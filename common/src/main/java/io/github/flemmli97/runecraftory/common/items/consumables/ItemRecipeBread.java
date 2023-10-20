@@ -60,7 +60,7 @@ public class ItemRecipeBread extends Item {
                                 .limit(amount).collect(Collectors.toList());
                         data.getRecipeKeeper().unlockRecipes(player, unlocked);
                         if (unlocked.isEmpty())
-                            player.sendMessage(new TranslatableComponent("recipe.eat.fail"), Util.NIL_UUID);
+                            player.sendMessage(new TranslatableComponent("runecraftory.recipe.eat.fail"), Util.NIL_UUID);
                     });
         }
         level.playSound(null, living.getX(), living.getY(), living.getZ(), SoundEvents.PLAYER_BURP, SoundSource.PLAYERS, 0.5F, level.random.nextFloat() * 0.1F + 0.9F);

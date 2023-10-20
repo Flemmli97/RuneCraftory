@@ -67,7 +67,7 @@ public class BlockMonsterBarn extends BaseEntityBlock {
             Platform.INSTANCE.getPlayerData(player)
                     .ifPresent(d -> {
                         if (d.onBarnFailMine(pos))
-                            player.sendMessage(new TranslatableComponent("barn.interact.not.owner", player.getServer()
+                            player.sendMessage(new TranslatableComponent("runecraftory.barn.interact.not.owner", player.getServer()
                                     .getProfileCache().get(uuid).map(p -> p.getName()).orElse("UNKNOWN")).withStyle(ChatFormatting.DARK_RED), Util.NIL_UUID);
                     });
         }
@@ -87,7 +87,7 @@ public class BlockMonsterBarn extends BaseEntityBlock {
             UUID owner = null;
             if (level.getBlockEntity(pos) instanceof MonsterBarnBlockEntity barn && (player.isCreative() || player.getUUID().equals(owner = barn.getOwner()))) {
                 if (barn.getBarnData() != null) {
-                    String key = barn.getBarnData().hasRoof() ? "barn.interact.block.roofed" : "barn.interact.block";
+                    String key = barn.getBarnData().hasRoof() ? "runecraftory.barn.interact.block.roofed" : "runecraftory.barn.interact.block";
                     player.sendMessage(new TranslatableComponent(key, barn.getBarnData().getCapacity(), barn.getBarnData().getCapacity() - barn.getBarnData().usedCapacity())
                             .withStyle(barn.getBarnData().getCapacity() > 0 ? ChatFormatting.GOLD : ChatFormatting.DARK_RED), Util.NIL_UUID);
                 }
@@ -96,7 +96,7 @@ public class BlockMonsterBarn extends BaseEntityBlock {
                 Platform.INSTANCE.getPlayerData(player)
                         .ifPresent(d -> {
                             if (d.onBarnFailMine(pos))
-                                player.sendMessage(new TranslatableComponent("barn.interact.not.owner", player.getServer()
+                                player.sendMessage(new TranslatableComponent("runecraftory.barn.interact.not.owner", player.getServer()
                                         .getProfileCache().get(uuid).map(p -> p.getName()).orElse("UNKNOWN")).withStyle(ChatFormatting.DARK_RED), Util.NIL_UUID);
                         });
             }

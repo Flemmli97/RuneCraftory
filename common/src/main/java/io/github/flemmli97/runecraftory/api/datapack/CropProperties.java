@@ -117,7 +117,7 @@ public class CropProperties {
         if (this.translationTexts == null) {
             this.translationTexts = new ArrayList<>();
             if (!this.bestSeason.isEmpty()) {
-                MutableComponent season = new TranslatableComponent("tooltip.season.best").append(": ");
+                MutableComponent season = new TranslatableComponent("runecraftory.tooltip.season.best").append(": ");
                 int i = 0;
                 for (EnumSeason seas : this.bestSeasons()) {
                     season.append(i != 0 ? "/" : "").withStyle(ChatFormatting.GRAY)
@@ -129,7 +129,7 @@ public class CropProperties {
             EnumSet<EnumSeason> badSeasons = EnumSet.copyOf(this.badSeason);
             badSeasons.removeAll(this.bestSeasons());
             if (!badSeasons.isEmpty()) {
-                MutableComponent season = new TranslatableComponent("tooltip.season.bad").append(": ");
+                MutableComponent season = new TranslatableComponent("runecraftory.tooltip.season.bad").append(": ");
                 int i = 0;
                 for (EnumSeason seas : badSeasons) {
                     season.append(i != 0 ? "/" : "").withStyle(ChatFormatting.GRAY)
@@ -138,8 +138,8 @@ public class CropProperties {
                 }
                 this.translationTexts.add(season);
             }
-            MutableComponent growth = new TranslatableComponent("tooltip.growth", this.growth()).withStyle(ChatFormatting.GOLD);
-            Component harvest = new TranslatableComponent("tooltip.harvested", this.maxDrops()).withStyle(ChatFormatting.GOLD);
+            MutableComponent growth = new TranslatableComponent("runecraftory.tooltip.growth", this.growth()).withStyle(ChatFormatting.GOLD);
+            Component harvest = new TranslatableComponent("runecraftory.tooltip.harvested", this.maxDrops()).withStyle(ChatFormatting.GOLD);
             this.translationTexts.add(growth.append("  ").append(harvest));
         }
         return this.translationTexts;

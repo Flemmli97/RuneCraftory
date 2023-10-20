@@ -34,7 +34,7 @@ public class C2SSetMonsterBehaviour implements Packet {
                 switch (pkt.type) {
                     case HOME, FOLLOW, FOLLOW_DISTANCE, STAY, WANDER -> {
                         if (pkt.type == Type.FOLLOW && Platform.INSTANCE.getPlayerData(sender).map(d -> !d.party.isPartyMember(entity) && d.party.isPartyFull()).orElse(true)) {
-                            sender.sendMessage(new TranslatableComponent("monster.interact.party.full"), Util.NIL_UUID);
+                            sender.sendMessage(new TranslatableComponent("runecraftory.monster.interact.party.full"), Util.NIL_UUID);
                             return;
                         }
                         monster.setBehaviour(pkt.type.behaviour);
@@ -62,9 +62,9 @@ public class C2SSetMonsterBehaviour implements Packet {
                                     if (monster.isWithinRestriction(pos)) {
                                         monster.setCropInventory(pos);
                                         data.entitySelector.poi = monster.getCropInventory();
-                                        player.sendMessage(new TranslatableComponent("behaviour.inventory.harvest"), Util.NIL_UUID);
+                                        player.sendMessage(new TranslatableComponent("runecraftory.behaviour.inventory.harvest"), Util.NIL_UUID);
                                     } else
-                                        player.sendMessage(new TranslatableComponent("behaviour.inventory.harvest.invalid"), Util.NIL_UUID);
+                                        player.sendMessage(new TranslatableComponent("runecraftory.behaviour.inventory.harvest.invalid"), Util.NIL_UUID);
                                 };
                             });
                     case SEEDINV -> Platform.INSTANCE.getPlayerData(sender)
@@ -75,9 +75,9 @@ public class C2SSetMonsterBehaviour implements Packet {
                                     if (monster.isWithinRestriction(pos)) {
                                         monster.setSeedInventory(pos);
                                         data.entitySelector.poi = monster.getSeedInventory();
-                                        player.sendMessage(new TranslatableComponent("behaviour.inventory.seed"), Util.NIL_UUID);
+                                        player.sendMessage(new TranslatableComponent("runecraftory.behaviour.inventory.seed"), Util.NIL_UUID);
                                     } else
-                                        player.sendMessage(new TranslatableComponent("behaviour.inventory.seed.invalid"), Util.NIL_UUID);
+                                        player.sendMessage(new TranslatableComponent("runecraftory.behaviour.inventory.seed.invalid"), Util.NIL_UUID);
                                 };
                             });
                     case RIDE -> {
@@ -102,17 +102,17 @@ public class C2SSetMonsterBehaviour implements Packet {
 
     public enum Type {
 
-        HOME("gui.companion.behaviour.home", BaseMonster.Behaviour.WANDER_HOME),
-        FOLLOW("gui.companion.behaviour.follow", BaseMonster.Behaviour.FOLLOW),
-        FOLLOW_DISTANCE("gui.companion.behaviour.follow_distance", BaseMonster.Behaviour.FOLLOW_DISTANCE),
-        STAY("gui.companion.behaviour.stay", BaseMonster.Behaviour.STAY),
-        WANDER("gui.companion.behaviour.wander", BaseMonster.Behaviour.WANDER),
-        FARM("gui.companion.behaviour.farm", BaseMonster.Behaviour.FARM),
-        HARVESTINV("gui.companion.behaviour.harvest", BaseMonster.Behaviour.FARM),
-        SEEDINV("gui.companion.behaviour.seed", BaseMonster.Behaviour.FARM),
-        RIDE("gui.companion.behaviour.ride", BaseMonster.Behaviour.FOLLOW),
-        CENTER("gui.companion.behaviour.center", BaseMonster.Behaviour.WANDER),
-        CENTER_FARM("gui.companion.behaviour.center", BaseMonster.Behaviour.FARM);
+        HOME("runecraftory.gui.companion.behaviour.home", BaseMonster.Behaviour.WANDER_HOME),
+        FOLLOW("runecraftory.gui.companion.behaviour.follow", BaseMonster.Behaviour.FOLLOW),
+        FOLLOW_DISTANCE("runecraftory.gui.companion.behaviour.follow_distance", BaseMonster.Behaviour.FOLLOW_DISTANCE),
+        STAY("runecraftory.gui.companion.behaviour.stay", BaseMonster.Behaviour.STAY),
+        WANDER("runecraftory.gui.companion.behaviour.wander", BaseMonster.Behaviour.WANDER),
+        FARM("runecraftory.gui.companion.behaviour.farm", BaseMonster.Behaviour.FARM),
+        HARVESTINV("runecraftory.gui.companion.behaviour.harvest", BaseMonster.Behaviour.FARM),
+        SEEDINV("runecraftory.gui.companion.behaviour.seed", BaseMonster.Behaviour.FARM),
+        RIDE("runecraftory.gui.companion.behaviour.ride", BaseMonster.Behaviour.FOLLOW),
+        CENTER("runecraftory.gui.companion.behaviour.center", BaseMonster.Behaviour.WANDER),
+        CENTER_FARM("runecraftory.gui.companion.behaviour.center", BaseMonster.Behaviour.FARM);
 
         public final String translation;
         public final BaseMonster.Behaviour behaviour;

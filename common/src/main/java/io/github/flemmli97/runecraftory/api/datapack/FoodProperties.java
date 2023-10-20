@@ -185,7 +185,7 @@ public class FoodProperties {
 
     public List<Component> texts(ItemStack stack) {
         List<Component> translationTexts = new ArrayList<>();
-        translationTexts.add(new TranslatableComponent("tooltip.item.eaten").withStyle(ChatFormatting.GRAY));
+        translationTexts.add(new TranslatableComponent("runecraftory.tooltip.item.eaten").withStyle(ChatFormatting.GRAY));
         TextComponent hprp = new TextComponent("");
         Pair<Map<Attribute, Double>, Map<Attribute, Double>> foodStats = ItemNBT.foodStats(stack);
         Map<Attribute, Double> effects = foodStats.getFirst();

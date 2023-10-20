@@ -62,6 +62,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
@@ -118,7 +119,7 @@ public class GateEntity extends Mob implements IBaseMob {
     public static ResourceLocation getGateLootLocation(EnumElement element) {
         ResourceLocation def = ModEntities.GATE.get().getDefaultLootTable();
         return lootRes.computeIfAbsent(element, e -> new ResourceLocation(def.getNamespace(),
-                def.getPath() + "_" + e.getTranslation().replace("element_", "")));
+                def.getPath() + "_" + e.name().toLowerCase(Locale.ROOT)));
     }
 
     @Override

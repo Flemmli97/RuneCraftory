@@ -42,7 +42,7 @@ public class SextupleRecipeCategory<T extends SextupleRecipe> implements IRecipe
     public SextupleRecipeCategory(IGuiHelper guiHelper, RecipeType<T> recipeType, Item icon) {
         this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(icon));
         this.recipeType = recipeType;
-        this.title = new TranslatableComponent("tile.crafting." + this.recipeType.getUid().getPath().replace("_category", ""));
+        this.title = new TranslatableComponent("runecraftory.tile.crafting." + this.recipeType.getUid().getPath().replace("_category", ""));
         this.background = guiHelper.createDrawable(GUI, 19, 20, 119, 42);
     }
 

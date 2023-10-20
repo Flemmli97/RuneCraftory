@@ -41,7 +41,7 @@ public class InventoryShippingBin extends SaveItemContainer {
             }
             data.setMoney(player, data.getMoney() + money);
             if (money != 0)
-                player.displayClientMessage(new TranslatableComponent("shipping.money").append("" + money).withStyle(ChatFormatting.GOLD), true);
+                player.displayClientMessage(new TranslatableComponent("runecraftory.shipping.money").append("" + money).withStyle(ChatFormatting.GOLD), true);
         });
     }
 }

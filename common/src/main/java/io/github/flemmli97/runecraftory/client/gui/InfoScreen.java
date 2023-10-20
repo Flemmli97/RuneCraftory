@@ -34,7 +34,7 @@ public class InfoScreen extends EffectRenderingInventoryScreen<AbstractContainer
     protected final PlayerData data;
     private final int textureX = 223;
     private final int textureY = 198;
-    private final Component levelTxt = new TranslatableComponent("level");
+    private final Component levelTxt = new TranslatableComponent("runecraftory.gui.level");
 
     // Cause if we just simply check to apply the color it can go out of sync for a few render ticks since item is set first before attribute update packet arrives
     private int canUseAttack = -1;

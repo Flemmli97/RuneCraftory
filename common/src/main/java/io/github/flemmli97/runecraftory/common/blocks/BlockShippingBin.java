@@ -27,7 +27,7 @@ import net.minecraft.world.phys.BlockHitResult;
 public class BlockShippingBin extends Block {
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
-    private static final Component name = new TranslatableComponent("container.shipping_bin");
+    private static final Component name = new TranslatableComponent("runecraftory.container.shipping_bin");
 
     public BlockShippingBin(BlockBehaviour.Properties props) {
         super(props);

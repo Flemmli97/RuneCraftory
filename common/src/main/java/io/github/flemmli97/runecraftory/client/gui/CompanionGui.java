@@ -24,7 +24,7 @@ public abstract class CompanionGui<T extends LivingEntity & IBaseMob> extends Sc
 
     private final int textureX = 190;
     private final int textureY = 113 + 70;
-    private final Component levelTxt = new TranslatableComponent("level");
+    private final Component levelTxt = new TranslatableComponent("runecraftory.gui.level");
     protected int leftPos;
     protected int topPos;
 

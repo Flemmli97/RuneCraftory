@@ -102,7 +102,7 @@ public class ContainerInfoScreen extends AbstractContainerMenu {
         return new MenuProvider() {
             @Override
             public Component getDisplayName() {
-                return new TranslatableComponent("container.info");
+                return new TranslatableComponent("runecraftory.container.info");
             }
 
             @Override
@@ -116,7 +116,7 @@ public class ContainerInfoScreen extends AbstractContainerMenu {
         return new MenuProvider() {
             @Override
             public Component getDisplayName() {
-                return new TranslatableComponent("container.info.sub");
+                return new TranslatableComponent("runecraftory.container.info.sub");
             }
 
             @Override

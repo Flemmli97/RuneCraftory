@@ -23,7 +23,7 @@ public class ItemProp extends Item {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
         super.appendHoverText(stack, level, tooltipComponents, isAdvanced);
-        tooltipComponents.add(new TranslatableComponent("tooltip.item.prop"));
+        tooltipComponents.add(new TranslatableComponent("runecraftory.tooltip.item.prop"));
     }
 
     public ItemStack clientItemStack(ItemStack real) {

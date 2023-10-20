@@ -95,7 +95,7 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
         y += 1;
         MutableComponent shopComp = null;
         if (this.entity.getShop() == ModNPCJobs.GENERAL.getSecond())
-            shopComp = new TranslatableComponent("gui.npc.shop.owner", new TranslatableComponent(this.entity.getShop().getTranslationKey()));
+            shopComp = new TranslatableComponent("runecraftory.gui.npc.shop.owner", new TranslatableComponent(this.entity.getShop().getTranslationKey()));
         else if (this.entity.getShop().hasWorkSchedule)
             shopComp = new TranslatableComponent(this.entity.getShop().getTranslationKey());
         int shopY = txtOffY + 13 * y;
@@ -174,11 +174,11 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
         }
         if (this.isShopOpen == ShopState.NOBED) {
             this.components = new ArrayList<>();
-            this.components.addAll(this.font.split(new TranslatableComponent("gui.npc.bed.no"), 150));
+            this.components.addAll(this.font.split(new TranslatableComponent("runecraftory.gui.npc.bed.no"), 150));
         }
         if (this.isShopOpen == ShopState.NOWORKPLACE && this.entity.getShop().poiType != null) {
             this.components = new ArrayList<>();
-            this.components.addAll(this.font.split(new TranslatableComponent("gui.npc.workplace.no", this.formatShopPoi(this.entity.getShop().poiType.get())), 150));
+            this.components.addAll(this.font.split(new TranslatableComponent("runecraftory.gui.npc.workplace.no", this.formatShopPoi(this.entity.getShop().poiType.get())), 150));
         }
     }
 

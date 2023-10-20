@@ -161,22 +161,22 @@ public class ClientCalls {
         ClientHandlers.CLIENT_PACK.itemStatManager().get(stack.getItem()).ifPresent(stat -> {
             tooltip.addAll(stat.texts(stack, shift));
             if (flag.isAdvanced())
-                debug.add(new TranslatableComponent("tooltip.debug.stat", stat.getId().toString()).withStyle(ChatFormatting.GRAY));
+                debug.add(new TranslatableComponent("runecraftory.tooltip.debug.stat", stat.getId().toString()).withStyle(ChatFormatting.GRAY));
         });
         CropProperties props = ClientHandlers.CLIENT_PACK.cropManager().get(stack.getItem());
         if (props != null) {
             tooltip.addAll(props.texts());
             if (flag.isAdvanced())
-                debug.add(new TranslatableComponent("tooltip.debug.crop", props.getId().toString()).withStyle(ChatFormatting.GRAY));
+                debug.add(new TranslatableComponent("runecraftory.tooltip.debug.crop", props.getId().toString()).withStyle(ChatFormatting.GRAY));
         }
         if (shift) {
             FoodProperties food = ClientHandlers.CLIENT_PACK.foodManager().get(stack.getItem());
             if (food != null) {
                 tooltip.addAll(food.texts(stack));
                 if (flag.isAdvanced())
-                    debug.add(new TranslatableComponent("tooltip.debug.food", food.getId().toString()).withStyle(ChatFormatting.GRAY));
+                    debug.add(new TranslatableComponent("runecraftory.tooltip.debug.food", food.getId().toString()).withStyle(ChatFormatting.GRAY));
             } else if (stack.isEdible()) {
-                tooltip.add(new TranslatableComponent("tooltip.item.eaten").withStyle(ChatFormatting.GRAY));
+                tooltip.add(new TranslatableComponent("runecraftory.tooltip.item.eaten").withStyle(ChatFormatting.GRAY));
                 MutableComponent comp = new TextComponent(" ").append(new TranslatableComponent(ModAttributes.RPGAIN.get().getDescriptionId())).append(new TextComponent(": " + EntityUtils.getRPFromVanillaFood(stack)));
                 tooltip.add(comp.withStyle(ChatFormatting.AQUA));
             }

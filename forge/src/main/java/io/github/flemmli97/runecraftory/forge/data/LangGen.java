@@ -5,6 +5,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumDay;
+import io.github.flemmli97.runecraftory.api.enums.EnumElement;
+import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
@@ -19,6 +21,7 @@ import io.github.flemmli97.runecraftory.common.items.tools.ItemToolHammer;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolHoe;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolSickle;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolWateringCan;
+import io.github.flemmli97.runecraftory.common.network.C2SNPCInteraction;
 import io.github.flemmli97.runecraftory.common.network.C2SSetMonsterBehaviour;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
@@ -214,48 +217,44 @@ public class LangGen implements DataProvider {
             this.add(day.translationFull(), d.substring(0, 1).toUpperCase(Locale.ROOT) + d.substring(1));
         }
 
-        this.add("recipe.eat.unlock", "Unlocked recipe for %s");
-        this.add("recipe.eat.fail", "Didn't learn any recipe. Maybe your crafting level is too low");
+        this.add("runecraftory.recipe.eat.fail", "Didn't learn any recipe. Maybe your crafting level is too low");
 
-        this.add("container.shipping_bin", "Shipping Bin");
+        this.add("runecraftory.container.shipping_bin", "Shipping Bin");
 
-        this.add("shipping.money", "Earning from shipped items: %s");
+        this.add("runecraftory.shipping.money", "Earning from shipped items: %s");
 
-        this.add("tile.crafting.forge", "Forging");
-        this.add("tile.crafting.armor", "Crafting");
-        this.add("tile.crafting.chemistry", "Chemistry");
-        this.add("tile.crafting.cooking", "Cooking");
+        this.add("runecraftory.tile.crafting.forge", "Forging");
+        this.add("runecraftory.tile.crafting.armor", "Crafting");
+        this.add("runecraftory.tile.crafting.chemistry", "Chemistry");
+        this.add("runecraftory.tile.crafting.cooking", "Cooking");
 
-        this.add("container.shippingbin", "Shipping Bin");
-        this.add("element_water", "Attribute: Water");
-        this.add("element_earth", "Attribute: Earth");
-        this.add("element_wind", "Attribute: Wind");
-        this.add("element_fire", "Attribute: Fire");
-        this.add("element_light", "Attribute: Light");
-        this.add("element_dark", "Attribute: Dark");
-        this.add("element_love", "Attribute: Love");
-        this.add("tooltip.item.level", "Level: %s");
-        this.add("tooltip.item.buy", "Buy: %s$");
-        this.add("tooltip.item.sell", "Sell: %s$");
-        this.add("tooltip.item.difficulty", "Upgrade Difficulty: %s");
-        this.add("tooltip.item.equipped", "When equipped");
-        this.add("tooltip.item.upgrade", "Upgrade");
-        this.add("tooltip.item.eaten", "When eaten");
+        this.add(EnumElement.WATER.getTranslation(), "Attribute: Water");
+        this.add(EnumElement.EARTH.getTranslation(), "Attribute: Earth");
+        this.add(EnumElement.WIND.getTranslation(), "Attribute: Wind");
+        this.add(EnumElement.FIRE.getTranslation(), "Attribute: Fire");
+        this.add(EnumElement.LIGHT.getTranslation(), "Attribute: Light");
+        this.add(EnumElement.DARK.getTranslation(), "Attribute: Dark");
+        this.add(EnumElement.LOVE.getTranslation(), "Attribute: Love");
+        this.add("runecraftory.tooltip.item.level", "Level: %s");
+        this.add("runecraftory.tooltip.item.buy", "Buy: %s$");
+        this.add("runecraftory.tooltip.item.sell", "Sell: %s$");
+        this.add("runecraftory.tooltip.item.difficulty", "Upgrade Difficulty: %s");
+        this.add("runecraftory.tooltip.item.equipped", "When equipped");
+        this.add("runecraftory.tooltip.item.upgrade", "Upgrade");
+        this.add("runecraftory.tooltip.item.eaten", "When eaten");
+        this.add("runecraftory.gui.level", "Level");
 
-        this.add("tooltip.item.spawn", "Rename to a number to set level");
-        this.add("tooltip.item.prop", "A prop item. Takes on the items look when in another entities hand");
+        this.add("runecraftory.tooltip.item.spawn", "Rename to a number to set level");
+        this.add("runecraftory.tooltip.item.prop", "A prop item. Takes on the items look when in another entities hand");
 
-        this.add("money", "Money");
-        this.add("season", "Season");
-        this.add("tooltip.growth", "Growth: %sd");
-        this.add("tooltip.harvested", "Harvest Amount: %s");
-        this.add("season.spring", "Spring");
-        this.add("season.summer", "Summer");
-        this.add("season.fall", "Fall");
-        this.add("season.winter", "Winter");
-        this.add("tooltip.season.best", "Good Season");
-        this.add("tooltip.season.bad", "Bad Season");
-        this.add("sleep", "Sleep");
+        this.add("runecraftory.tooltip.growth", "Growth: %sd");
+        this.add("runecraftory.tooltip.harvested", "Harvest Amount: %s");
+        this.add(EnumSeason.SPRING.translationKey(), "Spring");
+        this.add(EnumSeason.SUMMER.translationKey(), "Summer");
+        this.add(EnumSeason.FALL.translationKey(), "Fall");
+        this.add(EnumSeason.WINTER.translationKey(), "Winter");
+        this.add("runecraftory.tooltip.season.best", "Good Season");
+        this.add("runecraftory.tooltip.season.bad", "Bad Season");
 
         this.add(BaseMonster.Behaviour.WANDER_HOME.interactKey, "You send %s home");
         this.add(BaseMonster.Behaviour.FOLLOW.interactKey, "%s is now following you");
@@ -263,61 +262,22 @@ public class LangGen implements DataProvider {
         this.add(BaseMonster.Behaviour.STAY.interactKey, "%s is now staying");
         this.add(BaseMonster.Behaviour.WANDER.interactKey, "%s is now wandering around in this area");
         this.add(BaseMonster.Behaviour.FARM.interactKey, "%s is now tending the crops");
-        this.add("monster.interact.party.full", "Your party is full");
-        this.add("monster.interact.ride.no", "You can't ride this monster");
-        this.add("monster.interact.barn.no", "%s has no barn");
-        this.add("monster.interact.barn.no.ext", "%s [%s] has no home to go to.");
-        this.add("barn.interact.not.owner", "This barn belongs to %s.");
-        this.add("barn.interact.block", "Barn with capacity %1$s (Free: %2$s).");
-        this.add("barn.interact.block.roofed", "Roofed barn with capacity %1$s (Free: %2$s).");
+        this.add("runecraftory.monster.interact.party.full", "Your party is full");
+        this.add("runecraftory.monster.interact.ride.no", "You can't ride this monster");
+        this.add("runecraftory.monster.interact.barn.no", "%s has no barn");
+        this.add("runecraftory.monster.interact.barn.no.ext", "%s [%s] has no home to go to.");
+        this.add("runecraftory.barn.interact.not.owner", "This barn belongs to %s.");
+        this.add("runecraftory.barn.interact.block", "Barn with capacity %1$s (Free: %2$s).");
+        this.add("runecraftory.barn.interact.block.roofed", "Roofed barn with capacity %1$s (Free: %2$s).");
 
-        this.add("tooltip.item.treasure_chest", "Shift-right-click to cycle through loot tier");
-        this.add("tooltip.item.treasure_level", "Chest tier lvl: %s");
-        this.add("tooltip.debug.stat", "Itemstat-ID: %s");
-        this.add("tooltip.debug.crop", "Cropdata-ID: %s");
-        this.add("tooltip.debug.food", "Fooddata-ID: %s");
+        this.add("runecraftory.tooltip.item.treasure_chest", "Shift-right-click to cycle through loot tier");
+        this.add("runecraftory.tooltip.item.treasure_level", "Chest tier lvl: %s");
+        this.add("runecraftory.tooltip.debug.stat", "Itemstat-ID: %s");
+        this.add("runecraftory.tooltip.debug.crop", "Cropdata-ID: %s");
+        this.add("runecraftory.tooltip.debug.food", "Fooddata-ID: %s");
+        this.add("runecraftory.tooltip.item.npc", "Shift-right-click to change profession");
 
-        this.add("tooltip.item.npc", "Shift-right-click to change profession");
-        this.add(ModNPCJobs.NONE.getSecond().getTranslationKey(), "None");
-        this.add(ModNPCJobs.GENERAL.getSecond().getTranslationKey(), "General Store");
-        this.add(ModNPCJobs.FLOWER.getSecond().getTranslationKey(), "Florist");
-        this.add(ModNPCJobs.SMITH.getSecond().getTranslationKey(), "Smith");
-        this.add(ModNPCJobs.DOCTOR.getSecond().getTranslationKey(), "Doctor");
-        this.add(ModNPCJobs.COOK.getSecond().getTranslationKey(), "Cook");
-        this.add(ModNPCJobs.MAGIC.getSecond().getTranslationKey(), "Magicskill merchant");
-        this.add(ModNPCJobs.RUNE_SKILLS.getSecond().getTranslationKey(), "Runeskill merchant");
-        this.add(ModNPCJobs.BATHHOUSE.getSecond().getTranslationKey(), "Bathhouse attendant");
-        this.add(ModNPCJobs.RANDOM.getSecond().getTranslationKey(), "Travelling merchant");
-
-        this.add(Smith.BARN_ACTION, "Monster barn");
-        this.add(Smith.BARN_ACTION_DESCRIPTION, "You can buy a monster barn to house your tamed monsters. Each barn bought increases the costs of the next one");
-        this.add(Smith.BARN_ACTION_SUCCESS, "Thank you for your purchase.");
-        this.add(Smith.BARN_ACTION_FAIL, "You don't have enough materials for that.");
-        this.add(Smith.BARN_COST, "A barn costs %1$s$ and following materials:");
-        this.add(Smith.BARN_COST_MAT, "Logs x%1$s, Cobblestone x%2$s");
-        this.add(Smith.BARN_COST_FAIL, "Error getting the cost of a barn");
-
-        this.add(Cook.FORGE_BREAD_ACTION, "Weapon bread");
-        this.add(Cook.ARMOR_BREAD_DESCRIPTION, "Accessory bread");
-        this.add(Cook.CHEM_BREAD_SUCCESS, "Medicine bread");
-        this.add(Cook.COOKING_BREAD_SUCCESS, "Cooking bread");
-        this.add(Cook.BREAD_ACTION_SUCCESS, "Here you go");
-        this.add(Cook.BREAD_ACTION_SUCCESS_GOOD, "Here you go. This one was made very well.");
-        this.add(Cook.BREAD_ACTION_FAIL, "Seems you don't have enough money");
-        this.add(Cook.BREAD_COST, "One loaf costs: %1$s. %2$s left");
-
-        this.add(BathhouseAttendant.BATH_ACTION, "Take a bath");
-        this.add(BathhouseAttendant.BATH_ACTION_SUCCESS, "Have a relaxing bath.");
-        this.add(BathhouseAttendant.BATH_ACTION_FAIL, "You don't have enough money for that. You need %2$s.");
-        this.add(BathhouseAttendant.BATH_COST, "Cost: %s$");
-
-        this.add(Doctor.CURE_ACTION, "Cure");
-        this.add(Doctor.CURE_ACTION_DESC, "Cure all negative status effects");
-        this.add(Doctor.CURE_ACTION_SUCCESS, "There you go. Please take more care in the future.");
-        this.add(Doctor.CURE_ACTION_FAIL, "It seems you don't have enough money.");
-        this.add(Doctor.CURE_COST, "Cost: %s$");
-
-        this.add("crafting.rpMax.missing", "Missing total rp");
+        this.add("runecraftory.crafting.rpMax.missing", "Missing total rp");
 
         this.add("runecraftory.display.level", "Level: %s");
         this.add("death.attack.rfExhaust", "%1$s fainted");
@@ -364,23 +324,23 @@ public class LangGen implements DataProvider {
         this.add(C2SSetMonsterBehaviour.Type.RIDE.translation, "Ride");
         this.add(C2SSetMonsterBehaviour.Type.CENTER.translation, "Set center");
 
-        this.add("behaviour.home.position", "Updated restriction center");
-        this.add("behaviour.inventory.harvest", "Updated crop inventory position");
-        this.add("behaviour.inventory.harvest.invalid", "Position is too far away");
-        this.add("behaviour.inventory.seed", "Updated seed inventory position");
-        this.add("behaviour.inventory.seed.invalid", "Position is too far away");
+        this.add("runecraftory.behaviour.home.position", "Updated restriction center");
+        this.add("runecraftory.behaviour.inventory.harvest", "Updated crop inventory position");
+        this.add("runecraftory.behaviour.inventory.harvest.invalid", "Position is too far away");
+        this.add("runecraftory.behaviour.inventory.seed", "Updated seed inventory position");
+        this.add("runecraftory.behaviour.inventory.seed.invalid", "Position is too far away");
 
-        this.add("tamed.monster.knockout.by", "%1$s got knocked out by %5$s at [%2$s,%3$s,%4$s]");
-        this.add("tamed.monster.knockout", "%1$s got knocked out at [%2$s,%3$s,%4$s]");
+        this.add("runecraftory.tamed.monster.knockout.by", "%1$s got knocked out by %5$s at [%2$s,%3$s,%4$s]");
+        this.add("runecraftory.tamed.monster.knockout", "%1$s got knocked out at [%2$s,%3$s,%4$s]");
 
-        this.add("magnifying_glass.view.crop.growth", "Growth: %s");
-        this.add("magnifying_glass.view.crop.level", "Level: %s");
-        this.add("magnifying_glass.view.crop.giant", "Giant prog.: %s");
-        this.add("magnifying_glass.view.speed", "Speed: %s");
-        this.add("magnifying_glass.view.health", "Health: %s");
-        this.add("magnifying_glass.view.level", "Quality: %s");
-        this.add("magnifying_glass.view.giant", "Size: %s");
-        this.add("magnifying_glass.view.defence", "Defence: %s");
+        this.add("runecraftory.magnifying_glass.view.crop.growth", "Growth: %s");
+        this.add("runecraftory.magnifying_glass.view.crop.level", "Level: %s");
+        this.add("runecraftory.magnifying_glass.view.crop.giant", "Giant prog.: %s");
+        this.add("runecraftory.magnifying_glass.view.speed", "Speed: %s");
+        this.add("runecraftory.magnifying_glass.view.health", "Health: %s");
+        this.add("runecraftory.magnifying_glass.view.level", "Quality: %s");
+        this.add("runecraftory.magnifying_glass.view.giant", "Size: %s");
+        this.add("runecraftory.magnifying_glass.view.defence", "Defence: %s");
 
         this.add("runecraftory_book", "Runepedia");
         this.add("runecraftory.patchouli.subtitle", "");
@@ -578,15 +538,15 @@ public class LangGen implements DataProvider {
                     this.capitalize(s.getTranslation().replace("skill.", "").replace("_", " "),
                             Lists.newArrayList("and")));
 
-        this.add("gui.npc.talk", "Talk");
-        this.add("gui.npc.follow", "Follow me");
-        this.add("gui.npc.distance", "Stay back a bit");
-        this.add("gui.npc.stay", "Stay here");
-        this.add("gui.npc.stopFollow", "Stop following");
-        this.add("gui.npc.shop", "I want to shop");
-        this.add("gui.npc.shop.owner", "Owner of %s");
-        this.add("gui.npc.bed.no", "I don't have a bed");
-        this.add("gui.npc.workplace.no", "I don't have a work place. Valid workplaces are [%s]");
+        this.add(C2SNPCInteraction.Type.TALK.translation, "Talk");
+        this.add(C2SNPCInteraction.Type.FOLLOW.translation, "Follow me");
+        this.add(C2SNPCInteraction.Type.FOLLOWDISTANCE.translation, "Stay back a bit");
+        this.add(C2SNPCInteraction.Type.STAY.translation, "Stay here");
+        this.add(C2SNPCInteraction.Type.STOPFOLLOW.translation, "Stop following");
+        this.add(C2SNPCInteraction.Type.SHOP.translation, "I want to shop");
+        this.add("runecraftory.gui.npc.shop.owner", "Owner of %s");
+        this.add("runecraftory.gui.npc.bed.no", "I don't have a bed");
+        this.add("runecraftory.gui.npc.workplace.no", "I don't have a work place. Valid workplaces are [%s]");
 
         this.add("runecraftory.gui.quests.accept", "Accept");
         this.add("runecraftory.gui.quests.reset", "Cancel");
@@ -594,6 +554,45 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.gui.quests.accept.no", "No");
         this.add("runecraftory.quest.gui.button", "Requests");
         this.add("runecraftory.quest.npc.none", "The NPC for this quest doesn't exist anymore!");
+
+        this.add(ModNPCJobs.NONE.getSecond().getTranslationKey(), "None");
+        this.add(ModNPCJobs.GENERAL.getSecond().getTranslationKey(), "General Store");
+        this.add(ModNPCJobs.FLOWER.getSecond().getTranslationKey(), "Florist");
+        this.add(ModNPCJobs.SMITH.getSecond().getTranslationKey(), "Smith");
+        this.add(ModNPCJobs.DOCTOR.getSecond().getTranslationKey(), "Doctor");
+        this.add(ModNPCJobs.COOK.getSecond().getTranslationKey(), "Cook");
+        this.add(ModNPCJobs.MAGIC.getSecond().getTranslationKey(), "Magicskill merchant");
+        this.add(ModNPCJobs.RUNE_SKILLS.getSecond().getTranslationKey(), "Runeskill merchant");
+        this.add(ModNPCJobs.BATHHOUSE.getSecond().getTranslationKey(), "Bathhouse attendant");
+        this.add(ModNPCJobs.RANDOM.getSecond().getTranslationKey(), "Travelling merchant");
+
+        this.add(Smith.BARN_ACTION, "Monster barn");
+        this.add(Smith.BARN_ACTION_DESCRIPTION, "You can buy a monster barn to house your tamed monsters. Each barn bought increases the costs of the next one");
+        this.add(Smith.BARN_ACTION_SUCCESS, "Thank you for your purchase.");
+        this.add(Smith.BARN_ACTION_FAIL, "You don't have enough materials for that.");
+        this.add(Smith.BARN_COST, "A barn costs %1$s$ and following materials:");
+        this.add(Smith.BARN_COST_MAT, "Logs x%1$s, Cobblestone x%2$s");
+        this.add(Smith.BARN_COST_FAIL, "Error getting the cost of a barn");
+
+        this.add(Cook.FORGE_BREAD_ACTION, "Weapon bread");
+        this.add(Cook.ARMOR_BREAD_DESCRIPTION, "Accessory bread");
+        this.add(Cook.CHEM_BREAD_SUCCESS, "Medicine bread");
+        this.add(Cook.COOKING_BREAD_SUCCESS, "Cooking bread");
+        this.add(Cook.BREAD_ACTION_SUCCESS, "Here you go");
+        this.add(Cook.BREAD_ACTION_SUCCESS_GOOD, "Here you go. This one was made very well.");
+        this.add(Cook.BREAD_ACTION_FAIL, "Seems you don't have enough money");
+        this.add(Cook.BREAD_COST, "One loaf costs: %1$s. %2$s left");
+
+        this.add(BathhouseAttendant.BATH_ACTION, "Take a bath");
+        this.add(BathhouseAttendant.BATH_ACTION_SUCCESS, "Have a relaxing bath.");
+        this.add(BathhouseAttendant.BATH_ACTION_FAIL, "You don't have enough money for that. You need %2$s.");
+        this.add(BathhouseAttendant.BATH_COST, "Cost: %s$");
+
+        this.add(Doctor.CURE_ACTION, "Cure");
+        this.add(Doctor.CURE_ACTION_DESC, "Cure all negative status effects");
+        this.add(Doctor.CURE_ACTION_SUCCESS, "There you go. Please take more care in the future.");
+        this.add(Doctor.CURE_ACTION_FAIL, "It seems you don't have enough money.");
+        this.add(Doctor.CURE_COST, "Cost: %s$");
 
         this.add("npc.schedule.work", "From: %s - %s");
         this.add("npc.schedule.work.2", "And: %s - %s");
@@ -841,7 +840,7 @@ public class LangGen implements DataProvider {
                 return ENTITY;
             if (s.startsWith("container."))
                 return CONTAINER;
-            if (s.startsWith("element_"))
+            if (s.startsWith("runecraftory.element."))
                 return ELEMENT;
             if (s.startsWith("attribute.rf."))
                 return ATTRIBUTE;
@@ -849,17 +848,17 @@ public class LangGen implements DataProvider {
                 return ADVANCEMENT;
             if (s.startsWith("skill."))
                 return SKILL;
-            if (s.startsWith("tooltip."))
+            if (s.startsWith("runecraftory.tooltip."))
                 return TOOLTIP;
-            if (s.startsWith("day."))
+            if (s.startsWith("runecraftory.day."))
                 return DAY;
-            if (s.startsWith("season."))
+            if (s.startsWith("runecraftory.season."))
                 return SEASON;
             if (s.startsWith("death."))
                 return DEATH;
             if (s.startsWith("itemGroup."))
                 return ITEMGROUP;
-            if (s.startsWith("npc."))
+            if (s.startsWith("runecraftory.npc."))
                 return NPC;
             return OTHER;
         }

@@ -71,7 +71,7 @@ public class RuneCraftoryEggItem extends SpawnEgg {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
-        tooltipComponents.add(new TranslatableComponent("tooltip.item.spawn").withStyle(ChatFormatting.GOLD));
+        tooltipComponents.add(new TranslatableComponent("runecraftory.tooltip.item.spawn").withStyle(ChatFormatting.GOLD));
         super.appendHoverText(stack, level, tooltipComponents, isAdvanced);
     }
 }

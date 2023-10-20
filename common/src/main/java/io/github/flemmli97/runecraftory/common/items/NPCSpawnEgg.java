@@ -29,7 +29,7 @@ public class NPCSpawnEgg extends RuneCraftoryEggItem {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
-        tooltipComponents.add(new TranslatableComponent("tooltip.item.npc").withStyle(ChatFormatting.GOLD));
+        tooltipComponents.add(new TranslatableComponent("runecraftory.tooltip.item.npc").withStyle(ChatFormatting.GOLD));
         tooltipComponents.add(new TranslatableComponent(this.getJob(stack).getTranslationKey()).withStyle(ChatFormatting.AQUA));
         super.appendHoverText(stack, level, tooltipComponents, isAdvanced);
     }

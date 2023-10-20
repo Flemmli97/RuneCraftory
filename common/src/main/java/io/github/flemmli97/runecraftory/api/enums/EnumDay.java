@@ -2,13 +2,13 @@ package io.github.flemmli97.runecraftory.api.enums;
 
 public enum EnumDay {
 
-    MONDAY("day.monday"),
-    TUESDAY("day.tuesday"),
-    WEDNESDAY("day.wednesday"),
-    THURSDAY("day.thursday"),
-    FRIDAY("day.friday"),
-    SATURDAY("day.saturday"),
-    SUNDAY("day.sunday");
+    MONDAY("runecraftory.day.monday"),
+    TUESDAY("runecraftory.day.tuesday"),
+    WEDNESDAY("runecraftory.day.wednesday"),
+    THURSDAY("runecraftory.day.thursday"),
+    FRIDAY("runecraftory.day.friday"),
+    SATURDAY("runecraftory.day.saturday"),
+    SUNDAY("runecraftory.day.sunday");
 
     private final String translation;
     private final String translationFull;

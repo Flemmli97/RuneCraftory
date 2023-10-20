@@ -318,7 +318,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                             }
                         } else {
                             if (this.tickCount > 20)
-                                this.getOwner().sendMessage(new TranslatableComponent("monster.interact.barn.no.ext", this.getDisplayName(), this.blockPosition()), Util.NIL_UUID);
+                                this.getOwner().sendMessage(new TranslatableComponent("runecraftory.monster.interact.barn.no.ext", this.getDisplayName(), this.blockPosition()), Util.NIL_UUID);
                             this.setBehaviour(Behaviour.WANDER);
                         }
                         this.goalSelector.addGoal(6, this.wander);
@@ -683,7 +683,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         if (this.isTamed()) {
             if (!player.getUUID().equals(this.getOwnerUUID())) {
                 if (!clientSide)
-                    player.sendMessage(new TranslatableComponent("monster.interact.notowner"), Util.NIL_UUID);
+                    player.sendMessage(new TranslatableComponent("runecraftory.monster.interact.notowner"), Util.NIL_UUID);
                 return InteractionResult.sidedSuccess(clientSide);
             }
             if (player.isShiftKeyDown()) {
@@ -697,7 +697,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             }
             if (!clientSide && MobConfig.monsterNeedBarn && this.assignedBarn == null) {
                 if (!this.assignBarn()) {
-                    player.sendMessage(new TranslatableComponent("monster.interact.barn.no", this.getDisplayName()), Util.NIL_UUID);
+                    player.sendMessage(new TranslatableComponent("runecraftory.monster.interact.barn.no", this.getDisplayName()), Util.NIL_UUID);
                     return InteractionResult.CONSUME;
                 }
             }
@@ -1256,8 +1256,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     private Component getKnockoutMessage() {
         DamageSource source = this.getLastDamageSource();
         if (source instanceof EntityDamageSource && source.getEntity() != null)
-            return new TranslatableComponent("tamed.monster.knockout.by", this.getDisplayName(), this.blockPosition().getX(), this.blockPosition().getY(), this.blockPosition().getZ(), source.getEntity().getDisplayName());
-        return new TranslatableComponent("tamed.monster.knockout", this.getDisplayName(), this.blockPosition().getX(), this.blockPosition().getY(), this.blockPosition().getZ());
+            return new TranslatableComponent("runecraftory.tamed.monster.knockout.by", this.getDisplayName(), this.blockPosition().getX(), this.blockPosition().getY(), this.blockPosition().getZ(), source.getEntity().getDisplayName());
+        return new TranslatableComponent("runecraftory.tamed.monster.knockout", this.getDisplayName(), this.blockPosition().getX(), this.blockPosition().getY(), this.blockPosition().getZ());
     }
 
     public int getPlayDeathTick() {
@@ -1612,7 +1612,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             player.startRiding(this);
             return true;
         }
-        player.sendMessage(new TranslatableComponent("monster.interact.ride.no"), Util.NIL_UUID);
+        player.sendMessage(new TranslatableComponent("runecraftory.monster.interact.ride.no"), Util.NIL_UUID);
         return false;
     }
 
@@ -1788,12 +1788,12 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     public enum Behaviour {
 
-        WANDER_HOME("monster.interact.home", false),
-        FOLLOW("monster.interact.follow", true),
-        FOLLOW_DISTANCE("monster.interact.follow.distance", true),
-        STAY("monster.interact.stay", true),
-        WANDER("monster.interact.wander", false),
-        FARM("monster.interact.farm", false);
+        WANDER_HOME("runecraftory.monster.interact.home", false),
+        FOLLOW("runecraftory.monster.interact.follow", true),
+        FOLLOW_DISTANCE("runecraftory.monster.interact.follow.distance", true),
+        STAY("runecraftory.monster.interact.stay", true),
+        WANDER("runecraftory.monster.interact.wander", false),
+        FARM("runecraftory.monster.interact.farm", false);
 
         public final String interactKey;
 

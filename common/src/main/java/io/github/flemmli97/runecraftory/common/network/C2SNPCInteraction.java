@@ -48,7 +48,7 @@ public class C2SNPCInteraction implements Packet {
                     case TALK -> npc.talkTo(sender);
                     case FOLLOW -> {
                         if (Platform.INSTANCE.getPlayerData(sender).map(d -> !d.party.isPartyMember(entity) && d.party.isPartyFull()).orElse(true)) {
-                            sender.sendMessage(new TranslatableComponent("monster.interact.party.full"), Util.NIL_UUID);
+                            sender.sendMessage(new TranslatableComponent("runecraftory.monster.interact.party.full"), Util.NIL_UUID);
                             return;
                         }
                         if (npc.getEntityToFollowUUID() == null)
@@ -90,14 +90,14 @@ public class C2SNPCInteraction implements Packet {
 
     public enum Type {
 
-        TALK("gui.npc.talk", null),
-        FOLLOW("gui.npc.follow", EntityNPCBase.Behaviour.FOLLOW),
-        FOLLOWDISTANCE("gui.npc.distance", EntityNPCBase.Behaviour.FOLLOW_DISTANCE),
-        STAY("gui.npc.stay", EntityNPCBase.Behaviour.STAY),
-        STOPFOLLOW("gui.npc.stopFollow", EntityNPCBase.Behaviour.WANDER),
-        SHOP("gui.npc.shop", null),
-        CLOSE("gui.npc.close", null),
-        CLOSE_QUEST("gui.npc.close.quest", null),
+        TALK("runecraftory.gui.npc.talk", null),
+        FOLLOW("runecraftory.gui.npc.follow", EntityNPCBase.Behaviour.FOLLOW),
+        FOLLOWDISTANCE("runecraftory.gui.npc.distance", EntityNPCBase.Behaviour.FOLLOW_DISTANCE),
+        STAY("runecraftory.gui.npc.stay", EntityNPCBase.Behaviour.STAY),
+        STOPFOLLOW("runecraftory.gui.npc.stopFollow", EntityNPCBase.Behaviour.WANDER),
+        SHOP("runecraftory.gui.npc.shop", null),
+        CLOSE("runecraftory.gui.npc.close", null),
+        CLOSE_QUEST("runecraftory.gui.npc.close.quest", null),
         QUEST(SimpleQuestIntegration.QUEST_GUI_KEY, null),
         ACTION("", null);
 

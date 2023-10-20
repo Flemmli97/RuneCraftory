@@ -9,14 +9,14 @@ import java.util.function.Supplier;
 
 public enum EnumElement {
 
-    NONE(ChatFormatting.GRAY, "element_none", 0xffffff, null),
-    WATER(ChatFormatting.DARK_BLUE, "element_water", 0x101099, Suppliers.memoize(() -> new ItemStack(ModItems.crystalWater.get()))),
-    EARTH(ChatFormatting.YELLOW, "element_earth", 0xe6e610, Suppliers.memoize(() -> new ItemStack(ModItems.crystalEarth.get()))),
-    WIND(ChatFormatting.GREEN, "element_wind", 0x55ff55, Suppliers.memoize(() -> new ItemStack(ModItems.crystalWind.get()))),
-    FIRE(ChatFormatting.DARK_RED, "element_fire", 0x991010, Suppliers.memoize(() -> new ItemStack(ModItems.crystalFire.get()))),
-    LIGHT(ChatFormatting.WHITE, "element_light", 0xffff60, Suppliers.memoize(() -> new ItemStack(ModItems.crystalFire.get()))),
-    DARK(ChatFormatting.DARK_PURPLE, "element_dark", 0x821082, Suppliers.memoize(() -> new ItemStack(ModItems.crystalDark.get()))),
-    LOVE(ChatFormatting.RED, "element_love", 0xfc60fc, Suppliers.memoize(() -> new ItemStack(ModItems.crystalLove.get())));
+    NONE(ChatFormatting.GRAY, "runecraftory.element.none", 0xffffff, null),
+    WATER(ChatFormatting.DARK_BLUE, "runecraftory.element.water", 0x101099, Suppliers.memoize(() -> new ItemStack(ModItems.crystalWater.get()))),
+    EARTH(ChatFormatting.YELLOW, "runecraftory.element.earth", 0xe6e610, Suppliers.memoize(() -> new ItemStack(ModItems.crystalEarth.get()))),
+    WIND(ChatFormatting.GREEN, "runecraftory.element.wind", 0x55ff55, Suppliers.memoize(() -> new ItemStack(ModItems.crystalWind.get()))),
+    FIRE(ChatFormatting.DARK_RED, "runecraftory.element.fire", 0x991010, Suppliers.memoize(() -> new ItemStack(ModItems.crystalFire.get()))),
+    LIGHT(ChatFormatting.WHITE, "runecraftory.element.light", 0xffff60, Suppliers.memoize(() -> new ItemStack(ModItems.crystalFire.get()))),
+    DARK(ChatFormatting.DARK_PURPLE, "runecraftory.element.dark", 0x821082, Suppliers.memoize(() -> new ItemStack(ModItems.crystalDark.get()))),
+    LOVE(ChatFormatting.RED, "runecraftory.element.love", 0xfc60fc, Suppliers.memoize(() -> new ItemStack(ModItems.crystalLove.get())));
 
     private final String translation;
     private final ChatFormatting color;

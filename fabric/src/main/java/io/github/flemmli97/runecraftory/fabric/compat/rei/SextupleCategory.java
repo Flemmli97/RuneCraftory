@@ -48,7 +48,7 @@ public class SextupleCategory implements DisplayCategory<SextupleDisplay> {
 
     @Override
     public Component getTitle() {
-        return new TranslatableComponent("tile.crafting." + this.type.getId());
+        return new TranslatableComponent("runecraftory.tile.crafting." + this.type.getId());
     }
 
     @Override

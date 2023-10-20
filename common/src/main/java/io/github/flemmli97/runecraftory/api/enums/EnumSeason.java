@@ -4,10 +4,10 @@ import net.minecraft.ChatFormatting;
 
 public enum EnumSeason {
 
-    SPRING(ChatFormatting.RED, "season.spring"),
-    SUMMER(ChatFormatting.DARK_GREEN, "season.summer"),
-    FALL(ChatFormatting.GOLD, "season.fall"),
-    WINTER(ChatFormatting.BLUE, "season.winter");
+    SPRING(ChatFormatting.RED, "runecraftory.season.spring"),
+    SUMMER(ChatFormatting.DARK_GREEN, "runecraftory.season.summer"),
+    FALL(ChatFormatting.GOLD, "runecraftory.season.fall"),
+    WINTER(ChatFormatting.BLUE, "runecraftory.season.winter");
 
     private final ChatFormatting color;
     private final String translationKey;

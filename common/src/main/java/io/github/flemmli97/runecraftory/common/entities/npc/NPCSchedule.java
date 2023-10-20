@@ -91,10 +91,10 @@ public class NPCSchedule {
             }
             List<Component> newList = new ArrayList<>();
             boolean noBreaks = this.schedule.breakTime == this.schedule.workTimeAfter;
-            newList.add(new TranslatableComponent("npc.schedule.work", this.formatTime(this.schedule.workTime), noBreaks ? this.formatTime(this.schedule.doneWorkTime) : this.formatTime(this.schedule.breakTime)));
+            newList.add(new TranslatableComponent("runecraftory.npc.schedule.work", this.formatTime(this.schedule.workTime), noBreaks ? this.formatTime(this.schedule.doneWorkTime) : this.formatTime(this.schedule.breakTime)));
             if (!noBreaks)
                 newList.add(new TranslatableComponent("npc.schedule.work.2", this.formatTime(this.schedule.workTimeAfter), this.formatTime(this.schedule.doneWorkTime)));
-            newList.add(new TranslatableComponent("npc.schedule.days.header"));
+            newList.add(new TranslatableComponent("runecraftory.npc.schedule.days.header"));
             List<EnumDay> weekDayCounts = new ArrayList<>();
             for (EnumDay day : EnumDay.values()) {
                 if (day == EnumDay.SATURDAY || day == EnumDay.SUNDAY)
@@ -103,13 +103,13 @@ public class NPCSchedule {
                     weekDayCounts.add(day);
             }
             if (this.schedule.workDays.size() == EnumDay.values().length) {
-                newList.add(new TranslatableComponent("npc.schedule.days.all"));
+                newList.add(new TranslatableComponent("runecraftory.npc.schedule.days.all"));
             } else {
                 switch (weekDayCounts.size()) {
                     case 0 -> newList.add(new TranslatableComponent("npc.schedule.days.0"));
                     case 1 -> newList.add(new TranslatableComponent("npc.schedule.days.1", new TranslatableComponent(weekDayCounts.get(0).translationFull())));
                     case 2 -> newList.add(new TranslatableComponent("npc.schedule.days.2", new TranslatableComponent(weekDayCounts.get(0).translationFull(), weekDayCounts.get(1))));
-                    default -> newList.add(new TranslatableComponent("npc.schedule.days.with", this.schedule.workDays.stream().filter(day -> day != EnumDay.SATURDAY && day != EnumDay.SUNDAY).map(e -> new TranslatableComponent(e.translationFull())).toArray()));
+                    default -> newList.add(new TranslatableComponent("runecraftory.npc.schedule.days.with", this.schedule.workDays.stream().filter(day -> day != EnumDay.SATURDAY && day != EnumDay.SUNDAY).map(e -> new TranslatableComponent(e.translationFull())).toArray()));
                 }
                 if (this.schedule.workDays.contains(EnumDay.SATURDAY)) {
                     if (this.schedule.workDays.contains(EnumDay.SUNDAY))

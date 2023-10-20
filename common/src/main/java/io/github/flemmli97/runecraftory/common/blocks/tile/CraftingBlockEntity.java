@@ -36,7 +36,7 @@ public class CraftingBlockEntity extends BlockEntity implements MenuProvider {
 
     @Override
     public Component getDisplayName() {
-        return new TranslatableComponent("tile.crafting." + this.type.getId());
+        return new TranslatableComponent("runecraftory.tile.crafting." + this.type.getId());
     }
 
     @Override

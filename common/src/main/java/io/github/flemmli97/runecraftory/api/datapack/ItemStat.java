@@ -236,29 +236,29 @@ public class ItemStat {
 
     public List<Component> texts(ItemStack stack, boolean showStat) {
         List<Component> list = new ArrayList<>();
-        MutableComponent price = ItemNBT.shouldHaveLevel(stack) ? new TranslatableComponent("tooltip.item.level", ItemNBT.itemLevel(stack)) : null;
+        MutableComponent price = ItemNBT.shouldHaveLevel(stack) ? new TranslatableComponent("runecraftory.tooltip.item.level", ItemNBT.itemLevel(stack)) : null;
         if (ItemUtils.getBuyPrice(stack, this) > 0) {
             if (price == null)
-                price = new TranslatableComponent("tooltip.item.buy", ItemUtils.getBuyPrice(stack, this));
+                price = new TranslatableComponent("runecraftory.tooltip.item.buy", ItemUtils.getBuyPrice(stack, this));
             else
-                price.append(" ").append(new TranslatableComponent("tooltip.item.buy", ItemUtils.getBuyPrice(stack, this))).append(" ");
+                price.append(" ").append(new TranslatableComponent("runecraftory.tooltip.item.buy", ItemUtils.getBuyPrice(stack, this))).append(" ");
         }
         if (ItemUtils.getSellPrice(stack, this) > 0) {
             if (price == null)
-                price = new TranslatableComponent("tooltip.item.sell", ItemUtils.getSellPrice(stack, this));
+                price = new TranslatableComponent("runecraftory.tooltip.item.sell", ItemUtils.getSellPrice(stack, this));
             else
-                price.append(" ").append(new TranslatableComponent("tooltip.item.sell", ItemUtils.getSellPrice(stack, this)));
+                price.append(" ").append(new TranslatableComponent("runecraftory.tooltip.item.sell", ItemUtils.getSellPrice(stack, this)));
         }
         if (price != null)
             list.add(price.withStyle(ChatFormatting.YELLOW));
         boolean shouldHaveStats = ItemNBT.shouldHaveStats(stack);
         if (!shouldHaveStats && this.getDiff() > 0)
-            list.add(new TranslatableComponent("tooltip.item.difficulty", this.getDiff()).withStyle(ChatFormatting.YELLOW));
+            list.add(new TranslatableComponent("runecraftory.tooltip.item.difficulty", this.getDiff()).withStyle(ChatFormatting.YELLOW));
         if (showStat) {
             AttributeMapDisplay stats = getStatsAttributeMap(stack);
             List<Component> statsTooltip = stats.components();
             if (!statsTooltip.isEmpty()) {
-                String prefix = shouldHaveStats ? "tooltip.item.equipped" : "tooltip.item.upgrade";
+                String prefix = shouldHaveStats ? "runecraftory.tooltip.item.equipped" : "runecraftory.tooltip.item.upgrade";
                 list.add(new TranslatableComponent(prefix).withStyle(ChatFormatting.GRAY));
                 list.addAll(statsTooltip);
             }
