@@ -191,12 +191,25 @@ public abstract class NPCDataProvider implements DataProvider {
         this.looks.put(data.look(), look);
     }
 
-    public void addNPCDataAll(String id, NPCData.Builder data, Map<NPCData.ConversationType, NPCData.ConversationSet.Builder> conversations, NPCData.NPCLook look) {
+    public void addNPCDataAll(String id, NPCData.Builder data, Map<NPCData.ConversationType, NPCData.ConversationSet.Builder> conversations,
+                              NPCData.NPCLook look, Map<ResourceLocation, QuestResponseBuilder> questConversations) {
         conversations.forEach((key, value) -> {
             ResourceLocation conversationId = new ResourceLocation(this.modid, id + "/" + key.key);
             this.translations.putAll(value.getTranslations());
             this.conversations.put(conversationId, value.build());
             data.addInteractionIfAbsent(key, conversationId);
+        });
+        questConversations.forEach((key, value) -> {
+            ResourceLocation startId = new ResourceLocation(this.modid, id + "/quest_start_" + key.getPath());
+            this.translations.putAll(value.start.getTranslations());
+            this.conversations.put(startId, value.start.build());
+            ResourceLocation runId = new ResourceLocation(this.modid, id + "/quest_active_" + key.getPath());
+            this.translations.putAll(value.active.getTranslations());
+            this.conversations.put(runId, value.active.build());
+            ResourceLocation endId = new ResourceLocation(this.modid, id + "/quest_end_" + key.getPath());
+            this.translations.putAll(value.end.getTranslations());
+            this.conversations.put(endId, value.end.build());
+            data.addQuestResponse(key, startId, runId, endId);
         });
         this.translations.putAll(data.getTranslations());
         NPCData npcData = data.build();

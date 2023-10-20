@@ -82,13 +82,18 @@ public class NPCQuest extends QuestBase {
     }
 
     @Override
-    public List<MutableComponent> getDescription(ServerPlayer player) {
+    public MutableComponent getTask(ServerPlayer player, int idx) {
+        return new TranslatableComponent(this.questTaskString);
+    }
+
+    @Override
+    public List<MutableComponent> getDescription(ServerPlayer player, int idx) {
         if (this.npcUuid != null) {
             EntityNPCBase npc = EntityUtil.findFromUUID(EntityNPCBase.class, player.getLevel(), this.npcUuid);
             if (npc != null)
                 return this.questTaskDesc.stream().map(s -> new TranslatableComponent(s, npc.getCustomName(), npc.getX(), npc.getY(), npc.getZ())).collect(Collectors.toList());
         }
-        return super.getDescription(player);
+        return super.getDescription(player, idx);
     }
 
     @Override

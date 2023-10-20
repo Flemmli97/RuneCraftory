@@ -48,7 +48,7 @@ public class SimpleQuestIntegrationImpl extends SimpleQuestIntegration {
         Map<ResourceLocation, QuestBase> quest = SimpleQuestIntegration.INST().getQuestsFor(player);
         PlayerData data = PlayerData.get(player);
         Platform.INSTANCE.sendToClient(new S2COpenQuestGui(quest.entrySet().stream().sorted(Map.Entry.comparingByKey())
-                .map(e -> new ClientSideQuestDisplay(e.getKey(), e.getValue().getTask(), e.getValue().getDescription(player), data.isActive(e.getKey()))).toList()), player);
+                .map(e -> new ClientSideQuestDisplay(e.getKey(), e.getValue().getTask(player), e.getValue().getDescription(player), data.isActive(e.getKey()))).toList()), player);
         ((SimpleQuestData) PlayerData.get(player)).setQuestboardQuests(quest);
     }
 
