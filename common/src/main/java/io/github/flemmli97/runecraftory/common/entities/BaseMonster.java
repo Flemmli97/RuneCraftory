@@ -1180,6 +1180,11 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         if (!this.level.isClientSide) {
             if (this.level.getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getOwner() instanceof ServerPlayer)
                 this.getOwner().sendMessage(this.getCombatTracker().getDeathMessage(), Util.NIL_UUID);
+            if (this.getServer() != null && this.getOwnerUUID() != null) {
+                WorldHandler.get(this.getServer())
+                        .removeMonsterFromPlayer(this.getOwnerUUID(), this);
+                this.assignedBarn = null;
+            }
             this.getAnimationHandler().setAnimation(null);
             List<CombatEntry> entries = ((CombatTrackerAccessor) this.getCombatTracker()).getEntries();
             entries.forEach(e -> {
@@ -1694,7 +1699,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 Platform.INSTANCE.getPlayerData(this.getOwner()).ifPresent(d -> d.party.removePartyMember(this));
             else
                 WorldHandler.get(this.getServer())
-                        .removeMonsterFromPlayer(this.getOwnerUUID(), this);
+                        .toRemovePartyMember(this);
             this.assignedBarn = null;
         }
         this.setOwner(null);
