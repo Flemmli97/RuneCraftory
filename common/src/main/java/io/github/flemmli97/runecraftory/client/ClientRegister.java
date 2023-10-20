@@ -351,6 +351,7 @@ public class ClientRegister {
         consumer.register(ModEntities.RUNEY.get(), RenderRuney::new);
         consumer.register(ModEntities.STAT_BONUS.get(), EmptyRender::new);
 
+        consumer.register(ModEntities.SPORE_CIRCLE_SUMMONER.get(), EmptyRender::new);
         consumer.register(ModEntities.BUTTERFLY_SUMMONER.get(), EmptyRender::new);
         consumer.register(ModEntities.DARK_BULLET_SUMMONER.get(), EmptyRender::new);
         consumer.register(ModEntities.ELEMENTAL_BARRAGE_SUMMONER.get(), EmptyRender::new);

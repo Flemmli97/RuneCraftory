@@ -72,6 +72,8 @@ public class EntityTroll extends BaseMonster {
     @Override
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
+            if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), null))
+                return;
             if (command == 2)
                 this.getAnimationHandler().setAnimation(SLAM);
             else if (command == 1)

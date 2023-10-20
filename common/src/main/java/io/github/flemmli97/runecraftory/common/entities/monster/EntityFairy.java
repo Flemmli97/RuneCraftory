@@ -113,6 +113,8 @@ public class EntityFairy extends BaseMonster implements HealingPredicateEntity {
     @Override
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
+            if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), command == 1 ? ModSpells.SHINE.get() : ModSpells.DOUBLE_BULLET.get()))
+                return;
             if (command == 1)
                 this.getAnimationHandler().setAnimation(LIGHT);
             else

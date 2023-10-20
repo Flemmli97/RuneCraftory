@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.monster.wisp;
 
+import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
@@ -13,6 +14,11 @@ public class EntityIgnis extends EntityWispBase {
 
     public EntityIgnis(EntityType<? extends EntityWispBase> type, Level world) {
         super(type, world);
+    }
+
+    @Override
+    protected Spell getSpellFor(int command) {
+        return ModSpells.FIREBALL.get();
     }
 
     @Override

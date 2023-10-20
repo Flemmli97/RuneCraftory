@@ -252,6 +252,8 @@ public class EntityThunderbolt extends BossMonster {
     @Override
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
+            if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), command == 2 ? ModSpells.LASER5.get() : null))
+                return;
             if (command == 2)
                 this.getAnimationHandler().setAnimation(LASER_X5);
             else if (command == 1)

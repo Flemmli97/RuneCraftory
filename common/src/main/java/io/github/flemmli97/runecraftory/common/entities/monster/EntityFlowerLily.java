@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
+import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.EvadingRangedAttackGoal;
@@ -67,18 +68,20 @@ public class EntityFlowerLily extends BaseMonster {
             if (anim.getTick() == 1 && this.getTarget() != null)
                 this.lookAt(this.getTarget(), 360, 90);
             if (anim.canAttack()) {
-                this.doRangedAttack();
+                this.rangedAttackSpell().use(this);
             }
         }
     }
 
-    protected void doRangedAttack() {
-        ModSpells.DOUBLE_BULLET.get().use(this);
+    protected Spell rangedAttackSpell() {
+        return ModSpells.DOUBLE_BULLET.get();
     }
 
     @Override
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
+            if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), command == 0 ? this.rangedAttackSpell() : null))
+                return;
             if (command == 1)
                 this.getAnimationHandler().setAnimation(LEAP);
             else

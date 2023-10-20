@@ -4,8 +4,7 @@ import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedMeleeGoal;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntitySpore;
-import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
+import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
@@ -76,16 +75,8 @@ public class EntityBigMuck extends BaseMonster {
                 Vec3 look = Vec3.directionFromRotation(0, this.yHeadRot).scale(1.3);
                 this.attackPos = RayTraceUtils.rotatedVecs(look, new Vec3(0, 1, 0), -180, 135, 45);
             }
-            if (anim.getTick() > anim.getAttackTime()) {
-                if (EntityUtils.sealed(this))
-                    return;
-                int i = (anim.getTick() - anim.getAttackTime()) / 3;
-                if (i < this.attackPos.size()) {
-                    Vector3f vec = this.attackPos.get(i);
-                    EntitySpore spore = new EntitySpore(this.level, this);
-                    spore.setPos(spore.getX() + vec.x(), spore.getY() + 0.4, spore.getZ() + vec.z());
-                    this.level.addFreshEntity(spore);
-                }
+            if (anim.canAttack()) {
+                ModSpells.SPORE_CIRCLE_SPELL.get().use(this);
             }
         } else
             super.handleAttack(anim);
@@ -94,7 +85,9 @@ public class EntityBigMuck extends BaseMonster {
     @Override
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
-            if (command == 2)
+            if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), command == 1 ? ModSpells.SPORE_CIRCLE_SPELL.get() : null))
+                return;
+            if (command == 1)
                 this.getAnimationHandler().setAnimation(SPORE);
             else
                 this.getAnimationHandler().setAnimation(SLAP);

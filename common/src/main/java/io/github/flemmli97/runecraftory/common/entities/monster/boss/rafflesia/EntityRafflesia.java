@@ -264,6 +264,8 @@ public class EntityRafflesia extends BossMonster implements DelayedAttacker {
     @Override
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
+            if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), command == 1 ? ModSpells.RAFFLESIA_POISON.get() : ModSpells.RAFFLESIA_PARA.get()))
+                return;
             if (command == 1)
                 this.getAnimationHandler().setAnimation(POISON_BREATH);
             else

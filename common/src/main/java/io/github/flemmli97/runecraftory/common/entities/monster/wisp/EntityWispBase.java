@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.monster.wisp;
 
+import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.NearestTargetNoLoS;
@@ -137,12 +138,16 @@ public abstract class EntityWispBase extends BaseMonster {
     @Override
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
+            if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), this.getSpellFor(command)))
+                return;
             if (command == 1)
                 this.getAnimationHandler().setAnimation(ATTACK_CLOSE);
             else
                 this.getAnimationHandler().setAnimation(ATTACK_FAR);
         }
     }
+
+    protected abstract Spell getSpellFor(int command);
 
     @Override
     public float attackChance(AnimationType type) {

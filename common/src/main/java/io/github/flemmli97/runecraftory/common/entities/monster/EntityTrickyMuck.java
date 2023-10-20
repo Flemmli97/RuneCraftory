@@ -60,11 +60,16 @@ public class EntityTrickyMuck extends EntityBigMuck {
     @Override
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
-            if (command == 2)
-                this.getAnimationHandler().setAnimation(SPORE_BALL);
-            if (command == 1)
-                this.getAnimationHandler().setAnimation(SPORE);
-            else
+            if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), command == 2 ? ModSpells.POISON_BALL.get() : null))
+                return;
+            if (command == 2) {
+                if (this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), ModSpells.POISON_BALL.get()))
+                    this.getAnimationHandler().setAnimation(SPORE_BALL);
+            }
+            if (command == 1) {
+                if (this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), ModSpells.SPORE_CIRCLE_SPELL.get()))
+                    this.getAnimationHandler().setAnimation(SPORE);
+            } else
                 this.getAnimationHandler().setAnimation(SLAP);
         }
     }

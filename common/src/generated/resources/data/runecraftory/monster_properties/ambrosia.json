@@ -7,6 +7,23 @@
   "flying": true,
   "size": 2,
   "needsRoof": true,
+  "rideActionCosts": {
+    "command_1": {
+      "multiplier": 1.0,
+      "cost": 0,
+      "fixed": true
+    },
+    "command_2": {
+      "multiplier": 0.5,
+      "cost": 0,
+      "fixed": false
+    },
+    "command_3": {
+      "multiplier": 0.5,
+      "cost": 0,
+      "fixed": false
+    }
+  },
   "baseValues": {
     "minecraft:generic.max_health": 220.0,
     "minecraft:generic.attack_damage": 10.0,

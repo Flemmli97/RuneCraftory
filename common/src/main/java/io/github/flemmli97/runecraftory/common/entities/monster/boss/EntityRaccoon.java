@@ -132,7 +132,7 @@ public class EntityRaccoon extends BossMonster {
                 if (entity.isEnraged())
                     ModSpells.SMALL_LEAF_SPELL_X7.get().use(entity);
                 else {
-                    if (entity.random.nextFloat() < 0.6)
+                    if (entity.isTamed() || entity.random.nextFloat() < 0.6)
                         ModSpells.SMALL_LEAF_SPELL_X3.get().use(entity);
                     else
                         ModSpells.SMALL_LEAF_SPELL_X5.get().use(entity);
@@ -407,6 +407,8 @@ public class EntityRaccoon extends BossMonster {
     @Override
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
+            if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), command == 2 ? ModSpells.SMALL_LEAF_SPELL_X3.get() : null))
+                return;
             if (command == 2)
                 this.getAnimationHandler().setAnimation(LEAF_SHOOT);
             else if (command == 1)

@@ -60,6 +60,7 @@ import io.github.flemmli97.runecraftory.common.spells.SleepAuraSpell;
 import io.github.flemmli97.runecraftory.common.spells.SleepBallSpell;
 import io.github.flemmli97.runecraftory.common.spells.SmallLeafSpell;
 import io.github.flemmli97.runecraftory.common.spells.SnowballSpell;
+import io.github.flemmli97.runecraftory.common.spells.SporeCircleSpell;
 import io.github.flemmli97.runecraftory.common.spells.StoneThrowSpell;
 import io.github.flemmli97.runecraftory.common.spells.TeleportSpell;
 import io.github.flemmli97.runecraftory.common.spells.ThrowHandItemSpell;
@@ -133,7 +134,8 @@ public class ModSpells {
 
     public static final RegistryEntrySupplier<Spell> TELEPORT = registerSpell("teleport", TeleportSpell::new, new SpellProperties.Builder(30, 0));
 
-    public static final RegistryEntrySupplier<Spell> GUST_SPELL = registerSpell("gust", GustSpell::new, new SpellProperties.Builder(10, 5).withXPGain(EnumSkills.WIND, 5));
+    public static final RegistryEntrySupplier<Spell> SPORE_CIRCLE_SPELL = registerSpell("spore_circle", SporeCircleSpell::new, new SpellProperties.Builder(10, 5).withXPGain(EnumSkills.EARTH, 5).affectedSkill(EnumSkills.EARTH));
+    public static final RegistryEntrySupplier<Spell> GUST_SPELL = registerSpell("gust", GustSpell::new, new SpellProperties.Builder(10, 0).withXPGain(EnumSkills.WIND, 5));
     public static final RegistryEntrySupplier<Spell> STONE_THROW = registerSpell("stone_throw", StoneThrowSpell::new, new SpellProperties.Builder(10, 7));
     public static final RegistryEntrySupplier<Spell> WEB_SHOT = registerSpell("web_shot", WebShotSpell::new, new SpellProperties.Builder(15, 10));
     public static final RegistryEntrySupplier<Spell> SPIRIT_FLAME = registerSpell("spirit_flame", () -> new ElementalSpell(EnumElement.DARK), new SpellProperties.Builder(10, 7).withXPGain(EnumSkills.DARK, 7).affectedSkill(EnumSkills.DARK));

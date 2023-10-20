@@ -52,6 +52,8 @@ public class EntityGoblinGangster extends EntityGoblin {
     @Override
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
+            if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), command == 1 ? ModSpells.THROW_HAND_ITEM.get() : null))
+                return;
             if (command == 1)
                 this.getAnimationHandler().setAnimation(DOUBLE_THROW);
             else

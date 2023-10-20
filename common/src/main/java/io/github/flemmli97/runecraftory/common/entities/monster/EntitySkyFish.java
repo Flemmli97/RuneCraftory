@@ -124,12 +124,18 @@ public class EntitySkyFish extends BaseMonster {
     @Override
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
-            if (command == 2)
-                this.getAnimationHandler().setAnimation(SWIPE);
-            else if (command == 1)
+            if (command == 1) {
+                if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), ModSpells.WATER_LASER.get()))
+                    return;
                 this.getAnimationHandler().setAnimation(BEAM);
-            else
-                this.getAnimationHandler().setAnimation(SLAP);
+            } else {
+                if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), null))
+                    return;
+                if (command == 2) {
+                    this.getAnimationHandler().setAnimation(SWIPE);
+                } else
+                    this.getAnimationHandler().setAnimation(SLAP);
+            }
         }
     }
 

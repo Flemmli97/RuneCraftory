@@ -223,6 +223,8 @@ public class EntityMarionetta extends BossMonster {
     @Override
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
+            if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), command == 2 ? ModSpells.CARD_THROW.get() : null))
+                return;
             if (command == 2)
                 this.getAnimationHandler().setAnimation(CARD_ATTACK);
             else if (command == 1)

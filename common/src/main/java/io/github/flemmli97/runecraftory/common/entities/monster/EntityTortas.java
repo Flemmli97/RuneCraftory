@@ -96,6 +96,8 @@ public class EntityTortas extends ChargingMonster {
     @Override
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
+            if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), null))
+                return;
             if (command == 1)
                 this.getAnimationHandler().setAnimation(SPIN);
             else

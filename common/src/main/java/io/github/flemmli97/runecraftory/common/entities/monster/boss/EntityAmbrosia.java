@@ -166,11 +166,13 @@ public class EntityAmbrosia extends BossMonster implements DelayedAttacker {
     @Override
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
-            if (command == 2)
-                this.getAnimationHandler().setAnimation(WAVE);
-            else if (command == 1)
-                this.getAnimationHandler().setAnimation(SLEEP);
-            else
+            if (command == 2) {
+                if (this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), ModSpells.WAVE.get()))
+                    this.getAnimationHandler().setAnimation(WAVE);
+            } else if (command == 1) {
+                if (this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), ModSpells.SLEEP_BALLS.get()))
+                    this.getAnimationHandler().setAnimation(SLEEP);
+            } else if (this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), null))
                 this.getAnimationHandler().setAnimation(KICK_1);
         }
     }

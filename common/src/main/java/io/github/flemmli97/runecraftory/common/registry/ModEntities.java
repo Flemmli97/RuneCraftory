@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.EntityProperties;
+import io.github.flemmli97.runecraftory.api.datapack.EntityRideActionCosts;
 import io.github.flemmli97.runecraftory.api.datapack.GateSpawnData;
 import io.github.flemmli97.runecraftory.common.RFCreativeTabs;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
@@ -58,6 +59,7 @@ import io.github.flemmli97.runecraftory.common.entities.misc.EntityWispFlame;
 import io.github.flemmli97.runecraftory.common.entities.misc.RafflesiaBreathSummoner;
 import io.github.flemmli97.runecraftory.common.entities.misc.RafflesiaCircleSummoner;
 import io.github.flemmli97.runecraftory.common.entities.misc.RootSpikeSummoner;
+import io.github.flemmli97.runecraftory.common.entities.misc.SporeCircleSummoner;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityAnt;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityBeetle;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityBigAnt;
@@ -235,7 +237,9 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_CRIT, 5)
                     .putAttributes(ModAttributes.RES_LOVE, 10)
                     .putAttributes(ModAttributes.RES_DARK, -5)
-                    .xp(20).money(3).tamingChance(0.05f).setRideable(),
+                    .xp(20).money(3).tamingChance(0.05f).setRideable()
+                    .withRideActionCosts(new EntityRideActionCosts.Builder().secondCost(0.5f, 0, false)
+                            .thirdCost(0.5f, 0, false)),
             new GateSpawnData.Builder(0, 0).addToBiomeTag(40, ModTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, ModTags.IS_LUSH, ModTags.IS_MAGICAL, ModTags.IS_MUSHROOM));
     public static final RegistryEntrySupplier<EntityType<EntityBuffamoo>> BUFFAMOO = regMonster(EntityType.Builder.of(EntityBuffamoo::new, MobCategory.MONSTER).sized(1.2f, 1.45f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "buffamoo"),
             0xd8d8d0, 0x4e4e4c,
@@ -323,7 +327,8 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_CRIT, 5)
                     .putAttributes(ModAttributes.RES_FIRE, -25)
                     .putAttributes(ModAttributes.RES_WATER, 15)
-                    .xp(50).money(6).tamingChance(0.05f).setRideable().setFlying(),
+                    .xp(50).money(6).tamingChance(0.05f).setRideable().setFlying()
+                    .withRideActionCosts(new EntityRideActionCosts.Builder().secondCost(0.5f, 0, false)),
             new GateSpawnData.Builder(0, 5).canSpawnUnderwater().addToBiomeTag(40, ModTags.IS_BEACH, ModTags.IS_WATER));
     public static final RegistryEntrySupplier<EntityType<EntityWeagle>> WEAGLE = regMonster(EntityType.Builder.of(EntityWeagle::new, MobCategory.MONSTER).sized(0.8f, 1.1f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "weagle"),
             0x8e127b, 0xdb9dd2, true,
@@ -397,7 +402,8 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_LOVE, 10)
                     .putAttributes(ModAttributes.RES_LIGHT, 10)
                     .putAttributes(ModAttributes.RES_DARK, -10)
-                    .xp(66).money(6).tamingChance(0.05f).setFlying(),
+                    .xp(66).money(6).tamingChance(0.05f).setFlying()
+                    .withRideActionCosts(new EntityRideActionCosts.Builder(0.5f, 0, false).secondCost(0.5f, 0, false)),
             new GateSpawnData.Builder(0, 4).addToBiomeTag(30, ModTags.IS_PLAINS, BiomeTags.IS_FOREST, ModTags.IS_MAGICAL));
     public static final RegistryEntrySupplier<EntityType<EntityGhost>> GHOST = regMonster(EntityType.Builder.of(EntityGhost::new, MobCategory.MONSTER).sized(0.8f, 2.1f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "ghost"),
             0x4d3d35, 0x838383, true,
@@ -427,7 +433,8 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_CRIT, 5)
                     .putAttributes(ModAttributes.RES_LIGHT, -10)
                     .putAttributes(ModAttributes.RES_DARK, 10)
-                    .xp(75).money(5).tamingChance(0.05f).setFlying(),
+                    .xp(75).money(5).tamingChance(0.05f).setFlying()
+                    .withRideActionCosts(new EntityRideActionCosts.Builder(0.5f, 0, false)),
             new GateSpawnData.Builder(500, 3).addToBiomeTag(50, ModTags.IS_SPOOKY, ModTags.IS_DEAD, ModTags.IS_SWAMP, ModTags.IS_MAGICAL, ModTags.IS_END));
     public static final RegistryEntrySupplier<EntityType<EntityGhostRay>> GHOST_RAY = regMonster(EntityType.Builder.of(EntityGhostRay::new, MobCategory.MONSTER).sized(1f, 3.2f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "ghost_ray"),
             0x552217, 0x905a5a, true,
@@ -459,7 +466,8 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_FIRE, -10)
                     .putAttributes(ModAttributes.RES_EARTH, 10)
                     .putAttributes(ModAttributes.RES_DARK, 10)
-                    .xp(65).money(8).tamingChance(0.05f),
+                    .xp(65).money(8).tamingChance(0.05f)
+                    .withRideActionCosts(new EntityRideActionCosts.Builder(0.5f, 0, false).secondCost(0.5f, 0, false)),
             new GateSpawnData.Builder(0, 0).addToBiomeTag(60, ModTags.IS_SPOOKY, BiomeTags.IS_FOREST, BiomeTags.IS_JUNGLE, ModTags.IS_LUSH));
     public static final RegistryEntrySupplier<EntityType<EntityPanther>> SHADOW_PANTHER = regMonster(EntityType.Builder.of(EntityPanther::new, MobCategory.MONSTER).sized(1.3f, 2.2f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "shadow_panther"),
             0x27375b, 0x733838,
@@ -565,7 +573,8 @@ public class ModEntities {
                     .putAttributes(ModAttributes.CRIT, 1)
                     .putAttributes(ModAttributes.RES_CRIT, 5)
                     .putAttributes(ModAttributes.RES_FIRE, -15)
-                    .xp(135).money(4).tamingChance(0.05f).setRideable().setMinLevel(5),
+                    .xp(135).money(4).tamingChance(0.05f).setRideable().setMinLevel(5)
+                    .withRideActionCosts(new EntityRideActionCosts.Builder(0.5f, 0, false)),
             new GateSpawnData.Builder(0, 6).addToBiomeTag(30, ModTags.IS_PLAINS, BiomeTags.IS_FOREST));
     public static final RegistryEntrySupplier<EntityType<EntityWolf>> SILVER_WOLF = regMonster(EntityType.Builder.of(EntityWolf::new, MobCategory.MONSTER).sized(0.8f, 1.15f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "silver_wolf"),
             0x9bb9c3, 0x436ea1,
@@ -596,7 +605,8 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_CRIT, 5)
                     .putAttributes(ModAttributes.RES_FIRE, -15)
                     .putAttributes(ModAttributes.RES_WIND, 15)
-                    .xp(35).money(4).tamingChance(0.05f).setRideable().setMinLevel(10),
+                    .xp(35).money(4).tamingChance(0.05f).setRideable().setMinLevel(10)
+                    .withRideActionCosts(new EntityRideActionCosts.Builder(0.5f, 0, false).secondCost(1, 0, true)),
             new GateSpawnData.Builder(0, 10).addToBiomeTag(50, ModTags.IS_LUSH, BiomeTags.IS_FOREST, ModTags.IS_MAGICAL));
     public static final RegistryEntrySupplier<EntityType<EntityChipsqueek>> FURPY = regMonster(EntityType.Builder.of(EntityChipsqueek::new, MobCategory.MONSTER).sized(0.65f, 0.95f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "furpy"),
             0xab8620, 0xf9ffbb,
@@ -656,7 +666,9 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_CRIT, 5)
                     .putAttributes(ModAttributes.RES_EARTH, 15)
                     .putAttributes(ModAttributes.RES_LOVE, -10)
-                    .xp(40).money(3).tamingChance(0.05f).setRideable(),
+                    .xp(40).money(3).tamingChance(0.05f).setRideable()
+                    .withRideActionCosts(new EntityRideActionCosts.Builder().secondCost(0.5f, 0, false)
+                            .thirdCost(0.5f, 0, false)),
             new GateSpawnData.Builder(0, 0).addToBiomeTag(5, BiomeTags.IS_FOREST, ModTags.IS_LUSH, ModTags.IS_MAGICAL, ModTags.IS_MUSHROOM));
     public static final RegistryEntrySupplier<EntityType<EntityFlowerLily>> FLOWER_LILY = regMonster(EntityType.Builder.of(EntityFlowerLily::new, MobCategory.MONSTER).sized(0.75f, 1.65f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "flower_lily"),
             0xe8b3e7, 0x156e12,
@@ -672,7 +684,8 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_WIND, 7)
                     .putAttributes(ModAttributes.RES_EARTH, 7)
                     .putAttributes(ModAttributes.RES_FIRE, -10)
-                    .xp(40).money(3).tamingChance(0.06f).setRideable(),
+                    .xp(40).money(3).tamingChance(0.06f).setRideable()
+                    .withRideActionCosts(new EntityRideActionCosts.Builder(0.5f, 0, false).secondCost(1, 0, true)),
             new GateSpawnData.Builder(0, 0).addToBiomeTag(20, ModTags.IS_LUSH, ModTags.IS_MAGICAL, BiomeTags.IS_JUNGLE));
     public static final RegistryEntrySupplier<EntityType<EntityKingWooly>> KING_WOOLY = regMonster(EntityType.Builder.of(EntityKingWooly::new, MobCategory.MONSTER).sized(1.8f, 3.9f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "king_wooly"),
             0xffffcc, 0xffffff,
@@ -748,7 +761,8 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_CRIT, 5)
                     .putAttributes(ModAttributes.RES_FIRE, 25)
                     .putAttributes(ModAttributes.RES_WATER, -25)
-                    .xp(75).money(5).tamingChance(0.05f).setFlying(),
+                    .xp(75).money(5).tamingChance(0.05f).setFlying()
+                    .withRideActionCosts(new EntityRideActionCosts.Builder(0.5f, 0, false)),
             new GateSpawnData.Builder(500, 3).addToBiomeTag(30, ModTags.IS_SPOOKY, ModTags.IS_DEAD, ModTags.IS_HOT, BiomeTags.IS_BADLANDS));
     public static final RegistryEntrySupplier<EntityType<EntityScorpion>> SCORPION = regMonster(EntityType.Builder.of(EntityScorpion::new, MobCategory.MONSTER).sized(1.1f, 0.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "scorpion"),
             0x606060, 0xacacac,
@@ -791,7 +805,9 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_CRIT, 5)
                     .putAttributes(ModAttributes.RES_FIRE, -5)
                     .putAttributes(ModAttributes.RES_WIND, -5)
-                    .xp(100).money(3).tamingChance(0.05f).setRideable(),
+                    .xp(100).money(3).tamingChance(0.05f).setRideable()
+                    .withRideActionCosts(new EntityRideActionCosts.Builder().secondCost(0.5f, 0, false)
+                            .thirdCost(1, 0, true)),
             new GateSpawnData.Builder(0, 0).addToBiomeTag(10, ModTags.IS_HOT, ModTags.IS_SAVANNA));
     public static final RegistryEntrySupplier<EntityType<EntityVeggieGhost>> TOMATO_GHOST = regMonster(EntityType.Builder.of(EntityVeggieGhost::new, MobCategory.MONSTER).sized(0.75f, 1.65f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "tomato_ghost"),
             0x902323, 0x85268b, true,
@@ -807,7 +823,8 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_WIND, -5)
                     .putAttributes(ModAttributes.RES_DARK, 10)
                     .putAttributes(ModAttributes.RES_LIGHT, 10)
-                    .xp(100).money(3).tamingChance(0.05f).setRideable(),
+                    .xp(100).money(3).tamingChance(0.05f).setRideable()
+                    .withRideActionCosts(new EntityRideActionCosts.Builder().secondCost(0.5f, 0, false)),
             new GateSpawnData.Builder(0, 0).addToBiomeTag(20, ModTags.IS_HOT, ModTags.IS_DEAD, ModTags.IS_WASTELAND));
 
     public static final RegistryEntrySupplier<EntityType<EntityAmbrosia>> AMBROSIA = regMonster(EntityType.Builder.of(EntityAmbrosia::new, MobCategory.MONSTER).sized(0.85f, 2.3f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "ambrosia"),
@@ -830,7 +847,9 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_STUN, 50)
                     .putAttributes(ModAttributes.RES_FAINT, 100)
                     .putAttributes(ModAttributes.RES_DRAIN, 10)
-                    .xp(500).money(150).tamingChance(0.005f).setBarnOccupancy(2).setRideable().setFlying());
+                    .xp(500).money(150).tamingChance(0.005f).setBarnOccupancy(2).setRideable().setFlying()
+                    .withRideActionCosts(new EntityRideActionCosts.Builder().secondCost(0.5f, 0, false)
+                            .thirdCost(0.5f, 0, false)));
     public static final RegistryEntrySupplier<EntityType<EntityThunderbolt>> THUNDERBOLT = regMonster(EntityType.Builder.of(EntityThunderbolt::new, MobCategory.MONSTER).sized(1.6f, 1.8f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "thunderbolt"),
             0x212121, 0x2f1177,
             new EntityProperties.Builder()
@@ -849,7 +868,9 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_STUN, 50)
                     .putAttributes(ModAttributes.RES_FAINT, 100)
                     .putAttributes(ModAttributes.RES_DRAIN, 10)
-                    .xp(650).money(150).tamingChance(0.005f).setBarnOccupancy(2).setRideable());
+                    .xp(650).money(150).tamingChance(0.005f).setBarnOccupancy(2).setRideable()
+                    .withRideActionCosts(new EntityRideActionCosts.Builder()
+                            .thirdCost(0.5f, 0, false)));
     public static final RegistryEntrySupplier<EntityType<EntityMarionetta>> MARIONETTA = regMonster(EntityType.Builder.of(EntityMarionetta::new, MobCategory.MONSTER).sized(0.8f, 2.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "marionetta"),
             0xb86b13, 0xd8d7d7,
             new EntityProperties.Builder()
@@ -869,7 +890,9 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_STUN, 50)
                     .putAttributes(ModAttributes.RES_FAINT, 100)
                     .putAttributes(ModAttributes.RES_DRAIN, 10)
-                    .xp(900).money(150).tamingChance(0.005f).setBarnOccupancy(2).setRideable());
+                    .xp(900).money(150).tamingChance(0.005f).setBarnOccupancy(2).setRideable()
+                    .withRideActionCosts(new EntityRideActionCosts.Builder()
+                            .thirdCost(0.5f, 0, false)));
     public static final RegistryEntrySupplier<EntityType<EntityDeadTree>> DEAD_TREE = regMonster(EntityType.Builder.of(EntityDeadTree::new, MobCategory.MONSTER).sized(1.8f, 7f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "dead_tree"),
             0x3e4a40, 0x227904,
             new EntityProperties.Builder()
@@ -890,7 +913,9 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_STUN, 50)
                     .putAttributes(ModAttributes.RES_FAINT, 100)
                     .putAttributes(ModAttributes.RES_DRAIN, 10)
-                    .xp(950).money(150).tamingChance(0.005f).setBarnOccupancy(2).setRideable());
+                    .xp(950).money(150).tamingChance(0.005f).setBarnOccupancy(2).setRideable()
+                    .withRideActionCosts(new EntityRideActionCosts.Builder().secondCost(0.5f, 0, false)
+                            .thirdCost(0.5f, 0, false)));
     public static final RegistryEntrySupplier<EntityType<EntityChimera>> CHIMERA = regMonster(EntityType.Builder.of(EntityChimera::new, MobCategory.MONSTER).sized(1.45f, 1.45f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "chimera"),
             0x536983, 0xaaa7c8,
             new EntityProperties.Builder()
@@ -913,7 +938,9 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_STUN, 50)
                     .putAttributes(ModAttributes.RES_FAINT, 100)
                     .putAttributes(ModAttributes.RES_DRAIN, 10)
-                    .xp(950).money(150).tamingChance(0.005f).setBarnOccupancy(2).setRideable());
+                    .xp(950).money(150).tamingChance(0.005f).setBarnOccupancy(2).setRideable()
+                    .withRideActionCosts(new EntityRideActionCosts.Builder().secondCost(0.5f, 0, false)
+                            .thirdCost(0.5f, 0, false)));
     public static final RegistryEntrySupplier<EntityType<EntityRaccoon>> RACCOON = regMonster(EntityType.Builder.of(EntityRaccoon::new, MobCategory.MONSTER).sized(0.9f, 1.5f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "raccoon"),
             0xcb8055, 0x6d4342,
             new EntityProperties.Builder()
@@ -935,7 +962,9 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_STUN, 50)
                     .putAttributes(ModAttributes.RES_FAINT, 100)
                     .putAttributes(ModAttributes.RES_DRAIN, 10)
-                    .xp(950).money(150).tamingChance(0.005f).setBarnOccupancy(2).setRideable());
+                    .xp(950).money(150).tamingChance(0.005f).setBarnOccupancy(2).setRideable()
+                    .withRideActionCosts(new EntityRideActionCosts.Builder().secondCost(1, 10, true)
+                            .thirdCost(0.5f, 0, false)));
     public static final RegistryEntrySupplier<EntityType<EntitySkelefang>> SKELEFANG = regMonster(EntityType.Builder.of(EntitySkelefang::new, MobCategory.MONSTER).sized(1.95f, 3).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "skelefang"),
             0x615237, 0xc2a982,
             new EntityProperties.Builder()
@@ -977,7 +1006,8 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_STUN, 50)
                     .putAttributes(ModAttributes.RES_FAINT, 100)
                     .putAttributes(ModAttributes.RES_DRAIN, 10)
-                    .xp(950).money(150).tamingChance(0).setBarnOccupancy(3).setRideable());
+                    .xp(950).money(150).tamingChance(0).setBarnOccupancy(3).setRideable()
+                    .withRideActionCosts(new EntityRideActionCosts.Builder(0.5f, 0, false)));
 
     public static final RegistryEntrySupplier<EntityType<EntityNPCBase>> NPC = npc(EntityType.Builder.of(EntityNPCBase::new, MobCategory.MISC).sized(0.6f, 1.8f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "npc"));
 
@@ -1025,6 +1055,7 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntityRuney>> RUNEY = reg(EntityType.Builder.of(EntityRuney::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "runey"));
     public static final RegistryEntrySupplier<EntityType<EntityRuneOrb>> STAT_BONUS = reg(EntityType.Builder.of(EntityRuneOrb::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "rune_orb"));
 
+    public static final RegistryEntrySupplier<EntityType<SporeCircleSummoner>> SPORE_CIRCLE_SUMMONER = reg(EntityType.Builder.<SporeCircleSummoner>of(SporeCircleSummoner::new, MobCategory.MISC).sized(0.01f, 0.01f).noSummon().clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "spore_circle_summoner"));
     public static final RegistryEntrySupplier<EntityType<EntityButterflySummoner>> BUTTERFLY_SUMMONER = reg(EntityType.Builder.<EntityButterflySummoner>of(EntityButterflySummoner::new, MobCategory.MISC).sized(0.01f, 0.01f).noSummon().clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "butterfly_summoner"));
     public static final RegistryEntrySupplier<EntityType<EntityDarkBulletSummoner>> DARK_BULLET_SUMMONER = reg(EntityType.Builder.<EntityDarkBulletSummoner>of(EntityDarkBulletSummoner::new, MobCategory.MISC).sized(0.01f, 0.01f).noSummon().clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "dark_bullet_summoner"));
     public static final RegistryEntrySupplier<EntityType<ElementBallBarrageSummoner>> ELEMENTAL_BARRAGE_SUMMONER = reg(EntityType.Builder.<ElementBallBarrageSummoner>of(ElementBallBarrageSummoner::new, MobCategory.MISC).sized(0.01f, 0.01f).noSummon().clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "elemental_barrage_summoner"));

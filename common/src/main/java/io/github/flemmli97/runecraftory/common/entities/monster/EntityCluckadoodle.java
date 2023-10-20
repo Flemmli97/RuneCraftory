@@ -50,6 +50,8 @@ public class EntityCluckadoodle extends BaseMonster {
     @Override
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
+            if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), null))
+                return;
             this.getAnimationHandler().setAnimation(MELEE);
         }
     }

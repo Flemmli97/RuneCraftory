@@ -30,6 +30,7 @@ public class EntityProperties {
 
     public static final Codec<EntityProperties> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(
+                    EntityRideActionCosts.CODEC.fieldOf("rideActionCosts").forGetter(d -> d.rideActionCosts),
                     Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("baseValues").forGetter(d -> d.baseValues),
                     Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("levelGains").forGetter(d -> d.levelGains),
 
@@ -44,8 +45,8 @@ public class EntityProperties {
                     ExtraCodecs.POSITIVE_INT.fieldOf("minLevel").forGetter(d -> d.minLevel),
                     ExtraCodecs.NON_NEGATIVE_INT.fieldOf("xp").forGetter(d -> d.xp),
                     ExtraCodecs.NON_NEGATIVE_INT.fieldOf("money").forGetter(d -> d.money)
-            ).apply(instance, (baseValues, levelGains, size, needsRoof, levelIncreaseOnKill, tamingChance, rideable, flying, minLevel, xp, money) ->
-                    new EntityProperties(minLevel, xp, money, tamingChance, rideable, flying, size, needsRoof, baseValues, levelGains, levelIncreaseOnKill.orElse(List.of()))));
+            ).apply(instance, (rideActionCosts, baseValues, levelGains, size, needsRoof, levelIncreaseOnKill, tamingChance, rideable, flying, minLevel, xp, money) ->
+                    new EntityProperties(minLevel, xp, money, tamingChance, rideable, flying, size, needsRoof, rideActionCosts, baseValues, levelGains, levelIncreaseOnKill.orElse(List.of()))));
 
     public final int minLevel;
     public final int xp;
@@ -55,12 +56,13 @@ public class EntityProperties {
     public final boolean flying;
     public final int size;
     public final boolean needsRoof;
+    public final EntityRideActionCosts rideActionCosts;
     private final Map<Attribute, Double> baseValues;
     private final Map<Attribute, Double> levelGains;
 
     private final List<OnKilledIncrease> levelIncreaseOnKill;
 
-    private EntityProperties(int minLevel, int xp, int money, float tamingChance, boolean rideable, boolean flying, int size, boolean needsRoof, Map<Attribute, Double> baseValues, Map<Attribute, Double> levelGains, List<OnKilledIncrease> levelIncreaseOnKill) {
+    private EntityProperties(int minLevel, int xp, int money, float tamingChance, boolean rideable, boolean flying, int size, boolean needsRoof, EntityRideActionCosts rideActionCosts, Map<Attribute, Double> baseValues, Map<Attribute, Double> levelGains, List<OnKilledIncrease> levelIncreaseOnKill) {
         this.minLevel = Math.max(1, minLevel);
         this.xp = xp;
         this.money = money;
@@ -69,6 +71,7 @@ public class EntityProperties {
         this.flying = flying;
         this.size = size;
         this.needsRoof = needsRoof;
+        this.rideActionCosts = rideActionCosts;
         this.baseValues = baseValues;
         this.levelGains = levelGains;
         this.levelIncreaseOnKill = levelIncreaseOnKill.stream().sorted().toList();
@@ -117,6 +120,7 @@ public class EntityProperties {
         private int size = 1;
         private boolean needsRoof = true;
         private int minLevel = 1;
+        private EntityRideActionCosts rideActionCosts = EntityRideActionCosts.DEFAULT;
         private final List<OnKilledIncrease> levelIncreaseOnKill = new ArrayList<>();
 
         public Builder putAttributes(Supplier<Attribute> att, double val) {
@@ -179,14 +183,19 @@ public class EntityProperties {
             return this;
         }
 
+        public Builder withRideActionCosts(EntityRideActionCosts.Builder costs) {
+            this.rideActionCosts = costs.build();
+            return this;
+        }
+
         public EntityProperties build() {
             return new EntityProperties(this.minLevel, this.xp, this.money, this.taming, this.rideable, this.flying, this.size, this.needsRoof,
-                    this.baseValues.entrySet().stream().collect(Collectors.toMap(
-                            e -> e.getKey().get(),
-                            Map.Entry::getValue,
-                            (e1, e2) -> e1,
-                            LinkedHashMap::new
-                    )),
+                    this.rideActionCosts, this.baseValues.entrySet().stream().collect(Collectors.toMap(
+                    e -> e.getKey().get(),
+                    Map.Entry::getValue,
+                    (e1, e2) -> e1,
+                    LinkedHashMap::new
+            )),
                     this.gains.entrySet().stream().collect(Collectors.toMap(
                             e -> e.getKey().get(),
                             Map.Entry::getValue,

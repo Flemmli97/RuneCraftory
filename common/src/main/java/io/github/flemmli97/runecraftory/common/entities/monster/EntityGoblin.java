@@ -65,6 +65,8 @@ public class EntityGoblin extends LeapingMonster {
     @Override
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
+            if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), command == 2 ? ModSpells.STONE_THROW.get() : null))
+                return;
             if (command == 2)
                 this.getAnimationHandler().setAnimation(STONE);
             else if (command == 1)

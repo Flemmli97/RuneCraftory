@@ -226,12 +226,16 @@ public class EntityChimera extends BossMonster implements DelayedAttacker {
     @Override
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
-            if (command == 2)
-                this.getAnimationHandler().setAnimation(BUBBLE_BEAM);
-            else if (command == 1)
-                this.getAnimationHandler().setAnimation(SLASH);
-            else
-                this.getAnimationHandler().setAnimation(LEAP);
+            if (command == 2) {
+                if (this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), ModSpells.BUBBLE_BEAM.get()))
+                    this.getAnimationHandler().setAnimation(BUBBLE_BEAM);
+            } else if (command == 1) {
+                if (this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), ModSpells.SLASH.get()))
+                    this.getAnimationHandler().setAnimation(SLASH);
+            } else {
+                if (this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), null))
+                    this.getAnimationHandler().setAnimation(LEAP);
+            }
         }
     }
 

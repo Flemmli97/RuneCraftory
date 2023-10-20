@@ -96,6 +96,8 @@ public class EntityHornet extends BaseMonster {
     @Override
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
+            if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), ModSpells.POISON_NEEDLE.get()))
+                return;
             this.getAnimationHandler().setAnimation(ATTACK);
         }
     }

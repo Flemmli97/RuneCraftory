@@ -236,12 +236,16 @@ public class EntityDeadTree extends BossMonster {
     @Override
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
-            if (command == 2)
-                this.getAnimationHandler().setAnimation(SPIKE);
-            else if (command == 1)
-                this.getAnimationHandler().setAnimation(FALLING_APPLES);
-            else
-                this.getAnimationHandler().setAnimation(ATTACK);
+            if (command == 2) {
+                if (this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), ModSpells.ROOT_SPIKE_TRIPLE.get()))
+                    this.getAnimationHandler().setAnimation(SPIKE);
+            } else if (command == 1) {
+                if (this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), ModSpells.APPLE_RAIN.get()))
+                    this.getAnimationHandler().setAnimation(FALLING_APPLES);
+            } else {
+                if (this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), null))
+                    this.getAnimationHandler().setAnimation(ATTACK);
+            }
         }
     }
 

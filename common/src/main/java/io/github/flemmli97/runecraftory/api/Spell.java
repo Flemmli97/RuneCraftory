@@ -13,6 +13,7 @@ import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -26,8 +27,17 @@ public abstract class Spell extends CustomRegistryEntry<Spell> {
     }
 
     public static boolean tryUseWithCost(LivingEntity entity, ItemStack stack, Spell spell, float costMultiplier) {
-        return !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player)
-                .map(data -> LevelCalc.useRP(player, data, spell.rpCost() * costMultiplier, stack.getItem() instanceof ItemStaffBase, spell.percentageCost(), true, spell.costReductionSkills())).orElse(false);
+        return !(entity instanceof ServerPlayer player) || Platform.INSTANCE.getPlayerData(player)
+                .map(data -> {
+                    boolean hurt = stack.getItem() instanceof ItemStaffBase;
+                    if (!LevelCalc.useRP(player, data, spell.rpCost() * costMultiplier, hurt, spell.percentageCost(), true, spell.costReductionSkills())) {
+                        if (!hurt)
+                            player.connection.send(
+                                    new ClientboundSoundPacket(SoundEvents.VILLAGER_NO, SoundSource.PLAYERS, player.position().x, player.position().y, player.position().z, 1, 1));
+                        return false;
+                    }
+                    return true;
+                }).orElse(false);
     }
 
     public void update(Player player, ItemStack stack) {

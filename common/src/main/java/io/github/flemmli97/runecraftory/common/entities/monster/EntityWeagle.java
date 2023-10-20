@@ -128,6 +128,8 @@ public class EntityWeagle extends BaseMonster {
     @Override
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
+            if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), command == 2 ? ModSpells.GUST_SPELL.get() : null))
+                return;
             switch (command) {
                 case 2 -> this.getAnimationHandler().setAnimation(GALE);
                 case 1 -> this.getAnimationHandler().setAnimation(SWOOP);
