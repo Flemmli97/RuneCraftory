@@ -1,0 +1,315 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": {
+        "type": "minecraft:uniform",
+        "min": 1.0,
+        "max": 2.0
+      },
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:broad_sword"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:steel_sword"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:steel_sword_plus"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:cutlass"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:aqua_sword"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:invisiblade"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:claymore"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:zweihaender"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:zweihaender_plus"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:great_sword"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:sea_cutter"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:cyclone_blade"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:spear"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:wood_staff"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:lance"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:lance_plus"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:needle_spear"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:trident"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:battle_axe"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:battle_scythe"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:pole_axe"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:pole_axe_plus"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:great_axe"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:tomahawk"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:battle_hammer"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:bat"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:war_hammer"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:war_hammer_plus"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:iron_bat"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:great_hammer"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:short_dagger"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:steel_edge"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:frost_edge"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:iron_edge"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:thief_knife"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:wind_edge"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:leather_glove"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:brass_knuckles"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:kote"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:gloves"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:bear_claws"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:fist_of_earth"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:rod"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:amethyst_rod"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:aquamarine_rod"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:friendly_rod"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:love_love_rod"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:staff"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:cheap_bracelet"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:bronze_bracelet"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:silver_bracelet"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:gold_bracelet"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:platinum_bracelet"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:silver_ring"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:gold_ring"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:platinum_ring"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:magic_earrings"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:shirt"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:vest"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:cotton_cloth"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:headband"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:blue_ribbon"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:green_ribbon"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:purple_ribbon"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:black_ribbon"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:yellow_ribbon"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:red_ribbon"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:orange_ribbon"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:white_ribbon"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:indigo_ribbon"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:leather_boots"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:free_farming_shoes"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:piyo_sandals"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:small_shield"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:iron_shield"
+        }
+      ]
+    }
+  ]
+}

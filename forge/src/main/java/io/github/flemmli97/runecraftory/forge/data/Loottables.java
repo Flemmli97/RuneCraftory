@@ -10,6 +10,7 @@ import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
 import io.github.flemmli97.runecraftory.common.blocks.BlockQuestboard;
 import io.github.flemmli97.runecraftory.common.entities.GateEntity;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityCustomFishingHook;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityTreasureChest;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityKingWooly;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityWooly;
 import io.github.flemmli97.runecraftory.common.loot.FirstKillCondition;
@@ -21,16 +22,17 @@ import io.github.flemmli97.runecraftory.common.loot.SkillLevelCondition;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
 import net.minecraft.advancements.critereon.EnchantmentPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.loot.BlockLoot;
-import net.minecraft.data.loot.FishingLoot;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ItemLike;
@@ -80,7 +82,12 @@ public class Loottables extends LootTableProvider {
     private static final float LOOTING_BONUS = 0.2f;
     private static final float RARE_LOOTING_BONUS = 0.1f;
 
-    private final List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> loot = ImmutableList.of(Pair.of(EntityLoot::new, LootContextParamSets.ENTITY), Pair.of(WoolyShearedEntityLoot::new, LootContextParamSets.FISHING), Pair.of(BlockLootData::new, LootContextParamSets.BLOCK), Pair.of(FishingLootData::new, LootContextParamSets.FISHING));
+    private final List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> loot =
+            ImmutableList.of(Pair.of(EntityLoot::new, LootContextParamSets.ENTITY),
+                    Pair.of(WoolyShearedEntityLoot::new, LootContextParamSets.FISHING),
+                    Pair.of(BlockLootData::new, LootContextParamSets.BLOCK),
+                    Pair.of(FishingLootData::new, LootContextParamSets.FISHING),
+                    Pair.of(TreasureChestLoot::new, LootContextParamSets.CHEST));
 
     public Loottables(DataGenerator gen) {
         super(gen);
@@ -479,6 +486,44 @@ public class Loottables extends LootTableProvider {
         }
     }
 
+    static class TreasureChestLoot implements Consumer<BiConsumer<ResourceLocation, LootTable.Builder>> {
+
+        @Override
+        public void accept(BiConsumer<ResourceLocation, LootTable.Builder> biConsumer) {
+            LootPool.Builder tier1 = LootPool.lootPool().setRolls(UniformGenerator.between(2, 4));
+            for (RegistryEntrySupplier<Item> item : ModItems.TIER_1_CHEST) {
+                tier1.add(LootItem.lootTableItem(item.get()));
+            }
+            tier1.add(LootItem.lootTableItem(ModItems.forgingBread.get()));
+            tier1.add(LootItem.lootTableItem(ModItems.armorBread.get()));
+            tier1.add(LootItem.lootTableItem(ModItems.chemistryBread.get()));
+            tier1.add(LootItem.lootTableItem(ModItems.cookingBread.get()));
+            biConsumer.accept(EntityTreasureChest.TIER_1_LOOT, LootTable.lootTable().withPool(tier1));
+
+            LootPool.Builder tier2 = LootPool.lootPool().setRolls(UniformGenerator.between(2, 4));
+            for (RegistryEntrySupplier<Item> item : ModItems.TIER_2_CHEST) {
+                tier2.add(LootItem.lootTableItem(item.get()));
+            }
+            tier2.add(LootItem.lootTableItem(ModItems.forgingBread.get()));
+            tier2.add(LootItem.lootTableItem(ModItems.armorBread.get()));
+            tier2.add(LootItem.lootTableItem(ModItems.chemistryBread.get()));
+            tier2.add(LootItem.lootTableItem(ModItems.cookingBread.get()));
+            biConsumer.accept(EntityTreasureChest.TIER_2_LOOT, LootTable.lootTable().withPool(tier2));
+
+            LootPool.Builder tier3 = LootPool.lootPool().setRolls(UniformGenerator.between(1, 2));
+            for (RegistryEntrySupplier<Item> item : ModItems.TIER_3_CHEST) {
+                tier3.add(LootItem.lootTableItem(item.get()));
+            }
+            biConsumer.accept(EntityTreasureChest.TIER_3_LOOT, LootTable.lootTable().withPool(tier3));
+
+            LootPool.Builder tier4 = LootPool.lootPool().setRolls(UniformGenerator.between(1, 2));
+            for (RegistryEntrySupplier<Item> item : ModItems.TIER_4_CHEST) {
+                tier4.add(LootItem.lootTableItem(item.get()));
+            }
+            biConsumer.accept(EntityTreasureChest.TIER_4_LOOT, LootTable.lootTable().withPool(tier4));
+        }
+    }
+
     static class BlockLootData extends BlockLoot {
 
         private static final LootItemCondition.Builder SILK_TOUCH = MatchTool.toolMatches(ItemPredicate.Builder.item().hasEnchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.atLeast(1))));
@@ -671,7 +716,7 @@ public class Loottables extends LootTableProvider {
         }
     }
 
-    static class FishingLootData extends FishingLoot {
+    static class FishingLootData implements Consumer<BiConsumer<ResourceLocation, LootTable.Builder>> {
 
         @Override
         public void accept(BiConsumer<ResourceLocation, LootTable.Builder> biConsumer) {

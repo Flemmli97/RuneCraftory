@@ -114,12 +114,6 @@ public class ModTags {
 
     public static final TagKey<Item> FOODS = tagCommon("foods");
 
-    //Loot
-    public static final TagKey<Item> CHEST_T1 = tag("chest_t1");
-    public static final TagKey<Item> CHEST_T2 = tag("chest_t2");
-    public static final TagKey<Item> CHEST_T3 = tag("chest_t3");
-    public static final TagKey<Item> CHEST_T4 = tag("chest_t4");
-
     private static final Map<EntityType<?>, TagKey<Item>> ENTITY_TAMING_TAGS = new HashMap<>();
 
     //Blocks

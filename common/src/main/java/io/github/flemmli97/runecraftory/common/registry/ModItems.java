@@ -78,6 +78,11 @@ public class ModItems {
     public static final List<RegistryEntrySupplier<Item>> FLOWERS = new ArrayList<>();
     public static final List<RegistryEntrySupplier<Item>> CROPS = new ArrayList<>();
 
+    public static final List<RegistryEntrySupplier<Item>> TIER_1_CHEST = new ArrayList<>();
+    public static final List<RegistryEntrySupplier<Item>> TIER_2_CHEST = new ArrayList<>();
+    public static final List<RegistryEntrySupplier<Item>> TIER_3_CHEST = new ArrayList<>();
+    public static final List<RegistryEntrySupplier<Item>> TIER_4_CHEST = new ArrayList<>();
+
     private static final FoodProperties lowFoodProp = new FoodProperties.Builder().nutrition(1).saturationMod(0.5f).alwaysEat().build();
     private static final FoodProperties foodProp = new FoodProperties.Builder().nutrition(2).saturationMod(0.5f).alwaysEat().build();
     private static final FoodProperties highFoodProp = new FoodProperties.Builder().nutrition(6).saturationMod(0.75f).alwaysEat().build();
@@ -1268,7 +1273,7 @@ public class ModItems {
         if (Platform.INSTANCE.isDatagen())
             DATAGENTAGS.computeIfAbsent(ModTags.SHORTSWORDS, t -> new ArrayList<>()).add(sup);
         if (Platform.INSTANCE.isDatagen())
-            DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T3, t -> new ArrayList<>()).add(sup);
+            TIER_3_CHEST.add(sup);
         return sup;
     }
 
@@ -1282,7 +1287,7 @@ public class ModItems {
         if (Platform.INSTANCE.isDatagen())
             DATAGENTAGS.computeIfAbsent(ModTags.LONGSWORDS, t -> new ArrayList<>()).add(sup);
         if (Platform.INSTANCE.isDatagen())
-            DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T3, t -> new ArrayList<>()).add(sup);
+            TIER_3_CHEST.add(sup);
         return sup;
     }
 
@@ -1296,7 +1301,7 @@ public class ModItems {
         if (Platform.INSTANCE.isDatagen())
             DATAGENTAGS.computeIfAbsent(ModTags.SPEARS, t -> new ArrayList<>()).add(sup);
         if (Platform.INSTANCE.isDatagen())
-            DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T3, t -> new ArrayList<>()).add(sup);
+            TIER_3_CHEST.add(sup);
         return sup;
     }
 
@@ -1310,7 +1315,7 @@ public class ModItems {
         if (Platform.INSTANCE.isDatagen())
             DATAGENTAGS.computeIfAbsent(ModTags.AXES, t -> new ArrayList<>()).add(sup);
         if (Platform.INSTANCE.isDatagen())
-            DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T3, t -> new ArrayList<>()).add(sup);
+            TIER_3_CHEST.add(sup);
         return sup;
     }
 
@@ -1324,7 +1329,7 @@ public class ModItems {
         if (Platform.INSTANCE.isDatagen())
             DATAGENTAGS.computeIfAbsent(ModTags.HAMMERS, t -> new ArrayList<>()).add(sup);
         if (Platform.INSTANCE.isDatagen())
-            DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T3, t -> new ArrayList<>()).add(sup);
+            TIER_3_CHEST.add(sup);
         return sup;
     }
 
@@ -1338,7 +1343,7 @@ public class ModItems {
         if (Platform.INSTANCE.isDatagen())
             DATAGENTAGS.computeIfAbsent(ModTags.DUALBLADES, t -> new ArrayList<>()).add(sup);
         if (Platform.INSTANCE.isDatagen())
-            DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T3, t -> new ArrayList<>()).add(sup);
+            TIER_3_CHEST.add(sup);
         return sup;
     }
 
@@ -1352,7 +1357,7 @@ public class ModItems {
         if (Platform.INSTANCE.isDatagen())
             DATAGENTAGS.computeIfAbsent(ModTags.FISTS, t -> new ArrayList<>()).add(sup);
         if (Platform.INSTANCE.isDatagen())
-            DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T3, t -> new ArrayList<>()).add(sup);
+            TIER_3_CHEST.add(sup);
         return sup;
     }
 
@@ -1366,7 +1371,7 @@ public class ModItems {
         if (Platform.INSTANCE.isDatagen())
             DATAGENTAGS.computeIfAbsent(ModTags.STAFFS, t -> new ArrayList<>()).add(sup);
         if (Platform.INSTANCE.isDatagen())
-            DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T3, t -> new ArrayList<>()).add(sup);
+            TIER_3_CHEST.add(sup);
         return sup;
     }
 
@@ -1382,7 +1387,7 @@ public class ModItems {
         }
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> Platform.INSTANCE.armor(slot, new Item.Properties().tab(RFCreativeTabs.equipment), new ResourceLocation(RuneCraftory.MODID, name), useItemTexture));
         if (Platform.INSTANCE.isDatagen()) {
-            DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T3, t -> new ArrayList<>()).add(sup);
+            TIER_3_CHEST.add(sup);
             switch (slot) {
                 case FEET -> DATAGENTAGS.computeIfAbsent(ModTags.BOOTS, t -> new ArrayList<>()).add(sup);
                 case LEGS -> DATAGENTAGS.computeIfAbsent(ModTags.ACCESSORIES, t -> new ArrayList<>()).add(sup);
@@ -1401,7 +1406,7 @@ public class ModItems {
         }
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemStatShield(new Item.Properties().stacksTo(1).tab(RFCreativeTabs.equipment)));
         if (Platform.INSTANCE.isDatagen())
-            DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T3, t -> new ArrayList<>()).add(sup);
+            TIER_3_CHEST.add(sup);
         if (Platform.INSTANCE.isDatagen())
             DATAGENTAGS.computeIfAbsent(ModTags.SHIELDS, t -> new ArrayList<>()).add(sup);
         return sup;
@@ -1444,14 +1449,14 @@ public class ModItems {
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new Item(new Item.Properties().rarity(rarity).tab(RFCreativeTabs.upgradeItems)));
         if (rarity == Rarity.COMMON)
             if (Platform.INSTANCE.isDatagen())
-                DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T1, t -> new ArrayList<>()).add(sup);
+                TIER_1_CHEST.add(sup);
         return sup;
     }
 
     public static RegistryEntrySupplier<Item> medicine(String name, boolean affectStats) {
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemMedicine(affectStats, new Item.Properties().food(foodProp).stacksTo(16).tab(RFCreativeTabs.medicine)));
         if (Platform.INSTANCE.isDatagen())
-            DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T2, t -> new ArrayList<>()).add(sup);
+            TIER_2_CHEST.add(sup);
         return sup;
     }
 
@@ -1463,14 +1468,14 @@ public class ModItems {
             }
         });
         if (Platform.INSTANCE.isDatagen())
-            DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T2, t -> new ArrayList<>()).add(sup);
+            TIER_2_CHEST.add(sup);
         return sup;
     }
 
     public static RegistryEntrySupplier<Item> spell(Supplier<Supplier<Spell>> sup, String name) {
         RegistryEntrySupplier<Item> ret = ITEMS.register(name, () -> new ItemSpell(sup.get(), new Item.Properties().stacksTo(1).tab(RFCreativeTabs.cast)));
         if (Platform.INSTANCE.isDatagen())
-            DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T2, t -> new ArrayList<>()).add(ret);
+            TIER_2_CHEST.add(ret);
         if (Platform.INSTANCE.isDatagen())
             DATAGENTAGS.computeIfAbsent(ModTags.SPELLS, t -> new ArrayList<>()).add(ret);
         return ret;
@@ -1484,7 +1489,7 @@ public class ModItems {
         }
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new Item(new Item.Properties().tab(RFCreativeTabs.food)));
         if (Platform.INSTANCE.isDatagen())
-            DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T1, t -> new ArrayList<>()).add(sup);
+            TIER_1_CHEST.add(sup);
         return sup;
     }
 
@@ -1514,7 +1519,7 @@ public class ModItems {
         else
             sup = ITEMS.register("crop_" + name, () -> new Item(new Item.Properties().food(foodProp).tab(RFCreativeTabs.crops)));
         if (Platform.INSTANCE.isDatagen())
-            DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T1, t -> new ArrayList<>()).add(sup);
+            TIER_1_CHEST.add(sup);
         if (Platform.INSTANCE.isDatagen()) {
             switch (type) {
                 case 0 -> VEGGIES.add(sup);
@@ -1528,7 +1533,7 @@ public class ModItems {
     public static RegistryEntrySupplier<Item> herb(String name, Supplier<Supplier<Block>> block) {
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new BlockItem(block.get().get(), new Item.Properties().food(lowFoodProp).tab(RFCreativeTabs.medicine)));
         if (Platform.INSTANCE.isDatagen())
-            DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T1, t -> new ArrayList<>()).add(sup);
+            TIER_1_CHEST.add(sup);
         return sup;
     }
 
@@ -1544,7 +1549,7 @@ public class ModItems {
         }
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new Item(new Item.Properties().food(foodProp).tab(RFCreativeTabs.food)));
         if (Platform.INSTANCE.isDatagen())
-            DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T2, t -> new ArrayList<>()).add(sup);
+            TIER_2_CHEST.add(sup);
         return sup;
     }
 
@@ -1566,7 +1571,7 @@ public class ModItems {
             }
         });
         if (Platform.INSTANCE.isDatagen())
-            DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T2, t -> new ArrayList<>()).add(sup);
+            TIER_2_CHEST.add(sup);
         return sup;
     }
 

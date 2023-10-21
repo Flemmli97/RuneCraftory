@@ -1,0 +1,395 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": {
+        "type": "minecraft:uniform",
+        "min": 2.0,
+        "max": 4.0
+      },
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:fireball"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:fireball_big"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:explosion"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:water_laser"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:parallel_laser"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:delta_laser"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:screw_rock"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:earth_spike"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:avenger_rock"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:sonic_wind"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:double_sonic"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:penetrate_sonic"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:light_barrier"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:shine"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:prism"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:dark_snake"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:dark_ball"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:darkness"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:cure"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:cure_all"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:cure_master"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:medi_poison"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:medi_paralysis"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:medi_seal"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:greeting"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:power_wave"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:dash_slash"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:rush_attack"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:round_break"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:mind_thrust"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:gust"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:storm"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:blitz"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:twin_attack"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:rail_strike"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:wind_slash"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:flash_strike"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:naive_blade"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:steel_heart"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:delta_strike"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:hurricane"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:reaper_slash"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:million_strike"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:axel_disaster"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:stardust_upper"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:tornado_swing"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:grand_impact"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:giga_swing"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:upper_cut"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:double_kick"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:straight_punch"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:neko_damashi"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:rush_punch"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:cyclone"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:rapid_move"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:bonus_concerto"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:striking_march"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:iron_waltz"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:teleport"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:roundoff"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:para_gone"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:cold_medicine"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:antidote_potion"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:recovery_potion"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:healing_potion"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:mystery_potion"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:magical_potion"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:invinciroid"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:love_potion"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:formuade"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:oil"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:egg_l"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:egg_m"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:egg_s"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:milk_l"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:milk_m"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:milk_s"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:onigiri"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:pickled_turnip"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:flan"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:grape_juice"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:tempura_udon"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:curry_udon"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:udon"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:hot_chocolate"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:hot_milk"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:baked_apple"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:fried_veggies"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:disastrous_dish"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:failed_dish"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:grapes"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:forging_bread"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:armory_bread"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:chemistry_bread"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:cooking_bread"
+        }
+      ]
+    }
+  ]
+}

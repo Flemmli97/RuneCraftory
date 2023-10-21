@@ -1,9 +1,8 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
-import com.mojang.datafixers.util.Pair;
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
-import io.github.flemmli97.runecraftory.common.datapack.manager.ItemCraftingLevelManager;
-import io.github.flemmli97.runecraftory.common.registry.ModTags;
+import io.github.flemmli97.runecraftory.common.loot.LootCtxParameters;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
@@ -11,7 +10,6 @@ import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.api.entity.IAnimated;
 import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -23,7 +21,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -32,7 +29,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -40,18 +36,18 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.function.Consumer;
-
 public class EntityTreasureChest extends Entity implements IAnimated {
 
-    public static final int MAX_TIER = 3;
+    public static final int MAX_TIER = 4;
+
+    public static final ResourceLocation TIER_1_LOOT = new ResourceLocation(RuneCraftory.MODID, "entities/treasure_chest_tier_1");
+    public static final ResourceLocation TIER_2_LOOT = new ResourceLocation(RuneCraftory.MODID, "entities/treasure_chest_tier_2");
+    public static final ResourceLocation TIER_3_LOOT = new ResourceLocation(RuneCraftory.MODID, "entities/treasure_chest_tier_3");
+    public static final ResourceLocation TIER_4_LOOT = new ResourceLocation(RuneCraftory.MODID, "entities/treasure_chest_tier_4");
 
     private static final EntityDataAccessor<Integer> TIER = SynchedEntityData.defineId(EntityTreasureChest.class, EntityDataSerializers.INT);
 
-    private static final AnimatedAction OPEN = AnimatedAction.builder(12, "open").infinite().build();
+    private static final AnimatedAction OPEN = AnimatedAction.builder(12, "open").marker(12).infinite().build();
 
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{OPEN};
 
@@ -59,41 +55,12 @@ public class EntityTreasureChest extends Entity implements IAnimated {
 
     protected Player lastHurtByPlayer;
 
+    private ResourceLocation chestLoot;
+
     private Runnable openChest;
 
     public EntityTreasureChest(EntityType<? extends EntityTreasureChest> entityType, Level level) {
         super(entityType, level);
-    }
-
-    public static void dropRandomItems(ServerPlayer opener, Random random, int tier, Consumer<ItemStack> stackConsumer) {
-        List<ItemStack> items = new ArrayList<>();
-        Registry.ITEM.getTag(lootTagFromTier(tier))
-                .map(n -> n.stream().map(h -> new ItemStack(h.value()))
-                        .filter(stack -> {
-                            if (tier >= 3)
-                                return true;
-                            Pair<Integer, EnumSkills> pair = ItemCraftingLevelManager.getLowestLevel(opener.getServer(), stack.getItem());
-                            if (pair != null)
-                                return pair.getFirst() < Platform.INSTANCE.getPlayerData(opener).map(data -> data.getSkillLevel(pair.getSecond()).getLevel() + 3).orElse(0);
-                            return true;
-                        }))
-                .map(s -> items.addAll(s.toList()));
-        if (!items.isEmpty()) {
-            int rand = tier < 2 ? 2 : 1;
-            rand = Math.min(items.size(), rand + random.nextInt(tier < 2 ? 3 : 2));
-            for (int i = 0; i < rand; i++) {
-                stackConsumer.accept(items.get(random.nextInt(items.size())));
-            }
-        }
-    }
-
-    public static TagKey<Item> lootTagFromTier(int tier) {
-        return switch (tier) {
-            case 1 -> ModTags.CHEST_T2;
-            case 2 -> ModTags.CHEST_T3;
-            case 3 -> ModTags.CHEST_T4;
-            default -> ModTags.CHEST_T1;
-        };
     }
 
     @Override
@@ -124,6 +91,8 @@ public class EntityTreasureChest extends Entity implements IAnimated {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
+        if (this.chestLoot != null && source != DamageSource.OUT_OF_WORLD)
+            return false;
         if (source.getEntity() instanceof Player player)
             this.lastHurtByPlayer = player;
         if (!this.level.isClientSide) {
@@ -147,11 +116,20 @@ public class EntityTreasureChest extends Entity implements IAnimated {
     @Override
     protected void readAdditionalSaveData(CompoundTag compound) {
         this.setTier(compound.getInt("ChestTier"));
+        if (compound.contains("ChestLoot"))
+            this.chestLoot = new ResourceLocation(compound.getString("ChestLoot"));
     }
 
     @Override
     protected void addAdditionalSaveData(CompoundTag compound) {
         compound.putInt("ChestTier", this.entityData.get(TIER));
+        if (this.chestLoot != null)
+            compound.putString("ChestLoot", this.chestLoot.toString());
+    }
+
+    public void setChestLoot(ResourceLocation loot) {
+        this.chestLoot = loot;
+        this.setTier(4);
     }
 
     @Override
@@ -160,7 +138,7 @@ public class EntityTreasureChest extends Entity implements IAnimated {
             if (!this.getAnimationHandler().isCurrent(OPEN)) {
                 this.getAnimationHandler().setAnimation(OPEN);
                 this.playSound(SoundEvents.CHEST_OPEN, 0.7f, 1);
-                this.openChest = () -> dropRandomItems(serverPlayer, this.random, this.tier(), this::spawnAtLocation);
+                this.openChest = () -> this.openChest(serverPlayer, serverPlayer.getItemInHand(hand));
                 Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(serverPlayer, data, EnumSkills.SEARCHING, 20));
             }
         }
@@ -188,6 +166,24 @@ public class EntityTreasureChest extends Entity implements IAnimated {
 
     public int tier() {
         return this.entityData.get(TIER);
+    }
+
+    protected void openChest(ServerPlayer player, ItemStack stack) {
+        ResourceLocation resourceLocation = this.chestLoot != null ? this.chestLoot : switch (this.tier()) {
+            case 1 -> TIER_2_LOOT;
+            case 2 -> TIER_3_LOOT;
+            case 3 -> TIER_4_LOOT;
+            default -> TIER_1_LOOT;
+        };
+        LootContext.Builder builder = new LootContext.Builder((ServerLevel) this.level)
+                .withRandom(this.random)
+                .withLuck(player.getLuck())
+                .withParameter(LootContextParams.THIS_ENTITY, this)
+                .withParameter(LootContextParams.ORIGIN, this.position())
+                .withParameter(LootCtxParameters.INTERACTING_PLAYER, player)
+                .withParameter(LootContextParams.TOOL, stack);
+        LootTable lootTable = this.level.getServer().getLootTables().get(resourceLocation);
+        lootTable.getRandomItems(builder.create(LootContextParamSets.CHEST), this::spawnAtLocation);
     }
 
     protected void dropFromLootTable(DamageSource damageSource, boolean attackedRecently) {

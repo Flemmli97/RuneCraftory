@@ -1,0 +1,575 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": {
+        "type": "minecraft:uniform",
+        "min": 2.0,
+        "max": 4.0
+      },
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:bronze"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:silver"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:platinum"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:scrap"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:scrap_plus"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:amethyst"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:aquamarine"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:ruby"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:sapphire"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:water_crystal"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:earth_crystal"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:fire_crystal"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:wind_crystal"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:light_crystal"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:dark_crystal"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:love_crystal"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:small_crystal"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:big_crystal"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:magic_crystal"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:rune_crystal"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:thick_stick"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:insect_horn"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:rigid_horn"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:plant_stem"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:bulls_horn"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:devil_horn"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:glue"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:devil_blood"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:paralysis_poison"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:poison_king"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:black_feather"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:thunder_feather"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:yellow_feather"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:turtle_shell"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:fish_fossil"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:skull"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:black_tortoise_shell"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:rock"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:round_stone"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:tiny_golem_stone"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:golem_stone"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:golem_tablet"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:golem_spirit_stone"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:yarn"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:old_bandage"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:vine"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:scorpion_tail"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:arrowhead"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:blade_shard"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:broken_hilt"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:broken_box"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:fur_s"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:fur_m"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:fur_l"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:fur"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:yellow_down"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:quality_puffy_fur"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:penguin_down"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:spore"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:poison_powder"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:fairy_dust"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:fairy_elixir"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:root"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:cheap_cloth"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:quality_cloth"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:quality_worn_cloth"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:ghost_hood"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:giants_glove"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:blue_giants_glove"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:insect_carapace"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:pretty_carapace"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:insect_jaw"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:panther_claw"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:magic_claw"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:wolf_fang"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:gold_wolf_fang"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:palm_claw"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:malm_claw"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:giants_nail"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:scorpion_pincer"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:queens_jaw"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:wet_scale"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:grimoire_scale"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:dragon_scale"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:crimson_scale"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:blue_scale"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:glitter_scale"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:love_scale"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:black_scale"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:double_steel"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:invisible_stone"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:light_ore"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:warriors_proof"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:proof_of_rank"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:crop_turnip"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:crop_turnip_pink"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:crop_cabbage"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:crop_pink_melon"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:crop_golden_turnip"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:crop_golden_cabbage"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:crop_radish"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:crop_yam"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:crop_tomato"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:crop_cucumber"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:crop_toyherb"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:crop_moondrop_flower"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:crop_pink_cat"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:crop_charm_blue"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:crop_lamp_grass"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:crop_cherry_grass"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:crop_pom_pom_grass"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:crop_autumn_grass"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:crop_noel_grass"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:crop_fireflower"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:crop_four_leaf_clover"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:crop_ironleaf"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:crop_white_crystal"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:crop_red_crystal"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:crop_green_crystal"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:crop_blue_crystal"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:crop_emery_flower"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:elli_leaves"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:withered_grass"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:weeds"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:white_grass"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:indigo_grass"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:purple_grass"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:green_grass"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:blue_grass"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:yellow_grass"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:red_grass"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:orange_grass"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:black_grass"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:antidote_grass"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:medicinal_herb"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:bamboo_sprout"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:forging_bread"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:armory_bread"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:chemistry_bread"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:cooking_bread"
+        }
+      ]
+    }
+  ]
+}
