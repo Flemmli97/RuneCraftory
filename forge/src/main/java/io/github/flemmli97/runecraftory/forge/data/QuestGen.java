@@ -28,11 +28,13 @@ public class QuestGen extends QuestProvider {
             .unselectable()
             .setHidden()
             .countSameCategoryOnly()
+            .setSilent()
             .setMaxConcurrent(1).build();
     private final QuestCategory hidden = new QuestCategory.Builder(id("hidden_quests"), RuneCraftory.MODID + ".quests.category.hidden")
             .unselectable()
             .setHidden()
             .countSameCategoryOnly()
+            .setSilent()
             .setMaxConcurrent(1).build();
 
     public QuestGen(DataGenerator gen) {

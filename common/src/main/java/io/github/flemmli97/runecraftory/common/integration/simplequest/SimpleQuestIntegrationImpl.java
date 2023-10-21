@@ -59,10 +59,12 @@ public class SimpleQuestIntegrationImpl extends SimpleQuestIntegration {
             return;
         QuestBase quest = ((SimpleQuestData) data).getQuestboardQuests().get(res);
         if (quest != null) {
-            if (!(quest instanceof NPCQuest npcQuest) || WorldHandler.get(player.getServer()).npcHandler.doesNPCExist(npcQuest.getNpcUuid()))
+            if (!(quest instanceof NPCQuest npcQuest) || WorldHandler.get(player.getServer()).npcHandler.doesNPCExist(npcQuest.getNpcUuid())) {
                 data.acceptQuest(quest, 0);
-            else
+            }
+            else {
                 player.sendMessage(new TranslatableComponent("runecraftory.quest.npc.none").withStyle(ChatFormatting.DARK_RED), Util.NIL_UUID);
+            }
         }
     }
 
