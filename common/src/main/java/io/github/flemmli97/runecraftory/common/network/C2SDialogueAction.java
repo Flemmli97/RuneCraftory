@@ -31,7 +31,6 @@ public class C2SDialogueAction implements Packet {
         if (sender != null) {
             Entity entity = sender.level.getEntity(pkt.id);
             if (entity instanceof EntityNPCBase npc) {
-                npc.decreaseInteractingPlayers(sender);
                 npc.handleDialogueAction(sender, pkt.type, pkt.conversationID, pkt.action);
             }
         }

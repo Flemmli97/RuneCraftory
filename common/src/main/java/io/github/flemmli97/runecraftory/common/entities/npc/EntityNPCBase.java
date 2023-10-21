@@ -217,6 +217,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     private int sleepCooldown, tpCooldown;
 
     private final List<ServerPlayer> interactingPlayers = new ArrayList<>();
+    private int interactionMoveCooldown;
 
     private final NPCSchedule schedule;
 
@@ -374,6 +375,10 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             this.playDeathTick = Math.max(0, --this.playDeathTick);
         }
         if (!this.level.isClientSide) {
+            if(this.tickCount % 10 == 0) {
+                this.interactingPlayers.removeIf(p->p.distanceToSqr(this) > 100);
+            }
+            --this.interactionMoveCooldown;
             this.updater.tick();
             this.updateActivity();
             this.foodBuffTick = Math.max(-1, --this.foodBuffTick);
@@ -435,7 +440,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         }
         Platform.INSTANCE.sendToClient(new S2CUpdateNPCData(this, this.relationManager.getFriendPointData(player.getUUID()).save()), serverPlayer);
         Platform.INSTANCE.sendToClient(new S2COpenNPCGui(this, serverPlayer), serverPlayer);
-        this.interactingPlayers.add(serverPlayer);
+        this.interactWithPlayer(serverPlayer);
         this.lookAt(serverPlayer, 30, 30);
         return InteractionResult.CONSUME;
     }
@@ -568,7 +573,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     private void tellDialogue(ServerPlayer player, NPCData.ConversationType type, String conversationID, Component component, List<Component> actions) {
-        this.interactingPlayers.add(player);
+        this.interactWithPlayer(player);
         Platform.INSTANCE.sendToClient(new S2CNpcDialogue(this.getId(), type, conversationID, component, actions), player);
     }
 
@@ -594,6 +599,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     public void closedDialogue(ServerPlayer sender) {
+        this.decreaseInteractingPlayers(sender);
     }
 
     public void closedQuestDialogue(ServerPlayer sender) {
@@ -1181,11 +1187,17 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     public boolean isStaying() {
-        return this.interactingPlayers.size() > 0 || this.behaviourState() == Behaviour.STAY;
+        return this.interactingPlayers.size() > 0 || this.interactionMoveCooldown > 0 || this.behaviourState() == Behaviour.STAY;
+    }
+
+    public void interactWithPlayer(ServerPlayer player) {
+        this.interactingPlayers.add(player);
+        this.getNavigation().stop();
     }
 
     public void decreaseInteractingPlayers(ServerPlayer player) {
         this.interactingPlayers.remove(player);
+        this.interactionMoveCooldown = 40;
     }
 
     public ServerPlayer getLastInteractedPlayer() {
@@ -1255,7 +1267,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     public void openShopForPlayer(ServerPlayer player) {
         if (this.canTrade() == ShopState.OPEN) {
-            this.interactingPlayers.add(player);
+            this.interactWithPlayer(player);
             Platform.INSTANCE.getPlayerData(player).map(d -> {
                 if (EntityNPCBase.this.getShop().hasShop) {
                     return d.getShop(this.getShop());
