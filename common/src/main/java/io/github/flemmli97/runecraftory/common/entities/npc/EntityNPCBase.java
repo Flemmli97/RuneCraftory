@@ -375,8 +375,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             this.playDeathTick = Math.max(0, --this.playDeathTick);
         }
         if (!this.level.isClientSide) {
-            if(this.tickCount % 10 == 0) {
-                this.interactingPlayers.removeIf(p->p.distanceToSqr(this) > 100);
+            if (this.tickCount % 10 == 0) {
+                this.interactingPlayers.removeIf(p -> p.distanceToSqr(this) > 100);
             }
             --this.interactionMoveCooldown;
             this.updater.tick();
