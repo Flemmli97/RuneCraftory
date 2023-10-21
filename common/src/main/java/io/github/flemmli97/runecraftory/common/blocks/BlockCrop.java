@@ -15,7 +15,9 @@ import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -140,7 +142,7 @@ public class BlockCrop extends CropBlock {
         }
     }
 
-    public static void harvestCropRightClick(BlockState state, Level level, BlockPos pos, Entity entity, ItemStack stack, CropProperties props, Function<ItemStack, ItemStack> stackConsumer) {
+    public static void harvestCropRightClick(BlockState state, Level level, BlockPos pos, Entity entity, ItemStack stack, CropProperties props, InteractionHand hand, Function<ItemStack, ItemStack> stackConsumer) {
         if (!(level instanceof ServerLevel serverLevel) || !(state.getBlock() instanceof CropBlock cropBlock))
             return;
         if (stackConsumer != null) {
@@ -163,6 +165,8 @@ public class BlockCrop extends CropBlock {
             spawnRuney(player, pos);
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.FARMING, 2f));
         }
+        if (entity instanceof LivingEntity living)
+            living.swing(hand, true);
     }
 
     public static void spawnRuney(ServerPlayer player, BlockPos pos) {

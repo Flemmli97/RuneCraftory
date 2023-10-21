@@ -126,7 +126,7 @@ public class EntityEvents {
     @SubscribeEvent
     public void cropHarvest(PlayerInteractEvent.RightClickBlock event) {
         if (event.getUseBlock() != Event.Result.DENY)
-            EntityCalls.cropRightClickHarvest(event.getPlayer(), event.getEntity().level.getBlockState(event.getHitVec().getBlockPos()), event.getHitVec().getBlockPos());
+            EntityCalls.cropRightClickHarvest(event.getPlayer(), event.getEntity().level.getBlockState(event.getHitVec().getBlockPos()), event.getHitVec().getBlockPos(), event.getHand());
     }
 
     @SubscribeEvent

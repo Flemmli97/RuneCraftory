@@ -215,7 +215,7 @@ public class RuneCraftoryFabric implements ModInitializer {
             return InteractionResult.PASS;
         });
         UseBlockCallback.EVENT.register(((player, world, hand, hitResult) -> {
-            EntityCalls.cropRightClickHarvest(player, world.getBlockState(hitResult.getBlockPos()), hitResult.getBlockPos());
+            EntityCalls.cropRightClickHarvest(player, world.getBlockState(hitResult.getBlockPos()), hitResult.getBlockPos(), hand);
             return InteractionResult.PASS;
         }));
 

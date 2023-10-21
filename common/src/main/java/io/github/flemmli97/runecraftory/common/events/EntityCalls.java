@@ -276,12 +276,12 @@ public class EntityCalls {
         }
     }
 
-    public static void cropRightClickHarvest(Player player, BlockState state, BlockPos pos) {
+    public static void cropRightClickHarvest(Player player, BlockState state, BlockPos pos, InteractionHand hand) {
         if (!player.level.isClientSide && state.getBlock() instanceof CropBlock crop) {
             if (crop.isMaxAge(state)) {
                 CropProperties props = DataPackHandler.SERVER_PACK.cropManager().get(crop.getCloneItemStack(player.level, pos, state).getItem());
                 BlockCrop.harvestCropRightClick(state, player.level, pos, player, player.getMainHandItem(),
-                        props, null);
+                        props, hand, null);
             }
         }
     }

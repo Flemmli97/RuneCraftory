@@ -5,7 +5,6 @@ import io.github.flemmli97.runecraftory.api.datapack.NPCData;
 import io.github.flemmli97.runecraftory.api.datapack.provider.NPCDataProvider;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.AttackMeleeAction;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.NPCAttackActions;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;

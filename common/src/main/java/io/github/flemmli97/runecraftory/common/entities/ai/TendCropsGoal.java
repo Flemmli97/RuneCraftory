@@ -13,6 +13,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.BlockItem;
@@ -157,7 +158,7 @@ public class TendCropsGoal extends Goal {
                 }
                 success = true;
             } else if (block instanceof BlockCrop crop && crop.isMaxAge(state)) {
-                BlockCrop.harvestCropRightClick(state, this.entity.level, this.selected, this.entity, ItemStack.EMPTY, crop.properties().orElse(null), this.entity.getCropInventory() != null ?
+                BlockCrop.harvestCropRightClick(state, this.entity.level, this.selected, this.entity, ItemStack.EMPTY, crop.properties().orElse(null), InteractionHand.MAIN_HAND, this.entity.getCropInventory() != null ?
                         s -> Platform.INSTANCE.insertInto(this.entity.level.getBlockEntity(this.entity.getCropInventory()), s) : null);
                 this.entity.level.getEntities(EntityTypeTest.forClass(ItemEntity.class), this.entity.getBoundingBox().inflate(0.2), e -> true);
                 success = true;
