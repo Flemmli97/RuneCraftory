@@ -495,13 +495,13 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         stack.shrink(1);
     }
 
-    public void talkTo(Player player) {
+    public void talkTo(ServerPlayer player) {
         boolean doGreet = this.relationManager.getFriendPointData(player.getUUID())
                 .talkTo(this.level, 15);
         this.speak(player, doGreet ? NPCData.ConversationType.GREETING : NPCData.ConversationType.TALK);
     }
 
-    public void speak(Player player, NPCData.ConversationType type) {
+    public void speak(ServerPlayer player, NPCData.ConversationType type) {
         int heart = this.relationManager.getFriendPointData(player.getUUID()).points.getLevel();
         NPCData.ConversationSet conversations = this.data.getConversation(type);
         LootContext ctx = new LootContext.Builder((ServerLevel) this.level).withRandom(this.random)
@@ -509,17 +509,23 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
                 .withParameter(LootContextParams.ORIGIN, this.position())
                 .withParameter(LootCtxParameters.INTERACTING_PLAYER, player)
                 .withLuck(player.getLuck()).create(LootContextParamSets.GIFT);
-        List<Map.Entry<String, NPCData.Conversation>> filtered = conversations.getConversations().entrySet().stream().filter(c -> c.getValue().startingConversation() && c.getValue().test(heart, ctx))
+        List<Map.Entry<String, NPCData.Conversation>> filtered = conversations.getConversations().entrySet().stream()
+                .filter(c -> {
+                    //Disable if player already has a quest from this npc
+                    if (c.getValue().actions().stream().anyMatch(h -> h.action() == NPCData.ConversationAction.QUEST) &&
+                            SimpleQuestIntegration.INST().questForExists(player, this) != null &&
+                            !this.updater.alreadyAcceptedRandomquest(player))
+                        return false;
+                    return c.getValue().startingConversation() && c.getValue().test(heart, ctx);
+                })
                 .collect(Collectors.toList());
         Collections.shuffle(filtered, this.updater.getDailyRandom());
         int size = Math.min(filtered.size(), 2 + this.updater.getDailyRandom().nextInt(2)); //Select 2-3 random lines
-        if (player instanceof ServerPlayer serverPlayer) {
-            if (size > 0) {
-                Map.Entry<String, NPCData.Conversation> randomLine = filtered.get(this.random.nextInt(size));
-                this.tellDialogue(serverPlayer, type, randomLine.getKey(), randomLine.getValue());
-            } else {
-                this.tellDialogue(serverPlayer, type, null, new TranslatableComponent(conversations.getFallbackKey(), player.getName()), List.of());
-            }
+        if (size > 0) {
+            Map.Entry<String, NPCData.Conversation> randomLine = filtered.get(this.random.nextInt(size));
+            this.tellDialogue(player, type, randomLine.getKey(), randomLine.getValue());
+        } else {
+            this.tellDialogue(player, type, null, new TranslatableComponent(conversations.getFallbackKey(), player.getName()), List.of());
         }
     }
 
@@ -1128,7 +1134,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         return this.entityToFollowUUID;
     }
 
-    public boolean followEntity(Player player) {
+    public boolean followEntity(ServerPlayer player) {
         if (player == null)
             this.setBehaviour(Behaviour.WANDER);
         if (player != null) {
@@ -1141,8 +1147,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             this.speak(player, NPCData.ConversationType.FOLLOWYES);
             this.entityToFollowUUID = player.getUUID();
         } else {
-            if (this.followEntity() != null)
-                this.speak(this.followEntity(), NPCData.ConversationType.FOLLOWSTOP);
+            if (this.followEntity() instanceof ServerPlayer serverPlayer)
+                this.speak(serverPlayer, NPCData.ConversationType.FOLLOWSTOP);
             this.entityToFollowUUID = null;
         }
         this.entityToFollow = player;

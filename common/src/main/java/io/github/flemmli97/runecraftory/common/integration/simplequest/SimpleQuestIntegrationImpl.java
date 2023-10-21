@@ -89,6 +89,7 @@ public class SimpleQuestIntegrationImpl extends SimpleQuestIntegration {
         if (quest != null) {
             if (data.acceptQuest(NPCQuest.of(NPCQuest.withUuid(quest.id, npc.getUUID()),
                     npc, quest), 0)) {
+                npc.updater.acceptRandomQuest(player);
                 player.connection.send(new ClientboundSoundPacket(SoundEvents.VILLAGER_YES, player.getSoundSource(), player.getX(), player.getY(), player.getZ(), 1, 1.2f));
             }
         }
