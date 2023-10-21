@@ -81,7 +81,6 @@ public class CalendarImpl {
         buffer.writeEnum(this.day);
         buffer.writeEnum(this.season);
         buffer.writeEnum(this.currentWeather);
-        //buffer.writeEnum(this.todaysForecast);
     }
 
     public void fromPacket(FriendlyByteBuf buffer) {
@@ -89,7 +88,6 @@ public class CalendarImpl {
         this.day = buffer.readEnum(EnumDay.class);
         this.season = buffer.readEnum(EnumSeason.class);
         this.currentWeather = buffer.readEnum(EnumWeather.class);
-        //this.todaysForecast = buffer.readEnum(EnumWeather.class);
     }
 
     public void read(CompoundTag nbt) {
@@ -102,7 +100,7 @@ public class CalendarImpl {
                 .limit(8)
                 .toArray(EnumWeather[]::new);
         ListTag next = nbt.getList("NextForecast", Tag.TAG_STRING);
-        this.nextForecast = list.stream().map(t -> EnumWeather.valueOf(t.getAsString()))
+        this.nextForecast = next.stream().map(t -> EnumWeather.valueOf(t.getAsString()))
                 .limit(8)
                 .toArray(EnumWeather[]::new);
     }
