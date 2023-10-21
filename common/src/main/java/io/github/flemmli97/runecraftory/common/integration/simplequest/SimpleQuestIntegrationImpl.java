@@ -17,8 +17,10 @@ import io.github.flemmli97.simplequests.quest.types.QuestBase;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.HashMap;
@@ -41,13 +43,14 @@ public class SimpleQuestIntegrationImpl extends SimpleQuestIntegration {
         QuestEntryRegistry.registerSerializer(QuestTasks.TamingEntry.ID, QuestTasks.TamingEntry.CODEC);
         QuestEntryRegistry.registerSerializer(QuestTasks.NPCTalk.ID, QuestTasks.NPCTalk.CODEC);
         QuestBaseRegistry.registerSerializer(NPCQuest.ID, NPCQuest::of);
+        QuestBaseRegistry.registerSerializer(QuestBoardQuest.ID, QuestBoardQuest::of);
     }
 
     @Override
     public void openGui(ServerPlayer player) {
         Map<ResourceLocation, QuestBase> quest = SimpleQuestIntegration.INST().getQuestsFor(player);
         PlayerData data = PlayerData.get(player);
-        Platform.INSTANCE.sendToClient(new S2COpenQuestGui(quest.entrySet().stream().sorted(Map.Entry.comparingByKey())
+        Platform.INSTANCE.sendToClient(new S2COpenQuestGui(data.getCurrentQuest().stream().anyMatch(p -> p.getQuest() instanceof QuestBoardQuest), quest.entrySet().stream().sorted(Map.Entry.comparingByKey())
                 .map(e -> new ClientSideQuestDisplay(e.getKey(), e.getValue().getTask(player), e.getValue().getDescription(player), data.isActive(e.getKey()))).toList()), player);
         ((SimpleQuestData) PlayerData.get(player)).setQuestboardQuests(quest);
     }
@@ -60,9 +63,10 @@ public class SimpleQuestIntegrationImpl extends SimpleQuestIntegration {
         QuestBase quest = ((SimpleQuestData) data).getQuestboardQuests().get(res);
         if (quest != null) {
             if (!(quest instanceof NPCQuest npcQuest) || WorldHandler.get(player.getServer()).npcHandler.doesNPCExist(npcQuest.getNpcUuid())) {
-                data.acceptQuest(quest, 0);
-            }
-            else {
+                if (data.acceptQuest(quest, 0)) {
+                    player.connection.send(new ClientboundSoundPacket(SoundEvents.VILLAGER_YES, player.getSoundSource(), player.getX(), player.getY(), player.getZ(), 1, 1.2f));
+                }
+            } else {
                 player.sendMessage(new TranslatableComponent("runecraftory.quest.npc.none").withStyle(ChatFormatting.DARK_RED), Util.NIL_UUID);
             }
         }
@@ -72,7 +76,6 @@ public class SimpleQuestIntegrationImpl extends SimpleQuestIntegration {
     public void resetQuest(ServerPlayer player, ResourceLocation res) {
         PlayerData.get(player).reset(res, true, false);
     }
-
 
     @Override
     public void resetQuestData(ServerPlayer player) {
@@ -84,8 +87,10 @@ public class SimpleQuestIntegrationImpl extends SimpleQuestIntegration {
         PlayerData data = PlayerData.get(player);
         QuestBase quest = QuestsManager.instance().getAllQuests().get(res);
         if (quest != null) {
-            data.acceptQuest(NPCQuest.of(NPCQuest.withUuid(quest.id, npc.getUUID()),
-                    npc, quest), 0);
+            if (data.acceptQuest(NPCQuest.of(NPCQuest.withUuid(quest.id, npc.getUUID()),
+                    npc, quest), 0)) {
+                player.connection.send(new ClientboundSoundPacket(SoundEvents.VILLAGER_YES, player.getSoundSource(), player.getX(), player.getY(), player.getZ(), 1, 1.2f));
+            }
         }
     }
 
@@ -98,7 +103,7 @@ public class SimpleQuestIntegrationImpl extends SimpleQuestIntegration {
                             if (e.getValue() instanceof NPCQuest npcQuest) {
                                 return NPCQuest.of(npcQuest, player).stream();
                             }
-                            return Stream.of(e.getValue());
+                            return Stream.of(new QuestBoardQuest(e.getValue()));
                         }), data.getCurrentQuest().stream().map(QuestProgress::getQuest).filter(quest -> quest.category.id.equals(SimpleQuestIntegration.QUEST_CATEGORY)))
                 .collect(Collectors.toMap(
                         q -> q.id,

@@ -3,7 +3,9 @@ package io.github.flemmli97.runecraftory.common.integration.simplequest;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityTreasureChest;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import io.github.flemmli97.simplequests.api.QuestEntry;
 import io.github.flemmli97.simplequests.datapack.QuestsManager;
@@ -18,6 +20,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.entity.EntityTypeTest;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 
 import java.util.List;
 import java.util.Map;
@@ -151,6 +154,17 @@ public class NPCQuest extends QuestBase {
 
     @Override
     public void onComplete(ServerPlayer serverPlayer) {
+        EntityTreasureChest chest = ModEntities.TREASURE_CHEST.get().create(serverPlayer.getLevel());
+        if (chest != null && this.getLoot() != null && !this.getLoot().equals(BuiltInLootTables.EMPTY)) {
+            chest.absMoveTo(serverPlayer.getX(2), serverPlayer.getY(1.5), serverPlayer.getZ(2), serverPlayer.getRandom().nextFloat() * 360.0f, 0.0f);
+            int tries = 0;
+            while (!serverPlayer.level.noCollision(chest) && tries < 10) {
+                chest.absMoveTo(serverPlayer.getX(2), serverPlayer.getY(1.5), serverPlayer.getZ(2), serverPlayer.getRandom().nextFloat() * 360.0f, 0.0f);
+                tries++;
+            }
+            chest.setChestLoot(this.loot);
+            serverPlayer.getLevel().addFreshEntity(chest);
+        }
         this.onReset(serverPlayer);
     }
 

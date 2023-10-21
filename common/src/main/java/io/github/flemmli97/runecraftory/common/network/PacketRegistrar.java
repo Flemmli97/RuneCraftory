@@ -20,6 +20,7 @@ public class PacketRegistrar {
         register.registerMessage(id++, C2SSelectRecipeCrafting.ID, C2SSelectRecipeCrafting.class, C2SSelectRecipeCrafting::write, C2SSelectRecipeCrafting::read, C2SSelectRecipeCrafting::handle);
         register.registerMessage(id++, C2SDialogueAction.ID, C2SDialogueAction.class, C2SDialogueAction::write, C2SDialogueAction::read, C2SDialogueAction::handle);
         register.registerMessage(id++, C2SQuestSelect.ID, C2SQuestSelect.class, C2SQuestSelect::write, C2SQuestSelect::read, C2SQuestSelect::handle);
+        register.registerMessage(id++, C2SSubmitQuestBoard.ID, C2SSubmitQuestBoard.class, C2SSubmitQuestBoard::write, C2SSubmitQuestBoard::read, C2SSubmitQuestBoard::handle);
         return id;
     }
 

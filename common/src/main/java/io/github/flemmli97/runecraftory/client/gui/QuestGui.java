@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.integration.simplequest.ClientSideQuestDisplay;
 import io.github.flemmli97.runecraftory.common.network.C2SQuestSelect;
+import io.github.flemmli97.runecraftory.common.network.C2SSubmitQuestBoard;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -40,13 +41,16 @@ public class QuestGui extends Screen {
     private final QuestButton[] questButtons = new QuestButton[7];
     private QuestSelectButton yesButton;
     private QuestSelectButton noButton;
+    private SubmitButton submitButton;
     private int scrollValue;
     private boolean isDragging;
 
     private ClientSideQuestDisplay selectedQuest;
+    private final boolean hasActive;
 
-    public QuestGui(List<ClientSideQuestDisplay> quests) {
+    public QuestGui(boolean hasActive, List<ClientSideQuestDisplay> quests) {
         super(new TextComponent(""));
+        this.hasActive = hasActive;
         this.quests = quests;
     }
 
@@ -64,6 +68,11 @@ public class QuestGui extends Screen {
             this.yesButton.visible = false;
             this.noButton.visible = false;
         }));
+        this.addRenderableWidget(this.submitButton = new SubmitButton(this.leftPos + 238, this.topPos + 153, b -> {
+            Platform.INSTANCE.sendToServer(new C2SSubmitQuestBoard());
+            Minecraft.getInstance().setScreen(null);
+        }));
+        this.submitButton.active = this.hasActive;
         for (int i = 0; i < 7; i++) {
             this.addRenderableWidget(this.questButtons[i] = new QuestButton(this.leftPos + 14, this.topPos + 14 + i * 21, i, b -> {
                 if (b instanceof QuestButton but) {
@@ -77,7 +86,9 @@ public class QuestGui extends Screen {
         this.scrollArea = new Rect(this.leftPos + this.scrollArea.x, this.topPos + this.scrollArea.y, this.scrollArea.width, this.scrollArea.height);
     }
 
-    protected void renderBg(PoseStack stack, float partialTicks, int mouseX, int mouseY) {
+    @Override
+    public void renderBackground(PoseStack stack) {
+        super.renderBackground(stack);
         RenderSystem.setShaderTexture(0, TEXTUREPATH);
         this.blit(stack, this.leftPos, this.topPos, 0, 0, this.textureX, this.textureY);
     }
@@ -85,7 +96,6 @@ public class QuestGui extends Screen {
     @Override
     public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(stack);
-        this.renderBg(stack, partialTicks, mouseX, mouseY);
         for (QuestButton button : this.questButtons) {
             button.visible = button.index < this.quests.size();
             button.active = this.selectedQuest == null;
@@ -217,6 +227,35 @@ public class QuestGui extends Screen {
                 List<? extends Component> description = QuestGui.this.quests.get(this.getActualIndex()).description();
                 if (!description.isEmpty())
                     QuestGui.this.renderTooltip(poseStack, (List<Component>) description, Optional.empty(), relativeMouseX, relativeMouseY + 24);
+            }
+        }
+    }
+
+    private class SubmitButton extends Button {
+
+        public SubmitButton(int i, int j, OnPress onPress) {
+            super(i, j, 20, 22, TextComponent.EMPTY, onPress);
+        }
+
+        @Override
+        public void renderButton(PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
+            Minecraft minecraft = Minecraft.getInstance();
+            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+            RenderSystem.setShaderTexture(0, TEXTUREPATH_WIDGETS);
+            RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, this.alpha);
+            int i = this.getYImage(this.isHoveredOrFocused());
+            RenderSystem.enableBlend();
+            RenderSystem.defaultBlendFunc();
+            RenderSystem.enableDepthTest();
+            this.blit(poseStack, this.x, this.y, i * 22, 98, this.width, this.height);
+            this.renderBg(poseStack, minecraft, mouseX, mouseY);
+            this.renderToolTip(poseStack, mouseX, mouseY);
+        }
+
+        @Override
+        public void renderToolTip(PoseStack poseStack, int relativeMouseX, int relativeMouseY) {
+            if (this.isHovered && this.active) {
+                QuestGui.this.renderTooltip(poseStack, new TranslatableComponent("runecraftory.gui.quest.submit.button"), relativeMouseX, relativeMouseY + 24);
             }
         }
     }

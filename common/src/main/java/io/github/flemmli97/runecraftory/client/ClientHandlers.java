@@ -280,7 +280,7 @@ public class ClientHandlers {
         }
     }
 
-    public static void openQuestGui(List<ClientSideQuestDisplay> quests) {
-        Minecraft.getInstance().setScreen(new QuestGui(quests));
+    public static void openQuestGui(boolean hasActive, List<ClientSideQuestDisplay> quests) {
+        Minecraft.getInstance().setScreen(new QuestGui(hasActive, quests));
     }
 }

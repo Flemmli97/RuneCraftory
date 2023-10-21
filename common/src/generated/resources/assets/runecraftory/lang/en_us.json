@@ -1688,6 +1688,7 @@
   "runecraftory.gui.quests.reset": "Cancel",
   "runecraftory.gui.quests.accept.yes": "Yes",
   "runecraftory.gui.quests.accept.no": "No",
+  "runecraftory.gui.quest.submit.button": "Submit",
   "runecraftory.quest.gui.button": "Requests",
   "runecraftory.quest.npc.none": "The NPC for this quest doesn't exist anymore!",
   "npc.job.runecraftory:jobless": "None",

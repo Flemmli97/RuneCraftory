@@ -91,7 +91,7 @@ public class EntityTreasureChest extends Entity implements IAnimated {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if (this.chestLoot != null && source != DamageSource.OUT_OF_WORLD)
+        if (this.tier() == 4 && source != DamageSource.OUT_OF_WORLD)
             return false;
         if (source.getEntity() instanceof Player player)
             this.lastHurtByPlayer = player;

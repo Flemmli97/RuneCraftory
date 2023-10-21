@@ -86,7 +86,6 @@ public class BlockQuestboard extends HorizontalDirectionalBlock {
         if (!(player instanceof ServerPlayer serverPlayer)) {
             return InteractionResult.CONSUME;
         } else {
-            SimpleQuestIntegration.INST().questBoardComplete(serverPlayer);
             SimpleQuestIntegration.INST().openGui(serverPlayer);
             return InteractionResult.SUCCESS;
         }
