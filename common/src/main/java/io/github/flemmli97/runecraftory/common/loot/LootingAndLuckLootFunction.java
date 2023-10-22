@@ -57,7 +57,8 @@ public class LootingAndLuckLootFunction extends LootItemConditionalFunction {
         }
         for (LivingEntity other : contributing) {
             looting += Platform.INSTANCE.getLootingFromEntity(ctx.getParamOrNull(LootContextParams.THIS_ENTITY), other, ctx.getParamOrNull(LootContextParams.DAMAGE_SOURCE));
-            luck += (float) other.getAttributeValue(Attributes.LUCK);
+            if (other.getAttributes().hasAttribute(Attributes.LUCK))
+                luck += (float) other.getAttributeValue(Attributes.LUCK);
         }
         float chance = (this.baseChance.getFloat(ctx) + this.luckBonus.getFloat(ctx) * luck) * (1 + this.lootingBonus.getFloat(ctx) * looting);
         if (chance >= 1) {

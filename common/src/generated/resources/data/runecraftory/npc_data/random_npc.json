@@ -28,6 +28,7 @@
       "runecraftory:tame_monster": {
         "startID": "runecraftory:random_npc/quest_start_tame_monster",
         "activeID": "runecraftory:random_npc/quest_active_tame_monster",
+        "hasSequence": false,
         "endID": "runecraftory:random_npc/quest_end_tame_monster"
       }
     },

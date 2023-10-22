@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.common.entities.npc;
 
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
-import io.github.flemmli97.runecraftory.common.integration.simplequest.NPCQuestState;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -19,7 +18,7 @@ public class NPCRelationManager {
 
     private final Map<UUID, NPCFriendPoints> playerHearts = new HashMap<>();
     private final Map<UUID, Set<ResourceLocation>> completedQuests = new HashMap<>();
-    private final Map<UUID, Map<ResourceLocation, NPCQuestState>> questTracker = new HashMap<>();
+    private final Map<UUID, Map<ResourceLocation, Integer>> questTracker = new HashMap<>();
     private Pair<UUID, NPCRelation> relation;
     private UUIDNameMapper fatherUUID;
     private UUIDNameMapper motherUUID;
@@ -44,26 +43,24 @@ public class NPCRelationManager {
         return ImmutableSet.copyOf(this.completedQuests.computeIfAbsent(uuid, key -> new HashSet<>()));
     }
 
-    public NPCQuestState questStateFor(UUID uuid, ResourceLocation questID) {
+    public int questStateFor(UUID uuid, ResourceLocation questID) {
         return this.questTracker.computeIfAbsent(uuid, key -> new HashMap<>())
-                .getOrDefault(questID, NPCQuestState.NOT_STARTED);
+                .getOrDefault(questID, -1);
     }
 
     public void advanceQuest(UUID uuid, ResourceLocation questID) {
-        NPCQuestState newState = switch (this.questStateFor(uuid, questID)) {
-            case NOT_STARTED -> NPCQuestState.STARTED;
-            case STARTED -> NPCQuestState.END;
-            default -> null;
-        };
-        Map<ResourceLocation, NPCQuestState> map = this.questTracker.computeIfAbsent(uuid, key -> new HashMap<>());
-        if (newState != null)
-            map.put(questID, newState);
-        else
-            map.remove(questID);
+        int newState = this.questStateFor(uuid, questID) + 1;
+        Map<ResourceLocation, Integer> map = this.questTracker.computeIfAbsent(uuid, key -> new HashMap<>());
+        map.put(questID, newState);
+    }
+
+    public void endQuest(UUID uuid, ResourceLocation questID) {
+        Map<ResourceLocation, Integer> map = this.questTracker.computeIfAbsent(uuid, key -> new HashMap<>());
+        map.put(questID, -2);
     }
 
     public void resetQuest(UUID uuid, ResourceLocation questID) {
-        Map<ResourceLocation, NPCQuestState> map = this.questTracker.get(uuid);
+        Map<ResourceLocation, Integer> map = this.questTracker.get(uuid);
         if (map != null) {
             map.remove(questID);
             if (map.isEmpty())
@@ -86,7 +83,7 @@ public class NPCRelationManager {
         CompoundTag questsTracker = new CompoundTag();
         this.questTracker.forEach((uuid, tracker) -> {
             CompoundTag states = new CompoundTag();
-            tracker.forEach((id, state) -> states.putInt(id.toString(), state.ordinal()));
+            tracker.forEach((id, state) -> states.putInt(id.toString(), state));
             questsTracker.put(uuid.toString(), states);
         });
         compound.put("QuestStates", questsTracker);
@@ -110,8 +107,8 @@ public class NPCRelationManager {
         CompoundTag questsTracker = compound.getCompound("QuestStates");
         questsTracker.getAllKeys().forEach(key -> {
             CompoundTag states = questsTracker.getCompound(key);
-            Map<ResourceLocation, NPCQuestState> map = new HashMap<>();
-            states.getAllKeys().forEach(id -> map.put(new ResourceLocation(id), NPCQuestState.values()[states.getInt(id)]));
+            Map<ResourceLocation, Integer> map = new HashMap<>();
+            states.getAllKeys().forEach(id -> map.put(new ResourceLocation(id), states.getInt(id)));
             this.questTracker.put(UUID.fromString(key), map);
         });
     }

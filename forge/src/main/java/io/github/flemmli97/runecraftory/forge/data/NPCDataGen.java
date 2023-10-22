@@ -35,7 +35,9 @@ public class NPCDataGen extends NPCDataProvider {
                         .addGiftResponse("dislike", new NPCData.Gift(null, "npc.generic.dislike", -10), "Eh... thanks I guess?")
                         .addGiftResponse("like", new NPCData.Gift(null, "npc.generic.like", 25), "Thanks %s for the gift. I really like this.")
                         .setNeutralGiftResponse("npc.generic.gift.default", "Thank you for your gift")
-                        .withCombatAction(genericAttack),
+                        .withCombatAction(genericAttack)
+                        .addTranslation(QuestGen.getTask(new ResourceLocation(RuneCraftory.MODID, "tame_monster")), "Tame a monster")
+                        .addTranslation(QuestGen.getDescription(new ResourceLocation(RuneCraftory.MODID, "tame_monster")), "I need you to tame a monster. Come see me."),
                 of(m -> {
                     m.put(NPCData.ConversationType.GREETING, new NPCData.ConversationSet.Builder("npc.generic.greeting.default", "Hello %s.")
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.greeting.1", 0, 10).addCondition(TimeCheck.time(IntRange.range(0, 12000)).build()), "Good day %s.")
@@ -54,9 +56,11 @@ public class NPCDataGen extends NPCDataProvider {
                 }),
                 of(m -> {
                     m.put(new ResourceLocation(RuneCraftory.MODID, "tame_monster"), new QuestResponseBuilder(
-                            new NPCData.ConversationSet.Builder("npc.generic.quest.tame_monster.start", "Please tame a monster."),
-                            new NPCData.ConversationSet.Builder("npc.generic.quest.tame_monster.active", "You still need to tame a monster."),
-                            new NPCData.ConversationSet.Builder("npc.generic.quest.tame_monster.end", "Thank you for taming a monster.")
+                            new NPCData.ConversationSet.Builder("npc.generic.quest.tame_monster.start", "Did you know that you can tame the monsters in this world?\n" +
+                                    "You would need to setup a barn first and then just give them an item.\n\nWith that said I would like you to tame a monster."),
+                            new NPCData.ConversationSet.Builder("npc.generic.quest.tame_monster.active", "You still need to tame a monster.\n" +
+                                    "Some monsters prefer certain items more."),
+                            new NPCData.ConversationSet.Builder("npc.generic.quest.tame_monster.end", "I see you've successfully tamed a monster. Congrats!")
                     ));
                 }));
 
@@ -74,9 +78,7 @@ public class NPCDataGen extends NPCDataProvider {
                     m.put(NPCData.ConversationType.FOLLOWNO, new NPCData.ConversationSet.Builder("npc.generic.2.follow.no", "Sorry but I'm have something to take care of."));
                     m.put(NPCData.ConversationType.FOLLOWSTOP, new NPCData.ConversationSet.Builder("npc.generic.2.follow.stop", "Ok. Cya."));
                 }),
-                of(m -> {
-
-                }));
+                Map.of());
 
         this.addNPCData("random_npc_3", new NPCData.Builder(50)
                         .addGiftResponse("dislike", new NPCData.Gift(null, "npc.generic.3.dislike", -10), "What is this... Sorry but im not a fan of this")
@@ -94,39 +96,7 @@ public class NPCDataGen extends NPCDataProvider {
                     m.put(NPCData.ConversationType.FOLLOWNO, new NPCData.ConversationSet.Builder("npc.generic.3.follow.no", "I think I still have some things to do first."));
                     m.put(NPCData.ConversationType.FOLLOWSTOP, new NPCData.ConversationSet.Builder("npc.generic.3.follow.stop", "Oh ok. Well then later."));
                 }),
-                of(m -> {
-
-                }));
-
-        /*this.addNPCData("random_npc", new NPCData.Builder(50)
-                        .addGiftResponse("dislike", new NPCData.Gift(null, "npc.generic.dislike", -10), "Eh... thanks I guess?")
-                        .addGiftResponse("like", new NPCData.Gift(null, "npc.generic.like", 25), "Thanks %s for the gift. I really like this.")
-                        .setNeutralGiftResponse("npc.generic.gift.default", "Thank you for your gift")
-                        .withProfession(ModNPCJobs.GENERAL.getSecond())
-                        .withCombatAction(genericAttack),
-                of(m -> {
-                    m.put(NPCData.ConversationType.GREETING, new NPCData.ConversationSet.Builder("npc.generic.greeting.default", "Hello %s.")
-                            .addConversation(new NPCData.Conversation.Builder("npc.generic.greeting.1", 0, 10).addCondition(TimeCheck.time(IntRange.range(0, 12000)).build()), "Good day %s.")
-                            .addConversation(new NPCData.Conversation.Builder("npc.generic.greeting.2", 0, 10).addCondition(TimeCheck.time(IntRange.range(12000, 14000)).build()), "Good evening %s.")
-                            .addConversation(new NPCData.Conversation.Builder("npc.generic.greeting.3", 0, 10), "Hi. How are you today %s?"));
-                    m.put(NPCData.ConversationType.TALK, new NPCData.ConversationSet.Builder("npc.generic.talk.default", "...")
-                            .addConversation(new NPCData.Conversation.Builder("npc.generic.talk.1", 0, 10)
-                                    .addAction(new NPCData.ConversationActionHolder("npc.generic.talk.1.answer.same", NPCData.ConversationAction.ANSWER, "npc.generic.talk.1.response.same", 0), "Same")
-                                    .addAction(new NPCData.ConversationActionHolder("npc.generic.talk.1.answer.ok", NPCData.ConversationAction.ANSWER, "npc.generic.talk.1.response.ok", 0), "Ok..."), "On sunny days I like to go out and walk a lot.")
-                            .addConversation(new NPCData.Conversation.Builder("npc.generic.talk.1.response.same", 0, 10).setAnswer(), "It's nice right?")
-                            .addConversation(new NPCData.Conversation.Builder("npc.generic.talk.1.response.ok", 0, 10).setAnswer(), "You don't?")
-                            .addConversation(new NPCData.Conversation.Builder("npc.generic.talk.2", 0, 10), "I don't like working."));
-                    m.put(NPCData.ConversationType.FOLLOWYES, new NPCData.ConversationSet.Builder("npc.generic.follow.yes", "Ok"));
-                    m.put(NPCData.ConversationType.FOLLOWNO, new NPCData.ConversationSet.Builder("npc.generic.follow.no", "Sorry but I am busy right now."));
-                    m.put(NPCData.ConversationType.FOLLOWSTOP, new NPCData.ConversationSet.Builder("npc.generic.follow.stop", "Ok. See you again."));
-                }),
-                of(m -> {
-                    m.put(new ResourceLocation(RuneCraftory.MODID, "tame_monster"), new QuestResponseBuilder(
-                            new NPCData.ConversationSet.Builder("npc.generic.quest.tame_monster.start", "Please tame a monster."),
-                            new NPCData.ConversationSet.Builder("npc.generic.quest.tame_monster.active", "You still need to tame a monster."),
-                            new NPCData.ConversationSet.Builder("npc.generic.quest.tame_monster.end", "Thank you for taming a monster.")
-                    ));
-                }));*/
+                Map.of());
 
         //Test data using all possible fields
         /*ResourceLocation attackAll = this.addAttackActions(new ResourceLocation(RuneCraftory.MODID, "attack_all"), new NPCAttackActions.Builder()

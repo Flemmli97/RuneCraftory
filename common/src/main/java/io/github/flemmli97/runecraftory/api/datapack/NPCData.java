@@ -18,7 +18,6 @@ import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCSchedule;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
-import io.github.flemmli97.runecraftory.common.integration.simplequest.NPCQuestState;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
@@ -121,15 +120,20 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         return DataPackHandler.SERVER_PACK.npcConversationManager().get(conversationId, ConversationSet.DEFAULT.get(type));
     }
 
-    public ConversationSet getFromQuest(ResourceLocation quest, NPCQuestState state) {
+    public ConversationSet getFromQuest(ResourceLocation quest, int state) {
         QuestResponses responses = this.questHandler().responses().get(quest);
         ConversationSet fallback = new ConversationSet("npc.default.quest.response.default", Map.of());
         if (responses == null)
             return fallback;
         ResourceLocation conversationId = switch (state) {
-            case NOT_STARTED -> responses.startID;
-            case STARTED -> responses.activeID;
-            case END -> responses.endID;
+            case -2 -> responses.endID;
+            case -1 -> responses.startID;
+            default -> {
+                if (state == 0 || !responses.hasSequence)
+                    yield responses.activeID;
+                else
+                    yield new ResourceLocation(responses.activeID.getNamespace(), responses.activeID.getPath() + "_" + state);
+            }
         };
         return DataPackHandler.SERVER_PACK.npcConversationManager().get(conversationId, fallback);
     }
@@ -179,11 +183,13 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                 ).apply(inst, (responses, required) -> new QuestHandler(responses, Set.copyOf(required))));
     }
 
-    public record QuestResponses(ResourceLocation startID, ResourceLocation activeID, ResourceLocation endID) {
+    public record QuestResponses(ResourceLocation startID, ResourceLocation activeID, boolean hasSequence,
+                                 ResourceLocation endID) {
         public static final Codec<QuestResponses> CODEC = RecordCodecBuilder.create(inst ->
                 inst.group(
                         ResourceLocation.CODEC.fieldOf("startID").forGetter(d -> d.startID),
                         ResourceLocation.CODEC.fieldOf("activeID").forGetter(d -> d.activeID),
+                        Codec.BOOL.fieldOf("hasSequence").forGetter(d -> d.hasSequence),
                         ResourceLocation.CODEC.fieldOf("endID").forGetter(d -> d.endID)
                 ).apply(inst, QuestResponses::new));
     }
@@ -268,10 +274,8 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             return this;
         }
 
-        public Builder addTranslation(String questID, String first, String running, String end) {
-            this.translations.put(questID + ".start", first);
-            this.translations.put(questID + ".active", running);
-            this.translations.put(questID + ".end", end);
+        public Builder addTranslation(String key, String translation) {
+            this.translations.put(key, translation);
             return this;
         }
 
@@ -315,8 +319,8 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             return this;
         }
 
-        public Builder addQuestResponse(ResourceLocation quest, ResourceLocation startingID, ResourceLocation activeID, ResourceLocation endID) {
-            this.responses.put(quest, new QuestResponses(startingID, activeID, endID));
+        public Builder addQuestResponse(ResourceLocation quest, ResourceLocation startingID, ResourceLocation activeID, boolean hasSequence, ResourceLocation endID) {
+            this.responses.put(quest, new QuestResponses(startingID, activeID, hasSequence, endID));
             return this;
         }
 

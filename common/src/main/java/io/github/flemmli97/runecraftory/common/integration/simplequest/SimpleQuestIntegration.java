@@ -3,7 +3,6 @@ package io.github.flemmli97.runecraftory.common.integration.simplequest;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.simplequests.api.QuestCompletionState;
 import io.github.flemmli97.simplequests.quest.types.QuestBase;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
@@ -63,7 +62,7 @@ public class SimpleQuestIntegration {
     public void questBoardComplete(ServerPlayer player) {
     }
 
-    public Map<ResourceLocation, QuestCompletionState> triggerNPCTalk(ServerPlayer player, EntityNPCBase npc) {
+    public Map<ResourceLocation, ProgressState> triggerNPCTalk(ServerPlayer player, EntityNPCBase npc) {
         return Map.of();
 
     }
@@ -74,8 +73,8 @@ public class SimpleQuestIntegration {
     public void triggerTaming(ServerPlayer player, BaseMonster monster) {
     }
 
-    public boolean checkCompletionQuest(ServerPlayer player, EntityNPCBase npc) {
-        return false;
+    public ProgressState checkCompletionQuest(ServerPlayer player, EntityNPCBase npc) {
+        return ProgressState.NO;
     }
 
     public void submit(ServerPlayer player, EntityNPCBase npc) {

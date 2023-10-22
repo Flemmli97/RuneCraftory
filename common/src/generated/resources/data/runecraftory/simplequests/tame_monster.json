@@ -1,13 +1,14 @@
 {
   "category": "runecraftory:quests",
-  "task": "runecraftory.quest.tame_monster",
-  "description": "runecraftory.quest.tame_monster_description",
+  "task": "tame_monster.quest.runecraftory",
+  "description": "tame_monster.quest.runecraftory_description",
   "icon": {
     "item": "minecraft:air",
     "count": 0
   },
+  "repeat_delay": -1,
   "npc_id": "runecraftory:random_npc",
   "quest": "runecraftory:tame_monster_ref",
-  "loot_table": "minecraft:chests/abandoned_mineshaft",
+  "loot_table": "runecraftory:taming_quest_brush",
   "type": "runecraftory:npc_quest"
 }

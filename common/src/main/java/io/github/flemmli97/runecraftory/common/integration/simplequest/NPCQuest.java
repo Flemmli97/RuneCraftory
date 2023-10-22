@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.integration.simplequest;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import io.github.flemmli97.runecraftory.RuneCraftory;
@@ -23,6 +24,7 @@ import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -38,10 +40,10 @@ public class NPCQuest extends QuestBase {
     public final List<ResourceLocation> parentQuests;
     private ResourceLocation originID;
 
-    public NPCQuest(ResourceLocation id, QuestCategory category, String questTaskString, List<String> questTaskDesc,
-                    List<ResourceLocation> parents, boolean redoParent, int sortingId, EntityPredicate unlockCondition, ResourceLocation npcDataID, ResourceLocation quest, ResourceLocation loot) {
+    protected NPCQuest(ResourceLocation id, QuestCategory category, String questTaskString, List<String> questTaskDesc,
+                       List<ResourceLocation> parents, boolean redoParent, int repeatDelay, int sortingId, EntityPredicate unlockCondition, ResourceLocation npcDataID, ResourceLocation quest, ResourceLocation loot) {
         super(id, category, questTaskString, questTaskDesc,
-                List.of(), redoParent, false, ItemStack.EMPTY, 0, 0, sortingId, false, unlockCondition);
+                List.of(), redoParent, false, ItemStack.EMPTY, repeatDelay, 0, sortingId, false, unlockCondition);
         this.npcDataID = npcDataID;
         this.parentQuests = parents;
         this.quest = quest;
@@ -110,9 +112,7 @@ public class NPCQuest extends QuestBase {
                 obj.addProperty("parent_id", this.parentQuests.get(0).toString());
             } else {
                 JsonArray arr = new JsonArray();
-                this.parentQuests.forEach((r) -> {
-                    arr.add(r.toString());
-                });
+                this.parentQuests.forEach((r) -> arr.add(r.toString()));
                 obj.add("parent_id", arr);
             }
         }
@@ -150,9 +150,10 @@ public class NPCQuest extends QuestBase {
 
     @Override
     public QuestBase resolveToQuest(ServerPlayer player, int idx) {
-        if (idx != 0)
+        QuestBase quest = QuestsManager.instance().getAllQuests().get(this.quest);
+        if (quest == null)
             return null;
-        return QuestsManager.instance().getAllQuests().get(this.quest);
+        return quest.resolveToQuest(player, idx);
     }
 
     @Override
@@ -191,7 +192,10 @@ public class NPCQuest extends QuestBase {
     @Override
     public Map<String, QuestEntry> resolveTasks(ServerPlayer player, int idx) {
         QuestBase base = QuestsManager.instance().getAllQuests().get(this.quest);
-        return base.resolveTasks(player, 0);
+        Map<String, QuestEntry> result = new HashMap<>(base.resolveTasks(player, idx));
+        List<Map.Entry<String, QuestEntry>> talks = result.entrySet().stream().filter(e -> e.getValue() instanceof QuestTasks.NPCTalk).toList();
+        talks.forEach(e -> result.put(e.getKey(), e.getValue().resolve(player, this)));
+        return ImmutableMap.copyOf(result);
     }
 
     @Override
@@ -229,7 +233,7 @@ public class NPCQuest extends QuestBase {
         public NPCQuest build() {
             if (this.quest == null)
                 throw new IllegalStateException("Quest is not defined");
-            return new NPCQuest(this.id, this.category, this.questTaskString, this.questDesc, this.neededParentQuests, this.redoParent, this.sortingId,
+            return new NPCQuest(this.id, this.category, this.questTaskString, this.questDesc, this.neededParentQuests, this.redoParent, this.repeatDelay, this.sortingId,
                     this.unlockCondition, this.npcDataID, this.quest, this.loot);
         }
     }

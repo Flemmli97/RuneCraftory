@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.forge.data;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.enums.EnumMineralTier;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
@@ -521,6 +522,10 @@ public class Loottables extends LootTableProvider {
                 tier4.add(LootItem.lootTableItem(item.get()));
             }
             biConsumer.accept(EntityTreasureChest.TIER_4_LOOT, LootTable.lootTable().withPool(tier4));
+
+
+            biConsumer.accept(new ResourceLocation(RuneCraftory.MODID, "taming_quest_brush"), LootTable.lootTable().withPool(LootPool.lootPool()
+                    .add(LootItem.lootTableItem(ModItems.brush.get()))));
         }
     }
 

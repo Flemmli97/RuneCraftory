@@ -173,12 +173,20 @@ public abstract class NPCDataProvider implements DataProvider {
             this.translations.putAll(value.start.getTranslations());
             this.conversations.put(startId, value.start.build());
             ResourceLocation runId = new ResourceLocation(this.modid, id + "/quest_active_" + key.getPath());
-            this.translations.putAll(value.active.getTranslations());
-            this.conversations.put(runId, value.active.build());
+            if (value.active.size() == 1) {
+                this.translations.putAll(value.active.get(0).getTranslations());
+                this.conversations.put(runId, value.active.get(0).build());
+            } else {
+                for (int i = 0; i < value.active.size(); i++) {
+                    ResourceLocation runIdI = new ResourceLocation(this.modid, id + "/quest_active_" + key.getPath() + "_" + i);
+                    this.translations.putAll(value.active.get(i).getTranslations());
+                    this.conversations.put(runIdI, value.active.get(i).build());
+                }
+            }
             ResourceLocation endId = new ResourceLocation(this.modid, id + "/quest_end_" + key.getPath());
             this.translations.putAll(value.end.getTranslations());
             this.conversations.put(endId, value.end.build());
-            data.addQuestResponse(key, startId, runId, endId);
+            data.addQuestResponse(key, startId, runId, value.active.size() > 1, endId);
         });
         this.translations.putAll(data.getTranslations());
         this.data.put(new ResourceLocation(this.modid, id), data.build());
@@ -204,12 +212,20 @@ public abstract class NPCDataProvider implements DataProvider {
             this.translations.putAll(value.start.getTranslations());
             this.conversations.put(startId, value.start.build());
             ResourceLocation runId = new ResourceLocation(this.modid, id + "/quest_active_" + key.getPath());
-            this.translations.putAll(value.active.getTranslations());
-            this.conversations.put(runId, value.active.build());
+            if (value.active.size() == 1) {
+                this.translations.putAll(value.active.get(0).getTranslations());
+                this.conversations.put(runId, value.active.get(0).build());
+            } else {
+                for (int i = 0; i < value.active.size(); i++) {
+                    ResourceLocation runIdI = new ResourceLocation(this.modid, id + "/quest_active_" + key.getPath() + "_" + i);
+                    this.translations.putAll(value.active.get(i).getTranslations());
+                    this.conversations.put(runIdI, value.active.get(i).build());
+                }
+            }
             ResourceLocation endId = new ResourceLocation(this.modid, id + "/quest_end_" + key.getPath());
             this.translations.putAll(value.end.getTranslations());
             this.conversations.put(endId, value.end.build());
-            data.addQuestResponse(key, startId, runId, endId);
+            data.addQuestResponse(key, startId, runId, value.active.size() > 1, endId);
         });
         this.translations.putAll(data.getTranslations());
         NPCData npcData = data.build();
@@ -246,7 +262,13 @@ public abstract class NPCDataProvider implements DataProvider {
         return id;
     }
 
-    public record QuestResponseBuilder(NPCData.ConversationSet.Builder start, NPCData.ConversationSet.Builder active,
+    public record QuestResponseBuilder(NPCData.ConversationSet.Builder start,
+                                       List<NPCData.ConversationSet.Builder> active,
                                        NPCData.ConversationSet.Builder end) {
+
+        public QuestResponseBuilder(NPCData.ConversationSet.Builder start, NPCData.ConversationSet.Builder active,
+                                    NPCData.ConversationSet.Builder end) {
+            this(start, List.of(active), end);
+        }
     }
 }

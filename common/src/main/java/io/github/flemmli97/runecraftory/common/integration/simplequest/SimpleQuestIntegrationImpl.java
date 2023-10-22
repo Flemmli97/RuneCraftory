@@ -88,6 +88,7 @@ public class SimpleQuestIntegrationImpl extends SimpleQuestIntegration {
     @Override
     public void resetQuest(ServerPlayer player, ResourceLocation res) {
         PlayerData.get(player).reset(res, true, false);
+        player.connection.send(new ClientboundSoundPacket(SoundEvents.VILLAGER_NO, player.getSoundSource(), player.getX(), player.getY(), player.getZ(), 1, 1.2f));
     }
 
     @Override
@@ -112,13 +113,15 @@ public class SimpleQuestIntegrationImpl extends SimpleQuestIntegration {
     public Map<ResourceLocation, QuestBase> getQuestsFor(ServerPlayer player) {
         PlayerData data = PlayerData.get(player);
         return Stream.concat(QuestsManager.instance().getQuestsForCategoryID(SimpleQuestIntegration.QUEST_CATEGORY)
-                        .entrySet().stream().filter(e -> data.canAcceptQuest(e.getValue()) == PlayerData.AcceptType.ACCEPT && e.getValue().isUnlocked(player)) //TODO
-                        .flatMap(e -> {
-                            if (e.getValue() instanceof NPCQuest npcQuest) {
-                                return NPCQuest.of(npcQuest, player).stream();
-                            }
-                            return Stream.of(new QuestBoardQuest(e.getValue()));
-                        }), data.getCurrentQuest().stream().map(QuestProgress::getQuest).filter(quest -> quest.category.id.equals(SimpleQuestIntegration.QUEST_CATEGORY)))
+                                .entrySet().stream()
+                                .flatMap(e -> {
+                                    if (e.getValue() instanceof NPCQuest npcQuest) {
+                                        return NPCQuest.of(npcQuest, player).stream();
+                                    }
+                                    return Stream.of(new QuestBoardQuest(e.getValue()));
+                                })
+                                .filter(q -> data.canAcceptQuest(q) == PlayerData.AcceptType.ACCEPT && q.isUnlocked(player)) //TODO
+                        , data.getCurrentQuest().stream().map(QuestProgress::getQuest).filter(quest -> quest.category.id.equals(SimpleQuestIntegration.QUEST_CATEGORY)))
                 .collect(Collectors.toMap(
                         q -> q.id,
                         q -> q,
@@ -133,10 +136,19 @@ public class SimpleQuestIntegrationImpl extends SimpleQuestIntegration {
     }
 
     @Override
-    public Map<ResourceLocation, QuestCompletionState> triggerNPCTalk(ServerPlayer player, EntityNPCBase npc) {
+    public Map<ResourceLocation, ProgressState> triggerNPCTalk(ServerPlayer player, EntityNPCBase npc) {
         return SimpleQuestAPI.trigger(player, QuestTasks.NPCTalk.class, (name, e, prog) -> npc.getUUID().equals(e.targetNPC),
                 (prog, pair) -> {
-                });
+                }).entrySet().stream().collect(Collectors.toMap(
+                Map.Entry::getKey,
+                e -> switch (e.getValue()) {
+                    case PARTIAL -> ProgressState.PARTIAL;
+                    case COMPLETE -> ProgressState.COMPLETE;
+                    case NO -> ProgressState.NO;
+                },
+                (e1, e2) -> e1,
+                HashMap::new
+        ));
     }
 
     @Override
@@ -157,8 +169,15 @@ public class SimpleQuestIntegrationImpl extends SimpleQuestIntegration {
     }
 
     @Override
-    public boolean checkCompletionQuest(ServerPlayer player, EntityNPCBase npc) {
-        return PlayerData.get(player).getCurrentQuest().stream().anyMatch(p -> p.tryComplete(player, npc.getUUID().toString()) == QuestCompletionState.COMPLETE);
+    public ProgressState checkCompletionQuest(ServerPlayer player, EntityNPCBase npc) {
+        return PlayerData.get(player).getCurrentQuest().stream()
+                .map(p -> p.tryComplete(player, npc.getUUID().toString()))
+                .filter(s -> s != QuestCompletionState.NO)
+                .findFirst().map(s -> switch (s) {
+                    case PARTIAL -> ProgressState.PARTIAL;
+                    case COMPLETE -> ProgressState.COMPLETE;
+                    case NO -> ProgressState.NO;
+                }).orElse(ProgressState.NO);
     }
 
     @Override

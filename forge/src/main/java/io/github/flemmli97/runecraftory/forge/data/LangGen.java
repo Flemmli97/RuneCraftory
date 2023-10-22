@@ -681,9 +681,6 @@ public class LangGen implements DataProvider {
         this.add(QuestTasks.LevelEntry.ID.toString(), "Reach level %s");
         this.add(QuestTasks.SkillLevelEntry.ID.toString(), "Reach level %s in %s");
         this.add(QuestTasks.TamingEntry.ID.toString(), "%s");
-
-        this.add("runecraftory.quest.tame_monster", "Tame a monster");
-        this.add("runecraftory.quest.tame_monster_description", "I need you to tame a monster");
     }
 
     private String simpleTranslation(ResourceLocation res) {

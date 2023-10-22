@@ -27,7 +27,7 @@ import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.ShopState;
 import io.github.flemmli97.runecraftory.common.entities.pathing.NPCWalkNodeEvaluator;
 import io.github.flemmli97.runecraftory.common.integration.simplequest.NPCQuest;
-import io.github.flemmli97.runecraftory.common.integration.simplequest.NPCQuestState;
+import io.github.flemmli97.runecraftory.common.integration.simplequest.ProgressState;
 import io.github.flemmli97.runecraftory.common.integration.simplequest.SimpleQuestIntegration;
 import io.github.flemmli97.runecraftory.common.inventory.InventoryShop;
 import io.github.flemmli97.runecraftory.common.inventory.container.ContainerShop;
@@ -535,15 +535,17 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     public void respondToQuest(ServerPlayer player, ResourceLocation quest) {
-        NPCQuestState questState = this.relationManager.questStateFor(player.getUUID(), quest);
-        boolean result;
-        if (questState != NPCQuestState.NOT_STARTED) {
-            SimpleQuestIntegration.INST().triggerNPCTalk(player, this);
+        SimpleQuestIntegration.INST().triggerNPCTalk(player, this);
+        int questState = this.relationManager.questStateFor(player.getUUID(), quest);
+        ProgressState result;
+        if (questState != -1) {
             result = SimpleQuestIntegration.INST().checkCompletionQuest(player, this);
-            if (result) {
-                if (questState != NPCQuestState.END)
-                    this.relationManager.advanceQuest(player.getUUID(), quest);
-                questState = NPCQuestState.END;
+            if (result == ProgressState.COMPLETE) {
+                this.relationManager.endQuest(player.getUUID(), quest);
+                questState = -2;
+            } else if (result == ProgressState.PARTIAL) {
+                this.relationManager.advanceQuest(player.getUUID(), quest);
+                questState++;
             }
         }
         int heart = this.relationManager.getFriendPointData(player.getUUID()).points.getLevel();
@@ -563,7 +565,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         } else {
             this.tellDialogue(player, null, null, new TranslatableComponent(conversations.getFallbackKey(), player.getName()), List.of());
         }
-        if (questState == NPCQuestState.NOT_STARTED)
+        if (questState == -1)
             this.relationManager.advanceQuest(player.getUUID(), quest);
     }
 
@@ -605,7 +607,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     public void closedQuestDialogue(ServerPlayer sender) {
         this.closedDialogue(sender);
         ResourceLocation quest = SimpleQuestIntegration.INST().questForExists(sender, this);
-        if (quest != null && this.relationManager.questStateFor(sender.getUUID(), quest) == NPCQuestState.END)
+        if (quest != null && this.relationManager.questStateFor(sender.getUUID(), quest) == -2)
             SimpleQuestIntegration.INST().submit(sender, this);
     }
 

@@ -1,0 +1,13 @@
+{
+  "category": "runecraftory:hidden_quests",
+  "task": "NPC_SUBQUEST",
+  "loot_table": "minecraft:empty",
+  "entries": {
+    "talk": {
+      "translationKey": "",
+      "generic": false,
+      "id": "runecraftory:npc_talk"
+    }
+  },
+  "type": "simplequests:quest"
+}
