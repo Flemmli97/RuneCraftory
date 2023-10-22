@@ -21,6 +21,7 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,7 @@ public class NPCQuest extends QuestBase {
 
     public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "npc_quest");
 
+    private EntityNPCBase npc;
     private UUID npcUuid;
     public final ResourceLocation npcDataID, quest, loot;
     public final List<ResourceLocation> parentQuests;
@@ -78,6 +80,7 @@ public class NPCQuest extends QuestBase {
                 })
                 .stream().map(npc -> {
                     NPCQuest ret = of(withUuid(quest.id, npc.getUUID()), quest.category, quest.serialize(true, false));
+                    ret.npc = npc;
                     ret.originID = quest.id;
                     ret.npcUuid = npc.getUUID();
                     return ret;
@@ -127,6 +130,11 @@ public class NPCQuest extends QuestBase {
 
     public UUID getNpcUuid() {
         return this.npcUuid;
+    }
+
+    @Nullable
+    public EntityNPCBase getNpc() {
+        return this.npc;
     }
 
     public ResourceLocation getOriginID() {

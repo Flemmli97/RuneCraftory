@@ -2,8 +2,11 @@ package io.github.flemmli97.runecraftory.client.render;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
+import com.mojang.blaze3d.platform.Lighting;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
+import io.github.flemmli97.runecraftory.api.datapack.NPCData;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
@@ -15,6 +18,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -32,7 +36,7 @@ import java.util.Map;
 
 public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerModel<T>> {
 
-    private final Map<String, PlayerSkin> textureLocations = new HashMap<>();
+    private static final Map<String, PlayerSkin> TEXTURE_LOCATIONS = new HashMap<>();
 
     private final PlayerModel<T> def;
     private final PlayerModel<T> slim;
@@ -45,11 +49,42 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
         this.addLayer(new ItemInHandLayer<>(this));
     }
 
+    public static ResourceLocation getTextureFromLook(NPCData.NPCLook look) {
+        String skin = look.playerSkin();
+        if (skin != null) {
+            return TEXTURE_LOCATIONS.computeIfAbsent(skin, s -> new PlayerSkin(skin)).getLocation();
+        }
+        return look.texture();
+    }
+
+    public static boolean renderForTooltip(int x, int y, float scale, PlayerModel<?> model, String skin, ResourceLocation texture) {
+        if (skin == null && texture == null)
+            return false;
+        PoseStack poseStack = RenderSystem.getModelViewStack();
+        poseStack.pushPose();
+        poseStack.translate(x, y, 1950.0);
+        poseStack.scale(1.0f, 1.0f, -1.0f);
+        RenderSystem.applyModelViewMatrix();
+        PoseStack poseStack2 = new PoseStack();
+        poseStack2.translate(0.0, 0.0, 1000.0);
+        poseStack2.scale(scale, scale, scale);
+        Lighting.setupForEntityInInventory();
+        MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
+        RenderType renderType = model.renderType(texture != null ? texture : TEXTURE_LOCATIONS.computeIfAbsent(skin, s -> new PlayerSkin(skin)).getLocation());
+        model.head.render(poseStack2, bufferSource.getBuffer(renderType), 0xff00ff, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+        model.hat.render(poseStack2, bufferSource.getBuffer(renderType), 0xff00ff, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+        bufferSource.endBatch();
+        poseStack.popPose();
+        RenderSystem.applyModelViewMatrix();
+        Lighting.setupFor3DItems();
+        return true;
+    }
+
     @Override
     public void render(T entity, float entityYaw, float partialTicks, PoseStack matrixStack, MultiBufferSource buffer, int packedLight) {
         String skin = entity.getLook().playerSkin();
         if (skin != null) {
-            String skinMeta = this.textureLocations.computeIfAbsent(skin, s -> new PlayerSkin(skin)).getSkinMeta();
+            String skinMeta = TEXTURE_LOCATIONS.computeIfAbsent(skin, s -> new PlayerSkin(skin)).getSkinMeta();
             if (skinMeta.equals("slim"))
                 this.model = this.slim;
             else
@@ -105,11 +140,7 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
 
     @Override
     public ResourceLocation getTextureLocation(T entity) {
-        String skin = entity.getLook().playerSkin();
-        if (skin != null) {
-            return this.textureLocations.computeIfAbsent(skin, s -> new PlayerSkin(skin)).getLocation();
-        }
-        return entity.getLook().texture();
+        return getTextureFromLook(entity.getLook());
     }
 
     @Override

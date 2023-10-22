@@ -555,6 +555,7 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.gui.quest.submit.button", "Submit");
         this.add("runecraftory.quest.gui.button", "Requests");
         this.add("runecraftory.quest.npc.none", "The NPC for this quest doesn't exist anymore!");
+        this.add("runecraftory.quest.npc.header", "Requester: %1$s [%2$s,%3$s,%4$s]");
 
         this.add(ModNPCJobs.NONE.getSecond().getTranslationKey(), "None");
         this.add(ModNPCJobs.GENERAL.getSecond().getTranslationKey(), "General Store");

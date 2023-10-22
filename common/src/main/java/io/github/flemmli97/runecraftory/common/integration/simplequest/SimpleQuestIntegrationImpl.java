@@ -16,6 +16,8 @@ import io.github.flemmli97.simplequests.player.QuestProgress;
 import io.github.flemmli97.simplequests.quest.types.QuestBase;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.resources.ResourceLocation;
@@ -51,7 +53,18 @@ public class SimpleQuestIntegrationImpl extends SimpleQuestIntegration {
         Map<ResourceLocation, QuestBase> quest = SimpleQuestIntegration.INST().getQuestsFor(player);
         PlayerData data = PlayerData.get(player);
         Platform.INSTANCE.sendToClient(new S2COpenQuestGui(data.getCurrentQuest().stream().anyMatch(p -> p.getQuest() instanceof QuestBoardQuest), quest.entrySet().stream().sorted(Map.Entry.comparingByKey())
-                .map(e -> new ClientSideQuestDisplay(e.getKey(), e.getValue().getTask(player), e.getValue().getDescription(player), data.isActive(e.getKey()))).toList()), player);
+                .map(e -> {
+                    List<MutableComponent> description = e.getValue().getDescription(player);
+                    if (e.getValue() instanceof NPCQuest npcQuest && npcQuest.getNpc() != null) {
+                        description = Stream.concat(Stream.of(new TranslatableComponent("runecraftory.quest.npc.header", npcQuest.getNpc().getName(), npcQuest.getNpc().blockPosition().getX(),
+                                        npcQuest.getNpc().blockPosition().getY(), npcQuest.getNpc().blockPosition().getZ()).withStyle(ChatFormatting.GOLD),
+                                (MutableComponent) TextComponent.EMPTY), description.stream()).toList();
+                        return new ClientSideQuestDisplay(e.getKey(), e.getValue().getTask(player), description,
+                                npcQuest.getNpc().getLook().texture(), npcQuest.getNpc().getLook().playerSkin(), data.isActive(e.getKey()));
+                    }
+                    return new ClientSideQuestDisplay(e.getKey(), e.getValue().getTask(player), description,
+                            null, null, data.isActive(e.getKey()));
+                }).toList()), player);
         ((SimpleQuestData) PlayerData.get(player)).setQuestboardQuests(quest);
     }
 

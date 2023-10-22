@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
+import io.github.flemmli97.runecraftory.client.render.RenderNPC;
 import io.github.flemmli97.runecraftory.common.integration.simplequest.ClientSideQuestDisplay;
 import io.github.flemmli97.runecraftory.common.network.C2SQuestSelect;
 import io.github.flemmli97.runecraftory.common.network.C2SSubmitQuestBoard;
@@ -13,6 +14,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
@@ -28,6 +31,8 @@ public class QuestGui extends Screen {
     protected static final ResourceLocation TEXTUREPATH = new ResourceLocation(RuneCraftory.MODID, "textures/gui/quest_gui.png");
     protected static final ResourceLocation TEXTUREPATH_WIDGETS = new ResourceLocation(RuneCraftory.MODID, "textures/gui/quest_gui_widgets.png");
 
+    private final PlayerModel<?> MODEL = new PlayerModel<>(Minecraft.getInstance().getEntityModels().bakeLayer(ModelLayers.PLAYER), false);
+
     private final int textureX = 238;
     private final int textureY = 175;
 
@@ -41,7 +46,6 @@ public class QuestGui extends Screen {
     private final QuestButton[] questButtons = new QuestButton[7];
     private QuestSelectButton yesButton;
     private QuestSelectButton noButton;
-    private SubmitButton submitButton;
     private int scrollValue;
     private boolean isDragging;
 
@@ -68,11 +72,10 @@ public class QuestGui extends Screen {
             this.yesButton.visible = false;
             this.noButton.visible = false;
         }));
-        this.addRenderableWidget(this.submitButton = new SubmitButton(this.leftPos + 238, this.topPos + 153, b -> {
+        this.addRenderableWidget(new SubmitButton(this.leftPos + 238, this.topPos + 153, b -> {
             Platform.INSTANCE.sendToServer(new C2SSubmitQuestBoard());
             Minecraft.getInstance().setScreen(null);
-        }));
-        this.submitButton.active = this.hasActive;
+        })).active = this.hasActive;
         for (int i = 0; i < 7; i++) {
             this.addRenderableWidget(this.questButtons[i] = new QuestButton(this.leftPos + 14, this.topPos + 14 + i * 21, i, b -> {
                 if (b instanceof QuestButton but) {
@@ -216,7 +219,9 @@ public class QuestGui extends Screen {
                 this.blit(poseStack, this.x, this.y, 0, 0, this.width, this.height);
             }
             ClientSideQuestDisplay display = QuestGui.this.quests.get(this.getActualIndex());
-            Minecraft.getInstance().font.draw(poseStack, display.task(), this.x + 2, this.y + 6, display.active() ? 0x518203 : 0);
+            int offset = RenderNPC.renderForTooltip(this.x + 11, this.y + 18, 30,
+                    QuestGui.this.MODEL, display.npcSkin(), display.npcTexture()) ? 18 : 0;
+            Minecraft.getInstance().font.draw(poseStack, display.task(), this.x + 2 + offset, this.y + 6, display.active() ? 0x518203 : 0);
             this.renderToolTip(poseStack, mouseX, mouseY);
         }
 
