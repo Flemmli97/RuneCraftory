@@ -21,6 +21,7 @@ loom {
 
 ext {
     mod_meta.tenshilib_version = tenshilib_version
+    mod_meta.simple_quest_version = simplequests_version
 }
 
 // Make datagen output to common folder
@@ -56,7 +57,7 @@ dependencies {
     modImplementation "io.github.flemmli97:tenshilib:${tenshilib_version}-forge"
     modImplementation patchouli
     modImplementation patchouli_datagen
-    modImplementation "${simplequests}-forge"
+    modImplementation "io.github.flemmli97:simplequests:${simplequests_version}-forge"
     //modCompileOnly "${jei_dep}:api"
     modImplementation "mezz.jei:jei-1.18.2-forge:${jei_version}"
 

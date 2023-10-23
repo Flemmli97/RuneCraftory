@@ -13,8 +13,8 @@ repositories {
 }
 
 dependencies {
-    modCompileOnly "io.github.flemmli97:tenshilib:${tenshilib_version}-fabric"
-    modCompileOnly ("${simplequests}-fabric") {
+    modCompileOnly "io.github.flemmli97:tenshilib:${tenshilib_version}-common"
+    modCompileOnly ("io.github.flemmli97:simplequests:${simplequests_version}-common") {
         transitive = false
     }
 }

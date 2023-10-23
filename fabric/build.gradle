@@ -10,6 +10,7 @@ loom {
 
 ext {
     mod_meta.tenshilib_version = tenshilib_version
+    mod_meta.simple_quest_version = simplequests_version
 }
 
 repositories {
@@ -36,7 +37,7 @@ dependencies {
 
     modRuntimeOnly "io.github.flemmli97:debugutils:1.18.2-1.0.1-fabric"
 
-    modRuntimeOnly ("${simplequests}-fabric") {
+    modRuntimeOnly ("io.github.flemmli97:simplequests:${simplequests_version}-fabric") {
         transitive = false
     }
 }

@@ -40,7 +40,7 @@
     "minecraft": ">=${mcversion}",
     "tenshilib": ">=${tenshilib_version}"
   },
-  "conflicts": {
-    "simplequests": "<=1.18.2-1.3.0"
+  "breaks": {
+    "simplequests": "<${simple_quest_version}"
   }
 }
