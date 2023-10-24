@@ -1,3 +1,29 @@
+RuneCraftory 1.7.0
+================
+- Reworked combat: All weapons from this mod now have attack animations
+- Added ultimate attack for weapons. Unlocked with level 20 of their respective skill
+- Add `levelIncreaseOnKill` mob properties: When killed the base level of gates increase by this value
+- Vanilla hoes use up RP now
+- Make sleeping cure fatigue
+- Add party based loot & luck system
+- Rework npc dialogues:
+  - Custom gui
+  - Allows answer selection
+- Add dynamic configurable npc attack patterns
+- Implement Questsystem fully:
+  - Allows for Questboard based quests
+  - Allows for NPC based quests
+- Make standing still able to slowly regen RP
+- Reduced walking xp gain
+- Add configurable system for riding actions to consume RP.
+- Change treasure chests to use loottables instead of tags
+- Add sand fishing (currently only fishes up sand though)
+- Rework some weapon textures
+- Fix gates not spawning underwater
+- Fix knocked down mobs still getting targeted
+- Fix dead monster not resetting barn capacity
+- Fix right click harvesting arm swing
+
 RuneCraftory 1.6.2
 ================
 - Update jei version and compat
