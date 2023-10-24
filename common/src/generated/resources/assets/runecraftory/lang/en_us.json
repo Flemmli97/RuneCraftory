@@ -1760,7 +1760,7 @@
   "npc.generic.follow.yes": "Ok",
   "npc.generic.follow.no": "Sorry but I am busy right now.",
   "npc.generic.follow.stop": "Ok. See you again.",
-  "npc.generic.quest.tame_monster.start": "Did you know that you can tame the monsters in this world?\nYou would need a setup a barn first and then just give them an item.\n\nWith that said I would like you to tame a monster.",
+  "npc.generic.quest.tame_monster.start": "Did you know that you can tame the monsters in this world?\nYou would need to setup a barn first and then just give them an item.\n\nWith that said I would like you to tame a monster.",
   "npc.generic.quest.tame_monster.active": "You still need to tame a monster.\nSome monsters prefer certain items more.",
   "npc.generic.quest.tame_monster.end": "I see you've successfully tamed a monster. Congrats!",
   "npc.generic.dislike": "Eh... thanks I guess?",

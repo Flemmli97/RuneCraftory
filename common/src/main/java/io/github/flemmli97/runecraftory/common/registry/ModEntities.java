@@ -848,6 +848,9 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_FAINT, 100)
                     .putAttributes(ModAttributes.RES_DRAIN, 10)
                     .xp(500).money(150).tamingChance(0.005f).setBarnOccupancy(2).setRideable().setFlying()
+                    .withLevelIncrease(3, 1)
+                    .withLevelIncrease(5, 2)
+                    .withLevelIncrease(10, 3)
                     .withRideActionCosts(new EntityRideActionCosts.Builder().secondCost(0.5f, true)
                             .thirdCost(0.5f, true)));
     public static final RegistryEntrySupplier<EntityType<EntityThunderbolt>> THUNDERBOLT = regMonster(EntityType.Builder.of(EntityThunderbolt::new, MobCategory.MONSTER).sized(1.6f, 1.8f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "thunderbolt"),
@@ -869,6 +872,9 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_FAINT, 100)
                     .putAttributes(ModAttributes.RES_DRAIN, 10)
                     .xp(650).money(150).tamingChance(0.005f).setBarnOccupancy(2).setRideable()
+                    .withLevelIncrease(3, 1)
+                    .withLevelIncrease(5, 2)
+                    .withLevelIncrease(10, 3)
                     .withRideActionCosts(new EntityRideActionCosts.Builder()
                             .thirdCost(0.5f, true)));
     public static final RegistryEntrySupplier<EntityType<EntityMarionetta>> MARIONETTA = regMonster(EntityType.Builder.of(EntityMarionetta::new, MobCategory.MONSTER).sized(0.8f, 2.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "marionetta"),
@@ -891,6 +897,9 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_FAINT, 100)
                     .putAttributes(ModAttributes.RES_DRAIN, 10)
                     .xp(900).money(150).tamingChance(0.005f).setBarnOccupancy(2).setRideable()
+                    .withLevelIncrease(3, 1)
+                    .withLevelIncrease(5, 2)
+                    .withLevelIncrease(10, 3)
                     .withRideActionCosts(new EntityRideActionCosts.Builder()
                             .thirdCost(0.5f, true)));
     public static final RegistryEntrySupplier<EntityType<EntityDeadTree>> DEAD_TREE = regMonster(EntityType.Builder.of(EntityDeadTree::new, MobCategory.MONSTER).sized(1.8f, 7f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "dead_tree"),
@@ -914,6 +923,9 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_FAINT, 100)
                     .putAttributes(ModAttributes.RES_DRAIN, 10)
                     .xp(950).money(150).tamingChance(0.005f).setBarnOccupancy(2).setRideable()
+                    .withLevelIncrease(3, 1)
+                    .withLevelIncrease(5, 2)
+                    .withLevelIncrease(10, 3)
                     .withRideActionCosts(new EntityRideActionCosts.Builder().secondCost(0.5f, true)
                             .thirdCost(0.5f, true)));
     public static final RegistryEntrySupplier<EntityType<EntityChimera>> CHIMERA = regMonster(EntityType.Builder.of(EntityChimera::new, MobCategory.MONSTER).sized(1.45f, 1.45f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "chimera"),
@@ -939,6 +951,9 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_FAINT, 100)
                     .putAttributes(ModAttributes.RES_DRAIN, 10)
                     .xp(950).money(150).tamingChance(0.005f).setBarnOccupancy(2).setRideable()
+                    .withLevelIncrease(3, 1)
+                    .withLevelIncrease(5, 2)
+                    .withLevelIncrease(10, 3)
                     .withRideActionCosts(new EntityRideActionCosts.Builder().secondCost(0.5f, true)
                             .thirdCost(0.5f, true)));
     public static final RegistryEntrySupplier<EntityType<EntityRaccoon>> RACCOON = regMonster(EntityType.Builder.of(EntityRaccoon::new, MobCategory.MONSTER).sized(0.9f, 1.5f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "raccoon"),
@@ -963,6 +978,9 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_FAINT, 100)
                     .putAttributes(ModAttributes.RES_DRAIN, 10)
                     .xp(950).money(150).tamingChance(0.005f).setBarnOccupancy(2).setRideable()
+                    .withLevelIncrease(3, 1)
+                    .withLevelIncrease(5, 2)
+                    .withLevelIncrease(10, 3)
                     .withRideActionCosts(new EntityRideActionCosts.Builder().secondCost(10, false)
                             .thirdCost(0.5f, true)));
     public static final RegistryEntrySupplier<EntityType<EntitySkelefang>> SKELEFANG = regMonster(EntityType.Builder.of(EntitySkelefang::new, MobCategory.MONSTER).sized(1.95f, 3).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "skelefang"),
@@ -982,7 +1000,10 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_STUN, 50)
                     .putAttributes(ModAttributes.RES_FAINT, 100)
                     .putAttributes(ModAttributes.RES_DRAIN, 10)
-                    .xp(950).money(150).tamingChance(0.003f).setBarnOccupancy(3).setRideable());
+                    .xp(950).money(150).tamingChance(0.003f).setBarnOccupancy(3).setRideable()
+                    .withLevelIncrease(3, 1)
+                    .withLevelIncrease(5, 2)
+                    .withLevelIncrease(10, 3));
     public static final RegistryEntrySupplier<EntityType<EntityRafflesia>> RAFFLESIA = regMonster(EntityType.Builder.of(EntityRafflesia::new, MobCategory.MONSTER).sized(1.15f, 2.8f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "rafflesia"),
             0x9b58ba, 0x0a8414,
             new EntityProperties.Builder()
@@ -1007,6 +1028,9 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_FAINT, 100)
                     .putAttributes(ModAttributes.RES_DRAIN, 10)
                     .xp(950).money(150).tamingChance(0).setBarnOccupancy(3).setRideable()
+                    .withLevelIncrease(3, 1)
+                    .withLevelIncrease(5, 2)
+                    .withLevelIncrease(10, 3)
                     .withRideActionCosts(new EntityRideActionCosts.Builder(0.5f, true)));
 
     public static final RegistryEntrySupplier<EntityType<EntityNPCBase>> NPC = npc(EntityType.Builder.of(EntityNPCBase::new, MobCategory.MISC).sized(0.6f, 1.8f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "npc"));

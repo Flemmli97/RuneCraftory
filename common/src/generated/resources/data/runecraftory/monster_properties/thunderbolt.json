@@ -7,6 +7,20 @@
   "flying": false,
   "size": 2,
   "needsRoof": true,
+  "levelIncreaseOnKill": [
+    {
+      "minKilled": 3,
+      "increase": 1
+    },
+    {
+      "minKilled": 5,
+      "increase": 2
+    },
+    {
+      "minKilled": 10,
+      "increase": 3
+    }
+  ],
   "rideActionCosts": {
     "command_1": {
       "cost": 0.0,
