@@ -1,8 +1,13 @@
 package io.github.flemmli97.runecraftory.common.blocks;
 
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -10,7 +15,9 @@ import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.function.Supplier;
 
 public class BlockTreeSapling extends BushBlock implements Growable {
@@ -21,6 +28,12 @@ public class BlockTreeSapling extends BushBlock implements Growable {
     public BlockTreeSapling(Properties properties, Supplier<BlockTreeBase> treeBase) {
         super(properties);
         this.treeBase = treeBase;
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
+        tooltip.add(new TranslatableComponent("runecraftory.tooltip.sapling").withStyle(ChatFormatting.GRAY));
+        super.appendHoverText(stack, level, tooltip, flag);
     }
 
     @Override

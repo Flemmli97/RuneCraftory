@@ -1404,6 +1404,7 @@
   "runecraftory.tooltip.debug.crop": "Cropdata-ID: %s",
   "runecraftory.tooltip.debug.food": "Fooddata-ID: %s",
   "runecraftory.tooltip.item.npc": "Shift-right-click to change profession",
+  "runecraftory.tooltip.sapling": "Needs to be placed on farmland",
   "runecraftory.day.monday": "MON",
   "runecraftory.day.monday.full": "Monday",
   "runecraftory.day.tuesday": "TUE",

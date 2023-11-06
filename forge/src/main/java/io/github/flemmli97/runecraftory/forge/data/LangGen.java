@@ -276,6 +276,7 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.tooltip.debug.crop", "Cropdata-ID: %s");
         this.add("runecraftory.tooltip.debug.food", "Fooddata-ID: %s");
         this.add("runecraftory.tooltip.item.npc", "Shift-right-click to change profession");
+        this.add("runecraftory.tooltip.sapling", "Needs to be placed on farmland");
 
         this.add("runecraftory.crafting.rpMax.missing", "Missing total rp");
 
