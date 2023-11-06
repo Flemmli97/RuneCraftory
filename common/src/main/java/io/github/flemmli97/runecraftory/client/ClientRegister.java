@@ -117,6 +117,7 @@ import io.github.flemmli97.runecraftory.common.blocks.BlockCrafting;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
 import io.github.flemmli97.runecraftory.common.blocks.BlockHerb;
 import io.github.flemmli97.runecraftory.common.blocks.BlockMineral;
+import io.github.flemmli97.runecraftory.common.blocks.BlockTreeSapling;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityStone;
 import io.github.flemmli97.runecraftory.common.inventory.container.ShippingContainer;
@@ -147,6 +148,7 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.particle.HeartParticle;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
@@ -163,7 +165,9 @@ import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShieldItem;
+import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LeavesBlock;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.function.BiConsumer;
@@ -193,12 +197,17 @@ public class ClientRegister {
     }
 
     public static void setupRenderLayers(BiConsumer<Block, RenderType> consumer) {
+
         ModBlocks.BLOCKS.getEntries().forEach(reg -> {
             if (reg.get() instanceof BlockHerb || reg.get() instanceof BlockCrop || reg.get() instanceof BlockMineral || reg.get() instanceof BlockBrokenMineral)
                 consumer.accept(reg.get(), RenderType.cutout());
             if (reg.get() instanceof BlockCrafting)
                 consumer.accept(reg.get(), RenderType.cutout());
             if (reg == ModBlocks.monsterBarn)
+                consumer.accept(reg.get(), RenderType.cutout());
+            if (reg.get() instanceof LeavesBlock)
+                consumer.accept(reg.get(), RenderType.cutoutMipped());
+            if (reg.get() instanceof BlockTreeSapling)
                 consumer.accept(reg.get(), RenderType.cutout());
         });
 
@@ -221,6 +230,14 @@ public class ClientRegister {
     public static void registerBlockColors(BiConsumer<BlockColor, Block> cons) {
         ModBlocks.crops.forEach(reg -> cons.accept(cropColor, reg.get()));
         ModBlocks.flowers.forEach(reg -> cons.accept(cropColor, reg.get()));
+        BlockColor leaves = (blockState, blockAndTintGetter, blockPos, i) -> {
+            if (blockAndTintGetter == null || blockPos == null) {
+                return FoliageColor.getDefaultColor();
+            }
+            return BiomeColors.getAverageFoliageColor(blockAndTintGetter, blockPos);
+        };
+        cons.accept(leaves, ModBlocks.appleLeaves.get());
+        cons.accept(leaves, ModBlocks.apple.get());
     }
 
     public static void registerScreen(MenuScreenRegister factory) {

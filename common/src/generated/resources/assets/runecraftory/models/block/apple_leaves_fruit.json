@@ -1,0 +1,7 @@
+{
+  "parent": "runecraftory:block/fruit_leaves",
+  "textures": {
+    "base": "minecraft:block/oak_leaves",
+    "overlay": "runecraftory:block/apple_leaves_fruit"
+  }
+}

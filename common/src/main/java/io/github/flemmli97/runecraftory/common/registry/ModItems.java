@@ -966,6 +966,8 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> swordSeeds = seed("sword", () -> ModBlocks.swordCrop);
     public static final RegistryEntrySupplier<Item> dungeonSeeds = seed("dungeon", () -> ModBlocks.dungeon);
 
+    public static final RegistryEntrySupplier<Item> appleSapling = ITEMS.register("apple_sapling", () -> new ItemNameBlockItem(ModBlocks.appleSapling.get(), new Item.Properties().tab(RFCreativeTabs.crops)));
+
     //Recovery and stuff
     public static final RegistryEntrySupplier<Item> roundoff = medicine("roundoff", false);
     public static final RegistryEntrySupplier<Item> paraGone = medicine("para_gone", false);

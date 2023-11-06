@@ -10,6 +10,7 @@ import io.github.flemmli97.runecraftory.common.blocks.BlockChemistry;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCooking;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
 import io.github.flemmli97.runecraftory.common.blocks.BlockForge;
+import io.github.flemmli97.runecraftory.common.blocks.BlockFruitTreeLeaf;
 import io.github.flemmli97.runecraftory.common.blocks.BlockHerb;
 import io.github.flemmli97.runecraftory.common.blocks.BlockMeltableSnow;
 import io.github.flemmli97.runecraftory.common.blocks.BlockMineral;
@@ -17,6 +18,9 @@ import io.github.flemmli97.runecraftory.common.blocks.BlockMonsterBarn;
 import io.github.flemmli97.runecraftory.common.blocks.BlockQuestboard;
 import io.github.flemmli97.runecraftory.common.blocks.BlockShippingBin;
 import io.github.flemmli97.runecraftory.common.blocks.BlockSingleTimeSpawner;
+import io.github.flemmli97.runecraftory.common.blocks.BlockTreeBase;
+import io.github.flemmli97.runecraftory.common.blocks.BlockTreeRoot;
+import io.github.flemmli97.runecraftory.common.blocks.BlockTreeSapling;
 import io.github.flemmli97.runecraftory.common.blocks.tile.AccessoryBlockEntity;
 import io.github.flemmli97.runecraftory.common.blocks.tile.BossSpawnerBlockEntity;
 import io.github.flemmli97.runecraftory.common.blocks.tile.BrokenMineralBlockEntity;
@@ -25,6 +29,7 @@ import io.github.flemmli97.runecraftory.common.blocks.tile.CookingBlockEntity;
 import io.github.flemmli97.runecraftory.common.blocks.tile.ForgingBlockEntity;
 import io.github.flemmli97.runecraftory.common.blocks.tile.MonsterBarnBlockEntity;
 import io.github.flemmli97.runecraftory.common.blocks.tile.SingleTimeSpawner;
+import io.github.flemmli97.runecraftory.common.blocks.tile.TreeBlockEntity;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import io.github.flemmli97.tenshilib.platform.registry.PlatformRegistry;
@@ -33,6 +38,9 @@ import net.minecraft.core.Registry;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -173,11 +181,13 @@ public class ModBlocks {
     public static final RegistryEntrySupplier<Block> snow = BLOCKS.register("snow", () -> new BlockMeltableSnow(BlockBehaviour.Properties.of(Material.TOP_SNOW).randomTicks().strength(0.1f).requiresCorrectToolForDrops().sound(SoundType.SNOW).isViewBlocking((blockState, blockGetter, blockPos) -> blockState.getValue(SnowLayerBlock.LAYERS) >= 8)));
 
     //Trees
-    /*public static final RegistryEntrySupplier<Block> appleTree = new BlockTreeBase("apple_tree_base");
-    public static final RegistryEntrySupplier<Block> appleWood = new BlockTreeWood("apple_wood");
-    public static final RegistryEntrySupplier<Block> appleLeaves = new BlockTreeLeaves("apple_leaves");
-    public static final RegistryEntrySupplier<Block> apple = new BlockTreeFruit("apple_block");
-    public static final RegistryEntrySupplier<Block> appleSapling = new BlockTreeSapling("apple_sapling", appleTree);
+    public static final RegistryEntrySupplier<Block> treeSoil = BLOCKS.register("tree_soil", () -> new BlockTreeRoot(BlockBehaviour.Properties.of(Material.DIRT).sound(SoundType.GRAVEL).strength(-1, 99999)));
+    public static final RegistryEntrySupplier<BlockTreeBase> appleTree = BLOCKS.register("apple_tree", () -> new BlockTreeBase(logProps(), () -> ModFeatures.APPLE_1.value(), () -> ModFeatures.APPLE_2.value(), () -> ModFeatures.APPLE_3.value(), ModItems.appleSapling));
+    public static final RegistryEntrySupplier<Block> appleSapling = BLOCKS.register("apple_sapling", () -> new BlockTreeSapling(BlockBehaviour.Properties.of(Material.PLANT).noCollission().instabreak().sound(SoundType.GRASS), appleTree));
+    public static final RegistryEntrySupplier<RotatedPillarBlock> appleWood = BLOCKS.register("apple_wood", () -> new RotatedPillarBlock(BlockBehaviour.Properties.of(Material.WOOD).sound(SoundType.WOOD).strength(-1, 99999)));
+    public static final RegistryEntrySupplier<Block> appleLeaves = BLOCKS.register("apple_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES).strength(-1, 99999)));
+    public static final RegistryEntrySupplier<Block> apple = BLOCKS.register("apple_leaves_fruit", () -> new BlockFruitTreeLeaf(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES).strength(-1, 99999), () -> Items.APPLE));
+    /*
     public static final RegistryEntrySupplier<Block> orangeTree = new BlockTreeBase("orange_tree_base");
     public static final RegistryEntrySupplier<Block> orangeWood = new BlockTreeWood("orange_wood");
     public static final RegistryEntrySupplier<Block> orangeLeaves = new BlockTreeLeaves("orange_leaves");
@@ -201,6 +211,7 @@ public class ModBlocks {
     public static final RegistryEntrySupplier<BlockEntityType<BossSpawnerBlockEntity>> bossSpawnerTile = TILES.register("spawner_tile", () -> Platform.INSTANCE.blockEntityType(BossSpawnerBlockEntity::new, bossSpawner.get()));
     public static final RegistryEntrySupplier<BlockEntityType<SingleTimeSpawner>> singleSpawnerTile = TILES.register("single_spawner_tile", () -> Platform.INSTANCE.blockEntityType(SingleTimeSpawner::new, singleSpawnBlock.get()));
     public static final RegistryEntrySupplier<BlockEntityType<MonsterBarnBlockEntity>> monsterBarnBlockEntity = TILES.register("monster_barn_block_entity", () -> Platform.INSTANCE.blockEntityType(MonsterBarnBlockEntity::new, monsterBarn.get()));
+    public static final RegistryEntrySupplier<BlockEntityType<TreeBlockEntity>> treeBlockEntity = TILES.register("tree", () -> Platform.INSTANCE.blockEntityType(TreeBlockEntity::new, appleTree.get()));
 
     public static RegistryEntrySupplier<Block> mineral(EnumMineralTier name) {
         RegistryEntrySupplier<Block> reg = BLOCKS.register("ore_" + name.getSerializedName(), () -> new BlockMineral(name, BlockBehaviour.Properties.of(Material.STONE).strength(5, 10)
@@ -245,4 +256,7 @@ public class ModBlocks {
         return TILES.register(name, () -> Platform.INSTANCE.blockEntityType(BrokenMineralBlockEntity::new, blocks.stream().map(RegistryEntrySupplier::get).collect(Collectors.toSet())));
     }
 
+    private static BlockBehaviour.Properties logProps() {
+        return BlockBehaviour.Properties.of(Material.WOOD).strength(2.0f).sound(SoundType.WOOD);
+    }
 }

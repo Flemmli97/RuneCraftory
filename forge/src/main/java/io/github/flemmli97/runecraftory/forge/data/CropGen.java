@@ -66,5 +66,7 @@ public class CropGen extends CropProvider {
         this.addStat(ModItems.shieldSeeds.get(), new CropProperties.Builder(15, 1, false));
         this.addStat(ModItems.swordSeeds.get(), new CropProperties.Builder(15, 1, false));
         this.addStat(ModItems.dungeonSeeds.get(), new CropProperties.Builder(25, 1, false));
+
+        this.addStat(ModItems.appleSapling.get(), new CropProperties.Builder(20, 1, false));
     }
 }

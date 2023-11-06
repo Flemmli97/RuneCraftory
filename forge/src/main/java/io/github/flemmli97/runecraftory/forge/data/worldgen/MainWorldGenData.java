@@ -30,11 +30,14 @@ public class MainWorldGenData implements DataProvider {
     private final StructureSetGen structureSetGen;
     private final TemplatePoolGen templatePoolGen;
 
+    private final ConfiguredFeatureGen configuredFeatureGen;
+
     public MainWorldGenData(DataGenerator dataGenerator) {
         this.configuredStructureFeatureGen = new ConfiguredStructureFeatureGen(dataGenerator);
         this.processorListGen = new ProcessorListGen(dataGenerator);
         this.structureSetGen = new StructureSetGen(dataGenerator);
         this.templatePoolGen = new TemplatePoolGen(dataGenerator);
+        this.configuredFeatureGen = new ConfiguredFeatureGen(dataGenerator);
     }
 
     @Override
@@ -68,6 +71,7 @@ public class MainWorldGenData implements DataProvider {
         this.processorListGen.runExternal(cache);
         this.configuredStructureFeatureGen.runExternal(cache);
         this.structureSetGen.runExternal(cache);
+        this.configuredFeatureGen.runExternal(cache);
     }
 
     @Override

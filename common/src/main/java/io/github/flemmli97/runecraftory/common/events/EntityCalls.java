@@ -7,6 +7,7 @@ import io.github.flemmli97.runecraftory.api.datapack.SimpleEffect;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
 import io.github.flemmli97.runecraftory.common.blocks.BlockMineral;
+import io.github.flemmli97.runecraftory.common.blocks.Growable;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
@@ -66,6 +67,7 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -290,13 +292,14 @@ public class EntityCalls {
         if (level instanceof ServerLevel serverLevel) {
             BlockPos targetPos = null;
             boolean swing = false;
-            if (state.getBlock() instanceof CropBlock crop) {
-                CropProperties props = DataPackHandler.SERVER_PACK.cropManager().get(crop.getCloneItemStack(level, pos, state).getItem());
+            if (state.getBlock() instanceof Growable crop) {
+                CropProperties props = DataPackHandler.SERVER_PACK.cropManager().get(state.getBlock().getCloneItemStack(level, pos, state).getItem());
                 if (props != null) {
                     BlockPos below = pos.below();
                     if (FarmlandHandler.isFarmBlock(level.getBlockState(below)))
                         targetPos = below;
                 }
+                swing = !(state.getBlock() instanceof BonemealableBlock);
             } else if (FarmlandHandler.isFarmBlock(state)) {
                 targetPos = pos;
                 swing = true;

@@ -104,6 +104,7 @@ public class RuneCraftoryForge {
         ModCrafting.RECIPESERIALIZER.registerContent();
         //ModLootModifier.SERIALZER.register(FMLJavaModLoadingContext.get().getModEventBus());
         ModFeatures.FEATURES.registerContent();
+        ModFeatures.TREE_DECORATORS.registerContent();
         ModSpells.SPELLS.registerContent();
         ModStructures.STRUCTURES.registerContent();
         ModParticles.PARTICLES.registerContent();
@@ -119,13 +120,14 @@ public class RuneCraftoryForge {
         ModLootCondition.LOOTCONDITIONS.registerContent();
         ModStructures.STRUCTURESPROCESSORS.registerContent();
         ModCrafting.RECIPETYPE.registerContent();
+        ModFeatures.TRUNK_PLACER.registerContent();
     }
 
     public void common(FMLCommonSetupEvent event) {
         PacketHandler.register();
         event.enqueueWork(() -> {
             SpawnPlacements.register(ModEntities.GATE.get(), SpawnPlacements.Type.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, GateEntity::canSpawnAt);
-            ModFeatures.registerConfiguredMineralFeatures();
+            ModFeatures.registerConfiguredFeatures();
         });
         this.tweakVanillaAttribute(Attributes.MAX_HEALTH, Double.MAX_VALUE);
         this.tweakVanillaAttribute(Attributes.ATTACK_DAMAGE, Double.MAX_VALUE);

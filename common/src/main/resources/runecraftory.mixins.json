@@ -23,6 +23,7 @@
     "HoeItemMixin",
     "ItemEntityMixin",
     "ItemStackMixin",
+    "LevelMixin",
     "LivingEntityMixin",
     "PlayerMixin",
     "PoiTypeAccessor",
@@ -34,7 +35,8 @@
     "SpreadingSnowyDirtBlockMixin",
     "StructureTemplateMixin",
     "StructureTemplatePoolMixin",
-    "TargetingConditionsMixin"
+    "TargetingConditionsMixin",
+    "TreeFeatureMixin"
   ],
   "client": [
     "AtlasMixin",

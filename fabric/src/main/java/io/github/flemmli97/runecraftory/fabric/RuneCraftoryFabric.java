@@ -253,6 +253,8 @@ public class RuneCraftoryFabric implements ModInitializer {
         ModEffects.EFFECTS.registerContent();
         ModCrafting.RECIPESERIALIZER.registerContent();
         ModFeatures.FEATURES.registerContent();
+        ModFeatures.TRUNK_PLACER.registerContent();
+        ModFeatures.TREE_DECORATORS.registerContent();
         ModSpells.SPELLS.registerContent();
         ModStructures.STRUCTURES.registerContent();
         ModParticles.PARTICLES.registerContent();
@@ -268,7 +270,7 @@ public class RuneCraftoryFabric implements ModInitializer {
 
         this.tweakVanillaAttribute(Attributes.MAX_HEALTH, Double.MAX_VALUE);
         this.tweakVanillaAttribute(Attributes.ATTACK_DAMAGE, Double.MAX_VALUE);
-        ModFeatures.registerConfiguredMineralFeatures();
+        ModFeatures.registerConfiguredFeatures();
         ModCriteria.init();
     }
 

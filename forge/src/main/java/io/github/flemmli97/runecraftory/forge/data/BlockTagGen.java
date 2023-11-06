@@ -81,7 +81,7 @@ public class BlockTagGen extends BlockTagsProvider {
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.shipping.get(), ModBlocks.accessory.get(), ModBlocks.questBoard.get());
         this.tag(BlockTags.MINEABLE_WITH_HOE).add(ModBlocks.monsterBarn.get());
 
-        this.tag(ModTags.FARMLAND).add(Blocks.FARMLAND);
+        this.tag(ModTags.FARMLAND).add(Blocks.FARMLAND).add(ModBlocks.treeSoil.get());
 
         this.tag(ModTags.BARN_GROUND).add(Blocks.HAY_BLOCK);
 
@@ -89,5 +89,13 @@ public class BlockTagGen extends BlockTagsProvider {
 
         this.tag(ModTags.MINERAL_GEN_PLACE).addTag(BlockTags.DIRT).addTag(BlockTags.BASE_STONE_OVERWORLD).addTag(BlockTags.SAND).addTag(ModTags.STONE)
                 .addTag(BlockTags.BASE_STONE_NETHER).addTag(ModTags.ENDSTONES);
+
+        this.tag(BlockTags.LOGS)
+                .add(ModBlocks.appleTree.get())
+                .add(ModBlocks.appleWood.get());
+        this.tag(BlockTags.LEAVES)
+                .add(ModBlocks.appleLeaves.get())
+                .add(ModBlocks.apple.get());
+
     }
 }

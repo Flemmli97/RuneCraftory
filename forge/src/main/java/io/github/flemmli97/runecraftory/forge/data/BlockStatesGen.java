@@ -3,11 +3,14 @@ package io.github.flemmli97.runecraftory.forge.data;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrafting;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
+import io.github.flemmli97.runecraftory.common.blocks.BlockFruitTreeLeaf;
 import io.github.flemmli97.runecraftory.common.blocks.BlockHerb;
 import io.github.flemmli97.runecraftory.common.blocks.BlockQuestboard;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
+import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SnowLayerBlock;
@@ -116,6 +119,26 @@ public class BlockStatesGen extends BlockStateProvider {
                         this.models().getExistingFile(new ResourceLocation(RuneCraftory.MODID, "block/" + ModBlocks.questBoard.getID().getPath() + "_" + state.getValue(BlockQuestboard.PART).getSerializedName())))
                 .rotationY(((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot()) % 360)
                 .build());
+
+        this.simpleBlock(ModBlocks.treeSoil.get(), this.models().getExistingFile(new ResourceLocation("block/" + Blocks.DIRT.getRegistryName().getPath())));
+
+        this.axisBlock(ModBlocks.appleTree.get(), this.models().getExistingFile(new ResourceLocation("block/" + Blocks.OAK_LOG.getRegistryName().getPath())),
+                this.models().getExistingFile(new ResourceLocation("block/" + Blocks.OAK_LOG.getRegistryName().getPath() + "_horizontal")));
+        this.simpleBlock(ModBlocks.appleSapling.get(), this.models().cross(ModBlocks.appleSapling.getID().toString(), this.itemTexture(ModItems.appleSapling.get())));
+        this.axisBlock(ModBlocks.appleWood.get(), this.models().getExistingFile(new ResourceLocation("block/" + Blocks.OAK_LOG.getRegistryName().getPath())),
+                this.models().getExistingFile(new ResourceLocation("block/" + Blocks.OAK_LOG.getRegistryName().getPath() + "_horizontal")));
+        this.simpleBlock(ModBlocks.appleLeaves.get(), this.models().getExistingFile(new ResourceLocation("block/" + Blocks.OAK_LEAVES.getRegistryName().getPath())));
+
+        this.getVariantBuilder(ModBlocks.apple.get())
+                .partialState().with(BlockFruitTreeLeaf.HAS_FRUIT, true)
+                .modelForState().modelFile(this.models().withExistingParent(ModBlocks.apple.getID().toString(), this.modLoc("fruit_leaves"))
+                        .texture("base", this.blockTexture(Blocks.OAK_LEAVES))
+                        .texture("overlay", this.blockTexture(ModBlocks.apple.get())))
+                .addModel()
+                .partialState().with(BlockFruitTreeLeaf.HAS_FRUIT, false)
+                .modelForState().modelFile(this.models().withExistingParent(ModBlocks.apple.getID().toString() + "_fruitless", "block/leaves")
+                        .texture("all", this.blockTexture(Blocks.OAK_LEAVES)))
+                .addModel();
     }
 
     @Override
@@ -145,6 +168,11 @@ public class BlockStatesGen extends BlockStateProvider {
 
     public ResourceLocation itemTexture(Block block) {
         ResourceLocation name = block.getRegistryName();
+        return new ResourceLocation(name.getNamespace(), "item" + "/" + name.getPath());
+    }
+
+    public ResourceLocation itemTexture(Item item) {
+        ResourceLocation name = item.getRegistryName();
         return new ResourceLocation(name.getNamespace(), "item" + "/" + name.getPath());
     }
 

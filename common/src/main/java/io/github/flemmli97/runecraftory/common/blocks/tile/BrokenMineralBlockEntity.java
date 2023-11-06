@@ -24,7 +24,7 @@ public class BrokenMineralBlockEntity extends BlockEntity implements IDailyUpdat
     }
 
     @Override
-    public void update(ServerLevel world) {
+    public void update(ServerLevel level) {
         BlockState state = this.getBlockState();
         Block block = state.getBlock();
         if (block instanceof BlockBrokenMineral mineral) {

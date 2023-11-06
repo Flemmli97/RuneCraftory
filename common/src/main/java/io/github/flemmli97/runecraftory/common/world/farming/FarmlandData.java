@@ -4,6 +4,7 @@ import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeather;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
+import io.github.flemmli97.runecraftory.common.blocks.Growable;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
@@ -21,7 +22,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -140,10 +140,10 @@ public class FarmlandData {
         return (int) this.cropAge;
     }
 
-    private int growthPercent(BlockState crop) {
-        if (!(crop.getBlock() instanceof CropBlock))
+    private int growthPercent(ServerLevel level, BlockState crop) {
+        if (!(crop.getBlock() instanceof Growable))
             return 0;
-        CropProperties props = DataPackHandler.SERVER_PACK.cropManager().get(crop.getBlock().asItem());
+        CropProperties props = DataPackHandler.SERVER_PACK.cropManager().get(crop.getBlock().getCloneItemStack(level, this.pos, crop).getItem());
         if (props != null) {
             return Math.min((int) (this.cropAge / props.growth() * 100), 100);
         }
@@ -180,21 +180,21 @@ public class FarmlandData {
     }
 
     public void onRegrowableHarvest(ServerLevel level, BlockPos pos, BlockState state) {
-        if (!(state.getBlock() instanceof CropBlock crop)) {
+        if (!(state.getBlock() instanceof Growable crop)) {
             this.resetCrop();
             return;
         }
-        CropProperties props = DataPackHandler.SERVER_PACK.cropManager().get(crop.asItem());
+        CropProperties props = DataPackHandler.SERVER_PACK.cropManager().get(state.getBlock().getCloneItemStack(level, pos, state).getItem());
         if (props == null || !props.regrowable()) {
             this.resetCrop();
             return;
         }
         float max = props.growth();
         this.cropAge = max * 0.5f;
-        int maxAge = crop.getMaxAge();
+        int maxAge = crop.getGrowableMaxAge();
         int stage = Math.round(this.cropAge * maxAge) / props.growth();
         //Update the blockstate according to the growth age
-        BlockState newState = crop.getStateForAge(Math.min(stage, maxAge));
+        BlockState newState = crop.getGrowableStateForAge(state, Math.min(stage, maxAge));
         level.getServer().tell(new TickTask(1, () -> level.setBlock(pos, newState, Block.UPDATE_ALL)));
         FarmlandHandler.get(level.getServer()).scheduleUpdate(level, this);
     }
@@ -248,7 +248,7 @@ public class FarmlandData {
                 state = state == null ? level.getBlockState(cropPos) : state;
                 boolean destroyChance = level.random.nextFloat() < 0.4f;
                 if (destroyChance) {
-                    if (state.getBlock() instanceof CropBlock) {
+                    if (state.getBlock() instanceof Growable) {
                         if (level.random.nextFloat() < 0.6f) {
                             state = Blocks.AIR.defaultBlockState();
                             level.destroyBlock(cropPos, true);
@@ -316,12 +316,12 @@ public class FarmlandData {
 
         boolean growHerb = false;
         boolean cropRecalc = false;
-        CropProperties props = cropState.getBlock() instanceof CropBlock crop ? DataPackHandler.SERVER_PACK.cropManager().get(crop.asItem()) : null;
+        CropProperties props = cropState.getBlock() instanceof Growable ? DataPackHandler.SERVER_PACK.cropManager().get(cropState.getBlock().getCloneItemStack(level, this.pos, cropState).getItem()) : null;
 
         int wiltStage = 0;
         for (ExternalModifiers modifiers : this.scheduledData) {
             //Regen stats if unused
-            if (!(cropState.getBlock() instanceof CropBlock crop)) {
+            if (!(cropState.getBlock() instanceof Growable crop)) {
                 this.normalizeLand();
                 this.resetCrop();
                 if (!growHerb) {
@@ -339,7 +339,7 @@ public class FarmlandData {
             }
             //Dont do stuff if crop is fully grown.
             //No withering unlike game (for e.g. building purposes)
-            if (crop.isMaxAge(cropState)) {
+            if (crop.isAtMaxAge(cropState)) {
                 break;
             }
             //Handle crop growth
@@ -349,14 +349,19 @@ public class FarmlandData {
                 if (props != null) {
                     if (!cropRecalc) {
                         cropRecalc = true;
-                        run.add(() -> {
-                            int maxAge = crop.getMaxAge();
-                            int stage = Math.round(this.cropAge * maxAge) / props.growth();
-                            //Update the blockstate according to the growth age
-                            BlockState newState = crop.getStateForAge(Math.min(stage, maxAge));
-                            level.setBlock(cropPos, newState, Block.UPDATE_ALL);
-                            Platform.INSTANCE.cropGrowEvent(level, cropPos, level.getBlockState(cropPos));
-                        });
+                        if (crop.canGrow(level, cropPos, cropState)) {
+                            run.add(() -> {
+                                int maxAge = crop.getGrowableMaxAge();
+                                int stage = Math.round(this.cropAge * maxAge) / props.growth();
+                                //Update the blockstate according to the growth age
+                                BlockState newState = crop.getGrowableStateForAge(cropState, Math.min(stage, maxAge));
+                                if (newState.getBlock() instanceof Growable newGrowable)
+                                    newGrowable.onGrow(level, cropPos, newState, cropState);
+                                else
+                                    level.setBlock(cropPos, newState, Block.UPDATE_ALL);
+                                Platform.INSTANCE.cropGrowEvent(level, cropPos, level.getBlockState(cropPos));
+                            });
+                        }
                     }
                     float season = props.seasonMultiplier(modifiers.season);
                     float runeyBonus = modifiers.weather == EnumWeather.RUNEY ? 5 : 1;
@@ -398,7 +403,7 @@ public class FarmlandData {
                 level.setBlock(cropPos, cropState.setValue(BlockCrop.WILTED, true), Block.UPDATE_ALL);
             }
         }
-        this.cropProgress = this.growthPercent(cropState);
+        this.cropProgress = this.growthPercent(level, cropState);
         FarmlandHandler.get(level.getServer()).scheduleUpdate(level, this);
     }
 

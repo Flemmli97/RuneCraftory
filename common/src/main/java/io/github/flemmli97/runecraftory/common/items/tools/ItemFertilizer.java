@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.items.tools;
 
+import io.github.flemmli97.runecraftory.common.blocks.Growable;
 import io.github.flemmli97.runecraftory.common.network.S2CTriggers;
 import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandData;
@@ -97,7 +98,7 @@ public class ItemFertilizer extends Item {
                         }
                         return InteractionResult.PASS;
                     }).orElse(InteractionResult.PASS);
-        } else if (consecutive || state.getBlock() instanceof BushBlock) {
+        } else if (consecutive || state.getBlock() instanceof BushBlock || state.getBlock() instanceof Growable) {
             BlockPos below = blockPos.below();
             return FarmlandHandler.get(level.getServer())
                     .getData(level, below)
