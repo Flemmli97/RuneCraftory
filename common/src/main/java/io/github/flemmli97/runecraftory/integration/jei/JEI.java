@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.forge.compat.jei;
+package io.github.flemmli97.runecraftory.integration.jei;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.gui.CraftingGui;
@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.common.crafting.SextupleRecipe;
 import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import me.shedaniel.rei.plugincompatibilities.api.REIPluginCompatIgnore;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaTypes;
@@ -35,6 +36,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 @JeiPlugin
+@REIPluginCompatIgnore
 public class JEI implements IModPlugin {
 
     private static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "jei_integration");

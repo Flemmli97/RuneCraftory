@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.fabric.compat.rei;
+package io.github.flemmli97.runecraftory.integration.rei;
 
 import io.github.flemmli97.runecraftory.common.inventory.container.ContainerCrafting;
 import me.shedaniel.rei.api.common.transfer.info.MenuInfoContext;
@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+@SuppressWarnings("removal")
 public record SextupleMenuProvider(
         @NotNull SextupleDisplay display) implements SimplePlayerInventoryMenuInfo<ContainerCrafting, SextupleDisplay> {
 

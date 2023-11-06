@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.fabric.compat.rei;
+package io.github.flemmli97.runecraftory.integration.rei;
 
 import dev.architectury.event.EventResult;
 import io.github.flemmli97.runecraftory.RuneCraftory;

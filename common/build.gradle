@@ -10,6 +10,10 @@ repositories {
         name = "Flemmli97"
         url "https://gitlab.com/api/v4/projects/21830712/packages/maven"
     }
+    maven {
+        url "https://maven.blamejared.com"
+    }
+    maven { url "https://maven.shedaniel.me/" }
 }
 
 dependencies {
@@ -17,6 +21,9 @@ dependencies {
     modCompileOnly ("io.github.flemmli97:simplequests:${simplequests_version}-common") {
         transitive = false
     }
+    modCompileOnly "mezz.jei:jei-1.18.2-common:${jei_version}"
+    modCompileOnly "me.shedaniel:REIPluginCompatibilities-forge-annotations:8.+"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api:${rei_version}"
 }
 
 sourceSets.main.resources {

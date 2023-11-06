@@ -25,9 +25,11 @@
     "modmenu": [
       "io.github.flemmli97.runecraftory.fabric.ModMenuIntegration"
     ],"rei_client": [
-      "io.github.flemmli97.runecraftory.fabric.compat.rei.ReiClientPlugin"
-    ], "rei": [
-      "io.github.flemmli97.runecraftory.fabric.compat.rei.ReiServerPlugin"
+      "io.github.flemmli97.runecraftory.integration.rei.ReiClientPlugin"
+    ], "rei_common": [
+      "io.github.flemmli97.runecraftory.integration.rei.ReiServerPlugin"
+    ], "jei_mod_plugin": [
+      "io.github.flemmli97.runecraftory.integration.jei.JEI"
     ]
   },
   "mixins": [

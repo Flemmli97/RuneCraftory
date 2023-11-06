@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_16",
   "mixins": [
     "compat.SimpleQuestDataMixin",
+    "compat.CompatJei",
     "AbstractContainerMenuAccessor",
     "AttributeAccessor",
     "AttributeMapAccessor",

@@ -1,6 +1,6 @@
-package io.github.flemmli97.runecraftory.forge.mixin;
+package io.github.flemmli97.runecraftory.mixin.compat;
 
-import io.github.flemmli97.runecraftory.forge.compat.jei.JEI;
+import io.github.flemmli97.runecraftory.integration.jei.JEI;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.common.recipes.collect.RecipeTypeData;
 import org.spongepowered.asm.mixin.Mixin;

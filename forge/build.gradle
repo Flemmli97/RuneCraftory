@@ -58,9 +58,12 @@ dependencies {
     modImplementation patchouli
     modImplementation patchouli_datagen
     modImplementation "io.github.flemmli97:simplequests:${simplequests_version}-forge"
-    modCompileOnly "mezz.jei:jei-1.18.2-common:${jei_version}"
-    //modRuntimeOnly "mezz.jei:jei-1.18.2-forge-api:${jei_version}"
-    //modRuntimeOnly "mezz.jei:jei-1.18.2-forge:${jei_version}"
+
+    modRuntimeOnly "mezz.jei:jei-1.18.2-forge:${jei_version}"
+
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-forge:${rei_version}"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-forge:${rei_version}"
+    //modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-forge:${rei_version}"
 
     modCompileOnly "com.ldtteam:minecolonies:${rootProject.minecolonies}"
 

@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.fabric.compat.rei;
+package io.github.flemmli97.runecraftory.integration.rei;
 
 import io.github.flemmli97.runecraftory.common.inventory.container.ContainerCrafting;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
 
+@SuppressWarnings("removal")
 public class ReiServerPlugin implements REIServerPlugin {
 
     @Override

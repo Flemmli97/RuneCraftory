@@ -19,6 +19,9 @@ repositories {
         name = "TenshiLib"
         url "https://gitlab.com/api/v4/projects/21830712/packages/maven"
     }
+    maven {
+        url "https://maven.blamejared.com"
+    }
     maven { url "https://maven.shedaniel.me/" }
     maven { url "https://maven.terraformersmc.com/releases/" }
 }
@@ -30,10 +33,11 @@ dependencies {
         exclude(group: "net.fabricmc.fabric-api")
     }
     modImplementation "${mod_menu}"
+
     modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:${rei_version}"
-    modRuntimeOnly("me.shedaniel:RoughlyEnoughItems-fabric:${rei_version}") {
-        exclude(group: "net.fabricmc.fabric-api")
-    }
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:${rei_version}"
+    modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${rei_version}"
+    //modRuntimeOnly "mezz.jei:jei-1.18.2-fabric:${jei_version}"
 
     modRuntimeOnly "io.github.flemmli97:debugutils:1.18.2-1.0.1-fabric"
 

@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.fabric.compat.rei;
+package io.github.flemmli97.runecraftory.integration.rei;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
 import io.github.flemmli97.runecraftory.common.crafting.SextupleRecipe;

@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.forge.compat.jei;
+package io.github.flemmli97.runecraftory.integration.jei;
 
 import io.github.flemmli97.runecraftory.common.crafting.SextupleRecipe;
 import io.github.flemmli97.runecraftory.common.inventory.container.ContainerCrafting;
