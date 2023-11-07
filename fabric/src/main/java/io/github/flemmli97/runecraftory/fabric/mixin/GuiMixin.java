@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.fabric.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import io.github.flemmli97.runecraftory.client.ClientCalls;
 import io.github.flemmli97.runecraftory.common.config.ClientConfig;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import net.minecraft.client.gui.Gui;
@@ -25,5 +26,10 @@ public abstract class GuiMixin {
         if (old == 0 && GeneralConfig.disableHunger)
             return -1;
         return old;
+    }
+
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderVehicleHealth(Lcom/mojang/blaze3d/vertex/PoseStack;)V"))
+    private void renderOverlay(PoseStack poseStack, float partialTick, CallbackInfo info) {
+        ClientCalls.renderScreenOverlays(poseStack, partialTick);
     }
 }

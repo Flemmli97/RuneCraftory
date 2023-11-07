@@ -127,7 +127,7 @@ public class ClientCalls {
         }
     }
 
-    public static void renderRunePoints(PoseStack stack, float partialTicks) {
+    public static void renderScreenOverlays(PoseStack stack, float partialTicks) {
         if (ClientHandlers.overlay != null)
             ClientHandlers.overlay.renderBar(stack);
         if (ClientHandlers.spellDisplay != null && ClientConfig.inventoryButton)

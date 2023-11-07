@@ -44,7 +44,7 @@ public class ClientEvents {
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
         modBus.register(ForgeClientRegister.class);
         MinecraftForge.EVENT_BUS.register(ClientEvents.class);
-        OverlayRegistry.registerOverlayTop("rf_overlay_bar", (gui, stack, partialTicks, guiX, guiY) -> ClientCalls.renderRunePoints(stack, partialTicks));
+        OverlayRegistry.registerOverlayAbove(ForgeIngameGui.EXPERIENCE_BAR_ELEMENT, "rf_overlay_bar", (gui, stack, partialTicks, guiX, guiY) -> ClientCalls.renderScreenOverlays(stack, partialTicks));
         ClientRegister.registerTooltipComponentFactories(MinecraftForgeClient::registerTooltipComponentFactory);
     }
 
