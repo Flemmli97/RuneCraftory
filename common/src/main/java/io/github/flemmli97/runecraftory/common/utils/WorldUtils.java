@@ -79,21 +79,28 @@ public class WorldUtils {
     }
 
     public static boolean coldEnoughForSnow(Level level, BlockPos pos, Biome biome) {
+        return coldEnoughForSnow(pos, biome, () -> {
+            if (level instanceof ServerLevel serverLevel)
+                return WorldHandler.get(serverLevel.getServer()).currentSeason();
+            return ClientHandlers.clientCalendar.currentSeason();
+        });
+    }
+
+    public static boolean coldEnoughForSnow(BlockPos pos, Biome biome, Supplier<EnumSeason> seasonSupplier) {
         if (biome.coldEnoughToSnow(pos)) {
             return false;
         }
-        return seasonBasedTemp(level, pos, biome) < 0.15;
+        if (biome.getPrecipitation() == Biome.Precipitation.NONE) {
+            return false;
+        }
+        return seasonBasedTemp(pos, biome, seasonSupplier) < 0.15;
     }
 
-    public static float seasonBasedTemp(Level level, BlockPos pos, Biome biome) {
+    public static float seasonBasedTemp(BlockPos pos, Biome biome, Supplier<EnumSeason> seasonSupplier) {
         float temp = ((BiomeAccessor) (Object) biome).biomeTemp(pos);
         if (!GeneralConfig.seasonedSnow)
             return temp;
-        EnumSeason season;
-        if (level instanceof ServerLevel serverLevel)
-            season = WorldHandler.get(serverLevel.getServer()).currentSeason();
-        else
-            season = ClientHandlers.clientCalendar.currentSeason();
+        EnumSeason season = seasonSupplier.get();
         switch (season) {
             case SUMMER -> temp += 0.1f;
             case FALL -> temp -= 0.25f;

@@ -25,6 +25,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModPoiTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.registry.ModStats;
 import io.github.flemmli97.runecraftory.common.registry.ModStructures;
+import io.github.flemmli97.runecraftory.common.world.ChunkSnowData;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.fabric.config.ConfigHolder;
 import io.github.flemmli97.runecraftory.fabric.config.GeneralConfigSpec;
@@ -65,7 +66,6 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.Heightmap;
 
@@ -228,14 +228,15 @@ public class RuneCraftoryFabric implements ModInitializer {
         WorldCalls.addFeatures(((d, feature) -> BiomeModifications.addFeature(BiomeSelectors.foundInOverworld(), d, feature.unwrapKey().get())),
                 Biome.BiomeCategory.NONE);
         BiomeModifications.addSpawn(t -> true, MobCategory.MONSTER, ModEntities.GATE.get(), 100, 1, 1);
-        ServerTickEvents.END_WORLD_TICK.register(world -> {
-            if (world.dimension() == Level.OVERWORLD) {
-                WorldCalls.daily(world);
-            }
-        });
+        ServerTickEvents.END_WORLD_TICK.register(WorldCalls::worldTick);
         CropGrowEvent.EVENT.register((WorldCalls::disableVanillaCrop));
-        ServerChunkEvents.CHUNK_LOAD.register(((world, chunk) -> FarmlandHandler.get(world.getServer()).onChunkLoad(world, chunk.getPos())));
-        ServerChunkEvents.CHUNK_UNLOAD.register(((world, chunk) -> FarmlandHandler.get(world.getServer()).onChunkUnLoad(world, chunk.getPos())));
+        ServerChunkEvents.CHUNK_LOAD.register(((world, chunk) -> {
+            FarmlandHandler.get(world.getServer()).onChunkLoad(world, chunk.getPos());
+        }));
+        ServerChunkEvents.CHUNK_UNLOAD.register(((world, chunk) -> {
+            FarmlandHandler.get(world.getServer()).onChunkUnLoad(world, chunk.getPos());
+            ChunkSnowData.get(world).onChunkUnload(world, chunk);
+        }));
 
         SimpleQuestIntegration.INST().register();
     }

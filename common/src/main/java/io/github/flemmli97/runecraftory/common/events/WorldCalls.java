@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
 import io.github.flemmli97.runecraftory.common.commands.RunecraftoryCommand;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.registry.ModFeatures;
+import io.github.flemmli97.runecraftory.common.world.ChunkSnowData;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import net.minecraft.commands.CommandSourceStack;
@@ -47,11 +48,12 @@ public class WorldCalls {
         }
     }
 
-    public static void daily(Level level) {
-        if (level instanceof ServerLevel serverLevel && level.dimension().equals(Level.OVERWORLD)) {
-            WorldHandler.get(serverLevel.getServer()).update(serverLevel);
-            FarmlandHandler.get(serverLevel.getServer()).tick(serverLevel);
+    public static void worldTick(ServerLevel level) {
+        if (level.dimension().equals(Level.OVERWORLD)) {
+            WorldHandler.get(level.getServer()).update(level);
+            FarmlandHandler.get(level.getServer()).tick(level);
         }
+        ChunkSnowData.get(level).tickWeather(level);
     }
 
     public static boolean disableVanillaCrop(LevelAccessor level, BlockState state, BlockPos pos) {

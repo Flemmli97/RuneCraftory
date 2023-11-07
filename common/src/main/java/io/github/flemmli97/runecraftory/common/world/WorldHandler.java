@@ -84,6 +84,14 @@ public class WorldHandler extends SavedData {
         return (time % 3000) == 1;
     }
 
+    public static EnumDay getDayForDate(int date) {
+        return EnumDay.values()[Math.floorMod(date, EnumDay.values().length)];
+    }
+
+    public static EnumSeason getSeasonForDate(int date) {
+        return EnumSeason.values()[Math.floorMod(date / 30, EnumSeason.values().length)];
+    }
+
     public CalendarImpl getCalendar() {
         return this.calendar;
     }
@@ -96,8 +104,8 @@ public class WorldHandler extends SavedData {
 
     public void increaseDay(ServerLevel level) {
         int date = WorldUtils.day(level);
-        EnumDay day = EnumDay.values()[Math.floorMod(date, EnumDay.values().length)];
-        EnumSeason season = EnumSeason.values()[Math.floorMod(date / 30, EnumSeason.values().length)];
+        EnumDay day = getDayForDate(date);
+        EnumSeason season = getSeasonForDate(date);
         this.calendar.setDateDayAndSeason(date % 30 + 1, day, season);
         Platform.INSTANCE.sendToAll(new S2CCalendar(this.calendar), level.getServer());
         this.setDirty();

@@ -4,6 +4,7 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientFarmlandHandler;
 import io.github.flemmli97.runecraftory.common.events.WorldCalls;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
+import io.github.flemmli97.runecraftory.common.world.ChunkSnowData;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.forge.capability.EntityCap;
 import io.github.flemmli97.runecraftory.forge.capability.PlayerCap;
@@ -13,7 +14,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -53,8 +53,8 @@ public class WorldEvents {
 
     @SubscribeEvent
     public void daily(TickEvent.WorldTickEvent e) {
-        if (e.phase == TickEvent.Phase.END && e.world.dimension().equals(Level.OVERWORLD)) {
-            WorldCalls.daily(e.world);
+        if (e.phase == TickEvent.Phase.END && e.world instanceof ServerLevel serverLevel) {
+            WorldCalls.worldTick(serverLevel);
         }
     }
 
@@ -66,15 +66,17 @@ public class WorldEvents {
 
     @SubscribeEvent
     public void onChunkLoad(ChunkEvent.Load event) {
-        if (event.getWorld() instanceof ServerLevel level)
+        if (event.getWorld() instanceof ServerLevel level) {
             FarmlandHandler.get(level.getServer()).onChunkLoad(level, event.getChunk().getPos());
+        }
     }
 
     @SubscribeEvent
     public void onChunkUnLoad(ChunkEvent.Unload event) {
-        if (event.getWorld() instanceof ServerLevel level)
+        if (event.getWorld() instanceof ServerLevel level) {
             FarmlandHandler.get(level.getServer()).onChunkUnLoad(level, event.getChunk().getPos());
-        else if (event.getWorld().isClientSide())
+            ChunkSnowData.get(level).onChunkUnload(level, event.getChunk());
+        } else if (event.getWorld().isClientSide())
             ClientFarmlandHandler.INSTANCE.onChunkUnLoad(event.getChunk().getPos());
     }
 }

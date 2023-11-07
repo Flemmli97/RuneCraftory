@@ -25,6 +25,7 @@
     "ItemEntityMixin",
     "ItemStackMixin",
     "LevelMixin",
+    "LevelChunkMixin",
     "LivingEntityMixin",
     "PlayerMixin",
     "PoiTypeAccessor",
