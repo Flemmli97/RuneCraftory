@@ -14,7 +14,7 @@ public interface Growable {
     boolean isAtMaxAge(BlockState state);
 
     default boolean canGrow(ServerLevel level, BlockPos pos, BlockState state) {
-        return true;
+        return !this.isAtMaxAge(state);
     }
 
     default void onGrow(ServerLevel level, BlockPos pos, BlockState state, BlockState old) {

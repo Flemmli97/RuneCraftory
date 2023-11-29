@@ -11,6 +11,9 @@
     },
     "age=3": {
       "model": "runecraftory:block/plant_carrot_3"
+    },
+    "age=4": {
+      "model": "runecraftory:block/plant_carrot_4"
     }
   }
 }

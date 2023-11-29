@@ -7,23 +7,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "conditions": [
-            {
-              "condition": "runecraftory:crop_giant",
-              "giant": false
-            }
-          ],
           "name": "runecraftory:seed_sword_item"
-        },
-        {
-          "type": "minecraft:item",
-          "conditions": [
-            {
-              "condition": "runecraftory:crop_giant",
-              "giant": true
-            }
-          ],
-          "name": "minecraft:air"
         }
       ]
     }

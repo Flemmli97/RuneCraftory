@@ -1,5 +1,4 @@
 {
-  "regrowable": false,
   "bestSeason": [
     "SUMMER",
     "FALL"
@@ -9,5 +8,6 @@
   ],
   "growth": 9,
   "maxDrops": 5,
+  "regrowable": false,
   "item": "runecraftory:seed_yam"
 }

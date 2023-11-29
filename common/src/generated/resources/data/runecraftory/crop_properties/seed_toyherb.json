@@ -1,5 +1,5 @@
 {
-  "regrowable": false,
+  "giantCrop": "runecraftory:plant_giant_toyherb",
   "bestSeason": [
     "SPRING"
   ],
@@ -8,5 +8,6 @@
   ],
   "growth": 4,
   "maxDrops": 2,
+  "regrowable": false,
   "item": "runecraftory:seed_toyherb"
 }

@@ -1,5 +1,4 @@
 {
-  "regrowable": true,
   "bestSeason": [
     "SUMMER",
     "FALL"
@@ -7,5 +6,6 @@
   "badSeason": [],
   "growth": 15,
   "maxDrops": 5,
+  "regrowable": true,
   "item": "runecraftory:seed_strawberry"
 }

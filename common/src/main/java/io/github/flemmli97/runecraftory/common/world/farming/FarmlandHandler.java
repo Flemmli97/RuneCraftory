@@ -1,8 +1,10 @@
 package io.github.flemmli97.runecraftory.common.world.farming;
 
+import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeather;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
+import io.github.flemmli97.runecraftory.common.blocks.BlockGiantCrop;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.network.S2CFarmlandRemovePacket;
@@ -14,6 +16,7 @@ import io.github.flemmli97.runecraftory.platform.Platform;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -37,6 +40,7 @@ import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraft.world.phys.AABB;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,6 +66,7 @@ public class FarmlandHandler extends SavedData {
 
     private final Map<ResourceKey<Level>, Long2ObjectMap<Set<FarmlandData>>> scheduledUpdates = new HashMap<>();
     private final Map<ResourceKey<Level>, Long2ObjectMap<Set<BlockPos>>> scheduledRemoveUpdates = new HashMap<>();
+    private final Map<ResourceKey<Level>, Set<PendingGiantCrops>> pendingGiantGrowth = new HashMap<>();
 
     private final Map<ResourceKey<Level>, Map<UUID, IrrigationPOI>> irrigationPOI = new HashMap<>();
 
@@ -88,8 +93,8 @@ public class FarmlandHandler extends SavedData {
         level.playSound(null, pos, SoundEvents.BOAT_PADDLE_WATER, SoundSource.BLOCKS, 1.0f, 1.1f);
         BlockPos up = pos.above();
         BlockState crop = level.getBlockState(up);
-        if (crop.getBlock() instanceof BlockCrop && crop.getValue(BlockCrop.WILTED))
-            level.setBlock(up, crop.setValue(BlockCrop.WILTED, false), Block.UPDATE_ALL);
+        if (crop.getBlock() instanceof BlockCrop blockCrop && crop.getValue(BlockCrop.WILTED))
+            blockCrop.onWiltedWatering(level, up, crop);
     }
 
     public static boolean canRainingAt(Level level, BlockPos position) {
@@ -202,6 +207,31 @@ public class FarmlandHandler extends SavedData {
                 .add(data.pos);
     }
 
+    public void scheduleGiantCropMerge(ServerLevel level, BlockPos pos, BlockState state) {
+        Set<PendingGiantCrops> set = this.pendingGiantGrowth.computeIfAbsent(level.dimension(), key -> new HashSet<>());
+        List<PendingGiantCrops> overlap = new ArrayList<>();
+        for (PendingGiantCrops pending : set) {
+            if (pending.contains(pos)) {
+                overlap.add(pending);
+            }
+            if (overlap.size() > 1) {
+                overlap.get(0).add(pos, state);
+                overlap.get(0).combine(overlap.get(1));
+                break;
+            }
+        }
+        if (overlap.size() > 0) {
+            if (overlap.size() == 1)
+                overlap.get(0).add(pos, state);
+            else
+                set.remove(overlap.get(1));
+            return;
+        }
+        PendingGiantCrops newData = new PendingGiantCrops();
+        newData.add(pos, state);
+        set.add(newData);
+    }
+
     public void sendChangesTo(ServerPlayer player, ChunkPos pos) {
         Long2ObjectMap<Set<FarmlandData>> chunkFarms = this.farmlandChunks.get(player.getLevel().dimension());
         if (chunkFarms != null) {
@@ -244,12 +274,13 @@ public class FarmlandHandler extends SavedData {
         if (WorldUtils.canUpdateDaily(level, this.lastUpdateDay)) {
             ArrayList<ResourceKey<Level>> empty = new ArrayList<>();
             this.farmlandChunks.forEach((dim, m) -> {
+                ServerLevel actualLevel = level.dimension().equals(dim) ? level : level.getServer().getLevel(dim);
                 ArrayList<FarmlandData> removed = new ArrayList<>();
                 m.values().removeIf(set -> {
                     if (set == null)
                         return true;
                     set.removeIf(d -> {
-                        d.tick(level, false);
+                        d.tick(actualLevel, false);
                         boolean remove = d.shouldBeRemoved();
                         if (remove)
                             removed.add(d);
@@ -289,6 +320,12 @@ public class FarmlandHandler extends SavedData {
                 m.forEach((l, data) -> onFarmRemoveChange(actualLevel, new ChunkPos(l), new ArrayList<>(data)));
         });
         this.scheduledRemoveUpdates.clear();
+        this.pendingGiantGrowth.forEach((dim, m) -> {
+            ServerLevel actualLevel = level.dimension().equals(dim) ? level : level.getServer().getLevel(dim);
+            if (actualLevel != null)
+                m.forEach(data -> data.tryMerge(actualLevel));
+        });
+        this.pendingGiantGrowth.clear();
         this.setDirty();
     }
 
@@ -421,5 +458,78 @@ public class FarmlandHandler extends SavedData {
             tag.put("Pos", BlockPos.CODEC.encodeStart(NbtOps.INSTANCE, this.pos).getOrThrow(false, RuneCraftory.logger::error));
             return tag;
         }
+    }
+
+    /**
+     * This handles merging crops into giant crops.
+     * Ensures consistency
+     */
+    public static class PendingGiantCrops {
+
+        private static final PositionDirection[] OFFSETS = new PositionDirection[]{
+                new PositionDirection(new BlockPos(1, 0, 0), Direction.WEST),
+                new PositionDirection(new BlockPos(1, 0, 1), Direction.NORTH),
+                new PositionDirection(new BlockPos(0, 0, 1), Direction.EAST)
+        };
+
+        private AABB inner, outer;
+        private final Long2ObjectMap<BlockState> crops = new Long2ObjectOpenHashMap<>();
+
+        public boolean contains(BlockPos pos) {
+            return this.outer != null && this.outer.contains(pos.getX(), pos.getY(), pos.getZ());
+        }
+
+        public void add(BlockPos pos, BlockState state) {
+            this.crops.put(pos.asLong(), state);
+            if (this.inner == null) {
+                this.inner = new AABB(pos);
+            } else {
+                this.inner = this.inner.minmax(new AABB(pos));
+            }
+            this.outer = this.inner.inflate(1, 0, 1);
+        }
+
+        public void combine(PendingGiantCrops other) {
+            this.inner = this.inner.minmax(other.inner);
+            this.outer = this.inner.inflate(1, 0, 1);
+            this.crops.putAll(other.crops);
+        }
+
+        public void tryMerge(ServerLevel level) {
+            int minX = Mth.floor(this.inner.minX);
+            int minZ = Mth.floor(this.inner.minZ);
+            int y = Mth.floor(this.inner.minY);
+            int maxX = Mth.floor(this.inner.maxX - 1);
+            int maxZ = Mth.floor(this.inner.maxZ - 1);
+            for (int z = minZ; z <= maxZ; z++) {
+                for (int x = minX; x <= maxX; x++) {
+                    BlockState s = this.crops.get(BlockPos.asLong(x, y, z));
+                    if (s != null) {
+                        BlockPos p = new BlockPos(x, y, z);
+                        List<Pair<BlockPos, BlockState>> list = new ArrayList<>();
+                        if (s.getBlock() instanceof BlockGiantCrop)
+                            s = s.setValue(BlockGiantCrop.DIRECTION, Direction.SOUTH);
+                        for (PositionDirection offset : OFFSETS) {
+                            BlockPos newPos = p.offset(offset.pos());
+                            BlockState s2 = this.crops.get(newPos.asLong());
+                            if (s2 != null && s2.is(s.getBlock())) {
+                                if (s2.getBlock() instanceof BlockGiantCrop)
+                                    s2 = s2.setValue(BlockGiantCrop.DIRECTION, offset.direction());
+                                list.add(Pair.of(newPos, s2));
+                            }
+                        }
+                        list.add(Pair.of(p, s));
+                        if (list.size() == 4)
+                            for (Pair<BlockPos, BlockState> pair : list) {
+                                this.crops.remove(pair.getFirst().asLong());
+                                level.setBlock(pair.getFirst(), pair.getSecond(), Block.UPDATE_ALL);
+                            }
+                    }
+                }
+            }
+        }
+    }
+
+    record PositionDirection(BlockPos pos, Direction direction) {
     }
 }

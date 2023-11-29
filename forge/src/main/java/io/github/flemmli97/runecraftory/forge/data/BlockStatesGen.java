@@ -4,6 +4,7 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrafting;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
 import io.github.flemmli97.runecraftory.common.blocks.BlockFruitTreeLeaf;
+import io.github.flemmli97.runecraftory.common.blocks.BlockGiantCrop;
 import io.github.flemmli97.runecraftory.common.blocks.BlockHerb;
 import io.github.flemmli97.runecraftory.common.blocks.BlockQuestboard;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
@@ -43,24 +44,38 @@ public class BlockStatesGen extends BlockStateProvider {
         });
         ModBlocks.flowers.forEach(reg -> {
             Block block = reg.get();
-            this.getVariantBuilder(block).forAllStatesExcept(state -> {
-                int stage = state.getValue(BlockCrop.AGE);
-                boolean defaultFlowerState = stage == 0 && reg != ModBlocks.emeryFlower && reg != ModBlocks.ironleaf
-                        && reg != ModBlocks.noelGrass && reg != ModBlocks.lampGrass;
-                String name = defaultFlowerState ? "runecraftory:flower_stage_0" : block.getRegistryName().toString() + "_" + stage;
-                ResourceLocation texture = defaultFlowerState ? this.blockTexture(RuneCraftory.MODID, "flower_stage_0")
-                        : stage == 3 ? this.itemCropTexture(block) : this.blockTexture(RuneCraftory.MODID, block.getRegistryName().getPath() + "_" + stage);
-                return ConfiguredModel.builder().modelFile(this.models().singleTexture(name, crossTinted, "cross", texture)).build();
-            }, BlockCrop.WILTED);
+            if (block instanceof BlockGiantCrop)
+                this.getVariantBuilder(block).forAllStatesExcept(state -> {
+                    ResourceLocation texture = this.blockTexture(RuneCraftory.MODID, block.getRegistryName().getPath());
+                    return ConfiguredModel.builder().modelFile(this.models().singleTexture(block.getRegistryName().toString(), cropTinted, "crop", texture))
+                            .rotationY(((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 180) % 360).build();
+                }, BlockCrop.WILTED, BlockGiantCrop.AGE);
+            else if (block instanceof BlockCrop)
+                this.getVariantBuilder(block).forAllStatesExcept(state -> {
+                    int stage = state.getValue(BlockCrop.AGE);
+                    boolean defaultFlowerState = stage == 0 && reg != ModBlocks.emeryFlower && reg != ModBlocks.ironleaf
+                            && reg != ModBlocks.noelGrass && reg != ModBlocks.lampGrass;
+                    String name = defaultFlowerState ? "runecraftory:flower_stage_0" : block.getRegistryName().toString() + "_" + stage;
+                    ResourceLocation texture = defaultFlowerState ? this.blockTexture(RuneCraftory.MODID, "flower_stage_0")
+                            : stage == 3 ? this.itemCropTexture(block) : this.blockTexture(RuneCraftory.MODID, block.getRegistryName().getPath() + "_" + stage);
+                    return ConfiguredModel.builder().modelFile(this.models().singleTexture(name, crossTinted, "cross", texture)).build();
+                }, BlockCrop.WILTED);
         });
         ModBlocks.crops.forEach(reg -> {
             Block block = reg.get();
-            this.getVariantBuilder(block).forAllStatesExcept(state -> {
-                int stage = state.getValue(BlockCrop.AGE);
-                String name = block.getRegistryName().toString() + "_" + stage;
-                ResourceLocation texture = this.blockTexture(RuneCraftory.MODID, block.getRegistryName().getPath() + "_" + stage);
-                return ConfiguredModel.builder().modelFile(this.models().singleTexture(name, cropTinted, "crop", texture)).build();
-            }, BlockCrop.WILTED);
+            if (block instanceof BlockGiantCrop)
+                this.getVariantBuilder(block).forAllStatesExcept(state -> {
+                    ResourceLocation texture = this.blockTexture(RuneCraftory.MODID, block.getRegistryName().getPath());
+                    return ConfiguredModel.builder().modelFile(this.models().singleTexture(block.getRegistryName().toString(), cropTinted, "crop", texture))
+                            .rotationY(((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 180) % 360).build();
+                }, BlockCrop.WILTED, BlockGiantCrop.AGE);
+            else if (block instanceof BlockCrop)
+                this.getVariantBuilder(block).forAllStatesExcept(state -> {
+                    int stage = state.getValue(BlockCrop.AGE);
+                    String name = block.getRegistryName().toString() + "_" + stage;
+                    ResourceLocation texture = this.blockTexture(RuneCraftory.MODID, block.getRegistryName().getPath() + "_" + stage);
+                    return ConfiguredModel.builder().modelFile(this.models().singleTexture(name, cropTinted, "crop", texture)).build();
+                }, BlockCrop.WILTED);
         });
         ModBlocks.mineralMap.values().forEach(reg -> {
             Block block = reg.get();

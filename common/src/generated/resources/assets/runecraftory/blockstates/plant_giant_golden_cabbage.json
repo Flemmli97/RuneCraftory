@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "runecraftory:block/plant_giant_golden_cabbage"
+    },
+    "facing=south": {
+      "model": "runecraftory:block/plant_giant_golden_cabbage",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "runecraftory:block/plant_giant_golden_cabbage",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "runecraftory:block/plant_giant_golden_cabbage",
+      "y": 90
+    }
+  }
+}

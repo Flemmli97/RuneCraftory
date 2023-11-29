@@ -13,8 +13,6 @@
     "LivingDeathEvent",
     "LivingEntityMixin",
     "LivingHurtEvent",
-    "LootTableMixin",
-    "LootTablesMixin",
     "MilkBucketMixin",
     "NaturalSpawnerMixin",
     "PhantomSpawnerMixin",

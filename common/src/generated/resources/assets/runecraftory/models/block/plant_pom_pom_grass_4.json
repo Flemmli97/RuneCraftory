@@ -1,0 +1,6 @@
+{
+  "parent": "runecraftory:block/cross_tinted",
+  "textures": {
+    "cross": "runecraftory:block/plant_pom_pom_grass_4"
+  }
+}

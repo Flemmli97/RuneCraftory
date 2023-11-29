@@ -1,8 +1,8 @@
 {
-  "regrowable": false,
   "bestSeason": [],
   "badSeason": [],
   "growth": 15,
   "maxDrops": 1,
+  "regrowable": false,
   "item": "runecraftory:seed_sword"
 }

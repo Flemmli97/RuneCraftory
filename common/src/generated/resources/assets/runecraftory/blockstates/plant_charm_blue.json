@@ -11,6 +11,9 @@
     },
     "age=3": {
       "model": "runecraftory:block/plant_charm_blue_3"
+    },
+    "age=4": {
+      "model": "runecraftory:block/plant_charm_blue_4"
     }
   }
 }

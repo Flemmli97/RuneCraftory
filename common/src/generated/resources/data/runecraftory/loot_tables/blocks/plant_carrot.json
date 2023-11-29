@@ -7,23 +7,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "conditions": [
-            {
-              "condition": "runecraftory:crop_giant",
-              "giant": false
-            }
-          ],
           "name": "minecraft:carrot"
-        },
-        {
-          "type": "minecraft:item",
-          "conditions": [
-            {
-              "condition": "runecraftory:crop_giant",
-              "giant": true
-            }
-          ],
-          "name": "runecraftory:crop_carrot_giant"
         }
       ]
     }

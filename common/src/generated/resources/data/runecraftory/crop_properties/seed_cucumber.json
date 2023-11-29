@@ -1,5 +1,4 @@
 {
-  "regrowable": true,
   "bestSeason": [
     "SPRING",
     "SUMMER"
@@ -9,5 +8,6 @@
   ],
   "growth": 5,
   "maxDrops": 5,
+  "regrowable": true,
   "item": "runecraftory:seed_cucumber"
 }

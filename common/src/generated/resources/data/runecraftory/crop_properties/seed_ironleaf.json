@@ -1,5 +1,4 @@
 {
-  "regrowable": false,
   "bestSeason": [
     "WINTER"
   ],
@@ -8,5 +7,6 @@
   ],
   "growth": 21,
   "maxDrops": 2,
+  "regrowable": false,
   "item": "runecraftory:seed_ironleaf"
 }

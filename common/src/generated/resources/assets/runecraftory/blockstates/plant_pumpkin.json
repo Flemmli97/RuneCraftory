@@ -11,6 +11,9 @@
     },
     "age=3": {
       "model": "runecraftory:block/plant_pumpkin_3"
+    },
+    "age=4": {
+      "model": "runecraftory:block/plant_pumpkin_4"
     }
   }
 }

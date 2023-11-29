@@ -1,5 +1,4 @@
 {
-  "regrowable": false,
   "bestSeason": [
     "SPRING"
   ],
@@ -8,5 +7,6 @@
   ],
   "growth": 10,
   "maxDrops": 4,
+  "regrowable": false,
   "item": "runecraftory:seed_cherry_grass"
 }

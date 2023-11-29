@@ -8,6 +8,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumMineralTier;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrafting;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
+import io.github.flemmli97.runecraftory.common.blocks.BlockGiantCrop;
 import io.github.flemmli97.runecraftory.common.blocks.BlockQuestboard;
 import io.github.flemmli97.runecraftory.common.entities.GateEntity;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityCustomFishingHook;
@@ -16,7 +17,6 @@ import io.github.flemmli97.runecraftory.common.entities.monster.EntityKingWooly;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityWooly;
 import io.github.flemmli97.runecraftory.common.loot.FirstKillCondition;
 import io.github.flemmli97.runecraftory.common.loot.FriendPointCondition;
-import io.github.flemmli97.runecraftory.common.loot.GiantLootCondition;
 import io.github.flemmli97.runecraftory.common.loot.ItemLevelLootFunction;
 import io.github.flemmli97.runecraftory.common.loot.LootingAndLuckLootFunction;
 import io.github.flemmli97.runecraftory.common.loot.SkillLevelCondition;
@@ -28,6 +28,7 @@ import net.minecraft.advancements.critereon.EnchantmentPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
+import net.minecraft.core.Direction;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.loot.BlockLoot;
 import net.minecraft.data.loot.LootTableProvider;
@@ -542,8 +543,11 @@ public class Loottables extends LootTableProvider {
 
         protected static LootPool.Builder cropLoot(BlockCrop block) {
             LootPool.Builder build = LootPool.lootPool().setRolls(ConstantValue.exactly(1));
-            build.add(LootItem.lootTableItem(block.getCrop()).when(GiantLootCondition.get(false)));
-            build.add(LootItem.lootTableItem(block.getGiantCrop()).when(GiantLootCondition.get(true)));
+            if (block instanceof BlockGiantCrop)
+                build.add(LootItem.lootTableItem(block.getCrop()).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
+                        .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(BlockGiantCrop.DIRECTION, Direction.NORTH))));
+            else
+                build.add(LootItem.lootTableItem(block.getCrop()));
             return build;
         }
 

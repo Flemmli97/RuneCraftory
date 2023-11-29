@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.mixin;
 
-import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
+import io.github.flemmli97.runecraftory.common.utils.CropUtils;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -19,6 +19,6 @@ public abstract class BlockBehaviourMixin {
     @Inject(method = "getDrops", at = @At("TAIL"))
     private void modifyBlockDrops(BlockState state, LootContext.Builder builder, CallbackInfoReturnable<List<ItemStack>> info) {
         if (state.getBlock() instanceof CropBlock cropBlock)
-            BlockCrop.modifyCropDrops(state, builder, cropBlock, info.getReturnValue());
+            CropUtils.modifyCropDrops(state, builder, cropBlock, info.getReturnValue());
     }
 }

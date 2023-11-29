@@ -47,8 +47,8 @@ public class FarmlandInfo extends GuiComponent {
 
         if (blockState.getBlock() instanceof BushBlock) {
             pos = pos.below();
-            blockState = this.mc.level.getBlockState(pos);
             cropBlock = blockState.getBlock() instanceof Growable;
+            blockState = this.mc.level.getBlockState(pos);
         }
         if (FarmlandHandler.isFarmBlock(blockState))
             data = ClientFarmlandHandler.INSTANCE.getData(pos);

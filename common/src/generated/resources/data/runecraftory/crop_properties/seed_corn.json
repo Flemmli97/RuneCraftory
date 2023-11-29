@@ -1,5 +1,4 @@
 {
-  "regrowable": false,
   "bestSeason": [
     "SPRING",
     "SUMMER"
@@ -9,5 +8,6 @@
   ],
   "growth": 5,
   "maxDrops": 1,
+  "regrowable": false,
   "item": "runecraftory:seed_corn"
 }

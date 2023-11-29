@@ -42,7 +42,7 @@ public class BlockFruitTreeLeaf extends LeavesBlock {
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (level.isClientSide)
-            return InteractionResult.CONSUME;
+            return InteractionResult.SUCCESS;
         if (state.getValue(HAS_FRUIT)) {
             Block.popResource(level, pos.below(), new ItemStack(this.fruit.get()));
             level.setBlock(pos, state.setValue(HAS_FRUIT, false), Block.UPDATE_ALL);

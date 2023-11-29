@@ -1,5 +1,4 @@
 {
-  "regrowable": false,
   "bestSeason": [
     "FALL"
   ],
@@ -8,5 +7,6 @@
   ],
   "growth": 5,
   "maxDrops": 4,
+  "regrowable": false,
   "item": "runecraftory:seed_bok_choy"
 }

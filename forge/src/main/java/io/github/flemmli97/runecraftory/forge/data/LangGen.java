@@ -9,12 +9,14 @@ import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
+import io.github.flemmli97.runecraftory.common.blocks.BlockGiantCrop;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.BathhouseAttendant;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.Cook;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.Doctor;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.Smith;
 import io.github.flemmli97.runecraftory.common.integration.simplequest.QuestTasks;
+import io.github.flemmli97.runecraftory.common.items.consumables.ItemGiantCrops;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolAxe;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolFishingRod;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolHammer;
@@ -112,7 +114,8 @@ public class LangGen implements DataProvider {
         this.add(ModItems.fishingRodPlatinum.get(), "Sacred Pole");
         for (RegistryEntrySupplier<Item> sup : ModItems.ITEMS.getEntries()) {
             if (sup.get() instanceof ItemToolAxe || sup.get() instanceof ItemToolHoe || sup.get() instanceof ItemToolWateringCan
-                    || sup.get() instanceof ItemToolSickle || sup.get() instanceof ItemToolHammer || sup.get() instanceof ItemToolFishingRod)
+                    || sup.get() instanceof ItemToolSickle || sup.get() instanceof ItemToolHammer || sup.get() instanceof ItemToolFishingRod
+                    || sup.get() instanceof ItemGiantCrops)
                 continue;
             if (sup == ModItems.steelTen) {
                 this.add(sup.get(), "10-Fold Steel");
@@ -151,7 +154,7 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.item.creative.tooltip", "Debug item used for testing things");
 
         for (RegistryEntrySupplier<Block> sup : ModBlocks.BLOCKS.getEntries()) {
-            if (sup.get() instanceof BlockCrop)
+            if (sup.get() instanceof BlockCrop && !(sup.get() instanceof BlockGiantCrop))
                 this.add(sup.get(), this.simpleTranslation(sup.getID()));
         }
         this.add(ModBlocks.mushroom.get(), "Mushroom");

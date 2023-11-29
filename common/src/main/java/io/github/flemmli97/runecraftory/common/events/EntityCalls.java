@@ -5,7 +5,6 @@ import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.SimpleEffect;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
-import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
 import io.github.flemmli97.runecraftory.common.blocks.BlockMineral;
 import io.github.flemmli97.runecraftory.common.blocks.Growable;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
@@ -28,6 +27,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
+import io.github.flemmli97.runecraftory.common.utils.CropUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
@@ -280,9 +280,13 @@ public class EntityCalls {
 
     public static void cropRightClickHarvest(Player player, BlockState state, BlockPos pos, InteractionHand hand) {
         if (!player.level.isClientSide && state.getBlock() instanceof CropBlock crop) {
+            ItemStack stack = player.getItemInHand(hand);
+            if (stack.is(ModTags.QUICKHARVEST_BYPASS)) {
+                return;
+            }
             if (crop.isMaxAge(state)) {
-                CropProperties props = DataPackHandler.SERVER_PACK.cropManager().get(crop.getCloneItemStack(player.level, pos, state).getItem());
-                BlockCrop.harvestCropRightClick(state, player.level, pos, player, player.getMainHandItem(),
+                CropProperties props = CropUtils.getPropertiesFor(crop);
+                CropUtils.harvestCropRightClick(state, player.level, pos, player, player.getMainHandItem(),
                         props, hand, null);
             }
         }

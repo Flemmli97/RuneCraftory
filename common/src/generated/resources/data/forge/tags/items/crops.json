@@ -10,6 +10,23 @@
     "#forge:crops/yam",
     "#forge:crops/tomato",
     "#forge:crops/cucumber",
-    "#forge:crops/pink_melon"
+    "#forge:crops/pink_melon",
+    "#forge:crops/toyherb",
+    "#forge:crops/moondrop_flower",
+    "#forge:crops/pink_cat",
+    "#forge:crops/charm_blue",
+    "#forge:crops/lamp_grass",
+    "#forge:crops/cherry_grass",
+    "#forge:crops/pom_pom_grass",
+    "#forge:crops/autumn_grass",
+    "#forge:crops/noel_grass",
+    "#forge:crops/fireflower",
+    "#forge:crops/four_leaf_clover",
+    "#forge:crops/ironleaf",
+    "#forge:crops/white_crystal",
+    "#forge:crops/red_crystal",
+    "#forge:crops/green_crystal",
+    "#forge:crops/blue_crystal",
+    "#forge:crops/emery_flower"
   ]
 }

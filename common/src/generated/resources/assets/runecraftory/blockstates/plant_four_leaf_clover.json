@@ -11,6 +11,9 @@
     },
     "age=3": {
       "model": "runecraftory:block/plant_four_leaf_clover_3"
+    },
+    "age=4": {
+      "model": "runecraftory:block/plant_four_leaf_clover_4"
     }
   }
 }

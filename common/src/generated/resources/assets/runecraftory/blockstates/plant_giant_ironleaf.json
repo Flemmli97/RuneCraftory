@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "runecraftory:block/plant_giant_ironleaf"
+    },
+    "facing=south": {
+      "model": "runecraftory:block/plant_giant_ironleaf",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "runecraftory:block/plant_giant_ironleaf",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "runecraftory:block/plant_giant_ironleaf",
+      "y": 90
+    }
+  }
+}

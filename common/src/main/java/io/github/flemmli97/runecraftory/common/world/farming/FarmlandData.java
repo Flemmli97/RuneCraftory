@@ -8,6 +8,7 @@ import io.github.flemmli97.runecraftory.common.blocks.Growable;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
+import io.github.flemmli97.runecraftory.common.utils.CropUtils;
 import io.github.flemmli97.runecraftory.common.utils.GrassRegrowUtil;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
@@ -339,9 +340,10 @@ public class FarmlandData {
             }
             //Dont do stuff if crop is fully grown.
             //No withering unlike game (for e.g. building purposes)
-            if (crop.isAtMaxAge(cropState)) {
-                break;
-            }
+            //TODO
+            //if (crop.isAtMaxAge(cropState)) {
+            //    break;
+            //}
             //Handle crop growth
             boolean didCropGrow = false;
             boolean maxAgeStop = false;
@@ -361,6 +363,8 @@ public class FarmlandData {
                                     level.setBlock(cropPos, newState, Block.UPDATE_ALL);
                                 Platform.INSTANCE.cropGrowEvent(level, cropPos, level.getBlockState(cropPos));
                             });
+                        } else {
+                            run.add(() -> CropUtils.attemptGiantize(level, cropPos, crop, cropState, this.cropSize, props));
                         }
                     }
                     float season = props.seasonMultiplier(modifiers.season);
@@ -368,7 +372,8 @@ public class FarmlandData {
                     float speed = this.growth * season * runeyBonus;
                     this.cropAge += Math.min(props.growth(), speed);
                     this.cropLevel += this.quality * (level.getRandom().nextFloat() * 0.5 + 0.5);
-                    this.cropSize += this.size * (level.getRandom().nextFloat() * 0.5 + 0.5);
+                    if (crop.isAtMaxAge(cropState) && this.size != 0)
+                        this.cropSize += this.size * (level.getRandom().nextFloat() * 0.2 + 0.1);
                     didCropGrow = true;
                     if (this.cropAge >= props.growth())
                         maxAgeStop = true;
@@ -396,12 +401,8 @@ public class FarmlandData {
 
         //Finalize the tick run
         run.forEach(Runnable::run);
-        if (wiltStage > 0) {
-            if (wiltStage > 1 || cropState.getValue(BlockCrop.WILTED)) {
-                level.setBlock(cropPos, ModBlocks.witheredGrass.get().defaultBlockState(), Block.UPDATE_ALL);
-            } else {
-                level.setBlock(cropPos, cropState.setValue(BlockCrop.WILTED, true), Block.UPDATE_ALL);
-            }
+        if (wiltStage > 0 && cropState.getBlock() instanceof BlockCrop blockCrop) {
+            blockCrop.onWither(wiltStage, level, cropState, cropPos);
         }
         this.cropProgress = this.growthPercent(level, cropState);
         FarmlandHandler.get(level.getServer()).scheduleUpdate(level, this);

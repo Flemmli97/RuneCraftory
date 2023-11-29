@@ -1,5 +1,4 @@
 {
-  "regrowable": false,
   "bestSeason": [
     "SPRING",
     "FALL"
@@ -9,5 +8,6 @@
   ],
   "growth": 7,
   "maxDrops": 4,
+  "regrowable": false,
   "item": "runecraftory:seed_moondrop_flower"
 }

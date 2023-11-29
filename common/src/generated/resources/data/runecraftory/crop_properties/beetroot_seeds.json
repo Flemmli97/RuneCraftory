@@ -1,10 +1,10 @@
 {
-  "regrowable": false,
   "bestSeason": [
     "SPRING"
   ],
   "badSeason": [],
   "growth": 5,
   "maxDrops": 3,
+  "regrowable": false,
   "item": "minecraft:beetroot_seeds"
 }

@@ -521,7 +521,18 @@ public class ItemTagGen extends ItemTagsProvider {
         this.tag(ModTags.FLOWERS).addTag(forgeParentTag);
         for (RegistryEntrySupplier<Item> sup : ModItems.FLOWERS) {
             this.tag(forgeParentTag).add(sup.get());
+            //Also add to crops tag
+            String name = sup.getID().getPath().replace("crop_", "");
+            TagKey<Item> forgeTag = tempKeyForge("crops/" + name);
+            this.tag(forgeTag).add(sup.get());
+            this.tag(forgeCropParentTag).addTag(forgeTag);
         }
+
+        this.tag(ModTags.QUICKHARVEST_BYPASS)
+                .add(ModItems.formularA.get(), ModItems.formularB.get(), ModItems.formularC.get(), ModItems.minimizer.get(),
+                        ModItems.giantizer.get(), ModItems.greenifier.get(), ModItems.greenifierPlus.get(), ModItems.wettablePowder.get())
+                .add(ModItems.wateringCanScrap.get(), ModItems.wateringCanIron.get(),
+                        ModItems.wateringCanSilver.get(), ModItems.wateringCanGold.get(), ModItems.wateringCanPlatinum.get());
     }
 
     protected void forgeAndCommonTag(TagKey<Item> forge, TagKey<Item> common, Item... items) {

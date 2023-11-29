@@ -197,7 +197,6 @@ public class ClientRegister {
     }
 
     public static void setupRenderLayers(BiConsumer<Block, RenderType> consumer) {
-
         ModBlocks.BLOCKS.getEntries().forEach(reg -> {
             if (reg.get() instanceof BlockHerb || reg.get() instanceof BlockCrop || reg.get() instanceof BlockMineral || reg.get() instanceof BlockBrokenMineral)
                 consumer.accept(reg.get(), RenderType.cutout());

@@ -1,10 +1,10 @@
 {
-  "regrowable": true,
   "bestSeason": [
     "FALL"
   ],
   "badSeason": [],
   "growth": 5,
   "maxDrops": 4,
+  "regrowable": true,
   "item": "minecraft:wheat_seeds"
 }

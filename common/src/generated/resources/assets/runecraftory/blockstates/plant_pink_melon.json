@@ -11,6 +11,9 @@
     },
     "age=3": {
       "model": "runecraftory:block/plant_pink_melon_3"
+    },
+    "age=4": {
+      "model": "runecraftory:block/plant_pink_melon_4"
     }
   }
 }

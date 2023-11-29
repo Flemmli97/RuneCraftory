@@ -1,12 +1,10 @@
 package io.github.flemmli97.runecraftory.common.entities.ai;
 
-import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
-import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
-import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
 import io.github.flemmli97.runecraftory.common.utils.BlockPlaceCtxHelper;
+import io.github.flemmli97.runecraftory.common.utils.CropUtils;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
@@ -150,15 +148,7 @@ public class TendCropsGoal extends Goal {
                 this.breakBlock((ServerLevel) this.entity.level, this.selected, this.entity.getCropInventory() != null ?
                         s -> Platform.INSTANCE.insertInto(this.entity.level.getBlockEntity(this.entity.getCropInventory()), s) : null);
             } else if (block instanceof CropBlock crop && crop.isMaxAge(state)) {
-                this.breakBlock((ServerLevel) this.entity.level, this.selected, this.entity.getCropInventory() != null ?
-                        s -> Platform.INSTANCE.insertInto(this.entity.level.getBlockEntity(this.entity.getCropInventory()), s) : null);
-                CropProperties props = DataPackHandler.SERVER_PACK.cropManager().get(crop.getCloneItemStack(this.entity.level, this.selected, state).getItem());
-                if (props != null && props.regrowable()) {
-                    this.entity.level.setBlock(this.selected, crop.getStateForAge(0), Block.UPDATE_ALL);
-                }
-                success = true;
-            } else if (block instanceof BlockCrop crop && crop.isMaxAge(state)) {
-                BlockCrop.harvestCropRightClick(state, this.entity.level, this.selected, this.entity, ItemStack.EMPTY, crop.properties().orElse(null), InteractionHand.MAIN_HAND, this.entity.getCropInventory() != null ?
+                CropUtils.harvestCropRightClick(state, this.entity.level, this.selected, this.entity, ItemStack.EMPTY, CropUtils.getPropertiesFor(crop), InteractionHand.MAIN_HAND, this.entity.getCropInventory() != null ?
                         s -> Platform.INSTANCE.insertInto(this.entity.level.getBlockEntity(this.entity.getCropInventory()), s) : null);
                 this.entity.level.getEntities(EntityTypeTest.forClass(ItemEntity.class), this.entity.getBoundingBox().inflate(0.2), e -> true);
                 success = true;

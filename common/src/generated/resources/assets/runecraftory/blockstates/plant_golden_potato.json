@@ -11,6 +11,9 @@
     },
     "age=3": {
       "model": "runecraftory:block/plant_golden_potato_3"
+    },
+    "age=4": {
+      "model": "runecraftory:block/plant_golden_potato_4"
     }
   }
 }
