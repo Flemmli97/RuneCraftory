@@ -338,12 +338,13 @@ public class FarmlandData {
                     break;
                 continue;
             }
+            boolean hasGiantVersion = props != null && props.getGiantVersion() != Blocks.AIR && !cropState.is(props.getGiantVersion());
+
             //Dont do stuff if crop is fully grown.
             //No withering unlike game (for e.g. building purposes)
-            //TODO
-            //if (crop.isAtMaxAge(cropState)) {
-            //    break;
-            //}
+            if (crop.isAtMaxAge(cropState) && (!hasGiantVersion || this.size == 0 || (this.size > 0 ? this.cropSize >= 1 : this.cropSize <= 0))) {
+                break;
+            }
             //Handle crop growth
             boolean didCropGrow = false;
             boolean maxAgeStop = false;
@@ -372,10 +373,15 @@ public class FarmlandData {
                     float speed = this.growth * season * runeyBonus;
                     this.cropAge += Math.min(props.growth(), speed);
                     this.cropLevel += this.quality * (level.getRandom().nextFloat() * 0.5 + 0.5);
-                    if (crop.isAtMaxAge(cropState) && this.size != 0)
-                        this.cropSize += this.size * (level.getRandom().nextFloat() * 0.2 + 0.1);
-                    didCropGrow = true;
-                    if (this.cropAge >= props.growth())
+                    if (crop.isAtMaxAge(cropState) && hasGiantVersion) {
+                        if(this.size != 0) {
+                            this.cropSize += this.size * (level.getRandom().nextFloat() * 0.2 + 0.1);
+                            didCropGrow = this.size > 0 ? this.cropSize < 1 : this.cropSize > 0;
+                        }
+                    } else {
+                        didCropGrow = true;
+                    }
+                    if (!didCropGrow)
                         maxAgeStop = true;
                 }
                 if (!ignoreWater && canRainAt)
