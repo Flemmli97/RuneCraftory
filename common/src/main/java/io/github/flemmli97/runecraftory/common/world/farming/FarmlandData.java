@@ -342,7 +342,7 @@ public class FarmlandData {
 
             //Dont do stuff if crop is fully grown.
             //No withering unlike game (for e.g. building purposes)
-            if (crop.isAtMaxAge(cropState) && (!hasGiantVersion || this.size == 0 || (this.size > 0 ? this.cropSize >= 1 : this.cropSize <= 0))) {
+            if (crop.isAtMaxAge(cropState) && (!hasGiantVersion || this.size == 0 || (this.size < 0 && this.cropSize <= 0))) {
                 break;
             }
             //Handle crop growth
@@ -524,7 +524,7 @@ public class FarmlandData {
         buf.writeInt(this.health);
         buf.writeInt(this.defence);
         buf.writeInt(this.cropProgress);
-        buf.writeInt(Math.min(100, (int) this.size * 100));
+        buf.writeInt(Math.min(100, (int) this.cropSize * 100));
         buf.writeFloat(this.cropLevel);
     }
 
