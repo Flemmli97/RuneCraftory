@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "age=0": {
+      "model": "runecraftory:block/fodder_0"
+    },
+    "age=1": {
+      "model": "runecraftory:block/fodder_1"
+    },
+    "age=2": {
+      "model": "runecraftory:block/fodder_2"
+    },
+    "age=3": {
+      "model": "runecraftory:block/fodder_3"
+    },
+    "age=4": {
+      "model": "runecraftory:block/fodder_4"
+    }
+  }
+}

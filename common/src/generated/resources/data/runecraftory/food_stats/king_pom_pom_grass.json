@@ -1,0 +1,15 @@
+{
+  "duration": 600,
+  "effects": {
+    "runecraftory:health_gain": 80.0,
+    "runecraftory:rp_gain": 25.0
+  },
+  "effectsPercentage": {},
+  "cookingBonus": {
+    "runecraftory:rp_gain": 15.0
+  },
+  "cookingBonusPercent": {},
+  "potionApply": [],
+  "potionRemove": [],
+  "item": "runecraftory:king_pom_pom_grass"
+}

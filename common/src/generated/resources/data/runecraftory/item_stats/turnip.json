@@ -1,0 +1,9 @@
+{
+  "buyPrice": 230,
+  "sellPrice": 60,
+  "upgradeDifficulty": 1,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:turnip"
+}

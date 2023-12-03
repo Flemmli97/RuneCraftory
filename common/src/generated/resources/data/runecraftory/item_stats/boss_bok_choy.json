@@ -1,0 +1,9 @@
+{
+  "buyPrice": 0,
+  "sellPrice": 1100,
+  "upgradeDifficulty": 50,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:boss_bok_choy"
+}

@@ -1,0 +1,9 @@
+{
+  "buyPrice": 0,
+  "sellPrice": 6500,
+  "upgradeDifficulty": 76,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:king_pineapple"
+}

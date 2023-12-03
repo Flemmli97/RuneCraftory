@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "runecraftory:block/lorldy_yam"
+    },
+    "facing=south": {
+      "model": "runecraftory:block/lorldy_yam",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "runecraftory:block/lorldy_yam",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "runecraftory:block/lorldy_yam",
+      "y": 90
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "runecraftory:block/cross_tinted",
+  "textures": {
+    "cross": "runecraftory:block/green_crystal_1"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "buyPrice": 330,
+  "sellPrice": 33,
+  "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:strawberry_seeds"
+}

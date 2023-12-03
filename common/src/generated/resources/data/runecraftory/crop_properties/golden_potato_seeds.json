@@ -1,0 +1,12 @@
+{
+  "bestSeason": [
+    "WINTER"
+  ],
+  "badSeason": [
+    "SUMMER"
+  ],
+  "growth": 50,
+  "maxDrops": 3,
+  "regrowable": false,
+  "item": "runecraftory:golden_potato_seeds"
+}

@@ -1,0 +1,9 @@
+{
+  "buyPrice": 0,
+  "sellPrice": 20000,
+  "upgradeDifficulty": 89,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:golden_king_cabbage"
+}

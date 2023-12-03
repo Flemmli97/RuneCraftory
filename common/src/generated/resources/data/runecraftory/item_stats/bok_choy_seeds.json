@@ -1,0 +1,9 @@
+{
+  "buyPrice": 600,
+  "sellPrice": 60,
+  "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:bok_choy_seeds"
+}

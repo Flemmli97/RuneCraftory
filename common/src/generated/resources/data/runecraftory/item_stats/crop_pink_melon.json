@@ -1,9 +1,0 @@
-{
-  "buyPrice": 3300,
-  "sellPrice": 660,
-  "upgradeDifficulty": 19,
-  "itemStats": {},
-  "monsterBonus": {},
-  "element": "NONE",
-  "item": "runecraftory:crop_pink_melon"
-}

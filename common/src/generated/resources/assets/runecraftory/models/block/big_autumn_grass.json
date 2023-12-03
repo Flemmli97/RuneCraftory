@@ -1,0 +1,6 @@
+{
+  "parent": "runecraftory:block/giant_flower",
+  "textures": {
+    "0": "runecraftory:item/big_autumn_grass"
+  }
+}

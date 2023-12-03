@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "age=0": {
+      "model": "runecraftory:block/tomato_0"
+    },
+    "age=1": {
+      "model": "runecraftory:block/tomato_1"
+    },
+    "age=2": {
+      "model": "runecraftory:block/tomato_2"
+    },
+    "age=3": {
+      "model": "runecraftory:block/tomato_3"
+    },
+    "age=4": {
+      "model": "runecraftory:block/tomato_4"
+    }
+  }
+}

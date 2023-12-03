@@ -1,0 +1,9 @@
+{
+  "buyPrice": 0,
+  "sellPrice": 300,
+  "upgradeDifficulty": 12,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:ultra_toyherb"
+}

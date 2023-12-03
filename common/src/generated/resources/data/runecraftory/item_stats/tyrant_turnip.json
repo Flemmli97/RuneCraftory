@@ -1,0 +1,9 @@
+{
+  "buyPrice": 0,
+  "sellPrice": 250,
+  "upgradeDifficulty": 20,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:tyrant_turnip"
+}

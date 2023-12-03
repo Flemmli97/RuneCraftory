@@ -1,0 +1,9 @@
+{
+  "buyPrice": 0,
+  "sellPrice": 2800,
+  "upgradeDifficulty": 48,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:big_fireflower"
+}

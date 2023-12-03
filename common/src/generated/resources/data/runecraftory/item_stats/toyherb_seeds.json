@@ -1,0 +1,9 @@
+{
+  "buyPrice": 80,
+  "sellPrice": 8,
+  "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:toyherb_seeds"
+}

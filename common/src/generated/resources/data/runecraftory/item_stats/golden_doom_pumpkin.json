@@ -1,0 +1,9 @@
+{
+  "buyPrice": 0,
+  "sellPrice": 23500,
+  "upgradeDifficulty": 93,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:golden_doom_pumpkin"
+}

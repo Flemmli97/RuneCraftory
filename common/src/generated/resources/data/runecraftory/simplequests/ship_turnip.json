@@ -1,7 +1,7 @@
 {
   "category": "runecraftory:quests",
   "task": "Ship a turnip",
-  "icon": "runecraftory:crop_turnip",
+  "icon": "runecraftory:turnip",
   "repeat_delay": -1,
   "loot_table": "minecraft:empty",
   "submission_trigger": "runecraftory_quest_board_trigger",
@@ -9,7 +9,7 @@
     "turnip": {
       "predicate": {
         "items": [
-          "runecraftory:crop_turnip"
+          "runecraftory:turnip"
         ]
       },
       "amount": 1,

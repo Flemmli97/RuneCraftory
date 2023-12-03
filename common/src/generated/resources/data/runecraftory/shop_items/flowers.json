@@ -1,71 +1,71 @@
 {
   "values": [
     {
-      "item": "runecraftory:crop_toyherb",
+      "item": "runecraftory:toyherb",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:crop_moondrop_flower",
+      "item": "runecraftory:moondrop_flower",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:crop_pink_cat",
+      "item": "runecraftory:pink_cat",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:crop_charm_blue",
+      "item": "runecraftory:charm_blue",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:crop_lamp_grass",
+      "item": "runecraftory:lamp_grass",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:crop_cherry_grass",
+      "item": "runecraftory:cherry_grass",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:crop_pom_pom_grass",
+      "item": "runecraftory:pom_pom_grass",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:crop_autumn_grass",
+      "item": "runecraftory:autumn_grass",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:crop_noel_grass",
+      "item": "runecraftory:noel_grass",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:crop_fireflower",
+      "item": "runecraftory:fireflower",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:crop_four_leaf_clover",
+      "item": "runecraftory:four_leaf_clover",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:crop_ironleaf",
+      "item": "runecraftory:ironleaf",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:crop_white_crystal",
+      "item": "runecraftory:white_crystal",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:crop_red_crystal",
+      "item": "runecraftory:red_crystal",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:crop_green_crystal",
+      "item": "runecraftory:green_crystal",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:crop_blue_crystal",
+      "item": "runecraftory:blue_crystal",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:crop_emery_flower",
+      "item": "runecraftory:emery_flower",
       "needs_unlock": false
     }
   ]

@@ -1,0 +1,9 @@
+{
+  "buyPrice": 3500,
+  "sellPrice": 1550,
+  "upgradeDifficulty": 40,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:radish"
+}

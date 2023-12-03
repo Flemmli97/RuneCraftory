@@ -1,71 +1,71 @@
 {
   "values": [
     {
-      "item": "runecraftory:seed_toyherb",
+      "item": "runecraftory:toyherb_seeds",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:seed_moondrop_flower",
+      "item": "runecraftory:moondrop_flower_seeds",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:seed_pink_cat",
+      "item": "runecraftory:pink_cat_seeds",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:seed_charm_blue",
+      "item": "runecraftory:charm_blue_seeds",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:seed_lamp_grass",
+      "item": "runecraftory:lamp_grass_seeds",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:seed_cherry_grass",
+      "item": "runecraftory:cherry_grass_seeds",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:seed_pom_pom_grass",
+      "item": "runecraftory:pom_pom_grass_seeds",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:seed_autumn_grass",
+      "item": "runecraftory:autumn_grass_seeds",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:seed_noel_grass",
+      "item": "runecraftory:noel_grass_seeds",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:seed_fireflower",
+      "item": "runecraftory:fireflower_seeds",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:seed_four_leaf_clover",
+      "item": "runecraftory:four_leaf_clover_seeds",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:seed_ironleaf",
+      "item": "runecraftory:ironleaf_seeds",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:seed_white_crystal",
+      "item": "runecraftory:white_crystal_seeds",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:seed_red_crystal",
+      "item": "runecraftory:red_crystal_seeds",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:seed_green_crystal",
+      "item": "runecraftory:green_crystal_seeds",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:seed_blue_crystal",
+      "item": "runecraftory:blue_crystal_seeds",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:seed_emery_flower",
+      "item": "runecraftory:emery_flower_seeds",
       "needs_unlock": false
     },
     {

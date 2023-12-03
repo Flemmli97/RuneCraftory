@@ -1,0 +1,9 @@
+{
+  "buyPrice": 0,
+  "sellPrice": 150000,
+  "upgradeDifficulty": 95,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:great_emery_flower"
+}

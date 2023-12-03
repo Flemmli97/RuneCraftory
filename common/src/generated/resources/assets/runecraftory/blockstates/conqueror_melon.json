@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "runecraftory:block/conqueror_melon"
+    },
+    "facing=south": {
+      "model": "runecraftory:block/conqueror_melon",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "runecraftory:block/conqueror_melon",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "runecraftory:block/conqueror_melon",
+      "y": 90
+    }
+  }
+}

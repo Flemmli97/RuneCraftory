@@ -1,0 +1,12 @@
+{
+  "bestSeason": [
+    "WINTER"
+  ],
+  "badSeason": [
+    "SUMMER"
+  ],
+  "growth": 75,
+  "maxDrops": 3,
+  "regrowable": true,
+  "item": "runecraftory:golden_pumpkin_seeds"
+}

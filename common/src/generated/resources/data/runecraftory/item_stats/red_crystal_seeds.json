@@ -1,0 +1,9 @@
+{
+  "buyPrice": 25000,
+  "sellPrice": 1500,
+  "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:red_crystal_seeds"
+}

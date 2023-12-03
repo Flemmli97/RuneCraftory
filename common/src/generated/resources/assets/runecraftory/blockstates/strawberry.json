@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "age=0": {
+      "model": "runecraftory:block/strawberry_0"
+    },
+    "age=1": {
+      "model": "runecraftory:block/strawberry_1"
+    },
+    "age=2": {
+      "model": "runecraftory:block/strawberry_2"
+    },
+    "age=3": {
+      "model": "runecraftory:block/strawberry_3"
+    },
+    "age=4": {
+      "model": "runecraftory:block/strawberry_4"
+    }
+  }
+}

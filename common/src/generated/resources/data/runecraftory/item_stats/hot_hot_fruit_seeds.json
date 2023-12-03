@@ -1,0 +1,9 @@
+{
+  "buyPrice": 750,
+  "sellPrice": 75,
+  "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:hot_hot_fruit_seeds"
+}

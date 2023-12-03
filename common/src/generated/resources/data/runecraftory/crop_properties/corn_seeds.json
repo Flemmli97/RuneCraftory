@@ -1,0 +1,13 @@
+{
+  "bestSeason": [
+    "SPRING",
+    "SUMMER"
+  ],
+  "badSeason": [
+    "WINTER"
+  ],
+  "growth": 5,
+  "maxDrops": 1,
+  "regrowable": false,
+  "item": "runecraftory:corn_seeds"
+}

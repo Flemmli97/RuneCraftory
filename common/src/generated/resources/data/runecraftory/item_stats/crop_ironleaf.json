@@ -1,9 +1,0 @@
-{
-  "buyPrice": 1500,
-  "sellPrice": 980,
-  "upgradeDifficulty": 23,
-  "itemStats": {},
-  "monsterBonus": {},
-  "element": "NONE",
-  "item": "runecraftory:crop_ironleaf"
-}

@@ -1,9 +1,0 @@
-{
-  "buyPrice": 1200,
-  "sellPrice": 330,
-  "upgradeDifficulty": 14,
-  "itemStats": {},
-  "monsterBonus": {},
-  "element": "NONE",
-  "item": "runecraftory:crop_cabbage"
-}

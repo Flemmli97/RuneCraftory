@@ -1,0 +1,9 @@
+{
+  "buyPrice": 6000,
+  "sellPrice": 1000,
+  "upgradeDifficulty": 67,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:hot_hot_fruit"
+}

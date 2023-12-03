@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "runecraftory:block/ultra_moondrop_flower"
+    },
+    "facing=south": {
+      "model": "runecraftory:block/ultra_moondrop_flower",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "runecraftory:block/ultra_moondrop_flower",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "runecraftory:block/ultra_moondrop_flower",
+      "y": 90
+    }
+  }
+}

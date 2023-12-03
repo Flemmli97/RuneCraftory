@@ -1,0 +1,6 @@
+{
+  "parent": "runecraftory:block/big_flower",
+  "textures": {
+    "cross": "runecraftory:item/great_emery_flower"
+  }
+}

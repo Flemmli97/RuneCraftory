@@ -1,0 +1,9 @@
+{
+  "buyPrice": 0,
+  "sellPrice": 800,
+  "upgradeDifficulty": 28,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:green_pepper_rex"
+}

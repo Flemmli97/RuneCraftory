@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "runecraftory:block/boss_bok_choy"
+    },
+    "facing=south": {
+      "model": "runecraftory:block/boss_bok_choy",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "runecraftory:block/boss_bok_choy",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "runecraftory:block/boss_bok_choy",
+      "y": 90
+    }
+  }
+}

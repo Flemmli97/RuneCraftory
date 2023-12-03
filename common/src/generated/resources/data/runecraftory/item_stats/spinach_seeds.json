@@ -1,0 +1,9 @@
+{
+  "buyPrice": 120,
+  "sellPrice": 12,
+  "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:spinach_seeds"
+}

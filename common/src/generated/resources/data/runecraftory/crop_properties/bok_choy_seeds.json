@@ -1,0 +1,12 @@
+{
+  "bestSeason": [
+    "FALL"
+  ],
+  "badSeason": [
+    "SUMMER"
+  ],
+  "growth": 5,
+  "maxDrops": 4,
+  "regrowable": false,
+  "item": "runecraftory:bok_choy_seeds"
+}

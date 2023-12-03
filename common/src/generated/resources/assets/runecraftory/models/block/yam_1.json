@@ -1,0 +1,6 @@
+{
+  "parent": "runecraftory:block/crop_tinted",
+  "textures": {
+    "crop": "runecraftory:block/yam_1"
+  }
+}

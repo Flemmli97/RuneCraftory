@@ -1,9 +1,0 @@
-{
-  "buyPrice": 320,
-  "sellPrice": 130,
-  "upgradeDifficulty": 5,
-  "itemStats": {},
-  "monsterBonus": {},
-  "element": "NONE",
-  "item": "runecraftory:crop_turnip_pink"
-}

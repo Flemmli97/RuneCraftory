@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "runecraftory:block/sovereign_spinach"
+    },
+    "facing=south": {
+      "model": "runecraftory:block/sovereign_spinach",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "runecraftory:block/sovereign_spinach",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "runecraftory:block/sovereign_spinach",
+      "y": 90
+    }
+  }
+}

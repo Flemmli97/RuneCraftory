@@ -1,9 +1,0 @@
-{
-  "buyPrice": 1300,
-  "sellPrice": 440,
-  "upgradeDifficulty": 34,
-  "itemStats": {},
-  "monsterBonus": {},
-  "element": "NONE",
-  "item": "runecraftory:crop_bok_choy"
-}

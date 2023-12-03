@@ -1,0 +1,20 @@
+{
+  "duration": 600,
+  "effects": {
+    "runecraftory:rp_gain": 55.0
+  },
+  "effectsPercentage": {},
+  "cookingBonus": {
+    "runecraftory:rp_gain": 15.0
+  },
+  "cookingBonusPercent": {},
+  "potionApply": [
+    {
+      "potion": "minecraft:luck",
+      "duration": 600,
+      "amplifier": 1
+    }
+  ],
+  "potionRemove": [],
+  "item": "runecraftory:great_four_leaf_clover"
+}

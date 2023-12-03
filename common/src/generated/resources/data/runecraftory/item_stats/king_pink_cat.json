@@ -1,0 +1,9 @@
+{
+  "buyPrice": 0,
+  "sellPrice": 400,
+  "upgradeDifficulty": 17,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:king_pink_cat"
+}

@@ -1,0 +1,9 @@
+{
+  "buyPrice": 2380,
+  "sellPrice": 238,
+  "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:fireflower_seeds"
+}

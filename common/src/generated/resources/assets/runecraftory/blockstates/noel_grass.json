@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "age=0": {
+      "model": "runecraftory:block/noel_grass_0"
+    },
+    "age=1": {
+      "model": "runecraftory:block/noel_grass_1"
+    },
+    "age=2": {
+      "model": "runecraftory:block/noel_grass_2"
+    },
+    "age=3": {
+      "model": "runecraftory:block/noel_grass_3"
+    },
+    "age=4": {
+      "model": "runecraftory:block/noel_grass_4"
+    }
+  }
+}

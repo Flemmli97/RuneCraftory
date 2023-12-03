@@ -1,0 +1,12 @@
+{
+  "bestSeason": [
+    "SUMMER"
+  ],
+  "badSeason": [
+    "WINTER"
+  ],
+  "growth": 8,
+  "maxDrops": 5,
+  "regrowable": true,
+  "item": "runecraftory:green_pepper_seeds"
+}

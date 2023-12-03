@@ -2,7 +2,7 @@
   "parent": "runecraftory:main/shop",
   "display": {
     "icon": {
-      "item": "runecraftory:crop_emery_flower"
+      "item": "runecraftory:emery_flower"
     },
     "title": {
       "translate": "runecraftory.advancements.million.title"

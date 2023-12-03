@@ -1,0 +1,12 @@
+{
+  "bestSeason": [
+    "SUMMER"
+  ],
+  "badSeason": [
+    "WINTER"
+  ],
+  "growth": 42,
+  "maxDrops": 4,
+  "regrowable": false,
+  "item": "runecraftory:fireflower_seeds"
+}

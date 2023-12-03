@@ -1,0 +1,13 @@
+{
+  "bestSeason": [
+    "SUMMER",
+    "FALL"
+  ],
+  "badSeason": [
+    "WINTER"
+  ],
+  "growth": 9,
+  "maxDrops": 5,
+  "regrowable": false,
+  "item": "runecraftory:yam_seeds"
+}

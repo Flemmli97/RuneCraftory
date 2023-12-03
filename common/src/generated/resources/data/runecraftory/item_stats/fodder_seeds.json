@@ -1,0 +1,9 @@
+{
+  "buyPrice": 50,
+  "sellPrice": 5,
+  "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:fodder_seeds"
+}

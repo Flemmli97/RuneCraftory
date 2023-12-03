@@ -1,0 +1,9 @@
+{
+  "buyPrice": 1300,
+  "sellPrice": 370,
+  "upgradeDifficulty": 30,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:strawberry"
+}

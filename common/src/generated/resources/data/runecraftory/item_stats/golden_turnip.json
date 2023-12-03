@@ -1,0 +1,9 @@
+{
+  "buyPrice": 50000,
+  "sellPrice": 15000,
+  "upgradeDifficulty": 88,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:golden_turnip"
+}

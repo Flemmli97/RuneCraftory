@@ -4,7 +4,7 @@
   "cost": 25,
   "ingredients": [
     {
-      "item": "runecraftory:crop_cabbage"
+      "item": "runecraftory:cabbage"
     }
   ],
   "result": {

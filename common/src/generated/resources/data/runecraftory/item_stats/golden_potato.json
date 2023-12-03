@@ -1,0 +1,9 @@
+{
+  "buyPrice": 30000,
+  "sellPrice": 12500,
+  "upgradeDifficulty": 86,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:golden_potato"
+}

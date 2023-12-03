@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "runecraftory:block/colossal_pink"
+    },
+    "facing=south": {
+      "model": "runecraftory:block/colossal_pink",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "runecraftory:block/colossal_pink",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "runecraftory:block/colossal_pink",
+      "y": 90
+    }
+  }
+}

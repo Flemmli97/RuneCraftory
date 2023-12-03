@@ -374,7 +374,7 @@ public class FarmlandData {
                     this.cropAge += Math.min(props.growth(), speed);
                     this.cropLevel += this.quality * (level.getRandom().nextFloat() * 0.5 + 0.5);
                     if (crop.isAtMaxAge(cropState) && hasGiantVersion) {
-                        if(this.size != 0) {
+                        if (this.size != 0) {
                             this.cropSize += this.size * (level.getRandom().nextFloat() * 0.2 + 0.1);
                             didCropGrow = this.size > 0 ? this.cropSize < 1 : this.cropSize > 0;
                         }

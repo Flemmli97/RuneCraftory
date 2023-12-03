@@ -1,0 +1,11 @@
+{
+  "bestSeason": [
+    "SUMMER",
+    "FALL"
+  ],
+  "badSeason": [],
+  "growth": 4,
+  "maxDrops": 3,
+  "regrowable": false,
+  "item": "runecraftory:turnip_seeds"
+}

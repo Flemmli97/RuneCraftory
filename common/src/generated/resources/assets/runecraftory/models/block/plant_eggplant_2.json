@@ -1,6 +1,0 @@
-{
-  "parent": "runecraftory:block/crop_tinted",
-  "textures": {
-    "crop": "runecraftory:block/plant_eggplant_2"
-  }
-}

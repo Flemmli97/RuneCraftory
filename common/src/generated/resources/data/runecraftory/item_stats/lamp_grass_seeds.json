@@ -1,0 +1,9 @@
+{
+  "buyPrice": 550,
+  "sellPrice": 55,
+  "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:lamp_grass_seeds"
+}

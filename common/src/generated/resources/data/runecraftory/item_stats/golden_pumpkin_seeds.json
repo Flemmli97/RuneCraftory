@@ -1,0 +1,9 @@
+{
+  "buyPrice": 3500,
+  "sellPrice": 3500,
+  "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:golden_pumpkin_seeds"
+}

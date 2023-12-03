@@ -1,0 +1,9 @@
+{
+  "buyPrice": 0,
+  "sellPrice": 3000,
+  "upgradeDifficulty": 42,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:large_noel_grass"
+}

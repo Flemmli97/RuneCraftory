@@ -1,0 +1,16 @@
+{
+  "duration": 600,
+  "effects": {
+    "runecraftory:health_gain": 90.0,
+    "runecraftory:rp_increase": 18.0
+  },
+  "effectsPercentage": {},
+  "cookingBonus": {
+    "runecraftory:health_gain": 10.0,
+    "runecraftory:rp_gain": 5.0
+  },
+  "cookingBonusPercent": {},
+  "potionApply": [],
+  "potionRemove": [],
+  "item": "runecraftory:colossal_pink"
+}

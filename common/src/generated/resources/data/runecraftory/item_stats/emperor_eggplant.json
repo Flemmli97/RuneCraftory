@@ -1,0 +1,9 @@
+{
+  "buyPrice": 0,
+  "sellPrice": 850,
+  "upgradeDifficulty": 38,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:emperor_eggplant"
+}

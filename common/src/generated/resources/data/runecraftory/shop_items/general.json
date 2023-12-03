@@ -1,95 +1,95 @@
 {
   "values": [
     {
-      "item": "runecraftory:crop_turnip",
+      "item": "runecraftory:turnip",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:crop_turnip_pink",
+      "item": "runecraftory:turnip_pink",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:crop_cabbage",
+      "item": "runecraftory:cabbage",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:crop_pink_melon",
+      "item": "runecraftory:pink_melon",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:crop_pineapple",
+      "item": "runecraftory:pineapple",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:crop_strawberry",
+      "item": "runecraftory:strawberry",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:crop_golden_turnip",
+      "item": "runecraftory:golden_turnip",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:crop_golden_potato",
+      "item": "runecraftory:golden_potato",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:crop_golden_pumpkin",
+      "item": "runecraftory:golden_pumpkin",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:crop_golden_cabbage",
+      "item": "runecraftory:golden_cabbage",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:crop_hot_hot_fruit",
+      "item": "runecraftory:hot_hot_fruit",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:crop_bok_choy",
+      "item": "runecraftory:bok_choy",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:crop_leek",
+      "item": "runecraftory:leek",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:crop_radish",
+      "item": "runecraftory:radish",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:crop_spinach",
+      "item": "runecraftory:spinach",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:crop_green_pepper",
+      "item": "runecraftory:green_pepper",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:crop_yam",
+      "item": "runecraftory:yam",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:crop_eggplant",
+      "item": "runecraftory:eggplant",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:crop_tomato",
+      "item": "runecraftory:tomato",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:crop_corn",
+      "item": "runecraftory:corn",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:crop_cucumber",
+      "item": "runecraftory:cucumber",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:crop_pumpkin",
+      "item": "runecraftory:pumpkin",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:crop_onion",
+      "item": "runecraftory:onion",
       "needs_unlock": false
     }
   ]

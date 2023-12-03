@@ -1,0 +1,9 @@
+{
+  "buyPrice": 990,
+  "sellPrice": 99,
+  "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:tomato_seeds"
+}

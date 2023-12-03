@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "runecraftory:block/sultan_strawberry"
+    },
+    "facing=south": {
+      "model": "runecraftory:block/sultan_strawberry",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "runecraftory:block/sultan_strawberry",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "runecraftory:block/sultan_strawberry",
+      "y": 90
+    }
+  }
+}

@@ -1,15 +1,15 @@
 {
   "duration": 600,
   "effects": {
-    "runecraftory:health_gain": 3.0,
-    "runecraftory:rp_gain": 6.0
+    "runecraftory:health_gain": 80.0
   },
   "effectsPercentage": {},
   "cookingBonus": {
-    "runecraftory:health_gain": 10.0
+    "runecraftory:health_gain": 10.0,
+    "runecraftory:rp_gain": 5.0
   },
   "cookingBonusPercent": {},
   "potionApply": [],
   "potionRemove": [],
-  "item": "minecraft:carrot"
+  "item": "runecraftory:carrot"
 }

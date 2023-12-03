@@ -1,27 +1,27 @@
 {
   "values": [
     {
-      "item": "runecraftory:seed_turnip",
+      "item": "runecraftory:turnip_seeds",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:seed_turnip_pink",
+      "item": "runecraftory:turnip_pink_seeds",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:seed_cabbage",
+      "item": "runecraftory:cabbage_seeds",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:seed_pink_melon",
+      "item": "runecraftory:pink_melon_seeds",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:seed_tomato",
+      "item": "runecraftory:tomato_seeds",
       "needs_unlock": false
     },
     {
-      "item": "runecraftory:seed_cucumber",
+      "item": "runecraftory:cucumber_seeds",
       "needs_unlock": false
     }
   ]

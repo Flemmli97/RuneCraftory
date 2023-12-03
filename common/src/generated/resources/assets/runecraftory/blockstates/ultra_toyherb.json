@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "runecraftory:block/ultra_toyherb"
+    },
+    "facing=south": {
+      "model": "runecraftory:block/ultra_toyherb",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "runecraftory:block/ultra_toyherb",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "runecraftory:block/ultra_toyherb",
+      "y": 90
+    }
+  }
+}

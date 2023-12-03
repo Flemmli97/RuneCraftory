@@ -24,6 +24,8 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 public class BlockStatesGen extends BlockStateProvider {
 
     private static final ResourceLocation cropTinted = new ResourceLocation(RuneCraftory.MODID, "block/crop_tinted");
+    private static final ResourceLocation flowerBig = new ResourceLocation(RuneCraftory.MODID, "block/big_flower");
+    private static final ResourceLocation flowerGiant = new ResourceLocation(RuneCraftory.MODID, "block/giant_flower");
     private static final ResourceLocation crossTinted = new ResourceLocation(RuneCraftory.MODID, "block/cross_tinted");
 
     public BlockStatesGen(DataGenerator gen, ExistingFileHelper helper) {
@@ -44,10 +46,10 @@ public class BlockStatesGen extends BlockStateProvider {
         });
         ModBlocks.flowers.forEach(reg -> {
             Block block = reg.get();
-            if (block instanceof BlockGiantCrop)
+            if (block instanceof BlockGiantCrop giant)
                 this.getVariantBuilder(block).forAllStatesExcept(state -> {
-                    ResourceLocation texture = this.blockTexture(RuneCraftory.MODID, block.getRegistryName().getPath());
-                    return ConfiguredModel.builder().modelFile(this.models().singleTexture(block.getRegistryName().toString(), cropTinted, "crop", texture))
+                    ResourceLocation texture = this.itemTexture(giant.getCrop());
+                    return ConfiguredModel.builder().modelFile(this.models().singleTexture(block.getRegistryName().toString(), flowerGiant, "0", texture))
                             .rotationY(((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 180) % 360).build();
                 }, BlockCrop.WILTED, BlockGiantCrop.AGE);
             else if (block instanceof BlockCrop)
@@ -58,7 +60,13 @@ public class BlockStatesGen extends BlockStateProvider {
                     String name = defaultFlowerState ? "runecraftory:flower_stage_0" : block.getRegistryName().toString() + "_" + stage;
                     ResourceLocation texture = defaultFlowerState ? this.blockTexture(RuneCraftory.MODID, "flower_stage_0")
                             : stage == 3 ? this.itemCropTexture(block) : this.blockTexture(RuneCraftory.MODID, block.getRegistryName().getPath() + "_" + stage);
-                    return ConfiguredModel.builder().modelFile(this.models().singleTexture(name, crossTinted, "cross", texture)).build();
+                    ResourceLocation parent = crossTinted;
+                    if (stage == 4) {
+                        parent = flowerBig;
+                        if (ModBlocks.giantCropMap.get(reg).get() instanceof BlockGiantCrop giantCrop)
+                            texture = this.itemTexture(giantCrop.getCrop());
+                    }
+                    return ConfiguredModel.builder().modelFile(this.models().singleTexture(name, parent, "cross", texture)).build();
                 }, BlockCrop.WILTED);
         });
         ModBlocks.crops.forEach(reg -> {

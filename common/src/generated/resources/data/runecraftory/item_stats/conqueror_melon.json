@@ -1,0 +1,9 @@
+{
+  "buyPrice": 0,
+  "sellPrice": 1850,
+  "upgradeDifficulty": 29,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:conqueror_melon"
+}

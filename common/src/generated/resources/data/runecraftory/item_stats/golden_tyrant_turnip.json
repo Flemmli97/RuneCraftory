@@ -1,0 +1,9 @@
+{
+  "buyPrice": 0,
+  "sellPrice": 45000,
+  "upgradeDifficulty": 95,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:golden_tyrant_turnip"
+}

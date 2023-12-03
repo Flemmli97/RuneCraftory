@@ -1,0 +1,9 @@
+{
+  "buyPrice": 750,
+  "sellPrice": 330,
+  "upgradeDifficulty": 14,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:cherry_grass"
+}

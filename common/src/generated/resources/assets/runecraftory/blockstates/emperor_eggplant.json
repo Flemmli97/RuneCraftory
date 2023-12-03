@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "runecraftory:block/emperor_eggplant"
+    },
+    "facing=south": {
+      "model": "runecraftory:block/emperor_eggplant",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "runecraftory:block/emperor_eggplant",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "runecraftory:block/emperor_eggplant",
+      "y": 90
+    }
+  }
+}

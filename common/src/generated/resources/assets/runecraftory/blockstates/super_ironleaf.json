@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "runecraftory:block/super_ironleaf"
+    },
+    "facing=south": {
+      "model": "runecraftory:block/super_ironleaf",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "runecraftory:block/super_ironleaf",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "runecraftory:block/super_ironleaf",
+      "y": 90
+    }
+  }
+}

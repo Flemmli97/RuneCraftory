@@ -1,0 +1,9 @@
+{
+  "buyPrice": 380,
+  "sellPrice": 160,
+  "upgradeDifficulty": 5,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:moondrop_flower"
+}

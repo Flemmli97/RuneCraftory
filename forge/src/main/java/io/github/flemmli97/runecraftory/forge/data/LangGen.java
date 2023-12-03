@@ -9,7 +9,6 @@ import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
-import io.github.flemmli97.runecraftory.common.blocks.BlockGiantCrop;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.BathhouseAttendant;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.Cook;
@@ -139,12 +138,6 @@ public class LangGen implements DataProvider {
                 this.add(sup.get(), "Milk (M)");
             } else if (sup == ModItems.milkL) {
                 this.add(sup.get(), "Milk (L)");
-            } else if (sup == ModItems.fourLeafClover) {
-                this.add(sup.get(), "4-Leaf Clover");
-            } else if (sup == ModItems.fourLeafCloverGiant) {
-                this.add(sup.get(), "Giant 4-Leaf Clover");
-            } else if (sup == ModItems.fourLeafCloverSeeds) {
-                this.add(sup.get(), "4-Leaf Clover Seed");
             } else if (sup.get() instanceof SpawnEgg)
                 this.add(sup.get(), "%s" + " Spawn Egg");
             else
@@ -154,7 +147,7 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.item.creative.tooltip", "Debug item used for testing things");
 
         for (RegistryEntrySupplier<Block> sup : ModBlocks.BLOCKS.getEntries()) {
-            if (sup.get() instanceof BlockCrop && !(sup.get() instanceof BlockGiantCrop))
+            if (sup.get() instanceof BlockCrop)
                 this.add(sup.get(), this.simpleTranslation(sup.getID()));
         }
         this.add(ModBlocks.mushroom.get(), "Mushroom");
@@ -695,22 +688,13 @@ public class LangGen implements DataProvider {
         } else if (s.startsWith("ore_")) {
             s = s.replace("ore_", "");
             s = s + "_mineral";
-        } else if (s.startsWith("crop_")) {
-            s = s.replace("crop_", "");
-            if (s.endsWith("_giant")) {
-                s = s.replace("_giant", "");
-                s = "giant_" + s;
-            }
-        } else if (s.startsWith("seed_")) {
-            s = s.replace("seed_", "");
-            s = s + "_seeds";
-        } else if (s.startsWith("plant_")) {
-            s = s.replace("plant_", "");
         }
         return Stream.of(s.trim().split("_"))
                 .filter(word -> word.length() > 0)
                 .map(word -> word.substring(0, 1).toUpperCase() + word.substring(1))
-                .collect(Collectors.joining(" ")).replace("Plus", "+");
+                .collect(Collectors.joining(" ")).replace("Plus", "+")
+                .replace("Four Leaf", "4-Leaf")
+                .replace("Pom Pom", "Pom-Pom");
     }
 
     private static String patchouliEntity(ResourceLocation res) {

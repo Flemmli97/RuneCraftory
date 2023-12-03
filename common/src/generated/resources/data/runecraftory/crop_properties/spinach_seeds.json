@@ -1,0 +1,10 @@
+{
+  "bestSeason": [
+    "FALL"
+  ],
+  "badSeason": [],
+  "growth": 2,
+  "maxDrops": 2,
+  "regrowable": false,
+  "item": "runecraftory:spinach_seeds"
+}

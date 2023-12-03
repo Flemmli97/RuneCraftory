@@ -1,0 +1,9 @@
+{
+  "buyPrice": 0,
+  "sellPrice": 1150,
+  "upgradeDifficulty": 45,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:ultra_onion"
+}

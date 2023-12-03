@@ -387,111 +387,111 @@
         },
         {
           "type": "minecraft:item",
-          "name": "runecraftory:crop_turnip"
+          "name": "runecraftory:turnip"
         },
         {
           "type": "minecraft:item",
-          "name": "runecraftory:crop_turnip_pink"
+          "name": "runecraftory:turnip_pink"
         },
         {
           "type": "minecraft:item",
-          "name": "runecraftory:crop_cabbage"
+          "name": "runecraftory:cabbage"
         },
         {
           "type": "minecraft:item",
-          "name": "runecraftory:crop_pink_melon"
+          "name": "runecraftory:pink_melon"
         },
         {
           "type": "minecraft:item",
-          "name": "runecraftory:crop_golden_turnip"
+          "name": "runecraftory:golden_turnip"
         },
         {
           "type": "minecraft:item",
-          "name": "runecraftory:crop_golden_cabbage"
+          "name": "runecraftory:golden_cabbage"
         },
         {
           "type": "minecraft:item",
-          "name": "runecraftory:crop_radish"
+          "name": "runecraftory:radish"
         },
         {
           "type": "minecraft:item",
-          "name": "runecraftory:crop_yam"
+          "name": "runecraftory:yam"
         },
         {
           "type": "minecraft:item",
-          "name": "runecraftory:crop_tomato"
+          "name": "runecraftory:tomato"
         },
         {
           "type": "minecraft:item",
-          "name": "runecraftory:crop_cucumber"
+          "name": "runecraftory:cucumber"
         },
         {
           "type": "minecraft:item",
-          "name": "runecraftory:crop_toyherb"
+          "name": "runecraftory:toyherb"
         },
         {
           "type": "minecraft:item",
-          "name": "runecraftory:crop_moondrop_flower"
+          "name": "runecraftory:moondrop_flower"
         },
         {
           "type": "minecraft:item",
-          "name": "runecraftory:crop_pink_cat"
+          "name": "runecraftory:pink_cat"
         },
         {
           "type": "minecraft:item",
-          "name": "runecraftory:crop_charm_blue"
+          "name": "runecraftory:charm_blue"
         },
         {
           "type": "minecraft:item",
-          "name": "runecraftory:crop_lamp_grass"
+          "name": "runecraftory:lamp_grass"
         },
         {
           "type": "minecraft:item",
-          "name": "runecraftory:crop_cherry_grass"
+          "name": "runecraftory:cherry_grass"
         },
         {
           "type": "minecraft:item",
-          "name": "runecraftory:crop_pom_pom_grass"
+          "name": "runecraftory:pom_pom_grass"
         },
         {
           "type": "minecraft:item",
-          "name": "runecraftory:crop_autumn_grass"
+          "name": "runecraftory:autumn_grass"
         },
         {
           "type": "minecraft:item",
-          "name": "runecraftory:crop_noel_grass"
+          "name": "runecraftory:noel_grass"
         },
         {
           "type": "minecraft:item",
-          "name": "runecraftory:crop_fireflower"
+          "name": "runecraftory:fireflower"
         },
         {
           "type": "minecraft:item",
-          "name": "runecraftory:crop_four_leaf_clover"
+          "name": "runecraftory:four_leaf_clover"
         },
         {
           "type": "minecraft:item",
-          "name": "runecraftory:crop_ironleaf"
+          "name": "runecraftory:ironleaf"
         },
         {
           "type": "minecraft:item",
-          "name": "runecraftory:crop_white_crystal"
+          "name": "runecraftory:white_crystal"
         },
         {
           "type": "minecraft:item",
-          "name": "runecraftory:crop_red_crystal"
+          "name": "runecraftory:red_crystal"
         },
         {
           "type": "minecraft:item",
-          "name": "runecraftory:crop_green_crystal"
+          "name": "runecraftory:green_crystal"
         },
         {
           "type": "minecraft:item",
-          "name": "runecraftory:crop_blue_crystal"
+          "name": "runecraftory:blue_crystal"
         },
         {
           "type": "minecraft:item",
-          "name": "runecraftory:crop_emery_flower"
+          "name": "runecraftory:emery_flower"
         },
         {
           "type": "minecraft:item",

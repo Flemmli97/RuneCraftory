@@ -1,0 +1,9 @@
+{
+  "buyPrice": 0,
+  "sellPrice": 350,
+  "upgradeDifficulty": 24,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:sovereign_spinach"
+}

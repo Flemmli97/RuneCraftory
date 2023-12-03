@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "age=0": {
+      "model": "runecraftory:block/corn_0"
+    },
+    "age=1": {
+      "model": "runecraftory:block/corn_1"
+    },
+    "age=2": {
+      "model": "runecraftory:block/corn_2"
+    },
+    "age=3": {
+      "model": "runecraftory:block/corn_3"
+    },
+    "age=4": {
+      "model": "runecraftory:block/corn_4"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "duration": 600,
+  "effects": {
+    "runecraftory:rp_gain": 80.0
+  },
+  "effectsPercentage": {},
+  "cookingBonus": {
+    "runecraftory:rp_gain": 15.0
+  },
+  "cookingBonusPercent": {},
+  "potionApply": [],
+  "potionRemove": [],
+  "item": "runecraftory:kaiser_lamp_grass"
+}

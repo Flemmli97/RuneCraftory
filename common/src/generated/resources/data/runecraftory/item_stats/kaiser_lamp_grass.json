@@ -1,0 +1,9 @@
+{
+  "buyPrice": 0,
+  "sellPrice": 1300,
+  "upgradeDifficulty": 34,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:kaiser_lamp_grass"
+}

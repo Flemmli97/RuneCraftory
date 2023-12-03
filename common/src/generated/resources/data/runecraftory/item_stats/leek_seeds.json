@@ -1,0 +1,9 @@
+{
+  "buyPrice": 450,
+  "sellPrice": 45,
+  "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:leek_seeds"
+}

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "age=0": {
+      "model": "runecraftory:block/hot_hot_fruit_0"
+    },
+    "age=1": {
+      "model": "runecraftory:block/hot_hot_fruit_1"
+    },
+    "age=2": {
+      "model": "runecraftory:block/hot_hot_fruit_2"
+    },
+    "age=3": {
+      "model": "runecraftory:block/hot_hot_fruit_3"
+    },
+    "age=4": {
+      "model": "runecraftory:block/hot_hot_fruit_4"
+    }
+  }
+}

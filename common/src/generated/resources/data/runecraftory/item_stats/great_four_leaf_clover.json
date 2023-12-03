@@ -1,0 +1,9 @@
+{
+  "buyPrice": 0,
+  "sellPrice": 2400,
+  "upgradeDifficulty": 29,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:great_four_leaf_clover"
+}

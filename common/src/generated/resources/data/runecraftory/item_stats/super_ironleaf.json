@@ -1,0 +1,9 @@
+{
+  "buyPrice": 0,
+  "sellPrice": 1600,
+  "upgradeDifficulty": 48,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:super_ironleaf"
+}

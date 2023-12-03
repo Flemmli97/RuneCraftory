@@ -1,0 +1,9 @@
+{
+  "buyPrice": 0,
+  "sellPrice": 68000,
+  "upgradeDifficulty": 83,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:big_red_crystal"
+}
