@@ -28,7 +28,7 @@ public class BlockGiantCrop extends BlockCrop {
     public static final EnumProperty<Direction> DIRECTION = BlockStateProperties.HORIZONTAL_FACING;
     private static final List<Direction> DIRECTIONS = Direction.Plane.HORIZONTAL.stream().sorted(Comparator.comparingInt(Direction::get2DDataValue)).toList();
 
-    private static final VoxelShape SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D);
+    private static final VoxelShape[] SHAPE = BlockCrafting.joinedOrDirs(BlockCrafting.ShapeBuilder.of(0.0D, 0.0D, 0.0D, 13.0D, 12.0D, 13.0D));
 
     public BlockGiantCrop(Properties prop, Supplier<Item> giant, Supplier<Item> seed) {
         super(prop, giant, seed);
@@ -37,7 +37,7 @@ public class BlockGiantCrop extends BlockCrop {
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return SHAPE;
+        return SHAPE[state.getValue(BlockGiantCrop.DIRECTION).get2DDataValue()];
     }
 
     @Override

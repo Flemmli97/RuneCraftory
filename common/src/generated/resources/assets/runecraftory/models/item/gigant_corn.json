@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "runecraftory:item/double_sized_item",
   "textures": {
     "layer0": "runecraftory:item/gigant_corn"
   }

@@ -15,7 +15,6 @@ import io.github.flemmli97.runecraftory.common.entities.npc.job.Cook;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.Doctor;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.Smith;
 import io.github.flemmli97.runecraftory.common.integration.simplequest.QuestTasks;
-import io.github.flemmli97.runecraftory.common.items.consumables.ItemGiantCrops;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolAxe;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolFishingRod;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolHammer;
@@ -113,8 +112,7 @@ public class LangGen implements DataProvider {
         this.add(ModItems.fishingRodPlatinum.get(), "Sacred Pole");
         for (RegistryEntrySupplier<Item> sup : ModItems.ITEMS.getEntries()) {
             if (sup.get() instanceof ItemToolAxe || sup.get() instanceof ItemToolHoe || sup.get() instanceof ItemToolWateringCan
-                    || sup.get() instanceof ItemToolSickle || sup.get() instanceof ItemToolHammer || sup.get() instanceof ItemToolFishingRod
-                    || sup.get() instanceof ItemGiantCrops)
+                    || sup.get() instanceof ItemToolSickle || sup.get() instanceof ItemToolHammer || sup.get() instanceof ItemToolFishingRod)
                 continue;
             if (sup == ModItems.steelTen) {
                 this.add(sup.get(), "10-Fold Steel");

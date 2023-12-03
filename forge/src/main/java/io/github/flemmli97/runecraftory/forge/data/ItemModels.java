@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ItemModelProps;
+import io.github.flemmli97.runecraftory.common.items.consumables.ItemGiantCrops;
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemRecipeBread;
 import io.github.flemmli97.runecraftory.common.items.creative.ItemProp;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolAxe;
@@ -131,6 +132,8 @@ public class ItemModels extends ItemModelProvider {
                 this.withExistingParent(sup.getID().getPath(), new ResourceLocation(blockItem.getRegistryName().getNamespace(), "block/" + blockItem.getBlock().getRegistryName().getPath()));
             else if (sup.get() instanceof ItemProp)
                 this.singleTexture(sup.getID().getPath(), this.mcLoc("item/generated"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + ModItems.unknown.getID().getPath()));
+            else if (sup.get() instanceof ItemGiantCrops)
+                this.singleTexture(sup.getID().getPath(), this.modLoc("item/double_sized_item"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath()));
             else
                 this.singleTexture(sup.getID().getPath(), this.mcLoc("item/generated"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath()));
         }

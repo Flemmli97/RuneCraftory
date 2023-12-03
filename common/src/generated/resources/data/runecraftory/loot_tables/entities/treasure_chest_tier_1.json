@@ -431,7 +431,15 @@
         },
         {
           "type": "minecraft:item",
+          "name": "runecraftory:ultra_toyherb"
+        },
+        {
+          "type": "minecraft:item",
           "name": "runecraftory:moondrop_flower"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:ultra_moondrop_flower"
         },
         {
           "type": "minecraft:item",
@@ -439,7 +447,15 @@
         },
         {
           "type": "minecraft:item",
+          "name": "runecraftory:king_pink_cat"
+        },
+        {
+          "type": "minecraft:item",
           "name": "runecraftory:charm_blue"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:great_charm_blue"
         },
         {
           "type": "minecraft:item",
@@ -447,7 +463,15 @@
         },
         {
           "type": "minecraft:item",
+          "name": "runecraftory:kaiser_lamp_grass"
+        },
+        {
+          "type": "minecraft:item",
           "name": "runecraftory:cherry_grass"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:king_cherry_grass"
         },
         {
           "type": "minecraft:item",
@@ -455,7 +479,15 @@
         },
         {
           "type": "minecraft:item",
+          "name": "runecraftory:king_pom_pom_grass"
+        },
+        {
+          "type": "minecraft:item",
           "name": "runecraftory:autumn_grass"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:big_autumn_grass"
         },
         {
           "type": "minecraft:item",
@@ -463,7 +495,15 @@
         },
         {
           "type": "minecraft:item",
+          "name": "runecraftory:large_noel_grass"
+        },
+        {
+          "type": "minecraft:item",
           "name": "runecraftory:fireflower"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:big_fireflower"
         },
         {
           "type": "minecraft:item",
@@ -471,7 +511,15 @@
         },
         {
           "type": "minecraft:item",
+          "name": "runecraftory:great_four_leaf_clover"
+        },
+        {
+          "type": "minecraft:item",
           "name": "runecraftory:ironleaf"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:super_ironleaf"
         },
         {
           "type": "minecraft:item",
@@ -479,7 +527,15 @@
         },
         {
           "type": "minecraft:item",
+          "name": "runecraftory:big_white_crystal"
+        },
+        {
+          "type": "minecraft:item",
           "name": "runecraftory:red_crystal"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:big_red_crystal"
         },
         {
           "type": "minecraft:item",
@@ -487,11 +543,23 @@
         },
         {
           "type": "minecraft:item",
+          "name": "runecraftory:big_green_crystal"
+        },
+        {
+          "type": "minecraft:item",
           "name": "runecraftory:blue_crystal"
         },
         {
           "type": "minecraft:item",
+          "name": "runecraftory:big_blue_crystal"
+        },
+        {
+          "type": "minecraft:item",
           "name": "runecraftory:emery_flower"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:great_emery_flower"
         },
         {
           "type": "minecraft:item",
