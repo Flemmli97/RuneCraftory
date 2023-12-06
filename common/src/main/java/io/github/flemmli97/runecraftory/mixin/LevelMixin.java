@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(Level.class)
+@Mixin(value = Level.class, priority = 1001)
 public class LevelMixin implements LevelSnapshotHandler {
 
     @Unique
@@ -26,8 +26,7 @@ public class LevelMixin implements LevelSnapshotHandler {
         }
     }
 
-    @Inject(method = "getBlockState",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/chunk/LevelChunk;getBlockState(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;", shift = At.Shift.BY, by = -2), cancellable = true)
+    @Inject(method = "getBlockState", at = @At("HEAD"), cancellable = true)
     private void handleGetBlock(BlockPos pos, CallbackInfoReturnable<BlockState> info) {
         if (this.runecraftory_level_snapshot.isTakingSnapshot()) {
             BlockState state = this.runecraftory_level_snapshot.getBlockState(pos);
