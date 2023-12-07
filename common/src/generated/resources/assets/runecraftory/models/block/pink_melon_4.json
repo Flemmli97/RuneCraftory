@@ -1,6 +1,6 @@
 {
-  "parent": "runecraftory:block/crop_tinted",
+  "parent": "runecraftory:block/big_crop",
   "textures": {
-    "crop": "runecraftory:block/pink_melon_4"
+    "crop": "runecraftory:block/conqueror_melon"
   }
 }

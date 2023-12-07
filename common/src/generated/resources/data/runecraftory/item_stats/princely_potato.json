@@ -1,0 +1,9 @@
+{
+  "buyPrice": 0,
+  "sellPrice": 450,
+  "upgradeDifficulty": 19,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:princely_potato"
+}

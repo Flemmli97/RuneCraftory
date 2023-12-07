@@ -1,0 +1,6 @@
+{
+  "parent": "runecraftory:item/double_sized_item",
+  "textures": {
+    "layer0": "runecraftory:item/golden_prince_potato"
+  }
+}

@@ -8,12 +8,11 @@
       "y": 180
     },
     "facing=west": {
-      "model": "runecraftory:block/noble_radish",
-      "y": 270
+      "model": "runecraftory:block/noble_radish_2",
+      "y": 180
     },
     "facing=east": {
-      "model": "runecraftory:block/noble_radish",
-      "y": 90
+      "model": "runecraftory:block/noble_radish_2"
     }
   }
 }

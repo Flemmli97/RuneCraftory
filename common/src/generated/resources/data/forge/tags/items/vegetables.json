@@ -2,13 +2,26 @@
   "replace": false,
   "values": [
     "#forge:vegetables/turnip",
+    "#forge:vegetables/tyrant_turnip",
     "#forge:vegetables/turnip_pink",
+    "#forge:vegetables/colossal_pink",
     "#forge:vegetables/cabbage",
+    "#forge:vegetables/king_cabbage",
     "#forge:vegetables/golden_turnip",
+    "#forge:vegetables/golden_tyrant_turnip",
+    "#forge:vegetables/golden_potato",
+    "#forge:vegetables/golden_prince_potato",
     "#forge:vegetables/golden_cabbage",
+    "#forge:vegetables/golden_king_cabbage",
     "#forge:vegetables/radish",
+    "#forge:vegetables/noble_radish",
     "#forge:vegetables/yam",
+    "#forge:vegetables/lordly_yam",
     "#forge:vegetables/tomato",
-    "#forge:vegetables/cucumber"
+    "#forge:vegetables/titan_tomato",
+    "#forge:vegetables/cucumber",
+    "#forge:vegetables/kaiser_cucumber",
+    "#forge:vegetables/princely_potato",
+    "#forge:vegetables/royal_carrot"
   ]
 }

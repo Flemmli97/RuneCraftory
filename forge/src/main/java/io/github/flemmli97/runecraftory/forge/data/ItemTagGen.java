@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.forge.data;
 
+import dev.architectury.platform.Mod;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
@@ -265,6 +266,10 @@ public class ItemTagGen extends ItemTagsProvider {
                         ModItems.scaleFire.get(),
                         ModItems.scaleEarth.get(),
                         ModItems.scaleLegend.get());
+
+        this.tag(ModTags.TURNIP)
+                .add(ModItems.turnip.get(), ModItems.turnipGiant.get(), ModItems.turnipPink.get(), ModItems.turnipPinkGiant.get(),
+                        ModItems.goldenTurnip.get(), ModItems.goldenTurnipGiant.get());
 
         this.tag(ModTags.HIGH_TIER_TOOLS)
                 .add(ModItems.hoePlatinum.get())

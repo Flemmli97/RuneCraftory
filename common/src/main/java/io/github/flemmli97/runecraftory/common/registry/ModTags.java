@@ -115,6 +115,7 @@ public class ModTags {
     public static final TagKey<Item> QUICKHARVEST_BYPASS = tag("quick_harvest_bypass");
 
     public static final TagKey<Item> FOODS = tagCommon("foods");
+    public static final TagKey<Item> TURNIP = tagCommon("turnip");
 
     private static final Map<EntityType<?>, TagKey<Item>> ENTITY_TAMING_TAGS = new HashMap<>();
 

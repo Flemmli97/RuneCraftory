@@ -391,7 +391,15 @@
         },
         {
           "type": "minecraft:item",
+          "name": "runecraftory:tyrant_turnip"
+        },
+        {
+          "type": "minecraft:item",
           "name": "runecraftory:turnip_pink"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:colossal_pink"
         },
         {
           "type": "minecraft:item",
@@ -399,7 +407,15 @@
         },
         {
           "type": "minecraft:item",
+          "name": "runecraftory:king_cabbage"
+        },
+        {
+          "type": "minecraft:item",
           "name": "runecraftory:pink_melon"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:conqueror_melon"
         },
         {
           "type": "minecraft:item",
@@ -407,7 +423,23 @@
         },
         {
           "type": "minecraft:item",
+          "name": "runecraftory:golden_tyrant_turnip"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:golden_potato"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:golden_prince_potato"
+        },
+        {
+          "type": "minecraft:item",
           "name": "runecraftory:golden_cabbage"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:golden_king_cabbage"
         },
         {
           "type": "minecraft:item",
@@ -415,7 +447,15 @@
         },
         {
           "type": "minecraft:item",
+          "name": "runecraftory:noble_radish"
+        },
+        {
+          "type": "minecraft:item",
           "name": "runecraftory:yam"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:lordly_yam"
         },
         {
           "type": "minecraft:item",
@@ -423,7 +463,23 @@
         },
         {
           "type": "minecraft:item",
+          "name": "runecraftory:titan_tomato"
+        },
+        {
+          "type": "minecraft:item",
           "name": "runecraftory:cucumber"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:kaiser_cucumber"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:princely_potato"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:royal_carrot"
         },
         {
           "type": "minecraft:item",

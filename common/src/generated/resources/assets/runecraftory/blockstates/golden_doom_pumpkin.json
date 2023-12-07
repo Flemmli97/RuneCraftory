@@ -8,12 +8,11 @@
       "y": 180
     },
     "facing=west": {
-      "model": "runecraftory:block/golden_doom_pumpkin",
-      "y": 270
+      "model": "runecraftory:block/golden_doom_pumpkin_2",
+      "y": 180
     },
     "facing=east": {
-      "model": "runecraftory:block/golden_doom_pumpkin",
-      "y": 90
+      "model": "runecraftory:block/golden_doom_pumpkin_2"
     }
   }
 }

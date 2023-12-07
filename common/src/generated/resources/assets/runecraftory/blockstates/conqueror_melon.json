@@ -8,12 +8,11 @@
       "y": 180
     },
     "facing=west": {
-      "model": "runecraftory:block/conqueror_melon",
-      "y": 270
+      "model": "runecraftory:block/conqueror_melon_2",
+      "y": 180
     },
     "facing=east": {
-      "model": "runecraftory:block/conqueror_melon",
-      "y": 90
+      "model": "runecraftory:block/conqueror_melon_2"
     }
   }
 }

@@ -1,0 +1,6 @@
+{
+  "parent": "runecraftory:block/giant_crop_2",
+  "textures": {
+    "crop": "runecraftory:block/king_cabbage"
+  }
+}

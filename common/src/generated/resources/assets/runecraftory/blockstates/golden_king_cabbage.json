@@ -8,12 +8,11 @@
       "y": 180
     },
     "facing=west": {
-      "model": "runecraftory:block/golden_king_cabbage",
-      "y": 270
+      "model": "runecraftory:block/golden_king_cabbage_2",
+      "y": 180
     },
     "facing=east": {
-      "model": "runecraftory:block/golden_king_cabbage",
-      "y": 90
+      "model": "runecraftory:block/golden_king_cabbage_2"
     }
   }
 }

@@ -8,12 +8,11 @@
       "y": 180
     },
     "facing=west": {
-      "model": "runecraftory:block/tyrant_turnip",
-      "y": 270
+      "model": "runecraftory:block/tyrant_turnip_2",
+      "y": 180
     },
     "facing=east": {
-      "model": "runecraftory:block/tyrant_turnip",
-      "y": 90
+      "model": "runecraftory:block/tyrant_turnip_2"
     }
   }
 }

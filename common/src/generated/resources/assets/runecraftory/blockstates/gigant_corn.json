@@ -8,12 +8,11 @@
       "y": 180
     },
     "facing=west": {
-      "model": "runecraftory:block/gigant_corn",
-      "y": 270
+      "model": "runecraftory:block/gigant_corn_2",
+      "y": 180
     },
     "facing=east": {
-      "model": "runecraftory:block/gigant_corn",
-      "y": 90
+      "model": "runecraftory:block/gigant_corn_2"
     }
   }
 }

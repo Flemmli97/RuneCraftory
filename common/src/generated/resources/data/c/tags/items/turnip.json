@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "runecraftory:turnip",
+    "runecraftory:tyrant_turnip",
+    "runecraftory:turnip_pink",
+    "runecraftory:colossal_pink",
+    "runecraftory:golden_turnip",
+    "runecraftory:golden_tyrant_turnip"
+  ]
+}

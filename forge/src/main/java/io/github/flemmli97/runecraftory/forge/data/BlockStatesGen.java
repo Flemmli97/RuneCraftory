@@ -9,6 +9,7 @@ import io.github.flemmli97.runecraftory.common.blocks.BlockHerb;
 import io.github.flemmli97.runecraftory.common.blocks.BlockQuestboard;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -24,6 +25,9 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 public class BlockStatesGen extends BlockStateProvider {
 
     private static final ResourceLocation cropTinted = new ResourceLocation(RuneCraftory.MODID, "block/crop_tinted");
+    private static final ResourceLocation cropBig = new ResourceLocation(RuneCraftory.MODID, "block/big_crop");
+    private static final ResourceLocation cropGiant1 = new ResourceLocation(RuneCraftory.MODID, "block/giant_crop_1");
+    private static final ResourceLocation cropGiant2 = new ResourceLocation(RuneCraftory.MODID, "block/giant_crop_2");
     private static final ResourceLocation flowerBig = new ResourceLocation(RuneCraftory.MODID, "block/big_flower");
     private static final ResourceLocation flowerGiant = new ResourceLocation(RuneCraftory.MODID, "block/giant_flower");
     private static final ResourceLocation crossTinted = new ResourceLocation(RuneCraftory.MODID, "block/cross_tinted");
@@ -74,15 +78,37 @@ public class BlockStatesGen extends BlockStateProvider {
             if (block instanceof BlockGiantCrop)
                 this.getVariantBuilder(block).forAllStatesExcept(state -> {
                     ResourceLocation texture = this.blockTexture(RuneCraftory.MODID, block.getRegistryName().getPath());
-                    return ConfiguredModel.builder().modelFile(this.models().singleTexture(block.getRegistryName().toString(), cropTinted, "crop", texture))
-                            .rotationY(((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 180) % 360).build();
+                    ResourceLocation parent = cropGiant1;
+                    int rot = 0;
+                    String file = block.getRegistryName().toString();
+                    switch (state.getValue(BlockGiantCrop.DIRECTION)) {
+                        case EAST -> {
+                            parent = cropGiant2;
+                            file += "_2";
+                        }
+                        case SOUTH -> rot = 180;
+                        case WEST -> {
+                            parent = cropGiant2;
+                            file += "_2";
+                            rot = 180;
+                        }
+                    }
+                    return ConfiguredModel.builder().modelFile(this.models().singleTexture(file, parent, "crop", texture))
+                            .rotationY(rot).build();
                 }, BlockCrop.WILTED, BlockGiantCrop.AGE);
             else if (block instanceof BlockCrop)
                 this.getVariantBuilder(block).forAllStatesExcept(state -> {
                     int stage = state.getValue(BlockCrop.AGE);
                     String name = block.getRegistryName().toString() + "_" + stage;
                     ResourceLocation texture = this.blockTexture(RuneCraftory.MODID, block.getRegistryName().getPath() + "_" + stage);
-                    return ConfiguredModel.builder().modelFile(this.models().singleTexture(name, cropTinted, "crop", texture)).build();
+                    ResourceLocation parent = cropTinted;
+                    if (stage == 4) {
+                        parent = cropBig;
+                        RegistryEntrySupplier<Block> giant = ModBlocks.giantCropMap.get(reg);
+                        if (giant != null)
+                            texture = this.blockTexture(giant.get());
+                    }
+                    return ConfiguredModel.builder().modelFile(this.models().singleTexture(name, parent, "crop", texture)).build();
                 }, BlockCrop.WILTED);
         });
         ModBlocks.mineralMap.values().forEach(reg -> {

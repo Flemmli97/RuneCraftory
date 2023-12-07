@@ -1,5 +1,5 @@
 {
-  "parent": "runecraftory:block/crop_tinted",
+  "parent": "runecraftory:block/giant_crop_1",
   "textures": {
     "crop": "runecraftory:block/noble_radish"
   }

@@ -8,12 +8,11 @@
       "y": 180
     },
     "facing=west": {
-      "model": "runecraftory:block/giant_hot_hot_fruit",
-      "y": 270
+      "model": "runecraftory:block/giant_hot_hot_fruit_2",
+      "y": 180
     },
     "facing=east": {
-      "model": "runecraftory:block/giant_hot_hot_fruit",
-      "y": 90
+      "model": "runecraftory:block/giant_hot_hot_fruit_2"
     }
   }
 }

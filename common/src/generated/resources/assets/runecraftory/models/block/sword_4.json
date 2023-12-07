@@ -1,5 +1,5 @@
 {
-  "parent": "runecraftory:block/crop_tinted",
+  "parent": "runecraftory:block/big_crop",
   "textures": {
     "crop": "runecraftory:block/sword_4"
   }

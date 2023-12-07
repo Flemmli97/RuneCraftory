@@ -4,7 +4,7 @@
   "cost": 12,
   "ingredients": [
     {
-      "item": "runecraftory:turnip"
+      "tag": "c:turnip"
     }
   ],
   "result": {

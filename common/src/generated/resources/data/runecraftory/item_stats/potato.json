@@ -1,9 +1,9 @@
 {
-  "buyPrice": 0,
-  "sellPrice": 450,
-  "upgradeDifficulty": 19,
+  "buyPrice": 130,
+  "sellPrice": 100,
+  "upgradeDifficulty": 3,
   "itemStats": {},
   "monsterBonus": {},
   "element": "NONE",
-  "item": "runecraftory:potato"
+  "item": "minecraft:potato"
 }

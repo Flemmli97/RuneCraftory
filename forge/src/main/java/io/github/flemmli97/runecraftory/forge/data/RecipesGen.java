@@ -457,7 +457,7 @@ public class RecipesGen extends RecipeProvider {
         RecipeBuilder.create(EnumCrafting.COOKING, ModItems.onigiri.get(), 1, 1, 10)
                 .addIngredient(ModItems.rice.get()).build(consumer);
         RecipeBuilder.create(EnumCrafting.COOKING, ModItems.pickledTurnip.get(), 1, 5, 12)
-                .addIngredient(ModItems.turnip.get()).build(consumer);
+                .addIngredient(ModTags.TURNIP).build(consumer);
 
         RecipeBuilder.create(EnumCrafting.COOKING, ModItems.flan.get(), 1, 15, 20)
                 .addIngredient(ModTags.EGGS).addIngredient(ModTags.MILKS).build(consumer);

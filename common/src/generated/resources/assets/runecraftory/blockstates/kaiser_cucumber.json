@@ -8,12 +8,11 @@
       "y": 180
     },
     "facing=west": {
-      "model": "runecraftory:block/kaiser_cucumber",
-      "y": 270
+      "model": "runecraftory:block/kaiser_cucumber_2",
+      "y": 180
     },
     "facing=east": {
-      "model": "runecraftory:block/kaiser_cucumber",
-      "y": 90
+      "model": "runecraftory:block/kaiser_cucumber_2"
     }
   }
 }

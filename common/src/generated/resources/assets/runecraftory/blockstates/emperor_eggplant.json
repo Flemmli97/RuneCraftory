@@ -8,12 +8,11 @@
       "y": 180
     },
     "facing=west": {
-      "model": "runecraftory:block/emperor_eggplant",
-      "y": 270
+      "model": "runecraftory:block/emperor_eggplant_2",
+      "y": 180
     },
     "facing=east": {
-      "model": "runecraftory:block/emperor_eggplant",
-      "y": 90
+      "model": "runecraftory:block/emperor_eggplant_2"
     }
   }
 }
