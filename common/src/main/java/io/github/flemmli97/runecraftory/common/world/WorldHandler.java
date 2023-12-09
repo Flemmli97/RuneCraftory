@@ -60,6 +60,8 @@ public class WorldHandler extends SavedData {
 
     public final NPCHandler npcHandler = new NPCHandler();
 
+    private final NPCSpawner npcSpawner = new NPCSpawner();
+
     private int updateDelay, lastUpdateDay;
 
     public WorldHandler() {
@@ -138,6 +140,7 @@ public class WorldHandler extends SavedData {
         if (doWeather && shouldUpdateWeather(level, this.currentWeather())) {
             this.updateWeatherTo(level, this.calendar.getCurrentWeatherFor(level));
         }
+        this.npcSpawner.tick(level, true, true);
         // Checks if current weather is correct and if not corrects it
         /*
         if (--this.updateDelay <= 0) {
