@@ -1,0 +1,44 @@
+{
+  "gender": "MALE",
+  "profession": [
+    "runecraftory:general",
+    "runecraftory:flowers"
+  ],
+  "look": "runecraftory:shop_owner/male_1",
+  "weight": 50,
+  "combat": {
+    "combatActions": "runecraftory:generic_melee_attack"
+  },
+  "romanceable": false,
+  "neutralGiftResponse": "npc.shop_owner.male.1.gift.default",
+  "giftItems": {
+    "dislike": {
+      "items": "runecraftory:generic_trash",
+      "responseKey": "npc.shop_owner.male.1.dislike",
+      "xp": -10
+    },
+    "like": {
+      "items": "c:crops",
+      "responseKey": "npc.shop_owner.male.1.like",
+      "xp": 25
+    }
+  },
+  "interactions": {
+    "GREETING": "runecraftory:shop_owner/male_1/greeting",
+    "TALK": "runecraftory:shop_owner/male_1/talk",
+    "FOLLOWYES": "runecraftory:shop_owner/male_1/follow.yes",
+    "FOLLOWNO": "runecraftory:shop_owner/male_1/follow.no",
+    "FOLLOWSTOP": "runecraftory:shop_owner/male_1/follow.stop"
+  },
+  "questHandler": {
+    "responses": {
+      "runecraftory:ship_turnip": {
+        "startID": "runecraftory:shop_owner/male_1/quest_start_ship_turnip",
+        "activeID": "runecraftory:shop_owner/male_1/quest_active_ship_turnip",
+        "hasSequence": false,
+        "endID": "runecraftory:shop_owner/male_1/quest_end_ship_turnip"
+      }
+    },
+    "requiredQuests": []
+  }
+}

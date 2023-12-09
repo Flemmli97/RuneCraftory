@@ -59,6 +59,10 @@ public class ModTags {
 
     public static final TagKey<Item> GRAPES = tagCommon("grapes");
 
+    //Gifts
+    public static final TagKey<Item> GENERIC_TRASH = tag("generic_trash");
+    public static final TagKey<Item> SMITH_TRASH = tag("smith_trash");
+
     //Runefactory categories
     public static final TagKey<Item> MINERALS = tag("mineral");
     public static final TagKey<Item> JEWELS = tag("jewels");
@@ -120,6 +124,8 @@ public class ModTags {
     private static final Map<EntityType<?>, TagKey<Item>> ENTITY_TAMING_TAGS = new HashMap<>();
 
     //Blocks
+    public static final TagKey<Block> ORES = blockMod("ores");
+
     public static final TagKey<Block> FARMLAND = blockCommon("farmland");
     public static final TagKey<Block> SICKLE_DESTROYABLE = blockMod("sickle_destroyable");
     public static final TagKey<Block> HAMMER_FLATTENABLE = blockMod("hammer_flattenable");

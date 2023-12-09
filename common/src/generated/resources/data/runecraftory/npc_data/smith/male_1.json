@@ -1,0 +1,43 @@
+{
+  "gender": "MALE",
+  "profession": [
+    "runecraftory:smith"
+  ],
+  "look": "runecraftory:smith/male_1",
+  "weight": 50,
+  "combat": {
+    "combatActions": "runecraftory:melee_fireball_attack"
+  },
+  "romanceable": false,
+  "neutralGiftResponse": "npc.smith.male.1.gift.default",
+  "giftItems": {
+    "dislike": {
+      "items": "runecraftory:smith_trash",
+      "responseKey": "npc.smith.male.1.dislike",
+      "xp": -10
+    },
+    "like": {
+      "items": "runecraftory:mineral",
+      "responseKey": "npc.smith.male.1.like",
+      "xp": 25
+    }
+  },
+  "interactions": {
+    "GREETING": "runecraftory:smith/male_1/greeting",
+    "TALK": "runecraftory:smith/male_1/talk",
+    "FOLLOWYES": "runecraftory:smith/male_1/follow.yes",
+    "FOLLOWNO": "runecraftory:smith/male_1/follow.no",
+    "FOLLOWSTOP": "runecraftory:smith/male_1/follow.stop"
+  },
+  "questHandler": {
+    "responses": {
+      "runecraftory:mining": {
+        "startID": "runecraftory:smith/male_1/quest_start_mining",
+        "activeID": "runecraftory:smith/male_1/quest_active_mining",
+        "hasSequence": false,
+        "endID": "runecraftory:smith/male_1/quest_end_mining"
+      }
+    },
+    "requiredQuests": []
+  }
+}

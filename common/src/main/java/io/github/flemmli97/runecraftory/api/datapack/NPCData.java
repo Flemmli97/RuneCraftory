@@ -52,7 +52,7 @@ import java.util.TreeMap;
 import java.util.function.Function;
 
 public record NPCData(@Nullable String name, @Nullable String surname,
-                      Gender gender, NPCJob profession, @Nullable ResourceLocation look,
+                      Gender gender, List<NPCJob> profession, @Nullable ResourceLocation look,
                       @Nullable Pair<EnumSeason, Integer> birthday,
                       int weight, String neutralGiftResponse,
                       Map<ConversationType, ResourceLocation> interactions,
@@ -111,9 +111,9 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                     Codec.STRING.optionalFieldOf("name").forGetter(d -> Optional.ofNullable(d.name)),
                     Codec.STRING.optionalFieldOf("surname").forGetter(d -> Optional.ofNullable(d.surname)),
                     CodecHelper.enumCodec(Gender.class, Gender.UNDEFINED).fieldOf("gender").forGetter(d -> d.gender),
-                    ModNPCJobs.CODEC.optionalFieldOf("profession").forGetter(d -> Optional.ofNullable(d.profession))
+                    ModNPCJobs.CODEC.listOf().optionalFieldOf("profession").forGetter(d -> d.profession.isEmpty() ? Optional.empty() : Optional.of(d.profession))
             ).apply(inst, (interactions, questHandler, schedule, combat, romanceable, neutralGift, giftItems, look, birthday, weight, unique, name, surname, gender, profession) -> new NPCData(name.orElse(null), surname.orElse(null),
-                    gender, profession.orElse(null), look.orElse(null), birthday.orElse(null), weight, neutralGift, interactions, questHandler, giftItems, schedule.orElse(null), combat.map(d -> d.baseStats).orElse(null), combat.map(d -> d.statIncrease).orElse(null), combat.map(d -> d.baseLevel).orElse(1), combat.map(d -> d.npcAction).orElse(null), unique.orElse(0), romanceable.orElse(false))));
+                    gender, profession.orElse(List.of()), look.orElse(null), birthday.orElse(null), weight, neutralGift, interactions, questHandler, giftItems, schedule.orElse(null), combat.map(d -> d.baseStats).orElse(null), combat.map(d -> d.statIncrease).orElse(null), combat.map(d -> d.baseLevel).orElse(1), combat.map(d -> d.npcAction).orElse(null), unique.orElse(0), romanceable.orElse(false))));
 
     public ConversationSet getConversation(ConversationType type) {
         ResourceLocation conversationId = this.interactions().get(type);
@@ -201,7 +201,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         private final Gender gender;
         private final int weight;
         private String neutralGiftResponse;
-        private NPCJob profession;
+        private List<NPCJob> professions = new ArrayList<>();
         private final Map<ConversationType, ResourceLocation> interactions = new TreeMap<>();
         private final Map<String, Gift> giftItems = new LinkedHashMap<>();
         private Pair<EnumSeason, Integer> birthday;
@@ -253,8 +253,8 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             return this;
         }
 
-        public Builder withProfession(NPCJob profession) {
-            this.profession = profession;
+        public Builder withProfession(NPCJob... professions) {
+            this.professions.addAll(List.of(professions));
             return this;
         }
 
@@ -335,7 +335,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                 if (!this.interactions.containsKey(type))
                     throw new IllegalStateException("Missing interactions for " + type);
             }
-            return new NPCData(this.name, this.surname, this.gender, this.profession, this.look, this.birthday, this.weight, this.neutralGiftResponse, this.interactions,
+            return new NPCData(this.name, this.surname, this.gender, this.professions, this.look, this.birthday, this.weight, this.neutralGiftResponse, this.interactions,
                     new QuestHandler(this.responses, this.requiredQuests), this.giftItems, this.schedule,
                     this.baseStats.isEmpty() ? null : this.baseStats, this.statIncrease.isEmpty() ? null : this.statIncrease, this.baseLevel, this.combatAction, this.unique, this.romanceable);
         }

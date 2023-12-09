@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.integration.simplequest;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityTreasureChest;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
@@ -24,6 +25,7 @@ import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,15 +38,16 @@ public class NPCQuest extends QuestBase {
 
     private EntityNPCBase npc;
     private UUID npcUuid;
-    public final ResourceLocation npcDataID, quest, loot;
+    public final List<ResourceLocation> npcDataIDs;
+    public final ResourceLocation quest, loot;
     public final List<ResourceLocation> parentQuests;
     private ResourceLocation originID;
 
     protected NPCQuest(ResourceLocation id, QuestCategory category, String questTaskString, List<String> questTaskDesc,
-                       List<ResourceLocation> parents, boolean redoParent, int repeatDelay, int sortingId, EntityPredicate unlockCondition, ResourceLocation npcDataID, ResourceLocation quest, ResourceLocation loot) {
+                       List<ResourceLocation> parents, boolean redoParent, int repeatDelay, int sortingId, EntityPredicate unlockCondition, List<ResourceLocation> npcDataIDs, ResourceLocation quest, ResourceLocation loot) {
         super(id, category, questTaskString, questTaskDesc,
                 List.of(), redoParent, false, ItemStack.EMPTY, repeatDelay, 0, sortingId, false, unlockCondition);
-        this.npcDataID = npcDataID;
+        this.npcDataIDs = npcDataIDs;
         this.parentQuests = parents;
         this.quest = quest;
         this.loot = loot;
@@ -58,13 +61,20 @@ public class NPCQuest extends QuestBase {
     }
 
     public static NPCQuest of(ResourceLocation id, EntityNPCBase npc, QuestBase quest) {
-        return QuestBase.of(task -> new Builder(id, task, npc.getDataID(),
+        return QuestBase.of(task -> new Builder(id, task, List.of(npc.getDataID()),
                 quest.getLoot()).withQuest(quest.id), quest.category, quest.serialize(true, false)).build();
     }
 
     public static NPCQuest of(ResourceLocation id, QuestCategory category, JsonObject obj) {
         UUID uuid = obj.has("npc_uuid") ? UUID.fromString(obj.get("npc_uuid").getAsString()) : null;
-        NPCQuest quest = QuestBase.of(task -> new Builder(withUuid(id, uuid), task, new ResourceLocation(GsonHelper.getAsString(obj, "npc_id")),
+        List<ResourceLocation> npc_ids = new ArrayList<>();
+        try {
+            npc_ids.add(new ResourceLocation(GsonHelper.getAsString(obj, "npc_id")));
+        } catch (JsonSyntaxException e) {
+            JsonArray arr = GsonHelper.getAsJsonArray(obj, "npc_id");
+            arr.forEach(element -> npc_ids.add(new ResourceLocation(element.getAsString())));
+        }
+        NPCQuest quest = QuestBase.of(task -> new Builder(withUuid(id, uuid), task, npc_ids,
                 new ResourceLocation(GsonHelper.getAsString(obj, "loot_table")))
                 .withQuest(new ResourceLocation(GsonHelper.getAsString(obj, "quest"))), category, obj).build();
         quest.npcUuid = uuid;
@@ -74,7 +84,7 @@ public class NPCQuest extends QuestBase {
 
     public static List<NPCQuest> of(NPCQuest quest, ServerPlayer player) {
         return player.level.getEntities(EntityTypeTest.forClass(EntityNPCBase.class), player.getBoundingBox().inflate(48), e -> {
-                    if (e.getDataID().equals(quest.npcDataID) && e.canAcceptNPCQuest(player, quest)) {
+                    if (quest.npcDataIDs.contains(e.getDataID()) && e.canAcceptNPCQuest(player, quest)) {
                         ResourceLocation id = SimpleQuestIntegration.INST().questForExists(player, e);
                         return id == null || quest.getOriginID().equals(id);
                     }
@@ -116,7 +126,13 @@ public class NPCQuest extends QuestBase {
                 obj.add("parent_id", arr);
             }
         }
-        obj.addProperty("npc_id", this.npcDataID.toString());
+        if (this.npcDataIDs.size() == 1)
+            obj.addProperty("npc_id", this.npcDataIDs.get(0).toString());
+        else {
+            JsonArray arr = new JsonArray();
+            this.npcDataIDs.forEach(res -> arr.add(res.toString()));
+            obj.add("npc_id", arr);
+        }
         obj.addProperty("quest", this.quest.toString());
         obj.addProperty("loot_table", this.loot.toString());
         if (this.npcUuid != null)
@@ -205,11 +221,15 @@ public class NPCQuest extends QuestBase {
 
     public static class Builder extends BuilderBase<NPCQuest.Builder> {
 
-        private final ResourceLocation npcDataID;
+        private final List<ResourceLocation> npcDataID;
         private ResourceLocation quest;
         private final ResourceLocation loot;
 
         public Builder(ResourceLocation id, String task, ResourceLocation npcDataID, ResourceLocation loot) {
+            this(id, task, List.of(npcDataID), loot);
+        }
+
+        public Builder(ResourceLocation id, String task, List<ResourceLocation> npcDataID, ResourceLocation loot) {
             super(id, task);
             this.npcDataID = npcDataID;
             this.loot = loot;

@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.forge.data;
 
-import dev.architectury.platform.Mod;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
@@ -94,6 +93,15 @@ public class ItemTagGen extends ItemTagsProvider {
                 .add(ModItems.orichalcum.get());
         this.tag(ModTags.DRAGONIC)
                 .add(ModItems.dragonic.get());
+
+        this.tag(ModTags.GENERIC_TRASH)
+                .add(ModItems.failedDish.get(), ModItems.disastrousDish.get(),
+                        ModItems.weeds.get(), ModItems.witheredGrass.get())
+                .addTag(ItemTags.DIRT)
+                .addTag(ModTags.COBBLESTONE);
+        this.tag(ModTags.SMITH_TRASH)
+                .add(ModItems.scrap.get(), ModItems.scrapPlus.get())
+                .addTag(ModTags.GENERIC_TRASH);
 
         this.tag(ModTags.MINERALS)
                 .add(ModItems.scrapPlus.get())

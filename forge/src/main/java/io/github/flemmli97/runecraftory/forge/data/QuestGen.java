@@ -6,12 +6,15 @@ import io.github.flemmli97.runecraftory.common.integration.simplequest.QuestTask
 import io.github.flemmli97.runecraftory.common.integration.simplequest.SimpleQuestIntegration;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.ModTags;
 import io.github.flemmli97.simplequests.api.QuestEntry;
 import io.github.flemmli97.simplequests.datapack.provider.QuestProvider;
 import io.github.flemmli97.simplequests.quest.QuestCategory;
+import io.github.flemmli97.simplequests.quest.entry.QuestEntryImpls;
 import io.github.flemmli97.simplequests.quest.types.Quest;
 import io.github.flemmli97.simplequests.quest.types.SequentialQuest;
 import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
+import net.minecraft.advancements.critereon.BlockPredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.data.DataGenerator;
@@ -39,21 +42,35 @@ public class QuestGen extends QuestProvider {
             .setSilent()
             .setMaxConcurrent(1).build();
 
+    public static final ResourceLocation MINING = id("mining");
+    public static final ResourceLocation TAMING = id("tame_monster");
+    public static final ResourceLocation SHIP_TURNIP = id("ship_turnip");
+
     public QuestGen(DataGenerator gen) {
         super(gen, false);
     }
 
     @Override
     protected void add() {
-        this.addQuest(new Quest.Builder(id("ship_turnip"), "Ship a turnip", BuiltInLootTables.EMPTY)
-                .withCategory(this.main)
-                .withIcon(new ItemStack(ModItems.turnip.get()))
-                .withSubmissionTrigger(SimpleQuestIntegration.QUEST_BOARD_TRIGGER)
-                .setRepeatDelay(-1)
-                .addTaskEntry("turnip", new QuestTasks.ShippingEntry(ItemPredicate.Builder.item().of(ModItems.turnip.get()).build(), 1)));
+        this.createNPCQuest(new NPCQuest.Builder(SHIP_TURNIP, getTask(SHIP_TURNIP),
+                        List.of(id("shop_owner/male_1"), id("shop_owner/female_1")), SHIP_TURNIP)
+                        .setRepeatDelay(-1)
+                        .withCategory(this.main)
+                        .withIcon(new ItemStack(ModItems.turnipSeeds.get())),
+                List.of(of(m -> m.put("talk", new QuestTasks.NPCTalk("turnip.task.talk", false))),
+                        of(m -> m.put("shipping", new QuestTasks.ShippingEntry(ItemPredicate.Builder.item().of(ModItems.turnip.get()).build(), 1)))));
 
-        this.createNPCQuest(new NPCQuest.Builder(id("tame_monster"), getTask(id("tame_monster")),
-                        id("random_npc"), new ResourceLocation(RuneCraftory.MODID, "taming_quest_brush"))
+        this.createNPCQuest(new NPCQuest.Builder(MINING, getTask(MINING),
+                        List.of(id("smith/male_1"), id("smith/female_1")), MINING)
+                        .setRepeatDelay(-1)
+                        .withCategory(this.main)
+                        .withIcon(new ItemStack(ModItems.hammerScrap.get())),
+                List.of(of(m -> m.put("talk", new QuestTasks.NPCTalk("mining.task.talk", false))),
+                        of(m -> m.put("mine", new QuestEntryImpls.BlockInteractEntry(ItemPredicate.ANY, BlockPredicate.Builder.block().of(ModTags.ORES).build(),
+                                10, false, false, "")))));
+
+        this.createNPCQuest(new NPCQuest.Builder(TAMING, getTask(TAMING),
+                        id("random_npc"), TAMING)
                         .setRepeatDelay(-1)
                         .withCategory(this.main)
                         .withIcon(new ItemStack(SpawnEgg.fromType(ModEntities.WOOLY.get()).get())),

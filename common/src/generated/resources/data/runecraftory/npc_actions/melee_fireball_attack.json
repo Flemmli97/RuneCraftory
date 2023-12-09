@@ -1,0 +1,46 @@
+{
+  "actions": [
+    {
+      "weight": 1,
+      "concurrent_actions": [
+        {
+          "walkTime": {
+            "type": "minecraft:uniform",
+            "min": 30,
+            "max": 70
+          },
+          "type": "runecraftory:melee_attack"
+        }
+      ]
+    },
+    {
+      "weight": 1,
+      "concurrent_actions": [
+        {
+          "duration": {
+            "type": "minecraft:uniform",
+            "min": 20,
+            "max": 30
+          },
+          "type": "runecraftory:run_away"
+        },
+        {
+          "spell": "runecraftory:fireball",
+          "range": 8.0,
+          "ignoreSeal": false,
+          "walkTime": {
+            "type": "minecraft:uniform",
+            "min": 20,
+            "max": 40
+          },
+          "cooldown": {
+            "type": "minecraft:uniform",
+            "min": 10,
+            "max": 20
+          },
+          "type": "runecraftory:spell_attack"
+        }
+      ]
+    }
+  ]
+}

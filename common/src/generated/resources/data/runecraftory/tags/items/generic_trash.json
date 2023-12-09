@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "runecraftory:failed_dish",
+    "runecraftory:disastrous_dish",
+    "runecraftory:weeds",
+    "runecraftory:withered_grass",
+    "#minecraft:dirt",
+    "#c:cobblestone"
+  ]
+}

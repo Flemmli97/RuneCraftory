@@ -137,6 +137,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -201,6 +202,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     private Pair<EnumSeason, Integer> birthday = Pair.of(EnumSeason.SPRING, 1);
     //Will be used if data returns null for these values
     private Map<String, TagKey<Item>> gift = new HashMap<>();
+    private Random dataRandom = new Random();
 
     private Activity activity = Activity.IDLE;
 
@@ -896,7 +898,9 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         compound.putString("NPCLook", DataPackHandler.SERVER_PACK.npcLookManager().getId(this.getLook()).toString());
         if (this.data != NPCData.DEFAULT_DATA)
             compound.putString("NPCData", DataPackHandler.SERVER_PACK.npcDataManager().getId(this.data).toString());
-
+        if (this.data.profession().isEmpty()) {
+            compound.putString("Shop", ModNPCJobs.getIDFrom(this.shop).toString());
+        }
         compound.put("DailyUpdater", this.updater.save());
     }
 
@@ -923,7 +927,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             this.schedule.load(compound.getCompound("Schedule"));
         if (this.data.gender() == NPCData.Gender.UNDEFINED)
             this.setMale(compound.getBoolean("Male"));
-        if (this.data.profession() == null) {
+        if (this.data.profession().isEmpty()) {
             this.setShop(ModNPCJobs.getFromID(ModNPCJobs.legacyOfTag(compound.get("Shop"))));
         }
         if (this.data.look() == null && compound.contains("NPCLook"))
@@ -1019,7 +1023,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     public boolean isShopDefined() {
-        return this.data.profession() != null;
+        return !this.data.profession().isEmpty();
     }
 
     public boolean updateActivity() {
@@ -1315,7 +1319,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             WorldHandler.get(this.getServer()).npcHandler.addUniqueNPC(this.getUUID(), data);
         }
         this.data = data;
-        this.setShop(this.data.profession() != null ? this.data.profession() : ModNPCJobs.getRandomJob(this.random));
+        this.dataRandom.setSeed(this.getUUID().hashCode());
+        this.setShop(!this.data.profession().isEmpty() ? this.data.profession().get(this.dataRandom.nextInt(this.data.profession().size())) : ModNPCJobs.getRandomJob(this.random));
         this.setMale(this.data.gender() == NPCData.Gender.UNDEFINED ? this.random.nextBoolean() : this.data.gender() != NPCData.Gender.FEMALE);
         String name;
         if (this.data.name() != null) {

@@ -37,6 +37,9 @@ public class BlockTagGen extends BlockTagsProvider {
         this.tag(BlockTags.WOLVES_SPAWNABLE_ON).add(ModBlocks.snow.get());
         this.tag(BlockTags.MINEABLE_WITH_SHOVEL).add(ModBlocks.snow.get());
 
+        this.tag(ModTags.ORES)
+                .add(ModBlocks.mineralMap.values().stream().map(RegistryEntrySupplier::get).toArray(Block[]::new));
+
         this.tag(ModTags.SICKLE_DESTROYABLE)
                 .addTag(BlockTags.CORAL_PLANTS)
                 .addTag(BlockTags.CROPS)

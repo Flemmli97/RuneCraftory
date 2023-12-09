@@ -1,0 +1,17 @@
+{
+  "fallbackKey": "npc.shop_owner.male.1.talk.default",
+  "conversations": {
+    "npc.shop_owner.male.1.talk.1": {
+      "translationKey": "npc.shop_owner.male.1.talk.1",
+      "minHearts": 0,
+      "maxHearts": 10,
+      "conditions": []
+    },
+    "npc.shop_owner.male.1.talk.2": {
+      "translationKey": "npc.shop_owner.male.1.talk.2",
+      "minHearts": 0,
+      "maxHearts": 10,
+      "conditions": []
+    }
+  }
+}
