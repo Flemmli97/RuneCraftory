@@ -9,6 +9,7 @@ import io.github.flemmli97.runecraftory.common.events.EntityCalls;
 import io.github.flemmli97.runecraftory.common.events.WorldCalls;
 import io.github.flemmli97.runecraftory.common.integration.simplequest.SimpleQuestIntegration;
 import io.github.flemmli97.runecraftory.common.registry.ModActivities;
+import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.registry.ModContainer;
@@ -262,6 +263,7 @@ public class RuneCraftoryFabric implements ModInitializer {
         ModPoiTypes.POI.registerContent();
         ModStats.STATS.registerContent();
         ModNPCActions.ACTIONS.registerContent();
+        ModAttackActions.ATTACK_ACTIONS.registerContent();
 
         ModLootCondition.LOOTFUNCTION.registerContent();
         ModLootCondition.LOOTCONDITIONS.registerContent();

@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.api.action;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
 import io.github.flemmli97.runecraftory.common.network.S2CWeaponUse;
+import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import net.minecraft.server.level.ServerPlayer;
@@ -20,7 +21,7 @@ public class WeaponHandler {
 
     private static final float FADE_TICK = 3;
 
-    private AttackAction currentAction = AttackActions.NONE, chainTrackerAction = AttackActions.NONE;
+    private AttackAction currentAction = ModAttackActions.NONE.get(), chainTrackerAction = ModAttackActions.NONE.get();
     private int count, timeFrame;
 
     private AnimatedAction currentAnim, fadingAnim;
@@ -64,7 +65,7 @@ public class WeaponHandler {
     }
 
     public boolean canExecuteAction(LivingEntity entity, AttackAction action) {
-        return this.currentAction == AttackActions.NONE;
+        return this.currentAction == ModAttackActions.NONE.get();
     }
 
     public boolean canConsecutiveExecute(LivingEntity entity, AttackAction action) {
@@ -76,20 +77,20 @@ public class WeaponHandler {
     private void setAnimationBasedOnState(LivingEntity entity, AttackAction action, boolean packet, @Nullable BiConsumer<LivingEntity, AnimatedAction> attack) {
         if (this.currentAction.onEnd != null)
             this.currentAction.onEnd.accept(entity, this);
-        if (action == AttackActions.NONE && this.count >= this.currentAction.maxConsecutive.applyAsInt(entity)) {
+        if (action == ModAttackActions.NONE.get() && this.count >= this.currentAction.maxConsecutive.applyAsInt(entity)) {
             this.count = 0;
             this.chainTrackerAction = action;
         }
         this.currentAction = action;
-        if (action != AttackActions.NONE) {
+        if (action != ModAttackActions.NONE.get()) {
             this.chainTrackerAction = this.currentAction;
         }
         this.weaponConsumer = merged(attack, action.attackExecuter);
-        if (action == AttackActions.NONE)
+        if (action == ModAttackActions.NONE.get())
             this.fadingAnim = this.currentAnim;
         this.currentAnim = action.getAnimation(entity, this.getCurrentCount());
         this.timeSinceLastChange = 0;
-        if (this.currentAction != AttackActions.NONE) {
+        if (this.currentAction != ModAttackActions.NONE.get()) {
             this.count++;
             if (action.timeFrame != null && (this.chainTrackerAction != this.currentAction || this.timeFrame <= 0))
                 this.timeFrame = action.timeFrame.applyAsInt(entity);
@@ -97,7 +98,7 @@ public class WeaponHandler {
                 this.toolCharge = 0;
             }
         }
-        if (action == AttackActions.NONE)
+        if (action == ModAttackActions.NONE.get())
             this.usedWeapon = ItemStack.EMPTY;
         entity.yBodyRot = entity.yHeadRot;
         this.resetHitEntityTracker();
@@ -112,7 +113,7 @@ public class WeaponHandler {
     public void tick(LivingEntity entity) {
         if (this.currentAnim != null) {
             if (this.currentAnim.tick()) {
-                this.setAnimationBasedOnState(entity, AttackActions.NONE, false, null);
+                this.setAnimationBasedOnState(entity, ModAttackActions.NONE.get(), false, null);
             } else {
                 if (entity instanceof ServerPlayer player) {
                     PlayerData data = Platform.INSTANCE.getPlayerData(player).orElse(null);
@@ -126,7 +127,7 @@ public class WeaponHandler {
                         }
                     }
                     if (changedItem) {
-                        this.setAnimationBasedOnState(entity, AttackActions.NONE, true, null);
+                        this.setAnimationBasedOnState(entity, ModAttackActions.NONE.get(), true, null);
                     }
                 }
                 if (this.currentAnim != null && this.weaponConsumer != null)
@@ -135,7 +136,7 @@ public class WeaponHandler {
         } else {
             if (--this.timeFrame <= 0) {
                 this.count = 0;
-                this.chainTrackerAction = AttackActions.NONE;
+                this.chainTrackerAction = ModAttackActions.NONE.get();
                 this.toolCharge = 0;
             }
         }

@@ -1,10 +1,10 @@
 package io.github.flemmli97.runecraftory.api;
 
 import io.github.flemmli97.runecraftory.api.action.AttackAction;
-import io.github.flemmli97.runecraftory.api.action.AttackActions;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
+import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -27,9 +27,12 @@ public abstract class Spell extends CustomRegistryEntry<Spell> {
     }
 
     public static boolean tryUseWithCost(LivingEntity entity, ItemStack stack, Spell spell, float costMultiplier) {
+        return tryUseWithCost(entity, stack, spell, costMultiplier, stack.getItem() instanceof ItemStaffBase);
+    }
+
+    public static boolean tryUseWithCost(LivingEntity entity, ItemStack stack, Spell spell, float costMultiplier, boolean hurt) {
         return !(entity instanceof ServerPlayer player) || Platform.INSTANCE.getPlayerData(player)
                 .map(data -> {
-                    boolean hurt = stack.getItem() instanceof ItemStaffBase;
                     if (!LevelCalc.useRP(player, data, spell.rpCost() * costMultiplier, hurt, spell.percentageCost(), true, spell.costReductionSkills())) {
                         if (!hurt)
                             player.connection.send(
@@ -96,7 +99,11 @@ public abstract class Spell extends CustomRegistryEntry<Spell> {
     public abstract boolean use(ServerLevel world, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int level);
 
     public AttackAction useAction() {
-        return AttackActions.STAFF_USE;
+        return ModAttackActions.STAFF_USE.get();
+    }
+
+    public boolean canUse(ServerLevel world, LivingEntity entity, ItemStack stack) {
+        return true;
     }
 
     @Override

@@ -1,7 +1,6 @@
 package io.github.flemmli97.runecraftory.common.items.weapons;
 
 import io.github.flemmli97.runecraftory.api.Spell;
-import io.github.flemmli97.runecraftory.api.action.AttackActions;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.enums.EnumToolCharge;
@@ -10,6 +9,7 @@ import io.github.flemmli97.runecraftory.api.items.IChargeable;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.attachment.StaffData;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
+import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
@@ -67,7 +67,7 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable, Ext
     public boolean onServerSwing(LivingEntity entity, ItemStack stack) {
         if (entity instanceof Player player) {
             Platform.INSTANCE.getPlayerData(player)
-                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(player, AttackActions.STAFF, stack, null));
+                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(player, ModAttackActions.STAFF.get(), stack, null));
             return false;
         }
         return true;
@@ -136,7 +136,7 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable, Ext
                             if (spell.use(player.getLevel(), entity, stack))
                                 spell.levelSkill(player);
                         };
-                        data.getWeaponHandler().doWeaponAttack(player, AttackActions.STAFF_USE, stack, WeaponHandler.simpleServersidedAttackExecuter(run));
+                        data.getWeaponHandler().doWeaponAttack(player, ModAttackActions.STAFF_USE.get(), stack, WeaponHandler.simpleServersidedAttackExecuter(run));
                     });
                     return;
                 }

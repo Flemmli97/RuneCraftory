@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.GateEntity;
 import io.github.flemmli97.runecraftory.common.integration.simplequest.SimpleQuestIntegration;
 import io.github.flemmli97.runecraftory.common.registry.ModActivities;
+import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.registry.ModContainer;
@@ -112,6 +113,7 @@ public class RuneCraftoryForge {
         ModPoiTypes.POI.registerContent();
         ModStats.STATS.registerContent();
         ModNPCActions.ACTIONS.registerContent();
+        ModAttackActions.ATTACK_ACTIONS.registerContent();
         ModCriteria.init();
     }
 

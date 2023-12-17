@@ -2,11 +2,11 @@ package io.github.flemmli97.runecraftory.common.entities.ai.npc.actions;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.flemmli97.runecraftory.api.action.AttackActions;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCAttackGoal;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCActions;
 import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
@@ -68,13 +68,13 @@ public class AttackMeleeAction implements NPCAction {
         if (hand.getItem() instanceof IItemUsable usabe) {
             return switch (usabe.getWeaponType()) {
                 case FARM -> null;
-                case SHORTSWORD -> AttackActions.SHORT_SWORD.getAnimation(npc, npc.getRandom().nextInt(2));
-                case LONGSWORD -> AttackActions.LONG_SWORD.getAnimation(npc, npc.getRandom().nextInt(2));
-                case SPEAR -> AttackActions.SPEAR.getAnimation(npc, npc.getRandom().nextInt(2));
-                case HAXE -> AttackActions.HAMMER_AXE.getAnimation(npc, npc.getRandom().nextInt(2));
-                case DUAL -> AttackActions.DUAL_BLADES.getAnimation(npc, npc.getRandom().nextInt(2));
-                case GLOVE -> AttackActions.GLOVES.getAnimation(npc, npc.getRandom().nextInt(2));
-                case STAFF -> AttackActions.STAFF.getAnimation(npc, 0);
+                case SHORTSWORD -> ModAttackActions.SHORT_SWORD.get().getAnimation(npc, npc.getRandom().nextInt(2));
+                case LONGSWORD -> ModAttackActions.LONG_SWORD.get().getAnimation(npc, npc.getRandom().nextInt(2));
+                case SPEAR -> ModAttackActions.SPEAR.get().getAnimation(npc, npc.getRandom().nextInt(2));
+                case HAXE -> ModAttackActions.HAMMER_AXE.get().getAnimation(npc, npc.getRandom().nextInt(2));
+                case DUAL -> ModAttackActions.DUAL_BLADES.get().getAnimation(npc, npc.getRandom().nextInt(2));
+                case GLOVE -> ModAttackActions.GLOVES.get().getAnimation(npc, npc.getRandom().nextInt(2));
+                case STAFF -> ModAttackActions.STAFF.get().getAnimation(npc, 0);
             };
         }
         return null;

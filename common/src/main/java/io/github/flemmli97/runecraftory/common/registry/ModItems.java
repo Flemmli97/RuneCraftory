@@ -760,7 +760,7 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> mediPara = spell(() -> ModSpells.MEDI_PARA, "medi_paralysis");
     public static final RegistryEntrySupplier<Item> mediSeal = spell(() -> ModSpells.MEDI_SEAL, "medi_seal");
     public static final RegistryEntrySupplier<Item> greeting = spell(() -> ModSpells.EMPTY, "greeting");
-    public static final RegistryEntrySupplier<Item> powerWave = spell(() -> ModSpells.EMPTY, "power_wave");
+    public static final RegistryEntrySupplier<Item> powerWave = spell(() -> ModSpells.POWER_WAVE, "power_wave");
     public static final RegistryEntrySupplier<Item> dashSlash = spell(() -> ModSpells.EMPTY, "dash_slash");
     public static final RegistryEntrySupplier<Item> rushAttack = spell(() -> ModSpells.EMPTY, "rush_attack");
     public static final RegistryEntrySupplier<Item> roundBreak = spell(() -> ModSpells.EMPTY, "round_break");

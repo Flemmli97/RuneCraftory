@@ -48,6 +48,7 @@ import io.github.flemmli97.runecraftory.common.spells.PoisonBallSpell;
 import io.github.flemmli97.runecraftory.common.spells.PoisonHealSpell;
 import io.github.flemmli97.runecraftory.common.spells.PoisonNeedleSpell;
 import io.github.flemmli97.runecraftory.common.spells.PollenPuffSpell;
+import io.github.flemmli97.runecraftory.common.spells.PowerWaveSpell;
 import io.github.flemmli97.runecraftory.common.spells.PrismSpell;
 import io.github.flemmli97.runecraftory.common.spells.RafflesiaBreathSpell;
 import io.github.flemmli97.runecraftory.common.spells.RafflesiaCircleSpell;
@@ -131,6 +132,8 @@ public class ModSpells {
     public static final RegistryEntrySupplier<Spell> MEDI_POISON = registerSpell("medi_poison", PoisonHealSpell::new, new SpellProperties.Builder(20, 15).withXPGain(EnumSkills.LOVE, 10).affectedSkill(EnumSkills.LOVE).usePercentageCost());
     public static final RegistryEntrySupplier<Spell> MEDI_PARA = registerSpell("medi_paralysis", ParaHealSpell::new, new SpellProperties.Builder(20, 20).withXPGain(EnumSkills.LOVE, 10).affectedSkill(EnumSkills.LOVE).usePercentageCost());
     public static final RegistryEntrySupplier<Spell> MEDI_SEAL = registerSpell("medi_seal", UnsealSpell::new, new SpellProperties.Builder(20, 30).withXPGain(EnumSkills.LOVE, 10).affectedSkill(EnumSkills.LOVE).usePercentageCost());
+
+    public static final RegistryEntrySupplier<Spell> POWER_WAVE = registerSpell("power_wave", PowerWaveSpell::new, new SpellProperties.Builder(5, 20).withXPGain(EnumSkills.SHORTSWORD, 10).affectedSkill(EnumSkills.SHORTSWORD));
 
     public static final RegistryEntrySupplier<Spell> TELEPORT = registerSpell("teleport", TeleportSpell::new, new SpellProperties.Builder(30, 0));
 

@@ -1,5 +1,8 @@
-package io.github.flemmli97.runecraftory.api.action;
+package io.github.flemmli97.runecraftory.common.registry;
 
+import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.api.action.AttackAction;
+import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemAxeBase;
@@ -8,13 +11,21 @@ import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
+import io.github.flemmli97.runecraftory.platform.LazyGetter;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.common.utils.MathUtils;
 import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
+import io.github.flemmli97.tenshilib.platform.PlatformUtils;
+import io.github.flemmli97.tenshilib.platform.registry.PlatformRegistry;
+import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
+import io.github.flemmli97.tenshilib.platform.registry.SimpleRegistryWrapper;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -28,13 +39,18 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
+import java.util.function.Supplier;
 
-public class AttackActions {
+public class ModAttackActions {
 
-    public static final AttackAction NONE = AttackAction.register("none", new AttackAction.Builder(null));
+    public static final ResourceKey<? extends Registry<AttackAction>> ATTACK_ACTION_KEY = ResourceKey.createRegistryKey(new ResourceLocation(RuneCraftory.MODID, "attack_action"));
+    public static final Supplier<SimpleRegistryWrapper<AttackAction>> ATTACK_ACTION_REGISTRY = new LazyGetter<>(() -> PlatformUtils.INSTANCE.registry(ATTACK_ACTION_KEY));
+    public static final PlatformRegistry<AttackAction> ATTACK_ACTIONS = PlatformUtils.INSTANCE.customRegistry(AttackAction.class, ATTACK_ACTION_KEY, new ResourceLocation(RuneCraftory.MODID, "none"), true, true);
+
+    public static final RegistryEntrySupplier<AttackAction> NONE = register("none", () -> new AttackAction.Builder(null));
 
     //Short sword attack sequence
-    public static final AttackAction SHORT_SWORD = AttackAction.register("short_sword", new AttackAction.Builder((entity, count) -> {
+    public static final RegistryEntrySupplier<AttackAction> SHORT_SWORD = register("short_sword", () -> new AttackAction.Builder((entity, count) -> {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
         return PlayerModelAnimations.SHORT_SWORD.get(count).create(speed);
     }).allowSelfOverride((entity, w) -> switch (w.getCurrentCount()) {
@@ -109,9 +125,9 @@ public class AttackActions {
             .setMaxConsecutive(entity -> AttackAction.canPerform(entity, EnumSkills.SHORTSWORD, 20) ? 6 : 5, e -> 0)
             .setInvulnerability((e, w) -> w.getCurrentCount() == 6)
             .disableItemSwitch().disableMovement());
-    public static final AttackAction SHORT_SWORD_USE = AttackAction.register("short_sword_use", new AttackAction.Builder((entity, count) -> new AnimatedAction(16 + 1, 6, "short_sword_use")).disableMovement());
+    public static final RegistryEntrySupplier<AttackAction> SHORT_SWORD_USE = register("short_sword_use", () -> new AttackAction.Builder((entity, count) -> new AnimatedAction(16 + 1, 6, "short_sword_use")).disableMovement());
 
-    public static final AttackAction LONG_SWORD = AttackAction.register("long_sword", new AttackAction.Builder((entity, count) -> {
+    public static final RegistryEntrySupplier<AttackAction> LONG_SWORD = register("long_sword", () -> new AttackAction.Builder((entity, count) -> {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
         return PlayerModelAnimations.LONG_SWORD.get(count).create(speed);
     }).allowSelfOverride((entity, w) -> switch (w.getCurrentCount()) {
@@ -164,9 +180,9 @@ public class AttackActions {
             .setMaxConsecutive(entity -> AttackAction.canPerform(entity, EnumSkills.LONGSWORD, 20) ? 4 : 3, entity -> 0)
             .setInvulnerability((e, w) -> w.getCurrentCount() == 4)
             .disableItemSwitch().disableMovement());
-    public static final AttackAction LONGSWORD_USE = AttackAction.register("long_sword_use", new AttackAction.Builder((entity, count) -> new AnimatedAction(16 + 1, 5, "long_sword_use")).disableMovement());
+    public static final RegistryEntrySupplier<AttackAction> LONGSWORD_USE = register("long_sword_use", () -> new AttackAction.Builder((entity, count) -> new AnimatedAction(16 + 1, 5, "long_sword_use")).disableMovement());
 
-    public static final AttackAction SPEAR = AttackAction.register("spear", new AttackAction.Builder((entity, count) -> {
+    public static final RegistryEntrySupplier<AttackAction> SPEAR = register("spear", () -> new AttackAction.Builder((entity, count) -> {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
         return PlayerModelAnimations.SPEAR.get(count).create(speed);
     }).allowSelfOverride((entity, w) -> switch (w.getCurrentCount()) {
@@ -252,7 +268,7 @@ public class AttackActions {
             .setMaxConsecutive(entity -> AttackAction.canPerform(entity, EnumSkills.SPEAR, 20) ? 5 : 4, e -> 0)
             .setInvulnerability((e, w) -> w.getCurrentCount() == 5)
             .disableItemSwitch().disableMovement());
-    public static final AttackAction SPEAR_USE = AttackAction.register("spear_use", new AttackAction.Builder((entity, count) -> count > 1 ? new AnimatedAction((int) Math.ceil(1.12 * 20) + 1, 3, "spear_use_continue") : new AnimatedAction((int) Math.ceil(1.2 * 20) + 1, 5, "spear_use")).allowSelfOverride((entity, w) -> {
+    public static final RegistryEntrySupplier<AttackAction> SPEAR_USE = register("spear_use", () -> new AttackAction.Builder((entity, count) -> count > 1 ? new AnimatedAction((int) Math.ceil(1.12 * 20) + 1, 3, "spear_use_continue") : new AnimatedAction((int) Math.ceil(1.2 * 20) + 1, 5, "spear_use")).allowSelfOverride((entity, w) -> {
         AnimatedAction anim = w.getCurrentAnim();
         return anim == null || (anim.getID().equals("spear_use_continue") ? (anim.isPastTick(0.16) && !anim.isPastTick(0.40)) : (anim.isPastTick(0.28) && !anim.isPastTick(0.44)));
     }).doWhileAction(((entity, stack, handler, anim) -> {
@@ -262,7 +278,7 @@ public class AttackActions {
         }
     })).setMaxConsecutive(e -> 20, e -> 6).disableMovement());
 
-    public static final AttackAction HAMMER_AXE = AttackAction.register("hammer_axe", new AttackAction.Builder((entity, count) -> {
+    public static final RegistryEntrySupplier<AttackAction> HAMMER_AXE = register("hammer_axe", () -> new AttackAction.Builder((entity, count) -> {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
         return PlayerModelAnimations.HAMMER_AXE.get(count).create(speed);
     }).allowSelfOverride((entity, w) -> switch (w.getCurrentCount()) {
@@ -306,9 +322,9 @@ public class AttackActions {
             .setMaxConsecutive(entity -> AttackAction.canPerform(entity, EnumSkills.HAMMERAXE, 20) ? 3 : 2, e -> 0)
             .setInvulnerability((e, w) -> w.getCurrentCount() == 3)
             .disableItemSwitch().disableMovement());
-    public static final AttackAction HAMMER_AXE_USE = AttackAction.register("hammer_axe_use", new AttackAction.Builder((entity, count) -> new AnimatedAction(20 + 1, 12, "hammer_axe_use")).disableMovement().doWhileAction((entity, stack, handler, anim) -> ItemAxeBase.moveEntity(entity).accept(anim)));
+    public static final RegistryEntrySupplier<AttackAction> HAMMER_AXE_USE = register("hammer_axe_use", () -> new AttackAction.Builder((entity, count) -> new AnimatedAction(20 + 1, 12, "hammer_axe_use")).disableMovement().doWhileAction((entity, stack, handler, anim) -> ItemAxeBase.moveEntity(entity).accept(anim)));
 
-    public static final AttackAction DUAL_BLADES = AttackAction.register("dual_blades", new AttackAction.Builder((entity, count) -> {
+    public static final RegistryEntrySupplier<AttackAction> DUAL_BLADES = register("dual_blades", () -> new AttackAction.Builder((entity, count) -> {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
         return PlayerModelAnimations.DUAL_BLADES.get(count).create(speed);
     }).allowSelfOverride((entity, w) -> switch (w.getCurrentCount()) {
@@ -419,9 +435,9 @@ public class AttackActions {
             .setMaxConsecutive(entity -> AttackAction.canPerform(entity, EnumSkills.DUAL, 20) ? 8 : 7, e -> 0)
             .setInvulnerability((e, w) -> w.getCurrentCount() == 8)
             .disableItemSwitch().disableMovement());
-    public static final AttackAction DUAL_USE = AttackAction.register("dual_blade_use", new AttackAction.Builder((entity, count) -> new AnimatedAction(15 + 1, 7, "dual_blades_use")).disableMovement());
+    public static final RegistryEntrySupplier<AttackAction> DUAL_USE = register("dual_blade_use", () -> new AttackAction.Builder((entity, count) -> new AnimatedAction(15 + 1, 7, "dual_blades_use")).disableMovement());
 
-    public static final AttackAction GLOVES = AttackAction.register("gloves", new AttackAction.Builder((entity, count) -> {
+    public static final RegistryEntrySupplier<AttackAction> GLOVES = register("gloves", () -> new AttackAction.Builder((entity, count) -> {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
         return PlayerModelAnimations.GLOVES.get(count).create(speed);
     }).allowSelfOverride((entity, w) -> switch (w.getCurrentCount()) {
@@ -504,7 +520,7 @@ public class AttackActions {
                     return Pose.SPIN_ATTACK;
                 return null;
             }));
-    public static final AttackAction GLOVE_USE = AttackAction.register("glove_use", new AttackAction.Builder((entity, count) -> new AnimatedAction(27 + 1, 4, "glove_use")).disableMovement().doAtStart((e, w) -> e.maxUpStep += 0.5).doAtEnd((e, w) -> e.maxUpStep -= 0.5).doWhileAction(((entity, stack, handler, anim) -> {
+    public static final RegistryEntrySupplier<AttackAction> GLOVE_USE = register("glove_use", () -> new AttackAction.Builder((entity, count) -> new AnimatedAction(27 + 1, 4, "glove_use")).disableMovement().doAtStart((e, w) -> e.maxUpStep += 0.5).doAtEnd((e, w) -> e.maxUpStep -= 0.5).doWhileAction(((entity, stack, handler, anim) -> {
         if (entity instanceof ServerPlayer serverPlayer) {
             if (!handler.getCurrentAnim().isPastTick(0.16))
                 return;
@@ -532,7 +548,7 @@ public class AttackActions {
         return null;
     }));
 
-    public static final AttackAction STAFF = AttackAction.register("staff", new AttackAction.Builder((entity, count) -> {
+    public static final RegistryEntrySupplier<AttackAction> STAFF = register("staff", () -> new AttackAction.Builder((entity, count) -> {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
         return PlayerModelAnimations.STAFF.create(speed);
     }).allowSelfOverride((entity, w) -> switch (w.getCurrentCount()) {
@@ -553,18 +569,33 @@ public class AttackActions {
             }))
             .disableItemSwitch().disableMovement());
 
-    public static final AttackAction STAFF_USE = AttackAction.register("staff_use", new AttackAction.Builder((entity, count) -> PlayerModelAnimations.STAFF_USE.create()).disableMovement());
+    public static final RegistryEntrySupplier<AttackAction> STAFF_USE = register("staff_use", () -> new AttackAction.Builder((entity, count) -> PlayerModelAnimations.STAFF_USE.create()).disableMovement());
 
-    public static final AttackAction TOOL_AXE_USE = AttackAction.register("tool_axe", new AttackAction.Builder((entity, count) -> AnimatedAction.builder(20 + 1, "hammer_axe_use").marker(12).speed(1.3f).build()).allowSelfOverride((entity, w) -> w.getCurrentAnim().isPastTick(w.getCurrentAnim().getAttackTime())).disableMovement().setMaxConsecutive(p -> 3, p -> 15));
-    public static final AttackAction TOOL_HAMMER_USE = AttackAction.register("tool_hammer", new AttackAction.Builder((entity, count) -> AnimatedAction.builder(20 + 1, "hammer_axe_use").marker(12).speed(1.3f).build()).allowSelfOverride((entity, w) -> w.getCurrentAnim().isPastTick(w.getCurrentAnim().getAttackTime())).disableMovement().setMaxConsecutive(p -> 3, p -> 15));
-    public static final AttackAction FIREBALL_USE = AttackAction.register("fireball_use", new AttackAction.Builder((entity, count) -> PlayerModelAnimations.STAFF_USE.create()).allowSelfOverride((e, w) -> {
+    public static final RegistryEntrySupplier<AttackAction> TOOL_AXE_USE = register("tool_axe", () -> new AttackAction.Builder((entity, count) -> AnimatedAction.builder(20 + 1, "hammer_axe_use").marker(12).speed(1.3f).build()).allowSelfOverride((entity, w) -> w.getCurrentAnim().isPastTick(w.getCurrentAnim().getAttackTime())).disableMovement().setMaxConsecutive(p -> 3, p -> 15));
+    public static final RegistryEntrySupplier<AttackAction> TOOL_HAMMER_USE = register("tool_hammer", () -> new AttackAction.Builder((entity, count) -> AnimatedAction.builder(20 + 1, "hammer_axe_use").marker(12).speed(1.3f).build()).allowSelfOverride((entity, w) -> w.getCurrentAnim().isPastTick(w.getCurrentAnim().getAttackTime())).disableMovement().setMaxConsecutive(p -> 3, p -> 15));
+    public static final RegistryEntrySupplier<AttackAction> FIREBALL_USE = register("fireball_use", () -> new AttackAction.Builder((entity, count) -> PlayerModelAnimations.STAFF_USE.create()).allowSelfOverride((e, w) -> {
         AnimatedAction anim = w.getCurrentAnim();
         return anim == null || anim.isPastTick(anim.getAttackTime());
     }).disableMovement().setMaxConsecutive(p -> 3, p -> 8));
-    public static final AttackAction FIREBALL_BIG_USE = AttackAction.register("fireball_big_use", new AttackAction.Builder((entity, count) -> PlayerModelAnimations.STAFF_USE.create()).allowSelfOverride((e, w) -> {
+    public static final RegistryEntrySupplier<AttackAction> FIREBALL_BIG_USE = register("fireball_big_use", () -> new AttackAction.Builder((entity, count) -> PlayerModelAnimations.STAFF_USE.create()).allowSelfOverride((e, w) -> {
         AnimatedAction anim = w.getCurrentAnim();
         return anim == null || anim.isPastTick(anim.getAttackTime());
     }).disableMovement().setMaxConsecutive(p -> 2, p -> 8));
 
-    public static final AttackAction TOOL_ATTACK = AttackAction.register("tool_attack", new AttackAction.Builder((entity, count) -> new AnimatedAction(20, 1, "tool_attack")));
+    public static final RegistryEntrySupplier<AttackAction> TOOL_ATTACK = register("tool_attack", () -> new AttackAction.Builder((entity, count) -> new AnimatedAction(20, 1, "tool_attack")));
+
+    public static final RegistryEntrySupplier<AttackAction> POWER_WAVE = register("power_wave", () -> new AttackAction.Builder((entity, count) -> {
+        float speed = (float) (ItemNBT.attackSpeedModifier(entity));
+        return PlayerModelAnimations.POWER_WAVE.create(speed);
+    }).doWhileAction(((entity, stack, handler, anim) -> {
+                if (anim.isAtTick(0.4)) {
+                    entity.setDeltaMovement(AttackAction.fromRelativeVector(entity, new Vec3(0, 0, 1)).scale(0.3));
+                    AttackAction.sendMotionUpdate(entity);
+                }
+            }))
+            .disableItemSwitch().disableMovement());
+
+    public static RegistryEntrySupplier<AttackAction> register(String id, Supplier<AttackAction.Builder> builder) {
+        return ATTACK_ACTIONS.register(id, () -> builder.get().build());
+    }
 }

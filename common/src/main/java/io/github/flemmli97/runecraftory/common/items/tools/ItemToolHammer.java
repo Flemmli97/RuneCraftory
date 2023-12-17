@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.common.items.tools;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import io.github.flemmli97.runecraftory.api.action.AttackActions;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.enums.EnumToolCharge;
@@ -13,6 +12,7 @@ import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
+import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -142,7 +142,7 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
         if (this.tier.getTierLevel() != 0 && entity instanceof ServerPlayer player) {
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                int useTime = data.getWeaponHandler().canConsecutiveExecute(player, AttackActions.TOOL_HAMMER_USE) ? data.getWeaponHandler().getToolCharge() : ((this.getUseDuration(stack) - timeLeft) / this.getChargeTime(stack));
+                int useTime = data.getWeaponHandler().canConsecutiveExecute(player, ModAttackActions.TOOL_HAMMER_USE.get()) ? data.getWeaponHandler().getToolCharge() : ((this.getUseDuration(stack) - timeLeft) / this.getChargeTime(stack));
                 int range = Math.min(useTime, this.tier.getTierLevel());
                 BlockHitResult result = getPlayerPOVHitResult(world, player, ClipContext.Fluid.NONE);
                 if (range == 0) {
@@ -150,7 +150,7 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
                         this.useOnBlock(new UseOnContext((Player) entity, entity.getUsedItemHand(), result), false);
                     }
                 } else {
-                    data.getWeaponHandler().doWeaponAttack(player, AttackActions.TOOL_HAMMER_USE, stack, WeaponHandler.simpleServersidedAttackExecuter(() -> {
+                    data.getWeaponHandler().doWeaponAttack(player, ModAttackActions.TOOL_HAMMER_USE.get(), stack, WeaponHandler.simpleServersidedAttackExecuter(() -> {
                         setDontUseRPFlagTemp(stack, true);
                         BlockPos pos = entity.blockPosition();
                         if (result != null && result.getType() != HitResult.Type.MISS) {

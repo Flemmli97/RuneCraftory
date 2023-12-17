@@ -37,6 +37,8 @@ public class ItemSpell extends Item {
     }
 
     public boolean useSpell(ServerPlayer player, ItemStack stack) {
+        if (!this.getSpell().canUse(player.getLevel(), player, stack))
+            return false;
         if (this.getSpell().useAction() != null) {
             return Platform.INSTANCE.getPlayerData(player)
                     .map(d -> {

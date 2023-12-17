@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.common.items.weapons;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import io.github.flemmli97.runecraftory.api.action.AttackActions;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.enums.EnumToolCharge;
@@ -11,6 +10,7 @@ import io.github.flemmli97.runecraftory.api.items.IChargeable;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
+import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
@@ -70,7 +70,7 @@ public class ItemDualBladeBase extends SwordItem implements IItemUsable, ICharge
     public boolean onServerSwing(LivingEntity entity, ItemStack stack) {
         if (entity instanceof Player player) {
             Platform.INSTANCE.getPlayerData(player)
-                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(player, AttackActions.DUAL_BLADES, stack, null));
+                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(player, ModAttackActions.DUAL_BLADES.get(), stack, null));
             return false;
         }
         return true;
@@ -119,7 +119,7 @@ public class ItemDualBladeBase extends SwordItem implements IItemUsable, ICharge
         if (hand == InteractionHand.OFF_HAND)
             return InteractionResultHolder.pass(itemstack);
         boolean canCharge = Platform.INSTANCE.getPlayerData(player)
-                .map(data -> (data.getSkillLevel(EnumSkills.DUAL).getLevel() >= 5 || player.isCreative()) && data.getWeaponHandler().canExecuteAction(player, AttackActions.DUAL_USE)).orElse(false);
+                .map(data -> (data.getSkillLevel(EnumSkills.DUAL).getLevel() >= 5 || player.isCreative()) && data.getWeaponHandler().canExecuteAction(player, ModAttackActions.DUAL_USE.get())).orElse(false);
         if (canCharge) {
             player.startUsingItem(hand);
             return InteractionResultHolder.consume(itemstack);
@@ -149,7 +149,7 @@ public class ItemDualBladeBase extends SwordItem implements IItemUsable, ICharge
                             LevelCalc.levelSkill(player, data, EnumSkills.DUAL, 3);
                         }
                     };
-                    data.getWeaponHandler().doWeaponAttack(player, AttackActions.DUAL_USE, stack, WeaponHandler.simpleServersidedAttackExecuter(run));
+                    data.getWeaponHandler().doWeaponAttack(player, ModAttackActions.DUAL_USE.get(), stack, WeaponHandler.simpleServersidedAttackExecuter(run));
                 });
                 return;
             }

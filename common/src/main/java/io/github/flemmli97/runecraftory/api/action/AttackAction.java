@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.item.IAOEWeapon;
 import io.github.flemmli97.tenshilib.common.utils.AOEWeaponHandler;
+import io.github.flemmli97.tenshilib.platform.registry.CustomRegistryEntry;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -15,17 +16,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
-import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.ToIntFunction;
 
-public class AttackAction {
-
-    private static final Map<String, AttackAction> MAP = new HashMap<>();
+public class AttackAction extends CustomRegistryEntry<AttackAction> {
 
     private final BiFunction<LivingEntity, Integer, AnimatedAction> anim;
     /**
@@ -45,11 +41,9 @@ public class AttackAction {
 
     public final BiFunction<LivingEntity, WeaponHandler, Pose> withPose;
 
-    private final String id;
-
     private AttackAction(BiFunction<LivingEntity, Integer, AnimatedAction> anim, ActiveActionHandler attackExecuter, BiConsumer<LivingEntity, WeaponHandler> onStart, BiConsumer<LivingEntity, WeaponHandler> onEnd,
                          ToIntFunction<LivingEntity> maxConsecutive, ToIntFunction<LivingEntity> timeFrame, boolean disableItemSwitch, boolean disableMovement, boolean disableAnimation,
-                         BiPredicate<LivingEntity, WeaponHandler> canOverride, String id, BiPredicate<LivingEntity, WeaponHandler> isInvulnerable, BiFunction<LivingEntity, WeaponHandler, Pose> withPose) {
+                         BiPredicate<LivingEntity, WeaponHandler> canOverride, BiPredicate<LivingEntity, WeaponHandler> isInvulnerable, BiFunction<LivingEntity, WeaponHandler, Pose> withPose) {
         this.anim = anim == null ? (player, data) -> null : anim;
         this.attackExecuter = attackExecuter;
         this.onStart = onStart;
@@ -60,20 +54,8 @@ public class AttackAction {
         this.disableMovement = disableMovement;
         this.disableAnimation = disableAnimation;
         this.canOverride = canOverride;
-        this.id = id;
         this.isInvulnerable = isInvulnerable;
         this.withPose = withPose;
-    }
-
-    public static AttackAction register(String id, AttackAction.Builder builder) {
-        AttackAction action = builder.build(id);
-        MAP.put(id, action);
-        return action;
-    }
-
-    @Nullable
-    public static AttackAction get(String id) {
-        return MAP.get(id);
     }
 
     public static Vec3 fromRelativeVector(Entity entity, Vec3 relative) {
@@ -108,10 +90,6 @@ public class AttackAction {
     public AnimatedAction getAnimation(LivingEntity entity, int count) {
         AnimatedAction anim = this.anim.apply(entity, count);
         return anim != null ? anim.create() : null;
-    }
-
-    public String getId() {
-        return this.id;
     }
 
     public interface ActiveActionHandler {
@@ -192,8 +170,8 @@ public class AttackAction {
             return this;
         }
 
-        private AttackAction build(String id) {
-            return new AttackAction(this.anim, this.attackExecuter, this.onStart, this.onEnd, this.maxConsecutive, this.timeFrame, this.disableItemSwitch, this.disableMovement, this.disableAnimation, this.canOverride, id, this.isInvulnerable, this.withPose);
+        public AttackAction build() {
+            return new AttackAction(this.anim, this.attackExecuter, this.onStart, this.onEnd, this.maxConsecutive, this.timeFrame, this.disableItemSwitch, this.disableMovement, this.disableAnimation, this.canOverride, this.isInvulnerable, this.withPose);
         }
     }
 }

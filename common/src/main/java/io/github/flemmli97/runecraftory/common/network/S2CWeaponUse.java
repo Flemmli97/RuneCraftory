@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.network;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.action.AttackAction;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
+import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -22,7 +23,7 @@ public class S2CWeaponUse implements Packet {
     }
 
     public static S2CWeaponUse read(FriendlyByteBuf buf) {
-        return new S2CWeaponUse(AttackAction.get(buf.readUtf()), buf.readItem());
+        return new S2CWeaponUse(ModAttackActions.ATTACK_ACTION_REGISTRY.get().getFromId(buf.readResourceLocation()), buf.readItem());
     }
 
     public static void handle(S2CWeaponUse pkt) {
@@ -34,7 +35,7 @@ public class S2CWeaponUse implements Packet {
 
     @Override
     public void write(FriendlyByteBuf buf) {
-        buf.writeUtf(this.action.getId());
+        buf.writeResourceLocation(this.action.getRegistryName());
         buf.writeItem(this.stack);
     }
 

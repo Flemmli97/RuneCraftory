@@ -101,6 +101,8 @@ public class PlayerModelAnimations {
     public static final AnimatedAction STAFF = addTo(AnimatedAction.builder(EnumWeaponType.STAFF.defaultWeaponSpeed + 1, "staff").marker(9).build());
     public static final AnimatedAction STAFF_USE = addTo(new AnimatedAction(16 + 1, 4, "staff_use"));
 
+    public static final AnimatedAction POWER_WAVE = addTo(new AnimatedAction(14 + 1, 9, "power_wave"));
+
     public static List<AnimatedAction> getAll() {
         return ImmutableList.copyOf(ALL);
     }

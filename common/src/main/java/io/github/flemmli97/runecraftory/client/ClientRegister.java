@@ -361,6 +361,7 @@ public class ClientRegister {
         consumer.register(ModEntities.BONE_NEEDLE.get(), RenderBoneNeedle::new);
         consumer.register(ModEntities.ENERGY_ORB.get(), RenderEnergyOrb::new);
         consumer.register(ModEntities.HOMING_SPIKES.get(), RenderSpikes::new);
+        consumer.register(ModEntities.POWER_WAVE.get(), EmptyRender::new);
 
         consumer.register(ModEntities.DARK_BULLET.get(), RenderDarkBullet::new);
 

@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.mixinhelper;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
-import io.github.flemmli97.runecraftory.api.action.AttackActions;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.client.ArmorModels;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
@@ -12,6 +11,7 @@ import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.items.BigWeapon;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemDualBladeBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemGloveBase;
+import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -142,7 +142,7 @@ public class ClientMixinUtils {
         if (ClientHandlers.getAnimatedPlayerModel() != null && anim != null) {
             boolean ignoreRiding = false;
             if (entity instanceof Player player)
-                ignoreRiding = Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().getCurrentAction() == AttackActions.DUAL_USE).orElse(false);
+                ignoreRiding = Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().getCurrentAction() == ModAttackActions.DUAL_USE.get()).orElse(false);
             ClientHandlers.getAnimatedPlayerModel().copyTo(model, false, ignoreRiding);
         }
     }
