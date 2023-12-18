@@ -1,8 +1,6 @@
 package io.github.flemmli97.runecraftory.api.action;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
-import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
-import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.item.IAOEWeapon;
@@ -90,12 +88,6 @@ public class AttackAction extends CustomRegistryEntry<AttackAction> {
             if (stack.getItem() instanceof IAOEWeapon weapon)
                 AOEWeaponHandler.onAOEWeaponSwing(player, stack, weapon);
         }
-    }
-
-    public static int spellLevel(ItemStack stack) {
-        if (stack.getItem() instanceof ItemSpell)
-            return ItemNBT.itemLevel(stack);
-        return 1;
     }
 
     public AnimatedAction getAnimation(LivingEntity entity, int count) {

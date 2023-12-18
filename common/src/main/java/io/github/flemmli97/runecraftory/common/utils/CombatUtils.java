@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.utils;
 
+import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
@@ -7,6 +8,7 @@ import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.IBaseMob;
+import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
@@ -42,6 +44,7 @@ import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -49,6 +52,7 @@ import java.util.function.Predicate;
 public class CombatUtils {
 
     private static final UUID TEMP_ATTRIBUTE_MOD = UUID.fromString("5c8e5c2d-1eb0-434a-858f-8ab81f51832c");
+    private static final UUID TEMP_ATTRIBUTE_MOD_MULT = UUID.fromString("e2465d35-6c65-4ec8-a13c-a305a9d34c66");
 
     /**
      * For damage calculation target should be null. The damage reduction gets done at the target.
@@ -391,7 +395,7 @@ public class CombatUtils {
             elementalEffects(attacker, source.getElement(), target);
         }
         if (attacker instanceof LivingEntity livingAttacker) {
-            source.getAttributesChange().forEach((att, val) -> CombatUtils.removeAttribute(livingAttacker, att));
+            source.getAttributesChange().forEach((att, val) -> CombatUtils.removeTempAttribute(livingAttacker, att));
         }
         return success;
     }
@@ -515,10 +519,18 @@ public class CombatUtils {
             inst.addTransientModifier(new AttributeModifier(TEMP_ATTRIBUTE_MOD, "temp_mod", val, AttributeModifier.Operation.ADDITION));
     }
 
-    public static void removeAttribute(LivingEntity entity, Attribute att) {
+    public static void applyTempAttributeMult(LivingEntity entity, Attribute att, double val) {
         AttributeInstance inst = entity.getAttribute(att);
-        if (inst != null)
+        if (inst != null && inst.getModifier(TEMP_ATTRIBUTE_MOD_MULT) == null)
+            inst.addTransientModifier(new AttributeModifier(TEMP_ATTRIBUTE_MOD_MULT, "temp_mod_mult", val, AttributeModifier.Operation.MULTIPLY_TOTAL));
+    }
+
+    public static void removeTempAttribute(LivingEntity entity, Attribute att) {
+        AttributeInstance inst = entity.getAttribute(att);
+        if (inst != null) {
             inst.removeModifier(TEMP_ATTRIBUTE_MOD);
+            inst.removeModifier(TEMP_ATTRIBUTE_MOD_MULT);
+        }
     }
 
     public static void hitEntityWithItemPlayer(ServerPlayer player, ItemStack stack) {
@@ -566,6 +578,10 @@ public class CombatUtils {
     }
 
     public static List<LivingEntity> spinAttackHandler(LivingEntity entity, Vec3 dir, float aoe, float rangeBonus, Predicate<LivingEntity> pred) {
+        return spinAttackHandler(entity, dir, aoe, rangeBonus, pred, null);
+    }
+
+    public static List<LivingEntity> spinAttackHandler(LivingEntity entity, Vec3 dir, float aoe, float rangeBonus, Predicate<LivingEntity> pred, Pair<Map<Attribute, Double>, Map<Attribute, Double>> attributes) {
         if (entity.level.isClientSide)
             return List.of();
         float reach = (float) entity.getAttributeValue(ModAttributes.ATTACK_RANGE.get()) + rangeBonus;
@@ -574,16 +590,28 @@ public class CombatUtils {
                 t -> t != entity && (pred == null || pred.test(t)) && !t.isAlliedTo(entity) && t.isPickable()
                         && (t.getBoundingBox().minY <= entity.getBoundingBox().maxY || t.getBoundingBox().maxY >= entity.getBoundingBox().minY)
                         && circ.intersects(t.level, t.getBoundingBox().inflate(0.15, entity.getBbHeight() * 1.5, 0.15)));
+        if (attributes != null) {
+            attributes.getFirst().forEach((att, val) -> applyTempAttribute(entity, att, val));
+            attributes.getSecond().forEach((att, val) -> applyTempAttributeMult(entity, att, val));
+        }
         for (int i = 0; i < list.size(); ++i) {
             if (entity instanceof Player player)
                 CombatUtils.playerAttackWithItem(player, list.get(i), i == list.size() - 1, true, i == list.size() - 1);
             else if (entity instanceof Mob mob)
                 mob.doHurtTarget(list.get(i));
         }
+        if (attributes != null) {
+            attributes.getFirst().forEach((att, val) -> removeTempAttribute(entity, att));
+            attributes.getSecond().forEach((att, val) -> removeTempAttribute(entity, att));
+        }
         return list;
     }
 
     public static List<LivingEntity> spinAttackHandler(LivingEntity entity, float minYRot, float maxYRot, float rangeBonus, Predicate<LivingEntity> pred) {
+        return spinAttackHandler(entity, minYRot, maxYRot, rangeBonus, pred, null);
+    }
+
+    public static List<LivingEntity> spinAttackHandler(LivingEntity entity, float minYRot, float maxYRot, float rangeBonus, Predicate<LivingEntity> pred, Pair<Map<Attribute, Double>, Map<Attribute, Double>> attributes) {
         if (entity.level.isClientSide)
             return List.of();
         float rot = Mth.wrapDegrees(maxYRot - minYRot);
@@ -594,16 +622,28 @@ public class CombatUtils {
                 t -> t != entity && (pred == null || pred.test(t)) && !t.isAlliedTo(entity) && t.isPickable()
                         && (t.getBoundingBox().minY <= entity.getBoundingBox().maxY || t.getBoundingBox().maxY >= entity.getBoundingBox().minY)
                         && circ.intersects(t.level, t.getBoundingBox().inflate(0.15, entity.getBbHeight() * 1.5, 0.15)));
+        if (attributes != null) {
+            attributes.getFirst().forEach((att, val) -> applyTempAttribute(entity, att, val));
+            attributes.getSecond().forEach((att, val) -> applyTempAttributeMult(entity, att, val));
+        }
         for (int i = 0; i < list.size(); ++i) {
             if (entity instanceof Player player)
                 CombatUtils.playerAttackWithItem(player, list.get(i), i == list.size() - 1, true, i == list.size() - 1);
             else if (entity instanceof Mob mob)
                 mob.doHurtTarget(list.get(i));
         }
+        if (attributes != null) {
+            attributes.getFirst().forEach((att, val) -> removeTempAttribute(entity, att));
+            attributes.getSecond().forEach((att, val) -> removeTempAttribute(entity, att));
+        }
         return list;
     }
 
     public static List<LivingEntity> attackInAABB(LivingEntity entity, AABB aabb, Predicate<LivingEntity> pred) {
+        return attackInAABB(entity, aabb, pred, null);
+    }
+
+    public static List<LivingEntity> attackInAABB(LivingEntity entity, AABB aabb, Predicate<LivingEntity> pred, Pair<Map<Attribute, Double>, Map<Attribute, Double>> attributes) {
         if (entity.level.isClientSide)
             return List.of();
         List<LivingEntity> list = entity.level.getEntities(EntityTypeTest.forClass(LivingEntity.class), aabb,
@@ -621,5 +661,19 @@ public class CombatUtils {
         if (held.getItem() instanceof IAOEWeapon weapon)
             return weapon.getFOV(entity, held) + bonus;
         return bonus;
+    }
+
+    public static float getSpellDamageBonus(ItemStack stack, float origin) {
+        int level = 1;
+        if (stack.getItem() instanceof ItemSpell)
+            level = ItemNBT.itemLevel(stack);
+        return origin * (1 + (level - 1) * 0.025f);
+    }
+
+    public static double getMeleeAbilityDamageBonus(ItemStack stack) {
+        int level = 1;
+        if (stack.getItem() instanceof ItemSpell)
+            level = ItemNBT.itemLevel(stack);
+        return 1 + (level - 1) * 0.025;
     }
 }
