@@ -14,7 +14,6 @@
     "BrainMixin",
     "ChunkMapMixin",
     "ConfiguredStructureMixin",
-    "ContainerScreenAccessor",
     "CombatTrackerAccessor",
     "CropBlockAccessor",
     "CropBlockMixin",
@@ -42,6 +41,7 @@
   "client": [
     "AtlasMixin",
     "BiomeColorsMixin",
+    "ContainerScreenAccessor",
     "ItemRendererMixin",
     "HumanoidModelMixin",
     "PlayerModelMixin",
