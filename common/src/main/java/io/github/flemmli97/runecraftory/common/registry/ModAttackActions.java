@@ -31,7 +31,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -93,7 +95,6 @@ public class ModAttackActions {
                                 entity.setDeltaMovement(new Vec3(0, -0.2, 0));
                                 AttackAction.sendMotionUpdate(entity);
                             }
-
                         }
                         case 6 -> {
                             if (anim.isAtTick(0.24)) {
@@ -592,6 +593,121 @@ public class ModAttackActions {
                     entity.setDeltaMovement(AttackAction.fromRelativeVector(entity, new Vec3(0, 0, 1)).scale(0.3));
                     AttackAction.sendMotionUpdate(entity);
                 }
+            }))
+            .disableItemSwitch().disableMovement());
+    public static final RegistryEntrySupplier<AttackAction> DASH_SLASH = register("dash_slash", () -> new AttackAction.Builder((entity, count) -> {
+        float speed = (float) (ItemNBT.attackSpeedModifier(entity));
+        return PlayerModelAnimations.DASH_SLASH.get(count).create(speed);
+    }).allowSelfOverride((entity, w) -> w.getCurrentCount() == 1 && w.getCurrentAnim().isPastTick(0.36)).doWhileAction(((entity, stack, handler, anim) -> {
+                if (handler.getCurrentCount() == 2) {
+                    entity.setDeltaMovement(entity.getDeltaMovement().multiply(0.8, 1, 0.8));
+                    AttackAction.sendMotionUpdate(entity);
+                    if (handler.getCurrentAnim().canAttack()) {
+                        Vec3 attackPos = entity.position().add(0, 0.2, 0).add(entity.getLookAngle().scale(0.5));
+                        CombatUtils.attackInAABB(entity, new AABB(-0.5, -1, -0.8, 0.8, 1, 0.5).move(attackPos), null);
+                    }
+                } else {
+                    if (anim.isPastTick(0.2)) {
+                        Vec3 dir = AttackAction.fromRelativeVector(entity, new Vec3(0, 0, 1)).scale(0.4);
+                        if (anim.isAtTick(0.2) || entity.isOnGround()) {
+                            entity.setDeltaMovement(dir.add(0, 0.3, 0));
+                        } else if (anim.isPastTick(0.28)) {
+                            entity.setDeltaMovement(dir);
+                        } else {
+                            entity.setDeltaMovement(dir.add(0, entity.getDeltaMovement().y(), 0));
+                        }
+                        AttackAction.sendMotionUpdate(entity);
+                        if (!anim.isPastTick(0.72)) {
+                            double range = entity.getAttributeValue(ModAttributes.ATTACK_RANGE.get());
+                            dir = dir.normalize().scale(range);
+                            List<LivingEntity> entites = entity.level.getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(1).expandTowards(dir),
+                                    target -> target != entity && !handler.getHitEntityTracker().contains(target) && !target.isAlliedTo(entity) && target.isPickable());
+                            handler.addHitEntityTracker(entites);
+                            for (LivingEntity entite : entites) {
+                                if (entity instanceof Player player)
+                                    CombatUtils.playerAttackWithItem(player, entite, false, true, false);
+                                else if (entity instanceof Mob mob)
+                                    mob.doHurtTarget(entite);
+                            }
+                        }
+                    }
+                }
+            }))
+            .setMaxConsecutive(entity -> 2, e -> 0)
+            .disableItemSwitch().disableMovement());
+    public static final RegistryEntrySupplier<AttackAction> RUSH_ATTACK = register("rush_attack", () -> new AttackAction.Builder((entity, count) -> {
+        float speed = (float) (ItemNBT.attackSpeedModifier(entity));
+        if (count < 6)
+            count = 0;
+        else
+            count = 1;
+        return PlayerModelAnimations.RUSH_ATTACK.get(count).create(speed);
+    }).allowSelfOverride((entity, w) -> switch (w.getCurrentCount()) {
+                case 1, 2, 3, 4, 5 -> (!w.getCurrentAnim().isPastTick(0.88) && w.getCurrentAnim().isPastTick(0.6)) || w.getCurrentAnim().isPastTick(1.28);
+                case 6 -> w.getCurrentAnim().isPastTick(1.42);
+                default -> false;
+            }).doWhileAction(((entity, stack, handler, anim) -> {
+                if (handler.getCurrentCount() == 7) {
+                    if (anim.isAtTick(0.28)) {
+                        entity.moveRelative(1.1f, new Vec3(0, 0.3, 1.7));
+                        AttackAction.sendMotionUpdate(entity);
+                    }
+                    entity.fallDistance = 0;
+                    if (anim.canAttack()) {
+                        CombatUtils.spinAttackHandler(entity, entity.getLookAngle(), CombatUtils.getAOE(entity, stack, 10), 0.5f, null);
+                        entity.swing(InteractionHand.MAIN_HAND, true);
+                    }
+                } else {
+                    if (anim.isAtTick(0.32) || anim.isAtTick(0.48)) {
+                        entity.moveRelative(0.2f, new Vec3(0, 0, 1));
+                        AttackAction.sendMotionUpdate(entity);
+                    } else if (anim.isAtTick(0.92)) {
+                        entity.moveRelative(0.6f, new Vec3(0, 2.5, 1.4));
+                        AttackAction.sendMotionUpdate(entity);
+                    }
+                    if (anim.isPastTick(0.92) && !anim.isPastTick(1.38)) {
+                        entity.setDeltaMovement(entity.getDeltaMovement().x, entity.getDeltaMovement().y + 0.03, entity.getDeltaMovement().z);
+                        AttackAction.sendMotionUpdate(entity);
+                    }
+                    entity.fallDistance = 0;
+                    if (anim.canAttack() || anim.isAtTick(0.52) || anim.isAtTick(1.08)) {
+                        CombatUtils.spinAttackHandler(entity, entity.getLookAngle(), CombatUtils.getAOE(entity, stack, 10), 0.5f, null);
+                        entity.swing(InteractionHand.MAIN_HAND, true);
+                    }
+                }
+            }))
+            .withCountAdjuster((e, handler) -> handler.getCurrentAnim() != null && handler.getCurrentCount() < 7 && handler.getCurrentAnim().isPastTick(1.32) ? 6 : handler.getCurrentCount())
+            .setMaxConsecutive(entity -> 7, e -> 0)
+            .disableItemSwitch().disableMovement());
+    public static final RegistryEntrySupplier<AttackAction> ROUND_BREAK = register("round_break", () -> new AttackAction.Builder((entity, count) -> {
+        float speed = (float) (ItemNBT.attackSpeedModifier(entity));
+        return PlayerModelAnimations.ROUND_BREAK.create(speed);
+    }).doWhileAction(((entity, stack, handler, anim) -> {
+                if (anim.isAtTick(0.24)) {
+                    entity.moveRelative(0.3f, new Vec3(0, 1.3, 1.1));
+                    AttackAction.sendMotionUpdate(entity);
+                }
+                if (anim.isPastTick(0.24) && !anim.isPastTick(0.6)) {
+                    int start = Mth.ceil(0.24 * 20.0D);
+                    int end = Mth.ceil(0.6 * 20.0D);
+                    float len = (end - start) / anim.getSpeed();
+                    float f = (anim.getTick() - start) / anim.getSpeed();
+                    float angleInc = -360 / len;
+                    float rot = handler.getSpinStartRot();
+                    handler.addHitEntityTracker(CombatUtils.spinAttackHandler(entity, (rot + f * angleInc), (rot + (f + 1) * angleInc), 0.5f, e -> !handler.getHitEntityTracker().contains(e)));
+                }
+            }))
+            .disableItemSwitch().disableMovement());
+    public static final RegistryEntrySupplier<AttackAction> MIND_THRUST = register("mind_thrust", () -> new AttackAction.Builder((entity, count) -> {
+        float speed = (float) (ItemNBT.attackSpeedModifier(entity));
+        return PlayerModelAnimations.MIND_THRUST.create(speed);
+    }).doWhileAction(((entity, stack, handler, anim) -> {
+                if (anim.isAtTick(0.68)) {
+                    entity.moveRelative(0.45f, new Vec3(0, 0, 1));
+                    AttackAction.sendMotionUpdate(entity);
+                }
+                if (anim.canAttack())
+                    CombatUtils.spinAttackHandler(entity, entity.getLookAngle(), CombatUtils.getAOE(entity, stack, 0), 0.5f, null);
             }))
             .disableItemSwitch().disableMovement());
 

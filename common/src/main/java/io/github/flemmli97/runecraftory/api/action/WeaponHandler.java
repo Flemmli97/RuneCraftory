@@ -57,6 +57,8 @@ public class WeaponHandler {
 
     public boolean doWeaponAttack(LivingEntity entity, AttackAction action, ItemStack stack, @Nullable BiConsumer<LivingEntity, AnimatedAction> attack) {
         if (entity.level.isClientSide || this.canExecuteAction(entity, action) || this.canConsecutiveExecute(entity, action)) {
+            if (action.countAdjuster != null)
+                this.count = action.countAdjuster.applyAsInt(entity, this);
             this.setAnimationBasedOnState(entity, action, true, attack);
             this.usedWeapon = stack;
             return true;

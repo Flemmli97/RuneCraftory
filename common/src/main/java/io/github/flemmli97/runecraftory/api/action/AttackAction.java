@@ -1,6 +1,8 @@
 package io.github.flemmli97.runecraftory.api.action;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
+import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.item.IAOEWeapon;
@@ -19,6 +21,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
+import java.util.function.ToIntBiFunction;
 import java.util.function.ToIntFunction;
 
 public class AttackAction extends CustomRegistryEntry<AttackAction> {
@@ -38,12 +41,13 @@ public class AttackAction extends CustomRegistryEntry<AttackAction> {
     //Here for now till all have animations
     public final boolean disableAnimation;
     public final BiPredicate<LivingEntity, WeaponHandler> canOverride;
+    public final ToIntBiFunction<LivingEntity, WeaponHandler> countAdjuster;
 
     public final BiFunction<LivingEntity, WeaponHandler, Pose> withPose;
 
     private AttackAction(BiFunction<LivingEntity, Integer, AnimatedAction> anim, ActiveActionHandler attackExecuter, BiConsumer<LivingEntity, WeaponHandler> onStart, BiConsumer<LivingEntity, WeaponHandler> onEnd,
                          ToIntFunction<LivingEntity> maxConsecutive, ToIntFunction<LivingEntity> timeFrame, boolean disableItemSwitch, boolean disableMovement, boolean disableAnimation,
-                         BiPredicate<LivingEntity, WeaponHandler> canOverride, BiPredicate<LivingEntity, WeaponHandler> isInvulnerable, BiFunction<LivingEntity, WeaponHandler, Pose> withPose) {
+                         BiPredicate<LivingEntity, WeaponHandler> canOverride, BiPredicate<LivingEntity, WeaponHandler> isInvulnerable, ToIntBiFunction<LivingEntity, WeaponHandler> countAdjuster, BiFunction<LivingEntity, WeaponHandler, Pose> withPose) {
         this.anim = anim == null ? (player, data) -> null : anim;
         this.attackExecuter = attackExecuter;
         this.onStart = onStart;
@@ -55,6 +59,7 @@ public class AttackAction extends CustomRegistryEntry<AttackAction> {
         this.disableAnimation = disableAnimation;
         this.canOverride = canOverride;
         this.isInvulnerable = isInvulnerable;
+        this.countAdjuster = countAdjuster;
         this.withPose = withPose;
     }
 
@@ -87,6 +92,12 @@ public class AttackAction extends CustomRegistryEntry<AttackAction> {
         }
     }
 
+    public static int spellLevel(ItemStack stack) {
+        if (stack.getItem() instanceof ItemSpell)
+            return ItemNBT.itemLevel(stack);
+        return 1;
+    }
+
     public AnimatedAction getAnimation(LivingEntity entity, int count) {
         AnimatedAction anim = this.anim.apply(entity, count);
         return anim != null ? anim.create() : null;
@@ -114,6 +125,7 @@ public class AttackAction extends CustomRegistryEntry<AttackAction> {
         private boolean disableItemSwitch, disableMovement, disableAnimation;
         private BiPredicate<LivingEntity, WeaponHandler> isInvulnerable;
         private BiFunction<LivingEntity, WeaponHandler, Pose> withPose;
+        private ToIntBiFunction<LivingEntity, WeaponHandler> countAdjuster;
 
         public Builder(BiFunction<LivingEntity, Integer, AnimatedAction> anim) {
             this.anim = anim;
@@ -170,8 +182,13 @@ public class AttackAction extends CustomRegistryEntry<AttackAction> {
             return this;
         }
 
+        public Builder withCountAdjuster(ToIntBiFunction<LivingEntity, WeaponHandler> countAdjuster) {
+            this.countAdjuster = countAdjuster;
+            return this;
+        }
+
         public AttackAction build() {
-            return new AttackAction(this.anim, this.attackExecuter, this.onStart, this.onEnd, this.maxConsecutive, this.timeFrame, this.disableItemSwitch, this.disableMovement, this.disableAnimation, this.canOverride, this.isInvulnerable, this.withPose);
+            return new AttackAction(this.anim, this.attackExecuter, this.onStart, this.onEnd, this.maxConsecutive, this.timeFrame, this.disableItemSwitch, this.disableMovement, this.disableAnimation, this.canOverride, this.isInvulnerable, this.countAdjuster, this.withPose);
         }
     }
 }

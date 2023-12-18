@@ -608,12 +608,18 @@ public class CombatUtils {
             return List.of();
         List<LivingEntity> list = entity.level.getEntities(EntityTypeTest.forClass(LivingEntity.class), aabb,
                 t -> t != entity && (pred == null || pred.test(t)) && !t.isAlliedTo(entity) && t.isPickable());
-        for (int i = 0; i < list.size(); ++i) {
+        for (LivingEntity livingEntity : list) {
             if (entity instanceof Player player)
-                CombatUtils.playerAttackWithItem(player, list.get(i), i == list.size() - 1, true, i == list.size() - 1);
+                CombatUtils.playerAttackWithItem(player, livingEntity, false, true, false);
             else if (entity instanceof Mob mob)
-                mob.doHurtTarget(list.get(i));
+                mob.doHurtTarget(livingEntity);
         }
         return list;
+    }
+
+    public static float getAOE(LivingEntity entity, ItemStack held, float bonus) {
+        if (held.getItem() instanceof IAOEWeapon weapon)
+            return weapon.getFOV(entity, held) + bonus;
+        return bonus;
     }
 }

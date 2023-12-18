@@ -761,10 +761,10 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> mediSeal = spell(() -> ModSpells.MEDI_SEAL, "medi_seal");
     public static final RegistryEntrySupplier<Item> greeting = spell(() -> ModSpells.EMPTY, "greeting");
     public static final RegistryEntrySupplier<Item> powerWave = spell(() -> ModSpells.POWER_WAVE, "power_wave");
-    public static final RegistryEntrySupplier<Item> dashSlash = spell(() -> ModSpells.EMPTY, "dash_slash");
-    public static final RegistryEntrySupplier<Item> rushAttack = spell(() -> ModSpells.EMPTY, "rush_attack");
-    public static final RegistryEntrySupplier<Item> roundBreak = spell(() -> ModSpells.EMPTY, "round_break");
-    public static final RegistryEntrySupplier<Item> mindThrust = spell(() -> ModSpells.EMPTY, "mind_thrust");
+    public static final RegistryEntrySupplier<Item> dashSlash = spell(() -> ModSpells.DASH_SLASH, "dash_slash");
+    public static final RegistryEntrySupplier<Item> rushAttack = spell(() -> ModSpells.RUSH_ATTACK, "rush_attack");
+    public static final RegistryEntrySupplier<Item> roundBreak = spell(() -> ModSpells.ROUND_BREAK, "round_break");
+    public static final RegistryEntrySupplier<Item> mindThrust = spell(() -> ModSpells.MIND_THRUST, "mind_thrust");
     public static final RegistryEntrySupplier<Item> gust = spell(() -> ModSpells.EMPTY, "gust");
     public static final RegistryEntrySupplier<Item> storm = spell(() -> ModSpells.EMPTY, "storm");
     public static final RegistryEntrySupplier<Item> blitz = spell(() -> ModSpells.EMPTY, "blitz");

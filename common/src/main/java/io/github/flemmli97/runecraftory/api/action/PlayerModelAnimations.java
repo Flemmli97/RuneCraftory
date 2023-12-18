@@ -101,7 +101,16 @@ public class PlayerModelAnimations {
     public static final AnimatedAction STAFF = addTo(AnimatedAction.builder(EnumWeaponType.STAFF.defaultWeaponSpeed + 1, "staff").marker(9).build());
     public static final AnimatedAction STAFF_USE = addTo(new AnimatedAction(16 + 1, 4, "staff_use"));
 
-    public static final AnimatedAction POWER_WAVE = addTo(new AnimatedAction(14 + 1, 9, "power_wave"));
+    public static final AnimatedAction POWER_WAVE = addTo(new AnimatedAction(length(0.64), 0.32, "power_wave"));
+    public static final List<AnimatedAction> DASH_SLASH = addTo(2, "dash_slash", count -> count == 2 ? Pair.of((int) Math.ceil(0.64 * 20), (int) Math.ceil(0.48 * 20))
+            : Pair.of((int) Math.ceil(0.84 * 20), (int) Math.ceil(0.2 * 20))
+    );
+    public static final List<AnimatedAction> RUSH_ATTACK = addTo(3, "rush_attack", count -> switch (count) {
+        case 2 -> Pair.of((int) Math.ceil(0.6 * 20), (int) Math.ceil(0.32 * 20));
+        default -> Pair.of((int) Math.ceil(1.72 * 20), (int) Math.ceil(0.36 * 20));
+    });
+    public static final AnimatedAction ROUND_BREAK = addTo(new AnimatedAction(length(0.8), 0.24, "round_break"));
+    public static final AnimatedAction MIND_THRUST = addTo(new AnimatedAction(length(0.96), 0.72, "mind_thrust"));
 
     public static List<AnimatedAction> getAll() {
         return ImmutableList.copyOf(ALL);
@@ -128,9 +137,11 @@ public class PlayerModelAnimations {
         return anim;
     }
 
+    private static double length(double length) {
+        return length + 1 / 20d;
+    }
+
     interface DependendAnimationValue {
-
         Pair<Integer, Integer> getValues(int count);
-
     }
 }

@@ -72,6 +72,7 @@ import io.github.flemmli97.runecraftory.common.spells.TripleWaterLaserSpell;
 import io.github.flemmli97.runecraftory.common.spells.UnsealSpell;
 import io.github.flemmli97.runecraftory.common.spells.WaterLaserSpell;
 import io.github.flemmli97.runecraftory.common.spells.WaveSpell;
+import io.github.flemmli97.runecraftory.common.spells.WeaponSpell;
 import io.github.flemmli97.runecraftory.common.spells.WebShotSpell;
 import io.github.flemmli97.runecraftory.common.spells.WindBladeCircle;
 import io.github.flemmli97.runecraftory.common.spells.WindBladeSpell;
@@ -134,6 +135,10 @@ public class ModSpells {
     public static final RegistryEntrySupplier<Spell> MEDI_SEAL = registerSpell("medi_seal", UnsealSpell::new, new SpellProperties.Builder(20, 30).withXPGain(EnumSkills.LOVE, 10).affectedSkill(EnumSkills.LOVE).usePercentageCost());
 
     public static final RegistryEntrySupplier<Spell> POWER_WAVE = registerSpell("power_wave", PowerWaveSpell::new, new SpellProperties.Builder(5, 20).withXPGain(EnumSkills.SHORTSWORD, 10).affectedSkill(EnumSkills.SHORTSWORD));
+    public static final RegistryEntrySupplier<Spell> DASH_SLASH = registerSpell("dash_slash", () -> new WeaponSpell(ModAttackActions.DASH_SLASH, ModTags.SHORTSWORDS), new SpellProperties.Builder(5, 10).withXPGain(EnumSkills.SHORTSWORD, 10).affectedSkill(EnumSkills.SHORTSWORD));
+    public static final RegistryEntrySupplier<Spell> RUSH_ATTACK = registerSpell("rush_attack", () -> new WeaponSpell(ModAttackActions.RUSH_ATTACK, ModTags.SHORTSWORDS), new SpellProperties.Builder(5, 10).withXPGain(EnumSkills.SHORTSWORD, 10).affectedSkill(EnumSkills.SHORTSWORD));
+    public static final RegistryEntrySupplier<Spell> ROUND_BREAK = registerSpell("round_break", () -> new WeaponSpell(ModAttackActions.ROUND_BREAK, ModTags.SHORTSWORDS), new SpellProperties.Builder(5, 10).withXPGain(EnumSkills.SHORTSWORD, 10).affectedSkill(EnumSkills.SHORTSWORD));
+    public static final RegistryEntrySupplier<Spell> MIND_THRUST = registerSpell("mind_thrust", () -> new WeaponSpell(ModAttackActions.MIND_THRUST, ModTags.SHORTSWORDS), new SpellProperties.Builder(5, 10).withXPGain(EnumSkills.SHORTSWORD, 10).affectedSkill(EnumSkills.SHORTSWORD));
 
     public static final RegistryEntrySupplier<Spell> TELEPORT = registerSpell("teleport", TeleportSpell::new, new SpellProperties.Builder(30, 0));
 
