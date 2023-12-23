@@ -48,7 +48,7 @@ public class EntityHomingEnergyOrb extends BaseDamageCloud implements PowerableM
 
     @Override
     public int livingTickMax() {
-        return 400;
+        return 100;
     }
 
     @Override
