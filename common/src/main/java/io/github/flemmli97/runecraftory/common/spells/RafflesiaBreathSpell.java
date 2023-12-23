@@ -4,6 +4,7 @@ import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.common.entities.DelayedAttacker;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityStatusBall;
 import io.github.flemmli97.runecraftory.common.entities.misc.RafflesiaBreathSummoner;
+import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
@@ -24,6 +25,7 @@ public class RafflesiaBreathSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         RafflesiaBreathSummoner summoner = new RafflesiaBreathSummoner(level, entity, this.type);
+        summoner.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.8f));
         Vec3 position = entity.position().add(0, entity.getBbHeight() * 0.5, 0);
         float dirScale = 5;
         Vec3 dir = entity.getLookAngle().scale(dirScale);

@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityHomingEnergyOrb;
+import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
@@ -23,12 +24,8 @@ public class EnergyOrbSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         EntityHomingEnergyOrb orb = new EntityHomingEnergyOrb(level, entity);
+        orb.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.9f));
         level.addFreshEntity(orb);
         return true;
-    }
-
-    @Override
-    public int rpCost() {
-        return 300;
     }
 }

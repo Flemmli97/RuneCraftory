@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityStone;
+import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
@@ -15,7 +16,7 @@ public class StoneThrowSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         EntityStone stone = new EntityStone(level, entity);
-        stone.setDamageMultiplier(0.9f + lvl * 0.05f);
+        stone.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.95f));
         if (entity instanceof Mob mob && mob.getTarget() != null) {
             stone.shootAtEntity(mob.getTarget(), 1.3f, 7 - level.getDifficulty().getId() * 2, 0.2f);
         } else {

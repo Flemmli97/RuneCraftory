@@ -13,7 +13,7 @@ public class HealT3Spell extends Spell {
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
-        float healAmount = (float) (CombatUtils.getAttributeValue(entity, ModAttributes.MAGIC.get()) * (3f + lvl * 0.3f));
+        float healAmount = (float) (CombatUtils.getAttributeValue(entity, ModAttributes.MAGIC.get()) * CombatUtils.getAbilityDamageBonus(lvl, 2f));
         entity.heal(healAmount);
         HealT1Spell.spawnHealParticles(entity);
         return true;

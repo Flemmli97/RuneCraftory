@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntitySpike;
+import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
@@ -18,6 +19,7 @@ public class EarthSpikeSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         EntitySpike spike = new EntitySpike(level, entity, 30, 5, EntitySpike.SpikeType.EARTH);
+        spike.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1.2f));
         if (entity instanceof Player player) {
             HitResult result = RayTraceUtils.entityRayTrace(player, 12, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, true, false, e -> e instanceof LivingEntity);
             if (result instanceof EntityHitResult hitResult && hitResult.getEntity() instanceof LivingEntity target) {

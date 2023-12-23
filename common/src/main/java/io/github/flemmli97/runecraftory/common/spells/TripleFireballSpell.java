@@ -4,6 +4,7 @@ import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityFireball;
+import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -24,7 +25,7 @@ public class TripleFireballSpell extends Spell {
             dir = entity.getLookAngle();
         }
         fireball.shoot(dir.x, dir.y, dir.z, 1, 0);
-        fireball.setDamageMultiplier(0.9f + lvl * 0.05f);
+        fireball.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.85f));
         level.addFreshEntity(fireball);
 
         Vec3 up = entity.getUpVector(1);
@@ -33,7 +34,7 @@ public class TripleFireballSpell extends Spell {
             Vector3f newDir = new Vector3f(dir);
             newDir.transform(quaternion);
             EntityFireball other = new EntityFireball(level, entity, false);
-            other.setDamageMultiplier(0.9f + lvl * 0.05f);
+            other.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.85f));
             other.shoot(newDir.x(), newDir.y(), newDir.z(), 1, 0);
             level.addFreshEntity(other);
         }

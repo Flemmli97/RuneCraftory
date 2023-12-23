@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityDarkBall;
+import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -20,7 +21,7 @@ public class DarkBallSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         EntityDarkBall ball = new EntityDarkBall(level, entity, this.type);
-        ball.setDamageMultiplier(0.9f + lvl * 0.1f);
+        ball.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this.type == EntityDarkBall.Type.BALL ? 1 : 0.9f));
         float vel = this.type == EntityDarkBall.Type.BALL ? 0.09f : 0.23f;
         if (entity instanceof Mob mob && mob.getTarget() != null) {
             ball.shootAtEntity(mob.getTarget(), vel * 1.3f, 0, 0.2f, 0.3);

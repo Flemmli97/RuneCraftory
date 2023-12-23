@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityWindBlade;
+import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntitySelector;
@@ -19,7 +20,7 @@ public class WindBladeSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         EntityWindBlade wind = new EntityWindBlade(level, entity);
-        wind.setDamageMultiplier(0.95f + lvl * 0.05f);
+        wind.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.9f));
         wind.shoot(entity, 0, entity.getYRot(), 0, 0.45f, 0);
         if (entity instanceof Mob mob && mob.getTarget() != null) {
             wind.setTarget(mob.getTarget());

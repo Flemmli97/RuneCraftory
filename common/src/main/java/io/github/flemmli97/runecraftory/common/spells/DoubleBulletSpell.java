@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityBullet;
+import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
@@ -15,9 +16,9 @@ public class DoubleBulletSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         EntityBullet bullet = new EntityBullet(level, entity);
-        bullet.setDamageMultiplier(0.8f + lvl * 0.05f);
+        bullet.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.8f));
         EntityBullet bullet2 = new EntityBullet(level, entity);
-        bullet2.setDamageMultiplier(0.8f + lvl * 0.05f);
+        bullet2.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.8f));
         bullet2.reverseMovement();
         if (entity instanceof Mob mob && mob.getTarget() != null) {
             bullet.shootAtEntity(mob.getTarget(), 0.3f, 7 - level.getDifficulty().getId() * 2, 0);

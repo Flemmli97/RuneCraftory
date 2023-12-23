@@ -28,6 +28,7 @@ public class ParaHealSpell extends Spell {
             }
             if (lvl >= 5) {
                 entity.removeEffect(ModEffects.POISON.get());
+                entity.removeEffect(MobEffects.DIG_SLOWDOWN);
             }
             entity.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
             entity.removeEffect(ModEffects.PARALYSIS.get());

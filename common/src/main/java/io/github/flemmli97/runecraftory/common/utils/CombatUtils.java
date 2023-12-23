@@ -663,17 +663,17 @@ public class CombatUtils {
         return bonus;
     }
 
-    public static float getSpellDamageBonus(ItemStack stack, float origin) {
-        int level = 1;
+    public static int getSpellLevelFromStack(ItemStack stack) {
         if (stack.getItem() instanceof ItemSpell)
-            level = ItemNBT.itemLevel(stack);
-        return origin * (1 + (level - 1) * 0.025f);
+            return ItemNBT.itemLevel(stack);
+        return 1;
     }
 
-    public static double getMeleeAbilityDamageBonus(ItemStack stack) {
-        int level = 1;
-        if (stack.getItem() instanceof ItemSpell)
-            level = ItemNBT.itemLevel(stack);
-        return 1 + (level - 1) * 0.025;
+    public static double getAbilityDamageBonus(ItemStack stack) {
+        return getAbilityDamageBonus(getSpellLevelFromStack(stack), 1);
+    }
+
+    public static float getAbilityDamageBonus(int level, float origin) {
+        return origin * (1 + (level - 1) * 0.025f);
     }
 }

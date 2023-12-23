@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityWaterLaser;
+import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
 import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import net.minecraft.server.level.ServerLevel;
@@ -25,7 +26,7 @@ public class DoubleWaterLaserSpell extends Spell {
             Vec3 pre = laser.position();
             laser.setPos(laser.getX() + vec.x(), laser.getY() + vec.y(), laser.getZ() + vec.z());
             laser.setMaxTicks(entity instanceof Player ? 44 : 15);
-            laser.setDamageMultiplier(0.95f + lvl * 0.05f);
+            laser.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1.1f));
             laser.setPositionYawOffset(posYawOff);
             if (entity instanceof Mob mob && mob.getTarget() != null) {
                 LivingEntity target = mob.getTarget();

@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityPoisonNeedle;
+import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
@@ -15,7 +16,7 @@ public class PoisonNeedleSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         EntityPoisonNeedle projectile = new EntityPoisonNeedle(level, entity);
-        projectile.setDamageMultiplier(0.7f + lvl * 0.05f);
+        projectile.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.75f));
         if (entity instanceof Mob mob && mob.getTarget() != null) {
             projectile.shootAtEntity(mob.getTarget(), 1.2f, 4 - level.getDifficulty().getId(), 0);
         } else {

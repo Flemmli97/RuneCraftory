@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityFurniture;
+import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -18,7 +19,7 @@ public class FurnitureThrowSpell extends Spell {
         for (int i = 0; i < furnitureAmount; ++i) {
             EntityFurniture.Type randType = EntityFurniture.Type.values()[entity.getRandom().nextInt(EntityFurniture.Type.values().length)];
             EntityFurniture furniture = new EntityFurniture(level, entity, randType);
-            furniture.setDamageMultiplier(1 + 0.05f * lvl);
+            furniture.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1));
             furniture.setNoGravity(true);
             double xRand = entity.getX() + (entity.getRandom().nextDouble() - 0.5) * 13;
             double yRand = entity.getY() + (entity.getRandom().nextDouble()) * 2;

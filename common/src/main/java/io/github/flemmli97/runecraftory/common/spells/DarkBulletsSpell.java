@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.common.entities.DelayedAttacker;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityDarkBulletSummoner;
+import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -16,7 +17,7 @@ public class DarkBulletsSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         EntityDarkBulletSummoner summoner = new EntityDarkBulletSummoner(level, entity);
-        summoner.setDamageMultiplier(0.5f + lvl * 0.05f);
+        summoner.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.65f));
         Vec3 delayedPos;
         if (entity instanceof DelayedAttacker attacker && (delayedPos = attacker.targetPosition(summoner.position())) != null) {
             summoner.setTarget(delayedPos.x(), delayedPos.y(), delayedPos.z());

@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntitySmallRaccoonLeaf;
+import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
 import io.github.flemmli97.tenshilib.common.utils.MathUtils;
 import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
@@ -35,7 +36,7 @@ public class SmallLeafSpell extends Spell {
         for (Vector3f vec : RayTraceUtils.rotatedVecs(direct, MathUtils.normalY, -degs, degs, degs * 2 / this.amount)) {
             EntitySmallRaccoonLeaf leaf = new EntitySmallRaccoonLeaf(level, entity);
             leaf.setPos(leaf.getX() + vec.x() * 0.1, leaf.getY() + vec.y() * 0.1, leaf.getZ() + vec.z() * 0.1);
-            leaf.setDamageMultiplier(0.85f + lvl * 0.1f);
+            leaf.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.85f));
             leaf.shoot(vec.x(), vec.y(), vec.z(), 0.75f, 0);
             level.addFreshEntity(leaf);
         }

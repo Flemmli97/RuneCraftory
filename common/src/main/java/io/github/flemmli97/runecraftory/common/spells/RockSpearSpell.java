@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityRockSpear;
+import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -19,7 +20,7 @@ public class RockSpearSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         EntityRockSpear spear = new EntityRockSpear(level, entity, this.big);
-        spear.setDamageMultiplier(0.95f + lvl * 0.05f + (this.big ? 0.1f : 0));
+        spear.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this.big ? 1.4f : 1f));
         level.addFreshEntity(spear);
         return true;
     }

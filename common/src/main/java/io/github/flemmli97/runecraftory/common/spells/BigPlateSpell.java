@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityBigPlate;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -38,7 +39,7 @@ public class BigPlateSpell extends Spell {
         }
         EntityBigPlate plate = new EntityBigPlate(level, entity);
         plate.setPos(pos.x(), pos.y() + 6, pos.z());
-        plate.setDamageMultiplier(1.1f + (lvl - 1) * 0.5f);
+        plate.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1.25f));
         level.addFreshEntity(plate);
         return true;
     }

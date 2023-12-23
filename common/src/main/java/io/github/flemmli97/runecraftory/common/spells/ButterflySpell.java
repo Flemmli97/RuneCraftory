@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.common.entities.DelayedAttacker;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityButterflySummoner;
+import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -17,7 +18,7 @@ public class ButterflySpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         EntityButterflySummoner summoner = new EntityButterflySummoner(level, entity);
-        summoner.setDamageMultiplier(0.1f + lvl * 0.05f);
+        summoner.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.2f));
         Vec3 delayedPos;
         if (entity instanceof DelayedAttacker attacker && (delayedPos = attacker.targetPosition(summoner.position())) != null) {
             summoner.setTarget(delayedPos.x(), delayedPos.y(), delayedPos.z());

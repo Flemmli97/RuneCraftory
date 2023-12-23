@@ -41,9 +41,9 @@ public class PoisonHealSpell extends Spell {
             }
             if (lvl >= 5) {
                 living.removeEffect(ModEffects.PARALYSIS.get());
+                living.removeEffect(MobEffects.WITHER);
             }
             living.removeEffect(MobEffects.POISON);
-            living.removeEffect(MobEffects.WITHER);
             living.removeEffect(ModEffects.POISON.get());
             spawnStatusHealParticles(living);
         };

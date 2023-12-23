@@ -4,6 +4,7 @@ import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.entities.DelayedAttacker;
 import io.github.flemmli97.runecraftory.common.entities.misc.ElementBallBarrageSummoner;
+import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -23,6 +24,7 @@ public class ElementBallBarrageSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         ElementBallBarrageSummoner summoner = new ElementBallBarrageSummoner(level, entity, this.element);
+        summoner.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.7f));
         Vec3 eye = entity.getEyePosition();
         float dirScale = 5;
         Vec3 dir = entity.getLookAngle().scale(dirScale);

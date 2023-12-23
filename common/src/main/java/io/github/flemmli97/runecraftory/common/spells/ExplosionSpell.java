@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityExplosionSpell;
+import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.server.level.ServerLevel;
@@ -28,7 +29,7 @@ public class ExplosionSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         EntityExplosionSpell spell = new EntityExplosionSpell(level, entity);
-        spell.setDamageMultiplier(1.1f + (lvl - 1) * 0.05f);
+        spell.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1.25f));
         if (entity instanceof Mob mob && mob.getTarget() != null) {
             spell.shootAtEntity(mob.getTarget(), 1.3f, 0, 0);
         } else {
@@ -36,10 +37,5 @@ public class ExplosionSpell extends Spell {
         }
         level.addFreshEntity(spell);
         return true;
-    }
-
-    @Override
-    public int rpCost() {
-        return 45;
     }
 }

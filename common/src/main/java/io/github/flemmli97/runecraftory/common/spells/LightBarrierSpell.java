@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityLightBall;
+import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -17,7 +18,7 @@ public class LightBarrierSpell extends Spell {
             return false;
         List<Entity> lights = level.getEntities(entity, entity.getBoundingBox().inflate(4), e -> e instanceof EntityLightBall light && light.getOwner() == entity);
         lights.forEach(e -> e.remove(Entity.RemovalReason.KILLED));
-        EntityLightBall.createFrontLights(level, entity, 0.9f + lvl * 0.1f);
+        EntityLightBall.createFrontLights(level, entity, CombatUtils.getAbilityDamageBonus(lvl, 0.9f));
         return true;
     }
 }

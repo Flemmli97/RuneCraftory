@@ -608,7 +608,7 @@ public class ModAttackActions {
                     if (handler.getCurrentAnim().canAttack()) {
                         Vec3 attackPos = entity.position().add(0, 0.2, 0).add(entity.getLookAngle().scale(0.5));
                         CombatUtils.attackInAABB(entity, new AABB(-0.5, -1, -0.8, 0.8, 1, 0.5).move(attackPos), null,
-                                Pair.of(Map.of(), Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getMeleeAbilityDamageBonus(stack))));
+                                Pair.of(Map.of(), Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))));
                     }
                 } else {
                     if (anim.isPastTick(0.2)) {
@@ -627,7 +627,7 @@ public class ModAttackActions {
                             List<LivingEntity> entites = entity.level.getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(1).expandTowards(dir),
                                     target -> target != entity && !handler.getHitEntityTracker().contains(target) && !target.isAlliedTo(entity) && target.isPickable());
                             handler.addHitEntityTracker(entites);
-                            CombatUtils.applyTempAttributeMult(entity, Attributes.ATTACK_DAMAGE, CombatUtils.getMeleeAbilityDamageBonus(stack));
+                            CombatUtils.applyTempAttributeMult(entity, Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack));
                             for (LivingEntity entite : entites) {
                                 if (entity instanceof Player player)
                                     CombatUtils.playerAttackWithItem(player, entite, false, true, false);
@@ -661,7 +661,7 @@ public class ModAttackActions {
                     entity.fallDistance = 0;
                     if (anim.canAttack()) {
                         CombatUtils.spinAttackHandler(entity, entity.getLookAngle(), CombatUtils.getAOE(entity, stack, 10), 0.5f, null,
-                                Pair.of(Map.of(), Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getMeleeAbilityDamageBonus(stack))));
+                                Pair.of(Map.of(), Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))));
                         entity.swing(InteractionHand.MAIN_HAND, true);
                     }
                 } else {
@@ -679,7 +679,7 @@ public class ModAttackActions {
                     entity.fallDistance = 0;
                     if (anim.canAttack() || anim.isAtTick(0.52) || anim.isAtTick(1.08)) {
                         CombatUtils.spinAttackHandler(entity, entity.getLookAngle(), CombatUtils.getAOE(entity, stack, 10), 0.5f, null,
-                                Pair.of(Map.of(), Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getMeleeAbilityDamageBonus(stack))));
+                                Pair.of(Map.of(), Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))));
                         entity.swing(InteractionHand.MAIN_HAND, true);
                     }
                 }
@@ -703,7 +703,7 @@ public class ModAttackActions {
                     float angleInc = -360 / len;
                     float rot = handler.getSpinStartRot();
                     handler.addHitEntityTracker(CombatUtils.spinAttackHandler(entity, (rot + f * angleInc), (rot + (f + 1) * angleInc), 0.5f, e -> !handler.getHitEntityTracker().contains(e),
-                            Pair.of(Map.of(), Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getMeleeAbilityDamageBonus(stack)))));
+                            Pair.of(Map.of(), Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))));
                 }
             }))
             .disableItemSwitch().disableMovement());
@@ -719,7 +719,7 @@ public class ModAttackActions {
                     CombatUtils.spinAttackHandler(entity, entity.getLookAngle(), CombatUtils.getAOE(entity, stack, 0), 0.5f, null,
                             Pair.of(Map.of(ModAttributes.PARA.get(), 0.25,
                                             ModAttributes.POISON.get(), 0.05),
-                                    Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getMeleeAbilityDamageBonus(stack))));
+                                    Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))));
             }))
             .disableItemSwitch().disableMovement());
 

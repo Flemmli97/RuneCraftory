@@ -28,8 +28,8 @@ public class UnsealSpell extends Spell {
             }
             if (lvl >= 5) {
                 entity.removeEffect(ModEffects.PARALYSIS.get());
+                entity.removeEffect(MobEffects.DIG_SLOWDOWN);
             }
-            entity.removeEffect(MobEffects.DIG_SLOWDOWN);
             entity.removeEffect(ModEffects.SEAL.get());
             PoisonHealSpell.spawnStatusHealParticles(living);
         };

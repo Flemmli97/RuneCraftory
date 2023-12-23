@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
+import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -93,7 +94,7 @@ public abstract class Spell extends CustomRegistryEntry<Spell> {
             }
             return false;
         }
-        return this.use(world, entity, stack, 1, 1, 1);
+        return this.use(world, entity, stack, 1, 1, CombatUtils.getSpellLevelFromStack(stack));
     }
 
     public abstract boolean use(ServerLevel world, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int level);

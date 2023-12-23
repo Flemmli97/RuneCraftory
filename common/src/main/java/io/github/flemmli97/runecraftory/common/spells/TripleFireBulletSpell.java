@@ -5,6 +5,7 @@ import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityBullet;
+import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -27,7 +28,7 @@ public class TripleFireBulletSpell extends Spell {
         projectile.setElement(EnumElement.FIRE);
         projectile.setStraight();
         projectile.shoot(dir.x, dir.y, dir.z, 1, 0);
-        projectile.setDamageMultiplier(0.9f + lvl * 0.05f);
+        projectile.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.85f));
         level.addFreshEntity(projectile);
 
         Vec3 up = entity.getUpVector(1);
@@ -38,7 +39,7 @@ public class TripleFireBulletSpell extends Spell {
             EntityBullet other = new EntityBullet(level, entity);
             other.setStraight();
             other.setElement(EnumElement.FIRE);
-            other.setDamageMultiplier(0.9f + lvl * 0.05f);
+            other.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.85f));
             other.shoot(newDir.x(), newDir.y(), newDir.z(), 1, 0);
             level.addFreshEntity(other);
         }

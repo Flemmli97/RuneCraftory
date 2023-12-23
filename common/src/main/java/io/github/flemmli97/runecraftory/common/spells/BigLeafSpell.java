@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityBigRaccoonLeaf;
+import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
@@ -23,7 +24,7 @@ public class BigLeafSpell extends Spell {
         int leafs = this.doubleShot ? 2 : 1;
         for (int i = 0; i < leafs; i++) {
             EntityBigRaccoonLeaf leaf = new EntityBigRaccoonLeaf(level, entity);
-            leaf.setDamageMultiplier(1f + lvl * 0.1f);
+            leaf.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1));
             float vel = i % 2 == 0 ? 1 : 0.7f;
             if (entity instanceof Mob mob && mob.getTarget() != null) {
                 leaf.shootAtEntity(mob.getTarget(), vel, 0, 0, 0);

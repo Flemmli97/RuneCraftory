@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityPowerWave;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
+import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -21,7 +22,7 @@ public class PowerWaveSpell extends WeaponSpell {
         if (result) {
             EntityPowerWave wave = new EntityPowerWave(level, entity);
             wave.setPos(wave.getX(), entity.getY() + entity.getBbHeight() * 0.1, wave.getZ());
-            wave.setDamageMultiplier(1.1f + (lvl - 1) * 0.05f);
+            wave.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.65f));
             if (entity instanceof Mob mob && mob.getTarget() != null) {
                 wave.shootAtEntity(mob.getTarget(), 0.9f, 0, 0);
             } else {

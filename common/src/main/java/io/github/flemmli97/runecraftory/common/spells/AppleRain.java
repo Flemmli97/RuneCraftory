@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityAppleProjectile;
+import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -26,10 +27,10 @@ public class AppleRain extends Spell {
         for (int i = 0; i < apples; i++) {
             EntityAppleProjectile apple = new EntityAppleProjectile(level, entity);
             if (this.type == Type.BIG) {
-                apple.setDamageMultiplier(1.5f + lvl * 0.05f);
+                apple.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1.3f));
                 apple.withSizeInc(1);
             } else
-                apple.setDamageMultiplier(1.25f + lvl * 0.05f);
+                apple.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1.15f));
             double x = entity.getX() + (entity.getRandom().nextDouble() - 0.5) * 8;
             double y = entity.getY() + entity.getBbHeight() + entity.getRandom().nextDouble() * 3;
             double z = entity.getZ() + (entity.getRandom().nextDouble() - 0.5) * 8;

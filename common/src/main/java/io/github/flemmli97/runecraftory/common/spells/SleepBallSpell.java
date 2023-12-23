@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityStatusBall;
+import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -17,7 +18,7 @@ public class SleepBallSpell extends Spell {
             double x = Math.cos(angle) * 1.3;
             double z = Math.sin(angle) * 1.3;
             EntityStatusBall pollen = new EntityStatusBall(level, entity);
-            pollen.setDamageMultiplier(0.55f + lvl * 0.05f);
+            pollen.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.65f));
             pollen.setPos(entity.getX() + x, entity.getY() + 0.4, entity.getZ() + z);
             level.addFreshEntity(pollen);
         }

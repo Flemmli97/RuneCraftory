@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityWispFlame;
+import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -22,6 +23,7 @@ public class ElementalSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         EntityWispFlame flame = new EntityWispFlame(level, entity, this.element);
+        flame.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.9f));
         if (this.element == EnumElement.DARK) {
             if (entity instanceof Mob mob && mob.getTarget() != null)
                 flame.shootAtEntity(mob.getTarget(), 0.05f, 0, 0, 0.2);

@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityBoneNeedle;
+import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
 import io.github.flemmli97.tenshilib.common.utils.MathUtils;
 import net.minecraft.server.level.ServerLevel;
@@ -36,7 +37,7 @@ public class BoneNeedleSpell extends Spell {
             Vec3 random = needle.position().add(side.multiply(offset * 1.2, 1, offset * 1.2));
             offset += entity.getRandom().nextDouble() * inc * 0.5 + inc * 0.5;
             needle.setPos(random);
-            needle.setDamageMultiplier(0.8f + lvl * 0.1f);
+            needle.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.5f));
             level.addFreshEntity(needle);
         }
         level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ARROW_SHOOT, entity.getSoundSource(), 1.0f, 1.2f + level.getRandom().nextFloat() * 0.1f);

@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntitySpiderWeb;
+import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
@@ -15,7 +16,7 @@ public class WebShotSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         EntitySpiderWeb web = new EntitySpiderWeb(level, entity);
-        web.setDamageMultiplier(0.9f + lvl * 0.05f);
+        web.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.8f));
         if (entity instanceof Mob mob && mob.getTarget() != null) {
             web.shootAtEntity(mob.getTarget(), 1.3f, 7 - level.getDifficulty().getId() * 2, 0.2f);
         } else {

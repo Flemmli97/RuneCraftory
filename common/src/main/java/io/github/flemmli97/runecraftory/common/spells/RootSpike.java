@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntitySpike;
+import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import net.minecraft.server.level.ServerLevel;
@@ -21,6 +22,7 @@ public class RootSpike extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         EntitySpike spike = new EntitySpike(level, entity, 0, 10, EntitySpike.SpikeType.ROOT);
+        spike.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.9f));
         Vec3 targetPos = null;
         if (entity instanceof Mob mob) {
             Entity target = EntityUtils.ownedProjectileTarget(mob, 14);

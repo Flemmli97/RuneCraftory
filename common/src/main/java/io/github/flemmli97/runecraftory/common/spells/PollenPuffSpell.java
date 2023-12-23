@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityPollenPuff;
+import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.tenshilib.common.utils.MathUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
@@ -28,7 +29,7 @@ public class PollenPuffSpell extends Spell {
         for (Vec3 dir : DIRS) {
             EntityPollenPuff puff = new EntityPollenPuff(level, entity);
             puff.setPos(puff.getX(), entity.getY() + entity.getBbHeight() * 0.2, puff.getZ());
-            puff.setDamageMultiplier(0.45f + lvl * 0.05f);
+            puff.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.6f));
             puff.shoot(dir.x(), dir.y(), dir.z(), 0.23f, 0);
             level.addFreshEntity(puff);
         }
