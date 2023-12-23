@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityWindBlade;
-import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -23,7 +22,7 @@ public class DoubleWindBladeSpell extends Spell {
             if (entity instanceof Mob mob && mob.getTarget() != null) {
                 wind.setTarget(mob.getTarget());
             } else if (entity instanceof Player) {
-                EntityHitResult res = RayTraceUtils.calculateEntityFromLook(entity, 9);
+                EntityHitResult res = WindBladeSpell.calculateEntityFromLook(entity, 10);
                 if (res != null) {
                     wind.setTarget(res.getEntity());
                 }
