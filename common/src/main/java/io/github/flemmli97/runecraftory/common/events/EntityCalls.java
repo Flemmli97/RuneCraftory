@@ -297,7 +297,7 @@ public class EntityCalls {
             BlockPos targetPos = null;
             boolean swing = false;
             if (state.getBlock() instanceof Growable crop) {
-                CropProperties props = DataPackHandler.SERVER_PACK.cropManager().get(state.getBlock().getCloneItemStack(level, pos, state).getItem());
+                CropProperties props = DataPackHandler.INSTANCE.cropManager().get(state.getBlock().getCloneItemStack(level, pos, state).getItem());
                 if (props != null) {
                     BlockPos below = pos.below();
                     if (FarmlandHandler.isFarmBlock(level.getBlockState(below)))
@@ -348,7 +348,7 @@ public class EntityCalls {
                 mob.applyFoodEffect(stack);
                 return;
             }
-            FoodProperties prop = DataPackHandler.SERVER_PACK.foodManager().get(stack.getItem());
+            FoodProperties prop = DataPackHandler.INSTANCE.foodManager().get(stack.getItem());
             if (prop == null) {
                 if (entity instanceof ServerPlayer player && stack.isEdible()) {
                     Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {

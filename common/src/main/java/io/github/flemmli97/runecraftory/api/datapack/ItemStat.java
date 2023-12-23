@@ -271,7 +271,7 @@ public class ItemStat {
      */
     public static AttributeMapDisplay getStatsAttributeMap(ItemStack stack) {
         if (!ItemNBT.shouldHaveStats(stack))
-            return DataPackHandler.SERVER_PACK.itemStatManager().get(stack.getItem())
+            return DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem())
                     .map(s -> new AttributeMapDisplay(s.itemStats, null)).orElse(new AttributeMapDisplay(null, null));
         if (!ItemStat.SHOW_STATS_CUSTOM)
             return new AttributeMapDisplay(null, null);

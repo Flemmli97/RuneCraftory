@@ -48,7 +48,7 @@ public abstract class Spell extends CustomRegistryEntry<Spell> {
     }
 
     public void levelSkill(ServerPlayer player) {
-        Map<EnumSkills, Float> skillXp = DataPackHandler.SERVER_PACK.spellPropertiesManager().getPropertiesFor(this).skillXP;
+        Map<EnumSkills, Float> skillXp = DataPackHandler.INSTANCE.spellPropertiesManager().getPropertiesFor(this).skillXP;
         if (!skillXp.isEmpty()) {
             Platform.INSTANCE.getPlayerData(player).ifPresent(data ->
                     skillXp.forEach((skill, xp) -> LevelCalc.levelSkill(player, data, EnumSkills.DARK, xp)));
@@ -56,19 +56,19 @@ public abstract class Spell extends CustomRegistryEntry<Spell> {
     }
 
     public int coolDown() {
-        return DataPackHandler.SERVER_PACK.spellPropertiesManager().getPropertiesFor(this).cooldown;
+        return DataPackHandler.INSTANCE.spellPropertiesManager().getPropertiesFor(this).cooldown;
     }
 
     public int rpCost() {
-        return DataPackHandler.SERVER_PACK.spellPropertiesManager().getPropertiesFor(this).rpCost;
+        return DataPackHandler.INSTANCE.spellPropertiesManager().getPropertiesFor(this).rpCost;
     }
 
     public boolean percentageCost() {
-        return DataPackHandler.SERVER_PACK.spellPropertiesManager().getPropertiesFor(this).percentage;
+        return DataPackHandler.INSTANCE.spellPropertiesManager().getPropertiesFor(this).percentage;
     }
 
     public EnumSkills[] costReductionSkills() {
-        return DataPackHandler.SERVER_PACK.spellPropertiesManager().getPropertiesFor(this).skills.toArray(EnumSkills[]::new);
+        return DataPackHandler.INSTANCE.spellPropertiesManager().getPropertiesFor(this).skills.toArray(EnumSkills[]::new);
     }
 
     public boolean use(LivingEntity entity) {

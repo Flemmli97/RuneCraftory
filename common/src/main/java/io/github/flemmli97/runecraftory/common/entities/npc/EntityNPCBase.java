@@ -730,7 +730,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         if (stack.getItem() == ModItems.objectX.get())
             ItemObjectX.applyEffect(this, stack);
         this.removeFoodEffect();
-        FoodProperties food = DataPackHandler.SERVER_PACK.foodManager().get(stack.getItem());
+        FoodProperties food = DataPackHandler.INSTANCE.foodManager().get(stack.getItem());
         if (food == null) {
             net.minecraft.world.food.FoodProperties mcFood = stack.getItem().getFoodProperties();
             this.eat(this.level, stack);
@@ -895,9 +895,9 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         compound.putInt("Behaviour", this.behaviourState().ordinal());
 
         compound.putBoolean("Male", this.isMale());
-        compound.putString("NPCLook", DataPackHandler.SERVER_PACK.npcLookManager().getId(this.getLook()).toString());
+        compound.putString("NPCLook", DataPackHandler.INSTANCE.npcLookManager().getId(this.getLook()).toString());
         if (this.data != NPCData.DEFAULT_DATA)
-            compound.putString("NPCData", DataPackHandler.SERVER_PACK.npcDataManager().getId(this.data).toString());
+            compound.putString("NPCData", DataPackHandler.INSTANCE.npcDataManager().getId(this.data).toString());
         if (this.data.profession().isEmpty()) {
             compound.putString("Shop", ModNPCJobs.getIDFrom(this.shop).toString());
         }
@@ -922,7 +922,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         } catch (ArrayIndexOutOfBoundsException ignored) {
         }
         if (compound.contains("NPCData"))
-            this.setNPCData(DataPackHandler.SERVER_PACK.npcDataManager().get(new ResourceLocation(compound.getString("NPCData"))), true);
+            this.setNPCData(DataPackHandler.INSTANCE.npcDataManager().get(new ResourceLocation(compound.getString("NPCData"))), true);
         if (this.data.schedule() == null)
             this.schedule.load(compound.getCompound("Schedule"));
         if (this.data.gender() == NPCData.Gender.UNDEFINED)
@@ -931,7 +931,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             this.setShop(ModNPCJobs.getFromID(ModNPCJobs.legacyOfTag(compound.get("Shop"))));
         }
         if (this.data.look() == null && compound.contains("NPCLook"))
-            this.look = DataPackHandler.SERVER_PACK.npcLookManager().get(new ResourceLocation(compound.getString("NPCLook")));
+            this.look = DataPackHandler.INSTANCE.npcLookManager().get(new ResourceLocation(compound.getString("NPCLook")));
 
         this.updater.read(compound.getCompound("DailyUpdater"));
     }
@@ -1225,9 +1225,9 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             if (this.data == NPCData.DEFAULT_DATA)
                 this.look = NPCData.NPCLook.DEFAULT_LOOK;
             else if (this.data.look() != null)
-                this.look = DataPackHandler.SERVER_PACK.npcLookManager().get(this.data.look());
+                this.look = DataPackHandler.INSTANCE.npcLookManager().get(this.data.look());
             else
-                this.look = DataPackHandler.SERVER_PACK.npcLookManager().getRandom(this.random, this.isMale());
+                this.look = DataPackHandler.INSTANCE.npcLookManager().getRandom(this.random, this.isMale());
         }
         return this.look;
     }
@@ -1237,7 +1237,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             if (this.data == NPCData.DEFAULT_DATA)
                 this.attackActions = NPCAttackActions.DEFAULT;
             else
-                this.attackActions = DataPackHandler.SERVER_PACK.npcActionsManager().get(this.data.combatActions());
+                this.attackActions = DataPackHandler.INSTANCE.npcActionsManager().get(this.data.combatActions());
         }
         return this.attackActions;
     }
@@ -1264,7 +1264,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     public NPCData.Gift giftOf(ItemStack stack) {
         for (Map.Entry<String, NPCData.Gift> e : this.data.giftItems().entrySet()) {
-            TagKey<Item> tag = e.getValue().item() == null ? this.gift.computeIfAbsent(e.getKey(), s -> DataPackHandler.SERVER_PACK.nameAndGiftManager().getRandomGift(NPCData.GiftType.ofXP(e.getValue().xp()), this.random)) : e.getValue().item();
+            TagKey<Item> tag = e.getValue().item() == null ? this.gift.computeIfAbsent(e.getKey(), s -> DataPackHandler.INSTANCE.nameAndGiftManager().getRandomGift(NPCData.GiftType.ofXP(e.getValue().xp()), this.random)) : e.getValue().item();
             if (tag == null || stack.is(tag))
                 return e.getValue();
         }
@@ -1304,12 +1304,12 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     public void randomizeData() {
         if (this.getServer() != null)
-            this.setNPCData(DataPackHandler.SERVER_PACK.npcDataManager().getRandom(this.random, d -> WorldHandler.get(this.getServer())
+            this.setNPCData(DataPackHandler.INSTANCE.npcDataManager().getRandom(this.random, d -> WorldHandler.get(this.getServer())
                     .npcHandler.canAssignNPC(d)), false);
     }
 
     public ResourceLocation getDataID() {
-        return DataPackHandler.SERVER_PACK.npcDataManager().getId(this.data);
+        return DataPackHandler.INSTANCE.npcDataManager().getId(this.data);
     }
 
     public void setNPCData(NPCData data, boolean load) {
@@ -1329,9 +1329,9 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
                 name += " " + this.data.surname();
             this.setCustomName(new TextComponent(name));
         } else {
-            name = DataPackHandler.SERVER_PACK.nameAndGiftManager().getRandomName(this.random, this.isMale());
+            name = DataPackHandler.INSTANCE.nameAndGiftManager().getRandomName(this.random, this.isMale());
             if (name != null) {
-                String surname = DataPackHandler.SERVER_PACK.nameAndGiftManager().getRandomSurname(this.random);
+                String surname = DataPackHandler.INSTANCE.nameAndGiftManager().getRandomSurname(this.random);
                 if (surname != null)
                     name = name + " " + surname;
                 this.setCustomName(new TextComponent(name));

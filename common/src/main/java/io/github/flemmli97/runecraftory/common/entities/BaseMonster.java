@@ -236,7 +236,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         super(type, level);
         this.moveControl = new NewMoveController(this);
         //Client will get default value. This is intentional
-        this.prop = DataPackHandler.SERVER_PACK.monsterPropertiesManager().getPropertiesFor(type);
+        this.prop = DataPackHandler.INSTANCE.monsterPropertiesManager().getPropertiesFor(type);
         this.applyAttributes();
         if (!level.isClientSide) {
             this.addGoal();
@@ -931,7 +931,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         if (stack.getItem() == ModItems.objectX.get())
             ItemObjectX.applyEffect(this, stack);
         this.removeFoodEffect();
-        FoodProperties food = DataPackHandler.SERVER_PACK.foodManager().get(stack.getItem());
+        FoodProperties food = DataPackHandler.INSTANCE.foodManager().get(stack.getItem());
         if (food == null) {
             net.minecraft.world.food.FoodProperties mcFood = stack.getItem().getFoodProperties();
             this.eat(this.level, stack);
@@ -1012,7 +1012,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                             this.level.broadcastEntityEvent(this, (byte) 65);
                         else
                             this.level.broadcastEntityEvent(this, (byte) 64);
-                        DataPackHandler.SERVER_PACK.itemStatManager().get(stack.getItem()).ifPresent(s -> s.getMonsterGiftIncrease().forEach((att, d) -> {
+                        DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem()).ifPresent(s -> s.getMonsterGiftIncrease().forEach((att, d) -> {
                             AttributeInstance inst = this.getAttribute(att);
                             if (inst != null) {
                                 AttributeModifier mod = inst.getModifier(LibConstants.MONSTER_ITEM_BONUS);

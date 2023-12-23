@@ -43,7 +43,7 @@ public class NPCHandler {
     public boolean canAssignNPC(NPCData data) {
         if (data.unique() == 0)
             return true;
-        ResourceLocation res = DataPackHandler.SERVER_PACK.npcDataManager().getId(data);
+        ResourceLocation res = DataPackHandler.INSTANCE.npcDataManager().getId(data);
         Set<UUID> uuids = this.uniqueNPCS.get(res);
         return uuids == null || uuids.size() < data.unique();
     }
@@ -51,14 +51,14 @@ public class NPCHandler {
     public boolean addUniqueNPC(UUID uuid, NPCData data) {
         if (data.unique() == 0)
             return false;
-        ResourceLocation res = DataPackHandler.SERVER_PACK.npcDataManager().getId(data);
+        ResourceLocation res = DataPackHandler.INSTANCE.npcDataManager().getId(data);
         return this.uniqueNPCS.computeIfAbsent(res, key -> new HashSet<>()).add(uuid);
     }
 
     public boolean removeUniqueNPC(UUID uuid, NPCData data) {
         if (data.unique() == 0)
             return false;
-        ResourceLocation res = DataPackHandler.SERVER_PACK.npcDataManager().getId(data);
+        ResourceLocation res = DataPackHandler.INSTANCE.npcDataManager().getId(data);
         return this.uniqueNPCS.computeIfAbsent(res, key -> new HashSet<>()).remove(uuid);
     }
 

@@ -144,7 +144,7 @@ public class FarmlandData {
     private int growthPercent(ServerLevel level, BlockState crop) {
         if (!(crop.getBlock() instanceof Growable))
             return 0;
-        CropProperties props = DataPackHandler.SERVER_PACK.cropManager().get(crop.getBlock().getCloneItemStack(level, this.pos, crop).getItem());
+        CropProperties props = DataPackHandler.INSTANCE.cropManager().get(crop.getBlock().getCloneItemStack(level, this.pos, crop).getItem());
         if (props != null) {
             return Math.min((int) (this.cropAge / props.growth() * 100), 100);
         }
@@ -185,7 +185,7 @@ public class FarmlandData {
             this.resetCrop();
             return;
         }
-        CropProperties props = DataPackHandler.SERVER_PACK.cropManager().get(state.getBlock().getCloneItemStack(level, pos, state).getItem());
+        CropProperties props = DataPackHandler.INSTANCE.cropManager().get(state.getBlock().getCloneItemStack(level, pos, state).getItem());
         if (props == null || !props.regrowable()) {
             this.resetCrop();
             return;
@@ -317,7 +317,7 @@ public class FarmlandData {
 
         boolean growHerb = false;
         boolean cropRecalc = false;
-        CropProperties props = cropState.getBlock() instanceof Growable ? DataPackHandler.SERVER_PACK.cropManager().get(cropState.getBlock().getCloneItemStack(level, this.pos, cropState).getItem()) : null;
+        CropProperties props = cropState.getBlock() instanceof Growable ? DataPackHandler.INSTANCE.cropManager().get(cropState.getBlock().getCloneItemStack(level, this.pos, cropState).getItem()) : null;
 
         int wiltStage = 0;
         for (ExternalModifiers modifiers : this.scheduledData) {

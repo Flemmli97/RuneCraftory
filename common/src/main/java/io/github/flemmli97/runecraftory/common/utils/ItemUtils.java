@@ -54,7 +54,7 @@ public class ItemUtils {
     }
 
     public static int getSellPrice(ItemStack stack) {
-        return DataPackHandler.SERVER_PACK.itemStatManager().get(stack.getItem()).map(stat -> getSellPrice(stack, stat)).orElse(0);
+        return DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem()).map(stat -> getSellPrice(stack, stat)).orElse(0);
     }
 
     public static int getSellPrice(ItemStack stack, ItemStat stat) {
@@ -62,7 +62,7 @@ public class ItemUtils {
     }
 
     public static int getBuyPrice(ItemStack stack) {
-        return DataPackHandler.SERVER_PACK.itemStatManager().get(stack.getItem()).map(stat -> getBuyPrice(stack, stat)).orElse(0);
+        return DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem()).map(stat -> getBuyPrice(stack, stat)).orElse(0);
     }
 
     public static EnumShopResult buyItem(Player player, EntityNPCBase npc, ItemStack stack) {

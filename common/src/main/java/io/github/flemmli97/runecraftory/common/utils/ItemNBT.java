@@ -99,7 +99,7 @@ public class ItemNBT {
     public static Map<Attribute, Double> statIncrease(ItemStack stack) {
         CompoundTag compound = getItemNBT(stack);
         if (compound == null || !compound.contains(LibNBT.BASE)) {
-            return DataPackHandler.SERVER_PACK.itemStatManager().get(stack.getItem()).map(ItemStat::itemStats).orElse(new TreeMap<>(ModAttributes.SORTED));
+            return DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem()).map(ItemStat::itemStats).orElse(new TreeMap<>(ModAttributes.SORTED));
         }
         Map<Attribute, Double> map = new TreeMap<>(ModAttributes.SORTED);
         CompoundTag base = compound.getCompound(LibNBT.BASE);
@@ -127,7 +127,7 @@ public class ItemNBT {
     }
 
     public static Pair<Map<Attribute, Double>, Map<Attribute, Double>> foodStats(ItemStack stack) {
-        FoodProperties props = DataPackHandler.SERVER_PACK.foodManager().get(stack.getItem());
+        FoodProperties props = DataPackHandler.INSTANCE.foodManager().get(stack.getItem());
         if (props == null)
             return Pair.of(new TreeMap<>(ModAttributes.SORTED), new TreeMap<>(ModAttributes.SORTED));
         CompoundTag compound = getItemNBT(stack);
@@ -179,7 +179,7 @@ public class ItemNBT {
                 return EnumElement.NONE;
             }
         }
-        return isWeapon(stack) ? DataPackHandler.SERVER_PACK.itemStatManager().get(stack.getItem()).map(ItemStat::element).orElse(EnumElement.NONE) : EnumElement.NONE;
+        return isWeapon(stack) ? DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem()).map(ItemStat::element).orElse(EnumElement.NONE) : EnumElement.NONE;
     }
 
     public static ItemStack addUpgradeItem(ItemStack stack, ItemStack stackToAdd, boolean crafting, EnumCrafting type) {
@@ -257,10 +257,10 @@ public class ItemNBT {
         if (stackToAdd.getItem() == ModItems.raccoonLeaf.get())
             tag.putBoolean(LibNBT.RACCOON_LEAF, true);
 
-        ItemStat stat = DataPackHandler.SERVER_PACK.itemStatManager().get(stackToAdd.getItem()).orElse(null);
+        ItemStat stat = DataPackHandler.INSTANCE.itemStatManager().get(stackToAdd.getItem()).orElse(null);
         if (stat != null) {
             if (!tag.contains(LibNBT.BASE) && !stat.itemStats().isEmpty()) {
-                ItemStat base = DataPackHandler.SERVER_PACK.itemStatManager().get(stack.getItem()).orElse(null);
+                ItemStat base = DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem()).orElse(null);
                 if (base != null) {
                     CompoundTag statsTag = new CompoundTag();
                     for (Map.Entry<Attribute, Double> entry : base.itemStats().entrySet()) {
@@ -319,15 +319,15 @@ public class ItemNBT {
     }
 
     private static ItemStack changeBaseItemTo(ItemStack stack, ItemStack toApply, EnumCrafting crafting) {
-        ItemStat stat = DataPackHandler.SERVER_PACK.itemStatManager().get(toApply.getItem()).orElse(null);
+        ItemStat stat = DataPackHandler.INSTANCE.itemStatManager().get(toApply.getItem()).orElse(null);
         CompoundTag tag = new CompoundTag();
         //Setup base stuff
         if (stat != null) {
             if (!stat.itemStats().isEmpty()) {
-                ItemStat base = DataPackHandler.SERVER_PACK.itemStatManager().get(toApply.getItem()).orElse(null);
+                ItemStat base = DataPackHandler.INSTANCE.itemStatManager().get(toApply.getItem()).orElse(null);
                 if (base != null) {
                     CompoundTag statsTag = new CompoundTag();
-                    Map<Attribute, Double> origin = DataPackHandler.SERVER_PACK.itemStatManager().get(stack.getItem())
+                    Map<Attribute, Double> origin = DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem())
                             .map(ItemStat::itemStats).orElse(Map.of());
                     for (Map.Entry<Attribute, Double> entry : base.itemStats().entrySet()) {
                         if (entry.getKey() == ModAttributes.ATTACK_SPEED.get() || entry.getKey() == ModAttributes.ATTACK_RANGE.get()) //Do not copy att speed and range
@@ -380,10 +380,10 @@ public class ItemNBT {
         bonus.add(bonusItem);
         tag.put(LibNBT.CRAFTING_BONUS, bonus);
 
-        FoodProperties props = DataPackHandler.SERVER_PACK.foodManager().get(stackToAdd.getItem());
+        FoodProperties props = DataPackHandler.INSTANCE.foodManager().get(stackToAdd.getItem());
         if (props != null) {
             if (!tag.contains(LibNBT.FOOD_STATS)) {
-                FoodProperties base = DataPackHandler.SERVER_PACK.foodManager().get(stack.getItem());
+                FoodProperties base = DataPackHandler.INSTANCE.foodManager().get(stack.getItem());
                 if (base != null) {
                     CompoundTag statsTag = new CompoundTag();
                     for (Map.Entry<Attribute, Double> entry : base.effects().entrySet()) {

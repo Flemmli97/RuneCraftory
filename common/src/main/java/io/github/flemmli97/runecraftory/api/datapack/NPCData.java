@@ -117,7 +117,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
 
     public ConversationSet getConversation(ConversationType type) {
         ResourceLocation conversationId = this.interactions().get(type);
-        return DataPackHandler.SERVER_PACK.npcConversationManager().get(conversationId, ConversationSet.DEFAULT.get(type));
+        return DataPackHandler.INSTANCE.npcConversationManager().get(conversationId, ConversationSet.DEFAULT.get(type));
     }
 
     public ConversationSet getFromQuest(ResourceLocation quest, int state) {
@@ -135,7 +135,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                     yield new ResourceLocation(responses.activeID.getNamespace(), responses.activeID.getPath() + "_" + state);
             }
         };
-        return DataPackHandler.SERVER_PACK.npcConversationManager().get(conversationId, fallback);
+        return DataPackHandler.INSTANCE.npcConversationManager().get(conversationId, fallback);
     }
 
     public enum Gender {

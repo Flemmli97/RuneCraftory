@@ -55,7 +55,7 @@ public class CropUtils {
     }
 
     public static CropProperties getPropertiesFor(CropBlock crop) {
-        return DataPackHandler.SERVER_PACK.cropManager().get(((CropBlockAccessor) crop).getSeedItem().asItem());
+        return DataPackHandler.INSTANCE.cropManager().get(((CropBlockAccessor) crop).getSeedItem().asItem());
     }
 
     public static void modifyCropDrops(BlockState state, LootContext.Builder builder, CropBlock block, List<ItemStack> list) {

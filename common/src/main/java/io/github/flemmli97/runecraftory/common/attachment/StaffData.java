@@ -13,7 +13,7 @@ public class StaffData {
     private Spell tier1, tier2, tier3;
 
     public Spell getTier1Spell(ItemStack stack) {
-        return this.tier1 != null ? this.tier1 : DataPackHandler.SERVER_PACK.itemStatManager().get(stack.getItem()).map(ItemStat::getTier1Spell).orElse(null);
+        return this.tier1 != null ? this.tier1 : DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem()).map(ItemStat::getTier1Spell).orElse(null);
     }
 
     public void setTier1Spell(Spell spell) {
@@ -21,7 +21,7 @@ public class StaffData {
     }
 
     public Spell getTier2Spell(ItemStack stack) {
-        return this.tier2 != null ? this.tier2 : DataPackHandler.SERVER_PACK.itemStatManager().get(stack.getItem()).map(ItemStat::getTier2Spell).orElse(null);
+        return this.tier2 != null ? this.tier2 : DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem()).map(ItemStat::getTier2Spell).orElse(null);
     }
 
     public void setTier2Spell(Spell spell) {
@@ -29,7 +29,7 @@ public class StaffData {
     }
 
     public Spell getTier3Spell(ItemStack stack) {
-        return this.tier3 != null ? this.tier3 : DataPackHandler.SERVER_PACK.itemStatManager().get(stack.getItem()).map(ItemStat::getTier3Spell).orElse(null);
+        return this.tier3 != null ? this.tier3 : DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem()).map(ItemStat::getTier3Spell).orElse(null);
     }
 
     public void setTier3Spell(Spell spell) {

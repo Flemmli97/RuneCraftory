@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.common.datapack;
 
-import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.datapack.manager.CropManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.FoodManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.GateSpawnsManager;
@@ -22,7 +21,7 @@ import java.util.function.Consumer;
 
 public class DataPackHandler {
 
-    public static final DataPackHandler SERVER_PACK = new DataPackHandler();
+    public static final DataPackHandler INSTANCE = new DataPackHandler();
 
     private final ItemStatManager itemStats = new ItemStatManager();
     private final CropManager crops = new CropManager();
@@ -40,50 +39,53 @@ public class DataPackHandler {
     private final NPCConversationManager npcConversations = new NPCConversationManager();
 
     public static void reloadItemStats(Consumer<PreparableReloadListener> cons) {
-        cons.accept(SERVER_PACK.itemStats);
+        cons.accept(INSTANCE.itemStats);
     }
 
     public static void reloadCropManager(Consumer<PreparableReloadListener> cons) {
-        cons.accept(SERVER_PACK.crops);
+        cons.accept(INSTANCE.crops);
     }
 
     public static void reloadFoodManager(Consumer<PreparableReloadListener> cons) {
-        cons.accept(SERVER_PACK.foods);
+        cons.accept(INSTANCE.foods);
     }
 
     public static void reloadShopItems(Consumer<PreparableReloadListener> cons) {
-        cons.accept(SERVER_PACK.shopItems);
+        cons.accept(INSTANCE.shopItems);
     }
 
     public static void reloadGateSpawns(Consumer<PreparableReloadListener> cons) {
-        cons.accept(SERVER_PACK.gateSpawnsManager);
+        cons.accept(INSTANCE.gateSpawnsManager);
     }
 
     public static void reloadProperties(Consumer<PreparableReloadListener> cons) {
-        cons.accept(SERVER_PACK.mobProperties);
-        cons.accept(SERVER_PACK.spellProperties);
-        cons.accept(SERVER_PACK.skillPropertiesManager);
-        cons.accept(SERVER_PACK.weaponPropertiesManager);
+        cons.accept(INSTANCE.mobProperties);
+        cons.accept(INSTANCE.spellProperties);
+        cons.accept(INSTANCE.skillPropertiesManager);
+        cons.accept(INSTANCE.weaponPropertiesManager);
     }
 
     public static void reloadNPCData(Consumer<PreparableReloadListener> cons) {
-        cons.accept(SERVER_PACK.nameAndGifts);
-        cons.accept(SERVER_PACK.npcData);
-        cons.accept(SERVER_PACK.npcLooks);
-        cons.accept(SERVER_PACK.npcConversations);
-        cons.accept(SERVER_PACK.npcActions);
+        cons.accept(INSTANCE.nameAndGifts);
+        cons.accept(INSTANCE.npcData);
+        cons.accept(INSTANCE.npcLooks);
+        cons.accept(INSTANCE.npcConversations);
+        cons.accept(INSTANCE.npcActions);
     }
 
     public static void toPacket(FriendlyByteBuf buffer) {
-        SERVER_PACK.itemStats.toPacket(buffer);
-        SERVER_PACK.crops.toPacket(buffer);
-        SERVER_PACK.foods.toPacket(buffer);
+        INSTANCE.itemStats.toPacket(buffer);
+        INSTANCE.crops.toPacket(buffer);
+        INSTANCE.foods.toPacket(buffer);
     }
 
     public static void fromPacket(FriendlyByteBuf buffer) {
-        ClientHandlers.CLIENT_PACK.itemStats.fromPacket(buffer);
-        ClientHandlers.CLIENT_PACK.crops.fromPacket(buffer);
-        ClientHandlers.CLIENT_PACK.foods.fromPacket(buffer);
+        INSTANCE.itemStats.fromPacket(buffer);
+        INSTANCE.crops.fromPacket(buffer);
+        INSTANCE.foods.fromPacket(buffer);
+    }
+
+    private DataPackHandler() {
     }
 
     public ItemStatManager itemStatManager() {

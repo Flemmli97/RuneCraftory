@@ -110,7 +110,7 @@ public class GateEntity extends Mob implements IBaseMob {
 
     public static boolean canSpawnAt(EntityType<? extends GateEntity> type, ServerLevelAccessor level, MobSpawnType reason, BlockPos pos, Random random) {
         BlockState state = level.getBlockState(pos);
-        return level.getDifficulty() != Difficulty.PEACEFUL && DataPackHandler.SERVER_PACK.gateSpawnsManager().hasSpawns(level, pos, state)
+        return level.getDifficulty() != Difficulty.PEACEFUL && DataPackHandler.INSTANCE.gateSpawnsManager().hasSpawns(level, pos, state)
                 && level.getLevel().getPoiManager().find(PoiType.MEETING.getPredicate(), p -> true, pos, MobConfig.bellRadius, PoiManager.Occupancy.ANY).isEmpty()
                 && gateSpawnRules(type, level, reason, pos, state, random)
                 && level.getEntitiesOfClass(GateEntity.class, new AABB(pos).inflate(MobConfig.minDist)).size() < MobConfig.maxGroup;
@@ -294,7 +294,7 @@ public class GateEntity extends Mob implements IBaseMob {
         this.entityData.set(mobLevel, gateLevel);
         this.entityData.set(elementType, this.type.getTranslation());
         this.entityData.set(element, this.type.ordinal());
-        this.spawnList.addAll(DataPackHandler.SERVER_PACK.gateSpawnsManager().pickRandomMobs(level.getLevel(), this, biome, this.random, this.random.nextInt(3) + 1, this.blockPosition()));
+        this.spawnList.addAll(DataPackHandler.INSTANCE.gateSpawnsManager().pickRandomMobs(level.getLevel(), this, biome, this.random, this.random.nextInt(3) + 1, this.blockPosition()));
         this.setPos(this.getX(), this.getY() + 1, this.getZ());
         this.updateStatsToLevel();
         this.spawnMobs(Math.max(1, this.maxNearby - 2));

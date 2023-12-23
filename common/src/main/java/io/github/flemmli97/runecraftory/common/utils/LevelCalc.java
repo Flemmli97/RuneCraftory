@@ -83,7 +83,7 @@ public class LevelCalc {
     public static int xpAmountForSkillLevelUp(EnumSkills skill, int level) {
         if (level <= 0)
             return 1;
-        if (level >= DataPackHandler.SERVER_PACK.skillPropertiesManager().getPropertiesFor(skill).maxLevel())
+        if (level >= DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(skill).maxLevel())
             return 0;
         return (int) (totalSkillXpForLevel(skill, level + 1) - totalSkillXpForLevel(skill, level));
     }
@@ -208,7 +208,7 @@ public class LevelCalc {
     }
 
     public static float getSkillXpMultiplier(EnumSkills skill) {
-        return DataPackHandler.SERVER_PACK.skillPropertiesManager().getPropertiesFor(skill).xpMultiplier();
+        return DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(skill).xpMultiplier();
     }
 
     public static void levelSkill(ServerPlayer player, PlayerData data, EnumSkills skill, float amount) {

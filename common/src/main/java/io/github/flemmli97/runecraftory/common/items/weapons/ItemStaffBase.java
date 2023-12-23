@@ -44,7 +44,7 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable, Ext
     @Override
     public int getChargeTime(ItemStack stack) {
         return Platform.INSTANCE.getStaffData(stack).map(cap ->
-                cap.getTier1Spell(stack) != null ? cap.getTier1Spell(stack).coolDown() : cap.getTier2Spell(stack) != null ? cap.getTier1Spell(stack).coolDown() : cap.getTier3Spell(stack) != null ? cap.getTier3Spell(stack).coolDown() : 0).orElse(DataPackHandler.SERVER_PACK.weaponPropertiesManager().getPropertiesFor(this.getWeaponType()).chargeTime());
+                cap.getTier1Spell(stack) != null ? cap.getTier1Spell(stack).coolDown() : cap.getTier2Spell(stack) != null ? cap.getTier1Spell(stack).coolDown() : cap.getTier3Spell(stack) != null ? cap.getTier3Spell(stack).coolDown() : 0).orElse(DataPackHandler.INSTANCE.weaponPropertiesManager().getPropertiesFor(this.getWeaponType()).chargeTime());
     }
 
     @Override

@@ -305,11 +305,11 @@ public class PlayerData {
     }
 
     private double skillVal(Function<SkillProperties, Number> func) {
-        return this.skillMapN.entrySet().stream().mapToDouble(e -> (e.getValue().getLevel() - 1) * func.apply(DataPackHandler.SERVER_PACK.skillPropertiesManager().getPropertiesFor(e.getKey())).doubleValue()).sum();
+        return this.skillMapN.entrySet().stream().mapToDouble(e -> (e.getValue().getLevel() - 1) * func.apply(DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(e.getKey())).doubleValue()).sum();
     }
 
     private double skillValLevelFunc(BiFunction<Integer, SkillProperties, Number> func) {
-        return this.skillMapN.entrySet().stream().mapToDouble(e -> func.apply(e.getValue().getLevel() - 1, DataPackHandler.SERVER_PACK.skillPropertiesManager().getPropertiesFor(e.getKey())).doubleValue()).sum();
+        return this.skillMapN.entrySet().stream().mapToDouble(e -> func.apply(e.getValue().getLevel() - 1, DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(e.getKey())).doubleValue()).sum();
     }
 
     public LevelExpPair getSkillLevel(EnumSkills skill) {
@@ -317,7 +317,7 @@ public class PlayerData {
     }
 
     public void setSkillLevel(EnumSkills skill, Player player, int level, float xpAmount, boolean recalc) {
-        this.skillMapN.get(skill).setLevel(Mth.clamp(level, 1, DataPackHandler.SERVER_PACK.skillPropertiesManager().getPropertiesFor(skill).maxLevel()));
+        this.skillMapN.get(skill).setLevel(Mth.clamp(level, 1, DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(skill).maxLevel()));
         this.skillMapN.get(skill).setXp(Mth.clamp(xpAmount, 0, LevelCalc.xpAmountForSkillLevelUp(skill, level)));
         if (player instanceof ServerPlayer serverPlayer) {
             if (recalc) {
@@ -329,9 +329,9 @@ public class PlayerData {
     }
 
     public void increaseSkill(EnumSkills skill, Player player, float amount) {
-        if (this.skillMapN.get(skill).getLevel() >= DataPackHandler.SERVER_PACK.skillPropertiesManager().getPropertiesFor(skill).maxLevel())
+        if (this.skillMapN.get(skill).getLevel() >= DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(skill).maxLevel())
             return;
-        boolean levelUp = this.skillMapN.get(skill).addXP(amount, DataPackHandler.SERVER_PACK.skillPropertiesManager().getPropertiesFor(skill).maxLevel(), lvl -> LevelCalc.xpAmountForSkillLevelUp(skill, lvl), () -> this.onSkillLevelUp(skill, player));
+        boolean levelUp = this.skillMapN.get(skill).addXP(amount, DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(skill).maxLevel(), lvl -> LevelCalc.xpAmountForSkillLevelUp(skill, lvl), () -> this.onSkillLevelUp(skill, player));
         if (levelUp) {
             player.level.playSound(null, player.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1, 0.5f);
         }
@@ -343,7 +343,7 @@ public class PlayerData {
     }
 
     private void onSkillLevelUp(EnumSkills skill, Player player) {
-        SkillProperties prop = DataPackHandler.SERVER_PACK.skillPropertiesManager().getPropertiesFor(skill);
+        SkillProperties prop = DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(skill);
         int level = this.skillMapN.get(skill).getLevel();
         float health = player.getMaxHealth();
         this.updateHealth(player);
@@ -445,7 +445,7 @@ public class PlayerData {
     public void refreshShop(Player player) {
         if (!player.level.isClientSide) {
             for (NPCJob profession : ModNPCJobs.allJobs()) {
-                Collection<ShopItemProperties> datapack = DataPackHandler.SERVER_PACK.shopItemsManager().get(profession);
+                Collection<ShopItemProperties> datapack = DataPackHandler.INSTANCE.shopItemsManager().get(profession);
                 List<ItemStack> shopItems = new ArrayList<>();
                 datapack.forEach(item -> {
                     if (!item.needsSpecialUnlocking() && this.shippedItems.containsKey(PlatformUtils.INSTANCE.items().getIDFrom(item.stack().getItem())))
@@ -460,7 +460,7 @@ public class PlayerData {
                             break;
                     }
                 }
-                DataPackHandler.SERVER_PACK.shopItemsManager().getDefaultItems(profession).forEach(item -> shop.add(item.stack().copy()));
+                DataPackHandler.INSTANCE.shopItemsManager().getDefaultItems(profession).forEach(item -> shop.add(item.stack().copy()));
                 this.shopItems.put(profession, shop);
             }
         }
@@ -488,7 +488,7 @@ public class PlayerData {
     public void applyFoodEffect(Player player, ItemStack stack) {
         this.removeFoodEffect(player);
         Pair<Map<Attribute, Double>, Map<Attribute, Double>> foodStats = ItemNBT.foodStats(stack);
-        FoodProperties prop = DataPackHandler.SERVER_PACK.foodManager().get(stack.getItem());
+        FoodProperties prop = DataPackHandler.INSTANCE.foodManager().get(stack.getItem());
         Map<Attribute, Double> gain = foodStats.getFirst();
         foodStats.getSecond().forEach((att, d) -> {
             float percent = (float) (d * 0.01f);

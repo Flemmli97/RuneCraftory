@@ -32,7 +32,7 @@ public class ItemGloveBase extends Item implements IItemUsable, IChargeable, IDu
 
     @Override
     public int getChargeTime(ItemStack stack) {
-        return DataPackHandler.SERVER_PACK.weaponPropertiesManager().getPropertiesFor(this.getWeaponType()).chargeTime();
+        return DataPackHandler.INSTANCE.weaponPropertiesManager().getPropertiesFor(this.getWeaponType()).chargeTime();
     }
 
     @Override
@@ -82,7 +82,7 @@ public class ItemGloveBase extends Item implements IItemUsable, IChargeable, IDu
 
     @Override
     public float getFOV(LivingEntity entity, ItemStack stack) {
-        return DataPackHandler.SERVER_PACK.weaponPropertiesManager().getPropertiesFor(this.getWeaponType()).aoe();
+        return DataPackHandler.INSTANCE.weaponPropertiesManager().getPropertiesFor(this.getWeaponType()).aoe();
     }
 
     @Override
