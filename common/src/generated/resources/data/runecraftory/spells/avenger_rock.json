@@ -1,6 +1,6 @@
 {
   "cooldown": 20,
-  "rpCost": 40,
+  "rpCost": 16,
   "skillXP": {
     "EARTH": 10.0
   },

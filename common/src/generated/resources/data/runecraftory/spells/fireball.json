@@ -1,6 +1,6 @@
 {
   "cooldown": 20,
-  "rpCost": 10,
+  "rpCost": 3,
   "skillXP": {
     "FIRE": 2.0
   },

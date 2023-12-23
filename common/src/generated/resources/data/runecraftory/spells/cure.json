@@ -1,6 +1,6 @@
 {
   "cooldown": 20,
-  "rpCost": 4,
+  "rpCost": 8,
   "skillXP": {
     "LOVE": 8.0
   },
