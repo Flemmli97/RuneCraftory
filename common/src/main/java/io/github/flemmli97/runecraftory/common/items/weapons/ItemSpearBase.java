@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.common.items.weapons;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.enums.EnumToolCharge;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
@@ -66,7 +65,7 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
     public boolean onServerSwing(LivingEntity entity, ItemStack stack) {
         if (entity instanceof Player player) {
             Platform.INSTANCE.getPlayerData(player)
-                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(player, ModAttackActions.SPEAR.get(), stack, null));
+                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(player, ModAttackActions.SPEAR.get(), stack));
             return false;
         }
         return true;
@@ -123,8 +122,8 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
             if (player instanceof ServerPlayer serverPlayer) {
                 if (Platform.INSTANCE.getPlayerData(player).map(data -> {
                     // Check if insta use is possible
-                    if (data.getWeaponHandler().canConsecutiveExecute(serverPlayer, ModAttackActions.SPEAR_USE.get())) {
-                        data.getWeaponHandler().doWeaponAttack(serverPlayer, ModAttackActions.SPEAR_USE.get(), itemstack, WeaponHandler.simpleServersidedAttackExecuter(() -> this.useSpear(serverPlayer, itemstack)));
+                    if (data.getWeaponHandler().canExecuteAction(serverPlayer, ModAttackActions.SPEAR_USE.get(), false)) {
+                        data.getWeaponHandler().doWeaponAttack(serverPlayer, ModAttackActions.SPEAR_USE.get(), itemstack);
                         return false;
                     }
                     return data.getWeaponHandler().getCurrentAction() == ModAttackActions.NONE.get();
@@ -153,7 +152,7 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
             Platform.INSTANCE.getPlayerData(serverPlayer).ifPresent(data -> {
                 int time = this.getUseDuration(stack) - timeLeft;
                 if (time >= this.getChargeTime(stack) && data.getWeaponHandler().canExecuteAction(serverPlayer, ModAttackActions.SPEAR_USE.get())) {
-                    data.getWeaponHandler().doWeaponAttack(serverPlayer, ModAttackActions.SPEAR_USE.get(), stack, null);
+                    data.getWeaponHandler().doWeaponAttack(serverPlayer, ModAttackActions.SPEAR_USE.get(), stack);
                 }
             });
         }

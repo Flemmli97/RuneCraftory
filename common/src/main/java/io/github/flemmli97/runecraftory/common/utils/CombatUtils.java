@@ -47,6 +47,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class CombatUtils {
@@ -185,6 +186,11 @@ public class CombatUtils {
         return amount;
     }
 
+    public static void knockBackEntity(LivingEntity attacker, LivingEntity entity, float strength) {
+        Vec3 distVec = entity.position().subtract(attacker.position()).normalize();
+        entity.knockback(strength, -distVec.x, -distVec.z);
+    }
+
     public static void knockBack(LivingEntity entity, CustomDamage source) {
         if (source.getKnockBackType() == CustomDamage.KnockBackType.NONE)
             return;
@@ -252,7 +258,7 @@ public class CombatUtils {
             double damagePhys = getAttributeValue(player, Attributes.ATTACK_DAMAGE) * damageModifier;
             if (damagePhys > 0) {
                 if (resetCooldown && stack.getItem() instanceof IItemUsable usable && usable.hasCooldown()) {
-                    player.getCooldowns().addCooldown(stack.getItem(), Mth.ceil(usable.getWeaponType().defaultWeaponSpeed * ItemNBT.attackSpeedModifier(player)));
+                    player.getCooldowns().addCooldown(stack.getItem(), Mth.ceil(20 * ItemNBT.attackSpeedModifier(player)));
                 }
                 boolean faintChance = player.level.random.nextDouble() < statusEffectChance(player, ModAttributes.FAINT.get(), target);
                 boolean critChance = player.level.random.nextDouble() < statusEffectChance(player, ModAttributes.CRIT.get(), target);
@@ -578,10 +584,11 @@ public class CombatUtils {
     }
 
     public static List<LivingEntity> spinAttackHandler(LivingEntity entity, Vec3 dir, float aoe, float rangeBonus, Predicate<LivingEntity> pred) {
-        return spinAttackHandler(entity, dir, aoe, rangeBonus, pred, null);
+        return spinAttackHandler(entity, dir, aoe, rangeBonus, pred, null, null);
     }
 
-    public static List<LivingEntity> spinAttackHandler(LivingEntity entity, Vec3 dir, float aoe, float rangeBonus, Predicate<LivingEntity> pred, Pair<Map<Attribute, Double>, Map<Attribute, Double>> attributes) {
+    public static List<LivingEntity> spinAttackHandler(LivingEntity entity, Vec3 dir, float aoe, float rangeBonus, Predicate<LivingEntity> pred, Pair<Map<Attribute, Double>,
+            Map<Attribute, Double>> attributes, Consumer<LivingEntity> onSuccess) {
         if (entity.level.isClientSide)
             return List.of();
         float reach = (float) entity.getAttributeValue(ModAttributes.ATTACK_RANGE.get()) + rangeBonus;
@@ -595,10 +602,14 @@ public class CombatUtils {
             attributes.getSecond().forEach((att, val) -> applyTempAttributeMult(entity, att, val));
         }
         for (int i = 0; i < list.size(); ++i) {
+            boolean flag = false;
             if (entity instanceof Player player)
-                CombatUtils.playerAttackWithItem(player, list.get(i), i == list.size() - 1, true, i == list.size() - 1);
+                flag = CombatUtils.playerAttackWithItem(player, list.get(i), i == list.size() - 1, true, i == list.size() - 1);
             else if (entity instanceof Mob mob)
-                mob.doHurtTarget(list.get(i));
+                flag = mob.doHurtTarget(list.get(i));
+            if (flag && onSuccess != null) {
+                onSuccess.accept(list.get(i));
+            }
         }
         if (attributes != null) {
             attributes.getFirst().forEach((att, val) -> removeTempAttribute(entity, att));
@@ -608,10 +619,11 @@ public class CombatUtils {
     }
 
     public static List<LivingEntity> spinAttackHandler(LivingEntity entity, float minYRot, float maxYRot, float rangeBonus, Predicate<LivingEntity> pred) {
-        return spinAttackHandler(entity, minYRot, maxYRot, rangeBonus, pred, null);
+        return spinAttackHandler(entity, minYRot, maxYRot, rangeBonus, pred, null, null);
     }
 
-    public static List<LivingEntity> spinAttackHandler(LivingEntity entity, float minYRot, float maxYRot, float rangeBonus, Predicate<LivingEntity> pred, Pair<Map<Attribute, Double>, Map<Attribute, Double>> attributes) {
+    public static List<LivingEntity> spinAttackHandler(LivingEntity entity, float minYRot, float maxYRot, float rangeBonus, Predicate<LivingEntity> pred, Pair<Map<Attribute, Double>,
+            Map<Attribute, Double>> attributes, Consumer<LivingEntity> onSuccess) {
         if (entity.level.isClientSide)
             return List.of();
         float rot = Mth.wrapDegrees(maxYRot - minYRot);
@@ -627,10 +639,14 @@ public class CombatUtils {
             attributes.getSecond().forEach((att, val) -> applyTempAttributeMult(entity, att, val));
         }
         for (int i = 0; i < list.size(); ++i) {
+            boolean flag = false;
             if (entity instanceof Player player)
-                CombatUtils.playerAttackWithItem(player, list.get(i), i == list.size() - 1, true, i == list.size() - 1);
+                flag = CombatUtils.playerAttackWithItem(player, list.get(i), i == list.size() - 1, true, i == list.size() - 1);
             else if (entity instanceof Mob mob)
-                mob.doHurtTarget(list.get(i));
+                flag = mob.doHurtTarget(list.get(i));
+            if (flag && onSuccess != null) {
+                onSuccess.accept(list.get(i));
+            }
         }
         if (attributes != null) {
             attributes.getFirst().forEach((att, val) -> removeTempAttribute(entity, att));
@@ -640,19 +656,32 @@ public class CombatUtils {
     }
 
     public static List<LivingEntity> attackInAABB(LivingEntity entity, AABB aabb, Predicate<LivingEntity> pred) {
-        return attackInAABB(entity, aabb, pred, null);
+        return attackInAABB(entity, aabb, pred, null, null);
     }
 
-    public static List<LivingEntity> attackInAABB(LivingEntity entity, AABB aabb, Predicate<LivingEntity> pred, Pair<Map<Attribute, Double>, Map<Attribute, Double>> attributes) {
+    public static List<LivingEntity> attackInAABB(LivingEntity entity, AABB aabb, Predicate<LivingEntity> pred, Pair<Map<Attribute, Double>,
+            Map<Attribute, Double>> attributes, Consumer<LivingEntity> onSuccess) {
         if (entity.level.isClientSide)
             return List.of();
         List<LivingEntity> list = entity.level.getEntities(EntityTypeTest.forClass(LivingEntity.class), aabb,
                 t -> t != entity && (pred == null || pred.test(t)) && !t.isAlliedTo(entity) && t.isPickable());
+        if (attributes != null) {
+            attributes.getFirst().forEach((att, val) -> applyTempAttribute(entity, att, val));
+            attributes.getSecond().forEach((att, val) -> applyTempAttributeMult(entity, att, val));
+        }
         for (LivingEntity livingEntity : list) {
+            boolean flag = false;
             if (entity instanceof Player player)
-                CombatUtils.playerAttackWithItem(player, livingEntity, false, true, false);
+                flag = CombatUtils.playerAttackWithItem(player, livingEntity, false, true, false);
             else if (entity instanceof Mob mob)
-                mob.doHurtTarget(livingEntity);
+                flag = mob.doHurtTarget(livingEntity);
+            if (flag && onSuccess != null) {
+                onSuccess.accept(livingEntity);
+            }
+        }
+        if (attributes != null) {
+            attributes.getFirst().forEach((att, val) -> removeTempAttribute(entity, att));
+            attributes.getSecond().forEach((att, val) -> removeTempAttribute(entity, att));
         }
         return list;
     }

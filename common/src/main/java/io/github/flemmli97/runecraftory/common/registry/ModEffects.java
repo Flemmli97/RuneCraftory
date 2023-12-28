@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.registry;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.effects.BathEffect;
+import io.github.flemmli97.runecraftory.common.effects.BlitzEffect;
 import io.github.flemmli97.runecraftory.common.effects.ColdEffect;
 import io.github.flemmli97.runecraftory.common.effects.ParalysisEffect;
 import io.github.flemmli97.runecraftory.common.effects.PermanentEffect;
@@ -27,6 +28,8 @@ public class ModEffects {
     public static final RegistryEntrySupplier<MobEffect> FATIGUE = EFFECTS.register("fatigue", () -> new PermanentEffect(MobEffectCategory.HARMFUL, 0, S2CEntityDataSync.Type.FATIGUE));
     public static final RegistryEntrySupplier<MobEffect> COLD = EFFECTS.register("cold", ColdEffect::new);
     public static final RegistryEntrySupplier<MobEffect> BATH = EFFECTS.register("bath", BathEffect::new);
+    public static final RegistryEntrySupplier<MobEffect> BLITZ = EFFECTS.register("blitz", BlitzEffect::new);
+    public static final RegistryEntrySupplier<MobEffect> STEEL_HEART = EFFECTS.register("steel_heart", BathEffect::new);
 
     public static final RegistryEntrySupplier<MobEffect> TRUE_INVIS = EFFECTS.register("true_invis", TrueInvis::new);
 

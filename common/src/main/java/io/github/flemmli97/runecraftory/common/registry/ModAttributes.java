@@ -83,7 +83,7 @@ public class ModAttributes {
      * We use a custom attribute for this to remove other influences like haste etc.
      * Attack speed is in ticks
      */
-    public static final RegistryEntrySupplier<Attribute> ATTACK_SPEED = registerSyncable(LibAttributes.ATTACK_SPEED, ID++, 1, 0, 5);
+    public static final RegistryEntrySupplier<Attribute> ATTACK_SPEED = registerSyncable(LibAttributes.ATTACK_SPEED, ID++, 1, 0, 2);
     public static final RegistryEntrySupplier<Attribute> ATTACK_RANGE = registerSyncable(LibAttributes.ATTACK_RANGE, ID++, 3, 0, 9999);
 
     private static RegistryEntrySupplier<Attribute> register(ResourceLocation reg, int id, double base, double min, double max) {

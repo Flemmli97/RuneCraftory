@@ -16,49 +16,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
-import java.util.function.BiPredicate;
-import java.util.function.ToIntBiFunction;
-import java.util.function.ToIntFunction;
+public abstract class AttackAction extends CustomRegistryEntry<AttackAction> {
 
-public class AttackAction extends CustomRegistryEntry<AttackAction> {
-
-    private final BiFunction<LivingEntity, Integer, AnimatedAction> anim;
-    /**
-     * Static handler for this action
-     */
-    public final ActiveActionHandler attackExecuter;
-    public final BiConsumer<LivingEntity, WeaponHandler> onStart;
-    public final BiConsumer<LivingEntity, WeaponHandler> onEnd;
-
-    public final BiPredicate<LivingEntity, WeaponHandler> isInvulnerable;
-
-    public final ToIntFunction<LivingEntity> maxConsecutive, timeFrame;
-    public final boolean disableItemSwitch, disableMovement;
-    //Here for now till all have animations
-    public final boolean disableAnimation;
-    public final BiPredicate<LivingEntity, WeaponHandler> canOverride;
-    public final ToIntBiFunction<LivingEntity, WeaponHandler> countAdjuster;
-
-    public final BiFunction<LivingEntity, WeaponHandler, Pose> withPose;
-
-    private AttackAction(BiFunction<LivingEntity, Integer, AnimatedAction> anim, ActiveActionHandler attackExecuter, BiConsumer<LivingEntity, WeaponHandler> onStart, BiConsumer<LivingEntity, WeaponHandler> onEnd,
-                         ToIntFunction<LivingEntity> maxConsecutive, ToIntFunction<LivingEntity> timeFrame, boolean disableItemSwitch, boolean disableMovement, boolean disableAnimation,
-                         BiPredicate<LivingEntity, WeaponHandler> canOverride, BiPredicate<LivingEntity, WeaponHandler> isInvulnerable, ToIntBiFunction<LivingEntity, WeaponHandler> countAdjuster, BiFunction<LivingEntity, WeaponHandler, Pose> withPose) {
-        this.anim = anim == null ? (player, data) -> null : anim;
-        this.attackExecuter = attackExecuter;
-        this.onStart = onStart;
-        this.onEnd = onEnd;
-        this.maxConsecutive = maxConsecutive == null ? p -> 1 : maxConsecutive;
-        this.timeFrame = timeFrame;
-        this.disableItemSwitch = disableItemSwitch;
-        this.disableMovement = disableMovement;
-        this.disableAnimation = disableAnimation;
-        this.canOverride = canOverride;
-        this.isInvulnerable = isInvulnerable;
-        this.countAdjuster = countAdjuster;
-        this.withPose = withPose;
+    public static void moveRelative(LivingEntity entity, float amount, Vec3 relative, float speed, boolean overwrite) {
+        if (overwrite)
+            entity.setDeltaMovement(Vec3.ZERO);
+        entity.moveRelative(amount * speed, relative);
     }
 
     public static Vec3 fromRelativeVector(Entity entity, Vec3 relative) {
@@ -90,97 +53,57 @@ public class AttackAction extends CustomRegistryEntry<AttackAction> {
         }
     }
 
-    public AnimatedAction getAnimation(LivingEntity entity, int count) {
-        AnimatedAction anim = this.anim.apply(entity, count);
-        return anim != null ? anim.create() : null;
+    public AnimatedAction getAnimation(LivingEntity entity, int chain) {
+        return null;
     }
 
-    public interface ActiveActionHandler {
-        /**
-         * @param player        The player
-         * @param stack         The itemstack which the player used to activate this action
-         * @param weaponHandler The players playerdata (So don't need to fetch again)
-         * @param anim          Active animation
-         */
-        void handle(LivingEntity player, ItemStack stack, WeaponHandler weaponHandler, AnimatedAction anim);
+    public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
+
     }
 
-    public static class Builder {
+    public void onSetup(LivingEntity entity, WeaponHandler handler) {
 
-        private final BiFunction<LivingEntity, Integer, AnimatedAction> anim;
-        private ActiveActionHandler attackExecuter;
-        private BiConsumer<LivingEntity, WeaponHandler> onStart;
-        private BiConsumer<LivingEntity, WeaponHandler> onEnd;
-        private BiPredicate<LivingEntity, WeaponHandler> canOverride;
-        private ToIntFunction<LivingEntity> maxConsecutive;
-        private ToIntFunction<LivingEntity> timeFrame;
-        private boolean disableItemSwitch, disableMovement, disableAnimation;
-        private BiPredicate<LivingEntity, WeaponHandler> isInvulnerable;
-        private BiFunction<LivingEntity, WeaponHandler, Pose> withPose;
-        private ToIntBiFunction<LivingEntity, WeaponHandler> countAdjuster;
+    }
 
-        public Builder(BiFunction<LivingEntity, Integer, AnimatedAction> anim) {
-            this.anim = anim;
-        }
+    public void onStart(LivingEntity entity, WeaponHandler handler) {
 
-        public Builder doWhileAction(ActiveActionHandler attackExecuter) {
-            this.attackExecuter = attackExecuter;
-            return this;
-        }
+    }
 
-        public Builder doAtStart(BiConsumer<LivingEntity, WeaponHandler> onStart) {
-            this.onStart = onStart;
-            return this;
-        }
+    public void onEnd(LivingEntity entity, WeaponHandler handler) {
 
-        public Builder doAtEnd(BiConsumer<LivingEntity, WeaponHandler> onEnd) {
-            this.onEnd = onEnd;
-            return this;
-        }
+    }
 
-        public Builder setMaxConsecutive(ToIntFunction<LivingEntity> amount, ToIntFunction<LivingEntity> timeFrame) {
-            this.maxConsecutive = amount;
-            this.timeFrame = timeFrame;
-            return this;
-        }
+    public boolean canOverride(LivingEntity entity, WeaponHandler handler) {
+        return false;
+    }
 
-        public Builder disableItemSwitch() {
-            this.disableItemSwitch = true;
-            return this;
-        }
+    public boolean isInvulnerable(LivingEntity entity, WeaponHandler handler) {
+        return false;
+    }
 
-        public Builder disableMovement() {
-            this.disableMovement = true;
-            return this;
-        }
+    public AttackChain attackChain(LivingEntity entity, int chain) {
+        return AttackChain.DEFAULT;
+    }
 
-        public Builder noAnimation() {
-            this.disableAnimation = true;
-            return this;
-        }
+    public boolean disableItemSwitch() {
+        return true;
+    }
 
-        public Builder allowSelfOverride(BiPredicate<LivingEntity, WeaponHandler> canOverride) {
-            this.canOverride = canOverride;
-            return this;
-        }
+    public boolean disableMovement() {
+        return true;
+    }
 
-        public Builder setInvulnerability(BiPredicate<LivingEntity, WeaponHandler> isInvulnerable) {
-            this.isInvulnerable = isInvulnerable;
-            return this;
-        }
+    public Pose getPose(LivingEntity entity, WeaponHandler handler) {
+        return null;
+    }
 
-        public Builder withPose(BiFunction<LivingEntity, WeaponHandler, Pose> poseHandler) {
-            this.withPose = poseHandler;
-            return this;
-        }
-
-        public Builder withCountAdjuster(ToIntBiFunction<LivingEntity, WeaponHandler> countAdjuster) {
-            this.countAdjuster = countAdjuster;
-            return this;
-        }
-
-        public AttackAction build() {
-            return new AttackAction(this.anim, this.attackExecuter, this.onStart, this.onEnd, this.maxConsecutive, this.timeFrame, this.disableItemSwitch, this.disableMovement, this.disableAnimation, this.canOverride, this.isInvulnerable, this.countAdjuster, this.withPose);
-        }
+    /**
+     * Record for handling attack chains
+     *
+     * @param maxChains      Max amount of possible chains
+     * @param chainFrameTime Timeframe after finished animation to click for next chain attack
+     */
+    public record AttackChain(int maxChains, int chainFrameTime) {
+        public static final AttackChain DEFAULT = new AttackChain(1, 0);
     }
 }

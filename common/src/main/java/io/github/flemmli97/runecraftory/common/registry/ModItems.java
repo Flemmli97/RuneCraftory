@@ -765,11 +765,11 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> rushAttack = spell(() -> ModSpells.RUSH_ATTACK, "rush_attack");
     public static final RegistryEntrySupplier<Item> roundBreak = spell(() -> ModSpells.ROUND_BREAK, "round_break");
     public static final RegistryEntrySupplier<Item> mindThrust = spell(() -> ModSpells.MIND_THRUST, "mind_thrust");
-    public static final RegistryEntrySupplier<Item> gust = spell(() -> ModSpells.EMPTY, "gust");
-    public static final RegistryEntrySupplier<Item> storm = spell(() -> ModSpells.EMPTY, "storm");
-    public static final RegistryEntrySupplier<Item> blitz = spell(() -> ModSpells.EMPTY, "blitz");
-    public static final RegistryEntrySupplier<Item> twinAttack = spell(() -> ModSpells.EMPTY, "twin_attack");
-    public static final RegistryEntrySupplier<Item> railStrike = spell(() -> ModSpells.EMPTY, "rail_strike");
+    public static final RegistryEntrySupplier<Item> gust = spell(() -> ModSpells.GUST, "gust");
+    public static final RegistryEntrySupplier<Item> storm = spell(() -> ModSpells.STORM, "storm");
+    public static final RegistryEntrySupplier<Item> blitz = spell(() -> ModSpells.BLITZ, "blitz");
+    public static final RegistryEntrySupplier<Item> twinAttack = spell(() -> ModSpells.TWIN_ATTACK, "twin_attack");
+    public static final RegistryEntrySupplier<Item> railStrike = spell(() -> ModSpells.RAIL_STRIKE, "rail_strike");
     public static final RegistryEntrySupplier<Item> windSlash = spell(() -> ModSpells.EMPTY, "wind_slash");
     public static final RegistryEntrySupplier<Item> flashStrike = spell(() -> ModSpells.EMPTY, "flash_strike");
     public static final RegistryEntrySupplier<Item> naiveBlade = spell(() -> ModSpells.EMPTY, "naive_blade");

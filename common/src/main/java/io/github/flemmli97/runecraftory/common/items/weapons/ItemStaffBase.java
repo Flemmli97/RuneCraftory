@@ -1,7 +1,6 @@
 package io.github.flemmli97.runecraftory.common.items.weapons;
 
 import io.github.flemmli97.runecraftory.api.Spell;
-import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.enums.EnumToolCharge;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
@@ -67,7 +66,7 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable, Ext
     public boolean onServerSwing(LivingEntity entity, ItemStack stack) {
         if (entity instanceof Player player) {
             Platform.INSTANCE.getPlayerData(player)
-                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(player, ModAttackActions.STAFF.get(), stack, null));
+                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(player, ModAttackActions.STAFF.get(), stack));
             return false;
         }
         return true;
@@ -136,7 +135,7 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable, Ext
                             if (spell.use(player.getLevel(), entity, stack))
                                 spell.levelSkill(player);
                         };
-                        data.getWeaponHandler().doWeaponAttack(player, ModAttackActions.STAFF_USE.get(), stack, WeaponHandler.simpleServersidedAttackExecuter(run));
+                        data.getWeaponHandler().doWeaponAttack(player, ModAttackActions.STAFF_USE.get(), stack, spell);
                     });
                     return;
                 }

@@ -45,7 +45,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
 
 public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargeable {
 
@@ -142,7 +141,7 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
         if (this.tier.getTierLevel() != 0 && entity instanceof ServerPlayer player) {
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                int useTime = data.getWeaponHandler().canConsecutiveExecute(player, ModAttackActions.TOOL_HAMMER_USE.get()) ? data.getWeaponHandler().getToolCharge() : ((this.getUseDuration(stack) - timeLeft) / this.getChargeTime(stack));
+                int useTime = data.getWeaponHandler().canExecuteAction(player, ModAttackActions.TOOL_HAMMER_USE.get(), false) ? data.getWeaponHandler().getToolUseData().charge() : ((this.getUseDuration(stack) - timeLeft) / this.getChargeTime(stack));
                 int range = Math.min(useTime, this.tier.getTierLevel());
                 BlockHitResult result = getPlayerPOVHitResult(world, player, ClipContext.Fluid.NONE);
                 if (range == 0) {
@@ -150,29 +149,15 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
                         this.useOnBlock(new UseOnContext((Player) entity, entity.getUsedItemHand(), result), false);
                     }
                 } else {
-                    data.getWeaponHandler().doWeaponAttack(player, ModAttackActions.TOOL_HAMMER_USE.get(), stack, WeaponHandler.simpleServersidedAttackExecuter(() -> {
-                        setDontUseRPFlagTemp(stack, true);
-                        BlockPos pos = entity.blockPosition();
-                        if (result != null && result.getType() != HitResult.Type.MISS) {
-                            pos = result.getBlockPos();
-                        }
-                        int amount = (int) BlockPos.betweenClosedStream(pos.offset(-range, -1, -range), pos.offset(range, 0, range))
-                                .filter(p -> this.hammer((ServerLevel) world, p.immutable(), stack, entity, true) != HammerState.FAIL)
-                                .count();
-                        if (amount > 0) {
-                            LevelCalc.useRP(player, data, range * 15, true, false, true, EnumSkills.MINING);
-                            LevelCalc.levelSkill(player, data, EnumSkills.MINING, (range + 1) * 10);
-                        }
-                        setDontUseRPFlagTemp(stack, false);
-                    }));
-                    data.getWeaponHandler().updateToolCharge(range);
+                    data.getWeaponHandler().doWeaponAttack(player, ModAttackActions.TOOL_HAMMER_USE.get(), stack);
+                    data.getWeaponHandler().updateToolCharge(new WeaponHandler.ToolUseData(result, range));
                 }
             });
         }
         super.releaseUsing(stack, world, entity, timeLeft);
     }
 
-    private static void setDontUseRPFlagTemp(ItemStack stack, boolean flag) {
+    public static void setDontUseRPFlagTemp(ItemStack stack, boolean flag) {
         if (flag) {
             stack.getOrCreateTag().putBoolean("RFInUseFlag", true);
         } else {
@@ -212,7 +197,7 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
         return InteractionResult.PASS;
     }
 
-    private HammerState hammer(ServerLevel world, BlockPos pos, ItemStack stack, LivingEntity entity, boolean canHammer) {
+    public HammerState hammer(ServerLevel world, BlockPos pos, ItemStack stack, LivingEntity entity, boolean canHammer) {
         if (entity instanceof Player && !((Player) entity).mayUseItemAt(pos.relative(Direction.UP), Direction.UP, stack))
             return HammerState.FAIL;
         BlockState state = world.getBlockState(pos);
@@ -240,7 +225,7 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
         return ImmutableMultimap.of();
     }
 
-    enum HammerState {
+    public enum HammerState {
         FAIL,
         BREAK,
         FLATTEN

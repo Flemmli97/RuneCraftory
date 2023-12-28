@@ -32,7 +32,7 @@ public class MixinUtils {
                 player.setPose(Pose.SLEEPING);
             return true;
         }
-        Pose pose = Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().getCurrentAction().withPose != null ? d.getWeaponHandler().getCurrentAction().withPose.apply(player, d.getWeaponHandler()) : null).orElse(null);
+        Pose pose = Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().getCurrentAction().getPose(player, d.getWeaponHandler())).orElse(null);
         if (pose != null) {
             if (player.getPose() != pose)
                 player.setPose(pose);

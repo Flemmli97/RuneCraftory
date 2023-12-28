@@ -54,7 +54,7 @@ public class ItemGloveBase extends Item implements IItemUsable, IChargeable, IDu
     public boolean onServerSwing(LivingEntity entity, ItemStack stack) {
         if (entity instanceof Player player) {
             Platform.INSTANCE.getPlayerData(player)
-                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(player, ModAttackActions.GLOVES.get(), stack, null));
+                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(player, ModAttackActions.GLOVES.get(), stack));
             return false;
         }
         return true;
@@ -130,7 +130,7 @@ public class ItemGloveBase extends Item implements IItemUsable, IChargeable, IDu
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
         if (entity instanceof ServerPlayer serverPlayer && this.getUseDuration(stack) - timeLeft >= this.getChargeTime(stack)) {
             Platform.INSTANCE.getPlayerData(serverPlayer)
-                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(serverPlayer, ModAttackActions.GLOVE_USE.get(), stack, null));
+                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(serverPlayer, ModAttackActions.GLOVE_USE.get(), stack));
         }
     }
 

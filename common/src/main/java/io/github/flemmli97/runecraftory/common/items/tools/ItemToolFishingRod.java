@@ -135,7 +135,7 @@ public class ItemToolFishingRod extends FishingRodItem implements IItemUsable, I
                 hook = new EntityCustomFishingHook(level, entity, speed + this.tier.getTierLevel(), luck, charge);
                 hook.setElement(ItemNBT.getElement(itemStack));
                 if (entity instanceof Player player)
-                    hook.attackHandlingPlayer(() -> player.getCooldowns().getCooldownPercent(itemStack.getItem(), 0.0f) <= 0, () -> player.getCooldowns().addCooldown(itemStack.getItem(), Mth.ceil(EnumWeaponType.FARM.defaultWeaponSpeed * ItemNBT.attackSpeedModifier(player))));
+                    hook.attackHandlingPlayer(() -> player.getCooldowns().getCooldownPercent(itemStack.getItem(), 0.0f) <= 0, () -> player.getCooldowns().addCooldown(itemStack.getItem(), Mth.ceil(20 * ItemNBT.attackSpeedModifier(player))));
                 level.addFreshEntity(hook);
             }
             if (entity instanceof Player player)

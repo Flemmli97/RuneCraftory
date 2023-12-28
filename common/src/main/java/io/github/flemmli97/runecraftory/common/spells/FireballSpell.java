@@ -33,7 +33,7 @@ public class FireballSpell extends Spell {
         ball.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this.big ? 1 : 0.8f));
         level.addFreshEntity(ball);
         if (entity instanceof Player player) {
-            return !Platform.INSTANCE.getPlayerData(player).map(cap -> cap.getWeaponHandler().canConsecutiveExecute(player, this.useAction())).orElse(false);
+            return !Platform.INSTANCE.getPlayerData(player).map(cap -> cap.getWeaponHandler().canExecuteAction(player, this.useAction())).orElse(false);
         }
         return true;
     }

@@ -2,22 +2,19 @@ package io.github.flemmli97.runecraftory.api.enums;
 
 public enum EnumWeaponType {
 
-    FARM(1, 20),
-    SHORTSWORD(1, 11),
-    LONGSWORD(0.5f, 16),
-    SPEAR(0.5f, 12),
-    HAXE(0.5f, 18),
-    DUAL(0, 10),
-    GLOVE(0, 10),
-    STAFF(0.5f, 12);
+    FARM(1),
+    SHORTSWORD(1),
+    LONGSWORD(0.5f),
+    SPEAR(0.5f),
+    HAXE(0.5f),
+    DUAL(0),
+    GLOVE(0),
+    STAFF(0.5f);
 
     public final float shieldEfficiency;
 
-    public final int defaultWeaponSpeed;
-
-    EnumWeaponType(float shieldEfficiency, int defaultWeaponSpeed) {
+    EnumWeaponType(float shieldEfficiency) {
         this.shieldEfficiency = shieldEfficiency;
-        this.defaultWeaponSpeed = defaultWeaponSpeed;
     }
 
 }

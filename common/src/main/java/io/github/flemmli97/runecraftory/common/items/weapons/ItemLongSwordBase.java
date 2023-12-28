@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.common.items.weapons;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.enums.EnumToolCharge;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
@@ -70,7 +69,7 @@ public class ItemLongSwordBase extends SwordItem implements IItemUsable, ICharge
     public boolean onServerSwing(LivingEntity entity, ItemStack stack) {
         if (entity instanceof Player player) {
             Platform.INSTANCE.getPlayerData(player)
-                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(player, ModAttackActions.LONG_SWORD.get(), stack, null));
+                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(player, ModAttackActions.LONG_SWORD.get(), stack));
             return false;
         }
         return true;
@@ -141,21 +140,22 @@ public class ItemLongSwordBase extends SwordItem implements IItemUsable, ICharge
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
         if (!world.isClientSide && this.getUseDuration(stack) - timeLeft >= this.getChargeTime(stack)) {
             if (entity instanceof ServerPlayer player) {
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                    Runnable run = () -> {
-                        entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 1.0f, 1.0f);
-                        player.sweepAttack();
-                        if (performRightClickAction(stack, entity, this.getRange(entity, stack))) {
-                            LevelCalc.levelSkill(player, data, EnumSkills.LONGSWORD, 7);
-                        }
-                    };
-                    data.getWeaponHandler().doWeaponAttack(player, ModAttackActions.LONGSWORD_USE.get(), stack, WeaponHandler.simpleServersidedAttackExecuter(run));
-                });
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.getWeaponHandler().doWeaponAttack(player, ModAttackActions.LONGSWORD_USE.get(), stack));
                 return;
             }
             if (performRightClickAction(stack, entity, this.getRange(entity, stack))) {
                 entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 1.0f, 1.0f);
             }
+        }
+    }
+
+    public static void delayedRightClickAction(LivingEntity entity, ItemStack stack) {
+        float reach = (float) entity.getAttributeValue(ModAttributes.ATTACK_RANGE.get());
+        entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 1.0f, 1.0f);
+        if (entity instanceof ServerPlayer player)
+            player.sweepAttack();
+        if (performRightClickAction(stack, entity, reach) && entity instanceof ServerPlayer player) {
+            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.LONGSWORD, 7));
         }
     }
 

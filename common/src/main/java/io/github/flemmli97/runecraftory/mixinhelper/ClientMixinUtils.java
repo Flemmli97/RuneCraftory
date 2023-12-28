@@ -119,12 +119,9 @@ public class ClientMixinUtils {
                 AnimatedAction current = null;
                 if (data != null) {
                     current = data.getWeaponHandler().getCurrentAnim();
-                    if (data.getWeaponHandler().getCurrentAnim() == null && data.getWeaponHandler().getFadingAnim() != null)
-                        anim = data.getWeaponHandler().getFadingAnim();
-                    else if (!data.getWeaponHandler().noAnimation())
-                        anim = data.getWeaponHandler().getCurrentAnim();
+                    anim = data.getWeaponHandler().getCurrentAnimForRender();
                 }
-                if (current == null && data != null)
+                if (data != null)
                     interpolation = data.getWeaponHandler().interpolatedLastChange();
             } else if (entity instanceof IAnimated animated) {
                 anim = animated.getAnimationHandler().getAnimation();

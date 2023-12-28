@@ -14,6 +14,7 @@ import io.github.flemmli97.runecraftory.common.spells.BaseStaffSpell;
 import io.github.flemmli97.runecraftory.common.spells.BigLeafSpell;
 import io.github.flemmli97.runecraftory.common.spells.BigLightningBoltSpell;
 import io.github.flemmli97.runecraftory.common.spells.BigPlateSpell;
+import io.github.flemmli97.runecraftory.common.spells.BlitzSpell;
 import io.github.flemmli97.runecraftory.common.spells.BoneNeedleSpell;
 import io.github.flemmli97.runecraftory.common.spells.ButterflySpell;
 import io.github.flemmli97.runecraftory.common.spells.CardThrowSpell;
@@ -139,11 +140,16 @@ public class ModSpells {
     public static final RegistryEntrySupplier<Spell> RUSH_ATTACK = registerSpell("rush_attack", () -> new WeaponSpell(ModAttackActions.RUSH_ATTACK, ModTags.SHORTSWORDS), new SpellProperties.Builder(5, 10).withXPGain(EnumSkills.SHORTSWORD, 10).affectedSkill(EnumSkills.SHORTSWORD));
     public static final RegistryEntrySupplier<Spell> ROUND_BREAK = registerSpell("round_break", () -> new WeaponSpell(ModAttackActions.ROUND_BREAK, ModTags.SHORTSWORDS), new SpellProperties.Builder(5, 10).withXPGain(EnumSkills.SHORTSWORD, 10).affectedSkill(EnumSkills.SHORTSWORD));
     public static final RegistryEntrySupplier<Spell> MIND_THRUST = registerSpell("mind_thrust", () -> new WeaponSpell(ModAttackActions.MIND_THRUST, ModTags.SHORTSWORDS), new SpellProperties.Builder(5, 10).withXPGain(EnumSkills.SHORTSWORD, 10).affectedSkill(EnumSkills.SHORTSWORD));
+    public static final RegistryEntrySupplier<Spell> BLITZ = registerSpell("blitz", BlitzSpell::new, new SpellProperties.Builder(5, 15).usePercentageCost().withXPGain(EnumSkills.DUAL, 15).affectedSkill(EnumSkills.DUAL));
+    public static final RegistryEntrySupplier<Spell> TWIN_ATTACK = registerSpell("twin_attack", () -> new WeaponSpell(ModAttackActions.TWIN_ATTACK, ModTags.DUALBLADES), new SpellProperties.Builder(5, 10).withXPGain(EnumSkills.DUAL, 10).affectedSkill(EnumSkills.DUAL));
+    public static final RegistryEntrySupplier<Spell> STORM = registerSpell("storm", () -> new WeaponSpell(ModAttackActions.STORM, ModTags.DUALBLADES), new SpellProperties.Builder(5, 10).withXPGain(EnumSkills.DUAL, 10).affectedSkill(EnumSkills.DUAL));
+    public static final RegistryEntrySupplier<Spell> GUST = registerSpell("gust", () -> new WeaponSpell(ModAttackActions.GUST, ModTags.DUALBLADES), new SpellProperties.Builder(5, 10).withXPGain(EnumSkills.DUAL, 10).affectedSkill(EnumSkills.DUAL));
+    public static final RegistryEntrySupplier<Spell> RAIL_STRIKE = registerSpell("rail_strike", () -> new WeaponSpell(ModAttackActions.RAIL_STRIKE, ModTags.DUALBLADES), new SpellProperties.Builder(5, 10).withXPGain(EnumSkills.DUAL, 10).affectedSkill(EnumSkills.DUAL));
 
     public static final RegistryEntrySupplier<Spell> TELEPORT = registerSpell("teleport", TeleportSpell::new, new SpellProperties.Builder(30, 0));
 
     public static final RegistryEntrySupplier<Spell> SPORE_CIRCLE_SPELL = registerSpell("spore_circle", SporeCircleSpell::new, new SpellProperties.Builder(10, 5).withXPGain(EnumSkills.EARTH, 5).affectedSkill(EnumSkills.EARTH));
-    public static final RegistryEntrySupplier<Spell> GUST_SPELL = registerSpell("gust", GustSpell::new, new SpellProperties.Builder(10, 0).withXPGain(EnumSkills.WIND, 5));
+    public static final RegistryEntrySupplier<Spell> GUST_SPELL = registerSpell("gust_wind", GustSpell::new, new SpellProperties.Builder(10, 0).withXPGain(EnumSkills.WIND, 5));
     public static final RegistryEntrySupplier<Spell> STONE_THROW = registerSpell("stone_throw", StoneThrowSpell::new, new SpellProperties.Builder(10, 7));
     public static final RegistryEntrySupplier<Spell> WEB_SHOT = registerSpell("web_shot", WebShotSpell::new, new SpellProperties.Builder(15, 10));
     public static final RegistryEntrySupplier<Spell> SPIRIT_FLAME = registerSpell("spirit_flame", () -> new ElementalSpell(EnumElement.DARK), new SpellProperties.Builder(10, 7).withXPGain(EnumSkills.DARK, 7).affectedSkill(EnumSkills.DARK));

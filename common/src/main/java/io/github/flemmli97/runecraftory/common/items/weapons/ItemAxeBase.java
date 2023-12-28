@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.common.items.weapons;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.enums.EnumToolCharge;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
@@ -19,7 +18,6 @@ import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.item.IAOEWeapon;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -47,7 +45,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -83,7 +80,7 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IA
     public boolean onServerSwing(LivingEntity entity, ItemStack stack) {
         if (entity instanceof Player player) {
             Platform.INSTANCE.getPlayerData(player)
-                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(player, ModAttackActions.HAMMER_AXE.get(), stack, null));
+                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(player, ModAttackActions.HAMMER_AXE.get(), stack));
             return false;
         }
         return true;
@@ -165,7 +162,7 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IA
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
         if (!world.isClientSide && this.getUseDuration(stack) - timeLeft >= this.getChargeTime(stack)) {
             if (entity instanceof ServerPlayer player) {
-                performRightClickActionPlayer(stack, player, this.getRange(entity, stack));
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.getWeaponHandler().doWeaponAttack(player, ModAttackActions.HAMMER_AXE_USE.get(), stack));
                 return;
             }
             if (performRightClickAction(stack, entity, this.getRange(entity, stack))) {
@@ -179,18 +176,13 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IA
         return false;
     }
 
-    public static void performRightClickActionPlayer(ItemStack stack, ServerPlayer player, float range) {
-        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-            Runnable run = () -> {
-                boolean success = performRightClickAction(stack, player, range);
-                Platform.INSTANCE.sendToClient(new S2CScreenShake(4, 1), player);
-                if (success) {
-                    player.level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, player.getSoundSource(), 1.0f, 1.0f);
-                    LevelCalc.levelSkill(player, data, EnumSkills.HAMMERAXE, 5);
-                }
-            };
-            data.getWeaponHandler().doWeaponAttack(player, ModAttackActions.HAMMER_AXE_USE.get(), stack, WeaponHandler.simpleServersidedAttackExecuter(run));
-        });
+    public static void delayedRightClickAction(LivingEntity entity, ItemStack stack) {
+        float reach = (float) entity.getAttributeValue(ModAttributes.ATTACK_RANGE.get());
+        Platform.INSTANCE.sendToTrackingAndSelf(new S2CScreenShake(4, 1), entity);
+        entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, entity.getSoundSource(), 1.0f, 1.0f);
+        if (performRightClickAction(stack, entity, reach) && entity instanceof ServerPlayer player) {
+            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.HAMMERAXE, 5));
+        }
     }
 
     public static boolean performRightClickAction(ItemStack stack, LivingEntity entity, float range) {
@@ -232,15 +224,6 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IA
         double dZ = entity.getZ() - origin.z;
         reach += entity.getBbWidth() * 0.5;
         return dX * dX + dY * dY + dZ * dZ <= reach * reach;
-    }
-
-    public static Consumer<AnimatedAction> moveEntity(LivingEntity entity) {
-        return a -> {
-            if (a.getTick() <= 1) {
-                entity.setDeltaMovement(0, 0.35, 0);
-                entity.hasImpulse = true;
-            }
-        };
     }
 
     private static Vec3[] generateParticleDir(int range) {

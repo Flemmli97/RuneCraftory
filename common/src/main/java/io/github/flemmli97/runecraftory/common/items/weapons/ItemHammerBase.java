@@ -61,7 +61,7 @@ public class ItemHammerBase extends PickaxeItem implements IItemUsable, IChargea
     public boolean onServerSwing(LivingEntity entity, ItemStack stack) {
         if (entity instanceof Player player) {
             Platform.INSTANCE.getPlayerData(player)
-                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(player, ModAttackActions.HAMMER_AXE.get(), stack, null));
+                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(player, ModAttackActions.HAMMER_AXE.get(), stack));
             return false;
         }
         return true;
@@ -141,7 +141,7 @@ public class ItemHammerBase extends PickaxeItem implements IItemUsable, IChargea
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
         if (!world.isClientSide && this.getUseDuration(stack) - timeLeft >= this.getChargeTime(stack)) {
             if (entity instanceof ServerPlayer player) {
-                ItemAxeBase.performRightClickActionPlayer(stack, player, this.getRange(entity, stack));
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.getWeaponHandler().doWeaponAttack(player, ModAttackActions.HAMMER_AXE_USE.get(), stack));
                 return;
             }
             if (ItemAxeBase.performRightClickAction(stack, entity, this.getRange(entity, stack))) {

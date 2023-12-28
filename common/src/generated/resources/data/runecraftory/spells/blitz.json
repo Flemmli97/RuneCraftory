@@ -1,10 +1,10 @@
 {
   "cooldown": 5,
-  "rpCost": 10,
+  "rpCost": 15,
   "skillXP": {
-    "DUAL": 10.0
+    "DUAL": 15.0
   },
-  "percentage": false,
+  "percentage": true,
   "skills": [
     "DUAL"
   ]

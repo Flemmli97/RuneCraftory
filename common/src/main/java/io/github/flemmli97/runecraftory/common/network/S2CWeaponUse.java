@@ -30,7 +30,7 @@ public class S2CWeaponUse implements Packet {
         Player player = ClientHandlers.getPlayer();
         if (player == null)
             return;
-        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.getWeaponHandler().doWeaponAttack(player, pkt.action, pkt.stack, null));
+        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.getWeaponHandler().doWeaponAttack(player, pkt.action, pkt.stack));
     }
 
     @Override

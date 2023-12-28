@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.api.action;
 
+import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
 import io.github.flemmli97.runecraftory.common.network.S2CWeaponUse;
@@ -7,115 +8,103 @@ import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionHand;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.BiConsumer;
 
 public class WeaponHandler {
 
     private static final float FADE_TICK = 3;
 
-    private AttackAction currentAction = ModAttackActions.NONE.get(), chainTrackerAction = ModAttackActions.NONE.get();
-    private int count, timeFrame;
+    private AttackAction currentAction = ModAttackActions.NONE.get();
+    private int chainCount;
 
     private AnimatedAction currentAnim, fadingAnim;
     private ItemStack usedWeapon = ItemStack.EMPTY;
-    private AttackAction.ActiveActionHandler weaponConsumer;
+    private Spell spell;
+    /**
+     * Value used to interpolate animation transitions
+     */
     private int timeSinceLastChange;
 
-    private int toolCharge;
+    private ToolUseData toolUseData;
 
     private float spinStartRot;
     private final Set<LivingEntity> hitEntityTracker = new HashSet<>();
     private boolean lockLook;
 
-    private static AttackAction.ActiveActionHandler merged(BiConsumer<LivingEntity, AnimatedAction> first, AttackAction.ActiveActionHandler second) {
-        if (first == null)
-            return second;
-        if (second == null)
-            return (entity, stack, data, anim) -> first.accept(entity, anim);
-        return (entity, stack, data, anim) -> {
-            first.accept(entity, anim);
-            second.handle(entity, stack, data, anim);
-        };
+    private Vec3 moveDir;
+    private boolean oldGravity;
+    private int moveDuration;
+
+    public boolean doWeaponAttack(LivingEntity entity, AttackAction action, ItemStack stack) {
+        return this.doWeaponAttack(entity, action, stack, null);
     }
 
-    public static BiConsumer<LivingEntity, AnimatedAction> simpleServersidedAttackExecuter(Runnable run) {
-        return (entity, animatedAction) -> {
-            if (!entity.level.isClientSide && animatedAction.canAttack()) {
-                entity.swing(InteractionHand.MAIN_HAND);
-                run.run();
-            }
-        };
-    }
-
-    public boolean doWeaponAttack(LivingEntity entity, AttackAction action, ItemStack stack, @Nullable BiConsumer<LivingEntity, AnimatedAction> attack) {
-        if (entity.level.isClientSide || this.canExecuteAction(entity, action) || this.canConsecutiveExecute(entity, action)) {
-            if (action.countAdjuster != null)
-                this.count = action.countAdjuster.applyAsInt(entity, this);
-            this.setAnimationBasedOnState(entity, action, true, attack);
+    public boolean doWeaponAttack(LivingEntity entity, AttackAction action, ItemStack stack, @Nullable Spell spell) {
+        if (entity.level.isClientSide || this.canExecuteAction(entity, action)) {
+            action.onSetup(entity, this);
+            this.setAnimationBasedOnState(entity, action, true);
             this.usedWeapon = stack;
+            this.spell = spell;
             return true;
         }
         return false;
     }
 
     public boolean canExecuteAction(LivingEntity entity, AttackAction action) {
-        return this.currentAction == ModAttackActions.NONE.get();
+        return this.canExecuteAction(entity, action, true);
     }
 
-    public boolean canConsecutiveExecute(LivingEntity entity, AttackAction action) {
-        return (this.canExecuteAction(entity, action) || (this.currentAction == action && action.canOverride != null && action.canOverride.test(entity, this)))
-                && this.count < action.maxConsecutive.applyAsInt(entity)
-                && this.chainTrackerAction == action;
+    public boolean canExecuteAction(LivingEntity entity, AttackAction action, boolean allowNone) {
+        if (allowNone && (this.currentAction == ModAttackActions.NONE.get() || this.currentAnim == null))
+            return true;
+        if (!this.currentAction.canOverride(entity, this) && !this.isCurrentAnimationDone())
+            return false;
+        if (this.currentAction != action)
+            return true;
+        return this.chainCount < action.attackChain(entity, this.chainCount).maxChains();
     }
 
-    private void setAnimationBasedOnState(LivingEntity entity, AttackAction action, boolean packet, @Nullable BiConsumer<LivingEntity, AnimatedAction> attack) {
-        if (this.currentAction.onEnd != null)
-            this.currentAction.onEnd.accept(entity, this);
-        if (action == ModAttackActions.NONE.get() && this.count >= this.currentAction.maxConsecutive.applyAsInt(entity)) {
-            this.count = 0;
-            this.chainTrackerAction = action;
-        }
-        this.currentAction = action;
-        if (action != ModAttackActions.NONE.get()) {
-            this.chainTrackerAction = this.currentAction;
-        }
-        this.weaponConsumer = merged(attack, action.attackExecuter);
-        if (action == ModAttackActions.NONE.get())
+    private void setAnimationBasedOnState(LivingEntity entity, AttackAction action, boolean packet) {
+        this.currentAction.onEnd(entity, this);
+        this.moveDir = null;
+        if (action == ModAttackActions.NONE.get()) {
+            this.resetStates();
             this.fadingAnim = this.currentAnim;
-        this.currentAnim = action.getAnimation(entity, this.getCurrentCount());
-        this.timeSinceLastChange = 0;
-        if (this.currentAction != ModAttackActions.NONE.get()) {
-            this.count++;
-            if (action.timeFrame != null && (this.chainTrackerAction != this.currentAction || this.timeFrame <= 0))
-                this.timeFrame = action.timeFrame.applyAsInt(entity);
-            if (this.chainTrackerAction == this.currentAction) {
-                this.toolCharge = 0;
-            }
         }
-        if (action == ModAttackActions.NONE.get())
+        this.timeSinceLastChange = 0;
+        this.currentAction = action;
+        this.currentAnim = action.getAnimation(entity, this.getChainCount());
+        if (this.currentAction != ModAttackActions.NONE.get()) {
+            this.chainCount++;
+        } else
             this.usedWeapon = ItemStack.EMPTY;
         entity.yBodyRot = entity.yHeadRot;
         this.resetHitEntityTracker();
         this.lockLook = false;
-        if (this.currentAction.onStart != null)
-            this.currentAction.onStart.accept(entity, this);
+        this.currentAction.onStart(entity, this);
         if (packet && entity instanceof ServerPlayer serverPlayer) {
             Platform.INSTANCE.sendToClient(new S2CWeaponUse(this.currentAction, this.usedWeapon), serverPlayer);
         }
     }
 
+    private void resetStates() {
+        this.chainCount = 0;
+        this.toolUseData = null;
+    }
+
     public void tick(LivingEntity entity) {
         if (this.currentAnim != null) {
-            if (this.currentAnim.tick()) {
-                this.setAnimationBasedOnState(entity, ModAttackActions.NONE.get(), false, null);
+            if (this.currentAnim.tick(1 + (int) (this.currentAnim.getSpeed() * this.currentAction.attackChain(entity, this.chainCount).chainFrameTime()))) {
+                this.setAnimationBasedOnState(entity, ModAttackActions.NONE.get(), false);
             } else {
                 if (entity instanceof ServerPlayer player) {
                     PlayerData data = Platform.INSTANCE.getPlayerData(player).orElse(null);
@@ -129,34 +118,37 @@ public class WeaponHandler {
                         }
                     }
                     if (changedItem) {
-                        this.setAnimationBasedOnState(entity, ModAttackActions.NONE.get(), true, null);
+                        this.setAnimationBasedOnState(entity, ModAttackActions.NONE.get(), true);
                     }
                 }
-                if (this.currentAnim != null && this.weaponConsumer != null)
-                    this.weaponConsumer.handle(entity, this.usedWeapon, this, this.currentAnim);
+                this.currentAction.run(entity, this.usedWeapon, this, this.currentAnim);
             }
-        } else {
-            if (--this.timeFrame <= 0) {
-                this.count = 0;
-                this.chainTrackerAction = ModAttackActions.NONE.get();
-                this.toolCharge = 0;
-            }
+        }
+        if (this.moveDir != null) {
+            entity.setDeltaMovement(this.moveDir);
+            this.moveDuration--;
+            if (this.moveDuration <= 0)
+                this.moveDir = null;
         }
         this.timeSinceLastChange++;
         if (this.timeSinceLastChange >= FADE_TICK)
             this.fadingAnim = null;
     }
 
+    private boolean isCurrentAnimationDone() {
+        return this.currentAnim != null && this.currentAnim.isPastTick(1 + this.currentAnim.getLength());
+    }
+
     public AttackAction getCurrentAction() {
         return this.currentAction;
     }
 
-    public void updateToolCharge(int charge) {
-        this.toolCharge = charge;
+    public void updateToolCharge(ToolUseData toolUseData) {
+        this.toolUseData = toolUseData;
     }
 
-    public int getToolCharge() {
-        return this.toolCharge;
+    public ToolUseData getToolUseData() {
+        return this.toolUseData;
     }
 
     public float interpolatedLastChange() {
@@ -165,20 +157,20 @@ public class WeaponHandler {
         return Math.max(0, 1 - this.timeSinceLastChange / FADE_TICK);
     }
 
-    public int getCurrentCount() {
-        return this.count;
+    public void setChainCount(int count) {
+        this.chainCount = count;
+    }
+
+    public int getChainCount() {
+        return this.chainCount;
     }
 
     public boolean isMovementBlocked() {
-        return this.currentAction.disableMovement;
+        return this.currentAction.disableMovement();
     }
 
     public boolean isItemSwapBlocked() {
-        return this.currentAction.disableItemSwitch;
-    }
-
-    public boolean noAnimation() {
-        return this.currentAction.disableAnimation;
+        return this.currentAction.disableItemSwitch();
     }
 
     public boolean lockedLook() {
@@ -193,8 +185,18 @@ public class WeaponHandler {
         return this.currentAnim;
     }
 
+    public AnimatedAction getCurrentAnimForRender() {
+        if (this.getCurrentAnim() == null)
+            return this.getFadingAnim();
+        return this.getCurrentAnim();
+    }
+
     public AnimatedAction getFadingAnim() {
         return this.fadingAnim;
+    }
+
+    public Spell getSpellToCast() {
+        return this.spell;
     }
 
     public void setSpinStartRot(float rot) {
@@ -218,6 +220,32 @@ public class WeaponHandler {
     }
 
     public boolean isInvulnerable(LivingEntity entity) {
-        return this.currentAction.isInvulnerable != null && this.currentAction.isInvulnerable.test(entity, this);
+        return this.currentAction.isInvulnerable(entity, this);
+    }
+
+    public void setMoveTargetDir(Vec3 direction, AnimatedAction animation, double endTick) {
+        this.setMoveTargetDir(direction, animation, Mth.ceil(endTick * 20));
+    }
+
+    public void setMoveTargetDir(Vec3 direction, AnimatedAction animation, int endTick) {
+        double duration = Math.max(1, (endTick - animation.getTick()) / animation.getSpeed());
+        this.moveDir = direction.scale(1d / duration);
+        this.moveDuration = Mth.ceil(duration);
+    }
+
+    public void clearMoveTarget() {
+        this.moveDir = null;
+    }
+
+    public void setNoGravity(LivingEntity entity) {
+        this.oldGravity = entity.isNoGravity();
+        entity.setNoGravity(true);
+    }
+
+    public void restoreGravity(LivingEntity entity) {
+        entity.setNoGravity(this.oldGravity);
+    }
+
+    public record ToolUseData(HitResult result, int charge) {
     }
 }
