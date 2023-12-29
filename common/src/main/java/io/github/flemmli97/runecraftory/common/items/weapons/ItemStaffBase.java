@@ -130,13 +130,7 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable, Ext
             Spell spell = this.getSpell(stack, level);
             if (spell != null) {
                 if (entity instanceof ServerPlayer player) {
-                    Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                        Runnable run = () -> {
-                            if (spell.use(player.getLevel(), entity, stack))
-                                spell.levelSkill(player);
-                        };
-                        data.getWeaponHandler().doWeaponAttack(player, ModAttackActions.STAFF_USE.get(), stack, spell);
-                    });
+                    Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.getWeaponHandler().doWeaponAttack(player, ModAttackActions.STAFF_USE.get(), stack, spell, false));
                     return;
                 }
                 spell.use((ServerLevel) world, entity, stack);

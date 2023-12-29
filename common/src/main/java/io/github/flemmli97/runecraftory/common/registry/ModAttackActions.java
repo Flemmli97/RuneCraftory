@@ -2,19 +2,26 @@ package io.github.flemmli97.runecraftory.common.registry;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.action.AttackAction;
+import io.github.flemmli97.runecraftory.common.attackactions.AxelDisasterAttack;
 import io.github.flemmli97.runecraftory.common.attackactions.DashSlashAttack;
+import io.github.flemmli97.runecraftory.common.attackactions.DeltaStrikeAttack;
 import io.github.flemmli97.runecraftory.common.attackactions.DualBladeAttack;
 import io.github.flemmli97.runecraftory.common.attackactions.EmptyAction;
 import io.github.flemmli97.runecraftory.common.attackactions.FireballUseAttack;
+import io.github.flemmli97.runecraftory.common.attackactions.FlashStrikeAttack;
 import io.github.flemmli97.runecraftory.common.attackactions.GloveAttack;
 import io.github.flemmli97.runecraftory.common.attackactions.GloveUseAttack;
 import io.github.flemmli97.runecraftory.common.attackactions.GustAttack;
 import io.github.flemmli97.runecraftory.common.attackactions.HammerAxeAttack;
 import io.github.flemmli97.runecraftory.common.attackactions.HammerAxeUseAttack;
+import io.github.flemmli97.runecraftory.common.attackactions.HurricaneAttack;
 import io.github.flemmli97.runecraftory.common.attackactions.LongSwordAttack;
+import io.github.flemmli97.runecraftory.common.attackactions.MillionStrikeAttack;
 import io.github.flemmli97.runecraftory.common.attackactions.MindThrustAttack;
+import io.github.flemmli97.runecraftory.common.attackactions.NaiveBladeAttack;
 import io.github.flemmli97.runecraftory.common.attackactions.PowerWaveAttack;
 import io.github.flemmli97.runecraftory.common.attackactions.RailStrikeAttack;
+import io.github.flemmli97.runecraftory.common.attackactions.ReaperSlashAttack;
 import io.github.flemmli97.runecraftory.common.attackactions.RoundBreakAttack;
 import io.github.flemmli97.runecraftory.common.attackactions.RushAttack;
 import io.github.flemmli97.runecraftory.common.attackactions.SelfBuffSpell;
@@ -27,6 +34,7 @@ import io.github.flemmli97.runecraftory.common.attackactions.StormAttack;
 import io.github.flemmli97.runecraftory.common.attackactions.TimedUseAttack;
 import io.github.flemmli97.runecraftory.common.attackactions.ToolHammerUse;
 import io.github.flemmli97.runecraftory.common.attackactions.TwinAttack;
+import io.github.flemmli97.runecraftory.common.attackactions.WindSlashAttack;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemDualBladeBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemLongSwordBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemShortSwordBase;
@@ -95,6 +103,17 @@ public class ModAttackActions {
     public static final RegistryEntrySupplier<AttackAction> STORM = register("storm", StormAttack::new);
     public static final RegistryEntrySupplier<AttackAction> GUST = register("gust", GustAttack::new);
     public static final RegistryEntrySupplier<AttackAction> RAIL_STRIKE = register("rail_strike", RailStrikeAttack::new);
+
+    public static final RegistryEntrySupplier<AttackAction> WIND_SLASH = register("wind_slash", WindSlashAttack::new);
+    public static final RegistryEntrySupplier<AttackAction> FLASH_STRIKE = register("flash_strike", FlashStrikeAttack::new);
+    public static final RegistryEntrySupplier<AttackAction> STEEL_HEART = register("steel_heart", SelfBuffSpell::new);
+    public static final RegistryEntrySupplier<AttackAction> DELTA_STRIKE = register("delta_strike", DeltaStrikeAttack::new);
+    public static final RegistryEntrySupplier<AttackAction> NAIVE_BLADE = register("naive_blade", NaiveBladeAttack::new);
+
+    public static final RegistryEntrySupplier<AttackAction> HURRICANE = register("hurricane", HurricaneAttack::new);
+    public static final RegistryEntrySupplier<AttackAction> REAPER_SLASH = register("reaper_slash", ReaperSlashAttack::new);
+    public static final RegistryEntrySupplier<AttackAction> MILLION_STRIKE = register("million_strike", MillionStrikeAttack::new);
+    public static final RegistryEntrySupplier<AttackAction> AXEL_DISASTER = register("axel_disaster", AxelDisasterAttack::new);
 
     public static RegistryEntrySupplier<AttackAction> register(String id, Supplier<AttackAction> action) {
         return ATTACK_ACTIONS.register(id, action);

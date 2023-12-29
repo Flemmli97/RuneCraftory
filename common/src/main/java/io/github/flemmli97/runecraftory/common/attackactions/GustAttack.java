@@ -52,4 +52,9 @@ public class GustAttack extends AttackAction {
         }
         handler.lockLook(true);
     }
+
+    @Override
+    public boolean isInvulnerable(LivingEntity entity, WeaponHandler handler) {
+        return true;
+    }
 }

@@ -85,4 +85,9 @@ public class DashSlashAttack extends AttackAction {
         AnimatedAction anim = handler.getCurrentAnim();
         return anim != null && handler.getChainCount() == 1 && anim.isPastTick(0.36);
     }
+
+    @Override
+    public boolean isInvulnerable(LivingEntity entity, WeaponHandler handler) {
+        return handler.getChainCount() == 1;
+    }
 }

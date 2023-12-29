@@ -53,7 +53,7 @@ public class RushAttack extends AttackAction {
             if (!entity.level.isClientSide) {
                 if (anim.canAttack() || anim.isAtTick(0.52) || anim.isAtTick(1.08)) {
                     CombatUtils.spinAttackHandler(entity, entity.getLookAngle(), CombatUtils.getAOE(entity, stack, 10), 0.5f, null,
-                            Pair.of(Map.of(), Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))), anim.isAtTick(1.08) ? e -> e.setDeltaMovement(e.getDeltaMovement().add(0.0, 0.4f, 0.0)) : null);
+                            Pair.of(Map.of(), Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))), null);
                     entity.swing(InteractionHand.MAIN_HAND, true);
                 }
             }

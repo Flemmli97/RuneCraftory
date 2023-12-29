@@ -41,4 +41,9 @@ public class RoundBreakAttack extends AttackAction {
                     Pair.of(Map.of(), Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))), e -> CombatUtils.knockBackEntity(entity, e, 1.5f)));
         }
     }
+
+    @Override
+    public boolean isInvulnerable(LivingEntity entity, WeaponHandler handler) {
+        return true;
+    }
 }

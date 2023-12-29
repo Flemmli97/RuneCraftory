@@ -42,7 +42,7 @@ public class ItemSpell extends Item {
             return Platform.INSTANCE.getPlayerData(player)
                     .map(d -> {
                         if (player.getCooldowns().getCooldownPercent(this, 0) <= 0) {
-                            return d.getWeaponHandler().doWeaponAttack(player, this.getSpell().useAction(), stack, this.getSpell());
+                            return d.getWeaponHandler().doWeaponAttack(player, this.getSpell().useAction(), stack, this.getSpell(), false);
                         }
                         return false;
                     }).orElse(false);

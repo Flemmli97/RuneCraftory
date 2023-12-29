@@ -5,6 +5,8 @@ import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.SimpleEffect;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
+import io.github.flemmli97.runecraftory.common.attackactions.NaiveBladeAttack;
 import io.github.flemmli97.runecraftory.common.blocks.BlockMineral;
 import io.github.flemmli97.runecraftory.common.blocks.Growable;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
@@ -21,6 +23,7 @@ import io.github.flemmli97.runecraftory.common.network.S2CCapSync;
 import io.github.flemmli97.runecraftory.common.network.S2CDataPackSync;
 import io.github.flemmli97.runecraftory.common.network.S2CEntityDataSyncAll;
 import io.github.flemmli97.runecraftory.common.network.S2CTriggers;
+import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
@@ -405,7 +408,14 @@ public class EntityCalls {
         if (damage < 0)
             entity.heal(-damage);
         else if (damage > 0 && source != DamageSource.OUT_OF_WORLD && entity instanceof ServerPlayer player) {
-            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.DEFENCE, Math.min(7, (float) (0.5 + Math.log(damage * 0.25))) * 1.5f));
+            PlayerData data = Platform.INSTANCE.getPlayerData(player).orElse(null);
+            if (data != null) {
+                if (NaiveBladeAttack.canCounter(data.getWeaponHandler())) {
+                    data.getWeaponHandler().doWeaponAttack(entity, ModAttackActions.NAIVE_BLADE.get(), player.getMainHandItem(), null, true);
+                    return 0;
+                }
+                LevelCalc.levelSkill(player, data, EnumSkills.DEFENCE, Math.min(7, (float) (0.5 + Math.log(damage * 0.25))) * 1.5f);
+            }
         }
         //if (source instanceof CustomDamage)
         //    entity.invulnerableTime = ((CustomDamage) source).hurtProtection() + 10;

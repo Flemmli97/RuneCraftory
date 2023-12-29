@@ -122,7 +122,7 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
             if (player instanceof ServerPlayer serverPlayer) {
                 if (Platform.INSTANCE.getPlayerData(player).map(data -> {
                     // Check if insta use is possible
-                    if (data.getWeaponHandler().canExecuteAction(serverPlayer, ModAttackActions.SPEAR_USE.get(), false)) {
+                    if (data.getWeaponHandler().canExecuteAction(serverPlayer, ModAttackActions.SPEAR_USE.get(), false, false)) {
                         data.getWeaponHandler().doWeaponAttack(serverPlayer, ModAttackActions.SPEAR_USE.get(), itemstack);
                         return false;
                     }

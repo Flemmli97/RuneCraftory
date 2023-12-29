@@ -141,7 +141,7 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
         if (this.tier.getTierLevel() != 0 && entity instanceof ServerPlayer player) {
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                int useTime = data.getWeaponHandler().canExecuteAction(player, ModAttackActions.TOOL_HAMMER_USE.get(), false) ? data.getWeaponHandler().getToolUseData().charge() : ((this.getUseDuration(stack) - timeLeft) / this.getChargeTime(stack));
+                int useTime = data.getWeaponHandler().canExecuteAction(player, ModAttackActions.TOOL_HAMMER_USE.get(), false, false) ? data.getWeaponHandler().getToolUseData().charge() : ((this.getUseDuration(stack) - timeLeft) / this.getChargeTime(stack));
                 int range = Math.min(useTime, this.tier.getTierLevel());
                 BlockHitResult result = getPlayerPOVHitResult(world, player, ClipContext.Fluid.NONE);
                 if (range == 0) {

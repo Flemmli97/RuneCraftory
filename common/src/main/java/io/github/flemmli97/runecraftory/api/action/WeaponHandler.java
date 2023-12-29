@@ -45,11 +45,11 @@ public class WeaponHandler {
     private int moveDuration;
 
     public boolean doWeaponAttack(LivingEntity entity, AttackAction action, ItemStack stack) {
-        return this.doWeaponAttack(entity, action, stack, null);
+        return this.doWeaponAttack(entity, action, stack, null, false);
     }
 
-    public boolean doWeaponAttack(LivingEntity entity, AttackAction action, ItemStack stack, @Nullable Spell spell) {
-        if (entity.level.isClientSide || this.canExecuteAction(entity, action)) {
+    public boolean doWeaponAttack(LivingEntity entity, AttackAction action, ItemStack stack, @Nullable Spell spell, boolean ignoreCurrent) {
+        if (entity.level.isClientSide || this.canExecuteAction(entity, action, true, ignoreCurrent)) {
             action.onSetup(entity, this);
             this.setAnimationBasedOnState(entity, action, true);
             this.usedWeapon = stack;
@@ -60,13 +60,13 @@ public class WeaponHandler {
     }
 
     public boolean canExecuteAction(LivingEntity entity, AttackAction action) {
-        return this.canExecuteAction(entity, action, true);
+        return this.canExecuteAction(entity, action, true, false);
     }
 
-    public boolean canExecuteAction(LivingEntity entity, AttackAction action, boolean allowNone) {
+    public boolean canExecuteAction(LivingEntity entity, AttackAction action, boolean allowNone, boolean ignoreCurrent) {
         if (allowNone && (this.currentAction == ModAttackActions.NONE.get() || this.currentAnim == null))
             return true;
-        if (!this.currentAction.canOverride(entity, this) && !this.isCurrentAnimationDone())
+        if (!ignoreCurrent && !this.currentAction.canOverride(entity, this) && !this.isCurrentAnimationDone())
             return false;
         if (this.currentAction != action)
             return true;
@@ -99,6 +99,7 @@ public class WeaponHandler {
     private void resetStates() {
         this.chainCount = 0;
         this.toolUseData = null;
+        this.hitEntityTracker.clear();
     }
 
     public void tick(LivingEntity entity) {

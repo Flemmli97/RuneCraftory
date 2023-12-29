@@ -116,16 +116,16 @@ public class PlayerModelAnimations {
     public static final AnimatedAction GUST = addTo(new AnimatedAction(length(0.84), 0.64, "gust"));
     public static final AnimatedAction RAIL_STRIKE = addTo(new AnimatedAction(length(1.4), 0.32, "rail_strike"));
     public static final List<AnimatedAction> WIND_SLASH = addTo(2, "wind_slash", count -> switch (count) {
-        case 2 -> Pair.of((int) Math.ceil(1.2 * 20), 0);
-        default -> Pair.of((int) Math.ceil(1.44 * 20), (int) Math.ceil(0.24 * 20));
+        case 2 -> Pair.of((int) Math.ceil(1.16 * 20), 0);
+        default -> Pair.of((int) Math.ceil(1.36 * 20), (int) Math.ceil(0.24 * 20));
     });
     public static final AnimatedAction FLASH_STRIKE = addTo(new AnimatedAction(length(1.36), 0.24, "flash_strike"));
     public static final AnimatedAction DELTA_STRIKE = addTo(new AnimatedAction(length(1.08), 0.28, "delta_strike"));
-    public static final AnimatedAction NAIVE_BLADE = addTo(new AnimatedAction(length(0.72), 0.12, "naive_blade"));
-    public static final AnimatedAction NAIVE_BLADE_SUCCESS = addTo(new AnimatedAction(length(1.08), 0.28, "naive_blade_success"));
-    public static final AnimatedAction HURRICANE = addTo(new AnimatedAction(length(1.48), 0.32, "hurricane"));
+    public static final AnimatedAction NAIVE_BLADE = addTo(new AnimatedAction(length(0.84), 0.12, "naive_blade"));
+    public static final AnimatedAction NAIVE_BLADE_SUCCESS = addTo(new AnimatedAction(length(1.16), 0.36, "naive_blade_success"));
+    public static final AnimatedAction HURRICANE = addTo(new AnimatedAction(length(1.68), 0.12, "hurricane"));
     public static final AnimatedAction REAPER_SLASH = addTo(new AnimatedAction(length(0.84), 0.24, "reaper_slash"));
-    public static final AnimatedAction MILLION_STRIKE = addTo(new AnimatedAction(length(0.72), 0.32, "million_strike"));
+    public static final AnimatedAction MILLION_STRIKE = addTo(new AnimatedAction(length(0.8), 0.32, "million_strike"));
     public static final AnimatedAction AXEL_DISASTER = addTo(new AnimatedAction(length(1.2), 0.36, "axel_disaster"));
     public static final AnimatedAction STARDUST_UPPER = addTo(new AnimatedAction(length(1.76), 0.24, "stardust_upper"));
     public static final AnimatedAction GRAND_IMPACT = addTo(new AnimatedAction(length(3.08), 0.4, "grand_impact"));
