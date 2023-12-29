@@ -64,6 +64,7 @@ public class WindSlashAttack extends AttackAction {
 
     @Override
     public void onStart(LivingEntity entity, WeaponHandler handler) {
+        super.onStart(entity, handler);
         if (handler.getChainCount() == 2) {
             handler.setSpinStartRot(entity.getYRot());
             handler.resetHitEntityTracker();

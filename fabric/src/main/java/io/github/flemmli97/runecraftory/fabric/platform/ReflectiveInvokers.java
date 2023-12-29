@@ -15,7 +15,8 @@ public class ReflectiveInvokers {
             Activity ret = o.newInstance(name);
             o.setAccessible(false);
             return ret;
-        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException |
+                 InvocationTargetException e) {
             e.printStackTrace();
         }
         return null;
@@ -28,7 +29,8 @@ public class ReflectiveInvokers {
             SimpleParticleType ret = o.newInstance(overrideLimiter);
             o.setAccessible(false);
             return ret;
-        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException |
+                 InvocationTargetException e) {
             e.printStackTrace();
         }
         return null;

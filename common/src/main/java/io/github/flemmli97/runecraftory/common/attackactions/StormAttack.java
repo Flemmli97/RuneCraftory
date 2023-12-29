@@ -88,6 +88,7 @@ public class StormAttack extends AttackAction {
 
     @Override
     public void onStart(LivingEntity entity, WeaponHandler handler) {
+        super.onStart(entity, handler);
         handler.setNoGravity(entity);
     }
 

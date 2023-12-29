@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.items.weapons;
 
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
+import io.github.flemmli97.runecraftory.common.spells.WeaponSpell;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -42,6 +43,8 @@ public class ItemSpell extends Item {
             return Platform.INSTANCE.getPlayerData(player)
                     .map(d -> {
                         if (player.getCooldowns().getCooldownPercent(this, 0) <= 0) {
+                            if (this.getSpell().getClass() == WeaponSpell.class)
+                                d.getWeaponHandler().setConsumeSpellOnStart();
                             return d.getWeaponHandler().doWeaponAttack(player, this.getSpell().useAction(), stack, this.getSpell(), false);
                         }
                         return false;

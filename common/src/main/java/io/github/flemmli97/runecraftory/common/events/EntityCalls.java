@@ -195,7 +195,7 @@ public class EntityCalls {
 
     public static boolean cancelLivingAttack(DamageSource source, Entity target, float amount) {
         Entity attacker = source.getEntity();
-        if (target instanceof Player player && Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().isInvulnerable(player)).orElse(false))
+        if (!source.isBypassInvul() && target instanceof Player player && Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().isInvulnerable(player)).orElse(false))
             return true;
         if (source instanceof CustomDamage customDamage) {
             if (target.invulnerableTime + customDamage.hurtProtection() <= 20)
@@ -411,6 +411,7 @@ public class EntityCalls {
             PlayerData data = Platform.INSTANCE.getPlayerData(player).orElse(null);
             if (data != null) {
                 if (NaiveBladeAttack.canCounter(data.getWeaponHandler())) {
+                    data.getWeaponHandler().setConsumeSpellOnStart();
                     data.getWeaponHandler().doWeaponAttack(entity, ModAttackActions.NAIVE_BLADE.get(), player.getMainHandItem(), null, true);
                     return 0;
                 }

@@ -58,12 +58,13 @@ public class TornadoSwingAttack extends AttackAction {
 
     @Override
     public void onStart(LivingEntity entity, WeaponHandler handler) {
+        super.onStart(entity, handler);
         handler.setSpinStartRot(entity.getYRot() + (handler.getChainCount() == 1 ? 90 : 20));
     }
 
     @Override
     public boolean canOverride(LivingEntity entity, WeaponHandler handler) {
-        if(handler.getChainCount() == 1)
+        if (handler.getChainCount() == 1)
             return handler.getCurrentAnim().isPastTick(0.80) && !handler.getCurrentAnim().isPastTick(1.0);
         return handler.getCurrentAnim().isPastTick(0.56) && !handler.getCurrentAnim().isPastTick(0.72);
     }

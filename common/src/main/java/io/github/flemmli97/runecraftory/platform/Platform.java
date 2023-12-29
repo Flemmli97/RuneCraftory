@@ -99,7 +99,7 @@ public interface Platform {
 
     //Other
 
-    DamageSource createDamageSource(String name, boolean bypassArmor, boolean bypassMagic);
+    DamageSource createDamageSource(String name, boolean bypassArmor, boolean bypassMagic, boolean bypassInvulnerability);
 
     SimpleParticleType simple(boolean overrideLimiter);
 

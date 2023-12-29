@@ -12,4 +12,7 @@ public interface DamageSourceAccessor {
 
     @Invoker("bypassMagic")
     DamageSource setBypassMagic();
+
+    @Invoker("bypassInvul")
+    DamageSource setBypassInvul();
 }

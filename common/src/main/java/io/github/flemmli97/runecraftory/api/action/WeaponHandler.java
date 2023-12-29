@@ -30,6 +30,11 @@ public class WeaponHandler {
     private ItemStack usedWeapon = ItemStack.EMPTY;
     private Spell spell;
     /**
+     * Whether {@link Spell#use} should be called at {@link AttackAction#onStart}
+     * Usually holds true for weapon abilities
+     */
+    private boolean consumeSpellOnStart;
+    /**
      * Value used to interpolate animation transitions
      */
     private int timeSinceLastChange;
@@ -51,9 +56,9 @@ public class WeaponHandler {
     public boolean doWeaponAttack(LivingEntity entity, AttackAction action, ItemStack stack, @Nullable Spell spell, boolean ignoreCurrent) {
         if (entity.level.isClientSide || this.canExecuteAction(entity, action, true, ignoreCurrent)) {
             action.onSetup(entity, this);
-            this.setAnimationBasedOnState(entity, action, true);
-            this.usedWeapon = stack;
             this.spell = spell;
+            this.usedWeapon = stack;
+            this.setAnimationBasedOnState(entity, action, true);
             return true;
         }
         return false;
@@ -91,12 +96,14 @@ public class WeaponHandler {
         this.resetHitEntityTracker();
         this.lockLook = false;
         this.currentAction.onStart(entity, this);
+        this.consumeSpellOnStart = false;
         if (packet && entity instanceof ServerPlayer serverPlayer) {
             Platform.INSTANCE.sendToClient(new S2CWeaponUse(this.currentAction, this.usedWeapon), serverPlayer);
         }
     }
 
     private void resetStates() {
+        this.spell = null;
         this.chainCount = 0;
         this.toolUseData = null;
         this.hitEntityTracker.clear();
@@ -156,6 +163,10 @@ public class WeaponHandler {
         if (this.fadingAnim == null)
             return 1;
         return Math.max(0, 1 - this.timeSinceLastChange / FADE_TICK);
+    }
+
+    public ItemStack getUsedWeapon() {
+        return this.usedWeapon;
     }
 
     public void setChainCount(int count) {
@@ -241,6 +252,14 @@ public class WeaponHandler {
     public void setNoGravity(LivingEntity entity) {
         this.oldGravity = entity.isNoGravity();
         entity.setNoGravity(true);
+    }
+
+    public boolean consumeSpellOnStart() {
+        return this.consumeSpellOnStart;
+    }
+
+    public void setConsumeSpellOnStart() {
+        this.consumeSpellOnStart = true;
     }
 
     public void restoreGravity(LivingEntity entity) {

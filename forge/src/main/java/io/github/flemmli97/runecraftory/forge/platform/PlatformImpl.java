@@ -155,12 +155,14 @@ public class PlatformImpl implements Platform {
     }
 
     @Override
-    public DamageSource createDamageSource(String name, boolean bypassArmor, boolean bypassMagic) {
+    public DamageSource createDamageSource(String name, boolean bypassArmor, boolean bypassMagic, boolean bypassInvul) {
         DamageSource source = new DamageSource(name);
         if (bypassArmor)
             source.bypassArmor();
         if (bypassMagic)
             source.bypassMagic();
+        if (bypassInvul)
+            source.bypassInvul();
         return source;
     }
 

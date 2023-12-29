@@ -358,13 +358,20 @@ public class Loottables extends LootTableProvider {
 
         private LootTable.Builder gateLoot(EnumElement element) {
             return switch (element) {
-                case WATER -> this.table(new ItemLootData(ModItems.crystalWater.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2));
-                case EARTH -> this.table(new ItemLootData(ModItems.crystalEarth.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2));
-                case WIND -> this.table(new ItemLootData(ModItems.crystalWind.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2));
-                case FIRE -> this.table(new ItemLootData(ModItems.crystalFire.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2));
-                case LIGHT -> this.table(new ItemLootData(ModItems.crystalLight.get(), 0.1f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2));
-                case DARK -> this.table(new ItemLootData(ModItems.crystalDark.get(), 0.1f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2));
-                case LOVE -> this.table(new ItemLootData(ModItems.crystalLove.get(), 0.05f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2));
+                case WATER ->
+                        this.table(new ItemLootData(ModItems.crystalWater.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2));
+                case EARTH ->
+                        this.table(new ItemLootData(ModItems.crystalEarth.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2));
+                case WIND ->
+                        this.table(new ItemLootData(ModItems.crystalWind.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2));
+                case FIRE ->
+                        this.table(new ItemLootData(ModItems.crystalFire.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2));
+                case LIGHT ->
+                        this.table(new ItemLootData(ModItems.crystalLight.get(), 0.1f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2));
+                case DARK ->
+                        this.table(new ItemLootData(ModItems.crystalDark.get(), 0.1f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2));
+                case LOVE ->
+                        this.table(new ItemLootData(ModItems.crystalLove.get(), 0.05f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2));
                 default -> this.table();
             };
         }

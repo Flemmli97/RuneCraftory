@@ -19,8 +19,8 @@ import java.util.Map;
 
 public class CustomDamage extends EntityDamageSource {
 
-    public static final DamageSource EXHAUST = Platform.INSTANCE.createDamageSource("rfExhaust", true, true);
-    public static final DamageSource POISON = Platform.INSTANCE.createDamageSource("poison", true, true);
+    public static final DamageSource EXHAUST = Platform.INSTANCE.createDamageSource("rfExhaust", true, true, true);
+    public static final DamageSource POISON = Platform.INSTANCE.createDamageSource("poison", true, true, false);
 
     private final EnumElement element;
     private final KnockBackType knock;
