@@ -28,10 +28,10 @@ public class DualBladeAttack extends AttackAction {
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
         if (!entity.level.isClientSide && anim.canAttack() && handler.getChainCount() != 5 && handler.getChainCount() != 6) {
-            AttackAction.attack(entity, stack);
+            CombatUtils.attack(entity, stack);
             entity.swing(InteractionHand.MAIN_HAND, true);
         }
-        Vec3 dir = AttackAction.fromRelativeVector(entity, new Vec3(0, 0, 1));
+        Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
         switch (handler.getChainCount()) {
             case 1 -> {
                 if (anim.isAtTick(0.2)) {
@@ -133,7 +133,7 @@ public class DualBladeAttack extends AttackAction {
             case 8 -> 0;
             default -> 8;
         };
-        return new AttackChain(AttackAction.canPerform(entity, EnumSkills.DUAL, 20) ? 8 : 7, frame);
+        return new AttackChain(CombatUtils.canPerform(entity, EnumSkills.DUAL, 20) ? 8 : 7, frame);
     }
 
     @Override

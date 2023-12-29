@@ -41,7 +41,7 @@ public class DashSlashAttack extends AttackAction {
         } else {
             handler.lockLook(true);
             if (anim.isPastTick(0.2)) {
-                Vec3 dir = AttackAction.fromRelativeVector(entity, new Vec3(0, 0, 1));
+                Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
                 if (anim.isAtTick(0.2)) {
                     handler.setMoveTargetDir(dir.scale(0.5).add(0, 0.3, 0), anim, 0.28);
                 } else if (anim.isAtTick(0.28)) {

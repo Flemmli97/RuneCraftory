@@ -164,7 +164,8 @@ public class ModFeatures {
             Constructor<TrunkPlacerType> cons = TrunkPlacerType.class.getDeclaredConstructor(Codec.class);
             cons.setAccessible(true);
             return cons.newInstance(codec);
-        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException |
+                 InvocationTargetException e) {
             e.printStackTrace();
         }
         return null;
@@ -176,7 +177,8 @@ public class ModFeatures {
             Constructor<TreeDecoratorType> cons = TreeDecoratorType.class.getDeclaredConstructor(Codec.class);
             cons.setAccessible(true);
             return cons.newInstance(codec);
-        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException |
+                 InvocationTargetException e) {
             e.printStackTrace();
         }
         return null;

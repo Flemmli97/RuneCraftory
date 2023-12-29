@@ -27,7 +27,7 @@ public class HammerAxeAttack extends AttackAction {
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
         if (anim.canAttack() && handler.getChainCount() != 3) {
-            AttackAction.attack(entity, stack);
+            CombatUtils.attack(entity, stack);
             entity.swing(InteractionHand.MAIN_HAND, true);
         }
         if (handler.getChainCount() == 3) {
@@ -39,13 +39,14 @@ public class HammerAxeAttack extends AttackAction {
                 handler.resetHitEntityTracker();
             }
             if (anim.isPastTick(0.12) && !anim.isPastTick(1.28)) {
-                Vec3 dir = AttackAction.fromRelativeVector(entity, new Vec3(0, 0, 1));
+                Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
                 if (anim.isAtTick(0.12))
                     handler.setMoveTargetDir(dir.scale(3).add(0, 2, 0), anim, 0.76);
                 if (anim.isAtTick(0.76))
                     handler.setMoveTargetDir(dir.scale(3).add(0, -2, 0), anim, 1.28);
                 entity.resetFallDistance();
-                handler.addHitEntityTracker(CombatUtils.attackInAABB(entity, entity.getBoundingBox().inflate(0.5), e -> !handler.getHitEntityTracker().contains(e)));
+                if (!entity.level.isClientSide)
+                    handler.addHitEntityTracker(CombatUtils.attackInAABB(entity, entity.getBoundingBox().inflate(0.75), e -> !handler.getHitEntityTracker().contains(e)));
             } else
                 handler.clearMoveTarget();
         }
@@ -67,6 +68,6 @@ public class HammerAxeAttack extends AttackAction {
 
     @Override
     public AttackChain attackChain(LivingEntity entity, int chain) {
-        return new AttackChain(AttackAction.canPerform(entity, EnumSkills.HAMMERAXE, 20) ? 3 : 2, chain == 3 ? 0 : 8);
+        return new AttackChain(CombatUtils.canPerform(entity, EnumSkills.HAMMERAXE, 20) ? 3 : 2, chain == 3 ? 0 : 8);
     }
 }

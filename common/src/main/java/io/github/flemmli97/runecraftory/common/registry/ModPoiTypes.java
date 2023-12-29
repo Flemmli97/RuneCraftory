@@ -25,7 +25,8 @@ public class ModPoiTypes {
             Constructor<PoiType> cons = PoiType.class.getDeclaredConstructor(String.class, Set.class, int.class, int.class);
             cons.setAccessible(true);
             return cons.newInstance(RuneCraftory.MODID + ":" + string, set, i, j);
-        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException |
+                 InvocationTargetException e) {
             e.printStackTrace();
         }
         return null;

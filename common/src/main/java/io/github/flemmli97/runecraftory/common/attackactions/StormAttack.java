@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
+import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
@@ -16,6 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
+import java.util.Map;
 
 public class StormAttack extends AttackAction {
 
@@ -28,10 +30,11 @@ public class StormAttack extends AttackAction {
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
         if (!entity.level.isClientSide && anim.canAttack() && handler.getChainCount() != 5) {
-            AttackAction.attack(entity, stack);
+            CombatUtils.spinAttackHandler(entity, entity.getLookAngle(), Math.min(15, CombatUtils.getAOE(entity, stack, 10)), 0.5f, null,
+                    Pair.of(Map.of(), Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))), null);
             entity.swing(InteractionHand.MAIN_HAND, true);
         }
-        Vec3 dir = AttackAction.fromRelativeVector(entity, new Vec3(0, 0, 1));
+        Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
         switch (handler.getChainCount()) {
             case 1 -> {
                 if (anim.isAtTick(0.08)) {
@@ -49,7 +52,7 @@ public class StormAttack extends AttackAction {
             }
             case 4 -> {
                 if (anim.isAtTick(0.16)) {
-                    handler.setMoveTargetDir(dir.scale(0.4).add(0, -0.1, 0), anim, anim.getTick());
+                    handler.setMoveTargetDir(dir.scale(0.4).add(0, -0.05, 0), anim, anim.getTick());
                 }
                 if (anim.isAtTick(0.4)) {
                     handler.clearMoveTarget();
@@ -61,7 +64,8 @@ public class StormAttack extends AttackAction {
                     handler.setMoveTargetDir(dir.scale(1.8).add(0, 1.9, 0), anim, 0.36);
                 if (anim.isAtTick(0.36))
                     handler.setMoveTargetDir(dir.scale(2).add(0, -2.5, 0), anim, 0.6);
-                if (anim.canAttack()) {
+                entity.fallDistance = 0;
+                if (!entity.level.isClientSide && anim.canAttack()) {
                     double range = entity.getAttributeValue(ModAttributes.ATTACK_RANGE.get());
                     dir = dir.normalize().scale(range);
                     List<LivingEntity> entites = entity.level.getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(1).expandTowards(dir),

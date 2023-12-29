@@ -220,17 +220,20 @@ public class LevelCalc {
     public static int levelFromPos(ServerLevel level, Vec3 pos) {
         return Math.max(1, switch (MobConfig.gateLevelType) {
             case CONSTANT -> randomizedLevel(level.random, getLevelFor(level, pos, MobConfig.baseGateLevel, null));
-            case DISTANCESPAWN -> randomizedLevel(level.random, getLevelFor(level, pos, MobConfig.baseGateLevel + distanceLevelFrom(level, pos, level.getSharedSpawnPos()), null));
-            case DISTANCESPAWNPLAYER -> randomizedLevel(level.random, getLevelFor(level, pos, MobConfig.baseGateLevel, (player, d) -> {
-                ServerPlayer serverPlayer = (ServerPlayer) player;
-                BlockPos center;
-                if (serverPlayer.getRespawnDimension() != level.dimension() || serverPlayer.getRespawnPosition() == null)
-                    center = level.getSharedSpawnPos();
-                else
-                    center = serverPlayer.getRespawnPosition();
-                return distanceLevelFrom(level, pos, center);
-            }));
-            case PLAYERLEVEL -> randomizedLevel(level.random, getLevelFor(level, pos, MobConfig.baseGateLevel, (p, d) -> d.map(data -> data.getPlayerLevel().getLevel()).orElse(1)));
+            case DISTANCESPAWN ->
+                    randomizedLevel(level.random, getLevelFor(level, pos, MobConfig.baseGateLevel + distanceLevelFrom(level, pos, level.getSharedSpawnPos()), null));
+            case DISTANCESPAWNPLAYER ->
+                    randomizedLevel(level.random, getLevelFor(level, pos, MobConfig.baseGateLevel, (player, d) -> {
+                        ServerPlayer serverPlayer = (ServerPlayer) player;
+                        BlockPos center;
+                        if (serverPlayer.getRespawnDimension() != level.dimension() || serverPlayer.getRespawnPosition() == null)
+                            center = level.getSharedSpawnPos();
+                        else
+                            center = serverPlayer.getRespawnPosition();
+                        return distanceLevelFrom(level, pos, center);
+                    }));
+            case PLAYERLEVEL ->
+                    randomizedLevel(level.random, getLevelFor(level, pos, MobConfig.baseGateLevel, (p, d) -> d.map(data -> data.getPlayerLevel().getLevel()).orElse(1)));
         });
     }
 

@@ -164,7 +164,8 @@ public class ClientMixinUtils {
             };
         } else if (itemStack.getItem() instanceof ItemDualBladeBase) {
             ItemModelProps.HELD_TYPE = switch (transformType) {
-                case FIRST_PERSON_LEFT_HAND, THIRD_PERSON_LEFT_HAND, FIRST_PERSON_RIGHT_HAND, THIRD_PERSON_RIGHT_HAND -> 1;
+                case FIRST_PERSON_LEFT_HAND, THIRD_PERSON_LEFT_HAND, FIRST_PERSON_RIGHT_HAND, THIRD_PERSON_RIGHT_HAND ->
+                        1;
                 default -> 0;
             };
         }

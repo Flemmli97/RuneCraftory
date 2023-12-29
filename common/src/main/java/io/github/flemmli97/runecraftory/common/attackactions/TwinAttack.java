@@ -24,7 +24,7 @@ public class TwinAttack extends AttackAction {
 
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
-        if (anim.canAttack())
+        if (!entity.level.isClientSide && anim.canAttack())
             CombatUtils.spinAttackHandler(entity, entity.getLookAngle(), Math.min(15, CombatUtils.getAOE(entity, stack, 0)), 1f, null,
                     Pair.of(Map.of(ModAttributes.FAINT.get(), 0.1),
                             Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))), null);

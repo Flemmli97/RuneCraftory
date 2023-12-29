@@ -117,7 +117,8 @@ public class RenderFurnitures extends EntityRenderer<EntityFurniture> {
         switch (entity.getFurnitureType()) {
             case BARREL -> this.renderBlockModel(this.barrel, stack, buffer, packedLight);
             case ANVIL -> this.renderBlockModel(this.anvil, stack, buffer, packedLight);
-            case CHEST -> this.renderModel(stack, buffer, packedLight, Sheets.CHEST_LOCATION.texture(), this.chestBottom, this.chestLid, this.chestLock);
+            case CHEST ->
+                    this.renderModel(stack, buffer, packedLight, Sheets.CHEST_LOCATION.texture(), this.chestBottom, this.chestLid, this.chestLock);
             case CHAIR -> this.renderModel(stack, buffer, packedLight, texChair, this.chair);
             case PAINTING -> {
 

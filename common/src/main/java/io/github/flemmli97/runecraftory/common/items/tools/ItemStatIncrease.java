@@ -60,7 +60,8 @@ public class ItemStatIncrease extends Item {
     private void increaseStat(ItemStack stack, Level level, Player player) {
         Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
             switch (this.stat) {
-                case LEVEL -> data.addXp(player, LevelCalc.xpAmountForLevelUp(data.getPlayerLevel().getLevel()) - data.getPlayerLevel().getXp());
+                case LEVEL ->
+                        data.addXp(player, LevelCalc.xpAmountForLevelUp(data.getPlayerLevel().getLevel()) - data.getPlayerLevel().getXp());
                 case STR, INT, VIT, HP -> data.increaseStatBonus(player, this.stat);
             }
         });

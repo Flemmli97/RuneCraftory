@@ -36,10 +36,10 @@ public class SpearAttack extends AttackAction {
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
         if (anim.canAttack() && handler.getChainCount() != 5) {
-            AttackAction.attack(entity, stack);
+            CombatUtils.attack(entity, stack);
             entity.swing(InteractionHand.MAIN_HAND, true);
         }
-        Vec3 dir = AttackAction.fromRelativeVector(entity, new Vec3(0, 0, 1));
+        Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
         switch (handler.getChainCount()) {
             case 1, 3, 4 -> {
                 if (anim.isAtTick(0.28)) {
@@ -109,6 +109,6 @@ public class SpearAttack extends AttackAction {
 
     @Override
     public AttackChain attackChain(LivingEntity entity, int chain) {
-        return new AttackChain(AttackAction.canPerform(entity, EnumSkills.SPEAR, 20) ? 5 : 4, chain == 5 ? 0 : 8);
+        return new AttackChain(CombatUtils.canPerform(entity, EnumSkills.SPEAR, 20) ? 5 : 4, chain == 5 ? 0 : 8);
     }
 }

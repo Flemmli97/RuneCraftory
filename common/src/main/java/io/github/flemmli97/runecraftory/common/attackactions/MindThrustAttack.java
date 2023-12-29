@@ -26,10 +26,10 @@ public class MindThrustAttack extends AttackAction {
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
         if (anim.isAtTick(0.68)) {
-            Vec3 dir = AttackAction.fromRelativeVector(entity, new Vec3(0, 0, 1));
+            Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
             handler.setMoveTargetDir(dir.scale(0.5), anim, anim.getTick());
         }
-        if (anim.canAttack())
+        if (!entity.level.isClientSide && anim.canAttack())
             CombatUtils.spinAttackHandler(entity, entity.getLookAngle(), CombatUtils.getAOE(entity, stack, 0), 0.5f, null,
                     Pair.of(Map.of(ModAttributes.PARA.get(), 0.4,
                                     ModAttributes.POISON.get(), 0.1,

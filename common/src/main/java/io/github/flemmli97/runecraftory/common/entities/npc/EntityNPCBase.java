@@ -596,7 +596,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
                             this.tellDialogue(sender, type, action.actionValue(), answer);
                         }
                     }
-                    case QUEST -> SimpleQuestIntegration.INST().acceptQuestRandom(sender, this, new ResourceLocation(action.actionValue()));
+                    case QUEST ->
+                            SimpleQuestIntegration.INST().acceptQuestRandom(sender, this, new ResourceLocation(action.actionValue()));
                 }
             }
         }

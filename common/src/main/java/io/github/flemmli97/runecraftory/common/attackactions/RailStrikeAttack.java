@@ -26,12 +26,14 @@ public class RailStrikeAttack extends AttackAction {
 
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
-        Vec3 dir = AttackAction.fromRelativeVector(entity, new Vec3(0, 0, 1)).scale(0.4);
+        Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1)).scale(-0.4);
         if (anim.isAtTick(0.12))
-            handler.setMoveTargetDir(dir.scale(-5).add(0, 1.1, 0), anim, 0.76);
+            handler.setMoveTargetDir(dir.scale(5).add(0, 1.1, 0), anim, 0.76);
         if (anim.isAtTick(0.76))
-            handler.setMoveTargetDir(dir.scale(-3).add(0, -1.1, 0), anim, 1.28);
-        if (anim.isAtTick(0.64)) {
+            handler.setMoveTargetDir(dir.scale(3).add(0, -1.1, 0), anim, 1.28);
+        if (anim.getTickRaw() % (3 * anim.getSpeed()) == 0)
+            handler.resetHitEntityTracker();
+        if (!entity.level.isClientSide && anim.isPastTick(0.24) && !anim.isPastTick(1.08)) {
             double range = entity.getAttributeValue(ModAttributes.ATTACK_RANGE.get());
             dir = dir.normalize().scale(range);
             List<LivingEntity> entites = entity.level.getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(1).expandTowards(dir),

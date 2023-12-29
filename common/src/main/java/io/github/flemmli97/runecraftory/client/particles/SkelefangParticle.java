@@ -53,16 +53,24 @@ public class SkelefangParticle extends Particle {
         this.yawSpin = data.getYawSpin();
         this.lifetime = data.getMaxTime();
         ModelPartHandler.ModelPartExtended[] parts = switch (this.boneType) {
-            case TAIL -> new ModelPartHandler.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineBack, MODEL.get().tailBase, MODEL.get().tail};
-            case TAIL_BASE -> new ModelPartHandler.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineBack, MODEL.get().tailBase};
-            case LEFT_LEG -> new ModelPartHandler.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineBack, MODEL.get().leftLegBase};
-            case RIGHT_LEG -> new ModelPartHandler.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineBack, MODEL.get().rightLegBase};
-            case HEAD -> new ModelPartHandler.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineFront, MODEL.get().neck, MODEL.get().head};
-            case NECK -> new ModelPartHandler.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineFront, MODEL.get().neck};
+            case TAIL ->
+                    new ModelPartHandler.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineBack, MODEL.get().tailBase, MODEL.get().tail};
+            case TAIL_BASE ->
+                    new ModelPartHandler.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineBack, MODEL.get().tailBase};
+            case LEFT_LEG ->
+                    new ModelPartHandler.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineBack, MODEL.get().leftLegBase};
+            case RIGHT_LEG ->
+                    new ModelPartHandler.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineBack, MODEL.get().rightLegBase};
+            case HEAD ->
+                    new ModelPartHandler.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineFront, MODEL.get().neck, MODEL.get().head};
+            case NECK ->
+                    new ModelPartHandler.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineFront, MODEL.get().neck};
             case BACK -> new ModelPartHandler.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineBack};
-            case BACK_RIBS -> new ModelPartHandler.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineBack, MODEL.get().ribsSpine};
+            case BACK_RIBS ->
+                    new ModelPartHandler.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineBack, MODEL.get().ribsSpine};
             case FRONT -> new ModelPartHandler.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineFront};
-            case FRONT_RIBS -> new ModelPartHandler.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineFront, MODEL.get().ribsBody};
+            case FRONT_RIBS ->
+                    new ModelPartHandler.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineFront, MODEL.get().ribsBody};
             default -> null;
         };
         //Offset pos based on part

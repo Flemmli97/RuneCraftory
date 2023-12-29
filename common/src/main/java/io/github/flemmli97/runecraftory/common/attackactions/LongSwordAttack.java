@@ -27,11 +27,11 @@ public class LongSwordAttack extends AttackAction {
 
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
-        if (anim.canAttack() && handler.getChainCount() != 4) {
-            AttackAction.attack(entity, stack);
+        if (!entity.level.isClientSide && anim.canAttack() && handler.getChainCount() != 4) {
+            CombatUtils.attack(entity, stack);
             entity.swing(InteractionHand.MAIN_HAND, true);
         }
-        Vec3 dir = AttackAction.fromRelativeVector(entity, new Vec3(0, 0, 1));
+        Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
         switch (handler.getChainCount()) {
             case 2 -> {
                 if (anim.isAtTick(0.4)) {
@@ -77,6 +77,6 @@ public class LongSwordAttack extends AttackAction {
 
     @Override
     public AttackChain attackChain(LivingEntity entity, int chain) {
-        return new AttackChain(AttackAction.canPerform(entity, EnumSkills.LONGSWORD, 20) ? 4 : 3, chain == 4 ? 0 : 8);
+        return new AttackChain(CombatUtils.canPerform(entity, EnumSkills.LONGSWORD, 20) ? 4 : 3, chain == 4 ? 0 : 8);
     }
 }

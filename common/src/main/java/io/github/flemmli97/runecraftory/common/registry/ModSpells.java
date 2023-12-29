@@ -34,6 +34,7 @@ import io.github.flemmli97.runecraftory.common.spells.EvokerFangSpell;
 import io.github.flemmli97.runecraftory.common.spells.ExplosionSpell;
 import io.github.flemmli97.runecraftory.common.spells.FireballSpell;
 import io.github.flemmli97.runecraftory.common.spells.FurnitureThrowSpell;
+import io.github.flemmli97.runecraftory.common.spells.GroundedAbilitySpell;
 import io.github.flemmli97.runecraftory.common.spells.GustSpell;
 import io.github.flemmli97.runecraftory.common.spells.HealT1Spell;
 import io.github.flemmli97.runecraftory.common.spells.HealT2Spell;
@@ -142,7 +143,7 @@ public class ModSpells {
     public static final RegistryEntrySupplier<Spell> MIND_THRUST = registerSpell("mind_thrust", () -> new WeaponSpell(ModAttackActions.MIND_THRUST, ModTags.SHORTSWORDS), new SpellProperties.Builder(5, 10).withXPGain(EnumSkills.SHORTSWORD, 10).affectedSkill(EnumSkills.SHORTSWORD));
     public static final RegistryEntrySupplier<Spell> BLITZ = registerSpell("blitz", BlitzSpell::new, new SpellProperties.Builder(5, 15).usePercentageCost().withXPGain(EnumSkills.DUAL, 15).affectedSkill(EnumSkills.DUAL));
     public static final RegistryEntrySupplier<Spell> TWIN_ATTACK = registerSpell("twin_attack", () -> new WeaponSpell(ModAttackActions.TWIN_ATTACK, ModTags.DUALBLADES), new SpellProperties.Builder(5, 10).withXPGain(EnumSkills.DUAL, 10).affectedSkill(EnumSkills.DUAL));
-    public static final RegistryEntrySupplier<Spell> STORM = registerSpell("storm", () -> new WeaponSpell(ModAttackActions.STORM, ModTags.DUALBLADES), new SpellProperties.Builder(5, 10).withXPGain(EnumSkills.DUAL, 10).affectedSkill(EnumSkills.DUAL));
+    public static final RegistryEntrySupplier<Spell> STORM = registerSpell("storm", () -> new GroundedAbilitySpell(ModAttackActions.STORM, ModTags.DUALBLADES), new SpellProperties.Builder(5, 10).withXPGain(EnumSkills.DUAL, 10).affectedSkill(EnumSkills.DUAL));
     public static final RegistryEntrySupplier<Spell> GUST = registerSpell("gust", () -> new WeaponSpell(ModAttackActions.GUST, ModTags.DUALBLADES), new SpellProperties.Builder(5, 10).withXPGain(EnumSkills.DUAL, 10).affectedSkill(EnumSkills.DUAL));
     public static final RegistryEntrySupplier<Spell> RAIL_STRIKE = registerSpell("rail_strike", () -> new WeaponSpell(ModAttackActions.RAIL_STRIKE, ModTags.DUALBLADES), new SpellProperties.Builder(5, 10).withXPGain(EnumSkills.DUAL, 10).affectedSkill(EnumSkills.DUAL));
 

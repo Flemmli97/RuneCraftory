@@ -107,9 +107,12 @@ public class NPCSchedule {
             } else {
                 switch (weekDayCounts.size()) {
                     case 0 -> newList.add(new TranslatableComponent("npc.schedule.days.0"));
-                    case 1 -> newList.add(new TranslatableComponent("npc.schedule.days.1", new TranslatableComponent(weekDayCounts.get(0).translationFull())));
-                    case 2 -> newList.add(new TranslatableComponent("npc.schedule.days.2", new TranslatableComponent(weekDayCounts.get(0).translationFull(), weekDayCounts.get(1))));
-                    default -> newList.add(new TranslatableComponent("npc.schedule.days.with", this.schedule.workDays.stream().filter(day -> day != EnumDay.SATURDAY && day != EnumDay.SUNDAY).map(e -> new TranslatableComponent(e.translationFull())).toArray()));
+                    case 1 ->
+                            newList.add(new TranslatableComponent("npc.schedule.days.1", new TranslatableComponent(weekDayCounts.get(0).translationFull())));
+                    case 2 ->
+                            newList.add(new TranslatableComponent("npc.schedule.days.2", new TranslatableComponent(weekDayCounts.get(0).translationFull(), weekDayCounts.get(1))));
+                    default ->
+                            newList.add(new TranslatableComponent("npc.schedule.days.with", this.schedule.workDays.stream().filter(day -> day != EnumDay.SATURDAY && day != EnumDay.SUNDAY).map(e -> new TranslatableComponent(e.translationFull())).toArray()));
                 }
                 if (this.schedule.workDays.contains(EnumDay.SATURDAY)) {
                     if (this.schedule.workDays.contains(EnumDay.SUNDAY))

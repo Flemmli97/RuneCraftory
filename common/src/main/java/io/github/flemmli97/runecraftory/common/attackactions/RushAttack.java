@@ -31,29 +31,31 @@ public class RushAttack extends AttackAction {
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
         if (handler.getChainCount() == 7) {
             if (anim.isAtTick(0.28)) {
-                Vec3 dir = AttackAction.fromRelativeVector(entity, new Vec3(0, 0, 1));
+                Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
                 handler.setMoveTargetDir(dir.scale(3).add(0, -1.5, 0), anim, 0.4);
             }
             entity.fallDistance = 0;
-            if (anim.canAttack()) {
+            if (!entity.level.isClientSide && anim.canAttack()) {
                 CombatUtils.spinAttackHandler(entity, entity.getLookAngle(), CombatUtils.getAOE(entity, stack, 10), 0.5f, null,
                         Pair.of(Map.of(), Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))), e -> CombatUtils.knockBackEntity(entity, e, 0.8f));
                 entity.swing(InteractionHand.MAIN_HAND, true);
             }
         } else {
             if (anim.isAtTick(0.32) || anim.isAtTick(0.48)) {
-                Vec3 dir = AttackAction.fromRelativeVector(entity, new Vec3(0, 0, 1));
+                Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
                 handler.setMoveTargetDir(dir.scale(0.2), anim, anim.getTick());
             }
             if (anim.isAtTick(0.92)) {
-                Vec3 dir = AttackAction.fromRelativeVector(entity, new Vec3(0, 0, 1));
+                Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
                 handler.setMoveTargetDir(dir.scale(0.5).add(0, 1.5, 0), anim, 1.4);
             }
             entity.fallDistance = 0;
-            if (anim.canAttack() || anim.isAtTick(0.52) || anim.isAtTick(1.08)) {
-                CombatUtils.spinAttackHandler(entity, entity.getLookAngle(), CombatUtils.getAOE(entity, stack, 10), 0.5f, null,
-                        Pair.of(Map.of(), Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))), anim.isAtTick(1.08) ? e -> e.setDeltaMovement(e.getDeltaMovement().add(0.0, 0.4f, 0.0)) : null);
-                entity.swing(InteractionHand.MAIN_HAND, true);
+            if (!entity.level.isClientSide) {
+                if (anim.canAttack() || anim.isAtTick(0.52) || anim.isAtTick(1.08)) {
+                    CombatUtils.spinAttackHandler(entity, entity.getLookAngle(), CombatUtils.getAOE(entity, stack, 10), 0.5f, null,
+                            Pair.of(Map.of(), Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))), anim.isAtTick(1.08) ? e -> e.setDeltaMovement(e.getDeltaMovement().add(0.0, 0.4f, 0.0)) : null);
+                    entity.swing(InteractionHand.MAIN_HAND, true);
+                }
             }
         }
     }
@@ -67,7 +69,8 @@ public class RushAttack extends AttackAction {
     @Override
     public boolean canOverride(LivingEntity entity, WeaponHandler handler) {
         return switch (handler.getChainCount()) {
-            case 1, 2, 3, 4, 5 -> (!handler.getCurrentAnim().isPastTick(0.92) && handler.getCurrentAnim().isPastTick(0.6)) || handler.getCurrentAnim().isPastTick(1.12);
+            case 1, 2, 3, 4, 5 ->
+                    (!handler.getCurrentAnim().isPastTick(0.92) && handler.getCurrentAnim().isPastTick(0.6)) || handler.getCurrentAnim().isPastTick(1.12);
             case 6 -> handler.getCurrentAnim().isPastTick(1.12);
             default -> false;
         };

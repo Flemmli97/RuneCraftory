@@ -69,10 +69,14 @@ public class CraftingOutputSlot extends Slot {
                     this.craftingContainer.sendCraftingRecipesToClient(serverPlayer, data);
                 }
                 switch (this.craftingContainer.craftingType()) {
-                    case FORGE -> CraftingUtils.giveCraftingXPTo(serverPlayer, data, EnumSkills.FORGING, this.craftingContainer.getCurrentRecipe());
-                    case ARMOR -> CraftingUtils.giveCraftingXPTo(serverPlayer, data, EnumSkills.CRAFTING, this.craftingContainer.getCurrentRecipe());
-                    case CHEM -> CraftingUtils.giveCraftingXPTo(serverPlayer, data, EnumSkills.CHEMISTRY, this.craftingContainer.getCurrentRecipe());
-                    case COOKING -> CraftingUtils.giveCraftingXPTo(serverPlayer, data, EnumSkills.COOKING, this.craftingContainer.getCurrentRecipe());
+                    case FORGE ->
+                            CraftingUtils.giveCraftingXPTo(serverPlayer, data, EnumSkills.FORGING, this.craftingContainer.getCurrentRecipe());
+                    case ARMOR ->
+                            CraftingUtils.giveCraftingXPTo(serverPlayer, data, EnumSkills.CRAFTING, this.craftingContainer.getCurrentRecipe());
+                    case CHEM ->
+                            CraftingUtils.giveCraftingXPTo(serverPlayer, data, EnumSkills.CHEMISTRY, this.craftingContainer.getCurrentRecipe());
+                    case COOKING ->
+                            CraftingUtils.giveCraftingXPTo(serverPlayer, data, EnumSkills.COOKING, this.craftingContainer.getCurrentRecipe());
                 }
             });
 

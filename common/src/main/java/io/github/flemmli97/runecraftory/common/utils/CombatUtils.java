@@ -16,6 +16,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.item.IAOEWeapon;
+import io.github.flemmli97.tenshilib.common.utils.AOEWeaponHandler;
 import io.github.flemmli97.tenshilib.common.utils.CircleSector;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
@@ -704,5 +705,29 @@ public class CombatUtils {
 
     public static float getAbilityDamageBonus(int level, float origin) {
         return origin * (1 + (level - 1) * 0.025f);
+    }
+
+    public static Vec3 fromRelativeVector(Entity entity, Vec3 relative) {
+        return fromRelativeVector(entity.getYRot(), relative);
+    }
+
+    public static Vec3 fromRelativeVector(float yRot, Vec3 relative) {
+        Vec3 vec3 = relative.normalize();
+        float f = Mth.sin(yRot * Mth.DEG_TO_RAD);
+        float g = Mth.cos(yRot * Mth.DEG_TO_RAD);
+        return new Vec3(vec3.x * g - vec3.z * f, vec3.y, vec3.z * g + vec3.x * f);
+    }
+
+    public static boolean canPerform(LivingEntity entity, EnumSkills skill, int requiredLvl) {
+        if (!(entity instanceof Player player))
+            return false;
+        return player.isCreative() || Platform.INSTANCE.getPlayerData(player).map(d -> d.getSkillLevel(skill).getLevel() >= requiredLvl).orElse(false);
+    }
+
+    public static void attack(LivingEntity entity, ItemStack stack) {
+        if (entity instanceof Player player) {
+            if (stack.getItem() instanceof IAOEWeapon weapon)
+                AOEWeaponHandler.onAOEWeaponSwing(player, stack, weapon);
+        }
     }
 }

@@ -30,12 +30,12 @@ public class GloveAttack extends AttackAction {
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
         if (!entity.level.isClientSide && anim.canAttack() && handler.getChainCount() != 5) {
             if (handler.getChainCount() != 4)
-                AttackAction.attack(entity, stack);
+                CombatUtils.attack(entity, stack);
             else
                 CombatUtils.attackInAABB(entity, new AABB(-1, -1, -1, 1, 1, 1).move(entity.position().add(0, 0.2, 0).add(entity.getDeltaMovement().normalize().scale(0.4))), null);
             entity.swing(InteractionHand.MAIN_HAND, true);
         }
-        Vec3 dir = AttackAction.fromRelativeVector(entity, new Vec3(0, 0, 1));
+        Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
         switch (handler.getChainCount()) {
             case 1 -> {
                 if (anim.isAtTick(0.24)) {
@@ -64,11 +64,11 @@ public class GloveAttack extends AttackAction {
                 if (anim.isAtTick(0.16)) {
                     handler.setSpinStartRot(entity.getYRot());
                     handler.resetHitEntityTracker();
-                    Vec3 dir2 = AttackAction.fromRelativeVector(handler.getSpinStartRot(), new Vec3(0, 0, 1)).scale(6);
+                    Vec3 dir2 = CombatUtils.fromRelativeVector(handler.getSpinStartRot(), new Vec3(0, 0, 1)).scale(6);
                     handler.setMoveTargetDir(dir2.add(0, 2.5, 0), anim, 0.68);
                 }
                 if (anim.isAtTick(0.68)) {
-                    Vec3 dir2 = AttackAction.fromRelativeVector(handler.getSpinStartRot(), new Vec3(0, 0, 1)).scale(4);
+                    Vec3 dir2 = CombatUtils.fromRelativeVector(handler.getSpinStartRot(), new Vec3(0, 0, 1)).scale(4);
                     handler.setMoveTargetDir(dir2.add(0, -2.5, 0), anim, 1.12);
                 }
                 if (anim.isPastTick(0.16) && !anim.isPastTick(1.12)) {
@@ -97,7 +97,7 @@ public class GloveAttack extends AttackAction {
 
     @Override
     public AttackChain attackChain(LivingEntity entity, int chain) {
-        return new AttackChain(AttackAction.canPerform(entity, EnumSkills.FIST, 20) ? 5 : 4, chain == 5 ? 0 : 8);
+        return new AttackChain(CombatUtils.canPerform(entity, EnumSkills.FIST, 20) ? 5 : 4, chain == 5 ? 0 : 8);
     }
 
     @Override
