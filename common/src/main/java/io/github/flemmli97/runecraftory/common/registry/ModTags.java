@@ -100,6 +100,7 @@ public class ModTags {
     public static final TagKey<Item> SPEARS = tag("weapon/spears");
     public static final TagKey<Item> AXES = tag("weapon/axes");
     public static final TagKey<Item> HAMMERS = tag("weapon/hammers");
+    public static final TagKey<Item> HAMMER_AXES = tag("weapon/hammers_and_axes");
     public static final TagKey<Item> DUALBLADES = tag("weapon/dual_blades");
     public static final TagKey<Item> FISTS = tag("weapon/fists");
     public static final TagKey<Item> STAFFS = tag("weapon/staffs");

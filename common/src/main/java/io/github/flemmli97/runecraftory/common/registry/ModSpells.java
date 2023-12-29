@@ -155,6 +155,10 @@ public class ModSpells {
     public static final RegistryEntrySupplier<Spell> REAPER_SLASH = registerSpell("reaper_slash", () -> new WeaponSpell(ModAttackActions.REAPER_SLASH, ModTags.SPEARS), new SpellProperties.Builder(5, 10).withXPGain(EnumSkills.SPEAR, 10).affectedSkill(EnumSkills.SPEAR));
     public static final RegistryEntrySupplier<Spell> MILLION_STRIKE = registerSpell("million_strike", () -> new WeaponSpell(ModAttackActions.MILLION_STRIKE, ModTags.SPEARS), new SpellProperties.Builder(5, 10).withXPGain(EnumSkills.SPEAR, 10).affectedSkill(EnumSkills.SPEAR));
     public static final RegistryEntrySupplier<Spell> AXEL_DISASTER = registerSpell("axel_disaster", () -> new WeaponSpell(ModAttackActions.AXEL_DISASTER, ModTags.SPEARS), new SpellProperties.Builder(5, 10).withXPGain(EnumSkills.SPEAR, 10).affectedSkill(EnumSkills.SPEAR));
+    public static final RegistryEntrySupplier<Spell> STARDUST_UPPER = registerSpell("stardust_upper", () -> new WeaponSpell(ModAttackActions.STARDUST_UPPER, ModTags.HAMMER_AXES), new SpellProperties.Builder(5, 10).withXPGain(EnumSkills.HAMMERAXE, 10).affectedSkill(EnumSkills.HAMMERAXE));
+    public static final RegistryEntrySupplier<Spell> GRAND_IMPACT = registerSpell("grand_impact", () -> new WeaponSpell(ModAttackActions.GRAND_IMPACT, ModTags.HAMMER_AXES), new SpellProperties.Builder(5, 10).withXPGain(EnumSkills.HAMMERAXE, 10).affectedSkill(EnumSkills.HAMMERAXE));
+    public static final RegistryEntrySupplier<Spell> TORNADO_SWING = registerSpell("tornado_swing", () -> new WeaponSpell(ModAttackActions.TORNADO_SWING, ModTags.HAMMER_AXES), new SpellProperties.Builder(5, 10).withXPGain(EnumSkills.HAMMERAXE, 10).affectedSkill(EnumSkills.HAMMERAXE));
+    public static final RegistryEntrySupplier<Spell> GIGA_SWING = registerSpell("giga_swing", () -> new WeaponSpell(ModAttackActions.GIGA_SWING, ModTags.HAMMER_AXES), new SpellProperties.Builder(5, 10).withXPGain(EnumSkills.HAMMERAXE, 10).affectedSkill(EnumSkills.HAMMERAXE));
 
     public static final RegistryEntrySupplier<Spell> TELEPORT = registerSpell("teleport", TeleportSpell::new, new SpellProperties.Builder(30, 0));
 

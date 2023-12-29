@@ -128,8 +128,11 @@ public class PlayerModelAnimations {
     public static final AnimatedAction MILLION_STRIKE = addTo(new AnimatedAction(length(0.8), 0.32, "million_strike"));
     public static final AnimatedAction AXEL_DISASTER = addTo(new AnimatedAction(length(1.2), 0.36, "axel_disaster"));
     public static final AnimatedAction STARDUST_UPPER = addTo(new AnimatedAction(length(1.76), 0.24, "stardust_upper"));
-    public static final AnimatedAction GRAND_IMPACT = addTo(new AnimatedAction(length(3.08), 0.4, "grand_impact"));
-    public static final AnimatedAction TORNADO_SWING = addTo(new AnimatedAction(length(1.28), 0.24, "tornade_swing"));
+    public static final AnimatedAction GRAND_IMPACT = addTo(new AnimatedAction(length(2.8), 0.4, "grand_impact"));
+    public static final List<AnimatedAction> TORNADO_SWING = addTo(2, "tornado_swing", count -> switch (count) {
+        case 2 -> Pair.of((int) Math.ceil(1.32 * 20), 0);
+        default -> Pair.of((int) Math.ceil(1.48 * 20), (int) Math.ceil(0.24 * 20));
+    });
     public static final AnimatedAction GIGA_SWING = addTo(new AnimatedAction(length(1), 0.28, "giga_swing"));
     public static final AnimatedAction UPPER_CUT = addTo(new AnimatedAction(length(0.72), 0.36, "upper_cut"));
     public static final AnimatedAction DOUBLE_KICK = addTo(new AnimatedAction(length(0.76), 0.24, "double_kick"));

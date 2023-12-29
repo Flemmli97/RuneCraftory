@@ -144,7 +144,7 @@ public class ItemHammerBase extends PickaxeItem implements IItemUsable, IChargea
                 Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.getWeaponHandler().doWeaponAttack(player, ModAttackActions.HAMMER_AXE_USE.get(), stack));
                 return;
             }
-            if (ItemAxeBase.performRightClickAction(stack, entity, this.getRange(entity, stack))) {
+            if (ItemAxeBase.performRightClickAction(stack, entity, this.getRange(entity, stack), 0.7f)) {
                 entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, entity.getSoundSource(), 1.0f, 1.0f);
             }
         }

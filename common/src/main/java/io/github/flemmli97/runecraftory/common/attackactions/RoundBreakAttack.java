@@ -26,8 +26,10 @@ public class RoundBreakAttack extends AttackAction {
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
         Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1)).scale(0.4);
-        if (anim.isAtTick(0.2))
+        if (anim.isAtTick(0.2)) {
             handler.setMoveTargetDir(dir.scale(1.8).add(0, 1.6, 0), anim, 0.48);
+            handler.setSpinStartRot(entity.getYRot() + 90);
+        }
         if (anim.isAtTick(0.48))
             handler.setMoveTargetDir(dir.scale(3.3).add(0, -1.6, 0), anim, 0.68);
         if (!entity.level.isClientSide && anim.isPastTick(0.24) && !anim.isPastTick(0.6)) {

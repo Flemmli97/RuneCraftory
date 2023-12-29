@@ -165,7 +165,7 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IA
                 Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.getWeaponHandler().doWeaponAttack(player, ModAttackActions.HAMMER_AXE_USE.get(), stack));
                 return;
             }
-            if (performRightClickAction(stack, entity, this.getRange(entity, stack))) {
+            if (performRightClickAction(stack, entity, this.getRange(entity, stack), 0.7f)) {
                 entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, entity.getSoundSource(), 1.0f, 1.0f);
             }
         }
@@ -180,12 +180,12 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IA
         float reach = (float) entity.getAttributeValue(ModAttributes.ATTACK_RANGE.get());
         Platform.INSTANCE.sendToTrackingAndSelf(new S2CScreenShake(4, 1), entity);
         entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, entity.getSoundSource(), 1.0f, 1.0f);
-        if (performRightClickAction(stack, entity, reach) && entity instanceof ServerPlayer player) {
+        if (performRightClickAction(stack, entity, reach, 0.7f) && entity instanceof ServerPlayer player) {
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.HAMMERAXE, 5));
         }
     }
 
-    public static boolean performRightClickAction(ItemStack stack, LivingEntity entity, float range) {
+    public static boolean performRightClickAction(ItemStack stack, LivingEntity entity, float range, float knockback) {
         List<Entity> list = getEntitiesIn(entity, range, null);
         entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.DRAGON_FIREBALL_EXPLODE, entity.getSoundSource(), 1.0f, 0.4f);
         Vec3 pos = entity.position().add(0, -1, 0);
@@ -198,7 +198,8 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IA
                 ((ServerLevel) entity.getLevel()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state), entity.getX() + dir.x(), entity.getY() + 0.1, entity.getZ() + dir.z(), 0, (float) scaled.x(), 1.5f, (float) scaled.z(), 1);
         }
         if (!list.isEmpty()) {
-            Supplier<CustomDamage.Builder> base = () -> new CustomDamage.Builder(entity).element(ItemNBT.getElement(stack)).knock(CustomDamage.KnockBackType.UP).knockAmount(0.7f).hurtResistant(10);
+            Supplier<CustomDamage.Builder> base = () -> new CustomDamage.Builder(entity).element(ItemNBT.getElement(stack))
+                    .knock(CustomDamage.KnockBackType.UP).knockAmount(knockback).hurtResistant(5);
             boolean success = false;
             double damagePhys = CombatUtils.getAttributeValue(entity, Attributes.ATTACK_DAMAGE) * 1.1;
             for (Entity e : list) {

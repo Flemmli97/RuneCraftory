@@ -301,6 +301,8 @@ public class ItemTagGen extends ItemTagsProvider {
                 .addTag(ModTags.SPEARS).addTag(ModTags.AXES)
                 .addTag(ModTags.HAMMERS).addTag(ModTags.DUALBLADES)
                 .addTag(ModTags.FISTS).addTag(ModTags.STAFFS);
+        this.tag(ModTags.HAMMER_AXES)
+                .addTag(ModTags.HAMMERS).addTag(ModTags.AXES);
 
         this.tag(tempKeyFabric("swords")).addTag(tempKeyForge("tools/swords"));
         this.tag(tempKeyForge("tools/swords"))

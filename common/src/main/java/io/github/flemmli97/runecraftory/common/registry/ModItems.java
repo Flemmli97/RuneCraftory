@@ -779,10 +779,10 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> reaperSlash = spell(() -> ModSpells.REAPER_SLASH, "reaper_slash");
     public static final RegistryEntrySupplier<Item> millionStrike = spell(() -> ModSpells.MILLION_STRIKE, "million_strike");
     public static final RegistryEntrySupplier<Item> axelDisaster = spell(() -> ModSpells.AXEL_DISASTER, "axel_disaster");
-    public static final RegistryEntrySupplier<Item> stardustUpper = spell(() -> ModSpells.EMPTY, "stardust_upper");
-    public static final RegistryEntrySupplier<Item> tornadoSwing = spell(() -> ModSpells.EMPTY, "tornado_swing");
-    public static final RegistryEntrySupplier<Item> grandImpact = spell(() -> ModSpells.EMPTY, "grand_impact");
-    public static final RegistryEntrySupplier<Item> gigaSwing = spell(() -> ModSpells.EMPTY, "giga_swing");
+    public static final RegistryEntrySupplier<Item> stardustUpper = spell(() -> ModSpells.STARDUST_UPPER, "stardust_upper");
+    public static final RegistryEntrySupplier<Item> tornadoSwing = spell(() -> ModSpells.TORNADO_SWING, "tornado_swing");
+    public static final RegistryEntrySupplier<Item> grandImpact = spell(() -> ModSpells.GRAND_IMPACT, "grand_impact");
+    public static final RegistryEntrySupplier<Item> gigaSwing = spell(() -> ModSpells.GIGA_SWING, "giga_swing");
     public static final RegistryEntrySupplier<Item> upperCut = spell(() -> ModSpells.EMPTY, "upper_cut");
     public static final RegistryEntrySupplier<Item> doubleKick = spell(() -> ModSpells.EMPTY, "double_kick");
     public static final RegistryEntrySupplier<Item> straightPunch = spell(() -> ModSpells.EMPTY, "straight_punch");

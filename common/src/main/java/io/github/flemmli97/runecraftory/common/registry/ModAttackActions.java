@@ -9,8 +9,10 @@ import io.github.flemmli97.runecraftory.common.attackactions.DualBladeAttack;
 import io.github.flemmli97.runecraftory.common.attackactions.EmptyAction;
 import io.github.flemmli97.runecraftory.common.attackactions.FireballUseAttack;
 import io.github.flemmli97.runecraftory.common.attackactions.FlashStrikeAttack;
+import io.github.flemmli97.runecraftory.common.attackactions.GigaSwingAttack;
 import io.github.flemmli97.runecraftory.common.attackactions.GloveAttack;
 import io.github.flemmli97.runecraftory.common.attackactions.GloveUseAttack;
+import io.github.flemmli97.runecraftory.common.attackactions.GrandImpactAttack;
 import io.github.flemmli97.runecraftory.common.attackactions.GustAttack;
 import io.github.flemmli97.runecraftory.common.attackactions.HammerAxeAttack;
 import io.github.flemmli97.runecraftory.common.attackactions.HammerAxeUseAttack;
@@ -30,9 +32,11 @@ import io.github.flemmli97.runecraftory.common.attackactions.SpearAttack;
 import io.github.flemmli97.runecraftory.common.attackactions.SpearUseAttack;
 import io.github.flemmli97.runecraftory.common.attackactions.SpellUseAttack;
 import io.github.flemmli97.runecraftory.common.attackactions.StaffAttack;
+import io.github.flemmli97.runecraftory.common.attackactions.StardustUpperAttack;
 import io.github.flemmli97.runecraftory.common.attackactions.StormAttack;
 import io.github.flemmli97.runecraftory.common.attackactions.TimedUseAttack;
 import io.github.flemmli97.runecraftory.common.attackactions.ToolHammerUse;
+import io.github.flemmli97.runecraftory.common.attackactions.TornadoSwingAttack;
 import io.github.flemmli97.runecraftory.common.attackactions.TwinAttack;
 import io.github.flemmli97.runecraftory.common.attackactions.WindSlashAttack;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemDualBladeBase;
@@ -114,6 +118,11 @@ public class ModAttackActions {
     public static final RegistryEntrySupplier<AttackAction> REAPER_SLASH = register("reaper_slash", ReaperSlashAttack::new);
     public static final RegistryEntrySupplier<AttackAction> MILLION_STRIKE = register("million_strike", MillionStrikeAttack::new);
     public static final RegistryEntrySupplier<AttackAction> AXEL_DISASTER = register("axel_disaster", AxelDisasterAttack::new);
+
+    public static final RegistryEntrySupplier<AttackAction> STARDUST_UPPER = register("stardust_upper", StardustUpperAttack::new);
+    public static final RegistryEntrySupplier<AttackAction> GRAND_IMPACT = register("grand_impact", GrandImpactAttack::new);
+    public static final RegistryEntrySupplier<AttackAction> TORNADO_SWING = register("tornado_swing", TornadoSwingAttack::new);
+    public static final RegistryEntrySupplier<AttackAction> GIGA_SWING = register("giga_swing", GigaSwingAttack::new);
 
     public static RegistryEntrySupplier<AttackAction> register(String id, Supplier<AttackAction> action) {
         return ATTACK_ACTIONS.register(id, action);

@@ -51,7 +51,7 @@ public class DualBladeAttack extends AttackAction {
             case 5 -> {
                 if (anim.isAtTick(0.2)) {
                     handler.setMoveTargetDir(dir.scale(0.2), anim, anim.getTick());
-                    handler.setSpinStartRot(entity.getYRot() + 20);
+                    handler.setSpinStartRot(entity.getYRot() - 20);
                     handler.resetHitEntityTracker();
                 }
                 if (anim.isAtTick(0.4)) {
@@ -69,7 +69,7 @@ public class DualBladeAttack extends AttackAction {
             }
             case 6 -> {
                 if (anim.isAtTick(0.08)) {
-                    handler.setSpinStartRot(entity.getYRot() + 20);
+                    handler.setSpinStartRot(entity.getYRot() - 90);
                     handler.resetHitEntityTracker();
                 }
                 if (anim.isAtTick(0.28)) {
@@ -96,7 +96,7 @@ public class DualBladeAttack extends AttackAction {
             }
             case 8 -> {
                 if (anim.isAtTick(0.24)) {
-                    handler.setSpinStartRot(entity.getYRot() + 20);
+                    handler.setSpinStartRot(entity.getYRot() + 160);
                     handler.resetHitEntityTracker();
                 }
                 if (anim.isAtTick(0.48) || anim.isAtTick(0.68) || anim.isAtTick(0.92)) {
