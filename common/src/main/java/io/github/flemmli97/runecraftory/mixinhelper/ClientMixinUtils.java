@@ -116,13 +116,10 @@ public class ClientMixinUtils {
             float interpolation = 1;
             if (entity instanceof Player player) {
                 PlayerData data = Platform.INSTANCE.getPlayerData(player).orElse(null);
-                AnimatedAction current = null;
                 if (data != null) {
-                    current = data.getWeaponHandler().getCurrentAnim();
                     anim = data.getWeaponHandler().getCurrentAnimForRender();
-                }
-                if (data != null)
                     interpolation = data.getWeaponHandler().interpolatedLastChange();
+                }
             } else if (entity instanceof IAnimated animated) {
                 anim = animated.getAnimationHandler().getAnimation();
                 interpolation = animated.getAnimationHandler().getInterpolatedAnimationVal(1);

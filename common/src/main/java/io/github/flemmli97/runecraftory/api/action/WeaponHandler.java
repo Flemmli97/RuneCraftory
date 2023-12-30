@@ -9,6 +9,7 @@ import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.HitResult;
@@ -48,6 +49,7 @@ public class WeaponHandler {
     private Vec3 moveDir;
     private boolean oldGravity;
     private int moveDuration;
+    private Entity target;
 
     public boolean doWeaponAttack(LivingEntity entity, AttackAction action, ItemStack stack) {
         return this.doWeaponAttack(entity, action, stack, null, false);
@@ -107,6 +109,7 @@ public class WeaponHandler {
         this.chainCount = 0;
         this.toolUseData = null;
         this.hitEntityTracker.clear();
+        this.target = null;
     }
 
     public void tick(LivingEntity entity) {
@@ -198,6 +201,8 @@ public class WeaponHandler {
     }
 
     public AnimatedAction getCurrentAnimForRender() {
+        if (!this.currentAction.hasAnimation())
+            return null;
         if (this.getCurrentAnim() == null)
             return this.getFadingAnim();
         return this.getCurrentAnim();
@@ -243,6 +248,14 @@ public class WeaponHandler {
         double duration = Math.max(1, (endTick - animation.getTick()) / animation.getSpeed());
         this.moveDir = direction.scale(1d / duration);
         this.moveDuration = Mth.ceil(duration);
+    }
+
+    public Entity getTarget() {
+        return this.target;
+    }
+
+    public void setTarget(Entity target) {
+        this.target = target;
     }
 
     public void clearMoveTarget() {

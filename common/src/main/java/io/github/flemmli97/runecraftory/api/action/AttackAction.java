@@ -65,6 +65,10 @@ public class AttackAction extends CustomRegistryEntry<AttackAction> {
         return null;
     }
 
+    public boolean hasAnimation() {
+        return true;
+    }
+
     /**
      * Record for handling attack chains
      *

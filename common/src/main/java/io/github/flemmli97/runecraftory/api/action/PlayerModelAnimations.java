@@ -140,6 +140,7 @@ public class PlayerModelAnimations {
     public static final AnimatedAction NEKO_DAMASHI = addTo(new AnimatedAction(length(0.6), 0.36, "neko_damashi"));
     public static final AnimatedAction RUSH_PUNCH = addTo(new AnimatedAction(length(0.96), 0.2, "rush_punch"));
     public static final AnimatedAction CYCLONE = addTo(new AnimatedAction(length(1.44), 0.28, "cyclone"));
+    public static final AnimatedAction RAPID_MOVE = addTo(new AnimatedAction(length(0.6), 0.52, "rapid_move"));
 
     public static List<AnimatedAction> getAll() {
         return ImmutableList.copyOf(ALL);
