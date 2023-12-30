@@ -95,10 +95,18 @@ public class BlockTagGen extends BlockTagsProvider {
 
         this.tag(BlockTags.LOGS)
                 .add(ModBlocks.appleTree.get())
-                .add(ModBlocks.appleWood.get());
+                .add(ModBlocks.appleWood.get())
+                .add(ModBlocks.orangeTree.get())
+                .add(ModBlocks.orangeWood.get())
+                .add(ModBlocks.grapeTree.get())
+                .add(ModBlocks.grapeWood.get());
         this.tag(BlockTags.LEAVES)
                 .add(ModBlocks.appleLeaves.get())
-                .add(ModBlocks.apple.get());
+                .add(ModBlocks.apple.get())
+                .add(ModBlocks.orangeLeaves.get())
+                .add(ModBlocks.orange.get())
+                .add(ModBlocks.grapeLeaves.get())
+                .add(ModBlocks.grape.get());
 
     }
 }

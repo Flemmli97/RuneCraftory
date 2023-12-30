@@ -967,6 +967,8 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> dungeonSeeds = seed("dungeon", () -> ModBlocks.dungeon);
 
     public static final RegistryEntrySupplier<Item> appleSapling = ITEMS.register("apple_sapling", () -> new ItemNameBlockItem(ModBlocks.appleSapling.get(), new Item.Properties().tab(RFCreativeTabs.crops)));
+    public static final RegistryEntrySupplier<Item> orangeSapling = ITEMS.register("orange_sapling", () -> new ItemNameBlockItem(ModBlocks.orangeSapling.get(), new Item.Properties().tab(RFCreativeTabs.crops)));
+    public static final RegistryEntrySupplier<Item> grapeSapling = ITEMS.register("grape_sapling", () -> new ItemNameBlockItem(ModBlocks.grapeSapling.get(), new Item.Properties().tab(RFCreativeTabs.crops)));
 
     //Recovery and stuff
     public static final RegistryEntrySupplier<Item> roundoff = medicine("roundoff", false);
@@ -1190,7 +1192,7 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> sourDrop = food("sour_drop", Texture.N, lowFoodProp);
     public static final RegistryEntrySupplier<Item> sweetPowder = food("sweet_powder", Texture.N, lowFoodProp);
     public static final RegistryEntrySupplier<Item> heavySpice = food("heavy_spice", Texture.N, lowFoodProp);
-    public static final RegistryEntrySupplier<Item> orange = food("orange", Texture.N, lowFoodProp);
+    public static final RegistryEntrySupplier<Item> orange = food("orange", Texture.Y, lowFoodProp);
     public static final RegistryEntrySupplier<Item> grapes = food("grapes", Texture.Y, lowFoodProp);
     public static final RegistryEntrySupplier<Item> mealyApple = food("mealy_apple", Texture.N, lowFoodProp);
 

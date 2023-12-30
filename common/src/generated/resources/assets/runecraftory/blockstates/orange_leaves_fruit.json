@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "has_fruit=false": {
+      "model": "runecraftory:block/orange_leaves_fruit_fruitless"
+    },
+    "has_fruit=true": {
+      "model": "runecraftory:block/orange_leaves_fruit"
+    }
+  }
+}

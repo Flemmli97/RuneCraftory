@@ -3,6 +3,6 @@
   "textures": {
     "base": "minecraft:block/oak_leaves",
     "particle": "minecraft:block/oak_leaves",
-    "overlay": "runecraftory:block/apple_leaves_fruit"
+    "overlay": "runecraftory:block/orange_leaves_fruit"
   }
 }

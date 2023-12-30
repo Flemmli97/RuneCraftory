@@ -59,6 +59,12 @@ public class ModFeatures {
     public static Holder<ConfiguredFeature<?, ?>> APPLE_1;
     public static Holder<ConfiguredFeature<TreeConfiguration, ?>> APPLE_2;
     public static Holder<ConfiguredFeature<TreeConfiguration, ?>> APPLE_3;
+    public static Holder<ConfiguredFeature<?, ?>> ORANGE_1;
+    public static Holder<ConfiguredFeature<TreeConfiguration, ?>> ORANGE_2;
+    public static Holder<ConfiguredFeature<TreeConfiguration, ?>> ORANGE_3;
+    public static Holder<ConfiguredFeature<?, ?>> GRAPE_1;
+    public static Holder<ConfiguredFeature<TreeConfiguration, ?>> GRAPE_2;
+    public static Holder<ConfiguredFeature<TreeConfiguration, ?>> GRAPE_3;
 
     public static Holder<PlacedFeature> PLACEDHERBFEATURE;
     public static Holder<PlacedFeature> PLACEDNETHERHERBFEATURE;
@@ -104,6 +110,12 @@ public class ModFeatures {
         APPLE_1 = BuiltinRegistries.register(BuiltinRegistries.CONFIGURED_FEATURE, RuneCraftory.MODID + ":apple_stage_1", fruitSprout(ModBlocks.appleWood.get(), ModBlocks.appleLeaves.get()));
         APPLE_2 = BuiltinRegistries.registerExact(BuiltinRegistries.CONFIGURED_FEATURE, RuneCraftory.MODID + ":apple_stage_2", fruitTree(ModBlocks.appleWood.get(), ModBlocks.appleLeaves.get(), ModBlocks.apple.get(), false));
         APPLE_3 = BuiltinRegistries.registerExact(BuiltinRegistries.CONFIGURED_FEATURE, RuneCraftory.MODID + ":apple_stage_3", fruitTree(ModBlocks.appleWood.get(), ModBlocks.appleLeaves.get(), ModBlocks.apple.get(), true));
+        ORANGE_1 = BuiltinRegistries.register(BuiltinRegistries.CONFIGURED_FEATURE, RuneCraftory.MODID + ":orange_stage_1", fruitSprout(ModBlocks.orangeWood.get(), ModBlocks.orangeLeaves.get()));
+        ORANGE_2 = BuiltinRegistries.registerExact(BuiltinRegistries.CONFIGURED_FEATURE, RuneCraftory.MODID + ":orange_stage_2", fruitTree(ModBlocks.orangeWood.get(), ModBlocks.orangeLeaves.get(), ModBlocks.orange.get(), false));
+        ORANGE_3 = BuiltinRegistries.registerExact(BuiltinRegistries.CONFIGURED_FEATURE, RuneCraftory.MODID + ":orange_stage_3", fruitTree(ModBlocks.orangeWood.get(), ModBlocks.orangeLeaves.get(), ModBlocks.orange.get(), true));
+        GRAPE_1 = BuiltinRegistries.register(BuiltinRegistries.CONFIGURED_FEATURE, RuneCraftory.MODID + ":grape_stage_1", fruitSprout(ModBlocks.grapeWood.get(), ModBlocks.grapeLeaves.get()));
+        GRAPE_2 = BuiltinRegistries.registerExact(BuiltinRegistries.CONFIGURED_FEATURE, RuneCraftory.MODID + ":grape_stage_2", fruitTree(ModBlocks.grapeWood.get(), ModBlocks.grapeLeaves.get(), ModBlocks.grape.get(), false));
+        GRAPE_3 = BuiltinRegistries.registerExact(BuiltinRegistries.CONFIGURED_FEATURE, RuneCraftory.MODID + ":grape_stage_3", fruitTree(ModBlocks.grapeWood.get(), ModBlocks.grapeLeaves.get(), ModBlocks.grape.get(), true));
     }
 
     public static List<HerbFeature.Entry> build() {

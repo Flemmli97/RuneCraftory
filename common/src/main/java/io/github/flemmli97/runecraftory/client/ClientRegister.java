@@ -237,6 +237,10 @@ public class ClientRegister {
         };
         cons.accept(leaves, ModBlocks.appleLeaves.get());
         cons.accept(leaves, ModBlocks.apple.get());
+        cons.accept(leaves, ModBlocks.orangeLeaves.get());
+        cons.accept(leaves, ModBlocks.orange.get());
+        cons.accept(leaves, ModBlocks.grapeLeaves.get());
+        cons.accept(leaves, ModBlocks.grape.get());
     }
 
     public static void registerScreen(MenuScreenRegister factory) {

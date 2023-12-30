@@ -2,6 +2,10 @@
   "replace": false,
   "values": [
     "runecraftory:apple_tree",
-    "runecraftory:apple_wood"
+    "runecraftory:apple_wood",
+    "runecraftory:orange_tree",
+    "runecraftory:orange_wood",
+    "runecraftory:grape_tree",
+    "runecraftory:grape_wood"
   ]
 }

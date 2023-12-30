@@ -136,6 +136,8 @@ public class LangGen implements DataProvider {
                 this.add(sup.get(), "Milk (M)");
             } else if (sup == ModItems.milkL) {
                 this.add(sup.get(), "Milk (L)");
+            } else if (sup == ModItems.grapeSapling) {
+                this.add(sup.get(), "Grape Sapling?");
             } else if (sup.get() instanceof SpawnEgg)
                 this.add(sup.get(), "%s" + " Spawn Egg");
             else

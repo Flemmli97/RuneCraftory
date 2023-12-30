@@ -231,21 +231,16 @@ public class ModBlocks {
     public static final RegistryEntrySupplier<RotatedPillarBlock> appleWood = BLOCKS.register("apple_wood", () -> new RotatedPillarBlock(BlockBehaviour.Properties.of(Material.WOOD).sound(SoundType.WOOD).strength(-1, 99999)));
     public static final RegistryEntrySupplier<Block> appleLeaves = BLOCKS.register("apple_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES).strength(-1, 99999)));
     public static final RegistryEntrySupplier<Block> apple = BLOCKS.register("apple_leaves_fruit", () -> new BlockFruitTreeLeaf(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES).strength(-1, 99999), () -> Items.APPLE));
-    /*
-    public static final RegistryEntrySupplier<Block> orangeTree = new BlockTreeBase("orange_tree_base");
-    public static final RegistryEntrySupplier<Block> orangeWood = new BlockTreeWood("orange_wood");
-    public static final RegistryEntrySupplier<Block> orangeLeaves = new BlockTreeLeaves("orange_leaves");
-    public static final RegistryEntrySupplier<Block> orange = new BlockTreeFruit("orange_block");
-    public static final RegistryEntrySupplier<Block> orangeSapling = new BlockTreeSapling("orange_sapling", orangeTree);
-    public static final RegistryEntrySupplier<Block> grapeTree = new BlockTreeBase("grape_tree_base");
-    public static final RegistryEntrySupplier<Block> grapeWood = new BlockTreeWood("grape_wood");
-    public static final RegistryEntrySupplier<Block> grapeLeaves = new BlockTreeLeaves("grape_leaves");
-    public static final RegistryEntrySupplier<Block> grape = new BlockTreeFruit("grape_block");
-    public static final RegistryEntrySupplier<Block> grapeSapling = new BlockTreeSapling("grape_sapling", grapeTree);
-    public static final RegistryEntrySupplier<Block> shinyTree = new BlockTreeBase("shiny_tree_base");
-    public static final RegistryEntrySupplier<Block> shinyWood = new BlockTreeWood("shiny_wood");
-    public static final RegistryEntrySupplier<Block> shinyLeaves = new BlockTreeLeaves("shiny_leaves");
-    public static final RegistryEntrySupplier<Block> shinySapling = new BlockTreeSapling("shiny_sapling", shinyTree);*/
+    public static final RegistryEntrySupplier<BlockTreeBase> orangeTree = BLOCKS.register("orange_tree", () -> new BlockTreeBase(logProps(), () -> ModFeatures.ORANGE_1.value(), () -> ModFeatures.ORANGE_2.value(), () -> ModFeatures.ORANGE_3.value(), ModItems.orangeSapling));
+    public static final RegistryEntrySupplier<Block> orangeSapling = BLOCKS.register("orange_sapling", () -> new BlockTreeSapling(BlockBehaviour.Properties.of(Material.PLANT).noCollission().instabreak().sound(SoundType.GRASS), orangeTree));
+    public static final RegistryEntrySupplier<RotatedPillarBlock> orangeWood = BLOCKS.register("orange_wood", () -> new RotatedPillarBlock(BlockBehaviour.Properties.of(Material.WOOD).sound(SoundType.WOOD).strength(-1, 99999)));
+    public static final RegistryEntrySupplier<Block> orangeLeaves = BLOCKS.register("orange_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES).strength(-1, 99999)));
+    public static final RegistryEntrySupplier<Block> orange = BLOCKS.register("orange_leaves_fruit", () -> new BlockFruitTreeLeaf(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES).strength(-1, 99999), ModItems.orange::get));
+    public static final RegistryEntrySupplier<BlockTreeBase> grapeTree = BLOCKS.register("grape_tree", () -> new BlockTreeBase(logProps(), () -> ModFeatures.GRAPE_1.value(), () -> ModFeatures.GRAPE_2.value(), () -> ModFeatures.GRAPE_3.value(), ModItems.grapeSapling));
+    public static final RegistryEntrySupplier<Block> grapeSapling = BLOCKS.register("grape_sapling", () -> new BlockTreeSapling(BlockBehaviour.Properties.of(Material.PLANT).noCollission().instabreak().sound(SoundType.GRASS), grapeTree));
+    public static final RegistryEntrySupplier<RotatedPillarBlock> grapeWood = BLOCKS.register("grape_wood", () -> new RotatedPillarBlock(BlockBehaviour.Properties.of(Material.WOOD).sound(SoundType.WOOD).strength(-1, 99999)));
+    public static final RegistryEntrySupplier<Block> grapeLeaves = BLOCKS.register("grape_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES).strength(-1, 99999)));
+    public static final RegistryEntrySupplier<Block> grape = BLOCKS.register("grape_leaves_fruit", () -> new BlockFruitTreeLeaf(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES).strength(-1, 99999), ModItems.grapes::get));
 
     public static final RegistryEntrySupplier<BlockEntityType<BrokenMineralBlockEntity>> brokenMineralTile = brokenMineralTile("broken_mineral_tile", brokenMineralMap.values());
     public static final RegistryEntrySupplier<BlockEntityType<AccessoryBlockEntity>> accessoryTile = TILES.register("accessory_tile", () -> Platform.INSTANCE.blockEntityType(AccessoryBlockEntity::new, accessory.get()));

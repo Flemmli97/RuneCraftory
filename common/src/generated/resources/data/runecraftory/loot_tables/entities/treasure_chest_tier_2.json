@@ -371,6 +371,10 @@
         },
         {
           "type": "minecraft:item",
+          "name": "runecraftory:orange"
+        },
+        {
+          "type": "minecraft:item",
           "name": "runecraftory:grapes"
         },
         {

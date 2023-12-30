@@ -177,16 +177,52 @@ public class BlockStatesGen extends BlockStateProvider {
         this.axisBlock(ModBlocks.appleWood.get(), this.models().getExistingFile(new ResourceLocation("block/" + Blocks.OAK_LOG.getRegistryName().getPath())),
                 this.models().getExistingFile(new ResourceLocation("block/" + Blocks.OAK_LOG.getRegistryName().getPath() + "_horizontal")));
         this.simpleBlock(ModBlocks.appleLeaves.get(), this.models().getExistingFile(new ResourceLocation("block/" + Blocks.OAK_LEAVES.getRegistryName().getPath())));
-
         this.getVariantBuilder(ModBlocks.apple.get())
                 .partialState().with(BlockFruitTreeLeaf.HAS_FRUIT, true)
                 .modelForState().modelFile(this.models().withExistingParent(ModBlocks.apple.getID().toString(), this.modLoc("fruit_leaves"))
                         .texture("base", this.blockTexture(Blocks.OAK_LEAVES))
+                        .texture("particle", this.blockTexture(Blocks.OAK_LEAVES))
                         .texture("overlay", this.blockTexture(ModBlocks.apple.get())))
                 .addModel()
                 .partialState().with(BlockFruitTreeLeaf.HAS_FRUIT, false)
                 .modelForState().modelFile(this.models().withExistingParent(ModBlocks.apple.getID().toString() + "_fruitless", "block/leaves")
                         .texture("all", this.blockTexture(Blocks.OAK_LEAVES)))
+                .addModel();
+
+        this.axisBlock(ModBlocks.orangeTree.get(), this.models().getExistingFile(new ResourceLocation("block/" + Blocks.OAK_LOG.getRegistryName().getPath())),
+                this.models().getExistingFile(new ResourceLocation("block/" + Blocks.OAK_LOG.getRegistryName().getPath() + "_horizontal")));
+        this.simpleBlock(ModBlocks.orangeSapling.get(), this.models().cross(ModBlocks.orangeSapling.getID().toString(), this.itemTexture(ModItems.orangeSapling.get())));
+        this.axisBlock(ModBlocks.orangeWood.get(), this.models().getExistingFile(new ResourceLocation("block/" + Blocks.OAK_LOG.getRegistryName().getPath())),
+                this.models().getExistingFile(new ResourceLocation("block/" + Blocks.OAK_LOG.getRegistryName().getPath() + "_horizontal")));
+        this.simpleBlock(ModBlocks.orangeLeaves.get(), this.models().getExistingFile(new ResourceLocation("block/" + Blocks.OAK_LEAVES.getRegistryName().getPath())));
+        this.getVariantBuilder(ModBlocks.orange.get())
+                .partialState().with(BlockFruitTreeLeaf.HAS_FRUIT, true)
+                .modelForState().modelFile(this.models().withExistingParent(ModBlocks.orange.getID().toString(), this.modLoc("fruit_leaves"))
+                        .texture("base", this.blockTexture(Blocks.OAK_LEAVES))
+                        .texture("particle", this.blockTexture(Blocks.OAK_LEAVES))
+                        .texture("overlay", this.blockTexture(ModBlocks.orange.get())))
+                .addModel()
+                .partialState().with(BlockFruitTreeLeaf.HAS_FRUIT, false)
+                .modelForState().modelFile(this.models().withExistingParent(ModBlocks.orange.getID().toString() + "_fruitless", "block/leaves")
+                        .texture("all", this.blockTexture(Blocks.OAK_LEAVES)))
+                .addModel();
+
+        this.axisBlock(ModBlocks.grapeTree.get(), this.models().getExistingFile(new ResourceLocation("block/" + Blocks.SPRUCE_LOG.getRegistryName().getPath())),
+                this.models().getExistingFile(new ResourceLocation("block/" + Blocks.SPRUCE_LOG.getRegistryName().getPath() + "_horizontal")));
+        this.simpleBlock(ModBlocks.grapeSapling.get(), this.models().cross(ModBlocks.grapeSapling.getID().toString(), this.itemTexture(ModItems.grapeSapling.get())));
+        this.axisBlock(ModBlocks.grapeWood.get(), this.models().getExistingFile(new ResourceLocation("block/" + Blocks.SPRUCE_LOG.getRegistryName().getPath())),
+                this.models().getExistingFile(new ResourceLocation("block/" + Blocks.SPRUCE_LOG.getRegistryName().getPath() + "_horizontal")));
+        this.simpleBlock(ModBlocks.grapeLeaves.get(), this.models().getExistingFile(new ResourceLocation("block/" + Blocks.SPRUCE_LEAVES.getRegistryName().getPath())));
+        this.getVariantBuilder(ModBlocks.grape.get())
+                .partialState().with(BlockFruitTreeLeaf.HAS_FRUIT, true)
+                .modelForState().modelFile(this.models().withExistingParent(ModBlocks.grape.getID().toString(), this.modLoc("fruit_leaves"))
+                        .texture("base", this.blockTexture(Blocks.SPRUCE_LEAVES))
+                        .texture("particle", this.blockTexture(Blocks.SPRUCE_LEAVES))
+                        .texture("overlay", this.blockTexture(ModBlocks.grape.get())))
+                .addModel()
+                .partialState().with(BlockFruitTreeLeaf.HAS_FRUIT, false)
+                .modelForState().modelFile(this.models().withExistingParent(ModBlocks.grape.getID().toString() + "_fruitless", "block/leaves")
+                        .texture("all", this.blockTexture(Blocks.SPRUCE_LEAVES)))
                 .addModel();
     }
 
