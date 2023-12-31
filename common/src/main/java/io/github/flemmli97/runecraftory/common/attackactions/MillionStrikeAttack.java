@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
-import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
@@ -27,8 +26,10 @@ public class MillionStrikeAttack extends AttackAction {
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
         if (!entity.level.isClientSide && anim.isPastTick(0.28) && !anim.isPastTick(0.68) && anim.getTickRaw() % (2 * anim.getSpeed()) == 0) {
             float mod = (anim.getTickRaw() - Mth.ceil(0.28 * 20)) % (8 * anim.getSpeed());
-            CombatUtils.spinAttackHandler(entity, entity.getLookAngle(), 15, 2f, null,
-                    Pair.of(mod == 6 ? Map.of(ModAttributes.CRIT.get(), 100d) : Map.of(), Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))), null);
+            CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets(entity.getLookAngle(), 15, 2))
+                    .withBonusAttributes(mod == 6 ? Map.of(ModAttributes.CRIT.get(), 100d) : Map.of())
+                    .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
+                    .executeAttack();
         }
     }
 }

@@ -32,7 +32,10 @@ public class GloveAttack extends AttackAction {
             if (handler.getChainCount() != 4)
                 CombatUtils.attack(entity, stack);
             else
-                CombatUtils.attackInAABB(entity, new AABB(-1, -1, -1, 1, 1, 1).move(entity.position().add(0, 0.2, 0).add(entity.getDeltaMovement().normalize().scale(0.4))), null);
+                CombatUtils.EntityAttack.create(entity,
+                                CombatUtils.EntityAttack.aabbTargets(new AABB(-1, -1, -1, 1, 1, 1).move(entity.position().add(0, 0.2, 0)
+                                        .add(entity.getDeltaMovement().normalize().scale(0.4)))))
+                        .executeAttack();
             entity.swing(InteractionHand.MAIN_HAND, true);
         }
         Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
@@ -75,7 +78,10 @@ public class GloveAttack extends AttackAction {
                     entity.resetFallDistance();
                 }
                 if (!entity.level.isClientSide && anim.isPastTick(0.2) && !anim.isPastTick(1.08)) {
-                    handler.addHitEntityTracker(CombatUtils.attackInAABB(entity, entity.getBoundingBox().inflate(0.5), e -> !handler.getHitEntityTracker().contains(e)));
+                    handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity,
+                                    CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox().inflate(0.5)))
+                            .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
+                            .executeAttack());
                 }
             }
         }

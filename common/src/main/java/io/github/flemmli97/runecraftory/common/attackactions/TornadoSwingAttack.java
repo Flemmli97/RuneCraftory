@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
-import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
@@ -38,8 +37,10 @@ public class TornadoSwingAttack extends AttackAction {
                     float f = (anim.getTick() - start) / anim.getSpeed();
                     float angleInc = -450 / len;
                     float rot = handler.getSpinStartRot();
-                    handler.addHitEntityTracker(CombatUtils.spinAttackHandler(entity, (rot + f * angleInc), (rot + (f + 1) * angleInc), 0.5f, e -> !handler.getHitEntityTracker().contains(e),
-                            Pair.of(Map.of(), Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))), null));
+                    handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets((rot + f * angleInc), (rot + (f + 1) * angleInc), 0.5f))
+                            .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
+                            .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
+                            .executeAttack());
                 }
             } else {
                 if (anim.isPastTick(0) && !anim.isPastTick(0.96)) {
@@ -49,8 +50,10 @@ public class TornadoSwingAttack extends AttackAction {
                     float f = (anim.getTick() - start) / anim.getSpeed();
                     float angleInc = -380 / len;
                     float rot = handler.getSpinStartRot();
-                    handler.addHitEntityTracker(CombatUtils.spinAttackHandler(entity, (rot + f * angleInc), (rot + (f + 1) * angleInc), 0.5f, e -> !handler.getHitEntityTracker().contains(e),
-                            Pair.of(Map.of(), Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))), null));
+                    handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets((rot + f * angleInc), (rot + (f + 1) * angleInc), 0.5f))
+                            .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
+                            .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
+                            .executeAttack());
                 }
             }
         }

@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.common.utils;
 
-import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
@@ -22,6 +21,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
@@ -48,6 +48,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -584,109 +585,6 @@ public class CombatUtils {
         }
     }
 
-    public static List<LivingEntity> spinAttackHandler(LivingEntity entity, Vec3 dir, float aoe, float rangeBonus, Predicate<LivingEntity> pred) {
-        return spinAttackHandler(entity, dir, aoe, rangeBonus, pred, null, null);
-    }
-
-    public static List<LivingEntity> spinAttackHandler(LivingEntity entity, Vec3 dir, float aoe, float rangeBonus, Predicate<LivingEntity> pred, Pair<Map<Attribute, Double>,
-            Map<Attribute, Double>> attributes, Consumer<LivingEntity> onSuccess) {
-        if (entity.level.isClientSide)
-            return List.of();
-        float reach = (float) entity.getAttributeValue(ModAttributes.ATTACK_RANGE.get()) + rangeBonus;
-        CircleSector circ = new CircleSector(entity.position().add(0, entity.getBbHeight() * 0.6, 0), dir, reach, Mth.abs(aoe * 0.5f), entity);
-        List<LivingEntity> list = entity.level.getEntities(EntityTypeTest.forClass(LivingEntity.class), entity.getBoundingBox().inflate(reach + 1),
-                t -> t != entity && (pred == null || pred.test(t)) && !t.isAlliedTo(entity) && t.isPickable()
-                        && (t.getBoundingBox().minY <= entity.getBoundingBox().maxY || t.getBoundingBox().maxY >= entity.getBoundingBox().minY)
-                        && circ.intersects(t.level, t.getBoundingBox().inflate(0.15, entity.getBbHeight() * 1.5, 0.15)));
-        if (attributes != null) {
-            attributes.getFirst().forEach((att, val) -> applyTempAttribute(entity, att, val));
-            attributes.getSecond().forEach((att, val) -> applyTempAttributeMult(entity, att, val));
-        }
-        for (int i = 0; i < list.size(); ++i) {
-            boolean flag = false;
-            if (entity instanceof Player player)
-                flag = CombatUtils.playerAttackWithItem(player, list.get(i), i == list.size() - 1, true, i == list.size() - 1);
-            else if (entity instanceof Mob mob)
-                flag = mob.doHurtTarget(list.get(i));
-            if (flag && onSuccess != null) {
-                onSuccess.accept(list.get(i));
-            }
-        }
-        if (attributes != null) {
-            attributes.getFirst().forEach((att, val) -> removeTempAttribute(entity, att));
-            attributes.getSecond().forEach((att, val) -> removeTempAttribute(entity, att));
-        }
-        return list;
-    }
-
-    public static List<LivingEntity> spinAttackHandler(LivingEntity entity, float minYRot, float maxYRot, float rangeBonus, Predicate<LivingEntity> pred) {
-        return spinAttackHandler(entity, minYRot, maxYRot, rangeBonus, pred, null, null);
-    }
-
-    public static List<LivingEntity> spinAttackHandler(LivingEntity entity, float minYRot, float maxYRot, float rangeBonus, Predicate<LivingEntity> pred, Pair<Map<Attribute, Double>,
-            Map<Attribute, Double>> attributes, Consumer<LivingEntity> onSuccess) {
-        if (entity.level.isClientSide)
-            return List.of();
-        float rot = Mth.wrapDegrees(maxYRot - minYRot);
-        Vec3 dir = Vec3.directionFromRotation(0, Mth.wrapDegrees(minYRot + rot * 0.5f));
-        float reach = (float) entity.getAttributeValue(ModAttributes.ATTACK_RANGE.get()) + rangeBonus;
-        CircleSector circ = new CircleSector(entity.position().add(0, entity.getBbHeight() * 0.6, 0), dir, reach, Mth.abs(rot * 0.5f), entity);
-        List<LivingEntity> list = entity.level.getEntities(EntityTypeTest.forClass(LivingEntity.class), entity.getBoundingBox().inflate(reach + 1),
-                t -> t != entity && (pred == null || pred.test(t)) && !t.isAlliedTo(entity) && t.isPickable()
-                        && (t.getBoundingBox().minY <= entity.getBoundingBox().maxY || t.getBoundingBox().maxY >= entity.getBoundingBox().minY)
-                        && circ.intersects(t.level, t.getBoundingBox().inflate(0.15, entity.getBbHeight() * 1.5, 0.15)));
-        if (attributes != null) {
-            attributes.getFirst().forEach((att, val) -> applyTempAttribute(entity, att, val));
-            attributes.getSecond().forEach((att, val) -> applyTempAttributeMult(entity, att, val));
-        }
-        for (int i = 0; i < list.size(); ++i) {
-            boolean flag = false;
-            if (entity instanceof Player player)
-                flag = CombatUtils.playerAttackWithItem(player, list.get(i), i == list.size() - 1, true, i == list.size() - 1);
-            else if (entity instanceof Mob mob)
-                flag = mob.doHurtTarget(list.get(i));
-            if (flag && onSuccess != null) {
-                onSuccess.accept(list.get(i));
-            }
-        }
-        if (attributes != null) {
-            attributes.getFirst().forEach((att, val) -> removeTempAttribute(entity, att));
-            attributes.getSecond().forEach((att, val) -> removeTempAttribute(entity, att));
-        }
-        return list;
-    }
-
-    public static List<LivingEntity> attackInAABB(LivingEntity entity, AABB aabb, Predicate<LivingEntity> pred) {
-        return attackInAABB(entity, aabb, pred, null, null);
-    }
-
-    public static List<LivingEntity> attackInAABB(LivingEntity entity, AABB aabb, Predicate<LivingEntity> pred, Pair<Map<Attribute, Double>,
-            Map<Attribute, Double>> attributes, Consumer<LivingEntity> onSuccess) {
-        if (entity.level.isClientSide)
-            return List.of();
-        List<LivingEntity> list = entity.level.getEntities(EntityTypeTest.forClass(LivingEntity.class), aabb,
-                t -> t != entity && (pred == null || pred.test(t)) && !t.isAlliedTo(entity) && t.isPickable());
-        if (attributes != null) {
-            attributes.getFirst().forEach((att, val) -> applyTempAttribute(entity, att, val));
-            attributes.getSecond().forEach((att, val) -> applyTempAttributeMult(entity, att, val));
-        }
-        for (LivingEntity livingEntity : list) {
-            boolean flag = false;
-            if (entity instanceof Player player)
-                flag = CombatUtils.playerAttackWithItem(player, livingEntity, false, true, false);
-            else if (entity instanceof Mob mob)
-                flag = mob.doHurtTarget(livingEntity);
-            if (flag && onSuccess != null) {
-                onSuccess.accept(livingEntity);
-            }
-        }
-        if (attributes != null) {
-            attributes.getFirst().forEach((att, val) -> removeTempAttribute(entity, att));
-            attributes.getSecond().forEach((att, val) -> removeTempAttribute(entity, att));
-        }
-        return list;
-    }
-
     public static float getAOE(LivingEntity entity, ItemStack held, float bonus) {
         if (held.getItem() instanceof IAOEWeapon weapon)
             return weapon.getFOV(entity, held) + bonus;
@@ -728,6 +626,116 @@ public class CombatUtils {
         if (entity instanceof Player player) {
             if (stack.getItem() instanceof IAOEWeapon weapon)
                 AOEWeaponHandler.onAOEWeaponSwing(player, stack, weapon);
+        }
+    }
+
+    public static class EntityAttack {
+
+        private final LivingEntity attacker;
+        private Predicate<LivingEntity> targetPred;
+        private Map<Attribute, Double> bonusAttributes;
+        private Map<Attribute, Double> bonusAttributesMultiplier;
+
+        private Consumer<LivingEntity> onSuccess;
+
+        private SoundEvent soundToPlay;
+
+        private final BiFunction<LivingEntity, Predicate<LivingEntity>, List<LivingEntity>> targets;
+
+        protected EntityAttack(LivingEntity attacker, BiFunction<LivingEntity, Predicate<LivingEntity>, List<LivingEntity>> targets) {
+            this.attacker = attacker;
+            this.targets = targets;
+        }
+
+        public static EntityAttack create(LivingEntity attacker, BiFunction<LivingEntity, Predicate<LivingEntity>, List<LivingEntity>> targets) {
+            return new EntityAttack(attacker, targets);
+        }
+
+        public static BiFunction<LivingEntity, Predicate<LivingEntity>, List<LivingEntity>> circleTargets(Vec3 dir, float aoe, float rangeBonus) {
+            return (attacker, predicate) -> {
+                float reach = (float) attacker.getAttributeValue(ModAttributes.ATTACK_RANGE.get()) + rangeBonus;
+                CircleSector circ = new CircleSector(attacker.position().add(0, attacker.getBbHeight() * 0.6, 0), dir, reach, Mth.abs(aoe * 0.5f), attacker);
+                return attacker.level.getEntities(EntityTypeTest.forClass(LivingEntity.class), attacker.getBoundingBox().inflate(reach + 1),
+                        t -> t != attacker && (predicate == null || predicate.test(t)) && !t.isAlliedTo(attacker) && t.isPickable()
+                                && (t.getBoundingBox().minY <= attacker.getBoundingBox().maxY || t.getBoundingBox().maxY >= attacker.getBoundingBox().minY)
+                                && circ.intersects(t.level, t.getBoundingBox().inflate(0.15, attacker.getBbHeight() * 1.5, 0.15)));
+            };
+        }
+
+        public static BiFunction<LivingEntity, Predicate<LivingEntity>, List<LivingEntity>> circleTargets(float minYRot, float maxYRot, float rangeBonus) {
+            return (attacker, predicate) -> {
+                float rot = Mth.wrapDegrees(maxYRot - minYRot);
+                Vec3 dir = Vec3.directionFromRotation(0, Mth.wrapDegrees(minYRot + rot * 0.5f));
+                float reach = (float) attacker.getAttributeValue(ModAttributes.ATTACK_RANGE.get()) + rangeBonus;
+                CircleSector circ = new CircleSector(attacker.position().add(0, attacker.getBbHeight() * 0.6, 0), dir, reach, Mth.abs(rot * 0.5f), attacker);
+                return attacker.level.getEntities(EntityTypeTest.forClass(LivingEntity.class), attacker.getBoundingBox().inflate(reach + 1),
+                        t -> t != attacker && (predicate == null || predicate.test(t)) && !t.isAlliedTo(attacker) && t.isPickable()
+                                && (t.getBoundingBox().minY <= attacker.getBoundingBox().maxY || t.getBoundingBox().maxY >= attacker.getBoundingBox().minY)
+                                && circ.intersects(t.level, t.getBoundingBox().inflate(0.15, attacker.getBbHeight() * 1.5, 0.15)));
+            };
+        }
+
+        public static BiFunction<LivingEntity, Predicate<LivingEntity>, List<LivingEntity>> aabbTargets(AABB aabb) {
+            return (attacker, predicate) -> attacker.level.getEntities(EntityTypeTest.forClass(LivingEntity.class), aabb,
+                    t -> t != attacker && (predicate == null || predicate.test(t)) && !t.isAlliedTo(attacker) && t.isPickable());
+        }
+
+        public EntityAttack withTargetPredicate(Predicate<LivingEntity> targetPred) {
+            this.targetPred = targetPred;
+            return this;
+        }
+
+        public EntityAttack withBonusAttributes(Map<Attribute, Double> bonusAttributes) {
+            this.bonusAttributes = bonusAttributes;
+            return this;
+        }
+
+        public EntityAttack withBonusAttributesMultiplier(Map<Attribute, Double> multiplier) {
+            this.bonusAttributesMultiplier = multiplier;
+            return this;
+        }
+
+        public EntityAttack doOnSuccess(Consumer<LivingEntity> onSuccess) {
+            this.onSuccess = onSuccess;
+            return this;
+        }
+
+        public EntityAttack withAttackSound(SoundEvent sound) {
+            this.soundToPlay = sound;
+            return this;
+        }
+
+        public List<LivingEntity> executeAttack() {
+            if (this.attacker.level.isClientSide)
+                return List.of();
+            List<LivingEntity> list = this.targets.apply(this.attacker, this.targetPred);
+            if (this.bonusAttributes != null) {
+                this.bonusAttributes.forEach((att, val) -> applyTempAttribute(this.attacker, att, val));
+            }
+            if (this.bonusAttributesMultiplier != null) {
+                this.bonusAttributesMultiplier.forEach((att, val) -> applyTempAttributeMult(this.attacker, att, val));
+            }
+            for (LivingEntity livingEntity : list) {
+                boolean flag = false;
+                if (this.attacker instanceof Player player)
+                    flag = CombatUtils.playerAttackWithItem(player, livingEntity, false, this.soundToPlay == null, false);
+                else if (this.attacker instanceof Mob mob)
+                    flag = mob.doHurtTarget(livingEntity);
+                if (flag) {
+                    if (this.onSuccess != null)
+                        this.onSuccess.accept(livingEntity);
+                    if (this.soundToPlay != null)
+                        this.attacker.level.playSound(null, this.attacker.getX(), this.attacker.getY(), this.attacker.getZ(),
+                                this.soundToPlay, this.attacker.getSoundSource(), 1.0f, 1.0f);
+                }
+            }
+            if (this.bonusAttributes != null) {
+                this.bonusAttributes.forEach((att, val) -> removeTempAttribute(this.attacker, att));
+            }
+            if (this.bonusAttributesMultiplier != null) {
+                this.bonusAttributesMultiplier.forEach((att, val) -> removeTempAttribute(this.attacker, att));
+            }
+            return list;
         }
     }
 }

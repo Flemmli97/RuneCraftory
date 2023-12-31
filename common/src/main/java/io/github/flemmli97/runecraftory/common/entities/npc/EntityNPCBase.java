@@ -970,7 +970,9 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     public List<LivingEntity> attackableEntites() {
         ItemStack held = this.getMainHandItem();
         if (held.getItem() instanceof IAOEWeapon weapon) {
-            return CombatUtils.spinAttackHandler(this, this.getLookAngle(), Math.max(0, weapon.getFOV(this, held) - 20), 0, this.hitPred);
+            return CombatUtils.EntityAttack.create(this, CombatUtils.EntityAttack.circleTargets(this.getLookAngle(), Math.max(0, weapon.getFOV(this, held) - 20), 0))
+                    .withTargetPredicate(this.hitPred)
+                    .executeAttack();
         }
         LivingEntity target = this.getTarget();
         if (target == null)

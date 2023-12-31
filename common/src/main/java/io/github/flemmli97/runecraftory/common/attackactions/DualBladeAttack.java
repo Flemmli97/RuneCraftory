@@ -64,7 +64,10 @@ public class DualBladeAttack extends AttackAction {
                     float f = (anim.getTick() - start) / anim.getSpeed();
                     float angleInc = 360 / len;
                     float rot = handler.getSpinStartRot();
-                    handler.addHitEntityTracker(CombatUtils.spinAttackHandler(entity, (rot + f * angleInc), (rot + (f + 1) * angleInc), 0, e -> !handler.getHitEntityTracker().contains(e)));
+                    handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity,
+                                    CombatUtils.EntityAttack.circleTargets((rot + f * angleInc), (rot + (f + 1) * angleInc), 0))
+                            .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
+                            .executeAttack());
                 }
             }
             case 6 -> {
@@ -83,8 +86,12 @@ public class DualBladeAttack extends AttackAction {
                     float f = (anim.getTick() - start) / anim.getSpeed();
                     float angleInc = 360 / len;
                     float rot = handler.getSpinStartRot();
-                    handler.addHitEntityTracker(CombatUtils.spinAttackHandler(entity, (rot + f * angleInc), (rot + (f + 1) * angleInc), 0, e -> !handler.getHitEntityTracker().contains(e)));
-                    handler.addHitEntityTracker(CombatUtils.spinAttackHandler(entity, (rot + 180 + f * angleInc), (rot + 180 + (f + 1) * angleInc), 0, e -> !handler.getHitEntityTracker().contains(e)));
+                    handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets((rot + f * angleInc), (rot + (f + 1) * angleInc), 0))
+                            .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
+                            .executeAttack());
+                    handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets((rot + 180 + f * angleInc), (rot + 180 + (f + 1) * angleInc), 0))
+                            .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
+                            .executeAttack());
                 }
             }
             case 7 -> {
@@ -109,7 +116,9 @@ public class DualBladeAttack extends AttackAction {
                     float f = (anim.getTick() - start) / anim.getSpeed();
                     float angleInc = -1440 / len;
                     float rot = handler.getSpinStartRot();
-                    handler.addHitEntityTracker(CombatUtils.spinAttackHandler(entity, (rot + f * angleInc), (rot + (f + 1) * angleInc), 0, e -> !handler.getHitEntityTracker().contains(e)));
+                    handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets((rot + f * angleInc), (rot + (f + 1) * angleInc), 0))
+                            .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
+                            .executeAttack());
                 }
             }
         }

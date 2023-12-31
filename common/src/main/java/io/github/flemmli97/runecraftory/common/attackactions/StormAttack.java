@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
-import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
@@ -30,8 +29,9 @@ public class StormAttack extends AttackAction {
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
         if (!entity.level.isClientSide && anim.canAttack() && handler.getChainCount() != 5) {
-            CombatUtils.spinAttackHandler(entity, entity.getLookAngle(), Math.min(15, CombatUtils.getAOE(entity, stack, 10)), 0.5f, null,
-                    Pair.of(Map.of(), Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))), null);
+            CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets(entity.getLookAngle(), Math.min(15, CombatUtils.getAOE(entity, stack, 10)), 0.5f))
+                    .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
+                    .executeAttack();
             entity.swing(InteractionHand.MAIN_HAND, true);
         }
         Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));

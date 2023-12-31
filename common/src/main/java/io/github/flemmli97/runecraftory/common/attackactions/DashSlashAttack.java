@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
-import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
@@ -34,9 +33,10 @@ public class DashSlashAttack extends AttackAction {
             entity.setDeltaMovement(entity.getDeltaMovement().multiply(0.95, 1, 0.95));
             if (!entity.level.isClientSide && anim.canAttack()) {
                 Vec3 attackPos = entity.position().add(0, 0.2, 0).add(entity.getLookAngle().scale(0.5));
-                CombatUtils.attackInAABB(entity, new AABB(-0.5, -1, -0.8, 0.8, 1, 0.5).move(attackPos), null,
-                        Pair.of(Map.of(), Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))),
-                        e -> CombatUtils.knockBackEntity(entity, e, 1));
+                CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(new AABB(-0.5, -1, -0.8, 0.8, 1, 0.5).move(attackPos)))
+                        .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
+                        .doOnSuccess(e -> CombatUtils.knockBackEntity(entity, e, 1))
+                        .executeAttack();
             }
         } else {
             handler.lockLook(true);

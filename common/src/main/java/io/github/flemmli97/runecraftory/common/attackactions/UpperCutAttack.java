@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
-import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
@@ -24,8 +23,9 @@ public class UpperCutAttack extends AttackAction {
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
         if (!entity.level.isClientSide && anim.canAttack())
-            CombatUtils.spinAttackHandler(entity, entity.getLookAngle(), Math.min(15, CombatUtils.getAOE(entity, stack, 0)), 1f, null,
-                    Pair.of(Map.of(),
-                            Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))), e -> e.setDeltaMovement(e.getDeltaMovement().add(0, 0.8, 0)));
+            CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets(entity.getLookAngle(), Math.min(15, CombatUtils.getAOE(entity, stack, 0)), 1))
+                    .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
+                    .doOnSuccess(e -> e.setDeltaMovement(e.getDeltaMovement().add(0, 0.8, 0)))
+                    .executeAttack();
     }
 }

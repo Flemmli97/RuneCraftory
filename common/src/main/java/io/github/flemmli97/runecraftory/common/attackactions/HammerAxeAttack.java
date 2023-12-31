@@ -11,6 +11,7 @@ import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -34,9 +35,13 @@ public class HammerAxeAttack extends AttackAction {
             if (anim.isAtTick(0.12)) {
                 handler.setSpinStartRot(entity.getYRot());
                 handler.resetHitEntityTracker();
+                entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
+                        SoundEvents.ENDER_DRAGON_FLAP, entity.getSoundSource(), 0.7f, 0.5f);
             }
             if (anim.isAtTick(0.64)) {
                 handler.resetHitEntityTracker();
+                entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
+                        SoundEvents.ENDER_DRAGON_FLAP, entity.getSoundSource(), 0.7f, 0.7f);
             }
             if (anim.isPastTick(0.12) && !anim.isPastTick(1.28)) {
                 Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
@@ -46,7 +51,11 @@ public class HammerAxeAttack extends AttackAction {
                     handler.setMoveTargetDir(dir.scale(3).add(0, -2, 0), anim, 1.28);
                 entity.resetFallDistance();
                 if (!entity.level.isClientSide)
-                    handler.addHitEntityTracker(CombatUtils.attackInAABB(entity, entity.getBoundingBox().inflate(0.75), e -> !handler.getHitEntityTracker().contains(e)));
+                    handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity,
+                                    CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox().inflate(1)))
+                            .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
+                            .withAttackSound(SoundEvents.PLAYER_ATTACK_STRONG)
+                            .executeAttack());
             } else
                 handler.clearMoveTarget();
         }

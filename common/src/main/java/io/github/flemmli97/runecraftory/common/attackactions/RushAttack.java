@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
-import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
@@ -36,8 +35,10 @@ public class RushAttack extends AttackAction {
             }
             entity.fallDistance = 0;
             if (!entity.level.isClientSide && anim.canAttack()) {
-                CombatUtils.spinAttackHandler(entity, entity.getLookAngle(), CombatUtils.getAOE(entity, stack, 10), 0.5f, null,
-                        Pair.of(Map.of(), Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))), e -> CombatUtils.knockBackEntity(entity, e, 0.8f));
+                CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets(entity.getLookAngle(), CombatUtils.getAOE(entity, stack, 10), 0.5f))
+                        .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
+                        .doOnSuccess(e -> CombatUtils.knockBackEntity(entity, e, 0.8f))
+                        .executeAttack();
                 entity.swing(InteractionHand.MAIN_HAND, true);
             }
         } else {
@@ -52,8 +53,9 @@ public class RushAttack extends AttackAction {
             entity.fallDistance = 0;
             if (!entity.level.isClientSide) {
                 if (anim.canAttack() || anim.isAtTick(0.52) || anim.isAtTick(1.08)) {
-                    CombatUtils.spinAttackHandler(entity, entity.getLookAngle(), CombatUtils.getAOE(entity, stack, 10), 0.5f, null,
-                            Pair.of(Map.of(), Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))), null);
+                    CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets(entity.getLookAngle(), CombatUtils.getAOE(entity, stack, 10), 0.5f))
+                            .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
+                            .executeAttack();
                     entity.swing(InteractionHand.MAIN_HAND, true);
                 }
             }

@@ -11,14 +11,12 @@ import net.minecraft.network.protocol.game.ClientboundPlayerLookAtPacket;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.List;
+import java.util.Map;
 
 public class RapidMoveAttack extends AttackAction {
 
@@ -46,20 +44,10 @@ public class RapidMoveAttack extends AttackAction {
                 player.connection.send(new ClientboundPlayerLookAtPacket(EntityAnchorArgument.Anchor.FEET, lookPos.x, lookPos.y, lookPos.z));
             }
             if (anim.canAttack()) {
-                List<LivingEntity> entites = entity.level.getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(0.5).expandTowards(entity.getLookAngle()),
-                        target -> target != entity && !handler.getHitEntityTracker().contains(target) && !target.isAlliedTo(entity) && target.isPickable());
-                handler.addHitEntityTracker(entites);
-                CombatUtils.applyTempAttributeMult(entity, Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack));
-                for (LivingEntity target : entites) {
-                    boolean flag = false;
-                    if (entity instanceof Player player)
-                        flag = CombatUtils.playerAttackWithItem(player, target, false, true, false);
-                    else if (entity instanceof Mob mob)
-                        flag = mob.doHurtTarget(target);
-                    if (flag)
-                        CombatUtils.knockBackEntity(entity, target, 1.1f);
-                }
-                CombatUtils.removeTempAttribute(entity, Attributes.ATTACK_DAMAGE);
+                handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox().inflate(0.5).expandTowards(entity.getLookAngle())))
+                        .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
+                        .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
+                        .executeAttack());
             }
         }
     }

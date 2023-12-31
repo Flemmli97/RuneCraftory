@@ -66,7 +66,9 @@ public class SpearAttack extends AttackAction {
                     float f = (anim.getTick() - start) / anim.getSpeed();
                     float angleInc = 720 / len;
                     float rot = handler.getSpinStartRot();
-                    handler.addHitEntityTracker(CombatUtils.spinAttackHandler(entity, (rot + f * angleInc), (rot + (f + 1) * angleInc), 0, e -> !handler.getHitEntityTracker().contains(e)));
+                    handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets((rot + f * angleInc), (rot + (f + 1) * angleInc), 0))
+                            .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
+                            .executeAttack());
                 }
                 if (anim.isAtTick(1.2))
                     handler.setMoveTargetDir(dir.scale(1.8).add(0, 1.5, 0), anim, 1.4);
@@ -76,7 +78,8 @@ public class SpearAttack extends AttackAction {
                     Vec3 look = entity.getLookAngle();
                     look = new Vec3(look.x(), 0, look.z()).scale(1.2);
                     Vec3 attackPos = entity.position().add(0, 0.2, 0).add(look);
-                    CombatUtils.attackInAABB(entity, new AABB(-0.8, -1.2, -0.8, 0.8, 1.2, 0.8).move(attackPos), null);
+                    CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(new AABB(-0.8, -1.2, -0.8, 0.8, 1.2, 0.8).move(attackPos)))
+                            .executeAttack();
                     Vec3 pos = entity.position().add(0, -1, 0);
                     BlockPos.MutableBlockPos mut = new BlockPos.MutableBlockPos();
                     Vec3 axis = new Vec3(0, 1, 0);

@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
-import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
@@ -46,19 +45,23 @@ public class WindSlashAttack extends AttackAction {
                 handler.setMoveTargetDir(dir.scale(1).add(0, -0.9, 0), anim, 1.36);
             }
             if (!entity.level.isClientSide && anim.isPastTick(0.2) && !anim.isPastTick(1.08))
-                handler.addHitEntityTracker(CombatUtils.attackInAABB(entity, entity.getBoundingBox().inflate(0.75), e -> !handler.getHitEntityTracker().contains(e),
-                        Pair.of(Map.of(), Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))), null));
+                handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox().inflate(0.75)))
+                        .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
+                        .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
+                        .executeAttack());
         } else {
             if (anim.isAtTick(0.44)) {
                 handler.resetHitEntityTracker();
             }
-            if (anim.isAtTick(0.84)) {
+            if (anim.isAtTick(0.88)) {
                 Vec3 dir = CombatUtils.fromRelativeVector(handler.getSpinStartRot(), new Vec3(0, 0, 1));
                 handler.setMoveTargetDir(dir.scale(1).add(0, -0.9, 0), anim, 1.12);
             }
             if (!entity.level.isClientSide && !anim.isPastTick(0.88))
-                handler.addHitEntityTracker(CombatUtils.attackInAABB(entity, entity.getBoundingBox().inflate(0.75), e -> !handler.getHitEntityTracker().contains(e),
-                        Pair.of(Map.of(), Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))), null));
+                handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox().inflate(0.75)))
+                        .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
+                        .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
+                        .executeAttack());
         }
     }
 

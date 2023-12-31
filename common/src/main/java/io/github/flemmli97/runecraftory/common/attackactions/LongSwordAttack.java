@@ -58,7 +58,9 @@ public class LongSwordAttack extends AttackAction {
                     float f = (anim.getTick() - start) / anim.getSpeed();
                     float angleInc = -690 / len;
                     float rot = handler.getSpinStartRot();
-                    handler.addHitEntityTracker(CombatUtils.spinAttackHandler(entity, (rot + f * angleInc), (rot + (f + 1) * angleInc), 0.25f, e -> !handler.getHitEntityTracker().contains(e)));
+                    handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets((rot + f * angleInc), (rot + (f + 1) * angleInc), 0.25f))
+                            .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
+                            .executeAttack());
                 }
             }
         }

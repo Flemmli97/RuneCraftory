@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
-import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
@@ -25,8 +24,9 @@ public class NekoDamashiAttack extends AttackAction {
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
         if (!entity.level.isClientSide && anim.canAttack())
-            CombatUtils.spinAttackHandler(entity, entity.getLookAngle(), Math.min(10, CombatUtils.getAOE(entity, stack, 0)), 0.5f, null,
-                    Pair.of(Map.of(ModAttributes.PARA.get(), 0.3),
-                            Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))), null);
+            CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets(entity.getLookAngle(), Math.min(10, CombatUtils.getAOE(entity, stack, 0)), 0.5f))
+                    .withBonusAttributes(Map.of(ModAttributes.PARA.get(), 0.3))
+                    .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
+                    .executeAttack();
     }
 }

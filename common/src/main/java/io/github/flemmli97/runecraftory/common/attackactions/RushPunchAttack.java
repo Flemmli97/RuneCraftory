@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
-import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
@@ -27,8 +26,10 @@ public class RushPunchAttack extends AttackAction {
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
         if (!entity.level.isClientSide && anim.isPastTick(0.16) && !anim.isPastTick(0.92) && anim.getTickRaw() % (3 * anim.getSpeed()) == 0) {
             float mod = (anim.getTickRaw() - Mth.ceil(0.16 * 20)) % (15 * anim.getSpeed());
-            CombatUtils.spinAttackHandler(entity, entity.getLookAngle(), 10, 0, null,
-                    Pair.of(mod == 12 ? Map.of(ModAttributes.CRIT.get(), 100d) : Map.of(), Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))), null);
+            CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets(entity.getLookAngle(), 10, 0))
+                    .withBonusAttributes(mod == 12 ? Map.of(ModAttributes.CRIT.get(), 100d) : Map.of())
+                    .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
+                    .executeAttack();
         }
     }
 }

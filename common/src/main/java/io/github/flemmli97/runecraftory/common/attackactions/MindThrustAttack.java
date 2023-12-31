@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
-import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
@@ -30,10 +29,11 @@ public class MindThrustAttack extends AttackAction {
             handler.setMoveTargetDir(dir.scale(0.5), anim, anim.getTick());
         }
         if (!entity.level.isClientSide && anim.canAttack())
-            CombatUtils.spinAttackHandler(entity, entity.getLookAngle(), CombatUtils.getAOE(entity, stack, 0), 0.5f, null,
-                    Pair.of(Map.of(ModAttributes.PARA.get(), 0.4,
-                                    ModAttributes.POISON.get(), 0.1,
-                                    ModAttributes.SEAL.get(), 0.25),
-                            Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))), null);
+            CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets(entity.getLookAngle(), CombatUtils.getAOE(entity, stack, 0), 0.5f))
+                    .withBonusAttributes(Map.of(ModAttributes.PARA.get(), 0.4,
+                            ModAttributes.POISON.get(), 0.1,
+                            ModAttributes.SEAL.get(), 0.25))
+                    .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
+                    .executeAttack();
     }
 }
