@@ -195,8 +195,20 @@ public class EntityCalls {
 
     public static boolean cancelLivingAttack(DamageSource source, Entity target, float amount) {
         Entity attacker = source.getEntity();
-        if (!source.isBypassInvul() && target instanceof Player player && Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().isInvulnerable(player)).orElse(false))
-            return true;
+        if (!source.isBypassInvul() && target instanceof Player player) {
+            if (Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().isInvulnerable(player)).orElse(false))
+                return true;
+            if (amount > 0) {
+                PlayerData data = Platform.INSTANCE.getPlayerData(player).orElse(null);
+                if (data != null) {
+                    if (NaiveBladeAttack.canCounter(data.getWeaponHandler())) {
+                        data.getWeaponHandler().setConsumeSpellOnStart();
+                        data.getWeaponHandler().doWeaponAttack(player, ModAttackActions.NAIVE_BLADE.get(), player.getMainHandItem(), null, true);
+                        return true;
+                    }
+                }
+            }
+        }
         if (source instanceof CustomDamage customDamage) {
             if (target.invulnerableTime + customDamage.hurtProtection() <= 20)
                 target.invulnerableTime = 10;
@@ -410,11 +422,6 @@ public class EntityCalls {
         else if (damage > 0 && source != DamageSource.OUT_OF_WORLD && entity instanceof ServerPlayer player) {
             PlayerData data = Platform.INSTANCE.getPlayerData(player).orElse(null);
             if (data != null) {
-                if (NaiveBladeAttack.canCounter(data.getWeaponHandler())) {
-                    data.getWeaponHandler().setConsumeSpellOnStart();
-                    data.getWeaponHandler().doWeaponAttack(entity, ModAttackActions.NAIVE_BLADE.get(), player.getMainHandItem(), null, true);
-                    return 0;
-                }
                 LevelCalc.levelSkill(player, data, EnumSkills.DEFENCE, Math.min(7, (float) (0.5 + Math.log(damage * 0.25))) * 1.5f);
             }
         }
