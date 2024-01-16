@@ -31,6 +31,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.Deserializers;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -61,10 +62,13 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                       QuestHandler questHandler,
                       Map<String, Gift> giftItems, @Nullable NPCSchedule.Schedule schedule,
                       @Nullable Map<Attribute, Double> baseStats, @Nullable Map<Attribute, Double> statIncrease,
-                      int baseLevel, @Nullable ResourceLocation combatActions, int unique, boolean romanceable) {
+                      int baseLevel, @Nullable ResourceLocation combatActions, int unique,
+                      RelationShipState relationShipState) {
 
+    public static Map<Attribute, Double> DEFAULT_GAIN = Map.of(Attributes.MAX_HEALTH, 3d, Attributes.ATTACK_DAMAGE, 1d,
+            ModAttributes.DEFENCE.get(), 0.5d, ModAttributes.MAGIC.get(), 1d, ModAttributes.MAGIC_DEFENCE.get(), 0.5d);
     public static final NPCData DEFAULT_DATA = new NPCData(null, null, Gender.UNDEFINED, null, null, null, 1, "npc.default.gift.neutral",
-            Map.of(), new QuestHandler(Map.of(), Set.of()), Map.of(), null, null, null, 1, null, 0, false);
+            Map.of(), new QuestHandler(Map.of(), Set.of()), Map.of(), null, null, null, 1, null, 0, RelationShipState.DEFAULT);
 
     private static Map<ConversationType, ConversationSet> buildDefaultInteractionMap() {
         ImmutableMap.Builder<ConversationType, ConversationSet> builder = new ImmutableMap.Builder<>();
@@ -101,7 +105,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                         return Optional.of(combat);
                     }),
 
-                    Codec.BOOL.optionalFieldOf("romanceable").forGetter(d -> Optional.of(d.romanceable)),
+                    CodecHelper.enumCodec(RelationShipState.class, RelationShipState.DEFAULT).fieldOf("relationShipState").forGetter(d -> d.relationShipState),
                     Codec.STRING.fieldOf("neutralGiftResponse").forGetter(d -> d.neutralGiftResponse),
                     Codec.unboundedMap(Codec.STRING, Gift.CODEC).fieldOf("giftItems").forGetter(d -> d.giftItems),
 
@@ -115,7 +119,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                     CodecHelper.enumCodec(Gender.class, Gender.UNDEFINED).fieldOf("gender").forGetter(d -> d.gender),
                     ModNPCJobs.CODEC.listOf().optionalFieldOf("profession").forGetter(d -> d.profession.isEmpty() ? Optional.empty() : Optional.of(d.profession))
             ).apply(inst, (interactions, questHandler, schedule, combat, romanceable, neutralGift, giftItems, look, birthday, weight, unique, name, surname, gender, profession) -> new NPCData(name.orElse(null), surname.orElse(null),
-                    gender, profession.orElse(List.of()), look.orElse(null), birthday.orElse(null), weight, neutralGift, interactions, questHandler, giftItems, schedule.orElse(null), combat.map(d -> d.baseStats).orElse(null), combat.map(d -> d.statIncrease).orElse(null), combat.map(d -> d.baseLevel).orElse(1), combat.map(d -> d.npcAction).orElse(null), unique.orElse(0), romanceable.orElse(false))));
+                    gender, profession.orElse(List.of()), look.orElse(null), birthday.orElse(null), weight, neutralGift, interactions, questHandler, giftItems, schedule.orElse(null), combat.map(d -> d.baseStats).orElse(null), combat.map(d -> d.statIncrease).orElse(null), combat.map(d -> d.baseLevel).orElse(1), combat.map(d -> d.npcAction).orElse(null), unique.orElse(0), romanceable)));
 
     public ConversationSet getConversation(ConversationType type) {
         ResourceLocation conversationId = this.interactions().get(type);
@@ -144,6 +148,13 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         UNDEFINED,
         MALE,
         FEMALE
+    }
+
+    public enum RelationShipState {
+        DEFAULT,
+        NON_ROMANCEABLE,
+        NO_ROMANCE_NPC,
+        NO_ROMANCE
     }
 
     public enum ConversationType {
@@ -214,7 +225,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         private final Map<Attribute, Double> statIncrease = new TreeMap<>(ModAttributes.SORTED);
         private int baseLevel = 1;
         private int unique;
-        private boolean romanceable;
+        private RelationShipState relationShipState;
 
         private Map<ResourceLocation, QuestResponses> responses = new LinkedHashMap<>();
         private Set<ResourceLocation> requiredQuests = new LinkedHashSet<>();
@@ -306,8 +317,8 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             return this;
         }
 
-        public Builder romanceable() {
-            this.romanceable = true;
+        public Builder relationState(RelationShipState state) {
+            this.relationShipState = state;
             return this;
         }
 
@@ -339,7 +350,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             }
             return new NPCData(this.name, this.surname, this.gender, this.professions, this.look, this.birthday, this.weight, this.neutralGiftResponse, this.interactions,
                     new QuestHandler(this.responses, this.requiredQuests), this.giftItems, this.schedule,
-                    this.baseStats.isEmpty() ? null : this.baseStats, this.statIncrease.isEmpty() ? null : this.statIncrease, this.baseLevel, this.combatAction, this.unique, this.romanceable);
+                    this.baseStats.isEmpty() ? null : this.baseStats, this.statIncrease.isEmpty() ? null : this.statIncrease, this.baseLevel, this.combatAction, this.unique, this.relationShipState);
         }
     }
 

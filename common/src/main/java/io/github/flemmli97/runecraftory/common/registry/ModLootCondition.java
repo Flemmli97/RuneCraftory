@@ -9,6 +9,7 @@ import io.github.flemmli97.runecraftory.common.loot.LootingAndLuckLootFunction;
 import io.github.flemmli97.runecraftory.common.loot.NPCRelationCondition;
 import io.github.flemmli97.runecraftory.common.loot.SeasonLootCondition;
 import io.github.flemmli97.runecraftory.common.loot.SkillLevelCondition;
+import io.github.flemmli97.runecraftory.common.loot.TalkCountCondition;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import io.github.flemmli97.tenshilib.platform.registry.PlatformRegistry;
 import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
@@ -27,6 +28,7 @@ public class ModLootCondition {
     public static final RegistryEntrySupplier<LootItemConditionType> BIOME = LOOTCONDITIONS.register("biome", () -> new LootItemConditionType(new BiomeLootCondition.Serializer()));
     public static final RegistryEntrySupplier<LootItemConditionType> FRIENDPOINTS = LOOTCONDITIONS.register("friend_points", () -> new LootItemConditionType(new FriendPointCondition.Serializer()));
     public static final RegistryEntrySupplier<LootItemConditionType> FIRST_KILL = LOOTCONDITIONS.register("first_kill", () -> new LootItemConditionType(new FirstKillCondition.Serializer()));
+    public static final RegistryEntrySupplier<LootItemConditionType> TALKCOUNT = LOOTCONDITIONS.register("talk_count", () -> new LootItemConditionType(new TalkCountCondition.Serializer()));
 
     public static final RegistryEntrySupplier<LootItemFunctionType> ITEM_LEVEL = LOOTFUNCTION.register("item_level", () -> new LootItemFunctionType(new ItemLevelLootFunction.Serializer()));
     public static final RegistryEntrySupplier<LootItemFunctionType> LUCK_AND_LOOTING = LOOTFUNCTION.register("luck_and_looting", () -> new LootItemFunctionType(new LootingAndLuckLootFunction.Serializer()));

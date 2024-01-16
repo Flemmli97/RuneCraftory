@@ -657,8 +657,9 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     public void updateStatsToLevel() {
         float preHealthDiff = this.getMaxHealth() - this.getHealth();
-        if (this.data != null && this.data.statIncrease() != null) {
-            this.data.statIncrease().forEach((att, val) -> {
+        if (this.data != null) {
+            Map<Attribute, Double> gain = this.data.statIncrease() != null ? this.data.statIncrease() : NPCData.DEFAULT_GAIN;
+            gain.forEach((att, val) -> {
                 val *= 0.01;
                 AttributeInstance inst = this.getAttribute(att);
                 if (inst != null) {
@@ -708,6 +709,10 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     @Override
     public int friendPoints(UUID uuid) {
         return this.relationManager.getFriendPointData(uuid).points.getLevel();
+    }
+
+    public int talkCount(UUID uuid) {
+        return this.relationManager.getFriendPointData(uuid).getTalkCount();
     }
 
     public void updateFriendPointsFrom(Player player, CompoundTag tag) {
