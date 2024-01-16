@@ -100,6 +100,11 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
     }
 
     @Override
+    protected boolean shouldShowName(T entity) {
+        return false;
+    }
+
+    @Override
     public void render(T entity, float entityYaw, float partialTicks, PoseStack matrixStack, MultiBufferSource buffer, int packedLight) {
         String skin = entity.getLook().playerSkin();
         if (skin != null) {

@@ -881,7 +881,6 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.put("MobLevel", this.level().save());
-        compound.putString("Shop", ModNPCJobs.getIDFrom(this.getShop()).toString());
         compound.putInt("FoodBuffTick", this.foodBuffTick);
         compound.putBoolean("PlayDeath", this.entityData.get(PLAY_DEATH_STATE));
 
@@ -890,18 +889,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         if (this.entityToFollowUUID != null)
             compound.putUUID("EntityToFollow", this.entityToFollowUUID);
         compound.putInt("Behaviour", this.behaviourState().ordinal());
-
-        compound.put("Schedule", this.schedule.save());
-
-        compound.putInt("Behaviour", this.behaviourState().ordinal());
-
-        compound.putBoolean("Male", this.isMale());
-        compound.putString("NPCLook", DataPackHandler.INSTANCE.npcLookManager().getId(this.getLook()).toString());
-        if (this.data != NPCData.DEFAULT_DATA)
-            compound.putString("NPCData", DataPackHandler.INSTANCE.npcDataManager().getId(this.data).toString());
-        if (this.data.profession().isEmpty()) {
-            compound.putString("Shop", ModNPCJobs.getIDFrom(this.shop).toString());
-        }
+        compound.put("NPCData", this.saveNPCData());
         compound.put("DailyUpdater", this.updater.save());
     }
 
@@ -923,17 +911,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         } catch (ArrayIndexOutOfBoundsException ignored) {
         }
         if (compound.contains("NPCData"))
-            this.setNPCData(DataPackHandler.INSTANCE.npcDataManager().get(new ResourceLocation(compound.getString("NPCData"))), true);
-        if (this.data.schedule() == null)
-            this.schedule.load(compound.getCompound("Schedule"));
-        if (this.data.gender() == NPCData.Gender.UNDEFINED)
-            this.setMale(compound.getBoolean("Male"));
-        if (this.data.profession().isEmpty()) {
-            this.setShop(ModNPCJobs.getFromID(ModNPCJobs.legacyOfTag(compound.get("Shop"))));
-        }
-        if (this.data.look() == null && compound.contains("NPCLook"))
-            this.look = DataPackHandler.INSTANCE.npcLookManager().get(new ResourceLocation(compound.getString("NPCLook")));
-
+            this.loadNpcData(compound.getCompound("NPCData"));
         this.updater.read(compound.getCompound("DailyUpdater"));
     }
 
@@ -1323,37 +1301,89 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         }
         this.data = data;
         this.dataRandom.setSeed(this.getUUID().hashCode());
-        this.setShop(!this.data.profession().isEmpty() ? this.data.profession().get(this.dataRandom.nextInt(this.data.profession().size())) : ModNPCJobs.getRandomJob(this.random));
-        this.setMale(this.data.gender() == NPCData.Gender.UNDEFINED ? this.random.nextBoolean() : this.data.gender() != NPCData.Gender.FEMALE);
-        String name;
-        if (this.data.name() != null) {
-            name = this.data.name();
-            if (this.data.surname() != null)
-                name += " " + this.data.surname();
-            this.setCustomName(new TextComponent(name));
-        }
         if (!load) {
+            this.setShop(!this.data.profession().isEmpty() ? this.data.profession().get(this.dataRandom.nextInt(this.data.profession().size())) : ModNPCJobs.getRandomJob(this.random));
+            this.setMale(this.data.gender() == NPCData.Gender.UNDEFINED ? this.random.nextBoolean() : this.data.gender() != NPCData.Gender.FEMALE);
             if (this.data.name() == null) {
-                name = DataPackHandler.INSTANCE.nameManager().getRandomFullName(this.random, this.isMale());
+                String name = DataPackHandler.INSTANCE.nameManager().getRandomFullName(this.random, this.isMale());
                 if (name != null) {
                     this.setCustomName(new TextComponent(name));
                 }
+            } else {
+                String name = this.data.name();
+                if (this.data.surname() != null)
+                    name += " " + this.data.surname();
+                this.setCustomName(new TextComponent(name));
             }
             this.birthday = null;
             this.getBirthday();
             this.look = null;
             this.getLook();
+            this.attackActions = null;
+            this.getAttackActions();
+            if (data.schedule() == null)
+                this.schedule.load(new NPCSchedule(this, this.random).save());
+            else
+                this.schedule.with(data.schedule());
+        } else {
+            // Apply non null things else
+            if (this.data.look() != null) {
+                this.look = null;
+                this.getLook();
+            }
+            if (!this.data.profession().contains(this.getShop()))
+                this.setShop(!this.data.profession().isEmpty() ? this.data.profession().get(this.dataRandom.nextInt(this.data.profession().size())) : ModNPCJobs.getRandomJob(this.random));
+            if (this.data.gender() != NPCData.Gender.UNDEFINED && (this.data.gender() == NPCData.Gender.MALE) != this.isMale())
+                this.setMale(this.data.gender() == NPCData.Gender.UNDEFINED ? this.random.nextBoolean() : this.data.gender() != NPCData.Gender.FEMALE);
+            if (this.data.name() != null) {
+                String name = this.data.name();
+                if (this.data.surname() != null)
+                    name += " " + this.data.surname();
+                this.setCustomName(new TextComponent(name));
+            }
+            if (this.data.birthday() != null) {
+                this.birthday = null;
+                this.getBirthday();
+            }
+            if (this.data.combatActions() != null)
+                this.attackActions = null;
+            if (data.schedule() != null)
+                this.schedule.with(data.schedule());
         }
-        this.attackActions = null;
-        if (data.schedule() == null)
-            this.schedule.load(new NPCSchedule(this, this.random).save());
-        else
-            this.schedule.with(data.schedule());
         this.applyAttributes(!load);
         if (this.level().getLevel() < this.data.baseLevel()) {
             this.setLevel(this.data.baseLevel());
         }
         Platform.INSTANCE.sendToTrackingAndSelf(new S2CNPCLook(this.getId(), this.look), this);
+    }
+
+    private CompoundTag saveNPCData() {
+        CompoundTag tag = new CompoundTag();
+        tag.putString("Data", DataPackHandler.INSTANCE.npcDataManager().getId(this.data).toString());
+        tag.putString("Look", DataPackHandler.INSTANCE.npcLookManager().getId(this.getLook()).toString());
+        tag.putString("Profession", ModNPCJobs.getIDFrom(this.getShop()).toString());
+        tag.putBoolean("Male", this.isMale());
+        tag.putInt("BirthdayMonth", this.getBirthday().getFirst().ordinal());
+        tag.putInt("Birthday", this.getBirthday().getSecond());
+        tag.putString("Combat", DataPackHandler.INSTANCE.npcActionsManager().getId(this.getAttackActions()).toString());
+        tag.put("Schedule", this.schedule.save());
+        return tag;
+    }
+
+    private void loadNpcData(CompoundTag tag) {
+        NPCData data = DataPackHandler.INSTANCE.npcDataManager().get(new ResourceLocation(tag.getString("Data")));
+        this.look = DataPackHandler.INSTANCE.npcLookManager().get(new ResourceLocation(tag.getString("Look")));
+        this.setShop(ModNPCJobs.getFromID(new ResourceLocation(tag.getString("Profession"))));
+        this.setMale(tag.getBoolean("Male"));
+        try {
+            EnumSeason month = EnumSeason.values()[tag.getInt("BirthdayMonth")];
+            this.birthday = Pair.of(month, tag.getInt("Birthday"));
+        } catch (IllegalArgumentException e) {
+            this.getBirthday();
+        }
+        this.attackActions = DataPackHandler.INSTANCE.npcActionsManager().get(new ResourceLocation(tag.getString("Combat")));
+        this.schedule.load(tag.getCompound("Schedule"));
+        this.setNPCData(data, true);
     }
 
     @Override
