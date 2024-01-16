@@ -21,6 +21,7 @@ import net.minecraft.world.level.storage.loot.predicates.WeatherCheck;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -110,7 +111,7 @@ public class NPCDataGen extends NPCDataProvider {
                 }),
                 Map.of());
 
-        this.addNPCData("smith/male_1", new NPCData.Builder(50, null, NPCData.Gender.MALE)
+        this.addNPCDataAll("smith/male_1", new NPCData.Builder(50, null, NPCData.Gender.MALE)
                         .withLook(new ResourceLocation(RuneCraftory.MODID, "smith/male_1"))
                         .withProfession(ModNPCJobs.SMITH.getSecond())
                         .addGiftResponse("dislike", new NPCData.Gift(ModTags.SMITH_TRASH, "npc.smith.male.1.dislike", -10), "Hmm you better get rid of your trash yourself next time.")
@@ -128,6 +129,7 @@ public class NPCDataGen extends NPCDataProvider {
                     m.put(NPCData.ConversationType.FOLLOWNO, new NPCData.ConversationSet.Builder("npc.smith.male.1.follow.no", "Hmm sorry but I can't right now."));
                     m.put(NPCData.ConversationType.FOLLOWSTOP, new NPCData.ConversationSet.Builder("npc.smith.male.1.follow.stop", "Cya then!"));
                 }),
+                new NPCData.NPCLook(NPCData.Gender.MALE, npcTexture("smith/male_1"), null, 0, List.of()),
                 of(m -> {
                     m.put(QuestGen.MINING, new QuestResponseBuilder(
                             new NPCData.ConversationSet.Builder("npc.generic.quest.mining.start", "You saw my request? Great!\n" +
@@ -139,7 +141,7 @@ public class NPCDataGen extends NPCDataProvider {
                                     "With higher level you can get better ores from minerals. Here take this hammer, it should make mining minerals a bit easier.")
                     ));
                 }));
-        this.addNPCData("smith/female_1", new NPCData.Builder(50, null, NPCData.Gender.FEMALE)
+        this.addNPCDataAll("smith/female_1", new NPCData.Builder(50, null, NPCData.Gender.FEMALE)
                         .withLook(new ResourceLocation(RuneCraftory.MODID, "smith/female_1"))
                         .withProfession(ModNPCJobs.SMITH.getSecond())
                         .addGiftResponse("dislike", new NPCData.Gift(ModTags.SMITH_TRASH, "npc.smith.female.1.dislike", -10), "Hey! I'm not your trashcan!")
@@ -155,6 +157,7 @@ public class NPCDataGen extends NPCDataProvider {
                     m.put(NPCData.ConversationType.FOLLOWNO, new NPCData.ConversationSet.Builder("npc.smith.female.1.follow.no", "Sorry but I'm busy right now."));
                     m.put(NPCData.ConversationType.FOLLOWSTOP, new NPCData.ConversationSet.Builder("npc.smith.female.1.follow.stop", "Bye! See you next time"));
                 }),
+                new NPCData.NPCLook(NPCData.Gender.FEMALE, npcTexture("smith/female_1"), null, 0, List.of(new NPCData.LookFeature(NPCData.StaticLookTypes.SLIM_MODEL))),
                 of(m -> {
                     m.put(QuestGen.MINING, new QuestResponseBuilder(
                             new NPCData.ConversationSet.Builder("npc.generic.quest.mining.start", "You saw my request? Great!\n" +
@@ -167,7 +170,7 @@ public class NPCDataGen extends NPCDataProvider {
                     ));
                 }));
 
-        this.addNPCData("shop_owner/male_1", new NPCData.Builder(50, null, NPCData.Gender.MALE)
+        this.addNPCDataAll("shop_owner/male_1", new NPCData.Builder(50, null, NPCData.Gender.MALE)
                         .withLook(new ResourceLocation(RuneCraftory.MODID, "shop_owner/male_1"))
                         .withProfession(ModNPCJobs.GENERAL.getSecond(), ModNPCJobs.FLOWER.getSecond())
                         .addGiftResponse("dislike", new NPCData.Gift(ModTags.GENERIC_TRASH, "npc.shop_owner.male.1.dislike", -10), "Eh... what is this?")
@@ -185,6 +188,7 @@ public class NPCDataGen extends NPCDataProvider {
                     m.put(NPCData.ConversationType.FOLLOWNO, new NPCData.ConversationSet.Builder("npc.shop_owner.male.1.follow.no", "Hmm... maybe another time"));
                     m.put(NPCData.ConversationType.FOLLOWSTOP, new NPCData.ConversationSet.Builder("npc.shop_owner.male.1.follow.stop", "Ok Bye!"));
                 }),
+                new NPCData.NPCLook(NPCData.Gender.MALE, npcTexture("shop_owner/male_1"), null, 0, List.of()),
                 of(m -> {
                     m.put(QuestGen.SHIP_TURNIP, new QuestResponseBuilder(
                             new NPCData.ConversationSet.Builder("npc.generic.quest.ship_turnip.start", "Are you here for my request?\n" +
@@ -195,7 +199,7 @@ public class NPCDataGen extends NPCDataProvider {
                                     "these turnip seeds. It should come in handy.")
                     ));
                 }));
-        this.addNPCData("shop_owner/female_1", new NPCData.Builder(50, null, NPCData.Gender.FEMALE)
+        this.addNPCDataAll("shop_owner/female_1", new NPCData.Builder(50, null, NPCData.Gender.FEMALE)
                         .withLook(new ResourceLocation(RuneCraftory.MODID, "shop_owner/female_1"))
                         .withProfession(ModNPCJobs.GENERAL.getSecond(), ModNPCJobs.FLOWER.getSecond())
                         .addGiftResponse("dislike", new NPCData.Gift(ModTags.GENERIC_TRASH, "npc.shop_owner.female.1.dislike", -10), "Why would you give this to me???")
@@ -211,6 +215,7 @@ public class NPCDataGen extends NPCDataProvider {
                     m.put(NPCData.ConversationType.FOLLOWNO, new NPCData.ConversationSet.Builder("npc.shop_owner.female.1.follow.no", "I have something to do right now. Maybe next time..."));
                     m.put(NPCData.ConversationType.FOLLOWSTOP, new NPCData.ConversationSet.Builder("npc.shop_owner.female.1.follow.stop", "See ya next time. Bye!"));
                 }),
+                new NPCData.NPCLook(NPCData.Gender.FEMALE, npcTexture("shop_owner/female_1"), null, 0, List.of(new NPCData.LookFeature(NPCData.StaticLookTypes.SLIM_MODEL))),
                 of(m -> {
                     m.put(QuestGen.SHIP_TURNIP, new QuestResponseBuilder(
                             new NPCData.ConversationSet.Builder("npc.generic.quest.ship_turnip.start", "Are you here for my request?\n" +

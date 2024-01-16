@@ -9,11 +9,12 @@ import io.github.flemmli97.runecraftory.common.datapack.manager.ShopItemsManager
 import io.github.flemmli97.runecraftory.common.datapack.manager.SkillPropertiesManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.SpellPropertiesManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.WeaponPropertiesManager;
+import io.github.flemmli97.runecraftory.common.datapack.manager.npc.GiftManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCActionManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCConversationManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCDataManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCLookManager;
-import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NameAndGiftManager;
+import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NameManager;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.packs.resources.PreparableReloadListener;
 
@@ -32,7 +33,8 @@ public class DataPackHandler {
     private final SpellPropertiesManager spellProperties = new SpellPropertiesManager();
     private final SkillPropertiesManager skillPropertiesManager = new SkillPropertiesManager();
     private final WeaponPropertiesManager weaponPropertiesManager = new WeaponPropertiesManager();
-    private final NameAndGiftManager nameAndGifts = new NameAndGiftManager();
+    private final NameManager names = new NameManager();
+    private final GiftManager gifts = new GiftManager();
     private final NPCDataManager npcData = new NPCDataManager();
     private final NPCLookManager npcLooks = new NPCLookManager();
     private final NPCActionManager npcActions = new NPCActionManager();
@@ -66,7 +68,8 @@ public class DataPackHandler {
     }
 
     public static void reloadNPCData(Consumer<PreparableReloadListener> cons) {
-        cons.accept(INSTANCE.nameAndGifts);
+        cons.accept(INSTANCE.names);
+        cons.accept(INSTANCE.gifts);
         cons.accept(INSTANCE.npcData);
         cons.accept(INSTANCE.npcLooks);
         cons.accept(INSTANCE.npcConversations);
@@ -124,8 +127,12 @@ public class DataPackHandler {
         return this.weaponPropertiesManager;
     }
 
-    public NameAndGiftManager nameAndGiftManager() {
-        return this.nameAndGifts;
+    public NameManager nameManager() {
+        return this.names;
+    }
+
+    public GiftManager giftManager() {
+        return this.gifts;
     }
 
     public NPCDataManager npcDataManager() {

@@ -1,0 +1,8 @@
+{
+  "texture": "runecraftory:textures/entity/npc/smith/female_1.png",
+  "gender": "FEMALE",
+  "weight": 0,
+  "additionalFeatures": [
+    "SLIM_MODEL"
+  ]
+}

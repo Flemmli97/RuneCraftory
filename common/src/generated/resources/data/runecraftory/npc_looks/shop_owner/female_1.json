@@ -1,0 +1,8 @@
+{
+  "texture": "runecraftory:textures/entity/npc/shop_owner/female_1.png",
+  "gender": "FEMALE",
+  "weight": 0,
+  "additionalFeatures": [
+    "SLIM_MODEL"
+  ]
+}

@@ -1267,7 +1267,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     public NPCData.Gift giftOf(ItemStack stack) {
         for (Map.Entry<String, NPCData.Gift> e : this.data.giftItems().entrySet()) {
-            TagKey<Item> tag = e.getValue().item() == null ? this.gift.computeIfAbsent(e.getKey(), s -> DataPackHandler.INSTANCE.nameAndGiftManager().getRandomGift(NPCData.GiftType.ofXP(e.getValue().xp()), this.random)) : e.getValue().item();
+            TagKey<Item> tag = e.getValue().item() == null ? this.gift.computeIfAbsent(e.getKey(), s -> DataPackHandler.INSTANCE.giftManager().getRandomGift(NPCData.GiftType.ofXP(e.getValue().xp()), this.random)) : e.getValue().item();
             if (tag == null || stack.is(tag))
                 return e.getValue();
         }
@@ -1331,20 +1331,20 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             if (this.data.surname() != null)
                 name += " " + this.data.surname();
             this.setCustomName(new TextComponent(name));
-        } else {
-            name = DataPackHandler.INSTANCE.nameAndGiftManager().getRandomName(this.random, this.isMale());
-            if (name != null) {
-                String surname = DataPackHandler.INSTANCE.nameAndGiftManager().getRandomSurname(this.random);
-                if (surname != null)
-                    name = name + " " + surname;
-                this.setCustomName(new TextComponent(name));
-            }
         }
-        this.look = null;
-        this.getLook();
+        if (!load) {
+            if (this.data.name() == null) {
+                name = DataPackHandler.INSTANCE.nameManager().getRandomFullName(this.random, this.isMale());
+                if (name != null) {
+                    this.setCustomName(new TextComponent(name));
+                }
+            }
+            this.birthday = null;
+            this.getBirthday();
+            this.look = null;
+            this.getLook();
+        }
         this.attackActions = null;
-        this.birthday = null;
-        this.getBirthday();
         if (data.schedule() == null)
             this.schedule.load(new NPCSchedule(this, this.random).save());
         else

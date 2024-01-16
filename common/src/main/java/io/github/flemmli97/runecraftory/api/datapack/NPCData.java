@@ -7,6 +7,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSyntaxException;
+import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
@@ -41,6 +42,7 @@ import javax.annotation.Nullable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -544,15 +546,16 @@ public record NPCData(@Nullable String name, @Nullable String surname,
     }
 
     public record NPCLook(Gender gender, @Nullable ResourceLocation texture, @Nullable String playerSkin, int weight,
-                          List<Pair<ResourceLocation, ResourceLocation>> additionalFeatures) {
+                          List<LookFeature> additionalFeatures) {
 
+        public static final ResourceLocation DEFAULT_SKIN = new ResourceLocation("textures/entity/steve.png");
         public static final ResourceLocation DEFAULT_LOOK_ID = new ResourceLocation(RuneCraftory.MODID, "default_look");
-        public static final NPCLook DEFAULT_LOOK = new NPCLook(Gender.MALE, new ResourceLocation("textures/entity/steve.png"), null, 0, List.of());
+        public static final NPCLook DEFAULT_LOOK = new NPCLook(Gender.MALE, DEFAULT_SKIN, null, 0, List.of());
 
         public static final Codec<NPCLook> CODEC = RecordCodecBuilder.create(inst ->
                 inst.group(
                         ExtraCodecs.NON_NEGATIVE_INT.fieldOf("weight").forGetter(d -> d.weight),
-                        Codec.pair(ResourceLocation.CODEC, ResourceLocation.CODEC).listOf().fieldOf("additionalFeatures").forGetter(d -> d.additionalFeatures),
+                        LookFeature.CODEC.listOf().fieldOf("additionalFeatures").forGetter(d -> d.additionalFeatures),
 
                         ResourceLocation.CODEC.optionalFieldOf("texture").forGetter(d -> Optional.ofNullable(d.texture)),
                         Codec.STRING.optionalFieldOf("player_skin").forGetter(d -> Optional.ofNullable(d.playerSkin)),
@@ -571,9 +574,11 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             if (buf.readBoolean())
                 skin = buf.readUtf();
             int size = buf.readInt();
-            List<Pair<ResourceLocation, ResourceLocation>> additional = new ArrayList<>();
-            for (int i = 0; i < size; i++)
-                additional.add(Pair.of(buf.readResourceLocation(), buf.readResourceLocation()));
+            List<LookFeature> additional = new ArrayList<>();
+            for (int i = 0; i < size; i++) {
+                LookFeature feature = !buf.readBoolean() ? new LookFeature(buf.readEnum(StaticLookTypes.class)) : new LookFeature(Pair.of(buf.readResourceLocation(), buf.readResourceLocation()));
+                additional.add(feature);
+            }
             return new NPCLook(buf.readEnum(Gender.class), text, skin, buf.readInt(), additional);
         }
 
@@ -585,12 +590,81 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             if (this.playerSkin != null)
                 buf.writeUtf(this.playerSkin);
             buf.writeInt(this.additionalFeatures.size());
-            this.additionalFeatures.forEach(p -> {
-                buf.writeResourceLocation(p.getFirst());
-                buf.writeResourceLocation(p.getSecond());
+            this.additionalFeatures.forEach(e -> {
+                if (e.type != null) {
+                    buf.writeBoolean(false);
+                    buf.writeEnum(e.type);
+                } else {
+                    buf.writeBoolean(true);
+                    buf.writeResourceLocation(e.features.getFirst());
+                    buf.writeResourceLocation(e.features.getSecond());
+                }
+                ;
             });
             buf.writeEnum(this.gender());
             buf.writeInt(this.weight());
         }
+    }
+
+    // There is prob a better way to do this whole feature thing but...
+    public static class LookFeature {
+
+        private static final Codec<Pair<ResourceLocation, ResourceLocation>> PAIR = RecordCodecBuilder.create(inst ->
+                inst.group(ResourceLocation.CODEC.fieldOf("id").forGetter(Pair::getFirst),
+                        ResourceLocation.CODEC.fieldOf("value").forGetter(Pair::getSecond)
+                ).apply(inst, Pair::new));
+        private static final Codec<LookFeature> CODEC = Codec.either(CodecHelper.enumCodec(StaticLookTypes.class, null), PAIR)
+                .flatXmap(either -> DataResult.success(either.map(LookFeature::new, LookFeature::new)),
+                        feature -> {
+                            if (feature.type != null)
+                                return DataResult.success(Either.left(feature.type));
+                            return DataResult.success(Either.right(feature.features));
+                        });
+        private final StaticLookTypes type;
+        private final Pair<ResourceLocation, ResourceLocation> features;
+
+        public LookFeature(StaticLookTypes type) {
+            this.type = type;
+            this.features = null;
+        }
+
+        public LookFeature(Pair<ResourceLocation, ResourceLocation> features) {
+            this.features = features;
+            this.type = null;
+        }
+
+        @Override
+        public int hashCode() {
+            if (this.features != null)
+                return this.features.hashCode();
+            return this.type.hashCode();
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj instanceof LookFeature features) {
+                if (this.features != null)
+                    return this.features.equals(features.features);
+                return this.type == features.type;
+            }
+            if (obj instanceof StaticLookTypes type) {
+                return this.type == type;
+            }
+            if (obj instanceof Pair<?, ?>) {
+                return obj.equals(this.features);
+            }
+            return false;
+        }
+    }
+
+    public enum StaticLookTypes {
+
+        SLIM_MODEL;
+        private static final Map<StaticLookTypes, LookFeature> CACHE = new HashMap<>();
+
+        public static LookFeature from(StaticLookTypes type) {
+            return CACHE.computeIfAbsent(type, key -> new LookFeature(type));
+        }
+
     }
 }

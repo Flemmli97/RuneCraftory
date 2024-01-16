@@ -6,8 +6,11 @@ import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.NPCData;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
+import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
@@ -18,7 +21,9 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
+import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -31,12 +36,14 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.block.entity.SkullBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerModel<T>> {
 
     private static final Map<String, PlayerSkin> TEXTURE_LOCATIONS = new HashMap<>();
+    private static final Object2BooleanMap<ResourceLocation> MISSING = new Object2BooleanOpenHashMap<>();
 
     private final PlayerModel<T> def;
     private final PlayerModel<T> slim;
@@ -54,6 +61,18 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
         if (skin != null) {
             return TEXTURE_LOCATIONS.computeIfAbsent(skin, s -> new PlayerSkin(skin)).getLocation();
         }
+        if (MISSING.computeIfAbsent(look.texture(), s -> {
+            if (look.texture() == null)
+                return true;
+            try (AbstractTexture text = new SimpleTexture(look.texture())) {
+                text.load(Minecraft.getInstance().getResourceManager());
+                return false;
+            } catch (IOException exception) {
+                RuneCraftory.logger.warn("Failed to load texture: {}", look.texture(), exception);
+            }
+            return true;
+        }))
+            return NPCData.NPCLook.DEFAULT_SKIN;
         return look.texture();
     }
 
@@ -89,8 +108,13 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
                 this.model = this.slim;
             else
                 this.model = this.def;
-        } else
-            this.model = this.def;
+        } else {
+            if (!NPCData.NPCLook.DEFAULT_SKIN.equals(this.getTextureLocation(entity)) &&
+                    entity.getLook().additionalFeatures().contains(NPCData.StaticLookTypes.from(NPCData.StaticLookTypes.SLIM_MODEL)))
+                this.model = this.slim;
+            else
+                this.model = this.def;
+        }
         this.setModelProperties(entity);
         super.render(entity, entityYaw, partialTicks, matrixStack, buffer, packedLight);
     }
@@ -155,6 +179,11 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
             stack.translate(0, f * 0.1, -f * entity.getBbHeight() * 0.5);
             stack.mulPose(Vector3f.XP.rotationDegrees(f * this.getFlipDegrees(entity)));
         }
+    }
+
+    @Override
+    protected void scale(T livingEntity, PoseStack matrixStack, float partialTickTime) {
+        matrixStack.scale(0.9375f, 0.9375f, 0.9375f);
     }
 
     @Nullable

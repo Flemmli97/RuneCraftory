@@ -6,11 +6,12 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.api.datapack.NPCData;
+import io.github.flemmli97.runecraftory.common.datapack.manager.npc.GiftManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCActionManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCConversationManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCDataManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCLookManager;
-import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NameAndGiftManager;
+import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NameManager;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.NPCAttackActions;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
@@ -42,9 +43,6 @@ public abstract class NPCDataProvider implements DataProvider {
     private final Map<ResourceLocation, NPCData.ConversationSet> conversations = new HashMap<>();
     private final Map<ResourceLocation, NPCAttackActions> actions = new HashMap<>();
 
-    private List<String> surnames = new ArrayList<>();
-    private List<String> maleNames = new ArrayList<>();
-    private List<String> femaleNames = new ArrayList<>();
     private Map<NPCData.GiftType, List<TagKey<Item>>> giftTags = new LinkedHashMap<>();
 
     //Translation for lang
@@ -66,7 +64,7 @@ public abstract class NPCDataProvider implements DataProvider {
         this.gifts.forEach((type, giftList) -> {
             JsonArray giftArr = new JsonArray();
             giftList.forEach(r -> giftArr.add(r.toString()));
-            Path path1 = this.gen.getOutputFolder().resolve("data/" + this.modid + "/" + NameAndGiftManager.DIRECTORY + "/" + type.name().toLowerCase(Locale.ROOT) + "_gifts.json");
+            Path path1 = this.gen.getOutputFolder().resolve("data/" + this.modid + "/" + NameManager.DIRECTORY + "/" + type.name().toLowerCase(Locale.ROOT) + "_gifts.json");
             try {
                 DataProvider.save(GSON, cache, giftArr, path1);
             } catch (IOException e) {
@@ -104,29 +102,8 @@ public abstract class NPCDataProvider implements DataProvider {
                 LOGGER.error("Couldn't save npc conversations {}", path, e);
             }
         });
-        Path path = this.gen.getOutputFolder().resolve("data/" + this.modid + "/" + NameAndGiftManager.DIRECTORY + "/female_names.json");
-        try {
-            JsonElement obj = GSON.toJsonTree(this.femaleNames);
-            DataProvider.save(GSON, cache, obj, path);
-        } catch (IOException e) {
-            LOGGER.error("Couldn't save male names {}", path, e);
-        }
-        path = this.gen.getOutputFolder().resolve("data/" + this.modid + "/" + NameAndGiftManager.DIRECTORY + "/male_names.json");
-        try {
-            JsonElement obj = GSON.toJsonTree(this.maleNames);
-            DataProvider.save(GSON, cache, obj, path);
-        } catch (IOException e) {
-            LOGGER.error("Couldn't save female names {}", path, e);
-        }
-        path = this.gen.getOutputFolder().resolve("data/" + this.modid + "/" + NameAndGiftManager.DIRECTORY + "/surnames.json");
-        try {
-            JsonElement obj = GSON.toJsonTree(this.surnames);
-            DataProvider.save(GSON, cache, obj, path);
-        } catch (IOException e) {
-            LOGGER.error("Couldn't save surnames {}", path, e);
-        }
         this.gifts.forEach((type, list) -> {
-            Path path1 = this.gen.getOutputFolder().resolve("data/" + this.modid + "/" + NameAndGiftManager.DIRECTORY + "/" + type.name().toLowerCase() + "_gifts.json");
+            Path path1 = this.gen.getOutputFolder().resolve("data/" + this.modid + "/" + GiftManager.DIRECTORY + "/" + type.name().toLowerCase() + ".json");
             try {
                 JsonElement obj = GSON.toJsonTree(list);
                 DataProvider.save(GSON, cache, obj, path1);
@@ -241,18 +218,6 @@ public abstract class NPCDataProvider implements DataProvider {
         this.gifts.computeIfAbsent(type, t -> new ArrayList<>()).add(tag);
     }
 
-    public void addFemaleName(String name) {
-        this.femaleNames.add(name);
-    }
-
-    public void addMaleName(String name) {
-        this.maleNames.add(name);
-    }
-
-    public void addSurname(String name) {
-        this.surnames.add(name);
-    }
-
     public void addGenericGift(NPCData.GiftType type, TagKey<Item> tag) {
         this.gifts.computeIfAbsent(type, r -> new ArrayList<>()).add(tag.location());
     }
@@ -269,6 +234,12 @@ public abstract class NPCDataProvider implements DataProvider {
         public QuestResponseBuilder(NPCData.ConversationSet.Builder start, NPCData.ConversationSet.Builder active,
                                     NPCData.ConversationSet.Builder end) {
             this(start, List.of(active), end);
+        }
+    }
+
+    private record NameStructure(List<String> surnames, List<String> male_names, List<String> female_names) {
+        private NameStructure() {
+            this(new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         }
     }
 }
