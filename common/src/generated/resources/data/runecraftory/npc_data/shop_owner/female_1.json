@@ -9,7 +9,7 @@
   "combat": {
     "combatActions": "runecraftory:generic_melee_attack"
   },
-  "romanceable": false,
+  "relationShipState": "DEFAULT",
   "neutralGiftResponse": "npc.shop_owner.female.1.gift.default",
   "giftItems": {
     "dislike": {

@@ -225,7 +225,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         private final Map<Attribute, Double> statIncrease = new TreeMap<>(ModAttributes.SORTED);
         private int baseLevel = 1;
         private int unique;
-        private RelationShipState relationShipState;
+        private RelationShipState relationShipState = RelationShipState.DEFAULT;
 
         private Map<ResourceLocation, QuestResponses> responses = new LinkedHashMap<>();
         private Set<ResourceLocation> requiredQuests = new LinkedHashSet<>();

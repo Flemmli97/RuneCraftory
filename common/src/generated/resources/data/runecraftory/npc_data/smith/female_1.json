@@ -8,7 +8,7 @@
   "combat": {
     "combatActions": "runecraftory:melee_fireball_attack"
   },
-  "romanceable": false,
+  "relationShipState": "DEFAULT",
   "neutralGiftResponse": "npc.smith.female.1.gift.default",
   "giftItems": {
     "dislike": {
