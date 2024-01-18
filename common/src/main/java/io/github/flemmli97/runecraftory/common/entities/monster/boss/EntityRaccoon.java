@@ -53,18 +53,17 @@ public class EntityRaccoon extends BossMonster {
     public static final AnimatedAction LEAF_SHOOT = new AnimatedAction(0.88, 0.44, "shoot");
     public static final AnimatedAction LEAF_BOOMERANG = AnimatedAction.copyOf(LEAF_SHOOT, "spinning_shoot");
     public static final AnimatedAction LEAF_SHOT_CLONE = AnimatedAction.copyOf(LEAF_SHOOT, "leaf_clone");
-    public static final AnimatedAction BARRAGE = new AnimatedAction(20, 7, "barrage");
+    public static final AnimatedAction BARRAGE = new AnimatedAction(3.32, 0.44, "punch_barrage");
     public static final AnimatedAction ROAR = new AnimatedAction(1.24, 1, "roar");
     public static final AnimatedAction ANGRY = AnimatedAction.copyOf(ROAR, "angry");
     public static final AnimatedAction CLONE = AnimatedAction.copyOf(ROAR, "clone");
 
     public static final AnimatedAction DEFEAT = AnimatedAction.builder(100, "defeat").infinite().build();
     public static final AnimatedAction TRANSFORM = new AnimatedAction(30, 0, "transform");
-    public static final AnimatedAction DETRANSFORM = AnimatedAction.copyOf(TRANSFORM, "transform");
+    public static final AnimatedAction UNTRANSFORM = new AnimatedAction(2.2, 0, "untransform");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(DOUBLE_PUNCH, "interact");
     public static final AnimatedAction INTERACT_BERSERK = AnimatedAction.copyOf(PUNCH, "interact_berserk");
-
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{DOUBLE_PUNCH, PUNCH, JUMP, STOMP, LEAF_SHOOT, LEAF_BOOMERANG, BARRAGE, ROAR, ANGRY, CLONE, DEFEAT, TRANSFORM, DETRANSFORM, INTERACT, INTERACT_BERSERK};
+    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{DOUBLE_PUNCH, PUNCH, JUMP, STOMP, LEAF_SHOOT, LEAF_BOOMERANG, BARRAGE, ROAR, ANGRY, CLONE, DEFEAT, TRANSFORM, UNTRANSFORM, INTERACT, INTERACT_BERSERK};
     private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntityRaccoon>> ATTACK_HANDLER = createAnimationHandler(b -> {
         b.put(DOUBLE_PUNCH, (anim, entity) -> {
             LivingEntity target = entity.getTarget();
@@ -81,9 +80,16 @@ public class EntityRaccoon extends BossMonster {
             }
         });
         b.put(BARRAGE, (anim, entity) -> {
-            //TODO
-            if (anim.canAttack() || anim.getTick() == 13) {
+            if (anim.canAttack() || anim.isAtTick(0.84) || anim.isAtTick(1.28)) {
                 entity.mobAttack(anim, entity.getTarget(), entity::doHurtTarget);
+                LivingEntity target = entity.getTarget();
+                Vec3 dir;
+                if (target != null) {
+                    Vec3 targetPos = target.position();
+                    dir = new Vec3(targetPos.x - entity.getX(), 0.0, targetPos.z - entity.getZ()).normalize();
+                } else
+                    dir = new Vec3(entity.getLookAngle().x(), 0, entity.getLookAngle().z()).normalize();
+                entity.setDeltaMovement(entity.getDeltaMovement().add(dir.scale(0.6)));
             }
         });
         b.put(JUMP, (anim, entity) -> {
@@ -174,6 +180,11 @@ public class EntityRaccoon extends BossMonster {
             }
             entity.entityData.get(CLONE_CENTER).ifPresent(pos -> entity.lookAt(EntityAnchorArgument.Anchor.FEET, pos));
         });
+        b.put(UNTRANSFORM, (anim, entity) -> {
+            if (entity.isOnGround() && anim.isPastTick(1.0) && !anim.isPastTick(1.5)) {
+                entity.push(0, 0.4, 0);
+            }
+        });
     });
 
     public final RaccoonAttackGoal<EntityRaccoon> attack = new RaccoonAttackGoal<>(this);
@@ -235,13 +246,13 @@ public class EntityRaccoon extends BossMonster {
 
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (anim.is(DEFEAT, TRANSFORM, DETRANSFORM, INTERACT, INTERACT_BERSERK, ANGRY, BARRAGE))
+        if (anim.is(DEFEAT, TRANSFORM, UNTRANSFORM, INTERACT, INTERACT_BERSERK, ANGRY))
             return false;
         if (type == AnimationType.GENERICATTACK) {
             if (anim.is(DOUBLE_PUNCH))
                 return !this.isBerserk();
             else if (this.isBerserk()) {
-                if (anim.is(LEAF_SHOT_CLONE))
+                /*if (anim.is(LEAF_SHOT_CLONE))
                     return this.clone && this.isEnraged();
                 if (anim.is(DOUBLE_PUNCH))
                     return !this.isEnraged();
@@ -252,8 +263,8 @@ public class EntityRaccoon extends BossMonster {
                 if (anim.is(BARRAGE))
                     return this.random.nextFloat() < 0.08f;
                 if (anim.is(CLONE))
-                    return this.isEnraged();
-                return true;
+                    return this.isEnraged();*/
+                return anim.is(BARRAGE);
             }
         }
         return false;
@@ -279,7 +290,7 @@ public class EntityRaccoon extends BossMonster {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if (this.getAnimationHandler().isCurrent(JUMP, DEFEAT, TRANSFORM, DETRANSFORM, ANGRY))
+        if (this.getAnimationHandler().isCurrent(JUMP, DEFEAT, TRANSFORM, UNTRANSFORM, ANGRY))
             return false;
         return super.hurt(source, amount);
     }
@@ -290,8 +301,10 @@ public class EntityRaccoon extends BossMonster {
         if (!this.isBerserk()) {
             this.hit++;
             this.hitCountdown = 30;
-        } else if (this.getAnimationHandler().isCurrent(BARRAGE) && this.getAnimationHandler().getAnimation().getTick() > 10) {
+        } else if (this.getAnimationHandler().isCurrent(BARRAGE) && this.getAnimationHandler().getAnimation().isPastTick(1.4)) {
             this.setBerserk(false, false);
+            this.getAnimationHandler().setAnimation(UNTRANSFORM);
+            this.push(0, 0.6, 0);
         }
     }
 
@@ -315,7 +328,8 @@ public class EntityRaccoon extends BossMonster {
             if (flag)
                 this.getAnimationHandler().setAnimation(TRANSFORM);
             else
-                this.getAnimationHandler().setAnimation(DETRANSFORM);
+                this.getAnimationHandler().setAnimation(UNTRANSFORM);
+            this.attack.stop();
         }
     }
 
@@ -328,7 +342,7 @@ public class EntityRaccoon extends BossMonster {
 
     @Override
     protected boolean isImmobile() {
-        return super.isImmobile() || this.getAnimationHandler().isCurrent(CLONE, TRANSFORM, DETRANSFORM, ANGRY, ROAR, DEFEAT);
+        return super.isImmobile() || this.getAnimationHandler().isCurrent(CLONE, TRANSFORM, UNTRANSFORM, ANGRY, ROAR, DEFEAT);
     }
 
     @Override
@@ -390,7 +404,7 @@ public class EntityRaccoon extends BossMonster {
 
     @Override
     public double maxAttackRange(AnimatedAction anim) {
-        return 2.3;
+        return this.isBerserk() ? 2.3 : 1.3;
     }
 
     @Override

@@ -40,7 +40,7 @@ public class RenderRaccoon<T extends EntityRaccoon> extends RenderMonster<T, Mod
     @Override
     public void render(T entity, float entityYaw, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         AnimatedAction anim = entity.getAnimationHandler().getAnimation();
-        if (anim != null && anim.is(EntityRaccoon.TRANSFORM)) {
+        if (anim != null && (anim.is(EntityRaccoon.TRANSFORM) || anim.is(EntityRaccoon.UNTRANSFORM))) {
             int tick = anim.getTick();
             if (tick < 10)
                 this.model = tick % 3 == 0 ? this.berserkModel : this.normalModel;
@@ -48,6 +48,9 @@ public class RenderRaccoon<T extends EntityRaccoon> extends RenderMonster<T, Mod
                 this.model = tick % 4 <= 1 ? this.berserkModel : this.normalModel;
             else if (tick < 30)
                 this.model = tick % 5 <= 3 ? this.berserkModel : this.normalModel;
+            if (anim.is(EntityRaccoon.UNTRANSFORM)) {
+                this.model = this.model == this.berserkModel || tick > 30 ? this.normalModel : this.berserkModel;
+            }
         } else
             this.model = entity.isBerserk() ? this.berserkModel : this.normalModel;
         if (!this.clone && EntityRaccoon.CLONE.is(anim) && entity.cloneCenter().isPresent()) {
