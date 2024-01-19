@@ -5,7 +5,7 @@
   "itemStats": {
     "runecraftory:magic_attack": 13.0,
     "runecraftory:dizzy": 15.0,
-    "runecraftory:attack_range": -0.5
+    "runecraftory:attack_range": 0.0
   },
   "monsterBonus": {
     "runecraftory:magic_attack": 0.5

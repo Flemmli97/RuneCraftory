@@ -31,12 +31,12 @@ public class WeaponPropertiesgen implements DataProvider {
     @Override
     public void run(HashCache cache) {
         this.weaponProps.put(EnumWeaponType.FARM, new WeaponTypeProperties(0, 10));
-        this.weaponProps.put(EnumWeaponType.SHORTSWORD, new WeaponTypeProperties(7, 13));
+        this.weaponProps.put(EnumWeaponType.SHORTSWORD, new WeaponTypeProperties(15, 13));
         this.weaponProps.put(EnumWeaponType.LONGSWORD, new WeaponTypeProperties(40, 17));
-        this.weaponProps.put(EnumWeaponType.SPEAR, new WeaponTypeProperties(3, 13));
-        this.weaponProps.put(EnumWeaponType.HAXE, new WeaponTypeProperties(23, 16));
+        this.weaponProps.put(EnumWeaponType.SPEAR, new WeaponTypeProperties(10, 13));
+        this.weaponProps.put(EnumWeaponType.HAXE, new WeaponTypeProperties(30, 16));
         this.weaponProps.put(EnumWeaponType.DUAL, new WeaponTypeProperties(10, 10));
-        this.weaponProps.put(EnumWeaponType.GLOVE, new WeaponTypeProperties(3, 10));
+        this.weaponProps.put(EnumWeaponType.GLOVE, new WeaponTypeProperties(10, 10));
         this.weaponProps.put(EnumWeaponType.STAFF, new WeaponTypeProperties(0, 20));
 
         this.weaponProps.forEach((skill, builder) -> {

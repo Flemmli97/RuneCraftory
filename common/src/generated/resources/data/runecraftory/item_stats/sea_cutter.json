@@ -5,7 +5,7 @@
   "itemStats": {
     "minecraft:generic.attack_damage": 41.0,
     "runecraftory:dizzy": 10.0,
-    "runecraftory:attack_range": 1.0
+    "runecraftory:attack_range": 1.5
   },
   "monsterBonus": {
     "minecraft:generic.attack_damage": 1.0
