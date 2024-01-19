@@ -89,7 +89,8 @@ public class WeaponHandler {
         }
         this.timeSinceLastChange = 0;
         this.currentAction = action;
-        this.currentAnim = action.getAnimation(entity, this.getChainCount());
+        int chain = this.getChainCount();
+        this.currentAnim = action.getAnimation(entity, chain);
         if (this.currentAction != ModAttackActions.NONE.get()) {
             this.chainCount++;
         } else
@@ -99,9 +100,17 @@ public class WeaponHandler {
         this.lockLook = false;
         this.currentAction.onStart(entity, this);
         this.consumeSpellOnStart = false;
-        if (packet && entity instanceof ServerPlayer serverPlayer) {
-            Platform.INSTANCE.sendToClient(new S2CWeaponUse(this.currentAction, this.usedWeapon), serverPlayer);
+        if (packet && !entity.level.isClientSide()) {
+            Platform.INSTANCE.sendToTrackingAndSelf(new S2CWeaponUse(this.currentAction, this.usedWeapon, chain, entity), entity);
         }
+    }
+
+    public void clientSideUpdate(LivingEntity entity, AttackAction action, ItemStack stack, int count) {
+        if (!entity.level.isClientSide)
+            return;
+        this.chainCount = count;
+        this.setAnimationBasedOnState(entity, action, false);
+        this.usedWeapon = stack;
     }
 
     private void resetStates() {
