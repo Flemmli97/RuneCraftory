@@ -35,7 +35,7 @@ public class DualBladeAttack extends AttackAction {
         switch (handler.getChainCount()) {
             case 1 -> {
                 if (anim.isAtTick(0.2)) {
-                    handler.setMoveTargetDir(dir.scale(0.35), anim, anim.getTick());
+                    handler.setMoveTargetDir(dir.scale(0.25), anim, anim.getTick());
                 }
             }
             case 3 -> {
@@ -45,12 +45,12 @@ public class DualBladeAttack extends AttackAction {
             }
             case 4 -> {
                 if (anim.isAtTick(0.16)) {
-                    handler.setMoveTargetDir(dir.scale(0.35), anim, anim.getTick());
+                    handler.setMoveTargetDir(dir.scale(0.3), anim, anim.getTick());
                 }
             }
             case 5 -> {
                 if (anim.isAtTick(0.2)) {
-                    handler.setMoveTargetDir(dir.scale(0.2), anim, anim.getTick());
+                    handler.setMoveTargetDir(dir.scale(0.25), anim, anim.getTick());
                     handler.setSpinStartRot(entity.getYRot() - 20);
                     handler.resetHitEntityTracker();
                 }
@@ -76,7 +76,7 @@ public class DualBladeAttack extends AttackAction {
                     handler.resetHitEntityTracker();
                 }
                 if (anim.isAtTick(0.28)) {
-                    handler.setMoveTargetDir(dir.scale(0.7), anim, anim.getTick());
+                    handler.setMoveTargetDir(dir.scale(0.5), anim, anim.getTick());
                     handler.resetHitEntityTracker();
                 }
                 if (!entity.level.isClientSide && anim.isPastTick(0.12)) {
@@ -96,9 +96,9 @@ public class DualBladeAttack extends AttackAction {
             }
             case 7 -> {
                 if (anim.isAtTick(0.2)) {
-                    handler.setMoveTargetDir(dir.scale(0.9).add(0, -1.5, 0), anim, anim.getLength());
+                    handler.setMoveTargetDir(dir.scale(0.8).add(0, -1.5, 0), anim, anim.getLength());
                 } else if (anim.isAtTick(0.08)) {
-                    handler.setMoveTargetDir(dir.scale(0.75).add(0, 1.5, 0), anim, 0.2);
+                    handler.setMoveTargetDir(dir.scale(0.55).add(0, 1.5, 0), anim, 0.2);
                 }
             }
             case 8 -> {

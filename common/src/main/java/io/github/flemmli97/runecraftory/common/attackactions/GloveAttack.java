@@ -42,21 +42,21 @@ public class GloveAttack extends AttackAction {
         switch (handler.getChainCount()) {
             case 1 -> {
                 if (anim.isAtTick(0.24)) {
-                    handler.setMoveTargetDir(dir.scale(0.2), anim, anim.getTick());
+                    handler.setMoveTargetDir(dir.scale(0.15), anim, anim.getTick());
                 }
             }
             case 2, 3 -> {
                 if (anim.isAtTick(0.24)) {
-                    handler.setMoveTargetDir(dir.scale(0.15), anim, anim.getTick());
+                    handler.setMoveTargetDir(dir.scale(0.12), anim, anim.getTick());
                 }
             }
             case 4 -> {
                 if (anim.isAtTick(0.14)) {
-                    handler.setMoveTargetDir(dir.scale(2.5).add(0, -3, 0), anim, 0.44);
+                    handler.setMoveTargetDir(dir.scale(3).add(0, -3, 0), anim, 0.44);
                     entity.resetFallDistance();
                 }
                 if (anim.isAtTick(0.04)) {
-                    handler.setMoveTargetDir(dir.scale(2.5).add(0, 3, 0), anim, 0.14);
+                    handler.setMoveTargetDir(dir.scale(1).add(0, 3, 0), anim, 0.14);
                 }
                 if (anim.isPastTick(0.40) && entity.isOnGround()) {
                     handler.clearMoveTarget();

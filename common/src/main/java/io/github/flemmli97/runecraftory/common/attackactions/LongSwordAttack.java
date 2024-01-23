@@ -35,12 +35,12 @@ public class LongSwordAttack extends AttackAction {
         switch (handler.getChainCount()) {
             case 2 -> {
                 if (anim.isAtTick(0.4)) {
-                    handler.setMoveTargetDir(dir.scale(0.6), anim, anim.getTick());
+                    handler.setMoveTargetDir(dir.scale(0.4), anim, anim.getTick());
                 }
             }
             case 3 -> {
                 if (anim.isAtTick(0.44)) {
-                    handler.setMoveTargetDir(dir.scale(0.6), anim, anim.getTick());
+                    handler.setMoveTargetDir(dir.scale(0.4), anim, anim.getTick());
                 }
             }
             case 4 -> {

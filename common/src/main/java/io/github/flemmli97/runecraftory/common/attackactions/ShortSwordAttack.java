@@ -35,27 +35,27 @@ public class ShortSwordAttack extends AttackAction {
         switch (handler.getChainCount()) {
             case 1 -> {
                 if (anim.isAtTick(0.28)) {
-                    handler.setMoveTargetDir(dir.scale(0.4), anim, anim.getTick());
+                    handler.setMoveTargetDir(dir.scale(0.25), anim, anim.getTick());
                 }
             }
             case 2 -> {
                 if (anim.isAtTick(0.16)) {
-                    handler.setMoveTargetDir(dir.scale(0.4), anim, anim.getTick());
+                    handler.setMoveTargetDir(dir.scale(0.25), anim, anim.getTick());
                 }
             }
             case 3 -> {
                 if (anim.isAtTick(0.16)) {
-                    handler.setMoveTargetDir(dir.scale(0.2), anim, anim.getTick());
+                    handler.setMoveTargetDir(dir.scale(0.15), anim, anim.getTick());
                 }
             }
             case 4 -> {
                 if (anim.isAtTick(0.2)) {
-                    handler.setMoveTargetDir(dir.scale(0.5).add(0, 0.9, 0), anim, anim.getLength());
+                    handler.setMoveTargetDir(dir.scale(0.35).add(0, 0.9, 0), anim, anim.getLength());
                 }
             }
             case 5 -> {
                 if (anim.isAtTick(0.04)) {
-                    handler.setMoveTargetDir(new Vec3(0, -0.9, 0), anim, 0.2);
+                    handler.setMoveTargetDir(new Vec3(0, -0.8, 0), anim, 0.2);
                 }
             }
             case 6 -> {

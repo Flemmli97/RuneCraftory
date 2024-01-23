@@ -43,12 +43,12 @@ public class SpearAttack extends AttackAction {
         switch (handler.getChainCount()) {
             case 1, 3, 4 -> {
                 if (anim.isAtTick(0.28)) {
-                    handler.setMoveTargetDir(dir.scale(0.2), anim, anim.getTick());
+                    handler.setMoveTargetDir(dir.scale(0.15), anim, anim.getTick());
                 }
             }
             case 2 -> {
                 if (anim.isAtTick(0.2)) {
-                    handler.setMoveTargetDir(dir.scale(0.3), anim, anim.getTick());
+                    handler.setMoveTargetDir(dir.scale(0.2), anim, anim.getTick());
                 }
             }
             case 5 -> {
