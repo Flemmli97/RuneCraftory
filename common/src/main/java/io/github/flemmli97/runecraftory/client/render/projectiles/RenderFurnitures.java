@@ -55,8 +55,8 @@ public class RenderFurnitures extends EntityRenderer<EntityFurniture> {
         this.chestLock = modelPart.getChild("lock");
 
         this.chair = ctx.bakeLayer(LOC_CHAIR);
-        this.woolyPlush = ctx.bakeLayer(LOC_CHIPSQUEEK_PLUSH);
-        this.chipSqueekPlush = ctx.bakeLayer(LOC_WOOLY_PLUSH);
+        this.woolyPlush = ctx.bakeLayer(LOC_WOOLY_PLUSH);
+        this.chipSqueekPlush = ctx.bakeLayer(LOC_CHIPSQUEEK_PLUSH);
     }
 
     public static LayerDefinition chairLayer() {
@@ -114,26 +114,24 @@ public class RenderFurnitures extends EntityRenderer<EntityFurniture> {
     public void render(EntityFurniture entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         stack.pushPose();
         stack.scale(1.2f, 1.2f, 1.2f);
+        stack.mulPose(Vector3f.YP.rotationDegrees(entity.getRandomRotationOffset()));
         switch (entity.getFurnitureType()) {
             case BARREL -> this.renderBlockModel(this.barrel, stack, buffer, packedLight);
             case ANVIL -> this.renderBlockModel(this.anvil, stack, buffer, packedLight);
-            case CHEST ->
-                    this.renderModel(stack, buffer, packedLight, Sheets.CHEST_LOCATION.texture(), this.chestBottom, this.chestLid, this.chestLock);
-            case CHAIR -> this.renderModel(stack, buffer, packedLight, texChair, this.chair);
-            case PAINTING -> {
-
+            case CHEST -> {
+                stack.scale(-1.0f, -1.0f, 1.0f);
+                stack.translate(0.5, -1.501f, -0.5);
+                this.renderModel(stack, Sheets.CHEST_LOCATION.buffer(buffer, RenderType::entityCutout), packedLight, this.chestBottom, this.chestLid, this.chestLock);
             }
-            case WOOLYPLUSH -> this.renderModel(stack, buffer, packedLight, texWooly, this.woolyPlush);
-            case CHIPSQUEEKPLUSH -> this.renderModel(stack, buffer, packedLight, texChipsqueek, this.chipSqueekPlush);
+            case CHAIR -> this.renderModel(stack, this.simpleConsumer(buffer, texChair), packedLight, this.chair);
+            /*case PAINTING -> {
+
+            }*/
+            case WOOLYPLUSH ->
+                    this.renderModel(stack, this.simpleConsumer(buffer, texWooly), packedLight, this.woolyPlush);
+            case CHIPSQUEEKPLUSH ->
+                    this.renderModel(stack, this.simpleConsumer(buffer, texChipsqueek), packedLight, this.chipSqueekPlush);
         }
-        /*
-        float yaw = Mth.lerp(partialTicks, entity.yRotO, entity.getYRot());
-        float pitch = Mth.lerp(partialTicks, entity.xRotO, entity.getXRot());
-        float partialLivingTicks = (float)entity.tickCount + partialTicks;
-        stack.mulPose(Vector3f.YP.rotationDegrees(180.0F + yaw));
-        stack.mulPose(Vector3f.XP.rotationDegrees(pitch));
-        VertexConsumer ivertexbuilder = buffer.getBuffer(this.model.renderType(this.getTextureLocation(entity)));
-        this.model.renderToBuffer(stack, ivertexbuilder, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);*/
         stack.popPose();
         super.render(entity, rotation, partialTicks, stack, buffer, packedLight);
     }
@@ -150,9 +148,13 @@ public class RenderFurnitures extends EntityRenderer<EntityFurniture> {
         dispatcher.getModelRenderer().renderModel(stack.last(), buffer.getBuffer(Sheets.solidBlockSheet()), state, model, 0.0f, 0.0f, 0.0f, packedLight, OverlayTexture.NO_OVERLAY);
     }
 
-    private void renderModel(PoseStack stack, MultiBufferSource buffer, int packedLight, ResourceLocation tex, ModelPart... parts) {
-        stack.mulPose(Vector3f.XP.rotationDegrees(180));
-        VertexConsumer ivertexbuilder = buffer.getBuffer(RenderType.entityCutout(tex));
+    private VertexConsumer simpleConsumer(MultiBufferSource buffer, ResourceLocation tex) {
+        return buffer.getBuffer(RenderType.entityCutout(tex));
+    }
+
+    private void renderModel(PoseStack stack, VertexConsumer ivertexbuilder, int packedLight, ModelPart... parts) {
+        stack.scale(-1, -1, 1);
+        stack.translate(0.0, -1.501f, 0.0);
         for (ModelPart part : parts)
             part.render(stack, ivertexbuilder, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
     }

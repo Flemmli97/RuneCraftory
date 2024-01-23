@@ -58,6 +58,7 @@ public class EntityMarionetta extends BossMonster {
         b.put(SPIN, (anim, entity) -> {
             if (entity.aiVarHelper == null)
                 return;
+            entity.getNavigation().stop();
             entity.setDeltaMovement(new Vec3(entity.aiVarHelper[0], 0, entity.aiVarHelper[2]));
             if (anim.getTick() >= anim.getAttackTime()) {
                 entity.mobAttack(anim, null, e -> CombatUtils.mobAttack(entity, e, new CustomDamage.Builder(entity).hurtResistant(8), CombatUtils.getAttributeValue(entity, Attributes.ATTACK_DAMAGE)));
@@ -154,7 +155,7 @@ public class EntityMarionetta extends BossMonster {
 
     @Override
     protected void applyAttributes() {
-        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.29);
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.26);
         super.applyAttributes();
     }
 

@@ -20,8 +20,8 @@ public class PlushThrowSpell extends Spell {
             EntityFurniture furniture = new EntityFurniture(level, entity, entity.getRandom().nextBoolean() ? EntityFurniture.Type.WOOLYPLUSH : EntityFurniture.Type.CHIPSQUEEKPLUSH);
             furniture.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.9f));
             if (entity instanceof Mob mob && mob.getTarget() != null) {
-                Vec3 dir = mob.getTarget().position().subtract(entity.position()).scale(0.45 + entity.getRandom().nextDouble() * 0.2);
-                furniture.shootAtPosition(entity.getX() + dir.x(), mob.getTarget().getY() + 12, entity.getZ() + dir.z(), 0.95f + entity.getRandom().nextFloat() * 0.2f, 9);
+                Vec3 dir = mob.getTarget().position().subtract(entity.position()).scale(0.35 + entity.getRandom().nextDouble() * 0.2);
+                furniture.shootAtPosition(entity.getX() + dir.x(), mob.getTarget().getY() + 10, entity.getZ() + dir.z(), 0.95f + entity.getRandom().nextFloat() * 0.2f, 9);
             } else
                 furniture.shoot(entity, entity.getXRot(), entity.getYRot(), -55, 0.95f + entity.getRandom().nextFloat() * 0.2f, 9);
             level.addFreshEntity(furniture);

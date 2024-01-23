@@ -130,6 +130,7 @@ public class MarionettaAttackGoal<T extends EntityMarionetta> extends AnimatedAt
             dir = MathUtils.rotate(new Vec3(0, 1, 0), dir, this.attacker.getRandom().nextBoolean() ? 90 : -90);
             this.attacker.setDeltaMovement(-dir.x(), 0.22, -dir.z());
         }
+        this.attacker.getNavigation().stop();
     }
 
     @Override

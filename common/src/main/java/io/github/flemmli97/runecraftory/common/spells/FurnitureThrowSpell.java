@@ -26,10 +26,10 @@ public class FurnitureThrowSpell extends Spell {
             double zRand = entity.getZ() + (entity.getRandom().nextDouble() - 0.5) * 13;
             furniture.setPos(xRand, yRand, zRand);
             if (entity instanceof Mob mob && mob.getTarget() != null) {
-                furniture.shootAtPosition(mob.getTarget().getX(), mob.getTarget().getY() + mob.getTarget().getBbHeight() * 0.5, mob.getTarget().getZ(), 0.1f, 1.4f);
+                furniture.shootAtPosition(mob.getTarget().getX(), mob.getTarget().getY() + mob.getTarget().getBbHeight() * 0.5, mob.getTarget().getZ(), 0.1f, 2.3f);
             } else {
                 Vec3 look = entity.getLookAngle().scale(5);
-                furniture.shootAtPosition(look.x(), look.y(), look.z(), 0.1f, 1.4f);
+                furniture.shootAtPosition(look.x(), look.y(), look.z(), 0.1f, 2.3f);
             }
             level.addFreshEntity(furniture);
         }
