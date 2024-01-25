@@ -15,6 +15,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
@@ -38,7 +39,7 @@ import java.util.function.BiConsumer;
 
 public class EntityRafflesia extends BossMonster implements DelayedAttacker {
 
-    public static final AnimatedAction POISON_BREATH = new AnimatedAction(2.08, 0.48, "breath");
+    public static final AnimatedAction POISON_BREATH = new AnimatedAction(2.08, 0.56, "breath");
     public static final AnimatedAction PARA_BREATH = AnimatedAction.copyOf(POISON_BREATH, "paralysis_breath");
     public static final AnimatedAction SLEEP_BREATH = AnimatedAction.copyOf(POISON_BREATH, "sleep_breath");
     public static final AnimatedAction WIND_BLADE_X8 = new AnimatedAction(0.88, 0.44, "casting");
@@ -206,7 +207,8 @@ public class EntityRafflesia extends BossMonster implements DelayedAttacker {
     public void handleAttack(AnimatedAction anim) {
         LivingEntity target = this.getTarget();
         if (target != null && anim.getTick() == 1) {
-            this.getLookControl().setLookAt(target, 120.0f, 30.0f);
+            this.yHeadRot = (float) (Mth.atan2(target.getZ() - this.getZ(), target.getX() - this.getX()) * (180 / Math.PI)) - 90;
+            this.yBodyRot = this.yHeadRot;
             this.targetPosition = target.position();
         } else
             this.targetPosition = null;

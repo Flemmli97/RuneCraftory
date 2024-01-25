@@ -25,7 +25,7 @@ public class RafflesiaBreathSummoner extends ProjectileSummonHelperEntity {
         this.type = element;
         this.entityData.set(TYPE, this.type.ordinal());
         this.damageMultiplier = 0.7f;
-        this.maxLivingTicks = 27;
+        this.maxLivingTicks = 16;
     }
 
     @Override
@@ -46,12 +46,12 @@ public class RafflesiaBreathSummoner extends ProjectileSummonHelperEntity {
 
     @Override
     protected void summonProjectiles() {
-        float rot = Mth.wrapDegrees(this.getYRot() + Mth.sin(this.tickCount * Mth.PI / (this.maxLivingTicks * 0.5f)) * 15);
+        float rot = Mth.wrapDegrees(this.getYRot() - (this.tickCount * 50f / this.maxLivingTicks - 25f));
         EntityStatusBall ball = new EntityStatusBall(this.level, this.getOwner());
         ball.setType(this.type);
         ball.setDamageMultiplier(this.damageMultiplier);
         ball.shootFromRotation(this, this.getXRot(), rot, 0, 0.25f, 0);
-        Vec3 delta = ball.getDeltaMovement().normalize().scale(2);
+        Vec3 delta = ball.getDeltaMovement().normalize().scale(0.5);
         ball.setPos(ball.getX() + delta.x(), this.getY(), ball.getZ() + delta.z());
         this.level.addFreshEntity(ball);
     }
