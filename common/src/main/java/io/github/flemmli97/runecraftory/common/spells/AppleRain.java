@@ -20,9 +20,14 @@ public class AppleRain extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         int apples = switch (this.type) {
-            case NORMAL -> 24;
-            case BIG -> 20;
-            case LOTS -> 40;
+            case NORMAL -> 64;
+            case BIG -> 50;
+            case LOTS -> 96;
+        };
+        int range = switch (this.type) {
+            case NORMAL -> 9;
+            case BIG -> 10;
+            case LOTS -> 12;
         };
         for (int i = 0; i < apples; i++) {
             EntityAppleProjectile apple = new EntityAppleProjectile(level, entity);
@@ -31,9 +36,9 @@ public class AppleRain extends Spell {
                 apple.withSizeInc(1);
             } else
                 apple.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1.15f));
-            double x = entity.getX() + (entity.getRandom().nextDouble() - 0.5) * 8;
-            double y = entity.getY() + entity.getBbHeight() + entity.getRandom().nextDouble() * 3;
-            double z = entity.getZ() + (entity.getRandom().nextDouble() - 0.5) * 8;
+            double x = entity.getX() + (entity.getRandom().nextDouble() - 0.5) * range;
+            double y = entity.getY() + entity.getBbHeight() + 2 + entity.getRandom().nextDouble() * 4;
+            double z = entity.getZ() + (entity.getRandom().nextDouble() - 0.5) * range;
             apple.setPos(x, y, z);
             level.addFreshEntity(apple);
         }

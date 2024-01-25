@@ -117,8 +117,8 @@ public class EntityAppleProjectile extends BaseProjectile {
     protected EntityHitResult getEntityHit(Vec3 from, Vec3 to) {
         if (!this.isAlive())
             return null;
-        if (this.attackedEntities.size() < 1)
-            return RayTraceUtils.projectileRayTrace(this.level, this, from, to, this.getBoundingBox().expandTowards(this.getDeltaMovement()).inflate(1), this::canHit, this.radius());
+        if (this.attackedEntities.isEmpty())
+            return RayTraceUtils.rayTraceEntities(this.level, this, from, to, this.getBoundingBox().expandTowards(this.getDeltaMovement()).inflate(1), this::canHit, e -> this.radius() + 0.3f);
         return null;
     }
 
