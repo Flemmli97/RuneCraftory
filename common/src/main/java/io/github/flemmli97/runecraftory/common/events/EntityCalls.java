@@ -432,6 +432,8 @@ public class EntityCalls {
 
     public static void postDamage(LivingEntity entity, DamageSource src, float amount) {
         Entity attacker = src.getEntity();
+        if (attacker instanceof LivingEntity)
+            entity.removeEffect(ModEffects.SLEEP.get());
         if (amount > 0 && attacker instanceof LivingEntity living) {
             float drainPercent = (float) (CombatUtils.statusEffectChance(living, ModAttributes.DRAIN.get(), entity));
             if (drainPercent > 0f) {

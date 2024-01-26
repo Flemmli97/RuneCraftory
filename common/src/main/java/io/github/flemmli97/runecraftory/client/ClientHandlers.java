@@ -25,6 +25,7 @@ import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.client.CameraType;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.toasts.RecipeToast;
@@ -86,6 +87,7 @@ public class ClientHandlers {
     public static void grabMouse(LivingEntity entity) {
         if (entity == Minecraft.getInstance().player && Minecraft.getInstance().screen == null)
             Minecraft.getInstance().mouseHandler.grabMouse();
+        KeyMapping.releaseAll();
     }
 
     public static boolean disableMouseMove() {
