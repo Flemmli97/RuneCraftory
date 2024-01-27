@@ -190,7 +190,15 @@ public class CombatUtils {
 
     public static void knockBackEntity(LivingEntity attacker, LivingEntity entity, float strength) {
         Vec3 distVec = entity.position().subtract(attacker.position()).normalize();
-        entity.knockback(strength, -distVec.x, -distVec.z);
+        knockbackEntityIgnoreResistance(entity, strength, -distVec.x, -distVec.z);
+    }
+
+    public static void knockbackEntityIgnoreResistance(LivingEntity entity, double strength, double x, double z) {
+        if (!entity.getType().is(ModTags.BOSSES))
+            applyTempAttribute(entity, Attributes.KNOCKBACK_RESISTANCE, -entity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
+        entity.knockback(strength, x, z);
+        if (!entity.getType().is(ModTags.BOSSES))
+            removeTempAttribute(entity, Attributes.KNOCKBACK_RESISTANCE);
     }
 
     public static void knockBack(LivingEntity entity, CustomDamage source) {

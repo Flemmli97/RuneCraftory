@@ -244,7 +244,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     public static AttributeSupplier.Builder createAttributes(Collection<? extends RegistryEntrySupplier<Attribute>> atts) {
-        AttributeSupplier.Builder map = Monster.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.23);
+        AttributeSupplier.Builder map = Monster.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.23)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 1);
         if (atts != null)
             for (RegistryEntrySupplier<Attribute> att : atts)
                 map.add(att.get());
@@ -1294,11 +1295,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             this.setHealth(0.01f);
             this.setPlayDeath(true);
         }
-    }
-
-    @Override
-    public void knockback(double strength, double xRatio, double zRatio) {
-        super.knockback(strength, xRatio, zRatio);
     }
 
     //=====Movement Handling
