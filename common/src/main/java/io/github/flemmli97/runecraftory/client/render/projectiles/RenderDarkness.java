@@ -26,7 +26,7 @@ public class RenderDarkness extends EntityRenderer<EntityDarkness> {
 
     @Override
     public void render(EntityDarkness entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
-        float size = 1.2f + entity.getRadius() + Mth.sin((entity.tickCount + partialTicks) * 0.3f) * 0.06f;
+        float size = 1.5f + entity.getRadius() + Mth.sin((entity.tickCount + partialTicks) * 0.3f) * 0.06f;
         this.textureBuilder.setLight(packedLight);
         stack.pushPose();
         boolean playerView = entity.getOwner() == Minecraft.getInstance().player
