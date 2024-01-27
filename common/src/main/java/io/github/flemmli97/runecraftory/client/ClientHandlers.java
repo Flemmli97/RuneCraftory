@@ -84,10 +84,12 @@ public class ClientHandlers {
         }
     }
 
-    public static void grabMouse(LivingEntity entity) {
-        if (entity == Minecraft.getInstance().player && Minecraft.getInstance().screen == null)
+    public static void grabMouse(LivingEntity entity, boolean sleeping) {
+        if (entity == Minecraft.getInstance().player && Minecraft.getInstance().screen == null) {
             Minecraft.getInstance().mouseHandler.grabMouse();
-        KeyMapping.releaseAll();
+            if (sleeping)
+                KeyMapping.releaseAll();
+        }
     }
 
     public static boolean disableMouseMove() {
