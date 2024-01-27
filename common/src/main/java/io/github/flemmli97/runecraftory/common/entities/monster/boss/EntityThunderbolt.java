@@ -189,7 +189,6 @@ public class EntityThunderbolt extends BossMonster {
 
     @Override
     public int animationCooldown(AnimatedAction anim) {
-        int diffAdd = this.difficultyCooldown();
         if (anim != null)
             switch (anim.getID()) {
                 case "laser_kick_2":
@@ -199,7 +198,7 @@ public class EntityThunderbolt extends BossMonster {
                 case "charge_3":
                     return 1;
             }
-        return 24 + this.getRandom().nextInt(22) - (this.isEnraged() ? 15 : 0) + diffAdd;
+        return super.animationCooldown(anim);
     }
 
     @Override

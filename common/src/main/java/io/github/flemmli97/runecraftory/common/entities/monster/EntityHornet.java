@@ -78,7 +78,7 @@ public class EntityHornet extends BaseMonster {
 
     @Override
     public int animationCooldown(@Nullable AnimatedAction anim) {
-        return (int) (super.animationCooldown(anim) * 3.5);
+        return (int) (super.animationCooldown(anim) * 2.7);
     }
 
     @Override

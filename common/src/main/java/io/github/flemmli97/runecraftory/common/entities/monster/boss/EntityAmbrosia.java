@@ -109,11 +109,9 @@ public class EntityAmbrosia extends BossMonster implements DelayedAttacker {
 
     @Override
     public int animationCooldown(AnimatedAction anim) {
-        int diffAdd = this.difficultyCooldown();
-        if (anim != null)
-            if (anim.is(KICK_1, KICK_2, POLLEN))
-                return 3;
-        return 34 + this.getRandom().nextInt(22) - (this.isEnraged() ? 20 : 0) + diffAdd;
+        if (anim != null && anim.is(KICK_1, KICK_2, POLLEN))
+            return 3;
+        return super.animationCooldown(anim);
     }
 
     @Override

@@ -169,12 +169,6 @@ public class EntityMarionetta extends BossMonster {
     }
 
     @Override
-    public int animationCooldown(AnimatedAction anim) {
-        int diffAdd = this.difficultyCooldown();
-        return 30 + this.getRandom().nextInt(22) - (this.isEnraged() ? 20 : 0) + diffAdd;
-    }
-
-    @Override
     public boolean hurt(DamageSource source, float amount) {
         if (this.caughtEntities.contains(source.getEntity()))
             return false;

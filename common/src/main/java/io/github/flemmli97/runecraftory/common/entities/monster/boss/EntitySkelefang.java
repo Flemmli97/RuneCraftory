@@ -505,12 +505,6 @@ public class EntitySkelefang extends BossMonster {
     }
 
     @Override
-    public int animationCooldown(AnimatedAction anim) {
-        int diffAdd = this.difficultyCooldown();
-        return 25 + this.getRandom().nextInt(15) - (this.isEnraged() ? 13 : 0) + diffAdd;
-    }
-
-    @Override
     protected boolean checkRage() {
         return false;
     }

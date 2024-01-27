@@ -248,12 +248,6 @@ public class EntityRafflesia extends BossMonster implements DelayedAttacker {
     }
 
     @Override
-    public int animationCooldown(AnimatedAction anim) {
-        int diffAdd = this.difficultyCooldown();
-        return 25 + this.getRandom().nextInt(15) - (this.isEnraged() ? 13 : 0) + diffAdd;
-    }
-
-    @Override
     public boolean hurt(DamageSource source, float amount) {
         return !(this.getAnimationHandler().isCurrent(ANGRY)) && super.hurt(source, amount);
     }

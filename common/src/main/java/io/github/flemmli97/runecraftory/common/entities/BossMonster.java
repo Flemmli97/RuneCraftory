@@ -161,6 +161,12 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
         this.entityData.set(ENRAGED, flag);
     }
 
+    @Override
+    public int animationCooldown(AnimatedAction anim) {
+        int diffAdd = this.difficultyCooldown();
+        return 30 + this.getRandom().nextInt(this.isEnraged() ? 25 : 40) + diffAdd;
+    }
+
     protected void updateBossBar() {
         this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
     }

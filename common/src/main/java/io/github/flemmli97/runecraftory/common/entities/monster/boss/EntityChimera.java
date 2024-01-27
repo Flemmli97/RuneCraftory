@@ -158,12 +158,6 @@ public class EntityChimera extends BossMonster implements DelayedAttacker {
     }
 
     @Override
-    public int animationCooldown(AnimatedAction anim) {
-        int diffAdd = this.difficultyCooldown();
-        return 24 + this.getRandom().nextInt(18) - (this.isEnraged() ? 13 : 0) + diffAdd;
-    }
-
-    @Override
     public boolean hurt(DamageSource source, float amount) {
         return (!this.getAnimationHandler().hasAnimation() || !(this.getAnimationHandler().isCurrent(DEFEAT, ANGRY))) && super.hurt(source, amount);
     }

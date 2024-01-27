@@ -67,11 +67,6 @@ public class EntityLeafBall extends BaseMonster {
     }
 
     @Override
-    public int animationCooldown(AnimatedAction anim) {
-        return this.getRandom().nextInt(20) + 30;
-    }
-
-    @Override
     public double maxAttackRange(AnimatedAction anim) {
         return 0.9;
     }

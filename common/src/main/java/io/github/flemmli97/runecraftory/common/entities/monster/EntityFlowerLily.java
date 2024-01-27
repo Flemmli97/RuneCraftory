@@ -96,7 +96,7 @@ public class EntityFlowerLily extends BaseMonster {
 
     @Override
     public int animationCooldown(@Nullable AnimatedAction anim) {
-        return (int) (super.animationCooldown(anim) * 2.5);
+        return (int) (super.animationCooldown(anim) * 1.8);
     }
 
     @Override

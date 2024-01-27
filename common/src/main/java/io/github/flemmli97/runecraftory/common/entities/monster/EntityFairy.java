@@ -86,11 +86,6 @@ public class EntityFairy extends BaseMonster implements HealingPredicateEntity {
     }
 
     @Override
-    public int animationCooldown(AnimatedAction anim) {
-        return this.getRandom().nextInt(10) + 30;
-    }
-
-    @Override
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(LIGHT)) {
             this.getNavigation().stop();

@@ -819,12 +819,12 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     public int animationCooldown(@Nullable AnimatedAction anim) {
         int diffAdd = this.difficultyCooldown();
         if (anim == null)
-            return this.getRandom().nextInt(30) + 25 + diffAdd;
-        return this.getRandom().nextInt(30) + 15 + diffAdd;
+            return this.getRandom().nextInt(30) + 35 + diffAdd;
+        return this.getRandom().nextInt(30) + 25 + diffAdd;
     }
 
     public int difficultyCooldown() {
-        int diffAdd = 25;
+        int diffAdd = 20;
         Difficulty diff = this.level.getDifficulty();
         if (this.level.getDifficulty() == Difficulty.HARD)
             diffAdd = 0;
@@ -1298,7 +1298,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     @Override
     public void knockback(double strength, double xRatio, double zRatio) {
-        super.knockback(0, xRatio, zRatio);
+        super.knockback(strength, xRatio, zRatio);
     }
 
     //=====Movement Handling

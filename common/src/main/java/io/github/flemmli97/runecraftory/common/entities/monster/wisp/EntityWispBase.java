@@ -89,11 +89,6 @@ public abstract class EntityWispBase extends BaseMonster {
     }
 
     @Override
-    public int animationCooldown(AnimatedAction anim) {
-        return this.getRandom().nextInt(10) + 30;
-    }
-
-    @Override
     public boolean hurt(DamageSource source, float amount) {
         if (this.getAnimationHandler().isCurrent(VANISH))
             return false;

@@ -271,12 +271,6 @@ public class EntityRaccoon extends BossMonster {
     }
 
     @Override
-    public int animationCooldown(AnimatedAction anim) {
-        int diffAdd = this.difficultyCooldown();
-        return 25 + this.getRandom().nextInt(25) - (this.isEnraged() ? 15 : 0) + diffAdd;
-    }
-
-    @Override
     public void baseTick() {
         super.baseTick();
         if (!this.level.isClientSide) {

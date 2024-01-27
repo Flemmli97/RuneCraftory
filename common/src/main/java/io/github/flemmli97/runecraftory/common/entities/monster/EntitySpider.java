@@ -111,11 +111,6 @@ public class EntitySpider extends BaseMonster {
     }
 
     @Override
-    public int animationCooldown(AnimatedAction anim) {
-        return this.getRandom().nextInt(10) + 30;
-    }
-
-    @Override
     public double maxAttackRange(AnimatedAction anim) {
         return 1;
     }

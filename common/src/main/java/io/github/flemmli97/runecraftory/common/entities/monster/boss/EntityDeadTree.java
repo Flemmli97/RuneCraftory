@@ -185,8 +185,7 @@ public class EntityDeadTree extends BossMonster {
 
     @Override
     public int animationCooldown(AnimatedAction anim) {
-        int diffAdd = this.difficultyCooldown();
-        int cooldown = 25 + this.getRandom().nextInt(15) - (this.isEnraged() ? 7 : 0) + diffAdd;
+        int cooldown = super.animationCooldown(anim);
         if (anim != null && anim.is(SPIKE))
             cooldown += 40;
         return cooldown;

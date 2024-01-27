@@ -45,6 +45,11 @@ public class EntityAnt extends BaseMonster {
     }
 
     @Override
+    public int animationCooldown(AnimatedAction anim) {
+        return Math.max(25, (int) (super.animationCooldown(anim) * 0.7));
+    }
+
+    @Override
     public double maxAttackRange(AnimatedAction anim) {
         return 0.85;
     }
