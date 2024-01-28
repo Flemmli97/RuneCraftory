@@ -45,6 +45,7 @@ import io.github.flemmli97.runecraftory.common.attackactions.ToolHammerUse;
 import io.github.flemmli97.runecraftory.common.attackactions.TornadoSwingAttack;
 import io.github.flemmli97.runecraftory.common.attackactions.TwinAttack;
 import io.github.flemmli97.runecraftory.common.attackactions.UpperCutAttack;
+import io.github.flemmli97.runecraftory.common.attackactions.WaterLaserAttack;
 import io.github.flemmli97.runecraftory.common.attackactions.WindSlashAttack;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemDualBladeBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemLongSwordBase;
@@ -98,6 +99,10 @@ public class ModAttackActions {
     public static final RegistryEntrySupplier<AttackAction> TOOL_HAMMER_USE = register("tool_hammer", ToolHammerUse::new);
     public static final RegistryEntrySupplier<AttackAction> FIREBALL_USE = register("fireball_use", () -> new FireballUseAttack(false));
     public static final RegistryEntrySupplier<AttackAction> FIREBALL_BIG_USE = register("fireball_big_use", () -> new FireballUseAttack(true));
+
+    public static final RegistryEntrySupplier<AttackAction> WATER_LASER_USE = register("water_laser_use", () -> new WaterLaserAttack(0));
+    public static final RegistryEntrySupplier<AttackAction> DOUBLE_WATER_LASER_USE = register("double_water_laser_use", () -> new WaterLaserAttack(1));
+    public static final RegistryEntrySupplier<AttackAction> TRIPLE_WATER_LASER_USE = register("triple_water_laser_use", () -> new WaterLaserAttack(2));
 
     public static final RegistryEntrySupplier<AttackAction> TOOL_ATTACK = register("tool_attack", () -> new TimedUseAttack(() -> AnimatedAction.builder(20, "tool_attack").marker(7).build(), (entity, stack) -> {
         //TODO

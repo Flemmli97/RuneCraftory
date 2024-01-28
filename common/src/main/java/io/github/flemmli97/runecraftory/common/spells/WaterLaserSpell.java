@@ -1,8 +1,11 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.Spell;
+import io.github.flemmli97.runecraftory.api.action.AttackAction;
+import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.common.entities.DelayedAttacker;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityWaterLaser;
+import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
@@ -18,7 +21,7 @@ public class WaterLaserSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         EntityWaterLaser laser = new EntityWaterLaser(level, entity);
-        laser.setMaxTicks(entity instanceof Player ? 44 : 15);
+        laser.setMaxTicks(entity instanceof Player ? PlayerModelAnimations.WATER_LASER_ONE.getLength() : 15);
         laser.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.95f));
         if (entity instanceof Mob mob) {
             Vec3 delayedPos;
@@ -31,5 +34,10 @@ public class WaterLaserSpell extends Spell {
         }
         level.addFreshEntity(laser);
         return true;
+    }
+
+    @Override
+    public AttackAction useAction() {
+        return ModAttackActions.WATER_LASER_USE.get();
     }
 }

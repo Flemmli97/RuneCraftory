@@ -2,7 +2,10 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.api.Spell;
+import io.github.flemmli97.runecraftory.api.action.AttackAction;
+import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityWaterLaser;
+import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
 import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
@@ -25,7 +28,7 @@ public class DoubleWaterLaserSpell extends Spell {
             EntityWaterLaser laser = new EntityWaterLaser(level, entity);
             Vec3 pre = laser.position();
             laser.setPos(laser.getX() + vec.x(), laser.getY() + vec.y(), laser.getZ() + vec.z());
-            laser.setMaxTicks(entity instanceof Player ? 44 : 15);
+            laser.setMaxTicks(entity instanceof Player ? PlayerModelAnimations.WATER_LASER_TWO.getLength() : 15);
             laser.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1.1f));
             laser.setPositionYawOffset(posYawOff);
             if (entity instanceof Mob mob && mob.getTarget() != null) {
@@ -36,5 +39,10 @@ public class DoubleWaterLaserSpell extends Spell {
             level.addFreshEntity(laser);
         }
         return true;
+    }
+
+    @Override
+    public AttackAction useAction() {
+        return ModAttackActions.DOUBLE_WATER_LASER_USE.get();
     }
 }

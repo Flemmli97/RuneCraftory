@@ -81,7 +81,9 @@ public class WeaponHandler {
     }
 
     private void setAnimationBasedOnState(LivingEntity entity, AttackAction action, boolean packet) {
-        this.currentAction.onEnd(entity, this);
+        AttackAction change = this.currentAction.onChange(entity, this);
+        if (change != null)
+            action = change;
         this.moveDir = null;
         if (action == ModAttackActions.NONE.get()) {
             this.resetStates();

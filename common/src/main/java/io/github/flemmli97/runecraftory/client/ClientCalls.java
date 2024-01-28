@@ -84,17 +84,21 @@ public class ClientCalls {
         }
         if (Minecraft.getInstance().screen != null)
             return;
-        if (ClientHandlers.spell1.onPress()) {
-            Platform.INSTANCE.sendToServer(new C2SSpellKey(0));
+        switch (ClientHandlers.spell1.onPress()) {
+            case PRESSING -> Platform.INSTANCE.sendToServer(new C2SSpellKey(0, false));
+            case RELEASE -> Platform.INSTANCE.sendToServer(new C2SSpellKey(0, true));
         }
-        if (ClientHandlers.spell2.onPress()) {
-            Platform.INSTANCE.sendToServer(new C2SSpellKey(1));
+        switch (ClientHandlers.spell2.onPress()) {
+            case PRESSING -> Platform.INSTANCE.sendToServer(new C2SSpellKey(1, false));
+            case RELEASE -> Platform.INSTANCE.sendToServer(new C2SSpellKey(1, true));
         }
-        if (ClientHandlers.spell3.onPress()) {
-            Platform.INSTANCE.sendToServer(new C2SSpellKey(2));
+        switch (ClientHandlers.spell3.onPress()) {
+            case PRESSING -> Platform.INSTANCE.sendToServer(new C2SSpellKey(2, false));
+            case RELEASE -> Platform.INSTANCE.sendToServer(new C2SSpellKey(2, true));
         }
-        if (ClientHandlers.spell4.onPress()) {
-            Platform.INSTANCE.sendToServer(new C2SSpellKey(3));
+        switch (ClientHandlers.spell4.onPress()) {
+            case PRESSING -> Platform.INSTANCE.sendToServer(new C2SSpellKey(3, false));
+            case RELEASE -> Platform.INSTANCE.sendToServer(new C2SSpellKey(3, true));
         }
     }
 

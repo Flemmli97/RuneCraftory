@@ -37,8 +37,12 @@ public class AttackAction extends CustomRegistryEntry<AttackAction> {
         }
     }
 
-    public void onEnd(LivingEntity entity, WeaponHandler handler) {
+    public AttackAction onChange(LivingEntity entity, WeaponHandler handler) {
+        this.onEnd(entity, handler);
+        return null;
+    }
 
+    public void onEnd(LivingEntity entity, WeaponHandler handler) {
     }
 
     public boolean canOverride(LivingEntity entity, WeaponHandler handler) {

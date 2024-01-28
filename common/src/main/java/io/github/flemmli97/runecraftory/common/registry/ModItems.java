@@ -35,6 +35,7 @@ import io.github.flemmli97.runecraftory.common.items.weapons.ItemAxeBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemDualBladeBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemGloveBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemHammerBase;
+import io.github.flemmli97.runecraftory.common.items.weapons.ItemHoldSpell;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemLongSwordBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemShortSwordBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpearBase;
@@ -738,9 +739,9 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> fireBallSmall = spell(() -> ModSpells.FIREBALL, "fireball");
     public static final RegistryEntrySupplier<Item> fireBallBig = spell(() -> ModSpells.BIG_FIREBALL, "fireball_big");
     public static final RegistryEntrySupplier<Item> explosion = spell(() -> ModSpells.EXPLOSION, "explosion");
-    public static final RegistryEntrySupplier<Item> waterLaser = spell(() -> ModSpells.WATER_LASER, "water_laser");
-    public static final RegistryEntrySupplier<Item> parallelLaser = spell(() -> ModSpells.PARALLEL_LASER, "parallel_laser");
-    public static final RegistryEntrySupplier<Item> deltaLaser = spell(() -> ModSpells.DELTA_LASER, "delta_laser");
+    public static final RegistryEntrySupplier<Item> waterLaser = spell(() -> ModSpells.WATER_LASER, "water_laser", true);
+    public static final RegistryEntrySupplier<Item> parallelLaser = spell(() -> ModSpells.PARALLEL_LASER, "parallel_laser", true);
+    public static final RegistryEntrySupplier<Item> deltaLaser = spell(() -> ModSpells.DELTA_LASER, "delta_laser", true);
     public static final RegistryEntrySupplier<Item> screwRock = spell(() -> ModSpells.SCREW_ROCK, "screw_rock");
     public static final RegistryEntrySupplier<Item> earthSpike = spell(() -> ModSpells.EARTH_SPIKE, "earth_spike");
     public static final RegistryEntrySupplier<Item> avengerRock = spell(() -> ModSpells.AVENGER_ROCK, "avenger_rock");
@@ -1477,7 +1478,13 @@ public class ModItems {
     }
 
     public static RegistryEntrySupplier<Item> spell(Supplier<Supplier<Spell>> sup, String name) {
-        RegistryEntrySupplier<Item> ret = ITEMS.register(name, () -> new ItemSpell(sup.get(), new Item.Properties().stacksTo(1).tab(RFCreativeTabs.cast)));
+        return spell(sup, name, false);
+    }
+
+    public static RegistryEntrySupplier<Item> spell(Supplier<Supplier<Spell>> sup, String name, boolean canHold) {
+        RegistryEntrySupplier<Item> ret = ITEMS.register(name, () -> canHold ?
+                new ItemHoldSpell(sup.get(), new Item.Properties().stacksTo(1).tab(RFCreativeTabs.cast)) :
+                new ItemSpell(sup.get(), new Item.Properties().stacksTo(1).tab(RFCreativeTabs.cast)));
         if (Platform.INSTANCE.isDatagen())
             TIER_2_CHEST.add(ret);
         if (Platform.INSTANCE.isDatagen())

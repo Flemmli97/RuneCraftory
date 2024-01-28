@@ -29,7 +29,7 @@ public class ItemSpell extends Item {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         if (player instanceof ServerPlayer serverPlayer && this.useSpell(serverPlayer, player.getItemInHand(hand))) {
             return InteractionResultHolder.success(player.getItemInHand(hand));
         }

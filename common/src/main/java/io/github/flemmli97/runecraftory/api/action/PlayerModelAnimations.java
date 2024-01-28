@@ -92,7 +92,12 @@ public class PlayerModelAnimations {
     );
 
     public static final AnimatedAction STAFF = addTo(AnimatedAction.builder((int) Math.ceil(0.6 * 20) + 1, "staff").marker(9).build());
-    public static final AnimatedAction STAFF_USE = addTo(new AnimatedAction(16 + 1, 4, "staff_use"));
+    public static final AnimatedAction STAFF_USE = addTo(new AnimatedAction(length(0.8), 0.3, "staff_use"));
+
+    public static final AnimatedAction WATER_LASER_ONE = addTo(new AnimatedAction(length(2.64), 0.3, "water_laser_one"));
+    public static final AnimatedAction WATER_LASER_TWO = addTo(new AnimatedAction(length(1.68), 0.3, "water_laser_two"));
+    public static final AnimatedAction WATER_LASER_THREE = addTo(new AnimatedAction(length(1), 0.3, "water_laser_three"));
+    public static final AnimatedAction WATER_LASER_END = addTo(new AnimatedAction(length(0.4), 0, "water_laser_end"));
 
     public static final AnimatedAction POWER_WAVE = addTo(new AnimatedAction(length(0.64), 0.32, "power_wave"));
     public static final List<AnimatedAction> DASH_SLASH = addTo(2, "dash_slash", count -> count == 2 ? Pair.of((int) Math.ceil(0.64 * 20), (int) Math.ceil(0.48 * 20))

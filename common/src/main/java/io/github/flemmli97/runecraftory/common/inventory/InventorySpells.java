@@ -9,6 +9,8 @@ import net.minecraft.world.item.ItemStack;
 
 public class InventorySpells extends SaveItemContainer {
 
+    private ItemStack inUseStack;
+
     public InventorySpells() {
         super(4);
     }
@@ -22,7 +24,16 @@ public class InventorySpells extends SaveItemContainer {
         ItemStack stack = this.getItem(index);
         if (stack.getItem() instanceof ItemSpell itemSpell) {
             itemSpell.useSpell(player, stack);
+            this.inUseStack = stack;
         }
+    }
+
+    public void onRelease() {
+        this.inUseStack = ItemStack.EMPTY;
+    }
+
+    public ItemStack getInUseStack() {
+        return this.inUseStack;
     }
 
     public void dropItemsAt(LivingEntity entity) {
