@@ -81,4 +81,9 @@ public class LongSwordAttack extends AttackAction {
     public AttackChain attackChain(LivingEntity entity, int chain) {
         return new AttackChain(CombatUtils.canPerform(entity, EnumSkills.LONGSWORD, 20) ? 4 : 3, chain == 4 ? 0 : 8);
     }
+
+    @Override
+    public boolean disableMovement(AnimatedAction current) {
+        return !GeneralConfig.allowMoveOnAttack.get() && super.disableMovement(current);
+    }
 }

@@ -61,6 +61,8 @@ public class GeneralConfig {
     public static int goldWateringCanWater = 150;
     public static int platinumWateringCanWater = 250;
 
+    public static ServerValue<Boolean> allowMoveOnAttack = new ServerValue.SyncedBoolean(false, "config.move.attack");
+
     public static float xpMultiplier = 1;
     public static float skillXpMultiplier = 1;
     public static float tamingMultiplier = 1;

@@ -56,7 +56,7 @@ public class CycloneAttack extends AttackAction {
     }
 
     @Override
-    public boolean disableMovement() {
+    public boolean disableMovement(AnimatedAction current) {
         return false;
     }
 }

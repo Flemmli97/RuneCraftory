@@ -22,6 +22,7 @@ import io.github.flemmli97.runecraftory.common.network.S2CCalendar;
 import io.github.flemmli97.runecraftory.common.network.S2CCapSync;
 import io.github.flemmli97.runecraftory.common.network.S2CDataPackSync;
 import io.github.flemmli97.runecraftory.common.network.S2CEntityDataSyncAll;
+import io.github.flemmli97.runecraftory.common.network.S2CSyncConfig;
 import io.github.flemmli97.runecraftory.common.network.S2CTriggers;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
@@ -97,6 +98,7 @@ public class EntityCalls {
                 }
             });
             SimpleQuestIntegration.INST().removeNPCQuestsFor(serverPlayer);
+            Platform.INSTANCE.sendToClient(new S2CSyncConfig(), serverPlayer);
         }
     }
 

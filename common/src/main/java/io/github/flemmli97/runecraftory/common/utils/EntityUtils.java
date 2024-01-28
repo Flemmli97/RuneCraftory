@@ -199,23 +199,21 @@ public class EntityUtils {
     }
 
     public static LivingEntity ownedProjectileTarget(Entity owner, int range) {
-        if (owner != null) {
-            if (owner instanceof Mob mob && mob.getTarget() != null)
-                return mob.getTarget();
-            else if (owner instanceof LivingEntity livingOwner) {
-                Function<LivingEntity, Predicate<LivingEntity>> generator = ownerEntity -> ownerEntity instanceof BaseMonster monster ? monster.targetPred : e -> {
-                    if (ownerEntity instanceof Player)
-                        return !(e instanceof Animal || e instanceof Npc || (e instanceof OwnableEntity ownable && ownerEntity.getUUID().equals(ownable.getOwnerUUID())));
-                    if (ownerEntity instanceof Mob mob) {
-                        return e == mob.getTarget();
-                    }
-                    return false;
-                };
-                Predicate<LivingEntity> pred = owner.getControllingPassenger() instanceof LivingEntity controller ? generator.apply(controller) : generator.apply(livingOwner);
-                return owner.level.getNearestEntity(LivingEntity.class, TargetingConditions.forCombat().ignoreLineOfSight()
-                        .range(range).selector(pred), livingOwner, livingOwner.getX(), livingOwner.getY(), livingOwner.getZ(), new AABB(-10, -10, -10, 10, 10, 10)
-                        .move(livingOwner.position()));
-            }
+        if (owner instanceof Mob mob && mob.getTarget() != null)
+            return mob.getTarget();
+        else if (owner instanceof LivingEntity livingOwner) {
+            Function<LivingEntity, Predicate<LivingEntity>> generator = ownerEntity -> ownerEntity instanceof BaseMonster monster ? monster.targetPred : e -> {
+                if (ownerEntity instanceof Player)
+                    return !(e instanceof Animal || e instanceof Npc || (e instanceof OwnableEntity ownable && ownerEntity.getUUID().equals(ownable.getOwnerUUID())));
+                if (ownerEntity instanceof Mob mob) {
+                    return e == mob.getTarget();
+                }
+                return false;
+            };
+            Predicate<LivingEntity> pred = owner.getControllingPassenger() instanceof LivingEntity controller ? generator.apply(controller) : generator.apply(livingOwner);
+            return owner.level.getNearestEntity(LivingEntity.class, TargetingConditions.forCombat().ignoreLineOfSight()
+                    .range(range).selector(pred), livingOwner, livingOwner.getX(), livingOwner.getY(), livingOwner.getZ(), new AABB(-10, -10, -10, 10, 10, 10)
+                    .move(livingOwner.position()));
         }
         return null;
     }

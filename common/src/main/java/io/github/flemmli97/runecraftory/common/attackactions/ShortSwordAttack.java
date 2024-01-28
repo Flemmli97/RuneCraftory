@@ -102,4 +102,9 @@ public class ShortSwordAttack extends AttackAction {
     public AttackChain attackChain(LivingEntity entity, int chain) {
         return new AttackChain(CombatUtils.canPerform(entity, EnumSkills.SHORTSWORD, 20) ? 6 : 5, chain == 6 ? 0 : 8);
     }
+
+    @Override
+    public boolean disableMovement(AnimatedAction current) {
+        return !GeneralConfig.allowMoveOnAttack.get() && super.disableMovement(current);
+    }
 }

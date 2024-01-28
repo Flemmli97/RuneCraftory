@@ -79,4 +79,9 @@ public class HammerAxeAttack extends AttackAction {
     public AttackChain attackChain(LivingEntity entity, int chain) {
         return new AttackChain(CombatUtils.canPerform(entity, EnumSkills.HAMMERAXE, 20) ? 3 : 2, chain == 3 ? 0 : 8);
     }
+
+    @Override
+    public boolean disableMovement(AnimatedAction current) {
+        return !GeneralConfig.allowMoveOnAttack.get() && super.disableMovement(current);
+    }
 }

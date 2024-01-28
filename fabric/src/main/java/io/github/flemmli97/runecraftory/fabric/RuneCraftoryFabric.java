@@ -44,6 +44,7 @@ import net.fabricmc.fabric.api.entity.event.v1.EntitySleepEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
@@ -55,6 +56,7 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.mixin.object.builder.SpawnRestrictionAccessor;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
@@ -70,6 +72,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.Heightmap;
 
+import javax.annotation.Nullable;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
@@ -81,6 +84,8 @@ public class RuneCraftoryFabric implements ModInitializer {
     public static final Path confDir = FabricLoader.getInstance().getConfigDir().resolve(RuneCraftory.MODID);
 
     private static boolean initAttributes;
+
+    private static MinecraftServer SERVER_INSTANCE;
 
     public static void entityTick(LivingEntity entity) {
         if (entity instanceof Player player) {
@@ -238,6 +243,9 @@ public class RuneCraftoryFabric implements ModInitializer {
         ServerChunkEvents.CHUNK_LOAD.register(((world, chunk) -> FarmlandHandler.get(world.getServer()).onChunkLoad(world, chunk.getPos())));
         ServerChunkEvents.CHUNK_UNLOAD.register(((world, chunk) -> FarmlandHandler.get(world.getServer()).onChunkUnLoad(world, chunk.getPos())));
 
+        ServerLifecycleEvents.SERVER_STARTED.register(server -> SERVER_INSTANCE = server);
+        ServerLifecycleEvents.SERVER_STOPPED.register(server -> SERVER_INSTANCE = null);
+
         SimpleQuestIntegration.INST().register();
     }
 
@@ -288,5 +296,10 @@ public class RuneCraftoryFabric implements ModInitializer {
         if (attribute instanceof RangedAttribute) {
             ((AttributeAccessor) attribute).setMaxValue(value);
         }
+    }
+
+    @Nullable
+    public static MinecraftServer getServerInstance() {
+        return SERVER_INSTANCE;
     }
 }

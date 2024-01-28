@@ -190,7 +190,7 @@ public class WeaponHandler {
     }
 
     public boolean isMovementBlocked() {
-        return this.currentAction.disableMovement();
+        return this.currentAction.disableMovement(this.currentAnim);
     }
 
     public boolean isItemSwapBlocked() {

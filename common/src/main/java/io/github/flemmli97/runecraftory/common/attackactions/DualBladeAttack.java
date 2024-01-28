@@ -146,6 +146,11 @@ public class DualBladeAttack extends AttackAction {
     }
 
     @Override
+    public boolean disableMovement(AnimatedAction current) {
+        return !GeneralConfig.allowMoveOnAttack.get() && super.disableMovement(current);
+    }
+
+    @Override
     public boolean canOverride(LivingEntity entity, WeaponHandler handler) {
         AnimatedAction anim = handler.getCurrentAnim();
         if (anim == null)

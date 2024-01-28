@@ -57,7 +57,7 @@ public class AttackAction extends CustomRegistryEntry<AttackAction> {
         return true;
     }
 
-    public boolean disableMovement() {
+    public boolean disableMovement(AnimatedAction current) {
         return true;
     }
 

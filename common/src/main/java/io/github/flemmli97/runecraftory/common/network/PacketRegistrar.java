@@ -54,6 +54,7 @@ public class PacketRegistrar {
         register.registerMessage(id++, S2CFarmlandRemovePacket.ID, S2CFarmlandRemovePacket.class, S2CFarmlandRemovePacket::write, S2CFarmlandRemovePacket::read, S2CFarmlandRemovePacket::handle);
         register.registerMessage(id++, S2CNpcDialogue.ID, S2CNpcDialogue.class, S2CNpcDialogue::write, S2CNpcDialogue::read, S2CNpcDialogue::handle);
         register.registerMessage(id++, S2COpenQuestGui.ID, S2COpenQuestGui.class, S2COpenQuestGui::write, S2COpenQuestGui::read, S2COpenQuestGui::handle);
+        register.registerMessage(id++, S2CSyncConfig.ID, S2CSyncConfig.class, S2CSyncConfig::write, S2CSyncConfig::read, S2CSyncConfig::handle);
         return id;
     }
 

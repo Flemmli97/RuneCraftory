@@ -22,7 +22,7 @@ public class PlayerModelAnimations {
                     case 1, 3 -> attack = (int) Math.ceil(0.32 * 20);
                     case 2 -> attack = (int) Math.ceil(0.24 * 20);
                     case 4 -> attack = (int) Math.ceil(0.2 * 20);
-                    case 5 -> attack = (int) Math.ceil(0.28 * 20);
+                    case 5 -> attack = (int) Math.ceil(0.24 * 20);
                     case 6 -> defaultLength = (int) Math.ceil(1.36 * 20);
                 }
                 return Pair.of(defaultLength, attack);

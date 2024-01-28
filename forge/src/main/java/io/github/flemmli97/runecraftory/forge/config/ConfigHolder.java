@@ -4,8 +4,11 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.config.ClientConfig;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
+import io.github.flemmli97.runecraftory.common.network.S2CSyncConfig;
+import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.io.File;
 import java.util.LinkedHashMap;
@@ -78,12 +81,16 @@ public record ConfigHolder<T>(ModConfig.Type configType, String configName,
         GeneralConfig.silverWateringCanWater = spec.silverWateringCanWater.get();
         GeneralConfig.goldWateringCanWater = spec.goldWateringCanWater.get();
         GeneralConfig.platinumWateringCanWater = spec.platinumWateringCanWater.get();
+        GeneralConfig.allowMoveOnAttack.read(spec.allowMoveOnAttack.get());
 
         GeneralConfig.xpMultiplier = spec.xpMultiplier.get().floatValue();
         GeneralConfig.skillXpMultiplier = spec.skillXpMultiplier.get().floatValue();
         GeneralConfig.tamingMultiplier = spec.tamingMultiplier.get().floatValue();
 
         GeneralConfig.debugAttack = spec.debugAttack.get();
+
+        if (ServerLifecycleHooks.getCurrentServer() != null)
+            Platform.INSTANCE.sendToAll(new S2CSyncConfig(), ServerLifecycleHooks.getCurrentServer());
     }
 
     public static void loadClient(ClientConfigSpec spec) {

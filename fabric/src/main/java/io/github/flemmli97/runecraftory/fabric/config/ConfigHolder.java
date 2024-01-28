@@ -3,6 +3,9 @@ package io.github.flemmli97.runecraftory.fabric.config;
 import io.github.flemmli97.runecraftory.common.config.ClientConfig;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
+import io.github.flemmli97.runecraftory.common.network.S2CSyncConfig;
+import io.github.flemmli97.runecraftory.fabric.RuneCraftoryFabric;
+import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.config.CommentedJsonConfig;
 import io.github.flemmli97.tenshilib.common.config.JsonConfig;
 
@@ -72,12 +75,16 @@ public record ConfigHolder<T>(T configSpec, Consumer<T> loader) {
         GeneralConfig.silverWateringCanWater = spec.silverWateringCanWater.get();
         GeneralConfig.goldWateringCanWater = spec.goldWateringCanWater.get();
         GeneralConfig.platinumWateringCanWater = spec.platinumWateringCanWater.get();
+        GeneralConfig.allowMoveOnAttack.read(spec.allowMoveOnAttack.get());
 
         GeneralConfig.xpMultiplier = spec.xpMultiplier.get().floatValue();
         GeneralConfig.skillXpMultiplier = spec.skillXpMultiplier.get().floatValue();
         GeneralConfig.tamingMultiplier = spec.tamingMultiplier.get().floatValue();
 
         GeneralConfig.debugAttack = spec.debugAttack.get();
+
+        if (RuneCraftoryFabric.getServerInstance() != null)
+            Platform.INSTANCE.sendToAll(new S2CSyncConfig(), RuneCraftoryFabric.getServerInstance());
     }
 
     public static void loadClient(ClientConfigSpec spec) {

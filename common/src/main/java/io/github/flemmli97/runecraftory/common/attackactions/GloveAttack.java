@@ -107,6 +107,11 @@ public class GloveAttack extends AttackAction {
     }
 
     @Override
+    public boolean disableMovement(AnimatedAction current) {
+        return !GeneralConfig.allowMoveOnAttack.get() && super.disableMovement(current);
+    }
+
+    @Override
     public Pose getPose(LivingEntity entity, WeaponHandler handler) {
         if (handler.getCurrentAnim() == null)
             return null;

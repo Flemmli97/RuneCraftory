@@ -66,6 +66,7 @@ public class GeneralConfigSpec {
     public final ForgeConfigSpec.IntValue silverWateringCanWater;
     public final ForgeConfigSpec.IntValue goldWateringCanWater;
     public final ForgeConfigSpec.IntValue platinumWateringCanWater;
+    public final ForgeConfigSpec.BooleanValue allowMoveOnAttack;
 
     public final ForgeConfigSpec.DoubleValue xpMultiplier;
     public final ForgeConfigSpec.DoubleValue skillXpMultiplier;
@@ -156,6 +157,7 @@ public class GeneralConfigSpec {
         this.goldWateringCanWater = builder.defineInRange("Gold Watering Can Water", GeneralConfig.goldWateringCanWater, 0, Integer.MAX_VALUE);
         this.platinumWateringCanWater = builder.defineInRange("Platinum Watering Can Water", GeneralConfig.platinumWateringCanWater, 0, Integer.MAX_VALUE);
         builder.pop();
+        this.allowMoveOnAttack = builder.comment("Whether to allow moving during a normal melee attack. Synced to clients. Will look janky as the animation will not match player movements!").define("Allow Move On Attack", GeneralConfig.allowMoveOnAttack.get().booleanValue());
         builder.pop();
     }
 }
