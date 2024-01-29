@@ -55,12 +55,12 @@ public class SimpleQuestIntegrationImpl extends SimpleQuestIntegration {
         Platform.INSTANCE.sendToClient(new S2COpenQuestGui(data.getCurrentQuest().stream().anyMatch(p -> p.getQuest() instanceof QuestBoardQuest), quest.entrySet().stream().sorted(Map.Entry.comparingByKey())
                 .map(e -> {
                     List<MutableComponent> description = e.getValue().getDescription(player);
-                    if (e.getValue() instanceof NPCQuest npcQuest && npcQuest.getNpc() != null) {
-                        description = Stream.concat(Stream.of(new TranslatableComponent("runecraftory.quest.npc.header", npcQuest.getNpc().getName(), npcQuest.getNpc().blockPosition().getX(),
-                                        npcQuest.getNpc().blockPosition().getY(), npcQuest.getNpc().blockPosition().getZ()).withStyle(ChatFormatting.GOLD),
+                    if (e.getValue() instanceof NPCQuest npcQuest && npcQuest.getNpc(player.level) != null) {
+                        description = Stream.concat(Stream.of(new TranslatableComponent("runecraftory.quest.npc.header", npcQuest.getNpc(player.level).getName(), npcQuest.getNpc(player.level).blockPosition().getX(),
+                                        npcQuest.getNpc(player.level).blockPosition().getY(), npcQuest.getNpc(player.level).blockPosition().getZ()).withStyle(ChatFormatting.GOLD),
                                 (MutableComponent) TextComponent.EMPTY), description.stream()).toList();
                         return new ClientSideQuestDisplay(e.getKey(), e.getValue().getTask(player), description,
-                                npcQuest.getNpc().getLook().texture(), npcQuest.getNpc().getLook().playerSkin(), data.isActive(e.getKey()));
+                                npcQuest.getNpc(player.level).getLook().texture(), npcQuest.getNpc(player.level).getLook().playerSkin(), data.isActive(e.getKey()));
                     }
                     return new ClientSideQuestDisplay(e.getKey(), e.getValue().getTask(player), description,
                             null, null, data.isActive(e.getKey()));

@@ -79,7 +79,7 @@ public class NPCRelationManager {
             hearts.forEach(res -> list.add(StringTag.valueOf(res.toString())));
             quests.put(uuid.toString(), list);
         });
-        compound.put("CompletedQuests", heartsTag);
+        compound.put("CompletedQuests", quests);
         CompoundTag questsTracker = new CompoundTag();
         this.questTracker.forEach((uuid, tracker) -> {
             CompoundTag states = new CompoundTag();

@@ -618,6 +618,14 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         this.relationManager.resetQuest(player.getUUID(), quest);
     }
 
+    public void completeNPCQuest(ServerPlayer player, NPCQuest quest) {
+        this.relationManager.completeQuest(player.getUUID(), quest.getOriginID());
+    }
+
+    public boolean canAcceptNPCQuest(ServerPlayer player, NPCQuest quest) {
+        return this.relationManager.getCompletedQuests(player.getUUID()).containsAll(quest.parentQuests);
+    }
+
     public NPCRelation relationFor(Player player) {
         return this.relationManager.getRelationFor(player.getUUID());
     }
@@ -1282,10 +1290,6 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
                 shopList.forEach(s -> buf.writeWithCodec(ItemStack.CODEC, s));
             }));
         }
-    }
-
-    public boolean canAcceptNPCQuest(ServerPlayer player, NPCQuest quest) {
-        return this.relationManager.getCompletedQuests(player.getUUID()).containsAll(quest.parentQuests);
     }
 
     public void randomizeData() {

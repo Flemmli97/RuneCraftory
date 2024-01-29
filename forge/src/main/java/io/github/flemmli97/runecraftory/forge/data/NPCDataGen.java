@@ -177,7 +177,7 @@ public class NPCDataGen extends NPCDataProvider {
                         .addGiftResponse("like", new NPCData.Gift(ModTags.CROPS, "npc.shop_owner.male.1.like", 25), "Thank you. Appreciate it.")
                         .setNeutralGiftResponse("npc.shop_owner.male.1.gift.default", "Thanks. I would really like some crops.")
                         .withCombatAction(genericAttack)
-                        .addTranslation(QuestGen.getTask(QuestGen.SHIP_TURNIP), "Acquire Hardware??")
+                        .addTranslation(QuestGen.getTask(QuestGen.SHIP_TURNIP), "First Shipment")
                         .addTranslation(QuestGen.getDescription(QuestGen.SHIP_TURNIP), "Come see me."),
                 of(m -> {
                     m.put(NPCData.ConversationType.GREETING, new NPCData.ConversationSet.Builder("npc.shop_owner.male.1.greeting.default", "Hey. Nice to see you %s."));

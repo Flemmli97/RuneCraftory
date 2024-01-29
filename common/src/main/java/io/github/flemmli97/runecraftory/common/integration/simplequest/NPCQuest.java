@@ -21,6 +21,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import org.jetbrains.annotations.Nullable;
@@ -32,6 +33,10 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+/**
+ * A quest linked with a npc entity.
+ * NPC quests can only depend on npc quests (parents)
+ */
 public class NPCQuest extends QuestBase {
 
     public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "npc_quest");
@@ -77,8 +82,7 @@ public class NPCQuest extends QuestBase {
         NPCQuest quest = QuestBase.of(task -> new Builder(withUuid(id, uuid), task, npc_ids,
                 new ResourceLocation(GsonHelper.getAsString(obj, "loot_table")))
                 .withQuest(new ResourceLocation(GsonHelper.getAsString(obj, "quest"))), category, obj).build();
-        quest.npcUuid = uuid;
-        quest.originID = id;
+        quest.withNPC(uuid, id);
         return quest;
     }
 
@@ -92,11 +96,24 @@ public class NPCQuest extends QuestBase {
                 })
                 .stream().map(npc -> {
                     NPCQuest ret = of(withUuid(quest.id, npc.getUUID()), quest.category, quest.serialize(true, false));
-                    ret.npc = npc;
-                    ret.originID = quest.id;
-                    ret.npcUuid = npc.getUUID();
+                    ret.withNPC(npc, quest.id);
                     return ret;
                 }).toList();
+    }
+
+    private void withNPC(EntityNPCBase npc, ResourceLocation originID) {
+        this.npc = npc;
+        this.withNPC(npc.getUUID(), originID);
+    }
+
+    private void withNPC(UUID npc, ResourceLocation originID) {
+        this.npcUuid = npc;
+        this.originID = originID;
+    }
+
+    @Override
+    public boolean isUnlocked(ServerPlayer player) {
+        return super.isUnlocked(player) && (this.getNpc(player.level) == null || this.getNpc(player.level).canAcceptNPCQuest(player, this));
     }
 
     @Override
@@ -149,7 +166,9 @@ public class NPCQuest extends QuestBase {
     }
 
     @Nullable
-    public EntityNPCBase getNpc() {
+    public EntityNPCBase getNpc(Level level) {
+        if (this.npcUuid != null && this.npc == null)
+            this.npc = EntityUtil.findFromUUID(EntityNPCBase.class, level, this.npcUuid);
         return this.npc;
     }
 
@@ -190,6 +209,8 @@ public class NPCQuest extends QuestBase {
             chest.setChestLoot(this.loot);
             serverPlayer.getLevel().addFreshEntity(chest);
         }
+        if (this.getNpc(serverPlayer.level) != null)
+            this.getNpc(serverPlayer.level).completeNPCQuest(serverPlayer, this);
         this.onReset(serverPlayer);
     }
 
