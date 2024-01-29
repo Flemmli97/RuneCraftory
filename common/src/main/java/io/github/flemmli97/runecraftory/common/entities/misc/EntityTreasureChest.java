@@ -1,9 +1,9 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
-import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.loot.LootCtxParameters;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
+import io.github.flemmli97.runecraftory.common.utils.LootTableResources;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
@@ -39,11 +39,6 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 public class EntityTreasureChest extends Entity implements IAnimated {
 
     public static final int MAX_TIER = 4;
-
-    public static final ResourceLocation TIER_1_LOOT = new ResourceLocation(RuneCraftory.MODID, "entities/treasure_chest_tier_1");
-    public static final ResourceLocation TIER_2_LOOT = new ResourceLocation(RuneCraftory.MODID, "entities/treasure_chest_tier_2");
-    public static final ResourceLocation TIER_3_LOOT = new ResourceLocation(RuneCraftory.MODID, "entities/treasure_chest_tier_3");
-    public static final ResourceLocation TIER_4_LOOT = new ResourceLocation(RuneCraftory.MODID, "entities/treasure_chest_tier_4");
 
     private static final EntityDataAccessor<Integer> TIER = SynchedEntityData.defineId(EntityTreasureChest.class, EntityDataSerializers.INT);
 
@@ -170,10 +165,10 @@ public class EntityTreasureChest extends Entity implements IAnimated {
 
     protected void openChest(ServerPlayer player, ItemStack stack) {
         ResourceLocation resourceLocation = this.chestLoot != null ? this.chestLoot : switch (this.tier()) {
-            case 1 -> TIER_2_LOOT;
-            case 2 -> TIER_3_LOOT;
-            case 3 -> TIER_4_LOOT;
-            default -> TIER_1_LOOT;
+            case 1 -> LootTableResources.TIER_2_LOOT;
+            case 2 -> LootTableResources.TIER_3_LOOT;
+            case 3 -> LootTableResources.TIER_4_LOOT;
+            default -> LootTableResources.TIER_1_LOOT;
         };
         LootContext.Builder builder = new LootContext.Builder((ServerLevel) this.level)
                 .withRandom(this.random)

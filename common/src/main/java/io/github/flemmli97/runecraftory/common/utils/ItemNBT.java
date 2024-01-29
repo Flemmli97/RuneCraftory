@@ -462,7 +462,7 @@ public class ItemNBT {
     }
 
     public static boolean shouldHaveLevel(ItemStack stack) {
-        return shouldHaveStats(stack);
+        return shouldHaveStats(stack) || stack.is(ModTags.SPELLS);
     }
 
     public static boolean isWeapon(ItemStack stack) {

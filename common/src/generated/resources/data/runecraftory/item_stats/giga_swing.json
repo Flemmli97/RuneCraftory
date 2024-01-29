@@ -1,0 +1,9 @@
+{
+  "buyPrice": 9500,
+  "sellPrice": 475,
+  "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:giga_swing"
+}

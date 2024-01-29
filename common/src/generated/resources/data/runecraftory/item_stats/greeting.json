@@ -1,0 +1,9 @@
+{
+  "buyPrice": 500,
+  "sellPrice": 25,
+  "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:greeting"
+}

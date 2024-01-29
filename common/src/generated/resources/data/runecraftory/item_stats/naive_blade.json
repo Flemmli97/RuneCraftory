@@ -1,0 +1,9 @@
+{
+  "buyPrice": 6000,
+  "sellPrice": 300,
+  "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:naive_blade"
+}

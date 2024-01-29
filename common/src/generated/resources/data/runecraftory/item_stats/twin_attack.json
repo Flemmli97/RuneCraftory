@@ -1,0 +1,9 @@
+{
+  "buyPrice": 1500,
+  "sellPrice": 75,
+  "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:twin_attack"
+}

@@ -1,0 +1,9 @@
+{
+  "buyPrice": 8000,
+  "sellPrice": 400,
+  "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:double_kick"
+}

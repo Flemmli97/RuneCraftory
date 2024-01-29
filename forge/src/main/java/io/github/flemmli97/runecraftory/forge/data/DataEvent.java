@@ -54,6 +54,7 @@ public class DataEvent {
             data.addProvider(new SkillPropertiesgen(data));
             data.addProvider(new WeaponPropertiesgen(data));
             data.addProvider(new NPCNameGen(data));
+            data.addProvider(new LootModifierGen(data));
         }
     }
 

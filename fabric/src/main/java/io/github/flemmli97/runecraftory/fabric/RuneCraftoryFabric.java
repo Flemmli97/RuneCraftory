@@ -26,6 +26,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModPoiTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.registry.ModStats;
 import io.github.flemmli97.runecraftory.common.registry.ModStructures;
+import io.github.flemmli97.runecraftory.common.utils.LootTableResources;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.fabric.config.ConfigHolder;
 import io.github.flemmli97.runecraftory.fabric.config.GeneralConfigSpec;
@@ -48,6 +49,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.fabricmc.fabric.api.networking.v1.EntityTrackingEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
@@ -71,6 +73,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.entries.LootTableReference;
 
 import javax.annotation.Nullable;
 import java.nio.file.Path;
@@ -245,6 +249,11 @@ public class RuneCraftoryFabric implements ModInitializer {
 
         ServerLifecycleEvents.SERVER_STARTED.register(server -> SERVER_INSTANCE = server);
         ServerLifecycleEvents.SERVER_STOPPED.register(server -> SERVER_INSTANCE = null);
+
+        LootTableEvents.MODIFY.register(((resourceManager, lootManager, id, tableBuilder, source) -> {
+            if (LootTableResources.VANILLA_CHESTS.contains(id))
+                tableBuilder.withPool(LootPool.lootPool().add(LootTableReference.lootTableReference(LootTableResources.CHEST_LOOT_SPELLS)));
+        }));
 
         SimpleQuestIntegration.INST().register();
     }

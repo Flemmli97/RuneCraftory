@@ -1,0 +1,9 @@
+{
+  "buyPrice": 3000,
+  "sellPrice": 150,
+  "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:gust"
+}

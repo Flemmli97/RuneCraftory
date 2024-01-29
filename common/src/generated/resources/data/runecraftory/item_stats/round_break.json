@@ -1,0 +1,9 @@
+{
+  "buyPrice": 6500,
+  "sellPrice": 325,
+  "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:round_break"
+}

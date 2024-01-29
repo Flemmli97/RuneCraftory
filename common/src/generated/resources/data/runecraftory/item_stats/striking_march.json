@@ -1,0 +1,9 @@
+{
+  "buyPrice": 8500,
+  "sellPrice": 425,
+  "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:striking_march"
+}

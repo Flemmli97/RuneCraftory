@@ -10,8 +10,6 @@ import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
 import io.github.flemmli97.runecraftory.common.blocks.BlockGiantCrop;
 import io.github.flemmli97.runecraftory.common.blocks.BlockQuestboard;
 import io.github.flemmli97.runecraftory.common.entities.GateEntity;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityCustomFishingHook;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityTreasureChest;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityKingWooly;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityWooly;
 import io.github.flemmli97.runecraftory.common.loot.FirstKillCondition;
@@ -22,6 +20,7 @@ import io.github.flemmli97.runecraftory.common.loot.SkillLevelCondition;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.utils.LootTableResources;
 import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
 import net.minecraft.advancements.critereon.EnchantmentPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
@@ -88,7 +87,7 @@ public class Loottables extends LootTableProvider {
                     Pair.of(WoolyShearedEntityLoot::new, LootContextParamSets.FISHING),
                     Pair.of(BlockLootData::new, LootContextParamSets.BLOCK),
                     Pair.of(FishingLootData::new, LootContextParamSets.FISHING),
-                    Pair.of(TreasureChestLoot::new, LootContextParamSets.CHEST));
+                    Pair.of(ChestLoots::new, LootContextParamSets.CHEST));
 
     public Loottables(DataGenerator gen) {
         super(gen);
@@ -108,7 +107,7 @@ public class Loottables extends LootTableProvider {
         protected final Map<ResourceLocation, LootTable.Builder> lootTables = new HashMap<>();
 
         protected void init() {
-            this.lootTables.put(EntityWooly.WOOLED_LOOT, this.table(
+            this.lootTables.put(LootTableResources.WOOLED_WHITE_LOOT, this.table(
                             new ItemLootData(ModItems.furSmall.get(), 0.6f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2))
                     .withPool(LootPool.lootPool().add(LootTableReference.lootTableReference(ModEntities.WOOLY.get().getDefaultLootTable()))));
             this.registerLootTable(ModEntities.WOOLY.get(), this.table(
@@ -490,11 +489,11 @@ public class Loottables extends LootTableProvider {
                     .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
                     .apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE)));
 
-            this.lootTables.put(EntityWooly.shearedLootTable(EntityWooly.WOOLED_LOOT), LootTable.lootTable().withPool(LootPool.lootPool().add(b)));
+            this.lootTables.put(EntityWooly.shearedLootTable(LootTableResources.WOOLED_WHITE_LOOT), LootTable.lootTable().withPool(LootPool.lootPool().add(b)));
         }
     }
 
-    static class TreasureChestLoot implements Consumer<BiConsumer<ResourceLocation, LootTable.Builder>> {
+    static class ChestLoots implements Consumer<BiConsumer<ResourceLocation, LootTable.Builder>> {
 
         @Override
         public void accept(BiConsumer<ResourceLocation, LootTable.Builder> biConsumer) {
@@ -506,7 +505,7 @@ public class Loottables extends LootTableProvider {
             tier1.add(LootItem.lootTableItem(ModItems.armorBread.get()));
             tier1.add(LootItem.lootTableItem(ModItems.chemistryBread.get()));
             tier1.add(LootItem.lootTableItem(ModItems.cookingBread.get()));
-            biConsumer.accept(EntityTreasureChest.TIER_1_LOOT, LootTable.lootTable().withPool(tier1));
+            biConsumer.accept(LootTableResources.TIER_1_LOOT, LootTable.lootTable().withPool(tier1));
 
             LootPool.Builder tier2 = LootPool.lootPool().setRolls(UniformGenerator.between(2, 4));
             for (RegistryEntrySupplier<Item> item : ModItems.TIER_2_CHEST) {
@@ -516,19 +515,19 @@ public class Loottables extends LootTableProvider {
             tier2.add(LootItem.lootTableItem(ModItems.armorBread.get()));
             tier2.add(LootItem.lootTableItem(ModItems.chemistryBread.get()));
             tier2.add(LootItem.lootTableItem(ModItems.cookingBread.get()));
-            biConsumer.accept(EntityTreasureChest.TIER_2_LOOT, LootTable.lootTable().withPool(tier2));
+            biConsumer.accept(LootTableResources.TIER_2_LOOT, LootTable.lootTable().withPool(tier2));
 
             LootPool.Builder tier3 = LootPool.lootPool().setRolls(UniformGenerator.between(1, 2));
             for (RegistryEntrySupplier<Item> item : ModItems.TIER_3_CHEST) {
                 tier3.add(LootItem.lootTableItem(item.get()));
             }
-            biConsumer.accept(EntityTreasureChest.TIER_3_LOOT, LootTable.lootTable().withPool(tier3));
+            biConsumer.accept(LootTableResources.TIER_3_LOOT, LootTable.lootTable().withPool(tier3));
 
             LootPool.Builder tier4 = LootPool.lootPool().setRolls(UniformGenerator.between(1, 2));
             for (RegistryEntrySupplier<Item> item : ModItems.TIER_4_CHEST) {
                 tier4.add(LootItem.lootTableItem(item.get()));
             }
-            biConsumer.accept(EntityTreasureChest.TIER_4_LOOT, LootTable.lootTable().withPool(tier4));
+            biConsumer.accept(LootTableResources.TIER_4_LOOT, LootTable.lootTable().withPool(tier4));
 
             biConsumer.accept(QuestGen.MINING, LootTable.lootTable().withPool(LootPool.lootPool()
                     .add(LootItem.lootTableItem(ModItems.hammerScrap.get()))
@@ -538,6 +537,64 @@ public class Loottables extends LootTableProvider {
                     .add(LootItem.lootTableItem(ModItems.brush.get()))));
             biConsumer.accept(QuestGen.SHIP_TURNIP, LootTable.lootTable().withPool(LootPool.lootPool()
                     .add(LootItem.lootTableItem(ModItems.turnipSeeds.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 5))))));
+
+            LootPool.Builder spells = LootPool.lootPool().setRolls(UniformGenerator.between(-1, 1));
+            spells.add(LootItem.lootTableItem(ModItems.fireBallSmall.get()).setWeight(100));
+            spells.add(LootItem.lootTableItem(ModItems.fireBallBig.get()).setWeight(60));
+            spells.add(LootItem.lootTableItem(ModItems.explosion.get()).setWeight(20));
+            spells.add(LootItem.lootTableItem(ModItems.waterLaser.get()).setWeight(100));
+            spells.add(LootItem.lootTableItem(ModItems.parallelLaser.get()).setWeight(60));
+            spells.add(LootItem.lootTableItem(ModItems.deltaLaser.get()).setWeight(20));
+            spells.add(LootItem.lootTableItem(ModItems.screwRock.get()).setWeight(100));
+            spells.add(LootItem.lootTableItem(ModItems.earthSpike.get()).setWeight(60));
+            spells.add(LootItem.lootTableItem(ModItems.avengerRock.get()).setWeight(20));
+            spells.add(LootItem.lootTableItem(ModItems.sonicWind.get()).setWeight(100));
+            spells.add(LootItem.lootTableItem(ModItems.doubleSonic.get()).setWeight(60));
+            spells.add(LootItem.lootTableItem(ModItems.penetrateSonic.get()).setWeight(20));
+            spells.add(LootItem.lootTableItem(ModItems.lightBarrier.get()).setWeight(100));
+            spells.add(LootItem.lootTableItem(ModItems.shine.get()).setWeight(50));
+            spells.add(LootItem.lootTableItem(ModItems.prism.get()).setWeight(15));
+            spells.add(LootItem.lootTableItem(ModItems.darkSnake.get()).setWeight(100));
+            spells.add(LootItem.lootTableItem(ModItems.darkBall.get()).setWeight(50));
+            spells.add(LootItem.lootTableItem(ModItems.darkness.get()).setWeight(15));
+            spells.add(LootItem.lootTableItem(ModItems.cure.get()).setWeight(60));
+            spells.add(LootItem.lootTableItem(ModItems.cureAll.get()).setWeight(30));
+            spells.add(LootItem.lootTableItem(ModItems.cureMaster.get()).setWeight(10));
+            spells.add(LootItem.lootTableItem(ModItems.mediPoison.get()).setWeight(80));
+            spells.add(LootItem.lootTableItem(ModItems.mediPara.get()).setWeight(60));
+            spells.add(LootItem.lootTableItem(ModItems.mediSeal.get()).setWeight(10));
+
+            spells.add(LootItem.lootTableItem(ModItems.powerWave.get()).setWeight(100));
+            spells.add(LootItem.lootTableItem(ModItems.dashSlash.get()).setWeight(80));
+            spells.add(LootItem.lootTableItem(ModItems.rushAttack.get()).setWeight(85));
+            spells.add(LootItem.lootTableItem(ModItems.roundBreak.get()).setWeight(60));
+            spells.add(LootItem.lootTableItem(ModItems.mindThrust.get()).setWeight(85));
+            spells.add(LootItem.lootTableItem(ModItems.gust.get()).setWeight(60));
+            spells.add(LootItem.lootTableItem(ModItems.storm.get()).setWeight(80));
+            spells.add(LootItem.lootTableItem(ModItems.blitz.get()).setWeight(30));
+            spells.add(LootItem.lootTableItem(ModItems.twinAttack.get()).setWeight(100));
+            spells.add(LootItem.lootTableItem(ModItems.railStrike.get()).setWeight(50));
+            spells.add(LootItem.lootTableItem(ModItems.windSlash.get()).setWeight(70));
+            spells.add(LootItem.lootTableItem(ModItems.flashStrike.get()).setWeight(80));
+            spells.add(LootItem.lootTableItem(ModItems.naiveBlade.get()).setWeight(70));
+            spells.add(LootItem.lootTableItem(ModItems.steelHeart.get()).setWeight(40));
+            spells.add(LootItem.lootTableItem(ModItems.deltaStrike.get()).setWeight(80));
+            spells.add(LootItem.lootTableItem(ModItems.hurricane.get()).setWeight(90));
+            spells.add(LootItem.lootTableItem(ModItems.reaperSlash.get()).setWeight(100));
+            spells.add(LootItem.lootTableItem(ModItems.millionStrike.get()).setWeight(50));
+            spells.add(LootItem.lootTableItem(ModItems.axelDisaster.get()).setWeight(50));
+            spells.add(LootItem.lootTableItem(ModItems.stardustUpper.get()).setWeight(80));
+            spells.add(LootItem.lootTableItem(ModItems.tornadoSwing.get()).setWeight(60));
+            spells.add(LootItem.lootTableItem(ModItems.grandImpact.get()).setWeight(70));
+            spells.add(LootItem.lootTableItem(ModItems.gigaSwing.get()).setWeight(80));
+            spells.add(LootItem.lootTableItem(ModItems.upperCut.get()).setWeight(100));
+            spells.add(LootItem.lootTableItem(ModItems.doubleKick.get()).setWeight(90));
+            spells.add(LootItem.lootTableItem(ModItems.straightPunch.get()).setWeight(80));
+            spells.add(LootItem.lootTableItem(ModItems.nekoDamashi.get()).setWeight(100));
+            spells.add(LootItem.lootTableItem(ModItems.rushPunch.get()).setWeight(60));
+            spells.add(LootItem.lootTableItem(ModItems.cyclone.get()).setWeight(60));
+            spells.add(LootItem.lootTableItem(ModItems.rapidMove.get()).setWeight(90));
+            biConsumer.accept(LootTableResources.CHEST_LOOT_SPELLS, LootTable.lootTable().withPool(spells));
         }
     }
 
@@ -741,9 +798,9 @@ public class Loottables extends LootTableProvider {
         @Override
         public void accept(BiConsumer<ResourceLocation, LootTable.Builder> biConsumer) {
             //For now delegate to default table till fish get textures
-            biConsumer.accept(EntityCustomFishingHook.FISHING, LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
+            biConsumer.accept(LootTableResources.FISHING, LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
                     .add(LootTableReference.lootTableReference(BuiltInLootTables.FISHING))));
-            biConsumer.accept(EntityCustomFishingHook.SAND_FISHING, LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
+            biConsumer.accept(LootTableResources.SAND_FISHING, LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
                     .add(LootItem.lootTableItem(Items.SAND))));
         }
     }

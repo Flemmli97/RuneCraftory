@@ -1,0 +1,20 @@
+{
+  "replace": false,
+  "entries": [
+    "runecraftory:inject/chests/stronghold_corridor",
+    "runecraftory:inject/chests/woodland_mansion",
+    "runecraftory:inject/chests/igloo_chest",
+    "runecraftory:inject/chests/buried_treasure",
+    "runecraftory:inject/chests/bastion_treasure",
+    "runecraftory:inject/chests/simple_dungeon",
+    "runecraftory:inject/chests/jungle_temple_dispenser",
+    "runecraftory:inject/chests/desert_pyramid",
+    "runecraftory:inject/chests/jungle_temple",
+    "runecraftory:inject/chests/abandoned_mineshaft",
+    "runecraftory:inject/chests/nether_bridge",
+    "runecraftory:inject/chests/end_city_treasure",
+    "runecraftory:inject/chests/underwater_ruin_big",
+    "runecraftory:inject/chests/shipwreck_treasure",
+    "runecraftory:inject/chests/underwater_ruin_small"
+  ]
+}

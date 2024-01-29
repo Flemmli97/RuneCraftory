@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
-import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolFishingRod;
@@ -8,6 +7,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
+import io.github.flemmli97.runecraftory.common.utils.LootTableResources;
 import io.github.flemmli97.runecraftory.mixinhelper.ExtendedFishingRodHookTrigger;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.entity.EntityProjectile;
@@ -55,9 +55,6 @@ import java.util.function.BooleanSupplier;
  * The vanilla fishing hook has too much hardcoded stuff in it
  */
 public class EntityCustomFishingHook extends EntityProjectile {
-
-    public static final ResourceLocation FISHING = new ResourceLocation(RuneCraftory.MODID, "chore/fishing");
-    public static final ResourceLocation SAND_FISHING = new ResourceLocation(RuneCraftory.MODID, "chore/sand_fishing");
 
     private static final EntityDataAccessor<Boolean> DATA_BITING = SynchedEntityData.defineId(EntityCustomFishingHook.class, EntityDataSerializers.BOOLEAN);
 
@@ -386,7 +383,7 @@ public class EntityCustomFishingHook extends EntityProjectile {
                     .withParameter(LootContextParams.THIS_ENTITY, this)
                     .withRandom(this.random)
                     .withLuck(luck);
-            ResourceLocation loot = this.inSand ? SAND_FISHING : FISHING;
+            ResourceLocation loot = this.inSand ? LootTableResources.SAND_FISHING : LootTableResources.FISHING;
             LootTable lootTable = this.level.getServer().getLootTables().get(loot);
             List<ItemStack> list = lootTable.getRandomItems(builder.create(LootContextParamSets.FISHING));
             ((ExtendedFishingRodHookTrigger) CriteriaTriggers.FISHING_ROD_HOOKED).customTrigger(owner, stack, this, list);

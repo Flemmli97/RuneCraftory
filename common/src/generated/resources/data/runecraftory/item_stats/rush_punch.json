@@ -1,0 +1,9 @@
+{
+  "buyPrice": 7000,
+  "sellPrice": 350,
+  "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:rush_punch"
+}

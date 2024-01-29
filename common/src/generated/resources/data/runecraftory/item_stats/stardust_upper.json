@@ -1,0 +1,9 @@
+{
+  "buyPrice": 1800,
+  "sellPrice": 90,
+  "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:stardust_upper"
+}

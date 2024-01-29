@@ -26,6 +26,7 @@ import io.github.flemmli97.runecraftory.forge.client.ClientEvents;
 import io.github.flemmli97.runecraftory.forge.config.ConfigHolder;
 import io.github.flemmli97.runecraftory.forge.event.EntityEvents;
 import io.github.flemmli97.runecraftory.forge.event.WorldEvents;
+import io.github.flemmli97.runecraftory.forge.loot.ModGlobalLootModifiers;
 import io.github.flemmli97.runecraftory.forge.network.PacketHandler;
 import io.github.flemmli97.runecraftory.mixin.AttributeAccessor;
 import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
@@ -103,7 +104,6 @@ public class RuneCraftoryForge {
         ModAttributes.ATTRIBUTES.registerContent();
         ModEffects.EFFECTS.registerContent();
         ModCrafting.RECIPESERIALIZER.registerContent();
-        //ModLootModifier.SERIALZER.register(FMLJavaModLoadingContext.get().getModEventBus());
         ModFeatures.FEATURES.registerContent();
         ModFeatures.TREE_DECORATORS.registerContent();
         ModSpells.SPELLS.registerContent();
@@ -114,6 +114,7 @@ public class RuneCraftoryForge {
         ModStats.STATS.registerContent();
         ModNPCActions.ACTIONS.registerContent();
         ModAttackActions.ATTACK_ACTIONS.registerContent();
+        ModGlobalLootModifiers.MODIFIERS.register(FMLJavaModLoadingContext.get().getModEventBus());
         ModCriteria.init();
     }
 

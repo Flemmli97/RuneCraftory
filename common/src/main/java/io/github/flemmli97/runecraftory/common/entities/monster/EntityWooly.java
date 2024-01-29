@@ -1,11 +1,11 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
-import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.LeapingMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.LeapingAttackGoal;
 import io.github.flemmli97.runecraftory.common.loot.LootCtxParameters;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
+import io.github.flemmli97.runecraftory.common.utils.LootTableResources;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import net.minecraft.nbt.CompoundTag;
@@ -30,8 +30,6 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import org.jetbrains.annotations.Nullable;
 
 public class EntityWooly extends LeapingMonster {
-
-    public static final ResourceLocation WOOLED_LOOT = new ResourceLocation(RuneCraftory.MODID, "entities/wooly/white");
 
     public static final AnimatedAction SLAP = new AnimatedAction(16, 7, "slap");
     public static final AnimatedAction KICK = new AnimatedAction(20, 3, "kick");
@@ -183,7 +181,7 @@ public class EntityWooly extends LeapingMonster {
         if (this.isSheared())
             return super.getDefaultLootTable();
         else
-            return WOOLED_LOOT;
+            return LootTableResources.WOOLED_WHITE_LOOT;
     }
 
     public boolean isSheared() {

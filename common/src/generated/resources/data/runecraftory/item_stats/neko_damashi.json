@@ -1,0 +1,9 @@
+{
+  "buyPrice": 5500,
+  "sellPrice": 275,
+  "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:neko_damashi"
+}

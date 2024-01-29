@@ -1,0 +1,9 @@
+{
+  "buyPrice": 1000,
+  "sellPrice": 50,
+  "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:power_wave"
+}

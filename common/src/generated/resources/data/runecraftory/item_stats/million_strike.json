@@ -1,0 +1,9 @@
+{
+  "buyPrice": 9000,
+  "sellPrice": 450,
+  "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:million_strike"
+}
