@@ -22,6 +22,7 @@ public class NPCActionManager extends SimpleJsonResourceReloadListener {
     public static final String DIRECTORY = "npc_actions";
 
     private static final Gson GSON = new GsonBuilder().create();
+    public static final ResourceLocation DEFAULT_ID = new ResourceLocation(RuneCraftory.MODID, "default_action");
 
     private Map<ResourceLocation, NPCAttackActions> keyData = ImmutableMap.of();
     private Map<NPCAttackActions, ResourceLocation> dataKey = ImmutableMap.of();
@@ -36,7 +37,7 @@ public class NPCActionManager extends SimpleJsonResourceReloadListener {
     }
 
     public ResourceLocation getId(NPCAttackActions data) {
-        return this.dataKey.get(data);
+        return this.dataKey.getOrDefault(data, DEFAULT_ID);
     }
 
     public NPCAttackActions getRandom(Random random) {
@@ -49,13 +50,15 @@ public class NPCActionManager extends SimpleJsonResourceReloadListener {
     protected void apply(Map<ResourceLocation, JsonElement> map, ResourceManager resourceManager, ProfilerFiller profiler) {
         ImmutableMap.Builder<ResourceLocation, NPCAttackActions> builder = ImmutableMap.builder();
         map.forEach((fres, el) -> {
-            try {
-                JsonObject obj = el.getAsJsonObject();
-                builder.put(fres, NPCAttackActions.CODEC.parse(JsonOps.INSTANCE, obj)
-                        .getOrThrow(false, RuneCraftory.logger::error));
-            } catch (Exception ex) {
-                RuneCraftory.logger.error("Couldnt parse npc actions json {} {}", fres, ex);
-                ex.fillInStackTrace();
+            if (!fres.equals(DEFAULT_ID)) {
+                try {
+                    JsonObject obj = el.getAsJsonObject();
+                    builder.put(fres, NPCAttackActions.CODEC.parse(JsonOps.INSTANCE, obj)
+                            .getOrThrow(false, RuneCraftory.logger::error));
+                } catch (Exception ex) {
+                    RuneCraftory.logger.error("Couldnt parse npc actions json {} {}", fres, ex);
+                    ex.fillInStackTrace();
+                }
             }
         });
         this.keyData = builder.build();

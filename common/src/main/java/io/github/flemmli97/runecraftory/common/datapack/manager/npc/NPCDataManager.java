@@ -23,6 +23,7 @@ public class NPCDataManager extends SimpleJsonResourceReloadListener {
     public static final String DIRECTORY = "npc_data";
 
     private static final Gson GSON = new GsonBuilder().create();
+    public static final ResourceLocation DEFAULT_ID = new ResourceLocation(RuneCraftory.MODID, "default_npc");
 
     private Map<ResourceLocation, NPCData> keyData = ImmutableMap.of();
     private Map<NPCData, ResourceLocation> dataKey = ImmutableMap.of();
@@ -37,7 +38,7 @@ public class NPCDataManager extends SimpleJsonResourceReloadListener {
     }
 
     public ResourceLocation getId(NPCData data) {
-        return this.dataKey.get(data);
+        return this.dataKey.getOrDefault(data, DEFAULT_ID);
     }
 
     public NPCData getRandom(Random random, Predicate<NPCData> func) {
@@ -48,13 +49,15 @@ public class NPCDataManager extends SimpleJsonResourceReloadListener {
     protected void apply(Map<ResourceLocation, JsonElement> map, ResourceManager resourceManager, ProfilerFiller profiler) {
         ImmutableMap.Builder<ResourceLocation, NPCData> builder = ImmutableMap.builder();
         map.forEach((fres, el) -> {
-            try {
-                JsonObject obj = el.getAsJsonObject();
-                builder.put(fres, NPCData.CODEC.parse(JsonOps.INSTANCE, obj)
-                        .getOrThrow(false, RuneCraftory.logger::error));
-            } catch (Exception ex) {
-                RuneCraftory.logger.error("Couldnt parse npc data json {} {}", fres, ex);
-                ex.fillInStackTrace();
+            if (!fres.equals(DEFAULT_ID)) {
+                try {
+                    JsonObject obj = el.getAsJsonObject();
+                    builder.put(fres, NPCData.CODEC.parse(JsonOps.INSTANCE, obj)
+                            .getOrThrow(false, RuneCraftory.logger::error));
+                } catch (Exception ex) {
+                    RuneCraftory.logger.error("Couldnt parse npc data json {} {}", fres, ex);
+                    ex.fillInStackTrace();
+                }
             }
         });
         this.keyData = builder.build();

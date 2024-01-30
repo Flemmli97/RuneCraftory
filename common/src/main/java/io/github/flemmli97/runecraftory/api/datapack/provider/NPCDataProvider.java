@@ -210,6 +210,10 @@ public abstract class NPCDataProvider implements DataProvider {
         this.looks.put(npcData.look(), look);
     }
 
+    public void addLook(ResourceLocation id, NPCData.NPCLook look) {
+        this.looks.put(id, look);
+    }
+
     public void addSelectableGiftTag(NPCData.GiftType type, TagKey<Item> tag) {
         this.addSelectableGiftTag(type, tag.location());
     }

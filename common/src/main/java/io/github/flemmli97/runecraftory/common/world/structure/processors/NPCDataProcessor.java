@@ -33,7 +33,6 @@ public class NPCDataProcessor extends DataStructureBlockProcessor {
     @Override
     protected StructureTemplate.StructureBlockInfo handleDataMarker(String data, StructureTemplate.StructureBlockInfo origin, LevelReader level, StructurePlaceSettings settings) {
         CompoundTag entityTag = new CompoundTag();
-        entityTag.putString("Shop", this.jobID.toString());
         ListTag listTag = new ListTag();
         listTag.add(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 1200, 5, true, false).save(new CompoundTag()));
         entityTag.put("ActiveEffects", listTag);
@@ -41,6 +40,7 @@ public class NPCDataProcessor extends DataStructureBlockProcessor {
         CompoundTag tag = new CompoundTag();
         tag.putString("Entity", ModEntities.NPC.getID().toString());
         tag.put("EntityNBT", entityTag);
+        tag.putString("NPCShop", this.jobID.toString());
         return new StructureTemplate.StructureBlockInfo(origin.pos, state, tag);
     }
 

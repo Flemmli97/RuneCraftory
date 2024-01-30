@@ -111,6 +111,19 @@ public class NPCDataGen extends NPCDataProvider {
                 }),
                 Map.of());
 
+        this.addLook(new ResourceLocation(RuneCraftory.MODID, "generic/male_1"), new NPCData.NPCLook(NPCData.Gender.MALE,
+                npcTexture("generic/male_1"), null, 50, List.of()));
+        this.addLook(new ResourceLocation(RuneCraftory.MODID, "generic/male_2"), new NPCData.NPCLook(NPCData.Gender.MALE,
+                npcTexture("generic/male_2"), null, 50, List.of()));
+        this.addLook(new ResourceLocation(RuneCraftory.MODID, "generic/male_3"), new NPCData.NPCLook(NPCData.Gender.MALE,
+                npcTexture("generic/male_3"), null, 50, List.of()));
+        this.addLook(new ResourceLocation(RuneCraftory.MODID, "generic/female_1"), new NPCData.NPCLook(NPCData.Gender.FEMALE,
+                npcTexture("generic/female_1"), null, 50, List.of()));
+        this.addLook(new ResourceLocation(RuneCraftory.MODID, "generic/female_2"), new NPCData.NPCLook(NPCData.Gender.FEMALE,
+                npcTexture("generic/female_2"), null, 50, List.of()));
+        this.addLook(new ResourceLocation(RuneCraftory.MODID, "generic/female_3"), new NPCData.NPCLook(NPCData.Gender.FEMALE,
+                npcTexture("generic/female_3"), null, 50, List.of()));
+
         this.addNPCDataAll("smith/male_1", new NPCData.Builder(50, null, NPCData.Gender.MALE)
                         .withLook(new ResourceLocation(RuneCraftory.MODID, "smith/male_1"))
                         .withProfession(ModNPCJobs.SMITH.getSecond())

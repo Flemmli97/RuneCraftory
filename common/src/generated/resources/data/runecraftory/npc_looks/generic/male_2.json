@@ -1,0 +1,6 @@
+{
+  "texture": "runecraftory:textures/entity/npc/generic/male_2.png",
+  "gender": "MALE",
+  "weight": 50,
+  "additionalFeatures": []
+}

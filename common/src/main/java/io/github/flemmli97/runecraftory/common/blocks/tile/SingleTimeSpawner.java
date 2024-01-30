@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.blocks.tile;
 
+import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.core.BlockPos;
@@ -19,6 +20,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public class SingleTimeSpawner extends BlockEntity {
 
     private EntityType<?> savedEntity;
+    private ResourceLocation shop;
     private CompoundTag tag;
     private int delay = 3;
 
@@ -39,8 +41,14 @@ public class SingleTimeSpawner extends BlockEntity {
         if (!this.level.isClientSide) {
             Entity e = this.savedEntity.create(this.level);
             if (e != null) {
+                if (e instanceof EntityNPCBase npc) {
+                    npc.ignoreInit = true;
+                }
                 if (e instanceof Mob mob) {
                     mob.finalizeSpawn((ServerLevelAccessor) this.level, this.level.getCurrentDifficultyAt(e.blockPosition()), MobSpawnType.SPAWNER, null, null);
+                }
+                if (e instanceof EntityNPCBase npc) {
+                    npc.randomizeData(this.shop);
                 }
                 e.moveTo(this.worldPosition.getX() + 0.5, this.worldPosition.getY(), this.worldPosition.getZ() + 0.5, this.level.random.nextFloat() * 360.0F, 0.0F);
                 if (this.tag != null) {
@@ -66,6 +74,8 @@ public class SingleTimeSpawner extends BlockEntity {
         this.savedEntity = PlatformUtils.INSTANCE.entities().getFromId(new ResourceLocation(nbt.getString("Entity")));
         if (nbt.contains("EntityNBT"))
             this.tag = nbt.getCompound("EntityNBT");
+        if (nbt.contains("NPCShop"))
+            this.shop = new ResourceLocation(nbt.getString("NPCShop"));
     }
 
     @Override
@@ -75,5 +85,7 @@ public class SingleTimeSpawner extends BlockEntity {
             nbt.putString("Entity", PlatformUtils.INSTANCE.entities().getIDFrom(this.savedEntity).toString());
         if (this.tag != null)
             nbt.put("EntityNBT", this.tag);
+        if (this.shop != null)
+            nbt.putString("NPCShop", this.shop.toString());
     }
 }

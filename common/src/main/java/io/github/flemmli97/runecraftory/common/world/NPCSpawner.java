@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class NPCSpawner implements CustomSpawner {
 
-    private int cooldown;
+    private int cooldown = 1200;
 
     @Override
     public int tick(ServerLevel level, boolean spawnEnemies, boolean spawnFriendlies) {
@@ -26,10 +26,10 @@ public class NPCSpawner implements CustomSpawner {
             return 0;
         }
         if (this.doSpawning(level)) {
-            this.cooldown = level.getRandom().nextInt(400) + 1200;
+            this.cooldown = level.getRandom().nextInt(800) + 1200;
             return 1;
         }
-        this.cooldown = level.getRandom().nextInt(100) + 200;
+        this.cooldown = level.getRandom().nextInt(100) + 300;
         return 0;
     }
 
@@ -63,7 +63,7 @@ public class NPCSpawner implements CustomSpawner {
             int x = pos.getX() + level.random.nextInt(16) - 8;
             int z = pos.getZ() + level.random.nextInt(16) - 8;
             BlockPos blockPos = new BlockPos(x, level.getHeight(Heightmap.Types.WORLD_SURFACE, x, z), z);
-            if (!level.isVillage(blockPos) || level.getEntities(EntityTypeTest.forClass(EntityNPCBase.class), new AABB(blockPos).inflate(32), e -> true).size() > 3)
+            if (!level.isVillage(blockPos) || level.getEntities(EntityTypeTest.forClass(EntityNPCBase.class), new AABB(blockPos).inflate(48), e -> true).size() > 3)
                 continue;
             return Vec3.atBottomCenterOf(blockPos);
         }

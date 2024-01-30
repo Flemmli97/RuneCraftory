@@ -196,6 +196,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     private final LevelExpPair levelPair = new LevelExpPair();
 
     private NPCJob shop = ModNPCJobs.NONE.getSecond();
+
+    public boolean ignoreInit;
     private NPCData data = NPCData.DEFAULT_DATA;
     private NPCData.NPCLook look = NPCData.NPCLook.DEFAULT_LOOK;
     private NPCAttackActions attackActions = NPCAttackActions.DEFAULT;
@@ -930,9 +932,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
-        if (reason == MobSpawnType.COMMAND || reason == MobSpawnType.SPAWN_EGG || reason == MobSpawnType.SPAWNER || reason == MobSpawnType.DISPENSER || reason == MobSpawnType.NATURAL) {
-            this.randomizeData();
-        }
+        if (!this.ignoreInit)
+            this.randomizeData(null);
         return super.finalizeSpawn(level, difficulty, reason, spawnData, dataTag);
     }
 
@@ -1292,10 +1293,11 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         }
     }
 
-    public void randomizeData() {
+    public void randomizeData(@Nullable ResourceLocation job) {
         if (this.getServer() != null)
-            this.setNPCData(DataPackHandler.INSTANCE.npcDataManager().getRandom(this.random, d -> WorldHandler.get(this.getServer())
-                    .npcHandler.canAssignNPC(d)), false);
+            this.setNPCData(DataPackHandler.INSTANCE.npcDataManager().getRandom(this.random, d ->
+                    (job == null || d.profession().isEmpty() || d.profession().stream().anyMatch(j -> ModNPCJobs.getIDFrom(j).equals(job)))
+                            && WorldHandler.get(this.getServer()).npcHandler.canAssignNPC(d)), false);
     }
 
     public ResourceLocation getDataID() {

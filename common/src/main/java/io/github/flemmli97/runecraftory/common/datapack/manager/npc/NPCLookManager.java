@@ -23,6 +23,7 @@ public class NPCLookManager extends SimpleJsonResourceReloadListener {
     public static final String DIRECTORY = "npc_looks";
 
     private static final Gson GSON = new GsonBuilder().create();
+    public static final ResourceLocation DEFAULT_ID = new ResourceLocation(RuneCraftory.MODID, "default_look");
 
     private Map<ResourceLocation, NPCData.NPCLook> keyData = ImmutableMap.of();
     private Map<NPCData.NPCLook, ResourceLocation> dataKey = ImmutableMap.of();
@@ -37,26 +38,33 @@ public class NPCLookManager extends SimpleJsonResourceReloadListener {
     }
 
     public ResourceLocation getId(NPCData.NPCLook data) {
-        return this.dataKey.get(data);
+        return this.dataKey.getOrDefault(data, DEFAULT_ID);
     }
 
     public NPCData.NPCLook getRandom(Random random, boolean male) {
         if (this.selectable.isEmpty())
             return NPCData.NPCLook.DEFAULT_LOOK;
-        return this.selectable.get(random.nextInt(this.selectable.size()));
+        List<NPCData.NPCLook> looks = this.selectable.stream().filter(l ->
+                l.gender() == NPCData.Gender.UNDEFINED
+                        || l.gender() == (male ? NPCData.Gender.MALE : NPCData.Gender.FEMALE)).toList();
+        if (looks.isEmpty())
+            return NPCData.NPCLook.DEFAULT_LOOK;
+        return looks.get(random.nextInt(looks.size()));
     }
 
     @Override
     protected void apply(Map<ResourceLocation, JsonElement> map, ResourceManager resourceManager, ProfilerFiller profiler) {
         ImmutableMap.Builder<ResourceLocation, NPCData.NPCLook> builder = ImmutableMap.builder();
         map.forEach((fres, el) -> {
-            try {
-                JsonObject obj = el.getAsJsonObject();
-                builder.put(fres, NPCData.NPCLook.CODEC.parse(JsonOps.INSTANCE, obj)
-                        .getOrThrow(false, RuneCraftory.logger::error));
-            } catch (Exception ex) {
-                RuneCraftory.logger.error("Couldnt parse npc look json {} {}", fres, ex);
-                ex.fillInStackTrace();
+            if (!fres.equals(DEFAULT_ID)) {
+                try {
+                    JsonObject obj = el.getAsJsonObject();
+                    builder.put(fres, NPCData.NPCLook.CODEC.parse(JsonOps.INSTANCE, obj)
+                            .getOrThrow(false, RuneCraftory.logger::error));
+                } catch (Exception ex) {
+                    RuneCraftory.logger.error("Couldnt parse npc look json {} {}", fres, ex);
+                    ex.fillInStackTrace();
+                }
             }
         });
         builder.put(NPCData.NPCLook.DEFAULT_LOOK_ID, NPCData.NPCLook.DEFAULT_LOOK);
