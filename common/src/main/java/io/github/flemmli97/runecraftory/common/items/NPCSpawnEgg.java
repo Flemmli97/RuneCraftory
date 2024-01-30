@@ -37,8 +37,9 @@ public class NPCSpawnEgg extends RuneCraftoryEggItem {
     @Override
     public boolean onEntitySpawned(Entity e, ItemStack stack, Player player) {
         if (e instanceof EntityNPCBase npc) {
-            if (!npc.isShopDefined())
-                npc.setShop(this.getJob(stack));
+            NPCJob job = this.getJob(stack);
+            if (job != ModNPCJobs.NONE.getSecond())
+                npc.randomizeData(job, false);
         }
         return super.onEntitySpawned(e, stack, player);
     }

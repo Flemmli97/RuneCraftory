@@ -41,9 +41,6 @@ public class SingleTimeSpawner extends BlockEntity {
         if (!this.level.isClientSide) {
             Entity e = this.savedEntity.create(this.level);
             if (e != null) {
-                if (e instanceof EntityNPCBase npc) {
-                    npc.ignoreInit = true;
-                }
                 if (e instanceof Mob mob) {
                     mob.finalizeSpawn((ServerLevelAccessor) this.level, this.level.getCurrentDifficultyAt(e.blockPosition()), MobSpawnType.SPAWNER, null, null);
                 }

@@ -58,6 +58,7 @@ import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.api.entity.IAnimated;
 import io.github.flemmli97.tenshilib.api.item.IAOEWeapon;
 import io.github.flemmli97.tenshilib.api.item.IExtendedWeapon;
+import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
 import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
@@ -447,6 +448,12 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         this.interactWithPlayer(serverPlayer);
         this.lookAt(serverPlayer, 30, 30);
         return InteractionResult.CONSUME;
+    }
+
+    @Nullable
+    @Override
+    public ItemStack getPickResult() {
+        return SpawnEgg.fromType(this.getType()).map(ItemStack::new).orElse(ItemStack.EMPTY);
     }
 
     @Override
@@ -933,7 +940,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
         if (!this.ignoreInit)
-            this.randomizeData(null);
+            this.randomizeData(null, true);
         return super.finalizeSpawn(level, difficulty, reason, spawnData, dataTag);
     }
 
@@ -1294,10 +1301,14 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     public void randomizeData(@Nullable ResourceLocation job) {
+        this.randomizeData(ModNPCJobs.getFromID(job), false);
+    }
+
+    public void randomizeData(NPCJob job, boolean overwrite) {
         if (this.getServer() != null)
             this.setNPCData(DataPackHandler.INSTANCE.npcDataManager().getRandom(this.random, d ->
-                    (job == null || d.profession().isEmpty() || d.profession().stream().anyMatch(j -> ModNPCJobs.getIDFrom(j).equals(job)))
-                            && WorldHandler.get(this.getServer()).npcHandler.canAssignNPC(d)), false);
+                    (job == null || d.profession().isEmpty() || d.profession().stream().anyMatch(j -> j.equals(job)))
+                            && WorldHandler.get(this.getServer()).npcHandler.canAssignNPC(d)), !overwrite);
     }
 
     public ResourceLocation getDataID() {
@@ -1306,7 +1317,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     public void setNPCData(NPCData data, boolean load) {
         if (this.getServer() != null) {
-            if (this.data != null && this.data.unique() > 0)
+            if (this.data != null)
                 WorldHandler.get(this.getServer()).npcHandler.removeUniqueNPC(this.getUUID(), this.data);
             WorldHandler.get(this.getServer()).npcHandler.addUniqueNPC(this.getUUID(), data);
         }
