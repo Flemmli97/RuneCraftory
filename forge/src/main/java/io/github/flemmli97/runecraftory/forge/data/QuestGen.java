@@ -1,12 +1,12 @@
 package io.github.flemmli97.runecraftory.forge.data;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.integration.simplequest.NPCQuest;
-import io.github.flemmli97.runecraftory.integration.simplequest.QuestTasks;
-import io.github.flemmli97.runecraftory.integration.simplequest.SimpleQuestIntegration;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
+import io.github.flemmli97.runecraftory.integration.simplequest.NPCQuest;
+import io.github.flemmli97.runecraftory.integration.simplequest.QuestTasks;
+import io.github.flemmli97.runecraftory.integration.simplequest.SimpleQuestIntegration;
 import io.github.flemmli97.simplequests.api.QuestEntry;
 import io.github.flemmli97.simplequests.datapack.provider.QuestProvider;
 import io.github.flemmli97.simplequests.quest.QuestCategory;

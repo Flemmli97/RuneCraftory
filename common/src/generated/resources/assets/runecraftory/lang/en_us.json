@@ -1579,8 +1579,8 @@
   "runecraftory.behaviour.inventory.harvest.invalid": "Position is too far away",
   "runecraftory.behaviour.inventory.seed": "Updated seed inventory position",
   "runecraftory.behaviour.inventory.seed.invalid": "Position is too far away",
-  "runecraftory.tamed.monster.knockout.by": "%1$s got knocked out by %5$s at [%2$s,%3$s,%4$s]",
-  "runecraftory.tamed.monster.knockout": "%1$s got knocked out at [%2$s,%3$s,%4$s]",
+  "runecraftory.tamed.monster.knockout.by": "%1$s got knocked out by %5$s at [%2$s, %3$s, %4$s]",
+  "runecraftory.tamed.monster.knockout": "%1$s got knocked out at [%2$s, %3$s, %4$s]",
   "runecraftory.magnifying_glass.view.crop.growth": "Growth: %s",
   "runecraftory.magnifying_glass.view.crop.level": "Level: %s",
   "runecraftory.magnifying_glass.view.crop.giant": "Giant prog.: %s",
@@ -1890,5 +1890,12 @@
   "runecraftory:shipping.empty": "<Empty tag/items>",
   "runecraftory:level": "Reach level %s",
   "runecraftory:skill_level": "Reach level %s in %s",
-  "runecraftory:taming": "%s"
+  "runecraftory:taming": "%s",
+  "runecraftory.dependency.tooltips.owner.none": "Unknown owner",
+  "runecraftory.dependency.tooltips.owner": "Owned by: %s",
+  "runecraftory.dependency.tooltips.friendpoints": "FP: %s",
+  "runecraftory.dependency.tooltips.barn": "Barn at: %s",
+  "runecraftory.dependency.tooltips.barn.no": "No Barn assigned!",
+  "runecraftory.dependency.tooltips.behaviour": "Behaviour: %s",
+  "runecraftory.dependency.tooltips.npc.follow": "Party: %s"
 }

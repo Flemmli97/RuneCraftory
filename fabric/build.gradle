@@ -24,6 +24,10 @@ repositories {
     }
     maven { url "https://maven.shedaniel.me/" }
     maven { url "https://maven.terraformersmc.com/releases/" }
+    maven {
+        name = "CurseMaven"
+        url "https://www.cursemaven.com"
+    }
 }
 
 dependencies {
@@ -33,6 +37,8 @@ dependencies {
         exclude(group: "net.fabricmc.fabric-api")
     }
     modImplementation "${mod_menu}"
+    // for 1.18 the package structure is different between forge/fabric
+    modImplementation "curse.maven:jade-324717:4573438"
 
     modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:${rei_version}"
     modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:${rei_version}"

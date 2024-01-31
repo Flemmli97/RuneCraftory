@@ -3,7 +3,6 @@ package io.github.flemmli97.runecraftory.forge;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.GateEntity;
-import io.github.flemmli97.runecraftory.integration.simplequest.SimpleQuestIntegration;
 import io.github.flemmli97.runecraftory.common.registry.ModActivities;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
@@ -23,11 +22,13 @@ import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.registry.ModStats;
 import io.github.flemmli97.runecraftory.common.registry.ModStructures;
 import io.github.flemmli97.runecraftory.forge.client.ClientEvents;
+import io.github.flemmli97.runecraftory.forge.compat.top.TOP;
 import io.github.flemmli97.runecraftory.forge.config.ConfigHolder;
 import io.github.flemmli97.runecraftory.forge.event.EntityEvents;
 import io.github.flemmli97.runecraftory.forge.event.WorldEvents;
 import io.github.flemmli97.runecraftory.forge.loot.ModGlobalLootModifiers;
 import io.github.flemmli97.runecraftory.forge.network.PacketHandler;
+import io.github.flemmli97.runecraftory.integration.simplequest.SimpleQuestIntegration;
 import io.github.flemmli97.runecraftory.mixin.AttributeAccessor;
 import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
 import net.minecraft.world.entity.EntityType;
@@ -78,6 +79,7 @@ public class RuneCraftoryForge {
         modBus.addListener(this::attributes);
         modBus.addListener(this::attributesAdd);
         modBus.addGenericListener(GlobalLootModifierSerializer.class, this::registry);
+        modBus.addListener(TOP::enqueueIMC);
         if (FMLEnvironment.dist == Dist.CLIENT)
             ClientEvents.register();
 

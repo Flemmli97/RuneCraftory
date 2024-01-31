@@ -14,7 +14,6 @@ import io.github.flemmli97.runecraftory.common.entities.npc.job.BathhouseAttenda
 import io.github.flemmli97.runecraftory.common.entities.npc.job.Cook;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.Doctor;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.Smith;
-import io.github.flemmli97.runecraftory.integration.simplequest.QuestTasks;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolAxe;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolFishingRod;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolHammer;
@@ -29,6 +28,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
+import io.github.flemmli97.runecraftory.integration.simplequest.QuestTasks;
 import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
 import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
 import net.minecraft.data.DataGenerator;
@@ -64,7 +64,7 @@ import java.util.stream.Stream;
 public class LangGen implements DataProvider {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-    private static final Comparator<String> order = Comparator.comparingInt(o -> LangType.get(o).ordinal());
+    private static final Comparator<String> ORDER = Comparator.comparingInt(o -> LangType.get(o).ordinal());
     private final Map<String, String> data = new LinkedHashMap<>();
     private final DataGenerator gen;
     private final String modid;
@@ -327,8 +327,8 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.behaviour.inventory.seed", "Updated seed inventory position");
         this.add("runecraftory.behaviour.inventory.seed.invalid", "Position is too far away");
 
-        this.add("runecraftory.tamed.monster.knockout.by", "%1$s got knocked out by %5$s at [%2$s,%3$s,%4$s]");
-        this.add("runecraftory.tamed.monster.knockout", "%1$s got knocked out at [%2$s,%3$s,%4$s]");
+        this.add("runecraftory.tamed.monster.knockout.by", "%1$s got knocked out by %5$s at [%2$s, %3$s, %4$s]");
+        this.add("runecraftory.tamed.monster.knockout", "%1$s got knocked out at [%2$s, %3$s, %4$s]");
 
         this.add("runecraftory.magnifying_glass.view.crop.growth", "Growth: %s");
         this.add("runecraftory.magnifying_glass.view.crop.level", "Level: %s");
@@ -397,8 +397,7 @@ public class LangGen implements DataProvider {
                 "if too far regardless of where you are.");
 
         this.add("runecraftory.patchouli.entry.quests", "Quests");
-        this.add("runecraftory.patchouli.entry.quests.1", "" +
-                "This feature is WIP and there are currently no quests.");
+        this.add("runecraftory.patchouli.entry.quests.1", "This feature is WIP and there are currently no quests.");
 
         this.add("runecraftory.patchouli.category.farming", "Agriculture");
         this.add("runecraftory.patchouli.category.farming.desc", "An overview and guide about the agricultural aspects");
@@ -678,6 +677,14 @@ public class LangGen implements DataProvider {
         this.add(QuestTasks.LevelEntry.ID.toString(), "Reach level %s");
         this.add(QuestTasks.SkillLevelEntry.ID.toString(), "Reach level %s in %s");
         this.add(QuestTasks.TamingEntry.ID.toString(), "%s");
+
+        this.add("runecraftory.dependency.tooltips.owner.none", "Unknown owner");
+        this.add("runecraftory.dependency.tooltips.owner", "Owned by: %s");
+        this.add("runecraftory.dependency.tooltips.friendpoints", "FP: %s");
+        this.add("runecraftory.dependency.tooltips.barn", "Barn at: %s");
+        this.add("runecraftory.dependency.tooltips.barn.no", "No Barn assigned!");
+        this.add("runecraftory.dependency.tooltips.behaviour", "Behaviour: %s");
+        this.add("runecraftory.dependency.tooltips.npc.follow", "Party: %s");
     }
 
     private String simpleTranslation(ResourceLocation res) {
@@ -690,7 +697,7 @@ public class LangGen implements DataProvider {
             s = s + "_mineral";
         }
         return Stream.of(s.trim().split("_"))
-                .filter(word -> word.length() > 0)
+                .filter(word -> !word.isEmpty())
                 .map(word -> word.substring(0, 1).toUpperCase() + word.substring(1))
                 .collect(Collectors.joining(" ")).replace("Plus", "+")
                 .replace("Four Leaf", "4-Leaf")
@@ -703,7 +710,7 @@ public class LangGen implements DataProvider {
 
     private String capitalize(String s, List<String> dont) {
         return Stream.of(s.trim().split("\\s"))
-                .filter(word -> word.length() > 0)
+                .filter(word -> !word.isEmpty())
                 .map(word -> dont.contains(word) ? word : word.substring(0, 1).toUpperCase() + word.substring(1))
                 .collect(Collectors.joining(" "));
     }
@@ -711,7 +718,7 @@ public class LangGen implements DataProvider {
     @Override
     public void run(HashCache cache) throws IOException {
         this.addTranslations();
-        Map<String, String> sort = this.data.entrySet().stream().sorted((e, e2) -> order.compare(e.getKey(), e2.getKey()))
+        Map<String, String> sort = this.data.entrySet().stream().sorted((e, e2) -> ORDER.compare(e.getKey(), e2.getKey()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (old, v) -> old, LinkedHashMap::new));
         if (!this.data.isEmpty())
             this.save(cache, sort, this.gen.getOutputFolder().resolve("assets/" + this.modid + "/lang/" + this.locale + ".json"));
