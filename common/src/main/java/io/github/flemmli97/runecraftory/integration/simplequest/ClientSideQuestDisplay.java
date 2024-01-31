@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.common.integration.simplequest;
+package io.github.flemmli97.runecraftory.integration.simplequest;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;

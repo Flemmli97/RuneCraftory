@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.common.integration.simplequest;
+package io.github.flemmli97.runecraftory.integration.simplequest;
 
 import io.github.flemmli97.runecraftory.common.attachment.player.QuestTracker;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
@@ -50,7 +50,7 @@ public class SimpleQuestIntegrationImpl extends SimpleQuestIntegration {
 
     @Override
     public void openGui(ServerPlayer player) {
-        Map<ResourceLocation, QuestBase> quest = SimpleQuestIntegration.INST().getQuestsFor(player);
+        Map<ResourceLocation, QuestBase> quest = INST().getQuestsFor(player);
         PlayerData data = PlayerData.get(player);
         Platform.INSTANCE.sendToClient(new S2COpenQuestGui(data.getCurrentQuest().stream().anyMatch(p -> p.getQuest() instanceof QuestBoardQuest), quest.entrySet().stream().sorted(Map.Entry.comparingByKey())
                 .map(e -> {
@@ -112,7 +112,7 @@ public class SimpleQuestIntegrationImpl extends SimpleQuestIntegration {
     @Override
     public Map<ResourceLocation, QuestBase> getQuestsFor(ServerPlayer player) {
         PlayerData data = PlayerData.get(player);
-        return Stream.concat(QuestsManager.instance().getQuestsForCategoryID(SimpleQuestIntegration.QUEST_CATEGORY)
+        return Stream.concat(QuestsManager.instance().getQuestsForCategoryID(QUEST_CATEGORY)
                                 .entrySet().stream()
                                 .flatMap(e -> {
                                     if (e.getValue() instanceof NPCQuest npcQuest) {
@@ -121,7 +121,7 @@ public class SimpleQuestIntegrationImpl extends SimpleQuestIntegration {
                                     return Stream.of(new QuestBoardQuest(e.getValue()));
                                 })
                                 .filter(q -> data.canAcceptQuest(q) == PlayerData.AcceptType.ACCEPT && q.isUnlocked(player)) //TODO
-                        , data.getCurrentQuest().stream().map(QuestProgress::getQuest).filter(quest -> quest.category.id.equals(SimpleQuestIntegration.QUEST_CATEGORY)))
+                        , data.getCurrentQuest().stream().map(QuestProgress::getQuest).filter(quest -> quest.category.id.equals(QUEST_CATEGORY)))
                 .collect(Collectors.toMap(
                         q -> q.id,
                         q -> q,
@@ -132,7 +132,7 @@ public class SimpleQuestIntegrationImpl extends SimpleQuestIntegration {
 
     @Override
     public void questBoardComplete(ServerPlayer player) {
-        SimpleQuestAPI.submit(player, SimpleQuestIntegration.QUEST_BOARD_TRIGGER, false);
+        SimpleQuestAPI.submit(player, QUEST_BOARD_TRIGGER, false);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.common.integration.simplequest;
+package io.github.flemmli97.runecraftory.integration.simplequest;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonArray;

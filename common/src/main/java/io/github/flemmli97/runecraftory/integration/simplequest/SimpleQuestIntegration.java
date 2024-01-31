@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.common.integration.simplequest;
+package io.github.flemmli97.runecraftory.integration.simplequest;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;

@@ -26,9 +26,9 @@ import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.NPCAttack
 import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.ShopState;
 import io.github.flemmli97.runecraftory.common.entities.pathing.NPCWalkNodeEvaluator;
-import io.github.flemmli97.runecraftory.common.integration.simplequest.NPCQuest;
-import io.github.flemmli97.runecraftory.common.integration.simplequest.ProgressState;
-import io.github.flemmli97.runecraftory.common.integration.simplequest.SimpleQuestIntegration;
+import io.github.flemmli97.runecraftory.integration.simplequest.NPCQuest;
+import io.github.flemmli97.runecraftory.integration.simplequest.ProgressState;
+import io.github.flemmli97.runecraftory.integration.simplequest.SimpleQuestIntegration;
 import io.github.flemmli97.runecraftory.common.inventory.InventoryShop;
 import io.github.flemmli97.runecraftory.common.inventory.container.ContainerShop;
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemObjectX;

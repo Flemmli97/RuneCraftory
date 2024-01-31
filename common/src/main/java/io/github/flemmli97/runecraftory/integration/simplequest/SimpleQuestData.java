@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.common.integration.simplequest;
+package io.github.flemmli97.runecraftory.integration.simplequest;
 
 import io.github.flemmli97.simplequests.quest.types.QuestBase;
 import net.minecraft.resources.ResourceLocation;

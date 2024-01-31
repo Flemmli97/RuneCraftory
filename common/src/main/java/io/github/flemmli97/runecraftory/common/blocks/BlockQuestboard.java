@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.blocks;
 
 import com.mojang.datafixers.util.Pair;
-import io.github.flemmli97.runecraftory.common.integration.simplequest.SimpleQuestIntegration;
+import io.github.flemmli97.runecraftory.integration.simplequest.SimpleQuestIntegration;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

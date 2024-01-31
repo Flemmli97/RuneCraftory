@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.mixin.compat;
 
-import io.github.flemmli97.runecraftory.common.integration.simplequest.SimpleQuestData;
+import io.github.flemmli97.runecraftory.integration.simplequest.SimpleQuestData;
 import io.github.flemmli97.simplequests.quest.types.QuestBase;
 import net.minecraft.resources.ResourceLocation;
 import org.spongepowered.asm.mixin.Mixin;
