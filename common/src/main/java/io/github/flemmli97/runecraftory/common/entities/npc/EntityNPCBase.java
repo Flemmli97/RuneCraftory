@@ -1376,7 +1376,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         if (this.level().getLevel() < this.data.baseLevel()) {
             this.setLevel(this.data.baseLevel());
         }
-        Platform.INSTANCE.sendToTrackingAndSelf(new S2CNPCLook(this.getId(), this.look), this);
+        if (!this.level.isClientSide)
+            Platform.INSTANCE.sendToTrackingAndSelf(new S2CNPCLook(this.getId(), this.look), this);
     }
 
     private CompoundTag saveNPCData() {
