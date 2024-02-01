@@ -502,10 +502,10 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             NPCData.Gift gift = this.giftOf(stack);
             if (gift != null) {
                 if (this.relationManager.getFriendPointData(player.getUUID()).giftXP(this.level, (int) (gift.xp() * mult)))
-                    this.tellDialogue(serverPlayer, null, null, new TranslatableComponent(gift.responseKey(), player.getName()), List.of());
+                    this.tellDialogue(serverPlayer, null, null, new TranslatableComponent(gift.responseKey()), List.of());
             } else {
                 if (this.relationManager.getFriendPointData(player.getUUID()).giftXP(this.level, (int) (15 * mult)))
-                    this.tellDialogue(serverPlayer, null, null, new TranslatableComponent(this.data.neutralGiftResponse(), player.getName()), List.of());
+                    this.tellDialogue(serverPlayer, null, null, new TranslatableComponent(this.data.neutralGiftResponse()), List.of());
             }
         }
         stack.shrink(1);
@@ -541,7 +541,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             Map.Entry<String, NPCData.Conversation> randomLine = filtered.get(this.random.nextInt(size));
             this.tellDialogue(player, type, randomLine.getKey(), randomLine.getValue());
         } else {
-            this.tellDialogue(player, type, null, new TranslatableComponent(conversations.getFallbackKey(), player.getName()), List.of());
+            this.tellDialogue(player, type, null, new TranslatableComponent(conversations.getFallbackKey()), List.of());
         }
     }
 
@@ -574,15 +574,15 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             Map.Entry<String, NPCData.Conversation> randomLine = filtered.get(this.random.nextInt(size));
             this.tellDialogue(player, null, randomLine.getKey(), randomLine.getValue());
         } else {
-            this.tellDialogue(player, null, null, new TranslatableComponent(conversations.getFallbackKey(), player.getName()), List.of());
+            this.tellDialogue(player, null, null, new TranslatableComponent(conversations.getFallbackKey()), List.of());
         }
         if (questState == -1)
             this.relationManager.advanceQuest(player.getUUID(), quest);
     }
 
     private void tellDialogue(ServerPlayer player, NPCData.ConversationType type, String conversationID, NPCData.Conversation conversation) {
-        List<Component> actions = conversation.actions().stream().map(e -> (Component) new TranslatableComponent(e.translationKey(), player.getName())).toList();
-        this.tellDialogue(player, type, conversationID, new TranslatableComponent(conversation.translationKey(), player.getName()), actions);
+        List<Component> actions = conversation.actions().stream().map(e -> (Component) new TranslatableComponent(e.translationKey())).toList();
+        this.tellDialogue(player, type, conversationID, new TranslatableComponent(conversation.translationKey()), actions);
     }
 
     private void tellDialogue(ServerPlayer player, NPCData.ConversationType type, String conversationID, Component component, List<Component> actions) {

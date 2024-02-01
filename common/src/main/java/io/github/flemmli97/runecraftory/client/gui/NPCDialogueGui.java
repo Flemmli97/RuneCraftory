@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.NPCData;
+import io.github.flemmli97.runecraftory.client.PlaceHolderComponent;
 import io.github.flemmli97.runecraftory.client.gui.widgets.DialogueOptionButton;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.network.C2SDialogueAction;
@@ -19,6 +20,7 @@ import net.minecraft.util.FormattedCharSequence;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class NPCDialogueGui<T extends EntityNPCBase> extends Screen {
 
@@ -172,6 +174,8 @@ public class NPCDialogueGui<T extends EntityNPCBase> extends Screen {
     }
 
     public void updateConversation(Minecraft mc, NPCData.ConversationType type, String conversationID, Component conversation, List<Component> actions) {
+        conversation = PlaceHolderComponent.parseComponent(conversation, Map.of(PlaceHolderComponent.NPC, this.entity.getDisplayName(),
+                PlaceHolderComponent.PLAYER, mc.player.getDisplayName()));
         this.conversation = mc.font.getSplitter().splitLines(conversation, LINE_WIDTH, conversation.getStyle())
                 .stream().map(txt -> new ConversationLine(mc.font.width(txt), txt, Language.getInstance().getVisualOrder(txt))).toList();
         this.actions = actions;

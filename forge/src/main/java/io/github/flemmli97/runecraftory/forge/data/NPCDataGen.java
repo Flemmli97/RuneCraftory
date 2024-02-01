@@ -46,16 +46,16 @@ public class NPCDataGen extends NPCDataProvider {
 
         this.addNPCData("random_npc", new NPCData.Builder(50)
                         .addGiftResponse("dislike", new NPCData.Gift(null, "npc.generic.dislike", -10), "Eh... thanks I guess?")
-                        .addGiftResponse("like", new NPCData.Gift(null, "npc.generic.like", 25), "Thanks %s for the gift. I really like this.")
+                        .addGiftResponse("like", new NPCData.Gift(null, "npc.generic.like", 25), "Thanks %player% for the gift. I really like this.")
                         .setNeutralGiftResponse("npc.generic.gift.default", "Thank you for your gift")
                         .withCombatAction(genericAttack)
                         .addTranslation(QuestGen.getTask(QuestGen.TAMING), "Tame a monster")
                         .addTranslation(QuestGen.getDescription(QuestGen.TAMING), "I need you to tame a monster. Come see me."),
                 of(m -> {
-                    m.put(NPCData.ConversationType.GREETING, new NPCData.ConversationSet.Builder("npc.generic.greeting.default", "Hello %s.")
-                            .addConversation(new NPCData.Conversation.Builder("npc.generic.greeting.1", 0, 10).addCondition(TimeCheck.time(IntRange.range(0, 12000)).build()), "Good day %s.")
-                            .addConversation(new NPCData.Conversation.Builder("npc.generic.greeting.2", 0, 10).addCondition(TimeCheck.time(IntRange.range(12000, 14000)).build()), "Good evening %s.")
-                            .addConversation(new NPCData.Conversation.Builder("npc.generic.greeting.3", 0, 10), "Hi. How are you today %s?"));
+                    m.put(NPCData.ConversationType.GREETING, new NPCData.ConversationSet.Builder("npc.generic.greeting.default", "Hello %player%.")
+                            .addConversation(new NPCData.Conversation.Builder("npc.generic.greeting.1", 0, 10).addCondition(TimeCheck.time(IntRange.range(0, 12000)).build()), "Good day %player%.")
+                            .addConversation(new NPCData.Conversation.Builder("npc.generic.greeting.2", 0, 10).addCondition(TimeCheck.time(IntRange.range(12000, 14000)).build()), "Good evening %player%.")
+                            .addConversation(new NPCData.Conversation.Builder("npc.generic.greeting.3", 0, 10), "Hi. How are you today %player%?"));
                     m.put(NPCData.ConversationType.TALK, new NPCData.ConversationSet.Builder("npc.generic.talk.default", "...")
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.talk.1", 0, 10)
                                     .addAction(new NPCData.ConversationActionHolder("npc.generic.talk.1.answer.same", NPCData.ConversationAction.ANSWER, "npc.generic.talk.1.response.same", 0), "Same")
@@ -81,9 +81,9 @@ public class NPCDataGen extends NPCDataProvider {
                         .setNeutralGiftResponse("npc.generic.2.gift.default", "Thanks. I appreciate it")
                         .withCombatAction(genericAttack),
                 of(m -> {
-                    m.put(NPCData.ConversationType.GREETING, new NPCData.ConversationSet.Builder("npc.generic.2.greeting.default", "Hello %s.")
-                            .addConversation(new NPCData.Conversation.Builder("npc.generic.2.greeting.1", 0, 10), "Howdy %s")
-                            .addConversation(new NPCData.Conversation.Builder("npc.generic.2.greeting.2", 0, 10), "Hi. Whats up %s?"));
+                    m.put(NPCData.ConversationType.GREETING, new NPCData.ConversationSet.Builder("npc.generic.2.greeting.default", "Hello %player%.")
+                            .addConversation(new NPCData.Conversation.Builder("npc.generic.2.greeting.1", 0, 10), "Howdy %player%")
+                            .addConversation(new NPCData.Conversation.Builder("npc.generic.2.greeting.2", 0, 10), "Hi. Whats up %player%?"));
                     m.put(NPCData.ConversationType.TALK, new NPCData.ConversationSet.Builder("npc.generic.2.talk.default", "...")
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.2.talk.1", 0, 10), "Did you know that upgrading a weapon with scrap metal + makes it do 1 damage?")
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.2.talk.2", 0, 10), "Those villagers seem strange. Why do they have no hands?"));
@@ -95,11 +95,11 @@ public class NPCDataGen extends NPCDataProvider {
 
         this.addNPCData("random_npc_3", new NPCData.Builder(50)
                         .addGiftResponse("dislike", new NPCData.Gift(null, "npc.generic.3.dislike", -10), "What is this... Sorry but im not a fan of this")
-                        .addGiftResponse("like", new NPCData.Gift(null, "npc.generic.3.like", 25), "Wow %s. Thanks for the gift. This is a nice present!")
+                        .addGiftResponse("like", new NPCData.Gift(null, "npc.generic.3.like", 25), "Wow %player%. Thanks for the gift. This is a nice present!")
                         .setNeutralGiftResponse("npc.generic.3.gift.default", "Thank you for your gift")
                         .withCombatAction(genericAttack),
                 of(m -> {
-                    m.put(NPCData.ConversationType.GREETING, new NPCData.ConversationSet.Builder("npc.generic.3.greeting.default", "Hi %s. How are you doing today?")
+                    m.put(NPCData.ConversationType.GREETING, new NPCData.ConversationSet.Builder("npc.generic.3.greeting.default", "Hi %player%. How are you doing today?")
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.3.greeting.1", 0, 10), "Nice to see you"));
                     m.put(NPCData.ConversationType.TALK, new NPCData.ConversationSet.Builder("npc.generic.3.talk.default", "...")
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.3.talk.2", 0, 10), "A forge will allow you to craft your own weapons.")
@@ -138,7 +138,7 @@ public class NPCDataGen extends NPCDataProvider {
                         .addTranslation(QuestGen.getTask(QuestGen.MINING), "Acquire Hardware??")
                         .addTranslation(QuestGen.getDescription(QuestGen.MINING), "Come see me."),
                 of(m -> {
-                    m.put(NPCData.ConversationType.GREETING, new NPCData.ConversationSet.Builder("npc.smith.male.1.greeting.default", "Hello %s. Let's do our best again today!"));
+                    m.put(NPCData.ConversationType.GREETING, new NPCData.ConversationSet.Builder("npc.smith.male.1.greeting.default", "Hello %player%. Let's do our best again today!"));
                     m.put(NPCData.ConversationType.TALK, new NPCData.ConversationSet.Builder("npc.smith.male.1.talk.default", "...")
                             .addConversation(new NPCData.Conversation.Builder("npc.smith.male.1.talk.1", 0, 10), "Nothing beats the clanging sound of a working forge.")
                             .addConversation(new NPCData.Conversation.Builder("npc.smith.male.1.talk.2", 0, 10), "There are multiple different weapon types. You should try them all out to find the one that suits you the best."));
@@ -166,7 +166,7 @@ public class NPCDataGen extends NPCDataProvider {
                         .setNeutralGiftResponse("npc.smith.female.1.gift.default", "Thanks. Did you know ores are one of my favorite things?")
                         .withCombatAction(meleeAndFireball),
                 of(m -> {
-                    m.put(NPCData.ConversationType.GREETING, new NPCData.ConversationSet.Builder("npc.smith.female.1.greeting.default", "Hello %s. Today is a nice day!"));
+                    m.put(NPCData.ConversationType.GREETING, new NPCData.ConversationSet.Builder("npc.smith.female.1.greeting.default", "Hello %player%. Today is a nice day!"));
                     m.put(NPCData.ConversationType.TALK, new NPCData.ConversationSet.Builder("npc.smith.female.1.talk.default", "...")
                             .addConversation(new NPCData.Conversation.Builder("npc.smith.female.1.talk.1", 0, 10), "Working as a blacksmith is hard but very fun.")
                             .addConversation(new NPCData.Conversation.Builder("npc.smith.female.1.talk.2", 0, 10), "Someday I would like to make some kind of legendary weapon."));
@@ -197,7 +197,7 @@ public class NPCDataGen extends NPCDataProvider {
                         .addTranslation(QuestGen.getTask(QuestGen.SHIP_TURNIP), "First Shipment")
                         .addTranslation(QuestGen.getDescription(QuestGen.SHIP_TURNIP), "Come see me."),
                 of(m -> {
-                    m.put(NPCData.ConversationType.GREETING, new NPCData.ConversationSet.Builder("npc.shop_owner.male.1.greeting.default", "Hey. Nice to see you %s."));
+                    m.put(NPCData.ConversationType.GREETING, new NPCData.ConversationSet.Builder("npc.shop_owner.male.1.greeting.default", "Hey. Nice to see you %player%."));
                     m.put(NPCData.ConversationType.TALK, new NPCData.ConversationSet.Builder("npc.shop_owner.male.1.talk.default", "...")
                             .addConversation(new NPCData.Conversation.Builder("npc.shop_owner.male.1.talk.1", 0, 10), "You should totally check out my shop.")
                             .addConversation(new NPCData.Conversation.Builder("npc.shop_owner.male.1.talk.2", 0, 10), "Not watering crops will make them wilt so be sure to water them everyday."));
@@ -224,7 +224,7 @@ public class NPCDataGen extends NPCDataProvider {
                         .setNeutralGiftResponse("npc.shop_owner.female.1.gift.default", "Thank you. Come crops would be nice.")
                         .withCombatAction(genericAttack),
                 of(m -> {
-                    m.put(NPCData.ConversationType.GREETING, new NPCData.ConversationSet.Builder("npc.shop_owner.female.1.greeting.default", "Heya %s. It's good to see you!"));
+                    m.put(NPCData.ConversationType.GREETING, new NPCData.ConversationSet.Builder("npc.shop_owner.female.1.greeting.default", "Heya %player%. It's good to see you!"));
                     m.put(NPCData.ConversationType.TALK, new NPCData.ConversationSet.Builder("npc.shop_owner.female.1.talk.default", "...")
                             .addConversation(new NPCData.Conversation.Builder("npc.shop_owner.female.1.talk.1", 0, 10), "Buy something from my shop will ya!")
                             .addConversation(new NPCData.Conversation.Builder("npc.shop_owner.female.1.talk.2", 0, 10), "I heard crops can sometimes grow to very big sizes."));
