@@ -1,72 +1,172 @@
 {
   "values": [
     {
+      "item": "runecraftory:toyherb_seeds",
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": "runecraftory:moondrop_flower_seeds",
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": "runecraftory:pink_cat_seeds",
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": "runecraftory:charm_blue_seeds",
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": "runecraftory:lamp_grass_seeds",
+      "unlock_type": "AFTER_UNLOCK"
+    },
+    {
+      "item": "runecraftory:cherry_grass_seeds",
+      "unlock_type": "AFTER_UNLOCK"
+    },
+    {
+      "item": "runecraftory:pom_pom_grass_seeds",
+      "unlock_type": "AFTER_UNLOCK"
+    },
+    {
+      "item": "runecraftory:autumn_grass_seeds",
+      "unlock_type": "AFTER_UNLOCK"
+    },
+    {
+      "item": "runecraftory:noel_grass_seeds",
+      "unlock_type": "AFTER_UNLOCK"
+    },
+    {
+      "item": "runecraftory:fireflower_seeds",
+      "unlock_type": "AFTER_UNLOCK"
+    },
+    {
+      "item": "runecraftory:four_leaf_clover_seeds",
+      "unlock_type": "AFTER_UNLOCK"
+    },
+    {
+      "item": "runecraftory:ironleaf_seeds",
+      "unlock_type": "AFTER_UNLOCK"
+    },
+    {
+      "item": "runecraftory:white_crystal_seeds",
+      "unlock_type": "AFTER_UNLOCK"
+    },
+    {
+      "item": "runecraftory:red_crystal_seeds",
+      "unlock_type": "AFTER_UNLOCK"
+    },
+    {
+      "item": "runecraftory:green_crystal_seeds",
+      "unlock_type": "AFTER_UNLOCK"
+    },
+    {
+      "item": "runecraftory:blue_crystal_seeds",
+      "unlock_type": "AFTER_UNLOCK"
+    },
+    {
+      "item": "runecraftory:emery_flower_seeds",
+      "unlock_type": "AFTER_UNLOCK"
+    },
+    {
       "item": "runecraftory:toyherb",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:moondrop_flower",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:pink_cat",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:charm_blue",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:lamp_grass",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:cherry_grass",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:pom_pom_grass",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:autumn_grass",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:noel_grass",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:fireflower",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:four_leaf_clover",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:ironleaf",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:white_crystal",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:red_crystal",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:green_crystal",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:blue_crystal",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:emery_flower",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:formular_a",
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": "runecraftory:formular_b",
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": "runecraftory:formular_c",
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": "runecraftory:minimizer",
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": "runecraftory:giantizer",
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": "runecraftory:greenifier",
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": "runecraftory:greenifier_plus",
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": "runecraftory:wettable_powder",
+      "unlock_type": "DEFAULT"
     }
   ]
 }

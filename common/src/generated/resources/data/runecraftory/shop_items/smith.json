@@ -1,84 +1,152 @@
 {
   "values": [
     {
+      "item": "runecraftory:hoe_scrap",
+      "unlock_type": "DEFAULT"
+    },
+    {
       "item": "runecraftory:hoe_iron",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:hoe_silver",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:watering_can_scrap",
+      "unlock_type": "DEFAULT"
     },
     {
       "item": "runecraftory:watering_can_iron",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:watering_can_silver",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:sickle_scrap",
+      "unlock_type": "DEFAULT"
     },
     {
       "item": "runecraftory:sickle_iron",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:sickle_silver",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:hammer_scrap",
+      "unlock_type": "DEFAULT"
     },
     {
       "item": "runecraftory:hammer_iron",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:hammer_silver",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:axe_scrap",
+      "unlock_type": "DEFAULT"
     },
     {
       "item": "runecraftory:axe_iron",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:axe_silver",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:fishing_rod_scrap",
+      "unlock_type": "DEFAULT"
     },
     {
       "item": "runecraftory:fishing_rod_iron",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:fishing_rod_silver",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:monster_command_staff",
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": "runecraftory:brush",
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": "runecraftory:magnifying_glass",
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": "runecraftory:broad_sword",
+      "unlock_type": "DEFAULT"
     },
     {
       "item": "runecraftory:cutlass",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:claymore",
+      "unlock_type": "DEFAULT"
     },
     {
       "item": "runecraftory:great_sword",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:spear",
+      "unlock_type": "DEFAULT"
     },
     {
       "item": "runecraftory:needle_spear",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:battle_axe",
+      "unlock_type": "DEFAULT"
     },
     {
       "item": "runecraftory:pole_axe",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:battle_hammer",
+      "unlock_type": "DEFAULT"
     },
     {
       "item": "runecraftory:war_hammer",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:short_dagger",
+      "unlock_type": "DEFAULT"
     },
     {
       "item": "runecraftory:iron_edge",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:leather_glove",
+      "unlock_type": "DEFAULT"
     },
     {
       "item": "runecraftory:gloves",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:rod",
+      "unlock_type": "DEFAULT"
     },
     {
       "item": "runecraftory:aquamarine_rod",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     }
   ]
 }

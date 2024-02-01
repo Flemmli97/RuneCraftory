@@ -1,96 +1,100 @@
 {
   "values": [
     {
+      "item": "runecraftory:fireball",
+      "unlock_type": "DEFAULT"
+    },
+    {
       "item": "runecraftory:fireball_big",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:explosion",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:water_laser",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:parallel_laser",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:delta_laser",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:screw_rock",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:earth_spike",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:avenger_rock",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:sonic_wind",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:double_sonic",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:penetrate_sonic",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:light_barrier",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:shine",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:prism",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:dark_snake",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:dark_ball",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:darkness",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:cure",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:cure_all",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:cure_master",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:medi_poison",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:medi_paralysis",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:medi_seal",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     }
   ]
 }

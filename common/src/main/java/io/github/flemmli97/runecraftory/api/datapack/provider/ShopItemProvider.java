@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
+import io.github.flemmli97.runecraftory.api.datapack.ShopItemProperties;
 import io.github.flemmli97.runecraftory.common.datapack.manager.ShopItemsManager;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
@@ -34,8 +35,8 @@ public abstract class ShopItemProvider implements DataProvider {
 
     private static final Gson GSON = new GsonBuilder().enableComplexMapKeySerialization().setPrettyPrinting().disableHtmlEscaping().create();
 
-    private final Map<ResourceLocation, Collection<Pair<ItemLike, Boolean>>> items = new HashMap<>();
-    private final Map<ResourceLocation, Collection<Pair<Ingredient, Boolean>>> ingredients = new HashMap<>();
+    private final Map<ResourceLocation, Collection<Pair<ItemLike, ShopItemProperties.UnlockType>>> items = new HashMap<>();
+    private final Map<ResourceLocation, Collection<Pair<Ingredient, ShopItemProperties.UnlockType>>> ingredients = new HashMap<>();
 
     private final Map<ResourceLocation, Boolean> overwrite = new HashMap<>();
 
@@ -62,14 +63,14 @@ public abstract class ShopItemProvider implements DataProvider {
                 builder.forEach(pair -> {
                     JsonObject o = new JsonObject();
                     o.addProperty("item", PlatformUtils.INSTANCE.items().getIDFrom(pair.getFirst().asItem()).toString());
-                    o.addProperty("needs_unlock", pair.getSecond());
+                    o.addProperty("unlock_type", pair.getSecond().toString());
                     arr.add(o);
                 });
                 this.ingredients.getOrDefault(res, new ArrayList<>())
                         .forEach(pair -> {
                             JsonObject o = new JsonObject();
                             o.add("item", pair.getFirst().toJson());
-                            o.addProperty("needs_unlock", pair.getSecond());
+                            o.addProperty("unlock_type", pair.getSecond().toString());
                             arr.add(o);
                         });
                 obj.add("values", arr);
@@ -86,46 +87,34 @@ public abstract class ShopItemProvider implements DataProvider {
     }
 
     public void addItem(NPCJob shop, ItemLike item) {
-        this.addItem(shop, item, false, false);
+        this.addItem(shop, item, ShopItemProperties.UnlockType.NEEDS_SHIPPING);
     }
 
-    public void addItem(NPCJob shop, ItemLike item, boolean defaults) {
-        this.addItem(shop, item, defaults, false);
-    }
-
-    public void addItem(NPCJob shop, ItemLike item, boolean defaults, boolean needsUnlock) {
+    public void addItem(NPCJob shop, ItemLike item, ShopItemProperties.UnlockType needsUnlock) {
         ResourceLocation res = ModNPCJobs.getIDFrom(shop);
-        this.items.computeIfAbsent(new ResourceLocation(res.getNamespace(), res.getPath() + (defaults ? "_defaults" : "")),
+        this.items.computeIfAbsent(new ResourceLocation(res.getNamespace(), res.getPath()),
                         r -> new ArrayList<>())
                 .add(Pair.of(item, needsUnlock));
     }
 
     public void addItem(NPCJob shop, ItemStack item) {
-        this.addItem(shop, item, false, false);
+        this.addItem(shop, item, ShopItemProperties.UnlockType.NEEDS_SHIPPING);
     }
 
-    public void addItem(NPCJob shop, ItemStack item, boolean defaults) {
-        this.addItem(shop, item, defaults, false);
-    }
-
-    public void addItem(NPCJob shop, ItemStack item, boolean defaults, boolean needsUnlock) {
+    public void addItem(NPCJob shop, ItemStack item, ShopItemProperties.UnlockType needsUnlock) {
         ResourceLocation res = ModNPCJobs.getIDFrom(shop);
-        this.ingredients.computeIfAbsent(new ResourceLocation(res.getNamespace(), res.getPath() + (defaults ? "_defaults" : "")),
+        this.ingredients.computeIfAbsent(new ResourceLocation(res.getNamespace(), res.getPath()),
                         r -> new ArrayList<>())
                 .add(Pair.of(Ingredient.of(item), needsUnlock));
     }
 
     public void addItem(NPCJob shop, TagKey<Item> tag) {
-        this.addItem(shop, tag, false);
+        this.addItem(shop, tag, ShopItemProperties.UnlockType.NEEDS_SHIPPING);
     }
 
-    public void addItem(NPCJob shop, TagKey<Item> tag, boolean defaults) {
-        this.addItem(shop, tag, defaults, false);
-    }
-
-    public void addItem(NPCJob shop, TagKey<Item> tag, boolean defaults, boolean needsUnlock) {
+    public void addItem(NPCJob shop, TagKey<Item> tag, ShopItemProperties.UnlockType needsUnlock) {
         ResourceLocation res = ModNPCJobs.getIDFrom(shop);
-        this.ingredients.computeIfAbsent(new ResourceLocation(res.getNamespace(), res.getPath() + (defaults ? "_defaults" : "")),
+        this.ingredients.computeIfAbsent(new ResourceLocation(res.getNamespace(), res.getPath()),
                         r -> new ArrayList<>())
                 .add(Pair.of(Ingredient.of(tag), needsUnlock));
     }

@@ -1305,10 +1305,14 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     public void randomizeData(NPCJob job, boolean overwrite) {
-        if (this.getServer() != null)
+        if (this.getServer() != null) {
             this.setNPCData(DataPackHandler.INSTANCE.npcDataManager().getRandom(this.random, d ->
-                    (job == null || d.profession().isEmpty() || d.profession().stream().anyMatch(j -> j.equals(job)))
-                            && WorldHandler.get(this.getServer()).npcHandler.canAssignNPC(d)), !overwrite);
+                    (d.profession().isEmpty() || d.profession().stream().anyMatch(j -> j.equals(job)))
+                            && WorldHandler.get(this.getServer()).npcHandler.canAssignNPC(d), job == null ? null :
+                    d -> d.profession().stream().anyMatch(j -> j.equals(job))), !overwrite);
+            if (job != null)
+                this.setShop(job);
+        }
     }
 
     public ResourceLocation getDataID() {
@@ -1353,7 +1357,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
                 this.look = null;
                 this.getLook();
             }
-            if (!this.data.profession().contains(this.getShop()))
+            if (!this.data.profession().isEmpty() && !this.data.profession().contains(this.getShop()))
                 this.setShop(!this.data.profession().isEmpty() ? this.data.profession().get(this.dataRandom.nextInt(this.data.profession().size())) : ModNPCJobs.getRandomJob(this.random));
             if (this.data.gender() != NPCData.Gender.UNDEFINED && (this.data.gender() == NPCData.Gender.MALE) != this.isMale())
                 this.setMale(this.data.gender() == NPCData.Gender.UNDEFINED ? this.random.nextBoolean() : this.data.gender() != NPCData.Gender.FEMALE);

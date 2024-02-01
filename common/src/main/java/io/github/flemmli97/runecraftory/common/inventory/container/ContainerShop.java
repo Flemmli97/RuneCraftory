@@ -121,9 +121,9 @@ public class ContainerShop extends AbstractContainerMenu {
             if (shopOutput.hasItem() && player instanceof ServerPlayer serverPlayer) {
                 EnumShopResult res = ItemUtils.buyItem(player, this.invShop.npc, shopOutput.getItem().copy());
                 Component txt = switch (res) {
-                    case NOMONEY -> new TranslatableComponent("runecraftory.npc.shop.money.no");
-                    case NOSPACE -> new TranslatableComponent("runecraftory.npc.shop.inventory.full");
-                    case SUCCESS -> new TranslatableComponent("runecraftory.npc.shop.success");
+                    case NOMONEY -> new TranslatableComponent("npc.shop.money.no");
+                    case NOSPACE -> new TranslatableComponent("npc.shop.inventory.full");
+                    case SUCCESS -> new TranslatableComponent("npc.shop.success");
                 };
                 Platform.INSTANCE.sendToClient(new S2CShopResponses(txt), serverPlayer);
                 if (res == EnumShopResult.SUCCESS)

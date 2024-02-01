@@ -1,0 +1,124 @@
+{
+  "values": [
+    {
+      "item": "runecraftory:power_wave",
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": "runecraftory:dash_slash",
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:rush_attack",
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:round_break",
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:mind_thrust",
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:gust",
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:storm",
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:blitz",
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:twin_attack",
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:rail_strike",
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:wind_slash",
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:flash_strike",
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:naive_blade",
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:steel_heart",
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:delta_strike",
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:hurricane",
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:reaper_slash",
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:million_strike",
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:axel_disaster",
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:stardust_upper",
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:tornado_swing",
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:grand_impact",
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:giga_swing",
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:upper_cut",
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:double_kick",
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:straight_punch",
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:neko_damashi",
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:rush_punch",
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:cyclone",
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:rapid_move",
+      "unlock_type": "NEEDS_SHIPPING"
+    }
+  ]
+}

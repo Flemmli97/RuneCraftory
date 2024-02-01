@@ -78,7 +78,7 @@ public class ShopItemsManager extends SimpleJsonResourceReloadListener {
         ImmutableMap.Builder<NPCJob, Collection<ShopItemProperties>> bD = ImmutableMap.builder();
         b.put(ModNPCJobs.RANDOM.getSecond(), DataPackHandler.INSTANCE.itemStatManager().all()
                 .stream().filter(p -> p.getSecond().getBuy() > 0)
-                .map(p -> new ShopItemProperties(p.getFirst(), false))
+                .map(p -> new ShopItemProperties(p.getFirst(), ShopItemProperties.UnlockType.NEEDS_SHIPPING))
                 .toList());
         this.shopItems.forEach((s, c) -> {
             if (s != ModNPCJobs.RANDOM.getSecond()) {
@@ -105,12 +105,10 @@ public class ShopItemsManager extends SimpleJsonResourceReloadListener {
     @Override
     protected void apply(Map<ResourceLocation, JsonElement> data, ResourceManager manager, ProfilerFiller profiler) {
         HashMap<NPCJob, Collection<ShopItemProperties>> shopBuilder = new HashMap<>();
-        HashMap<NPCJob, Collection<ShopItemProperties>> shopBuilder2 = new HashMap<>();
         this.checkedStats = false;
         data.forEach((fres, el) -> {
             try {
-                boolean addToDefault = fres.getPath().contains("_defaults");
-                NPCJob shop = ModNPCJobs.getFromID(new ResourceLocation(fres.getNamespace(), fres.getPath().replace("_defaults", "")));
+                NPCJob shop = ModNPCJobs.getFromID(new ResourceLocation(fres.getNamespace(), fres.getPath()));
                 if (!shop.hasShop)
                     return;
                 JsonObject obj = el.getAsJsonObject();
@@ -122,7 +120,12 @@ public class ShopItemsManager extends SimpleJsonResourceReloadListener {
                         JsonObject valObj = val.getAsJsonObject();
                         JsonElement itemVal = valObj.get("item");
                         List<ItemStack> itemList = new ArrayList<>();
-                        boolean special = valObj.get("needs_unlock").getAsBoolean();
+                        ShopItemProperties.UnlockType unlockType;
+                        try {
+                            unlockType = ShopItemProperties.UnlockType.valueOf(valObj.get("unlock_type").getAsString());
+                        } catch (IllegalArgumentException e) {
+                            throw new JsonSyntaxException("No such unlock type " + valObj.get("unlock_type").getAsString() + " for " + fres);
+                        }
                         if (itemVal.isJsonPrimitive()) {
                             Item item = PlatformUtils.INSTANCE.items().getFromId(new ResourceLocation(itemVal.getAsString()));
                             if (item != Items.AIR) {
@@ -131,30 +134,18 @@ public class ShopItemsManager extends SimpleJsonResourceReloadListener {
                         } else {
                             itemList.addAll(Arrays.asList(Ingredient.fromJson(val).getItems()));
                         }
-                        itemList.forEach(s -> items.add(new ShopItemProperties(s, special)));
+                        itemList.forEach(s -> items.add(new ShopItemProperties(s, unlockType)));
                     }
                 });
-                if (addToDefault) {
-                    if (replace)
-                        shopBuilder2.put(shop, items);
-                    else
-                        shopBuilder2.compute(shop, (k, v) -> {
-                            if (v == null)
-                                return items;
-                            v.addAll(items);
-                            return v;
-                        });
-                } else {
-                    if (replace)
-                        shopBuilder.put(shop, items);
-                    else
-                        shopBuilder.compute(shop, (k, v) -> {
-                            if (v == null)
-                                return items;
-                            v.addAll(items);
-                            return v;
-                        });
-                }
+                if (replace)
+                    shopBuilder.put(shop, items);
+                else
+                    shopBuilder.compute(shop, (k, v) -> {
+                        if (v == null)
+                            return items;
+                        v.addAll(items);
+                        return v;
+                    });
             } catch (JsonSyntaxException ex) {
                 RuneCraftory.logger.error("Couldnt parse shop items json {} {}", fres, ex);
                 ex.fillInStackTrace();
@@ -162,8 +153,10 @@ public class ShopItemsManager extends SimpleJsonResourceReloadListener {
         });
         ImmutableMap.Builder<NPCJob, Collection<ShopItemProperties>> b = ImmutableMap.builder();
         ImmutableMap.Builder<NPCJob, Collection<ShopItemProperties>> bD = ImmutableMap.builder();
-        shopBuilder.forEach((s, c) -> b.put(s, ImmutableList.copyOf(c)));
-        shopBuilder2.forEach((s, c) -> bD.put(s, ImmutableList.copyOf(c)));
+        shopBuilder.forEach((s, c) -> {
+            b.put(s, ImmutableList.copyOf(c));
+            bD.put(s, c.stream().filter(p -> p.unlockType() == ShopItemProperties.UnlockType.DEFAULT).toList());
+        });
         this.shopItems = b.build();
         this.shopItemsDefaults = bD.build();
     }

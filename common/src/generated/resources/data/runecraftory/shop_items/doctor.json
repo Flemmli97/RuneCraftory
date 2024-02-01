@@ -1,20 +1,84 @@
 {
   "values": [
     {
+      "item": "runecraftory:recovery_potion",
+      "unlock_type": "DEFAULT"
+    },
+    {
       "item": "runecraftory:healing_potion",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:mystery_potion",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:magical_potion",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:roundoff",
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": "runecraftory:para_gone",
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": "runecraftory:cold_medicine",
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": "runecraftory:antidote_potion",
+      "unlock_type": "DEFAULT"
     },
     {
       "item": "runecraftory:elli_leaves",
-      "needs_unlock": false
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:white_grass",
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": "runecraftory:indigo_grass",
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": "runecraftory:purple_grass",
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": "runecraftory:green_grass",
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": "runecraftory:blue_grass",
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": "runecraftory:yellow_grass",
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": "runecraftory:red_grass",
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": "runecraftory:orange_grass",
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": "runecraftory:black_grass",
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": "runecraftory:antidote_grass",
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": "runecraftory:medicinal_herb",
+      "unlock_type": "DEFAULT"
     }
   ]
 }

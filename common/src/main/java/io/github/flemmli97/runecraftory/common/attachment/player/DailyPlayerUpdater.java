@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class DailyPlayerUpdater {
 
-    private int lastUpdateDay;
+    private int lastUpdateDay = -1;
 
     private boolean gaveMonsterItem, ateFood;
     private int bathCounter;

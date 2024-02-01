@@ -14,6 +14,7 @@ import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.util.random.WeightedEntry;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.Random;
 import java.util.function.Predicate;
@@ -28,6 +29,7 @@ public class NPCDataManager extends SimpleJsonResourceReloadListener {
     private Map<ResourceLocation, NPCData> keyData = ImmutableMap.of();
     private Map<NPCData, ResourceLocation> dataKey = ImmutableMap.of();
     private WeightedList<NPCData> view = new WeightedList<>();
+    private WeightedList<NPCData> viewNoJobDef = new WeightedList<>();
 
     public NPCDataManager() {
         super(GSON, DIRECTORY);
@@ -41,8 +43,8 @@ public class NPCDataManager extends SimpleJsonResourceReloadListener {
         return this.dataKey.getOrDefault(data, DEFAULT_ID);
     }
 
-    public NPCData getRandom(Random random, Predicate<NPCData> func) {
-        return this.view.getRandom(random, NPCData.DEFAULT_DATA, func);
+    public NPCData getRandom(Random random, Predicate<NPCData> func, @Nullable Predicate<NPCData> other) {
+        return this.view.getRandom(random, NPCData.DEFAULT_DATA, func, other);
     }
 
     @Override
@@ -65,5 +67,6 @@ public class NPCDataManager extends SimpleJsonResourceReloadListener {
         this.keyData.forEach((resourceLocation, data) -> reverse.put(data, resourceLocation));
         this.dataKey = reverse.build();
         this.view.setList(this.keyData.values().stream().map(d -> WeightedEntry.wrap(d, d.weight())).toList());
+        this.viewNoJobDef.setList(this.keyData.values().stream().filter(d -> d.profession().isEmpty()).map(d -> WeightedEntry.wrap(d, d.weight())).toList());
     }
 }

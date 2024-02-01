@@ -118,24 +118,6 @@ public class ModNPCJobs {
     }
 
     /**
-     * for legacy player data. keep for a few versions
-     */
-    public static ResourceLocation legacyOfString(String string) {
-        return switch (string) {
-            case "NONE" -> NONE.getFirst();
-            case "GENERAL" -> GENERAL.getFirst();
-            case "FLOWER" -> FLOWER.getFirst();
-            case "WEAPON" -> SMITH.getFirst();
-            case "CLINIC" -> DOCTOR.getFirst();
-            case "FOOD" -> COOK.getFirst();
-            case "MAGIC" -> MAGIC.getFirst();
-            case "RUNESKILL" -> RUNE_SKILLS.getFirst();
-            case "RANDOM" -> RANDOM.getFirst();
-            default -> DEFAULT_KEY;
-        };
-    }
-
-    /**
      * for legacy npc data. keep for a few versions
      */
     public static ResourceLocation legacyOfTag(Tag tag) {
