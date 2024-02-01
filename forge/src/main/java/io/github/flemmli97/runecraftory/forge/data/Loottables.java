@@ -538,20 +538,20 @@ public class Loottables extends LootTableProvider {
             biConsumer.accept(QuestGen.SHIP_TURNIP, LootTable.lootTable().withPool(LootPool.lootPool()
                     .add(LootItem.lootTableItem(ModItems.turnipSeeds.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 5))))));
 
-            LootPool.Builder spells = LootPool.lootPool().setRolls(UniformGenerator.between(-1, 1));
-            spells.add(LootItem.lootTableItem(ModItems.fireBallSmall.get()).setWeight(100));
+            LootPool.Builder spells = LootPool.lootPool().setRolls(UniformGenerator.between(-2, 1));
+            spells.add(LootItem.lootTableItem(ModItems.fireBallSmall.get()).setWeight(140));
             spells.add(LootItem.lootTableItem(ModItems.fireBallBig.get()).setWeight(60));
             spells.add(LootItem.lootTableItem(ModItems.explosion.get()).setWeight(20));
-            spells.add(LootItem.lootTableItem(ModItems.waterLaser.get()).setWeight(100));
+            spells.add(LootItem.lootTableItem(ModItems.waterLaser.get()).setWeight(110));
             spells.add(LootItem.lootTableItem(ModItems.parallelLaser.get()).setWeight(60));
             spells.add(LootItem.lootTableItem(ModItems.deltaLaser.get()).setWeight(20));
-            spells.add(LootItem.lootTableItem(ModItems.screwRock.get()).setWeight(100));
+            spells.add(LootItem.lootTableItem(ModItems.screwRock.get()).setWeight(110));
             spells.add(LootItem.lootTableItem(ModItems.earthSpike.get()).setWeight(60));
             spells.add(LootItem.lootTableItem(ModItems.avengerRock.get()).setWeight(20));
-            spells.add(LootItem.lootTableItem(ModItems.sonicWind.get()).setWeight(100));
+            spells.add(LootItem.lootTableItem(ModItems.sonicWind.get()).setWeight(110));
             spells.add(LootItem.lootTableItem(ModItems.doubleSonic.get()).setWeight(60));
             spells.add(LootItem.lootTableItem(ModItems.penetrateSonic.get()).setWeight(20));
-            spells.add(LootItem.lootTableItem(ModItems.lightBarrier.get()).setWeight(100));
+            spells.add(LootItem.lootTableItem(ModItems.lightBarrier.get()).setWeight(90));
             spells.add(LootItem.lootTableItem(ModItems.shine.get()).setWeight(50));
             spells.add(LootItem.lootTableItem(ModItems.prism.get()).setWeight(15));
             spells.add(LootItem.lootTableItem(ModItems.darkSnake.get()).setWeight(100));
@@ -572,7 +572,7 @@ public class Loottables extends LootTableProvider {
             spells.add(LootItem.lootTableItem(ModItems.gust.get()).setWeight(60));
             spells.add(LootItem.lootTableItem(ModItems.storm.get()).setWeight(80));
             spells.add(LootItem.lootTableItem(ModItems.blitz.get()).setWeight(30));
-            spells.add(LootItem.lootTableItem(ModItems.twinAttack.get()).setWeight(100));
+            spells.add(LootItem.lootTableItem(ModItems.twinAttack.get()).setWeight(90));
             spells.add(LootItem.lootTableItem(ModItems.railStrike.get()).setWeight(50));
             spells.add(LootItem.lootTableItem(ModItems.windSlash.get()).setWeight(70));
             spells.add(LootItem.lootTableItem(ModItems.flashStrike.get()).setWeight(80));
@@ -580,7 +580,7 @@ public class Loottables extends LootTableProvider {
             spells.add(LootItem.lootTableItem(ModItems.steelHeart.get()).setWeight(40));
             spells.add(LootItem.lootTableItem(ModItems.deltaStrike.get()).setWeight(80));
             spells.add(LootItem.lootTableItem(ModItems.hurricane.get()).setWeight(90));
-            spells.add(LootItem.lootTableItem(ModItems.reaperSlash.get()).setWeight(100));
+            spells.add(LootItem.lootTableItem(ModItems.reaperSlash.get()).setWeight(80));
             spells.add(LootItem.lootTableItem(ModItems.millionStrike.get()).setWeight(50));
             spells.add(LootItem.lootTableItem(ModItems.axelDisaster.get()).setWeight(50));
             spells.add(LootItem.lootTableItem(ModItems.stardustUpper.get()).setWeight(80));
