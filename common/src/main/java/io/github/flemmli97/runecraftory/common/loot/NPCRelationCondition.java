@@ -7,7 +7,7 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSyntaxException;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCRelation;
-import io.github.flemmli97.runecraftory.common.registry.ModLootCondition;
+import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -26,7 +26,7 @@ public record NPCRelationCondition(NPCRelation relation) implements LootItemCond
 
     @Override
     public LootItemConditionType getType() {
-        return ModLootCondition.INTERACTINGPLAYER.get();
+        return ModLootRegistries.INTERACTINGPLAYER.get();
     }
 
     @Override

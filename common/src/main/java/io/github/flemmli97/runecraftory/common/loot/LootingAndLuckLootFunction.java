@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.registry.ModLootCondition;
+import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.Entity;
@@ -42,7 +42,7 @@ public class LootingAndLuckLootFunction extends LootItemConditionalFunction {
 
     @Override
     public LootItemFunctionType getType() {
-        return ModLootCondition.LUCK_AND_LOOTING.get();
+        return ModLootRegistries.LUCK_AND_LOOTING.get();
     }
 
     @Override

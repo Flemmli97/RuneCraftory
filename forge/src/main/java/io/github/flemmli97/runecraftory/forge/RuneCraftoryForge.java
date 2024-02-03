@@ -14,7 +14,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModFeatures;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
-import io.github.flemmli97.runecraftory.common.registry.ModLootCondition;
+import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCActions;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.registry.ModPoiTypes;
@@ -121,8 +121,8 @@ public class RuneCraftoryForge {
     }
 
     public void registry(RegistryEvent.Register<GlobalLootModifierSerializer<?>> event) {
-        ModLootCondition.LOOTFUNCTION.registerContent();
-        ModLootCondition.LOOTCONDITIONS.registerContent();
+        ModLootRegistries.LOOTFUNCTION.registerContent();
+        ModLootRegistries.LOOTCONDITIONS.registerContent();
         ModStructures.STRUCTURESPROCESSORS.registerContent();
         ModCrafting.RECIPETYPE.registerContent();
         ModFeatures.TRUNK_PLACER.registerContent();

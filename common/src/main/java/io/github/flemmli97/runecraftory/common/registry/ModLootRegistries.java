@@ -17,11 +17,10 @@ import net.minecraft.core.Registry;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 
-public class ModLootCondition {
+public class ModLootRegistries {
 
     public static final PlatformRegistry<LootItemConditionType> LOOTCONDITIONS = PlatformUtils.INSTANCE.of(Registry.LOOT_ITEM_REGISTRY, RuneCraftory.MODID);
     public static final PlatformRegistry<LootItemFunctionType> LOOTFUNCTION = PlatformUtils.INSTANCE.of(Registry.LOOT_FUNCTION_REGISTRY, RuneCraftory.MODID);
-
     public static final RegistryEntrySupplier<LootItemConditionType> SKILL_CHECK = LOOTCONDITIONS.register("skill_check", () -> new LootItemConditionType(new SkillLevelCondition.Serializer()));
     public static final RegistryEntrySupplier<LootItemConditionType> INTERACTINGPLAYER = LOOTCONDITIONS.register("interacting_player", () -> new LootItemConditionType(new NPCRelationCondition.Serializer()));
     public static final RegistryEntrySupplier<LootItemConditionType> SEASONTYPE = LOOTCONDITIONS.register("season", () -> new LootItemConditionType(new SeasonLootCondition.Serializer()));

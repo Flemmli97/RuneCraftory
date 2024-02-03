@@ -5,7 +5,7 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSyntaxException;
-import io.github.flemmli97.runecraftory.common.registry.ModLootCondition;
+import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
@@ -28,7 +28,7 @@ public record BiomeLootCondition(TagKey<Biome> tag) implements LootItemCondition
 
     @Override
     public LootItemConditionType getType() {
-        return ModLootCondition.BIOME.get();
+        return ModLootRegistries.BIOME.get();
     }
 
     @Override

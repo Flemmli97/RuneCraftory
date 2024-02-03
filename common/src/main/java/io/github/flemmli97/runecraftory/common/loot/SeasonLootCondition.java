@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSyntaxException;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
-import io.github.flemmli97.runecraftory.common.registry.ModLootCondition;
+import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -24,7 +24,7 @@ public record SeasonLootCondition(EnumSeason season) implements LootItemConditio
 
     @Override
     public LootItemConditionType getType() {
-        return ModLootCondition.SEASONTYPE.get();
+        return ModLootRegistries.SEASONTYPE.get();
     }
 
     @Override

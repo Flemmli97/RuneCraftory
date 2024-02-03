@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
-import io.github.flemmli97.runecraftory.common.registry.ModLootCondition;
+import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.entity.Entity;
@@ -26,7 +26,7 @@ public class FirstKillCondition implements LootItemCondition {
 
     @Override
     public LootItemConditionType getType() {
-        return ModLootCondition.FIRST_KILL.get();
+        return ModLootRegistries.FIRST_KILL.get();
     }
 
     @Override

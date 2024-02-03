@@ -524,7 +524,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
                 .withParameter(LootContextParams.THIS_ENTITY, this)
                 .withParameter(LootContextParams.ORIGIN, this.position())
                 .withParameter(LootCtxParameters.INTERACTING_PLAYER, player)
-                .withLuck(player.getLuck()).create(LootContextParamSets.GIFT);
+                .withLuck(player.getLuck()).create(LootCtxParameters.NPC_INTERACTION);
         List<Map.Entry<String, NPCData.Conversation>> filtered = conversations.getConversations().entrySet().stream()
                 .filter(c -> {
                     //Disable if player already has a quest from this npc

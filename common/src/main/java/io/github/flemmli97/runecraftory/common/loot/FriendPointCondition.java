@@ -5,7 +5,7 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import io.github.flemmli97.runecraftory.common.entities.IBaseMob;
-import io.github.flemmli97.runecraftory.common.registry.ModLootCondition;
+import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -25,7 +25,7 @@ public record FriendPointCondition(int points) implements LootItemCondition {
 
     @Override
     public LootItemConditionType getType() {
-        return ModLootCondition.FRIENDPOINTS.get();
+        return ModLootRegistries.FRIENDPOINTS.get();
     }
 
     @Override

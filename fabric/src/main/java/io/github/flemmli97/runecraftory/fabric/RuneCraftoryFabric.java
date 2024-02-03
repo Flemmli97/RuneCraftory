@@ -18,7 +18,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModFeatures;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
-import io.github.flemmli97.runecraftory.common.registry.ModLootCondition;
+import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCActions;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.registry.ModPoiTypes;
@@ -282,8 +282,8 @@ public class RuneCraftoryFabric implements ModInitializer {
         ModNPCActions.ACTIONS.registerContent();
         ModAttackActions.ATTACK_ACTIONS.registerContent();
 
-        ModLootCondition.LOOTFUNCTION.registerContent();
-        ModLootCondition.LOOTCONDITIONS.registerContent();
+        ModLootRegistries.LOOTFUNCTION.registerContent();
+        ModLootRegistries.LOOTCONDITIONS.registerContent();
         ModStructures.STRUCTURESPROCESSORS.registerContent();
         ModCrafting.RECIPETYPE.registerContent();
 

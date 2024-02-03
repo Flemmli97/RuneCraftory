@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSyntaxException;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
-import io.github.flemmli97.runecraftory.common.registry.ModLootCondition;
+import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.player.Player;
@@ -34,7 +34,7 @@ public class SkillLevelCondition implements LootItemCondition {
 
     @Override
     public LootItemConditionType getType() {
-        return ModLootCondition.SKILL_CHECK.get();
+        return ModLootRegistries.SKILL_CHECK.get();
     }
 
     @Override
