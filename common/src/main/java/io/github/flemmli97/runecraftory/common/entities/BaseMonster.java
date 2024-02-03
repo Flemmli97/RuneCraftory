@@ -113,7 +113,6 @@ import net.minecraft.world.level.entity.EntityInLevelCallback;
 import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -1120,7 +1119,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     protected void dropAsDailyDrop(ResourceLocation resourceLocation) {
         LootTable lootTable = this.level.getServer().getLootTables().get(resourceLocation);
-        lootTable.getRandomItems(this.dailyDropContext().create(LootContextParamSets.GIFT), this::spawnAtLocation);
+        lootTable.getRandomItems(this.dailyDropContext().create(LootCtxParameters.MONSTER_INTERACTION), this::spawnAtLocation);
     }
 
     protected LootContext.Builder dailyDropContext() {
@@ -1129,7 +1128,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 .withParameter(LootContextParams.THIS_ENTITY, this)
                 .withParameter(LootContextParams.ORIGIN, this.position());
         if (this.getOwnerUUID() != null)
-            builder.withParameter(LootCtxParameters.UUID_CONTEXT, this.getOwnerUUID());
+            builder.withOptionalParameter(LootCtxParameters.UUID_CONTEXT, this.getOwnerUUID());
         return builder;
     }
 

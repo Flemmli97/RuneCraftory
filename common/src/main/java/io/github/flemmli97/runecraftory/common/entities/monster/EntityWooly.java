@@ -25,7 +25,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import org.jetbrains.annotations.Nullable;
 
@@ -195,8 +194,8 @@ public class EntityWooly extends LeapingMonster {
     public void shear(Player player, ItemStack used) {
         LootTable lootTable = this.level.getServer().getLootTables().get(shearedLootTable(this.getDefaultLootTable()));
         lootTable.getRandomItems(this.dailyDropContext()
-                .withParameter(LootCtxParameters.INTERACTING_PLAYER, player)
-                .withParameter(LootContextParams.TOOL, used).create(LootContextParamSets.GIFT), this::spawnAtLocation);
+                .withOptionalParameter(LootCtxParameters.INTERACTING_PLAYER, player)
+                .withOptionalParameter(LootContextParams.TOOL, used).create(LootCtxParameters.MONSTER_INTERACTION), this::spawnAtLocation);
         this.setSheared(true);
         this.playSound(SoundEvents.SHEEP_SHEAR, 1.0f, 1.0f);
         this.gameEvent(GameEvent.SHEAR, player);

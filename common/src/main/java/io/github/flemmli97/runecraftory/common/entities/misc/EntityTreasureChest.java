@@ -178,7 +178,7 @@ public class EntityTreasureChest extends Entity implements IAnimated {
                 .withParameter(LootCtxParameters.INTERACTING_PLAYER, player)
                 .withParameter(LootContextParams.TOOL, stack);
         LootTable lootTable = this.level.getServer().getLootTables().get(resourceLocation);
-        lootTable.getRandomItems(builder.create(LootContextParamSets.CHEST), this::spawnAtLocation);
+        lootTable.getRandomItems(builder.create(LootCtxParameters.MONSTER_INTERACTION), this::spawnAtLocation);
     }
 
     protected void dropFromLootTable(DamageSource damageSource, boolean attackedRecently) {
