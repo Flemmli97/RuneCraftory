@@ -4,11 +4,11 @@
   "loot_table": "minecraft:empty",
   "entries": {
     "mine": {
+      "amount": 10,
+      "use": false,
       "block": {
         "tag": "runecraftory:ores"
       },
-      "amount": 10,
-      "use": false,
       "consumeItem": false,
       "description": "",
       "id": "simplequests:block_interact"

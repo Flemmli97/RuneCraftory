@@ -11,11 +11,14 @@ import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
+import net.minecraft.advancements.critereon.LocationPredicate;
+import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.IntRange;
+import net.minecraft.world.level.storage.loot.predicates.LocationCheck;
 import net.minecraft.world.level.storage.loot.predicates.TimeCheck;
 import net.minecraft.world.level.storage.loot.predicates.WeatherCheck;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
@@ -103,7 +106,7 @@ public class NPCDataGen extends NPCDataProvider {
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.3.greeting.1", 0, 10), "Nice to see you"));
                     m.put(NPCData.ConversationType.TALK, new NPCData.ConversationSet.Builder("npc.generic.3.talk.default", "...")
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.3.talk.2", 0, 10), "A forge will allow you to craft your own weapons.")
-                            .addConversation(new NPCData.Conversation.Builder("npc.generic.3.talk.1", 0, 10).addCondition(WeatherCheck.weather().setRaining(true).build()), "I don't like the rain.")
+                            .addConversation(new NPCData.Conversation.Builder("npc.generic.3.talk.2", 0, 10).addCondition(WeatherCheck.weather().setRaining(true).build()), "I don't like the rain.")
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.3.talk.2", 0, 10), "I've heard that there are places in this world where very strong monster appear."));
                     m.put(NPCData.ConversationType.FOLLOWYES, new NPCData.ConversationSet.Builder("npc.generic.3.follow.yes", "Sure. Where do you want to go?"));
                     m.put(NPCData.ConversationType.FOLLOWNO, new NPCData.ConversationSet.Builder("npc.generic.3.follow.no", "I think I still have some things to do first."));
@@ -141,7 +144,9 @@ public class NPCDataGen extends NPCDataProvider {
                     m.put(NPCData.ConversationType.GREETING, new NPCData.ConversationSet.Builder("npc.smith.male.1.greeting.default", "Hello %player%. Let's do our best again today!"));
                     m.put(NPCData.ConversationType.TALK, new NPCData.ConversationSet.Builder("npc.smith.male.1.talk.default", "...")
                             .addConversation(new NPCData.Conversation.Builder("npc.smith.male.1.talk.1", 0, 10), "Nothing beats the clanging sound of a working forge.")
-                            .addConversation(new NPCData.Conversation.Builder("npc.smith.male.1.talk.2", 0, 10), "There are multiple different weapon types. You should try them all out to find the one that suits you the best."));
+                            .addConversation(new NPCData.Conversation.Builder("npc.smith.male.1.talk.2", 0, 10), "There are multiple different weapon types. You should try them all out to find the one that suits you the best.")
+                            .addConversation(new NPCData.Conversation.Builder("npc.smith.male.1.talk.thunder", 0, 10)
+                                    .addCondition(WeatherCheck.weather().setThundering(true).build()), "It is really pouring down huh?"));
                     m.put(NPCData.ConversationType.FOLLOWYES, new NPCData.ConversationSet.Builder("npc.smith.male.1.follow.yes", "Ok. Where are we going?"));
                     m.put(NPCData.ConversationType.FOLLOWNO, new NPCData.ConversationSet.Builder("npc.smith.male.1.follow.no", "Hmm sorry but I can't right now."));
                     m.put(NPCData.ConversationType.FOLLOWSTOP, new NPCData.ConversationSet.Builder("npc.smith.male.1.follow.stop", "Cya then!"));
@@ -169,7 +174,9 @@ public class NPCDataGen extends NPCDataProvider {
                     m.put(NPCData.ConversationType.GREETING, new NPCData.ConversationSet.Builder("npc.smith.female.1.greeting.default", "Hello %player%. Today is a nice day!"));
                     m.put(NPCData.ConversationType.TALK, new NPCData.ConversationSet.Builder("npc.smith.female.1.talk.default", "...")
                             .addConversation(new NPCData.Conversation.Builder("npc.smith.female.1.talk.1", 0, 10), "Working as a blacksmith is hard but very fun.")
-                            .addConversation(new NPCData.Conversation.Builder("npc.smith.female.1.talk.2", 0, 10), "Someday I would like to make some kind of legendary weapon."));
+                            .addConversation(new NPCData.Conversation.Builder("npc.smith.female.1.talk.2", 0, 10), "Someday I would like to make some kind of legendary weapon.")
+                            .addConversation(new NPCData.Conversation.Builder("npc.smith.female.1.talk.height", 0, 10)
+                                    .addCondition(LocationCheck.checkLocation(new LocationPredicate.Builder().setY(MinMaxBounds.Doubles.atLeast(150))).build()), "Urgh. I'm no good with this height..."));
                     m.put(NPCData.ConversationType.FOLLOWYES, new NPCData.ConversationSet.Builder("npc.smith.female.1.follow.yes", "Ok. Where are we going?"));
                     m.put(NPCData.ConversationType.FOLLOWNO, new NPCData.ConversationSet.Builder("npc.smith.female.1.follow.no", "Sorry but I'm busy right now."));
                     m.put(NPCData.ConversationType.FOLLOWSTOP, new NPCData.ConversationSet.Builder("npc.smith.female.1.follow.stop", "Bye! See you next time"));
