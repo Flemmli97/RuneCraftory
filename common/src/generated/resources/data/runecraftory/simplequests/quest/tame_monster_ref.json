@@ -1,0 +1,9 @@
+{
+  "task": "NPC_SUBQUEST",
+  "loot_table": "minecraft:empty",
+  "quests": [
+    "runecraftory:quest/tame_monster_ref_0",
+    "runecraftory:quest/tame_monster_ref_1"
+  ],
+  "type": "simplequests:sequential_quest"
+}

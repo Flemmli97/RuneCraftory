@@ -1,0 +1,18 @@
+{
+  "category": "runecraftory:quests",
+  "task": "quest/mining.quest.runecraftory",
+  "description": "quest/mining.quest.runecraftory_description",
+  "icon": {
+    "item": "minecraft:air",
+    "count": 0
+  },
+  "repeat_delay": -1,
+  "visibility": "NEVER",
+  "npc_id": [
+    "runecraftory:smith/male_1",
+    "runecraftory:smith/female_1"
+  ],
+  "quest": "runecraftory:quest/mining_ref",
+  "loot_table": "runecraftory:quest/mining",
+  "type": "runecraftory:npc_quest"
+}

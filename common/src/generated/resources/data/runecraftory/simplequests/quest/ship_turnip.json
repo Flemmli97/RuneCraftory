@@ -1,0 +1,18 @@
+{
+  "category": "runecraftory:quests",
+  "task": "quest/ship_turnip.quest.runecraftory",
+  "description": "quest/ship_turnip.quest.runecraftory_description",
+  "icon": {
+    "item": "minecraft:air",
+    "count": 0
+  },
+  "repeat_delay": -1,
+  "visibility": "NEVER",
+  "npc_id": [
+    "runecraftory:shop_owner/male_1",
+    "runecraftory:shop_owner/female_1"
+  ],
+  "quest": "runecraftory:quest/ship_turnip_ref",
+  "loot_table": "runecraftory:quest/ship_turnip",
+  "type": "runecraftory:npc_quest"
+}

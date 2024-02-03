@@ -1,0 +1,9 @@
+{
+  "task": "NPC_SUBQUEST",
+  "loot_table": "minecraft:empty",
+  "quests": [
+    "runecraftory:quest/mining_ref_0",
+    "runecraftory:quest/mining_ref_1"
+  ],
+  "type": "simplequests:sequential_quest"
+}

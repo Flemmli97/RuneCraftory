@@ -67,7 +67,7 @@ public class QuestGen extends QuestProvider {
                         .withIcon(new ItemStack(ModItems.hammerScrap.get())),
                 List.of(of(m -> m.put("talk", new QuestTasks.NPCTalk("mining.task.talk", false))),
                         of(m -> m.put("mine", new QuestEntryImpls.BlockInteractEntry(ItemPredicate.ANY, BlockPredicate.Builder.block().of(ModTags.ORES).build(),
-                                10, false, false, "")))));
+                                10, false, false, true, "", "", "", EntityPredicate.ANY)))));
 
         this.createNPCQuest(new NPCQuest.Builder(TAMING, getTask(TAMING),
                         id("random_npc"), TAMING)
