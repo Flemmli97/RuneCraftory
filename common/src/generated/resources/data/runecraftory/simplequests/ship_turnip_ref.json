@@ -1,9 +1,0 @@
-{
-  "task": "NPC_SUBQUEST",
-  "loot_table": "minecraft:empty",
-  "quests": [
-    "runecraftory:ship_turnip_ref_0",
-    "runecraftory:ship_turnip_ref_1"
-  ],
-  "type": "simplequests:sequential_quest"
-}

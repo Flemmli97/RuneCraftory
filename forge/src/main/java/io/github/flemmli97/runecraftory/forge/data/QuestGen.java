@@ -42,9 +42,9 @@ public class QuestGen extends QuestProvider {
             .setSilent()
             .setMaxConcurrent(1).build();
 
-    public static final ResourceLocation MINING = id("mining");
-    public static final ResourceLocation TAMING = id("tame_monster");
-    public static final ResourceLocation SHIP_TURNIP = id("ship_turnip");
+    public static final ResourceLocation MINING = id("quest/mining");
+    public static final ResourceLocation TAMING = id("quest/tame_monster");
+    public static final ResourceLocation SHIP_TURNIP = id("quest/ship_turnip");
 
     public QuestGen(DataGenerator gen) {
         super(gen, false);

@@ -32,11 +32,11 @@
   },
   "questHandler": {
     "responses": {
-      "runecraftory:ship_turnip": {
-        "startID": "runecraftory:shop_owner/female_1/quest_start_ship_turnip",
-        "activeID": "runecraftory:shop_owner/female_1/quest_active_ship_turnip",
+      "runecraftory:quest/ship_turnip": {
+        "startID": "runecraftory:shop_owner/female_1/quest_start_quest/ship_turnip",
+        "activeID": "runecraftory:shop_owner/female_1/quest_active_quest/ship_turnip",
         "hasSequence": false,
-        "endID": "runecraftory:shop_owner/female_1/quest_end_ship_turnip"
+        "endID": "runecraftory:shop_owner/female_1/quest_end_quest/ship_turnip"
       }
     },
     "requiredQuests": []

@@ -530,9 +530,10 @@ public class Loottables extends LootTableProvider {
             biConsumer.accept(LootTableResources.TIER_4_LOOT, LootTable.lootTable().withPool(tier4));
 
             biConsumer.accept(QuestGen.MINING, LootTable.lootTable().withPool(LootPool.lootPool()
-                    .add(LootItem.lootTableItem(ModItems.hammerScrap.get()))
-                    .add(LootItem.lootTableItem(Items.IRON_INGOT).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 5))))
-                    .add(LootItem.lootTableItem(Items.COPPER_INGOT).apply(SetItemCountFunction.setCount(UniformGenerator.between(6, 10))))));
+                            .add(LootItem.lootTableItem(ModItems.hammerScrap.get())))
+                    .withPool(LootPool.lootPool()
+                            .add(LootItem.lootTableItem(Items.IRON_INGOT).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 5))))
+                            .add(LootItem.lootTableItem(Items.COPPER_INGOT).apply(SetItemCountFunction.setCount(UniformGenerator.between(6, 10))))));
             biConsumer.accept(QuestGen.TAMING, LootTable.lootTable().withPool(LootPool.lootPool()
                     .add(LootItem.lootTableItem(ModItems.brush.get()))));
             biConsumer.accept(QuestGen.SHIP_TURNIP, LootTable.lootTable().withPool(LootPool.lootPool()
