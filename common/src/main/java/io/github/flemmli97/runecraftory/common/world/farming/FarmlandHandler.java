@@ -15,6 +15,8 @@ import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.longs.LongArraySet;
+import it.unimi.dsi.fastutil.longs.LongSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
@@ -276,18 +278,23 @@ public class FarmlandHandler extends SavedData {
             this.farmlandChunks.forEach((dim, m) -> {
                 ServerLevel actualLevel = level.dimension().equals(dim) ? level : level.getServer().getLevel(dim);
                 ArrayList<FarmlandData> removed = new ArrayList<>();
-                m.values().removeIf(set -> {
-                    if (set == null)
-                        return true;
-                    set.removeIf(d -> {
+                LongSet toRemove = new LongArraySet();
+                for (Long2ObjectMap.Entry<Set<FarmlandData>> entry : m.long2ObjectEntrySet()) {
+                    if (entry.getValue() == null) {
+                        toRemove.add(entry.getLongKey());
+                        continue;
+                    }
+                    entry.getValue().removeIf(d -> {
                         d.tick(actualLevel, false);
                         boolean remove = d.shouldBeRemoved();
                         if (remove)
                             removed.add(d);
                         return remove;
                     });
-                    return set.isEmpty();
-                });
+                    if (entry.getValue().isEmpty())
+                        toRemove.add(entry.getLongKey());
+                }
+                toRemove.forEach(m::remove);
                 if (m.isEmpty())
                     empty.add(dim);
                 else
