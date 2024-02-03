@@ -51,7 +51,7 @@ public class NPCQuest extends QuestBase {
     protected NPCQuest(ResourceLocation id, QuestCategory category, String questTaskString, List<String> questTaskDesc,
                        List<ResourceLocation> parents, boolean redoParent, int repeatDelay, int sortingId, EntityPredicate unlockCondition, List<ResourceLocation> npcDataIDs, ResourceLocation quest, ResourceLocation loot) {
         super(id, category, questTaskString, questTaskDesc,
-                List.of(), redoParent, false, ItemStack.EMPTY, repeatDelay, 0, sortingId, false, unlockCondition);
+                List.of(), redoParent, false, ItemStack.EMPTY, repeatDelay, 0, sortingId, false, unlockCondition, Visibility.NEVER);
         this.npcDataIDs = npcDataIDs;
         this.parentQuests = parents;
         this.quest = quest;

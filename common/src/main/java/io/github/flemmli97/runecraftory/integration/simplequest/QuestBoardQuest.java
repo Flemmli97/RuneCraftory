@@ -25,7 +25,7 @@ public class QuestBoardQuest extends QuestBase {
 
     public QuestBoardQuest(QuestBase base) {
         super(base.id, base.category, "", List.of(), base.neededParentQuests, base.redoParent, base.needsUnlock,
-                base.getIcon(), base.repeatDelay, base.repeatDaily, base.sortingId, base.isDailyQuest, EntityPredicate.ANY);
+                base.getIcon(), base.repeatDelay, base.repeatDaily, base.sortingId, base.isDailyQuest, EntityPredicate.ANY, Visibility.NEVER);
         this.quest = base;
     }
 
