@@ -7,7 +7,6 @@ import com.google.gson.JsonSerializationContext;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
 import net.minecraft.util.GsonHelper;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -36,8 +35,7 @@ public record TalkCountCondition(int count) implements LootItemCondition {
     @Override
     public boolean test(LootContext ctx) {
         if (ctx.getParamOrNull(LootContextParams.THIS_ENTITY) instanceof EntityNPCBase npc) {
-            Player player = ctx.getParamOrNull(LootCtxParameters.INTERACTING_PLAYER);
-            UUID uuid = player != null ? player.getUUID() : ctx.getParamOrNull(LootCtxParameters.UUID_CONTEXT);
+            UUID uuid = ctx.getParamOrNull(LootCtxParameters.UUID_CONTEXT);
             if (uuid != null)
                 return npc.talkCount(uuid) >= this.count;
         }

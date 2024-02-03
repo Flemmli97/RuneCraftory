@@ -522,7 +522,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         LootContext ctx = new LootContext.Builder((ServerLevel) this.level).withRandom(this.random)
                 .withParameter(LootContextParams.THIS_ENTITY, this)
                 .withParameter(LootContextParams.ORIGIN, this.position())
-                .withParameter(LootCtxParameters.INTERACTING_PLAYER, player)
+                .withParameter(LootCtxParameters.UUID_CONTEXT, player.getUUID())
                 .withLuck(player.getLuck()).create(LootCtxParameters.NPC_INTERACTION);
         List<Map.Entry<String, NPCData.Conversation>> filtered = conversations.getConversations().entrySet().stream()
                 .filter(c -> {
@@ -563,7 +563,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         LootContext ctx = new LootContext.Builder((ServerLevel) this.level).withRandom(this.random)
                 .withParameter(LootContextParams.THIS_ENTITY, this)
                 .withParameter(LootContextParams.ORIGIN, this.position())
-                .withParameter(LootCtxParameters.INTERACTING_PLAYER, player)
+                .withParameter(LootCtxParameters.UUID_CONTEXT, player.getUUID())
                 .withLuck(player.getLuck()).create(LootCtxParameters.NPC_INTERACTION);
         List<Map.Entry<String, NPCData.Conversation>> filtered = conversations.getConversations().entrySet().stream().filter(c -> c.getValue().startingConversation() && c.getValue().test(heart, ctx))
                 .collect(Collectors.toList());
@@ -634,8 +634,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         return this.relationManager.getCompletedQuests(player.getUUID()).containsAll(quest.parentQuests);
     }
 
-    public NPCRelation relationFor(Player player) {
-        return this.relationManager.getRelationFor(player.getUUID());
+    public NPCRelation relationFor(UUID player) {
+        return this.relationManager.getRelationFor(player);
     }
 
     @Override

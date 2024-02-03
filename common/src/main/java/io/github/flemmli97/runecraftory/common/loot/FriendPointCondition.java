@@ -7,7 +7,6 @@ import com.google.gson.JsonSerializationContext;
 import io.github.flemmli97.runecraftory.common.entities.IBaseMob;
 import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
 import net.minecraft.util.GsonHelper;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -36,9 +35,6 @@ public record FriendPointCondition(int points) implements LootItemCondition {
     @Override
     public boolean test(LootContext ctx) {
         if (ctx.getParamOrNull(LootContextParams.THIS_ENTITY) instanceof IBaseMob mob) {
-            Player player = ctx.getParamOrNull(LootCtxParameters.INTERACTING_PLAYER);
-            if (player != null)
-                return mob.friendPoints(player) >= this.points;
             UUID uuid = ctx.getParamOrNull(LootCtxParameters.UUID_CONTEXT);
             if (uuid != null)
                 return mob.friendPoints(uuid) >= this.points;

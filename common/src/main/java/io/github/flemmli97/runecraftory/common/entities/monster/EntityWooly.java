@@ -194,7 +194,7 @@ public class EntityWooly extends LeapingMonster {
     public void shear(Player player, ItemStack used) {
         LootTable lootTable = this.level.getServer().getLootTables().get(shearedLootTable(this.getDefaultLootTable()));
         lootTable.getRandomItems(this.dailyDropContext()
-                .withOptionalParameter(LootCtxParameters.INTERACTING_PLAYER, player)
+                .withOptionalParameter(LootCtxParameters.UUID_CONTEXT, player.getUUID())
                 .withOptionalParameter(LootContextParams.TOOL, used).create(LootCtxParameters.MONSTER_INTERACTION), this::spawnAtLocation);
         this.setSheared(true);
         this.playSound(SoundEvents.SHEEP_SHEAR, 1.0f, 1.0f);
