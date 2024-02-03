@@ -289,6 +289,7 @@ public class FarmlandData {
             return;
         }
         BlockState farm = level.getBlockState(this.pos);
+        this.isFarmBlock = FarmlandHandler.isFarmBlock(farm);
         boolean isWet = this.isFarmBlock && farm.getValue(FarmBlock.MOISTURE) > 0;
         boolean canRainAt = FarmlandHandler.canRainingAt(level, this.pos);
         if (!onLoad) {
