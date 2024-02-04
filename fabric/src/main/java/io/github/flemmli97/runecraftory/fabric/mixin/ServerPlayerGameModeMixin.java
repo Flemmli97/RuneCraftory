@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-@Mixin(ServerPlayerGameMode.class)
+@Mixin(value = ServerPlayerGameMode.class, priority = 1001)
 public abstract class ServerPlayerGameModeMixin {
 
     @Shadow
