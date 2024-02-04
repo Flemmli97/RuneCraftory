@@ -38,13 +38,13 @@ public class NPCDataGen extends NPCDataProvider {
     protected void add() {
         ResourceLocation genericAttack = this.addAttackActions(new ResourceLocation(RuneCraftory.MODID, "generic_melee_attack"), new NPCAttackActions.Builder()
                 .addAction(new NPCAttackActions.ActionBuilder(1)
-                        .action(new AttackMeleeAction(UniformGenerator.between(30, 70)))));
+                        .action(new AttackMeleeAction(UniformGenerator.between(30, 80)))));
 
         ResourceLocation meleeAndFireball = this.addAttackActions(new ResourceLocation(RuneCraftory.MODID, "melee_fireball_attack"), new NPCAttackActions.Builder()
+                .addAction(new NPCAttackActions.ActionBuilder(5)
+                        .action(new AttackMeleeAction(UniformGenerator.between(30, 80))))
                 .addAction(new NPCAttackActions.ActionBuilder(1)
-                        .action(new AttackMeleeAction(UniformGenerator.between(30, 70))))
-                .addAction(new NPCAttackActions.ActionBuilder(1)
-                        .action(new RunAwayAction(UniformGenerator.between(20, 30)))
+                        .action(new RunAwayAction(UniformGenerator.between(30, 50), 8))
                         .action(new SpellAttackAction(ModSpells.FIREBALL.get(), 8, false, UniformGenerator.between(20, 40), UniformGenerator.between(10, 20)))));
 
         this.addNPCData("random_npc", new NPCData.Builder(50)

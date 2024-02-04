@@ -14,36 +14,33 @@ import net.minecraft.world.phys.Vec3;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public class RunAwayAction implements NPCAction {
+public class WalkAroundAction implements NPCAction {
 
-    public static final Codec<RunAwayAction> CODEC = RecordCodecBuilder.create((instance) ->
+    public static final Codec<WalkAroundAction> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(CodecHelper.NUMER_PROVIDER_CODEC.fieldOf("duration").forGetter(d -> d.duration),
-                    NPCAction.optionalCooldown(d -> d.cooldown),
-                    Codec.FLOAT.fieldOf("maxDist").forGetter(d->d.maxDist)
-            ).apply(instance, RunAwayAction::new));
+                    NPCAction.optionalCooldown(d -> d.cooldown)
+            ).apply(instance, WalkAroundAction::new));
 
     private final NumberProvider duration;
     private final NumberProvider cooldown;
-    private final float maxDist;
 
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-    private RunAwayAction(NumberProvider duration, Optional<NumberProvider> cooldown, float maxDist) {
-        this(duration, cooldown.orElse(NPCAction.CONST_ZERO), maxDist);
+    private WalkAroundAction(NumberProvider duration, Optional<NumberProvider> cooldown) {
+        this(duration, cooldown.orElse(NPCAction.CONST_ZERO));
     }
 
-    public RunAwayAction(NumberProvider duration, float maxDist) {
-        this(duration, NPCAction.CONST_ZERO, maxDist);
+    public WalkAroundAction(NumberProvider duration) {
+        this(duration, NPCAction.CONST_ZERO);
     }
 
-    public RunAwayAction(NumberProvider duration, NumberProvider cooldown, float maxDist) {
+    public WalkAroundAction(NumberProvider duration, NumberProvider cooldown) {
         this.duration = duration;
         this.cooldown = cooldown;
-        this.maxDist = maxDist;
     }
 
     @Override
     public Supplier<NPCActionCodec> codec() {
-        return ModNPCActions.RUN_AWAY_ACTION;
+        return ModNPCActions.WALK_AROUND_ACTION;
     }
 
     @Override
@@ -64,13 +61,11 @@ public class RunAwayAction implements NPCAction {
     @Override
     public boolean doAction(EntityNPCBase npc, NPCAttackGoal<?> goal, AnimatedAction action) {
         if (npc.getNavigation().isDone()) {
-            if (goal.getDistSqr() > this.maxDist * this.maxDist)
-                return true;
-            Vec3 vec3 = DefaultRandomPos.getPosAway(npc, 16, 7, goal.getAttackTarget().position());
+            Vec3 vec3 = DefaultRandomPos.getPos(npc, 16, 7);
             if (vec3 == null) {
                 return false;
             }
-            npc.getNavigation().moveTo(vec3.x, vec3.y, vec3.z, 1f);
+            npc.getNavigation().moveTo(vec3.x, vec3.y, vec3.z, 1.2f);
         }
         return false;
     }

@@ -98,7 +98,8 @@ public class NPCAttackGoal<T extends EntityNPCBase> extends Goal {
                 this.attacker.getAnimationHandler().setAnimation(this.animation);
             this.idleTime = this.actions.get(this.idx).getCooldown(this.attacker);
             this.idx++;
-            this.initialSelect = false;
+            this.initialSelect = true;
+            this.attacker.getNavigation().stop();
             if (this.idx >= this.actions.size()) {
                 this.selectActionSequence();
             }
@@ -109,7 +110,7 @@ public class NPCAttackGoal<T extends EntityNPCBase> extends Goal {
         return this.target;
     }
 
-    public double getDist() {
+    public double getDistSqr() {
         return this.distanceToTargetSq;
     }
 

@@ -7,11 +7,11 @@ import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCAttackGoal;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
-import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCActions;
 import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.ai.goal.ZombieAttackGoal;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 
@@ -54,10 +54,10 @@ public class AttackMeleeAction implements NPCAction {
 
     @Override
     public int getCooldown(EntityNPCBase npc) {
-        int cooldown = 15;
+        int cooldown = 20;
         ItemStack hand = npc.getMainHandItem();
         if (hand.getItem() instanceof IItemUsable usabe && usabe.getWeaponType() != EnumWeaponType.FARM) {
-            cooldown = 10;
+            cooldown = 12;
         }
         return cooldown + this.cooldown.getInt(NPCAction.createLootContext(npc));
     }
@@ -84,8 +84,8 @@ public class AttackMeleeAction implements NPCAction {
     public boolean doAction(EntityNPCBase npc, NPCAttackGoal<?> goal, AnimatedAction action) {
         goal.moveToEntityNearer(goal.getAttackTarget(), 1.1f);
         npc.getLookControl().setLookAt(goal.getAttackTarget(), 30, 30);
-        double minDist = npc.getAttributeValue(ModAttributes.ATTACK_RANGE.get()) - 0.3 + goal.getAttackTarget().getBbWidth() * 0.5;
-        if (goal.getDist() <= minDist * minDist) {
+        double minDist = npc.getMeleeAttackRangeSqr(goal.getAttackTarget());
+        if (goal.getDistSqr() <= minDist) {
             if (action == null) {
                 npc.swing(InteractionHand.MAIN_HAND);
                 npc.npcAttack(npc::doHurtTarget);

@@ -955,8 +955,9 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             if (this.delayedAttack != null) {
                 this.delayedAttack.run();
                 this.delayedAttack = null;
+            } else {
+                this.npcAttack(this::doHurtTarget);
             }
-            this.npcAttack(this::doHurtTarget);
         }
     }
 
@@ -975,13 +976,26 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         if (target == null)
             return List.of();
         double range = this.getMeleeAttackRangeSqr(target);
-        if (this.getMainHandItem().getItem() instanceof IExtendedWeapon weapon) {
-            float weaponRange = weapon.getRange(this, held);
-            range = weaponRange * weaponRange;
-        }
         if (this.distanceToSqr(target.getX(), target.getY(), target.getZ()) <= range)
             return List.of(target);
         return List.of();
+    }
+
+    @Override
+    public double getMeleeAttackRangeSqr(LivingEntity target) {
+        double reachSqr;
+        ItemStack held = this.getMainHandItem();
+        if(held.getItem() instanceof IAOEWeapon) {
+            reachSqr = this.getAttributeValue(ModAttributes.ATTACK_RANGE.get()) - 0.3 + target.getBbWidth() * 0.5;
+            reachSqr = reachSqr * reachSqr;
+        }
+        else if(held.getItem() instanceof IExtendedWeapon weapon) {
+            float weaponRange = weapon.getRange(this, held);
+            reachSqr = weaponRange  + target.getBbWidth() * 0.5;
+            reachSqr = reachSqr * reachSqr;
+        } else
+            reachSqr = super.getMeleeAttackRangeSqr(target);
+        return reachSqr;
     }
 
     @Override

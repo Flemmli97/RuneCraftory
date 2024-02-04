@@ -64,7 +64,7 @@ public class SpellAttackAction implements NPCAction {
     public boolean doAction(EntityNPCBase npc, NPCAttackGoal<?> goal, AnimatedAction action) {
         goal.moveToEntityNearer(goal.getAttackTarget(), 1);
         npc.getLookControl().setLookAt(goal.getAttackTarget(), 60, 30);
-        if (goal.canSeeTarget() && (this.range < 0 || goal.getDist() <= this.range * this.range)) {
+        if (goal.canSeeTarget() && (this.range < 0 || goal.getDistSqr() <= this.range * this.range)) {
             npc.useDelayedAttack(() -> this.spell.use((ServerLevel) npc.getLevel(), npc, npc.getMainHandItem(), this.ignoreSeal));
             return true;
         }
