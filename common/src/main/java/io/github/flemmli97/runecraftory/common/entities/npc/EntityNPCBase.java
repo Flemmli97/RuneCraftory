@@ -546,10 +546,9 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     public void respondToQuest(ServerPlayer player, ResourceLocation quest) {
         SimpleQuestIntegration.INST().triggerNPCTalk(player, this);
+        ProgressState result = SimpleQuestIntegration.INST().checkCompletionQuest(player, this);
         int questState = this.relationManager.questStateFor(player.getUUID(), quest);
-        ProgressState result;
         if (questState != -1) {
-            result = SimpleQuestIntegration.INST().checkCompletionQuest(player, this);
             if (result == ProgressState.COMPLETE) {
                 this.relationManager.endQuest(player.getUUID(), quest);
                 questState = -2;

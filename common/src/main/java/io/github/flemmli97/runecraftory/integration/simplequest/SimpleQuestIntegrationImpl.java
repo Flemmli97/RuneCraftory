@@ -139,7 +139,7 @@ public class SimpleQuestIntegrationImpl extends SimpleQuestIntegration {
     public Map<ResourceLocation, ProgressState> triggerNPCTalk(ServerPlayer player, EntityNPCBase npc) {
         return SimpleQuestAPI.trigger(player, QuestTasks.NPCTalk.class, (name, e, prog) -> npc.getUUID().equals(e.targetNPC),
                 (prog, pair) -> {
-                }, npc.getUUID().toString()).entrySet().stream().collect(Collectors.toMap(
+                }).entrySet().stream().collect(Collectors.toMap(
                 Map.Entry::getKey,
                 e -> switch (e.getValue()) {
                     case PARTIAL -> ProgressState.PARTIAL;
