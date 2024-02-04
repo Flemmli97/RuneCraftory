@@ -1,7 +1,9 @@
-package io.github.flemmli97.runecraftory.fabric.compat.jade;
+package io.github.flemmli97.runecraftory.fabric.integration.jade;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.attachment.player.LevelExpPair;
+import io.github.flemmli97.runecraftory.common.blocks.BlockMonsterBarn;
+import io.github.flemmli97.runecraftory.common.blocks.tile.MonsterBarnBlockEntity;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.IBaseMob;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
@@ -22,7 +24,10 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.EntityAccessor;
+import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.IEntityComponentProvider;
 import snownee.jade.api.IServerDataProvider;
 import snownee.jade.api.ITooltip;
@@ -41,9 +46,29 @@ import snownee.jade.util.UsernameCache;
 public class JadePlugin implements IWailaPlugin {
 
     private static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "jade_entity_plugin");
+    private static final ResourceLocation IDBLOCK = new ResourceLocation(RuneCraftory.MODID, "jade_block_plugin");
 
     @Override
     public void register(IWailaCommonRegistration registration) {
+        registration.registerBlockDataProvider(new IServerDataProvider<>() {
+            @Override
+            public void appendServerData(CompoundTag compoundTag, ServerPlayer serverPlayer, Level level, BlockEntity blockEntity, boolean b) {
+                if (blockEntity instanceof MonsterBarnBlockEntity barn) {
+                    BarnData data = barn.getBarnData();
+                    if (data != null) {
+                        compoundTag.putBoolean("Roof", data.hasRoof());
+                        compoundTag.putInt("Size", data.getSize());
+                        compoundTag.putInt("Used", data.usedCapacity());
+                        compoundTag.putInt("Capacity", data.getCapacity());
+                    }
+                }
+            }
+
+            @Override
+            public ResourceLocation getUid() {
+                return IDBLOCK;
+            }
+        }, MonsterBarnBlockEntity.class);
         registration.registerEntityDataProvider(new IServerDataProvider<>() {
             @Override
             public void appendServerData(CompoundTag compoundTag, ServerPlayer player, Level level, Entity entity, boolean b) {
@@ -92,6 +117,25 @@ public class JadePlugin implements IWailaPlugin {
 
     @Override
     public void registerClient(IWailaClientRegistration registration) {
+        registration.registerBlockComponent(new IBlockComponentProvider() {
+            @Override
+            public void appendTooltip(ITooltip iTooltip, BlockAccessor blockAccessor, IPluginConfig iPluginConfig) {
+                CompoundTag tag = blockAccessor.getServerData();
+                if (blockAccessor.getBlockEntity() instanceof MonsterBarnBlockEntity) {
+                    int size = tag.getInt("Size");
+                    Component sizeText = size > 1 ? new TextComponent("" + size).withStyle(ChatFormatting.GREEN)
+                            : new TextComponent("" + size).withStyle(ChatFormatting.DARK_RED);
+                    iTooltip.add(new TranslatableComponent("runecraftory.dependency.tooltips.barn.1", new TranslatableComponent(tag.getBoolean("Roof") ? "runecraftory.generic.yes" : "runecraftory.generic.no").withStyle(ChatFormatting.YELLOW),
+                            sizeText));
+                    iTooltip.add(new TranslatableComponent("runecraftory.dependency.tooltips.barn.2", tag.getInt("Used"), tag.getInt("Capacity")));
+                }
+            }
+
+            @Override
+            public ResourceLocation getUid() {
+                return IDBLOCK;
+            }
+        }, BlockMonsterBarn.class);
         BoxStyle box = new BoxStyle();
         box.borderColor = 0xff000000;
         registration.registerEntityComponent(new IEntityComponentProvider() {

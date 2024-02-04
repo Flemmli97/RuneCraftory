@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.forge.compat.top;
+package io.github.flemmli97.runecraftory.forge.integration.top;
 
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModList;

@@ -261,7 +261,7 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.monster.interact.party.full", "Your party is full");
         this.add("runecraftory.monster.interact.ride.no", "You can't ride this monster");
         this.add("runecraftory.monster.interact.barn.no", "%s has no barn");
-        this.add("runecraftory.monster.interact.barn.no.ext", "%s [%s] has no home to go to.");
+        this.add("runecraftory.monster.interact.barn.no.ext", "%1$s [%2$s] has no home to go to.");
         this.add("runecraftory.barn.interact.not.owner", "This barn belongs to %s.");
         this.add("runecraftory.barn.interact.block", "Barn with capacity %1$s (Free: %2$s).");
         this.add("runecraftory.barn.interact.block.roofed", "Roofed barn with capacity %1$s (Free: %2$s).");
@@ -294,6 +294,9 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.key.spell_2", "Interaction Key 2");
         this.add("runecraftory.key.spell_3", "Interaction Key 3");
         this.add("runecraftory.key.spell_4", "Interaction Key 4");
+
+        this.add("runecraftory.generic.yes", "Yes");
+        this.add("runecraftory.generic.no", "No");
 
         this.add("runecraftory.command.skill.lvl.add", "Added %3$s %1$s skill level to %2$s");
         this.add("runecraftory.command.skill.xp.add", "Added %3$s %1$s skill xp points to %2$s");
@@ -546,8 +549,6 @@ public class LangGen implements DataProvider {
 
         this.add("runecraftory.gui.quests.accept", "Accept");
         this.add("runecraftory.gui.quests.reset", "Cancel");
-        this.add("runecraftory.gui.quests.accept.yes", "Yes");
-        this.add("runecraftory.gui.quests.accept.no", "No");
         this.add("runecraftory.gui.quest.submit.button", "Submit");
         this.add("runecraftory.quest.gui.button", "Requests");
         this.add("runecraftory.quest.npc.none", "The NPC for this quest doesn't exist anymore!");
@@ -592,8 +593,8 @@ public class LangGen implements DataProvider {
         this.add(Doctor.CURE_ACTION_FAIL, "It seems you don't have enough money.");
         this.add(Doctor.CURE_COST, "Cost: %s$");
 
-        this.add("npc.schedule.work", "From: %s - %s");
-        this.add("npc.schedule.work.2", "And: %s - %s");
+        this.add("npc.schedule.work", "From: %1$s - %2$s");
+        this.add("npc.schedule.work.2", "And: %1$s - %2$s");
         this.add("npc.schedule.days.header", "Open on:");
         this.add("npc.schedule.days.all", "Everyday");
         this.add("npc.schedule.days.0", "All weekdays");
@@ -675,7 +676,7 @@ public class LangGen implements DataProvider {
         this.add(QuestTasks.ShippingEntry.ID + ".multi", "Ship any of the following x%2$s: %1$s");
         this.add(QuestTasks.ShippingEntry.ID + ".empty", "<Empty tag/items>");
         this.add(QuestTasks.LevelEntry.ID.toString(), "Reach level %s");
-        this.add(QuestTasks.SkillLevelEntry.ID.toString(), "Reach level %s in %s");
+        this.add(QuestTasks.SkillLevelEntry.ID.toString(), "Reach level %1$s in %s");
         this.add(QuestTasks.TamingEntry.ID.toString(), "%s");
 
         this.add("runecraftory.dependency.tooltips.owner.none", "Unknown owner");
@@ -685,6 +686,8 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.dependency.tooltips.barn.no", "No Barn assigned!");
         this.add("runecraftory.dependency.tooltips.behaviour", "Behaviour: %s");
         this.add("runecraftory.dependency.tooltips.npc.follow", "Party: %s");
+        this.add("runecraftory.dependency.tooltips.barn.1", "Roof: %1$s - Size: %2$s");
+        this.add("runecraftory.dependency.tooltips.barn.2", "Capacity: %1$s / %2$s");
     }
 
     private String simpleTranslation(ResourceLocation res) {

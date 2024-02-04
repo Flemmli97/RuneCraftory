@@ -66,8 +66,7 @@ public class BarnData {
     public boolean hasCapacityFor(int size, boolean needsRoof) {
         if (needsRoof && !this.hasRoof)
             return false;
-        return this.monsters.values().stream().mapToInt(i -> i)
-                .sum() + size <= this.getCapacity();
+        return this.usedCapacity() + size <= this.getCapacity();
     }
 
     public int getCapacity() {

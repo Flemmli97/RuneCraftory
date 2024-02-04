@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.forge.compat.top;
+package io.github.flemmli97.runecraftory.forge.integration.top;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.attachment.player.LevelExpPair;

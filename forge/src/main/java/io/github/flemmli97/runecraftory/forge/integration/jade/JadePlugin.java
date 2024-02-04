@@ -1,7 +1,9 @@
-package io.github.flemmli97.runecraftory.forge.compat.jade;
+package io.github.flemmli97.runecraftory.forge.integration.jade;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.attachment.player.LevelExpPair;
+import io.github.flemmli97.runecraftory.common.blocks.BlockMonsterBarn;
+import io.github.flemmli97.runecraftory.common.blocks.tile.MonsterBarnBlockEntity;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.IBaseMob;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
@@ -35,6 +37,17 @@ public class JadePlugin implements IWailaPlugin {
 
     @Override
     public void register(IWailaCommonRegistration registration) {
+        registration.registerBlockDataProvider(((compoundTag, serverPlayer, level, blockEntity, b) -> {
+            if (blockEntity instanceof MonsterBarnBlockEntity barn) {
+                BarnData data = barn.getBarnData();
+                if (data != null) {
+                    compoundTag.putBoolean("Roof", data.hasRoof());
+                    compoundTag.putInt("Size", data.getSize());
+                    compoundTag.putInt("Used", data.usedCapacity());
+                    compoundTag.putInt("Capacity", data.getCapacity());
+                }
+            }
+        }), MonsterBarnBlockEntity.class);
         registration.registerEntityDataProvider((compoundTag, player, level, entity, b) -> {
             if (entity instanceof IBaseMob mob && (player.getMainHandItem().getItem() == ModItems.debug || player.isCreative()
                     || (entity instanceof OwnableEntity ownable && player.getUUID().equals(ownable.getOwnerUUID())))) {
@@ -75,6 +88,17 @@ public class JadePlugin implements IWailaPlugin {
 
     @Override
     public void registerClient(IWailaClientRegistration registration) {
+        registration.registerComponentProvider((iTooltip, blockAccessor, iPluginConfig) -> {
+            CompoundTag tag = blockAccessor.getServerData();
+            if (blockAccessor.getBlockEntity() instanceof MonsterBarnBlockEntity) {
+                int size = tag.getInt("Size");
+                Component sizeText = size > 1 ? new TextComponent("" + size).withStyle(ChatFormatting.GREEN)
+                        : new TextComponent("" + size).withStyle(ChatFormatting.DARK_RED);
+                iTooltip.add(new TranslatableComponent("runecraftory.dependency.tooltips.barn.1", new TranslatableComponent(tag.getBoolean("Roof") ? "runecraftory.generic.yes" : "runecraftory.generic.no").withStyle(ChatFormatting.YELLOW),
+                        sizeText));
+                iTooltip.add(new TranslatableComponent("runecraftory.dependency.tooltips.barn.2", tag.getInt("Used"), tag.getInt("Capacity")));
+            }
+        }, TooltipPosition.BODY, BlockMonsterBarn.class);
         registration.registerComponentProvider((iTooltip, entityAccessor, iPluginConfig) -> {
             CompoundTag tag = entityAccessor.getServerData();
             if (tag.contains("RunecraftoryLevel")) {

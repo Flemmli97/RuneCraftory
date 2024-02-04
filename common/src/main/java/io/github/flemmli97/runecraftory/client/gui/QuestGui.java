@@ -270,7 +270,7 @@ public class QuestGui extends Screen {
         private final boolean red;
 
         public QuestSelectButton(int i, int j, boolean red, OnPress onPress) {
-            super(i, j, 44, 22, red ? new TranslatableComponent("runecraftory.gui.quests.accept.no") : new TranslatableComponent("runecraftory.gui.quests.accept.yes"), onPress);
+            super(i, j, 44, 22, red ? new TranslatableComponent("runecraftory.generic.no") : new TranslatableComponent("runecraftory.generic.yes"), onPress);
             this.visible = false;
             this.red = red;
         }
