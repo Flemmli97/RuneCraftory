@@ -124,10 +124,9 @@ public class NPCDialogueGui<T extends EntityNPCBase> extends Screen {
             ConversationLine txt = this.conversation.get(this.lineProgress);
             if (this.textProgress > txt.width()) {
                 this.lineProgress++;
-                if (this.lineProgress >= this.conversation.size() - 1)
+                if (this.lineProgress > this.conversation.size() - 1)
                     this.showAllButtons();
-                else
-                    this.textProgress = 0;
+                this.textProgress = 0;
             }
         }
     }
@@ -158,7 +157,7 @@ public class NPCDialogueGui<T extends EntityNPCBase> extends Screen {
     }
 
     private int maxCurrentLineIndex() {
-        return Math.min(6 + (this.pageIndex * LINES_PER_PAGE), this.conversation.size() - 1);
+        return Math.min((LINES_PER_PAGE - 1) + (this.pageIndex * LINES_PER_PAGE), this.conversation.size() - 1);
     }
 
     private boolean buttonsVisible() {
