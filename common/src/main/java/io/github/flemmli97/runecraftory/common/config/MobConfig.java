@@ -30,6 +30,7 @@ public class MobConfig {
     public static float mimicChance = 0.4f;
     public static float mimicStrongChance = 0.3f;
 
+    // Just here for record. Change it via datapack
     public static double npcHealth = 20;
     public static double npcAttack = 1;
     public static double npcDefence = 0;
@@ -40,6 +41,10 @@ public class MobConfig {
     public static double npcDefenceGain = 2;
     public static double npcMagicAttackGain = 2;
     public static double npcMagicDefenceGain = 2;
+
+    public static int npcSpawnRateMin = 3600;
+    public static int npcSpawnRateMax = 7200;
+
 
     public enum GateLevelType {
         CONSTANT,

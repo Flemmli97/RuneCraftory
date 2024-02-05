@@ -141,6 +141,8 @@ public record ConfigHolder<T>(ModConfig.Type configType, String configName,
         MobConfig.treasureChance = spec.treasureChance.get().floatValue();
         MobConfig.mimicChance = spec.mimicChance.get().floatValue();
         MobConfig.mimicStrongChance = spec.mimicStrongChance.get().floatValue();
+        MobConfig.npcSpawnRateMin = spec.npcSpawnRateMin.get();
+        MobConfig.npcSpawnRateMax = spec.npcSpawnRateMax.get();
     }
 
     public void reloadConfig() {

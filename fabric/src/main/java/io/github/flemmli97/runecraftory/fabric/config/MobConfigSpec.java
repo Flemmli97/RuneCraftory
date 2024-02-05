@@ -40,6 +40,9 @@ public class MobConfigSpec {
     public final CommentedJsonConfig.DoubleVal mimicChance;
     public final CommentedJsonConfig.DoubleVal mimicStrongChance;
 
+    public final CommentedJsonConfig.IntVal npcSpawnRateMin;
+    public final CommentedJsonConfig.IntVal npcSpawnRateMax;
+
     public MobConfigSpec(CommentedJsonConfig.Builder builder) {
 
         builder.push("general");
@@ -48,6 +51,8 @@ public class MobConfigSpec {
         this.mobAttackNPC = builder.comment("If monsters should attack npcs/villagers. Note if an npc follows you they will always attack").define("Attack NPC", MobConfig.mobAttackNPC);
         this.vanillaGiveXp = builder.comment("If true other mobs also give xp. The amount is based on the health they have").define("Vanilla mobs give XP", MobConfig.vanillaGiveXp);
         this.monsterNeedBarn = builder.comment("If true monster need to have a barn assigned or other interactions will not be possible").define("Monster need barn", MobConfig.monsterNeedBarn);
+        this.npcSpawnRateMin = builder.comment("Min spawn rate of npc in villages").defineInRange("NPC Spawnrate Min", MobConfig.npcSpawnRateMin, 0, Integer.MAX_VALUE);
+        this.npcSpawnRateMax = builder.comment("Max spawn rate of npc in villages").defineInRange("NPC Spawnrate Max", MobConfig.npcSpawnRateMax, 0, Integer.MAX_VALUE);
         builder.pop();
 
         builder.comment("Gate Configs").push("gate");

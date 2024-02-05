@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.world;
 
+import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import net.minecraft.core.BlockPos;
@@ -25,11 +26,12 @@ public class NPCSpawner implements CustomSpawner {
         if (--this.cooldown > 0) {
             return 0;
         }
+        int cooldown = level.getRandom().nextInt(MobConfig.npcSpawnRateMax - MobConfig.npcSpawnRateMin) + MobConfig.npcSpawnRateMin;
         if (this.doSpawning(level)) {
-            this.cooldown = level.getRandom().nextInt(800) + 1200;
+            this.cooldown = cooldown;
             return 1;
         }
-        this.cooldown = level.getRandom().nextInt(100) + 300;
+        this.cooldown = (int) (cooldown * 0.5);
         return 0;
     }
 
