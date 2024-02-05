@@ -44,7 +44,7 @@ public class NPCDataGen extends NPCDataProvider {
                 .addAction(new NPCAttackActions.ActionBuilder(5)
                         .action(new AttackMeleeAction(UniformGenerator.between(30, 80))))
                 .addAction(new NPCAttackActions.ActionBuilder(1)
-                        .action(new RunAwayAction(UniformGenerator.between(30, 50), 8))
+                        .action(new RunAwayAction(UniformGenerator.between(25, 40), 7))
                         .action(new SpellAttackAction(ModSpells.FIREBALL.get(), 8, false, UniformGenerator.between(20, 40), UniformGenerator.between(10, 20)))));
 
         this.addNPCData("random_npc", new NPCData.Builder(50)

@@ -19,10 +19,10 @@
         {
           "duration": {
             "type": "minecraft:uniform",
-            "min": 30,
-            "max": 50
+            "min": 25,
+            "max": 40
           },
-          "maxDist": 8.0,
+          "maxDist": 7.0,
           "type": "runecraftory:run_away"
         },
         {
