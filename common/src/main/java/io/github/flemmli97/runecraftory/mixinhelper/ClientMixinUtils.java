@@ -175,7 +175,7 @@ public class ClientMixinUtils {
     public static boolean onRenderHeldItem(LivingEntity livingEntity, ItemStack itemStack, ItemTransforms.TransformType transformType, boolean leftHand, PoseStack poseStack, MultiBufferSource buffer, int combinedLight) {
         if (livingEntity instanceof AbstractClientPlayer player && transformType.firstPerson()) {
             PlayerData data = Platform.INSTANCE.getPlayerData(player).orElse(null);
-            if (data != null) {
+            if (data != null && data.getWeaponHandler().getCurrentAnim() != null) {
                 if (leftHand)
                     return true;
                 poseStack.popPose();
@@ -184,7 +184,7 @@ public class ClientMixinUtils {
                 poseStack.translate(0, 0.06, 0);
                 poseStack.scale(0.6f, 0.6f, 0.6f);
                 PlayerRenderer playerRenderer = (PlayerRenderer) Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(player);
-                ClientHandlers.getAnimatedPlayerModel().setUpModel(player, data.getWeaponHandler().getCurrentAnim(), data.getWeaponHandler().getLastAnim(), Minecraft.getInstance().getFrameTime(), 1);
+                ClientHandlers.getAnimatedPlayerModel().setUpModel(player, data.getWeaponHandler().getCurrentAnim(), null, Minecraft.getInstance().getFrameTime(), 1);
                 ClientHandlers.getAnimatedPlayerModel().copyTo(playerRenderer.getModel(), false, true);
                 playerRenderer.getModel().leftArm.render(poseStack, buffer.getBuffer(RenderType.entitySolid(player.getSkinTextureLocation())), combinedLight, OverlayTexture.NO_OVERLAY);
                 playerRenderer.getModel().rightArm.render(poseStack, buffer.getBuffer(RenderType.entitySolid(player.getSkinTextureLocation())), combinedLight, OverlayTexture.NO_OVERLAY);
