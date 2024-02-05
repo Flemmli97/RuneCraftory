@@ -27,7 +27,7 @@ public class WeaponHandler {
     private AttackAction currentAction = ModAttackActions.NONE.get();
     private int chainCount;
 
-    private AnimatedAction currentAnim, fadingAnim;
+    private AnimatedAction currentAnim, lastAnim;
     private ItemStack usedWeapon = ItemStack.EMPTY;
     private Spell spell;
     /**
@@ -87,8 +87,8 @@ public class WeaponHandler {
         this.moveDir = null;
         if (action == ModAttackActions.NONE.get()) {
             this.resetStates();
-            this.fadingAnim = this.currentAnim;
         }
+        this.lastAnim = this.currentAnim;
         this.timeSinceLastChange = 0;
         this.currentAction = action;
         int chain = this.getChainCount();
@@ -153,8 +153,6 @@ public class WeaponHandler {
                 this.moveDir = null;
         }
         this.timeSinceLastChange++;
-        if (this.timeSinceLastChange >= FADE_TICK)
-            this.fadingAnim = null;
     }
 
     private boolean isCurrentAnimationDone() {
@@ -173,10 +171,8 @@ public class WeaponHandler {
         return this.toolUseData;
     }
 
-    public float interpolatedLastChange() {
-        if (this.fadingAnim == null)
-            return 1;
-        return Math.max(0, 1 - this.timeSinceLastChange / FADE_TICK);
+    public float interpolatedLastChange(float partialTicks) {
+        return Mth.clamp((this.timeSinceLastChange + partialTicks) / FADE_TICK, 0, 1);
     }
 
     public ItemStack getUsedWeapon() {
@@ -211,16 +207,8 @@ public class WeaponHandler {
         return this.currentAnim;
     }
 
-    public AnimatedAction getCurrentAnimForRender() {
-        if (!this.currentAction.hasAnimation())
-            return null;
-        if (this.getCurrentAnim() == null)
-            return this.getFadingAnim();
-        return this.getCurrentAnim();
-    }
-
-    public AnimatedAction getFadingAnim() {
-        return this.fadingAnim;
+    public AnimatedAction getLastAnim() {
+        return this.lastAnim;
     }
 
     public Spell getSpellToCast() {

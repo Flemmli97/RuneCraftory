@@ -111,15 +111,18 @@ public class ClientMixinUtils {
     public static boolean transFormPre(LivingEntity entity, HumanoidModel<?> model) {
         if (ClientHandlers.getAnimatedPlayerModel() != null) {
             AnimatedAction anim = null;
+            AnimatedAction last = null;
             float interpolation = 1;
+            float partialTicks = Minecraft.getInstance().getFrameTime();
             if (entity instanceof Player player) {
                 PlayerData data = Platform.INSTANCE.getPlayerData(player).orElse(null);
                 if (data != null) {
-                    anim = data.getWeaponHandler().getCurrentAnimForRender();
-                    interpolation = data.getWeaponHandler().interpolatedLastChange();
+                    anim = data.getWeaponHandler().getCurrentAnim();
+                    last = data.getWeaponHandler().getLastAnim();
+                    interpolation = data.getWeaponHandler().interpolatedLastChange(partialTicks);
                 }
             }
-            boolean result = ClientHandlers.getAnimatedPlayerModel().setUpModel(entity, anim, Minecraft.getInstance().getFrameTime(), interpolation);
+            boolean result = ClientHandlers.getAnimatedPlayerModel().setUpModel(entity, anim, last, partialTicks, interpolation);
             if (!result)
                 ClientHandlers.getAnimatedPlayerModel().copyTo(model, true, false);
             return result;
@@ -171,8 +174,8 @@ public class ClientMixinUtils {
     @SuppressWarnings("unchecked")
     public static boolean onRenderHeldItem(LivingEntity livingEntity, ItemStack itemStack, ItemTransforms.TransformType transformType, boolean leftHand, PoseStack poseStack, MultiBufferSource buffer, int combinedLight) {
         if (livingEntity instanceof AbstractClientPlayer player && transformType.firstPerson()) {
-            AnimatedAction anim = Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().getCurrentAnim()).orElse(null);
-            if (anim != null) {
+            PlayerData data = Platform.INSTANCE.getPlayerData(player).orElse(null);
+            if (data != null) {
                 if (leftHand)
                     return true;
                 poseStack.popPose();
@@ -181,7 +184,7 @@ public class ClientMixinUtils {
                 poseStack.translate(0, 0.06, 0);
                 poseStack.scale(0.6f, 0.6f, 0.6f);
                 PlayerRenderer playerRenderer = (PlayerRenderer) Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(player);
-                ClientHandlers.getAnimatedPlayerModel().setUpModel(player, anim, Minecraft.getInstance().getFrameTime(), 1);
+                ClientHandlers.getAnimatedPlayerModel().setUpModel(player, data.getWeaponHandler().getCurrentAnim(), data.getWeaponHandler().getLastAnim(), Minecraft.getInstance().getFrameTime(), 1);
                 ClientHandlers.getAnimatedPlayerModel().copyTo(playerRenderer.getModel(), false, true);
                 playerRenderer.getModel().leftArm.render(poseStack, buffer.getBuffer(RenderType.entitySolid(player.getSkinTextureLocation())), combinedLight, OverlayTexture.NO_OVERLAY);
                 playerRenderer.getModel().rightArm.render(poseStack, buffer.getBuffer(RenderType.entitySolid(player.getSkinTextureLocation())), combinedLight, OverlayTexture.NO_OVERLAY);
