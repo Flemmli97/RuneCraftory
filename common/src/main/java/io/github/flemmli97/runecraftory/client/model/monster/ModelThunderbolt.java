@@ -124,11 +124,11 @@ public class ModelThunderbolt<T extends EntityThunderbolt> extends EntityModel<T
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.model.resetPoses();
+        AnimatedAction anim = entity.getAnimationHandler().getAnimation();
         this.head.yRot += netHeadYaw * Mth.DEG_TO_RAD * 0.15f;
         this.head.xRot += headPitch * Mth.DEG_TO_RAD * 0.15f;
         this.neck.yRot += netHeadYaw * Mth.DEG_TO_RAD * 0.15f;
         this.neck.xRot += headPitch * Mth.DEG_TO_RAD * 0.15f;
-        AnimatedAction anim = entity.getAnimationHandler().getAnimation();
 
         float partialTicks = Minecraft.getInstance().getFrameTime();
         if (anim == null) {
@@ -138,8 +138,8 @@ public class ModelThunderbolt<T extends EntityThunderbolt> extends EntityModel<T
                 else if (entity.moveTick() > 0)
                     this.anim.doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
             }
-        } else
-            this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks);
+        }
+        this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks);
     }
 
     @Override

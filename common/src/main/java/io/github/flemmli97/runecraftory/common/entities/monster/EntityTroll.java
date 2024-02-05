@@ -22,7 +22,7 @@ public class EntityTroll extends BaseMonster {
     public static final AnimatedAction DOUBLE_PUNCH = new AnimatedAction(16, 10, "double_fist_punch");
     public static final AnimatedAction SLAM = new AnimatedAction(16, 10, "fist_slam");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(PUNCH, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().changeDelay(AnimationHandler.DEFAULT_ADJUST_TIME).build();
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{PUNCH, DOUBLE_PUNCH, SLAM, INTERACT, SLEEP};
 
     public final AnimatedMeleeGoal<EntityTroll> attack = new AnimatedMeleeGoal<>(this);

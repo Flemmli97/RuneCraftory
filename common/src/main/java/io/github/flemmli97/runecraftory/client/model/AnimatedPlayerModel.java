@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.TransformationHelper;
 import io.github.flemmli97.runecraftory.mixinhelper.HumanoidMainHand;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.api.entity.IAnimated;
 import io.github.flemmli97.tenshilib.client.AnimationManager;
 import io.github.flemmli97.tenshilib.client.model.BlockBenchAnimations;
@@ -22,6 +23,7 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 
@@ -87,10 +89,35 @@ public class AnimatedPlayerModel<T extends LivingEntity & IAnimated> extends Ent
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
     }
 
-    public void setUpModel(LivingEntity entity, AnimatedAction anim, float partialTicks, float interpolation) {
+    public boolean setUpModel(LivingEntity entity, AnimatedAction anim, float partialTicks, float interpolation) {
         this.model.resetPoses();
+        if (entity instanceof IAnimated animated) {
+            return this.anim.doAnimation(this, animated.getAnimationHandler(), partialTicks, 5, false);
+        }
         if (anim != null)
             this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks, interpolation, entity.getMainArm() == HumanoidArm.LEFT);
+        return anim != null;
+    }
+
+    public boolean doAnimation(ExtendedModel model, AnimationHandler<?> handler, float partialTicks, float adjustTime, boolean mirror) {
+        AnimatedAction current = handler.getAnimation();
+        AnimatedAction last = handler.getLastAnim();
+        float interpolation = handler.getInterpolatedAnimationVal(partialTicks, adjustTime);
+        boolean changed = false;
+        if (last != null) {
+            float interpolation2 = Mth.clamp((handler.getTimeSinceLastChange() + partialTicks) / adjustTime, 0, 1);
+            float interpolationRev = 1 - interpolation2;
+            if (interpolationRev > 0) {
+                this.anim.doAnimation(model, last.getAnimationClient(), last.getTick(), partialTicks, interpolationRev, mirror);
+                changed = true;
+            }
+        }
+        //this.anim.doAnimation(model, PlayerModelAnimations.SHORT_SWORD.get(0).getAnimationClient(), 6, partialTicks, 1, mirror);
+        if (current != null) {
+            this.anim.doAnimation(model, current.getAnimationClient(), current.getTick(), partialTicks, interpolation, mirror);
+            changed = true;
+        }
+        return changed;
     }
 
     public void copyTo(HumanoidModel<?> model, boolean plain, boolean ignoreRiding) {

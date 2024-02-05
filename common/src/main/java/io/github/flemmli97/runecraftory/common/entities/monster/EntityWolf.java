@@ -21,7 +21,7 @@ public class EntityWolf extends LeapingMonster {
     private static final AnimatedAction MELEE = new AnimatedAction(36, 10, "attack");
     private static final AnimatedAction LEAP = new AnimatedAction(23, 7, "leap");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().changeDelay(AnimationHandler.DEFAULT_ADJUST_TIME).build();
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, LEAP, INTERACT, SLEEP};
 
     public LeapingAttackGoal<EntityWolf> attack = new LeapingAttackGoal<>(this);

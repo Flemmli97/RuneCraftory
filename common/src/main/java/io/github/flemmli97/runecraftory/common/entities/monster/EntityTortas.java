@@ -25,7 +25,7 @@ public class EntityTortas extends ChargingMonster {
     public static final AnimatedAction BITE = new AnimatedAction(11, 6, "bite");
     public static final AnimatedAction SPIN = new AnimatedAction(51, 0, "spin");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(BITE, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().changeDelay(AnimationHandler.DEFAULT_ADJUST_TIME).build();
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{BITE, SPIN, INTERACT, SLEEP};
 
     public final ChargeAttackGoal<EntityTortas> ai = new ChargeAttackGoal<>(this);

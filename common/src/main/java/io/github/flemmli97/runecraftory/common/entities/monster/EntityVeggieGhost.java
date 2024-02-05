@@ -32,7 +32,7 @@ public class EntityVeggieGhost extends BaseMonster {
     public static final AnimatedAction SPIN = new AnimatedAction(14, 6, "spin");
     public static final AnimatedAction VANISH = new AnimatedAction(100, 50, "vanish");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(CAST, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().changeDelay(AnimationHandler.DEFAULT_ADJUST_TIME).build();
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{ATTACK, CAST, SPIN, VANISH, INTERACT, SLEEP};
 
     public VeggieGhostAttackGoal<EntityVeggieGhost> rangedGoal = new VeggieGhostAttackGoal<>(this, 10, false, (attacker, target, anim) -> attacker.distanceToSqr(target) <= 16, e -> true);

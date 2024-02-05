@@ -19,7 +19,7 @@ public class EntityFlowerLily extends BaseMonster {
     public static final AnimatedAction LEAP = new AnimatedAction(18, 3, "leap");
     public static final AnimatedAction ATTACK = new AnimatedAction(12, 6, "attack");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(ATTACK, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().changeDelay(AnimationHandler.DEFAULT_ADJUST_TIME).build();
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{LEAP, ATTACK, INTERACT, SLEEP};
 
     public final EvadingRangedAttackGoal<EntityFlowerLily> attack = new EvadingRangedAttackGoal<>(this, 2, 8, e -> true);

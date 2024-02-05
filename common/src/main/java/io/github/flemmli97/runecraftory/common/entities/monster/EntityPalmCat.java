@@ -23,7 +23,7 @@ public class EntityPalmCat extends LeapingMonster {
     private static final AnimatedAction MELEE = new AnimatedAction(15, 9, "attack");
     private static final AnimatedAction LEAP = new AnimatedAction(15, 8, "attack_2");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().changeDelay(AnimationHandler.DEFAULT_ADJUST_TIME).build();
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, LEAP, INTERACT, SLEEP};
 
     public PalmCatAttack<EntityPalmCat> attack = new PalmCatAttack<>(this);

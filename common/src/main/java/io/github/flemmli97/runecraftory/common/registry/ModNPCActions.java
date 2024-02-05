@@ -7,10 +7,10 @@ import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.DoNothing
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.FoodThrowAction;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.NPCAction;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.PartyTargetAction;
-import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.WalkAroundAction;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.RunAwayAction;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.RunToLeadAction;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.SpellAttackAction;
+import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.WalkAroundAction;
 import io.github.flemmli97.runecraftory.platform.LazyGetter;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import io.github.flemmli97.tenshilib.platform.registry.PlatformRegistry;

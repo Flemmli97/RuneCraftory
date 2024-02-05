@@ -6,7 +6,6 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.model.SittingModel;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia.EntityRafflesia;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia.EntityRafflesiaPart;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.client.AnimationManager;
 import io.github.flemmli97.tenshilib.client.model.BlockBenchAnimations;
 import io.github.flemmli97.tenshilib.client.model.ExtendedModel;
@@ -199,36 +198,28 @@ public class ModelRafflesia<T extends EntityRafflesia> extends EntityModel<T> im
         this.mainStem.yRot = (Mth.lerp(partialTicks, entity.yHeadRotO, entity.yHeadRot) - entity.getSpawnDirection().toYRot()) * Mth.DEG_TO_RAD;
         this.head.yRot += netHeadYaw * Mth.DEG_TO_RAD * 0.3f;
         this.head.xRot += headPitch * Mth.DEG_TO_RAD * 0.3f;
-        AnimatedAction anim = entity.getAnimationHandler().getAnimation();
         if (entity.deathTime <= 0 && !entity.playDeath()) {
             this.anim.doAnimation(this, "idle", entity.tickCount, partialTicks);
         }
-        if (anim != null)
-            this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks, entity.getAnimationHandler().getInterpolatedAnimationVal(partialTicks));
+        this.anim.doAnimation(this, entity.getAnimationHandler(), partialTicks);
         EntityRafflesiaPart horseTail = entity.getHorseTail();
         if (horseTail != null) {
             this.horseTail.visible = true;
-            AnimatedAction action = horseTail.getAnimationHandler().getAnimation();
-            if (action != null)
-                this.anim.doAnimation(this, action.getAnimationClient(), action.getTick(), partialTicks, horseTail.getAnimationHandler().getInterpolatedAnimationVal(partialTicks));
+            this.anim.doAnimation(this, horseTail.getAnimationHandler(), partialTicks);
         } else {
             this.horseTail.visible = false;
         }
         EntityRafflesiaPart flower = entity.getFlower();
         if (flower != null) {
             this.flower.visible = true;
-            AnimatedAction action = flower.getAnimationHandler().getAnimation();
-            if (action != null)
-                this.anim.doAnimation(this, action.getAnimationClient(), action.getTick(), partialTicks, flower.getAnimationHandler().getInterpolatedAnimationVal(partialTicks));
+            this.anim.doAnimation(this, flower.getAnimationHandler(), partialTicks);
         } else {
             this.flower.visible = false;
         }
         EntityRafflesiaPart pitcher = entity.getPitcher();
         if (pitcher != null) {
             this.pitcher.visible = true;
-            AnimatedAction action = pitcher.getAnimationHandler().getAnimation();
-            if (action != null)
-                this.anim.doAnimation(this, action.getAnimationClient(), action.getTick(), partialTicks, pitcher.getAnimationHandler().getInterpolatedAnimationVal(partialTicks));
+            this.anim.doAnimation(this, pitcher.getAnimationHandler(), partialTicks);
         } else {
             this.pitcher.visible = false;
         }

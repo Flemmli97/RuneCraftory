@@ -330,10 +330,9 @@ public class ModelSkelefang<T extends EntitySkelefang> extends EntityModel<T> im
                 this.anim.doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
             }
         }
-        if (anim != null) {
-            this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks);
-            if (anim.is(EntitySkelefang.BEAM))
-                this.beamTick = anim.getTick();
+        this.anim.doAnimation(this, entity.getAnimationHandler(), partialTicks);
+        if (anim != null && anim.is(EntitySkelefang.BEAM)) {
+            this.beamTick = anim.getTick();
         } else
             this.beamTick = -1;
     }

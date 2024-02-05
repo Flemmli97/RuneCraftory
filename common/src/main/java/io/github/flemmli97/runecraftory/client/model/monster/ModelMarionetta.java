@@ -116,12 +116,10 @@ public class ModelMarionetta<T extends EntityMarionetta> extends EntityModel<T> 
             if (entity.moveTick() > 0)
                 this.anim.doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
         }
-        if (anim != null) {
-            if (entity.caughtTarget())
-                this.anim.doAnimation(this, "chest_attack_hit", anim.getTick(), partialTicks);
-            else
-                this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks);
-        }
+        if (anim != null && entity.caughtTarget()) {
+            this.anim.doAnimation(this, "chest_attack_hit", anim.getTick(), partialTicks);
+        } else
+            this.anim.doAnimation(this, entity.getAnimationHandler(), partialTicks);
     }
 
     @Override

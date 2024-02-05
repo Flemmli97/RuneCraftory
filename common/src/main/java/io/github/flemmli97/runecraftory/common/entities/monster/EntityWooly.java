@@ -34,7 +34,7 @@ public class EntityWooly extends LeapingMonster {
     public static final AnimatedAction KICK = new AnimatedAction(20, 3, "kick");
     public static final AnimatedAction HEADBUTT = new AnimatedAction(16, 7, "headbutt");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(HEADBUTT, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().changeDelay(AnimationHandler.DEFAULT_ADJUST_TIME).build();
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
     public static final AnimatedAction[] ANIMS = new AnimatedAction[]{SLAP, KICK, HEADBUTT, INTERACT, SLEEP};
     private static final EntityDataAccessor<Boolean> SHEARED = SynchedEntityData.defineId(EntityWooly.class, EntityDataSerializers.BOOLEAN);
     protected static final EntityDataAccessor<Boolean> SPAWNSHEARED = SynchedEntityData.defineId(EntityWooly.class, EntityDataSerializers.BOOLEAN);

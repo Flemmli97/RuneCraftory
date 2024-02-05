@@ -7,7 +7,6 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.model.SittingModel;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityWeagle;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.client.AnimationManager;
 import io.github.flemmli97.tenshilib.client.model.BlockBenchAnimations;
 import io.github.flemmli97.tenshilib.client.model.ExtendedModel;
@@ -108,16 +107,13 @@ public class ModelWeagle<T extends EntityWeagle> extends EntityModel<T> implemen
         this.head.xRot += headPitch * Mth.DEG_TO_RAD * 0.1f;
         AnimatedAction anim = entity.getAnimationHandler().getAnimation();
         float partialTicks = Minecraft.getInstance().getFrameTime();
-        if (anim == null) {
-            if (entity.deathTime <= 0 && !entity.playDeath()) {
-                if (entity.moveTick() > 0) {
-                    this.anim.doAnimation(this, "fly", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
-                } else
-                    this.anim.doAnimation(this, "idle", entity.tickCount, partialTicks);
-            }
-        } else {
-            this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks, entity.getAnimationHandler().getInterpolatedAnimationVal(partialTicks, anim.is(EntityWeagle.DEFEAT) ? 7 : AnimationHandler.DEFAULT_ADJUST_TIME));
+        if (anim != null && entity.deathTime <= 0 && !entity.playDeath()) {
+            if (entity.moveTick() > 0) {
+                this.anim.doAnimation(this, "fly", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
+            } else
+                this.anim.doAnimation(this, "idle", entity.tickCount, partialTicks);
         }
+        this.anim.doAnimation(this, entity.getAnimationHandler(), partialTicks);
     }
 
     @Override

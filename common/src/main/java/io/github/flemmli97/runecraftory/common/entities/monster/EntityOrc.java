@@ -18,7 +18,7 @@ public class EntityOrc extends BaseMonster {
     private static final AnimatedAction MELEE_1 = new AnimatedAction(22, 14, "attack_1");
     private static final AnimatedAction MELEE_2 = new AnimatedAction(23, 13, "attack_2");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE_1, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().changeDelay(AnimationHandler.DEFAULT_ADJUST_TIME).build();
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE_1, MELEE_2, INTERACT, SLEEP};
     private final AnimationHandler<EntityOrc> animationHandler = new AnimationHandler<>(this, ANIMS);
     public AnimatedMeleeGoal<EntityOrc> attack = new AnimatedMeleeGoal<>(this);

@@ -16,7 +16,6 @@ import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.api.entity.IAnimated;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
@@ -37,7 +36,6 @@ import net.minecraft.world.level.BlockAndTintGetter;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Consumer;
 
 public class ClientMixinUtils {
 
@@ -110,7 +108,7 @@ public class ClientMixinUtils {
     }
 
     @SuppressWarnings("unchecked")
-    public static void transFormPre(LivingEntity entity, HumanoidModel<?> model, Consumer<AnimatedAction> cons) {
+    public static boolean transFormPre(LivingEntity entity, HumanoidModel<?> model) {
         if (ClientHandlers.getAnimatedPlayerModel() != null) {
             AnimatedAction anim = null;
             float interpolation = 1;
@@ -120,20 +118,18 @@ public class ClientMixinUtils {
                     anim = data.getWeaponHandler().getCurrentAnimForRender();
                     interpolation = data.getWeaponHandler().interpolatedLastChange();
                 }
-            } else if (entity instanceof IAnimated animated) {
-                anim = animated.getAnimationHandler().getAnimation();
-                interpolation = animated.getAnimationHandler().getInterpolatedAnimationVal(1);
             }
-            cons.accept(anim);
-            ClientHandlers.getAnimatedPlayerModel().setUpModel(entity, anim, Minecraft.getInstance().getFrameTime(), interpolation);
-            if (anim == null)
+            boolean result = ClientHandlers.getAnimatedPlayerModel().setUpModel(entity, anim, Minecraft.getInstance().getFrameTime(), interpolation);
+            if (!result)
                 ClientHandlers.getAnimatedPlayerModel().copyTo(model, true, false);
+            return result;
         }
+        return false;
     }
 
     @SuppressWarnings("unchecked")
-    public static void transformHumanoidModel(LivingEntity entity, HumanoidModel<?> model, AnimatedAction anim) {
-        if (ClientHandlers.getAnimatedPlayerModel() != null && anim != null) {
+    public static void transformHumanoidModel(LivingEntity entity, HumanoidModel<?> model) {
+        if (ClientHandlers.getAnimatedPlayerModel() != null) {
             boolean ignoreRiding = false;
             if (entity instanceof Player player)
                 ignoreRiding = Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().getCurrentAction() == ModAttackActions.DUAL_USE.get()).orElse(false);
