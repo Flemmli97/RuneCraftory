@@ -12,26 +12,27 @@ RuneCraftory 1.8.0
   **This breaks every previous world** (or rather all affected items/blocks in world will vanish)!
 - Add npc spawning mechanism:
   NPC will spawn in villages if there are only few nearby
-- Mineral blocks mine slower with regular pickaxes
 - Add some more npcs and quest
 - Add all rune abilities
 - Add random npc names and (some) textures
-- Fix npc data not persistent on load
-- Increase weapon range and aoe
-- Fix player animation sync 
-- Tweaked weapon stats
-- Fix "furniture" attack texture from marionetta
-- Change rafflesia attack and fix it not hitting when too close
 - Taking damage during sleep effect wakes you up
-- Increase cooldown of boss attacks
-- Tweak monster knockback
 - Config added to allow movement during weapon attacks.
   - Animation will look out of place though as its not made for that
-- Water spells now can be held to cast it longer
 - Add spells and rune abilities to various vanilla chest loots
+- Added Jade and TheOneProbe compat
+- Mineral blocks mine slower with regular pickaxes
+- Increase weapon range and aoe
+- Tweaked weapon stats
+- Change rafflesia attack and fix it not hitting when too close
+- Increase cooldown of boss attacks
+- Tweak monster knockback
+- Water spells now can be held to cast it longer
+- Fix npc data not persistent on load
+- Fix player animation sync
+- Fix "furniture" attack texture from marionetta
 - Fix parent quest for npc quests
 - Fix shop item on reload gone
-- Added Jade and TheOneProbe compat
+
 
 RuneCraftory 1.7.0
 ================
