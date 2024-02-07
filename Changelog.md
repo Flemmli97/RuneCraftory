@@ -1,3 +1,38 @@
+RuneCraftory 1.8.0
+================
+- Breaking Change!!!
+- Added fruit trees:  
+  Fruit trees behave similarly to crops.  
+  You need to water them everyday and they take a long time to grow.  
+  When mature they will drop fruits every day
+- Added giant crops:
+  Plant crops in a 2x2 and apply giantizer to it.
+  After a while they will merge together into a giant version
+- Renamed lots of items/blocks (crops, seeds) to reflect the translated name better.
+  **This breaks every previous world** (or rather all affected items/blocks in world will vanish)!
+- Add npc spawning mechanism:
+  NPC will spawn in villages if there are only few nearby
+- Mineral blocks mine slower with regular pickaxes
+- Add some more npcs and quest
+- Add all rune abilities
+- Add random npc names and (some) textures
+- Fix npc data not persistent on load
+- Increase weapon range and aoe
+- Fix player animation sync 
+- Tweaked weapon stats
+- Fix "furniture" attack texture from marionetta
+- Change rafflesia attack and fix it not hitting when too close
+- Taking damage during sleep effect wakes you up
+- Increase cooldown of boss attacks
+- Tweak monster knockback
+- Config added to allow movement during weapon attacks.
+  - Animation will look out of place though as its not made for that
+- Water spells now can be held to cast it longer
+- Add spells and rune abilities to various vanilla chest loots
+- Fix parent quest for npc quests
+- Fix shop item on reload gone
+- Added Jade and TheOneProbe compat
+
 RuneCraftory 1.7.0
 ================
 - Reworked combat: All weapons from this mod now have attack animations
