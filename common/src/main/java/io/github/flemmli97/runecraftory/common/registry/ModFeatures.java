@@ -76,7 +76,7 @@ public class ModFeatures {
         Holder<ConfiguredFeature<?, ?>> CONFIGUREDHERBFEATURE = BuiltinRegistries.register(BuiltinRegistries.CONFIGURED_FEATURE, "configured_herb_feature", new ConfiguredFeature<>(HERBFEATURE.get(),
                 new HerbFeatureConfig(70, 8, 9, build())));
         PLACEDHERBFEATURE = BuiltinRegistries.register(BuiltinRegistries.PLACED_FEATURE, "placed_herb_feature", new PlacedFeature(CONFIGUREDHERBFEATURE, List.of(
-                RarityFilter.onAverageOnceEvery(5),
+                RarityFilter.onAverageOnceEvery(4),
                 InSquarePlacement.spread(),
                 PlacementUtils.HEIGHTMAP
         )));
