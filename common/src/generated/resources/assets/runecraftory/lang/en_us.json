@@ -1523,6 +1523,8 @@
   "effect.runecraftory.fatigue": "Fatigue",
   "effect.runecraftory.bath": "Bath",
   "effect.runecraftory.true_invis": "True Invisibility",
+  "effect.runecraftory.blitz": "Blitz",
+  "effect.runecraftory.steel_heart": "Steel Heart",
   "runecraftory.recipe.eat.fail": "Didn't learn any recipe. Maybe your crafting level is too low",
   "runecraftory.container.shipping_bin": "Shipping Bin",
   "runecraftory.shipping.money": "Earning from shipped items: %s",
