@@ -64,7 +64,7 @@ public class NPCSpawner implements CustomSpawner {
         for (int i = 0; i < 10; ++i) {
             int x = pos.getX() + level.random.nextInt(16) - 8;
             int z = pos.getZ() + level.random.nextInt(16) - 8;
-            BlockPos blockPos = new BlockPos(x, level.getHeight(Heightmap.Types.WORLD_SURFACE, x, z), z);
+            BlockPos blockPos = new BlockPos(x, level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z), z);
             if (!level.isVillage(blockPos) || level.getEntities(EntityTypeTest.forClass(EntityNPCBase.class), new AABB(blockPos).inflate(48), e -> true).size() > 3)
                 continue;
             return Vec3.atBottomCenterOf(blockPos);
