@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia;
 
+import io.github.flemmli97.runecraftory.common.entities.IBaseMob;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
@@ -66,6 +67,10 @@ public class EntityRafflesiaPitcher extends EntityRafflesiaPart {
                     if (e != null) {
                         if (e instanceof Mob mob)
                             mob.setTarget(part.getTarget());
+                        if (e instanceof IBaseMob mob && part.getOwner() != null) {
+                            int level = part.getOwner().level().getLevel();
+                            mob.setLevel(level + (int) ((part.getRandom().nextDouble() - 0.5) * level * 0.1));
+                        }
                         for (int p = 0; p < 5; p++)
                             serverLevel.sendParticles(ParticleTypes.CLOUD, e.getRandomX(1), e.getRandomY(), e.getRandomZ(1), 1, serverLevel.getRandom().nextGaussian() * 0.1, serverLevel.getRandom().nextGaussian() * 0.1, serverLevel.getRandom().nextGaussian() * 0.1, 0);
                         part.level.addFreshEntity(e);
