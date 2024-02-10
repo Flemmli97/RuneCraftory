@@ -1,3 +1,11 @@
+RuneCraftory 1.8.1
+================
+- Increase herb generation rate
+- Add missing effect icon for blitz and steel heart
+- Minor tweaks to boss stats
+- Fix rafflesia summons not being same level as it
+- Fix npc spawning on leaves
+
 RuneCraftory 1.8.0
 ================
 - Breaking Change!!!
