@@ -1,3 +1,8 @@
+RuneCraftory 1.8.2
+================
+- Changing some default config values
+- Fix raccoon attack
+
 RuneCraftory 1.8.1
 ================
 - Increase herb generation rate
