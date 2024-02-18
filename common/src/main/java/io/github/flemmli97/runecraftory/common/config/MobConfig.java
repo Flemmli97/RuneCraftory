@@ -18,15 +18,15 @@ public class MobConfig {
     public static int gateXP = 25;
     public static int gateMoney = 5;
     public static int minSpawnDelay = 200;
-    public static int maxSpawnDelay = 400;
+    public static int maxSpawnDelay = 600;
     public static double minDist = 32;
     public static int maxGroup = 1;
     public static int minNearby = 2;
     public static int maxNearby = 5;
     public static int baseGateLevel = 1;
-    public static GateLevelType gateLevelType = GateLevelType.DISTANCESPAWN;
+    public static GateLevelType gateLevelType = GateLevelType.DISTANCESPAWNPLAYER;
     public static PlayerLevelType playerLevelType = PlayerLevelType.MEAN;
-    public static float treasureChance = 0.001f;
+    public static float treasureChance = 0.003f;
     public static float mimicChance = 0.4f;
     public static float mimicStrongChance = 0.3f;
 

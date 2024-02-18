@@ -3,15 +3,14 @@ package io.github.flemmli97.runecraftory.common.config;
 public class GeneralConfig {
 
     public static boolean disableDefence = false;
-    public static boolean vanillaIgnoreDefence = true;
+    public static boolean vanillaIgnoreDefence = false;
     public static boolean gateSpawning = true;
     public static boolean disableVanillaSpawning = false;
     public static boolean randomDamage = true;
-    public static boolean dropVanillaLoot = true;
     public static RecipeSystem recipeSystem = RecipeSystem.SKILL;
     public static boolean useRP = true;
     public static float deathHPPercent = 1;
-    public static float deathRPPercent = 1;
+    public static float deathRPPercent = 0.5f;
     public static boolean disableHunger = false;
     public static boolean modifyWeather = true;
     public static boolean modifyBed = false;
@@ -29,13 +28,10 @@ public class GeneralConfig {
     public static boolean tickUnloadedFarmland = true;
     public static boolean unloadedFarmlandCheckWater = true;
 
-    public static boolean waila = true;
-    public static boolean harvestCraft = true;
     public static boolean seasons = true;
     public static boolean dynamicTrees = true;
 
     public static int maxLevel = 999;
-    public static int maxSkillLevel = 100;
     public static int startingHealth = 20;
     public static int startingRP = 100;
     public static int startingMoney = 100;
