@@ -107,7 +107,7 @@ public class EntityRaccoon extends BossMonster {
                     jumpDir = new Vec3(entity.getLookAngle().x(), 0, entity.getLookAngle().z()).normalize().scale(8);
                 entity.jumpDir = jumpDir.multiply(1 / length, 1, 1 / length);
             }
-            if (entity.jumpDir != null && anim.getTick() > 3 && anim.getTick() <= anim.getAttackTime()) {
+            if (anim.getTick() > 3 && anim.getTick() <= anim.getAttackTime()) {
                 double d = Math.sin((anim.getTick() - 3) * Math.PI / length * 2) * 0.95;
                 entity.setDeltaMovement(entity.jumpDir.x, d < 0 ? d * 1.65 : d, entity.jumpDir.z);
                 if (anim.canAttack()) {
@@ -252,7 +252,7 @@ public class EntityRaccoon extends BossMonster {
             if (anim.is(DOUBLE_PUNCH))
                 return !this.isBerserk();
             else if (this.isBerserk()) {
-                /*if (anim.is(LEAF_SHOT_CLONE))
+                if (anim.is(LEAF_SHOT_CLONE))
                     return this.clone && this.isEnraged();
                 if (anim.is(DOUBLE_PUNCH))
                     return !this.isEnraged();
@@ -263,8 +263,8 @@ public class EntityRaccoon extends BossMonster {
                 if (anim.is(BARRAGE))
                     return this.random.nextFloat() < 0.08f;
                 if (anim.is(CLONE))
-                    return this.isEnraged();*/
-                return anim.is(BARRAGE);
+                    return this.isEnraged();
+                return false;
             }
         }
         return false;
