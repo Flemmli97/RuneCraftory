@@ -15,6 +15,7 @@ import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCConversat
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCDataManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCLookManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NameManager;
+import io.github.flemmli97.runecraftory.common.network.S2CDataPackSync;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.packs.resources.PreparableReloadListener;
 
@@ -76,16 +77,32 @@ public class DataPackHandler {
         cons.accept(INSTANCE.npcActions);
     }
 
-    public static void toPacket(FriendlyByteBuf buffer) {
+    public static void toPacket(FriendlyByteBuf buffer, S2CDataPackSync.SyncedType type) {
+        // See S2CDataPackSync
+        /*switch (type) {
+            case ITEMSTATS -> INSTANCE.itemStats.toPacket(buffer);
+            case CROPS -> INSTANCE.crops.toPacket(buffer);
+            case FOOD -> INSTANCE.foods.toPacket(buffer);
+            case SKILL -> INSTANCE.skillPropertiesManager.toPacket(buffer);
+        }*/
         INSTANCE.itemStats.toPacket(buffer);
         INSTANCE.crops.toPacket(buffer);
         INSTANCE.foods.toPacket(buffer);
+        INSTANCE.skillPropertiesManager.toPacket(buffer);
     }
 
-    public static void fromPacket(FriendlyByteBuf buffer) {
+    public static void fromPacket(S2CDataPackSync.SyncedType type, FriendlyByteBuf buffer) {
+        // See S2CDataPackSync
+        /*switch (type) {
+            case ITEMSTATS -> INSTANCE.itemStats.fromPacket(buffer);
+            case CROPS -> INSTANCE.crops.fromPacket(buffer);
+            case FOOD -> INSTANCE.foods.fromPacket(buffer);
+            case SKILL -> INSTANCE.skillPropertiesManager.fromPacket(buffer);
+        }*/
         INSTANCE.itemStats.fromPacket(buffer);
         INSTANCE.crops.fromPacket(buffer);
         INSTANCE.foods.fromPacket(buffer);
+        INSTANCE.skillPropertiesManager.fromPacket(buffer);
     }
 
     private DataPackHandler() {
