@@ -69,7 +69,9 @@ public class CombatUtils {
         } else if (attacker.getAttribute(att) != null) {
             increase += attacker.getAttributeValue(att);
         }
-        return (int) increase;
+        int inc = (int) increase;
+        double restRound = Math.round((increase - inc) * 2) / 2;
+        return inc + restRound;
     }
 
     public static Attribute opposing(Attribute att) {
