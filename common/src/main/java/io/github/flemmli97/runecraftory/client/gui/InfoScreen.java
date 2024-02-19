@@ -83,7 +83,6 @@ public class InfoScreen extends EffectRenderingInventoryScreen<AbstractContainer
         ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + this.data.getMoney(), this.leftPos + 187, this.topPos + 9, 0.6f, 0);
         int statX = 216;
         int statY = 59;
-        double att = CombatUtils.getAttributeValue(this.minecraft.player, Attributes.ATTACK_DAMAGE);
         MutableComponent mut = new TextComponent("" + (int) CombatUtils.getAttributeValue(this.minecraft.player, Attributes.ATTACK_DAMAGE));
         if (this.canUseAttack == -1) {
             this.canUseAttack = ItemNBT.isWeapon(this.minecraft.player.getMainHandItem()) ? 1 : 0;
