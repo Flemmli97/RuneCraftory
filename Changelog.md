@@ -1,3 +1,12 @@
+RuneCraftory 1.8.3
+================
+- Sync max skill level to client. 
+  Fixes bug where skill level was not updated correctly there
+- Fix food buffs not reset when using reset command
+- Change stats to round to nearest 0.5 instead of full integer
+- Removed `disableDefence` and `vanillaIgnoreDefence` and replaced it with
+  `defenceSystem` config which allows a bit more possibilities
+
 RuneCraftory 1.8.2
 ================
 - Changing some default config values
