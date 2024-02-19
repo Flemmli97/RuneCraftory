@@ -82,7 +82,7 @@ public class PlayerData {
      * first number is level, second is the xp a.k.a. percent to next level
      */
     private final LevelExpPair level = new LevelExpPair();
-    private final EnumMap<EnumSkills, LevelExpPair> skillMapN = new EnumMap<>(EnumSkills.class);
+    private final EnumMap<EnumSkills, LevelExpPair> skillLevels = new EnumMap<>(EnumSkills.class);
 
     private final InventorySpells spells = new InventorySpells();
 
@@ -125,7 +125,7 @@ public class PlayerData {
 
     public PlayerData() {
         for (EnumSkills skill : EnumSkills.values()) {
-            this.skillMapN.put(skill, new LevelExpPair());
+            this.skillLevels.put(skill, new LevelExpPair());
         }
     }
 
@@ -309,20 +309,20 @@ public class PlayerData {
     }
 
     private double skillVal(Function<SkillProperties, Number> func) {
-        return this.skillMapN.entrySet().stream().mapToDouble(e -> (e.getValue().getLevel() - 1) * func.apply(DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(e.getKey())).doubleValue()).sum();
+        return this.skillLevels.entrySet().stream().mapToDouble(e -> (e.getValue().getLevel() - 1) * func.apply(DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(e.getKey())).doubleValue()).sum();
     }
 
     private double skillValLevelFunc(BiFunction<Integer, SkillProperties, Number> func) {
-        return this.skillMapN.entrySet().stream().mapToDouble(e -> func.apply(e.getValue().getLevel() - 1, DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(e.getKey())).doubleValue()).sum();
+        return this.skillLevels.entrySet().stream().mapToDouble(e -> func.apply(e.getValue().getLevel() - 1, DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(e.getKey())).doubleValue()).sum();
     }
 
     public LevelExpPair getSkillLevel(EnumSkills skill) {
-        return this.skillMapN.get(skill);
+        return this.skillLevels.get(skill);
     }
 
     public void setSkillLevel(EnumSkills skill, Player player, int level, float xpAmount, boolean recalc) {
-        this.skillMapN.get(skill).setLevel(Mth.clamp(level, 1, DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(skill).maxLevel()));
-        this.skillMapN.get(skill).setXp(Mth.clamp(xpAmount, 0, LevelCalc.xpAmountForSkillLevelUp(skill, level)));
+        this.skillLevels.get(skill).setLevel(player.level.isClientSide ? level : Mth.clamp(level, 1, DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(skill).maxLevel()));
+        this.skillLevels.get(skill).setXp(player.level.isClientSide ? xpAmount : Mth.clamp(xpAmount, 0, LevelCalc.xpAmountForSkillLevelUp(skill, level)));
         if (player instanceof ServerPlayer serverPlayer) {
             if (recalc) {
                 this.recalculateStats(serverPlayer, true);
@@ -333,9 +333,9 @@ public class PlayerData {
     }
 
     public void increaseSkill(EnumSkills skill, Player player, float amount) {
-        if (this.skillMapN.get(skill).getLevel() >= DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(skill).maxLevel())
+        if (this.skillLevels.get(skill).getLevel() >= DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(skill).maxLevel())
             return;
-        boolean levelUp = this.skillMapN.get(skill).addXP(amount, DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(skill).maxLevel(), lvl -> LevelCalc.xpAmountForSkillLevelUp(skill, lvl), () -> this.onSkillLevelUp(skill, player));
+        boolean levelUp = this.skillLevels.get(skill).addXP(amount, DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(skill).maxLevel(), lvl -> LevelCalc.xpAmountForSkillLevelUp(skill, lvl), () -> this.onSkillLevelUp(skill, player));
         if (levelUp) {
             player.level.playSound(null, player.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1, 0.5f);
         }
@@ -348,7 +348,7 @@ public class PlayerData {
 
     private void onSkillLevelUp(EnumSkills skill, Player player) {
         SkillProperties prop = DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(skill);
-        int level = this.skillMapN.get(skill).getLevel();
+        int level = this.skillLevels.get(skill).getLevel();
         float health = player.getMaxHealth();
         this.updateHealth(player);
         player.heal(player.getMaxHealth() - health);
@@ -673,7 +673,7 @@ public class PlayerData {
         this.intAdd = nbt.getFloat("IntelligenceBonus");
         CompoundTag skillCompound = nbt.getCompound("Skills");
         for (EnumSkills skill : EnumSkills.values()) {
-            this.skillMapN.get(skill).read(skillCompound.get(skill.toString()));
+            this.skillLevels.get(skill).read(skillCompound.get(skill.toString()));
         }
         this.spells.load(nbt.getCompound("Inventory"));
         this.shipping.load(nbt.getCompound("Shipping"));
@@ -740,7 +740,7 @@ public class PlayerData {
         nbt.putFloat("IntelligenceBonus", this.intAdd);
         CompoundTag skillCompound = new CompoundTag();
         for (EnumSkills skill : EnumSkills.values()) {
-            skillCompound.put(skill.toString(), this.skillMapN.get(skill).save());
+            skillCompound.put(skill.toString(), this.skillLevels.get(skill).save());
         }
         nbt.put("Skills", skillCompound);
         nbt.put("Inventory", this.spells.save());
