@@ -62,4 +62,9 @@ public class LevelExpPair {
             this.xp = compoundTag.getFloat("XP");
         }
     }
+
+    @Override
+    public String toString() {
+        return String.format("Level: %s, XP: %s", this.level, this.xp);
+    }
 }
