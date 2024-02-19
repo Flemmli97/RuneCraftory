@@ -46,6 +46,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
@@ -54,6 +55,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -423,8 +425,10 @@ public class PlayerData {
     public double getAttributeValue(Player player, Attribute att) {
         double val = 0;
         float vit = this.getVit() + this.vitAdd;
-        if (att == Attributes.ATTACK_DAMAGE)
+        if (att == Attributes.ATTACK_DAMAGE) {
             val += this.getStr() + this.strAdd;
+            val += EnchantmentHelper.getDamageBonus(player.getMainHandItem(), MobType.UNDEFINED);
+        }
         if (att == ModAttributes.MAGIC.get())
             val += this.getIntel() + this.intAdd;
         if (att == ModAttributes.DEFENCE.get())
@@ -564,13 +568,11 @@ public class PlayerData {
     }
 
     public void readFoodBuffFromNBT(CompoundTag nbt) {
-        if (nbt.contains("LastFood"))
-            this.lastFood = PlatformUtils.INSTANCE.items().getFromId(new ResourceLocation(nbt.getString("LastFood")));
-        if (nbt.contains("FoodBuffs")) {
-            CompoundTag tag = nbt.getCompound("FoodBuffs");
-            for (String s : tag.getAllKeys()) {
-                this.foodBuffs.put(PlatformUtils.INSTANCE.attributes().getFromId(new ResourceLocation(s)), tag.getDouble(s));
-            }
+        this.lastFood = nbt.contains("LastFood") ? PlatformUtils.INSTANCE.items().getFromId(new ResourceLocation(nbt.getString("LastFood"))) : null;
+        this.foodBuffs.clear();
+        CompoundTag tag = nbt.getCompound("FoodBuffs");
+        for (String s : tag.getAllKeys()) {
+            this.foodBuffs.put(PlatformUtils.INSTANCE.attributes().getFromId(new ResourceLocation(s)), tag.getDouble(s));
         }
         this.foodDuration = nbt.getInt("FoodBuffDuration");
     }
