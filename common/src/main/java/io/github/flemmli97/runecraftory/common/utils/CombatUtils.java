@@ -131,14 +131,21 @@ public class CombatUtils {
 
     public static float reduceDamageFromStats(LivingEntity entity, DamageSource source, float amount) {
         float reduce = 0;
-        if (!GeneralConfig.disableDefence) {
-            if (!GeneralConfig.vanillaIgnoreDefence || source instanceof CustomDamage) {
-                if (source.isMagic()) {
-                    if (!source.isBypassMagic())
-                        reduce = (float) getAttributeValue(entity, ModAttributes.MAGIC_DEFENCE.get());
-                } else if (!source.isBypassArmor()) {
-                    reduce = (float) getAttributeValue(entity, ModAttributes.DEFENCE.get());
-                }
+        boolean ignoreDefence = switch (GeneralConfig.defenceSystem) {
+            case NO_DEFENCE -> true;
+            case VANILLA_IGNORE -> !(source instanceof CustomDamage);
+            case IGNORE_VANILLA_MOBS -> !(source instanceof CustomDamage) && source.getEntity() instanceof Mob;
+            case IGNORE_VANILLA_PLAYER_ATT -> !(source instanceof CustomDamage) && source.getEntity() instanceof Player;
+            case IGNORE_VANILLA_PLAYER_HURT -> !(source instanceof CustomDamage) && entity instanceof Player;
+            case IGNORE_VANILLA_PLAYER ->
+                    !(source instanceof CustomDamage) && (entity instanceof Player || source.getEntity() instanceof Player);
+        };
+        if (!ignoreDefence) {
+            if (source.isMagic()) {
+                if (!source.isBypassMagic())
+                    reduce = (float) getAttributeValue(entity, ModAttributes.MAGIC_DEFENCE.get());
+            } else if (!source.isBypassArmor()) {
+                reduce = (float) getAttributeValue(entity, ModAttributes.DEFENCE.get());
             }
         }
         float dmg = amount - reduce;

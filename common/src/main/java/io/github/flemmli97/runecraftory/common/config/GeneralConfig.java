@@ -2,8 +2,8 @@ package io.github.flemmli97.runecraftory.common.config;
 
 public class GeneralConfig {
 
-    public static boolean disableDefence = false;
-    public static boolean vanillaIgnoreDefence = false;
+    public static DefenceSystem defenceSystem = DefenceSystem.IGNORE_VANILLA_PLAYER;
+    public static boolean vanillaIgnoreDefencePlayer = true;
     public static boolean gateSpawning = true;
     public static boolean disableVanillaSpawning = false;
     public static boolean randomDamage = true;
@@ -64,6 +64,15 @@ public class GeneralConfig {
     public static float tamingMultiplier = 1;
 
     public static boolean debugAttack = false;
+
+    public enum DefenceSystem {
+        NO_DEFENCE,
+        VANILLA_IGNORE,
+        IGNORE_VANILLA_MOBS,
+        IGNORE_VANILLA_PLAYER_ATT,
+        IGNORE_VANILLA_PLAYER_HURT,
+        IGNORE_VANILLA_PLAYER,
+    }
 
     public enum RecipeSystem {
 
