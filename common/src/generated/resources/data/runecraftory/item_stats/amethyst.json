@@ -9,5 +9,5 @@
     "runecraftory:defence": 0.75
   },
   "element": "NONE",
-  "tag": "c:amethysts"
+  "item": "c:amethysts"
 }

@@ -9,5 +9,5 @@
     "runecraftory:magic_defence": 7.0
   },
   "element": "NONE",
-  "tag": "c:sapphires"
+  "item": "c:sapphires"
 }

@@ -28,7 +28,7 @@ public class ModNPCActions {
     public static final Supplier<SimpleRegistryWrapper<NPCAction.NPCActionCodec>> ACTIONS_REGISTRY = new LazyGetter<>(() -> PlatformUtils.INSTANCE.registry(ACTIONS_REGISTRY_KEY));
 
     public static final PlatformRegistry<NPCAction.NPCActionCodec> ACTIONS = PlatformUtils.INSTANCE
-            .customRegistry(NPCAction.NPCActionCodec.class, ACTIONS_REGISTRY_KEY, new ResourceLocation(RuneCraftory.MODID, "run_to_leader"), true, false);
+            .customRegistry(NPCAction.NPCActionCodec.class, ACTIONS_REGISTRY_KEY, new ResourceLocation(RuneCraftory.MODID, "do_nothing"), true, false);
 
     public static final RegistryEntrySupplier<NPCAction.NPCActionCodec> DO_NOTHING_ACTION = register("do_nothing", DoNothingAction.CODEC);
     public static final RegistryEntrySupplier<NPCAction.NPCActionCodec> MELEE_ATTACK = register("melee_attack", AttackMeleeAction.CODEC);

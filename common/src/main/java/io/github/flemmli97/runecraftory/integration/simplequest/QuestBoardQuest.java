@@ -41,7 +41,7 @@ public class QuestBoardQuest extends QuestBase {
             obj.addProperty("id", this.id.toString());
         if (this.category != QuestCategory.DEFAULT_CATEGORY)
             obj.addProperty("category", this.category.id.toString());
-        obj.addProperty("WrappedQuest", this.quest.id.toString());
+        obj.addProperty("wrappedQuest", this.quest.id.toString());
         obj.addProperty(QuestBase.TYPE_ID, ID.toString());
         return obj;
     }

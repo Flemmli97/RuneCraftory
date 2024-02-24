@@ -9,5 +9,5 @@
     "minecraft:generic.max_health": 0.1
   },
   "element": "NONE",
-  "tag": "minecraft:flowers"
+  "item": "minecraft:flowers"
 }

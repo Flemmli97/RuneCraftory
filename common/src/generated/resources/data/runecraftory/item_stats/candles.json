@@ -9,5 +9,5 @@
     "runecraftory:magic_attack": 0.1
   },
   "element": "NONE",
-  "tag": "minecraft:candles"
+  "item": "minecraft:candles"
 }

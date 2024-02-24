@@ -30,7 +30,6 @@ public class NameManager extends SimplePreparableReloadListener<Map<ResourceLoca
 
     private static final Gson GSON = new GsonBuilder().create();
 
-
     public static final String DIRECTORY = "names";
 
     private Map<String, List<String>> surnames;

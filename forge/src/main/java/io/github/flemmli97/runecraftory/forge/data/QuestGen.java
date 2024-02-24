@@ -57,7 +57,7 @@ public class QuestGen extends QuestProvider {
                         .setRepeatDelay(-1)
                         .withCategory(this.main)
                         .withIcon(new ItemStack(ModItems.turnipSeeds.get())),
-                List.of(of(m -> m.put("talk", new QuestTasks.NPCTalk("turnip.task.talk", false))),
+                List.of(of(m -> m.put("talk", new QuestTasks.NPCTalk(null))),
                         of(m -> m.put("shipping", new QuestTasks.ShippingEntry(ItemPredicate.Builder.item().of(ModItems.turnip.get()).build(), 1)))));
 
         this.createNPCQuest(new NPCQuest.Builder(MINING, getTask(MINING),
@@ -65,7 +65,7 @@ public class QuestGen extends QuestProvider {
                         .setRepeatDelay(-1)
                         .withCategory(this.main)
                         .withIcon(new ItemStack(ModItems.hammerScrap.get())),
-                List.of(of(m -> m.put("talk", new QuestTasks.NPCTalk("mining.task.talk", false))),
+                List.of(of(m -> m.put("talk", new QuestTasks.NPCTalk(null))),
                         of(m -> m.put("mine", new QuestEntryImpls.BlockInteractEntry(ItemPredicate.ANY, BlockPredicate.Builder.block().of(ModTags.ORES).build(),
                                 10, false, false, true, "", "", "", EntityPredicate.ANY)))));
 
@@ -74,7 +74,7 @@ public class QuestGen extends QuestProvider {
                         .setRepeatDelay(-1)
                         .withCategory(this.main)
                         .withIcon(new ItemStack(SpawnEgg.fromType(ModEntities.WOOLY.get()).get())),
-                List.of(of(m -> m.put("talk", new QuestTasks.NPCTalk("", false))),
+                List.of(of(m -> m.put("talk", new QuestTasks.NPCTalk(null))),
                         of(m -> m.put("tame", new QuestTasks.TamingEntry(EntityPredicate.ANY, 1, "")))));
     }
 

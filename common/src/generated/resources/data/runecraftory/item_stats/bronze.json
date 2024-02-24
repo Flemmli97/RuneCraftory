@@ -9,5 +9,5 @@
     "runecraftory:defence": 0.5
   },
   "element": "NONE",
-  "tag": "c:bronze_ingots"
+  "item": "c:bronze_ingots"
 }

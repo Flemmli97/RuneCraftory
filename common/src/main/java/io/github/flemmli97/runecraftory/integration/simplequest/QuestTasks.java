@@ -170,24 +170,21 @@ public class QuestTasks {
 
         public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "npc_talk");
         public static final Codec<NPCTalk> CODEC = RecordCodecBuilder.create((instance) ->
-                instance.group(Codec.STRING.fieldOf("translationKey").forGetter(d -> d.translationKey),
-                                Codec.BOOL.fieldOf("generic").forGetter(d -> d.generic),
+                instance.group(ResourceLocation.CODEC.optionalFieldOf("targetNPCId").forGetter(d -> Optional.ofNullable(d.targetNPCId)),
                                 Codec.STRING.optionalFieldOf("targetNPC").forGetter(d -> d.targetNPC != null ? Optional.of(d.targetNPC.toString()) : Optional.empty()))
-                        .apply(instance, (key, generic, target) -> new NPCTalk(key, generic, target.map(UUID::fromString).orElse(null))));
+                        .apply(instance, (generic, target) -> new NPCTalk(generic.orElse(null), target.map(UUID::fromString).orElse(null))));
 
-        private final String translationKey;
-        private final boolean generic;
+        private final ResourceLocation targetNPCId;
 
         public final UUID targetNPC;
         private EntityNPCBase npc;
 
-        public NPCTalk(String translationKey, boolean generic) {
-            this(translationKey, generic, null);
+        public NPCTalk(ResourceLocation generic) {
+            this(generic, null);
         }
 
-        protected NPCTalk(String translationKey, boolean generic, UUID targetNPC) {
-            this.translationKey = translationKey;
-            this.generic = generic;
+        protected NPCTalk(ResourceLocation generic, UUID targetNPC) {
+            this.targetNPCId = generic;
             this.targetNPC = targetNPC;
         }
 
@@ -217,8 +214,8 @@ public class QuestTasks {
         @Override
         public QuestEntry resolve(ServerPlayer player, QuestBase quest) {
             if (quest instanceof NPCQuest npcQuest)
-                return new NPCTalk(this.translationKey, this.generic, npcQuest.getNpcUuid());
-            return new NPCTalk(this.translationKey, this.generic, this.targetNPC);
+                return new NPCTalk(this.targetNPCId, npcQuest.getNpcUuid());
+            return new NPCTalk(this.targetNPCId, this.targetNPC);
         }
     }
 }

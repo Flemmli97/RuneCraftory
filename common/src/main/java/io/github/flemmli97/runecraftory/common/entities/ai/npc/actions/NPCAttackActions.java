@@ -8,6 +8,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModNPCActions;
 import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.random.Weight;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.util.random.WeightedRandom;
@@ -46,7 +47,7 @@ public class NPCAttackActions {
     public static class WeightedAction implements WeightedEntry {
 
         public static final Codec<WeightedAction> CODEC = RecordCodecBuilder.create((instance) ->
-                instance.group(Codec.INT.fieldOf("weight").forGetter(d -> d.weight.asInt()),
+                instance.group(ExtraCodecs.POSITIVE_INT.fieldOf("weight").forGetter(d -> d.weight.asInt()),
                         CodecHelper.ENTITY_PREDICATE_CODEC.optionalFieldOf("predicate").forGetter(d -> d.predicate == EntityPredicate.ANY ? Optional.empty() : Optional.of(d.predicate)),
                         CodecHelper.ofCustomRegistry(ModNPCActions.ACTIONS_REGISTRY, ModNPCActions.ACTIONS_REGISTRY_KEY)
                                 .dispatchStable(c -> c.codec().get(), c -> c.codec).listOf().fieldOf("concurrent_actions").forGetter(d -> d.chainedActions)

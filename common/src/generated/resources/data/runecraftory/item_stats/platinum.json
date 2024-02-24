@@ -9,5 +9,5 @@
     "runecraftory:defence": 0.8
   },
   "element": "NONE",
-  "tag": "c:platinum_ingots"
+  "item": "c:platinum_ingots"
 }

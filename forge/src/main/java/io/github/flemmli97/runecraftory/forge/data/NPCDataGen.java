@@ -259,7 +259,7 @@ public class NPCDataGen extends NPCDataProvider {
                 .addAction(new NPCAttackActions.ActionBuilder(1)
                         .action(new FoodThrowAction(List.of(new ItemStack(Items.APPLE)), ConstantValue.exactly(40), ConstantValue.exactly(0))))
                 .addAction(new NPCAttackActions.ActionBuilder(1)
-                        .action(new RunAwayAction(ConstantValue.exactly(40), ConstantValue.exactly(0))))
+                        .action(new RunAwayAction(ConstantValue.exactly(40), ConstantValue.exactly(0), 6)))
                 .addAction(new NPCAttackActions.ActionBuilder(1)
                         .action(new SpellAttackAction(ModSpells.FIREBALL.get(), 8, false, ConstantValue.exactly(40), ConstantValue.exactly(0))))
                 .addAction(new NPCAttackActions.ActionBuilder(1)
@@ -286,7 +286,10 @@ public class NPCDataGen extends NPCDataProvider {
                     m.put(NPCData.ConversationType.FOLLOWNO, new NPCData.ConversationSet.Builder("npc.generic.all.follow.no", "Test"));
                     m.put(NPCData.ConversationType.FOLLOWSTOP, new NPCData.ConversationSet.Builder("npc.generic.all.follow.stop", "Test"));
                 }),
-                new NPCData.NPCLook(NPCData.Gender.UNDEFINED, new ResourceLocation(RuneCraftory.MODID, "texture"), "Flemmli97", 0, List.of()),
+                new NPCData.NPCLook(NPCData.Gender.UNDEFINED, new ResourceLocation(RuneCraftory.MODID, "texture"), "Flemmli97", 0, List.of(
+                        new NPCData.LookFeature(NPCData.StaticLookTypes.SLIM_MODEL),
+                        new NPCData.LookFeature(Pair.of(new ResourceLocation(RuneCraftory.MODID, "test_feature"), new ResourceLocation(RuneCraftory.MODID, "test_value")))
+                )),
                 Map.of());*/
     }
 

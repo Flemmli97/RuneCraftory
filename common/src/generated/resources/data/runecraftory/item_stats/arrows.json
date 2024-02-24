@@ -10,5 +10,5 @@
   },
   "element": "NONE",
   "tier1Spell": "runecraftory:vanilla_arrow",
-  "tag": "minecraft:arrows"
+  "item": "minecraft:arrows"
 }

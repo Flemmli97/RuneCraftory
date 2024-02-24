@@ -9,5 +9,5 @@
     "minecraft:generic.max_health": 0.15
   },
   "element": "NONE",
-  "tag": "minecraft:saplings"
+  "item": "minecraft:saplings"
 }

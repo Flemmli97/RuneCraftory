@@ -4,8 +4,6 @@
   "loot_table": "minecraft:empty",
   "entries": {
     "talk": {
-      "translationKey": "turnip.task.talk",
-      "generic": false,
       "id": "runecraftory:npc_talk"
     }
   },

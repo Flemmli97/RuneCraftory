@@ -28,8 +28,8 @@ public class NPCDataManager extends SimpleJsonResourceReloadListener {
 
     private Map<ResourceLocation, NPCData> keyData = ImmutableMap.of();
     private Map<NPCData, ResourceLocation> dataKey = ImmutableMap.of();
-    private WeightedList<NPCData> view = new WeightedList<>();
-    private WeightedList<NPCData> viewNoJobDef = new WeightedList<>();
+    private final WeightedList<NPCData> view = new WeightedList<>();
+    private final WeightedList<NPCData> viewNoJobDef = new WeightedList<>();
 
     public NPCDataManager() {
         super(GSON, DIRECTORY);

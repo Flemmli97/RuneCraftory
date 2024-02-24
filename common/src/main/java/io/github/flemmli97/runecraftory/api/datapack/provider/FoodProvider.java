@@ -87,6 +87,6 @@ public abstract class FoodProvider implements DataProvider {
     public void addStat(String id, TagKey<Item> tag, FoodProperties.Builder builder) {
         ResourceLocation res = new ResourceLocation(this.modid, id);
         this.data.put(res, builder);
-        this.item.put(res, obj -> obj.addProperty("tag", tag.location().toString()));
+        this.item.put(res, obj -> obj.addProperty("item", tag.location().toString()));
     }
 }

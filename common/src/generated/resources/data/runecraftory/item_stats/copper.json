@@ -9,5 +9,5 @@
     "runecraftory:defence": 0.5
   },
   "element": "NONE",
-  "tag": "c:copper_ingots"
+  "item": "c:copper_ingots"
 }

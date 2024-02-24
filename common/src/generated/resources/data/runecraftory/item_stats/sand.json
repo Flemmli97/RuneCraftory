@@ -9,5 +9,5 @@
     "runecraftory:defence": 0.2
   },
   "element": "NONE",
-  "tag": "minecraft:sand"
+  "item": "minecraft:sand"
 }

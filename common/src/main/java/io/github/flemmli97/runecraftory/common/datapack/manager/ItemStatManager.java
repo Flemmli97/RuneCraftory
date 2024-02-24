@@ -16,6 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -72,14 +73,15 @@ public class ItemStatManager extends SimpleJsonResourceReloadListener {
         data.forEach((fres, el) -> {
             try {
                 JsonObject obj = el.getAsJsonObject();
-                if (obj.has("tag")) {
-                    TagKey<Item> tag = PlatformUtils.INSTANCE.itemTag(new ResourceLocation(obj.get("tag").getAsString()));
+                String item = GsonHelper.getAsString(obj, "item");
+                if (item.startsWith("#")) {
+                    TagKey<Item> tag = PlatformUtils.INSTANCE.itemTag(new ResourceLocation(item.substring(1)));
                     ItemStat stat = ItemStat.CODEC.parse(JsonOps.INSTANCE, el)
                             .getOrThrow(false, RuneCraftory.logger::error);
                     stat.setID(fres);
                     tagBuilder.put(tag, stat);
-                } else if (obj.has("item")) {
-                    ResourceLocation res = new ResourceLocation(obj.get("item").getAsString());
+                } else {
+                    ResourceLocation res = new ResourceLocation(item);
                     ItemStat stat = ItemStat.CODEC.parse(JsonOps.INSTANCE, el)
                             .getOrThrow(false, RuneCraftory.logger::error);
                     stat.setID(fres);

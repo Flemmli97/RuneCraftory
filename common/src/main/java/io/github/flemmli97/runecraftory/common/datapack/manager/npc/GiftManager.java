@@ -35,7 +35,7 @@ public class GiftManager extends SimplePreparableReloadListener<Map<ResourceLoca
 
     private static final Gson GSON = new GsonBuilder().create();
 
-    public static final String DIRECTORY = "gifts";
+    public static final String DIRECTORY = "npc_gifts";
 
     private Map<NPCData.GiftType, List<TagKey<Item>>> giftTags;
 
