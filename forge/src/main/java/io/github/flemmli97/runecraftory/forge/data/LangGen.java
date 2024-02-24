@@ -241,9 +241,20 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.tooltip.item.upgrade", "Upgrade");
         this.add("runecraftory.tooltip.item.eaten", "When eaten");
         this.add("runecraftory.gui.level", "Level");
+        this.add("runecraftory.gui.npc.id", "Npc data-id");
+        this.add("runecraftory.gui.npc.profession", "Npc Profession");
+        this.add("runecraftory.gui.save", "Save");
 
-        this.add("runecraftory.tooltip.item.spawn", "Rename to a number to set level");
+        this.add("runecraftory.tooltip.item.spawn", "Right click in air to change mob level");
         this.add("runecraftory.tooltip.item.prop", "A prop item. Takes on the items look when in another entities hand");
+
+        this.add("runecraftory.tooltip.item.treasure_chest", "Shift-right-click to cycle through loot tier");
+        this.add("runecraftory.tooltip.item.treasure_level", "Chest tier lvl: %s");
+        this.add("runecraftory.tooltip.debug.stat", "Itemstat-ID: %s");
+        this.add("runecraftory.tooltip.debug.crop", "Cropdata-ID: %s");
+        this.add("runecraftory.tooltip.debug.food", "Fooddata-ID: %s");
+        this.add("runecraftory.tooltip.item.npc", "Shift-right-click to change profession");
+        this.add("runecraftory.tooltip.sapling", "Needs to be placed on farmland");
 
         this.add("runecraftory.tooltip.growth", "Growth: %sd");
         this.add("runecraftory.tooltip.harvested", "Harvest Amount: %s");
@@ -267,14 +278,6 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.barn.interact.not.owner", "This barn belongs to %s.");
         this.add("runecraftory.barn.interact.block", "Barn with capacity %1$s (Free: %2$s).");
         this.add("runecraftory.barn.interact.block.roofed", "Roofed barn with capacity %1$s (Free: %2$s).");
-
-        this.add("runecraftory.tooltip.item.treasure_chest", "Shift-right-click to cycle through loot tier");
-        this.add("runecraftory.tooltip.item.treasure_level", "Chest tier lvl: %s");
-        this.add("runecraftory.tooltip.debug.stat", "Itemstat-ID: %s");
-        this.add("runecraftory.tooltip.debug.crop", "Cropdata-ID: %s");
-        this.add("runecraftory.tooltip.debug.food", "Fooddata-ID: %s");
-        this.add("runecraftory.tooltip.item.npc", "Shift-right-click to change profession");
-        this.add("runecraftory.tooltip.sapling", "Needs to be placed on farmland");
 
         this.add("runecraftory.crafting.rpMax.missing", "Missing total rp");
 

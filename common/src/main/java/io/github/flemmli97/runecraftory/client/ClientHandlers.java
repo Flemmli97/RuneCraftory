@@ -13,6 +13,7 @@ import io.github.flemmli97.runecraftory.client.gui.NPCGui;
 import io.github.flemmli97.runecraftory.client.gui.NPCShopGui;
 import io.github.flemmli97.runecraftory.client.gui.OverlayGui;
 import io.github.flemmli97.runecraftory.client.gui.QuestGui;
+import io.github.flemmli97.runecraftory.client.gui.SpawnEggScreen;
 import io.github.flemmli97.runecraftory.client.gui.SpellInvOverlayGui;
 import io.github.flemmli97.runecraftory.client.model.AnimatedPlayerModel;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
@@ -37,6 +38,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -283,5 +285,9 @@ public class ClientHandlers {
 
     public static void openQuestGui(boolean hasActive, List<ClientSideQuestDisplay> quests) {
         Minecraft.getInstance().setScreen(new QuestGui(hasActive, quests));
+    }
+
+    public static void openSpawneggGui(InteractionHand hand) {
+        Minecraft.getInstance().setScreen(new SpawnEggScreen(hand));
     }
 }

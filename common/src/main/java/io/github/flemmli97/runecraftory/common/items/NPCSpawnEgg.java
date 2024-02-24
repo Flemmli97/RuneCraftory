@@ -1,5 +1,7 @@
 package io.github.flemmli97.runecraftory.common.items;
 
+import io.github.flemmli97.runecraftory.api.datapack.NPCData;
+import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
@@ -23,21 +25,32 @@ import java.util.function.Supplier;
 
 public class NPCSpawnEgg extends RuneCraftoryEggItem {
 
+    public static final String NPC_ID = "NPCId";
+    public static final String NPC_SHOP = "Shop";
+
     public NPCSpawnEgg(Supplier<? extends EntityType<?>> type, Properties props) {
         super(type, 0x452808, 0x7d4c15, props);
     }
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
-        tooltipComponents.add(new TranslatableComponent("runecraftory.tooltip.item.npc").withStyle(ChatFormatting.GOLD));
-        tooltipComponents.add(new TranslatableComponent(this.getJob(stack).getTranslationKey()).withStyle(ChatFormatting.AQUA));
         super.appendHoverText(stack, level, tooltipComponents, isAdvanced);
+        tooltipComponents.add(new TranslatableComponent("runecraftory.tooltip.item.npc").withStyle(ChatFormatting.GOLD));
+        tooltipComponents.add(new TranslatableComponent(getJob(stack).getTranslationKey()).withStyle(ChatFormatting.AQUA));
     }
 
     @Override
     public boolean onEntitySpawned(Entity e, ItemStack stack, Player player) {
         if (e instanceof EntityNPCBase npc) {
-            NPCJob job = this.getJob(stack);
+            ResourceLocation id = getNpcID(stack);
+            if (id != null) {
+                NPCData data = DataPackHandler.INSTANCE.npcDataManager().get(id);
+                if (data != null) {
+                    npc.setNPCData(data, false);
+                    return super.onEntitySpawned(e, stack, player);
+                }
+            }
+            NPCJob job = getJob(stack);
             if (job != ModNPCJobs.NONE.getSecond())
                 npc.randomizeData(job, false);
         }
@@ -49,24 +62,39 @@ public class NPCSpawnEgg extends RuneCraftoryEggItem {
         if (player.isShiftKeyDown()) {
             ItemStack stack = player.getItemInHand(hand);
             if (!world.isClientSide)
-                this.next(stack);
+                next(stack);
             return InteractionResultHolder.consume(stack);
         }
         return super.use(world, player, hand);
     }
 
-    protected NPCJob getJob(ItemStack stack) {
+    public static NPCJob getJob(ItemStack stack) {
         NPCJob job = ModNPCJobs.NONE.getSecond();
-        if (stack.hasTag() && stack.getTag().contains("Shop")) {
-            job = ModNPCJobs.getFromID(new ResourceLocation(stack.getTag().getString("Shop")));
+        if (stack.hasTag() && stack.getTag().contains(NPC_SHOP)) {
+            job = ModNPCJobs.getFromID(new ResourceLocation(stack.getTag().getString(NPC_SHOP)));
         }
         return job;
     }
 
-    protected void next(ItemStack stack) {
+    public static void setNpcID(ItemStack stack, ResourceLocation id) {
+        CompoundTag tag = stack.getOrCreateTag();
+        if (id == null)
+            tag.remove(NPC_ID);
+        else
+            tag.putString(NPC_ID, id.toString());
+    }
+
+    public static ResourceLocation getNpcID(ItemStack stack) {
+        if (stack.hasTag() && stack.getTag().contains(NPC_ID)) {
+            return new ResourceLocation(stack.getTag().getString(NPC_ID));
+        }
+        return null;
+    }
+
+    public static void next(ItemStack stack) {
         CompoundTag tag = stack.getOrCreateTag();
         List<NPCJob> jobs = ModNPCJobs.allJobs();
-        NPCJob current = this.getJob(stack);
-        tag.putString("Shop", ModNPCJobs.getIDFrom(jobs.get((jobs.indexOf(current) + 1) % jobs.size())).toString());
+        NPCJob current = getJob(stack);
+        tag.putString(NPC_SHOP, ModNPCJobs.getIDFrom(jobs.get((jobs.indexOf(current) + 1) % jobs.size())).toString());
     }
 }

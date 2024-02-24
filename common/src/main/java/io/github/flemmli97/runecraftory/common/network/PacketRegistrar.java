@@ -21,6 +21,7 @@ public class PacketRegistrar {
         register.registerMessage(id++, C2SDialogueAction.ID, C2SDialogueAction.class, C2SDialogueAction::write, C2SDialogueAction::read, C2SDialogueAction::handle);
         register.registerMessage(id++, C2SQuestSelect.ID, C2SQuestSelect.class, C2SQuestSelect::write, C2SQuestSelect::read, C2SQuestSelect::handle);
         register.registerMessage(id++, C2SSubmitQuestBoard.ID, C2SSubmitQuestBoard.class, C2SSubmitQuestBoard::write, C2SSubmitQuestBoard::read, C2SSubmitQuestBoard::handle);
+        register.registerMessage(id++, C2SSpawnEgg.ID, C2SSpawnEgg.class, C2SSpawnEgg::write, C2SSpawnEgg::read, C2SSpawnEgg::handle);
         return id;
     }
 
@@ -55,6 +56,7 @@ public class PacketRegistrar {
         register.registerMessage(id++, S2CNpcDialogue.ID, S2CNpcDialogue.class, S2CNpcDialogue::write, S2CNpcDialogue::read, S2CNpcDialogue::handle);
         register.registerMessage(id++, S2COpenQuestGui.ID, S2COpenQuestGui.class, S2COpenQuestGui::write, S2COpenQuestGui::read, S2COpenQuestGui::handle);
         register.registerMessage(id++, S2CSyncConfig.ID, S2CSyncConfig.class, S2CSyncConfig::write, S2CSyncConfig::read, S2CSyncConfig::handle);
+        register.registerMessage(id++, S2CSpawnEggScreen.ID, S2CSpawnEggScreen.class, S2CSpawnEggScreen::write, S2CSpawnEggScreen::read, S2CSpawnEggScreen::handle);
         return id;
     }
 
