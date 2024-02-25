@@ -138,8 +138,8 @@ public class ModelThunderbolt<T extends EntityThunderbolt> extends EntityModel<T
                 else if (entity.moveTick() > 0)
                     this.anim.doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
             }
-        }
-        this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks);
+        } else
+            this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks);
     }
 
     @Override
