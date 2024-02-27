@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
@@ -28,8 +29,12 @@ public class WindSlashAttack extends AttackAction {
             if (anim.isAtTick(0.12)) {
                 handler.setSpinStartRot(entity.getYRot());
                 handler.resetHitEntityTracker();
+                entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
+                        SoundEvents.ENDER_DRAGON_FLAP, entity.getSoundSource(), 1, 0.7f);
             }
             if (anim.isAtTick(0.64)) {
+                entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
+                        SoundEvents.ENDER_DRAGON_FLAP, entity.getSoundSource(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.7f);
                 handler.resetHitEntityTracker();
             }
             if (anim.isAtTick(0.12)) {
@@ -52,6 +57,8 @@ public class WindSlashAttack extends AttackAction {
         } else {
             if (anim.isAtTick(0.44)) {
                 handler.resetHitEntityTracker();
+                entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
+                        SoundEvents.ENDER_DRAGON_FLAP, entity.getSoundSource(), 1, 0.7f);
             }
             if (anim.isAtTick(0.88)) {
                 Vec3 dir = CombatUtils.fromRelativeVector(handler.getSpinStartRot(), new Vec3(0, 0, 1));
@@ -71,6 +78,8 @@ public class WindSlashAttack extends AttackAction {
         if (handler.getChainCount() == 2) {
             handler.setSpinStartRot(entity.getYRot());
             handler.resetHitEntityTracker();
+            entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
+                    SoundEvents.ENDER_DRAGON_FLAP, entity.getSoundSource(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.7f);
             Vec3 dir = CombatUtils.fromRelativeVector(handler.getSpinStartRot(), new Vec3(0, 0, 1));
             handler.setMoveTargetDir(dir.scale(5), handler.getCurrentAnim(), 0.84);
         }

@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityThunderboltBeam;
+import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import net.minecraft.server.level.ServerLevel;
@@ -22,6 +23,7 @@ public class LaserAOESpell extends Spell {
             beam.setRotationToDir(vec.x(), vec.y(), vec.z(), 0);
             level.addFreshEntity(beam);
         }
+        playSound(entity, ModSounds.SPELL_GENERIC_ELECTRIC_ZAP.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         return true;
     }
 }

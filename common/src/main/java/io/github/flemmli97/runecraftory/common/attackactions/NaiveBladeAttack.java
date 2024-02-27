@@ -4,6 +4,7 @@ import io.github.flemmli97.runecraftory.api.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
+import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
@@ -35,9 +36,11 @@ public class NaiveBladeAttack extends AttackAction {
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
         if (handler.getChainCount() == 2) {
             if (anim.isAtTick(0.48)) {
+                entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
                 handler.setMoveTargetDir(new Vec3(0, 1, 0), anim, 0.76);
             }
             if (anim.isAtTick(0.76)) {
+                entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
                 handler.setMoveTargetDir(new Vec3(0, -1, 0), anim, 0.96);
             }
             if (!entity.level.isClientSide) {
@@ -52,7 +55,7 @@ public class NaiveBladeAttack extends AttackAction {
                     for (LivingEntity target : entities) {
                         boolean flag = false;
                         if (entity instanceof Player player)
-                            flag = CombatUtils.playerAttackWithItem(player, target, false, true, false);
+                            flag = CombatUtils.playerAttackWithItem(player, target, false, false);
                         else if (entity instanceof Mob mob)
                             flag = mob.doHurtTarget(target);
                         if (flag)
@@ -68,7 +71,16 @@ public class NaiveBladeAttack extends AttackAction {
                 }
             }
         } else if (anim.canAttack()) {
-            entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.CHAIN_PLACE, entity.getSoundSource(), 1.5f, 1.0f);
+            entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.CHAIN_PLACE, entity.getSoundSource(), 1.5f, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+        }
+    }
+
+
+    @Override
+    public void onStart(LivingEntity entity, WeaponHandler handler) {
+        super.onStart(entity, handler);
+        if (handler.getChainCount() == 2) {
+            entity.playSound(ModSounds.SPELL_NAIVE_BLADE.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         }
     }
 

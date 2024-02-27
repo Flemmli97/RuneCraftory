@@ -11,6 +11,7 @@ import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.items.BigWeapon;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
+import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -168,12 +169,15 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
         return ImmutableMultimap.of();
     }
 
-    public void useSpear(ServerPlayer player, ItemStack stack) {
+    public void useSpear(ServerPlayer player, ItemStack stack, boolean finishing) {
         List<Entity> list = RayTraceUtils.getEntities(player, this.getRange(player, stack), 10);
         if (!list.isEmpty()) {
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.SPEAR, 2));
-            list.forEach(e -> CombatUtils.playerAttackWithItem(player, e, player.getMainHandItem(), 0.6f, false, false, false));
-            player.level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, player.getSoundSource(), 1.0f, 1.0f);
+            list.forEach(e -> CombatUtils.playerAttackWithItem(player, e, player.getMainHandItem(), 0.6f, false, false));
         }
+        if (finishing)
+            player.level.playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.PLAYER_ATTACK_SWOOSH.get(), player.getSoundSource(), 1.0f, (player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.2f + 1.5f);
+        else
+            player.level.playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.PLAYER_ATTACK_SWOOSH_LIGHT.get(), player.getSoundSource(), 1.0f, (player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.2f + 1.0f);
     }
 }

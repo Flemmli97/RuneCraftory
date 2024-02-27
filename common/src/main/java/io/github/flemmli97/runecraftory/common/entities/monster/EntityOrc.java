@@ -5,13 +5,20 @@ import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedMeleeGoal;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+
+import java.util.function.Consumer;
 
 public class EntityOrc extends BaseMonster {
 
@@ -59,6 +66,26 @@ public class EntityOrc extends BaseMonster {
     }
 
     @Override
+    protected SoundEvent getAmbientSound() {
+        return SoundEvents.PIGLIN_BRUTE_AMBIENT;
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+        return SoundEvents.PIGLIN_BRUTE_HURT;
+    }
+
+    @Override
+    protected SoundEvent getDeathSound() {
+        return SoundEvents.PIGLIN_BRUTE_DEATH;
+    }
+
+    @Override
+    public float getVoicePitch() {
+        return (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 0.9f;
+    }
+
+    @Override
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
             if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), null))
@@ -68,6 +95,13 @@ public class EntityOrc extends BaseMonster {
             else
                 this.getAnimationHandler().setAnimation(MELEE_2);
         }
+    }
+
+    @Override
+    public void mobAttack(AnimatedAction anim, LivingEntity target, Consumer<LivingEntity> cons) {
+        super.mobAttack(anim, target, cons);
+        if (this.getMainHandItem().is(ModItems.orcMaze.get()))
+            this.playSound(ModSounds.ENTITY_ORC_BONK.get(), 1, (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.0f);
     }
 
     @Override

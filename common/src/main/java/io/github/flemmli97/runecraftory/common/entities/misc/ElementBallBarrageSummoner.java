@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.entities.misc;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
+import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -72,5 +73,13 @@ public class ElementBallBarrageSummoner extends ProjectileSummonHelperEntity {
         spellBall.setPos(spellBall.getX() + this.random.nextFloat() * 1.5 - 0.75, spellBall.getY() + this.random.nextFloat() * 0.05 - 0.1, spellBall.getZ() + this.random.nextFloat() * 1.5 - 0.75);
         spellBall.shootAtPosition(this.targetX, this.targetY, this.targetZ, 0.3f, 8);
         this.level.addFreshEntity(spellBall);
+        if (this.getOwner() != null) {
+            switch (this.element) {
+                case FIRE ->
+                        this.getOwner().playSound(ModSounds.SPELL_GENERIC_POOF.get(), 1, (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.0f);
+                case WATER ->
+                        this.getOwner().playSound(ModSounds.SPELL_GENERIC_WATERBUBBLE.get(), 1, (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.0f);
+            }
+        }
     }
 }

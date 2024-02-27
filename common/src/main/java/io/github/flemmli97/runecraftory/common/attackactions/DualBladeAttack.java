@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
+import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
@@ -74,10 +75,12 @@ public class DualBladeAttack extends AttackAction {
                 if (anim.isAtTick(0.08)) {
                     handler.setSpinStartRot(entity.getYRot() - 90);
                     handler.resetHitEntityTracker();
+                    entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
                 }
                 if (anim.isAtTick(0.28)) {
                     handler.setMoveTargetDir(dir.scale(0.5), anim, anim.getTick());
                     handler.resetHitEntityTracker();
+                    entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
                 }
                 if (!entity.level.isClientSide && anim.isPastTick(0.12)) {
                     int start = Mth.ceil(0.12 * 20.0D);
@@ -105,10 +108,14 @@ public class DualBladeAttack extends AttackAction {
                 if (anim.isAtTick(0.24)) {
                     handler.setSpinStartRot(entity.getYRot() + 160);
                     handler.resetHitEntityTracker();
+                    entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
                 }
                 if (anim.isAtTick(0.48) || anim.isAtTick(0.68) || anim.isAtTick(0.92)) {
                     handler.resetHitEntityTracker();
+                    entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
                 }
+                if (anim.isAtTick(0.92))
+                    entity.playSound(ModSounds.SPELL_GENERIC_WIND_LONG.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.5f);
                 if (!entity.level.isClientSide && anim.isPastTick(0.24) && !anim.isPastTick(1.12)) {
                     int start = Mth.ceil(0.28 * 20.0D);
                     int end = Mth.ceil(1.12 * 20.0D);
@@ -126,7 +133,9 @@ public class DualBladeAttack extends AttackAction {
 
     @Override
     public void onStart(LivingEntity entity, WeaponHandler handler) {
-        if (handler.getChainCount() == 8 && entity instanceof ServerPlayer player)
+        if (handler.getChainCount() != 8) {
+            entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+        } else if (entity instanceof ServerPlayer player)
             Platform.INSTANCE.getPlayerData(player).ifPresent(d -> LevelCalc.useRP(player, d, GeneralConfig.dualBladeUltimate, true, false, false));
     }
 

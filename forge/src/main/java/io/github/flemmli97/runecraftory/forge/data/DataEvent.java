@@ -30,6 +30,7 @@ public class DataEvent {
             data.addProvider(new ItemModels(data, ignore));
             data.addProvider(new LangGen(data, npcDataGen));
             data.addProvider(new ParticleGen(data));
+            data.addProvider(new SoundGen(data, event.getExistingFileHelper()));
         }
         if (event.includeServer()) {
             BlockTagGen blocks = new BlockTagGen(data, event.getExistingFileHelper());

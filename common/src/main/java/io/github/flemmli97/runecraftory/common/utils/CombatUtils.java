@@ -265,19 +265,20 @@ public class CombatUtils {
      * @param player        the attacking player
      * @param target        the target
      * @param resetCooldown should the attack reset cooldown
-     * @param playSound     should the attack play sounds
      * @return if the attack was successful or not
      */
-    public static boolean playerAttackWithItem(Player player, Entity target, boolean resetCooldown, boolean playSound, boolean levelSkill) {
-        return CombatUtils.playerAttackWithItem(player, target, player.getMainHandItem(), 1, resetCooldown, playSound, levelSkill);
+    public static boolean playerAttackWithItem(Player player, Entity target, boolean resetCooldown, boolean levelSkill) {
+        return CombatUtils.playerAttackWithItem(player, target, player.getMainHandItem(), 1, resetCooldown, levelSkill);
     }
 
-    public static boolean playerAttackWithItem(Player player, Entity target, ItemStack stack, float damageModifier, boolean resetCooldown, boolean playSound, boolean levelSkill) {
+    public static boolean playerAttackWithItem(Player player, Entity target, ItemStack stack, float damageModifier, boolean resetCooldown, boolean levelSkill) {
         if (target.isAttackable() && !target.skipAttackInteraction(player) && player.getCooldowns().getCooldownPercent(stack.getItem(), 0.0f) <= 0) {
             double damagePhys = getAttributeValue(player, Attributes.ATTACK_DAMAGE) * damageModifier;
             if (damagePhys > 0) {
+                boolean playSound = false;
                 if (resetCooldown && stack.getItem() instanceof IItemUsable usable && usable.hasCooldown()) {
                     player.getCooldowns().addCooldown(stack.getItem(), Mth.ceil(20 * ItemNBT.attackSpeedModifier(player)));
+                    playSound = true;
                 }
                 boolean faintChance = player.level.random.nextDouble() < statusEffectChance(player, ModAttributes.FAINT.get(), target);
                 boolean critChance = player.level.random.nextDouble() < statusEffectChance(player, ModAttributes.CRIT.get(), target);
@@ -735,7 +736,7 @@ public class CombatUtils {
             for (LivingEntity livingEntity : list) {
                 boolean flag = false;
                 if (this.attacker instanceof Player player)
-                    flag = CombatUtils.playerAttackWithItem(player, livingEntity, false, this.soundToPlay == null, false);
+                    flag = CombatUtils.playerAttackWithItem(player, livingEntity, false, false);
                 else if (this.attacker instanceof Mob mob)
                     flag = mob.doHurtTarget(livingEntity);
                 if (flag) {

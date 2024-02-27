@@ -7,6 +7,7 @@ import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.RestrictedWaterAvoidingStrollGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.boss.ThunderboltAttackGoal;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
+import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
@@ -17,6 +18,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
@@ -48,7 +50,7 @@ public class EntityThunderbolt extends BossMonster {
     public static final AnimatedAction LASER_KICK_2 = AnimatedAction.copyOf(LASER_KICK, "laser_kick_2");
     public static final AnimatedAction WIND_BLADE = new AnimatedAction(15, 8, "wind_blade");
     public static final AnimatedAction LASER_KICK_3 = AnimatedAction.copyOf(LASER_KICK, "laser_kick_3");
-    public static final AnimatedAction FEINT = new AnimatedAction(40, 2, "feint");
+    public static final AnimatedAction FEINT = new AnimatedAction(40, 18, "feint");
     public static final AnimatedAction DEFEAT = AnimatedAction.builder(80, "defeat").marker(60).infinite().build();
     public static final AnimatedAction NEIGH = new AnimatedAction(24, 9, "neigh");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(STOMP, "interact");
@@ -133,6 +135,14 @@ public class EntityThunderbolt extends BossMonster {
         b.put(CHARGE, charge);
         b.put(CHARGE_2, charge);
         b.put(CHARGE_3, charge);
+        b.put(NEIGH, (anim, entity) -> {
+            if (anim.canAttack())
+                entity.playSound(ModSounds.ENTITY_THUNDERBOLT_NEIGH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+        });
+        b.put(FEINT, (anim, entity) -> {
+            if (anim.canAttack())
+                entity.playSound(ModSounds.ENTITY_THUNDERBOLT_NEIGH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+        });
     });
 
     private static final EntityDataAccessor<Float> LOCKED_YAW = SynchedEntityData.defineId(EntityThunderbolt.class, EntityDataSerializers.FLOAT);
@@ -260,6 +270,21 @@ public class EntityThunderbolt extends BossMonster {
             else
                 this.getAnimationHandler().setAnimation(HORN_ATTACK);
         }
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+        return SoundEvents.HORSE_HURT;
+    }
+
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return SoundEvents.HORSE_AMBIENT;
+    }
+
+    @Override
+    public float getVoicePitch() {
+        return (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 0.8f;
     }
 
     @Override
@@ -443,5 +468,9 @@ public class EntityThunderbolt extends BossMonster {
     @Override
     public void playInteractionAnimation() {
         this.getAnimationHandler().setAnimation(INTERACT);
+    }
+
+    @Override
+    public void playAngrySound() {
     }
 }

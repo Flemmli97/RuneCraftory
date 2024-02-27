@@ -18,9 +18,9 @@ public class SpearUseAttack extends AttackAction {
 
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
-        boolean canAttack = anim.canAttack() || (anim.getID().equals("spear_use_continue") ? anim.isAtTick(0.88) : anim.isAtTick(0.96));
-        if (canAttack && entity instanceof ServerPlayer serverPlayer && stack.getItem() instanceof ItemSpearBase spear) {
-            spear.useSpear(serverPlayer, stack);
+        boolean finish = (anim.getID().equals("spear_use_continue") ? anim.isAtTick(0.88) : anim.isAtTick(0.96));
+        if ((anim.canAttack() || finish) && entity instanceof ServerPlayer serverPlayer && stack.getItem() instanceof ItemSpearBase spear) {
+            spear.useSpear(serverPlayer, stack, finish);
         }
     }
 

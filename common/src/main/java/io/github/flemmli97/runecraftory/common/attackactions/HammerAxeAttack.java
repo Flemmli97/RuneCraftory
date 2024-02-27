@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
+import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
@@ -41,7 +42,7 @@ public class HammerAxeAttack extends AttackAction {
             if (anim.isAtTick(0.64)) {
                 handler.resetHitEntityTracker();
                 entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
-                        SoundEvents.ENDER_DRAGON_FLAP, entity.getSoundSource(), 0.7f, 0.7f);
+                        SoundEvents.ENDER_DRAGON_FLAP, entity.getSoundSource(), 1, 0.7f);
             }
             if (anim.isPastTick(0.12) && !anim.isPastTick(1.28)) {
                 Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
@@ -58,9 +59,9 @@ public class HammerAxeAttack extends AttackAction {
                             .executeAttack());
             } else
                 handler.clearMoveTarget();
-        }
-        if (handler.getChainCount() == 3) {
             handler.lockLook(anim.isPastTick(0.12) && !anim.isPastTick(1.28));
+        } else if (anim.isAtTick(0.4)) {
+            entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_HEAVY.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.8f);
         }
     }
 

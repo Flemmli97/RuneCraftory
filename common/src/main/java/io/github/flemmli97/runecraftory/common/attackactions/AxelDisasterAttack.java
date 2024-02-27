@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.attackactions;
 import io.github.flemmli97.runecraftory.api.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
+import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
@@ -30,6 +31,9 @@ public class AxelDisasterAttack extends AttackAction {
             Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
             handler.setMoveTargetDir(dir.scale(0.5).add(0, 0.75, 0), anim, 0.36);
         }
+        if (anim.isAtTick(0.28)) {
+            entity.playSound(ModSounds.SPELL_GENERIC_LEAP.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.2f);
+        }
         if (anim.isAtTick(0.36)) {
             Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
             handler.setMoveTargetDir(dir.scale(9), anim, 0.8);
@@ -49,7 +53,7 @@ public class AxelDisasterAttack extends AttackAction {
             for (LivingEntity target : entites) {
                 boolean flag = false;
                 if (entity instanceof Player player)
-                    flag = CombatUtils.playerAttackWithItem(player, target, false, true, false);
+                    flag = CombatUtils.playerAttackWithItem(player, target, false, false);
                 else if (entity instanceof Mob mob)
                     flag = mob.doHurtTarget(target);
                 if (flag)

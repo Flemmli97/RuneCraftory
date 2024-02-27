@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.DelayedAttacker;
 import io.github.flemmli97.runecraftory.common.entities.ai.boss.RafflesiaAttackGoal;
+import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
@@ -15,6 +16,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
@@ -48,7 +50,7 @@ public class EntityRafflesia extends BossMonster implements DelayedAttacker {
     public static final AnimatedAction STATUS_CIRCLE = AnimatedAction.copyOf(WIND_BLADE_X8, "status_circle");
 
     public static final AnimatedAction DEATH = AnimatedAction.builder(120, "death").infinite().build();
-    public static final AnimatedAction ANGRY = new AnimatedAction(1.64, 1, "roar");
+    public static final AnimatedAction ANGRY = AnimatedAction.copyOf(WIND_BLADE_X8, "roar");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(POISON_BREATH, "interact");
 
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{POISON_BREATH, PARA_BREATH, SLEEP_BREATH, WIND_BLADE_X8, WIND_BLADE_X16, RESUMMON, STATUS_CIRCLE, DEATH, ANGRY, INTERACT};
@@ -355,5 +357,16 @@ public class EntityRafflesia extends BossMonster implements DelayedAttacker {
     @Override
     public Vec3 targetPosition(Vec3 from) {
         return this.targetPosition;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getDeathSound() {
+        return ModSounds.ENTITY_RAFFLESIA_DEATH.get();
+    }
+
+    @Override
+    public void playAngrySound() {
+        this.playSound(ModSounds.ENTITY_RAFFLESIA_ANGRY.get(), 1, (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.0f);
     }
 }

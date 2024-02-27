@@ -4,9 +4,11 @@ import io.github.flemmli97.runecraftory.api.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
+import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -31,12 +33,15 @@ public class DashSlashAttack extends AttackAction {
         if (handler.getChainCount() == 2) {
             handler.clearMoveTarget();
             entity.setDeltaMovement(entity.getDeltaMovement().multiply(0.95, 1, 0.95));
-            if (!entity.level.isClientSide && anim.canAttack()) {
-                Vec3 attackPos = entity.position().add(0, 0.2, 0).add(entity.getLookAngle().scale(0.5));
-                CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(new AABB(-0.5, -1, -0.8, 0.8, 1, 0.5).move(attackPos)))
-                        .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
-                        .doOnSuccess(e -> CombatUtils.knockBackEntity(entity, e, 1))
-                        .executeAttack();
+            if (anim.canAttack()) {
+                if (!entity.level.isClientSide) {
+                    Vec3 attackPos = entity.position().add(0, 0.2, 0).add(entity.getLookAngle().scale(0.5));
+                    CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(new AABB(-0.5, -1, -0.8, 0.8, 1, 0.5).move(attackPos)))
+                            .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
+                            .doOnSuccess(e -> CombatUtils.knockBackEntity(entity, e, 1))
+                            .executeAttack();
+                }
+                entity.playSound(SoundEvents.PLAYER_ATTACK_STRONG, 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
             }
         } else {
             handler.lockLook(true);
@@ -47,6 +52,8 @@ public class DashSlashAttack extends AttackAction {
                 } else if (anim.isAtTick(0.28)) {
                     handler.setMoveTargetDir(dir.scale(5), anim, anim.getLength());
                 }
+                if (anim.isAtTick(0.32))
+                    entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
                 if (!entity.level.isClientSide && !anim.isPastTick(0.72)) {
                     double range = entity.getAttributeValue(ModAttributes.ATTACK_RANGE.get());
                     dir = dir.normalize().scale(range);
@@ -56,7 +63,7 @@ public class DashSlashAttack extends AttackAction {
                     CombatUtils.applyTempAttributeMult(entity, Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack));
                     for (LivingEntity entite : entites) {
                         if (entity instanceof Player player)
-                            CombatUtils.playerAttackWithItem(player, entite, false, true, false);
+                            CombatUtils.playerAttackWithItem(player, entite, false, false);
                         else if (entity instanceof Mob mob)
                             mob.doHurtTarget(entite);
                     }

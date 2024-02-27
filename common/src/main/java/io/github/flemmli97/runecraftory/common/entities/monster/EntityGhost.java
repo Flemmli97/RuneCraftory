@@ -7,11 +7,13 @@ import io.github.flemmli97.runecraftory.common.entities.ai.NearestTargetNoLoS;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.FloatingFlyNavigator;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.NoClipFlyEvaluator;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.NoClipFlyMoveController;
+import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -126,6 +128,11 @@ public class EntityGhost extends ChargingMonster {
             else
                 this.getAnimationHandler().setAnimation(SWING);
         }
+    }
+
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return ModSounds.ENTITY_GHOST_AMBIENT.get();
     }
 
     @Override

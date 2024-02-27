@@ -4,6 +4,7 @@ import io.github.flemmli97.runecraftory.api.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
+import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
@@ -35,6 +36,8 @@ public class StormAttack extends AttackAction {
             entity.swing(InteractionHand.MAIN_HAND, true);
         }
         Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
+        if (handler.getChainCount() != 5 && anim.isAtTick(0.12))
+            entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_LIGHT.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         switch (handler.getChainCount()) {
             case 1 -> {
                 if (anim.isAtTick(0.08)) {
@@ -62,8 +65,10 @@ public class StormAttack extends AttackAction {
             case 5 -> {
                 if (anim.isAtTick(0.04))
                     handler.setMoveTargetDir(dir.scale(1.8).add(0, 1.9, 0), anim, 0.36);
-                if (anim.isAtTick(0.36))
+                if (anim.isAtTick(0.36)) {
                     handler.setMoveTargetDir(dir.scale(2).add(0, -2.5, 0), anim, 0.6);
+                    entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+                }
                 entity.fallDistance = 0;
                 if (!entity.level.isClientSide && anim.canAttack()) {
                     double range = entity.getAttributeValue(ModAttributes.ATTACK_RANGE.get());
@@ -74,7 +79,7 @@ public class StormAttack extends AttackAction {
                     for (LivingEntity target : entites) {
                         boolean flag = false;
                         if (entity instanceof Player player)
-                            flag = CombatUtils.playerAttackWithItem(player, target, false, true, false);
+                            flag = CombatUtils.playerAttackWithItem(player, target, false, false);
                         else if (entity instanceof Mob mob)
                             flag = mob.doHurtTarget(target);
                         if (flag)

@@ -26,6 +26,6 @@ public class EntityAggressiveWooly extends EntityWooly {
 
     @Override
     public float getVoicePitch() {
-        return 0.9f;
+        return (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 0.9f;
     }
 }

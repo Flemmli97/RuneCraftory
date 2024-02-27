@@ -12,6 +12,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -159,6 +160,8 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
 
     public void setEnraged(boolean flag, boolean load) {
         this.entityData.set(ENRAGED, flag);
+        if (flag && !load && this.isAlive())
+            this.playAngrySound();
     }
 
     @Override
@@ -234,5 +237,9 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
     @Override
     public int overlayV(int orig) {
         return this.isEnraged() ? 0 : orig;
+    }
+
+    public void playAngrySound() {
+        this.playSound(SoundEvents.PARROT_IMITATE_ENDER_DRAGON, 1, (this.getRandom().nextFloat() - this.getRandom().nextFloat()) * 0.2f + 0.8f);
     }
 }

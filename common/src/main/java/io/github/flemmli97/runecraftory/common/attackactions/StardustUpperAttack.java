@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.attackactions;
 import io.github.flemmli97.runecraftory.api.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
+import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
@@ -27,6 +28,8 @@ public class StardustUpperAttack extends AttackAction {
         if (anim.isAtTick(0.12)) {
             handler.setSpinStartRot(entity.getYRot() - 90);
         }
+        if (anim.isAtTick(0.28))
+            entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_HEAVY.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1f);
         if (anim.isAtTick(0.24) || anim.isAtTick(0.88)) {
             Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
             handler.setMoveTargetDir(dir.scale(0.8), anim, anim.getTick() + 1);
@@ -34,6 +37,8 @@ public class StardustUpperAttack extends AttackAction {
         if (anim.isAtTick(0.84)) {
             handler.resetHitEntityTracker();
         }
+        if (anim.isAtTick(0.92))
+            entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_HEAVY.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1f);
         if (!entity.level.isClientSide) {
             if (anim.isPastTick(0.16) && !anim.isPastTick(1.52)) {
                 int start = Mth.ceil(0.16 * 20.0D);
@@ -45,6 +50,10 @@ public class StardustUpperAttack extends AttackAction {
                 handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets((rot + f * angleInc), (rot + (f + 1) * angleInc), 0.5f))
                         .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
                         .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
+                        .doOnSuccess(target -> {
+                            CombatUtils.knockBackEntity(entity, target, 0.4f);
+                            target.setDeltaMovement(target.getDeltaMovement().add(0, 0.3, 0));
+                        })
                         .executeAttack());
             }
         }

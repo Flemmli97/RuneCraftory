@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntitySmallRaccoonLeaf;
+import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
 import io.github.flemmli97.tenshilib.common.utils.MathUtils;
@@ -40,7 +41,7 @@ public class SmallLeafSpell extends Spell {
             leaf.shoot(vec.x(), vec.y(), vec.z(), 0.75f, 0);
             level.addFreshEntity(leaf);
         }
-        level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ARROW_SHOOT, entity.getSoundSource(), 1.0f, 1.2f + level.getRandom().nextFloat() * 0.1f);
+        playSound(entity, ModSounds.ENTITY_FLOWER_LILY_STEP.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.2f);
         return true;
     }
 }

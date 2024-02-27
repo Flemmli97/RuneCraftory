@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.attackactions;
 import io.github.flemmli97.runecraftory.api.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
+import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
@@ -26,6 +27,10 @@ public class HurricaneAttack extends AttackAction {
         if (anim.isAtTick(0.4)) {
             handler.setSpinStartRot(entity.getYRot() + 180);
             handler.resetHitEntityTracker();
+            entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.2f);
+        }
+        if (anim.isAtTick(0.72) || anim.isAtTick(1.04)) {
+            entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.2f);
         }
         if (anim.isAtTick(0.76) || anim.isAtTick(1.08)) {
             handler.resetHitEntityTracker();
@@ -35,6 +40,7 @@ public class HurricaneAttack extends AttackAction {
                 CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets(entity.getLookAngle(), 20, 0.5f))
                         .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
                         .executeAttack();
+                entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_LIGHT.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
             }
             if (anim.isPastTick(0.44) && !anim.isPastTick(1.44)) {
                 int start = Mth.ceil(0.44 * 20.0D);

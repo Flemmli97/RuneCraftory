@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityPowerWave;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
+import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import net.minecraft.server.level.ServerLevel;
@@ -30,6 +31,7 @@ public class PowerWaveSpell extends WeaponSpell {
                 wave.shootAtPosition(dir.x(), dir.y(), dir.z(), 0.9f, 0);
             }
             level.addFreshEntity(wave);
+            entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), ModSounds.PLAYER_ATTACK_SWOOSH.get(), entity.getSoundSource(), 1.4f, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.5f);
         }
         return result;
     }

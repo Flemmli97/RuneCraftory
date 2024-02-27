@@ -140,13 +140,8 @@ public class EntityWooly extends LeapingMonster {
     }
 
     @Override
-    protected float getSoundVolume() {
-        return 0.65f;
-    }
-
-    @Override
     public float getVoicePitch() {
-        return 1.7f;
+        return (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.7f;
     }
 
     @Override

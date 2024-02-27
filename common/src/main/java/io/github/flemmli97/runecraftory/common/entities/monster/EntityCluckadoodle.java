@@ -67,13 +67,8 @@ public class EntityCluckadoodle extends BaseMonster {
     }
 
     @Override
-    protected float getSoundVolume() {
-        return 0.95f;
-    }
-
-    @Override
     public float getVoicePitch() {
-        return 0.8f;
+        return (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 0.8f;
     }
 
     @Override

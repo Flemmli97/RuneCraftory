@@ -71,13 +71,8 @@ public class EntityBuffamoo extends ChargingMonster {
     }
 
     @Override
-    protected float getSoundVolume() {
-        return 1.1f;
-    }
-
-    @Override
     public float getVoicePitch() {
-        return 0.7f;
+        return (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 0.7f;
     }
 
     @Override

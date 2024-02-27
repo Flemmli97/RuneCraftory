@@ -22,6 +22,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCActions;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.registry.ModPoiTypes;
+import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.registry.ModStats;
 import io.github.flemmli97.runecraftory.common.registry.ModStructures;
@@ -286,6 +287,7 @@ public class RuneCraftoryFabric implements ModInitializer {
         ModLootRegistries.LOOTCONDITIONS.registerContent();
         ModStructures.STRUCTURESPROCESSORS.registerContent();
         ModCrafting.RECIPETYPE.registerContent();
+        ModSounds.SOUND_EVENTS.registerContent();
 
         this.tweakVanillaAttribute(Attributes.MAX_HEALTH, Double.MAX_VALUE);
         this.tweakVanillaAttribute(Attributes.ATTACK_DAMAGE, Double.MAX_VALUE);

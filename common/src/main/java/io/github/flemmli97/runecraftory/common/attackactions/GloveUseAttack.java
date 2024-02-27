@@ -38,7 +38,7 @@ public class GloveUseAttack extends AttackAction {
             for (LivingEntity e : list) {
                 if (e != entity) {
                     if (entity instanceof Player player)
-                        flag = CombatUtils.playerAttackWithItem(player, e, stack, 0.5f, false, true, false);
+                        flag = CombatUtils.playerAttackWithItem(player, e, stack, 0.5f, false, false);
                     else if (entity instanceof Mob mob)
                         flag = mob.doHurtTarget(e);
                 }

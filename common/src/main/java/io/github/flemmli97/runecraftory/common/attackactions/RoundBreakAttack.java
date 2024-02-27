@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.attackactions;
 import io.github.flemmli97.runecraftory.api.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
+import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
@@ -29,6 +30,8 @@ public class RoundBreakAttack extends AttackAction {
             handler.setMoveTargetDir(dir.scale(1.8).add(0, 1.6, 0), anim, 0.48);
             handler.setSpinStartRot(entity.getYRot() + 90);
         }
+        if (anim.isAtTick(0.24))
+            entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_LIGHT.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         if (anim.isAtTick(0.48))
             handler.setMoveTargetDir(dir.scale(3.3).add(0, -1.6, 0), anim, 0.68);
         if (!entity.level.isClientSide && anim.isPastTick(0.24) && !anim.isPastTick(0.6)) {

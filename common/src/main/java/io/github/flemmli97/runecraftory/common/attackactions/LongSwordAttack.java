@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
+import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
@@ -32,6 +33,9 @@ public class LongSwordAttack extends AttackAction {
             entity.swing(InteractionHand.MAIN_HAND, true);
         }
         Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
+        if (handler.getChainCount() != 4 && anim.isAtTick(0.24)) {
+            entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.8f);
+        }
         switch (handler.getChainCount()) {
             case 2 -> {
                 if (anim.isAtTick(0.4)) {
@@ -47,9 +51,11 @@ public class LongSwordAttack extends AttackAction {
                 if (anim.isAtTick(0.2)) {
                     handler.setSpinStartRot(entity.getYRot() + 150);
                     handler.resetHitEntityTracker();
+                    entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.8f);
                 }
                 if (anim.isAtTick(0.68)) {
                     handler.resetHitEntityTracker();
+                    entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.8f);
                 }
                 if (anim.isPastTick(0.2)) {
                     int start = Mth.ceil(0.2 * 20.0D);

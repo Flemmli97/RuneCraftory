@@ -20,4 +20,14 @@ public class EntityKingWooly extends EntityAggressiveWooly {
         else
             return KING_WOOLY_WOOLED_LOOT;
     }
+
+    @Override
+    public float getVoicePitch() {
+        return (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 0.6f;
+    }
+
+    @Override
+    public float getSoundVolume() {
+        return 1.15f;
+    }
 }

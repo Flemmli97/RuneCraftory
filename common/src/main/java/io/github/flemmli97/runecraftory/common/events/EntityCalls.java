@@ -228,7 +228,7 @@ public class EntityCalls {
 
     public static boolean playerAttack(Player player, Entity target) {
         if (!player.level.isClientSide && ItemNBT.isWeapon(player.getMainHandItem())) {
-            CombatUtils.playerAttackWithItem(player, target, true, true, true);
+            CombatUtils.playerAttackWithItem(player, target, true, true);
             return true;
         }
         return false;
@@ -237,7 +237,7 @@ public class EntityCalls {
     public static boolean playerAoeAttack(Player player, ItemStack stack, List<Entity> list) {
         if (ItemNBT.isWeapon(stack)) {
             for (int i = 0; i < list.size(); ++i) {
-                CombatUtils.playerAttackWithItem(player, list.get(i), i == list.size() - 1, true, i == list.size() - 1);
+                CombatUtils.playerAttackWithItem(player, list.get(i), i == list.size() - 1, i == list.size() - 1);
             }
             return true;
         }

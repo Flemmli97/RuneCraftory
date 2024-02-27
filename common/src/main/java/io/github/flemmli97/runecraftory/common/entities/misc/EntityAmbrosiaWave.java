@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
+import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
@@ -81,6 +82,8 @@ public class EntityAmbrosiaWave extends BaseDamageCloud {
                 }
             }
         } else {
+            if(this.canStartDamage())
+                this.playSound(ModSounds.ENTITY_AMBROSIA_WAVE.get(), 1, 1);
             if ((this.getOwner() != null && !this.getOwner().isAlive()))
                 this.discard();
             this.hitEntityPos.forEach(frozenEntity -> {

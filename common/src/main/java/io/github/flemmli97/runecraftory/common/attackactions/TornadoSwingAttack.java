@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.attackactions;
 import io.github.flemmli97.runecraftory.api.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
+import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
@@ -28,28 +29,43 @@ public class TornadoSwingAttack extends AttackAction {
         entity.setDeltaMovement(entity.getDeltaMovement().scale(0.6));
         entity.xxa *= 0.6f;
         entity.zza *= 0.6f;
-        if (!entity.level.isClientSide) {
-            if (handler.getChainCount() == 1) {
-                if (anim.isPastTick(0.16) && !anim.isPastTick(1.2)) {
-                    int start = Mth.ceil(0.88 * 20.0D);
-                    int end = Mth.ceil(1.2 * 20.0D);
-                    float len = (end - start) / anim.getSpeed();
-                    float f = (anim.getTick() - start) / anim.getSpeed();
-                    float angleInc = -450 / len;
-                    float rot = handler.getSpinStartRot();
+        if (handler.getChainCount() == 1) {
+            if (anim.isAtTick(0.2))
+                entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_HEAVY.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.8f);
+            if (anim.isAtTick(0.64)) {
+                handler.resetHitEntityTracker();
+                entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_HEAVY.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.8f);
+            }
+            if (anim.isPastTick(0.16) && !anim.isPastTick(1.2)) {
+                int start = Mth.ceil(0.88 * 20.0D);
+                int end = Mth.ceil(1.2 * 20.0D);
+                float len = (end - start) / anim.getSpeed();
+                float f = (anim.getTick() - start) / anim.getSpeed();
+                float angleInc = -450 / len;
+                float rot = handler.getSpinStartRot();
+                if (!entity.level.isClientSide) {
+
                     handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets((rot + f * angleInc), (rot + (f + 1) * angleInc), 0.5f))
                             .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
                             .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
                             .executeAttack());
                 }
-            } else {
-                if (anim.isPastTick(0) && !anim.isPastTick(0.96)) {
-                    int start = 0;
-                    int end = Mth.ceil(0.96 * 20.0D);
-                    float len = (end - start) / anim.getSpeed();
-                    float f = (anim.getTick() - start) / anim.getSpeed();
-                    float angleInc = -380 / len;
-                    float rot = handler.getSpinStartRot();
+            }
+        } else {
+            if (anim.isAtTick(0.12))
+                entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_HEAVY.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+            if (anim.isAtTick(0.52)) {
+                handler.resetHitEntityTracker();
+                entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_HEAVY.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+            }
+            if (anim.isPastTick(0) && !anim.isPastTick(0.96)) {
+                int start = 0;
+                int end = Mth.ceil(0.96 * 20.0D);
+                float len = (end - start) / anim.getSpeed();
+                float f = (anim.getTick() - start) / anim.getSpeed();
+                float angleInc = -380 / len;
+                float rot = handler.getSpinStartRot();
+                if (!entity.level.isClientSide) {
                     handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets((rot + f * angleInc), (rot + (f + 1) * angleInc), 0.5f))
                             .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
                             .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))

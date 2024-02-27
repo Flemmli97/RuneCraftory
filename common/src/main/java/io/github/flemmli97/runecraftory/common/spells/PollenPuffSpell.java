@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityPollenPuff;
+import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.tenshilib.common.utils.MathUtils;
 import net.minecraft.server.level.ServerLevel;
@@ -33,6 +34,7 @@ public class PollenPuffSpell extends Spell {
             puff.shoot(dir.x(), dir.y(), dir.z(), 0.23f, 0);
             level.addFreshEntity(puff);
         }
+        playSound(entity, ModSounds.SPELL_GENERIC_POOF.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         return true;
     }
 }

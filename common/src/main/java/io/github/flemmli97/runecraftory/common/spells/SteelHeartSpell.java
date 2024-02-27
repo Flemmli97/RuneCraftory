@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
+import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -19,6 +20,7 @@ public class SteelHeartSpell extends WeaponSpell {
         boolean result = super.use(level, entity, stack, rpUseMultiplier, amount, lvl);
         if (result) {
             entity.addEffect(new MobEffectInstance(ModEffects.STEEL_HEART.get(), 400 + 30 * lvl, 0));
+            playSound(entity, ModSounds.SPELL_GENERIC_BUFF.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.2f);
         }
         return result;
     }

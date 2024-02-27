@@ -5,9 +5,13 @@ import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
 import io.github.flemmli97.runecraftory.common.entities.SwimWalkMoveController;
 import io.github.flemmli97.runecraftory.common.entities.ai.ChargeAttackGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.AmphibiousNavigator;
+import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobType;
@@ -111,6 +115,21 @@ public class EntityTortas extends ChargingMonster {
     }
 
     @Override
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+        return SoundEvents.TURTLE_HURT;
+    }
+
+    @Override
+    protected SoundEvent getDeathSound() {
+        return SoundEvents.TURTLE_DEATH;
+    }
+
+    @Override
+    public float getVoicePitch() {
+        return (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 0.75f;
+    }
+
+    @Override
     public float attackChance(AnimationType type) {
         if (type == AnimationType.MELEE)
             return 0.85f;
@@ -138,12 +157,12 @@ public class EntityTortas extends ChargingMonster {
         if (this.getTarget() != null) {
             Vec3 pos = this.position();
             Vec3 target = this.getTarget().position();
-            Vec3 mot = target.subtract(pos.x, this.isInWater() ? pos.y : target.y, pos.z).normalize().scale(0.3);
+            Vec3 mot = target.subtract(pos.x, this.isInWater() ? pos.y : target.y, pos.z).normalize().scale(0.27);
             this.setDeltaMovement(mot.x, mot.y, mot.z);
             if (!this.isOnGround() && !this.isInWater())
                 this.setDeltaMovement(this.getDeltaMovement().add(0, prevMotion.y, 0));
         } else {
-            Vec3 look = this.calculateViewVector(this.isInWater() ? this.getXRot() : 0, this.getYRot()).scale(0.3);
+            Vec3 look = this.calculateViewVector(this.isInWater() ? this.getXRot() : 0, this.getYRot()).scale(0.27);
             this.setDeltaMovement(look.x, look.y, look.z);
             if (!this.isOnGround() && !this.isInWater())
                 this.setDeltaMovement(this.getDeltaMovement().add(0, prevMotion.y, 0));
@@ -153,7 +172,9 @@ public class EntityTortas extends ChargingMonster {
 
     @Override
     public void doWhileCharge() {
-        if (this.tickCount % 10 == 0) {
+        if(this.tickCount % 4 == 0)
+            this.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_LIGHT.get(), 1, (this.getRandom().nextFloat() - this.getRandom().nextFloat()) * 0.2f + 1.0f);
+        if (this.tickCount % 8 == 0) {
             this.hitEntity.clear();
         }
     }

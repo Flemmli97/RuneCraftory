@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
+import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
@@ -62,9 +63,11 @@ public class ShortSwordAttack extends AttackAction {
                 if (anim.isAtTick(0.24)) {
                     handler.setSpinStartRot(entity.getYRot() + 30);
                     handler.resetHitEntityTracker();
+                    entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
                 }
                 if (anim.isAtTick(0.48) || anim.isAtTick(0.72)) {
                     handler.resetHitEntityTracker();
+                    entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
                 }
                 if (anim.isAtTick(0.24)) {
                     handler.setMoveTargetDir(new Vec3(0, 2, 0), anim, 1.18);
@@ -89,7 +92,9 @@ public class ShortSwordAttack extends AttackAction {
 
     @Override
     public void onStart(LivingEntity entity, WeaponHandler handler) {
-        if (handler.getChainCount() == 6 && entity instanceof ServerPlayer player)
+        if (handler.getChainCount() != 6) {
+            entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+        } else if (entity instanceof ServerPlayer player)
             Platform.INSTANCE.getPlayerData(player).ifPresent(d -> LevelCalc.useRP(player, d, GeneralConfig.shortSwordUltimate, true, false, false));
     }
 

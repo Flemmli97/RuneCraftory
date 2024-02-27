@@ -5,12 +5,14 @@ import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
+import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
@@ -28,15 +30,18 @@ public class GloveAttack extends AttackAction {
 
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
-        if (!entity.level.isClientSide && anim.canAttack() && handler.getChainCount() != 5) {
-            if (handler.getChainCount() != 4)
-                CombatUtils.attack(entity, stack);
-            else
-                CombatUtils.EntityAttack.create(entity,
-                                CombatUtils.EntityAttack.aabbTargets(new AABB(-1, -1, -1, 1, 1, 1).move(entity.position().add(0, 0.2, 0)
-                                        .add(entity.getDeltaMovement().normalize().scale(0.4)))))
-                        .executeAttack();
-            entity.swing(InteractionHand.MAIN_HAND, true);
+        if (anim.canAttack() && handler.getChainCount() != 5) {
+            if (!entity.level.isClientSide) {
+                if (handler.getChainCount() != 4)
+                    CombatUtils.attack(entity, stack);
+                else
+                    CombatUtils.EntityAttack.create(entity,
+                                    CombatUtils.EntityAttack.aabbTargets(new AABB(-1, -1, -1, 1, 1, 1).move(entity.position().add(0, 0.2, 0)
+                                            .add(entity.getDeltaMovement().normalize().scale(0.4)))))
+                            .executeAttack();
+                entity.swing(InteractionHand.MAIN_HAND, true);
+            }
+            entity.playSound(SoundEvents.PLAYER_ATTACK_STRONG, 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         }
         Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
         switch (handler.getChainCount()) {
@@ -77,6 +82,8 @@ public class GloveAttack extends AttackAction {
                 if (anim.isPastTick(0.16) && !anim.isPastTick(1.12)) {
                     entity.resetFallDistance();
                 }
+                if (anim.isAtTick(0.24))
+                    entity.playSound(ModSounds.SPELL_GENERIC_WIND_LONG.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.3f);
                 if (!entity.level.isClientSide && anim.isPastTick(0.2) && !anim.isPastTick(1.08)) {
                     handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity,
                                     CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox().inflate(0.5)))

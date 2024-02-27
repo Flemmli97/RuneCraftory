@@ -13,6 +13,7 @@ import io.github.flemmli97.tenshilib.platform.registry.CustomRegistryEntry;
 import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -42,6 +43,10 @@ public abstract class Spell extends CustomRegistryEntry<Spell> {
                     }
                     return true;
                 }).orElse(false);
+    }
+
+    public static void playSound(LivingEntity entity, SoundEvent sound, float volume, float pitch) {
+        entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), sound, entity.getSoundSource(), volume, pitch);
     }
 
     public void update(Player player, ItemStack stack) {

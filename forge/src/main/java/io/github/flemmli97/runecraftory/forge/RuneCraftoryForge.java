@@ -18,6 +18,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCActions;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.registry.ModPoiTypes;
+import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.registry.ModStats;
 import io.github.flemmli97.runecraftory.common.registry.ModStructures;
@@ -117,6 +118,7 @@ public class RuneCraftoryForge {
         ModNPCActions.ACTIONS.registerContent();
         ModAttackActions.ATTACK_ACTIONS.registerContent();
         ModGlobalLootModifiers.MODIFIERS.register(FMLJavaModLoadingContext.get().getModEventBus());
+        ModSounds.SOUND_EVENTS.registerContent();
         ModCriteria.init();
     }
 

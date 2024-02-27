@@ -1,0 +1,264 @@
+{
+  "entity.ambrosia.wave": {
+    "subtitle": "runecraftory:entity.ambrosia.wave",
+    "sounds": [
+      "runecraftory:entity/ambrosia/wave"
+    ]
+  },
+  "entity.chimera.ambient": {
+    "subtitle": "runecraftory:entity.chimera.ambient",
+    "sounds": [
+      "runecraftory:entity/chimera/ambient_1",
+      "runecraftory:entity/chimera/ambient_2"
+    ]
+  },
+  "entity.chipsqueek.hurt": {
+    "subtitle": "runecraftory:entity.chipsqueek.hurt",
+    "sounds": [
+      "runecraftory:entity/chipsqueek/hurt_1",
+      "runecraftory:entity/chipsqueek/hurt_2"
+    ]
+  },
+  "entity.dead_tree.death": {
+    "subtitle": "runecraftory:entity.dead_tree.death",
+    "sounds": [
+      "runecraftory:entity/dead_tree/death"
+    ]
+  },
+  "entity.fairy.ambient": {
+    "subtitle": "runecraftory:entity.fairy.ambient",
+    "sounds": [
+      "runecraftory:entity/fairy/ambient"
+    ]
+  },
+  "entity.flower_lily.step": {
+    "subtitle": "runecraftory:entity.flower_lily.step",
+    "sounds": [
+      "runecraftory:entity/flower_lily/step_1",
+      "runecraftory:entity/flower_lily/step_2"
+    ]
+  },
+  "entity.ghost.ambient": {
+    "subtitle": "runecraftory:entity.ghost.ambient",
+    "sounds": [
+      "runecraftory:entity/ghost/ambient_1",
+      "runecraftory:entity/ghost/ambient_2",
+      "runecraftory:entity/ghost/ambient_3"
+    ]
+  },
+  "entity.goblin.ambient": {
+    "subtitle": "runecraftory:entity.goblin.ambient",
+    "sounds": [
+      "runecraftory:entity/goblin/ambient_1",
+      "runecraftory:entity/goblin/ambient_2",
+      "runecraftory:entity/goblin/ambient_3"
+    ]
+  },
+  "entity.goblin.hurt": {
+    "subtitle": "runecraftory:entity.goblin.hurt",
+    "sounds": [
+      "runecraftory:entity/goblin/hurt"
+    ]
+  },
+  "entity.goblin.death": {
+    "subtitle": "runecraftory:entity.goblin.death",
+    "sounds": [
+      "runecraftory:entity/goblin/death"
+    ]
+  },
+  "entity.orc.bonk": {
+    "subtitle": "runecraftory:entity.orc.bonk",
+    "sounds": [
+      "runecraftory:entity/orc/bonk"
+    ]
+  },
+  "entity.panther.ambient": {
+    "subtitle": "runecraftory:entity.panther.ambient",
+    "sounds": [
+      "runecraftory:entity/panther/ambient"
+    ]
+  },
+  "entity.panther.hurt": {
+    "subtitle": "runecraftory:entity.panther.hurt",
+    "sounds": [
+      "runecraftory:entity/panther/hurt"
+    ]
+  },
+  "entity.rafflesia.angry": {
+    "subtitle": "runecraftory:entity.rafflesia.angry",
+    "sounds": [
+      "runecraftory:entity/rafflesia/angry"
+    ]
+  },
+  "entity.rafflesia.death": {
+    "subtitle": "runecraftory:entity.rafflesia.death",
+    "sounds": [
+      "runecraftory:entity/rafflesia/death"
+    ]
+  },
+  "entity.scorpion.step": {
+    "subtitle": "runecraftory:entity.scorpion.step",
+    "sounds": [
+      "runecraftory:entity/scorpion/step"
+    ]
+  },
+  "entity.skelefang.roar": {
+    "subtitle": "runecraftory:entity.skelefang.roar",
+    "sounds": [
+      "runecraftory:entity/skelefang/roar"
+    ]
+  },
+  "entity.thunderbolt.neigh": {
+    "subtitle": "runecraftory:entity.thunderbolt.neigh",
+    "sounds": [
+      "runecraftory:entity/thunderbolt/neigh"
+    ]
+  },
+  "entity.wasp.buzz": {
+    "subtitle": "runecraftory:entity.wasp.buzz",
+    "sounds": [
+      "runecraftory:entity/wasp/buzz_1",
+      "runecraftory:entity/wasp/buzz_2",
+      "runecraftory:entity/wasp/buzz_3"
+    ]
+  },
+  "entity.weagle.flap": {
+    "subtitle": "runecraftory:entity.weagle.flap",
+    "sounds": [
+      "runecraftory:entity/weagle/flap"
+    ]
+  },
+  "entity.wisp.ambient": {
+    "subtitle": "runecraftory:entity.wisp.ambient",
+    "sounds": [
+      "runecraftory:entity/wisp/ambient"
+    ]
+  },
+  "player.attack.swoosh": {
+    "subtitle": "runecraftory:player.attack.swoosh",
+    "sounds": [
+      "runecraftory:player/attack/swoosh_1",
+      "runecraftory:player/attack/swoosh_2",
+      "runecraftory:player/attack/swoosh_3",
+      "runecraftory:player/attack/swoosh_4"
+    ]
+  },
+  "player.attack.swoosh_heavy": {
+    "subtitle": "runecraftory:player.attack.swoosh_heavy",
+    "sounds": [
+      "runecraftory:player/attack/swoosh_heavy"
+    ]
+  },
+  "player.attack.swoosh_light": {
+    "subtitle": "runecraftory:player.attack.swoosh_light",
+    "sounds": [
+      "runecraftory:player/attack/swoosh_light_1",
+      "runecraftory:player/attack/swoosh_light_2",
+      "runecraftory:player/attack/swoosh_light_3"
+    ]
+  },
+  "spell.apple_rain": {
+    "subtitle": "runecraftory:spell.apple_rain",
+    "sounds": [
+      "runecraftory:spell/apple_rain"
+    ]
+  },
+  "spell.generic.buff": {
+    "subtitle": "runecraftory:spell.generic.buff",
+    "sounds": [
+      "runecraftory:spell/generic/buff"
+    ]
+  },
+  "spell.generic.dark": {
+    "subtitle": "runecraftory:spell.generic.dark",
+    "sounds": [
+      "runecraftory:spell/generic/dark"
+    ]
+  },
+  "spell.generic.electric_zap": {
+    "subtitle": "runecraftory:spell.generic.electric_zap",
+    "sounds": [
+      "runecraftory:spell/generic/electric_zap"
+    ]
+  },
+  "spell.generic.fireball": {
+    "subtitle": "runecraftory:spell.generic.fireball",
+    "sounds": [
+      "runecraftory:spell/generic/fireball"
+    ]
+  },
+  "spell.generic.heal": {
+    "subtitle": "runecraftory:spell.generic.heal",
+    "sounds": [
+      "runecraftory:spell/generic/heal_1",
+      "runecraftory:spell/generic/heal_2",
+      "runecraftory:spell/generic/heal_3"
+    ]
+  },
+  "spell.generic.leap": {
+    "subtitle": "runecraftory:spell.generic.leap",
+    "sounds": [
+      "runecraftory:spell/generic/leap"
+    ]
+  },
+  "spell.generic.light": {
+    "subtitle": "runecraftory:spell.generic.light",
+    "sounds": [
+      "runecraftory:spell/generic/light"
+    ]
+  },
+  "spell.generic.poof": {
+    "subtitle": "runecraftory:spell.generic.poof",
+    "sounds": [
+      "runecraftory:spell/generic/poof"
+    ]
+  },
+  "spell.generic.pop": {
+    "subtitle": "runecraftory:spell.generic.pop",
+    "sounds": [
+      "runecraftory:spell/generic/pop"
+    ]
+  },
+  "spell.generic.rocks": {
+    "subtitle": "runecraftory:spell.generic.rocks",
+    "sounds": [
+      "runecraftory:spell/generic/rocks"
+    ]
+  },
+  "spell.generic.wave": {
+    "subtitle": "runecraftory:spell.generic.wave",
+    "sounds": [
+      "runecraftory:spell/generic/wave"
+    ]
+  },
+  "spell.generic.water_bubble": {
+    "subtitle": "runecraftory:spell.generic.water_bubble",
+    "sounds": [
+      "runecraftory:spell/generic/water_bubble"
+    ]
+  },
+  "spell.generic.wind": {
+    "subtitle": "runecraftory:spell.generic.wind",
+    "sounds": [
+      "runecraftory:spell/generic/wind"
+    ]
+  },
+  "spell.generic.wind_long": {
+    "subtitle": "runecraftory:spell.generic.wind_long",
+    "sounds": [
+      "runecraftory:spell/generic/wind_long"
+    ]
+  },
+  "spell.naive_blade": {
+    "subtitle": "runecraftory:spell.naive_blade",
+    "sounds": [
+      "runecraftory:spell/naive_blade"
+    ]
+  },
+  "spell.straight_punch": {
+    "subtitle": "runecraftory:spell.straight_punch",
+    "sounds": [
+      "runecraftory:spell/straight_punch"
+    ]
+  }
+}

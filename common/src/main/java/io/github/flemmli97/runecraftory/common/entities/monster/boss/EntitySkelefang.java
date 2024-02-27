@@ -9,8 +9,10 @@ import io.github.flemmli97.runecraftory.common.entities.ai.boss.SkelefangAttackG
 import io.github.flemmli97.runecraftory.common.entities.misc.EntitySlashResidue;
 import io.github.flemmli97.runecraftory.common.entities.monster.MultiPartContainer;
 import io.github.flemmli97.runecraftory.common.network.S2CAttackDebug;
+import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.common.particles.DurationalParticleData;
 import io.github.flemmli97.runecraftory.common.particles.SkelefangParticleData;
+import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
@@ -70,7 +72,7 @@ public class EntitySkelefang extends BossMonster {
     public static final AnimatedAction BEAM = AnimatedAction.builder(1, "beam").infinite().build();
 
     public static final AnimatedAction DEATH = AnimatedAction.builder(120, "death").infinite().build();
-    public static final AnimatedAction ROAR = new AnimatedAction(1.64, 1, "roar");
+    public static final AnimatedAction ROAR = new AnimatedAction(2, 0.28, "roar");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(TAIL_SLAM, "interact");
 
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{TAIL_SLAP, NEEDLE_THROW, TAIL_SLAM, SLASH, CHARGE, BEAM, DEATH, ROAR, INTERACT};
@@ -162,6 +164,12 @@ public class EntitySkelefang extends BossMonster {
                 entity.restoreDragon();
             if (anim.getTick() >= 250)
                 entity.getAnimationHandler().setAnimation(null);
+        });
+        b.put(ROAR, (anim, entity) -> {
+            if (anim.canAttack()) {
+                entity.playSound(ModSounds.ENTITY_SKELEFANG_ROAR.get(), 1, (entity.random.nextFloat() - entity.random.nextFloat()) * 0.2f + 1.0f);
+                Platform.INSTANCE.sendToTrackingAndSelf(new S2CScreenShake(40, 1.5f), entity);
+            }
         });
     });
 
@@ -698,5 +706,9 @@ public class EntitySkelefang extends BossMonster {
     @Override
     public AnimatedAction getSleepAnimation() {
         return DEATH;
+    }
+
+    @Override
+    public void playAngrySound() {
     }
 }

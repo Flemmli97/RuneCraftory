@@ -83,7 +83,7 @@ public class ModelChimera<T extends EntityChimera> extends EntityModel<T> implem
 
         PartDefinition mouth = snout.addOrReplaceChild("mouth", CubeListBuilder.create().texOffs(71, 63).addBox(-2.5F, 0.0F, -3.0F, 6.0F, 1.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 1.5F, 0.0F, 0.5236F, 0.0F, 0.0F));
 
-        PartDefinition tongue = mouth.addOrReplaceChild("tongue", CubeListBuilder.create().texOffs(0, 12).addBox(-2.0F, 0.0F, -5.5F, 4.0F, 0.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.5F, 0.0F, 0.5F));
+        PartDefinition tongue = mouth.addOrReplaceChild("tongue", CubeListBuilder.create().texOffs(0, 12).addBox(-2.0F, 0.0F, -5.5F, 4.0F, 0.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.5F, -0.025F, 0.5F));
 
         PartDefinition tail = body.addOrReplaceChild("tail", CubeListBuilder.create().texOffs(58, 63).addBox(-1.5F, -2.5F, 0.0F, 3.0F, 3.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offset(-0.5F, -2.5F, 10.5F));
 

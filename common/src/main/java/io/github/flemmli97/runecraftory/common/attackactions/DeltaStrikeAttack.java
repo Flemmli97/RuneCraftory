@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.attackactions;
 import io.github.flemmli97.runecraftory.api.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
+import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
@@ -28,13 +29,14 @@ public class DeltaStrikeAttack extends AttackAction {
             Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
             handler.setMoveTargetDir(dir.scale(0.33), anim, anim.getTick());
         }
-        if (!entity.level.isClientSide) {
-            if (anim.canAttack() || anim.isAtTick(0.48) || anim.isAtTick(0.88)) {
+        if (anim.canAttack() || anim.isAtTick(0.48) || anim.isAtTick(0.88)) {
+            if (!entity.level.isClientSide) {
                 CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets(entity.getLookAngle(), CombatUtils.getAOE(entity, stack, 15), 1))
                         .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
                         .executeAttack();
                 entity.swing(InteractionHand.MAIN_HAND, true);
             }
+            entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         }
     }
 }

@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.Spell;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.projectile.WitherSkull;
@@ -22,6 +23,7 @@ public class WitherSkullSpell extends Spell {
         WitherSkull skull = new WitherSkull(level, entity, look.x, look.y, look.z);
         skull.setPos(entity.getX(), entity.getEyeY(), entity.getZ());
         level.addFreshEntity(skull);
+        playSound(entity, SoundEvents.WITHER_SHOOT, 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         return true;
     }
 }
