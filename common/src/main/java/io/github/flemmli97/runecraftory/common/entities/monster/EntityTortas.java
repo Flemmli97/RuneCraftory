@@ -172,7 +172,7 @@ public class EntityTortas extends ChargingMonster {
 
     @Override
     public void doWhileCharge() {
-        if(this.tickCount % 4 == 0)
+        if (this.tickCount % 4 == 0)
             this.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_LIGHT.get(), 1, (this.getRandom().nextFloat() - this.getRandom().nextFloat()) * 0.2f + 1.0f);
         if (this.tickCount % 8 == 0) {
             this.hitEntity.clear();

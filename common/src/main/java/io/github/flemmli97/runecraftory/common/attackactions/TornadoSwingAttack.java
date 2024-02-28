@@ -32,19 +32,18 @@ public class TornadoSwingAttack extends AttackAction {
         if (handler.getChainCount() == 1) {
             if (anim.isAtTick(0.2))
                 entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_HEAVY.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.8f);
-            if (anim.isAtTick(0.64)) {
+            if (anim.isAtTick(0.84)) {
                 handler.resetHitEntityTracker();
                 entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_HEAVY.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.8f);
             }
-            if (anim.isPastTick(0.16) && !anim.isPastTick(1.2)) {
-                int start = Mth.ceil(0.88 * 20.0D);
-                int end = Mth.ceil(1.2 * 20.0D);
+            if (anim.isPastTick(0.12) && !anim.isPastTick(1.04)) {
+                int start = Mth.ceil(0.12 * 20.0D);
+                int end = Mth.ceil(1.04 * 20.0D);
                 float len = (end - start) / anim.getSpeed();
                 float f = (anim.getTick() - start) / anim.getSpeed();
-                float angleInc = -450 / len;
+                float angleInc = -480 / len;
                 float rot = handler.getSpinStartRot();
                 if (!entity.level.isClientSide) {
-
                     handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets((rot + f * angleInc), (rot + (f + 1) * angleInc), 0.5f))
                             .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
                             .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
@@ -54,7 +53,7 @@ public class TornadoSwingAttack extends AttackAction {
         } else {
             if (anim.isAtTick(0.12))
                 entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_HEAVY.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
-            if (anim.isAtTick(0.52)) {
+            if (anim.isAtTick(0.72)) {
                 handler.resetHitEntityTracker();
                 entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_HEAVY.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
             }
@@ -63,7 +62,7 @@ public class TornadoSwingAttack extends AttackAction {
                 int end = Mth.ceil(0.96 * 20.0D);
                 float len = (end - start) / anim.getSpeed();
                 float f = (anim.getTick() - start) / anim.getSpeed();
-                float angleInc = -380 / len;
+                float angleInc = -480 / len;
                 float rot = handler.getSpinStartRot();
                 if (!entity.level.isClientSide) {
                     handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets((rot + f * angleInc), (rot + (f + 1) * angleInc), 0.5f))
@@ -84,8 +83,8 @@ public class TornadoSwingAttack extends AttackAction {
     @Override
     public boolean canOverride(LivingEntity entity, WeaponHandler handler) {
         if (handler.getChainCount() == 1)
-            return handler.getCurrentAnim().isPastTick(0.80) && !handler.getCurrentAnim().isPastTick(1.0);
-        return handler.getCurrentAnim().isPastTick(0.56) && !handler.getCurrentAnim().isPastTick(0.72);
+            return handler.getCurrentAnim().isPastTick(0.60) && !handler.getCurrentAnim().isPastTick(0.84);
+        return handler.getCurrentAnim().isPastTick(0.48) && !handler.getCurrentAnim().isPastTick(0.76);
     }
 
     @Override

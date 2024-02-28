@@ -82,7 +82,7 @@ public class EntityAmbrosiaWave extends BaseDamageCloud {
                 }
             }
         } else {
-            if(this.canStartDamage())
+            if (this.canStartDamage())
                 this.playSound(ModSounds.ENTITY_AMBROSIA_WAVE.get(), 1, 1);
             if ((this.getOwner() != null && !this.getOwner().isAlive()))
                 this.discard();

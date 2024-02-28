@@ -99,10 +99,10 @@ public class AnimatedPlayerModel<T extends LivingEntity & IAnimated> extends Ent
         float interpolationRev = 1 - interpolation;
         boolean changed = false;
         if (last != null && interpolationRev > 0) {
-            changed = this.anim.doAnimation(this, last.getAnimationClient(), last.getTick(), partialTicks, interpolationRev, mirror, BlockBenchAnimations.InterpolationCheck.END);
+            changed = this.anim.doAnimation(this, last.getAnimationClient(), last.getTick(), partialTicks, anim != null ? 1 : interpolationRev, mirror, BlockBenchAnimations.InterpolationCheck.END, false);
         }
         if (anim != null) {
-            changed = this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks, interpolation, mirror, BlockBenchAnimations.InterpolationCheck.START);
+            changed = this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks, interpolation, mirror, BlockBenchAnimations.InterpolationCheck.START, changed);
         }
         return changed;
     }
