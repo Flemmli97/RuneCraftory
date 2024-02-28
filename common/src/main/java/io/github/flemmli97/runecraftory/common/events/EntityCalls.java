@@ -200,7 +200,8 @@ public class EntityCalls {
         if (!source.isBypassInvul() && target instanceof Player player) {
             if (Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().isInvulnerable(player)).orElse(false))
                 return true;
-            if (amount > 0) {
+            // Only trigger if caused by any entity
+            if (source.getDirectEntity() != null && amount > 0) {
                 PlayerData data = Platform.INSTANCE.getPlayerData(player).orElse(null);
                 if (data != null) {
                     if (NaiveBladeAttack.canCounter(data.getWeaponHandler())) {
