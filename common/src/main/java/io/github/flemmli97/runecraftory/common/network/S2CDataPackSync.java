@@ -10,20 +10,16 @@ public class S2CDataPackSync implements Packet {
     public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "s2c_datapack_sync");
 
     private FriendlyByteBuf buffer;
-    // TODO: As this is a breaking change
-    private final SyncedType type = SyncedType.ITEMSTATS;
 
+    private final SyncedType type;
 
     private S2CDataPackSync(FriendlyByteBuf buf) {
+        this.type = buf.readEnum(SyncedType.class);
         this.buffer = buf;
     }
 
-    public S2CDataPackSync() {
-    }
-
-    // TODO: As this is a breaking change
     public S2CDataPackSync(SyncedType type) {
-        //this.type = type;
+        this.type = type;
     }
 
     public static S2CDataPackSync read(FriendlyByteBuf buf) {
@@ -36,7 +32,7 @@ public class S2CDataPackSync implements Packet {
 
     @Override
     public void write(FriendlyByteBuf buf) {
-        //buf.writeEnum(this.type);
+        buf.writeEnum(this.type);
         DataPackHandler.toPacket(buf, this.type);
     }
 

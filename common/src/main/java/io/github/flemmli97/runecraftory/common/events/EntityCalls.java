@@ -87,7 +87,8 @@ public class EntityCalls {
 
     public static void joinPlayer(Player player) {
         if (player instanceof ServerPlayer serverPlayer) {
-            Platform.INSTANCE.sendToClient(new S2CDataPackSync(), serverPlayer);
+            for (S2CDataPackSync.SyncedType type : S2CDataPackSync.SyncedType.values())
+                Platform.INSTANCE.sendToClient(new S2CDataPackSync(type), serverPlayer);
             Platform.INSTANCE.sendToClient(new S2CCalendar(WorldHandler.get(serverPlayer.getServer()).getCalendar()), serverPlayer);
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
                 data.recalculateStats(serverPlayer, false);
