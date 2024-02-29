@@ -1,3 +1,14 @@
+RuneCraftory 1.8.4
+================
+- Add a screen for spawn eggs instead of renaming it to set a level
+- Add sounds to various things
+- Split datapack packets into multiple ones
+- Change naive blade skill to not get triggered by non entity attacks
+- Tweak hp of monsters
+- Fix crash with thunderbolt
+- Fix negative multiplier with monster stats
+- Fix some animations
+
 RuneCraftory 1.8.3
 ================
 - Sync max skill level to client. 
