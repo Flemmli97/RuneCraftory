@@ -520,7 +520,7 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntityBigAnt>> KILLER_ANT = regMonster(EntityType.Builder.of(EntityBigAnt::new, MobCategory.MONSTER).sized(1.35f, 0.54f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "killer_ant"),
             0x0f0e0e, 0x754848,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 160).putLevelGains(() -> Attributes.MAX_HEALTH, 125)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 45).putLevelGains(() -> Attributes.MAX_HEALTH, 125)
                     .putAttributes(() -> Attributes.ATTACK_DAMAGE, 25).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 215)
                     .putAttributes(ModAttributes.DEFENCE, 15).putLevelGains(ModAttributes.DEFENCE, 130)
                     .putAttributes(ModAttributes.MAGIC, 11).putLevelGains(ModAttributes.MAGIC, 100)
@@ -535,7 +535,7 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntityOrc>> HIGH_ORC = regMonster(EntityType.Builder.of(EntityOrc::new, MobCategory.MONSTER).sized(0.73f, 2.3f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "high_orc"),
             0x9f6c4e, 0x333e78,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 220).putLevelGains(() -> Attributes.MAX_HEALTH, 110)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 49).putLevelGains(() -> Attributes.MAX_HEALTH, 110)
                     .putAttributes(() -> Attributes.ATTACK_DAMAGE, 24).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 235)
                     .putAttributes(ModAttributes.DEFENCE, 12).putLevelGains(ModAttributes.DEFENCE, 140)
                     .putAttributes(ModAttributes.MAGIC, 13).putLevelGains(ModAttributes.MAGIC, 105)
@@ -550,7 +550,7 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntityOrcHunter>> ORC_HUNTER = regMonster(EntityType.Builder.of(EntityOrcHunter::new, MobCategory.MONSTER).sized(0.73f, 2.3f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "orc_hunter"),
             0x9f6c4e, 0x333e78,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 220).putLevelGains(() -> Attributes.MAX_HEALTH, 110)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 49).putLevelGains(() -> Attributes.MAX_HEALTH, 110)
                     .putAttributes(() -> Attributes.ATTACK_DAMAGE, 24).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 235)
                     .putAttributes(ModAttributes.DEFENCE, 12).putLevelGains(ModAttributes.DEFENCE, 140)
                     .putAttributes(ModAttributes.MAGIC, 13).putLevelGains(ModAttributes.MAGIC, 105)
@@ -565,7 +565,7 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntityHornet>> HORNET = regMonster(EntityType.Builder.of(EntityHornet::new, MobCategory.MONSTER).sized(0.7f, 0.85f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "hornet"),
             0x627d73, 0x20201f, true,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 90).putLevelGains(() -> Attributes.MAX_HEALTH, 115)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 38).putLevelGains(() -> Attributes.MAX_HEALTH, 115)
                     .putAttributes(() -> Attributes.ATTACK_DAMAGE, 15).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 200)
                     .putAttributes(ModAttributes.DEFENCE, 14).putLevelGains(ModAttributes.DEFENCE, 120)
                     .putAttributes(ModAttributes.MAGIC, 13).putLevelGains(ModAttributes.MAGIC, 100)
@@ -580,7 +580,7 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntityWolf>> SILVER_WOLF = regMonster(EntityType.Builder.of(EntityWolf::new, MobCategory.MONSTER).sized(0.8f, 1.15f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "silver_wolf"),
             0x9bb9c3, 0x436ea1,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 250).putLevelGains(() -> Attributes.MAX_HEALTH, 135)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 42).putLevelGains(() -> Attributes.MAX_HEALTH, 135)
                     .putAttributes(() -> Attributes.ATTACK_DAMAGE, 6).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 245)
                     .putAttributes(ModAttributes.DEFENCE, 0).putLevelGains(ModAttributes.DEFENCE, 125)
                     .putAttributes(ModAttributes.MAGIC, 3).putLevelGains(ModAttributes.MAGIC, 100)
@@ -596,7 +596,7 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntityLeafBall>> LEAF_BALL = regMonster(EntityType.Builder.of(EntityLeafBall::new, MobCategory.MONSTER).sized(0.8f, 1.2f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "leaf_ball"),
             0xdcb5f0, 0xb72fd3, true,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 230).putLevelGains(() -> Attributes.MAX_HEALTH, 120)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 37).putLevelGains(() -> Attributes.MAX_HEALTH, 120)
                     .putAttributes(() -> Attributes.ATTACK_DAMAGE, 17).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 150)
                     .putAttributes(ModAttributes.DEFENCE, 11).putLevelGains(ModAttributes.DEFENCE, 115)
                     .putAttributes(ModAttributes.MAGIC, 27).putLevelGains(ModAttributes.MAGIC, 235)
@@ -612,7 +612,7 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntityChipsqueek>> FURPY = regMonster(EntityType.Builder.of(EntityChipsqueek::new, MobCategory.MONSTER).sized(0.65f, 0.95f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "furpy"),
             0xab8620, 0xf9ffbb,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 70).putLevelGains(() -> Attributes.MAX_HEALTH, 105)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 40).putLevelGains(() -> Attributes.MAX_HEALTH, 105)
                     .putAttributes(() -> Attributes.ATTACK_DAMAGE, 14).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 130)
                     .putAttributes(ModAttributes.DEFENCE, 8).putLevelGains(ModAttributes.DEFENCE, 120)
                     .putAttributes(ModAttributes.MAGIC, 13).putLevelGains(ModAttributes.MAGIC, 130)
@@ -642,7 +642,7 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntityPommePomme>> MINO = regMonster(EntityType.Builder.of(EntityPommePomme::new, MobCategory.MONSTER).sized(0.9f, 1.8f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "mino"),
             0x8b573d, 0xc0916d,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 65).putLevelGains(() -> Attributes.MAX_HEALTH, 120)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 28).putLevelGains(() -> Attributes.MAX_HEALTH, 120)
                     .putAttributes(() -> Attributes.ATTACK_DAMAGE, 12).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 150)
                     .putAttributes(ModAttributes.DEFENCE, 7).putLevelGains(ModAttributes.DEFENCE, 180)
                     .putAttributes(ModAttributes.MAGIC, 10).putLevelGains(ModAttributes.MAGIC, 125)
@@ -691,7 +691,7 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntityKingWooly>> KING_WOOLY = regMonster(EntityType.Builder.of(EntityKingWooly::new, MobCategory.MONSTER).sized(1.8f, 3.9f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "king_wooly"),
             0xffffcc, 0xffffff,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 170).putLevelGains(() -> Attributes.MAX_HEALTH, 110)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 75).putLevelGains(() -> Attributes.MAX_HEALTH, 110)
                     .putAttributes(() -> Attributes.ATTACK_DAMAGE, 5).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 200)
                     .putAttributes(ModAttributes.DEFENCE, 5).putLevelGains(ModAttributes.DEFENCE, 135)
                     .putAttributes(ModAttributes.MAGIC, 3).putLevelGains(ModAttributes.MAGIC, 130)
@@ -708,7 +708,7 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntityBuffamoo>> BUFFALOO = regMonster(EntityType.Builder.of(EntityBuffamoo::new, MobCategory.MONSTER).sized(1.2f, 1.45f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "buffaloo"),
             0x8a8a5e, 0xb5b489,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 80).putLevelGains(() -> Attributes.MAX_HEALTH, 120)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 30).putLevelGains(() -> Attributes.MAX_HEALTH, 120)
                     .putAttributes(() -> Attributes.ATTACK_DAMAGE, 17).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 210)
                     .putAttributes(ModAttributes.DEFENCE, 2).putLevelGains(ModAttributes.DEFENCE, 180)
                     .putAttributes(ModAttributes.MAGIC, 7).putLevelGains(ModAttributes.MAGIC, 150)
@@ -722,7 +722,7 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntityGoblinPirate>> GOBLIN_PIRATE = regMonster(EntityType.Builder.of(EntityGoblinPirate::new, MobCategory.MONSTER).sized(0.6f, 1.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "goblin_pirate"),
             0x484209, 0x29307f,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 22).putLevelGains(() -> Attributes.MAX_HEALTH, 103)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 23).putLevelGains(() -> Attributes.MAX_HEALTH, 103)
                     .putAttributes(() -> Attributes.ATTACK_DAMAGE, 8).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 235)
                     .putAttributes(ModAttributes.DEFENCE, 0.5).putLevelGains(ModAttributes.DEFENCE, 145)
                     .putAttributes(ModAttributes.MAGIC, 4).putLevelGains(ModAttributes.MAGIC, 115)
@@ -737,7 +737,7 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntityGoblinGangster>> GOBLIN_GANGSTER = regMonster(EntityType.Builder.of(EntityGoblinGangster::new, MobCategory.MONSTER).sized(0.6f, 1.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "goblin_gangster"),
             0x6e5d2d, 0x316275,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 22).putLevelGains(() -> Attributes.MAX_HEALTH, 108)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 23).putLevelGains(() -> Attributes.MAX_HEALTH, 108)
                     .putAttributes(() -> Attributes.ATTACK_DAMAGE, 8).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 230)
                     .putAttributes(ModAttributes.DEFENCE, 0.5).putLevelGains(ModAttributes.DEFENCE, 140)
                     .putAttributes(ModAttributes.MAGIC, 4).putLevelGains(ModAttributes.MAGIC, 120)
@@ -831,7 +831,7 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntityAmbrosia>> AMBROSIA = regMonster(EntityType.Builder.of(EntityAmbrosia::new, MobCategory.MONSTER).sized(0.85f, 2.3f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "ambrosia"),
             0x00ff00, 0xe600e6,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 220).putLevelGains(() -> Attributes.MAX_HEALTH, 230)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 250).putLevelGains(() -> Attributes.MAX_HEALTH, 230)
                     .putAttributes(() -> Attributes.ATTACK_DAMAGE, 10).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 275)
                     .putAttributes(ModAttributes.DEFENCE, 4).putLevelGains(ModAttributes.DEFENCE, 220)
                     .putAttributes(ModAttributes.MAGIC, 14).putLevelGains(ModAttributes.MAGIC, 280)
@@ -857,7 +857,7 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntityThunderbolt>> THUNDERBOLT = regMonster(EntityType.Builder.of(EntityThunderbolt::new, MobCategory.MONSTER).sized(1.6f, 1.8f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "thunderbolt"),
             0x212121, 0x2f1177,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 250).putLevelGains(() -> Attributes.MAX_HEALTH, 220)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 275).putLevelGains(() -> Attributes.MAX_HEALTH, 220)
                     .putAttributes(() -> Attributes.ATTACK_DAMAGE, 16).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 270)
                     .putAttributes(ModAttributes.DEFENCE, 4).putLevelGains(ModAttributes.DEFENCE, 230)
                     .putAttributes(ModAttributes.MAGIC, 13).putLevelGains(ModAttributes.MAGIC, 260)
@@ -906,7 +906,7 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntityDeadTree>> DEAD_TREE = regMonster(EntityType.Builder.of(EntityDeadTree::new, MobCategory.MONSTER).sized(1.8f, 7f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "dead_tree"),
             0x3e4a40, 0x227904,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 300).putLevelGains(() -> Attributes.MAX_HEALTH, 233)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 290).putLevelGains(() -> Attributes.MAX_HEALTH, 233)
                     .putAttributes(() -> Attributes.ATTACK_DAMAGE, 16.8).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 250)
                     .putAttributes(ModAttributes.DEFENCE, 4.8).putLevelGains(ModAttributes.DEFENCE, 220)
                     .putAttributes(ModAttributes.MAGIC, 12).putLevelGains(ModAttributes.MAGIC, 230)
@@ -960,7 +960,7 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntityRaccoon>> RACCOON = regMonster(EntityType.Builder.of(EntityRaccoon::new, MobCategory.MONSTER).sized(0.9f, 1.5f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "raccoon"),
             0xcb8055, 0x6d4342,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 300).putLevelGains(() -> Attributes.MAX_HEALTH, 245)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 225).putLevelGains(() -> Attributes.MAX_HEALTH, 245)
                     .putAttributes(() -> Attributes.ATTACK_DAMAGE, 16.5).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 226)
                     .putAttributes(ModAttributes.DEFENCE, 4.5).putLevelGains(ModAttributes.DEFENCE, 205)
                     .putAttributes(ModAttributes.MAGIC, 12.7).putLevelGains(ModAttributes.MAGIC, 218)
@@ -987,7 +987,7 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntitySkelefang>> SKELEFANG = regMonster(EntityType.Builder.of(EntitySkelefang::new, MobCategory.MONSTER).sized(1.95f, 3).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "skelefang"),
             0x615237, 0xc2a982,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 240).putLevelGains(() -> Attributes.MAX_HEALTH, 265)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 300).putLevelGains(() -> Attributes.MAX_HEALTH, 265)
                     .putAttributes(() -> Attributes.ATTACK_DAMAGE, 17).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 274)
                     .putAttributes(ModAttributes.DEFENCE, 4.4).putLevelGains(ModAttributes.DEFENCE, 230)
                     .putAttributes(ModAttributes.MAGIC, 13.5).putLevelGains(ModAttributes.MAGIC, 234)
@@ -1008,7 +1008,7 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntityRafflesia>> RAFFLESIA = regMonster(EntityType.Builder.of(EntityRafflesia::new, MobCategory.MONSTER).sized(1.15f, 2.8f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "rafflesia"),
             0x9b58ba, 0x0a8414,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 230).putLevelGains(() -> Attributes.MAX_HEALTH, 275)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 275).putLevelGains(() -> Attributes.MAX_HEALTH, 275)
                     .putAttributes(() -> Attributes.ATTACK_DAMAGE, 14).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 200)
                     .putAttributes(ModAttributes.DEFENCE, 4.5).putLevelGains(ModAttributes.DEFENCE, 228)
                     .putAttributes(ModAttributes.MAGIC, 16.5).putLevelGains(ModAttributes.MAGIC, 240)
