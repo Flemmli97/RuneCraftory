@@ -40,7 +40,8 @@ public abstract class LivingEntityMixin {
     @Inject(method = "collectEquipmentChanges", at = @At("RETURN"), locals = LocalCapture.CAPTURE_FAILHARD)
     private void onChange(CallbackInfoReturnable<Map<EquipmentSlot, ItemStack>> info, Map<EquipmentSlot, ItemStack> map) {
         if (map != null)
-            EntityCalls.updateEquipmentNew((LivingEntity) (Object) this, map, this.getLastHandItem(EquipmentSlot.MAINHAND));
+            // Can't be a method reference!
+            EntityCalls.updateEquipmentNew((LivingEntity) (Object) this, map, this.getLastHandItem(EquipmentSlot.MAINHAND), slot -> this.getLastArmorItem(slot));
     }
 
     /**
@@ -61,4 +62,7 @@ public abstract class LivingEntityMixin {
 
     @Shadow
     abstract ItemStack getLastHandItem(EquipmentSlot slot);
+
+    @Shadow
+    abstract ItemStack getLastArmorItem(EquipmentSlot slot);
 }

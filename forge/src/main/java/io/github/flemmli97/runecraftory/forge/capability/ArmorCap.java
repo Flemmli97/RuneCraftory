@@ -1,17 +1,25 @@
 package io.github.flemmli97.runecraftory.forge.capability;
 
-import io.github.flemmli97.runecraftory.common.attachment.StaffData;
+import io.github.flemmli97.runecraftory.common.attachment.ArmorEffectData;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-public class StaffCap extends StaffData implements ICapabilitySerializable<CompoundTag> {
+public class ArmorCap extends ArmorEffectData implements ICapabilitySerializable<CompoundTag> {
 
-    private final LazyOptional<StaffData> holder = LazyOptional.of(() -> this);
+    private final LazyOptional<ArmorEffectData> holder = LazyOptional.of(() -> this);
+
+    @Nonnull
+    @Override
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+        return CapabilityInsts.ARMOR_ITEM_CAP.orEmpty(cap, this.holder);
+    }
 
     @Override
     public CompoundTag serializeNBT() {
@@ -21,11 +29,5 @@ public class StaffCap extends StaffData implements ICapabilitySerializable<Compo
     @Override
     public void deserializeNBT(CompoundTag nbt) {
         this.readFromNBT(nbt);
-    }
-
-    @Nonnull
-    @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, Direction side) {
-        return CapabilityInsts.STAFF_ITEM_CAP.orEmpty(cap, this.holder);
     }
 }

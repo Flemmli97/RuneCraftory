@@ -40,6 +40,7 @@ public class ModSounds {
     public static final RegistryEntrySupplier<SoundEvent> PLAYER_ATTACK_SWOOSH = register("player.attack.swoosh", 4);
     public static final RegistryEntrySupplier<SoundEvent> PLAYER_ATTACK_SWOOSH_HEAVY = register("player.attack.swoosh_heavy");
     public static final RegistryEntrySupplier<SoundEvent> PLAYER_ATTACK_SWOOSH_LIGHT = register("player.attack.swoosh_light", 3);
+    public static final RegistryEntrySupplier<SoundEvent> PLAYER_ARMOR_PIYO_CHIRP = register("player.armor.piyo_chirp", 4);
     public static final RegistryEntrySupplier<SoundEvent> SPELL_APPLE_RAIN = register("spell.apple_rain");
     public static final RegistryEntrySupplier<SoundEvent> SPELL_GENERIC_BUFF = register("spell.generic.buff");
     public static final RegistryEntrySupplier<SoundEvent> SPELL_GENERIC_DARK = register("spell.generic.dark");

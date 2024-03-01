@@ -157,6 +157,15 @@
       "runecraftory:player/attack/swoosh_light_3"
     ]
   },
+  "player.armor.piyo_chirp": {
+    "subtitle": "runecraftory:player.armor.piyo_chirp",
+    "sounds": [
+      "runecraftory:player/armor/piyo_chirp_1",
+      "runecraftory:player/armor/piyo_chirp_2",
+      "runecraftory:player/armor/piyo_chirp_3",
+      "runecraftory:player/armor/piyo_chirp_4"
+    ]
+  },
   "spell.apple_rain": {
     "subtitle": "runecraftory:spell.apple_rain",
     "sounds": [

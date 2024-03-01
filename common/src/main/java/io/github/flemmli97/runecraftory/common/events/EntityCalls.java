@@ -82,6 +82,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Function;
 
 public class EntityCalls {
 
@@ -144,11 +145,19 @@ public class EntityCalls {
      * We are doing this roundabout way cause the attack damage bonus of equipment should only come into play when the player has a fitting weapon in
      * the main hand.
      */
-    public static void updateEquipmentNew(LivingEntity entity, Map<EquipmentSlot, ItemStack> changed, ItemStack lastMainhandItem) {
+    public static void updateEquipmentNew(LivingEntity entity, Map<EquipmentSlot, ItemStack> changed, ItemStack lastMainhandItem, Function<EquipmentSlot, ItemStack> lastArmor) {
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             //Readd attack damage to unchanged slots. This is to make sure the client gets send the correct data
             if (!changed.containsKey(slot)) {
                 reAddAttackDamage(entity, entity.getItemBySlot(slot), slot);
+            }
+        }
+        for (Map.Entry<EquipmentSlot, ItemStack> entry : changed.entrySet()) {
+            if (entry.getKey().getType() == EquipmentSlot.Type.ARMOR) {
+                ItemStack now = entry.getValue();
+                ItemStack last = lastArmor.apply(entry.getKey());
+                Platform.INSTANCE.getArmorEffects(last).ifPresent(d -> d.triggerEvent(last, e -> e.onRemove(entity, last)));
+                Platform.INSTANCE.getArmorEffects(now).ifPresent(d -> d.triggerEvent(now, e -> e.onEquip(entity, now)));
             }
         }
         boolean hasWeapon = ItemNBT.isWeapon(entity.getMainHandItem());
@@ -315,7 +324,7 @@ public class EntityCalls {
         if (level instanceof ServerLevel serverLevel) {
             BlockPos targetPos = null;
             boolean swing = false;
-            if (state.getBlock() instanceof Growable crop) {
+            if (state.getBlock() instanceof Growable) {
                 CropProperties props = DataPackHandler.INSTANCE.cropManager().get(state.getBlock().getCloneItemStack(level, pos, state).getItem());
                 if (props != null) {
                     BlockPos below = pos.below();
@@ -348,16 +357,25 @@ public class EntityCalls {
         return player == null && FarmlandHandler.isFarmBlock(state);
     }
 
-    public static void updateLivingTick(Player player) {
-        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.tick(player));
-        if (GeneralConfig.disableHunger) {
-            int food = EntityUtils.paralysed(player) ? 6 : 14;
-            player.getFoodData().setFoodLevel(food);
-            player.getFoodData().setSaturation(0);
+    public static void updateLivingTick(LivingEntity entity) {
+        if (entity instanceof Player player) {
+            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.tick(player));
+            if (GeneralConfig.disableHunger) {
+                int food = EntityUtils.paralysed(player) ? 6 : 14;
+                player.getFoodData().setFoodLevel(food);
+                player.getFoodData().setSaturation(0);
             /*if (player.hasEffect(MobEffects.HUNGER)) {
                 player.removeEffect(MobEffects.HUNGER);
                 player.addEffect(new MobEffectInstance(ModEffects.poison.get(), 600, 1));
             }*/
+            }
+        }
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            if (slot.getType() != EquipmentSlot.Type.ARMOR)
+                continue;
+            ItemStack stack = entity.getItemBySlot(slot);
+            if (!stack.isEmpty())
+                Platform.INSTANCE.getArmorEffects(stack).ifPresent(d -> d.triggerEvent(stack, e -> e.onTick(entity, stack)));
         }
     }
 

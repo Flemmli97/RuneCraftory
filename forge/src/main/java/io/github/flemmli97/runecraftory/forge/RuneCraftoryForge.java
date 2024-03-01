@@ -4,6 +4,7 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.GateEntity;
 import io.github.flemmli97.runecraftory.common.registry.ModActivities;
+import io.github.flemmli97.runecraftory.common.registry.ModArmorEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
@@ -119,6 +120,7 @@ public class RuneCraftoryForge {
         ModAttackActions.ATTACK_ACTIONS.registerContent();
         ModGlobalLootModifiers.MODIFIERS.register(FMLJavaModLoadingContext.get().getModEventBus());
         ModSounds.SOUND_EVENTS.registerContent();
+        ModArmorEffects.ARMOR_EFFECTS.registerContent();
         ModCriteria.init();
     }
 

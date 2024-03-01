@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.forge.platform;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
+import io.github.flemmli97.runecraftory.common.attachment.ArmorEffectData;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.attachment.StaffData;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
@@ -74,18 +75,25 @@ public class PlatformImpl implements Platform {
 
     @Override
     public Optional<PlayerData> getPlayerData(Player player) {
-        return player.getCapability(CapabilityInsts.PLAYERCAP).resolve();
+        return player.getCapability(CapabilityInsts.PLAYER_CAP).resolve();
     }
 
     @Override
     public Optional<EntityData> getEntityData(LivingEntity living) {
-        return living.getCapability(CapabilityInsts.ENTITYCAP).resolve();
+        return living.getCapability(CapabilityInsts.ENTITY_CAP).resolve();
     }
 
     @Override
     public Optional<StaffData> getStaffData(Object obj) {
         if (obj instanceof ItemStack stack)
-            return stack.getCapability(CapabilityInsts.ITEMSTACKCAP).resolve();
+            return stack.getCapability(CapabilityInsts.STAFF_ITEM_CAP).resolve();
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<ArmorEffectData> getArmorEffects(Object obj) {
+        if (obj instanceof ItemStack stack)
+            return stack.getCapability(CapabilityInsts.ARMOR_ITEM_CAP).resolve();
         return Optional.empty();
     }
 

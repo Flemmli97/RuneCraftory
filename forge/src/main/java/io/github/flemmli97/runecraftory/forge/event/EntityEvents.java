@@ -10,7 +10,6 @@ import io.github.flemmli97.tenshilib.forge.events.AOEAttackEvent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.ItemAttributeModifierEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -72,9 +71,7 @@ public class EntityEvents {
 
     @SubscribeEvent
     public void updateLivingTick(LivingEvent.LivingUpdateEvent event) {
-        if (event.getEntityLiving() instanceof Player player) {
-            EntityCalls.updateLivingTick(player);
-        }
+        EntityCalls.updateLivingTick(event.getEntityLiving());
         if (event.getEntityLiving().level.isClientSide)
             ClientCalls.tick(event.getEntityLiving());
     }

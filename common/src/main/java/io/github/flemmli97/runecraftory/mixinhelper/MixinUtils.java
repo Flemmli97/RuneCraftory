@@ -8,6 +8,8 @@ import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -111,6 +113,16 @@ public class MixinUtils {
     public static void recheckFarmland(ServerLevel level, BlockState state, BlockPos pos) {
         if (FarmlandHandler.get(level.getServer()).getData(level, pos).map(d -> !d.isFarmBlock()).orElse(true)) {
             FarmlandHandler.get(level.getServer()).onFarmlandPlace(level, pos);
+        }
+    }
+
+    public static void triggerArmorStepEffect(LivingEntity living) {
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            if (slot.getType() != EquipmentSlot.Type.ARMOR)
+                continue;
+            ItemStack stack = living.getItemBySlot(slot);
+            if (!stack.isEmpty())
+                Platform.INSTANCE.getArmorEffects(stack).ifPresent(d -> d.triggerEvent(stack, e -> e.onStep(living, stack)));
         }
     }
 }

@@ -8,6 +8,7 @@ import io.github.flemmli97.runecraftory.common.entities.GateEntity;
 import io.github.flemmli97.runecraftory.common.events.EntityCalls;
 import io.github.flemmli97.runecraftory.common.events.WorldCalls;
 import io.github.flemmli97.runecraftory.common.registry.ModActivities;
+import io.github.flemmli97.runecraftory.common.registry.ModArmorEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
@@ -70,7 +71,6 @@ import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -93,9 +93,7 @@ public class RuneCraftoryFabric implements ModInitializer {
     private static MinecraftServer SERVER_INSTANCE;
 
     public static void entityTick(LivingEntity entity) {
-        if (entity instanceof Player player) {
-            EntityCalls.updateLivingTick(player);
-        }
+        EntityCalls.updateLivingTick(entity);
         if (entity.level.isClientSide)
             ClientCalls.tick(entity);
     }
@@ -282,6 +280,7 @@ public class RuneCraftoryFabric implements ModInitializer {
         ModStats.STATS.registerContent();
         ModNPCActions.ACTIONS.registerContent();
         ModAttackActions.ATTACK_ACTIONS.registerContent();
+        ModArmorEffects.ARMOR_EFFECTS.registerContent();
 
         ModLootRegistries.LOOTFUNCTION.registerContent();
         ModLootRegistries.LOOTCONDITIONS.registerContent();

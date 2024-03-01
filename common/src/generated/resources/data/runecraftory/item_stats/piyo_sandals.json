@@ -12,5 +12,6 @@
     "runecraftory:res_dizzy": 0.7
   },
   "element": "NONE",
+  "armorEffect": "runecraftory:piyo_sandals",
   "item": "runecraftory:piyo_sandals"
 }

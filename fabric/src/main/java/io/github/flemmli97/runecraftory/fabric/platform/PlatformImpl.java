@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.fabric.platform;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
+import io.github.flemmli97.runecraftory.common.attachment.ArmorEffectData;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.attachment.StaffData;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
@@ -10,8 +11,8 @@ import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.network.Packet;
 import io.github.flemmli97.runecraftory.fabric.mixin.DamageSourceAccessor;
 import io.github.flemmli97.runecraftory.fabric.mixinhelper.EntityDataGetter;
+import io.github.flemmli97.runecraftory.fabric.mixinhelper.ItemStackDataGetter;
 import io.github.flemmli97.runecraftory.fabric.mixinhelper.PlayerDataGetter;
-import io.github.flemmli97.runecraftory.fabric.mixinhelper.StaffDataGetter;
 import io.github.flemmli97.runecraftory.fabric.network.ClientPacketHandler;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
@@ -88,8 +89,15 @@ public class PlatformImpl implements Platform {
 
     @Override
     public Optional<StaffData> getStaffData(Object stack) {
-        if (stack instanceof StaffDataGetter getter)
+        if (stack instanceof ItemStackDataGetter getter)
             return Optional.ofNullable(getter.getStaffData());
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<ArmorEffectData> getArmorEffects(Object stack) {
+        if (stack instanceof ItemStackDataGetter getter)
+            return Optional.ofNullable(getter.getArmorEffectData());
         return Optional.empty();
     }
 

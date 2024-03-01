@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.platform;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
+import io.github.flemmli97.runecraftory.common.attachment.ArmorEffectData;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.attachment.StaffData;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
@@ -64,6 +65,8 @@ public interface Platform {
     Optional<EntityData> getEntityData(LivingEntity living);
 
     Optional<StaffData> getStaffData(Object stack);
+
+    Optional<ArmorEffectData> getArmorEffects(Object stack);
 
     void openGuiMenu(ServerPlayer player, MenuProvider provider);
 

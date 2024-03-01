@@ -189,6 +189,7 @@ public class ItemNBT {
         CompoundTag tag = getItemNBT(stack);
         if (tag == null)
             tag = new CompoundTag();
+        ItemStat stat = DataPackHandler.INSTANCE.itemStatManager().get(stackToAdd.getItem()).orElse(null);
         if (ItemNBT.shouldHaveStats(stackToAdd)) {
             if (!crafting || tag.contains(LibNBT.ORIGINITEM))
                 return stack;
@@ -209,6 +210,8 @@ public class ItemNBT {
                 else if (stack.getItem() instanceof IItemUsable armor1 && stackToAdd.getItem() instanceof IItemUsable armor2 && armor1.getWeaponType() == armor2.getWeaponType())
                     return changeBaseItemTo(stack, stackToAdd, type);
             }
+            if (stat.getArmorEffect() != null && stat.getArmorEffect().canBeAppliedTo(stack))
+                Platform.INSTANCE.getArmorEffects(stack).ifPresent(data -> data.addArmorEffects(stat.getArmorEffect()));
             return stack;
         }
         tag.putInt(LibNBT.LEVEL, !crafting ? level + 1 : level);
@@ -257,7 +260,6 @@ public class ItemNBT {
         if (stackToAdd.getItem() == ModItems.raccoonLeaf.get())
             tag.putBoolean(LibNBT.RACCOON_LEAF, true);
 
-        ItemStat stat = DataPackHandler.INSTANCE.itemStatManager().get(stackToAdd.getItem()).orElse(null);
         if (stat != null) {
             if (!tag.contains(LibNBT.BASE) && !stat.itemStats().isEmpty()) {
                 ItemStat base = DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem()).orElse(null);
@@ -312,6 +314,8 @@ public class ItemNBT {
                         data.setTier3Spell(stat.getTier3Spell());
                 });
             }
+            if (stat.getArmorEffect() != null && stat.getArmorEffect().canBeAppliedTo(stack))
+                Platform.INSTANCE.getArmorEffects(stack).ifPresent(data -> data.addArmorEffects(stat.getArmorEffect()));
         }
         CompoundTag stackTag = stack.getOrCreateTag();
         stackTag.put(RuneCraftory.MODID, tag);
@@ -349,6 +353,8 @@ public class ItemNBT {
                         data.setTier3Spell(stat.getTier3Spell());
                 });
             }
+            if (stat.getArmorEffect() != null && stat.getArmorEffect().canBeAppliedTo(stack))
+                Platform.INSTANCE.getArmorEffects(stack).ifPresent(data -> data.addArmorEffects(stat.getArmorEffect()));
         }
         tag.putString(LibNBT.ORIGINITEM, PlatformUtils.INSTANCE.items().getIDFrom(toApply.getItem()).toString());
         CompoundTag stackTag = stack.getOrCreateTag();

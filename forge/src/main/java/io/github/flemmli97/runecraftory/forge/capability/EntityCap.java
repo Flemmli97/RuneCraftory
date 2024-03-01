@@ -16,6 +16,6 @@ public class EntityCap extends EntityData implements ICapabilityProvider {
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        return CapabilityInsts.ENTITYCAP.orEmpty(cap, this.holder);
+        return CapabilityInsts.ENTITY_CAP.orEmpty(cap, this.holder);
     }
 }

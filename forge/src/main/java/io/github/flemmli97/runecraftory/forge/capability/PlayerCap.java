@@ -26,6 +26,6 @@ public class PlayerCap extends PlayerData implements ICapabilitySerializable<Com
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, Direction side) {
-        return CapabilityInsts.PLAYERCAP.orEmpty(cap, this.holder);
+        return CapabilityInsts.PLAYER_CAP.orEmpty(cap, this.holder);
     }
 }

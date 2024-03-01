@@ -7,8 +7,10 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
+import io.github.flemmli97.runecraftory.api.items.ArmorEffect;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.lib.LibAttributes;
+import io.github.flemmli97.runecraftory.common.registry.ModArmorEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
@@ -46,10 +48,12 @@ public class ItemStat {
 
     public static final Codec<ItemStat> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(
+                    CodecHelper.ofCustomRegistry(ModSpells.SPELL_REGISTRY, ModSpells.SPELL_REGISTRY_KEY).optionalFieldOf("tier3Spell").forGetter(s -> Optional.ofNullable(s.getTier3Spell())),
+                    CodecHelper.ofCustomRegistry(ModArmorEffects.ARMOR_EFFECT_REGISTRY, ModArmorEffects.ARMOR_EFFECT_KEY).optionalFieldOf("armorEffect").forGetter(s -> Optional.ofNullable(s.getArmorEffect())),
+
                     CodecHelper.enumCodec(EnumElement.class, EnumElement.NONE).orElse(EnumElement.NONE).fieldOf("element").forGetter(ItemStat::element),
                     CodecHelper.ofCustomRegistry(ModSpells.SPELL_REGISTRY, ModSpells.SPELL_REGISTRY_KEY).optionalFieldOf("tier1Spell").forGetter(s -> Optional.ofNullable(s.getTier1Spell())),
                     CodecHelper.ofCustomRegistry(ModSpells.SPELL_REGISTRY, ModSpells.SPELL_REGISTRY_KEY).optionalFieldOf("tier2Spell").forGetter(s -> Optional.ofNullable(s.getTier2Spell())),
-                    CodecHelper.ofCustomRegistry(ModSpells.SPELL_REGISTRY, ModSpells.SPELL_REGISTRY_KEY).optionalFieldOf("tier3Spell").forGetter(s -> Optional.ofNullable(s.getTier3Spell())),
 
                     Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("itemStats").forGetter(ItemStat::itemStats),
                     Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("monsterBonus").forGetter(ItemStat::getMonsterGiftIncrease),
@@ -57,8 +61,8 @@ public class ItemStat {
                     ExtraCodecs.NON_NEGATIVE_INT.fieldOf("buyPrice").forGetter(ItemStat::getBuy),
                     ExtraCodecs.NON_NEGATIVE_INT.fieldOf("sellPrice").forGetter(ItemStat::getSell),
                     ExtraCodecs.NON_NEGATIVE_INT.fieldOf("upgradeDifficulty").forGetter(ItemStat::getDiff)
-            ).apply(instance, ((element, spell, spell2, spell3, atts, monster, buy, sell, upgrade) ->
-                    new ItemStat(buy, sell, upgrade, element, spell.orElse(null), spell2.orElse(null), spell3.orElse(null), atts, monster))));
+            ).apply(instance, ((spell3, armorEffect, element, spell, spell2, atts, monster, buy, sell, upgrade) ->
+                    new ItemStat(buy, sell, upgrade, element, spell.orElse(null), spell2.orElse(null), spell3.orElse(null), armorEffect.orElse(null), atts, monster))));
 
     private static final Set<ResourceLocation> PERCENT_ATTRIBUTES = Sets.newHashSet(
             LibAttributes.PARA,
@@ -110,6 +114,7 @@ public class ItemStat {
     private Spell tier1Spell;
     private Spell tier2Spell;
     private Spell tier3Spell;
+    private ArmorEffect armorEffect;
 
     private transient ResourceLocation id;
 
@@ -117,7 +122,7 @@ public class ItemStat {
         this.itemStats = new HashMap<>();
     }
 
-    private ItemStat(int buyPrice, int sellPrice, int upgradeDifficulty, EnumElement element, Spell tier1Spell, Spell tier2Spell, Spell tier3Spell, Map<Attribute, Double> itemStats, Map<Attribute, Double> monsterGiftIncrease) {
+    private ItemStat(int buyPrice, int sellPrice, int upgradeDifficulty, EnumElement element, Spell tier1Spell, Spell tier2Spell, Spell tier3Spell, ArmorEffect effect, Map<Attribute, Double> itemStats, Map<Attribute, Double> monsterGiftIncrease) {
         this.itemStats = itemStats;
         this.buyPrice = buyPrice;
         this.sellPrice = sellPrice;
@@ -126,6 +131,7 @@ public class ItemStat {
         this.tier1Spell = tier1Spell;
         this.tier2Spell = tier2Spell;
         this.tier3Spell = tier3Spell;
+        this.armorEffect = effect;
         this.monsterGiftIncrease = ImmutableSortedMap.copyOf(monsterGiftIncrease, ModAttributes.SORTED);
     }
 
@@ -151,6 +157,8 @@ public class ItemStat {
             stat.tier2Spell = spellRegistry.getFromId(buffer.readResourceLocation());
         if (buffer.readBoolean())
             stat.tier3Spell = spellRegistry.getFromId(buffer.readResourceLocation());
+        if (buffer.readBoolean())
+            stat.armorEffect = ModArmorEffects.ARMOR_EFFECT_REGISTRY.get().getFromId(buffer.readResourceLocation());
         return stat;
     }
 
@@ -204,6 +212,11 @@ public class ItemStat {
         return this.tier3Spell;
     }
 
+    @Nullable
+    public ArmorEffect getArmorEffect() {
+        return this.armorEffect;
+    }
+
     /**
      * Writes this ItemStat to a buffer for synchronization. Spell upgrades are not synched
      */
@@ -232,6 +245,9 @@ public class ItemStat {
         buffer.writeBoolean(this.tier3Spell != null);
         if (this.tier3Spell != null)
             buffer.writeResourceLocation(this.tier3Spell.getRegistryName());
+        buffer.writeBoolean(this.armorEffect != null);
+        if (this.armorEffect != null)
+            buffer.writeResourceLocation(this.armorEffect.getRegistryName());
     }
 
     public List<Component> texts(ItemStack stack, boolean showStat) {
@@ -392,6 +408,7 @@ public class ItemStat {
         private Spell tier1Spell;
         private Spell tier2Spell;
         private Spell tier3Spell;
+        private ArmorEffect armorEffect;
 
         public Builder(int buy, int sell, int upgrade) {
             this.buyPrice = buy;
@@ -421,8 +438,13 @@ public class ItemStat {
             return this;
         }
 
+        public Builder withArmorEffect(ArmorEffect effect) {
+            this.armorEffect = effect;
+            return this;
+        }
+
         public ItemStat build() {
-            return new ItemStat(this.buyPrice, this.sellPrice, this.upgradeDifficulty, this.element, this.tier1Spell, this.tier2Spell, this.tier3Spell, this.itemStats, this.monsterGiftIncrease);
+            return new ItemStat(this.buyPrice, this.sellPrice, this.upgradeDifficulty, this.element, this.tier1Spell, this.tier2Spell, this.tier3Spell, this.armorEffect, this.itemStats, this.monsterGiftIncrease);
         }
     }
 }

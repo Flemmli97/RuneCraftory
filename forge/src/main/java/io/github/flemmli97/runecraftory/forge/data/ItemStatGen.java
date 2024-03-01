@@ -4,6 +4,7 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
 import io.github.flemmli97.runecraftory.api.datapack.provider.ItemStatProvider;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
+import io.github.flemmli97.runecraftory.common.registry.ModArmorEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
@@ -757,6 +758,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.RES_COLD.get(), 3)
                 .addMonsterStat(ModAttributes.DEFENCE.get(), 0.5));
         this.addStat(ModItems.piyoSandals.get(), new ItemStat.Builder(400, 35, 0)
+                .withArmorEffect(ModArmorEffects.PIYO_SANDALS.get())
                 .addAttribute(ModAttributes.DEFENCE.get(), 5)
                 .addAttribute(ModAttributes.RES_LOVE.get(), 1)
                 .addAttribute(ModAttributes.RES_DIZZY.get(), 50)
