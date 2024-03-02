@@ -613,11 +613,7 @@ public class LangGen implements DataProvider {
         this.add("npc.shop.money.no", "You don't have enough money");
         this.add("npc.shop.success", "Thank you for your purchase");
 
-        this.add("npc.default.greeting.default", "Hello %s.");
-        this.add("npc.default.talk.default", "Hi %s.");
-        this.add("npc.default.follow.yes.default", "Sure %s. Where are we going?");
-        this.add("npc.default.follow.no.default", "Sorry but im busy right now.");
-        this.add("npc.default.follow.stop.default", "Ok.");
+        this.add("npc.conversation.missing", "-Missing Conversation-");
         this.add("npc.default.gift.neutral", "Thank you for your gift.");
         this.add("npc.default.quest.response.default", "Placeholder text for quest response");
 

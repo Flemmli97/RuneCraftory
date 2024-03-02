@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
+import io.github.flemmli97.runecraftory.api.datapack.ConversationContext;
 import io.github.flemmli97.runecraftory.api.datapack.NPCData;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.GiftManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCActionManager;
@@ -135,12 +136,12 @@ public abstract class NPCDataProvider implements DataProvider {
         this.data.put(new ResourceLocation(this.modid, id), data.build());
     }
 
-    public void addNPCData(String id, NPCData.Builder data, Map<NPCData.ConversationType, NPCData.ConversationSet.Builder> conversations,
+    public void addNPCData(String id, NPCData.Builder data, Map<ConversationContext, NPCData.ConversationSet.Builder> conversations,
                            Map<ResourceLocation, QuestResponseBuilder> questConversations) {
         //if (data.look() != null && !this.looks.containsKey(data.look()))
         //    throw new IllegalStateException("NPC has look defined but there is no such look registered");
         conversations.forEach((key, value) -> {
-            ResourceLocation conversationId = new ResourceLocation(this.modid, id + "/" + key.key);
+            ResourceLocation conversationId = new ResourceLocation(this.modid, id + "/" + key.key().getPath());
             this.translations.putAll(value.getTranslations());
             this.conversations.put(conversationId, value.build());
             data.addInteractionIfAbsent(key, conversationId);
@@ -176,10 +177,10 @@ public abstract class NPCDataProvider implements DataProvider {
         this.looks.put(data.look(), look);
     }
 
-    public void addNPCDataAll(String id, NPCData.Builder data, Map<NPCData.ConversationType, NPCData.ConversationSet.Builder> conversations,
+    public void addNPCDataAll(String id, NPCData.Builder data, Map<ConversationContext, NPCData.ConversationSet.Builder> conversations,
                               NPCData.NPCLook look, Map<ResourceLocation, QuestResponseBuilder> questConversations) {
         conversations.forEach((key, value) -> {
-            ResourceLocation conversationId = new ResourceLocation(this.modid, id + "/" + key.key);
+            ResourceLocation conversationId = new ResourceLocation(this.modid, id + "/" + key.key().getPath());
             this.translations.putAll(value.getTranslations());
             this.conversations.put(conversationId, value.build());
             data.addInteractionIfAbsent(key, conversationId);

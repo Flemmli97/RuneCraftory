@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
+import io.github.flemmli97.runecraftory.api.datapack.ConversationContext;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.NPCData;
 import io.github.flemmli97.runecraftory.api.datapack.SimpleEffect;
@@ -513,12 +514,12 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     public void talkTo(ServerPlayer player) {
         boolean doGreet = this.relationManager.getFriendPointData(player.getUUID())
                 .talkTo(this.level, 15);
-        this.speak(player, doGreet ? NPCData.ConversationType.GREETING : NPCData.ConversationType.TALK);
+        this.speak(player, doGreet ? ConversationContext.GREETING : ConversationContext.TALK);
     }
 
-    public void speak(ServerPlayer player, NPCData.ConversationType type) {
+    public void speak(ServerPlayer player, ConversationContext convCtx) {
         int heart = this.relationManager.getFriendPointData(player.getUUID()).points.getLevel();
-        NPCData.ConversationSet conversations = this.data.getConversation(type);
+        NPCData.ConversationSet conversations = this.data.getConversation(convCtx);
         LootContext ctx = new LootContext.Builder((ServerLevel) this.level).withRandom(this.random)
                 .withParameter(LootContextParams.THIS_ENTITY, this)
                 .withParameter(LootContextParams.ORIGIN, this.position())
@@ -538,9 +539,9 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         int size = Math.min(filtered.size(), 2 + this.updater.getDailyRandom().nextInt(2)); //Select 2-3 random lines
         if (size > 0) {
             Map.Entry<String, NPCData.Conversation> randomLine = filtered.get(this.random.nextInt(size));
-            this.tellDialogue(player, type, randomLine.getKey(), randomLine.getValue());
+            this.tellDialogue(player, convCtx, randomLine.getKey(), randomLine.getValue());
         } else {
-            this.tellDialogue(player, type, null, new TranslatableComponent(conversations.getFallbackKey()), List.of());
+            this.tellDialogue(player, convCtx, null, new TranslatableComponent(conversations.getFallbackKey()), List.of());
         }
     }
 
@@ -578,18 +579,18 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             this.relationManager.advanceQuest(player.getUUID(), quest);
     }
 
-    private void tellDialogue(ServerPlayer player, NPCData.ConversationType type, String conversationID, NPCData.Conversation conversation) {
+    private void tellDialogue(ServerPlayer player, ConversationContext convCtx, String conversationID, NPCData.Conversation conversation) {
         List<Component> actions = conversation.actions().stream().map(e -> (Component) new TranslatableComponent(e.translationKey())).toList();
-        this.tellDialogue(player, type, conversationID, new TranslatableComponent(conversation.translationKey()), actions);
+        this.tellDialogue(player, convCtx, conversationID, new TranslatableComponent(conversation.translationKey()), actions);
     }
 
-    private void tellDialogue(ServerPlayer player, NPCData.ConversationType type, String conversationID, Component component, List<Component> actions) {
+    private void tellDialogue(ServerPlayer player, ConversationContext convCtx, String conversationID, Component component, List<Component> actions) {
         this.interactWithPlayer(player);
-        Platform.INSTANCE.sendToClient(new S2CNpcDialogue(this.getId(), type, conversationID, component, actions), player);
+        Platform.INSTANCE.sendToClient(new S2CNpcDialogue(this.getId(), convCtx, conversationID, component, actions), player);
     }
 
-    public void handleDialogueAction(ServerPlayer sender, NPCData.ConversationType type, String conversationID, int actionIdx) {
-        NPCData.ConversationSet conversations = this.data.getConversation(type);
+    public void handleDialogueAction(ServerPlayer sender, ConversationContext convCtx, String conversationID, int actionIdx) {
+        NPCData.ConversationSet conversations = this.data.getConversation(convCtx);
         NPCData.Conversation conversation = conversations.getConversations().get(conversationID);
         if (conversation != null && actionIdx < conversation.actions().size()) {
             NPCData.ConversationActionHolder action = conversation.actions().get(actionIdx);
@@ -600,7 +601,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
                         if (answer != null) {
                             this.relationManager.getFriendPointData(sender.getUUID())
                                     .answer(conversationID, action.friendXP());
-                            this.tellDialogue(sender, type, action.actionValue(), answer);
+                            this.tellDialogue(sender, convCtx, action.actionValue(), answer);
                         }
                     }
                     case QUEST ->
@@ -1164,14 +1165,14 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             int points = this.friendPoints(player);
             float denyChance = points < 3 ? -0.1f + 0.1f * points : (0.4f + 0.15f * points);
             if (!player.isCreative() && Platform.INSTANCE.getPlayerData(player).map(d -> d.getDailyUpdater().getDailyRandom().nextFloat() < denyChance).orElse(true)) {
-                this.speak(player, NPCData.ConversationType.FOLLOWNO);
+                this.speak(player, ConversationContext.FOLLOW_NO);
                 return false;
             }
-            this.speak(player, NPCData.ConversationType.FOLLOWYES);
+            this.speak(player, ConversationContext.FOLLOW_YES);
             this.entityToFollowUUID = player.getUUID();
         } else {
             if (this.followEntity() instanceof ServerPlayer serverPlayer)
-                this.speak(serverPlayer, NPCData.ConversationType.FOLLOWSTOP);
+                this.speak(serverPlayer, ConversationContext.FOLLOW_STOP);
             this.entityToFollowUUID = null;
         }
         this.entityToFollow = player;

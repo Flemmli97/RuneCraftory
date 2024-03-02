@@ -8,11 +8,11 @@
   "neutralGiftResponse": "npc.generic.2.gift.default",
   "giftItems": {},
   "interactions": {
-    "GREETING": "runecraftory:random_npc_2/greeting",
-    "TALK": "runecraftory:random_npc_2/talk",
-    "FOLLOWYES": "runecraftory:random_npc_2/follow.yes",
-    "FOLLOWNO": "runecraftory:random_npc_2/follow.no",
-    "FOLLOWSTOP": "runecraftory:random_npc_2/follow.stop"
+    "runecraftory:greeting": "runecraftory:random_npc_2/greeting",
+    "runecraftory:talk": "runecraftory:random_npc_2/talk",
+    "runecraftory:follow_yes": "runecraftory:random_npc_2/follow_yes",
+    "runecraftory:follow_no": "runecraftory:random_npc_2/follow_no",
+    "runecraftory:follow_stop": "runecraftory:random_npc_2/follow_stop"
   },
   "questHandler": {
     "responses": {},

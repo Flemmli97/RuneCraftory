@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.api.datapack.NPCData;
+import io.github.flemmli97.runecraftory.api.datapack.ConversationContext;
 import io.github.flemmli97.runecraftory.client.PlaceHolderComponent;
 import io.github.flemmli97.runecraftory.client.gui.widgets.DialogueOptionButton;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
@@ -44,7 +44,7 @@ public class NPCDialogueGui<T extends EntityNPCBase> extends Screen {
 
     protected final T entity;
 
-    private NPCData.ConversationType type;
+    private ConversationContext convCtx;
     private String conversationID;
     private List<ConversationLine> conversation;
     private List<Component> actions;
@@ -104,8 +104,8 @@ public class NPCDialogueGui<T extends EntityNPCBase> extends Screen {
         for (int i = this.actions.size() - 1; i >= 0; i--) {
             int actionIdx = i;
             DialogueOptionButton btn = new DialogueOptionButton(this.width / 2, this.topPos - 20 + y, this.font, this.actions.get(i), b -> {
-                if (this.type != null && this.conversationID != null)
-                    Platform.INSTANCE.sendToServer(new C2SDialogueAction(this.entity.getId(), this.type, this.conversationID, actionIdx));
+                if (this.convCtx != null && this.conversationID != null)
+                    Platform.INSTANCE.sendToServer(new C2SDialogueAction(this.entity.getId(), this.convCtx, this.conversationID, actionIdx));
             });
             btn.y -= btn.getHeight();
             btn.visible = visible;
@@ -169,16 +169,16 @@ public class NPCDialogueGui<T extends EntityNPCBase> extends Screen {
         super.removed();
         Minecraft.getInstance().options.keyUse.consumeClick();
         Minecraft.getInstance().options.keyUse.setDown(false);
-        Platform.INSTANCE.sendToServer(new C2SNPCInteraction(this.entity.getId(), this.type == null ? C2SNPCInteraction.Type.CLOSE_QUEST : C2SNPCInteraction.Type.CLOSE, this.conversationID));
+        Platform.INSTANCE.sendToServer(new C2SNPCInteraction(this.entity.getId(), this.convCtx == null ? C2SNPCInteraction.Type.CLOSE_QUEST : C2SNPCInteraction.Type.CLOSE, this.conversationID));
     }
 
-    public void updateConversation(Minecraft mc, NPCData.ConversationType type, String conversationID, Component conversation, List<Component> actions) {
+    public void updateConversation(Minecraft mc, ConversationContext convCtx, String conversationID, Component conversation, List<Component> actions) {
         conversation = PlaceHolderComponent.parseComponent(conversation, Map.of(PlaceHolderComponent.NPC, this.entity.getDisplayName(),
                 PlaceHolderComponent.PLAYER, mc.player.getDisplayName()));
         this.conversation = mc.font.getSplitter().splitLines(conversation, LINE_WIDTH, conversation.getStyle())
                 .stream().map(txt -> new ConversationLine(mc.font.width(txt), txt, Language.getInstance().getVisualOrder(txt))).toList();
         this.actions = actions;
-        this.type = type;
+        this.convCtx = convCtx;
         this.conversationID = conversationID;
         this.lineProgress = 0;
         this.textProgress = 0;

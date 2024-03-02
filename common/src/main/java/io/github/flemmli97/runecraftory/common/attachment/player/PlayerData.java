@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.attachment.player;
 import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
+import io.github.flemmli97.runecraftory.api.datapack.NPCData;
 import io.github.flemmli97.runecraftory.api.datapack.ShopItemProperties;
 import io.github.flemmli97.runecraftory.api.datapack.SkillProperties;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
@@ -124,6 +125,9 @@ public class PlayerData {
     private int breakTick;
 
     private int mobLevelIncrease;
+
+    private NPCData.Gender gender;
+
 
     public PlayerData() {
         for (EnumSkills skill : EnumSkills.values()) {
@@ -659,6 +663,10 @@ public class PlayerData {
 
     public int getMobLevelIncrease() {
         return this.mobLevelIncrease;
+    }
+
+    public NPCData.Gender getGender() {
+        return this.gender;
     }
 
     public void readFromNBT(CompoundTag nbt, Player player) {

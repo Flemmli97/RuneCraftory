@@ -23,11 +23,11 @@
     }
   },
   "interactions": {
-    "GREETING": "runecraftory:smith/male_1/greeting",
-    "TALK": "runecraftory:smith/male_1/talk",
-    "FOLLOWYES": "runecraftory:smith/male_1/follow.yes",
-    "FOLLOWNO": "runecraftory:smith/male_1/follow.no",
-    "FOLLOWSTOP": "runecraftory:smith/male_1/follow.stop"
+    "runecraftory:greeting": "runecraftory:smith/male_1/greeting",
+    "runecraftory:talk": "runecraftory:smith/male_1/talk",
+    "runecraftory:follow_yes": "runecraftory:smith/male_1/follow_yes",
+    "runecraftory:follow_no": "runecraftory:smith/male_1/follow_no",
+    "runecraftory:follow_stop": "runecraftory:smith/male_1/follow_stop"
   },
   "questHandler": {
     "responses": {

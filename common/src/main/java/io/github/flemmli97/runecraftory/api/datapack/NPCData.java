@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.api.datapack;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
@@ -58,7 +57,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                       Gender gender, List<NPCJob> profession, @Nullable ResourceLocation look,
                       @Nullable Pair<EnumSeason, Integer> birthday,
                       int weight, String neutralGiftResponse,
-                      Map<ConversationType, ResourceLocation> interactions,
+                      Map<ConversationContext, ResourceLocation> interactions,
                       QuestHandler questHandler,
                       Map<String, Gift> giftItems, @Nullable NPCSchedule.Schedule schedule,
                       @Nullable Map<Attribute, Double> baseStats, @Nullable Map<Attribute, Double> statIncrease,
@@ -70,31 +69,24 @@ public record NPCData(@Nullable String name, @Nullable String surname,
     public static final NPCData DEFAULT_DATA = new NPCData(null, null, Gender.UNDEFINED, List.of(), null, null, 1, "npc.default.gift.neutral",
             Map.of(), new QuestHandler(Map.of(), Set.of()), Map.of(), null, null, null, 1, null, 0, RelationShipState.DEFAULT);
 
-    private static Map<ConversationType, ConversationSet> buildDefaultInteractionMap() {
-        ImmutableMap.Builder<ConversationType, ConversationSet> builder = new ImmutableMap.Builder<>();
-        for (ConversationType type : ConversationType.values())
-            builder.put(type, new ConversationSet("npc.default." + type.key + ".default", Map.of()));
-        return builder.build();
-    }
-
-    public static <E extends Enum<?>, T> Codec<Map<E, T>> filledMap(Class<E> enumClss, Codec<Map<E, T>> codec) {
-        return codec.flatXmap(filledMapCheck(enumClss), filledMapCheck(enumClss));
-    }
-
-    public static <E extends Enum<?>, T> Function<Map<E, T>, DataResult<Map<E, T>>> filledMapCheck(Class<E> enumClss) {
-        return map -> {
-            E[] enums = enumClss.getEnumConstants();
-            for (E e : enums)
+    public static <T> Codec<Map<ConversationContext, T>> filledMap(Codec<Map<ConversationContext, T>> codec) {
+        Function<Map<ConversationContext, T>, DataResult<Map<ConversationContext, T>>> check = map -> {
+            List<ResourceLocation> missing = new ArrayList<>();
+            for (ConversationContext e : ConversationContext.getRegistered()) {
                 if (!map.containsKey(e)) {
-                    return DataResult.error("Map is missing value for " + e);
+                    missing.add(e.key());
                 }
+            }
+            if (!missing.isEmpty())
+                return DataResult.error("Conversation map is missing conversation for contexts: " + missing, map);
             return DataResult.success(map);
         };
+        return codec.flatXmap(check, DataResult::success);
     }
 
     public static final Codec<NPCData> CODEC = RecordCodecBuilder.create(inst ->
             inst.group(
-                    filledMap(ConversationType.class, Codec.unboundedMap(CodecHelper.enumCodec(ConversationType.class, null), ResourceLocation.CODEC))
+                    filledMap(Codec.unboundedMap(ResourceLocation.CODEC.flatComapMap(ConversationContext::get, ctx -> DataResult.success(ctx.key())), ResourceLocation.CODEC))
                             .fieldOf("interactions").forGetter(d -> d.interactions),
                     QuestHandler.CODEC.fieldOf("questHandler").forGetter(d -> d.questHandler),
                     NPCSchedule.Schedule.CODEC.optionalFieldOf("schedule").forGetter(d -> Optional.ofNullable(d.schedule)),
@@ -121,9 +113,11 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             ).apply(inst, (interactions, questHandler, schedule, combat, romanceable, neutralGift, giftItems, look, birthday, weight, unique, name, surname, gender, profession) -> new NPCData(name.orElse(null), surname.orElse(null),
                     gender, profession.orElse(List.of()), look.orElse(null), birthday.orElse(null), weight, neutralGift, interactions, questHandler, giftItems, schedule.orElse(null), combat.map(d -> d.baseStats).orElse(null), combat.map(d -> d.statIncrease).orElse(null), combat.map(d -> d.baseLevel).orElse(1), combat.map(d -> d.npcAction).orElse(null), unique.orElse(0), romanceable)));
 
-    public ConversationSet getConversation(ConversationType type) {
-        ResourceLocation conversationId = this.interactions().get(type);
-        return DataPackHandler.INSTANCE.npcConversationManager().get(conversationId, ConversationSet.DEFAULT.get(type));
+    public ConversationSet getConversation(ConversationContext convCtx) {
+        ResourceLocation conversationId = this.interactions().get(convCtx);
+        if (conversationId == null)
+            return ConversationSet.DEFAULT;
+        return DataPackHandler.INSTANCE.npcConversationManager().get(conversationId, ConversationSet.DEFAULT);
     }
 
     public ConversationSet getFromQuest(ResourceLocation quest, int state) {
@@ -155,21 +149,6 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         NON_ROMANCEABLE,
         NO_ROMANCE_NPC,
         NO_ROMANCE
-    }
-
-    public enum ConversationType {
-
-        GREETING("greeting"),
-        TALK("talk"),
-        FOLLOWYES("follow.yes"),
-        FOLLOWNO("follow.no"),
-        FOLLOWSTOP("follow.stop");
-
-        public final String key;
-
-        ConversationType(String key) {
-            this.key = key;
-        }
     }
 
     record NPCCombat(@Nullable Map<Attribute, Double> baseStats, @Nullable Map<Attribute, Double> statIncrease,
@@ -215,7 +194,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         private final int weight;
         private String neutralGiftResponse;
         private List<NPCJob> professions = new ArrayList<>();
-        private final Map<ConversationType, ResourceLocation> interactions = new TreeMap<>();
+        private final Map<ConversationContext, ResourceLocation> interactions = new LinkedHashMap<>();
         private final Map<String, Gift> giftItems = new LinkedHashMap<>();
         private Pair<EnumSeason, Integer> birthday;
         private NPCSchedule.Schedule schedule;
@@ -271,13 +250,13 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             return this;
         }
 
-        public Builder addInteraction(ConversationType type, ResourceLocation conversationId) {
-            this.interactions.put(type, conversationId);
+        public Builder addInteraction(ConversationContext convCtx, ResourceLocation conversationId) {
+            this.interactions.put(convCtx, conversationId);
             return this;
         }
 
-        public Builder addInteractionIfAbsent(ConversationType type, ResourceLocation conversationId) {
-            this.interactions.putIfAbsent(type, conversationId);
+        public Builder addInteractionIfAbsent(ConversationContext convCtx, ResourceLocation conversationId) {
+            this.interactions.putIfAbsent(convCtx, conversationId);
             return this;
         }
 
@@ -344,9 +323,9 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         public NPCData build() {
             if (this.neutralGiftResponse == null)
                 throw new IllegalStateException("Neutral gift response not set.");
-            for (ConversationType type : ConversationType.values()) {
-                if (!this.interactions.containsKey(type))
-                    throw new IllegalStateException("Missing interactions for " + type);
+            for (ConversationContext convCtx : ConversationContext.dataGenVerify()) {
+                if (!this.interactions.containsKey(convCtx))
+                    throw new IllegalStateException("Missing interactions for " + convCtx);
             }
             return new NPCData(this.name, this.surname, this.gender, this.professions, this.look, this.birthday, this.weight, this.neutralGiftResponse, this.interactions,
                     new QuestHandler(this.responses, this.requiredQuests), this.giftItems, this.schedule,
@@ -362,7 +341,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                         Codec.unboundedMap(Codec.STRING, Conversation.CODEC).fieldOf("conversations").forGetter(d -> d.conversations)
                 ).apply(inst, ConversationSet::new));
 
-        public static final Map<ConversationType, ConversationSet> DEFAULT = buildDefaultInteractionMap();
+        public static final ConversationSet DEFAULT = new ConversationSet("npc.conversation.missing", Map.of());
 
         private final String fallbackKey;
         private final Map<String, Conversation> conversations;

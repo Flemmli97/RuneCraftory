@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.forge.data;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.api.datapack.ConversationContext;
 import io.github.flemmli97.runecraftory.api.datapack.NPCData;
 import io.github.flemmli97.runecraftory.api.datapack.provider.NPCDataProvider;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.AttackMeleeAction;
@@ -55,20 +56,20 @@ public class NPCDataGen extends NPCDataProvider {
                         .addTranslation(QuestGen.getTask(QuestGen.TAMING), "Tame a monster")
                         .addTranslation(QuestGen.getDescription(QuestGen.TAMING), "I need you to tame a monster. Come see me."),
                 of(m -> {
-                    m.put(NPCData.ConversationType.GREETING, new NPCData.ConversationSet.Builder("npc.generic.greeting.default", "Hello %player%.")
+                    m.put(ConversationContext.GREETING, new NPCData.ConversationSet.Builder("npc.generic.greeting.default", "Hello %player%.")
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.greeting.1", 0, 10).addCondition(TimeCheck.time(IntRange.range(0, 12000)).build()), "Good day %player%.")
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.greeting.2", 0, 10).addCondition(TimeCheck.time(IntRange.range(12000, 14000)).build()), "Good evening %player%.")
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.greeting.3", 0, 10), "Hi. How are you today %player%?"));
-                    m.put(NPCData.ConversationType.TALK, new NPCData.ConversationSet.Builder("npc.generic.talk.default", "...")
+                    m.put(ConversationContext.TALK, new NPCData.ConversationSet.Builder("npc.generic.talk.default", "...")
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.talk.1", 0, 10)
                                     .addAction(new NPCData.ConversationActionHolder("npc.generic.talk.1.answer.same", NPCData.ConversationAction.ANSWER, "npc.generic.talk.1.response.same", 0), "Same")
                                     .addAction(new NPCData.ConversationActionHolder("npc.generic.talk.1.answer.ok", NPCData.ConversationAction.ANSWER, "npc.generic.talk.1.response.ok", 0), "Ok..."), "On sunny days I like to go out and walk a lot.")
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.talk.1.response.same", 0, 10).setAnswer(), "It's nice right?")
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.talk.1.response.ok", 0, 10).setAnswer(), "You don't?")
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.talk.2", 0, 10), "I don't like working."));
-                    m.put(NPCData.ConversationType.FOLLOWYES, new NPCData.ConversationSet.Builder("npc.generic.follow.yes", "Ok"));
-                    m.put(NPCData.ConversationType.FOLLOWNO, new NPCData.ConversationSet.Builder("npc.generic.follow.no", "Sorry but I am busy right now."));
-                    m.put(NPCData.ConversationType.FOLLOWSTOP, new NPCData.ConversationSet.Builder("npc.generic.follow.stop", "Ok. See you again."));
+                    m.put(ConversationContext.FOLLOW_YES, new NPCData.ConversationSet.Builder("npc.generic.follow.yes", "Ok"));
+                    m.put(ConversationContext.FOLLOW_NO, new NPCData.ConversationSet.Builder("npc.generic.follow.no", "Sorry but I am busy right now."));
+                    m.put(ConversationContext.FOLLOW_STOP, new NPCData.ConversationSet.Builder("npc.generic.follow.stop", "Ok. See you again."));
                 }),
                 of(m -> {
                     m.put(QuestGen.TAMING, new QuestResponseBuilder(
@@ -84,15 +85,15 @@ public class NPCDataGen extends NPCDataProvider {
                         .setNeutralGiftResponse("npc.generic.2.gift.default", "Thanks. I appreciate it")
                         .withCombatAction(genericAttack),
                 of(m -> {
-                    m.put(NPCData.ConversationType.GREETING, new NPCData.ConversationSet.Builder("npc.generic.2.greeting.default", "Hello %player%.")
+                    m.put(ConversationContext.GREETING, new NPCData.ConversationSet.Builder("npc.generic.2.greeting.default", "Hello %player%.")
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.2.greeting.1", 0, 10), "Howdy %player%")
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.2.greeting.2", 0, 10), "Hi. Whats up %player%?"));
-                    m.put(NPCData.ConversationType.TALK, new NPCData.ConversationSet.Builder("npc.generic.2.talk.default", "...")
+                    m.put(ConversationContext.TALK, new NPCData.ConversationSet.Builder("npc.generic.2.talk.default", "...")
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.2.talk.1", 0, 10), "Did you know that upgrading a weapon with scrap metal + makes it do 1 damage?")
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.2.talk.2", 0, 10), "Those villagers seem strange. Why do they have no hands?"));
-                    m.put(NPCData.ConversationType.FOLLOWYES, new NPCData.ConversationSet.Builder("npc.generic.2.follow.yes", "Where are we going?"));
-                    m.put(NPCData.ConversationType.FOLLOWNO, new NPCData.ConversationSet.Builder("npc.generic.2.follow.no", "Sorry but I'm have something to take care of."));
-                    m.put(NPCData.ConversationType.FOLLOWSTOP, new NPCData.ConversationSet.Builder("npc.generic.2.follow.stop", "Ok. Cya."));
+                    m.put(ConversationContext.FOLLOW_YES, new NPCData.ConversationSet.Builder("npc.generic.2.follow.yes", "Where are we going?"));
+                    m.put(ConversationContext.FOLLOW_NO, new NPCData.ConversationSet.Builder("npc.generic.2.follow.no", "Sorry but I'm have something to take care of."));
+                    m.put(ConversationContext.FOLLOW_STOP, new NPCData.ConversationSet.Builder("npc.generic.2.follow.stop", "Ok. Cya."));
                 }),
                 Map.of());
 
@@ -102,15 +103,15 @@ public class NPCDataGen extends NPCDataProvider {
                         .setNeutralGiftResponse("npc.generic.3.gift.default", "Thank you for your gift")
                         .withCombatAction(genericAttack),
                 of(m -> {
-                    m.put(NPCData.ConversationType.GREETING, new NPCData.ConversationSet.Builder("npc.generic.3.greeting.default", "Hi %player%. How are you doing today?")
+                    m.put(ConversationContext.GREETING, new NPCData.ConversationSet.Builder("npc.generic.3.greeting.default", "Hi %player%. How are you doing today?")
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.3.greeting.1", 0, 10), "Nice to see you"));
-                    m.put(NPCData.ConversationType.TALK, new NPCData.ConversationSet.Builder("npc.generic.3.talk.default", "...")
+                    m.put(ConversationContext.TALK, new NPCData.ConversationSet.Builder("npc.generic.3.talk.default", "...")
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.3.talk.2", 0, 10), "A forge will allow you to craft your own weapons.")
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.3.talk.2", 0, 10).addCondition(WeatherCheck.weather().setRaining(true).build()), "I don't like the rain.")
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.3.talk.2", 0, 10), "I've heard that there are places in this world where very strong monster appear."));
-                    m.put(NPCData.ConversationType.FOLLOWYES, new NPCData.ConversationSet.Builder("npc.generic.3.follow.yes", "Sure. Where do you want to go?"));
-                    m.put(NPCData.ConversationType.FOLLOWNO, new NPCData.ConversationSet.Builder("npc.generic.3.follow.no", "I think I still have some things to do first."));
-                    m.put(NPCData.ConversationType.FOLLOWSTOP, new NPCData.ConversationSet.Builder("npc.generic.3.follow.stop", "Oh ok. Well then later."));
+                    m.put(ConversationContext.FOLLOW_YES, new NPCData.ConversationSet.Builder("npc.generic.3.follow.yes", "Sure. Where do you want to go?"));
+                    m.put(ConversationContext.FOLLOW_NO, new NPCData.ConversationSet.Builder("npc.generic.3.follow.no", "I think I still have some things to do first."));
+                    m.put(ConversationContext.FOLLOW_STOP, new NPCData.ConversationSet.Builder("npc.generic.3.follow.stop", "Oh ok. Well then later."));
                 }),
                 Map.of());
 
@@ -141,15 +142,15 @@ public class NPCDataGen extends NPCDataProvider {
                         .addTranslation(QuestGen.getTask(QuestGen.MINING), "Acquire Hardware??")
                         .addTranslation(QuestGen.getDescription(QuestGen.MINING), "Come see me."),
                 of(m -> {
-                    m.put(NPCData.ConversationType.GREETING, new NPCData.ConversationSet.Builder("npc.smith.male.1.greeting.default", "Hello %player%. Let's do our best again today!"));
-                    m.put(NPCData.ConversationType.TALK, new NPCData.ConversationSet.Builder("npc.smith.male.1.talk.default", "...")
+                    m.put(ConversationContext.GREETING, new NPCData.ConversationSet.Builder("npc.smith.male.1.greeting.default", "Hello %player%. Let's do our best again today!"));
+                    m.put(ConversationContext.TALK, new NPCData.ConversationSet.Builder("npc.smith.male.1.talk.default", "...")
                             .addConversation(new NPCData.Conversation.Builder("npc.smith.male.1.talk.1", 0, 10), "Nothing beats the clanging sound of a working forge.")
                             .addConversation(new NPCData.Conversation.Builder("npc.smith.male.1.talk.2", 0, 10), "There are multiple different weapon types. You should try them all out to find the one that suits you the best.")
                             .addConversation(new NPCData.Conversation.Builder("npc.smith.male.1.talk.thunder", 0, 10)
                                     .addCondition(WeatherCheck.weather().setThundering(true).build()), "It is really pouring down huh?"));
-                    m.put(NPCData.ConversationType.FOLLOWYES, new NPCData.ConversationSet.Builder("npc.smith.male.1.follow.yes", "Ok. Where are we going?"));
-                    m.put(NPCData.ConversationType.FOLLOWNO, new NPCData.ConversationSet.Builder("npc.smith.male.1.follow.no", "Hmm sorry but I can't right now."));
-                    m.put(NPCData.ConversationType.FOLLOWSTOP, new NPCData.ConversationSet.Builder("npc.smith.male.1.follow.stop", "Cya then!"));
+                    m.put(ConversationContext.FOLLOW_YES, new NPCData.ConversationSet.Builder("npc.smith.male.1.follow.yes", "Ok. Where are we going?"));
+                    m.put(ConversationContext.FOLLOW_NO, new NPCData.ConversationSet.Builder("npc.smith.male.1.follow.no", "Hmm sorry but I can't right now."));
+                    m.put(ConversationContext.FOLLOW_STOP, new NPCData.ConversationSet.Builder("npc.smith.male.1.follow.stop", "Cya then!"));
                 }),
                 new NPCData.NPCLook(NPCData.Gender.MALE, npcTexture("smith/male_1"), null, 0, List.of()),
                 of(m -> {
@@ -171,15 +172,15 @@ public class NPCDataGen extends NPCDataProvider {
                         .setNeutralGiftResponse("npc.smith.female.1.gift.default", "Thanks. Did you know ores are one of my favorite things?")
                         .withCombatAction(meleeAndFireball),
                 of(m -> {
-                    m.put(NPCData.ConversationType.GREETING, new NPCData.ConversationSet.Builder("npc.smith.female.1.greeting.default", "Hello %player%. Today is a nice day!"));
-                    m.put(NPCData.ConversationType.TALK, new NPCData.ConversationSet.Builder("npc.smith.female.1.talk.default", "...")
+                    m.put(ConversationContext.GREETING, new NPCData.ConversationSet.Builder("npc.smith.female.1.greeting.default", "Hello %player%. Today is a nice day!"));
+                    m.put(ConversationContext.TALK, new NPCData.ConversationSet.Builder("npc.smith.female.1.talk.default", "...")
                             .addConversation(new NPCData.Conversation.Builder("npc.smith.female.1.talk.1", 0, 10), "Working as a blacksmith is hard but very fun.")
                             .addConversation(new NPCData.Conversation.Builder("npc.smith.female.1.talk.2", 0, 10), "Someday I would like to make some kind of legendary weapon.")
                             .addConversation(new NPCData.Conversation.Builder("npc.smith.female.1.talk.height", 0, 10)
                                     .addCondition(LocationCheck.checkLocation(new LocationPredicate.Builder().setY(MinMaxBounds.Doubles.atLeast(150))).build()), "Urgh. I'm no good with this height..."));
-                    m.put(NPCData.ConversationType.FOLLOWYES, new NPCData.ConversationSet.Builder("npc.smith.female.1.follow.yes", "Ok. Where are we going?"));
-                    m.put(NPCData.ConversationType.FOLLOWNO, new NPCData.ConversationSet.Builder("npc.smith.female.1.follow.no", "Sorry but I'm busy right now."));
-                    m.put(NPCData.ConversationType.FOLLOWSTOP, new NPCData.ConversationSet.Builder("npc.smith.female.1.follow.stop", "Bye! See you next time"));
+                    m.put(ConversationContext.FOLLOW_YES, new NPCData.ConversationSet.Builder("npc.smith.female.1.follow.yes", "Ok. Where are we going?"));
+                    m.put(ConversationContext.FOLLOW_NO, new NPCData.ConversationSet.Builder("npc.smith.female.1.follow.no", "Sorry but I'm busy right now."));
+                    m.put(ConversationContext.FOLLOW_STOP, new NPCData.ConversationSet.Builder("npc.smith.female.1.follow.stop", "Bye! See you next time"));
                 }),
                 new NPCData.NPCLook(NPCData.Gender.FEMALE, npcTexture("smith/female_1"), null, 0, List.of(new NPCData.LookFeature(NPCData.StaticLookTypes.SLIM_MODEL))),
                 of(m -> {
@@ -204,13 +205,13 @@ public class NPCDataGen extends NPCDataProvider {
                         .addTranslation(QuestGen.getTask(QuestGen.SHIP_TURNIP), "First Shipment")
                         .addTranslation(QuestGen.getDescription(QuestGen.SHIP_TURNIP), "Come see me."),
                 of(m -> {
-                    m.put(NPCData.ConversationType.GREETING, new NPCData.ConversationSet.Builder("npc.shop_owner.male.1.greeting.default", "Hey. Nice to see you %player%."));
-                    m.put(NPCData.ConversationType.TALK, new NPCData.ConversationSet.Builder("npc.shop_owner.male.1.talk.default", "...")
+                    m.put(ConversationContext.GREETING, new NPCData.ConversationSet.Builder("npc.shop_owner.male.1.greeting.default", "Hey. Nice to see you %player%."));
+                    m.put(ConversationContext.TALK, new NPCData.ConversationSet.Builder("npc.shop_owner.male.1.talk.default", "...")
                             .addConversation(new NPCData.Conversation.Builder("npc.shop_owner.male.1.talk.1", 0, 10), "You should totally check out my shop.")
                             .addConversation(new NPCData.Conversation.Builder("npc.shop_owner.male.1.talk.2", 0, 10), "Not watering crops will make them wilt so be sure to water them everyday."));
-                    m.put(NPCData.ConversationType.FOLLOWYES, new NPCData.ConversationSet.Builder("npc.shop_owner.male.1.follow.yes", "Where are we going?"));
-                    m.put(NPCData.ConversationType.FOLLOWNO, new NPCData.ConversationSet.Builder("npc.shop_owner.male.1.follow.no", "Hmm... maybe another time"));
-                    m.put(NPCData.ConversationType.FOLLOWSTOP, new NPCData.ConversationSet.Builder("npc.shop_owner.male.1.follow.stop", "Ok Bye!"));
+                    m.put(ConversationContext.FOLLOW_YES, new NPCData.ConversationSet.Builder("npc.shop_owner.male.1.follow.yes", "Where are we going?"));
+                    m.put(ConversationContext.FOLLOW_NO, new NPCData.ConversationSet.Builder("npc.shop_owner.male.1.follow.no", "Hmm... maybe another time"));
+                    m.put(ConversationContext.FOLLOW_STOP, new NPCData.ConversationSet.Builder("npc.shop_owner.male.1.follow.stop", "Ok Bye!"));
                 }),
                 new NPCData.NPCLook(NPCData.Gender.MALE, npcTexture("shop_owner/male_1"), null, 0, List.of()),
                 of(m -> {
@@ -231,13 +232,13 @@ public class NPCDataGen extends NPCDataProvider {
                         .setNeutralGiftResponse("npc.shop_owner.female.1.gift.default", "Thank you. Come crops would be nice.")
                         .withCombatAction(genericAttack),
                 of(m -> {
-                    m.put(NPCData.ConversationType.GREETING, new NPCData.ConversationSet.Builder("npc.shop_owner.female.1.greeting.default", "Heya %player%. It's good to see you!"));
-                    m.put(NPCData.ConversationType.TALK, new NPCData.ConversationSet.Builder("npc.shop_owner.female.1.talk.default", "...")
+                    m.put(ConversationContext.GREETING, new NPCData.ConversationSet.Builder("npc.shop_owner.female.1.greeting.default", "Heya %player%. It's good to see you!"));
+                    m.put(ConversationContext.TALK, new NPCData.ConversationSet.Builder("npc.shop_owner.female.1.talk.default", "...")
                             .addConversation(new NPCData.Conversation.Builder("npc.shop_owner.female.1.talk.1", 0, 10), "Buy something from my shop will ya!")
                             .addConversation(new NPCData.Conversation.Builder("npc.shop_owner.female.1.talk.2", 0, 10), "I heard crops can sometimes grow to very big sizes."));
-                    m.put(NPCData.ConversationType.FOLLOWYES, new NPCData.ConversationSet.Builder("npc.shop_owner.female.1.follow.yes", "Where do you want to go?"));
-                    m.put(NPCData.ConversationType.FOLLOWNO, new NPCData.ConversationSet.Builder("npc.shop_owner.female.1.follow.no", "I have something to do right now. Maybe next time..."));
-                    m.put(NPCData.ConversationType.FOLLOWSTOP, new NPCData.ConversationSet.Builder("npc.shop_owner.female.1.follow.stop", "See ya next time. Bye!"));
+                    m.put(ConversationContext.FOLLOW_YES, new NPCData.ConversationSet.Builder("npc.shop_owner.female.1.follow.yes", "Where do you want to go?"));
+                    m.put(ConversationContext.FOLLOW_NO, new NPCData.ConversationSet.Builder("npc.shop_owner.female.1.follow.no", "I have something to do right now. Maybe next time..."));
+                    m.put(ConversationContext.FOLLOW_STOP, new NPCData.ConversationSet.Builder("npc.shop_owner.female.1.follow.stop", "See ya next time. Bye!"));
                 }),
                 new NPCData.NPCLook(NPCData.Gender.FEMALE, npcTexture("shop_owner/female_1"), null, 0, List.of(new NPCData.LookFeature(NPCData.StaticLookTypes.SLIM_MODEL))),
                 of(m -> {
@@ -276,15 +277,15 @@ public class NPCDataGen extends NPCDataProvider {
                         .setStatIncrease(Attributes.MAX_HEALTH, 1)
                         .setBaseLevel(5).withCombatAction(attackAll),
                 of(m -> {
-                    m.put(NPCData.ConversationType.GREETING, new NPCData.ConversationSet.Builder("npc.generic.all.talk.default", "Test")
+                    m.put(ConversationContext.GREETING, new NPCData.ConversationSet.Builder("npc.generic.all.talk.default", "Test")
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.all.greeting.1", 0, 10), "Test")
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.all.greeting.2", 0, 10), "Test"));
-                    m.put(NPCData.ConversationType.TALK, new NPCData.ConversationSet.Builder("npc.generic.2.talk.default", "Test")
+                    m.put(ConversationContext.TALK, new NPCData.ConversationSet.Builder("npc.generic.2.talk.default", "Test")
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.all.talk.1", 0, 10), "Test")
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.all.talk.2", 0, 10), "Test"));
-                    m.put(NPCData.ConversationType.FOLLOWYES, new NPCData.ConversationSet.Builder("npc.generic.all.follow.yes", "Test"));
-                    m.put(NPCData.ConversationType.FOLLOWNO, new NPCData.ConversationSet.Builder("npc.generic.all.follow.no", "Test"));
-                    m.put(NPCData.ConversationType.FOLLOWSTOP, new NPCData.ConversationSet.Builder("npc.generic.all.follow.stop", "Test"));
+                    m.put(ConversationContext.FOLLOWYES, new NPCData.ConversationSet.Builder("npc.generic.all.follow.yes", "Test"));
+                    m.put(ConversationContext.FOLLOW_NO, new NPCData.ConversationSet.Builder("npc.generic.all.follow.no", "Test"));
+                    m.put(ConversationContext.FOLLOW_STOP, new NPCData.ConversationSet.Builder("npc.generic.all.follow.stop", "Test"));
                 }),
                 new NPCData.NPCLook(NPCData.Gender.UNDEFINED, new ResourceLocation(RuneCraftory.MODID, "texture"), "Flemmli97", 0, List.of(
                         new NPCData.LookFeature(NPCData.StaticLookTypes.SLIM_MODEL),

@@ -55,7 +55,7 @@ public class NPCDataManager extends SimpleJsonResourceReloadListener {
                 try {
                     JsonObject obj = el.getAsJsonObject();
                     builder.put(fres, NPCData.CODEC.parse(JsonOps.INSTANCE, obj)
-                            .getOrThrow(false, RuneCraftory.logger::error));
+                            .getOrThrow(true, s -> RuneCraftory.logger.error("NPC: " + fres + " - " + s)));
                 } catch (Exception ex) {
                     RuneCraftory.logger.error("Couldnt parse npc data json {} {}", fres, ex);
                     ex.fillInStackTrace();

@@ -17,11 +17,11 @@
     }
   },
   "interactions": {
-    "GREETING": "runecraftory:random_npc_3/greeting",
-    "TALK": "runecraftory:random_npc_3/talk",
-    "FOLLOWYES": "runecraftory:random_npc_3/follow.yes",
-    "FOLLOWNO": "runecraftory:random_npc_3/follow.no",
-    "FOLLOWSTOP": "runecraftory:random_npc_3/follow.stop"
+    "runecraftory:greeting": "runecraftory:random_npc_3/greeting",
+    "runecraftory:talk": "runecraftory:random_npc_3/talk",
+    "runecraftory:follow_yes": "runecraftory:random_npc_3/follow_yes",
+    "runecraftory:follow_no": "runecraftory:random_npc_3/follow_no",
+    "runecraftory:follow_stop": "runecraftory:random_npc_3/follow_stop"
   },
   "questHandler": {
     "responses": {},

@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import io.github.flemmli97.runecraftory.api.datapack.NPCData;
+import io.github.flemmli97.runecraftory.api.datapack.ConversationContext;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.client.gui.CraftingGui;
 import io.github.flemmli97.runecraftory.client.gui.FarmlandInfo;
@@ -273,12 +273,12 @@ public class ClientHandlers {
         }
     }
 
-    public static void updateNPCDialogue(EntityNPCBase npc, NPCData.ConversationType type, String conversationID, Component component, List<Component> actions) {
+    public static void updateNPCDialogue(EntityNPCBase npc, ConversationContext convCtx, String conversationID, Component component, List<Component> actions) {
         if (Minecraft.getInstance().screen instanceof NPCDialogueGui<?> gui) {
-            gui.updateConversation(Minecraft.getInstance(), type, conversationID, component, actions);
+            gui.updateConversation(Minecraft.getInstance(), convCtx, conversationID, component, actions);
         } else {
             NPCDialogueGui<EntityNPCBase> gui = new NPCDialogueGui<>(npc);
-            gui.updateConversation(Minecraft.getInstance(), type, conversationID, component, actions);
+            gui.updateConversation(Minecraft.getInstance(), convCtx, conversationID, component, actions);
             Minecraft.getInstance().setScreen(gui);
         }
     }
