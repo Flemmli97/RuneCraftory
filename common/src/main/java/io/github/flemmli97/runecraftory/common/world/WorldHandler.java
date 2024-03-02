@@ -32,6 +32,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
@@ -44,7 +45,8 @@ import java.util.UUID;
 
 public class WorldHandler extends SavedData {
 
-    private static final String id = "RCCalendar";
+    private static final String ID_OLD = "RCCalendar";
+    private static final String ID = "RunecraftorySaveData";
 
     private final CalendarImpl calendar = new CalendarImpl();
 
@@ -72,7 +74,17 @@ public class WorldHandler extends SavedData {
     }
 
     public static WorldHandler get(MinecraftServer server) {
-        return server.overworld().getDataStorage().computeIfAbsent(WorldHandler::new, WorldHandler::new, id);
+        DimensionDataStorage storage = server.overworld().getDataStorage();
+        WorldHandler newData = storage.get(WorldHandler::new, ID);
+        if (newData != null)
+            return newData;
+        WorldHandler legacy = storage.get(WorldHandler::new, ID_OLD);
+        if (legacy != null) {
+            storage.set(ID_OLD, null);
+            storage.set(ID, legacy);
+            return legacy;
+        }
+        return storage.computeIfAbsent(WorldHandler::new, WorldHandler::new, ID);
     }
 
     public static boolean canUpdateWeather(Level level) {
