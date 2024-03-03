@@ -7,7 +7,6 @@ import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
@@ -34,7 +33,6 @@ public class DeltaStrikeAttack extends AttackAction {
                 CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets(entity.getLookAngle(), CombatUtils.getAOE(entity, stack, 15), 1))
                         .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
                         .executeAttack();
-                entity.swing(InteractionHand.MAIN_HAND, true);
             }
             entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         }

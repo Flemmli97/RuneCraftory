@@ -10,7 +10,6 @@ import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -48,7 +47,6 @@ public class NaiveBladeAttack extends AttackAction {
                     float reach = (float) entity.getAttributeValue(ModAttributes.ATTACK_RANGE.get()) + 0.5f;
                     List<LivingEntity> entities = entity.level.getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(reach, 1, reach), (t) -> t != entity && !t.isAlliedTo(entity) && t.isPickable() &&
                             inReach(entity.position(), t, reach));
-                    entity.swing(InteractionHand.MAIN_HAND, true);
                     if (entity instanceof ServerPlayer player)
                         player.sweepAttack();
                     CombatUtils.applyTempAttributeMult(entity, Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack));
@@ -67,7 +65,6 @@ public class NaiveBladeAttack extends AttackAction {
                     CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets(entity.getLookAngle(), CombatUtils.getAOE(entity, stack, 25), 1.5f))
                             .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
                             .executeAttack();
-                    entity.swing(InteractionHand.MAIN_HAND, true);
                 }
             }
         } else if (anim.canAttack()) {

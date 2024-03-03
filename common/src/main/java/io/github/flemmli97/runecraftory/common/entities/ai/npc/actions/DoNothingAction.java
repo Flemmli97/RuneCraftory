@@ -2,11 +2,11 @@ package io.github.flemmli97.runecraftory.common.entities.ai.npc.actions;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.github.flemmli97.runecraftory.api.action.AttackAction;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCAttackGoal;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCActions;
 import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 
 import java.util.Optional;
@@ -52,12 +52,12 @@ public class DoNothingAction implements NPCAction {
     }
 
     @Override
-    public AnimatedAction getAction(EntityNPCBase npc) {
+    public AttackAction getAction(EntityNPCBase npc) {
         return null;
     }
 
     @Override
-    public boolean doAction(EntityNPCBase npc, NPCAttackGoal<?> goal, AnimatedAction action) {
+    public boolean doAction(EntityNPCBase npc, NPCAttackGoal<?> goal, AttackAction action) {
         return false;
     }
 }

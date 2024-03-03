@@ -2,14 +2,13 @@ package io.github.flemmli97.runecraftory.common.entities.ai.npc.actions;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
+import io.github.flemmli97.runecraftory.api.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCAttackGoal;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCActions;
 import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
@@ -29,11 +28,11 @@ public class AttackMeleeAction implements NPCAction {
 
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     private AttackMeleeAction(NumberProvider walkTime, Optional<NumberProvider> cooldown) {
-        this(walkTime, cooldown.orElse(NPCAction.CONST_ZERO));
+        this(walkTime, cooldown.orElse(NPCAction.CONST_SEC));
     }
 
     public AttackMeleeAction(NumberProvider walkTime) {
-        this(walkTime, NPCAction.CONST_ZERO);
+        this(walkTime, NPCAction.CONST_SEC);
     }
 
     public AttackMeleeAction(NumberProvider walkTime, NumberProvider cooldown) {
@@ -53,34 +52,29 @@ public class AttackMeleeAction implements NPCAction {
 
     @Override
     public int getCooldown(EntityNPCBase npc) {
-        int cooldown = 20;
-        ItemStack hand = npc.getMainHandItem();
-        if (hand.getItem() instanceof IItemUsable usabe && usabe.getWeaponType() != EnumWeaponType.FARM) {
-            cooldown = 12;
-        }
-        return cooldown + this.cooldown.getInt(NPCAction.createLootContext(npc));
+        return this.cooldown.getInt(NPCAction.createLootContext(npc));
     }
 
     @Override
-    public AnimatedAction getAction(EntityNPCBase npc) {
+    public AttackAction getAction(EntityNPCBase npc) {
         ItemStack hand = npc.getMainHandItem();
         if (hand.getItem() instanceof IItemUsable usabe) {
             return switch (usabe.getWeaponType()) {
                 case FARM -> null;
-                case SHORTSWORD -> ModAttackActions.SHORT_SWORD.get().getAnimation(npc, npc.getRandom().nextInt(2));
-                case LONGSWORD -> ModAttackActions.LONG_SWORD.get().getAnimation(npc, npc.getRandom().nextInt(2));
-                case SPEAR -> ModAttackActions.SPEAR.get().getAnimation(npc, npc.getRandom().nextInt(2));
-                case HAXE -> ModAttackActions.HAMMER_AXE.get().getAnimation(npc, npc.getRandom().nextInt(2));
-                case DUAL -> ModAttackActions.DUAL_BLADES.get().getAnimation(npc, npc.getRandom().nextInt(2));
-                case GLOVE -> ModAttackActions.GLOVES.get().getAnimation(npc, npc.getRandom().nextInt(2));
-                case STAFF -> ModAttackActions.STAFF.get().getAnimation(npc, 0);
+                case SHORTSWORD -> ModAttackActions.SHORT_SWORD.get();
+                case LONGSWORD -> ModAttackActions.LONG_SWORD.get();
+                case SPEAR -> ModAttackActions.SPEAR.get();
+                case HAXE -> ModAttackActions.HAMMER_AXE.get();
+                case DUAL -> ModAttackActions.DUAL_BLADES.get();
+                case GLOVE -> ModAttackActions.GLOVES.get();
+                case STAFF -> ModAttackActions.STAFF.get();
             };
         }
         return null;
     }
 
     @Override
-    public boolean doAction(EntityNPCBase npc, NPCAttackGoal<?> goal, AnimatedAction action) {
+    public boolean doAction(EntityNPCBase npc, NPCAttackGoal<?> goal, AttackAction action) {
         goal.moveToEntityNearer(goal.getAttackTarget(), 1.1f);
         npc.getLookControl().setLookAt(goal.getAttackTarget(), 30, 30);
         double minDist = npc.getMeleeAttackRangeSqr(goal.getAttackTarget());
@@ -89,6 +83,7 @@ public class AttackMeleeAction implements NPCAction {
                 npc.swing(InteractionHand.MAIN_HAND);
                 npc.npcAttack(npc::doHurtTarget);
             }
+            npc.weaponHandler.setChainCount(npc.getRandom().nextInt(2));
             return true;
         }
         return false;

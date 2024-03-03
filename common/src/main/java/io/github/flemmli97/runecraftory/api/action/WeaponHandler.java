@@ -7,6 +7,7 @@ import io.github.flemmli97.runecraftory.common.network.S2CWeaponUse;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.api.entity.IAnimated;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -102,8 +103,13 @@ public class WeaponHandler {
         this.lockLook = false;
         this.currentAction.onStart(entity, this);
         this.consumeSpellOnStart = false;
-        if (packet && !entity.level.isClientSide()) {
-            Platform.INSTANCE.sendToTrackingAndSelf(new S2CWeaponUse(this.currentAction, this.usedWeapon, chain, entity), entity);
+        if (!entity.level.isClientSide) {
+            if (entity instanceof IAnimated animated && this.currentAnim != null) {
+                animated.getAnimationHandler().setAnimation(this.currentAnim);
+            }
+            if (packet) {
+                Platform.INSTANCE.sendToTrackingAndSelf(new S2CWeaponUse(this.currentAction, this.usedWeapon, chain, entity), entity);
+            }
         }
     }
 

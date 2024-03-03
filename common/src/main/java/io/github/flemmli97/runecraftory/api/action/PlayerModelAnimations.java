@@ -155,7 +155,7 @@ public class PlayerModelAnimations {
         ImmutableList.Builder<AnimatedAction> list = new ImmutableList.Builder<>();
         for (int i = 1; i <= amount; i++) {
             Pair<Integer, Integer> val = values.getValues(i);
-            AnimatedAction anim = AnimatedAction.builder(val.getFirst(), baseName + "_" + i).marker(val.getSecond()).build();
+            AnimatedAction anim = AnimatedAction.builder(val.getFirst() + 1, baseName + "_" + i).marker(val.getSecond()).build();
             ALL.add(anim);
             list.add(anim);
         }
@@ -173,7 +173,7 @@ public class PlayerModelAnimations {
     }
 
     private static double length(double length) {
-        return length;
+        return length + 0.05;
     }
 
     interface DependendAnimationValue {

@@ -7,7 +7,6 @@ import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
@@ -41,7 +40,7 @@ public class RushAttack extends AttackAction {
                         .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
                         .doOnSuccess(e -> CombatUtils.knockBackEntity(entity, e, 0.8f))
                         .executeAttack();
-                entity.swing(InteractionHand.MAIN_HAND, true);
+
             }
         } else {
             if (anim.isAtTick(0.32) || anim.isAtTick(0.48)) {
@@ -60,7 +59,7 @@ public class RushAttack extends AttackAction {
                     CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets(entity.getLookAngle(), CombatUtils.getAOE(entity, stack, 10), 0.5f))
                             .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
                             .executeAttack();
-                    entity.swing(InteractionHand.MAIN_HAND, true);
+
                 }
             }
         }

@@ -9,7 +9,6 @@ import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.EntityHitResult;
@@ -31,7 +30,6 @@ public class StaffAttack extends AttackAction {
                     serverPlayer.attack(res.getEntity());
                 staff.castBaseSpell(stack, entity);
                 entity.playSound(SoundEvents.PLAYER_ATTACK_SWEEP, 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
-                entity.swing(InteractionHand.MAIN_HAND, true);
             }
         }
     }

@@ -3,14 +3,13 @@ package io.github.flemmli97.runecraftory.common.entities.ai.npc.actions;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.Spell;
-import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
+import io.github.flemmli97.runecraftory.api.action.AttackAction;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCAttackGoal;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCActions;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 
 import java.util.Optional;
@@ -60,16 +59,20 @@ public class PartyTargetAction implements NPCAction {
     }
 
     @Override
-    public AnimatedAction getAction(EntityNPCBase npc) {
-        return PlayerModelAnimations.STAFF_USE;
+    public AttackAction getAction(EntityNPCBase npc) {
+        return ModAttackActions.STAFF_USE.get();
     }
 
     @Override
-    public boolean doAction(EntityNPCBase npc, NPCAttackGoal<?> goal, AnimatedAction action) {
+    public Spell getSpell() {
+        return this.spell;
+    }
+
+    @Override
+    public boolean doAction(EntityNPCBase npc, NPCAttackGoal<?> goal, AttackAction action) {
         if (npc.followEntity() == null)
             return true;
         npc.getLookControl().setLookAt(npc.followEntity(), 360, 90);
-        npc.useDelayedAttack(() -> this.spell.use((ServerLevel) npc.getLevel(), npc, npc.getMainHandItem(), this.ignoreSeal));
         return true;
     }
 }

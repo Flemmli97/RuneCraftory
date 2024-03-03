@@ -13,7 +13,6 @@ import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
@@ -30,7 +29,6 @@ public class HammerAxeAttack extends AttackAction {
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
         if (anim.canAttack() && handler.getChainCount() != 3) {
             CombatUtils.attack(entity, stack);
-            entity.swing(InteractionHand.MAIN_HAND, true);
         }
         if (handler.getChainCount() == 3) {
             if (anim.isAtTick(0.12)) {

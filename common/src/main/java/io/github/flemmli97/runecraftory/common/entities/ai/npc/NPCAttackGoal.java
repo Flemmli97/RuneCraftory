@@ -1,8 +1,10 @@
 package io.github.flemmli97.runecraftory.common.entities.ai.npc;
 
+import io.github.flemmli97.runecraftory.api.action.AttackAction;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.NPCAction;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
+import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.pathfinder.Path;
@@ -22,7 +24,7 @@ public class NPCAttackGoal<T extends EntityNPCBase> extends Goal {
     private List<NPCAction> actions;
     private int idx, actionDuration, idleTime;
     private boolean initialSelect = true;
-    private AnimatedAction animation;
+    private AttackAction attackAction;
 
     public NPCAttackGoal(T entity) {
         super();
@@ -53,7 +55,10 @@ public class NPCAttackGoal<T extends EntityNPCBase> extends Goal {
     @Override
     public void stop() {
         super.stop();
-        this.attacker.setTarget(null);
+        LivingEntity livingEntity = this.attacker.getTarget();
+        if (!EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(livingEntity)) {
+            this.attacker.setTarget(null);
+        }
         this.actions = null;
         this.idx = 0;
         this.initialSelect = true;
@@ -72,7 +77,7 @@ public class NPCAttackGoal<T extends EntityNPCBase> extends Goal {
         if (this.initialSelect) {
             this.initialSelect = false;
             NPCAction action = this.actions.get(this.idx);
-            this.animation = action.getAction(this.attacker);
+            this.attackAction = action.getAction(this.attacker);
             this.actionDuration = Math.max(1, action.getDuration(this.attacker));
         }
     }
@@ -92,14 +97,17 @@ public class NPCAttackGoal<T extends EntityNPCBase> extends Goal {
             return;
         }
         this.setupValues();
-        boolean done = this.actions.get(this.idx).doAction(this.attacker, this, this.animation);
+        NPCAction npcAction = this.actions.get(this.idx);
+        boolean done = npcAction.doAction(this.attacker, this, this.attackAction);
         if (done || this.actionDuration <= 0) {
-            if (done)
-                this.attacker.getAnimationHandler().setAnimation(this.animation);
-            this.idleTime = this.actions.get(this.idx).getCooldown(this.attacker);
+            if (done && this.attackAction != null) {
+                this.attacker.weaponHandler.doWeaponAttack(this.attacker, this.attackAction, this.attacker.getMainHandItem(), npcAction.getSpell(), false);
+            }
+            this.idleTime = npcAction.getCooldown(this.attacker);
             this.idx++;
             this.initialSelect = true;
-            this.attacker.getNavigation().stop();
+            if (done)
+                this.attacker.getNavigation().stop();
             if (this.idx >= this.actions.size()) {
                 this.selectActionSequence();
             }

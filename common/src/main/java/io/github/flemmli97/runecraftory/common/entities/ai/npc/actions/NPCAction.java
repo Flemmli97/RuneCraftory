@@ -2,10 +2,11 @@ package io.github.flemmli97.runecraftory.common.entities.ai.npc.actions;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.github.flemmli97.runecraftory.api.Spell;
+import io.github.flemmli97.runecraftory.api.action.AttackAction;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCAttackGoal;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.platform.registry.CustomRegistryEntry;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -22,6 +23,7 @@ import java.util.function.Supplier;
 public interface NPCAction {
 
     NumberProvider CONST_ZERO = ConstantValue.exactly(0);
+    NumberProvider CONST_SEC = ConstantValue.exactly(20);
 
     static Optional<NumberProvider> asOpt(NumberProvider val, NumberProvider def) {
         return val.equals(def) ? Optional.empty() : Optional.of(val);
@@ -47,9 +49,13 @@ public interface NPCAction {
 
     int getCooldown(EntityNPCBase npc);
 
-    AnimatedAction getAction(EntityNPCBase npc);
+    AttackAction getAction(EntityNPCBase npc);
 
-    boolean doAction(EntityNPCBase npc, NPCAttackGoal<?> goal, @Nullable AnimatedAction action);
+    default Spell getSpell() {
+        return null;
+    }
+
+    boolean doAction(EntityNPCBase npc, NPCAttackGoal<?> goal, @Nullable AttackAction action);
 
     //Wrapper needed for registries on forge
     class NPCActionCodec extends CustomRegistryEntry<NPCActionCodec> {

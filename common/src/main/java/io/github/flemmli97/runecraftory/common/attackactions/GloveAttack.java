@@ -13,7 +13,6 @@ import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.item.ItemStack;
@@ -39,7 +38,6 @@ public class GloveAttack extends AttackAction {
                                     CombatUtils.EntityAttack.aabbTargets(new AABB(-1, -1, -1, 1, 1, 1).move(entity.position().add(0, 0.2, 0)
                                             .add(entity.getDeltaMovement().normalize().scale(0.4)))))
                             .executeAttack();
-                entity.swing(InteractionHand.MAIN_HAND, true);
             }
             entity.playSound(SoundEvents.PLAYER_ATTACK_STRONG, 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         }

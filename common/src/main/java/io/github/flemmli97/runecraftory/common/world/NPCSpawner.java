@@ -9,6 +9,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.CustomSpawner;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
@@ -21,7 +22,7 @@ public class NPCSpawner implements CustomSpawner {
 
     @Override
     public int tick(ServerLevel level, boolean spawnEnemies, boolean spawnFriendlies) {
-        if (!level.getServer().isSpawningAnimals())
+        if (!level.getServer().isSpawningAnimals() || !level.getGameRules().getBoolean(GameRules.RULE_DOMOBSPAWNING))
             return 0;
         if (--this.cooldown > 0) {
             return 0;

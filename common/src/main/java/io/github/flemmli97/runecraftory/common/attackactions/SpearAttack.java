@@ -19,7 +19,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.RenderShape;
@@ -39,7 +38,6 @@ public class SpearAttack extends AttackAction {
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
         if (anim.canAttack() && handler.getChainCount() != 5) {
             CombatUtils.attack(entity, stack);
-            entity.swing(InteractionHand.MAIN_HAND, true);
         }
         Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
         switch (handler.getChainCount()) {

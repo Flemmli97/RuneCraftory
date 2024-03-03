@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
+import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.datapack.ConversationContext;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.NPCData;
@@ -40,7 +41,9 @@ import io.github.flemmli97.runecraftory.common.registry.ModActivities;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
+import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
+import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
@@ -164,8 +167,6 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     public static final AnimatedAction[] ANIMS = PlayerModelAnimations.getAll().toArray(new AnimatedAction[0]);
     private final AnimationHandler<EntityNPCBase> animationHandler = new AnimationHandler<>(this, ANIMS);
 
-    private Runnable delayedAttack = null;
-
     public final Predicate<LivingEntity> targetPred = (e) -> {
         if (e != this) {
             if (this.followEntity() == null)
@@ -232,6 +233,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     private int prevRestrictionRadius = -1;
 
     public final DailyNPCUpdater updater = new DailyNPCUpdater(this);
+
+    public final WeaponHandler weaponHandler = new WeaponHandler();
 
     public EntityNPCBase(EntityType<? extends EntityNPCBase> type, Level level) {
         super(type, level);
@@ -404,6 +407,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         this.updateSwingTime();
         super.aiStep();
         this.getAnimationHandler().tick();
+        this.weaponHandler.tick(this);
         boolean teleported = false;
         if (this.level instanceof ServerLevel serverLevel) {
             if (this.behaviourState().following && --this.tpCooldown <= 0) {
@@ -730,7 +734,20 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     @Override
     public boolean doHurtTarget(Entity entity) {
-        return CombatUtils.mobAttack(this, entity);
+        return attack(this, entity);
+    }
+
+    public static boolean attack(LivingEntity attacker, Entity target) {
+        ItemStack stack = attacker.getMainHandItem();
+        CustomDamage.Builder source = new CustomDamage.Builder(attacker).hurtResistant(0).element(ItemNBT.getElement(stack));
+        double damagePhys = CombatUtils.getAttributeValue(attacker, Attributes.ATTACK_DAMAGE);
+        if (attacker.level instanceof ServerLevel serverLevel)
+            ModSpells.STAFF_CAST.get().use(serverLevel, attacker, stack);
+        if (ItemNBT.doesFixedOneDamage(stack)) {
+            source.damageType(CustomDamage.DamageType.FIXED);
+            damagePhys = 1;
+        }
+        return CombatUtils.mobAttack(attacker, target, source, damagePhys);
     }
 
     @Override
@@ -1031,23 +1048,18 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         return super.finalizeSpawn(level, difficulty, reason, spawnData, dataTag);
     }
 
-    public void useDelayedAttack(Runnable runnable) {
-        if (this.delayedAttack == null)
-            this.delayedAttack = runnable;
-    }
-
     public void handleAttack(AnimatedAction anim) {
         this.getNavigation().stop();
         if (anim.getTick() == 1 && this.getTarget() != null)
             this.lookAt(this.getTarget(), 360, 90);
-        if (anim.canAttack()) {
+        /*if (anim.canAttack()) {
             if (this.delayedAttack != null) {
                 this.delayedAttack.run();
                 this.delayedAttack = null;
             } else {
                 this.npcAttack(this::doHurtTarget);
             }
-        }
+        }*/
     }
 
     public void npcAttack(Consumer<LivingEntity> cons) {

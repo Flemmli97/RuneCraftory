@@ -8,7 +8,6 @@ import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -33,7 +32,6 @@ public class StormAttack extends AttackAction {
             CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets(entity.getLookAngle(), Math.min(15, CombatUtils.getAOE(entity, stack, 10)), 0.5f))
                     .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
                     .executeAttack();
-            entity.swing(InteractionHand.MAIN_HAND, true);
         }
         Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
         if (handler.getChainCount() != 5 && anim.isAtTick(0.12))

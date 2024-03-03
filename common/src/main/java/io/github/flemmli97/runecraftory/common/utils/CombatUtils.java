@@ -7,6 +7,7 @@ import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.IBaseMob;
+import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
@@ -644,6 +645,8 @@ public class CombatUtils {
         if (entity instanceof Player player) {
             if (stack.getItem() instanceof IAOEWeapon weapon)
                 AOEWeaponHandler.onAOEWeaponSwing(player, stack, weapon);
+        } else if (entity instanceof EntityNPCBase npc) {
+            npc.npcAttack(npc::doHurtTarget);
         }
     }
 

@@ -13,7 +13,6 @@ import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
@@ -30,7 +29,6 @@ public class DualBladeAttack extends AttackAction {
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
         if (!entity.level.isClientSide && anim.canAttack() && handler.getChainCount() != 5 && handler.getChainCount() != 6) {
             CombatUtils.attack(entity, stack);
-            entity.swing(InteractionHand.MAIN_HAND, true);
         }
         Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
         switch (handler.getChainCount()) {
