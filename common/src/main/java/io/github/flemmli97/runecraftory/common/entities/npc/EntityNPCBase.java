@@ -49,6 +49,8 @@ import io.github.flemmli97.runecraftory.common.utils.TeleportUtils;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import io.github.flemmli97.runecraftory.common.world.NPCHandler;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
+import io.github.flemmli97.runecraftory.common.world.family.FamilyEntry;
+import io.github.flemmli97.runecraftory.common.world.family.FamilyHandler;
 import io.github.flemmli97.runecraftory.integration.simplequest.NPCQuest;
 import io.github.flemmli97.runecraftory.integration.simplequest.ProgressState;
 import io.github.flemmli97.runecraftory.integration.simplequest.SimpleQuestIntegration;
@@ -483,6 +485,77 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             case EAT -> stack.getEatingSound();
             default -> SoundEvents.NOTE_BLOCK_PLING;
         };
+        if (stack.getItem() == ModItems.divorcePaper.get()) {
+            if (player instanceof ServerPlayer serverPlayer) {
+                FamilyHandler families = FamilyHandler.get(this.getServer());
+                FamilyEntry family = families.getOrCreateEntry(this);
+                if (player.getUUID().equals(family.getPartner())) {
+                    this.speak(serverPlayer, ConversationContext.DIVORCE);
+                    family.updateRelationship(FamilyEntry.Relationship.NONE, null);
+                    this.relationManager.getFriendPointData(player.getUUID())
+                            .points.addXP(-2000, 10, LevelCalc::friendPointsForNext, () -> {
+                            });
+                } else {
+                    this.speak(serverPlayer, ConversationContext.DIVORCE_ERROR);
+                }
+                stack.shrink(1);
+            }
+            return;
+        }
+        if (stack.getItem() == ModItems.loveLetter.get()) {
+            if (player instanceof ServerPlayer serverPlayer) {
+                FamilyHandler families = FamilyHandler.get(this.getServer());
+                FamilyEntry playerEntry = families.getOrCreateEntry(serverPlayer);
+                FamilyEntry family = families.getOrCreateEntry(this);
+                boolean success = false;
+                if (playerEntry.getRelationship() != FamilyEntry.Relationship.NONE
+                        || family.getRelationship() != FamilyEntry.Relationship.NONE) {
+                    this.speak(serverPlayer, ConversationContext.DATING_DENY);
+                } else {
+                    float chance = this.friendPoints(player) >= 7 ? 0.33f * (this.friendPoints(player) - 6) : 0;
+                    if (chance > 0 && this.updater.getDailyRandom().nextFloat() < chance) {
+                        this.speak(serverPlayer, ConversationContext.DATING_ACCEPT);
+                        family.updateRelationship(FamilyEntry.Relationship.DATING, player.getUUID());
+                        success = true;
+                    } else
+                        this.speak(serverPlayer, ConversationContext.DATING_DENY);
+                }
+                if (!success) {
+                    player.addItem(stack);
+                } else
+                    stack.shrink(1);
+            }
+            return;
+        }
+        if (stack.getItem() == ModItems.engagementRing.get()) {
+            if (player instanceof ServerPlayer serverPlayer) {
+                FamilyHandler families = FamilyHandler.get(this.getServer());
+                FamilyEntry playerEntry = families.getOrCreateEntry(serverPlayer);
+                FamilyEntry family = families.getOrCreateEntry(this);
+                boolean success = false;
+                if ((playerEntry.getRelationship() != FamilyEntry.Relationship.NONE && !this.getUUID().equals(playerEntry.getPartner()))
+                        || family.getPartner() == null
+                        || !family.getPartner().equals(player.getUUID())) {
+                    this.speak(serverPlayer, ConversationContext.MARRIAGE_DENY);
+                } else {
+                    if (family.getRelationship() == FamilyEntry.Relationship.DATING) {
+                        float chance = this.friendPoints(player) >= 10 ? 0.2f * (this.friendPoints(player) - 9) : 0;
+                        if (chance > 0 && this.relationManager.getCompletedQuests(player.getUUID()).containsAll(this.data.questHandler().requiredQuests()) &&
+                                this.updater.getDailyRandom().nextFloat() < chance) {
+                            this.speak(serverPlayer, ConversationContext.MARRIAGE_ACCEPT);
+                            family.updateRelationship(FamilyEntry.Relationship.MARRIED, player.getUUID());
+                            success = true;
+                        } else
+                            this.speak(serverPlayer, ConversationContext.MARRIAGE_DENY);
+                    }
+                }
+                if (!success) {
+                    player.addItem(stack);
+                } else
+                    stack.shrink(1);
+            }
+            return;
+        }
         float mult = 1;
         if (player instanceof ServerPlayer serverPlayer) {
             WorldHandler handler = WorldHandler.get(serverPlayer.getServer());
@@ -496,7 +569,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             copy.setCount(1);
             this.setItemSlot(slot, copy);
         }
-        boolean food = this.applyFoodEffect(stack);
+        this.applyFoodEffect(stack);
         stack.setCount(count);
         if (player instanceof ServerPlayer serverPlayer) {
             NPCData.Gift gift = this.giftOf(stack);
@@ -541,7 +614,9 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             Map.Entry<String, NPCData.Conversation> randomLine = filtered.get(this.random.nextInt(size));
             this.tellDialogue(player, convCtx, randomLine.getKey(), randomLine.getValue());
         } else {
-            this.tellDialogue(player, convCtx, null, new TranslatableComponent(conversations.getFallbackKey()), List.of());
+            Component dialog = conversations.getFallbackKey().equals(NPCData.ConversationSet.DEFAULT.getFallbackKey())
+                    ? new TranslatableComponent(conversations.getFallbackKey(), convCtx.key()) : new TranslatableComponent(conversations.getFallbackKey());
+            this.tellDialogue(player, convCtx, null, dialog, List.of());
         }
     }
 
@@ -634,8 +709,23 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         return this.relationManager.getCompletedQuests(player.getUUID()).containsAll(quest.parentQuests);
     }
 
-    public NPCRelation relationFor(UUID player) {
-        return this.relationManager.getRelationFor(player);
+    /**
+     * Gets the family of this npc. Returns null on client
+     */
+    @Nullable
+    public FamilyEntry getFamily() {
+        if (this.getServer() != null) {
+            return FamilyHandler.get(this.getServer())
+                    .getOrCreateEntry(this);
+        }
+        return null;
+    }
+
+    public FamilyEntry.Relationship relationFor(UUID player) {
+        FamilyEntry entry = this.getFamily();
+        if (entry != null && player.equals(entry.getPartner()))
+            return entry.getRelationship();
+        return FamilyEntry.Relationship.NONE;
     }
 
     @Override
@@ -830,11 +920,11 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         this.releasePOI(this.getWorkPlace());
         this.releasePOI(this.getMeetingPos());
         super.remove(reason);
-        if (this.getServer() != null && (reason == RemovalReason.KILLED || reason == RemovalReason.DISCARDED)) {
+        if (this.getServer() != null) {
             NPCHandler handler = WorldHandler.get(this.getServer()).npcHandler;
-            if (this.data != null && this.data.unique() > 0)
-                WorldHandler.get(this.getServer()).npcHandler.removeUniqueNPC(this.getUUID(), this.data);
-            handler.removeNPC(this);
+            if (reason.shouldDestroy() && this.data != null && this.data.unique() > 0)
+                handler.removeUniqueNPC(this.getUUID(), this.data);
+            handler.removeNPC(this, reason);
         }
     }
 

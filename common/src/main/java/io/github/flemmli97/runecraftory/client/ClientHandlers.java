@@ -23,6 +23,7 @@ import io.github.flemmli97.runecraftory.common.entities.npc.job.ShopState;
 import io.github.flemmli97.runecraftory.common.network.S2CTriggers;
 import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
+import io.github.flemmli97.runecraftory.common.world.family.SyncedFamilyData;
 import io.github.flemmli97.runecraftory.integration.simplequest.ClientSideQuestDisplay;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.client.CameraType;
@@ -156,13 +157,13 @@ public class ClientHandlers {
         }
     }
 
-    public static void openNPCChat(int id, ShopState isShopOpen, int followState, Map<String, List<Component>> actions, ResourceLocation quest) {
+    public static void openNPCChat(int id, ShopState isShopOpen, SyncedFamilyData family, int followState, Map<String, List<Component>> actions, ResourceLocation quest) {
         Entity entity = Minecraft.getInstance().level.getEntity(id);
         if (entity instanceof EntityNPCBase npc) {
             if (followState == 1)
                 Minecraft.getInstance().setScreen(new NPCCompanionGui(npc, isShopOpen == ShopState.OPEN, quest));
             else
-                Minecraft.getInstance().setScreen(new NPCGui<>(npc, isShopOpen, followState == 0, actions, quest));
+                Minecraft.getInstance().setScreen(new NPCGui<>(npc, isShopOpen, followState == 0, family, actions, quest));
         }
     }
 

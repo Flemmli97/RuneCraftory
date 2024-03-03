@@ -10,6 +10,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,7 +23,6 @@ public class NPCHandler {
 
     private final Set<UUID> npcs = new HashSet<>();
     private final Map<ResourceLocation, Set<UUID>> uniqueNPCS = new HashMap<>();
-
     private final Map<UUID, Set<Pair<UUID, ResourceLocation>>> resetQuestNPCS = new HashMap<>();
 
     public boolean doesNPCExist(UUID uuid) {
@@ -33,11 +33,14 @@ public class NPCHandler {
         return this.npcs.add(npc.getUUID());
     }
 
-    public boolean removeNPC(EntityNPCBase npc) {
-        npc.getServer().getPlayerList().getPlayers().forEach(p -> {
-            SimpleQuestIntegration.INST().removeQuestFor(p, npc);
-        });
-        return this.npcs.remove(npc.getUUID());
+    public void removeNPC(EntityNPCBase npc, Entity.RemovalReason reason) {
+        if (reason.shouldDestroy()) {
+            npc.getServer().getPlayerList().getPlayers().forEach(p -> {
+                SimpleQuestIntegration.INST().removeQuestFor(p, npc);
+            });
+            npc.getFamily().markAsDead();
+            this.npcs.remove(npc.getUUID());
+        }
     }
 
     public boolean canAssignNPC(NPCData data) {

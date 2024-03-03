@@ -376,6 +376,8 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> elvishHarp = staff("elvish_harp", EnumElement.LOVE, 3, Texture.N);
     public static final RegistryEntrySupplier<Item> syringe = staff("syringe", EnumElement.WATER, 2, Texture.N);
 
+    public static final RegistryEntrySupplier<Item> loveLetter = ITEMS.register("love_letter", () -> new Item(new Item.Properties().stacksTo(1).tab(RFCreativeTabs.weaponToolTab)));
+    public static final RegistryEntrySupplier<Item> divorcePaper = ITEMS.register("divorce_paper", () -> new Item(new Item.Properties().stacksTo(1).tab(RFCreativeTabs.weaponToolTab)));
     public static final RegistryEntrySupplier<Item> engagementRing = equipment(EquipmentSlot.LEGS, "engagement_ring", Texture.N);
     public static final RegistryEntrySupplier<Item> cheapBracelet = equipment(EquipmentSlot.LEGS, "cheap_bracelet", Texture.Y);
     public static final RegistryEntrySupplier<Item> bronzeBracelet = equipment(EquipmentSlot.LEGS, "bronze_bracelet", Texture.Y);

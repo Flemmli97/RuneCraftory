@@ -6,8 +6,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSyntaxException;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.entities.npc.NPCRelation;
 import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
+import io.github.flemmli97.runecraftory.common.world.family.FamilyEntry;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
@@ -18,9 +18,9 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import java.util.Set;
 import java.util.UUID;
 
-public record NPCRelationCondition(NPCRelation relation) implements LootItemCondition {
+public record NPCRelationCondition(FamilyEntry.Relationship relation) implements LootItemCondition {
 
-    public static LootItemCondition.Builder of(NPCRelation relation) {
+    public static LootItemCondition.Builder of(FamilyEntry.Relationship relation) {
         return () -> new NPCRelationCondition(relation);
     }
 
@@ -53,9 +53,9 @@ public record NPCRelationCondition(NPCRelation relation) implements LootItemCond
 
         @Override
         public NPCRelationCondition deserialize(JsonObject obj, JsonDeserializationContext context) {
-            String type = GsonHelper.getAsString(obj, "relation", NPCRelation.NORMAL.toString());
+            String type = GsonHelper.getAsString(obj, "relation", FamilyEntry.Relationship.NONE.toString());
             try {
-                return new NPCRelationCondition(NPCRelation.valueOf(type));
+                return new NPCRelationCondition(FamilyEntry.Relationship.valueOf(type));
             } catch (IllegalArgumentException e) {
                 throw new JsonSyntaxException("Unknown relation type '" + type + "'");
             }

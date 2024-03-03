@@ -1,7 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.npc;
 
 import com.google.common.collect.ImmutableSet;
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -19,19 +18,12 @@ public class NPCRelationManager {
     private final Map<UUID, NPCFriendPoints> playerHearts = new HashMap<>();
     private final Map<UUID, Set<ResourceLocation>> completedQuests = new HashMap<>();
     private final Map<UUID, Map<ResourceLocation, Integer>> questTracker = new HashMap<>();
-    private Pair<UUID, NPCRelation> relation;
     private UUIDNameMapper fatherUUID;
     private UUIDNameMapper motherUUID;
     private UUIDNameMapper[] childUUIDs;
 
     public NPCFriendPoints getFriendPointData(UUID uuid) {
         return this.playerHearts.computeIfAbsent(uuid, key -> new NPCFriendPoints());
-    }
-
-    public NPCRelation getRelationFor(UUID uuid) {
-        if (this.relation != null && this.relation.getFirst().equals(uuid))
-            return this.relation.getSecond();
-        return NPCRelation.NORMAL;
     }
 
     public void completeQuest(UUID uuid, ResourceLocation questID) {

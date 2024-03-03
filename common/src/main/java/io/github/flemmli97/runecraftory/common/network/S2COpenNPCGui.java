@@ -4,6 +4,7 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.ShopState;
+import io.github.flemmli97.runecraftory.common.world.family.SyncedFamilyData;
 import io.github.flemmli97.runecraftory.integration.simplequest.SimpleQuestIntegration;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.network.FriendlyByteBuf;
@@ -24,13 +25,15 @@ public class S2COpenNPCGui implements Packet {
     private final int followState;
     private final Map<String, List<Component>> actions;
     private final ResourceLocation quest;
+    private final SyncedFamilyData family;
 
-    private S2COpenNPCGui(int id, ShopState isShopOpen, int followState, Map<String, List<Component>> actions, ResourceLocation quest) {
+    private S2COpenNPCGui(int id, ShopState isShopOpen, int followState, Map<String, List<Component>> actions, ResourceLocation quest, SyncedFamilyData family) {
         this.entityID = id;
         this.isShopOpen = isShopOpen;
         this.followState = followState;
         this.actions = actions;
         this.quest = quest;
+        this.family = family;
     }
 
     public S2COpenNPCGui(EntityNPCBase entity, ServerPlayer player) {
@@ -42,15 +45,17 @@ public class S2COpenNPCGui implements Packet {
             this.followState = Platform.INSTANCE.getPlayerData(player).map(d -> d.party.isPartyFull()).orElse(true) ? 2 : 0;
         else
             this.followState = entity.getEntityToFollowUUID().equals(player.getUUID()) ? 1 : 2;
+        this.family = entity.getFamily().forSyncing();
     }
 
     public static S2COpenNPCGui read(FriendlyByteBuf buf) {
         return new S2COpenNPCGui(buf.readInt(), buf.readEnum(ShopState.class), buf.readInt(),
-                buf.readMap(LinkedHashMap::new, FriendlyByteBuf::readUtf, b -> b.readList(FriendlyByteBuf::readComponent)), !buf.readBoolean() ? null : buf.readResourceLocation());
+                buf.readMap(LinkedHashMap::new, FriendlyByteBuf::readUtf, b -> b.readList(FriendlyByteBuf::readComponent)), !buf.readBoolean() ? null : buf.readResourceLocation(),
+                new SyncedFamilyData(buf));
     }
 
     public static void handle(S2COpenNPCGui pkt) {
-        ClientHandlers.openNPCChat(pkt.entityID, pkt.isShopOpen, pkt.followState, pkt.actions, pkt.quest);
+        ClientHandlers.openNPCChat(pkt.entityID, pkt.isShopOpen, pkt.family, pkt.followState, pkt.actions, pkt.quest);
     }
 
     @Override
@@ -62,6 +67,7 @@ public class S2COpenNPCGui implements Packet {
         buf.writeBoolean(this.quest != null);
         if (this.quest != null)
             buf.writeResourceLocation(this.quest);
+        this.family.toPacket(buf);
     }
 
     @Override

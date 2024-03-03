@@ -130,8 +130,10 @@ public class LevelCalc {
     public static int friendPointsForNext(int level) {
         if (level <= 0)
             return 1;
-        if (level >= 10)
+        if (level >= 20)
             return 0;
+        if (level >= 10)
+            return 1000;
         return (int) (totalFriendPointsForLevel(level) - totalFriendPointsForLevel(level - 1));
     }
 

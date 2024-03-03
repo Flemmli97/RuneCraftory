@@ -9,6 +9,8 @@ import io.github.flemmli97.runecraftory.common.entities.npc.job.ShopState;
 import io.github.flemmli97.runecraftory.common.network.C2SNPCInteraction;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.common.registry.ModPoiTypes;
+import io.github.flemmli97.runecraftory.common.world.family.FamilyEntry;
+import io.github.flemmli97.runecraftory.common.world.family.SyncedFamilyData;
 import io.github.flemmli97.runecraftory.integration.simplequest.SimpleQuestIntegration;
 import io.github.flemmli97.runecraftory.mixin.PoiTypeAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -51,16 +53,18 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
     private Map<String, List<Component>> actions;
 
     private final ResourceLocation quest;
+    private final SyncedFamilyData family;
 
     private List<ToolTipRenderer> tooltipComponents = new ArrayList<>();
 
-    public NPCGui(T entity, ShopState isShopOpen, boolean canFollow, Map<String, List<Component>> actions, ResourceLocation quest) {
+    public NPCGui(T entity, ShopState isShopOpen, boolean canFollow, SyncedFamilyData family, Map<String, List<Component>> actions, ResourceLocation quest) {
         super(entity.getDisplayName());
         this.entity = entity;
         this.isShopOpen = isShopOpen;
         this.canFollow = canFollow;
         this.actions = actions;
         this.quest = quest;
+        this.family = family;
     }
 
     @Override
@@ -81,17 +85,49 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
             texY = 40;
         else if (!this.entity.getShop().hasWorkSchedule)
             texY = 60;
+        boolean renderParents = this.family.father() != null || this.family.mother() != null;
+        if (renderParents) {
+            texY += 13;
+        }
+        if (this.family.relationship() != FamilyEntry.Relationship.NONE) {
+            texY += 13;
+        }
         this.blit(stack, posX, posY, 0, 0, 150, texY - 5);
-        this.blit(stack, posX, posY + texY - 5, 0, 160 - 5, 160, 5);
+        this.blit(stack, posX, posY + texY - 5, 0, 256 - 5, 160, 5);
         int txtOffX = posX + 5;
         int txtOffY = posY + 5;
 
-        this.blit(stack, posX + 65, txtOffY + 13, 152, 2, 8, 8);
-
-        int y = 0;
         ClientHandlers.drawCenteredScaledString(stack, this.font, this.entity.getName(), posX + 75, txtOffY, 1, 0);
-        y += 1;
+        int y = 1;
+        RenderSystem.setShaderTexture(0, texturepath);
+        this.blit(stack, posX + 65, txtOffY + 13 * y, 152, 2, 8, 8);
         this.font.draw(stack, "" + this.entity.friendPoints(this.minecraft.player), posX + 65 + 10, txtOffY + 13 * y, 0);
+        y += 1;
+        if (renderParents) {
+            if (this.family.father() == null)
+                this.font.draw(stack, new TranslatableComponent("runecraftory.gui.npc.parent", this.family.mother()), txtOffX, txtOffY + 13 * y, 0);
+            else if (this.family.mother() == null)
+                this.font.draw(stack, new TranslatableComponent("runecraftory.gui.npc.parent", this.family.father()), txtOffX, txtOffY + 13 * y, 0);
+            else
+                this.font.draw(stack, new TranslatableComponent("runecraftory.gui.npc.parents", this.family.father(), this.family.mother()), txtOffX, txtOffY + 13 * y, 0);
+            y += 1;
+        }
+        switch (this.family.relationship()) {
+            case NONE -> {
+            }
+            case DATING -> {
+                RenderSystem.setShaderTexture(0, texturepath);
+                this.blit(stack, txtOffX, txtOffY + 13 * y, 152, 41, 10, 8);
+                this.font.draw(stack, this.family.partner(), txtOffX + 12, txtOffY + 13 * y, 0);
+                y += 1;
+            }
+            case MARRIED -> {
+                RenderSystem.setShaderTexture(0, texturepath);
+                this.blit(stack, txtOffX, txtOffY + 13 * y, 152, 54, 10, 8);
+                this.font.draw(stack, this.family.partner(), txtOffX + 12, txtOffY + 13 * y, 0);
+                y += 1;
+            }
+        }
         y += 1;
         MutableComponent shopComp = null;
         if (this.entity.getShop() == ModNPCJobs.GENERAL.getSecond())

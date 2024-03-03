@@ -37,6 +37,7 @@ import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
+import io.github.flemmli97.runecraftory.common.world.family.FamilyHandler;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.integration.simplequest.SimpleQuestIntegration;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -101,6 +102,9 @@ public class EntityCalls {
             });
             SimpleQuestIntegration.INST().removeNPCQuestsFor(serverPlayer);
             Platform.INSTANCE.sendToClient(new S2CSyncConfig(), serverPlayer);
+            FamilyHandler.get(serverPlayer.getServer())
+                    .getOrCreateEntry(serverPlayer)
+                    .updateName(player);
         }
     }
 

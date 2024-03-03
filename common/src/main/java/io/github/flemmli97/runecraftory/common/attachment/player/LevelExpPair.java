@@ -28,6 +28,18 @@ public class LevelExpPair {
     }
 
     public boolean addXP(float amount, int maxLevel, IntUnaryOperator xpForNext, Runnable onLevelUp) {
+        if (amount < 0) {
+            int neededXP = xpForNext.applyAsInt(this.level - 1);
+            if (this.xp < -amount) {
+                this.level -= 1;
+                float current = this.xp;
+                this.xp = neededXP;
+                return this.addXP(amount + current, maxLevel, xpForNext, onLevelUp);
+            } else {
+                this.xp -= amount;
+            }
+            return true;
+        }
         int neededXP = xpForNext.applyAsInt(this.level);
         if (neededXP <= 0)
             return false;

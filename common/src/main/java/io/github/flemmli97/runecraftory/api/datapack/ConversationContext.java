@@ -17,10 +17,12 @@ public record ConversationContext(ResourceLocation key) {
     public static final ConversationContext FOLLOW_YES = register("follow_yes");
     public static final ConversationContext FOLLOW_NO = register("follow_no");
     public static final ConversationContext FOLLOW_STOP = register("follow_stop");
-    public static final ConversationContext ENGAGEMENT_ACCEPT = register("engagement_accept");
-    public static final ConversationContext ENGAGEMENT_DENY = register("engagement_deny");
+    public static final ConversationContext DATING_ACCEPT = register("dating_accept");
+    public static final ConversationContext DATING_DENY = register("dating_deny");
     public static final ConversationContext MARRIAGE_ACCEPT = register("marriage_accept");
     public static final ConversationContext MARRIAGE_DENY = register("marriage_deny");
+    public static final ConversationContext DIVORCE = register("divorce");
+    public static final ConversationContext DIVORCE_ERROR = register("divorce_error");
 
     private static ConversationContext register(String key) {
         return register(new ResourceLocation(RuneCraftory.MODID, key));

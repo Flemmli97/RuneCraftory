@@ -240,10 +240,6 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.tooltip.item.equipped", "When equipped");
         this.add("runecraftory.tooltip.item.upgrade", "Upgrade");
         this.add("runecraftory.tooltip.item.eaten", "When eaten");
-        this.add("runecraftory.gui.level", "Level");
-        this.add("runecraftory.gui.npc.id", "Npc data-id");
-        this.add("runecraftory.gui.npc.profession", "Npc Profession");
-        this.add("runecraftory.gui.save", "Save");
 
         this.add("runecraftory.tooltip.item.spawn", "Right click in air to change mob level");
         this.add("runecraftory.tooltip.item.prop", "A prop item. Takes on the items look when in another entities hand");
@@ -548,9 +544,17 @@ public class LangGen implements DataProvider {
         this.add(C2SNPCInteraction.Type.STAY.translation, "Stay here");
         this.add(C2SNPCInteraction.Type.STOPFOLLOW.translation, "Stop following");
         this.add(C2SNPCInteraction.Type.SHOP.translation, "I want to shop");
+        this.add("runecraftory.gui.level", "Level");
+        this.add("runecraftory.gui.npc.id", "Npc data-id");
+        this.add("runecraftory.gui.npc.profession", "Npc Profession");
+        this.add("runecraftory.gui.save", "Save");
         this.add("runecraftory.gui.npc.shop.owner", "Owner of %s");
         this.add("runecraftory.gui.npc.bed.no", "I don't have a bed");
         this.add("runecraftory.gui.npc.workplace.no", "I don't have a work place. Valid workplaces are [%s]");
+        this.add("runecraftory.gui.npc.parent", "Parent: %s");
+        this.add("runecraftory.gui.npc.parents", "Parents: %1$s & %2$s");
+        this.add("runecraftory.gui.npc.relationship.dating", "Dating %s");
+        this.add("runecraftory.gui.npc.relationship.married", "Married to %s");
 
         this.add("runecraftory.gui.quests.accept", "Accept");
         this.add("runecraftory.gui.quests.reset", "Cancel");
@@ -613,7 +617,7 @@ public class LangGen implements DataProvider {
         this.add("npc.shop.money.no", "You don't have enough money");
         this.add("npc.shop.success", "Thank you for your purchase");
 
-        this.add("npc.conversation.missing", "-Missing Conversation-");
+        this.add("npc.conversation.missing", "-Missing Conversation for context %s-");
         this.add("npc.default.gift.neutral", "Thank you for your gift.");
         this.add("npc.default.quest.response.default", "Placeholder text for quest response");
 
