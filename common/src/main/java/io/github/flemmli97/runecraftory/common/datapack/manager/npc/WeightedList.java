@@ -4,7 +4,7 @@ package io.github.flemmli97.runecraftory.common.datapack.manager.npc;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.util.random.WeightedRandom;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;

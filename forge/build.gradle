@@ -7,14 +7,14 @@ apply from: "https://raw.githubusercontent.com/Flemmli97/GradleScripts/mc-archit
 loom {
     forge {
         mixinConfigs = ["runecraftory.mixins.json", "runecraftory.forge.mixins.json"]
-        dataGen {
-            mod "runecraftory"
-        }
-        launches {
-            data {
-                arg "--existing", project(":common").file("src/main/resources").absolutePath
-                arg "--existing", file("src/main/resources").absolutePath
-            }
+    }
+    runs {
+        data {
+            data()
+            programArgs "--all", "--mod", "runecraftory"
+            programArgs "--output", project(":common").file("src/generated/resources").absolutePath
+            programArgs "--existing", file("src/main/resources").absolutePath
+            programArgs "--existing", project(":common").file("src/main/resources").absolutePath
         }
     }
 }
@@ -22,15 +22,6 @@ loom {
 ext {
     mod_meta.tenshilib_version = tenshilib_version
     mod_meta.simple_quest_version = simplequests_version
-}
-
-// Make datagen output to common folder
-configureLaunch.doLast {
-    def file = file(".gradle/loom-cache/launch.cfg");
-    def cfg = file.getText('UTF-8')
-    cfg = cfg.replaceAll(project(":forge").file("src/generated/resources").absolutePath,
-            project(":common").file("src/generated/resources").absolutePath)
-    file.write(cfg, 'UTF-8')
 }
 
 repositories {

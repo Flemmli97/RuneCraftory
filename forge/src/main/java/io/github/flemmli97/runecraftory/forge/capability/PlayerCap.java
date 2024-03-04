@@ -6,8 +6,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
-
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 public class PlayerCap extends PlayerData implements ICapabilitySerializable<CompoundTag> {
 
@@ -23,9 +22,9 @@ public class PlayerCap extends PlayerData implements ICapabilitySerializable<Com
         this.readFromNBT(nbt, null);
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, Direction side) {
+    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, Direction side) {
         return CapabilityInsts.PLAYER_CAP.orEmpty(cap, this.holder);
     }
 }

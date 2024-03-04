@@ -9,8 +9,8 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 
 public class LootTableInjectModifier extends LootModifier {
@@ -22,7 +22,7 @@ public class LootTableInjectModifier extends LootModifier {
     }
 
     @Override
-    @Nonnull
+    @NotNull
     protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context) {
         LootTable lootTable = context.getLootTable(this.table);
         lootTable.getRandomItemsRaw(context, generatedLoot::add);
