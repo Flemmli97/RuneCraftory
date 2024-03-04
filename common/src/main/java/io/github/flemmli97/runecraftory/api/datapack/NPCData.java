@@ -16,9 +16,9 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCSchedule;
+import io.github.flemmli97.runecraftory.common.entities.npc.features.NPCFeature;
+import io.github.flemmli97.runecraftory.common.entities.npc.features.NPCFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
-import io.github.flemmli97.runecraftory.common.entities.npc.look.NPCLookFeature;
-import io.github.flemmli97.runecraftory.common.entities.npc.look.NPCLookFeatureType;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
@@ -537,7 +537,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
     }
 
     public record NPCLook(Gender gender, @Nullable ResourceLocation texture, @Nullable String playerSkin, int weight,
-                          List<NPCLookFeature> additionalFeatures) {
+                          List<NPCFeature> additionalFeatures) {
 
         public static final ResourceLocation DEFAULT_SKIN = new ResourceLocation("textures/entity/steve.png");
         public static final ResourceLocation DEFAULT_LOOK_ID = new ResourceLocation(RuneCraftory.MODID, "default_look");
@@ -546,7 +546,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         public static final Codec<NPCLook> CODEC = RecordCodecBuilder.create(inst ->
                 inst.group(
                         ExtraCodecs.NON_NEGATIVE_INT.fieldOf("weight").forGetter(d -> d.weight),
-                        ModNPCLooks.CODEC.listOf().fieldOf("additionalFeatures").forGetter(d -> d.additionalFeatures),
+                        NPCFeature.CODEC.listOf().fieldOf("additionalFeatures").forGetter(d -> d.additionalFeatures),
 
                         ResourceLocation.CODEC.optionalFieldOf("texture").forGetter(d -> Optional.ofNullable(d.texture)),
                         Codec.STRING.optionalFieldOf("player_skin").forGetter(d -> Optional.ofNullable(d.playerSkin)),
@@ -564,8 +564,8 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             String skin = null;
             if (buf.readBoolean())
                 skin = buf.readUtf();
-            List<NPCLookFeature> additional = buf.readList(b -> {
-                NPCLookFeatureType<?> t = ModNPCLooks.LOOK_FEATURE_REGISTRY.get()
+            List<NPCFeature> additional = buf.readList(b -> {
+                NPCFeatureType<?> t = ModNPCLooks.NPC_FEATURE_REGISTRY.get()
                         .getFromId(b.readResourceLocation());
                 return t.create(b);
             });

@@ -8,6 +8,7 @@ import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.AttackMel
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.NPCAttackActions;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.RunAwayAction;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.SpellAttackAction;
+import io.github.flemmli97.runecraftory.common.entities.npc.features.SlimLookFeature;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
@@ -182,7 +183,7 @@ public class NPCDataGen extends NPCDataProvider {
                     m.put(ConversationContext.FOLLOW_NO, new NPCData.ConversationSet.Builder("npc.smith.female.1.follow.no", "Sorry but I'm busy right now."));
                     m.put(ConversationContext.FOLLOW_STOP, new NPCData.ConversationSet.Builder("npc.smith.female.1.follow.stop", "Bye! See you next time"));
                 }),
-                new NPCData.NPCLook(NPCData.Gender.FEMALE, npcTexture("smith/female_1"), null, 0, List.of(new NPCData.LookFeature(NPCData.StaticLookTypes.SLIM_MODEL))),
+                new NPCData.NPCLook(NPCData.Gender.FEMALE, npcTexture("smith/female_1"), null, 0, List.of(new SlimLookFeature())),
                 of(m -> {
                     m.put(QuestGen.MINING, new QuestResponseBuilder(
                             new NPCData.ConversationSet.Builder("npc.generic.quest.mining.start", "You saw my request? Great!\n" +
@@ -240,7 +241,7 @@ public class NPCDataGen extends NPCDataProvider {
                     m.put(ConversationContext.FOLLOW_NO, new NPCData.ConversationSet.Builder("npc.shop_owner.female.1.follow.no", "I have something to do right now. Maybe next time..."));
                     m.put(ConversationContext.FOLLOW_STOP, new NPCData.ConversationSet.Builder("npc.shop_owner.female.1.follow.stop", "See ya next time. Bye!"));
                 }),
-                new NPCData.NPCLook(NPCData.Gender.FEMALE, npcTexture("shop_owner/female_1"), null, 0, List.of(new NPCData.LookFeature(NPCData.StaticLookTypes.SLIM_MODEL))),
+                new NPCData.NPCLook(NPCData.Gender.FEMALE, npcTexture("shop_owner/female_1"), null, 0, List.of(new SlimLookFeature())),
                 of(m -> {
                     m.put(QuestGen.SHIP_TURNIP, new QuestResponseBuilder(
                             new NPCData.ConversationSet.Builder("npc.generic.quest.ship_turnip.start", "Are you here for my request?\n" +

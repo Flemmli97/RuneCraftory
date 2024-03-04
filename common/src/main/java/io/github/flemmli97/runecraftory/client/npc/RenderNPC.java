@@ -9,7 +9,7 @@ import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.NPCData;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.entities.npc.look.NPCLookFeature;
+import io.github.flemmli97.runecraftory.common.entities.npc.features.NPCFeature;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
 import net.minecraft.client.Minecraft;
@@ -116,13 +116,13 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
             else
                 this.model = this.def;
         }
-        for (NPCLookFeature feature : entity.getLook().additionalFeatures()) {
-            NPCLookRenderers.get(feature).onSetup(feature, this, entity);
+        for (NPCFeature feature : entity.getLook().additionalFeatures()) {
+            NPCFeatureRenderers.get(feature).onSetup(feature, this, entity);
         }
         this.setModelProperties(entity);
         super.render(entity, entityYaw, partialTicks, matrixStack, buffer, packedLight);
-        for (NPCLookFeature feature : entity.getLook().additionalFeatures()) {
-            NPCLookRenderers.get(feature).onSetup(feature, this, entity);
+        for (NPCFeature feature : entity.getLook().additionalFeatures()) {
+            NPCFeatureRenderers.get(feature).onSetup(feature, this, entity);
         }
     }
 
@@ -208,7 +208,7 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
     }
 
     public void setModel(PlayerModel<T> model) {
-
+        this.model = model;
     }
 
     static class PlayerSkin {

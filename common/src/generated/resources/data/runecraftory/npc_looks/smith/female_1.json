@@ -3,6 +3,8 @@
   "gender": "FEMALE",
   "weight": 0,
   "additionalFeatures": [
-    "SLIM_MODEL"
+    {
+      "type": "runecraftory:slim_feature"
+    }
   ]
 }

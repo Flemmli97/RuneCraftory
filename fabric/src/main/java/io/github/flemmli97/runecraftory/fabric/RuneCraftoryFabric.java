@@ -21,6 +21,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModFeatures;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCActions;
+import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.registry.ModPoiTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
@@ -76,8 +77,8 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.entries.LootTableReference;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
@@ -281,6 +282,7 @@ public class RuneCraftoryFabric implements ModInitializer {
         ModNPCActions.ACTIONS.registerContent();
         ModAttackActions.ATTACK_ACTIONS.registerContent();
         ModArmorEffects.ARMOR_EFFECTS.registerContent();
+        ModNPCLooks.NPC_FEATURES.registerContent();
 
         ModLootRegistries.LOOTFUNCTION.registerContent();
         ModLootRegistries.LOOTCONDITIONS.registerContent();

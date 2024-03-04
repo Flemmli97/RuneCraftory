@@ -59,6 +59,7 @@ import io.github.flemmli97.runecraftory.client.model.monster.ModelWisp;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelWolf;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelWooly;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelWoolyWool;
+import io.github.flemmli97.runecraftory.client.npc.NPCFeatureRenderers;
 import io.github.flemmli97.runecraftory.client.npc.RenderNPC;
 import io.github.flemmli97.runecraftory.client.particles.CirclingParticle;
 import io.github.flemmli97.runecraftory.client.particles.LightningParticle;
@@ -386,6 +387,8 @@ public class ClientRegister {
         consumer.register(ModEntities.RAFFLESIA_HORSETAIL.get(), EmptyRender::new);
         consumer.register(ModEntities.RAFFLESIA_FLOWER.get(), EmptyRender::new);
         consumer.register(ModEntities.RAFFLESIA_PITCHER.get(), EmptyRender::new);
+
+        NPCFeatureRenderers.init();
     }
 
     private static <T extends BaseMonster, M extends EntityModel<T> & RideableModel<T>> EntityRendererProvider<? super T> getMonsterRender(Function<ModelPart, M> model, ModelLayerLocation layerLocation, ResourceLocation texture, float shadow) {
