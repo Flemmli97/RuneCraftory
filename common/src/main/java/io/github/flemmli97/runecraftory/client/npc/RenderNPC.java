@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.client.render;
+package io.github.flemmli97.runecraftory.client.npc;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
@@ -9,6 +9,7 @@ import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.NPCData;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.entities.npc.look.NPCLookFeature;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
 import net.minecraft.client.Minecraft;
@@ -46,7 +47,7 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
     private static final Object2BooleanMap<ResourceLocation> MISSING = new Object2BooleanOpenHashMap<>();
 
     private final PlayerModel<T> def;
-    private final PlayerModel<T> slim;
+    public final PlayerModel<T> slim;
 
     public RenderNPC(EntityRendererProvider.Context ctx) {
         super(ctx, new PlayerModel<>(ctx.bakeLayer(ModelLayers.PLAYER), false), 0.5f);
@@ -106,6 +107,7 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
 
     @Override
     public void render(T entity, float entityYaw, float partialTicks, PoseStack matrixStack, MultiBufferSource buffer, int packedLight) {
+        this.model = this.def;
         String skin = entity.getLook().playerSkin();
         if (skin != null) {
             String skinMeta = TEXTURE_LOCATIONS.computeIfAbsent(skin, s -> new PlayerSkin(skin)).getSkinMeta();
@@ -113,15 +115,15 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
                 this.model = this.slim;
             else
                 this.model = this.def;
-        } else {
-            if (!NPCData.NPCLook.DEFAULT_SKIN.equals(this.getTextureLocation(entity)) &&
-                    entity.getLook().additionalFeatures().contains(NPCData.StaticLookTypes.from(NPCData.StaticLookTypes.SLIM_MODEL)))
-                this.model = this.slim;
-            else
-                this.model = this.def;
+        }
+        for (NPCLookFeature feature : entity.getLook().additionalFeatures()) {
+            NPCLookRenderers.get(feature).onSetup(feature, this, entity);
         }
         this.setModelProperties(entity);
         super.render(entity, entityYaw, partialTicks, matrixStack, buffer, packedLight);
+        for (NPCLookFeature feature : entity.getLook().additionalFeatures()) {
+            NPCLookRenderers.get(feature).onSetup(feature, this, entity);
+        }
     }
 
     private void setModelProperties(EntityNPCBase npc) {
@@ -203,6 +205,10 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
                 return null;
         }
         return super.getRenderType(entity, invis, translucent, glowing);
+    }
+
+    public void setModel(PlayerModel<T> model) {
+
     }
 
     static class PlayerSkin {

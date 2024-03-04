@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
-import io.github.flemmli97.runecraftory.client.render.RenderNPC;
+import io.github.flemmli97.runecraftory.client.npc.RenderNPC;
 import io.github.flemmli97.runecraftory.common.network.C2SQuestSelect;
 import io.github.flemmli97.runecraftory.common.network.C2SSubmitQuestBoard;
 import io.github.flemmli97.runecraftory.integration.simplequest.ClientSideQuestDisplay;

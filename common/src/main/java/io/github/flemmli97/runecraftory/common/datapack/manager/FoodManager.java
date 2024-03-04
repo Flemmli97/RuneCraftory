@@ -17,8 +17,8 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.Item;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.Map;
 
 public class FoodManager extends SimpleJsonResourceReloadListener {
