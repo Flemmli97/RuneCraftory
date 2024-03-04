@@ -57,9 +57,9 @@ public class ModAttributes {
     public static final RegistryEntrySupplier<Attribute> DIZZY = register(LibAttributes.DIZZY, ID++, 0, -100, 100);
     public static final RegistryEntrySupplier<Attribute> CRIT = register(LibAttributes.CRIT, ID++, 0, -100, 100);
     public static final RegistryEntrySupplier<Attribute> STUN = register(LibAttributes.STUN, ID++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute> KNOCK = register(LibAttributes.KNOCK, ID++, 0, -100, 100);
     public static final RegistryEntrySupplier<Attribute> FAINT = register(LibAttributes.FAINT, ID++, 0, -100, 100);
     public static final RegistryEntrySupplier<Attribute> DRAIN = register(LibAttributes.DRAIN, ID++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute> KNOCK = register(LibAttributes.KNOCK, ID++, 0, -100, 100);
     public static final RegistryEntrySupplier<Attribute> RES_WATER = register(LibAttributes.RES_WATER, ID++, 0, -100, 200);
     public static final RegistryEntrySupplier<Attribute> RES_EARTH = register(LibAttributes.RES_EARTH, ID++, 0, -100, 200);
     public static final RegistryEntrySupplier<Attribute> RES_WIND = register(LibAttributes.RES_WIND, ID++, 0, -100, 200);
