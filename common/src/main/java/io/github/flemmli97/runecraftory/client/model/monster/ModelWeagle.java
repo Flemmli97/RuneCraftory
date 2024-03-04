@@ -105,9 +105,8 @@ public class ModelWeagle<T extends EntityWeagle> extends EntityModel<T> implemen
         this.model.resetPoses();
         this.head.yRot += netHeadYaw * Mth.DEG_TO_RAD * 0.3f;
         this.head.xRot += headPitch * Mth.DEG_TO_RAD * 0.1f;
-        AnimatedAction anim = entity.getAnimationHandler().getAnimation();
         float partialTicks = Minecraft.getInstance().getFrameTime();
-        if (anim != null && entity.deathTime <= 0 && !entity.playDeath()) {
+        if (entity.deathTime <= 0 && !entity.playDeath()) {
             if (entity.moveTick() > 0) {
                 this.anim.doAnimation(this, "fly", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
             } else
