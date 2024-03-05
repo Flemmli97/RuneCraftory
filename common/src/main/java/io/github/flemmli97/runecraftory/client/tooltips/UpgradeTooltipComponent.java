@@ -46,7 +46,7 @@ public class UpgradeTooltipComponent implements ClientTooltipComponent {
 
     public static boolean shouldAdd(ItemStack stack) {
         return (ItemNBT.canBeUsedAsMagnifyingGlass(stack) && stack.getItem() != ModItems.glass.get()) || (ItemNBT.isWeapon(stack) && ItemNBT.getElement(stack) != EnumElement.NONE) || ItemNBT.doesFixedOneDamage(stack)
-                || ItemNBT.isInvis(stack);
+                || ItemNBT.isInvis(stack) || !ItemNBT.getOriginItem(stack).isEmpty();
     }
 
     @Override
