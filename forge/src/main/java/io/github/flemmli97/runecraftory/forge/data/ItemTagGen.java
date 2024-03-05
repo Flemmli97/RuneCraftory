@@ -26,6 +26,10 @@ public class ItemTagGen extends ItemTagsProvider {
     @Override
     protected void addTags() {
         ModItems.DATAGENTAGS.forEach((key, supList) -> supList.forEach(sup -> this.tag(key).add(sup.get())));
+        this.tag(ModTags.SHORTSWORDS)
+                .add(ModItems.plantSword.get());
+        this.tag(ModTags.SHIELDS)
+                .add(ModItems.plantShield.get());
 
         //Forge copy tags
         this.tag(ModTags.IRON)

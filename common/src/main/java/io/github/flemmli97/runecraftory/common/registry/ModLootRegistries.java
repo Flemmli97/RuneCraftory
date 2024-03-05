@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.registry;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.loot.BiomeLootCondition;
+import io.github.flemmli97.runecraftory.common.loot.CropWeaponLootFunction;
 import io.github.flemmli97.runecraftory.common.loot.FirstKillCondition;
 import io.github.flemmli97.runecraftory.common.loot.FriendPointCondition;
 import io.github.flemmli97.runecraftory.common.loot.ItemLevelLootFunction;
@@ -31,4 +32,6 @@ public class ModLootRegistries {
 
     public static final RegistryEntrySupplier<LootItemFunctionType> ITEM_LEVEL = LOOTFUNCTION.register("item_level", () -> new LootItemFunctionType(new ItemLevelLootFunction.Serializer()));
     public static final RegistryEntrySupplier<LootItemFunctionType> LUCK_AND_LOOTING = LOOTFUNCTION.register("luck_and_looting", () -> new LootItemFunctionType(new LootingAndLuckLootFunction.Serializer()));
+    public static final RegistryEntrySupplier<LootItemFunctionType> CROP_WEAPON_FUNCTION = LOOTFUNCTION.register("crop_weapon", () -> new LootItemFunctionType(new CropWeaponLootFunction.Serializer()));
+
 }

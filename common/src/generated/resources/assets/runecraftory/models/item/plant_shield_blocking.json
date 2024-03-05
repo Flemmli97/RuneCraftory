@@ -1,5 +1,5 @@
 {
-  "parent": "runecraftory:item/seed_shield_item",
+  "parent": "runecraftory:item/plant_shield",
   "display": {
     "firstperson_righthand": {
       "rotation": [

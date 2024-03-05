@@ -7,7 +7,12 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "runecraftory:seed_sword_item"
+          "functions": [
+            {
+              "function": "runecraftory:crop_weapon"
+            }
+          ],
+          "name": "runecraftory:plant_shield"
         }
       ]
     }

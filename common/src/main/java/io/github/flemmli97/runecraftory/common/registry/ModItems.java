@@ -18,7 +18,6 @@ import io.github.flemmli97.runecraftory.common.items.creative.ItemDebug;
 import io.github.flemmli97.runecraftory.common.items.creative.ItemLevelUp;
 import io.github.flemmli97.runecraftory.common.items.creative.ItemProp;
 import io.github.flemmli97.runecraftory.common.items.creative.ItemSkillUp;
-import io.github.flemmli97.runecraftory.common.items.equipment.ItemSeedShield;
 import io.github.flemmli97.runecraftory.common.items.equipment.ItemStatShield;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemBrush;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemCommandStaff;
@@ -40,7 +39,6 @@ import io.github.flemmli97.runecraftory.common.items.weapons.ItemLongSwordBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemShortSwordBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpearBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
-import io.github.flemmli97.runecraftory.common.items.weapons.shortsword.ItemSeedSword;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import io.github.flemmli97.tenshilib.platform.registry.PlatformRegistry;
@@ -137,7 +135,6 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> wettablePowder = ITEMS.register("wettable_powder", () -> new ItemFertilizer(ItemFertilizer.WETTABLE, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
 
     //Weapons
-    public static final RegistryEntrySupplier<Item> seedSword = ITEMS.register("seed_sword_item", () -> new ItemSeedSword(new Item.Properties()));
     public static final RegistryEntrySupplier<Item> broadSword = shortSword("broad_sword", Texture.Y);
     public static final RegistryEntrySupplier<Item> steelSword = shortSword("steel_sword", Texture.Y);
     public static final RegistryEntrySupplier<Item> steelSwordPlus = shortSword("steel_sword_plus", Texture.Y);
@@ -171,6 +168,7 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> backScratcher = shortSword("back_scratcher", Texture.N);
     public static final RegistryEntrySupplier<Item> spoon = shortSword("spoon", Texture.N);
     public static final RegistryEntrySupplier<Item> veggieBlade = shortSword("veggie_blade", Texture.N);
+    public static final RegistryEntrySupplier<Item> plantSword = ITEMS.register("plant_sword", () -> new ItemShortSwordBase(new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
 
     public static final RegistryEntrySupplier<Item> claymore = longSword("claymore", Texture.Y);
     public static final RegistryEntrySupplier<Item> zweihaender = longSword("zweihaender", Texture.Y);
@@ -519,7 +517,6 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> iceSkates = equipment(EquipmentSlot.FEET, "ice_skates", Texture.N);
     public static final RegistryEntrySupplier<Item> rocketWing = equipment(EquipmentSlot.FEET, "rocket_wing", Texture.N);
 
-    public static final RegistryEntrySupplier<Item> seedShield = ITEMS.register("seed_shield_item", () -> new ItemSeedShield(new Item.Properties().stacksTo(1)));
     public static final RegistryEntrySupplier<Item> smallShield = shield("small_shield", Texture.Y);
     public static final RegistryEntrySupplier<Item> umbrella = shield("umbrella", Texture.N);
     public static final RegistryEntrySupplier<Item> ironShield = shield("iron_shield", Texture.Y);
@@ -537,6 +534,7 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> magicalShield = shield("magical_shield", Texture.N);
     public static final RegistryEntrySupplier<Item> prismShield = shield("prism_shield", Texture.N);
     public static final RegistryEntrySupplier<Item> runeShield = shield("rune_shield", Texture.N);
+    public static final RegistryEntrySupplier<Item> plantShield = ITEMS.register("plant_shield", () -> new ItemStatShield(new Item.Properties().stacksTo(1).tab(RFCreativeTabs.equipment)));
 
     public static final RegistryEntrySupplier<Item> itemBlockForge = ITEMS.register("forge", () -> new CraftingBlockItem(ModBlocks.forge.get(), new Item.Properties().tab(RFCreativeTabs.blocks)));
     public static final RegistryEntrySupplier<Item> itemBlockAccess = ITEMS.register("accessory_workbench", () -> new CraftingBlockItem(ModBlocks.accessory.get(), new Item.Properties().tab(RFCreativeTabs.blocks)));

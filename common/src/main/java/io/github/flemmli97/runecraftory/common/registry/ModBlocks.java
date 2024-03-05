@@ -160,11 +160,6 @@ public class ModBlocks {
     public static final RegistryEntrySupplier<Block> onionGiant = giantCrop("ultra_onion", () -> ModItems.onionGiant, () -> ModItems.onionSeeds, onion);
     public static final RegistryEntrySupplier<Block> fodder = crop("fodder", () -> ModItems.fodder, () -> ModItems.fodderSeeds);
 
-    public static final RegistryEntrySupplier<Block> shieldCrop = crop("shield", () -> ModItems.seedShield, () -> ModItems.shieldSeeds);
-    public static final RegistryEntrySupplier<Block> swordCrop = crop("sword", () -> ModItems.seedSword, () -> ModItems.swordSeeds);
-
-    public static final RegistryEntrySupplier<Block> dungeon = crop("dungeon", () -> () -> Items.STONE, () -> ModItems.dungeonSeeds);
-
     public static final RegistryEntrySupplier<Block> potatoGiant = crop("potato", () -> () -> Items.POTATO, () -> () -> Items.POTATO);
     public static final RegistryEntrySupplier<Block> carrotGiant = crop("carrot", () -> () -> Items.CARROT, () -> () -> Items.CARROT);
 
@@ -203,6 +198,11 @@ public class ModBlocks {
     public static final RegistryEntrySupplier<Block> greenCrystalGiant = giantFlower("big_green_crystal", () -> ModItems.greenCrystalGiant, () -> ModItems.greenCrystalSeeds, greenCrystal);
     public static final RegistryEntrySupplier<Block> blueCrystalGiant = giantFlower("big_blue_crystal", () -> ModItems.blueCrystalGiant, () -> ModItems.blueCrystalSeeds, blueCrystal);
     public static final RegistryEntrySupplier<Block> emeryFlowerGiant = giantFlower("great_emery_flower", () -> ModItems.emeryFlowerGiant, () -> ModItems.emeryFlowerSeeds, emeryFlower);
+
+    public static final RegistryEntrySupplier<Block> shieldCrop = flower("shield_flower", () -> ModItems.plantShield, () -> ModItems.shieldSeeds);
+    public static final RegistryEntrySupplier<Block> swordCrop = flower("sword_flower", () -> ModItems.plantSword, () -> ModItems.swordSeeds);
+
+    public static final RegistryEntrySupplier<Block> dungeon = flower("dungeon_flower", () -> () -> Items.STONE, () -> ModItems.dungeonSeeds);
 
     public static final RegistryEntrySupplier<Block> mushroom = herb("mushroom");
     public static final RegistryEntrySupplier<Block> monarchMushroom = herb("monarch_mushroom");

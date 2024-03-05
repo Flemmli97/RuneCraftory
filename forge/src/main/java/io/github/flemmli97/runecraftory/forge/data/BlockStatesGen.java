@@ -67,7 +67,8 @@ public class BlockStatesGen extends BlockStateProvider {
                     ResourceLocation parent = crossTinted;
                     if (stage == 4) {
                         parent = flowerBig;
-                        if (ModBlocks.giantCropMap.get(reg).get() instanceof BlockGiantCrop giantCrop)
+                        RegistryEntrySupplier<Block> giant = ModBlocks.giantCropMap.get(reg);
+                        if (giant != null && giant.get() instanceof BlockGiantCrop giantCrop)
                             texture = this.itemTexture(giantCrop.getCrop());
                     }
                     return ConfiguredModel.builder().modelFile(this.models().singleTexture(name, parent, "cross", texture)).build();

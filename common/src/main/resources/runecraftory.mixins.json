@@ -25,6 +25,7 @@
     "ItemStackMixin",
     "LevelMixin",
     "LivingEntityMixin",
+    "LootContextBuilderMixin",
     "PlayerMixin",
     "PoiTypeAccessor",
     "PoolsMixin",

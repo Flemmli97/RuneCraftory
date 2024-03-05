@@ -1,0 +1,9 @@
+{
+  "buyPrice": 1500,
+  "sellPrice": 500,
+  "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:sword_seeds"
+}

@@ -20,13 +20,12 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 public class ItemStatManager extends SimpleJsonResourceReloadListener {
 
@@ -55,14 +54,22 @@ public class ItemStatManager extends SimpleJsonResourceReloadListener {
         return Optional.empty();
     }
 
-    public Collection<Pair<ItemStack, ItemStat>> all() {
+    public List<Pair<ItemStack, ItemStat>> all() {
+        return this.all(t -> true);
+    }
+
+    public List<Pair<ItemStack, ItemStat>> all(Predicate<ItemStack> test) {
         List<Pair<ItemStack, ItemStat>> list = new ArrayList<>();
         this.itemstat.forEach((res, stat) -> {
-            Item item = PlatformUtils.INSTANCE.items().getFromId(res);
-            if (item != null && item != Items.AIR)
-                list.add(Pair.of(new ItemStack(item), stat));
+            ItemStack stack = new ItemStack(PlatformUtils.INSTANCE.items().getFromId(res));
+            if (!stack.isEmpty() && test.test(stack))
+                list.add(Pair.of(stack, stat));
         });
-        this.itemstatTag.forEach((key, value) -> Registry.ITEM.getTag(key).ifPresent(n -> n.forEach(h -> list.add(Pair.of(new ItemStack(h.value()), value)))));
+        this.itemstatTag.forEach((key, value) -> Registry.ITEM.getTag(key).ifPresent(n -> n.forEach(h -> {
+            ItemStack stack = new ItemStack(h.value());
+            if (!stack.isEmpty() && test.test(stack))
+                list.add(Pair.of(stack, value));
+        })));
         return list;
     }
 

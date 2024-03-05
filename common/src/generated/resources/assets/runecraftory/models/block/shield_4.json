@@ -1,6 +1,0 @@
-{
-  "parent": "runecraftory:block/big_crop",
-  "textures": {
-    "crop": "runecraftory:block/shield_4"
-  }
-}

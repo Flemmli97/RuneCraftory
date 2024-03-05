@@ -12,6 +12,7 @@ import io.github.flemmli97.runecraftory.common.blocks.BlockQuestboard;
 import io.github.flemmli97.runecraftory.common.entities.GateEntity;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityKingWooly;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityWooly;
+import io.github.flemmli97.runecraftory.common.loot.CropWeaponLootFunction;
 import io.github.flemmli97.runecraftory.common.loot.FirstKillCondition;
 import io.github.flemmli97.runecraftory.common.loot.FriendPointCondition;
 import io.github.flemmli97.runecraftory.common.loot.ItemLevelLootFunction;
@@ -620,6 +621,13 @@ public class Loottables extends LootTableProvider {
             return build;
         }
 
+        protected static LootPool.Builder cropWeaponLoot(BlockCrop block) {
+            LootPool.Builder build = LootPool.lootPool().setRolls(ConstantValue.exactly(1));
+            build.add(LootItem.lootTableItem(block.getCrop())
+                    .apply(new CropWeaponLootFunction.Builder()));
+            return build;
+        }
+
         protected static LootPool.Builder oreLootPool(EnumMineralTier tier) {
             LootPool.Builder build = LootPool.lootPool().setRolls(ConstantValue.exactly(1));
             switch (tier) {
@@ -760,16 +768,22 @@ public class Loottables extends LootTableProvider {
             this.dropSelf(ModBlocks.monsterBarn.get());
             this.add(ModBlocks.questBoard.get(), block -> createSinglePropConditionTable(block, BlockQuestboard.PART, BlockQuestboard.Part.BOTTOM_LEFT));
 
-            ModBlocks.crops.forEach(reg -> {
+            for (RegistryEntrySupplier<Block> reg : ModBlocks.crops) {
                 Block block = reg.get();
                 if (block instanceof BlockCrop)
                     this.add(reg.get(), LootTable.lootTable().withPool(cropLoot((BlockCrop) block)));
-            });
-            ModBlocks.flowers.forEach(reg -> {
+            }
+            for (RegistryEntrySupplier<Block> reg : ModBlocks.flowers) {
+                if (reg == ModBlocks.swordCrop || reg == ModBlocks.shieldCrop) {
+                    Block block = reg.get();
+                    if (block instanceof BlockCrop)
+                        this.add(reg.get(), LootTable.lootTable().withPool(cropWeaponLoot((BlockCrop) block)));
+                    continue;
+                }
                 Block block = reg.get();
                 if (block instanceof BlockCrop)
                     this.add(reg.get(), LootTable.lootTable().withPool(cropLoot((BlockCrop) block)));
-            });
+            }
             ModBlocks.mineralMap.forEach((tier, reg) -> this.add(reg.get(), LootTable.lootTable().withPool(oreLootPool(tier))));
 
             this.add(ModBlocks.accessory.get(), block -> createSinglePropConditionTable(block, BlockCrafting.PART, BlockCrafting.EnumPart.LEFT));

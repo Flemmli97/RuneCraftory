@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/handheld",
   "textures": {
-    "layer0": "runecraftory:item/seed_sword_item"
+    "layer0": "runecraftory:item/plant_sword"
   }
 }

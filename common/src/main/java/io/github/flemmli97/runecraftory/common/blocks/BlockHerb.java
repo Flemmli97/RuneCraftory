@@ -1,7 +1,6 @@
 package io.github.flemmli97.runecraftory.common.blocks;
 
-import io.github.flemmli97.runecraftory.common.loot.IBlockModifyLevel;
-import io.github.flemmli97.runecraftory.common.loot.ItemLevelLootFunction;
+import io.github.flemmli97.runecraftory.common.loot.LootCtxParameters;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import net.minecraft.core.BlockPos;
@@ -11,7 +10,6 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BushBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -23,9 +21,10 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Set;
 
-public class BlockHerb extends BushBlock implements IBlockModifyLevel {
+public class BlockHerb extends BushBlock {
 
     public static final VoxelShape SHAPE = Block.box(5.0D, 0.0D, 5.0D, 11.0D, 10.0D, 11.0D);
 
@@ -39,9 +38,8 @@ public class BlockHerb extends BushBlock implements IBlockModifyLevel {
     }
 
     @Override
-    public int getLevel(BlockState state, BlockEntity blockEntity, ItemLevelLootFunction func, LootContext ctx) {
-        int level = state.getValue(LEVEL);
-        return level == 0 ? func.getLevel(ctx) : level;
+    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+        return super.getDrops(state, builder.withParameter(LootCtxParameters.ITEM_LEVEL_CONTEXT, state.getValue(LEVEL)));
     }
 
     @Override

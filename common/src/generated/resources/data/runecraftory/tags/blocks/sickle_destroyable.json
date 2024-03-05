@@ -78,9 +78,6 @@
     "runecraftory:doom_pumpkin",
     "runecraftory:ultra_onion",
     "runecraftory:fodder",
-    "runecraftory:shield",
-    "runecraftory:sword",
-    "runecraftory:dungeon",
     "runecraftory:potato",
     "runecraftory:carrot",
     "runecraftory:toyherb",
@@ -116,6 +113,9 @@
     "runecraftory:big_red_crystal",
     "runecraftory:big_green_crystal",
     "runecraftory:big_blue_crystal",
-    "runecraftory:great_emery_flower"
+    "runecraftory:great_emery_flower",
+    "runecraftory:shield_flower",
+    "runecraftory:sword_flower",
+    "runecraftory:dungeon_flower"
   ]
 }

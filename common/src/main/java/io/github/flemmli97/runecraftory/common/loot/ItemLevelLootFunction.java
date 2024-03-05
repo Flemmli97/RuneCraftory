@@ -8,9 +8,11 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
+import io.github.flemmli97.runecraftory.common.world.farming.FarmlandData;
+import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
@@ -91,11 +93,18 @@ public class ItemLevelLootFunction extends LootItemConditionalFunction {
 
     @Override
     protected ItemStack run(ItemStack stack, LootContext ctx) {
-        int level;
-        BlockState state = ctx.getParamOrNull(LootContextParams.BLOCK_STATE);
-        if (state != null && state.getBlock() instanceof IBlockModifyLevel) {
-            level = ((IBlockModifyLevel) state.getBlock()).getLevel(state, ctx.getParamOrNull(LootContextParams.BLOCK_ENTITY), this, ctx);
-        } else
+        int level = 0;
+        if (ctx.hasParam(LootCtxParameters.ITEM_LEVEL_CONTEXT))
+            level = ctx.getParam(LootCtxParameters.ITEM_LEVEL_CONTEXT);
+        else {
+            if (ctx.hasParam(LootContextParams.BLOCK_STATE) && ctx.hasParam(LootContextParams.ORIGIN)) {
+                BlockPos blockPos = new BlockPos(ctx.getParam(LootContextParams.ORIGIN));
+                level = FarmlandHandler.get(ctx.getLevel().getServer())
+                        .getData(ctx.getLevel(), blockPos)
+                        .map(FarmlandData::getCropLevel).orElse(0);
+            }
+        }
+        if (level == 0)
             level = this.getLevel(ctx);
         return ItemNBT.getLeveledItem(stack, Math.abs(level));
     }

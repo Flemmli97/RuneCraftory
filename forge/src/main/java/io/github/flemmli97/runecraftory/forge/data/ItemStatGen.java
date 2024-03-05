@@ -244,6 +244,8 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.DIZZY.get(), 5)
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3.0))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
+        this.addStat(ModItems.plantSword.get(), new ItemStat.Builder(2000, 700, 0)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 5));
 
         this.addStat(ModItems.claymore.get(), new ItemStat.Builder(210, 17, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 6)
@@ -774,6 +776,8 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.ironShield.get(), new ItemStat.Builder(1000, 50, 0)
                 .addAttribute(ModAttributes.DEFENCE.get(), 7)
                 .addMonsterStat(ModAttributes.DEFENCE.get(), 0.5));
+        this.addStat(ModItems.plantShield.get(), new ItemStat.Builder(2000, 700, 0)
+                .addAttribute(ModAttributes.DEFENCE.get(), 5));
 
         this.addStat(ModItems.scrap.get(), new ItemStat.Builder(13, 1, 1)
                 .addAttribute(ModAttributes.DEFENCE.get(), -2)
@@ -1570,6 +1574,8 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.strawberrySeeds.get(), new ItemStat.Builder(330, 33, 0));
         this.addStat(ModItems.cucumberSeeds.get(), new ItemStat.Builder(230, 23, 0));
         this.addStat(ModItems.fodderSeeds.get(), new ItemStat.Builder(50, 5, 0));
+        this.addStat(ModItems.swordSeeds.get(), new ItemStat.Builder(1500, 500, 0));
+        this.addStat(ModItems.shieldSeeds.get(), new ItemStat.Builder(1500, 500, 0));
 
         this.addStat(ModItems.fodder.get(), new ItemStat.Builder(250, 35, 0));
 

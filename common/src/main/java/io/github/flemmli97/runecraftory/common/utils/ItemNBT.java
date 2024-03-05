@@ -89,9 +89,10 @@ public class ItemNBT {
     public static ItemStack getLeveledItem(ItemStack stack, int level) {
         if (shouldHaveLevel(stack)) {
             CompoundTag compound = ItemNBT.getItemNBT(stack);
-            if (compound != null) {
-                compound.putInt(LibNBT.LEVEL, Mth.clamp(level, 1, 10));
-            }
+            if (compound == null)
+                compound = new CompoundTag();
+            compound.putInt(LibNBT.LEVEL, Mth.clamp(level, 1, 10));
+            stack.getOrCreateTag().put(RuneCraftory.MODID, compound);
         }
         return stack;
     }

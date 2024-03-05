@@ -1,0 +1,11 @@
+{
+  "buyPrice": 2000,
+  "sellPrice": 700,
+  "upgradeDifficulty": 0,
+  "itemStats": {
+    "runecraftory:defence": 5.0
+  },
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:plant_shield"
+}
