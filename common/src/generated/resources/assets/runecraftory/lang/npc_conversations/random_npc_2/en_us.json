@@ -1,0 +1,12 @@
+{
+  "npc.generic.2.greeting.default": "Hello %player%.",
+  "npc.generic.2.greeting.1": "Howdy %player%",
+  "npc.generic.2.greeting.2": "Hi. Whats up %player%?",
+  "npc.generic.2.talk.default": "...",
+  "npc.generic.2.talk.1": "Did you know that upgrading a weapon with scrap metal + makes it do 1 damage?",
+  "npc.generic.2.talk.2": "Those villagers seem strange. Why do they have no hands?",
+  "npc.generic.2.follow.yes": "Where are we going?",
+  "npc.generic.2.follow.no": "Sorry but I'm have something to take care of.",
+  "npc.generic.2.follow.stop": "Ok. Cya.",
+  "npc.generic.2.gift.default": "Thanks. I appreciate it"
+}

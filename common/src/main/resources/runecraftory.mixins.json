@@ -47,6 +47,7 @@
     "PlayerModelMixin",
     "ItemInHandRendererMixin",
     "KeyboardHandlerMixin",
+    "LanguageManagerMixin",
     "LevelRendererMixin",
     "LivingEntityRendererMixin",
     "MinecraftMixin",

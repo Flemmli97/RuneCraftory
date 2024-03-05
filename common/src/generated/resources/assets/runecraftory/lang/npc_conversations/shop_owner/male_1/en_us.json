@@ -1,0 +1,17 @@
+{
+  "npc.shop_owner.male.1.greeting.default": "Hey. Nice to see you %player%.",
+  "npc.shop_owner.male.1.talk.default": "...",
+  "npc.shop_owner.male.1.talk.1": "You should totally check out my shop.",
+  "npc.shop_owner.male.1.talk.2": "Not watering crops will make them wilt so be sure to water them everyday.",
+  "npc.shop_owner.male.1.follow.yes": "Where are we going?",
+  "npc.shop_owner.male.1.follow.no": "Hmm... maybe another time",
+  "npc.shop_owner.male.1.follow.stop": "Ok Bye!",
+  "npc.generic.quest.ship_turnip.start": "Are you here for my request?\nI will show you how to ship items to make money: Shipping items is very simple. First you need a shipping bin. It can hold any shippable items in it.\nPut the items you want to ship in it and everyday in the morning your items will be automatically shipped. Lets try it out now: I want you to ship a turnip.",
+  "npc.generic.quest.ship_turnip.active": "Please ship a turnip.",
+  "npc.generic.quest.ship_turnip.end": "Great. There are a lot of items you can ship to make money. Here takethese turnip seeds. It should come in handy.",
+  "npc.shop_owner.male.1.dislike": "Eh... what is this?",
+  "npc.shop_owner.male.1.like": "Thank you. Appreciate it.",
+  "npc.shop_owner.male.1.gift.default": "Thanks. I would really like some crops.",
+  "quest/ship_turnip.quest.runecraftory": "First Shipment",
+  "quest/ship_turnip.quest.runecraftory_description": "Come see me."
+}

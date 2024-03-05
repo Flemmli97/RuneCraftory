@@ -23,24 +23,28 @@ public class PlaceHolderComponent {
     /**
      * Parse the component by replacing the placeholder texts
      */
-    public static Component parseComponent(Component component, Map<String, Object> replacements) {
+    public static Component parseDialogueComponent(Component component, Map<String, Object> replacements) {
         Component parse;
         if (component instanceof TranslatableComponent translatable) {
-            Language language = Language.getInstance();
-            String string = language.getOrDefault(translatable.getKey());
+            String translation = NPCDialogueLanguageManager.INSTANCE
+                    .getOrDefault(translatable.getKey());
+            if (translation.equals(translatable.getKey())) {
+                Language language = Language.getInstance();
+                translation = language.getOrDefault(translatable.getKey());
+            }
             List<Object> args = new ArrayList<>(List.of(translatable.getArgs()));
             for (String pattern : PLACEHOLDERS) {
                 Object replacement = replacements.get(pattern);
                 if (replacement != null) {
-                    string = string.replace("%player%", "%" + (args.size() + 1) + "$s");
+                    translation = translation.replace("%player%", "%" + (args.size() + 1) + "$s");
                     args.add(replacement);
                 }
             }
-            parse = new TranslatableComponent(string, args.toArray());
+            parse = new TranslatableComponent(translation, args.toArray());
         } else {
             parse = component.plainCopy();
         }
-        List<Component> children = component.getSiblings().stream().map(c -> parseComponent(c, replacements)).toList();
+        List<Component> children = component.getSiblings().stream().map(c -> parseDialogueComponent(c, replacements)).toList();
         parse.getSiblings().addAll(children);
         return parse;
     }

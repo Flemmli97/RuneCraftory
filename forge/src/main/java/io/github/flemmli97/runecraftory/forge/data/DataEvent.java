@@ -28,7 +28,8 @@ public class DataEvent {
         if (event.includeClient()) {
             data.addProvider(new BlockStatesGen(data, ignore));
             data.addProvider(new ItemModels(data, ignore));
-            data.addProvider(new LangGen(data, npcDataGen));
+            data.addProvider(new LangGen(data));
+            data.addProvider(new NPCDialogLangGen(data, npcDataGen));
             data.addProvider(new ParticleGen(data));
             data.addProvider(new SoundGen(data, event.getExistingFileHelper()));
         }

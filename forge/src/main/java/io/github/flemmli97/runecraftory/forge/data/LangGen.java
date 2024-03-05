@@ -42,7 +42,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
 import org.apache.commons.lang3.text.translate.JavaUnicodeEscaper;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -69,13 +68,11 @@ public class LangGen implements DataProvider {
     private final DataGenerator gen;
     private final String modid;
     private final String locale;
-    private final NPCDataGen npcDataGen;
 
-    public LangGen(DataGenerator gen, @Nullable NPCDataGen npcDataGen) {
+    public LangGen(DataGenerator gen) {
         this.gen = gen;
         this.modid = RuneCraftory.MODID;
         this.locale = "en_us";
-        this.npcDataGen = npcDataGen;
     }
 
     protected void addTranslations() {
@@ -621,9 +618,6 @@ public class LangGen implements DataProvider {
         this.add("npc.default.gift.neutral", "Thank you for your gift.");
         this.add("npc.default.quest.response.default", "Placeholder text for quest response");
 
-        if (this.npcDataGen != null)
-            this.npcDataGen.translations.forEach(this::add);
-
         this.add("runecraftory.advancements.root.title", "Runecraftory");
         this.add("runecraftory.advancements.root.description", "A minecrafty harvest moon");
         this.add("runecraftory.advancements.tame.first.title", "First buddy");
@@ -728,7 +722,7 @@ public class LangGen implements DataProvider {
         this.addTranslations();
         Map<String, String> sort = this.data.entrySet().stream().sorted((e, e2) -> ORDER.compare(e.getKey(), e2.getKey()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (old, v) -> old, LinkedHashMap::new));
-        if (!this.data.isEmpty())
+        if (!sort.isEmpty())
             this.save(cache, sort, this.gen.getOutputFolder().resolve("assets/" + this.modid + "/lang/" + this.locale + ".json"));
     }
 

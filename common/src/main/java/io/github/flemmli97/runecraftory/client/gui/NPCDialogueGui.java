@@ -17,6 +17,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.entity.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,7 +104,7 @@ public class NPCDialogueGui<T extends EntityNPCBase> extends Screen {
         int y = 0;
         for (int i = this.actions.size() - 1; i >= 0; i--) {
             int actionIdx = i;
-            DialogueOptionButton btn = new DialogueOptionButton(this.width / 2, this.topPos - 20 + y, this.font, this.actions.get(i), b -> {
+            DialogueOptionButton btn = new DialogueOptionButton(this.width / 2, this.topPos - 20 + y, this.font, PlaceHolderComponent.parseDialogueComponent(this.actions.get(i), this.replacements(this.minecraft.player)), b -> {
                 if (this.convCtx != null && this.conversationID != null)
                     Platform.INSTANCE.sendToServer(new C2SDialogueAction(this.entity.getId(), this.convCtx, this.conversationID, actionIdx));
             });
@@ -173,8 +174,7 @@ public class NPCDialogueGui<T extends EntityNPCBase> extends Screen {
     }
 
     public void updateConversation(Minecraft mc, ConversationContext convCtx, String conversationID, Component conversation, List<Component> actions) {
-        conversation = PlaceHolderComponent.parseComponent(conversation, Map.of(PlaceHolderComponent.NPC, this.entity.getDisplayName(),
-                PlaceHolderComponent.PLAYER, mc.player.getDisplayName()));
+        conversation = PlaceHolderComponent.parseDialogueComponent(conversation, this.replacements(mc.player));
         this.conversation = mc.font.getSplitter().splitLines(conversation, LINE_WIDTH, conversation.getStyle())
                 .stream().map(txt -> new ConversationLine(mc.font.width(txt), txt, Language.getInstance().getVisualOrder(txt))).toList();
         this.actions = actions;
@@ -184,6 +184,11 @@ public class NPCDialogueGui<T extends EntityNPCBase> extends Screen {
         this.textProgress = 0;
         this.pageIndex = 0;
         this.reset = true;
+    }
+
+    private Map<String, Object> replacements(Player player) {
+        return Map.of(PlaceHolderComponent.NPC, this.entity.getDisplayName(),
+                PlaceHolderComponent.PLAYER, player.getDisplayName());
     }
 
     record ConversationLine(int width, FormattedText raw, FormattedCharSequence txt) {
