@@ -10,5 +10,5 @@
     "runecraftory:defence": 1.5
   },
   "element": "NONE",
-  "item": "c:dragonic"
+  "item": "#c:dragonic"
 }

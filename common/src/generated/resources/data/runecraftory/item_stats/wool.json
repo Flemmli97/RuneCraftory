@@ -11,5 +11,5 @@
     "runecraftory:magic_defence": 0.2
   },
   "element": "NONE",
-  "item": "minecraft:wool"
+  "item": "#minecraft:wool"
 }

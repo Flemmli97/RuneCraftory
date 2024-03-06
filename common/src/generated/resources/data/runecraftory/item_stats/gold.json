@@ -10,5 +10,5 @@
     "runecraftory:defence": 0.7
   },
   "element": "NONE",
-  "item": "c:gold_ingots"
+  "item": "#c:gold_ingots"
 }

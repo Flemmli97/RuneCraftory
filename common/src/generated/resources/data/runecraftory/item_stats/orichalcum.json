@@ -9,5 +9,5 @@
     "runecraftory:defence": 1.0
   },
   "element": "NONE",
-  "item": "c:orichalcum"
+  "item": "#c:orichalcum"
 }

@@ -10,5 +10,5 @@
     "runecraftory:defence": 0.25
   },
   "element": "NONE",
-  "item": "minecraft:logs"
+  "item": "#minecraft:logs"
 }

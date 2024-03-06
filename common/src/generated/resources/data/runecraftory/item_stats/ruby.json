@@ -9,5 +9,5 @@
     "runecraftory:magic_defence": 0.5
   },
   "element": "NONE",
-  "item": "c:rubies"
+  "item": "#c:rubies"
 }

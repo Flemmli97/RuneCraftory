@@ -376,7 +376,7 @@ public class ModItems {
 
     public static final RegistryEntrySupplier<Item> loveLetter = ITEMS.register("love_letter", () -> new Item(new Item.Properties().stacksTo(1).tab(RFCreativeTabs.weaponToolTab)));
     public static final RegistryEntrySupplier<Item> divorcePaper = ITEMS.register("divorce_paper", () -> new Item(new Item.Properties().stacksTo(1).tab(RFCreativeTabs.weaponToolTab)));
-    public static final RegistryEntrySupplier<Item> engagementRing = equipment(EquipmentSlot.LEGS, "engagement_ring", Texture.N);
+    public static final RegistryEntrySupplier<Item> engagementRing = ITEMS.register("engagement_ring", () -> Platform.INSTANCE.armor(EquipmentSlot.LEGS, new Item.Properties().tab(RFCreativeTabs.equipment), new ResourceLocation(RuneCraftory.MODID, "engagement_ring"), false));
     public static final RegistryEntrySupplier<Item> cheapBracelet = equipment(EquipmentSlot.LEGS, "cheap_bracelet", Texture.Y);
     public static final RegistryEntrySupplier<Item> bronzeBracelet = equipment(EquipmentSlot.LEGS, "bronze_bracelet", Texture.Y);
     public static final RegistryEntrySupplier<Item> silverBracelet = equipment(EquipmentSlot.LEGS, "silver_bracelet", Texture.Y);
