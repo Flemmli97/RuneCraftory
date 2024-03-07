@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.attachment.player.TamedEntityTracker;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.registry.ModTags;
+import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
 import net.minecraft.advancements.critereon.DeserializationContext;
@@ -61,7 +61,7 @@ public class TameMonsterTrigger extends SimpleCriterionTrigger<TameMonsterTrigge
 
         public boolean matches(BaseMonster monster, TamedEntityTracker tracker) {
             if (this.bossOnly) {
-                if (!monster.getType().is(ModTags.BOSS_MONSTERS))
+                if (!monster.getType().is(RunecraftoryTags.BOSS_MONSTERS))
                     return false;
                 return tracker.getTameCount(true) >= this.amount;
             }

@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.entities.npc.job;
 import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
-import io.github.flemmli97.runecraftory.common.registry.ModTags;
+import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.Util;
 import net.minecraft.advancements.critereon.ItemPredicate;
@@ -42,7 +42,7 @@ public class Smith extends NPCJob {
 
     private static final Map<ItemPredicate, Integer> MATERIALS = ImmutableMap.of(
             ItemPredicate.Builder.item().of(ItemTags.LOGS).build(), 32,
-            ItemPredicate.Builder.item().of(ModTags.COBBLESTONE).build(), 64
+            ItemPredicate.Builder.item().of(RunecraftoryTags.COBBLESTONE).build(), 64
     );
 
     public Smith(NPCJob.Builder builder) {

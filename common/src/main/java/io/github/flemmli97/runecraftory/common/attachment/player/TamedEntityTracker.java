@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.attachment.player;
 
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.registry.ModTags;
+import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import net.minecraft.nbt.CompoundTag;
 
 public class TamedEntityTracker {
@@ -11,7 +11,7 @@ public class TamedEntityTracker {
 
     public void tameEntity(BaseMonster monster) {
         this.tamedMonster++;
-        if (monster.getType().is(ModTags.BOSS_MONSTERS))
+        if (monster.getType().is(RunecraftoryTags.BOSS_MONSTERS))
             this.tamedBossMonster++;
     }
 

@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.common.registry;
+package io.github.flemmli97.runecraftory.common.lib;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.Block;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ModTags {
+public class RunecraftoryTags {
 
     //Forge Tags
     public static final TagKey<Item> BRONZE_F = forge("ingots/bronze");

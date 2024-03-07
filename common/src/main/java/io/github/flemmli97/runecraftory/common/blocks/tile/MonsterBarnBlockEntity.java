@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.blocks.tile;
 
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
-import io.github.flemmli97.runecraftory.common.registry.ModTags;
+import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.world.BarnData;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import net.minecraft.core.BlockPos;
@@ -79,7 +79,7 @@ public class MonsterBarnBlockEntity extends BlockEntity {
 
     private static boolean matches(Level level, BlockPos pos, boolean ground) {
         BlockState state = level.getBlockState(pos);
-        return ground ? state.is(ModTags.BARN_GROUND) : !state.is(ModBlocks.MONSTER_BARN.get()) && state.getCollisionShape(level, pos).isEmpty();
+        return ground ? state.is(RunecraftoryTags.BARN_GROUND) : !state.is(ModBlocks.MONSTER_BARN.get()) && state.getCollisionShape(level, pos).isEmpty();
     }
 
     private static boolean cornersMatch(int size, Level level, BlockPos center) {

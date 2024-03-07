@@ -9,7 +9,7 @@ import io.github.flemmli97.runecraftory.common.entities.misc.EntityTreasureChest
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
-import io.github.flemmli97.runecraftory.common.registry.ModTags;
+import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -464,28 +464,28 @@ public class GateEntity extends Mob implements IBaseMob {
 
     private EnumElement getType(ServerLevelAccessor level, Holder<Biome> key) {
         EnumElement element = EnumElement.values()[this.getRandom().nextInt(EnumElement.values().length)];
-        if (key.is(ModTags.IS_PLAINS) && this.getRandom().nextFloat() < 0.5) {
+        if (key.is(RunecraftoryTags.IS_PLAINS) && this.getRandom().nextFloat() < 0.5) {
             element = EnumElement.NONE;
         } else if (key.is(BiomeTags.IS_FOREST) && this.getRandom().nextFloat() < 0.5) {
             element = EnumElement.WIND;
-        } else if (key.is(ModTags.IS_HOT) && this.getRandom().nextFloat() < 0.5) {
+        } else if (key.is(RunecraftoryTags.IS_HOT) && this.getRandom().nextFloat() < 0.5) {
             element = EnumElement.FIRE;
         } else if (key.is(BiomeTags.IS_MOUNTAIN) && this.getRandom().nextFloat() < 0.5) {
             element = EnumElement.WIND;
         } else if (key.is(BiomeTags.IS_OCEAN) && this.getRandom().nextFloat() < 0.5) {
             element = EnumElement.WATER;
-        } else if (key.is(ModTags.IS_SANDY) && this.getRandom().nextFloat() < 0.5) {
+        } else if (key.is(RunecraftoryTags.IS_SANDY) && this.getRandom().nextFloat() < 0.5) {
             element = EnumElement.EARTH;
-        } else if (key.is(ModTags.IS_MAGICAL)) {
+        } else if (key.is(RunecraftoryTags.IS_MAGICAL)) {
             if (this.getRandom().nextFloat() < 0.4) {
                 element = EnumElement.LIGHT;
             } else if (this.getRandom().nextFloat() < 0.2) {
                 element = EnumElement.LOVE;
             }
-        } else if (key.is(ModTags.IS_SPOOKY) && this.getRandom().nextFloat() < 0.4) {
+        } else if (key.is(RunecraftoryTags.IS_SPOOKY) && this.getRandom().nextFloat() < 0.4) {
             element = EnumElement.DARK;
         }
-        if (key.is(ModTags.IS_END)) {
+        if (key.is(RunecraftoryTags.IS_END)) {
             if (this.getRandom().nextFloat() < 0.3) {
                 element = EnumElement.DARK;
             } else if (this.getRandom().nextFloat() < 0.3) {

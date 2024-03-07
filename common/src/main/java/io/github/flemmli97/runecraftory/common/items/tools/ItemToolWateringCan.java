@@ -10,7 +10,7 @@ import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.common.lib.LibNBT;
-import io.github.flemmli97.runecraftory.common.registry.ModTags;
+import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -215,7 +215,7 @@ public class ItemToolWateringCan extends TieredItem implements IItemUsable, ICha
         boolean creative = !(entity instanceof Player) || ((Player) entity).isCreative();
         BlockState state = world.getBlockState(pos);
         int water = this.getWater(stack);
-        if ((creative || water > 0) && state.is(ModTags.FARMLAND) && state.getValue(FarmBlock.MOISTURE) != 7) {
+        if ((creative || water > 0) && state.is(RunecraftoryTags.FARMLAND) && state.getValue(FarmBlock.MOISTURE) != 7) {
             FarmlandHandler.waterLand(world, pos, state);
             if (!creative) {
                 stack.getTag().putInt(LibNBT.WATERING_CAN_WATER, water - 1);

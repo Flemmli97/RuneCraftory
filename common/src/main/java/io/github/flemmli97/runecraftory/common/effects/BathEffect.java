@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.effects;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
-import io.github.flemmli97.runecraftory.common.registry.ModTags;
+import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
@@ -65,7 +65,7 @@ public class BathEffect extends MobEffect {
         if (state.is(BlockTags.CAMPFIRES)) {
             return state.hasProperty(CampfireBlock.LIT) && state.getValue(CampfireBlock.LIT);
         }
-        return state.is(ModTags.ONSEN_PROVIDER);
+        return state.is(RunecraftoryTags.ONSEN_PROVIDER);
     }
 
     @Override

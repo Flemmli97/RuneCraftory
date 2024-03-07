@@ -4,7 +4,6 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.AttackAABBRender;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
-import io.github.flemmli97.runecraftory.common.lib.EnumAABBType;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -59,5 +58,11 @@ public class S2CAttackDebug implements Packet {
     @Override
     public ResourceLocation getID() {
         return ID;
+    }
+
+    public enum EnumAABBType {
+
+        ATTEMPT,
+        ATTACK
     }
 }

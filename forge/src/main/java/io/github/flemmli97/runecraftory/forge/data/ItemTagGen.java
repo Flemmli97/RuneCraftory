@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.forge.data;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
-import io.github.flemmli97.runecraftory.common.registry.ModTags;
+import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
 import net.minecraft.data.DataGenerator;
@@ -26,98 +26,98 @@ public class ItemTagGen extends ItemTagsProvider {
     @Override
     protected void addTags() {
         ModItems.DATAGENTAGS.forEach((key, supList) -> supList.forEach(sup -> this.tag(key).add(sup.get())));
-        this.tag(ModTags.SHORTSWORDS)
+        this.tag(RunecraftoryTags.SHORTSWORDS)
                 .add(ModItems.PLANT_SWORD.get());
-        this.tag(ModTags.SHIELDS)
+        this.tag(RunecraftoryTags.SHIELDS)
                 .add(ModItems.PLANT_SHIELD.get());
 
         //Forge copy tags
-        this.tag(ModTags.IRON)
+        this.tag(RunecraftoryTags.IRON)
                 .add(Items.IRON_INGOT)
                 .addOptional(Tags.Items.INGOTS_IRON.location());
-        this.tag(ModTags.GOLD)
+        this.tag(RunecraftoryTags.GOLD)
                 .add(Items.GOLD_INGOT)
                 .addOptional(Tags.Items.INGOTS_GOLD.location());
-        this.tag(ModTags.COPPER)
+        this.tag(RunecraftoryTags.COPPER)
                 .add(Items.COPPER_INGOT)
                 .addOptional(Tags.Items.INGOTS_COPPER.location());
-        this.tag(ModTags.COPPER_BLOCK)
+        this.tag(RunecraftoryTags.COPPER_BLOCK)
                 .add(Items.COPPER_BLOCK)
                 .add(Items.CUT_COPPER)
                 .addOptional(Tags.Items.STORAGE_BLOCKS_COPPER.location());
-        this.tag(ModTags.EMERALDS)
+        this.tag(RunecraftoryTags.EMERALDS)
                 .add(Items.EMERALD)
                 .addOptional(Tags.Items.GEMS_EMERALD.location());
-        this.tag(ModTags.CHEST)
+        this.tag(RunecraftoryTags.CHEST)
                 .add(Items.ENDER_CHEST)
                 .add(Items.TRAPPED_CHEST)
                 .add(Items.CHEST)
                 .add(Items.TRAPPED_CHEST)
                 .addOptional(Tags.Items.CHESTS.location());
-        this.tag(ModTags.SHEARS)
+        this.tag(RunecraftoryTags.SHEARS)
                 .add(Items.SHEARS)
                 .addOptional(Tags.Items.SHEARS.location());
-        this.tag(ModTags.COBBLESTONE)
+        this.tag(RunecraftoryTags.COBBLESTONE)
                 .add(Items.COBBLESTONE)
                 .add(Items.INFESTED_COBBLESTONE)
                 .add(Items.MOSSY_COBBLESTONE)
                 .add(Items.COBBLED_DEEPSLATE)
                 .addOptional(Tags.Items.COBBLESTONE.location());
-        this.tag(ModTags.WOOD_ROD)
+        this.tag(RunecraftoryTags.WOOD_ROD)
                 .add(Items.STICK)
                 .addOptional(Tags.Items.RODS_WOODEN.location());
-        this.tag(ModTags.SEEDS)
+        this.tag(RunecraftoryTags.SEEDS)
                 .add(Items.WHEAT_SEEDS)
                 .add(Items.BEETROOT_SEEDS)
                 .add(Items.MELON_SEEDS)
                 .add(Items.PUMPKIN_SEEDS)
                 .addTag(Tags.Items.SEEDS);
-        this.tag(ModTags.CROPS)
+        this.tag(RunecraftoryTags.CROPS)
                 .add(Items.BEETROOT)
                 .add(Items.CARROT)
                 .add(Items.NETHER_WART)
                 .add(Items.POTATO)
                 .add(Items.WHEAT);
 
-        this.forgeAndCommonTag(Tags.Items.SLIMEBALLS, ModTags.SLIME, ModItems.GLUE.get());
-        this.tag(ModTags.SLIME)
+        this.forgeAndCommonTag(Tags.Items.SLIMEBALLS, RunecraftoryTags.SLIME, ModItems.GLUE.get());
+        this.tag(RunecraftoryTags.SLIME)
                 .add(Items.SLIME_BALL);
-        this.forgeAndCommonTag(ModTags.BRONZE_F, ModTags.BRONZE, ModItems.BRONZE.get());
-        this.forgeAndCommonTag(ModTags.SILVER_F, ModTags.SILVER, ModItems.SILVER.get());
-        this.forgeAndCommonTag(ModTags.PLATINUM_F, ModTags.PLATINUM, ModItems.PLATINUM.get());
+        this.forgeAndCommonTag(RunecraftoryTags.BRONZE_F, RunecraftoryTags.BRONZE, ModItems.BRONZE.get());
+        this.forgeAndCommonTag(RunecraftoryTags.SILVER_F, RunecraftoryTags.SILVER, ModItems.SILVER.get());
+        this.forgeAndCommonTag(RunecraftoryTags.PLATINUM_F, RunecraftoryTags.PLATINUM, ModItems.PLATINUM.get());
 
-        this.forgeAndCommonTag(ModTags.AMETHYST_F, ModTags.AMETHYSTS, ModItems.AMETHYST.get());
-        this.tag(ModTags.AMETHYSTS)
+        this.forgeAndCommonTag(RunecraftoryTags.AMETHYST_F, RunecraftoryTags.AMETHYSTS, ModItems.AMETHYST.get());
+        this.tag(RunecraftoryTags.AMETHYSTS)
                 .add(Items.AMETHYST_SHARD);
-        this.forgeAndCommonTag(ModTags.AQUAMARINE_F, ModTags.AQUAMARINES, ModItems.AQUAMARINE.get());
-        this.forgeAndCommonTag(ModTags.RUBY_F, ModTags.RUBIES, ModItems.RUBY.get());
-        this.forgeAndCommonTag(ModTags.SAPPHIRE_F, ModTags.SAPPHIRES, ModItems.SAPPHIRE.get());
+        this.forgeAndCommonTag(RunecraftoryTags.AQUAMARINE_F, RunecraftoryTags.AQUAMARINES, ModItems.AQUAMARINE.get());
+        this.forgeAndCommonTag(RunecraftoryTags.RUBY_F, RunecraftoryTags.RUBIES, ModItems.RUBY.get());
+        this.forgeAndCommonTag(RunecraftoryTags.SAPPHIRE_F, RunecraftoryTags.SAPPHIRES, ModItems.SAPPHIRE.get());
 
-        this.tag(ModTags.ORICHALCUM)
+        this.tag(RunecraftoryTags.ORICHALCUM)
                 .add(ModItems.ORICHALCUM.get());
-        this.tag(ModTags.DRAGONIC)
+        this.tag(RunecraftoryTags.DRAGONIC)
                 .add(ModItems.DRAGONIC.get());
 
-        this.tag(ModTags.GENERIC_TRASH)
+        this.tag(RunecraftoryTags.GENERIC_TRASH)
                 .add(ModItems.FAILED_DISH.get(), ModItems.DISASTROUS_DISH.get(),
                         ModItems.WEEDS.get(), ModItems.WITHERED_GRASS.get())
                 .addTag(ItemTags.DIRT)
-                .addTag(ModTags.COBBLESTONE);
-        this.tag(ModTags.SMITH_TRASH)
+                .addTag(RunecraftoryTags.COBBLESTONE);
+        this.tag(RunecraftoryTags.SMITH_TRASH)
                 .add(ModItems.SCRAP.get(), ModItems.SCRAP_PLUS.get())
-                .addTag(ModTags.GENERIC_TRASH);
+                .addTag(RunecraftoryTags.GENERIC_TRASH);
 
-        this.tag(ModTags.MINERALS)
+        this.tag(RunecraftoryTags.MINERALS)
                 .add(ModItems.SCRAP_PLUS.get())
-                .addTag(ModTags.IRON)
-                .addTag(ModTags.GOLD)
-                .addTag(ModTags.COPPER)
-                .addTag(ModTags.BRONZE)
-                .addTag(ModTags.SILVER)
-                .addTag(ModTags.PLATINUM)
-                .addTag(ModTags.ORICHALCUM)
-                .addTag(ModTags.DRAGONIC);
-        this.forgeAndCommonTag(Tags.Items.GEMS, ModTags.JEWELS,
+                .addTag(RunecraftoryTags.IRON)
+                .addTag(RunecraftoryTags.GOLD)
+                .addTag(RunecraftoryTags.COPPER)
+                .addTag(RunecraftoryTags.BRONZE)
+                .addTag(RunecraftoryTags.SILVER)
+                .addTag(RunecraftoryTags.PLATINUM)
+                .addTag(RunecraftoryTags.ORICHALCUM)
+                .addTag(RunecraftoryTags.DRAGONIC);
+        this.forgeAndCommonTag(Tags.Items.GEMS, RunecraftoryTags.JEWELS,
                 ModItems.AMETHYST.get(),
                 ModItems.AQUAMARINE.get(),
                 ModItems.RUBY.get(),
@@ -127,8 +127,8 @@ public class ItemTagGen extends ItemTagsProvider {
                 ModItems.CORE_YELLOW.get(),
                 ModItems.CORE_GREEN.get(),
                 ModItems.CRYSTAL_SKULL.get());
-        this.tag(ModTags.JEWELS).add(Items.EMERALD, Items.DIAMOND);
-        this.tag(ModTags.CRYSTALS)
+        this.tag(RunecraftoryTags.JEWELS).add(Items.EMERALD, Items.DIAMOND);
+        this.tag(RunecraftoryTags.CRYSTALS)
                 .add(ModItems.CRYSTAL_WATER.get())
                 .add(ModItems.CRYSTAL_EARTH.get())
                 .add(ModItems.CRYSTAL_FIRE.get())
@@ -141,7 +141,7 @@ public class ItemTagGen extends ItemTagsProvider {
                 .add(ModItems.CRYSTAL_MAGIC.get())
                 .add(ModItems.CRYSTAL_RUNE.get())
                 .add(ModItems.CRYSTAL_ELECTRO.get());
-        this.tag(ModTags.STICKS)
+        this.tag(RunecraftoryTags.STICKS)
                 .addOptionalTag(Tags.Items.RODS_WOODEN.location())
                 .add(Items.STICK,
                         ModItems.STICK_THICK.get(),
@@ -151,25 +151,25 @@ public class ItemTagGen extends ItemTagsProvider {
                         ModItems.PLANT_STEM.get(),
                         ModItems.HORN_BULL.get(),
                         ModItems.MOVING_BRANCH.get());
-        this.tag(ModTags.LIQUIDS)
+        this.tag(RunecraftoryTags.LIQUIDS)
                 .add(ModItems.GLUE.get(),
                         ModItems.DEVIL_BLOOD.get(),
                         ModItems.PARA_POISON.get(),
                         ModItems.POISON_KING.get());
-        this.tag(ModTags.FEATHERS)
+        this.tag(RunecraftoryTags.FEATHERS)
                 .add(Items.FEATHER,
                         ModItems.FEATHER_BLACK.get(),
                         ModItems.FEATHER_THUNDER.get(),
                         ModItems.FEATHER_YELLOW.get(),
                         ModItems.DRAGON_FIN.get())
                 .addOptionalTag(Tags.Items.FEATHERS.location());
-        this.tag(ModTags.SHELLS_BONES)
+        this.tag(RunecraftoryTags.SHELLS_BONES)
                 .add(ModItems.TURTLE_SHELL.get(),
                         ModItems.FISH_FOSSIL.get(),
                         ModItems.SKULL.get(),
                         ModItems.DRAGON_BONES.get(),
                         ModItems.TORTOISE_SHELL.get());
-        this.tag(ModTags.STONES)
+        this.tag(RunecraftoryTags.STONES)
                 .add(ModItems.ROCK.get(),
                         ModItems.STONE_ROUND.get(),
                         ModItems.STONE_TINY.get(),
@@ -177,7 +177,7 @@ public class ItemTagGen extends ItemTagsProvider {
                         ModItems.TABLET_GOLEM.get(),
                         ModItems.STONE_SPIRIT.get(),
                         ModItems.TABLET_TRUTH.get());
-        this.tag(ModTags.STRINGS)
+        this.tag(RunecraftoryTags.STRINGS)
                 .add(Items.STRING,
                         ModItems.YARN.get(),
                         ModItems.OLD_BANDAGE.get(),
@@ -189,7 +189,7 @@ public class ItemTagGen extends ItemTagsProvider {
                         ModItems.STRONG_VINE.get(),
                         ModItems.THREAD_PRETTY.get(),
                         ModItems.TAIL_CHIMERA.get());
-        this.tag(ModTags.SHARDS)
+        this.tag(RunecraftoryTags.SHARDS)
                 .add(Items.FLINT,
                         ModItems.ARROW_HEAD.get(),
                         ModItems.BLADE_SHARD.get(),
@@ -206,7 +206,7 @@ public class ItemTagGen extends ItemTagsProvider {
                         ModItems.ROCK_SHARD_RIGHT.get(),
                         ModItems.MTGU_PLATE.get(),
                         ModItems.BROKEN_ICE_WALL.get());
-        this.tag(ModTags.FURS)
+        this.tag(RunecraftoryTags.FURS)
                 .add(ModItems.FUR_SMALL.get(),
                         ModItems.FUR_MEDIUM.get(),
                         ModItems.FUR_LARGE.get(),
@@ -219,7 +219,7 @@ public class ItemTagGen extends ItemTagsProvider {
                         ModItems.FUR_RED_LION.get(),
                         ModItems.FUR_BLUE_LION.get(),
                         ModItems.CHEST_HAIR.get());
-        this.tag(ModTags.POWDERS)
+        this.tag(RunecraftoryTags.POWDERS)
                 .add(ModItems.SPORE.get(),
                         ModItems.POWDER_POISON.get(),
                         ModItems.SPORE_HOLY.get(),
@@ -234,7 +234,7 @@ public class ItemTagGen extends ItemTagsProvider {
                         ModItems.ASH_WATER.get(),
                         ModItems.TURNIPS_MIRACLE.get(),
                         ModItems.MELODY_BOTTLE.get());
-        this.tag(ModTags.CLOTHS)
+        this.tag(RunecraftoryTags.CLOTHS)
                 .add(Items.LEATHER,
                         ModItems.CLOTH_CHEAP.get(),
                         ModItems.CLOTH_QUALITY.get(),
@@ -246,7 +246,7 @@ public class ItemTagGen extends ItemTagsProvider {
                         ModItems.CARAPACE_INSECT.get(),
                         ModItems.CARAPACE_PRETTY.get(),
                         ModItems.CLOTH_ANCIENT_ORC.get());
-        this.tag(ModTags.CLAWS_FANGS)
+        this.tag(RunecraftoryTags.CLAWS_FANGS)
                 .add(ModItems.JAW_INSECT.get(),
                         ModItems.CLAW_PANTHER.get(),
                         ModItems.CLAW_MAGIC.get(),
@@ -266,7 +266,7 @@ public class ItemTagGen extends ItemTagsProvider {
                         ModItems.JAW_QUEEN.get(),
                         ModItems.FANG_DRAGON.get(),
                         ModItems.GIANTS_NAIL_BIG.get());
-        this.tag(ModTags.SCALES)
+        this.tag(RunecraftoryTags.SCALES)
                 .add(ModItems.SCALE_WET.get(),
                         ModItems.SCALE_GRIMOIRE.get(),
                         ModItems.SCALE_DRAGON.get(),
@@ -279,11 +279,11 @@ public class ItemTagGen extends ItemTagsProvider {
                         ModItems.SCALE_EARTH.get(),
                         ModItems.SCALE_LEGEND.get());
 
-        this.tag(ModTags.TURNIP)
+        this.tag(RunecraftoryTags.TURNIP)
                 .add(ModItems.TURNIP.get(), ModItems.TURNIP_GIANT.get(), ModItems.TURNIP_PINK.get(), ModItems.TURNIP_PINK_GIANT.get(),
                         ModItems.GOLDEN_TURNIP.get(), ModItems.GOLDEN_TURNIP_GIANT.get());
 
-        this.tag(ModTags.HIGH_TIER_TOOLS)
+        this.tag(RunecraftoryTags.HIGH_TIER_TOOLS)
                 .add(ModItems.HOE_PLATINUM.get())
                 .add(ModItems.WATERING_CAN_PLATINUM.get())
                 .add(ModItems.SICKLE_PLATINUM.get())
@@ -291,192 +291,192 @@ public class ItemTagGen extends ItemTagsProvider {
                 .add(ModItems.AXE_PLATINUM.get())
                 .add(ModItems.FISHING_ROD_PLATINUM.get());
 
-        this.tag(ModTags.UPGRADABLE_HELD).addTag(ModTags.TOOLS).addTag(ModTags.WEAPONS);
-        this.tag(ModTags.TOOLS).addTag(ModTags.HOES).addTag(ModTags.WATERINGCANS)
-                .addTag(ModTags.SICKLES).addTag(ModTags.HAMMER_TOOLS)
-                .addTag(ModTags.AXE_TOOLS).addTag(ModTags.FISHING_RODS);
+        this.tag(RunecraftoryTags.UPGRADABLE_HELD).addTag(RunecraftoryTags.TOOLS).addTag(RunecraftoryTags.WEAPONS);
+        this.tag(RunecraftoryTags.TOOLS).addTag(RunecraftoryTags.HOES).addTag(RunecraftoryTags.WATERINGCANS)
+                .addTag(RunecraftoryTags.SICKLES).addTag(RunecraftoryTags.HAMMER_TOOLS)
+                .addTag(RunecraftoryTags.AXE_TOOLS).addTag(RunecraftoryTags.FISHING_RODS);
 
         this.tag(tempKeyFabric("hoes")).addTag(tempKeyForge("tools/hoes"));
-        this.tag(tempKeyForge("tools/hoes")).addTag(ModTags.HOES);
+        this.tag(tempKeyForge("tools/hoes")).addTag(RunecraftoryTags.HOES);
         this.tag(tempKeyFabric("fishing_rods")).addTag(tempKeyForge("tools/fishing_rods"));
-        this.tag(tempKeyForge("tools/fishing_rods")).addTag(ModTags.FISHING_RODS);
+        this.tag(tempKeyForge("tools/fishing_rods")).addTag(RunecraftoryTags.FISHING_RODS);
 
-        this.tag(ModTags.WEAPONS).addTag(ModTags.SHORTSWORDS).addTag(ModTags.LONGSWORDS)
-                .addTag(ModTags.SPEARS).addTag(ModTags.AXES)
-                .addTag(ModTags.HAMMERS).addTag(ModTags.DUALBLADES)
-                .addTag(ModTags.FISTS).addTag(ModTags.STAFFS);
-        this.tag(ModTags.HAMMER_AXES)
-                .addTag(ModTags.HAMMERS).addTag(ModTags.AXES);
+        this.tag(RunecraftoryTags.WEAPONS).addTag(RunecraftoryTags.SHORTSWORDS).addTag(RunecraftoryTags.LONGSWORDS)
+                .addTag(RunecraftoryTags.SPEARS).addTag(RunecraftoryTags.AXES)
+                .addTag(RunecraftoryTags.HAMMERS).addTag(RunecraftoryTags.DUALBLADES)
+                .addTag(RunecraftoryTags.FISTS).addTag(RunecraftoryTags.STAFFS);
+        this.tag(RunecraftoryTags.HAMMER_AXES)
+                .addTag(RunecraftoryTags.HAMMERS).addTag(RunecraftoryTags.AXES);
 
         this.tag(tempKeyFabric("swords")).addTag(tempKeyForge("tools/swords"));
         this.tag(tempKeyForge("tools/swords"))
-                .addTag(ModTags.SHORTSWORDS).addTag(ModTags.LONGSWORDS).addTag(ModTags.DUALBLADES);
+                .addTag(RunecraftoryTags.SHORTSWORDS).addTag(RunecraftoryTags.LONGSWORDS).addTag(RunecraftoryTags.DUALBLADES);
 
-        this.tag(ModTags.EQUIPMENT).addTag(ModTags.HELMET).addTag(ModTags.CHESTPLATE)
-                .addTag(ModTags.ACCESSORIES).addTag(ModTags.BOOTS)
-                .addTag(ModTags.SHIELDS);
+        this.tag(RunecraftoryTags.EQUIPMENT).addTag(RunecraftoryTags.HELMET).addTag(RunecraftoryTags.CHESTPLATE)
+                .addTag(RunecraftoryTags.ACCESSORIES).addTag(RunecraftoryTags.BOOTS)
+                .addTag(RunecraftoryTags.SHIELDS);
 
         this.tag(tempKeyFabric("helmets")).addTag(tempKeyForge("armors/helmets"));
-        this.tag(tempKeyForge("armors/helmets")).addTag(ModTags.HELMET);
+        this.tag(tempKeyForge("armors/helmets")).addTag(RunecraftoryTags.HELMET);
         this.tag(tempKeyFabric("chestplates")).addTag(tempKeyForge("armors/chestplates"));
-        this.tag(tempKeyForge("armors/chestplates")).addTag(ModTags.CHESTPLATE);
+        this.tag(tempKeyForge("armors/chestplates")).addTag(RunecraftoryTags.CHESTPLATE);
         this.tag(tempKeyFabric("boots")).addTag(tempKeyForge("armors/boots"));
-        this.tag(tempKeyForge("armors/boots")).addTag(ModTags.BOOTS);
+        this.tag(tempKeyForge("armors/boots")).addTag(RunecraftoryTags.BOOTS);
         this.tag(tempKeyFabric("shields")).addTag(tempKeyForge("tools/shields"));
-        this.tag(tempKeyForge("tools/shields")).addTag(ModTags.SHIELDS);
+        this.tag(tempKeyForge("tools/shields")).addTag(RunecraftoryTags.SHIELDS);
 
-        this.forgeAndCommonTag(Tags.Items.EGGS, ModTags.EGGS, ModItems.EGG_S.get(),
+        this.forgeAndCommonTag(Tags.Items.EGGS, RunecraftoryTags.EGGS, ModItems.EGG_S.get(),
                 ModItems.EGG_M.get(), ModItems.EGG_L.get(), Items.EGG);
-        this.tag(ModTags.MILKS)
+        this.tag(RunecraftoryTags.MILKS)
                 .add(ModItems.MILK_S.get())
                 .add(ModItems.MILK_M.get())
                 .add(ModItems.MILK_L.get())
                 .add(Items.MILK_BUCKET);
 
-        this.tag(ModTags.tamingTag(ModEntities.WOOLY.get()))
-                .addTag(ModTags.SHEARS)
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.WOOLY.get()))
+                .addTag(RunecraftoryTags.SHEARS)
                 .addTag(ItemTags.WOOL)
                 .add(Items.WHEAT);
-        this.tag(ModTags.tamingTag(ModEntities.ORC.get()))
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.ORC.get()))
                 .add(ModItems.CHEAP_BRACELET.get())
                 .add(ModItems.CLOTH_CHEAP.get())
                 .add(ModItems.OLD_BANDAGE.get());
-        this.tag(ModTags.tamingTag(ModEntities.ORC_ARCHER.get()))
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.ORC_ARCHER.get()))
                 .add(Items.GUNPOWDER)
                 .add(Items.ARROW)
                 .add(ModItems.ARROW_HEAD.get())
                 .add(ModItems.RECOVERY_POTION.get());
-        this.tag(ModTags.tamingTag(ModEntities.ANT.get()))
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.ANT.get()))
                 .add(ModItems.CARAPACE_INSECT.get())
                 .add(ModItems.CARAPACE_PRETTY.get())
                 .add(ModItems.JAW_INSECT.get())
                 .add(ModItems.JAW_QUEEN.get());
-        this.tag(ModTags.tamingTag(ModEntities.BEETLE.get()))
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.BEETLE.get()))
                 .add(ModItems.CARAPACE_INSECT.get())
                 .add(ModItems.CARAPACE_PRETTY.get())
                 .add(ModItems.HORN_INSECT.get())
                 .add(ModItems.HORN_RIGID.get());
-        this.tag(ModTags.tamingTag(ModEntities.BIG_MUCK.get()))
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.BIG_MUCK.get()))
                 .add(Items.BROWN_MUSHROOM)
                 .add(Items.RED_MUSHROOM)
                 .add(ModItems.MUSHROOM.get())
                 .add(ModItems.MONARCH_MUSHROOM.get())
                 .add(ModItems.SPORE.get());
-        this.tag(ModTags.tamingTag(ModEntities.BUFFAMOO.get()))
-                .addTag(ModTags.MILKS)
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.BUFFAMOO.get()))
+                .addTag(RunecraftoryTags.MILKS)
                 .add(Items.WHEAT);
-        this.tag(ModTags.tamingTag(ModEntities.CHIPSQUEEK.get()))
-                .addTag(ModTags.FURS);
-        this.tag(ModTags.tamingTag(ModEntities.CLUCKADOODLE.get()))
-                .addTag(ModTags.EGGS)
-                .addTag(ModTags.SEEDS);
-        this.tag(ModTags.tamingTag(ModEntities.POMME_POMME.get()))
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.CHIPSQUEEK.get()))
+                .addTag(RunecraftoryTags.FURS);
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.CLUCKADOODLE.get()))
+                .addTag(RunecraftoryTags.EGGS)
+                .addTag(RunecraftoryTags.SEEDS);
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.POMME_POMME.get()))
                 .add(Items.APPLE);
-        this.tag(ModTags.tamingTag(ModEntities.TORTAS.get()))
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.TORTAS.get()))
                 .add(Items.SEAGRASS)
                 .add(ModItems.TORTOISE_SHELL.get());
-        this.tag(ModTags.tamingTag(ModEntities.SKY_FISH.get()))
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.SKY_FISH.get()))
                 .add(Items.KELP);
-        this.tag(ModTags.tamingTag(ModEntities.WEAGLE.get()))
-                .addTag(ModTags.FEATHERS);
-        this.tag(ModTags.tamingTag(ModEntities.GOBLIN.get()))
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.WEAGLE.get()))
+                .addTag(RunecraftoryTags.FEATHERS);
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.GOBLIN.get()))
                 .add(ModItems.OLD_BANDAGE.get());
-        this.tag(ModTags.tamingTag(ModEntities.GOBLIN_ARCHER.get()))
-                .addTag(ModTags.tamingTag(ModEntities.GOBLIN.get()));
-        this.tag(ModTags.tamingTag(ModEntities.DUCK.get()))
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.GOBLIN_ARCHER.get()))
+                .addTag(RunecraftoryTags.tamingTag(ModEntities.GOBLIN.get()));
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.DUCK.get()))
                 .add(ModItems.FUR.get())
                 .add(Items.FEATHER);
-        this.tag(ModTags.tamingTag(ModEntities.FAIRY.get()))
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.FAIRY.get()))
                 .add(ModItems.FAIRY_DUST.get());
-        this.tag(ModTags.tamingTag(ModEntities.GHOST.get()))
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.GHOST.get()))
                 .add(ModItems.GHOST_HOOD.get());
-        this.tag(ModTags.tamingTag(ModEntities.SPIRIT.get()))
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.SPIRIT.get()))
                 .add(ModItems.CRYSTAL_DARK.get());
-        this.tag(ModTags.tamingTag(ModEntities.GHOST_RAY.get()))
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.GHOST_RAY.get()))
                 .add(ModItems.GHOST_HOOD.get());
-        this.tag(ModTags.tamingTag(ModEntities.SPIDER.get()))
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.SPIDER.get()))
                 .add(Items.STRING)
                 .add(ModItems.THREAD_SPIDER.get());
-        this.tag(ModTags.tamingTag(ModEntities.SHADOW_PANTHER.get()))
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.SHADOW_PANTHER.get()))
                 .add(ModItems.FUR.get())
                 .add(ModItems.CLAW_PANTHER.get());
-        this.tag(ModTags.tamingTag(ModEntities.MONSTER_BOX.get()))
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.MONSTER_BOX.get()))
                 .add(ModItems.FAILED_DISH.get())
                 .add(ModItems.DISASTROUS_DISH.get());
-        this.tag(ModTags.tamingTag(ModEntities.GOBBLE_BOX.get()))
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.GOBBLE_BOX.get()))
                 .add(ModItems.FAILED_DISH.get())
                 .add(ModItems.DISASTROUS_DISH.get());
-        this.tag(ModTags.tamingTag(ModEntities.KILLER_ANT.get()))
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.KILLER_ANT.get()))
                 .add(ModItems.CARAPACE_PRETTY.get());
-        this.tag(ModTags.tamingTag(ModEntities.HIGH_ORC.get()))
-                .addTag(ModTags.tamingTag(ModEntities.ORC.get()));
-        this.tag(ModTags.tamingTag(ModEntities.ORC_HUNTER.get()))
-                .addTag(ModTags.tamingTag(ModEntities.ORC_ARCHER.get()));
-        this.tag(ModTags.tamingTag(ModEntities.HORNET.get()))
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.HIGH_ORC.get()))
+                .addTag(RunecraftoryTags.tamingTag(ModEntities.ORC.get()));
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.ORC_HUNTER.get()))
+                .addTag(RunecraftoryTags.tamingTag(ModEntities.ORC_ARCHER.get()));
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.HORNET.get()))
                 .add(Items.HONEY_BOTTLE)
                 .add(Items.HONEYCOMB);
-        this.tag(ModTags.tamingTag(ModEntities.SILVER_WOLF.get()))
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.SILVER_WOLF.get()))
                 .add(Items.BONE)
                 .add(ModItems.FANG_WOLF.get());
-        this.tag(ModTags.tamingTag(ModEntities.LEAF_BALL.get()))
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.LEAF_BALL.get()))
                 .addTag(ItemTags.LEAVES);
-        this.tag(ModTags.tamingTag(ModEntities.FURPY.get()))
-                .addTag(ModTags.tamingTag(ModEntities.CHIPSQUEEK.get()));
-        this.tag(ModTags.tamingTag(ModEntities.PALM_CAT.get()))
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.FURPY.get()))
+                .addTag(RunecraftoryTags.tamingTag(ModEntities.CHIPSQUEEK.get()));
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.PALM_CAT.get()))
                 .add(ModItems.FUR.get())
                 .add(Items.CAKE)
                 .add(ModItems.CAKE.get());
-        this.tag(ModTags.tamingTag(ModEntities.MINO.get()))
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.MINO.get()))
                 .add(ModItems.GRAPES.get());
-        this.tag(ModTags.tamingTag(ModEntities.TRICKY_MUCK.get()))
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.TRICKY_MUCK.get()))
                 .add(ModItems.POWDER_POISON.get());
-        this.tag(ModTags.tamingTag(ModEntities.FLOWER_LILY.get()))
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.FLOWER_LILY.get()))
                 .addTag(ItemTags.FLOWERS);
-        this.tag(ModTags.tamingTag(ModEntities.KING_WOOLY.get()))
-                .addTag(ModTags.tamingTag(ModEntities.WOOLY.get()));
-        this.tag(ModTags.tamingTag(ModEntities.BUFFALOO.get()))
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.KING_WOOLY.get()))
+                .addTag(RunecraftoryTags.tamingTag(ModEntities.WOOLY.get()));
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.BUFFALOO.get()))
                 .add(ModItems.HORN_BULL.get());
-        this.tag(ModTags.tamingTag(ModEntities.GOBLIN_PIRATE.get()))
-                .addTag(ModTags.tamingTag(ModEntities.GOBLIN.get()));
-        this.tag(ModTags.tamingTag(ModEntities.GOBLIN_GANGSTER.get()))
-                .addTag(ModTags.tamingTag(ModEntities.GOBLIN.get()));
-        this.tag(ModTags.tamingTag(ModEntities.IGNIS.get()))
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.GOBLIN_PIRATE.get()))
+                .addTag(RunecraftoryTags.tamingTag(ModEntities.GOBLIN.get()));
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.GOBLIN_GANGSTER.get()))
+                .addTag(RunecraftoryTags.tamingTag(ModEntities.GOBLIN.get()));
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.IGNIS.get()))
                 .add(ModItems.CRYSTAL_FIRE.get())
                 .add(ModItems.CRYSTAL_MAGIC.get());
-        this.tag(ModTags.tamingTag(ModEntities.SCORPION.get()))
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.SCORPION.get()))
                 .add(ModItems.TAIL_SCORPION.get());
-        this.tag(ModTags.tamingTag(ModEntities.TROLL.get()))
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.TROLL.get()))
                 .add(ModItems.GIANTS_NAIL.get())
                 .add(ModItems.GLOVE_GIANT.get())
                 .add(ModItems.HAMMER_PIECE.get());
-        this.tag(ModTags.tamingTag(ModEntities.FLOWER_LION.get()))
-                .addTag(ModTags.tamingTag(ModEntities.FLOWER_LILY.get()));
-        this.tag(ModTags.tamingTag(ModEntities.TOMATO_GHOST.get()))
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.FLOWER_LION.get()))
+                .addTag(RunecraftoryTags.tamingTag(ModEntities.FLOWER_LILY.get()));
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.TOMATO_GHOST.get()))
                 .addTag(tempKeyFabric("vegetables/tomato"));
 
-        this.tag(ModTags.tamingTag(ModEntities.AMBROSIA.get()))
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.AMBROSIA.get()))
                 .add(ModItems.TOYHERB_GIANT.get());
-        this.tag(ModTags.tamingTag(ModEntities.THUNDERBOLT.get()))
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.THUNDERBOLT.get()))
                 .add(ModItems.CARROT_GIANT.get());
-        this.tag(ModTags.tamingTag(ModEntities.MARIONETTA.get()))
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.MARIONETTA.get()))
                 .add(Items.CAKE)
                 .add(ModItems.CHEESECAKE.get())
                 .add(ModItems.CHOCOLATE_CAKE.get())
                 .add(ModItems.APPLE_PIE.get());
-        this.tag(ModTags.tamingTag(ModEntities.DEAD_TREE.get()))
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.DEAD_TREE.get()))
                 .add(ModItems.GREENIFIER_PLUS.get());
-        this.tag(ModTags.tamingTag(ModEntities.CHIMERA.get()))
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.CHIMERA.get()))
                 .add(ModItems.ROYAL_CURRY.get())
                 .add(ModItems.ULTIMATE_CURRY.get());
-        this.tag(ModTags.tamingTag(ModEntities.RACCOON.get()))
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.RACCOON.get()))
                 .add(ModItems.UDON.get())
                 .add(ModItems.TEMPURA_UDON.get())
                 .add(ModItems.CURRY_UDON.get());
-        this.tag(ModTags.tamingTag(ModEntities.SKELEFANG.get()))
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.SKELEFANG.get()))
                 .add(Items.DRAGON_HEAD);
 
         TagKey<Item> temp = tempKeyForge("fruits/grapes");
-        this.tag(ModTags.GRAPES)
+        this.tag(RunecraftoryTags.GRAPES)
                 .add(ModItems.GRAPES.get())
                 .addTag(temp);
         this.tag(temp)
@@ -496,8 +496,8 @@ public class ItemTagGen extends ItemTagsProvider {
 
         forgeParentTag = tempKeyForge("vegetables");
         TagKey<Item> forgeCropParentTag = tempKeyForge("crops");
-        this.tag(ModTags.VEGGIES).addTag(forgeParentTag);
-        this.tag(ModTags.CROPS).addTag(forgeCropParentTag);
+        this.tag(RunecraftoryTags.VEGGIES).addTag(forgeParentTag);
+        this.tag(RunecraftoryTags.CROPS).addTag(forgeCropParentTag);
         for (RegistryEntrySupplier<Item> sup : ModItems.VEGGIES) {
             String name = sup.getID().getPath().replace("crop_", "");
             TagKey<Item> forgeTag = tempKeyForge("vegetables/" + name);
@@ -517,7 +517,7 @@ public class ItemTagGen extends ItemTagsProvider {
         }
 
         forgeParentTag = tempKeyForge("fruits");
-        this.tag(ModTags.FRUITS).addTag(forgeParentTag);
+        this.tag(RunecraftoryTags.FRUITS).addTag(forgeParentTag);
         for (RegistryEntrySupplier<Item> sup : ModItems.FRUITS) {
             String name = sup.getID().getPath().replace("crop_", "");
             TagKey<Item> forgeTag = tempKeyForge("fruits/" + name);
@@ -537,7 +537,7 @@ public class ItemTagGen extends ItemTagsProvider {
         }
 
         forgeParentTag = tempKeyForge("flowers");
-        this.tag(ModTags.FLOWERS).addTag(forgeParentTag);
+        this.tag(RunecraftoryTags.FLOWERS).addTag(forgeParentTag);
         for (RegistryEntrySupplier<Item> sup : ModItems.FLOWERS) {
             this.tag(forgeParentTag).add(sup.get());
             //Also add to crops tag
@@ -547,7 +547,7 @@ public class ItemTagGen extends ItemTagsProvider {
             this.tag(forgeCropParentTag).addTag(forgeTag);
         }
 
-        this.tag(ModTags.QUICKHARVEST_BYPASS)
+        this.tag(RunecraftoryTags.QUICKHARVEST_BYPASS)
                 .add(ModItems.FORMULAR_A.get(), ModItems.FORMULAR_B.get(), ModItems.FORMULAR_C.get(), ModItems.MINIMIZER.get(),
                         ModItems.GIANTIZER.get(), ModItems.GREENIFIER.get(), ModItems.GREENIFIER_PLUS.get(), ModItems.WETTABLE_POWDER.get())
                 .add(ModItems.WATERING_CAN_SCRAP.get(), ModItems.WATERING_CAN_IRON.get(),

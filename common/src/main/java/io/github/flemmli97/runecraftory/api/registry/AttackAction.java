@@ -1,6 +1,6 @@
-package io.github.flemmli97.runecraftory.api.action;
+package io.github.flemmli97.runecraftory.api.registry;
 
-import io.github.flemmli97.runecraftory.api.Spell;
+import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.platform.registry.CustomRegistryEntry;
 import net.minecraft.server.level.ServerLevel;

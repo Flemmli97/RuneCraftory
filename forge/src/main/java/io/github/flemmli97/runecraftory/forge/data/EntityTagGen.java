@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.forge.data;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
-import io.github.flemmli97.runecraftory.common.registry.ModTags;
+import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.tenshilib.TenshiLib;
 import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
 import net.minecraft.core.Registry;
@@ -36,9 +36,9 @@ public class EntityTagGen extends TagsProvider<EntityType<?>> {
             this.tag(IM_VILLAGERS).add(type.get());
             this.tag(IM_ARMOR).add(type.get());
             this.tag(MINECOLONIES).add(type.get());
-            this.tag(ModTags.MONSTERS).add(type.get());
+            this.tag(RunecraftoryTags.MONSTERS).add(type.get());
         }
-        this.tag(ModTags.BOSS_MONSTERS)
+        this.tag(RunecraftoryTags.BOSS_MONSTERS)
                 .add(ModEntities.AMBROSIA.get())
                 .add(ModEntities.THUNDERBOLT.get())
                 .add(ModEntities.MARIONETTA.get())
@@ -48,31 +48,31 @@ public class EntityTagGen extends TagsProvider<EntityType<?>> {
                 .add(ModEntities.SKELEFANG.get());
         TagKey<EntityType<?>> forgeBosses = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("forge", "bosses"));
         this.tag(forgeBosses)
-                .addTag(ModTags.BOSS_MONSTERS);
-        this.tag(ModTags.BOSSES)
+                .addTag(RunecraftoryTags.BOSS_MONSTERS);
+        this.tag(RunecraftoryTags.BOSSES)
                 .addTag(forgeBosses);
 
-        this.tag(ModTags.RAFFLESIA_SUMMONS)
+        this.tag(RunecraftoryTags.RAFFLESIA_SUMMONS)
                 .add(ModEntities.HORNET.get())
                 .add(ModEntities.ANT.get())
                 .add(ModEntities.KILLER_ANT.get());
 
-        this.tag(ModTags.FOREST_BOSSES)
+        this.tag(RunecraftoryTags.FOREST_BOSSES)
                 .add(ModEntities.AMBROSIA.get())
                 .add(ModEntities.DEAD_TREE.get());
-        this.tag(ModTags.WATER_RUIN_BOSSES)
+        this.tag(RunecraftoryTags.WATER_RUIN_BOSSES)
                 .add(ModEntities.CHIMERA.get())
                 .add(ModEntities.THUNDERBOLT.get());
-        this.tag(ModTags.THEATER_RUIN_BOSSES)
+        this.tag(RunecraftoryTags.THEATER_RUIN_BOSSES)
                 .add(ModEntities.MARIONETTA.get());
-        this.tag(ModTags.PLAINS_ARENA_BOSSES)
+        this.tag(RunecraftoryTags.PLAINS_ARENA_BOSSES)
                 .add(ModEntities.RACCOON.get());
-        this.tag(ModTags.DESERT_ARENA_BOSSES)
+        this.tag(RunecraftoryTags.DESERT_ARENA_BOSSES)
                 .add(ModEntities.SKELEFANG.get());
-        this.tag(ModTags.NETHER_ARENA_BOSSES)
+        this.tag(RunecraftoryTags.NETHER_ARENA_BOSSES)
                 .add(ModEntities.RAFFLESIA.get());
 
-        this.tag(ModTags.TAMED_MONSTER_IGNORE)
+        this.tag(RunecraftoryTags.TAMED_MONSTER_IGNORE)
                 .add(EntityType.SNOW_GOLEM)
                 .add(EntityType.IRON_GOLEM)
                 .addOptional(new ResourceLocation("advancedgolems", "golem"));

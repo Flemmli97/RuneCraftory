@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.registry;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.api.Spell;
+import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.enums.EnumMineralTier;
@@ -39,6 +39,7 @@ import io.github.flemmli97.runecraftory.common.items.weapons.ItemLongSwordBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemShortSwordBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpearBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
+import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import io.github.flemmli97.tenshilib.platform.registry.PlatformRegistry;
@@ -1220,42 +1221,42 @@ public class ModItems {
     public static RegistryEntrySupplier<Item> hoe(EnumToolTier tier) {
         RegistryEntrySupplier<Item> sup = ITEMS.register("hoe_" + tier.getName(), () -> new ItemToolHoe(tier, new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
         if (Platform.INSTANCE.isDatagen())
-            DATAGENTAGS.computeIfAbsent(ModTags.HOES, t -> new ArrayList<>()).add(sup);
+            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.HOES, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
     public static RegistryEntrySupplier<Item> wateringCan(EnumToolTier tier) {
         RegistryEntrySupplier<Item> sup = ITEMS.register("watering_can_" + tier.getName(), () -> new ItemToolWateringCan(tier, new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
         if (Platform.INSTANCE.isDatagen())
-            DATAGENTAGS.computeIfAbsent(ModTags.WATERINGCANS, t -> new ArrayList<>()).add(sup);
+            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.WATERINGCANS, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
     public static RegistryEntrySupplier<Item> sickle(EnumToolTier tier) {
         RegistryEntrySupplier<Item> sup = ITEMS.register("sickle_" + tier.getName(), () -> new ItemToolSickle(tier, new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
         if (Platform.INSTANCE.isDatagen())
-            DATAGENTAGS.computeIfAbsent(ModTags.SICKLES, t -> new ArrayList<>()).add(sup);
+            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.SICKLES, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
     public static RegistryEntrySupplier<Item> hammerTool(EnumToolTier tier) {
         RegistryEntrySupplier<Item> sup = ITEMS.register("hammer_" + tier.getName(), () -> new ItemToolHammer(tier, new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
         if (Platform.INSTANCE.isDatagen())
-            DATAGENTAGS.computeIfAbsent(ModTags.HAMMER_TOOLS, t -> new ArrayList<>()).add(sup);
+            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.HAMMER_TOOLS, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
     public static RegistryEntrySupplier<Item> axeTool(EnumToolTier tier) {
         RegistryEntrySupplier<Item> sup = ITEMS.register("axe_" + tier.getName(), () -> new ItemToolAxe(tier, new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
         if (Platform.INSTANCE.isDatagen())
-            DATAGENTAGS.computeIfAbsent(ModTags.AXE_TOOLS, t -> new ArrayList<>()).add(sup);
+            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.AXE_TOOLS, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
     public static RegistryEntrySupplier<Item> fishingRod(EnumToolTier tier) {
         RegistryEntrySupplier<Item> sup = ITEMS.register("fishing_rod_" + tier.getName(), () -> new ItemToolFishingRod(tier, new Item.Properties().stacksTo(1).tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
         if (Platform.INSTANCE.isDatagen())
-            DATAGENTAGS.computeIfAbsent(ModTags.FISHING_RODS, t -> new ArrayList<>()).add(sup);
+            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.FISHING_RODS, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
@@ -1267,7 +1268,7 @@ public class ModItems {
         }
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemShortSwordBase(new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
         if (Platform.INSTANCE.isDatagen())
-            DATAGENTAGS.computeIfAbsent(ModTags.SHORTSWORDS, t -> new ArrayList<>()).add(sup);
+            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.SHORTSWORDS, t -> new ArrayList<>()).add(sup);
         if (Platform.INSTANCE.isDatagen())
             TIER_3_CHEST.add(sup);
         return sup;
@@ -1281,7 +1282,7 @@ public class ModItems {
         }
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemLongSwordBase(new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
         if (Platform.INSTANCE.isDatagen())
-            DATAGENTAGS.computeIfAbsent(ModTags.LONGSWORDS, t -> new ArrayList<>()).add(sup);
+            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.LONGSWORDS, t -> new ArrayList<>()).add(sup);
         if (Platform.INSTANCE.isDatagen())
             TIER_3_CHEST.add(sup);
         return sup;
@@ -1295,7 +1296,7 @@ public class ModItems {
         }
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemSpearBase(new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
         if (Platform.INSTANCE.isDatagen())
-            DATAGENTAGS.computeIfAbsent(ModTags.SPEARS, t -> new ArrayList<>()).add(sup);
+            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.SPEARS, t -> new ArrayList<>()).add(sup);
         if (Platform.INSTANCE.isDatagen())
             TIER_3_CHEST.add(sup);
         return sup;
@@ -1309,7 +1310,7 @@ public class ModItems {
         }
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemAxeBase(new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
         if (Platform.INSTANCE.isDatagen())
-            DATAGENTAGS.computeIfAbsent(ModTags.AXES, t -> new ArrayList<>()).add(sup);
+            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.AXES, t -> new ArrayList<>()).add(sup);
         if (Platform.INSTANCE.isDatagen())
             TIER_3_CHEST.add(sup);
         return sup;
@@ -1323,7 +1324,7 @@ public class ModItems {
         }
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemHammerBase(new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
         if (Platform.INSTANCE.isDatagen())
-            DATAGENTAGS.computeIfAbsent(ModTags.HAMMERS, t -> new ArrayList<>()).add(sup);
+            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.HAMMERS, t -> new ArrayList<>()).add(sup);
         if (Platform.INSTANCE.isDatagen())
             TIER_3_CHEST.add(sup);
         return sup;
@@ -1337,7 +1338,7 @@ public class ModItems {
         }
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemDualBladeBase(new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
         if (Platform.INSTANCE.isDatagen())
-            DATAGENTAGS.computeIfAbsent(ModTags.DUALBLADES, t -> new ArrayList<>()).add(sup);
+            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.DUALBLADES, t -> new ArrayList<>()).add(sup);
         if (Platform.INSTANCE.isDatagen())
             TIER_3_CHEST.add(sup);
         return sup;
@@ -1351,7 +1352,7 @@ public class ModItems {
         }
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemGloveBase(new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
         if (Platform.INSTANCE.isDatagen())
-            DATAGENTAGS.computeIfAbsent(ModTags.FISTS, t -> new ArrayList<>()).add(sup);
+            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.FISTS, t -> new ArrayList<>()).add(sup);
         if (Platform.INSTANCE.isDatagen())
             TIER_3_CHEST.add(sup);
         return sup;
@@ -1365,7 +1366,7 @@ public class ModItems {
         }
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> Platform.INSTANCE.staff(starterElement, amount, new Item.Properties().stacksTo(1).tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
         if (Platform.INSTANCE.isDatagen())
-            DATAGENTAGS.computeIfAbsent(ModTags.STAFFS, t -> new ArrayList<>()).add(sup);
+            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.STAFFS, t -> new ArrayList<>()).add(sup);
         if (Platform.INSTANCE.isDatagen())
             TIER_3_CHEST.add(sup);
         return sup;
@@ -1385,10 +1386,10 @@ public class ModItems {
         if (Platform.INSTANCE.isDatagen()) {
             TIER_3_CHEST.add(sup);
             switch (slot) {
-                case FEET -> DATAGENTAGS.computeIfAbsent(ModTags.BOOTS, t -> new ArrayList<>()).add(sup);
-                case LEGS -> DATAGENTAGS.computeIfAbsent(ModTags.ACCESSORIES, t -> new ArrayList<>()).add(sup);
-                case CHEST -> DATAGENTAGS.computeIfAbsent(ModTags.CHESTPLATE, t -> new ArrayList<>()).add(sup);
-                case HEAD -> DATAGENTAGS.computeIfAbsent(ModTags.HELMET, t -> new ArrayList<>()).add(sup);
+                case FEET -> DATAGENTAGS.computeIfAbsent(RunecraftoryTags.BOOTS, t -> new ArrayList<>()).add(sup);
+                case LEGS -> DATAGENTAGS.computeIfAbsent(RunecraftoryTags.ACCESSORIES, t -> new ArrayList<>()).add(sup);
+                case CHEST -> DATAGENTAGS.computeIfAbsent(RunecraftoryTags.CHESTPLATE, t -> new ArrayList<>()).add(sup);
+                case HEAD -> DATAGENTAGS.computeIfAbsent(RunecraftoryTags.HELMET, t -> new ArrayList<>()).add(sup);
             }
         }
         return sup;
@@ -1404,7 +1405,7 @@ public class ModItems {
         if (Platform.INSTANCE.isDatagen())
             TIER_3_CHEST.add(sup);
         if (Platform.INSTANCE.isDatagen())
-            DATAGENTAGS.computeIfAbsent(ModTags.SHIELDS, t -> new ArrayList<>()).add(sup);
+            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.SHIELDS, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
@@ -1479,7 +1480,7 @@ public class ModItems {
         if (Platform.INSTANCE.isDatagen())
             TIER_2_CHEST.add(ret);
         if (Platform.INSTANCE.isDatagen())
-            DATAGENTAGS.computeIfAbsent(ModTags.SPELLS, t -> new ArrayList<>()).add(ret);
+            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.SPELLS, t -> new ArrayList<>()).add(ret);
         return ret;
     }
 

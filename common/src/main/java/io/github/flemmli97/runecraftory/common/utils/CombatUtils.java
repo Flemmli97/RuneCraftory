@@ -13,7 +13,7 @@ import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
-import io.github.flemmli97.runecraftory.common.registry.ModTags;
+import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.item.IAOEWeapon;
 import io.github.flemmli97.tenshilib.common.utils.AOEWeaponHandler;
@@ -204,10 +204,10 @@ public class CombatUtils {
     }
 
     public static void knockbackEntityIgnoreResistance(LivingEntity entity, double strength, double x, double z) {
-        if (!entity.getType().is(ModTags.BOSSES))
+        if (!entity.getType().is(RunecraftoryTags.BOSSES))
             applyTempAttribute(entity, Attributes.KNOCKBACK_RESISTANCE, -entity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
         entity.knockback(strength, x, z);
-        if (!entity.getType().is(ModTags.BOSSES))
+        if (!entity.getType().is(RunecraftoryTags.BOSSES))
             removeTempAttribute(entity, Attributes.KNOCKBACK_RESISTANCE);
     }
 
@@ -577,29 +577,29 @@ public class CombatUtils {
             }
             return;
         }
-        if (stack.is(ModTags.SHORTSWORDS)) {
+        if (stack.is(RunecraftoryTags.SHORTSWORDS)) {
             LevelCalc.levelSkill(player, data, EnumSkills.SHORTSWORD, 2);
         }
-        if (stack.is(ModTags.LONGSWORDS)) {
+        if (stack.is(RunecraftoryTags.LONGSWORDS)) {
             LevelCalc.levelSkill(player, data, EnumSkills.LONGSWORD, 4);
         }
-        if (stack.is(ModTags.SPEARS)) {
+        if (stack.is(RunecraftoryTags.SPEARS)) {
             LevelCalc.levelSkill(player, data, EnumSkills.SPEAR, 3);
         }
-        if (stack.is(ModTags.AXES) || stack.is(ModTags.HAMMERS)) {
+        if (stack.is(RunecraftoryTags.AXES) || stack.is(RunecraftoryTags.HAMMERS)) {
             LevelCalc.levelSkill(player, data, EnumSkills.HAMMERAXE, 5);
         }
-        if (stack.is(ModTags.DUALBLADES)) {
+        if (stack.is(RunecraftoryTags.DUALBLADES)) {
             LevelCalc.levelSkill(player, data, EnumSkills.DUAL, 2);
         }
-        if (stack.is(ModTags.FISTS)) {
+        if (stack.is(RunecraftoryTags.FISTS)) {
             LevelCalc.levelSkill(player, data, EnumSkills.FIST, 2);
         }
         //Tools
-        if (stack.is(ModTags.AXE_TOOLS) || stack.is(ModTags.HAMMER_TOOLS)) {
+        if (stack.is(RunecraftoryTags.AXE_TOOLS) || stack.is(RunecraftoryTags.HAMMER_TOOLS)) {
             LevelCalc.levelSkill(player, data, EnumSkills.HAMMERAXE, 1);
         }
-        if (stack.is(ModTags.HOES) || stack.is(ModTags.WATERINGCANS) || stack.is(ModTags.SICKLES)) {
+        if (stack.is(RunecraftoryTags.HOES) || stack.is(RunecraftoryTags.WATERINGCANS) || stack.is(RunecraftoryTags.SICKLES)) {
             LevelCalc.levelSkill(player, data, EnumSkills.FARMING, 1);
         }
     }

@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.armoreffects;
 
-import io.github.flemmli97.runecraftory.api.items.ArmorEffect;
+import io.github.flemmli97.runecraftory.api.registry.ArmorEffect;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;

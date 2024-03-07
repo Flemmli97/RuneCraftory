@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.registry;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.api.items.ArmorEffect;
+import io.github.flemmli97.runecraftory.api.registry.ArmorEffect;
 import io.github.flemmli97.runecraftory.common.armoreffects.PiyoSandalsEffect;
 import io.github.flemmli97.runecraftory.platform.LazyGetter;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;

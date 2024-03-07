@@ -15,7 +15,7 @@ import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.lib.LibNBT;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
-import io.github.flemmli97.runecraftory.common.registry.ModTags;
+import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.nbt.CompoundTag;
@@ -195,16 +195,16 @@ public class ItemNBT {
             if (!crafting || tag.contains(LibNBT.ORIGINITEM))
                 return stack;
             boolean lightOreApplied = tag.getBoolean(LibNBT.LIGHTORETAG);
-            if (stack.is(ModTags.EQUIPMENT)) {
-                if (!stackToAdd.is(ModTags.EQUIPMENT))
+            if (stack.is(RunecraftoryTags.EQUIPMENT)) {
+                if (!stackToAdd.is(RunecraftoryTags.EQUIPMENT))
                     return stack;
                 if (lightOreApplied)
                     return changeBaseItemTo(stack, stackToAdd, type);
                 else if (stack.getItem() instanceof ArmorItem armor1 && stackToAdd.getItem() instanceof ArmorItem armor2 && armor1.getSlot() == armor2.getSlot())
                     return changeBaseItemTo(stack, stackToAdd, type);
             }
-            if (stack.is(ModTags.UPGRADABLE_HELD)) {
-                if (!stackToAdd.is(ModTags.UPGRADABLE_HELD))
+            if (stack.is(RunecraftoryTags.UPGRADABLE_HELD)) {
+                if (!stackToAdd.is(RunecraftoryTags.UPGRADABLE_HELD))
                     return stack;
                 if (lightOreApplied)
                     return changeBaseItemTo(stack, stackToAdd, type);
@@ -252,7 +252,7 @@ public class ItemNBT {
             tag.putBoolean(LibNBT.OBJECT_X, !hasObjectX);
         if (type == EnumCrafting.FORGE && stackToAdd.getItem() == ModItems.INVIS_STONE.get())
             tag.putBoolean(LibNBT.INVIS, true);
-        if (type == EnumCrafting.FORGE && stackToAdd.is(ModTags.SCALES))
+        if (type == EnumCrafting.FORGE && stackToAdd.is(RunecraftoryTags.SCALES))
             tag.putBoolean(LibNBT.DRAGON_SCALE, true);
         if (crafting && stackToAdd.getItem() == ModItems.LIGHT_ORE.get() && !tag.contains(LibNBT.ORIGINITEM))
             tag.putBoolean(LibNBT.LIGHTORETAG, true);
@@ -465,15 +465,15 @@ public class ItemNBT {
     }
 
     public static boolean shouldHaveStats(ItemStack stack) {
-        return stack.is(ModTags.UPGRADABLE_HELD) || stack.is(ModTags.EQUIPMENT);
+        return stack.is(RunecraftoryTags.UPGRADABLE_HELD) || stack.is(RunecraftoryTags.EQUIPMENT);
     }
 
     public static boolean shouldHaveLevel(ItemStack stack) {
-        return shouldHaveStats(stack) || stack.is(ModTags.SPELLS);
+        return shouldHaveStats(stack) || stack.is(RunecraftoryTags.SPELLS);
     }
 
     public static boolean isWeapon(ItemStack stack) {
-        return stack.is(ModTags.UPGRADABLE_HELD);
+        return stack.is(RunecraftoryTags.UPGRADABLE_HELD);
     }
 
     public static boolean canBeUsedAsMagnifyingGlass(ItemStack stack) {

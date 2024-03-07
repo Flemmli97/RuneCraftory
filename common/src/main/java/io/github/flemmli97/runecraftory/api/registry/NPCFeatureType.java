@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.common.entities.npc.features;
+package io.github.flemmli97.runecraftory.api.registry;
 
 import com.mojang.serialization.Codec;
 import io.github.flemmli97.tenshilib.platform.registry.CustomRegistryEntry;

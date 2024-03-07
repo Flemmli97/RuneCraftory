@@ -4,7 +4,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumMineralTier;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolHammer;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
-import io.github.flemmli97.runecraftory.common.registry.ModTags;
+import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.platform.ExtendedBlock;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -230,7 +230,7 @@ public class BlockMineral extends Block implements SimpleWaterloggedBlock, Exten
     @Override
     public float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos pos) {
         float f = super.getDestroyProgress(state, player, level, pos);
-        return player.getMainHandItem().is(ModTags.HAMMER_TOOLS) ? f : f * 0.5f;
+        return player.getMainHandItem().is(RunecraftoryTags.HAMMER_TOOLS) ? f : f * 0.5f;
     }
 
     @Override

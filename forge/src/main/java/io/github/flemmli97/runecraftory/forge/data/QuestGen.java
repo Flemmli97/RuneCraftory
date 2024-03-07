@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.forge.data;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
-import io.github.flemmli97.runecraftory.common.registry.ModTags;
+import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.integration.simplequest.NPCQuest;
 import io.github.flemmli97.runecraftory.integration.simplequest.QuestTasks;
 import io.github.flemmli97.runecraftory.integration.simplequest.SimpleQuestIntegration;
@@ -66,7 +66,7 @@ public class QuestGen extends QuestProvider {
                         .withCategory(this.main)
                         .withIcon(new ItemStack(ModItems.HAMMER_SCRAP.get())),
                 List.of(of(m -> m.put("talk", new QuestTasks.NPCTalk(null))),
-                        of(m -> m.put("mine", new QuestEntryImpls.BlockInteractEntry(ItemPredicate.ANY, BlockPredicate.Builder.block().of(ModTags.ORES).build(),
+                        of(m -> m.put("mine", new QuestEntryImpls.BlockInteractEntry(ItemPredicate.ANY, BlockPredicate.Builder.block().of(RunecraftoryTags.ORES).build(),
                                 10, false, false, true, "", "", "", EntityPredicate.ANY)))));
 
         this.createNPCQuest(new NPCQuest.Builder(TAMING, getTask(TAMING),

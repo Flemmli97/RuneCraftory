@@ -1,9 +1,7 @@
-package io.github.flemmli97.runecraftory.common.entities.ai.npc.actions;
+package io.github.flemmli97.runecraftory.api.registry;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.flemmli97.runecraftory.api.Spell;
-import io.github.flemmli97.runecraftory.api.action.AttackAction;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCAttackGoal;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.utils.CodecHelper;

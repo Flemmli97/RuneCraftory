@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.blocks;
 
 import io.github.flemmli97.runecraftory.common.loot.LootCtxParameters;
-import io.github.flemmli97.runecraftory.common.registry.ModTags;
+import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
@@ -48,12 +48,12 @@ public class BlockHerb extends BushBlock {
             if (state.is(BlockTags.BASE_STONE_NETHER) || state.is(BlockTags.NYLIUM))
                 return true;
         if (this.types.contains(GroundTypes.END))
-            if (state.is(ModTags.ENDSTONES))
+            if (state.is(RunecraftoryTags.ENDSTONES))
                 return true;
         if (this.types.contains(GroundTypes.SANDY))
             if (state.is(BlockTags.SAND))
                 return true;
-        return state.is(BlockTags.DIRT) || state.is(ModTags.FARMLAND) || super.mayPlaceOn(state, level, pos);
+        return state.is(BlockTags.DIRT) || state.is(RunecraftoryTags.FARMLAND) || super.mayPlaceOn(state, level, pos);
     }
 
     @Override

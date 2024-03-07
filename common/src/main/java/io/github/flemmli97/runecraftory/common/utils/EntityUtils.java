@@ -11,7 +11,7 @@ import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.network.S2CUpdateAttributesWithAdditional;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
-import io.github.flemmli97.runecraftory.common.registry.ModTags;
+import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.Direction;
 import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
@@ -103,7 +103,7 @@ public class EntityUtils {
     public static void foodHealing(LivingEntity entity, float amount) {
         if (amount > 0)
             entity.heal(amount);
-        else if (!entity.getType().is(ModTags.BOSS_MONSTERS))
+        else if (!entity.getType().is(RunecraftoryTags.BOSS_MONSTERS))
             entity.setHealth(entity.getHealth() + amount);
     }
 

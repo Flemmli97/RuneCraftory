@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.entities.ai;
 
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.registry.ModTags;
+import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.utils.BlockPlaceCtxHelper;
 import io.github.flemmli97.runecraftory.common.utils.CropUtils;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
@@ -37,7 +37,7 @@ import java.util.function.Predicate;
 public class TendCropsGoal extends Goal {
 
     private static final Predicate<ItemStack> SEED_ITEM = s -> !s.isEmpty() && s.getItem() instanceof BlockItem
-            && (s.is(ModTags.SEEDS) || s.getItem() == Items.POTATO || s.getItem() == Items.CARROT);
+            && (s.is(RunecraftoryTags.SEEDS) || s.getItem() == Items.POTATO || s.getItem() == Items.CARROT);
 
     private final List<BlockPos> toTend = new ArrayList<>();
     private BlockPos selected;
@@ -86,10 +86,10 @@ public class TendCropsGoal extends Goal {
         if (block instanceof CropBlock crop && crop.isMaxAge(state))
             return true;
         BlockState state2 = level.getBlockState(pos.below());
-        if (state2.is(ModTags.FARMLAND) && state2.getValue(FarmBlock.MOISTURE) < 7)
+        if (state2.is(RunecraftoryTags.FARMLAND) && state2.getValue(FarmBlock.MOISTURE) < 7)
             return true;
         if (state2.getBlock() instanceof FarmBlock) {
-            if (state.is(ModTags.MONSTER_CLEARABLE))
+            if (state.is(RunecraftoryTags.MONSTER_CLEARABLE))
                 return true;
             if (this.canPlant)
                 return state.isAir();
@@ -144,7 +144,7 @@ public class TendCropsGoal extends Goal {
             BlockState state = this.entity.level.getBlockState(this.selected);
             Block block = state.getBlock();
             boolean success = false;
-            if (state.is(ModTags.MONSTER_CLEARABLE)) {
+            if (state.is(RunecraftoryTags.MONSTER_CLEARABLE)) {
                 this.breakBlock((ServerLevel) this.entity.level, this.selected, this.entity.getCropInventory() != null ?
                         s -> Platform.INSTANCE.insertInto(this.entity.level.getBlockEntity(this.entity.getCropInventory()), s) : null);
             } else if (block instanceof CropBlock crop && crop.isMaxAge(state)) {
@@ -155,7 +155,7 @@ public class TendCropsGoal extends Goal {
             } else {
                 BlockPos pos = this.selected.below();
                 BlockState state2 = this.entity.level.getBlockState(pos);
-                if (state2.is(ModTags.FARMLAND)) {
+                if (state2.is(RunecraftoryTags.FARMLAND)) {
                     if (state2.getValue(FarmBlock.MOISTURE) < 7) {
                         FarmlandHandler.waterLand((ServerLevel) this.entity.level, pos, state2);
                         success = true;

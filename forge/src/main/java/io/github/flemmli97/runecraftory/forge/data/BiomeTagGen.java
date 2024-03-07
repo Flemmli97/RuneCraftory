@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.forge.data;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.common.registry.ModTags;
+import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.TagsProvider;
@@ -27,75 +27,75 @@ public class BiomeTagGen extends TagsProvider<Biome> {
 
     @Override
     protected void addTags() {
-        this.tag(Biomes.PLAINS, ModTags.IS_PLAINS);
-        this.tag(Biomes.DESERT, ModTags.IS_HOT, ModTags.IS_DRY_OVERWORLD, ModTags.IS_SANDY);
-        this.tag(Biomes.SWAMP, ModTags.IS_WET, ModTags.IS_SWAMP);
-        this.tag(Biomes.NETHER_WASTES, ModTags.IS_HOT);
-        this.tag(Biomes.THE_END, ModTags.IS_END);
-        this.tag(Biomes.FROZEN_OCEAN, ModTags.IS_SNOWY);
-        this.tag(Biomes.FROZEN_RIVER, ModTags.IS_SNOWY);
-        this.tag(Biomes.SNOWY_PLAINS, ModTags.IS_SNOWY, ModTags.IS_WASTELAND, ModTags.IS_PLAINS);
-        this.tag(Biomes.MUSHROOM_FIELDS, ModTags.IS_MUSHROOM);
-        this.tag(Biomes.BEACH, ModTags.IS_BEACH);
-        this.tag(Biomes.JUNGLE, ModTags.IS_HOT, ModTags.IS_WET, ModTags.IS_DENSE_OVERWORLD);
-        this.tag(Biomes.SPARSE_JUNGLE, ModTags.IS_HOT, ModTags.IS_WET, ModTags.IS_WET);
-        this.tag(Biomes.STONY_SHORE, ModTags.IS_BEACH);
-        this.tag(Biomes.SNOWY_BEACH, ModTags.IS_BEACH, ModTags.IS_SNOWY);
-        this.tag(Biomes.DARK_FOREST, ModTags.IS_SPOOKY);
-        this.tag(Biomes.SNOWY_TAIGA, ModTags.IS_SNOWY);
-        this.tag(Biomes.WINDSWEPT_FOREST, ModTags.IS_SPARSE);
-        this.tag(Biomes.SAVANNA, ModTags.IS_HOT, ModTags.IS_SAVANNA, ModTags.IS_SPARSE);
-        this.tag(Biomes.SAVANNA_PLATEAU, ModTags.IS_HOT, ModTags.IS_SAVANNA, ModTags.IS_SPARSE, ModTags.IS_SLOPE);
-        this.tag(Biomes.BADLANDS, ModTags.IS_SANDY, ModTags.IS_DRY_OVERWORLD);
-        this.tag(Biomes.WOODED_BADLANDS, ModTags.IS_SANDY, ModTags.IS_DRY_OVERWORLD, ModTags.IS_SPARSE, ModTags.IS_SLOPE);
-        this.tag(Biomes.MEADOW, ModTags.IS_PLAINS, ModTags.IS_SLOPE);
-        this.tag(Biomes.GROVE, ModTags.IS_SNOWY, ModTags.IS_SLOPE);
-        this.tag(Biomes.SNOWY_SLOPES, ModTags.IS_SPARSE, ModTags.IS_SNOWY, ModTags.IS_SLOPE);
-        this.tag(Biomes.JAGGED_PEAKS, ModTags.IS_SPARSE, ModTags.IS_SNOWY, ModTags.IS_PEAK);
-        this.tag(Biomes.FROZEN_PEAKS, ModTags.IS_SPARSE, ModTags.IS_SNOWY, ModTags.IS_PEAK);
-        this.tag(Biomes.STONY_PEAKS, ModTags.IS_HOT, ModTags.IS_PEAK);
-        this.tag(Biomes.SMALL_END_ISLANDS, ModTags.IS_END);
-        this.tag(Biomes.END_MIDLANDS, ModTags.IS_END);
-        this.tag(Biomes.END_HIGHLANDS, ModTags.IS_END);
-        this.tag(Biomes.END_BARRENS, ModTags.IS_END);
-        this.tag(Biomes.WARM_OCEAN, ModTags.IS_HOT);
-        this.tag(Biomes.SUNFLOWER_PLAINS, ModTags.IS_PLAINS);
-        this.tag(Biomes.WINDSWEPT_GRAVELLY_HILLS, ModTags.IS_SPARSE);
-        this.tag(Biomes.ICE_SPIKES, ModTags.IS_SNOWY);
-        this.tag(Biomes.OLD_GROWTH_BIRCH_FOREST, ModTags.IS_DENSE_OVERWORLD);
-        this.tag(Biomes.OLD_GROWTH_SPRUCE_TAIGA, ModTags.IS_DENSE_OVERWORLD);
-        this.tag(Biomes.WINDSWEPT_SAVANNA, ModTags.IS_HOT, ModTags.IS_DRY_OVERWORLD, ModTags.IS_SPARSE, ModTags.IS_SAVANNA);
-        this.tag(Biomes.ERODED_BADLANDS, ModTags.IS_HOT, ModTags.IS_DRY_OVERWORLD, ModTags.IS_SPARSE);
-        this.tag(Biomes.BAMBOO_JUNGLE, ModTags.IS_HOT, ModTags.IS_WET);
-        this.tag(Biomes.LUSH_CAVES, ModTags.IS_LUSH, ModTags.IS_WET);
-        this.tag(Biomes.DRIPSTONE_CAVES, ModTags.IS_SPARSE);
-        this.tag(Biomes.SOUL_SAND_VALLEY, ModTags.IS_HOT);
-        this.tag(Biomes.CRIMSON_FOREST, ModTags.IS_HOT);
-        this.tag(Biomes.WARPED_FOREST, ModTags.IS_HOT);
-        this.tag(Biomes.BASALT_DELTAS, ModTags.IS_HOT);
+        this.tag(Biomes.PLAINS, RunecraftoryTags.IS_PLAINS);
+        this.tag(Biomes.DESERT, RunecraftoryTags.IS_HOT, RunecraftoryTags.IS_DRY_OVERWORLD, RunecraftoryTags.IS_SANDY);
+        this.tag(Biomes.SWAMP, RunecraftoryTags.IS_WET, RunecraftoryTags.IS_SWAMP);
+        this.tag(Biomes.NETHER_WASTES, RunecraftoryTags.IS_HOT);
+        this.tag(Biomes.THE_END, RunecraftoryTags.IS_END);
+        this.tag(Biomes.FROZEN_OCEAN, RunecraftoryTags.IS_SNOWY);
+        this.tag(Biomes.FROZEN_RIVER, RunecraftoryTags.IS_SNOWY);
+        this.tag(Biomes.SNOWY_PLAINS, RunecraftoryTags.IS_SNOWY, RunecraftoryTags.IS_WASTELAND, RunecraftoryTags.IS_PLAINS);
+        this.tag(Biomes.MUSHROOM_FIELDS, RunecraftoryTags.IS_MUSHROOM);
+        this.tag(Biomes.BEACH, RunecraftoryTags.IS_BEACH);
+        this.tag(Biomes.JUNGLE, RunecraftoryTags.IS_HOT, RunecraftoryTags.IS_WET, RunecraftoryTags.IS_DENSE_OVERWORLD);
+        this.tag(Biomes.SPARSE_JUNGLE, RunecraftoryTags.IS_HOT, RunecraftoryTags.IS_WET, RunecraftoryTags.IS_WET);
+        this.tag(Biomes.STONY_SHORE, RunecraftoryTags.IS_BEACH);
+        this.tag(Biomes.SNOWY_BEACH, RunecraftoryTags.IS_BEACH, RunecraftoryTags.IS_SNOWY);
+        this.tag(Biomes.DARK_FOREST, RunecraftoryTags.IS_SPOOKY);
+        this.tag(Biomes.SNOWY_TAIGA, RunecraftoryTags.IS_SNOWY);
+        this.tag(Biomes.WINDSWEPT_FOREST, RunecraftoryTags.IS_SPARSE);
+        this.tag(Biomes.SAVANNA, RunecraftoryTags.IS_HOT, RunecraftoryTags.IS_SAVANNA, RunecraftoryTags.IS_SPARSE);
+        this.tag(Biomes.SAVANNA_PLATEAU, RunecraftoryTags.IS_HOT, RunecraftoryTags.IS_SAVANNA, RunecraftoryTags.IS_SPARSE, RunecraftoryTags.IS_SLOPE);
+        this.tag(Biomes.BADLANDS, RunecraftoryTags.IS_SANDY, RunecraftoryTags.IS_DRY_OVERWORLD);
+        this.tag(Biomes.WOODED_BADLANDS, RunecraftoryTags.IS_SANDY, RunecraftoryTags.IS_DRY_OVERWORLD, RunecraftoryTags.IS_SPARSE, RunecraftoryTags.IS_SLOPE);
+        this.tag(Biomes.MEADOW, RunecraftoryTags.IS_PLAINS, RunecraftoryTags.IS_SLOPE);
+        this.tag(Biomes.GROVE, RunecraftoryTags.IS_SNOWY, RunecraftoryTags.IS_SLOPE);
+        this.tag(Biomes.SNOWY_SLOPES, RunecraftoryTags.IS_SPARSE, RunecraftoryTags.IS_SNOWY, RunecraftoryTags.IS_SLOPE);
+        this.tag(Biomes.JAGGED_PEAKS, RunecraftoryTags.IS_SPARSE, RunecraftoryTags.IS_SNOWY, RunecraftoryTags.IS_PEAK);
+        this.tag(Biomes.FROZEN_PEAKS, RunecraftoryTags.IS_SPARSE, RunecraftoryTags.IS_SNOWY, RunecraftoryTags.IS_PEAK);
+        this.tag(Biomes.STONY_PEAKS, RunecraftoryTags.IS_HOT, RunecraftoryTags.IS_PEAK);
+        this.tag(Biomes.SMALL_END_ISLANDS, RunecraftoryTags.IS_END);
+        this.tag(Biomes.END_MIDLANDS, RunecraftoryTags.IS_END);
+        this.tag(Biomes.END_HIGHLANDS, RunecraftoryTags.IS_END);
+        this.tag(Biomes.END_BARRENS, RunecraftoryTags.IS_END);
+        this.tag(Biomes.WARM_OCEAN, RunecraftoryTags.IS_HOT);
+        this.tag(Biomes.SUNFLOWER_PLAINS, RunecraftoryTags.IS_PLAINS);
+        this.tag(Biomes.WINDSWEPT_GRAVELLY_HILLS, RunecraftoryTags.IS_SPARSE);
+        this.tag(Biomes.ICE_SPIKES, RunecraftoryTags.IS_SNOWY);
+        this.tag(Biomes.OLD_GROWTH_BIRCH_FOREST, RunecraftoryTags.IS_DENSE_OVERWORLD);
+        this.tag(Biomes.OLD_GROWTH_SPRUCE_TAIGA, RunecraftoryTags.IS_DENSE_OVERWORLD);
+        this.tag(Biomes.WINDSWEPT_SAVANNA, RunecraftoryTags.IS_HOT, RunecraftoryTags.IS_DRY_OVERWORLD, RunecraftoryTags.IS_SPARSE, RunecraftoryTags.IS_SAVANNA);
+        this.tag(Biomes.ERODED_BADLANDS, RunecraftoryTags.IS_HOT, RunecraftoryTags.IS_DRY_OVERWORLD, RunecraftoryTags.IS_SPARSE);
+        this.tag(Biomes.BAMBOO_JUNGLE, RunecraftoryTags.IS_HOT, RunecraftoryTags.IS_WET);
+        this.tag(Biomes.LUSH_CAVES, RunecraftoryTags.IS_LUSH, RunecraftoryTags.IS_WET);
+        this.tag(Biomes.DRIPSTONE_CAVES, RunecraftoryTags.IS_SPARSE);
+        this.tag(Biomes.SOUL_SAND_VALLEY, RunecraftoryTags.IS_HOT);
+        this.tag(Biomes.CRIMSON_FOREST, RunecraftoryTags.IS_HOT);
+        this.tag(Biomes.WARPED_FOREST, RunecraftoryTags.IS_HOT);
+        this.tag(Biomes.BASALT_DELTAS, RunecraftoryTags.IS_HOT);
 
-        this.tag(ModTags.IS_WATER).addTag(BiomeTags.IS_OCEAN).addTag(BiomeTags.IS_RIVER);
-        this.tag(BiomeTags.IS_MOUNTAIN).addTag(ModTags.IS_PEAK).addTag(ModTags.IS_SLOPE);
+        this.tag(RunecraftoryTags.IS_WATER).addTag(BiomeTags.IS_OCEAN).addTag(BiomeTags.IS_RIVER);
+        this.tag(BiomeTags.IS_MOUNTAIN).addTag(RunecraftoryTags.IS_PEAK).addTag(RunecraftoryTags.IS_SLOPE);
 
-        this.tag(ModTags.NETHER_END).addTag(BiomeTags.IS_NETHER).addTag(ModTags.IS_END);
+        this.tag(RunecraftoryTags.NETHER_END).addTag(BiomeTags.IS_NETHER).addTag(RunecraftoryTags.IS_END);
 
-        this.tag(ModTags.AQUAMARINE_GEN).addTag(ModTags.IS_WATER).addTag(ModTags.IS_BEACH).addTag(ModTags.IS_WET);
-        this.tag(ModTags.AMETHYST_GEN).addTag(BiomeTags.IS_FOREST).addTag(BiomeTags.IS_MOUNTAIN).addOptionalTag(ModTags.IS_DEAD.location());
-        this.tag(ModTags.RUBY_GEN).addTag(ModTags.IS_HOT).addTag(BiomeTags.IS_NETHER);
-        this.tag(ModTags.EMERALD_GEN).addTag(ModTags.IS_PLAINS).addTag(ModTags.IS_WASTELAND).addTag(ModTags.IS_SPARSE).addTag(BiomeTags.IS_HILL);
-        this.tag(ModTags.SAPPHIRE_GEN).addOptionalTag(ModTags.IS_MAGICAL.location()).addTag(ModTags.IS_SNOWY);
+        this.tag(RunecraftoryTags.AQUAMARINE_GEN).addTag(RunecraftoryTags.IS_WATER).addTag(RunecraftoryTags.IS_BEACH).addTag(RunecraftoryTags.IS_WET);
+        this.tag(RunecraftoryTags.AMETHYST_GEN).addTag(BiomeTags.IS_FOREST).addTag(BiomeTags.IS_MOUNTAIN).addOptionalTag(RunecraftoryTags.IS_DEAD.location());
+        this.tag(RunecraftoryTags.RUBY_GEN).addTag(RunecraftoryTags.IS_HOT).addTag(BiomeTags.IS_NETHER);
+        this.tag(RunecraftoryTags.EMERALD_GEN).addTag(RunecraftoryTags.IS_PLAINS).addTag(RunecraftoryTags.IS_WASTELAND).addTag(RunecraftoryTags.IS_SPARSE).addTag(BiomeTags.IS_HILL);
+        this.tag(RunecraftoryTags.SAPPHIRE_GEN).addOptionalTag(RunecraftoryTags.IS_MAGICAL.location()).addTag(RunecraftoryTags.IS_SNOWY);
 
-        this.tag(ModTags.WATER_NETHER_END).addTag(ModTags.NETHER_END).addTag(ModTags.IS_WATER);
-        this.tag(ModTags.MUSHROOM_GEN).addTag(BiomeTags.IS_FOREST).addTag(ModTags.IS_MUSHROOM).addOptionalTag(ModTags.IS_MAGICAL.location());
-        this.tag(ModTags.INDIGO_GEN).addTag(ModTags.IS_WET).addOptionalTag(ModTags.IS_MAGICAL.location()).addTag(ModTags.IS_LUSH);
-        this.tag(ModTags.PURPLE_GEN).addTag(ModTags.IS_WET).addOptionalTag(ModTags.IS_MAGICAL.location());
-        this.tag(ModTags.BLUE_GEN).addTag(ModTags.IS_BEACH).addOptionalTag(ModTags.IS_MAGICAL.location()).addTag(BiomeTags.IS_RIVER).addTag(ModTags.IS_SWAMP);
-        this.tag(ModTags.WATER_END).addTag(ModTags.IS_WATER).addTag(ModTags.IS_END);
-        this.tag(ModTags.YELLOW_GEN).addTag(ModTags.IS_DRY_OVERWORLD).addTag(ModTags.IS_SANDY).addTag(BiomeTags.IS_NETHER);
-        this.tag(ModTags.ORANGE_GEN).addTag(BiomeTags.IS_NETHER).addTag(ModTags.IS_HOT).addTag(ModTags.IS_SAVANNA);
+        this.tag(RunecraftoryTags.WATER_NETHER_END).addTag(RunecraftoryTags.NETHER_END).addTag(RunecraftoryTags.IS_WATER);
+        this.tag(RunecraftoryTags.MUSHROOM_GEN).addTag(BiomeTags.IS_FOREST).addTag(RunecraftoryTags.IS_MUSHROOM).addOptionalTag(RunecraftoryTags.IS_MAGICAL.location());
+        this.tag(RunecraftoryTags.INDIGO_GEN).addTag(RunecraftoryTags.IS_WET).addOptionalTag(RunecraftoryTags.IS_MAGICAL.location()).addTag(RunecraftoryTags.IS_LUSH);
+        this.tag(RunecraftoryTags.PURPLE_GEN).addTag(RunecraftoryTags.IS_WET).addOptionalTag(RunecraftoryTags.IS_MAGICAL.location());
+        this.tag(RunecraftoryTags.BLUE_GEN).addTag(RunecraftoryTags.IS_BEACH).addOptionalTag(RunecraftoryTags.IS_MAGICAL.location()).addTag(BiomeTags.IS_RIVER).addTag(RunecraftoryTags.IS_SWAMP);
+        this.tag(RunecraftoryTags.WATER_END).addTag(RunecraftoryTags.IS_WATER).addTag(RunecraftoryTags.IS_END);
+        this.tag(RunecraftoryTags.YELLOW_GEN).addTag(RunecraftoryTags.IS_DRY_OVERWORLD).addTag(RunecraftoryTags.IS_SANDY).addTag(BiomeTags.IS_NETHER);
+        this.tag(RunecraftoryTags.ORANGE_GEN).addTag(BiomeTags.IS_NETHER).addTag(RunecraftoryTags.IS_HOT).addTag(RunecraftoryTags.IS_SAVANNA);
 
-        this.tag(ModTags.BAMBOO_GEN).addTag(BiomeTags.IS_JUNGLE).addTag(ModTags.IS_LUSH).addTag(ModTags.IS_DENSE_OVERWORLD);
-        this.tag(ModTags.GENERAL_HERBS).addOptionalTag(ModTags.IS_MAGICAL.location()).addTag(ModTags.IS_LUSH).addTag(ModTags.IS_DENSE_OVERWORLD).addTag(ModTags.IS_PLAINS)
+        this.tag(RunecraftoryTags.BAMBOO_GEN).addTag(BiomeTags.IS_JUNGLE).addTag(RunecraftoryTags.IS_LUSH).addTag(RunecraftoryTags.IS_DENSE_OVERWORLD);
+        this.tag(RunecraftoryTags.GENERAL_HERBS).addOptionalTag(RunecraftoryTags.IS_MAGICAL.location()).addTag(RunecraftoryTags.IS_LUSH).addTag(RunecraftoryTags.IS_DENSE_OVERWORLD).addTag(RunecraftoryTags.IS_PLAINS)
                 .addTag(BiomeTags.IS_FOREST).addTag(BiomeTags.IS_HILL);
 
         this.addedTags.forEach(tag -> this.tag(tag).addOptionalTag(new ResourceLocation("byg", tag.location().getPath())));

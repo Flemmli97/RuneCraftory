@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
-import io.github.flemmli97.runecraftory.api.Spell;
-import io.github.flemmli97.runecraftory.api.action.AttackAction;
-import io.github.flemmli97.runecraftory.common.registry.ModTags;
+import io.github.flemmli97.runecraftory.api.registry.Spell;
+import io.github.flemmli97.runecraftory.api.registry.AttackAction;
+import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.LivingEntity;
@@ -23,7 +23,7 @@ public class WeaponSpell extends Spell {
 
     @Override
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
-        boolean hasWeapon = entity.getMainHandItem().is(ModTags.WEAPONS) || entity.getMainHandItem().is(ModTags.TOOLS);
+        boolean hasWeapon = entity.getMainHandItem().is(RunecraftoryTags.WEAPONS) || entity.getMainHandItem().is(RunecraftoryTags.TOOLS);
         if (!hasWeapon)
             return false;
         boolean correctWeapon = entity.getMainHandItem().is(this.weapon);
@@ -33,7 +33,7 @@ public class WeaponSpell extends Spell {
 
     @Override
     public boolean canUse(ServerLevel world, LivingEntity entity, ItemStack stack) {
-        return entity.getMainHandItem().is(ModTags.WEAPONS) || entity.getMainHandItem().is(ModTags.TOOLS);
+        return entity.getMainHandItem().is(RunecraftoryTags.WEAPONS) || entity.getMainHandItem().is(RunecraftoryTags.TOOLS);
     }
 
     @Override

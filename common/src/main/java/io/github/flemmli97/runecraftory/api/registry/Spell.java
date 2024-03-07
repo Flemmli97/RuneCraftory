@@ -1,6 +1,5 @@
-package io.github.flemmli97.runecraftory.api;
+package io.github.flemmli97.runecraftory.api.registry;
 
-import io.github.flemmli97.runecraftory.api.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;

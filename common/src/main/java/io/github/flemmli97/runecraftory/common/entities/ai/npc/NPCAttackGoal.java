@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.entities.ai.npc;
 
-import io.github.flemmli97.runecraftory.api.action.AttackAction;
-import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.NPCAction;
+import io.github.flemmli97.runecraftory.api.registry.AttackAction;
+import io.github.flemmli97.runecraftory.api.registry.NPCAction;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import net.minecraft.world.entity.EntitySelector;

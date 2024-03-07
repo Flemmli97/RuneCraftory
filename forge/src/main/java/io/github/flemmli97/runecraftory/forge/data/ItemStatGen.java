@@ -8,7 +8,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModArmorEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
-import io.github.flemmli97.runecraftory.common.registry.ModTags;
+import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -785,29 +785,29 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.SCRAP_PLUS.get(), new ItemStat.Builder(0, 2, 1)
                 .addAttribute(ModAttributes.DEFENCE.get(), 2)
                 .addMonsterStat(ModAttributes.DEFENCE.get(), 0.2));
-        this.addStat("iron", ModTags.IRON, new ItemStat.Builder(150, 2, 5)
+        this.addStat("iron", RunecraftoryTags.IRON, new ItemStat.Builder(150, 2, 5)
                 .addAttribute(ModAttributes.DEFENCE.get(), 1)
                 .addMonsterStat(ModAttributes.DEFENCE.get(), 0.5));
-        this.addStat("bronze", ModTags.BRONZE, new ItemStat.Builder(400, 14, 13)
+        this.addStat("bronze", RunecraftoryTags.BRONZE, new ItemStat.Builder(400, 14, 13)
                 .addAttribute(ModAttributes.DEFENCE.get(), 2.4)
                 .addMonsterStat(ModAttributes.DEFENCE.get(), 0.5));
-        this.addStat("copper", ModTags.COPPER, new ItemStat.Builder(200, 9, 10)
+        this.addStat("copper", RunecraftoryTags.COPPER, new ItemStat.Builder(200, 9, 10)
                 .addAttribute(ModAttributes.DEFENCE.get(), 1.6)
                 .addMonsterStat(ModAttributes.DEFENCE.get(), 0.5));
-        this.addStat("silver", ModTags.SILVER, new ItemStat.Builder(1500, 27, 15)
+        this.addStat("silver", RunecraftoryTags.SILVER, new ItemStat.Builder(1500, 27, 15)
                 .addAttribute(ModAttributes.DEFENCE.get(), 5)
                 .addMonsterStat(ModAttributes.DEFENCE.get(), 0.6));
-        this.addStat("gold", ModTags.GOLD, new ItemStat.Builder(3500, 34, 20)
+        this.addStat("gold", RunecraftoryTags.GOLD, new ItemStat.Builder(3500, 34, 20)
                 .addAttribute(ModAttributes.DEFENCE.get(), 7)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 5)
                 .addMonsterStat(ModAttributes.DEFENCE.get(), 0.7));
-        this.addStat("platinum", ModTags.PLATINUM, new ItemStat.Builder(5000, 111, 34)
+        this.addStat("platinum", RunecraftoryTags.PLATINUM, new ItemStat.Builder(5000, 111, 34)
                 .addAttribute(ModAttributes.DEFENCE.get(), 30)
                 .addMonsterStat(ModAttributes.DEFENCE.get(), 0.8));
-        this.addStat("orichalcum", ModTags.ORICHALCUM, new ItemStat.Builder(20000, 750, 65)
+        this.addStat("orichalcum", RunecraftoryTags.ORICHALCUM, new ItemStat.Builder(20000, 750, 65)
                 .addAttribute(ModAttributes.DEFENCE.get(), 70)
                 .addMonsterStat(ModAttributes.DEFENCE.get(), 1));
-        this.addStat("dragonic", ModTags.DRAGONIC, new ItemStat.Builder(0, 1000, 70)
+        this.addStat("dragonic", RunecraftoryTags.DRAGONIC, new ItemStat.Builder(0, 1000, 70)
                 .addAttribute(ModAttributes.DEFENCE.get(), 130)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 90)
                 .addMonsterStat(ModAttributes.DEFENCE.get(), 1.5));
@@ -816,22 +816,22 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 20)
                 .addMonsterStat(ModAttributes.DEFENCE.get(), 0.9));
 
-        this.addStat("emerald", ModTags.EMERALDS, new ItemStat.Builder(2500, 5, 24)
+        this.addStat("emerald", RunecraftoryTags.EMERALDS, new ItemStat.Builder(2500, 5, 24)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 5)
                 .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 0.5));
         this.addStat(Items.DIAMOND, new ItemStat.Builder(5000, 21, 29)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 15)
                 .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 1));
-        this.addStat("amethyst", ModTags.AMETHYSTS, new ItemStat.Builder(3500, 18, 24)
+        this.addStat("amethyst", RunecraftoryTags.AMETHYSTS, new ItemStat.Builder(3500, 18, 24)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 7)
                 .addMonsterStat(ModAttributes.DEFENCE.get(), 0.75));
-        this.addStat("aquamarine", ModTags.AQUAMARINES, new ItemStat.Builder(3500, 23, 24)
+        this.addStat("aquamarine", RunecraftoryTags.AQUAMARINES, new ItemStat.Builder(3500, 23, 24)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 7)
                 .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 0.5));
-        this.addStat("ruby", ModTags.RUBIES, new ItemStat.Builder(4000, 37, 24)
+        this.addStat("ruby", RunecraftoryTags.RUBIES, new ItemStat.Builder(4000, 37, 24)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 7)
                 .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 0.5));
-        this.addStat("sapphire", ModTags.SAPPHIRES, new ItemStat.Builder(3500, 24, 24)
+        this.addStat("sapphire", RunecraftoryTags.SAPPHIRES, new ItemStat.Builder(3500, 24, 24)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 7)
                 .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 7));
         this.addStat(ModItems.CORE_GREEN.get(), new ItemStat.Builder(15000, 1050, 24)

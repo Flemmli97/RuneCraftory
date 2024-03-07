@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.client.npc;
 
-import io.github.flemmli97.runecraftory.common.entities.npc.features.NPCFeature;
-import io.github.flemmli97.runecraftory.common.entities.npc.features.NPCFeatureType;
+import io.github.flemmli97.runecraftory.api.registry.NPCFeature;
+import io.github.flemmli97.runecraftory.api.registry.NPCFeatureType;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
 
 import java.util.HashMap;

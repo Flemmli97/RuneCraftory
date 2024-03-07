@@ -29,7 +29,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModStats;
-import io.github.flemmli97.runecraftory.common.registry.ModTags;
+import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.spells.TeleportSpell;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
@@ -835,7 +835,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     @Override
     public TagKey<Item> tamingItem() {
-        return ModTags.tamingTag(this.getType());
+        return RunecraftoryTags.tamingTag(this.getType());
     }
 
     public ResourceLocation dailyDropTable() {
@@ -1767,7 +1767,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     @Override
     public boolean canBeAttackedBy(LivingEntity entity) {
-        if (entity instanceof Mob m && entity.getType().is(ModTags.TAMED_MONSTER_IGNORE) && this.getTarget() != m && m.getLastHurtByMob() != this)
+        if (entity instanceof Mob m && entity.getType().is(RunecraftoryTags.TAMED_MONSTER_IGNORE) && this.getTarget() != m && m.getLastHurtByMob() != this)
             return !this.isTamed();
         return true;
     }

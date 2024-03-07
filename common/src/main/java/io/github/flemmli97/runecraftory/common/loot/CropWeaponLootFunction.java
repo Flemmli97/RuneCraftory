@@ -10,7 +10,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.lib.LibNBT;
 import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
-import io.github.flemmli97.runecraftory.common.registry.ModTags;
+import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandData;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
@@ -42,7 +42,7 @@ public class CropWeaponLootFunction extends LootItemConditionalFunction {
     protected ItemStack run(ItemStack stack, LootContext ctx) {
         if (!ItemNBT.shouldHaveStats(stack))
             return stack;
-        boolean equipment = stack.is(ModTags.EQUIPMENT) && stack.getItem() instanceof ShieldItem;
+        boolean equipment = stack.is(RunecraftoryTags.EQUIPMENT) && stack.getItem() instanceof ShieldItem;
         int level = 1;
         if (ctx.hasParam(LootCtxParameters.ITEM_LEVEL_CONTEXT))
             level = ctx.getParam(LootCtxParameters.ITEM_LEVEL_CONTEXT);
@@ -55,7 +55,7 @@ public class CropWeaponLootFunction extends LootItemConditionalFunction {
             }
         }
         List<Pair<ItemStack, ItemStat>> base = DataPackHandler.INSTANCE.itemStatManager()
-                .all(s -> !s.is(stack.getItem()) && equipment ? s.getItem() instanceof ShieldItem : s.is(ModTags.UPGRADABLE_HELD));
+                .all(s -> !s.is(stack.getItem()) && equipment ? s.getItem() instanceof ShieldItem : s.is(RunecraftoryTags.UPGRADABLE_HELD));
         if (!base.isEmpty()) {
             CompoundTag tag = ItemNBT.getItemNBT(stack);
             if (tag == null)
@@ -66,7 +66,7 @@ public class CropWeaponLootFunction extends LootItemConditionalFunction {
             ItemNBT.addUpgradeItem(stack, base.get(ctx.getRandom().nextInt(base.size())).getFirst(), true, equipment ? EnumCrafting.ARMOR : EnumCrafting.FORGE);
         }
         List<Pair<ItemStack, ItemStat>> bonus = DataPackHandler.INSTANCE.itemStatManager()
-                .all(s -> !s.is(ModTags.WEAPONS) && !s.is(ModTags.EQUIPMENT));
+                .all(s -> !s.is(RunecraftoryTags.WEAPONS) && !s.is(RunecraftoryTags.EQUIPMENT));
         int bonusAmount = ctx.getRandom().nextInt(3) + 1;
         for (int i = 0; i < bonusAmount; i++)
             ItemNBT.addUpgradeItem(stack, bonus.get(ctx.getRandom().nextInt(bonus.size())).getFirst(), true, equipment ? EnumCrafting.ARMOR : EnumCrafting.FORGE);

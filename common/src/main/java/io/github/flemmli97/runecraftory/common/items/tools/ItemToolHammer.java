@@ -13,7 +13,7 @@ import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
-import io.github.flemmli97.runecraftory.common.registry.ModTags;
+import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
@@ -199,7 +199,7 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
         if (entity instanceof Player && !((Player) entity).mayUseItemAt(pos.relative(Direction.UP), Direction.UP, stack))
             return HammerState.FAIL;
         BlockState state = world.getBlockState(pos);
-        if (canHammer && state.is(ModTags.HAMMER_BREAKABLE)) {
+        if (canHammer && state.is(RunecraftoryTags.HAMMER_BREAKABLE)) {
             if (entity instanceof ServerPlayer serverPlayer) {
                 if (((ServerPlayer) entity).gameMode.destroyBlock(pos)) {
                     world.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
@@ -209,7 +209,7 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
             } else {
                 return world.destroyBlock(pos, true, entity, 3) ? HammerState.BREAK : HammerState.FAIL;
             }
-        } else if (state.is(ModTags.HAMMER_FLATTENABLE) && world.getBlockState(pos.above()).getMaterial() == Material.AIR) {
+        } else if (state.is(RunecraftoryTags.HAMMER_FLATTENABLE) && world.getBlockState(pos.above()).getMaterial() == Material.AIR) {
             if (world.setBlockAndUpdate(pos, Block.pushEntitiesUp(state, Blocks.DIRT.defaultBlockState(), world, pos))) {
                 world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.STONE_BREAK, SoundSource.BLOCKS, 1, 1);
                 return HammerState.FLATTEN;

@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.registry;
 
 import com.mojang.serialization.Codec;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.common.entities.npc.features.NPCFeatureType;
+import io.github.flemmli97.runecraftory.api.registry.NPCFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.SlimLookFeature;
 import io.github.flemmli97.runecraftory.platform.LazyGetter;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;

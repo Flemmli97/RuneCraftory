@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.api.items;
+package io.github.flemmli97.runecraftory.api.registry;
 
 import io.github.flemmli97.tenshilib.platform.registry.CustomRegistryEntry;
 import net.minecraft.world.entity.LivingEntity;

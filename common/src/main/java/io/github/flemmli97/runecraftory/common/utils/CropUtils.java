@@ -7,7 +7,7 @@ import io.github.flemmli97.runecraftory.common.blocks.Growable;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
-import io.github.flemmli97.runecraftory.common.registry.ModTags;
+import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandData;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.mixin.CropBlockAccessor;
@@ -85,7 +85,7 @@ public class CropUtils {
     }
 
     private static void modifyStack(CropProperties props, ItemStack stack, int level) {
-        if (stack.is(ModTags.CROPS)) {
+        if (stack.is(RunecraftoryTags.CROPS)) {
             stack.setCount(props.maxDrops());
             ItemNBT.getLeveledItem(stack, level);
         }

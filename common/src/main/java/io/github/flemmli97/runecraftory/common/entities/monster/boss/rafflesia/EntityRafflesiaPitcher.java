@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia;
 
 import io.github.flemmli97.runecraftory.common.entities.IBaseMob;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
-import io.github.flemmli97.runecraftory.common.registry.ModTags;
+import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import net.minecraft.core.BlockPos;
@@ -41,7 +41,7 @@ public class EntityRafflesiaPitcher extends EntityRafflesiaPart {
         if (part.level.isClientSide)
             return;
         List<Mob> nearby = part.level.getEntities(EntityTypeTest.forClass(Mob.class), part.getBoundingBox().inflate(16), m -> {
-            if (!m.getType().is(ModTags.RAFFLESIA_SUMMONS))
+            if (!m.getType().is(RunecraftoryTags.RAFFLESIA_SUMMONS))
                 return false;
             if (m instanceof OwnableEntity ownableEntity) {
                 Player player = null;
@@ -60,7 +60,7 @@ public class EntityRafflesiaPitcher extends EntityRafflesiaPart {
             BlockPos summonPos = part.blockPosition();
             for (int i = 0; i < rand; i++) {
                 BlockPos pos = summonPos.offset(part.getRandom().nextInt(8) - 4, part.getRandom().nextInt(2), part.getRandom().nextInt(8) - 4);
-                Optional<EntityType<?>> opt = Registry.ENTITY_TYPE.getTag(ModTags.RAFFLESIA_SUMMONS).flatMap(named -> named.getRandomElement(part.getRandom()).map(Holder::value));
+                Optional<EntityType<?>> opt = Registry.ENTITY_TYPE.getTag(RunecraftoryTags.RAFFLESIA_SUMMONS).flatMap(named -> named.getRandomElement(part.getRandom()).map(Holder::value));
                 opt.ifPresent(type -> {
                     ServerLevel serverLevel = (ServerLevel) part.level;
                     Entity e = type.create(serverLevel, null, null, null, pos, MobSpawnType.MOB_SUMMONED, true, true);

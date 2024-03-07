@@ -9,7 +9,7 @@ import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.network.S2CFarmlandRemovePacket;
 import io.github.flemmli97.runecraftory.common.network.S2CFarmlandUpdatePacket;
-import io.github.flemmli97.runecraftory.common.registry.ModTags;
+import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -86,7 +86,7 @@ public class FarmlandHandler extends SavedData {
     }
 
     public static boolean isFarmBlock(BlockState state) {
-        return state.is(ModTags.FARMLAND) && state.hasProperty(FarmBlock.MOISTURE);
+        return state.is(RunecraftoryTags.FARMLAND) && state.hasProperty(FarmBlock.MOISTURE);
     }
 
     public static void waterLand(ServerLevel level, BlockPos pos, BlockState state) {

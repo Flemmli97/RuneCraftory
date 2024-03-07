@@ -11,7 +11,7 @@ import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.SpellAtta
 import io.github.flemmli97.runecraftory.common.entities.npc.features.SlimLookFeature;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
-import io.github.flemmli97.runecraftory.common.registry.ModTags;
+import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.advancements.critereon.LocationPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
@@ -139,8 +139,8 @@ public class NPCDataGen extends NPCDataProvider {
         this.addNPCDataAll("smith/male_1", new NPCData.Builder(50, null, NPCData.Gender.MALE)
                         .withLook(new ResourceLocation(RuneCraftory.MODID, "smith/male_1"))
                         .withProfession(ModNPCJobs.SMITH.getSecond())
-                        .addGiftResponse("dislike", new NPCData.Gift(ModTags.SMITH_TRASH, "npc.smith.male.1.dislike", -10), "Hmm you better get rid of your trash yourself next time.")
-                        .addGiftResponse("like", new NPCData.Gift(ModTags.MINERALS, "npc.smith.male.1.like", 25), "You're giving this to me? Thanks! I will make good use of this")
+                        .addGiftResponse("dislike", new NPCData.Gift(RunecraftoryTags.SMITH_TRASH, "npc.smith.male.1.dislike", -10), "Hmm you better get rid of your trash yourself next time.")
+                        .addGiftResponse("like", new NPCData.Gift(RunecraftoryTags.MINERALS, "npc.smith.male.1.like", 25), "You're giving this to me? Thanks! I will make good use of this")
                         .setNeutralGiftResponse("npc.smith.male.1.gift.default", "Thank you for your gift. I really like ores")
                         .withCombatAction(meleeAndFireball)
                         .addTranslation(QuestGen.getTask(QuestGen.MINING), "Acquire Hardware??")
@@ -172,8 +172,8 @@ public class NPCDataGen extends NPCDataProvider {
         this.addNPCDataAll("smith/female_1", new NPCData.Builder(50, null, NPCData.Gender.FEMALE)
                         .withLook(new ResourceLocation(RuneCraftory.MODID, "smith/female_1"))
                         .withProfession(ModNPCJobs.SMITH.getSecond())
-                        .addGiftResponse("dislike", new NPCData.Gift(ModTags.SMITH_TRASH, "npc.smith.female.1.dislike", -10), "Hey! I'm not your trashcan!")
-                        .addGiftResponse("like", new NPCData.Gift(ModTags.MINERALS, "npc.smith.female.1.like", 25), "Wow thanks! I can make something great using this")
+                        .addGiftResponse("dislike", new NPCData.Gift(RunecraftoryTags.SMITH_TRASH, "npc.smith.female.1.dislike", -10), "Hey! I'm not your trashcan!")
+                        .addGiftResponse("like", new NPCData.Gift(RunecraftoryTags.MINERALS, "npc.smith.female.1.like", 25), "Wow thanks! I can make something great using this")
                         .setNeutralGiftResponse("npc.smith.female.1.gift.default", "Thanks. Did you know ores are one of my favorite things?")
                         .withCombatAction(meleeAndFireball),
                 of(m -> {
@@ -204,8 +204,8 @@ public class NPCDataGen extends NPCDataProvider {
         this.addNPCDataAll("shop_owner/male_1", new NPCData.Builder(50, null, NPCData.Gender.MALE)
                         .withLook(new ResourceLocation(RuneCraftory.MODID, "shop_owner/male_1"))
                         .withProfession(ModNPCJobs.GENERAL.getSecond(), ModNPCJobs.FLOWER.getSecond())
-                        .addGiftResponse("dislike", new NPCData.Gift(ModTags.GENERIC_TRASH, "npc.shop_owner.male.1.dislike", -10), "Eh... what is this?")
-                        .addGiftResponse("like", new NPCData.Gift(ModTags.CROPS, "npc.shop_owner.male.1.like", 25), "Thank you. Appreciate it.")
+                        .addGiftResponse("dislike", new NPCData.Gift(RunecraftoryTags.GENERIC_TRASH, "npc.shop_owner.male.1.dislike", -10), "Eh... what is this?")
+                        .addGiftResponse("like", new NPCData.Gift(RunecraftoryTags.CROPS, "npc.shop_owner.male.1.like", 25), "Thank you. Appreciate it.")
                         .setNeutralGiftResponse("npc.shop_owner.male.1.gift.default", "Thanks. I would really like some crops.")
                         .withCombatAction(genericAttack)
                         .addTranslation(QuestGen.getTask(QuestGen.SHIP_TURNIP), "First Shipment")
@@ -234,8 +234,8 @@ public class NPCDataGen extends NPCDataProvider {
         this.addNPCDataAll("shop_owner/female_1", new NPCData.Builder(50, null, NPCData.Gender.FEMALE)
                         .withLook(new ResourceLocation(RuneCraftory.MODID, "shop_owner/female_1"))
                         .withProfession(ModNPCJobs.GENERAL.getSecond(), ModNPCJobs.FLOWER.getSecond())
-                        .addGiftResponse("dislike", new NPCData.Gift(ModTags.GENERIC_TRASH, "npc.shop_owner.female.1.dislike", -10), "Why would you give this to me???")
-                        .addGiftResponse("like", new NPCData.Gift(ModTags.CROPS, "npc.shop_owner.female.1.like", 25), "Thanks! I can totally sell this... Huh? I said nothing.")
+                        .addGiftResponse("dislike", new NPCData.Gift(RunecraftoryTags.GENERIC_TRASH, "npc.shop_owner.female.1.dislike", -10), "Why would you give this to me???")
+                        .addGiftResponse("like", new NPCData.Gift(RunecraftoryTags.CROPS, "npc.shop_owner.female.1.like", 25), "Thanks! I can totally sell this... Huh? I said nothing.")
                         .setNeutralGiftResponse("npc.shop_owner.female.1.gift.default", "Thank you. Come crops would be nice.")
                         .withCombatAction(genericAttack),
                 of(m -> {

@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.mixin;
 
 import io.github.flemmli97.runecraftory.common.blocks.Growable;
-import io.github.flemmli97.runecraftory.common.registry.ModTags;
+import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.CropBlock;
@@ -16,7 +16,7 @@ public abstract class CropBlockMixin implements Growable {
 
     @Inject(method = "mayPlaceOn", at = @At("HEAD"), cancellable = true)
     private void checkPlace(BlockState state, BlockGetter level, BlockPos pos, CallbackInfoReturnable<Boolean> info) {
-        if (state.is(ModTags.FARMLAND)) {
+        if (state.is(RunecraftoryTags.FARMLAND)) {
             info.setReturnValue(true);
             info.cancel();
         }

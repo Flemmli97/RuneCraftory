@@ -12,7 +12,7 @@ import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
-import io.github.flemmli97.runecraftory.common.registry.ModTags;
+import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
@@ -54,7 +54,7 @@ public class ItemToolSickle extends DiggerItem implements IItemUsable, IChargeab
     public final EnumToolTier tier;
 
     public ItemToolSickle(EnumToolTier tier, Item.Properties props) {
-        super(0, 0, ItemTiers.TIER, ModTags.SICKLE_EFFECTIVE, props);
+        super(0, 0, ItemTiers.TIER, RunecraftoryTags.SICKLE_EFFECTIVE, props);
         this.tier = tier;
     }
 
@@ -207,7 +207,7 @@ public class ItemToolSickle extends DiggerItem implements IItemUsable, IChargeab
         if (entity instanceof Player player && !player.mayUseItemAt(pos.relative(Direction.UP), Direction.UP, stack))
             return false;
         BlockState state = level.getBlockState(pos);
-        if (state.is(ModTags.SICKLE_DESTROYABLE)) {
+        if (state.is(RunecraftoryTags.SICKLE_DESTROYABLE)) {
             if (entity instanceof ServerPlayer serverPlayer) {
                 if (serverPlayer.gameMode.destroyBlock(pos)) {
                     level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
