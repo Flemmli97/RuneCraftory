@@ -1784,11 +1784,11 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     public enum Behaviour {
 
+        WANDER("runecraftory.monster.interact.wander", false),
         WANDER_HOME("runecraftory.monster.interact.home", false),
         FOLLOW("runecraftory.monster.interact.follow", true),
         FOLLOW_DISTANCE("runecraftory.monster.interact.follow.distance", true),
         STAY("runecraftory.monster.interact.stay", true),
-        WANDER("runecraftory.monster.interact.wander", false),
         FARM("runecraftory.monster.interact.farm", false);
 
         public final String interactKey;
