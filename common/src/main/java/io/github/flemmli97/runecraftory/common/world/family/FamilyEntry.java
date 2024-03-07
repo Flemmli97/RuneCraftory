@@ -8,6 +8,7 @@ import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumMap;
@@ -160,6 +161,13 @@ public class FamilyEntry {
         return this.partner;
     }
 
+    public boolean hasPlayerRelationShip() {
+        if (this.partner == null)
+            return false;
+        return this.familyHandler.getFamily(this.partner)
+                .map(FamilyEntry::isPlayer).orElse(false);
+    }
+
     /**
      * @return True if the given uuid is related to this entry
      */
@@ -261,6 +269,10 @@ public class FamilyEntry {
         return false;
     }
 
+    public boolean isPlayer() {
+        return this.entityState == EntityState.PLAYER;
+    }
+
     public void markAsDead() {
         if (this.entityState != EntityState.PLAYER)
             this.entityState = EntityState.DEAD;
@@ -275,7 +287,18 @@ public class FamilyEntry {
     }
 
     private boolean shouldPersist(int depth) {
+        if (this.entityState == EntityState.ALIVE || this.entityState == EntityState.PLAYER)
+            return true;
         if (depth > 0) {
+            if (this.partner != null) {
+                if (this.familyHandler.getFamily(this.partner)
+                        .map(e -> {
+                            if (e.entityState == EntityState.ALIVE || e.entityState == EntityState.PLAYER)
+                                return true;
+                            return e.shouldPersist(depth - 2);
+                        }).orElse(false))
+                    return true;
+            }
             if (this.father != null) {
                 if (this.familyHandler.getFamily(this.father)
                         .map(e -> {

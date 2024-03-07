@@ -66,6 +66,7 @@ import io.github.flemmli97.tenshilib.api.item.IAOEWeapon;
 import io.github.flemmli97.tenshilib.api.item.IExtendedWeapon;
 import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
 import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.particles.ParticleOptions;
@@ -92,6 +93,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.EntityDamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
@@ -127,6 +129,7 @@ import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.entity.EntityInLevelCallback;
@@ -516,7 +519,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
                         || family.getRelationship() != FamilyEntry.Relationship.NONE) {
                     this.speak(serverPlayer, ConversationContext.DATING_DENY);
                 } else {
-                    float chance = this.friendPoints(player) >= 7 ? 0.33f * (this.friendPoints(player) - 6) : 0;
+                    float chance = 1;//this.friendPoints(player) >= 7 ? 0.33f * (this.friendPoints(player) - 6) : 0;
                     if (chance > 0 && this.updater.getDailyRandom().nextFloat() < chance) {
                         this.speak(serverPlayer, ConversationContext.DATING_ACCEPT);
                         family.updateRelationship(FamilyEntry.Relationship.DATING, player.getUUID());
@@ -721,6 +724,20 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         if (this.getServer() != null) {
             return FamilyHandler.get(this.getServer())
                     .getOrCreateEntry(this);
+        }
+        return null;
+    }
+
+    /**
+     * The player partner if npc is in a relationship with a player
+     */
+    @Nullable
+    public Player getPartner() {
+        if (this.getServer() != null) {
+            FamilyEntry family = FamilyHandler.get(this.getServer())
+                    .getOrCreateEntry(this);
+            if (family.getPartner() != null && family.hasPlayerRelationShip())
+                return this.level.getServer().getPlayerList().getPlayer(family.getPartner());
         }
         return null;
     }
@@ -957,6 +974,10 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     public void setPlayDeath(boolean flag) {
         this.entityData.set(PLAY_DEATH_STATE, flag);
         if (flag) {
+            Player partner;
+            if (!this.level.isClientSide && this.level.getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES)
+                    && this.followEntity() == null && (partner = this.getPartner()) instanceof ServerPlayer)
+                partner.sendMessage(this.getKnockoutMessage(), Util.NIL_UUID);
             this.level.getEntities(EntityTypeTest.forClass(Mob.class), this.getBoundingBox().inflate(32), e -> this.equals(e.getTarget()))
                     .forEach(m -> m.setTarget(null));
             this.getNavigation().stop();
@@ -966,6 +987,13 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         } else {
             this.getAnimationHandler().setAnimation(null);
         }
+    }
+
+    private Component getKnockoutMessage() {
+        DamageSource source = this.getLastDamageSource();
+        if (source instanceof EntityDamageSource && source.getEntity() != null)
+            return new TranslatableComponent("runecraftory.tamed.monster.knockout.by", this.getDisplayName(), this.blockPosition().getX(), this.blockPosition().getY(), this.blockPosition().getZ(), source.getEntity().getDisplayName());
+        return new TranslatableComponent("runecraftory.tamed.monster.knockout", this.getDisplayName(), this.blockPosition().getX(), this.blockPosition().getY(), this.blockPosition().getZ());
     }
 
     public int getPlayDeathTick() {
@@ -979,8 +1007,9 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if (this.playDeath() && source != DamageSource.OUT_OF_WORLD)
+        if (this.playDeath() && source != DamageSource.OUT_OF_WORLD) {
             return false;
+        }
         if (this.followEntity() != null && source.getEntity() != null) {
             Player follow = this.followEntity();
             if (follow.equals(source.getEntity()) || Platform.INSTANCE.getPlayerData(follow).map(d -> d.party.isPartyMember(source.getEntity())).orElse(false))
@@ -992,9 +1021,14 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     @Override
     protected void actuallyHurt(DamageSource damageSrc, float damageAmount) {
         super.actuallyHurt(damageSrc, damageAmount);
-        if (damageSrc != DamageSource.OUT_OF_WORLD && this.getHealth() <= 0 && this.followEntity() != null) {
-            this.setHealth(0.01f);
-            this.setPlayDeath(true);
+        if (damageSrc != DamageSource.OUT_OF_WORLD) {
+            FamilyEntry family;
+            if (this.getHealth() <= 0 && (this.followEntity() != null
+                    || ((family = this.getFamily()) != null && family.getPartner() != null && FamilyHandler.get(this.getServer())
+                    .getFamily(family.getPartner()).map(FamilyEntry::isPlayer).orElse(false)))) {
+                this.setHealth(0.01f);
+                this.setPlayDeath(true);
+            }
         }
     }
 
@@ -1052,14 +1086,6 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         this.getNavigation().stop();
         if (anim.getTick() == 1 && this.getTarget() != null)
             this.lookAt(this.getTarget(), 360, 90);
-        /*if (anim.canAttack()) {
-            if (this.delayedAttack != null) {
-                this.delayedAttack.run();
-                this.delayedAttack = null;
-            } else {
-                this.npcAttack(this::doHurtTarget);
-            }
-        }*/
     }
 
     public void npcAttack(Consumer<LivingEntity> cons) {
@@ -1264,9 +1290,12 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         if (player == null)
             this.setBehaviour(Behaviour.WANDER);
         if (player != null) {
+            FamilyEntry family = this.getFamily();
             int points = this.friendPoints(player);
             float denyChance = points < 3 ? -0.1f + 0.1f * points : (0.4f + 0.15f * points);
-            if (!player.isCreative() && Platform.INSTANCE.getPlayerData(player).map(d -> d.getDailyUpdater().getDailyRandom().nextFloat() < denyChance).orElse(true)) {
+            if (!player.isCreative()
+                    && (family != null && family.hasPlayerRelationShip() && !family.getPartner().equals(player.getUUID()))
+                    && Platform.INSTANCE.getPlayerData(player).map(d -> d.getDailyUpdater().getDailyRandom().nextFloat() < denyChance).orElse(true)) {
                 this.speak(player, ConversationContext.FOLLOW_NO);
                 return false;
             }
