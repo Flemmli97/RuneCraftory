@@ -4,6 +4,9 @@ import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import net.minecraftforge.common.ForgeConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.List;
+import java.util.function.Predicate;
+
 public class MobConfigSpec {
 
     public static final Pair<MobConfigSpec, ForgeConfigSpec> SPEC = new ForgeConfigSpec.Builder().configure(MobConfigSpec::new);
@@ -31,6 +34,7 @@ public class MobConfigSpec {
     public final ForgeConfigSpec.IntValue maxNearby;
     public final ForgeConfigSpec.IntValue baseGateLevel;
     public final ForgeConfigSpec.EnumValue<MobConfig.GateLevelType> gateLevelType;
+    public final ForgeConfigSpec.ConfigValue<List<String>> levelZones;
     public final ForgeConfigSpec.EnumValue<MobConfig.PlayerLevelType> playerLevelType;
     public final ForgeConfigSpec.DoubleValue treasureChance;
     public final ForgeConfigSpec.DoubleValue mimicChance;
@@ -74,8 +78,15 @@ public class MobConfigSpec {
                 "DISTANCESPAWNPLAYER: The further away from a players spawn (or world spawn if not exist) a gate is the stronger it gets. Highest level of nearby player counts",
                 "PLAYERLEVEL: The players level will be used to calculate the gates level",
                 "The final gate level gets a 10% randomizer").defineEnum("Gate Level Calc", MobConfig.gateLevelType);
+        this.levelZones = builder.comment("Define zones for levels here.",
+                "Gate Level Calc needs to be either DISTANCESPAWN or DISTANCESPAWNPLAYER.",
+                "The an entry is defined as: x-y-z",
+                "x: The distance at which this zone gets used",
+                "y: The starting level of that zone",
+                "z: The increase of level per distance away from the center.",
+                "E.g. 5-10-0.01 means a zone that starts at level 10 and from 5 blocks away from the center and the level will increase by 0.01 per block out.").define("Gate Zones", MobConfig.levelZones.writeToString(), stringList());
         this.playerLevelType = builder.comment("How players in a 256 radius influence the calculation of a gates level",
-                "For INCREASED an internal player specific value will be added on. That value is increased e.g. by defeating bosses so monsters get stronger the more bosses are defeated.",
+                "For INCREASED an internal player specific value will be added on. That value is increased e.g. by defeating bosses.",
                 "MEAN: The mean of all players will be used. Does nothing if Gate Level Calc is CONSTANT or DISTANCESPAWN",
                 "MEANINCREASED: The mean of all players will be used.",
                 "MAX: The max of all players will be used. Does nothing if Gate Level Calc is CONSTANT or DISTANCESPAWN",
@@ -84,5 +95,9 @@ public class MobConfigSpec {
         this.mimicChance = builder.comment("Chance for a spawned treasure chest to be a monster box").defineInRange("Mimic Chance", MobConfig.mimicChance, 0, 1f);
         this.mimicStrongChance = builder.comment("Chance for a monster box to be a gobble box").defineInRange("Strong Mimic Chance", MobConfig.mimicStrongChance, 0, 1f);
         builder.pop();
+    }
+
+    private static Predicate<Object> stringList() {
+        return p -> p instanceof List<?> list && list.stream().allMatch(e -> e instanceof String);
     }
 }

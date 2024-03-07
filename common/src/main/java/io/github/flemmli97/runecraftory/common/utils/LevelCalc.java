@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
+import io.github.flemmli97.runecraftory.common.config.DistanceZoningConfig;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
@@ -23,6 +24,7 @@ import net.minecraft.world.level.EntityGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.phys.Vec3;
+import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -266,17 +268,8 @@ public class LevelCalc {
         double dX = spawn.x - pos.x;
         double dZ = spawn.z - pos.z;
         double dist = Math.sqrt(dX * dX + dZ * dZ);
-        if (dist < 300)
-            return MobConfig.baseGateLevel;
-        if (dist < 2000)
-            return randomizedLevel(level.random, MobConfig.baseGateLevel + uniformInterpolation(0, 25, 2000 - 300, dist));
-        if (dist < 7500)
-            return randomizedLevel(level.random, MobConfig.baseGateLevel + uniformInterpolation(25, 80, 7500 - 2000, dist));
-        return randomizedLevel(level.random, MobConfig.baseGateLevel + (int) (80 + (dist - 7500) * 0.07));
-    }
-
-    private static int uniformInterpolation(int start, int increase, int len, double x) {
-        return (int) (start + increase / (float) len * x);
+        Pair<Float, DistanceZoningConfig.Zone> zone = MobConfig.levelZones.get((float) dist);
+        return randomizedLevel(level.random, (int) (zone.getRight().start() + (dist - zone.getLeft()) * zone.getRight().increasePerBlock()));
     }
 
     private static List<Player> playersIn(EntityGetter getter, Vec3 pos, double radius) {

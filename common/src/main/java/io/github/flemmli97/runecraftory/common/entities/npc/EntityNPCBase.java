@@ -270,25 +270,25 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         }
         AttributeInstance inst = this.getAttribute(Attributes.MAX_HEALTH);
         if (inst != null) {
-            inst.setBaseValue(MobConfig.npcHealth);
+            inst.setBaseValue(MobConfig.NPC_HEALTH);
             if (regenHealth)
                 this.setHealth(this.getMaxHealth());
         }
         inst = this.getAttribute(Attributes.ATTACK_DAMAGE);
         if (inst != null) {
-            inst.setBaseValue(MobConfig.npcAttack);
+            inst.setBaseValue(MobConfig.NPC_ATTACK);
         }
         inst = this.getAttribute(ModAttributes.DEFENCE.get());
         if (inst != null) {
-            inst.setBaseValue(MobConfig.npcDefence);
+            inst.setBaseValue(MobConfig.NPC_DEFENCE);
         }
         inst = this.getAttribute(ModAttributes.MAGIC.get());
         if (inst != null) {
-            inst.setBaseValue(MobConfig.npcMagicAttack);
+            inst.setBaseValue(MobConfig.NPC_MAGIC_ATTACK);
         }
         inst = this.getAttribute(ModAttributes.MAGIC_DEFENCE.get());
         if (inst != null) {
-            inst.setBaseValue(MobConfig.npcMagicDefence);
+            inst.setBaseValue(MobConfig.NPC_MAGIC_DEFENCE);
         }
     }
 
@@ -817,28 +817,28 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         AttributeInstance inst = this.getAttribute(Attributes.MAX_HEALTH);
         if (inst != null) {
             float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, RuneCraftory.MODID + ".levelMod", (this.level().getLevel() - levelOffset) * MobConfig.npcHealthGain * multiplier, AttributeModifier.Operation.ADDITION));
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, RuneCraftory.MODID + ".levelMod", (this.level().getLevel() - levelOffset) * MobConfig.NPC_HEALTH_GAIN * multiplier, AttributeModifier.Operation.ADDITION));
             this.setHealth(this.getMaxHealth() - preHealthDiff);
         }
         inst = this.getAttribute(Attributes.ATTACK_DAMAGE);
         if (inst != null) {
             float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, RuneCraftory.MODID + ".levelMod", (this.level().getLevel() - levelOffset) * MobConfig.npcAttackGain * multiplier, AttributeModifier.Operation.ADDITION));
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, RuneCraftory.MODID + ".levelMod", (this.level().getLevel() - levelOffset) * MobConfig.NPC_ATTACK_GAIN * multiplier, AttributeModifier.Operation.ADDITION));
         }
         inst = this.getAttribute(ModAttributes.DEFENCE.get());
         if (inst != null) {
             float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, RuneCraftory.MODID + ".levelMod", (this.level().getLevel() - levelOffset) * MobConfig.npcDefenceGain * multiplier, AttributeModifier.Operation.ADDITION));
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, RuneCraftory.MODID + ".levelMod", (this.level().getLevel() - levelOffset) * MobConfig.NPC_DEFENCE_GAIN * multiplier, AttributeModifier.Operation.ADDITION));
         }
         inst = this.getAttribute(ModAttributes.MAGIC.get());
         if (inst != null) {
             float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, RuneCraftory.MODID + ".levelMod", (this.level().getLevel() - levelOffset) * MobConfig.npcMagicAttackGain * multiplier, AttributeModifier.Operation.ADDITION));
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, RuneCraftory.MODID + ".levelMod", (this.level().getLevel() - levelOffset) * MobConfig.NPC_MAGIC_ATTACK_GAIN * multiplier, AttributeModifier.Operation.ADDITION));
         }
         inst = this.getAttribute(ModAttributes.MAGIC_DEFENCE.get());
         if (inst != null) {
             float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, RuneCraftory.MODID + ".levelMod", (this.level().getLevel() - levelOffset) * MobConfig.npcMagicDefenceGain * multiplier, AttributeModifier.Operation.ADDITION));
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, RuneCraftory.MODID + ".levelMod", (this.level().getLevel() - levelOffset) * MobConfig.NPC_MAGIC_DEFENCE_GAIN * multiplier, AttributeModifier.Operation.ADDITION));
         }
     }
 
