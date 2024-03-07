@@ -271,7 +271,7 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.barn.interact.not.owner", "This barn belongs to %s.");
         this.add("runecraftory.barn.interact.block", "Barn with capacity %1$s (Free: %2$s).");
         this.add("runecraftory.barn.interact.block.roofed", "Roofed barn with capacity %1$s (Free: %2$s).");
-
+        this.add("runecraftory.spawner.entry.deny", "A mystical force prevents you from entering!");
         this.add("runecraftory.crafting.rpMax.missing", "Missing total rp");
 
         this.add("runecraftory.display.level", "Level: %s");

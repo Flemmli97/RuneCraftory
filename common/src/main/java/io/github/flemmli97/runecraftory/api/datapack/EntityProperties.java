@@ -9,6 +9,7 @@ import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.core.Registry;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import org.jetbrains.annotations.NotNull;
@@ -30,23 +31,24 @@ public class EntityProperties {
 
     public static final Codec<EntityProperties> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(
-                    EntityRideActionCosts.CODEC.fieldOf("rideActionCosts").forGetter(d -> d.rideActionCosts),
                     Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("baseValues").forGetter(d -> d.baseValues),
                     Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("levelGains").forGetter(d -> d.levelGains),
+                    CodecHelper.ENTITY_PREDICATE_CODEC.optionalFieldOf("spawnerPredicate").forGetter(d -> Optional.ofNullable(d.spawnerPredicate == EntityPredicate.ANY ? null : d.spawnerPredicate)),
 
-                    ExtraCodecs.POSITIVE_INT.fieldOf("size").forGetter(d -> d.size),
                     Codec.BOOL.fieldOf("needsRoof").forGetter(d -> d.needsRoof),
                     OnKilledIncrease.CODEC.listOf().optionalFieldOf("levelIncreaseOnKill").forGetter(d -> d.levelIncreaseOnKill.isEmpty() ? Optional.empty() : Optional.of(d.levelIncreaseOnKill)),
+                    EntityRideActionCosts.CODEC.fieldOf("rideActionCosts").forGetter(d -> d.rideActionCosts),
 
-                    Codec.FLOAT.fieldOf("tamingChance").forGetter(d -> d.tamingChance),
                     Codec.BOOL.fieldOf("rideable").forGetter(d -> d.rideable),
                     Codec.BOOL.fieldOf("flying").forGetter(d -> d.flying),
+                    ExtraCodecs.POSITIVE_INT.fieldOf("size").forGetter(d -> d.size),
 
                     ExtraCodecs.POSITIVE_INT.fieldOf("minLevel").forGetter(d -> d.minLevel),
                     ExtraCodecs.NON_NEGATIVE_INT.fieldOf("xp").forGetter(d -> d.xp),
-                    ExtraCodecs.NON_NEGATIVE_INT.fieldOf("money").forGetter(d -> d.money)
-            ).apply(instance, (rideActionCosts, baseValues, levelGains, size, needsRoof, levelIncreaseOnKill, tamingChance, rideable, flying, minLevel, xp, money) ->
-                    new EntityProperties(minLevel, xp, money, tamingChance, rideable, flying, size, needsRoof, rideActionCosts, baseValues, levelGains, levelIncreaseOnKill.orElse(List.of()))));
+                    ExtraCodecs.NON_NEGATIVE_INT.fieldOf("money").forGetter(d -> d.money),
+                    Codec.FLOAT.fieldOf("tamingChance").forGetter(d -> d.tamingChance)
+            ).apply(instance, (baseValues, levelGains, spawnerPredicate, needsRoof, levelIncreaseOnKill, rideActionCosts, rideable, flying, size, minLevel, xp, money, tamingChance) ->
+                    new EntityProperties(minLevel, xp, money, tamingChance, rideable, flying, size, needsRoof, rideActionCosts, baseValues, levelGains, levelIncreaseOnKill.orElse(List.of()), spawnerPredicate.orElse(EntityPredicate.ANY))));
 
     public final int minLevel;
     public final int xp;
@@ -62,7 +64,9 @@ public class EntityProperties {
 
     private final List<OnKilledIncrease> levelIncreaseOnKill;
 
-    private EntityProperties(int minLevel, int xp, int money, float tamingChance, boolean rideable, boolean flying, int size, boolean needsRoof, EntityRideActionCosts rideActionCosts, Map<Attribute, Double> baseValues, Map<Attribute, Double> levelGains, List<OnKilledIncrease> levelIncreaseOnKill) {
+    public final EntityPredicate spawnerPredicate;
+
+    private EntityProperties(int minLevel, int xp, int money, float tamingChance, boolean rideable, boolean flying, int size, boolean needsRoof, EntityRideActionCosts rideActionCosts, Map<Attribute, Double> baseValues, Map<Attribute, Double> levelGains, List<OnKilledIncrease> levelIncreaseOnKill, EntityPredicate spawnerPredicate) {
         this.minLevel = Math.max(1, minLevel);
         this.xp = xp;
         this.money = money;
@@ -75,6 +79,7 @@ public class EntityProperties {
         this.baseValues = baseValues;
         this.levelGains = levelGains;
         this.levelIncreaseOnKill = levelIncreaseOnKill.stream().sorted().toList();
+        this.spawnerPredicate = spawnerPredicate;
     }
 
     public Map<Attribute, Double> getBaseValues() {
@@ -122,6 +127,7 @@ public class EntityProperties {
         private int minLevel = 1;
         private EntityRideActionCosts rideActionCosts = EntityRideActionCosts.DEFAULT;
         private final List<OnKilledIncrease> levelIncreaseOnKill = new ArrayList<>();
+        private EntityPredicate spawnerPredicate = EntityPredicate.ANY;
 
         public Builder putAttributes(Supplier<Attribute> att, double val) {
             this.baseValues.put(att, val);
@@ -188,6 +194,11 @@ public class EntityProperties {
             return this;
         }
 
+        public Builder withSpawnerPredicate(EntityPredicate.Builder builder) {
+            this.spawnerPredicate = builder.build();
+            return this;
+        }
+
         public EntityProperties build() {
             return new EntityProperties(this.minLevel, this.xp, this.money, this.taming, this.rideable, this.flying, this.size, this.needsRoof,
                     this.rideActionCosts, this.baseValues.entrySet().stream().collect(Collectors.toMap(
@@ -201,7 +212,7 @@ public class EntityProperties {
                             Map.Entry::getValue,
                             (e1, e2) -> e1,
                             LinkedHashMap::new
-                    )), this.levelIncreaseOnKill);
+                    )), this.levelIncreaseOnKill, this.spawnerPredicate);
         }
     }
 }

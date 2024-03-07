@@ -1547,6 +1547,7 @@
   "runecraftory.barn.interact.not.owner": "This barn belongs to %s.",
   "runecraftory.barn.interact.block": "Barn with capacity %1$s (Free: %2$s).",
   "runecraftory.barn.interact.block.roofed": "Roofed barn with capacity %1$s (Free: %2$s).",
+  "runecraftory.spawner.entry.deny": "A mystical force prevents you from entering!",
   "runecraftory.crafting.rpMax.missing": "Missing total rp",
   "runecraftory.display.level": "Level: %s",
   "runecraftory.keycategory": "Runecraftory",

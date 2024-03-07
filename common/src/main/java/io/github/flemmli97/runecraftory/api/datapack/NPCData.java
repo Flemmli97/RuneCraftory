@@ -334,7 +334,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         }
     }
 
-    public record ConversationSet(String fallbackKey, Map<String, Conversation> conversations) {
+    public static class ConversationSet {
 
         public static final Codec<ConversationSet> CODEC = RecordCodecBuilder.create(inst ->
                 inst.group(
@@ -343,6 +343,22 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                 ).apply(inst, ConversationSet::new));
 
         public static final ConversationSet DEFAULT = new ConversationSet("npc.conversation.missing", Map.of());
+
+        private final String fallbackKey;
+        private final Map<String, Conversation> conversations;
+
+        public ConversationSet(String fallbackKey, Map<String, Conversation> conversations) {
+            this.fallbackKey = fallbackKey;
+            this.conversations = conversations;
+        }
+
+        public String fallbackKey() {
+            return this.fallbackKey;
+        }
+
+        public Map<String, Conversation> conversations() {
+            return this.conversations;
+        }
 
         public static class Builder {
 

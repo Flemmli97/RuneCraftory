@@ -1,7 +1,7 @@
 {
   "entity": "runecraftory:goblin_gangster",
-  "min_distance_from_spawn": 500,
-  "min_gate_level": 7,
+  "minDistanceFromSpawn": 500,
+  "minGateLevel": 7,
   "allowUnderwater": false,
   "biomes": {
     "c:is_hot": 30,

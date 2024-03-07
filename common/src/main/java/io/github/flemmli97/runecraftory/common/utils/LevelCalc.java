@@ -16,6 +16,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.OwnableEntity;
@@ -221,13 +222,18 @@ public class LevelCalc {
         data.increaseSkill(skill, player, getSkillXpMultiplier(skill) * amount * GeneralConfig.skillXpMultiplier);
     }
 
-    public static int levelFromPos(ServerLevel level, Vec3 pos) {
+    public static GateLevelResult levelFromPos(ServerLevel level, Vec3 pos) {
+        List<ServerPlayer> nearby = playersAround(level, pos, 256);
+        return new GateLevelResult(levelFromPos(level, pos, nearby), nearby);
+    }
+
+    public static int levelFromPos(ServerLevel level, Vec3 pos, List<ServerPlayer> list) {
         return Math.max(1, switch (MobConfig.gateLevelType) {
-            case CONSTANT -> randomizedLevel(level.random, getLevelFor(level, pos, MobConfig.baseGateLevel, null));
+            case CONSTANT -> randomizedLevel(level.random, getLevelFor(MobConfig.baseGateLevel, list, null));
             case DISTANCESPAWN ->
-                    randomizedLevel(level.random, getLevelFor(level, pos, MobConfig.baseGateLevel + distanceLevelFrom(level, pos, level.getSharedSpawnPos()), null));
+                    randomizedLevel(level.random, getLevelFor(MobConfig.baseGateLevel + distanceLevelFrom(level, pos, level.getSharedSpawnPos()), list, null));
             case DISTANCESPAWNPLAYER ->
-                    randomizedLevel(level.random, getLevelFor(level, pos, MobConfig.baseGateLevel, (player, d) -> {
+                    randomizedLevel(level.random, getLevelFor(MobConfig.baseGateLevel, list, (player, d) -> {
                         ServerPlayer serverPlayer = (ServerPlayer) player;
                         BlockPos center;
                         if (serverPlayer.getRespawnDimension() != level.dimension() || serverPlayer.getRespawnPosition() == null)
@@ -237,14 +243,13 @@ public class LevelCalc {
                         return distanceLevelFrom(level, pos, center);
                     }));
             case PLAYERLEVEL ->
-                    randomizedLevel(level.random, getLevelFor(level, pos, MobConfig.baseGateLevel, (p, d) -> d.map(data -> data.getPlayerLevel().getLevel()).orElse(1)));
+                    randomizedLevel(level.random, getLevelFor(MobConfig.baseGateLevel, list, (p, d) -> d.map(data -> data.getPlayerLevel().getLevel()).orElse(1)));
         });
     }
 
-    private static int getLevelFor(ServerLevel level, Vec3 pos, int base, ToIntBiFunction<Player, Optional<PlayerData>> levelFunc) {
+    private static int getLevelFor(int base, List<ServerPlayer> list, ToIntBiFunction<Player, Optional<PlayerData>> levelFunc) {
         if (levelFunc == null && !MobConfig.playerLevelType.increased)
             return base;
-        List<Player> list = playersIn(level, pos, 256);
         if (list.isEmpty())
             return base;
         int lvl = 0;
@@ -272,11 +277,13 @@ public class LevelCalc {
         return randomizedLevel(level.random, (int) (zone.getRight().start() + (dist - zone.getLeft()) * zone.getRight().increasePerBlock()));
     }
 
-    private static List<Player> playersIn(EntityGetter getter, Vec3 pos, double radius) {
-        ArrayList<Player> list = Lists.newArrayList();
+    public static List<ServerPlayer> playersAround(EntityGetter getter, Vec3 pos, double radius) {
+        ArrayList<ServerPlayer> list = Lists.newArrayList();
         for (Player player : getter.players()) {
-            if (player.position().closerThan(pos, radius))
-                list.add(player);
+            if (!EntitySelector.NO_SPECTATORS.test(player) || !EntitySelector.LIVING_ENTITY_STILL_ALIVE.test(player))
+                continue;
+            if (player instanceof ServerPlayer serverPlayer && player.position().closerThan(pos, radius))
+                list.add(serverPlayer);
         }
         return list;
     }
@@ -341,5 +348,8 @@ public class LevelCalc {
             case LOVE -> EnumSkills.LOVE;
             default -> null;
         };
+    }
+
+    public record GateLevelResult(int level, List<ServerPlayer> nearby) {
     }
 }

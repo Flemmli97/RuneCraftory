@@ -1,7 +1,7 @@
 {
   "entity": "runecraftory:ignis",
-  "min_distance_from_spawn": 500,
-  "min_gate_level": 3,
+  "minDistanceFromSpawn": 500,
+  "minGateLevel": 3,
   "allowUnderwater": false,
   "biomes": {
     "c:is_spooky": 30,

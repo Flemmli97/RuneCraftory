@@ -17,6 +17,7 @@ import net.minecraft.core.SectionPos;
 import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.tags.FluidTags;
@@ -25,6 +26,7 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
@@ -52,7 +54,7 @@ public class GateSpawnsManager extends SimpleJsonResourceReloadListener {
         super(GSON, DIRECTORY);
     }
 
-    public List<EntityType<?>> pickRandomMobs(ServerLevel level, GateEntity gate, Holder<Biome> biome, Random rand, int amount, BlockPos pos) {
+    public List<EntityType<?>> pickRandomMobs(ServerLevel level, GateEntity gate, Holder<Biome> biome, Random rand, int amount, BlockPos pos, List<ServerPlayer> players) {
         List<SpawnResource> list = level.structureFeatureManager().startsForFeature(SectionPos.of(pos), this.structureSpawns::containsKey)
                 .stream().filter(start -> start.getBoundingBox().isInside(pos))
                 .map(start -> this.structureSpawns.get(start.getFeature()))
@@ -64,6 +66,7 @@ public class GateSpawnsManager extends SimpleJsonResourceReloadListener {
                     list.addAll(l);
             });
         }
+        list.removeIf(w -> w.playerPredicate != EntityPredicate.ANY && players.stream().noneMatch(p -> w.playerPredicate.matches(p, p)));
         if (list.isEmpty())
             return new ArrayList<>();
         double dist = pos.distSqr(level.getSharedSpawnPos());
@@ -138,7 +141,7 @@ public class GateSpawnsManager extends SimpleJsonResourceReloadListener {
         private final int distToSpawnSq;
         private final int minGateLevel;
         private final boolean allowWater;
-        private final EntityPredicate gatePredicate;
+        private final EntityPredicate gatePredicate, playerPredicate;
 
         public SpawnResource(EntityType<?> entity, GateSpawnData spawnData, int weight) {
             super(weight);
@@ -147,6 +150,7 @@ public class GateSpawnsManager extends SimpleJsonResourceReloadListener {
             this.minGateLevel = spawnData.minGateLevel();
             this.allowWater = spawnData.canSpawnInWater();
             this.gatePredicate = spawnData.gatePredicate();
+            this.playerPredicate = spawnData.playerPredicate();
         }
 
         public boolean canSpawn(ServerLevel serverLevel, BlockPos pos, BlockState state) {
@@ -155,7 +159,7 @@ public class GateSpawnsManager extends SimpleJsonResourceReloadListener {
 
         public boolean matches(ServerLevel serverLevel, BlockPos pos, BlockState state, double dist, GateEntity gate) {
             return dist >= this.distToSpawnSq && (state.getFluidState().isEmpty() || (this.allowWater && state.getFluidState().is(FluidTags.WATER) && serverLevel.canSeeSkyFromBelowWater(pos)))
-                    && (MobConfig.gateLevelType == MobConfig.GateLevelType.CONSTANT || gate.level().getLevel() >= this.minGateLevel)
+                    && gate.level().getLevel() >= this.minGateLevel
                     && this.gatePredicate.matches(serverLevel, gate.position(), gate);
         }
 

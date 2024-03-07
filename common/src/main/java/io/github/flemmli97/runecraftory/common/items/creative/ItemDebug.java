@@ -56,7 +56,7 @@ public class ItemDebug extends Item {
     @Override
     public InteractionResult useOn(UseOnContext context) {
         if (context.getLevel() instanceof ServerLevel serverLevel) {
-            int lvl = LevelCalc.levelFromPos(serverLevel, Vec3.atCenterOf(context.getClickedPos()));
+            int lvl = LevelCalc.levelFromPos(serverLevel, Vec3.atCenterOf(context.getClickedPos()), LevelCalc.playersAround(serverLevel, Vec3.atCenterOf(context.getClickedPos()), 256));
             context.getPlayer().sendMessage(new TextComponent("GateLevel at pos: " + lvl), Util.NIL_UUID);
             FarmlandHandler.get(serverLevel.getServer()).getData(serverLevel, context.getClickedPos())
                     .ifPresent(d -> context.getPlayer().sendMessage(new TextComponent(d.toStringFull()), Util.NIL_UUID));

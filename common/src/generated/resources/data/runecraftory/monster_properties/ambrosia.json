@@ -63,5 +63,12 @@
     "runecraftory:defence": 220.0,
     "runecraftory:magic_attack": 280.0,
     "runecraftory:magic_defence": 245.0
+  },
+  "spawnerPredicate": {
+    "player": {
+      "advancements": {
+        "minecraft:nether/return_to_sender": true
+      }
+    }
   }
 }

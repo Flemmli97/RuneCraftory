@@ -1,30 +1,44 @@
 package io.github.flemmli97.runecraftory.common.blocks.tile;
 
+import io.github.flemmli97.runecraftory.api.datapack.EntityProperties;
+import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
+import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
+import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.ChatType;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BossSpawnerBlockEntity extends BlockEntity {
 
     private int lastUpdateDay = -1;
+    private int ticker;
     private EntityType<?> savedEntity;
     private BlockPos structurePos;
     private ResourceLocation structureID;
@@ -35,16 +49,37 @@ public class BossSpawnerBlockEntity extends BlockEntity {
     }
 
     public static void tick(Level level, BlockPos blockPos, BlockState blockState, BossSpawnerBlockEntity blockEntity) {
-        if (level.hasNearbyAlivePlayer(blockPos.getX() + 0.5, blockPos.getY() + 0.5, blockPos.getZ() + 0.5, 16)) {
+        blockEntity.ticker++;
+        if (blockEntity.ticker % 5 != 0)
+            return;
+        Vec3 pos = Vec3.atCenterOf(blockPos.above(2));
+        List<ServerPlayer> nearby = LevelCalc.playersAround(level, pos, 16);
+        if (!nearby.isEmpty()) {
+            EntityProperties prop = DataPackHandler.INSTANCE.monsterPropertiesManager().getPropertiesFor(blockEntity.savedEntity);
+            boolean canSpawn = false;
+            if (prop.spawnerPredicate != EntityPredicate.ANY) {
+                // Throw out all non matching players
+                List<ServerPlayer> removed = new ArrayList<>();
+                for (ServerPlayer player : nearby) {
+                    if (!prop.spawnerPredicate.matches(player, player)) {
+                        removed.add(player);
+                        Vec3 opposite = player.position().subtract(pos).normalize();
+                        player.fallDistance = 0;
+                        player.setDeltaMovement(opposite);
+                        player.sendMessage(new TranslatableComponent("runecraftory.spawner.entry.deny").withStyle(ChatFormatting.DARK_PURPLE),
+                                ChatType.GAME_INFO, Util.NIL_UUID);
+                        player.connection.send(new ClientboundSetEntityMotionPacket(player));
+                    } else if (player.position().closerThan(pos, 10)) {
+                        canSpawn = true;
+                    }
+                }
+                nearby.removeAll(removed);
+            } else {
+                canSpawn = true;
+            }
             boolean flag = blockEntity.lastUpdateDay != WorldUtils.day(level);
-            /*if(this.structure!=null)
-                for(EntityPlayer player : this.world.playerEntities)
-                    if(this.base.isInside(player.getPosition()))
-                    {
-
-                    }*/
-            if (blockEntity.savedEntity != null && flag) {
-                blockEntity.spawnEntity();
+            if (canSpawn && blockEntity.savedEntity != null && flag) {
+                blockEntity.spawnEntity(nearby, pos);
             }
         }
     }
@@ -55,7 +90,7 @@ public class BossSpawnerBlockEntity extends BlockEntity {
         return this.structure;
     }
 
-    public void spawnEntity() {
+    public void spawnEntity(List<ServerPlayer> nearby, Vec3 pos) {
         if (!this.level.isClientSide && this.savedEntity != null) {
             Entity e = this.savedEntity.create(this.level);
             if (e != null) {
@@ -63,7 +98,7 @@ public class BossSpawnerBlockEntity extends BlockEntity {
                 if (!this.level.getEntitiesOfClass(e.getClass(), new AABB(this.worldPosition).inflate(32)).isEmpty())
                     return;
                 if (e instanceof BaseMonster)
-                    ((BaseMonster) e).setLevel(LevelCalc.levelFromPos((ServerLevel) this.level, Vec3.atCenterOf(this.worldPosition)) - 1);
+                    ((BaseMonster) e).setLevel(LevelCalc.levelFromPos((ServerLevel) this.level, Vec3.atCenterOf(this.worldPosition), nearby));
                 e.moveTo(this.worldPosition.getX() + 0.5, this.worldPosition.getY() + 5, this.worldPosition.getZ() + 0.5, this.level.random.nextFloat() * 360.0F, 0.0F);
                 if (e instanceof Mob mob) {
                     mob.restrictTo(this.worldPosition, 14);
