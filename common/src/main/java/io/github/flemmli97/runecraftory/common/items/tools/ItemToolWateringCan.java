@@ -51,7 +51,7 @@ public class ItemToolWateringCan extends TieredItem implements IItemUsable, ICha
     @Override
     public int getChargeTime(ItemStack stack) {
         if (this.tier == EnumToolTier.PLATINUM)
-            return (int) (DataPackHandler.INSTANCE.weaponPropertiesManager().getPropertiesFor(this.getWeaponType()).chargeTime() * GeneralConfig.PLATINUM_CHARGE_TIME);
+            return (int) (DataPackHandler.INSTANCE.weaponPropertiesManager().getPropertiesFor(this.getWeaponType()).chargeTime() * GeneralConfig.platinumChargeTime);
         return DataPackHandler.INSTANCE.weaponPropertiesManager().getPropertiesFor(this.getWeaponType()).chargeTime();
     }
 
@@ -86,11 +86,11 @@ public class ItemToolWateringCan extends TieredItem implements IItemUsable, ICha
 
     public int maxWater() {
         return switch (this.tier) {
-            case IRON -> GeneralConfig.IRON_WATERING_CAN_WATER;
-            case SILVER -> GeneralConfig.SILVER_WATERING_CAN_WATER;
-            case GOLD -> GeneralConfig.GOLD_WATERING_CAN_WATER;
-            case PLATINUM -> GeneralConfig.PLATINUM_WATERING_CAN_WATER;
-            default -> GeneralConfig.SCRAP_WATERING_CAN_WATER;
+            case IRON -> GeneralConfig.ironWateringCanWater;
+            case SILVER -> GeneralConfig.silverWateringCanWater;
+            case GOLD -> GeneralConfig.goldWateringCanWater;
+            case PLATINUM -> GeneralConfig.platinumWateringCanWater;
+            default -> GeneralConfig.scrapWateringCanWater;
         };
     }
 

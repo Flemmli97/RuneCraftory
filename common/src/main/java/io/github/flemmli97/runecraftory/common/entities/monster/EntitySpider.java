@@ -37,7 +37,7 @@ public class EntitySpider extends BaseMonster {
     public AnimatedRangedGoal<EntitySpider> attack = new AnimatedRangedGoal<>(this, 7, (e) -> true);
 
     public int climbingTicker = -1;
-    public static int CLIMB_MAX = 9;
+    public static final int CLIMB_MAX = 9;
 
     public EntitySpider(EntityType<? extends EntitySpider> type, Level world) {
         super(type, world);

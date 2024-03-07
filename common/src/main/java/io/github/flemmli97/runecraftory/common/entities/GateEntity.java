@@ -92,7 +92,7 @@ public class GateEntity extends Mob implements IBaseMob {
         }
         this.updateAttributes();
         this.setNoGravity(true);
-        this.maxNearby = this.getRandom().nextInt(1 + MobConfig.MAX_NEARBY - MobConfig.MIN_NEARBY) + MobConfig.MIN_NEARBY;
+        this.maxNearby = this.getRandom().nextInt(1 + MobConfig.maxNearby - MobConfig.minNearby) + MobConfig.minNearby;
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -111,9 +111,9 @@ public class GateEntity extends Mob implements IBaseMob {
     public static boolean canSpawnAt(EntityType<? extends GateEntity> type, ServerLevelAccessor level, MobSpawnType reason, BlockPos pos, Random random) {
         BlockState state = level.getBlockState(pos);
         return level.getDifficulty() != Difficulty.PEACEFUL && DataPackHandler.INSTANCE.gateSpawnsManager().hasSpawns(level, pos, state)
-                && level.getLevel().getPoiManager().find(PoiType.MEETING.getPredicate(), p -> true, pos, MobConfig.BELL_RADIUS, PoiManager.Occupancy.ANY).isEmpty()
+                && level.getLevel().getPoiManager().find(PoiType.MEETING.getPredicate(), p -> true, pos, MobConfig.bellRadius, PoiManager.Occupancy.ANY).isEmpty()
                 && gateSpawnRules(type, level, reason, pos, state, random)
-                && level.getEntitiesOfClass(GateEntity.class, new AABB(pos).inflate(MobConfig.MIN_DIST)).size() < MobConfig.MAX_GROUP;
+                && level.getEntitiesOfClass(GateEntity.class, new AABB(pos).inflate(MobConfig.minDist)).size() < MobConfig.maxGroup;
     }
 
     public static ResourceLocation getGateLootLocation(EnumElement element) {
@@ -145,12 +145,12 @@ public class GateEntity extends Mob implements IBaseMob {
 
     @Override
     public int baseXP() {
-        return MobConfig.GATE_XP;
+        return MobConfig.gateXp;
     }
 
     @Override
     public int baseMoney() {
-        return MobConfig.GATE_MONEY;
+        return MobConfig.gateMoney;
     }
 
     @Override
@@ -171,9 +171,9 @@ public class GateEntity extends Mob implements IBaseMob {
     }
 
     private void updateAttributes() {
-        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(MobConfig.GATE_HEALTH);
-        this.getAttribute(ModAttributes.DEFENCE.get()).setBaseValue(MobConfig.GATE_DEF);
-        this.getAttribute(ModAttributes.MAGIC_DEFENCE.get()).setBaseValue(MobConfig.GATE_M_DEF);
+        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(MobConfig.gateHealth);
+        this.getAttribute(ModAttributes.DEFENCE.get()).setBaseValue(MobConfig.gateDef);
+        this.getAttribute(ModAttributes.MAGIC_DEFENCE.get()).setBaseValue(MobConfig.gateMDef);
         this.setHealth(this.getMaxHealth());
     }
 
@@ -214,7 +214,7 @@ public class GateEntity extends Mob implements IBaseMob {
             this.setDeltaMovement(this.getDeltaMovement().scale(0.98D));
         }
         if (!this.level.isClientSide && --this.spawnDelay <= 0 && this.level.getDifficulty() != Difficulty.PEACEFUL) {
-            this.spawnDelay = MobConfig.MIN_SPAWN_DELAY >= MobConfig.MAX_SPAWN_DELAY ? MobConfig.MIN_SPAWN_DELAY : this.getRandom().nextInt(MobConfig.MIN_SPAWN_DELAY, MobConfig.MAX_SPAWN_DELAY);
+            this.spawnDelay = MobConfig.minSpawnDelay >= MobConfig.maxSpawnDelay ? MobConfig.minSpawnDelay : this.getRandom().nextInt(MobConfig.minSpawnDelay, MobConfig.maxSpawnDelay);
             if (this.spawnMobs(1)) {
                 this.spawnDelay *= 0.4;
             }
@@ -298,7 +298,7 @@ public class GateEntity extends Mob implements IBaseMob {
         this.setPos(this.getX(), this.getY() + 1, this.getZ());
         this.updateStatsToLevel();
         this.spawnMobs(Math.max(1, this.maxNearby - 2));
-        this.spawnDelay = this.getRandom().nextInt(MobConfig.MIN_SPAWN_DELAY, MobConfig.MAX_SPAWN_DELAY);
+        this.spawnDelay = this.getRandom().nextInt(MobConfig.minSpawnDelay, MobConfig.maxSpawnDelay);
         //Cant check during spawn conditions since gate level isnt set there yet
         if (this.spawnList.isEmpty() && reason != MobSpawnType.SPAWN_EGG && reason != MobSpawnType.COMMAND)
             this.removeCauseEmptyList = true;
@@ -453,11 +453,11 @@ public class GateEntity extends Mob implements IBaseMob {
 
     private void updateStatsToLevel() {
         this.getAttribute(Attributes.MAX_HEALTH).removeModifier(ATTRIBUTE_LEVEL_MOD);
-        this.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(new AttributeModifier(ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.level().getLevel() - 1) * MobConfig.GATE_HEALTH_GAIN, AttributeModifier.Operation.ADDITION));
+        this.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(new AttributeModifier(ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.level().getLevel() - 1) * MobConfig.gateHealthGain, AttributeModifier.Operation.ADDITION));
         this.getAttribute(ModAttributes.DEFENCE.get()).removeModifier(ATTRIBUTE_LEVEL_MOD);
-        this.getAttribute(ModAttributes.DEFENCE.get()).addPermanentModifier(new AttributeModifier(ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.level().getLevel() - 1) * MobConfig.GATE_DEF_GAIN, AttributeModifier.Operation.ADDITION));
+        this.getAttribute(ModAttributes.DEFENCE.get()).addPermanentModifier(new AttributeModifier(ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.level().getLevel() - 1) * MobConfig.gateDefGain, AttributeModifier.Operation.ADDITION));
         this.getAttribute(ModAttributes.MAGIC_DEFENCE.get()).removeModifier(ATTRIBUTE_LEVEL_MOD);
-        this.getAttribute(ModAttributes.MAGIC_DEFENCE.get()).addPermanentModifier(new AttributeModifier(ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.level().getLevel() - 1) * MobConfig.GATE_M_DEF_GAIN, AttributeModifier.Operation.ADDITION));
+        this.getAttribute(ModAttributes.MAGIC_DEFENCE.get()).addPermanentModifier(new AttributeModifier(ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.level().getLevel() - 1) * MobConfig.gateMDefGain, AttributeModifier.Operation.ADDITION));
         this.setHealth(this.getMaxHealth());
     }
 

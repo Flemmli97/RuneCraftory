@@ -155,7 +155,7 @@ public class GateSpawnsManager extends SimpleJsonResourceReloadListener {
 
         public boolean matches(ServerLevel serverLevel, BlockPos pos, BlockState state, double dist, GateEntity gate) {
             return dist >= this.distToSpawnSq && (state.getFluidState().isEmpty() || (this.allowWater && state.getFluidState().is(FluidTags.WATER) && serverLevel.canSeeSkyFromBelowWater(pos)))
-                    && (MobConfig.GATE_LEVEL_TYPE == MobConfig.GateLevelType.CONSTANT || gate.level().getLevel() >= this.minGateLevel)
+                    && (MobConfig.gateLevelType == MobConfig.GateLevelType.CONSTANT || gate.level().getLevel() >= this.minGateLevel)
                     && this.gatePredicate.matches(serverLevel, gate.position(), gate);
         }
 

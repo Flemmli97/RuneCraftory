@@ -248,7 +248,7 @@ public class ItemNBT {
         if (stackToAdd.getItem() == ModItems.SCRAP_PLUS.get() && stack.getItem() instanceof IItemUsable)
             tag.putBoolean(LibNBT.SCRAP_METAL_PLUS, true);
         boolean hasObjectX = tag.getBoolean(LibNBT.OBJECT_X);
-        if (stackToAdd.getItem() == ModItems.objectX.get())
+        if (stackToAdd.getItem() == ModItems.OBJECT_X.get())
             tag.putBoolean(LibNBT.OBJECT_X, !hasObjectX);
         if (type == EnumCrafting.FORGE && stackToAdd.getItem() == ModItems.INVIS_STONE.get())
             tag.putBoolean(LibNBT.INVIS, true);
@@ -405,7 +405,7 @@ public class ItemNBT {
                 }
             }
             boolean hasObjectX = tag.getBoolean(LibNBT.OBJECT_X);
-            if (stackToAdd.getItem() == ModItems.objectX.get())
+            if (stackToAdd.getItem() == ModItems.OBJECT_X.get())
                 tag.putBoolean(LibNBT.OBJECT_X, !hasObjectX);
             for (Map.Entry<Attribute, Double> entry : props.cookingBonus().entrySet()) {
                 double amount = entry.getValue();

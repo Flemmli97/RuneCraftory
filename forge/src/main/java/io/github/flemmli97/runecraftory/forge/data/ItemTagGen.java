@@ -204,7 +204,7 @@ public class ItemTagGen extends ItemTagsProvider {
                         ModItems.SCREW_SHINY.get(),
                         ModItems.ROCK_SHARD_LEFT.get(),
                         ModItems.ROCK_SHARD_RIGHT.get(),
-                        ModItems.MTGUPlate.get(),
+                        ModItems.MTGU_PLATE.get(),
                         ModItems.BROKEN_ICE_WALL.get());
         this.tag(ModTags.FURS)
                 .add(ModItems.FUR_SMALL.get(),
@@ -325,12 +325,12 @@ public class ItemTagGen extends ItemTagsProvider {
         this.tag(tempKeyFabric("shields")).addTag(tempKeyForge("tools/shields"));
         this.tag(tempKeyForge("tools/shields")).addTag(ModTags.SHIELDS);
 
-        this.forgeAndCommonTag(Tags.Items.EGGS, ModTags.EGGS, ModItems.eggS.get(),
-                ModItems.eggM.get(), ModItems.eggL.get(), Items.EGG);
+        this.forgeAndCommonTag(Tags.Items.EGGS, ModTags.EGGS, ModItems.EGG_S.get(),
+                ModItems.EGG_M.get(), ModItems.EGG_L.get(), Items.EGG);
         this.tag(ModTags.MILKS)
-                .add(ModItems.milkS.get())
-                .add(ModItems.milkM.get())
-                .add(ModItems.milkL.get())
+                .add(ModItems.MILK_S.get())
+                .add(ModItems.MILK_M.get())
+                .add(ModItems.MILK_L.get())
                 .add(Items.MILK_BUCKET);
 
         this.tag(ModTags.tamingTag(ModEntities.WOOLY.get()))
@@ -548,7 +548,7 @@ public class ItemTagGen extends ItemTagsProvider {
         }
 
         this.tag(ModTags.QUICKHARVEST_BYPASS)
-                .add(ModItems.formularA.get(), ModItems.formularB.get(), ModItems.formularC.get(), ModItems.MINIMIZER.get(),
+                .add(ModItems.FORMULAR_A.get(), ModItems.FORMULAR_B.get(), ModItems.FORMULAR_C.get(), ModItems.MINIMIZER.get(),
                         ModItems.GIANTIZER.get(), ModItems.GREENIFIER.get(), ModItems.GREENIFIER_PLUS.get(), ModItems.WETTABLE_POWDER.get())
                 .add(ModItems.WATERING_CAN_SCRAP.get(), ModItems.WATERING_CAN_IRON.get(),
                         ModItems.WATERING_CAN_SILVER.get(), ModItems.WATERING_CAN_GOLD.get(), ModItems.WATERING_CAN_PLATINUM.get());

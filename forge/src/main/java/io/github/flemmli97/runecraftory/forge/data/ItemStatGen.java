@@ -209,7 +209,7 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.INVINCIROID.get(), new ItemStat.Builder(25000, 1500, 0));
         this.addStat(ModItems.LOVE_POTION.get(), new ItemStat.Builder(50000, 2000, 0));
         this.addStat(ModItems.FORMUADE.get(), new ItemStat.Builder(20000, 700, 0));
-        this.addStat(ModItems.objectX.get(), new ItemStat.Builder(6000, 500, 15));
+        this.addStat(ModItems.OBJECT_X.get(), new ItemStat.Builder(6000, 500, 15));
 
         this.addStat(ModItems.BROAD_SWORD.get(), new ItemStat.Builder(100, 16, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 4)
@@ -672,9 +672,9 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.VITAL_GUMMI.get(), new ItemStat.Builder(1500000, 1500, 0));
         this.addStat(ModItems.INTELLIGENCER.get(), new ItemStat.Builder(1500000, 1500, 0));
         this.addStat(ModItems.PROTEIN.get(), new ItemStat.Builder(1500000, 1500, 0));
-        this.addStat(ModItems.formularA.get(), new ItemStat.Builder(1000, 150, 0));
-        this.addStat(ModItems.formularB.get(), new ItemStat.Builder(2500, 250, 0));
-        this.addStat(ModItems.formularC.get(), new ItemStat.Builder(5000, 400, 0));
+        this.addStat(ModItems.FORMULAR_A.get(), new ItemStat.Builder(1000, 150, 0));
+        this.addStat(ModItems.FORMULAR_B.get(), new ItemStat.Builder(2500, 250, 0));
+        this.addStat(ModItems.FORMULAR_C.get(), new ItemStat.Builder(5000, 400, 0));
         this.addStat(ModItems.MINIMIZER.get(), new ItemStat.Builder(10000, 300, 0));
         this.addStat(ModItems.GIANTIZER.get(), new ItemStat.Builder(10000, 300, 0));
         this.addStat(ModItems.GREENIFIER.get(), new ItemStat.Builder(2000, 200, 0));
@@ -1058,7 +1058,7 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.SCREW_SHINY.get(), 0, 0, 0);
         this.addStat(ModItems.ROCK_SHARD_LEFT.get(), 0, 0, 0);
         this.addStat(ModItems.ROCK_SHARD_RIGHT.get(), 0, 0, 0);
-        this.addStat(ModItems.MTGUPlate.get(), 0, 0, 0);
+        this.addStat(ModItems.MTGU_PLATE.get(), 0, 0, 0);
         this.addStat(ModItems.BROKEN_ICE_WALL.get(), 0, 0, 0);
 
         this.addStat(ModItems.FUR_SMALL.get(), new ItemStat.Builder(35, 7, 1)
@@ -1358,12 +1358,12 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.YOGURT.get(), 0, 0, 0);
         this.addStat(ModItems.CHEESE.get(), 0, 0, 0);
         this.addStat(ModItems.MAYONNAISE.get(), 0, 0, 0);
-        this.addStat(ModItems.eggS.get(), 1250, 250, 1);
-        this.addStat(ModItems.eggM.get(), 1500, 300, 1);
-        this.addStat(ModItems.eggL.get(), 1700, 400, 1);
-        this.addStat(ModItems.milkS.get(), 1250, 250, 1);
-        this.addStat(ModItems.milkM.get(), 1500, 300, 1);
-        this.addStat(ModItems.milkL.get(), 1700, 400, 1);
+        this.addStat(ModItems.EGG_S.get(), 1250, 250, 1);
+        this.addStat(ModItems.EGG_M.get(), 1500, 300, 1);
+        this.addStat(ModItems.EGG_L.get(), 1700, 400, 1);
+        this.addStat(ModItems.MILK_S.get(), 1250, 250, 1);
+        this.addStat(ModItems.MILK_M.get(), 1500, 300, 1);
+        this.addStat(ModItems.MILK_L.get(), 1700, 400, 1);
         this.addStat(ModItems.WINE.get(), 0, 0, 0);
         this.addStat(ModItems.CHOCOLATE.get(), 0, 0, 0);
         this.addStat(ModItems.RICE.get(), 0, 0, 0);

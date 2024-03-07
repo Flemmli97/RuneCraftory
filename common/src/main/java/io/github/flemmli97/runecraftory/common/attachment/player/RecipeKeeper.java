@@ -60,14 +60,14 @@ public class RecipeKeeper {
     }
 
     public boolean isUnlocked(Recipe<?> recipe) {
-        if (GeneralConfig.RECIPE_SYSTEM.lockIsIgnored())
+        if (GeneralConfig.recipeSystem.lockIsIgnored())
             return true;
         return this.unlockedRecipes.contains(recipe.getId());
     }
 
     public boolean isUnlockedForCrafting(Recipe<?> recipe) {
-        if (GeneralConfig.RECIPE_SYSTEM == GeneralConfig.RecipeSystem.SKILLBLOCKLOCK ||
-                GeneralConfig.RECIPE_SYSTEM == GeneralConfig.RecipeSystem.BASEBLOCKLOCK)
+        if (GeneralConfig.recipeSystem == GeneralConfig.RecipeSystem.SKILLBLOCKLOCK ||
+                GeneralConfig.recipeSystem == GeneralConfig.RecipeSystem.BASEBLOCKLOCK)
             return this.isUnlocked(recipe);
         return true;
     }

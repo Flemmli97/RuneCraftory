@@ -143,23 +143,23 @@ public class Loottables extends LootTableProvider {
                             new ItemLootData(ModItems.MUSHROOM.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)),
                     new TamedItemLootData(ModItems.SPORE.get(), 1, 0));
             this.registerLootTable(ModEntities.BUFFAMOO.get(), this.table(
-                                    new ItemLootData(ModItems.milkS.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0))
+                                    new ItemLootData(ModItems.MILK_S.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0))
                             .withPool(this.create().add(this.addWithCount(Items.LEATHER, -4, 1, 1)))
                             .withPool(this.create().add(this.addWithCount(Items.BEEF, -5, 2, 1))),
-                    new TamedItemLootData(ModItems.milkS.get(), 1, 0),
-                    new TamedItemLootData(ModItems.milkM.get(), 1, 5),
-                    new TamedItemLootData(ModItems.milkL.get(), 1, 8));
+                    new TamedItemLootData(ModItems.MILK_S.get(), 1, 0),
+                    new TamedItemLootData(ModItems.MILK_M.get(), 1, 5),
+                    new TamedItemLootData(ModItems.MILK_L.get(), 1, 8));
             this.registerLootTable(ModEntities.CHIPSQUEEK.get(), this.table(
                             new ItemLootData(ModItems.FUR.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
                             new ItemLootData(ModItems.FUR_QUALITY.get(), 0.02f, VERY_RARE_LUCK_BONUS, LOOTING_BONUS, 0)),
                     new TamedItemLootData(ModItems.FUR.get(), 1, 0));
             this.registerLootTable(ModEntities.CLUCKADOODLE.get(), this.table(
-                                    new ItemLootData(ModItems.eggS.get(), 0.45f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0))
+                                    new ItemLootData(ModItems.EGG_S.get(), 0.45f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0))
                             .withPool(this.create().add(this.addWithCount(Items.CHICKEN, -4, 1, 0.5f)))
                             .withPool(this.create().add(this.addWithCount(Items.FEATHER, -3, 2, 1))),
-                    new TamedItemLootData(ModItems.eggS.get(), 1, 0),
-                    new TamedItemLootData(ModItems.eggM.get(), 1, 5),
-                    new TamedItemLootData(ModItems.eggL.get(), 1, 8));
+                    new TamedItemLootData(ModItems.EGG_S.get(), 1, 0),
+                    new TamedItemLootData(ModItems.EGG_M.get(), 1, 5),
+                    new TamedItemLootData(ModItems.EGG_L.get(), 1, 8));
             this.registerLootTable(ModEntities.POMME_POMME.get(), this.table(
                             new ItemLootData(Items.APPLE, 0.7f, 0.05f, 0.7f, 2, true),
                             new ItemLootData(ModItems.BAKED_APPLE.get(), 0.05f, RARE_LUCK_BONUS, LOOTING_BONUS, 1)),

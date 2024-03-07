@@ -87,7 +87,7 @@ public class WorldUtils {
 
     public static float seasonBasedTemp(Level level, BlockPos pos, Biome biome) {
         float temp = ((BiomeAccessor) (Object) biome).biomeTemp(pos);
-        if (!GeneralConfig.SEASONED_SNOW)
+        if (!GeneralConfig.seasonedSnow)
             return temp;
         EnumSeason season;
         if (level instanceof ServerLevel serverLevel)

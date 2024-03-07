@@ -39,7 +39,7 @@ public class ItemStatManager extends SimpleJsonResourceReloadListener {
     }
 
     public Optional<ItemStat> get(Item item) {
-        if (GeneralConfig.DISABLE_ITEM_STAT_SYSTEM)
+        if (GeneralConfig.disableItemStatSystem)
             return Optional.empty();
         ResourceLocation res = PlatformUtils.INSTANCE.items().getIDFrom(item);
         ItemStat stat = this.itemstat.get(res);

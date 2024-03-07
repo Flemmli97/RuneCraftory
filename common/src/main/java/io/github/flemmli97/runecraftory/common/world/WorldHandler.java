@@ -88,7 +88,7 @@ public class WorldHandler extends SavedData {
     }
 
     public static boolean canUpdateWeather(Level level) {
-        return GeneralConfig.MODIFY_WEATHER && level.getGameRules().getBoolean(GameRules.RULE_DAYLIGHT);
+        return GeneralConfig.modifyWeather && level.getGameRules().getBoolean(GameRules.RULE_DAYLIGHT);
     }
 
     public static boolean shouldUpdateWeather(Level level, EnumWeather currentWeather) {

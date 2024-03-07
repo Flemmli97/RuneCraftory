@@ -82,7 +82,7 @@ public class ModItems {
     public static final List<RegistryEntrySupplier<Item>> TIER_3_CHEST = new ArrayList<>();
     public static final List<RegistryEntrySupplier<Item>> TIER_4_CHEST = new ArrayList<>();
 
-    private static final FoodProperties lowFoodProp = new FoodProperties.Builder().nutrition(1).saturationMod(0.5f).alwaysEat().build();
+    private static final FoodProperties LOW_FOOD_PROP = new FoodProperties.Builder().nutrition(1).saturationMod(0.5f).alwaysEat().build();
     private static final FoodProperties FOOD_PROP = new FoodProperties.Builder().nutrition(2).saturationMod(0.5f).alwaysEat().build();
     private static final FoodProperties HIGH_FOOD_PROP = new FoodProperties.Builder().nutrition(6).saturationMod(0.75f).alwaysEat().build();
 
@@ -125,9 +125,9 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> VITAL_GUMMI = ITEMS.register("vital_gummi", () -> new ItemStatIncrease(ItemStatIncrease.Stat.VIT, new Item.Properties().tab(RFCreativeTabs.MEDICINE)));
     public static final RegistryEntrySupplier<Item> INTELLIGENCER = ITEMS.register("intelligencer", () -> new ItemStatIncrease(ItemStatIncrease.Stat.INT, new Item.Properties().tab(RFCreativeTabs.MEDICINE)));
     public static final RegistryEntrySupplier<Item> PROTEIN = ITEMS.register("protein", () -> new ItemStatIncrease(ItemStatIncrease.Stat.STR, new Item.Properties().tab(RFCreativeTabs.MEDICINE)));
-    public static final RegistryEntrySupplier<Item> formularA = ITEMS.register("formular_a", () -> new ItemFertilizer(ItemFertilizer.FORMULAR_A, new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
-    public static final RegistryEntrySupplier<Item> formularB = ITEMS.register("formular_b", () -> new ItemFertilizer(ItemFertilizer.FORMULAR_B, new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
-    public static final RegistryEntrySupplier<Item> formularC = ITEMS.register("formular_c", () -> new ItemFertilizer(ItemFertilizer.FORMULAR_C, new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
+    public static final RegistryEntrySupplier<Item> FORMULAR_A = ITEMS.register("formular_a", () -> new ItemFertilizer(ItemFertilizer.FORMULAR_A, new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
+    public static final RegistryEntrySupplier<Item> FORMULAR_B = ITEMS.register("formular_b", () -> new ItemFertilizer(ItemFertilizer.FORMULAR_B, new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
+    public static final RegistryEntrySupplier<Item> FORMULAR_C = ITEMS.register("formular_c", () -> new ItemFertilizer(ItemFertilizer.FORMULAR_C, new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
     public static final RegistryEntrySupplier<Item> MINIMIZER = ITEMS.register("minimizer", () -> new ItemFertilizer(ItemFertilizer.MINIMIZER, new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
     public static final RegistryEntrySupplier<Item> GIANTIZER = ITEMS.register("giantizer", () -> new ItemFertilizer(ItemFertilizer.GIANTIZER, new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
     public static final RegistryEntrySupplier<Item> GREENIFIER = ITEMS.register("greenifier", () -> new ItemFertilizer(ItemFertilizer.GREENIFIER, new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
@@ -645,7 +645,7 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> SCREW_SHINY = mat("shiny_screw", Texture.N);
     public static final RegistryEntrySupplier<Item> ROCK_SHARD_LEFT = mat("left_rock_shard", Rarity.RARE, Texture.N);
     public static final RegistryEntrySupplier<Item> ROCK_SHARD_RIGHT = mat("right_rock_shard", Rarity.RARE, Texture.N);
-    public static final RegistryEntrySupplier<Item> MTGUPlate = mat("mtgu_plate", Rarity.RARE, Texture.N);
+    public static final RegistryEntrySupplier<Item> MTGU_PLATE = mat("mtgu_plate", Rarity.RARE, Texture.N);
     public static final RegistryEntrySupplier<Item> BROKEN_ICE_WALL = mat("broken_ice_wall", Rarity.RARE, Texture.N);
     public static final RegistryEntrySupplier<Item> FUR_SMALL = mat("fur_s", Texture.Y);
     public static final RegistryEntrySupplier<Item> FUR_MEDIUM = mat("fur_m", Texture.Y);
@@ -976,7 +976,7 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> INVINCIROID = drinkable("invinciroid");
     public static final RegistryEntrySupplier<Item> LOVE_POTION = drinkable("love_potion");
     public static final RegistryEntrySupplier<Item> FORMUADE = drinkable("formuade");
-    public static final RegistryEntrySupplier<Item> objectX = ITEMS.register("object_x", () -> new ItemObjectX(new Item.Properties().food(FOOD_PROP).tab(RFCreativeTabs.MEDICINE)));
+    public static final RegistryEntrySupplier<Item> OBJECT_X = ITEMS.register("object_x", () -> new ItemObjectX(new Item.Properties().food(FOOD_PROP).tab(RFCreativeTabs.MEDICINE)));
 
     public static final RegistryEntrySupplier<Item> ELLI_LEAVES = herb("elli_leaves", () -> ModBlocks.ELLI_LEAVES);
     public static final RegistryEntrySupplier<Item> WITHERED_GRASS = herb("withered_grass", () -> ModBlocks.WITHERED_GRASS);
@@ -993,23 +993,23 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> ANTIDOTE_GRASS = herb("antidote_grass", () -> ModBlocks.ANTIDOTE_GRASS);
     public static final RegistryEntrySupplier<Item> MEDICINAL_HERB = herb("medicinal_herb", () -> ModBlocks.MEDICINAL_HERB);
     public static final RegistryEntrySupplier<Item> BAMBOO_SPROUT = herb("bamboo_sprout", () -> ModBlocks.BAMBOO_SPROUT);
-    public static final RegistryEntrySupplier<Item> MUSHROOM = ITEMS.register("mushroom", () -> new ItemMushroom(new Item.Properties().food(lowFoodProp).tab(RFCreativeTabs.FOOD)));
-    public static final RegistryEntrySupplier<Item> MONARCH_MUSHROOM = ITEMS.register("monarch_mushroom", () -> new ItemMushroom(new Item.Properties().food(lowFoodProp).tab(RFCreativeTabs.FOOD)));
+    public static final RegistryEntrySupplier<Item> MUSHROOM = ITEMS.register("mushroom", () -> new ItemMushroom(new Item.Properties().food(LOW_FOOD_PROP).tab(RFCreativeTabs.FOOD)));
+    public static final RegistryEntrySupplier<Item> MONARCH_MUSHROOM = ITEMS.register("monarch_mushroom", () -> new ItemMushroom(new Item.Properties().food(LOW_FOOD_PROP).tab(RFCreativeTabs.FOOD)));
 
-    public static final RegistryEntrySupplier<Item> RICE_FLOUR = food("rice_flour", Texture.N, lowFoodProp);
-    public static final RegistryEntrySupplier<Item> CURRY_POWDER = food("curry_powder", Texture.N, lowFoodProp);
-    public static final RegistryEntrySupplier<Item> OIL = drinkable("oil", Texture.Y, lowFoodProp);
-    public static final RegistryEntrySupplier<Item> FLOUR = food("flour", Texture.N, lowFoodProp);
+    public static final RegistryEntrySupplier<Item> RICE_FLOUR = food("rice_flour", Texture.N, LOW_FOOD_PROP);
+    public static final RegistryEntrySupplier<Item> CURRY_POWDER = food("curry_powder", Texture.N, LOW_FOOD_PROP);
+    public static final RegistryEntrySupplier<Item> OIL = drinkable("oil", Texture.Y, LOW_FOOD_PROP);
+    public static final RegistryEntrySupplier<Item> FLOUR = food("flour", Texture.N, LOW_FOOD_PROP);
     public static final RegistryEntrySupplier<Item> HONEY = food("honey", Texture.N, FOOD_PROP);
     public static final RegistryEntrySupplier<Item> YOGURT = food("yogurt", Texture.N);
-    public static final RegistryEntrySupplier<Item> CHEESE = food("cheese", Texture.N, lowFoodProp);
-    public static final RegistryEntrySupplier<Item> MAYONNAISE = food("mayonnaise", Texture.N, lowFoodProp);
-    public static final RegistryEntrySupplier<Item> eggL = food("egg_l", Texture.Y, lowFoodProp);
-    public static final RegistryEntrySupplier<Item> eggM = food("egg_m", Texture.Y, lowFoodProp);
-    public static final RegistryEntrySupplier<Item> eggS = food("egg_s", Texture.Y, lowFoodProp);
-    public static final RegistryEntrySupplier<Item> milkL = drinkable("milk_l", Texture.Y, lowFoodProp);
-    public static final RegistryEntrySupplier<Item> milkM = drinkable("milk_m", Texture.Y, lowFoodProp);
-    public static final RegistryEntrySupplier<Item> milkS = drinkable("milk_s", Texture.Y, lowFoodProp);
+    public static final RegistryEntrySupplier<Item> CHEESE = food("cheese", Texture.N, LOW_FOOD_PROP);
+    public static final RegistryEntrySupplier<Item> MAYONNAISE = food("mayonnaise", Texture.N, LOW_FOOD_PROP);
+    public static final RegistryEntrySupplier<Item> EGG_L = food("egg_l", Texture.Y, LOW_FOOD_PROP);
+    public static final RegistryEntrySupplier<Item> EGG_M = food("egg_m", Texture.Y, LOW_FOOD_PROP);
+    public static final RegistryEntrySupplier<Item> EGG_S = food("egg_s", Texture.Y, LOW_FOOD_PROP);
+    public static final RegistryEntrySupplier<Item> MILK_L = drinkable("milk_l", Texture.Y, LOW_FOOD_PROP);
+    public static final RegistryEntrySupplier<Item> MILK_M = drinkable("milk_m", Texture.Y, LOW_FOOD_PROP);
+    public static final RegistryEntrySupplier<Item> MILK_S = drinkable("milk_s", Texture.Y, LOW_FOOD_PROP);
     public static final RegistryEntrySupplier<Item> WINE = drinkable("wine", Texture.N, FOOD_PROP);
     public static final RegistryEntrySupplier<Item> CHOCOLATE = food("chocolate", Texture.N);
     public static final RegistryEntrySupplier<Item> RICE = food("rice", Texture.N, FOOD_PROP);
@@ -1041,8 +1041,8 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> HOT_JUICE = drinkable("hot_juice", Texture.N, HIGH_FOOD_PROP);
     public static final RegistryEntrySupplier<Item> PRELUDETO_LOVE = drinkable("prelude_to_love", Texture.N, HIGH_FOOD_PROP);
     public static final RegistryEntrySupplier<Item> GOLD_JUICE = drinkable("gold_juice", Texture.N, HIGH_FOOD_PROP);
-    public static final RegistryEntrySupplier<Item> BUTTER = food("butter", Texture.N, lowFoodProp);
-    public static final RegistryEntrySupplier<Item> KETCHUP = drinkable("ketchup", Texture.N, lowFoodProp);
+    public static final RegistryEntrySupplier<Item> BUTTER = food("butter", Texture.N, LOW_FOOD_PROP);
+    public static final RegistryEntrySupplier<Item> KETCHUP = drinkable("ketchup", Texture.N, LOW_FOOD_PROP);
     public static final RegistryEntrySupplier<Item> MIXED_SMOOTHIE = drinkable("mixed_smoothie", Texture.N, HIGH_FOOD_PROP);
     public static final RegistryEntrySupplier<Item> MIXED_JUICE = drinkable("mixed_juice", Texture.N, HIGH_FOOD_PROP);
     public static final RegistryEntrySupplier<Item> VEGGIE_SMOOTHIE = drinkable("veggie_smoothie", Texture.N, HIGH_FOOD_PROP);
@@ -1178,15 +1178,15 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> RAINBOW_SASHIMI = food("rainbow_sashimi", Texture.N);
     public static final RegistryEntrySupplier<Item> CHAR_SASHIMI = food("char_sashimi", Texture.N);
     public static final RegistryEntrySupplier<Item> TROUT_SASHIMI = food("trout_sashimi", Texture.N);
-    public static final RegistryEntrySupplier<Item> DISASTROUS_DISH = food("disastrous_dish", Texture.Y, lowFoodProp);
-    public static final RegistryEntrySupplier<Item> FAILED_DISH = food("failed_dish", Texture.Y, lowFoodProp);
-    public static final RegistryEntrySupplier<Item> MIXED_HERBS = food("mixed_herbs", Texture.N, lowFoodProp);
-    public static final RegistryEntrySupplier<Item> SOUR_DROP = food("sour_drop", Texture.N, lowFoodProp);
-    public static final RegistryEntrySupplier<Item> SWEET_POWDER = food("sweet_powder", Texture.N, lowFoodProp);
-    public static final RegistryEntrySupplier<Item> HEAVY_SPICE = food("heavy_spice", Texture.N, lowFoodProp);
-    public static final RegistryEntrySupplier<Item> ORANGE = food("orange", Texture.Y, lowFoodProp);
-    public static final RegistryEntrySupplier<Item> GRAPES = food("grapes", Texture.Y, lowFoodProp);
-    public static final RegistryEntrySupplier<Item> MEALY_APPLE = food("mealy_apple", Texture.N, lowFoodProp);
+    public static final RegistryEntrySupplier<Item> DISASTROUS_DISH = food("disastrous_dish", Texture.Y, LOW_FOOD_PROP);
+    public static final RegistryEntrySupplier<Item> FAILED_DISH = food("failed_dish", Texture.Y, LOW_FOOD_PROP);
+    public static final RegistryEntrySupplier<Item> MIXED_HERBS = food("mixed_herbs", Texture.N, LOW_FOOD_PROP);
+    public static final RegistryEntrySupplier<Item> SOUR_DROP = food("sour_drop", Texture.N, LOW_FOOD_PROP);
+    public static final RegistryEntrySupplier<Item> SWEET_POWDER = food("sweet_powder", Texture.N, LOW_FOOD_PROP);
+    public static final RegistryEntrySupplier<Item> HEAVY_SPICE = food("heavy_spice", Texture.N, LOW_FOOD_PROP);
+    public static final RegistryEntrySupplier<Item> ORANGE = food("orange", Texture.Y, LOW_FOOD_PROP);
+    public static final RegistryEntrySupplier<Item> GRAPES = food("grapes", Texture.Y, LOW_FOOD_PROP);
+    public static final RegistryEntrySupplier<Item> MEALY_APPLE = food("mealy_apple", Texture.N, LOW_FOOD_PROP);
 
     public static final RegistryEntrySupplier<Item> FORGING_BREAD = ITEMS.register("forging_bread", () -> new ItemRecipeBread(EnumCrafting.FORGE, new Item.Properties().tab(RFCreativeTabs.FOOD).stacksTo(16)));
     public static final RegistryEntrySupplier<Item> ARMOR_BREAD = ITEMS.register("armory_bread", () -> new ItemRecipeBread(EnumCrafting.ARMOR, new Item.Properties().tab(RFCreativeTabs.FOOD).stacksTo(16)));
@@ -1200,7 +1200,7 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> QUEST_BOARD = ITEMS.register("quest_board", () -> new QuestBoardItem(ModBlocks.QUEST_BOARD.get(), new Item.Properties().tab(RFCreativeTabs.BLOCKS)));
 
 
-    public static final RegistryEntrySupplier<Item> icon0 = ITEMS.register("icon_0", () -> new Item(new Item.Properties()));
+    public static final RegistryEntrySupplier<Item> ICON_0 = ITEMS.register("icon_0", () -> new Item(new Item.Properties()));
     public static final RegistryEntrySupplier<Item> DEBUG = ITEMS.register("debug_item", () -> new ItemDebug(new Item.Properties()));
     public static final RegistryEntrySupplier<Item> LEVEL = ITEMS.register("level_item", () -> new ItemLevelUp(new Item.Properties()));
     public static final RegistryEntrySupplier<Item> SKILL = ITEMS.register("skill_item", () -> new ItemSkillUp(new Item.Properties()));
@@ -1533,7 +1533,7 @@ public class ModItems {
     }
 
     public static RegistryEntrySupplier<Item> herb(String name, Supplier<Supplier<Block>> block) {
-        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new BlockItem(block.get().get(), new Item.Properties().food(lowFoodProp).tab(RFCreativeTabs.MEDICINE)));
+        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new BlockItem(block.get().get(), new Item.Properties().food(LOW_FOOD_PROP).tab(RFCreativeTabs.MEDICINE)));
         if (Platform.INSTANCE.isDatagen())
             TIER_1_CHEST.add(sup);
         return sup;

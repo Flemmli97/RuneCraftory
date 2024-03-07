@@ -8,5 +8,5 @@ public class RuneCraftory {
     public static final String MODID = "runecraftory";
     public static final Logger LOGGER = LogManager.getLogger(RuneCraftory.MODID);
 
-    public static boolean SIMPLE_QUESTS;
+    public static boolean simpleQuests;
 }

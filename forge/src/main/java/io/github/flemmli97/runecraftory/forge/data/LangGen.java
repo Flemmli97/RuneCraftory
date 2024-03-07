@@ -113,7 +113,7 @@ public class LangGen implements DataProvider {
                 continue;
             if (sup == ModItems.STEEL_TEN) {
                 this.add(sup.get(), "10-Fold Steel");
-            } else if (sup == ModItems.MTGUPlate) {
+            } else if (sup == ModItems.MTGU_PLATE) {
                 this.add(sup.get(), "MGTU Plate");
             } else if (sup == ModItems.FUR_SMALL) {
                 this.add(sup.get(), "Fur (S)");
@@ -121,17 +121,17 @@ public class LangGen implements DataProvider {
                 this.add(sup.get(), "Fur (M)");
             } else if (sup == ModItems.FUR_LARGE) {
                 this.add(sup.get(), "Fur (L)");
-            } else if (sup == ModItems.eggS) {
+            } else if (sup == ModItems.EGG_S) {
                 this.add(sup.get(), "Egg (S)");
-            } else if (sup == ModItems.eggM) {
+            } else if (sup == ModItems.EGG_M) {
                 this.add(sup.get(), "Egg (M)");
-            } else if (sup == ModItems.eggL) {
+            } else if (sup == ModItems.EGG_L) {
                 this.add(sup.get(), "Egg (L)");
-            } else if (sup == ModItems.milkS) {
+            } else if (sup == ModItems.MILK_S) {
                 this.add(sup.get(), "Milk (S)");
-            } else if (sup == ModItems.milkM) {
+            } else if (sup == ModItems.MILK_M) {
                 this.add(sup.get(), "Milk (M)");
-            } else if (sup == ModItems.milkL) {
+            } else if (sup == ModItems.MILK_L) {
                 this.add(sup.get(), "Milk (L)");
             } else if (sup == ModItems.GRAPE_SAPLING) {
                 this.add(sup.get(), "Grape Sapling?");

@@ -46,7 +46,7 @@ public class CropLootModifier {
     }
 
     protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context) {
-        if (!GeneralConfig.DISABLE_CROP_SYSTEM) {
+        if (!GeneralConfig.disableCropSystem) {
             List<ItemStack> mod = new ArrayList<>();
             generatedLoot.removeIf(stack -> stack.getItem() == this.remove);
             generatedLoot.removeIf(stack -> this.insertMerge(mod, stack));

@@ -13,10 +13,10 @@ import java.util.Map;
 
 public class ItemCraftingLevelManager {
 
-    private static Map<Item, Pair<Integer, EnumSkills>> MAP;
+    private static Map<Item, Pair<Integer, EnumSkills>> craftingLevelCache;
 
     public static void reload(MinecraftServer server) {
-        MAP = new HashMap<>();
+        craftingLevelCache = new HashMap<>();
         add(server.getRecipeManager().getAllRecipesFor(ModCrafting.FORGE.get()), EnumSkills.FORGING);
         add(server.getRecipeManager().getAllRecipesFor(ModCrafting.CHEMISTRY.get()), EnumSkills.CHEMISTRY);
         add(server.getRecipeManager().getAllRecipesFor(ModCrafting.ARMOR.get()), EnumSkills.CRAFTING);
@@ -25,7 +25,7 @@ public class ItemCraftingLevelManager {
 
     private static void add(Collection<SextupleRecipe> recipes, EnumSkills skills) {
         for (SextupleRecipe recipe : recipes) {
-            MAP.compute(recipe.getResultItem().getItem(), (item, old) -> {
+            craftingLevelCache.compute(recipe.getResultItem().getItem(), (item, old) -> {
                 if (old != null && old.getFirst() <= recipe.getCraftingLevel())
                     return old;
                 else
@@ -35,13 +35,13 @@ public class ItemCraftingLevelManager {
     }
 
     public static Pair<Integer, EnumSkills> getLowestLevel(MinecraftServer server, Item item) {
-        if (MAP == null) {
+        if (craftingLevelCache == null) {
             reload(server);
         }
-        return MAP.get(item);
+        return craftingLevelCache.get(item);
     }
 
     public static void reset() {
-        MAP = null;
+        craftingLevelCache = null;
     }
 }

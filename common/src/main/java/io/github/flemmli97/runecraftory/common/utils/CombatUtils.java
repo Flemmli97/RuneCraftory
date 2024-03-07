@@ -132,7 +132,7 @@ public class CombatUtils {
 
     public static float reduceDamageFromStats(LivingEntity entity, DamageSource source, float amount) {
         float reduce = 0;
-        boolean ignoreDefence = switch (GeneralConfig.DEFENCE_SYSTEM) {
+        boolean ignoreDefence = switch (GeneralConfig.defenceSystem) {
             case NO_DEFENCE -> true;
             case VANILLA_IGNORE -> !(source instanceof CustomDamage);
             case IGNORE_VANILLA_MOBS -> !(source instanceof CustomDamage) && source.getEntity() instanceof Mob;
@@ -152,7 +152,7 @@ public class CombatUtils {
         float dmg = amount - reduce;
         if (reduce > amount * 0.8)
             dmg = (float) Math.max(0.05 * amount, amount * 0.2 * Math.pow(0.997, reduce - amount * 0.8));
-        if (source instanceof CustomDamage custom && GeneralConfig.RANDOM_DAMAGE && !custom.fixedDamage()) {
+        if (source instanceof CustomDamage custom && GeneralConfig.randomDamage && !custom.fixedDamage()) {
             dmg += entity.level.random.nextGaussian() * dmg / 10.0;
         }
         return elementalReduction(entity, source, dmg);

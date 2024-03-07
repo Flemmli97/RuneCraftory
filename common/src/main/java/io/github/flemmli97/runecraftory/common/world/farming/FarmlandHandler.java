@@ -260,7 +260,7 @@ public class FarmlandHandler extends SavedData {
     }
 
     public boolean hasWater(ServerLevel level, BlockPos pos) {
-        if (!GeneralConfig.UNLOADED_FARMLAND_CHECK_WATER || (!GeneralConfig.DISABLE_FARMLAND_RANDOMTICK && FarmlandHandler.isNearWater(level, pos)))
+        if (!GeneralConfig.unloadedFarmlandCheckWater || (!GeneralConfig.disableFarmlandRandomtick && FarmlandHandler.isNearWater(level, pos)))
             return true;
         Map<UUID, IrrigationPOI> map = this.irrigationPOI.get(level.dimension());
         if (map != null) {
@@ -450,7 +450,7 @@ public class FarmlandHandler extends SavedData {
 
         @Override
         public boolean isInside(BlockPos pos) {
-            int radius = MobConfig.FARM_RADIUS;
+            int radius = MobConfig.farmRadius;
             int dX = this.pos.getX() - pos.getX();
             int dY = this.pos.getY() - pos.getY();
             int dZ = this.pos.getZ() - pos.getZ();

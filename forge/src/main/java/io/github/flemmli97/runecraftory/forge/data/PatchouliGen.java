@@ -35,7 +35,7 @@ public class PatchouliGen extends PatchouliBookProvider {
                 .setI18n(true)
                 .setShowProgress(false);
 
-        book.addCategory("category.main", "runecraftory.patchouli.category.main", "runecraftory.patchouli.category.main.desc", new ItemStack(ModItems.icon0.get()))
+        book.addCategory("category.main", "runecraftory.patchouli.category.main", "runecraftory.patchouli.category.main.desc", new ItemStack(ModItems.ICON_0.get()))
                 .setSortnum(0)
 
                 .addEntry("entry.crafting", "runecraftory.patchouli.entry.crafting", new ItemStack(ModBlocks.FORGE.get()))
@@ -105,7 +105,7 @@ public class PatchouliGen extends PatchouliBookProvider {
                 .addSimpleTextPage("runecraftory.patchouli.entry.farming.3")
                 .build()
 
-                .addEntry("entry.fertilizer", "runecraftory.patchouli.entry.fertilizer", new ItemStack(ModItems.formularA.get()))
+                .addEntry("entry.fertilizer", "runecraftory.patchouli.entry.fertilizer", new ItemStack(ModItems.FORMULAR_A.get()))
                 .setSortnum(1)
                 .addTextPage("runecraftory.patchouli.entry.fertilizer.1")
                 .setAnchor("p1")

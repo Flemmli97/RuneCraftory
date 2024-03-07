@@ -39,7 +39,7 @@ public class S2CAttackDebug implements Packet {
 
     public static void handle(S2CAttackDebug pkt) {
         Player player = ClientHandlers.getPlayer();
-        if (player == null || !GeneralConfig.DEBUG_ATTACK)
+        if (player == null || !GeneralConfig.debugAttack)
             return;
         AttackAABBRender.INST.addNewAABB(pkt.aabb, pkt.duration, pkt.type);
     }

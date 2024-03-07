@@ -34,7 +34,7 @@ public class FoodManager extends SimpleJsonResourceReloadListener {
 
     @Nullable
     public FoodProperties get(Item item) {
-        if (GeneralConfig.DISABLE_FOOD_SYSTEM)
+        if (GeneralConfig.disableFoodSystem)
             return null;
         ResourceLocation res = PlatformUtils.INSTANCE.items().getIDFrom(item);
         FoodProperties prop = this.food.get(res);

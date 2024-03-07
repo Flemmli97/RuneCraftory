@@ -23,5 +23,5 @@ public class RFCreativeTabs {
 
     public static final CreativeModeTab CROPS = Platform.INSTANCE.tab("crops", () -> new ItemStack(ModItems.TURNIP_SEEDS.get()));
 
-    public static final CreativeModeTab MONSTERS = Platform.INSTANCE.tab("monsters", () -> new ItemStack(ModItems.icon0.get()));
+    public static final CreativeModeTab MONSTERS = Platform.INSTANCE.tab("monsters", () -> new ItemStack(ModItems.ICON_0.get()));
 }

@@ -26,7 +26,7 @@ public class SpecialSextupleRecipe extends SextupleRecipe {
             return new RecipeOutput(new ItemStack(ModItems.SCRAP_PLUS.get()), new ItemStack(ModItems.UNKNOWN.get()), NonNullList.create());
         }
     });
-    public static final Supplier<SpecialSextupleRecipe> OBJECT_X = Suppliers.memoize(() -> new SpecialSextupleRecipe(new ResourceLocation(RuneCraftory.MODID, "object_x"), new ItemStack(ModItems.objectX.get())));
+    public static final Supplier<SpecialSextupleRecipe> OBJECT_X = Suppliers.memoize(() -> new SpecialSextupleRecipe(new ResourceLocation(RuneCraftory.MODID, "object_x"), new ItemStack(ModItems.OBJECT_X.get())));
     public static final Supplier<SpecialSextupleRecipe> FAILED_DISH = Suppliers.memoize(() -> new SpecialSextupleRecipe(new ResourceLocation(RuneCraftory.MODID, "scrap_metal"), new ItemStack(ModItems.FAILED_DISH.get())) {
         @Override
         public RecipeOutput getCraftingOutput(PlayerContainerInv inv) {

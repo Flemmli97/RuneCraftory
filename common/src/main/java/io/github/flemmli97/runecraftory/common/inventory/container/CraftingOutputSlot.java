@@ -122,7 +122,7 @@ public class CraftingOutputSlot extends Slot {
 
     @Override
     public boolean mayPickup(Player player) {
-        if (!GeneralConfig.USE_RP)
+        if (!GeneralConfig.useRp)
             return true;
         return (player.isCreative() || Platform.INSTANCE.getPlayerData(player).map(data -> data.getMaxRunePoints() >= this.craftingContainer.rpCost()).orElse(false));
     }

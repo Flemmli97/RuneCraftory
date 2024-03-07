@@ -99,9 +99,9 @@ public class ShopItemGen extends ShopItemProvider {
         this.addItem(ModNPCJobs.FLOWER.getSecond(), ModItems.BLUE_CRYSTAL.get());
         this.addItem(ModNPCJobs.FLOWER.getSecond(), ModItems.EMERY_FLOWER.get());
 
-        this.addItem(ModNPCJobs.FLOWER.getSecond(), ModItems.formularA.get(), ShopItemProperties.UnlockType.DEFAULT);
-        this.addItem(ModNPCJobs.FLOWER.getSecond(), ModItems.formularB.get(), ShopItemProperties.UnlockType.DEFAULT);
-        this.addItem(ModNPCJobs.FLOWER.getSecond(), ModItems.formularC.get(), ShopItemProperties.UnlockType.DEFAULT);
+        this.addItem(ModNPCJobs.FLOWER.getSecond(), ModItems.FORMULAR_A.get(), ShopItemProperties.UnlockType.DEFAULT);
+        this.addItem(ModNPCJobs.FLOWER.getSecond(), ModItems.FORMULAR_B.get(), ShopItemProperties.UnlockType.DEFAULT);
+        this.addItem(ModNPCJobs.FLOWER.getSecond(), ModItems.FORMULAR_C.get(), ShopItemProperties.UnlockType.DEFAULT);
         this.addItem(ModNPCJobs.FLOWER.getSecond(), ModItems.MINIMIZER.get(), ShopItemProperties.UnlockType.DEFAULT);
         this.addItem(ModNPCJobs.FLOWER.getSecond(), ModItems.GIANTIZER.get(), ShopItemProperties.UnlockType.DEFAULT);
         this.addItem(ModNPCJobs.FLOWER.getSecond(), ModItems.GREENIFIER.get(), ShopItemProperties.UnlockType.DEFAULT);

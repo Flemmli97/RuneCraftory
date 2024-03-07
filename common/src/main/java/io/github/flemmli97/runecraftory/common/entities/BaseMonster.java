@@ -386,7 +386,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         if (keepPos)
             pos = this.getRestrictCenter();
         if (this.behaviourState() == Behaviour.FARM) {
-            this.restrictTo(pos, MobConfig.FARM_RADIUS + 3);
+            this.restrictTo(pos, MobConfig.farmRadius + 3);
             if (this.level instanceof ServerLevel serverLevel)
                 FarmlandHandler.get(serverLevel.getServer()).addIrrigationPOI(serverLevel, this.getUUID(), this.blockPosition());
         } else if (this.behaviourState() == Behaviour.WANDER)
@@ -501,7 +501,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 this.assignedBarn = null;
             if (this.isTamed()) {
                 if (this.assignedBarn == null) {
-                    if (MobConfig.MONSTER_NEED_BARN && this.behaviourState() != Behaviour.STAY)
+                    if (MobConfig.monsterNeedBarn && this.behaviourState() != Behaviour.STAY)
                         this.setBehaviour(Behaviour.STAY);
                 }
             }
@@ -695,7 +695,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                     return InteractionResult.sidedSuccess(clientSide);
                 }
             }
-            if (!clientSide && MobConfig.MONSTER_NEED_BARN && this.assignedBarn == null) {
+            if (!clientSide && MobConfig.monsterNeedBarn && this.assignedBarn == null) {
                 if (!this.assignBarn()) {
                     player.sendMessage(new TranslatableComponent("runecraftory.monster.interact.barn.no", this.getDisplayName()), Util.NIL_UUID);
                     return InteractionResult.CONSUME;
@@ -928,7 +928,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     public boolean applyFoodEffect(ItemStack stack) {
         if (this.level.isClientSide)
             return false;
-        if (stack.getItem() == ModItems.objectX.get())
+        if (stack.getItem() == ModItems.OBJECT_X.get())
             ItemObjectX.applyEffect(this, stack);
         this.removeFoodEffect();
         FoodProperties food = DataPackHandler.INSTANCE.foodManager().get(stack.getItem());
@@ -1045,7 +1045,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 stack.shrink(1);
             this.tamingTick = 60;
             float chance = EntityUtils.tamingChance(this, player, rightItemMultiplier, this.brushCount, this.loveAttCount);
-            if (this.getServer() != null && (!MobConfig.MONSTER_NEED_BARN || WorldHandler.get(this.getServer()).findFittingBarn(this, player.getUUID()) != null))
+            if (this.getServer() != null && (!MobConfig.monsterNeedBarn || WorldHandler.get(this.getServer()).findFittingBarn(this, player.getUUID()) != null))
                 this.delayedTaming = () -> {
                     if (chance == 0)
                         this.level.broadcastEntityEvent(this, (byte) 34);
@@ -1083,7 +1083,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     public void increaseLevel() {
-        this.entityData.set(ENTITY_LEVEL, Math.min(GeneralConfig.MAX_LEVEL, this.level().getLevel() + 1));
+        this.entityData.set(ENTITY_LEVEL, Math.min(GeneralConfig.maxLevel, this.level().getLevel() + 1));
         this.updateStatsToLevel();
     }
 
@@ -1112,7 +1112,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     public void onDailyUpdate() {
-        if (this.level instanceof ServerLevel && this.isTamed() && !this.playDeath() && (!MobConfig.MONSTER_NEED_BARN || this.assignBarn())) {
+        if (this.level instanceof ServerLevel && this.isTamed() && !this.playDeath() && (!MobConfig.monsterNeedBarn || this.assignBarn())) {
             ResourceLocation resourceLocation = this.dailyDropTable();
             this.dropAsDailyDrop(resourceLocation);
         }

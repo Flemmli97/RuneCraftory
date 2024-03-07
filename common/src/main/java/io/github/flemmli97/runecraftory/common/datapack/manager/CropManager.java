@@ -36,7 +36,7 @@ public class CropManager extends SimpleJsonResourceReloadListener {
 
     @Nullable
     public CropProperties get(Item item) {
-        if (GeneralConfig.DISABLE_CROP_SYSTEM)
+        if (GeneralConfig.disableCropSystem)
             return null;
         ResourceLocation res = PlatformUtils.INSTANCE.items().getIDFrom(item);
         CropProperties props = this.crops.get(res);

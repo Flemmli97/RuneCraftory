@@ -62,7 +62,7 @@ public class TendCropsGoal extends Goal {
                 this.entity.level.getBlockEntity(this.entity.getSeedInventory()), SEED_ITEM);
         BlockPos center = this.entity.getRestrictCenter();
         BlockPos.MutableBlockPos mutable = this.entity.getRestrictCenter().mutable();
-        int radius = MobConfig.FARM_RADIUS;
+        int radius = MobConfig.farmRadius;
         for (int x = -radius; x <= radius; ++x) {
             for (int z = -radius; z <= radius; ++z) {
                 for (int y = -1; y <= 1; ++y) {

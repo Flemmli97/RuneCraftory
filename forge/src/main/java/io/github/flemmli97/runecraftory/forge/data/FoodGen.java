@@ -119,7 +119,7 @@ public class FoodGen extends FoodProvider {
                 .addEffect(ModAttributes.RES_FAT.get(), 25)
                 .addEffect(ModAttributes.RES_COLD.get(), 25)
                 .addEffect(ModAttributes.RES_FAINT.get(), 25));
-        this.addStat(ModItems.objectX.get(), new FoodProperties.Builder(100).setRPIncrease(0, -50)
+        this.addStat(ModItems.OBJECT_X.get(), new FoodProperties.Builder(100).setRPIncrease(0, -50)
                 .addCookingBonusPercent(ModAttributes.HEALTHGAIN.get(), -10)
                 .addCookingBonusPercent(ModAttributes.RPGAIN.get(), -10));
 
@@ -135,19 +135,19 @@ public class FoodGen extends FoodProvider {
         this.addStat(ModItems.YOGURT.get(), new FoodProperties.Builder(0));
         this.addStat(ModItems.CHEESE.get(), new FoodProperties.Builder(0));
         this.addStat(ModItems.MAYONNAISE.get(), new FoodProperties.Builder(0));
-        this.addStat(ModItems.eggS.get(), new FoodProperties.Builder(100).setHPRegen(5, 0)
+        this.addStat(ModItems.EGG_S.get(), new FoodProperties.Builder(100).setHPRegen(5, 0)
                 .addCookingBonusPercent(ModAttributes.HEALTHGAIN.get(), 5));
-        this.addStat(ModItems.eggM.get(), new FoodProperties.Builder(100).setHPRegen(10, 0).setRPRegen(10, 0)
+        this.addStat(ModItems.EGG_M.get(), new FoodProperties.Builder(100).setHPRegen(10, 0).setRPRegen(10, 0)
                 .addCookingBonusPercent(ModAttributes.HEALTHGAIN.get(), 10)
                 .addCookingBonusPercent(ModAttributes.RPGAIN.get(), 10));
-        this.addStat(ModItems.eggL.get(), new FoodProperties.Builder(100).setHPRegen(40, 0).setRPRegen(20, 0)
+        this.addStat(ModItems.EGG_L.get(), new FoodProperties.Builder(100).setHPRegen(40, 0).setRPRegen(20, 0)
                 .addCookingBonusPercent(ModAttributes.HEALTHGAIN.get(), 40)
                 .addCookingBonusPercent(ModAttributes.RPGAIN.get(), 20));
-        this.addStat(ModItems.milkS.get(), new FoodProperties.Builder(100).setRPRegen(5, 0));
-        this.addStat(ModItems.milkM.get(), new FoodProperties.Builder(100).setRPRegen(10, 0).setHPRegen(30, 0)
+        this.addStat(ModItems.MILK_S.get(), new FoodProperties.Builder(100).setRPRegen(5, 0));
+        this.addStat(ModItems.MILK_M.get(), new FoodProperties.Builder(100).setRPRegen(10, 0).setHPRegen(30, 0)
                 .addCookingBonusPercent(ModAttributes.HEALTHGAIN.get(), 10)
                 .addCookingBonusPercent(ModAttributes.RPGAIN.get(), 30));
-        this.addStat(ModItems.milkL.get(), new FoodProperties.Builder(100).setRPRegen(40, 0).setHPRegen(50, 0)
+        this.addStat(ModItems.MILK_L.get(), new FoodProperties.Builder(100).setRPRegen(40, 0).setHPRegen(50, 0)
                 .addCookingBonusPercent(ModAttributes.HEALTHGAIN.get(), 40)
                 .addCookingBonusPercent(ModAttributes.RPGAIN.get(), 50));
         this.addStat(ModItems.WINE.get(), new FoodProperties.Builder(0));

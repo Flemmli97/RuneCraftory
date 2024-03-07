@@ -54,7 +54,7 @@ public class LevelCalc {
     public static int xpAmountForLevelUp(int level) {
         if (level <= 0)
             return 1;
-        if (level >= GeneralConfig.MAX_LEVEL)
+        if (level >= GeneralConfig.maxLevel)
             return 0;
         return (int) (totalXpForLevel(level + 1) - totalXpForLevel(level));
     }
@@ -161,7 +161,7 @@ public class LevelCalc {
     }
 
     public static void addXP(LivingEntity attacker, int base, int money, int level, boolean adjustOnLevel) {
-        if (GeneralConfig.XP_MULTIPLIER == 0)
+        if (GeneralConfig.xpMultiplier == 0)
             return;
         ServerPlayer player = null;
         if (attacker instanceof ServerPlayer sP)
@@ -202,11 +202,11 @@ public class LevelCalc {
     }
 
     private static float levelXpWith(int base, int level, int targetLevel) {
-        float xp = (base + base * (level - 1) * 0.5f) * GeneralConfig.XP_MULTIPLIER;
+        float xp = (base + base * (level - 1) * 0.5f) * GeneralConfig.xpMultiplier;
         if (level <= targetLevel)
             return xp;
         int diff = level - targetLevel;
-        return xp * Math.max(0.01f, 1 - diff * 0.075f) * GeneralConfig.XP_MULTIPLIER;
+        return xp * Math.max(0.01f, 1 - diff * 0.075f) * GeneralConfig.xpMultiplier;
     }
 
     public static float getSkillXpMultiplier(EnumSkills skill) {
@@ -214,18 +214,18 @@ public class LevelCalc {
     }
 
     public static void levelSkill(ServerPlayer player, PlayerData data, EnumSkills skill, float amount) {
-        if (GeneralConfig.SKILL_XP_MULTIPLIER == 0)
+        if (GeneralConfig.skillXpMultiplier == 0)
             return;
-        data.increaseSkill(skill, player, getSkillXpMultiplier(skill) * amount * GeneralConfig.SKILL_XP_MULTIPLIER);
+        data.increaseSkill(skill, player, getSkillXpMultiplier(skill) * amount * GeneralConfig.skillXpMultiplier);
     }
 
     public static int levelFromPos(ServerLevel level, Vec3 pos) {
-        return Math.max(1, switch (MobConfig.GATE_LEVEL_TYPE) {
-            case CONSTANT -> randomizedLevel(level.random, getLevelFor(level, pos, MobConfig.BASE_GATE_LEVEL, null));
+        return Math.max(1, switch (MobConfig.gateLevelType) {
+            case CONSTANT -> randomizedLevel(level.random, getLevelFor(level, pos, MobConfig.baseGateLevel, null));
             case DISTANCESPAWN ->
-                    randomizedLevel(level.random, getLevelFor(level, pos, MobConfig.BASE_GATE_LEVEL + distanceLevelFrom(level, pos, level.getSharedSpawnPos()), null));
+                    randomizedLevel(level.random, getLevelFor(level, pos, MobConfig.baseGateLevel + distanceLevelFrom(level, pos, level.getSharedSpawnPos()), null));
             case DISTANCESPAWNPLAYER ->
-                    randomizedLevel(level.random, getLevelFor(level, pos, MobConfig.BASE_GATE_LEVEL, (player, d) -> {
+                    randomizedLevel(level.random, getLevelFor(level, pos, MobConfig.baseGateLevel, (player, d) -> {
                         ServerPlayer serverPlayer = (ServerPlayer) player;
                         BlockPos center;
                         if (serverPlayer.getRespawnDimension() != level.dimension() || serverPlayer.getRespawnPosition() == null)
@@ -235,22 +235,22 @@ public class LevelCalc {
                         return distanceLevelFrom(level, pos, center);
                     }));
             case PLAYERLEVEL ->
-                    randomizedLevel(level.random, getLevelFor(level, pos, MobConfig.BASE_GATE_LEVEL, (p, d) -> d.map(data -> data.getPlayerLevel().getLevel()).orElse(1)));
+                    randomizedLevel(level.random, getLevelFor(level, pos, MobConfig.baseGateLevel, (p, d) -> d.map(data -> data.getPlayerLevel().getLevel()).orElse(1)));
         });
     }
 
     private static int getLevelFor(ServerLevel level, Vec3 pos, int base, ToIntBiFunction<Player, Optional<PlayerData>> levelFunc) {
-        if (levelFunc == null && !MobConfig.PLAYER_LEVEL_TYPE.increased)
+        if (levelFunc == null && !MobConfig.playerLevelType.increased)
             return base;
         List<Player> list = playersIn(level, pos, 256);
         if (list.isEmpty())
             return base;
         int lvl = 0;
-        boolean mean = MobConfig.PLAYER_LEVEL_TYPE.mean;
+        boolean mean = MobConfig.playerLevelType.mean;
         for (Player player : list) {
             Optional<PlayerData> data = Platform.INSTANCE.getPlayerData(player);
             int pL = levelFunc != null ? levelFunc.applyAsInt(player, data) : 0;
-            if (MobConfig.PLAYER_LEVEL_TYPE.increased)
+            if (MobConfig.playerLevelType.increased)
                 pL += data.map(PlayerData::getMobLevelIncrease).orElse(0);
             if (mean)
                 lvl += pL;
@@ -267,12 +267,12 @@ public class LevelCalc {
         double dZ = spawn.z - pos.z;
         double dist = Math.sqrt(dX * dX + dZ * dZ);
         if (dist < 300)
-            return MobConfig.BASE_GATE_LEVEL;
+            return MobConfig.baseGateLevel;
         if (dist < 2000)
-            return randomizedLevel(level.random, MobConfig.BASE_GATE_LEVEL + uniformInterpolation(0, 25, 2000 - 300, dist));
+            return randomizedLevel(level.random, MobConfig.baseGateLevel + uniformInterpolation(0, 25, 2000 - 300, dist));
         if (dist < 7500)
-            return randomizedLevel(level.random, MobConfig.BASE_GATE_LEVEL + uniformInterpolation(25, 80, 7500 - 2000, dist));
-        return randomizedLevel(level.random, MobConfig.BASE_GATE_LEVEL + (int) (80 + (dist - 7500) * 0.07));
+            return randomizedLevel(level.random, MobConfig.baseGateLevel + uniformInterpolation(25, 80, 7500 - 2000, dist));
+        return randomizedLevel(level.random, MobConfig.baseGateLevel + (int) (80 + (dist - 7500) * 0.07));
     }
 
     private static int uniformInterpolation(int start, int increase, int len, double x) {
