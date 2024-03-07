@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 public class RuneCraftory {
 
     public static final String MODID = "runecraftory";
-    public static final Logger logger = LogManager.getLogger(RuneCraftory.MODID);
+    public static final Logger LOGGER = LogManager.getLogger(RuneCraftory.MODID);
 
-    public static boolean simpleQuests;
+    public static boolean SIMPLE_QUESTS;
 }

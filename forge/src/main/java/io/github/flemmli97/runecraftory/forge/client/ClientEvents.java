@@ -78,9 +78,9 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void renderRunePoints(RenderGameOverlayEvent.PreLayer event) {
-        if (ClientConfig.renderHealthRPBar == ClientConfig.HealthRPRenderType.BOTH && event.getOverlay() == ForgeIngameGui.PLAYER_HEALTH_ELEMENT)
+        if (ClientConfig.RENDER_HEALTH_RP_BAR == ClientConfig.HealthRPRenderType.BOTH && event.getOverlay() == ForgeIngameGui.PLAYER_HEALTH_ELEMENT)
             event.setCanceled(true);
-        if (GeneralConfig.disableHunger && event.getOverlay() == ForgeIngameGui.FOOD_LEVEL_ELEMENT)
+        if (GeneralConfig.DISABLE_HUNGER && event.getOverlay() == ForgeIngameGui.FOOD_LEVEL_ELEMENT)
             event.setCanceled(true);
     }
 

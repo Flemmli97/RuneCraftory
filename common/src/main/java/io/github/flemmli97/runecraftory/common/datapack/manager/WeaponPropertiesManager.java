@@ -60,7 +60,7 @@ public class WeaponPropertiesManager extends SimplePreparableReloadListener<Map<
                     }
                 }
             } catch (JsonParseException | IOException | IllegalArgumentException exception) {
-                RuneCraftory.logger.error("Couldn't parse data file {} {}", res, exception);
+                RuneCraftory.LOGGER.error("Couldn't parse data file {} {}", res, exception);
             }
         }
         return map;
@@ -72,11 +72,11 @@ public class WeaponPropertiesManager extends SimplePreparableReloadListener<Map<
         data.forEach((key, el) -> {
             try {
                 WeaponTypeProperties props = WeaponTypeProperties.CODEC.parse(JsonOps.INSTANCE, el)
-                        .getOrThrow(false, RuneCraftory.logger::error);
+                        .getOrThrow(false, RuneCraftory.LOGGER::error);
                 EnumWeaponType skills = EnumWeaponType.valueOf(key.getPath().toUpperCase(Locale.ROOT));
                 propertiesBuilder.put(skills, props);
             } catch (Exception ex) {
-                RuneCraftory.logger.error("Couldnt parse weapon properties json {} {}", key, ex);
+                RuneCraftory.LOGGER.error("Couldnt parse weapon properties json {} {}", key, ex);
                 ex.fillInStackTrace();
             }
         });

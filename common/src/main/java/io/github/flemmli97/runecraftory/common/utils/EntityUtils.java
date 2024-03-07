@@ -78,7 +78,7 @@ public class EntityUtils {
     public static boolean canMonsterTargetNPC(Entity e) {
         if (e instanceof EntityNPCBase npc && npc.getEntityToFollowUUID() != null)
             return true;
-        return MobConfig.mobAttackNPC && e instanceof Npc;
+        return MobConfig.MOB_ATTACK_NPC && e instanceof Npc;
     }
 
     public static void sendAttributesTo(LivingEntity entity, ServerPlayer player) {
@@ -137,7 +137,7 @@ public class EntityUtils {
     }
 
     public static float tamingChance(BaseMonster monster, Player player, float itemMultiplier, int brushCount, int loveAttackCount) {
-        if (itemMultiplier == 0 || GeneralConfig.tamingMultiplier == 0)
+        if (itemMultiplier == 0 || GeneralConfig.TAMING_MULTIPLIER == 0)
             return 0;
         int lvl = Platform.INSTANCE.getPlayerData(player).map(d -> d.getPlayerLevel().getLevel()).orElse(1) + 1;
         float lvlPenalty = Math.max(0, (monster.level().getLevel() - lvl) * 0.02f);
@@ -145,7 +145,7 @@ public class EntityUtils {
         float loveAttackBonus = loveAttackCount * 0.002f;
         float tamingLvlBonus = (Platform.INSTANCE.getPlayerData(player).map(d -> d.getSkillLevel(EnumSkills.TAMING).getLevel()).orElse(1) - 1) * 0.005f;
         float tamingBonus = 1 + brushBonus + loveAttackBonus + tamingLvlBonus;
-        return monster.tamingChance() * GeneralConfig.tamingMultiplier * tamingBonus - lvlPenalty;
+        return monster.tamingChance() * GeneralConfig.TAMING_MULTIPLIER * tamingBonus - lvlPenalty;
     }
 
     public static NullPointerException playerDataException() {
@@ -153,9 +153,9 @@ public class EntityUtils {
     }
 
     public static EntityType<?> trySpawnTreasureChest(GateEntity spawner) {
-        if (spawner.getRandom().nextFloat() < MobConfig.treasureChance) {
-            if (spawner.getRandom().nextFloat() < MobConfig.mimicChance) {
-                if (spawner.getRandom().nextFloat() < MobConfig.mimicStrongChance)
+        if (spawner.getRandom().nextFloat() < MobConfig.TREASURE_CHANCE) {
+            if (spawner.getRandom().nextFloat() < MobConfig.MIMIC_CHANCE) {
+                if (spawner.getRandom().nextFloat() < MobConfig.MIMIC_STRONG_CHANCE)
                     return ModEntities.GOBBLE_BOX.get();
                 else
                     return ModEntities.MONSTER_BOX.get();

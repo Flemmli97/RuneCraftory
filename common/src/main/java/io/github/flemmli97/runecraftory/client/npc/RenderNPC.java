@@ -69,7 +69,7 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
                 text.load(Minecraft.getInstance().getResourceManager());
                 return false;
             } catch (IOException exception) {
-                RuneCraftory.logger.warn("Failed to load texture: {}", look.texture(), exception);
+                RuneCraftory.LOGGER.warn("Failed to load texture: {}", look.texture(), exception);
             }
             return true;
         }))

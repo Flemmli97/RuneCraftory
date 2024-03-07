@@ -82,8 +82,8 @@ public class Smith extends NPCJob {
                                         }
                                     }
                                 }
-                                if (!player.addItem(new ItemStack(ModItems.monsterBarn.get())))
-                                    player.spawnAtLocation(new ItemStack(ModItems.monsterBarn.get()));
+                                if (!player.addItem(new ItemStack(ModItems.MONSTER_BARN.get())))
+                                    player.spawnAtLocation(new ItemStack(ModItems.MONSTER_BARN.get()));
                                 d.onBuyBarn();
                             } else {
                                 player.sendMessage(new TranslatableComponent(BARN_ACTION_FAIL, player.getName(), amount), Util.NIL_UUID);

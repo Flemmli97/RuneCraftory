@@ -28,7 +28,7 @@ public class MonsterBarnBlockEntity extends BlockEntity {
     private BarnData barnData;
 
     public MonsterBarnBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(ModBlocks.monsterBarnBlockEntity.get(), blockPos, blockState);
+        super(ModBlocks.MONSTER_BARN_BLOCK_ENTITY.get(), blockPos, blockState);
     }
 
     public static void tick(Level level, BlockPos blockPos, BlockState blockState, MonsterBarnBlockEntity blockEntity) {
@@ -79,7 +79,7 @@ public class MonsterBarnBlockEntity extends BlockEntity {
 
     private static boolean matches(Level level, BlockPos pos, boolean ground) {
         BlockState state = level.getBlockState(pos);
-        return ground ? state.is(ModTags.BARN_GROUND) : !state.is(ModBlocks.monsterBarn.get()) && state.getCollisionShape(level, pos).isEmpty();
+        return ground ? state.is(ModTags.BARN_GROUND) : !state.is(ModBlocks.MONSTER_BARN.get()) && state.getCollisionShape(level, pos).isEmpty();
     }
 
     private static boolean cornersMatch(int size, Level level, BlockPos center) {

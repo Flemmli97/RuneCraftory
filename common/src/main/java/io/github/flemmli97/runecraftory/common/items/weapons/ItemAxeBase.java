@@ -50,10 +50,10 @@ import java.util.function.Supplier;
 
 public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IAOEWeapon, BigWeapon {
 
-    private static final Vec3[] particleDirection = generateParticleDir(2);
+    private static final Vec3[] PARTICLE_DIRECTION = generateParticleDir(2);
 
     public ItemAxeBase(Item.Properties props) {
-        super(ItemTiers.tier, 0, 0, props);
+        super(ItemTiers.TIER, 0, 0, props);
     }
 
     @Override
@@ -189,7 +189,7 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IA
         entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.DRAGON_FIREBALL_EXPLODE, entity.getSoundSource(), 1.0f, 0.4f);
         Vec3 pos = entity.position().add(0, -1, 0);
         BlockPos.MutableBlockPos mut = new BlockPos.MutableBlockPos();
-        for (Vec3 dir : particleDirection) {
+        for (Vec3 dir : PARTICLE_DIRECTION) {
             Vec3 scaled = dir.scale(0.5);
             mut.set(Mth.floor(pos.x() + dir.x()), Mth.floor(pos.y()), Mth.floor(pos.z() + dir.z()));
             BlockState state = entity.level.getBlockState(mut);

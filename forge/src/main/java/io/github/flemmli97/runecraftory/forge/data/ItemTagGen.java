@@ -27,9 +27,9 @@ public class ItemTagGen extends ItemTagsProvider {
     protected void addTags() {
         ModItems.DATAGENTAGS.forEach((key, supList) -> supList.forEach(sup -> this.tag(key).add(sup.get())));
         this.tag(ModTags.SHORTSWORDS)
-                .add(ModItems.plantSword.get());
+                .add(ModItems.PLANT_SWORD.get());
         this.tag(ModTags.SHIELDS)
-                .add(ModItems.plantShield.get());
+                .add(ModItems.PLANT_SHIELD.get());
 
         //Forge copy tags
         this.tag(ModTags.IRON)
@@ -79,36 +79,36 @@ public class ItemTagGen extends ItemTagsProvider {
                 .add(Items.POTATO)
                 .add(Items.WHEAT);
 
-        this.forgeAndCommonTag(Tags.Items.SLIMEBALLS, ModTags.SLIME, ModItems.glue.get());
+        this.forgeAndCommonTag(Tags.Items.SLIMEBALLS, ModTags.SLIME, ModItems.GLUE.get());
         this.tag(ModTags.SLIME)
                 .add(Items.SLIME_BALL);
-        this.forgeAndCommonTag(ModTags.BRONZE_F, ModTags.BRONZE, ModItems.bronze.get());
-        this.forgeAndCommonTag(ModTags.SILVER_F, ModTags.SILVER, ModItems.silver.get());
-        this.forgeAndCommonTag(ModTags.PLATINUM_F, ModTags.PLATINUM, ModItems.platinum.get());
+        this.forgeAndCommonTag(ModTags.BRONZE_F, ModTags.BRONZE, ModItems.BRONZE.get());
+        this.forgeAndCommonTag(ModTags.SILVER_F, ModTags.SILVER, ModItems.SILVER.get());
+        this.forgeAndCommonTag(ModTags.PLATINUM_F, ModTags.PLATINUM, ModItems.PLATINUM.get());
 
-        this.forgeAndCommonTag(ModTags.AMETHYST_F, ModTags.AMETHYSTS, ModItems.amethyst.get());
+        this.forgeAndCommonTag(ModTags.AMETHYST_F, ModTags.AMETHYSTS, ModItems.AMETHYST.get());
         this.tag(ModTags.AMETHYSTS)
                 .add(Items.AMETHYST_SHARD);
-        this.forgeAndCommonTag(ModTags.AQUAMARINE_F, ModTags.AQUAMARINES, ModItems.aquamarine.get());
-        this.forgeAndCommonTag(ModTags.RUBY_F, ModTags.RUBIES, ModItems.ruby.get());
-        this.forgeAndCommonTag(ModTags.SAPPHIRE_F, ModTags.SAPPHIRES, ModItems.sapphire.get());
+        this.forgeAndCommonTag(ModTags.AQUAMARINE_F, ModTags.AQUAMARINES, ModItems.AQUAMARINE.get());
+        this.forgeAndCommonTag(ModTags.RUBY_F, ModTags.RUBIES, ModItems.RUBY.get());
+        this.forgeAndCommonTag(ModTags.SAPPHIRE_F, ModTags.SAPPHIRES, ModItems.SAPPHIRE.get());
 
         this.tag(ModTags.ORICHALCUM)
-                .add(ModItems.orichalcum.get());
+                .add(ModItems.ORICHALCUM.get());
         this.tag(ModTags.DRAGONIC)
-                .add(ModItems.dragonic.get());
+                .add(ModItems.DRAGONIC.get());
 
         this.tag(ModTags.GENERIC_TRASH)
-                .add(ModItems.failedDish.get(), ModItems.disastrousDish.get(),
-                        ModItems.weeds.get(), ModItems.witheredGrass.get())
+                .add(ModItems.FAILED_DISH.get(), ModItems.DISASTROUS_DISH.get(),
+                        ModItems.WEEDS.get(), ModItems.WITHERED_GRASS.get())
                 .addTag(ItemTags.DIRT)
                 .addTag(ModTags.COBBLESTONE);
         this.tag(ModTags.SMITH_TRASH)
-                .add(ModItems.scrap.get(), ModItems.scrapPlus.get())
+                .add(ModItems.SCRAP.get(), ModItems.SCRAP_PLUS.get())
                 .addTag(ModTags.GENERIC_TRASH);
 
         this.tag(ModTags.MINERALS)
-                .add(ModItems.scrapPlus.get())
+                .add(ModItems.SCRAP_PLUS.get())
                 .addTag(ModTags.IRON)
                 .addTag(ModTags.GOLD)
                 .addTag(ModTags.COPPER)
@@ -118,178 +118,178 @@ public class ItemTagGen extends ItemTagsProvider {
                 .addTag(ModTags.ORICHALCUM)
                 .addTag(ModTags.DRAGONIC);
         this.forgeAndCommonTag(Tags.Items.GEMS, ModTags.JEWELS,
-                ModItems.amethyst.get(),
-                ModItems.aquamarine.get(),
-                ModItems.ruby.get(),
-                ModItems.sapphire.get(),
-                ModItems.coreRed.get(),
-                ModItems.coreBlue.get(),
-                ModItems.coreYellow.get(),
-                ModItems.coreGreen.get(),
-                ModItems.crystalSkull.get());
+                ModItems.AMETHYST.get(),
+                ModItems.AQUAMARINE.get(),
+                ModItems.RUBY.get(),
+                ModItems.SAPPHIRE.get(),
+                ModItems.CORE_RED.get(),
+                ModItems.CORE_BLUE.get(),
+                ModItems.CORE_YELLOW.get(),
+                ModItems.CORE_GREEN.get(),
+                ModItems.CRYSTAL_SKULL.get());
         this.tag(ModTags.JEWELS).add(Items.EMERALD, Items.DIAMOND);
         this.tag(ModTags.CRYSTALS)
-                .add(ModItems.crystalWater.get())
-                .add(ModItems.crystalEarth.get())
-                .add(ModItems.crystalFire.get())
-                .add(ModItems.crystalWind.get())
-                .add(ModItems.crystalLight.get())
-                .add(ModItems.crystalDark.get())
-                .add(ModItems.crystalLove.get())
-                .add(ModItems.crystalSmall.get())
-                .add(ModItems.crystalBig.get())
-                .add(ModItems.crystalMagic.get())
-                .add(ModItems.crystalRune.get())
-                .add(ModItems.crystalElectro.get());
+                .add(ModItems.CRYSTAL_WATER.get())
+                .add(ModItems.CRYSTAL_EARTH.get())
+                .add(ModItems.CRYSTAL_FIRE.get())
+                .add(ModItems.CRYSTAL_WIND.get())
+                .add(ModItems.CRYSTAL_LIGHT.get())
+                .add(ModItems.CRYSTAL_DARK.get())
+                .add(ModItems.CRYSTAL_LOVE.get())
+                .add(ModItems.CRYSTAL_SMALL.get())
+                .add(ModItems.CRYSTAL_BIG.get())
+                .add(ModItems.CRYSTAL_MAGIC.get())
+                .add(ModItems.CRYSTAL_RUNE.get())
+                .add(ModItems.CRYSTAL_ELECTRO.get());
         this.tag(ModTags.STICKS)
                 .addOptionalTag(Tags.Items.RODS_WOODEN.location())
                 .add(Items.STICK,
-                        ModItems.stickThick.get(),
-                        ModItems.hornInsect.get(),
-                        ModItems.hornRigid.get(),
-                        ModItems.hornDevil.get(),
-                        ModItems.plantStem.get(),
-                        ModItems.hornBull.get(),
-                        ModItems.movingBranch.get());
+                        ModItems.STICK_THICK.get(),
+                        ModItems.HORN_INSECT.get(),
+                        ModItems.HORN_RIGID.get(),
+                        ModItems.HORN_DEVIL.get(),
+                        ModItems.PLANT_STEM.get(),
+                        ModItems.HORN_BULL.get(),
+                        ModItems.MOVING_BRANCH.get());
         this.tag(ModTags.LIQUIDS)
-                .add(ModItems.glue.get(),
-                        ModItems.devilBlood.get(),
-                        ModItems.paraPoison.get(),
-                        ModItems.poisonKing.get());
+                .add(ModItems.GLUE.get(),
+                        ModItems.DEVIL_BLOOD.get(),
+                        ModItems.PARA_POISON.get(),
+                        ModItems.POISON_KING.get());
         this.tag(ModTags.FEATHERS)
                 .add(Items.FEATHER,
-                        ModItems.featherBlack.get(),
-                        ModItems.featherThunder.get(),
-                        ModItems.featherYellow.get(),
-                        ModItems.dragonFin.get())
+                        ModItems.FEATHER_BLACK.get(),
+                        ModItems.FEATHER_THUNDER.get(),
+                        ModItems.FEATHER_YELLOW.get(),
+                        ModItems.DRAGON_FIN.get())
                 .addOptionalTag(Tags.Items.FEATHERS.location());
         this.tag(ModTags.SHELLS_BONES)
-                .add(ModItems.turtleShell.get(),
-                        ModItems.fishFossil.get(),
-                        ModItems.skull.get(),
-                        ModItems.dragonBones.get(),
-                        ModItems.tortoiseShell.get());
+                .add(ModItems.TURTLE_SHELL.get(),
+                        ModItems.FISH_FOSSIL.get(),
+                        ModItems.SKULL.get(),
+                        ModItems.DRAGON_BONES.get(),
+                        ModItems.TORTOISE_SHELL.get());
         this.tag(ModTags.STONES)
-                .add(ModItems.rock.get(),
-                        ModItems.stoneRound.get(),
-                        ModItems.stoneTiny.get(),
-                        ModItems.stoneGolem.get(),
-                        ModItems.tabletGolem.get(),
-                        ModItems.stoneSpirit.get(),
-                        ModItems.tabletTruth.get());
+                .add(ModItems.ROCK.get(),
+                        ModItems.STONE_ROUND.get(),
+                        ModItems.STONE_TINY.get(),
+                        ModItems.STONE_GOLEM.get(),
+                        ModItems.TABLET_GOLEM.get(),
+                        ModItems.STONE_SPIRIT.get(),
+                        ModItems.TABLET_TRUTH.get());
         this.tag(ModTags.STRINGS)
                 .add(Items.STRING,
-                        ModItems.yarn.get(),
-                        ModItems.oldBandage.get(),
-                        ModItems.ambrosiasThorns.get(),
-                        ModItems.threadSpider.get(),
-                        ModItems.puppetryStrings.get(),
-                        ModItems.vine.get(),
-                        ModItems.tailScorpion.get(),
-                        ModItems.strongVine.get(),
-                        ModItems.threadPretty.get(),
-                        ModItems.tailChimera.get());
+                        ModItems.YARN.get(),
+                        ModItems.OLD_BANDAGE.get(),
+                        ModItems.AMBROSIAS_THORNS.get(),
+                        ModItems.THREAD_SPIDER.get(),
+                        ModItems.PUPPETRY_STRINGS.get(),
+                        ModItems.VINE.get(),
+                        ModItems.TAIL_SCORPION.get(),
+                        ModItems.STRONG_VINE.get(),
+                        ModItems.THREAD_PRETTY.get(),
+                        ModItems.TAIL_CHIMERA.get());
         this.tag(ModTags.SHARDS)
                 .add(Items.FLINT,
-                        ModItems.arrowHead.get(),
-                        ModItems.bladeShard.get(),
-                        ModItems.brokenHilt.get(),
-                        ModItems.brokenBox.get(),
-                        ModItems.bladeGlistening.get(),
-                        ModItems.greatHammerShard.get(),
-                        ModItems.hammerPiece.get(),
-                        ModItems.shoulderPiece.get(),
-                        ModItems.piratesArmor.get(),
-                        ModItems.screwRusty.get(),
-                        ModItems.screwShiny.get(),
-                        ModItems.rockShardLeft.get(),
-                        ModItems.rockShardRight.get(),
+                        ModItems.ARROW_HEAD.get(),
+                        ModItems.BLADE_SHARD.get(),
+                        ModItems.BROKEN_HILT.get(),
+                        ModItems.BROKEN_BOX.get(),
+                        ModItems.BLADE_GLISTENING.get(),
+                        ModItems.GREAT_HAMMER_SHARD.get(),
+                        ModItems.HAMMER_PIECE.get(),
+                        ModItems.SHOULDER_PIECE.get(),
+                        ModItems.PIRATES_ARMOR.get(),
+                        ModItems.SCREW_RUSTY.get(),
+                        ModItems.SCREW_SHINY.get(),
+                        ModItems.ROCK_SHARD_LEFT.get(),
+                        ModItems.ROCK_SHARD_RIGHT.get(),
                         ModItems.MTGUPlate.get(),
-                        ModItems.brokenIceWall.get());
+                        ModItems.BROKEN_ICE_WALL.get());
         this.tag(ModTags.FURS)
-                .add(ModItems.furSmall.get(),
-                        ModItems.furMedium.get(),
-                        ModItems.furLarge.get(),
-                        ModItems.fur.get(),
-                        ModItems.furball.get(),
-                        ModItems.downYellow.get(),
-                        ModItems.furQuality.get(),
-                        ModItems.downPenguin.get(),
-                        ModItems.lightningMane.get(),
-                        ModItems.furRedLion.get(),
-                        ModItems.furBlueLion.get(),
-                        ModItems.chestHair.get());
+                .add(ModItems.FUR_SMALL.get(),
+                        ModItems.FUR_MEDIUM.get(),
+                        ModItems.FUR_LARGE.get(),
+                        ModItems.FUR.get(),
+                        ModItems.FURBALL.get(),
+                        ModItems.DOWN_YELLOW.get(),
+                        ModItems.FUR_QUALITY.get(),
+                        ModItems.DOWN_PENGUIN.get(),
+                        ModItems.LIGHTNING_MANE.get(),
+                        ModItems.FUR_RED_LION.get(),
+                        ModItems.FUR_BLUE_LION.get(),
+                        ModItems.CHEST_HAIR.get());
         this.tag(ModTags.POWDERS)
-                .add(ModItems.spore.get(),
-                        ModItems.powderPoison.get(),
-                        ModItems.sporeHoly.get(),
-                        ModItems.fairyDust.get(),
-                        ModItems.fairyElixir.get(),
-                        ModItems.root.get(),
-                        ModItems.powderMagic.get(),
-                        ModItems.powderMysterious.get(),
-                        ModItems.magic.get(),
-                        ModItems.ashEarth.get(),
-                        ModItems.ashFire.get(),
-                        ModItems.ashWater.get(),
-                        ModItems.turnipsMiracle.get(),
-                        ModItems.melodyBottle.get());
+                .add(ModItems.SPORE.get(),
+                        ModItems.POWDER_POISON.get(),
+                        ModItems.SPORE_HOLY.get(),
+                        ModItems.FAIRY_DUST.get(),
+                        ModItems.FAIRY_ELIXIR.get(),
+                        ModItems.ROOT.get(),
+                        ModItems.POWDER_MAGIC.get(),
+                        ModItems.POWDER_MYSTERIOUS.get(),
+                        ModItems.MAGIC.get(),
+                        ModItems.ASH_EARTH.get(),
+                        ModItems.ASH_FIRE.get(),
+                        ModItems.ASH_WATER.get(),
+                        ModItems.TURNIPS_MIRACLE.get(),
+                        ModItems.MELODY_BOTTLE.get());
         this.tag(ModTags.CLOTHS)
                 .add(Items.LEATHER,
-                        ModItems.clothCheap.get(),
-                        ModItems.clothQuality.get(),
-                        ModItems.clothQualityWorn.get(),
-                        ModItems.clothSilk.get(),
-                        ModItems.ghostHood.get(),
-                        ModItems.gloveGiant.get(),
-                        ModItems.gloveBlueGiant.get(),
-                        ModItems.carapaceInsect.get(),
-                        ModItems.carapacePretty.get(),
-                        ModItems.clothAncientOrc.get());
+                        ModItems.CLOTH_CHEAP.get(),
+                        ModItems.CLOTH_QUALITY.get(),
+                        ModItems.CLOTH_QUALITY_WORN.get(),
+                        ModItems.CLOTH_SILK.get(),
+                        ModItems.GHOST_HOOD.get(),
+                        ModItems.GLOVE_GIANT.get(),
+                        ModItems.GLOVE_BLUE_GIANT.get(),
+                        ModItems.CARAPACE_INSECT.get(),
+                        ModItems.CARAPACE_PRETTY.get(),
+                        ModItems.CLOTH_ANCIENT_ORC.get());
         this.tag(ModTags.CLAWS_FANGS)
-                .add(ModItems.jawInsect.get(),
-                        ModItems.clawPanther.get(),
-                        ModItems.clawMagic.get(),
-                        ModItems.fangWolf.get(),
-                        ModItems.fangGoldWolf.get(),
-                        ModItems.clawPalm.get(),
-                        ModItems.clawMalm.get(),
-                        ModItems.giantsNail.get(),
-                        ModItems.clawChimera.get(),
-                        ModItems.tuskIvory.get(),
-                        ModItems.tuskUnbrokenIvory.get(),
-                        ModItems.scorpionPincer.get(),
-                        ModItems.dangerousScissors.get(),
-                        ModItems.propellorCheap.get(),
-                        ModItems.propellorQuality.get(),
-                        ModItems.fangDragon.get(),
-                        ModItems.jawQueen.get(),
-                        ModItems.fangDragon.get(),
-                        ModItems.giantsNailBig.get());
+                .add(ModItems.JAW_INSECT.get(),
+                        ModItems.CLAW_PANTHER.get(),
+                        ModItems.CLAW_MAGIC.get(),
+                        ModItems.FANG_WOLF.get(),
+                        ModItems.FANG_GOLD_WOLF.get(),
+                        ModItems.CLAW_PALM.get(),
+                        ModItems.CLAW_MALM.get(),
+                        ModItems.GIANTS_NAIL.get(),
+                        ModItems.CLAW_CHIMERA.get(),
+                        ModItems.TUSK_IVORY.get(),
+                        ModItems.TUSK_UNBROKEN_IVORY.get(),
+                        ModItems.SCORPION_PINCER.get(),
+                        ModItems.DANGEROUS_SCISSORS.get(),
+                        ModItems.PROPELLOR_CHEAP.get(),
+                        ModItems.PROPELLOR_QUALITY.get(),
+                        ModItems.FANG_DRAGON.get(),
+                        ModItems.JAW_QUEEN.get(),
+                        ModItems.FANG_DRAGON.get(),
+                        ModItems.GIANTS_NAIL_BIG.get());
         this.tag(ModTags.SCALES)
-                .add(ModItems.scaleWet.get(),
-                        ModItems.scaleGrimoire.get(),
-                        ModItems.scaleDragon.get(),
-                        ModItems.scaleCrimson.get(),
-                        ModItems.scaleBlue.get(),
-                        ModItems.scaleGlitter.get(),
-                        ModItems.scaleLove.get(),
-                        ModItems.scaleBlack.get(),
-                        ModItems.scaleFire.get(),
-                        ModItems.scaleEarth.get(),
-                        ModItems.scaleLegend.get());
+                .add(ModItems.SCALE_WET.get(),
+                        ModItems.SCALE_GRIMOIRE.get(),
+                        ModItems.SCALE_DRAGON.get(),
+                        ModItems.SCALE_CRIMSON.get(),
+                        ModItems.SCALE_BLUE.get(),
+                        ModItems.SCALE_GLITTER.get(),
+                        ModItems.SCALE_LOVE.get(),
+                        ModItems.SCALE_BLACK.get(),
+                        ModItems.SCALE_FIRE.get(),
+                        ModItems.SCALE_EARTH.get(),
+                        ModItems.SCALE_LEGEND.get());
 
         this.tag(ModTags.TURNIP)
-                .add(ModItems.turnip.get(), ModItems.turnipGiant.get(), ModItems.turnipPink.get(), ModItems.turnipPinkGiant.get(),
-                        ModItems.goldenTurnip.get(), ModItems.goldenTurnipGiant.get());
+                .add(ModItems.TURNIP.get(), ModItems.TURNIP_GIANT.get(), ModItems.TURNIP_PINK.get(), ModItems.TURNIP_PINK_GIANT.get(),
+                        ModItems.GOLDEN_TURNIP.get(), ModItems.GOLDEN_TURNIP_GIANT.get());
 
         this.tag(ModTags.HIGH_TIER_TOOLS)
-                .add(ModItems.hoePlatinum.get())
-                .add(ModItems.wateringCanPlatinum.get())
-                .add(ModItems.sicklePlatinum.get())
-                .add(ModItems.hammerPlatinum.get())
-                .add(ModItems.axePlatinum.get())
-                .add(ModItems.fishingRodPlatinum.get());
+                .add(ModItems.HOE_PLATINUM.get())
+                .add(ModItems.WATERING_CAN_PLATINUM.get())
+                .add(ModItems.SICKLE_PLATINUM.get())
+                .add(ModItems.HAMMER_PLATINUM.get())
+                .add(ModItems.AXE_PLATINUM.get())
+                .add(ModItems.FISHING_ROD_PLATINUM.get());
 
         this.tag(ModTags.UPGRADABLE_HELD).addTag(ModTags.TOOLS).addTag(ModTags.WEAPONS);
         this.tag(ModTags.TOOLS).addTag(ModTags.HOES).addTag(ModTags.WATERINGCANS)
@@ -338,30 +338,30 @@ public class ItemTagGen extends ItemTagsProvider {
                 .addTag(ItemTags.WOOL)
                 .add(Items.WHEAT);
         this.tag(ModTags.tamingTag(ModEntities.ORC.get()))
-                .add(ModItems.cheapBracelet.get())
-                .add(ModItems.clothCheap.get())
-                .add(ModItems.oldBandage.get());
+                .add(ModItems.CHEAP_BRACELET.get())
+                .add(ModItems.CLOTH_CHEAP.get())
+                .add(ModItems.OLD_BANDAGE.get());
         this.tag(ModTags.tamingTag(ModEntities.ORC_ARCHER.get()))
                 .add(Items.GUNPOWDER)
                 .add(Items.ARROW)
-                .add(ModItems.arrowHead.get())
-                .add(ModItems.recoveryPotion.get());
+                .add(ModItems.ARROW_HEAD.get())
+                .add(ModItems.RECOVERY_POTION.get());
         this.tag(ModTags.tamingTag(ModEntities.ANT.get()))
-                .add(ModItems.carapaceInsect.get())
-                .add(ModItems.carapacePretty.get())
-                .add(ModItems.jawInsect.get())
-                .add(ModItems.jawQueen.get());
+                .add(ModItems.CARAPACE_INSECT.get())
+                .add(ModItems.CARAPACE_PRETTY.get())
+                .add(ModItems.JAW_INSECT.get())
+                .add(ModItems.JAW_QUEEN.get());
         this.tag(ModTags.tamingTag(ModEntities.BEETLE.get()))
-                .add(ModItems.carapaceInsect.get())
-                .add(ModItems.carapacePretty.get())
-                .add(ModItems.hornInsect.get())
-                .add(ModItems.hornRigid.get());
+                .add(ModItems.CARAPACE_INSECT.get())
+                .add(ModItems.CARAPACE_PRETTY.get())
+                .add(ModItems.HORN_INSECT.get())
+                .add(ModItems.HORN_RIGID.get());
         this.tag(ModTags.tamingTag(ModEntities.BIG_MUCK.get()))
                 .add(Items.BROWN_MUSHROOM)
                 .add(Items.RED_MUSHROOM)
-                .add(ModItems.mushroom.get())
-                .add(ModItems.monarchMushroom.get())
-                .add(ModItems.spore.get());
+                .add(ModItems.MUSHROOM.get())
+                .add(ModItems.MONARCH_MUSHROOM.get())
+                .add(ModItems.SPORE.get());
         this.tag(ModTags.tamingTag(ModEntities.BUFFAMOO.get()))
                 .addTag(ModTags.MILKS)
                 .add(Items.WHEAT);
@@ -374,40 +374,40 @@ public class ItemTagGen extends ItemTagsProvider {
                 .add(Items.APPLE);
         this.tag(ModTags.tamingTag(ModEntities.TORTAS.get()))
                 .add(Items.SEAGRASS)
-                .add(ModItems.tortoiseShell.get());
+                .add(ModItems.TORTOISE_SHELL.get());
         this.tag(ModTags.tamingTag(ModEntities.SKY_FISH.get()))
                 .add(Items.KELP);
         this.tag(ModTags.tamingTag(ModEntities.WEAGLE.get()))
                 .addTag(ModTags.FEATHERS);
         this.tag(ModTags.tamingTag(ModEntities.GOBLIN.get()))
-                .add(ModItems.oldBandage.get());
+                .add(ModItems.OLD_BANDAGE.get());
         this.tag(ModTags.tamingTag(ModEntities.GOBLIN_ARCHER.get()))
                 .addTag(ModTags.tamingTag(ModEntities.GOBLIN.get()));
         this.tag(ModTags.tamingTag(ModEntities.DUCK.get()))
-                .add(ModItems.fur.get())
+                .add(ModItems.FUR.get())
                 .add(Items.FEATHER);
         this.tag(ModTags.tamingTag(ModEntities.FAIRY.get()))
-                .add(ModItems.fairyDust.get());
+                .add(ModItems.FAIRY_DUST.get());
         this.tag(ModTags.tamingTag(ModEntities.GHOST.get()))
-                .add(ModItems.ghostHood.get());
+                .add(ModItems.GHOST_HOOD.get());
         this.tag(ModTags.tamingTag(ModEntities.SPIRIT.get()))
-                .add(ModItems.crystalDark.get());
+                .add(ModItems.CRYSTAL_DARK.get());
         this.tag(ModTags.tamingTag(ModEntities.GHOST_RAY.get()))
-                .add(ModItems.ghostHood.get());
+                .add(ModItems.GHOST_HOOD.get());
         this.tag(ModTags.tamingTag(ModEntities.SPIDER.get()))
                 .add(Items.STRING)
-                .add(ModItems.threadSpider.get());
+                .add(ModItems.THREAD_SPIDER.get());
         this.tag(ModTags.tamingTag(ModEntities.SHADOW_PANTHER.get()))
-                .add(ModItems.fur.get())
-                .add(ModItems.clawPanther.get());
+                .add(ModItems.FUR.get())
+                .add(ModItems.CLAW_PANTHER.get());
         this.tag(ModTags.tamingTag(ModEntities.MONSTER_BOX.get()))
-                .add(ModItems.failedDish.get())
-                .add(ModItems.disastrousDish.get());
+                .add(ModItems.FAILED_DISH.get())
+                .add(ModItems.DISASTROUS_DISH.get());
         this.tag(ModTags.tamingTag(ModEntities.GOBBLE_BOX.get()))
-                .add(ModItems.failedDish.get())
-                .add(ModItems.disastrousDish.get());
+                .add(ModItems.FAILED_DISH.get())
+                .add(ModItems.DISASTROUS_DISH.get());
         this.tag(ModTags.tamingTag(ModEntities.KILLER_ANT.get()))
-                .add(ModItems.carapacePretty.get());
+                .add(ModItems.CARAPACE_PRETTY.get());
         this.tag(ModTags.tamingTag(ModEntities.HIGH_ORC.get()))
                 .addTag(ModTags.tamingTag(ModEntities.ORC.get()));
         this.tag(ModTags.tamingTag(ModEntities.ORC_HUNTER.get()))
@@ -417,70 +417,70 @@ public class ItemTagGen extends ItemTagsProvider {
                 .add(Items.HONEYCOMB);
         this.tag(ModTags.tamingTag(ModEntities.SILVER_WOLF.get()))
                 .add(Items.BONE)
-                .add(ModItems.fangWolf.get());
+                .add(ModItems.FANG_WOLF.get());
         this.tag(ModTags.tamingTag(ModEntities.LEAF_BALL.get()))
                 .addTag(ItemTags.LEAVES);
         this.tag(ModTags.tamingTag(ModEntities.FURPY.get()))
                 .addTag(ModTags.tamingTag(ModEntities.CHIPSQUEEK.get()));
         this.tag(ModTags.tamingTag(ModEntities.PALM_CAT.get()))
-                .add(ModItems.fur.get())
+                .add(ModItems.FUR.get())
                 .add(Items.CAKE)
-                .add(ModItems.cake.get());
+                .add(ModItems.CAKE.get());
         this.tag(ModTags.tamingTag(ModEntities.MINO.get()))
-                .add(ModItems.grapes.get());
+                .add(ModItems.GRAPES.get());
         this.tag(ModTags.tamingTag(ModEntities.TRICKY_MUCK.get()))
-                .add(ModItems.powderPoison.get());
+                .add(ModItems.POWDER_POISON.get());
         this.tag(ModTags.tamingTag(ModEntities.FLOWER_LILY.get()))
                 .addTag(ItemTags.FLOWERS);
         this.tag(ModTags.tamingTag(ModEntities.KING_WOOLY.get()))
                 .addTag(ModTags.tamingTag(ModEntities.WOOLY.get()));
         this.tag(ModTags.tamingTag(ModEntities.BUFFALOO.get()))
-                .add(ModItems.hornBull.get());
+                .add(ModItems.HORN_BULL.get());
         this.tag(ModTags.tamingTag(ModEntities.GOBLIN_PIRATE.get()))
                 .addTag(ModTags.tamingTag(ModEntities.GOBLIN.get()));
         this.tag(ModTags.tamingTag(ModEntities.GOBLIN_GANGSTER.get()))
                 .addTag(ModTags.tamingTag(ModEntities.GOBLIN.get()));
         this.tag(ModTags.tamingTag(ModEntities.IGNIS.get()))
-                .add(ModItems.crystalFire.get())
-                .add(ModItems.crystalMagic.get());
+                .add(ModItems.CRYSTAL_FIRE.get())
+                .add(ModItems.CRYSTAL_MAGIC.get());
         this.tag(ModTags.tamingTag(ModEntities.SCORPION.get()))
-                .add(ModItems.tailScorpion.get());
+                .add(ModItems.TAIL_SCORPION.get());
         this.tag(ModTags.tamingTag(ModEntities.TROLL.get()))
-                .add(ModItems.giantsNail.get())
-                .add(ModItems.gloveGiant.get())
-                .add(ModItems.hammerPiece.get());
+                .add(ModItems.GIANTS_NAIL.get())
+                .add(ModItems.GLOVE_GIANT.get())
+                .add(ModItems.HAMMER_PIECE.get());
         this.tag(ModTags.tamingTag(ModEntities.FLOWER_LION.get()))
                 .addTag(ModTags.tamingTag(ModEntities.FLOWER_LILY.get()));
         this.tag(ModTags.tamingTag(ModEntities.TOMATO_GHOST.get()))
                 .addTag(tempKeyFabric("vegetables/tomato"));
 
         this.tag(ModTags.tamingTag(ModEntities.AMBROSIA.get()))
-                .add(ModItems.toyherbGiant.get());
+                .add(ModItems.TOYHERB_GIANT.get());
         this.tag(ModTags.tamingTag(ModEntities.THUNDERBOLT.get()))
-                .add(ModItems.carrotGiant.get());
+                .add(ModItems.CARROT_GIANT.get());
         this.tag(ModTags.tamingTag(ModEntities.MARIONETTA.get()))
                 .add(Items.CAKE)
-                .add(ModItems.cheesecake.get())
-                .add(ModItems.chocolateCake.get())
-                .add(ModItems.applePie.get());
+                .add(ModItems.CHEESECAKE.get())
+                .add(ModItems.CHOCOLATE_CAKE.get())
+                .add(ModItems.APPLE_PIE.get());
         this.tag(ModTags.tamingTag(ModEntities.DEAD_TREE.get()))
-                .add(ModItems.greenifierPlus.get());
+                .add(ModItems.GREENIFIER_PLUS.get());
         this.tag(ModTags.tamingTag(ModEntities.CHIMERA.get()))
-                .add(ModItems.royalCurry.get())
-                .add(ModItems.ultimateCurry.get());
+                .add(ModItems.ROYAL_CURRY.get())
+                .add(ModItems.ULTIMATE_CURRY.get());
         this.tag(ModTags.tamingTag(ModEntities.RACCOON.get()))
-                .add(ModItems.udon.get())
-                .add(ModItems.tempuraUdon.get())
-                .add(ModItems.curryUdon.get());
+                .add(ModItems.UDON.get())
+                .add(ModItems.TEMPURA_UDON.get())
+                .add(ModItems.CURRY_UDON.get());
         this.tag(ModTags.tamingTag(ModEntities.SKELEFANG.get()))
                 .add(Items.DRAGON_HEAD);
 
         TagKey<Item> temp = tempKeyForge("fruits/grapes");
         this.tag(ModTags.GRAPES)
-                .add(ModItems.grapes.get())
+                .add(ModItems.GRAPES.get())
                 .addTag(temp);
         this.tag(temp)
-                .add(ModItems.grapes.get());
+                .add(ModItems.GRAPES.get());
 
         //Note: Add items to the matching forge tags and make fabric common tag include the corresponding forge tag
         TagKey<Item> forgeParentTag = tempKeyForge("seeds");
@@ -548,10 +548,10 @@ public class ItemTagGen extends ItemTagsProvider {
         }
 
         this.tag(ModTags.QUICKHARVEST_BYPASS)
-                .add(ModItems.formularA.get(), ModItems.formularB.get(), ModItems.formularC.get(), ModItems.minimizer.get(),
-                        ModItems.giantizer.get(), ModItems.greenifier.get(), ModItems.greenifierPlus.get(), ModItems.wettablePowder.get())
-                .add(ModItems.wateringCanScrap.get(), ModItems.wateringCanIron.get(),
-                        ModItems.wateringCanSilver.get(), ModItems.wateringCanGold.get(), ModItems.wateringCanPlatinum.get());
+                .add(ModItems.formularA.get(), ModItems.formularB.get(), ModItems.formularC.get(), ModItems.MINIMIZER.get(),
+                        ModItems.GIANTIZER.get(), ModItems.GREENIFIER.get(), ModItems.GREENIFIER_PLUS.get(), ModItems.WETTABLE_POWDER.get())
+                .add(ModItems.WATERING_CAN_SCRAP.get(), ModItems.WATERING_CAN_IRON.get(),
+                        ModItems.WATERING_CAN_SILVER.get(), ModItems.WATERING_CAN_GOLD.get(), ModItems.WATERING_CAN_PLATINUM.get());
     }
 
     protected void forgeAndCommonTag(TagKey<Item> forge, TagKey<Item> common, Item... items) {

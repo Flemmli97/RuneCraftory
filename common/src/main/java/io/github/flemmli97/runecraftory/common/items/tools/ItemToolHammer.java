@@ -43,24 +43,22 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 
 public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargeable {
 
-    private static final AABB farmlandTop = new AABB(0.0, 0.9375, 0.0, 1.0, 1.0, 1.0);
     public final EnumToolTier tier;
     private final int[] chargeRunes = new int[]{1, 5, 15, 50, 100};
 
     public ItemToolHammer(EnumToolTier tier, Properties props) {
-        super(ItemTiers.tier, 0, 0, props);
+        super(ItemTiers.TIER, 0, 0, props);
         this.tier = tier;
     }
 
     @Override
     public int getChargeTime(ItemStack stack) {
         if (this.tier == EnumToolTier.PLATINUM)
-            return (int) (DataPackHandler.INSTANCE.weaponPropertiesManager().getPropertiesFor(this.getWeaponType()).chargeTime() * GeneralConfig.platinumChargeTime);
+            return (int) (DataPackHandler.INSTANCE.weaponPropertiesManager().getPropertiesFor(this.getWeaponType()).chargeTime() * GeneralConfig.PLATINUM_CHARGE_TIME);
         return DataPackHandler.INSTANCE.weaponPropertiesManager().getPropertiesFor(this.getWeaponType()).chargeTime();
     }
 

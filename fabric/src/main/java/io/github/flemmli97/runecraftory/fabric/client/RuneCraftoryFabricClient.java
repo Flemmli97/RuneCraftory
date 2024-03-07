@@ -74,7 +74,7 @@ public class RuneCraftoryFabricClient implements ClientModInitializer {
         ItemTooltipCallback.EVENT.register((stack, context, lines) -> ClientCalls.tooltipEvent(stack, lines, context));
         WorldRenderEvents.END.register(ctx -> ClientCalls.worldRender(ctx.matrixStack()));
         ModItems.ITEMS.getEntries().forEach(e -> {
-            ArmorModels.ArmorModelGetter r = ArmorModels.armorGetter.get(e.getID());
+            ArmorModels.ArmorModelGetter r = ArmorModels.ARMOR_GETTER.get(e.getID());
             if (r != null)
                 ArmorRendererRegistryImpl.register(new ArmorRendererImpl(r, new ResourceLocation(e.getID().getNamespace(), "textures/models/armor/" + e.getID().getPath() + ".png")), e.get());
         });

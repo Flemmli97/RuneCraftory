@@ -18,7 +18,7 @@ public class ModPoiTypes {
     public static final PlatformRegistry<PoiType> POI = PlatformUtils.INSTANCE.of(Registry.POINT_OF_INTEREST_TYPE_REGISTRY, RuneCraftory.MODID);
 
     public static final RegistryEntrySupplier<PoiType> CASH_REGISTER = POI.register("cash_register", () -> createPoiType("cash_register",
-            ImmutableSet.copyOf(ModBlocks.cashRegister.get().getStateDefinition().getPossibleStates()), 1, 1));
+            ImmutableSet.copyOf(ModBlocks.CASH_REGISTER.get().getStateDefinition().getPossibleStates()), 1, 1));
 
     private static PoiType createPoiType(String string, Set<BlockState> set, int i, int j) {
         try {

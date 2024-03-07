@@ -13,10 +13,10 @@ import java.util.Map;
 
 public class ItemCraftingLevelManager {
 
-    private static Map<Item, Pair<Integer, EnumSkills>> map;
+    private static Map<Item, Pair<Integer, EnumSkills>> MAP;
 
     public static void reload(MinecraftServer server) {
-        map = new HashMap<>();
+        MAP = new HashMap<>();
         add(server.getRecipeManager().getAllRecipesFor(ModCrafting.FORGE.get()), EnumSkills.FORGING);
         add(server.getRecipeManager().getAllRecipesFor(ModCrafting.CHEMISTRY.get()), EnumSkills.CHEMISTRY);
         add(server.getRecipeManager().getAllRecipesFor(ModCrafting.ARMOR.get()), EnumSkills.CRAFTING);
@@ -25,7 +25,7 @@ public class ItemCraftingLevelManager {
 
     private static void add(Collection<SextupleRecipe> recipes, EnumSkills skills) {
         for (SextupleRecipe recipe : recipes) {
-            map.compute(recipe.getResultItem().getItem(), (item, old) -> {
+            MAP.compute(recipe.getResultItem().getItem(), (item, old) -> {
                 if (old != null && old.getFirst() <= recipe.getCraftingLevel())
                     return old;
                 else
@@ -35,13 +35,13 @@ public class ItemCraftingLevelManager {
     }
 
     public static Pair<Integer, EnumSkills> getLowestLevel(MinecraftServer server, Item item) {
-        if (map == null) {
+        if (MAP == null) {
             reload(server);
         }
-        return map.get(item);
+        return MAP.get(item);
     }
 
     public static void reset() {
-        map = null;
+        MAP = null;
     }
 }

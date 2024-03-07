@@ -25,7 +25,7 @@ public class SkillLevelTrigger extends SimpleCriterionTrigger<SkillLevelTrigger.
             try {
                 skill = EnumSkills.valueOf(s);
             } catch (IllegalArgumentException e) {
-                RuneCraftory.logger.error("Error with skill level trigger. No such skill " + s);
+                RuneCraftory.LOGGER.error("Error with skill level trigger. No such skill " + s);
             }
         }
         return new SkillLevelTrigger.TriggerInstance(player, GsonHelper.getAsInt(json, "level", 1), skill);

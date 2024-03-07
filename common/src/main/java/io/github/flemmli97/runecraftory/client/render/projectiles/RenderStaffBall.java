@@ -15,10 +15,10 @@ import net.minecraft.resources.ResourceLocation;
 
 public class RenderStaffBall extends EntityRenderer<EntityBaseSpellBall> {
 
-    private static final ResourceLocation fire = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/fireball_n.png");
-    private static final ResourceLocation water = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/staff_water.png");
-    private static final ResourceLocation earth = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/staff_earth.png");
-    private static final ResourceLocation love = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/staff_love.png");
+    private static final ResourceLocation FIRE = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/fireball_n.png");
+    private static final ResourceLocation WATER = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/staff_water.png");
+    private static final ResourceLocation EARTH = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/staff_earth.png");
+    private static final ResourceLocation LOVE = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/staff_love.png");
 
     public final float xSize = 1, ySize = 1;
 
@@ -50,10 +50,10 @@ public class RenderStaffBall extends EntityRenderer<EntityBaseSpellBall> {
     @Override
     public ResourceLocation getTextureLocation(EntityBaseSpellBall entity) {
         return switch (entity.getElement()) {
-            case WATER -> water;
-            case LOVE -> love;
-            case EARTH -> earth;
-            default -> fire;
+            case WATER -> WATER;
+            case LOVE -> LOVE;
+            case EARTH -> EARTH;
+            default -> FIRE;
         };
     }
 

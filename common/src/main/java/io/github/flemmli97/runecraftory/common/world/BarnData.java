@@ -33,7 +33,7 @@ public class BarnData {
 
     public static BarnData fromTag(CompoundTag tag) {
         DataResult<GlobalPos> dataResult = GlobalPos.CODEC.parse(new Dynamic<>(NbtOps.INSTANCE, tag.get("Pos")));
-        BarnData data = new BarnData(dataResult.getOrThrow(false, RuneCraftory.logger::error));
+        BarnData data = new BarnData(dataResult.getOrThrow(false, RuneCraftory.LOGGER::error));
         data.load(tag);
         return data;
     }
@@ -116,7 +116,7 @@ public class BarnData {
 
     public CompoundTag save() {
         CompoundTag tag = new CompoundTag();
-        GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, this.pos).resultOrPartial(RuneCraftory.logger::error)
+        GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, this.pos).resultOrPartial(RuneCraftory.LOGGER::error)
                 .ifPresent(t -> tag.put("Pos", t));
         tag.putInt("Size", this.size);
         tag.putBoolean("HasRoof", this.hasRoof);

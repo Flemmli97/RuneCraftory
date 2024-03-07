@@ -5,14 +5,13 @@ import io.github.flemmli97.runecraftory.common.blocks.tile.ChemistryBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class BlockChemistry extends BlockCrafting {
 
-    public static final VoxelShape[] shapesLeft = BlockCrafting.joinedOrDirs(ShapeBuilder.of(0, 0, 1, 16, 12, 16),
+    public static final VoxelShape[] SHAPES_LEFT = BlockCrafting.joinedOrDirs(ShapeBuilder.of(0, 0, 1, 16, 12, 16),
             ShapeBuilder.of(0, 12, 0, 16, 14, 16),
             ShapeBuilder.of(7, 15, 3, 10, 16, 6),
             ShapeBuilder.of(9, 14, 3, 10, 15, 4),
@@ -21,7 +20,7 @@ public class BlockChemistry extends BlockCrafting {
             ShapeBuilder.of(7, 14, 5, 8, 15, 6),
             ShapeBuilder.of(9, 16, 4, 9, 17, 5),
             ShapeBuilder.of(1, 13.1, 4, 2, 14.1, 9));
-    public static final VoxelShape[] shapesRight = BlockCrafting.joinedOrDirs(ShapeBuilder.of(0, 0, 1, 16, 12, 16),
+    public static final VoxelShape[] SHAPES_RIGHT = BlockCrafting.joinedOrDirs(ShapeBuilder.of(0, 0, 1, 16, 12, 16),
             ShapeBuilder.of(0, 12, 0, 16, 14, 16),
             ShapeBuilder.of(10, 13.25, 4, 14, 14.25, 8),
             ShapeBuilder.of(1, 14, 13, 3, 16, 15),
@@ -37,15 +36,15 @@ public class BlockChemistry extends BlockCrafting {
             ShapeBuilder.of(3, 14, 3, 5, 18, 5),
             ShapeBuilder.of(5, 14, 7, 7, 18, 9));
 
-    public BlockChemistry(BlockBehaviour.Properties props) {
+    public BlockChemistry(Properties props) {
         super(EnumCrafting.CHEM, props);
     }
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         if (state.getValue(BlockCrafting.PART) == EnumPart.LEFT)
-            return shapesLeft[state.getValue(BlockCrafting.FACING).get2DDataValue()];
-        return shapesRight[state.getValue(BlockCrafting.FACING).get2DDataValue()];
+            return SHAPES_LEFT[state.getValue(BlockCrafting.FACING).get2DDataValue()];
+        return SHAPES_RIGHT[state.getValue(BlockCrafting.FACING).get2DDataValue()];
     }
 
     @Override

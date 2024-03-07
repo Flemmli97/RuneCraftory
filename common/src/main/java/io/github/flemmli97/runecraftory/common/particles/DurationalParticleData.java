@@ -6,7 +6,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
-import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.FriendlyByteBuf;
 
@@ -39,7 +38,7 @@ public class DurationalParticleData extends ColoredParticleData {
     private final int duration;
 
     public DurationalParticleData(float red, float green, float blue, float alpha, float scale, int duration) {
-        super(ModParticles.durationalParticle.get(), red, green, blue, alpha, scale);
+        super(ModParticles.DURATIONAL_PARTICLE.get(), red, green, blue, alpha, scale);
         this.duration = duration;
     }
 

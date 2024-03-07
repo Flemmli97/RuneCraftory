@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class WalkingTracker {
 
-    private static final Map<ResourceLocation, Float> relevantStats = relevantStatMap();
+    private static final Map<ResourceLocation, Float> RELEVANT_STATS = relevantStatMap();
 
     private final Map<ResourceLocation, Integer> lastCheck = new HashMap<>();
 
@@ -34,7 +34,7 @@ public class WalkingTracker {
     public boolean tickWalkingTracker(ServerPlayer player) {
         ServerStatsCounter counter = player.getStats();
         float mult = 0;
-        for (Map.Entry<ResourceLocation, Float> e : relevantStats.entrySet()) {
+        for (Map.Entry<ResourceLocation, Float> e : RELEVANT_STATS.entrySet()) {
             mult += this.calcMultiplier(e.getKey(), counter, e.getValue());
         }
         if (mult != 0) {

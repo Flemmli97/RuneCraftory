@@ -37,7 +37,7 @@ import java.util.Set;
 
 public class NPCGui<T extends EntityNPCBase> extends Screen {
 
-    private static final ResourceLocation texturepath = new ResourceLocation(RuneCraftory.MODID, "textures/gui/view.png");
+    private static final ResourceLocation TEXTURE_PATH = new ResourceLocation(RuneCraftory.MODID, "textures/gui/view.png");
 
     private final int offSetX = 140;
     private final int offSetY = 50;
@@ -77,7 +77,7 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
 
     @Override
     public void render(PoseStack stack, int mouseX, int mouseY, float partialTick) {
-        RenderSystem.setShaderTexture(0, texturepath);
+        RenderSystem.setShaderTexture(0, TEXTURE_PATH);
         int posX = 25;
         int posY = 25;
         int texY = 150;
@@ -99,7 +99,7 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
 
         ClientHandlers.drawCenteredScaledString(stack, this.font, this.entity.getName(), posX + 75, txtOffY, 1, 0);
         int y = 1;
-        RenderSystem.setShaderTexture(0, texturepath);
+        RenderSystem.setShaderTexture(0, TEXTURE_PATH);
         this.blit(stack, posX + 65, txtOffY + 13 * y, 152, 2, 8, 8);
         this.font.draw(stack, "" + this.entity.friendPoints(this.minecraft.player), posX + 65 + 10, txtOffY + 13 * y, 0);
         y += 1;
@@ -116,13 +116,13 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
             case NONE -> {
             }
             case DATING -> {
-                RenderSystem.setShaderTexture(0, texturepath);
+                RenderSystem.setShaderTexture(0, TEXTURE_PATH);
                 this.blit(stack, txtOffX, txtOffY + 13 * y, 152, 41, 10, 8);
                 this.font.draw(stack, this.family.partner(), txtOffX + 12, txtOffY + 13 * y, 0);
                 y += 1;
             }
             case MARRIED -> {
-                RenderSystem.setShaderTexture(0, texturepath);
+                RenderSystem.setShaderTexture(0, TEXTURE_PATH);
                 this.blit(stack, txtOffX, txtOffY + 13 * y, 152, 54, 10, 8);
                 this.font.draw(stack, this.family.partner(), txtOffX + 12, txtOffY + 13 * y, 0);
                 y += 1;

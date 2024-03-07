@@ -89,7 +89,7 @@ public abstract class SextupleRecipe implements Recipe<PlayerContainerInv> {
         if (this.getType() == ModCrafting.COOKING.get())
             type = EnumCrafting.COOKING;
         ItemStack trueOutput = CraftingUtils.getCraftingOutput(this.recipeOutput.copy(), inv, ing, type);
-        return new RecipeOutput(trueOutput, unlocked ? trueOutput : new ItemStack(ModItems.unknown.get()), ing.getSecond());
+        return new RecipeOutput(trueOutput, unlocked ? trueOutput : new ItemStack(ModItems.UNKNOWN.get()), ing.getSecond());
     }
 
     public static Pair<NonNullList<ItemStack>, NonNullList<ItemStack>> matchingStacks(SextupleRecipe recipe, NonNullList<ItemStack> inv) {

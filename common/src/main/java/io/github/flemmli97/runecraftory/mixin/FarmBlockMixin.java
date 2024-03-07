@@ -19,7 +19,7 @@ public abstract class FarmBlockMixin {
     @Inject(method = "randomTick", at = @At("HEAD"), cancellable = true)
     private void onRandomTick(BlockState state, ServerLevel level, BlockPos pos, Random random, CallbackInfo info) {
         MixinUtils.recheckFarmland(level, state, pos);
-        if (GeneralConfig.disableFarmlandRandomtick)
+        if (GeneralConfig.DISABLE_FARMLAND_RANDOMTICK)
             info.cancel();
     }
 }

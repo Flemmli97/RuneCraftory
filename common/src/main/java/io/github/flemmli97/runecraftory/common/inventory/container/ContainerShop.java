@@ -35,7 +35,7 @@ public class ContainerShop extends AbstractContainerMenu {
     }
 
     public ContainerShop(int windowID, Inventory playerInv, InventoryShop invShop) {
-        super(ModContainer.shopContainer.get(), windowID);
+        super(ModContainer.SHOP_CONTAINER.get(), windowID);
         this.invShop = invShop;
         if (this.invShop == null)
             throw new IllegalStateException("Tried creating a shop container but shop inventory was null");
@@ -54,7 +54,7 @@ public class ContainerShop extends AbstractContainerMenu {
                 });
             }
         }
-        this.addSlot(new Slot(this.invShop, InventoryShop.shopSize, 200, 144) {
+        this.addSlot(new Slot(this.invShop, InventoryShop.SHOP_SIZE, 200, 144) {
             @Override
             public boolean mayPlace(ItemStack stack) {
                 return false;
@@ -86,7 +86,7 @@ public class ContainerShop extends AbstractContainerMenu {
 
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
-        if (index <= InventoryShop.shopSize) {
+        if (index <= InventoryShop.SHOP_SIZE) {
             return ItemStack.EMPTY;
         }
         Slot slot = this.slots.get(index);
@@ -112,12 +112,12 @@ public class ContainerShop extends AbstractContainerMenu {
 
     @Override
     public void clicked(int slot, int mouse, ClickType clickType, Player player) {
-        if (slot > InventoryShop.shopSize || slot < 0) {
+        if (slot > InventoryShop.SHOP_SIZE || slot < 0) {
             super.clicked(slot, mouse, clickType, player);
             return;
         }
-        if (slot == InventoryShop.shopSize) {
-            Slot shopOutput = this.getSlot(InventoryShop.shopSize);
+        if (slot == InventoryShop.SHOP_SIZE) {
+            Slot shopOutput = this.getSlot(InventoryShop.SHOP_SIZE);
             if (shopOutput.hasItem() && player instanceof ServerPlayer serverPlayer) {
                 EnumShopResult res = ItemUtils.buyItem(player, this.invShop.npc, shopOutput.getItem().copy());
                 Component txt = switch (res) {
@@ -135,7 +135,7 @@ public class ContainerShop extends AbstractContainerMenu {
             ItemStack clickedStack = this.getSlot(slot).getItem();
             if (clickedStack.isEmpty())
                 return;
-            Slot shopOutput = this.getSlot(InventoryShop.shopSize);
+            Slot shopOutput = this.getSlot(InventoryShop.SHOP_SIZE);
             int count = clickType == ClickType.QUICK_MOVE ? 10 : 1;
             if (mouse == 1)
                 count = -count;

@@ -19,7 +19,7 @@ public class RenderSpider<T extends EntitySpider> extends RenderMonster<T, Model
     protected void setupRotations(T entity, PoseStack stack, float ageInTicks, float rotationYaw, float partialTicks) {
         super.setupRotations(entity, stack, ageInTicks, rotationYaw, partialTicks);
         if (entity.climbingTicker >= 0) {
-            float f = (entity.climbingTicker + (entity.isClimbing() ? partialTicks : -partialTicks)) / EntitySpider.climbMax;
+            float f = (entity.climbingTicker + (entity.isClimbing() ? partialTicks : -partialTicks)) / EntitySpider.CLIMB_MAX;
             if (f > 1)
                 f = 1;
             stack.mulPose(Vector3f.XP.rotationDegrees(f * 90));

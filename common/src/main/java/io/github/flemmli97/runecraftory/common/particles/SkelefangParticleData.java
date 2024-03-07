@@ -85,7 +85,7 @@ public class SkelefangParticleData implements ParticleOptions {
 
     @Override
     public ParticleType<?> getType() {
-        return ModParticles.skelefangBones.get();
+        return ModParticles.SKELEFANG_BONES.get();
     }
 
     @Override

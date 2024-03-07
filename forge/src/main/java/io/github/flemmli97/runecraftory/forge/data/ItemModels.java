@@ -61,9 +61,9 @@ public class ItemModels extends ItemModelProvider {
         List<RegistryEntrySupplier<Item>> ribbons = ModItems.ribbons();
 
         for (RegistryEntrySupplier<Item> sup : ModItems.ITEMS.getEntries()) {
-            if (sup == ModItems.medicinalHerb || sup == ModItems.itemBlockForge || sup == ModItems.itemBlockAccess
-                    || sup == ModItems.itemBlockChem || sup == ModItems.itemBlockCooking || sup == ModItems.questBoard
-                    || sup == ModItems.orcMaze)
+            if (sup == ModItems.MEDICINAL_HERB || sup == ModItems.ITEM_BLOCK_FORGE || sup == ModItems.ITEM_BLOCK_ACCESS
+                    || sup == ModItems.ITEM_BLOCK_CHEM || sup == ModItems.ITEM_BLOCK_COOKING || sup == ModItems.QUEST_BOARD
+                    || sup == ModItems.ORC_MAZE)
                 continue;
             if (ribbons.contains(sup)) {
                 this.singleTexture(sup.getID().getPath(), this.mcLoc("item/generated"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath()))
@@ -75,22 +75,22 @@ public class ItemModels extends ItemModelProvider {
                 //this.singleTexture(sup.getID().getPath(), this.mcLoc("item/generated"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath()))
                 //        .transforms().transform(ItemTransforms.TransformType.HEAD).rotation(0, 180, 35).translation(4.5f, 5, -6.75f).scale(0.35f);*/
             } else if (sup.get() instanceof ShieldItem) {
-                if (sup == ModItems.umbrella)
+                if (sup == ModItems.UMBRELLA)
                     continue;
                 this.withExistingParent(sup.getID().getPath() + "_blocking", this.modLoc(sup.getID().getPath())).transforms()
                         .transform(ItemTransforms.TransformType.FIRST_PERSON_RIGHT_HAND).rotation(9.25f, 0.37f, 8).translation(-0.5f, -4.25f, 0).end()
                         .transform(ItemTransforms.TransformType.FIRST_PERSON_LEFT_HAND).rotation(9.25f, 0.37f, 8).translation(-0.5f, -4.25f, 0).end()
                         .transform(ItemTransforms.TransformType.THIRD_PERSON_LEFT_HAND).rotation(55, -47.5f, 0).translation(6, -1.25f, -4).end()
                         .transform(ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND).rotation(55, -47.5f, 0).translation(6, -1.25f, -4).end();
-            } else if (sup == ModItems.spawner)
+            } else if (sup == ModItems.SPAWNER)
                 this.withExistingParent(sup.getID().getPath(), "block/spawner");
-            else if (sup == ModItems.debug)
-                this.withExistingParent(sup.getID().getPath(), this.modLoc("item/" + ModItems.unknown.getID().getPath()));
-            else if (sup == ModItems.tame)
+            else if (sup == ModItems.DEBUG)
+                this.withExistingParent(sup.getID().getPath(), this.modLoc("item/" + ModItems.UNKNOWN.getID().getPath()));
+            else if (sup == ModItems.TAME)
                 this.withExistingParent(sup.getID().getPath(), this.mcLoc("item/template_spawn_egg"));
-            else if (sup == ModItems.seaCutter)
+            else if (sup == ModItems.SEA_CUTTER)
                 this.createBigWeaponModel(sup, new ResourceLocation(RuneCraftory.MODID, "item/handheld_long_sword_reverse"));
-            else if (sup == ModItems.cutlass)
+            else if (sup == ModItems.CUTLASS)
                 this.singleTexture(sup.getID().getPath(), new ResourceLocation(RuneCraftory.MODID, "item/handheld_reverse"), "layer0", this.modLoc("item/" + sup.getID().getPath()));
             else if (this.dualItemGenMapping.containsKey(sup)) {
                 this.dualItemGenMapping.get(sup).get();
@@ -127,11 +127,11 @@ public class ItemModels extends ItemModelProvider {
                 this.createBigWeaponModel(sup, this.modLoc("item/handheld_big"));
             else if (sup.get() instanceof TieredItem || sup.get() instanceof StaffItem)
                 this.singleTexture(sup.getID().getPath(), this.mcLoc("item/handheld"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath()));
-            else if (sup.get() instanceof BlockItem blockItem && (sup.getID().getPath().startsWith("ore_") || sup == ModItems.shippingBin
-                    || sup == ModItems.cashRegister || sup == ModItems.monsterBarn))
+            else if (sup.get() instanceof BlockItem blockItem && (sup.getID().getPath().startsWith("ore_") || sup == ModItems.SHIPPING_BIN
+                    || sup == ModItems.CASH_REGISTER || sup == ModItems.MONSTER_BARN))
                 this.withExistingParent(sup.getID().getPath(), new ResourceLocation(blockItem.getRegistryName().getNamespace(), "block/" + blockItem.getBlock().getRegistryName().getPath()));
             else if (sup.get() instanceof ItemProp)
-                this.singleTexture(sup.getID().getPath(), this.mcLoc("item/generated"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + ModItems.unknown.getID().getPath()));
+                this.singleTexture(sup.getID().getPath(), this.mcLoc("item/generated"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + ModItems.UNKNOWN.getID().getPath()));
             else if (sup.get() instanceof ItemGiantCrops)
                 this.singleTexture(sup.getID().getPath(), this.modLoc("item/double_sized_item"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath()));
             else
@@ -149,26 +149,26 @@ public class ItemModels extends ItemModelProvider {
 
     private Map<RegistryEntrySupplier<Item>, ResourceLocation> getDualItemMapping() {
         ImmutableMap.Builder<RegistryEntrySupplier<Item>, ResourceLocation> map = new ImmutableMap.Builder<>();
-        map.put(ModItems.shortDagger, ModItems.broadSword.getID());
-        map.put(ModItems.steelEdge, ModItems.steelSwordPlus.getID());
-        map.put(ModItems.ironEdge, ModItems.steelSword.getID());
-        map.put(ModItems.frostEdge, ModItems.aquaSword.getID());
+        map.put(ModItems.SHORT_DAGGER, ModItems.BROAD_SWORD.getID());
+        map.put(ModItems.STEEL_EDGE, ModItems.STEEL_SWORD_PLUS.getID());
+        map.put(ModItems.IRON_EDGE, ModItems.STEEL_SWORD.getID());
+        map.put(ModItems.FROST_EDGE, ModItems.AQUA_SWORD.getID());
         return map.build();
     }
 
     private Map<RegistryEntrySupplier<Item>, Supplier<ItemModelBuilder>> generateDualItemMapping() {
         ImmutableMap.Builder<RegistryEntrySupplier<Item>, Supplier<ItemModelBuilder>> map = new ImmutableMap.Builder<>();
-        map.put(ModItems.thiefKnife, () -> this.singleTexture(ModItems.thiefKnife.getID().getPath() + "_single", new ResourceLocation(RuneCraftory.MODID, "item/handheld_reverse"),
-                "layer0", this.modLoc("item/" + ModItems.thiefKnife.getID().getPath() + "_single")));
-        map.put(ModItems.windEdge, () -> this.singleTexture(ModItems.windEdge.getID().getPath() + "_single", new ResourceLocation(RuneCraftory.MODID, "item/handheld_reverse"),
-                "layer0", this.modLoc("item/" + ModItems.windEdge.getID().getPath() + "_single")));
+        map.put(ModItems.THIEF_KNIFE, () -> this.singleTexture(ModItems.THIEF_KNIFE.getID().getPath() + "_single", new ResourceLocation(RuneCraftory.MODID, "item/handheld_reverse"),
+                "layer0", this.modLoc("item/" + ModItems.THIEF_KNIFE.getID().getPath() + "_single")));
+        map.put(ModItems.WIND_EDGE, () -> this.singleTexture(ModItems.WIND_EDGE.getID().getPath() + "_single", new ResourceLocation(RuneCraftory.MODID, "item/handheld_reverse"),
+                "layer0", this.modLoc("item/" + ModItems.WIND_EDGE.getID().getPath() + "_single")));
         return map.build();
     }
 
     private Set<RegistryEntrySupplier<Item>> generateSameGloveItemMapping() {
         ImmutableSet.Builder<RegistryEntrySupplier<Item>> builder = new ImmutableSet.Builder<>();
-        builder.add(ModItems.brassKnuckles);
-        builder.add(ModItems.bearClaws);
+        builder.add(ModItems.BRASS_KNUCKLES);
+        builder.add(ModItems.BEAR_CLAWS);
         return builder.build();
     }
 

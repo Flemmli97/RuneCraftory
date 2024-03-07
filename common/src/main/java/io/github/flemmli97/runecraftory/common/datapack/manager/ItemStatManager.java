@@ -39,7 +39,7 @@ public class ItemStatManager extends SimpleJsonResourceReloadListener {
     }
 
     public Optional<ItemStat> get(Item item) {
-        if (GeneralConfig.disableItemStatSystem)
+        if (GeneralConfig.DISABLE_ITEM_STAT_SYSTEM)
             return Optional.empty();
         ResourceLocation res = PlatformUtils.INSTANCE.items().getIDFrom(item);
         ItemStat stat = this.itemstat.get(res);
@@ -84,18 +84,18 @@ public class ItemStatManager extends SimpleJsonResourceReloadListener {
                 if (item.startsWith("#")) {
                     TagKey<Item> tag = PlatformUtils.INSTANCE.itemTag(new ResourceLocation(item.substring(1)));
                     ItemStat stat = ItemStat.CODEC.parse(JsonOps.INSTANCE, el)
-                            .getOrThrow(false, RuneCraftory.logger::error);
+                            .getOrThrow(false, RuneCraftory.LOGGER::error);
                     stat.setID(fres);
                     tagBuilder.put(tag, stat);
                 } else {
                     ResourceLocation res = new ResourceLocation(item);
                     ItemStat stat = ItemStat.CODEC.parse(JsonOps.INSTANCE, el)
-                            .getOrThrow(false, RuneCraftory.logger::error);
+                            .getOrThrow(false, RuneCraftory.LOGGER::error);
                     stat.setID(fres);
                     builder.put(res, stat);
                 }
             } catch (Exception ex) {
-                RuneCraftory.logger.error("Couldnt parse item stat json {} {}", fres, ex);
+                RuneCraftory.LOGGER.error("Couldnt parse item stat json {} {}", fres, ex);
                 ex.fillInStackTrace();
             }
         });

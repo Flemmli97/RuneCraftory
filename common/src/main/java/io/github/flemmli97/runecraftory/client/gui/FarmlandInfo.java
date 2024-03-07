@@ -25,7 +25,7 @@ import net.minecraft.world.phys.HitResult;
 
 public class FarmlandInfo extends GuiComponent {
 
-    private static final ResourceLocation texturepath = new ResourceLocation(RuneCraftory.MODID, "textures/gui/farmland_view.png");
+    private static final ResourceLocation TEXTURE_PATH = new ResourceLocation(RuneCraftory.MODID, "textures/gui/farmland_view.png");
     private final Minecraft mc;
     private final int sizeX = 100, sizeY = 100;
 
@@ -56,12 +56,12 @@ public class FarmlandInfo extends GuiComponent {
             return;
 
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-        RenderSystem.setShaderTexture(0, texturepath);
+        RenderSystem.setShaderTexture(0, TEXTURE_PATH);
         RenderSystem.enableBlend();
         RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         int sY = 60 + (cropBlock ? 40 : 0);
-        int xPos = ClientConfig.farmlandPosition.positionX(this.mc.getWindow().getGuiScaledWidth(), 100, ClientConfig.farmlandX);
-        int yPos = ClientConfig.farmlandPosition.positionY(this.mc.getWindow().getGuiScaledHeight(), sY, ClientConfig.farmlandY);
+        int xPos = ClientConfig.FARMLAND_POSITION.positionX(this.mc.getWindow().getGuiScaledWidth(), 100, ClientConfig.FARMLAND_X);
+        int yPos = ClientConfig.FARMLAND_POSITION.positionY(this.mc.getWindow().getGuiScaledHeight(), sY, ClientConfig.FARMLAND_Y);
         this.blit(stack, xPos, yPos, 0, 0, 100, sY - 5);
         this.blit(stack, xPos, yPos + sY - 5, 0, 100 - 5, 100, 5);
         RenderSystem.defaultBlendFunc();

@@ -2,68 +2,68 @@ package io.github.flemmli97.runecraftory.common.config;
 
 public class GeneralConfig {
 
-    public static DefenceSystem defenceSystem = DefenceSystem.IGNORE_VANILLA_PLAYER;
-    public static boolean vanillaIgnoreDefencePlayer = true;
-    public static boolean gateSpawning = true;
-    public static boolean disableVanillaSpawning = false;
-    public static boolean randomDamage = true;
-    public static RecipeSystem recipeSystem = RecipeSystem.SKILL;
-    public static boolean useRP = true;
-    public static float deathHPPercent = 1;
-    public static float deathRPPercent = 0.5f;
-    public static boolean disableHunger = false;
-    public static boolean modifyWeather = true;
-    public static boolean modifyBed = false;
-    public static boolean healOnWakeUp = true;
-    public static boolean disableFoodSystem = false;
-    public static boolean disableItemStatSystem = false;
-    public static boolean disableCropSystem = false;
-    public static boolean seasonedSnow = true;
-    public static int maxPartySize = 3;
+    public static DefenceSystem DEFENCE_SYSTEM = DefenceSystem.IGNORE_VANILLA_PLAYER;
+    public static boolean VANILLA_IGNORE_DEFENCE_PLAYER = true;
+    public static boolean GATE_SPAWNING = true;
+    public static boolean DISABLE_VANILLA_SPAWNING = false;
+    public static boolean RANDOM_DAMAGE = true;
+    public static RecipeSystem RECIPE_SYSTEM = RecipeSystem.SKILL;
+    public static boolean USE_RP = true;
+    public static float DEATH_HP_PERCENT = 1;
+    public static float DEATH_RP_PERCENT = 0.5f;
+    public static boolean DISABLE_HUNGER = false;
+    public static boolean MODIFY_WEATHER = true;
+    public static boolean MODIFY_BED = false;
+    public static boolean HEAL_ON_WAKE_UP = true;
+    public static boolean DISABLE_FOOD_SYSTEM = false;
+    public static boolean DISABLE_ITEM_STAT_SYSTEM = false;
+    public static boolean DISABLE_CROP_SYSTEM = false;
+    public static boolean SEASONED_SNOW = true;
+    public static int MAX_PARTY_SIZE = 3;
 
-    public static float witherChance = 0.5f;
-    public static float runeyChance = 0.05f;
-    public static boolean disableFarmlandRandomtick = true;
-    public static boolean disableFarmlandTrample = true;
-    public static boolean tickUnloadedFarmland = true;
-    public static boolean unloadedFarmlandCheckWater = true;
+    public static float WITHER_CHANCE = 0.5f;
+    public static float RUNEY_CHANCE = 0.05f;
+    public static boolean DISABLE_FARMLAND_RANDOMTICK = true;
+    public static boolean DISABLE_FARMLAND_TRAMPLE = true;
+    public static boolean TICK_UNLOADED_FARMLAND = true;
+    public static boolean UNLOADED_FARMLAND_CHECK_WATER = true;
 
-    public static boolean seasons = true;
-    public static boolean dynamicTrees = true;
+    public static boolean SEASONS = true;
+    public static boolean DYNAMIC_TREES = true;
 
-    public static int maxLevel = 999;
-    public static int startingHealth = 20;
-    public static int startingRP = 100;
-    public static int startingMoney = 100;
-    public static int startingStr = 0;
-    public static int startingVit = 0;
-    public static int startingIntel = 3;
-    public static float hpPerLevel = 5;
-    public static float rpPerLevel = 2;
-    public static float strPerLevel = 1;
-    public static float vitPerLevel = 1.5f;
-    public static float intPerLevel = 1;
-    public static float shortSwordUltimate = 7;
-    public static float longSwordUltimate = 7;
-    public static float spearUltimate = 7;
-    public static float hammerAxeUltimate = 7;
-    public static float dualBladeUltimate = 7;
-    public static float gloveUltimate = 7;
+    public static int MAX_LEVEL = 999;
+    public static int STARTING_HEALTH = 20;
+    public static int STARTING_RP = 100;
+    public static int STARTING_MONEY = 100;
+    public static int STARTING_STR = 0;
+    public static int STARTING_VIT = 0;
+    public static int STARTING_INTEL = 3;
+    public static float HP_PER_LEVEL = 5;
+    public static float RP_PER_LEVEL = 2;
+    public static float STR_PER_LEVEL = 1;
+    public static float VIT_PER_LEVEL = 1.5f;
+    public static float INT_PER_LEVEL = 1;
+    public static float SHORT_SWORD_ULTIMATE = 7;
+    public static float LONG_SWORD_ULTIMATE = 7;
+    public static float SPEAR_ULTIMATE = 7;
+    public static float HAMMER_AXE_ULTIMATE = 7;
+    public static float DUAL_BLADE_ULTIMATE = 7;
+    public static float GLOVE_ULTIMATE = 7;
 
-    public static float platinumChargeTime = 0.5f;
-    public static int scrapWateringCanWater = 25;
-    public static int ironWateringCanWater = 35;
-    public static int silverWateringCanWater = 100;
-    public static int goldWateringCanWater = 150;
-    public static int platinumWateringCanWater = 250;
+    public static float PLATINUM_CHARGE_TIME = 0.5f;
+    public static int SCRAP_WATERING_CAN_WATER = 25;
+    public static int IRON_WATERING_CAN_WATER = 35;
+    public static int SILVER_WATERING_CAN_WATER = 100;
+    public static int GOLD_WATERING_CAN_WATER = 150;
+    public static int PLATINUM_WATERING_CAN_WATER = 250;
 
-    public static final ServerValue<Boolean> allowMoveOnAttack = new ServerValue.SyncedBoolean(false, "config.move.attack");
+    public static final ServerValue<Boolean> ALLOW_MOVE_ON_ATTACK = new ServerValue.SyncedBoolean(false, "config.move.attack");
 
-    public static float xpMultiplier = 1;
-    public static float skillXpMultiplier = 1;
-    public static float tamingMultiplier = 1;
+    public static float XP_MULTIPLIER = 1;
+    public static float SKILL_XP_MULTIPLIER = 1;
+    public static float TAMING_MULTIPLIER = 1;
 
-    public static boolean debugAttack = false;
+    public static boolean DEBUG_ATTACK = false;
 
     public enum DefenceSystem {
         NO_DEFENCE,

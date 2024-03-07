@@ -39,7 +39,7 @@ public class EntityProbeProvider implements IProbeInfoEntityProvider {
     @Override
     public void addProbeEntityInfo(ProbeMode probeMode, IProbeInfo probeInfo, Player player, Level level, Entity entity, IProbeHitEntityData iProbeHitEntityData) {
         if (entity instanceof IBaseMob mob && (probeMode == ProbeMode.DEBUG
-                || player.getMainHandItem().getItem() == ModItems.debug.get() || player.isCreative()
+                || player.getMainHandItem().getItem() == ModItems.DEBUG.get() || player.isCreative()
                 || (entity instanceof OwnableEntity ownable && player.getUUID().equals(ownable.getOwnerUUID())))) {
             LevelExpPair entityLevel = mob.level();
             probeInfo.progress((int) entityLevel.getXp(), LevelCalc.xpAmountForLevelUp(entityLevel.getLevel()),

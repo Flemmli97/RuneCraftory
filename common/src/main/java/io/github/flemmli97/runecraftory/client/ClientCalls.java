@@ -84,35 +84,35 @@ public class ClientCalls {
         }
         if (Minecraft.getInstance().screen != null)
             return;
-        switch (ClientHandlers.spell1.onPress()) {
+        switch (ClientHandlers.SPELL_1.onPress()) {
             case PRESSING -> Platform.INSTANCE.sendToServer(new C2SSpellKey(0, false));
             case RELEASE -> Platform.INSTANCE.sendToServer(new C2SSpellKey(0, true));
         }
-        switch (ClientHandlers.spell2.onPress()) {
+        switch (ClientHandlers.SPELL_2.onPress()) {
             case PRESSING -> Platform.INSTANCE.sendToServer(new C2SSpellKey(1, false));
             case RELEASE -> Platform.INSTANCE.sendToServer(new C2SSpellKey(1, true));
         }
-        switch (ClientHandlers.spell3.onPress()) {
+        switch (ClientHandlers.SPELL_3.onPress()) {
             case PRESSING -> Platform.INSTANCE.sendToServer(new C2SSpellKey(2, false));
             case RELEASE -> Platform.INSTANCE.sendToServer(new C2SSpellKey(2, true));
         }
-        switch (ClientHandlers.spell4.onPress()) {
+        switch (ClientHandlers.SPELL_4.onPress()) {
             case PRESSING -> Platform.INSTANCE.sendToServer(new C2SSpellKey(3, false));
             case RELEASE -> Platform.INSTANCE.sendToServer(new C2SSpellKey(3, true));
         }
     }
 
     public static void initSkillTab(Screen screen, Consumer<AbstractWidget> cons) {
-        if (ClientConfig.inventoryButton) {
+        if (ClientConfig.INVENTORY_BUTTON) {
             if (screen instanceof InventoryScreen || screen instanceof CreativeModeInventoryScreen) {
                 int x = ((ContainerScreenAccessor) screen).getLeft();
                 int y = ((ContainerScreenAccessor) screen).getTop();
                 if (screen instanceof InventoryScreen) {
-                    x += ClientConfig.inventoryOffsetX;
-                    y += ClientConfig.inventoryOffsetY;
+                    x += ClientConfig.INVENTORY_OFFSET_X;
+                    y += ClientConfig.INVENTORY_OFFSET_Y;
                 } else {
-                    x += ClientConfig.creativeInventoryOffsetX;
-                    y += ClientConfig.creativeInventoryOffsetY;
+                    x += ClientConfig.CREATIVE_INVENTORY_OFFSET_X;
+                    y += ClientConfig.CREATIVE_INVENTORY_OFFSET_Y;
                 }
                 cons.accept(new SkillButton(x, y, screen, b -> Platform.INSTANCE.sendToServer(new C2SOpenInfo(C2SOpenInfo.Type.MAIN))));
             }
@@ -133,12 +133,12 @@ public class ClientCalls {
     }
 
     public static void renderScreenOverlays(PoseStack stack, float partialTicks) {
-        if (ClientHandlers.overlay != null)
-            ClientHandlers.overlay.renderBar(stack);
-        if (ClientHandlers.spellDisplay != null && ClientConfig.inventoryButton)
-            ClientHandlers.spellDisplay.render(stack, partialTicks);
-        if (ClientHandlers.farmDisplay != null)
-            ClientHandlers.farmDisplay.render(stack);
+        if (ClientHandlers.OVERLAY != null)
+            ClientHandlers.OVERLAY.renderBar(stack);
+        if (ClientHandlers.SPELL_DISPLAY != null && ClientConfig.INVENTORY_BUTTON)
+            ClientHandlers.SPELL_DISPLAY.render(stack, partialTicks);
+        if (ClientHandlers.FARM_DISPLAY != null)
+            ClientHandlers.FARM_DISPLAY.render(stack);
     }
 
     public static void tooltipEvent(ItemStack stack, List<Component> tooltip, TooltipFlag flag) {
@@ -195,7 +195,7 @@ public class ClientCalls {
     }
 
     public static void worldRender(PoseStack stack) {
-        if (GeneralConfig.debugAttack) {
+        if (GeneralConfig.DEBUG_ATTACK) {
             AttackAABBRender.INST.render(stack, Minecraft.getInstance().renderBuffers().crumblingBufferSource());
         }
         Minecraft minecraft = Minecraft.getInstance();
@@ -265,27 +265,27 @@ public class ClientCalls {
         Platform.INSTANCE.getEntityData(entity).ifPresent(data -> {
             int mod = entity.tickCount % 20;
             if (mod == 0 && data.isSleeping()) {
-                entity.level.addParticle(ModParticles.sleep.get(), entity.getX(), entity.getY() + entity.getBbHeight() + 0.1, entity.getZ(), 0, 0, 0);
+                entity.level.addParticle(ModParticles.SLEEP.get(), entity.getX(), entity.getY() + entity.getBbHeight() + 0.1, entity.getZ(), 0, 0, 0);
 
             }
             if (mod == 3 && data.isPoisoned()) {
-                entity.level.addParticle(ModParticles.poison.get(), entity.getX(), entity.getY() + entity.getBbHeight() + 0.1, entity.getZ(), 0, 0, 0);
+                entity.level.addParticle(ModParticles.POISON.get(), entity.getX(), entity.getY() + entity.getBbHeight() + 0.1, entity.getZ(), 0, 0, 0);
             }
             if (data.isParalysed()) {
                 boolean bl2 = entity.isInvisible() ? entity.getRandom().nextInt(25) == 0 : entity.getRandom().nextInt(5) == 0;
                 if (bl2) {
-                    entity.level.addParticle(ModParticles.paralysis.get(), entity.getRandomX(0.5), entity.getRandomY(), entity.getRandomZ(0.5), 0.05, 0.05, 0.05);
+                    entity.level.addParticle(ModParticles.PARALYSIS.get(), entity.getRandomX(0.5), entity.getRandomY(), entity.getRandomZ(0.5), 0.05, 0.05, 0.05);
                 }
             }
         });
         if (entity instanceof LocalPlayer player && entity.getVehicle() instanceof BaseMonster && player.input.jumping)
             Platform.INSTANCE.sendToServer(new C2SRideJump());
         if (entity == Minecraft.getInstance().cameraEntity) {
-            ShakeHandler.shakeTick--;
-            if (ClientHandlers.clientCalendar.currentWeather() == EnumWeather.RUNEY) {
+            ShakeHandler.SHAKE_TICK--;
+            if (ClientHandlers.CLIENT_CALENDAR.currentWeather() == EnumWeather.RUNEY) {
                 int tries = Minecraft.getInstance().options.particles != ParticleStatus.ALL ? 1 : 2;
                 for (int i = 0; i < tries; i++)
-                    entity.level.addParticle(ModParticles.runey.get(),
+                    entity.level.addParticle(ModParticles.RUNEY.get(),
                             entity.getX() + (entity.getRandom().nextDouble() - 0.5) * 24,
                             entity.getY() + (entity.getRandom().nextDouble() - 0.5) * 12,
                             entity.getZ() + (entity.getRandom().nextDouble() - 0.5) * 24, 0, 0, 0);
@@ -299,12 +299,12 @@ public class ClientCalls {
 
     public static void renderShaking(Camera camera, float yaw, float pitch, float roll, float partialTicks,
                                      Consumer<Float> setYaw, Consumer<Float> setPitch, Consumer<Float> setRoll) {
-        int t = ShakeHandler.shakeTick;
+        int t = ShakeHandler.SHAKE_TICK;
         if (t <= 0)
             return;
         float pT = t * 2 - partialTicks;
-        setPitch.accept(pitch + Mth.sin(pT * pT) * ShakeHandler.shakeStrength);
-        setRoll.accept(roll + Mth.sin(pT * 2) * ShakeHandler.shakeStrength);
+        setPitch.accept(pitch + Mth.sin(pT * pT) * ShakeHandler.SHAKE_STRENGTH);
+        setRoll.accept(roll + Mth.sin(pT * 2) * ShakeHandler.SHAKE_STRENGTH);
     }
 
     public static boolean onBlockHighlightRender(Level level, PoseStack poseStack, VertexConsumer consumer, Entity entity, double camX, double camY, double camZ, BlockPos pos, BlockState state) {

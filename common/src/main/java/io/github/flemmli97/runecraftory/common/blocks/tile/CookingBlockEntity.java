@@ -8,6 +8,6 @@ import net.minecraft.world.level.block.state.BlockState;
 public class CookingBlockEntity extends CraftingBlockEntity {
 
     public CookingBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(ModBlocks.cookingTile.get(), EnumCrafting.COOKING, blockPos, blockState);
+        super(ModBlocks.COOKING_TILE.get(), EnumCrafting.COOKING, blockPos, blockState);
     }
 }

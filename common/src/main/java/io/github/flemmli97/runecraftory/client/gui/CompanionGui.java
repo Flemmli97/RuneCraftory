@@ -19,8 +19,8 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 
 public abstract class CompanionGui<T extends LivingEntity & IBaseMob> extends Screen {
 
-    protected static final ResourceLocation texturepath = new ResourceLocation(RuneCraftory.MODID, "textures/gui/companion_gui.png");
-    protected static final ResourceLocation bars = new ResourceLocation(RuneCraftory.MODID, "textures/gui/bars.png");
+    protected static final ResourceLocation TEXTURE_PATH = new ResourceLocation(RuneCraftory.MODID, "textures/gui/companion_gui.png");
+    protected static final ResourceLocation BARS = new ResourceLocation(RuneCraftory.MODID, "textures/gui/bars.png");
 
     private final int textureX = 190;
     private final int textureY = 113 + 70;
@@ -56,7 +56,7 @@ public abstract class CompanionGui<T extends LivingEntity & IBaseMob> extends Sc
 
         int healthWidth = Math.min(100, (int) (this.entity.getHealth() / this.entity.getMaxHealth() * 100.0));
         int exp = Math.min(100, (int) (this.entity.level().getXp() / (float) LevelCalc.xpAmountForLevelUp(this.entity.level().getLevel()) * 100.0));
-        RenderSystem.setShaderTexture(0, bars);
+        RenderSystem.setShaderTexture(0, BARS);
         int barX = 81;
         this.blit(stack, this.leftPos + barX, this.topPos + 14, 2, 51, healthWidth, 6);
         this.blit(stack, this.leftPos + barX, this.topPos + 25, 2, 66, exp, 9);
@@ -84,7 +84,7 @@ public abstract class CompanionGui<T extends LivingEntity & IBaseMob> extends Sc
     protected abstract void buttons();
 
     protected ResourceLocation texture() {
-        return texturepath;
+        return TEXTURE_PATH;
     }
 
     protected void drawCenteredScaledString(PoseStack stack, Component txt, float x, float y, float scale, int color) {

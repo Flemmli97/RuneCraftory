@@ -28,7 +28,7 @@ public class PoisonHealSpell extends Spell {
         ServerLevel serverLevel = (ServerLevel) entity.level;
         serverLevel.sendParticles(ParticleTypes.HEART, entity.getX(), entity.getY() + entity.getBbHeight() + 0.5, entity.getZ(), 0, 0, 0.1, 0, 0);
         for (int i = 0; i < 16; i++) {
-            serverLevel.sendParticles(new ColoredParticleData(ModParticles.light.get(), 57 / 255F, 112 / 255F, 179 / 255F, 0.5f, 2f), entity.getRandomX(1.2), entity.getY() + entity.getBbHeight() * 0.5 + entity.getRandom().nextGaussian() * 0.5 * entity.getBbHeight() * 0.3, entity.getRandomZ(1.2), 1, entity.getRandom().nextGaussian() * 0.03, entity.getRandom().nextGaussian() * 0.03, entity.getRandom().nextGaussian() * 0.03, 0);
+            serverLevel.sendParticles(new ColoredParticleData(ModParticles.LIGHT.get(), 57 / 255F, 112 / 255F, 179 / 255F, 0.5f, 2f), entity.getRandomX(1.2), entity.getY() + entity.getBbHeight() * 0.5 + entity.getRandom().nextGaussian() * 0.5 * entity.getBbHeight() * 0.3, entity.getRandomZ(1.2), 1, entity.getRandom().nextGaussian() * 0.03, entity.getRandom().nextGaussian() * 0.03, entity.getRandom().nextGaussian() * 0.03, 0);
         }
     }
 

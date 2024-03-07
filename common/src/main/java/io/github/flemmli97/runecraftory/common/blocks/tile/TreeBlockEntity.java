@@ -29,7 +29,7 @@ public class TreeBlockEntity extends BlockEntity {
     private List<BlockPos> fruits = new ArrayList<>();
 
     public TreeBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(ModBlocks.treeBlockEntity.get(), blockPos, blockState);
+        super(ModBlocks.TREE_BLOCK_ENTITY.get(), blockPos, blockState);
     }
 
     public void updateTreeLogs(Collection<BlockPos> pos) {
@@ -74,11 +74,11 @@ public class TreeBlockEntity extends BlockEntity {
         super.load(tag);
         this.health = tag.getInt("Health");
         ListTag logs = tag.getList("Logs", Tag.TAG_INT_ARRAY);
-        logs.forEach(t -> this.logs.add(BlockPos.CODEC.parse(NbtOps.INSTANCE, t).getOrThrow(false, RuneCraftory.logger::error)));
+        logs.forEach(t -> this.logs.add(BlockPos.CODEC.parse(NbtOps.INSTANCE, t).getOrThrow(false, RuneCraftory.LOGGER::error)));
         ListTag leaves = tag.getList("Leaves", Tag.TAG_INT_ARRAY);
-        leaves.forEach(t -> this.leaves.add(BlockPos.CODEC.parse(NbtOps.INSTANCE, t).getOrThrow(false, RuneCraftory.logger::error)));
+        leaves.forEach(t -> this.leaves.add(BlockPos.CODEC.parse(NbtOps.INSTANCE, t).getOrThrow(false, RuneCraftory.LOGGER::error)));
         ListTag fruits = tag.getList("Fruits", Tag.TAG_INT_ARRAY);
-        fruits.forEach(t -> this.fruits.add(BlockPos.CODEC.parse(NbtOps.INSTANCE, t).getOrThrow(false, RuneCraftory.logger::error)));
+        fruits.forEach(t -> this.fruits.add(BlockPos.CODEC.parse(NbtOps.INSTANCE, t).getOrThrow(false, RuneCraftory.LOGGER::error)));
     }
 
     @Override
@@ -86,13 +86,13 @@ public class TreeBlockEntity extends BlockEntity {
         super.saveAdditional(tag);
         tag.putInt("Health", this.health);
         ListTag logs = new ListTag();
-        this.logs.forEach(p -> logs.add(BlockPos.CODEC.encodeStart(NbtOps.INSTANCE, p).getOrThrow(false, RuneCraftory.logger::error)));
+        this.logs.forEach(p -> logs.add(BlockPos.CODEC.encodeStart(NbtOps.INSTANCE, p).getOrThrow(false, RuneCraftory.LOGGER::error)));
         tag.put("Logs", logs);
         ListTag leaves = new ListTag();
-        this.leaves.forEach(p -> leaves.add(BlockPos.CODEC.encodeStart(NbtOps.INSTANCE, p).getOrThrow(false, RuneCraftory.logger::error)));
+        this.leaves.forEach(p -> leaves.add(BlockPos.CODEC.encodeStart(NbtOps.INSTANCE, p).getOrThrow(false, RuneCraftory.LOGGER::error)));
         tag.put("Leaves", leaves);
         ListTag fruits = new ListTag();
-        this.fruits.forEach(p -> fruits.add(BlockPos.CODEC.encodeStart(NbtOps.INSTANCE, p).getOrThrow(false, RuneCraftory.logger::error)));
+        this.fruits.forEach(p -> fruits.add(BlockPos.CODEC.encodeStart(NbtOps.INSTANCE, p).getOrThrow(false, RuneCraftory.LOGGER::error)));
         tag.put("Fruits", fruits);
     }
 

@@ -115,6 +115,6 @@ public class BlockMonsterBarn extends BaseEntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
-        return level.isClientSide ? null : BaseEntityBlock.createTickerHelper(blockEntityType, ModBlocks.monsterBarnBlockEntity.get(), MonsterBarnBlockEntity::tick);
+        return level.isClientSide ? null : BaseEntityBlock.createTickerHelper(blockEntityType, ModBlocks.MONSTER_BARN_BLOCK_ENTITY.get(), MonsterBarnBlockEntity::tick);
     }
 }

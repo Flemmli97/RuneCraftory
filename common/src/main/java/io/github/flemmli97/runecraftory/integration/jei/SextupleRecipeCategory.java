@@ -108,7 +108,7 @@ public class SextupleRecipeCategory<T extends SextupleRecipe> implements IRecipe
                         .addIngredients(ing);
             }
             builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 65, 15)
-                    .addItemStack(new ItemStack(ModItems.unknown.get()))
+                    .addItemStack(new ItemStack(ModItems.UNKNOWN.get()))
                     .addTooltipCallback((view, tooltip) -> {
                         tooltip.clear();
                         tooltip.add(new TranslatableComponent("runecraftory.recipe_integration.locked"));

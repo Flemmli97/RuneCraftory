@@ -119,7 +119,7 @@ public class CropUtils {
     }
 
     public static void spawnRuney(ServerPlayer player, BlockPos pos) {
-        if (player.getRandom().nextFloat() < GeneralConfig.runeyChance) {
+        if (player.getRandom().nextFloat() < GeneralConfig.RUNEY_CHANCE) {
             Entity entity = player.getRandom().nextFloat() < 0.4 ? ModEntities.RUNEY.get().create(player.getLevel()) : ModEntities.STAT_BONUS.get().create(player.getLevel());
             entity.setPos(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
             player.level.addFreshEntity(entity);

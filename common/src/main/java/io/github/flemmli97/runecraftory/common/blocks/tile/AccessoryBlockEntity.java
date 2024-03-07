@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public class AccessoryBlockEntity extends UpgradingCraftingBlockEntity {
 
     public AccessoryBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(ModBlocks.accessoryTile.get(), EnumCrafting.ARMOR, blockPos, blockState);
+        super(ModBlocks.ACCESSORY_TILE.get(), EnumCrafting.ARMOR, blockPos, blockState);
     }
 
     @Override

@@ -17,24 +17,23 @@ import java.util.function.Supplier;
 
 public class SpecialSextupleRecipe extends SextupleRecipe {
 
-    //Since we dont want to register the recipe so mc doesn't pick it up elsewhere we just have it here as instances
-    public static final Supplier<SpecialSextupleRecipe> scrap = Suppliers.memoize(() -> new SpecialSextupleRecipe(new ResourceLocation(RuneCraftory.MODID, "scrap_metal"), new ItemStack(ModItems.scrap.get())) {
+    public static final Supplier<SpecialSextupleRecipe> SCRAP = Suppliers.memoize(() -> new SpecialSextupleRecipe(new ResourceLocation(RuneCraftory.MODID, "scrap_metal"), new ItemStack(ModItems.SCRAP.get())) {
         @Override
         public RecipeOutput getCraftingOutput(PlayerContainerInv inv) {
             Platform.INSTANCE.getPlayerData(inv.getPlayer()).ifPresent(d -> CraftingUtils.RAND.setSeed(d.getCraftingSeed(inv.getPlayer())));
             if (CraftingUtils.RAND.nextFloat() < 0.9)
                 return super.getCraftingOutput(inv);
-            return new RecipeOutput(new ItemStack(ModItems.scrapPlus.get()), new ItemStack(ModItems.unknown.get()), NonNullList.create());
+            return new RecipeOutput(new ItemStack(ModItems.SCRAP_PLUS.get()), new ItemStack(ModItems.UNKNOWN.get()), NonNullList.create());
         }
     });
-    public static final Supplier<SpecialSextupleRecipe> objectX = Suppliers.memoize(() -> new SpecialSextupleRecipe(new ResourceLocation(RuneCraftory.MODID, "object_x"), new ItemStack(ModItems.objectX.get())));
-    public static final Supplier<SpecialSextupleRecipe> failedDish = Suppliers.memoize(() -> new SpecialSextupleRecipe(new ResourceLocation(RuneCraftory.MODID, "scrap_metal"), new ItemStack(ModItems.failedDish.get())) {
+    public static final Supplier<SpecialSextupleRecipe> OBJECT_X = Suppliers.memoize(() -> new SpecialSextupleRecipe(new ResourceLocation(RuneCraftory.MODID, "object_x"), new ItemStack(ModItems.objectX.get())));
+    public static final Supplier<SpecialSextupleRecipe> FAILED_DISH = Suppliers.memoize(() -> new SpecialSextupleRecipe(new ResourceLocation(RuneCraftory.MODID, "scrap_metal"), new ItemStack(ModItems.FAILED_DISH.get())) {
         @Override
         public RecipeOutput getCraftingOutput(PlayerContainerInv inv) {
             Platform.INSTANCE.getPlayerData(inv.getPlayer()).ifPresent(d -> CraftingUtils.RAND.setSeed(d.getCraftingSeed(inv.getPlayer())));
             if (CraftingUtils.RAND.nextFloat() < 0.9)
                 return super.getCraftingOutput(inv);
-            return new RecipeOutput(new ItemStack(ModItems.disastrousDish.get()), new ItemStack(ModItems.unknown.get()), NonNullList.create());
+            return new RecipeOutput(new ItemStack(ModItems.DISASTROUS_DISH.get()), new ItemStack(ModItems.UNKNOWN.get()), NonNullList.create());
         }
     });
 
@@ -49,7 +48,7 @@ public class SpecialSextupleRecipe extends SextupleRecipe {
 
     @Override
     public RecipeOutput getCraftingOutput(PlayerContainerInv inv) {
-        return new RecipeOutput(this.getResultItem(), new ItemStack(ModItems.unknown.get()), NonNullList.create());
+        return new RecipeOutput(this.getResultItem(), new ItemStack(ModItems.UNKNOWN.get()), NonNullList.create());
     }
 
     @Override

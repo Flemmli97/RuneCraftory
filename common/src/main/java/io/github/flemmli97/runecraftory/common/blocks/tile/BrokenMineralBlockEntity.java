@@ -20,7 +20,7 @@ public class BrokenMineralBlockEntity extends BlockEntity implements IDailyUpdat
     private boolean check;
 
     public BrokenMineralBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(ModBlocks.brokenMineralTile.get(), blockPos, blockState);
+        super(ModBlocks.BROKEN_MINERAL_TILE.get(), blockPos, blockState);
     }
 
     @Override

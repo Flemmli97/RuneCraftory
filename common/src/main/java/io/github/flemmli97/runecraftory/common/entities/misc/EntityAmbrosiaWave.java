@@ -78,7 +78,7 @@ public class EntityAmbrosiaWave extends BaseDamageCloud {
         if (this.level.isClientSide) {
             if (this.livingTicks < this.entityData.get(MAX_TICK) && this.livingTicks % 5 == 1) {
                 for (Vector3f vec : CIRCLE_PARTICLE_MOTION) {
-                    this.level.addParticle(new ColoredParticleData(ModParticles.staticLight.get(), 200 / 255F, 133 / 255F, 36 / 255F, 1, 0.4f), this.getX(), this.getY() + 0.2, this.getZ(), vec.x(), vec.y(), vec.z());
+                    this.level.addParticle(new ColoredParticleData(ModParticles.STATIC_LIGHT.get(), 200 / 255F, 133 / 255F, 36 / 255F, 1, 0.4f), this.getX(), this.getY() + 0.2, this.getZ(), vec.x(), vec.y(), vec.z());
                 }
             }
         } else {

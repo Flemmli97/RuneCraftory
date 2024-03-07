@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 
 public class NPCWanderGoal extends Goal {
 
-    private static final Supplier<Set<PoiType>> shelterPOIS = Suppliers.memoize(() ->
+    private static final Supplier<Set<PoiType>> SHELTER_POIS = Suppliers.memoize(() ->
             ModNPCJobs.allJobs().stream().map(s -> s.poiType.get()).filter(Objects::nonNull).collect(Collectors.toSet()));
 
     protected final EntityNPCBase npc;
@@ -150,7 +150,7 @@ public class NPCWanderGoal extends Goal {
                 Optional<GlobalPos> hide = this.npc.getBrain().getMemory(MemoryModuleType.HIDING_PLACE);
                 if (hide.isEmpty()) {
                     PoiManager poiManager = ((ServerLevel) this.npc.level).getPoiManager();
-                    Set<BlockPos> set = poiManager.findAllClosestFirst(p -> shelterPOIS.get().contains(p), p -> {
+                    Set<BlockPos> set = poiManager.findAllClosestFirst(p -> SHELTER_POIS.get().contains(p), p -> {
                         if (this.npc.getBedPos() != null)
                             return this.npc.blockPosition().distSqr(this.npc.getBedPos().pos()) > p.distSqr(this.npc.blockPosition());
                         return true;

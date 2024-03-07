@@ -21,14 +21,14 @@ import java.util.Map;
 
 public class VillageStructuresModification {
 
-    public static final Map<ResourceLocation, Holder<StructureProcessorList>> map = new HashMap<>();
+    public static final Map<ResourceLocation, Holder<StructureProcessorList>> MAP = new HashMap<>();
 
-    private static boolean init;
+    private static boolean INIT;
 
     public static void modifyVillagePools() {
-        if (init)
+        if (INIT)
             return;
-        init = true;
+        INIT = true;
         Pools.register(new StructureTemplatePool(new ResourceLocation(RuneCraftory.MODID, "npc/bath_house_under"), new ResourceLocation(RuneCraftory.MODID, "npc/bath_house_under"),
                 ImmutableList.of(Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/bath_house_under", ProcessorLists.EMPTY).apply(StructureTemplatePool.Projection.RIGID), 1))));
 
@@ -70,7 +70,7 @@ public class VillageStructuresModification {
     }
 
     private static Holder<StructureProcessorList> get(ResourceLocation shop) {
-        return map.computeIfAbsent(shop, s -> ModStructures.NPC_PROCESSOR_LIST.get(shop));
+        return MAP.computeIfAbsent(shop, s -> ModStructures.NPC_PROCESSOR_LIST.get(shop));
     }
 
     private static void add(StructureTemplatePool pool, List<Pair<StructurePoolElement, Integer>> houses) {

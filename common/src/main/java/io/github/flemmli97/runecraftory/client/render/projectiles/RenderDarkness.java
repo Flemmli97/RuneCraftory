@@ -16,7 +16,7 @@ import net.minecraft.util.Mth;
 
 public class RenderDarkness extends EntityRenderer<EntityDarkness> {
 
-    private static final ResourceLocation tex = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/darkness.png");
+    private static final ResourceLocation TEX = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/darkness.png");
 
     protected final RenderUtils.TextureBuilder textureBuilder = new RenderUtils.TextureBuilder();
 
@@ -47,6 +47,6 @@ public class RenderDarkness extends EntityRenderer<EntityDarkness> {
 
     @Override
     public ResourceLocation getTextureLocation(EntityDarkness entity) {
-        return tex;
+        return TEX;
     }
 }

@@ -10,7 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class RenderFireball extends RenderTexture<EntityFireball> {
 
-    private static final ResourceLocation tex = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/fireball_n.png");
+    private static final ResourceLocation TEX = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/fireball_n.png");
 
     public RenderFireball(EntityRendererProvider.Context ctx) {
         super(ctx, 1, 1, 6, 1);
@@ -18,7 +18,7 @@ public class RenderFireball extends RenderTexture<EntityFireball> {
 
     @Override
     public ResourceLocation getTextureLocation(EntityFireball entity) {
-        return tex;
+        return TEX;
     }
 
     @Override

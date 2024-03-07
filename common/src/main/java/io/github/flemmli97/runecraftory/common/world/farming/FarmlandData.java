@@ -254,7 +254,7 @@ public class FarmlandData {
                             state = Blocks.AIR.defaultBlockState();
                             level.destroyBlock(cropPos, true);
                         } else
-                            state = ModBlocks.witheredGrass.get().defaultBlockState();
+                            state = ModBlocks.WITHERED_GRASS.get().defaultBlockState();
                     } else {
                         state = Blocks.DIRT.defaultBlockState();
                         break;
@@ -275,7 +275,7 @@ public class FarmlandData {
 
     public void tick(ServerLevel level, boolean onLoad) {
         this.lastUpdateDay = WorldUtils.day(level);
-        if (!this.isLoaded && !GeneralConfig.tickUnloadedFarmland)
+        if (!this.isLoaded && !GeneralConfig.TICK_UNLOADED_FARMLAND)
             return;
         //If its not a farm block can do stuff without it being loaded
         if (!this.isFarmBlock) {
@@ -389,7 +389,7 @@ public class FarmlandData {
                     isWet = this.scheduledWatering > 0;
                 this.scheduledWatering = Math.max(0, --this.scheduledWatering);
             } else if (cropState.getBlock() instanceof BlockCrop) {
-                if (level.random.nextFloat() < GeneralConfig.witherChance) {
+                if (level.random.nextFloat() < GeneralConfig.WITHER_CHANCE) {
                     wiltStage++;
                 }
             }

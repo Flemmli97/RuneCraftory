@@ -34,21 +34,21 @@ import java.util.Map;
 
 public class ArmorModels {
 
-    public static final Map<ResourceLocation, ArmorModelGetter> armorGetter = getArmorRenderer();
-    private static final Map<ResourceLocation, FirstPersonArmorRenderer> firstPersonGetter = getFirstPersonHandRenderer();
-    private static final Map<Item, ResourceLocation> armorTex = new HashMap<>();
+    public static final Map<ResourceLocation, ArmorModelGetter> ARMOR_GETTER = getArmorRenderer();
+    private static final Map<ResourceLocation, FirstPersonArmorRenderer> FIRST_PERSON_GETTER = getFirstPersonHandRenderer();
+    private static final Map<Item, ResourceLocation> ARMOR_TEX = new HashMap<>();
 
-    private static final ArmorSimpleItemModel itemModel = new ArmorSimpleItemModel();
-    private static PiyoSandals piyoSandalsModel;
-    private static RingsArmorModel ringsModel;
+    private static final ArmorSimpleItemModel ITEM_MODEL = new ArmorSimpleItemModel();
+    private static PiyoSandals PIYO_SANDALS_MODEL;
+    private static RingsArmorModel RINGS_MODEL;
 
-    private static HumanoidModel<?> inner;
-    private static HumanoidModel<?> outer;
+    private static HumanoidModel<?> INNER;
+    private static HumanoidModel<?> OUTER;
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     private static Map<ResourceLocation, ArmorModelGetter> getArmorRenderer() {
         ImmutableMap.Builder<ResourceLocation, ArmorModelGetter> builder = ImmutableMap.builder();
-        builder.put(ModItems.magicEarrings.getID(), ((entityLiving, itemStack, slot, origin) -> {
+        builder.put(ModItems.MAGIC_EARRINGS.getID(), ((entityLiving, itemStack, slot, origin) -> {
             origin.setAllVisible(false);
             origin.head.visible = true;
             origin.hat.visible = true;
@@ -67,28 +67,28 @@ public class ArmorModels {
         for (RegistryEntrySupplier<Item> sup : bracelets())
             builder.put(sup.getID(), bracelet);
         ArmorModelGetter ribbons = (entityLiving, itemStack, slot, origin) -> {
-            itemModel.setProperties(entityLiving, itemStack, origin.getHead(), ArmorSimpleItemModel.translateToHead);
-            return itemModel;
+            ITEM_MODEL.setProperties(entityLiving, itemStack, origin.getHead(), ArmorSimpleItemModel.TRANSLATE_TO_HEAD);
+            return ITEM_MODEL;
         };
         for (RegistryEntrySupplier<Item> sup : ModItems.ribbons())
             builder.put(sup.getID(), ribbons);
-        builder.put(ModItems.piyoSandals.getID(), ((entityLiving, itemStack, slot, origin) -> {
-            origin.copyPropertiesTo((HumanoidModel) piyoSandalsModel);
-            piyoSandalsModel.setAllVisible(false);
-            piyoSandalsModel.leftLeg.visible = true;
-            piyoSandalsModel.rightLeg.visible = true;
-            return piyoSandalsModel;
+        builder.put(ModItems.PIYO_SANDALS.getID(), ((entityLiving, itemStack, slot, origin) -> {
+            origin.copyPropertiesTo((HumanoidModel) PIYO_SANDALS_MODEL);
+            PIYO_SANDALS_MODEL.setAllVisible(false);
+            PIYO_SANDALS_MODEL.leftLeg.visible = true;
+            PIYO_SANDALS_MODEL.rightLeg.visible = true;
+            return PIYO_SANDALS_MODEL;
         }));
         ArmorModelGetter rings = ((entityLiving, itemStack, slot, origin) -> {
-            origin.copyPropertiesTo((HumanoidModel) ringsModel);
-            ringsModel.setAllVisible(false);
+            origin.copyPropertiesTo((HumanoidModel) RINGS_MODEL);
+            RINGS_MODEL.setAllVisible(false);
             boolean right = entityLiving.getMainArm() == HumanoidArm.RIGHT;
-            ModelPart model = right ? ringsModel.rightArm : ringsModel.leftArm;
+            ModelPart model = right ? RINGS_MODEL.rightArm : RINGS_MODEL.leftArm;
             model.visible = true;
             if (entityLiving instanceof AbstractClientPlayer clientPlayer && clientPlayer.getModelName().equals("slim")) {
                 model.x += right ? 0.5 : -0.5;
             }
-            return ringsModel;
+            return RINGS_MODEL;
         });
         for (RegistryEntrySupplier<Item> sup : rings())
             builder.put(sup.getID(), rings);
@@ -99,9 +99,9 @@ public class ArmorModels {
     private static Map<ResourceLocation, FirstPersonArmorRenderer> getFirstPersonHandRenderer() {
         ImmutableMap.Builder<ResourceLocation, FirstPersonArmorRenderer> builder = ImmutableMap.builder();
         FirstPersonArmorRenderer bracelet = (player, stack, right, origin, poseStack, buffer, light) -> {
-            origin.copyPropertiesTo((HumanoidModel) outer);
-            outer.setAllVisible(false);
-            ModelPart model = right ? outer.rightArm : outer.leftArm;
+            origin.copyPropertiesTo((HumanoidModel) OUTER);
+            OUTER.setAllVisible(false);
+            ModelPart model = right ? OUTER.rightArm : OUTER.leftArm;
             model.visible = true;
             if (player.getModelName().equals("slim"))
                 model.x += right ? 0.5 : -0.5;
@@ -110,9 +110,9 @@ public class ArmorModels {
         for (RegistryEntrySupplier<Item> sup : bracelets())
             builder.put(sup.getID(), bracelet);
         FirstPersonArmorRenderer rings = (player, stack, right, origin, poseStack, buffer, light) -> {
-            origin.copyPropertiesTo((HumanoidModel) ringsModel);
-            ringsModel.setAllVisible(false);
-            ModelPart model = right ? ringsModel.rightArm : ringsModel.leftArm;
+            origin.copyPropertiesTo((HumanoidModel) RINGS_MODEL);
+            RINGS_MODEL.setAllVisible(false);
+            ModelPart model = right ? RINGS_MODEL.rightArm : RINGS_MODEL.leftArm;
             model.visible = true;
             if (player.getModelName().equals("slim"))
                 model.x += right ? 0.5 : -0.5;
@@ -125,7 +125,7 @@ public class ArmorModels {
 
     private static VertexConsumer forArmor(MultiBufferSource buffer, ItemStack stack, Player player) {
         if (stack.getItem() instanceof ItemArmorBase armor)
-            return ItemRenderer.getArmorFoilBuffer(buffer, RenderType.armorCutoutNoCull(armorTex.computeIfAbsent(stack.getItem(), i -> new ResourceLocation(armor.getArmorTexture(stack, player, armor.getSlot(), null)))), false, stack.hasFoil());
+            return ItemRenderer.getArmorFoilBuffer(buffer, RenderType.armorCutoutNoCull(ARMOR_TEX.computeIfAbsent(stack.getItem(), i -> new ResourceLocation(armor.getArmorTexture(stack, player, armor.getSlot(), null)))), false, stack.hasFoil());
         return null;
     }
 
@@ -137,35 +137,35 @@ public class ArmorModels {
 
     public static ArmorModelGetter fromItemStack(ItemStack stack) {
         if (stack.getItem() instanceof ItemArmorBase armor)
-            return armorGetter.get(armor.registryID);
+            return ARMOR_GETTER.get(armor.registryID);
         return null;
     }
 
     public static FirstPersonArmorRenderer getFirstPersonRenderer(ItemStack stack) {
         if (stack.getItem() instanceof ItemArmorBase armor)
-            return firstPersonGetter.get(armor.registryID);
+            return FIRST_PERSON_GETTER.get(armor.registryID);
         return null;
     }
 
     public static HumanoidModel<?> getDefaultArmorModel(EquipmentSlot slot) {
-        return slot == EquipmentSlot.LEGS ? inner : outer;
+        return slot == EquipmentSlot.LEGS ? INNER : OUTER;
     }
 
     public static void initArmorModels(EntityRendererProvider.Context ctx) {
-        inner = new HumanoidModel<>(ctx.bakeLayer(ModelLayers.PLAYER_INNER_ARMOR));
-        outer = new HumanoidModel<>(ctx.bakeLayer(ModelLayers.PLAYER_OUTER_ARMOR));
+        INNER = new HumanoidModel<>(ctx.bakeLayer(ModelLayers.PLAYER_INNER_ARMOR));
+        OUTER = new HumanoidModel<>(ctx.bakeLayer(ModelLayers.PLAYER_OUTER_ARMOR));
 
-        piyoSandalsModel = new PiyoSandals(ctx.bakeLayer(PiyoSandals.LAYER_LOCATION));
-        ringsModel = new RingsArmorModel(ctx.bakeLayer(RingsArmorModel.LAYER_LOCATION));
+        PIYO_SANDALS_MODEL = new PiyoSandals(ctx.bakeLayer(PiyoSandals.LAYER_LOCATION));
+        RINGS_MODEL = new RingsArmorModel(ctx.bakeLayer(RingsArmorModel.LAYER_LOCATION));
     }
 
     private static List<RegistryEntrySupplier<Item>> bracelets() {
-        return List.of(ModItems.cheapBracelet, ModItems.bronzeBracelet, ModItems.silverBracelet,
-                ModItems.goldBracelet, ModItems.platinumBracelet);
+        return List.of(ModItems.CHEAP_BRACELET, ModItems.BRONZE_BRACELET, ModItems.SILVER_BRACELET,
+                ModItems.GOLD_BRACELET, ModItems.PLATINUM_BRACELET);
     }
 
     private static List<RegistryEntrySupplier<Item>> rings() {
-        return List.of(ModItems.silverRing, ModItems.goldRing, ModItems.platinumRing, ModItems.engagementRing);
+        return List.of(ModItems.SILVER_RING, ModItems.GOLD_RING, ModItems.PLATINUM_RING, ModItems.ENGAGEMENT_RING);
     }
 
     public interface ArmorModelGetter {

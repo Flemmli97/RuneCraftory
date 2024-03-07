@@ -7,21 +7,21 @@ import net.minecraft.world.item.ItemStack;
 
 public class RFCreativeTabs {
 
-    public static final CreativeModeTab weaponToolTab = Platform.INSTANCE.tab("weapons_tools", () -> new ItemStack(ModItems.shortDagger.get()));
+    public static final CreativeModeTab WEAPON_TOOL_TAB = Platform.INSTANCE.tab("weapons_tools", () -> new ItemStack(ModItems.SHORT_DAGGER.get()));
 
-    public static final CreativeModeTab equipment = Platform.INSTANCE.tab("equipment", () -> new ItemStack(ModItems.cheapBracelet.get()));
+    public static final CreativeModeTab EQUIPMENT = Platform.INSTANCE.tab("equipment", () -> new ItemStack(ModItems.CHEAP_BRACELET.get()));
 
-    public static final CreativeModeTab upgradeItems = Platform.INSTANCE.tab("upgrade", () -> new ItemStack(ModItems.dragonic.get()));
+    public static final CreativeModeTab UPGRADE_ITEMS = Platform.INSTANCE.tab("upgrade", () -> new ItemStack(ModItems.DRAGONIC.get()));
 
-    public static final CreativeModeTab blocks = Platform.INSTANCE.tab("blocks", () -> new ItemStack(ModItems.mineralIron.get()));
+    public static final CreativeModeTab BLOCKS = Platform.INSTANCE.tab("blocks", () -> new ItemStack(ModItems.MINERAL_IRON.get()));
 
-    public static final CreativeModeTab medicine = Platform.INSTANCE.tab("medicine", () -> new ItemStack(ModItems.recoveryPotion.get()));
+    public static final CreativeModeTab MEDICINE = Platform.INSTANCE.tab("medicine", () -> new ItemStack(ModItems.RECOVERY_POTION.get()));
 
-    public static final CreativeModeTab cast = Platform.INSTANCE.tab("cast", () -> new ItemStack(ModItems.teleport.get()));
+    public static final CreativeModeTab CAST = Platform.INSTANCE.tab("cast", () -> new ItemStack(ModItems.TELEPORT.get()));
 
-    public static final CreativeModeTab food = Platform.INSTANCE.tab("food", () -> new ItemStack(ModItems.onigiri.get()));
+    public static final CreativeModeTab FOOD = Platform.INSTANCE.tab("food", () -> new ItemStack(ModItems.ONIGIRI.get()));
 
-    public static final CreativeModeTab crops = Platform.INSTANCE.tab("crops", () -> new ItemStack(ModItems.turnipSeeds.get()));
+    public static final CreativeModeTab CROPS = Platform.INSTANCE.tab("crops", () -> new ItemStack(ModItems.TURNIP_SEEDS.get()));
 
-    public static final CreativeModeTab monsters = Platform.INSTANCE.tab("monsters", () -> new ItemStack(ModItems.icon0.get()));
+    public static final CreativeModeTab MONSTERS = Platform.INSTANCE.tab("monsters", () -> new ItemStack(ModItems.icon0.get()));
 }

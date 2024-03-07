@@ -15,13 +15,13 @@ public abstract class BiomeColorsMixin {
 
     @Inject(method = "getAverageGrassColor", at = @At("RETURN"), cancellable = true)
     private static void grass(BlockAndTintGetter level, BlockPos blockPos, CallbackInfoReturnable<Integer> info) {
-        if (ClientConfig.grassColor)
+        if (ClientConfig.GRASS_COLOR)
             info.setReturnValue(ClientMixinUtils.modifyColoredTintGrass(level, info.getReturnValue()));
     }
 
     @Inject(method = "getAverageFoliageColor", at = @At("RETURN"), cancellable = true)
     private static void foliage(BlockAndTintGetter level, BlockPos blockPos, CallbackInfoReturnable<Integer> info) {
-        if (ClientConfig.foliageColor)
+        if (ClientConfig.FOLIAGE_COLOR)
             info.setReturnValue(ClientMixinUtils.modifyColoredTint(level, info.getReturnValue()));
     }
 }

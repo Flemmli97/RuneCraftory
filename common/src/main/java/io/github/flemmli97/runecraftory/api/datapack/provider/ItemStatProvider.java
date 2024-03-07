@@ -48,7 +48,7 @@ public abstract class ItemStatProvider implements DataProvider {
             Path path = this.gen.getOutputFolder().resolve("data/" + res.getNamespace() + "/" + ItemStatManager.DIRECTORY + "/" + res.getPath() + ".json");
             try {
                 JsonElement obj = ItemStat.CODEC.encodeStart(JsonOps.INSTANCE, builder.build())
-                        .getOrThrow(false, RuneCraftory.logger::error);
+                        .getOrThrow(false, RuneCraftory.LOGGER::error);
                 if (obj.isJsonObject())
                     this.item.get(res).accept(obj.getAsJsonObject());
                 DataProvider.save(GsonInstances.ATTRIBUTE_SPELLS, cache, obj, path);

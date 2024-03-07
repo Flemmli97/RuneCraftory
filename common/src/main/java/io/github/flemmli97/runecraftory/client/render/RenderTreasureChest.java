@@ -16,9 +16,9 @@ import net.minecraft.util.Mth;
 
 public class RenderTreasureChest extends EntityRenderer<EntityTreasureChest> {
 
-    protected static final ResourceLocation common = new ResourceLocation(RuneCraftory.MODID, "textures/entity/chest.png");
-    protected static final ResourceLocation rare = new ResourceLocation(RuneCraftory.MODID, "textures/entity/rare_chest.png");
-    protected static final ResourceLocation quest = new ResourceLocation(RuneCraftory.MODID, "textures/entity/quest_chest.png");
+    protected static final ResourceLocation COMMON = new ResourceLocation(RuneCraftory.MODID, "textures/entity/chest.png");
+    protected static final ResourceLocation RARE = new ResourceLocation(RuneCraftory.MODID, "textures/entity/rare_chest.png");
+    protected static final ResourceLocation QUEST = new ResourceLocation(RuneCraftory.MODID, "textures/entity/quest_chest.png");
 
     protected final EntityModel<EntityTreasureChest> model;
 
@@ -48,10 +48,10 @@ public class RenderTreasureChest extends EntityRenderer<EntityTreasureChest> {
     public ResourceLocation getTextureLocation(EntityTreasureChest entity) {
         int tier = entity.tier();
         if (tier == 2 || tier == 3)
-            return rare;
+            return RARE;
         if (tier == 4)
-            return quest;
-        return common;
+            return QUEST;
+        return COMMON;
     }
 
     public void translate(EntityTreasureChest entity, PoseStack stack, float pitch, float yaw, float partialTicks) {

@@ -44,7 +44,7 @@ public class EntityExplosionSpell extends BaseProjectile {
     public void tick() {
         super.tick();
         if (this.level.isClientSide) {
-            this.level.addParticle(new ColoredParticleData(ModParticles.light.get(), 246 / 255F, 52 / 255F, 52 / 255F, 0.5f, 3f), this.getX(), this.getY(), this.getZ(), 0, 0, 0);
+            this.level.addParticle(new ColoredParticleData(ModParticles.LIGHT.get(), 246 / 255F, 52 / 255F, 52 / 255F, 0.5f, 3f), this.getX(), this.getY(), this.getZ(), 0, 0, 0);
         }
     }
 

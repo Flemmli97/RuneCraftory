@@ -14,8 +14,8 @@ import java.util.function.Supplier;
 
 public class QuestBoardItem extends BlockItem implements MultiBlockItem {
 
-    private final Supplier<List<Pair<BlockPos, BlockState>>> states = Suppliers.memoize(() -> BlockQuestboard.getPosMap(BlockPos.ZERO, ModBlocks.questBoard.get().defaultBlockState())
-            .stream().map(p -> Pair.of(p.getSecond(), ModBlocks.questBoard.get().defaultBlockState().setValue(BlockQuestboard.PART, p.getFirst())))
+    private final Supplier<List<Pair<BlockPos, BlockState>>> states = Suppliers.memoize(() -> BlockQuestboard.getPosMap(BlockPos.ZERO, ModBlocks.QUEST_BOARD.get().defaultBlockState())
+            .stream().map(p -> Pair.of(p.getSecond(), ModBlocks.QUEST_BOARD.get().defaultBlockState().setValue(BlockQuestboard.PART, p.getFirst())))
             .toList());
 
     public QuestBoardItem(Block block, Properties properties) {

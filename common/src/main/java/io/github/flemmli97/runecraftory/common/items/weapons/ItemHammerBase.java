@@ -34,7 +34,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public class ItemHammerBase extends PickaxeItem implements IItemUsable, IChargeable, IAOEWeapon, BigWeapon {
 
     public ItemHammerBase(Item.Properties props) {
-        super(ItemTiers.tier, 0, 0, props);
+        super(ItemTiers.TIER, 0, 0, props);
     }
 
     @Override

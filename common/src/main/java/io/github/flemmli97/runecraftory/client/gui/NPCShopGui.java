@@ -6,7 +6,6 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.client.gui.widgets.PageButton;
 import io.github.flemmli97.runecraftory.client.gui.widgets.SpeechBubble;
-import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.inventory.container.ContainerShop;
 import io.github.flemmli97.runecraftory.common.network.C2SNPCInteraction;
 import io.github.flemmli97.runecraftory.common.network.C2SShopButton;
@@ -22,7 +21,7 @@ import net.minecraft.world.inventory.Slot;
 
 public class NPCShopGui extends AbstractContainerScreen<ContainerShop> {
 
-    protected static final ResourceLocation texturepath = new ResourceLocation(RuneCraftory.MODID, "textures/gui/shop.png");
+    protected static final ResourceLocation TEXTURE_PATH = new ResourceLocation(RuneCraftory.MODID, "textures/gui/shop.png");
 
     private final Inventory inventory;
 
@@ -85,7 +84,7 @@ public class NPCShopGui extends AbstractContainerScreen<ContainerShop> {
     @Override
     protected void renderBg(PoseStack stack, float partialTick, int mouseX, int mouseY) {
         InventoryScreen.renderEntityInInventory(this.leftPos + 200, this.topPos + 150, 50, this.leftPos + 200 - mouseX, this.topPos + 65 - mouseY, this.menu.getShopOwner());
-        RenderSystem.setShaderTexture(0, texturepath);
+        RenderSystem.setShaderTexture(0, TEXTURE_PATH);
         this.blit(stack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 
         Platform.INSTANCE.getPlayerData(this.minecraft.player).ifPresent(data -> ClientHandlers.drawRightAlignedScaledString(stack, this.font, new TextComponent("" + data.getMoney()), this.leftPos + 237, this.topPos + 197, 1, 0));

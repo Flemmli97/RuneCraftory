@@ -98,7 +98,7 @@ public class GloveAttack extends AttackAction {
     @Override
     public void onStart(LivingEntity entity, WeaponHandler handler) {
         if (handler.getChainCount() == 5 && entity instanceof ServerPlayer player)
-            Platform.INSTANCE.getPlayerData(player).ifPresent(d -> LevelCalc.useRP(player, d, GeneralConfig.gloveUltimate, true, false, false));
+            Platform.INSTANCE.getPlayerData(player).ifPresent(d -> LevelCalc.useRP(player, d, GeneralConfig.GLOVE_ULTIMATE, true, false, false));
     }
 
     @Override
@@ -113,7 +113,7 @@ public class GloveAttack extends AttackAction {
 
     @Override
     public boolean disableMovement(AnimatedAction current) {
-        return !GeneralConfig.allowMoveOnAttack.get() && super.disableMovement(current);
+        return !GeneralConfig.ALLOW_MOVE_ON_ATTACK.get() && super.disableMovement(current);
     }
 
     @Override

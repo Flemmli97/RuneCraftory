@@ -98,7 +98,7 @@ public class RuneCraftoryFabric implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        RuneCraftory.simpleQuests = FabricLoader.getInstance().isModLoaded("simplequests");
+        RuneCraftory.SIMPLE_QUESTS = FabricLoader.getInstance().isModLoaded("simplequests");
 
         this.initContent();
         ConfigHolder.CONFIGS.get(GeneralConfigSpec.SPEC.getLeft())
@@ -213,7 +213,7 @@ public class RuneCraftoryFabric implements ModInitializer {
         //PlayerCalls
         EntityTrackingEvents.START_TRACKING.register((trackedEntity, player) -> EntityCalls.trackEntity(player, trackedEntity));
         AOEAttackEvent.ATTACK.register(EntityCalls::playerAoeAttack);
-        EntitySleepEvents.ALLOW_SLEEP_TIME.register(((player, sleepingPos, vanillaResult) -> GeneralConfig.modifyBed ? InteractionResult.CONSUME : InteractionResult.PASS));
+        EntitySleepEvents.ALLOW_SLEEP_TIME.register(((player, sleepingPos, vanillaResult) -> GeneralConfig.MODIFY_BED ? InteractionResult.CONSUME : InteractionResult.PASS));
         ServerPlayerEvents.COPY_FROM.register((old, newPlayer, keepEverything) -> EntityCalls.clone(old, newPlayer, !keepEverything));
         ServerPlayConnectionEvents.JOIN.register(((handler, sender, server) -> EntityCalls.joinPlayer(handler.getPlayer())));
         AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {

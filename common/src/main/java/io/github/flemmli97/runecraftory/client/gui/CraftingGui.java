@@ -27,11 +27,11 @@ import java.util.List;
 
 public class CraftingGui extends AbstractContainerScreen<ContainerCrafting> {
 
-    private static final ResourceLocation bars = new ResourceLocation(RuneCraftory.MODID, "textures/gui/bars.png");
-    private static final ResourceLocation forging = new ResourceLocation(RuneCraftory.MODID, "textures/gui/forging.png");
-    private static final ResourceLocation crafting = new ResourceLocation(RuneCraftory.MODID, "textures/gui/crafting.png");
-    private static final ResourceLocation cooking = new ResourceLocation(RuneCraftory.MODID, "textures/gui/cooking.png");
-    private static final ResourceLocation chemistry = new ResourceLocation(RuneCraftory.MODID, "textures/gui/chemistry.png");
+    private static final ResourceLocation BARS = new ResourceLocation(RuneCraftory.MODID, "textures/gui/bars.png");
+    private static final ResourceLocation FORGING = new ResourceLocation(RuneCraftory.MODID, "textures/gui/forging.png");
+    private static final ResourceLocation CRAFTING = new ResourceLocation(RuneCraftory.MODID, "textures/gui/crafting.png");
+    private static final ResourceLocation COOKING = new ResourceLocation(RuneCraftory.MODID, "textures/gui/cooking.png");
+    private static final ResourceLocation CHEMISTRY = new ResourceLocation(RuneCraftory.MODID, "textures/gui/chemistry.png");
 
     private Rect scrollBar = new Rect(195, 12, 8, 142);
     private Rect scrollArea = new Rect(172, 12, 31, 142);
@@ -68,12 +68,12 @@ public class CraftingGui extends AbstractContainerScreen<ContainerCrafting> {
 
     @Override
     protected void renderBg(PoseStack stack, float partialTicks, int mouseX, int mouseY) {
-        ResourceLocation texture = forging;
+        ResourceLocation texture = FORGING;
         texture = switch (this.menu.craftingType()) {
-            case ARMOR -> crafting;
-            case COOKING -> cooking;
-            case FORGE -> forging;
-            case CHEM -> chemistry;
+            case ARMOR -> CRAFTING;
+            case COOKING -> COOKING;
+            case FORGE -> FORGING;
+            case CHEM -> CHEMISTRY;
         };
         RenderSystem.setShaderTexture(0, texture);
         this.blit(stack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
@@ -93,7 +93,7 @@ public class CraftingGui extends AbstractContainerScreen<ContainerCrafting> {
             int yPos = this.topPos - 12;
             stack.translate(xPos, yPos, 0);
             stack.scale(scale, scale, scale);
-            RenderSystem.setShaderTexture(0, bars);
+            RenderSystem.setShaderTexture(0, BARS);
             this.blit(stack, 0, 0, 131, 74, 96, 29);
             int runePointsWidth = Math.min(76, (int) (data.getRunePoints() / (float) data.getMaxRunePoints() * 76.0f));
             this.blit(stack, 17, 3, 18, 40, runePointsWidth, 9);
@@ -119,7 +119,7 @@ public class CraftingGui extends AbstractContainerScreen<ContainerCrafting> {
         for (CraftingGui.RecipeSelectButton button : this.selectButtons) {
             button.visible = button.index < this.menu.getMatchingRecipesClient().size();
         }
-        RenderSystem.setShaderTexture(0, bars);
+        RenderSystem.setShaderTexture(0, BARS);
         this.renderScroller(stack, this.scrollBar.x + 1, this.scrollBar.y + 1);
     }
 

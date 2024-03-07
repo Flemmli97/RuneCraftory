@@ -9,7 +9,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 
 public class ItemTiers {
 
-    public static final Tier tier = new Tier() {
+    public static final Tier TIER = new Tier() {
         @Override
         public int getUses() {
             return 0;
@@ -41,7 +41,7 @@ public class ItemTiers {
         }
     };
 
-    public static final ArmorMaterial armor = new ArmorMaterial() {
+    public static final ArmorMaterial ARMOR = new ArmorMaterial() {
         @Override
         public int getDurabilityForSlot(EquipmentSlot slotIn) {
             return 0;

@@ -260,7 +260,7 @@ public class FarmlandHandler extends SavedData {
     }
 
     public boolean hasWater(ServerLevel level, BlockPos pos) {
-        if (!GeneralConfig.unloadedFarmlandCheckWater || (!GeneralConfig.disableFarmlandRandomtick && FarmlandHandler.isNearWater(level, pos)))
+        if (!GeneralConfig.UNLOADED_FARMLAND_CHECK_WATER || (!GeneralConfig.DISABLE_FARMLAND_RANDOMTICK && FarmlandHandler.isNearWater(level, pos)))
             return true;
         Map<UUID, IrrigationPOI> map = this.irrigationPOI.get(level.dimension());
         if (map != null) {
@@ -440,7 +440,7 @@ public class FarmlandHandler extends SavedData {
         public static final String ID = "MonsterIrrigation";
 
         public MonsterCropIrrigation(CompoundTag tag) {
-            this(tag.getLong("Start"), BlockPos.CODEC.parse(NbtOps.INSTANCE, tag.getCompound("Pos")).getOrThrow(false, RuneCraftory.logger::error));
+            this(tag.getLong("Start"), BlockPos.CODEC.parse(NbtOps.INSTANCE, tag.getCompound("Pos")).getOrThrow(false, RuneCraftory.LOGGER::error));
         }
 
         @Override
@@ -450,7 +450,7 @@ public class FarmlandHandler extends SavedData {
 
         @Override
         public boolean isInside(BlockPos pos) {
-            int radius = MobConfig.farmRadius;
+            int radius = MobConfig.FARM_RADIUS;
             int dX = this.pos.getX() - pos.getX();
             int dY = this.pos.getY() - pos.getY();
             int dZ = this.pos.getZ() - pos.getZ();
@@ -462,7 +462,7 @@ public class FarmlandHandler extends SavedData {
             CompoundTag tag = new CompoundTag();
             tag.putString("ID", ID);
             tag.putLong("Start", this.getStartTime());
-            tag.put("Pos", BlockPos.CODEC.encodeStart(NbtOps.INSTANCE, this.pos).getOrThrow(false, RuneCraftory.logger::error));
+            tag.put("Pos", BlockPos.CODEC.encodeStart(NbtOps.INSTANCE, this.pos).getOrThrow(false, RuneCraftory.LOGGER::error));
             return tag;
         }
     }

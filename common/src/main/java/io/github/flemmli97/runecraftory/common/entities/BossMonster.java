@@ -106,7 +106,7 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
         if (this.level.isClientSide && this.deathTime > 1) {
             if (this.deathTime < 40) {
                 if (this.deathTime % 10 == 0)
-                    this.level.addParticle(new ColoredParticleData(ModParticles.blink.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
+                    this.level.addParticle(new ColoredParticleData(ModParticles.BLINK.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
                             this.getX() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth()),
                             this.getY() + this.random.nextDouble() * (this.getBbHeight()),
                             this.getZ() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth()),
@@ -115,7 +115,7 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
                             this.random.nextGaussian() * 0.02D);
             } else if (this.deathTime < 80) {
                 if (this.deathTime % 2 == 0)
-                    this.level.addParticle(new ColoredParticleData(ModParticles.blink.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
+                    this.level.addParticle(new ColoredParticleData(ModParticles.BLINK.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
                             this.getX() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth() + 2),
                             this.getY() + this.random.nextDouble() * (this.getBbHeight() + 1),
                             this.getZ() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth() + 2),
@@ -125,7 +125,7 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
             } else {
                 int amount = (this.deathTime - 80) / 10;
                 for (int i = 0; i < amount; i++) {
-                    this.level.addParticle(new ColoredParticleData(ModParticles.blink.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
+                    this.level.addParticle(new ColoredParticleData(ModParticles.BLINK.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
                             this.getX() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth() + 3),
                             this.getY() + this.random.nextDouble() * (this.getBbHeight() + 1),
                             this.getZ() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth() + 3),

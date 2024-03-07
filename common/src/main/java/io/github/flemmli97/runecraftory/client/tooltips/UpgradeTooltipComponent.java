@@ -18,9 +18,9 @@ import java.util.function.Supplier;
 
 public class UpgradeTooltipComponent implements ClientTooltipComponent {
 
-    private static final Supplier<ItemStack> MAGNIFYING_GLASS = Suppliers.memoize(() -> new ItemStack(ModItems.glass.get()));
-    private static final Supplier<ItemStack> SCRAP_PLUS = Suppliers.memoize(() -> new ItemStack(ModItems.scrapPlus.get()));
-    private static final Supplier<ItemStack> QUESTION = Suppliers.memoize(() -> new ItemStack(ModItems.unknown.get()));
+    private static final Supplier<ItemStack> MAGNIFYING_GLASS = Suppliers.memoize(() -> new ItemStack(ModItems.GLASS.get()));
+    private static final Supplier<ItemStack> SCRAP_PLUS = Suppliers.memoize(() -> new ItemStack(ModItems.SCRAP_PLUS.get()));
+    private static final Supplier<ItemStack> QUESTION = Suppliers.memoize(() -> new ItemStack(ModItems.UNKNOWN.get()));
 
     private final List<ItemStack> stacks = new ArrayList<>();
 
@@ -35,7 +35,7 @@ public class UpgradeTooltipComponent implements ClientTooltipComponent {
             this.stacks.add(SCRAP_PLUS.get());
         if (ItemNBT.isInvis(stack))
             this.stacks.add(QUESTION.get());
-        if (ItemNBT.canBeUsedAsMagnifyingGlass(stack) && stack.getItem() != ModItems.glass.get())
+        if (ItemNBT.canBeUsedAsMagnifyingGlass(stack) && stack.getItem() != ModItems.GLASS.get())
             this.stacks.add(MAGNIFYING_GLASS.get());
         if (!this.stacks.isEmpty())
             this.stacks.add(ItemStack.EMPTY);
@@ -45,7 +45,7 @@ public class UpgradeTooltipComponent implements ClientTooltipComponent {
     }
 
     public static boolean shouldAdd(ItemStack stack) {
-        return (ItemNBT.canBeUsedAsMagnifyingGlass(stack) && stack.getItem() != ModItems.glass.get()) || (ItemNBT.isWeapon(stack) && ItemNBT.getElement(stack) != EnumElement.NONE) || ItemNBT.doesFixedOneDamage(stack)
+        return (ItemNBT.canBeUsedAsMagnifyingGlass(stack) && stack.getItem() != ModItems.GLASS.get()) || (ItemNBT.isWeapon(stack) && ItemNBT.getElement(stack) != EnumElement.NONE) || ItemNBT.doesFixedOneDamage(stack)
                 || ItemNBT.isInvis(stack) || !ItemNBT.getOriginItem(stack).isEmpty();
     }
 

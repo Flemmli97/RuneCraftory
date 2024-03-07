@@ -56,15 +56,15 @@ public class QuestGen extends QuestProvider {
                         List.of(id("shop_owner/male_1"), id("shop_owner/female_1")), SHIP_TURNIP)
                         .setRepeatDelay(-1)
                         .withCategory(this.main)
-                        .withIcon(new ItemStack(ModItems.turnipSeeds.get())),
+                        .withIcon(new ItemStack(ModItems.TURNIP_SEEDS.get())),
                 List.of(of(m -> m.put("talk", new QuestTasks.NPCTalk(null))),
-                        of(m -> m.put("shipping", new QuestTasks.ShippingEntry(ItemPredicate.Builder.item().of(ModItems.turnip.get()).build(), 1)))));
+                        of(m -> m.put("shipping", new QuestTasks.ShippingEntry(ItemPredicate.Builder.item().of(ModItems.TURNIP.get()).build(), 1)))));
 
         this.createNPCQuest(new NPCQuest.Builder(MINING, getTask(MINING),
                         List.of(id("smith/male_1"), id("smith/female_1")), MINING)
                         .setRepeatDelay(-1)
                         .withCategory(this.main)
-                        .withIcon(new ItemStack(ModItems.hammerScrap.get())),
+                        .withIcon(new ItemStack(ModItems.HAMMER_SCRAP.get())),
                 List.of(of(m -> m.put("talk", new QuestTasks.NPCTalk(null))),
                         of(m -> m.put("mine", new QuestEntryImpls.BlockInteractEntry(ItemPredicate.ANY, BlockPredicate.Builder.block().of(ModTags.ORES).build(),
                                 10, false, false, true, "", "", "", EntityPredicate.ANY)))));

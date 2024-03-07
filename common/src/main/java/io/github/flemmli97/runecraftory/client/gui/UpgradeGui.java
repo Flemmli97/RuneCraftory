@@ -20,8 +20,8 @@ import net.minecraft.world.entity.player.Inventory;
 
 public class UpgradeGui extends AbstractContainerScreen<ContainerUpgrade> {
 
-    private static final ResourceLocation forging = new ResourceLocation(RuneCraftory.MODID, "textures/gui/forging_upgrade.png");
-    private static final ResourceLocation crafting = new ResourceLocation(RuneCraftory.MODID, "textures/gui/crafting_upgrade.png");
+    private static final ResourceLocation FORGING = new ResourceLocation(RuneCraftory.MODID, "textures/gui/forging_upgrade.png");
+    private static final ResourceLocation CRAFTING = new ResourceLocation(RuneCraftory.MODID, "textures/gui/crafting_upgrade.png");
 
     private final EnumSkills skill;
 
@@ -44,9 +44,9 @@ public class UpgradeGui extends AbstractContainerScreen<ContainerUpgrade> {
 
     @Override
     protected void renderBg(PoseStack stack, float partialTicks, int mouseX, int mouseY) {
-        ResourceLocation texture = forging;
+        ResourceLocation texture = FORGING;
         if (this.menu.craftingType() == EnumCrafting.ARMOR)
-            texture = crafting;
+            texture = CRAFTING;
         RenderSystem.setShaderTexture(0, texture);
         this.blit(stack, this.leftPos, this.topPos, 0, 0, 176, 166);
         PlayerData data = Platform.INSTANCE.getPlayerData(this.minecraft.player).orElse(null);

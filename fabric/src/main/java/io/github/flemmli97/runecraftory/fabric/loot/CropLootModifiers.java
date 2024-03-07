@@ -50,7 +50,7 @@ public class CropLootModifiers extends SimpleJsonResourceReloadListener implemen
                     builder.put(fres, CropLootModifier.SERIALIZER.read(fres, obj));
                 }
             } catch (JsonSyntaxException | IllegalStateException ex) {
-                RuneCraftory.logger.error("Couldnt parse crop modifier from json {}", fres);
+                RuneCraftory.LOGGER.error("Couldnt parse crop modifier from json {}", fres);
                 ex.fillInStackTrace();
             }
         });

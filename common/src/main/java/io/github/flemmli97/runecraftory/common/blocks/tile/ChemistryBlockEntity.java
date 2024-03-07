@@ -8,6 +8,6 @@ import net.minecraft.world.level.block.state.BlockState;
 public class ChemistryBlockEntity extends CraftingBlockEntity {
 
     public ChemistryBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(ModBlocks.chemistryTile.get(), EnumCrafting.CHEM, blockPos, blockState);
+        super(ModBlocks.CHEMISTRY_TILE.get(), EnumCrafting.CHEM, blockPos, blockState);
     }
 }

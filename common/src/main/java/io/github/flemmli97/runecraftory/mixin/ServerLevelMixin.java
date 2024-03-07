@@ -31,10 +31,10 @@ public abstract class ServerLevelMixin {
 
     @ModifyArg(method = "tickChunk", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Block;handlePrecipitation(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/biome/Biome$Precipitation;)V"))
     private Biome.Precipitation withSeason(BlockState state, Level level, BlockPos pos, Biome.Precipitation old) {
-        if (GeneralConfig.seasonedSnow && WorldUtils.coldEnoughForSnow(level, pos, this.runecraftoryBiomeCache) && this.runecraftoryBiomeCache.getPrecipitation() != Biome.Precipitation.NONE) {
+        if (GeneralConfig.SEASONED_SNOW && WorldUtils.coldEnoughForSnow(level, pos, this.runecraftoryBiomeCache) && this.runecraftoryBiomeCache.getPrecipitation() != Biome.Precipitation.NONE) {
             BlockPos above = pos.above();
             if (WorldUtils.canPlaceSnowAt(level, above)) {
-                level.setBlockAndUpdate(above, ModBlocks.snow.get().defaultBlockState());
+                level.setBlockAndUpdate(above, ModBlocks.SNOW.get().defaultBlockState());
             }
             if (old == Biome.Precipitation.RAIN)
                 return Biome.Precipitation.SNOW;

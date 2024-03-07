@@ -23,7 +23,7 @@ public class ItemArmorBase extends ArmorItem implements ExtendedItem, DynamicArm
     private final boolean useItemTexture;
 
     public ItemArmorBase(EquipmentSlot slot, Properties properties, ResourceLocation registryID, boolean useItemTexture) {
-        super(ItemTiers.armor, slot, properties);
+        super(ItemTiers.ARMOR, slot, properties);
         this.registryID = registryID;
         this.useItemTexture = useItemTexture;
     }

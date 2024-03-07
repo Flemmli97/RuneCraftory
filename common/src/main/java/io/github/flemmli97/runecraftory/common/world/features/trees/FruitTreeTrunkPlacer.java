@@ -61,8 +61,8 @@ public class FruitTreeTrunkPlacer extends TrunkPlacer {
     public List<FoliagePlacer.FoliageAttachment> placeTrunk(LevelSimulatedReader level, BiConsumer<BlockPos, BlockState> blockSetter, Random random, int freeTreeHeight, BlockPos pos, TreeConfiguration config) {
         BlockPos soil = pos.below();
         Map<BlockPos, BlockState> placements = new HashMap<>();
-        if (level.isStateAtPosition(soil, s -> !s.is(ModBlocks.treeSoil.get()))) {
-            placements.put(soil, ModBlocks.treeSoil.get().defaultBlockState());
+        if (level.isStateAtPosition(soil, s -> !s.is(ModBlocks.TREE_SOIL.get()))) {
+            placements.put(soil, ModBlocks.TREE_SOIL.get().defaultBlockState());
         }
         List<FoliagePlacer.FoliageAttachment> foliagePos = new ArrayList<>();
         for (int i = 1; i <= freeTreeHeight; i++) {

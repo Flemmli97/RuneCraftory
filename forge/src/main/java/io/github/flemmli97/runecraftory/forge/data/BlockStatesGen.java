@@ -38,9 +38,9 @@ public class BlockStatesGen extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        ModBlocks.herbs.forEach(reg -> {
+        ModBlocks.HERBS.forEach(reg -> {
             Block block = reg.get();
-            if (block == ModBlocks.medicinalHerb.get())
+            if (block == ModBlocks.MEDICINAL_HERB.get())
                 this.simpleBlock(block, this.models().withExistingParent(block.getRegistryName().toString(), new ResourceLocation(RuneCraftory.MODID + ":item/medicinal_herb")));
             else if (block instanceof BlockHerb) {
                 ResourceLocation texture = this.itemTexture(block);
@@ -48,9 +48,9 @@ public class BlockStatesGen extends BlockStateProvider {
                         .texture("particle", texture));
             }
         });
-        for (RegistryEntrySupplier<Block> reg : ModBlocks.flowers) {
+        for (RegistryEntrySupplier<Block> reg : ModBlocks.FLOWERS) {
             Block block = reg.get();
-            if (reg == ModBlocks.swordCrop || reg == ModBlocks.shieldCrop) {
+            if (reg == ModBlocks.SWORD_CROP || reg == ModBlocks.SHIELD_CROP) {
                 this.getVariantBuilder(block).forAllStatesExcept(state -> {
                     int stage = state.getValue(BlockCrop.AGE);
                     ResourceLocation text;
@@ -72,22 +72,22 @@ public class BlockStatesGen extends BlockStateProvider {
             else if (block instanceof BlockCrop)
                 this.getVariantBuilder(block).forAllStatesExcept(state -> {
                     int stage = state.getValue(BlockCrop.AGE);
-                    boolean defaultFlowerState = stage == 0 && reg != ModBlocks.emeryFlower && reg != ModBlocks.ironleaf
-                            && reg != ModBlocks.noelGrass && reg != ModBlocks.lampGrass;
+                    boolean defaultFlowerState = stage == 0 && reg != ModBlocks.EMERY_FLOWER && reg != ModBlocks.IRONLEAF
+                            && reg != ModBlocks.NOEL_GRASS && reg != ModBlocks.LAMP_GRASS;
                     String name = defaultFlowerState ? "runecraftory:flower_stage_0" : block.getRegistryName().toString() + "_" + stage;
                     ResourceLocation texture = defaultFlowerState ? this.blockTexture(RuneCraftory.MODID, "flower_stage_0")
                             : stage == 3 ? this.itemCropTexture(block) : this.blockTexture(RuneCraftory.MODID, block.getRegistryName().getPath() + "_" + stage);
                     ResourceLocation parent = CROSS_TINTED;
                     if (stage == 4) {
                         parent = FLOWER_BIG;
-                        RegistryEntrySupplier<Block> giant = ModBlocks.giantCropMap.get(reg);
+                        RegistryEntrySupplier<Block> giant = ModBlocks.GIANT_CROP_MAP.get(reg);
                         if (giant != null && giant.get() instanceof BlockGiantCrop giantCrop)
                             texture = this.itemTexture(giantCrop.getCrop());
                     }
                     return ConfiguredModel.builder().modelFile(this.models().singleTexture(name, parent, "cross", texture)).build();
                 }, BlockCrop.WILTED);
         }
-        ModBlocks.crops.forEach(reg -> {
+        ModBlocks.CROPS.forEach(reg -> {
             Block block = reg.get();
             if (block instanceof BlockGiantCrop)
                 this.getVariantBuilder(block).forAllStatesExcept(state -> {
@@ -118,19 +118,19 @@ public class BlockStatesGen extends BlockStateProvider {
                     ResourceLocation parent = CROP_TINTED;
                     if (stage == 4) {
                         parent = CROP_BIG;
-                        RegistryEntrySupplier<Block> giant = ModBlocks.giantCropMap.get(reg);
+                        RegistryEntrySupplier<Block> giant = ModBlocks.GIANT_CROP_MAP.get(reg);
                         if (giant != null)
                             texture = this.blockTexture(giant.get());
                     }
                     return ConfiguredModel.builder().modelFile(this.models().singleTexture(name, parent, "crop", texture)).build();
                 }, BlockCrop.WILTED);
         });
-        ModBlocks.mineralMap.values().forEach(reg -> {
+        ModBlocks.MINERAL_MAP.values().forEach(reg -> {
             Block block = reg.get();
             this.getVariantBuilder(block)
                     .forAllStatesExcept(state -> {
                                 BlockModelBuilder file = this.models().withExistingParent(block.getRegistryName().toString(), "runecraftory:block/ore").texture("ore", this.blockTexture(block));
-                                if (block == ModBlocks.mineralDragonic.get())
+                                if (block == ModBlocks.MINERAL_DRAGONIC.get())
                                     file = file.texture("0", new ResourceLocation("block/end_stone"));
                                 return ConfiguredModel.builder()
                                         .modelFile(file)
@@ -140,12 +140,12 @@ public class BlockStatesGen extends BlockStateProvider {
                             BlockStateProperties.WATERLOGGED
                     );
         });
-        ModBlocks.brokenMineralMap.values().forEach(reg -> {
+        ModBlocks.BROKEN_MINERAL_MAP.values().forEach(reg -> {
             Block block = reg.get();
             this.getVariantBuilder(block)
                     .forAllStatesExcept(state -> {
                                 BlockModelBuilder file = this.models().withExistingParent(block.getRegistryName().toString(), "runecraftory:block/ore_broken").texture("ore", this.mineralTexture(block));
-                                if (block == ModBlocks.brokenMineralDragonic.get())
+                                if (block == ModBlocks.BROKEN_MINERAL_DRAGONIC.get())
                                     file = file.texture("0", new ResourceLocation("block/end_stone"));
                                 return ConfiguredModel.builder()
                                         .modelFile(file)
@@ -155,87 +155,87 @@ public class BlockStatesGen extends BlockStateProvider {
                             BlockStateProperties.WATERLOGGED
                     );
         });
-        this.craftingModel(ModBlocks.forge.get());
-        this.craftingModel(ModBlocks.accessory.get());
-        this.craftingModel(ModBlocks.cooking.get());
-        this.craftingModel(ModBlocks.chemistry.get());
+        this.craftingModel(ModBlocks.FORGE.get());
+        this.craftingModel(ModBlocks.ACCESSORY.get());
+        this.craftingModel(ModBlocks.COOKING.get());
+        this.craftingModel(ModBlocks.CHEMISTRY.get());
         //this.simpleBlock(ModBlocks.board.get());
-        this.simpleBlock(ModBlocks.bossSpawner.get(), this.models().getExistingFile(new ResourceLocation("block/" + Blocks.SPAWNER.getRegistryName().getPath())));
-        this.simpleBlock(ModBlocks.singleSpawnBlock.get(), this.models().getExistingFile(new ResourceLocation("block/" + Blocks.SPAWNER.getRegistryName().getPath())));
-        this.simpleBlock(ModBlocks.monsterBarn.get(), this.models().getExistingFile(new ResourceLocation(RuneCraftory.MODID, "block/" + ModBlocks.monsterBarn.getID().getPath())));
+        this.simpleBlock(ModBlocks.BOSS_SPAWNER.get(), this.models().getExistingFile(new ResourceLocation("block/" + Blocks.SPAWNER.getRegistryName().getPath())));
+        this.simpleBlock(ModBlocks.SINGLE_SPAWN_BLOCK.get(), this.models().getExistingFile(new ResourceLocation("block/" + Blocks.SPAWNER.getRegistryName().getPath())));
+        this.simpleBlock(ModBlocks.MONSTER_BARN.get(), this.models().getExistingFile(new ResourceLocation(RuneCraftory.MODID, "block/" + ModBlocks.MONSTER_BARN.getID().getPath())));
 
-        this.getVariantBuilder(ModBlocks.snow.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(
+        this.getVariantBuilder(ModBlocks.SNOW.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(
                         this.models().getExistingFile(state.getValue(SnowLayerBlock.LAYERS) == 8 ? new ResourceLocation("block/snow_block") : new ResourceLocation("block/snow_height" + state.getValue(SnowLayerBlock.LAYERS) * 2)))
                 .build());
 
-        this.getVariantBuilder(ModBlocks.shipping.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(
-                        this.models().orientableVertical(ModBlocks.shipping.getID().getPath(), this.modLoc("block/shipping_bin"), this.modLoc("block/shipping_bin_top")))
+        this.getVariantBuilder(ModBlocks.SHIPPING.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(
+                        this.models().orientableVertical(ModBlocks.SHIPPING.getID().getPath(), this.modLoc("block/shipping_bin"), this.modLoc("block/shipping_bin_top")))
                 .rotationY(((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot()) % 360)
                 .build());
 
-        this.getVariantBuilder(ModBlocks.cashRegister.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(
-                        this.models().getExistingFile(new ResourceLocation(RuneCraftory.MODID, "block/" + ModBlocks.cashRegister.getID().getPath())))
+        this.getVariantBuilder(ModBlocks.CASH_REGISTER.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(
+                        this.models().getExistingFile(new ResourceLocation(RuneCraftory.MODID, "block/" + ModBlocks.CASH_REGISTER.getID().getPath())))
                 .rotationY(((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot()) % 360)
                 .build());
 
-        this.getVariantBuilder(ModBlocks.questBoard.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(
-                        this.models().getExistingFile(new ResourceLocation(RuneCraftory.MODID, "block/" + ModBlocks.questBoard.getID().getPath() + "_" + state.getValue(BlockQuestboard.PART).getSerializedName())))
+        this.getVariantBuilder(ModBlocks.QUEST_BOARD.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(
+                        this.models().getExistingFile(new ResourceLocation(RuneCraftory.MODID, "block/" + ModBlocks.QUEST_BOARD.getID().getPath() + "_" + state.getValue(BlockQuestboard.PART).getSerializedName())))
                 .rotationY(((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot()) % 360)
                 .build());
 
-        this.simpleBlock(ModBlocks.treeSoil.get(), this.models().getExistingFile(new ResourceLocation("block/" + Blocks.DIRT.getRegistryName().getPath())));
+        this.simpleBlock(ModBlocks.TREE_SOIL.get(), this.models().getExistingFile(new ResourceLocation("block/" + Blocks.DIRT.getRegistryName().getPath())));
 
-        this.axisBlock(ModBlocks.appleTree.get(), this.models().getExistingFile(new ResourceLocation("block/" + Blocks.OAK_LOG.getRegistryName().getPath())),
+        this.axisBlock(ModBlocks.APPLE_TREE.get(), this.models().getExistingFile(new ResourceLocation("block/" + Blocks.OAK_LOG.getRegistryName().getPath())),
                 this.models().getExistingFile(new ResourceLocation("block/" + Blocks.OAK_LOG.getRegistryName().getPath() + "_horizontal")));
-        this.simpleBlock(ModBlocks.appleSapling.get(), this.models().cross(ModBlocks.appleSapling.getID().toString(), this.itemTexture(ModItems.appleSapling.get())));
-        this.axisBlock(ModBlocks.appleWood.get(), this.models().getExistingFile(new ResourceLocation("block/" + Blocks.OAK_LOG.getRegistryName().getPath())),
+        this.simpleBlock(ModBlocks.APPLE_SAPLING.get(), this.models().cross(ModBlocks.APPLE_SAPLING.getID().toString(), this.itemTexture(ModItems.APPLE_SAPLING.get())));
+        this.axisBlock(ModBlocks.APPLE_WOOD.get(), this.models().getExistingFile(new ResourceLocation("block/" + Blocks.OAK_LOG.getRegistryName().getPath())),
                 this.models().getExistingFile(new ResourceLocation("block/" + Blocks.OAK_LOG.getRegistryName().getPath() + "_horizontal")));
-        this.simpleBlock(ModBlocks.appleLeaves.get(), this.models().getExistingFile(new ResourceLocation("block/" + Blocks.OAK_LEAVES.getRegistryName().getPath())));
-        this.getVariantBuilder(ModBlocks.apple.get())
+        this.simpleBlock(ModBlocks.APPLE_LEAVES.get(), this.models().getExistingFile(new ResourceLocation("block/" + Blocks.OAK_LEAVES.getRegistryName().getPath())));
+        this.getVariantBuilder(ModBlocks.APPLE.get())
                 .partialState().with(BlockFruitTreeLeaf.HAS_FRUIT, true)
-                .modelForState().modelFile(this.models().withExistingParent(ModBlocks.apple.getID().toString(), this.modLoc("fruit_leaves"))
+                .modelForState().modelFile(this.models().withExistingParent(ModBlocks.APPLE.getID().toString(), this.modLoc("fruit_leaves"))
                         .texture("base", this.blockTexture(Blocks.OAK_LEAVES))
                         .texture("particle", this.blockTexture(Blocks.OAK_LEAVES))
-                        .texture("overlay", this.blockTexture(ModBlocks.apple.get())))
+                        .texture("overlay", this.blockTexture(ModBlocks.APPLE.get())))
                 .addModel()
                 .partialState().with(BlockFruitTreeLeaf.HAS_FRUIT, false)
-                .modelForState().modelFile(this.models().withExistingParent(ModBlocks.apple.getID().toString() + "_fruitless", "block/leaves")
+                .modelForState().modelFile(this.models().withExistingParent(ModBlocks.APPLE.getID().toString() + "_fruitless", "block/leaves")
                         .texture("all", this.blockTexture(Blocks.OAK_LEAVES)))
                 .addModel();
 
-        this.axisBlock(ModBlocks.orangeTree.get(), this.models().getExistingFile(new ResourceLocation("block/" + Blocks.OAK_LOG.getRegistryName().getPath())),
+        this.axisBlock(ModBlocks.ORANGE_TREE.get(), this.models().getExistingFile(new ResourceLocation("block/" + Blocks.OAK_LOG.getRegistryName().getPath())),
                 this.models().getExistingFile(new ResourceLocation("block/" + Blocks.OAK_LOG.getRegistryName().getPath() + "_horizontal")));
-        this.simpleBlock(ModBlocks.orangeSapling.get(), this.models().cross(ModBlocks.orangeSapling.getID().toString(), this.itemTexture(ModItems.orangeSapling.get())));
-        this.axisBlock(ModBlocks.orangeWood.get(), this.models().getExistingFile(new ResourceLocation("block/" + Blocks.OAK_LOG.getRegistryName().getPath())),
+        this.simpleBlock(ModBlocks.ORANGE_SAPLING.get(), this.models().cross(ModBlocks.ORANGE_SAPLING.getID().toString(), this.itemTexture(ModItems.ORANGE_SAPLING.get())));
+        this.axisBlock(ModBlocks.ORANGE_WOOD.get(), this.models().getExistingFile(new ResourceLocation("block/" + Blocks.OAK_LOG.getRegistryName().getPath())),
                 this.models().getExistingFile(new ResourceLocation("block/" + Blocks.OAK_LOG.getRegistryName().getPath() + "_horizontal")));
-        this.simpleBlock(ModBlocks.orangeLeaves.get(), this.models().getExistingFile(new ResourceLocation("block/" + Blocks.OAK_LEAVES.getRegistryName().getPath())));
-        this.getVariantBuilder(ModBlocks.orange.get())
+        this.simpleBlock(ModBlocks.ORANGE_LEAVES.get(), this.models().getExistingFile(new ResourceLocation("block/" + Blocks.OAK_LEAVES.getRegistryName().getPath())));
+        this.getVariantBuilder(ModBlocks.ORANGE.get())
                 .partialState().with(BlockFruitTreeLeaf.HAS_FRUIT, true)
-                .modelForState().modelFile(this.models().withExistingParent(ModBlocks.orange.getID().toString(), this.modLoc("fruit_leaves"))
+                .modelForState().modelFile(this.models().withExistingParent(ModBlocks.ORANGE.getID().toString(), this.modLoc("fruit_leaves"))
                         .texture("base", this.blockTexture(Blocks.OAK_LEAVES))
                         .texture("particle", this.blockTexture(Blocks.OAK_LEAVES))
-                        .texture("overlay", this.blockTexture(ModBlocks.orange.get())))
+                        .texture("overlay", this.blockTexture(ModBlocks.ORANGE.get())))
                 .addModel()
                 .partialState().with(BlockFruitTreeLeaf.HAS_FRUIT, false)
-                .modelForState().modelFile(this.models().withExistingParent(ModBlocks.orange.getID().toString() + "_fruitless", "block/leaves")
+                .modelForState().modelFile(this.models().withExistingParent(ModBlocks.ORANGE.getID().toString() + "_fruitless", "block/leaves")
                         .texture("all", this.blockTexture(Blocks.OAK_LEAVES)))
                 .addModel();
 
-        this.axisBlock(ModBlocks.grapeTree.get(), this.models().getExistingFile(new ResourceLocation("block/" + Blocks.SPRUCE_LOG.getRegistryName().getPath())),
+        this.axisBlock(ModBlocks.GRAPE_TREE.get(), this.models().getExistingFile(new ResourceLocation("block/" + Blocks.SPRUCE_LOG.getRegistryName().getPath())),
                 this.models().getExistingFile(new ResourceLocation("block/" + Blocks.SPRUCE_LOG.getRegistryName().getPath() + "_horizontal")));
-        this.simpleBlock(ModBlocks.grapeSapling.get(), this.models().cross(ModBlocks.grapeSapling.getID().toString(), this.itemTexture(ModItems.grapeSapling.get())));
-        this.axisBlock(ModBlocks.grapeWood.get(), this.models().getExistingFile(new ResourceLocation("block/" + Blocks.SPRUCE_LOG.getRegistryName().getPath())),
+        this.simpleBlock(ModBlocks.GRAPE_SAPLING.get(), this.models().cross(ModBlocks.GRAPE_SAPLING.getID().toString(), this.itemTexture(ModItems.GRAPE_SAPLING.get())));
+        this.axisBlock(ModBlocks.GRAPE_WOOD.get(), this.models().getExistingFile(new ResourceLocation("block/" + Blocks.SPRUCE_LOG.getRegistryName().getPath())),
                 this.models().getExistingFile(new ResourceLocation("block/" + Blocks.SPRUCE_LOG.getRegistryName().getPath() + "_horizontal")));
-        this.simpleBlock(ModBlocks.grapeLeaves.get(), this.models().getExistingFile(new ResourceLocation("block/" + Blocks.SPRUCE_LEAVES.getRegistryName().getPath())));
-        this.getVariantBuilder(ModBlocks.grape.get())
+        this.simpleBlock(ModBlocks.GRAPE_LEAVES.get(), this.models().getExistingFile(new ResourceLocation("block/" + Blocks.SPRUCE_LEAVES.getRegistryName().getPath())));
+        this.getVariantBuilder(ModBlocks.GRAPE.get())
                 .partialState().with(BlockFruitTreeLeaf.HAS_FRUIT, true)
-                .modelForState().modelFile(this.models().withExistingParent(ModBlocks.grape.getID().toString(), this.modLoc("fruit_leaves"))
+                .modelForState().modelFile(this.models().withExistingParent(ModBlocks.GRAPE.getID().toString(), this.modLoc("fruit_leaves"))
                         .texture("base", this.blockTexture(Blocks.SPRUCE_LEAVES))
                         .texture("particle", this.blockTexture(Blocks.SPRUCE_LEAVES))
-                        .texture("overlay", this.blockTexture(ModBlocks.grape.get())))
+                        .texture("overlay", this.blockTexture(ModBlocks.GRAPE.get())))
                 .addModel()
                 .partialState().with(BlockFruitTreeLeaf.HAS_FRUIT, false)
-                .modelForState().modelFile(this.models().withExistingParent(ModBlocks.grape.getID().toString() + "_fruitless", "block/leaves")
+                .modelForState().modelFile(this.models().withExistingParent(ModBlocks.GRAPE.getID().toString() + "_fruitless", "block/leaves")
                         .texture("all", this.blockTexture(Blocks.SPRUCE_LEAVES)))
                 .addModel();
     }

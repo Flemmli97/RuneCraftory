@@ -72,7 +72,7 @@ public class JadePlugin implements IWailaPlugin {
         registration.registerEntityDataProvider(new IServerDataProvider<>() {
             @Override
             public void appendServerData(CompoundTag compoundTag, ServerPlayer player, Level level, Entity entity, boolean b) {
-                if (entity instanceof IBaseMob mob && (player.getMainHandItem().getItem() == ModItems.debug.get() || player.isCreative()
+                if (entity instanceof IBaseMob mob && (player.getMainHandItem().getItem() == ModItems.DEBUG.get() || player.isCreative()
                         || (entity instanceof OwnableEntity ownable && player.getUUID().equals(ownable.getOwnerUUID())))) {
                     LevelExpPair entityLevel = mob.level();
                     compoundTag.putFloat("RunecraftoryLevelPerc", entityLevel.getXp() / LevelCalc.xpAmountForLevelUp(entityLevel.getLevel()));
@@ -92,7 +92,7 @@ public class JadePlugin implements IWailaPlugin {
                             BarnData barn = monster.getAssignedBarn();
                             if (barn != null) {
                                 compoundTag.putBoolean("HasBarn", true);
-                                compoundTag.put("Barn", BlockPos.CODEC.encodeStart(NbtOps.INSTANCE, barn.pos.pos()).getOrThrow(false, RuneCraftory.logger::error));
+                                compoundTag.put("Barn", BlockPos.CODEC.encodeStart(NbtOps.INSTANCE, barn.pos.pos()).getOrThrow(false, RuneCraftory.LOGGER::error));
                             } else {
                                 compoundTag.putBoolean("HasBarn", false);
                             }
@@ -160,7 +160,7 @@ public class JadePlugin implements IWailaPlugin {
                         if (entityAccessor.getPlayer().getUUID().equals(monster.getOwnerUUID())) {
                             withText(iTooltip, "runecraftory.dependency.tooltips.friendpoints", new TextComponent("" + tag.getInt("FP")), ChatFormatting.YELLOW);
                             if (tag.getBoolean("HasBarn")) {
-                                BlockPos pos = BlockPos.CODEC.parse(NbtOps.INSTANCE, tag.get("Barn")).getOrThrow(false, RuneCraftory.logger::error);
+                                BlockPos pos = BlockPos.CODEC.parse(NbtOps.INSTANCE, tag.get("Barn")).getOrThrow(false, RuneCraftory.LOGGER::error);
                                 withText(iTooltip, "runecraftory.dependency.tooltips.barn", new TextComponent(String.format("[%s, %s, %s]", pos.getX(), pos.getY(), pos.getZ())), ChatFormatting.GREEN);
                             } else {
                                 iTooltip.add(new TranslatableComponent("runecraftory.dependency.tooltips.barn.no").withStyle(ChatFormatting.RED, ChatFormatting.BOLD));

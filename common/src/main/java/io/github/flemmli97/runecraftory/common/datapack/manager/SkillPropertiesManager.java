@@ -61,7 +61,7 @@ public class SkillPropertiesManager extends SimplePreparableReloadListener<Map<R
                     }
                 }
             } catch (JsonParseException | IOException | IllegalArgumentException exception) {
-                RuneCraftory.logger.error("Couldn't parse data file {} {}", res, exception);
+                RuneCraftory.LOGGER.error("Couldn't parse data file {} {}", res, exception);
             }
         }
         return map;
@@ -73,11 +73,11 @@ public class SkillPropertiesManager extends SimplePreparableReloadListener<Map<R
         data.forEach((key, el) -> {
             try {
                 SkillProperties props = SkillProperties.CODEC.parse(JsonOps.INSTANCE, el)
-                        .getOrThrow(false, RuneCraftory.logger::error);
+                        .getOrThrow(false, RuneCraftory.LOGGER::error);
                 EnumSkills skills = EnumSkills.valueOf(key.getPath().toUpperCase(Locale.ROOT));
                 propertiesBuilder.put(skills, props);
             } catch (Exception ex) {
-                RuneCraftory.logger.error("Couldnt parse skill properties json {} {}", key, ex);
+                RuneCraftory.LOGGER.error("Couldnt parse skill properties json {} {}", key, ex);
                 ex.fillInStackTrace();
             }
         });

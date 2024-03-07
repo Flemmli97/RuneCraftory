@@ -51,8 +51,8 @@ public class EntityThunderboltBeam extends BaseBeam {
             Vec3 dir = this.hitVec.subtract(pos);
             for (double d = 0; d < 1; d += 0.025) {
                 Vec3 scaleD = dir.scale(d).add(pos);
-                this.level.addParticle(new ColoredParticleData(ModParticles.staticLight.get(), 34 / 255F, 34 / 255F, 180 / 255F, 0.6f, 0.2f), scaleD.x(), scaleD.y(), scaleD.z(), 0, 0, 0);
-                this.level.addParticle(ModParticles.lightning.get(), scaleD.x() + (this.random.nextDouble() - 0.5) * 0.1, scaleD.y() + (this.random.nextDouble() - 0.5) * 0.1, scaleD.z() + (this.random.nextDouble() - 0.5) * 0.1, 0.02, 0.02, 0.02);
+                this.level.addParticle(new ColoredParticleData(ModParticles.STATIC_LIGHT.get(), 34 / 255F, 34 / 255F, 180 / 255F, 0.6f, 0.2f), scaleD.x(), scaleD.y(), scaleD.z(), 0, 0, 0);
+                this.level.addParticle(ModParticles.LIGHTNING.get(), scaleD.x() + (this.random.nextDouble() - 0.5) * 0.1, scaleD.y() + (this.random.nextDouble() - 0.5) * 0.1, scaleD.z() + (this.random.nextDouble() - 0.5) * 0.1, 0.02, 0.02, 0.02);
             }
         }
     }

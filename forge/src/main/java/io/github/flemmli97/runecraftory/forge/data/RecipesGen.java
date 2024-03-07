@@ -33,32 +33,32 @@ public class RecipesGen extends RecipeProvider {
                 Ingredient.of(Items.BOOK), Ingredient.of(Items.GRASS), Ingredient.of(Items.STONE)));
 
         ShapelessRecipeBuilder.shapeless(Items.WHITE_WOOL)
-                .requires(ModItems.furSmall.get(), 4)
+                .requires(ModItems.FUR_SMALL.get(), 4)
                 .unlockedBy("wool", has(ItemTags.WOOL))
                 .save(consumer, RuneCraftory.MODID + ":small_fur_conversion");
         ShapelessRecipeBuilder.shapeless(Items.WHITE_WOOL)
-                .requires(ModItems.furMedium.get())
+                .requires(ModItems.FUR_MEDIUM.get())
                 .unlockedBy("wool", has(ItemTags.WOOL))
                 .save(consumer, RuneCraftory.MODID + ":medium_fur_conversion");
         ShapelessRecipeBuilder.shapeless(Items.WHITE_WOOL, 2)
-                .requires(ModItems.furLarge.get())
+                .requires(ModItems.FUR_LARGE.get())
                 .unlockedBy("wool", has(ItemTags.WOOL))
                 .save(consumer, RuneCraftory.MODID + ":large_fur_conversion");
         ShapelessRecipeBuilder.shapeless(Items.IRON_NUGGET, 1)
-                .requires(ModItems.scrap.get(), 3)
+                .requires(ModItems.SCRAP.get(), 3)
                 .unlockedBy("iron", has(Items.IRON_INGOT))
                 .save(consumer, RuneCraftory.MODID + ":scrap_iron_conversion");
         ShapelessRecipeBuilder.shapeless(Items.IRON_NUGGET, 1)
-                .requires(ModItems.scrapPlus.get(), 2)
+                .requires(ModItems.SCRAP_PLUS.get(), 2)
                 .unlockedBy("iron", has(Items.IRON_INGOT))
                 .save(consumer, RuneCraftory.MODID + ":scrap_plus_iron_conversion");
         ShapedRecipeBuilder.shaped(Items.ARROW, 4)
                 .define('#', ModTags.WOOD_ROD)
-                .define('X', ModItems.arrowHead.get())
+                .define('X', ModItems.ARROW_HEAD.get())
                 .define('Y', ModTags.FEATHERS)
                 .pattern("X").pattern("#").pattern("Y")
                 .unlockedBy("feather", RecipeProvider.has(ModTags.FEATHERS))
-                .unlockedBy("arrowhead", RecipeProvider.has(ModItems.arrowHead.get()))
+                .unlockedBy("arrowhead", RecipeProvider.has(ModItems.ARROW_HEAD.get()))
                 .save(consumer, RuneCraftory.MODID + ":arrows");
         ShapedRecipeBuilder.shaped(Items.ARROW, 4)
                 .define('#', ModTags.WOOD_ROD)
@@ -84,25 +84,25 @@ public class RecipesGen extends RecipeProvider {
                 .unlockedBy("wool", has(ItemTags.WOOL))
                 .save(consumer, RuneCraftory.MODID + ":large_milk_conversion");
         ShapelessRecipeBuilder.shapeless(Items.MUSHROOM_STEW)
-                .requires(ModItems.mushroom.get(), 2)
+                .requires(ModItems.MUSHROOM.get(), 2)
                 .requires(Items.BOWL)
-                .unlockedBy("mushroom_stew", has(ModItems.mushroom.get()))
+                .unlockedBy("mushroom_stew", has(ModItems.MUSHROOM.get()))
                 .save(consumer, RuneCraftory.MODID + ":mushroom_stew");
         ShapelessRecipeBuilder.shapeless(Items.MUSHROOM_STEW, 2)
-                .requires(ModItems.monarchMushroom.get(), 2)
+                .requires(ModItems.MONARCH_MUSHROOM.get(), 2)
                 .requires(Items.BOWL)
-                .unlockedBy("mushroom_stew", has(ModItems.monarchMushroom.get()))
+                .unlockedBy("mushroom_stew", has(ModItems.MONARCH_MUSHROOM.get()))
                 .save(consumer, RuneCraftory.MODID + ":mushroom_stew_monarch");
         ShapelessRecipeBuilder.shapeless(Items.BONE_MEAL, 2)
-                .requires(ModItems.fishFossil.get(), 1)
-                .unlockedBy("fish_fossil", has(ModItems.fishFossil.get()))
+                .requires(ModItems.FISH_FOSSIL.get(), 1)
+                .unlockedBy("fish_fossil", has(ModItems.FISH_FOSSIL.get()))
                 .save(consumer, RuneCraftory.MODID + ":fish_fossil_bone_meal");
         ShapelessRecipeBuilder.shapeless(Items.BONE_MEAL, 3)
-                .requires(ModItems.skull.get(), 1)
-                .unlockedBy("skull", has(ModItems.skull.get()))
+                .requires(ModItems.SKULL.get(), 1)
+                .unlockedBy("skull", has(ModItems.SKULL.get()))
                 .save(consumer, RuneCraftory.MODID + ":skull_bone_meal");
 
-        ShapedRecipeBuilder.shaped(ModItems.shippingBin.get())
+        ShapedRecipeBuilder.shaped(ModItems.SHIPPING_BIN.get())
                 .pattern("ses")
                 .pattern("scs")
                 .pattern("sls")
@@ -112,7 +112,7 @@ public class RecipesGen extends RecipeProvider {
                 .define('l', ItemTags.PLANKS)
                 .unlockedBy("shipping_bin", has(Items.CHEST))
                 .save(consumer);
-        ShapedRecipeBuilder.shaped(ModItems.itemBlockForge.get())
+        ShapedRecipeBuilder.shaped(ModItems.ITEM_BLOCK_FORGE.get())
                 .pattern("ccc")
                 .pattern("ibi")
                 .pattern("clc")
@@ -122,7 +122,7 @@ public class RecipesGen extends RecipeProvider {
                 .define('l', Items.LAVA_BUCKET)
                 .unlockedBy("forge_recipe", has(Items.LAVA_BUCKET))
                 .save(consumer);
-        ShapedRecipeBuilder.shaped(ModItems.itemBlockAccess.get())
+        ShapedRecipeBuilder.shaped(ModItems.ITEM_BLOCK_ACCESS.get())
                 .pattern(" s ")
                 .pattern("aaa")
                 .pattern("lcl")
@@ -132,7 +132,7 @@ public class RecipesGen extends RecipeProvider {
                 .define('l', ItemTags.LOGS)
                 .unlockedBy("accessory_recipe", has(Items.CRAFTING_TABLE))
                 .save(consumer);
-        ShapedRecipeBuilder.shaped(ModItems.itemBlockChem.get())
+        ShapedRecipeBuilder.shaped(ModItems.ITEM_BLOCK_CHEM.get())
                 .pattern("b s")
                 .pattern("qqq")
                 .pattern("ccc")
@@ -142,7 +142,7 @@ public class RecipesGen extends RecipeProvider {
                 .define('q', Items.QUARTZ_BLOCK)
                 .unlockedBy("chemistry_recipe", has(Items.BREWING_STAND))
                 .save(consumer);
-        ShapedRecipeBuilder.shaped(ModItems.itemBlockCooking.get())
+        ShapedRecipeBuilder.shaped(ModItems.ITEM_BLOCK_COOKING.get())
                 .pattern("   ")
                 .pattern("qwq")
                 .pattern("lsl")
@@ -152,7 +152,7 @@ public class RecipesGen extends RecipeProvider {
                 .define('l', ItemTags.LOGS)
                 .unlockedBy("cooking_recipe", has(Items.SMOKER))
                 .save(consumer);
-        ShapedRecipeBuilder.shaped(ModItems.questBoard.get())
+        ShapedRecipeBuilder.shaped(ModItems.QUEST_BOARD.get())
                 .pattern("PPP")
                 .pattern("SSS")
                 .pattern("PPP")
@@ -161,7 +161,7 @@ public class RecipesGen extends RecipeProvider {
                 .unlockedBy("quest_board", has(ItemTags.SIGNS))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(ModItems.teleport.get())
+        ShapedRecipeBuilder.shaped(ModItems.TELEPORT.get())
                 .pattern(" e ")
                 .pattern("ebe")
                 .pattern(" e ")
@@ -169,7 +169,7 @@ public class RecipesGen extends RecipeProvider {
                 .define('b', ItemTags.BEDS)
                 .unlockedBy("teleport", has(ItemTags.BEDS))
                 .save(consumer);
-        ShapedRecipeBuilder.shaped(ModItems.fireBallSmall.get())
+        ShapedRecipeBuilder.shaped(ModItems.FIRE_BALL_SMALL.get())
                 .pattern("bcb")
                 .pattern("clc")
                 .pattern("bcb")
@@ -179,297 +179,297 @@ public class RecipesGen extends RecipeProvider {
                 .unlockedBy("fireball", has(Items.LAVA_BUCKET))
                 .save(consumer);
 
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.hoeScrap.get(), 1, 5, 20)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.HOE_SCRAP.get(), 1, 5, 20)
                 .addIngredient(ModTags.MINERALS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.hoeIron.get(), 1, 15, 20)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.HOE_IRON.get(), 1, 15, 20)
                 .addIngredient(ModTags.COPPER_BLOCK).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.hoeSilver.get(), 1, 30, 20)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.HOE_SILVER.get(), 1, 30, 20)
                 .addIngredient(ModTags.SILVER).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.hoeGold.get(), 1, 45, 20)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.HOE_GOLD.get(), 1, 45, 20)
                 .addIngredient(ModTags.GOLD).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.hoePlatinum.get(), 1, 80, 20)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.HOE_PLATINUM.get(), 1, 80, 20)
                 .addIngredient(ModTags.PLATINUM).build(consumer);
 
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.wateringCanScrap.get(), 1, 5, 20)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.WATERING_CAN_SCRAP.get(), 1, 5, 20)
                 .addIngredient(ModTags.MINERALS)
                 .addIngredient(ModTags.CLOTHS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.wateringCanIron.get(), 1, 15, 20)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.WATERING_CAN_IRON.get(), 1, 15, 20)
                 .addIngredient(ModTags.COPPER_BLOCK)
                 .addIngredient(ModTags.CLOTHS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.wateringCanSilver.get(), 1, 30, 20)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.WATERING_CAN_SILVER.get(), 1, 30, 20)
                 .addIngredient(ModTags.SILVER)
                 .addIngredient(ModTags.CLOTHS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.wateringCanGold.get(), 1, 45, 20)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.WATERING_CAN_GOLD.get(), 1, 45, 20)
                 .addIngredient(ModTags.GOLD)
                 .addIngredient(ModTags.CLOTHS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.wateringCanPlatinum.get(), 1, 80, 20)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.WATERING_CAN_PLATINUM.get(), 1, 80, 20)
                 .addIngredient(ModTags.PLATINUM)
                 .addIngredient(ModTags.CLOTHS).build(consumer);
 
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.sickleScrap.get(), 1, 5, 20)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.SICKLE_SCRAP.get(), 1, 5, 20)
                 .addIngredient(ModTags.MINERALS)
                 .addIngredient(ModTags.SHARDS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.sickleIron.get(), 1, 15, 20)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.SICKLE_IRON.get(), 1, 15, 20)
                 .addIngredient(ModTags.COPPER_BLOCK)
                 .addIngredient(ModTags.SHARDS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.sickleSilver.get(), 1, 30, 20)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.SICKLE_SILVER.get(), 1, 30, 20)
                 .addIngredient(ModTags.SILVER)
                 .addIngredient(ModTags.SHARDS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.sickleGold.get(), 1, 45, 20)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.SICKLE_GOLD.get(), 1, 45, 20)
                 .addIngredient(ModTags.GOLD)
                 .addIngredient(ModTags.SHARDS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.sicklePlatinum.get(), 1, 80, 20)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.SICKLE_PLATINUM.get(), 1, 80, 20)
                 .addIngredient(ModTags.PLATINUM)
                 .addIngredient(ModTags.SHARDS).build(consumer);
 
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.hammerScrap.get(), 1, 5, 20)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.HAMMER_SCRAP.get(), 1, 5, 20)
                 .addIngredient(ModTags.IRON)
                 .addIngredient(ModTags.STICKS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.hammerIron.get(), 1, 15, 20)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.HAMMER_IRON.get(), 1, 15, 20)
                 .addIngredient(ModTags.COPPER_BLOCK)
                 .addIngredient(ModTags.IRON)
                 .addIngredient(ModTags.STICKS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.hammerSilver.get(), 1, 30, 20)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.HAMMER_SILVER.get(), 1, 30, 20)
                 .addIngredient(ModTags.SILVER)
                 .addIngredient(ModTags.IRON)
                 .addIngredient(ModTags.STICKS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.hammerGold.get(), 1, 45, 20)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.HAMMER_GOLD.get(), 1, 45, 20)
                 .addIngredient(ModTags.GOLD)
                 .addIngredient(ModTags.IRON)
                 .addIngredient(ModTags.STICKS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.hammerPlatinum.get(), 1, 80, 20)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.HAMMER_PLATINUM.get(), 1, 80, 20)
                 .addIngredient(ModTags.PLATINUM)
                 .addIngredient(ModTags.IRON)
                 .addIngredient(ModTags.STICKS).build(consumer);
 
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.axeScrap.get(), 1, 5, 20)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.AXE_SCRAP.get(), 1, 5, 20)
                 .addIngredient(ModTags.IRON)
                 .addIngredient(ModTags.STICKS)
                 .addIngredient(ModTags.STICKS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.axeIron.get(), 1, 15, 20)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.AXE_IRON.get(), 1, 15, 20)
                 .addIngredient(ModTags.COPPER_BLOCK)
                 .addIngredient(ModTags.STICKS)
                 .addIngredient(ModTags.STICKS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.axeSilver.get(), 1, 30, 20)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.AXE_SILVER.get(), 1, 30, 20)
                 .addIngredient(ModTags.SILVER)
                 .addIngredient(ModTags.STICKS)
                 .addIngredient(ModTags.STICKS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.axeGold.get(), 1, 45, 20)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.AXE_GOLD.get(), 1, 45, 20)
                 .addIngredient(ModTags.GOLD)
                 .addIngredient(ModTags.STICKS)
                 .addIngredient(ModTags.STICKS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.axePlatinum.get(), 1, 80, 20)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.AXE_PLATINUM.get(), 1, 80, 20)
                 .addIngredient(ModTags.PLATINUM)
                 .addIngredient(ModTags.STICKS)
                 .addIngredient(ModTags.STICKS).build(consumer);
 
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.fishingRodScrap.get(), 1, 5, 20)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.FISHING_ROD_SCRAP.get(), 1, 5, 20)
                 .addIngredient(ModTags.STRINGS)
                 .addIngredient(ModTags.STICKS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.fishingRodIron.get(), 1, 15, 20)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.FISHING_ROD_IRON.get(), 1, 15, 20)
                 .addIngredient(ModTags.COPPER_BLOCK)
                 .addIngredient(ModTags.STRINGS)
                 .addIngredient(ModTags.STICKS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.fishingRodSilver.get(), 1, 30, 20)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.FISHING_ROD_SILVER.get(), 1, 30, 20)
                 .addIngredient(ModTags.SILVER)
                 .addIngredient(ModTags.STRINGS)
                 .addIngredient(ModTags.STICKS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.fishingRodGold.get(), 1, 45, 20)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.FISHING_ROD_GOLD.get(), 1, 45, 20)
                 .addIngredient(ModTags.GOLD)
                 .addIngredient(ModTags.STRINGS)
                 .addIngredient(ModTags.STICKS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.fishingRodPlatinum.get(), 1, 80, 20)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.FISHING_ROD_PLATINUM.get(), 1, 80, 20)
                 .addIngredient(ModTags.PLATINUM)
                 .addIngredient(ModTags.STRINGS)
                 .addIngredient(ModTags.STICKS).build(consumer);
 
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.broadSword.get(), 1, 3, 20)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.BROAD_SWORD.get(), 1, 3, 20)
                 .addIngredient(ModTags.MINERALS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.steelSword.get(), 1, 5, 30)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.STEEL_SWORD.get(), 1, 5, 30)
                 .addIngredient(ModTags.MINERALS).addIngredient(ModTags.CLAWS_FANGS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.steelSwordPlus.get(), 1, 7, 30)
-                .addIngredient(ModItems.steelSword.get()).addIngredient(ModTags.MINERALS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.cutlass.get(), 1, 10, 40)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.STEEL_SWORD_PLUS.get(), 1, 7, 30)
+                .addIngredient(ModItems.STEEL_SWORD.get()).addIngredient(ModTags.MINERALS).build(consumer);
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.CUTLASS.get(), 1, 10, 40)
                 .addIngredient(ModTags.COPPER_BLOCK).addIngredient(ModTags.CLAWS_FANGS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.aquaSword.get(), 1, 13, 40)
-                .addIngredient(ModTags.SILVER).addIngredient(ModItems.aquamarine.get()).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.invisiBlade.get(), 1, 16, 40)
-                .addIngredient(ModItems.invisStone.get()).addIngredient(ModTags.CLAWS_FANGS).addIngredient(ModTags.CRYSTALS).build(consumer);
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.AQUA_SWORD.get(), 1, 13, 40)
+                .addIngredient(ModTags.SILVER).addIngredient(ModItems.AQUAMARINE.get()).build(consumer);
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.INVISI_BLADE.get(), 1, 16, 40)
+                .addIngredient(ModItems.INVIS_STONE.get()).addIngredient(ModTags.CLAWS_FANGS).addIngredient(ModTags.CRYSTALS).build(consumer);
 
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.claymore.get(), 1, 3, 25)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.CLAYMORE.get(), 1, 3, 25)
                 .addIngredient(ModTags.MINERALS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.zweihaender.get(), 1, 5, 30)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.ZWEIHAENDER.get(), 1, 5, 30)
                 .addIngredient(ModTags.MINERALS).addIngredient(ModTags.CLAWS_FANGS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.zweihaenderPlus.get(), 1, 7, 30)
-                .addIngredient(ModItems.zweihaender.get()).addIngredient(ModTags.COPPER_BLOCK).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.greatSword.get(), 1, 13, 40)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.ZWEIHAENDER_PLUS.get(), 1, 7, 30)
+                .addIngredient(ModItems.ZWEIHAENDER.get()).addIngredient(ModTags.COPPER_BLOCK).build(consumer);
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.GREAT_SWORD.get(), 1, 13, 40)
                 .addIngredient(ModTags.COPPER_BLOCK).addIngredient(ModTags.LIQUIDS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.seaCutter.get(), 1, 15, 40)
-                .addIngredient(ModTags.SILVER).addIngredient(ModItems.aquamarine.get()).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.cycloneBlade.get(), 1, 18, 40)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.SEA_CUTTER.get(), 1, 15, 40)
+                .addIngredient(ModTags.SILVER).addIngredient(ModItems.AQUAMARINE.get()).build(consumer);
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.CYCLONE_BLADE.get(), 1, 18, 40)
                 .addIngredient(ModTags.GOLD).addIngredient(Items.EMERALD).build(consumer);
 
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.spear.get(), 1, 3, 25)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.SPEAR.get(), 1, 3, 25)
                 .addIngredient(ModTags.MINERALS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.woodStaff.get(), 1, 6, 25)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.WOOD_STAFF.get(), 1, 6, 25)
                 .addIngredient(ModTags.STICKS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.lance.get(), 1, 10, 25)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.LANCE.get(), 1, 10, 25)
                 .addIngredient(ModTags.STICKS).addIngredient(ModTags.MINERALS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.lancePlus.get(), 1, 13, 35)
-                .addIngredient(ModItems.lance.get()).addIngredient(ModTags.COPPER_BLOCK).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.needleSpear.get(), 1, 16, 40)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.LANCE_PLUS.get(), 1, 13, 35)
+                .addIngredient(ModItems.LANCE.get()).addIngredient(ModTags.COPPER_BLOCK).build(consumer);
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.NEEDLE_SPEAR.get(), 1, 16, 40)
                 .addIngredient(ModTags.STICKS).addIngredient(ModTags.MINERALS)
                 .addIngredient(ModTags.CLAWS_FANGS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.trident.get(), 1, 19, 40)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.TRIDENT.get(), 1, 19, 40)
                 .addIngredient(ModTags.SILVER).addIngredient(ModTags.STICKS).build(consumer);
 
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.battleAxe.get(), 1, 5, 25)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.BATTLE_AXE.get(), 1, 5, 25)
                 .addIngredient(ModTags.MINERALS).addIngredient(ModTags.CLAWS_FANGS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.battleScythe.get(), 1, 9, 25)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.BATTLE_SCYTHE.get(), 1, 9, 25)
                 .addIngredient(ModTags.COPPER_BLOCK).addIngredient(ModTags.CLAWS_FANGS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.poleAxe.get(), 1, 15, 25)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.POLE_AXE.get(), 1, 15, 25)
                 .addIngredient(ModTags.MINERALS).addIngredient(ModTags.CLAWS_FANGS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.poleAxePlus.get(), 1, 19, 35)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.POLE_AXE_PLUS.get(), 1, 19, 35)
                 .addIngredient(ModTags.MINERALS).addIngredient(ModTags.CLAWS_FANGS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.greatAxe.get(), 1, 24, 40)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.GREAT_AXE.get(), 1, 24, 40)
                 .addIngredient(ModTags.MINERALS).addIngredient(ModTags.CLAWS_FANGS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.tomahawk.get(), 1, 28, 40)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.TOMAHAWK.get(), 1, 28, 40)
                 .addIngredient(ModTags.MINERALS).addIngredient(ModTags.CLAWS_FANGS).build(consumer);
 
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.battleHammer.get(), 1, 3, 25)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.BATTLE_HAMMER.get(), 1, 3, 25)
                 .addIngredient(ModTags.MINERALS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.bat.get(), 1, 8, 25)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.BAT.get(), 1, 8, 25)
                 .addIngredient(ModTags.COPPER_BLOCK).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.warHammer.get(), 1, 14, 25)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.WAR_HAMMER.get(), 1, 14, 25)
                 .addIngredient(ModTags.COPPER_BLOCK).addIngredient(ModTags.SHARDS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.warHammerPlus.get(), 1, 17, 35)
-                .addIngredient(ModItems.warHammer.get()).addIngredient(ModTags.LIQUIDS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.ironBat.get(), 1, 21, 40)
-                .addIngredient(ModItems.bat.get()).addIngredient(ModTags.SILVER).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.greatHammer.get(), 1, 25, 40)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.WAR_HAMMER_PLUS.get(), 1, 17, 35)
+                .addIngredient(ModItems.WAR_HAMMER.get()).addIngredient(ModTags.LIQUIDS).build(consumer);
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.IRON_BAT.get(), 1, 21, 40)
+                .addIngredient(ModItems.BAT.get()).addIngredient(ModTags.SILVER).build(consumer);
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.GREAT_HAMMER.get(), 1, 25, 40)
                 .addIngredient(ModTags.SILVER).addIngredient(ModTags.SHARDS).build(consumer);
 
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.shortDagger.get(), 1, 3, 25)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.SHORT_DAGGER.get(), 1, 3, 25)
                 .addIngredient(ModTags.MINERALS).addIngredient(ModTags.MINERALS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.steelEdge.get(), 1, 7, 25)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.STEEL_EDGE.get(), 1, 7, 25)
                 .addIngredient(ModTags.IRON).addIngredient(ModTags.IRON).addIngredient(ModTags.COPPER_BLOCK).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.frostEdge.get(), 1, 11, 25)
-                .addIngredient(ModItems.aquamarine.get()).addIngredient(ModItems.aquamarine.get()).addIngredient(ModTags.LIQUIDS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.ironEdge.get(), 1, 15, 30)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.FROST_EDGE.get(), 1, 11, 25)
+                .addIngredient(ModItems.AQUAMARINE.get()).addIngredient(ModItems.AQUAMARINE.get()).addIngredient(ModTags.LIQUIDS).build(consumer);
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.IRON_EDGE.get(), 1, 15, 30)
                 .addIngredient(ModTags.MINERALS).addIngredient(ModTags.MINERALS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.thiefKnife.get(), 1, 17, 40)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.THIEF_KNIFE.get(), 1, 17, 40)
                 .addIngredient(ModTags.IRON).addIngredient(ModTags.IRON).addIngredient(ModTags.SILVER).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.windEdge.get(), 1, 20, 40)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.WIND_EDGE.get(), 1, 20, 40)
                 .addIngredient(ModTags.GOLD).addIngredient(Items.EMERALD)
                 .addIngredient(Items.EMERALD).addIngredient(ModTags.CLAWS_FANGS).build(consumer);
 
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.leatherGlove.get(), 1, 3, 25)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.LEATHER_GLOVE.get(), 1, 3, 25)
                 .addIngredient(ModTags.MINERALS).addIngredient(ModTags.CLOTHS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.brassKnuckles.get(), 1, 8, 25)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.BRASS_KNUCKLES.get(), 1, 8, 25)
                 .addIngredient(ModTags.MINERALS).addIngredient(ModTags.CLOTHS).addIngredient(ModTags.COPPER_BLOCK).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.kote.get(), 1, 12, 30)
-                .addIngredient(ModTags.MINERALS).addIngredient(ModTags.CLOTHS).addIngredient(ModTags.IRON).addIngredient(ModItems.clawPalm.get()).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.gloves.get(), 1, 14, 35)
-                .addIngredient(ModTags.MINERALS).addIngredient(ModTags.CLOTHS).addIngredient(ModItems.furMedium.get()).addIngredient(ModItems.clothQuality.get()).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.bearClaws.get(), 1, 16, 45)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.KOTE.get(), 1, 12, 30)
+                .addIngredient(ModTags.MINERALS).addIngredient(ModTags.CLOTHS).addIngredient(ModTags.IRON).addIngredient(ModItems.CLAW_PALM.get()).build(consumer);
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.GLOVES.get(), 1, 14, 35)
+                .addIngredient(ModTags.MINERALS).addIngredient(ModTags.CLOTHS).addIngredient(ModItems.FUR_MEDIUM.get()).addIngredient(ModItems.CLOTH_QUALITY.get()).build(consumer);
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.BEAR_CLAWS.get(), 1, 16, 45)
                 .addIngredient(ModTags.MINERALS).addIngredient(ModTags.CLOTHS).addIngredient(ModTags.GOLD).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.fistEarth.get(), 1, 22, 45)
-                .addIngredient(ModTags.MINERALS).addIngredient(ModTags.CLOTHS).addIngredient(ModTags.GOLD).addIngredient(ModItems.hornRigid.get()).addIngredient(ModItems.crystalEarth.get()).build(consumer);
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.FIST_EARTH.get(), 1, 22, 45)
+                .addIngredient(ModTags.MINERALS).addIngredient(ModTags.CLOTHS).addIngredient(ModTags.GOLD).addIngredient(ModItems.HORN_RIGID.get()).addIngredient(ModItems.CRYSTAL_EARTH.get()).build(consumer);
 
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.rod.get(), 1, 3, 25)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.ROD.get(), 1, 3, 25)
                 .addIngredient(ModTags.STICKS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.amethystRod.get(), 1, 6, 25)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.AMETHYST_ROD.get(), 1, 6, 25)
                 .addIngredient(ModTags.AMETHYSTS).addIngredient(ModTags.STICKS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.aquamarineRod.get(), 1, 12, 35)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.AQUAMARINE_ROD.get(), 1, 12, 35)
                 .addIngredient(ModTags.AQUAMARINES).addIngredient(ModTags.STICKS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.friendlyRod.get(), 1, 16, 35)
-                .addIngredient(ModItems.crystalLove.get()).addIngredient(ModTags.STICKS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.loveLoveRod.get(), 1, 19, 40)
-                .addIngredient(ModItems.friendlyRod.get()).addIngredient(ModItems.crystalLove.get())
-                .addIngredient(ModItems.crystalLove.get()).addIngredient(ModItems.crystalLove.get()).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.staff.get(), 1, 22, 40)
-                .addIngredient(ModItems.crystalMagic.get()).addIngredient(ModTags.STICKS).build(consumer);
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.FRIENDLY_ROD.get(), 1, 16, 35)
+                .addIngredient(ModItems.CRYSTAL_LOVE.get()).addIngredient(ModTags.STICKS).build(consumer);
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.LOVE_LOVE_ROD.get(), 1, 19, 40)
+                .addIngredient(ModItems.FRIENDLY_ROD.get()).addIngredient(ModItems.CRYSTAL_LOVE.get())
+                .addIngredient(ModItems.CRYSTAL_LOVE.get()).addIngredient(ModItems.CRYSTAL_LOVE.get()).build(consumer);
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.STAFF.get(), 1, 22, 40)
+                .addIngredient(ModItems.CRYSTAL_MAGIC.get()).addIngredient(ModTags.STICKS).build(consumer);
 
-        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.yarn.get(), 1, 5, 15)
+        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.YARN.get(), 1, 5, 15)
                 .addIngredient(ModTags.FURS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.cheapBracelet.get(), 1, 3, 15)
+        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.CHEAP_BRACELET.get(), 1, 3, 15)
                 .addIngredient(ModTags.MINERALS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.bronzeBracelet.get(), 1, 15, 15)
+        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.BRONZE_BRACELET.get(), 1, 15, 15)
                 .addIngredient(ModTags.COPPER_BLOCK).addIngredient(ModTags.CLOTHS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.silverBracelet.get(), 1, 25, 20)
+        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.SILVER_BRACELET.get(), 1, 25, 20)
                 .addIngredient(ModTags.SILVER).addIngredient(ModTags.CLOTHS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.goldBracelet.get(), 1, 35, 30)
+        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.GOLD_BRACELET.get(), 1, 35, 30)
                 .addIngredient(ModTags.GOLD).addIngredient(ModTags.CLOTHS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.platinumBracelet.get(), 1, 50, 40)
+        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.PLATINUM_BRACELET.get(), 1, 50, 40)
                 .addIngredient(ModTags.PLATINUM).addIngredient(ModTags.CLOTHS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.silverRing.get(), 1, 20, 30)
+        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.SILVER_RING.get(), 1, 20, 30)
                 .addIngredient(ModTags.SILVER).addIngredient(ModTags.CRYSTALS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.goldRing.get(), 1, 20, 30)
-                .addIngredient(ModTags.GOLD).addIngredient(ModItems.orichalcum.get()).addIngredient(ModItems.turnipsMiracle.get()).build(consumer);
-        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.platinumRing.get(), 1, 70, 50)
-                .addIngredient(ModTags.PLATINUM).addIngredient(ModItems.dragonic.get()).build(consumer);
+        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.GOLD_RING.get(), 1, 20, 30)
+                .addIngredient(ModTags.GOLD).addIngredient(ModItems.ORICHALCUM.get()).addIngredient(ModItems.TURNIPS_MIRACLE.get()).build(consumer);
+        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.PLATINUM_RING.get(), 1, 70, 50)
+                .addIngredient(ModTags.PLATINUM).addIngredient(ModItems.DRAGONIC.get()).build(consumer);
 
-        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.shirt.get(), 1, 2, 10)
+        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.SHIRT.get(), 1, 2, 10)
                 .addIngredient(ModTags.CLOTHS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.vest.get(), 1, 10, 25)
+        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.VEST.get(), 1, 10, 25)
                 .addIngredient(ModTags.CLOTHS).addIngredient(ModTags.FURS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.cottonCloth.get(), 1, 15, 25)
-                .addIngredient(ModItems.oldBandage.get()).addIngredient(ModItems.oldBandage.get()).addIngredient(ModTags.STRINGS).build(consumer);
+        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.COTTON_CLOTH.get(), 1, 15, 25)
+                .addIngredient(ModItems.OLD_BANDAGE.get()).addIngredient(ModItems.OLD_BANDAGE.get()).addIngredient(ModTags.STRINGS).build(consumer);
 
-        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.headband.get(), 1, 1, 10)
+        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.HEADBAND.get(), 1, 1, 10)
                 .addIngredient(ModTags.CLOTHS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.blueRibbon.get(), 1, 7, 15)
-                .addIngredient(ModItems.blueGrass.get()).addIngredient(ModTags.CLOTHS).addIngredient(ModTags.STRINGS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.greenRibbon.get(), 1, 7, 15)
-                .addIngredient(ModItems.greenGrass.get()).addIngredient(ModTags.CLOTHS).addIngredient(ModTags.STRINGS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.purpleRibbon.get(), 1, 7, 15)
-                .addIngredient(ModItems.purpleGrass.get()).addIngredient(ModTags.CLOTHS).addIngredient(ModTags.STRINGS).build(consumer);
+        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.BLUE_RIBBON.get(), 1, 7, 15)
+                .addIngredient(ModItems.BLUE_GRASS.get()).addIngredient(ModTags.CLOTHS).addIngredient(ModTags.STRINGS).build(consumer);
+        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.GREEN_RIBBON.get(), 1, 7, 15)
+                .addIngredient(ModItems.GREEN_GRASS.get()).addIngredient(ModTags.CLOTHS).addIngredient(ModTags.STRINGS).build(consumer);
+        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.PURPLE_RIBBON.get(), 1, 7, 15)
+                .addIngredient(ModItems.PURPLE_GRASS.get()).addIngredient(ModTags.CLOTHS).addIngredient(ModTags.STRINGS).build(consumer);
 
-        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.leatherBoots.get(), 1, 5, 10)
+        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.LEATHER_BOOTS.get(), 1, 5, 10)
                 .addIngredient(Items.LEATHER_BOOTS).addIngredient(ModTags.FURS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.freeFarmingShoes.get(), 1, 9, 10)
+        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.FREE_FARMING_SHOES.get(), 1, 9, 10)
                 .addIngredient(ModTags.FURS).addIngredient(ModTags.STRINGS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.piyoSandals.get(), 1, 12, 10)
-                .addIngredient(ModItems.carapaceInsect.get()).addIngredient(ModTags.CLOTHS).build(consumer);
+        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.PIYO_SANDALS.get(), 1, 12, 10)
+                .addIngredient(ModItems.CARAPACE_INSECT.get()).addIngredient(ModTags.CLOTHS).build(consumer);
 
-        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.smallShield.get(), 1, 2, 10)
+        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.SMALL_SHIELD.get(), 1, 2, 10)
                 .addIngredient(Items.SHIELD).addIngredient(ModTags.MINERALS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.ironShield.get(), 1, 10, 10)
+        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.IRON_SHIELD.get(), 1, 10, 10)
                 .addIngredient(Items.SHIELD).addIngredient(ModTags.IRON).addIngredient(ModTags.IRON).build(consumer);
 
-        RecipeBuilder.create(EnumCrafting.CHEM, ModItems.recoveryPotion.get(), 2, 3, 30)
-                .addIngredient(ModItems.medicinalHerb.get())
-                .addIngredient(ModItems.medicinalHerb.get())
-                .addIngredient(ModItems.greenGrass.get()).build(consumer);
-        RecipeBuilder.create(EnumCrafting.CHEM, ModItems.healingPotion.get(), 2, 20, 30)
-                .addIngredient(ModItems.medicinalHerb.get())
-                .addIngredient(ModItems.medicinalHerb.get())
-                .addIngredient(ModItems.redGrass.get()).build(consumer);
-        RecipeBuilder.create(EnumCrafting.CHEM, ModItems.mysteryPotion.get(), 2, 45, 30)
-                .addIngredient(ModItems.medicinalHerb.get())
-                .addIngredient(ModItems.medicinalHerb.get())
-                .addIngredient(ModItems.whiteGrass.get()).build(consumer);
-        RecipeBuilder.create(EnumCrafting.CHEM, ModItems.magicalPotion.get(), 2, 70, 30)
-                .addIngredient(ModItems.medicinalHerb.get())
-                .addIngredient(ModItems.medicinalHerb.get())
-                .addIngredient(ModItems.elliLeaves.get()).build(consumer);
+        RecipeBuilder.create(EnumCrafting.CHEM, ModItems.RECOVERY_POTION.get(), 2, 3, 30)
+                .addIngredient(ModItems.MEDICINAL_HERB.get())
+                .addIngredient(ModItems.MEDICINAL_HERB.get())
+                .addIngredient(ModItems.GREEN_GRASS.get()).build(consumer);
+        RecipeBuilder.create(EnumCrafting.CHEM, ModItems.HEALING_POTION.get(), 2, 20, 30)
+                .addIngredient(ModItems.MEDICINAL_HERB.get())
+                .addIngredient(ModItems.MEDICINAL_HERB.get())
+                .addIngredient(ModItems.RED_GRASS.get()).build(consumer);
+        RecipeBuilder.create(EnumCrafting.CHEM, ModItems.MYSTERY_POTION.get(), 2, 45, 30)
+                .addIngredient(ModItems.MEDICINAL_HERB.get())
+                .addIngredient(ModItems.MEDICINAL_HERB.get())
+                .addIngredient(ModItems.WHITE_GRASS.get()).build(consumer);
+        RecipeBuilder.create(EnumCrafting.CHEM, ModItems.MAGICAL_POTION.get(), 2, 70, 30)
+                .addIngredient(ModItems.MEDICINAL_HERB.get())
+                .addIngredient(ModItems.MEDICINAL_HERB.get())
+                .addIngredient(ModItems.ELLI_LEAVES.get()).build(consumer);
 
-        RecipeBuilder.create(EnumCrafting.COOKING, ModItems.onigiri.get(), 1, 1, 10)
-                .addIngredient(ModItems.rice.get()).build(consumer);
-        RecipeBuilder.create(EnumCrafting.COOKING, ModItems.pickledTurnip.get(), 1, 5, 12)
+        RecipeBuilder.create(EnumCrafting.COOKING, ModItems.ONIGIRI.get(), 1, 1, 10)
+                .addIngredient(ModItems.RICE.get()).build(consumer);
+        RecipeBuilder.create(EnumCrafting.COOKING, ModItems.PICKLED_TURNIP.get(), 1, 5, 12)
                 .addIngredient(ModTags.TURNIP).build(consumer);
 
-        RecipeBuilder.create(EnumCrafting.COOKING, ModItems.flan.get(), 1, 15, 20)
+        RecipeBuilder.create(EnumCrafting.COOKING, ModItems.FLAN.get(), 1, 15, 20)
                 .addIngredient(ModTags.EGGS).addIngredient(ModTags.MILKS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.COOKING, ModItems.hotMilk.get(), 1, 5, 20)
+        RecipeBuilder.create(EnumCrafting.COOKING, ModItems.HOT_MILK.get(), 1, 5, 20)
                 .addIngredient(ModTags.MILKS).build(consumer);
 
-        RecipeBuilder.create(EnumCrafting.COOKING, ModItems.grapeJuice.get(), 1, 5, 20)
+        RecipeBuilder.create(EnumCrafting.COOKING, ModItems.GRAPE_JUICE.get(), 1, 5, 20)
                 .addIngredient(ModTags.GRAPES).build(consumer);
 
-        RecipeBuilder.create(EnumCrafting.COOKING, ModItems.friedVeggies.get(), 1, 20, 25)
-                .addIngredient(ModItems.cabbage.get()).build(consumer);
-        RecipeBuilder.create(EnumCrafting.COOKING, ModItems.bakedApple.get(), 1, 3, 12)
+        RecipeBuilder.create(EnumCrafting.COOKING, ModItems.FRIED_VEGGIES.get(), 1, 20, 25)
+                .addIngredient(ModItems.CABBAGE.get()).build(consumer);
+        RecipeBuilder.create(EnumCrafting.COOKING, ModItems.BAKED_APPLE.get(), 1, 3, 12)
                 .addIngredient(Items.APPLE).build(consumer);
 
     }

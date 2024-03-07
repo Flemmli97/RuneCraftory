@@ -27,7 +27,7 @@ public class NPCSpawner implements CustomSpawner {
         if (--this.cooldown > 0) {
             return 0;
         }
-        int cooldown = level.getRandom().nextInt(MobConfig.npcSpawnRateMax - MobConfig.npcSpawnRateMin) + MobConfig.npcSpawnRateMin;
+        int cooldown = level.getRandom().nextInt(MobConfig.NPC_SPAWN_RATE_MAX - MobConfig.NPC_SPAWN_RATE_MIN) + MobConfig.NPC_SPAWN_RATE_MIN;
         if (this.doSpawning(level)) {
             this.cooldown = cooldown;
             return 1;

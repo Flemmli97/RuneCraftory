@@ -25,7 +25,7 @@ public class SingleTimeSpawner extends BlockEntity {
     private int delay = 3;
 
     public SingleTimeSpawner(BlockPos blockPos, BlockState blockState) {
-        super(ModBlocks.singleSpawnerTile.get(), blockPos, blockState);
+        super(ModBlocks.SINGLE_SPAWNER_TILE.get(), blockPos, blockState);
     }
 
     public static void tick(Level level, BlockPos blockPos, BlockState blockState, SingleTimeSpawner blockEntity) {

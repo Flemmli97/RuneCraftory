@@ -14,8 +14,8 @@ import net.minecraft.resources.ResourceLocation;
 
 public class RenderWispFlame extends RenderTexture<EntityWispFlame> {
 
-    private static final ResourceLocation dark = new ResourceLocation("minecraft", "block/soul_fire_0");
-    private static final ResourceLocation fire = new ResourceLocation("minecraft", "block/fire_0");
+    private static final ResourceLocation DARK = new ResourceLocation("minecraft", "block/soul_fire_0");
+    private static final ResourceLocation FIRE = new ResourceLocation("minecraft", "block/fire_0");
 
     public RenderWispFlame(EntityRendererProvider.Context ctx) {
         super(ctx, 1, 1, 1, 1);
@@ -24,8 +24,8 @@ public class RenderWispFlame extends RenderTexture<EntityWispFlame> {
     @Override
     public ResourceLocation getTextureLocation(EntityWispFlame entity) {
         return switch (entity.element()) {
-            case FIRE -> fire;
-            default -> dark;
+            case FIRE -> FIRE;
+            default -> DARK;
         };
     }
 

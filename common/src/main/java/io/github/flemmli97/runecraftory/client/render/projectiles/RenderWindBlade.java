@@ -10,7 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class RenderWindBlade extends RenderTexture<EntityWindBlade> {
 
-    private static final ResourceLocation tex = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/wind_blade.png");
+    private static final ResourceLocation TEX = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/wind_blade.png");
 
     public RenderWindBlade(EntityRendererProvider.Context ctx) {
         super(ctx, 1, 1, 8, 1);
@@ -18,7 +18,7 @@ public class RenderWindBlade extends RenderTexture<EntityWindBlade> {
 
     @Override
     public ResourceLocation getTextureLocation(EntityWindBlade entity) {
-        return tex;
+        return TEX;
     }
 
     @Override

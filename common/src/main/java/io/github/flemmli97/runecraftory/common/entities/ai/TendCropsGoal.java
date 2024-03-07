@@ -36,7 +36,7 @@ import java.util.function.Predicate;
 
 public class TendCropsGoal extends Goal {
 
-    private static final Predicate<ItemStack> seedItem = s -> !s.isEmpty() && s.getItem() instanceof BlockItem
+    private static final Predicate<ItemStack> SEED_ITEM = s -> !s.isEmpty() && s.getItem() instanceof BlockItem
             && (s.is(ModTags.SEEDS) || s.getItem() == Items.POTATO || s.getItem() == Items.CARROT);
 
     private final List<BlockPos> toTend = new ArrayList<>();
@@ -59,10 +59,10 @@ public class TendCropsGoal extends Goal {
             return false;
         this.toTend.clear();
         this.canPlant = this.entity.getSeedInventory() != null && Platform.INSTANCE.matchingInventory(
-                this.entity.level.getBlockEntity(this.entity.getSeedInventory()), seedItem);
+                this.entity.level.getBlockEntity(this.entity.getSeedInventory()), SEED_ITEM);
         BlockPos center = this.entity.getRestrictCenter();
         BlockPos.MutableBlockPos mutable = this.entity.getRestrictCenter().mutable();
-        int radius = MobConfig.farmRadius;
+        int radius = MobConfig.FARM_RADIUS;
         for (int x = -radius; x <= radius; ++x) {
             for (int z = -radius; z <= radius; ++z) {
                 for (int y = -1; y <= 1; ++y) {
@@ -128,7 +128,7 @@ public class TendCropsGoal extends Goal {
                 return;
             this.selected = this.toTend.remove(this.entity.getRandom().nextInt(this.toTend.size()));
             this.canPlant = this.entity.getSeedInventory() != null && Platform.INSTANCE.matchingInventory(
-                    this.entity.level.getBlockEntity(this.entity.getSeedInventory()), seedItem);
+                    this.entity.level.getBlockEntity(this.entity.getSeedInventory()), SEED_ITEM);
             if (!this.validPos(this.selected, this.entity.level)) {
                 this.selected = null;
                 this.cooldown = 10;
@@ -161,7 +161,7 @@ public class TendCropsGoal extends Goal {
                         success = true;
                     } else if (state.isAir()) {
                         if (this.entity.getSeedInventory() != null) {
-                            ItemStack stack = Platform.INSTANCE.findMatchingItem(this.entity.level.getBlockEntity(this.entity.getSeedInventory()), seedItem, 1);
+                            ItemStack stack = Platform.INSTANCE.findMatchingItem(this.entity.level.getBlockEntity(this.entity.getSeedInventory()), SEED_ITEM, 1);
                             if (!stack.isEmpty() && stack.getItem() instanceof BlockItem blockItem) {
                                 blockItem.place(BlockPlaceCtxHelper.entityPlaceAt(this.entity.level, stack, this.selected, Direction.UP));
                                 //this.entity.level.setBlock(this.selected, blockItem.getBlock().defaultBlockState(), 3);

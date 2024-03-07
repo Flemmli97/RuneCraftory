@@ -40,10 +40,10 @@ public class SpellPropertiesManager extends SimpleJsonResourceReloadListener {
         data.forEach((key, el) -> {
             try {
                 SpellProperties props = SpellProperties.CODEC.parse(JsonOps.INSTANCE, el)
-                        .getOrThrow(false, RuneCraftory.logger::error);
+                        .getOrThrow(false, RuneCraftory.LOGGER::error);
                 propertiesBuilder.put(key, props);
             } catch (Exception ex) {
-                RuneCraftory.logger.error("Couldnt parse spell properties json {} {}", key, ex);
+                RuneCraftory.LOGGER.error("Couldnt parse spell properties json {} {}", key, ex);
                 ex.fillInStackTrace();
             }
         });

@@ -24,8 +24,8 @@ import org.jetbrains.annotations.Nullable;
 public class ItemUtils {
 
     public static void starterItems(Player player) {
-        ItemStack broadSword = new ItemStack(ModItems.broadSword.get());
-        ItemStack hammer = new ItemStack(ModItems.hammerScrap.get());
+        ItemStack broadSword = new ItemStack(ModItems.BROAD_SWORD.get());
+        ItemStack hammer = new ItemStack(ModItems.HAMMER_SCRAP.get());
         spawnItemAtEntity(player, broadSword);
         spawnItemAtEntity(player, hammer);
     }

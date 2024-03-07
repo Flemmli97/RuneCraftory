@@ -17,13 +17,13 @@ public abstract class GuiMixin {
 
     @Inject(method = "renderHearts", at = @At("HEAD"), cancellable = true)
     private void health(PoseStack poseStack, Player player, int x, int y, int height, int i, float f, int j, int k, int l, boolean bl, CallbackInfo info) {
-        if (ClientConfig.renderHealthRPBar == ClientConfig.HealthRPRenderType.BOTH)
+        if (ClientConfig.RENDER_HEALTH_RP_BAR == ClientConfig.HealthRPRenderType.BOTH)
             info.cancel();
     }
 
     @ModifyVariable(method = "renderPlayerHealth", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;getVehicleMaxHearts(Lnet/minecraft/world/entity/LivingEntity;)I", shift = At.Shift.BY, by = 2), ordinal = 13)
     private int food(int old) {
-        if (old == 0 && GeneralConfig.disableHunger)
+        if (old == 0 && GeneralConfig.DISABLE_HUNGER)
             return -1;
         return old;
     }

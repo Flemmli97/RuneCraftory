@@ -98,7 +98,7 @@ public class EntityDeadTree extends BossMonster {
                 ServerLevel serverLevel = (ServerLevel) entity.level;
                 serverLevel.sendParticles(ParticleTypes.HEART, entity.getX(), entity.getY() + entity.getBbHeight() + 0.5, entity.getZ(), 0, 0, 0.1, 0, 0);
                 for (int i = 0; i < 10; i++) {
-                    serverLevel.sendParticles(new ColoredParticleData(ModParticles.light.get(), 63 / 255F, 201 / 255F, 63 / 255F, 0.4f, 2f), entity.getX() + entity.getRandom().nextGaussian() * 0.2, entity.getY() + entity.getBbHeight() * 0.5 + entity.getRandom().nextGaussian() * 0.07, entity.getZ() + entity.getRandom().nextGaussian() * 0.2, 1, entity.getRandom().nextGaussian() * 0.03, entity.getRandom().nextGaussian() * 0.03, entity.getRandom().nextGaussian() * 0.03, 0);
+                    serverLevel.sendParticles(new ColoredParticleData(ModParticles.LIGHT.get(), 63 / 255F, 201 / 255F, 63 / 255F, 0.4f, 2f), entity.getX() + entity.getRandom().nextGaussian() * 0.2, entity.getY() + entity.getBbHeight() * 0.5 + entity.getRandom().nextGaussian() * 0.07, entity.getZ() + entity.getRandom().nextGaussian() * 0.2, 1, entity.getRandom().nextGaussian() * 0.03, entity.getRandom().nextGaussian() * 0.03, entity.getRandom().nextGaussian() * 0.03, 0);
                 }
             }
         });

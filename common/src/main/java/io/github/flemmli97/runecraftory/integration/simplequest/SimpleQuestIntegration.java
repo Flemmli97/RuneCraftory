@@ -25,7 +25,7 @@ public class SimpleQuestIntegration {
 
     public static SimpleQuestIntegration INST() {
         if (INST == null) {
-            if (RuneCraftory.simpleQuests)
+            if (RuneCraftory.SIMPLE_QUESTS)
                 INST = new SimpleQuestIntegrationImpl();
             else
                 INST = new SimpleQuestIntegration();

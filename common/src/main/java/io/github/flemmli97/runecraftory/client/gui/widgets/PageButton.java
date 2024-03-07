@@ -14,7 +14,7 @@ import net.minecraft.util.Mth;
 
 public class PageButton extends Button {
 
-    private static final ResourceLocation texturepath = new ResourceLocation(RuneCraftory.MODID, "textures/gui/bars.png");
+    private static final ResourceLocation TEXTURE_PATH = new ResourceLocation(RuneCraftory.MODID, "textures/gui/bars.png");
 
     public PageButton(int x, int y, Component display, OnPress press) {
         super(x, y, 12, 12, display, press);
@@ -25,7 +25,7 @@ public class PageButton extends Button {
         Minecraft minecraft = Minecraft.getInstance();
         Font font = minecraft.font;
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderTexture(0, texturepath);
+        RenderSystem.setShaderTexture(0, TEXTURE_PATH);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, this.alpha);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();

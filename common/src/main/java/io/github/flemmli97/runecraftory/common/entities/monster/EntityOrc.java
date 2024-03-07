@@ -37,7 +37,7 @@ public class EntityOrc extends BaseMonster {
 
     @Override
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
-        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.orcMaze.get()));
+        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.ORC_MAZE.get()));
         this.setDropChance(EquipmentSlot.MAINHAND, 0);
     }
 
@@ -100,7 +100,7 @@ public class EntityOrc extends BaseMonster {
     @Override
     public void mobAttack(AnimatedAction anim, LivingEntity target, Consumer<LivingEntity> cons) {
         super.mobAttack(anim, target, cons);
-        if (this.getMainHandItem().is(ModItems.orcMaze.get()))
+        if (this.getMainHandItem().is(ModItems.ORC_MAZE.get()))
             this.playSound(ModSounds.ENTITY_ORC_BONK.get(), 1, (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.0f);
     }
 

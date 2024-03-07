@@ -31,7 +31,7 @@ public class BossSpawnerBlockEntity extends BlockEntity {
     private StructureStart structure;
 
     public BossSpawnerBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(ModBlocks.bossSpawnerTile.get(), blockPos, blockState);
+        super(ModBlocks.BOSS_SPAWNER_TILE.get(), blockPos, blockState);
     }
 
     public static void tick(Level level, BlockPos blockPos, BlockState blockState, BossSpawnerBlockEntity blockEntity) {

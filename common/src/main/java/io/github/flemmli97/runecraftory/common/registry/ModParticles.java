@@ -20,26 +20,26 @@ public class ModParticles {
 
     public static final PlatformRegistry<ParticleType<?>> PARTICLES = PlatformUtils.INSTANCE.of(Registry.PARTICLE_TYPE_REGISTRY, RuneCraftory.MODID);
 
-    public static final RegistryEntrySupplier<ParticleType<ColoredParticleData>> sinkingDust = registerColoredParticleType("sinking_dust", false);
-    public static final RegistryEntrySupplier<ParticleType<ColoredParticleData>> light = registerColoredParticleType("light", false);
-    public static final RegistryEntrySupplier<ParticleType<ColoredParticleData>> shortLight = registerColoredParticleType("short_light", false);
-    public static final RegistryEntrySupplier<ParticleType<ColoredParticleData>> cross = registerColoredParticleType("cross", false);
-    public static final RegistryEntrySupplier<ParticleType<ColoredParticleData>> smoke = registerColoredParticleType("smoke", false);
-    public static final RegistryEntrySupplier<ParticleType<ColoredParticleData>> blink = registerColoredParticleType("blink", false);
-    public static final RegistryEntrySupplier<ParticleType<ColoredParticleData>> staticLight = registerColoredParticleType("static_light", false);
-    public static final RegistryEntrySupplier<ParticleType<ColoredParticleData4f>> circlingLight = PARTICLES.register("circling_light", () -> new ColoredParticle4fType(false));
-    public static final RegistryEntrySupplier<ParticleType<ColoredParticleData4f>> vortex = PARTICLES.register("vortex", () -> new ColoredParticle4fType(false));
-    public static final RegistryEntrySupplier<ParticleType<ColoredParticleData>> wind = registerColoredParticleType("wind", false);
-    public static final RegistryEntrySupplier<SimpleParticleType> lightning = PARTICLES.register("lightning", () -> Platform.INSTANCE.simple(false));
+    public static final RegistryEntrySupplier<ParticleType<ColoredParticleData>> SINKING_DUST = registerColoredParticleType("sinking_dust", false);
+    public static final RegistryEntrySupplier<ParticleType<ColoredParticleData>> LIGHT = registerColoredParticleType("light", false);
+    public static final RegistryEntrySupplier<ParticleType<ColoredParticleData>> SHORT_LIGHT = registerColoredParticleType("short_light", false);
+    public static final RegistryEntrySupplier<ParticleType<ColoredParticleData>> CROSS = registerColoredParticleType("cross", false);
+    public static final RegistryEntrySupplier<ParticleType<ColoredParticleData>> SMOKE = registerColoredParticleType("smoke", false);
+    public static final RegistryEntrySupplier<ParticleType<ColoredParticleData>> BLINK = registerColoredParticleType("blink", false);
+    public static final RegistryEntrySupplier<ParticleType<ColoredParticleData>> STATIC_LIGHT = registerColoredParticleType("static_light", false);
+    public static final RegistryEntrySupplier<ParticleType<ColoredParticleData4f>> CIRCLING_LIGHT = PARTICLES.register("circling_light", () -> new ColoredParticle4fType(false));
+    public static final RegistryEntrySupplier<ParticleType<ColoredParticleData4f>> VORTEX = PARTICLES.register("vortex", () -> new ColoredParticle4fType(false));
+    public static final RegistryEntrySupplier<ParticleType<ColoredParticleData>> WIND = registerColoredParticleType("wind", false);
+    public static final RegistryEntrySupplier<SimpleParticleType> LIGHTNING = PARTICLES.register("lightning", () -> Platform.INSTANCE.simple(false));
 
-    public static final RegistryEntrySupplier<SimpleParticleType> runey = PARTICLES.register("runey", () -> Platform.INSTANCE.simple(false));
+    public static final RegistryEntrySupplier<SimpleParticleType> RUNEY = PARTICLES.register("runey", () -> Platform.INSTANCE.simple(false));
 
-    public static final RegistryEntrySupplier<SimpleParticleType> sleep = PARTICLES.register("sleep", () -> Platform.INSTANCE.simple(false));
-    public static final RegistryEntrySupplier<SimpleParticleType> poison = PARTICLES.register("poison", () -> Platform.INSTANCE.simple(false));
-    public static final RegistryEntrySupplier<SimpleParticleType> paralysis = PARTICLES.register("paralysis", () -> Platform.INSTANCE.simple(false));
+    public static final RegistryEntrySupplier<SimpleParticleType> SLEEP = PARTICLES.register("sleep", () -> Platform.INSTANCE.simple(false));
+    public static final RegistryEntrySupplier<SimpleParticleType> POISON = PARTICLES.register("poison", () -> Platform.INSTANCE.simple(false));
+    public static final RegistryEntrySupplier<SimpleParticleType> PARALYSIS = PARTICLES.register("paralysis", () -> Platform.INSTANCE.simple(false));
 
-    public static final RegistryEntrySupplier<ParticleType<SkelefangParticleData>> skelefangBones = PARTICLES.register("skelefang_bones", () -> new SkelefangParticleType(false));
-    public static final RegistryEntrySupplier<MovingGoalParticleType> durationalParticle = PARTICLES.register("particle_with_duration", () -> new MovingGoalParticleType(false));
+    public static final RegistryEntrySupplier<ParticleType<SkelefangParticleData>> SKELEFANG_BONES = PARTICLES.register("skelefang_bones", () -> new SkelefangParticleType(false));
+    public static final RegistryEntrySupplier<MovingGoalParticleType> DURATIONAL_PARTICLE = PARTICLES.register("particle_with_duration", () -> new MovingGoalParticleType(false));
 
     public static RegistryEntrySupplier<ParticleType<ColoredParticleData>> registerColoredParticleType(String name, boolean alwaysShow) {
         return PARTICLES.register(name, () -> new ColoredParticleType(alwaysShow));

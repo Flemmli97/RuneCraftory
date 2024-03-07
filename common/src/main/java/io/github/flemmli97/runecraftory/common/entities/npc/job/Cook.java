@@ -45,10 +45,10 @@ public class Cook extends NPCJob {
             return;
         }
         ItemStack bread = switch (action) {
-            case ARMOR_BREAD_DESCRIPTION -> new ItemStack(ModItems.armorBread.get());
-            case CHEM_BREAD_SUCCESS -> new ItemStack(ModItems.chemistryBread.get());
-            case COOKING_BREAD_SUCCESS -> new ItemStack(ModItems.cookingBread.get());
-            default -> new ItemStack(ModItems.forgingBread.get());
+            case ARMOR_BREAD_DESCRIPTION -> new ItemStack(ModItems.ARMOR_BREAD.get());
+            case CHEM_BREAD_SUCCESS -> new ItemStack(ModItems.CHEMISTRY_BREAD.get());
+            case COOKING_BREAD_SUCCESS -> new ItemStack(ModItems.COOKING_BREAD.get());
+            default -> new ItemStack(ModItems.FORGING_BREAD.get());
         };
         int level = Mth.ceil(Math.abs(npc.getRandom().nextGaussian() * 4));
         withLevel(bread, level);

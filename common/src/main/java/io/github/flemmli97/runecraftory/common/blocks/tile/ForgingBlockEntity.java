@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public class ForgingBlockEntity extends UpgradingCraftingBlockEntity {
 
     public ForgingBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(ModBlocks.forgingTile.get(), EnumCrafting.FORGE, blockPos, blockState);
+        super(ModBlocks.FORGING_TILE.get(), EnumCrafting.FORGE, blockPos, blockState);
     }
 
     @Override

@@ -28,8 +28,8 @@ public class SextupleCategory implements DisplayCategory<SextupleDisplay> {
     private final EnumCrafting type;
     private final CategoryIdentifier<SextupleDisplay> identifier;
 
-    private static final int xSize = 119;
-    private static final int ySize = 42;
+    private static final int X_SIZE = 119;
+    private static final int Y_SIZE = 42;
 
     public SextupleCategory(EnumCrafting type, CategoryIdentifier<SextupleDisplay> identifier) {
         this.type = type;
@@ -39,10 +39,10 @@ public class SextupleCategory implements DisplayCategory<SextupleDisplay> {
     @Override
     public Renderer getIcon() {
         return switch (this.type) {
-            case FORGE -> EntryStacks.of(ModItems.itemBlockForge.get());
-            case ARMOR -> EntryStacks.of(ModItems.itemBlockAccess.get());
-            case CHEM -> EntryStacks.of(ModItems.itemBlockChem.get());
-            case COOKING -> EntryStacks.of(ModItems.itemBlockCooking.get());
+            case FORGE -> EntryStacks.of(ModItems.ITEM_BLOCK_FORGE.get());
+            case ARMOR -> EntryStacks.of(ModItems.ITEM_BLOCK_ACCESS.get());
+            case CHEM -> EntryStacks.of(ModItems.ITEM_BLOCK_CHEM.get());
+            case COOKING -> EntryStacks.of(ModItems.ITEM_BLOCK_COOKING.get());
         };
     }
 
@@ -56,7 +56,7 @@ public class SextupleCategory implements DisplayCategory<SextupleDisplay> {
         List<Widget> widgets = new ArrayList<>();
         widgets.add(Widgets.createRecipeBase(bounds));
         widgets.add(Widgets.createTexturedWidget(GUI,
-                bounds.getX(), bounds.getY(), 19, 20, xSize, ySize));
+                bounds.getX(), bounds.getY(), 19, 20, X_SIZE, Y_SIZE));
         Player player = Minecraft.getInstance().player;
         if (display.recipe() != null && Platform.INSTANCE.getPlayerData(player).map(cap -> cap.getRecipeKeeper().isUnlocked(display.recipe())).orElse(false)) {
             for (int y = 0; y < 2; y++) {
@@ -69,7 +69,7 @@ public class SextupleCategory implements DisplayCategory<SextupleDisplay> {
             TranslatableComponent level = new TranslatableComponent("runecraftory.recipe_integration.crafting_level", display.recipe().getCraftingLevel());
             widgets.add(Widgets.createLabel(new Point(bounds.getX() + bounds.getWidth(), bounds.getY()), level).noShadow().rightAligned().color(0xFF404040, 0xFFBBBBBB));
         } else {
-            widgets.add(Widgets.createSlot(new Point(bounds.getX() + 64, bounds.getY() + 14)).entry(EntryStacks.of(new ItemStack(ModItems.unknown.get()))
+            widgets.add(Widgets.createSlot(new Point(bounds.getX() + 64, bounds.getY() + 14)).entry(EntryStacks.of(new ItemStack(ModItems.UNKNOWN.get()))
                     .tooltip(new TranslatableComponent("runecraftory.recipe_integration.locked"))));
         }
         widgets.add(Widgets.createSlot(new Point(bounds.getX() + 97, bounds.getY() + 15))
@@ -79,12 +79,12 @@ public class SextupleCategory implements DisplayCategory<SextupleDisplay> {
 
     @Override
     public int getDisplayHeight() {
-        return ySize;
+        return Y_SIZE;
     }
 
     @Override
     public int getDisplayWidth(SextupleDisplay display) {
-        return xSize;
+        return X_SIZE;
     }
 
     @Override

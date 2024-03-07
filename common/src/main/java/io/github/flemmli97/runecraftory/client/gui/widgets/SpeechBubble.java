@@ -14,7 +14,7 @@ import java.util.List;
 
 public class SpeechBubble extends GuiComponent implements Widget {
 
-    protected static final ResourceLocation tex = new ResourceLocation(RuneCraftory.MODID, "textures/gui/bars.png");
+    protected static final ResourceLocation TEX = new ResourceLocation(RuneCraftory.MODID, "textures/gui/bars.png");
 
     private final Minecraft mc;
     private final int x;
@@ -36,7 +36,7 @@ public class SpeechBubble extends GuiComponent implements Widget {
     @Override
     public void render(PoseStack stack, int mouseX, int mouseY, float partialTick) {
         if (--this.showDuration > 0 && this.texts != null) {
-            RenderSystem.setShaderTexture(0, tex);
+            RenderSystem.setShaderTexture(0, TEX);
             this.blit(stack, this.x, this.y, 1, 94, this.width / 2, this.height / 2);
             this.blit(stack, this.x + this.width / 2, this.y, 129 - this.width / 2, 94, this.width / 2, this.height / 2);
             this.blit(stack, this.x, this.y + this.height / 2, 1, 158 - this.height / 2, this.width / 2, this.height / 2 + 15);

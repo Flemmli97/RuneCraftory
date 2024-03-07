@@ -18,7 +18,7 @@ import net.minecraft.world.phys.Vec3;
 
 public class RenderRaccoon<T extends EntityRaccoon> extends RenderMonster<T, ModelRaccoonBase<T>> {
 
-    private static final ResourceLocation berserkTexture = new ResourceLocation(RuneCraftory.MODID, "textures/entity/monsters/raccoon_berserk.png");
+    private static final ResourceLocation BERSERK_TEXTURE = new ResourceLocation(RuneCraftory.MODID, "textures/entity/monsters/raccoon_berserk.png");
 
     private final ModelRaccoonBase<T> normalModel;
     private final ModelRaccoonBase<T> berserkModel;
@@ -34,7 +34,7 @@ public class RenderRaccoon<T extends EntityRaccoon> extends RenderMonster<T, Mod
 
     @Override
     public ResourceLocation getTextureLocation(T entity) {
-        return this.model == this.berserkModel ? berserkTexture : super.getTextureLocation(entity);
+        return this.model == this.berserkModel ? BERSERK_TEXTURE : super.getTextureLocation(entity);
     }
 
     @Override

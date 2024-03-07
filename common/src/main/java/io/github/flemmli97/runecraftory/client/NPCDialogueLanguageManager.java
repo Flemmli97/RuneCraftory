@@ -42,7 +42,7 @@ public class NPCDialogueLanguageManager {
                     }
                 }
             } catch (IOException iOException) {
-                RuneCraftory.logger.warn("Failed to load dialog translations for language {}", lang, iOException);
+                RuneCraftory.LOGGER.warn("Failed to load dialog translations for language {}", lang, iOException);
             }
             translations.computeIfAbsent(lang, k -> new HashMap<>()).putAll(map);
         }

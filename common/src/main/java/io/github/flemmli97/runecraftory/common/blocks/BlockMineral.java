@@ -49,7 +49,7 @@ public class BlockMineral extends Block implements SimpleWaterloggedBlock, Exten
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
-    public static final VoxelShape north = Stream.of(
+    public static final VoxelShape NORTH = Stream.of(
             Block.box(8, 0, 0, 13, 6, 5),
             Block.box(10, 0, 8, 13, 11, 10),
             Block.box(9, 0, 10, 16, 6, 15),
@@ -73,7 +73,7 @@ public class BlockMineral extends Block implements SimpleWaterloggedBlock, Exten
             Block.box(8.6, 8.4, 3.5, 11.6, 10.4, 4.5),
             Block.box(0.6, 5, 4.2, 1.6, 7, 8.2)
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
-    public static final VoxelShape west = Stream.of(
+    public static final VoxelShape WEST = Stream.of(
             Block.box(0, 0, 3, 5, 6, 8),
             Block.box(8, 0, 3, 10, 11, 6),
             Block.box(10, 0, 0, 15, 6, 7),
@@ -97,7 +97,7 @@ public class BlockMineral extends Block implements SimpleWaterloggedBlock, Exten
             Block.box(3.5, 8.4, 4.4, 4.5, 10.4, 7.4),
             Block.box(4.2, 5, 14.4, 8.2, 7, 15.4)
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
-    public static final VoxelShape south = Stream.of(
+    public static final VoxelShape SOUTH = Stream.of(
             Block.box(3, 0, 11, 8, 6, 16),
             Block.box(3, 0, 6, 6, 11, 8),
             Block.box(0, 0, 1, 7, 6, 6),
@@ -121,7 +121,7 @@ public class BlockMineral extends Block implements SimpleWaterloggedBlock, Exten
             Block.box(4.4, 8.4, 11.5, 7.4, 10.4, 12.5),
             Block.box(14.4, 5, 7.8, 15.4, 7, 11.8)
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
-    public static final VoxelShape east = Stream.of(
+    public static final VoxelShape EAST = Stream.of(
             Block.box(11, 0, 8, 16, 6, 13),
             Block.box(6, 0, 10, 8, 11, 13),
             Block.box(1, 0, 9, 6, 6, 16),
@@ -220,10 +220,10 @@ public class BlockMineral extends Block implements SimpleWaterloggedBlock, Exten
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return switch (state.getValue(FACING)) {
-            case WEST -> west;
-            case EAST -> east;
-            case SOUTH -> south;
-            default -> north;
+            case WEST -> WEST;
+            case EAST -> EAST;
+            case SOUTH -> SOUTH;
+            default -> NORTH;
         };
     }
 
@@ -259,7 +259,7 @@ public class BlockMineral extends Block implements SimpleWaterloggedBlock, Exten
     }
 
     public BlockState getBrokenState(BlockState state) {
-        BlockState blockState = ModBlocks.brokenMineralMap.get(this.tier).get().defaultBlockState();
+        BlockState blockState = ModBlocks.BROKEN_MINERAL_MAP.get(this.tier).get().defaultBlockState();
         if (blockState.hasProperty(FACING))
             blockState.setValue(FACING, state.getValue(FACING));
         if (blockState.hasProperty(WATERLOGGED))

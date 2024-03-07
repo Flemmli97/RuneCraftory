@@ -319,7 +319,7 @@ public class EntityThunderbolt extends BossMonster {
                 int tick = this.getAnimationHandler().getAnimation().getTick();
                 if (tick < 40) {
                     if (tick % 10 == 0)
-                        this.level.addParticle(new ColoredParticleData(ModParticles.blink.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
+                        this.level.addParticle(new ColoredParticleData(ModParticles.BLINK.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
                                 this.getX() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth()),
                                 this.getY() + this.random.nextDouble() * (this.getBbHeight()),
                                 this.getZ() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth()),
@@ -328,7 +328,7 @@ public class EntityThunderbolt extends BossMonster {
                                 this.random.nextGaussian() * 0.02D);
                 } else if (tick < 80) {
                     if (tick % 2 == 0)
-                        this.level.addParticle(new ColoredParticleData(ModParticles.blink.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
+                        this.level.addParticle(new ColoredParticleData(ModParticles.BLINK.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
                                 this.getX() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth() + 2),
                                 this.getY() + this.random.nextDouble() * (this.getBbHeight() + 1),
                                 this.getZ() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth() + 2),
@@ -338,7 +338,7 @@ public class EntityThunderbolt extends BossMonster {
                 } else {
                     int amount = (tick - 80) / 10;
                     for (int i = 0; i < amount; i++) {
-                        this.level.addParticle(new ColoredParticleData(ModParticles.blink.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
+                        this.level.addParticle(new ColoredParticleData(ModParticles.BLINK.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
                                 this.getX() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth() + 3),
                                 this.getY() + this.random.nextDouble() * (this.getBbHeight() + 1),
                                 this.getZ() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth() + 3),

@@ -88,7 +88,7 @@ public class EntityPollen extends BaseDamageCloud {
             for (Vector3f base : POLLEN_BASE) {
                 for (Vector3f dir : POLLEN_IND) {
                     for (int i = 0; i < 3; i++)
-                        this.level.addParticle(new ColoredParticleData(ModParticles.sinkingDust.get(), 10 / 255F, 138 / 255F, 12 / 255F, 1), this.getX() + base.x(), this.getY() + 0.05, this.getZ() + base.z(), dir.x() + base.x() * 0.02, dir.y(), dir.z() + base.z() * 0.02);
+                        this.level.addParticle(new ColoredParticleData(ModParticles.SINKING_DUST.get(), 10 / 255F, 138 / 255F, 12 / 255F, 1), this.getX() + base.x(), this.getY() + 0.05, this.getZ() + base.z(), dir.x() + base.x() * 0.02, dir.y(), dir.z() + base.z() * 0.02);
                 }
             }
         } else

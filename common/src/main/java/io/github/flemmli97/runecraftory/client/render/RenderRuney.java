@@ -14,10 +14,10 @@ import net.minecraft.util.Mth;
 
 public class RenderRuney extends EntityRenderer<EntityRuney> {
 
-    private static final ResourceLocation tex1 = new ResourceLocation(RuneCraftory.MODID, "textures/particle/runey_0.png");
-    private static final ResourceLocation tex2 = new ResourceLocation(RuneCraftory.MODID, "textures/particle/runey_1.png");
-    private static final ResourceLocation tex3 = new ResourceLocation(RuneCraftory.MODID, "textures/particle/runey_2.png");
-    private static final ResourceLocation tex4 = new ResourceLocation(RuneCraftory.MODID, "textures/particle/runey_3.png");
+    private static final ResourceLocation TEX_1 = new ResourceLocation(RuneCraftory.MODID, "textures/particle/runey_0.png");
+    private static final ResourceLocation TEX_2 = new ResourceLocation(RuneCraftory.MODID, "textures/particle/runey_1.png");
+    private static final ResourceLocation TEX_3 = new ResourceLocation(RuneCraftory.MODID, "textures/particle/runey_2.png");
+    private static final ResourceLocation TEX_4 = new ResourceLocation(RuneCraftory.MODID, "textures/particle/runey_3.png");
 
     protected final RenderUtils.TextureBuilder textureBuilder = new RenderUtils.TextureBuilder();
 
@@ -42,10 +42,10 @@ public class RenderRuney extends EntityRenderer<EntityRuney> {
     @Override
     public ResourceLocation getTextureLocation(EntityRuney entity) {
         return switch (entity.type()) {
-            case 0 -> tex1;
-            case 1 -> tex2;
-            case 2 -> tex3;
-            default -> tex4;
+            case 0 -> TEX_1;
+            case 1 -> TEX_2;
+            case 2 -> TEX_3;
+            default -> TEX_4;
         };
     }
 }

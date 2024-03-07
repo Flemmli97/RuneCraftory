@@ -68,7 +68,7 @@ public class RuneCraftoryForge {
     public static final String MODID = "runecraftory";
 
     public RuneCraftoryForge() {
-        RuneCraftory.simpleQuests = ModList.get().isLoaded("simplequests");
+        RuneCraftory.SIMPLE_QUESTS = ModList.get().isLoaded("simplequests");
 
         Path confDir = FMLPaths.CONFIGDIR.get().resolve(MODID);
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();

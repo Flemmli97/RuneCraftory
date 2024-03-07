@@ -11,9 +11,9 @@ import java.util.List;
 
 public class InventoryShop implements Container {
 
-    public static final int shopSize = 30;
+    public static final int SHOP_SIZE = 30;
 
-    private final NonNullList<ItemStack> slots = NonNullList.withSize(shopSize, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> slots = NonNullList.withSize(SHOP_SIZE, ItemStack.EMPTY);
     private final NonNullList<ItemStack> shop;
     private int index;
     private ItemStack output = ItemStack.EMPTY;
@@ -43,7 +43,7 @@ public class InventoryShop implements Container {
 
     @Override
     public ItemStack getItem(int index) {
-        if (index == shopSize) {
+        if (index == SHOP_SIZE) {
             return this.output;
         }
         return this.slots.get(index);
@@ -51,7 +51,7 @@ public class InventoryShop implements Container {
 
     @Override
     public ItemStack removeItem(int index, int count) {
-        if (index == shopSize) {
+        if (index == SHOP_SIZE) {
             return this.output.split(count);
         }
         return ContainerHelper.removeItem(this.slots, index, count);
@@ -59,7 +59,7 @@ public class InventoryShop implements Container {
 
     @Override
     public ItemStack removeItemNoUpdate(int index) {
-        if (index == shopSize) {
+        if (index == SHOP_SIZE) {
             ItemStack stack = this.output.copy();
             this.output = ItemStack.EMPTY;
             return stack;
@@ -69,7 +69,7 @@ public class InventoryShop implements Container {
 
     @Override
     public void setItem(int index, ItemStack stack) {
-        if (index == shopSize) {
+        if (index == SHOP_SIZE) {
             this.output = stack;
         } else {
             stack.setCount(this.getMaxStackSize());
@@ -103,7 +103,7 @@ public class InventoryShop implements Container {
     }
 
     public void next() {
-        this.index = Math.min(this.shop.size() / shopSize, ++this.index);
+        this.index = Math.min(this.shop.size() / SHOP_SIZE, ++this.index);
         this.updateInv();
     }
 
@@ -113,7 +113,7 @@ public class InventoryShop implements Container {
     }
 
     public boolean hasNext() {
-        return this.index < this.shop.size() / shopSize;
+        return this.index < this.shop.size() / SHOP_SIZE;
     }
 
     public boolean hasPrev() {
@@ -123,7 +123,7 @@ public class InventoryShop implements Container {
     private void updateInv() {
         List<ItemStack> list = this.shop;
         for (int i = 0; i < this.slots.size(); ++i) {
-            int slot = i + shopSize * this.index;
+            int slot = i + SHOP_SIZE * this.index;
             ItemStack stack = ItemStack.EMPTY;
             if (slot < list.size()) {
                 stack = list.get(slot);

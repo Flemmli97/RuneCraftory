@@ -48,14 +48,14 @@ public class ClientMixinUtils {
     private static final Map<SeasonedTint, Integer> GRASS_TINTS = new ConcurrentHashMap<>();
 
     public static int modifyColoredTint(BlockAndTintGetter getter, int old) {
-        CalendarImpl calendar = ClientHandlers.clientCalendar;
+        CalendarImpl calendar = ClientHandlers.CLIENT_CALENDAR;
         if (calendar.currentSeason() == EnumSeason.SUMMER)
             return old;
         return LEAVE_TINTS.computeIfAbsent(new SeasonedTint(old, calendar.currentSeason()), ClientMixinUtils::getLeaveTint);
     }
 
     public static int modifyColoredTintGrass(BlockAndTintGetter getter, int old) {
-        CalendarImpl calendar = ClientHandlers.clientCalendar;
+        CalendarImpl calendar = ClientHandlers.CLIENT_CALENDAR;
         if (calendar.currentSeason() == EnumSeason.SUMMER)
             return old;
         return GRASS_TINTS.computeIfAbsent(new SeasonedTint(old, calendar.currentSeason()), ClientMixinUtils::getGrassTint);

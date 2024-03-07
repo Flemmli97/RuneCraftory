@@ -19,7 +19,7 @@ public class ShippingContainer extends AbstractContainerMenu {
     }
 
     public ShippingContainer(int i, Inventory inventory, Container shippingBin) {
-        super(ModContainer.shippingContainer.get(), i);
+        super(ModContainer.SHIPPING_CONTAINER.get(), i);
         this.container = shippingBin;
         if (this.container == null)
             throw new IllegalStateException("Couldn't get shipping container from player");

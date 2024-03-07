@@ -28,7 +28,7 @@ public class BlockBossSpawner extends BaseEntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
-        return level.isClientSide ? null : BaseEntityBlock.createTickerHelper(blockEntityType, ModBlocks.bossSpawnerTile.get(), BossSpawnerBlockEntity::tick);
+        return level.isClientSide ? null : BaseEntityBlock.createTickerHelper(blockEntityType, ModBlocks.BOSS_SPAWNER_TILE.get(), BossSpawnerBlockEntity::tick);
     }
 
     @Override

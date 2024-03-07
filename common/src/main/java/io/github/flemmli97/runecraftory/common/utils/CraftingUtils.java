@@ -41,7 +41,7 @@ public class CraftingUtils {
     }
 
     public static int upgradeCost(EnumCrafting type, PlayerData data, ItemStack stack, ItemStack ingredient, boolean onlyIngredient) {
-        if (!GeneralConfig.useRP)
+        if (!GeneralConfig.USE_RP)
             return 0;
         return DataPackHandler.INSTANCE.itemStatManager().get(ingredient.getItem()).map(stat -> {
             if (stat.getDiff() <= 0)
@@ -64,16 +64,16 @@ public class CraftingUtils {
     }
 
     public static int craftingCost(EnumCrafting type, PlayerData data, SextupleRecipe recipe, NonNullList<ItemStack> bonusItems, boolean unlocked) {
-        if (!GeneralConfig.useRP)
+        if (!GeneralConfig.USE_RP)
             return 0;
-        if (GeneralConfig.recipeSystem.baseCost) {
+        if (GeneralConfig.RECIPE_SYSTEM.baseCost) {
             int cost = recipe.getBaseCost();
             int additionalMaterial = 0;
             for (ItemStack items : bonusItems) {
                 additionalMaterial += DataPackHandler.INSTANCE.itemStatManager().get(items.getItem()).map(ItemStat::getDiff).orElse(10);
             }
             cost += additionalMaterial;
-            if (!unlocked && GeneralConfig.recipeSystem.lockedCostMore)
+            if (!unlocked && GeneralConfig.RECIPE_SYSTEM.lockedCostMore)
                 cost *= 3;
             return cost;
         }
@@ -101,7 +101,7 @@ public class CraftingUtils {
             }).orElse(10);
         }
         cost += additionalMaterial;
-        if (!unlocked && GeneralConfig.recipeSystem.lockedCostMore)
+        if (!unlocked && GeneralConfig.RECIPE_SYSTEM.lockedCostMore)
             cost *= 3;
         return cost;
     }
@@ -123,9 +123,9 @@ public class CraftingUtils {
     }
 
     public static void giveCraftingXPTo(ServerPlayer serverPlayer, PlayerData data, EnumSkills skill, SextupleRecipe recipe) {
-        if (GeneralConfig.skillXpMultiplier == 0)
+        if (GeneralConfig.SKILL_XP_MULTIPLIER == 0)
             return;
-        data.increaseSkill(skill, serverPlayer, xpForCrafting(skill, recipe, data.getSkillLevel(skill).getLevel()) * GeneralConfig.skillXpMultiplier);
+        data.increaseSkill(skill, serverPlayer, xpForCrafting(skill, recipe, data.getSkillLevel(skill).getLevel()) * GeneralConfig.SKILL_XP_MULTIPLIER);
     }
 
     private static float xpForUpgrade(EnumSkills skill, ItemStack equip, ItemStack upgrade, int skillLevel) {
@@ -138,9 +138,9 @@ public class CraftingUtils {
     }
 
     public static void giveUpgradeXPTo(ServerPlayer serverPlayer, PlayerData data, EnumSkills skill, ItemStack equip, ItemStack upgrade) {
-        if (GeneralConfig.skillXpMultiplier == 0)
+        if (GeneralConfig.SKILL_XP_MULTIPLIER == 0)
             return;
-        data.increaseSkill(skill, serverPlayer, xpForUpgrade(skill, equip, upgrade, data.getSkillLevel(skill).getLevel()) * GeneralConfig.skillXpMultiplier);
+        data.increaseSkill(skill, serverPlayer, xpForUpgrade(skill, equip, upgrade, data.getSkillLevel(skill).getLevel()) * GeneralConfig.SKILL_XP_MULTIPLIER);
     }
 
     public static ItemStack getCraftingOutput(ItemStack stack, PlayerContainerInv inv, Pair<NonNullList<ItemStack>, NonNullList<ItemStack>> materials, EnumCrafting type) {

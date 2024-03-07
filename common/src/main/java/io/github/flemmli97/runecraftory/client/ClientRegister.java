@@ -178,23 +178,23 @@ import java.util.function.Supplier;
 
 public class ClientRegister {
 
-    private static final BlockColor cropColor = (blockState, blockAndTintGetter, blockPos, i) -> {
+    private static final BlockColor CROP_COLOR = (blockState, blockAndTintGetter, blockPos, i) -> {
         if (blockState.getValue(BlockCrop.WILTED))
             return 0xdc680a;
         return -1;
     };
 
     public static void init() {
-        ClientHandlers.overlay = new OverlayGui(Minecraft.getInstance());
-        ClientHandlers.spellDisplay = new SpellInvOverlayGui(Minecraft.getInstance());
-        ClientHandlers.farmDisplay = new FarmlandInfo(Minecraft.getInstance());
+        ClientHandlers.OVERLAY = new OverlayGui(Minecraft.getInstance());
+        ClientHandlers.SPELL_DISPLAY = new SpellInvOverlayGui(Minecraft.getInstance());
+        ClientHandlers.FARM_DISPLAY = new FarmlandInfo(Minecraft.getInstance());
     }
 
     public static void registerKeyBinding(Consumer<KeyMapping> consumer) {
-        consumer.accept(ClientHandlers.spell1 = new TriggerKeyBind(RuneCraftory.MODID + ".key.spell_1", GLFW.GLFW_KEY_C, RuneCraftory.MODID + ".keycategory"));
-        consumer.accept(ClientHandlers.spell2 = new TriggerKeyBind(RuneCraftory.MODID + ".key.spell_2", GLFW.GLFW_KEY_V, RuneCraftory.MODID + ".keycategory"));
-        consumer.accept(ClientHandlers.spell3 = new TriggerKeyBind(RuneCraftory.MODID + ".key.spell_3", GLFW.GLFW_KEY_G, RuneCraftory.MODID + ".keycategory"));
-        consumer.accept(ClientHandlers.spell4 = new TriggerKeyBind(RuneCraftory.MODID + ".key.spell_4", GLFW.GLFW_KEY_B, RuneCraftory.MODID + ".keycategory"));
+        consumer.accept(ClientHandlers.SPELL_1 = new TriggerKeyBind(RuneCraftory.MODID + ".key.spell_1", GLFW.GLFW_KEY_C, RuneCraftory.MODID + ".keycategory"));
+        consumer.accept(ClientHandlers.SPELL_2 = new TriggerKeyBind(RuneCraftory.MODID + ".key.spell_2", GLFW.GLFW_KEY_V, RuneCraftory.MODID + ".keycategory"));
+        consumer.accept(ClientHandlers.SPELL_3 = new TriggerKeyBind(RuneCraftory.MODID + ".key.spell_3", GLFW.GLFW_KEY_G, RuneCraftory.MODID + ".keycategory"));
+        consumer.accept(ClientHandlers.SPELL_4 = new TriggerKeyBind(RuneCraftory.MODID + ".key.spell_4", GLFW.GLFW_KEY_B, RuneCraftory.MODID + ".keycategory"));
     }
 
     public static void setupRenderLayers(BiConsumer<Block, RenderType> consumer) {
@@ -203,7 +203,7 @@ public class ClientRegister {
                 consumer.accept(reg.get(), RenderType.cutout());
             if (reg.get() instanceof BlockCrafting)
                 consumer.accept(reg.get(), RenderType.cutout());
-            if (reg == ModBlocks.monsterBarn)
+            if (reg == ModBlocks.MONSTER_BARN)
                 consumer.accept(reg.get(), RenderType.cutout());
             if (reg.get() instanceof LeavesBlock)
                 consumer.accept(reg.get(), RenderType.cutoutMipped());
@@ -211,7 +211,7 @@ public class ClientRegister {
                 consumer.accept(reg.get(), RenderType.cutout());
         });
 
-        consumer.accept(ModBlocks.bossSpawner.get(), RenderType.cutout());
+        consumer.accept(ModBlocks.BOSS_SPAWNER.get(), RenderType.cutout());
     }
 
     public static void registerItemProps(ItemModelPropsRegister register) {
@@ -228,29 +228,29 @@ public class ClientRegister {
     }
 
     public static void registerBlockColors(BiConsumer<BlockColor, Block> cons) {
-        ModBlocks.crops.forEach(reg -> cons.accept(cropColor, reg.get()));
-        ModBlocks.flowers.forEach(reg -> cons.accept(cropColor, reg.get()));
+        ModBlocks.CROPS.forEach(reg -> cons.accept(CROP_COLOR, reg.get()));
+        ModBlocks.FLOWERS.forEach(reg -> cons.accept(CROP_COLOR, reg.get()));
         BlockColor leaves = (blockState, blockAndTintGetter, blockPos, i) -> {
             if (blockAndTintGetter == null || blockPos == null) {
                 return FoliageColor.getDefaultColor();
             }
             return BiomeColors.getAverageFoliageColor(blockAndTintGetter, blockPos);
         };
-        cons.accept(leaves, ModBlocks.appleLeaves.get());
-        cons.accept(leaves, ModBlocks.apple.get());
-        cons.accept(leaves, ModBlocks.orangeLeaves.get());
-        cons.accept(leaves, ModBlocks.orange.get());
-        cons.accept(leaves, ModBlocks.grapeLeaves.get());
-        cons.accept(leaves, ModBlocks.grape.get());
+        cons.accept(leaves, ModBlocks.APPLE_LEAVES.get());
+        cons.accept(leaves, ModBlocks.APPLE.get());
+        cons.accept(leaves, ModBlocks.ORANGE_LEAVES.get());
+        cons.accept(leaves, ModBlocks.ORANGE.get());
+        cons.accept(leaves, ModBlocks.GRAPE_LEAVES.get());
+        cons.accept(leaves, ModBlocks.GRAPE.get());
     }
 
     public static void registerScreen(MenuScreenRegister factory) {
-        factory.register(ModContainer.craftingContainer.get(), (CraftingGui::new));
-        factory.register(ModContainer.upgradeContainer.get(), UpgradeGui::new);
-        factory.register(ModContainer.infoContainer.get(), InfoScreen::new);
-        factory.register(ModContainer.infoSubContainer.get(), InfoSubScreen::new);
-        factory.register(ModContainer.shippingContainer.get(), MaxChestScreen<ShippingContainer>::new);
-        factory.register(ModContainer.shopContainer.get(), NPCShopGui::new);
+        factory.register(ModContainer.CRAFTING_CONTAINER.get(), (CraftingGui::new));
+        factory.register(ModContainer.UPGRADE_CONTAINER.get(), UpgradeGui::new);
+        factory.register(ModContainer.INFO_CONTAINER.get(), InfoScreen::new);
+        factory.register(ModContainer.INFO_SUB_CONTAINER.get(), InfoSubScreen::new);
+        factory.register(ModContainer.SHIPPING_CONTAINER.get(), MaxChestScreen<ShippingContainer>::new);
+        factory.register(ModContainer.SHOP_CONTAINER.get(), NPCShopGui::new);
     }
 
     public static <T extends Entity> void registerRenderers(EntityRendererRegister consumer) {
@@ -318,7 +318,7 @@ public class ClientRegister {
         consumer.register(ModEntities.SPORE.get(), EmptyRender::new);
         consumer.register(ModEntities.GUST.get(), EmptyRender::new);
         consumer.register(ModEntities.STONE.get(), ctx -> new RenderProjectileItem<>(ctx) {
-            private final ItemStack stack = new ItemStack(ModItems.stoneRound.get());
+            private final ItemStack stack = new ItemStack(ModItems.STONE_ROUND.get());
 
             @Override
             public ItemStack getRenderItemStack(EntityStone entity) {
@@ -473,25 +473,25 @@ public class ClientRegister {
     }
 
     public static <T extends ParticleOptions> void registerParticles(PartileRegister consumer) {
-        consumer.register(ModParticles.sinkingDust.get(), SinkingParticle.Factory::new);
-        consumer.register(ModParticles.light.get(), ColoredParticle.LightParticleFactory::new);
-        consumer.register(ModParticles.shortLight.get(), ParticleFactories.ShortLightParticleFactory::new);
-        consumer.register(ModParticles.cross.get(), ColoredParticle.LightParticleFactory::new);
-        consumer.register(ModParticles.blink.get(), ColoredParticle.LightParticleFactory::new);
-        consumer.register(ModParticles.smoke.get(), ColoredParticle.LightParticleFactory::new);
-        consumer.register(ModParticles.staticLight.get(), ColoredParticle.NoGravityParticleFactory::new);
-        consumer.register(ModParticles.circlingLight.get(), CirclingParticle.CirclingFactoryBase::new);
-        consumer.register(ModParticles.vortex.get(), VortexParticle.VortexFactoryBase::new);
-        consumer.register(ModParticles.wind.get(), ColoredParticle.NoGravityParticleFactory::new);
-        consumer.register(ModParticles.sleep.get(), HeartParticle.Provider::new);
-        consumer.register(ModParticles.poison.get(), HeartParticle.Provider::new);
-        consumer.register(ModParticles.paralysis.get(), LightningParticle.Factory::new);
-        consumer.register(ModParticles.lightning.get(), LightningParticle.Factory::new);
+        consumer.register(ModParticles.SINKING_DUST.get(), SinkingParticle.Factory::new);
+        consumer.register(ModParticles.LIGHT.get(), ColoredParticle.LightParticleFactory::new);
+        consumer.register(ModParticles.SHORT_LIGHT.get(), ParticleFactories.ShortLightParticleFactory::new);
+        consumer.register(ModParticles.CROSS.get(), ColoredParticle.LightParticleFactory::new);
+        consumer.register(ModParticles.BLINK.get(), ColoredParticle.LightParticleFactory::new);
+        consumer.register(ModParticles.SMOKE.get(), ColoredParticle.LightParticleFactory::new);
+        consumer.register(ModParticles.STATIC_LIGHT.get(), ColoredParticle.NoGravityParticleFactory::new);
+        consumer.register(ModParticles.CIRCLING_LIGHT.get(), CirclingParticle.CirclingFactoryBase::new);
+        consumer.register(ModParticles.VORTEX.get(), VortexParticle.VortexFactoryBase::new);
+        consumer.register(ModParticles.WIND.get(), ColoredParticle.NoGravityParticleFactory::new);
+        consumer.register(ModParticles.SLEEP.get(), HeartParticle.Provider::new);
+        consumer.register(ModParticles.POISON.get(), HeartParticle.Provider::new);
+        consumer.register(ModParticles.PARALYSIS.get(), LightningParticle.Factory::new);
+        consumer.register(ModParticles.LIGHTNING.get(), LightningParticle.Factory::new);
 
-        consumer.register(ModParticles.runey.get(), RuneyParticle.Provider::new);
+        consumer.register(ModParticles.RUNEY.get(), RuneyParticle.Provider::new);
 
-        consumer.register(ModParticles.skelefangBones.get(), SkelefangParticle.SkelefangParticleFactoryBase::new);
-        consumer.register(ModParticles.durationalParticle.get(), MoveToGoalParticle.ParticleFactoryBase::new);
+        consumer.register(ModParticles.SKELEFANG_BONES.get(), SkelefangParticle.SkelefangParticleFactoryBase::new);
+        consumer.register(ModParticles.DURATIONAL_PARTICLE.get(), MoveToGoalParticle.ParticleFactoryBase::new);
     }
 
     public static <T extends TooltipComponent> void registerTooltipComponentFactories(ToolTipComponentRegister register) {

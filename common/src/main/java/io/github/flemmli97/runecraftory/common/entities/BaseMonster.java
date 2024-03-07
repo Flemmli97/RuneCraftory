@@ -229,7 +229,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     private int moveTick;
     private final int moveRandom = this.random.nextInt(10);
 
-    public static final int moveTickMax = 3;
+    public static final int MOVE_TICK_MAX = 3;
 
     public BaseMonster(EntityType<? extends BaseMonster> type, Level level) {
         super(type, level);
@@ -386,7 +386,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         if (keepPos)
             pos = this.getRestrictCenter();
         if (this.behaviourState() == Behaviour.FARM) {
-            this.restrictTo(pos, MobConfig.farmRadius + 3);
+            this.restrictTo(pos, MobConfig.FARM_RADIUS + 3);
             if (this.level instanceof ServerLevel serverLevel)
                 FarmlandHandler.get(serverLevel.getServer()).addIrrigationPOI(serverLevel, this.getUUID(), this.blockPosition());
         } else if (this.behaviourState() == Behaviour.WANDER)
@@ -469,7 +469,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     public void tick() {
         super.tick();
         if (this.getMoveFlag() != MoveType.NONE) {
-            this.moveTick = Math.min(moveTickMax, ++this.moveTick);
+            this.moveTick = Math.min(MOVE_TICK_MAX, ++this.moveTick);
         } else {
             this.moveTick = Math.max(0, --this.moveTick);
         }
@@ -501,7 +501,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 this.assignedBarn = null;
             if (this.isTamed()) {
                 if (this.assignedBarn == null) {
-                    if (MobConfig.monsterNeedBarn && this.behaviourState() != Behaviour.STAY)
+                    if (MobConfig.MONSTER_NEED_BARN && this.behaviourState() != Behaviour.STAY)
                         this.setBehaviour(Behaviour.STAY);
                 }
             }
@@ -568,7 +568,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             compound.putIntArray("CropInventory", new int[]{this.cropInventory.getX(), this.cropInventory.getY(), this.cropInventory.getZ()});
         }
         if (this.assignedBarn != null && !this.assignedBarn.isInvalidFor(this))
-            GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, this.assignedBarn.pos).resultOrPartial(RuneCraftory.logger::error)
+            GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, this.assignedBarn.pos).resultOrPartial(RuneCraftory.LOGGER::error)
                     .ifPresent(t -> compound.put("AssignedBarnLocation", t));
         //CompoundTag genes = new CompoundTag();
         //this.attributeRandomizer.forEach((att, val)->genes.putInt(att.getRegistryName().toString(), val));
@@ -606,7 +606,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         if (compound.contains("AssignedBarnLocation")) {
             if (this.getServer() != null)
                 GlobalPos.CODEC.parse(new Dynamic<>(NbtOps.INSTANCE, compound.get("AssignedBarnLocation")))
-                        .resultOrPartial(RuneCraftory.logger::error).ifPresent(p ->
+                        .resultOrPartial(RuneCraftory.LOGGER::error).ifPresent(p ->
                                 this.assignedBarn = WorldHandler.get(this.getServer()).barnAt(p)
                         );
         }
@@ -695,13 +695,13 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                     return InteractionResult.sidedSuccess(clientSide);
                 }
             }
-            if (!clientSide && MobConfig.monsterNeedBarn && this.assignedBarn == null) {
+            if (!clientSide && MobConfig.MONSTER_NEED_BARN && this.assignedBarn == null) {
                 if (!this.assignBarn()) {
                     player.sendMessage(new TranslatableComponent("runecraftory.monster.interact.barn.no", this.getDisplayName()), Util.NIL_UUID);
                     return InteractionResult.CONSUME;
                 }
             }
-            if (stack.getItem() == ModItems.brush.get()) {
+            if (stack.getItem() == ModItems.BRUSH.get()) {
                 if (player instanceof ServerPlayer serverPlayer) {
                     int day = WorldUtils.day(this.level);
                     if (this.updater.getLastUpdateBrush() == day)
@@ -726,12 +726,12 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             }
             return InteractionResult.PASS;
         } else if (player.isShiftKeyDown() && !stack.isEmpty()) {
-            if (stack.getItem() == ModItems.tame.get()) {
+            if (stack.getItem() == ModItems.TAME.get()) {
                 if (!clientSide)
                     this.tameEntity(player);
                 return InteractionResult.sidedSuccess(clientSide);
             } else {
-                if (stack.getItem() == ModItems.brush.get() && this.isAlive()) {
+                if (stack.getItem() == ModItems.BRUSH.get() && this.isAlive()) {
                     if (player instanceof ServerPlayer serverPlayer) {
                         if (this.tamingTick == -1)
                             return InteractionResult.PASS;
@@ -1045,7 +1045,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 stack.shrink(1);
             this.tamingTick = 60;
             float chance = EntityUtils.tamingChance(this, player, rightItemMultiplier, this.brushCount, this.loveAttCount);
-            if (this.getServer() != null && (!MobConfig.monsterNeedBarn || WorldHandler.get(this.getServer()).findFittingBarn(this, player.getUUID()) != null))
+            if (this.getServer() != null && (!MobConfig.MONSTER_NEED_BARN || WorldHandler.get(this.getServer()).findFittingBarn(this, player.getUUID()) != null))
                 this.delayedTaming = () -> {
                     if (chance == 0)
                         this.level.broadcastEntityEvent(this, (byte) 34);
@@ -1083,7 +1083,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     public void increaseLevel() {
-        this.entityData.set(ENTITY_LEVEL, Math.min(GeneralConfig.maxLevel, this.level().getLevel() + 1));
+        this.entityData.set(ENTITY_LEVEL, Math.min(GeneralConfig.MAX_LEVEL, this.level().getLevel() + 1));
         this.updateStatsToLevel();
     }
 
@@ -1112,7 +1112,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     public void onDailyUpdate() {
-        if (this.level instanceof ServerLevel && this.isTamed() && !this.playDeath() && (!MobConfig.monsterNeedBarn || this.assignBarn())) {
+        if (this.level instanceof ServerLevel && this.isTamed() && !this.playDeath() && (!MobConfig.MONSTER_NEED_BARN || this.assignBarn())) {
             ResourceLocation resourceLocation = this.dailyDropTable();
             this.dropAsDailyDrop(resourceLocation);
         }
@@ -1140,7 +1140,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     public float interpolatedMoveTick(float partialTicks) {
-        return this.moveRandom + Mth.clamp((this.moveTick + (this.getMoveFlag() != MoveType.NONE ? partialTicks : -partialTicks)) / (float) moveTickMax, 0, 1);
+        return this.moveRandom + Mth.clamp((this.moveTick + (this.getMoveFlag() != MoveType.NONE ? partialTicks : -partialTicks)) / (float) MOVE_TICK_MAX, 0, 1);
     }
 
     public void setMovingFlag(MoveType type) {

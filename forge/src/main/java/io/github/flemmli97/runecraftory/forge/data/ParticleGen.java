@@ -32,39 +32,39 @@ public class ParticleGen implements DataProvider {
     }
 
     public void add() {
-        this.addTo(ModParticles.sinkingDust.get(), new ResourceLocation("generic_5"), new ResourceLocation("generic_6"),
+        this.addTo(ModParticles.SINKING_DUST.get(), new ResourceLocation("generic_5"), new ResourceLocation("generic_6"),
                 new ResourceLocation("generic_7"), new ResourceLocation("generic_6"), new ResourceLocation("generic_5"),
                 new ResourceLocation("generic_4"), new ResourceLocation("generic_3"), new ResourceLocation("generic_2"),
                 new ResourceLocation("generic_1"), new ResourceLocation("generic_0"));
-        this.addTo(ModParticles.light.get());
-        this.addTo(ModParticles.shortLight.get(), ModParticles.light.getID());
-        this.addTo(ModParticles.staticLight.get(), ModParticles.light.getID());
-        this.addTo(ModParticles.circlingLight.get(), ModParticles.light.getID());
-        this.addTo(ModParticles.vortex.get(), ModParticles.light.getID());
-        this.addTo(ModParticles.cross.get());
-        this.addTo(ModParticles.blink.get());
-        this.addTo(ModParticles.smoke.get(), 4);
-        this.addTo(ModParticles.wind.get(), new ResourceLocation("effect_7"), new ResourceLocation("effect_6"),
+        this.addTo(ModParticles.LIGHT.get());
+        this.addTo(ModParticles.SHORT_LIGHT.get(), ModParticles.LIGHT.getID());
+        this.addTo(ModParticles.STATIC_LIGHT.get(), ModParticles.LIGHT.getID());
+        this.addTo(ModParticles.CIRCLING_LIGHT.get(), ModParticles.LIGHT.getID());
+        this.addTo(ModParticles.VORTEX.get(), ModParticles.LIGHT.getID());
+        this.addTo(ModParticles.CROSS.get());
+        this.addTo(ModParticles.BLINK.get());
+        this.addTo(ModParticles.SMOKE.get(), 4);
+        this.addTo(ModParticles.WIND.get(), new ResourceLocation("effect_7"), new ResourceLocation("effect_6"),
                 new ResourceLocation("effect_5"), new ResourceLocation("effect_4"), new ResourceLocation("effect_3"),
                 new ResourceLocation("effect_2"), new ResourceLocation("effect_1"), new ResourceLocation("effect_0"));
-        this.addTo(ModParticles.sleep.get());
-        this.addTo(ModParticles.poison.get());
-        this.addTo(ModParticles.paralysis.get(), new ResourceLocation(RuneCraftory.MODID, "paralysis_0"),
+        this.addTo(ModParticles.SLEEP.get());
+        this.addTo(ModParticles.POISON.get());
+        this.addTo(ModParticles.PARALYSIS.get(), new ResourceLocation(RuneCraftory.MODID, "paralysis_0"),
                 new ResourceLocation(RuneCraftory.MODID, "paralysis_1"),
                 new ResourceLocation(RuneCraftory.MODID, "paralysis_2"),
                 new ResourceLocation(RuneCraftory.MODID, "paralysis_3"));
-        this.addTo(ModParticles.lightning.get(), new ResourceLocation(RuneCraftory.MODID, "lightning_0"),
+        this.addTo(ModParticles.LIGHTNING.get(), new ResourceLocation(RuneCraftory.MODID, "lightning_0"),
                 new ResourceLocation(RuneCraftory.MODID, "lightning_1"),
                 new ResourceLocation(RuneCraftory.MODID, "lightning_2"),
                 new ResourceLocation(RuneCraftory.MODID, "lightning_3"));
 
-        this.addTo(ModParticles.runey.get(), new ResourceLocation(RuneCraftory.MODID, "runey_0"),
+        this.addTo(ModParticles.RUNEY.get(), new ResourceLocation(RuneCraftory.MODID, "runey_0"),
                 new ResourceLocation(RuneCraftory.MODID, "runey_1"),
                 new ResourceLocation(RuneCraftory.MODID, "runey_2"),
                 new ResourceLocation(RuneCraftory.MODID, "runey_3"));
 
-        this.addTo(ModParticles.skelefangBones.get());
-        this.addTo(ModParticles.durationalParticle.get(), ModParticles.light.getID());
+        this.addTo(ModParticles.SKELEFANG_BONES.get());
+        this.addTo(ModParticles.DURATIONAL_PARTICLE.get(), ModParticles.LIGHT.getID());
     }
 
     @Override

@@ -30,14 +30,14 @@ public class ItemToolAxe extends AxeItem implements IItemUsable, IChargeable {
     public final EnumToolTier tier;
 
     public ItemToolAxe(EnumToolTier tier, Item.Properties props) {
-        super(ItemTiers.tier, 0, 0, props);
+        super(ItemTiers.TIER, 0, 0, props);
         this.tier = tier;
     }
 
     @Override
     public int getChargeTime(ItemStack stack) {
         if (this.tier == EnumToolTier.PLATINUM)
-            return (int) (DataPackHandler.INSTANCE.weaponPropertiesManager().getPropertiesFor(this.getWeaponType()).chargeTime() * GeneralConfig.platinumChargeTime);
+            return (int) (DataPackHandler.INSTANCE.weaponPropertiesManager().getPropertiesFor(this.getWeaponType()).chargeTime() * GeneralConfig.PLATINUM_CHARGE_TIME);
         return DataPackHandler.INSTANCE.weaponPropertiesManager().getPropertiesFor(this.getWeaponType()).chargeTime();
     }
 

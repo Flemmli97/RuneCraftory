@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 
 public class RenderDarkBeam extends RenderBeam<EntityDarkBeam> {
-    private static final ResourceLocation tex = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/dark_beam.png");
+    private static final ResourceLocation TEX = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/dark_beam.png");
 
     public RenderDarkBeam(EntityRendererProvider.Context ctx) {
         super(ctx, 0.8f, 0.65f, 4);
@@ -35,6 +35,6 @@ public class RenderDarkBeam extends RenderBeam<EntityDarkBeam> {
 
     @Override
     public ResourceLocation getTextureLocation(EntityDarkBeam entity) {
-        return tex;
+        return TEX;
     }
 }

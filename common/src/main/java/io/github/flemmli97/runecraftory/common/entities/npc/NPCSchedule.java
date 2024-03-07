@@ -69,12 +69,12 @@ public class NPCSchedule {
     }
 
     public CompoundTag save() {
-        return (CompoundTag) Schedule.CODEC.encodeStart(NbtOps.INSTANCE, this.schedule).getOrThrow(true, RuneCraftory.logger::error);
+        return (CompoundTag) Schedule.CODEC.encodeStart(NbtOps.INSTANCE, this.schedule).getOrThrow(true, RuneCraftory.LOGGER::error);
     }
 
     public void load(CompoundTag tag) {
         this.schedule = Schedule.CODEC.parse(NbtOps.INSTANCE, tag)
-                .resultOrPartial(s -> RuneCraftory.logger.error("Couldn't load schedule for " + this.npc + ". " + s)).orElse(new Schedule(this.npc.getRandom()));
+                .resultOrPartial(s -> RuneCraftory.LOGGER.error("Couldn't load schedule for " + this.npc + ". " + s)).orElse(new Schedule(this.npc.getRandom()));
         this.view = null;
     }
 

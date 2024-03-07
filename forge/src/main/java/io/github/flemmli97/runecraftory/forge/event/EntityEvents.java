@@ -83,7 +83,7 @@ public class EntityEvents {
 
     @SubscribeEvent
     public void sleep(SleepingTimeCheckEvent event) {
-        if (GeneralConfig.modifyBed)
+        if (GeneralConfig.MODIFY_BED)
             event.setResult(Event.Result.ALLOW);
     }
 

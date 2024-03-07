@@ -34,7 +34,7 @@ public class FoodManager extends SimpleJsonResourceReloadListener {
 
     @Nullable
     public FoodProperties get(Item item) {
-        if (GeneralConfig.disableFoodSystem)
+        if (GeneralConfig.DISABLE_FOOD_SYSTEM)
             return null;
         ResourceLocation res = PlatformUtils.INSTANCE.items().getIDFrom(item);
         FoodProperties prop = this.food.get(res);
@@ -61,18 +61,18 @@ public class FoodManager extends SimpleJsonResourceReloadListener {
                 if (item.startsWith("#")) {
                     TagKey<Item> tag = PlatformUtils.INSTANCE.itemTag(new ResourceLocation(item.substring(1)));
                     FoodProperties props = FoodProperties.CODEC.parse(JsonOps.INSTANCE, el)
-                            .getOrThrow(false, RuneCraftory.logger::error);
+                            .getOrThrow(false, RuneCraftory.LOGGER::error);
                     props.setID(fres);
                     tagBuilder.put(tag, props);
                 } else {
                     ResourceLocation res = new ResourceLocation(item);
                     FoodProperties props = FoodProperties.CODEC.parse(JsonOps.INSTANCE, el)
-                            .getOrThrow(false, RuneCraftory.logger::error);
+                            .getOrThrow(false, RuneCraftory.LOGGER::error);
                     props.setID(fres);
                     builder.put(res, props);
                 }
             } catch (Exception ex) {
-                RuneCraftory.logger.error("Couldnt parse food stat json {} {}", fres, ex);
+                RuneCraftory.LOGGER.error("Couldnt parse food stat json {} {}", fres, ex);
                 ex.fillInStackTrace();
             }
         });

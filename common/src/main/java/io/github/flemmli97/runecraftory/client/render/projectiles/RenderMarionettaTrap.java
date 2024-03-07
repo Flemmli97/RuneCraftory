@@ -20,8 +20,8 @@ import net.minecraft.world.item.Items;
 
 public class RenderMarionettaTrap extends EntityRenderer<EntityMarionettaTrap> {
 
-    protected static final ResourceLocation common = new ResourceLocation(RuneCraftory.MODID, "textures/entity/chest.png");
-    protected static final ResourceLocation rare = new ResourceLocation(RuneCraftory.MODID, "textures/entity/rare_chest.png");
+    protected static final ResourceLocation COMMON = new ResourceLocation(RuneCraftory.MODID, "textures/entity/chest.png");
+    protected static final ResourceLocation RARE = new ResourceLocation(RuneCraftory.MODID, "textures/entity/rare_chest.png");
 
     protected final EntityModel<EntityMarionettaTrap> model;
 
@@ -69,6 +69,6 @@ public class RenderMarionettaTrap extends EntityRenderer<EntityMarionettaTrap> {
 
     @Override
     public ResourceLocation getTextureLocation(EntityMarionettaTrap entity) {
-        return common;
+        return COMMON;
     }
 }

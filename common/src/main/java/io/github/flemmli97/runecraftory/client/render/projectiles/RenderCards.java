@@ -10,14 +10,14 @@ import net.minecraft.resources.ResourceLocation;
 
 public class RenderCards extends RenderTexture<EntityCards> {
 
-    private static final ResourceLocation tex1 = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/card_b_1.png");
-    private static final ResourceLocation tex2 = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/card_b_2.png");
-    private static final ResourceLocation tex3 = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/card_b_3.png");
-    private static final ResourceLocation tex4 = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/card_b_4.png");
-    private static final ResourceLocation tex5 = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/card_r_1.png");
-    private static final ResourceLocation tex6 = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/card_r_2.png");
-    private static final ResourceLocation tex7 = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/card_r_3.png");
-    private static final ResourceLocation tex8 = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/card_r_4.png");
+    private static final ResourceLocation TEX_1 = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/card_b_1.png");
+    private static final ResourceLocation TEX_2 = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/card_b_2.png");
+    private static final ResourceLocation TEX_3 = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/card_b_3.png");
+    private static final ResourceLocation TEX_4 = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/card_b_4.png");
+    private static final ResourceLocation TEX_5 = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/card_r_1.png");
+    private static final ResourceLocation TEX_6 = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/card_r_2.png");
+    private static final ResourceLocation TEX_7 = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/card_r_3.png");
+    private static final ResourceLocation TEX_8 = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/card_r_4.png");
 
     public RenderCards(EntityRendererProvider.Context ctx) {
         super(ctx, 1, 1, 1, 1);
@@ -26,14 +26,14 @@ public class RenderCards extends RenderTexture<EntityCards> {
     @Override
     public ResourceLocation getTextureLocation(EntityCards entity) {
         return switch (entity.getCardType()) {
-            case 1 -> tex2;
-            case 2 -> tex3;
-            case 3 -> tex4;
-            case 4 -> tex5;
-            case 5 -> tex6;
-            case 6 -> tex7;
-            case 7 -> tex8;
-            default -> tex1;
+            case 1 -> TEX_2;
+            case 2 -> TEX_3;
+            case 3 -> TEX_4;
+            case 4 -> TEX_5;
+            case 5 -> TEX_6;
+            case 6 -> TEX_7;
+            case 7 -> TEX_8;
+            default -> TEX_1;
         };
     }
 

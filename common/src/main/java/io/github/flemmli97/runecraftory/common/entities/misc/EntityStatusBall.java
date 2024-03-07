@@ -98,7 +98,7 @@ public class EntityStatusBall extends BaseDamageCloud {
                 case SLEEP, MUSHROOM_POISON -> {
                     for (int i = 0; i < 2; i++) {
                         Vector3f color = this.type.particleColor;
-                        this.level.addParticle(new ColoredParticleData(ModParticles.light.get(), color.x(), color.y(), color.z(), 1, 2), this.getX() + this.random.nextGaussian() * 0.15, this.getY() + 0.35 + this.random.nextGaussian() * 0.07, this.getZ() + this.random.nextGaussian() * 0.15, this.random.nextGaussian() * 0.01, Math.abs(this.random.nextGaussian() * 0.03), this.random.nextGaussian() * 0.01);
+                        this.level.addParticle(new ColoredParticleData(ModParticles.LIGHT.get(), color.x(), color.y(), color.z(), 1, 2), this.getX() + this.random.nextGaussian() * 0.15, this.getY() + 0.35 + this.random.nextGaussian() * 0.07, this.getZ() + this.random.nextGaussian() * 0.15, this.random.nextGaussian() * 0.01, Math.abs(this.random.nextGaussian() * 0.03), this.random.nextGaussian() * 0.01);
                     }
                 }
                 case RAFFLESIA_SLEEP, RAFFLESIA_PARALYSIS, RAFFLESIA_POISON, RAFFLESIA_ALL -> {

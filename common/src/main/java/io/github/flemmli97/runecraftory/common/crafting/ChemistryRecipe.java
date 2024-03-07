@@ -24,7 +24,7 @@ public class ChemistryRecipe extends SextupleRecipe {
 
     @Override
     public ItemStack getToastSymbol() {
-        return new ItemStack(ModItems.itemBlockChem.get());
+        return new ItemStack(ModItems.ITEM_BLOCK_CHEM.get());
     }
 
     @Override

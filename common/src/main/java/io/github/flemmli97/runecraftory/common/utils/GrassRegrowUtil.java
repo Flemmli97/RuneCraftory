@@ -18,11 +18,11 @@ import java.util.List;
 
 public class GrassRegrowUtil {
 
-    private static final EnumMap<EnumSeason, List<HerbEntry>> seasonHerbGrowMap = getSeasonHerbGrowMap();
+    private static final EnumMap<EnumSeason, List<HerbEntry>> SEASON_HERB_GROW_MAP = getSeasonHerbGrowMap();
 
     public static void tryGrowHerb(ServerLevel level, BlockPos pos) {
         EnumSeason currentSeason = WorldHandler.get(level.getServer()).currentSeason();
-        List<HerbEntry> l = seasonHerbGrowMap.get(currentSeason);
+        List<HerbEntry> l = SEASON_HERB_GROW_MAP.get(currentSeason);
         BlockState state = WeightedRandom.getRandomItem(level.random, l).map(e -> e.sup.get().defaultBlockState()).orElse(Blocks.AIR.defaultBlockState());
         if (state.getBlock() != Blocks.AIR)
             level.setBlock(pos, state, Block.UPDATE_ALL);
@@ -30,23 +30,23 @@ public class GrassRegrowUtil {
 
     private static EnumMap<EnumSeason, List<HerbEntry>> getSeasonHerbGrowMap() {
         EnumMap<EnumSeason, List<HerbEntry>> map = new EnumMap<>(EnumSeason.class);
-        map.put(EnumSeason.SPRING, List.of(new HerbEntry(100, ModBlocks.weeds),
-                new HerbEntry(30, ModBlocks.greenGrass), new HerbEntry(30, ModBlocks.orangeGrass),
-                new HerbEntry(50, ModBlocks.antidoteGrass), new HerbEntry(50, ModBlocks.medicinalHerb),
-                new HerbEntry(15, ModBlocks.bambooSprout)));
-        map.put(EnumSeason.SUMMER, List.of(new HerbEntry(100, ModBlocks.weeds),
-                new HerbEntry(30, ModBlocks.greenGrass), new HerbEntry(30, ModBlocks.yellowGrass),
-                new HerbEntry(30, ModBlocks.blueGrass), new HerbEntry(30, ModBlocks.purpleGrass),
-                new HerbEntry(50, ModBlocks.antidoteGrass), new HerbEntry(50, ModBlocks.medicinalHerb),
-                new HerbEntry(15, ModBlocks.bambooSprout)));
-        map.put(EnumSeason.FALL, List.of(new HerbEntry(100, ModBlocks.weeds),
-                new HerbEntry(30, ModBlocks.yellowGrass), new HerbEntry(20, ModBlocks.redGrass),
-                new HerbEntry(20, ModBlocks.orangeGrass), new HerbEntry(50, ModBlocks.antidoteGrass),
-                new HerbEntry(50, ModBlocks.medicinalHerb), new HerbEntry(15, ModBlocks.bambooSprout)));
-        map.put(EnumSeason.WINTER, List.of(new HerbEntry(100, ModBlocks.weeds),
-                new HerbEntry(20, ModBlocks.whiteGrass), new HerbEntry(20, ModBlocks.blackGrass),
-                new HerbEntry(30, ModBlocks.indigoGrass), new HerbEntry(50, ModBlocks.antidoteGrass),
-                new HerbEntry(50, ModBlocks.medicinalHerb), new HerbEntry(15, ModBlocks.bambooSprout)));
+        map.put(EnumSeason.SPRING, List.of(new HerbEntry(100, ModBlocks.WEEDS),
+                new HerbEntry(30, ModBlocks.GREEN_GRASS), new HerbEntry(30, ModBlocks.ORANGE_GRASS),
+                new HerbEntry(50, ModBlocks.ANTIDOTE_GRASS), new HerbEntry(50, ModBlocks.MEDICINAL_HERB),
+                new HerbEntry(15, ModBlocks.BAMBOO_SPROUT)));
+        map.put(EnumSeason.SUMMER, List.of(new HerbEntry(100, ModBlocks.WEEDS),
+                new HerbEntry(30, ModBlocks.GREEN_GRASS), new HerbEntry(30, ModBlocks.YELLOW_GRASS),
+                new HerbEntry(30, ModBlocks.BLUE_GRASS), new HerbEntry(30, ModBlocks.PURPLE_GRASS),
+                new HerbEntry(50, ModBlocks.ANTIDOTE_GRASS), new HerbEntry(50, ModBlocks.MEDICINAL_HERB),
+                new HerbEntry(15, ModBlocks.BAMBOO_SPROUT)));
+        map.put(EnumSeason.FALL, List.of(new HerbEntry(100, ModBlocks.WEEDS),
+                new HerbEntry(30, ModBlocks.YELLOW_GRASS), new HerbEntry(20, ModBlocks.RED_GRASS),
+                new HerbEntry(20, ModBlocks.ORANGE_GRASS), new HerbEntry(50, ModBlocks.ANTIDOTE_GRASS),
+                new HerbEntry(50, ModBlocks.MEDICINAL_HERB), new HerbEntry(15, ModBlocks.BAMBOO_SPROUT)));
+        map.put(EnumSeason.WINTER, List.of(new HerbEntry(100, ModBlocks.WEEDS),
+                new HerbEntry(20, ModBlocks.WHITE_GRASS), new HerbEntry(20, ModBlocks.BLACK_GRASS),
+                new HerbEntry(30, ModBlocks.INDIGO_GRASS), new HerbEntry(50, ModBlocks.ANTIDOTE_GRASS),
+                new HerbEntry(50, ModBlocks.MEDICINAL_HERB), new HerbEntry(15, ModBlocks.BAMBOO_SPROUT)));
         return map;
     }
 

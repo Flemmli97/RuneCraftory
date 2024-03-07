@@ -1,7 +1,5 @@
 package io.github.flemmli97.runecraftory.common.items.tools;
 
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.enums.EnumToolCharge;
 import io.github.flemmli97.runecraftory.api.enums.EnumToolTier;
@@ -25,10 +23,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -49,14 +44,14 @@ public class ItemToolWateringCan extends TieredItem implements IItemUsable, ICha
     private final EnumToolTier tier;
 
     public ItemToolWateringCan(EnumToolTier tier, Item.Properties props) {
-        super(ItemTiers.tier, props);
+        super(ItemTiers.TIER, props);
         this.tier = tier;
     }
 
     @Override
     public int getChargeTime(ItemStack stack) {
         if (this.tier == EnumToolTier.PLATINUM)
-            return (int) (DataPackHandler.INSTANCE.weaponPropertiesManager().getPropertiesFor(this.getWeaponType()).chargeTime() * GeneralConfig.platinumChargeTime);
+            return (int) (DataPackHandler.INSTANCE.weaponPropertiesManager().getPropertiesFor(this.getWeaponType()).chargeTime() * GeneralConfig.PLATINUM_CHARGE_TIME);
         return DataPackHandler.INSTANCE.weaponPropertiesManager().getPropertiesFor(this.getWeaponType()).chargeTime();
     }
 
@@ -91,11 +86,11 @@ public class ItemToolWateringCan extends TieredItem implements IItemUsable, ICha
 
     public int maxWater() {
         return switch (this.tier) {
-            case IRON -> GeneralConfig.ironWateringCanWater;
-            case SILVER -> GeneralConfig.silverWateringCanWater;
-            case GOLD -> GeneralConfig.goldWateringCanWater;
-            case PLATINUM -> GeneralConfig.platinumWateringCanWater;
-            default -> GeneralConfig.scrapWateringCanWater;
+            case IRON -> GeneralConfig.IRON_WATERING_CAN_WATER;
+            case SILVER -> GeneralConfig.SILVER_WATERING_CAN_WATER;
+            case GOLD -> GeneralConfig.GOLD_WATERING_CAN_WATER;
+            case PLATINUM -> GeneralConfig.PLATINUM_WATERING_CAN_WATER;
+            default -> GeneralConfig.SCRAP_WATERING_CAN_WATER;
         };
     }
 

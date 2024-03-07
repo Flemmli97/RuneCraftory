@@ -60,7 +60,7 @@ public class ContainerCrafting extends AbstractContainerMenu {
     }
 
     public ContainerCrafting(int windowID, Inventory playerInv, CraftingBlockEntity tile) {
-        super(ModContainer.craftingContainer.get(), windowID);
+        super(ModContainer.CRAFTING_CONTAINER.get(), windowID);
         this.outPutInv = new DummyInventory(new SimpleContainer(2));
         this.craftingInv = PlayerContainerInv.create(this, tile.getInventory(), playerInv.player);
         this.tile = tile;
@@ -117,9 +117,9 @@ public class ContainerCrafting extends AbstractContainerMenu {
             if (this.matchingRecipes.isEmpty()) {
                 this.matchingRecipes = new ArrayList<>();
                 SpecialSextupleRecipe recipe = switch (this.type) {
-                    case ARMOR, FORGE -> SpecialSextupleRecipe.scrap.get();
-                    case CHEM -> SpecialSextupleRecipe.objectX.get();
-                    case COOKING -> SpecialSextupleRecipe.failedDish.get();
+                    case ARMOR, FORGE -> SpecialSextupleRecipe.SCRAP.get();
+                    case CHEM -> SpecialSextupleRecipe.OBJECT_X.get();
+                    case COOKING -> SpecialSextupleRecipe.FAILED_DISH.get();
                 };
                 if (recipe.matches(this.craftingInv, this.craftingInv.getPlayer().level))
                     this.matchingRecipes.add(recipe);
@@ -148,7 +148,7 @@ public class ContainerCrafting extends AbstractContainerMenu {
             }
             this.currentRecipe = this.matchingRecipes.get(this.tile.craftingIndex());
             SextupleRecipe.RecipeOutput output = this.currentRecipe.getCraftingOutput(this.craftingInv);
-            this.rpCost.set(CraftingUtils.craftingCost(this.type, Platform.INSTANCE.getPlayerData(this.craftingInv.getPlayer()).orElseThrow(EntityUtils::playerDataException), this.currentRecipe, output.bonusItems(), output.clientResult().getItem() != ModItems.unknown.get()));
+            this.rpCost.set(CraftingUtils.craftingCost(this.type, Platform.INSTANCE.getPlayerData(this.craftingInv.getPlayer()).orElseThrow(EntityUtils::playerDataException), this.currentRecipe, output.bonusItems(), output.clientResult().getItem() != ModItems.UNKNOWN.get()));
             trueOutput = output.serverResult();
             clientOutput = output.clientResult();
         } else {
@@ -172,7 +172,7 @@ public class ContainerCrafting extends AbstractContainerMenu {
         List<Pair<Integer, ItemStack>> clientData = IntStream.range(0, this.matchingRecipes.size())
                 .mapToObj(i -> {
                     SextupleRecipe recipe = this.matchingRecipes.get(i);
-                    return Pair.of(i, recipe instanceof SpecialSextupleRecipe || data.getRecipeKeeper().isUnlocked(recipe) ? this.matchingRecipes.get(i).getResultItem() : new ItemStack(ModItems.unknown.get()));
+                    return Pair.of(i, recipe instanceof SpecialSextupleRecipe || data.getRecipeKeeper().isUnlocked(recipe) ? this.matchingRecipes.get(i).getResultItem() : new ItemStack(ModItems.UNKNOWN.get()));
                 }).toList();
         if (!this.init)
             Platform.INSTANCE.sendToClient(new S2CCraftingRecipes(clientData, 0), player);

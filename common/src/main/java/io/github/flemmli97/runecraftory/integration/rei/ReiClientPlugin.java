@@ -42,13 +42,13 @@ public class ReiClientPlugin implements REIClientPlugin {
     @Override
     public void registerCategories(CategoryRegistry registry) {
         registry.add(new SextupleCategory(EnumCrafting.FORGE, FORGING));
-        registry.addWorkstations(FORGING, EntryStacks.of(ModItems.itemBlockForge.get()));
+        registry.addWorkstations(FORGING, EntryStacks.of(ModItems.ITEM_BLOCK_FORGE.get()));
         registry.add(new SextupleCategory(EnumCrafting.CHEM, CHEM));
-        registry.addWorkstations(CHEM, EntryStacks.of(ModItems.itemBlockChem.get()));
+        registry.addWorkstations(CHEM, EntryStacks.of(ModItems.ITEM_BLOCK_CHEM.get()));
         registry.add(new SextupleCategory(EnumCrafting.COOKING, COOKING));
-        registry.addWorkstations(COOKING, EntryStacks.of(ModItems.itemBlockCooking.get()));
+        registry.addWorkstations(COOKING, EntryStacks.of(ModItems.ITEM_BLOCK_COOKING.get()));
         registry.add(new SextupleCategory(EnumCrafting.ARMOR, ARMOR));
-        registry.addWorkstations(ARMOR, EntryStacks.of(ModItems.itemBlockAccess.get()));
+        registry.addWorkstations(ARMOR, EntryStacks.of(ModItems.ITEM_BLOCK_ACCESS.get()));
     }
 
     @Override

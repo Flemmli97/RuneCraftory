@@ -66,7 +66,7 @@ public class GiftManager extends SimplePreparableReloadListener<Map<ResourceLoca
                     }
                 }
             } catch (JsonParseException | IOException | IllegalArgumentException exception) {
-                RuneCraftory.logger.error("Couldn't parse gift file {} {}", res, exception);
+                RuneCraftory.LOGGER.error("Couldn't parse gift file {} {}", res, exception);
             }
         }
         return map;
@@ -80,7 +80,7 @@ public class GiftManager extends SimplePreparableReloadListener<Map<ResourceLoca
                 NPCData.GiftType giftType = NPCData.GiftType.valueOf(res.getPath().toUpperCase(Locale.ROOT));
                 arr.forEach(e -> gifts.add(Pair.of(giftType, PlatformUtils.INSTANCE.itemTag(new ResourceLocation(e.getAsString())))));
             } catch (IllegalArgumentException ignored) {
-                RuneCraftory.logger.error("No such gift type {}", res.getPath());
+                RuneCraftory.LOGGER.error("No such gift type {}", res.getPath());
             }
         });
         this.giftTags = gifts.build().stream().collect(Collectors.groupingBy(Pair::getFirst, Collectors.mapping(Pair::getSecond, Collectors.toList())));

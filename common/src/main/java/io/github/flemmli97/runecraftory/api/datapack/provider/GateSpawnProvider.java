@@ -45,7 +45,7 @@ public abstract class GateSpawnProvider implements DataProvider {
             Path path = this.gen.getOutputFolder().resolve("data/" + res.getNamespace() + "/" + GateSpawnsManager.DIRECTORY + "/" + res.getPath() + ".json");
             try {
                 JsonElement obj = GateSpawnData.CODEC.encodeStart(JsonOps.INSTANCE, spawnData)
-                        .getOrThrow(false, RuneCraftory.logger::error);
+                        .getOrThrow(false, RuneCraftory.LOGGER::error);
                 DataProvider.save(GsonInstances.ATTRIBUTE_SPELLS, cache, obj, path);
             } catch (IOException e) {
                 LOGGER.error("Couldn't save itemstat {}", path, e);

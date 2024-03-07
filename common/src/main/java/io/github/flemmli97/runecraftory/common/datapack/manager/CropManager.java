@@ -36,7 +36,7 @@ public class CropManager extends SimpleJsonResourceReloadListener {
 
     @Nullable
     public CropProperties get(Item item) {
-        if (GeneralConfig.disableCropSystem)
+        if (GeneralConfig.DISABLE_CROP_SYSTEM)
             return null;
         ResourceLocation res = PlatformUtils.INSTANCE.items().getIDFrom(item);
         CropProperties props = this.crops.get(res);
@@ -63,18 +63,18 @@ public class CropManager extends SimpleJsonResourceReloadListener {
                 if (item.startsWith("#")) {
                     TagKey<Item> tag = PlatformUtils.INSTANCE.itemTag(new ResourceLocation(item.substring(1)));
                     CropProperties props = CropProperties.CODEC.parse(JsonOps.INSTANCE, el)
-                            .getOrThrow(false, RuneCraftory.logger::error);
+                            .getOrThrow(false, RuneCraftory.LOGGER::error);
                     props.setID(fres);
                     tagBuilder.put(tag, props);
                 } else {
                     ResourceLocation res = new ResourceLocation(item);
                     CropProperties props = CropProperties.CODEC.parse(JsonOps.INSTANCE, el)
-                            .getOrThrow(false, RuneCraftory.logger::error);
+                            .getOrThrow(false, RuneCraftory.LOGGER::error);
                     props.setID(fres);
                     builder.put(res, props);
                 }
             } catch (Exception ex) {
-                RuneCraftory.logger.error("Couldnt parse crop properties json {} {}", fres, ex);
+                RuneCraftory.LOGGER.error("Couldnt parse crop properties json {} {}", fres, ex);
                 ex.fillInStackTrace();
             }
         });

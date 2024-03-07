@@ -43,10 +43,10 @@ public class EntityThiccLightningBolt extends BaseProjectile {
         super.tick();
         if (this.level.isClientSide) {
             for (int i = 0; i < 6; i++) {
-                this.level.addParticle(new ColoredParticleData(ModParticles.light.get(), 38 / 255F, 133 / 255F, 222 / 255F, 0.2f, 3f), this.getX() + this.random.nextGaussian() * 0.15, this.getY() + 0.35 + this.random.nextGaussian() * 0.07, this.getZ() + this.random.nextGaussian() * 0.15, this.random.nextGaussian() * 0.01, Math.abs(this.random.nextGaussian() * 0.03), this.random.nextGaussian() * 0.01);
+                this.level.addParticle(new ColoredParticleData(ModParticles.LIGHT.get(), 38 / 255F, 133 / 255F, 222 / 255F, 0.2f, 3f), this.getX() + this.random.nextGaussian() * 0.15, this.getY() + 0.35 + this.random.nextGaussian() * 0.07, this.getZ() + this.random.nextGaussian() * 0.15, this.random.nextGaussian() * 0.01, Math.abs(this.random.nextGaussian() * 0.03), this.random.nextGaussian() * 0.01);
             }
             for (int i = 0; i < 8; i++) {
-                this.level.addParticle(ModParticles.lightning.get(), this.getX() + this.random.nextGaussian() * 0.15, this.getY() + 0.35 + this.random.nextGaussian() * 0.07, this.getZ() + this.random.nextGaussian() * 0.15, 0.05, 0.05, 0.05);
+                this.level.addParticle(ModParticles.LIGHTNING.get(), this.getX() + this.random.nextGaussian() * 0.15, this.getY() + 0.35 + this.random.nextGaussian() * 0.07, this.getZ() + this.random.nextGaussian() * 0.15, 0.05, 0.05, 0.05);
             }
         } else if (this.livingTicks % 13 == 0) {
             this.checkedEntities.clear();

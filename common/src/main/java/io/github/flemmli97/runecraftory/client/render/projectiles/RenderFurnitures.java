@@ -33,9 +33,9 @@ public class RenderFurnitures extends EntityRenderer<EntityFurniture> {
     public static final ModelLayerLocation LOC_CHIPSQUEEK_PLUSH = new ModelLayerLocation(new ResourceLocation(RuneCraftory.MODID, "chipsqueek_plush"), "main");
     public static final ModelLayerLocation LOC_WOOLY_PLUSH = new ModelLayerLocation(new ResourceLocation(RuneCraftory.MODID, "wooly_plush"), "main");
 
-    private static final ResourceLocation texChair = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/chair.png");
-    private static final ResourceLocation texWooly = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/wooly_plush.png");
-    private static final ResourceLocation texChipsqueek = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/chipsqueek_plush.png");
+    private static final ResourceLocation TEX_CHAIR = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/chair.png");
+    private static final ResourceLocation TEX_WOOLY = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/wooly_plush.png");
+    private static final ResourceLocation TEX_CHIPSQUEEK = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/chipsqueek_plush.png");
 
     private final BlockState barrel = Blocks.BARREL.defaultBlockState();
     private final BlockState anvil = Blocks.ANVIL.defaultBlockState();
@@ -123,14 +123,14 @@ public class RenderFurnitures extends EntityRenderer<EntityFurniture> {
                 stack.translate(0.5, -1.501f, -0.5);
                 this.renderModel(stack, Sheets.CHEST_LOCATION.buffer(buffer, RenderType::entityCutout), packedLight, this.chestBottom, this.chestLid, this.chestLock);
             }
-            case CHAIR -> this.renderModel(stack, this.simpleConsumer(buffer, texChair), packedLight, this.chair);
+            case CHAIR -> this.renderModel(stack, this.simpleConsumer(buffer, TEX_CHAIR), packedLight, this.chair);
             /*case PAINTING -> {
 
             }*/
             case WOOLYPLUSH ->
-                    this.renderModel(stack, this.simpleConsumer(buffer, texWooly), packedLight, this.woolyPlush);
+                    this.renderModel(stack, this.simpleConsumer(buffer, TEX_WOOLY), packedLight, this.woolyPlush);
             case CHIPSQUEEKPLUSH ->
-                    this.renderModel(stack, this.simpleConsumer(buffer, texChipsqueek), packedLight, this.chipSqueekPlush);
+                    this.renderModel(stack, this.simpleConsumer(buffer, TEX_CHIPSQUEEK), packedLight, this.chipSqueekPlush);
         }
         stack.popPose();
         super.render(entity, rotation, partialTicks, stack, buffer, packedLight);

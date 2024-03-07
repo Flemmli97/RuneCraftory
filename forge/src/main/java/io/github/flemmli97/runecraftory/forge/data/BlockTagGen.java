@@ -29,16 +29,16 @@ public class BlockTagGen extends BlockTagsProvider {
                 .addOptional(Tags.Blocks.STONE.location());
 
         //Snow
-        this.tag(BlockTags.SNOW).add(ModBlocks.snow.get());
-        this.tag(BlockTags.INSIDE_STEP_SOUND_BLOCKS).add(ModBlocks.snow.get());
-        this.tag(BlockTags.GOATS_SPAWNABLE_ON).add(ModBlocks.snow.get());
-        this.tag(BlockTags.RABBITS_SPAWNABLE_ON).add(ModBlocks.snow.get());
-        this.tag(BlockTags.FOXES_SPAWNABLE_ON).add(ModBlocks.snow.get());
-        this.tag(BlockTags.WOLVES_SPAWNABLE_ON).add(ModBlocks.snow.get());
-        this.tag(BlockTags.MINEABLE_WITH_SHOVEL).add(ModBlocks.snow.get());
+        this.tag(BlockTags.SNOW).add(ModBlocks.SNOW.get());
+        this.tag(BlockTags.INSIDE_STEP_SOUND_BLOCKS).add(ModBlocks.SNOW.get());
+        this.tag(BlockTags.GOATS_SPAWNABLE_ON).add(ModBlocks.SNOW.get());
+        this.tag(BlockTags.RABBITS_SPAWNABLE_ON).add(ModBlocks.SNOW.get());
+        this.tag(BlockTags.FOXES_SPAWNABLE_ON).add(ModBlocks.SNOW.get());
+        this.tag(BlockTags.WOLVES_SPAWNABLE_ON).add(ModBlocks.SNOW.get());
+        this.tag(BlockTags.MINEABLE_WITH_SHOVEL).add(ModBlocks.SNOW.get());
 
         this.tag(ModTags.ORES)
-                .add(ModBlocks.mineralMap.values().stream().map(RegistryEntrySupplier::get).toArray(Block[]::new));
+                .add(ModBlocks.MINERAL_MAP.values().stream().map(RegistryEntrySupplier::get).toArray(Block[]::new));
 
         this.tag(ModTags.SICKLE_DESTROYABLE)
                 .addTag(BlockTags.CORAL_PLANTS)
@@ -55,36 +55,36 @@ public class BlockTagGen extends BlockTagsProvider {
                 .add(Blocks.FARMLAND, Blocks.DIRT_PATH);
 
         this.tag(ModTags.HAMMER_BREAKABLE)
-                .add(ModBlocks.mineralMap.values().stream().map(RegistryEntrySupplier::get).toArray(Block[]::new));
+                .add(ModBlocks.MINERAL_MAP.values().stream().map(RegistryEntrySupplier::get).toArray(Block[]::new));
 
-        for (RegistryEntrySupplier<Block> sup : ModBlocks.mineralMap.values()) {
+        for (RegistryEntrySupplier<Block> sup : ModBlocks.MINERAL_MAP.values()) {
             this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(sup.get());
             this.tag(BlockTags.NEEDS_IRON_TOOL).add(sup.get());
         }
-        for (RegistryEntrySupplier<Block> sup : ModBlocks.herbs) {
+        for (RegistryEntrySupplier<Block> sup : ModBlocks.HERBS) {
             this.tag(ModTags.SICKLE_DESTROYABLE).add(sup.get());
             this.tag(ModTags.HERBS).add(sup.get());
         }
-        for (RegistryEntrySupplier<Block> sup : ModBlocks.crops) {
+        for (RegistryEntrySupplier<Block> sup : ModBlocks.CROPS) {
             this.tag(ModTags.SICKLE_DESTROYABLE).add(sup.get());
         }
-        for (RegistryEntrySupplier<Block> sup : ModBlocks.flowers) {
+        for (RegistryEntrySupplier<Block> sup : ModBlocks.FLOWERS) {
             this.tag(ModTags.SICKLE_DESTROYABLE).add(sup.get());
         }
 
         this.tag(ModTags.MONSTER_CLEARABLE).addTag(ModTags.HERBS);
 
-        for (RegistryEntrySupplier<Block> sup : ModBlocks.brokenMineralMap.values()) {
+        for (RegistryEntrySupplier<Block> sup : ModBlocks.BROKEN_MINERAL_MAP.values()) {
             this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(sup.get());
             this.tag(BlockTags.NEEDS_IRON_TOOL).add(sup.get());
         }
 
-        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.forge.get(), ModBlocks.cooking.get(), ModBlocks.chemistry.get(),
-                ModBlocks.bossSpawner.get(), ModBlocks.cashRegister.get());
-        this.tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.shipping.get(), ModBlocks.accessory.get(), ModBlocks.questBoard.get());
-        this.tag(BlockTags.MINEABLE_WITH_HOE).add(ModBlocks.monsterBarn.get());
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.FORGE.get(), ModBlocks.COOKING.get(), ModBlocks.CHEMISTRY.get(),
+                ModBlocks.BOSS_SPAWNER.get(), ModBlocks.CASH_REGISTER.get());
+        this.tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.SHIPPING.get(), ModBlocks.ACCESSORY.get(), ModBlocks.QUEST_BOARD.get());
+        this.tag(BlockTags.MINEABLE_WITH_HOE).add(ModBlocks.MONSTER_BARN.get());
 
-        this.tag(ModTags.FARMLAND).add(Blocks.FARMLAND).add(ModBlocks.treeSoil.get());
+        this.tag(ModTags.FARMLAND).add(Blocks.FARMLAND).add(ModBlocks.TREE_SOIL.get());
 
         this.tag(ModTags.BARN_GROUND).add(Blocks.HAY_BLOCK);
 
@@ -94,19 +94,19 @@ public class BlockTagGen extends BlockTagsProvider {
                 .addTag(BlockTags.BASE_STONE_NETHER).addTag(ModTags.ENDSTONES);
 
         this.tag(BlockTags.LOGS)
-                .add(ModBlocks.appleTree.get())
-                .add(ModBlocks.appleWood.get())
-                .add(ModBlocks.orangeTree.get())
-                .add(ModBlocks.orangeWood.get())
-                .add(ModBlocks.grapeTree.get())
-                .add(ModBlocks.grapeWood.get());
+                .add(ModBlocks.APPLE_TREE.get())
+                .add(ModBlocks.APPLE_WOOD.get())
+                .add(ModBlocks.ORANGE_TREE.get())
+                .add(ModBlocks.ORANGE_WOOD.get())
+                .add(ModBlocks.GRAPE_TREE.get())
+                .add(ModBlocks.GRAPE_WOOD.get());
         this.tag(BlockTags.LEAVES)
-                .add(ModBlocks.appleLeaves.get())
-                .add(ModBlocks.apple.get())
-                .add(ModBlocks.orangeLeaves.get())
-                .add(ModBlocks.orange.get())
-                .add(ModBlocks.grapeLeaves.get())
-                .add(ModBlocks.grape.get());
+                .add(ModBlocks.APPLE_LEAVES.get())
+                .add(ModBlocks.APPLE.get())
+                .add(ModBlocks.ORANGE_LEAVES.get())
+                .add(ModBlocks.ORANGE.get())
+                .add(ModBlocks.GRAPE_LEAVES.get())
+                .add(ModBlocks.GRAPE.get());
 
     }
 }

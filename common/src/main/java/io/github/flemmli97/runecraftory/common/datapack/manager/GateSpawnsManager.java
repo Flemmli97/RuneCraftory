@@ -106,7 +106,7 @@ public class GateSpawnsManager extends SimpleJsonResourceReloadListener {
         data.forEach((fres, el) -> {
             try {
                 GateSpawnData spawnData = GateSpawnData.CODEC.parse(JsonOps.INSTANCE, el)
-                        .getOrThrow(false, RuneCraftory.logger::error);
+                        .getOrThrow(false, RuneCraftory.LOGGER::error);
                 Optional<EntityType<?>> optType = PlatformUtils.INSTANCE.entities().getOptionalFromId(spawnData.entity());
                 optType.ifPresentOrElse(type -> {
                     spawnData.biomes().forEach((key, weight) -> {
@@ -120,11 +120,11 @@ public class GateSpawnsManager extends SimpleJsonResourceReloadListener {
                             SpawnResource resource = new SpawnResource(type, spawnData, weight);
                             structureSpawns.computeIfAbsent(feat, o -> new ArrayList<>())
                                     .add(resource);
-                        }, () -> RuneCraftory.logger.error("No such feature " + key + " for spawn data " + fres));
+                        }, () -> RuneCraftory.LOGGER.error("No such feature " + key + " for spawn data " + fres));
                     });
-                }, () -> RuneCraftory.logger.error("No such entity " + spawnData.entity() + " for spawn data " + fres));
+                }, () -> RuneCraftory.LOGGER.error("No such entity " + spawnData.entity() + " for spawn data " + fres));
             } catch (Exception ex) {
-                RuneCraftory.logger.error("Couldnt parse spawn data json {} {}", fres, ex);
+                RuneCraftory.LOGGER.error("Couldnt parse spawn data json {} {}", fres, ex);
                 ex.fillInStackTrace();
             }
         });
@@ -155,7 +155,7 @@ public class GateSpawnsManager extends SimpleJsonResourceReloadListener {
 
         public boolean matches(ServerLevel serverLevel, BlockPos pos, BlockState state, double dist, GateEntity gate) {
             return dist >= this.distToSpawnSq && (state.getFluidState().isEmpty() || (this.allowWater && state.getFluidState().is(FluidTags.WATER) && serverLevel.canSeeSkyFromBelowWater(pos)))
-                    && (MobConfig.gateLevelType == MobConfig.GateLevelType.CONSTANT || gate.level().getLevel() >= this.minGateLevel)
+                    && (MobConfig.GATE_LEVEL_TYPE == MobConfig.GateLevelType.CONSTANT || gate.level().getLevel() >= this.minGateLevel)
                     && this.gatePredicate.matches(serverLevel, gate.position(), gate);
         }
 

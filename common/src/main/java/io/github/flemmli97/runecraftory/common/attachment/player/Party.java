@@ -34,7 +34,7 @@ public class Party {
     }
 
     public boolean isPartyFull() {
-        return GeneralConfig.maxPartySize != 0 && this.members.size() >= GeneralConfig.maxPartySize;
+        return GeneralConfig.MAX_PARTY_SIZE != 0 && this.members.size() >= GeneralConfig.MAX_PARTY_SIZE;
     }
 
     public void load(CompoundTag tag) {

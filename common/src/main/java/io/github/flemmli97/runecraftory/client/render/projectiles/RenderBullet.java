@@ -4,7 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityBullet;
 import io.github.flemmli97.tenshilib.client.render.RenderTexture;
-import io.github.flemmli97.tenshilib.client.render.RenderUtils;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
@@ -30,7 +29,7 @@ public class RenderBullet extends RenderTexture<EntityBullet> {
         if (entity.element() == EnumElement.FIRE)
             this.textureBuilder.setColor(255, 150, 150, 255);
         else
-            this.textureBuilder.setColor(RenderUtils.defaultColor);
+            this.textureBuilder.setColor(0xFFFFFFFF);
         super.render(entity, rotation, partialTicks, stack, buffer, packedLight);
         stack.popPose();
     }

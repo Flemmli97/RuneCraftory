@@ -243,22 +243,22 @@ public class ItemNBT {
             tag.put(LibNBT.CRAFTING_BONUS, bonus);
         }
         //Special Item Tags
-        if (stackToAdd.getItem() == ModItems.glass.get() && stack.getItem() instanceof IItemUsable)
+        if (stackToAdd.getItem() == ModItems.GLASS.get() && stack.getItem() instanceof IItemUsable)
             tag.putBoolean(LibNBT.MAGNIFYING_GLASS, true);
-        if (stackToAdd.getItem() == ModItems.scrapPlus.get() && stack.getItem() instanceof IItemUsable)
+        if (stackToAdd.getItem() == ModItems.SCRAP_PLUS.get() && stack.getItem() instanceof IItemUsable)
             tag.putBoolean(LibNBT.SCRAP_METAL_PLUS, true);
         boolean hasObjectX = tag.getBoolean(LibNBT.OBJECT_X);
         if (stackToAdd.getItem() == ModItems.objectX.get())
             tag.putBoolean(LibNBT.OBJECT_X, !hasObjectX);
-        if (type == EnumCrafting.FORGE && stackToAdd.getItem() == ModItems.invisStone.get())
+        if (type == EnumCrafting.FORGE && stackToAdd.getItem() == ModItems.INVIS_STONE.get())
             tag.putBoolean(LibNBT.INVIS, true);
         if (type == EnumCrafting.FORGE && stackToAdd.is(ModTags.SCALES))
             tag.putBoolean(LibNBT.DRAGON_SCALE, true);
-        if (crafting && stackToAdd.getItem() == ModItems.lightOre.get() && !tag.contains(LibNBT.ORIGINITEM))
+        if (crafting && stackToAdd.getItem() == ModItems.LIGHT_ORE.get() && !tag.contains(LibNBT.ORIGINITEM))
             tag.putBoolean(LibNBT.LIGHTORETAG, true);
-        if (stackToAdd.getItem() == ModItems.glittaAugite.get())
+        if (stackToAdd.getItem() == ModItems.GLITTA_AUGITE.get())
             tag.putBoolean(LibNBT.GLITTA_AUGITE, true);
-        if (stackToAdd.getItem() == ModItems.raccoonLeaf.get())
+        if (stackToAdd.getItem() == ModItems.RACCOON_LEAF.get())
             tag.putBoolean(LibNBT.RACCOON_LEAF, true);
 
         if (stat != null) {
@@ -268,9 +268,9 @@ public class ItemNBT {
                     CompoundTag statsTag = new CompoundTag();
                     for (Map.Entry<Attribute, Double> entry : base.itemStats().entrySet()) {
                         if (entry.getKey() == ModAttributes.ATTACK_RANGE.get()) {
-                            if (stackToAdd.getItem() == ModItems.raccoonLeaf.get() && tag.getBoolean(LibNBT.RACCOON_LEAF))
+                            if (stackToAdd.getItem() == ModItems.RACCOON_LEAF.get() && tag.getBoolean(LibNBT.RACCOON_LEAF))
                                 continue;
-                            if (stackToAdd.getItem() == ModItems.glittaAugite.get() && tag.getBoolean(LibNBT.GLITTA_AUGITE))
+                            if (stackToAdd.getItem() == ModItems.GLITTA_AUGITE.get() && tag.getBoolean(LibNBT.GLITTA_AUGITE))
                                 continue;
                         }
                         statsTag.putDouble(PlatformUtils.INSTANCE.attributes().getIDFrom(entry.getKey()).toString(), entry.getValue());
@@ -477,7 +477,7 @@ public class ItemNBT {
     }
 
     public static boolean canBeUsedAsMagnifyingGlass(ItemStack stack) {
-        if (stack.getItem() == ModItems.glass.get())
+        if (stack.getItem() == ModItems.GLASS.get())
             return true;
         if (stack.hasTag()) {
             CompoundTag tag = stack.getTag().getCompound(RuneCraftory.MODID);

@@ -147,7 +147,7 @@ public class ShopItemsManager extends SimpleJsonResourceReloadListener {
                         return v;
                     });
             } catch (JsonSyntaxException ex) {
-                RuneCraftory.logger.error("Couldnt parse shop items json {} {}", fres, ex);
+                RuneCraftory.LOGGER.error("Couldnt parse shop items json {} {}", fres, ex);
                 ex.fillInStackTrace();
             }
         });

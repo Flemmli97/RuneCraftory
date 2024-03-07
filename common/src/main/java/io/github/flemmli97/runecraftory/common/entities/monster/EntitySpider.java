@@ -26,7 +26,7 @@ import net.minecraft.world.phys.Vec3;
 
 public class EntitySpider extends BaseMonster {
 
-    private static final EntityDataAccessor<Boolean> climbingSync = SynchedEntityData.defineId(EntitySpider.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> CLIMBING_SYNC = SynchedEntityData.defineId(EntitySpider.class, EntityDataSerializers.BOOLEAN);
 
     public static final AnimatedAction MELEE = new AnimatedAction(13, 9, "attack");
     public static final AnimatedAction WEBSHOT = new AnimatedAction(14, 6, "webshot");
@@ -37,7 +37,7 @@ public class EntitySpider extends BaseMonster {
     public AnimatedRangedGoal<EntitySpider> attack = new AnimatedRangedGoal<>(this, 7, (e) -> true);
 
     public int climbingTicker = -1;
-    public static int climbMax = 9;
+    public static int CLIMB_MAX = 9;
 
     public EntitySpider(EntityType<? extends EntitySpider> type, Level world) {
         super(type, world);
@@ -58,7 +58,7 @@ public class EntitySpider extends BaseMonster {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(climbingSync, false);
+        this.entityData.define(CLIMBING_SYNC, false);
     }
 
     @Override
@@ -68,7 +68,7 @@ public class EntitySpider extends BaseMonster {
             this.setClimbing(this.horizontalCollision);
         }
         if (this.isClimbing() && this.isAlive() && !this.playDeath()) {
-            this.climbingTicker = Math.min(this.climbingTicker + 1, climbMax);
+            this.climbingTicker = Math.min(this.climbingTicker + 1, CLIMB_MAX);
         } else
             this.climbingTicker = Math.max(this.climbingTicker - 1, -1);
     }
@@ -86,11 +86,11 @@ public class EntitySpider extends BaseMonster {
     }
 
     public boolean isClimbing() {
-        return this.entityData.get(climbingSync);
+        return this.entityData.get(CLIMBING_SYNC);
     }
 
     public void setClimbing(boolean climbing) {
-        this.entityData.set(climbingSync, climbing);
+        this.entityData.set(CLIMBING_SYNC, climbing);
     }
 
     @Override

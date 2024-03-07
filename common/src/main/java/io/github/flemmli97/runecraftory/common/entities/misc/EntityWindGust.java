@@ -62,7 +62,7 @@ public class EntityWindGust extends EntityBeam {
                 double upScale = this.random.nextDouble() * 2 - 1;
                 double sideScale = this.random.nextDouble() * 2 - 1;
                 Vec3 ppos = pos.add(this.up.scale(upScale)).add(this.side.scale(sideScale));
-                this.level.addParticle(new ColoredParticleData(ModParticles.wind.get(), 255 / 255F, 255 / 255F, 255 / 255F, 1, 0.15f), ppos.x(), ppos.y(), ppos.z(), this.pMotion.x(), this.pMotion.y(), this.pMotion.z());
+                this.level.addParticle(new ColoredParticleData(ModParticles.WIND.get(), 255 / 255F, 255 / 255F, 255 / 255F, 1, 0.15f), ppos.x(), ppos.y(), ppos.z(), this.pMotion.x(), this.pMotion.y(), this.pMotion.z());
             }
         }
     }

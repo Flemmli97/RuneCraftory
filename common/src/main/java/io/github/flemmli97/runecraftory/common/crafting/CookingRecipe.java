@@ -23,7 +23,7 @@ public class CookingRecipe extends SextupleRecipe {
 
     @Override
     public ItemStack getToastSymbol() {
-        return new ItemStack(ModItems.itemBlockCooking.get());
+        return new ItemStack(ModItems.ITEM_BLOCK_COOKING.get());
     }
 
     @Override

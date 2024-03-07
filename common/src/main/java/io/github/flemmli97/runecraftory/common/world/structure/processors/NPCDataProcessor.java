@@ -36,7 +36,7 @@ public class NPCDataProcessor extends DataStructureBlockProcessor {
         ListTag listTag = new ListTag();
         listTag.add(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 1200, 5, true, false).save(new CompoundTag()));
         entityTag.put("ActiveEffects", listTag);
-        BlockState state = ModBlocks.singleSpawnBlock.get().defaultBlockState();
+        BlockState state = ModBlocks.SINGLE_SPAWN_BLOCK.get().defaultBlockState();
         CompoundTag tag = new CompoundTag();
         tag.putString("Entity", ModEntities.NPC.getID().toString());
         tag.put("EntityNBT", entityTag);

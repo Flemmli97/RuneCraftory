@@ -88,7 +88,7 @@ public class WorldHandler extends SavedData {
     }
 
     public static boolean canUpdateWeather(Level level) {
-        return GeneralConfig.modifyWeather && level.getGameRules().getBoolean(GameRules.RULE_DAYLIGHT);
+        return GeneralConfig.MODIFY_WEATHER && level.getGameRules().getBoolean(GameRules.RULE_DAYLIGHT);
     }
 
     public static boolean shouldUpdateWeather(Level level, EnumWeather currentWeather) {
@@ -335,7 +335,7 @@ public class WorldHandler extends SavedData {
             list.forEach(t -> {
                 CompoundTag cTag = (CompoundTag) t;
                 map.add(new UnloadedPartyMember(UUID.fromString(cTag.getString("UUID")), GlobalPos.CODEC.parse(new Dynamic<>(NbtOps.INSTANCE, cTag.get("Pos")))
-                        .getOrThrow(false, RuneCraftory.logger::error)));
+                        .getOrThrow(false, RuneCraftory.LOGGER::error)));
             });
         });
         CompoundTag removedPartyMembers = compoundNBT.getCompound("RemovedPartyMembers");
@@ -369,7 +369,7 @@ public class WorldHandler extends SavedData {
                 pairs.forEach(p -> {
                     CompoundTag pTag = new CompoundTag();
                     pTag.putString("UUID", p.uuid().toString());
-                    GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, p.pos()).resultOrPartial(RuneCraftory.logger::error)
+                    GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, p.pos()).resultOrPartial(RuneCraftory.LOGGER::error)
                             .ifPresent(t -> pTag.put("Pos", t));
                     pTags.add(pTag);
                 });

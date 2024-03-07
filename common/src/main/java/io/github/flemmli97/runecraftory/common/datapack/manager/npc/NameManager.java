@@ -94,7 +94,7 @@ public class NameManager extends SimplePreparableReloadListener<Map<ResourceLoca
                     }
                 }
             } catch (JsonParseException | IOException | IllegalArgumentException exception) {
-                RuneCraftory.logger.error("Couldn't parse data file {} {}", res, exception);
+                RuneCraftory.LOGGER.error("Couldn't parse data file {} {}", res, exception);
             }
         }
         return map;

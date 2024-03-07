@@ -37,7 +37,7 @@ import java.util.function.Supplier;
 
 public class OverlayGui extends GuiComponent {
 
-    private static final ResourceLocation texturepath = new ResourceLocation(RuneCraftory.MODID, "textures/gui/bars.png");
+    private static final ResourceLocation TEXTURE_PATH = new ResourceLocation(RuneCraftory.MODID, "textures/gui/bars.png");
     private final Minecraft mc;
     private final Supplier<ItemStack> playerHead = Suppliers.memoize(() -> {
         ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
@@ -55,20 +55,20 @@ public class OverlayGui extends GuiComponent {
 
     public void renderBar(PoseStack stack) {
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-        RenderSystem.setShaderTexture(0, texturepath);
+        RenderSystem.setShaderTexture(0, TEXTURE_PATH);
         int guiWidth = this.mc.getWindow().getGuiScaledWidth();
         int guiHeight = this.mc.getWindow().getGuiScaledHeight();
-        if (ClientConfig.renderHealthRPBar != ClientConfig.HealthRPRenderType.NONE) {
+        if (ClientConfig.RENDER_HEALTH_RP_BAR != ClientConfig.HealthRPRenderType.NONE) {
             PlayerData data = Platform.INSTANCE.getPlayerData(this.mc.player).orElse(null);
             int barWidth = 76;
-            int yHeight = ClientConfig.renderHealthRPBar == ClientConfig.HealthRPRenderType.BOTH ? 2 + 9 + 9 + 12 : 11;
-            int xPos = ClientConfig.healthBarWidgetPosition.positionX(guiWidth, barWidth + 20 + 2, ClientConfig.healthBarWidgetX) + 1;
-            int yPos = ClientConfig.healthBarWidgetPosition.positionY(guiHeight, yHeight, ClientConfig.healthBarWidgetY) + 1;
+            int yHeight = ClientConfig.RENDER_HEALTH_RP_BAR == ClientConfig.HealthRPRenderType.BOTH ? 2 + 9 + 9 + 12 : 11;
+            int xPos = ClientConfig.HEALTH_BAR_WIDGET_POSITION.positionX(guiWidth, barWidth + 20 + 2, ClientConfig.HEALTH_BAR_WIDGET_X) + 1;
+            int yPos = ClientConfig.HEALTH_BAR_WIDGET_POSITION.positionY(guiHeight, yHeight, ClientConfig.HEALTH_BAR_WIDGET_Y) + 1;
             this.renderPlayerHeadIcon(this.mc.getItemRenderer(), this.playerHead.get(), xPos, yPos);
-            RenderSystem.setShaderTexture(0, texturepath);
+            RenderSystem.setShaderTexture(0, TEXTURE_PATH);
             xPos += 20;
             if (data != null && !this.mc.player.isCreative()) {
-                if (ClientConfig.renderHealthRPBar == ClientConfig.HealthRPRenderType.BOTH) {
+                if (ClientConfig.RENDER_HEALTH_RP_BAR == ClientConfig.HealthRPRenderType.BOTH) {
                     this.blit(stack, xPos, yPos, 19, 3, barWidth, 9);
                     int healthWidth = Math.min(barWidth, (int) (this.mc.player.getHealth() / this.mc.player.getMaxHealth() * barWidth));
                     this.blit(stack, xPos, yPos, 19, 28, healthWidth, 9);
@@ -79,17 +79,17 @@ public class OverlayGui extends GuiComponent {
                 this.blit(stack, xPos, yPos, 19, 40, runePointsWidth, 9);
             }
         }
-        if (ClientConfig.renderCalendar) {
-            CalendarImpl calendar = ClientHandlers.clientCalendar;
+        if (ClientConfig.RENDER_CALENDAR) {
+            CalendarImpl calendar = ClientHandlers.CLIENT_CALENDAR;
             EnumSeason season = calendar.currentSeason();
 
-            int xPos = ClientConfig.seasonDisplayPosition.positionX(guiWidth, 37, ClientConfig.seasonDisplayX);
-            int yPos = ClientConfig.seasonDisplayPosition.positionY(guiHeight, 36, ClientConfig.seasonDisplayY);
+            int xPos = ClientConfig.SEASON_DISPLAY_POSITION.positionX(guiWidth, 37, ClientConfig.SEASON_DISPLAY_X);
+            int yPos = ClientConfig.SEASON_DISPLAY_POSITION.positionY(guiHeight, 36, ClientConfig.SEASON_DISPLAY_Y);
             this.blit(stack, xPos, yPos, 50, 176, 37, 36);
             this.blit(stack, xPos + 3, yPos + 3, season.ordinal() * 32, 226, 32, 30);
             this.blit(stack, xPos, yPos + 39, 0, 176, 48, 17);
 
-            drawStringCenter(stack, this.mc.font, new TranslatableComponent(calendar.currentDay().translation()).append(new TranslatableComponent(" " + calendar.date())), ClientConfig.seasonDisplayX + 26, ClientConfig.seasonDisplayY + 39 + 5, 0xbd1600);
+            drawStringCenter(stack, this.mc.font, new TranslatableComponent(calendar.currentDay().translation()).append(new TranslatableComponent(" " + calendar.date())), ClientConfig.SEASON_DISPLAY_X + 26, ClientConfig.SEASON_DISPLAY_Y + 39 + 5, 0xbd1600);
         }
     }
 

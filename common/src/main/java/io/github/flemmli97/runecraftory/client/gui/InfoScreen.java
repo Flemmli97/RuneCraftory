@@ -28,8 +28,8 @@ import net.minecraft.world.item.ItemStack;
 
 public class InfoScreen extends EffectRenderingInventoryScreen<AbstractContainerMenu> {
 
-    protected static final ResourceLocation texturepath = new ResourceLocation(RuneCraftory.MODID, "textures/gui/skills_1.png");
-    protected static final ResourceLocation bars = new ResourceLocation(RuneCraftory.MODID, "textures/gui/bars.png");
+    protected static final ResourceLocation TEXTURE_PATH = new ResourceLocation(RuneCraftory.MODID, "textures/gui/skills_1.png");
+    protected static final ResourceLocation BARS = new ResourceLocation(RuneCraftory.MODID, "textures/gui/bars.png");
 
     protected final PlayerData data;
     private final int textureX = 223;
@@ -71,7 +71,7 @@ public class InfoScreen extends EffectRenderingInventoryScreen<AbstractContainer
         int healthWidth = Math.min(100, (int) (this.minecraft.player.getHealth() / this.minecraft.player.getMaxHealth() * 100.0));
         int runeWidth = Math.min(100, (int) (this.data.getRunePoints() / (float) this.data.getMaxRunePoints() * 100.0f));
         int exp = Math.min(100, (int) (this.data.getPlayerLevel().getXp() / (float) LevelCalc.xpAmountForLevelUp(this.data.getPlayerLevel().getLevel()) * 100.0f));
-        RenderSystem.setShaderTexture(0, bars);
+        RenderSystem.setShaderTexture(0, BARS);
         int barX = 117;
         this.blit(stack, this.leftPos + barX, this.topPos + 20, 2, 51, healthWidth, 6);
         this.blit(stack, this.leftPos + barX, this.topPos + 30, 2, 58, runeWidth, 6);
@@ -110,7 +110,7 @@ public class InfoScreen extends EffectRenderingInventoryScreen<AbstractContainer
     }
 
     protected ResourceLocation texture() {
-        return texturepath;
+        return TEXTURE_PATH;
     }
 
     @Override

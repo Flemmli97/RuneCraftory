@@ -17,14 +17,14 @@ import net.minecraft.util.Mth;
 
 public class RenderGate extends LivingEntityRenderer<GateEntity, ModelGate> {
 
-    private static final ResourceLocation none = new ResourceLocation(RuneCraftory.MODID, "textures/entity/gate_none.png");
-    private static final ResourceLocation fire = new ResourceLocation(RuneCraftory.MODID, "textures/entity/gate_fire.png");
-    private static final ResourceLocation water = new ResourceLocation(RuneCraftory.MODID, "textures/entity/gate_water.png");
-    private static final ResourceLocation earth = new ResourceLocation(RuneCraftory.MODID, "textures/entity/gate_earth.png");
-    private static final ResourceLocation wind = new ResourceLocation(RuneCraftory.MODID, "textures/entity/gate_wind.png");
-    private static final ResourceLocation light = new ResourceLocation(RuneCraftory.MODID, "textures/entity/gate_light.png");
-    private static final ResourceLocation dark = new ResourceLocation(RuneCraftory.MODID, "textures/entity/gate_dark.png");
-    private static final ResourceLocation love = new ResourceLocation(RuneCraftory.MODID, "textures/entity/gate_love.png");
+    private static final ResourceLocation NONE = new ResourceLocation(RuneCraftory.MODID, "textures/entity/gate_none.png");
+    private static final ResourceLocation FIRE = new ResourceLocation(RuneCraftory.MODID, "textures/entity/gate_fire.png");
+    private static final ResourceLocation WATER = new ResourceLocation(RuneCraftory.MODID, "textures/entity/gate_water.png");
+    private static final ResourceLocation EARTH = new ResourceLocation(RuneCraftory.MODID, "textures/entity/gate_earth.png");
+    private static final ResourceLocation WIND = new ResourceLocation(RuneCraftory.MODID, "textures/entity/gate_wind.png");
+    private static final ResourceLocation LIGHT = new ResourceLocation(RuneCraftory.MODID, "textures/entity/gate_light.png");
+    private static final ResourceLocation DARK = new ResourceLocation(RuneCraftory.MODID, "textures/entity/gate_dark.png");
+    private static final ResourceLocation LOVE = new ResourceLocation(RuneCraftory.MODID, "textures/entity/gate_love.png");
     protected final RenderUtils.TextureBuilder textureBuilder = new RenderUtils.TextureBuilder();
 
     public RenderGate(EntityRendererProvider.Context ctx) {
@@ -99,14 +99,14 @@ public class RenderGate extends LivingEntityRenderer<GateEntity, ModelGate> {
     @Override
     public ResourceLocation getTextureLocation(GateEntity entity) {
         return switch (entity.getElement()) {
-            case NONE -> none;
-            case WATER -> water;
-            case EARTH -> earth;
-            case WIND -> wind;
-            case FIRE -> fire;
-            case LIGHT -> light;
-            case DARK -> dark;
-            case LOVE -> love;
+            case NONE -> NONE;
+            case WATER -> WATER;
+            case EARTH -> EARTH;
+            case WIND -> WIND;
+            case FIRE -> FIRE;
+            case LIGHT -> LIGHT;
+            case DARK -> DARK;
+            case LOVE -> LOVE;
         };
     }
 }

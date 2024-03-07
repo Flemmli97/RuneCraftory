@@ -32,7 +32,7 @@ public class EntityRideActionCosts {
     private final RideActionCost command3;
     private final RideActionCost command4;
 
-    public EntityRideActionCosts(RideActionCost command1, RideActionCost command2, RideActionCost command3, RideActionCost command4) {
+    private EntityRideActionCosts(RideActionCost command1, RideActionCost command2, RideActionCost command3, RideActionCost command4) {
         this.command1 = command1;
         this.command2 = command2;
         this.command3 = command3;

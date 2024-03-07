@@ -28,7 +28,7 @@ public class BlockSingleTimeSpawner extends BaseEntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
-        return level.isClientSide ? null : BaseEntityBlock.createTickerHelper(blockEntityType, ModBlocks.singleSpawnerTile.get(), SingleTimeSpawner::tick);
+        return level.isClientSide ? null : BaseEntityBlock.createTickerHelper(blockEntityType, ModBlocks.SINGLE_SPAWNER_TILE.get(), SingleTimeSpawner::tick);
     }
 
     @Override

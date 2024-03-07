@@ -21,7 +21,6 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.SupportType;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -41,7 +40,7 @@ public class BlockBrokenMineral extends Block implements SimpleWaterloggedBlock,
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
-    public static final VoxelShape north = Stream.of(
+    public static final VoxelShape NORTH = Stream.of(
             Block.box(8, 0, 0, 13, 1, 5),
             Block.box(10, 0, 8, 13, 1, 10),
             Block.box(9, 0, 10, 16, 1, 15),
@@ -57,7 +56,7 @@ public class BlockBrokenMineral extends Block implements SimpleWaterloggedBlock,
             Block.box(6.75, 1.55, 4.5, 8.75, 2.55, 7.5),
             Block.box(3.75, 1.55, 9.5, 5.75, 2.55, 11.5)
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
-    public static final VoxelShape west = Stream.of(
+    public static final VoxelShape WEST = Stream.of(
             Block.box(0, 0, 3, 5, 1, 8),
             Block.box(8, 0, 3, 10, 1, 6),
             Block.box(10, 0, 0, 15, 1, 7),
@@ -73,7 +72,7 @@ public class BlockBrokenMineral extends Block implements SimpleWaterloggedBlock,
             Block.box(4.5, 1.55, 7.25, 7.5, 2.55, 9.25),
             Block.box(9.5, 1.55, 10.25, 11.5, 2.55, 12.25)
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
-    public static final VoxelShape south = Stream.of(
+    public static final VoxelShape SOUTH = Stream.of(
             Block.box(3, 0, 11, 8, 1, 16),
             Block.box(3, 0, 6, 6, 1, 8),
             Block.box(0, 0, 1, 7, 1, 6),
@@ -89,7 +88,7 @@ public class BlockBrokenMineral extends Block implements SimpleWaterloggedBlock,
             Block.box(7.25, 1.55, 8.5, 9.25, 2.55, 11.5),
             Block.box(10.25, 1.55, 4.5, 12.25, 2.55, 6.5)
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
-    public static final VoxelShape east = Stream.of(
+    public static final VoxelShape EAST = Stream.of(
             Block.box(11, 0, 8, 16, 1, 13),
             Block.box(6, 0, 10, 8, 1, 13),
             Block.box(1, 0, 9, 6, 1, 16),
@@ -108,7 +107,7 @@ public class BlockBrokenMineral extends Block implements SimpleWaterloggedBlock,
 
     public final EnumMineralTier tier;
 
-    public BlockBrokenMineral(EnumMineralTier tier, BlockBehaviour.Properties properties) {
+    public BlockBrokenMineral(EnumMineralTier tier, Properties properties) {
         super(properties);
         this.tier = tier;
         this.registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
@@ -165,10 +164,10 @@ public class BlockBrokenMineral extends Block implements SimpleWaterloggedBlock,
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return switch (state.getValue(FACING)) {
-            case WEST -> west;
-            case EAST -> east;
-            case SOUTH -> south;
-            default -> north;
+            case WEST -> WEST;
+            case EAST -> EAST;
+            case SOUTH -> SOUTH;
+            default -> NORTH;
         };
     }
 
@@ -184,7 +183,7 @@ public class BlockBrokenMineral extends Block implements SimpleWaterloggedBlock,
     }
 
     public BlockState getMineralState(BlockState state) {
-        BlockState blockState = ModBlocks.mineralMap.get(this.tier).get().defaultBlockState();
+        BlockState blockState = ModBlocks.MINERAL_MAP.get(this.tier).get().defaultBlockState();
         if (state.hasProperty(FACING))
             state.setValue(FACING, state.getValue(FACING));
         if (state.hasProperty(WATERLOGGED))

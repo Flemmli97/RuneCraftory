@@ -143,7 +143,7 @@ public class BlockTreeBase extends RotatedPillarBlock implements EntityBlock, Gr
                 Growable.super.onGrow(level, pos, state, old);
             if (this.growTree(level, pos, state, level.getRandom())) {
                 Growable.super.onGrow(level, pos, state, old);
-                level.setBlock(pos.below(), ModBlocks.treeSoil.get().defaultBlockState(), Block.UPDATE_ALL);
+                level.setBlock(pos.below(), ModBlocks.TREE_SOIL.get().defaultBlockState(), Block.UPDATE_ALL);
             }
         }
     }

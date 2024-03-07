@@ -87,7 +87,7 @@ public class MonsterCompanionGui extends CompanionGui<BaseMonster> {
             buttonIndex++;
         }
 
-        if (this.minecraft.player.getMainHandItem().getItem() == ModItems.mobStaff.get()) {
+        if (this.minecraft.player.getMainHandItem().getItem() == ModItems.MOB_STAFF.get()) {
             if (this.updatedBehaviour == BaseMonster.Behaviour.WANDER)
                 this.addRenderableWidget(new Button(this.leftPos + x + (int) ((xSize + 5) * 0.5), this.topPos + y + (buttonIndex / 2 * 23), xSize, 20, new TranslatableComponent(C2SSetMonsterBehaviour.Type.CENTER.translation), b -> this.handlePress(C2SSetMonsterBehaviour.Type.CENTER)));
             if (this.updatedBehaviour == BaseMonster.Behaviour.FARM) {

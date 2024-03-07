@@ -74,12 +74,12 @@ public class PlayerData {
 
     public boolean starting, unlockedRecipes;
     //max runepoints possible: 2883
-    private int money = GeneralConfig.startingMoney;
-    private float runePointsMax = GeneralConfig.startingRP;
+    private int money = GeneralConfig.STARTING_MONEY;
+    private float runePointsMax = GeneralConfig.STARTING_RP;
     private int runePoints = (int) this.runePointsMax;
-    private float str = GeneralConfig.startingStr;
-    private float vit = GeneralConfig.startingVit;
-    private float intel = GeneralConfig.startingIntel;
+    private float str = GeneralConfig.STARTING_STR;
+    private float vit = GeneralConfig.STARTING_VIT;
+    private float intel = GeneralConfig.STARTING_INTEL;
     private float strAdd, vitAdd, intAdd;
     /**
      * first number is level, second is the xp a.k.a. percent to next level
@@ -164,7 +164,7 @@ public class PlayerData {
     }
 
     public boolean decreaseRunePoints(Player player, int amount, boolean damage) {
-        if (!GeneralConfig.useRP && !player.level.isClientSide)
+        if (!GeneralConfig.USE_RP && !player.level.isClientSide)
             return true;
         if (!player.isCreative()) {
             if (EntityUtils.isExhaust(player)) {
@@ -265,7 +265,7 @@ public class PlayerData {
     }
 
     public void setPlayerLevel(Player player, int level, float xpAmount, boolean recalc) {
-        this.level.setLevel(Mth.clamp(level, 1, GeneralConfig.maxLevel));
+        this.level.setLevel(Mth.clamp(level, 1, GeneralConfig.MAX_LEVEL));
         this.level.setXp(Mth.clamp(xpAmount, 0, LevelCalc.xpAmountForLevelUp(level)));
         if (player instanceof ServerPlayer serverPlayer) {
             if (recalc) {
@@ -276,9 +276,9 @@ public class PlayerData {
     }
 
     public void addXp(Player player, float amount) {
-        if (this.level.getLevel() >= GeneralConfig.maxLevel)
+        if (this.level.getLevel() >= GeneralConfig.MAX_LEVEL)
             return;
-        boolean levelUp = this.level.addXP(amount, GeneralConfig.maxLevel, LevelCalc::xpAmountForLevelUp, () -> this.onLevelUp(player));
+        boolean levelUp = this.level.addXP(amount, GeneralConfig.MAX_LEVEL, LevelCalc::xpAmountForLevelUp, () -> this.onLevelUp(player));
         if (levelUp) {
             player.level.playSound(null, player.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1, 0.5f);
         }
@@ -293,24 +293,24 @@ public class PlayerData {
         float health = player.getMaxHealth();
         this.updateHealth(player);
         player.heal(player.getMaxHealth() - health);
-        this.runePointsMax += GeneralConfig.rpPerLevel;
-        this.runePoints = Math.min(this.runePoints + (int) GeneralConfig.rpPerLevel, this.runePoints);
-        this.str += GeneralConfig.strPerLevel;
-        this.vit += GeneralConfig.vitPerLevel;
-        this.intel += GeneralConfig.intPerLevel;
+        this.runePointsMax += GeneralConfig.RP_PER_LEVEL;
+        this.runePoints = Math.min(this.runePoints + (int) GeneralConfig.RP_PER_LEVEL, this.runePoints);
+        this.str += GeneralConfig.STR_PER_LEVEL;
+        this.vit += GeneralConfig.VIT_PER_LEVEL;
+        this.intel += GeneralConfig.INT_PER_LEVEL;
     }
 
     public void recalculateStats(ServerPlayer player, boolean regen) {
         int lvl = this.level.getLevel() - 1;
         this.updateHealth(player);
-        this.runePointsMax = GeneralConfig.rpPerLevel * lvl + GeneralConfig.startingRP + (int) this.skillValLevelFunc((skillLvl, prop) -> Math.min(100, skillLvl) * prop.rpIncrease());
+        this.runePointsMax = GeneralConfig.RP_PER_LEVEL * lvl + GeneralConfig.STARTING_RP + (int) this.skillValLevelFunc((skillLvl, prop) -> Math.min(100, skillLvl) * prop.rpIncrease());
         if (regen) {
             player.setHealth(player.getMaxHealth());
             this.runePoints = (int) this.runePointsMax;
         }
-        this.str = GeneralConfig.strPerLevel * lvl + GeneralConfig.startingStr + (float) this.skillVal(SkillProperties::strIncrease);
-        this.intel = GeneralConfig.intPerLevel * lvl + GeneralConfig.startingIntel + (float) this.skillVal(SkillProperties::intelIncrease);
-        this.vit = GeneralConfig.vitPerLevel * lvl + GeneralConfig.startingVit + (float) this.skillVal(SkillProperties::vitIncrease);
+        this.str = GeneralConfig.STR_PER_LEVEL * lvl + GeneralConfig.STARTING_STR + (float) this.skillVal(SkillProperties::strIncrease);
+        this.intel = GeneralConfig.INT_PER_LEVEL * lvl + GeneralConfig.STARTING_INTEL + (float) this.skillVal(SkillProperties::intelIncrease);
+        this.vit = GeneralConfig.VIT_PER_LEVEL * lvl + GeneralConfig.STARTING_VIT + (float) this.skillVal(SkillProperties::vitIncrease);
         Platform.INSTANCE.sendToClient(new S2CLevelPkt(this), player);
     }
 
@@ -368,7 +368,7 @@ public class PlayerData {
     }
 
     private void updateHealth(Player player) {
-        this.setMaxHealth(player, GeneralConfig.startingHealth + LevelCalc.getHealthTotalFor(GeneralConfig.hpPerLevel, this.level.getLevel()) +
+        this.setMaxHealth(player, GeneralConfig.STARTING_HEALTH + LevelCalc.getHealthTotalFor(GeneralConfig.HP_PER_LEVEL, this.level.getLevel()) +
                 (float) this.skillValLevelFunc((skillLvl, prop) -> {
                     int skillHealthMultiplier = 1 + (skillLvl / 25);
                     return skillHealthMultiplier * prop.healthIncrease() * skillLvl;
@@ -474,7 +474,7 @@ public class PlayerData {
                     for (float chance = 1.5f + shopItems.size() * 0.002f; player.level.random.nextFloat() < chance; chance -= 0.1f) {
                         ItemStack stack = shopItems.remove(player.level.random.nextInt(shopItems.size()));
                         shop.add(stack);
-                        if (shopItems.isEmpty() || (profession == ModNPCJobs.RANDOM.getSecond() && shop.size() >= InventoryShop.shopSize))
+                        if (shopItems.isEmpty() || (profession == ModNPCJobs.RANDOM.getSecond() && shop.size() >= InventoryShop.SHOP_SIZE))
                             break;
                     }
                 }
@@ -600,7 +600,7 @@ public class PlayerData {
                 this.blockBreakPosForMsg = null;
             ItemStack main = player.getMainHandItem();
             ItemStack off = player.getOffhandItem();
-            if (main.is(ModItems.mobStaff.get()) || off.is(ModItems.mobStaff.get())) {
+            if (main.is(ModItems.MOB_STAFF.get()) || off.is(ModItems.MOB_STAFF.get())) {
                 if (this.entitySelector.poi != null) {
                     serverPlayer.getLevel().sendParticles(serverPlayer, ParticleTypes.FLAME, true,
                             this.entitySelector.poi.getX() + 0.5, this.entitySelector.poi.getY() + 1.5, this.entitySelector.poi.getZ() + 0.5,
@@ -733,8 +733,8 @@ public class PlayerData {
             nbt.putInt("RunePoints", this.runePoints);
         } else {
             if (wasDead) {
-                nbt.putFloat("RestoreHP", player.getMaxHealth() * GeneralConfig.deathHPPercent);
-                nbt.putInt("RunePoints", (int) (this.runePointsMax * GeneralConfig.deathRPPercent));
+                nbt.putFloat("RestoreHP", player.getMaxHealth() * GeneralConfig.DEATH_HP_PERCENT);
+                nbt.putInt("RunePoints", (int) (this.runePointsMax * GeneralConfig.DEATH_RP_PERCENT));
             } else {
                 nbt.putFloat("RestoreHP", player.getHealth());
                 nbt.putInt("RunePoints", this.runePoints);

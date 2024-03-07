@@ -87,13 +87,13 @@ public class WorldUtils {
 
     public static float seasonBasedTemp(Level level, BlockPos pos, Biome biome) {
         float temp = ((BiomeAccessor) (Object) biome).biomeTemp(pos);
-        if (!GeneralConfig.seasonedSnow)
+        if (!GeneralConfig.SEASONED_SNOW)
             return temp;
         EnumSeason season;
         if (level instanceof ServerLevel serverLevel)
             season = WorldHandler.get(serverLevel.getServer()).currentSeason();
         else
-            season = ClientHandlers.clientCalendar.currentSeason();
+            season = ClientHandlers.CLIENT_CALENDAR.currentSeason();
         switch (season) {
             case SUMMER -> temp += 0.1f;
             case FALL -> temp -= 0.25f;

@@ -20,7 +20,7 @@ public abstract class SpreadingSnowyDirtBlockMixin {
 
     @Inject(method = "canBeGrass", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;is(Lnet/minecraft/world/level/block/Block;)Z"), cancellable = true, locals = LocalCapture.CAPTURE_FAILHARD)
     private static void grassCheck(BlockState state, LevelReader levelReader, BlockPos pos, CallbackInfoReturnable<Boolean> info, BlockPos above, BlockState aboveState) {
-        if (aboveState.is(ModBlocks.snow.get()) && aboveState.getValue(SnowLayerBlock.LAYERS) == 1) {
+        if (aboveState.is(ModBlocks.SNOW.get()) && aboveState.getValue(SnowLayerBlock.LAYERS) == 1) {
             info.setReturnValue(true);
         }
     }

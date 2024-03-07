@@ -54,14 +54,14 @@ public class ItemToolSickle extends DiggerItem implements IItemUsable, IChargeab
     public final EnumToolTier tier;
 
     public ItemToolSickle(EnumToolTier tier, Item.Properties props) {
-        super(0, 0, ItemTiers.tier, ModTags.SICKLE_EFFECTIVE, props);
+        super(0, 0, ItemTiers.TIER, ModTags.SICKLE_EFFECTIVE, props);
         this.tier = tier;
     }
 
     @Override
     public int getChargeTime(ItemStack stack) {
         if (this.tier == EnumToolTier.PLATINUM)
-            return (int) (DataPackHandler.INSTANCE.weaponPropertiesManager().getPropertiesFor(this.getWeaponType()).chargeTime() * GeneralConfig.platinumChargeTime);
+            return (int) (DataPackHandler.INSTANCE.weaponPropertiesManager().getPropertiesFor(this.getWeaponType()).chargeTime() * GeneralConfig.PLATINUM_CHARGE_TIME);
         return DataPackHandler.INSTANCE.weaponPropertiesManager().getPropertiesFor(this.getWeaponType()).chargeTime();
     }
 

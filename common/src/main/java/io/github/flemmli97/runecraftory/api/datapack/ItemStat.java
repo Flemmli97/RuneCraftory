@@ -285,7 +285,7 @@ public class ItemStat {
     /**
      * Attributes and values to display
      */
-    public static AttributeMapDisplay getStatsAttributeMap(ItemStack stack) {
+    private static AttributeMapDisplay getStatsAttributeMap(ItemStack stack) {
         if (!ItemNBT.shouldHaveStats(stack))
             return DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem())
                     .map(s -> new AttributeMapDisplay(s.itemStats, null)).orElse(new AttributeMapDisplay(null, null));

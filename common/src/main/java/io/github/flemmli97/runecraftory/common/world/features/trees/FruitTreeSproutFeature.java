@@ -23,8 +23,8 @@ public class FruitTreeSproutFeature extends Feature<FruitTreeSproutConfiguration
     @Override
     public boolean place(FeaturePlaceContext<FruitTreeSproutConfiguration> context) {
         BlockPos soil = context.origin().below();
-        if (context.level().isStateAtPosition(soil, s -> !s.is(ModBlocks.treeSoil.get()))) {
-            context.level().setBlock(soil, ModBlocks.treeSoil.get().defaultBlockState(), Block.UPDATE_ALL);
+        if (context.level().isStateAtPosition(soil, s -> !s.is(ModBlocks.TREE_SOIL.get()))) {
+            context.level().setBlock(soil, ModBlocks.TREE_SOIL.get().defaultBlockState(), Block.UPDATE_ALL);
         }
         BlockPos above = context.origin().above();
         BlockEntity blockEntity = context.level().getBlockEntity(context.origin());

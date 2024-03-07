@@ -18,8 +18,8 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 
 public class InfoSubScreen extends InfoScreen {
 
-    private static final ResourceLocation page2 = new ResourceLocation(RuneCraftory.MODID, "textures/gui/skills_2.png");
-    private static final ResourceLocation pageEnd = new ResourceLocation(RuneCraftory.MODID, "textures/gui/skills_3.png");
+    private static final ResourceLocation PAGE_2 = new ResourceLocation(RuneCraftory.MODID, "textures/gui/skills_2.png");
+    private static final ResourceLocation PAGE_END = new ResourceLocation(RuneCraftory.MODID, "textures/gui/skills_3.png");
     private final int maxPages = EnumSkills.values().length / 12;
     private int page;
 
@@ -35,7 +35,7 @@ public class InfoSubScreen extends InfoScreen {
             if (index < EnumSkills.values().length) {
                 EnumSkills skill = EnumSkills.values()[index];
                 int skillXP = (int) (this.data.getSkillLevel(skill).getXp() / (float) LevelCalc.xpAmountForSkillLevelUp(skill, this.data.getSkillLevel(skill).getLevel()) * 96.0f);
-                RenderSystem.setShaderTexture(0, bars);
+                RenderSystem.setShaderTexture(0, BARS);
                 this.blit(stack, this.leftPos + 9, this.topPos + 117 + 13 * i, 2, 80, skillXP, 9);
                 this.minecraft.font.draw(stack, new TranslatableComponent(skill.getTranslation()), this.leftPos + 11, this.topPos + 118 + 13 * i, 0xffffff);
                 ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + this.data.getSkillLevel(skill).getLevel(), this.leftPos + 104, this.topPos + 118 + 13 * i, 1.0f, 0xffffff);
@@ -44,7 +44,7 @@ public class InfoSubScreen extends InfoScreen {
             if (index < EnumSkills.values().length) {
                 EnumSkills skill2 = EnumSkills.values()[i + 6 + this.page * 12];
                 int skillXP2 = (int) (this.data.getSkillLevel(skill2).getXp() / (float) LevelCalc.xpAmountForSkillLevelUp(skill2, this.data.getSkillLevel(skill2).getLevel()) * 96.0f);
-                RenderSystem.setShaderTexture(0, bars);
+                RenderSystem.setShaderTexture(0, BARS);
                 this.blit(stack, this.leftPos + 119, this.topPos + 117 + 13 * i, 2, 80, skillXP2, 9);
                 this.minecraft.font.draw(stack, new TranslatableComponent(skill2.getTranslation()), this.leftPos + 121, this.topPos + 118 + 13 * i, 0xffffff);
                 ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + this.data.getSkillLevel(skill2).getLevel(), this.leftPos + 214, this.topPos + 118 + 13 * i, 1.0f, 0xffffff);
@@ -72,7 +72,7 @@ public class InfoSubScreen extends InfoScreen {
     @Override
     protected ResourceLocation texture() {
         if (this.page == this.maxPages)
-            return pageEnd;
-        return page2;
+            return PAGE_END;
+        return PAGE_2;
     }
 }

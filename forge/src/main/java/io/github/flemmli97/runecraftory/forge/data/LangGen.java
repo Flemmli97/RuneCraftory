@@ -77,49 +77,49 @@ public class LangGen implements DataProvider {
 
     protected void addTranslations() {
         //Static order
-        this.add(ModItems.hoeScrap.get(), "Cheap Hoe");
-        this.add(ModItems.hoeIron.get(), "Sturdy Hoe");
-        this.add(ModItems.hoeSilver.get(), "Seasoned Hoe");
-        this.add(ModItems.hoeGold.get(), "Shiny Hoe");
-        this.add(ModItems.hoePlatinum.get(), "Blessed Hoe");
-        this.add(ModItems.wateringCanScrap.get(), "Cheap Waterpot");
-        this.add(ModItems.wateringCanIron.get(), "Tin Waterpot");
-        this.add(ModItems.wateringCanSilver.get(), "Lion Waterpot");
-        this.add(ModItems.wateringCanGold.get(), "Rainbow Waterpot");
-        this.add(ModItems.wateringCanPlatinum.get(), "Joy Waterpot");
-        this.add(ModItems.sickleScrap.get(), "Cheap Sickle");
-        this.add(ModItems.sickleIron.get(), "Iron Sickle");
-        this.add(ModItems.sickleSilver.get(), "Quality Sickle");
-        this.add(ModItems.sickleGold.get(), "Super Sickle");
-        this.add(ModItems.sicklePlatinum.get(), "Legendary Sickle");
-        this.add(ModItems.hammerScrap.get(), "Cheap Hammer");
-        this.add(ModItems.hammerIron.get(), "Iron Hammer");
-        this.add(ModItems.hammerSilver.get(), "Silver Hammer");
-        this.add(ModItems.hammerGold.get(), "Golden Hammer");
-        this.add(ModItems.hammerPlatinum.get(), "Platinum Hammer");
-        this.add(ModItems.axeScrap.get(), "Cheap Axe");
-        this.add(ModItems.axeIron.get(), "Chopping Axe");
-        this.add(ModItems.axeSilver.get(), "Lumber Axe");
-        this.add(ModItems.axeGold.get(), "Mountain Axe");
-        this.add(ModItems.axePlatinum.get(), "Miracle Axe");
-        this.add(ModItems.fishingRodScrap.get(), "Cheap Pole");
-        this.add(ModItems.fishingRodIron.get(), "Beginner's Pole");
-        this.add(ModItems.fishingRodSilver.get(), "Skilled Pole");
-        this.add(ModItems.fishingRodGold.get(), "Famous Pole");
-        this.add(ModItems.fishingRodPlatinum.get(), "Sacred Pole");
+        this.add(ModItems.HOE_SCRAP.get(), "Cheap Hoe");
+        this.add(ModItems.HOE_IRON.get(), "Sturdy Hoe");
+        this.add(ModItems.HOE_SILVER.get(), "Seasoned Hoe");
+        this.add(ModItems.HOE_GOLD.get(), "Shiny Hoe");
+        this.add(ModItems.HOE_PLATINUM.get(), "Blessed Hoe");
+        this.add(ModItems.WATERING_CAN_SCRAP.get(), "Cheap Waterpot");
+        this.add(ModItems.WATERING_CAN_IRON.get(), "Tin Waterpot");
+        this.add(ModItems.WATERING_CAN_SILVER.get(), "Lion Waterpot");
+        this.add(ModItems.WATERING_CAN_GOLD.get(), "Rainbow Waterpot");
+        this.add(ModItems.WATERING_CAN_PLATINUM.get(), "Joy Waterpot");
+        this.add(ModItems.SICKLE_SCRAP.get(), "Cheap Sickle");
+        this.add(ModItems.SICKLE_IRON.get(), "Iron Sickle");
+        this.add(ModItems.SICKLE_SILVER.get(), "Quality Sickle");
+        this.add(ModItems.SICKLE_GOLD.get(), "Super Sickle");
+        this.add(ModItems.SICKLE_PLATINUM.get(), "Legendary Sickle");
+        this.add(ModItems.HAMMER_SCRAP.get(), "Cheap Hammer");
+        this.add(ModItems.HAMMER_IRON.get(), "Iron Hammer");
+        this.add(ModItems.HAMMER_SILVER.get(), "Silver Hammer");
+        this.add(ModItems.HAMMER_GOLD.get(), "Golden Hammer");
+        this.add(ModItems.HAMMER_PLATINUM.get(), "Platinum Hammer");
+        this.add(ModItems.AXE_SCRAP.get(), "Cheap Axe");
+        this.add(ModItems.AXE_IRON.get(), "Chopping Axe");
+        this.add(ModItems.AXE_SILVER.get(), "Lumber Axe");
+        this.add(ModItems.AXE_GOLD.get(), "Mountain Axe");
+        this.add(ModItems.AXE_PLATINUM.get(), "Miracle Axe");
+        this.add(ModItems.FISHING_ROD_SCRAP.get(), "Cheap Pole");
+        this.add(ModItems.FISHING_ROD_IRON.get(), "Beginner's Pole");
+        this.add(ModItems.FISHING_ROD_SILVER.get(), "Skilled Pole");
+        this.add(ModItems.FISHING_ROD_GOLD.get(), "Famous Pole");
+        this.add(ModItems.FISHING_ROD_PLATINUM.get(), "Sacred Pole");
         for (RegistryEntrySupplier<Item> sup : ModItems.ITEMS.getEntries()) {
             if (sup.get() instanceof ItemToolAxe || sup.get() instanceof ItemToolHoe || sup.get() instanceof ItemToolWateringCan
                     || sup.get() instanceof ItemToolSickle || sup.get() instanceof ItemToolHammer || sup.get() instanceof ItemToolFishingRod)
                 continue;
-            if (sup == ModItems.steelTen) {
+            if (sup == ModItems.STEEL_TEN) {
                 this.add(sup.get(), "10-Fold Steel");
             } else if (sup == ModItems.MTGUPlate) {
                 this.add(sup.get(), "MGTU Plate");
-            } else if (sup == ModItems.furSmall) {
+            } else if (sup == ModItems.FUR_SMALL) {
                 this.add(sup.get(), "Fur (S)");
-            } else if (sup == ModItems.furMedium) {
+            } else if (sup == ModItems.FUR_MEDIUM) {
                 this.add(sup.get(), "Fur (M)");
-            } else if (sup == ModItems.furLarge) {
+            } else if (sup == ModItems.FUR_LARGE) {
                 this.add(sup.get(), "Fur (L)");
             } else if (sup == ModItems.eggS) {
                 this.add(sup.get(), "Egg (S)");
@@ -133,7 +133,7 @@ public class LangGen implements DataProvider {
                 this.add(sup.get(), "Milk (M)");
             } else if (sup == ModItems.milkL) {
                 this.add(sup.get(), "Milk (L)");
-            } else if (sup == ModItems.grapeSapling) {
+            } else if (sup == ModItems.GRAPE_SAPLING) {
                 this.add(sup.get(), "Grape Sapling?");
             } else if (sup.get() instanceof SpawnEgg)
                 this.add(sup.get(), "%s" + " Spawn Egg");
@@ -147,9 +147,9 @@ public class LangGen implements DataProvider {
             if (sup.get() instanceof BlockCrop)
                 this.add(sup.get(), this.simpleTranslation(sup.getID()));
         }
-        this.add(ModBlocks.mushroom.get(), "Mushroom");
-        this.add(ModBlocks.monarchMushroom.get(), "Monach Mushroom");
-        this.add(ModBlocks.snow.get(), "Snow");
+        this.add(ModBlocks.MUSHROOM.get(), "Mushroom");
+        this.add(ModBlocks.MONARCH_MUSHROOM.get(), "Monach Mushroom");
+        this.add(ModBlocks.SNOW.get(), "Snow");
 
         for (RegistryEntrySupplier<EntityType<?>> sup : ModEntities.ENTITIES.getEntries()) {
             this.add(sup.get(), this.simpleTranslation(sup.getID()));

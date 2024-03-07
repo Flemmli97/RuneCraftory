@@ -96,7 +96,7 @@ public class EntityCalls {
                 data.recalculateStats(serverPlayer, false);
                 if (!data.starting) {
                     data.starting = true;
-                    data.setMaxHealth(player, GeneralConfig.startingHealth, true);
+                    data.setMaxHealth(player, GeneralConfig.STARTING_HEALTH, true);
                     player.setHealth(player.getMaxHealth());
                 }
             });
@@ -264,13 +264,13 @@ public class EntityCalls {
             if (!source.isBypassInvul()) {
                 ItemStack deathProt = ItemStack.EMPTY;
                 for (ItemStack stack : entity.getAllSlots()) {
-                    if (stack.getItem() == ModItems.lawn.get()) {
+                    if (stack.getItem() == ModItems.LAWN.get()) {
                         deathProt = stack;
                     }
                 }
                 if (deathProt.isEmpty() && entity instanceof Player player) {
                     for (ItemStack stack : player.getInventory().items) {
-                        if (stack.getItem() == ModItems.lawn.get()) {
+                        if (stack.getItem() == ModItems.LAWN.get()) {
                             deathProt = stack;
                         }
                     }
@@ -288,7 +288,7 @@ public class EntityCalls {
                     return true;
                 }
             }
-            if (MobConfig.vanillaGiveXp && entity instanceof Mob m && !(entity instanceof IBaseMob) && source.getEntity() instanceof LivingEntity attacker) {
+            if (MobConfig.VANILLA_GIVE_XP && entity instanceof Mob m && !(entity instanceof IBaseMob) && source.getEntity() instanceof LivingEntity attacker) {
                 LevelCalc.addXP(attacker, (int) Math.log(m.getMaxHealth() + 1) * 10, 0, 0, false);
             }
         }
@@ -364,7 +364,7 @@ public class EntityCalls {
     public static void updateLivingTick(LivingEntity entity) {
         if (entity instanceof Player player) {
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.tick(player));
-            if (GeneralConfig.disableHunger) {
+            if (GeneralConfig.DISABLE_HUNGER) {
                 int food = EntityUtils.paralysed(player) ? 6 : 14;
                 player.getFoodData().setFoodLevel(food);
                 player.getFoodData().setSaturation(0);
@@ -424,7 +424,7 @@ public class EntityCalls {
     }
 
     public static void wakeUp(Player player) {
-        if (GeneralConfig.healOnWakeUp && player instanceof ServerPlayer serverPlayer) {
+        if (GeneralConfig.HEAL_ON_WAKE_UP && player instanceof ServerPlayer serverPlayer) {
             player.heal(player.getMaxHealth());
             Platform.INSTANCE.getPlayerData(serverPlayer).ifPresent(data -> {
                 data.refreshRunePoints(player, data.getMaxRunePoints());
@@ -435,7 +435,7 @@ public class EntityCalls {
     }
 
     public static boolean disableNatural(MobSpawnType spawnType, EntityType<?> entity) {
-        if (MobConfig.disableNaturalSpawn) {
+        if (MobConfig.DISABLE_NATURAL_SPAWN) {
             return (spawnType == MobSpawnType.CHUNK_GENERATION || spawnType == MobSpawnType.NATURAL) && entity != ModEntities.GATE.get();
         }
         return false;
@@ -495,6 +495,6 @@ public class EntityCalls {
     }
 
     public static boolean shouldPreventFarmlandTrample(Entity entity, LevelAccessor world) {
-        return GeneralConfig.disableFarmlandTrample;
+        return GeneralConfig.DISABLE_FARMLAND_TRAMPLE;
     }
 }

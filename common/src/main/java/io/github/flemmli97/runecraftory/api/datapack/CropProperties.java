@@ -33,7 +33,7 @@ public class CropProperties {
                     Codec.list(CodecHelper.enumCodec(EnumSeason.class, EnumSeason.SPRING)).fieldOf("badSeason").forGetter(d -> List.copyOf(d.badSeason))
             ).apply(instance, (growth, drops, regrowable, giant, best, bad) -> new CropProperties(growth, drops, regrowable, giant.orElse(Blocks.AIR), best, bad)));
 
-    public static final CropProperties defaultProp = new CropProperties();
+    public static final CropProperties DEFAULT_PROP = new CropProperties();
     private final EnumSet<EnumSeason> bestSeason = EnumSet.noneOf(EnumSeason.class);
     private final EnumSet<EnumSeason> badSeason = EnumSet.noneOf(EnumSeason.class);
 

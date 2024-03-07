@@ -42,7 +42,7 @@ import java.util.function.Supplier;
 public class ItemDualBladeBase extends SwordItem implements IItemUsable, IChargeable, IDualWeapon, IAOEWeapon {
 
     public ItemDualBladeBase(Item.Properties props) {
-        super(ItemTiers.tier, 0, 0, props);
+        super(ItemTiers.TIER, 0, 0, props);
     }
 
     @Override

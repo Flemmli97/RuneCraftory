@@ -30,7 +30,7 @@ public class ContainerInfoScreen extends AbstractContainerMenu {
     private final boolean main;
 
     public ContainerInfoScreen(int windowId, Inventory playerInventory, boolean main) {
-        super(main ? ModContainer.infoContainer.get() : ModContainer.infoSubContainer.get(), windowId);
+        super(main ? ModContainer.INFO_CONTAINER.get() : ModContainer.INFO_SUB_CONTAINER.get(), windowId);
         this.main = main;
         InventorySpells playerSpells = Platform.INSTANCE.getPlayerData(playerInventory.player).map(PlayerData::getInv).orElse(null);
         if (playerSpells == null)

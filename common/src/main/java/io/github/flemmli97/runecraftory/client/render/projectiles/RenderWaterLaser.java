@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class RenderWaterLaser extends RenderBeam<EntityWaterLaser> {
 
-    private static final ResourceLocation tex = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/water_laser.png");
+    private static final ResourceLocation TEX = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/water_laser.png");
 
     public RenderWaterLaser(EntityRendererProvider.Context ctx) {
         super(ctx, 0.6f, 0.4f, 4);
@@ -36,6 +36,6 @@ public class RenderWaterLaser extends RenderBeam<EntityWaterLaser> {
 
     @Override
     public ResourceLocation getTextureLocation(EntityWaterLaser entity) {
-        return tex;
+        return TEX;
     }
 }

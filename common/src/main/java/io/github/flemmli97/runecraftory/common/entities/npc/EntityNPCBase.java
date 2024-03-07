@@ -270,25 +270,25 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         }
         AttributeInstance inst = this.getAttribute(Attributes.MAX_HEALTH);
         if (inst != null) {
-            inst.setBaseValue(MobConfig.npcHealth);
+            inst.setBaseValue(MobConfig.NPC_HEALTH);
             if (regenHealth)
                 this.setHealth(this.getMaxHealth());
         }
         inst = this.getAttribute(Attributes.ATTACK_DAMAGE);
         if (inst != null) {
-            inst.setBaseValue(MobConfig.npcAttack);
+            inst.setBaseValue(MobConfig.NPC_ATTACK);
         }
         inst = this.getAttribute(ModAttributes.DEFENCE.get());
         if (inst != null) {
-            inst.setBaseValue(MobConfig.npcDefence);
+            inst.setBaseValue(MobConfig.NPC_DEFENCE);
         }
         inst = this.getAttribute(ModAttributes.MAGIC.get());
         if (inst != null) {
-            inst.setBaseValue(MobConfig.npcMagicAttack);
+            inst.setBaseValue(MobConfig.NPC_MAGIC_ATTACK);
         }
         inst = this.getAttribute(ModAttributes.MAGIC_DEFENCE.get());
         if (inst != null) {
-            inst.setBaseValue(MobConfig.npcMagicDefence);
+            inst.setBaseValue(MobConfig.NPC_MAGIC_DEFENCE);
         }
     }
 
@@ -492,7 +492,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             case EAT -> stack.getEatingSound();
             default -> SoundEvents.NOTE_BLOCK_PLING;
         };
-        if (stack.getItem() == ModItems.divorcePaper.get()) {
+        if (stack.getItem() == ModItems.DIVORCE_PAPER.get()) {
             if (player instanceof ServerPlayer serverPlayer) {
                 FamilyHandler families = FamilyHandler.get(this.getServer());
                 FamilyEntry family = families.getOrCreateEntry(this);
@@ -509,7 +509,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             }
             return;
         }
-        if (stack.getItem() == ModItems.loveLetter.get()) {
+        if (stack.getItem() == ModItems.LOVE_LETTER.get()) {
             if (player instanceof ServerPlayer serverPlayer) {
                 FamilyHandler families = FamilyHandler.get(this.getServer());
                 FamilyEntry playerEntry = families.getOrCreateEntry(serverPlayer);
@@ -534,7 +534,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             }
             return;
         }
-        if (stack.getItem() == ModItems.engagementRing.get()) {
+        if (stack.getItem() == ModItems.ENGAGEMENT_RING.get()) {
             if (player instanceof ServerPlayer serverPlayer) {
                 FamilyHandler families = FamilyHandler.get(this.getServer());
                 FamilyEntry playerEntry = families.getOrCreateEntry(serverPlayer);
@@ -605,7 +605,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
                 .withParameter(LootContextParams.ORIGIN, this.position())
                 .withParameter(LootCtxParameters.UUID_CONTEXT, player.getUUID())
                 .withLuck(player.getLuck()).create(LootCtxParameters.NPC_INTERACTION);
-        List<Map.Entry<String, NPCData.Conversation>> filtered = conversations.getConversations().entrySet().stream()
+        List<Map.Entry<String, NPCData.Conversation>> filtered = conversations.conversations().entrySet().stream()
                 .filter(c -> {
                     //Disable if player already has a quest from this npc
                     if (c.getValue().actions().stream().anyMatch(h -> h.action() == NPCData.ConversationAction.QUEST) &&
@@ -621,8 +621,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             Map.Entry<String, NPCData.Conversation> randomLine = filtered.get(this.random.nextInt(size));
             this.tellDialogue(player, convCtx, randomLine.getKey(), randomLine.getValue());
         } else {
-            Component dialog = conversations.getFallbackKey().equals(NPCData.ConversationSet.DEFAULT.getFallbackKey())
-                    ? new TranslatableComponent(conversations.getFallbackKey(), convCtx.key()) : new TranslatableComponent(conversations.getFallbackKey());
+            Component dialog = conversations.fallbackKey().equals(NPCData.ConversationSet.DEFAULT.fallbackKey())
+                    ? new TranslatableComponent(conversations.fallbackKey(), convCtx.key()) : new TranslatableComponent(conversations.fallbackKey());
             this.tellDialogue(player, convCtx, null, dialog, List.of());
         }
     }
@@ -647,7 +647,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
                 .withParameter(LootContextParams.ORIGIN, this.position())
                 .withParameter(LootCtxParameters.UUID_CONTEXT, player.getUUID())
                 .withLuck(player.getLuck()).create(LootCtxParameters.NPC_INTERACTION);
-        List<Map.Entry<String, NPCData.Conversation>> filtered = conversations.getConversations().entrySet().stream().filter(c -> c.getValue().startingConversation() && c.getValue().test(heart, ctx))
+        List<Map.Entry<String, NPCData.Conversation>> filtered = conversations.conversations().entrySet().stream().filter(c -> c.getValue().startingConversation() && c.getValue().test(heart, ctx))
                 .collect(Collectors.toList());
         Collections.shuffle(filtered, this.updater.getDailyRandom());
         int size = Math.min(filtered.size(), 2 + this.updater.getDailyRandom().nextInt(2)); //Select 2-3 random lines
@@ -655,7 +655,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             Map.Entry<String, NPCData.Conversation> randomLine = filtered.get(this.random.nextInt(size));
             this.tellDialogue(player, null, randomLine.getKey(), randomLine.getValue());
         } else {
-            this.tellDialogue(player, null, null, new TranslatableComponent(conversations.getFallbackKey()), List.of());
+            this.tellDialogue(player, null, null, new TranslatableComponent(conversations.fallbackKey()), List.of());
         }
         if (questState == -1)
             this.relationManager.advanceQuest(player.getUUID(), quest);
@@ -673,13 +673,13 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     public void handleDialogueAction(ServerPlayer sender, ConversationContext convCtx, String conversationID, int actionIdx) {
         NPCData.ConversationSet conversations = this.data.getConversation(convCtx);
-        NPCData.Conversation conversation = conversations.getConversations().get(conversationID);
+        NPCData.Conversation conversation = conversations.conversations().get(conversationID);
         if (conversation != null && actionIdx < conversation.actions().size()) {
             NPCData.ConversationActionHolder action = conversation.actions().get(actionIdx);
             if (action != null) {
                 switch (action.action()) {
                     case ANSWER -> {
-                        NPCData.Conversation answer = conversations.getConversations().get(action.actionValue());
+                        NPCData.Conversation answer = conversations.conversations().get(action.actionValue());
                         if (answer != null) {
                             this.relationManager.getFriendPointData(sender.getUUID())
                                     .answer(conversationID, action.friendXP());
@@ -781,7 +781,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     public void increaseLevel() {
-        this.entityData.set(ENTITY_LEVEL, Math.min(GeneralConfig.maxLevel, this.level().getLevel() + 1));
+        this.entityData.set(ENTITY_LEVEL, Math.min(GeneralConfig.MAX_LEVEL, this.level().getLevel() + 1));
         this.updateStatsToLevel();
     }
 
@@ -817,28 +817,28 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         AttributeInstance inst = this.getAttribute(Attributes.MAX_HEALTH);
         if (inst != null) {
             float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, RuneCraftory.MODID + ".levelMod", (this.level().getLevel() - levelOffset) * MobConfig.npcHealthGain * multiplier, AttributeModifier.Operation.ADDITION));
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, RuneCraftory.MODID + ".levelMod", (this.level().getLevel() - levelOffset) * MobConfig.NPC_HEALTH_GAIN * multiplier, AttributeModifier.Operation.ADDITION));
             this.setHealth(this.getMaxHealth() - preHealthDiff);
         }
         inst = this.getAttribute(Attributes.ATTACK_DAMAGE);
         if (inst != null) {
             float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, RuneCraftory.MODID + ".levelMod", (this.level().getLevel() - levelOffset) * MobConfig.npcAttackGain * multiplier, AttributeModifier.Operation.ADDITION));
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, RuneCraftory.MODID + ".levelMod", (this.level().getLevel() - levelOffset) * MobConfig.NPC_ATTACK_GAIN * multiplier, AttributeModifier.Operation.ADDITION));
         }
         inst = this.getAttribute(ModAttributes.DEFENCE.get());
         if (inst != null) {
             float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, RuneCraftory.MODID + ".levelMod", (this.level().getLevel() - levelOffset) * MobConfig.npcDefenceGain * multiplier, AttributeModifier.Operation.ADDITION));
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, RuneCraftory.MODID + ".levelMod", (this.level().getLevel() - levelOffset) * MobConfig.NPC_DEFENCE_GAIN * multiplier, AttributeModifier.Operation.ADDITION));
         }
         inst = this.getAttribute(ModAttributes.MAGIC.get());
         if (inst != null) {
             float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, RuneCraftory.MODID + ".levelMod", (this.level().getLevel() - levelOffset) * MobConfig.npcMagicAttackGain * multiplier, AttributeModifier.Operation.ADDITION));
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, RuneCraftory.MODID + ".levelMod", (this.level().getLevel() - levelOffset) * MobConfig.NPC_MAGIC_ATTACK_GAIN * multiplier, AttributeModifier.Operation.ADDITION));
         }
         inst = this.getAttribute(ModAttributes.MAGIC_DEFENCE.get());
         if (inst != null) {
             float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, RuneCraftory.MODID + ".levelMod", (this.level().getLevel() - levelOffset) * MobConfig.npcMagicDefenceGain * multiplier, AttributeModifier.Operation.ADDITION));
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, RuneCraftory.MODID + ".levelMod", (this.level().getLevel() - levelOffset) * MobConfig.NPC_MAGIC_DEFENCE_GAIN * multiplier, AttributeModifier.Operation.ADDITION));
         }
     }
 
@@ -934,7 +934,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     @Override
     public void die(DamageSource cause) {
-        RuneCraftory.logger.info("NPC {} died, message: '{}'", this, cause.getLocalizedDeathMessage(this).getString());
+        RuneCraftory.LOGGER.info("NPC {} died, message: '{}'", this, cause.getLocalizedDeathMessage(this).getString());
         if (!this.level.isClientSide) {
             this.getAnimationHandler().setAnimation(null);
         }

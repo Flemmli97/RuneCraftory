@@ -75,7 +75,7 @@ public class BlockCrop extends CropBlock {
 
     public void onWither(int amount, Level level, BlockState state, BlockPos pos) {
         if (amount > 1 || state.getValue(BlockCrop.WILTED)) {
-            level.setBlock(pos, ModBlocks.witheredGrass.get().defaultBlockState(), Block.UPDATE_ALL);
+            level.setBlock(pos, ModBlocks.WITHERED_GRASS.get().defaultBlockState(), Block.UPDATE_ALL);
         } else {
             level.setBlock(pos, state.setValue(BlockCrop.WILTED, true), Block.UPDATE_ALL);
         }

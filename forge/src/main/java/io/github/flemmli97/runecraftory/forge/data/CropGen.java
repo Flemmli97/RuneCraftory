@@ -19,136 +19,136 @@ public class CropGen extends CropProvider {
     protected void add() {
         this.addStat(Items.WHEAT_SEEDS, new CropProperties.Builder(5, 4, true).addGoodSeason(EnumSeason.FALL));
         this.addStat(Items.CARROT, new CropProperties.Builder(6, 3, false).addGoodSeason(EnumSeason.FALL)
-                .withGiantVersion(ModBlocks.carrotGiant.get()));
+                .withGiantVersion(ModBlocks.CARROT_GIANT.get()));
         this.addStat(Items.POTATO, new CropProperties.Builder(6, 3, false).addGoodSeason(EnumSeason.SUMMER)
-                .withGiantVersion(ModBlocks.potatoGiant.get()));
+                .withGiantVersion(ModBlocks.POTATO_GIANT.get()));
         this.addStat(Items.BEETROOT_SEEDS, new CropProperties.Builder(5, 3, false).addGoodSeason(EnumSeason.SPRING));
 
-        this.addStat(ModItems.toyherbSeeds.get(), new CropProperties.Builder(4, 2, false)
+        this.addStat(ModItems.TOYHERB_SEEDS.get(), new CropProperties.Builder(4, 2, false)
                 .addGoodSeason(EnumSeason.SPRING).addBadSeason(EnumSeason.WINTER)
-                .withGiantVersion(ModBlocks.toyherbGiant.get()));
-        this.addStat(ModItems.moondropSeeds.get(), new CropProperties.Builder(7, 4, false)
+                .withGiantVersion(ModBlocks.TOYHERB_GIANT.get()));
+        this.addStat(ModItems.MOONDROP_SEEDS.get(), new CropProperties.Builder(7, 4, false)
                 .addGoodSeason(EnumSeason.SPRING).addGoodSeason(EnumSeason.FALL).addBadSeason(EnumSeason.WINTER)
-                .withGiantVersion(ModBlocks.moondropFlowerGiant.get()));
-        this.addStat(ModItems.pinkCatSeeds.get(), new CropProperties.Builder(6, 3, false)
+                .withGiantVersion(ModBlocks.MOONDROP_FLOWER_GIANT.get()));
+        this.addStat(ModItems.PINK_CAT_SEEDS.get(), new CropProperties.Builder(6, 3, false)
                 .addGoodSeason(EnumSeason.SUMMER).addBadSeason(EnumSeason.WINTER)
-                .withGiantVersion(ModBlocks.pinkCatGiant.get()));
-        this.addStat(ModItems.charmBlueSeeds.get(), new CropProperties.Builder(8, 3, false)
+                .withGiantVersion(ModBlocks.PINK_CAT_GIANT.get()));
+        this.addStat(ModItems.CHARM_BLUE_SEEDS.get(), new CropProperties.Builder(8, 3, false)
                 .addGoodSeason(EnumSeason.FALL).addBadSeason(EnumSeason.WINTER)
-                .withGiantVersion(ModBlocks.charmBlueGiant.get()));
-        this.addStat(ModItems.cherryGrassSeeds.get(), new CropProperties.Builder(10, 4, false)
+                .withGiantVersion(ModBlocks.CHARM_BLUE_GIANT.get()));
+        this.addStat(ModItems.CHERRY_GRASS_SEEDS.get(), new CropProperties.Builder(10, 4, false)
                 .addGoodSeason(EnumSeason.SPRING).addBadSeason(EnumSeason.WINTER)
-                .withGiantVersion(ModBlocks.cherryGrassGiant.get()));
-        this.addStat(ModItems.lampGrassSeeds.get(), new CropProperties.Builder(16, 3, false)
+                .withGiantVersion(ModBlocks.CHERRY_GRASS_GIANT.get()));
+        this.addStat(ModItems.LAMP_GRASS_SEEDS.get(), new CropProperties.Builder(16, 3, false)
                 .addGoodSeason(EnumSeason.WINTER)
-                .withGiantVersion(ModBlocks.lampGrassGiant.get()));
-        this.addStat(ModItems.blueCrystalSeeds.get(), new CropProperties.Builder(55, 3, false)
+                .withGiantVersion(ModBlocks.LAMP_GRASS_GIANT.get()));
+        this.addStat(ModItems.BLUE_CRYSTAL_SEEDS.get(), new CropProperties.Builder(55, 3, false)
                 .addGoodSeason(EnumSeason.SPRING).addBadSeason(EnumSeason.SUMMER).addBadSeason(EnumSeason.FALL).addBadSeason(EnumSeason.WINTER)
-                .withGiantVersion(ModBlocks.blueCrystalGiant.get()));
-        this.addStat(ModItems.ironleafSeeds.get(), new CropProperties.Builder(21, 2, false)
+                .withGiantVersion(ModBlocks.BLUE_CRYSTAL_GIANT.get()));
+        this.addStat(ModItems.IRONLEAF_SEEDS.get(), new CropProperties.Builder(21, 2, false)
                 .addGoodSeason(EnumSeason.WINTER).addBadSeason(EnumSeason.SUMMER)
-                .withGiantVersion(ModBlocks.ironleafGiant.get()));
-        this.addStat(ModItems.fourLeafCloverSeeds.get(), new CropProperties.Builder(28, 3, false)
+                .withGiantVersion(ModBlocks.IRONLEAF_GIANT.get()));
+        this.addStat(ModItems.FOUR_LEAF_CLOVER_SEEDS.get(), new CropProperties.Builder(28, 3, false)
                 .addGoodSeason(EnumSeason.SPRING).addGoodSeason(EnumSeason.FALL).addBadSeason(EnumSeason.SUMMER)
-                .withGiantVersion(ModBlocks.fourLeafCloverGiant.get()));
-        this.addStat(ModItems.fireflowerSeeds.get(), new CropProperties.Builder(42, 4, false)
+                .withGiantVersion(ModBlocks.FOUR_LEAF_CLOVER_GIANT.get()));
+        this.addStat(ModItems.FIREFLOWER_SEEDS.get(), new CropProperties.Builder(42, 4, false)
                 .addGoodSeason(EnumSeason.SUMMER).addBadSeason(EnumSeason.WINTER)
-                .withGiantVersion(ModBlocks.fireflowerGiant.get()));
-        this.addStat(ModItems.greenCrystalSeeds.get(), new CropProperties.Builder(70, 3, false)
+                .withGiantVersion(ModBlocks.FIREFLOWER_GIANT.get()));
+        this.addStat(ModItems.GREEN_CRYSTAL_SEEDS.get(), new CropProperties.Builder(70, 3, false)
                 .addGoodSeason(EnumSeason.SUMMER).addBadSeason(EnumSeason.SPRING).addBadSeason(EnumSeason.FALL).addBadSeason(EnumSeason.WINTER)
-                .withGiantVersion(ModBlocks.greenCrystalGiant.get()));
-        this.addStat(ModItems.noelGrassSeeds.get(), new CropProperties.Builder(33, 4, false)
+                .withGiantVersion(ModBlocks.GREEN_CRYSTAL_GIANT.get()));
+        this.addStat(ModItems.NOEL_GRASS_SEEDS.get(), new CropProperties.Builder(33, 4, false)
                 .addGoodSeason(EnumSeason.WINTER).addBadSeason(EnumSeason.SUMMER)
-                .withGiantVersion(ModBlocks.noelGrassGiant.get()));
-        this.addStat(ModItems.autumnGrassSeeds.get(), new CropProperties.Builder(29, 3, false)
+                .withGiantVersion(ModBlocks.NOEL_GRASS_GIANT.get()));
+        this.addStat(ModItems.AUTUMN_GRASS_SEEDS.get(), new CropProperties.Builder(29, 3, false)
                 .addGoodSeason(EnumSeason.FALL).addBadSeason(EnumSeason.WINTER)
-                .withGiantVersion(ModBlocks.autumnGrassGiant.get()));
-        this.addStat(ModItems.pomPomGrassSeeds.get(), new CropProperties.Builder(14, 3, false)
+                .withGiantVersion(ModBlocks.AUTUMN_GRASS_GIANT.get()));
+        this.addStat(ModItems.POM_POM_GRASS_SEEDS.get(), new CropProperties.Builder(14, 3, false)
                 .addGoodSeason(EnumSeason.FALL).addBadSeason(EnumSeason.WINTER)
-                .withGiantVersion(ModBlocks.pomPomGrassGiant.get()));
-        this.addStat(ModItems.redCrystalSeeds.get(), new CropProperties.Builder(80, 3, false)
+                .withGiantVersion(ModBlocks.POM_POM_GRASS_GIANT.get()));
+        this.addStat(ModItems.RED_CRYSTAL_SEEDS.get(), new CropProperties.Builder(80, 3, false)
                 .addGoodSeason(EnumSeason.FALL).addBadSeason(EnumSeason.SPRING).addBadSeason(EnumSeason.SUMMER).addBadSeason(EnumSeason.WINTER)
-                .withGiantVersion(ModBlocks.redCrystalGiant.get()));
-        this.addStat(ModItems.whiteCrystalSeeds.get(), new CropProperties.Builder(90, 3, false)
+                .withGiantVersion(ModBlocks.RED_CRYSTAL_GIANT.get()));
+        this.addStat(ModItems.WHITE_CRYSTAL_SEEDS.get(), new CropProperties.Builder(90, 3, false)
                 .addGoodSeason(EnumSeason.WINTER).addBadSeason(EnumSeason.SPRING).addBadSeason(EnumSeason.SUMMER).addBadSeason(EnumSeason.FALL)
-                .withGiantVersion(ModBlocks.whiteCrystalGiant.get()));
-        this.addStat(ModItems.emeryFlowerSeeds.get(), new CropProperties.Builder(120, 2, false)
-                .withGiantVersion(ModBlocks.emeryFlowerGiant.get()));
+                .withGiantVersion(ModBlocks.WHITE_CRYSTAL_GIANT.get()));
+        this.addStat(ModItems.EMERY_FLOWER_SEEDS.get(), new CropProperties.Builder(120, 2, false)
+                .withGiantVersion(ModBlocks.EMERY_FLOWER_GIANT.get()));
 
-        this.addStat(ModItems.turnipSeeds.get(), new CropProperties.Builder(4, 3, false)
+        this.addStat(ModItems.TURNIP_SEEDS.get(), new CropProperties.Builder(4, 3, false)
                 .addGoodSeason(EnumSeason.SUMMER).addGoodSeason(EnumSeason.FALL)
-                .withGiantVersion(ModBlocks.turnipGiant.get()));
-        this.addStat(ModItems.turnipPinkSeeds.get(), new CropProperties.Builder(8, 3, false)
+                .withGiantVersion(ModBlocks.TURNIP_GIANT.get()));
+        this.addStat(ModItems.TURNIP_PINK_SEEDS.get(), new CropProperties.Builder(8, 3, false)
                 .addGoodSeason(EnumSeason.SPRING).addBadSeason(EnumSeason.WINTER)
-                .withGiantVersion(ModBlocks.turnipPinkGiant.get()));
-        this.addStat(ModItems.cabbageSeeds.get(), new CropProperties.Builder(7, 3, false)
+                .withGiantVersion(ModBlocks.TURNIP_PINK_GIANT.get()));
+        this.addStat(ModItems.CABBAGE_SEEDS.get(), new CropProperties.Builder(7, 3, false)
                 .addGoodSeason(EnumSeason.SPRING).addGoodSeason(EnumSeason.FALL).addBadSeason(EnumSeason.WINTER)
-                .withGiantVersion(ModBlocks.cabbageGiant.get()));
-        this.addStat(ModItems.pinkMelonSeeds.get(), new CropProperties.Builder(7, 2, true)
+                .withGiantVersion(ModBlocks.CABBAGE_GIANT.get()));
+        this.addStat(ModItems.PINK_MELON_SEEDS.get(), new CropProperties.Builder(7, 2, true)
                 .addGoodSeason(EnumSeason.SPRING).addGoodSeason(EnumSeason.SUMMER).addBadSeason(EnumSeason.WINTER)
-                .withGiantVersion(ModBlocks.pinkMelonGiant.get()));
-        this.addStat(ModItems.hotHotSeeds.get(), new CropProperties.Builder(31, 5, false)
+                .withGiantVersion(ModBlocks.PINK_MELON_GIANT.get()));
+        this.addStat(ModItems.HOT_HOT_SEEDS.get(), new CropProperties.Builder(31, 5, false)
                 .addGoodSeason(EnumSeason.WINTER).addBadSeason(EnumSeason.SUMMER)
-                .withGiantVersion(ModBlocks.hotHotFruitGiant.get()));
-        this.addStat(ModItems.goldTurnipSeeds.get(), new CropProperties.Builder(90, 3, false)
+                .withGiantVersion(ModBlocks.HOT_HOT_FRUIT_GIANT.get()));
+        this.addStat(ModItems.GOLD_TURNIP_SEEDS.get(), new CropProperties.Builder(90, 3, false)
                 .addGoodSeason(EnumSeason.WINTER).addBadSeason(EnumSeason.SUMMER)
-                .withGiantVersion(ModBlocks.goldenTurnipGiant.get()));
-        this.addStat(ModItems.goldPotatoSeeds.get(), new CropProperties.Builder(50, 3, false)
+                .withGiantVersion(ModBlocks.GOLDEN_TURNIP_GIANT.get()));
+        this.addStat(ModItems.GOLD_POTATO_SEEDS.get(), new CropProperties.Builder(50, 3, false)
                 .addGoodSeason(EnumSeason.WINTER).addBadSeason(EnumSeason.SUMMER)
-                .withGiantVersion(ModBlocks.goldenPotatoGiant.get()));
-        this.addStat(ModItems.goldPumpkinSeeds.get(), new CropProperties.Builder(75, 3, true)
+                .withGiantVersion(ModBlocks.GOLDEN_POTATO_GIANT.get()));
+        this.addStat(ModItems.GOLD_PUMPKIN_SEEDS.get(), new CropProperties.Builder(75, 3, true)
                 .addGoodSeason(EnumSeason.WINTER).addBadSeason(EnumSeason.SUMMER)
-                .withGiantVersion(ModBlocks.pumpkinGiant.get()));
-        this.addStat(ModItems.goldCabbageSeeds.get(), new CropProperties.Builder(75, 3, false)
+                .withGiantVersion(ModBlocks.PUMPKIN_GIANT.get()));
+        this.addStat(ModItems.GOLD_CABBAGE_SEEDS.get(), new CropProperties.Builder(75, 3, false)
                 .addGoodSeason(EnumSeason.WINTER).addBadSeason(EnumSeason.SUMMER)
-                .withGiantVersion(ModBlocks.goldenCabbageGiant.get()));
-        this.addStat(ModItems.bokChoySeeds.get(), new CropProperties.Builder(5, 4, false)
+                .withGiantVersion(ModBlocks.GOLDEN_CABBAGE_GIANT.get()));
+        this.addStat(ModItems.BOK_CHOY_SEEDS.get(), new CropProperties.Builder(5, 4, false)
                 .addGoodSeason(EnumSeason.FALL).addBadSeason(EnumSeason.SUMMER)
-                .withGiantVersion(ModBlocks.bokChoyGiant.get()));
-        this.addStat(ModItems.leekSeeds.get(), new CropProperties.Builder(10, 2, false)
+                .withGiantVersion(ModBlocks.BOK_CHOY_GIANT.get()));
+        this.addStat(ModItems.LEEK_SEEDS.get(), new CropProperties.Builder(10, 2, false)
                 .addGoodSeason(EnumSeason.SPRING).addGoodSeason(EnumSeason.FALL).addBadSeason(EnumSeason.SUMMER)
-                .withGiantVersion(ModBlocks.leekGiant.get()));
-        this.addStat(ModItems.radishSeeds.get(), new CropProperties.Builder(4, 1, false)
+                .withGiantVersion(ModBlocks.LEEK_GIANT.get()));
+        this.addStat(ModItems.RADISH_SEEDS.get(), new CropProperties.Builder(4, 1, false)
                 .addGoodSeason(EnumSeason.FALL).addBadSeason(EnumSeason.SUMMER)
-                .withGiantVersion(ModBlocks.radishGiant.get()));
-        this.addStat(ModItems.greenPepperSeeds.get(), new CropProperties.Builder(8, 5, true)
+                .withGiantVersion(ModBlocks.RADISH_GIANT.get()));
+        this.addStat(ModItems.GREEN_PEPPER_SEEDS.get(), new CropProperties.Builder(8, 5, true)
                 .addGoodSeason(EnumSeason.SUMMER).addBadSeason(EnumSeason.WINTER)
-                .withGiantVersion(ModBlocks.greenPepperGiant.get()));
-        this.addStat(ModItems.spinachSeeds.get(), new CropProperties.Builder(2, 2, false)
+                .withGiantVersion(ModBlocks.GREEN_PEPPER_GIANT.get()));
+        this.addStat(ModItems.SPINACH_SEEDS.get(), new CropProperties.Builder(2, 2, false)
                 .addGoodSeason(EnumSeason.FALL)
-                .withGiantVersion(ModBlocks.spinachGiant.get()));
-        this.addStat(ModItems.yamSeeds.get(), new CropProperties.Builder(9, 5, false)
+                .withGiantVersion(ModBlocks.SPINACH_GIANT.get()));
+        this.addStat(ModItems.YAM_SEEDS.get(), new CropProperties.Builder(9, 5, false)
                 .addGoodSeason(EnumSeason.SUMMER).addGoodSeason(EnumSeason.FALL).addBadSeason(EnumSeason.WINTER)
-                .withGiantVersion(ModBlocks.yamGiant.get()));
-        this.addStat(ModItems.eggplantSeeds.get(), new CropProperties.Builder(7, 4, true)
+                .withGiantVersion(ModBlocks.YAM_GIANT.get()));
+        this.addStat(ModItems.EGGPLANT_SEEDS.get(), new CropProperties.Builder(7, 4, true)
                 .addGoodSeason(EnumSeason.SPRING).addGoodSeason(EnumSeason.SUMMER).addBadSeason(EnumSeason.WINTER)
-                .withGiantVersion(ModBlocks.eggplantGiant.get()));
-        this.addStat(ModItems.pineappleSeeds.get(), new CropProperties.Builder(30, 2, true)
+                .withGiantVersion(ModBlocks.EGGPLANT_GIANT.get()));
+        this.addStat(ModItems.PINEAPPLE_SEEDS.get(), new CropProperties.Builder(30, 2, true)
                 .addGoodSeason(EnumSeason.SUMMER).addBadSeason(EnumSeason.SPRING).addBadSeason(EnumSeason.FALL).addBadSeason(EnumSeason.WINTER)
-                .withGiantVersion(ModBlocks.pineappleGiant.get()));
-        this.addStat(ModItems.onionSeeds.get(), new CropProperties.Builder(20, 6, false)
+                .withGiantVersion(ModBlocks.PINEAPPLE_GIANT.get()));
+        this.addStat(ModItems.ONION_SEEDS.get(), new CropProperties.Builder(20, 6, false)
                 .addGoodSeason(EnumSeason.FALL).addBadSeason(EnumSeason.SUMMER)
-                .withGiantVersion(ModBlocks.onionGiant.get()));
-        this.addStat(ModItems.cornSeeds.get(), new CropProperties.Builder(5, 1, false)
+                .withGiantVersion(ModBlocks.ONION_GIANT.get()));
+        this.addStat(ModItems.CORN_SEEDS.get(), new CropProperties.Builder(5, 1, false)
                 .addGoodSeason(EnumSeason.SPRING).addGoodSeason(EnumSeason.SUMMER).addBadSeason(EnumSeason.WINTER)
-                .withGiantVersion(ModBlocks.cornGiant.get()));
-        this.addStat(ModItems.tomatoSeeds.get(), new CropProperties.Builder(8, 2, true)
+                .withGiantVersion(ModBlocks.CORN_GIANT.get()));
+        this.addStat(ModItems.TOMATO_SEEDS.get(), new CropProperties.Builder(8, 2, true)
                 .addGoodSeason(EnumSeason.SPRING).addGoodSeason(EnumSeason.SUMMER).addBadSeason(EnumSeason.WINTER)
-                .withGiantVersion(ModBlocks.tomatoGiant.get()));
-        this.addStat(ModItems.strawberrySeeds.get(), new CropProperties.Builder(15, 5, true)
+                .withGiantVersion(ModBlocks.TOMATO_GIANT.get()));
+        this.addStat(ModItems.STRAWBERRY_SEEDS.get(), new CropProperties.Builder(15, 5, true)
                 .addGoodSeason(EnumSeason.SUMMER).addGoodSeason(EnumSeason.FALL)
-                .withGiantVersion(ModBlocks.strawberryGiant.get()));
-        this.addStat(ModItems.cucumberSeeds.get(), new CropProperties.Builder(5, 5, true)
+                .withGiantVersion(ModBlocks.STRAWBERRY_GIANT.get()));
+        this.addStat(ModItems.CUCUMBER_SEEDS.get(), new CropProperties.Builder(5, 5, true)
                 .addGoodSeason(EnumSeason.SPRING).addGoodSeason(EnumSeason.SUMMER).addBadSeason(EnumSeason.WINTER)
-                .withGiantVersion(ModBlocks.cucumberGiant.get()));
-        this.addStat(ModItems.fodderSeeds.get(), new CropProperties.Builder(5, 1, true));
+                .withGiantVersion(ModBlocks.CUCUMBER_GIANT.get()));
+        this.addStat(ModItems.FODDER_SEEDS.get(), new CropProperties.Builder(5, 1, true));
 
-        this.addStat(ModItems.shieldSeeds.get(), new CropProperties.Builder(15, 1, false));
-        this.addStat(ModItems.swordSeeds.get(), new CropProperties.Builder(15, 1, false));
-        this.addStat(ModItems.dungeonSeeds.get(), new CropProperties.Builder(25, 1, false));
+        this.addStat(ModItems.SHIELD_SEEDS.get(), new CropProperties.Builder(15, 1, false));
+        this.addStat(ModItems.SWORD_SEEDS.get(), new CropProperties.Builder(15, 1, false));
+        this.addStat(ModItems.DUNGEON_SEEDS.get(), new CropProperties.Builder(25, 1, false));
 
-        this.addStat(ModItems.appleSapling.get(), new CropProperties.Builder(20, 1, false));
-        this.addStat(ModItems.orangeSapling.get(), new CropProperties.Builder(20, 1, false));
-        this.addStat(ModItems.grapeSapling.get(), new CropProperties.Builder(20, 1, false));
+        this.addStat(ModItems.APPLE_SAPLING.get(), new CropProperties.Builder(20, 1, false));
+        this.addStat(ModItems.ORANGE_SAPLING.get(), new CropProperties.Builder(20, 1, false));
+        this.addStat(ModItems.GRAPE_SAPLING.get(), new CropProperties.Builder(20, 1, false));
     }
 }

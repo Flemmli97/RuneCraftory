@@ -32,7 +32,7 @@ public class ContainerUpgrade extends AbstractContainerMenu {
     }
 
     public ContainerUpgrade(int windowId, Inventory playerInv, UpgradingCraftingBlockEntity tile) {
-        super(ModContainer.upgradeContainer.get(), windowId);
+        super(ModContainer.UPGRADE_CONTAINER.get(), windowId);
         this.outPutInv = new DummyInventory(new SimpleContainer(1));
         this.craftingInv = PlayerContainerInv.create(this, tile.getUpgradeInventory(), playerInv.player);
         this.type = tile.craftingType();

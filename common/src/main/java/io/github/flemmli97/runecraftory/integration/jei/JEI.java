@@ -50,10 +50,10 @@ public class JEI implements IModPlugin {
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
         registration.addRecipeCategories(
-                new SextupleRecipeCategory<>(registration.getJeiHelpers().getGuiHelper(), SextupleRecipeCategory.FORGECATEGORY, ModItems.itemBlockForge.get()),
-                new SextupleRecipeCategory<>(registration.getJeiHelpers().getGuiHelper(), SextupleRecipeCategory.COOKINGCATEGORY, ModItems.itemBlockCooking.get()),
-                new SextupleRecipeCategory<>(registration.getJeiHelpers().getGuiHelper(), SextupleRecipeCategory.ARMORCATEGORY, ModItems.itemBlockAccess.get()),
-                new SextupleRecipeCategory<>(registration.getJeiHelpers().getGuiHelper(), SextupleRecipeCategory.CHEMISTRYCATEGORY, ModItems.itemBlockChem.get())
+                new SextupleRecipeCategory<>(registration.getJeiHelpers().getGuiHelper(), SextupleRecipeCategory.FORGECATEGORY, ModItems.ITEM_BLOCK_FORGE.get()),
+                new SextupleRecipeCategory<>(registration.getJeiHelpers().getGuiHelper(), SextupleRecipeCategory.COOKINGCATEGORY, ModItems.ITEM_BLOCK_COOKING.get()),
+                new SextupleRecipeCategory<>(registration.getJeiHelpers().getGuiHelper(), SextupleRecipeCategory.ARMORCATEGORY, ModItems.ITEM_BLOCK_ACCESS.get()),
+                new SextupleRecipeCategory<>(registration.getJeiHelpers().getGuiHelper(), SextupleRecipeCategory.CHEMISTRYCATEGORY, ModItems.ITEM_BLOCK_CHEM.get())
         );
     }
 
@@ -86,10 +86,10 @@ public class JEI implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(ModItems.itemBlockForge.get()), SextupleRecipeCategory.FORGECATEGORY);
-        registration.addRecipeCatalyst(new ItemStack(ModItems.itemBlockAccess.get()), SextupleRecipeCategory.ARMORCATEGORY);
-        registration.addRecipeCatalyst(new ItemStack(ModItems.itemBlockCooking.get()), SextupleRecipeCategory.COOKINGCATEGORY);
-        registration.addRecipeCatalyst(new ItemStack(ModItems.itemBlockChem.get()), SextupleRecipeCategory.CHEMISTRYCATEGORY);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.ITEM_BLOCK_FORGE.get()), SextupleRecipeCategory.FORGECATEGORY);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.ITEM_BLOCK_ACCESS.get()), SextupleRecipeCategory.ARMORCATEGORY);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.ITEM_BLOCK_COOKING.get()), SextupleRecipeCategory.COOKINGCATEGORY);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.ITEM_BLOCK_CHEM.get()), SextupleRecipeCategory.CHEMISTRYCATEGORY);
     }
 
     @Override
