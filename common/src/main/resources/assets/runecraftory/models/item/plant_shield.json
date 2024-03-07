@@ -1,0 +1,169 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+		"0": "runecraftory:item/plant_shield"
+	},
+	"elements": [
+		{
+			"name": "handle",
+			"from": [7, 8, 9],
+			"to": [9, 14, 15],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 11, 12]},
+			"faces": {
+				"north": {"uv": [5.5, 6, 6, 7.5], "texture": "#0"},
+				"east": {"uv": [4, 6, 5.5, 7.5], "texture": "#0"},
+				"south": {"uv": [7.5, 6, 8, 7.5], "texture": "#0"},
+				"west": {"uv": [6, 6, 7.5, 7.5], "texture": "#0"},
+				"up": {"uv": [6, 6, 5.5, 4.5], "texture": "#0"},
+				"down": {"uv": [6.5, 4.5, 6, 6], "texture": "#0"}
+			}
+		},
+		{
+			"name": "shield",
+			"from": [3, 6, 8],
+			"to": [13, 16, 9],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 11, 8.5]},
+			"faces": {
+				"north": {"uv": [0.25, 3.5, 2.75, 6], "texture": "#0"},
+				"east": {"uv": [0, 3.5, 0.25, 6], "texture": "#0"},
+				"south": {"uv": [3, 3.5, 5.5, 6], "texture": "#0"},
+				"west": {"uv": [2.75, 3.5, 3, 6], "texture": "#0"},
+				"up": {"uv": [2.75, 3.5, 0.25, 3.25], "texture": "#0"},
+				"down": {"uv": [5.25, 3.25, 2.75, 3.5], "texture": "#0"}
+			}
+		},
+		{
+			"name": "shield",
+			"from": [14, 6, 8.5],
+			"to": [16, 17, 9.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 11, 9]},
+			"faces": {
+				"north": {"uv": [6.75, 0.25, 7.25, 3], "texture": "#0"},
+				"east": {"uv": [6.5, 0.25, 6.75, 3], "texture": "#0"},
+				"south": {"uv": [7.5, 0.25, 8, 3], "texture": "#0"},
+				"west": {"uv": [7.25, 0.25, 7.5, 3], "texture": "#0"},
+				"up": {"uv": [7.25, 0.25, 6.75, 0], "texture": "#0"},
+				"down": {"uv": [7.75, 0, 7.25, 0.25], "texture": "#0"}
+			}
+		},
+		{
+			"name": "shield",
+			"from": [2, 5, 8.5],
+			"to": [14, 17, 9.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 11, 9]},
+			"faces": {
+				"north": {"uv": [0.25, 0.25, 3.25, 3.25], "texture": "#0"},
+				"east": {"uv": [0, 0.25, 0.25, 3.25], "texture": "#0"},
+				"south": {"uv": [3.5, 0.25, 6.5, 3.25], "texture": "#0"},
+				"west": {"uv": [3.25, 0.25, 3.5, 3.25], "texture": "#0"},
+				"up": {"uv": [3.25, 0.25, 0.25, 0], "texture": "#0"},
+				"down": {"uv": [6.25, 0, 3.25, 0.25], "texture": "#0"}
+			}
+		},
+		{
+			"name": "shield",
+			"from": [3, 17, 8.5],
+			"to": [13, 18, 9.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 11, 9]},
+			"faces": {
+				"north": {"uv": [5.75, 4, 8.25, 4.25], "texture": "#0"},
+				"east": {"uv": [5.5, 4, 5.75, 4.25], "texture": "#0"},
+				"south": {"uv": [8.5, 4, 11, 4.25], "texture": "#0"},
+				"west": {"uv": [8.25, 4, 8.5, 4.25], "texture": "#0"},
+				"up": {"uv": [8.25, 4, 5.75, 3.75], "texture": "#0"},
+				"down": {"uv": [10.75, 3.75, 8.25, 4], "texture": "#0"}
+			}
+		},
+		{
+			"name": "shield",
+			"from": [0, 6, 8.5],
+			"to": [2, 17, 9.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 11, 9]},
+			"faces": {
+				"north": {"uv": [2.75, 6.25, 3.25, 9], "texture": "#0"},
+				"east": {"uv": [2.5, 6.25, 2.75, 9], "texture": "#0"},
+				"south": {"uv": [3.5, 6.25, 4, 9], "texture": "#0"},
+				"west": {"uv": [3.25, 6.25, 3.5, 9], "texture": "#0"},
+				"up": {"uv": [3.25, 6.25, 2.75, 6], "texture": "#0"},
+				"down": {"uv": [3.75, 6, 3.25, 6.25], "texture": "#0"}
+			}
+		},
+		{
+			"name": "shield",
+			"from": [3, 4, 8.5],
+			"to": [13, 5, 9.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 11, 9]},
+			"faces": {
+				"north": {"uv": [5.75, 3.5, 8.25, 3.75], "texture": "#0"},
+				"east": {"uv": [5.5, 3.5, 5.75, 3.75], "texture": "#0"},
+				"south": {"uv": [8.5, 3.5, 11, 3.75], "texture": "#0"},
+				"west": {"uv": [8.25, 3.5, 8.5, 3.75], "texture": "#0"},
+				"up": {"uv": [8.25, 3.5, 5.75, 3.25], "texture": "#0"},
+				"down": {"uv": [10.75, 3.25, 8.25, 3.5], "texture": "#0"}
+			}
+		},
+		{
+			"name": "shield",
+			"from": [6, 4.99, 7.75],
+			"to": [10, 19.01, 8.75],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 11, 8.25]},
+			"faces": {
+				"north": {"uv": [0.25, 6.25, 1.25, 9.75], "texture": "#0"},
+				"east": {"uv": [0, 6.25, 0.25, 9.75], "texture": "#0"},
+				"south": {"uv": [1.5, 6.25, 2.5, 9.75], "texture": "#0"},
+				"west": {"uv": [1.25, 6.25, 1.5, 9.75], "texture": "#0"},
+				"up": {"uv": [1.25, 6.25, 0.25, 6], "texture": "#0"},
+				"down": {"uv": [2.25, 6, 1.25, 6.25], "texture": "#0"}
+			}
+		}
+	],
+	"gui_light": "front",
+	"overrides": [
+		{
+			"predicate": {
+				"blocking": 1
+			},
+			"model": "runecraftory:item/plant_shield_blocking"
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [0, -90, 0],
+			"translation": [4, -5, 4]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [0, -90, 0],
+			"translation": [4, -5, 4]
+		},
+		"firstperson_righthand": {
+			"translation": [3, -5.5, 0]
+		},
+		"firstperson_lefthand": {
+			"translation": [3, -5.5, 0]
+		},
+		"ground": {
+			"translation": [0, 2, 0],
+			"scale": [0.25, 0.25, 0.25]
+		},
+		"gui": {
+			"rotation": [179.67, 35.79, -171.16],
+			"translation": [-1.25, -2.75, 0],
+			"scale": [0.9, 0.9, 0.9]
+		},
+		"head": {
+			"translation": [0, 5, -8]
+		},
+		"fixed": {
+			"translation": [0, -3, -1.25]
+		}
+	},
+	"groups": [
+		{
+			"name": "shield",
+			"origin": [-1, 15.5, 3],
+			"color": 0,
+			"children": [0, 1, 2, 3, 4, 5, 6, 7]
+		}
+	]
+}

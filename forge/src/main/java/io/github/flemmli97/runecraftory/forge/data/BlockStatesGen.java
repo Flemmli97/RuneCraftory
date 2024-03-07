@@ -48,8 +48,21 @@ public class BlockStatesGen extends BlockStateProvider {
                         .texture("particle", texture));
             }
         });
-        ModBlocks.flowers.forEach(reg -> {
+        for (RegistryEntrySupplier<Block> reg : ModBlocks.flowers) {
             Block block = reg.get();
+            if (reg == ModBlocks.swordCrop || reg == ModBlocks.shieldCrop) {
+                this.getVariantBuilder(block).forAllStatesExcept(state -> {
+                    int stage = state.getValue(BlockCrop.AGE);
+                    ResourceLocation text;
+                    if (stage == 3 || stage == 4) {
+                        text = this.blockTexture(RuneCraftory.MODID, reg.getID().getPath());
+                    } else {
+                        text = this.blockTexture(RuneCraftory.MODID, "plant_gear_" + stage);
+                    }
+                    return ConfiguredModel.builder().modelFile(this.models().singleTexture(text.toString(), crossTinted, "cross", text)).build();
+                }, BlockCrop.WILTED);
+                continue;
+            }
             if (block instanceof BlockGiantCrop giant)
                 this.getVariantBuilder(block).forAllStatesExcept(state -> {
                     ResourceLocation texture = this.itemTexture(giant.getCrop());
@@ -73,7 +86,7 @@ public class BlockStatesGen extends BlockStateProvider {
                     }
                     return ConfiguredModel.builder().modelFile(this.models().singleTexture(name, parent, "cross", texture)).build();
                 }, BlockCrop.WILTED);
-        });
+        };
         ModBlocks.crops.forEach(reg -> {
             Block block = reg.get();
             if (block instanceof BlockGiantCrop)

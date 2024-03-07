@@ -1,6 +1,0 @@
-{
-  "parent": "runecraftory:block/big_flower",
-  "textures": {
-    "cross": "runecraftory:block/shield_flower_4"
-  }
-}

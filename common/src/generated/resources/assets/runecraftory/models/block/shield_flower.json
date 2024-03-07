@@ -1,6 +1,6 @@
 {
   "parent": "runecraftory:block/cross_tinted",
   "textures": {
-    "cross": "runecraftory:item/shield_flower"
+    "cross": "runecraftory:block/shield_flower"
   }
 }
