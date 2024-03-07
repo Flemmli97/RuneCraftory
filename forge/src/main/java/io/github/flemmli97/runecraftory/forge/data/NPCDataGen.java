@@ -74,8 +74,11 @@ public class NPCDataGen extends NPCDataProvider {
                 }),
                 of(m -> {
                     m.put(QuestGen.TAMING, new QuestResponseBuilder(
-                            new NPCData.ConversationSet.Builder("npc.generic.quest.tame_monster.start", "Did you know that you can tame the monsters in this world?\n" +
-                                    "You would need to setup a barn first and then just give them an item.\n\nWith that said I would like you to tame a monster."),
+                            new NPCData.ConversationSet.Builder("npc.generic.quest.tame_monster.start", """
+                                    Did you know that you can tame the monsters in this world?
+                                    You would need to setup a barn first and then just give them an item.
+
+                                    With that said I would like you to tame a monster."""),
                             new NPCData.ConversationSet.Builder("npc.generic.quest.tame_monster.active", "You still need to tame a monster.\n" +
                                     "Some monsters prefer certain items more."),
                             new NPCData.ConversationSet.Builder("npc.generic.quest.tame_monster.end", "I see you've successfully tamed a monster. Congrats!")
@@ -156,9 +159,10 @@ public class NPCDataGen extends NPCDataProvider {
                 new NPCData.NPCLook(NPCData.Gender.MALE, npcTexture("smith/male_1"), null, 0, List.of()),
                 of(m -> {
                     m.put(QuestGen.MINING, new QuestResponseBuilder(
-                            new NPCData.ConversationSet.Builder("npc.generic.quest.mining.start", "You saw my request? Great!\n" +
-                                    "You might have noticed various strange stones around the world. Those are minerals and they provide various different ores.\n" +
-                                    "I want you to mine 10 of them for me."),
+                            new NPCData.ConversationSet.Builder("npc.generic.quest.mining.start", """
+                                    You saw my request? Great!
+                                    You might have noticed various strange stones around the world. Those are minerals and they provide various different ores.
+                                    I want you to mine 10 of them for me."""),
                             new NPCData.ConversationSet.Builder("npc.generic.quest.mining.active", "To mine minerals you need atleast an iron pickaxe or a hammer. " +
                                     "I want you to mine 10 mineral blocks for me."),
                             new NPCData.ConversationSet.Builder("npc.generic.quest.mining.end", "Nice! Mining ores increases your mining level. " +
@@ -186,9 +190,10 @@ public class NPCDataGen extends NPCDataProvider {
                 new NPCData.NPCLook(NPCData.Gender.FEMALE, npcTexture("smith/female_1"), null, 0, List.of(new SlimLookFeature())),
                 of(m -> {
                     m.put(QuestGen.MINING, new QuestResponseBuilder(
-                            new NPCData.ConversationSet.Builder("npc.generic.quest.mining.start", "You saw my request? Great!\n" +
-                                    "You might have noticed various strange stones around the world. Those are minerals and they provide various different ores.\n" +
-                                    "I want you to mine 10 of them for me."),
+                            new NPCData.ConversationSet.Builder("npc.generic.quest.mining.start", """
+                                    You saw my request? Great!
+                                    You might have noticed various strange stones around the world. Those are minerals and they provide various different ores.
+                                    I want you to mine 10 of them for me."""),
                             new NPCData.ConversationSet.Builder("npc.generic.quest.mining.active", "To mine minerals you need atleast an iron pickaxe or a hammer. " +
                                     "I want you to mine 10 mineral blocks for me."),
                             new NPCData.ConversationSet.Builder("npc.generic.quest.mining.end", "Nice! Mining ores increases your mining level. " +
@@ -217,9 +222,10 @@ public class NPCDataGen extends NPCDataProvider {
                 new NPCData.NPCLook(NPCData.Gender.MALE, npcTexture("shop_owner/male_1"), null, 0, List.of()),
                 of(m -> {
                     m.put(QuestGen.SHIP_TURNIP, new QuestResponseBuilder(
-                            new NPCData.ConversationSet.Builder("npc.generic.quest.ship_turnip.start", "Are you here for my request?\n" +
-                                    "I will show you how to ship items to make money: Shipping items is very simple. First you need a shipping bin. It can hold any shippable items in it.\n" +
-                                    "Put the items you want to ship in it and everyday in the morning your items will be automatically shipped. Lets try it out now: I want you to ship a turnip."),
+                            new NPCData.ConversationSet.Builder("npc.generic.quest.ship_turnip.start", """
+                                    Are you here for my request?
+                                    I will show you how to ship items to make money: Shipping items is very simple. First you need a shipping bin. It can hold any shippable items in it.
+                                    Put the items you want to ship in it and everyday in the morning your items will be automatically shipped. Lets try it out now: I want you to ship a turnip."""),
                             new NPCData.ConversationSet.Builder("npc.generic.quest.ship_turnip.active", "Please ship a turnip."),
                             new NPCData.ConversationSet.Builder("npc.generic.quest.ship_turnip.end", "Great. There are a lot of items you can ship to make money. Here take" +
                                     "these turnip seeds. It should come in handy.")
@@ -244,9 +250,10 @@ public class NPCDataGen extends NPCDataProvider {
                 new NPCData.NPCLook(NPCData.Gender.FEMALE, npcTexture("shop_owner/female_1"), null, 0, List.of(new SlimLookFeature())),
                 of(m -> {
                     m.put(QuestGen.SHIP_TURNIP, new QuestResponseBuilder(
-                            new NPCData.ConversationSet.Builder("npc.generic.quest.ship_turnip.start", "Are you here for my request?\n" +
-                                    "I will show you how to ship items to make money: Shipping items is very simple. First you need a shipping bin. It can hold any shippable items in it.\n" +
-                                    "Put the items you want to ship in it and everyday in the morning your items will be automatically shipped. Lets try it out now: I want you to ship a turnip."),
+                            new NPCData.ConversationSet.Builder("npc.generic.quest.ship_turnip.start", """
+                                    Are you here for my request?
+                                    I will show you how to ship items to make money: Shipping items is very simple. First you need a shipping bin. It can hold any shippable items in it.
+                                    Put the items you want to ship in it and everyday in the morning your items will be automatically shipped. Lets try it out now: I want you to ship a turnip."""),
                             new NPCData.ConversationSet.Builder("npc.generic.quest.ship_turnip.active", "Please ship a turnip."),
                             new NPCData.ConversationSet.Builder("npc.generic.quest.ship_turnip.end", "Great. There are a lot of items you can ship to make money. Here take" +
                                     "these turnip seeds. It should come in handy.")

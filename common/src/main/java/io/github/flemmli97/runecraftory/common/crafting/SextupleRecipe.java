@@ -207,9 +207,7 @@ public abstract class SextupleRecipe implements Recipe<PlayerContainerInv> {
             String s = buffer.readUtf(32767);
             int i = buffer.readVarInt();
             NonNullList<Ingredient> nonnulllist = NonNullList.withSize(i, Ingredient.EMPTY);
-            for (int j = 0; j < nonnulllist.size(); ++j) {
-                nonnulllist.set(j, Ingredient.fromNetwork(buffer));
-            }
+            nonnulllist.replaceAll(ignored -> Ingredient.fromNetwork(buffer));
             ItemStack itemstack = buffer.readItem();
             return this.get(res, s, level, cost, itemstack, nonnulllist);
         }

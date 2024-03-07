@@ -53,7 +53,7 @@ public class SpellProperties {
 
         private final int cooldown, rpCost;
         private boolean percentage;
-        private List<EnumSkills> skills = new ArrayList<>();
+        private final List<EnumSkills> skills = new ArrayList<>();
 
         public Builder(int cooldown, int rpCost) {
             this.cooldown = cooldown;

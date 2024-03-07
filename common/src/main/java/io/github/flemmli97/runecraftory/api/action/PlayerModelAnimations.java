@@ -20,9 +20,8 @@ public class PlayerModelAnimations {
                 int attack = 4;
                 switch (count) {
                     case 1, 3 -> attack = (int) Math.ceil(0.32 * 20);
-                    case 2 -> attack = (int) Math.ceil(0.24 * 20);
+                    case 2, 5 -> attack = (int) Math.ceil(0.24 * 20);
                     case 4 -> attack = (int) Math.ceil(0.2 * 20);
-                    case 5 -> attack = (int) Math.ceil(0.24 * 20);
                     case 6 -> defaultLength = (int) Math.ceil(1.36 * 20);
                 }
                 return Pair.of(defaultLength, attack);
@@ -103,10 +102,9 @@ public class PlayerModelAnimations {
     public static final List<AnimatedAction> DASH_SLASH = addTo(2, "dash_slash", count -> count == 2 ? Pair.of((int) Math.ceil(0.64 * 20), (int) Math.ceil(0.48 * 20))
             : Pair.of((int) Math.ceil(0.84 * 20), (int) Math.ceil(0.2 * 20))
     );
-    public static final List<AnimatedAction> RUSH_ATTACK = addTo(3, "rush_attack", count -> switch (count) {
-        case 2 -> Pair.of((int) Math.ceil(0.6 * 20), (int) Math.ceil(0.32 * 20));
-        default -> Pair.of((int) Math.ceil(1.72 * 20), (int) Math.ceil(0.36 * 20));
-    });
+    public static final List<AnimatedAction> RUSH_ATTACK = addTo(3, "rush_attack", count ->
+            count == 2 ? Pair.of((int) Math.ceil(0.6 * 20), (int) Math.ceil(0.32 * 20)) : Pair.of((int) Math.ceil(1.72 * 20), (int) Math.ceil(0.36 * 20))
+    );
     public static final AnimatedAction ROUND_BREAK = addTo(new AnimatedAction(length(0.8), 0.24, "round_break"));
     public static final AnimatedAction MIND_THRUST = addTo(new AnimatedAction(length(0.96), 0.72, "mind_thrust"));
     public static final AnimatedAction BUFF = addTo(new AnimatedAction(length(1.04), 0.68, "self_buff"));
@@ -120,10 +118,9 @@ public class PlayerModelAnimations {
     );
     public static final AnimatedAction GUST = addTo(new AnimatedAction(length(0.84), 0.64, "gust"));
     public static final AnimatedAction RAIL_STRIKE = addTo(new AnimatedAction(length(1.4), 0.32, "rail_strike"));
-    public static final List<AnimatedAction> WIND_SLASH = addTo(2, "wind_slash", count -> switch (count) {
-        case 2 -> Pair.of((int) Math.ceil(1.16 * 20), 0);
-        default -> Pair.of((int) Math.ceil(1.36 * 20), (int) Math.ceil(0.24 * 20));
-    });
+    public static final List<AnimatedAction> WIND_SLASH = addTo(2, "wind_slash", count ->
+            count == 2 ? Pair.of((int) Math.ceil(1.16 * 20), 0) : Pair.of((int) Math.ceil(1.36 * 20), (int) Math.ceil(0.24 * 20))
+    );
     public static final AnimatedAction FLASH_STRIKE = addTo(new AnimatedAction(length(1.36), 0.24, "flash_strike"));
     public static final AnimatedAction DELTA_STRIKE = addTo(new AnimatedAction(length(1.08), 0.28, "delta_strike"));
     public static final AnimatedAction NAIVE_BLADE = addTo(new AnimatedAction(length(0.84), 0.12, "naive_blade"));
@@ -134,10 +131,9 @@ public class PlayerModelAnimations {
     public static final AnimatedAction AXEL_DISASTER = addTo(new AnimatedAction(length(1.2), 0.36, "axel_disaster"));
     public static final AnimatedAction STARDUST_UPPER = addTo(new AnimatedAction(length(1.76), 0.24, "stardust_upper"));
     public static final AnimatedAction GRAND_IMPACT = addTo(new AnimatedAction(length(2.8), 0.4, "grand_impact"));
-    public static final List<AnimatedAction> TORNADO_SWING = addTo(2, "tornado_swing", count -> switch (count) {
-        case 2 -> Pair.of((int) Math.ceil(1.32 * 20), 0);
-        default -> Pair.of((int) Math.ceil(1.48 * 20), (int) Math.ceil(0.24 * 20));
-    });
+    public static final List<AnimatedAction> TORNADO_SWING = addTo(2, "tornado_swing", count ->
+            count == 2 ? Pair.of((int) Math.ceil(1.32 * 20), 0) : Pair.of((int) Math.ceil(1.48 * 20), (int) Math.ceil(0.24 * 20))
+    );
     public static final AnimatedAction GIGA_SWING = addTo(new AnimatedAction(length(1), 0.28, "giga_swing"));
     public static final AnimatedAction UPPER_CUT = addTo(new AnimatedAction(length(0.72), 0.36, "upper_cut"));
     public static final AnimatedAction DOUBLE_KICK = addTo(new AnimatedAction(length(0.76), 0.24, "double_kick"));

@@ -35,9 +35,7 @@ public class NPCHandler {
 
     public void removeNPC(EntityNPCBase npc, Entity.RemovalReason reason) {
         if (reason.shouldDestroy()) {
-            npc.getServer().getPlayerList().getPlayers().forEach(p -> {
-                SimpleQuestIntegration.INST().removeQuestFor(p, npc);
-            });
+            npc.getServer().getPlayerList().getPlayers().forEach(p -> SimpleQuestIntegration.INST().removeQuestFor(p, npc));
             npc.getFamily().markAsDead();
             this.npcs.remove(npc.getUUID());
         }

@@ -24,13 +24,13 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class BlockStatesGen extends BlockStateProvider {
 
-    private static final ResourceLocation cropTinted = new ResourceLocation(RuneCraftory.MODID, "block/crop_tinted");
-    private static final ResourceLocation cropBig = new ResourceLocation(RuneCraftory.MODID, "block/big_crop");
-    private static final ResourceLocation cropGiant1 = new ResourceLocation(RuneCraftory.MODID, "block/giant_crop_1");
-    private static final ResourceLocation cropGiant2 = new ResourceLocation(RuneCraftory.MODID, "block/giant_crop_2");
-    private static final ResourceLocation flowerBig = new ResourceLocation(RuneCraftory.MODID, "block/big_flower");
-    private static final ResourceLocation flowerGiant = new ResourceLocation(RuneCraftory.MODID, "block/giant_flower");
-    private static final ResourceLocation crossTinted = new ResourceLocation(RuneCraftory.MODID, "block/cross_tinted");
+    private static final ResourceLocation CROP_TINTED = new ResourceLocation(RuneCraftory.MODID, "block/crop_tinted");
+    private static final ResourceLocation CROP_BIG = new ResourceLocation(RuneCraftory.MODID, "block/big_crop");
+    private static final ResourceLocation CROP_GIANT_1 = new ResourceLocation(RuneCraftory.MODID, "block/giant_crop_1");
+    private static final ResourceLocation CROP_GIANT_2 = new ResourceLocation(RuneCraftory.MODID, "block/giant_crop_2");
+    private static final ResourceLocation FLOWER_BIG = new ResourceLocation(RuneCraftory.MODID, "block/big_flower");
+    private static final ResourceLocation FLOWER_GIANT = new ResourceLocation(RuneCraftory.MODID, "block/giant_flower");
+    private static final ResourceLocation CROSS_TINTED = new ResourceLocation(RuneCraftory.MODID, "block/cross_tinted");
 
     public BlockStatesGen(DataGenerator gen, ExistingFileHelper helper) {
         super(gen, RuneCraftory.MODID, helper);
@@ -59,14 +59,14 @@ public class BlockStatesGen extends BlockStateProvider {
                     } else {
                         text = this.blockTexture(RuneCraftory.MODID, "plant_gear_" + stage);
                     }
-                    return ConfiguredModel.builder().modelFile(this.models().singleTexture(text.toString(), crossTinted, "cross", text)).build();
+                    return ConfiguredModel.builder().modelFile(this.models().singleTexture(text.toString(), CROSS_TINTED, "cross", text)).build();
                 }, BlockCrop.WILTED);
                 continue;
             }
             if (block instanceof BlockGiantCrop giant)
                 this.getVariantBuilder(block).forAllStatesExcept(state -> {
                     ResourceLocation texture = this.itemTexture(giant.getCrop());
-                    return ConfiguredModel.builder().modelFile(this.models().singleTexture(block.getRegistryName().toString(), flowerGiant, "0", texture))
+                    return ConfiguredModel.builder().modelFile(this.models().singleTexture(block.getRegistryName().toString(), FLOWER_GIANT, "0", texture))
                             .rotationY(((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 180) % 360).build();
                 }, BlockCrop.WILTED, BlockGiantCrop.AGE);
             else if (block instanceof BlockCrop)
@@ -77,32 +77,32 @@ public class BlockStatesGen extends BlockStateProvider {
                     String name = defaultFlowerState ? "runecraftory:flower_stage_0" : block.getRegistryName().toString() + "_" + stage;
                     ResourceLocation texture = defaultFlowerState ? this.blockTexture(RuneCraftory.MODID, "flower_stage_0")
                             : stage == 3 ? this.itemCropTexture(block) : this.blockTexture(RuneCraftory.MODID, block.getRegistryName().getPath() + "_" + stage);
-                    ResourceLocation parent = crossTinted;
+                    ResourceLocation parent = CROSS_TINTED;
                     if (stage == 4) {
-                        parent = flowerBig;
+                        parent = FLOWER_BIG;
                         RegistryEntrySupplier<Block> giant = ModBlocks.giantCropMap.get(reg);
                         if (giant != null && giant.get() instanceof BlockGiantCrop giantCrop)
                             texture = this.itemTexture(giantCrop.getCrop());
                     }
                     return ConfiguredModel.builder().modelFile(this.models().singleTexture(name, parent, "cross", texture)).build();
                 }, BlockCrop.WILTED);
-        };
+        }
         ModBlocks.crops.forEach(reg -> {
             Block block = reg.get();
             if (block instanceof BlockGiantCrop)
                 this.getVariantBuilder(block).forAllStatesExcept(state -> {
                     ResourceLocation texture = this.blockTexture(RuneCraftory.MODID, block.getRegistryName().getPath());
-                    ResourceLocation parent = cropGiant1;
+                    ResourceLocation parent = CROP_GIANT_1;
                     int rot = 0;
                     String file = block.getRegistryName().toString();
                     switch (state.getValue(BlockGiantCrop.DIRECTION)) {
                         case EAST -> {
-                            parent = cropGiant2;
+                            parent = CROP_GIANT_2;
                             file += "_2";
                         }
                         case SOUTH -> rot = 180;
                         case WEST -> {
-                            parent = cropGiant2;
+                            parent = CROP_GIANT_2;
                             file += "_2";
                             rot = 180;
                         }
@@ -115,9 +115,9 @@ public class BlockStatesGen extends BlockStateProvider {
                     int stage = state.getValue(BlockCrop.AGE);
                     String name = block.getRegistryName().toString() + "_" + stage;
                     ResourceLocation texture = this.blockTexture(RuneCraftory.MODID, block.getRegistryName().getPath() + "_" + stage);
-                    ResourceLocation parent = cropTinted;
+                    ResourceLocation parent = CROP_TINTED;
                     if (stage == 4) {
-                        parent = cropBig;
+                        parent = CROP_BIG;
                         RegistryEntrySupplier<Block> giant = ModBlocks.giantCropMap.get(reg);
                         if (giant != null)
                             texture = this.blockTexture(giant.get());

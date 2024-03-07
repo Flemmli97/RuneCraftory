@@ -134,7 +134,7 @@ public class ContainerCrafting extends AbstractContainerMenu {
     private void updateCraftingSlot() {
         ItemStack trueOutput;
         ItemStack clientOutput;
-        if (this.matchingRecipes != null && this.matchingRecipes.size() > 0) {
+        if (this.matchingRecipes != null && !this.matchingRecipes.isEmpty()) {
             if (this.updatedRecipes) {
                 if (this.currentRecipe != null) {
                     int i;

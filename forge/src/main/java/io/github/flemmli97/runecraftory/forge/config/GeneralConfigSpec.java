@@ -7,7 +7,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 public class GeneralConfigSpec {
 
-    public static final Pair<GeneralConfigSpec, ForgeConfigSpec> spec = new ForgeConfigSpec.Builder().configure(GeneralConfigSpec::new);
+    public static final Pair<GeneralConfigSpec, ForgeConfigSpec> SPEC = new ForgeConfigSpec.Builder().configure(GeneralConfigSpec::new);
 
     public final ForgeConfigSpec.EnumValue<GeneralConfig.DefenceSystem> defenceSystem;
     public final ForgeConfigSpec.BooleanValue gateSpawning;

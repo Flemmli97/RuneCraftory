@@ -6,7 +6,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 public class MobConfigSpec {
 
-    public static final Pair<MobConfigSpec, ForgeConfigSpec> spec = new ForgeConfigSpec.Builder().configure(MobConfigSpec::new);
+    public static final Pair<MobConfigSpec, ForgeConfigSpec> SPEC = new ForgeConfigSpec.Builder().configure(MobConfigSpec::new);
 
     public final ForgeConfigSpec.BooleanValue disableNaturalSpawn;
     public final ForgeConfigSpec.IntValue farmRadius;

@@ -10,7 +10,7 @@ import net.minecraft.world.entity.EntityType;
 
 public class ModStats {
 
-    public static PlatformRegistry<StatType<?>> STATS = PlatformUtils.INSTANCE.of(Registry.STAT_TYPE_REGISTRY, RuneCraftory.MODID);
+    public static final PlatformRegistry<StatType<?>> STATS = PlatformUtils.INSTANCE.of(Registry.STAT_TYPE_REGISTRY, RuneCraftory.MODID);
 
-    public static RegistryEntrySupplier<StatType<EntityType<?>>> COMBINED_KILLS = STATS.register("combined_killed", () -> new StatType<>(Registry.ENTITY_TYPE));
+    public static final RegistryEntrySupplier<StatType<EntityType<?>>> COMBINED_KILLS = STATS.register("combined_killed", () -> new StatType<>(Registry.ENTITY_TYPE));
 }

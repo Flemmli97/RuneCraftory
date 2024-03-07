@@ -36,8 +36,4 @@ public class SpellUseAttack extends AttackAction {
         }
     }
 
-    @Override
-    public boolean disableItemSwitch() {
-        return true;
-    }
 }

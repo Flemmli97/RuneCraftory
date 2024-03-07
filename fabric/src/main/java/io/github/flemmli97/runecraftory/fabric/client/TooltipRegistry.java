@@ -12,14 +12,14 @@ import java.util.function.Function;
  */
 public class TooltipRegistry {
 
-    private static final Map<Class<? extends TooltipComponent>, Function<TooltipComponent, ClientTooltipComponent>> components = new ConcurrentHashMap<>();
+    private static final Map<Class<? extends TooltipComponent>, Function<TooltipComponent, ClientTooltipComponent>> COMPONENTS = new ConcurrentHashMap<>();
 
     public static Function<TooltipComponent, ClientTooltipComponent> get(Class<? extends TooltipComponent> clss) {
-        return components.get(clss);
+        return COMPONENTS.get(clss);
     }
 
     @SuppressWarnings("unchecked")
     public static <T extends TooltipComponent> void registerFactory(Class<T> clss, Function<? super T, ? extends ClientTooltipComponent> factory) {
-        components.put(clss, (Function<TooltipComponent, ClientTooltipComponent>) factory);
+        COMPONENTS.put(clss, (Function<TooltipComponent, ClientTooltipComponent>) factory);
     }
 }

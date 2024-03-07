@@ -60,7 +60,7 @@ public class BossSpawnerBlockEntity extends BlockEntity {
             Entity e = this.savedEntity.create(this.level);
             if (e != null) {
                 this.lastUpdateDay = WorldUtils.day(this.level);
-                if (this.level.getEntitiesOfClass(e.getClass(), new AABB(this.worldPosition).inflate(32)).size() != 0)
+                if (!this.level.getEntitiesOfClass(e.getClass(), new AABB(this.worldPosition).inflate(32)).isEmpty())
                     return;
                 if (e instanceof BaseMonster)
                     ((BaseMonster) e).setLevel(LevelCalc.levelFromPos((ServerLevel) this.level, Vec3.atCenterOf(this.worldPosition)) - 1);

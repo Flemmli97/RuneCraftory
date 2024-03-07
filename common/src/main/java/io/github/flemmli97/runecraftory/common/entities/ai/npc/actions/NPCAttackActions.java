@@ -24,7 +24,7 @@ public class NPCAttackActions {
                     WeightedAction.CODEC.listOf().fieldOf("actions").forGetter(d -> d.actions)
             ).apply(instance, NPCAttackActions::new));
 
-    public static NPCAttackActions DEFAULT = new NPCAttackActions(List.of());
+    public static final NPCAttackActions DEFAULT = new NPCAttackActions(List.of());
 
     private final List<WeightedAction> actions;
 

@@ -7,11 +7,6 @@ import net.minecraft.world.entity.LivingEntity;
 public class EmptyAction extends AttackAction {
 
     @Override
-    public AnimatedAction getAnimation(LivingEntity entity, int chain) {
-        return null;
-    }
-
-    @Override
     public boolean disableItemSwitch() {
         return false;
     }

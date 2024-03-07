@@ -14,6 +14,6 @@ public class ModMenuIntegration implements ModMenuApi {
 
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
-        return parent -> ClothConfigScreenHelper.configScreenOf(parent, RuneCraftory.MODID, List.of(ClientConfigSpec.spec.getKey(), GeneralConfigSpec.spec.getKey(), MobConfigSpec.spec.getKey()));
+        return parent -> ClothConfigScreenHelper.configScreenOf(parent, RuneCraftory.MODID, List.of(ClientConfigSpec.SPEC.getKey(), GeneralConfigSpec.SPEC.getKey(), MobConfigSpec.SPEC.getKey()));
     }
 }

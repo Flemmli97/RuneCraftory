@@ -72,7 +72,7 @@ public class JadePlugin implements IWailaPlugin {
         registration.registerEntityDataProvider(new IServerDataProvider<>() {
             @Override
             public void appendServerData(CompoundTag compoundTag, ServerPlayer player, Level level, Entity entity, boolean b) {
-                if (entity instanceof IBaseMob mob && (player.getMainHandItem().getItem() == ModItems.debug || player.isCreative()
+                if (entity instanceof IBaseMob mob && (player.getMainHandItem().getItem() == ModItems.debug.get() || player.isCreative()
                         || (entity instanceof OwnableEntity ownable && player.getUUID().equals(ownable.getOwnerUUID())))) {
                     LevelExpPair entityLevel = mob.level();
                     compoundTag.putFloat("RunecraftoryLevelPerc", entityLevel.getXp() / LevelCalc.xpAmountForLevelUp(entityLevel.getLevel()));

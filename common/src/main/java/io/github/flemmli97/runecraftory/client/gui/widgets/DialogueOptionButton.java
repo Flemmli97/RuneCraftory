@@ -22,7 +22,7 @@ public class DialogueOptionButton extends Button {
 
     private final List<FormattedCharSequence> text;
     private final int txtX;
-    private int maxWidth;
+    private final int maxWidth;
 
     public DialogueOptionButton(int x, int y, Font font, Component text, OnPress press) {
         super(x, y, 0, 0, text, press);

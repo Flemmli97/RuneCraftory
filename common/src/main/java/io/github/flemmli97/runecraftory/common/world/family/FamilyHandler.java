@@ -51,9 +51,7 @@ public class FamilyHandler extends SavedData {
 
     public void load(CompoundTag compoundNBT) {
         CompoundTag data = compoundNBT.getCompound("Families");
-        data.getAllKeys().forEach((id) -> {
-            this.families.put(UUID.fromString(id), new FamilyEntry(this, data.getCompound(id)));
-        });
+        data.getAllKeys().forEach((id) -> this.families.put(UUID.fromString(id), new FamilyEntry(this, data.getCompound(id))));
     }
 
     @Override

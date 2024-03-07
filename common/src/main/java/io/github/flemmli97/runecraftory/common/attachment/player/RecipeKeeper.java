@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 public class RecipeKeeper {
 
-    private Set<ResourceLocation> unlockedRecipes = new HashSet<>();
+    private final Set<ResourceLocation> unlockedRecipes = new HashSet<>();
 
     public void unlockRecipe(Player player, Recipe<?> recipe) {
         this.unlockRecipesRes(player, Sets.newHashSet(recipe.getId()));

@@ -24,7 +24,7 @@ public class NPCShopGui extends AbstractContainerScreen<ContainerShop> {
 
     protected static final ResourceLocation texturepath = new ResourceLocation(RuneCraftory.MODID, "textures/gui/shop.png");
 
-    private Inventory inventory;
+    private final Inventory inventory;
 
     private Slot lastClickSlotShop;
     private boolean isLeftClickDown, isRightClickDown;
@@ -88,9 +88,7 @@ public class NPCShopGui extends AbstractContainerScreen<ContainerShop> {
         RenderSystem.setShaderTexture(0, texturepath);
         this.blit(stack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 
-        PlayerData data = Platform.INSTANCE.getPlayerData(this.minecraft.player).orElse(null);
-        if (data != null)
-            ClientHandlers.drawRightAlignedScaledString(stack, this.font, new TextComponent("" + data.getMoney()), this.leftPos + 237, this.topPos + 197, 1, 0);
+        Platform.INSTANCE.getPlayerData(this.minecraft.player).ifPresent(data -> ClientHandlers.drawRightAlignedScaledString(stack, this.font, new TextComponent("" + data.getMoney()), this.leftPos + 237, this.topPos + 197, 1, 0));
         if (this.menu.getCurrentCost() > 0) {
             ClientHandlers.drawRightAlignedScaledString(stack, this.font, new TextComponent("" + this.menu.getCurrentCost()), this.leftPos + 237, this.topPos + 175, 1, 0);
         }

@@ -234,7 +234,7 @@ public class EntityMimic extends LeapingMonster {
     protected static class JumpingMover extends MoveControl {
 
         private final EntityMimic mimic;
-        private float yRot;
+        private final float yRot;
         private int jumpDelay;
 
         public JumpingMover(EntityMimic mimic) {

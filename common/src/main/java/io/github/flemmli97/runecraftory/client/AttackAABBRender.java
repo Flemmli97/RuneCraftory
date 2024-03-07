@@ -14,7 +14,7 @@ public class AttackAABBRender {
 
     private static final float[] attackRGB = new float[]{18 / 255f, 181 / 255f, 51 / 255f};
     private static final float[] attemptRGB = new float[]{19 / 255f, 56 / 255f, 191 / 255f};
-    public static AttackAABBRender INST = new AttackAABBRender();
+    public static final AttackAABBRender INST = new AttackAABBRender();
     private final List<RenderAABB> list = new ArrayList<>();
     private final List<RenderAABB> toAdd = new ArrayList<>();
 

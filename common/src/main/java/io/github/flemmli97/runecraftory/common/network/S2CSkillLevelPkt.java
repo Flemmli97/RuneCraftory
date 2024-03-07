@@ -16,8 +16,11 @@ public class S2CSkillLevelPkt implements Packet {
 
     private final EnumSkills skill;
     private final LevelExpPair level;
-    private int rp;
-    private float rpMax, str, intel, vit;
+    private final int rp;
+    private final float rpMax;
+    private final float str;
+    private final float intel;
+    private final float vit;
 
     private S2CSkillLevelPkt(EnumSkills skill, int level, float xp, int rp, float rpMax, float str, float intel, float vit) {
         this.skill = skill;

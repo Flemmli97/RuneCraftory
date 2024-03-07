@@ -201,11 +201,6 @@ public class ItemToolWateringCan extends TieredItem implements IItemUsable, ICha
         return false;
     }
 
-    @Override
-    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot equipmentSlot) {
-        return ImmutableMultimap.of();
-    }
-
     private InteractionResult useOnBlock(UseOnContext ctx) {
         if (ctx.getLevel().isClientSide)
             return InteractionResult.PASS;

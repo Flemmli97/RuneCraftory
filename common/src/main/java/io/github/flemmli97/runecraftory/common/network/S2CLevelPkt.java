@@ -14,8 +14,11 @@ public class S2CLevelPkt implements Packet {
     public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "s2c_level");
 
     private final LevelExpPair level;
-    private int rp;
-    private float rpMax, str, intel, vit;
+    private final int rp;
+    private final float rpMax;
+    private final float str;
+    private final float intel;
+    private final float vit;
 
     private S2CLevelPkt(int level, float xp, int rp, float rpMax, float str, float intel, float vit) {
         this.level = new LevelExpPair();

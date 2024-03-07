@@ -31,16 +31,16 @@ public class MobConfig {
     public static float mimicStrongChance = 0.3f;
 
     // Just here for record. Change it via datapack
-    public static double npcHealth = 20;
-    public static double npcAttack = 1;
-    public static double npcDefence = 0;
-    public static double npcMagicAttack = 5;
-    public static double npcMagicDefence = 0;
-    public static double npcHealthGain = 5;
-    public static double npcAttackGain = 2;
-    public static double npcDefenceGain = 2;
-    public static double npcMagicAttackGain = 2;
-    public static double npcMagicDefenceGain = 2;
+    public static final double npcHealth = 20;
+    public static final double npcAttack = 1;
+    public static final double npcDefence = 0;
+    public static final double npcMagicAttack = 5;
+    public static final double npcMagicDefence = 0;
+    public static final double npcHealthGain = 5;
+    public static final double npcAttackGain = 2;
+    public static final double npcDefenceGain = 2;
+    public static final double npcMagicAttackGain = 2;
+    public static final double npcMagicDefenceGain = 2;
 
     public static int npcSpawnRateMin = 3600;
     public static int npcSpawnRateMax = 7200;

@@ -63,7 +63,7 @@ public class ClientHandlers {
     public static TriggerKeyBind spell3;
     public static TriggerKeyBind spell4;
 
-    private static AnimatedPlayerModel animatedPlayerModel;
+    private static AnimatedPlayerModel<?> animatedPlayerModel;
 
     private static CameraType pastType = CameraType.FIRST_PERSON;
 
@@ -232,12 +232,12 @@ public class ClientHandlers {
         }
     }
 
-    public static AnimatedPlayerModel getAnimatedPlayerModel() {
+    public static AnimatedPlayerModel<?> getAnimatedPlayerModel() {
         return animatedPlayerModel;
     }
 
     public static void initNonRendererModels(EntityRendererProvider.Context ctx) {
-        animatedPlayerModel = new AnimatedPlayerModel(ctx.bakeLayer(AnimatedPlayerModel.LAYER_LOCATION));
+        animatedPlayerModel = new AnimatedPlayerModel<>(ctx.bakeLayer(AnimatedPlayerModel.LAYER_LOCATION));
         ArmorModels.initArmorModels(ctx);
     }
 

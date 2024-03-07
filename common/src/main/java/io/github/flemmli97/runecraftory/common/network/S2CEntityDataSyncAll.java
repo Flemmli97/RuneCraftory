@@ -15,7 +15,7 @@ public class S2CEntityDataSyncAll implements Packet {
     public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "s2c_entity_data_all");
 
     private boolean sleeping, paralysis, cold, poison;
-    private int entityID;
+    private final int entityID;
 
     public S2CEntityDataSyncAll(LivingEntity entity) {
         this.entityID = entity.getId();

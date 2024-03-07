@@ -21,7 +21,7 @@ import java.util.Map;
 
 public class VillageStructuresModification {
 
-    public static Map<ResourceLocation, Holder<StructureProcessorList>> map = new HashMap<>();
+    public static final Map<ResourceLocation, Holder<StructureProcessorList>> map = new HashMap<>();
 
     private static boolean init;
 

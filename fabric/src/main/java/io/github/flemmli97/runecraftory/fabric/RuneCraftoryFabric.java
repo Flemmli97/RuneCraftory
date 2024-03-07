@@ -79,7 +79,6 @@ import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.entries.LootTableReference;
 import org.jetbrains.annotations.Nullable;
 
-import java.nio.file.Path;
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
@@ -87,9 +86,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class RuneCraftoryFabric implements ModInitializer {
 
-    public static final Path confDir = FabricLoader.getInstance().getConfigDir().resolve(RuneCraftory.MODID);
-
-    private static boolean initAttributes;
+    private static boolean INIT_ATTRIBUTES;
 
     private static MinecraftServer SERVER_INSTANCE;
 
@@ -104,9 +101,9 @@ public class RuneCraftoryFabric implements ModInitializer {
         RuneCraftory.simpleQuests = FabricLoader.getInstance().isModLoaded("simplequests");
 
         this.initContent();
-        ConfigHolder.configs.get(GeneralConfigSpec.spec.getLeft())
+        ConfigHolder.CONFIGS.get(GeneralConfigSpec.SPEC.getLeft())
                 .reloadConfig();
-        ConfigHolder.configs.get(MobConfigSpec.spec.getLeft())
+        ConfigHolder.CONFIGS.get(MobConfigSpec.SPEC.getLeft())
                 .reloadConfig();
         ServerPacketHandler.registerServer();
 
@@ -297,9 +294,9 @@ public class RuneCraftoryFabric implements ModInitializer {
     }
 
     public static Collection<RegistryEntrySupplier<Attribute>> attributes() {
-        if (!initAttributes) {
+        if (!INIT_ATTRIBUTES) {
             ModAttributes.ATTRIBUTES.registerContent();
-            initAttributes = true;
+            INIT_ATTRIBUTES = true;
         }
         return ModAttributes.ENTITY_ATTRIBUTES;
     }

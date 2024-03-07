@@ -10,7 +10,7 @@ import java.util.function.Predicate;
 
 public class StayGoal<T extends Mob> extends Goal {
 
-    public static Predicate<BaseMonster> CANSTAYMONSTER = monster -> {
+    public static final Predicate<BaseMonster> CANSTAYMONSTER = monster -> {
         if (!monster.isTamed()) {
             return false;
         }
@@ -22,7 +22,7 @@ public class StayGoal<T extends Mob> extends Goal {
         }
         return monster.isStaying();
     };
-    public static Predicate<EntityNPCBase> CANSTAYNPC = npc -> {
+    public static final Predicate<EntityNPCBase> CANSTAYNPC = npc -> {
         if (npc.isInWaterOrBubble()) {
             return false;
         }

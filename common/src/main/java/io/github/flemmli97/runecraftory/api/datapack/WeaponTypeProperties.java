@@ -5,7 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 public record WeaponTypeProperties(float aoe, int chargeTime) {
 
-    public static WeaponTypeProperties DEFAULT = new WeaponTypeProperties(0, 20);
+    public static final WeaponTypeProperties DEFAULT = new WeaponTypeProperties(0, 20);
 
     public static final Codec<WeaponTypeProperties> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(

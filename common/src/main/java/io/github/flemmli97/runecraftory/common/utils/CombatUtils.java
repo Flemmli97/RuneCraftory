@@ -71,7 +71,7 @@ public class CombatUtils {
             increase += attacker.getAttributeValue(att);
         }
         int inc = (int) increase;
-        double restRound = Math.round((increase - inc) * 2) / 2;
+        double restRound = Math.round((increase - inc) * 2) / 2d;
         return inc + restRound;
     }
 
@@ -532,7 +532,7 @@ public class CombatUtils {
             }
             double r = (color >> 16 & 0xFF) / 255.0;
             double g = (color >> 8 & 0xFF) / 255.0;
-            double b = (color >> 0 & 0xFF) / 255.0;
+            double b = (color & 0xFF) / 255.0;
             Random rand = new Random();
             for (int i = 0; i < 7; ++i) {
                 serverLevel.sendParticles(ParticleTypes.ENTITY_EFFECT, target.getX() + (rand.nextDouble() - 0.5) * target.getBbWidth(), target.getY() + 0.3 + rand.nextDouble() * target.getBbHeight(), target.getZ() + (rand.nextDouble() - 0.5) * target.getBbWidth(), 0, r, g, b, 1);

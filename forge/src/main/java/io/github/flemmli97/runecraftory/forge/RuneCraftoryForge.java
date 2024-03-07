@@ -58,8 +58,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.loading.FMLPaths;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.nio.file.Path;
 import java.util.Map;
@@ -68,9 +66,6 @@ import java.util.Map;
 public class RuneCraftoryForge {
 
     public static final String MODID = "runecraftory";
-    public static final Logger logger = LogManager.getLogger(RuneCraftoryForge.MODID);
-
-    public static Path confDir;
 
     public RuneCraftoryForge() {
         RuneCraftory.simpleQuests = ModList.get().isLoaded("simplequests");
@@ -93,7 +88,7 @@ public class RuneCraftoryForge {
         forgeBus.register(new EntityEvents());
         forgeBus.register(new WorldEvents());
 
-        for (Map.Entry<ForgeConfigSpec, ConfigHolder<?>> confs : ConfigHolder.configs.entrySet()) {
+        for (Map.Entry<ForgeConfigSpec, ConfigHolder<?>> confs : ConfigHolder.CONFIGS.entrySet()) {
             ConfigHolder<?> loader = confs.getValue();
             ModLoadingContext.get().registerConfig(loader.configType(), confs.getKey(), loader.configName());
         }
@@ -158,7 +153,7 @@ public class RuneCraftoryForge {
     }
 
     public void conf(ModConfigEvent event) {
-        ConfigHolder<?> holder = ConfigHolder.configs.get(event.getConfig().getSpec());
+        ConfigHolder<?> holder = ConfigHolder.CONFIGS.get(event.getConfig().getSpec());
         if (holder != null)
             holder.reloadConfig();
     }

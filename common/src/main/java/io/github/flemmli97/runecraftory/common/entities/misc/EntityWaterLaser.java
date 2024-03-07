@@ -32,7 +32,7 @@ public class EntityWaterLaser extends BaseBeam {
     private static final EntityDataAccessor<Float> YAW_OFFSET = SynchedEntityData.defineId(EntityWaterLaser.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Float> POSITION_YAW_OFFSET = SynchedEntityData.defineId(EntityWaterLaser.class, EntityDataSerializers.FLOAT);
 
-    private Object2IntMap<Entity> hitEntities = new Object2IntOpenHashMap<>();
+    private final Object2IntMap<Entity> hitEntities = new Object2IntOpenHashMap<>();
     private float accumulatedRot;
 
     public EntityWaterLaser(EntityType<? extends EntityWaterLaser> type, Level level) {

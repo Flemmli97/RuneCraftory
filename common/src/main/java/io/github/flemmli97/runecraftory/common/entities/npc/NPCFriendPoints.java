@@ -15,7 +15,7 @@ import java.util.Set;
 public class NPCFriendPoints {
 
     private int lastUpdateTalk = -1, lastUpdateGift = -1;
-    private Set<String> answeredConversations = new HashSet<>();
+    private final Set<String> answeredConversations = new HashSet<>();
     public final LevelExpPair points = new LevelExpPair();
     private int talkCount;
 

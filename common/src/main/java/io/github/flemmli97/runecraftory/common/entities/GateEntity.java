@@ -77,7 +77,7 @@ public class GateEntity extends Mob implements IBaseMob {
     private static final UUID attributeLevelMod = UUID.fromString("EC84560E-5266-4DC3-A4E1-388b97DBC0CB");
     public int rotate, clientParticles;
     public boolean clientParticleFlag;
-    private List<EntityType<?>> spawnList = new ArrayList<>();
+    private final List<EntityType<?>> spawnList = new ArrayList<>();
     private EnumElement type = EnumElement.NONE;
     private boolean initialSpawn = true;
     private final LevelExpPair expPair = new LevelExpPair();

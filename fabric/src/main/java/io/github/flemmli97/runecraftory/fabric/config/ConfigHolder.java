@@ -15,12 +15,12 @@ import java.util.function.Consumer;
 
 public record ConfigHolder<T>(T configSpec, Consumer<T> loader) {
 
-    public static final Map<JsonConfig<CommentedJsonConfig>, ConfigHolder<?>> configs = new LinkedHashMap<>();
+    public static final Map<JsonConfig<CommentedJsonConfig>, ConfigHolder<?>> CONFIGS = new LinkedHashMap<>();
 
     static {
-        configs.put(GeneralConfigSpec.spec.getLeft(), new ConfigHolder<>(GeneralConfigSpec.spec.getRight(), ConfigHolder::loadGeneral));
-        configs.put(ClientConfigSpec.spec.getLeft(), new ConfigHolder<>(ClientConfigSpec.spec.getRight(), ConfigHolder::loadClient));
-        configs.put(MobConfigSpec.spec.getLeft(), new ConfigHolder<>(MobConfigSpec.spec.getRight(), ConfigHolder::loadMobs));
+        CONFIGS.put(GeneralConfigSpec.SPEC.getLeft(), new ConfigHolder<>(GeneralConfigSpec.SPEC.getRight(), ConfigHolder::loadGeneral));
+        CONFIGS.put(ClientConfigSpec.SPEC.getLeft(), new ConfigHolder<>(ClientConfigSpec.SPEC.getRight(), ConfigHolder::loadClient));
+        CONFIGS.put(MobConfigSpec.SPEC.getLeft(), new ConfigHolder<>(MobConfigSpec.SPEC.getRight(), ConfigHolder::loadMobs));
     }
 
     public static void loadGeneral(GeneralConfigSpec spec) {

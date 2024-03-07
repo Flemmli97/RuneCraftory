@@ -210,8 +210,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     private NPCAttackActions attackActions = NPCAttackActions.DEFAULT;
     private Pair<EnumSeason, Integer> birthday = Pair.of(EnumSeason.SPRING, 1);
     //Will be used if data returns null for these values
-    private Map<String, TagKey<Item>> gift = new HashMap<>();
-    private Random dataRandom = new Random();
+    private final Map<String, TagKey<Item>> gift = new HashMap<>();
+    private final Random dataRandom = new Random();
 
     private Activity activity = Activity.IDLE;
 
@@ -797,9 +797,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     public void updateStatsToLevel() {
         float preHealthDiff = this.getMaxHealth() - this.getHealth();
-        ((AttributeMapAccessor) this.getAttributes()).getAttributes().forEach((att, inst) -> {
-            inst.removeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD);
-        });
+        ((AttributeMapAccessor) this.getAttributes()).getAttributes().forEach((att, inst) -> inst.removeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD));
         if (this.data != null) {
             Map<Attribute, Double> gain = this.data.statIncrease() != null ? this.data.statIncrease() : NPCData.DEFAULT_GAIN;
             gain.forEach((att, val) -> {
@@ -1336,7 +1334,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     public boolean isStaying() {
-        return this.interactingPlayers.size() > 0 || this.interactionMoveCooldown > 0 || this.behaviourState() == Behaviour.STAY;
+        return !this.interactingPlayers.isEmpty() || this.interactionMoveCooldown > 0 || this.behaviourState() == Behaviour.STAY;
     }
 
     public void interactWithPlayer(ServerPlayer player) {

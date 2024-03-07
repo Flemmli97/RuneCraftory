@@ -44,7 +44,7 @@ public abstract class NPCDataProvider implements DataProvider {
     private final Map<ResourceLocation, NPCData.ConversationSet> conversations = new HashMap<>();
     private final Map<ResourceLocation, NPCAttackActions> actions = new HashMap<>();
 
-    private Map<NPCData.GiftType, List<TagKey<Item>>> giftTags = new LinkedHashMap<>();
+    private final Map<NPCData.GiftType, List<TagKey<Item>>> giftTags = new LinkedHashMap<>();
 
     //Translation for lang
     public final Map<String, Map<String, String>> translations = new LinkedHashMap<>();

@@ -222,7 +222,7 @@ public class FarmlandHandler extends SavedData {
                 break;
             }
         }
-        if (overlap.size() > 0) {
+        if (!overlap.isEmpty()) {
             if (overlap.size() == 1)
                 overlap.get(0).add(pos, state);
             else

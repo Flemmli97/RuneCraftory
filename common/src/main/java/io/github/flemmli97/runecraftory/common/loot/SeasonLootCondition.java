@@ -28,11 +28,6 @@ public record SeasonLootCondition(EnumSeason season) implements LootItemConditio
     }
 
     @Override
-    public Set<LootContextParam<?>> getReferencedContextParams() {
-        return ImmutableSet.of();
-    }
-
-    @Override
     public boolean test(LootContext ctx) {
         return WorldHandler.get(ctx.getLevel().getServer()).currentSeason() == this.season;
     }

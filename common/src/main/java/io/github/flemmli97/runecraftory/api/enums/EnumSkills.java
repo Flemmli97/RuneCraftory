@@ -70,6 +70,6 @@ public enum EnumSkills {
         SLOW,
         FAST,
         VERY_FAST,
-        CRAFTING;
+        CRAFTING
     }
 }

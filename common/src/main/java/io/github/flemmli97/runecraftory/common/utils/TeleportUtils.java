@@ -18,13 +18,12 @@ import java.util.function.Predicate;
 public class TeleportUtils {
 
     public static boolean safeDimensionTeleport(Mob entity, ServerLevel newLevel, BlockPos target) {
-        BlockPos blockPos = target;
         BlockPos safe = null;
         for (int i = 0; i < 10; ++i) {
             int x = randomIntInclusive(entity.getRandom(), -3, 3);
             int y = randomIntInclusive(entity.getRandom(), -1, 2);
             int z = randomIntInclusive(entity.getRandom(), -3, 3);
-            BlockPos pos = isSafePos(entity, newLevel, blockPos.offset(x, y, z), s -> true);
+            BlockPos pos = isSafePos(entity, newLevel, target.offset(x, y, z), s -> true);
             if (pos != null) {
                 safe = pos;
                 break;

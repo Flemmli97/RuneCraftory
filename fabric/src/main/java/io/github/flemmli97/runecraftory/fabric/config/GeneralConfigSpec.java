@@ -10,7 +10,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 public class GeneralConfigSpec {
 
-    public static final Pair<JsonConfig<CommentedJsonConfig>, GeneralConfigSpec> spec = CommentedJsonConfig.Builder
+    public static final Pair<JsonConfig<CommentedJsonConfig>, GeneralConfigSpec> SPEC = CommentedJsonConfig.Builder
             .create(FabricLoader.getInstance().getConfigDir().resolve(RuneCraftory.MODID).resolve("general.json"), 1, GeneralConfigSpec::new);
 
     public final CommentedJsonConfig.CommentedVal<GeneralConfig.DefenceSystem> defenceSystem;

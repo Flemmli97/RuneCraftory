@@ -10,5 +10,5 @@ public class ModGlobalLootModifiers {
 
     public static final DeferredRegister<GlobalLootModifierSerializer<?>> MODIFIERS = DeferredRegister.create(ForgeRegistries.Keys.LOOT_MODIFIER_SERIALIZERS, RuneCraftory.MODID);
 
-    public static RegistryObject<GlobalLootModifierSerializer<LootTableInjectModifier>> TABLE_REFERENCE = MODIFIERS.register("loot_table_inject", LootTableInjectModifier.Serializer::new);
+    public static final RegistryObject<GlobalLootModifierSerializer<LootTableInjectModifier>> TABLE_REFERENCE = MODIFIERS.register("loot_table_inject", LootTableInjectModifier.Serializer::new);
 }

@@ -50,12 +50,12 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
 
     private List<FormattedCharSequence> components;
 
-    private Map<String, List<Component>> actions;
+    private final Map<String, List<Component>> actions;
 
     private final ResourceLocation quest;
     private final SyncedFamilyData family;
 
-    private List<ToolTipRenderer> tooltipComponents = new ArrayList<>();
+    private final List<ToolTipRenderer> tooltipComponents = new ArrayList<>();
 
     public NPCGui(T entity, ShopState isShopOpen, boolean canFollow, SyncedFamilyData family, Map<String, List<Component>> actions, ResourceLocation quest) {
         super(entity.getDisplayName());

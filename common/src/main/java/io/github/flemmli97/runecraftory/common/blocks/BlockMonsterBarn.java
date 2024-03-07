@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.blocks;
 
+import com.mojang.authlib.GameProfile;
 import io.github.flemmli97.runecraftory.common.blocks.tile.MonsterBarnBlockEntity;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
@@ -68,7 +69,7 @@ public class BlockMonsterBarn extends BaseEntityBlock {
                     .ifPresent(d -> {
                         if (d.onBarnFailMine(pos))
                             player.sendMessage(new TranslatableComponent("runecraftory.barn.interact.not.owner", player.getServer()
-                                    .getProfileCache().get(uuid).map(p -> p.getName()).orElse("UNKNOWN")).withStyle(ChatFormatting.DARK_RED), Util.NIL_UUID);
+                                    .getProfileCache().get(uuid).map(GameProfile::getName).orElse("UNKNOWN")).withStyle(ChatFormatting.DARK_RED), Util.NIL_UUID);
                     });
         }
         return 0;
@@ -97,7 +98,7 @@ public class BlockMonsterBarn extends BaseEntityBlock {
                         .ifPresent(d -> {
                             if (d.onBarnFailMine(pos))
                                 player.sendMessage(new TranslatableComponent("runecraftory.barn.interact.not.owner", player.getServer()
-                                        .getProfileCache().get(uuid).map(p -> p.getName()).orElse("UNKNOWN")).withStyle(ChatFormatting.DARK_RED), Util.NIL_UUID);
+                                        .getProfileCache().get(uuid).map(GameProfile::getName).orElse("UNKNOWN")).withStyle(ChatFormatting.DARK_RED), Util.NIL_UUID);
                         });
             }
             return InteractionResult.CONSUME;

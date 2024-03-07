@@ -93,10 +93,8 @@ public class EntityChimera extends BossMonster implements DelayedAttacker {
         });
         b.put(BITE, (anim, entity) -> {
             if (anim.getTick() == anim.getAttackTime()) {
-                entity.mobAttack(anim, entity.getTarget(), e -> {
-                    CombatUtils.mobAttack(entity, e,
-                            new CustomDamage.Builder(entity).hurtResistant(5).knockAmount(0), CombatUtils.getAttributeValue(entity, Attributes.ATTACK_DAMAGE));
-                });
+                entity.mobAttack(anim, entity.getTarget(), e -> CombatUtils.mobAttack(entity, e,
+                        new CustomDamage.Builder(entity).hurtResistant(5).knockAmount(0), CombatUtils.getAttributeValue(entity, Attributes.ATTACK_DAMAGE)));
             } else if (anim.getTick() == 17) {
                 entity.mobAttack(anim, entity.getTarget(), entity::doHurtTarget);
             }

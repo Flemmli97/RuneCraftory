@@ -60,11 +60,6 @@ public class DurationalParticleData extends ColoredParticleData {
         buffer.writeInt(this.getDuration());
     }
 
-    @Override
-    public String writeToString() {
-        return PlatformUtils.INSTANCE.particles().getIDFrom(this.getType()).toString();
-    }
-
     public int getDuration() {
         return this.duration;
     }

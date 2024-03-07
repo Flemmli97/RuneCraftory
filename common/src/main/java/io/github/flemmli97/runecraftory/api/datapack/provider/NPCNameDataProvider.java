@@ -23,7 +23,7 @@ public abstract class NPCNameDataProvider implements DataProvider {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
-    private Map<String, NameStructure> names = new HashMap<>();
+    private final Map<String, NameStructure> names = new HashMap<>();
 
     private final DataGenerator gen;
     private final String modid;

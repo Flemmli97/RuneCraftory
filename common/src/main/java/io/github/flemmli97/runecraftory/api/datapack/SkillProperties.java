@@ -7,7 +7,7 @@ public record SkillProperties(int maxLevel, float healthIncrease, float rpIncrea
                               float vitIncrease,
                               float intelIncrease, float xpMultiplier) {
 
-    public static SkillProperties DEFAULT = new SkillProperties(1, 0, 0, 0, 0, 0, 0);
+    public static final SkillProperties DEFAULT = new SkillProperties(1, 0, 0, 0, 0, 0, 0);
 
     public static final Codec<SkillProperties> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(

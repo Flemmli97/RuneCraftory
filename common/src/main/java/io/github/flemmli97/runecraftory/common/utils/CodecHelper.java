@@ -27,8 +27,8 @@ public class CodecHelper {
 
     private static final Gson GSON = Deserializers.createConditionSerializer().create();
 
-    public static Codec<EntityPredicate> ENTITY_PREDICATE_CODEC = jsonCodecBuilder(EntityPredicate::serializeToJson, EntityPredicate::fromJson, "EntityPredicate");
-    public static Codec<NumberProvider> NUMER_PROVIDER_CODEC = jsonCodecBuilder(GSON::toJsonTree, e -> GSON.fromJson(e, NumberProvider.class), "NumberProvider");
+    public static final Codec<EntityPredicate> ENTITY_PREDICATE_CODEC = jsonCodecBuilder(EntityPredicate::serializeToJson, EntityPredicate::fromJson, "EntityPredicate");
+    public static final Codec<NumberProvider> NUMER_PROVIDER_CODEC = jsonCodecBuilder(GSON::toJsonTree, e -> GSON.fromJson(e, NumberProvider.class), "NumberProvider");
 
     public static <T extends Enum<T>> Codec<T> enumCodec(Class<T> clss, T fallback) {
         return Codec.STRING.flatXmap(s -> {

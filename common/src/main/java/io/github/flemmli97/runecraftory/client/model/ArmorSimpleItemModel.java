@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class ArmorSimpleItemModel extends EntityModel<Entity> {
 
-    public static TriConsumer<LivingEntity, PoseStack, ModelPart> translateToHead = (entity, poseStack, part) -> {
+    public static final TriConsumer<LivingEntity, PoseStack, ModelPart> translateToHead = (entity, poseStack, part) -> {
         boolean villager = entity instanceof Villager;
         if (entity.isBaby() && !villager) {
             poseStack.translate(0.0, 0.03125, 0.0);

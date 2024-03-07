@@ -20,7 +20,7 @@ import java.util.List;
 
 public class BossSpawnerProcessor extends DataStructureBlockProcessor {
 
-    public static final Codec<BossSpawnerProcessor> CODEC = Codec.STRING.fieldOf("boss").xmap(BossSpawnerProcessor::new, d -> d.tag != null ? "#" + d.tag.location().toString() : d.boss.toString()).codec();
+    public static final Codec<BossSpawnerProcessor> CODEC = Codec.STRING.fieldOf("boss").xmap(BossSpawnerProcessor::new, d -> d.tag != null ? "#" + d.tag.location() : d.boss.toString()).codec();
 
     protected final ResourceLocation boss;
     protected final TagKey<EntityType<?>> tag;

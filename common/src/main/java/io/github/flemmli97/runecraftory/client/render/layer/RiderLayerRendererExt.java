@@ -13,7 +13,7 @@ import java.util.function.BiConsumer;
 
 public class RiderLayerRendererExt<T extends LivingEntity, M extends EntityModel<T> & RideableModel<T>> extends RiderLayerRenderer<T, M> {
 
-    private BiConsumer<PoseStack, T> preRender;
+    private final BiConsumer<PoseStack, T> preRender;
 
     public RiderLayerRendererExt(LivingEntityRenderer<T, M> renderer, BiConsumer<PoseStack, T> preRender) {
         super(renderer);

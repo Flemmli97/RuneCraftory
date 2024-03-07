@@ -18,15 +18,15 @@ import java.util.function.Consumer;
 public record ConfigHolder<T>(ModConfig.Type configType, String configName,
                               T configSpec, Consumer<T> loader) {
 
-    public static final Map<ForgeConfigSpec, ConfigHolder<?>> configs = new LinkedHashMap<>();
+    public static final Map<ForgeConfigSpec, ConfigHolder<?>> CONFIGS = new LinkedHashMap<>();
 
     static {
-        configs.put(GeneralConfigSpec.spec.getRight(), new ConfigHolder<>(ModConfig.Type.COMMON, RuneCraftory.MODID + File.separator + "general.toml",
-                GeneralConfigSpec.spec.getLeft(), ConfigHolder::loadGeneral));
-        configs.put(ClientConfigSpec.spec.getRight(), new ConfigHolder<>(ModConfig.Type.CLIENT, RuneCraftory.MODID + File.separator + "client.toml",
-                ClientConfigSpec.spec.getLeft(), ConfigHolder::loadClient));
-        configs.put(MobConfigSpec.spec.getRight(), new ConfigHolder<>(ModConfig.Type.COMMON, RuneCraftory.MODID + File.separator + "mobs.toml",
-                MobConfigSpec.spec.getLeft(), ConfigHolder::loadMobs));
+        CONFIGS.put(GeneralConfigSpec.SPEC.getRight(), new ConfigHolder<>(ModConfig.Type.COMMON, RuneCraftory.MODID + File.separator + "general.toml",
+                GeneralConfigSpec.SPEC.getLeft(), ConfigHolder::loadGeneral));
+        CONFIGS.put(ClientConfigSpec.SPEC.getRight(), new ConfigHolder<>(ModConfig.Type.CLIENT, RuneCraftory.MODID + File.separator + "client.toml",
+                ClientConfigSpec.SPEC.getLeft(), ConfigHolder::loadClient));
+        CONFIGS.put(MobConfigSpec.SPEC.getRight(), new ConfigHolder<>(ModConfig.Type.COMMON, RuneCraftory.MODID + File.separator + "mobs.toml",
+                MobConfigSpec.SPEC.getLeft(), ConfigHolder::loadMobs));
     }
 
     public static void loadGeneral(GeneralConfigSpec spec) {

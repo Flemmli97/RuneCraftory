@@ -9,7 +9,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 public class MobConfigSpec {
 
-    public static final Pair<JsonConfig<CommentedJsonConfig>, MobConfigSpec> spec = CommentedJsonConfig.Builder
+    public static final Pair<JsonConfig<CommentedJsonConfig>, MobConfigSpec> SPEC = CommentedJsonConfig.Builder
             .create(FabricLoader.getInstance().getConfigDir().resolve(RuneCraftory.MODID).resolve("mobs.json"), 1, MobConfigSpec::new);
 
     public final CommentedJsonConfig.CommentedVal<Boolean> disableNaturalSpawn;

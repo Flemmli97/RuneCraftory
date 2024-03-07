@@ -374,56 +374,36 @@ public class EntitySkelefang extends BossMonster {
     @Override
     public void handleEntityEvent(byte id) {
         switch (id) {
-            case HEAD_DROP -> {
-                this.level.addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.HEAD, this.getXRot(), this.yHeadRot, 1, 0),
-                        this.getX(), this.getY(), this.getZ(), 0, 0, 0);
-            }
+            case HEAD_DROP -> this.level.addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.HEAD, this.getXRot(), this.yHeadRot, 1, 0),
+                    this.getX(), this.getY(), this.getZ(), 0, 0, 0);
             case HEAD_THROW -> {
                 Vec3 look = Vec3.directionFromRotation(0, this.yBodyRot);
                 this.level.addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.HEAD, this.getXRot(), this.yHeadRot, -2, 0, 40, false),
                         this.getX(), this.getY(), this.getZ(), look.x, look.y, look.z);
             }
-            case NECK_DROP -> {
-                this.level.addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.NECK, this.getXRot(), this.yHeadRot, 1, this.random.nextInt(2) - 1),
-                        this.getX(), this.getY(), this.getZ(), 0, 0, 0);
-            }
+            case NECK_DROP -> this.level.addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.NECK, this.getXRot(), this.yHeadRot, 1, this.random.nextInt(2) - 1),
+                    this.getX(), this.getY(), this.getZ(), 0, 0, 0);
             case NECK_THROW -> {
                 Vec3 look = Vec3.directionFromRotation(0, this.yBodyRot);
                 this.level.addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.NECK, this.getXRot(), this.yHeadRot, -2, 0, 40, false),
                         this.getX(), this.getY(), this.getZ(), look.x, look.y, look.z);
             }
-            case FRONT -> {
-                this.level.addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.FRONT, this.getXRot(), this.yBodyRot, this.random.nextInt(2) - 1, this.random.nextInt(2) - 1),
-                        this.getX(), this.getY(), this.getZ(), 0, 0, 0);
-            }
-            case FRONT_RIBS -> {
-                this.level.addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.FRONT_RIBS, this.getXRot(), this.yBodyRot, this.random.nextInt(2) - 1, this.random.nextInt(2) - 1),
-                        this.getX(), this.getY(), this.getZ(), 0, 0, 0);
-            }
-            case LEFT_LEG -> {
-                this.level.addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.LEFT_LEG, this.getXRot(), this.yBodyRot, this.random.nextInt(2) - 1, this.random.nextInt(2) - 1),
-                        this.getX(), this.getY(), this.getZ(), 0, 0, 0);
-            }
-            case RIGHT_LEG -> {
-                this.level.addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.RIGHT_LEG, this.getXRot(), this.yBodyRot, this.random.nextInt(2) - 1, this.random.nextInt(2) - 1),
-                        this.getX(), this.getY(), this.getZ(), 0, 0, 0);
-            }
-            case BACK -> {
-                this.level.addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.BACK, this.getXRot(), this.yBodyRot, this.random.nextInt(2) - 1, this.random.nextInt(2) - 1),
-                        this.getX(), this.getY(), this.getZ(), 0, 0, 0);
-            }
-            case BACK_RIBS -> {
-                this.level.addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.BACK_RIBS, this.getXRot(), this.yBodyRot, this.random.nextInt(2) - 1, this.random.nextInt(2) - 1),
-                        this.getX(), this.getY(), this.getZ(), 0, 0, 0);
-            }
-            case TAIL -> {
-                this.level.addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.TAIL, this.getXRot(), this.yBodyRot, this.random.nextInt(2) - 1, this.random.nextInt(2) - 1),
-                        this.getX(), this.getY(), this.getZ(), 0, 0, 0);
-            }
-            case TAIL_BASE -> {
-                this.level.addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.TAIL_BASE, this.getXRot(), this.yBodyRot, this.random.nextInt(2) - 1, this.random.nextInt(2) - 1),
-                        this.getX(), this.getY(), this.getZ(), 0, 0, 0);
-            }
+            case FRONT -> this.level.addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.FRONT, this.getXRot(), this.yBodyRot, this.random.nextInt(2) - 1, this.random.nextInt(2) - 1),
+                    this.getX(), this.getY(), this.getZ(), 0, 0, 0);
+            case FRONT_RIBS -> this.level.addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.FRONT_RIBS, this.getXRot(), this.yBodyRot, this.random.nextInt(2) - 1, this.random.nextInt(2) - 1),
+                    this.getX(), this.getY(), this.getZ(), 0, 0, 0);
+            case LEFT_LEG -> this.level.addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.LEFT_LEG, this.getXRot(), this.yBodyRot, this.random.nextInt(2) - 1, this.random.nextInt(2) - 1),
+                    this.getX(), this.getY(), this.getZ(), 0, 0, 0);
+            case RIGHT_LEG -> this.level.addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.RIGHT_LEG, this.getXRot(), this.yBodyRot, this.random.nextInt(2) - 1, this.random.nextInt(2) - 1),
+                    this.getX(), this.getY(), this.getZ(), 0, 0, 0);
+            case BACK -> this.level.addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.BACK, this.getXRot(), this.yBodyRot, this.random.nextInt(2) - 1, this.random.nextInt(2) - 1),
+                    this.getX(), this.getY(), this.getZ(), 0, 0, 0);
+            case BACK_RIBS -> this.level.addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.BACK_RIBS, this.getXRot(), this.yBodyRot, this.random.nextInt(2) - 1, this.random.nextInt(2) - 1),
+                    this.getX(), this.getY(), this.getZ(), 0, 0, 0);
+            case TAIL -> this.level.addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.TAIL, this.getXRot(), this.yBodyRot, this.random.nextInt(2) - 1, this.random.nextInt(2) - 1),
+                    this.getX(), this.getY(), this.getZ(), 0, 0, 0);
+            case TAIL_BASE -> this.level.addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.TAIL_BASE, this.getXRot(), this.yBodyRot, this.random.nextInt(2) - 1, this.random.nextInt(2) - 1),
+                    this.getX(), this.getY(), this.getZ(), 0, 0, 0);
             case HIT -> {
                 int amount = this.random.nextInt(6) + 12;
                 for (int i = 0; i < amount; i++) {

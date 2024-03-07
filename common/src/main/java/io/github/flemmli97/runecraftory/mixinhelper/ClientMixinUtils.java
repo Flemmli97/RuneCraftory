@@ -40,9 +40,9 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ClientMixinUtils {
 
     //Add
-    public static int LEAVE_SPRING = 0x0d4a01;
+    public static final int LEAVE_SPRING = 0x0d4a01;
     //Mult
-    public static int LEAVE_FALL = 0xff4646;
+    public static final int LEAVE_FALL = 0xff4646;
 
     private static final Map<SeasonedTint, Integer> LEAVE_TINTS = new ConcurrentHashMap<>();
     private static final Map<SeasonedTint, Integer> GRASS_TINTS = new ConcurrentHashMap<>();
@@ -107,7 +107,6 @@ public class ClientMixinUtils {
         }
     }
 
-    @SuppressWarnings("unchecked")
     public static boolean transFormPre(LivingEntity entity, HumanoidModel<?> model) {
         if (ClientHandlers.getAnimatedPlayerModel() != null) {
             AnimatedAction anim = null;
@@ -130,7 +129,6 @@ public class ClientMixinUtils {
         return false;
     }
 
-    @SuppressWarnings("unchecked")
     public static void transformHumanoidModel(LivingEntity entity, HumanoidModel<?> model) {
         if (ClientHandlers.getAnimatedPlayerModel() != null) {
             boolean ignoreRiding = false;
@@ -171,7 +169,6 @@ public class ClientMixinUtils {
         ItemModelProps.HELD_TYPE = 0;
     }
 
-    @SuppressWarnings("unchecked")
     public static boolean onRenderHeldItem(LivingEntity livingEntity, ItemStack itemStack, ItemTransforms.TransformType transformType, boolean leftHand, PoseStack poseStack, MultiBufferSource buffer, int combinedLight) {
         if (livingEntity instanceof AbstractClientPlayer player && transformType.firstPerson()) {
             PlayerData data = Platform.INSTANCE.getPlayerData(player).orElse(null);

@@ -110,11 +110,6 @@ public class MultiPartEntity extends Entity implements OwnableEntity {
     }
 
     @Override
-    public boolean canBeCollidedWith() {
-        return false;
-    }
-
-    @Override
     public boolean isInvulnerableTo(DamageSource source) {
         if (this.getOwner() != null && this.getOwner().isInvulnerableTo(source))
             return true;

@@ -41,7 +41,7 @@ public class RuneCraftoryFabricClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ClientPacketHandler.registerClientPackets();
-        ConfigHolder.configs.get(ClientConfigSpec.spec.getLeft())
+        ConfigHolder.CONFIGS.get(ClientConfigSpec.SPEC.getLeft())
                 .reloadConfig();
         //ClientRegister
         ClientRegister.init();

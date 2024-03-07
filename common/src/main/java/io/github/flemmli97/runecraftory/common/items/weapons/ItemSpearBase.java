@@ -164,11 +164,6 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
         return false;
     }
 
-    @Override
-    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot equipmentSlot) {
-        return ImmutableMultimap.of();
-    }
-
     public void useSpear(ServerPlayer player, ItemStack stack, boolean finishing) {
         List<Entity> list = RayTraceUtils.getEntities(player, this.getRange(player, stack), 10);
         if (!list.isEmpty()) {

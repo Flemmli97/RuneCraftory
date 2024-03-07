@@ -9,7 +9,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 public class ClientConfigSpec {
 
-    public static final Pair<JsonConfig<CommentedJsonConfig>, ClientConfigSpec> spec = CommentedJsonConfig.Builder
+    public static final Pair<JsonConfig<CommentedJsonConfig>, ClientConfigSpec> SPEC = CommentedJsonConfig.Builder
             .create(FabricLoader.getInstance().getConfigDir().resolve(RuneCraftory.MODID).resolve("client.json"), 1, ClientConfigSpec::new);
 
     public final CommentedJsonConfig.IntVal healthBarWidgetX;

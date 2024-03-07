@@ -40,7 +40,10 @@ public class ColoredParticleData4f extends ColoredParticleData {
             return new ColoredParticleData4f(type, buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat());
         }
     };
-    private float radius, inc, offset, angle;
+    private final float radius;
+    private final float inc;
+    private final float offset;
+    private final float angle;
 
     public ColoredParticleData4f(ParticleType<ColoredParticleData4f> type, float red, float green, float blue, float alpha) {
         this(type, red, green, blue, alpha, 1, 0, 0, 0, 0);

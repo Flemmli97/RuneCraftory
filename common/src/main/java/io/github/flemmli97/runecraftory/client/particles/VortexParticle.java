@@ -20,9 +20,13 @@ import net.minecraft.world.phys.Vec3;
 public class VortexParticle extends TextureSheetParticle {
 
     public final SpriteSet spriteProvider;
-    private float[][] points;
-    private float angleInc, radInc, currentRadius, currentAngle, subOffset;
-    private boolean renderOpposite;
+    private final float[][] points;
+    private final float angleInc;
+    private final float radInc;
+    private float currentRadius;
+    private float currentAngle;
+    private final float subOffset;
+    private final boolean renderOpposite;
 
     public VortexParticle(ClientLevel world, double x, double y, double z, float radius, float radiusInc, float angleOffset, float angleInc,
                           ColoredParticleData colorData, SpriteSet sprite, int maxAge, float minAgeRand, float maxAgeRand, boolean renderOpposite, int amount) {
@@ -84,8 +88,7 @@ public class VortexParticle extends TextureSheetParticle {
         float f4 = this.getQuadSize(partialTicks);
         for (float[] floats : this.points) {
             Vector3f[] avector3f = new Vector3f[]{new Vector3f(-1.0F, -1.0F, 0.0F), new Vector3f(-1.0F, 1.0F, 0.0F), new Vector3f(1.0F, 1.0F, 0.0F), new Vector3f(1.0F, -1.0F, 0.0F)};
-            float[] point = floats;
-            Vector3f offset = new Vector3f(point[0], point[1], point[2]);
+            Vector3f offset = new Vector3f(floats[0], floats[1], floats[2]);
             offset.transform(quaternion);
 
             Vector3f[] opposite = new Vector3f[4];

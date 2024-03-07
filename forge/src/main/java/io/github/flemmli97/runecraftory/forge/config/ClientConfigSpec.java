@@ -6,7 +6,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 public class ClientConfigSpec {
 
-    public static final Pair<ClientConfigSpec, ForgeConfigSpec> spec = new ForgeConfigSpec.Builder().configure(ClientConfigSpec::new);
+    public static final Pair<ClientConfigSpec, ForgeConfigSpec> SPEC = new ForgeConfigSpec.Builder().configure(ClientConfigSpec::new);
 
     public final ForgeConfigSpec.IntValue healthBarWidgetX;
     public final ForgeConfigSpec.IntValue healthBarWidgetY;

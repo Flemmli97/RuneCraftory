@@ -446,10 +446,7 @@ public class EntityCalls {
         if (damage < 0)
             entity.heal(-damage);
         else if (damage > 0 && source != DamageSource.OUT_OF_WORLD && entity instanceof ServerPlayer player) {
-            PlayerData data = Platform.INSTANCE.getPlayerData(player).orElse(null);
-            if (data != null) {
-                LevelCalc.levelSkill(player, data, EnumSkills.DEFENCE, Math.min(7, (float) (0.5 + Math.log(damage * 0.25))) * 1.5f);
-            }
+            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.DEFENCE, Math.min(7, (float) (0.5 + Math.log(damage * 0.25))) * 1.5f));
         }
         //if (source instanceof CustomDamage)
         //    entity.invulnerableTime = ((CustomDamage) source).hurtProtection() + 10;

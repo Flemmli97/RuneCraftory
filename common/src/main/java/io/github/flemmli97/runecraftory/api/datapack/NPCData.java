@@ -65,7 +65,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                       int baseLevel, @Nullable ResourceLocation combatActions, int unique,
                       RelationShipState relationShipState) {
 
-    public static Map<Attribute, Double> DEFAULT_GAIN = Map.of(Attributes.MAX_HEALTH, 3d, Attributes.ATTACK_DAMAGE, 1d,
+    public static final Map<Attribute, Double> DEFAULT_GAIN = Map.of(Attributes.MAX_HEALTH, 3d, Attributes.ATTACK_DAMAGE, 1d,
             ModAttributes.DEFENCE.get(), 0.5d, ModAttributes.MAGIC.get(), 1d, ModAttributes.MAGIC_DEFENCE.get(), 0.5d);
     public static final NPCData DEFAULT_DATA = new NPCData(null, null, Gender.UNDEFINED, List.of(), null, null, 1, "npc.default.gift.neutral",
             Map.of(), new QuestHandler(Map.of(), Set.of()), Map.of(), null, null, null, 1, null, 0, RelationShipState.DEFAULT);
@@ -194,7 +194,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         private final Gender gender;
         private final int weight;
         private String neutralGiftResponse;
-        private List<NPCJob> professions = new ArrayList<>();
+        private final List<NPCJob> professions = new ArrayList<>();
         private final Map<ConversationContext, ResourceLocation> interactions = new LinkedHashMap<>();
         private final Map<String, Gift> giftItems = new LinkedHashMap<>();
         private Pair<EnumSeason, Integer> birthday;
@@ -207,8 +207,8 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         private int unique;
         private RelationShipState relationShipState = RelationShipState.DEFAULT;
 
-        private Map<ResourceLocation, QuestResponses> responses = new LinkedHashMap<>();
-        private Set<ResourceLocation> requiredQuests = new LinkedHashSet<>();
+        private final Map<ResourceLocation, QuestResponses> responses = new LinkedHashMap<>();
+        private final Set<ResourceLocation> requiredQuests = new LinkedHashSet<>();
 
         private final Map<String, String> translations = new LinkedHashMap<>();
 
