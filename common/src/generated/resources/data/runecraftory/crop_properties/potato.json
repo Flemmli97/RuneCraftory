@@ -4,8 +4,8 @@
     "SUMMER"
   ],
   "badSeason": [],
-  "growth": 6,
-  "maxDrops": 3,
+  "growth": 4,
+  "maxDrops": 4,
   "regrowable": false,
   "item": "minecraft:potato"
 }

@@ -17,10 +17,10 @@ public class CropGen extends CropProvider {
 
     @Override
     protected void add() {
-        this.addStat(Items.WHEAT_SEEDS, new CropProperties.Builder(5, 4, true).addGoodSeason(EnumSeason.FALL));
-        this.addStat(Items.CARROT, new CropProperties.Builder(6, 3, false).addGoodSeason(EnumSeason.FALL)
+        this.addStat(Items.WHEAT_SEEDS, new CropProperties.Builder(5, 3, true).addGoodSeason(EnumSeason.FALL));
+        this.addStat(Items.CARROT, new CropProperties.Builder(4, 4, false).addGoodSeason(EnumSeason.FALL)
                 .withGiantVersion(ModBlocks.CARROT_GIANT.get()));
-        this.addStat(Items.POTATO, new CropProperties.Builder(6, 3, false).addGoodSeason(EnumSeason.SUMMER)
+        this.addStat(Items.POTATO, new CropProperties.Builder(4, 4, false).addGoodSeason(EnumSeason.SUMMER)
                 .withGiantVersion(ModBlocks.POTATO_GIANT.get()));
         this.addStat(Items.BEETROOT_SEEDS, new CropProperties.Builder(5, 3, false).addGoodSeason(EnumSeason.SPRING));
 

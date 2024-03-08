@@ -4,7 +4,7 @@
   ],
   "badSeason": [],
   "growth": 5,
-  "maxDrops": 4,
+  "maxDrops": 3,
   "regrowable": true,
   "item": "minecraft:wheat_seeds"
 }

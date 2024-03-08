@@ -349,46 +349,47 @@ public class FarmlandData {
             //Handle crop growth
             boolean didCropGrow = false;
             boolean maxAgeStop = false;
-            if (isWet) {
-                if (props != null) {
-                    if (!cropRecalc) {
-                        cropRecalc = true;
-                        if (crop.canGrow(level, cropPos, cropState)) {
-                            run.add(() -> {
-                                int maxAge = crop.getGrowableMaxAge();
-                                int stage = Math.round(this.cropAge * maxAge) / props.growth();
-                                //Update the blockstate according to the growth age
-                                BlockState newState = crop.getGrowableStateForAge(cropState, Math.min(stage, maxAge));
-                                if (newState.getBlock() instanceof Growable newGrowable)
-                                    newGrowable.onGrow(level, cropPos, newState, cropState);
-                                else
-                                    level.setBlock(cropPos, newState, Block.UPDATE_ALL);
-                                Platform.INSTANCE.cropGrowEvent(level, cropPos, level.getBlockState(cropPos));
-                            });
-                        } else {
-                            run.add(() -> CropUtils.attemptGiantize(level, cropPos, crop, cropState, this.cropSize, props));
-                        }
-                    }
-                    float season = props.seasonMultiplier(modifiers.season);
-                    float runeyBonus = modifiers.weather == EnumWeather.RUNEY ? 5 : 1;
-                    float speed = this.growth * season * runeyBonus;
-                    this.cropAge += Math.min(props.growth(), speed);
-                    this.cropLevel += this.quality * (level.getRandom().nextFloat() * 0.5 + 0.5);
-                    if (crop.isAtMaxAge(cropState) && hasGiantVersion) {
-                        if (this.size != 0) {
-                            this.cropSize += this.size * (level.getRandom().nextFloat() * 0.2 + 0.1);
-                            didCropGrow = this.size > 0 ? this.cropSize < 1 : this.cropSize > 0;
-                        }
+            if (props != null) {
+                if (!cropRecalc) {
+                    cropRecalc = true;
+                    if (crop.canGrow(level, cropPos, cropState)) {
+                        run.add(() -> {
+                            int maxAge = crop.getGrowableMaxAge();
+                            int stage = Math.round(this.cropAge * maxAge) / props.growth();
+                            //Update the blockstate according to the growth age
+                            BlockState newState = crop.getGrowableStateForAge(cropState, Math.min(stage, maxAge));
+                            if (newState.getBlock() instanceof Growable newGrowable)
+                                newGrowable.onGrow(level, cropPos, newState, cropState);
+                            else
+                                level.setBlock(cropPos, newState, Block.UPDATE_ALL);
+                            Platform.INSTANCE.cropGrowEvent(level, cropPos, level.getBlockState(cropPos));
+                        });
                     } else {
-                        didCropGrow = true;
+                        run.add(() -> CropUtils.attemptGiantize(level, cropPos, crop, cropState, this.cropSize, props));
                     }
-                    if (!didCropGrow)
-                        maxAgeStop = true;
                 }
-                if (!ignoreWater && canRainAt)
-                    isWet = this.scheduledWatering > 0;
-                this.scheduledWatering = Math.max(0, --this.scheduledWatering);
-            } else if (cropState.getBlock() instanceof BlockCrop) {
+                float season = props.seasonMultiplier(modifiers.season);
+                float runeyBonus = modifiers.weather == EnumWeather.RUNEY ? 5 : 1;
+                float speed = this.growth * season * runeyBonus;
+                if (!isWet)
+                    speed *= 0.5f;
+                this.cropAge += Math.min(props.growth(), speed);
+                this.cropLevel += this.quality * (level.getRandom().nextFloat() * 0.5 + 0.5);
+                if (crop.isAtMaxAge(cropState) && hasGiantVersion) {
+                    if (this.size != 0) {
+                        this.cropSize += this.size * (level.getRandom().nextFloat() * 0.2 + 0.1);
+                        didCropGrow = this.size > 0 ? this.cropSize < 1 : this.cropSize > 0;
+                    }
+                } else {
+                    didCropGrow = true;
+                }
+                if (!didCropGrow)
+                    maxAgeStop = true;
+            }
+            if (!ignoreWater && canRainAt)
+                isWet = this.scheduledWatering > 0;
+            this.scheduledWatering = Math.max(0, --this.scheduledWatering);
+            if (!isWet && cropState.getBlock() instanceof BlockCrop) {
                 if (level.random.nextFloat() < GeneralConfig.witherChance) {
                     wiltStage++;
                 }
