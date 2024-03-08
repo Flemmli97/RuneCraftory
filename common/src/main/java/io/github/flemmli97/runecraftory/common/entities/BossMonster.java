@@ -182,6 +182,17 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
         }
     }
 
+    @Override
+    public void onDeathDamageRecord(ServerPlayer player, DamageSource source, float damage) {
+        super.onDeathDamageRecord(player, source, damage);
+        if (!this.isTamed() && damage > this.getMaxHealth() * 0.05) {
+            // Killing player already gets awarded via vanilla
+            if (this.deathScore <= 0 || player != this.getKillCredit()) {
+                player.awardKillScore(this, this.deathScore, source);
+            }
+        }
+    }
+
     protected boolean checkRage() {
         return this.getHealth() / this.getMaxHealth() < 0.5 && !this.isEnraged();
     }

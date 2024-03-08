@@ -120,6 +120,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -1188,17 +1189,25 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             }
             this.getAnimationHandler().setAnimation(null);
             List<CombatEntry> entries = ((CombatTrackerAccessor) this.getCombatTracker()).getEntries();
+            Map<UUID, CombatRecord> merged = new HashMap<>();
             entries.forEach(e -> {
-                if (e.getAttacker() instanceof ServerPlayer player && e.getDamage() > this.getMaxHealth() * 0.05) {
-                    Platform.INSTANCE.getPlayerData(player).ifPresent(d -> {
-                        player.getStats().increment(player, ModStats.COMBINED_KILLS.get().get(this.getType()), 1);
-                        int killed = player.getStats().getValue(ModStats.COMBINED_KILLS.get().get(this.getType()));
-                        d.increaseMobLevel(this.getProp().levelIncreaseFromKill(killed, player));
-                    });
+                if (e.getAttacker() instanceof ServerPlayer player) {
+                    merged.compute(player.getUUID(), (id, o) -> o == null ? new CombatRecord(player, e.getSource(), e.getDamage())
+                            : new CombatRecord(player, e.getSource(), o.totalDamage() + e.getDamage())
+                    );
                 }
             });
+            merged.values().forEach(rec -> this.onDeathDamageRecord(rec.player, rec.lastSource, rec.totalDamage));
         }
         super.die(cause);
+    }
+
+    public void onDeathDamageRecord(ServerPlayer player, DamageSource source, float damage) {
+        if (damage > this.getMaxHealth() * 0.05) {
+            player.getStats().increment(player, ModStats.COMBINED_KILLS.get().get(this.getType()), 1);
+            int killed = player.getStats().getValue(ModStats.COMBINED_KILLS.get().get(this.getType()));
+            Platform.INSTANCE.getPlayerData(player).ifPresent(d -> d.increaseMobLevel(this.getProp().levelIncreaseFromKill(killed, player)));
+        }
     }
 
     @Override
@@ -1806,5 +1815,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         WALK,
         RUN,
         SNEAK
+    }
+
+    public record CombatRecord(ServerPlayer player, DamageSource lastSource, float totalDamage) {
     }
 }
