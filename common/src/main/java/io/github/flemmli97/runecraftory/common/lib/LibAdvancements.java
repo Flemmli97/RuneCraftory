@@ -1,6 +1,8 @@
 package io.github.flemmli97.runecraftory.common.lib;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.critereon.PlayerPredicate;
 import net.minecraft.resources.ResourceLocation;
 
 public class LibAdvancements {
@@ -63,5 +65,9 @@ public class LibAdvancements {
 
     private static ResourceLocation progression(String id) {
         return new ResourceLocation(RuneCraftory.MODID, "progression/" + id);
+    }
+
+    public static EntityPredicate.Builder playerAdvancementCheck(ResourceLocation advancement) {
+        return EntityPredicate.Builder.entity().player(PlayerPredicate.Builder.player().checkAdvancementDone(advancement, true).build());
     }
 }

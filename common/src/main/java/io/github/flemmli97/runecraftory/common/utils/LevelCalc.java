@@ -289,7 +289,7 @@ public class LevelCalc {
     }
 
     public static int randomizedLevel(Random random, int level) {
-        return level + Math.round((float) ((random.nextDouble() * 2 - 1) * Math.ceil(level * 0.1)));
+        return level + Math.round((float) ((random.nextDouble() * 2 - 1) * Math.ceil(level * 0.15)));
     }
 
     public static boolean useRP(Player player, PlayerData data, float amount, boolean hurt, boolean percent, boolean mean, EnumSkills... skills) {

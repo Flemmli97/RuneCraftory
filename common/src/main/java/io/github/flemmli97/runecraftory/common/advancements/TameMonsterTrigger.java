@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.advancements;
 
 import com.google.gson.JsonObject;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.common.attachment.player.TamedEntityTracker;
+import io.github.flemmli97.runecraftory.common.attachment.player.EntityStatsTracker;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import net.minecraft.advancements.Advancement;
@@ -24,7 +24,7 @@ public class TameMonsterTrigger extends SimpleCriterionTrigger<TameMonsterTrigge
         return new TriggerInstance(player, EntityPredicate.fromJson(json.get("entity")), GsonHelper.getAsInt(json, "amount", 1), GsonHelper.getAsBoolean(json, "bosses", false));
     }
 
-    public void trigger(ServerPlayer player, BaseMonster monster, TamedEntityTracker tracker) {
+    public void trigger(ServerPlayer player, BaseMonster monster, EntityStatsTracker tracker) {
         this.trigger(player, inst -> inst.matches(player, monster, tracker));
     }
 
@@ -65,7 +65,7 @@ public class TameMonsterTrigger extends SimpleCriterionTrigger<TameMonsterTrigge
          * If the entityPredicate is defined get the tame count for the specific entity type.
          * Else it will use the total tame count
          */
-        public boolean matches(ServerPlayer player, BaseMonster monster, TamedEntityTracker tracker) {
+        public boolean matches(ServerPlayer player, BaseMonster monster, EntityStatsTracker tracker) {
             if (this.entityPredicate != null && this.entityPredicate != EntityPredicate.ANY) {
                 if (!this.entityPredicate.matches(player, monster))
                     return false;

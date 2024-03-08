@@ -26,7 +26,6 @@ import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.registry.ModPoiTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
-import io.github.flemmli97.runecraftory.common.registry.ModStats;
 import io.github.flemmli97.runecraftory.common.registry.ModStructures;
 import io.github.flemmli97.runecraftory.common.utils.LootTableResources;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
@@ -275,7 +274,6 @@ public class RuneCraftoryFabric implements ModInitializer {
         ModParticles.PARTICLES.registerContent();
         ModActivities.ACTIVITIES.registerContent();
         ModPoiTypes.POI.registerContent();
-        ModStats.STATS.registerContent();
         ModNPCActions.ACTIONS.registerContent();
         ModAttackActions.ATTACK_ACTIONS.registerContent();
         ModArmorEffects.ARMOR_EFFECTS.registerContent();

@@ -183,8 +183,8 @@ public class EntityProperties {
             return this;
         }
 
-        public Builder withLevelIncrease(int minKilled, int increase, EntityPredicate pred) {
-            this.levelIncreaseOnKill.add(new OnKilledIncrease(minKilled, increase, pred));
+        public Builder withLevelIncrease(int minKilled, int increase, EntityPredicate.Builder pred) {
+            this.levelIncreaseOnKill.add(new OnKilledIncrease(minKilled, increase, pred.build()));
             return this;
         }
 

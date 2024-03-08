@@ -9,16 +9,20 @@
   "needsRoof": true,
   "levelIncreaseOnKill": [
     {
-      "minKilled": 3,
+      "minKilled": 1,
+      "increase": 15
+    },
+    {
+      "minKilled": 2,
       "increase": 1
     },
     {
-      "minKilled": 5,
-      "increase": 2
+      "minKilled": 7,
+      "increase": 3
     },
     {
-      "minKilled": 10,
-      "increase": 3
+      "minKilled": 15,
+      "increase": 5
     }
   ],
   "rideActionCosts": {
@@ -58,5 +62,12 @@
     "runecraftory:defence": 228.0,
     "runecraftory:magic_attack": 240.0,
     "runecraftory:magic_defence": 224.0
+  },
+  "spawnerPredicate": {
+    "player": {
+      "advancements": {
+        "runecraftory:progression/path_1/chimera": true
+      }
+    }
   }
 }

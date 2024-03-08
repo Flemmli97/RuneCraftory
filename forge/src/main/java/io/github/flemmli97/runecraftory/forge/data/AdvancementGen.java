@@ -30,7 +30,6 @@ import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.KilledTrigger;
-import net.minecraft.advancements.critereon.PlayerPredicate;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.HashCache;
@@ -141,7 +140,7 @@ public class AdvancementGen implements DataProvider {
     private static <T extends Entity> Advancement bossProgression(RegistryEntrySupplier<EntityType<T>> entity, Consumer<Advancement> cons, ResourceLocation id, Advancement parent) {
         CriterionTriggerInstance trigger = parent != null ? new KilledTrigger.TriggerInstance(
                 CriteriaTriggers.PLAYER_KILLED_ENTITY.getId(),
-                EntityPredicate.Composite.wrap(EntityPredicate.Builder.entity().player(PlayerPredicate.Builder.player().checkAdvancementDone(parent.getId(), true).build()).build()),
+                EntityPredicate.Composite.wrap(LibAdvancements.playerAdvancementCheck(parent.getId()).build()),
                 EntityPredicate.Composite.wrap(EntityPredicate.Builder.entity().of(entity.get()).build()),
                 DamageSourcePredicate.ANY) :
                 KilledTrigger.TriggerInstance.entityKilledPlayer(

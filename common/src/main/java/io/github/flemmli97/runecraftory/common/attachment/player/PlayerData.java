@@ -9,6 +9,7 @@ import io.github.flemmli97.runecraftory.api.datapack.SkillProperties;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
+import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
 import io.github.flemmli97.runecraftory.common.inventory.InventoryShippingBin;
 import io.github.flemmli97.runecraftory.common.inventory.InventoryShop;
@@ -109,7 +110,7 @@ public class PlayerData {
 
     public final EntitySelector entitySelector = new EntitySelector();
 
-    public final TamedEntityTracker tamedEntity = new TamedEntityTracker();
+    public final EntityStatsTracker entityStatsTracker = new EntityStatsTracker();
 
     public final Party party = new Party();
 
@@ -666,6 +667,11 @@ public class PlayerData {
         return start;
     }
 
+    public void increaseMobFrom(ServerPlayer player, BaseMonster monster) {
+        this.entityStatsTracker.killEntity(monster);
+        this.increaseMobLevel(monster.getProp().levelIncreaseFromKill(this.entityStatsTracker.getKillCount(monster.getType()), player));
+    }
+
     public void increaseMobLevel(int increase) {
         this.mobLevelIncrease += increase;
     }
@@ -791,7 +797,7 @@ public class PlayerData {
         }*/
         nbt.put("FoodData", this.foodBuffNBT());
         nbt.put("WalkingTracker", this.walkingTracker.save());
-        nbt.put("TamedEntityTracker", this.tamedEntity.save());
+        nbt.put("TamedEntityTracker", this.entityStatsTracker.save());
         nbt.put("PartyTag", this.party.save());
         nbt.putInt("CraftingSeed", this.craftingSeed);
         nbt.put("QuestTracker", this.questTracker.save());
@@ -808,7 +814,7 @@ public class PlayerData {
         this.recalculateStats(player, false);
         this.refreshShop(player);
         this.starting = false;
-        this.tamedEntity.reset();
+        this.entityStatsTracker.reset();
         this.mobLevelIncrease = 0;
     }
 

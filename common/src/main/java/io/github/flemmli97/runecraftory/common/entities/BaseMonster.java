@@ -29,7 +29,6 @@ import io.github.flemmli97.runecraftory.common.network.S2COpenCompanionGui;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
-import io.github.flemmli97.runecraftory.common.registry.ModStats;
 import io.github.flemmli97.runecraftory.common.spells.TeleportSpell;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
@@ -1204,9 +1203,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     public void onDeathDamageRecord(ServerPlayer player, DamageSource source, float damage) {
         if (damage > this.getMaxHealth() * 0.05) {
-            player.getStats().increment(player, ModStats.COMBINED_KILLS.get().get(this.getType()), 1);
-            int killed = player.getStats().getValue(ModStats.COMBINED_KILLS.get().get(this.getType()));
-            Platform.INSTANCE.getPlayerData(player).ifPresent(d -> d.increaseMobLevel(this.getProp().levelIncreaseFromKill(killed, player)));
+            Platform.INSTANCE.getPlayerData(player).ifPresent(d -> d.increaseMobFrom(player, this));
         }
     }
 
@@ -1649,8 +1646,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.setLastHurtByMob(null);
         if (owner instanceof ServerPlayer serverPlayer) {
             Platform.INSTANCE.getPlayerData(serverPlayer).ifPresent(data -> {
-                data.tamedEntity.tameEntity(this);
-                ModCriteria.TAME_MONSTER_TRIGGER.trigger(serverPlayer, this, data.tamedEntity);
+                data.entityStatsTracker.tameEntity(this);
+                ModCriteria.TAME_MONSTER_TRIGGER.trigger(serverPlayer, this, data.entityStatsTracker);
                 LevelCalc.levelSkill(serverPlayer, data, EnumSkills.TAMING, 10);
             });
             SimpleQuestIntegration.INST().triggerTaming(serverPlayer, this);
