@@ -1,5 +1,5 @@
 {
-  "parent": "runecraftory:main/spell",
+  "parent": "runecraftory:main/crafting/forge",
   "display": {
     "icon": {
       "item": "runecraftory:rod"

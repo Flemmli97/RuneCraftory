@@ -1,0 +1,53 @@
+{
+  "parent": "runecraftory:progression/path_4/ambrosia",
+  "display": {
+    "icon": {
+      "item": "runecraftory:thunderbolt_spawn_egg"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.progression.boss.thunderbolt.title"
+    },
+    "description": {
+      "translate": "runecraftory.advancements.progression.boss.thunderbolt.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false,
+    "background": "minecraft:textures/block/dirt.png"
+  },
+  "criteria": {
+    "boss": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "player": {
+                "advancements": {
+                  "runecraftory:progression/path_4/ambrosia": true
+                }
+              }
+            },
+            "entity": "this"
+          }
+        ],
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "type": "runecraftory:thunderbolt"
+            },
+            "entity": "this"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "boss"
+    ]
+  ]
+}

@@ -1,5 +1,5 @@
 {
-  "parent": "runecraftory:main/upgrade",
+  "parent": "runecraftory:main/crafting/forge",
   "display": {
     "icon": {
       "item": "runecraftory:fireball"

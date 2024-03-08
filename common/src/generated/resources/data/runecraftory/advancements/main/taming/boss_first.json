@@ -2,7 +2,7 @@
   "parent": "runecraftory:main/taming/first",
   "display": {
     "icon": {
-      "item": "runecraftory:ambrosia_spawn_egg"
+      "item": "runecraftory:ambrosias_thorns"
     },
     "title": {
       "translate": "runecraftory.advancements.tame.boss.title"
@@ -10,7 +10,7 @@
     "description": {
       "translate": "runecraftory.advancements.tame.boss.description"
     },
-    "frame": "challenge",
+    "frame": "task",
     "show_toast": true,
     "announce_to_chat": true,
     "hidden": false

@@ -2,7 +2,7 @@
   "parent": "runecraftory:main/root",
   "display": {
     "icon": {
-      "item": "runecraftory:short_dagger"
+      "item": "runecraftory:wooly_spawn_egg"
     },
     "title": {
       "translate": "runecraftory.advancements.skill.weapon.5.title"
@@ -44,7 +44,7 @@
         "skill": "HAMMERAXE"
       }
     },
-    "fist": {
+    "first": {
       "trigger": "runecraftory:skill_level_trigger",
       "conditions": {
         "level": 5,
@@ -58,7 +58,7 @@
       "long_sword",
       "spear",
       "axes_hammer",
-      "fist"
+      "first"
     ]
   ]
 }

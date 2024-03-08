@@ -1,0 +1,73 @@
+{
+  "parent": "runecraftory:main/taming/boss_first",
+  "display": {
+    "icon": {
+      "item": "runecraftory:ambrosia_spawn_egg",
+      "nbt": "{Enchantments:[{id:\"minecraft:unbreaking\",lvl:1s}]}"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.tame.boss.five.title"
+    },
+    "description": {
+      "translate": "runecraftory.advancements.tame.boss.five.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "tame_bosses_0": {
+      "trigger": "runecraftory:tame_monster",
+      "conditions": {
+        "amount": 1,
+        "bosses": true
+      }
+    },
+    "tame_bosses_1": {
+      "trigger": "runecraftory:tame_monster",
+      "conditions": {
+        "amount": 2,
+        "bosses": true
+      }
+    },
+    "tame_bosses_2": {
+      "trigger": "runecraftory:tame_monster",
+      "conditions": {
+        "amount": 3,
+        "bosses": true
+      }
+    },
+    "tame_bosses_3": {
+      "trigger": "runecraftory:tame_monster",
+      "conditions": {
+        "amount": 4,
+        "bosses": true
+      }
+    },
+    "tame_bosses_4": {
+      "trigger": "runecraftory:tame_monster",
+      "conditions": {
+        "amount": 5,
+        "bosses": true
+      }
+    }
+  },
+  "requirements": [
+    [
+      "tame_bosses_0"
+    ],
+    [
+      "tame_bosses_1"
+    ],
+    [
+      "tame_bosses_2"
+    ],
+    [
+      "tame_bosses_3"
+    ],
+    [
+      "tame_bosses_4"
+    ]
+  ]
+}

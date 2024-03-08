@@ -1,0 +1,126 @@
+{
+  "parent": "runecraftory:main/taming/boss_five",
+  "display": {
+    "icon": {
+      "item": "runecraftory:legendary_scale"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.tame.boss.all.title"
+    },
+    "description": {
+      "translate": "runecraftory.advancements.tame.boss.all.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "runecraftory:ambrosia": {
+      "trigger": "runecraftory:tame_monster",
+      "conditions": {
+        "amount": 1,
+        "bosses": false,
+        "entity": {
+          "type": "runecraftory:ambrosia"
+        }
+      }
+    },
+    "runecraftory:thunderbolt": {
+      "trigger": "runecraftory:tame_monster",
+      "conditions": {
+        "amount": 1,
+        "bosses": false,
+        "entity": {
+          "type": "runecraftory:thunderbolt"
+        }
+      }
+    },
+    "runecraftory:marionetta": {
+      "trigger": "runecraftory:tame_monster",
+      "conditions": {
+        "amount": 1,
+        "bosses": false,
+        "entity": {
+          "type": "runecraftory:marionetta"
+        }
+      }
+    },
+    "runecraftory:dead_tree": {
+      "trigger": "runecraftory:tame_monster",
+      "conditions": {
+        "amount": 1,
+        "bosses": false,
+        "entity": {
+          "type": "runecraftory:dead_tree"
+        }
+      }
+    },
+    "runecraftory:chimera": {
+      "trigger": "runecraftory:tame_monster",
+      "conditions": {
+        "amount": 1,
+        "bosses": false,
+        "entity": {
+          "type": "runecraftory:chimera"
+        }
+      }
+    },
+    "runecraftory:raccoon": {
+      "trigger": "runecraftory:tame_monster",
+      "conditions": {
+        "amount": 1,
+        "bosses": false,
+        "entity": {
+          "type": "runecraftory:raccoon"
+        }
+      }
+    },
+    "runecraftory:skelefang": {
+      "trigger": "runecraftory:tame_monster",
+      "conditions": {
+        "amount": 1,
+        "bosses": false,
+        "entity": {
+          "type": "runecraftory:skelefang"
+        }
+      }
+    },
+    "runecraftory:rafflesia": {
+      "trigger": "runecraftory:tame_monster",
+      "conditions": {
+        "amount": 1,
+        "bosses": false,
+        "entity": {
+          "type": "runecraftory:rafflesia"
+        }
+      }
+    }
+  },
+  "requirements": [
+    [
+      "runecraftory:ambrosia"
+    ],
+    [
+      "runecraftory:thunderbolt"
+    ],
+    [
+      "runecraftory:marionetta"
+    ],
+    [
+      "runecraftory:dead_tree"
+    ],
+    [
+      "runecraftory:chimera"
+    ],
+    [
+      "runecraftory:raccoon"
+    ],
+    [
+      "runecraftory:skelefang"
+    ],
+    [
+      "runecraftory:rafflesia"
+    ]
+  ]
+}

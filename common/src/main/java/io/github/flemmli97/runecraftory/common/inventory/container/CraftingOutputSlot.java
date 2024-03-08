@@ -83,11 +83,11 @@ public class CraftingOutputSlot extends Slot {
             });
         if (ItemNBT.usedLightOre(stack))
             ModCriteria.LIGHT_ORE.trigger(serverPlayer);
-        switch (this.craftingContainer.craftingType()){
+        switch (this.craftingContainer.craftingType()) {
             case FORGE -> ModCriteria.FORGING.trigger(serverPlayer);
-            case ARMOR ->  ModCriteria.CRAFTING.trigger(serverPlayer);
-            case CHEM ->  ModCriteria.MEDICINE.trigger(serverPlayer);
-            case COOKING ->  ModCriteria.COOKING.trigger(serverPlayer);
+            case ARMOR -> ModCriteria.CRAFTING.trigger(serverPlayer);
+            case CHEM -> ModCriteria.MEDICINE.trigger(serverPlayer);
+            case COOKING -> ModCriteria.COOKING.trigger(serverPlayer);
         }
         boolean refreshRecipe = false;
         for (int i = 0; i < remaining.size(); ++i) {

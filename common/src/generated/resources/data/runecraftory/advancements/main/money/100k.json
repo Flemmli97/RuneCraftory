@@ -1,16 +1,16 @@
 {
-  "parent": "runecraftory:main/shop",
+  "parent": "runecraftory:main/shopping",
   "display": {
     "icon": {
-      "item": "runecraftory:emery_flower"
+      "item": "minecraft:gold_block"
     },
     "title": {
-      "translate": "runecraftory.advancements.million.title"
+      "translate": "runecraftory.advancements.100k.title"
     },
     "description": {
-      "translate": "runecraftory.advancements.million.description"
+      "translate": "runecraftory.advancements.100k.description"
     },
-    "frame": "task",
+    "frame": "goal",
     "show_toast": true,
     "announce_to_chat": true,
     "hidden": false
@@ -19,7 +19,7 @@
     "have_money": {
       "trigger": "runecraftory:money",
       "conditions": {
-        "amount": 1000000
+        "amount": 100000
       }
     }
   },

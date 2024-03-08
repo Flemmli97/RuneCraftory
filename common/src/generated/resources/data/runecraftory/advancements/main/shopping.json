@@ -1,5 +1,5 @@
 {
-  "parent": "runecraftory:main/shipping",
+  "parent": "runecraftory:main/shipping/first",
   "display": {
     "icon": {
       "item": "minecraft:gold_ingot"
@@ -10,7 +10,7 @@
     "description": {
       "translate": "runecraftory.advancements.shop.description"
     },
-    "frame": "goal",
+    "frame": "task",
     "show_toast": true,
     "announce_to_chat": true,
     "hidden": false

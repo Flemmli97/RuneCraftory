@@ -2,7 +2,7 @@
   "parent": "runecraftory:main/taming/first",
   "display": {
     "icon": {
-      "item": "runecraftory:wooly_spawn_egg"
+      "item": "runecraftory:monster_barn"
     },
     "title": {
       "translate": "runecraftory.advancements.tame.ten.title"
@@ -10,7 +10,7 @@
     "description": {
       "translate": "runecraftory.advancements.tame.ten.description"
     },
-    "frame": "task",
+    "frame": "goal",
     "show_toast": true,
     "announce_to_chat": true,
     "hidden": false

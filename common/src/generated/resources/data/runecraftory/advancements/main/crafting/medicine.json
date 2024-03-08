@@ -1,0 +1,29 @@
+{
+  "parent": "runecraftory:main/root",
+  "display": {
+    "icon": {
+      "item": "runecraftory:chemistry_set"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.crafting.chemistry.title"
+    },
+    "description": {
+      "translate": "runecraftory.advancements.crafting.chemistry.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "craft": {
+      "trigger": "runecraftory:medicine",
+      "conditions": {}
+    }
+  },
+  "requirements": [
+    [
+      "craft"
+    ]
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "parent": "runecraftory:progression/path_4/thunderbolt",
+  "display": {
+    "icon": {
+      "item": "runecraftory:marionetta_spawn_egg"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.progression.boss.marionetta.title"
+    },
+    "description": {
+      "translate": "runecraftory.advancements.progression.boss.marionetta.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false,
+    "background": "minecraft:textures/block/dirt.png"
+  },
+  "criteria": {
+    "boss": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "player": {
+                "advancements": {
+                  "runecraftory:progression/path_4/thunderbolt": true
+                }
+              }
+            },
+            "entity": "this"
+          }
+        ],
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "type": "runecraftory:marionetta"
+            },
+            "entity": "this"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "boss"
+    ]
+  ]
+}

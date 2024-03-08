@@ -1,0 +1,29 @@
+{
+  "parent": "runecraftory:main/change_element",
+  "display": {
+    "icon": {
+      "item": "runecraftory:light_ore"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.lightore.title"
+    },
+    "description": {
+      "translate": "runecraftory.advancements.lightore.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "light_ore": {
+      "trigger": "runecraftory:light_ore",
+      "conditions": {}
+    }
+  },
+  "requirements": [
+    [
+      "light_ore"
+    ]
+  ]
+}

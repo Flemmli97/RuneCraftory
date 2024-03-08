@@ -1,0 +1,31 @@
+{
+  "parent": "runecraftory:main/shipping/first",
+  "display": {
+    "icon": {
+      "item": "runecraftory:shipping_bin"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.shipping.fifty.title"
+    },
+    "description": {
+      "translate": "runecraftory.advancements.shipping.fifty.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "ship_item": {
+      "trigger": "runecraftory:shipping",
+      "conditions": {
+        "amount": 50
+      }
+    }
+  },
+  "requirements": [
+    [
+      "ship_item"
+    ]
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "parent": "runecraftory:main/root",
+  "display": {
+    "icon": {
+      "item": "runecraftory:accessory_workbench"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.crafting.armor.title"
+    },
+    "description": {
+      "translate": "runecraftory.advancements.crafting.armor.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "craft": {
+      "trigger": "runecraftory:crafting",
+      "conditions": {}
+    }
+  },
+  "requirements": [
+    [
+      "craft"
+    ]
+  ]
+}

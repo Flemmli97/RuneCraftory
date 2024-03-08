@@ -1,0 +1,31 @@
+{
+  "parent": "runecraftory:main/fertilizer",
+  "display": {
+    "icon": {
+      "item": "runecraftory:tyrant_turnip"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.giant_crop.title"
+    },
+    "description": {
+      "translate": "runecraftory.advancements.giant_crop.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "giant_crop": {
+      "trigger": "runecraftory:crop_harvest",
+      "conditions": {
+        "tag": "runecraftory:giant_crop"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "giant_crop"
+    ]
+  ]
+}

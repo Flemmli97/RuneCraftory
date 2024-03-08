@@ -1,0 +1,53 @@
+{
+  "parent": "runecraftory:progression/path_1/chimera",
+  "display": {
+    "icon": {
+      "item": "runecraftory:rafflesia_spawn_egg"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.progression.boss.rafflesia.title"
+    },
+    "description": {
+      "translate": "runecraftory.advancements.progression.boss.rafflesia.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false,
+    "background": "minecraft:textures/block/dirt.png"
+  },
+  "criteria": {
+    "boss": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "player": {
+                "advancements": {
+                  "runecraftory:progression/path_1/chimera": true
+                }
+              }
+            },
+            "entity": "this"
+          }
+        ],
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "type": "runecraftory:rafflesia"
+            },
+            "entity": "this"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "boss"
+    ]
+  ]
+}

@@ -17,6 +17,7 @@ import io.github.flemmli97.runecraftory.common.entities.ai.DisableGoal;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolHammer;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolSickle;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
+import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.network.S2CCalendar;
 import io.github.flemmli97.runecraftory.common.network.S2CCapSync;
 import io.github.flemmli97.runecraftory.common.network.S2CDataPackSync;
@@ -25,10 +26,10 @@ import io.github.flemmli97.runecraftory.common.network.S2CSyncConfig;
 import io.github.flemmli97.runecraftory.common.network.S2CTriggers;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
+import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
-import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CropUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
@@ -469,6 +470,9 @@ public class EntityCalls {
     }
 
     public static void onBlockBreak(ServerPlayer player, BlockState state, BlockPos pos) {
+        if (state.getBlock() instanceof CropBlock) {
+            ModCriteria.HARVEST_CROP.trigger(player, state);
+        }
         if (!player.hasCorrectToolForDrops(state))
             return;
         if (state.is(RunecraftoryTags.HAMMER_BREAKABLE)) {

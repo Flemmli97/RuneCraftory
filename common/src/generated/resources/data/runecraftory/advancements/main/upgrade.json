@@ -1,5 +1,5 @@
 {
-  "parent": "runecraftory:main/root",
+  "parent": "runecraftory:main/crafting/craft",
   "display": {
     "icon": {
       "item": "runecraftory:cheap_bracelet"
