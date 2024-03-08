@@ -25,7 +25,6 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
@@ -53,7 +52,7 @@ public class BossSpawnerBlockEntity extends BlockEntity {
         if (blockEntity.ticker % 5 != 0)
             return;
         Vec3 pos = Vec3.atCenterOf(blockPos.above(2));
-        List<ServerPlayer> nearby = LevelCalc.playersAround(level, pos, 16);
+        List<ServerPlayer> nearby = LevelCalc.playersAround(level, pos, 20);
         if (!nearby.isEmpty()) {
             EntityProperties prop = DataPackHandler.INSTANCE.monsterPropertiesManager().getPropertiesFor(blockEntity.savedEntity);
             boolean canSpawn = false;
@@ -63,12 +62,14 @@ public class BossSpawnerBlockEntity extends BlockEntity {
                 for (ServerPlayer player : nearby) {
                     if (!prop.spawnerPredicate.matches(player, player)) {
                         removed.add(player);
-                        Vec3 opposite = player.position().subtract(pos).normalize();
-                        player.fallDistance = 0;
-                        player.setDeltaMovement(opposite);
-                        player.sendMessage(new TranslatableComponent("runecraftory.spawner.entry.deny").withStyle(ChatFormatting.DARK_PURPLE),
-                                ChatType.GAME_INFO, Util.NIL_UUID);
-                        player.connection.send(new ClientboundSetEntityMotionPacket(player));
+                        if (player.position().closerThan(pos, 16)) {
+                            Vec3 opposite = player.position().subtract(pos).normalize();
+                            player.fallDistance = 0;
+                            player.setDeltaMovement(opposite);
+                            player.sendMessage(new TranslatableComponent("runecraftory.spawner.entry.deny").withStyle(ChatFormatting.DARK_PURPLE),
+                                    ChatType.GAME_INFO, Util.NIL_UUID);
+                            player.connection.send(new ClientboundSetEntityMotionPacket(player));
+                        }
                     } else if (player.position().closerThan(pos, 10)) {
                         canSpawn = true;
                     }
