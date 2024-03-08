@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.blocks;
 
-import io.github.flemmli97.runecraftory.common.loot.LootCtxParameters;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
+import io.github.flemmli97.runecraftory.common.loot.LootCtxParameters;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;

@@ -21,11 +21,11 @@ public class TameMonsterTrigger extends SimpleCriterionTrigger<TameMonsterTrigge
 
     @Override
     protected TriggerInstance createInstance(JsonObject json, EntityPredicate.Composite player, DeserializationContext context) {
-        return new TriggerInstance(player, GsonHelper.getAsInt(json, "amount", 1), GsonHelper.getAsBoolean(json, "bosses", false));
+        return new TriggerInstance(player, EntityPredicate.fromJson(json.get("entity")), GsonHelper.getAsInt(json, "amount", 1), GsonHelper.getAsBoolean(json, "bosses", false));
     }
 
     public void trigger(ServerPlayer player, BaseMonster monster, TamedEntityTracker tracker) {
-        this.trigger(player, inst -> inst.matches(monster, tracker));
+        this.trigger(player, inst -> inst.matches(player, monster, tracker));
     }
 
     @Override
@@ -37,35 +37,46 @@ public class TameMonsterTrigger extends SimpleCriterionTrigger<TameMonsterTrigge
 
         private final int amount;
         private final boolean bossOnly;
+        private final EntityPredicate entityPredicate;
 
-        public TriggerInstance(EntityPredicate.Composite composite, int amount, boolean bossOnly) {
-            super(ID, composite);
+        public TriggerInstance(EntityPredicate.Composite playerPredicate, EntityPredicate entityPredicate, int amount, boolean bossOnly) {
+            super(ID, playerPredicate);
             this.amount = amount;
             this.bossOnly = bossOnly;
+            this.entityPredicate = entityPredicate;
         }
 
         public static TriggerInstance of(int amount) {
-            return new TriggerInstance(EntityPredicate.Composite.ANY, amount, false);
+            return new TriggerInstance(EntityPredicate.Composite.ANY, EntityPredicate.ANY, amount, false);
         }
 
-        public static Advancement.Builder amountOfSteps(Advancement.Builder builder, String key, int amount) {
+        public static Advancement.Builder amountOfSteps(Advancement.Builder builder, String key, int amount, boolean boss) {
             for (int i = 0; i < amount; i++) {
-                builder.addCriterion(key + "_" + i, of(i + 1));
+                builder.addCriterion(key + "_" + i, boss ? bossOf(i + 1) : of(i + 1));
             }
             return builder;
         }
 
         public static TriggerInstance bossOf(int amount) {
-            return new TriggerInstance(EntityPredicate.Composite.ANY, amount, true);
+            return new TriggerInstance(EntityPredicate.Composite.ANY, EntityPredicate.ANY, amount, true);
         }
 
-        public boolean matches(BaseMonster monster, TamedEntityTracker tracker) {
+        /**
+         * If the entityPredicate is defined get the tame count for the specific entity type.
+         * Else it will use the total tame count
+         */
+        public boolean matches(ServerPlayer player, BaseMonster monster, TamedEntityTracker tracker) {
+            if (this.entityPredicate != null && this.entityPredicate != EntityPredicate.ANY) {
+                if (!this.entityPredicate.matches(player, monster))
+                    return false;
+                return tracker.getTameCount(monster.getType()) >= this.amount;
+            }
             if (this.bossOnly) {
                 if (!monster.getType().is(RunecraftoryTags.BOSS_MONSTERS))
                     return false;
-                return tracker.getTameCount(true) >= this.amount;
+                return tracker.getTotalTameCount(true) >= this.amount;
             }
-            return tracker.getTameCount(false) >= this.amount;
+            return tracker.getTotalTameCount(false) >= this.amount;
         }
 
         @Override
@@ -73,6 +84,7 @@ public class TameMonsterTrigger extends SimpleCriterionTrigger<TameMonsterTrigge
             JsonObject obj = super.serializeToJson(context);
             obj.addProperty("amount", this.amount);
             obj.addProperty("bosses", this.bossOnly);
+            obj.add("entity", this.entityPredicate.serializeToJson());
             return obj;
         }
     }

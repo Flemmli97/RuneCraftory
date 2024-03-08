@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.forge.data;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
+import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
@@ -62,14 +62,25 @@ public class BlockTagGen extends BlockTagsProvider {
             this.tag(BlockTags.NEEDS_IRON_TOOL).add(sup.get());
         }
         for (RegistryEntrySupplier<Block> sup : ModBlocks.HERBS) {
-            this.tag(RunecraftoryTags.SICKLE_DESTROYABLE).add(sup.get());
             this.tag(RunecraftoryTags.HERBS).add(sup.get());
         }
+        this.tag(RunecraftoryTags.SICKLE_DESTROYABLE)
+                .addTag(RunecraftoryTags.HERBS)
+                .addTag(RunecraftoryTags.CROP_BLOCKS)
+                .addTag(RunecraftoryTags.FLOWER_BLOCKS);
         for (RegistryEntrySupplier<Block> sup : ModBlocks.CROPS) {
-            this.tag(RunecraftoryTags.SICKLE_DESTROYABLE).add(sup.get());
+            this.tag(RunecraftoryTags.CROP_BLOCKS).add(sup.get());
+            RegistryEntrySupplier<Block> giant = ModBlocks.GIANT_CROP_MAP.get(sup);
+            if (giant != null)
+                this.tag(RunecraftoryTags.GIANT_CROP_BLOCKS)
+                        .add(giant.get());
         }
         for (RegistryEntrySupplier<Block> sup : ModBlocks.FLOWERS) {
-            this.tag(RunecraftoryTags.SICKLE_DESTROYABLE).add(sup.get());
+            this.tag(RunecraftoryTags.FLOWER_BLOCKS).add(sup.get());
+            RegistryEntrySupplier<Block> giant = ModBlocks.GIANT_CROP_MAP.get(sup);
+            if (giant != null)
+                this.tag(RunecraftoryTags.GIANT_CROP_BLOCKS)
+                        .add(giant.get());
         }
 
         this.tag(RunecraftoryTags.MONSTER_CLEARABLE).addTag(RunecraftoryTags.HERBS);

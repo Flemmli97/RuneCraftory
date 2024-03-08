@@ -144,6 +144,7 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<GateEntity>> GATE = reg(EntityType.Builder.of(GateEntity::new, MobCategory.MONSTER).sized(0.9f, 0.9f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "gate"));
 
     private static final List<RegistryEntrySupplier<EntityType<?>>> MONSTERS = new ArrayList<>();
+    private static final List<RegistryEntrySupplier<EntityType<?>>> BOSSES = new ArrayList<>();
     /**
      * Used for registering attributes
      */
@@ -829,7 +830,7 @@ public class ModEntities {
                     .withRideActionCosts(new EntityRideActionCosts.Builder().secondCost(0.5f, true)),
             new GateSpawnData.Builder(0, 0).addToBiomeTag(20, RunecraftoryTags.IS_HOT, RunecraftoryTags.IS_DEAD, RunecraftoryTags.IS_WASTELAND));
 
-    public static final RegistryEntrySupplier<EntityType<EntityAmbrosia>> AMBROSIA = regMonster(EntityType.Builder.of(EntityAmbrosia::new, MobCategory.MONSTER).sized(0.85f, 2.3f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "ambrosia"),
+    public static final RegistryEntrySupplier<EntityType<EntityAmbrosia>> AMBROSIA = regBoss(EntityType.Builder.of(EntityAmbrosia::new, MobCategory.MONSTER).sized(0.85f, 2.3f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "ambrosia"),
             0x00ff00, 0xe600e6,
             new EntityProperties.Builder()
                     .putAttributes(() -> Attributes.MAX_HEALTH, 250).putLevelGains(() -> Attributes.MAX_HEALTH, 230)
@@ -859,7 +860,7 @@ public class ModEntities {
                     .withLevelIncrease(10, 3)
                     .withRideActionCosts(new EntityRideActionCosts.Builder().secondCost(0.5f, true)
                             .thirdCost(0.5f, true)));
-    public static final RegistryEntrySupplier<EntityType<EntityThunderbolt>> THUNDERBOLT = regMonster(EntityType.Builder.of(EntityThunderbolt::new, MobCategory.MONSTER).sized(1.6f, 1.8f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "thunderbolt"),
+    public static final RegistryEntrySupplier<EntityType<EntityThunderbolt>> THUNDERBOLT = regBoss(EntityType.Builder.of(EntityThunderbolt::new, MobCategory.MONSTER).sized(1.6f, 1.8f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "thunderbolt"),
             0x212121, 0x2f1177,
             new EntityProperties.Builder()
                     .putAttributes(() -> Attributes.MAX_HEALTH, 275).putLevelGains(() -> Attributes.MAX_HEALTH, 220)
@@ -887,7 +888,7 @@ public class ModEntities {
                     .withLevelIncrease(10, 3)
                     .withRideActionCosts(new EntityRideActionCosts.Builder()
                             .thirdCost(0.5f, true)));
-    public static final RegistryEntrySupplier<EntityType<EntityMarionetta>> MARIONETTA = regMonster(EntityType.Builder.of(EntityMarionetta::new, MobCategory.MONSTER).sized(0.8f, 2.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "marionetta"),
+    public static final RegistryEntrySupplier<EntityType<EntityMarionetta>> MARIONETTA = regBoss(EntityType.Builder.of(EntityMarionetta::new, MobCategory.MONSTER).sized(0.8f, 2.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "marionetta"),
             0xb86b13, 0xd8d7d7,
             new EntityProperties.Builder()
                     .putAttributes(() -> Attributes.MAX_HEALTH, 300).putLevelGains(() -> Attributes.MAX_HEALTH, 225)
@@ -915,7 +916,7 @@ public class ModEntities {
                     .withLevelIncrease(10, 3)
                     .withRideActionCosts(new EntityRideActionCosts.Builder()
                             .thirdCost(0.5f, true)));
-    public static final RegistryEntrySupplier<EntityType<EntityDeadTree>> DEAD_TREE = regMonster(EntityType.Builder.of(EntityDeadTree::new, MobCategory.MONSTER).sized(1.8f, 7f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "dead_tree"),
+    public static final RegistryEntrySupplier<EntityType<EntityDeadTree>> DEAD_TREE = regBoss(EntityType.Builder.of(EntityDeadTree::new, MobCategory.MONSTER).sized(1.8f, 7f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "dead_tree"),
             0x3e4a40, 0x227904,
             new EntityProperties.Builder()
                     .putAttributes(() -> Attributes.MAX_HEALTH, 290).putLevelGains(() -> Attributes.MAX_HEALTH, 233)
@@ -944,7 +945,7 @@ public class ModEntities {
                     .withLevelIncrease(10, 3)
                     .withRideActionCosts(new EntityRideActionCosts.Builder().secondCost(0.5f, true)
                             .thirdCost(0.5f, true)));
-    public static final RegistryEntrySupplier<EntityType<EntityChimera>> CHIMERA = regMonster(EntityType.Builder.of(EntityChimera::new, MobCategory.MONSTER).sized(1.45f, 1.45f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "chimera"),
+    public static final RegistryEntrySupplier<EntityType<EntityChimera>> CHIMERA = regBoss(EntityType.Builder.of(EntityChimera::new, MobCategory.MONSTER).sized(1.45f, 1.45f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "chimera"),
             0x536983, 0xaaa7c8,
             new EntityProperties.Builder()
                     .putAttributes(() -> Attributes.MAX_HEALTH, 300).putLevelGains(() -> Attributes.MAX_HEALTH, 225)
@@ -975,7 +976,7 @@ public class ModEntities {
                     .withLevelIncrease(10, 3)
                     .withRideActionCosts(new EntityRideActionCosts.Builder().secondCost(0.5f, true)
                             .thirdCost(0.5f, true)));
-    public static final RegistryEntrySupplier<EntityType<EntityRaccoon>> RACCOON = regMonster(EntityType.Builder.of(EntityRaccoon::new, MobCategory.MONSTER).sized(0.9f, 1.5f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "raccoon"),
+    public static final RegistryEntrySupplier<EntityType<EntityRaccoon>> RACCOON = regBoss(EntityType.Builder.of(EntityRaccoon::new, MobCategory.MONSTER).sized(0.9f, 1.5f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "raccoon"),
             0xcb8055, 0x6d4342,
             new EntityProperties.Builder()
                     .putAttributes(() -> Attributes.MAX_HEALTH, 225).putLevelGains(() -> Attributes.MAX_HEALTH, 245)
@@ -1004,7 +1005,7 @@ public class ModEntities {
                     .withLevelIncrease(10, 3)
                     .withRideActionCosts(new EntityRideActionCosts.Builder().secondCost(10, false)
                             .thirdCost(0.5f, true)));
-    public static final RegistryEntrySupplier<EntityType<EntitySkelefang>> SKELEFANG = regMonster(EntityType.Builder.of(EntitySkelefang::new, MobCategory.MONSTER).sized(1.95f, 3).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "skelefang"),
+    public static final RegistryEntrySupplier<EntityType<EntitySkelefang>> SKELEFANG = regBoss(EntityType.Builder.of(EntitySkelefang::new, MobCategory.MONSTER).sized(1.95f, 3).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "skelefang"),
             0x615237, 0xc2a982,
             new EntityProperties.Builder()
                     .putAttributes(() -> Attributes.MAX_HEALTH, 300).putLevelGains(() -> Attributes.MAX_HEALTH, 265)
@@ -1033,7 +1034,7 @@ public class ModEntities {
                     .withLevelIncrease(3, 1)
                     .withLevelIncrease(5, 2)
                     .withLevelIncrease(10, 3));
-    public static final RegistryEntrySupplier<EntityType<EntityRafflesia>> RAFFLESIA = regMonster(EntityType.Builder.of(EntityRafflesia::new, MobCategory.MONSTER).sized(1.15f, 2.8f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "rafflesia"),
+    public static final RegistryEntrySupplier<EntityType<EntityRafflesia>> RAFFLESIA = regBoss(EntityType.Builder.of(EntityRafflesia::new, MobCategory.MONSTER).sized(1.15f, 2.8f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "rafflesia"),
             0x9b58ba, 0x0a8414,
             new EntityProperties.Builder()
                     .putAttributes(() -> Attributes.MAX_HEALTH, 275).putLevelGains(() -> Attributes.MAX_HEALTH, 275)
@@ -1131,6 +1132,10 @@ public class ModEntities {
         return ImmutableList.copyOf(MONSTERS);
     }
 
+    public static List<RegistryEntrySupplier<EntityType<?>>> getBosses() {
+        return ImmutableList.copyOf(BOSSES);
+    }
+
     public static Map<ResourceLocation, GateSpawnData> getDefaultGateSpawns() {
         return ImmutableMap.copyOf(DEFAULT_SPAWN_DATA);
     }
@@ -1180,6 +1185,14 @@ public class ModEntities {
 
     public static <V extends BaseMonster> RegistryEntrySupplier<EntityType<V>> regMonster(EntityType.Builder<V> v, ResourceLocation name, int primary, int secondary, EntityProperties.Builder props) {
         return regMonster(v, name, primary, secondary, false, props);
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public static <V extends BaseMonster> RegistryEntrySupplier<EntityType<V>> regBoss(EntityType.Builder<V> v, ResourceLocation name, int primary, int secondary, EntityProperties.Builder props) {
+        RegistryEntrySupplier<EntityType<V>> sup = regMonster(v, name, primary, secondary, false, props);
+        if (Platform.INSTANCE.isDatagen())
+            BOSSES.add((RegistryEntrySupplier) sup);
+        return sup;
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})

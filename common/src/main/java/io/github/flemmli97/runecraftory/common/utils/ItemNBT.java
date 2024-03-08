@@ -13,9 +13,9 @@ import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.lib.LibNBT;
+import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
-import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.nbt.CompoundTag;
@@ -527,6 +527,18 @@ public class ItemNBT {
             return new ItemStack(PlatformUtils.INSTANCE.items().getFromId(new ResourceLocation(s)));
         }
         return ItemStack.EMPTY;
+    }
+
+    public static boolean usedLightOre(ItemStack stack) {
+        if (shouldHaveStats(stack) && stack.hasTag()) {
+            CompoundTag tag = stack.getTag().getCompound(RuneCraftory.MODID);
+            String s = tag.getString(LibNBT.ORIGINITEM);
+            if (s.isEmpty())
+                return false;
+            ItemStack changed = new ItemStack(PlatformUtils.INSTANCE.items().getFromId(new ResourceLocation(s)));
+            return changed.isEmpty() && tag.getBoolean(LibNBT.LIGHTORETAG);
+        }
+        return false;
     }
 
     public static double attackSpeedModifier(LivingEntity entity) {

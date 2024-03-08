@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.forge.data.worldgen;
 
 import com.mojang.datafixers.util.Pair;
-import io.github.flemmli97.runecraftory.common.registry.ModStructures;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
+import io.github.flemmli97.runecraftory.common.registry.ModStructures;
 import io.github.flemmli97.runecraftory.common.world.structure.processors.BossSpawnerProcessor;
 import io.github.flemmli97.runecraftory.common.world.structure.processors.WaterUnlogProcessor;
 import net.minecraft.data.DataGenerator;

@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.blocks.tile;
 
-import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
+import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.world.BarnData;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import net.minecraft.core.BlockPos;

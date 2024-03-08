@@ -35,7 +35,7 @@ public class InventoryShippingBin extends SaveItemContainer {
                     continue;
                 money += basePrice * stack.getCount();
                 data.addShippingItem(stack);
-                ModCriteria.SHIPPING_TRIGGER.trigger(player, stack);
+                ModCriteria.SHIPPING_TRIGGER.trigger(player, data, stack);
                 SimpleQuestIntegration.INST().triggerShipping(player, stack);
                 this.setItem(i, ItemStack.EMPTY);
             }

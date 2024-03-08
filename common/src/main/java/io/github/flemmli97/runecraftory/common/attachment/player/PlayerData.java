@@ -94,7 +94,7 @@ public class PlayerData {
 
     private final RecipeKeeper keeper = new RecipeKeeper();
 
-    private final Map<Item, Integer> shippedItems = new HashMap<>();
+    private final Map<Item, ShippedItemData> shippedItems = new HashMap<>();
     private final Set<Item> unlockedItem = new HashSet<>();
     private final Map<NPCJob, NonNullList<ItemStack>> shopItems = new HashMap<>();
     private final InventoryShippingBin shipping = new InventoryShippingBin();
@@ -490,9 +490,18 @@ public class PlayerData {
         return list;
     }
 
-    public void addShippingItem(ItemStack item) {
-        int level = ItemNBT.itemLevel(item);
-        this.shippedItems.compute(item.getItem(), (k, v) -> v == null ? level : Math.max(v, level));
+    public void addShippingItem(ItemStack stack) {
+        int level = ItemNBT.itemLevel(stack);
+        this.shippedItems.compute(stack.getItem(), (k, v) -> v == null ?
+                new ShippedItemData(stack.getCount(), level) : new ShippedItemData(v.amount + stack.getCount(), Math.max(v.maxLevel, level)));
+    }
+
+    public ShippedItemData shippedItemData(ItemStack stack) {
+        return this.shippedItems.get(stack.getItem());
+    }
+
+    public int getShippedTypesAmount() {
+        return this.shippedItems.size();
     }
 
     public void unlockItem(ItemStack item) {
@@ -688,9 +697,10 @@ public class PlayerData {
         this.spells.load(nbt.getCompound("Inventory"));
         this.shipping.load(nbt.getCompound("Shipping"));
         CompoundTag shipped = nbt.getCompound("ShippedItems");
-        for (String key : shipped.getAllKeys()) {
-            this.shippedItems.put(PlatformUtils.INSTANCE.items().getFromId(new ResourceLocation(key)), shipped.getInt(key));
-        }
+        shipped.getAllKeys().forEach(key -> {
+            CompoundTag d = shipped.getCompound(key);
+            this.shippedItems.put(PlatformUtils.INSTANCE.items().getFromId(new ResourceLocation(key)), new ShippedItemData(d.getInt("Amount"), d.getInt("Level")));
+        });
         ListTag unlocked = nbt.getList("UnlockedItems", Tag.TAG_STRING);
         unlocked.forEach(t -> this.unlockedItem.add(PlatformUtils.INSTANCE.items().getFromId(new ResourceLocation(t.getAsString()))));
         CompoundTag shops = nbt.getCompound("ShopItems");
@@ -756,7 +766,12 @@ public class PlayerData {
         nbt.put("Inventory", this.spells.save());
         nbt.put("Shipping", this.shipping.save());
         CompoundTag ship = new CompoundTag();
-        this.shippedItems.forEach((key, value) -> ship.putInt(key.toString(), value));
+        this.shippedItems.forEach((key, value) -> {
+            CompoundTag d = new CompoundTag();
+            d.putInt("Amount", value.amount);
+            d.putInt("Level", value.maxLevel);
+            ship.put(key.toString(), d);
+        });
         nbt.put("ShippedItems", ship);
         ListTag unlocked = new ListTag();
         this.unlockedItem.forEach(i -> unlocked.add(StringTag.valueOf(PlatformUtils.INSTANCE.items().getIDFrom(i).toString())));
@@ -795,5 +810,8 @@ public class PlayerData {
         this.starting = false;
         this.tamedEntity.reset();
         this.mobLevelIncrease = 0;
+    }
+
+    public record ShippedItemData(int amount, int maxLevel) {
     }
 }

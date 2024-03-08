@@ -4,7 +4,9 @@ import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.crafting.SextupleRecipe;
 import io.github.flemmli97.runecraftory.common.inventory.PlayerContainerInv;
+import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
 import io.github.flemmli97.runecraftory.common.utils.CraftingUtils;
+import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.NonNullList;
 import net.minecraft.server.level.ServerPlayer;
@@ -79,7 +81,14 @@ public class CraftingOutputSlot extends Slot {
                             CraftingUtils.giveCraftingXPTo(serverPlayer, data, EnumSkills.COOKING, this.craftingContainer.getCurrentRecipe());
                 }
             });
-
+        if (ItemNBT.usedLightOre(stack))
+            ModCriteria.LIGHT_ORE.trigger(serverPlayer);
+        switch (this.craftingContainer.craftingType()){
+            case FORGE -> ModCriteria.FORGING.trigger(serverPlayer);
+            case ARMOR ->  ModCriteria.CRAFTING.trigger(serverPlayer);
+            case CHEM ->  ModCriteria.MEDICINE.trigger(serverPlayer);
+            case COOKING ->  ModCriteria.COOKING.trigger(serverPlayer);
+        }
         boolean refreshRecipe = false;
         for (int i = 0; i < remaining.size(); ++i) {
             ItemStack itemstack = this.ingredientInv.getItem(i);

@@ -2,10 +2,10 @@ package io.github.flemmli97.runecraftory.common.registry;
 
 import com.mojang.serialization.Codec;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.api.registry.NPCAction;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.AttackMeleeAction;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.DoNothingAction;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.FoodThrowAction;
-import io.github.flemmli97.runecraftory.api.registry.NPCAction;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.PartyTargetAction;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.RunAwayAction;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.RunToLeadAction;

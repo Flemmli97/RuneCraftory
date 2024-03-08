@@ -134,6 +134,10 @@ public class RunecraftoryTags {
     public static final TagKey<Block> HERBS = blockMod("herbs");
     public static final TagKey<Block> SICKLE_EFFECTIVE = blockCommon("mineable/sickle");
 
+    public static final TagKey<Block> CROP_BLOCKS = blockMod("crops");
+    public static final TagKey<Block> FLOWER_BLOCKS = blockMod("flowers");
+    public static final TagKey<Block> GIANT_CROP_BLOCKS = blockMod("giant_crop");
+
     public static final TagKey<Block> ENDSTONES = blockCommon("end_stones");
 
     public static final TagKey<Block> MONSTER_CLEARABLE = blockMod("monster_clearable");

@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.client.npc;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeature;
+import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import net.minecraft.client.renderer.MultiBufferSource;
 
 public class NPCFeatureRenderer<T extends NPCFeature> {

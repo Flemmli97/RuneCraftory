@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.registry;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.common.advancements.CropHarvestTrigger;
 import io.github.flemmli97.runecraftory.common.advancements.LevelTrigger;
 import io.github.flemmli97.runecraftory.common.advancements.MoneyTrigger;
 import io.github.flemmli97.runecraftory.common.advancements.ShippingTrigger;
@@ -20,11 +21,17 @@ public class ModCriteria {
     public static final ShopTrigger SHOP_TRIGGER = register(new ShopTrigger());
     public static final SkillLevelTrigger SKILL_LEVEL_TRIGGER = register(new SkillLevelTrigger());
     public static final TameMonsterTrigger TAME_MONSTER_TRIGGER = register(new TameMonsterTrigger());
+    public static final CropHarvestTrigger HARVEST_CROP = register(new CropHarvestTrigger());
     public static final SimpleTrigger UPGRADE_ITEM = register(new SimpleTrigger(new ResourceLocation(RuneCraftory.MODID, "upgrade_item")));
     public static final SimpleTrigger CHANGE_SPELL = register(new SimpleTrigger(new ResourceLocation(RuneCraftory.MODID, "change_spell")));
+    public static final SimpleTrigger LIGHT_ORE = register(new SimpleTrigger(new ResourceLocation(RuneCraftory.MODID, "light_ore")));
     public static final SimpleTrigger CHANGE_ELEMENT = register(new SimpleTrigger(new ResourceLocation(RuneCraftory.MODID, "change_element")));
     public static final SimpleTrigger FERTILIZE_FARM = register(new SimpleTrigger(new ResourceLocation(RuneCraftory.MODID, "fertilize_farm")));
     public static final SimpleTrigger COMMAND_FARMING = register(new SimpleTrigger(new ResourceLocation(RuneCraftory.MODID, "monster_farming")));
+    public static final SimpleTrigger FORGING = register(new SimpleTrigger(new ResourceLocation(RuneCraftory.MODID, "forging")));
+    public static final SimpleTrigger CRAFTING = register(new SimpleTrigger(new ResourceLocation(RuneCraftory.MODID, "crafting")));
+    public static final SimpleTrigger MEDICINE = register(new SimpleTrigger(new ResourceLocation(RuneCraftory.MODID, "medicine")));
+    public static final SimpleTrigger COOKING = register(new SimpleTrigger(new ResourceLocation(RuneCraftory.MODID, "cooking")));
 
     public static void init() {
     }

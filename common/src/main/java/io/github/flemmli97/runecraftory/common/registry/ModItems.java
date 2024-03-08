@@ -1,11 +1,11 @@
 package io.github.flemmli97.runecraftory.common.registry;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.enums.EnumMineralTier;
 import io.github.flemmli97.runecraftory.api.enums.EnumToolTier;
+import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.RFCreativeTabs;
 import io.github.flemmli97.runecraftory.common.items.CraftingBlockItem;
 import io.github.flemmli97.runecraftory.common.items.QuestBoardItem;

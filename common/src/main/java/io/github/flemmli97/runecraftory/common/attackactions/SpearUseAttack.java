@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
-import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
+import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpearBase;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import net.minecraft.server.level.ServerPlayer;

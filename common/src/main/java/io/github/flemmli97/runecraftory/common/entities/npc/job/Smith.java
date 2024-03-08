@@ -2,8 +2,8 @@ package io.github.flemmli97.runecraftory.common.entities.npc.job;
 
 import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
+import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.Util;
 import net.minecraft.advancements.critereon.ItemPredicate;

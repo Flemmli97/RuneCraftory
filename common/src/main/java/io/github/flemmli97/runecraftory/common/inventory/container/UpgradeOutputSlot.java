@@ -57,10 +57,10 @@ public class UpgradeOutputSlot extends Slot {
             return;
         ItemStack toUpgrade = this.ingredientInv.getItem(0);
         ItemStack material = this.ingredientInv.getItem(1);
+        ModCriteria.UPGRADE_ITEM.trigger(serverPlayer);
+        if (ItemNBT.getElement(toUpgrade) != ItemNBT.getElement(stack))
+            ModCriteria.CHANGE_ELEMENT.trigger(serverPlayer);
         Platform.INSTANCE.getPlayerData(serverPlayer).ifPresent(data -> {
-            ModCriteria.UPGRADE_ITEM.trigger(serverPlayer);
-            if (ItemNBT.getElement(toUpgrade) != ItemNBT.getElement(stack))
-                ModCriteria.CHANGE_ELEMENT.trigger(serverPlayer);
             if (stack.getItem() instanceof ItemStaffBase) {
                 if (DataPackHandler.INSTANCE.itemStatManager().get(material.getItem()).map(s -> s.getTier1Spell() != null || s.getTier2Spell() != null || s.getTier3Spell() != null).orElse(false))
                     ModCriteria.CHANGE_SPELL.trigger(serverPlayer);

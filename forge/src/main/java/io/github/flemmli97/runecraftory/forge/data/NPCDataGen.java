@@ -9,9 +9,9 @@ import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.NPCAttack
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.RunAwayAction;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.SpellAttackAction;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.SlimLookFeature;
+import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
-import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.advancements.critereon.LocationPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;

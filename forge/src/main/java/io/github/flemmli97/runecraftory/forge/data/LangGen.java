@@ -8,6 +8,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumDay;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.common.advancements.SimpleTrigger;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.BathhouseAttendant;
@@ -20,10 +21,12 @@ import io.github.flemmli97.runecraftory.common.items.tools.ItemToolHammer;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolHoe;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolSickle;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolWateringCan;
+import io.github.flemmli97.runecraftory.common.lib.LibAdvancements;
 import io.github.flemmli97.runecraftory.common.network.C2SNPCInteraction;
 import io.github.flemmli97.runecraftory.common.network.C2SSetMonsterBehaviour;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
+import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
@@ -31,9 +34,12 @@ import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.integration.simplequest.QuestTasks;
 import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
 import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.FrameType;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.HashCache;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
@@ -626,11 +632,19 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.advancements.tame.ten.description", "Tame 10 monster");
         this.add("runecraftory.advancements.tame.boss.title", "Strong buddy");
         this.add("runecraftory.advancements.tame.boss.description", "Tame a boss monster");
+        this.add("runecraftory.advancements.tame.boss.five.title", "Strong buddy");
+        this.add("runecraftory.advancements.tame.boss.five.description", "Tame a boss monster");
+        this.add("runecraftory.advancements.tame.boss.all.title", "Strong buddy");
+        this.add("runecraftory.advancements.tame.boss.all.description", "Tame a boss monster");
 
         this.add("runecraftory.advancements.shipping.title", "Money");
         this.add("runecraftory.advancements.shipping.description", "Ship your first item");
+        this.add("runecraftory.advancements.shipping.fifty.title", "Money");
+        this.add("runecraftory.advancements.shipping.fifty.description", "Ship your first item");
         this.add("runecraftory.advancements.shop.title", "Time for shopping");
         this.add("runecraftory.advancements.shop.description", "Buy your first item");
+        this.add("runecraftory.advancements.100k.title", "One Million!");
+        this.add("runecraftory.advancements.100k.description", "Have one million gold");
         this.add("runecraftory.advancements.million.title", "One Million!");
         this.add("runecraftory.advancements.million.description", "Have one million gold");
 
@@ -654,6 +668,15 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.advancements.level.100.title", "Level 100");
         this.add("runecraftory.advancements.level.100.description", "Get to level 100");
 
+        this.add("runecraftory.advancements.crafting.forging.title", "Better equipment");
+        this.add("runecraftory.advancements.crafting.forging.description", "Better equipment");
+        this.add("runecraftory.advancements.crafting.armor.title", "Better equipment");
+        this.add("runecraftory.advancements.crafting.armor.description", "Better equipment");
+        this.add("runecraftory.advancements.crafting.chemistry.title", "Better equipment");
+        this.add("runecraftory.advancements.crafting.chemistry.description", "Better equipment");
+        this.add("runecraftory.advancements.crafting.cooking.title", "Better equipment");
+        this.add("runecraftory.advancements.crafting.cooking.description", "Better equipment");
+
         this.add("runecraftory.advancements.upgrade.title", "Better equipment");
         this.add("runecraftory.advancements.upgrade.description", "Upgrade any equipment");
         this.add("runecraftory.advancements.change.element.title", "Its super effective");
@@ -662,9 +685,13 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.advancements.spell.description", "Find or craft a spell");
         this.add("runecraftory.advancements.change.spell.title", "Staff power");
         this.add("runecraftory.advancements.change.spell.description", "Change or add a spell to a staff");
+        this.add("runecraftory.advancements.lightorel.title", "Staff power");
+        this.add("runecraftory.advancements.lightore.description", "Change or add a spell to a staff");
 
         this.add("runecraftory.advancements.fertilizer.title", "Increased production");
         this.add("runecraftory.advancements.fertilizer.description", "Use a fertilizer to improve your farmland");
+        this.add("runecraftory.advancements.giant_crop.title", "Increased production");
+        this.add("runecraftory.advancements.giant_crop.description", "Use a fertilizer to improve your farmland");
         this.add("runecraftory.advancements.monster.help.title", "Useful helper");
         this.add("runecraftory.advancements.monster.help.description", "Command a monster to help you out with farming");
         this.add("runecraftory.advancements.final.tool.title", "The best");
