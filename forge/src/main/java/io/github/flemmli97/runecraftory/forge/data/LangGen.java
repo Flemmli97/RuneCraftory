@@ -36,6 +36,7 @@ import net.minecraft.data.DataProvider;
 import net.minecraft.data.HashCache;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -47,6 +48,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -342,9 +344,18 @@ public class LangGen implements DataProvider {
 
         this.add("runecraftory_book", "Runepedia");
         this.add("runecraftory.patchouli.subtitle", "");
-        this.add("runecraftory.patchouli.landing", "WIP Guidebook for the mod");
+        this.add("runecraftory.patchouli.landing", "This Guidebook will explain to you various feature of the mod and what it has to offer.");
         this.add("runecraftory.patchouli.category.main", "Introduction");
         this.add("runecraftory.patchouli.category.main.desc", "");
+
+        this.add("runecraftory.patchouli.entry.runepoints", "Rune points");
+        this.add("runecraftory.patchouli.entry.runepoints.1", "Rune points (RP) can be seen as your stamina or mana. Nearly all actions you do require rune points. Keep track of your current rune points when performing actions as " +
+                "running out of rune points will make use of your HP! $(br)$(br)You can replenish your rune points by either sleeping or eating food.");
+
+        this.add("runecraftory.patchouli.entry.calendar", "Calendar");
+        this.add("runecraftory.patchouli.entry.calendar.1", "On the left (by default) you can see the current date and season in the world. A year is divided by 4 seasons each with 30 days. Keeping track of the season is important in order to successfully " +
+                "grow crops. If its getting colder biomes which usually don't have snow can experience snowfall too.");
+
         this.add("runecraftory.patchouli.entry.crafting", "Crafting");
         this.add("runecraftory.patchouli.entry.crafting.1", "This mod adds 4 additional blocks that are used to craft various items. " +
                 "Every crafting process requires a certain amount of rp. Recipes that you haven't unlocked yet will require more rp than those you have." +
@@ -359,13 +370,16 @@ public class LangGen implements DataProvider {
                 "to increase the stats.");
         this.add("runecraftory.patchouli.entry.crafting.cooking", "The cooking table is as the name implies used to make all kinds of food. Some items can also be used as additional items for a better end product.");
         this.add("runecraftory.patchouli.entry.crafting.chemistry", "A chemistry set allows you to create potions and other pharmacy items.");
+
         this.add("runecraftory.patchouli.entry.minerals", "Minerals");
         this.add("runecraftory.patchouli.entry.minerals.1", "Cluster of minerals spawn all over the world. These mineral clusters can be mined with an iron pickaxe or above but its best mined with " +
                 "the $(item)mining hammers$() from this mod. Better hammers and mining skill decrease the chance of the mineral breaking and increase the chance to get rarer materials from it.");
         this.add("runecraftory.patchouli.entry.minerals.2", "Some materials even are impossible to get unless you have a high enough mining skill. " +
                 "$(br)Minerals regenerate after a day. $(br)If you want to completly get rid of a mineral mine a broken one while shifting.");
+
         this.add("runecraftory.patchouli.entry.shipping", "Shipping Items");
         this.add("runecraftory.patchouli.entry.shipping.1", "You can craft a shipping bin to sell items. Every morning all sellable items in the shipping bin will be sold. The shipping bin inventory is global for each player.");
+
         this.add("runecraftory.patchouli.entry.entities", "Monsters");
         this.add("runecraftory.patchouli.entry.entities.1", "The mobs in this mod don't spawn by themself but through gates that appear through the world. $(br)" +
                 "The type of monster a gate spawns depends on the biome and a gate will continue to spawn monsters till it is destroyed. Gates can drop their corresponding crystals upon destruction. " +
@@ -392,31 +406,42 @@ public class LangGen implements DataProvider {
                 "Most monster also need a roof. All blocks (except blocks without collision) count as roofs and there needs to be at least 3 blocks of air between the ground and the roof. " +
                 "Bigger sized barn also need more air blocks.");
 
+        this.add("runecraftory.patchouli.entry.gate", "Gates");
+        this.add("runecraftory.patchouli.entry.gate.1", "Gates are ripples in time-space that connects this world to the forest of beginnings, the home of monsters. " +
+                "Through them monster will continously come out unless the gate is destroyed. Word has it that there are strong monsters in the world that when defeated causes " +
+                "gates around the player to get stronger.");
+
         this.add("runecraftory.patchouli.entry.party", "Party");
         this.add("runecraftory.patchouli.entry.party.1", "You might have noticed that sometimes you can't make monsters or npc follow you. " +
                 "This is due to the party system which allows only a max of 3 entities to follow you at the same time. Party members will follow you and teleport " +
                 "if too far regardless of where you are.");
 
-        this.add("runecraftory.patchouli.entry.quests", "Quests");
-        this.add("runecraftory.patchouli.entry.quests.1", "This feature is WIP and there are currently no quests.");
-
         this.add("runecraftory.patchouli.category.farming", "Agriculture");
         this.add("runecraftory.patchouli.category.farming.desc", "An overview and guide about the agricultural aspects");
+
         this.add("runecraftory.patchouli.entry.farming", "Getting Started");
         this.add("runecraftory.patchouli.entry.farming.1", "To get started with growing crops you first need a $(item)hoe$(), a $(item)watering can$() and of course $(item)crop seeds$() to plant. " +
                 "Then simply till the land to turn it into farmland. Using a $(item)magnifying glass$() you can see the stats of the farmland.");
         this.add("runecraftory.patchouli.entry.farming.2", "After that plant the crops on the farmland and water it with a watering can. Unlike vanilla farmland nearby water will not water it. " +
                 "The crops will grow every day and you will also need to keep watering them each day till they are fully grown. Crops can wilt if you forget to water them and by not watering wilted crops they will turn into withered grass so make sure to keep them hydrated. " +
-                "You can use items to increase the soil quality see $(l:entry.fertilizer#p1)here$().");
+                "You can use items to increase the soil quality (see $(l:entry.fertilizer#p1)here$()).");
         this.add("runecraftory.patchouli.entry.farming.3", "Crops will get a growth bonus if they are planted in the correct season and if planted in the wrong season will grow slower. The cropsystem can affect crops not from this mod and if affected you will not be able to grow those the vanilla way. " +
                 "You can see if they are affected by simply look if they have additional info attached to them.");
+        this.add("runecraftory.patchouli.entry.farming.4", "One thing of note is that crops will grow REGARDLESS of if the chunk is loaded or not. While this means you don't need to be nearby for the crops to grow " +
+                "it also means that unless regularly watering them they have a high chance to wilt. You can mitigate this problem by having your monster companion help you out.");
+
+        this.add("runecraftory.patchouli.entry.trees", "Trees");
+        this.add("runecraftory.patchouli.entry.trees.1", "You might come accross some special saplings that are unlike the other saplings. These saplings act similar to crops instead and need to be planted on farmland. " +
+                "The saplings take a long time to grow but once fully grown will bear fruit everyday you can harvest. One thing to note about these trees is that they are unbreakable except for the base of the tree.");
+
         this.add("runecraftory.patchouli.entry.fertilizer", "Fertilizer");
         this.add("runecraftory.patchouli.entry.fertilizer.1", "There are various items to improve your farming experience. You can buy them at shops. Vanilla bonemeal will not work like normal and grow the crops, " +
                 "instead it will work as a very weak growth increaser for the soil");
-        this.add("runecraftory.patchouli.entry.fertilizer.2", "$(li)Formular a, b and c acts increase the growth rate of the soil with a being the weakest and c the strongest." +
-                "$(li)Wettable powder: Increases the soils defence. If the defence is 0 storms have a chance to destroy the crop." +
-                "$(li)Giantizer/Minimizer are used to grow giant crops (Not implemented $(bold)ATM$())." +
-                "$(li)Greenifier: Increases soil level and as such also crop level (Not implemented $(bold)ATM$()).");
+        this.add("runecraftory.patchouli.entry.fertilizer.2", "$(li)$(2)Formular a, b and c$() acts increase the growth rate of the soil with a being the weakest and c the strongest." +
+                "$(li)$(2)Wettable powder$(): Increases the soils defence. If the defence is 0 storms have a chance to destroy the crop." +
+                "$(li)$(2)Giantizer/Minimizer$() are used to grow giant crops." +
+                "$(li)$(2)Greenifier$(): Increases soil level and as such also crop level (Not implemented $(bold)ATM$()).");
+
         this.add("runecraftory.patchouli.entry.weather", "Weather");
         this.add("runecraftory.patchouli.entry.weather.1", "There are 4 types of weather conditions in this mod that only changes during certain times of the day: " +
                 "$(li)$(a)Sunny$(): Normal sunny day without any special properties" +
@@ -475,8 +500,10 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.patchouli.entry.npc.1", "You might come across some villagers that are different from vanilla villagers. Some can operate shops where you can buy stuff. " +
                 "For them to operate a shop they need a bed and workplace not too far away from eachother first. Right click allows you to interact with them and they will tell you if they are missing something.");
         this.add("runecraftory.patchouli.entry.npc.2", "Hover over the red text (if existent) to see that. Talking daily with a villager increases your friendship. You can also gift them item" +
-                "by throwing it at them. If you give them equipment they will equip it too." +
-                "$(br)$(br)Note: Villagers don't have skins yet.");
+                "by throwing it at them. If you give them equipment they will equip it too.");
+        this.add("runecraftory.patchouli.entry.npc.3", "Befriending them allows you to make them follow you and also allows you to develope an relationship with them. " +
+                "$(br)If your friend points are high enough giving them a $(item)love letter$() can initiate a deeper relationship. " +
+                "$(br)Going a bit further you might even be able to propose to them with an $(item)engagement ring$()");
 
         this.add("runecraftory.patchouli.entry.npc.jobs", "Villager jobs");
         this.add("runecraftory.patchouli.entry.npc.jobs.1.title", "General Store");
@@ -489,46 +516,38 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.patchouli.entry.npc.jobs.4", "You can buy medicine and herbs here");
         this.add("runecraftory.patchouli.entry.npc.jobs.5.title", "Cook");
         this.add("runecraftory.patchouli.entry.npc.jobs.5", "Buy food and recipe breads here. The cook only has a certain amount of recipe breads each day");
-        this.add("runecraftory.patchouli.entry.npc.jobs.6.title", "Magic Store");
-        this.add("runecraftory.patchouli.entry.npc.jobs.6", "Sells various spells here. WIP");
+        this.add("runecraftory.patchouli.entry.npc.jobs.6.title", "Magic Shop");
+        this.add("runecraftory.patchouli.entry.npc.jobs.6", "Sells various spells here. Most spells need to be shipped at least once before being sold here.");
         this.add("runecraftory.patchouli.entry.npc.jobs.7.title", "Rune skill Store");
-        this.add("runecraftory.patchouli.entry.npc.jobs.7", "Sells various rune skills here. WIP");
+        this.add("runecraftory.patchouli.entry.npc.jobs.7", "Sells various rune skills here. Most skills need to be shipped at least once before being sold here.");
         this.add("runecraftory.patchouli.entry.npc.jobs.8.title", "Bath house");
         this.add("runecraftory.patchouli.entry.npc.jobs.8", "Bath houses offer a way to regen your hp and rp. By talking to the bath house attendant you can obtain an effect " +
-                "which will regen hp+rp if you go into hot water (water with campfire below). Going out of the water will remove the effect immediately!");
+                "which will regen hp+rp if you go into hot water. Water is hot if it has a campfire below, indicated by if the smoke is coming up or not. Going out of the water will remove the effect immediately!");
         this.add("runecraftory.patchouli.entry.npc.jobs.9.title", "Travelling merchant");
-        this.add("runecraftory.patchouli.entry.npc.jobs.9", "Sells misc items. WIP");
+        this.add("runecraftory.patchouli.entry.npc.jobs.9", "Sells miscellaneous items. WIP");
+
+        this.add("runecraftory.patchouli.entry.quests", "Quests");
+        this.add("runecraftory.patchouli.entry.quests.1", "Crafting a quest board and placing it in the world will allow nearby NPCs to post quests for you to complete. Try doing them as they usually give you useful information and/or rewards. " +
+                "After accepting a quest talk to the NPC to progress through it. " +
+                "Some NPCs also require you to complete certain quests before being able to marry them. (This feature atm is WIP)");
 
         this.add("runecraftory.patchouli.category.entities", "Monsters");
         this.add("runecraftory.patchouli.category.entities.desc", "List of all monsters");
-        this.add(patchouliEntity(ModEntities.WOOLY.getID()), "Sheep like creature that is rather passive. Shearable.");
-        this.add(patchouliEntity(ModEntities.ORC.getID()), "");
-        this.add(patchouliEntity(ModEntities.ORC_ARCHER.getID()), "An orc but with a bow");
-        this.add(patchouliEntity(ModEntities.ANT.getID()), "");
-        this.add(patchouliEntity(ModEntities.BEETLE.getID()), "");
-        this.add(patchouliEntity(ModEntities.BIG_MUCK.getID()), "Mushroom like create that attacks using spores");
-        this.add(patchouliEntity(ModEntities.BUFFAMOO.getID()), "");
-        this.add(patchouliEntity(ModEntities.CHIPSQUEEK.getID()), "");
-        this.add(patchouliEntity(ModEntities.CLUCKADOODLE.getID()), "");
-        this.add(patchouliEntity(ModEntities.POMME_POMME.getID()), "");
-        this.add(patchouliEntity(ModEntities.TORTAS.getID()), "");
-        this.add(patchouliEntity(ModEntities.SKY_FISH.getID()), "");
-        this.add(patchouliEntity(ModEntities.WEAGLE.getID()), "");
-        this.add(patchouliEntity(ModEntities.GOBLIN.getID()), "");
-        this.add(patchouliEntity(ModEntities.GOBLIN_ARCHER.getID()), "");
-        this.add(patchouliEntity(ModEntities.DUCK.getID()), "");
-        this.add(patchouliEntity(ModEntities.FAIRY.getID()), "");
-        this.add(patchouliEntity(ModEntities.GHOST.getID()), "");
-        this.add(patchouliEntity(ModEntities.SPIRIT.getID()), "");
-        this.add(patchouliEntity(ModEntities.GHOST_RAY.getID()), "");
-        this.add(patchouliEntity(ModEntities.SPIDER.getID()), "");
-        this.add(patchouliEntity(ModEntities.SHADOW_PANTHER.getID()), "");
-        this.add(patchouliEntity(ModEntities.GOBBLE_BOX.getID()), "");
-        this.add(patchouliEntity(ModEntities.MONSTER_BOX.getID()), "");
 
-        this.add(patchouliEntity(ModEntities.AMBROSIA.getID()), "Butterfly boss monster. Spawns in forest groves and can be fought once a day");
-        this.add(patchouliEntity(ModEntities.THUNDERBOLT.getID()), "Horse said to be as fast as lightning. Spawns in water ruins");
-        this.add(patchouliEntity(ModEntities.MARIONETTA.getID()), "Spooky old doll that spawns in theater ruins");
+        List<RegistryEntrySupplier<EntityType<? extends Entity>>> entities = new ArrayList<>();
+        this.addPatchouliEntityDesc(entities, ModEntities.WOOLY, "Sheep like creature that is rather passive. Shearable.");
+        this.addPatchouliEntityDesc(entities, ModEntities.ORC_ARCHER, "An orc but with a bow");
+        this.addPatchouliEntityDesc(entities, ModEntities.BIG_MUCK, "Mushroom like create that attacks using spores");
+
+        this.addPatchouliEntityDesc(entities, ModEntities.AMBROSIA, "Butterfly boss monster");
+        this.addPatchouliEntityDesc(entities, ModEntities.THUNDERBOLT, "Horse said to be as fast as lightning");
+        this.addPatchouliEntityDesc(entities, ModEntities.MARIONETTA, "Spooky old doll");
+
+        for (RegistryEntrySupplier<EntityType<?>> sup : ModEntities.getMonsters()) {
+            if (entities.contains(sup))
+                continue;
+            this.add(patchouliEntity(sup.getID()), "");
+        }
 
         for (EnumSkills s : EnumSkills.values())
             this.add(s.getTranslation(),
@@ -848,6 +867,12 @@ public class LangGen implements DataProvider {
     public void add(String key, String value) {
         if (this.data.put(key, value) != null)
             throw new IllegalStateException("Duplicate translation key " + key);
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public <T extends Entity> void addPatchouliEntityDesc(List<RegistryEntrySupplier<EntityType<?>>> list, RegistryEntrySupplier<EntityType<T>> sup, String value) {
+        list.add((RegistryEntrySupplier) sup);
+        this.add(patchouliEntity(sup.getID()), value);
     }
 
     enum LangType {

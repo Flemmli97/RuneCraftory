@@ -1,0 +1,12 @@
+{
+  "name": "runecraftory.patchouli.entry.calendar",
+  "category": "runecraftory:category.main",
+  "icon": "runecraftory:red_grass",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.calendar.1"
+    }
+  ],
+  "sortnum": 1
+}

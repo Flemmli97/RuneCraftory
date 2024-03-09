@@ -4,10 +4,10 @@
   "cost": 35,
   "ingredients": [
     {
-      "tag": "runecraftory:mineral"
+      "item": "runecraftory:pole_axe"
     },
     {
-      "tag": "runecraftory:claws_fangs"
+      "tag": "c:silver_ingots"
     }
   ],
   "result": {

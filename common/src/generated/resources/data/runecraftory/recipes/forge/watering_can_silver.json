@@ -7,7 +7,7 @@
       "tag": "c:silver_ingots"
     },
     {
-      "tag": "runecraftory:cloths"
+      "item": "runecraftory:quality_cloth"
     }
   ],
   "result": {

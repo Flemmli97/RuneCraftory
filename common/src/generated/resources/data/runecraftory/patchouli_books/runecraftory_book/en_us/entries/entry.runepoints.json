@@ -1,0 +1,12 @@
+{
+  "name": "runecraftory.patchouli.entry.runepoints",
+  "category": "runecraftory:category.main",
+  "icon": "runecraftory:mystery_potion",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.runepoints.1"
+    }
+  ],
+  "sortnum": 0
+}

@@ -20,7 +20,6 @@ import io.github.flemmli97.runecraftory.common.entities.ai.RestrictedWaterAvoidi
 import io.github.flemmli97.runecraftory.common.entities.ai.RiderAttackTargetGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.StayGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.TendCropsGoal;
-import io.github.flemmli97.runecraftory.common.items.RuneCraftoryEggItem;
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemObjectX;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
@@ -1076,7 +1075,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 val *= 0.01;
                 inst.removeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD);
                 float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-                inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.level().getLevel() - 1)  * val * multiplier, AttributeModifier.Operation.ADDITION));
+                inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.level().getLevel() - 1) * val * multiplier, AttributeModifier.Operation.ADDITION));
                 if (att == Attributes.MAX_HEALTH)
                     this.setHealth(this.getMaxHealth() - preHealthDiff);
             }

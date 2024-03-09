@@ -4,7 +4,7 @@
   "cost": 40,
   "ingredients": [
     {
-      "tag": "runecraftory:mineral"
+      "tag": "c:gold_ingots"
     },
     {
       "tag": "runecraftory:claws_fangs"

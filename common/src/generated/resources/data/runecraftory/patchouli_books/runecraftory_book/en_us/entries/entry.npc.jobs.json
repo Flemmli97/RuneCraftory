@@ -1,7 +1,7 @@
 {
   "name": "runecraftory.patchouli.entry.npc.jobs",
   "category": "runecraftory:category.npc",
-  "icon": "minecraft:player_head",
+  "icon": "runecraftory:cash_register",
   "pages": [
     {
       "type": "patchouli:text",

@@ -2,6 +2,19 @@
   "name": "runecraftory.patchouli.entry.npc",
   "category": "runecraftory:category.npc",
   "icon": "minecraft:player_head",
-  "pages": [],
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.npc.1"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.npc.2"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.npc.3"
+    }
+  ],
   "sortnum": 0
 }

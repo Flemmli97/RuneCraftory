@@ -1,12 +1,16 @@
 {
   "name": "runecraftory.patchouli.entry.quests",
-  "category": "runecraftory:category.main",
+  "category": "runecraftory:category.npc",
   "icon": "runecraftory:quest_board",
   "pages": [
     {
       "type": "patchouli:text",
       "text": "runecraftory.patchouli.entry.quests.1"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "runecraftory:quest_board"
     }
   ],
-  "sortnum": 5
+  "sortnum": 2
 }

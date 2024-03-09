@@ -1,0 +1,12 @@
+{
+  "name": "runecraftory.patchouli.entry.trees",
+  "category": "runecraftory:category.farming",
+  "icon": "runecraftory:apple_sapling",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.trees.1"
+    }
+  ],
+  "sortnum": 1
+}

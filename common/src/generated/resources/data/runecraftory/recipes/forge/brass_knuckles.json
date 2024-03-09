@@ -4,9 +4,6 @@
   "cost": 25,
   "ingredients": [
     {
-      "tag": "runecraftory:mineral"
-    },
-    {
       "tag": "runecraftory:cloths"
     },
     {

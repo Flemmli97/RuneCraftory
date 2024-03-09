@@ -4,10 +4,7 @@
   "cost": 40,
   "ingredients": [
     {
-      "tag": "c:iron_ingots"
-    },
-    {
-      "tag": "c:iron_ingots"
+      "tag": "c:silver_ingots"
     },
     {
       "tag": "c:silver_ingots"

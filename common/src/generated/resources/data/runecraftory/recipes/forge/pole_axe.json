@@ -4,10 +4,13 @@
   "cost": 25,
   "ingredients": [
     {
-      "tag": "runecraftory:mineral"
+      "tag": "c:copper_blocks"
     },
     {
-      "tag": "runecraftory:claws_fangs"
+      "item": "runecraftory:wolf_fang"
+    },
+    {
+      "tag": "runecraftory:sticks"
     }
   ],
   "result": {

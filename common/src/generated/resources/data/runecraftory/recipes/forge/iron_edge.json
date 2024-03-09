@@ -4,10 +4,13 @@
   "cost": 30,
   "ingredients": [
     {
-      "tag": "runecraftory:mineral"
+      "tag": "c:iron_ingots"
     },
     {
-      "tag": "runecraftory:mineral"
+      "tag": "c:iron_ingots"
+    },
+    {
+      "tag": "c:silver_ingots"
     }
   ],
   "result": {

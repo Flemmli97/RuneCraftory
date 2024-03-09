@@ -1,0 +1,12 @@
+{
+  "name": "runecraftory.patchouli.entry.gate",
+  "category": "runecraftory:category.main",
+  "icon": "runecraftory:love_crystal",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.gate.1"
+    }
+  ],
+  "sortnum": 6
+}

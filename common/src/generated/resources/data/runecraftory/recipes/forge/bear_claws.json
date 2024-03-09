@@ -4,10 +4,10 @@
   "cost": 45,
   "ingredients": [
     {
-      "tag": "runecraftory:mineral"
+      "tag": "runecraftory:cloths"
     },
     {
-      "tag": "runecraftory:cloths"
+      "item": "runecraftory:panther_claw"
     },
     {
       "tag": "c:gold_ingots"

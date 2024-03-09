@@ -14,6 +14,10 @@
     {
       "type": "patchouli:text",
       "text": "runecraftory.patchouli.entry.farming.3"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.farming.4"
     }
   ],
   "sortnum": 0

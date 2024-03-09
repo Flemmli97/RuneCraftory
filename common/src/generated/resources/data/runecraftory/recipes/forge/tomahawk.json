@@ -4,7 +4,13 @@
   "cost": 40,
   "ingredients": [
     {
-      "tag": "runecraftory:mineral"
+      "tag": "c:silver_ingots"
+    },
+    {
+      "tag": "c:emeralds"
+    },
+    {
+      "item": "runecraftory:silk_cloth"
     },
     {
       "tag": "runecraftory:claws_fangs"
