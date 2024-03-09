@@ -1,7 +1,7 @@
 {
   "entity": "runecraftory:gobble_box",
   "minDistanceFromSpawn": 0,
-  "minGateLevel": 10,
+  "minGateLevel": 25,
   "allowUnderwater": false,
   "biomes": {},
   "structures": {}

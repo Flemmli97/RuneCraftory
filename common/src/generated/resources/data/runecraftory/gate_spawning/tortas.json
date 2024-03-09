@@ -1,7 +1,7 @@
 {
   "entity": "runecraftory:tortas",
   "minDistanceFromSpawn": 0,
-  "minGateLevel": 4,
+  "minGateLevel": 12,
   "allowUnderwater": true,
   "biomes": {
     "c:is_beach": 50,

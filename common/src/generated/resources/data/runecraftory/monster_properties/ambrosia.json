@@ -1,5 +1,5 @@
 {
-  "minLevel": 1,
+  "minLevel": 5,
   "xp": 500,
   "money": 150,
   "tamingChance": 0.005,
@@ -10,7 +10,7 @@
   "levelIncreaseOnKill": [
     {
       "minKilled": 1,
-      "increase": 10
+      "increase": 5
     },
     {
       "minKilled": 2,

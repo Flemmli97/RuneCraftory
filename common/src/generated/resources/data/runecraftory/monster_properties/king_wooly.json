@@ -14,11 +14,11 @@
     }
   },
   "baseValues": {
-    "minecraft:generic.max_health": 75.0,
-    "minecraft:generic.attack_damage": 5.0,
-    "runecraftory:defence": 5.0,
-    "runecraftory:magic_attack": 3.0,
-    "runecraftory:magic_defence": 5.0,
+    "minecraft:generic.max_health": 50.0,
+    "minecraft:generic.attack_damage": 15.0,
+    "runecraftory:defence": 5.5,
+    "runecraftory:magic_attack": 6.0,
+    "runecraftory:magic_defence": 5.5,
     "runecraftory:dizzy": 7.0,
     "runecraftory:crit": 2.0,
     "runecraftory:res_crit": 7.0,
@@ -27,7 +27,7 @@
     "runecraftory:res_water": 10.0
   },
   "levelGains": {
-    "minecraft:generic.max_health": 110.0,
+    "minecraft:generic.max_health": 125.0,
     "minecraft:generic.attack_damage": 200.0,
     "runecraftory:defence": 135.0,
     "runecraftory:magic_attack": 130.0,

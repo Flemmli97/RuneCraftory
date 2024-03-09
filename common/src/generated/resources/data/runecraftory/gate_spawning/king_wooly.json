@@ -1,7 +1,7 @@
 {
   "entity": "runecraftory:king_wooly",
   "minDistanceFromSpawn": 0,
-  "minGateLevel": 10,
+  "minGateLevel": 60,
   "allowUnderwater": false,
   "biomes": {
     "c:is_plains": 1,

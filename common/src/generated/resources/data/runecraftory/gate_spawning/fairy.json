@@ -1,7 +1,7 @@
 {
   "entity": "runecraftory:fairy",
   "minDistanceFromSpawn": 0,
-  "minGateLevel": 4,
+  "minGateLevel": 15,
   "allowUnderwater": false,
   "biomes": {
     "c:is_plains": 30,

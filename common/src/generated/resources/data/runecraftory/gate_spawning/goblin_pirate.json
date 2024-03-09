@@ -1,7 +1,7 @@
 {
   "entity": "runecraftory:goblin_pirate",
-  "minDistanceFromSpawn": 500,
-  "minGateLevel": 7,
+  "minDistanceFromSpawn": 0,
+  "minGateLevel": 50,
   "allowUnderwater": false,
   "biomes": {
     "c:is_hot": 30,

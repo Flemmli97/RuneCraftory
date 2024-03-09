@@ -1,7 +1,7 @@
 {
   "entity": "runecraftory:chipsqueek",
   "minDistanceFromSpawn": 0,
-  "minGateLevel": 0,
+  "minGateLevel": 5,
   "allowUnderwater": false,
   "biomes": {
     "c:is_plains": 40,

@@ -1,7 +1,7 @@
 {
   "entity": "runecraftory:killer_ant",
   "minDistanceFromSpawn": 0,
-  "minGateLevel": 10,
+  "minGateLevel": 30,
   "allowUnderwater": false,
   "biomes": {
     "c:is_plains": 30,

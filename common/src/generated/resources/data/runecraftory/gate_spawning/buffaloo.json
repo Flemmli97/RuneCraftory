@@ -1,7 +1,7 @@
 {
   "entity": "runecraftory:buffaloo",
   "minDistanceFromSpawn": 0,
-  "minGateLevel": 5,
+  "minGateLevel": 50,
   "allowUnderwater": false,
   "biomes": {
     "c:is_hot": 20,

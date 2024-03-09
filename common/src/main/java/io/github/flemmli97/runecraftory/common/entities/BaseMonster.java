@@ -20,6 +20,7 @@ import io.github.flemmli97.runecraftory.common.entities.ai.RestrictedWaterAvoidi
 import io.github.flemmli97.runecraftory.common.entities.ai.RiderAttackTargetGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.StayGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.TendCropsGoal;
+import io.github.flemmli97.runecraftory.common.items.RuneCraftoryEggItem;
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemObjectX;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
@@ -666,6 +667,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
         this.populateDefaultEquipmentSlots(difficulty);
+        this.setLevel(Mth.clamp(this.level().getLevel(), this.prop.minLevel, LibConstants.MAX_MONSTER_LEVEL));
         //for(Attribute att : this.prop.getAttributeGains().keySet())
         //    this.attributeRandomizer.put(att, this.rand.nextInt(5)-2);
         return spawnData;
@@ -1074,8 +1076,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 val *= 0.01;
                 inst.removeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD);
                 float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-                int lvl = Math.max(0, (this.level().getLevel() - this.prop.minLevel));
-                inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, "rf.levelMod", lvl * val * multiplier, AttributeModifier.Operation.ADDITION));
+                inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.level().getLevel() - 1)  * val * multiplier, AttributeModifier.Operation.ADDITION));
                 if (att == Attributes.MAX_HEALTH)
                     this.setHealth(this.getMaxHealth() - preHealthDiff);
             }

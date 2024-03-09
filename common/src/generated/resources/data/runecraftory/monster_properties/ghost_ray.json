@@ -1,5 +1,5 @@
 {
-  "minLevel": 1,
+  "minLevel": 27,
   "xp": 150,
   "money": 10,
   "tamingChance": 0.02,
@@ -14,11 +14,11 @@
     }
   },
   "baseValues": {
-    "minecraft:generic.max_health": 32.0,
+    "minecraft:generic.max_health": 35.0,
     "minecraft:generic.attack_damage": 14.3,
-    "runecraftory:defence": 1.5,
+    "runecraftory:defence": 2.25,
     "runecraftory:magic_attack": 9.0,
-    "runecraftory:magic_defence": 1.5,
+    "runecraftory:magic_defence": 2.25,
     "runecraftory:dizzy": 3.0,
     "runecraftory:crit": 1.0,
     "runecraftory:res_crit": 5.0,

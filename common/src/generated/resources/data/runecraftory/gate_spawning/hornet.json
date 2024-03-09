@@ -1,7 +1,7 @@
 {
   "entity": "runecraftory:hornet",
   "minDistanceFromSpawn": 0,
-  "minGateLevel": 6,
+  "minGateLevel": 35,
   "allowUnderwater": false,
   "biomes": {
     "c:is_plains": 30,
