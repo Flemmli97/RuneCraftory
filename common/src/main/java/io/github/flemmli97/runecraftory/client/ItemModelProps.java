@@ -1,7 +1,9 @@
 package io.github.flemmli97.runecraftory.client;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.common.items.BabySpawnEgg;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolFishingRod;
+import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
@@ -13,6 +15,7 @@ public class ItemModelProps {
     public static final ResourceLocation HELD_ID = new ResourceLocation(RuneCraftory.MODID, "held");
     public static final ResourceLocation GLOVE_HELD_ID = new ResourceLocation(RuneCraftory.MODID, "glove_held");
     public static final ResourceLocation FISHING_ROD_ID = new ResourceLocation(RuneCraftory.MODID, "fishing");
+    public static final ResourceLocation BABY_GENDER = new ResourceLocation(RuneCraftory.MODID, "baby_gender");
 
     public static int HELD_TYPE;
 
@@ -40,5 +43,11 @@ public class ItemModelProps {
             }
             return (flag || flag1) && Platform.INSTANCE.getEntityData(entity).map(d -> d.fishingHook != null).orElse(false) ? 1.0F : 0.0F;
         }
+    };
+
+    public static final ClampedItemPropertyFunction BABY_GENDER_PROPS = (stack, world, entity, i) -> {
+        if (stack.getItem() != ModItems.NPC_BABY.get())
+            return 0;
+        return BabySpawnEgg.isBoy(stack) ? 0 : 1;
     };
 }

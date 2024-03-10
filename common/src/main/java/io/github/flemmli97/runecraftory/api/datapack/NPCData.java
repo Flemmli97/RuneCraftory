@@ -63,12 +63,12 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                       Map<String, Gift> giftItems, @Nullable NPCSchedule.Schedule schedule,
                       @Nullable Map<Attribute, Double> baseStats, @Nullable Map<Attribute, Double> statIncrease,
                       int baseLevel, @Nullable ResourceLocation combatActions, int unique,
-                      RelationShipState relationShipState) {
+                      RelationShipState relationShipState, List<ResourceLocation> possibleChildren) {
 
     public static final Map<Attribute, Double> DEFAULT_GAIN = Map.of(Attributes.MAX_HEALTH, 3d, Attributes.ATTACK_DAMAGE, 1d,
             ModAttributes.DEFENCE.get(), 0.5d, ModAttributes.MAGIC.get(), 1d, ModAttributes.MAGIC_DEFENCE.get(), 0.5d);
     public static final NPCData DEFAULT_DATA = new NPCData(null, null, Gender.UNDEFINED, List.of(), null, null, 1, "npc.default.gift.neutral",
-            Map.of(), new QuestHandler(Map.of(), Set.of()), Map.of(), null, null, null, 1, null, 0, RelationShipState.DEFAULT);
+            Map.of(), new QuestHandler(Map.of(), Set.of()), Map.of(), null, null, null, 1, null, 0, RelationShipState.DEFAULT, List.of());
 
     public static <T> Codec<Map<ConversationContext, T>> filledMap(Codec<Map<ConversationContext, T>> codec) {
         Function<Map<ConversationContext, T>, DataResult<Map<ConversationContext, T>>> check = map -> {
@@ -98,7 +98,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                         return Optional.of(combat);
                     }),
 
-                    CodecHelper.enumCodec(RelationShipState.class, RelationShipState.DEFAULT).fieldOf("relationShipState").forGetter(d -> d.relationShipState),
+                    RelationStruct.CODEC.fieldOf("relation").forGetter(d -> new RelationStruct(d.relationShipState, d.possibleChildren)),
                     Codec.STRING.fieldOf("neutralGiftResponse").forGetter(d -> d.neutralGiftResponse),
                     Codec.unboundedMap(Codec.STRING, Gift.CODEC).fieldOf("giftItems").forGetter(d -> d.giftItems),
 
@@ -111,8 +111,11 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                     Codec.STRING.optionalFieldOf("surname").forGetter(d -> Optional.ofNullable(d.surname)),
                     CodecHelper.enumCodec(Gender.class, Gender.UNDEFINED).fieldOf("gender").forGetter(d -> d.gender),
                     ModNPCJobs.CODEC.listOf().optionalFieldOf("profession").forGetter(d -> d.profession.isEmpty() ? Optional.empty() : Optional.of(d.profession))
-            ).apply(inst, (interactions, questHandler, schedule, combat, romanceable, neutralGift, giftItems, look, birthday, weight, unique, name, surname, gender, profession) -> new NPCData(name.orElse(null), surname.orElse(null),
-                    gender, profession.orElse(List.of()), look.orElse(null), birthday.orElse(null), weight, neutralGift, interactions, questHandler, giftItems, schedule.orElse(null), combat.map(d -> d.baseStats).orElse(null), combat.map(d -> d.statIncrease).orElse(null), combat.map(d -> d.baseLevel).orElse(1), combat.map(d -> d.npcAction).orElse(null), unique.orElse(0), romanceable)));
+            ).apply(inst, (interactions, questHandler, schedule, combat, relation, neutralGift, giftItems, look, birthday, weight, unique, name, surname, gender, profession) ->
+                    new NPCData(name.orElse(null), surname.orElse(null), gender, profession.orElse(List.of()), look.orElse(null), birthday.orElse(null),
+                            weight, neutralGift, interactions, questHandler, giftItems, schedule.orElse(null), combat.map(d -> d.baseStats).orElse(null),
+                            combat.map(d -> d.statIncrease).orElse(null), combat.map(d -> d.baseLevel).orElse(1), combat.map(d -> d.npcAction).orElse(null),
+                            unique.orElse(0), relation.relationShipState, relation.possibleChildren)));
 
     public ConversationSet getConversation(ConversationContext convCtx) {
         ResourceLocation conversationId = this.interactions().get(convCtx);
@@ -150,6 +153,16 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         NON_ROMANCEABLE,
         NO_ROMANCE_NPC,
         NO_ROMANCE
+    }
+
+    record RelationStruct(RelationShipState relationShipState, List<ResourceLocation> possibleChildren) {
+
+        public static final Codec<RelationStruct> CODEC = RecordCodecBuilder.create(inst ->
+                inst.group(
+                        CodecHelper.enumCodec(RelationShipState.class, RelationShipState.DEFAULT).fieldOf("relationShipState").forGetter(d -> d.relationShipState),
+                        ResourceLocation.CODEC.listOf().optionalFieldOf("possibleChildren").forGetter(d -> d.possibleChildren.isEmpty() ? Optional.empty() : Optional.of(d.possibleChildren))
+                ).apply(inst, (state, childs) -> new RelationStruct(state, childs.orElse(List.of()))));
+
     }
 
     record NPCCombat(@Nullable Map<Attribute, Double> baseStats, @Nullable Map<Attribute, Double> statIncrease,
@@ -206,6 +219,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         private int baseLevel = 1;
         private int unique;
         private RelationShipState relationShipState = RelationShipState.DEFAULT;
+        private List<ResourceLocation> possibleChildIds = new ArrayList<>();
 
         private final Map<ResourceLocation, QuestResponses> responses = new LinkedHashMap<>();
         private final Set<ResourceLocation> requiredQuests = new LinkedHashSet<>();
@@ -302,6 +316,11 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             return this;
         }
 
+        public Builder addChild(ResourceLocation child) {
+            this.possibleChildIds.add(child);
+            return this;
+        }
+
         public Builder withCombatAction(ResourceLocation action) {
             this.combatAction = action;
             return this;
@@ -330,7 +349,8 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             }
             return new NPCData(this.name, this.surname, this.gender, this.professions, this.look, this.birthday, this.weight, this.neutralGiftResponse, this.interactions,
                     new QuestHandler(this.responses, this.requiredQuests), this.giftItems, this.schedule,
-                    this.baseStats.isEmpty() ? null : this.baseStats, this.statIncrease.isEmpty() ? null : this.statIncrease, this.baseLevel, this.combatAction, this.unique, this.relationShipState);
+                    this.baseStats.isEmpty() ? null : this.baseStats, this.statIncrease.isEmpty() ? null : this.statIncrease,
+                    this.baseLevel, this.combatAction, this.unique, this.relationShipState, this.possibleChildIds);
         }
     }
 

@@ -2,11 +2,13 @@ package io.github.flemmli97.runecraftory.common.world.family;
 
 import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.api.datapack.NPCData;
+import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.Nullable;
 
@@ -379,14 +381,15 @@ public class FamilyEntry {
         this.entityState = EntityState.values()[tag.getInt("EntityState")];
     }
 
-    public SyncedFamilyData forSyncing() {
+    public SyncedFamilyData forSyncing(EntityNPCBase npc, ServerPlayer player) {
         Component father = this.father != null ? this.familyHandler.getFamily(this.father)
                 .map(e -> e.name).orElse(null) : null;
         Component mother = this.mother != null ? this.familyHandler.getFamily(this.mother)
                 .map(e -> e.name).orElse(null) : null;
         Component partner = this.partner != null ? this.familyHandler.getFamily(this.partner)
                 .map(e -> e.name).orElse(null) : null;
-        return new SyncedFamilyData(father, mother, partner, this.relationship);
+        return new SyncedFamilyData(father, mother, partner, this.relationship,
+                player.getUUID().equals(this.partner) && npc.canProcreate());
     }
 
     public enum Relationship {

@@ -4,13 +4,13 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 
 public record SyncedFamilyData(Component father, Component mother, Component partner,
-                               FamilyEntry.Relationship relationship) {
+                               FamilyEntry.Relationship relationship, boolean canProcreate) {
 
     public SyncedFamilyData(FriendlyByteBuf buf) {
         this(buf.readBoolean() ? buf.readComponent() : null,
                 buf.readBoolean() ? buf.readComponent() : null,
                 buf.readBoolean() ? buf.readComponent() : null,
-                buf.readEnum(FamilyEntry.Relationship.class));
+                buf.readEnum(FamilyEntry.Relationship.class), buf.readBoolean());
     }
 
     public void toPacket(FriendlyByteBuf buf) {
@@ -24,5 +24,6 @@ public record SyncedFamilyData(Component father, Component mother, Component par
         if (this.partner != null)
             buf.writeComponent(this.partner);
         buf.writeEnum(this.relationship);
+        buf.writeBoolean(this.canProcreate);
     }
 }

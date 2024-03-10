@@ -7,6 +7,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumMineralTier;
 import io.github.flemmli97.runecraftory.api.enums.EnumToolTier;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.RFCreativeTabs;
+import io.github.flemmli97.runecraftory.common.items.BabySpawnEgg;
 import io.github.flemmli97.runecraftory.common.items.CraftingBlockItem;
 import io.github.flemmli97.runecraftory.common.items.QuestBoardItem;
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemGiantCrops;
@@ -1217,6 +1218,8 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> STEEL_SWORD_PROP = ITEMS.register("steel_sword_prop", () -> new ItemProp(new Item.Properties().stacksTo(1), real -> new ItemStack(ModItems.STEEL_SWORD.get())));
     public static final RegistryEntrySupplier<Item> CUTLASS_PROP = ITEMS.register("cutlass_prop", () -> new ItemProp(new Item.Properties().stacksTo(1), real -> new ItemStack(ModItems.CUTLASS.get())));
     public static final RegistryEntrySupplier<Item> THIEF_KNIFE_PROP = ITEMS.register("thief_knife_prop", () -> new ItemProp(new Item.Properties().stacksTo(1), real -> new ItemStack(ModItems.THIEF_KNIFE.get())));
+
+    public static final RegistryEntrySupplier<Item> NPC_BABY = ITEMS.register("baby", () -> new BabySpawnEgg(new Item.Properties().stacksTo(1)));
 
     public static RegistryEntrySupplier<Item> hoe(EnumToolTier tier) {
         RegistryEntrySupplier<Item> sup = ITEMS.register("hoe_" + tier.getName(), () -> new ItemToolHoe(tier, new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));

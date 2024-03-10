@@ -260,6 +260,11 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.tooltip.season.best", "Good Season");
         this.add("runecraftory.tooltip.season.bad", "Bad Season");
 
+        this.add("runecraftory.tooltip.baby.boy", "Boy");
+        this.add("runecraftory.tooltip.baby.girl", "Girl");
+        this.add("runecraftory.tooltip.baby.owner", "Parent: %s");
+        this.add("runecraftory.npc.spawn.name.missing", "Missing name for baby!");
+
         this.add(BaseMonster.Behaviour.WANDER_HOME.interactKey, "You send %s home");
         this.add(BaseMonster.Behaviour.FOLLOW.interactKey, "%s is now following you");
         this.add(BaseMonster.Behaviour.FOLLOW_DISTANCE.interactKey, "%s is now following you with distance");
@@ -567,10 +572,11 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.gui.npc.shop.owner", "Owner of %s");
         this.add("runecraftory.gui.npc.bed.no", "I don't have a bed");
         this.add("runecraftory.gui.npc.workplace.no", "I don't have a work place. Valid workplaces are [%s]");
-        this.add("runecraftory.gui.npc.parent", "Parent: %s");
-        this.add("runecraftory.gui.npc.parents", "Parents: %1$s & %2$s");
+        this.add("runecraftory.gui.npc.parent", "Parent:");
+        this.add("runecraftory.gui.npc.parents", "Parents:");
         this.add("runecraftory.gui.npc.relationship.dating", "Dating %s");
         this.add("runecraftory.gui.npc.relationship.married", "Married to %s");
+        this.add("runecraftory.gui.npc.procreate", "Procreate");
 
         this.add("runecraftory.gui.quests.accept", "Accept");
         this.add("runecraftory.gui.quests.reset", "Cancel");

@@ -222,6 +222,8 @@ public class ClientRegister {
                 register.register(reg.get(), ItemModelProps.GLOVE_HELD_ID, ItemModelProps.HELD_MAIN_GLOVE);
             else if (reg.get() instanceof ItemToolFishingRod)
                 register.register(reg.get(), ItemModelProps.FISHING_ROD_ID, ItemModelProps.FISHING_RODS);
+            else if (reg == ModItems.NPC_BABY)
+                register.register(reg.get(), ItemModelProps.BABY_GENDER, ItemModelProps.BABY_GENDER_PROPS);
             else if (reg.get() instanceof ShieldItem)
                 register.register(reg.get(), new ResourceLocation("blocking"), (itemStack, clientLevel, livingEntity, i) -> livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == itemStack ? 1.0f : 0.0f);
         });

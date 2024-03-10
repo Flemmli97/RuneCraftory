@@ -45,7 +45,7 @@ public class S2COpenNPCGui implements Packet {
             this.followState = Platform.INSTANCE.getPlayerData(player).map(d -> d.party.isPartyFull()).orElse(true) ? 2 : 0;
         else
             this.followState = entity.getEntityToFollowUUID().equals(player.getUUID()) ? 1 : 2;
-        this.family = entity.getFamily().forSyncing();
+        this.family = entity.getFamily().forSyncing(entity, player);
     }
 
     public static S2COpenNPCGui read(FriendlyByteBuf buf) {

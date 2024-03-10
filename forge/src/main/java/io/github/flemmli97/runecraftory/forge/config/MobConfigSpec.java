@@ -42,6 +42,8 @@ public class MobConfigSpec {
 
     public final ForgeConfigSpec.IntValue npcSpawnRateMin;
     public final ForgeConfigSpec.IntValue npcSpawnRateMax;
+    public final ForgeConfigSpec.IntValue initialProcreationCooldown;
+    public final ForgeConfigSpec.IntValue procreationCooldown;
 
     public MobConfigSpec(ForgeConfigSpec.Builder builder) {
         builder.push("general");
@@ -52,6 +54,8 @@ public class MobConfigSpec {
         this.monsterNeedBarn = builder.comment("If true monster need to have a barn assigned or other interactions will not be possible").define("Monster need barn", MobConfig.monsterNeedBarn);
         this.npcSpawnRateMin = builder.comment("Min spawn rate of npc in villages").defineInRange("NPC Spawnrate Min", MobConfig.npcSpawnRateMin, 0, Integer.MAX_VALUE);
         this.npcSpawnRateMax = builder.comment("Max spawn rate of npc in villages").defineInRange("NPC Spawnrate Max", MobConfig.npcSpawnRateMax, 0, Integer.MAX_VALUE);
+        this.initialProcreationCooldown = builder.comment("Initial procreation cooldown after marrying an npc").defineInRange("Initial procreation cooldown", MobConfig.initialProcreationCooldown, 0, Integer.MAX_VALUE);
+        this.procreationCooldown = builder.comment("Cooldown for procreating with an npc").defineInRange("Procreation cooldown", MobConfig.procreationCooldown, 0, Integer.MAX_VALUE);
         builder.pop();
 
         builder.comment("Gate Configs").push("gate");

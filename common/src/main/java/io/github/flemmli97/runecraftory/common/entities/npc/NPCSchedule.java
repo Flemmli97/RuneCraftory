@@ -48,7 +48,7 @@ public class NPCSchedule {
         EnumDay day = WorldHandler.get(level.getServer()).currentDay();
         if (dayTime < this.schedule.wakeUpTime)
             return Activity.REST;
-        if (this.schedule.workDays.contains(day) && this.npc.getShop().hasWorkSchedule) {
+        if (!this.npc.isBaby() && this.schedule.workDays.contains(day) && this.npc.getShop().hasWorkSchedule) {
             if (dayTime < this.schedule.workTime)
                 return ModActivities.EARLYIDLE.get();
             if (dayTime < this.schedule.breakTime)

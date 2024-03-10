@@ -23,6 +23,7 @@ public record ConversationContext(ResourceLocation key) {
     public static final ConversationContext MARRIAGE_DENY = register("marriage_deny");
     public static final ConversationContext DIVORCE = register("divorce");
     public static final ConversationContext DIVORCE_ERROR = register("divorce_error");
+    public static final ConversationContext PROCREATION_COOLDOWN = register("procreation_cooldown");
 
     private static ConversationContext register(String key) {
         return register(new ResourceLocation(RuneCraftory.MODID, key));

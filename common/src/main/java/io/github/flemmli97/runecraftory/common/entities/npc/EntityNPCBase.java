@@ -14,6 +14,7 @@ import io.github.flemmli97.runecraftory.common.attachment.player.LevelExpPair;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
+import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCDataManager;
 import io.github.flemmli97.runecraftory.common.entities.IBaseMob;
 import io.github.flemmli97.runecraftory.common.entities.ai.AvoidWhenNotFollowing;
 import io.github.flemmli97.runecraftory.common.entities.ai.LookAtAliveGoal;
@@ -30,6 +31,7 @@ import io.github.flemmli97.runecraftory.common.entities.npc.job.ShopState;
 import io.github.flemmli97.runecraftory.common.entities.pathing.NPCWalkNodeEvaluator;
 import io.github.flemmli97.runecraftory.common.inventory.InventoryShop;
 import io.github.flemmli97.runecraftory.common.inventory.container.ContainerShop;
+import io.github.flemmli97.runecraftory.common.items.BabySpawnEgg;
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemObjectX;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.loot.LootCtxParameters;
@@ -39,6 +41,7 @@ import io.github.flemmli97.runecraftory.common.network.S2COpenNPCGui;
 import io.github.flemmli97.runecraftory.common.network.S2CUpdateNPCData;
 import io.github.flemmli97.runecraftory.common.registry.ModActivities;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
+import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
@@ -219,6 +222,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     private int playDeathTick;
 
     private final NPCRelationManager relationManager = new NPCRelationManager();
+    private int procreationCooldown, procreationProgress;
+    private Entity procreationEntity;
 
     private Behaviour behaviour = Behaviour.WANDER;
 
@@ -428,6 +433,20 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
                     }
                 }
             }
+            --this.procreationCooldown;
+            if (this.procreationProgress > 0) {
+                this.getNavigation().stop();
+                this.procreationProgress--;
+                if (this.tickCount % 10 == 0)
+                    serverLevel.sendParticles(ParticleTypes.HEART, this.getX(), this.getY() + this.getBbHeight(), this.getZ(),
+                            0, 0, 0, 0, 0);
+                if (this.procreationProgress == 0) {
+                    if (this.spawnBaby()) {
+                        this.procreationCooldown = MobConfig.procreationCooldown;
+                    }
+                    this.procreationEntity = null;
+                }
+            }
         }
         if (this.playDeath()) {
             this.playDeathTick = Math.min(15, ++this.playDeathTick);
@@ -519,7 +538,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
                         || family.getRelationship() != FamilyEntry.Relationship.NONE) {
                     this.speak(serverPlayer, ConversationContext.DATING_DENY);
                 } else {
-                    float chance = 1;//this.friendPoints(player) >= 7 ? 0.33f * (this.friendPoints(player) - 6) : 0;
+                    float chance = this.friendPoints(player) >= 7 ? 0.33f * (this.friendPoints(player) - 6) : 0;
                     if (chance > 0 && this.updater.getDailyRandom().nextFloat() < chance) {
                         this.speak(serverPlayer, ConversationContext.DATING_ACCEPT);
                         family.updateRelationship(FamilyEntry.Relationship.DATING, player.getUUID());
@@ -552,6 +571,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
                             this.speak(serverPlayer, ConversationContext.MARRIAGE_ACCEPT);
                             family.updateRelationship(FamilyEntry.Relationship.MARRIED, player.getUUID());
                             success = true;
+                            this.procreationCooldown = MobConfig.initialProcreationCooldown;
                         } else
                             this.speak(serverPlayer, ConversationContext.MARRIAGE_DENY);
                     }
@@ -1048,6 +1068,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         compound.putInt("Behaviour", this.behaviourState().ordinal());
         compound.put("NPCData", this.saveNPCData());
         compound.put("DailyUpdater", this.updater.save());
+        compound.putInt("ProcreationCooldown", this.procreationCooldown);
     }
 
     @Override
@@ -1070,6 +1091,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         if (compound.contains("NPCData"))
             this.loadNpcData(compound.getCompound("NPCData"));
         this.updater.read(compound.getCompound("DailyUpdater"));
+        this.procreationCooldown = compound.getInt("ProcreationCooldown");
     }
 
     @Override
@@ -1229,7 +1251,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     public ShopState canTrade() {
-        if (!this.shop.hasShop && !this.shop.hasWorkSchedule)
+        if (this.isBaby() || (!this.shop.hasShop && !this.shop.hasWorkSchedule))
             return ShopState.NOTWORKER;
         if (!this.shop.hasWorkSchedule)
             return ShopState.OPEN;
@@ -1289,10 +1311,10 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         if (player != null) {
             FamilyEntry family = this.getFamily();
             int points = this.friendPoints(player);
-            float denyChance = points < 3 ? -0.1f + 0.1f * points : (0.4f + 0.15f * points);
+            float chance = points < 3 ? -0.1f + 0.1f * points : (0.5f + 0.15f * points);
             if (!player.isCreative()
                     && (family != null && family.hasPlayerRelationShip() && !family.getPartner().equals(player.getUUID()))
-                    && Platform.INSTANCE.getPlayerData(player).map(d -> d.getDailyUpdater().getDailyRandom().nextFloat() < denyChance).orElse(true)) {
+                    && this.updater.getDailyRandom().nextFloat() < chance) {
                 this.speak(player, ConversationContext.FOLLOW_NO);
                 return false;
             }
@@ -1350,6 +1372,72 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         if (this.interactingPlayers.isEmpty())
             return null;
         return this.interactingPlayers.get(this.interactingPlayers.size() - 1);
+    }
+
+    public boolean procreateWith(Entity other) {
+        FamilyEntry family = this.getFamily();
+        if (family == null || !family.getPartner().equals(other.getUUID()) || this.procreationProgress > 0)
+            return false;
+        if (!this.canProcreate()) {
+            if (other instanceof ServerPlayer player) {
+                this.speak(player, ConversationContext.PROCREATION_COOLDOWN);
+            }
+            return false;
+        }
+        this.procreationProgress = 60;
+        this.procreationEntity = other;
+        return true;
+    }
+
+    public void tryUpdateName(Component component) {
+        if (this.data.name() == null)
+            this.setCustomName(component);
+    }
+
+    public boolean hasDataName() {
+        return this.data.name() != null;
+    }
+
+    public boolean canProcreate() {
+        return this.procreationCooldown < 0;
+    }
+
+    private boolean spawnBaby() {
+        if (!(this.level instanceof ServerLevel serverLevel))
+            return false;
+        EntityNPCBase baby = ModEntities.NPC.get().create(serverLevel, null, null, null, this.blockPosition(), MobSpawnType.BREEDING, false, false);
+        if (baby == null)
+            return false;
+        baby.setBaby(true);
+        List<ResourceLocation> childIDs = new ArrayList<>(this.data.possibleChildren());
+        NPCDataManager manager = DataPackHandler.INSTANCE.npcDataManager();
+        if (this.procreationEntity instanceof EntityNPCBase npc) {
+            childIDs.addAll(npc.data.possibleChildren());
+        }
+        childIDs.removeIf(r -> !manager.has(r));
+        if (childIDs.isEmpty()) {
+            baby.randomizeData(null, true);
+        } else {
+            baby.setLevel(1);
+            baby.setNPCData(DataPackHandler.INSTANCE.npcDataManager().get(childIDs.get(this.random.nextInt(childIDs.size()))), false);
+        }
+        UUID father;
+        UUID mother;
+        if (this.isMale()) {
+            father = this.getUUID();
+            mother = this.getFamily().getPartner();
+        } else {
+            mother = this.getUUID();
+            father = this.getFamily().getPartner();
+        }
+        if (this.procreationEntity instanceof ServerPlayer player) {
+            player.addItem(BabySpawnEgg.createBabyFrom(baby, player.getName(), father, mother));
+        } else {
+            baby.getFamily().setFather(father);
+            baby.getFamily().setMother(mother);
+            serverLevel.addFreshEntity(baby);
+        }
+        return true;
     }
 
     public boolean isMale() {

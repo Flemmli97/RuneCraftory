@@ -7,9 +7,9 @@ import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.ShopState;
 import io.github.flemmli97.runecraftory.common.network.C2SNPCInteraction;
+import io.github.flemmli97.runecraftory.common.network.C2SProcreationRequest;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.common.registry.ModPoiTypes;
-import io.github.flemmli97.runecraftory.common.world.family.FamilyEntry;
 import io.github.flemmli97.runecraftory.common.world.family.SyncedFamilyData;
 import io.github.flemmli97.runecraftory.integration.simplequest.SimpleQuestIntegration;
 import io.github.flemmli97.runecraftory.mixin.PoiTypeAccessor;
@@ -43,6 +43,8 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
     private final int offSetY = 50;
     protected int leftPos;
     protected int topPos;
+    private int lines;
+
 
     protected final T entity;
     private final ShopState isShopOpen;
@@ -80,18 +82,8 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
         RenderSystem.setShaderTexture(0, TEXTURE_PATH);
         int posX = 25;
         int posY = 25;
-        int texY = 150;
-        if (!this.entity.getShop().hasShop && !this.entity.getShop().hasWorkSchedule)
-            texY = 40;
-        else if (!this.entity.getShop().hasWorkSchedule)
-            texY = 60;
+        int texY = this.lines * 13 + 10;
         boolean renderParents = this.family.father() != null || this.family.mother() != null;
-        if (renderParents) {
-            texY += 13;
-        }
-        if (this.family.relationship() != FamilyEntry.Relationship.NONE) {
-            texY += 13;
-        }
         this.blit(stack, posX, posY, 0, 0, 150, texY - 5);
         this.blit(stack, posX, posY + texY - 5, 0, 256 - 5, 160, 5);
         int txtOffX = posX + 5;
@@ -104,62 +96,85 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
         this.font.draw(stack, "" + this.entity.friendPoints(this.minecraft.player), posX + 65 + 10, txtOffY + 13 * y, 0);
         y += 1;
         if (renderParents) {
-            if (this.family.father() == null)
-                this.font.draw(stack, new TranslatableComponent("runecraftory.gui.npc.parent", this.family.mother()), txtOffX, txtOffY + 13 * y, 0);
-            else if (this.family.mother() == null)
-                this.font.draw(stack, new TranslatableComponent("runecraftory.gui.npc.parent", this.family.father()), txtOffX, txtOffY + 13 * y, 0);
-            else
-                this.font.draw(stack, new TranslatableComponent("runecraftory.gui.npc.parents", this.family.father(), this.family.mother()), txtOffX, txtOffY + 13 * y, 0);
-            y += 1;
-        }
-        switch (this.family.relationship()) {
-            case NONE -> {
-            }
-            case DATING -> {
-                RenderSystem.setShaderTexture(0, TEXTURE_PATH);
-                this.blit(stack, txtOffX, txtOffY + 13 * y, 152, 41, 10, 8);
-                this.font.draw(stack, this.family.partner(), txtOffX + 12, txtOffY + 13 * y, 0);
+            if (this.family.father() == null) {
+                this.font.draw(stack, new TranslatableComponent("runecraftory.gui.npc.parent"), txtOffX, txtOffY + 13 * y, 0);
                 y += 1;
-            }
-            case MARRIED -> {
-                RenderSystem.setShaderTexture(0, TEXTURE_PATH);
-                this.blit(stack, txtOffX, txtOffY + 13 * y, 152, 54, 10, 8);
-                this.font.draw(stack, this.family.partner(), txtOffX + 12, txtOffY + 13 * y, 0);
+                for (FormattedCharSequence ch : this.font.split(this.family.mother(), 150 - 10)) {
+                    this.font.draw(stack, ch, txtOffX, txtOffY + 13 * y, 0);
+                    y += 1;
+                }
+            } else if (this.family.mother() == null) {
+                this.font.draw(stack, new TranslatableComponent("runecraftory.gui.npc.parent"), txtOffX, txtOffY + 13 * y, 0);
                 y += 1;
-            }
-        }
-        y += 1;
-        MutableComponent shopComp = null;
-        if (this.entity.getShop() == ModNPCJobs.GENERAL.getSecond())
-            shopComp = new TranslatableComponent("runecraftory.gui.npc.shop.owner", new TranslatableComponent(this.entity.getShop().getTranslationKey()));
-        else if (this.entity.getShop().hasWorkSchedule)
-            shopComp = new TranslatableComponent(this.entity.getShop().getTranslationKey());
-        int shopY = txtOffY + 13 * y;
-        int shopSizeY = -5;
-        if (shopComp != null) {
-            if (this.isShopOpen == ShopState.NOBED || this.isShopOpen == ShopState.NOWORKPLACE)
-                shopComp.withStyle(ChatFormatting.DARK_RED);
-            for (FormattedCharSequence comp : this.font.split(shopComp, 140)) {
-                float xCenter = posX + 75 - this.minecraft.font.width(comp) * 0.5f;
-                this.font.draw(stack, comp, xCenter, txtOffY + 13 * y, 0);
-                y++;
-                shopSizeY += 13;
-            }
-        }
-
-        if (this.entity.getShop().hasWorkSchedule) {
-            for (Component comp : this.entity.getSchedule().viewSchedule()) {
-                for (FormattedCharSequence formatted : this.font.split(comp, 140)) {
-                    this.font.draw(stack, formatted, txtOffX, txtOffY + 13 * y, 0);
-                    y++;
+                for (FormattedCharSequence ch : this.font.split(this.family.father(), 150 - 10)) {
+                    this.font.draw(stack, ch, txtOffX, txtOffY + 13 * y, 0);
+                    y += 1;
+                }
+            } else {
+                this.font.draw(stack, new TranslatableComponent("runecraftory.gui.npc.parents"), txtOffX, txtOffY + 13 * y, 0);
+                y += 1;
+                for (FormattedCharSequence ch : this.font.split(this.family.father(), 150 - 10)) {
+                    this.font.draw(stack, ch, txtOffX, txtOffY + 13 * y, 0);
+                    y += 1;
+                }
+                for (FormattedCharSequence ch : this.font.split(this.family.mother(), 150 - 10)) {
+                    this.font.draw(stack, ch, txtOffX, txtOffY + 13 * y, 0);
+                    y += 1;
                 }
             }
         }
+        if (!this.entity.isBaby()) {
+            switch (this.family.relationship()) {
+                case NONE -> {
+                }
+                case DATING -> {
+                    RenderSystem.setShaderTexture(0, TEXTURE_PATH);
+                    this.blit(stack, txtOffX, txtOffY + 13 * y, 152, 41, 10, 8);
+                    this.font.draw(stack, this.family.partner(), txtOffX + 12, txtOffY + 13 * y, 0);
+                    y += 1;
+                }
+                case MARRIED -> {
+                    RenderSystem.setShaderTexture(0, TEXTURE_PATH);
+                    this.blit(stack, txtOffX, txtOffY + 13 * y, 152, 54, 10, 8);
+                    this.font.draw(stack, this.family.partner(), txtOffX + 12, txtOffY + 13 * y, 0);
+                    y += 1;
+                }
+            }
+            y += 1;
+        }
+        int shopY = txtOffY + 13 * y;
+        int shopSizeY = -5;
+        if (!this.entity.isBaby()) {
+            MutableComponent shopComp = null;
+            if (this.entity.getShop() == ModNPCJobs.GENERAL.getSecond())
+                shopComp = new TranslatableComponent("runecraftory.gui.npc.shop.owner", new TranslatableComponent(this.entity.getShop().getTranslationKey()));
+            else if (this.entity.getShop().hasWorkSchedule)
+                shopComp = new TranslatableComponent(this.entity.getShop().getTranslationKey());
+            if (shopComp != null) {
+                if (this.isShopOpen == ShopState.NOBED || this.isShopOpen == ShopState.NOWORKPLACE)
+                    shopComp.withStyle(ChatFormatting.DARK_RED);
+                for (FormattedCharSequence comp : this.font.split(shopComp, 140)) {
+                    float xCenter = posX + 75 - this.minecraft.font.width(comp) * 0.5f;
+                    this.font.draw(stack, comp, xCenter, txtOffY + 13 * y, 0);
+                    y++;
+                    shopSizeY += 13;
+                }
+            }
 
+            if (this.entity.getShop().hasWorkSchedule) {
+                for (Component comp : this.entity.getSchedule().viewSchedule()) {
+                    for (FormattedCharSequence formatted : this.font.split(comp, 140)) {
+                        this.font.draw(stack, formatted, txtOffX, txtOffY + 13 * y, 0);
+                        y++;
+                    }
+                }
+            }
+        }
         if (this.components != null && this.isHovering(txtOffX, shopY, 145, shopSizeY, mouseX, mouseY)) {
             this.renderTooltip(stack, this.components, mouseX, mouseY);
         }
         this.tooltipComponents.forEach(r -> r.render(stack, mouseX, mouseY));
+        this.lines = y;
         super.render(stack, mouseX, mouseY, partialTick);
     }
 
@@ -178,7 +193,7 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
                 this.minecraft.setScreen(null);
             }));
         }
-        if (this.isShopOpen == ShopState.OPEN) {
+        if (!this.entity.isBaby() && this.isShopOpen == ShopState.OPEN) {
             if (this.entity.getShop().hasShop) {
                 y += 30;
                 this.addRenderableWidget(new Button(this.leftPos + x, this.topPos + y, xSize, 20, new TranslatableComponent(C2SNPCInteraction.Type.SHOP.translation), b -> {
@@ -208,11 +223,18 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
                 this.minecraft.setScreen(null);
             }));
         }
+        if (!this.entity.isBaby() && this.family.canProcreate()) {
+            y += 30;
+            this.addRenderableWidget(new Button(this.leftPos + x, this.topPos + y, xSize, 20, new TranslatableComponent("runecraftory.gui.npc.procreate"), b -> {
+                Platform.INSTANCE.sendToServer(new C2SProcreationRequest(this.entity.getId()));
+                this.minecraft.setScreen(null);
+            }));
+        }
         if (this.isShopOpen == ShopState.NOBED) {
             this.components = new ArrayList<>();
             this.components.addAll(this.font.split(new TranslatableComponent("runecraftory.gui.npc.bed.no"), 150));
         }
-        if (this.isShopOpen == ShopState.NOWORKPLACE && this.entity.getShop().poiType != null) {
+        if (!this.entity.isBaby() && this.isShopOpen == ShopState.NOWORKPLACE && this.entity.getShop().poiType != null) {
             this.components = new ArrayList<>();
             this.components.addAll(this.font.split(new TranslatableComponent("runecraftory.gui.npc.workplace.no", this.formatShopPoi(this.entity.getShop().poiType.get())), 150));
         }

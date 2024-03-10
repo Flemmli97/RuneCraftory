@@ -45,6 +45,8 @@ public class MobConfig {
 
     public static int npcSpawnRateMin = 3600;
     public static int npcSpawnRateMax = 7200;
+    public static int initialProcreationCooldown = 24000;
+    public static int procreationCooldown = 24000;
 
 
     public enum GateLevelType {

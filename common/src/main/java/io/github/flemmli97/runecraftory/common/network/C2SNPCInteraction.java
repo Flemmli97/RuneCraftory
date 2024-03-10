@@ -68,7 +68,10 @@ public class C2SNPCInteraction implements Packet {
                     case QUEST -> npc.respondToQuest(sender, new ResourceLocation(pkt.action));
                     case CLOSE -> npc.closedDialogue(sender);
                     case CLOSE_QUEST -> npc.closedQuestDialogue(sender);
-                    case ACTION -> npc.getShop().handleAction(npc, sender, pkt.action);
+                    case ACTION -> {
+                        if (!npc.isBaby())
+                            npc.getShop().handleAction(npc, sender, pkt.action);
+                    }
                 }
             }
         }

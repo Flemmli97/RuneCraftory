@@ -22,6 +22,7 @@ public class PacketRegistrar {
         register.registerMessage(id++, C2SQuestSelect.ID, C2SQuestSelect.class, C2SQuestSelect::write, C2SQuestSelect::read, C2SQuestSelect::handle);
         register.registerMessage(id++, C2SSubmitQuestBoard.ID, C2SSubmitQuestBoard.class, C2SSubmitQuestBoard::write, C2SSubmitQuestBoard::read, C2SSubmitQuestBoard::handle);
         register.registerMessage(id++, C2SSpawnEgg.ID, C2SSpawnEgg.class, C2SSpawnEgg::write, C2SSpawnEgg::read, C2SSpawnEgg::handle);
+        register.registerMessage(id++, C2SProcreationRequest.ID, C2SProcreationRequest.class, C2SProcreationRequest::write, C2SProcreationRequest::read, C2SProcreationRequest::handle);
         return id;
     }
 

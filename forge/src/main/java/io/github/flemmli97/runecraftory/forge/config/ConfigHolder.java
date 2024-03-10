@@ -143,6 +143,8 @@ public record ConfigHolder<T>(ModConfig.Type configType, String configName,
         MobConfig.mimicStrongChance = spec.mimicStrongChance.get().floatValue();
         MobConfig.npcSpawnRateMin = spec.npcSpawnRateMin.get();
         MobConfig.npcSpawnRateMax = spec.npcSpawnRateMax.get();
+        MobConfig.initialProcreationCooldown = spec.initialProcreationCooldown.get();
+        MobConfig.procreationCooldown = spec.procreationCooldown.get();
     }
 
     public void reloadConfig() {

@@ -134,6 +134,10 @@ public class ItemModels extends ItemModelProvider {
                 this.singleTexture(sup.getID().getPath(), this.mcLoc("item/generated"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + ModItems.UNKNOWN.getID().getPath()));
             else if (sup.get() instanceof ItemGiantCrops)
                 this.singleTexture(sup.getID().getPath(), this.modLoc("item/double_sized_item"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath()));
+            else if (sup == ModItems.NPC_BABY)
+                this.singleTexture(sup.getID().getPath(), this.mcLoc("item/generated"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath() + "_boy"))
+                        .override().predicate(ItemModelProps.BABY_GENDER, 1)
+                        .model(this.singleTexture(sup.getID().getPath() + "_girl", this.mcLoc("item/generated"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath() + "_girl"))).end();
             else
                 this.singleTexture(sup.getID().getPath(), this.mcLoc("item/generated"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath()));
         }
