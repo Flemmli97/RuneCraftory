@@ -15,13 +15,12 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeature;
-import io.github.flemmli97.runecraftory.api.registry.NPCFeatureType;
+import io.github.flemmli97.runecraftory.api.registry.NPCFeatureHolder;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCSchedule;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
 import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
@@ -557,7 +556,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
     }
 
     public record NPCLook(Gender gender, @Nullable ResourceLocation texture, @Nullable String playerSkin, int weight,
-                          List<NPCFeature> additionalFeatures) {
+                          List<NPCFeatureHolder<?>> additionalFeatures) {
 
         public static final ResourceLocation DEFAULT_SKIN = new ResourceLocation("textures/entity/steve.png");
         public static final ResourceLocation DEFAULT_LOOK_ID = new ResourceLocation(RuneCraftory.MODID, "default_look");
@@ -584,12 +583,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             String skin = null;
             if (buf.readBoolean())
                 skin = buf.readUtf();
-            List<NPCFeature> additional = buf.readList(b -> {
-                NPCFeatureType<?> t = ModNPCLooks.NPC_FEATURE_REGISTRY.get()
-                        .getFromId(b.readResourceLocation());
-                return t.create(b);
-            });
-            return new NPCLook(buf.readEnum(Gender.class), text, skin, buf.readInt(), additional);
+            return new NPCLook(buf.readEnum(Gender.class), text, skin, buf.readInt(), List.of());
         }
 
         public void writeToBuffer(FriendlyByteBuf buf) {
@@ -599,10 +593,6 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             buf.writeBoolean(this.playerSkin != null);
             if (this.playerSkin != null)
                 buf.writeUtf(this.playerSkin);
-            buf.writeCollection(this.additionalFeatures, (b, e) -> {
-                b.writeResourceLocation(e.getType().getRegistryName());
-                e.writeToBuffer(b);
-            });
             buf.writeEnum(this.gender());
             buf.writeInt(this.weight());
         }

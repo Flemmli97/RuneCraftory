@@ -2,26 +2,21 @@ package io.github.flemmli97.runecraftory.api.registry;
 
 import com.mojang.serialization.Codec;
 import io.github.flemmli97.tenshilib.platform.registry.CustomRegistryEntry;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.function.Function;
 
-public class NPCFeatureType<T extends NPCFeature> extends CustomRegistryEntry<NPCFeatureType<T>> {
+public class NPCFeatureType<F extends NPCFeature> extends CustomRegistryEntry<NPCFeatureType<F>> {
 
-    private final Function<FriendlyByteBuf, T> factory;
-    private final Codec<T> codec;
+    public final Codec<? extends NPCFeatureHolder<F>> codec;
+    public final Function<FriendlyByteBuf, F> pkt;
+    public final Function<Tag, F> load;
 
-    public NPCFeatureType(Function<FriendlyByteBuf, T> factory, Codec<T> codec) {
-        this.factory = factory;
+    public NPCFeatureType(Codec<? extends NPCFeatureHolder<F>> codec, Function<FriendlyByteBuf, F> pkt, Function<Tag, F> load) {
         this.codec = codec;
-    }
-
-    public T create(FriendlyByteBuf buf) {
-        return this.factory.apply(buf);
-    }
-
-    public Codec<T> getCodec() {
-        return this.codec;
+        this.pkt = pkt;
+        this.load = load;
     }
 
     @Override

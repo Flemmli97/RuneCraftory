@@ -106,7 +106,7 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
     }
 
     @Override
-    public void render(T entity, float entityYaw, float partialTicks, PoseStack matrixStack, MultiBufferSource buffer, int packedLight) {
+    public void render(T entity, float entityYaw, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         this.model = this.def;
         String skin = entity.getLook().playerSkin();
         if (skin != null) {
@@ -116,13 +116,13 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
             else
                 this.model = this.def;
         }
-        for (NPCFeature feature : entity.getLook().additionalFeatures()) {
-            NPCFeatureRenderers.get(feature).onSetup(feature, this, entity);
+        for (NPCFeature feature : entity.lookFeatures.view.values()) {
+            NPCFeatureRenderers.get(feature).onSetup(feature, this, entity, stack);
         }
         this.setModelProperties(entity);
-        super.render(entity, entityYaw, partialTicks, matrixStack, buffer, packedLight);
-        for (NPCFeature feature : entity.getLook().additionalFeatures()) {
-            NPCFeatureRenderers.get(feature).onSetup(feature, this, entity);
+        super.render(entity, entityYaw, partialTicks, stack, buffer, packedLight);
+        for (NPCFeature feature : entity.lookFeatures.view.values()) {
+            NPCFeatureRenderers.get(feature).render(feature, entity, entityYaw, partialTicks, stack, buffer, packedLight);
         }
     }
 
@@ -185,6 +185,9 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
             }
             stack.translate(0, f * 0.1, -f * entity.getBbHeight() * 0.5);
             stack.mulPose(Vector3f.XP.rotationDegrees(f * this.getFlipDegrees(entity)));
+        }
+        for (NPCFeature feature : entity.lookFeatures.view.values()) {
+            NPCFeatureRenderers.get(feature).transformStack(feature, this, entity, stack, partialTicks);
         }
     }
 

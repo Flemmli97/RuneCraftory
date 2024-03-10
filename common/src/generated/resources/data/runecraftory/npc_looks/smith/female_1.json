@@ -5,6 +5,14 @@
   "additionalFeatures": [
     {
       "type": "runecraftory:slim_feature"
+    },
+    {
+      "size": {
+        "type": "minecraft:uniform",
+        "min": 0.7,
+        "max": 0.9
+      },
+      "type": "runecraftory:size_feature"
     }
   ]
 }

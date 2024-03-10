@@ -26,6 +26,8 @@ import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCFindPOI;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCFollowGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCWanderGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.NPCAttackActions;
+import io.github.flemmli97.runecraftory.common.entities.npc.features.NPCFeatureContainer;
+import io.github.flemmli97.runecraftory.common.entities.npc.features.SizeFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.ShopState;
 import io.github.flemmli97.runecraftory.common.entities.pathing.NPCWalkNodeEvaluator;
@@ -44,6 +46,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
+import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
@@ -100,12 +103,14 @@ import net.minecraft.world.damagesource.EntityDamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.OwnableEntity;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -210,6 +215,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     public boolean ignoreInit;
     private NPCData data = NPCData.DEFAULT_DATA;
     private NPCData.NPCLook look = NPCData.NPCLook.DEFAULT_LOOK;
+    public final NPCFeatureContainer lookFeatures = new NPCFeatureContainer();
     private NPCAttackActions attackActions = NPCAttackActions.DEFAULT;
     private Pair<EnumSeason, Integer> birthday = Pair.of(EnumSeason.SPRING, 1);
     //Will be used if data returns null for these values
@@ -1171,6 +1177,14 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         return super.hasRestriction() && this.getEntityToFollowUUID() == null;
     }
 
+    @Override
+    public EntityDimensions getDimensions(Pose pose) {
+        SizeFeatureType.SizeFeature feat = this.lookFeatures.getFeature(ModNPCLooks.SIZE.get());
+        if (feat != null)
+            return super.getDimensions(pose).scale(feat.size);
+        return super.getDimensions(pose);
+    }
+
     public NPCJob getShop() {
         return this.shop;
     }
@@ -1486,8 +1500,10 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     public void setClientLook(NPCData.NPCLook look) {
-        if (this.level.isClientSide)
+        if (this.level.isClientSide) {
             this.look = look;
+            this.refreshDimensions();
+        }
     }
 
     public NPCData.Gift giftOf(ItemStack stack) {
@@ -1577,6 +1593,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
                 this.schedule.load(new NPCSchedule(this, this.random).save());
             else
                 this.schedule.with(data.schedule());
+            this.lookFeatures.buildFromLooks(this, this.look.additionalFeatures());
         } else {
             // Apply non null things else
             if (this.data.look() != null) {
@@ -1606,8 +1623,9 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         if (this.level().getLevel() < this.data.baseLevel()) {
             this.setLevel(this.data.baseLevel());
         }
+        this.refreshDimensions();
         if (!this.level.isClientSide)
-            Platform.INSTANCE.sendToTrackingAndSelf(new S2CNPCLook(this.getId(), this.look), this);
+            Platform.INSTANCE.sendToTrackingAndSelf(new S2CNPCLook(this.getId(), this.look, this.lookFeatures.save()), this);
     }
 
     private CompoundTag saveNPCData() {
@@ -1620,6 +1638,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         tag.putInt("Birthday", this.getBirthday().getSecond());
         tag.putString("Combat", DataPackHandler.INSTANCE.npcActionsManager().getId(this.getAttackActions()).toString());
         tag.put("Schedule", this.schedule.save());
+        tag.put("LookFeatures", this.lookFeatures.save());
         return tag;
     }
 
@@ -1636,12 +1655,13 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         }
         this.attackActions = DataPackHandler.INSTANCE.npcActionsManager().get(new ResourceLocation(tag.getString("Combat")));
         this.schedule.load(tag.getCompound("Schedule"));
+        this.lookFeatures.read(tag.getCompound("LookFeatures"));
         this.setNPCData(data, true);
     }
 
     @Override
     public void startSeenByPlayer(ServerPlayer player) {
-        Platform.INSTANCE.sendToClient(new S2CNPCLook(this.getId(), this.look), player);
+        Platform.INSTANCE.sendToClient(new S2CNPCLook(this.getId(), this.look, this.lookFeatures.save()), player);
     }
 
     public enum Behaviour {

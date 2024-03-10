@@ -13,17 +13,18 @@ public class NPCFeatureRenderers {
 
     public static void init() {
         register(ModNPCLooks.SLIM.get(), new SlimLookRenderer());
+        register(ModNPCLooks.SIZE.get(), new SizeRenderer());
     }
 
-    public static synchronized <T extends NPCFeature> void register(NPCFeatureType<T> type, NPCFeatureRenderer<T> renderer) {
+    public static synchronized <F extends NPCFeature> void register(NPCFeatureType<F> type, NPCFeatureRenderer<F> renderer) {
         RENDERERS.put(type, renderer);
     }
 
     @SuppressWarnings("unchecked")
-    public static <T extends NPCFeature> NPCFeatureRenderer<T> get(T feature) {
+    public static <T extends NPCFeature> NPCFeatureRenderer<T> get(NPCFeature feature) {
         NPCFeatureRenderer<T> renderer = (NPCFeatureRenderer<T>) RENDERERS.get(feature.getType());
         if (renderer == null)
-            throw new IllegalStateException("No npc feature renderer registered for " + feature.getType());
+            throw new IllegalStateException("No npc feature renderer registered for " + feature);
         return renderer;
     }
 }
