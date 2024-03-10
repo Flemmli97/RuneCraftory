@@ -20,6 +20,9 @@ public record SizeFeatureType(NumberProvider size) implements NPCFeatureHolder<S
     public static final Codec<SizeFeatureType> CODEC = RecordCodecBuilder.create(inst ->
             inst.group(CodecHelper.NUMER_PROVIDER_CODEC.fieldOf("size").forGetter(d -> d.size)).apply(inst, SizeFeatureType::new));
 
+    public static final float MIN = 0.2F;
+    public static final float MAX = 10;
+
     @Override
     public SizeFeature create(EntityNPCBase npc) {
         return new SizeFeature(this.size.getFloat(RuneCraftory.createContext(npc)));
@@ -43,7 +46,7 @@ public record SizeFeatureType(NumberProvider size) implements NPCFeatureHolder<S
         }
 
         public SizeFeature(float size) {
-            this.size = Mth.clamp(size, 0.2f, 5);
+            this.size = Mth.clamp(size, MIN, MAX);
         }
 
         @Override
