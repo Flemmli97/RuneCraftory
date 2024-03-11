@@ -1,11 +1,10 @@
 package io.github.flemmli97.runecraftory.common.effects;
 
+import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.network.S2CEntityDataSync;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 
 public class PoisonEffect extends PermanentEffect {
 
@@ -16,14 +15,12 @@ public class PoisonEffect extends PermanentEffect {
 
     @Override
     public void applyEffectTick(LivingEntity living, int amplifier) {
-        if (living instanceof Player player) {
-            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                float amount = player.getMaxHealth() * 0.05f;
-                amount = ((player.getHealth() - amount < 1) ? (player.getHealth() - 1) : amount);
-                if (amount > 0)
-                    player.hurt(CustomDamage.POISON, amount);
-            });
-        }
+        float amount = living.getMaxHealth() * 0.05f;
+        amount = ((living.getHealth() - amount < 1) ? (living.getHealth() - 1) : amount);
+        if (living.getType().is(RunecraftoryTags.BOSSES))
+            amount *= 0.25;
+        if (amount > 0)
+            living.hurt(CustomDamage.POISON, amount);
         super.applyEffectTick(living, amplifier);
     }
 }
