@@ -25,7 +25,7 @@ public class RenderWindBlade extends RenderTexture<EntityWindBlade> {
     public void render(EntityWindBlade entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         stack.pushPose();
         stack.scale(0.75f, 0.75f, 0.75f);
-        stack.translate(0, this.ySize * 0.35, 0);
+        stack.translate(0, this.ySize * 0.15, 0);
         super.render(entity, rotation, partialTicks, stack, buffer, packedLight);
         stack.popPose();
     }
