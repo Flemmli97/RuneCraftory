@@ -14,7 +14,7 @@ public class WaveSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         EntityAmbrosiaWave wave = new EntityAmbrosiaWave(level, entity, 40);
-        wave.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.33f));
+        wave.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.35f));
         wave.setPos(wave.getX(), wave.getY() + 0.2, wave.getZ());
         level.addFreshEntity(wave);
         return true;

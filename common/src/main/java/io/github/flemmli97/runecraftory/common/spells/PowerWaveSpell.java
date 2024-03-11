@@ -23,7 +23,7 @@ public class PowerWaveSpell extends WeaponSpell {
         if (result) {
             EntityPowerWave wave = new EntityPowerWave(level, entity);
             wave.setPos(wave.getX(), entity.getY() + entity.getBbHeight() * 0.1, wave.getZ());
-            wave.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.65f));
+            wave.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.75f));
             if (entity instanceof Mob mob && mob.getTarget() != null) {
                 wave.shootAtEntity(mob.getTarget(), 0.9f, 0, 0);
             } else {

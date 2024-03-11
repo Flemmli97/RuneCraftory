@@ -28,7 +28,7 @@ public class Laser5Spell extends Spell {
         }
         for (Vector3f vec : RayTraceUtils.rotatedVecs(dir, new Vec3(0, 1, 0), -50, 50, 25)) {
             EntityThunderboltBeam beam = new EntityThunderboltBeam(level, entity);
-            beam.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.75f));
+            beam.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.9f));
             beam.setRotationToDir(vec.x(), vec.y(), vec.z(), 0);
             level.addFreshEntity(beam);
         }
