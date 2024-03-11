@@ -1,13 +1,13 @@
 package io.github.flemmli97.runecraftory.common.entities.ai.boss;
 
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
+import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedMonsterAttackGoal;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityMarionetta;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.AnimatedAttackGoal;
 import io.github.flemmli97.tenshilib.common.utils.MathUtils;
 import net.minecraft.world.phys.Vec3;
 
-public class MarionettaAttackGoal<T extends EntityMarionetta> extends AnimatedAttackGoal<T> {
+public class MarionettaAttackGoal<T extends EntityMarionetta> extends AnimatedMonsterAttackGoal<T> {
 
     private int moveDelay;
     private boolean moveFlag, idleFlag, clockwise;

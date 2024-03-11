@@ -1,12 +1,12 @@
 package io.github.flemmli97.runecraftory.common.entities.ai.boss;
 
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
-import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedMeleeGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedMonsterAttackGoal;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityChimera;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
 
-public class ChimeraAttackGoal<T extends EntityChimera> extends AnimatedMeleeGoal<T> {
+public class ChimeraAttackGoal<T extends EntityChimera> extends AnimatedMonsterAttackGoal<T> {
 
     private int moveDelay;
     private boolean moveFlag;

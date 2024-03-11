@@ -10,7 +10,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.function.Predicate;
 
-public class EvadingRangedAttackGoal<T extends BaseMonster> extends AnimatedMeleeGoal<T> {
+public class EvadingRangedAttackGoal<T extends BaseMonster> extends AnimatedMonsterAttackGoal<T> {
 
     private final float reachSq;
     private final float meleeDistSq;
@@ -60,7 +60,7 @@ public class EvadingRangedAttackGoal<T extends BaseMonster> extends AnimatedMele
     @Override
     public void handleIdle() {
         if (!this.canSee || this.distanceToTargetSq > this.reachSq) {
-            this.moveToEntityNearer(this.target, 1);
+            this.moveToWithDelay(1);
             this.movingNearer = true;
             return;
         }

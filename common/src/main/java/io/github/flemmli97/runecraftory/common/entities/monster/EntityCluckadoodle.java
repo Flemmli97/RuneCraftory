@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedMeleeGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedMonsterAttackGoal;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import net.minecraft.sounds.SoundEvent;
@@ -18,7 +18,7 @@ public class EntityCluckadoodle extends BaseMonster {
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
     public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, INTERACT, SLEEP};
-    public final AnimatedMeleeGoal<EntityCluckadoodle> attack = new AnimatedMeleeGoal<>(this);
+    public final AnimatedMonsterAttackGoal<EntityCluckadoodle> attack = new AnimatedMonsterAttackGoal<>(this);
     private final AnimationHandler<EntityCluckadoodle> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityCluckadoodle(EntityType<? extends EntityCluckadoodle> type, Level world) {

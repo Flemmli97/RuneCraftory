@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedMeleeGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedMonsterAttackGoal;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
@@ -22,7 +22,7 @@ public class EntityScorpion extends BaseMonster {
     public static final AnimatedAction STILL = AnimatedAction.builder(1, "still").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, INTERACT, STILL};
 
-    public final AnimatedMeleeGoal<EntityScorpion> attack = new AnimatedMeleeGoal<>(this);
+    public final AnimatedMonsterAttackGoal<EntityScorpion> attack = new AnimatedMonsterAttackGoal<>(this);
     private final AnimationHandler<EntityScorpion> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityScorpion(EntityType<? extends EntityScorpion> type, Level world) {

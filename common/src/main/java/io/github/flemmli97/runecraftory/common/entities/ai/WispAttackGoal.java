@@ -4,7 +4,7 @@ import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.monster.wisp.EntityWispBase;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 
-public class WispAttackGoal<T extends EntityWispBase> extends AnimatedMeleeGoal<T> {
+public class WispAttackGoal<T extends EntityWispBase> extends AnimatedMonsterAttackGoal<T> {
 
     private final float reach;
 
@@ -26,7 +26,7 @@ public class WispAttackGoal<T extends EntityWispBase> extends AnimatedMeleeGoal<
     @Override
     public void handlePreAttack() {
         if (this.distanceToTargetSq >= 64)
-            this.moveToEntityNearer(this.target, 1);
+            this.moveToWithDelay(1);
         this.attacker.getLookControl().setLookAt(this.target, 360, 90);
         if (this.distanceToTargetSq <= 25) {
             this.attacker.getNavigation().stop();

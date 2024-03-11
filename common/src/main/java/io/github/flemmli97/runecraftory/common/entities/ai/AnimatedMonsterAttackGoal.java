@@ -5,16 +5,17 @@ import io.github.flemmli97.runecraftory.common.entities.RandomAttackSelectorMob;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.IAnimated;
 import io.github.flemmli97.tenshilib.common.entity.ai.AnimatedAttackGoal;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.AABB;
 
-public class AnimatedMeleeGoal<T extends PathfinderMob & IAnimated & RandomAttackSelectorMob> extends AnimatedAttackGoal<T> {
+public class AnimatedMonsterAttackGoal<T extends PathfinderMob & IAnimated & RandomAttackSelectorMob> extends AnimatedAttackGoal<T> {
 
     protected int idleMoveDelay, idleMoveFlag, attackMoveDelay;
 
-    public AnimatedMeleeGoal(T entity) {
+    public AnimatedMonsterAttackGoal(T entity) {
         super(entity);
     }
 
@@ -38,10 +39,7 @@ public class AnimatedMeleeGoal<T extends PathfinderMob & IAnimated & RandomAttac
 
     @Override
     public void handlePreAttack() {
-        if (this.attacker.maxAttackRange(this.next) <= 1)
-            this.moveToEntityNearer(this.target, 1);
-        else
-            this.moveToWithDelay(1);
+        this.moveToWithDelay(1);
         if (this.attackMoveDelay <= 0)
             this.attackMoveDelay = this.attacker.getRandom().nextInt(50) + 100;
         AABB aabb = this.attacker.attackCheckAABB(this.next, this.target, -0.3);
@@ -83,13 +81,22 @@ public class AnimatedMeleeGoal<T extends PathfinderMob & IAnimated & RandomAttac
         this.idleMoveDelay--;
     }
 
-    protected void moveToEntityNearer(LivingEntity target, float speed) {
+    @Override
+    protected void moveToWithDelay(double speed) {
+        double min = this.attacker.getBbWidth() * 0.5 + this.target.getBbWidth() * 0.5 + 0.;
+        if (this.distanceToTargetSq < min * min) {
+            this.attacker.getNavigation().stop();
+            return;
+        }
         if (this.pathFindDelay <= 0) {
-            Path path = this.attacker.getNavigation().createPath(target, 0);
-            if (path == null || this.attacker.getNavigation().moveTo(path, speed)) {
+            if (!this.moveTo(this.target, speed))
                 this.pathFindDelay += 15;
-            }
             this.pathFindDelay += this.attacker.getRandom().nextInt(10) + 5;
         }
+    }
+
+    private boolean moveTo(Entity target, double speed) {
+        Path path = this.attacker.getNavigation().createPath(target, 0);
+        return path != null && this.attacker.getNavigation().moveTo(path, speed);
     }
 }

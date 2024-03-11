@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedMeleeGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedMonsterAttackGoal;
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
@@ -25,7 +25,7 @@ public class EntityTroll extends BaseMonster {
     public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{PUNCH, DOUBLE_PUNCH, SLAM, INTERACT, SLEEP};
 
-    public final AnimatedMeleeGoal<EntityTroll> attack = new AnimatedMeleeGoal<>(this);
+    public final AnimatedMonsterAttackGoal<EntityTroll> attack = new AnimatedMonsterAttackGoal<>(this);
     private final AnimationHandler<EntityTroll> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityTroll(EntityType<? extends EntityTroll> type, Level world) {

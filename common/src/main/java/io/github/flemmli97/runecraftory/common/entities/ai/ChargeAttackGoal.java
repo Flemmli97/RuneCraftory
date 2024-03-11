@@ -5,7 +5,7 @@ import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import net.minecraft.world.phys.AABB;
 
-public class ChargeAttackGoal<T extends ChargingMonster> extends AnimatedMeleeGoal<T> {
+public class ChargeAttackGoal<T extends ChargingMonster> extends AnimatedMonsterAttackGoal<T> {
 
     public ChargeAttackGoal(T entity) {
         super(entity);

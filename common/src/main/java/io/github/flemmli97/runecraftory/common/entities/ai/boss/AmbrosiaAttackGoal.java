@@ -1,13 +1,13 @@
 package io.github.flemmli97.runecraftory.common.entities.ai.boss;
 
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
+import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedMonsterAttackGoal;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityAmbrosia;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.AnimatedAttackGoal;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
 
-public class AmbrosiaAttackGoal<T extends EntityAmbrosia> extends AnimatedAttackGoal<T> {
+public class AmbrosiaAttackGoal<T extends EntityAmbrosia> extends AnimatedMonsterAttackGoal<T> {
 
     private int moveDelay;
     private boolean moveFlag, idleFlag, clockwise;

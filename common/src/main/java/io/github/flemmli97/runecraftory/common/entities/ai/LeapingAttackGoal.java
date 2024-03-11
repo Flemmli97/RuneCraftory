@@ -7,7 +7,7 @@ import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-public class LeapingAttackGoal<T extends LeapingMonster> extends AnimatedMeleeGoal<T> {
+public class LeapingAttackGoal<T extends LeapingMonster> extends AnimatedMonsterAttackGoal<T> {
 
     private final double meleeDistSq;
     private final boolean keepDistance, stayIfClose;

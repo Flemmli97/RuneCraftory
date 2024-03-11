@@ -5,7 +5,7 @@ import io.github.flemmli97.runecraftory.common.entities.monster.EntityGhost;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import net.minecraft.world.phys.AABB;
 
-public class GhostAttackGoal<T extends EntityGhost> extends AnimatedMeleeGoal<T> {
+public class GhostAttackGoal<T extends EntityGhost> extends AnimatedMonsterAttackGoal<T> {
 
     public GhostAttackGoal(T entity) {
         super(entity);
@@ -32,7 +32,7 @@ public class GhostAttackGoal<T extends EntityGhost> extends AnimatedMeleeGoal<T>
             super.handlePreAttack();
         else if (this.attacker.isAnimOfType(this.next, AnimationType.RANGED)) {
             if (this.distanceToTargetSq >= 64)
-                this.moveToEntityNearer(this.target, 1);
+                this.moveToWithDelay(1);
 
             this.attacker.getLookControl().setLookAt(this.target, 360, 90);
             if (this.distanceToTargetSq <= 25) {

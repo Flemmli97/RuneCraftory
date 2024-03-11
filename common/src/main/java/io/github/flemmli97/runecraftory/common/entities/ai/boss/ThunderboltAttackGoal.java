@@ -1,12 +1,12 @@
 package io.github.flemmli97.runecraftory.common.entities.ai.boss;
 
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
+import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedMonsterAttackGoal;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityThunderbolt;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.AnimatedAttackGoal;
 import net.minecraft.core.BlockPos;
 
-public class ThunderboltAttackGoal<T extends EntityThunderbolt> extends AnimatedAttackGoal<T> {
+public class ThunderboltAttackGoal<T extends EntityThunderbolt> extends AnimatedMonsterAttackGoal<T> {
 
     private int moveDelay, idleData;
     private boolean moveFlag, idleFlag;

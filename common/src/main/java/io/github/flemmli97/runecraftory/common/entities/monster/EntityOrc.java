@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedMeleeGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedMonsterAttackGoal;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
@@ -28,7 +28,7 @@ public class EntityOrc extends BaseMonster {
     public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE_1, MELEE_2, INTERACT, SLEEP};
     private final AnimationHandler<EntityOrc> animationHandler = new AnimationHandler<>(this, ANIMS);
-    public AnimatedMeleeGoal<EntityOrc> attack = new AnimatedMeleeGoal<>(this);
+    public AnimatedMonsterAttackGoal<EntityOrc> attack = new AnimatedMonsterAttackGoal<>(this);
 
     public EntityOrc(EntityType<? extends EntityOrc> type, Level world) {
         super(type, world);

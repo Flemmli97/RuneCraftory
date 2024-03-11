@@ -1,13 +1,13 @@
 package io.github.flemmli97.runecraftory.common.entities.ai.boss;
 
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
-import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedMeleeGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedMonsterAttackGoal;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityRaccoon;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.phys.Vec3;
 
-public class RaccoonAttackGoal<T extends EntityRaccoon> extends AnimatedMeleeGoal<T> {
+public class RaccoonAttackGoal<T extends EntityRaccoon> extends AnimatedMonsterAttackGoal<T> {
 
     private int moveDelay;
     private boolean moveFlag;

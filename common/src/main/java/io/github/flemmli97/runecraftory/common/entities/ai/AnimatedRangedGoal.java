@@ -8,7 +8,7 @@ import net.minecraft.world.phys.AABB;
 
 import java.util.function.Predicate;
 
-public class AnimatedRangedGoal<T extends BaseMonster> extends AnimatedMeleeGoal<T> {
+public class AnimatedRangedGoal<T extends BaseMonster> extends AnimatedMonsterAttackGoal<T> {
 
     private static <T extends BaseMonster> MeleeAttackCheck<T> DEFAULT_CHECK() {
         return (attacker, target, anim) -> {

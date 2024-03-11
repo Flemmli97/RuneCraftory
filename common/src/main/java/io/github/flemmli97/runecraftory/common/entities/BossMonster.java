@@ -251,6 +251,6 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
     }
 
     public void playAngrySound() {
-        this.playSound(SoundEvents.PARROT_IMITATE_ENDER_DRAGON, 1, (this.getRandom().nextFloat() - this.getRandom().nextFloat()) * 0.2f + 0.8f);
+        this.playSound(SoundEvents.PARROT_IMITATE_ENDER_DRAGON, 1.3f, (this.getRandom().nextFloat() - this.getRandom().nextFloat()) * 0.2f + 0.8f);
     }
 }

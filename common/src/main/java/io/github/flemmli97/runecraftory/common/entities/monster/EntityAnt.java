@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedMeleeGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedMonsterAttackGoal;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import net.minecraft.world.entity.EntityType;
@@ -15,7 +15,7 @@ public class EntityAnt extends BaseMonster {
     public static final AnimatedAction MELEE = new AnimatedAction(23, 12, "attack");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, INTERACT};
-    public final AnimatedMeleeGoal<EntityAnt> attack = new AnimatedMeleeGoal<>(this);
+    public final AnimatedMonsterAttackGoal<EntityAnt> attack = new AnimatedMonsterAttackGoal<>(this);
     private final AnimationHandler<EntityAnt> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityAnt(EntityType<? extends EntityAnt> type, Level world) {

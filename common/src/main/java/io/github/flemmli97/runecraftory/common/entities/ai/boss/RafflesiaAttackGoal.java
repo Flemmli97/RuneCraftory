@@ -1,11 +1,11 @@
 package io.github.flemmli97.runecraftory.common.entities.ai.boss;
 
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
-import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedMeleeGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedMonsterAttackGoal;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia.EntityRafflesia;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 
-public class RafflesiaAttackGoal<T extends EntityRafflesia> extends AnimatedMeleeGoal<T> {
+public class RafflesiaAttackGoal<T extends EntityRafflesia> extends AnimatedMonsterAttackGoal<T> {
 
     public RafflesiaAttackGoal(T entity) {
         super(entity);
