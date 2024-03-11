@@ -31,7 +31,7 @@
     "runecraftory:res_dark": -10.0
   },
   "levelGains": {
-    "minecraft:generic.max_health": 100.0,
+    "minecraft:generic.max_health": 400.0,
     "minecraft:generic.attack_damage": 140.0,
     "runecraftory:defence": 130.0,
     "runecraftory:magic_attack": 250.0,

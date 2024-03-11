@@ -26,7 +26,7 @@
     "runecraftory:res_earth": 15.0
   },
   "levelGains": {
-    "minecraft:generic.max_health": 125.0,
+    "minecraft:generic.max_health": 425.0,
     "minecraft:generic.attack_damage": 215.0,
     "runecraftory:defence": 115.0,
     "runecraftory:magic_attack": 100.0

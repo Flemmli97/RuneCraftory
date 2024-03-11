@@ -57,7 +57,7 @@
     "runecraftory:res_faint": 100.0
   },
   "levelGains": {
-    "minecraft:generic.max_health": 275.0,
+    "minecraft:generic.max_health": 575.0,
     "minecraft:generic.attack_damage": 200.0,
     "runecraftory:defence": 228.0,
     "runecraftory:magic_attack": 240.0,
