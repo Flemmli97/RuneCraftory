@@ -20,6 +20,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.HashSet;
@@ -98,6 +99,12 @@ public class EntityAmbrosiaWave extends BaseDamageCloud {
     @Override
     protected boolean canHit(LivingEntity e) {
         return super.canHit(e) && e.distanceToSqr(this) <= this.getRadius() * this.getRadius();
+    }
+
+    @Override
+    protected AABB damageBoundingBox() {
+        float radius = this.getRadius();
+        return this.getBoundingBox().inflate(radius, 0.5, radius);
     }
 
     @Override

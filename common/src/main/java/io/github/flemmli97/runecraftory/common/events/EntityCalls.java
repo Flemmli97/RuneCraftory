@@ -13,7 +13,6 @@ import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.IBaseMob;
-import io.github.flemmli97.runecraftory.common.entities.ai.DisableGoal;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolHammer;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolSickle;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
@@ -41,6 +40,7 @@ import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import io.github.flemmli97.runecraftory.common.world.family.FamilyHandler;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.integration.simplequest.SimpleQuestIntegration;
+import io.github.flemmli97.runecraftory.mixinhelper.DisableTicking;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
@@ -136,9 +136,6 @@ public class EntityCalls {
     }
 
     public static void onLoadEntity(LivingEntity living) {
-        if (living instanceof Mob mob) {
-            mob.goalSelector.addGoal(-1, new DisableGoal(mob));
-        }
         if (living instanceof ServerPlayer player) {
             onPlayerLoad(player);
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> Platform.INSTANCE.sendToClient(new S2CCapSync(data), player));
@@ -381,6 +378,13 @@ public class EntityCalls {
             ItemStack stack = entity.getItemBySlot(slot);
             if (!stack.isEmpty())
                 Platform.INSTANCE.getArmorEffects(stack).ifPresent(d -> d.triggerEvent(stack, e -> e.onTick(entity, stack)));
+        }
+        if (entity instanceof Mob mob) {
+            boolean disabled = EntityUtils.isDisabled(mob);
+            ((DisableTicking) mob.getBrain()).disable(disabled);
+            ((DisableTicking) mob.goalSelector).disable(disabled);
+            if (disabled && !mob.getNavigation().isDone())
+                mob.getNavigation().stop();
         }
     }
 

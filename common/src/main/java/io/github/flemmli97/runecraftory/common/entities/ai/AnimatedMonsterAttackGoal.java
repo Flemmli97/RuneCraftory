@@ -6,7 +6,6 @@ import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.IAnimated;
 import io.github.flemmli97.tenshilib.common.entity.ai.AnimatedAttackGoal;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.AABB;
@@ -83,7 +82,11 @@ public class AnimatedMonsterAttackGoal<T extends PathfinderMob & IAnimated & Ran
 
     @Override
     protected void moveToWithDelay(double speed) {
-        double min = this.attacker.getBbWidth() * 0.5 + this.target.getBbWidth() * 0.5 + 0.;
+        double range = 0.5;
+        double width = this.attacker.getBbWidth() * 0.5;
+        if (this.next != null)
+            range = Math.min(width * 0.8, this.attacker.maxAttackRange(this.next) * 0.5f);
+        double min = width + this.target.getBbWidth() * 0.5 + range;
         if (this.distanceToTargetSq < min * min) {
             this.attacker.getNavigation().stop();
             return;

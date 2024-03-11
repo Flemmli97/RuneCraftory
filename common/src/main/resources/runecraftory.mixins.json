@@ -20,6 +20,7 @@
     "EntityMixin",
     "FarmBlockMixin",
     "FishingRodHookTriggerMixin",
+    "GoalSelectorMixin",
     "HoeItemMixin",
     "ItemEntityMixin",
     "ItemStackMixin",

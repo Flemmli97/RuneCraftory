@@ -525,16 +525,30 @@ public class EntitySkelefang extends BossMonster {
         this.hurtResist = 2;
         if (this.hasBones()) {
             if (damageAmount > 4) {
+                int boneDamage = 7;
                 if (this.remainingTailBones() > 0) {
-                    this.setTailBones(this.remainingTailBones() - 7);
-                } else if (this.remainingLeftLegBones() > 0) {
-                    this.setLeftLegBones(this.remainingLeftLegBones() - 7);
-                } else if (this.remainingRightLegBones() > 0) {
-                    this.setRightLegBones(this.remainingRightLegBones() - 7);
-                } else if (this.remainingHeadBones() > 0) {
-                    this.setHeadBones(this.remainingHeadBones() - 7);
-                } else if (this.remainingBodyBones() > 0) {
-                    this.setBodyBones(this.remainingBodyBones() - 6);
+                    int amount = Math.min(boneDamage, this.remainingTailBones());
+                    boneDamage -= amount;
+                    this.setTailBones(this.remainingTailBones() - amount);
+                }
+                if (this.remainingLeftLegBones() > 0) {
+                    int amount = Math.min(boneDamage, this.remainingLeftLegBones());
+                    boneDamage -= amount;
+                    this.setLeftLegBones(this.remainingLeftLegBones() - amount);
+                }
+                if (this.remainingRightLegBones() > 0) {
+                    int amount = Math.min(boneDamage, this.remainingRightLegBones());
+                    boneDamage -= amount;
+                    this.setRightLegBones(this.remainingRightLegBones() - amount);
+                }
+                if (this.remainingHeadBones() > 0) {
+                    int amount = Math.min(boneDamage, this.remainingHeadBones());
+                    boneDamage -= amount;
+                    this.setHeadBones(this.remainingHeadBones() - amount);
+                }
+                if (this.remainingBodyBones() > 0) {
+                    int amount = Math.min(boneDamage, this.remainingBodyBones());
+                    this.setBodyBones(this.remainingBodyBones() - amount);
                 }
             }
             if (this.isDeadOrDying())

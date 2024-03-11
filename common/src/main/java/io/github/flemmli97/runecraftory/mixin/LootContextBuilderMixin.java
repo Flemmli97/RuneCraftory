@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import java.util.Set;
 
 @Mixin(LootContext.Builder.class)
-public class LootContextBuilderMixin {
+public abstract class LootContextBuilderMixin {
 
     /**
      * Disables the vanilla verification check of having the provided parameter set needing to match the current parameters

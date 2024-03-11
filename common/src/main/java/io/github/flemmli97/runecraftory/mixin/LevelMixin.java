@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = Level.class, priority = 1001)
-public class LevelMixin implements LevelSnapshotHandler {
+public abstract class LevelMixin implements LevelSnapshotHandler {
 
     @Unique
     private final LevelSetBlockSnapshot runecraftory_level_snapshot = new LevelSetBlockSnapshot((Level) (Object) this);

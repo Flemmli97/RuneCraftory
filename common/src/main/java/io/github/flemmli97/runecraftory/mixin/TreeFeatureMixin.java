@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import java.util.Set;
 
 @Mixin(TreeFeature.class)
-public class TreeFeatureMixin {
+public abstract class TreeFeatureMixin {
 
     @Unique
     private TreeBlockEntity runecraftory_placingFruitTree;

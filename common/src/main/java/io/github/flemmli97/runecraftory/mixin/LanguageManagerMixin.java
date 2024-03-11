@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import java.util.List;
 
 @Mixin(LanguageManager.class)
-public class LanguageManagerMixin {
+public abstract class LanguageManagerMixin {
 
     @ModifyVariable(method = "onResourceManagerReload", at = @At("RETURN"))
     private List<LanguageInfo> injectDialogReloader(List<LanguageInfo> origin, ResourceManager resourceManager) {

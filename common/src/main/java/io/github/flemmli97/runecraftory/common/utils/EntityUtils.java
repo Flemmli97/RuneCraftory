@@ -67,10 +67,6 @@ public class EntityUtils {
         return entity.hasEffect(ModEffects.PARALYSIS.get());
     }
 
-    public static boolean sleeping(LivingEntity entity) {
-        return entity.hasEffect(ModEffects.SLEEP.get());
-    }
-
     public static boolean sealed(LivingEntity entity) {
         return entity.hasEffect(ModEffects.SEAL.get());
     }

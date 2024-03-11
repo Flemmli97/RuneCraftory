@@ -1,23 +1,21 @@
 package io.github.flemmli97.runecraftory.mixin;
 
 import io.github.flemmli97.runecraftory.mixinhelper.DisableTicking;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.Brain;
+import net.minecraft.world.entity.ai.goal.GoalSelector;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(Brain.class)
-public abstract class BrainMixin implements DisableTicking {
+@Mixin(GoalSelector.class)
+public abstract class GoalSelectorMixin implements DisableTicking {
 
     @Unique
     private boolean runecraftoryDisabled;
 
-    @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
-    private void checkDisabled(ServerLevel world, LivingEntity entity, CallbackInfo info) {
+    @Inject(method = "tickRunningGoals", at = @At(value = "HEAD"), cancellable = true)
+    private void checkDisabled(boolean tickAllRunning, CallbackInfo info) {
         if (this.runecraftoryDisabled)
             info.cancel();
     }
