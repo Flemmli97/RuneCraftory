@@ -259,12 +259,12 @@ public class EntityRaccoon extends BossMonster {
                 if (this.clone)
                     return anim.is(LEAF_SHOOT, LEAF_BOOMERANG);
                 if (anim.is(ROAR))
-                    return this.random.nextFloat() < 0.25f;
+                    return this.random.nextFloat() < 0.35f;
                 if (anim.is(BARRAGE))
-                    return this.random.nextFloat() < 0.08f;
+                    return this.random.nextFloat() < 0.1f;
                 if (anim.is(CLONE))
                     return this.isEnraged();
-                return false;
+                return true;
             }
         }
         return false;
