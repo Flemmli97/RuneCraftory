@@ -147,7 +147,7 @@ public class EntityRaccoon extends BossMonster {
         });
         b.put(LEAF_SHOT_CLONE, (anim, entity) -> {
             entity.getNavigation().stop();
-            if (anim.canAttack() || anim.getTick() > anim.getAttackTime() + 4) {
+            if (anim.canAttack() || anim.isAtTick(anim.getAttackTime() + 6)) {
                 if (entity.isEnraged())
                     ModSpells.SMALL_LEAF_SPELL_X7.get().use(entity);
                 else {
@@ -167,10 +167,15 @@ public class EntityRaccoon extends BossMonster {
                     ModSpells.BIG_LEAF_SPELL.get().use(entity);
             }
         });
-        b.put(ROAR, (anim, entity) -> entity.getNavigation().stop());
+        b.put(ROAR, (anim, entity) -> {
+            entity.getNavigation().stop();
+            if (anim.isAtTick(1))
+                entity.playAngrySound();
+        });
         b.put(CLONE, (anim, entity) -> {
             entity.getNavigation().stop();
-            if (anim.getTick() == 1) {
+            if (anim.isAtTick(1)) {
+                entity.playAngrySound();
                 Vec3 center = entity.getTarget() != null && entity.distanceTo(entity.getTarget()) < 50 ? entity.getTarget().position() : entity.position();
                 entity.entityData.set(CLONE_CENTER, Optional.of(center));
                 int id = entity.random.nextInt(CLONE_POS.length);
@@ -203,6 +208,12 @@ public class EntityRaccoon extends BossMonster {
                     this.entityData.set(CLONE_CENTER, Optional.empty());
                 }
                 this.jumpDir = null;
+            }).setAnimationChangeFunc(anim -> {
+                if (anim == null && this.clone) {
+                    this.getAnimationHandler().setAnimation(this.getRandom().nextBoolean() ? LEAF_SHOT_CLONE : LEAF_BOOMERANG);
+                    return true;
+                }
+                return false;
             });
 
     public EntityRaccoon(EntityType<? extends EntityRaccoon> type, Level world) {
@@ -252,19 +263,15 @@ public class EntityRaccoon extends BossMonster {
             if (anim.is(DOUBLE_PUNCH))
                 return !this.isBerserk();
             else if (this.isBerserk()) {
-                if (anim.is(LEAF_SHOT_CLONE))
-                    return this.clone && this.isEnraged();
                 if (anim.is(DOUBLE_PUNCH))
                     return !this.isEnraged();
-                if (this.clone)
-                    return anim.is(LEAF_SHOOT, LEAF_BOOMERANG);
                 if (anim.is(ROAR))
                     return this.random.nextFloat() < 0.35f;
                 if (anim.is(BARRAGE))
                     return this.random.nextFloat() < 0.1f;
                 if (anim.is(CLONE))
                     return this.isEnraged();
-                return true;
+                return !anim.is(LEAF_SHOT_CLONE);
             }
         }
         return false;

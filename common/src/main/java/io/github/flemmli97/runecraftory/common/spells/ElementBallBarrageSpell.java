@@ -25,7 +25,7 @@ public class ElementBallBarrageSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         ElementBallBarrageSummoner summoner = new ElementBallBarrageSummoner(level, entity, this.element);
-        summoner.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.7f));
+        summoner.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.75f));
         Vec3 eye = entity.getEyePosition();
         float dirScale = 5;
         Vec3 dir = entity.getLookAngle().scale(dirScale);
