@@ -120,7 +120,7 @@ public class EntitySkelefang extends BossMonster {
                 if (entity.remainingLeftLegBones() > 0) {
                     Vec3 leftPos = entity.position().add(dir).add(side.scale(-1.3));
                     EntitySlashResidue slash = new EntitySlashResidue(entity.level, entity);
-                    slash.setType(EntitySlashResidue.Type.SKELEFANG);
+                    slash.setSize(1.5f);
                     slash.setPos(leftPos.x, leftPos.y, leftPos.z);
                     slash.setXRot(0);
                     slash.setYRot(entity.yBodyRot);
@@ -129,7 +129,7 @@ public class EntitySkelefang extends BossMonster {
                 if (entity.remainingRightLegBones() > 0) {
                     Vec3 rightPos = entity.position().add(dir).add(side.scale(1.3));
                     EntitySlashResidue slash = new EntitySlashResidue(entity.level, entity);
-                    slash.setType(EntitySlashResidue.Type.SKELEFANG);
+                    slash.setSize(1.5f);
                     slash.setPos(rightPos.x, rightPos.y, rightPos.z);
                     slash.setXRot(0);
                     slash.setYRot(entity.yBodyRot);
@@ -147,6 +147,10 @@ public class EntitySkelefang extends BossMonster {
             else {
                 dir = dir.normalize().scale(entity.getAttributeValue(Attributes.MOVEMENT_SPEED) * 1.3);
                 entity.setDeltaMovement(dir.x(), entity.getDeltaMovement().y, dir.z());
+            }
+            if (entity.tickCount % 5 == 0) {
+                entity.playSound(ModSounds.ENTITY_SKELEFANG_CHARGE.get(), 1, (entity.random.nextFloat() - entity.random.nextFloat()) * 0.2f + 0.5f);
+                Platform.INSTANCE.sendToTrackingAndSelf(new S2CScreenShake(10, 0.4f), entity);
             }
             entity.mobAttack(anim, null, e -> {
                 if (!entity.hitEntity.contains(e) && CombatUtils.mobAttack(entity, e,
@@ -347,13 +351,13 @@ public class EntitySkelefang extends BossMonster {
         if (anim.is(ROAR, DEATH, INTERACT, BEAM))
             return false;
         if (type == AnimationType.GENERICATTACK) {
-            if (anim.is(SLASH))
+            /*if (anim.is(SLASH))
                 return (this.remainingRightLegBones() > 0 || this.remainingLeftLegBones() > 0) && this.random.nextFloat() < 0.8;
             if (anim.is(TAIL_SLAM, TAIL_SLAP))
                 return this.remainingTailBones() > 10 || this.isEnraged();
             if (anim.is(CHARGE))
-                return this.random.nextFloat() < 0.6;
-            return true;
+                return this.random.nextFloat() < 0.6;*/
+            return anim.is(CHARGE, TAIL_SLAM);
         }
         return false;
     }

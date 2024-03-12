@@ -87,7 +87,7 @@ public class AnimatedMonsterAttackGoal<T extends PathfinderMob & IAnimated & Ran
         if (this.next != null)
             range = Math.min(width * 0.8, this.attacker.maxAttackRange(this.next) * 0.5f);
         double min = width + this.target.getBbWidth() * 0.5 + range;
-        if (this.distanceToTargetSq < min * min) {
+        if (this.distanceToTargetSq < min * min || this.attacker.getBoundingBox().inflate(0.2).intersects(this.target.getBoundingBox())) {
             this.attacker.getNavigation().stop();
             return;
         }

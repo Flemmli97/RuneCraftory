@@ -108,6 +108,12 @@
       "runecraftory:entity/skelefang/roar"
     ]
   },
+  "entity.skelefang.charge": {
+    "subtitle": "runecraftory:entity.skelefang.charge",
+    "sounds": [
+      "runecraftory:entity/skelefang/charge"
+    ]
+  },
   "entity.thunderbolt.neigh": {
     "subtitle": "runecraftory:entity.thunderbolt.neigh",
     "sounds": [

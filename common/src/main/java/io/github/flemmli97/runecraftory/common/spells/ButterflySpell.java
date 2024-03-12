@@ -4,6 +4,7 @@ import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.DelayedAttacker;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityButterflySummoner;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
+import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -23,7 +24,8 @@ public class ButterflySpell extends Spell {
         if (entity instanceof DelayedAttacker attacker && (delayedPos = attacker.targetPosition(summoner.position())) != null) {
             summoner.setTarget(delayedPos.x(), delayedPos.y(), delayedPos.z());
         } else if (entity instanceof Mob mob && mob.getTarget() != null) {
-            summoner.setTarget(mob.getTarget().getX(), mob.getTarget().getY(), mob.getTarget().getZ());
+            Vec3 target = EntityUtil.getStraightProjectileTarget(summoner.position(), mob.getTarget());
+            summoner.setTarget(target.x(), target.y(), target.z());
         } else {
             Vec3 look = Vec3.directionFromRotation(Mth.clamp(entity.getXRot(), -10, 10), entity.getYRot()).scale(5);
             summoner.setTarget(entity.getX() + look.x(), entity.getEyeY() + look.y(), entity.getZ() + look.z());

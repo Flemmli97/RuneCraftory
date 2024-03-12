@@ -10,8 +10,10 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -24,9 +26,9 @@ public class EntitySlashResidue extends BaseDamageCloud {
             new Vec3(-0.5f, 0, 0)
     };
 
-    protected static final EntityDataAccessor<Integer> TYPE = SynchedEntityData.defineId(EntitySlashResidue.class, EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Float> SIZE = SynchedEntityData.defineId(EntitySlashResidue.class, EntityDataSerializers.FLOAT);
 
-    private Type slashType;
+    private boolean oneTimeDamage;
 
     public EntitySlashResidue(EntityType<? extends BaseDamageCloud> type, Level world) {
         super(type, world);
@@ -39,22 +41,30 @@ public class EntitySlashResidue extends BaseDamageCloud {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(TYPE, 0);
+        this.entityData.define(SIZE, 1f);
     }
 
     @Override
     public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
         super.onSyncedDataUpdated(key);
-        if (key == TYPE) {
-            int i = this.entityData.get(TYPE);
-            if (i < Type.values().length)
-                this.slashType = Type.values()[i];
+        if (SIZE.equals(key)) {
+            this.refreshDimensions();
         }
     }
 
-    public void setType(Type type) {
-        this.slashType = type;
-        this.entityData.set(TYPE, type.ordinal());
+    public void setSize(float size) {
+        this.entityData.set(SIZE, Math.max(0.2f, size));
+        this.reapplyPosition();
+        this.refreshDimensions();
+    }
+
+    public void setOneTime() {
+        this.oneTimeDamage = true;
+    }
+
+    @Override
+    public EntityDimensions getDimensions(Pose pose) {
+        return super.getDimensions(pose).scale(this.entityData.get(SIZE));
     }
 
     @Override
@@ -64,7 +74,7 @@ public class EntitySlashResidue extends BaseDamageCloud {
 
     @Override
     public boolean canStartDamage() {
-        return this.slashType != Type.SKELEFANG && this.livingTicks % 3 == 0;
+        return !this.oneTimeDamage && this.livingTicks % 3 == 0;
     }
 
     @Override
@@ -72,11 +82,8 @@ public class EntitySlashResidue extends BaseDamageCloud {
         super.tick();
         if (this.level.isClientSide) {
             double height = this.getBoundingBox().getYsize();
-            if (this.slashType == Type.SKELEFANG)
-                height += 1;
             for (Vec3 vec3 : BASE) {
-                if (this.slashType == Type.SKELEFANG)
-                    vec3 = vec3.scale(1.5);
+                vec3 = vec3.scale(this.entityData.get(SIZE));
                 Vec3 rot = MathUtils.rotate(MathUtils.normalY, vec3, Mth.DEG_TO_RAD * this.getYRot());
                 for (double d = 0; d < height; d += 0.2) {
                     this.level.addParticle(ParticleTypes.CRIT, this.getX() + rot.x, this.getY() + rot.y + d, this.getZ() + rot.z, 0, 0, 0);
@@ -93,16 +100,15 @@ public class EntitySlashResidue extends BaseDamageCloud {
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        this.entityData.set(TYPE, compound.getInt("Type"));
-        int i = this.entityData.get(TYPE);
-        if (i < Type.values().length)
-            this.slashType = Type.values()[i];
+        this.entityData.set(SIZE, compound.getFloat("Size"));
+        this.oneTimeDamage = compound.getBoolean("OneTime");
     }
 
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("Type", this.slashType.ordinal());
+        compound.putFloat("Size", this.entityData.get(SIZE));
+        compound.putBoolean("OneTime", this.oneTimeDamage);
     }
 
     public enum Type {

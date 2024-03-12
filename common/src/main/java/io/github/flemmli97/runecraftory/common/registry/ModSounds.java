@@ -33,6 +33,7 @@ public class ModSounds {
     public static final RegistryEntrySupplier<SoundEvent> ENTITY_RAFFLESIA_DEATH = register("entity.rafflesia.death");
     public static final RegistryEntrySupplier<SoundEvent> ENTITY_SCORPION_STEP = register("entity.scorpion.step");
     public static final RegistryEntrySupplier<SoundEvent> ENTITY_SKELEFANG_ROAR = register("entity.skelefang.roar");
+    public static final RegistryEntrySupplier<SoundEvent> ENTITY_SKELEFANG_CHARGE = register("entity.skelefang.charge");
     public static final RegistryEntrySupplier<SoundEvent> ENTITY_THUNDERBOLT_NEIGH = register("entity.thunderbolt.neigh");
     public static final RegistryEntrySupplier<SoundEvent> ENTITY_WASP_BUZZ = register("entity.wasp.buzz", 3);
     public static final RegistryEntrySupplier<SoundEvent> ENTITY_WEAGLE_FLAP = register("entity.weagle.flap");

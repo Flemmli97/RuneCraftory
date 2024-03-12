@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.DelayedAttacker;
 import io.github.flemmli97.runecraftory.common.entities.misc.ElementBallBarrageSummoner;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
+import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -31,9 +32,9 @@ public class ElementBallBarrageSpell extends Spell {
         if (entity instanceof Mob mob) {
             Vec3 delayedPos;
             if (mob instanceof DelayedAttacker delayed && (delayedPos = delayed.targetPosition(summoner.position())) != null) {
-                dir = delayedPos.subtract(eye.x, delayedPos.y, eye.z).normalize().scale(dirScale);
+                dir = delayedPos.subtract(eye.x, eye.y, eye.z).normalize().scale(dirScale);
             } else if (mob.getTarget() != null) {
-                dir = mob.getTarget().getEyePosition().subtract(eye).normalize().scale(dirScale);
+                dir = mob.getTarget().position().subtract(EntityUtil.getStraightProjectileTarget(eye, mob.getTarget())).normalize().scale(dirScale);
             }
         }
         Vec3 off = dir.normalize().scale(-dirScale + 3);

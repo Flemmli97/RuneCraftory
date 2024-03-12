@@ -87,6 +87,7 @@ public class EntityMarionetta extends BossMonster {
                 Vec3 throwVec = new Vec3(entity.getLookAngle().x(), 0, entity.getLookAngle().z())
                         .normalize().scale(1.2).add(0, 0.85, 0);
                 EntityMarionettaTrap trap = new EntityMarionettaTrap(entity.level, entity);
+                trap.setDamageMultiplier(0.9f);
                 entity.caughtEntities.forEach(e -> {
                     e.addEffect(new MobEffectInstance(ModEffects.TRUE_INVIS.get(), 100, 1, true, false, false));
                     trap.addCaughtEntity(e);
