@@ -3,7 +3,9 @@ package io.github.flemmli97.runecraftory.client.particles;
 import com.google.common.base.Suppliers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelSkelefang;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderSkelefang;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntitySkelefang;
@@ -36,9 +38,14 @@ public class SkelefangParticle extends Particle {
         return model;
     });
 
+    private static final Supplier<RenderType> RENDER_TYPE = Suppliers.memoize(() -> MODEL.get().renderType(RenderSkelefang.TEXTURE));
+
     private final SkelefangParticleData.SkelefangBoneType boneType;
     private final float initialRotX, initialRotY, pitchSpin, yawSpin;
     private int groundTick;
+
+    private float cameraLastPitch, cameraLastYaw;
+    private boolean first = true;
 
     public SkelefangParticle(ClientLevel world, double x, double y, double z, double dirX, double dirY, double dirZ, SkelefangParticleData data) {
         super(world, x, y, z);
@@ -101,11 +108,17 @@ public class SkelefangParticle extends Particle {
 
     @Override
     public void render(VertexConsumer buffer, Camera renderInfo, float partialTicks) {
+        if (this.first) {
+            this.cameraLastPitch = renderInfo.getXRot();
+            this.cameraLastYaw = renderInfo.getYRot() - 180;
+            this.first = false;
+        }
         Vec3 vec3 = renderInfo.getPosition();
         float x = (float) (Mth.lerp(partialTicks, this.xo, this.x) - vec3.x());
         float y = (float) (Mth.lerp(partialTicks, this.yo, this.y) - vec3.y());
         float z = (float) (Mth.lerp(partialTicks, this.zo, this.z) - vec3.z());
         PoseStack stack = new PoseStack();
+        this.irisFix(stack, renderInfo, partialTicks);
         stack.translate(x, y, z);
         int next;
         int spinAge;
@@ -122,12 +135,26 @@ public class SkelefangParticle extends Particle {
         stack.mulPose(Vector3f.XP.rotationDegrees(pitch));
         stack.scale(-1.0F, -1.0F, 1.0F);
         stack.translate(0.0D, -1.5, 0.0D);
-        VertexConsumer consumer = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(MODEL.get().renderType(RenderSkelefang.TEXTURE));
+        RenderType type = RENDER_TYPE.get();
+        CustomParticleRenderTypes.batchType(type);
+        VertexConsumer consumer = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(type);
         float alpha = 0.9f - this.age * 07f / this.lifetime;
         BlockPos pos = new BlockPos(this.x, this.y, this.z);
         int block = this.level.getBrightness(LightLayer.BLOCK, pos);
         int light = this.level.getBrightness(LightLayer.SKY, pos);
         MODEL.get().renderAsParticle(stack, consumer, this.boneType, LightTexture.pack(block, light), OverlayTexture.NO_OVERLAY, 1, 1, 1, alpha);
+    }
+
+    /**
+     * Iris does some stuff with camera caching etc. which makes it so we need to do this
+     */
+    private void irisFix(PoseStack stack, Camera renderInfo, float partialTicks) {
+        if (!RuneCraftory.iris)
+            return;
+        stack.mulPose(Vector3f.XP.rotationDegrees(Mth.lerp(partialTicks, this.cameraLastPitch, renderInfo.getXRot())));
+        stack.mulPose(Vector3f.YP.rotationDegrees(Mth.lerp(partialTicks, this.cameraLastYaw, renderInfo.getYRot() - 180)));
+        this.cameraLastPitch = renderInfo.getXRot();
+        this.cameraLastYaw = renderInfo.getYRot() - 180;
     }
 
     @Override

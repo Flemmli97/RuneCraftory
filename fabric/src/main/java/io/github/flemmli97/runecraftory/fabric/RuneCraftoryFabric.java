@@ -98,6 +98,7 @@ public class RuneCraftoryFabric implements ModInitializer {
     @Override
     public void onInitialize() {
         RuneCraftory.simpleQuests = FabricLoader.getInstance().isModLoaded("simplequests");
+        RuneCraftory.iris = FabricLoader.getInstance().isModLoaded("iris");
 
         this.initContent();
         ConfigHolder.CONFIGS.get(GeneralConfigSpec.SPEC.getLeft())

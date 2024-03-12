@@ -68,6 +68,7 @@ public class RuneCraftoryForge {
 
     public RuneCraftoryForge() {
         RuneCraftory.simpleQuests = ModList.get().isLoaded("simplequests");
+        RuneCraftory.iris = ModList.get().isLoaded("oculus");
 
         Path confDir = FMLPaths.CONFIGDIR.get().resolve(MODID);
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
