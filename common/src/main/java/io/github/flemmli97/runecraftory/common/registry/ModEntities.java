@@ -993,7 +993,7 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntityRaccoon>> RACCOON = regBoss(EntityType.Builder.of(EntityRaccoon::new, MobCategory.MONSTER).sized(0.9f, 1.5f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "raccoon"),
             0xcb8055, 0x6d4342,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 225).putLevelGains(() -> Attributes.MAX_HEALTH, 545)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 240).putLevelGains(() -> Attributes.MAX_HEALTH, 545)
                     .putAttributes(() -> Attributes.ATTACK_DAMAGE, 16.5).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 226)
                     .putAttributes(ModAttributes.DEFENCE, 4.5).putLevelGains(ModAttributes.DEFENCE, 205)
                     .putAttributes(ModAttributes.MAGIC, 13.7).putLevelGains(ModAttributes.MAGIC, 218)
@@ -1024,7 +1024,7 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntitySkelefang>> SKELEFANG = regBoss(EntityType.Builder.of(EntitySkelefang::new, MobCategory.MONSTER).sized(1.95f, 3).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "skelefang"),
             0x615237, 0xc2a982,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 300).putLevelGains(() -> Attributes.MAX_HEALTH, 565)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 225).putLevelGains(() -> Attributes.MAX_HEALTH, 565)
                     .putAttributes(() -> Attributes.ATTACK_DAMAGE, 18).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 274)
                     .putAttributes(ModAttributes.DEFENCE, 4.4).putLevelGains(ModAttributes.DEFENCE, 230)
                     .putAttributes(ModAttributes.MAGIC, 15).putLevelGains(ModAttributes.MAGIC, 234)

@@ -139,10 +139,10 @@ public class EntityStatusBall extends BaseDamageCloud {
         RAFFLESIA_SLEEP(b -> b.hurtResistant(2).magic().withChangedAttribute(ModAttributes.SLEEP.get(), 10)
                 .withChangedAttribute(ModAttributes.FATIGUE.get(), 2)
                 .withChangedAttribute(ModAttributes.COLD.get(), 2), new Vector3f(207 / 255F, 13 / 255F, 38 / 255F), 30),
-        RAFFLESIA_PARALYSIS(b -> b.hurtResistant(2).magic().withChangedAttribute(ModAttributes.PARA.get(), 10)
+        RAFFLESIA_PARALYSIS(b -> b.hurtResistant(2).magic().withChangedAttribute(ModAttributes.PARA.get(), 7)
                 .withChangedAttribute(ModAttributes.FATIGUE.get(), 2)
                 .withChangedAttribute(ModAttributes.COLD.get(), 2), new Vector3f(204 / 255F, 190 / 255F, 57 / 255F), 30),
-        RAFFLESIA_POISON(b -> b.hurtResistant(2).magic().withChangedAttribute(ModAttributes.POISON.get(), 10)
+        RAFFLESIA_POISON(b -> b.hurtResistant(2).magic().withChangedAttribute(ModAttributes.POISON.get(), 7)
                 .withChangedAttribute(ModAttributes.FATIGUE.get(), 2)
                 .withChangedAttribute(ModAttributes.COLD.get(), 2), new Vector3f(184 / 255F, 56 / 255F, 209 / 255F), 30),
         RAFFLESIA_ALL(b -> b.hurtResistant(2).magic().withChangedAttribute(ModAttributes.SLEEP.get(), 5)

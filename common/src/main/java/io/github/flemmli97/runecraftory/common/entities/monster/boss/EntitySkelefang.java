@@ -121,6 +121,7 @@ public class EntitySkelefang extends BossMonster {
                     Vec3 leftPos = entity.position().add(dir).add(side.scale(-1.3));
                     EntitySlashResidue slash = new EntitySlashResidue(entity.level, entity);
                     slash.setSize(1.5f);
+                    slash.setOneTime();
                     slash.setPos(leftPos.x, leftPos.y, leftPos.z);
                     slash.setXRot(0);
                     slash.setYRot(entity.yBodyRot);
@@ -130,6 +131,7 @@ public class EntitySkelefang extends BossMonster {
                     Vec3 rightPos = entity.position().add(dir).add(side.scale(1.3));
                     EntitySlashResidue slash = new EntitySlashResidue(entity.level, entity);
                     slash.setSize(1.5f);
+                    slash.setOneTime();
                     slash.setPos(rightPos.x, rightPos.y, rightPos.z);
                     slash.setXRot(0);
                     slash.setYRot(entity.yBodyRot);
