@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.entities;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -66,6 +67,11 @@ public class MultiPartEntity extends Entity implements OwnableEntity {
     @Override
     public EntityDimensions getDimensions(Pose pose) {
         return this.dimensions;
+    }
+
+    @Override
+    public Component getName() {
+        return this.parent.getName();
     }
 
     @Override
