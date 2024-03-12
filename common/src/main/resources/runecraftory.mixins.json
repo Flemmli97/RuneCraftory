@@ -44,6 +44,7 @@
     "AtlasMixin",
     "BiomeColorsMixin",
     "ContainerScreenAccessor",
+    "EntityRendererDispatcherMixin",
     "ItemRendererMixin",
     "HumanoidModelMixin",
     "PlayerModelMixin",

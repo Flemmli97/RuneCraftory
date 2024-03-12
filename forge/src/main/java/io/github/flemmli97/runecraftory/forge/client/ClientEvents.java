@@ -21,7 +21,6 @@ import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.MovementInputUpdateEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
-import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.client.gui.ForgeIngameGui;
@@ -107,14 +106,6 @@ public class ClientEvents {
     public static void worldRender(RenderLevelStageEvent event) {
         if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_PARTICLES)
             ClientCalls.worldRender(event.getPoseStack());
-    }
-
-    @SubscribeEvent
-    public static void render(RenderLivingEvent.Pre<?, ?> event) {
-        if (ClientCalls.invis(event.getEntity())) {
-            event.setCanceled(true);
-            MinecraftForge.EVENT_BUS.post(new RenderLivingEvent.Post<>(event.getEntity(), event.getRenderer(), event.getPartialTick(), event.getPoseStack(), event.getMultiBufferSource(), event.getPackedLight()));
-        }
     }
 
     @SubscribeEvent

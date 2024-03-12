@@ -23,7 +23,6 @@
     "CameraAccessor",
     "GameRendererMixin",
     "GuiMixin",
-    "LivingRenderMixin",
     "LocalPlayerMixin",
     "ScreenMixin",
     "ParticleEngineMixin"
