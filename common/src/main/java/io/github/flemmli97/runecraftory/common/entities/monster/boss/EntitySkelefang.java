@@ -149,7 +149,7 @@ public class EntitySkelefang extends BossMonster {
                 entity.setDeltaMovement(dir.x(), entity.getDeltaMovement().y, dir.z());
             }
             if (entity.tickCount % 5 == 0) {
-                entity.playSound(ModSounds.ENTITY_SKELEFANG_CHARGE.get(), 1, (entity.random.nextFloat() - entity.random.nextFloat()) * 0.2f + 0.5f);
+                entity.playSound(ModSounds.ENTITY_SKELEFANG_CHARGE.get(), 1, (entity.random.nextFloat() - entity.random.nextFloat()) * 0.2f + 1.0f);
                 Platform.INSTANCE.sendToTrackingAndSelf(new S2CScreenShake(10, 0.4f), entity);
             }
             entity.mobAttack(anim, null, e -> {
@@ -351,13 +351,13 @@ public class EntitySkelefang extends BossMonster {
         if (anim.is(ROAR, DEATH, INTERACT, BEAM))
             return false;
         if (type == AnimationType.GENERICATTACK) {
-            /*if (anim.is(SLASH))
+            if (anim.is(SLASH))
                 return (this.remainingRightLegBones() > 0 || this.remainingLeftLegBones() > 0) && this.random.nextFloat() < 0.8;
             if (anim.is(TAIL_SLAM, TAIL_SLAP))
                 return this.remainingTailBones() > 10 || this.isEnraged();
             if (anim.is(CHARGE))
-                return this.random.nextFloat() < 0.6;*/
-            return anim.is(CHARGE, TAIL_SLAM);
+                return this.random.nextFloat() < 0.6;
+            return true;
         }
         return false;
     }
