@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "runecraftory:divorce_paper"
+    ]
+  },
+  "criteria": {
+    "divorce_paper": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:paper"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "runecraftory:divorce_paper"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "divorce_paper",
+      "has_the_recipe"
+    ]
+  ]
+}

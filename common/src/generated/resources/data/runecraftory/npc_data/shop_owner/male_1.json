@@ -30,7 +30,14 @@
     "runecraftory:talk": "runecraftory:shop_owner/male_1/talk",
     "runecraftory:follow_yes": "runecraftory:shop_owner/male_1/follow_yes",
     "runecraftory:follow_no": "runecraftory:shop_owner/male_1/follow_no",
-    "runecraftory:follow_stop": "runecraftory:shop_owner/male_1/follow_stop"
+    "runecraftory:follow_stop": "runecraftory:shop_owner/male_1/follow_stop",
+    "runecraftory:dating_accept": "runecraftory:shop_owner/male_1/dating_accept",
+    "runecraftory:dating_deny": "runecraftory:shop_owner/male_1/dating_deny",
+    "runecraftory:marriage_accept": "runecraftory:shop_owner/male_1/marriage_accept",
+    "runecraftory:marriage_deny": "runecraftory:shop_owner/male_1/marriage_deny",
+    "runecraftory:divorce": "runecraftory:shop_owner/male_1/divorce",
+    "runecraftory:divorce_error": "runecraftory:shop_owner/male_1/divorce_error",
+    "runecraftory:procreation_cooldown": "runecraftory:shop_owner/male_1/procreation_cooldown"
   },
   "questHandler": {
     "responses": {

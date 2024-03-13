@@ -72,6 +72,13 @@ public class NPCDataGen extends NPCDataProvider {
                     m.put(ConversationContext.FOLLOW_YES, new NPCData.ConversationSet.Builder("npc.generic.follow.yes", "Ok"));
                     m.put(ConversationContext.FOLLOW_NO, new NPCData.ConversationSet.Builder("npc.generic.follow.no", "Sorry but I am busy right now."));
                     m.put(ConversationContext.FOLLOW_STOP, new NPCData.ConversationSet.Builder("npc.generic.follow.stop", "Ok. See you again."));
+                    m.put(ConversationContext.DATING_ACCEPT, new NPCData.ConversationSet.Builder("npc.generic.dating.yes", "I... didn't think that day would come but yes!"));
+                    m.put(ConversationContext.DATING_DENY, new NPCData.ConversationSet.Builder("npc.generic.dating.no", "Sorry but i don't feel that way"));
+                    m.put(ConversationContext.MARRIAGE_ACCEPT, new NPCData.ConversationSet.Builder("npc.generic.marry.yes", "Yes! I'm so happy!"));
+                    m.put(ConversationContext.MARRIAGE_DENY, new NPCData.ConversationSet.Builder("npc.generic.marry.yes", "I'm sorry"));
+                    m.put(ConversationContext.DIVORCE, new NPCData.ConversationSet.Builder("npc.generic.follow.yes", "Goodbye"));
+                    m.put(ConversationContext.DIVORCE_ERROR, new NPCData.ConversationSet.Builder("npc.generic.follow.yes", "Huh? Why are you giving me that?"));
+                    m.put(ConversationContext.PROCREATION_COOLDOWN, new NPCData.ConversationSet.Builder("npc.generic.follow.yes", "No i don't think so"));
                 }),
                 of(m -> {
                     m.put(QuestGen.TAMING, new QuestResponseBuilder(
@@ -99,6 +106,13 @@ public class NPCDataGen extends NPCDataProvider {
                     m.put(ConversationContext.FOLLOW_YES, new NPCData.ConversationSet.Builder("npc.generic.2.follow.yes", "Where are we going?"));
                     m.put(ConversationContext.FOLLOW_NO, new NPCData.ConversationSet.Builder("npc.generic.2.follow.no", "Sorry but I'm have something to take care of."));
                     m.put(ConversationContext.FOLLOW_STOP, new NPCData.ConversationSet.Builder("npc.generic.2.follow.stop", "Ok. Cya."));
+                    m.put(ConversationContext.DATING_ACCEPT, new NPCData.ConversationSet.Builder("npc.generic.2.dating.yes", "I... didn't think that day would come but yes!"));
+                    m.put(ConversationContext.DATING_DENY, new NPCData.ConversationSet.Builder("npc.generic.2.dating.no", "Sorry but i don't feel that way"));
+                    m.put(ConversationContext.MARRIAGE_ACCEPT, new NPCData.ConversationSet.Builder("npc.generic.2.marry.yes", "Yes! I'm so happy!"));
+                    m.put(ConversationContext.MARRIAGE_DENY, new NPCData.ConversationSet.Builder("npc.generic.2.marry.yes", "I'm sorry"));
+                    m.put(ConversationContext.DIVORCE, new NPCData.ConversationSet.Builder("npc.generic.2.divorce.yes", "Goodbye"));
+                    m.put(ConversationContext.DIVORCE_ERROR, new NPCData.ConversationSet.Builder("npc.generic.2.divorce.not", "Huh? Why are you giving me that?"));
+                    m.put(ConversationContext.PROCREATION_COOLDOWN, new NPCData.ConversationSet.Builder("npc.generic.2.procreation.no", "No i don't think so"));
                 }),
                 Map.of());
 
@@ -117,6 +131,13 @@ public class NPCDataGen extends NPCDataProvider {
                     m.put(ConversationContext.FOLLOW_YES, new NPCData.ConversationSet.Builder("npc.generic.3.follow.yes", "Sure. Where do you want to go?"));
                     m.put(ConversationContext.FOLLOW_NO, new NPCData.ConversationSet.Builder("npc.generic.3.follow.no", "I think I still have some things to do first."));
                     m.put(ConversationContext.FOLLOW_STOP, new NPCData.ConversationSet.Builder("npc.generic.3.follow.stop", "Oh ok. Well then later."));
+                    m.put(ConversationContext.DATING_ACCEPT, new NPCData.ConversationSet.Builder("npc.generic.3.dating.yes", "I... didn't think that day would come but yes!"));
+                    m.put(ConversationContext.DATING_DENY, new NPCData.ConversationSet.Builder("npc.generic.3.dating.no", "Sorry but i don't feel that way"));
+                    m.put(ConversationContext.MARRIAGE_ACCEPT, new NPCData.ConversationSet.Builder("npc.generic.3.marry.yes", "Yes! I'm so happy!"));
+                    m.put(ConversationContext.MARRIAGE_DENY, new NPCData.ConversationSet.Builder("npc.generic.3.marry.yes", "I'm sorry"));
+                    m.put(ConversationContext.DIVORCE, new NPCData.ConversationSet.Builder("npc.generic.3.divorce.yes", "Goodbye"));
+                    m.put(ConversationContext.DIVORCE_ERROR, new NPCData.ConversationSet.Builder("npc.generic.3.divorce.not", "Huh? Why are you giving me that?"));
+                    m.put(ConversationContext.PROCREATION_COOLDOWN, new NPCData.ConversationSet.Builder("npc.generic.3.procreation.no", "No i don't think so"));
                 }),
                 Map.of());
 
@@ -156,6 +177,13 @@ public class NPCDataGen extends NPCDataProvider {
                     m.put(ConversationContext.FOLLOW_YES, new NPCData.ConversationSet.Builder("npc.smith.male.1.follow.yes", "Ok. Where are we going?"));
                     m.put(ConversationContext.FOLLOW_NO, new NPCData.ConversationSet.Builder("npc.smith.male.1.follow.no", "Hmm sorry but I can't right now."));
                     m.put(ConversationContext.FOLLOW_STOP, new NPCData.ConversationSet.Builder("npc.smith.male.1.follow.stop", "Cya then!"));
+                    m.put(ConversationContext.DATING_ACCEPT, new NPCData.ConversationSet.Builder("npc.smith.male.1.dating.yes", "I... didn't think that day would come but yes!"));
+                    m.put(ConversationContext.DATING_DENY, new NPCData.ConversationSet.Builder("npc.smith.male.1.dating.no", "Sorry but i don't feel that way"));
+                    m.put(ConversationContext.MARRIAGE_ACCEPT, new NPCData.ConversationSet.Builder("npc.smith.male.1.marry.yes", "Yes! I'm so happy!"));
+                    m.put(ConversationContext.MARRIAGE_DENY, new NPCData.ConversationSet.Builder("npc.smith.male.1.marry.yes", "I'm sorry"));
+                    m.put(ConversationContext.DIVORCE, new NPCData.ConversationSet.Builder("npc.smith.male.1.divorce.yes", "Goodbye"));
+                    m.put(ConversationContext.DIVORCE_ERROR, new NPCData.ConversationSet.Builder("npc.smith.male.1.divorce.not", "Huh? Why are you giving me that?"));
+                    m.put(ConversationContext.PROCREATION_COOLDOWN, new NPCData.ConversationSet.Builder("npc.smith.male.1.procreation.no", "No i don't think so"));
                 }),
                 new NPCData.NPCLook(NPCData.Gender.MALE, npcTexture("smith/male_1"), null, 0, List.of()),
                 of(m -> {
@@ -187,6 +215,13 @@ public class NPCDataGen extends NPCDataProvider {
                     m.put(ConversationContext.FOLLOW_YES, new NPCData.ConversationSet.Builder("npc.smith.female.1.follow.yes", "Ok. Where are we going?"));
                     m.put(ConversationContext.FOLLOW_NO, new NPCData.ConversationSet.Builder("npc.smith.female.1.follow.no", "Sorry but I'm busy right now."));
                     m.put(ConversationContext.FOLLOW_STOP, new NPCData.ConversationSet.Builder("npc.smith.female.1.follow.stop", "Bye! See you next time"));
+                    m.put(ConversationContext.DATING_ACCEPT, new NPCData.ConversationSet.Builder("npc.smith.female.1.dating.yes", "I... didn't think that day would come but yes!"));
+                    m.put(ConversationContext.DATING_DENY, new NPCData.ConversationSet.Builder("npc.smith.female.1.dating.no", "Sorry but i don't feel that way"));
+                    m.put(ConversationContext.MARRIAGE_ACCEPT, new NPCData.ConversationSet.Builder("npc.smith.female.1.marry.yes", "Yes! I'm so happy!"));
+                    m.put(ConversationContext.MARRIAGE_DENY, new NPCData.ConversationSet.Builder("npc.smith.female.1.marry.yes", "I'm sorry"));
+                    m.put(ConversationContext.DIVORCE, new NPCData.ConversationSet.Builder("npc.smith.female.1.divorce.yes", "Goodbye"));
+                    m.put(ConversationContext.DIVORCE_ERROR, new NPCData.ConversationSet.Builder("npc.smith.female.1.divorce.not", "Huh? Why are you giving me that?"));
+                    m.put(ConversationContext.PROCREATION_COOLDOWN, new NPCData.ConversationSet.Builder("npc.smith.female.1.procreation.no", "No i don't think so"));
                 }),
                 new NPCData.NPCLook(NPCData.Gender.FEMALE, npcTexture("smith/female_1"), null, 0, List.of(new SlimLookFeatureType())),
                 of(m -> {
@@ -219,6 +254,13 @@ public class NPCDataGen extends NPCDataProvider {
                     m.put(ConversationContext.FOLLOW_YES, new NPCData.ConversationSet.Builder("npc.shop_owner.male.1.follow.yes", "Where are we going?"));
                     m.put(ConversationContext.FOLLOW_NO, new NPCData.ConversationSet.Builder("npc.shop_owner.male.1.follow.no", "Hmm... maybe another time"));
                     m.put(ConversationContext.FOLLOW_STOP, new NPCData.ConversationSet.Builder("npc.shop_owner.male.1.follow.stop", "Ok Bye!"));
+                    m.put(ConversationContext.DATING_ACCEPT, new NPCData.ConversationSet.Builder("npc.shop_owner.male.1.dating.yes", "I... didn't think that day would come but yes!"));
+                    m.put(ConversationContext.DATING_DENY, new NPCData.ConversationSet.Builder("npc.shop_owner.male.1.dating.no", "Sorry but i don't feel that way"));
+                    m.put(ConversationContext.MARRIAGE_ACCEPT, new NPCData.ConversationSet.Builder("npc.shop_owner.male.1.marry.yes", "Yes! I'm so happy!"));
+                    m.put(ConversationContext.MARRIAGE_DENY, new NPCData.ConversationSet.Builder("npc.shop_owner.male.1.marry.yes", "I'm sorry"));
+                    m.put(ConversationContext.DIVORCE, new NPCData.ConversationSet.Builder("npc.shop_owner.male.1.divorce.yes", "Goodbye"));
+                    m.put(ConversationContext.DIVORCE_ERROR, new NPCData.ConversationSet.Builder("npc.shop_owner.male.1.divorce.not", "Huh? Why are you giving me that?"));
+                    m.put(ConversationContext.PROCREATION_COOLDOWN, new NPCData.ConversationSet.Builder("npc.shop_owner.male.1.procreation.no", "No i don't think so"));
                 }),
                 new NPCData.NPCLook(NPCData.Gender.MALE, npcTexture("shop_owner/male_1"), null, 0, List.of()),
                 of(m -> {
@@ -247,6 +289,13 @@ public class NPCDataGen extends NPCDataProvider {
                     m.put(ConversationContext.FOLLOW_YES, new NPCData.ConversationSet.Builder("npc.shop_owner.female.1.follow.yes", "Where do you want to go?"));
                     m.put(ConversationContext.FOLLOW_NO, new NPCData.ConversationSet.Builder("npc.shop_owner.female.1.follow.no", "I have something to do right now. Maybe next time..."));
                     m.put(ConversationContext.FOLLOW_STOP, new NPCData.ConversationSet.Builder("npc.shop_owner.female.1.follow.stop", "See ya next time. Bye!"));
+                    m.put(ConversationContext.DATING_ACCEPT, new NPCData.ConversationSet.Builder("npc.shop_owner.female.1.dating.yes", "I... didn't think that day would come but yes!"));
+                    m.put(ConversationContext.DATING_DENY, new NPCData.ConversationSet.Builder("npc.shop_owner.female.1.dating.no", "Sorry but i don't feel that way"));
+                    m.put(ConversationContext.MARRIAGE_ACCEPT, new NPCData.ConversationSet.Builder("npc.shop_owner.female.1.marry.yes", "Yes! I'm so happy!"));
+                    m.put(ConversationContext.MARRIAGE_DENY, new NPCData.ConversationSet.Builder("npc.shop_owner.female.1.marry.yes", "I'm sorry"));
+                    m.put(ConversationContext.DIVORCE, new NPCData.ConversationSet.Builder("npc.shop_owner.female.1.divorce.yes", "Goodbye"));
+                    m.put(ConversationContext.DIVORCE_ERROR, new NPCData.ConversationSet.Builder("npc.shop_owner.female.1.divorce.not", "Huh? Why are you giving me that?"));
+                    m.put(ConversationContext.PROCREATION_COOLDOWN, new NPCData.ConversationSet.Builder("npc.shop_owner.female.1.procreation.no", "No i don't think so"));
                 }),
                 new NPCData.NPCLook(NPCData.Gender.FEMALE, npcTexture("shop_owner/female_1"), null, 0, List.of(new SlimLookFeatureType(), new SizeFeatureType(UniformGenerator.between(0.85f, 1)))),
                 of(m -> {

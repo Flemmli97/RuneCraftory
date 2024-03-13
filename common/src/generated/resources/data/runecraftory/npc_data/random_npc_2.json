@@ -14,7 +14,14 @@
     "runecraftory:talk": "runecraftory:random_npc_2/talk",
     "runecraftory:follow_yes": "runecraftory:random_npc_2/follow_yes",
     "runecraftory:follow_no": "runecraftory:random_npc_2/follow_no",
-    "runecraftory:follow_stop": "runecraftory:random_npc_2/follow_stop"
+    "runecraftory:follow_stop": "runecraftory:random_npc_2/follow_stop",
+    "runecraftory:dating_accept": "runecraftory:random_npc_2/dating_accept",
+    "runecraftory:dating_deny": "runecraftory:random_npc_2/dating_deny",
+    "runecraftory:marriage_accept": "runecraftory:random_npc_2/marriage_accept",
+    "runecraftory:marriage_deny": "runecraftory:random_npc_2/marriage_deny",
+    "runecraftory:divorce": "runecraftory:random_npc_2/divorce",
+    "runecraftory:divorce_error": "runecraftory:random_npc_2/divorce_error",
+    "runecraftory:procreation_cooldown": "runecraftory:random_npc_2/procreation_cooldown"
   },
   "questHandler": {
     "responses": {},

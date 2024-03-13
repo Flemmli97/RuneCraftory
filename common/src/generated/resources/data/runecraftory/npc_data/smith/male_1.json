@@ -29,7 +29,14 @@
     "runecraftory:talk": "runecraftory:smith/male_1/talk",
     "runecraftory:follow_yes": "runecraftory:smith/male_1/follow_yes",
     "runecraftory:follow_no": "runecraftory:smith/male_1/follow_no",
-    "runecraftory:follow_stop": "runecraftory:smith/male_1/follow_stop"
+    "runecraftory:follow_stop": "runecraftory:smith/male_1/follow_stop",
+    "runecraftory:dating_accept": "runecraftory:smith/male_1/dating_accept",
+    "runecraftory:dating_deny": "runecraftory:smith/male_1/dating_deny",
+    "runecraftory:marriage_accept": "runecraftory:smith/male_1/marriage_accept",
+    "runecraftory:marriage_deny": "runecraftory:smith/male_1/marriage_deny",
+    "runecraftory:divorce": "runecraftory:smith/male_1/divorce",
+    "runecraftory:divorce_error": "runecraftory:smith/male_1/divorce_error",
+    "runecraftory:procreation_cooldown": "runecraftory:smith/male_1/procreation_cooldown"
   },
   "questHandler": {
     "responses": {

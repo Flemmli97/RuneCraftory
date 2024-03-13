@@ -1,0 +1,16 @@
+{
+  "type": "runecraftory:armor",
+  "level": 20,
+  "cost": 15,
+  "ingredients": [
+    {
+      "tag": "runecraftory:mineral"
+    },
+    {
+      "tag": "runecraftory:jewels"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:engagement_ring"
+  }
+}

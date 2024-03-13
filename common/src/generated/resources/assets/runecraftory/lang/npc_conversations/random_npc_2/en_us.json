@@ -8,5 +8,11 @@
   "npc.generic.2.follow.yes": "Where are we going?",
   "npc.generic.2.follow.no": "Sorry but I'm have something to take care of.",
   "npc.generic.2.follow.stop": "Ok. Cya.",
+  "npc.generic.2.dating.yes": "I... didn't think that day would come but yes!",
+  "npc.generic.2.dating.no": "Sorry but i don't feel that way",
+  "npc.generic.2.marry.yes": "I'm sorry",
+  "npc.generic.2.divorce.yes": "Goodbye",
+  "npc.generic.2.divorce.not": "Huh? Why are you giving me that?",
+  "npc.generic.2.procreation.no": "No i don't think so",
   "npc.generic.2.gift.default": "Thanks. I appreciate it"
 }

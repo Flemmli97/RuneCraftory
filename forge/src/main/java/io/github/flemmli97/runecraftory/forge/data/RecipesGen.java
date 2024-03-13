@@ -179,6 +179,23 @@ public class RecipesGen extends RecipeProvider {
                 .unlockedBy("fireball", has(Items.LAVA_BUCKET))
                 .save(consumer);
 
+        ShapedRecipeBuilder.shaped(ModItems.LOVE_LETTER.get())
+                .pattern(" P ")
+                .pattern("PFP")
+                .pattern(" P ")
+                .define('F', RunecraftoryTags.FLOWERS)
+                .define('P', Items.PAPER)
+                .unlockedBy("love_letter", has(RunecraftoryTags.FLOWERS))
+                .save(consumer);
+        ShapedRecipeBuilder.shaped(ModItems.DIVORCE_PAPER.get())
+                .pattern(" P ")
+                .pattern("PSP")
+                .pattern(" P ")
+                .define('S', ModItems.SCRAP.get())
+                .define('P', Items.PAPER)
+                .unlockedBy("divorce_paper", has(Items.PAPER))
+                .save(consumer);
+
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.HOE_SCRAP.get(), 1, 5, 20)
                 .addIngredient(RunecraftoryTags.MINERALS).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.HOE_IRON.get(), 1, 15, 20)
@@ -394,6 +411,8 @@ public class RecipesGen extends RecipeProvider {
 
         RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.YARN.get(), 1, 5, 15)
                 .addIngredient(RunecraftoryTags.FURS).build(consumer);
+        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.ENGAGEMENT_RING.get(), 1, 20, 15)
+                .addIngredient(RunecraftoryTags.MINERALS).addIngredient(RunecraftoryTags.JEWELS).build(consumer);
         RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.CHEAP_BRACELET.get(), 1, 3, 15)
                 .addIngredient(RunecraftoryTags.MINERALS).build(consumer);
         RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.BRONZE_BRACELET.get(), 1, 15, 15)
