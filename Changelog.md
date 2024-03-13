@@ -1,3 +1,29 @@
+RuneCraftory 1.9.0
+================
+- Added armor effects system:
+  You can specify additional effects for armor pieces.  
+  These effects can also be transfered to other pieces during crafting similar to adding spells to staffs
+- Rewrote NPC conversation type to use a registry based system making it more expandable
+- Implementing romancing npcs. Giving a npc a love letter with 7 >= friend points has a chance of advancing relationship.  
+  Giving a npc an engagement ring allows you to marry it if you are dating and all their quests requirements are met.
+  These npcs cannot die.
+- Make npc combat system use the same as the players which fixes e.g. rune abilities not working right on them
+- Rewrite the npc look feature system to use a registry based one. Also added a size feature.
+- Added plant sword/shield:
+  These items can be grown as crops and will be applied random item upgrades on harvest
+- Added zoning config for distance based level increase. Previously that was hardcoded.
+- Added player predicate option to gate and boss spawning
+- Boss spawner now have requirements to meet before being able to enter
+- Updated lots of advancement and introduced some progression system
+- Changed requirement of farmland needing to be wet to grow crops. Now if its not wet the growth speed gets a 0.5 penalty
+- Renamed saved data file
+- Adjusted monster stats
+- Updated the guide book
+- Fix weagle idle animation not working
+- Fix upgrade tooltip on items sometimes not shown
+- Fix item stats using tags not working
+- "Fixed" skelefang particle with sodium/iris
+
 RuneCraftory 1.8.4
 ================
 - Add a screen for spawn eggs instead of renaming it to set a level
@@ -65,7 +91,6 @@ RuneCraftory 1.8.0
 - Fix "furniture" attack texture from marionetta
 - Fix parent quest for npc quests
 - Fix shop item on reload gone
-
 
 RuneCraftory 1.7.0
 ================
