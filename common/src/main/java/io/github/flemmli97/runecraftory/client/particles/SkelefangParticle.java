@@ -3,7 +3,6 @@ package io.github.flemmli97.runecraftory.client.particles;
 import com.google.common.base.Suppliers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelSkelefang;

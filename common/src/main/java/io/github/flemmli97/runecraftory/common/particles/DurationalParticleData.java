@@ -31,15 +31,20 @@ public class DurationalParticleData extends ColoredParticleData {
 
         @Override
         public DurationalParticleData fromNetwork(ParticleType<DurationalParticleData> type, FriendlyByteBuf buffer) {
-            return new DurationalParticleData(buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readInt());
+            return new DurationalParticleData(buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readInt(), buffer.readInt());
         }
     };
 
-    private final int duration;
+    private final int duration, entityAnchor;
 
     public DurationalParticleData(float red, float green, float blue, float alpha, float scale, int duration) {
+        this(red, green, blue, alpha, scale, duration, -1);
+    }
+
+    public DurationalParticleData(float red, float green, float blue, float alpha, float scale, int duration, int entityAnchor) {
         super(ModParticles.DURATIONAL_PARTICLE.get(), red, green, blue, alpha, scale);
         this.duration = duration;
+        this.entityAnchor = entityAnchor;
     }
 
     public static Codec<DurationalParticleData> codec() {
@@ -49,7 +54,8 @@ public class DurationalParticleData extends ColoredParticleData {
                         Codec.FLOAT.fieldOf("b").forGetter(ColoredParticleData::getBlue),
                         Codec.FLOAT.fieldOf("alpha").forGetter(ColoredParticleData::getAlpha),
                         Codec.FLOAT.fieldOf("scale").forGetter(ColoredParticleData::getScale),
-                        Codec.INT.fieldOf("duration").forGetter(DurationalParticleData::getDuration))
+                        Codec.INT.fieldOf("duration").forGetter(DurationalParticleData::getDuration),
+                        Codec.INT.fieldOf("entityAnchor").forGetter(DurationalParticleData::getEntityAnchor))
                 .apply(builder, DurationalParticleData::new));
     }
 
@@ -57,10 +63,14 @@ public class DurationalParticleData extends ColoredParticleData {
     public void writeToNetwork(FriendlyByteBuf buffer) {
         super.writeToNetwork(buffer);
         buffer.writeInt(this.getDuration());
+        buffer.writeInt(this.getEntityAnchor());
     }
 
     public int getDuration() {
         return this.duration;
     }
 
+    public int getEntityAnchor() {
+        return this.entityAnchor;
+    }
 }

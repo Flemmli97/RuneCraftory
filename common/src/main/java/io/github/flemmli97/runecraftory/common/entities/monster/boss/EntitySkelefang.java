@@ -468,7 +468,7 @@ public class EntitySkelefang extends BossMonster {
                 for (Vector3f vec : locations) {
                     Vec3 pos = center.add(vec.x(), vec.y(), vec.z());
                     Vec3 dir = new Vec3(vec.x(), vec.y(), vec.z()).normalize().scale(speed);
-                    this.level.addAlwaysVisibleParticle(new DurationalParticleData(217 / 255f, 248 / 255f, 252 / 255f, 0.4f, 2.3f, 40),
+                    this.level.addAlwaysVisibleParticle(new DurationalParticleData(217 / 255f, 248 / 255f, 252 / 255f, 0.4f, 2.3f, 40, this.getId()),
                             pos.x(), pos.y(), pos.z(), -dir.x(), -dir.y(), -dir.z());
                 }
             }
