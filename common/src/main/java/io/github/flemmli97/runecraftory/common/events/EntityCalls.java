@@ -450,7 +450,7 @@ public class EntityCalls {
         float damage = CombatUtils.reduceDamageFromStats(entity, source, dmg);
         if (damage < 0)
             entity.heal(-damage);
-        else if (damage > 0 && source != DamageSource.OUT_OF_WORLD && entity instanceof ServerPlayer player) {
+        else if (damage > 1 && source != DamageSource.OUT_OF_WORLD && entity instanceof ServerPlayer player) {
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.DEFENCE, Math.min(7, (float) (0.5 + Math.log(damage * 0.25))) * 1.5f));
         }
         //if (source instanceof CustomDamage)
