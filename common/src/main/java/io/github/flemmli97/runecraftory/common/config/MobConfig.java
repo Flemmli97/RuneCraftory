@@ -12,7 +12,7 @@ public class MobConfig {
     public static double gateHealth = 75;
     public static double gateDef = 0;
     public static double gateMDef = 0;
-    public static double gateHealthGain = 25;
+    public static double gateHealthGain = 10;
     public static double gateDefGain = 1.5;
     public static double gateMDefGain = 1.5;
     public static int gateXp = 25;
