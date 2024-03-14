@@ -11,7 +11,6 @@ import io.github.flemmli97.runecraftory.api.datapack.NPCData;
 import io.github.flemmli97.runecraftory.api.datapack.SimpleEffect;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.common.attachment.player.LevelExpPair;
-import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCDataManager;
@@ -37,6 +36,7 @@ import io.github.flemmli97.runecraftory.common.items.BabySpawnEgg;
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemObjectX;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.loot.LootCtxParameters;
+import io.github.flemmli97.runecraftory.common.network.S2CEntityLevelPkt;
 import io.github.flemmli97.runecraftory.common.network.S2CNPCLook;
 import io.github.flemmli97.runecraftory.common.network.S2CNpcDialogue;
 import io.github.flemmli97.runecraftory.common.network.S2COpenNPCGui;
@@ -165,8 +165,6 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     public static final float PATH_FIND_LENGTH = 100;
 
-    private static final EntityDataAccessor<Integer> ENTITY_LEVEL = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Float> LEVEL_XP = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Boolean> PLAY_DEATH_STATE = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> SHOP_SYNC = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> MALE = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.BOOLEAN);
@@ -252,6 +250,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     public EntityNPCBase(EntityType<? extends EntityNPCBase> type, Level level) {
         super(type, level);
+        this.levelPair.setLevel(LibConstants.BASE_LEVEL, LevelCalc::xpAmountForLevelUp);
         this.applyAttributes(true);
         if (!level.isClientSide)
             this.addGoal();
@@ -327,8 +326,6 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(ENTITY_LEVEL, LibConstants.BASE_LEVEL);
-        this.entityData.define(LEVEL_XP, 0f);
         this.entityData.define(PLAY_DEATH_STATE, false);
         this.entityData.define(SHOP_SYNC, 0);
         this.entityData.define(MALE, false);
@@ -795,33 +792,31 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     @Override
     public LevelExpPair level() {
-        this.levelPair.setLevel(this.entityData.get(ENTITY_LEVEL));
-        this.levelPair.setXp(this.entityData.get(LEVEL_XP));
         return this.levelPair;
     }
 
     @Override
     public void setLevel(int level) {
-        this.entityData.set(ENTITY_LEVEL, Mth.clamp(level, 1, LibConstants.MAX_MONSTER_LEVEL));
+        this.level().setLevel(Mth.clamp(level, 1, LibConstants.MAX_MONSTER_LEVEL), LevelCalc::xpAmountForLevelUp);
         this.updateStatsToLevel();
     }
 
     public void increaseLevel() {
-        this.entityData.set(ENTITY_LEVEL, Math.min(GeneralConfig.maxLevel, this.level().getLevel() + 1));
+        this.level().setLevel(Mth.clamp(this.level().getLevel() + 1, 1, LibConstants.MAX_MONSTER_LEVEL), LevelCalc::xpAmountForLevelUp);
         this.updateStatsToLevel();
     }
 
     public void addXp(float amount) {
-        LevelExpPair pair = this.level();
-        boolean res = pair.addXP(amount, LibConstants.MAX_MONSTER_LEVEL, LevelCalc::xpAmountForLevelUp, () -> {
+        boolean res = this.level().addXP(amount, LibConstants.MAX_MONSTER_LEVEL, LevelCalc::xpAmountForLevelUp, () -> {
         });
-        this.entityData.set(ENTITY_LEVEL, pair.getLevel());
-        this.entityData.set(LEVEL_XP, pair.getXp());
+        Platform.INSTANCE.sendToTrackingAndSelf(S2CEntityLevelPkt.create(this), this);
         if (res)
             this.updateStatsToLevel();
     }
 
     public void updateStatsToLevel() {
+        if (!this.level.isClientSide)
+            Platform.INSTANCE.sendToTrackingAndSelf(S2CEntityLevelPkt.create(this), this);
         float preHealthDiff = this.getMaxHealth() - this.getHealth();
         ((AttributeMapAccessor) this.getAttributes()).getAttributes().forEach((att, inst) -> inst.removeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD));
         if (this.data != null) {
@@ -1081,8 +1076,6 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.levelPair.read(compound.getCompound("MobLevel"));
-        this.entityData.set(ENTITY_LEVEL, this.levelPair.getLevel());
-        this.entityData.set(LEVEL_XP, this.levelPair.getXp());
         this.foodBuffTick = compound.getInt("FoodBuffTick");
         this.setPlayDeath(compound.getBoolean("PlayDeath"));
 
@@ -1662,6 +1655,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     @Override
     public void startSeenByPlayer(ServerPlayer player) {
         Platform.INSTANCE.sendToClient(new S2CNPCLook(this.getId(), this.look, this.lookFeatures.save()), player);
+        Platform.INSTANCE.sendToClient(S2CEntityLevelPkt.create(this), player);
     }
 
     public enum Behaviour {

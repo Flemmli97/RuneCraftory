@@ -7,7 +7,6 @@ import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.entities.IBaseMob;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.network.chat.Component;
@@ -55,7 +54,7 @@ public abstract class CompanionGui<T extends LivingEntity & IBaseMob> extends Sc
         this.blit(stack, this.leftPos + iconX, this.topPos + iconY + 13 * 4, 226, 46, 8, 8);
 
         int healthWidth = Math.min(100, (int) (this.entity.getHealth() / this.entity.getMaxHealth() * 100.0));
-        int exp = Math.min(100, (int) (this.entity.level().getXp() / (float) LevelCalc.xpAmountForLevelUp(this.entity.level().getLevel()) * 100.0));
+        int exp = Math.min(100, (int) (this.entity.level().getProgress() * 100.0));
         RenderSystem.setShaderTexture(0, BARS);
         int barX = 81;
         this.blit(stack, this.leftPos + barX, this.topPos + 14, 2, 51, healthWidth, 6);

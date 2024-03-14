@@ -11,7 +11,6 @@ import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
-import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
@@ -70,7 +69,7 @@ public class InfoScreen extends EffectRenderingInventoryScreen<AbstractContainer
 
         int healthWidth = Math.min(100, (int) (this.minecraft.player.getHealth() / this.minecraft.player.getMaxHealth() * 100.0));
         int runeWidth = Math.min(100, (int) (this.data.getRunePoints() / (float) this.data.getMaxRunePoints() * 100.0f));
-        int exp = Math.min(100, (int) (this.data.getPlayerLevel().getXp() / (float) LevelCalc.xpAmountForLevelUp(this.data.getPlayerLevel().getLevel()) * 100.0f));
+        int exp = Math.min(100, (int) (this.data.getPlayerLevel().getProgress() * 100.0f));
         RenderSystem.setShaderTexture(0, BARS);
         int barX = 117;
         this.blit(stack, this.leftPos + barX, this.topPos + 20, 2, 51, healthWidth, 6);

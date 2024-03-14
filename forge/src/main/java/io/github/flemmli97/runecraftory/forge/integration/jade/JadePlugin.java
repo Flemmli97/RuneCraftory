@@ -52,7 +52,7 @@ public class JadePlugin implements IWailaPlugin {
             if (entity instanceof IBaseMob mob && (player.getMainHandItem().getItem() == ModItems.DEBUG.get() || player.isCreative()
                     || (entity instanceof OwnableEntity ownable && player.getUUID().equals(ownable.getOwnerUUID())))) {
                 LevelExpPair entityLevel = mob.level();
-                compoundTag.putFloat("RunecraftoryLevelPerc", entityLevel.getXp() / LevelCalc.xpAmountForLevelUp(entityLevel.getLevel()));
+                compoundTag.putFloat("RunecraftoryLevelPerc", entityLevel.getProgress());
                 compoundTag.putInt("RunecraftoryLevel", entityLevel.getLevel());
             }
             if (entity instanceof BaseMonster monster) {

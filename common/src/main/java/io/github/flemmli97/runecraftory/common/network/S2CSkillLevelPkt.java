@@ -22,11 +22,9 @@ public class S2CSkillLevelPkt implements Packet {
     private final float intel;
     private final float vit;
 
-    private S2CSkillLevelPkt(EnumSkills skill, int level, float xp, int rp, float rpMax, float str, float intel, float vit) {
+    private S2CSkillLevelPkt(EnumSkills skill, LevelExpPair xp, int rp, float rpMax, float str, float intel, float vit) {
         this.skill = skill;
-        this.level = new LevelExpPair();
-        this.level.setLevel(level);
-        this.level.setXp(xp);
+        this.level = xp;
         this.rp = rp;
         this.rpMax = rpMax;
         this.str = str;
@@ -45,7 +43,7 @@ public class S2CSkillLevelPkt implements Packet {
     }
 
     public static S2CSkillLevelPkt read(FriendlyByteBuf buf) {
-        return new S2CSkillLevelPkt(buf.readEnum(EnumSkills.class), buf.readInt(), buf.readFloat(), buf.readInt(), buf.readFloat(), buf.readFloat(), buf.readFloat(), buf.readFloat());
+        return new S2CSkillLevelPkt(buf.readEnum(EnumSkills.class), new LevelExpPair(buf), buf.readInt(), buf.readFloat(), buf.readFloat(), buf.readFloat(), buf.readFloat());
     }
 
     public static void handle(S2CSkillLevelPkt pkt) {
@@ -53,7 +51,7 @@ public class S2CSkillLevelPkt implements Packet {
         if (player == null)
             return;
         Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-            data.setSkillLevel(pkt.skill, player, pkt.level.getLevel(), pkt.level.getXp(), false);
+            data.getSkillLevel(pkt.skill).from(pkt.level);
             data.setRunePoints(player, pkt.rp);
             data.setMaxRunePoints(player, pkt.rpMax);
             data.setStr(player, pkt.str);
@@ -65,8 +63,7 @@ public class S2CSkillLevelPkt implements Packet {
     @Override
     public void write(FriendlyByteBuf buf) {
         buf.writeEnum(this.skill);
-        buf.writeInt(this.level.getLevel());
-        buf.writeFloat(this.level.getXp());
+        this.level.toPacket(buf);
         buf.writeInt(this.rp);
         buf.writeFloat(this.rpMax);
         buf.writeFloat(this.str);

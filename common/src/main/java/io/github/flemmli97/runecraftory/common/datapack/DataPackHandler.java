@@ -82,7 +82,6 @@ public class DataPackHandler {
             case ITEMSTATS -> INSTANCE.itemStats.toPacket(buffer);
             case CROPS -> INSTANCE.crops.toPacket(buffer);
             case FOOD -> INSTANCE.foods.toPacket(buffer);
-            case SKILL -> INSTANCE.skillPropertiesManager.toPacket(buffer);
         }
     }
 
@@ -91,7 +90,6 @@ public class DataPackHandler {
             case ITEMSTATS -> INSTANCE.itemStats.fromPacket(buffer);
             case CROPS -> INSTANCE.crops.fromPacket(buffer);
             case FOOD -> INSTANCE.foods.fromPacket(buffer);
-            case SKILL -> INSTANCE.skillPropertiesManager.fromPacket(buffer);
         }
     }
 

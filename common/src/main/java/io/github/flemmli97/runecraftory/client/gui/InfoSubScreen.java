@@ -7,7 +7,6 @@ import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.client.gui.widgets.PageButton;
 import io.github.flemmli97.runecraftory.common.network.C2SOpenInfo;
-import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
@@ -34,7 +33,7 @@ public class InfoSubScreen extends InfoScreen {
             int index = i + this.page * 12;
             if (index < EnumSkills.values().length) {
                 EnumSkills skill = EnumSkills.values()[index];
-                int skillXP = (int) (this.data.getSkillLevel(skill).getXp() / (float) LevelCalc.xpAmountForSkillLevelUp(skill, this.data.getSkillLevel(skill).getLevel()) * 96.0f);
+                int skillXP = (int) (this.data.getSkillLevel(skill).getProgress() * 96.0f);
                 RenderSystem.setShaderTexture(0, BARS);
                 this.blit(stack, this.leftPos + 9, this.topPos + 117 + 13 * i, 2, 80, skillXP, 9);
                 this.minecraft.font.draw(stack, new TranslatableComponent(skill.getTranslation()), this.leftPos + 11, this.topPos + 118 + 13 * i, 0xffffff);
@@ -43,7 +42,7 @@ public class InfoSubScreen extends InfoScreen {
             index = i + 6 + this.page * 12;
             if (index < EnumSkills.values().length) {
                 EnumSkills skill2 = EnumSkills.values()[i + 6 + this.page * 12];
-                int skillXP2 = (int) (this.data.getSkillLevel(skill2).getXp() / (float) LevelCalc.xpAmountForSkillLevelUp(skill2, this.data.getSkillLevel(skill2).getLevel()) * 96.0f);
+                int skillXP2 = (int) (this.data.getSkillLevel(skill2).getProgress() * 96.0f);
                 RenderSystem.setShaderTexture(0, BARS);
                 this.blit(stack, this.leftPos + 119, this.topPos + 117 + 13 * i, 2, 80, skillXP2, 9);
                 this.minecraft.font.draw(stack, new TranslatableComponent(skill2.getTranslation()), this.leftPos + 121, this.topPos + 118 + 13 * i, 0xffffff);

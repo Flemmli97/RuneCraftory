@@ -58,15 +58,11 @@ public class S2CCapSync implements Packet {
         pkt.str = buf.readFloat();
         pkt.intel = buf.readFloat();
         pkt.vit = buf.readFloat();
-        pkt.level.setLevel(buf.readInt());
-        pkt.level.setXp(buf.readFloat());
+        pkt.level.fromPacket(buf);
         int l = buf.readInt();
         for (int i = 0; i < l; i++) {
             EnumSkills skill = buf.readEnum(EnumSkills.class);
-            LevelExpPair pair = new LevelExpPair();
-            pair.setLevel(buf.readInt());
-            pair.setXp(buf.readFloat());
-            pkt.skillMap.put(skill, pair);
+            pkt.skillMap.put(skill, new LevelExpPair(buf));
         }
         pkt.spells = buf.readNbt();
         pkt.foodData = buf.readNbt();
@@ -88,8 +84,8 @@ public class S2CCapSync implements Packet {
             data.setStr(player, pkt.str);
             data.setVit(player, pkt.vit);
             data.setIntel(player, pkt.intel);
-            data.setPlayerLevel(player, pkt.level.getLevel(), pkt.level.getXp(), false);
-            pkt.skillMap.forEach((skill, val) -> data.setSkillLevel(skill, player, val.getLevel(), val.getXp(), false));
+            data.getPlayerLevel().from(pkt.level);
+            pkt.skillMap.forEach((skill, val) -> data.getSkillLevel(skill).from(val));
             data.getInv().load(pkt.spells);
             data.readFoodBuffFromNBT(pkt.foodData);
             data.getRecipeKeeper().clientUpdate(pkt.recipes);
@@ -104,14 +100,12 @@ public class S2CCapSync implements Packet {
         buf.writeFloat(this.str);
         buf.writeFloat(this.intel);
         buf.writeFloat(this.vit);
-        buf.writeInt(this.level.getLevel());
-        buf.writeFloat(this.level.getXp());
+        this.level.toPacket(buf);
         buf.writeInt(EnumSkills.values().length);
         for (EnumSkills skill : EnumSkills.values()) {
             buf.writeEnum(skill);
-            LevelExpPair i = this.skillMap.getOrDefault(skill, new LevelExpPair());
-            buf.writeInt(i.getLevel());
-            buf.writeFloat(i.getXp());
+            LevelExpPair xp = this.skillMap.getOrDefault(skill, new LevelExpPair());
+            xp.toPacket(buf);
         }
         buf.writeNbt(this.spells);
         buf.writeNbt(this.foodData);

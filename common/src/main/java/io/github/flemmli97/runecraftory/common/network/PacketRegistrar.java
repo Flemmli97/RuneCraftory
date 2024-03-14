@@ -58,6 +58,7 @@ public class PacketRegistrar {
         register.registerMessage(id++, S2COpenQuestGui.ID, S2COpenQuestGui.class, S2COpenQuestGui::write, S2COpenQuestGui::read, S2COpenQuestGui::handle);
         register.registerMessage(id++, S2CSyncConfig.ID, S2CSyncConfig.class, S2CSyncConfig::write, S2CSyncConfig::read, S2CSyncConfig::handle);
         register.registerMessage(id++, S2CSpawnEggScreen.ID, S2CSpawnEggScreen.class, S2CSpawnEggScreen::write, S2CSpawnEggScreen::read, S2CSpawnEggScreen::handle);
+        register.registerMessage(id++, S2CEntityLevelPkt.ID, S2CEntityLevelPkt.class, S2CEntityLevelPkt::write, S2CEntityLevelPkt::read, S2CEntityLevelPkt::handle);
         return id;
     }
 

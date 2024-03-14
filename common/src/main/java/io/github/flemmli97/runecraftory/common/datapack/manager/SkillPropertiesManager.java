@@ -9,7 +9,6 @@ import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.SkillProperties;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -90,15 +89,5 @@ public class SkillPropertiesManager extends SimplePreparableReloadListener<Map<R
         if (!missing.isEmpty())
             throw new IllegalStateException("Some skills are missing their properties. " + missing);
         this.propertiesMap = propertiesBuilder;
-    }
-
-    public void toPacket(FriendlyByteBuf buffer) {
-        buffer.writeMap(this.propertiesMap, FriendlyByteBuf::writeEnum,
-                ((friendlyByteBuf, skillProperties) -> friendlyByteBuf.writeInt(skillProperties.maxLevel())));
-    }
-
-    public void fromPacket(FriendlyByteBuf buffer) {
-        this.propertiesMap.putAll(buffer.readMap(b -> b.readEnum(EnumSkills.class), b ->
-                new SkillProperties(b.readInt(), 0, 0, 0, 0, 0, 0)));
     }
 }

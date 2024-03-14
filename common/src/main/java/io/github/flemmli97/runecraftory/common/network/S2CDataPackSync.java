@@ -45,6 +45,5 @@ public class S2CDataPackSync implements Packet {
         ITEMSTATS,
         CROPS,
         FOOD,
-        SKILL
     }
 }

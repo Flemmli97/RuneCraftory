@@ -129,7 +129,7 @@ public class GateEntity extends Mob implements IBaseMob {
 
     @Override
     public LevelExpPair level() {
-        this.expPair.setLevel(this.entityData.get(MOB_LEVEL));
+        this.expPair.setLevel(this.entityData.get(MOB_LEVEL), l -> 0);
         return this.expPair;
     }
 

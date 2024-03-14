@@ -20,10 +20,8 @@ public class S2CLevelPkt implements Packet {
     private final float intel;
     private final float vit;
 
-    private S2CLevelPkt(int level, float xp, int rp, float rpMax, float str, float intel, float vit) {
-        this.level = new LevelExpPair();
-        this.level.setLevel(level);
-        this.level.setXp(xp);
+    private S2CLevelPkt(LevelExpPair xp, int rp, float rpMax, float str, float intel, float vit) {
+        this.level = xp;
         this.rp = rp;
         this.rpMax = rpMax;
         this.str = str;
@@ -41,7 +39,7 @@ public class S2CLevelPkt implements Packet {
     }
 
     public static S2CLevelPkt read(FriendlyByteBuf buf) {
-        return new S2CLevelPkt(buf.readInt(), buf.readFloat(), buf.readInt(), buf.readFloat(), buf.readFloat(), buf.readFloat(), buf.readFloat());
+        return new S2CLevelPkt(new LevelExpPair(buf), buf.readInt(), buf.readFloat(), buf.readFloat(), buf.readFloat(), buf.readFloat());
     }
 
     public static void handle(S2CLevelPkt pkt) {
@@ -49,7 +47,7 @@ public class S2CLevelPkt implements Packet {
         if (player == null)
             return;
         Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-            data.setPlayerLevel(player, pkt.level.getLevel(), pkt.level.getXp(), false);
+            data.getPlayerLevel().from(pkt.level);
             data.setRunePoints(player, pkt.rp);
             data.setMaxRunePoints(player, pkt.rpMax);
             data.setStr(player, pkt.str);
@@ -60,8 +58,7 @@ public class S2CLevelPkt implements Packet {
 
     @Override
     public void write(FriendlyByteBuf buf) {
-        buf.writeInt(this.level.getLevel());
-        buf.writeFloat(this.level.getXp());
+        this.level.toPacket(buf);
         buf.writeInt(this.rp);
         buf.writeFloat(this.rpMax);
         buf.writeFloat(this.str);

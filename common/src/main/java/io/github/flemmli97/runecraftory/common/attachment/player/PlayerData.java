@@ -266,7 +266,7 @@ public class PlayerData {
     }
 
     public void setPlayerLevel(Player player, int level, float xpAmount, boolean recalc) {
-        this.level.setLevel(Mth.clamp(level, 1, GeneralConfig.maxLevel));
+        this.level.setLevel(Mth.clamp(level, 1, GeneralConfig.maxLevel), LevelCalc::xpAmountForLevelUp);
         this.level.setXp(Mth.clamp(xpAmount, 0, LevelCalc.xpAmountForLevelUp(level)));
         if (player instanceof ServerPlayer serverPlayer) {
             if (recalc) {
@@ -328,7 +328,7 @@ public class PlayerData {
     }
 
     public void setSkillLevel(EnumSkills skill, Player player, int level, float xpAmount, boolean recalc) {
-        this.skillLevels.get(skill).setLevel(player.level.isClientSide ? level : Mth.clamp(level, 1, DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(skill).maxLevel()));
+        this.skillLevels.get(skill).setLevel(player.level.isClientSide ? level : Mth.clamp(level, 1, DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(skill).maxLevel()), l -> LevelCalc.xpAmountForSkillLevelUp(skill, l));
         this.skillLevels.get(skill).setXp(player.level.isClientSide ? xpAmount : Mth.clamp(xpAmount, 0, LevelCalc.xpAmountForSkillLevelUp(skill, level)));
         if (player instanceof ServerPlayer serverPlayer) {
             if (recalc) {
