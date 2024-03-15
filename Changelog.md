@@ -1,3 +1,10 @@
+RuneCraftory 1.9.1
+================
+- Fix taking small damage triggering level up sound
+- Minimum damage to gain defence xp is > 1
+- Remove skill datapack syncing. All level stuff is now done completely on the server
+- Decrease default gate hp gain
+
 RuneCraftory 1.9.0
 ================
 - Added armor effects system:
