@@ -428,14 +428,14 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
         super.onSyncedDataUpdated(key);
         if (this.level.isClientSide) {
-            if (key == BEHAVIOUR_DATA) {
+            if (key.equals(BEHAVIOUR_DATA)) {
                 try {
                     this.behaviour = Behaviour.values()[this.entityData.get(BEHAVIOUR_DATA)];
                 } catch (ArrayIndexOutOfBoundsException ignored) {
                 }
             }
             //This case only happens during load. At that point we want to skip right to the end of the animation
-            if (key == PLAY_DEATH_STATE) {
+            if (key.equals(PLAY_DEATH_STATE)) {
                 if (this.entityData.get(PLAY_DEATH_STATE) && !this.getAnimationHandler().hasAnimation())
                     this.playDeathAnimation(true);
             }

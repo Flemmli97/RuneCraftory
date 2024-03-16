@@ -336,13 +336,13 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
         super.onSyncedDataUpdated(key);
         if (this.level.isClientSide) {
-            if (key == SHOP_SYNC) {
+            if (key.equals(SHOP_SYNC)) {
                 try {
                     this.shop = ModNPCJobs.getFromSyncID(this.entityData.get(SHOP_SYNC));
                 } catch (ArrayIndexOutOfBoundsException ignored) {
                 }
             }
-            if (key == BEHAVIOUR_DATA) {
+            if (key.equals(BEHAVIOUR_DATA)) {
                 try {
                     this.behaviour = Behaviour.values()[this.entityData.get(BEHAVIOUR_DATA)];
                 } catch (ArrayIndexOutOfBoundsException ignored) {

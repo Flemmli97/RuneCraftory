@@ -231,7 +231,7 @@ public class EntitySkelefang extends BossMonster {
     @Override
     public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
         super.onSyncedDataUpdated(key);
-        if (key == BODY_BONES) {
+        if (key.equals(BODY_BONES)) {
             if (!this.hasBones())
                 this.ignoreHurt = true;
         }
