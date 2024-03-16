@@ -234,7 +234,7 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
             this.components = new ArrayList<>();
             this.components.addAll(this.font.split(new TranslatableComponent("runecraftory.gui.npc.bed.no"), 150));
         }
-        if (!this.entity.isBaby() && this.isShopOpen == ShopState.NOWORKPLACE && this.entity.getShop().poiType != null) {
+        if (!this.entity.isBaby() && this.isShopOpen == ShopState.NOWORKPLACE && this.entity.getShop().poiType != null && this.entity.getShop().poiType.get() != null) {
             this.components = new ArrayList<>();
             this.components.addAll(this.font.split(new TranslatableComponent("runecraftory.gui.npc.workplace.no", this.formatShopPoi(this.entity.getShop().poiType.get())), 150));
         }
