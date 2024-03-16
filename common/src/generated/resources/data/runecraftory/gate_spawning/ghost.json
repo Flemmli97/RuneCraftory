@@ -4,9 +4,9 @@
   "minGateLevel": 25,
   "allowUnderwater": false,
   "biomes": {
-    "c:is_spooky": 60,
-    "c:is_dead": 60,
-    "c:is_swamp": 60
+    "c:is_spooky": 75,
+    "c:is_dead": 75,
+    "c:is_swamp": 75
   },
   "structures": {}
 }

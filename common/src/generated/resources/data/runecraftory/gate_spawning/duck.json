@@ -4,9 +4,9 @@
   "minGateLevel": 15,
   "allowUnderwater": false,
   "biomes": {
-    "c:is_plains": 30,
-    "c:is_water": 30,
-    "minecraft:is_beach": 30
+    "c:is_plains": 50,
+    "c:is_water": 50,
+    "minecraft:is_beach": 50
   },
   "structures": {}
 }

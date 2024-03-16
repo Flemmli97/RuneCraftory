@@ -4,9 +4,9 @@
   "minGateLevel": 40,
   "allowUnderwater": false,
   "biomes": {
-    "minecraft:is_forest": 40,
-    "c:is_sandy": 40,
-    "c:is_savanna": 40
+    "minecraft:is_forest": 60,
+    "c:is_sandy": 60,
+    "c:is_savanna": 60
   },
   "structures": {}
 }

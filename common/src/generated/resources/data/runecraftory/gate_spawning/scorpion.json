@@ -4,10 +4,10 @@
   "minGateLevel": 50,
   "allowUnderwater": false,
   "biomes": {
-    "c:is_hot": 40,
-    "c:is_savanna": 40,
-    "c:is_sandy": 40,
-    "minecraft:is_badlands": 40
+    "c:is_hot": 50,
+    "c:is_savanna": 50,
+    "c:is_sandy": 50,
+    "minecraft:is_badlands": 50
   },
   "structures": {}
 }

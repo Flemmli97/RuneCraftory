@@ -4,10 +4,10 @@
   "minGateLevel": 25,
   "allowUnderwater": false,
   "biomes": {
-    "c:is_spooky": 60,
-    "minecraft:is_forest": 60,
-    "minecraft:is_jungle": 60,
-    "c:is_lush": 60
+    "c:is_spooky": 80,
+    "minecraft:is_forest": 80,
+    "minecraft:is_jungle": 80,
+    "c:is_lush": 80
   },
   "structures": {}
 }

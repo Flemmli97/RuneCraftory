@@ -4,10 +4,10 @@
   "minGateLevel": 50,
   "allowUnderwater": false,
   "biomes": {
-    "c:is_spooky": 30,
-    "c:is_dead": 30,
-    "c:is_hot": 30,
-    "minecraft:is_badlands": 30
+    "c:is_spooky": 60,
+    "c:is_dead": 60,
+    "c:is_hot": 60,
+    "minecraft:is_badlands": 60
   },
   "structures": {}
 }

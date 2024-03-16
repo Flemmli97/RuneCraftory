@@ -4,13 +4,14 @@
   "minGateLevel": 0,
   "allowUnderwater": false,
   "biomes": {
-    "c:is_plains": 60,
-    "c:is_beach": 60,
-    "minecraft:is_forest": 60,
-    "minecraft:is_hill": 60,
-    "c:is_magical": 60,
-    "c:is_savanna": 44,
-    "minecraft:is_mountain": 44
+    "c:is_plains": 100,
+    "c:is_beach": 100,
+    "minecraft:is_forest": 100,
+    "minecraft:is_hill": 100,
+    "c:is_magical": 100,
+    "c:is_savanna": 60,
+    "minecraft:is_mountain": 60,
+    "minecraft:is_taiga": 60
   },
   "structures": {}
 }

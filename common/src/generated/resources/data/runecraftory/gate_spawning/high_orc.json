@@ -4,11 +4,11 @@
   "minGateLevel": 35,
   "allowUnderwater": false,
   "biomes": {
-    "c:is_plains": 30,
-    "c:is_beach": 30,
-    "minecraft:is_forest": 30,
-    "minecraft:is_hill": 30,
-    "c:is_magical": 30,
+    "c:is_plains": 70,
+    "c:is_beach": 70,
+    "minecraft:is_forest": 70,
+    "minecraft:is_hill": 70,
+    "c:is_magical": 70,
     "c:is_savanna": 44,
     "minecraft:is_mountain": 44
   },

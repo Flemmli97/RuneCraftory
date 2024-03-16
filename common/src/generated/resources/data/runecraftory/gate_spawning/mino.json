@@ -4,9 +4,9 @@
   "minGateLevel": 40,
   "allowUnderwater": false,
   "biomes": {
-    "minecraft:is_forest": 10,
-    "minecraft:is_taiga": 10,
-    "c:is_magical": 10
+    "minecraft:is_forest": 80,
+    "minecraft:is_taiga": 80,
+    "c:is_magical": 80
   },
   "structures": {}
 }

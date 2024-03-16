@@ -4,8 +4,8 @@
   "minGateLevel": 50,
   "allowUnderwater": false,
   "biomes": {
-    "c:is_hot": 10,
-    "c:is_savanna": 10
+    "c:is_hot": 60,
+    "c:is_savanna": 60
   },
   "structures": {}
 }

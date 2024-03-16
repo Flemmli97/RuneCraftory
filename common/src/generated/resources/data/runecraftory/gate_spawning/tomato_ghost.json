@@ -4,9 +4,10 @@
   "minGateLevel": 60,
   "allowUnderwater": false,
   "biomes": {
-    "c:is_hot": 20,
-    "c:is_dead": 20,
-    "c:is_wasteland": 20
+    "c:is_hot": 75,
+    "c:is_dead": 75,
+    "c:is_wasteland": 75,
+    "c:is_magical": 75
   },
   "structures": {}
 }

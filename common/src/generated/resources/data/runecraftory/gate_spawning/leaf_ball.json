@@ -4,9 +4,9 @@
   "minGateLevel": 40,
   "allowUnderwater": false,
   "biomes": {
-    "c:is_lush": 50,
-    "minecraft:is_forest": 50,
-    "c:is_magical": 50
+    "c:is_lush": 70,
+    "minecraft:is_forest": 70,
+    "c:is_magical": 70
   },
   "structures": {}
 }

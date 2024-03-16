@@ -4,10 +4,11 @@
   "minGateLevel": 50,
   "allowUnderwater": false,
   "biomes": {
-    "c:is_hot": 20,
-    "minecraft:is_mountain": 20,
-    "minecraft:is_hill": 20,
-    "minecraft:is_badlands": 20
+    "c:is_slope": 65,
+    "c:is_hot": 65,
+    "minecraft:is_mountain": 65,
+    "minecraft:is_hill": 65,
+    "minecraft:is_badlands": 65
   },
   "structures": {}
 }

@@ -4,8 +4,8 @@
   "minGateLevel": 12,
   "allowUnderwater": true,
   "biomes": {
-    "c:is_beach": 50,
-    "c:is_water": 50
+    "c:is_beach": 70,
+    "c:is_water": 70
   },
   "structures": {}
 }
