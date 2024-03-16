@@ -354,7 +354,7 @@ public class GateEntity extends Mob implements IBaseMob {
                             if (Platform.INSTANCE.canEntitySpawnSpawner(mob, this.level, (float) entity.getX(), (float) entity.getY(), (float) entity.getZ(), null, MobSpawnType.SPAWNER) && this.level.noCollision(mob)) {
                                 mob.finalizeSpawn(serverLevel, this.level.getCurrentDifficultyAt(mob.blockPosition()), MobSpawnType.SPAWNER, null, null);
                                 AttributeInstance follow = mob.getAttribute(Attributes.FOLLOW_RANGE);
-                                mob.restrictTo(this.blockPosition(), (int) Math.max(16, follow != null ? follow.getValue() * 0.75 : 0));
+                                mob.restrictTo(this.blockPosition(), (int) Math.max(18, follow != null ? follow.getValue() * 0.75 : 0));
                                 this.level.addFreshEntity(entity);
                                 mob.spawnAnim();
                             }
