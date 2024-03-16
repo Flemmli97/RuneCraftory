@@ -22,10 +22,10 @@
     }
   },
   "baseValues": {
-    "minecraft:generic.max_health": 23.0,
-    "minecraft:generic.attack_damage": 9.0,
+    "minecraft:generic.max_health": 25.0,
+    "minecraft:generic.attack_damage": 18.0,
     "runecraftory:defence": 2.0,
-    "runecraftory:magic_attack": 5.0,
+    "runecraftory:magic_attack": 15.0,
     "runecraftory:magic_defence": 2.0,
     "runecraftory:dizzy": 3.0,
     "runecraftory:crit": 1.0,
