@@ -84,7 +84,7 @@ public class EntitySlashResidue extends BaseDamageCloud {
             double height = this.getBoundingBox().getYsize();
             for (Vec3 vec3 : BASE) {
                 vec3 = vec3.scale(this.entityData.get(SIZE));
-                Vec3 rot = MathUtils.rotate(MathUtils.normalY, vec3, Mth.DEG_TO_RAD * this.getYRot());
+                Vec3 rot = MathUtils.rotate(MathUtils.normalY, vec3, -Mth.DEG_TO_RAD * this.getYRot());
                 for (double d = 0; d < height; d += 0.2) {
                     this.level.addParticle(ParticleTypes.CRIT, this.getX() + rot.x, this.getY() + rot.y + d, this.getZ() + rot.z, 0, 0, 0);
                 }
