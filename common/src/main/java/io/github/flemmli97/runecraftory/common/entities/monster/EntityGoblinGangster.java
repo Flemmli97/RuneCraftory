@@ -87,8 +87,10 @@ public class EntityGoblinGangster extends EntityGoblin {
             }
         } else if (anim.is(DOUBLE_STAB)) {
             this.getNavigation().stop();
-            if (anim.getTick() == 1 && this.getTarget() != null)
-                this.lookAt(this.getTarget(), 360, 90);
+            if (anim.getTick() == 1 && this.getTarget() != null) {
+                this.lookAtNow(this.getTarget(), 360, 90);
+                this.targetPosition = this.getTarget().position();
+            }
             if (anim.canAttack() || anim.getTick() == 14) {
                 this.mobAttack(anim, this.getTarget(), this::quickAttack);
             }

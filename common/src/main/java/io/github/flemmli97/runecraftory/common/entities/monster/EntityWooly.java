@@ -106,7 +106,7 @@ public class EntityWooly extends LeapingMonster {
 
     @Override
     public double maxAttackRange(AnimatedAction anim) {
-        return 0.85;
+        return 1;
     }
 
     @Override

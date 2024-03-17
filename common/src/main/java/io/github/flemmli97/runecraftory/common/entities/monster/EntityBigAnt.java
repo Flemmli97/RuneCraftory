@@ -12,6 +12,6 @@ public class EntityBigAnt extends EntityAnt {
 
     @Override
     public double maxAttackRange(AnimatedAction anim) {
-        return 1;
+        return 1.3;
     }
 }

@@ -92,6 +92,9 @@ public class EntityChimera extends BossMonster implements DelayedAttacker {
             }
         });
         b.put(BITE, (anim, entity) -> {
+            if (anim.getTick() == 1 && entity.getTarget() != null) {
+                entity.targetPosition = entity.getTarget().position();
+            }
             if (anim.getTick() == anim.getAttackTime()) {
                 entity.mobAttack(anim, entity.getTarget(), e -> CombatUtils.mobAttack(entity, e,
                         new CustomDamage.Builder(entity).hurtResistant(5).knockAmount(0), CombatUtils.getAttributeValue(entity, Attributes.ATTACK_DAMAGE)));
@@ -185,7 +188,7 @@ public class EntityChimera extends BossMonster implements DelayedAttacker {
     }
 
     @Override
-    public AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target, double grow) {
+    public AABB calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
         if (!anim.is(BITE)) {
             return super.calculateAttackAABB(anim, target, grow);
         }
@@ -193,8 +196,8 @@ public class EntityChimera extends BossMonster implements DelayedAttacker {
         Vec3 dir;
         float offset = anim.canAttack() ? 10 : -10;
         if (target != null && !this.canBeControlledByRider()) {
-            reach = Math.min(reach, this.distanceTo(target));
-            dir = MathUtils.rotate(MathUtils.normalY, target.position().subtract(this.position()).normalize(), offset * Mth.DEG_TO_RAD);
+            reach = Math.min(reach, this.position().distanceTo(target));
+            dir = MathUtils.rotate(MathUtils.normalY, target.subtract(this.position()).normalize(), offset * Mth.DEG_TO_RAD);
         } else {
             if (this.getControllingPassenger() instanceof Player player)
                 dir = Vec3.directionFromRotation(player.getXRot(), player.getYRot() + offset);

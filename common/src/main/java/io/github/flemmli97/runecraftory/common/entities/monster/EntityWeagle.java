@@ -97,9 +97,13 @@ public class EntityWeagle extends BaseMonster {
         } else if (anim.is(SWOOP)) {
             if (this.hitEntity == null)
                 this.hitEntity = new ArrayList<>();
+            if (anim.getTick() == 1 && this.getTarget() != null) {
+                this.targetPosition = this.getTarget().position();
+            }
+            Vec3 target = this.targetPosition != null || this.getTarget() == null ? this.targetPosition : this.getTarget().position();
             Vec3 dir;
-            if (this.getTarget() != null) {
-                dir = this.getTarget().position().subtract(this.position()).normalize();
+            if (target != null) {
+                dir = target.subtract(this.position()).normalize();
             } else {
                 dir = this.getLookAngle();
             }
@@ -120,10 +124,10 @@ public class EntityWeagle extends BaseMonster {
     }
 
     @Override
-    public AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target) {
+    public AABB calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
         if (anim.is(SWOOP))
-            return super.calculateAttackAABB(anim, target).move(this.getDeltaMovement());
-        return super.calculateAttackAABB(anim, target);
+            return super.calculateAttackAABB(anim, target, grow).move(this.getDeltaMovement());
+        return super.calculateAttackAABB(anim, target, grow);
     }
 
     @Override

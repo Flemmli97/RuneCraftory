@@ -50,6 +50,9 @@ public class EntityMarionetta extends BossMonster {
             LivingEntity target = entity.getTarget();
             if (target != null) {
                 entity.getNavigation().moveTo(target, 1.0);
+                if (anim.getTick() == 1) {
+                    entity.targetPosition = target.position();
+                }
             }
             if (anim.canAttack()) {
                 entity.mobAttack(anim, target, entity::doHurtTarget);
@@ -206,14 +209,14 @@ public class EntityMarionetta extends BossMonster {
     }
 
     @Override
-    public AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target) {
+    public AABB calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
         if (anim.is(SPIN)) {
-            return this.getBoundingBox().inflate(1.6, 0, 1.6);
+            return this.getBoundingBox().inflate(1.6, 0.1, 1.6);
         }
         if (anim.is(CHEST_ATTACK)) {
-            return this.getBoundingBox().inflate(1.2, 0, 1.2);
+            return this.getBoundingBox().inflate(1.2, 0.1, 1.2);
         }
-        return super.calculateAttackAABB(anim, target);
+        return super.calculateAttackAABB(anim, target, grow);
     }
 
     @Override

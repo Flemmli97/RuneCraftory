@@ -62,6 +62,9 @@ public class EntityDeadTree extends BossMonster {
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{ATTACK, FALLING_APPLES, APPLE_SHIELD, SPIKE, BIG_FALLING_APPLES, MORE_FALLING_APPLES, DEFEAT, ANGRY, INTERACT};
     private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntityDeadTree>> ATTACK_HANDLER = createAnimationHandler(b -> {
         b.put(ATTACK, (anim, entity) -> {
+            if (anim.getTick() == 1 && entity.getTarget() != null) {
+                entity.targetPosition = entity.getTarget().position();
+            }
             if (anim.canAttack() || anim.getTick() == 14) {
                 entity.mobAttack(anim, entity.getTarget(), entity::doHurtTarget);
             }

@@ -46,10 +46,13 @@ public abstract class LeapingMonster extends BaseMonster {
     public void handleAttack(AnimatedAction anim) {
         if (this.isAnimOfType(anim, AnimationType.LEAP)) {
             this.getNavigation().stop();
+            this.lookAt(EntityAnchorArgument.Anchor.FEET, this.position().add(this.getDeltaMovement().x, 0, this.getDeltaMovement().z));
+            if (anim.getTick() == 1 && this.getTarget() != null) {
+                this.targetPosition = this.getTarget().position();
+            }
             if (anim.canAttack()) {
-                Vec3 vec32 = this.getLeapVec(this.getTarget());
+                Vec3 vec32 = this.getLeapVec(this.getTarget() == null ? this.targetPosition : this.getTarget().position());
                 this.setDeltaMovement(vec32.x, this.leapHeightMotion(), vec32.z);
-                this.lookAt(EntityAnchorArgument.Anchor.EYES, this.position().add(vec32.x, 0, vec32.z));
             }
             if (anim.getTick() >= anim.getAttackTime()) {
                 if (this.hitEntity == null)
@@ -66,10 +69,9 @@ public abstract class LeapingMonster extends BaseMonster {
         }
     }
 
-    public Vec3 getLeapVec(@Nullable LivingEntity target) {
+    public Vec3 getLeapVec(@Nullable Vec3 target) {
         if (target != null) {
-            Vec3 targetPos = target.position();
-            return new Vec3(targetPos.x - this.getX(), 0.0, targetPos.z - this.getZ()).normalize();
+            return new Vec3(target.x - this.getX(), 0.0, target.z - this.getZ()).normalize();
         }
         return this.getLookAngle();
     }
@@ -83,7 +85,7 @@ public abstract class LeapingMonster extends BaseMonster {
     }
 
     @Override
-    public AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target, double grow) {
+    public AABB calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
         if (!this.isAnimOfType(anim, AnimationType.LEAP))
             return super.calculateAttackAABB(anim, target, grow);
         double reach = this.maxAttackRange(anim) * 0.5 + this.getBbWidth() * 0.5;

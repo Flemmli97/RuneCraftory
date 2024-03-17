@@ -81,7 +81,6 @@ public class EntityRafflesia extends BossMonster implements DelayedAttacker {
     private EntityRafflesiaPart flowerEntity;
     private EntityRafflesiaPart pitcherEntity;
     private int summonCooldown = 100;
-    private Vec3 targetPosition;
 
     public EntityRafflesia(EntityType<? extends EntityRafflesia> type, Level world) {
         super(type, world);
@@ -208,10 +207,12 @@ public class EntityRafflesia extends BossMonster implements DelayedAttacker {
     @Override
     public void handleAttack(AnimatedAction anim) {
         LivingEntity target = this.getTarget();
-        if (target != null && anim.getTick() == 1) {
-            this.yHeadRot = (float) (Mth.atan2(target.getZ() - this.getZ(), target.getX() - this.getX()) * (180 / Math.PI)) - 90;
-            this.yBodyRot = this.yHeadRot;
-            this.targetPosition = target.position();
+        if (target != null) {
+            if (anim.getTick() == 1) {
+                this.yHeadRot = (float) (Mth.atan2(target.getZ() - this.getZ(), target.getX() - this.getX()) * (180 / Math.PI)) - 90;
+                this.yBodyRot = this.yHeadRot;
+                this.targetPosition = target.position();
+            }
         } else
             this.targetPosition = null;
         BiConsumer<AnimatedAction, EntityRafflesia> handler = ATTACK_HANDLER.get(anim.getID());

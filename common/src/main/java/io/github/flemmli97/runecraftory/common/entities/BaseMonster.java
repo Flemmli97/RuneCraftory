@@ -169,6 +169,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     public HurtByTargetPredicate hurt = new HurtByTargetPredicate(this, this.defendPred);
 
     public TendCropsGoal farm = new TendCropsGoal(this);
+    protected Vec3 targetPosition;
     private BlockPos seedInventory, cropInventory;
 
     public final Predicate<LivingEntity> hitPred = (e) -> {
@@ -493,6 +494,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 this.removeFoodEffect();
             }
             this.getAnimationHandler().runIfNotNull(this::handleAttack);
+            if (this.getAnimationHandler().getAnimation() == null)
+                this.targetPosition = null;
             if (this.assignedBarn != null && this.assignedBarn.isInvalidFor(this))
                 this.assignedBarn = null;
             if (this.isTamed()) {
@@ -814,17 +817,17 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     public int animationCooldown(@Nullable AnimatedAction anim) {
         int diffAdd = this.difficultyCooldown();
         if (anim == null)
-            return this.getRandom().nextInt(30) + 35 + diffAdd;
-        return this.getRandom().nextInt(30) + 25 + diffAdd;
+            return this.getRandom().nextInt(20) + 25 + diffAdd;
+        return this.getRandom().nextInt(20) + 15 + diffAdd;
     }
 
     public int difficultyCooldown() {
-        int diffAdd = 20;
+        int diffAdd = 15;
         Difficulty diff = this.level.getDifficulty();
         if (this.level.getDifficulty() == Difficulty.HARD)
             diffAdd = 0;
         else if (diff == Difficulty.NORMAL)
-            diffAdd = 10;
+            diffAdd = 8;
         return diffAdd;
     }
 
@@ -1523,6 +1526,12 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         return null;
     }
 
+    public void lookAtNow(Entity entity, float maxYRotIncrease, float maxXRotIncrease) {
+        super.lookAt(entity, maxYRotIncrease, maxXRotIncrease);
+        this.yHeadRot = this.getYRot();
+        this.yBodyRot = this.yHeadRot;
+    }
+
     private boolean canAttackFrom(Vec3 pos) {
         if (this.isTamed())
             return true;
@@ -1539,38 +1548,37 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     @Override
     public double maxAttackRange(AnimatedAction anim) {
-        return 1;
+        return 1.15;
     }
 
     public void handleAttack(AnimatedAction anim) {
         if (this.isAnimOfType(anim, AnimationType.MELEE)) {
             this.getNavigation().stop();
-            if (anim.getTick() == 1 && this.getTarget() != null)
-                this.lookAt(this.getTarget(), 360, 90);
+            if (anim.getTick() == 1 && this.getTarget() != null) {
+                this.lookAtNow(this.getTarget(), 360, 90);
+                this.targetPosition = this.getTarget().position();
+            }
             if (anim.canAttack()) {
                 this.mobAttack(anim, this.getTarget(), this::doHurtTarget);
+                this.targetPosition = null;
             }
         }
     }
 
     public void mobAttack(AnimatedAction anim, LivingEntity target, Consumer<LivingEntity> cons) {
-        AABB aabb = this.calculateAttackAABB(anim, target);
+        AABB aabb = this.calculateAttackAABB(anim, this.targetPosition != null || target == null ? this.targetPosition : target.position(), 0.2);
         this.level.getEntitiesOfClass(LivingEntity.class, aabb, this.hitPred).forEach(cons);
         if (this.getServer() != null)
             Platform.INSTANCE.sendToAll(new S2CAttackDebug(aabb), this.getServer());
     }
 
-    public AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target) {
-        return this.calculateAttackAABB(anim, target, 0.2);
-    }
-
     @Override
-    public AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target, double grow) {
+    public AABB calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
         double reach = this.maxAttackRange(anim) * 0.5 + this.getBbWidth();
         Vec3 dir;
         if (target != null && !this.canBeControlledByRider()) {
-            reach = Math.min(reach, this.distanceTo(target));
-            dir = target.position().subtract(this.position()).normalize();
+            reach = Math.min(reach, this.position().distanceTo(target));
+            dir = target.subtract(this.position()).normalize();
         } else {
             if (this.getControllingPassenger() instanceof Player player)
                 dir = player.getLookAngle();

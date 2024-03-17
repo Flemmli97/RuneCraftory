@@ -49,20 +49,24 @@ public class EntityFlowerLily extends BaseMonster {
 
     @Override
     public double maxAttackRange(AnimatedAction anim) {
-        return 1;
+        return 1.5;
     }
 
     @Override
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(LEAP)) {
             this.getNavigation().stop();
+            if (anim.getTick() == 1 && this.getTarget() != null) {
+                this.targetPosition = this.getTarget().position();
+            }
             if (anim.canAttack()) {
+                Vec3 target = this.targetPosition != null || this.getTarget() == null ? this.targetPosition : this.getTarget().position();
                 Vec3 vec32;
-                if (this.getTarget() != null) {
-                    Vec3 targetPos = this.getTarget().position();
-                    vec32 = new Vec3(targetPos.x - this.getX(), 0.0, targetPos.z - this.getZ()).normalize();
+                if (target != null) {
+                    vec32 = new Vec3(target.x - this.getX(), 0.0, target.z - this.getZ()).normalize();
                 } else
                     vec32 = this.getLookAngle();
+                vec32 = vec32.scale(-2);
                 this.setDeltaMovement(vec32.x, 0.1, vec32.z);
                 this.lookAt(EntityAnchorArgument.Anchor.EYES, this.position().add(vec32.x, 0, vec32.z));
             }
@@ -99,7 +103,7 @@ public class EntityFlowerLily extends BaseMonster {
 
     @Override
     public float attackChance(AnimationType type) {
-        return type == AnimationType.MELEE ? 0.4f : 1;
+        return type == AnimationType.MELEE ? 0.6f : 1;
     }
 
     @Override

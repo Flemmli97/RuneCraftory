@@ -90,8 +90,10 @@ public class EntityWolf extends LeapingMonster {
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(MELEE)) {
             this.getNavigation().stop();
-            if (anim.getTick() == 1 && this.getTarget() != null)
-                this.lookAt(this.getTarget(), 360, 90);
+            if (anim.getTick() == 1 && this.getTarget() != null) {
+                this.lookAtNow(this.getTarget(), 360, 90);
+                this.targetPosition = this.getTarget().position();
+            }
             if (anim.getTick() == 10 || anim.getTick() == 17 || anim.getTick() == 23 || anim.getTick() == 30) {
                 this.mobAttack(anim, this.getTarget(), target -> wolfAttack(this, target));
             }
@@ -100,7 +102,7 @@ public class EntityWolf extends LeapingMonster {
     }
 
     @Override
-    public Vec3 getLeapVec(@Nullable LivingEntity target) {
+    public Vec3 getLeapVec(@Nullable Vec3 target) {
         return super.getLeapVec(target).scale(1.1);
     }
 
@@ -132,8 +134,8 @@ public class EntityWolf extends LeapingMonster {
     @Override
     public double maxAttackRange(AnimatedAction anim) {
         if (LEAP.is(anim))
-            return 1.2;
-        return 1;
+            return 1.15;
+        return 1.2;
     }
 
     @Override

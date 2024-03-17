@@ -10,7 +10,6 @@ import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -88,10 +87,9 @@ public class EntityPalmCat extends LeapingMonster {
     }
 
     @Override
-    public Vec3 getLeapVec(@Nullable LivingEntity target) {
+    public Vec3 getLeapVec(@Nullable Vec3 target) {
         if (target != null) {
-            Vec3 targetPos = target.position();
-            Vec3 leap = new Vec3(targetPos.x - this.getX(), 0.0, targetPos.z - this.getZ());
+            Vec3 leap = new Vec3(target.x - this.getX(), 0.0, target.z - this.getZ());
             if (leap.lengthSqr() > 7)
                 return leap.normalize();
             return leap.scale(0.9);
@@ -131,8 +129,8 @@ public class EntityPalmCat extends LeapingMonster {
     @Override
     public double maxAttackRange(AnimatedAction anim) {
         if (LEAP.is(anim))
-            return 1.2;
-        return 1;
+            return 1.15;
+        return 1.2;
     }
 
     @Override

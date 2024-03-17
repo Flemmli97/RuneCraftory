@@ -51,7 +51,7 @@ public class EntityAnt extends BaseMonster {
 
     @Override
     public double maxAttackRange(AnimatedAction anim) {
-        return 0.85;
+        return 1;
     }
 
     @Override

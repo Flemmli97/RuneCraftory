@@ -13,7 +13,6 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -62,7 +61,7 @@ public class EntityGoblin extends LeapingMonster {
     public double maxAttackRange(AnimatedAction anim) {
         if (anim.is(STONE))
             return 8;
-        return 1;
+        return 1.25;
     }
 
     @Override
@@ -118,7 +117,7 @@ public class EntityGoblin extends LeapingMonster {
     }
 
     @Override
-    public Vec3 getLeapVec(@Nullable LivingEntity target) {
+    public Vec3 getLeapVec(@Nullable Vec3 target) {
         return super.getLeapVec(target).scale(1.25);
     }
 

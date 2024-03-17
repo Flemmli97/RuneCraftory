@@ -68,9 +68,9 @@ public class EntityAmbrosia extends BossMonster implements DelayedAttacker {
                 ModSpells.WAVE.get().use(entity);
         });
         BiConsumer<AnimatedAction, EntityAmbrosia> pollenHandler = (anim, entity) -> {
-            if (entity.aiVarHelper == null)
+            if (entity.targetPosition == null)
                 return;
-            entity.setDeltaMovement(new Vec3(entity.aiVarHelper.x(), 0, entity.aiVarHelper.z()));
+            entity.setDeltaMovement(new Vec3(entity.targetPosition.x(), 0, entity.targetPosition.z()));
             if (anim.canAttack() && !EntityUtils.sealed(entity)) {
                 entity.getNavigation().stop();
                 EntityPollen pollen = new EntityPollen(entity.level, entity);
@@ -84,7 +84,6 @@ public class EntityAmbrosia extends BossMonster implements DelayedAttacker {
 
     public final AmbrosiaAttackGoal<EntityAmbrosia> attack = new AmbrosiaAttackGoal<>(this);
     private final AnimationHandler<EntityAmbrosia> animationHandler = new AnimationHandler<>(this, ANIMS);
-    private Vec3 aiVarHelper;
 
     public EntityAmbrosia(EntityType<? extends EntityAmbrosia> type, Level world) {
         super(type, world);
@@ -154,11 +153,11 @@ public class EntityAmbrosia extends BossMonster implements DelayedAttacker {
     }
 
     @Override
-    public AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target) {
+    public AABB calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
         if (anim.is(POLLEN)) {
             return this.getBoundingBox().inflate(2.0);
         }
-        return super.calculateAttackAABB(anim, target);
+        return super.calculateAttackAABB(anim, target, grow);
     }
 
     @Override
@@ -188,7 +187,7 @@ public class EntityAmbrosia extends BossMonster implements DelayedAttacker {
     }
 
     public void setAiVarHelper(Vec3 aiVarHelper) {
-        this.aiVarHelper = aiVarHelper;
+        this.targetPosition = aiVarHelper;
     }
 
     @Override
@@ -231,7 +230,7 @@ public class EntityAmbrosia extends BossMonster implements DelayedAttacker {
 
     @Override
     public Vec3 targetPosition(Vec3 from) {
-        return this.aiVarHelper;
+        return this.targetPosition;
     }
 
     @Override

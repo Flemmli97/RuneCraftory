@@ -61,6 +61,9 @@ public class EntityThunderbolt extends BossMonster {
     private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntityThunderbolt>> ATTACK_HANDLER = createAnimationHandler(b -> {
         BiConsumer<AnimatedAction, EntityThunderbolt> kick = (anim, entity) -> {
             LivingEntity target = entity.getTarget();
+            if (anim.getTick() == 1 && entity.getTarget() != null) {
+                entity.targetPosition = entity.getTarget().position();
+            }
             if (anim.canAttack()) {
                 entity.mobAttack(anim, target, e -> {
                     if (entity.doHurtTarget(e)) {
@@ -75,6 +78,9 @@ public class EntityThunderbolt extends BossMonster {
         b.put(BACK_KICK_HORN, kick);
         b.put(HORN_ATTACK, (anim, entity) -> {
             LivingEntity target = entity.getTarget();
+            if (anim.getTick() == 1 && entity.getTarget() != null) {
+                entity.targetPosition = entity.getTarget().position();
+            }
             if (anim.canAttack()) {
                 AtomicBoolean bool = new AtomicBoolean(false);
                 entity.mobAttack(anim, target, e -> {
@@ -251,11 +257,11 @@ public class EntityThunderbolt extends BossMonster {
     }
 
     @Override
-    public AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target) {
+    public AABB calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
         if (anim.is(STOMP)) {
             return this.getBoundingBox().inflate(1.5, -0.4, 1.5);
         } else
-            return super.calculateAttackAABB(anim, target);
+            return super.calculateAttackAABB(anim, target, grow);
     }
 
     @Override

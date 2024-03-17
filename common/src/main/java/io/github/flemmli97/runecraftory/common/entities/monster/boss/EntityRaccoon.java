@@ -69,17 +69,29 @@ public class EntityRaccoon extends BossMonster {
             LivingEntity target = entity.getTarget();
             if (target != null) {
                 entity.getNavigation().moveTo(target, 1.0);
+                if (anim.getTick() == 1) {
+                    entity.targetPosition = target.position();
+                }
+            }
+            if (anim.getTick() == 1 && entity.getTarget() != null) {
+                entity.targetPosition = entity.getTarget().position();
             }
             if (anim.canAttack() || anim.getTick() == 13) {
                 entity.mobAttack(anim, target, entity::doHurtTarget);
             }
         });
         b.put(PUNCH, (anim, entity) -> {
+            if (anim.getTick() == 1 && entity.getTarget() != null) {
+                entity.targetPosition = entity.getTarget().position();
+            }
             if (anim.canAttack() || anim.getTick() == 13) {
                 entity.mobAttack(anim, entity.getTarget(), entity::doHurtTarget);
             }
         });
         b.put(BARRAGE, (anim, entity) -> {
+            if (anim.getTick() == 1 && entity.getTarget() != null) {
+                entity.targetPosition = entity.getTarget().position();
+            }
             if (anim.canAttack() || anim.isAtTick(0.84) || anim.isAtTick(1.28)) {
                 entity.mobAttack(anim, entity.getTarget(), entity::doHurtTarget);
                 LivingEntity target = entity.getTarget();
@@ -383,7 +395,7 @@ public class EntityRaccoon extends BossMonster {
     }
 
     @Override
-    public AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target) {
+    public AABB calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
         if (anim.is(JUMP)) {
             double attackSize = this.getBbWidth() + 3;
             return new AABB(-attackSize, -0.5, -attackSize, attackSize, 2, attackSize)
@@ -400,7 +412,7 @@ public class EntityRaccoon extends BossMonster {
             Vec3 attackPos = this.position().add(dir.scale(reach));
             return this.attackAABB(anim).move(attackPos.x, attackPos.y, attackPos.z);
         }
-        return super.calculateAttackAABB(anim, target);
+        return super.calculateAttackAABB(anim, target, grow);
     }
 
     @Override

@@ -13,6 +13,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.function.Consumer;
 
@@ -63,7 +64,7 @@ public class EntityTroll extends BaseMonster {
     }
 
     @Override
-    public AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target, double grow) {
+    public AABB calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
         if (anim.is(SLAM))
             return this.attackAABB(anim).inflate(grow, 0, grow).move(this.getX(), this.getY(), this.getZ());
         return super.calculateAttackAABB(anim, target, grow);

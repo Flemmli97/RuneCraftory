@@ -64,7 +64,7 @@ public class EntityBigMuck extends BaseMonster {
     public double maxAttackRange(AnimatedAction anim) {
         if (anim.is(SPORE))
             return 1.7;
-        return 0.9;
+        return super.maxAttackRange(anim);
     }
 
     @Override

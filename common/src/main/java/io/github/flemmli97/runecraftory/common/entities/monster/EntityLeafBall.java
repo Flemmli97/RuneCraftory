@@ -68,7 +68,7 @@ public class EntityLeafBall extends BaseMonster {
 
     @Override
     public double maxAttackRange(AnimatedAction anim) {
-        return 0.9;
+        return 1;
     }
 
     @Override

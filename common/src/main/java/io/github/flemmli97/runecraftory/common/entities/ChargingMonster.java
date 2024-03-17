@@ -93,7 +93,7 @@ public abstract class ChargingMonster extends BaseMonster {
     }
 
     @Override
-    public AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target, double grow) {
+    public AABB calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
         if (!this.isAnimOfType(anim, AnimationType.CHARGE))
             return super.calculateAttackAABB(anim, target, grow);
         double reach = this.maxAttackRange(anim) * 0.5 + this.getBbWidth() * 0.5;

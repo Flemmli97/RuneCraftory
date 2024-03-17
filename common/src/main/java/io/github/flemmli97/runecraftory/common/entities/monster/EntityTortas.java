@@ -91,10 +91,10 @@ public class EntityTortas extends ChargingMonster {
     }
 
     @Override
-    public AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target) {
+    public AABB calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
         if (anim != null && anim.is(SPIN))
             return this.attackAABB(anim).move(this.getX(), this.getY(), this.getZ());
-        return super.calculateAttackAABB(anim, target);
+        return super.calculateAttackAABB(anim, target, grow);
     }
 
     @Override

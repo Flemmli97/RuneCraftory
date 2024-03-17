@@ -37,7 +37,7 @@ public class LevelExpPair {
     }
 
     public float getProgress() {
-        if(this.required == -1)
+        if (this.required == -1)
             return 1;
         if (this.required <= 0)
             return 0;
