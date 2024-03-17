@@ -31,18 +31,23 @@ import java.util.function.Consumer;
 public abstract class BossMonster extends BaseMonster implements IOverlayEntityRender {
 
     private static final EntityDataAccessor<Boolean> ENRAGED = SynchedEntityData.defineId(BossMonster.class, EntityDataSerializers.BOOLEAN);
-    protected final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.GREEN, BossEvent.BossBarOverlay.PROGRESS);
+    protected final ServerBossEvent bossInfo;
 
     private int noPlayerTick, noPlayerRegenTick;
 
     public BossMonster(EntityType<? extends BossMonster> type, Level level) {
         super(type, level);
+        this.bossInfo = this.createBossBar();
     }
 
     public static <T extends BaseMonster> ImmutableMap<String, BiConsumer<AnimatedAction, T>> createAnimationHandler(Consumer<ImmutableMap.Builder<AnimatedAction, BiConsumer<AnimatedAction, T>>> cons) {
         ImmutableMap.Builder<AnimatedAction, BiConsumer<AnimatedAction, T>> builder = ImmutableMap.builder();
         cons.accept(builder);
         return builder.build().entrySet().stream().collect(ImmutableMap.toImmutableMap(e -> e.getKey().getID(), Map.Entry::getValue));
+    }
+
+    public ServerBossEvent createBossBar() {
+        return new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.GREEN, BossEvent.BossBarOverlay.PROGRESS);
     }
 
     @Override
@@ -92,9 +97,7 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
     public void setOwner(Player player) {
         super.setOwner(player);
         if (player != null) {
-            for (ServerPlayer sPlayer : this.bossInfo.getPlayers()) {
-                this.bossInfo.removePlayer(sPlayer);
-            }
+            this.bossInfo.removeAllPlayers();
         }
     }
 
@@ -214,7 +217,7 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
         if (this.hasRestriction()) {
             return new AABB(this.getRestrictCenter()).inflate(this.getRestrictRadius());
         }
-        return this.getBoundingBox().inflate(12.0);
+        return this.getBoundingBox().inflate(16.0);
     }
 
     @Override

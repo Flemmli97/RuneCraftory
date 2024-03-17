@@ -16,6 +16,7 @@ import io.github.flemmli97.tenshilib.common.utils.MathUtils;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
@@ -127,6 +128,11 @@ public class EntityChimera extends BossMonster implements DelayedAttacker {
         if (!world.isClientSide)
             this.goalSelector.addGoal(1, this.attack);
         this.maxUpStep = 1;
+    }
+
+    @Override
+    public ServerBossEvent createBossBar() {
+        return new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.BLUE, BossEvent.BossBarOverlay.PROGRESS);
     }
 
     @Override

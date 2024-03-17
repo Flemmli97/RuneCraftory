@@ -18,6 +18,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.BossEvent;
@@ -173,6 +174,11 @@ public class EntityThunderbolt extends BossMonster {
         if (!world.isClientSide)
             this.goalSelector.addGoal(1, this.attack);
         this.maxUpStep = 1;
+    }
+
+    @Override
+    public ServerBossEvent createBossBar() {
+        return new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.BLUE, BossEvent.BossBarOverlay.PROGRESS);
     }
 
     @Override
