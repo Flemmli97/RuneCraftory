@@ -73,6 +73,7 @@ import java.util.function.Consumer;
 public class ClientCalls {
 
     public static void clientTick() {
+        BossBarTracker.tickSounds();
         Player player = Minecraft.getInstance().player;
         if (player != null && Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().isItemSwapBlocked()).orElse(false)) {
             Options options = Minecraft.getInstance().options;

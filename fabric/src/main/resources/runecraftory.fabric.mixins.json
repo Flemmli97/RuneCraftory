@@ -24,8 +24,8 @@
     "GameRendererMixin",
     "GuiMixin",
     "LocalPlayerMixin",
-    "ScreenMixin",
-    "ParticleEngineMixin"
+    "ParticleEngineMixin",
+    "ScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1

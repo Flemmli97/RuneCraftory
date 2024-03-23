@@ -13,8 +13,8 @@
     "BlockBehaviourMixin",
     "BrainMixin",
     "ChunkMapMixin",
-    "ConfiguredStructureMixin",
     "CombatTrackerAccessor",
+    "ConfiguredStructureMixin",
     "CropBlockAccessor",
     "CropBlockMixin",
     "EntityMixin",
@@ -43,21 +43,23 @@
   "client": [
     "AtlasMixin",
     "BiomeColorsMixin",
+    "ClientPacketListenerMixin",
     "ContainerScreenAccessor",
     "EntityRendererDispatcherMixin",
-    "ItemRendererMixin",
     "HumanoidModelMixin",
-    "PlayerModelMixin",
     "ItemInHandRendererMixin",
+    "ItemRendererMixin",
     "KeyboardHandlerMixin",
     "LanguageManagerMixin",
     "LevelRendererMixin",
     "LivingEntityRendererMixin",
+    "Matrix4fMixin",
     "MinecraftMixin",
     "MouseHandlerMixin",
+    "PlayerModelMixin",
     "PlayerRendererMixin",
-    "ClientPacketListenerMixin",
-    "Matrix4fMixin"
+    "SoundEngineMixin",
+    "SoundManagerAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

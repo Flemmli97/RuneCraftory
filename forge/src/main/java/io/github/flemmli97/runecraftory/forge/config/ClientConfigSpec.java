@@ -26,6 +26,8 @@ public class ClientConfigSpec {
     public final ForgeConfigSpec.BooleanValue inventoryButton;
     public final ForgeConfigSpec.BooleanValue grassColor;
     public final ForgeConfigSpec.BooleanValue foliageColor;
+    public final ForgeConfigSpec.BooleanValue bossMusic;
+    public final ForgeConfigSpec.IntValue bossMusicFadeDelay;
 
     private ClientConfigSpec(ForgeConfigSpec.Builder builder) {
         this.healthBarWidgetX = builder.comment("X Position of health bar").defineInRange("Health X", ClientConfig.healthBarWidgetX, Integer.MIN_VALUE, Integer.MAX_VALUE);
@@ -46,5 +48,7 @@ public class ClientConfigSpec {
         this.inventoryButton = builder.comment("Adds the button for the extended inventory to the vanilla inventory").define("Add Button", ClientConfig.inventoryButton);
         this.grassColor = builder.comment("Adjust grass color to current season").define("Season Grass", ClientConfig.grassColor);
         this.foliageColor = builder.comment("Adjust foliage color to current season").define("Season Foliage", ClientConfig.foliageColor);
+        this.bossMusic = builder.comment("Bosses play a battle music during fight").define("Boss Music", ClientConfig.bossMusic);
+        this.bossMusicFadeDelay = builder.comment("Time in ticks for boss music to fade away if the player runs away from the boss").defineInRange("Boss Music Fade", ClientConfig.bossMusicFadeDelay, 0, Integer.MAX_VALUE);
     }
 }

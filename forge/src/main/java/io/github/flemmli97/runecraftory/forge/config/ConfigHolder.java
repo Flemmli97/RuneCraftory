@@ -111,6 +111,8 @@ public record ConfigHolder<T>(ModConfig.Type configType, String configName,
         ClientConfig.inventoryButton = spec.inventoryButton.get();
         ClientConfig.grassColor = spec.grassColor.get();
         ClientConfig.foliageColor = spec.foliageColor.get();
+        ClientConfig.bossMusic = spec.bossMusic.get();
+        ClientConfig.bossMusicFadeDelay = spec.bossMusicFadeDelay.get();
     }
 
     public static void loadMobs(MobConfigSpec spec) {

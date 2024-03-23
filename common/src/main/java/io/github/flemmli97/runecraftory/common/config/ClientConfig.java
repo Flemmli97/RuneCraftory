@@ -27,6 +27,9 @@ public class ClientConfig {
     public static boolean grassColor = true;
     public static boolean foliageColor = true;
 
+    public static boolean bossMusic = true;
+    public static int bossMusicFadeDelay = 80;
+
     public enum HealthRPRenderType {
         NONE,
         BOTH,

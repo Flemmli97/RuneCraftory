@@ -209,7 +209,10 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
         Set<ServerPlayer> set2 = Sets.newHashSet(this.bossInfo.getPlayers());
         set2.removeAll(set);
         for (ServerPlayer serverPlayer : set2) {
-            this.bossInfo.removePlayer(serverPlayer);
+            if (this.bossInfo instanceof RunecraftoryBossbar bar)
+                bar.removePlayerFading(serverPlayer);
+            else
+                this.bossInfo.removePlayer(serverPlayer);
         }
     }
 
