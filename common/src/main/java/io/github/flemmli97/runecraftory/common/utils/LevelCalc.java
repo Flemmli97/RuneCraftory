@@ -66,10 +66,7 @@ public class LevelCalc {
         if (level <= 0)
             return 0;
         if (LEVEL_XP_TOTAL == null || LEVEL_XP_TOTAL.length < level) {
-            int len = 100;
-            if (LEVEL_XP_TOTAL != null) {
-                len = level + 50;
-            }
+            int len = level + 10;
             LEVEL_XP_TOTAL = new long[len];
             LEVEL_XP_TOTAL[0] = 50;
             long prev = LEVEL_XP_TOTAL[0];
@@ -116,7 +113,9 @@ public class LevelCalc {
     }
 
     private static long[] calcSkillXPs(long[] current, int level, BiFunction<Integer, Long, Long> levelXP) {
-        int len = 100;
+        if (current != null && current.length >= level)
+            return current;
+        int len = level + 10;
         if (current != null) {
             len = level + 50;
         }
