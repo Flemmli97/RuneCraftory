@@ -124,7 +124,7 @@ public class EntityHornet extends BaseMonster {
 
     @Override
     public float getVoicePitch() {
-        return (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 0.7f;
+        return (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 0.9f;
     }
 
     @Override
@@ -134,7 +134,7 @@ public class EntityHornet extends BaseMonster {
 
     @Override
     public int getAmbientSoundInterval() {
-        return 15;
+        return 25;
     }
 
     @Override
