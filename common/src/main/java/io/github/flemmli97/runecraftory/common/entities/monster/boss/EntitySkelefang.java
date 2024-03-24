@@ -385,7 +385,7 @@ public class EntitySkelefang extends BossMonster {
             this.updateParts();
             if (!this.isDeadOrDying() && !this.hasBones() && !this.getAnimationHandler().isCurrent(BEAM))
                 this.getAnimationHandler().setAnimation(BEAM);
-            if (!this.getAnimationHandler().hasAnimation() && !this.isTamed() && this.getHealth() / this.getMaxHealth() < 0.5 && !this.isEnraged())
+            if (this.isAlive() && !this.getAnimationHandler().hasAnimation() && !this.isTamed() && this.getHealth() / this.getMaxHealth() < 0.5 && !this.isEnraged())
                 this.setEnraged(true, false);
         }
     }
