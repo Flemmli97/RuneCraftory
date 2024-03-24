@@ -66,7 +66,7 @@ public class EntityRaccoon extends BossMonster {
     public static final AnimatedAction UNTRANSFORM = new AnimatedAction(2.2, 0, "untransform");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(DOUBLE_PUNCH, "interact");
     public static final AnimatedAction INTERACT_BERSERK = AnimatedAction.copyOf(PUNCH, "interact_berserk");
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{DOUBLE_PUNCH, PUNCH, JUMP, STOMP, LEAF_SHOOT, LEAF_BOOMERANG, BARRAGE, ROAR, ANGRY, CLONE, DEFEAT, TRANSFORM, UNTRANSFORM, INTERACT, INTERACT_BERSERK};
+    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{DOUBLE_PUNCH, PUNCH, JUMP, STOMP, LEAF_SHOOT, LEAF_BOOMERANG, LEAF_SHOT_CLONE, BARRAGE, ROAR, ANGRY, CLONE, DEFEAT, TRANSFORM, UNTRANSFORM, INTERACT, INTERACT_BERSERK};
     private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntityRaccoon>> ATTACK_HANDLER = createAnimationHandler(b -> {
         b.put(DOUBLE_PUNCH, (anim, entity) -> {
             LivingEntity target = entity.getTarget();
@@ -191,7 +191,8 @@ public class EntityRaccoon extends BossMonster {
             entity.getNavigation().stop();
             if (anim.isAtTick(1)) {
                 entity.playAngrySound();
-                Vec3 center = entity.getTarget() != null && entity.distanceTo(entity.getTarget()) < 50 ? entity.getTarget().position() : entity.position();
+                Vec3 center = entity.getTarget() == null ? entity.position() : (entity.distanceToSqr(entity.getTarget()) < 144 ? entity.getTarget().position()
+                        : entity.getTarget().position().subtract(entity.position()).normalize().scale(12).add(entity.position()));
                 entity.entityData.set(CLONE_CENTER, Optional.of(center));
                 int id = entity.random.nextInt(CLONE_POS.length);
                 Vec3 pos = CLONE_POS[id];
