@@ -11,10 +11,14 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class ModSounds {
 
     public static final PlatformRegistry<SoundEvent> SOUND_EVENTS = PlatformUtils.INSTANCE.of(Registry.SOUND_EVENT_REGISTRY, RuneCraftory.MODID);
     public static final Object2IntMap<ResourceLocation> VARIATIONS = new Object2IntArrayMap<>();
+    public static final Set<ResourceLocation> BGM = new HashSet<>();
 
     public static final RegistryEntrySupplier<SoundEvent> ENTITY_AMBROSIA_WAVE = register("entity.ambrosia.wave");
     public static final RegistryEntrySupplier<SoundEvent> ENTITY_CHIMERA_AMBIENT = register("entity.chimera.ambient", 2);
@@ -60,6 +64,15 @@ public class ModSounds {
     public static final RegistryEntrySupplier<SoundEvent> SPELL_NAIVE_BLADE = register("spell.naive_blade");
     public static final RegistryEntrySupplier<SoundEvent> SPELL_STRAIGHT_PUNCH = register("spell.straight_punch");
 
+    public static final RegistryEntrySupplier<SoundEvent> AMBROSIA_FIGHT = registerBgm("bgm.ambrosia_fight");
+    public static final RegistryEntrySupplier<SoundEvent> CHIMERA_FIGHT = registerBgm("bgm.chimera_fight");
+    public static final RegistryEntrySupplier<SoundEvent> DEAD_TREE_FIGHT = registerBgm("bgm.dead_tree_fight");
+    public static final RegistryEntrySupplier<SoundEvent> MARIONETTA_FIGHT = registerBgm("bgm.marionetta_fight");
+    public static final RegistryEntrySupplier<SoundEvent> RACCOON_FIGHT = registerBgm("bgm.raccoon_fight");
+    public static final RegistryEntrySupplier<SoundEvent> SKELEFANG_FIGHT = registerBgm("bgm.skelefang_fight");
+    public static final RegistryEntrySupplier<SoundEvent> RAFFLESIA_FIGHT = registerBgm("bgm.rafflesia_fight");
+    public static final RegistryEntrySupplier<SoundEvent> THUNDERBOLT_FIGHT = registerBgm("bgm.thunderbolt_fight");
+
     private static RegistryEntrySupplier<SoundEvent> register(String name) {
         return SOUND_EVENTS.register(name, () -> new SoundEvent(new ResourceLocation(RuneCraftory.MODID, name)));
     }
@@ -68,6 +81,13 @@ public class ModSounds {
         RegistryEntrySupplier<SoundEvent> res = SOUND_EVENTS.register(name, () -> new SoundEvent(new ResourceLocation(RuneCraftory.MODID, name)));
         if (Platform.INSTANCE.isDatagen())
             VARIATIONS.put(res.getID(), variations);
+        return res;
+    }
+
+    private static RegistryEntrySupplier<SoundEvent> registerBgm(String name) {
+        RegistryEntrySupplier<SoundEvent> res = SOUND_EVENTS.register(name, () -> new SoundEvent(new ResourceLocation(RuneCraftory.MODID, name)));
+        if (Platform.INSTANCE.isDatagen())
+            BGM.add(res.getID());
         return res;
     }
 

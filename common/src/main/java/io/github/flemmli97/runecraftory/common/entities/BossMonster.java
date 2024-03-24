@@ -10,7 +10,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.BossEvent;
@@ -31,7 +30,7 @@ import java.util.function.Consumer;
 public abstract class BossMonster extends BaseMonster implements IOverlayEntityRender {
 
     private static final EntityDataAccessor<Boolean> ENRAGED = SynchedEntityData.defineId(BossMonster.class, EntityDataSerializers.BOOLEAN);
-    protected final ServerBossEvent bossInfo;
+    protected final RunecraftoryBossbar bossInfo;
 
     private int noPlayerTick, noPlayerRegenTick;
 
@@ -46,8 +45,8 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
         return builder.build().entrySet().stream().collect(ImmutableMap.toImmutableMap(e -> e.getKey().getID(), Map.Entry::getValue));
     }
 
-    public ServerBossEvent createBossBar() {
-        return new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.GREEN, BossEvent.BossBarOverlay.PROGRESS);
+    public RunecraftoryBossbar createBossBar() {
+        return new RunecraftoryBossbar(null, this.getDisplayName(), BossEvent.BossBarColor.GREEN, BossEvent.BossBarOverlay.PROGRESS);
     }
 
     @Override
@@ -209,10 +208,7 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
         Set<ServerPlayer> set2 = Sets.newHashSet(this.bossInfo.getPlayers());
         set2.removeAll(set);
         for (ServerPlayer serverPlayer : set2) {
-            if (this.bossInfo instanceof RunecraftoryBossbar bar)
-                bar.removePlayerFading(serverPlayer);
-            else
-                this.bossInfo.removePlayer(serverPlayer);
+            this.bossInfo.removePlayerFading(serverPlayer);
         }
     }
 

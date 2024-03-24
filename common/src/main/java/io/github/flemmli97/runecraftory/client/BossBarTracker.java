@@ -50,7 +50,7 @@ public class BossBarTracker {
         }
         TickingSoundChannel ch = FADING_CHANNEL.get(id);
         if (ch != null) {
-            ch.reverse = true;
+            ch.reverse(true);
             playMusic = false;
             soundInstance = ch.inst;
         }
@@ -80,7 +80,7 @@ public class BossBarTracker {
             } else {
                 TickingSoundChannel old = FADING_CHANNEL.get(id);
                 if (old != null) {
-                    old.reverse = false;
+                    old.reverse(false);
                 } else {
                     TickingSoundChannel ch = new TickingSoundChannel(data.music, ClientConfig.bossMusicFadeDelay);
                     FADING_CHANNEL.put(id, ch);
@@ -103,14 +103,6 @@ public class BossBarTracker {
         if (sound == null || !ClientConfig.bossMusic)
             return null;
         return new SimpleSoundInstance(sound.getLocation(), SoundSource.RECORDS, 1, 1, true, 0, SoundInstance.Attenuation.LINEAR, 0.0, 0.0, 0.0, true);
-    }
-
-    private static void modifyPlayingSound(SoundInstance inst, Consumer<Channel> cons) {
-        SoundEngineUtil engine = (SoundEngineUtil) ((SoundManagerAccessor) Minecraft.getInstance().getSoundManager()).getSoundEngine();
-        ChannelAccess.ChannelHandle ch = engine.getHandle(inst);
-        if (ch != null) {
-            ch.execute(cons);
-        }
     }
 
     public record BossBarData(ResourceLocation type, SoundInstance music) {
@@ -149,8 +141,8 @@ public class BossBarTracker {
             return done;
         }
 
-        public void reverse() {
-            this.reverse = true;
+        public void reverse(boolean reverse) {
+            this.reverse = reverse;
         }
     }
 

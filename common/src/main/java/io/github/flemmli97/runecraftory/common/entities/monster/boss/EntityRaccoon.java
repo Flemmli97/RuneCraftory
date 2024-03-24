@@ -4,8 +4,10 @@ import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
+import io.github.flemmli97.runecraftory.common.entities.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.entities.ai.boss.RaccoonAttackGoal;
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
+import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
@@ -19,6 +21,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
@@ -232,6 +235,12 @@ public class EntityRaccoon extends BossMonster {
         super(type, world);
         if (!world.isClientSide)
             this.goalSelector.addGoal(1, this.attack);
+    }
+
+    @Override
+    public RunecraftoryBossbar createBossBar() {
+        return new RunecraftoryBossbar(null, this.getDisplayName(), BossEvent.BossBarColor.GREEN, BossEvent.BossBarOverlay.PROGRESS)
+                .setMusic(ModSounds.RACCOON_FIGHT.get());
     }
 
     @Override

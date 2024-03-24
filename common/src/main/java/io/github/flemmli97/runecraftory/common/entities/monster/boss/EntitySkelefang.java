@@ -5,6 +5,7 @@ import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.MultiPartEntity;
+import io.github.flemmli97.runecraftory.common.entities.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.entities.ai.boss.SkelefangAttackGoal;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntitySlashResidue;
 import io.github.flemmli97.runecraftory.common.entities.monster.MultiPartContainer;
@@ -26,7 +27,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
@@ -74,7 +74,7 @@ public class EntitySkelefang extends BossMonster {
     public static final AnimatedAction BEAM = AnimatedAction.builder(1, "beam").infinite().build();
 
     public static final AnimatedAction DEATH = AnimatedAction.builder(120, "death").infinite().build();
-    public static final AnimatedAction ROAR = new AnimatedAction(2, 0.28, "roar");
+    public static final AnimatedAction ROAR = new AnimatedAction(2, 0.2, "roar");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(TAIL_SLAM, "interact");
 
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{TAIL_SLAP, NEEDLE_THROW, TAIL_SLAM, SLASH, CHARGE, BEAM, DEATH, ROAR, INTERACT};
@@ -221,8 +221,9 @@ public class EntitySkelefang extends BossMonster {
     }
 
     @Override
-    public ServerBossEvent createBossBar() {
-        return new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.YELLOW, BossEvent.BossBarOverlay.PROGRESS);
+    public RunecraftoryBossbar createBossBar() {
+        return new RunecraftoryBossbar(null, this.getDisplayName(), BossEvent.BossBarColor.YELLOW, BossEvent.BossBarOverlay.PROGRESS)
+                .setMusic(ModSounds.SKELEFANG_FIGHT.get());
     }
 
     @Override

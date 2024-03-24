@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
+import io.github.flemmli97.runecraftory.common.entities.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.entities.ai.boss.DeadTreeAttackGoal;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
@@ -20,6 +21,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -130,6 +132,12 @@ public class EntityDeadTree extends BossMonster {
         super(type, world);
         if (!world.isClientSide)
             this.goalSelector.addGoal(1, this.attack);
+    }
+
+    @Override
+    public RunecraftoryBossbar createBossBar() {
+        return new RunecraftoryBossbar(null, this.getDisplayName(), BossEvent.BossBarColor.GREEN, BossEvent.BossBarOverlay.PROGRESS)
+                .setMusic(ModSounds.DEAD_TREE_FIGHT.get());
     }
 
     @Override

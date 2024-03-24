@@ -19,12 +19,28 @@ public class SoundGen extends SoundDefinitionsProvider {
     @Override
     public void registerSounds() {
         for (RegistryEntrySupplier<SoundEvent> sup : ModSounds.SOUND_EVENTS.getEntries()) {
+            if (ModSounds.BGM.contains(sup.getID()))
+                continue;
             int num = ModSounds.VARIATIONS.getInt(sup.getID());
             if (num > 0)
                 this.add(sup.get(), num);
             else
                 this.add(sup.get());
         }
+        ResourceLocation bgm1 = new ResourceLocation(RuneCraftory.MODID, "bgm/aiwa-konomunede-kuchiteyuku");
+        ResourceLocation bgm2 = new ResourceLocation(RuneCraftory.MODID, "bgm/area12");
+        ResourceLocation bgm3 = new ResourceLocation(RuneCraftory.MODID, "bgm/catch-them-all");
+        ResourceLocation bgm4 = new ResourceLocation(RuneCraftory.MODID, "bgm/cruising-down-8bit-lane");
+        ResourceLocation bgm5 = new ResourceLocation(RuneCraftory.MODID, "bgm/yami-no-sekai-no-tatakai");
+        ResourceLocation bgm6 = new ResourceLocation(RuneCraftory.MODID, "bgm/yurei");
+        this.addBgmWith(ModSounds.AMBROSIA_FIGHT.get(), bgm4);
+        this.addBgmWith(ModSounds.CHIMERA_FIGHT.get(), bgm2);
+        this.addBgmWith(ModSounds.DEAD_TREE_FIGHT.get(), bgm2);
+        this.addBgmWith(ModSounds.MARIONETTA_FIGHT.get(), bgm6);
+        this.addBgmWith(ModSounds.RACCOON_FIGHT.get(), bgm1);
+        this.addBgmWith(ModSounds.SKELEFANG_FIGHT.get(), bgm5);
+        this.addBgmWith(ModSounds.RAFFLESIA_FIGHT.get(), bgm3);
+        this.addBgmWith(ModSounds.THUNDERBOLT_FIGHT.get(), bgm4);
     }
 
     private void add(SoundEvent event) {
@@ -38,4 +54,12 @@ public class SoundGen extends SoundDefinitionsProvider {
         this.add(event, def);
     }
 
+    private void addBgmWith(SoundEvent event) {
+        this.addBgmWith(event, new ResourceLocation(event.getLocation().getNamespace(), event.getLocation().getPath().replace(".", "/")));
+    }
+
+    private void addBgmWith(SoundEvent event, ResourceLocation sound) {
+        this.add(event, definition().subtitle(event.getLocation().toString()).with(SoundDefinition.Sound.sound(sound, SoundDefinition.SoundType.SOUND)
+                .stream()));
+    }
 }

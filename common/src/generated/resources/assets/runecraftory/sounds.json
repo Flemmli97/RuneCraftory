@@ -275,5 +275,77 @@
     "sounds": [
       "runecraftory:spell/straight_punch"
     ]
+  },
+  "bgm.ambrosia_fight": {
+    "subtitle": "runecraftory:bgm.ambrosia_fight",
+    "sounds": [
+      {
+        "name": "runecraftory:bgm/cruising-down-8bit-lane",
+        "stream": true
+      }
+    ]
+  },
+  "bgm.chimera_fight": {
+    "subtitle": "runecraftory:bgm.chimera_fight",
+    "sounds": [
+      {
+        "name": "runecraftory:bgm/area12",
+        "stream": true
+      }
+    ]
+  },
+  "bgm.dead_tree_fight": {
+    "subtitle": "runecraftory:bgm.dead_tree_fight",
+    "sounds": [
+      {
+        "name": "runecraftory:bgm/area12",
+        "stream": true
+      }
+    ]
+  },
+  "bgm.marionetta_fight": {
+    "subtitle": "runecraftory:bgm.marionetta_fight",
+    "sounds": [
+      {
+        "name": "runecraftory:bgm/yurei",
+        "stream": true
+      }
+    ]
+  },
+  "bgm.raccoon_fight": {
+    "subtitle": "runecraftory:bgm.raccoon_fight",
+    "sounds": [
+      {
+        "name": "runecraftory:bgm/aiwa-konomunede-kuchiteyuku",
+        "stream": true
+      }
+    ]
+  },
+  "bgm.skelefang_fight": {
+    "subtitle": "runecraftory:bgm.skelefang_fight",
+    "sounds": [
+      {
+        "name": "runecraftory:bgm/yami-no-sekai-no-tatakai",
+        "stream": true
+      }
+    ]
+  },
+  "bgm.rafflesia_fight": {
+    "subtitle": "runecraftory:bgm.rafflesia_fight",
+    "sounds": [
+      {
+        "name": "runecraftory:bgm/catch-them-all",
+        "stream": true
+      }
+    ]
+  },
+  "bgm.thunderbolt_fight": {
+    "subtitle": "runecraftory:bgm.thunderbolt_fight",
+    "sounds": [
+      {
+        "name": "runecraftory:bgm/cruising-down-8bit-lane",
+        "stream": true
+      }
+    ]
   }
 }
