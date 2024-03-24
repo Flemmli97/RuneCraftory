@@ -1,3 +1,14 @@
+RuneCraftory 1.9.2
+================
+- Increase wander radius of monster around gates
+- Adjusted gate spawn data
+- Fix some problems with entity data syncing. E.g. npc data not synced to client on a server
+- Fix rafflesia parts always having 20 health
+- Adjusted monster stats
+- Adjust monster attack. Attack aabb are now calculated at start of animation and not when its done.
+- Bossbar color depending on boss
+- Add boss music
+
 RuneCraftory 1.9.1
 ================
 - Fix taking small damage triggering level up sound
