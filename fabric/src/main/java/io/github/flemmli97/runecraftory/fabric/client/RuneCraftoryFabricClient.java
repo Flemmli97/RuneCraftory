@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.fabric.client;
 
 import io.github.flemmli97.runecraftory.client.ArmorModels;
+import io.github.flemmli97.runecraftory.client.BossBarTracker;
 import io.github.flemmli97.runecraftory.client.ClientCalls;
 import io.github.flemmli97.runecraftory.client.ClientFarmlandHandler;
 import io.github.flemmli97.runecraftory.client.ClientRegister;
@@ -79,5 +80,6 @@ public class RuneCraftoryFabricClient implements ClientModInitializer {
                 ArmorRendererRegistryImpl.register(new ArmorRendererImpl(r, new ResourceLocation(e.getID().getNamespace(), "textures/models/armor/" + e.getID().getPath() + ".png")), e.get());
         });
         ClientChunkEvents.CHUNK_UNLOAD.register(((world, chunk) -> ClientFarmlandHandler.INSTANCE.onChunkUnLoad(chunk.getPos())));
+        BossBarTracker.register();
     }
 }

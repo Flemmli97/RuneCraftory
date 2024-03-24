@@ -1,14 +1,17 @@
 package io.github.flemmli97.runecraftory.client;
 
-import com.mojang.blaze3d.audio.Channel;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.config.ClientConfig;
 import io.github.flemmli97.runecraftory.mixin.SoundManagerAccessor;
 import io.github.flemmli97.runecraftory.mixinhelper.SoundEngineUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.sounds.ChannelAccess;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -18,7 +21,6 @@ import net.minecraft.world.BossEvent;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.Consumer;
 
 public class BossBarTracker {
 
@@ -90,12 +92,12 @@ public class BossBarTracker {
         }
     }
 
-    public static int tryRenderCustomBossbar(PoseStack poseStack, int x, int y, BossEvent bossEvent) {
+    public static int tryRenderCustomBossbar(PoseStack poseStack, int x, int y, BossEvent bossEvent, boolean withName) {
         BossBarData data = ACTIVE_BOSS_BARS.get(bossEvent.getId());
         if (data != null) {
             ClientBossBarType type = BOSS_BARS.get(data.type);
             if (type != null)
-                return type.renderFrom(poseStack, x, y, bossEvent);
+                return type.renderFrom(poseStack, x, y, bossEvent, withName);
         }
         return 0;
     }
@@ -149,8 +151,24 @@ public class BossBarTracker {
 
     public record ClientBossBarType(BossbarTexture texture, BossbarTexture overlay) {
 
-        public int renderFrom(PoseStack poseStack, int x, int y, BossEvent bossEvent) {
-            return 0;
+        public int renderFrom(PoseStack poseStack, int x, int y, BossEvent bossEvent, boolean withName) {
+            Minecraft mc = Minecraft.getInstance();
+            if (withName) {
+                int screenX = mc.getWindow().getGuiScaledWidth();
+                Component component = bossEvent.getName();
+                int len = mc.font.width(component);
+                int txtX = screenX / 2 - len / 2;
+                mc.font.drawShadow(poseStack, component, txtX, y - 9, 0xFFFFFF);
+            }
+
+            RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+            RenderSystem.setShaderTexture(0, this.texture.texture);
+            GuiComponent.blit(poseStack, x, y, 0, this.texture.offsetX, this.texture.offsetY, this.texture.width, this.texture.height, 256, 256);
+
+            RenderSystem.setShaderTexture(0, this.overlay.texture);
+            int overlayWidth = (int) (bossEvent.getProgress() * this.overlay.width);
+            GuiComponent.blit(poseStack, x, y, 0, this.overlay.offsetX, this.overlay.offsetY, overlayWidth, this.overlay.height, 256, 256);
+            return y + mc.font.lineHeight + Math.max(this.texture.height, this.overlay.height) + 5;
         }
     }
 

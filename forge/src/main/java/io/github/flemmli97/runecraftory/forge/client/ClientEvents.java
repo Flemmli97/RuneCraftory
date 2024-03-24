@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.forge.client;
 
 import com.mojang.datafixers.util.Either;
 import io.github.flemmli97.runecraftory.client.ArmorModels;
+import io.github.flemmli97.runecraftory.client.BossBarTracker;
 import io.github.flemmli97.runecraftory.client.ClientCalls;
 import io.github.flemmli97.runecraftory.client.ClientFarmlandHandler;
 import io.github.flemmli97.runecraftory.client.ClientRegister;
@@ -45,6 +46,7 @@ public class ClientEvents {
         MinecraftForge.EVENT_BUS.register(ClientEvents.class);
         OverlayRegistry.registerOverlayAbove(ForgeIngameGui.EXPERIENCE_BAR_ELEMENT, "rf_overlay_bar", (gui, stack, partialTicks, guiX, guiY) -> ClientCalls.renderScreenOverlays(stack, partialTicks));
         ClientRegister.registerTooltipComponentFactories(MinecraftForgeClient::registerTooltipComponentFactory);
+        BossBarTracker.register();
     }
 
     public static void initClientItemProps(Consumer<IItemRenderProperties> consumer) {
@@ -116,5 +118,14 @@ public class ClientEvents {
     @SubscribeEvent
     public static void shaking(ClientPlayerNetworkEvent.LoggedOutEvent event) {
         ClientFarmlandHandler.INSTANCE.onDisconnect();
+    }
+
+    @SubscribeEvent
+    public static void bossbar(RenderGameOverlayEvent.BossInfo event) {
+        int i = BossBarTracker.tryRenderCustomBossbar(event.getMatrixStack(), event.getX(), event.getY(), event.getBossEvent(), true);
+        if (i != 0) {
+            event.setIncrement(i);
+            event.setCanceled(true);
+        }
     }
 }
