@@ -12,6 +12,7 @@ import net.minecraft.client.sounds.ChannelAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
 
 import java.util.HashMap;
@@ -134,7 +135,7 @@ public class BossBarTracker {
                 this.tick--;
             else
                 this.tick++;
-            float volMult = Math.max(0, 1 - this.volDecrease * this.tick);
+            float volMult = Mth.clamp(1 - this.volDecrease * this.tick, 0, 1);
             this.channel.execute(ch -> ch.setVolume(this.inst.getVolume() * volMult));
             if (done && !this.reverse)
                 Minecraft.getInstance().getSoundManager().stop(this.inst);
