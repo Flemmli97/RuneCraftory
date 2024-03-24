@@ -54,7 +54,9 @@ public abstract class EntityRafflesiaPart extends Mob implements IAnimated, Owna
         this.parent = parent;
         this.entityData.set(PARENT, Optional.of(this.parent.getUUID()));
         this.getAttributes().load(parent.getAttributes().save());
-        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(parent.getAttributeValue(Attributes.MAX_HEALTH));
+        double health = parent.getAttributeValue(Attributes.MAX_HEALTH) * 0.5;
+        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(health);
+        this.setHealth(this.getMaxHealth());
     }
 
     public static AttributeSupplier.Builder createAttributes(Collection<? extends RegistryEntrySupplier<Attribute>> atts) {
