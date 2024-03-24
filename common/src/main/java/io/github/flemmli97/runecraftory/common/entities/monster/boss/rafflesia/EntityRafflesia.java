@@ -93,7 +93,8 @@ public class EntityRafflesia extends BossMonster implements DelayedAttacker {
     public static Vec3 rotateVec(Direction dir, Vec3 v) {
         return switch (dir) {
             case NORTH -> v.multiply(-1, 1, -1);
-            case WEST, EAST -> new Vec3(v.z(), v.y(), -v.x());
+            case EAST -> new Vec3(v.z(), v.y(), -v.x());
+            case WEST -> new Vec3(-v.z(), v.y(), -v.x());
             default -> v;
         };
     }
