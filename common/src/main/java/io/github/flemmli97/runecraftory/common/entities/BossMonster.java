@@ -16,6 +16,7 @@ import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -62,10 +63,12 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
             if (!this.isTamed() && this.isAlive()) {
                 this.updatePlayers();
                 this.updateBossBar();
-                if (this.bossInfo.getPlayers().isEmpty() && ++this.noPlayerTick > 200) {
-                    if (++this.noPlayerRegenTick > 40) {
-                        this.heal(this.getMaxHealth() * 0.1f);
-                        this.noPlayerRegenTick = 0;
+                if (this.getTarget() == null && this.bossInfo.getPlayers().isEmpty()) {
+                    if (++this.noPlayerTick > 400) {
+                        if (++this.noPlayerRegenTick > 40) {
+                            this.heal(this.getMaxHealth() * 0.1f);
+                            this.noPlayerRegenTick = 0;
+                        }
                     }
                 } else {
                     this.noPlayerTick = 0;
@@ -214,9 +217,9 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
 
     public AABB arenaAABB() {
         if (this.hasRestriction()) {
-            return new AABB(this.getRestrictCenter()).inflate(this.getRestrictRadius());
+            return new AABB(this.getRestrictCenter()).inflate(this.getRestrictRadius() + 1);
         }
-        return this.getBoundingBox().inflate(16.0);
+        return this.getBoundingBox().inflate(this.getAttributeValue(Attributes.FOLLOW_RANGE) + 1);
     }
 
     @Override
@@ -236,7 +239,7 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
     public void stopSeenByPlayer(ServerPlayer player) {
         super.stopSeenByPlayer(player);
         this.bossInfo.removePlayer(player);
-        // If boss killed all players (or every nearby simply player died) heal it back to full
+        // If boss killed all players (or every nearby player simply died) heal it back to full
         if (!this.isTamed() && player.isRemoved() && this.bossInfo.getPlayers().isEmpty()) {
             this.heal(this.getMaxHealth());
         }

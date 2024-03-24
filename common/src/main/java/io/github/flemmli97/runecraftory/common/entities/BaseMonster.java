@@ -243,6 +243,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     public static AttributeSupplier.Builder createAttributes(Collection<? extends RegistryEntrySupplier<Attribute>> atts) {
         AttributeSupplier.Builder map = Monster.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.23)
+                .add(Attributes.FOLLOW_RANGE, 24.0)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1);
         if (atts != null)
             for (RegistryEntrySupplier<Attribute> att : atts)
