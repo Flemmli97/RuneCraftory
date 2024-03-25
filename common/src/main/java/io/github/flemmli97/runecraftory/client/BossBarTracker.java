@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.config.ClientConfig;
 import io.github.flemmli97.runecraftory.mixin.SoundManagerAccessor;
 import io.github.flemmli97.runecraftory.mixinhelper.SoundEngineUtil;
@@ -17,6 +16,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -116,7 +116,7 @@ public class BossBarTracker {
         private final SoundInstance inst;
         private final ChannelAccess.ChannelHandle channel;
         private final int fadeTime;
-        private final float volDecrease;
+        private final float defaultVol, volDecrease;
         private int tick;
         private boolean reverse;
 
@@ -127,6 +127,18 @@ public class BossBarTracker {
             this.fadeTime = fadeTime;
             this.tick = 0;
             this.volDecrease = 1f / this.fadeTime;
+            this.defaultVol = calculateVolume(inst);
+        }
+
+        private static float calculateVolume(SoundInstance sound) {
+            return Mth.clamp(sound.getVolume() * getVolume(sound.getSource()), 0.0f, 1.0f);
+        }
+
+        private static float getVolume(@Nullable SoundSource category) {
+            if (category == null || category == SoundSource.MASTER) {
+                return 1.0f;
+            }
+            return Minecraft.getInstance().options.getSoundSourceVolume(category);
         }
 
         public boolean tick() {
@@ -137,8 +149,8 @@ public class BossBarTracker {
                 this.tick--;
             else
                 this.tick++;
-            float volMult = Mth.clamp(1 - this.volDecrease * this.tick, 0, 1);
-            this.channel.execute(ch -> ch.setVolume(this.inst.getVolume() * volMult));
+            float vol = this.defaultVol * Mth.clamp(1 - this.volDecrease * this.tick, 0, 1);
+            this.channel.execute(ch -> ch.setVolume(vol));
             if (done && !this.reverse)
                 Minecraft.getInstance().getSoundManager().stop(this.inst);
             return done;
