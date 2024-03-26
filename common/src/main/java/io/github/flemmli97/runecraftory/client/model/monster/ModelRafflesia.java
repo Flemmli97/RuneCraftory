@@ -6,6 +6,8 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.model.SittingModel;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia.EntityRafflesia;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia.EntityRafflesiaPart;
+import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.client.AnimationManager;
 import io.github.flemmli97.tenshilib.client.model.BlockBenchAnimations;
 import io.github.flemmli97.tenshilib.client.model.ExtendedModel;
@@ -201,7 +203,7 @@ public class ModelRafflesia<T extends EntityRafflesia> extends EntityModel<T> im
         if (entity.deathTime <= 0 && !entity.playDeath()) {
             this.anim.doAnimation(this, "idle", entity.tickCount, partialTicks);
         }
-        this.anim.doAnimation(this, entity.getAnimationHandler(), partialTicks);
+        this.doAnimation(this, entity.getAnimationHandler(), partialTicks);
         EntityRafflesiaPart horseTail = entity.getHorseTail();
         if (horseTail != null) {
             this.horseTail.visible = true;
@@ -223,6 +225,23 @@ public class ModelRafflesia<T extends EntityRafflesia> extends EntityModel<T> im
         } else {
             this.pitcher.visible = false;
         }
+    }
+
+    public boolean doAnimation(ExtendedModel model, AnimationHandler<?> handler, float partialTicks) {
+        AnimatedAction current = handler.getAnimation();
+        AnimatedAction last = handler.getLastAnim();
+        float interpolation = handler.getInterpolatedAnimationVal(partialTicks, AnimationHandler.DEFAULT_ADJUST_TIME);
+        float interpolationRev = 1 - interpolation;
+        boolean changed = false;
+        if (last != null && interpolationRev > 0) {
+            boolean mirror = EntityRafflesia.isMirrorAttack(last);
+            changed = this.anim.doAnimation(model, last.getAnimationClient(), last.getTick(), partialTicks, current != null ? 1 : interpolationRev, mirror, BlockBenchAnimations.InterpolationCheck.END, false);
+        }
+        if (current != null) {
+            boolean mirror = EntityRafflesia.isMirrorAttack(current);
+            changed = this.anim.doAnimation(model, current.getAnimationClient(), current.getTick(), partialTicks, interpolation, mirror, BlockBenchAnimations.InterpolationCheck.START, changed);
+        }
+        return changed;
     }
 
     @Override

@@ -49,7 +49,7 @@ public class RafflesiaPartAttackGoal extends Goal {
             return;
         }
         if (this.idleTime <= 0) {
-            this.idleTime = this.attacker.getRandom().nextInt(40) + 90;
+            this.idleTime = this.attacker.cooldown();
             this.attacker.getAnimationHandler().setAnimation(this.attacker.attackAnim());
         } else {
             this.idleTime--;

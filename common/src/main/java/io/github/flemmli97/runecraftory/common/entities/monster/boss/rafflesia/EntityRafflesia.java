@@ -32,6 +32,7 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -43,9 +44,12 @@ import java.util.function.BiConsumer;
 
 public class EntityRafflesia extends BossMonster implements DelayedAttacker {
 
-    public static final AnimatedAction POISON_BREATH = new AnimatedAction(2.08, 0.56, "breath");
+    public static final AnimatedAction POISON_BREATH = new AnimatedAction(2.08, 0.64, "breath");
+    public static final AnimatedAction POISON_BREATH_REV = AnimatedAction.copyOf(POISON_BREATH, "breath_2");
     public static final AnimatedAction PARA_BREATH = AnimatedAction.copyOf(POISON_BREATH, "paralysis_breath");
+    public static final AnimatedAction PARA_BREATH_REV = AnimatedAction.copyOf(POISON_BREATH, "paralysis_breath_2");
     public static final AnimatedAction SLEEP_BREATH = AnimatedAction.copyOf(POISON_BREATH, "sleep_breath");
+    public static final AnimatedAction SLEEP_BREATH_REV = AnimatedAction.copyOf(POISON_BREATH, "sleep_breath_2");
     public static final AnimatedAction WIND_BLADE_X8 = new AnimatedAction(0.88, 0.44, "casting");
     public static final AnimatedAction WIND_BLADE_X16 = AnimatedAction.copyOf(WIND_BLADE_X8, "wind_blade_x16");
     public static final AnimatedAction RESUMMON = AnimatedAction.copyOf(WIND_BLADE_X8, "resummon");
@@ -55,7 +59,8 @@ public class EntityRafflesia extends BossMonster implements DelayedAttacker {
     public static final AnimatedAction ANGRY = AnimatedAction.copyOf(WIND_BLADE_X8, "roar");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(POISON_BREATH, "interact");
 
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{POISON_BREATH, PARA_BREATH, SLEEP_BREATH, WIND_BLADE_X8, WIND_BLADE_X16, RESUMMON, STATUS_CIRCLE, DEATH, ANGRY, INTERACT};
+    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{POISON_BREATH, POISON_BREATH_REV, PARA_BREATH, PARA_BREATH_REV, SLEEP_BREATH, SLEEP_BREATH_REV,
+            WIND_BLADE_X8, WIND_BLADE_X16, RESUMMON, STATUS_CIRCLE, DEATH, ANGRY, INTERACT};
     private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntityRafflesia>> ATTACK_HANDLER = createAnimationHandler(b -> {
         BiConsumer<AnimatedAction, EntityRafflesia> cons = (anim, entity) -> {
             if (anim.canAttack()) {
@@ -65,6 +70,9 @@ public class EntityRafflesia extends BossMonster implements DelayedAttacker {
         b.put(POISON_BREATH, cons);
         b.put(PARA_BREATH, cons);
         b.put(SLEEP_BREATH, cons);
+        b.put(POISON_BREATH_REV, cons);
+        b.put(PARA_BREATH_REV, cons);
+        b.put(SLEEP_BREATH_REV, cons);
         b.put(WIND_BLADE_X8, cons);
         b.put(WIND_BLADE_X16, cons);
         b.put(RESUMMON, cons);
@@ -76,8 +84,15 @@ public class EntityRafflesia extends BossMonster implements DelayedAttacker {
     private static final EntityDataAccessor<Optional<UUID>> PITCHER = SynchedEntityData.defineId(EntityRafflesia.class, EntityDataSerializers.OPTIONAL_UUID);
     private static final EntityDataAccessor<Direction> SPAWN_DIRECTION = SynchedEntityData.defineId(EntityRafflesia.class, EntityDataSerializers.DIRECTION);
 
+    private boolean mirrorAttack;
+
     public final RafflesiaAttackGoal<EntityRafflesia> attack = new RafflesiaAttackGoal<>(this);
-    private final AnimationHandler<EntityRafflesia> animationHandler = new AnimationHandler<>(this, ANIMS);
+    private final AnimationHandler<EntityRafflesia> animationHandler = new AnimationHandler<>(this, ANIMS)
+            .setAnimationChangeCons(anim -> {
+                if (!this.level.isClientSide) {
+                    this.mirrorAttack = isMirrorAttack(anim);
+                }
+            });
 
     private EntityRafflesiaPart horseTailEntity;
     private EntityRafflesiaPart flowerEntity;
@@ -97,6 +112,10 @@ public class EntityRafflesia extends BossMonster implements DelayedAttacker {
             case WEST -> new Vec3(-v.z(), v.y(), -v.x());
             default -> v;
         };
+    }
+
+    public static boolean isMirrorAttack(AnimatedAction anim) {
+        return anim != null && anim.is(POISON_BREATH_REV, PARA_BREATH_REV, SLEEP_BREATH_REV);
     }
 
     @Override
@@ -123,11 +142,11 @@ public class EntityRafflesia extends BossMonster implements DelayedAttacker {
             ModSpells.WIND_CIRCLE_X8.get().use(this);
         if (anim.is(WIND_BLADE_X16))
             ModSpells.WIND_CIRCLE_X16.get().use(this);
-        if (anim.is(POISON_BREATH))
+        if (anim.is(POISON_BREATH, POISON_BREATH_REV))
             ModSpells.RAFFLESIA_POISON.get().use(this);
-        if (anim.is(PARA_BREATH))
+        if (anim.is(PARA_BREATH, PARA_BREATH_REV))
             ModSpells.RAFFLESIA_PARA.get().use(this);
-        if (anim.is(SLEEP_BREATH))
+        if (anim.is(SLEEP_BREATH, SLEEP_BREATH_REV))
             ModSpells.RAFFLESIA_SLEEP.get().use(this);
         if (anim.is(STATUS_CIRCLE))
             ModSpells.RAFFLESIA_CIRCLE.get().use(this);
@@ -209,6 +228,18 @@ public class EntityRafflesia extends BossMonster implements DelayedAttacker {
             }
             if (this.summonCooldown < 200 && this.getHorseTail() == null || this.getPitcher() == null || this.getFlower() == null) {
                 this.summonCooldown = this.random.nextInt(200) + 300;
+            }
+            if (this.tickCount % 30 == 0) {
+                this.level.getEntities(EntityTypeTest.forClass(LivingEntity.class),
+                                this.getBoundingBox().inflate(0.3).move(0, this.getBbHeight(), 0),
+                                e -> e != this && this.targetPred.test(e))
+                        .forEach(e -> {
+                            Vec3 dir = e.position().subtract(this.position());
+                            boolean none = dir.x() == 0 && dir.z() == 0;
+                            dir = new Vec3(none ? 1 : dir.x(), 0, dir.z()).normalize().scale(1.2);
+                            e.setDeltaMovement(e.getDeltaMovement().add(dir));
+                            e.hurtMarked = true;
+                        });
             }
         }
     }
@@ -378,5 +409,9 @@ public class EntityRafflesia extends BossMonster implements DelayedAttacker {
     @Override
     public void playAngrySound() {
         this.playSound(ModSounds.ENTITY_RAFFLESIA_ANGRY.get(), 1, (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.0f);
+    }
+
+    public boolean mirrorAttack() {
+        return this.mirrorAttack;
     }
 }

@@ -48,4 +48,9 @@ public class EntityRafflesiaFlower extends EntityRafflesiaPart {
     public AnimationHandler<?> getAnimationHandler() {
         return this.animationHandler;
     }
+
+    @Override
+    public int cooldown() {
+        return this.getRandom().nextInt(60) + 120;
+    }
 }

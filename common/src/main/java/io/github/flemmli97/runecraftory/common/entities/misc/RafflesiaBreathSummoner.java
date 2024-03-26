@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
+import io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia.EntityRafflesia;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -15,6 +16,7 @@ public class RafflesiaBreathSummoner extends ProjectileSummonHelperEntity {
     protected static final EntityDataAccessor<Integer> TYPE = SynchedEntityData.defineId(RafflesiaBreathSummoner.class, EntityDataSerializers.INT);
 
     private EntityStatusBall.Type type = EntityStatusBall.Type.RAFFLESIA_SLEEP;
+    private boolean reversed;
 
     public RafflesiaBreathSummoner(EntityType<?> entityType, Level level) {
         super(entityType, level);
@@ -26,6 +28,9 @@ public class RafflesiaBreathSummoner extends ProjectileSummonHelperEntity {
         this.entityData.set(TYPE, this.type.ordinal());
         this.damageMultiplier = 0.7f;
         this.maxLivingTicks = 16;
+        if (caster instanceof EntityRafflesia rafflesia) {
+            this.reversed = rafflesia.mirrorAttack();
+        }
     }
 
     @Override
@@ -46,7 +51,8 @@ public class RafflesiaBreathSummoner extends ProjectileSummonHelperEntity {
 
     @Override
     protected void summonProjectiles() {
-        float rot = Mth.wrapDegrees(this.getYRot() - (this.tickCount * 50f / this.maxLivingTicks - 25f));
+        float add = (this.tickCount * 70f / this.maxLivingTicks - 35f);
+        float rot = Mth.wrapDegrees(this.getYRot() + (this.reversed ? add : -add));
         EntityStatusBall ball = new EntityStatusBall(this.level, this.getOwner());
         ball.setType(this.type);
         ball.setDamageMultiplier(this.damageMultiplier);

@@ -38,9 +38,9 @@ public class EntityRafflesiaPitcher extends EntityRafflesiaPart {
     }
 
     public static void rafflesiaSpawning(EntityRafflesiaPart part) {
-        if (part.level.isClientSide)
+        if (part.level.isClientSide || part.getOwner() == null)
             return;
-        List<Mob> nearby = part.level.getEntities(EntityTypeTest.forClass(Mob.class), part.getBoundingBox().inflate(16), m -> {
+        List<Mob> nearby = part.level.getEntities(EntityTypeTest.forClass(Mob.class), part.getOwner().arenaAABB(), m -> {
             if (!m.getType().is(RunecraftoryTags.RAFFLESIA_SUMMONS))
                 return false;
             if (m instanceof OwnableEntity ownableEntity) {
@@ -105,5 +105,10 @@ public class EntityRafflesiaPitcher extends EntityRafflesiaPart {
     @Override
     public AnimationHandler<?> getAnimationHandler() {
         return this.animationHandler;
+    }
+
+    @Override
+    public int cooldown() {
+        return this.getRandom().nextInt(60) + 120;
     }
 }
