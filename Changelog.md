@@ -1,3 +1,8 @@
+RuneCraftory 1.9.3
+================
+- Fix bgm not respecting sound category volume
+- Tweak various boss attacks
+
 RuneCraftory 1.9.2
 ================
 - Increase wander radius of monster around gates
