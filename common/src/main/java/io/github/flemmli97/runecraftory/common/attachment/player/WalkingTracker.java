@@ -38,7 +38,7 @@ public class WalkingTracker {
             mult += this.calcMultiplier(e.getKey(), counter, e.getValue());
         }
         if (mult != 0) {
-            float finalMult = mult * 0.5f;
+            float finalMult = mult * 0.3f;
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.WALKING, finalMult));
         }
         return mult != 0;

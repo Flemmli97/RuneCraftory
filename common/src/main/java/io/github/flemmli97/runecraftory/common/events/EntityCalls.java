@@ -498,7 +498,7 @@ public class EntityCalls {
 
     public static void onLootTableBlockGen(Player player, BlockEntity blockEntity) {
         if (player instanceof ServerPlayer serverPlayer) {
-            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(serverPlayer, data, EnumSkills.SEARCHING, 15));
+            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(serverPlayer, data, EnumSkills.SEARCHING, 7));
         }
     }
 
