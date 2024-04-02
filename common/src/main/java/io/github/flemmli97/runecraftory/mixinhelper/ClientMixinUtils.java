@@ -173,7 +173,7 @@ public class ClientMixinUtils {
         if (livingEntity instanceof AbstractClientPlayer player && transformType.firstPerson()) {
             PlayerData data = Platform.INSTANCE.getPlayerData(player).orElse(null);
             if (data != null && data.getWeaponHandler().getCurrentAnim() != null) {
-                if (leftHand)
+                if (leftHand == (livingEntity.getMainArm() == HumanoidArm.RIGHT))
                     return true;
                 poseStack.popPose();
                 poseStack.pushPose();
@@ -187,21 +187,21 @@ public class ClientMixinUtils {
                 playerRenderer.getModel().rightArm.render(poseStack, buffer.getBuffer(RenderType.entitySolid(player.getSkinTextureLocation())), combinedLight, OverlayTexture.NO_OVERLAY);
                 if (!ItemNBT.isInvis(itemStack)) {
                     poseStack.pushPose();
-                    playerRenderer.getModel().translateToHand(HumanoidArm.RIGHT, poseStack);
+                    playerRenderer.getModel().translateToHand(leftHand ? HumanoidArm.LEFT : HumanoidArm.RIGHT, poseStack);
                     poseStack.mulPose(Vector3f.XP.rotationDegrees(-90.0f));
                     poseStack.mulPose(Vector3f.YP.rotationDegrees(180.0f));
                     poseStack.translate((float) 1 / 16.0f, 0.125, -0.625);
-                    Minecraft.getInstance().getItemRenderer().renderStatic(livingEntity, itemStack, ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, false, poseStack, buffer, livingEntity.level, combinedLight, OverlayTexture.NO_OVERLAY, livingEntity.getId() + transformType.ordinal());
+                    Minecraft.getInstance().getItemRenderer().renderStatic(livingEntity, itemStack, transformType, leftHand, poseStack, buffer, livingEntity.level, combinedLight, OverlayTexture.NO_OVERLAY, livingEntity.getId() + transformType.ordinal());
                     poseStack.popPose();
                 }
                 itemStack = player.getOffhandItem();
                 if (!itemStack.isEmpty() && !ItemNBT.isInvis(itemStack)) {
                     poseStack.pushPose();
-                    playerRenderer.getModel().translateToHand(HumanoidArm.LEFT, poseStack);
+                    playerRenderer.getModel().translateToHand(leftHand ? HumanoidArm.RIGHT : HumanoidArm.LEFT, poseStack);
                     poseStack.mulPose(Vector3f.XP.rotationDegrees(-90.0f));
                     poseStack.mulPose(Vector3f.YP.rotationDegrees(180.0f));
                     poseStack.translate((float) -1 / 16.0f, 0.125, -0.625);
-                    Minecraft.getInstance().getItemRenderer().renderStatic(livingEntity, itemStack, ItemTransforms.TransformType.THIRD_PERSON_LEFT_HAND, true, poseStack, buffer, livingEntity.level, combinedLight, OverlayTexture.NO_OVERLAY, livingEntity.getId() + transformType.ordinal());
+                    Minecraft.getInstance().getItemRenderer().renderStatic(livingEntity, itemStack, transformType, leftHand, poseStack, buffer, livingEntity.level, combinedLight, OverlayTexture.NO_OVERLAY, livingEntity.getId() + transformType.ordinal());
                     poseStack.popPose();
                 }
                 poseStack.popPose();
