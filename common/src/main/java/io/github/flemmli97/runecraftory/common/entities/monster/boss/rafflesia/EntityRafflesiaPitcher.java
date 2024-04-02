@@ -65,9 +65,13 @@ public class EntityRafflesiaPitcher extends EntityRafflesiaPart {
                     ServerLevel serverLevel = (ServerLevel) part.level;
                     Entity e = type.create(serverLevel, null, null, null, pos, MobSpawnType.MOB_SUMMONED, true, true);
                     if (e != null) {
-                        if (e instanceof Mob mob)
+                        EntityRafflesia owner = part.getOwner();
+                        if (e instanceof Mob mob) {
                             mob.setTarget(part.getTarget());
-                        if (e instanceof IBaseMob mob && part.getOwner() != null) {
+                            if (owner != null && owner.hasRestriction())
+                                mob.restrictTo(owner.blockPosition(), (int) owner.getRestrictRadius() + 1);
+                        }
+                        if (e instanceof IBaseMob mob && owner != null) {
                             int level = part.getOwner().level().getLevel();
                             mob.setLevel(level + (int) ((part.getRandom().nextDouble() - 0.5) * level * 0.1));
                         }

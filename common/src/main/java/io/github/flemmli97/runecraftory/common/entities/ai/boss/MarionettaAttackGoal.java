@@ -30,7 +30,11 @@ public class MarionettaAttackGoal<T extends EntityMarionetta> extends AnimatedMo
 
     @Override
     public AnimatedAction randomAttack() {
-        return this.attacker.getRandomAnimation(AnimationType.GENERICATTACK);
+        AnimatedAction anim = this.attacker.getRandomAnimation(AnimationType.GENERICATTACK);
+        if (anim == null || anim.getID().equals(this.prevAnim)) {
+            return this.randomAttack();
+        }
+        return anim;
     }
 
     @Override

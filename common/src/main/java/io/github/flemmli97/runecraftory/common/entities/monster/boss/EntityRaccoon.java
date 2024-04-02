@@ -273,7 +273,7 @@ public class EntityRaccoon extends BossMonster {
 
     @Override
     protected void applyAttributes() {
-        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.22);
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.23);
         super.applyAttributes();
     }
 
@@ -407,9 +407,7 @@ public class EntityRaccoon extends BossMonster {
     @Override
     public AABB calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
         if (anim.is(JUMP)) {
-            double attackSize = this.getBbWidth() + 3;
-            return new AABB(-attackSize, -0.5, -attackSize, attackSize, 2, attackSize)
-                    .move(this.position());
+            return this.attackAABB(anim).move(this.position());
         }
         if (anim.is(STOMP)) {
             double reach = this.getBbWidth() * 0.55;
@@ -427,16 +425,17 @@ public class EntityRaccoon extends BossMonster {
 
     @Override
     public double maxAttackRange(AnimatedAction anim) {
-        return this.isBerserk() ? 2.3 : 1.3;
+        return this.isBerserk() ? 2.5 : 1.5;
     }
 
     @Override
     public AABB attackAABB(AnimatedAction anim) {
         if (anim.is(JUMP)) {
-            return new AABB(this.getBbWidth() - 3, -0.5, this.getBbWidth() - 3, this.getBbWidth() + 3, 2, this.getBbWidth() + 3);
+            double attackSize = this.getBbWidth() + 2.75;
+            return new AABB(-attackSize, -0.5, -attackSize, attackSize, 2, attackSize);
         }
         if (anim.is(STOMP)) {
-            return new AABB(-1.9, -0.5, -1.9, 1.9, 1, 1.9);
+            return new AABB(-2, -0.5, -2, 2, 2, 2);
         }
         return super.attackAABB(anim);
     }

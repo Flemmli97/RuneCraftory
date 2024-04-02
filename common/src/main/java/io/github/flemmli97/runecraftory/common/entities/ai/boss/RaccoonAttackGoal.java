@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedMonsterAttack
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityRaccoon;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import net.minecraft.world.entity.ai.util.DefaultRandomPos;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 public class RaccoonAttackGoal<T extends EntityRaccoon> extends AnimatedMonsterAttackGoal<T> {
@@ -30,17 +31,22 @@ public class RaccoonAttackGoal<T extends EntityRaccoon> extends AnimatedMonsterA
 
     @Override
     public AnimatedAction randomAttack() {
-        return this.attacker.getRandomAnimation(AnimationType.GENERICATTACK);
+        AnimatedAction anim = this.attacker.getRandomAnimation(AnimationType.GENERICATTACK);
+        if (anim == null || (this.attacker.isBerserk() && anim.getID().equals(this.prevAnim))) {
+            return this.randomAttack();
+        }
+        return anim;
     }
 
     @Override
     public void handlePreAttack() {
-        if (this.attacker.isBerserk())
+        if (this.attacker.isBerserk()) {
             this.moveToWithDelay(1.2);
+        }
         if (!this.moveFlag) {
             this.pathFindDelay = 0;
             this.moveDelay = 25 + this.attacker.getRandom().nextInt(10);
-            if (!this.attacker.isBerserk()) {
+            if (!this.attacker.isBerserk() && this.distanceToTargetSq < 25) {
                 this.moveDelay += 20;
                 Vec3 away = DefaultRandomPos.getPosAway(this.attacker, 6, 4, this.target.position());
                 if (away != null) {
@@ -48,9 +54,15 @@ public class RaccoonAttackGoal<T extends EntityRaccoon> extends AnimatedMonsterA
                 }
             }
             this.moveFlag = true;
-        } else if (this.moveDelay-- <= 0 || (this.attacker.isBerserk() && this.distanceToTargetSq < 4)) {
+        } else if (this.moveDelay-- <= 0 || this.next.is(EntityRaccoon.JUMP) || (this.next.is(EntityRaccoon.LEAF_SHOOT, EntityRaccoon.LEAF_BOOMERANG) && this.distanceToTargetSq < 49)) {
             this.movementDone = true;
             this.moveFlag = false;
+        } else if (this.attacker.isBerserk()) {
+            AABB aabb = this.attacker.attackCheckAABB(this.next, this.target, -0.3);
+            if (aabb.intersects(this.target.getBoundingBox())) {
+                this.movementDone = true;
+                this.attacker.getLookControl().setLookAt(this.target, 360, 90);
+            }
         }
     }
 }
