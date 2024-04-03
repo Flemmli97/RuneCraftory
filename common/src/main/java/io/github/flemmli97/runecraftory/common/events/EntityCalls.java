@@ -505,4 +505,8 @@ public class EntityCalls {
     public static boolean shouldPreventFarmlandTrample(Entity entity, LevelAccessor world) {
         return GeneralConfig.disableFarmlandTrample;
     }
+
+    public static boolean onPlayerUseItem(Player player) {
+        return Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().getCurrentAction() == ModAttackActions.NONE.get()).orElse(true);
+    }
 }

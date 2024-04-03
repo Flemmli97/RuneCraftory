@@ -147,4 +147,11 @@ public class EntityEvents {
         if (EntityCalls.shouldPreventFarmlandTrample(event.getEntity(), event.getWorld()))
             event.setCanceled(true);
     }
+
+    @SubscribeEvent
+    public void playerUseItem(PlayerInteractEvent.RightClickItem event) {
+        if (!EntityCalls.onPlayerUseItem(event.getPlayer())) {
+            event.setCanceled(true);
+        }
+    }
 }
