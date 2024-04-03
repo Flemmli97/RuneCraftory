@@ -1,0 +1,15 @@
+{
+  "buyPrice": 700,
+  "sellPrice": 80,
+  "upgradeDifficulty": 29,
+  "itemStats": {
+    "runecraftory:defence": 17.0,
+    "runecraftory:magic_defence": 12.0
+  },
+  "monsterBonus": {
+    "runecraftory:defence": 1.0
+  },
+  "element": "NONE",
+  "tier1Spell": "runecraftory:vanilla_shulker_bullet",
+  "item": "minecraft:shulker_shell"
+}

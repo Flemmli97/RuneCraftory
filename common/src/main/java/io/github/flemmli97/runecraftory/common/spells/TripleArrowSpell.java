@@ -4,15 +4,12 @@ import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityMobArrow;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
-import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
@@ -23,15 +20,13 @@ public class TripleArrowSpell extends Spell {
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
-        Arrow arrowentity = new Arrow(level, entity);
+        EntityMobArrow first = new EntityMobArrow(level, entity, 1);
         float f = 1;
         if (stack.getItem() instanceof ItemStaffBase)
             f = BowItem.getPowerForTime(72000 - entity.getUseItemRemainingTicks());
-        arrowentity.shootFromRotation(entity, entity.getXRot(), entity.getYRot(), 0.0F, f * 1.5F, 1.0F);
-        arrowentity.setBaseDamage(1.7 + CombatUtils.getAttributeValue(entity, Attributes.ATTACK_DAMAGE) * 0.05 * lvl);
-        arrowentity.setSecondsOnFire(ItemNBT.getElement(stack) == EnumElement.FIRE ? 200 : 0);
-        arrowentity.pickup = AbstractArrow.Pickup.DISALLOWED;
-        level.addFreshEntity(arrowentity);
+        first.shootFromRotation(entity, entity.getXRot(), entity.getYRot(), 0.0F, f * 1.5F, 1.0F);
+        first.setSecondsOnFire(ItemNBT.getElement(stack) == EnumElement.FIRE ? 200 : 0);
+        level.addFreshEntity(first);
 
         Vec3 dir = entity.getLookAngle();
         Vec3 up = entity.getUpVector(1);
@@ -39,10 +34,10 @@ public class TripleArrowSpell extends Spell {
             Quaternion quaternion = new Quaternion(new Vector3f(up), y, true);
             Vector3f newDir = new Vector3f(dir);
             newDir.transform(quaternion);
-            Arrow arrowO = new Arrow(level, entity);
-            arrowO.setBaseDamage(1.7 + CombatUtils.getAttributeValue(entity, Attributes.ATTACK_DAMAGE) * 0.05 * lvl);
-            arrowO.shoot(newDir.x(), newDir.y(), newDir.z(), f * 1.5F, 1.0F);
-            level.addFreshEntity(arrowO);
+            EntityMobArrow arrow = new EntityMobArrow(level, entity, 1);
+            arrow.shoot(newDir.x(), newDir.y(), newDir.z(), f * 1.5F, 1.0F);
+            arrow.setSecondsOnFire(ItemNBT.getElement(stack) == EnumElement.FIRE ? 200 : 0);
+            level.addFreshEntity(arrow);
         }
         level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ARROW_SHOOT, entity.getSoundSource(), 1.0f, 1.0f / (level.getRandom().nextFloat() * 0.4f + 1.2f) + f * 0.5f);
         return true;

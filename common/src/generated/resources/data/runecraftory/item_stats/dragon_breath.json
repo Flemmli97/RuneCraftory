@@ -1,0 +1,15 @@
+{
+  "buyPrice": 2000,
+  "sellPrice": 150,
+  "upgradeDifficulty": 24,
+  "itemStats": {
+    "minecraft:generic.attack_damage": 4.0,
+    "runecraftory:magic_attack": 15.0
+  },
+  "monsterBonus": {
+    "runecraftory:magic_attack": 0.8
+  },
+  "element": "NONE",
+  "tier1Spell": "runecraftory:vanilla_dragon_fireball",
+  "item": "minecraft:dragon_breath"
+}

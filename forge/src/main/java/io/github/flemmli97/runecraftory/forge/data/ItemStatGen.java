@@ -136,7 +136,8 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(ModAttributes.MAGIC.get(), 0.5));
         this.addStat(Items.BLAZE_ROD, new ItemStat.Builder(350, 23, 25)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 12)
-                .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
+                .addMonsterStat(Attributes.ATTACK_DAMAGE, 1)
+                .setSpell(ModSpells.BLAZE_FIREBALLS.get(), null, null));
         this.addStat(Items.ENDER_PEARL, new ItemStat.Builder(400, 28, 21)
                 .addAttribute(ModAttributes.MAGIC.get(), 3)
                 .addAttribute(ModAttributes.RES_STUN.get(), 5)
@@ -155,7 +156,8 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(Attributes.MAX_HEALTH, 15)
                 .addAttribute(ModAttributes.MAGIC.get(), 2)
                 .addAttribute(ModAttributes.DEFENCE.get(), 3)
-                .addMonsterStat(Attributes.MAX_HEALTH, 2));
+                .addMonsterStat(Attributes.MAX_HEALTH, 2)
+                .setSpell(ModSpells.GHAST_FIREBALL.get(), null, null));
         this.addStat(Items.PHANTOM_MEMBRANE, new ItemStat.Builder(600, 55, 19)
                 .addAttribute(Attributes.MOVEMENT_SPEED, 0.03)
                 .addMonsterStat(Attributes.MAX_HEALTH, 0.0008));
@@ -168,6 +170,16 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(ModAttributes.DEFENCE.get(), 0.4)
                 .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 0.4)
                 .setSpell(ModSpells.EVOKER_FANG.get(), null, null));
+        this.addStat(Items.DRAGON_BREATH, new ItemStat.Builder(2000, 150, 24)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 4)
+                .addAttribute(ModAttributes.MAGIC.get(), 15)
+                .addMonsterStat(ModAttributes.MAGIC.get(), 0.8)
+                .setSpell(ModSpells.DRAGON_FIREBALL.get(), null, null));
+        this.addStat(Items.SHULKER_SHELL, new ItemStat.Builder(700, 80, 29)
+                .addAttribute(ModAttributes.DEFENCE.get(), 17)
+                .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 12)
+                .addMonsterStat(ModAttributes.DEFENCE.get(), 1)
+                .setSpell(ModSpells.SHULKER_BULLET.get(), null, null));
         this.addStat(Items.WITHER_SKELETON_SKULL, new ItemStat.Builder(5000, 170, 29)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 5)
                 .addAttribute(ModAttributes.MAGIC.get(), 20)

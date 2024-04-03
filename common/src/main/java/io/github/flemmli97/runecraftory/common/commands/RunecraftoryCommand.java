@@ -8,9 +8,11 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeather;
+import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.attachment.player.LevelExpPair;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.network.S2CCapSync;
 import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
@@ -23,6 +25,8 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.Collection;
 import java.util.Set;
@@ -52,6 +56,15 @@ public class RunecraftoryCommand {
                         .then(Commands.argument("player", EntityArgument.players())
                                 .then(Commands.literal("all").executes(RunecraftoryCommand::resetAll))
                                 .then(Commands.literal("recipes").executes(RunecraftoryCommand::resetRecipes)))
+                )
+                .then(Commands.literal("spell").requires(src -> src.hasPermission(2))
+                        .then(Commands.literal("cast")
+                                .then(Commands.argument("spell", SpellArgumentType.spell()).executes(ctx -> RunecraftoryCommand.castSpell(ctx, Set.of(ctx.getSource().getEntityOrException())))
+                                        .then(Commands.argument("for", EntityArgument.entities()).executes(ctx -> RunecraftoryCommand.castSpell(ctx, EntityArgument.getEntities(ctx, "as"))))))
+                        .then(Commands.literal("apply")
+                                .then(Commands.argument("spell", SpellArgumentType.spell())
+                                        .then(Commands.argument("tier", IntegerArgumentType.integer(1, 3)).executes(ctx -> RunecraftoryCommand.applySpellTo(ctx, Set.of(ctx.getSource().getEntityOrException())))
+                                                .then(Commands.argument("for", EntityArgument.entities()).executes(ctx -> RunecraftoryCommand.applySpellTo(ctx, EntityArgument.getEntities(ctx, "as")))))))
                 )
         );
     }
@@ -237,5 +250,39 @@ public class RunecraftoryCommand {
         }
         ctx.getSource().sendSuccess(new TranslatableComponent("runecraftory.command.recalc.stats", i), false);
         return i;
+    }
+
+    private static int castSpell(CommandContext<CommandSourceStack> ctx, Collection<? extends Entity> entities) {
+        int success = 0;
+        Spell spell = SpellArgumentType.getSpell(ctx, "spell");
+        for (Entity entity : entities) {
+            if (entity instanceof LivingEntity living) {
+                spell.use(living);
+                success++;
+            }
+        }
+        return success;
+    }
+
+    private static int applySpellTo(CommandContext<CommandSourceStack> ctx, Collection<? extends Entity> entities) {
+        int success = 0;
+        Spell spell = SpellArgumentType.getSpell(ctx, "spell");
+        int tier = IntegerArgumentType.getInteger(ctx, "tier");
+        for (Entity entity : entities) {
+            if (entity instanceof LivingEntity living) {
+                ItemStack stack = living.getMainHandItem();
+                if (stack.getItem() instanceof ItemStaffBase) {
+                    Platform.INSTANCE.getStaffData(stack).ifPresent(data -> {
+                        switch (tier) {
+                            case 3 -> data.setTier3Spell(spell);
+                            case 2 -> data.setTier2Spell(spell);
+                            default -> data.setTier1Spell(spell);
+                        }
+                    });
+                    success++;
+                }
+            }
+        }
+        return success;
     }
 }

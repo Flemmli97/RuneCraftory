@@ -382,6 +382,7 @@ public class ClientRegister {
         consumer.register(ModEntities.ROOT_SPIKE_SUMMONER.get(), EmptyRender::new);
         consumer.register(ModEntities.RAFFLESIA_BREATH_SUMMONER.get(), EmptyRender::new);
         consumer.register(ModEntities.RAFFLESIA_CIRCLE_SUMMONER.get(), EmptyRender::new);
+        consumer.register(ModEntities.BLAZE_BARRAGE.get(), EmptyRender::new);
 
         consumer.register(ModEntities.FISHING_HOOK.get(), CustomFishingHookRenderer::new);
 
