@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
+import net.minecraft.util.ExtraCodecs;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,7 +27,7 @@ public class SpellProperties {
                     Codec.BOOL.fieldOf("percentage").forGetter(d -> d.percentage),
                     CodecHelper.enumCodec(EnumSkills.class, null).listOf().optionalFieldOf("skills").forGetter(d -> d.skills.isEmpty() ? Optional.empty() : Optional.of(List.copyOf(d.skills))),
 
-                    Codec.INT.fieldOf("cooldown").forGetter(d -> d.cooldown),
+                    ExtraCodecs.NON_NEGATIVE_INT.fieldOf("cooldown").forGetter(d -> d.cooldown),
                     Codec.INT.fieldOf("rpCost").forGetter(d -> d.rpCost),
                     Codec.unboundedMap(CodecHelper.enumCodec(EnumSkills.class, null), Codec.FLOAT).fieldOf("skillXP").forGetter(d -> d.skillXP)
             ).apply(instance, (percentage, skills, cooldown, rpCost, skillXp) -> new SpellProperties(skillXp, cooldown, rpCost, percentage, skills.orElse(List.of()))));

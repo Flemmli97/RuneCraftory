@@ -105,11 +105,23 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable, Ext
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
-        if (this.chargeAmount(player.getItemInHand(hand)) > 0) {
-            player.startUsingItem(hand);
-            return InteractionResultHolder.consume(player.getItemInHand(hand));
+        ItemStack stack = player.getItemInHand(hand);
+        if (hand == InteractionHand.OFF_HAND)
+            return InteractionResultHolder.fail(stack);
+        if (this.chargeAmount(stack) > 0) {
+            if (!world.isClientSide) {
+                if (this.getChargeTime(stack) <= 0) {
+                    int level = Math.min(3, this.chargeAmount(stack));
+                    Spell spell = this.getSpell(stack, level);
+                    if (spell != null && player instanceof ServerPlayer serverPlayer) {
+                        Platform.INSTANCE.getPlayerData(serverPlayer).ifPresent(data -> data.getWeaponHandler().doWeaponAttack(serverPlayer, ModAttackActions.STAFF_USE.get(), stack, spell, false));
+                    }
+                } else
+                    player.startUsingItem(hand);
+            }
+            return InteractionResultHolder.consume(stack);
         }
-        return InteractionResultHolder.pass(player.getItemInHand(hand));
+        return InteractionResultHolder.pass(stack);
     }
 
     @Override

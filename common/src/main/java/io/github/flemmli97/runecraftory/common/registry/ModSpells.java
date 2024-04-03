@@ -110,7 +110,7 @@ public class ModSpells {
     public static final RegistryEntrySupplier<Spell> TRIPLE_ARROW = registerSpell("triple_arrow", TripleArrowSpell::new, new SpellProperties.Builder(10, 8));
     public static final RegistryEntrySupplier<Spell> WITHER_SKULL = registerSpell("vanilla_wither_skull", WitherSkullSpell::new, new SpellProperties.Builder(10, 3));
     public static final RegistryEntrySupplier<Spell> EVOKER_FANG = registerSpell("vanilla_evoker_fang", EvokerFangSpell::new, new SpellProperties.Builder(10, 2));
-    public static final RegistryEntrySupplier<Spell> SNOWBALL = registerSpell("vanilla_snowball", SnowballSpell::new, new SpellProperties.Builder(1, 0));
+    public static final RegistryEntrySupplier<Spell> SNOWBALL = registerSpell("vanilla_snowball", SnowballSpell::new, new SpellProperties.Builder(0, 0));
 
     public static final RegistryEntrySupplier<Spell> FIREBALL = registerSpell("fireball", () -> new FireballSpell(false), new SpellProperties.Builder(20, 3).withXPGain(EnumSkills.FIRE, 2).affectedSkill(EnumSkills.FIRE));
     public static final RegistryEntrySupplier<Spell> BIG_FIREBALL = registerSpell("big_fireball", () -> new FireballSpell(true), new SpellProperties.Builder(20, 7).withXPGain(EnumSkills.FIRE, 4).affectedSkill(EnumSkills.FIRE));
