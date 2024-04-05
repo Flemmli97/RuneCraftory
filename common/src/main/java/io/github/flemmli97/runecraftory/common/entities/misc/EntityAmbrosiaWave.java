@@ -29,8 +29,6 @@ import java.util.Set;
 
 public class EntityAmbrosiaWave extends BaseDamageCloud {
 
-    public static final float CIRCLE_INC = 0.2f;
-    public static final int TIME_TILL_FULL = 25;
     private static final EntityDataAccessor<Integer> MAX_TICK = SynchedEntityData.defineId(EntityAmbrosiaWave.class, EntityDataSerializers.INT);
     private static final List<Vector3f> CIRCLE_PARTICLE_MOTION = RayTraceUtils.rotatedVecs(new Vec3(0.25, 0, 0), new Vec3(0, 1, 0), -180, 175, 5);
 
@@ -49,7 +47,7 @@ public class EntityAmbrosiaWave extends BaseDamageCloud {
 
     @Override
     public float radiusIncrease() {
-        return CIRCLE_INC;
+        return 0.5f;
     }
 
     @Override
@@ -77,7 +75,7 @@ public class EntityAmbrosiaWave extends BaseDamageCloud {
     public void tick() {
         super.tick();
         if (this.level.isClientSide) {
-            if (this.livingTicks < this.entityData.get(MAX_TICK) && this.livingTicks % 5 == 1) {
+            if (this.livingTicks < (this.entityData.get(MAX_TICK) - 8) && this.livingTicks % 5 == 1) {
                 for (Vector3f vec : CIRCLE_PARTICLE_MOTION) {
                     this.level.addParticle(new ColoredParticleData(ModParticles.STATIC_LIGHT.get(), 200 / 255F, 133 / 255F, 36 / 255F, 1, 0.4f), this.getX(), this.getY() + 0.2, this.getZ(), vec.x(), vec.y(), vec.z());
                 }
@@ -104,7 +102,7 @@ public class EntityAmbrosiaWave extends BaseDamageCloud {
     @Override
     protected AABB damageBoundingBox() {
         float radius = this.getRadius();
-        return this.getBoundingBox().inflate(radius, 0.5, radius);
+        return this.getBoundingBox().inflate(radius, 0.75, radius);
     }
 
     @Override
