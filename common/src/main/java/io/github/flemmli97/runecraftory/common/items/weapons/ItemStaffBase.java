@@ -16,6 +16,7 @@ import io.github.flemmli97.runecraftory.platform.ExtendedItem;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.item.IExtendedWeapon;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -93,9 +94,11 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable, Ext
 
     @Override
     public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int remainingUseDuration) {
-        int duration = stack.getUseDuration() - remainingUseDuration;
-        if (duration > 0 && duration / this.getChargeTime(stack) <= this.chargeAmount(stack) && duration % this.getChargeTime(stack) == 0)
-            livingEntity.playSound(SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
+        if (livingEntity instanceof ServerPlayer player) {
+            int duration = stack.getUseDuration() - remainingUseDuration;
+            if (duration > 0 && duration / this.getChargeTime(stack) <= this.chargeAmount(stack) && duration % this.getChargeTime(stack) == 0)
+                player.connection.send(new ClientboundSoundPacket(SoundEvents.NOTE_BLOCK_XYLOPHONE, player.getSoundSource(), player.getX(), player.getY(), player.getZ(), 1, 1));
+        }
     }
 
     @Override
@@ -137,8 +140,8 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable, Ext
     @Override
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
         if (!world.isClientSide) {
-            int useTime = (this.getUseDuration(stack) - timeLeft) / this.getChargeTime(stack);
-            int level = Math.min(useTime, this.chargeAmount(stack));
+            int tier = (this.getUseDuration(stack) - timeLeft - 1) / this.getChargeTime(stack);
+            int level = Math.min(tier, this.chargeAmount(stack));
             Spell spell = this.getSpell(stack, level);
             if (spell != null) {
                 if (entity instanceof ServerPlayer player) {

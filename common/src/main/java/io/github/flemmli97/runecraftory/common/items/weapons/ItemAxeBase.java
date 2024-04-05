@@ -22,6 +22,7 @@ import io.github.flemmli97.tenshilib.api.item.IAOEWeapon;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -124,9 +125,11 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IA
 
     @Override
     public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int remainingUseDuration) {
-        int duration = stack.getUseDuration() - remainingUseDuration;
-        if (duration == this.getChargeTime(stack))
-            livingEntity.playSound(SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
+        if (livingEntity instanceof ServerPlayer player) {
+            int duration = stack.getUseDuration() - remainingUseDuration;
+            if (duration == this.getChargeTime(stack))
+                player.connection.send(new ClientboundSoundPacket(SoundEvents.NOTE_BLOCK_XYLOPHONE, player.getSoundSource(), player.getX(), player.getY(), player.getZ(), 1, 1));
+        }
     }
 
     @Override
@@ -160,7 +163,7 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IA
 
     @Override
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
-        if (!world.isClientSide && this.getUseDuration(stack) - timeLeft >= this.getChargeTime(stack)) {
+        if (!world.isClientSide && stack.getUseDuration() - timeLeft - 1 >= this.getChargeTime(stack)) {
             if (entity instanceof ServerPlayer player) {
                 Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.getWeaponHandler().doWeaponAttack(player, ModAttackActions.HAMMER_AXE_USE.get(), stack));
                 return;

@@ -16,6 +16,7 @@ import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -89,9 +90,11 @@ public class ItemToolHoe extends HoeItem implements IItemUsable, IChargeable {
 
     @Override
     public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int remainingUseDuration) {
-        int duration = stack.getUseDuration() - remainingUseDuration;
-        if (duration != 0 && duration / this.getChargeTime(stack) <= this.chargeAmount(stack) && duration % this.getChargeTime(stack) == 0)
-            livingEntity.playSound(SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
+        if (livingEntity instanceof ServerPlayer player) {
+            int duration = stack.getUseDuration() - remainingUseDuration;
+            if (duration > 0 && duration / this.getChargeTime(stack) <= this.chargeAmount(stack) && duration % this.getChargeTime(stack) == 0)
+                player.connection.send(new ClientboundSoundPacket(SoundEvents.NOTE_BLOCK_XYLOPHONE, player.getSoundSource(), player.getX(), player.getY(), player.getZ(), 1, 1));
+        }
     }
 
     @Override
@@ -117,7 +120,7 @@ public class ItemToolHoe extends HoeItem implements IItemUsable, IChargeable {
     @Override
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
         if (this.tier.getTierLevel() != 0 && entity instanceof ServerPlayer player) {
-            int useTime = (this.getUseDuration(stack) - timeLeft) / this.getChargeTime(stack);
+            int useTime = (stack.getUseDuration() - timeLeft - 1) / this.getChargeTime(stack);
             int range = Math.min(useTime, this.tier.getTierLevel());
             BlockHitResult result = getPlayerPOVHitResult(world, player, ClipContext.Fluid.NONE);
             if (range == 0) {

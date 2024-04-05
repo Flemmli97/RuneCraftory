@@ -19,6 +19,7 @@ import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.item.IAOEWeapon;
 import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
+import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
@@ -107,9 +108,11 @@ public class ItemLongSwordBase extends SwordItem implements IItemUsable, ICharge
 
     @Override
     public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int remainingUseDuration) {
-        int duration = stack.getUseDuration() - remainingUseDuration;
-        if (duration == this.getChargeTime(stack))
-            livingEntity.playSound(SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
+        if (livingEntity instanceof ServerPlayer player) {
+            int duration = stack.getUseDuration() - remainingUseDuration;
+            if (duration == this.getChargeTime(stack))
+                player.connection.send(new ClientboundSoundPacket(SoundEvents.NOTE_BLOCK_XYLOPHONE, player.getSoundSource(), player.getX(), player.getY(), player.getZ(), 1, 1));
+        }
     }
 
     @Override
@@ -138,7 +141,7 @@ public class ItemLongSwordBase extends SwordItem implements IItemUsable, ICharge
 
     @Override
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
-        if (!world.isClientSide && this.getUseDuration(stack) - timeLeft >= this.getChargeTime(stack)) {
+        if (!world.isClientSide && stack.getUseDuration() - timeLeft - 1 >= this.getChargeTime(stack)) {
             if (entity instanceof ServerPlayer player) {
                 Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.getWeaponHandler().doWeaponAttack(player, ModAttackActions.LONGSWORD_USE.get(), stack));
                 return;

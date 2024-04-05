@@ -10,6 +10,7 @@ import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityCustomFishingHook;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -72,9 +73,11 @@ public class ItemToolFishingRod extends FishingRodItem implements IItemUsable, I
 
     @Override
     public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int remainingUseDuration) {
-        int duration = stack.getUseDuration() - remainingUseDuration;
-        if (duration != 0 && duration / this.getChargeTime(stack) < this.chargeAmount(stack) && duration % this.getChargeTime(stack) == 0)
-            livingEntity.playSound(SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
+        if (livingEntity instanceof ServerPlayer player) {
+            int duration = stack.getUseDuration() - remainingUseDuration;
+            if (duration > 0 && duration / this.getChargeTime(stack) <= this.chargeAmount(stack) && duration % this.getChargeTime(stack) == 0)
+                player.connection.send(new ClientboundSoundPacket(SoundEvents.NOTE_BLOCK_XYLOPHONE, player.getSoundSource(), player.getX(), player.getY(), player.getZ(), 1, 1));
+        }
     }
 
     @Override
@@ -101,7 +104,7 @@ public class ItemToolFishingRod extends FishingRodItem implements IItemUsable, I
     @Override
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
         if (this.tier.getTierLevel() != 0) {
-            int useTime = (this.getUseDuration(stack) - timeLeft) / this.getChargeTime(stack);
+            int useTime = (stack.getUseDuration() - timeLeft - 1) / this.getChargeTime(stack);
             int charge = Math.min(useTime, this.tier.getTierLevel());
             this.throwRod(world, entity, stack, charge);
             entity.swing(entity.getUsedItemHand());
