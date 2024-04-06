@@ -197,6 +197,7 @@ public class FarmlandData {
         //Update the blockstate according to the growth age
         BlockState newState = crop.getGrowableStateForAge(state, Math.min(stage, maxAge));
         level.getServer().tell(new TickTask(1, () -> level.setBlock(pos, newState, Block.UPDATE_ALL)));
+        this.cropProgress = this.growthPercent(level, state);
         FarmlandHandler.get(level.getServer()).scheduleUpdate(level, this);
     }
 
@@ -274,11 +275,11 @@ public class FarmlandData {
     }
 
     public void tick(ServerLevel level, boolean onLoad) {
-        this.lastUpdateDay = WorldUtils.day(level);
         if (!this.isLoaded && !GeneralConfig.tickUnloadedFarmland)
             return;
         //If its not a farm block can do stuff without it being loaded
         if (!this.isFarmBlock) {
+            this.lastUpdateDay = WorldUtils.day(level);
             this.handleNotFarmblock(level);
             return;
         }
@@ -288,6 +289,7 @@ public class FarmlandData {
             this.scheduledData.add(ext);
             return;
         }
+        this.lastUpdateDay = WorldUtils.day(level);
         BlockState farm = level.getBlockState(this.pos);
         this.isFarmBlock = FarmlandHandler.isFarmBlock(farm);
         boolean isWet = this.isFarmBlock && farm.getValue(FarmBlock.MOISTURE) > 0;
@@ -355,7 +357,7 @@ public class FarmlandData {
                     if (crop.canGrow(level, cropPos, cropState)) {
                         run.add(() -> {
                             int maxAge = crop.getGrowableMaxAge();
-                            int stage = Math.round(this.cropAge * maxAge) / props.growth();
+                            int stage = Mth.floor(this.cropAge * maxAge) / props.growth();
                             //Update the blockstate according to the growth age
                             BlockState newState = crop.getGrowableStateForAge(cropState, Math.min(stage, maxAge));
                             if (newState.getBlock() instanceof Growable newGrowable)
@@ -366,6 +368,15 @@ public class FarmlandData {
                         });
                     } else {
                         run.add(() -> CropUtils.attemptGiantize(level, cropPos, crop, cropState, this.cropSize, props));
+                    }
+                }
+                if (!isWet) {
+                    if (level.random.nextFloat() < GeneralConfig.witherChance) {
+                        wiltStage++;
+                        // If crop cannot wilt we simply stop once we reach >= 2 (normally wilted)
+                        // E.g. in case of vanilla crops etc.
+                        if (!cropState.hasProperty(BlockCrop.WILTED) && wiltStage > 1)
+                            break;
                     }
                 }
                 float season = props.seasonMultiplier(modifiers.season);
@@ -389,16 +400,13 @@ public class FarmlandData {
             if (!ignoreWater && canRainAt)
                 isWet = this.scheduledWatering > 0;
             this.scheduledWatering = Math.max(0, --this.scheduledWatering);
-            if (!isWet && cropState.getBlock() instanceof BlockCrop) {
-                if (level.random.nextFloat() < GeneralConfig.witherChance) {
-                    wiltStage++;
-                }
-            }
-
             if (didCropGrow) {
-                this.modifyHealth(null, -1);
-                this.applyGrowthFertilizer(null, this.growth > 1 ? -0.1f : -0.05f);
-                this.modifyQuality(null, -0.05f);
+                if (level.random.nextInt(3) != 0)
+                    this.modifyHealth(null, -1);
+                if (level.random.nextBoolean())
+                    this.applyGrowthFertilizer(null, this.growth > 1 ? -0.1f : -0.05f);
+                if (level.random.nextBoolean())
+                    this.modifyQuality(null, -0.05f);
             } else {
                 this.normalizeLand();
             }
@@ -407,7 +415,7 @@ public class FarmlandData {
         }
         this.resetScheduledData();
 
-        //Finalize the tick run
+        // Finalize the tick run
         run.forEach(Runnable::run);
         if (wiltStage > 0 && cropState.getBlock() instanceof BlockCrop blockCrop) {
             blockCrop.onWither(wiltStage, level, cropState, cropPos);
@@ -499,8 +507,7 @@ public class FarmlandData {
         nbt.putInt("LastWeatherDay", this.lastWeatherDay);
 
         nbt.putInt("ScheduledStormTicks", this.scheduledStormTicks);
-        nbt.putInt("LastUpdate", this.scheduledWatering);
-        nbt.putInt("ScheduledWaterAmount", this.lastUpdateDay);
+        nbt.putInt("ScheduledWaterAmount", this.scheduledWatering);
         ListTag scheduledDataTag = new ListTag();
         this.scheduledData.forEach(mod -> {
             CompoundTag lT = new CompoundTag();
