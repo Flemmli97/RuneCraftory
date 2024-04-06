@@ -1,3 +1,20 @@
+RuneCraftory 1.9.4
+================
+- Tweak some skill xp gain for some skills
+- Improve raccoon boss ai
+- Staffs can insta cast if spell cooldown is 0 (only for snowballs atm)
+- Added more vanilla spells e.g. shulker bullets
+- Prevent item right clicking if player has a running animation
+- Increase damage bounding box for wave attack
+- If crops cannot wilt they will stop growing if they would've wilted otherwise.
+  - Applies to e.g. vanilla crops
+  - Prevents simply planting vanilla crops and leaving them alone
+- Fix first person animation if left handed
+- Fix notification sound for right click items not in sync
+- Fix farmland data saving wrong things
+- Fix farmland not updating growth on load
+- Fix farmland progress not updating on harvest
+
 RuneCraftory 1.9.3
 ================
 - Fix bgm not respecting sound category volume
