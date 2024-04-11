@@ -1490,13 +1490,13 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     @Override
     public void setSleepingPos(BlockPos pos) {
         super.setSleepingPos(pos);
-        this.onSleeping(true);
+        this.setSleeping(true);
     }
 
     @Override
     public void clearSleepingPos() {
         super.clearSleepingPos();
-        this.onSleeping(false);
+        this.setSleeping(false);
     }
 
     @Override

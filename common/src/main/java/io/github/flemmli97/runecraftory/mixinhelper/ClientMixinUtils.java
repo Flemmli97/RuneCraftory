@@ -26,7 +26,6 @@ import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.FastColor;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
@@ -97,13 +96,10 @@ public class ClientMixinUtils {
                 Math.min(255, FastColor.ARGB32.blue(packedColourOne) + FastColor.ARGB32.blue(packedColorTwo)));
     }
 
-    public static void translateSleepingEntity(LivingEntity entity, PoseStack poseStack, float partialTicks) {
+    public static void translateSleepingEntity(LivingEntity entity, PoseStack poseStack) {
         if (EntityData.getSleepState(entity) == EntityData.SleepState.VANILLA) {
-            float standOffset = entity.getEyeHeight(Pose.STANDING) - 0.1f;
-            float f = Mth.rotLerp(partialTicks, entity.yBodyRotO, entity.yBodyRot);
-            float xDir = -Mth.cos(-f * ((float) Math.PI / 180) - (float) Math.PI);
-            float zDir = -Mth.sin(-f * ((float) Math.PI / 180) - (float) Math.PI);
-            poseStack.translate(xDir * standOffset, 0.0, zDir * standOffset);
+            float standOffset = entity.getEyeHeight(Pose.STANDING) * 0.6f;
+            poseStack.translate(0, -standOffset, 0);
         }
     }
 

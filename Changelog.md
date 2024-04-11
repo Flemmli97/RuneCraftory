@@ -1,3 +1,10 @@
+RuneCraftory 1.9.5
+================
+- Improve sleep effect:
+  - Set noAI for affected mobs which should better prevent ai from running
+  - Fix sleep offset for mobs that dont rotate when sleeping
+  - Fix sleep offset model translation
+  
 RuneCraftory 1.9.4
 ================
 - Tweak some skill xp gain for some skills

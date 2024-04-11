@@ -40,7 +40,6 @@ import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import io.github.flemmli97.runecraftory.common.world.family.FamilyHandler;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.integration.simplequest.SimpleQuestIntegration;
-import io.github.flemmli97.runecraftory.mixinhelper.DisableTicking;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
@@ -381,8 +380,6 @@ public class EntityCalls {
         }
         if (entity instanceof Mob mob) {
             boolean disabled = EntityUtils.isDisabled(mob);
-            ((DisableTicking) mob.getBrain()).disable(disabled);
-            ((DisableTicking) mob.goalSelector).disable(disabled);
             if (disabled && !mob.getNavigation().isDone())
                 mob.getNavigation().stop();
         }

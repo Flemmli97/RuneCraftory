@@ -266,10 +266,10 @@ public class ClientCalls {
         Platform.INSTANCE.getEntityData(entity).ifPresent(data -> {
             int mod = entity.tickCount % 20;
             if (mod == 0 && data.isSleeping()) {
-                entity.level.addParticle(ModParticles.SLEEP.get(), entity.getX(), entity.getY() + entity.getBbHeight() + 0.1, entity.getZ(), 0, 0, 0);
+                entity.level.addParticle(ModParticles.SLEEP.get(), entity.getX(), entity.getY() + entity.getBbHeight() + 0.5, entity.getZ(), 0, 0, 0);
 
             }
-            if (mod == 3 && data.isPoisoned()) {
+            if (mod == 5 && data.isPoisoned()) {
                 entity.level.addParticle(ModParticles.POISON.get(), entity.getX(), entity.getY() + entity.getBbHeight() + 0.1, entity.getZ(), 0, 0, 0);
             }
             if (data.isParalysed()) {

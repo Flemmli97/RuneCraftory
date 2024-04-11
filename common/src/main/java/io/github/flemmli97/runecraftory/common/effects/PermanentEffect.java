@@ -25,7 +25,16 @@ public class PermanentEffect extends MobEffect implements ExtendedEffect {
     }
 
     private static void sendPacket(LivingEntity entity, S2CEntityDataSync.Type type, boolean flag) {
-        Platform.INSTANCE.sendToTrackingAndSelf(new S2CEntityDataSync(entity.getId(), type, flag), entity);
+        Platform.INSTANCE.getEntityData(entity).ifPresent(data -> {
+            switch (type) {
+                case POISON -> data.setPoison(entity, flag);
+                case SLEEP -> data.setSleeping(entity, flag);
+                case PARALYSIS -> data.setParalysis(entity, flag);
+                case COLD -> data.setCold(entity, flag);
+                case INVIS -> data.setInvis(entity, flag);
+                case ORTHOVIEW -> data.setOrthoView(entity, flag);
+            }
+        });
     }
 
     public PermanentEffect setTickDelay(int value) {

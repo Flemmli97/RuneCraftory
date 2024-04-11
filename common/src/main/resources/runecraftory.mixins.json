@@ -27,6 +27,7 @@
     "LevelMixin",
     "LivingEntityMixin",
     "LootContextBuilderMixin",
+    "MobMixin",
     "PlayerMixin",
     "PoiTypeAccessor",
     "PoolsMixin",

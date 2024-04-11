@@ -6,11 +6,12 @@ import io.github.flemmli97.runecraftory.common.entities.misc.EntityCustomFishing
 import io.github.flemmli97.runecraftory.common.network.S2CEntityDataSync;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 
 public class EntityData {
 
-    private boolean sleeping, paralysis, cold, poison, invis, orthoView;
+    private boolean sleeping, noAI, isSilent, paralysis, cold, poison, invis, orthoView;
 
     public EntityCustomFishingHook fishingHook;
 
@@ -28,6 +29,23 @@ public class EntityData {
 
     public void setSleeping(LivingEntity entity, boolean flag) {
         this.sleeping = flag;
+        if (flag) {
+            if (entity instanceof Mob mob) {
+                this.noAI = mob.isNoAi();
+                if (!this.noAI)
+                    mob.setNoAi(true);
+            }
+            this.isSilent = entity.isSilent();
+            if (!this.isSilent)
+                entity.setSilent(true);
+        } else {
+            if (entity instanceof Mob mob && !this.noAI) {
+                mob.setNoAi(false);
+            }
+            if (!this.isSilent) {
+                entity.setSilent(false);
+            }
+        }
         this.setOrthoView(entity, flag);
         if (!entity.level.isClientSide) {
             Platform.INSTANCE.sendToTrackingAndSelf(new S2CEntityDataSync(entity.getId(), S2CEntityDataSync.Type.SLEEP, this.sleeping), entity);
