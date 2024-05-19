@@ -7,7 +7,7 @@ import io.github.flemmli97.runecraftory.api.registry.NPCAction;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCAttackGoal;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCActions;
-import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
+import io.github.flemmli97.runecraftory.common.utils.JsonCodecHelper;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 
 import java.util.Optional;
@@ -16,7 +16,7 @@ import java.util.function.Supplier;
 public class DoNothingAction implements NPCAction {
 
     public static final Codec<DoNothingAction> CODEC = RecordCodecBuilder.create((instance) ->
-            instance.group(CodecHelper.NUMER_PROVIDER_CODEC.fieldOf("duration").forGetter(d -> d.duration),
+            instance.group(JsonCodecHelper.NUMER_PROVIDER_CODEC.fieldOf("duration").forGetter(d -> d.duration),
                     NPCAction.optionalCooldown(d -> d.cooldown)
             ).apply(instance, DoNothingAction::new));
 

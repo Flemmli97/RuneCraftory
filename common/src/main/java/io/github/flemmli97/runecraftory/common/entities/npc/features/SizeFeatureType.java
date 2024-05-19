@@ -8,7 +8,7 @@ import io.github.flemmli97.runecraftory.api.registry.NPCFeatureHolder;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
-import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
+import io.github.flemmli97.runecraftory.common.utils.JsonCodecHelper;
 import net.minecraft.nbt.FloatTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -18,7 +18,7 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 public record SizeFeatureType(NumberProvider size) implements NPCFeatureHolder<SizeFeatureType.SizeFeature> {
 
     public static final Codec<SizeFeatureType> CODEC = RecordCodecBuilder.create(inst ->
-            inst.group(CodecHelper.NUMER_PROVIDER_CODEC.fieldOf("size").forGetter(d -> d.size)).apply(inst, SizeFeatureType::new));
+            inst.group(JsonCodecHelper.NUMER_PROVIDER_CODEC.fieldOf("size").forGetter(d -> d.size)).apply(inst, SizeFeatureType::new));
 
     public static final float MIN = 0.2F;
     public static final float MAX = 10;

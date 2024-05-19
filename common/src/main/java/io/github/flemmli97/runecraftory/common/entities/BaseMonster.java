@@ -46,7 +46,6 @@ import io.github.flemmli97.runecraftory.mixin.CombatTrackerAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.IAnimated;
-import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
 import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -792,11 +791,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     @Override
     public boolean doHurtTarget(Entity entity) {
         return CombatUtils.mobAttack(this, entity);
-    }
-
-    @Override
-    public ItemStack getPickResult() {
-        return SpawnEgg.fromType(this.getType()).map(ItemStack::new).orElse(ItemStack.EMPTY);
     }
 
     @Override

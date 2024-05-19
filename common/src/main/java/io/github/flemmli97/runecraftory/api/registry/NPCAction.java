@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCAttackGoal;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
+import io.github.flemmli97.runecraftory.common.utils.JsonCodecHelper;
 import io.github.flemmli97.tenshilib.platform.registry.CustomRegistryEntry;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -34,7 +34,7 @@ public interface NPCAction {
                 return Optional.empty();
             return Optional.of(provider);
         };
-        return CodecHelper.NUMER_PROVIDER_CODEC.optionalFieldOf("cooldown").forGetter(optGetter);
+        return JsonCodecHelper.NUMER_PROVIDER_CODEC.optionalFieldOf("cooldown").forGetter(optGetter);
     }
 
     static LootContext createLootContext(EntityNPCBase npc) {

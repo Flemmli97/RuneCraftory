@@ -6,7 +6,7 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
-import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
+import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
@@ -73,7 +73,7 @@ public class SkelefangParticleData implements ParticleOptions {
 
     public static Codec<SkelefangParticleData> codec() {
         return RecordCodecBuilder.create((builder) -> builder.group(
-                        CodecHelper.enumCodec(SkelefangBoneType.class, SkelefangBoneType.GENERIC).fieldOf("bone").forGetter(SkelefangParticleData::getBoneType),
+                        CodecUtils.stringEnumCodec(SkelefangBoneType.class, SkelefangBoneType.GENERIC).fieldOf("bone").forGetter(SkelefangParticleData::getBoneType),
                         Codec.FLOAT.fieldOf("initX").forGetter(SkelefangParticleData::getInitialRotX),
                         Codec.FLOAT.fieldOf("initY").forGetter(SkelefangParticleData::getInitialRotY),
                         Codec.FLOAT.fieldOf("rotX").forGetter(SkelefangParticleData::getPitchSpin),

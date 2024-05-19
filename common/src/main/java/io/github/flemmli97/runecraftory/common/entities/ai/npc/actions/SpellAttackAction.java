@@ -9,7 +9,8 @@ import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCAttackGoal;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCActions;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
-import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
+import io.github.flemmli97.runecraftory.common.utils.JsonCodecHelper;
+import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 
 import java.util.function.Supplier;
@@ -17,10 +18,10 @@ import java.util.function.Supplier;
 public class SpellAttackAction implements NPCAction {
 
     public static final Codec<SpellAttackAction> CODEC = RecordCodecBuilder.create((instance) ->
-            instance.group(CodecHelper.NUMER_PROVIDER_CODEC.fieldOf("walkTime").forGetter(d -> d.walkTime),
+            instance.group(JsonCodecHelper.NUMER_PROVIDER_CODEC.fieldOf("walkTime").forGetter(d -> d.walkTime),
                     NPCAction.optionalCooldown(d -> d.cooldown),
 
-                    CodecHelper.ofCustomRegistry(ModSpells.SPELL_REGISTRY, ModSpells.SPELL_REGISTRY_KEY).fieldOf("spell").forGetter(d -> d.spell),
+                    CodecUtils.registryCodec(ModSpells.SPELL_REGISTRY_KEY).fieldOf("spell").forGetter(d -> d.spell),
                     Codec.DOUBLE.fieldOf("range").forGetter(d -> d.range),
                     Codec.BOOL.fieldOf("ignoreSeal").forGetter(d -> d.ignoreSeal)
             ).apply(instance, (walkTime, cooldown, spell, range, ignoreSeal) -> new SpellAttackAction(spell, range, ignoreSeal, walkTime, cooldown.orElse(NPCAction.CONST_ZERO))));

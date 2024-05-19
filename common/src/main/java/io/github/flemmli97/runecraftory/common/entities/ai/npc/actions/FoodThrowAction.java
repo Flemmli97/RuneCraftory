@@ -8,7 +8,7 @@ import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCAttackGoal;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityThrownItem;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCActions;
-import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
+import io.github.flemmli97.runecraftory.common.utils.JsonCodecHelper;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
@@ -21,7 +21,7 @@ public class FoodThrowAction implements NPCAction {
 
     public static final Codec<FoodThrowAction> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(ItemStack.CODEC.listOf().fieldOf("items").forGetter(d -> d.items),
-                    CodecHelper.NUMER_PROVIDER_CODEC.fieldOf("walkTime").forGetter(d -> d.walkTime),
+                    JsonCodecHelper.NUMER_PROVIDER_CODEC.fieldOf("walkTime").forGetter(d -> d.walkTime),
                     NPCAction.optionalCooldown(d -> d.cooldown)
             ).apply(instance, FoodThrowAction::new));
 

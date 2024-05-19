@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.api.datapack;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
+import io.github.flemmli97.runecraftory.common.utils.JsonCodecHelper;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
@@ -23,8 +23,8 @@ public record GateSpawnData(ResourceLocation entity, int minDistanceFromSpawn,
     public static final Codec<GateSpawnData> CODEC = RecordCodecBuilder.create((instance) -> instance.group(
             Codec.unboundedMap(TagKey.codec(Registry.BIOME_REGISTRY), ExtraCodecs.POSITIVE_INT).fieldOf("biomes").forGetter(GateSpawnData::biomes),
             Codec.unboundedMap(ResourceLocation.CODEC, ExtraCodecs.POSITIVE_INT).fieldOf("structures").forGetter(GateSpawnData::structures),
-            CodecHelper.ENTITY_PREDICATE_CODEC.optionalFieldOf("gatePredicate").forGetter(d -> Optional.ofNullable(d.gatePredicate == EntityPredicate.ANY ? null : d.gatePredicate)),
-            CodecHelper.ENTITY_PREDICATE_CODEC.optionalFieldOf("playerPredicate").forGetter(d -> Optional.ofNullable(d.playerPredicate == EntityPredicate.ANY ? null : d.playerPredicate)),
+            JsonCodecHelper.ENTITY_PREDICATE_CODEC.optionalFieldOf("gatePredicate").forGetter(d -> Optional.ofNullable(d.gatePredicate == EntityPredicate.ANY ? null : d.gatePredicate)),
+            JsonCodecHelper.ENTITY_PREDICATE_CODEC.optionalFieldOf("playerPredicate").forGetter(d -> Optional.ofNullable(d.playerPredicate == EntityPredicate.ANY ? null : d.playerPredicate)),
 
             ResourceLocation.CODEC.fieldOf("entity").forGetter(GateSpawnData::entity),
             ExtraCodecs.NON_NEGATIVE_INT.fieldOf("minDistanceFromSpawn").orElse(0).forGetter(GateSpawnData::minDistanceFromSpawn),

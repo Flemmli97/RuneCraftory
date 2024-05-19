@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.api.datapack;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
-import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
+import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
@@ -29,8 +29,8 @@ public class CropProperties {
                     Codec.BOOL.fieldOf("regrowable").forGetter(d -> d.regrowable),
 
                     Registry.BLOCK.byNameCodec().optionalFieldOf("giantCrop").forGetter(d -> d.giantVersion == Blocks.AIR ? Optional.empty() : Optional.of(d.giantVersion)),
-                    Codec.list(CodecHelper.enumCodec(EnumSeason.class, EnumSeason.SPRING)).fieldOf("bestSeason").forGetter(d -> List.copyOf(d.bestSeason)),
-                    Codec.list(CodecHelper.enumCodec(EnumSeason.class, EnumSeason.SPRING)).fieldOf("badSeason").forGetter(d -> List.copyOf(d.badSeason))
+                    Codec.list(CodecUtils.stringEnumCodec(EnumSeason.class, EnumSeason.SPRING)).fieldOf("bestSeason").forGetter(d -> List.copyOf(d.bestSeason)),
+                    Codec.list(CodecUtils.stringEnumCodec(EnumSeason.class, EnumSeason.SPRING)).fieldOf("badSeason").forGetter(d -> List.copyOf(d.badSeason))
             ).apply(instance, (growth, drops, regrowable, giant, best, bad) -> new CropProperties(growth, drops, regrowable, giant.orElse(Blocks.AIR), best, bad)));
 
     public static final CropProperties DEFAULT_PROP = new CropProperties();

@@ -62,7 +62,7 @@ public class ChimeraAttackGoal<T extends EntityChimera> extends AnimatedMonsterA
                     this.attacker.lockYaw(this.attacker.getYRot());
                 }
                 case "tail_beam", "water_tail_bubble", "water_tail_beam",
-                        "breath_attack", "bubble_beam" -> {
+                     "breath_attack", "bubble_beam" -> {
                     this.attacker.lookAt(this.target, 360, 10);
                     this.attacker.lockYaw(this.attacker.getYRot());
                     this.attacker.setAiTarget(from -> EntityUtil.getStraightProjectileTarget(from, this.target));

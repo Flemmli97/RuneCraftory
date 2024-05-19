@@ -21,8 +21,8 @@ import io.github.flemmli97.runecraftory.common.entities.npc.NPCSchedule;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
-import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
+import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
@@ -108,7 +108,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
 
                     Codec.STRING.optionalFieldOf("name").forGetter(d -> Optional.ofNullable(d.name)),
                     Codec.STRING.optionalFieldOf("surname").forGetter(d -> Optional.ofNullable(d.surname)),
-                    CodecHelper.enumCodec(Gender.class, Gender.UNDEFINED).fieldOf("gender").forGetter(d -> d.gender),
+                    CodecUtils.stringEnumCodec(Gender.class, Gender.UNDEFINED).fieldOf("gender").forGetter(d -> d.gender),
                     ModNPCJobs.CODEC.listOf().optionalFieldOf("profession").forGetter(d -> d.profession.isEmpty() ? Optional.empty() : Optional.of(d.profession))
             ).apply(inst, (interactions, questHandler, schedule, combat, relation, neutralGift, giftItems, look, birthday, weight, unique, name, surname, gender, profession) ->
                     new NPCData(name.orElse(null), surname.orElse(null), gender, profession.orElse(List.of()), look.orElse(null), birthday.orElse(null),
@@ -158,7 +158,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
 
         public static final Codec<RelationStruct> CODEC = RecordCodecBuilder.create(inst ->
                 inst.group(
-                        CodecHelper.enumCodec(RelationShipState.class, RelationShipState.DEFAULT).fieldOf("relationShipState").forGetter(d -> d.relationShipState),
+                        CodecUtils.stringEnumCodec(RelationShipState.class, RelationShipState.DEFAULT).fieldOf("relationShipState").forGetter(d -> d.relationShipState),
                         ResourceLocation.CODEC.listOf().optionalFieldOf("possibleChildren").forGetter(d -> d.possibleChildren.isEmpty() ? Optional.empty() : Optional.of(d.possibleChildren))
                 ).apply(inst, (state, childs) -> new RelationStruct(state, childs.orElse(List.of()))));
 
@@ -514,7 +514,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         public static final Codec<ConversationActionHolder> CODEC = RecordCodecBuilder.create(inst ->
                 inst.group(
                         Codec.STRING.fieldOf("translationKey").forGetter(d -> d.translationKey),
-                        CodecHelper.enumCodec(ConversationAction.class, null).fieldOf("actions").forGetter(d -> d.action),
+                        CodecUtils.stringEnumCodec(ConversationAction.class, null).fieldOf("actions").forGetter(d -> d.action),
                         Codec.STRING.fieldOf("value").forGetter(d -> d.actionValue),
                         Codec.INT.optionalFieldOf("friendXP").forGetter(d -> d.friendXP != 0 ? Optional.of(d.friendXP) : Optional.empty())
                 ).apply(inst, (key, action, value, xp) -> new ConversationActionHolder(key, action, value, xp.orElse(0))));
@@ -569,7 +569,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
 
                         ResourceLocation.CODEC.optionalFieldOf("texture").forGetter(d -> Optional.ofNullable(d.texture)),
                         Codec.STRING.optionalFieldOf("player_skin").forGetter(d -> Optional.ofNullable(d.playerSkin)),
-                        CodecHelper.enumCodec(Gender.class, Gender.UNDEFINED).fieldOf("gender").forGetter(d -> d.gender)
+                        CodecUtils.stringEnumCodec(Gender.class, Gender.UNDEFINED).fieldOf("gender").forGetter(d -> d.gender)
                 ).apply(inst, (weight, features, text, skin, gender) -> {
                     if (text.isEmpty() && skin.isEmpty())
                         throw new IllegalArgumentException("Both texture or skin cant be null");

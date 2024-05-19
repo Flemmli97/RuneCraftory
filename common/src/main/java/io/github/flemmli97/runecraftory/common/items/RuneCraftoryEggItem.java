@@ -17,6 +17,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -32,8 +33,8 @@ public class RuneCraftoryEggItem extends SpawnEgg {
 
     public static final String EGG_LEVEL = "SpawnEggLevel";
 
-    public RuneCraftoryEggItem(Supplier<? extends EntityType<?>> type, int primary, int secondary, Properties props) {
-        super(type, primary, secondary, props);
+    public RuneCraftoryEggItem(Supplier<? extends EntityType<? extends Mob>> type, int primary, int secondary, Properties props) {
+        super(new EntityTypeHolder<>(Mob.class, type), primary, secondary, props);
     }
 
     @Override

@@ -26,6 +26,11 @@ public class TreasureChestSpawnegg extends SpawnEgg {
     }
 
     @Override
+    public boolean addToDefaultSpawneggs() {
+        return false;
+    }
+
+    @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
         tooltipComponents.add(new TranslatableComponent("runecraftory.tooltip.item.treasure_chest").withStyle(ChatFormatting.GOLD));
         tooltipComponents.add(new TranslatableComponent("runecraftory.tooltip.item.treasure_level", this.getTier(stack) + 1).withStyle(ChatFormatting.AQUA));

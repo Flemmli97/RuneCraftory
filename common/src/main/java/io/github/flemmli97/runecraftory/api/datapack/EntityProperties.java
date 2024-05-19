@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.api.datapack;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
+import io.github.flemmli97.runecraftory.common.utils.JsonCodecHelper;
 import io.github.flemmli97.tenshilib.common.utils.SearchUtils;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.core.Registry;
@@ -32,7 +32,7 @@ public class EntityProperties {
             instance.group(
                     Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("baseValues").forGetter(d -> d.baseValues),
                     Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("levelGains").forGetter(d -> d.levelGains),
-                    CodecHelper.ENTITY_PREDICATE_CODEC.optionalFieldOf("spawnerPredicate").forGetter(d -> Optional.ofNullable(d.spawnerPredicate == EntityPredicate.ANY ? null : d.spawnerPredicate)),
+                    JsonCodecHelper.ENTITY_PREDICATE_CODEC.optionalFieldOf("spawnerPredicate").forGetter(d -> Optional.ofNullable(d.spawnerPredicate == EntityPredicate.ANY ? null : d.spawnerPredicate)),
 
                     Codec.BOOL.fieldOf("needsRoof").forGetter(d -> d.needsRoof),
                     OnKilledIncrease.CODEC.listOf().optionalFieldOf("levelIncreaseOnKill").forGetter(d -> d.levelIncreaseOnKill.isEmpty() ? Optional.empty() : Optional.of(d.levelIncreaseOnKill)),
@@ -103,7 +103,7 @@ public class EntityProperties {
                 inst.group(
                         Codec.INT.fieldOf("minKilled").forGetter(d -> d.minKilled),
                         Codec.INT.fieldOf("increase").forGetter(d -> d.increase),
-                        CodecHelper.ENTITY_PREDICATE_CODEC.optionalFieldOf("predicate").forGetter(d -> Optional.ofNullable(d.condition == EntityPredicate.ANY ? null : d.condition))
+                        JsonCodecHelper.ENTITY_PREDICATE_CODEC.optionalFieldOf("predicate").forGetter(d -> Optional.ofNullable(d.condition == EntityPredicate.ANY ? null : d.condition))
                 ).apply(inst, (minKilled, increase, predicate) -> new OnKilledIncrease(minKilled, increase, predicate.orElse(EntityPredicate.ANY))));
 
         @Override

@@ -13,9 +13,9 @@ import io.github.flemmli97.runecraftory.common.lib.LibAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModArmorEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
-import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
+import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import io.github.flemmli97.tenshilib.common.utils.MapUtils;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import io.github.flemmli97.tenshilib.platform.registry.SimpleRegistryWrapper;
@@ -48,12 +48,12 @@ public class ItemStat {
 
     public static final Codec<ItemStat> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(
-                    CodecHelper.ofCustomRegistry(ModSpells.SPELL_REGISTRY, ModSpells.SPELL_REGISTRY_KEY).optionalFieldOf("tier3Spell").forGetter(s -> Optional.ofNullable(s.getTier3Spell())),
-                    CodecHelper.ofCustomRegistry(ModArmorEffects.ARMOR_EFFECT_REGISTRY, ModArmorEffects.ARMOR_EFFECT_KEY).optionalFieldOf("armorEffect").forGetter(s -> Optional.ofNullable(s.getArmorEffect())),
+                    CodecUtils.registryCodec(ModSpells.SPELL_REGISTRY_KEY).optionalFieldOf("tier3Spell").forGetter(s -> Optional.ofNullable(s.getTier3Spell())),
+                    CodecUtils.registryCodec(ModArmorEffects.ARMOR_EFFECT_KEY).optionalFieldOf("armorEffect").forGetter(s -> Optional.ofNullable(s.getArmorEffect())),
 
-                    CodecHelper.enumCodec(EnumElement.class, EnumElement.NONE).orElse(EnumElement.NONE).fieldOf("element").forGetter(ItemStat::element),
-                    CodecHelper.ofCustomRegistry(ModSpells.SPELL_REGISTRY, ModSpells.SPELL_REGISTRY_KEY).optionalFieldOf("tier1Spell").forGetter(s -> Optional.ofNullable(s.getTier1Spell())),
-                    CodecHelper.ofCustomRegistry(ModSpells.SPELL_REGISTRY, ModSpells.SPELL_REGISTRY_KEY).optionalFieldOf("tier2Spell").forGetter(s -> Optional.ofNullable(s.getTier2Spell())),
+                    CodecUtils.stringEnumCodec(EnumElement.class, EnumElement.NONE).orElse(EnumElement.NONE).fieldOf("element").forGetter(ItemStat::element),
+                    CodecUtils.registryCodec(ModSpells.SPELL_REGISTRY_KEY).optionalFieldOf("tier1Spell").forGetter(s -> Optional.ofNullable(s.getTier1Spell())),
+                    CodecUtils.registryCodec(ModSpells.SPELL_REGISTRY_KEY).optionalFieldOf("tier2Spell").forGetter(s -> Optional.ofNullable(s.getTier2Spell())),
 
                     Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("itemStats").forGetter(ItemStat::itemStats),
                     Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("monsterBonus").forGetter(ItemStat::getMonsterGiftIncrease),

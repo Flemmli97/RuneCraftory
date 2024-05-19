@@ -14,6 +14,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -28,8 +29,13 @@ public class NPCSpawnEgg extends RuneCraftoryEggItem {
     public static final String NPC_ID = "NPCId";
     public static final String NPC_SHOP = "Shop";
 
-    public NPCSpawnEgg(Supplier<? extends EntityType<?>> type, Properties props) {
+    public NPCSpawnEgg(Supplier<? extends EntityType<? extends Mob>> type, Properties props) {
         super(type, 0x452808, 0x7d4c15, props);
+    }
+
+    @Override
+    public boolean addToDefaultSpawneggs() {
+        return false;
     }
 
     @Override

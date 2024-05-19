@@ -7,9 +7,9 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumDay;
 import io.github.flemmli97.runecraftory.common.registry.ModActivities;
-import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
+import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
@@ -146,7 +146,7 @@ public class NPCSchedule {
                         ExtraCodecs.POSITIVE_INT.fieldOf("MeetTime").forGetter(d -> d.meetTime),
                         ExtraCodecs.POSITIVE_INT.fieldOf("MeetTimeAfter").forGetter(d -> d.meetTimeAfter),
                         ExtraCodecs.POSITIVE_INT.fieldOf("SleepTime").forGetter(d -> d.sleepTime),
-                        CodecHelper.enumCodec(EnumDay.class, null).listOf().fieldOf("WorkDays").forGetter(d -> d.workDays.stream().toList())
+                        CodecUtils.stringEnumCodec(EnumDay.class, null).listOf().fieldOf("WorkDays").forGetter(d -> d.workDays.stream().toList())
                 ).apply(inst, Schedule::new)
         );
 

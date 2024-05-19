@@ -5,13 +5,13 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.simplequests.JsonCodecs;
 import io.github.flemmli97.simplequests.api.QuestEntry;
 import io.github.flemmli97.simplequests.mixin.ItemPredicateAccessor;
 import io.github.flemmli97.simplequests.quest.types.QuestBase;
 import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
+import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
@@ -122,7 +122,7 @@ public class QuestTasks {
         public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "skill_level");
         public static final Codec<SkillLevelEntry> CODEC = RecordCodecBuilder.create((instance) ->
                 instance.group(
-                        CodecHelper.enumCodec(EnumSkills.class, null).fieldOf("skill").forGetter(d -> d.skill),
+                        CodecUtils.stringEnumCodec(EnumSkills.class, null).fieldOf("skill").forGetter(d -> d.skill),
                         ExtraCodecs.POSITIVE_INT.fieldOf("level").forGetter(d -> d.level)).apply(instance, SkillLevelEntry::new));
 
         @Override

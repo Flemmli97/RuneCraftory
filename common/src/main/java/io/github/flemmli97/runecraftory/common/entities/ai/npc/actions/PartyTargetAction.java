@@ -10,7 +10,7 @@ import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCActions;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
-import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
+import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 
 import java.util.Optional;
@@ -19,7 +19,7 @@ import java.util.function.Supplier;
 public class PartyTargetAction implements NPCAction {
 
     public static final Codec<PartyTargetAction> CODEC = RecordCodecBuilder.create((instance) ->
-            instance.group(CodecHelper.ofCustomRegistry(ModSpells.SPELL_REGISTRY, ModSpells.SPELL_REGISTRY_KEY).fieldOf("spell").forGetter(d -> d.spell),
+            instance.group(CodecUtils.registryCodec(ModSpells.SPELL_REGISTRY_KEY).fieldOf("spell").forGetter(d -> d.spell),
                     Codec.BOOL.fieldOf("ignoreSeal").forGetter(d -> d.ignoreSeal),
                     NPCAction.optionalCooldown(d -> d.cooldown)
             ).apply(instance, PartyTargetAction::new));
