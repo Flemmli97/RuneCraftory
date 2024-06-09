@@ -549,7 +549,7 @@ public class CombatUtils {
     public static void applyTempAttributeMult(LivingEntity entity, Attribute att, double val) {
         AttributeInstance inst = entity.getAttribute(att);
         if (inst != null && inst.getModifier(TEMP_ATTRIBUTE_MOD_MULT) == null)
-            inst.addTransientModifier(new AttributeModifier(TEMP_ATTRIBUTE_MOD_MULT, "temp_mod_mult", val, AttributeModifier.Operation.MULTIPLY_TOTAL));
+            inst.addTransientModifier(new AttributeModifier(TEMP_ATTRIBUTE_MOD_MULT, "temp_mod_mult", (val - 1), AttributeModifier.Operation.MULTIPLY_TOTAL));
     }
 
     public static void removeTempAttribute(LivingEntity entity, Attribute att) {
