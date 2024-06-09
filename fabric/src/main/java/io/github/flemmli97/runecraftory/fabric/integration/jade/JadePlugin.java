@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.common.blocks.BlockMonsterBarn;
 import io.github.flemmli97.runecraftory.common.blocks.tile.MonsterBarnBlockEntity;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.IBaseMob;
+import io.github.flemmli97.runecraftory.common.entities.MultiPartEntity;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.world.BarnData;
@@ -135,6 +136,15 @@ public class JadePlugin implements IWailaPlugin {
                 return IDBLOCK;
             }
         }, BlockMonsterBarn.class);
+        registration.addRayTraceCallback((hitResult, accessor, origin) -> {
+            if (accessor instanceof EntityAccessor entityAccessor) {
+                if (entityAccessor.getEntity() instanceof MultiPartEntity entity) {
+                    accessor = registration.entityAccessor().from(entityAccessor).entity(entity.getOwner()).build();
+                    return accessor;
+                }
+            }
+            return accessor;
+        });
         BoxStyle box = new BoxStyle();
         box.borderColor = 0xff000000;
         registration.registerEntityComponent(new IEntityComponentProvider() {

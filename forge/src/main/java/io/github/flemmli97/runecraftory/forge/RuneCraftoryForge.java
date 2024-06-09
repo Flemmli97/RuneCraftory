@@ -27,6 +27,7 @@ import io.github.flemmli97.runecraftory.forge.client.ClientEvents;
 import io.github.flemmli97.runecraftory.forge.config.ConfigHolder;
 import io.github.flemmli97.runecraftory.forge.event.EntityEvents;
 import io.github.flemmli97.runecraftory.forge.event.WorldEvents;
+import io.github.flemmli97.runecraftory.forge.integration.jade.JadePlugin;
 import io.github.flemmli97.runecraftory.forge.integration.top.TOP;
 import io.github.flemmli97.runecraftory.forge.loot.ModGlobalLootModifiers;
 import io.github.flemmli97.runecraftory.forge.network.PacketHandler;
@@ -88,6 +89,8 @@ public class RuneCraftoryForge {
         forgeBus.register(new EntityEvents());
         forgeBus.register(new WorldEvents());
 
+        if (ModList.get().isLoaded("jade"))
+            MinecraftForge.EVENT_BUS.addListener(JadePlugin::multipartHandler);
         for (Map.Entry<ForgeConfigSpec, ConfigHolder<?>> confs : ConfigHolder.CONFIGS.entrySet()) {
             ConfigHolder<?> loader = confs.getValue();
             ModLoadingContext.get().registerConfig(loader.configType(), confs.getKey(), loader.configName());

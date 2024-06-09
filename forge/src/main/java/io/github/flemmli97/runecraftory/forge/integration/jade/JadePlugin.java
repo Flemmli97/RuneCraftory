@@ -6,15 +6,19 @@ import io.github.flemmli97.runecraftory.common.blocks.BlockMonsterBarn;
 import io.github.flemmli97.runecraftory.common.blocks.tile.MonsterBarnBlockEntity;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.IBaseMob;
+import io.github.flemmli97.runecraftory.common.entities.MultiPartEntity;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.world.BarnData;
+import mcp.mobius.waila.api.Accessor;
+import mcp.mobius.waila.api.EntityAccessor;
 import mcp.mobius.waila.api.ITooltip;
 import mcp.mobius.waila.api.IWailaClientRegistration;
 import mcp.mobius.waila.api.IWailaCommonRegistration;
 import mcp.mobius.waila.api.IWailaPlugin;
 import mcp.mobius.waila.api.TooltipPosition;
 import mcp.mobius.waila.api.WailaPlugin;
+import mcp.mobius.waila.api.event.WailaRayTraceEvent;
 import mcp.mobius.waila.impl.ui.BorderStyle;
 import mcp.mobius.waila.impl.ui.ProgressElement;
 import mcp.mobius.waila.impl.ui.ProgressStyle;
@@ -33,6 +37,8 @@ import net.minecraftforge.common.UsernameCache;
 @SuppressWarnings("UnstableApiUsage")
 @WailaPlugin
 public class JadePlugin implements IWailaPlugin {
+
+    private static IWailaClientRegistration client;
 
     @Override
     public void register(IWailaCommonRegistration registration) {
@@ -85,8 +91,26 @@ public class JadePlugin implements IWailaPlugin {
         }, Mob.class);
     }
 
+    public static void multipartHandler(WailaRayTraceEvent event) {
+        Accessor<?> accessor = event.getAccessor();
+        if (accessor instanceof EntityAccessor entityAccessor) {
+            if (entityAccessor.getEntity() instanceof MultiPartEntity entity) {
+                accessor = client.createEntityAccessor(
+                        entity.getOwner(),
+                        accessor.getLevel(),
+                        accessor.getPlayer(),
+                        accessor.getServerData(),
+                        entityAccessor.getHitResult(),
+                        accessor.isServerConnected()
+                );
+                event.setAccessor(accessor);
+            }
+        }
+    }
+
     @Override
     public void registerClient(IWailaClientRegistration registration) {
+        client = registration;
         registration.registerComponentProvider((iTooltip, blockAccessor, iPluginConfig) -> {
             CompoundTag tag = blockAccessor.getServerData();
             if (blockAccessor.getBlockEntity() instanceof MonsterBarnBlockEntity) {
