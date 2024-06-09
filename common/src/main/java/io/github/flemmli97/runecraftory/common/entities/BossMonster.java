@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.entities;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
+import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.IOverlayEntityRender;
@@ -16,6 +17,8 @@ import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -23,14 +26,25 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public abstract class BossMonster extends BaseMonster implements IOverlayEntityRender {
 
+    private static final List<Supplier<Attribute>> STAT_INCREASE = List.of(
+            () -> Attributes.ATTACK_DAMAGE,
+            ModAttributes.DEFENCE,
+            ModAttributes.MAGIC,
+            ModAttributes.MAGIC_DEFENCE
+    );
+    private static final UUID STAT_INCREASE_ID = UUID.fromString("fc5aaf23-4e83-4f7d-a4f0-675350d6e5e7");
     private static final EntityDataAccessor<Boolean> ENRAGED = SynchedEntityData.defineId(BossMonster.class, EntityDataSerializers.BOOLEAN);
+
     protected final RunecraftoryBossbar bossInfo;
 
     private int noPlayerTick, noPlayerRegenTick;
@@ -165,6 +179,14 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
 
     public void setEnraged(boolean flag, boolean load) {
         this.entityData.set(ENRAGED, flag);
+        if (!load) {
+            if (flag) {
+                STAT_INCREASE.forEach(att -> this.getAttribute(att.get())
+                        .addPermanentModifier(new AttributeModifier(STAT_INCREASE_ID, "rf.boss_stat_increase", 0.1, AttributeModifier.Operation.MULTIPLY_TOTAL)));
+            } else {
+                STAT_INCREASE.forEach(att -> this.getAttribute(att.get()).removeModifier(STAT_INCREASE_ID));
+            }
+        }
         if (flag && !load && this.isAlive())
             this.playAngrySound();
     }
