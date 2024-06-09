@@ -1,6 +1,6 @@
 {
   "maxLevel": 100,
-  "healthIncrease": 1.0,
+  "healthIncrease": 0.0,
   "rpIncrease": 0.0,
   "strIncrease": 0.25,
   "vitIncrease": 0.0,

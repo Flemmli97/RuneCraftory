@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "runecraftory:dragon_bones_bone_meal"
+    ]
+  },
+  "criteria": {
+    "dragon_bones": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "runecraftory:dragon_bones"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "runecraftory:dragon_bones_bone_meal"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "dragon_bones",
+      "has_the_recipe"
+    ]
+  ]
+}

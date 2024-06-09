@@ -49,37 +49,37 @@ public class FoodGen extends FoodProvider {
                 .addCookingBonusPercent(ModAttributes.HEALTHGAIN.get(), -10));
         this.addStat(ModItems.WEEDS.get(), new FoodProperties.Builder(100).setHPRegen(-10, 0)
                 .addCookingBonusPercent(ModAttributes.HEALTHGAIN.get(), -5));
-        this.addStat(ModItems.WHITE_GRASS.get(), new FoodProperties.Builder(100).setHPRegen(25, 0).setRPRegen(5, 0)
+        this.addStat(ModItems.WHITE_GRASS.get(), new FoodProperties.Builder(100).setHPRegen(15, 0).setRPRegen(5, 0)
                 .addCookingBonus(ModAttributes.HEALTHGAIN.get(), 10)
                 .addCookingBonus(ModAttributes.RPGAIN.get(), 10));
-        this.addStat(ModItems.INDIGO_GRASS.get(), new FoodProperties.Builder(100).setHPRegen(25, 0).setRPRegen(5, 0)
+        this.addStat(ModItems.INDIGO_GRASS.get(), new FoodProperties.Builder(100).setHPRegen(15, 0).setRPRegen(5, 0)
                 .addCookingBonus(ModAttributes.HEALTHGAIN.get(), 10)
                 .addCookingBonus(ModAttributes.RPGAIN.get(), 10));
-        this.addStat(ModItems.PURPLE_GRASS.get(), new FoodProperties.Builder(100).setHPRegen(25, 0).setRPRegen(5, 0)
+        this.addStat(ModItems.PURPLE_GRASS.get(), new FoodProperties.Builder(100).setHPRegen(15, 0).setRPRegen(5, 0)
                 .addCookingBonus(ModAttributes.HEALTHGAIN.get(), 10)
                 .addCookingBonus(ModAttributes.RPGAIN.get(), 10));
-        this.addStat(ModItems.GREEN_GRASS.get(), new FoodProperties.Builder(100).setHPRegen(25, 0).setRPRegen(5, 0)
+        this.addStat(ModItems.GREEN_GRASS.get(), new FoodProperties.Builder(100).setHPRegen(15, 0).setRPRegen(5, 0)
                 .addCookingBonus(ModAttributes.HEALTHGAIN.get(), 10)
                 .addCookingBonus(ModAttributes.RPGAIN.get(), 10));
-        this.addStat(ModItems.BLUE_GRASS.get(), new FoodProperties.Builder(100).setHPRegen(25, 0).setRPRegen(5, 0)
+        this.addStat(ModItems.BLUE_GRASS.get(), new FoodProperties.Builder(100).setHPRegen(15, 0).setRPRegen(5, 0)
                 .addCookingBonus(ModAttributes.HEALTHGAIN.get(), 10)
                 .addCookingBonus(ModAttributes.RPGAIN.get(), 10));
-        this.addStat(ModItems.YELLOW_GRASS.get(), new FoodProperties.Builder(100).setHPRegen(25, 0).setRPRegen(5, 0)
+        this.addStat(ModItems.YELLOW_GRASS.get(), new FoodProperties.Builder(100).setHPRegen(15, 0).setRPRegen(5, 0)
                 .addCookingBonus(ModAttributes.HEALTHGAIN.get(), 10)
                 .addCookingBonus(ModAttributes.RPGAIN.get(), 10));
-        this.addStat(ModItems.RED_GRASS.get(), new FoodProperties.Builder(100).setHPRegen(25, 0).setRPRegen(5, 0)
+        this.addStat(ModItems.RED_GRASS.get(), new FoodProperties.Builder(100).setHPRegen(15, 0).setRPRegen(5, 0)
                 .addCookingBonus(ModAttributes.HEALTHGAIN.get(), 10)
                 .addCookingBonus(ModAttributes.RPGAIN.get(), 10));
-        this.addStat(ModItems.ORANGE_GRASS.get(), new FoodProperties.Builder(100).setHPRegen(25, 0).setRPRegen(5, 0)
+        this.addStat(ModItems.ORANGE_GRASS.get(), new FoodProperties.Builder(100).setHPRegen(15, 0).setRPRegen(5, 0)
                 .addCookingBonus(ModAttributes.HEALTHGAIN.get(), 10)
                 .addCookingBonus(ModAttributes.RPGAIN.get(), 10));
-        this.addStat(ModItems.BLACK_GRASS.get(), new FoodProperties.Builder(100).setHPRegen(25, 0).setRPRegen(5, 0)
+        this.addStat(ModItems.BLACK_GRASS.get(), new FoodProperties.Builder(100).setHPRegen(15, 0).setRPRegen(5, 0)
                 .addCookingBonus(ModAttributes.HEALTHGAIN.get(), 10)
                 .addCookingBonus(ModAttributes.RPGAIN.get(), 10));
         this.addStat(ModItems.ANTIDOTE_GRASS.get(), new FoodProperties.Builder(100).setHPRegen(10, 0)
                 .curePotion(ModEffects.POISON.get()).curePotion(MobEffects.POISON).curePotion(MobEffects.WITHER)
                 .addCookingBonus(ModAttributes.HEALTHGAIN.get(), 10));
-        this.addStat(ModItems.MEDICINAL_HERB.get(), new FoodProperties.Builder(100).setHPRegen(30, 0)
+        this.addStat(ModItems.MEDICINAL_HERB.get(), new FoodProperties.Builder(100).setHPRegen(25, 0)
                 .addCookingBonus(ModAttributes.HEALTHGAIN.get(), 20));
         this.addStat(ModItems.BAMBOO_SPROUT.get(), new FoodProperties.Builder(100).setHPRegen(10, 0).setRPRegen(5, 0)
                 .addCookingBonus(ModAttributes.HEALTHGAIN.get(), 10));

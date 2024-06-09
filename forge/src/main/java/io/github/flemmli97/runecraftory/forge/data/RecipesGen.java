@@ -101,6 +101,10 @@ public class RecipesGen extends RecipeProvider {
                 .requires(ModItems.SKULL.get(), 1)
                 .unlockedBy("skull", has(ModItems.SKULL.get()))
                 .save(consumer, RuneCraftory.MODID + ":skull_bone_meal");
+        ShapelessRecipeBuilder.shapeless(Items.BONE_MEAL, 9)
+                .requires(ModItems.DRAGON_BONES.get(), 1)
+                .unlockedBy("dragon_bones", has(ModItems.DRAGON_BONES.get()))
+                .save(consumer, RuneCraftory.MODID + ":dragon_bones_bone_meal");
 
         ShapedRecipeBuilder.shaped(ModItems.SHIPPING_BIN.get())
                 .pattern("ses")
