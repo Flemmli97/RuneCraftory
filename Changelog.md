@@ -1,3 +1,11 @@
+RuneCraftory 1.9.6
+================
+- Only one boss music now plays if there are multiple bosses present
+- Some boss stats now increase when they get angry
+- Fixes some damage multipliers being wrong for certain skills
+- NPC spawning now only occurs if there are a certain amount of villagers nearby
+- Jade integration: Multipart entities will now be displayed as their parents
+
 RuneCraftory 1.9.5
 ================
 - Improve sleep effect:
