@@ -7,6 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.CustomSpawner;
 import net.minecraft.world.level.GameRules;
@@ -66,7 +67,7 @@ public class NPCSpawner implements CustomSpawner {
             int x = pos.getX() + level.random.nextInt(16) - 8;
             int z = pos.getZ() + level.random.nextInt(16) - 8;
             BlockPos blockPos = new BlockPos(x, level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z), z);
-            if (!level.isVillage(blockPos) || level.getEntities(EntityTypeTest.forClass(EntityNPCBase.class), new AABB(blockPos).inflate(48), e -> true).size() > 3)
+            if (!level.isVillage(blockPos) || level.getEntities(EntityTypeTest.forClass(EntityNPCBase.class), new AABB(blockPos).inflate(64), e -> true).size() > 3 || level.getEntities(EntityTypeTest.forClass(Villager.class), new AABB(blockPos).inflate(48), e -> true).size() < 5)
                 continue;
             return Vec3.atBottomCenterOf(blockPos);
         }
