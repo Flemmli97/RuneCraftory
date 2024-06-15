@@ -1212,12 +1212,11 @@ public class ModItems {
             return true;
         }
     });
-    public static final RegistryEntrySupplier<Item> ENTITY_LEVEL = ITEMS.register("entity_level_item", () -> new ItemDebug(new Item.Properties()));
     public static final RegistryEntrySupplier<Item> UNKNOWN = ITEMS.register("unknown", () -> new Item(new Item.Properties()));
     public static final RegistryEntrySupplier<Item> ORC_MAZE = ITEMS.register("orc_maze", () -> new Item(new Item.Properties().stacksTo(1)));
-    public static final RegistryEntrySupplier<Item> STEEL_SWORD_PROP = ITEMS.register("steel_sword_prop", () -> new ItemProp(new Item.Properties().stacksTo(1), real -> new ItemStack(ModItems.STEEL_SWORD.get())));
-    public static final RegistryEntrySupplier<Item> CUTLASS_PROP = ITEMS.register("cutlass_prop", () -> new ItemProp(new Item.Properties().stacksTo(1), real -> new ItemStack(ModItems.CUTLASS.get())));
-    public static final RegistryEntrySupplier<Item> THIEF_KNIFE_PROP = ITEMS.register("thief_knife_prop", () -> new ItemProp(new Item.Properties().stacksTo(1), real -> new ItemStack(ModItems.THIEF_KNIFE.get())));
+    public static final RegistryEntrySupplier<Item> STEEL_SWORD_PROP = ITEMS.register("steel_sword_prop", () -> new ItemProp(new Item.Properties().stacksTo(1), () -> new ItemStack(ModItems.STEEL_SWORD.get())));
+    public static final RegistryEntrySupplier<Item> CUTLASS_PROP = ITEMS.register("cutlass_prop", () -> new ItemProp(new Item.Properties().stacksTo(1), () -> new ItemStack(ModItems.CUTLASS.get())));
+    public static final RegistryEntrySupplier<Item> THIEF_KNIFE_PROP = ITEMS.register("thief_knife_prop", () -> new ItemProp(new Item.Properties().stacksTo(1), () -> new ItemStack(ModItems.THIEF_KNIFE.get())));
 
     public static final RegistryEntrySupplier<Item> NPC_BABY = ITEMS.register("baby", () -> new BabySpawnEgg(new Item.Properties().stacksTo(1)));
 

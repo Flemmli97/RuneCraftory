@@ -26,7 +26,7 @@ public abstract class ClientPacketListenerMixin {
             packet.getSlots().forEach((pair) -> {
                 ItemStack stack = pair.getSecond();
                 if (stack.getItem() instanceof ItemProp mimic) {
-                    entity.setItemSlot(pair.getFirst(), mimic.clientItemStack(stack));
+                    entity.setItemSlot(pair.getFirst(), mimic.clientItemStack());
                 }
             });
         }

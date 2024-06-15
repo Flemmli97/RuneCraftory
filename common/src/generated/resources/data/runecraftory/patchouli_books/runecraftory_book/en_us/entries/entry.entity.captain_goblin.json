@@ -1,0 +1,16 @@
+{
+  "name": "entity.runecraftory.captain_goblin",
+  "category": "runecraftory:category.entities",
+  "icon": "runecraftory:captain_goblin_spawn_egg",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:captain_goblin",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:captain_goblin"
+    }
+  ]
+}

@@ -39,6 +39,7 @@ import io.github.flemmli97.runecraftory.client.model.monster.ModelLeafBall;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelMarionetta;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelMimic;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelMino;
+import io.github.flemmli97.runecraftory.client.model.monster.ModelNappie;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelOrc;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelPalmCat;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelPanther;
@@ -302,6 +303,11 @@ public class ClientRegister {
         register(consumer, ModEntities.TROLL.get(), ModelTroll::new, ModelTroll.LAYER_LOCATION);
         register(consumer, ModEntities.FLOWER_LION.get(), ModelFlowerLily::new, ModelFlowerLily.LAYER_LOCATION);
         consumer.register(ModEntities.TOMATO_GHOST.get(), ctx -> new RenderVeggieGhost<>(ctx, mobTexture(ModEntities.TOMATO_GHOST.get())));
+        consumer.register(ModEntities.GOBLIN_CAPTAIN.get(), ctx -> new RenderGoblin<>(ctx, mobTexture(ModEntities.GOBLIN_CAPTAIN.get())));
+        consumer.register(ModEntities.GOBLIN_DON.get(), ctx -> new RenderGoblin<>(ctx, mobTexture(ModEntities.GOBLIN_DON.get())));
+        register(consumer, ModEntities.MINERAL_SQUEEK.get(), ModelChipsqueek::new, ModelChipsqueek.LAYER_LOCATION);
+        register(consumer, ModEntities.NAPPIE.get(), ModelNappie::new, ModelNappie.LAYER_LOCATION);
+        register(consumer, ModEntities.MALM_TIGER.get(), ModelPalmCat::new, ModelPalmCat.LAYER_LOCATION);
 
         register(consumer, ModEntities.AMBROSIA.get(), ModelAmbrosia::new, ModelAmbrosia.LAYER_LOCATION);
         register(consumer, ModEntities.THUNDERBOLT.get(), ModelThunderbolt::new, ModelThunderbolt.LAYER_LOCATION);
@@ -444,6 +450,7 @@ public class ClientRegister {
         consumer.accept(ModelPalmCat.LAYER_LOCATION, ModelPalmCat::createBodyLayer);
         consumer.accept(ModelTroll.LAYER_LOCATION, ModelTroll::createBodyLayer);
         consumer.accept(ModelVeggieGhost.LAYER_LOCATION, ModelVeggieGhost::createBodyLayer);
+        consumer.accept(ModelNappie.LAYER_LOCATION, ModelNappie::createBodyLayer);
 
         consumer.accept(ModelChest.LAYER_LOCATION, ModelChest::createBodyLayer);
 

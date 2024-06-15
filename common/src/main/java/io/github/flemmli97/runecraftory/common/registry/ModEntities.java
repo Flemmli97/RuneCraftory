@@ -83,6 +83,8 @@ import io.github.flemmli97.runecraftory.common.entities.monster.EntityHornet;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityKingWooly;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityLeafBall;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityMimic;
+import io.github.flemmli97.runecraftory.common.entities.monster.EntityMineralSqueek;
+import io.github.flemmli97.runecraftory.common.entities.monster.EntityNappie;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityOrc;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityOrcArcher;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityOrcHunter;
@@ -833,6 +835,80 @@ public class ModEntities {
                     .xp(100).money(3).tamingChance(0.05f).setRideable()
                     .withRideActionCosts(new EntityRideActionCosts.Builder().secondCost(0.5f, true)),
             new GateSpawnData.Builder(0, 60).addToBiomeTag(75, RunecraftoryTags.IS_HOT, RunecraftoryTags.IS_DEAD, RunecraftoryTags.IS_WASTELAND, RunecraftoryTags.IS_MAGICAL));
+    public static final RegistryEntrySupplier<EntityType<EntityGoblinPirate>> GOBLIN_CAPTAIN = regMonster(EntityType.Builder.of(EntityGoblinPirate::new, MobCategory.MONSTER).sized(0.6f, 1.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "captain_goblin"),
+            0x452621, 0xe9e9e9,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 24.5).putLevelGains(() -> Attributes.MAX_HEALTH, 403)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 17).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 235)
+                    .putAttributes(ModAttributes.DEFENCE, 1.5).putLevelGains(ModAttributes.DEFENCE, 145)
+                    .putAttributes(ModAttributes.MAGIC, 4).putLevelGains(ModAttributes.MAGIC, 115)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 1).putLevelGains(ModAttributes.MAGIC_DEFENCE, 130)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_EARTH, 10)
+                    .putAttributes(ModAttributes.RES_WATER, 5)
+                    .xp(50).money(8).tamingChance(0.05f).setRideable(),
+            new GateSpawnData.Builder(0, 50).addToBiomeTag(50, RunecraftoryTags.IS_HOT, RunecraftoryTags.IS_SAVANNA, RunecraftoryTags.IS_SANDY, BiomeTags.IS_BADLANDS));
+    public static final RegistryEntrySupplier<EntityType<EntityGoblinGangster>> GOBLIN_DON = regMonster(EntityType.Builder.of(EntityGoblinGangster::new, MobCategory.MONSTER).sized(0.6f, 1.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "goblin_don"),
+            0x474133, 0x286c83,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 24.5).putLevelGains(() -> Attributes.MAX_HEALTH, 408)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 17).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 230)
+                    .putAttributes(ModAttributes.DEFENCE, 1.5).putLevelGains(ModAttributes.DEFENCE, 140)
+                    .putAttributes(ModAttributes.MAGIC, 4).putLevelGains(ModAttributes.MAGIC, 120)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 1).putLevelGains(ModAttributes.MAGIC_DEFENCE, 131)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_EARTH, 10)
+                    .putAttributes(ModAttributes.RES_FIRE, 5)
+                    .xp(50).money(8).tamingChance(0.05f).setRideable(),
+            new GateSpawnData.Builder(0, 50).addToBiomeTag(50, RunecraftoryTags.IS_HOT, RunecraftoryTags.IS_SAVANNA, RunecraftoryTags.IS_SANDY, BiomeTags.IS_BADLANDS));
+    public static final RegistryEntrySupplier<EntityType<EntityMineralSqueek>> MINERAL_SQUEEK = regMonster(EntityType.Builder.of(EntityMineralSqueek::new, MobCategory.MONSTER).sized(0.65f, 0.95f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "mineral_squeek"),
+            0xfa5a74, 0xf9ffbb,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 10)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 11.5).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 160)
+                    .putAttributes(ModAttributes.DEFENCE, 0).putLevelGains(ModAttributes.DEFENCE, 120)
+                    .putAttributes(ModAttributes.MAGIC, 9.2).putLevelGains(ModAttributes.MAGIC, 160)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 1).putLevelGains(ModAttributes.MAGIC_DEFENCE, 120)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_LOVE, 10)
+                    .xp(15).money(1).tamingChance(0.15f),
+            new GateSpawnData.Builder(0, 5).addToBiomeTag(1, RunecraftoryTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, BiomeTags.IS_MOUNTAIN, RunecraftoryTags.IS_LUSH, RunecraftoryTags.IS_SAVANNA));
+    public static final RegistryEntrySupplier<EntityType<EntityNappie>> NAPPIE = regMonster(EntityType.Builder.of(EntityNappie::new, MobCategory.MONSTER).sized(1.0f, 1.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "nappie"),
+            0x705020, 0x1b5a0d,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 24).putLevelGains(() -> Attributes.MAX_HEALTH, 415)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 14).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 160)
+                    .putAttributes(ModAttributes.DEFENCE, 0).putLevelGains(ModAttributes.DEFENCE, 175)
+                    .putAttributes(ModAttributes.MAGIC, 9).putLevelGains(ModAttributes.MAGIC, 120)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 0).putLevelGains(ModAttributes.MAGIC_DEFENCE, 120)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_EARTH, 15)
+                    .putAttributes(ModAttributes.RES_WIND, -25)
+                    .xp(30).money(4).tamingChance(0.1f).setRideable(),
+            new GateSpawnData.Builder(0, 5).addToBiomeTag(70, RunecraftoryTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, RunecraftoryTags.IS_MAGICAL));
+    public static final RegistryEntrySupplier<EntityType<EntityPalmCat>> MALM_TIGER = regMonster(EntityType.Builder.of(EntityPalmCat::new, MobCategory.MONSTER).sized(0.6f, 1.8f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "malm_tiger"),
+            0x8596ae, 0x3a5573,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 25).putLevelGains(() -> Attributes.MAX_HEALTH, 420)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 13).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 220)
+                    .putAttributes(ModAttributes.DEFENCE, 2).putLevelGains(ModAttributes.DEFENCE, 125)
+                    .putAttributes(ModAttributes.MAGIC, 7.5).putLevelGains(ModAttributes.MAGIC, 130)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 4).putLevelGains(ModAttributes.MAGIC_DEFENCE, 125)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_EARTH, 15)
+                    .putAttributes(ModAttributes.RES_WIND, 15)
+                    .xp(35).money(1).tamingChance(0.05f),
+            new GateSpawnData.Builder(0, 40).addToBiomeTag(40, BiomeTags.IS_FOREST, BiomeTags.IS_TAIGA));
 
     public static final RegistryEntrySupplier<EntityType<EntityAmbrosia>> AMBROSIA = regBoss(EntityType.Builder.of(EntityAmbrosia::new, MobCategory.MONSTER).sized(0.85f, 2.3f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "ambrosia"),
             0x00ff00, 0xe600e6,

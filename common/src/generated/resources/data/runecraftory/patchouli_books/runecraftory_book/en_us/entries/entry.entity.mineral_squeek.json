@@ -1,0 +1,16 @@
+{
+  "name": "entity.runecraftory.mineral_squeek",
+  "category": "runecraftory:category.entities",
+  "icon": "runecraftory:mineral_squeek_spawn_egg",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:mineral_squeek",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:mineral_squeek"
+    }
+  ]
+}

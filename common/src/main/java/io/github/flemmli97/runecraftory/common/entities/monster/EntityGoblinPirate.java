@@ -32,7 +32,7 @@ public class EntityGoblinPirate extends EntityGoblin {
 
     @Override
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
-        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.THIEF_KNIFE.get()));
+        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.THIEF_KNIFE_PROP.get()));
         this.setDropChance(EquipmentSlot.MAINHAND, 0);
     }
 

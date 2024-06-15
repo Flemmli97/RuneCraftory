@@ -57,7 +57,7 @@ public class EntityPommePomme extends ChargingMonster {
     }
 
     @Override
-    public AnimationHandler<EntityPommePomme> getAnimationHandler() {
+    public AnimationHandler<? extends EntityPommePomme> getAnimationHandler() {
         return this.animationHandler;
     }
 

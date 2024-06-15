@@ -44,6 +44,13 @@ public class ModelPommePomme<T extends EntityPommePomme> extends EntityModel<T> 
         this.body = this.model.getPart("body");
     }
 
+    public ModelPommePomme(ModelPart root, String animation) {
+        super();
+        this.model = new ModelPartHandler(root, "root");
+        this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, animation));
+        this.body = this.model.getPart("body");
+    }
+
     public static LayerDefinition createBodyLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();

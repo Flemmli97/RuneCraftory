@@ -1,0 +1,16 @@
+{
+  "name": "entity.runecraftory.malm_tiger",
+  "category": "runecraftory:category.entities",
+  "icon": "runecraftory:malm_tiger_spawn_egg",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:malm_tiger",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:malm_tiger"
+    }
+  ]
+}

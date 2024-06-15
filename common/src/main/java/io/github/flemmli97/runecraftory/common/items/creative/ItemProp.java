@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.items.creative;
 
+import com.google.common.base.Suppliers;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.Item;
@@ -9,15 +10,15 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class ItemProp extends Item {
 
-    private final Function<ItemStack, ItemStack> clientStack;
+    private final Supplier<ItemStack> clientStack;
 
-    public ItemProp(Properties properties, Function<ItemStack, ItemStack> clientStack) {
+    public ItemProp(Properties properties, Supplier<ItemStack> clientStack) {
         super(properties);
-        this.clientStack = clientStack;
+        this.clientStack = Suppliers.memoize(clientStack::get);
     }
 
     @Override
@@ -26,7 +27,7 @@ public class ItemProp extends Item {
         tooltipComponents.add(new TranslatableComponent("runecraftory.tooltip.item.prop"));
     }
 
-    public ItemStack clientItemStack(ItemStack real) {
-        return this.clientStack.apply(real);
+    public ItemStack clientItemStack() {
+        return this.clientStack.get();
     }
 }

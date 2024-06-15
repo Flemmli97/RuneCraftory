@@ -453,6 +453,18 @@ public class ItemTagGen extends ItemTagsProvider {
                 .addTag(RunecraftoryTags.tamingTag(ModEntities.FLOWER_LILY.get()));
         this.tag(RunecraftoryTags.tamingTag(ModEntities.TOMATO_GHOST.get()))
                 .addTag(tempKeyFabric("vegetables/tomato"));
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.GOBLIN_DON.get()))
+                .addTag(RunecraftoryTags.tamingTag(ModEntities.GOBLIN.get()));
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.GOBLIN_CAPTAIN.get()))
+                .addTag(RunecraftoryTags.tamingTag(ModEntities.GOBLIN.get()));
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.MINERAL_SQUEEK.get()))
+                .addTag(RunecraftoryTags.tamingTag(ModEntities.CHIPSQUEEK.get()));
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.NAPPIE.get()))
+                .add(ModItems.PINEAPPLE.get());
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.MALM_TIGER.get()))
+                .add(ModItems.FUR.get())
+                .add(Items.CAKE)
+                .add(ModItems.CAKE.get());
 
         this.tag(RunecraftoryTags.tamingTag(ModEntities.AMBROSIA.get()))
                 .add(ModItems.TOYHERB_GIANT.get());
