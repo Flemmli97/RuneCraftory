@@ -38,6 +38,7 @@ public class ModelPalmCat<T extends EntityPalmCat> extends EntityModel<T> implem
 
     public ModelPartHandler.ModelPartExtended body;
     public ModelPartHandler.ModelPartExtended head;
+    public ModelPartHandler.ModelPartExtended ridingPosition;
 
     public ModelPalmCat(ModelPart root) {
         super();
@@ -45,6 +46,7 @@ public class ModelPalmCat<T extends EntityPalmCat> extends EntityModel<T> implem
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "palm_cat"));
         this.body = this.model.getPart("body");
         this.head = this.model.getPart("head");
+        this.ridingPosition = this.model.getPart("ridingPos");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -99,6 +101,8 @@ public class ModelPalmCat<T extends EntityPalmCat> extends EntityModel<T> implem
                 .texOffs(0, 14).addBox(-0.45F, 4.0F, -2.5F, 1.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
                 .texOffs(0, 0).addBox(-1.95F, 4.0F, -2.5F, 1.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 5.0F, -1.5F));
 
+        PartDefinition ridingPos = body.addOrReplaceChild("ridingPos", CubeListBuilder.create(), PartPose.offset(0.0F, 4.0F, 4.0F));
+
         return LayerDefinition.create(meshdefinition, 64, 64);
     }
 
@@ -136,12 +140,11 @@ public class ModelPalmCat<T extends EntityPalmCat> extends EntityModel<T> implem
             EntityModel<?> model = lR.getModel();
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.body.translateAndRotate(poseStack);
+                this.ridingPosition.translateAndRotate(poseStack);
                 if (model instanceof SittingModel sittingModel)
                     sittingModel.translateSittingPosition(poseStack);
                 else
-                    poseStack.translate(0, 8 / 16d, 4 / 16d);
-                if (entity.getMoveFlag() == BaseMonster.MoveType.RUN)
-                    poseStack.translate(0, 9 / 16d, 0);
+                    poseStack.translate(0, 11 / 16d, 0);
                 return true;
             }
         }

@@ -38,6 +38,7 @@ public class ModelChimera<T extends EntityChimera> extends EntityModel<T> implem
 
     public ModelPartHandler.ModelPartExtended body;
     public ModelPartHandler.ModelPartExtended upperBody;
+    public ModelPartHandler.ModelPartExtended ridingPosition;
 
     public ModelChimera(ModelPart root) {
         super();
@@ -45,6 +46,7 @@ public class ModelChimera<T extends EntityChimera> extends EntityModel<T> implem
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "chimera"));
         this.body = this.model.getPart("body");
         this.upperBody = this.model.getPart("upperBody");
+        this.ridingPosition = this.model.getPart("ridingPos");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -119,6 +121,8 @@ public class ModelChimera<T extends EntityChimera> extends EntityModel<T> implem
 
         PartDefinition rightHindPaw = rightHindLeg.addOrReplaceChild("rightHindPaw", CubeListBuilder.create().texOffs(0, 30).addBox(-3.0F, 0.0F, -3.0F, 4.0F, 4.0F, 3.0F, new CubeDeformation(-0.025F)), PartPose.offsetAndRotation(1.5F, 7.0F, 1.0F, -1.2654F, 0.0F, 0.0F));
 
+        PartDefinition ridingPos = body.addOrReplaceChild("ridingPos", CubeListBuilder.create(), PartPose.offset(0.0F, -7.0F, 5.0F));
+
         return LayerDefinition.create(meshdefinition, 128, 128);
     }
 
@@ -156,10 +160,11 @@ public class ModelChimera<T extends EntityChimera> extends EntityModel<T> implem
             EntityModel<?> model = lR.getModel();
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.body.translateAndRotate(poseStack);
+                this.ridingPosition.translateAndRotate(poseStack);
                 if (model instanceof SittingModel sittingModel)
                     sittingModel.translateSittingPosition(poseStack);
                 else
-                    poseStack.translate(0, 4 / 16d, 5 / 16d);
+                    poseStack.translate(0, 11 / 16d, 0);
                 return true;
             }
         }

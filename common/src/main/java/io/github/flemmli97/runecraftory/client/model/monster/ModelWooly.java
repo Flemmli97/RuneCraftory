@@ -44,6 +44,7 @@ public class ModelWooly<T extends EntityWooly> extends EntityModel<T> implements
     public ModelPartHandler.ModelPartExtended armRightBase;
     public ModelPartHandler.ModelPartExtended feetLeftBase;
     public ModelPartHandler.ModelPartExtended feetRightBase;
+    public ModelPartHandler.ModelPartExtended ridingPosition;
 
     public ModelWooly(ModelPart root) {
         super();
@@ -57,6 +58,7 @@ public class ModelWooly<T extends EntityWooly> extends EntityModel<T> implements
         this.armRightBase = this.model.getPart("armRightBase");
         this.feetLeftBase = this.model.getPart("feetLeftBase");
         this.feetRightBase = this.model.getPart("feetRightBase");
+        this.ridingPosition = this.model.getPart("ridingPos");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -106,6 +108,8 @@ public class ModelWooly<T extends EntityWooly> extends EntityModel<T> implements
 
         PartDefinition tail = body.addOrReplaceChild("tail", CubeListBuilder.create().texOffs(52, 3).mirror().addBox(-1.5F, -1.5F, 0.0F, 3.0F, 3.0F, 3.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(0.0F, 3.0F, 4.0F));
 
+        PartDefinition ridingPos = body.addOrReplaceChild("ridingPos", CubeListBuilder.create(), PartPose.offset(0.0F, -7.0F, 6.0F));
+
         return LayerDefinition.create(meshdefinition, 64, 62);
     }
 
@@ -140,12 +144,12 @@ public class ModelWooly<T extends EntityWooly> extends EntityModel<T> implements
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.bodyCenter.translateAndRotate(poseStack);
                 this.body.translateAndRotate(poseStack);
+                this.ridingPosition.translateAndRotate(poseStack);
+                poseStack.scale(1 / scaledRender.scale, 1 / scaledRender.scale, 1 / scaledRender.scale);
                 if (model instanceof SittingModel sittingModel)
                     sittingModel.translateSittingPosition(poseStack);
                 else
-                    poseStack.translate(0, -7 / 16d, 6 / 16d);
-                poseStack.scale(1 / scaledRender.scale, 1 / scaledRender.scale, 1 / scaledRender.scale);
-                poseStack.translate(0, 11 / 16d, 0);
+                    poseStack.translate(0, 11 / 16d, 0);
                 poseStack.scale(scaledRender.scale, scaledRender.scale, scaledRender.scale);
                 return true;
             }

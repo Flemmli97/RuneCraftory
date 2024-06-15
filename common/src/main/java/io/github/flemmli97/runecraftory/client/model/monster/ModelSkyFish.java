@@ -35,12 +35,14 @@ public class ModelSkyFish<T extends EntitySkyFish> extends EntityModel<T> implem
     protected final BlockBenchAnimations anim;
 
     public ModelPartHandler.ModelPartExtended body;
+    public ModelPartHandler.ModelPartExtended ridingPosition;
 
     public ModelSkyFish(ModelPart root) {
         super();
         this.model = new ModelPartHandler(root, "root");
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "sky_fish"));
         this.body = this.model.getPart("body");
+        this.ridingPosition = this.model.getPart("ridingPos");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -75,6 +77,8 @@ public class ModelSkyFish<T extends EntitySkyFish> extends EntityModel<T> implem
 
         PartDefinition rightPelvicFin = body.addOrReplaceChild("rightPelvicFin", CubeListBuilder.create().texOffs(8, 82).mirror().addBox(0.0F, 1.0F, 0.0F, 0.0F, 2.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-3.5F, 2.0F, 4.0F, -0.1745F, -0.3927F, 0.0F));
 
+        PartDefinition riderPos = body.addOrReplaceChild("ridingPos", CubeListBuilder.create(), PartPose.offset(0.0F, -6.0F, 1.0F));
+
         return LayerDefinition.create(meshdefinition, 128, 128);
     }
 
@@ -106,10 +110,11 @@ public class ModelSkyFish<T extends EntitySkyFish> extends EntityModel<T> implem
             EntityModel<?> model = lR.getModel();
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.body.translateAndRotate(poseStack);
+                this.ridingPosition.translateAndRotate(poseStack);
                 if (model instanceof SittingModel sittingModel)
                     sittingModel.translateSittingPosition(poseStack);
                 else
-                    poseStack.translate(0, 4 / 16d, 2 / 16d);
+                    poseStack.translate(0, 11 / 16d, 0);
                 return true;
             }
         }

@@ -37,12 +37,14 @@ public class ModelGhost<T extends EntityGhost> extends EntityModel<T> implements
     protected final BlockBenchAnimations anim;
 
     public ModelPartHandler.ModelPartExtended body;
+    public ModelPartHandler.ModelPartExtended ridingPosition;
 
     public ModelGhost(ModelPart root) {
         super(RenderType::entityTranslucentCull);
         this.model = new ModelPartHandler(root, "root");
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "ghost"));
         this.body = this.model.getPart("body");
+        this.ridingPosition = this.model.getPart("ridingPos");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -85,6 +87,8 @@ public class ModelGhost<T extends EntityGhost> extends EntityModel<T> implements
 
         PartDefinition blade5 = blade4.addOrReplaceChild("blade5", CubeListBuilder.create().texOffs(70, 52).addBox(-0.5F, 3.0F, -6.0F, 1.0F, 2.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 2.0F, -6.0F, 0.3491F, 0.0F, 0.0F));
 
+        PartDefinition ridingPos = body.addOrReplaceChild("ridingPos", CubeListBuilder.create(), PartPose.offset(0.0F, 4.0F, 10.0F));
+
         return LayerDefinition.create(meshdefinition, 128, 128);
     }
 
@@ -117,12 +121,12 @@ public class ModelGhost<T extends EntityGhost> extends EntityModel<T> implements
             EntityModel<?> model = lR.getModel();
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.body.translateAndRotate(poseStack);
+                this.ridingPosition.translateAndRotate(poseStack);
+                poseStack.scale(1 / scaledRender.scale, 1 / scaledRender.scale, 1 / scaledRender.scale);
                 if (model instanceof SittingModel sittingModel)
                     sittingModel.translateSittingPosition(poseStack);
                 else
-                    poseStack.translate(0, -7 / 16d, 10 / 16d);
-                poseStack.scale(1 / scaledRender.scale, 1 / scaledRender.scale, 1 / scaledRender.scale);
-                poseStack.translate(0, 11 / 16d, 0);
+                    poseStack.translate(0, 11 / 16d, 0);
                 poseStack.scale(scaledRender.scale, scaledRender.scale, scaledRender.scale);
                 return true;
             }

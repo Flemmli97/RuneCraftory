@@ -47,6 +47,7 @@ public class ModelRafflesia<T extends EntityRafflesia> extends EntityModel<T> im
     public ModelPartHandler.ModelPartExtended horseTail;
     public ModelPartHandler.ModelPartExtended pitcher;
     public ModelPartHandler.ModelPartExtended flower;
+    public ModelPartHandler.ModelPartExtended ridingPosition;
 
     public ModelRafflesia(ModelPart root) {
         super();
@@ -61,7 +62,9 @@ public class ModelRafflesia<T extends EntityRafflesia> extends EntityModel<T> im
         this.horseTail = this.model.getPart("leftStem");
         this.pitcher = this.model.getPart("rightStem");
         this.flower = this.model.getPart("frontStem");
+        this.ridingPosition = this.model.getPart("ridingPos");
     }
+
 
     public static LayerDefinition createBodyLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
@@ -102,6 +105,8 @@ public class ModelRafflesia<T extends EntityRafflesia> extends EntityModel<T> im
         PartDefinition flower6 = flowerBase2.addOrReplaceChild("flower6", CubeListBuilder.create().texOffs(32, 69).addBox(1.0F, -6.5F, 0.0F, 16.0F, 13.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 0.0873F, 0.0F));
 
         PartDefinition flower8 = flowerBase2.addOrReplaceChild("flower8", CubeListBuilder.create().texOffs(32, 69).addBox(1.0F, -6.5F, 0.0F, 16.0F, 13.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 0.0873F, -3.1416F));
+
+        PartDefinition ridingPos = head.addOrReplaceChild("ridingPos", CubeListBuilder.create(), PartPose.offset(0.0F, -5.0F, -3.0F));
 
         PartDefinition leafSetBottom = mainStem.addOrReplaceChild("leafSetBottom", CubeListBuilder.create(), PartPose.offset(0.5F, -2.0F, -0.5F));
 
@@ -260,10 +265,11 @@ public class ModelRafflesia<T extends EntityRafflesia> extends EntityModel<T> im
                 this.mainStem3.translateAndRotate(poseStack);
                 this.mainStem4.translateAndRotate(poseStack);
                 this.head.translateAndRotate(poseStack);
+                this.ridingPosition.translateAndRotate(poseStack);
                 if (model instanceof SittingModel sittingModel)
                     sittingModel.translateSittingPosition(poseStack);
                 else
-                    poseStack.translate(0, 6 / 16d, -3 / 16d);
+                    poseStack.translate(0, 11 / 16d, 0);
                 return true;
             }
         }

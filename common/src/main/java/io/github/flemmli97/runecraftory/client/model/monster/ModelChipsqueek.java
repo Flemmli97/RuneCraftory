@@ -2,9 +2,9 @@ package io.github.flemmli97.runecraftory.client.model.monster;// Made with Block
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.model.SittingModel;
+import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityChipsqueek;
 import io.github.flemmli97.tenshilib.client.AnimationManager;
 import io.github.flemmli97.tenshilib.client.model.BlockBenchAnimations;
@@ -38,6 +38,7 @@ public class ModelChipsqueek<T extends EntityChipsqueek> extends EntityModel<T> 
 
     public ModelPartHandler.ModelPartExtended body;
     public ModelPartHandler.ModelPartExtended head;
+    public ModelPartHandler.ModelPartExtended ridingPosition;
 
     public ModelChipsqueek(ModelPart root) {
         super();
@@ -45,6 +46,7 @@ public class ModelChipsqueek<T extends EntityChipsqueek> extends EntityModel<T> 
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "chipsqueek"));
         this.body = this.model.getPart("body");
         this.head = this.model.getPart("head");
+        this.ridingPosition = this.model.getPart("ridingPos");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -81,6 +83,8 @@ public class ModelChipsqueek<T extends EntityChipsqueek> extends EntityModel<T> 
 
         PartDefinition feetRight = legRight.addOrReplaceChild("feetRight", CubeListBuilder.create().texOffs(46, 11).addBox(-1.0F, -0.5F, -1.0F, 2.0F, 0.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 2.0F, -2.0F));
 
+        PartDefinition ridingPos = body.addOrReplaceChild("ridingPos", CubeListBuilder.create(), PartPose.offset(0.0F, -4.0F, 2.0F));
+
         return LayerDefinition.create(meshdefinition, 64, 28);
     }
 
@@ -97,8 +101,11 @@ public class ModelChipsqueek<T extends EntityChipsqueek> extends EntityModel<T> 
         float partialTicks = Minecraft.getInstance().getFrameTime();
         if (entity.deathTime <= 0 && !entity.playDeath()) {
             this.anim.doAnimation(this, "idle", entity.tickCount, partialTicks);
-            if (entity.moveTick() > 0)
+            if (entity.moveTick() > 0) {
                 this.anim.doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
+                float lerp = Mth.clamp((entity.moveTick() + (entity.getMoveFlag() != BaseMonster.MoveType.NONE ? partialTicks : -partialTicks)) / (float) BaseMonster.MOVE_TICK_MAX, 0, 1);
+                this.ridingPosition.xRot = lerp * (-20) * Mth.DEG_TO_RAD;
+            }
         }
         this.anim.doAnimation(this, entity.getAnimationHandler(), partialTicks);
     }
@@ -114,12 +121,11 @@ public class ModelChipsqueek<T extends EntityChipsqueek> extends EntityModel<T> 
             EntityModel<?> model = lR.getModel();
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.body.translateAndRotate(poseStack);
+                this.ridingPosition.translateAndRotate(poseStack);
                 if (model instanceof SittingModel sittingModel)
                     sittingModel.translateSittingPosition(poseStack);
                 else
-                    poseStack.translate(0, 8 / 16d, 2 / 16d);
-                if (entity.moveTick() <= 1 && !entity.getAnimationHandler().hasAnimation())
-                    poseStack.mulPose(Vector3f.XP.rotationDegrees(15));
+                    poseStack.translate(0, 11 / 16d, 0);
                 return true;
             }
         }

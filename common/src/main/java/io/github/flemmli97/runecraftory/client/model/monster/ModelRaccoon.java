@@ -36,6 +36,7 @@ public class ModelRaccoon<T extends EntityRaccoon> extends ModelRaccoonBase<T> {
 
     public ModelPartHandler.ModelPartExtended body;
     public ModelPartHandler.ModelPartExtended head;
+    public ModelPartHandler.ModelPartExtended ridingPosition;
 
     public ModelRaccoon(ModelPart root) {
         super();
@@ -43,6 +44,7 @@ public class ModelRaccoon<T extends EntityRaccoon> extends ModelRaccoonBase<T> {
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "raccoon"));
         this.body = this.model.getPart("body");
         this.head = this.model.getPart("head");
+        this.ridingPosition = this.model.getPart("ridingPos");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -84,6 +86,8 @@ public class ModelRaccoon<T extends EntityRaccoon> extends ModelRaccoonBase<T> {
 
         PartDefinition leftLegDown = leftLeg.addOrReplaceChild("leftLegDown", CubeListBuilder.create().texOffs(34, 7).addBox(-1.5F, 0.0F, 0.0F, 3.0F, 3.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offset(0.5F, 3.5F, -1.5F));
 
+        PartDefinition ridingPos = body.addOrReplaceChild("ridingPos", CubeListBuilder.create(), PartPose.offset(0.0F, -5.0F, 5.0F));
+
         return LayerDefinition.create(meshdefinition, 64, 64);
     }
 
@@ -121,10 +125,11 @@ public class ModelRaccoon<T extends EntityRaccoon> extends ModelRaccoonBase<T> {
             EntityModel<?> model = lR.getModel();
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.body.translateAndRotate(poseStack);
+                this.ridingPosition.translateAndRotate(poseStack);
                 if (model instanceof SittingModel sittingModel)
                     sittingModel.translateSittingPosition(poseStack);
                 else
-                    poseStack.translate(0, 5 / 16d, 5 / 16d);
+                    poseStack.translate(0, 11 / 16d, 0);
                 return true;
             }
         }

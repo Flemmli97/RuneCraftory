@@ -43,6 +43,7 @@ public class ModelGoblin<T extends EntityGoblin> extends EntityModel<T> implemen
     public ModelPartHandler.ModelPartExtended leftArmDown;
     public ModelPartHandler.ModelPartExtended rightArm;
     public ModelPartHandler.ModelPartExtended rightArmDown;
+    public ModelPartHandler.ModelPartExtended ridingPosition;
 
     public ModelGoblin(ModelPart root) {
         super();
@@ -54,17 +55,18 @@ public class ModelGoblin<T extends EntityGoblin> extends EntityModel<T> implemen
         this.leftArmDown = this.model.getPart("leftArmDown");
         this.rightArm = this.model.getPart("rightArm");
         this.rightArmDown = this.model.getPart("rightArmDown");
+        this.ridingPosition = this.model.getPart("ridingPos");
     }
 
     public static LayerDefinition createBodyLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition body = partdefinition.addOrReplaceChild("body", CubeListBuilder.create().texOffs(32, 0).addBox(-3.5F, -5.0F, -1.0F, 9.0F, 12.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(-1.0F, 11.0F, -1.5F));
+        PartDefinition body = partdefinition.addOrReplaceChild("body", CubeListBuilder.create().texOffs(32, 0).addBox(-4.5F, -5.0F, -2.5F, 9.0F, 12.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 11.0F, 0.0F));
 
         PartDefinition head = body.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -7.0F, -4.0F, 8.0F, 7.0F, 8.0F, new CubeDeformation(0.0F))
                 .texOffs(0, 49).addBox(-1.0F, -3.0F, -5.0F, 2.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(28, 42).addBox(-1.0F, -2.0F, -5.75F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(1.0F, -5.0F, 1.5F));
+                .texOffs(28, 42).addBox(-1.0F, -2.0F, -5.75F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -5.0F, 0.0F));
 
         PartDefinition horn = head.addOrReplaceChild("horn", CubeListBuilder.create().texOffs(42, 42).addBox(-0.5F, -3.0F, 0.0F, 1.0F, 4.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -7.0F, -4.6F, 0.6545F, 0.0F, 0.0F));
 
@@ -77,24 +79,26 @@ public class ModelGoblin<T extends EntityGoblin> extends EntityModel<T> implemen
                 .texOffs(20, 42).addBox(0.0F, -3.0F, 4.5F, 1.0F, 1.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-4.0F, -2.0F, -1.5F, 0.2182F, -0.829F, 0.0F));
 
         PartDefinition leftArm = body.addOrReplaceChild("leftArm", CubeListBuilder.create().texOffs(0, 42).addBox(0.0F, -1.5F, -2.0F, 3.0F, 4.0F, 3.0F, new CubeDeformation(0.0F))
-                .texOffs(16, 17).addBox(-0.5F, -2.0F, -2.5F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(5.5F, -1.5F, 2.0F));
+                .texOffs(16, 17).addBox(-0.5F, -2.0F, -2.5F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(4.5F, -1.5F, 0.5F));
 
         PartDefinition leftArmDown = leftArm.addOrReplaceChild("leftArmDown", CubeListBuilder.create().texOffs(28, 34).addBox(-3.0F, 0.0F, -3.0F, 3.0F, 5.0F, 3.0F, new CubeDeformation(0.0F))
                 .texOffs(0, 34).addBox(-3.5F, 1.0F, -3.5F, 4.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(3.0F, 2.5F, 1.0F));
 
         PartDefinition rightArm = body.addOrReplaceChild("rightArm", CubeListBuilder.create().texOffs(40, 34).addBox(-3.0F, -1.5F, -1.5F, 3.0F, 4.0F, 3.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 17).addBox(-3.5F, -2.0F, -2.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(-3.5F, -1.5F, 1.5F));
+                .texOffs(0, 17).addBox(-3.5F, -2.0F, -2.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(-4.5F, -1.5F, 0.0F));
 
         PartDefinition rightArmDown = rightArm.addOrReplaceChild("rightArmDown", CubeListBuilder.create().texOffs(16, 34).addBox(0.0F, 0.0F, -3.0F, 3.0F, 5.0F, 3.0F, new CubeDeformation(0.0F))
                 .texOffs(40, 25).addBox(-0.5F, 1.0F, -3.5F, 4.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(-3.0F, 2.5F, 1.5F));
 
-        PartDefinition rightLeg = body.addOrReplaceChild("rightLeg", CubeListBuilder.create().texOffs(28, 25).addBox(-1.5F, -0.5F, -2.0F, 3.0F, 6.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offset(-1.0F, 7.0F, 2.0F));
+        PartDefinition rightLeg = body.addOrReplaceChild("rightLeg", CubeListBuilder.create().texOffs(28, 25).addBox(-1.5F, -0.5F, -2.0F, 3.0F, 6.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offset(-2.0F, 7.0F, 0.5F));
 
         PartDefinition rightFoot = rightLeg.addOrReplaceChild("rightFoot", CubeListBuilder.create().texOffs(0, 25).addBox(-1.5F, 0.0F, -5.0F, 3.0F, 1.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 5.0F, 1.0F));
 
-        PartDefinition leftLeg = body.addOrReplaceChild("leftLeg", CubeListBuilder.create().texOffs(16, 25).addBox(-1.0F, -0.5F, -2.0F, 3.0F, 6.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offset(2.5F, 7.0F, 2.0F));
+        PartDefinition leftLeg = body.addOrReplaceChild("leftLeg", CubeListBuilder.create().texOffs(16, 25).addBox(-1.0F, -0.5F, -2.0F, 3.0F, 6.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offset(1.5F, 7.0F, 0.5F));
 
         PartDefinition leftFoot = leftLeg.addOrReplaceChild("leftFoot", CubeListBuilder.create().texOffs(32, 17).addBox(-1.0F, 0.0F, -5.0F, 3.0F, 1.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 5.0F, 1.0F));
+
+        PartDefinition ridingPos = body.addOrReplaceChild("ridingPos", CubeListBuilder.create(), PartPose.offset(0.0F, -5.0F, 5.0F));
 
         return LayerDefinition.create(meshdefinition, 64, 64);
     }
@@ -150,10 +154,11 @@ public class ModelGoblin<T extends EntityGoblin> extends EntityModel<T> implemen
             EntityModel<?> model = lR.getModel();
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.body.translateAndRotate(poseStack);
+                this.ridingPosition.translateAndRotate(poseStack);
                 if (model instanceof SittingModel sittingModel)
                     sittingModel.translateSittingPosition(poseStack);
                 else
-                    poseStack.translate(0, 6 / 16d, 6 / 16d);
+                    poseStack.translate(0, 11 / 16d, 0);
                 return true;
             }
         }
@@ -162,6 +167,6 @@ public class ModelGoblin<T extends EntityGoblin> extends EntityModel<T> implemen
 
     @Override
     public void translateSittingPosition(PoseStack stack) {
-        stack.translate(0, 1 / 16d, 6 / 16d);
+        stack.translate(0, 4 / 16d, 0);
     }
 }

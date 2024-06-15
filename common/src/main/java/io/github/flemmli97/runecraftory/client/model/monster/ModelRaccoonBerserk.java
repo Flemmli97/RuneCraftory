@@ -35,6 +35,7 @@ public class ModelRaccoonBerserk<T extends EntityRaccoon> extends ModelRaccoonBa
 
     public ModelPartHandler.ModelPartExtended body;
     public ModelPartHandler.ModelPartExtended head;
+    public ModelPartHandler.ModelPartExtended ridingPosition;
 
     public ModelRaccoonBerserk(ModelPart root) {
         super();
@@ -42,6 +43,7 @@ public class ModelRaccoonBerserk<T extends EntityRaccoon> extends ModelRaccoonBa
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "raccoon_berserk"));
         this.body = this.model.getPart("body");
         this.head = this.model.getPart("head");
+        this.ridingPosition = this.model.getPart("ridingPos");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -91,6 +93,8 @@ public class ModelRaccoonBerserk<T extends EntityRaccoon> extends ModelRaccoonBa
 
         PartDefinition rightLegDown = rightLeg.addOrReplaceChild("rightLegDown", CubeListBuilder.create().texOffs(64, 40).addBox(-2.5F, 0.0F, -1.5F, 5.0F, 6.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 4.0F, -1.0F, 0.3927F, 0.0F, 0.0F));
 
+        PartDefinition ridingPos = body.addOrReplaceChild("ridingPos", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 7.0F));
+
         return LayerDefinition.create(meshdefinition, 128, 128);
     }
 
@@ -125,10 +129,11 @@ public class ModelRaccoonBerserk<T extends EntityRaccoon> extends ModelRaccoonBa
             EntityModel<?> model = lR.getModel();
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.body.translateAndRotate(poseStack);
+                this.ridingPosition.translateAndRotate(poseStack);
                 if (model instanceof SittingModel sittingModel)
                     sittingModel.translateSittingPosition(poseStack);
                 else
-                    poseStack.translate(0, 10 / 16d, 7 / 16d);
+                    poseStack.translate(0, 11 / 16d, 0);
                 return true;
             }
         }

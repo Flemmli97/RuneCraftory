@@ -36,12 +36,10 @@ public class ModelPommePomme<T extends EntityPommePomme> extends EntityModel<T> 
     protected final BlockBenchAnimations anim;
 
     public ModelPartHandler.ModelPartExtended body;
+    public ModelPartHandler.ModelPartExtended ridingPosition;
 
     public ModelPommePomme(ModelPart root) {
-        super();
-        this.model = new ModelPartHandler(root, "root");
-        this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "pomme_pomme"));
-        this.body = this.model.getPart("body");
+        this(root, "pomme_pomme");
     }
 
     public ModelPommePomme(ModelPart root, String animation) {
@@ -49,6 +47,7 @@ public class ModelPommePomme<T extends EntityPommePomme> extends EntityModel<T> 
         this.model = new ModelPartHandler(root, "root");
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, animation));
         this.body = this.model.getPart("body");
+        this.ridingPosition = this.model.getPart("ridingPos");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -85,6 +84,8 @@ public class ModelPommePomme<T extends EntityPommePomme> extends EntityModel<T> 
 
         PartDefinition feetRight = body.addOrReplaceChild("feetRight", CubeListBuilder.create().texOffs(82, 0).mirror().addBox(-1.5F, 0.0F, -7.0F, 3.0F, 1.0F, 7.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(-3.5F, 10.0F, 1.0F));
 
+        PartDefinition ridingPos = body.addOrReplaceChild("ridingPos", CubeListBuilder.create(), PartPose.offset(0.0F, -5.0F, 5.0F));
+
         return LayerDefinition.create(meshdefinition, 126, 52);
     }
 
@@ -118,10 +119,11 @@ public class ModelPommePomme<T extends EntityPommePomme> extends EntityModel<T> 
             EntityModel<?> model = lR.getModel();
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.body.translateAndRotate(poseStack);
+                this.ridingPosition.translateAndRotate(poseStack);
                 if (model instanceof SittingModel sittingModel)
                     sittingModel.translateSittingPosition(poseStack);
                 else
-                    poseStack.translate(0, 4 / 16d, 5 / 16d);
+                    poseStack.translate(0, 11 / 16d, 0);
                 return true;
             }
         }

@@ -35,12 +35,14 @@ public class ModelLeafBall<T extends EntityLeafBall> extends EntityModel<T> impl
     protected final BlockBenchAnimations anim;
 
     public ModelPartHandler.ModelPartExtended body;
+    public ModelPartHandler.ModelPartExtended ridingPosition;
 
     public ModelLeafBall(ModelPart root) {
         super();
         this.model = new ModelPartHandler(root, "root");
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "leaf_ball"));
         this.body = this.model.getPart("body");
+        this.ridingPosition = this.model.getPart("ridingPos");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -65,6 +67,8 @@ public class ModelLeafBall<T extends EntityLeafBall> extends EntityModel<T> impl
         PartDefinition bottomLeaf = body.addOrReplaceChild("bottomLeaf", CubeListBuilder.create().texOffs(40, 0).addBox(0.0F, -1.0F, -5.0F, 0.0F, 5.0F, 10.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 6.0F, 0.0F, 0.0F, -0.7854F, 0.0F));
 
         PartDefinition bottomLeaf2 = body.addOrReplaceChild("bottomLeaf2", CubeListBuilder.create().texOffs(24, 27).addBox(-5.0F, -1.0F, 0.0F, 10.0F, 5.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 6.0F, 0.0F, 0.0F, -0.7854F, 0.0F));
+
+        PartDefinition ridingPos = body.addOrReplaceChild("ridingPos", CubeListBuilder.create(), PartPose.offset(0.0F, -5.0F, 6.0F));
 
         return LayerDefinition.create(meshdefinition, 128, 128);
     }
@@ -95,10 +99,11 @@ public class ModelLeafBall<T extends EntityLeafBall> extends EntityModel<T> impl
             EntityModel<?> model = lR.getModel();
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.body.translateAndRotate(poseStack);
+                this.ridingPosition.translateAndRotate(poseStack);
                 if (model instanceof SittingModel sittingModel)
                     sittingModel.translateSittingPosition(poseStack);
                 else
-                    poseStack.translate(0, 4 / 16d, 6 / 16d);
+                    poseStack.translate(0, 11 / 16d, 0);
                 return true;
             }
         }

@@ -37,6 +37,7 @@ public class ModelBuffamoo<T extends EntityBuffamoo> extends EntityModel<T> impl
 
     public ModelPartHandler.ModelPartExtended body;
     public ModelPartHandler.ModelPartExtended head;
+    public ModelPartHandler.ModelPartExtended ridingPosition;
 
     public ModelBuffamoo(ModelPart root) {
         super();
@@ -44,6 +45,7 @@ public class ModelBuffamoo<T extends EntityBuffamoo> extends EntityModel<T> impl
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "buffamoo"));
         this.body = this.model.getPart("body");
         this.head = this.model.getPart("head");
+        this.ridingPosition = this.model.getPart("ridingPos");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -93,6 +95,8 @@ public class ModelBuffamoo<T extends EntityBuffamoo> extends EntityModel<T> impl
 
         PartDefinition tailTip = tail3.addOrReplaceChild("tailTip", CubeListBuilder.create().texOffs(44, 69).addBox(-1.0F, -0.2F, -1.0F, 2.0F, 3.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 4.3F, 0.0F));
 
+        PartDefinition ridingPos = body.addOrReplaceChild("ridingPos", CubeListBuilder.create(), PartPose.offset(0.0F, -3.0F, 3.0F));
+
         return LayerDefinition.create(meshdefinition, 128, 128);
     }
 
@@ -126,10 +130,11 @@ public class ModelBuffamoo<T extends EntityBuffamoo> extends EntityModel<T> impl
             EntityModel<?> model = lR.getModel();
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.body.translateAndRotate(poseStack);
+                this.ridingPosition.translateAndRotate(poseStack);
                 if (model instanceof SittingModel sittingModel)
                     sittingModel.translateSittingPosition(poseStack);
                 else
-                    poseStack.translate(0, 8 / 16d, 3 / 16d);
+                    poseStack.translate(0, 11 / 16d, 0);
                 return true;
             }
         }

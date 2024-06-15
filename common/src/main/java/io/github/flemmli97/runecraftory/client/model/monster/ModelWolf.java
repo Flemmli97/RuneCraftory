@@ -38,6 +38,7 @@ public class ModelWolf<T extends EntityWolf> extends EntityModel<T> implements E
 
     public ModelPartHandler.ModelPartExtended body;
     public ModelPartHandler.ModelPartExtended upper;
+    public ModelPartHandler.ModelPartExtended ridingPosition;
 
     public ModelWolf(ModelPart root) {
         super();
@@ -45,6 +46,7 @@ public class ModelWolf<T extends EntityWolf> extends EntityModel<T> implements E
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "wolf"));
         this.body = this.model.getPart("body");
         this.upper = this.model.getPart("upperBody");
+        this.ridingPosition = this.model.getPart("ridingPos");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -93,6 +95,8 @@ public class ModelWolf<T extends EntityWolf> extends EntityModel<T> implements E
 
         PartDefinition rightHindPaw = rightHindLeg.addOrReplaceChild("rightHindPaw", CubeListBuilder.create().texOffs(24, 56).addBox(-3.0F, 0.0F, -2.0F, 3.0F, 4.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(1.5F, 6.0F, 1.0F, -1.2654F, 0.0F, 0.0F));
 
+        PartDefinition ridingPos = body.addOrReplaceChild("ridingPos", CubeListBuilder.create(), PartPose.offset(0.0F, -4.75F, 6.0F));
+
         return LayerDefinition.create(meshdefinition, 128, 128);
     }
 
@@ -130,10 +134,11 @@ public class ModelWolf<T extends EntityWolf> extends EntityModel<T> implements E
             EntityModel<?> model = lR.getModel();
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.body.translateAndRotate(poseStack);
+                this.ridingPosition.translateAndRotate(poseStack);
                 if (model instanceof SittingModel sittingModel)
                     sittingModel.translateSittingPosition(poseStack);
                 else
-                    poseStack.translate(0, 5 / 16d, 2 / 16d);
+                    poseStack.translate(0, 11 / 16d, 0);
                 return true;
             }
         }

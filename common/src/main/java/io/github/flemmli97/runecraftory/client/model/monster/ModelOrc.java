@@ -43,6 +43,7 @@ public class ModelOrc<T extends EntityOrc> extends EntityModel<T> implements Ext
     public ModelPartHandler.ModelPartExtended handLeftDown;
     public ModelPartHandler.ModelPartExtended handRightUp;
     public ModelPartHandler.ModelPartExtended handRightDown;
+    public ModelPartHandler.ModelPartExtended ridingPosition;
 
     public ModelOrc(ModelPart root) {
         super();
@@ -54,6 +55,7 @@ public class ModelOrc<T extends EntityOrc> extends EntityModel<T> implements Ext
         this.handLeftDown = this.model.getPart("handLeftDown");
         this.handRightUp = this.model.getPart("handRightUp");
         this.handRightDown = this.model.getPart("handRightDown");
+        this.ridingPosition = this.model.getPart("ridingPos");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -92,6 +94,8 @@ public class ModelOrc<T extends EntityOrc> extends EntityModel<T> implements Ext
                 .texOffs(32, 60).addBox(-1.8F, 2.0F, -3.25F, 4.0F, 4.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-2.7F, 7.0F, 0.5F, -0.5236F, 0.0F, 0.0F));
 
         PartDefinition legRightDown = legRightUp.addOrReplaceChild("legRightDown", CubeListBuilder.create().texOffs(32, 43).addBox(-1.4F, 0.0F, 0.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-0.4F, 6.0F, -3.0F, 0.3491F, 0.0F, 0.0F));
+
+        PartDefinition ridingPos = body.addOrReplaceChild("ridingPos", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 6.0F));
 
         return LayerDefinition.create(meshdefinition, 128, 128);
     }
@@ -146,10 +150,11 @@ public class ModelOrc<T extends EntityOrc> extends EntityModel<T> implements Ext
             EntityModel<?> model = lR.getModel();
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.body.translateAndRotate(poseStack);
+                this.ridingPosition.translateAndRotate(poseStack);
                 if (model instanceof SittingModel sittingModel)
                     sittingModel.translateSittingPosition(poseStack);
                 else
-                    poseStack.translate(0, -1 / 16d, 6 / 16d);
+                    poseStack.translate(0, 11 / 16d, 0);
                 return true;
             }
         }
@@ -158,6 +163,6 @@ public class ModelOrc<T extends EntityOrc> extends EntityModel<T> implements Ext
 
     @Override
     public void translateSittingPosition(PoseStack stack) {
-        stack.translate(0, 2 / 16d, 6 / 16d);
+        stack.translate(0, 4 / 16d, 0);
     }
 }

@@ -35,12 +35,14 @@ public class ModelDuck<T extends EntityDuck> extends EntityModel<T> implements E
     protected final BlockBenchAnimations anim;
 
     public ModelPartHandler.ModelPartExtended body;
+    public ModelPartHandler.ModelPartExtended ridingPosition;
 
     public ModelDuck(ModelPart root) {
         super();
         this.model = new ModelPartHandler(root, "root");
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "duck"));
         this.body = this.model.getPart("body");
+        this.ridingPosition = this.model.getPart("ridingPos");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -69,6 +71,8 @@ public class ModelDuck<T extends EntityDuck> extends EntityModel<T> implements E
         PartDefinition leftFeet = body.addOrReplaceChild("leftFeet", CubeListBuilder.create().texOffs(0, 69).addBox(-2.0F, -0.5F, -8.0F, 4.0F, 1.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offset(3.25F, 12.0F, -2.5F));
 
         PartDefinition rightFeet = body.addOrReplaceChild("rightFeet", CubeListBuilder.create().texOffs(58, 58).addBox(-2.0F, -0.5F, -8.0F, 4.0F, 1.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offset(-3.25F, 12.0F, -2.5F));
+
+        PartDefinition ridingPos = body.addOrReplaceChild("ridingPos", CubeListBuilder.create(), PartPose.offset(0.0F, -12.0F, 6.0F));
 
         return LayerDefinition.create(meshdefinition, 128, 128);
     }
@@ -103,10 +107,11 @@ public class ModelDuck<T extends EntityDuck> extends EntityModel<T> implements E
             EntityModel<?> model = lR.getModel();
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.body.translateAndRotate(poseStack);
+                this.ridingPosition.translateAndRotate(poseStack);
                 if (model instanceof SittingModel sittingModel)
                     sittingModel.translateSittingPosition(poseStack);
                 else
-                    poseStack.translate(0, -1 / 16d, 6 / 16d);
+                    poseStack.translate(0, 11 / 16d, 0);
                 return true;
             }
         }

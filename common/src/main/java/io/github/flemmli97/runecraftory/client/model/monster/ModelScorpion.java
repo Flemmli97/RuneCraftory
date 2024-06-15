@@ -35,12 +35,14 @@ public class ModelScorpion<T extends EntityScorpion> extends EntityModel<T> impl
     protected final BlockBenchAnimations anim;
 
     public ModelPartHandler.ModelPartExtended body;
+    public ModelPartHandler.ModelPartExtended ridingPosition;
 
     public ModelScorpion(ModelPart root) {
         super();
         this.model = new ModelPartHandler(root, "root");
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "scorpion"));
         this.body = this.model.getPart("body");
+        this.ridingPosition = this.model.getPart("ridingPos");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -120,6 +122,8 @@ public class ModelScorpion<T extends EntityScorpion> extends EntityModel<T> impl
 
         PartDefinition leg1Down16 = leg1Down14.addOrReplaceChild("leg1Down16", CubeListBuilder.create().texOffs(0, 48).addBox(-4.0F, -1.0F, -1.0F, 4.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-4.0F, -0.5F, -1.5F, 0.0F, -0.4363F, 0.0F));
 
+        PartDefinition riderPos = body.addOrReplaceChild("ridingPos", CubeListBuilder.create(), PartPose.offset(0.0F, -3.0F, 0.0F));
+
         return LayerDefinition.create(meshdefinition, 128, 128);
     }
 
@@ -151,10 +155,11 @@ public class ModelScorpion<T extends EntityScorpion> extends EntityModel<T> impl
             EntityModel<?> model = lR.getModel();
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.body.translateAndRotate(poseStack);
+                this.ridingPosition.translateAndRotate(poseStack);
                 if (model instanceof SittingModel sittingModel)
                     sittingModel.translateSittingPosition(poseStack);
                 else
-                    poseStack.translate(0, 6 / 16d, 4 / 16d);
+                    poseStack.translate(0, 11 / 16d, 0);
                 return true;
             }
         }

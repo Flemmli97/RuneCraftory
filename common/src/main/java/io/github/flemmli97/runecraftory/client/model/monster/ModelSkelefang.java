@@ -56,6 +56,8 @@ public class ModelSkelefang<T extends EntitySkelefang> extends EntityModel<T> im
     public ModelPartHandler.ModelPartExtended bone2;
 
     public ModelPartHandler.ModelPartExtended heart;
+    public ModelPartHandler.ModelPartExtended ridingPositionBones;
+    public ModelPartHandler.ModelPartExtended ridingPositionHeart;
 
     private int beamTick = -1, entityTick;
     private boolean translucentTail, translucentTailBase, translucentSpineBack, translucentSpineFront, translucentBackRibs, translucentFrontRibs;
@@ -78,6 +80,8 @@ public class ModelSkelefang<T extends EntitySkelefang> extends EntityModel<T> im
         this.bone1 = this.model.getPart("randomBone");
         this.bone2 = this.model.getPart("randomBone2");
         this.heart = this.model.getPart("heartYAxis");
+        this.ridingPositionBones = this.model.getPart("ridingPosBones");
+        this.ridingPositionHeart = this.model.getPart("ridingPosHeart");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -173,11 +177,15 @@ public class ModelSkelefang<T extends EntitySkelefang> extends EntityModel<T> im
                 .texOffs(141, 138).addBox(-6.5F, 0.0F, -28.0F, 12.0F, 6.0F, 13.0F, new CubeDeformation(0.0F))
                 .texOffs(31, 159).addBox(-6.5F, -1.0F, -28.0F, 12.0F, 1.0F, 13.0F, new CubeDeformation(-0.025F)), PartPose.offsetAndRotation(0.0F, -1.0F, -8.0F, 0.1309F, 0.0F, 0.0F));
 
+        PartDefinition ridingPosBones = spineFront.addOrReplaceChild("ridingPosBones", CubeListBuilder.create(), PartPose.offset(0.0F, -4.0F, 6.0F));
+
         PartDefinition heartYAxis = body.addOrReplaceChild("heartYAxis", CubeListBuilder.create(), PartPose.offset(0.0F, 9.5F, 13.0F));
 
         PartDefinition heartZAxis = heartYAxis.addOrReplaceChild("heartZAxis", CubeListBuilder.create(), PartPose.offsetAndRotation(0.0F, 7.0F, 0.0F, -0.6109F, 0.0F, 0.0F));
 
         PartDefinition heartXAxis = heartZAxis.addOrReplaceChild("heartXAxis", CubeListBuilder.create().texOffs(48, 134).addBox(-6.0F, -6.0F, -6.0F, 12.0F, 12.0F, 12.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.7854F));
+
+        PartDefinition ridingPosHeart = heartYAxis.addOrReplaceChild("ridingPosHeart", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 3.0F));
 
         PartDefinition spineBack = body.addOrReplaceChild("spineBack", CubeListBuilder.create().texOffs(0, 31).addBox(-4.0F, -4.0F, 0.0F, 8.0F, 8.0F, 24.0F, new CubeDeformation(0.0F))
                 .texOffs(0, 91).addBox(-2.0F, -13.0F, 2.0F, 4.0F, 9.0F, 4.0F, new CubeDeformation(0.0F))
@@ -350,17 +358,15 @@ public class ModelSkelefang<T extends EntitySkelefang> extends EntityModel<T> im
                 this.body.translateAndRotate(poseStack);
                 if (entity.hasBones()) {
                     this.spineFront.translateAndRotate(poseStack);
-                    if (model instanceof SittingModel sittingModel)
-                        sittingModel.translateSittingPosition(poseStack);
-                    else
-                        poseStack.translate(0, 6 / 16d, 5 / 16d);
+                    this.ridingPositionBones.translateAndRotate(poseStack);
                 } else {
                     this.heart.translateAndRotate(poseStack);
-                    if (model instanceof SittingModel sittingModel)
-                        sittingModel.translateSittingPosition(poseStack);
-                    else
-                        poseStack.translate(0, 11 / 16d, 3 / 16d);
+                    this.ridingPositionHeart.translateAndRotate(poseStack);
                 }
+                if (model instanceof SittingModel sittingModel)
+                    sittingModel.translateSittingPosition(poseStack);
+                else
+                    poseStack.translate(0, 11 / 16d, 0);
                 return true;
             }
         }

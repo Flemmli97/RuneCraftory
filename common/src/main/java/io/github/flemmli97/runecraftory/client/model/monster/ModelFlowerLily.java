@@ -36,12 +36,14 @@ public class ModelFlowerLily<T extends EntityFlowerLily> extends EntityModel<T> 
     protected final BlockBenchAnimations anim;
 
     public ModelPartHandler.ModelPartExtended body;
+    public ModelPartHandler.ModelPartExtended ridingPosition;
 
     public ModelFlowerLily(ModelPart root) {
         super();
         this.model = new ModelPartHandler(root, "root");
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "flower_lily"));
         this.body = this.model.getPart("body");
+        this.ridingPosition = this.model.getPart("ridingPos");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -73,6 +75,8 @@ public class ModelFlowerLily<T extends EntityFlowerLily> extends EntityModel<T> 
         PartDefinition leaf2 = stem.addOrReplaceChild("leaf2", CubeListBuilder.create().texOffs(16, 52).mirror().addBox(-8.0F, -8.0F, 1.0F, 8.0F, 9.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(0.0F, -2.0F, 0.0F, 0.0F, 0.3491F, -0.3054F));
 
         PartDefinition tail = body.addOrReplaceChild("tail", CubeListBuilder.create().texOffs(0, 18).addBox(0.0F, -10.0F, 0.0F, 0.0F, 10.0F, 10.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 7.0F, 2.0F));
+
+        PartDefinition ridingPos = body.addOrReplaceChild("ridingPos", CubeListBuilder.create(), PartPose.offset(0.0F, -7.0F, 4.0F));
 
         return LayerDefinition.create(meshdefinition, 128, 128);
     }
@@ -107,10 +111,11 @@ public class ModelFlowerLily<T extends EntityFlowerLily> extends EntityModel<T> 
             EntityModel<?> model = lR.getModel();
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.body.translateAndRotate(poseStack);
+                this.ridingPosition.translateAndRotate(poseStack);
                 if (model instanceof SittingModel sittingModel)
                     sittingModel.translateSittingPosition(poseStack);
                 else
-                    poseStack.translate(0, 4 / 16d, 5 / 16d);
+                    poseStack.translate(0, 11 / 16d, 0);
                 return true;
             }
         }

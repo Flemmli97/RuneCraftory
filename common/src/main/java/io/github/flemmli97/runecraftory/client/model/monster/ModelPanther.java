@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.client.model.monster;// Made with Block
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.model.SittingModel;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityPanther;
@@ -36,12 +35,14 @@ public class ModelPanther<T extends EntityPanther> extends EntityModel<T> implem
     protected final BlockBenchAnimations anim;
 
     public ModelPartHandler.ModelPartExtended body;
+    public ModelPartHandler.ModelPartExtended ridingPosition;
 
     public ModelPanther(ModelPart root) {
         super();
         this.model = new ModelPartHandler(root, "root");
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "panther"));
         this.body = this.model.getPart("body");
+        this.ridingPosition = this.model.getPart("ridingPos");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -109,6 +110,8 @@ public class ModelPanther<T extends EntityPanther> extends EntityModel<T> implem
 
         PartDefinition tailTip = tailMiddle.addOrReplaceChild("tailTip", CubeListBuilder.create().texOffs(0, 38).addBox(-1.0F, -2.0F, 0.0F, 2.0F, 2.0F, 12.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 2.0F, 11.0F, 0.48F, 0.0F, 0.0F));
 
+        PartDefinition ridingPos = body.addOrReplaceChild("ridingPos", CubeListBuilder.create(), PartPose.offsetAndRotation(0.0F, -7.0F, 11.0F, 0.7854F, 0.0F, 0.0F));
+
         return LayerDefinition.create(meshdefinition, 128, 128);
     }
 
@@ -140,11 +143,11 @@ public class ModelPanther<T extends EntityPanther> extends EntityModel<T> implem
             EntityModel<?> model = lR.getModel();
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.body.translateAndRotate(poseStack);
+                this.ridingPosition.translateAndRotate(poseStack);
                 if (model instanceof SittingModel sittingModel)
                     sittingModel.translateSittingPosition(poseStack);
                 else
-                    poseStack.translate(0, -1 / 16d, 12 / 16d);
-                poseStack.mulPose(Vector3f.XP.rotationDegrees(45));
+                    poseStack.translate(0, 11 / 16d, 0);
                 return true;
             }
         }

@@ -36,12 +36,14 @@ public class ModelWisp<T extends EntityWispBase> extends EntityModel<T> implemen
     protected final BlockBenchAnimations anim;
 
     public ModelPartHandler.ModelPartExtended main;
+    public ModelPartHandler.ModelPartExtended ridingPosition;
 
     public ModelWisp(ModelPart root) {
         super(RenderType::entityTranslucentCull);
         this.model = new ModelPartHandler(root, "main");
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "wisp"));
         this.main = this.model.getPart("main");
+        this.ridingPosition = this.model.getPart("ridingPos");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -62,6 +64,8 @@ public class ModelWisp<T extends EntityWispBase> extends EntityModel<T> implemen
         PartDefinition floaty5 = main.addOrReplaceChild("floaty5", CubeListBuilder.create().texOffs(0, 4).addBox(-2.0F, 0.0F, 7.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         PartDefinition floaty6 = main.addOrReplaceChild("floaty6", CubeListBuilder.create().texOffs(0, 0).addBox(-5.0F, -8.0F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+        PartDefinition riderPos = main.addOrReplaceChild("ridingPos", CubeListBuilder.create(), PartPose.offset(0.0F, -4.5F, 3.0F));
 
         return LayerDefinition.create(meshdefinition, 64, 64);
     }
@@ -95,10 +99,11 @@ public class ModelWisp<T extends EntityWispBase> extends EntityModel<T> implemen
             EntityModel<?> model = lR.getModel();
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.main.translateAndRotate(poseStack);
+                this.ridingPosition.translateAndRotate(poseStack);
                 if (model instanceof SittingModel sittingModel)
                     sittingModel.translateSittingPosition(poseStack);
                 else
-                    poseStack.translate(0, 4.5 / 16d, 2 / 16d);
+                    poseStack.translate(0, 11 / 16d, 0);
                 return true;
             }
         }

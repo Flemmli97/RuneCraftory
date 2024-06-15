@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.client.model.monster;// Made with Block
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.model.SittingModel;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityWeagle;
@@ -38,6 +37,7 @@ public class ModelWeagle<T extends EntityWeagle> extends EntityModel<T> implemen
 
     public ModelPartHandler.ModelPartExtended body;
     public ModelPartHandler.ModelPartExtended head;
+    public ModelPartHandler.ModelPartExtended ridingPosition;
 
     public ModelWeagle(ModelPart root) {
         super();
@@ -45,6 +45,7 @@ public class ModelWeagle<T extends EntityWeagle> extends EntityModel<T> implemen
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "weagle"));
         this.body = this.model.getPart("body");
         this.head = this.model.getPart("head");
+        this.ridingPosition = this.model.getPart("ridingPos");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -91,6 +92,7 @@ public class ModelWeagle<T extends EntityWeagle> extends EntityModel<T> implemen
         PartDefinition rightLeg = body.addOrReplaceChild("rightLeg", CubeListBuilder.create().texOffs(54, 52).addBox(-1.0F, -1.0F, -0.5F, 2.0F, 2.0F, 4.0F, new CubeDeformation(0.0F))
                 .texOffs(36, 61).mirror().addBox(-2.5F, -1.0F, 3.5F, 5.0F, 4.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(-3.5F, 6.0F, 8.5F));
 
+        PartDefinition ridingPos = body.addOrReplaceChild("ridingPos", CubeListBuilder.create(), PartPose.offsetAndRotation(0.0F, -1.0F, 6.0F, 1.2217F, 0.0F, 0.0F));
         return LayerDefinition.create(meshdefinition, 128, 128);
     }
 
@@ -125,11 +127,11 @@ public class ModelWeagle<T extends EntityWeagle> extends EntityModel<T> implemen
             EntityModel<?> model = lR.getModel();
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.body.translateAndRotate(poseStack);
+                this.ridingPosition.translateAndRotate(poseStack);
                 if (model instanceof SittingModel sittingModel)
                     sittingModel.translateSittingPosition(poseStack);
                 else
-                    poseStack.translate(0, -1 / 16d, 20 / 16d);
-                poseStack.mulPose(Vector3f.XP.rotationDegrees(80));
+                    poseStack.translate(0, 11 / 16d, 0);
                 return true;
             }
         }

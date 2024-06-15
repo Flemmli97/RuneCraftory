@@ -880,7 +880,7 @@ public class ModEntities {
                     .xp(15).money(1).tamingChance(0.15f),
             new GateSpawnData.Builder(0, 5).addToBiomeTag(1, RunecraftoryTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, BiomeTags.IS_MOUNTAIN, RunecraftoryTags.IS_LUSH, RunecraftoryTags.IS_SAVANNA));
     public static final RegistryEntrySupplier<EntityType<EntityNappie>> NAPPIE = regMonster(EntityType.Builder.of(EntityNappie::new, MobCategory.MONSTER).sized(1.0f, 1.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "nappie"),
-            0x705020, 0x1b5a0d,
+            0xb4843c, 0x1b5a0d,
             new EntityProperties.Builder()
                     .putAttributes(() -> Attributes.MAX_HEALTH, 24).putLevelGains(() -> Attributes.MAX_HEALTH, 415)
                     .putAttributes(() -> Attributes.ATTACK_DAMAGE, 14).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 160)

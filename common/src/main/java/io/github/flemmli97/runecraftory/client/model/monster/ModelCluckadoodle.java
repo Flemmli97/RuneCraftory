@@ -38,6 +38,7 @@ public class ModelCluckadoodle<T extends EntityCluckadoodle> extends EntityModel
     public ModelPartHandler.ModelPartExtended body;
     public ModelPartHandler.ModelPartExtended head;
     public ModelPartHandler.ModelPartExtended neck;
+    public ModelPartHandler.ModelPartExtended ridingPosition;
 
     public ModelCluckadoodle(ModelPart root) {
         super();
@@ -46,15 +47,16 @@ public class ModelCluckadoodle<T extends EntityCluckadoodle> extends EntityModel
         this.body = this.model.getPart("body");
         this.head = this.model.getPart("head");
         this.neck = this.model.getPart("neck");
+        this.ridingPosition = this.model.getPart("ridingPos");
     }
 
     public static LayerDefinition createBodyLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition body = partdefinition.addOrReplaceChild("body", CubeListBuilder.create().texOffs(32, 15).addBox(-3.5F, -3.5F, -5.3333F, 7.0F, 7.0F, 10.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 15.5F, 1.3333F));
+        PartDefinition body = partdefinition.addOrReplaceChild("body", CubeListBuilder.create().texOffs(32, 15).addBox(-3.5F, -3.5F, -4.0F, 7.0F, 7.0F, 10.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 15.5F, 0.0F));
 
-        PartDefinition neck = body.addOrReplaceChild("neck", CubeListBuilder.create().texOffs(0, 16).addBox(-2.0F, 0.0F, -1.0F, 4.0F, 3.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -2.5F, -5.3333F));
+        PartDefinition neck = body.addOrReplaceChild("neck", CubeListBuilder.create().texOffs(0, 16).addBox(-2.0F, 0.0F, -1.0F, 4.0F, 3.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -2.5F, -4.0F));
 
         PartDefinition head = neck.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 0).addBox(-2.0F, -6.0F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
@@ -63,23 +65,25 @@ public class ModelCluckadoodle<T extends EntityCluckadoodle> extends EntityModel
         PartDefinition beak = head.addOrReplaceChild("beak", CubeListBuilder.create().texOffs(12, 14).addBox(-1.0F, -4.0F, -4.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
                 .texOffs(12, 18).addBox(-1.0F, -3.5F, -4.5F, 2.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition backFeathersLeft = body.addOrReplaceChild("backFeathersLeft", CubeListBuilder.create().texOffs(0, 21).addBox(0.0F, -8.5F, 0.0F, 6.0F, 9.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -3.0F, 3.6667F, -0.4363F, -0.0873F, 1.1345F));
+        PartDefinition backFeathersLeft = body.addOrReplaceChild("backFeathersLeft", CubeListBuilder.create().texOffs(0, 21).addBox(0.0F, -8.5F, 0.0F, 6.0F, 9.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -3.0F, 5.0F, -0.4363F, -0.0873F, 1.1345F));
 
         PartDefinition backFeathersLeftUp = backFeathersLeft.addOrReplaceChild("backFeathersLeftUp", CubeListBuilder.create().texOffs(12, 21).addBox(0.0F, -10.5F, 0.0F, 6.0F, 11.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, -0.1745F, 0.0F, -1.0472F));
 
-        PartDefinition backFeathersRight = body.addOrReplaceChild("backFeathersRight", CubeListBuilder.create().texOffs(0, 21).mirror().addBox(-6.0F, -9.5F, 0.0F, 6.0F, 10.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(0.0F, -3.0F, 3.6667F, -0.4363F, 0.0873F, -1.1345F));
+        PartDefinition backFeathersRight = body.addOrReplaceChild("backFeathersRight", CubeListBuilder.create().texOffs(0, 21).mirror().addBox(-6.0F, -9.5F, 0.0F, 6.0F, 10.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(0.0F, -3.0F, 5.0F, -0.4363F, 0.0873F, -1.1345F));
 
         PartDefinition backFeathersRightUp = backFeathersRight.addOrReplaceChild("backFeathersRightUp", CubeListBuilder.create().texOffs(12, 21).mirror().addBox(-6.0F, -10.5F, 0.0F, 6.0F, 11.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, -0.1745F, 0.0F, 1.0472F));
 
         PartDefinition legLeft = body.addOrReplaceChild("legLeft", CubeListBuilder.create().texOffs(26, 0).addBox(-0.5F, -1.0F, -0.5F, 1.0F, 6.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(26, 7).addBox(-1.5F, 5.0F, -2.5F, 3.0F, 0.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(1.5F, 3.5F, -0.8333F));
+                .texOffs(26, 7).addBox(-1.5F, 5.0F, -2.5F, 3.0F, 0.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(1.5F, 3.5F, 0.5F));
 
         PartDefinition legRight = body.addOrReplaceChild("legRight", CubeListBuilder.create().texOffs(26, 0).addBox(-0.5F, -1.0F, -0.5F, 1.0F, 6.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(26, 7).addBox(-1.5F, 5.0F, -2.5F, 3.0F, 0.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(-1.5F, 3.5F, -0.8333F));
+                .texOffs(26, 7).addBox(-1.5F, 5.0F, -2.5F, 3.0F, 0.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(-1.5F, 3.5F, 0.5F));
 
-        PartDefinition wingLeft = body.addOrReplaceChild("wingLeft", CubeListBuilder.create().texOffs(40, 0).addBox(0.0F, -2.0F, -0.5F, 1.0F, 5.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.5F, -1.5F, -3.8333F, 0.4363F, 0.0F, 0.0F));
+        PartDefinition wingLeft = body.addOrReplaceChild("wingLeft", CubeListBuilder.create().texOffs(40, 0).addBox(0.0F, -2.0F, -0.5F, 1.0F, 5.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.5F, -1.5F, -2.5F, 0.4363F, 0.0F, 0.0F));
 
-        PartDefinition wingRight = body.addOrReplaceChild("wingRight", CubeListBuilder.create().texOffs(40, 0).mirror().addBox(-1.0F, -2.0603F, -0.842F, 1.0F, 5.0F, 8.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-3.5F, -1.4397F, -3.4913F, 0.4363F, 0.0F, 0.0F));
+        PartDefinition wingRight = body.addOrReplaceChild("wingRight", CubeListBuilder.create().texOffs(40, 0).mirror().addBox(-1.0F, -2.0603F, -0.842F, 1.0F, 5.0F, 8.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-3.5F, -1.4397F, -2.158F, 0.4363F, 0.0F, 0.0F));
+
+        PartDefinition ridingPos = body.addOrReplaceChild("ridingPos", CubeListBuilder.create(), PartPose.offset(0.0F, -3.0F, 2.0F));
 
         return LayerDefinition.create(meshdefinition, 66, 32);
     }
@@ -116,10 +120,11 @@ public class ModelCluckadoodle<T extends EntityCluckadoodle> extends EntityModel
             EntityModel<?> model = lR.getModel();
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.body.translateAndRotate(poseStack);
+                this.ridingPosition.translateAndRotate(poseStack);
                 if (model instanceof SittingModel sittingModel)
                     sittingModel.translateSittingPosition(poseStack);
                 else
-                    poseStack.translate(0, 8 / 16d, 0);
+                    poseStack.translate(0, 11 / 16d, 0);
                 return true;
             }
         }

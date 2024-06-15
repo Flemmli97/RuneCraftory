@@ -36,12 +36,14 @@ public class ModelMarionetta<T extends EntityMarionetta> extends EntityModel<T> 
     protected final BlockBenchAnimations anim;
 
     public ModelPartHandler.ModelPartExtended body;
+    public ModelPartHandler.ModelPartExtended ridingPosition;
 
     public ModelMarionetta(ModelPart root) {
         super();
         this.model = new ModelPartHandler(root, "root");
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "marionetta"));
         this.body = this.model.getPart("body");
+        this.ridingPosition = this.model.getPart("ridingPos");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -98,6 +100,8 @@ public class ModelMarionetta<T extends EntityMarionetta> extends EntityModel<T> 
 
         PartDefinition rightLegDown = rightLeg.addOrReplaceChild("rightLegDown", CubeListBuilder.create().texOffs(54, 31).addBox(-2.0F, 0.0F, 0.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(-0.1F, 6.0F, -2.0F));
 
+        PartDefinition ridingPos = body.addOrReplaceChild("ridingPos", CubeListBuilder.create(), PartPose.offset(0.0F, 3.0F, 6.0F));
+
         return LayerDefinition.create(meshdefinition, 128, 128);
     }
 
@@ -133,10 +137,11 @@ public class ModelMarionetta<T extends EntityMarionetta> extends EntityModel<T> 
             EntityModel<?> model = lR.getModel();
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.body.translateAndRotate(poseStack);
+                this.ridingPosition.translateAndRotate(poseStack);
                 if (model instanceof SittingModel sittingModel)
                     sittingModel.translateSittingPosition(poseStack);
                 else
-                    poseStack.translate(0, 6 / 16d, 7 / 16d);
+                    poseStack.translate(0, 11 / 16d, 0);
                 return true;
             }
         }

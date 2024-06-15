@@ -36,6 +36,7 @@ public class ModelBigMuck<T extends EntityBigMuck> extends EntityModel<T> implem
 
     public ModelPartHandler.ModelPartExtended body;
     public ModelPartHandler.ModelPartExtended cap;
+    public ModelPartHandler.ModelPartExtended ridingPosition;
 
     public ModelBigMuck(ModelPart root) {
         super();
@@ -43,6 +44,7 @@ public class ModelBigMuck<T extends EntityBigMuck> extends EntityModel<T> implem
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "big_muck"));
         this.body = this.model.getPart("body");
         this.cap = this.model.getPart("mushroomCap");
+        this.ridingPosition = this.model.getPart("ridingPos");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -55,11 +57,13 @@ public class ModelBigMuck<T extends EntityBigMuck> extends EntityModel<T> implem
                 .texOffs(44, 0).addBox(-7.0F, -14.0F, -4.0F, 1.0F, 14.0F, 9.0F, new CubeDeformation(0.0F))
                 .texOffs(20, 25).addBox(-5.0F, -14.0F, 6.0F, 9.0F, 14.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.5F, 24.0F, -0.5F));
 
-        PartDefinition mushroomCap = body.addOrReplaceChild("mushroomCap", CubeListBuilder.create().texOffs(0, 48).addBox(-10.0F, -2.0F, -9.0F, 19.0F, 2.0F, 19.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 69).addBox(-8.0F, -4.0F, -7.0F, 15.0F, 2.0F, 15.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 86).addBox(-7.0F, -7.0F, -6.0F, 13.0F, 3.0F, 13.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 102).addBox(-6.0F, -10.0F, -5.0F, 11.0F, 3.0F, 11.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 116).addBox(-4.0F, -12.0F, -3.0F, 7.0F, 2.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -14.0F, 0.0F));
+        PartDefinition mushroomCap = body.addOrReplaceChild("mushroomCap", CubeListBuilder.create().texOffs(0, 48).addBox(-9.5F, -2.0F, -9.5F, 19.0F, 2.0F, 19.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 69).addBox(-7.5F, -4.0F, -7.5F, 15.0F, 2.0F, 15.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 86).addBox(-6.5F, -7.0F, -6.5F, 13.0F, 3.0F, 13.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 102).addBox(-5.5F, -10.0F, -5.5F, 11.0F, 3.0F, 11.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 116).addBox(-3.5F, -12.0F, -3.5F, 7.0F, 2.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offset(-0.5F, -14.0F, 0.5F));
+
+        PartDefinition ridingPos = mushroomCap.addOrReplaceChild("ridingPos", CubeListBuilder.create(), PartPose.offset(0.0F, -12.0F, 3.0F));
 
         PartDefinition handLeft = body.addOrReplaceChild("handLeft", CubeListBuilder.create().texOffs(0, 40).mirror().addBox(0.0F, -0.5F, -3.5F, 8.0F, 1.0F, 7.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(6.0F, -8.5F, 0.5F, 0.0F, 0.0F, 0.2618F));
 
@@ -101,10 +105,11 @@ public class ModelBigMuck<T extends EntityBigMuck> extends EntityModel<T> implem
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.body.translateAndRotate(poseStack);
                 this.cap.translateAndRotate(poseStack);
+                this.ridingPosition.translateAndRotate(poseStack);
                 if (model instanceof SittingModel sittingModel)
                     sittingModel.translateSittingPosition(poseStack);
                 else
-                    poseStack.translate(0, -1 / 16d, 3 / 16d);
+                    poseStack.translate(0, 11 / 16d, 0);
                 return true;
             }
         }

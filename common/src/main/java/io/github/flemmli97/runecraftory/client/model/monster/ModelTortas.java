@@ -37,6 +37,7 @@ public class ModelTortas<T extends EntityTortas> extends EntityModel<T> implemen
 
     public ModelPartHandler.ModelPartExtended body;
     public ModelPartHandler.ModelPartExtended neck;
+    public ModelPartHandler.ModelPartExtended ridingPosition;
 
     public ModelTortas(ModelPart root) {
         super();
@@ -44,6 +45,7 @@ public class ModelTortas<T extends EntityTortas> extends EntityModel<T> implemen
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "tortas"));
         this.body = this.model.getPart("body");
         this.neck = this.model.getPart("neck");
+        this.ridingPosition = this.model.getPart("ridingPos");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -95,6 +97,8 @@ public class ModelTortas<T extends EntityTortas> extends EntityModel<T> implemen
 
         PartDefinition tail3 = tail2.addOrReplaceChild("tail3", CubeListBuilder.create().texOffs(114, 86).addBox(-0.5F, 1.0F, 0.0F, 1.0F, 1.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 2.0F));
 
+        PartDefinition ridingPos = body.addOrReplaceChild("ridingPos", CubeListBuilder.create(), PartPose.offset(0.0F, -11.0F, 4.0F));
+
         return LayerDefinition.create(meshdefinition, 128, 108);
     }
 
@@ -132,10 +136,11 @@ public class ModelTortas<T extends EntityTortas> extends EntityModel<T> implemen
             EntityModel<?> model = lR.getModel();
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.body.translateAndRotate(poseStack);
+                this.ridingPosition.translateAndRotate(poseStack);
                 if (model instanceof SittingModel sittingModel)
                     sittingModel.translateSittingPosition(poseStack);
                 else
-                    poseStack.translate(0, -1 / 16d, 2 / 16d);
+                    poseStack.translate(0, 11 / 16d, 0);
                 return true;
             }
         }

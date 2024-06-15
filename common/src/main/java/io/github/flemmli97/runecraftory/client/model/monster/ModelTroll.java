@@ -37,14 +37,18 @@ public class ModelTroll<T extends EntityTroll> extends EntityModel<T> implements
     protected final BlockBenchAnimations anim;
 
     public ModelPartHandler.ModelPartExtended body;
+    public ModelPartHandler.ModelPartExtended upperBody;
     public ModelPartHandler.ModelPartExtended head;
+    public ModelPartHandler.ModelPartExtended ridingPosition;
 
     public ModelTroll(ModelPart root) {
         super();
         this.model = new ModelPartHandler(root, "root");
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "troll"));
         this.body = this.model.getPart("body");
+        this.upperBody = this.model.getPart("upperBody");
         this.head = this.model.getPart("head");
+        this.ridingPosition = this.model.getPart("ridingPos");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -79,6 +83,8 @@ public class ModelTroll<T extends EntityTroll> extends EntityModel<T> implements
                 .texOffs(28, 76).addBox(-7.0F, -3.0F, -3.0F, 7.0F, 5.0F, 7.0F, new CubeDeformation(0.25F)), PartPose.offset(-8.5F, -7.0F, 0.0F));
 
         PartDefinition rightArmDown = rightArmUp.addOrReplaceChild("rightArmDown", CubeListBuilder.create().texOffs(40, 22).addBox(-4.0F, 0.0F, -3.0F, 7.0F, 11.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offset(-3.0F, 8.0F, 0.0F));
+
+        PartDefinition ridingPos = upperBody.addOrReplaceChild("ridingPos", CubeListBuilder.create(), PartPose.offset(0.0F, -12.0F, 6.0F));
 
         PartDefinition leftLegUp = body.addOrReplaceChild("leftLegUp", CubeListBuilder.create().texOffs(56, 60).addBox(-3.0F, 0.0F, -3.0F, 7.0F, 9.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offset(3.0F, 3.5F, 0.0F));
 
@@ -123,10 +129,12 @@ public class ModelTroll<T extends EntityTroll> extends EntityModel<T> implements
             EntityModel<?> model = lR.getModel();
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.body.translateAndRotate(poseStack);
+                this.upperBody.translateAndRotate(poseStack);
+                this.ridingPosition.translateAndRotate(poseStack);
                 if (model instanceof SittingModel sittingModel)
                     sittingModel.translateSittingPosition(poseStack);
                 else
-                    poseStack.translate(0, -6 / 16d, 7 / 16d);
+                    poseStack.translate(0, 11 / 16d, 0);
                 return true;
             }
         }

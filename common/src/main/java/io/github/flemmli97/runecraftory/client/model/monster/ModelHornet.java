@@ -36,12 +36,14 @@ public class ModelHornet<T extends EntityHornet> extends EntityModel<T> implemen
     protected final BlockBenchAnimations anim;
 
     public ModelPartHandler.ModelPartExtended body;
+    public ModelPartHandler.ModelPartExtended ridingPosition;
 
     public ModelHornet(ModelPart root) {
         super();
         this.model = new ModelPartHandler(root, "root");
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "hornet"));
         this.body = this.model.getPart("body");
+        this.ridingPosition = this.model.getPart("ridingPos");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -106,6 +108,8 @@ public class ModelHornet<T extends EntityHornet> extends EntityModel<T> implemen
 
         PartDefinition feet6 = legMiddle6.addOrReplaceChild("feet6", CubeListBuilder.create().texOffs(10, 40).addBox(-4.0F, -1.0F, -1.5F, 4.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-4.0F, 0.5F, 0.0F, 0.0F, 0.0F, 0.3927F));
 
+        PartDefinition ridingPos = body.addOrReplaceChild("ridingPos", CubeListBuilder.create(), PartPose.offset(0.0F, -4.0F, 6.0F));
+
         return LayerDefinition.create(meshdefinition, 128, 128);
     }
 
@@ -136,10 +140,11 @@ public class ModelHornet<T extends EntityHornet> extends EntityModel<T> implemen
             EntityModel<?> model = lR.getModel();
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.body.translateAndRotate(poseStack);
+                this.ridingPosition.translateAndRotate(poseStack);
                 if (model instanceof SittingModel sittingModel)
                     sittingModel.translateSittingPosition(poseStack);
                 else
-                    poseStack.translate(0, 6 / 16d, 7 / 16d);
+                    poseStack.translate(0, 11 / 16d, 0);
                 return true;
             }
         }

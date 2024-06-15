@@ -38,6 +38,7 @@ public class ModelDeadTree<T extends EntityDeadTree> extends EntityModel<T> impl
 
     public ModelPartHandler.ModelPartExtended body;
     public ModelPartHandler.ModelPartExtended leafs;
+    public ModelPartHandler.ModelPartExtended ridingPosition;
 
     public ModelDeadTree(ModelPart root) {
         super();
@@ -45,6 +46,7 @@ public class ModelDeadTree<T extends EntityDeadTree> extends EntityModel<T> impl
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "dead_tree"));
         this.body = this.model.getPart("body");
         this.leafs = this.model.getPart("leafs");
+        this.ridingPosition = this.model.getPart("ridingPos");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -86,6 +88,8 @@ public class ModelDeadTree<T extends EntityDeadTree> extends EntityModel<T> impl
                 .texOffs(0, 0).addBox(19.0F, -12.0F, -11.0F, 3.0F, 3.0F, 3.0F, new CubeDeformation(0.0F))
                 .texOffs(0, 0).addBox(19.0F, -7.0F, 7.0F, 3.0F, 3.0F, 3.0F, new CubeDeformation(0.0F))
                 .texOffs(0, 0).addBox(-2.0F, -11.0F, 19.0F, 3.0F, 3.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -15.0F, 0.0F));
+
+        PartDefinition ridingPos = leafs.addOrReplaceChild("ridingPos", CubeListBuilder.create(), PartPose.offset(0.0F, -32.0F, 3.0F));
 
         PartDefinition armLeft = body.addOrReplaceChild("armLeft", CubeListBuilder.create().texOffs(0, 20).addBox(0.0F, -3.0F, -10.0F, 6.0F, 6.0F, 14.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(6.0F, -11.0F, 2.0F, 0.0698F, -0.8727F, 0.1745F));
 
@@ -137,12 +141,12 @@ public class ModelDeadTree<T extends EntityDeadTree> extends EntityModel<T> impl
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.body.translateAndRotate(poseStack);
                 this.leafs.translateAndRotate(poseStack);
+                this.ridingPosition.translateAndRotate(poseStack);
+                poseStack.scale(1 / scaledRender.scale, 1 / scaledRender.scale, 1 / scaledRender.scale);
                 if (model instanceof SittingModel sittingModel)
                     sittingModel.translateSittingPosition(poseStack);
                 else
-                    poseStack.translate(0, -3 / 16d, 3 / 16d);
-                poseStack.scale(1 / scaledRender.scale, 1 / scaledRender.scale, 1 / scaledRender.scale);
-                poseStack.translate(0, -46 / 16d, 0);
+                    poseStack.translate(0, 11 / 16d, 0);
                 poseStack.scale(scaledRender.scale, scaledRender.scale, scaledRender.scale);
                 return true;
             }

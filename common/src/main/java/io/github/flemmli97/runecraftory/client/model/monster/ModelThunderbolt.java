@@ -40,6 +40,7 @@ public class ModelThunderbolt<T extends EntityThunderbolt> extends EntityModel<T
     public ModelPartHandler.ModelPartExtended body;
     public ModelPartHandler.ModelPartExtended head;
     public ModelPartHandler.ModelPartExtended neck;
+    public ModelPartHandler.ModelPartExtended ridingPosition;
 
     public ModelThunderbolt(ModelPart root) {
         super();
@@ -48,6 +49,7 @@ public class ModelThunderbolt<T extends EntityThunderbolt> extends EntityModel<T
         this.body = this.model.getPart("body");
         this.head = this.model.getPart("head");
         this.neck = this.model.getPart("neck");
+        this.ridingPosition = this.model.getPart("ridingPos");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -113,6 +115,8 @@ public class ModelThunderbolt<T extends EntityThunderbolt> extends EntityModel<T
         PartDefinition tailTip = tail.addOrReplaceChild("tailTip", CubeListBuilder.create().texOffs(67, 62).addBox(-1.5F, 0.0F, -3.5F, 2.0F, 13.0F, 3.0F, new CubeDeformation(0.0F))
                 .texOffs(32, 66).addBox(-1.0F, -1.0F, -3.5F, 1.0F, 14.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 6.0F, 3.0F, -0.5236F, 0.0F, 0.0F));
 
+        PartDefinition riderPos = body.addOrReplaceChild("ridingPos", CubeListBuilder.create(), PartPose.offset(0.0F, -7.0F, 4.0F));
+
         return LayerDefinition.create(meshdefinition, 128, 128);
     }
 
@@ -153,10 +157,11 @@ public class ModelThunderbolt<T extends EntityThunderbolt> extends EntityModel<T
             EntityModel<?> model = lR.getModel();
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.body.translateAndRotate(poseStack);
+                this.ridingPosition.translateAndRotate(poseStack);
                 if (model instanceof SittingModel sittingModel)
                     sittingModel.translateSittingPosition(poseStack);
                 else
-                    poseStack.translate(0, 3 / 16d, 1 / 16d);
+                    poseStack.translate(0, 11 / 16d, 0);
                 return true;
             }
         }

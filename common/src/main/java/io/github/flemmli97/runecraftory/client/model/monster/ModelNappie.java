@@ -59,6 +59,8 @@ public class ModelNappie<T extends EntityNappie> extends ModelPommePomme<T> {
 
         PartDefinition feetRight = body.addOrReplaceChild("feetRight", CubeListBuilder.create().texOffs(61, 55).mirror().addBox(-1.5F, 0.0F, -7.0F, 3.0F, 1.0F, 7.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(-3.5F, 10.0F, 1.0F));
 
+        PartDefinition ridingPos = body.addOrReplaceChild("ridingPos", CubeListBuilder.create(), PartPose.offset(0.0F, -5.0F, 5.0F));
+
         return LayerDefinition.create(meshdefinition, 128, 128);
     }
 }

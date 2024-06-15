@@ -38,6 +38,7 @@ public class ModelAmbrosia<T extends EntityAmbrosia> extends EntityModel<T> impl
 
     public ModelPartHandler.ModelPartExtended body;
     public ModelPartHandler.ModelPartExtended head;
+    public ModelPartHandler.ModelPartExtended ridingPosition;
 
     public ModelAmbrosia(ModelPart root) {
         super();
@@ -45,7 +46,10 @@ public class ModelAmbrosia<T extends EntityAmbrosia> extends EntityModel<T> impl
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "ambrosia"));
         this.body = this.model.getPart("body");
         this.head = this.model.getPart("head");
+        this.ridingPosition = this.model.getPart("ridingPos");
     }
+
+    ;
 
     public static LayerDefinition createBodyLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
@@ -93,6 +97,8 @@ public class ModelAmbrosia<T extends EntityAmbrosia> extends EntityModel<T> impl
 
         PartDefinition rightLegDown = rightLeg.addOrReplaceChild("rightLegDown", CubeListBuilder.create().texOffs(50, 30).mirror().addBox(-2.0F, 0.0F, 0.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-0.1F, 7.0F, -2.0F, 0.2618F, 0.0F, 0.0F));
 
+        PartDefinition ridingPos = body.addOrReplaceChild("ridingPos", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 5.0F));
+
         return LayerDefinition.create(meshdefinition, 66, 65);
     }
 
@@ -127,10 +133,11 @@ public class ModelAmbrosia<T extends EntityAmbrosia> extends EntityModel<T> impl
             EntityModel<?> model = lR.getModel();
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.body.translateAndRotate(poseStack);
+                this.ridingPosition.translateAndRotate(poseStack);
                 if (model instanceof SittingModel sittingModel)
                     sittingModel.translateSittingPosition(poseStack);
                 else
-                    poseStack.translate(0, 10 / 16d, 5 / 16d);
+                    poseStack.translate(0, 11 / 16d, 0);
                 return true;
             }
         }
