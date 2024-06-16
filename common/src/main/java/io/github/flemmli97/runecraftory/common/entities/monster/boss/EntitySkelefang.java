@@ -31,6 +31,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -713,8 +714,10 @@ public class EntitySkelefang extends BossMonster {
     }
 
     @Override
-    public double getPassengersRidingOffset() {
-        return this.getBbHeight() * 0.85D;
+    public Vec3 passengerOffset(Entity passenger) {
+        if (this.hasBones())
+            return new Vec3(0, 43.5 / 16d, 7 / 16d);
+        return new Vec3(0, 30 / 16d, -3 / 16d);
     }
 
     @Override

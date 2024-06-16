@@ -142,7 +142,7 @@ public class ModelDeadTree<T extends EntityDeadTree> extends EntityModel<T> impl
                 this.body.translateAndRotate(poseStack);
                 this.leafs.translateAndRotate(poseStack);
                 this.ridingPosition.translateAndRotate(poseStack);
-                ClientHandlers.translateRider(entityRenderer, model, poseStack);
+                ClientHandlers.translateRider(entityRenderer, rider, model, poseStack);
                 return true;
             }
         }

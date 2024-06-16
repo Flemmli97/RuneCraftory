@@ -11,6 +11,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -186,5 +187,10 @@ public class EntityWeagle extends BaseMonster {
     @Override
     public AnimatedAction getSleepAnimation() {
         return SLEEP;
+    }
+
+    @Override
+    public Vec3 passengerOffset(Entity passenger) {
+        return new Vec3(0, 16 / 16d, -1 / 16d);
     }
 }

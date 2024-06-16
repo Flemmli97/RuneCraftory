@@ -131,7 +131,11 @@ public class ModelRaccoonBerserk<T extends EntityRaccoon> extends ModelRaccoonBa
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.body.translateAndRotate(poseStack);
                 this.ridingPosition.translateAndRotate(poseStack);
-                ClientHandlers.translateRider(entityRenderer, model, poseStack);
+                if (entity.isBerserk())
+                    poseStack.scale(1 / 1.4f, 1 / 1.4f, 1 / 1.4f);
+                ClientHandlers.translateRider(entityRenderer, rider, model, poseStack);
+                if (entity.isBerserk())
+                    poseStack.scale(1.4f, 1.4f, 1.4f);
                 return true;
             }
         }

@@ -13,6 +13,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -187,5 +188,10 @@ public class EntitySpider extends BaseMonster {
     @Override
     public AnimatedAction getSleepAnimation() {
         return STILL;
+    }
+
+    @Override
+    public Vec3 passengerOffset(Entity passenger) {
+        return new Vec3(0, 10 / 16d, 3.5 / 16d);
     }
 }

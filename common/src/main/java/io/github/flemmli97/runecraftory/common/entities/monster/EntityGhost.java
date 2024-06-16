@@ -240,4 +240,9 @@ public class EntityGhost extends ChargingMonster {
     public AnimatedAction getSleepAnimation() {
         return STILL;
     }
+
+    @Override
+    public Vec3 passengerOffset(Entity passenger) {
+        return new Vec3(0, 11.5 / 16d, -10 / 16d);
+    }
 }

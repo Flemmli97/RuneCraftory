@@ -478,8 +478,10 @@ public class EntityRaccoon extends BossMonster {
     }
 
     @Override
-    public double getPassengersRidingOffset() {
-        return this.getBbHeight() * 0.85D;
+    public Vec3 passengerOffset(Entity passenger) {
+        if (this.isBerserk())
+            return new Vec3(0, 16.25 / 16d, -10.5 / 16d).scale(1.4);
+        return new Vec3(0, 17 / 16d, -5 / 16d);
     }
 
     @Override

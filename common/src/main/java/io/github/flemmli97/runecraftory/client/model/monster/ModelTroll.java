@@ -132,7 +132,7 @@ public class ModelTroll<T extends EntityTroll> extends EntityModel<T> implements
                 this.body.translateAndRotate(poseStack);
                 this.upperBody.translateAndRotate(poseStack);
                 this.ridingPosition.translateAndRotate(poseStack);
-                ClientHandlers.translateRider(entityRenderer, model, poseStack);
+                ClientHandlers.translateRider(entityRenderer, rider, model, poseStack);
                 return true;
             }
         }

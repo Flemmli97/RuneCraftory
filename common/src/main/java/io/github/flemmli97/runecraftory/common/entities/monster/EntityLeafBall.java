@@ -8,6 +8,7 @@ import io.github.flemmli97.runecraftory.common.entities.ai.pathing.FloatingFlyNa
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -16,6 +17,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 public class EntityLeafBall extends BaseMonster {
 
@@ -121,5 +123,10 @@ public class EntityLeafBall extends BaseMonster {
     @Override
     public AnimatedAction getSleepAnimation() {
         return STILL;
+    }
+
+    @Override
+    public Vec3 passengerOffset(Entity passenger) {
+        return new Vec3(0, 16 / 16d, -6 / 16d);
     }
 }

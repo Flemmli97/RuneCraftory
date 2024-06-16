@@ -23,6 +23,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -31,6 +32,7 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -289,8 +291,8 @@ public class EntityDeadTree extends BossMonster {
     }
 
     @Override
-    public double getPassengersRidingOffset() {
-        return this.getBbHeight() * 0.85D;
+    public Vec3 passengerOffset(Entity passenger) {
+        return new Vec3(0, 57 / 16d, -3 / 16d).scale(2);
     }
 
     @Override

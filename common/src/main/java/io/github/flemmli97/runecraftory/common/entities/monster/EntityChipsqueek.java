@@ -8,8 +8,10 @@ import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 public class EntityChipsqueek extends ChargingMonster {
 
@@ -81,5 +83,10 @@ public class EntityChipsqueek extends ChargingMonster {
     @Override
     public AnimatedAction getSleepAnimation() {
         return SLEEP;
+    }
+
+    @Override
+    public Vec3 passengerOffset(Entity passenger) {
+        return new Vec3(0, 9.5 / 16d, -5 / 16d);
     }
 }

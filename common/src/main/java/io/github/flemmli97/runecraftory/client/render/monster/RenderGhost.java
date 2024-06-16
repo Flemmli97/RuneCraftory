@@ -21,7 +21,7 @@ public class RenderGhost<T extends EntityGhost> extends RenderMonster<T, ModelGh
 
     public RenderGhost(EntityRendererProvider.Context ctx, ResourceLocation texture, float scale) {
         super(ctx, new ModelGhost<>(ctx.bakeLayer(ModelGhost.LAYER_LOCATION)), texture, 0.5f, false);
-        this.scale = scale;
+        this.scale = scale * 0.85f;
         this.layers.add(new RiderLayerRendererExt<>(this, (stack, entity) -> stack.scale(1 / this.scale, 1 / this.scale, 1 / this.scale)));
     }
 

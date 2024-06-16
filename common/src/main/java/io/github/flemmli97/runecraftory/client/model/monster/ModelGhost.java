@@ -5,7 +5,6 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.client.model.SittingModel;
-import io.github.flemmli97.runecraftory.client.render.monster.RenderGhost;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityGhost;
 import io.github.flemmli97.tenshilib.client.AnimationManager;
 import io.github.flemmli97.tenshilib.client.model.BlockBenchAnimations;
@@ -95,8 +94,6 @@ public class ModelGhost<T extends EntityGhost> extends EntityModel<T> implements
 
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-        poseStack.scale(0.85f, 0.85f, 0.85f);
-        poseStack.translate(0, 0.2, 0);
         this.model.getMainPart().render(poseStack, buffer, packedLight, packedOverlay, red, green, blue, 0.85f);
     }
 
@@ -118,12 +115,12 @@ public class ModelGhost<T extends EntityGhost> extends EntityModel<T> implements
 
     @Override
     public boolean transform(T entity, EntityRenderer<T> entityRenderer, Entity rider, EntityRenderer<?> ridingEntityRenderer, PoseStack poseStack, int riderNum) {
-        if (ridingEntityRenderer instanceof LivingEntityRenderer<?, ?> lR && entityRenderer instanceof RenderGhost<T> scaledRender) {
+        if (ridingEntityRenderer instanceof LivingEntityRenderer<?, ?> lR) {
             EntityModel<?> model = lR.getModel();
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.body.translateAndRotate(poseStack);
                 this.ridingPosition.translateAndRotate(poseStack);
-                ClientHandlers.translateRider(entityRenderer, model, poseStack);
+                ClientHandlers.translateRider(entityRenderer, rider, model, poseStack);
                 return true;
             }
         }

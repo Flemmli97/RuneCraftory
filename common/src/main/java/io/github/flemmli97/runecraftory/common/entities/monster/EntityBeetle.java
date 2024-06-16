@@ -5,9 +5,11 @@ import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.ChargeAttackGoal;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 public class EntityBeetle extends ChargingMonster {
 
@@ -76,5 +78,10 @@ public class EntityBeetle extends ChargingMonster {
     @Override
     public AnimatedAction getSleepAnimation() {
         return SLEEP;
+    }
+
+    @Override
+    public Vec3 passengerOffset(Entity passenger) {
+        return new Vec3(0, 18 / 16d, -10 / 16d);
     }
 }

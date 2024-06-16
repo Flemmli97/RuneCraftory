@@ -267,7 +267,7 @@ public class ModelRafflesia<T extends EntityRafflesia> extends EntityModel<T> im
                 this.mainStem4.translateAndRotate(poseStack);
                 this.head.translateAndRotate(poseStack);
                 this.ridingPosition.translateAndRotate(poseStack);
-                ClientHandlers.translateRider(entityRenderer, model, poseStack);
+                ClientHandlers.translateRider(entityRenderer, rider, model, poseStack);
                 return true;
             }
         }

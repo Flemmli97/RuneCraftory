@@ -148,4 +148,9 @@ public class EntityDemon extends BaseMonster implements HealingPredicateEntity {
     public AnimatedAction getSleepAnimation() {
         return SLEEP;
     }
+
+    @Override
+    public Vec3 passengerOffset(Entity passenger) {
+        return new Vec3(0, 15.5 / 16d, -5 / 16d);
+    }
 }

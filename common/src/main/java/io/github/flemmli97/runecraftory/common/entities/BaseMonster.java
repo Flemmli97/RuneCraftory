@@ -1320,6 +1320,26 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     @Override
+    public void positionRider(Entity passenger) {
+        if (this.hasPassenger(passenger)) {
+            Vec3 offset = this.passengerOffset(passenger)
+                    .add(0, passenger.getMyRidingOffset(), 0).yRot(-this.yBodyRot * Mth.DEG_TO_RAD);
+            passenger.setPos(this.getX() + offset.x(), this.getY() + offset.y(), this.getZ() + offset.z());
+            if (passenger instanceof LivingEntity living) {
+                living.yBodyRot = this.yBodyRot;
+            }
+        }
+    }
+
+    /**
+     * Return the passenger offset for a passenger entity. Default implementation is equal to vanilla
+     * Self note: When using model to determine offset keep in mind for scaled models
+     */
+    public Vec3 passengerOffset(Entity passenger) {
+        return new Vec3(0, this.getPassengersRidingOffset(), 0);
+    }
+
+    @Override
     public void travel(Vec3 vec) {
         if (this.shouldFreezeTravel())
             return;

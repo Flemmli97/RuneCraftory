@@ -5,7 +5,6 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.client.model.SittingModel;
-import io.github.flemmli97.runecraftory.client.render.monster.RenderWooly;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityWooly;
 import io.github.flemmli97.tenshilib.client.AnimationManager;
 import io.github.flemmli97.tenshilib.client.model.BlockBenchAnimations;
@@ -140,13 +139,13 @@ public class ModelWooly<T extends EntityWooly> extends EntityModel<T> implements
 
     @Override
     public boolean transform(T entity, EntityRenderer<T> entityRenderer, Entity rider, EntityRenderer<?> ridingEntityRenderer, PoseStack poseStack, int riderNum) {
-        if (ridingEntityRenderer instanceof LivingEntityRenderer<?, ?> lR && entityRenderer instanceof RenderWooly<T> scaledRender) {
+        if (ridingEntityRenderer instanceof LivingEntityRenderer<?, ?> lR) {
             EntityModel<?> model = lR.getModel();
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.bodyCenter.translateAndRotate(poseStack);
                 this.body.translateAndRotate(poseStack);
                 this.ridingPosition.translateAndRotate(poseStack);
-                ClientHandlers.translateRider(entityRenderer, model, poseStack);
+                ClientHandlers.translateRider(entityRenderer, rider, model, poseStack);
                 return true;
             }
         }

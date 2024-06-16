@@ -11,6 +11,7 @@ import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -139,5 +140,10 @@ public class EntityGoblin extends LeapingMonster {
     @Override
     public AnimatedAction getSleepAnimation() {
         return SLEEP;
+    }
+
+    @Override
+    public Vec3 passengerOffset(Entity passenger) {
+        return new Vec3(0, 13 / 16d, -5 / 16d);
     }
 }

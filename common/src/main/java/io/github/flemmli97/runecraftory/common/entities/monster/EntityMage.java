@@ -8,11 +8,13 @@ import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedRangedGoal;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.function.Predicate;
 
@@ -124,5 +126,10 @@ public class EntityMage extends BaseMonster implements HealingPredicateEntity {
 
     public Spell getSecondSpell() {
         return ModSpells.EXPANDING_QUAD_LIGHT.get();
+    }
+
+    @Override
+    public Vec3 passengerOffset(Entity passenger) {
+        return new Vec3(0, 13.5 / 16d, -5 / 16d);
     }
 }

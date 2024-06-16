@@ -8,6 +8,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
@@ -102,5 +103,10 @@ public class EntityBigMuck extends BaseMonster {
     @Override
     public AnimatedAction getSleepAnimation() {
         return SLEEP;
+    }
+
+    @Override
+    public Vec3 passengerOffset(Entity passenger) {
+        return new Vec3(0, 26 / 16d, -3 / 16d);
     }
 }

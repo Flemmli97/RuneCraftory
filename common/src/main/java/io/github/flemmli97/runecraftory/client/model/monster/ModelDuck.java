@@ -80,8 +80,6 @@ public class ModelDuck<T extends EntityDuck> extends EntityModel<T> implements E
 
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-        poseStack.scale(0.85f, 0.85f, 0.85f);
-        poseStack.translate(0, 0.26, 0);
         this.model.getMainPart().render(poseStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
     }
 
@@ -109,7 +107,7 @@ public class ModelDuck<T extends EntityDuck> extends EntityModel<T> implements E
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.body.translateAndRotate(poseStack);
                 this.ridingPosition.translateAndRotate(poseStack);
-                ClientHandlers.translateRider(entityRenderer, model, poseStack);
+                ClientHandlers.translateRider(entityRenderer, rider, model, poseStack);
                 return true;
             }
         }

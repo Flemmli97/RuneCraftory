@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.common.entities.ai.ChargeAttackGoal;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
@@ -121,5 +122,10 @@ public class EntityDuck extends ChargingMonster {
     @Override
     public AnimatedAction getSleepAnimation() {
         return STILL;
+    }
+
+    @Override
+    public Vec3 passengerOffset(Entity passenger) {
+        return new Vec3(0, 24.6 / 16d, -6 / 16d);
     }
 }

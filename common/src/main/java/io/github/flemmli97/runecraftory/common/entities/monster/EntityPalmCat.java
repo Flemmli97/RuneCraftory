@@ -154,4 +154,9 @@ public class EntityPalmCat extends LeapingMonster {
     public AnimatedAction getSleepAnimation() {
         return SLEEP;
     }
+
+    @Override
+    public Vec3 passengerOffset(Entity passenger) {
+        return new Vec3(0, 15.75 / 16d, -4 / 16d);
+    }
 }

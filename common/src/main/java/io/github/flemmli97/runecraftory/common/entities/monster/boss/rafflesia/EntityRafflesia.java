@@ -22,6 +22,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
@@ -329,11 +330,6 @@ public class EntityRafflesia extends BossMonster implements DelayedAttacker {
     }
 
     @Override
-    public double getPassengersRidingOffset() {
-        return this.getBbHeight() * 0.85D;
-    }
-
-    @Override
     public boolean canBeCollidedWith() {
         return true;
     }
@@ -413,5 +409,10 @@ public class EntityRafflesia extends BossMonster implements DelayedAttacker {
 
     public boolean mirrorAttack() {
         return this.mirrorAttack;
+    }
+
+    @Override
+    public Vec3 passengerOffset(Entity passenger) {
+        return new Vec3(0, 43 / 16d, 3.5 / 16d);
     }
 }

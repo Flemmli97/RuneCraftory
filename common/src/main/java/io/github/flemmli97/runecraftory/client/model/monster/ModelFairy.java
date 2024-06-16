@@ -94,8 +94,6 @@ public class ModelFairy<T extends EntityFairy> extends EntityModel<T> implements
 
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-        poseStack.scale(0.75f, 0.75f, 0.75f);
-        poseStack.translate(0, 0.5, 0);
         this.model.getMainPart().render(poseStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
     }
 
@@ -124,7 +122,7 @@ public class ModelFairy<T extends EntityFairy> extends EntityModel<T> implements
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.body.translateAndRotate(poseStack);
                 this.ridingPosition.translateAndRotate(poseStack);
-                ClientHandlers.translateRider(entityRenderer, model, poseStack);
+                ClientHandlers.translateRider(entityRenderer, rider, model, poseStack);
                 return true;
             }
         }

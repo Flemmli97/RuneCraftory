@@ -3,12 +3,15 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedMonsterAttackGoal;
+import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 public class EntityAnt extends BaseMonster {
 
@@ -76,5 +79,13 @@ public class EntityAnt extends BaseMonster {
     @Override
     public boolean hasSleepingAnimation() {
         return true;
+    }
+
+    @Override
+    public Vec3 passengerOffset(Entity passenger) {
+        Vec3 off = new Vec3(0, 6 / 16d, 0);
+        if (this.getType() == ModEntities.ANT.get())
+            return off.scale(0.7);
+        return off;
     }
 }

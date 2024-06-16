@@ -107,7 +107,7 @@ public class ModelBigMuck<T extends EntityBigMuck> extends EntityModel<T> implem
                 this.body.translateAndRotate(poseStack);
                 this.cap.translateAndRotate(poseStack);
                 this.ridingPosition.translateAndRotate(poseStack);
-                ClientHandlers.translateRider(entityRenderer, model, poseStack);
+                ClientHandlers.translateRider(entityRenderer, rider, model, poseStack);
                 return true;
             }
         }

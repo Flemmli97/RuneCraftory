@@ -104,8 +104,10 @@ public class ModelChipsqueek<T extends EntityChipsqueek> extends EntityModel<T> 
             this.anim.doAnimation(this, "idle", entity.tickCount, partialTicks);
             if (entity.moveTick() > 0) {
                 this.anim.doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
+            }
+            if (entity.moveTick() < 1) {
                 float lerp = Mth.clamp((entity.moveTick() + (entity.getMoveFlag() != BaseMonster.MoveType.NONE ? partialTicks : -partialTicks)) / (float) BaseMonster.MOVE_TICK_MAX, 0, 1);
-                this.ridingPosition.xRot = lerp * (-20) * Mth.DEG_TO_RAD;
+                this.ridingPosition.xRot = (1 - lerp) * 20 * Mth.DEG_TO_RAD;
             }
         }
         this.anim.doAnimation(this, entity.getAnimationHandler(), partialTicks);
@@ -123,7 +125,7 @@ public class ModelChipsqueek<T extends EntityChipsqueek> extends EntityModel<T> 
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.body.translateAndRotate(poseStack);
                 this.ridingPosition.translateAndRotate(poseStack);
-                ClientHandlers.translateRider(entityRenderer, model, poseStack);
+                ClientHandlers.translateRider(entityRenderer, rider, model, poseStack);
                 return true;
             }
         }

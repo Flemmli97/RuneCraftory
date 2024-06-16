@@ -223,4 +223,9 @@ public abstract class EntityWispBase extends BaseMonster {
     public AnimatedAction getSleepAnimation() {
         return STILL;
     }
+
+    @Override
+    public Vec3 passengerOffset(Entity passenger) {
+        return new Vec3(0, 10 / 16d, -3 / 16d);
+    }
 }

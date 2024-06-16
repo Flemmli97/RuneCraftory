@@ -3,8 +3,10 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 public class EntityKingWooly extends EntityAggressiveWooly {
 
@@ -35,5 +37,10 @@ public class EntityKingWooly extends EntityAggressiveWooly {
     @Override
     public double maxAttackRange(AnimatedAction anim) {
         return 1.7;
+    }
+
+    @Override
+    public Vec3 passengerOffset(Entity passenger) {
+        return super.passengerOffset(passenger).scale(2.5f);
     }
 }

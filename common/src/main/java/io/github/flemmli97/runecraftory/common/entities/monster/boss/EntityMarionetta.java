@@ -283,8 +283,8 @@ public class EntityMarionetta extends BossMonster {
     }
 
     @Override
-    public double getPassengersRidingOffset() {
-        return this.getBbHeight() * 0.85D;
+    public Vec3 passengerOffset(Entity passenger) {
+        return new Vec3(0, 17.25 / 16d, -6 / 16d);
     }
 
     @Override

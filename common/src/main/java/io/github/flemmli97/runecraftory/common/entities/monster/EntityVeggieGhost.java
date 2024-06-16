@@ -214,4 +214,9 @@ public class EntityVeggieGhost extends BaseMonster {
     public AnimatedAction getSleepAnimation() {
         return SLEEP;
     }
+
+    @Override
+    public Vec3 passengerOffset(Entity passenger) {
+        return new Vec3(0, 12 / 16d, -4 / 16d);
+    }
 }

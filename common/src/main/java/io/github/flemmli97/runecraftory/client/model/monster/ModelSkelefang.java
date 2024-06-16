@@ -364,7 +364,7 @@ public class ModelSkelefang<T extends EntitySkelefang> extends EntityModel<T> im
                     this.heart.translateAndRotate(poseStack);
                     this.ridingPositionHeart.translateAndRotate(poseStack);
                 }
-                ClientHandlers.translateRider(entityRenderer, model, poseStack);
+                ClientHandlers.translateRider(entityRenderer, rider, model, poseStack);
                 return true;
             }
         }

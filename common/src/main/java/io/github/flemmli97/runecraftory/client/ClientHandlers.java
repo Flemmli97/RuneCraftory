@@ -298,9 +298,12 @@ public class ClientHandlers {
 
     /**
      * Translates a rider to the current root position. Assumes the model is either a vanilla humanoid one or a custom SittingModel
-     * E.g. in vanilla the legs simply get rotate to indicate a sitting pose while the whole model still floats in the air
+     * In this version vanilla uses a mix of relative height and absolute value on entities for the passenger position which makes supporting all entities very hard.
+     * This changes in future versions so for now only humanoid models supported
+     * <p>
+     * Additionally in vanilla the legs simply get rotated to indicate a sitting pose while the whole model still floats in the air
      */
-    public static void translateRider(EntityRenderer<?> entityRenderer, EntityModel<?> model, PoseStack poseStack) {
+    public static void translateRider(EntityRenderer<?> entityRenderer, Entity rider, EntityModel<?> model, PoseStack poseStack) {
         float scale = 1;
         if (entityRenderer instanceof ScaledRenderer scaledRender) {
             scale = scaledRender.getScale();
@@ -309,8 +312,13 @@ public class ClientHandlers {
             poseStack.scale(1 / scale, 1 / scale, 1 / scale);
         if (model instanceof SittingModel sittingModel)
             sittingModel.translateSittingPosition(poseStack);
-        else
-            poseStack.translate(0, 11 / 16d, 0);
+        else {
+            if (rider instanceof LivingEntity living && living.isBaby()) {
+                poseStack.translate(0, 5 / 16d, 0);
+            } else {
+                poseStack.translate(0, 11 / 16d, 0);
+            }
+        }
         if (scale != 1)
             poseStack.scale(scale, scale, scale);
 

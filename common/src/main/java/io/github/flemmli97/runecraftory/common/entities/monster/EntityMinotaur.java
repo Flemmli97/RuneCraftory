@@ -11,6 +11,7 @@ import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -73,8 +74,7 @@ public class EntityMinotaur extends ChargingMonster {
                 if (this.getTarget() != null) {
                     dir = this.getTarget().position().subtract(this.position());
                     this.lookAtNow(this.getTarget(), 360, 90);
-                }
-                else
+                } else
                     dir = this.getLookAngle();
                 this.spinDirection = new Vec3(dir.x(), 0, dir.z()).normalize().scale(0.1);
                 this.spinAngle = this.getYRot() + 90;
@@ -145,5 +145,10 @@ public class EntityMinotaur extends ChargingMonster {
     @Override
     public AnimatedAction getSleepAnimation() {
         return SLEEP;
+    }
+
+    @Override
+    public Vec3 passengerOffset(Entity passenger) {
+        return new Vec3(0, 37 / 16d, -7 / 16d);
     }
 }

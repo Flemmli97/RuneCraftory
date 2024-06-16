@@ -1,8 +1,10 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 public class EntityGhostRay extends EntityGhost {
 
@@ -13,5 +15,10 @@ public class EntityGhostRay extends EntityGhost {
     @Override
     public double maxAttackRange(AnimatedAction anim) {
         return 2.2;
+    }
+
+    @Override
+    public Vec3 passengerOffset(Entity passenger) {
+        return super.passengerOffset(passenger).scale(1.4);
     }
 }
