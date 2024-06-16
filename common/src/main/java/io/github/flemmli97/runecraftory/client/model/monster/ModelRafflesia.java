@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.client.model.monster;// Made with Block
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.client.model.SittingModel;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia.EntityRafflesia;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia.EntityRafflesiaPart;
@@ -266,10 +267,7 @@ public class ModelRafflesia<T extends EntityRafflesia> extends EntityModel<T> im
                 this.mainStem4.translateAndRotate(poseStack);
                 this.head.translateAndRotate(poseStack);
                 this.ridingPosition.translateAndRotate(poseStack);
-                if (model instanceof SittingModel sittingModel)
-                    sittingModel.translateSittingPosition(poseStack);
-                else
-                    poseStack.translate(0, 11 / 16d, 0);
+                ClientHandlers.translateRider(entityRenderer, model, poseStack);
                 return true;
             }
         }

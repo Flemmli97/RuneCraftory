@@ -19,6 +19,7 @@ import net.minecraft.world.phys.Vec3;
 public class EntityLightBall extends BaseDamageCloud {
 
     private Type lightType = Type.LONG;
+    private Vec3 spawnPos;
     private int angleOffset;
     private int firstDmg = -1;
 
@@ -48,13 +49,13 @@ public class EntityLightBall extends BaseDamageCloud {
         }
     }
 
-    public static void createQuadLights(Level level, LivingEntity thrower, boolean shortLived, float dmgMod) {
+    public static void createQuadLights(Level level, LivingEntity thrower, Type type, float dmgMod) {
         if (level.isClientSide)
             return;
         for (int i = 0; i < 4; i++) {
             EntityLightBall ball = new EntityLightBall(level, thrower);
             ball.setDamageMultiplier(dmgMod);
-            ball.lightType = shortLived ? Type.SHORT : Type.LONG;
+            ball.lightType = type;
             ball.setAngleOffset(90 * i);
             level.addFreshEntity(ball);
         }
@@ -72,6 +73,7 @@ public class EntityLightBall extends BaseDamageCloud {
     @Override
     public int livingTickMax() {
         return switch (this.lightType) {
+            case EXPAND -> 40;
             case SHORT -> 140;
             case LONG, FRONT -> 144000;
         };
@@ -90,6 +92,8 @@ public class EntityLightBall extends BaseDamageCloud {
         double newY = this.getY() + motion.y;
         double newZ = this.getZ() + motion.z;
         this.setPos(newX, newY, newZ);
+        if (this.spawnPos == null)
+            this.spawnPos = this.position();
         if (this.getOwner() == null)
             this.discard();
         if (this.level.isClientSide) {
@@ -99,14 +103,17 @@ public class EntityLightBall extends BaseDamageCloud {
             if (this.getOwner() != null) {
                 Entity owner = this.getOwner();
                 Vec3 ownerPos = owner.position();
-                double[] pos;
-                if (this.lightType == Type.FRONT) {
-                    Vec3 look = this.getOwner().getLookAngle();
-                    look = new Vec3(look.x, 0, look.z).scale(1.2);
-                    pos = MathUtils.rotate(0, 1, 0, look.x, 0, look.z, Mth.DEG_TO_RAD * this.angleOffset);
-                } else {
-                    pos = MathUtils.rotate(0, 1, 0, owner.getBbWidth() + 0.5, 0, 0, Mth.DEG_TO_RAD * (13 * this.livingTicks + this.angleOffset));
-                }
+                double[] pos = switch (this.lightType) {
+                    case FRONT -> {
+                        Vec3 look = this.getOwner().getLookAngle();
+                        look = new Vec3(look.x, 0, look.z).scale(1.2);
+                        yield MathUtils.rotate(0, 1, 0, look.x, 0, look.z, Mth.DEG_TO_RAD * this.angleOffset);
+                    }
+                    case LONG, SHORT ->
+                            MathUtils.rotate(0, 1, 0, owner.getBbWidth() + 0.5, 0, 0, Mth.DEG_TO_RAD * (13 * this.livingTicks + this.angleOffset));
+                    case EXPAND ->
+                            MathUtils.rotate(0, 1, 0, owner.getBbWidth() + this.livingTicks * this.livingTicks * 0.01, 0, 0, Mth.DEG_TO_RAD * (13 * this.livingTicks + this.angleOffset));
+                };
                 this.setDeltaMovement(ownerPos.x + pos[0] - this.getX(), ownerPos.y + this.getOwner().getBbHeight() * 0.6 - this.getY(), ownerPos.z + pos[2] - this.getZ());
                 this.hasImpulse = true;
             }
@@ -116,7 +123,7 @@ public class EntityLightBall extends BaseDamageCloud {
     @Override
     protected boolean damageEntity(LivingEntity target) {
         if (CombatUtils.damageWithFaintAndCrit(this.getOwner(), target, new CustomDamage.Builder(this, this.getOwner()).magic().hurtResistant(0).element(EnumElement.LIGHT), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier, null)) {
-            if (this.lightType == Type.LONG)
+            if (this.lightType == Type.LONG || this.lightType == Type.EXPAND)
                 this.discard();
             if (this.firstDmg == -1)
                 this.firstDmg = this.livingTicks;
@@ -139,6 +146,8 @@ public class EntityLightBall extends BaseDamageCloud {
             this.lightType = Type.LONG;
         }
         this.angleOffset = compound.getInt("AngleOffset");
+        if (compound.contains("SpawnX"))
+            this.spawnPos = new Vec3(compound.getDouble("SpawnX"), compound.getDouble("SpawnY"), compound.getDouble("SpawnZ"));
     }
 
     @Override
@@ -146,11 +155,17 @@ public class EntityLightBall extends BaseDamageCloud {
         super.addAdditionalSaveData(compound);
         compound.putString("LightType", this.lightType.toString());
         compound.putInt("AngleOffset", this.angleOffset);
+        if (this.spawnPos != null) {
+            compound.putDouble("SpawnX", this.spawnPos.x);
+            compound.putDouble("SpawnY", this.spawnPos.y);
+            compound.putDouble("SpawnZ", this.spawnPos.z);
+        }
     }
 
     public enum Type {
         SHORT,
         LONG,
-        FRONT
+        FRONT,
+        EXPAND
     }
 }

@@ -8,14 +8,20 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 
-public class PoisonBallSpell extends Spell {
+public class StatusBallSpell extends Spell {
+
+    private final EntityStatusBall.Type type;
+
+    public StatusBallSpell(EntityStatusBall.Type type) {
+        this.type = type;
+    }
 
     @Override
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         EntityStatusBall ball = new EntityStatusBall(level, entity);
-        ball.setType(EntityStatusBall.Type.MUSHROOM_POISON);
+        ball.setType(this.type);
         ball.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.8f));
         ball.setPos(entity.getX(), entity.getY() + 0.4, entity.getZ());
         if (entity instanceof Mob mob && mob.getTarget() != null) {

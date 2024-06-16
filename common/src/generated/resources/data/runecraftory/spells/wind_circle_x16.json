@@ -2,7 +2,7 @@
   "cooldown": 30,
   "rpCost": 100,
   "skillXP": {
-    "EARTH": 10.0
+    "WIND": 10.0
   },
   "percentage": false,
   "skills": [

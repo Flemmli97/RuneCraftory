@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.client.model.monster;// Made with Block
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.client.model.SittingModel;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityPanther;
 import io.github.flemmli97.tenshilib.client.AnimationManager;
@@ -144,10 +145,7 @@ public class ModelPanther<T extends EntityPanther> extends EntityModel<T> implem
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.body.translateAndRotate(poseStack);
                 this.ridingPosition.translateAndRotate(poseStack);
-                if (model instanceof SittingModel sittingModel)
-                    sittingModel.translateSittingPosition(poseStack);
-                else
-                    poseStack.translate(0, 11 / 16d, 0);
+                ClientHandlers.translateRider(entityRenderer, model, poseStack);
                 return true;
             }
         }

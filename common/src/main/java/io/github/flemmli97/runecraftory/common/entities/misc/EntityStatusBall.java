@@ -95,7 +95,7 @@ public class EntityStatusBall extends BaseDamageCloud {
         super.tick();
         if (this.level.isClientSide) {
             switch (this.type) {
-                case SLEEP, MUSHROOM_POISON -> {
+                case SLEEP, PARALYSIS, MUSHROOM_POISON -> {
                     for (int i = 0; i < 2; i++) {
                         Vector3f color = this.type.particleColor;
                         this.level.addParticle(new ColoredParticleData(ModParticles.LIGHT.get(), color.x(), color.y(), color.z(), 1, 2), this.getX() + this.random.nextGaussian() * 0.15, this.getY() + 0.35 + this.random.nextGaussian() * 0.07, this.getZ() + this.random.nextGaussian() * 0.15, this.random.nextGaussian() * 0.01, Math.abs(this.random.nextGaussian() * 0.03), this.random.nextGaussian() * 0.01);
@@ -136,6 +136,7 @@ public class EntityStatusBall extends BaseDamageCloud {
 
         SLEEP(b -> b.magic().element(EnumElement.EARTH).withChangedAttribute(ModAttributes.SLEEP.get(), 100), new Vector3f(207 / 255F, 13 / 255F, 38 / 255F), 40),
         MUSHROOM_POISON(b -> b.magic().withChangedAttribute(ModAttributes.POISON.get(), 50), new Vector3f(112 / 255F, 201 / 255F, 95 / 255F), 40),
+        PARALYSIS(b -> b.magic().withChangedAttribute(ModAttributes.PARA.get(), 50), new Vector3f(196 / 255F, 186 / 255F, 35 / 255F), 40),
         RAFFLESIA_SLEEP(b -> b.hurtResistant(2).magic().withChangedAttribute(ModAttributes.SLEEP.get(), 10)
                 .withChangedAttribute(ModAttributes.FATIGUE.get(), 2)
                 .withChangedAttribute(ModAttributes.COLD.get(), 2), new Vector3f(207 / 255F, 13 / 255F, 38 / 255F), 30),

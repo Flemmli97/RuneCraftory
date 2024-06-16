@@ -16,6 +16,8 @@ import io.github.flemmli97.runecraftory.client.gui.QuestGui;
 import io.github.flemmli97.runecraftory.client.gui.SpawnEggScreen;
 import io.github.flemmli97.runecraftory.client.gui.SpellInvOverlayGui;
 import io.github.flemmli97.runecraftory.client.model.AnimatedPlayerModel;
+import io.github.flemmli97.runecraftory.client.model.SittingModel;
+import io.github.flemmli97.runecraftory.client.render.ScaledRenderer;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
@@ -33,6 +35,8 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.toasts.RecipeToast;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -290,5 +294,25 @@ public class ClientHandlers {
 
     public static void openSpawneggGui(InteractionHand hand) {
         Minecraft.getInstance().setScreen(new SpawnEggScreen(hand));
+    }
+
+    /**
+     * Translates a rider to the current root position. Assumes the model is either a vanilla humanoid one or a custom SittingModel
+     * E.g. in vanilla the legs simply get rotate to indicate a sitting pose while the whole model still floats in the air
+     */
+    public static void translateRider(EntityRenderer<?> entityRenderer, EntityModel<?> model, PoseStack poseStack) {
+        float scale = 1;
+        if (entityRenderer instanceof ScaledRenderer scaledRender) {
+            scale = scaledRender.getScale();
+        }
+        if (scale != 1)
+            poseStack.scale(1 / scale, 1 / scale, 1 / scale);
+        if (model instanceof SittingModel sittingModel)
+            sittingModel.translateSittingPosition(poseStack);
+        else
+            poseStack.translate(0, 11 / 16d, 0);
+        if (scale != 1)
+            poseStack.scale(scale, scale, scale);
+
     }
 }

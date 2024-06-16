@@ -29,6 +29,7 @@ import io.github.flemmli97.runecraftory.client.model.monster.ModelChimera;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelChipsqueek;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelCluckadoodle;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelDeadTree;
+import io.github.flemmli97.runecraftory.client.model.monster.ModelDemon;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelDuck;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelFairy;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelFlowerLily;
@@ -36,9 +37,11 @@ import io.github.flemmli97.runecraftory.client.model.monster.ModelGhost;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelGoblin;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelHornet;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelLeafBall;
+import io.github.flemmli97.runecraftory.client.model.monster.ModelMage;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelMarionetta;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelMimic;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelMino;
+import io.github.flemmli97.runecraftory.client.model.monster.ModelMinotaur;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelNappie;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelOrc;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelPalmCat;
@@ -308,6 +311,10 @@ public class ClientRegister {
         register(consumer, ModEntities.MINERAL_SQUEEK.get(), ModelChipsqueek::new, ModelChipsqueek.LAYER_LOCATION);
         register(consumer, ModEntities.NAPPIE.get(), ModelNappie::new, ModelNappie.LAYER_LOCATION);
         register(consumer, ModEntities.MALM_TIGER.get(), ModelPalmCat::new, ModelPalmCat.LAYER_LOCATION);
+        register(consumer, ModEntities.LITTLE_EMPEROR.get(), ModelMage::new, ModelMage.LAYER_LOCATION);
+        register(consumer, ModEntities.ARCH_DEMON.get(), ModelDemon::new, ModelDemon.LAYER_LOCATION);
+        register(consumer, ModEntities.MINOTAUR.get(), ModelMinotaur::new, ModelMinotaur.LAYER_LOCATION);
+        register(consumer, ModEntities.KING_MINOTAUR.get(), ModelMinotaur::new, ModelMinotaur.LAYER_LOCATION);
 
         register(consumer, ModEntities.AMBROSIA.get(), ModelAmbrosia::new, ModelAmbrosia.LAYER_LOCATION);
         register(consumer, ModEntities.THUNDERBOLT.get(), ModelThunderbolt::new, ModelThunderbolt.LAYER_LOCATION);
@@ -451,6 +458,9 @@ public class ClientRegister {
         consumer.accept(ModelTroll.LAYER_LOCATION, ModelTroll::createBodyLayer);
         consumer.accept(ModelVeggieGhost.LAYER_LOCATION, ModelVeggieGhost::createBodyLayer);
         consumer.accept(ModelNappie.LAYER_LOCATION, ModelNappie::createBodyLayer);
+        consumer.accept(ModelMage.LAYER_LOCATION, ModelMage::createBodyLayer);
+        consumer.accept(ModelDemon.LAYER_LOCATION, ModelDemon::createBodyLayer);
+        consumer.accept(ModelMinotaur.LAYER_LOCATION, ModelMinotaur::createBodyLayer);
 
         consumer.accept(ModelChest.LAYER_LOCATION, ModelChest::createBodyLayer);
 

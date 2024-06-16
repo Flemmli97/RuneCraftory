@@ -5,13 +5,14 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelWooly;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelWoolyWool;
 import io.github.flemmli97.runecraftory.client.render.RenderMonster;
+import io.github.flemmli97.runecraftory.client.render.ScaledRenderer;
 import io.github.flemmli97.runecraftory.client.render.layer.LayerWooly;
 import io.github.flemmli97.runecraftory.client.render.layer.RiderLayerRendererExt;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityWooly;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 
-public class RenderWooly<T extends EntityWooly> extends RenderMonster<T, ModelWooly<T>> {
+public class RenderWooly<T extends EntityWooly> extends RenderMonster<T, ModelWooly<T>> implements ScaledRenderer {
 
     public final float scale;
 
@@ -36,4 +37,8 @@ public class RenderWooly<T extends EntityWooly> extends RenderMonster<T, ModelWo
         stack.scale(this.scale, this.scale, this.scale);
     }
 
+    @Override
+    public float getScale() {
+        return this.scale;
+    }
 }

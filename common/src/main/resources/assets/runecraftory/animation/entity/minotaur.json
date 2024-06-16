@@ -358,7 +358,7 @@
 			}
 		},
 		"spin": {
-			"animation_length": 1.52,
+			"animation_length": 1.48,
 			"bones": {
 				"body": {
 					"rotation": {

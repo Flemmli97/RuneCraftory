@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.client.model.monster;// Made with Block
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.client.model.SittingModel;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityFlowerLily;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
@@ -50,35 +51,35 @@ public class ModelFlowerLily<T extends EntityFlowerLily> extends EntityModel<T> 
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition body = partdefinition.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 66).addBox(-2.0F, 6.0F, -2.0F, 4.0F, 1.0F, 4.0F, new CubeDeformation(0.0F))
+        PartDefinition body = partdefinition.addOrReplaceChild("body", CubeListBuilder.create().texOffs(48, 26).addBox(-2.0F, 6.0F, -2.0F, 4.0F, 1.0F, 4.0F, new CubeDeformation(0.0F))
                 .texOffs(0, 0).addBox(-4.0F, -4.0F, -4.0F, 8.0F, 10.0F, 8.0F, new CubeDeformation(0.0F))
-                .texOffs(32, 0).addBox(-4.5F, 0.0F, -4.5F, 9.0F, 4.0F, 9.0F, new CubeDeformation(0.0F))
-                .texOffs(24, 38).addBox(-3.0F, -7.0F, -3.0F, 6.0F, 3.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 17.0F, 0.0F));
+                .texOffs(0, 18).addBox(-4.5F, 0.0F, -4.5F, 9.0F, 4.0F, 9.0F, new CubeDeformation(0.0F))
+                .texOffs(32, 8).addBox(-3.0F, -7.0F, -3.0F, 6.0F, 3.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 17.0F, 0.0F));
 
-        PartDefinition stem = body.addOrReplaceChild("stem", CubeListBuilder.create().texOffs(48, 52).addBox(-1.0F, -10.0F, -1.0F, 2.0F, 11.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -7.0F, 0.0F));
+        PartDefinition stem = body.addOrReplaceChild("stem", CubeListBuilder.create().texOffs(0, 50).addBox(-1.0F, -10.0F, -1.0F, 2.0F, 11.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -7.0F, 0.0F));
 
-        PartDefinition head = stem.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 38).addBox(-3.0F, -3.0F, -7.0F, 6.0F, 6.0F, 6.0F, new CubeDeformation(0.0F))
-                .texOffs(32, 52).addBox(-2.0F, -2.0F, -11.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -9.0F, -0.5F));
+        PartDefinition head = stem.addOrReplaceChild("head", CubeListBuilder.create().texOffs(30, 26).addBox(-3.0F, -3.0F, -7.0F, 6.0F, 6.0F, 6.0F, new CubeDeformation(0.0F))
+                .texOffs(48, 48).addBox(-2.0F, -2.0F, -11.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -9.0F, -0.5F));
 
         PartDefinition flowerBase = head.addOrReplaceChild("flowerBase", CubeListBuilder.create(), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.7854F));
 
-        PartDefinition flower1 = flowerBase.addOrReplaceChild("flower1", CubeListBuilder.create().texOffs(20, 26).addBox(-7.0F, -8.0F, 0.0F, 14.0F, 8.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.2618F, 0.0F, 0.0F));
+        PartDefinition flower1 = flowerBase.addOrReplaceChild("flower1", CubeListBuilder.create().texOffs(27, 18).addBox(-7.0F, -8.0F, 0.0F, 14.0F, 8.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.2618F, 0.0F, 0.0F));
 
-        PartDefinition flower2 = flowerBase.addOrReplaceChild("flower2", CubeListBuilder.create().texOffs(0, 52).addBox(0.0F, -7.0F, 0.0F, 8.0F, 14.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 0.2618F, 0.0F));
+        PartDefinition flower2 = flowerBase.addOrReplaceChild("flower2", CubeListBuilder.create().texOffs(36, 38).addBox(0.0F, -7.0F, 0.0F, 8.0F, 14.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 0.2618F, 0.0F));
 
-        PartDefinition flower3 = flowerBase.addOrReplaceChild("flower3", CubeListBuilder.create().texOffs(48, 38).addBox(-8.0F, -7.0F, 0.0F, 8.0F, 14.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, -0.2618F, 0.0F));
+        PartDefinition flower3 = flowerBase.addOrReplaceChild("flower3", CubeListBuilder.create().texOffs(20, 38).addBox(-8.0F, -7.0F, 0.0F, 8.0F, 14.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, -0.2618F, 0.0F));
 
-        PartDefinition flower4 = flowerBase.addOrReplaceChild("flower4", CubeListBuilder.create().texOffs(20, 18).addBox(-7.0F, 0.0F, 0.0F, 14.0F, 8.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, -0.2618F, 0.0F, 0.0F));
+        PartDefinition flower4 = flowerBase.addOrReplaceChild("flower4", CubeListBuilder.create().texOffs(24, 0).addBox(-7.0F, 0.0F, 0.0F, 14.0F, 8.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, -0.2618F, 0.0F, 0.0F));
 
-        PartDefinition leaf1 = stem.addOrReplaceChild("leaf1", CubeListBuilder.create().texOffs(16, 52).addBox(0.0F, -8.0F, 0.0F, 8.0F, 9.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -2.0F, 1.0F, 0.0F, -0.3491F, 0.3054F));
+        PartDefinition leaf1 = stem.addOrReplaceChild("leaf1", CubeListBuilder.create().texOffs(0, 41).addBox(0.0F, -8.0F, 0.0F, 8.0F, 9.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -2.0F, 1.0F, 0.0F, -0.3491F, 0.3054F));
 
-        PartDefinition leaf2 = stem.addOrReplaceChild("leaf2", CubeListBuilder.create().texOffs(16, 52).mirror().addBox(-8.0F, -8.0F, 1.0F, 8.0F, 9.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(0.0F, -2.0F, 0.0F, 0.0F, 0.3491F, -0.3054F));
+        PartDefinition leaf2 = stem.addOrReplaceChild("leaf2", CubeListBuilder.create().texOffs(0, 41).mirror().addBox(-8.0F, -8.0F, 1.0F, 8.0F, 9.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(0.0F, -2.0F, 0.0F, 0.0F, 0.3491F, -0.3054F));
 
-        PartDefinition tail = body.addOrReplaceChild("tail", CubeListBuilder.create().texOffs(0, 18).addBox(0.0F, -10.0F, 0.0F, 0.0F, 10.0F, 10.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 7.0F, 2.0F));
+        PartDefinition tail = body.addOrReplaceChild("tail", CubeListBuilder.create().texOffs(0, 21).addBox(0.0F, -10.0F, 0.0F, 0.0F, 10.0F, 10.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 7.0F, 2.0F));
 
         PartDefinition ridingPos = body.addOrReplaceChild("ridingPos", CubeListBuilder.create(), PartPose.offset(0.0F, -7.0F, 4.0F));
 
-        return LayerDefinition.create(meshdefinition, 128, 128);
+        return LayerDefinition.create(meshdefinition, 64, 64);
     }
 
     @Override
@@ -112,10 +113,7 @@ public class ModelFlowerLily<T extends EntityFlowerLily> extends EntityModel<T> 
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.body.translateAndRotate(poseStack);
                 this.ridingPosition.translateAndRotate(poseStack);
-                if (model instanceof SittingModel sittingModel)
-                    sittingModel.translateSittingPosition(poseStack);
-                else
-                    poseStack.translate(0, 11 / 16d, 0);
+                ClientHandlers.translateRider(entityRenderer, model, poseStack);
                 return true;
             }
         }

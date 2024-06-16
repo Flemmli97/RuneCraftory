@@ -1,0 +1,16 @@
+{
+  "name": "entity.runecraftory.little_emperor",
+  "category": "runecraftory:category.entities",
+  "icon": "runecraftory:little_emperor_spawn_egg",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:little_emperor",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:little_emperor"
+    }
+  ]
+}

@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.client.model.monster;// Made with Block
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.client.model.SittingModel;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderVeggieGhost;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityVeggieGhost;
@@ -105,12 +106,7 @@ public class ModelVeggieGhost<T extends EntityVeggieGhost> extends EntityModel<T
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.body.translateAndRotate(poseStack);
                 this.ridingPosition.translateAndRotate(poseStack);
-                poseStack.scale(1 / scaledRender.scale, 1 / scaledRender.scale, 1 / scaledRender.scale);
-                if (model instanceof SittingModel sittingModel)
-                    sittingModel.translateSittingPosition(poseStack);
-                else
-                    poseStack.translate(0, 11 / 16d, 0);
-                poseStack.scale(scaledRender.scale, scaledRender.scale, scaledRender.scale);
+                ClientHandlers.translateRider(entityRenderer, model, poseStack);
                 return true;
             }
         }

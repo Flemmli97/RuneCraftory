@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.client.render.monster;
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelGhost;
 import io.github.flemmli97.runecraftory.client.render.RenderMonster;
+import io.github.flemmli97.runecraftory.client.render.ScaledRenderer;
 import io.github.flemmli97.runecraftory.client.render.layer.RiderLayerRendererExt;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityGhost;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
@@ -10,7 +11,7 @@ import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 
-public class RenderGhost<T extends EntityGhost> extends RenderMonster<T, ModelGhost<T>> {
+public class RenderGhost<T extends EntityGhost> extends RenderMonster<T, ModelGhost<T>> implements ScaledRenderer {
 
     public final float scale;
 
@@ -46,5 +47,10 @@ public class RenderGhost<T extends EntityGhost> extends RenderMonster<T, ModelGh
     protected void scale(T entity, PoseStack stack, float partialTick) {
         super.scale(entity, stack, partialTick);
         stack.scale(this.scale, this.scale, this.scale);
+    }
+
+    @Override
+    public float getScale() {
+        return this.scale;
     }
 }

@@ -3,12 +3,13 @@ package io.github.flemmli97.runecraftory.client.render.monster;
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelAnt;
 import io.github.flemmli97.runecraftory.client.render.RenderMonster;
+import io.github.flemmli97.runecraftory.client.render.ScaledRenderer;
 import io.github.flemmli97.runecraftory.client.render.layer.RiderLayerRendererExt;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityAnt;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 
-public class RenderAnt<T extends EntityAnt> extends RenderMonster<T, ModelAnt<T>> {
+public class RenderAnt<T extends EntityAnt> extends RenderMonster<T, ModelAnt<T>> implements ScaledRenderer {
 
     public final float scale;
 
@@ -26,5 +27,10 @@ public class RenderAnt<T extends EntityAnt> extends RenderMonster<T, ModelAnt<T>
     protected void scale(T entity, PoseStack stack, float partialTick) {
         super.scale(entity, stack, partialTick);
         stack.scale(this.scale, this.scale, this.scale);
+    }
+
+    @Override
+    public float getScale() {
+        return this.scale;
     }
 }

@@ -25,6 +25,12 @@
 				},
 				"rightHorn": {
 					"rotation": ["-math.sin(time*90)*2", 0, "-math.cos(time*90)"]
+				},
+				"tailBase": {
+					"rotation": [0, "math.sin(time*90)*5", 0]
+				},
+				"tail": {
+					"rotation": [0, "math.sin(time*90-10)*7", 0]
 				}
 			}
 		},

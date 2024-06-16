@@ -69,6 +69,7 @@ import io.github.flemmli97.runecraftory.common.entities.monster.EntityBigMuck;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityBuffamoo;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityChipsqueek;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityCluckadoodle;
+import io.github.flemmli97.runecraftory.common.entities.monster.EntityDemon;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityDuck;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityFairy;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityFlowerLily;
@@ -82,8 +83,10 @@ import io.github.flemmli97.runecraftory.common.entities.monster.EntityGoblinPira
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityHornet;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityKingWooly;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityLeafBall;
+import io.github.flemmli97.runecraftory.common.entities.monster.EntityMage;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityMimic;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityMineralSqueek;
+import io.github.flemmli97.runecraftory.common.entities.monster.EntityMinotaur;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityNappie;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityOrc;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityOrcArcher;
@@ -632,7 +635,7 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_LOVE, -10)
                     .xp(35).money(1).tamingChance(0.1f).setMinLevel(5),
             new GateSpawnData.Builder(0, 40).addToBiomeTag(60, BiomeTags.IS_FOREST, RunecraftoryTags.IS_SANDY, RunecraftoryTags.IS_SAVANNA));
-    public static final RegistryEntrySupplier<EntityType<EntityPalmCat>> PALM_CAT = regMonster(EntityType.Builder.of(EntityPalmCat::new, MobCategory.MONSTER).sized(0.6f, 1.8f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "palm_cat"),
+    public static final RegistryEntrySupplier<EntityType<EntityPalmCat>> PALM_CAT = regMonster(EntityType.Builder.of(EntityPalmCat::new, MobCategory.MONSTER).sized(0.6f, 1.9f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "palm_cat"),
             0xc98f2d, 0xb46d28,
             new EntityProperties.Builder()
                     .putAttributes(() -> Attributes.MAX_HEALTH, 25).putLevelGains(() -> Attributes.MAX_HEALTH, 420)
@@ -894,8 +897,68 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_WIND, -25)
                     .xp(30).money(4).tamingChance(0.1f).setRideable(),
             new GateSpawnData.Builder(0, 5).addToBiomeTag(70, RunecraftoryTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, RunecraftoryTags.IS_MAGICAL));
-    public static final RegistryEntrySupplier<EntityType<EntityPalmCat>> MALM_TIGER = regMonster(EntityType.Builder.of(EntityPalmCat::new, MobCategory.MONSTER).sized(0.6f, 1.8f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "malm_tiger"),
+    public static final RegistryEntrySupplier<EntityType<EntityPalmCat>> MALM_TIGER = regMonster(EntityType.Builder.of(EntityPalmCat::new, MobCategory.MONSTER).sized(0.6f, 1.9f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "malm_tiger"),
             0x8596ae, 0x3a5573,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 25).putLevelGains(() -> Attributes.MAX_HEALTH, 420)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 13).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 220)
+                    .putAttributes(ModAttributes.DEFENCE, 2).putLevelGains(ModAttributes.DEFENCE, 125)
+                    .putAttributes(ModAttributes.MAGIC, 7.5).putLevelGains(ModAttributes.MAGIC, 130)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 4).putLevelGains(ModAttributes.MAGIC_DEFENCE, 125)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_EARTH, 15)
+                    .putAttributes(ModAttributes.RES_WIND, 15)
+                    .xp(35).money(1).tamingChance(0.05f),
+            new GateSpawnData.Builder(0, 40).addToBiomeTag(40, BiomeTags.IS_FOREST, BiomeTags.IS_TAIGA));
+    public static final RegistryEntrySupplier<EntityType<EntityMage>> LITTLE_EMPEROR = regMonster(EntityType.Builder.of(EntityMage::new, MobCategory.MONSTER).sized(0.6f, 1.7f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "little_emperor"),
+            0x49ab5f, 0xdedede,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 25).putLevelGains(() -> Attributes.MAX_HEALTH, 420)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 13).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 220)
+                    .putAttributes(ModAttributes.DEFENCE, 2).putLevelGains(ModAttributes.DEFENCE, 125)
+                    .putAttributes(ModAttributes.MAGIC, 7.5).putLevelGains(ModAttributes.MAGIC, 130)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 4).putLevelGains(ModAttributes.MAGIC_DEFENCE, 125)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_EARTH, 15)
+                    .putAttributes(ModAttributes.RES_WIND, 15)
+                    .xp(35).money(1).tamingChance(0.05f),
+            new GateSpawnData.Builder(0, 40).addToBiomeTag(40, BiomeTags.IS_FOREST, BiomeTags.IS_TAIGA));
+    public static final RegistryEntrySupplier<EntityType<EntityDemon>> ARCH_DEMON = regMonster(EntityType.Builder.of(EntityDemon::new, MobCategory.MONSTER).sized(0.65f, 2.1f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "arch_demon"),
+            0xa5746d, 0x372321,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 25).putLevelGains(() -> Attributes.MAX_HEALTH, 420)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 13).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 220)
+                    .putAttributes(ModAttributes.DEFENCE, 2).putLevelGains(ModAttributes.DEFENCE, 125)
+                    .putAttributes(ModAttributes.MAGIC, 7.5).putLevelGains(ModAttributes.MAGIC, 130)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 4).putLevelGains(ModAttributes.MAGIC_DEFENCE, 125)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_EARTH, 15)
+                    .putAttributes(ModAttributes.RES_WIND, 15)
+                    .xp(35).money(1).tamingChance(0.05f),
+            new GateSpawnData.Builder(0, 40).addToBiomeTag(40, BiomeTags.IS_FOREST, BiomeTags.IS_TAIGA));
+    public static final RegistryEntrySupplier<EntityType<EntityMinotaur>> MINOTAUR = regMonster(EntityType.Builder.of(EntityMinotaur::new, MobCategory.MONSTER).sized(1.4f, 2.9f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "minotaur"),
+            0x61423d, 0x2c2825,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 25).putLevelGains(() -> Attributes.MAX_HEALTH, 420)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 13).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 220)
+                    .putAttributes(ModAttributes.DEFENCE, 2).putLevelGains(ModAttributes.DEFENCE, 125)
+                    .putAttributes(ModAttributes.MAGIC, 7.5).putLevelGains(ModAttributes.MAGIC, 130)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 4).putLevelGains(ModAttributes.MAGIC_DEFENCE, 125)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_EARTH, 15)
+                    .putAttributes(ModAttributes.RES_WIND, 15)
+                    .xp(35).money(1).tamingChance(0.05f),
+            new GateSpawnData.Builder(0, 40).addToBiomeTag(40, BiomeTags.IS_FOREST, BiomeTags.IS_TAIGA));
+    public static final RegistryEntrySupplier<EntityType<EntityMinotaur>> KING_MINOTAUR = regMonster(EntityType.Builder.of(EntityMinotaur::new, MobCategory.MONSTER).sized(1.4f, 2.9f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "king_minotaur"),
+            0x344a53, 0x907822,
             new EntityProperties.Builder()
                     .putAttributes(() -> Attributes.MAX_HEALTH, 25).putLevelGains(() -> Attributes.MAX_HEALTH, 420)
                     .putAttributes(() -> Attributes.ATTACK_DAMAGE, 13).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 220)

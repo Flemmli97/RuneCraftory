@@ -48,7 +48,7 @@ public class AnimatedRangedGoal<T extends BaseMonster> extends AnimatedMonsterAt
         if (this.attacker.getRandom().nextFloat() < this.attacker.attackChance(AnimationType.GENERICATTACK)) {
             if (this.attacker.getRandom().nextFloat() < this.attacker.attackChance(AnimationType.MELEE)) {
                 AnimatedAction anim = this.attacker.getRandomAnimation(AnimationType.MELEE);
-                if (this.meleeAttackCheck.inMeleeRange(this.attacker, this.target, anim))
+                if (anim != null && this.meleeAttackCheck.inMeleeRange(this.attacker, this.target, anim))
                     return anim;
             }
             if (this.distanceToTargetSq <= this.reachSq && this.canRanged.test(this.attacker))

@@ -33,6 +33,7 @@ import io.github.flemmli97.runecraftory.common.spells.ElementalSpell;
 import io.github.flemmli97.runecraftory.common.spells.EmptySpell;
 import io.github.flemmli97.runecraftory.common.spells.EnergyOrbSpell;
 import io.github.flemmli97.runecraftory.common.spells.EvokerFangSpell;
+import io.github.flemmli97.runecraftory.common.spells.ExpandingQuadLight;
 import io.github.flemmli97.runecraftory.common.spells.ExplosionSpell;
 import io.github.flemmli97.runecraftory.common.spells.FireballSpell;
 import io.github.flemmli97.runecraftory.common.spells.FurnitureThrowSpell;
@@ -48,7 +49,6 @@ import io.github.flemmli97.runecraftory.common.spells.LightBarrierSpell;
 import io.github.flemmli97.runecraftory.common.spells.ParaHealSpell;
 import io.github.flemmli97.runecraftory.common.spells.PenetrateWindBladeSpell;
 import io.github.flemmli97.runecraftory.common.spells.PlushThrowSpell;
-import io.github.flemmli97.runecraftory.common.spells.PoisonBallSpell;
 import io.github.flemmli97.runecraftory.common.spells.PoisonHealSpell;
 import io.github.flemmli97.runecraftory.common.spells.PoisonNeedleSpell;
 import io.github.flemmli97.runecraftory.common.spells.PollenPuffSpell;
@@ -67,6 +67,7 @@ import io.github.flemmli97.runecraftory.common.spells.SleepAuraSpell;
 import io.github.flemmli97.runecraftory.common.spells.SleepBallSpell;
 import io.github.flemmli97.runecraftory.common.spells.SmallLeafSpell;
 import io.github.flemmli97.runecraftory.common.spells.SporeCircleSpell;
+import io.github.flemmli97.runecraftory.common.spells.StatusBallSpell;
 import io.github.flemmli97.runecraftory.common.spells.StoneThrowSpell;
 import io.github.flemmli97.runecraftory.common.spells.TeleportSpell;
 import io.github.flemmli97.runecraftory.common.spells.ThrowHandItemSpell;
@@ -196,7 +197,7 @@ public class ModSpells {
     public static final RegistryEntrySupplier<Spell> DARK_BEAM = registerSpell("dark_beam", DarkBeamSpell::new, new SpellProperties.Builder(25, 75).withXPGain(EnumSkills.DARK, 5).affectedSkill(EnumSkills.DARK));
     public static final RegistryEntrySupplier<Spell> PLATE = registerSpell("big_plate", BigPlateSpell::new, new SpellProperties.Builder(25, 150));
     public static final RegistryEntrySupplier<Spell> DARK_BULLETS = registerSpell("dark_bullets", DarkBulletsSpell::new, new SpellProperties.Builder(25, 200).withXPGain(EnumSkills.DARK, 10).affectedSkill(EnumSkills.DARK));
-    public static final RegistryEntrySupplier<Spell> POISON_BALL = registerSpell("poison_ball", PoisonBallSpell::new, new SpellProperties.Builder(40, 30).withXPGain(EnumSkills.EARTH, 7).affectedSkill(EnumSkills.EARTH));
+    public static final RegistryEntrySupplier<Spell> POISON_BALL = registerSpell("poison_ball", () -> new StatusBallSpell(EntityStatusBall.Type.MUSHROOM_POISON), new SpellProperties.Builder(40, 30).withXPGain(EnumSkills.EARTH, 7).affectedSkill(EnumSkills.EARTH));
     public static final RegistryEntrySupplier<Spell> POISON_NEEDLE = registerSpell("poison_needle", PoisonNeedleSpell::new, new SpellProperties.Builder(15, 20));
     public static final RegistryEntrySupplier<Spell> SLEEP_AURA = registerSpell("sleep_aura", SleepAuraSpell::new, new SpellProperties.Builder(30, 40).withXPGain(EnumSkills.EARTH, 7).affectedSkill(EnumSkills.EARTH));
     public static final RegistryEntrySupplier<Spell> DOUBLE_BULLET = registerSpell("double_bullet", DoubleBulletSpell::new, new SpellProperties.Builder(25, 35));
@@ -224,7 +225,9 @@ public class ModSpells {
     public static final RegistryEntrySupplier<Spell> RAFFLESIA_SLEEP = registerSpell("rafflesia_sleep", () -> new RafflesiaBreathSpell(EntityStatusBall.Type.RAFFLESIA_SLEEP), new SpellProperties.Builder(30, 200));
     public static final RegistryEntrySupplier<Spell> RAFFLESIA_CIRCLE = registerSpell("rafflesia_cicle", RafflesiaCircleSpell::new, new SpellProperties.Builder(30, 150));
     public static final RegistryEntrySupplier<Spell> WIND_CIRCLE_X8 = registerSpell("wind_circle_x8", () -> new WindBladeCircle(8), new SpellProperties.Builder(30, 80).withXPGain(EnumSkills.WIND, 8).affectedSkill(EnumSkills.WIND));
-    public static final RegistryEntrySupplier<Spell> WIND_CIRCLE_X16 = registerSpell("wind_circle_x16", () -> new WindBladeCircle(16), new SpellProperties.Builder(30, 100).withXPGain(EnumSkills.EARTH, 10).affectedSkill(EnumSkills.WIND));
+    public static final RegistryEntrySupplier<Spell> WIND_CIRCLE_X16 = registerSpell("wind_circle_x16", () -> new WindBladeCircle(16), new SpellProperties.Builder(30, 100).withXPGain(EnumSkills.WIND, 10).affectedSkill(EnumSkills.WIND));
+    public static final RegistryEntrySupplier<Spell> EXPANDING_QUAD_LIGHT = registerSpell("expanding_quad_light", ExpandingQuadLight::new, new SpellProperties.Builder(30, 40).withXPGain(EnumSkills.LIGHT, 10).affectedSkill(EnumSkills.LIGHT));
+    public static final RegistryEntrySupplier<Spell> PARALYSIS_BALL = registerSpell("paralysis_ball", () -> new StatusBallSpell(EntityStatusBall.Type.PARALYSIS), new SpellProperties.Builder(40, 30).withXPGain(EnumSkills.LIGHT, 7).affectedSkill(EnumSkills.LIGHT));
 
     private static RegistryEntrySupplier<Spell> registerSpell(String name, Supplier<Spell> sup, SpellProperties.Builder properties) {
         RegistryEntrySupplier<Spell> entry = SPELLS.register(name, sup);

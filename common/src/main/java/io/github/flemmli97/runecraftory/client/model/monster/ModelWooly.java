@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.client.model.monster;// Made with Block
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.client.model.SittingModel;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderWooly;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityWooly;
@@ -145,12 +146,7 @@ public class ModelWooly<T extends EntityWooly> extends EntityModel<T> implements
                 this.bodyCenter.translateAndRotate(poseStack);
                 this.body.translateAndRotate(poseStack);
                 this.ridingPosition.translateAndRotate(poseStack);
-                poseStack.scale(1 / scaledRender.scale, 1 / scaledRender.scale, 1 / scaledRender.scale);
-                if (model instanceof SittingModel sittingModel)
-                    sittingModel.translateSittingPosition(poseStack);
-                else
-                    poseStack.translate(0, 11 / 16d, 0);
-                poseStack.scale(scaledRender.scale, scaledRender.scale, scaledRender.scale);
+                ClientHandlers.translateRider(entityRenderer, model, poseStack);
                 return true;
             }
         }

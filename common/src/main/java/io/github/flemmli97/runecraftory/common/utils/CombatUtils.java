@@ -696,6 +696,18 @@ public class CombatUtils {
             };
         }
 
+        public static BiFunction<LivingEntity, Predicate<LivingEntity>, List<LivingEntity>> circleTargetsFixedRange(float minYRot, float maxYRot, float reach) {
+            return (attacker, predicate) -> {
+                float rot = Mth.wrapDegrees(maxYRot - minYRot);
+                Vec3 dir = Vec3.directionFromRotation(0, Mth.wrapDegrees(minYRot + rot * 0.5f));
+                CircleSector circ = new CircleSector(attacker.position().add(0, attacker.getBbHeight() * 0.6, 0), dir, reach, Mth.abs(rot * 0.5f), attacker);
+                return attacker.level.getEntities(EntityTypeTest.forClass(LivingEntity.class), attacker.getBoundingBox().inflate(reach + 1),
+                        t -> t != attacker && (predicate == null || predicate.test(t)) && !t.isAlliedTo(attacker) && t.isPickable()
+                                && (t.getBoundingBox().minY <= attacker.getBoundingBox().maxY || t.getBoundingBox().maxY >= attacker.getBoundingBox().minY)
+                                && circ.intersects(t.level, t.getBoundingBox().inflate(0.15, attacker.getBbHeight() * 1.5, 0.15)));
+            };
+        }
+
         public static BiFunction<LivingEntity, Predicate<LivingEntity>, List<LivingEntity>> aabbTargets(AABB aabb) {
             return (attacker, predicate) -> attacker.level.getEntities(EntityTypeTest.forClass(LivingEntity.class), aabb,
                     t -> t != attacker && (predicate == null || predicate.test(t)) && !t.isAlliedTo(attacker) && t.isPickable());

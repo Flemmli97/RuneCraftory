@@ -19,7 +19,7 @@ public class PrismSpell extends Spell {
             return false;
         List<Entity> lights = level.getEntities(entity, entity.getBoundingBox().inflate(4), e -> e instanceof EntityLightBall light && light.getOwner() == entity);
         lights.forEach(e -> e.remove(Entity.RemovalReason.KILLED));
-        EntityLightBall.createQuadLights(level, entity, true, CombatUtils.getAbilityDamageBonus(lvl, 0.75f));
+        EntityLightBall.createQuadLights(level, entity, EntityLightBall.Type.SHORT, CombatUtils.getAbilityDamageBonus(lvl, 0.75f));
         playSound(entity, ModSounds.SPELL_GENERIC_LIGHT.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         return true;
     }
