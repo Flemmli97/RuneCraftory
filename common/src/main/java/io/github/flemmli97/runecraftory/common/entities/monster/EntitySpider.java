@@ -1,17 +1,23 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
-import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedRangedGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -25,6 +31,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.List;
+
 public class EntitySpider extends BaseMonster {
 
     private static final EntityDataAccessor<Boolean> CLIMBING_SYNC = SynchedEntityData.defineId(EntitySpider.class, EntityDataSerializers.BOOLEAN);
@@ -34,8 +42,19 @@ public class EntitySpider extends BaseMonster {
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
     public static final AnimatedAction STILL = AnimatedAction.builder(1, "still").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, WEBSHOT, INTERACT, STILL};
+
+    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntitySpider>>> ATTACKS = List.of(
+            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(MELEE, e -> 0.7f), 1),
+            WeightedEntry.wrap(MonsterActionUtils.simpleRangedStrafingAction(WEBSHOT, 7, 1, e -> 1), 2)
+    );
+    private static final List<WeightedEntry.Wrapper<IdleAction<EntitySpider>>> IDLE_ACTIONS = List.of(
+            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 1)), 5),
+            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(9, 3)), 3),
+            WeightedEntry.wrap(new IdleAction<>(DoNothingRunner::new), 1)
+    );
+
+    public final AnimatedAttackGoal<EntitySpider> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntitySpider> animationHandler = new AnimationHandler<>(this, ANIMS);
-    public AnimatedRangedGoal<EntitySpider> attack = new AnimatedRangedGoal<>(this, 7, (e) -> true);
 
     public int climbingTicker = -1;
     public static final int CLIMB_MAX = 9;
@@ -120,24 +139,8 @@ public class EntitySpider extends BaseMonster {
     }
 
     @Override
-    public float attackChance(AnimationType type) {
-        if (type == AnimationType.MELEE)
-            return 0.7f;
-        return 1;
-    }
-
-    @Override
     public AnimationHandler<EntitySpider> getAnimationHandler() {
         return this.animationHandler;
-    }
-
-    @Override
-    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (type == AnimationType.RANGED)
-            return anim.is(WEBSHOT);
-        if (type == AnimationType.MELEE)
-            return anim.is(MELEE);
-        return false;
     }
 
     @Override
@@ -147,8 +150,12 @@ public class EntitySpider extends BaseMonster {
 
     @Override
     public void handleAttack(AnimatedAction anim) {
-        if (this.isAnimOfType(anim, AnimationType.RANGED)) {
+        if (anim.is(WEBSHOT)) {
             this.getNavigation().stop();
+            if (anim.getTick() == 1 && this.getTarget() != null) {
+                this.lookAtNow(this.getTarget(), 360, 90);
+                this.targetPosition = this.getTarget().position();
+            }
             if (anim.canAttack()) {
                 if (this.getTarget() != null && this.getSensing().hasLineOfSight(this.getTarget()) || this.getFirstPassenger() instanceof Player) {
                     ModSpells.WEB_SHOT.get().use(this);

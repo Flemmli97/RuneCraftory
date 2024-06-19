@@ -1,13 +1,18 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
-import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedMonsterAttackGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -16,6 +21,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 public class EntityTroll extends BaseMonster {
@@ -27,7 +33,17 @@ public class EntityTroll extends BaseMonster {
     public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{PUNCH, DOUBLE_PUNCH, SLAM, INTERACT, SLEEP};
 
-    public final AnimatedMonsterAttackGoal<EntityTroll> attack = new AnimatedMonsterAttackGoal<>(this);
+    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityTroll>>> ATTACKS = List.of(
+            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(PUNCH, e -> 1), 1),
+            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(DOUBLE_PUNCH, e -> 1), 1),
+            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(SLAM, e -> 1), 1)
+    );
+    private static final List<WeightedEntry.Wrapper<IdleAction<EntityTroll>>> IDLE_ACTIONS = List.of(
+            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 1)), 3),
+            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(12, 4)), 1)
+    );
+
+    public final AnimatedAttackGoal<EntityTroll> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityTroll> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityTroll(EntityType<? extends EntityTroll> type, Level world) {
@@ -42,16 +58,9 @@ public class EntityTroll extends BaseMonster {
     }
 
     @Override
-    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (type == AnimationType.MELEE)
-            return anim.is(PUNCH, DOUBLE_PUNCH, SLAM);
-        return false;
-    }
-
-    @Override
     public double maxAttackRange(AnimatedAction anim) {
         if (anim.is(SLAM))
-            return this.getBbWidth() + 1;
+            return this.getBbWidth() + 4;
         return 1.5;
     }
 
@@ -83,11 +92,6 @@ public class EntityTroll extends BaseMonster {
             else
                 this.getAnimationHandler().setAnimation(PUNCH);
         }
-    }
-
-    @Override
-    public float attackChance(AnimationType type) {
-        return 1;
     }
 
     @Override

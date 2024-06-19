@@ -1,13 +1,18 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
-import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedRangedGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.NearestTargetHorizontal;
+import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.FloatingFlyNavigator;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.EvadingRangedRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
+import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -18,6 +23,9 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class EntityLeafBall extends BaseMonster {
 
@@ -28,7 +36,17 @@ public class EntityLeafBall extends BaseMonster {
     public static final AnimatedAction STILL = AnimatedAction.builder(1, "still").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, WIND, SLEEP_ATTACK, INTERACT, STILL};
 
-    public final AnimatedRangedGoal<EntityLeafBall> attack = new AnimatedRangedGoal<>(this, 8, false, e -> true);
+    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityLeafBall>>> ATTACKS = List.of(
+            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeActionInRange(MELEE, e -> 0.7f), 1),
+            WeightedEntry.wrap(MonsterActionUtils.simpleRangedEvadingAction(WIND, 10, 4, 1, e -> 1), 3),
+            WeightedEntry.wrap(MonsterActionUtils.simpleRangedEvadingAction(SLEEP_ATTACK, 7, 1, 1, e -> 1), 2)
+    );
+    private static final List<WeightedEntry.Wrapper<IdleAction<EntityLeafBall>>> IDLE_ACTIONS = List.of(
+            WeightedEntry.wrap(new IdleAction<>(() -> new EvadingRangedRunner<>(10, 4, 1)), 2),
+            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 3)
+    );
+
+    public final AnimatedAttackGoal<EntityLeafBall> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityLeafBall> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityLeafBall(EntityType<? extends EntityLeafBall> type, Level world) {
@@ -58,14 +76,6 @@ public class EntityLeafBall extends BaseMonster {
     @Override
     protected NearestAttackableTargetGoal<Mob> createTargetGoalMobs() {
         return new NearestTargetHorizontal<>(this, Mob.class, 5, true, true, this.targetPred);
-    }
-
-    @Override
-    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (type == AnimationType.RANGED) {
-            return anim.is(WIND, SLEEP_ATTACK) && this.getRandom().nextFloat() < 0.6f;
-        }
-        return type == AnimationType.MELEE && anim.is(MELEE);
     }
 
     @Override
@@ -104,10 +114,11 @@ public class EntityLeafBall extends BaseMonster {
     }
 
     @Override
-    public float attackChance(AnimationType type) {
-        if (type == AnimationType.MELEE)
-            return 0.6f;
-        return 1;
+    public int animationCooldown(@Nullable AnimatedAction anim) {
+        int diffAdd = this.difficultyCooldown();
+        if (anim == null)
+            return this.getRandom().nextInt(20) + 30 + diffAdd;
+        return this.getRandom().nextInt(40) + 25 + diffAdd;
     }
 
     @Override

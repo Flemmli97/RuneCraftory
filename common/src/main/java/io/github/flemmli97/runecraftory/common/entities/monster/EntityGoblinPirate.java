@@ -1,12 +1,18 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
-import io.github.flemmli97.runecraftory.common.entities.AnimationType;
-import io.github.flemmli97.runecraftory.common.entities.ai.LeapingAttackGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
+import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -15,34 +21,37 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
+import java.util.List;
+
 public class EntityGoblinPirate extends EntityGoblin {
 
     private static final AnimatedAction DOUBLE_SLASH = new AnimatedAction(20, 9, "double_slash");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(DOUBLE_SLASH, "interact");
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{DOUBLE_SLASH, LEAP, INTERACT, SLEEP};
 
+    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityGoblinPirate>>> ATTACKS = List.of(
+            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(DOUBLE_SLASH, e -> 0.8f), 1),
+            WeightedEntry.wrap(new GoalAttackAction<EntityGoblinPirate>(LEAP)
+                    .cooldown(e -> e.animationCooldown(LEAP))
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 4)
+    );
+    private static final List<WeightedEntry.Wrapper<IdleAction<EntityGoblinPirate>>> IDLE_ACTIONS = List.of(
+            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(12, 5)), 1)
+    );
+
+    public final AnimatedAttackGoal<EntityGoblinPirate> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityGoblinPirate> animationHandler = new AnimationHandler<>(this, ANIMS);
-    public LeapingAttackGoal<EntityGoblin> ai = new LeapingAttackGoal<>(this, true, 2);
 
     public EntityGoblinPirate(EntityType<? extends EntityGoblin> type, Level level) {
         super(type, level);
-        this.goalSelector.removeGoal(this.attack);
-        this.goalSelector.addGoal(2, this.ai);
+        this.goalSelector.removeGoal(super.attack);
+        this.goalSelector.addGoal(2, this.attack);
     }
 
     @Override
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.THIEF_KNIFE_PROP.get()));
         this.setDropChance(EquipmentSlot.MAINHAND, 0);
-    }
-
-    @Override
-    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (type == AnimationType.LEAP)
-            return anim.is(LEAP);
-        if (type == AnimationType.MELEE)
-            return anim.is(DOUBLE_SLASH);
-        return false;
     }
 
     @Override
@@ -55,13 +64,6 @@ public class EntityGoblinPirate extends EntityGoblin {
             else
                 this.getAnimationHandler().setAnimation(DOUBLE_SLASH);
         }
-    }
-
-    @Override
-    public float attackChance(AnimationType type) {
-        if (type == AnimationType.MELEE)
-            return 0.8f;
-        return 1;
     }
 
     @Override

@@ -1,13 +1,18 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
-import io.github.flemmli97.runecraftory.common.entities.AnimationType;
-import io.github.flemmli97.runecraftory.common.entities.ai.EvadingRangedAttackGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
+import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -16,6 +21,8 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
+import java.util.List;
+
 public class EntityGoblinGangster extends EntityGoblin {
 
     private static final AnimatedAction DOUBLE_STAB = new AnimatedAction(18, 8, "double_stab");
@@ -23,13 +30,23 @@ public class EntityGoblinGangster extends EntityGoblin {
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(DOUBLE_THROW, "interact");
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{DOUBLE_STAB, DOUBLE_THROW, INTERACT, SLEEP};
 
+    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityGoblinGangster>>> ATTACKS = List.of(
+            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeActionInRange(DOUBLE_STAB, e -> 0.8f), 2),
+            WeightedEntry.wrap(MonsterActionUtils.<EntityGoblinGangster>simpleRangedEvadingAction(DOUBLE_THROW, 8, 3, 1, e -> 1)
+                    .withCondition(((goal, target, previous) -> !goal.attacker.getMainHandItem().isEmpty())), 3)
+    );
+    private static final List<WeightedEntry.Wrapper<IdleAction<EntityGoblinGangster>>> IDLE_ACTIONS = List.of(
+            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 1)), 1),
+            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 2)
+    );
+
+    public final AnimatedAttackGoal<EntityGoblinGangster> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityGoblinGangster> animationHandler = new AnimationHandler<>(this, ANIMS);
-    public EvadingRangedAttackGoal<EntityGoblin> rangedGoal = new EvadingRangedAttackGoal<>(this, 1.5f, 8, (e) -> !e.getMainHandItem().isEmpty());
 
     public EntityGoblinGangster(EntityType<? extends EntityGoblin> type, Level level) {
         super(type, level);
-        this.goalSelector.removeGoal(this.attack);
-        this.goalSelector.addGoal(2, this.rangedGoal);
+        this.goalSelector.removeGoal(super.attack);
+        this.goalSelector.addGoal(2, this.attack);
     }
 
     @Override
@@ -38,15 +55,6 @@ public class EntityGoblinGangster extends EntityGoblin {
         this.setDropChance(EquipmentSlot.MAINHAND, 0);
         this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ModItems.CUTLASS_PROP.get()));
         this.setDropChance(EquipmentSlot.OFFHAND, 0);
-    }
-
-    @Override
-    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (type == AnimationType.RANGED)
-            return anim.is(DOUBLE_THROW);
-        if (type == AnimationType.MELEE)
-            return anim.is(DOUBLE_STAB);
-        return false;
     }
 
     @Override
@@ -59,13 +67,6 @@ public class EntityGoblinGangster extends EntityGoblin {
             else
                 this.getAnimationHandler().setAnimation(DOUBLE_STAB);
         }
-    }
-
-    @Override
-    public float attackChance(AnimationType type) {
-        if (type == AnimationType.MELEE)
-            return 0.7f;
-        return 1;
     }
 
     @Override

@@ -32,7 +32,7 @@ public abstract class ChargingMonster extends BaseMonster {
     protected Consumer<AnimatedAction> animatedActionConsumer() {
         return anim -> {
             if (!this.level.isClientSide) {
-                if (anim != null && this.isAnimOfType(anim, AnimationType.CHARGE)) {
+                if (anim != null && this.isChargingAnim(anim)) {
                     this.prevStepHeight = this.maxUpStep;
                     this.maxUpStep = Math.max(1.5f, 1f + this.maxUpStep);
                     if (this.isVehicle()) {
@@ -71,11 +71,10 @@ public abstract class ChargingMonster extends BaseMonster {
 
     @Override
     public void handleAttack(AnimatedAction anim) {
-        if (this.isAnimOfType(anim, AnimationType.CHARGE)) {
+        if (this.isChargingAnim(anim)) {
             this.getNavigation().stop();
             if (anim.getTick() > anim.getAttackTime()) {
-                this.handleChargeMovement();
-                if (!this.handleChargeMovement())
+                if (!this.handleChargeMovement(anim))
                     return;
                 if (this.hitEntity == null)
                     this.hitEntity = new ArrayList<>();
@@ -92,9 +91,11 @@ public abstract class ChargingMonster extends BaseMonster {
         }
     }
 
+    protected abstract boolean isChargingAnim(AnimatedAction anim);
+
     @Override
     public AABB calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
-        if (!this.isAnimOfType(anim, AnimationType.CHARGE))
+        if (!this.isChargingAnim(anim))
             return super.calculateAttackAABB(anim, target, grow);
         double reach = this.maxAttackRange(anim) * 0.5 + this.getBbWidth() * 0.5;
         Vec3 attackPos = this.position().add(Vec3.directionFromRotation(0, this.getYRot()).scale(reach));
@@ -121,7 +122,7 @@ public abstract class ChargingMonster extends BaseMonster {
         super.push(entity);
     }
 
-    public boolean handleChargeMovement() {
+    public boolean handleChargeMovement(AnimatedAction anim) {
         if (this.chargeMotion != null) {
             this.setDeltaMovement(this.chargeMotion[0], this.getDeltaMovement().y, this.chargeMotion[2]);
             return true;
@@ -149,6 +150,6 @@ public abstract class ChargingMonster extends BaseMonster {
 
     private boolean isChargingAnimation() {
         AnimatedAction anim = this.getAnimationHandler().getAnimation();
-        return anim != null && this.isAnimOfType(anim, AnimationType.CHARGE);
+        return anim != null && this.isChargingAnim(anim);
     }
 }

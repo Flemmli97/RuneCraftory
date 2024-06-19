@@ -1,14 +1,19 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
-import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedMonsterAttackGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -17,6 +22,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.List;
+
 public class EntityScorpion extends BaseMonster {
 
     public static final AnimatedAction MELEE = new AnimatedAction(12, 6, "attack");
@@ -24,7 +31,15 @@ public class EntityScorpion extends BaseMonster {
     public static final AnimatedAction STILL = AnimatedAction.builder(1, "still").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, INTERACT, STILL};
 
-    public final AnimatedMonsterAttackGoal<EntityScorpion> attack = new AnimatedMonsterAttackGoal<>(this);
+    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityScorpion>>> ATTACKS = List.of(
+            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(MELEE, e -> 0.9f), 1)
+    );
+    private static final List<WeightedEntry.Wrapper<IdleAction<EntityScorpion>>> IDLE_ACTIONS = List.of(
+            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 1)), 2),
+            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 1)
+    );
+
+    public final AnimatedAttackGoal<EntityScorpion> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityScorpion> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityScorpion(EntityType<? extends EntityScorpion> type, Level world) {
@@ -36,11 +51,6 @@ public class EntityScorpion extends BaseMonster {
     protected void applyAttributes() {
         super.applyAttributes();
         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.25);
-    }
-
-    @Override
-    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        return type == AnimationType.MELEE && anim.is(MELEE);
     }
 
     @Override
@@ -75,11 +85,6 @@ public class EntityScorpion extends BaseMonster {
     @Override
     public float getVoicePitch() {
         return (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.5f;
-    }
-
-    @Override
-    public float attackChance(AnimationType type) {
-        return 0.9f;
     }
 
     @Override

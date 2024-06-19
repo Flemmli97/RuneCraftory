@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
-import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityMobArrow;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import net.minecraft.sounds.SoundEvents;
@@ -21,7 +20,7 @@ public class EntityOrcHunter extends EntityOrcArcher {
 
     @Override
     public void handleAttack(AnimatedAction anim) {
-        if (this.isAnimOfType(anim, AnimationType.RANGED)) {
+        if (anim.is(EntityOrcArcher.RANGED)) {
             if (anim.getTick() == 1)
                 this.startUsingItem(InteractionHand.MAIN_HAND);
             this.getNavigation().stop();

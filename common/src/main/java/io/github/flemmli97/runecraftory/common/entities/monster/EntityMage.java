@@ -1,13 +1,19 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
-import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.HealingPredicateEntity;
-import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedRangedGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.EvadingRangedRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
+import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -16,6 +22,7 @@ import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.List;
 import java.util.function.Predicate;
 
 public class EntityMage extends BaseMonster implements HealingPredicateEntity {
@@ -27,7 +34,20 @@ public class EntityMage extends BaseMonster implements HealingPredicateEntity {
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(SWING, "interact");
     public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{SWING, CAST_1, CAST_2, CAST_DOUBLE, INTERACT, SLEEP};
-    public final AnimatedRangedGoal<EntityMage> attack = new AnimatedRangedGoal<>(this, 8, e -> true);
+
+    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityMage>>> ATTACKS = List.of(
+            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeActionInRange(SWING, e -> 0.8f), 1),
+            WeightedEntry.wrap(MonsterActionUtils.simpleRangedStrafingAction(CAST_1, 6, 1, e -> 1), 3),
+            WeightedEntry.wrap(MonsterActionUtils.simpleRangedStrafingAction(CAST_DOUBLE, 7, 1, e -> 1), 2),
+            WeightedEntry.wrap(MonsterActionUtils.simpleRangedStrafingAction(CAST_2, 8, 1, e -> 1), 4)
+    );
+    private static final List<WeightedEntry.Wrapper<IdleAction<EntityMage>>> IDLE_ACTIONS = List.of(
+            WeightedEntry.wrap(new IdleAction<>(() -> new EvadingRangedRunner<>(10, 4, 1)), 3),
+            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 1),
+            WeightedEntry.wrap(new IdleAction<>(DoNothingRunner::new), 2)
+    );
+
+    public final AnimatedAttackGoal<EntityMage> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityMage> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     private final Predicate<LivingEntity> healingPredicate = e -> {
@@ -44,19 +64,6 @@ public class EntityMage extends BaseMonster implements HealingPredicateEntity {
     public EntityMage(EntityType<? extends EntityMage> type, Level world) {
         super(type, world);
         this.goalSelector.addGoal(2, this.attack);
-    }
-
-    @Override
-    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (type == AnimationType.RANGED) {
-            return anim.is(CAST_1, CAST_DOUBLE, CAST_2);
-        }
-        return type == AnimationType.MELEE && this.random.nextFloat() < 0.8f && anim.is(SWING);
-    }
-
-    @Override
-    public float attackChance(AnimationType type) {
-        return 1;
     }
 
     @Override

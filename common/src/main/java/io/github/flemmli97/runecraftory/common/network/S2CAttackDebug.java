@@ -4,14 +4,21 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.AttackAABBRender;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
+import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 
 public class S2CAttackDebug implements Packet {
 
     public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "s2c_attack_debug");
+
+    public static void sendDebugPacket(AABB aabb, EnumAABBType type, Entity entity) {
+        if (GeneralConfig.debugAttack)
+            Platform.INSTANCE.sendToTrackingAndSelf(new S2CAttackDebug(aabb, type), entity);
+    }
 
     private final AABB aabb;
     private final int duration;

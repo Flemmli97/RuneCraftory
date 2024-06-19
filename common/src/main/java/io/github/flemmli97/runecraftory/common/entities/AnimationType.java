@@ -10,6 +10,5 @@ public enum AnimationType {
     MELEE,
     LEAP,
     CHARGE,
-    RANGED,
-    IDLE
+    RANGED
 }

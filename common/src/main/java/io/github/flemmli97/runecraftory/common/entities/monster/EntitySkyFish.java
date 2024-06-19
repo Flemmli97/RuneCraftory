@@ -1,20 +1,25 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
-import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.SwimWalkMoveController;
 import io.github.flemmli97.runecraftory.common.entities.ai.AirWanderGoal;
-import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedRangedGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.NearestTargetHorizontal;
+import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.FloatingFlyNavigator;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityWaterLaser;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -29,6 +34,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.List;
+
 public class EntitySkyFish extends BaseMonster {
 
     public static final AnimatedAction SLAP = new AnimatedAction(11, 6, "slap");
@@ -37,8 +44,19 @@ public class EntitySkyFish extends BaseMonster {
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(SLAP, "interact");
     public static final AnimatedAction STILL = AnimatedAction.builder(1, "still").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{SLAP, BEAM, SWIPE, INTERACT, STILL};
+
+    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntitySkyFish>>> ATTACKS = List.of(
+            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(SLAP, e -> 0.6f), 1),
+            WeightedEntry.wrap(MonsterActionUtils.simpleRangedEvadingAction(BEAM, 8, 5, 1, e -> 1), 2),
+            WeightedEntry.wrap(MonsterActionUtils.simpleRangedEvadingAction(SWIPE, 8, 5, 1, e -> 1), 1)
+    );
+    private static final List<WeightedEntry.Wrapper<IdleAction<EntitySkyFish>>> IDLE_ACTIONS = List.of(
+            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(10, 5)), 2),
+            WeightedEntry.wrap(new IdleAction<>(DoNothingRunner::new), 1)
+    );
+
+    public final AnimatedAttackGoal<EntitySkyFish> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntitySkyFish> animationHandler = new AnimationHandler<>(this, ANIMS);
-    public AnimatedRangedGoal<EntitySkyFish> rangedGoal = new AnimatedRangedGoal<>(this, 8, e -> true);
 
     public EntitySkyFish(EntityType<? extends BaseMonster> type, Level world) {
         super(type, world);
@@ -46,7 +64,7 @@ public class EntitySkyFish extends BaseMonster {
         this.goalSelector.addGoal(6, this.wander = new AirWanderGoal(this));
         this.setPathfindingMalus(BlockPathTypes.WATER, 0.0F);
         //this.setPathPriority(BlockPathTypes.OPEN, 0.5f);
-        this.goalSelector.addGoal(2, this.rangedGoal);
+        this.goalSelector.addGoal(2, this.attack);
         this.moveControl = new FlySwimMoveController(this);
         this.goalSelector.removeGoal(this.swimGoal);
         this.wander.setInterval(50);
@@ -84,14 +102,6 @@ public class EntitySkyFish extends BaseMonster {
             newY += 0.03;
             this.setDeltaMovement(mot.x, Math.min(0.3, newY), mot.z);
         }
-    }
-
-    @Override
-    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (type == AnimationType.RANGED) {
-            return anim.is(BEAM, SWIPE);
-        }
-        return type == AnimationType.MELEE && anim.is(SLAP);
     }
 
     @Override
@@ -155,13 +165,6 @@ public class EntitySkyFish extends BaseMonster {
     @Override
     public float getVoicePitch() {
         return (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 0.8f;
-    }
-
-    @Override
-    public float attackChance(AnimationType type) {
-        if (type == AnimationType.MELEE)
-            return 0.6f;
-        return 1;
     }
 
     @Override

@@ -1,14 +1,21 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
-import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.LeapingMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.LeapingAttackGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveAwayRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -20,6 +27,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 public class EntityGoblin extends LeapingMonster {
 
     protected static final AnimatedAction MELEE = new AnimatedAction(12, 7, "slash");
@@ -29,7 +38,22 @@ public class EntityGoblin extends LeapingMonster {
     public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, LEAP, STONE, INTERACT, SLEEP};
 
-    public LeapingAttackGoal<EntityGoblin> attack = new LeapingAttackGoal<>(this);
+    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityGoblin>>> ATTACKS = List.of(
+            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(MELEE, e -> 0.8f), 2),
+            WeightedEntry.wrap(new GoalAttackAction<EntityGoblin>(LEAP)
+                    .cooldown(e -> e.animationCooldown(LEAP))
+                    .prepare(() -> new WrappedRunner<>(new MoveAwayRunner<>(1.5, 1, 4))), 1),
+            WeightedEntry.wrap(new GoalAttackAction<EntityGoblin>(LEAP)
+                    .cooldown(e -> e.animationCooldown(LEAP))
+                    .prepare(() -> new WrappedRunner<>(new MoveToTargetRunner<>(1, 5))), 2),
+            WeightedEntry.wrap(MonsterActionUtils.simpleRangedEvadingAction(STONE, 8, 3, 1, e -> 1), 3)
+    );
+    private static final List<WeightedEntry.Wrapper<IdleAction<EntityGoblin>>> IDLE_ACTIONS = List.of(
+            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 1)), 1),
+            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 2)
+    );
+
+    public final AnimatedAttackGoal<EntityGoblin> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityGoblin> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityGoblin(EntityType<? extends EntityGoblin> type, Level world) {
@@ -47,15 +71,6 @@ public class EntityGoblin extends LeapingMonster {
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.STEEL_SWORD_PROP.get()));
         this.setDropChance(EquipmentSlot.MAINHAND, 0);
-    }
-
-    @Override
-    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (type == AnimationType.MELEE)
-            return anim.is(MELEE, STONE);
-        if (type == AnimationType.LEAP)
-            return anim.is(LEAP);
-        return false;
     }
 
     @Override
@@ -95,11 +110,6 @@ public class EntityGoblin extends LeapingMonster {
     }
 
     @Override
-    public float attackChance(AnimationType type) {
-        return 0.9f;
-    }
-
-    @Override
     public AnimationHandler<? extends EntityGoblin> getAnimationHandler() {
         return this.animationHandler;
     }
@@ -118,6 +128,11 @@ public class EntityGoblin extends LeapingMonster {
     }
 
     @Override
+    protected boolean isLeapingAnim(AnimatedAction anim) {
+        return anim.is(LEAP);
+    }
+
+    @Override
     public Vec3 getLeapVec(@Nullable Vec3 target) {
         return super.getLeapVec(target).scale(1.25);
     }
@@ -125,11 +140,6 @@ public class EntityGoblin extends LeapingMonster {
     @Override
     public double leapHeightMotion() {
         return 0.3;
-    }
-
-    @Override
-    public float maxLeapDistance() {
-        return 5;
     }
 
     @Override

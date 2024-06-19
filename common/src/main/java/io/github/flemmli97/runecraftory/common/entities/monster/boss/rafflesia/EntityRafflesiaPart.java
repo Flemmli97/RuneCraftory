@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia;
 
-import io.github.flemmli97.runecraftory.common.entities.ai.boss.RafflesiaPartAttackGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.RafflesiaPartAttackGoal;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.IAnimated;
 import io.github.flemmli97.tenshilib.common.entity.EntityUtil;

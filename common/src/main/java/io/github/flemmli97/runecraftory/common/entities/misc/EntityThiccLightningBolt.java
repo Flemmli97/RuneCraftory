@@ -35,7 +35,7 @@ public class EntityThiccLightningBolt extends BaseProjectile {
 
     @Override
     public int livingTickMax() {
-        return 35;
+        return 45;
     }
 
     @Override

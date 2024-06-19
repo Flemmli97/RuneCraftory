@@ -1,13 +1,21 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
-import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.LeapingMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.LeapingAttackGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.ActionUtils;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveAwayRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -16,6 +24,7 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class EntityPanther extends LeapingMonster {
 
@@ -25,7 +34,23 @@ public class EntityPanther extends LeapingMonster {
     public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, LEAP, INTERACT, SLEEP};
 
-    public LeapingAttackGoal<EntityPanther> attack = new LeapingAttackGoal<>(this);
+    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityPanther>>> ATTACKS = List.of(
+            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(MELEE, e -> 0.8f), 2),
+            WeightedEntry.wrap(new GoalAttackAction<EntityPanther>(LEAP)
+                    .cooldown(e -> e.animationCooldown(LEAP))
+                    .withCondition(ActionUtils.chanced(e -> 1))
+                    .prepare(() -> new WrappedRunner<>(new MoveAwayRunner<>(1.5, 1, 4))), 1),
+            WeightedEntry.wrap(new GoalAttackAction<EntityPanther>(LEAP)
+                    .cooldown(e -> e.animationCooldown(LEAP))
+                    .withCondition(ActionUtils.chanced(e -> 1))
+                    .prepare(() -> new WrappedRunner<>(new MoveToTargetRunner<>(1, 4))), 2)
+    );
+    private static final List<WeightedEntry.Wrapper<IdleAction<EntityPanther>>> IDLE_ACTIONS = List.of(
+            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 1)), 1),
+            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 2)
+    );
+
+    public final AnimatedAttackGoal<EntityPanther> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityPanther> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityPanther(EntityType<? extends EntityPanther> type, Level world) {
@@ -41,13 +66,6 @@ public class EntityPanther extends LeapingMonster {
     @Override
     protected SoundEvent getAmbientSound() {
         return ModSounds.ENTITY_PANTHER_AMBIENT.get();
-    }
-
-    @Override
-    public float attackChance(AnimationType type) {
-        if (type == AnimationType.MELEE)
-            return 0.8f;
-        return 1;
     }
 
     @Override
@@ -81,6 +99,11 @@ public class EntityPanther extends LeapingMonster {
     }
 
     @Override
+    protected boolean isLeapingAnim(AnimatedAction anim) {
+        return anim.is(LEAP);
+    }
+
+    @Override
     public Vec3 getLeapVec(@Nullable Vec3 target) {
         return super.getLeapVec(target).scale(1.15);
     }
@@ -88,20 +111,6 @@ public class EntityPanther extends LeapingMonster {
     @Override
     public double leapHeightMotion() {
         return 0.25f;
-    }
-
-    @Override
-    public float maxLeapDistance() {
-        return 4;
-    }
-
-    @Override
-    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (type == AnimationType.MELEE)
-            return anim.is(MELEE);
-        if (type == AnimationType.LEAP)
-            return anim.is(LEAP);
-        return false;
     }
 
     @Override

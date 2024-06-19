@@ -58,7 +58,7 @@ public class RafflesiaBreathSummoner extends ProjectileSummonHelperEntity {
         ball.setDamageMultiplier(this.damageMultiplier);
         ball.shootFromRotation(this, this.getXRot(), rot, 0, 0.25f, 0);
         Vec3 delta = ball.getDeltaMovement().normalize().scale(0.5);
-        ball.setPos(ball.getX() + delta.x(), this.getY(), ball.getZ() + delta.z());
+        ball.setPos(ball.getX() + delta.x() * 1.3, this.getY(), ball.getZ() + delta.z() * 1.3);
         this.level.addFreshEntity(ball);
     }
 }

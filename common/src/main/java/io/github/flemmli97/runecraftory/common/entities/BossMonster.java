@@ -47,7 +47,7 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
 
     protected final RunecraftoryBossbar bossInfo;
 
-    private int noPlayerTick, noPlayerRegenTick;
+    private int combatTick, noPlayerRegenTick, fullHealDelay;
 
     public BossMonster(EntityType<? extends BossMonster> type, Level level) {
         super(type, level);
@@ -78,16 +78,21 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
                 this.updatePlayers();
                 this.updateBossBar();
                 if (this.getTarget() == null && this.bossInfo.getPlayers().isEmpty()) {
-                    if (++this.noPlayerTick > 400) {
+                    if (++this.combatTick > 400) {
                         if (++this.noPlayerRegenTick > 40) {
                             this.heal(this.getMaxHealth() * 0.1f);
+                            if (this.getHealth() >= this.getMaxHealth())
+                                this.fullyHeal();
                             this.noPlayerRegenTick = 0;
                         }
                     }
                 } else {
-                    this.noPlayerTick = 0;
+                    this.combatTick = 0;
                     this.noPlayerRegenTick = 0;
                 }
+            }
+            if (--this.fullHealDelay == 1) {
+                this.fullyHeal();
             }
         }
     }
@@ -96,12 +101,14 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Enraged", this.isEnraged());
+        compound.putInt("FullHealDelay", this.fullHealDelay);
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setEnraged(compound.getBoolean("Enraged"), true);
+        this.fullHealDelay = compound.getInt("FullHealDelay");
     }
 
     @Override
@@ -194,7 +201,7 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
     @Override
     public int animationCooldown(AnimatedAction anim) {
         int diffAdd = this.difficultyCooldown();
-        return (this.isEnraged() ? 15 + this.getRandom().nextInt(20) : 20 + this.getRandom().nextInt(30)) + diffAdd;
+        return (this.isEnraged() ? 25 + this.getRandom().nextInt(20) : 30 + this.getRandom().nextInt(25)) + diffAdd;
     }
 
     protected void updateBossBar() {
@@ -204,6 +211,7 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
     @Override
     protected void actuallyHurt(DamageSource damageSrc, float damageAmount) {
         super.actuallyHurt(damageSrc, damageAmount);
+        this.combatTick = 0;
         if (!this.isTamed() && this.checkRage()) {
             this.setEnraged(true, false);
         }
@@ -222,6 +230,11 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
 
     protected boolean checkRage() {
         return this.getHealth() / this.getMaxHealth() < 0.5 && !this.isEnraged();
+    }
+
+    protected void fullyHeal() {
+        this.heal(this.getMaxHealth());
+        this.setEnraged(false, false);
     }
 
     private void updatePlayers() {
@@ -263,7 +276,7 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
         this.bossInfo.removePlayer(player);
         // If boss killed all players (or every nearby player simply died) heal it back to full
         if (!this.isTamed() && player.isRemoved() && this.bossInfo.getPlayers().isEmpty()) {
-            this.heal(this.getMaxHealth());
+            this.fullHealDelay = 10;
         }
     }
 

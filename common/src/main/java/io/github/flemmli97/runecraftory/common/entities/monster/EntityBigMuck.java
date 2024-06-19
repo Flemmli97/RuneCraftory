@@ -1,13 +1,18 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import com.mojang.math.Vector3f;
-import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedMonsterAttackGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
 import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
+import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -23,14 +28,24 @@ public class EntityBigMuck extends BaseMonster {
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(SLAP, "interact");
     public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{SLAP, SPORE, INTERACT, SLEEP};
-    public final AnimatedMonsterAttackGoal<EntityBigMuck> ai = new AnimatedMonsterAttackGoal<>(this);
+
+    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityBigMuck>>> ATTACKS = List.of(
+            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(SLAP, e -> 1), 1),
+            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(SPORE, e -> 1), 2)
+    );
+    private static final List<WeightedEntry.Wrapper<IdleAction<EntityBigMuck>>> IDLE_ACTIONS = List.of(
+            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 1)), 2),
+            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(12, 4)), 1)
+    );
+
+    public AnimatedAttackGoal<EntityBigMuck> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityBigMuck> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     private List<Vector3f> attackPos;
 
     public EntityBigMuck(EntityType<? extends EntityBigMuck> type, Level world) {
         super(type, world);
-        this.goalSelector.addGoal(2, this.ai);
+        this.goalSelector.addGoal(2, this.attack);
         this.getOrCreateAnimationHandler().setAnimationChangeCons(a -> this.attackPos = null);
     }
 
@@ -38,11 +53,6 @@ public class EntityBigMuck extends BaseMonster {
     protected void applyAttributes() {
         super.applyAttributes();
         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.2);
-    }
-
-    @Override
-    public float attackChance(AnimationType type) {
-        return 0.8f;
     }
 
     protected AnimationHandler<EntityBigMuck> getOrCreateAnimationHandler() {
@@ -55,16 +65,9 @@ public class EntityBigMuck extends BaseMonster {
     }
 
     @Override
-    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (type == AnimationType.MELEE)
-            return anim.is(SLAP, SPORE);
-        return false;
-    }
-
-    @Override
     public double maxAttackRange(AnimatedAction anim) {
         if (anim.is(SPORE))
-            return 1.7;
+            return 1.5;
         return super.maxAttackRange(anim);
     }
 

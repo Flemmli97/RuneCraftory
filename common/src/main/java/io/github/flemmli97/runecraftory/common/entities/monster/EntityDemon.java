@@ -1,13 +1,20 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
-import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.HealingPredicateEntity;
-import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedRangedGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
 import io.github.flemmli97.tenshilib.common.utils.MathUtils;
+import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -17,6 +24,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -30,7 +38,24 @@ public class EntityDemon extends BaseMonster implements HealingPredicateEntity {
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(DARK, "interact");
     public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{DARK, HEAL, STAB, STAB_LONG, SWIPE, INTERACT, SLEEP};
-    public final AnimatedRangedGoal<EntityDemon> attack = new AnimatedRangedGoal<>(this, 8, e -> true);
+
+    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityDemon>>> ATTACKS = List.of(
+            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(STAB, e -> 1), 3),
+            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(STAB_LONG, e -> 1), 3),
+            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(SWIPE, e -> 1), 3),
+            WeightedEntry.wrap(new GoalAttackAction<EntityDemon>(DARK)
+                    .cooldown(e -> e.animationCooldown(DARK))
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 2),
+            WeightedEntry.wrap(new GoalAttackAction<EntityDemon>(HEAL)
+                    .cooldown(e -> e.animationCooldown(HEAL))
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 1)
+    );
+    private static final List<WeightedEntry.Wrapper<IdleAction<EntityDemon>>> IDLE_ACTIONS = List.of(
+            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 2),
+            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 1)), 1)
+    );
+
+    public final AnimatedAttackGoal<EntityDemon> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityDemon> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     private final Predicate<LivingEntity> healingPredicate = e -> {
@@ -50,27 +75,16 @@ public class EntityDemon extends BaseMonster implements HealingPredicateEntity {
     }
 
     @Override
-    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (type == AnimationType.RANGED) {
-            return this.getRandom().nextFloat() < 0.8f && anim.is(DARK);
-        }
-        if (type == AnimationType.MELEE) {
-            return anim.is(STAB, STAB_LONG, SWIPE);
-        }
-        return false;
-    }
-
-    @Override
-    public float attackChance(AnimationType type) {
-        return 1;
-    }
-
-    @Override
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(DARK)) {
             this.getNavigation().stop();
             if (anim.canAttack()) {
                 ModSpells.DARK_BALL.get().use(this);
+            }
+        } else if (anim.is(HEAL)) {
+            this.getNavigation().stop();
+            if (anim.canAttack()) {
+                ModSpells.CURE_ALL.get().use(this);
             }
         } else if (anim.is(STAB) || anim.is(STAB_LONG)) {
             this.getNavigation().stop();
@@ -79,7 +93,7 @@ public class EntityDemon extends BaseMonster implements HealingPredicateEntity {
             }
             if (anim.canAttack()) {
                 final float range = anim.is(STAB_LONG) ? 5 : 2.5f;
-                AABB aabb = AABB.ofSize(this.position(), range + 1, range + 1, range + 1);
+                AABB aabb = AABB.ofSize(this.position(), 2 * (range + 1), 2 * (range + 1), 2 * (range + 1));
                 this.level.getEntitiesOfClass(LivingEntity.class, aabb, e -> this.hitPred.test(e) && this.spearHit(e, range))
                         .forEach(this::doHurtTarget);
             }
@@ -123,7 +137,7 @@ public class EntityDemon extends BaseMonster implements HealingPredicateEntity {
         if (anim.is(STAB))
             return 2;
         if (anim.is(STAB_LONG))
-            return 4.5;
+            return 4;
         if (anim.is(SWIPE))
             return 2.5;
         return super.maxAttackRange(anim);

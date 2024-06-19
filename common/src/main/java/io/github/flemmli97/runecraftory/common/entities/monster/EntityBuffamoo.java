@@ -1,19 +1,27 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
-import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.ChargeAttackGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.animated.ChargeAction;
+import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.List;
 
 public class EntityBuffamoo extends ChargingMonster {
 
@@ -23,26 +31,29 @@ public class EntityBuffamoo extends ChargingMonster {
     public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{STAMP, CHARGE_ATTACK, INTERACT, SLEEP};
 
-    public final ChargeAttackGoal<EntityBuffamoo> ai = new ChargeAttackGoal<>(this);
+    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityBuffamoo>>> ATTACKS = List.of(
+            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(STAMP, e -> 1), 1),
+            WeightedEntry.wrap(new GoalAttackAction<EntityBuffamoo>(CHARGE_ATTACK)
+                    .cooldown(e -> e.animationCooldown(CHARGE_ATTACK))
+                    .prepare(ChargeAction::new), 1)
+    );
+    private static final List<WeightedEntry.Wrapper<IdleAction<EntityBuffamoo>>> IDLE_ACTIONS = List.of(
+            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(8, 4)), 2),
+            WeightedEntry.wrap(new IdleAction<>(DoNothingRunner::new), 2)
+    );
+
+    public final AnimatedAttackGoal<EntityBuffamoo> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityBuffamoo> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityBuffamoo(EntityType<? extends EntityBuffamoo> type, Level world) {
         super(type, world);
-        this.goalSelector.addGoal(2, this.ai);
+        this.goalSelector.addGoal(2, this.attack);
     }
 
     @Override
     protected void applyAttributes() {
         super.applyAttributes();
         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.2);
-    }
-
-    @Override
-    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (type == AnimationType.CHARGE) {
-            return anim.is(CHARGE_ATTACK);
-        }
-        return type == AnimationType.MELEE && anim.is(STAMP);
     }
 
     @Override
@@ -63,6 +74,18 @@ public class EntityBuffamoo extends ChargingMonster {
     }
 
     @Override
+    protected boolean isChargingAnim(AnimatedAction anim) {
+        return anim.is(CHARGE_ATTACK);
+    }
+
+    @Override
+    public boolean handleChargeMovement(AnimatedAction anim) {
+        if (anim.isPastTick(2.04))
+            return false;
+        return super.handleChargeMovement(anim);
+    }
+
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return SoundEvents.COW_HURT;
     }
@@ -75,11 +98,6 @@ public class EntityBuffamoo extends ChargingMonster {
     @Override
     public float getVoicePitch() {
         return (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 0.7f;
-    }
-
-    @Override
-    public float attackChance(AnimationType type) {
-        return 0.7f;
     }
 
     @Override

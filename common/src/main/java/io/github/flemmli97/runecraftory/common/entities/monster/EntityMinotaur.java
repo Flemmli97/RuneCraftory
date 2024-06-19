@@ -1,22 +1,29 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
-import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.ChargeAttackGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.animated.ChargeAction;
+import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class EntityMinotaur extends ChargingMonster {
@@ -28,14 +35,28 @@ public class EntityMinotaur extends ChargingMonster {
     public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{SWING, SPIN, CHARGE, INTERACT, SLEEP};
 
-    public final ChargeAttackGoal<EntityMinotaur> ai = new ChargeAttackGoal<>(this);
+    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityMinotaur>>> ATTACKS = List.of(
+            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(SWING, e -> 1), 1),
+            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(SPIN, e -> 1), 1),
+            WeightedEntry.wrap(new GoalAttackAction<EntityMinotaur>(CHARGE)
+                    .cooldown(e -> e.animationCooldown(CHARGE))
+                    .withCondition(MonsterActionUtils.chargeCondition())
+                    .prepare(ChargeAction::new), 2)
+    );
+    private static final List<WeightedEntry.Wrapper<IdleAction<EntityMinotaur>>> IDLE_ACTIONS = List.of(
+            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 1)), 3),
+            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(12, 5)), 5)
+    );
+
+    public final AnimatedAttackGoal<EntityMinotaur> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityMinotaur> animationHandler = new AnimationHandler<>(this, ANIMS);
+
     private Vec3 spinDirection;
     private float spinAngle;
 
     public EntityMinotaur(EntityType<? extends EntityMinotaur> type, Level world) {
         super(type, world);
-        this.goalSelector.addGoal(2, this.ai);
+        this.goalSelector.addGoal(2, this.attack);
     }
 
     @Override
@@ -49,14 +70,6 @@ public class EntityMinotaur extends ChargingMonster {
                 }
             }
         };
-    }
-
-    @Override
-    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (type == AnimationType.CHARGE) {
-            return anim.is(CHARGE);
-        }
-        return type == AnimationType.MELEE && anim.is(SWING, SPIN);
     }
 
     @Override
@@ -89,7 +102,7 @@ public class EntityMinotaur extends ChargingMonster {
                 if (anim.isAtTick(0.84))
                     this.hitEntity.clear();
                 this.hitEntity.addAll(CombatUtils.EntityAttack.create(this, CombatUtils.EntityAttack.circleTargetsFixedRange((this.spinAngle + f * angleInc), (this.spinAngle + (f + 1) * angleInc), 4.5f))
-                        .withTargetPredicate(e -> !this.hitEntity.contains(e))
+                        .withTargetPredicate(e -> this.hitPred.test(e) && !this.hitEntity.contains(e))
                         .executeAttack());
             }
         } else {
@@ -102,10 +115,18 @@ public class EntityMinotaur extends ChargingMonster {
     }
 
     @Override
-    public boolean handleChargeMovement() {
-        boolean res = super.handleChargeMovement();
+    protected boolean isChargingAnim(AnimatedAction anim) {
+        return anim.is(CHARGE);
+    }
+
+    @Override
+    public boolean handleChargeMovement(AnimatedAction anim) {
+        if (anim.isPastTick(2.2))
+            return false;
+        boolean res = super.handleChargeMovement(anim);
         if (res) {
-            this.playSound(ModSounds.ENTITY_SKELEFANG_CHARGE.get(), 1, (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.0f);
+            if (this.tickCount % 7 == 0)
+                this.playSound(ModSounds.ENTITY_SKELEFANG_CHARGE.get(), 1, (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.0f);
         }
         return res;
     }
@@ -120,11 +141,6 @@ public class EntityMinotaur extends ChargingMonster {
             } else
                 this.getAnimationHandler().setAnimation(SWING);
         }
-    }
-
-    @Override
-    public float attackChance(AnimationType type) {
-        return 1;
     }
 
     @Override

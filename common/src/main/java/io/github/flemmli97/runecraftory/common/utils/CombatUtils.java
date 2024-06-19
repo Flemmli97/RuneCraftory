@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
+import io.github.flemmli97.runecraftory.common.entities.ElementalAttackMob;
 import io.github.flemmli97.runecraftory.common.entities.IBaseMob;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
@@ -357,6 +358,11 @@ public class CombatUtils {
         if (target.level.getDifficulty() == Difficulty.PEACEFUL && target instanceof Player)
             return false;
         if (dmg > 0) {
+            if (attacker instanceof ElementalAttackMob mob) {
+                EnumElement element = mob.getAttackElement();
+                if (element != null)
+                    source.element(element);
+            }
             return damageWithFaintAndCrit(attacker, target, source, dmg, null);
         }
         return false;

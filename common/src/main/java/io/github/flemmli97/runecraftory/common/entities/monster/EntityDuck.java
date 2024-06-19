@@ -1,16 +1,25 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
-import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.ChargeAttackGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.animated.ChargeAction;
+import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
+import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EntityDuck extends ChargingMonster {
 
@@ -20,7 +29,18 @@ public class EntityDuck extends ChargingMonster {
     public static final AnimatedAction STILL = AnimatedAction.builder(1, "still").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, DIVE, INTERACT, STILL};
 
-    public ChargeAttackGoal<EntityDuck> attack = new ChargeAttackGoal<>(this);
+    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityDuck>>> ATTACKS = List.of(
+            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(MELEE, e -> 1), 1),
+            WeightedEntry.wrap(new GoalAttackAction<EntityDuck>(DIVE)
+                    .cooldown(e -> e.animationCooldown(DIVE))
+                    .prepare(ChargeAction::new), 1)
+    );
+    private static final List<WeightedEntry.Wrapper<IdleAction<EntityDuck>>> IDLE_ACTIONS = List.of(
+            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 2),
+            WeightedEntry.wrap(new IdleAction<>(DoNothingRunner::new), 3)
+    );
+
+    public final AnimatedAttackGoal<EntityDuck> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityDuck> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityDuck(EntityType<? extends EntityDuck> type, Level world) {
@@ -32,13 +52,6 @@ public class EntityDuck extends ChargingMonster {
     protected void applyAttributes() {
         super.applyAttributes();
         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.25);
-    }
-
-    @Override
-    public float attackChance(AnimationType type) {
-        if (type == AnimationType.MELEE)
-            return 0.8f;
-        return 0.85f;
     }
 
     @Override
@@ -57,6 +70,8 @@ public class EntityDuck extends ChargingMonster {
                 this.getNavigation().stop();
             }
             if (anim.getTick() >= anim.getAttackTime() && !this.onGround) {
+                if (this.hitEntity == null)
+                    this.hitEntity = new ArrayList<>();
                 this.mobAttack(anim, null, e -> {
                     if (!this.hitEntity.contains(e)) {
                         this.hitEntity.add(e);
@@ -72,18 +87,14 @@ public class EntityDuck extends ChargingMonster {
     }
 
     @Override
-    public float chargingYaw() {
-        AnimatedAction anim = this.getAnimationHandler().getAnimation();
-        return this.isVehicle() || ((anim != null && anim.is(DIVE) && anim.getTick() >= anim.getAttackTime())) ? this.getYRot() : this.entityData.get(LOCKED_YAW);
+    protected boolean isChargingAnim(AnimatedAction anim) {
+        return anim.is(DIVE);
     }
 
     @Override
-    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (type == AnimationType.MELEE)
-            return anim.is(MELEE);
-        if (type == AnimationType.CHARGE)
-            return anim.is(DIVE);
-        return false;
+    public float chargingYaw() {
+        AnimatedAction anim = this.getAnimationHandler().getAnimation();
+        return this.isVehicle() || ((anim != null && anim.is(DIVE) && anim.getTick() >= anim.getAttackTime())) ? this.getYRot() : this.entityData.get(LOCKED_YAW);
     }
 
     @Override

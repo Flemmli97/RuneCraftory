@@ -116,7 +116,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -126,7 +125,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnimated, IExtendedMob, RandomAttackSelectorMob, ExtendedEntity, SleepingEntity, TargetableOpponent {
+public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnimated, IExtendedMob, ExtendedEntity, SleepingEntity, TargetableOpponent {
 
     private static final EntityDataAccessor<Optional<UUID>> OWNER_UUID = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.OPTIONAL_UUID);
     private static final EntityDataAccessor<Byte> MOVE_FLAGS = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.BYTE);
@@ -225,7 +224,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
      * For movement animation interpolation
      */
     private int moveTick;
-    private final int moveRandom = this.random.nextInt(10);
 
     public static final int MOVE_TICK_MAX = 3;
 
@@ -793,22 +791,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         return CombatUtils.mobAttack(this, entity);
     }
 
-    @Override
-    @Nullable
-    public AnimatedAction getRandomAnimation(AnimationType type) {
-        List<AnimatedAction> anims = new ArrayList<>();
-        for (AnimatedAction anim : this.getAnimationHandler().getAnimations())
-            if (this.isAnimOfType(anim, type))
-                anims.add(anim);
-        if (anims.isEmpty())
-            return null;
-        return anims.get(this.getRandom().nextInt(anims.size()));
-    }
-
-    @Override
-    public abstract boolean isAnimOfType(AnimatedAction anim, AnimationType type);
-
-    @Override
     public int animationCooldown(@Nullable AnimatedAction anim) {
         int diffAdd = this.difficultyCooldown();
         if (anim == null)
@@ -817,12 +799,12 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     public int difficultyCooldown() {
-        int diffAdd = 15;
+        int diffAdd = 12;
         Difficulty diff = this.level.getDifficulty();
         if (this.level.getDifficulty() == Difficulty.HARD)
             diffAdd = 0;
         else if (diff == Difficulty.NORMAL)
-            diffAdd = 8;
+            diffAdd = 7;
         return diffAdd;
     }
 
@@ -1136,7 +1118,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     public float interpolatedMoveTick(float partialTicks) {
-        return this.moveRandom + Mth.clamp((this.moveTick + (this.getMoveFlag() != MoveType.NONE ? partialTicks : -partialTicks)) / (float) MOVE_TICK_MAX, 0, 1);
+        return Mth.clamp((this.moveTick + (this.getMoveFlag() != MoveType.NONE ? partialTicks : -partialTicks)) / (float) MOVE_TICK_MAX, 0, 1);
     }
 
     public void setMovingFlag(MoveType type) {
@@ -1341,8 +1323,12 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     @Override
     public void travel(Vec3 vec) {
-        if (this.shouldFreezeTravel())
+        if (this.shouldFreezeTravel()) {
+            this.xxa = 0;
+            this.yya = 0;
+            this.zza = 0;
             return;
+        }
         if (this.canBeControlledByRider() && this.getControllingPassenger() instanceof Player player) {
             if (!this.level.isClientSide) {
                 if (this.adjustRotFromRider(player)) {
@@ -1561,33 +1547,29 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         return result;
     }
 
-    @Override
     public double maxAttackRange(AnimatedAction anim) {
         return 1.15;
     }
 
     public void handleAttack(AnimatedAction anim) {
-        if (this.isAnimOfType(anim, AnimationType.MELEE)) {
-            this.getNavigation().stop();
-            if (anim.getTick() == 1 && this.getTarget() != null) {
-                this.lookAtNow(this.getTarget(), 360, 90);
-                this.targetPosition = this.getTarget().position();
-            }
-            if (anim.canAttack()) {
-                this.mobAttack(anim, this.getTarget(), this::doHurtTarget);
-                this.targetPosition = null;
-            }
+        this.getNavigation().stop();
+        if (anim.getTick() == 1 && this.getTarget() != null) {
+            this.lookAtNow(this.getTarget(), 360, 90);
+            this.targetPosition = this.getTarget().position();
+        }
+        if (anim.canAttack()) {
+            this.mobAttack(anim, this.getTarget(), this::doHurtTarget);
+            this.targetPosition = null;
         }
     }
 
     public void mobAttack(AnimatedAction anim, LivingEntity target, Consumer<LivingEntity> cons) {
         AABB aabb = this.calculateAttackAABB(anim, this.targetPosition != null || target == null ? this.targetPosition : target.position(), 0.2);
         this.level.getEntitiesOfClass(LivingEntity.class, aabb, this.hitPred).forEach(cons);
-        if (this.getServer() != null)
-            Platform.INSTANCE.sendToAll(new S2CAttackDebug(aabb), this.getServer());
+        if (!this.level.isClientSide)
+            S2CAttackDebug.sendDebugPacket(aabb, S2CAttackDebug.EnumAABBType.ATTACK, this);
     }
 
-    @Override
     public AABB calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
         double reach = this.maxAttackRange(anim) * 0.5 + this.getBbWidth();
         Vec3 dir;
@@ -1602,6 +1584,10 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         }
         Vec3 attackPos = this.position().add(dir.scale(reach));
         return this.attackAABB(anim).inflate(grow, 0, grow).move(attackPos.x, attackPos.y, attackPos.z);
+    }
+
+    public AABB attackCheckAABB(AnimatedAction anim, LivingEntity target, double grow) {
+        return this.calculateAttackAABB(anim, target.position(), grow);
     }
 
     public AABB attackAABB(AnimatedAction anim) {
@@ -1807,6 +1793,12 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     @Override
     public Predicate<LivingEntity> validTargetPredicate() {
         return this.hitPred;
+    }
+
+    public boolean isAnimEqual(String prev, AnimatedAction other) {
+        if (other == null)
+            return false;
+        return prev.equals(other.getID());
     }
 
     public enum Behaviour {

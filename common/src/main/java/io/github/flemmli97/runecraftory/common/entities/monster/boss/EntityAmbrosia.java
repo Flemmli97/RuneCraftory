@@ -1,19 +1,26 @@
 package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.DelayedAttacker;
 import io.github.flemmli97.runecraftory.common.entities.RunecraftoryBossbar;
-import io.github.flemmli97.runecraftory.common.entities.ai.boss.AmbrosiaAttackGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
+import io.github.flemmli97.runecraftory.common.entities.ai.animated.MoveToTargetAttackRunner;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityPollen;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveAwayRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.StrafingRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.TimedWrappedRunner;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -25,6 +32,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.List;
 import java.util.function.BiConsumer;
 
 public class EntityAmbrosia extends BossMonster implements DelayedAttacker {
@@ -40,11 +48,14 @@ public class EntityAmbrosia extends BossMonster implements DelayedAttacker {
     public static final AnimatedAction DEFEAT = AnimatedAction.builder(204, "defeat").marker(150).infinite().build();
     public static final AnimatedAction ANGRY = new AnimatedAction(48, 0, "angry");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(KICK_1, "interact");
-
-    public static final ImmutableList<String> NON_CHOOSABLE_ATTACKS = ImmutableList.of(POLLEN_2.getID(), KICK_2.getID(), KICK_3.getID());
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{KICK_1, BUTTERFLY, WAVE, SLEEP, POLLEN, POLLEN_2, KICK_2, KICK_3, DEFEAT, ANGRY, INTERACT};
+
     private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntityAmbrosia>> ATTACK_HANDLER = createAnimationHandler(b -> {
         b.put(BUTTERFLY, (anim, entity) -> {
+            if (entity.targetPosition == null && entity.getTarget() != null) {
+                LivingEntity target = entity.getTarget();
+                entity.setAiVarHelper(new Vec3(target.getX(), target.getEyeY() - target.getBbHeight() * 0.5, target.getZ()));
+            }
             if (anim.canAttack()) {
                 ModSpells.BUTTERFLY.get().use(entity);
             }
@@ -72,8 +83,12 @@ public class EntityAmbrosia extends BossMonster implements DelayedAttacker {
                 ModSpells.WAVE.get().use(entity);
         });
         BiConsumer<AnimatedAction, EntityAmbrosia> pollenHandler = (anim, entity) -> {
-            if (entity.targetPosition == null)
-                return;
+            if (entity.targetPosition == null) {
+                Vec3 dir = entity.getTarget() != null ? entity.getTarget().position().subtract(entity.position()) : entity.getLookAngle();
+                dir = new Vec3(dir.x(), 0, dir.y()).normalize().scale(5);
+                int length = anim.getLength();
+                entity.targetPosition = new Vec3(dir.x / length, 0, dir.z / length);
+            }
             entity.setDeltaMovement(new Vec3(entity.targetPosition.x(), 0, entity.targetPosition.z()));
             if (anim.canAttack() && !EntityUtils.sealed(entity)) {
                 entity.getNavigation().stop();
@@ -86,8 +101,40 @@ public class EntityAmbrosia extends BossMonster implements DelayedAttacker {
         b.put(POLLEN_2, pollenHandler);
     });
 
-    public final AmbrosiaAttackGoal<EntityAmbrosia> attack = new AmbrosiaAttackGoal<>(this);
-    private final AnimationHandler<EntityAmbrosia> animationHandler = new AnimationHandler<>(this, ANIMS);
+    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityAmbrosia>>> ATTACKS = List.of(
+            WeightedEntry.wrap(MonsterActionUtils.<EntityAmbrosia>nonRepeatableAttack(BUTTERFLY)
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveAwayRunner<>(4.5, 1.1, 6), e -> 40 + e.getRandom().nextInt(10))), 3),
+            WeightedEntry.wrap(MonsterActionUtils.<EntityAmbrosia>nonRepeatableAttack(KICK_1)
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.2), e -> 50 + e.getRandom().nextInt(10))), 2),
+            WeightedEntry.wrap(MonsterActionUtils.<EntityAmbrosia>nonRepeatableAttack(SLEEP)
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.2, 2), e -> 50 + e.getRandom().nextInt(10))), 3),
+            WeightedEntry.wrap(MonsterActionUtils.<EntityAmbrosia>nonRepeatableAttack(WAVE)
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 1.5), e -> 20 + e.getRandom().nextInt(10))), 3),
+            WeightedEntry.wrap(MonsterActionUtils.<EntityAmbrosia>nonRepeatableAttack(POLLEN)
+                    .withCondition((goal, target, previous) -> goal.attacker.isEnraged() && !goal.attacker.isAnimEqual(previous, POLLEN))
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 2), e -> 45 + e.getRandom().nextInt(10))), 3)
+    );
+    private static final List<WeightedEntry.Wrapper<IdleAction<EntityAmbrosia>>> IDLE_ACTIONS = List.of(
+            WeightedEntry.wrap(new IdleAction<>(() -> new StrafingRunner<>(7, 1, 0.2f)), 1)
+    );
+
+    public final AnimatedAttackGoal<EntityAmbrosia> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+    private final AnimationHandler<EntityAmbrosia> animationHandler = new AnimationHandler<>(this, ANIMS).setAnimationChangeFunc(anim -> {
+        if (!this.level.isClientSide && anim == null) {
+            boolean chain = !this.commanded;
+            this.commanded = false;
+            if (chain) {
+                AnimatedAction chainAnim = this.chainAnim(this.getAnimationHandler().getAnimation());
+                if (chainAnim != null) {
+                    this.getAnimationHandler().setAnimation(chainAnim);
+                    return true;
+                }
+            }
+        }
+        return false;
+    });
+
+    private boolean commanded;
 
     public EntityAmbrosia(EntityType<? extends EntityAmbrosia> type, Level world) {
         super(type, world);
@@ -105,22 +152,6 @@ public class EntityAmbrosia extends BossMonster implements DelayedAttacker {
     protected void applyAttributes() {
         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.29);
         super.applyAttributes();
-    }
-
-    @Override
-    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (anim.is(ANGRY, DEFEAT, INTERACT))
-            return false;
-        if (type == AnimationType.GENERICATTACK)
-            return this.isEnraged() || !anim.is(POLLEN);
-        return false;
-    }
-
-    @Override
-    public int animationCooldown(AnimatedAction anim) {
-        if (anim != null && anim.is(KICK_1, KICK_2, POLLEN))
-            return 3;
-        return super.animationCooldown(anim);
     }
 
     @Override
@@ -181,12 +212,8 @@ public class EntityAmbrosia extends BossMonster implements DelayedAttacker {
                     this.getAnimationHandler().setAnimation(SLEEP);
             } else if (this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), null))
                 this.getAnimationHandler().setAnimation(KICK_1);
+            this.commanded = true;
         }
-    }
-
-    @Override
-    public float attackChance(AnimationType type) {
-        return 1;
     }
 
     @Override
@@ -214,18 +241,21 @@ public class EntityAmbrosia extends BossMonster implements DelayedAttacker {
         return this.animationHandler;
     }
 
+    @Override
     public boolean isAnimEqual(String prev, AnimatedAction other) {
         if (other == null)
-            return true;
+            return false;
         if (prev.equals(POLLEN_2.getID()))
-            return other.getID().equals(POLLEN.getID());
+            return POLLEN.is(other);
         if (prev.equals(KICK_3.getID()))
-            return other.getID().equals(KICK_1.getID());
+            return KICK_1.is(other);
         return prev.equals(other.getID());
     }
 
-    public AnimatedAction chainAnim(String prev) {
-        return switch (prev) {
+    public AnimatedAction chainAnim(AnimatedAction anim) {
+        if (anim == null)
+            return null;
+        return switch (anim.getID()) {
             case "kick_1" -> KICK_2;
             case "kick_2" -> KICK_3;
             case "pollen" -> POLLEN_2;

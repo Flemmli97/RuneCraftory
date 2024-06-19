@@ -1,15 +1,20 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
-import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.EvadingRangedAttackGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.StrafingRunner;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -17,6 +22,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class EntityFlowerLily extends BaseMonster {
 
@@ -26,7 +33,17 @@ public class EntityFlowerLily extends BaseMonster {
     public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{LEAP, ATTACK, INTERACT, SLEEP};
 
-    public final EvadingRangedAttackGoal<EntityFlowerLily> attack = new EvadingRangedAttackGoal<>(this, 2, 8, e -> true);
+    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityFlowerLily>>> ATTACKS = List.of(
+            WeightedEntry.wrap(MonsterActionUtils.simpleRangedEvadingAction(ATTACK, 9, 2, 1, e -> 1), 2),
+            WeightedEntry.wrap(MonsterActionUtils.<EntityFlowerLily>simpleMeleeAction(LEAP, e -> 1)
+                    .withCondition(((goal, target, previous) -> goal.distanceToTargetSq < 4)), 5)
+    );
+    private static final List<WeightedEntry.Wrapper<IdleAction<EntityFlowerLily>>> IDLE_ACTIONS = List.of(
+            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 2),
+            WeightedEntry.wrap(new IdleAction<>(() -> new StrafingRunner<>(16, 5)), 1)
+    );
+
+    public final AnimatedAttackGoal<EntityFlowerLily> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityFlowerLily> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityFlowerLily(EntityType<? extends EntityFlowerLily> type, Level world) {
@@ -38,14 +55,6 @@ public class EntityFlowerLily extends BaseMonster {
     protected void applyAttributes() {
         super.applyAttributes();
         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.25);
-    }
-
-    @Override
-    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (type == AnimationType.RANGED) {
-            return anim.is(ATTACK);
-        }
-        return type == AnimationType.MELEE && anim.is(LEAP);
     }
 
     @Override
@@ -103,13 +112,11 @@ public class EntityFlowerLily extends BaseMonster {
     }
 
     @Override
-    public float attackChance(AnimationType type) {
-        return type == AnimationType.MELEE ? 0.6f : 1;
-    }
-
-    @Override
     public int animationCooldown(@Nullable AnimatedAction anim) {
-        return (int) (super.animationCooldown(anim) * 1.8);
+        int diffAdd = this.difficultyCooldown();
+        if (anim == null)
+            return this.getRandom().nextInt(20) + 30 + diffAdd;
+        return this.getRandom().nextInt(40) + 25 + diffAdd;
     }
 
     @Override

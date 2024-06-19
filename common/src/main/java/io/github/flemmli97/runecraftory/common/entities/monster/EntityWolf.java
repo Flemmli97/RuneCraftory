@@ -1,15 +1,22 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
-import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.LeapingMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.LeapingAttackGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.RestrictedWaterAvoidingStrollGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveAwayRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -19,6 +26,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 public class EntityWolf extends LeapingMonster {
 
     private static final AnimatedAction MELEE = new AnimatedAction(36, 10, "attack");
@@ -27,7 +36,21 @@ public class EntityWolf extends LeapingMonster {
     public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, LEAP, INTERACT, SLEEP};
 
-    public LeapingAttackGoal<EntityWolf> attack = new LeapingAttackGoal<>(this);
+    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityWolf>>> ATTACKS = List.of(
+            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(MELEE, e -> 0.8f), 2),
+            WeightedEntry.wrap(new GoalAttackAction<EntityWolf>(LEAP)
+                    .cooldown(e -> e.animationCooldown(LEAP))
+                    .prepare(() -> new WrappedRunner<>(new MoveAwayRunner<>(1.5, 1, 4))), 1),
+            WeightedEntry.wrap(new GoalAttackAction<EntityWolf>(LEAP)
+                    .cooldown(e -> e.animationCooldown(LEAP))
+                    .prepare(() -> new WrappedRunner<>(new MoveToTargetRunner<>(1, 4))), 2)
+    );
+    private static final List<WeightedEntry.Wrapper<IdleAction<EntityWolf>>> IDLE_ACTIONS = List.of(
+            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 1)), 1),
+            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 2)
+    );
+
+    public final AnimatedAttackGoal<EntityWolf> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityWolf> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityWolf(EntityType<? extends EntityWolf> type, Level world) {
@@ -75,13 +98,6 @@ public class EntityWolf extends LeapingMonster {
     }
 
     @Override
-    public float attackChance(AnimationType type) {
-        if (type == AnimationType.MELEE)
-            return 0.7f;
-        return 1;
-    }
-
-    @Override
     public AnimationHandler<? extends EntityWolf> getAnimationHandler() {
         return this.animationHandler;
     }
@@ -102,13 +118,13 @@ public class EntityWolf extends LeapingMonster {
     }
 
     @Override
-    public Vec3 getLeapVec(@Nullable Vec3 target) {
-        return super.getLeapVec(target).scale(1.1);
+    protected boolean isLeapingAnim(AnimatedAction anim) {
+        return anim.is(LEAP);
     }
 
     @Override
-    public float maxLeapDistance() {
-        return 3.5f;
+    public Vec3 getLeapVec(@Nullable Vec3 target) {
+        return super.getLeapVec(target).scale(1.1);
     }
 
     @Override
@@ -120,15 +136,6 @@ public class EntityWolf extends LeapingMonster {
         CustomDamage.Builder source = new CustomDamage.Builder(attacker).noKnockback().hurtResistant(1);
         double damagePhys = CombatUtils.getAttributeValue(attacker, Attributes.ATTACK_DAMAGE);
         return CombatUtils.mobAttack(attacker, target, source, damagePhys);
-    }
-
-    @Override
-    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (type == AnimationType.MELEE)
-            return anim.is(MELEE);
-        if (type == AnimationType.LEAP)
-            return anim.is(LEAP);
-        return false;
     }
 
     @Override

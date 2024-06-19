@@ -1,12 +1,16 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
-import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedMonsterAttackGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -14,13 +18,23 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.List;
+
 public class EntityCluckadoodle extends BaseMonster {
 
     public static final AnimatedAction MELEE = new AnimatedAction(16, 10, "attack");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
     public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, INTERACT, SLEEP};
-    public final AnimatedMonsterAttackGoal<EntityCluckadoodle> attack = new AnimatedMonsterAttackGoal<>(this);
+
+    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityCluckadoodle>>> ATTACKS = List.of(
+            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(MELEE, e -> 1), 1)
+    );
+    private static final List<WeightedEntry.Wrapper<IdleAction<EntityCluckadoodle>>> IDLE_ACTIONS = List.of(
+            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 1)
+    );
+
+    public final AnimatedAttackGoal<EntityCluckadoodle> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityCluckadoodle> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityCluckadoodle(EntityType<? extends EntityCluckadoodle> type, Level world) {
@@ -32,11 +46,6 @@ public class EntityCluckadoodle extends BaseMonster {
     protected void applyAttributes() {
         super.applyAttributes();
         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.27);
-    }
-
-    @Override
-    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        return type == AnimationType.MELEE && anim.is(MELEE);
     }
 
     @Override
@@ -71,11 +80,6 @@ public class EntityCluckadoodle extends BaseMonster {
     @Override
     public float getVoicePitch() {
         return (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 0.8f;
-    }
-
-    @Override
-    public float attackChance(AnimationType type) {
-        return 0.8f;
     }
 
     @Override

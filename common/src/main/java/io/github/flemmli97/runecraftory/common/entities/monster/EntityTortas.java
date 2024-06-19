@@ -1,16 +1,23 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
-import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
 import io.github.flemmli97.runecraftory.common.entities.SwimWalkMoveController;
-import io.github.flemmli97.runecraftory.common.entities.ai.ChargeAttackGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.animated.ChargeAction;
+import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.AmphibiousNavigator;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -25,6 +32,8 @@ import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.List;
+
 public class EntityTortas extends ChargingMonster {
 
     public static final AnimatedAction BITE = new AnimatedAction(11, 6, "bite");
@@ -33,15 +42,28 @@ public class EntityTortas extends ChargingMonster {
     public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{BITE, SPIN, INTERACT, SLEEP};
 
-    public final ChargeAttackGoal<EntityTortas> ai = new ChargeAttackGoal<>(this);
+    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityTortas>>> ATTACKS = List.of(
+            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(BITE, e -> 0.85f), 1),
+            WeightedEntry.wrap(new GoalAttackAction<EntityTortas>(SPIN)
+                    .cooldown(e -> e.animationCooldown(SPIN))
+                    .withCondition(MonsterActionUtils.chargeCondition())
+                    .prepare(ChargeAction::new), 2)
+    );
+    private static final List<WeightedEntry.Wrapper<IdleAction<EntityTortas>>> IDLE_ACTIONS = List.of(
+            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 1)), 3),
+            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(12, 5)), 5),
+            WeightedEntry.wrap(new IdleAction<>(DoNothingRunner::new), 1)
+    );
+
+    public final AnimatedAttackGoal<EntityTortas> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+    private final AnimationHandler<EntityTortas> animationHandler = new AnimationHandler<>(this, ANIMS);
     protected final WaterBoundPathNavigation waterNavigator;
     protected final GroundPathNavigation groundNavigator;
-    private final AnimationHandler<EntityTortas> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityTortas(EntityType<? extends EntityTortas> type, Level world) {
         super(type, world);
         this.setPathfindingMalus(BlockPathTypes.WATER, 0.0F);
-        this.goalSelector.addGoal(2, this.ai);
+        this.goalSelector.addGoal(2, this.attack);
         this.moveControl = new SwimWalkMoveController(this);
         this.goalSelector.removeGoal(this.swimGoal);
         this.waterNavigator = new AmphibiousNavigator(this, world);
@@ -57,17 +79,11 @@ public class EntityTortas extends ChargingMonster {
     }
 
     @Override
-    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (type == AnimationType.CHARGE) {
-            return anim.is(SPIN);
-        }
-        return type == AnimationType.MELEE && anim.is(BITE);
-    }
-
-    @Override
     public int animationCooldown(AnimatedAction anim) {
-        if (anim != null && anim.is(SPIN))
-            return super.animationCooldown(anim) * 2;
+        if (anim != null && anim.is(SPIN)) {
+            int diffAdd = this.difficultyCooldown();
+            return this.getRandom().nextInt(50) + 30 + diffAdd;
+        }
         return super.animationCooldown(anim);
     }
 
@@ -89,6 +105,11 @@ public class EntityTortas extends ChargingMonster {
     @Override
     public double maxAttackRange(AnimatedAction anim) {
         return 1;
+    }
+
+    @Override
+    protected boolean isChargingAnim(AnimatedAction anim) {
+        return anim.is(SPIN);
     }
 
     @Override
@@ -131,13 +152,6 @@ public class EntityTortas extends ChargingMonster {
     }
 
     @Override
-    public float attackChance(AnimationType type) {
-        if (type == AnimationType.MELEE)
-            return 0.85f;
-        return 1;
-    }
-
-    @Override
     public AnimationHandler<EntityTortas> getAnimationHandler() {
         return this.animationHandler;
     }
@@ -153,7 +167,7 @@ public class EntityTortas extends ChargingMonster {
     }
 
     @Override
-    public boolean handleChargeMovement() {
+    public boolean handleChargeMovement(AnimatedAction anim) {
         Vec3 prevMotion = this.getDeltaMovement();
         if (this.getTarget() != null) {
             Vec3 pos = this.position();

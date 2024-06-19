@@ -44,7 +44,7 @@ public abstract class LeapingMonster extends BaseMonster {
 
     @Override
     public void handleAttack(AnimatedAction anim) {
-        if (this.isAnimOfType(anim, AnimationType.LEAP)) {
+        if (this.isLeapingAnim(anim)) {
             this.getNavigation().stop();
             this.lookAt(EntityAnchorArgument.Anchor.FEET, this.position().add(this.getDeltaMovement().x, 0, this.getDeltaMovement().z));
             if (anim.getTick() == 1 && this.getTarget() != null) {
@@ -69,6 +69,8 @@ public abstract class LeapingMonster extends BaseMonster {
         }
     }
 
+    protected abstract boolean isLeapingAnim(AnimatedAction anim);
+
     public Vec3 getLeapVec(@Nullable Vec3 target) {
         if (target != null) {
             return new Vec3(target.x - this.getX(), 0.0, target.z - this.getZ()).normalize();
@@ -86,7 +88,7 @@ public abstract class LeapingMonster extends BaseMonster {
 
     @Override
     public AABB calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
-        if (!this.isAnimOfType(anim, AnimationType.LEAP))
+        if (!this.isLeapingAnim(anim))
             return super.calculateAttackAABB(anim, target, grow);
         double reach = this.maxAttackRange(anim) * 0.5 + this.getBbWidth() * 0.5;
         Vec3 attackPos = this.position().add(Vec3.directionFromRotation(0, this.getYRot()).scale(reach));
@@ -107,6 +109,6 @@ public abstract class LeapingMonster extends BaseMonster {
 
     private boolean isLeapingAnimation() {
         AnimatedAction anim = this.getAnimationHandler().getAnimation();
-        return anim != null && this.isAnimOfType(anim, AnimationType.LEAP);
+        return anim != null && this.isLeapingAnim(anim);
     }
 }

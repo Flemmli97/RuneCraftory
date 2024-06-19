@@ -1,18 +1,23 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
-import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.AirWanderGoal;
-import io.github.flemmli97.runecraftory.common.entities.ai.EvadingRangedAttackGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.NearestTargetHorizontal;
+import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.FloatingFlyNavigator;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.EvadingRangedRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -28,6 +33,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 public class EntityHornet extends BaseMonster {
 
     public static final AnimatedAction ATTACK = new AnimatedAction(14, 6, "attack");
@@ -35,14 +42,23 @@ public class EntityHornet extends BaseMonster {
     public static final AnimatedAction STILL = AnimatedAction.builder(1, "still").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{ATTACK, INTERACT, STILL};
 
-    public EvadingRangedAttackGoal<EntityHornet> rangedGoal = new EvadingRangedAttackGoal<>(this, 2, 10, e -> true);
+    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityHornet>>> ATTACKS = List.of(
+            WeightedEntry.wrap(MonsterActionUtils.simpleRangedEvadingAction(ATTACK, 9, 2, 1, e -> 1), 1)
+    );
+    private static final List<WeightedEntry.Wrapper<IdleAction<EntityHornet>>> IDLE_ACTIONS = List.of(
+            WeightedEntry.wrap(new IdleAction<>(() -> new EvadingRangedRunner<EntityHornet>(10, 2, 1))
+                    .withCondition(((goal, target) -> goal.distanceToTargetSq < 9)), 5),
+            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(12, 5)), 3)
+    );
+
+    public final AnimatedAttackGoal<EntityHornet> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityHornet> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityHornet(EntityType<? extends BaseMonster> type, Level world) {
         super(type, world);
         this.goalSelector.removeGoal(this.wander);
         this.goalSelector.addGoal(6, this.wander = new AirWanderGoal(this));
-        this.goalSelector.addGoal(2, this.rangedGoal);
+        this.goalSelector.addGoal(2, this.attack);
         this.moveControl = new FlyingMoveControl(this, 50, true);
         this.setNoGravity(true);
     }
@@ -65,14 +81,6 @@ public class EntityHornet extends BaseMonster {
     }
 
     @Override
-    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (type == AnimationType.RANGED) {
-            return anim.is(ATTACK);
-        }
-        return false;
-    }
-
-    @Override
     public void travel(Vec3 vec) {
         if (this.isEffectiveAi() && this.isVehicle() && this.canBeControlledByRider() && this.getControllingPassenger() instanceof LivingEntity) {
             this.handleNoGravTravel(vec);
@@ -83,7 +91,10 @@ public class EntityHornet extends BaseMonster {
 
     @Override
     public int animationCooldown(@Nullable AnimatedAction anim) {
-        return (int) (super.animationCooldown(anim) * 2.7);
+        int diffAdd = this.difficultyCooldown();
+        if (anim == null)
+            return this.getRandom().nextInt(20) + 30 + diffAdd;
+        return this.getRandom().nextInt(40) + 35 + diffAdd;
     }
 
     @Override
@@ -136,11 +147,6 @@ public class EntityHornet extends BaseMonster {
     @Override
     public int getAmbientSoundInterval() {
         return 25;
-    }
-
-    @Override
-    public float attackChance(AnimationType type) {
-        return type == AnimationType.MELEE ? 0 : 1;
     }
 
     @Override

@@ -2,13 +2,20 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
-import io.github.flemmli97.runecraftory.common.entities.AnimationType;
-import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedRangedGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityMobArrow;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.ActionUtils;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.EvadingRangedRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
@@ -20,6 +27,8 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.List;
+
 public class EntityGoblinArcher extends EntityGoblin {
 
     private static final AnimatedAction BOW = new AnimatedAction(15, 9, "bow");
@@ -27,28 +36,35 @@ public class EntityGoblinArcher extends EntityGoblin {
     private static final AnimatedAction KICK = new AnimatedAction(11, 7, "kick");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(KICK, "interact");
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{BOW, TRIPLE, KICK, INTERACT, SLEEP};
+
+    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityGoblinArcher>>> ATTACKS = List.of(
+            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeActionInRange(KICK, e -> 0.6f), 1),
+            WeightedEntry.wrap(MonsterActionUtils.<EntityGoblinArcher>simpleRangedStrafingAction(BOW, 8, 1, e -> 1)
+                    .withCondition(ActionUtils.chanced(e -> 1,
+                            (goal, target, previous) -> goal.attacker.getMainHandItem().getItem() instanceof BowItem)), 6),
+            WeightedEntry.wrap(MonsterActionUtils.<EntityGoblinArcher>simpleRangedStrafingAction(TRIPLE, 8, 1, e -> 1)
+                    .withCondition(ActionUtils.chanced(e -> 1,
+                            (goal, target, previous) -> goal.attacker.getMainHandItem().getItem() instanceof BowItem)), 3)
+    );
+    private static final List<WeightedEntry.Wrapper<IdleAction<EntityGoblinArcher>>> IDLE_ACTIONS = List.of(
+            WeightedEntry.wrap(new IdleAction<>(() -> new EvadingRangedRunner<>(10, 4, 1)), 3),
+            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 1),
+            WeightedEntry.wrap(new IdleAction<>(DoNothingRunner::new), 2)
+    );
+
+    public final AnimatedAttackGoal<EntityGoblinArcher> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityGoblinArcher> animationHandler = new AnimationHandler<>(this, ANIMS);
-    public AnimatedRangedGoal<EntityGoblin> rangedGoal = new AnimatedRangedGoal<>(this, 8, (e) -> e.getMainHandItem().getItem() instanceof BowItem);
 
     public EntityGoblinArcher(EntityType<? extends EntityGoblin> type, Level level) {
         super(type, level);
-        this.goalSelector.removeGoal(this.attack);
-        this.goalSelector.addGoal(2, this.rangedGoal);
+        this.goalSelector.removeGoal(super.attack);
+        this.goalSelector.addGoal(2, this.attack);
     }
 
     @Override
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
         this.setDropChance(EquipmentSlot.MAINHAND, 0);
-    }
-
-    @Override
-    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (type == AnimationType.RANGED)
-            return anim.is(BOW, TRIPLE);
-        if (type == AnimationType.MELEE)
-            return anim.is(KICK);
-        return false;
     }
 
     @Override
@@ -66,20 +82,13 @@ public class EntityGoblinArcher extends EntityGoblin {
     }
 
     @Override
-    public float attackChance(AnimationType type) {
-        if (type == AnimationType.MELEE)
-            return 0.6f;
-        return 0.9f;
-    }
-
-    @Override
     public AnimationHandler<EntityGoblinArcher> getAnimationHandler() {
         return this.animationHandler;
     }
 
     @Override
     public void handleAttack(AnimatedAction anim) {
-        if (this.isAnimOfType(anim, AnimationType.RANGED)) {
+        if (anim.is(BOW, TRIPLE)) {
             if (anim.getTick() == 1)
                 this.startUsingItem(InteractionHand.MAIN_HAND);
             this.getNavigation().stop();

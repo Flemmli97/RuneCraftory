@@ -1,9 +1,9 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
-import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.GhostAttackGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.NearestTargetNoLoS;
+import io.github.flemmli97.runecraftory.common.entities.ai.animated.ChargeAction;
+import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.FloatingFlyNavigator;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.NoClipFlyEvaluator;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.NoClipFlyMoveController;
@@ -11,9 +11,16 @@ import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -29,6 +36,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.PathFinder;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 public class EntityGhost extends ChargingMonster {
@@ -41,10 +49,26 @@ public class EntityGhost extends ChargingMonster {
     public static final AnimatedAction STILL = AnimatedAction.builder(1, "still").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{DARKBALL, CHARGE, SWING, VANISH, INTERACT, STILL};
 
-    public final GhostAttackGoal<EntityGhost> attack = new GhostAttackGoal<>(this);
-    private boolean vanishNext;
+    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityGhost>>> ATTACKS = List.of(
+            WeightedEntry.wrap(MonsterActionUtils.simpleRangedEvadingAction(DARKBALL, 9, 1, 1, e -> 1), 1),
+            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(SWING, e -> 1), 1),
+            WeightedEntry.wrap(new GoalAttackAction<EntityGhost>(CHARGE)
+                    .cooldown(e -> e.animationCooldown(CHARGE))
+                    .withCondition(MonsterActionUtils.chargeCondition())
+                    .prepare(ChargeAction::new), 2),
+            WeightedEntry.wrap(new GoalAttackAction<EntityGhost>(VANISH)
+                    .withCondition(((goal, target, previous) -> goal.attacker.shouldVanishNext(previous)))
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 4)
+    );
+    private static final List<WeightedEntry.Wrapper<IdleAction<EntityGhost>>> IDLE_ACTIONS = List.of(
+            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 3),
+            WeightedEntry.wrap(new IdleAction<>(DoNothingRunner::new), 1)
+    );
 
+    public final AnimatedAttackGoal<EntityGhost> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityGhost> animationHandler = new AnimationHandler<>(this, ANIMS);
+
+    private boolean vanishNext;
 
     public EntityGhost(EntityType<? extends EntityGhost> type, Level world) {
         super(type, world);
@@ -93,17 +117,6 @@ public class EntityGhost extends ChargingMonster {
     }
 
     @Override
-    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (type == AnimationType.CHARGE)
-            return anim.is(CHARGE);
-        if (type == AnimationType.RANGED)
-            return anim.is(DARKBALL);
-        if (type == AnimationType.MELEE)
-            return anim.is(SWING);
-        return false;
-    }
-
-    @Override
     public boolean hurt(DamageSource source, float amount) {
         if (this.getAnimationHandler().isCurrent(VANISH))
             return false;
@@ -136,17 +149,12 @@ public class EntityGhost extends ChargingMonster {
     }
 
     @Override
-    public float attackChance(AnimationType type) {
-        return 1;
-    }
-
-    @Override
     public AnimationHandler<EntityGhost> getAnimationHandler() {
         return this.animationHandler;
     }
 
     @Override
-    public boolean handleChargeMovement() {
+    public boolean handleChargeMovement(AnimatedAction anim) {
         if (this.chargeMotion != null) {
             this.setDeltaMovement(this.chargeMotion[0] * 0.98f, this.getDeltaMovement().y, this.chargeMotion[2] * 0.98f);
             return true;
@@ -178,6 +186,11 @@ public class EntityGhost extends ChargingMonster {
             }
         } else
             super.handleAttack(anim);
+    }
+
+    @Override
+    protected boolean isChargingAnim(AnimatedAction anim) {
+        return anim.is(CHARGE);
     }
 
     @Override

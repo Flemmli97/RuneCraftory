@@ -1,16 +1,19 @@
 package io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia;
 
 import com.google.common.collect.ImmutableMap;
-import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.DelayedAttacker;
 import io.github.flemmli97.runecraftory.common.entities.RunecraftoryBossbar;
-import io.github.flemmli97.runecraftory.common.entities.ai.boss.RafflesiaAttackGoal;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -19,6 +22,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
+import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
@@ -38,12 +42,18 @@ import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 
 public class EntityRafflesia extends BossMonster implements DelayedAttacker {
+
+    private static final EntityDataAccessor<Optional<UUID>> HORSE_TAIL = SynchedEntityData.defineId(EntityRafflesia.class, EntityDataSerializers.OPTIONAL_UUID);
+    private static final EntityDataAccessor<Optional<UUID>> FLOWER = SynchedEntityData.defineId(EntityRafflesia.class, EntityDataSerializers.OPTIONAL_UUID);
+    private static final EntityDataAccessor<Optional<UUID>> PITCHER = SynchedEntityData.defineId(EntityRafflesia.class, EntityDataSerializers.OPTIONAL_UUID);
+    private static final EntityDataAccessor<Direction> SPAWN_DIRECTION = SynchedEntityData.defineId(EntityRafflesia.class, EntityDataSerializers.DIRECTION);
 
     public static final AnimatedAction POISON_BREATH = new AnimatedAction(2.08, 0.64, "breath");
     public static final AnimatedAction POISON_BREATH_REV = AnimatedAction.copyOf(POISON_BREATH, "breath_2");
@@ -80,14 +90,45 @@ public class EntityRafflesia extends BossMonster implements DelayedAttacker {
         b.put(STATUS_CIRCLE, cons);
     });
 
-    private static final EntityDataAccessor<Optional<UUID>> HORSE_TAIL = SynchedEntityData.defineId(EntityRafflesia.class, EntityDataSerializers.OPTIONAL_UUID);
-    private static final EntityDataAccessor<Optional<UUID>> FLOWER = SynchedEntityData.defineId(EntityRafflesia.class, EntityDataSerializers.OPTIONAL_UUID);
-    private static final EntityDataAccessor<Optional<UUID>> PITCHER = SynchedEntityData.defineId(EntityRafflesia.class, EntityDataSerializers.OPTIONAL_UUID);
-    private static final EntityDataAccessor<Direction> SPAWN_DIRECTION = SynchedEntityData.defineId(EntityRafflesia.class, EntityDataSerializers.DIRECTION);
+    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityRafflesia>>> ATTACKS = List.of(
+            WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(POISON_BREATH)
+                    .cooldown(e -> e.animationCooldown(POISON_BREATH))
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 2),
+            WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(POISON_BREATH_REV)
+                    .cooldown(e -> e.animationCooldown(POISON_BREATH_REV))
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 2),
+            WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(PARA_BREATH)
+                    .cooldown(e -> e.animationCooldown(PARA_BREATH))
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 2),
+            WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(PARA_BREATH_REV)
+                    .cooldown(e -> e.animationCooldown(PARA_BREATH_REV))
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 2),
+            WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(SLEEP_BREATH)
+                    .cooldown(e -> e.animationCooldown(SLEEP_BREATH))
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 2),
+            WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(SLEEP_BREATH_REV)
+                    .cooldown(e -> e.animationCooldown(SLEEP_BREATH_REV))
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 2),
+            WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(WIND_BLADE_X8)
+                    .cooldown(e -> e.animationCooldown(WIND_BLADE_X8))
+                    .withCondition(((goal, target, previous) -> !goal.attacker.isEnraged()))
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 4),
+            WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(WIND_BLADE_X16)
+                    .cooldown(e -> e.animationCooldown(WIND_BLADE_X16))
+                    .withCondition(((goal, target, previous) -> goal.attacker.isEnraged()))
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 4),
+            WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(RESUMMON)
+                    .cooldown(e -> e.animationCooldown(RESUMMON))
+                    .withCondition(((goal, target, previous) -> goal.attacker.getHorseTail() == null || goal.attacker.getPitcher() == null || goal.attacker.getFlower() == null))
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 2)
+    );
+    private static final List<WeightedEntry.Wrapper<IdleAction<EntityRafflesia>>> IDLE_ACTIONS = List.of(
+            WeightedEntry.wrap(new IdleAction<>(DoNothingRunner::new), 1)
+    );
 
+    public final AnimatedAttackGoal<EntityRafflesia> attack2 = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private boolean mirrorAttack;
 
-    public final RafflesiaAttackGoal<EntityRafflesia> attack = new RafflesiaAttackGoal<>(this);
     private final AnimationHandler<EntityRafflesia> animationHandler = new AnimationHandler<>(this, ANIMS)
             .setAnimationChangeCons(anim -> {
                 if (!this.level.isClientSide) {
@@ -103,7 +144,7 @@ public class EntityRafflesia extends BossMonster implements DelayedAttacker {
     public EntityRafflesia(EntityType<? extends EntityRafflesia> type, Level world) {
         super(type, world);
         if (!world.isClientSide)
-            this.goalSelector.addGoal(1, this.attack);
+            this.goalSelector.addGoal(1, this.attack2);
     }
 
     public static Vec3 rotateVec(Direction dir, Vec3 v) {
@@ -192,24 +233,6 @@ public class EntityRafflesia extends BossMonster implements DelayedAttacker {
         } catch (ArrayIndexOutOfBoundsException ignored) {
         }
         this.summonCooldown = compound.getInt("SummonCooldown");
-    }
-
-    @Override
-    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (anim.is(ANGRY, DEATH, INTERACT))
-            return false;
-        if (type == AnimationType.GENERICATTACK) {
-            if (anim.is(RESUMMON))
-                return this.getHorseTail() == null || this.getPitcher() == null || this.getFlower() == null;
-            if (anim.is(WIND_BLADE_X8))
-                return !this.isEnraged();
-            if (anim.is(WIND_BLADE_X16))
-                return this.isEnraged();
-            if (anim.is(STATUS_CIRCLE))
-                return this.isEnraged();
-            return true;
-        }
-        return false;
     }
 
     @Override
@@ -311,11 +334,6 @@ public class EntityRafflesia extends BossMonster implements DelayedAttacker {
             else
                 this.getAnimationHandler().setAnimation(PARA_BREATH);
         }
-    }
-
-    @Override
-    public float attackChance(AnimationType type) {
-        return 1;
     }
 
     @Override

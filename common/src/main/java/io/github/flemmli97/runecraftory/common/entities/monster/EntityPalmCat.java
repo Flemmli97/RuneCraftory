@@ -1,13 +1,19 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
-import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.LeapingMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.PalmCatAttack;
 import io.github.flemmli97.runecraftory.common.entities.ai.RestrictedWaterAvoidingStrollGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
+import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -15,6 +21,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 public class EntityPalmCat extends LeapingMonster {
@@ -25,7 +32,18 @@ public class EntityPalmCat extends LeapingMonster {
     public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, LEAP, INTERACT, SLEEP};
 
-    public PalmCatAttack<EntityPalmCat> attack = new PalmCatAttack<>(this);
+    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityPalmCat>>> ATTACKS = List.of(
+            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(MELEE, e -> e.consecutive ? 1 : 0.7f), 4),
+            WeightedEntry.wrap(new GoalAttackAction<EntityPalmCat>(LEAP)
+                    .cooldown(e -> e.animationCooldown(LEAP))
+                    .prepare(() -> new WrappedRunner<>(new MoveToTargetRunner<>(1, 3))), 2)
+    );
+    private static final List<WeightedEntry.Wrapper<IdleAction<EntityPalmCat>>> IDLE_ACTIONS = List.of(
+            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 1)), 3),
+            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(12, 5)), 1)
+    );
+
+    public final AnimatedAttackGoal<EntityPalmCat> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityPalmCat> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     private boolean hitAny;
@@ -56,6 +74,11 @@ public class EntityPalmCat extends LeapingMonster {
     }
 
     @Override
+    protected boolean isLeapingAnim(AnimatedAction anim) {
+        return anim.is(LEAP);
+    }
+
+    @Override
     protected void applyAttributes() {
         super.applyAttributes();
         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.3);
@@ -75,13 +98,6 @@ public class EntityPalmCat extends LeapingMonster {
     }
 
     @Override
-    public float attackChance(AnimationType type) {
-        if (type == AnimationType.MELEE)
-            return 0.7f;
-        return 1;
-    }
-
-    @Override
     public AnimationHandler<? extends EntityPalmCat> getAnimationHandler() {
         return this.animationHandler;
     }
@@ -98,11 +114,6 @@ public class EntityPalmCat extends LeapingMonster {
     }
 
     @Override
-    public float maxLeapDistance() {
-        return 3;
-    }
-
-    @Override
     public double leapHeightMotion() {
         return 0.2;
     }
@@ -115,15 +126,6 @@ public class EntityPalmCat extends LeapingMonster {
         if (hurt)
             this.hitAny = true;
         return hurt;
-    }
-
-    @Override
-    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (type == AnimationType.MELEE)
-            return anim.is(MELEE);
-        if (type == AnimationType.LEAP)
-            return anim.is(LEAP);
-        return false;
     }
 
     @Override

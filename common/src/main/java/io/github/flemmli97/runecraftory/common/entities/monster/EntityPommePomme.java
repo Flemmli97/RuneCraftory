@@ -1,14 +1,22 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
-import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.ChargeAttackGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.animated.ChargeAction;
+import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
+import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.List;
 
 public class EntityPommePomme extends ChargingMonster {
 
@@ -18,20 +26,24 @@ public class EntityPommePomme extends ChargingMonster {
     public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{KICK, CHARGE_ATTACK, INTERACT, SLEEP};
 
-    public final ChargeAttackGoal<EntityPommePomme> ai = new ChargeAttackGoal<>(this);
+    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityPommePomme>>> ATTACKS = List.of(
+            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(KICK, e -> 0.8f), 1),
+            WeightedEntry.wrap(new GoalAttackAction<EntityPommePomme>(CHARGE_ATTACK)
+                    .cooldown(e -> e.animationCooldown(CHARGE_ATTACK))
+                    .withCondition(MonsterActionUtils.chargeCondition())
+                    .prepare(ChargeAction::new), 2)
+    );
+    private static final List<WeightedEntry.Wrapper<IdleAction<EntityPommePomme>>> IDLE_ACTIONS = List.of(
+            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 1)), 3),
+            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(12, 5)), 5)
+    );
+
+    public final AnimatedAttackGoal<EntityPommePomme> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityPommePomme> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityPommePomme(EntityType<? extends EntityPommePomme> type, Level world) {
         super(type, world);
-        this.goalSelector.addGoal(2, this.ai);
-    }
-
-    @Override
-    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (type == AnimationType.CHARGE) {
-            return anim.is(CHARGE_ATTACK);
-        }
-        return type == AnimationType.MELEE && anim.is(KICK);
+        this.goalSelector.addGoal(2, this.attack);
     }
 
     @Override
@@ -52,15 +64,13 @@ public class EntityPommePomme extends ChargingMonster {
     }
 
     @Override
-    public float attackChance(AnimationType type) {
-        if (type == AnimationType.MELEE)
-            return 0.7f;
-        return 1;
+    public AnimationHandler<? extends EntityPommePomme> getAnimationHandler() {
+        return this.animationHandler;
     }
 
     @Override
-    public AnimationHandler<? extends EntityPommePomme> getAnimationHandler() {
-        return this.animationHandler;
+    protected boolean isChargingAnim(AnimatedAction anim) {
+        return anim.is(CHARGE_ATTACK);
     }
 
     @Override

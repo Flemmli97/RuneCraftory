@@ -1,24 +1,31 @@
 package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 
 import com.google.common.collect.ImmutableMap;
-import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.DelayedAttacker;
 import io.github.flemmli97.runecraftory.common.entities.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.entities.ai.RestrictedWaterAvoidingStrollGoal;
-import io.github.flemmli97.runecraftory.common.entities.ai.boss.ChimeraAttackGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
+import io.github.flemmli97.runecraftory.common.entities.ai.animated.MoveToTargetAttackRunner;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveAwayRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.TimedWrappedRunner;
 import io.github.flemmli97.tenshilib.common.utils.MathUtils;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
+import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -37,6 +44,8 @@ import java.util.function.Function;
 
 public class EntityChimera extends BossMonster implements DelayedAttacker {
 
+    private static final EntityDataAccessor<Float> LOCKED_YAW = SynchedEntityData.defineId(EntityChimera.class, EntityDataSerializers.FLOAT);
+
     public static final AnimatedAction LEAP = new AnimatedAction(1.36, "leap");
     public static final AnimatedAction FIRE_TAIL_BUBBLE = new AnimatedAction(1.48, 0.44, "tail_beam");
     public static final AnimatedAction WATER_TAIL_BUBBLE = AnimatedAction.copyOf(FIRE_TAIL_BUBBLE, "water_tail_bubble");
@@ -49,8 +58,8 @@ public class EntityChimera extends BossMonster implements DelayedAttacker {
     public static final AnimatedAction SLEEP = AnimatedAction.builder(4, "sleep").infinite().build();
     public static final AnimatedAction DEFEAT = AnimatedAction.builder(80, "defeat").marker(60).infinite().build();
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(SLASH, "interact");
-
     private static final AnimatedAction[] ANIMATED_ACTIONS = new AnimatedAction[]{LEAP, FIRE_TAIL_BUBBLE, WATER_TAIL_BUBBLE, WATER_TAIL_BEAM, FIRE_BREATH, BUBBLE_BEAM, SLASH, BITE, DEFEAT, INTERACT, ANGRY, SLEEP};
+
     private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntityChimera>> ATTACK_HANDLER = createAnimationHandler(b -> {
         BiConsumer<AnimatedAction, EntityChimera> summonFire = (anim, entity) -> {
             if (anim.canAttack()) {
@@ -82,7 +91,6 @@ public class EntityChimera extends BossMonster implements DelayedAttacker {
                     if (!entity.hitEntity.contains(e) && CombatUtils.mobAttack(entity, e,
                             new CustomDamage.Builder(entity).hurtResistant(5).knock(CustomDamage.KnockBackType.UP), CombatUtils.getAttributeValue(entity, Attributes.ATTACK_DAMAGE))) {
                         entity.chargeAttackSuccess = true;
-                        entity.attack.chargeSuccess(0);
                         entity.hitEntity.add(e);
                     }
                 });
@@ -106,18 +114,57 @@ public class EntityChimera extends BossMonster implements DelayedAttacker {
         });
     });
 
-    private static final EntityDataAccessor<Float> LOCKED_YAW = SynchedEntityData.defineId(EntityChimera.class, EntityDataSerializers.FLOAT);
+    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityChimera>>> ATTACKS = List.of(
+            WeightedEntry.wrap(MonsterActionUtils.<EntityChimera>nonRepeatableAttack(LEAP)
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 4), e -> 30 + e.getRandom().nextInt(15))), 1),
+            WeightedEntry.wrap(MonsterActionUtils.<EntityChimera>nonRepeatableAttack(FIRE_TAIL_BUBBLE)
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 6), e -> 30 + e.getRandom().nextInt(15))), 1),
+            WeightedEntry.wrap(MonsterActionUtils.<EntityChimera>nonRepeatableAttack(WATER_TAIL_BUBBLE)
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 6), e -> 30 + e.getRandom().nextInt(15))), 1),
+            WeightedEntry.wrap(MonsterActionUtils.<EntityChimera>nonRepeatableAttack(WATER_TAIL_BEAM)
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 6), e -> 30 + e.getRandom().nextInt(15))), 1),
+            WeightedEntry.wrap(MonsterActionUtils.<EntityChimera>nonRepeatableAttack(FIRE_BREATH)
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 6), e -> 30 + e.getRandom().nextInt(15))), 1),
+            WeightedEntry.wrap(MonsterActionUtils.<EntityChimera>nonRepeatableAttack(BUBBLE_BEAM)
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 6), e -> 30 + e.getRandom().nextInt(15))), 1),
+            WeightedEntry.wrap(MonsterActionUtils.<EntityChimera>nonRepeatableAttack(SLASH)
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.1), e -> 30 + e.getRandom().nextInt(15))), 1)
+    );
+    private static final List<WeightedEntry.Wrapper<IdleAction<EntityChimera>>> IDLE_ACTIONS = List.of(
+            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1.1, 1)), 1),
+            WeightedEntry.wrap(new IdleAction<>(() -> new MoveAwayRunner<>(4, 1, 6)), 1)
+    );
 
-    public final ChimeraAttackGoal<EntityChimera> attack = new ChimeraAttackGoal<>(this);
+    public final AnimatedAttackGoal<EntityChimera> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityChimera> animationHandler = new AnimationHandler<>(this, ANIMATED_ACTIONS)
-            .setAnimationChangeCons(anim -> {
+            .setAnimationChangeFunc(anim -> {
                 if (!this.level.isClientSide) {
-                    if (this.chargeAttackSuccess && anim != null)
-                        this.chargeAttackSuccess = false;
-                    if (this.getAnimationHandler().isCurrent(LEAP))
+                    if (anim == null) {
+                        this.chargeMotion = null;
+                    } else if (anim.is(LEAP)) {
+                        if (this.isVehicle()) {
+                            this.lockYaw(this.getControllingPassenger().getYHeadRot());
+                            this.setChargeMotion(this.getChargeTo(anim, this.position().add(this.getControllingPassenger().getLookAngle())));
+                        } else if (this.getTarget() != null) {
+                            LivingEntity target = this.getTarget();
+                            this.setChargeMotion(this.getChargeTo(anim, target.position().subtract(this.position())));
+                            this.lookAt(target, 360, 10);
+                            this.lockYaw(this.getYRot());
+                        }
+                    }
+                    if (this.getAnimationHandler().isCurrent(LEAP)) {
                         this.hitEntity = null;
+                        if (this.chargeAttackSuccess) {
+                            this.chargeAttackSuccess = false;
+                            this.getAnimationHandler().setAnimation(BITE);
+                            return true;
+                        }
+                    }
+                    return false;
                 }
+                return false;
             });
+
     protected boolean chargeAttackSuccess;
     private double[] chargeMotion;
     protected List<LivingEntity> hitEntity;
@@ -155,18 +202,6 @@ public class EntityChimera extends BossMonster implements DelayedAttacker {
     @Override
     public double sprintSpeedThreshold() {
         return 0.9;
-    }
-
-    @Override
-    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (anim.is(DEFEAT, INTERACT, SLEEP, ANGRY))
-            return false;
-        if (type == AnimationType.GENERICATTACK) {
-            if (this.chargeAttackSuccess)
-                return anim.is(BITE);
-            return true;
-        }
-        return false;
     }
 
     @Override
@@ -290,11 +325,6 @@ public class EntityChimera extends BossMonster implements DelayedAttacker {
         int length = anim.getLength() - anim.getAttackTime() - 4;
         Vec3 vec = dir.normalize().scale(4.5);
         return new double[]{vec.x / length, this.getY(), vec.z / length};
-    }
-
-    @Override
-    public float attackChance(AnimationType type) {
-        return 1;
     }
 
     @Override

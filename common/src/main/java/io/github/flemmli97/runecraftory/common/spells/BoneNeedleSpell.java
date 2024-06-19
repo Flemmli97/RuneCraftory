@@ -27,9 +27,9 @@ public class BoneNeedleSpell extends Spell {
             direct = Vec3.directionFromRotation(entity.getXRot(), entity.yBodyRot);
         Vec3 side = Vec3.directionFromRotation(0, entity.yBodyRot - 90);
         side = new Vec3(side.x(), 0, side.z()).normalize().add(0, -entity.getBbHeight() * 0.15, 0);
-        double offset = -2;
+        double offset = -2.5;
         double max = Math.abs(offset);
-        double inc = max * 2 / 16;
+        double inc = max * 2.5 / 16;
         while (offset <= max) {
             EntityBoneNeedle needle = new EntityBoneNeedle(level, entity);
             Vec3 direction = MathUtils.rotate(MathUtils.normalY, direct, (float) (Mth.DEG_TO_RAD * 9 * offset));

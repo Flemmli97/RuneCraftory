@@ -1,17 +1,24 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
-import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.LeapingMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.LeapingAttackGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.RiderAttackTargetGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.StayGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveAwayRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -23,17 +30,30 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class EntityMimic extends LeapingMonster {
 
     private static final EntityDataAccessor<Boolean> AWAKE = SynchedEntityData.defineId(EntityMimic.class, EntityDataSerializers.BOOLEAN);
+
     private static final AnimatedAction MELEE = new AnimatedAction(12, 9, "attack");
     private static final AnimatedAction LEAP = new AnimatedAction(12, 3, "leap");
     private static final AnimatedAction CLOSE = new AnimatedAction(6, 6, "close");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, LEAP, CLOSE, INTERACT};
 
-    public LeapingAttackGoal<EntityMimic> attack = new LeapingAttackGoal<>(this);
+    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityMimic>>> ATTACKS = List.of(
+            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(MELEE, e -> 0.8f), 2),
+            WeightedEntry.wrap(new GoalAttackAction<EntityMimic>(LEAP)
+                    .cooldown(e -> e.animationCooldown(LEAP))
+                    .prepare(() -> new WrappedRunner<>(new MoveAwayRunner<>(3, 1, 3))), 2)
+    );
+    private static final List<WeightedEntry.Wrapper<IdleAction<EntityMimic>>> IDLE_ACTIONS = List.of(
+            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 1.5)), 1),
+            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 2)
+    );
+
+    public final AnimatedAttackGoal<EntityMimic> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityMimic> animationHandler = new AnimationHandler<>(this, ANIMS);
     private int sleepTick = -1;
     private boolean sleeping;
@@ -64,15 +84,6 @@ public class EntityMimic extends LeapingMonster {
     }
 
     @Override
-    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (type == AnimationType.MELEE)
-            return anim.is(MELEE);
-        if (type == AnimationType.LEAP)
-            return anim.is(LEAP);
-        return false;
-    }
-
-    @Override
     public boolean hurt(DamageSource source, float amount) {
         boolean ret = super.hurt(source, amount);
         if (ret && !this.sleeping)
@@ -82,7 +93,7 @@ public class EntityMimic extends LeapingMonster {
 
     @Override
     public double maxAttackRange(AnimatedAction anim) {
-        return 1;
+        return 1.2;
     }
 
     @Override
@@ -128,6 +139,11 @@ public class EntityMimic extends LeapingMonster {
     }
 
     @Override
+    protected boolean isLeapingAnim(AnimatedAction anim) {
+        return anim.is(LEAP);
+    }
+
+    @Override
     public Vec3 getLeapVec(@Nullable Vec3 target) {
         return super.getLeapVec(target).scale(1.25);
     }
@@ -135,11 +151,6 @@ public class EntityMimic extends LeapingMonster {
     @Override
     public double leapHeightMotion() {
         return 0.3;
-    }
-
-    @Override
-    public float maxLeapDistance() {
-        return 5;
     }
 
     @Override
@@ -184,11 +195,6 @@ public class EntityMimic extends LeapingMonster {
 
     public boolean isAwake() {
         return this.entityData.get(AWAKE);
-    }
-
-    @Override
-    public float attackChance(AnimationType type) {
-        return 1;
     }
 
     @Override

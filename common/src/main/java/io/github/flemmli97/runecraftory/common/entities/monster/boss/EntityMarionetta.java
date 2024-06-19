@@ -1,10 +1,10 @@
 package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 
 import com.google.common.collect.ImmutableMap;
-import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.RunecraftoryBossbar;
-import io.github.flemmli97.runecraftory.common.entities.ai.boss.MarionettaAttackGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
+import io.github.flemmli97.runecraftory.common.entities.ai.animated.MoveToTargetAttackRunner;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityMarionettaTrap;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
@@ -14,10 +14,20 @@ import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.EvadingRangedRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.JumpEvadeAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.StrafingRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.TimedWrappedRunner;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -34,6 +44,8 @@ import java.util.List;
 import java.util.function.BiConsumer;
 
 public class EntityMarionetta extends BossMonster {
+
+    private static final EntityDataAccessor<Boolean> CAUGHT = SynchedEntityData.defineId(EntityMarionetta.class, EntityDataSerializers.BOOLEAN);
 
     public static final AnimatedAction MELEE = new AnimatedAction(10, 5, "melee");
     public static final AnimatedAction SPIN = new AnimatedAction(31, 6, "spin");
@@ -62,10 +74,13 @@ public class EntityMarionetta extends BossMonster {
             }
         });
         b.put(SPIN, (anim, entity) -> {
-            if (entity.aiVarHelper == null)
-                return;
             entity.getNavigation().stop();
-            entity.setDeltaMovement(new Vec3(entity.aiVarHelper[0], 0, entity.aiVarHelper[2]));
+            if (entity.aiVarHelper == null) {
+                Vec3 dir = entity.getTarget() != null ? entity.getTarget().position().subtract(entity.position()) : entity.getLookAngle();
+                dir = new Vec3(dir.x(), 0, dir.z()).normalize().scale(8d / anim.getLength());
+                entity.aiVarHelper = dir;
+            }
+            entity.setDeltaMovement(entity.aiVarHelper);
             if (anim.getTick() >= anim.getAttackTime()) {
                 entity.mobAttack(anim, null, e -> CombatUtils.mobAttack(entity, e, new CustomDamage.Builder(entity).hurtResistant(8), CombatUtils.getAttributeValue(entity, Attributes.ATTACK_DAMAGE)));
             }
@@ -76,9 +91,13 @@ public class EntityMarionetta extends BossMonster {
                 ModSpells.CARD_THROW.get().use(entity);
         });
         b.put(CHEST_ATTACK, (anim, entity) -> {
-            if (entity.aiVarHelper == null)
-                return;
-            entity.setDeltaMovement(new Vec3(entity.aiVarHelper[0], 0, entity.aiVarHelper[2]));
+            entity.getNavigation().stop();
+            if (entity.aiVarHelper == null) {
+                Vec3 dir = entity.getTarget() != null ? entity.getTarget().position().subtract(entity.position()) : entity.getLookAngle();
+                dir = new Vec3(dir.x(), 0, dir.z()).normalize().scale(8d / anim.getLength());
+                entity.aiVarHelper = dir;
+            }
+            entity.setDeltaMovement(entity.aiVarHelper);
             if (anim.getTick() >= anim.getAttackTime()) {
                 entity.mobAttack(anim, null, e -> {
                     if (!entity.caughtEntities.contains(e)) {
@@ -119,13 +138,33 @@ public class EntityMarionetta extends BossMonster {
                 ModSpells.FURNITURE.get().use(entity);
         });
     });
+    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityMarionetta>>> ATTACKS = List.of(
+            WeightedEntry.wrap(MonsterActionUtils.<EntityMarionetta>nonRepeatableAttack(MELEE)
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.1), e -> 30 + e.getRandom().nextInt(20))), 1),
+            WeightedEntry.wrap(MonsterActionUtils.<EntityMarionetta>nonRepeatableAttack(SPIN)
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 6.5), e -> 35 + e.getRandom().nextInt(20))), 1),
+            WeightedEntry.wrap(MonsterActionUtils.<EntityMarionetta>nonRepeatableAttack(CARD_ATTACK)
+                    .prepare(() -> new TimedWrappedRunner<>(new JumpEvadeAction<>(2, 0.9, 0.5f, 0, 0.5f, new DoNothingRunner<>(true)), e -> 5)), 1),
+            WeightedEntry.wrap(MonsterActionUtils.<EntityMarionetta>nonRepeatableAttack(CHEST_ATTACK)
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 6.5), e -> 35 + e.getRandom().nextInt(20))), 1),
+            WeightedEntry.wrap(MonsterActionUtils.<EntityMarionetta>nonRepeatableAttack(STUFFED_ANIMALS)
+                    .prepare(() -> new TimedWrappedRunner<>(new EvadingRangedRunner<>(7, 3, 1.2), e -> 30 + e.getRandom().nextInt(20))), 1),
+            WeightedEntry.wrap(MonsterActionUtils.<EntityMarionetta>nonRepeatableAttack(DARK_BEAM)
+                    .withCondition((goal, target, previous) -> goal.attacker.isEnraged() && !goal.attacker.isAnimEqual(previous, DARK_BEAM))
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 6, true, true), e -> 30 + e.getRandom().nextInt(20))), 1),
+            WeightedEntry.wrap(MonsterActionUtils.<EntityMarionetta>nonRepeatableAttack(FURNITURE)
+                    .withCondition((goal, target, previous) -> goal.attacker.isEnraged() && !goal.attacker.isAnimEqual(previous, FURNITURE))
+                    .prepare(() -> new TimedWrappedRunner<>(new DoNothingRunner<>(true), e -> 5)), 1)
+    );
+    private static final List<WeightedEntry.Wrapper<IdleAction<EntityMarionetta>>> IDLE_ACTIONS = List.of(
+            WeightedEntry.wrap(new IdleAction<>(() -> new JumpEvadeAction<>(2, 0.9, 0.5f, 0.015f, 0.4f, new StrafingRunner<>(7, 1))), 2),
+            WeightedEntry.wrap(new IdleAction<>(() -> new StrafingRunner<>(7, 1)), 3)
+    );
 
-    private static final EntityDataAccessor<Boolean> CAUGHT = SynchedEntityData.defineId(EntityMarionetta.class, EntityDataSerializers.BOOLEAN);
-
-    public final MarionettaAttackGoal<EntityMarionetta> attack = new MarionettaAttackGoal<>(this);
-    private final List<LivingEntity> caughtEntities = new ArrayList<>();
+    public final AnimatedAttackGoal<EntityMarionetta> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityMarionetta> animationHandler = new AnimationHandler<>(this, ANIMS)
             .setAnimationChangeFunc(anim -> {
+                this.aiVarHelper = null;
                 if (this.entityData.get(CAUGHT)) {
                     if (!this.level.isClientSide) {
                         this.entityData.set(CAUGHT, false);
@@ -135,7 +174,9 @@ public class EntityMarionetta extends BossMonster {
                 }
                 return false;
             });
-    private double[] aiVarHelper;
+
+    private final List<LivingEntity> caughtEntities = new ArrayList<>();
+    private Vec3 aiVarHelper;
 
     public EntityMarionetta(EntityType<? extends EntityMarionetta> type, Level world) {
         super(type, world);
@@ -171,15 +212,6 @@ public class EntityMarionetta extends BossMonster {
     protected void applyAttributes() {
         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.26);
         super.applyAttributes();
-    }
-
-    @Override
-    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (anim.is(CHEST_THROW, DEFEAT, ANGRY, INTERACT))
-            return false;
-        if (type == AnimationType.GENERICATTACK)
-            return this.isEnraged() || (!anim.is(DARK_BEAM) && !anim.is(FURNITURE));
-        return false;
     }
 
     @Override
@@ -241,15 +273,6 @@ public class EntityMarionetta extends BossMonster {
             else
                 this.getAnimationHandler().setAnimation(MELEE);
         }
-    }
-
-    @Override
-    public float attackChance(AnimationType type) {
-        return 1;
-    }
-
-    public void setAiVarHelper(double[] aiVarHelper) {
-        this.aiVarHelper = aiVarHelper;
     }
 
     @Override
