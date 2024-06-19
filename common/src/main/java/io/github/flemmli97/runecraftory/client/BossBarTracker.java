@@ -73,7 +73,9 @@ public class BossBarTracker {
             else {
                 ACTIVE_BOSS_BARS.forEach((uuid, d) -> {
                     SoundEngineUtil engine = (SoundEngineUtil) ((SoundManagerAccessor) Minecraft.getInstance().getSoundManager()).getSoundEngine();
-                    engine.getHandle(d.music).execute(Channel::pause);
+                    ChannelAccess.ChannelHandle handle = engine.getHandle(d.music);
+                    if (handle != null)
+                        handle.execute(Channel::pause);
                 });
                 Minecraft.getInstance().getSoundManager().play(data.music);
             }
@@ -118,7 +120,9 @@ public class BossBarTracker {
         ACTIVE_BOSS_BARS.values().stream().findFirst()
                 .ifPresent(d -> {
                     SoundEngineUtil engine = (SoundEngineUtil) ((SoundManagerAccessor) Minecraft.getInstance().getSoundManager()).getSoundEngine();
-                    engine.getHandle(d.music).execute(Channel::pause);
+                    ChannelAccess.ChannelHandle handle = engine.getHandle(d.music);
+                    if (handle != null)
+                        handle.execute(Channel::pause);
                 });
         Minecraft.getInstance().getSoundManager().play(sound);
     }
@@ -127,7 +131,11 @@ public class BossBarTracker {
         ACTIVE_BOSS_BARS.values().stream().findFirst()
                 .ifPresent(d -> {
                     SoundEngineUtil engine = (SoundEngineUtil) ((SoundManagerAccessor) Minecraft.getInstance().getSoundManager()).getSoundEngine();
-                    engine.getHandle(d.music).execute(Channel::unpause);
+                    ChannelAccess.ChannelHandle handle = engine.getHandle(d.music);
+                    if (handle != null)
+                        handle.execute(Channel::unpause);
+                    else
+                        Minecraft.getInstance().getSoundManager().play(d.music);
                 });
         Minecraft.getInstance().getSoundManager().stop(sound);
     }
