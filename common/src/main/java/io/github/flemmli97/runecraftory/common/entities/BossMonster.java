@@ -18,6 +18,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
@@ -188,8 +189,11 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
         this.entityData.set(ENRAGED, flag);
         if (!load) {
             if (flag) {
-                STAT_INCREASE.forEach(att -> this.getAttribute(att.get())
-                        .addPermanentModifier(new AttributeModifier(STAT_INCREASE_ID, "rf.boss_stat_increase", 0.1, AttributeModifier.Operation.MULTIPLY_TOTAL)));
+                STAT_INCREASE.forEach(att -> {
+                    AttributeInstance inst = this.getAttribute(att.get());
+                    if (inst.getModifier(STAT_INCREASE_ID) == null)
+                        inst.addPermanentModifier(new AttributeModifier(STAT_INCREASE_ID, "rf.boss_stat_increase", 0.1, AttributeModifier.Operation.MULTIPLY_TOTAL));
+                });
             } else {
                 STAT_INCREASE.forEach(att -> this.getAttribute(att.get()).removeModifier(STAT_INCREASE_ID));
             }
@@ -275,7 +279,7 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
         super.stopSeenByPlayer(player);
         this.bossInfo.removePlayer(player);
         // If boss killed all players (or every nearby player simply died) heal it back to full
-        if (!this.isTamed() && player.isRemoved() && this.bossInfo.getPlayers().isEmpty()) {
+        if (this.isAlive() && !this.isTamed() && player.isRemoved() && this.bossInfo.getPlayers().isEmpty()) {
             this.fullHealDelay = 10;
         }
     }
