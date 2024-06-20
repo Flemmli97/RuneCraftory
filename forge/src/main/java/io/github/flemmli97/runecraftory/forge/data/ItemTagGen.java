@@ -453,9 +453,9 @@ public class ItemTagGen extends ItemTagsProvider {
                 .addTag(RunecraftoryTags.tamingTag(ModEntities.FLOWER_LILY.get()));
         this.tag(RunecraftoryTags.tamingTag(ModEntities.TOMATO_GHOST.get()))
                 .addTag(tempKeyFabric("vegetables/tomato"));
-        this.tag(RunecraftoryTags.tamingTag(ModEntities.GOBLIN_DON.get()))
-                .addTag(RunecraftoryTags.tamingTag(ModEntities.GOBLIN.get()));
         this.tag(RunecraftoryTags.tamingTag(ModEntities.GOBLIN_CAPTAIN.get()))
+                .addTag(RunecraftoryTags.tamingTag(ModEntities.GOBLIN.get()));
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.GOBLIN_DON.get()))
                 .addTag(RunecraftoryTags.tamingTag(ModEntities.GOBLIN.get()));
         this.tag(RunecraftoryTags.tamingTag(ModEntities.MINERAL_SQUEEK.get()))
                 .addTag(RunecraftoryTags.tamingTag(ModEntities.CHIPSQUEEK.get()));
@@ -465,6 +465,22 @@ public class ItemTagGen extends ItemTagsProvider {
                 .add(ModItems.FUR.get())
                 .add(Items.CAKE)
                 .add(ModItems.CAKE.get());
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.LITTLE_EMPEROR.get()))
+                .add(ModItems.CRYSTAL_LIGHT.get())
+                .add(ModItems.CRYSTAL_DARK.get())
+                .add(ModItems.CRYSTAL_SMALL.get());
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.DEMON.get()))
+                .add(ModItems.CRYSTAL_DARK.get())
+                .add(ModItems.CRYSTAL_BIG.get());
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.ARCH_DEMON.get()))
+                .add(ModItems.CRYSTAL_DARK.get())
+                .add(ModItems.CRYSTAL_BIG.get());
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.MINOTAUR.get()))
+                .add(ModItems.HAMMER_PIECE.get())
+                .addTag(RunecraftoryTags.AXES);
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.MINOTAUR_KING.get()))
+                .add(ModItems.HAMMER_PIECE.get())
+                .addTag(RunecraftoryTags.AXES);
 
         this.tag(RunecraftoryTags.tamingTag(ModEntities.AMBROSIA.get()))
                 .add(ModItems.TOYHERB_GIANT.get());

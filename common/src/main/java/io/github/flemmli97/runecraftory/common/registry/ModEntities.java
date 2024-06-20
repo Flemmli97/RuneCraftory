@@ -927,8 +927,23 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_WIND, 15)
                     .xp(35).money(1).tamingChance(0.05f),
             new GateSpawnData.Builder(0, 40).addToBiomeTag(40, BiomeTags.IS_FOREST, BiomeTags.IS_TAIGA));
+    public static final RegistryEntrySupplier<EntityType<EntityDemon>> DEMON = regMonster(EntityType.Builder.of(EntityDemon::new, MobCategory.MONSTER).sized(0.6f, 1.8f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "demon"),
+            0xba8b84, 0x6a5450,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 25).putLevelGains(() -> Attributes.MAX_HEALTH, 420)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 13).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 220)
+                    .putAttributes(ModAttributes.DEFENCE, 2).putLevelGains(ModAttributes.DEFENCE, 125)
+                    .putAttributes(ModAttributes.MAGIC, 7.5).putLevelGains(ModAttributes.MAGIC, 130)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 4).putLevelGains(ModAttributes.MAGIC_DEFENCE, 125)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_EARTH, 15)
+                    .putAttributes(ModAttributes.RES_WIND, 15)
+                    .xp(35).money(1).tamingChance(0.05f),
+            new GateSpawnData.Builder(0, 40).addToBiomeTag(40, BiomeTags.IS_FOREST, BiomeTags.IS_TAIGA));
     public static final RegistryEntrySupplier<EntityType<EntityDemon>> ARCH_DEMON = regMonster(EntityType.Builder.of(EntityDemon::new, MobCategory.MONSTER).sized(0.65f, 2.1f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "arch_demon"),
-            0xa5746d, 0x372321,
+            0x9f6a63, 0x372321,
             new EntityProperties.Builder()
                     .putAttributes(() -> Attributes.MAX_HEALTH, 25).putLevelGains(() -> Attributes.MAX_HEALTH, 420)
                     .putAttributes(() -> Attributes.ATTACK_DAMAGE, 13).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 220)
@@ -957,7 +972,7 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_WIND, 15)
                     .xp(35).money(1).tamingChance(0.05f),
             new GateSpawnData.Builder(0, 40).addToBiomeTag(40, BiomeTags.IS_FOREST, BiomeTags.IS_TAIGA));
-    public static final RegistryEntrySupplier<EntityType<EntityMinotaur>> KING_MINOTAUR = regMonster(EntityType.Builder.of(EntityMinotaur::new, MobCategory.MONSTER).sized(1.4f, 2.9f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "king_minotaur"),
+    public static final RegistryEntrySupplier<EntityType<EntityMinotaur>> MINOTAUR_KING = regMonster(EntityType.Builder.of(EntityMinotaur::new, MobCategory.MONSTER).sized(1.4f, 2.9f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "minotaur_king"),
             0x344a53, 0x907822,
             new EntityProperties.Builder()
                     .putAttributes(() -> Attributes.MAX_HEALTH, 25).putLevelGains(() -> Attributes.MAX_HEALTH, 420)

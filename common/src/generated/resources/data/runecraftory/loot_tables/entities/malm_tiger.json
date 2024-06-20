@@ -7,63 +7,54 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "conditions": [
-            {
-              "condition": "minecraft:random_chance_with_looting",
-              "chance": 0.7,
-              "looting_multiplier": 0.05
-            }
-          ],
-          "functions": [
-            {
-              "function": "minecraft:looting_enchant",
-              "count": {
-                "type": "minecraft:uniform",
-                "min": 0.0,
-                "max": 0.7
-              },
-              "limit": 2
-            }
-          ],
-          "name": "minecraft:apple"
-        }
-      ]
-    },
-    {
-      "rolls": 1.0,
-      "bonus_rolls": 0.0,
-      "entries": [
-        {
-          "type": "minecraft:item",
           "functions": [
             {
               "function": "runecraftory:luck_and_looting",
-              "baseChance": 0.05,
-              "luckBonus": 0.01,
-              "lootingBonus": 0.2,
-              "limit": 1
-            }
-          ],
-          "name": "runecraftory:baked_apple"
-        }
-      ]
-    },
-    {
-      "rolls": 1.0,
-      "bonus_rolls": 0.0,
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "function": "runecraftory:luck_and_looting",
-              "baseChance": 0.05,
-              "luckBonus": 0.005,
+              "baseChance": 0.3,
+              "luckBonus": 0.05,
               "lootingBonus": 0.2,
               "limit": 0
             }
           ],
-          "name": "runecraftory:apple_sapling"
+          "name": "runecraftory:fur"
+        }
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "runecraftory:luck_and_looting",
+              "baseChance": 0.2,
+              "luckBonus": 0.1,
+              "lootingBonus": 0.2,
+              "limit": 0
+            }
+          ],
+          "name": "runecraftory:quality_puffy_fur"
+        }
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "runecraftory:luck_and_looting",
+              "baseChance": 0.3,
+              "luckBonus": 0.1,
+              "lootingBonus": 0.2,
+              "limit": 0
+            }
+          ],
+          "name": "runecraftory:malm_claw"
         }
       ]
     }

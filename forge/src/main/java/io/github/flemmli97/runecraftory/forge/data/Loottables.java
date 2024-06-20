@@ -11,6 +11,7 @@ import io.github.flemmli97.runecraftory.common.blocks.BlockGiantCrop;
 import io.github.flemmli97.runecraftory.common.blocks.BlockQuestboard;
 import io.github.flemmli97.runecraftory.common.entities.GateEntity;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityKingWooly;
+import io.github.flemmli97.runecraftory.common.entities.monster.EntityMineralSqueek;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityWooly;
 import io.github.flemmli97.runecraftory.common.loot.CropWeaponLootFunction;
 import io.github.flemmli97.runecraftory.common.loot.FirstKillCondition;
@@ -161,9 +162,10 @@ public class Loottables extends LootTableProvider {
                     new TamedItemLootData(ModItems.EGG_M.get(), 1, 5),
                     new TamedItemLootData(ModItems.EGG_L.get(), 1, 8));
             this.registerLootTable(ModEntities.POMME_POMME.get(), this.table(
-                            new ItemLootData(Items.APPLE, 0.7f, 0.05f, 0.7f, 2, true),
-                            new ItemLootData(ModItems.BAKED_APPLE.get(), 0.05f, RARE_LUCK_BONUS, LOOTING_BONUS, 1)),
-                    new TamedItemLootData(Items.APPLE, 1, 0)); // + apple tree seed
+                            new ItemLootData(Items.APPLE, 0.7f, COMMON_LUCK_BONUS, 0.7f, 2, true),
+                            new ItemLootData(ModItems.BAKED_APPLE.get(), 0.05f, RARE_LUCK_BONUS, LOOTING_BONUS, 1),
+                            new ItemLootData(ModItems.APPLE_SAPLING.get(), 0.05f, VERY_RARE_LUCK_BONUS, LOOTING_BONUS, 0)),
+                    new TamedItemLootData(Items.APPLE, 1, 0));
             this.registerLootTable(ModEntities.TORTAS.get(), this.table(
                     new ItemLootData(ModItems.TURTLE_SHELL.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
                     new ItemLootData(Items.IRON_INGOT, 0.65f, COMMON_LUCK_BONUS, 0.5f, 0),
@@ -312,6 +314,52 @@ public class Loottables extends LootTableProvider {
                     new ItemLootData(ModItems.TOMATO_SEEDS.get(), 0.1f, RARE_LUCK_BONUS, LOOTING_BONUS, 0),
                     new ItemLootData(ModItems.TOMATO.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
                     new ItemLootData(ModItems.GHOST_HOOD.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0))); //Giant tomato
+            this.registerLootTable(ModEntities.GOBLIN_CAPTAIN.get(), this.table(
+                    new ItemLootData(ModItems.CLOTH_QUALITY.get(), 0.1f, RARE_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(ModItems.WARRIORS_PROOF.get(), 0.1f, RARE_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(ModItems.SKULL.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(ModItems.CLOTH_SILK.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(ModItems.WINE.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)));
+            this.registerLootTable(ModEntities.GOBLIN_DON.get(), this.table(
+                    new ItemLootData(ModItems.OLD_BANDAGE.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(ModItems.PROOF_OF_RANK.get(), 0.1f, RARE_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(ModItems.SKULL.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(ModItems.WINE.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)));
+            this.lootTables.put(EntityMineralSqueek.MINERAL_SQUEEK_HURT, new LootTable.Builder()
+                    .withPool(LootPool.lootPool().add(LootItem.lootTableItem(ModItems.STEEL_DOUBLE.get())
+                                    .setWeight(40))
+                            .add(LootItem.lootTableItem(ModItems.STEEL_TEN.get())
+                                    .setWeight(1))));
+            this.registerLootTable(ModEntities.NAPPIE.get(), this.table(
+                            new ItemLootData(ModItems.PINEAPPLE.get(), 0.6f, COMMON_LUCK_BONUS, 0.5f, 2, true),
+                            new ItemLootData(ModItems.PINEAPPLE_JUICE.get(), 0.05f, RARE_LUCK_BONUS, LOOTING_BONUS, 1),
+                            new ItemLootData(ModItems.PINEAPPLE_SEEDS.get(), 0.05f, VERY_RARE_LUCK_BONUS, LOOTING_BONUS, 0)),
+                    new TamedItemLootData(ModItems.PINEAPPLE.get(), 0.5f, 0));
+            this.registerLootTable(ModEntities.MALM_TIGER.get(), this.table(
+                            new ItemLootData(ModItems.PINEAPPLE.get(), 0.6f, COMMON_LUCK_BONUS, 0.5f, 2, true),
+                            new ItemLootData(ModItems.PINEAPPLE_JUICE.get(), 0.05f, RARE_LUCK_BONUS, LOOTING_BONUS, 1),
+                            new ItemLootData(ModItems.PINEAPPLE_SEEDS.get(), 0.05f, VERY_RARE_LUCK_BONUS, LOOTING_BONUS, 0)),
+                    new TamedItemLootData(ModItems.PINEAPPLE.get(), 0.5f, 0));
+            this.registerLootTable(ModEntities.MALM_TIGER.get(), this.table(
+                    new ItemLootData(ModItems.FUR.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(ModItems.FUR_QUALITY.get(), 0.2f, RARE_LOOTING_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(ModItems.CLAW_MALM.get(), 0.3f, RARE_LOOTING_BONUS, LOOTING_BONUS, 0)));
+            this.registerLootTable(ModEntities.LITTLE_EMPEROR.get(), this.table(
+                    new ItemLootData(ModItems.CRYSTAL_MAGIC.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(ModItems.POWDER_MAGIC.get(), 0.2f, RARE_LOOTING_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(ModItems.CRYSTAL_SMALL.get(), 0.05f, VERY_RARE_LUCK_BONUS, LOOTING_BONUS, 0)));
+            this.registerLootTable(ModEntities.DEMON.get(), this.table(
+                    new ItemLootData(ModItems.DEVIL_BLOOD.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)));
+            this.registerLootTable(ModEntities.ARCH_DEMON.get(), this.table(
+                    new ItemLootData(ModItems.DEVIL_BLOOD.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(ModItems.HORN_DEVIL.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)));
+            this.registerLootTable(ModEntities.MINOTAUR.get(), this.table(
+                    new ItemLootData(ModItems.HORN_DEVIL.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(ModItems.HAMMER_PIECE.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(ModItems.PROTEIN.get(), 0.01f, VERY_RARE_LUCK_BONUS, LOOTING_BONUS, 0)));
+            this.registerLootTable(ModEntities.MINOTAUR_KING.get(), this.table(
+                    new ItemLootData(ModItems.HAMMER_PIECE.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(ModItems.PROTEIN.get(), 0.01f, VERY_RARE_LUCK_BONUS, LOOTING_BONUS, 0)));
 
             this.registerLootTable(ModEntities.AMBROSIA.get(), this.table(
                     new ItemLootData(ModItems.AMBROSIAS_THORNS.get(), 0.65f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2, true, false),

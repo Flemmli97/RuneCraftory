@@ -14,12 +14,8 @@ public class ScaledEntityRenderer<T extends BaseMonster, M extends EntityModel<T
 
     public final float scale;
 
-    public ScaledEntityRenderer(EntityRendererProvider.Context ctx, M model, ResourceLocation texture) {
-        this(ctx, model, texture, 1);
-    }
-
-    public ScaledEntityRenderer(EntityRendererProvider.Context ctx, M model, ResourceLocation texture, float scale) {
-        super(ctx, model, texture, 0.5f, false);
+    public ScaledEntityRenderer(EntityRendererProvider.Context ctx, M model, ResourceLocation texture, float scale, float shadow) {
+        super(ctx, model, texture, shadow, false);
         this.scale = scale;
         this.layers.add(new RiderLayerRendererExt<>(this, (stack, entity) -> stack.scale(1 / this.scale, 1 / this.scale, 1 / this.scale)));
     }

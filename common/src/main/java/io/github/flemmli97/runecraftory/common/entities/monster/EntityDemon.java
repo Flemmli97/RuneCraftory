@@ -1,6 +1,8 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
+import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
+import io.github.flemmli97.runecraftory.common.entities.ElementalAttackMob;
 import io.github.flemmli97.runecraftory.common.entities.HealingPredicateEntity;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
@@ -28,7 +30,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-public class EntityDemon extends BaseMonster implements HealingPredicateEntity {
+public class EntityDemon extends BaseMonster implements HealingPredicateEntity, ElementalAttackMob {
 
     public static final AnimatedAction DARK = new AnimatedAction(0.88, 0.52, "cast");
     public static final AnimatedAction HEAL = AnimatedAction.copyOf(DARK, "heal");
@@ -166,5 +168,10 @@ public class EntityDemon extends BaseMonster implements HealingPredicateEntity {
     @Override
     public Vec3 passengerOffset(Entity passenger) {
         return new Vec3(0, 15.5 / 16d, -5 / 16d);
+    }
+
+    @Override
+    public EnumElement getAttackElement() {
+        return EnumElement.DARK;
     }
 }

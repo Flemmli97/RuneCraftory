@@ -88,6 +88,7 @@ import io.github.flemmli97.runecraftory.client.render.monster.RenderSpider;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderVeggieGhost;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderWisp;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderWooly;
+import io.github.flemmli97.runecraftory.client.render.monster.ScaledEntityRenderer;
 import io.github.flemmli97.runecraftory.client.render.projectiles.CustomFishingHookRenderer;
 import io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderAppleProjectile;
@@ -311,9 +312,10 @@ public class ClientRegister {
         register(consumer, ModEntities.NAPPIE.get(), ModelNappie::new, ModelNappie.LAYER_LOCATION);
         register(consumer, ModEntities.MALM_TIGER.get(), ModelPalmCat::new, ModelPalmCat.LAYER_LOCATION);
         register(consumer, ModEntities.LITTLE_EMPEROR.get(), ModelMage::new, ModelMage.LAYER_LOCATION);
+        registerScaled(consumer, ModEntities.DEMON.get(), ModelDemon::new, ModelDemon.LAYER_LOCATION, 0.85f);
         register(consumer, ModEntities.ARCH_DEMON.get(), ModelDemon::new, ModelDemon.LAYER_LOCATION);
         register(consumer, ModEntities.MINOTAUR.get(), ModelMinotaur::new, ModelMinotaur.LAYER_LOCATION);
-        register(consumer, ModEntities.KING_MINOTAUR.get(), ModelMinotaur::new, ModelMinotaur.LAYER_LOCATION);
+        register(consumer, ModEntities.MINOTAUR_KING.get(), ModelMinotaur::new, ModelMinotaur.LAYER_LOCATION);
 
         register(consumer, ModEntities.AMBROSIA.get(), ModelAmbrosia::new, ModelAmbrosia.LAYER_LOCATION);
         register(consumer, ModEntities.THUNDERBOLT.get(), ModelThunderbolt::new, ModelThunderbolt.LAYER_LOCATION);
@@ -410,6 +412,10 @@ public class ClientRegister {
         return manager -> new RenderMonster<>(manager, model.apply(manager.bakeLayer(layerLocation)), texture, shadow);
     }
 
+    private static <T extends BaseMonster, M extends EntityModel<T> & RideableModel<T>> EntityRendererProvider<? super T> getMonsterRenderScaled(Function<ModelPart, M> model, ModelLayerLocation layerLocation, ResourceLocation texture, float shadow, float scale) {
+        return manager -> new ScaledEntityRenderer<>(manager, model.apply(manager.bakeLayer(layerLocation)), texture, scale, shadow);
+    }
+
     private static <T extends BaseMonster, M extends EntityModel<T> & RideableModel<T>> void register(EntityRendererRegister consumer, EntityType<T> reg, Function<ModelPart, M> model, ModelLayerLocation layerLocation) {
         register(consumer, reg, model, layerLocation, 0.5f);
     }
@@ -423,7 +429,7 @@ public class ClientRegister {
     }
 
     private static <T extends BaseMonster, M extends EntityModel<T> & RideableModel<T>> void registerScaled(EntityRendererRegister consumer, EntityType<T> reg, Function<ModelPart, M> model, ModelLayerLocation layerLocation, float scale, float shadow) {
-        consumer.register(reg, getMonsterRender(model, layerLocation, mobTexture(reg), shadow));
+        consumer.register(reg, getMonsterRenderScaled(model, layerLocation, mobTexture(reg), shadow, scale));
     }
 
     public static ResourceLocation mobTexture(EntityType<?> reg) {

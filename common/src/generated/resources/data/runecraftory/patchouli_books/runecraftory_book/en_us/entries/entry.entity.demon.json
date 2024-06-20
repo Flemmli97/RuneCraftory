@@ -1,0 +1,16 @@
+{
+  "name": "entity.runecraftory.demon",
+  "category": "runecraftory:category.entities",
+  "icon": "runecraftory:demon_spawn_egg",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:demon",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:demon"
+    }
+  ]
+}

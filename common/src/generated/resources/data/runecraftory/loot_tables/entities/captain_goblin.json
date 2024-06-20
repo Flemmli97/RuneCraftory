@@ -1,0 +1,100 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "runecraftory:luck_and_looting",
+              "baseChance": 0.1,
+              "luckBonus": 0.01,
+              "lootingBonus": 0.2,
+              "limit": 0
+            }
+          ],
+          "name": "runecraftory:quality_cloth"
+        }
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "runecraftory:luck_and_looting",
+              "baseChance": 0.1,
+              "luckBonus": 0.01,
+              "lootingBonus": 0.2,
+              "limit": 0
+            }
+          ],
+          "name": "runecraftory:warriors_proof"
+        }
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "runecraftory:luck_and_looting",
+              "baseChance": 0.2,
+              "luckBonus": 0.05,
+              "lootingBonus": 0.2,
+              "limit": 0
+            }
+          ],
+          "name": "runecraftory:skull"
+        }
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "runecraftory:luck_and_looting",
+              "baseChance": 0.2,
+              "luckBonus": 0.05,
+              "lootingBonus": 0.2,
+              "limit": 0
+            }
+          ],
+          "name": "runecraftory:silk_cloth"
+        }
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "runecraftory:luck_and_looting",
+              "baseChance": 0.3,
+              "luckBonus": 0.05,
+              "lootingBonus": 0.2,
+              "limit": 0
+            }
+          ],
+          "name": "runecraftory:wine"
+        }
+      ]
+    }
+  ]
+}

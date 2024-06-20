@@ -1,0 +1,16 @@
+{
+  "name": "entity.runecraftory.minotaur_king",
+  "category": "runecraftory:category.entities",
+  "icon": "runecraftory:minotaur_king_spawn_egg",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:minotaur_king",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:minotaur_king"
+    }
+  ]
+}
