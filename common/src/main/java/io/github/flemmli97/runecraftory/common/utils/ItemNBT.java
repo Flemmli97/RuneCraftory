@@ -228,7 +228,7 @@ public class ItemNBT {
                     ++similar;
                 }
             }
-            efficiency = (float) Math.max(0.0, 1 - 0.3 * similar);
+            efficiency = similar > 0 ? (float) (1 - Math.pow(0.5, similar)) : 1;
             CompoundTag upgradeItem = new CompoundTag();
             upgradeItem.putString("Id", PlatformUtils.INSTANCE.items().getIDFrom(stackToAdd.getItem()).toString());
             upgradeItem.putInt("Level", ItemNBT.itemLevel(stackToAdd));
@@ -260,6 +260,21 @@ public class ItemNBT {
             tag.putBoolean(LibNBT.GLITTA_AUGITE, true);
         if (stackToAdd.getItem() == ModItems.RACCOON_LEAF.get())
             tag.putBoolean(LibNBT.RACCOON_LEAF, true);
+        // Apply double/tenfold steel. Works only once
+        boolean applyDoubleSteel = tag.getBoolean(LibNBT.DOUBLE_STEEL);
+        if (!tag.contains(LibNBT.DOUBLE_STEEL)) {
+            if (stackToAdd.getItem() == ModItems.STEEL_DOUBLE.get())
+                tag.putBoolean(LibNBT.DOUBLE_STEEL, true);
+        } else if (applyDoubleSteel) {
+            tag.putBoolean(LibNBT.DOUBLE_STEEL, false);
+        }
+        boolean applyTenSteel = tag.getBoolean(LibNBT.TENFOLD_STEEL);
+        if (!tag.contains(LibNBT.TENFOLD_STEEL)) {
+            if (stackToAdd.getItem() == ModItems.STEEL_TEN.get())
+                tag.putBoolean(LibNBT.TENFOLD_STEEL, true);
+        } else if (applyTenSteel) {
+            tag.putBoolean(LibNBT.TENFOLD_STEEL, false);
+        }
 
         if (stat != null) {
             if (!tag.contains(LibNBT.BASE) && !stat.itemStats().isEmpty()) {
@@ -291,6 +306,10 @@ public class ItemNBT {
                 double amount = entry.getValue() * efficiency;
                 if (hasObjectX)
                     amount *= -1;
+                if (applyDoubleSteel)
+                    amount *= 2;
+                if (applyTenSteel)
+                    amount *= 8;
                 updateStatIncrease(entry.getKey(), amount, statCompound);
             }
             tag.put(LibNBT.STATS, statCompound);

@@ -18,6 +18,8 @@ public class LibNBT {
     public static final String DRAGON_SCALE = "DragonScale";
     public static final String GLITTA_AUGITE = "GlittaAugite";
     public static final String RACCOON_LEAF = "RaccoonLeaf";
+    public static final String DOUBLE_STEEL = "DoubleSteel";
+    public static final String TENFOLD_STEEL = "TenfoldSteel";
 
     public static final String INVIS = "Invis";
     public static final String LIGHTORETAG = "LightOre";
