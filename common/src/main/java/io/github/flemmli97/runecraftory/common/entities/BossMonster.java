@@ -258,7 +258,7 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
         if (this.hasRestriction()) {
             return new AABB(this.getRestrictCenter()).inflate(this.getRestrictRadius() + 1);
         }
-        return this.getBoundingBox().inflate(this.getAttributeValue(Attributes.FOLLOW_RANGE) + 1);
+        return this.getBoundingBox().inflate(Math.max(48, this.getAttributeValue(Attributes.FOLLOW_RANGE) + 1));
     }
 
     @Override
