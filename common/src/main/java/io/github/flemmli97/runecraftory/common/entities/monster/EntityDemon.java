@@ -64,7 +64,7 @@ public class EntityDemon extends BaseMonster implements HealingPredicateEntity, 
         if (this.getOwnerUUID() == null) {
             if (e instanceof OwnableEntity ownable && ownable.getOwnerUUID() != null)
                 return false;
-            return e instanceof Enemy;
+            return e instanceof Enemy && e != this.getTarget();
         }
         if (e instanceof OwnableEntity ownable && this.getOwnerUUID().equals(ownable.getOwnerUUID()))
             return true;
