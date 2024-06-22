@@ -28,17 +28,17 @@ public class RafflesiaBreathSpell extends Spell {
         summoner.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.7f));
         Vec3 position = entity.position().add(0, entity.getBbHeight() * 0.5, 0);
         float dirScale = 5;
-        Vec3 dir = entity.getLookAngle().scale(dirScale);
+        Vec3 target = position.add(entity.getLookAngle().scale(dirScale));
         if (entity instanceof Mob mob) {
             Vec3 delayedPos;
             if (mob instanceof DelayedAttacker delayed && (delayedPos = delayed.targetPosition(summoner.position())) != null) {
-                dir = delayedPos.subtract(position.x, delayedPos.y, position.z).normalize().scale(dirScale);
+                target = delayedPos;
             } else if (mob.getTarget() != null) {
-                dir = EntityUtil.getStraightProjectileTarget(position, mob.getTarget()).subtract(position).normalize().scale(dirScale);
+                target = EntityUtil.getStraightProjectileTarget(position, mob.getTarget());
             }
         }
         summoner.setPos(position.x, position.y, position.z);
-        summoner.setTarget(position.x + dir.x, position.y + dir.y, position.z + dir.z);
+        summoner.setTarget(target.x, target.y, target.z);
         level.addFreshEntity(summoner);
         return true;
     }

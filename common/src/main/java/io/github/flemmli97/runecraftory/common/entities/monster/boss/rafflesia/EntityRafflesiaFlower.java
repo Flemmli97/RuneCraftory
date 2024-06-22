@@ -53,4 +53,9 @@ public class EntityRafflesiaFlower extends EntityRafflesiaPart {
     public int cooldown() {
         return this.getRandom().nextInt(60) + 120;
     }
+
+    @Override
+    public PartType getPartType() {
+        return PartType.FLOWER;
+    }
 }

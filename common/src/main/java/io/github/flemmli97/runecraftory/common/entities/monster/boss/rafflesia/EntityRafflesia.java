@@ -14,6 +14,7 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -21,7 +22,6 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.util.Mth;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.DifficultyInstance;
@@ -39,6 +39,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -54,8 +55,10 @@ public class EntityRafflesia extends BossMonster implements DelayedAttacker {
     private static final EntityDataAccessor<Optional<UUID>> FLOWER = SynchedEntityData.defineId(EntityRafflesia.class, EntityDataSerializers.OPTIONAL_UUID);
     private static final EntityDataAccessor<Optional<UUID>> PITCHER = SynchedEntityData.defineId(EntityRafflesia.class, EntityDataSerializers.OPTIONAL_UUID);
     private static final EntityDataAccessor<Direction> SPAWN_DIRECTION = SynchedEntityData.defineId(EntityRafflesia.class, EntityDataSerializers.DIRECTION);
+    private static final EntityDataAccessor<Float> LOCKED_YAW = SynchedEntityData.defineId(EntityRafflesia.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Float> LOCKED_PITCH = SynchedEntityData.defineId(EntityRafflesia.class, EntityDataSerializers.FLOAT);
 
-    public static final AnimatedAction POISON_BREATH = new AnimatedAction(2.08, 0.64, "breath");
+    public static final AnimatedAction POISON_BREATH = new AnimatedAction(1.96, 0.56, "breath");
     public static final AnimatedAction POISON_BREATH_REV = AnimatedAction.copyOf(POISON_BREATH, "breath_2");
     public static final AnimatedAction PARA_BREATH = AnimatedAction.copyOf(POISON_BREATH, "paralysis_breath");
     public static final AnimatedAction PARA_BREATH_REV = AnimatedAction.copyOf(POISON_BREATH, "paralysis_breath_2");
@@ -93,30 +96,30 @@ public class EntityRafflesia extends BossMonster implements DelayedAttacker {
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityRafflesia>>> ATTACKS = List.of(
             WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(POISON_BREATH)
                     .cooldown(e -> e.animationCooldown(POISON_BREATH))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 2),
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 4),
             WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(POISON_BREATH_REV)
                     .cooldown(e -> e.animationCooldown(POISON_BREATH_REV))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 2),
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 4),
             WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(PARA_BREATH)
                     .cooldown(e -> e.animationCooldown(PARA_BREATH))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 2),
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 4),
             WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(PARA_BREATH_REV)
                     .cooldown(e -> e.animationCooldown(PARA_BREATH_REV))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 2),
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 4),
             WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(SLEEP_BREATH)
                     .cooldown(e -> e.animationCooldown(SLEEP_BREATH))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 2),
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 4),
             WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(SLEEP_BREATH_REV)
                     .cooldown(e -> e.animationCooldown(SLEEP_BREATH_REV))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 2),
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 4),
             WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(WIND_BLADE_X8)
                     .cooldown(e -> e.animationCooldown(WIND_BLADE_X8))
                     .withCondition(((goal, target, previous) -> !goal.attacker.isEnraged()))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 4),
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 3),
             WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(WIND_BLADE_X16)
                     .cooldown(e -> e.animationCooldown(WIND_BLADE_X16))
                     .withCondition(((goal, target, previous) -> goal.attacker.isEnraged()))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 4),
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 3),
             WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(RESUMMON)
                     .cooldown(e -> e.animationCooldown(RESUMMON))
                     .withCondition(((goal, target, previous) -> goal.attacker.getHorseTail() == null || goal.attacker.getPitcher() == null || goal.attacker.getFlower() == null))
@@ -207,6 +210,8 @@ public class EntityRafflesia extends BossMonster implements DelayedAttacker {
         this.entityData.define(FLOWER, Optional.empty());
         this.entityData.define(PITCHER, Optional.empty());
         this.entityData.define(SPAWN_DIRECTION, Direction.NORTH);
+        this.entityData.define(LOCKED_YAW, 0f);
+        this.entityData.define(LOCKED_PITCH, 0f);
     }
 
     @Override
@@ -245,6 +250,10 @@ public class EntityRafflesia extends BossMonster implements DelayedAttacker {
     @Override
     public void baseTick() {
         super.baseTick();
+        if (this.getAnimationHandler().hasAnimation() && this.getAnimationHandler().getAnimation().getAnimationClient().equals("breath")) {
+            this.setRot(this.entityData.get(LOCKED_YAW), this.entityData.get(LOCKED_PITCH));
+            this.setYHeadRot(this.getYRot());
+        }
         if (!this.level.isClientSide) {
             LivingEntity target = this.getTarget();
             if (target != null && !this.getAnimationHandler().hasAnimation()) {
@@ -271,14 +280,17 @@ public class EntityRafflesia extends BossMonster implements DelayedAttacker {
     @Override
     public void handleAttack(AnimatedAction anim) {
         LivingEntity target = this.getTarget();
-        if (target != null) {
-            if (anim.getTick() == 1) {
-                this.yHeadRot = (float) (Mth.atan2(target.getZ() - this.getZ(), target.getX() - this.getX()) * (180 / Math.PI)) - 90;
-                this.yBodyRot = this.yHeadRot;
-                this.targetPosition = target.position();
+        if (anim.getTick() == 1) {
+            if (target != null) {
+                AABB aabb = target.getBoundingBox();
+                this.targetPosition = EntityUtil.getStraightProjectileTarget(this.position().add(0, this.getEyeHeight(), 0), target.position(), aabb.minY + target.getBbHeight() * 0.25, aabb.maxY - target.getBbHeight() * 0.25);
+            } else {
+                this.targetPosition = this.getLookAngle().scale(5);
             }
-        } else
-            this.targetPosition = null;
+            this.lookAt(EntityAnchorArgument.Anchor.EYES, this.targetPosition);
+            this.entityData.set(LOCKED_PITCH, this.getXRot());
+            this.entityData.set(LOCKED_YAW, this.getYRot());
+        }
         BiConsumer<AnimatedAction, EntityRafflesia> handler = ATTACK_HANDLER.get(anim.getID());
         if (handler != null)
             handler.accept(anim, this);

@@ -40,6 +40,7 @@ public class ModelRafflesia<T extends EntityRafflesia> extends EntityModel<T> im
     protected final BlockBenchAnimations anim;
 
     public ModelPartHandler.ModelPartExtended main;
+    public ModelPartHandler.ModelPartExtended mainRoot;
     public ModelPartHandler.ModelPartExtended mainStem;
     public ModelPartHandler.ModelPartExtended mainStem2;
     public ModelPartHandler.ModelPartExtended mainStem3;
@@ -55,6 +56,7 @@ public class ModelRafflesia<T extends EntityRafflesia> extends EntityModel<T> im
         this.model = new ModelPartHandler(root, "root");
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "rafflesia"));
         this.main = this.model.getPart("main");
+        this.mainRoot = this.model.getPart("mainRoot");
         this.mainStem = this.model.getPart("mainStem");
         this.mainStem2 = this.model.getPart("mainStem2");
         this.mainStem3 = this.model.getPart("mainStem3");
@@ -66,14 +68,15 @@ public class ModelRafflesia<T extends EntityRafflesia> extends EntityModel<T> im
         this.ridingPosition = this.model.getPart("ridingPos");
     }
 
-
     public static LayerDefinition createBodyLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
         PartDefinition main = partdefinition.addOrReplaceChild("main", CubeListBuilder.create().texOffs(0, 0).addBox(-7.5F, -3.0F, -7.5F, 15.0F, 3.0F, 15.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 24.0F, 0.0F));
 
-        PartDefinition mainStem = main.addOrReplaceChild("mainStem", CubeListBuilder.create().texOffs(0, 31).addBox(-1.0F, -12.0F, -2.0F, 3.0F, 10.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offset(-0.5F, -1.0F, 0.5F));
+        PartDefinition mainRoot = main.addOrReplaceChild("mainRoot", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+        PartDefinition mainStem = mainRoot.addOrReplaceChild("mainStem", CubeListBuilder.create().texOffs(0, 31).addBox(-1.0F, -12.0F, -2.0F, 3.0F, 10.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offset(-0.5F, -1.0F, 0.5F));
 
         PartDefinition mainStem2 = mainStem.addOrReplaceChild("mainStem2", CubeListBuilder.create().texOffs(0, 18).addBox(-1.5F, -10.0F, -1.5F, 3.0F, 10.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offset(0.5F, -12.0F, -0.5F));
 
@@ -83,11 +86,11 @@ public class ModelRafflesia<T extends EntityRafflesia> extends EntityModel<T> im
 
         PartDefinition head = mainStem4.addOrReplaceChild("head", CubeListBuilder.create().texOffs(46, 48).addBox(-5.5F, -5.5F, -11.0F, 11.0F, 11.0F, 10.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -7.0F, -0.5F));
 
-        PartDefinition mouthUpper = head.addOrReplaceChild("mouthUpper", CubeListBuilder.create().texOffs(0, 62).addBox(-3.0F, -5.0F, -9.0F, 7.0F, 5.0F, 9.0F, new CubeDeformation(0.0F))
-                .texOffs(78, 28).addBox(-3.0F, -0.25F, -9.0F, 7.0F, 1.0F, 9.0F, new CubeDeformation(-0.025F)), PartPose.offsetAndRotation(0.0F, 1.0F, -11.0F, -0.1309F, 0.0F, 0.0F));
+        PartDefinition mouthUpper = head.addOrReplaceChild("mouthUpper", CubeListBuilder.create().texOffs(0, 62).addBox(-3.5F, -5.0F, -9.0F, 7.0F, 5.0F, 9.0F, new CubeDeformation(0.0F))
+                .texOffs(78, 28).addBox(-3.5F, -0.25F, -9.0F, 7.0F, 1.0F, 9.0F, new CubeDeformation(-0.025F)), PartPose.offsetAndRotation(0.0F, 1.0F, -11.0F, -0.1309F, 0.0F, 0.0F));
 
-        PartDefinition mouthLower = head.addOrReplaceChild("mouthLower", CubeListBuilder.create().texOffs(64, 69).addBox(-3.5F, 0.0F, -9.0F, 7.0F, 3.0F, 9.0F, new CubeDeformation(0.0F))
-                .texOffs(77, 0).addBox(-3.5F, -0.75F, -9.0F, 7.0F, 1.0F, 9.0F, new CubeDeformation(-0.025F)), PartPose.offsetAndRotation(0.5F, 1.0F, -11.0F, 0.0436F, 0.0F, 0.0F));
+        PartDefinition mouthLower = head.addOrReplaceChild("mouthLower", CubeListBuilder.create().texOffs(64, 69).addBox(-4.0F, 0.0F, -9.0F, 7.0F, 3.0F, 9.0F, new CubeDeformation(0.0F))
+                .texOffs(77, 0).addBox(-4.0F, -0.75F, -9.0F, 7.0F, 1.0F, 9.0F, new CubeDeformation(-0.025F)), PartPose.offsetAndRotation(0.5F, 1.0F, -11.0F, 0.0436F, 0.0F, 0.0F));
 
         PartDefinition flowerBase = head.addOrReplaceChild("flowerBase", CubeListBuilder.create(), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.7854F));
 
@@ -203,13 +206,16 @@ public class ModelRafflesia<T extends EntityRafflesia> extends EntityModel<T> im
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.model.resetPoses();
         float partialTicks = Minecraft.getInstance().getFrameTime();
-        this.mainStem.yRot = (Mth.lerp(partialTicks, entity.yHeadRotO, entity.yHeadRot) - entity.getSpawnDirection().toYRot()) * Mth.DEG_TO_RAD;
+        this.mainRoot.yRot = (Mth.lerp(partialTicks, entity.yHeadRotO, entity.yHeadRot) - entity.getSpawnDirection().toYRot()) * Mth.DEG_TO_RAD;
         this.head.yRot += netHeadYaw * Mth.DEG_TO_RAD * 0.3f;
-        this.head.xRot += headPitch * Mth.DEG_TO_RAD * 0.3f;
-        if (entity.deathTime <= 0 && !entity.playDeath()) {
+        AnimatedAction current = entity.getAnimationHandler().getAnimation();
+        if (entity.deathTime <= 0 && !entity.playDeath() && (current == null || !current.getAnimationClient().equals("breath"))) {
             this.anim.doAnimation(this, "idle", entity.tickCount, partialTicks);
         }
         this.doAnimation(this, entity.getAnimationHandler(), partialTicks);
+        if (current == null || current.getAnimationClient().equals("breath")) {
+            this.head.xRot += headPitch * Mth.DEG_TO_RAD * 1;
+        }
         EntityRafflesiaPart horseTail = entity.getHorseTail();
         if (horseTail != null) {
             this.horseTail.visible = true;
@@ -261,6 +267,7 @@ public class ModelRafflesia<T extends EntityRafflesia> extends EntityModel<T> im
             EntityModel<?> model = lR.getModel();
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.main.translateAndRotate(poseStack);
+                this.mainRoot.translateAndRotate(poseStack);
                 this.mainStem.translateAndRotate(poseStack);
                 this.mainStem2.translateAndRotate(poseStack);
                 this.mainStem3.translateAndRotate(poseStack);

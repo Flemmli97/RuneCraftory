@@ -63,10 +63,15 @@ public class EntityRafflesiaHorseTail extends EntityRafflesiaPart implements Hea
                 return true;
             if (e instanceof OwnableEntity ownableEntity && this.getOwnerUUID() == ownableEntity.getOwnerUUID())
                 return true;
-            if (this.getOwner() != null && this.getOwner().getOwner() == null)
-                return e instanceof Enemy;
             EntityRafflesia owner = this.getOwner();
+            if (owner != null && this.getOwner().getOwner() == null)
+                return e instanceof Enemy && e != owner.getTarget();
             return owner == null || e != owner.getTarget();
         };
+    }
+
+    @Override
+    public PartType getPartType() {
+        return PartType.HORSETAIL;
     }
 }

@@ -11,6 +11,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.OwnableEntity;
@@ -29,6 +30,7 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Function;
 
 public abstract class EntityRafflesiaPart extends Mob implements IAnimated, OwnableEntity {
 
@@ -83,7 +85,7 @@ public abstract class EntityRafflesiaPart extends Mob implements IAnimated, Owna
     public void baseTick() {
         if (!this.level.isClientSide && !this.firstTick) {
             if (this.getOwner() != null) {
-                if (this.getOwner().isDeadOrDying())
+                if (this.getOwner().isDeadOrDying() || this.getPartType().getPart.apply(this.getOwner()) != this)
                     this.discard();
                 else {
                     if (this.getTarget() != this.getOwner().getTarget()) {
@@ -159,5 +161,20 @@ public abstract class EntityRafflesiaPart extends Mob implements IAnimated, Owna
 
     public int cooldown() {
         return this.getRandom().nextInt(40) + 100;
+    }
+
+    public abstract PartType getPartType();
+
+    public enum PartType {
+
+        FLOWER(EntityRafflesia::getFlower),
+        HORSETAIL(EntityRafflesia::getHorseTail),
+        PITCHER(EntityRafflesia::getPitcher);
+
+        private final Function<EntityRafflesia, Entity> getPart;
+
+        PartType(Function<EntityRafflesia, Entity> getPart) {
+            this.getPart = getPart;
+        }
     }
 }
