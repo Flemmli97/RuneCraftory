@@ -13,6 +13,7 @@ import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
@@ -40,7 +41,6 @@ import net.minecraft.world.phys.Vec3;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
-import java.util.function.Function;
 
 public class EntityChimera extends BossMonster implements DelayedAttacker {
 
@@ -151,6 +151,9 @@ public class EntityChimera extends BossMonster implements DelayedAttacker {
                             this.lookAt(target, 360, 10);
                             this.lockYaw(this.getYRot());
                         }
+                    } else if (anim.is(FIRE_TAIL_BUBBLE, WATER_TAIL_BUBBLE, WATER_TAIL_BEAM, FIRE_BREATH, BUBBLE_BEAM)) {
+                        if (this.getTarget() != null)
+                            this.targetPosition = EntityUtil.getStraightProjectileTarget(this.getEyePosition(), this.getTarget());
                     }
                     if (this.getAnimationHandler().isCurrent(LEAP)) {
                         this.hitEntity = null;
@@ -168,7 +171,6 @@ public class EntityChimera extends BossMonster implements DelayedAttacker {
     protected boolean chargeAttackSuccess;
     private double[] chargeMotion;
     protected List<LivingEntity> hitEntity;
-    private Function<Vec3, Vec3> aiTargetPosition;
 
     public EntityChimera(EntityType<? extends EntityChimera> type, Level world) {
         super(type, world);
@@ -346,12 +348,8 @@ public class EntityChimera extends BossMonster implements DelayedAttacker {
         return SLEEP;
     }
 
-    public void setAiTarget(Function<Vec3, Vec3> aiVarHelper) {
-        this.aiTargetPosition = aiVarHelper;
-    }
-
     @Override
     public Vec3 targetPosition(Vec3 from) {
-        return this.aiTargetPosition.apply(from);
+        return this.targetPosition;
     }
 }

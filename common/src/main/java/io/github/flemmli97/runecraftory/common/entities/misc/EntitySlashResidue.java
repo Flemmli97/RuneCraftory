@@ -74,7 +74,7 @@ public class EntitySlashResidue extends BaseDamageCloud {
 
     @Override
     public boolean canStartDamage() {
-        return !this.oneTimeDamage && this.livingTicks % 3 == 0;
+        return !this.oneTimeDamage && this.livingTicks % 3 == 1;
     }
 
     @Override

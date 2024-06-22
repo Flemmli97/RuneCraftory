@@ -28,18 +28,17 @@ public class ElementBallBarrageSpell extends Spell {
         summoner.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.75f));
         Vec3 eye = entity.getEyePosition();
         float dirScale = 5;
-        Vec3 dir = entity.getLookAngle().scale(dirScale);
+        Vec3 target = eye.add(entity.getLookAngle().scale(dirScale));
         if (entity instanceof Mob mob) {
             Vec3 delayedPos;
             if (mob instanceof DelayedAttacker delayed && (delayedPos = delayed.targetPosition(summoner.position())) != null) {
-                dir = delayedPos.subtract(eye.x, eye.y, eye.z).normalize().scale(dirScale);
+                target = delayedPos;
             } else if (mob.getTarget() != null) {
-                dir = mob.getTarget().position().subtract(EntityUtil.getStraightProjectileTarget(eye, mob.getTarget())).normalize().scale(dirScale);
+                target = EntityUtil.getStraightProjectileTarget(eye, mob.getTarget());
             }
         }
-        Vec3 off = dir.normalize().scale(-dirScale + 3);
-        summoner.setPos(eye.x + off.x, eye.y, eye.z + off.z);
-        summoner.setTarget(eye.x + dir.x, eye.y + dir.y, eye.z + dir.z);
+        summoner.setPos(eye.x, eye.y, eye.z);
+        summoner.setTarget(target.x, target.y, target.z);
         level.addFreshEntity(summoner);
         return true;
     }

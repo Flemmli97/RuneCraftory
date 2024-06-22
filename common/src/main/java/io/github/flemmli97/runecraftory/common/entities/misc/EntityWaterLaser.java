@@ -154,8 +154,8 @@ public class EntityWaterLaser extends BaseBeam {
     }
 
     @Override
-    public int attackCooldown() {
-        return 0;
+    public boolean canStartDamage() {
+        return true;
     }
 
     @Override

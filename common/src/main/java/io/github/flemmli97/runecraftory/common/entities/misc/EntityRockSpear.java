@@ -20,13 +20,11 @@ public class EntityRockSpear extends BaseBeam {
 
     public EntityRockSpear(EntityType<? extends EntityRockSpear> type, Level world) {
         super(type, world);
-        this.coolDown = 5;
     }
 
     public EntityRockSpear(Level world, LivingEntity shooter, boolean big) {
         super(ModEntities.ROCK_SPEAR.get(), world, shooter);
         this.setPos(this.getX(), this.getY() - 0.1, this.getZ());
-        this.coolDown = 5;
         this.entityData.set(BIG, big);
     }
 
@@ -63,6 +61,11 @@ public class EntityRockSpear extends BaseBeam {
     @Override
     public void onImpact(EntityHitResult entityHitResult) {
         CombatUtils.damageWithFaintAndCrit(this.getOwner(), entityHitResult.getEntity(), new CustomDamage.Builder(this, this.getOwner()).magic().noKnockback().element(EnumElement.EARTH).hurtResistant(5), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier, null);
+    }
+
+    @Override
+    public boolean canStartDamage() {
+        return (this.livingTicks - 1) == 5;
     }
 
     @Override

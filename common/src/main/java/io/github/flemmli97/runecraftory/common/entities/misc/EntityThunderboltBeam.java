@@ -63,7 +63,7 @@ public class EntityThunderboltBeam extends BaseBeam {
     }
 
     @Override
-    public int attackCooldown() {
-        return this.livingTickMax();
+    public boolean canStartDamage() {
+        return this.livingTicks == 1;
     }
 }

@@ -93,8 +93,8 @@ public class EntityWindGust extends EntityBeam {
     }
 
     @Override
-    public int attackCooldown() {
-        return 1;
+    public boolean canStartDamage() {
+        return true;
     }
 
     @Override

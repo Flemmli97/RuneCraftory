@@ -25,7 +25,7 @@ import net.minecraft.world.phys.Vec3;
 public class EntitySpike extends BaseDamageCloud {
 
     private static final int ATTACK_DURATION = 20;
-    private static final int ATTACK_TICK = 9;
+    private static final int ATTACK_TICK = 10;
 
     private static final EntityDataAccessor<Integer> TYPE = SynchedEntityData.defineId(EntitySpike.class, EntityDataSerializers.INT);
 

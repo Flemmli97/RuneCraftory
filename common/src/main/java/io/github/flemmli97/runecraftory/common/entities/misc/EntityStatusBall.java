@@ -11,6 +11,7 @@ import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.tenshilib.common.entity.EntityProjectile;
 import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -29,6 +30,7 @@ public class EntityStatusBall extends BaseDamageCloud {
     private static final EntityDataAccessor<Integer> TYPE_DATA = SynchedEntityData.defineId(EntityStatusBall.class, EntityDataSerializers.INT);
 
     private Type type = Type.SLEEP;
+    private int maxLivingTicks;
 
     public EntityStatusBall(EntityType<? extends EntityStatusBall> type, Level world) {
         super(type, world);
@@ -41,7 +43,7 @@ public class EntityStatusBall extends BaseDamageCloud {
 
     @Override
     public int livingTickMax() {
-        return this.type.maxLivingTicks;
+        return this.maxLivingTicks;
     }
 
     @Override
@@ -53,6 +55,11 @@ public class EntityStatusBall extends BaseDamageCloud {
     public void setType(Type type) {
         this.type = type;
         this.entityData.set(TYPE_DATA, this.type.ordinal());
+        this.maxLivingTicks = this.type.maxLivingTicks;
+    }
+
+    public void setLivingTicksMax(int ticks) {
+        this.maxLivingTicks = ticks;
     }
 
     @Override
@@ -130,6 +137,20 @@ public class EntityStatusBall extends BaseDamageCloud {
     @Override
     protected AABB damageBoundingBox() {
         return this.getBoundingBox().inflate(0.3, 0.45, 0.3);
+    }
+
+    @Override
+    protected void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putInt("StatusType", this.type.ordinal());
+        compound.putInt("MaxTicks", this.maxLivingTicks);
+    }
+
+    @Override
+    protected void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        this.type = Type.values()[compound.getInt("StatusType")];
+        this.maxLivingTicks = compound.getInt("MaxTicks");
     }
 
     public enum Type {

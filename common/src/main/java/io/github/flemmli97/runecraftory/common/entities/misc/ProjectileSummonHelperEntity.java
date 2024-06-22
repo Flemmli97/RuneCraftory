@@ -109,7 +109,7 @@ public abstract class ProjectileSummonHelperEntity extends Entity implements Own
         double dY = y - this.getY();
         double dZ = z - this.getZ();
         this.setYRot((float) (Mth.atan2(dZ, dX) * Mth.RAD_TO_DEG) - 90);
-        this.setXRot((float) (Mth.atan2(dY, Math.sqrt(dX * dX + dZ * dZ)) * Mth.RAD_TO_DEG));
+        this.setXRot((float) -(Mth.atan2(dY, Math.sqrt(dX * dX + dZ * dZ)) * Mth.RAD_TO_DEG));
     }
 
     @Nullable
