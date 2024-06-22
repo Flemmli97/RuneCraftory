@@ -50,7 +50,7 @@ public class EntityCards extends BaseProjectile {
 
     @Override
     protected boolean entityRayTraceHit(EntityHitResult result) {
-        boolean att = CombatUtils.damageWithFaintAndCrit(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).noKnockback().hurtResistant(1).element(EnumElement.LIGHT), CombatUtils.getAttributeValue(this.getOwner(), Attributes.ATTACK_DAMAGE) * this.damageMultiplier, null);
+        boolean att = CombatUtils.damageWithFaintAndCrit(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).noKnockback().hurtResistant(1).element(EnumElement.LIGHT).projectile(), CombatUtils.getAttributeValue(this.getOwner(), Attributes.ATTACK_DAMAGE) * this.damageMultiplier, null);
         this.discard();
         return att;
     }

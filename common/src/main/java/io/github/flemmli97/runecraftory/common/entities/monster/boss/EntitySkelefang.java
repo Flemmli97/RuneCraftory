@@ -201,19 +201,22 @@ public class EntitySkelefang extends BossMonster {
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntitySkelefang>>> ATTACKS = List.of(
             WeightedEntry.wrap(new GoalAttackAction<EntitySkelefang>(TAIL_SLAM)
                     .cooldown(e -> e.animationCooldown(TAIL_SLAM))
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 4), e -> 40 + e.getRandom().nextInt(20))), 1),
+                    .withCondition(((goal, target, previous) -> goal.attacker.remainingTailBones() > 10))
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 4), e -> 40 + e.getRandom().nextInt(20))), 4),
             WeightedEntry.wrap(new GoalAttackAction<EntitySkelefang>(NEEDLE_THROW)
                     .cooldown(e -> e.animationCooldown(NEEDLE_THROW))
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 4), e -> 40 + e.getRandom().nextInt(20))), 1),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 6), e -> 40 + e.getRandom().nextInt(20))), 3),
             WeightedEntry.wrap(new GoalAttackAction<EntitySkelefang>(TAIL_SLAP)
                     .cooldown(e -> e.animationCooldown(TAIL_SLAP))
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 4), e -> 40 + e.getRandom().nextInt(20))), 1),
+                    .withCondition(((goal, target, previous) -> goal.attacker.remainingTailBones() > 10))
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 4), e -> 40 + e.getRandom().nextInt(20))), 5),
             WeightedEntry.wrap(new GoalAttackAction<EntitySkelefang>(SLASH)
                     .cooldown(e -> e.animationCooldown(SLASH))
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 4), e -> 40 + e.getRandom().nextInt(20))), 1),
+                    .withCondition(((goal, target, previous) -> goal.attacker.remainingRightLegBones() > 0 || goal.attacker.remainingLeftLegBones() > 0))
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 4), e -> 40 + e.getRandom().nextInt(20))), 4),
             WeightedEntry.wrap(new GoalAttackAction<EntitySkelefang>(CHARGE)
                     .cooldown(e -> e.animationCooldown(CHARGE))
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 7), e -> 20 + e.getRandom().nextInt(20))), 1)
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 7), e -> 20 + e.getRandom().nextInt(20))), 4)
     );
     private static final List<WeightedEntry.Wrapper<IdleAction<EntitySkelefang>>> IDLE_ACTIONS = List.of(
             WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 3)), 1)
@@ -630,9 +633,9 @@ public class EntitySkelefang extends BossMonster {
     @Override
     public void mobAttack(AnimatedAction anim, LivingEntity target, Consumer<LivingEntity> cons) {
         if (anim.is(CHARGE)) {
-            double widthH = this.getBbWidth() * 0.5 + 1.5;
-            AABB aabb = new AABB(-widthH, -0.02, -widthH, widthH, 1.8 + 0.02, widthH).move(this.getX(), this.getY(), this.getZ())
-                    .move(Vec3.directionFromRotation(0, this.yBodyRot).scale(1.5));
+            double widthH = this.getBbWidth() * 0.5 + 1.3;
+            AABB aabb = new AABB(-widthH, -0.02, -widthH, widthH, this.getBbHeight() + 0.02, widthH).move(this.getX(), this.getY(), this.getZ())
+                    .move(Vec3.directionFromRotation(0, this.yBodyRot).scale(0.7));
             this.level.getEntitiesOfClass(LivingEntity.class, aabb, this.hitPred).forEach(cons);
             if (!this.level.isClientSide)
                 S2CAttackDebug.sendDebugPacket(aabb, S2CAttackDebug.EnumAABBType.ATTACK, this);
@@ -752,6 +755,12 @@ public class EntitySkelefang extends BossMonster {
     @Override
     public void playInteractionAnimation() {
         this.getAnimationHandler().setAnimation(INTERACT);
+    }
+
+    @Override
+    public int animationCooldown(AnimatedAction anim) {
+        int diffAdd = this.difficultyCooldown();
+        return (this.isEnraged() ? 27 + this.getRandom().nextInt(20) : 35 + this.getRandom().nextInt(25)) + diffAdd;
     }
 
     @Override

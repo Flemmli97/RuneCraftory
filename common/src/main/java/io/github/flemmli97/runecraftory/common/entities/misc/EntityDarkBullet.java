@@ -33,7 +33,7 @@ public class EntityDarkBullet extends BaseProjectile {
 
     @Override
     protected boolean entityRayTraceHit(EntityHitResult result) {
-        boolean att = CombatUtils.damageWithFaintAndCrit(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).magic().noKnockback().element(EnumElement.DARK).hurtResistant(3), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier, null);
+        boolean att = CombatUtils.damageWithFaintAndCrit(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).magic().noKnockback().element(EnumElement.DARK).hurtResistant(3).projectile(), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier, null);
         this.discard();
         return att;
     }

@@ -21,23 +21,23 @@ public class BoneNeedleSpell extends Spell {
             return false;
         Vec3 direct;
         if (entity instanceof Mob mob && mob.getTarget() != null) {
-            Vec3 pos = new EntityBoneNeedle(level, entity).position().add(0, -entity.getBbHeight() * 0.15, 0);
+            Vec3 pos = new EntityBoneNeedle(level, entity).position().add(0, -entity.getBbHeight() * 0.25, 0);
             direct = EntityUtil.getStraightProjectileTarget(pos, mob.getTarget()).subtract(pos);
         } else
             direct = Vec3.directionFromRotation(entity.getXRot(), entity.yBodyRot);
         Vec3 side = Vec3.directionFromRotation(0, entity.yBodyRot - 90);
         side = new Vec3(side.x(), 0, side.z()).normalize().add(0, -entity.getBbHeight() * 0.15, 0);
-        double offset = -2.5;
+        double offset = -3;
         double max = Math.abs(offset);
         double inc = max * 2.5 / 16;
         while (offset <= max) {
             EntityBoneNeedle needle = new EntityBoneNeedle(level, entity);
-            Vec3 direction = MathUtils.rotate(MathUtils.normalY, direct, (float) (Mth.DEG_TO_RAD * 9 * offset));
-            needle.shoot(direction.x(), direction.y(), direction.z(), entity.getRandom().nextFloat() * 0.1f + 0.9f, 2);
-            Vec3 random = needle.position().add(side.multiply(offset * 1.2, 1, offset * 1.2));
+            Vec3 direction = MathUtils.rotate(MathUtils.normalY, direct, (float) (Mth.DEG_TO_RAD * 15 * offset));
+            needle.shoot(direction.x(), direction.y(), direction.z(), entity.getRandom().nextFloat() * 0.1f + 0.6f, 2);
+            Vec3 random = needle.position().add(0, -entity.getBbHeight() * 0.25, 0).add(side.multiply(offset * 0.5, 0, offset * 0.5));
             offset += entity.getRandom().nextDouble() * inc * 0.5 + inc * 0.5;
             needle.setPos(random);
-            needle.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.55f));
+            needle.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.75f));
             level.addFreshEntity(needle);
         }
         level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ARROW_SHOOT, entity.getSoundSource(), 1.0f, 1.2f + level.getRandom().nextFloat() * 0.1f);
