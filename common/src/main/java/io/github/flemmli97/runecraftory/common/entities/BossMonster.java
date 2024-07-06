@@ -8,6 +8,7 @@ import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.IOverlayEntityRender;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -25,6 +26,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.List;
@@ -110,6 +112,15 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
         super.readAdditionalSaveData(compound);
         this.setEnraged(compound.getBoolean("Enraged"), true);
         this.fullHealDelay = compound.getInt("FullHealDelay");
+        if (this.hasCustomName()) {
+            this.bossInfo.setName(this.getDisplayName());
+        }
+    }
+
+    @Override
+    public void setCustomName(@Nullable Component name) {
+        super.setCustomName(name);
+        this.bossInfo.setName(this.getDisplayName());
     }
 
     @Override
@@ -243,7 +254,7 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
 
     private void updatePlayers() {
         Set<ServerPlayer> set = new HashSet<>();
-        for (ServerPlayer serverPlayer : this.level.getEntitiesOfClass(ServerPlayer.class, this.arenaAABB())) {
+        for (ServerPlayer serverPlayer : this.level.getEntitiesOfClass(ServerPlayer.class, this.arenaAABB(), e -> true)) {
             this.bossInfo.addPlayer(serverPlayer);
             set.add(serverPlayer);
         }
