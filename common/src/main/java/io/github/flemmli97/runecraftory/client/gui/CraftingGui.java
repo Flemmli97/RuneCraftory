@@ -84,7 +84,7 @@ public class CraftingGui extends AbstractContainerScreen<ContainerCrafting> {
             if (rpMax < this.menu.rpCost() && !this.minecraft.player.isCreative()) {
                 cost = new TranslatableComponent("runecraftory.crafting.rpMax.missing").withStyle(ChatFormatting.DARK_RED);
             }
-            OverlayGui.drawStringCenter(stack, this.font, cost, this.leftPos + 123, this.topPos + 20, 0);
+            ClientHandlers.drawCenteredScaledString(stack, this.font, cost, this.leftPos + 123, this.topPos + 20, 1, 0);
         }
         if (data != null) {
             stack.pushPose();

@@ -58,7 +58,7 @@ public class UpgradeGui extends AbstractContainerScreen<ContainerUpgrade> {
                 cost = new TranslatableComponent("runecraftory.crafting.rpMax.missing").withStyle(ChatFormatting.DARK_RED);
                 yOffset = -25;
             }
-            OverlayGui.drawStringCenter(stack, this.font, cost, this.leftPos + 91, this.topPos + 42 + yOffset, 0);
+            ClientHandlers.drawCenteredScaledString(stack, this.font, cost, this.leftPos + 91, this.topPos + 42 + yOffset, 1, 0);
         }
         if (data != null) {
             stack.pushPose();
