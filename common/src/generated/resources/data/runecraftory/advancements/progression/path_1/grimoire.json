@@ -1,0 +1,53 @@
+{
+  "parent": "runecraftory:progression/path_1/rafflesia",
+  "display": {
+    "icon": {
+      "item": "runecraftory:grimoire_spawn_egg"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.progression.boss.grimoire.title"
+    },
+    "description": {
+      "translate": "runecraftory.advancements.progression.boss.grimoire.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false,
+    "background": "minecraft:textures/block/dirt.png"
+  },
+  "criteria": {
+    "boss": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "player": {
+                "advancements": {
+                  "runecraftory:progression/path_1/rafflesia": true
+                }
+              }
+            },
+            "entity": "this"
+          }
+        ],
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "type": "runecraftory:grimoire"
+            },
+            "entity": "this"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "boss"
+    ]
+  ]
+}

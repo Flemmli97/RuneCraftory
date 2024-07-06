@@ -38,6 +38,7 @@ import io.github.flemmli97.runecraftory.common.spells.ExplosionSpell;
 import io.github.flemmli97.runecraftory.common.spells.FireballSpell;
 import io.github.flemmli97.runecraftory.common.spells.FurnitureThrowSpell;
 import io.github.flemmli97.runecraftory.common.spells.GroundedAbilitySpell;
+import io.github.flemmli97.runecraftory.common.spells.GustRockSpell;
 import io.github.flemmli97.runecraftory.common.spells.GustSpell;
 import io.github.flemmli97.runecraftory.common.spells.HealT1Spell;
 import io.github.flemmli97.runecraftory.common.spells.HealT2Spell;
@@ -71,6 +72,7 @@ import io.github.flemmli97.runecraftory.common.spells.StatusBallSpell;
 import io.github.flemmli97.runecraftory.common.spells.StoneThrowSpell;
 import io.github.flemmli97.runecraftory.common.spells.TeleportSpell;
 import io.github.flemmli97.runecraftory.common.spells.ThrowHandItemSpell;
+import io.github.flemmli97.runecraftory.common.spells.TornadoSpell;
 import io.github.flemmli97.runecraftory.common.spells.TripleArrowSpell;
 import io.github.flemmli97.runecraftory.common.spells.TripleFireBulletSpell;
 import io.github.flemmli97.runecraftory.common.spells.TripleFireballSpell;
@@ -80,6 +82,7 @@ import io.github.flemmli97.runecraftory.common.spells.WaterLaserSpell;
 import io.github.flemmli97.runecraftory.common.spells.WaveSpell;
 import io.github.flemmli97.runecraftory.common.spells.WeaponSpell;
 import io.github.flemmli97.runecraftory.common.spells.WebShotSpell;
+import io.github.flemmli97.runecraftory.common.spells.WindBladeBarrageSpell;
 import io.github.flemmli97.runecraftory.common.spells.WindBladeCircle;
 import io.github.flemmli97.runecraftory.common.spells.WindBladeSpell;
 import io.github.flemmli97.runecraftory.platform.LazyGetter;
@@ -228,6 +231,9 @@ public class ModSpells {
     public static final RegistryEntrySupplier<Spell> WIND_CIRCLE_X16 = registerSpell("wind_circle_x16", () -> new WindBladeCircle(16), new SpellProperties.Builder(30, 100).withXPGain(EnumSkills.WIND, 10).affectedSkill(EnumSkills.WIND));
     public static final RegistryEntrySupplier<Spell> EXPANDING_QUAD_LIGHT = registerSpell("expanding_quad_light", ExpandingQuadLight::new, new SpellProperties.Builder(30, 40).withXPGain(EnumSkills.LIGHT, 10).affectedSkill(EnumSkills.LIGHT));
     public static final RegistryEntrySupplier<Spell> PARALYSIS_BALL = registerSpell("paralysis_ball", () -> new StatusBallSpell(EntityStatusBall.Type.PARALYSIS), new SpellProperties.Builder(40, 30).withXPGain(EnumSkills.LIGHT, 7).affectedSkill(EnumSkills.LIGHT));
+    public static final RegistryEntrySupplier<Spell> WIND_BLADE_BARRAGE = registerSpell("wind_blade_barrage", WindBladeBarrageSpell::new, new SpellProperties.Builder(40, 30).withXPGain(EnumSkills.WIND, 7).affectedSkill(EnumSkills.WIND));
+    public static final RegistryEntrySupplier<Spell> GUST_ROCKS = registerSpell("gust_rocks", GustRockSpell::new, new SpellProperties.Builder(10, 0).withXPGain(EnumSkills.EARTH, 5));
+    public static final RegistryEntrySupplier<Spell> TORNADO = registerSpell("tornado", TornadoSpell::new, new SpellProperties.Builder(10, 0).withXPGain(EnumSkills.WIND, 5));
 
     private static RegistryEntrySupplier<Spell> registerSpell(String name, Supplier<Spell> sup, SpellProperties.Builder properties) {
         RegistryEntrySupplier<Spell> entry = SPELLS.register(name, sup);

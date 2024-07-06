@@ -133,7 +133,7 @@ public class VortexParticle extends TextureSheetParticle {
 
         @Override
         public Particle createParticle(ColoredParticleData4f data, ClientLevel level, double x, double y, double z, double motX, double motY, double motZ) {
-            return new VortexParticle(level, x, y, z, data.getRadius(), data.getInc(), data.getOffset(), data.getAngle(), data, this.sprite, 40, 0.9f, 1.1f, true, 4);
+            return new VortexParticle(level, x, y, z, data.getRadius(), data.getSpeed(), data.getOffset(), data.getAngleIncrease(), data, this.sprite, 40, 0.9f, 1.1f, true, 4);
         }
     }
 }

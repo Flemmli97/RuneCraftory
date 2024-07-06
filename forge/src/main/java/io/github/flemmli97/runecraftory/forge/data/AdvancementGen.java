@@ -102,6 +102,7 @@ public class AdvancementGen implements DataProvider {
         Advancement rootProgression = Advancement.Builder.advancement().display(ModItems.SHORT_DAGGER.get(), new TranslatableComponent("runecraftory.advancements.progression.root.title"), new TranslatableComponent("runecraftory.advancements.progression.root.description"), new ResourceLocation("textures/block/dirt.png"), FrameType.TASK, false, false, false).addCriterion("crafting_table", InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.CRAFTING_TABLE)).save(cons, LibAdvancements.ROOT_PROGRESSION.toString());
         Advancement chimera = bossProgression(ModEntities.CHIMERA, cons, LibAdvancements.CHIMERA, rootProgression);
         Advancement rafflesia = bossProgression(ModEntities.RAFFLESIA, cons, LibAdvancements.RAFFLESIA, chimera);
+        Advancement grimoire = bossProgression(ModEntities.GRIMOIRE, cons, LibAdvancements.GRIMOIRE, rafflesia);
         Advancement deadTree = bossProgression(ModEntities.DEAD_TREE, cons, LibAdvancements.DEAD_TREE, rootProgression);
         Advancement raccoon = bossProgression(ModEntities.RACCOON, cons, LibAdvancements.RACCOON, rootProgression);
         Advancement skelefang = bossProgression(ModEntities.SKELEFANG, cons, LibAdvancements.SKELEFANG, raccoon);

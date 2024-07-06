@@ -1,0 +1,16 @@
+{
+  "name": "entity.runecraftory.grimoire",
+  "category": "runecraftory:category.entities",
+  "icon": "runecraftory:grimoire_spawn_egg",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:grimoire",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:grimoire"
+    }
+  ]
+}

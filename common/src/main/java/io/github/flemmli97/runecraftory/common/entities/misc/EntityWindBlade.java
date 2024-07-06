@@ -27,7 +27,7 @@ import java.util.List;
 public class EntityWindBlade extends BaseProjectile {
 
     private Entity target;
-    private boolean piercing = false;
+    private Type type = Type.HOMING;
 
     public EntityWindBlade(EntityType<? extends EntityWindBlade> type, Level world) {
         super(type, world);
@@ -41,13 +41,13 @@ public class EntityWindBlade extends BaseProjectile {
         this.target = entity;
     }
 
-    public void setPiercing() {
-        this.piercing = true;
+    public void setType(Type type) {
+        this.type = type;
     }
 
     @Override
     public boolean isPiercing() {
-        return this.piercing;
+        return this.type == Type.PIERCING;
     }
 
     @Override
@@ -59,7 +59,7 @@ public class EntityWindBlade extends BaseProjectile {
     public void tick() {
         super.tick();
         if (!this.level.isClientSide) {
-            if (this.target == null && !this.piercing) {
+            if (this.target == null && this.type == Type.HOMING) {
                 List<Entity> list = this.level.getEntities(this, this.getBoundingBox().inflate(16).expandTowards(this.getDeltaMovement()), e -> {
                     if (!e.isPickable() || !e.isAttackable())
                         return false;
@@ -92,7 +92,7 @@ public class EntityWindBlade extends BaseProjectile {
 
     @Override
     protected boolean entityRayTraceHit(EntityHitResult result) {
-        if (CombatUtils.damageWithFaintAndCrit(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).magic().noKnockback().hurtResistant(10).element(EnumElement.WIND).projectile(), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier, null)) {
+        if (CombatUtils.damageWithFaintAndCrit(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).magic().noKnockback().hurtResistant(this.type == Type.PLAIN ? 2 : 10).element(EnumElement.WIND).projectile(), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier, null)) {
             if (!this.isPiercing())
                 this.discard();
             return true;
@@ -138,5 +138,11 @@ public class EntityWindBlade extends BaseProjectile {
                 this.onBlockHit(raytraceresult);
             }
         }
+    }
+
+    public enum Type {
+        PLAIN,
+        HOMING,
+        PIERCING,
     }
 }

@@ -31,6 +31,7 @@ public class ModParticles {
     public static final RegistryEntrySupplier<ParticleType<ColoredParticleData4f>> VORTEX = PARTICLES.register("vortex", () -> new ColoredParticle4fType(false));
     public static final RegistryEntrySupplier<ParticleType<ColoredParticleData>> WIND = registerColoredParticleType("wind", false);
     public static final RegistryEntrySupplier<SimpleParticleType> LIGHTNING = PARTICLES.register("lightning", () -> Platform.INSTANCE.simple(false));
+    public static final RegistryEntrySupplier<ParticleType<ColoredParticleData4f>> TORNADO = PARTICLES.register("tornado", () -> new ColoredParticle4fType(false));
 
     public static final RegistryEntrySupplier<SimpleParticleType> RUNEY = PARTICLES.register("runey", () -> Platform.INSTANCE.simple(false));
 

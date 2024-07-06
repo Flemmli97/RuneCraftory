@@ -32,29 +32,33 @@ public class ColoredParticleData4f extends ColoredParticleData {
             float offset = reader.readFloat();
             reader.expect(' ');
             float angle = reader.readFloat();
-            return new ColoredParticleData4f(type, r, g, b, a, scale, radius, inc, offset, angle);
+            reader.expect(' ');
+            float exp = reader.readFloat();
+            return new ColoredParticleData4f(type, r, g, b, a, scale, radius, inc, offset, angle, exp);
         }
 
         @Override
         public ColoredParticleData4f fromNetwork(ParticleType<ColoredParticleData4f> type, FriendlyByteBuf buffer) {
-            return new ColoredParticleData4f(type, buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat());
+            return new ColoredParticleData4f(type, buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat());
         }
     };
     private final float radius;
-    private final float inc;
+    private final float speed;
     private final float offset;
-    private final float angle;
+    private final float angleIncrease;
+    private final float expansion;
 
     public ColoredParticleData4f(ParticleType<ColoredParticleData4f> type, float red, float green, float blue, float alpha) {
-        this(type, red, green, blue, alpha, 1, 0, 0, 0, 0);
+        this(type, red, green, blue, alpha, 1, 0, 0, 0, 0, 0);
     }
 
-    public ColoredParticleData4f(ParticleType<ColoredParticleData4f> type, float red, float green, float blue, float alpha, float scale, float radius, float inc, float offset, float angleInc) {
+    public ColoredParticleData4f(ParticleType<ColoredParticleData4f> type, float red, float green, float blue, float alpha, float scale, float radius, float speed, float offset, float angleInc, float expansion) {
         super(type, red, green, blue, alpha, scale);
         this.radius = radius;
-        this.inc = inc;
+        this.speed = speed;
         this.offset = offset;
-        this.angle = angleInc;
+        this.angleIncrease = angleInc;
+        this.expansion = expansion;
     }
 
     public static Codec<ColoredParticleData4f> codec4f(ParticleType<ColoredParticleData4f> type) {
@@ -65,10 +69,11 @@ public class ColoredParticleData4f extends ColoredParticleData {
                         Codec.FLOAT.fieldOf("alpha").forGetter(ColoredParticleData::getAlpha),
                         Codec.FLOAT.fieldOf("scale").forGetter(ColoredParticleData::getScale),
                         Codec.FLOAT.fieldOf("radius").forGetter(ColoredParticleData4f::getRadius),
-                        Codec.FLOAT.fieldOf("inc").forGetter(ColoredParticleData4f::getInc),
+                        Codec.FLOAT.fieldOf("speed").forGetter(ColoredParticleData4f::getSpeed),
                         Codec.FLOAT.fieldOf("offset").forGetter(ColoredParticleData4f::getOffset),
-                        Codec.FLOAT.fieldOf("angleInc").forGetter(ColoredParticleData4f::getAngle))
-                .apply(builder, (r, g, b, a, scale, radius, inc, offset, angle) -> new ColoredParticleData4f(type, r, g, b, a, scale, radius, inc, offset, angle)));
+                        Codec.FLOAT.fieldOf("angleIncrease").forGetter(ColoredParticleData4f::getAngleIncrease),
+                        Codec.FLOAT.fieldOf("expansion").forGetter(ColoredParticleData4f::getExpansion))
+                .apply(builder, (r, g, b, a, scale, radius, inc, offset, angle, exp) -> new ColoredParticleData4f(type, r, g, b, a, scale, radius, inc, offset, angle, exp)));
     }
 
     @Override
@@ -79,24 +84,81 @@ public class ColoredParticleData4f extends ColoredParticleData {
         buffer.writeFloat(this.getAlpha());
         buffer.writeFloat(this.getScale());
         buffer.writeFloat(this.radius);
-        buffer.writeFloat(this.inc);
+        buffer.writeFloat(this.speed);
         buffer.writeFloat(this.offset);
-        buffer.writeFloat(this.angle);
+        buffer.writeFloat(this.angleIncrease);
+        buffer.writeFloat(this.expansion);
     }
 
     public float getRadius() {
         return this.radius;
     }
 
-    public float getInc() {
-        return this.inc;
+    public float getSpeed() {
+        return this.speed;
     }
 
     public float getOffset() {
         return this.offset;
     }
 
-    public float getAngle() {
-        return this.angle;
+    public float getAngleIncrease() {
+        return this.angleIncrease;
+    }
+
+    public float getExpansion() {
+        return this.expansion;
+    }
+
+    public static class Builder {
+
+        private final float red;
+        private final float green;
+        private final float blue;
+        private final float alpha;
+
+        private float scale = 1;
+        private float radius;
+        private float speed = 1;
+        private float offset;
+        private float angleIncrease;
+        private float expansion;
+
+        public Builder(float red, float green, float blue, float alpha) {
+            this.red = red;
+            this.green = green;
+            this.blue = blue;
+            this.alpha = alpha;
+        }
+
+        public Builder withScale(float scale) {
+            this.scale = scale;
+            return this;
+        }
+
+        public Builder withSpeed(float speed) {
+            this.speed = speed;
+            return this;
+        }
+
+        public Builder circle(float radius, float increase) {
+            this.radius = radius;
+            this.angleIncrease = increase;
+            return this;
+        }
+
+        public Builder withOffset(float offset) {
+            this.offset = offset;
+            return this;
+        }
+
+        public Builder expandCircle(float expansion) {
+            this.expansion = expansion;
+            return this;
+        }
+
+        public ColoredParticleData4f build(ParticleType<ColoredParticleData4f> type) {
+            return new ColoredParticleData4f(type, this.red, this.green, this.blue, this.alpha, this.scale, this.radius, this.speed, this.offset, this.angleIncrease, this.expansion);
+        }
     }
 }

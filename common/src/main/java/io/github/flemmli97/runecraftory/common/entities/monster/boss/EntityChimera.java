@@ -218,7 +218,7 @@ public class EntityChimera extends BossMonster implements DelayedAttacker {
 
     @Override
     public void push(double x, double y, double z) {
-        if (this.getAnimationHandler().isCurrent(ANGRY, DEFEAT))
+        if (this.getAnimationHandler().isCurrent(ANGRY, DEFEAT, LEAP))
             return;
         super.push(x, y, z);
     }
@@ -235,6 +235,9 @@ public class EntityChimera extends BossMonster implements DelayedAttacker {
 
     @Override
     public AABB calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
+        if (anim.is(LEAP)) {
+            return this.getBoundingBox().inflate(0.3, 0.1, 0.3);
+        }
         if (!anim.is(BITE)) {
             return super.calculateAttackAABB(anim, target, grow);
         }

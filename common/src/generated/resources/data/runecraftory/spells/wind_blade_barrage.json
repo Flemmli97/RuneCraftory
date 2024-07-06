@@ -1,0 +1,11 @@
+{
+  "cooldown": 40,
+  "rpCost": 30,
+  "skillXP": {
+    "WIND": 7.0
+  },
+  "percentage": false,
+  "skills": [
+    "WIND"
+  ]
+}

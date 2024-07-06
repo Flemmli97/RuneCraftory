@@ -72,6 +72,7 @@ public class ModSounds {
     public static final RegistryEntrySupplier<SoundEvent> SKELEFANG_FIGHT = registerBgm("bgm.skelefang_fight");
     public static final RegistryEntrySupplier<SoundEvent> RAFFLESIA_FIGHT = registerBgm("bgm.rafflesia_fight");
     public static final RegistryEntrySupplier<SoundEvent> THUNDERBOLT_FIGHT = registerBgm("bgm.thunderbolt_fight");
+    public static final RegistryEntrySupplier<SoundEvent> GRIMOIRE_FIGHT = registerBgm("bgm.grimoire_fight");
 
     private static RegistryEntrySupplier<SoundEvent> register(String name) {
         return SOUND_EVENTS.register(name, () -> new SoundEvent(new ResourceLocation(RuneCraftory.MODID, name)));

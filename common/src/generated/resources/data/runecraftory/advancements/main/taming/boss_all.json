@@ -95,6 +95,16 @@
           "type": "runecraftory:rafflesia"
         }
       }
+    },
+    "runecraftory:grimoire": {
+      "trigger": "runecraftory:tame_monster",
+      "conditions": {
+        "amount": 1,
+        "bosses": false,
+        "entity": {
+          "type": "runecraftory:grimoire"
+        }
+      }
     }
   },
   "requirements": [
@@ -121,6 +131,9 @@
     ],
     [
       "runecraftory:rafflesia"
+    ],
+    [
+      "runecraftory:grimoire"
     ]
   ]
 }

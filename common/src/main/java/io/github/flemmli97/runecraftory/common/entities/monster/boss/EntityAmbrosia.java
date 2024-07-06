@@ -83,13 +83,13 @@ public class EntityAmbrosia extends BossMonster implements DelayedAttacker {
                 ModSpells.WAVE.get().use(entity);
         });
         BiConsumer<AnimatedAction, EntityAmbrosia> pollenHandler = (anim, entity) -> {
-            if (entity.targetPosition == null) {
+            if (entity.moveDirection == null) {
                 Vec3 dir = entity.getTarget() != null ? entity.getTarget().position().subtract(entity.position()) : entity.getLookAngle();
-                dir = new Vec3(dir.x(), 0, dir.y()).normalize().scale(5);
+                dir = new Vec3(dir.x(), 0, dir.z()).normalize().scale(5);
                 int length = anim.getLength();
-                entity.targetPosition = new Vec3(dir.x / length, 0, dir.z / length);
+                entity.moveDirection = new Vec3(dir.x / length, 0, dir.z / length);
             }
-            entity.setDeltaMovement(new Vec3(entity.targetPosition.x(), 0, entity.targetPosition.z()));
+            entity.setDeltaMovement(entity.moveDirection);
             if (anim.canAttack() && !EntityUtils.sealed(entity)) {
                 entity.getNavigation().stop();
                 EntityPollen pollen = new EntityPollen(entity.level, entity);
@@ -122,6 +122,7 @@ public class EntityAmbrosia extends BossMonster implements DelayedAttacker {
     private final AnimationHandler<EntityAmbrosia> animationHandler = new AnimationHandler<>(this, ANIMS).setAnimationChangeFunc(anim -> {
         if (!this.level.isClientSide && anim == null) {
             boolean chain = !this.commanded;
+            this.moveDirection = null;
             this.commanded = false;
             if (chain) {
                 AnimatedAction chainAnim = this.chainAnim(this.getAnimationHandler().getAnimation());
@@ -135,6 +136,7 @@ public class EntityAmbrosia extends BossMonster implements DelayedAttacker {
     });
 
     private boolean commanded;
+    private Vec3 moveDirection;
 
     public EntityAmbrosia(EntityType<? extends EntityAmbrosia> type, Level world) {
         super(type, world);
@@ -271,10 +273,5 @@ public class EntityAmbrosia extends BossMonster implements DelayedAttacker {
     @Override
     public Vec3 targetPosition(Vec3 from) {
         return this.targetPosition;
-    }
-
-    @Override
-    public AnimatedAction getSleepAnimation() {
-        return SLEEP;
     }
 }

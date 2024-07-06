@@ -17,7 +17,7 @@ public class PenetrateWindBladeSpell extends Spell {
         for (int i = 0; i < 3; i++) {
             EntityWindBlade wind = new EntityWindBlade(level, entity);
             wind.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1.1f));
-            wind.setPiercing();
+            wind.setType(EntityWindBlade.Type.PIERCING);
             wind.shoot(entity, entity.getXRot(), entity.getYRot() - (i - 1) * 50, 0, 0.35f, 0);
             level.addFreshEntity(wind);
         }

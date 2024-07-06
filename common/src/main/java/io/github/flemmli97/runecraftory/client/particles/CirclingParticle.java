@@ -2,20 +2,23 @@ package io.github.flemmli97.runecraftory.client.particles;
 
 import io.github.flemmli97.runecraftory.common.particles.ColoredParticleData4f;
 import io.github.flemmli97.tenshilib.client.particles.ColoredParticle;
+import io.github.flemmli97.tenshilib.client.particles.ParticleRenderTypes;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
 import io.github.flemmli97.tenshilib.common.utils.MathUtils;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.world.phys.Vec3;
 
 public class CirclingParticle extends ColoredParticle {
 
     private final double motionAX, motionAY, motionAZ, speedMod;
-    private final float radInc;
+    private final float radInc, expansion;
     private double[] point;
 
-    public CirclingParticle(ClientLevel world, double x, double y, double z, double dirX, double dirY, double dirZ, ColoredParticleData colorData, SpriteSet sprite, int maxAge, float minAgeRand, float maxAgeRand, double radius, double speedMod, float radAdd, float radInc) {
+    public CirclingParticle(ClientLevel world, double x, double y, double z, double dirX, double dirY, double dirZ, ColoredParticleData colorData, SpriteSet sprite, int maxAge, float minAgeRand, float maxAgeRand, double radius, double speedMod, float radAdd, float radInc, float expansion) {
         super(world, x, y, z, 0, 0, 0, colorData, sprite, maxAge, minAgeRand, maxAgeRand, false, false, false);
         if (dirX == 0 && dirY == 0 && dirZ == 0)
             dirY = 1;
@@ -32,6 +35,7 @@ public class CirclingParticle extends ColoredParticle {
         this.yo = this.y;
         this.zo = this.z;
         this.radInc = MathUtils.degToRad(radInc);
+        this.expansion = expansion;
     }
 
     @Override
@@ -43,7 +47,8 @@ public class CirclingParticle extends ColoredParticle {
             this.remove();
         } else {
             double[] prev = this.point;
-            this.point = MathUtils.rotate(this.motionAX, this.motionAY, this.motionAZ, this.point[0], this.point[1], this.point[2], this.radInc);
+            Vec3 dir = this.expansion == 0 ? Vec3.ZERO : new Vec3(this.point[0], this.point[1], this.point[2]).normalize().scale(this.expansion);
+            this.point = MathUtils.rotate(this.motionAX, this.motionAY, this.motionAZ, this.point[0] + dir.x, this.point[1] + dir.y, this.point[2] + dir.z, this.radInc);
             this.setSpriteFromAge(this.spriteProvider);
             this.move(this.point[0] - prev[0] + this.motionAX * this.speedMod,
                     this.point[1] - prev[1] + this.motionAY * this.speedMod,
@@ -56,7 +61,7 @@ public class CirclingParticle extends ColoredParticle {
 
         @Override
         public Particle createParticle(ColoredParticleData4f data, ClientLevel level, double x, double y, double z, double motionX, double motionY, double motionZ) {
-            return new CirclingParticle(level, x, y, z, motionX, motionY, motionZ, data, this.sprite, 25, 0.9f, 1.1f, data.getRadius(), data.getInc(), data.getOffset(), data.getAngle()).setScale(data.getScale());
+            return new CirclingParticle(level, x, y, z, motionX, motionY, motionZ, data, this.sprite, 25, 0.9f, 1.1f, data.getRadius(), data.getSpeed(), data.getOffset(), data.getAngleIncrease(), data.getExpansion()).setScale(data.getScale());
         }
     }
 }

@@ -35,6 +35,7 @@ import io.github.flemmli97.runecraftory.client.model.monster.ModelFairy;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelFlowerLily;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelGhost;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelGoblin;
+import io.github.flemmli97.runecraftory.client.model.monster.ModelGrimoire;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelHornet;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelLeafBall;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelMage;
@@ -71,6 +72,7 @@ import io.github.flemmli97.runecraftory.client.particles.MoveToGoalParticle;
 import io.github.flemmli97.runecraftory.client.particles.RuneyParticle;
 import io.github.flemmli97.runecraftory.client.particles.SinkingParticle;
 import io.github.flemmli97.runecraftory.client.particles.SkelefangParticle;
+import io.github.flemmli97.runecraftory.client.particles.TornadoParticle;
 import io.github.flemmli97.runecraftory.client.particles.VortexParticle;
 import io.github.flemmli97.runecraftory.client.render.RenderGate;
 import io.github.flemmli97.runecraftory.client.render.RenderMonster;
@@ -325,6 +327,7 @@ public class ClientRegister {
         consumer.register(ModEntities.RACCOON.get(), RenderRaccoon::new);
         consumer.register(ModEntities.SKELEFANG.get(), RenderSkelefang::new);
         consumer.register(ModEntities.RAFFLESIA.get(), RenderRafflesia::new);
+        registerScaled(consumer, ModEntities.GRIMOIRE.get(), ModelGrimoire::new, ModelGrimoire.LAYER_LOCATION, 1.5f);
 
         consumer.register(ModEntities.NPC.get(), RenderNPC::new);
 
@@ -383,8 +386,8 @@ public class ClientRegister {
         consumer.register(ModEntities.ENERGY_ORB.get(), RenderEnergyOrb::new);
         consumer.register(ModEntities.HOMING_SPIKES.get(), RenderSpikes::new);
         consumer.register(ModEntities.POWER_WAVE.get(), EmptyRender::new);
-
-        consumer.register(ModEntities.DARK_BULLET.get(), RenderDarkBullet::new);
+        consumer.register(ModEntities.GUST_ROCK.get(), EmptyRender::new);
+        consumer.register(ModEntities.TORNADO.get(), EmptyRender::new);
 
         consumer.register(ModEntities.RUNEY.get(), RenderRuney::new);
         consumer.register(ModEntities.STAT_BONUS.get(), EmptyRender::new);
@@ -397,6 +400,7 @@ public class ClientRegister {
         consumer.register(ModEntities.RAFFLESIA_BREATH_SUMMONER.get(), EmptyRender::new);
         consumer.register(ModEntities.RAFFLESIA_CIRCLE_SUMMONER.get(), EmptyRender::new);
         consumer.register(ModEntities.BLAZE_BARRAGE.get(), EmptyRender::new);
+        consumer.register(ModEntities.WIND_BLADE_BARRAGE_SUMMONER.get(), EmptyRender::new);
 
         consumer.register(ModEntities.FISHING_HOOK.get(), CustomFishingHookRenderer::new);
 
@@ -486,6 +490,7 @@ public class ClientRegister {
         consumer.accept(ModelRaccoonBerserk.LAYER_LOCATION, ModelRaccoonBerserk::createBodyLayer);
         consumer.accept(ModelSkelefang.LAYER_LOCATION, ModelSkelefang::createBodyLayer);
         consumer.accept(ModelRafflesia.LAYER_LOCATION, ModelRafflesia::createBodyLayer);
+        consumer.accept(ModelGrimoire.LAYER_LOCATION, ModelGrimoire::createBodyLayer);
 
         consumer.accept(ModelButterfly.LAYER_LOCATION, ModelButterfly::createBodyLayer);
         consumer.accept(ModelWoolyWool.LAYER_LOCATION, ModelWoolyWool::createBodyLayer);
@@ -520,6 +525,7 @@ public class ClientRegister {
         consumer.register(ModParticles.POISON.get(), HeartParticle.Provider::new);
         consumer.register(ModParticles.PARALYSIS.get(), LightningParticle.Factory::new);
         consumer.register(ModParticles.LIGHTNING.get(), LightningParticle.Factory::new);
+        consumer.register(ModParticles.TORNADO.get(), TornadoParticle.TornadoFactoryBase::new);
 
         consumer.register(ModParticles.RUNEY.get(), RuneyParticle.Provider::new);
 
