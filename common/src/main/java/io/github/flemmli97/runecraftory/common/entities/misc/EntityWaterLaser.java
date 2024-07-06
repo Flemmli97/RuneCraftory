@@ -25,6 +25,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.UUID;
+
 public class EntityWaterLaser extends BaseBeam {
 
     private static final EntityDataAccessor<Float> YAW_MOTION_VAL = SynchedEntityData.defineId(EntityWaterLaser.class, EntityDataSerializers.FLOAT);
@@ -34,6 +36,7 @@ public class EntityWaterLaser extends BaseBeam {
 
     private final Object2IntMap<Entity> hitEntities = new Object2IntOpenHashMap<>();
     private float accumulatedRot;
+    private UUID other;
 
     public EntityWaterLaser(EntityType<? extends EntityWaterLaser> type, Level level) {
         super(type, level);
@@ -66,6 +69,10 @@ public class EntityWaterLaser extends BaseBeam {
         this.entityData.set(POSITION_YAW_OFFSET, offset);
     }
 
+    public void setTwinId(UUID other) {
+        this.other = other;
+    }
+
     @Override
     public float getRange() {
         return 9;
@@ -73,7 +80,7 @@ public class EntityWaterLaser extends BaseBeam {
 
     @Override
     public float radius() {
-        return 0.5f;
+        return 0.6f;
     }
 
     @Override
@@ -118,6 +125,7 @@ public class EntityWaterLaser extends BaseBeam {
 
     @Override
     public void tick() {
+        float yRot = this.getYRot();
         if (this.entityData.get(YAW_MOTION_VAL) != 0) {
             this.setYRot(this.getYRot() + this.entityData.get(YAW_MOTION_VAL));
             this.hit = null;
@@ -127,6 +135,9 @@ public class EntityWaterLaser extends BaseBeam {
             this.accumulatedRot = 0;
         }
         super.tick();
+        if (this.entityData.get(YAW_MOTION_VAL) != 0) {
+            this.yRotO = yRot;
+        }
         if (this.getOwner() instanceof ServerPlayer player) {
             boolean keep = Platform.INSTANCE.getPlayerData(player)
                     .map(d -> {
@@ -142,6 +153,12 @@ public class EntityWaterLaser extends BaseBeam {
     @Override
     public void onImpact(EntityHitResult res) {
         Entity e = res.getEntity();
+        if (e instanceof LivingEntity living) {
+            if (living.getLastDamageSource() != null && living.getLastDamageSource().getDirectEntity() != null &&
+                    living.getLastDamageSource().getDirectEntity().getUUID().equals(this.other)) {
+                living.invulnerableTime = 10;
+            }
+        }
         CombatUtils.damageWithFaintAndCrit(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(5).magic().noKnockback().element(EnumElement.WATER), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier, null);
         this.hitEntities.put(e, this.tickCount);
     }
@@ -155,7 +172,7 @@ public class EntityWaterLaser extends BaseBeam {
 
     @Override
     public boolean canStartDamage() {
-        return true;
+        return true;//(this.livingTicks - 1) % 5 == 0;
     }
 
     @Override

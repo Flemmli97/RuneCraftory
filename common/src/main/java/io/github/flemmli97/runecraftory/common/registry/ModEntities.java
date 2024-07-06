@@ -14,7 +14,6 @@ import io.github.flemmli97.runecraftory.common.entities.misc.BlazeBarrageSummone
 import io.github.flemmli97.runecraftory.common.entities.misc.ElementBallBarrageSummoner;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityAmbrosiaWave;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityAppleProjectile;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityBaseSpellBall;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityBigPlate;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityBigRaccoonLeaf;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityBoneNeedle;
@@ -28,11 +27,13 @@ import io.github.flemmli97.runecraftory.common.entities.misc.EntityDarkBeam;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityDarkBullet;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityDarkBulletSummoner;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityDarkness;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityElementalBall;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityExplosionSpell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityFireball;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityFurniture;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityGustRocks;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityHomingEnergyOrb;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityIceTrail;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityLightBall;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityMarionettaTrap;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityMobArrow;
@@ -113,8 +114,10 @@ import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityDeadT
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityGrimoire;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityMarionetta;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityRaccoon;
+import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntitySano;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntitySkelefang;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityThunderbolt;
+import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityUno;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia.EntityRafflesia;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia.EntityRafflesiaFlower;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia.EntityRafflesiaHorseTail;
@@ -1284,6 +1287,74 @@ public class ModEntities {
                     .setMinLevel(12)
                     .withSpawnerPredicate(LibAdvancements.playerAdvancementCheck(LibAdvancements.RAFFLESIA))
                     .withRideActionCosts(new EntityRideActionCosts.Builder(0.5f, true)));
+    public static final RegistryEntrySupplier<EntityType<EntitySano>> SANO = regBoss(EntityType.Builder.of(EntitySano::new, MobCategory.MONSTER).sized(3, 4.1f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "sano"),
+            0xa18c4a, 0xa82626,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 275).putLevelGains(() -> Attributes.MAX_HEALTH, 575)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 13).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 200)
+                    .putAttributes(ModAttributes.DEFENCE, 4.5).putLevelGains(ModAttributes.DEFENCE, 228)
+                    .putAttributes(ModAttributes.MAGIC, 16.5).putLevelGains(ModAttributes.MAGIC, 240)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 3.8).putLevelGains(ModAttributes.MAGIC_DEFENCE, 224)
+                    .putAttributes(ModAttributes.RES_EARTH, 15)
+                    .putAttributes(ModAttributes.RES_WATER, 15)
+                    .putAttributes(ModAttributes.RES_FIRE, 15)
+                    .putAttributes(ModAttributes.RES_WIND, -25)
+                    .putAttributes(ModAttributes.RES_LIGHT, -15)
+                    .putAttributes(ModAttributes.RES_LOVE, -15)
+                    .putAttributes(ModAttributes.RES_CRIT, 25)
+                    .putAttributes(ModAttributes.RES_DRAIN, 25)
+                    .putAttributes(ModAttributes.RES_DIZZY, 100)
+                    .putAttributes(() -> Attributes.KNOCKBACK_RESISTANCE, 1)
+                    .putAttributes(ModAttributes.RES_STUN, 100)
+                    .putAttributes(ModAttributes.RES_PARA, 97)
+                    .putAttributes(ModAttributes.RES_POISON, 100)
+                    .putAttributes(ModAttributes.RES_SEAL, 80)
+                    .putAttributes(ModAttributes.RES_SLEEP, 100)
+                    .putAttributes(ModAttributes.RES_FAT, 100)
+                    .putAttributes(ModAttributes.RES_COLD, 100)
+                    .putAttributes(ModAttributes.RES_FAINT, 100)
+                    .xp(950).money(150).tamingChance(0).setBarnOccupancy(3).setRideable()
+                    .withLevelIncrease(1, 10)
+                    .withLevelIncrease(2, 1)
+                    .withLevelIncrease(7, 3)
+                    .withLevelIncrease(15, 5)
+                    .setMinLevel(12)
+                    .withSpawnerPredicate(LibAdvancements.playerAdvancementCheck(LibAdvancements.MARIONETTA))
+                    .withRideActionCosts(new EntityRideActionCosts.Builder(0.5f, true)));
+    public static final RegistryEntrySupplier<EntityType<EntityUno>> UNO = regBoss(EntityType.Builder.of(EntityUno::new, MobCategory.MONSTER).sized(3, 4.1f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "uno"),
+            0xa18c4a, 0x1b7f9c,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 275).putLevelGains(() -> Attributes.MAX_HEALTH, 575)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 13).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 200)
+                    .putAttributes(ModAttributes.DEFENCE, 4.5).putLevelGains(ModAttributes.DEFENCE, 228)
+                    .putAttributes(ModAttributes.MAGIC, 16.5).putLevelGains(ModAttributes.MAGIC, 240)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 3.8).putLevelGains(ModAttributes.MAGIC_DEFENCE, 224)
+                    .putAttributes(ModAttributes.RES_EARTH, 15)
+                    .putAttributes(ModAttributes.RES_WATER, 15)
+                    .putAttributes(ModAttributes.RES_FIRE, 15)
+                    .putAttributes(ModAttributes.RES_WIND, -25)
+                    .putAttributes(ModAttributes.RES_LIGHT, -15)
+                    .putAttributes(ModAttributes.RES_LOVE, -15)
+                    .putAttributes(ModAttributes.RES_CRIT, 25)
+                    .putAttributes(ModAttributes.RES_DRAIN, 25)
+                    .putAttributes(ModAttributes.RES_DIZZY, 100)
+                    .putAttributes(() -> Attributes.KNOCKBACK_RESISTANCE, 1)
+                    .putAttributes(ModAttributes.RES_STUN, 100)
+                    .putAttributes(ModAttributes.RES_PARA, 97)
+                    .putAttributes(ModAttributes.RES_POISON, 100)
+                    .putAttributes(ModAttributes.RES_SEAL, 80)
+                    .putAttributes(ModAttributes.RES_SLEEP, 100)
+                    .putAttributes(ModAttributes.RES_FAT, 100)
+                    .putAttributes(ModAttributes.RES_COLD, 100)
+                    .putAttributes(ModAttributes.RES_FAINT, 100)
+                    .xp(950).money(150).tamingChance(0).setBarnOccupancy(3).setRideable()
+                    .withLevelIncrease(1, 10)
+                    .withLevelIncrease(2, 1)
+                    .withLevelIncrease(7, 3)
+                    .withLevelIncrease(15, 5)
+                    .setMinLevel(12)
+                    .withSpawnerPredicate(LibAdvancements.playerAdvancementCheck(LibAdvancements.MARIONETTA))
+                    .withRideActionCosts(new EntityRideActionCosts.Builder(0.5f, true)));
 
     public static final RegistryEntrySupplier<EntityType<EntityNPCBase>> NPC = npc(EntityType.Builder.of(EntityNPCBase::new, MobCategory.MISC).sized(0.6f, 1.8f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "npc"));
 
@@ -1305,7 +1376,7 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntityCards>> CARDS = reg(EntityType.Builder.<EntityCards>of(EntityCards::new, MobCategory.MISC).sized(0.5f, 0.5f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "cards"));
     public static final RegistryEntrySupplier<EntityType<EntityFurniture>> FURNITURE = reg(EntityType.Builder.<EntityFurniture>of(EntityFurniture::new, MobCategory.MISC).sized(1f, 1f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "furniture"));
     public static final RegistryEntrySupplier<EntityType<EntityMarionettaTrap>> TRAP_CHEST = reg(EntityType.Builder.<EntityMarionettaTrap>of(EntityMarionettaTrap::new, MobCategory.MISC).sized(0.5f, 0.5f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "trap_chest"));
-    public static final RegistryEntrySupplier<EntityType<EntityBaseSpellBall>> STAFF_BASE_PROJECTILE = reg(EntityType.Builder.<EntityBaseSpellBall>of(EntityBaseSpellBall::new, MobCategory.MISC).sized(0.2f, 0.2f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "staff_base_projectile"));
+    public static final RegistryEntrySupplier<EntityType<EntityElementalBall>> ELEMENTAL_BALL = reg(EntityType.Builder.<EntityElementalBall>of(EntityElementalBall::new, MobCategory.MISC).sized(0.2f, 0.2f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "elemental_ball"));
     public static final RegistryEntrySupplier<EntityType<EntityFireball>> FIRE_BALL = reg(EntityType.Builder.<EntityFireball>of(EntityFireball::new, MobCategory.MISC).sized(0.2f, 0.2f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "fireball"));
     public static final RegistryEntrySupplier<EntityType<EntityExplosionSpell>> EXPLOSION = reg(EntityType.Builder.<EntityExplosionSpell>of(EntityExplosionSpell::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "explosion"));
     public static final RegistryEntrySupplier<EntityType<EntityWaterLaser>> WATER_LASER = reg(EntityType.Builder.<EntityWaterLaser>of(EntityWaterLaser::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "water_laser"));
@@ -1330,6 +1401,7 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntityPowerWave>> POWER_WAVE = reg(EntityType.Builder.<EntityPowerWave>of(EntityPowerWave::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "power_wave"));
     public static final RegistryEntrySupplier<EntityType<EntityGustRocks>> GUST_ROCK = reg(EntityType.Builder.<EntityGustRocks>of(EntityGustRocks::new, MobCategory.MISC).sized(0.01f, 0.01f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "gust_rocks"));
     public static final RegistryEntrySupplier<EntityType<EntityTornado>> TORNADO = reg(EntityType.Builder.<EntityTornado>of(EntityTornado::new, MobCategory.MISC).sized(1.5f, 4.5f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "tornado"));
+    public static final RegistryEntrySupplier<EntityType<EntityIceTrail>> ICE_TRAIL = reg(EntityType.Builder.<EntityIceTrail>of(EntityIceTrail::new, MobCategory.MISC).sized(1, 1).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "ice_trail"));
 
     public static final RegistryEntrySupplier<EntityType<EntityRuney>> RUNEY = reg(EntityType.Builder.of(EntityRuney::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "runey"));
     public static final RegistryEntrySupplier<EntityType<EntityRuneOrb>> STAT_BONUS = reg(EntityType.Builder.of(EntityRuneOrb::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "rune_orb"));

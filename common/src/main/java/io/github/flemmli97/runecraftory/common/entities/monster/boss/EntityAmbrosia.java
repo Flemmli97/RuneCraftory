@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 
 import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
-import io.github.flemmli97.runecraftory.common.entities.DelayedAttacker;
+import io.github.flemmli97.runecraftory.common.entities.MobAttackExt;
 import io.github.flemmli97.runecraftory.common.entities.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.MoveToTargetAttackRunner;
@@ -35,7 +35,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.List;
 import java.util.function.BiConsumer;
 
-public class EntityAmbrosia extends BossMonster implements DelayedAttacker {
+public class EntityAmbrosia extends BossMonster implements MobAttackExt {
 
     public static final AnimatedAction KICK_1 = new AnimatedAction(12, 6, "kick_1");
     public static final AnimatedAction KICK_2 = new AnimatedAction(12, 6, "kick_2");

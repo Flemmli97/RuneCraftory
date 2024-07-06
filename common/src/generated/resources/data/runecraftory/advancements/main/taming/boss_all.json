@@ -105,6 +105,26 @@
           "type": "runecraftory:grimoire"
         }
       }
+    },
+    "runecraftory:sano": {
+      "trigger": "runecraftory:tame_monster",
+      "conditions": {
+        "amount": 1,
+        "bosses": false,
+        "entity": {
+          "type": "runecraftory:sano"
+        }
+      }
+    },
+    "runecraftory:uno": {
+      "trigger": "runecraftory:tame_monster",
+      "conditions": {
+        "amount": 1,
+        "bosses": false,
+        "entity": {
+          "type": "runecraftory:uno"
+        }
+      }
     }
   },
   "requirements": [
@@ -134,6 +154,12 @@
     ],
     [
       "runecraftory:grimoire"
+    ],
+    [
+      "runecraftory:sano"
+    ],
+    [
+      "runecraftory:uno"
     ]
   ]
 }

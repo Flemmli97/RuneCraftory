@@ -6,9 +6,7 @@ import io.github.flemmli97.runecraftory.common.entities.ai.AirWanderGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.NearestTargetHorizontal;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.FloatingFlyNavigator;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityWaterLaser;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
-import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
@@ -118,17 +116,7 @@ public class EntitySkyFish extends BaseMonster {
             }
         } else if (anim.is(SWIPE)) {
             if (anim.canAttack()) {
-                if (EntityUtils.sealed(this))
-                    return;
-                EntityWaterLaser laser = new EntityWaterLaser(this.level, this, -4).setMaxTicks(10);
-                Vec3 dir;
-                if (this.getTarget() != null) {
-                    dir = this.getTarget().getEyePosition(1).subtract(this.position());
-                } else {
-                    dir = this.getLookAngle();
-                }
-                laser.setRotationToDirWithOffset(dir.x(), dir.y(), dir.z(), 0, 20);
-                this.level.addFreshEntity(laser);
+                ModSpells.WATER_SWIPE.get().use(this);
             }
         } else
             super.handleAttack(anim);

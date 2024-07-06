@@ -38,6 +38,7 @@ public class ModelGrimoire<T extends EntityGrimoire> extends EntityModel<T> impl
     protected final BlockBenchAnimations anim;
 
     public ModelPartHandler.ModelPartExtended body;
+    public ModelPartHandler.ModelPartExtended body2;
     public ModelPartHandler.ModelPartExtended head;
     public ModelPartHandler.ModelPartExtended ridingPosition;
 
@@ -47,6 +48,7 @@ public class ModelGrimoire<T extends EntityGrimoire> extends EntityModel<T> impl
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "grimoire"));
         this.head = this.model.getPart("head");
         this.body = this.model.getPart("body");
+        this.body2 = this.model.getPart("body2");
         this.ridingPosition = this.model.getPart("ridingPos");
     }
 
@@ -213,6 +215,7 @@ public class ModelGrimoire<T extends EntityGrimoire> extends EntityModel<T> impl
             EntityModel<?> model = lR.getModel();
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.body.translateAndRotate(poseStack);
+                this.body2.translateAndRotate(poseStack);
                 this.ridingPosition.translateAndRotate(poseStack);
                 ClientHandlers.translateRider(entityRenderer, rider, model, poseStack);
                 return true;

@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
-import io.github.flemmli97.runecraftory.common.entities.DelayedAttacker;
+import io.github.flemmli97.runecraftory.common.entities.MobAttackExt;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityStatusBall;
 import io.github.flemmli97.runecraftory.common.entities.misc.RafflesiaBreathSummoner;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
@@ -31,7 +31,7 @@ public class RafflesiaBreathSpell extends Spell {
         Vec3 target = position.add(entity.getLookAngle().scale(dirScale));
         if (entity instanceof Mob mob) {
             Vec3 delayedPos;
-            if (mob instanceof DelayedAttacker delayed && (delayedPos = delayed.targetPosition(summoner.position())) != null) {
+            if (mob instanceof MobAttackExt delayed && (delayedPos = delayed.targetPosition(summoner.position())) != null) {
                 target = delayedPos;
             } else if (mob.getTarget() != null) {
                 target = EntityUtil.getStraightProjectileTarget(position, mob.getTarget());

@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
-import io.github.flemmli97.runecraftory.common.entities.DelayedAttacker;
+import io.github.flemmli97.runecraftory.common.entities.MobAttackExt;
 import io.github.flemmli97.runecraftory.common.entities.misc.RafflesiaCircleSummoner;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import net.minecraft.server.level.ServerLevel;
@@ -23,7 +23,7 @@ public class RafflesiaCircleSpell extends Spell {
         Vec3 dir = entity.getLookAngle().scale(dirScale);
         if (entity instanceof Mob mob) {
             Vec3 delayedPos;
-            if (mob instanceof DelayedAttacker delayed && (delayedPos = delayed.targetPosition(summoner.position())) != null) {
+            if (mob instanceof MobAttackExt delayed && (delayedPos = delayed.targetPosition(summoner.position())) != null) {
                 dir = delayedPos.subtract(position.x, delayedPos.y, position.z).normalize().scale(dirScale);
             } else if (mob.getTarget() != null) {
                 dir = mob.getTarget().getEyePosition().subtract(position).normalize().scale(dirScale);

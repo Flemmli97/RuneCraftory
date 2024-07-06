@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
-import io.github.flemmli97.runecraftory.common.entities.DelayedAttacker;
+import io.github.flemmli97.runecraftory.common.entities.MobAttackExt;
 import io.github.flemmli97.runecraftory.common.entities.misc.ElementBallBarrageSummoner;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
@@ -31,7 +31,7 @@ public class ElementBallBarrageSpell extends Spell {
         Vec3 target = eye.add(entity.getLookAngle().scale(dirScale));
         if (entity instanceof Mob mob) {
             Vec3 delayedPos;
-            if (mob instanceof DelayedAttacker delayed && (delayedPos = delayed.targetPosition(summoner.position())) != null) {
+            if (mob instanceof MobAttackExt delayed && (delayedPos = delayed.targetPosition(summoner.position())) != null) {
                 target = delayedPos;
             } else if (mob.getTarget() != null) {
                 target = EntityUtil.getStraightProjectileTarget(eye, mob.getTarget());

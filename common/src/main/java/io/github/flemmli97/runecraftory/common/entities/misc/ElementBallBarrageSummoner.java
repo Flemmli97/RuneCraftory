@@ -67,7 +67,7 @@ public class ElementBallBarrageSummoner extends ProjectileSummonHelperEntity {
 
     @Override
     protected void summonProjectiles() {
-        EntityBaseSpellBall spellBall = new EntityBaseSpellBall(this.level, this.getOwner(), this.element);
+        EntityElementalBall spellBall = new EntityElementalBall(this.level, this.getOwner(), this.element);
         spellBall.withMaxLivingTicks(40);
         spellBall.setDamageMultiplier(this.damageMultiplier);
         spellBall.setPos(spellBall.getX() + this.random.nextFloat() * 1.5 - 0.75, spellBall.getY() + this.random.nextFloat() * 0.05 - 0.1, spellBall.getZ() + this.random.nextFloat() * 1.5 - 0.75);

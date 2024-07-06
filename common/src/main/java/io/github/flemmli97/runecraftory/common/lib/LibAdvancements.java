@@ -59,6 +59,8 @@ public class LibAdvancements {
     public static final ResourceLocation AMBROSIA = progression("path_4/ambrosia");
     public static final ResourceLocation THUNDERBOLT = progression("path_4/thunderbolt");
     public static final ResourceLocation MARIONETTA = progression("path_4/marionetta");
+    public static final ResourceLocation SANO = progression("path_4/sano");
+    public static final ResourceLocation UNO = progression("path_4/uno");
 
     private static ResourceLocation main(String id) {
         return new ResourceLocation(RuneCraftory.MODID, "main/" + id);

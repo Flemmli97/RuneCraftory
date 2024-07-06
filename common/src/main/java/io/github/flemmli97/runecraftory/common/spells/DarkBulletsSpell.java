@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
-import io.github.flemmli97.runecraftory.common.entities.DelayedAttacker;
+import io.github.flemmli97.runecraftory.common.entities.MobAttackExt;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityDarkBulletSummoner;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
@@ -20,7 +20,7 @@ public class DarkBulletsSpell extends Spell {
         EntityDarkBulletSummoner summoner = new EntityDarkBulletSummoner(level, entity);
         summoner.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.7f));
         Vec3 delayedPos;
-        if (entity instanceof DelayedAttacker attacker && (delayedPos = attacker.targetPosition(summoner.position())) != null) {
+        if (entity instanceof MobAttackExt attacker && (delayedPos = attacker.targetPosition(summoner.position())) != null) {
             summoner.setTarget(delayedPos.x(), delayedPos.y(), delayedPos.z());
         } else if (entity instanceof Mob mob && mob.getTarget() != null) {
             Vec3 target = EntityUtil.getStraightProjectileTarget(summoner.position(), mob.getTarget());

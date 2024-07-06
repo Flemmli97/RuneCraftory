@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
-import io.github.flemmli97.runecraftory.common.entities.DelayedAttacker;
+import io.github.flemmli97.runecraftory.common.entities.MobAttackExt;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityWaterLaser;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
@@ -26,7 +26,7 @@ public class WaterLaserSpell extends Spell {
         laser.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.95f));
         if (entity instanceof Mob mob) {
             Vec3 delayedPos;
-            if (entity instanceof DelayedAttacker attacker && (delayedPos = attacker.targetPosition(laser.position())) != null) {
+            if (entity instanceof MobAttackExt attacker && (delayedPos = attacker.targetPosition(laser.position())) != null) {
                 laser.setRotationTo(delayedPos.x(), delayedPos.y(), delayedPos.z(), 0);
             } else if (mob.getTarget() != null) {
                 LivingEntity target = mob.getTarget();

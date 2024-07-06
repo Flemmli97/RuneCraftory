@@ -46,6 +46,7 @@ import net.minecraft.world.level.block.Blocks;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.HashSet;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class AdvancementGen implements DataProvider {
@@ -109,6 +110,8 @@ public class AdvancementGen implements DataProvider {
         Advancement ambrosia = bossProgression(ModEntities.AMBROSIA, cons, LibAdvancements.AMBROSIA, rootProgression);
         Advancement thunderbolt = bossProgression(ModEntities.THUNDERBOLT, cons, LibAdvancements.THUNDERBOLT, ambrosia);
         Advancement marionetta = bossProgression(ModEntities.MARIONETTA, cons, LibAdvancements.MARIONETTA, thunderbolt);
+        Advancement sano = bossProgression(ModEntities.SANO, cons, LibAdvancements.SANO, marionetta);
+        Advancement uno = bossProgression(ModEntities.UNO, cons, LibAdvancements.UNO, marionetta);
     }
 
     private static ItemStack glowing(ItemLike itemLike) {

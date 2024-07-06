@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia;
 
 import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
-import io.github.flemmli97.runecraftory.common.entities.DelayedAttacker;
+import io.github.flemmli97.runecraftory.common.entities.MobAttackExt;
 import io.github.flemmli97.runecraftory.common.entities.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
@@ -49,7 +49,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 
-public class EntityRafflesia extends BossMonster implements DelayedAttacker {
+public class EntityRafflesia extends BossMonster implements MobAttackExt {
 
     private static final EntityDataAccessor<Optional<UUID>> HORSE_TAIL = SynchedEntityData.defineId(EntityRafflesia.class, EntityDataSerializers.OPTIONAL_UUID);
     private static final EntityDataAccessor<Optional<UUID>> FLOWER = SynchedEntityData.defineId(EntityRafflesia.class, EntityDataSerializers.OPTIONAL_UUID);

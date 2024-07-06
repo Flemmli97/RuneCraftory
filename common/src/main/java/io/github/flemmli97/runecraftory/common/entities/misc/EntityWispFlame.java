@@ -23,6 +23,7 @@ public class EntityWispFlame extends BaseDamageCloud {
     private static final EntityDataAccessor<Boolean> STATIONARY = SynchedEntityData.defineId(EntityWispFlame.class, EntityDataSerializers.BOOLEAN);
 
     private EnumElement element = EnumElement.NONE;
+    private boolean piercing = true;
 
     public EntityWispFlame(EntityType<? extends EntityWispFlame> type, Level level) {
         super(type, level);
@@ -79,6 +80,10 @@ public class EntityWispFlame extends BaseDamageCloud {
         this.entityData.set(STATIONARY, stationary);
     }
 
+    public void setPiercing(boolean piercing) {
+        this.piercing = piercing;
+    }
+
     @Override
     public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
         if (key.equals(ELEMENT_DATA)) {
@@ -115,6 +120,8 @@ public class EntityWispFlame extends BaseDamageCloud {
     protected boolean damageEntity(LivingEntity target) {
         if (CombatUtils.damageWithFaintAndCrit(this.getOwner(), target, new CustomDamage.Builder(this, this.getOwner()).magic().noKnockback().hurtResistant(10).element(this.element), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier, null)) {
             target.knockback(0.5, this.getX() - target.getX(), this.getZ() - target.getZ());
+            if (!this.piercing)
+                this.discard();
             return true;
         }
         return false;
@@ -128,6 +135,7 @@ public class EntityWispFlame extends BaseDamageCloud {
         } catch (IllegalArgumentException ignored) {
         }
         this.entityData.set(STATIONARY, compound.getBoolean("Stationary"));
+        this.piercing = compound.getBoolean("Piercing");
     }
 
     @Override
@@ -135,5 +143,6 @@ public class EntityWispFlame extends BaseDamageCloud {
         super.addAdditionalSaveData(compound);
         compound.putString("Type", this.element.toString());
         compound.putBoolean("Stationary", this.entityData.get(STATIONARY));
+        compound.putBoolean("Piercing", this.piercing);
     }
 }

@@ -51,6 +51,7 @@ import io.github.flemmli97.runecraftory.client.model.monster.ModelPommePomme;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelRaccoon;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelRaccoonBerserk;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelRafflesia;
+import io.github.flemmli97.runecraftory.client.model.monster.ModelSanoUno;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelScorpion;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelSkelefang;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelSkyFish;
@@ -102,9 +103,11 @@ import io.github.flemmli97.runecraftory.client.render.projectiles.RenderCards;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderDarkBeam;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderDarkBullet;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderDarkness;
+import io.github.flemmli97.runecraftory.client.render.projectiles.RenderElementBall;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderEnergyOrb;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderFireball;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderFurnitures;
+import io.github.flemmli97.runecraftory.client.render.projectiles.RenderIceTrail;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderMarionettaTrap;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderMobArrow;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderPlate;
@@ -113,7 +116,6 @@ import io.github.flemmli97.runecraftory.client.render.projectiles.RenderRockSpea
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderSmallRaccoonLeaf;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderSpiderWeb;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderSpikes;
-import io.github.flemmli97.runecraftory.client.render.projectiles.RenderStaffBall;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderThrownItem;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderWaterLaser;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderWindBlade;
@@ -328,6 +330,8 @@ public class ClientRegister {
         consumer.register(ModEntities.SKELEFANG.get(), RenderSkelefang::new);
         consumer.register(ModEntities.RAFFLESIA.get(), RenderRafflesia::new);
         registerScaled(consumer, ModEntities.GRIMOIRE.get(), ModelGrimoire::new, ModelGrimoire.LAYER_LOCATION, 1.5f);
+        registerScaled(consumer, ModEntities.SANO.get(), ModelSanoUno::new, ModelSanoUno.LAYER_LOCATION, 2);
+        registerScaled(consumer, ModEntities.UNO.get(), ModelSanoUno::new, ModelSanoUno.LAYER_LOCATION, 2);
 
         consumer.register(ModEntities.NPC.get(), RenderNPC::new);
 
@@ -363,7 +367,7 @@ public class ClientRegister {
         consumer.register(ModEntities.FURNITURE.get(), RenderFurnitures::new);
         consumer.register(ModEntities.TRAP_CHEST.get(), RenderMarionettaTrap::new);
 
-        consumer.register(ModEntities.STAFF_BASE_PROJECTILE.get(), RenderStaffBall::new);
+        consumer.register(ModEntities.ELEMENTAL_BALL.get(), RenderElementBall::new);
         consumer.register(ModEntities.FIRE_BALL.get(), RenderFireball::new);
         consumer.register(ModEntities.EXPLOSION.get(), EmptyRender::new);
         consumer.register(ModEntities.ROCK_SPEAR.get(), RenderRockSpear::new);
@@ -388,6 +392,7 @@ public class ClientRegister {
         consumer.register(ModEntities.POWER_WAVE.get(), EmptyRender::new);
         consumer.register(ModEntities.GUST_ROCK.get(), EmptyRender::new);
         consumer.register(ModEntities.TORNADO.get(), EmptyRender::new);
+        consumer.register(ModEntities.ICE_TRAIL.get(), RenderIceTrail::new);
 
         consumer.register(ModEntities.RUNEY.get(), RenderRuney::new);
         consumer.register(ModEntities.STAT_BONUS.get(), EmptyRender::new);
@@ -491,6 +496,7 @@ public class ClientRegister {
         consumer.accept(ModelSkelefang.LAYER_LOCATION, ModelSkelefang::createBodyLayer);
         consumer.accept(ModelRafflesia.LAYER_LOCATION, ModelRafflesia::createBodyLayer);
         consumer.accept(ModelGrimoire.LAYER_LOCATION, ModelGrimoire::createBodyLayer);
+        consumer.accept(ModelSanoUno.LAYER_LOCATION, ModelSanoUno::createBodyLayer);
 
         consumer.accept(ModelButterfly.LAYER_LOCATION, ModelButterfly::createBodyLayer);
         consumer.accept(ModelWoolyWool.LAYER_LOCATION, ModelWoolyWool::createBodyLayer);

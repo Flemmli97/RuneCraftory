@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityBaseSpellBall;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityElementalBall;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.tenshilib.common.utils.MathUtils;
@@ -29,7 +29,7 @@ public class BaseStaffSpell extends Spell {
             if (element == EnumElement.NONE)
                 return false;
             if (staff.amount == 1) {
-                EntityBaseSpellBall ball = new EntityBaseSpellBall(level, entity, element);
+                EntityElementalBall ball = new EntityElementalBall(level, entity, element);
                 Vec3 look = entity.getLookAngle();
                 ball.shoot(look.x, look.y, look.z, 1, 0);
                 entity.level.addFreshEntity(ball);
@@ -37,7 +37,7 @@ public class BaseStaffSpell extends Spell {
                 for (float offset : OFFSET_TWO) {
                     Vec3 side = MathUtils.rotate(MathUtils.normalY, MathUtils.normalX, -entity.getYRot() * Mth.DEG_TO_RAD);
                     Vec3 newPos = entity.position().add(side.scale(offset)).add(0, entity.getEyeHeight() - 0.1, 0);
-                    EntityBaseSpellBall ball = new EntityBaseSpellBall(level, entity, element);
+                    EntityElementalBall ball = new EntityElementalBall(level, entity, element);
                     Vec3 look = entity.getLookAngle();
                     ball.shoot(look.x, look.y, look.z, 1, 0);
                     ball.setPos(newPos.x, newPos.y, newPos.z);
@@ -47,7 +47,7 @@ public class BaseStaffSpell extends Spell {
                 for (float offset : OFFSET_THREE) {
                     Vec3 side = MathUtils.rotate(MathUtils.normalY, MathUtils.normalX, -entity.getYRot() * Mth.DEG_TO_RAD);
                     Vec3 newPos = entity.position().add(side.scale(offset)).add(0, entity.getEyeHeight() - 0.1, 0);
-                    EntityBaseSpellBall ball = new EntityBaseSpellBall(level, entity, element);
+                    EntityElementalBall ball = new EntityElementalBall(level, entity, element);
                     Vec3 look = entity.getLookAngle();
                     ball.shoot(look.x, look.y, look.z, 1, 0);
                     ball.setPos(newPos.x, newPos.y, newPos.z);

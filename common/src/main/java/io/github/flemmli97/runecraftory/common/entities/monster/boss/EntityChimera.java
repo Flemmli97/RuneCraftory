@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 
 import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
-import io.github.flemmli97.runecraftory.common.entities.DelayedAttacker;
+import io.github.flemmli97.runecraftory.common.entities.MobAttackExt;
 import io.github.flemmli97.runecraftory.common.entities.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.entities.ai.RestrictedWaterAvoidingStrollGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
@@ -42,7 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 
-public class EntityChimera extends BossMonster implements DelayedAttacker {
+public class EntityChimera extends BossMonster implements MobAttackExt {
 
     private static final EntityDataAccessor<Float> LOCKED_YAW = SynchedEntityData.defineId(EntityChimera.class, EntityDataSerializers.FLOAT);
 

@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 
 import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
-import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
 import io.github.flemmli97.runecraftory.common.entities.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.MoveToTargetAttackRunner;
@@ -125,7 +124,7 @@ public class EntityGrimoire extends BossMonster {
             if (!this.level.isClientSide) {
                 if (this.isVehicle()) {
                     this.entityData.set(LOCKED_YAW, this.getControllingPassenger().getYHeadRot());
-                } else if(this.getTarget() != null) {
+                } else if (this.getTarget() != null) {
                     this.lookAt(this.getTarget(), 360, 10);
                     this.entityData.set(LOCKED_YAW, this.getYRot());
                 }
