@@ -97,9 +97,9 @@ public class ModelCluckadoodle<T extends EntityCluckadoodle> extends EntityModel
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.model.resetPoses();
-        this.head.yRot += netHeadYaw * Mth.DEG_TO_RAD * 0.25f;
+        this.head.yRot += (netHeadYaw % 360) * Mth.DEG_TO_RAD * 0.25f;
         this.head.xRot += headPitch * Mth.DEG_TO_RAD * 0.25f;
-        this.neck.yRot += netHeadYaw * Mth.DEG_TO_RAD * 0.25f;
+        this.neck.yRot += (netHeadYaw % 360) * Mth.DEG_TO_RAD * 0.25f;
         this.neck.xRot += headPitch * Mth.DEG_TO_RAD * 0.25f;
         float partialTicks = Minecraft.getInstance().getFrameTime();
         if (entity.deathTime <= 0 && !entity.playDeath()) {

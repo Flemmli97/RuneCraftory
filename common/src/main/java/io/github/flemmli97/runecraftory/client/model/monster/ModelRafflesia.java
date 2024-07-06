@@ -207,7 +207,7 @@ public class ModelRafflesia<T extends EntityRafflesia> extends EntityModel<T> im
         this.model.resetPoses();
         float partialTicks = Minecraft.getInstance().getFrameTime();
         this.mainRoot.yRot = (Mth.lerp(partialTicks, entity.yHeadRotO, entity.yHeadRot) - entity.getSpawnDirection().toYRot()) * Mth.DEG_TO_RAD;
-        this.head.yRot += netHeadYaw * Mth.DEG_TO_RAD * 0.3f;
+        this.head.yRot += (netHeadYaw % 360) * Mth.DEG_TO_RAD * 0.3f;
         AnimatedAction current = entity.getAnimationHandler().getAnimation();
         if (entity.deathTime <= 0 && !entity.playDeath() && (current == null || !current.getAnimationClient().equals("breath"))) {
             this.anim.doAnimation(this, "idle", entity.tickCount, partialTicks);

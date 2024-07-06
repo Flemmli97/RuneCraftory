@@ -130,9 +130,9 @@ public class ModelThunderbolt<T extends EntityThunderbolt> extends EntityModel<T
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.model.resetPoses();
         AnimatedAction anim = entity.getAnimationHandler().getAnimation();
-        this.head.yRot += netHeadYaw * Mth.DEG_TO_RAD * 0.15f;
+        this.head.yRot += (netHeadYaw % 360) * Mth.DEG_TO_RAD * 0.15f;
         this.head.xRot += headPitch * Mth.DEG_TO_RAD * 0.15f;
-        this.neck.yRot += netHeadYaw * Mth.DEG_TO_RAD * 0.15f;
+        this.neck.yRot += (netHeadYaw % 360) * Mth.DEG_TO_RAD * 0.15f;
         this.neck.xRot += headPitch * Mth.DEG_TO_RAD * 0.15f;
 
         float partialTicks = Minecraft.getInstance().getFrameTime();

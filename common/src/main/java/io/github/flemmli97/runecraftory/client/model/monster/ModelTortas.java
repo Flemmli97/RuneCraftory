@@ -111,7 +111,7 @@ public class ModelTortas<T extends EntityTortas> extends EntityModel<T> implemen
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.model.resetPoses();
-        this.neck.yRot += netHeadYaw * Mth.DEG_TO_RAD * 0.1f;
+        this.neck.yRot += (netHeadYaw % 360) * Mth.DEG_TO_RAD * 0.1f;
         this.neck.xRot += headPitch * Mth.DEG_TO_RAD * 0.1f;
         float partialTicks = Minecraft.getInstance().getFrameTime();
         if (entity.deathTime <= 0 && !entity.playDeath()) {

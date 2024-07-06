@@ -63,6 +63,12 @@ public class SpawnEggScreen extends Screen {
     }
 
     @Override
+    public void tick() {
+        super.tick();
+        this.entity.tickCount++;
+    }
+
+    @Override
     public void render(PoseStack stack, int mouseX, int mouseY, float partialTick) {
         this.fillGradient(stack, this.leftPos, this.topPos, this.leftPos + this.sizeX, this.topPos + this.sizeY, -1072689136, -804253680);
         int xPadding = 16;

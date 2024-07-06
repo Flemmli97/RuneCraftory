@@ -107,7 +107,7 @@ public class ModelTroll<T extends EntityTroll> extends EntityModel<T> implements
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.model.resetPoses();
         AnimatedAction anim = entity.getAnimationHandler().getAnimation();
-        this.head.yRot += netHeadYaw * Mth.DEG_TO_RAD * 0.5f;
+        this.head.yRot += (netHeadYaw % 360) * Mth.DEG_TO_RAD * 0.5f;
         this.head.xRot += headPitch * Mth.DEG_TO_RAD * 0.5f;
         float partialTicks = Minecraft.getInstance().getFrameTime();
         if (entity.deathTime <= 0 && !entity.playDeath()) {

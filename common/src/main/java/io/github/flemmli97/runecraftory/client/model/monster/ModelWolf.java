@@ -109,7 +109,7 @@ public class ModelWolf<T extends EntityWolf> extends EntityModel<T> implements E
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.model.resetPoses();
-        this.upper.yRot += netHeadYaw * Mth.DEG_TO_RAD * 0.5f;
+        this.upper.yRot += (netHeadYaw % 360) * Mth.DEG_TO_RAD * 0.5f;
         this.upper.xRot += headPitch * Mth.DEG_TO_RAD * 0.5f;
         float partialTicks = Minecraft.getInstance().getFrameTime();
         if (entity.deathTime <= 0 && !entity.playDeath()) {
