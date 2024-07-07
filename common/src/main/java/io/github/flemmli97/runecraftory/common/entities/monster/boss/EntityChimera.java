@@ -174,7 +174,6 @@ public class EntityChimera extends BossMonster implements MobAttackExt {
 
     public EntityChimera(EntityType<? extends EntityChimera> type, Level world) {
         super(type, world);
-        this.bossInfo.setColor(BossEvent.BossBarColor.BLUE);
         if (!world.isClientSide)
             this.goalSelector.addGoal(1, this.attack);
         this.maxUpStep = 1;

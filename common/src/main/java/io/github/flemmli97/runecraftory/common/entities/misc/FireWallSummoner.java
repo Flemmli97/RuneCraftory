@@ -28,7 +28,7 @@ public class FireWallSummoner extends ProjectileSummonHelperEntity {
 
         } else if (this.ticksExisted > 5 && this.ticksExisted % 2 == 0) {
             Vec3 dir = new Vec3(this.targetX, this.targetY, this.targetZ).subtract(this.position()).normalize();
-            EntityWispFlame fire = new EntityWispFlame(this.level, owner, EnumElement.FIRE);
+            EntityElementalTrail fire = new EntityElementalTrail(this.level, owner, EnumElement.FIRE);
             fire.setPos(this.position().add(dir.scale((this.ticksExisted - 2) / 2f * 1)));
             this.playSound(SoundEvents.BLAZE_SHOOT, 1, (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.0f);
             this.level.addFreshEntity(fire);

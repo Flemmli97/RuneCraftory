@@ -110,8 +110,7 @@ public class EntityAmbrosia extends BossMonster implements MobAttackExt {
                     .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.2, 2), e -> 50 + e.getRandom().nextInt(10))), 3),
             WeightedEntry.wrap(MonsterActionUtils.<EntityAmbrosia>nonRepeatableAttack(WAVE)
                     .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 1.5), e -> 20 + e.getRandom().nextInt(10))), 3),
-            WeightedEntry.wrap(MonsterActionUtils.<EntityAmbrosia>nonRepeatableAttack(POLLEN)
-                    .withCondition((goal, target, previous) -> goal.attacker.isEnraged() && !goal.attacker.isAnimEqual(previous, POLLEN))
+            WeightedEntry.wrap(MonsterActionUtils.<EntityAmbrosia>enragedBossAttack(POLLEN)
                     .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 2), e -> 45 + e.getRandom().nextInt(10))), 3)
     );
     private static final List<WeightedEntry.Wrapper<IdleAction<EntityAmbrosia>>> IDLE_ACTIONS = List.of(
@@ -244,14 +243,12 @@ public class EntityAmbrosia extends BossMonster implements MobAttackExt {
     }
 
     @Override
-    public boolean isAnimEqual(String prev, AnimatedAction other) {
-        if (other == null)
-            return false;
+    public boolean allowAnimation(String prev, AnimatedAction other) {
         if (prev.equals(POLLEN_2.getID()))
-            return POLLEN.is(other);
+            return !POLLEN.is(other);
         if (prev.equals(KICK_3.getID()))
-            return KICK_1.is(other);
-        return prev.equals(other.getID());
+            return !KICK_1.is(other);
+        return super.allowAnimation(prev, other);
     }
 
     public AnimatedAction chainAnim(AnimatedAction anim) {

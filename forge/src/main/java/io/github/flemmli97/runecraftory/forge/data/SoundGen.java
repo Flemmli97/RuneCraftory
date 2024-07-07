@@ -41,6 +41,8 @@ public class SoundGen extends SoundDefinitionsProvider {
         this.addBgmWith(ModSounds.SKELEFANG_FIGHT.get(), bgm5);
         this.addBgmWith(ModSounds.RAFFLESIA_FIGHT.get(), bgm3);
         this.addBgmWith(ModSounds.THUNDERBOLT_FIGHT.get(), bgm4);
+        this.addBgmWith(ModSounds.GRIMOIRE_FIGHT.get(), bgm4);
+        this.addBgmWith(ModSounds.SANO_UNO_FIGHT.get(), bgm4);
     }
 
     private void add(SoundEvent event) {

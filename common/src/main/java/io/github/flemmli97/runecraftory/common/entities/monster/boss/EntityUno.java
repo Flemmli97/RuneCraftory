@@ -89,7 +89,7 @@ public class EntityUno extends BossMonster implements MobAttackExt {
 
     public EntityUno(EntityType<? extends EntityUno> type, Level world) {
         super(type, world);
-        this.lookControl = new EntitySano.NonLookControl(this);
+        this.lookControl = new NonLookControl(this);
         if (!world.isClientSide)
             this.goalSelector.addGoal(1, this.attack);
     }
@@ -97,7 +97,7 @@ public class EntityUno extends BossMonster implements MobAttackExt {
     @Override
     public RunecraftoryBossbar createBossBar() {
         return new RunecraftoryBossbar(null, this.getDisplayName(), BossEvent.BossBarColor.YELLOW, BossEvent.BossBarOverlay.PROGRESS)
-                .setMusic(ModSounds.AMBROSIA_FIGHT.get());
+                .setMusic(ModSounds.SANO_UNO_FIGHT.get());
     }
 
     @Override

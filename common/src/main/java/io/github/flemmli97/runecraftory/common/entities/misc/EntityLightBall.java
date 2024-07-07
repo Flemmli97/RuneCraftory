@@ -20,16 +20,11 @@ public class EntityLightBall extends BaseDamageCloud {
 
     private Type lightType = Type.LONG;
     private Vec3 spawnPos;
-    private int angleOffset;
+    private float angleOffset;
     private int firstDmg = -1;
 
     public EntityLightBall(EntityType<? extends EntityLightBall> type, Level level) {
         super(type, level);
-    }
-
-    public EntityLightBall(Level level, double x, double y, double z) {
-        super(ModEntities.LIGHT_BALL.get(), level, x, y, z);
-        this.setRadius(0.8f);
     }
 
     public EntityLightBall(Level level, LivingEntity thrower) {
@@ -49,19 +44,20 @@ public class EntityLightBall extends BaseDamageCloud {
         }
     }
 
-    public static void createQuadLights(Level level, LivingEntity thrower, Type type, float dmgMod) {
+    public static void createLights(Level level, LivingEntity thrower, Type type, float dmgMod, int amount) {
         if (level.isClientSide)
             return;
-        for (int i = 0; i < 4; i++) {
+        float angle = 360f / amount;
+        for (int i = 0; i < amount; i++) {
             EntityLightBall ball = new EntityLightBall(level, thrower);
             ball.setDamageMultiplier(dmgMod);
             ball.lightType = type;
-            ball.setAngleOffset(90 * i);
+            ball.setAngleOffset(angle * i);
             level.addFreshEntity(ball);
         }
     }
 
-    public void setAngleOffset(int angleOffset) {
+    public void setAngleOffset(float angleOffset) {
         this.angleOffset = angleOffset;
     }
 
@@ -74,7 +70,8 @@ public class EntityLightBall extends BaseDamageCloud {
     public int livingTickMax() {
         return switch (this.lightType) {
             case EXPAND -> 40;
-            case SHORT -> 140;
+            case PIERCING_SHORT -> 140;
+            case PIERCING_LONG -> 240;
             case LONG, FRONT -> 144000;
         };
     }
@@ -109,7 +106,7 @@ public class EntityLightBall extends BaseDamageCloud {
                         look = new Vec3(look.x, 0, look.z).scale(1.2);
                         yield MathUtils.rotate(0, 1, 0, look.x, 0, look.z, Mth.DEG_TO_RAD * this.angleOffset);
                     }
-                    case LONG, SHORT ->
+                    case LONG, PIERCING_SHORT, PIERCING_LONG ->
                             MathUtils.rotate(0, 1, 0, owner.getBbWidth() + 0.5, 0, 0, Mth.DEG_TO_RAD * (13 * this.livingTicks + this.angleOffset));
                     case EXPAND ->
                             MathUtils.rotate(0, 1, 0, owner.getBbWidth() + this.livingTicks * this.livingTicks * 0.01, 0, 0, Mth.DEG_TO_RAD * (13 * this.livingTicks + this.angleOffset));
@@ -145,7 +142,7 @@ public class EntityLightBall extends BaseDamageCloud {
         } catch (IllegalArgumentException e) {
             this.lightType = Type.LONG;
         }
-        this.angleOffset = compound.getInt("AngleOffset");
+        this.angleOffset = compound.getFloat("AngleOffset");
         if (compound.contains("SpawnX"))
             this.spawnPos = new Vec3(compound.getDouble("SpawnX"), compound.getDouble("SpawnY"), compound.getDouble("SpawnZ"));
     }
@@ -154,7 +151,7 @@ public class EntityLightBall extends BaseDamageCloud {
     protected void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putString("LightType", this.lightType.toString());
-        compound.putInt("AngleOffset", this.angleOffset);
+        compound.putFloat("AngleOffset", this.angleOffset);
         if (this.spawnPos != null) {
             compound.putDouble("SpawnX", this.spawnPos.x);
             compound.putDouble("SpawnY", this.spawnPos.y);
@@ -163,7 +160,8 @@ public class EntityLightBall extends BaseDamageCloud {
     }
 
     public enum Type {
-        SHORT,
+        PIERCING_SHORT,
+        PIERCING_LONG,
         LONG,
         FRONT,
         EXPAND

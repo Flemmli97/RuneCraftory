@@ -100,7 +100,7 @@ public class EntitySano extends BossMonster implements MobAttackExt {
     @Override
     public RunecraftoryBossbar createBossBar() {
         return new RunecraftoryBossbar(null, this.getDisplayName(), BossEvent.BossBarColor.YELLOW, BossEvent.BossBarOverlay.PROGRESS)
-                .setMusic(ModSounds.AMBROSIA_FIGHT.get());
+                .setMusic(ModSounds.SANO_UNO_FIGHT.get());
     }
 
     @Override

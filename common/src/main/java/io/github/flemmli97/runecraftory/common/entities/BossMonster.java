@@ -305,6 +305,13 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
         return this.isEnraged() ? 0 : orig;
     }
 
+    @Override
+    public boolean allowAnimation(String prev, AnimatedAction other) {
+        if (!prev.equals(other.getID()))
+            return true;
+        return super.allowAnimation(prev, other);
+    }
+
     public void playAngrySound() {
         this.playSound(SoundEvents.PARROT_IMITATE_ENDER_DRAGON, 2f, (this.getRandom().nextFloat() - this.getRandom().nextFloat()) * 0.2f + 0.8f);
     }

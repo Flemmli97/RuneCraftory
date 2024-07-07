@@ -1795,10 +1795,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         return this.hitPred;
     }
 
-    public boolean isAnimEqual(String prev, AnimatedAction other) {
-        if (other == null)
-            return false;
-        return prev.equals(other.getID());
+    public boolean allowAnimation(String prev, AnimatedAction other) {
+        return true;
     }
 
     public enum Behaviour {

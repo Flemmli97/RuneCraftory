@@ -46,7 +46,6 @@ import net.minecraft.world.level.block.Blocks;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.HashSet;
-import java.util.List;
 import java.util.function.Consumer;
 
 public class AdvancementGen implements DataProvider {
@@ -110,8 +109,23 @@ public class AdvancementGen implements DataProvider {
         Advancement ambrosia = bossProgression(ModEntities.AMBROSIA, cons, LibAdvancements.AMBROSIA, rootProgression);
         Advancement thunderbolt = bossProgression(ModEntities.THUNDERBOLT, cons, LibAdvancements.THUNDERBOLT, ambrosia);
         Advancement marionetta = bossProgression(ModEntities.MARIONETTA, cons, LibAdvancements.MARIONETTA, thunderbolt);
-        Advancement sano = bossProgression(ModEntities.SANO, cons, LibAdvancements.SANO, marionetta);
-        Advancement uno = bossProgression(ModEntities.UNO, cons, LibAdvancements.UNO, marionetta);
+        Advancement.Builder builder = Advancement.Builder.advancement().display(SpawnEgg.fromType(ModEntities.SANO.get()).get(),
+                        new TranslatableComponent("runecraftory.advancements.progression.boss.sano_uno.title"),
+                        new TranslatableComponent("runecraftory.advancements.progression.boss.sano_uno.description"),
+                        new ResourceLocation("textures/block/dirt.png"), FrameType.TASK, true, true, false)
+                .addCriterion("boss1", new KilledTrigger.TriggerInstance(
+                        CriteriaTriggers.PLAYER_KILLED_ENTITY.getId(),
+                        EntityPredicate.Composite.wrap(LibAdvancements.playerAdvancementCheck(marionetta.getId()).build()),
+                        EntityPredicate.Composite.wrap(EntityPredicate.Builder.entity().of(ModEntities.SANO.get()).build()),
+                        DamageSourcePredicate.ANY))
+                .addCriterion("boss2", new KilledTrigger.TriggerInstance(
+                        CriteriaTriggers.PLAYER_KILLED_ENTITY.getId(),
+                        EntityPredicate.Composite.wrap(LibAdvancements.playerAdvancementCheck(marionetta.getId()).build()),
+                        EntityPredicate.Composite.wrap(EntityPredicate.Builder.entity().of(ModEntities.UNO.get()).build()),
+                        DamageSourcePredicate.ANY))
+                .parent(marionetta);
+        Advancement sano_uno = builder.save(cons, LibAdvancements.SANO_UNO.toString());
+        Advancement sarcophagus = bossProgression(ModEntities.SARCOPHAGUS, cons, LibAdvancements.SARCOPHAGUS, sano_uno);
     }
 
     private static ItemStack glowing(ItemLike itemLike) {

@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.entities.ai.animated;
 
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
+import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
@@ -23,7 +24,13 @@ public class MonsterActionUtils {
     public static <T extends BaseMonster> GoalAttackAction<T> nonRepeatableAttack(AnimatedAction anim) {
         return new GoalAttackAction<T>(anim)
                 .cooldown(e -> e.animationCooldown(anim))
-                .withCondition((goal, target, previous) -> !goal.attacker.isAnimEqual(previous, anim));
+                .withCondition((goal, target, previous) -> goal.attacker.allowAnimation(previous, anim));
+    }
+
+    public static <T extends BossMonster> GoalAttackAction<T> enragedBossAttack(AnimatedAction anim) {
+        return new GoalAttackAction<T>(anim)
+                .cooldown(e -> e.animationCooldown(anim))
+                .withCondition((goal, target, previous) -> goal.attacker.isEnraged() && goal.attacker.allowAnimation(previous, anim));
     }
 
     public static <T extends BaseMonster> GoalAttackAction.Condition<T> inAABBRange(AnimatedAction anim) {

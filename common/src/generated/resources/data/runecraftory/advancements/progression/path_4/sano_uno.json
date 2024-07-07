@@ -5,10 +5,10 @@
       "item": "runecraftory:sano_spawn_egg"
     },
     "title": {
-      "translate": "runecraftory.advancements.progression.boss.sano.title"
+      "translate": "runecraftory.advancements.progression.boss.sano_uno.title"
     },
     "description": {
-      "translate": "runecraftory.advancements.progression.boss.sano.description"
+      "translate": "runecraftory.advancements.progression.boss.sano_uno.description"
     },
     "frame": "task",
     "show_toast": true,
@@ -17,7 +17,7 @@
     "background": "minecraft:textures/block/dirt.png"
   },
   "criteria": {
-    "boss": {
+    "boss1": {
       "trigger": "minecraft:player_killed_entity",
       "conditions": {
         "player": [
@@ -43,11 +43,41 @@
           }
         ]
       }
+    },
+    "boss2": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "player": {
+                "advancements": {
+                  "runecraftory:progression/path_4/marionetta": true
+                }
+              }
+            },
+            "entity": "this"
+          }
+        ],
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "type": "runecraftory:uno"
+            },
+            "entity": "this"
+          }
+        ]
+      }
     }
   },
   "requirements": [
     [
-      "boss"
+      "boss1"
+    ],
+    [
+      "boss2"
     ]
   ]
 }

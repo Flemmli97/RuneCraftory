@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityWispFlame;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityElementalTrail;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
@@ -22,7 +22,8 @@ public class ElementalSpell extends Spell {
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
-        EntityWispFlame flame = new EntityWispFlame(level, entity, this.element);
+        EntityElementalTrail flame = new EntityElementalTrail(level, entity, this.element);
+        flame.knockback();
         flame.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.9f));
         if (this.element == EnumElement.DARK) {
             if (entity instanceof Mob mob && mob.getTarget() != null)

@@ -63,6 +63,7 @@ public class ModSounds {
     public static final RegistryEntrySupplier<SoundEvent> SPELL_GENERIC_WIND_LONG = register("spell.generic.wind_long");
     public static final RegistryEntrySupplier<SoundEvent> SPELL_NAIVE_BLADE = register("spell.naive_blade");
     public static final RegistryEntrySupplier<SoundEvent> SPELL_STRAIGHT_PUNCH = register("spell.straight_punch");
+    public static final RegistryEntrySupplier<SoundEvent> SPELL_STARFALL_AMBIENT = register("spell.starfall");
 
     public static final RegistryEntrySupplier<SoundEvent> AMBROSIA_FIGHT = registerBgm("bgm.ambrosia_fight");
     public static final RegistryEntrySupplier<SoundEvent> CHIMERA_FIGHT = registerBgm("bgm.chimera_fight");
@@ -73,6 +74,8 @@ public class ModSounds {
     public static final RegistryEntrySupplier<SoundEvent> RAFFLESIA_FIGHT = registerBgm("bgm.rafflesia_fight");
     public static final RegistryEntrySupplier<SoundEvent> THUNDERBOLT_FIGHT = registerBgm("bgm.thunderbolt_fight");
     public static final RegistryEntrySupplier<SoundEvent> GRIMOIRE_FIGHT = registerBgm("bgm.grimoire_fight");
+    public static final RegistryEntrySupplier<SoundEvent> SANO_UNO_FIGHT = registerBgm("bgm.sano_uno_fight");
+    public static final RegistryEntrySupplier<SoundEvent> SARCOPHAGUS_FIGHT = registerBgm("bgm.sarcophagus_fight");
 
     private static RegistryEntrySupplier<SoundEvent> register(String name) {
         return SOUND_EVENTS.register(name, () -> new SoundEvent(new ResourceLocation(RuneCraftory.MODID, name)));

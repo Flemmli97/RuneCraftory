@@ -125,6 +125,16 @@
           "type": "runecraftory:uno"
         }
       }
+    },
+    "runecraftory:sarcophagus": {
+      "trigger": "runecraftory:tame_monster",
+      "conditions": {
+        "amount": 1,
+        "bosses": false,
+        "entity": {
+          "type": "runecraftory:sarcophagus"
+        }
+      }
     }
   },
   "requirements": [
@@ -160,6 +170,9 @@
     ],
     [
       "runecraftory:uno"
+    ],
+    [
+      "runecraftory:sarcophagus"
     ]
   ]
 }

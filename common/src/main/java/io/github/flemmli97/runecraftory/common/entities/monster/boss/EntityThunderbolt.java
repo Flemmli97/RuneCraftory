@@ -168,20 +168,18 @@ public class EntityThunderbolt extends BossMonster {
             WeightedEntry.wrap(MonsterActionUtils.<EntityThunderbolt>nonRepeatableAttack(BACK_KICK)
                     .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.2), e -> 35 + e.getRandom().nextInt(15))), 5),
             WeightedEntry.wrap(MonsterActionUtils.<EntityThunderbolt>nonRepeatableAttack(LASER_X5)
-                    .withCondition((goal, target, previous) -> !goal.attacker.isEnraged() && !goal.attacker.isAnimEqual(previous, LASER_X5))
+                    .withCondition((goal, target, previous) -> !goal.attacker.isEnraged() && goal.attacker.allowAnimation(previous, LASER_X5))
                     .prepare(() -> new TimedWrappedRunner<>(new MoveAwayRunner<>(2, 1.2, 4), e -> 35 + e.getRandom().nextInt(15))), 5),
             WeightedEntry.wrap(MonsterActionUtils.<EntityThunderbolt>nonRepeatableAttack(STOMP)
                     .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.2), e -> 35 + e.getRandom().nextInt(15))), 6),
             WeightedEntry.wrap(MonsterActionUtils.<EntityThunderbolt>nonRepeatableAttack(HORN_ATTACK)
                     .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.2), e -> 35 + e.getRandom().nextInt(15))), 5),
             WeightedEntry.wrap(MonsterActionUtils.<EntityThunderbolt>nonRepeatableAttack(CHARGE)
-                    .withCondition((goal, target, previous) -> !goal.attacker.isAnimEqual(previous, CHARGE))
+                    .withCondition((goal, target, previous) -> goal.attacker.allowAnimation(previous, CHARGE))
                     .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.2), e -> 35 + e.getRandom().nextInt(15))), 5),
-            WeightedEntry.wrap(MonsterActionUtils.<EntityThunderbolt>nonRepeatableAttack(LASER_AOE)
-                    .withCondition((goal, target, previous) -> goal.attacker.isEnraged() && !goal.attacker.isAnimEqual(previous, LASER_AOE))
+            WeightedEntry.wrap(MonsterActionUtils.<EntityThunderbolt>enragedBossAttack(LASER_AOE)
                     .prepare(() -> new TimedWrappedRunner<>(new MoveAwayRunner<>(2, 1.2, 4), e -> 35 + e.getRandom().nextInt(15))), 4),
-            WeightedEntry.wrap(MonsterActionUtils.<EntityThunderbolt>nonRepeatableAttack(LASER_KICK)
-                    .withCondition((goal, target, previous) -> goal.attacker.isEnraged() && !goal.attacker.isAnimEqual(previous, LASER_KICK))
+            WeightedEntry.wrap(MonsterActionUtils.<EntityThunderbolt>enragedBossAttack(LASER_KICK)
                     .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.2), e -> 35 + e.getRandom().nextInt(15))), 4),
             WeightedEntry.wrap(MonsterActionUtils.<EntityThunderbolt>nonRepeatableAttack(WIND_BLADE)
                     .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.2, 7), e -> 35 + e.getRandom().nextInt(15))), 2)
@@ -234,7 +232,6 @@ public class EntityThunderbolt extends BossMonster {
 
     public EntityThunderbolt(EntityType<? extends BossMonster> type, Level world) {
         super(type, world);
-        this.bossInfo.setColor(BossEvent.BossBarColor.BLUE);
         if (!world.isClientSide)
             this.goalSelector.addGoal(1, this.attack);
         this.maxUpStep = 1;
@@ -486,16 +483,14 @@ public class EntityThunderbolt extends BossMonster {
     }
 
     @Override
-    public boolean isAnimEqual(String prev, AnimatedAction other) {
-        if (other == null)
-            return true;
+    public boolean allowAnimation(String prev, AnimatedAction other) {
         if (prev.equals(CHARGE_2.getID()) || prev.equals(CHARGE_3.getID()))
-            return other.getID().equals(CHARGE.getID());
+            return !other.getID().equals(CHARGE.getID());
         if (prev.equals(LASER_KICK_2.getID()) || prev.equals(LASER_KICK_3.getID()))
-            return other.getID().equals(LASER_KICK.getID());
+            return !other.getID().equals(LASER_KICK.getID());
         if (prev.equals(BACK_KICK_HORN.getID()))
-            return other.getID().equals(HORN_ATTACK.getID());
-        return prev.equals(other.getID());
+            return !other.getID().equals(HORN_ATTACK.getID());
+        return super.allowAnimation(prev, other);
     }
 
     public AnimatedAction chainAnim(AnimatedAction anim) {

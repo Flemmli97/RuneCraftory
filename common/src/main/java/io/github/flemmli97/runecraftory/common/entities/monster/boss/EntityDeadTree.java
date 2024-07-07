@@ -121,8 +121,7 @@ public class EntityDeadTree extends BossMonster {
     });
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityDeadTree>>> ATTACKS = List.of(
-            WeightedEntry.wrap(new GoalAttackAction<EntityDeadTree>(ATTACK)
-                    .cooldown(e -> e.animationCooldown(ATTACK))
+            WeightedEntry.wrap(MonsterActionUtils.<EntityDeadTree>nonRepeatableAttack(ATTACK)
                     .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1), e -> 35 + e.getRandom().nextInt(15))), 2),
             WeightedEntry.wrap(new GoalAttackAction<EntityDeadTree>(FALLING_APPLES)
                     .cooldown(e -> e.animationCooldown(FALLING_APPLES))

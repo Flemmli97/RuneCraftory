@@ -276,6 +276,12 @@
       "runecraftory:spell/straight_punch"
     ]
   },
+  "spell.starfall": {
+    "subtitle": "runecraftory:spell.starfall",
+    "sounds": [
+      "runecraftory:spell/starfall"
+    ]
+  },
   "bgm.ambrosia_fight": {
     "subtitle": "runecraftory:bgm.ambrosia_fight",
     "sounds": [
@@ -341,6 +347,24 @@
   },
   "bgm.thunderbolt_fight": {
     "subtitle": "runecraftory:bgm.thunderbolt_fight",
+    "sounds": [
+      {
+        "name": "runecraftory:bgm/cruising-down-8bit-lane",
+        "stream": true
+      }
+    ]
+  },
+  "bgm.grimoire_fight": {
+    "subtitle": "runecraftory:bgm.grimoire_fight",
+    "sounds": [
+      {
+        "name": "runecraftory:bgm/cruising-down-8bit-lane",
+        "stream": true
+      }
+    ]
+  },
+  "bgm.sano_uno_fight": {
+    "subtitle": "runecraftory:bgm.sano_uno_fight",
     "sounds": [
       {
         "name": "runecraftory:bgm/cruising-down-8bit-lane",

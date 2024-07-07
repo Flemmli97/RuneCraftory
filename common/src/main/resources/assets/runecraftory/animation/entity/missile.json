@@ -1,0 +1,14 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation": {
+			"loop": true,
+			"animation_length": 2,
+			"bones": {
+				"propeller": {
+					"rotation": [0, 0, "time*180"]
+				}
+			}
+		}
+	}
+}

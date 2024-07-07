@@ -109,8 +109,7 @@ public class EntityGrimoire extends BossMonster {
                     .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 6), e -> 40 + e.getRandom().nextInt(15))), 3),
             WeightedEntry.wrap(MonsterActionUtils.<EntityGrimoire>nonRepeatableAttack(WIND_BREATH)
                     .prepare(() -> new TimedWrappedRunner<>(new MoveAwayRunner<>(4, 1, 6), e -> 40 + e.getRandom().nextInt(20))), 2),
-            WeightedEntry.wrap(MonsterActionUtils.<EntityGrimoire>nonRepeatableAttack(TORNADO)
-                    .withCondition((goal, target, previous) -> goal.attacker.isEnraged() && !goal.attacker.isAnimEqual(previous, TORNADO))
+            WeightedEntry.wrap(MonsterActionUtils.<EntityGrimoire>enragedBossAttack(TORNADO)
                     .prepare(() -> new TimedWrappedRunner<>(new MoveAwayRunner<>(3, 1, 6), e -> 40 + e.getRandom().nextInt(15))), 4)
     );
     private static final List<WeightedEntry.Wrapper<IdleAction<EntityGrimoire>>> IDLE_ACTIONS = List.of(
@@ -265,12 +264,10 @@ public class EntityGrimoire extends BossMonster {
     }
 
     @Override
-    public boolean isAnimEqual(String prev, AnimatedAction other) {
-        if (other == null)
-            return false;
+    public boolean allowAnimation(String prev, AnimatedAction other) {
         if (prev.equals(BITE.getID()))
-            return this.isEnraged() && TAIL_SWIPE.is(other);
-        return prev.equals(other.getID());
+            return !this.isEnraged() || !TAIL_SWIPE.is(other);
+        return super.allowAnimation(prev, other);
     }
 
     @Override

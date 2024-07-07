@@ -13,13 +13,19 @@ import java.util.List;
 
 public class PrismSpell extends Spell {
 
+    private final boolean longDuration;
+
+    public PrismSpell(boolean longDuration) {
+        this.longDuration = longDuration;
+    }
+
     @Override
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         List<Entity> lights = level.getEntities(entity, entity.getBoundingBox().inflate(4), e -> e instanceof EntityLightBall light && light.getOwner() == entity);
         lights.forEach(e -> e.remove(Entity.RemovalReason.KILLED));
-        EntityLightBall.createQuadLights(level, entity, EntityLightBall.Type.SHORT, CombatUtils.getAbilityDamageBonus(lvl, 0.75f));
+        EntityLightBall.createLights(level, entity, this.longDuration ? EntityLightBall.Type.PIERCING_LONG : EntityLightBall.Type.PIERCING_SHORT, CombatUtils.getAbilityDamageBonus(lvl, 0.75f), 4);
         playSound(entity, ModSounds.SPELL_GENERIC_LIGHT.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         return true;
     }

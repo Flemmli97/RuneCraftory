@@ -17,6 +17,7 @@ import io.github.flemmli97.runecraftory.client.model.armor.RingsArmorModel;
 import io.github.flemmli97.runecraftory.client.model.misc.ModelButterfly;
 import io.github.flemmli97.runecraftory.client.model.misc.ModelChest;
 import io.github.flemmli97.runecraftory.client.model.misc.ModelEnergyOrb;
+import io.github.flemmli97.runecraftory.client.model.misc.ModelMissile;
 import io.github.flemmli97.runecraftory.client.model.misc.ModelPlate;
 import io.github.flemmli97.runecraftory.client.model.misc.ModelSpikes;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelAmbrosia;
@@ -52,6 +53,7 @@ import io.github.flemmli97.runecraftory.client.model.monster.ModelRaccoon;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelRaccoonBerserk;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelRafflesia;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelSanoUno;
+import io.github.flemmli97.runecraftory.client.model.monster.ModelSarcophagus;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelScorpion;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelSkelefang;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelSkyFish;
@@ -100,26 +102,26 @@ import io.github.flemmli97.runecraftory.client.render.projectiles.RenderBoneNeed
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderBullet;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderButterfly;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderCards;
-import io.github.flemmli97.runecraftory.client.render.projectiles.RenderDarkBeam;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderDarkBullet;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderDarkness;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderElementBall;
+import io.github.flemmli97.runecraftory.client.render.projectiles.RenderElementalTrail;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderEnergyOrb;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderFireball;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderFurnitures;
-import io.github.flemmli97.runecraftory.client.render.projectiles.RenderIceTrail;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderMarionettaTrap;
+import io.github.flemmli97.runecraftory.client.render.projectiles.RenderMissile;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderMobArrow;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderPlate;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderPoisonNeedle;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderRockSpear;
+import io.github.flemmli97.runecraftory.client.render.projectiles.RenderSingleFrameBeam;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderSmallRaccoonLeaf;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderSpiderWeb;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderSpikes;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderThrownItem;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderWaterLaser;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderWindBlade;
-import io.github.flemmli97.runecraftory.client.render.projectiles.RenderWispFlame;
 import io.github.flemmli97.runecraftory.client.tooltips.UpgradeTooltipComponent;
 import io.github.flemmli97.runecraftory.common.blocks.BlockBrokenMineral;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrafting;
@@ -332,6 +334,7 @@ public class ClientRegister {
         registerScaled(consumer, ModEntities.GRIMOIRE.get(), ModelGrimoire::new, ModelGrimoire.LAYER_LOCATION, 1.5f);
         registerScaled(consumer, ModEntities.SANO.get(), ModelSanoUno::new, ModelSanoUno.LAYER_LOCATION, 2);
         registerScaled(consumer, ModEntities.UNO.get(), ModelSanoUno::new, ModelSanoUno.LAYER_LOCATION, 2);
+        register(consumer, ModEntities.SARCOPHAGUS.get(), ModelSarcophagus::new, ModelSarcophagus.LAYER_LOCATION);
 
         consumer.register(ModEntities.NPC.get(), RenderNPC::new);
 
@@ -360,13 +363,12 @@ public class ClientRegister {
         consumer.register(ModEntities.BUTTERFLY.get(), RenderButterfly::new);
         consumer.register(ModEntities.LIGHTNING_ORB_BOLT.get(), EmptyRender::new);
         consumer.register(ModEntities.LIGHTNING_BEAM.get(), EmptyRender::new);
-        consumer.register(ModEntities.WISP_FLAME.get(), RenderWispFlame::new);
+        consumer.register(ModEntities.ELEMENTAL_TRAIL.get(), RenderElementalTrail::new);
         consumer.register(ModEntities.SPIDER_WEB.get(), RenderSpiderWeb::new);
-        consumer.register(ModEntities.DARK_BEAM.get(), RenderDarkBeam::new);
+        consumer.register(ModEntities.DARK_BEAM.get(), ctx -> new RenderSingleFrameBeam<>(ctx, RenderSingleFrameBeam.DARK_BEAM));
         consumer.register(ModEntities.CARDS.get(), RenderCards::new);
         consumer.register(ModEntities.FURNITURE.get(), RenderFurnitures::new);
         consumer.register(ModEntities.TRAP_CHEST.get(), RenderMarionettaTrap::new);
-
         consumer.register(ModEntities.ELEMENTAL_BALL.get(), RenderElementBall::new);
         consumer.register(ModEntities.FIRE_BALL.get(), RenderFireball::new);
         consumer.register(ModEntities.EXPLOSION.get(), EmptyRender::new);
@@ -392,7 +394,9 @@ public class ClientRegister {
         consumer.register(ModEntities.POWER_WAVE.get(), EmptyRender::new);
         consumer.register(ModEntities.GUST_ROCK.get(), EmptyRender::new);
         consumer.register(ModEntities.TORNADO.get(), EmptyRender::new);
-        consumer.register(ModEntities.ICE_TRAIL.get(), RenderIceTrail::new);
+        consumer.register(ModEntities.LIGHT_BEAM.get(), ctx -> new RenderSingleFrameBeam<>(ctx, RenderSingleFrameBeam.LIGHT_BEAM));
+        consumer.register(ModEntities.MISSILE.get(), RenderMissile::new);
+        consumer.register(ModEntities.STARFALL.get(), EmptyRender::new);
 
         consumer.register(ModEntities.RUNEY.get(), RenderRuney::new);
         consumer.register(ModEntities.STAT_BONUS.get(), EmptyRender::new);
@@ -406,6 +410,8 @@ public class ClientRegister {
         consumer.register(ModEntities.RAFFLESIA_CIRCLE_SUMMONER.get(), EmptyRender::new);
         consumer.register(ModEntities.BLAZE_BARRAGE.get(), EmptyRender::new);
         consumer.register(ModEntities.WIND_BLADE_BARRAGE_SUMMONER.get(), EmptyRender::new);
+        consumer.register(ModEntities.ELEMENTAL_CIRCLE_SUMMONER.get(), EmptyRender::new);
+        consumer.register(ModEntities.STARFALL_SUMMONER.get(), EmptyRender::new);
 
         consumer.register(ModEntities.FISHING_HOOK.get(), CustomFishingHookRenderer::new);
 
@@ -497,6 +503,7 @@ public class ClientRegister {
         consumer.accept(ModelRafflesia.LAYER_LOCATION, ModelRafflesia::createBodyLayer);
         consumer.accept(ModelGrimoire.LAYER_LOCATION, ModelGrimoire::createBodyLayer);
         consumer.accept(ModelSanoUno.LAYER_LOCATION, ModelSanoUno::createBodyLayer);
+        consumer.accept(ModelSarcophagus.LAYER_LOCATION, ModelSarcophagus::createBodyLayer);
 
         consumer.accept(ModelButterfly.LAYER_LOCATION, ModelButterfly::createBodyLayer);
         consumer.accept(ModelWoolyWool.LAYER_LOCATION, ModelWoolyWool::createBodyLayer);
@@ -508,6 +515,7 @@ public class ClientRegister {
         consumer.accept(ModelEnergyOrb.LAYER_LOCATION, () -> ModelEnergyOrb.createBodyLayer(CubeDeformation.NONE));
         consumer.accept(ModelEnergyOrb.LAYER_LOCATION_LAYER, () -> ModelEnergyOrb.createBodyLayer(new CubeDeformation(1.5f)));
         consumer.accept(ModelSpikes.LAYER_LOCATION, ModelSpikes::createBodyLayer);
+        consumer.accept(ModelMissile.LAYER_LOCATION, ModelMissile::createBodyLayer);
 
         consumer.accept(AnimatedPlayerModel.LAYER_LOCATION, AnimatedPlayerModel::createBodyLayer);
         consumer.accept(PiyoSandals.LAYER_LOCATION, PiyoSandals::createBodyLayer);

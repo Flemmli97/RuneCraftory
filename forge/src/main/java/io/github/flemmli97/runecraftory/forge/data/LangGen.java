@@ -722,6 +722,8 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.advancements.progression.boss.chimera.description", "Defeat a chimera in a water ruin");
         this.add("runecraftory.advancements.progression.boss.rafflesia.title", "Status gallore");
         this.add("runecraftory.advancements.progression.boss.rafflesia.description", "Defeat rafflesia in the nether");
+        this.add("runecraftory.advancements.progression.boss.grimoire.title", "Don't get blown away");
+        this.add("runecraftory.advancements.progression.boss.grimoire.description", "Defeat a grimoire at a mountain top");
         this.add("runecraftory.advancements.progression.boss.dead_tree.title", "Whispies cousin");
         this.add("runecraftory.advancements.progression.boss.dead_tree.description", "Defeat the dead tree in a forest grove");
         this.add("runecraftory.advancements.progression.boss.raccoon.title", "Caught thief");
@@ -734,6 +736,10 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.advancements.progression.boss.thunderbolt.description", "Defeat thunderbolt in the water ruins");
         this.add("runecraftory.advancements.progression.boss.marionetta.title", "It's not a ghost right?");
         this.add("runecraftory.advancements.progression.boss.marionetta.description", "Defeat marionetta in the theater ruins");
+        this.add("runecraftory.advancements.progression.boss.sano_uno.title", "Are you worthy?");
+        this.add("runecraftory.advancements.progression.boss.sano_uno.description", "Defeat sano and uno. Now where are they...");
+        this.add("runecraftory.advancements.progression.boss.sarcophagus.title", "Don't get cursed!");
+        this.add("runecraftory.advancements.progression.boss.sarcophagus.description", "Defeat sarcophagus after proving your worth to sano and uno");
 
         this.add("runecraftory.dependency.simplequest.missing", "Simplequest is needed for quests");
         this.add(QuestTasks.ShippingEntry.ID + ".single", "Ship %1$s x%2$s");

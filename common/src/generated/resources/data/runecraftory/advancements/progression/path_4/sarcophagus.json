@@ -1,14 +1,14 @@
 {
-  "parent": "runecraftory:progression/path_4/marionetta",
+  "parent": "runecraftory:progression/path_4/sano_uno",
   "display": {
     "icon": {
-      "item": "runecraftory:uno_spawn_egg"
+      "item": "runecraftory:sarcophagus_spawn_egg"
     },
     "title": {
-      "translate": "runecraftory.advancements.progression.boss.uno.title"
+      "translate": "runecraftory.advancements.progression.boss.sarcophagus.title"
     },
     "description": {
-      "translate": "runecraftory.advancements.progression.boss.uno.description"
+      "translate": "runecraftory.advancements.progression.boss.sarcophagus.description"
     },
     "frame": "task",
     "show_toast": true,
@@ -26,7 +26,7 @@
             "predicate": {
               "player": {
                 "advancements": {
-                  "runecraftory:progression/path_4/marionetta": true
+                  "runecraftory:progression/path_4/sano_uno": true
                 }
               }
             },
@@ -37,7 +37,7 @@
           {
             "condition": "minecraft:entity_properties",
             "predicate": {
-              "type": "runecraftory:uno"
+              "type": "runecraftory:sarcophagus"
             },
             "entity": "this"
           }

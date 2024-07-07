@@ -5,11 +5,13 @@ import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.common.entity.EntityProjectile;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -17,28 +19,26 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
-public class EntityWispFlame extends BaseDamageCloud {
+public class EntityElementalTrail extends BaseDamageCloud {
 
-    private static final EntityDataAccessor<Integer> ELEMENT_DATA = SynchedEntityData.defineId(EntityWispFlame.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Boolean> STATIONARY = SynchedEntityData.defineId(EntityWispFlame.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> ELEMENT_DATA = SynchedEntityData.defineId(EntityElementalTrail.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> STATIONARY = SynchedEntityData.defineId(EntityElementalTrail.class, EntityDataSerializers.BOOLEAN);
 
     private EnumElement element = EnumElement.NONE;
     private boolean piercing = true;
+    private boolean hasKnockback, homing;
+    private LivingEntity targetMob;
+    private int livingTicksMax = 100;
 
-    public EntityWispFlame(EntityType<? extends EntityWispFlame> type, Level level) {
+    public EntityElementalTrail(EntityType<? extends EntityElementalTrail> type, Level level) {
         super(type, level);
     }
 
-    public EntityWispFlame(Level level, double x, double y, double z) {
-        super(ModEntities.WISP_FLAME.get(), level, x, y, z);
-        this.setRadius(1.5f);
-    }
-
-    public EntityWispFlame(Level level, LivingEntity thrower, EnumElement element) {
-        super(ModEntities.WISP_FLAME.get(), level, thrower);
+    public EntityElementalTrail(Level level, LivingEntity thrower, EnumElement element) {
+        super(ModEntities.ELEMENTAL_TRAIL.get(), level, thrower);
         this.setPos(this.getX(), this.getY() + thrower.getBbHeight() * 0.5, this.getZ());
         this.setElement(element);
-        this.setRadius(1.5f);
+        this.setRadius(0.5f);
     }
 
     public void shootAtEntity(Entity target, float velocity, float inaccuracy, float yOffsetModifier, double heighMod) {
@@ -84,6 +84,18 @@ public class EntityWispFlame extends BaseDamageCloud {
         this.piercing = piercing;
     }
 
+    public void knockback() {
+        this.hasKnockback = true;
+    }
+
+    public void homing() {
+        this.homing = true;
+    }
+
+    public void withMaxLiving(int livingTicksMax) {
+        this.livingTicksMax = livingTicksMax;
+    }
+
     @Override
     public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
         if (key.equals(ELEMENT_DATA)) {
@@ -94,7 +106,7 @@ public class EntityWispFlame extends BaseDamageCloud {
 
     @Override
     public int livingTickMax() {
-        return 100;
+        return this.livingTicksMax;
     }
 
     @Override
@@ -114,12 +126,33 @@ public class EntityWispFlame extends BaseDamageCloud {
             double newZ = this.getZ() + motion.z;
             this.setPos(newX, newY, newZ);
         }
+        if (!this.level.isClientSide) {
+            if (this.homing) {
+                if (this.targetMob == null || this.targetMob.isDeadOrDying()) {
+                    this.targetMob = EntityUtils.ownedProjectileTarget(this.getOwner(), 10);
+                } else {
+                    Vec3 dir = this.targetMob.position().subtract(this.position());
+                    if (dir.lengthSqr() > 0.22 * 0.22)
+                        dir = dir.normalize().scale(0.22);
+                    this.setDeltaMovement(dir);
+                    this.hasImpulse = true;
+                }
+            }
+        } else {
+            if (this.livingTicks % 2 == 0) {
+                if (this.element == EnumElement.WATER)
+                    this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.GLASS_BREAK, this.getSoundSource(), 2, 0.8f, false);
+                if (this.element == EnumElement.EARTH)
+                    this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.ROOTED_DIRT_BREAK, this.getSoundSource(), 2, 0.8f, false);
+            }
+        }
     }
 
     @Override
     protected boolean damageEntity(LivingEntity target) {
         if (CombatUtils.damageWithFaintAndCrit(this.getOwner(), target, new CustomDamage.Builder(this, this.getOwner()).magic().noKnockback().hurtResistant(10).element(this.element), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier, null)) {
-            target.knockback(0.5, this.getX() - target.getX(), this.getZ() - target.getZ());
+            if (this.hasKnockback)
+                target.knockback(0.5, this.getX() - target.getX(), this.getZ() - target.getZ());
             if (!this.piercing)
                 this.discard();
             return true;
@@ -131,18 +164,24 @@ public class EntityWispFlame extends BaseDamageCloud {
     protected void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         try {
-            this.setElement(EnumElement.valueOf(compound.getString("Element")));
-        } catch (IllegalArgumentException ignored) {
+            this.setElement(EnumElement.values()[compound.getInt("Element")]);
+        } catch (ArrayIndexOutOfBoundsException ignored) {
         }
         this.entityData.set(STATIONARY, compound.getBoolean("Stationary"));
         this.piercing = compound.getBoolean("Piercing");
+        this.hasKnockback = compound.getBoolean("Knockback");
+        this.homing = compound.getBoolean("Homing");
+        this.livingTicksMax = compound.getInt("LivingTicksMax");
     }
 
     @Override
     protected void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString("Type", this.element.toString());
+        compound.putInt("Element", this.element.ordinal());
         compound.putBoolean("Stationary", this.entityData.get(STATIONARY));
         compound.putBoolean("Piercing", this.piercing);
+        compound.putBoolean("Knockback", this.hasKnockback);
+        compound.putBoolean("Homing", this.homing);
+        compound.putInt("LivingTicksMax", this.livingTicksMax);
     }
 }
