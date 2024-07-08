@@ -137,7 +137,7 @@ public class ModelChimera<T extends EntityChimera> extends EntityModel<T> implem
         this.model.resetPoses();
         float partialTicks = Minecraft.getInstance().getFrameTime();
         if (entity.deathTime <= 0 && !entity.playDeath()) {
-            this.upperBody.yRot += netHeadYaw * 0.8 * Mth.DEG_TO_RAD;
+            this.upperBody.yRot += (netHeadYaw % 360) * Mth.DEG_TO_RAD * 0.8;
             this.upperBody.xRot += headPitch * Mth.DEG_TO_RAD;
             this.anim.doAnimation(this, "idle", entity.tickCount, partialTicks);
             if (entity.moveTick() > 0) {

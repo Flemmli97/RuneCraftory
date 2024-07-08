@@ -12,15 +12,15 @@ import net.minecraft.resources.ResourceLocation;
 public class RenderWooly<T extends EntityWooly> extends ScaledEntityRenderer<T, ModelWooly<T>> implements ScaledRenderer {
 
     public RenderWooly(EntityRendererProvider.Context ctx) {
-        this(ctx, new ResourceLocation(RuneCraftory.MODID, "textures/entity/monsters/wooly.png"), 1);
+        this(ctx, new ResourceLocation(RuneCraftory.MODID, "textures/entity/monsters/wooly.png"), 1, 0.5f);
     }
 
-    public RenderWooly(EntityRendererProvider.Context ctx, float scale) {
-        this(ctx, new ResourceLocation(RuneCraftory.MODID, "textures/entity/monsters/wooly.png"), scale);
+    public RenderWooly(EntityRendererProvider.Context ctx, float scale, float shadow) {
+        this(ctx, new ResourceLocation(RuneCraftory.MODID, "textures/entity/monsters/wooly.png"), scale, shadow);
     }
 
-    public RenderWooly(EntityRendererProvider.Context ctx, ResourceLocation texture, float scale) {
-        super(ctx, new ModelWooly<>(ctx.bakeLayer(ModelWooly.LAYER_LOCATION)), texture, scale, 0.5f);
+    public RenderWooly(EntityRendererProvider.Context ctx, ResourceLocation texture, float scale, float shadow) {
+        super(ctx, new ModelWooly<>(ctx.bakeLayer(ModelWooly.LAYER_LOCATION)), texture, scale, shadow);
         this.layers.add(new LayerWooly<>(this, new ModelWoolyWool<>(ctx.bakeLayer(ModelWoolyWool.LAYER_LOCATION))));
     }
 }

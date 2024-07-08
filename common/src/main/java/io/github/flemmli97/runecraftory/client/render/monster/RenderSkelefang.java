@@ -15,7 +15,7 @@ public class RenderSkelefang<T extends EntitySkelefang> extends RenderMonster<T,
     public static final ResourceLocation TEXTURE = new ResourceLocation(RuneCraftory.MODID, "textures/entity/monsters/skelefang.png");
 
     public RenderSkelefang(EntityRendererProvider.Context ctx) {
-        super(ctx, new ModelSkelefang<>(ctx.bakeLayer(ModelSkelefang.LAYER_LOCATION), RenderType::entityTranslucent), TEXTURE, 0.5f);
+        super(ctx, new ModelSkelefang<>(ctx.bakeLayer(ModelSkelefang.LAYER_LOCATION), RenderType::entityTranslucent), TEXTURE, 0);
     }
 
     @Override

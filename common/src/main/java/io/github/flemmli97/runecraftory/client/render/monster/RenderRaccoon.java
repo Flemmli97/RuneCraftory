@@ -44,6 +44,10 @@ public class RenderRaccoon<T extends EntityRaccoon> extends RenderMonster<T, Mod
 
     @Override
     public void render(T entity, float entityYaw, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
+        if (entity.isBerserk())
+            this.shadowRadius = 1;
+        else
+            this.shadowRadius = 0.5f;
         AnimatedAction anim = entity.getAnimationHandler().getAnimation();
         if (anim != null && (anim.is(EntityRaccoon.TRANSFORM) || anim.is(EntityRaccoon.UNTRANSFORM))) {
             int tick = anim.getTick();

@@ -330,10 +330,10 @@ public class ModelSkelefang<T extends EntitySkelefang> extends EntityModel<T> im
         AnimatedAction anim = entity.getAnimationHandler().getAnimation();
         float partialTicks = Minecraft.getInstance().getFrameTime();
         if (entity.deathTime <= 0 && !entity.playDeath()) {
-            this.neck.yRot += netHeadYaw * 0.2 * Mth.DEG_TO_RAD;
-            this.neck.xRot += headPitch * 0.2 * Mth.DEG_TO_RAD;
-            this.head.yRot += netHeadYaw * 0.4 * Mth.DEG_TO_RAD;
-            this.head.xRot += headPitch * 0.4 * Mth.DEG_TO_RAD;
+            this.neck.yRot += (netHeadYaw % 360) * Mth.DEG_TO_RAD * 0.2;
+            this.neck.xRot += headPitch * Mth.DEG_TO_RAD * 0.2;
+            this.head.yRot += (netHeadYaw % 360) * Mth.DEG_TO_RAD * 0.4;
+            this.head.xRot += headPitch * Mth.DEG_TO_RAD * 0.4;
             this.anim.doAnimation(this, "idle", entity.tickCount, partialTicks);
             if (entity.moveTick() > 0) {
                 this.anim.doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));

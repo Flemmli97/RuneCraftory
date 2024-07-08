@@ -13,7 +13,7 @@ public class RenderDuck<T extends EntityDuck> extends ScaledEntityRenderer<T, Mo
     private final ResourceLocation sleepTexture;
 
     public RenderDuck(EntityRendererProvider.Context ctx, ResourceLocation texture, ResourceLocation sleepTexture) {
-        super(ctx, new ModelDuck<>(ctx.bakeLayer(ModelDuck.LAYER_LOCATION)), texture, SCALE, 0.5f);
+        super(ctx, new ModelDuck<>(ctx.bakeLayer(ModelDuck.LAYER_LOCATION)), texture, SCALE, 0.6f * SCALE);
         this.sleepTexture = sleepTexture;
     }
 

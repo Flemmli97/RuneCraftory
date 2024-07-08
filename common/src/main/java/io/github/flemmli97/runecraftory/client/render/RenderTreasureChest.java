@@ -24,6 +24,7 @@ public class RenderTreasureChest extends EntityRenderer<EntityTreasureChest> {
 
     public RenderTreasureChest(EntityRendererProvider.Context ctx) {
         super(ctx);
+        this.shadowRadius = 0.5f;
         this.model = new ModelChest<>(ctx.bakeLayer(ModelChest.LAYER_LOCATION));
     }
 

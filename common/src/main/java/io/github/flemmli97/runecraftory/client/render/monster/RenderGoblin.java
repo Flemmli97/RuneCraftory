@@ -15,7 +15,7 @@ public class RenderGoblin<T extends EntityGoblin> extends RenderMonster<T, Model
     }
 
     public RenderGoblin(EntityRendererProvider.Context ctx, ResourceLocation texture) {
-        super(ctx, new ModelGoblin<>(ctx.bakeLayer(ModelGoblin.LAYER_LOCATION)), texture, 0.5f);
+        super(ctx, new ModelGoblin<>(ctx.bakeLayer(ModelGoblin.LAYER_LOCATION)), texture, 0.4f);
         this.layers.add(new ItemLayer<>(this));
     }
 }
