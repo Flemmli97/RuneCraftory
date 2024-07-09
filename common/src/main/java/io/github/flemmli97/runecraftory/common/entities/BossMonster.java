@@ -307,9 +307,9 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
 
     @Override
     public boolean allowAnimation(String prev, AnimatedAction other) {
-        if (!prev.equals(other.getID()))
-            return true;
-        return super.allowAnimation(prev, other);
+        if (other == null)
+            return super.allowAnimation(prev, null);
+        return !prev.equals(other.getID());
     }
 
     public void playAngrySound() {

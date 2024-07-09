@@ -1795,7 +1795,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         return this.hitPred;
     }
 
-    public boolean allowAnimation(String prev, AnimatedAction other) {
+    public boolean allowAnimation(String prev, @Nullable AnimatedAction other) {
         return true;
     }
 
