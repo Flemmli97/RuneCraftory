@@ -19,7 +19,7 @@ public class ButterflySpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         EntityButterflySummoner summoner = new EntityButterflySummoner(level, entity);
-        summoner.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.25f));
+        summoner.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.2f));
         Vec3 delayedPos;
         if (entity instanceof MobAttackExt attacker && (delayedPos = attacker.targetPosition(summoner.position())) != null) {
             summoner.setTarget(delayedPos.x(), delayedPos.y(), delayedPos.z());
