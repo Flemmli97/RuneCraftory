@@ -124,7 +124,7 @@ public class ModelGrimoire<T extends EntityGrimoire> extends EntityModel<T> impl
         PartDefinition rightWing3 = rightWing2.addOrReplaceChild("rightWing3", CubeListBuilder.create().texOffs(52, 38).mirror().addBox(-16.0F, -0.5F, -0.5F, 16.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false)
                 .texOffs(0, 21).mirror().addBox(-17.0F, 0.0F, -0.5F, 21.0F, 0.0F, 17.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-15.0F, 0.0F, 0.25F, 0.0F, 0.48F, -0.2618F));
 
-        PartDefinition ridingPos = body2.addOrReplaceChild("ridingPos", CubeListBuilder.create(), PartPose.offset(0.0F, -5.5F, -9.0F));
+        PartDefinition ridingPos = body2.addOrReplaceChild("ridingPos", CubeListBuilder.create(), PartPose.offsetAndRotation(0.0F, -5.5F, -9.0F, 0.8727F, 0.0F, 0.0F));
 
         PartDefinition leftLegBase = body.addOrReplaceChild("leftLegBase", CubeListBuilder.create().texOffs(0, 99).addBox(-1.25F, -3.5F, -3.5F, 6.0F, 15.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(5.75F, 3.0F, 2.5F, 0.7854F, 0.0F, 0.0F));
 

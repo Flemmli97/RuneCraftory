@@ -135,7 +135,7 @@ public class ModelSanoUno<T extends BaseMonster> extends EntityModel<T> implemen
 
         PartDefinition tailTip9 = tail9.addOrReplaceChild("tailTip9", CubeListBuilder.create().texOffs(121, 118).addBox(-2.0F, -2.0F, 0.0F, 4.0F, 4.0F, 9.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 11.0F, 0.48F, -0.1309F, 0.0F));
 
-        PartDefinition ridingPos = body.addOrReplaceChild("ridingPos", CubeListBuilder.create(), PartPose.offset(0.0F, -5.0F, -18.0F));
+        PartDefinition ridingPos = body.addOrReplaceChild("ridingPos", CubeListBuilder.create(), PartPose.offsetAndRotation(0.0F, -5.0F, -18.0F, 0.8727F, 0.0F, 0.0F));
 
         return LayerDefinition.create(meshdefinition, 256, 256);
     }

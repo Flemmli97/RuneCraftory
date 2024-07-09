@@ -255,7 +255,7 @@ public class EntityGrimoire extends BossMonster {
 
     @Override
     public Vec3 passengerOffset(Entity passenger) {
-        return new Vec3(0, 43.5 / 16d, -26.25 / 16d).scale(1.5);
+        return new Vec3(0, 39 / 16d, 11.5 / 16d).scale(1.5);
     }
 
     @Override

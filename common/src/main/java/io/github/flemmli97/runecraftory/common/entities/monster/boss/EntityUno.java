@@ -21,6 +21,7 @@ import net.minecraft.world.BossEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.ai.control.LookControl;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.level.Level;
@@ -119,6 +120,8 @@ public class EntityUno extends BossMonster implements MobAttackExt {
         this.xxa = 0;
         this.yya = 0;
         this.zza = 0;
+        this.setDeltaMovement(0, this.getDeltaMovement().y - 0.08, 0);
+        this.move(MoverType.SELF, this.getDeltaMovement());
     }
 
     @Override
@@ -157,7 +160,7 @@ public class EntityUno extends BossMonster implements MobAttackExt {
 
     @Override
     public Vec3 passengerOffset(Entity passenger) {
-        return new Vec3(0, 29 / 16d, -5 / 16d);
+        return new Vec3(0, 30.5 / 16d, 6 / 16d).scale(2);
     }
 
     @Override

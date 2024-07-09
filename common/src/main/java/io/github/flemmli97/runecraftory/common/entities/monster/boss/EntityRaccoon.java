@@ -331,7 +331,7 @@ public class EntityRaccoon extends BossMonster {
 
     @Override
     protected void applyAttributes() {
-        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.23);
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.24);
         super.applyAttributes();
     }
 

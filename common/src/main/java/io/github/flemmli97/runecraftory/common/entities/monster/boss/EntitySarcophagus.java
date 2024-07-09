@@ -382,7 +382,7 @@ public class EntitySarcophagus extends BossMonster implements MobAttackExt {
 
     @Override
     public Vec3 passengerOffset(Entity passenger) {
-        return new Vec3(0, 22.75 / 16d, -5 / 16d);
+        return new Vec3(0, 29.5 / 16d, -8 / 16d);
     }
 
     @Override

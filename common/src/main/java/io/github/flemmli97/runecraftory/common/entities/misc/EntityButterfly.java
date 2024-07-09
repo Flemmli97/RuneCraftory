@@ -109,7 +109,7 @@ public class EntityButterfly extends BaseProjectile {
         this.entityData.set(LOCKED_PITCH, this.getXRot());
         this.entityData.set(LOCKED_YAW, this.getYRot());
         this.entityData.set(HIT, Optional.of(target.getUUID()));
-        Vec3 dir = this.position().subtract(target.position()).scale(0.98);
+        Vec3 dir = this.position().add(this.getDeltaMovement().scale(1.5)).subtract(target.position()).scale(0.98);
         this.entityData.set(HIT_X, (float) dir.x());
         this.entityData.set(HIT_Y, (float) dir.y());
         this.entityData.set(HIT_Z, (float) dir.z());
