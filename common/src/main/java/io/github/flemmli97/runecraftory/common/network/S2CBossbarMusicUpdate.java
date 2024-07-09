@@ -29,7 +29,7 @@ public class S2CBossbarMusicUpdate implements Packet {
         Player player = ClientHandlers.getPlayer();
         if (player == null)
             return;
-        BossBarTracker.stopMusic(pkt.id, pkt.stop);
+        BossBarTracker.updateMusic(pkt.id, pkt.stop);
     }
 
     @Override

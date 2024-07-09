@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.client;
 
-import com.mojang.blaze3d.audio.Channel;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.common.config.ClientConfig;
@@ -28,6 +27,7 @@ public class BossBarTracker {
     private static final Map<ResourceLocation, ClientBossBarType> BOSS_BARS = new HashMap<>();
     private static final Map<UUID, BossBarData> ACTIVE_BOSS_BARS = new HashMap<>();
     private static final Map<UUID, TickingSoundChannel> FADING_CHANNEL = new HashMap<>();
+    private static SoundInstance activeMusic;
 
     public static void registerCustomBossbarType(ResourceLocation id, ClientBossBarType type) {
         BOSS_BARS.put(id, type);
@@ -49,7 +49,7 @@ public class BossBarTracker {
         if (old != null) {
             if (old.music != null) {
                 if (music == null || !old.music.getLocation().equals(music.getLocation()))
-                    stopMusic(old.music);
+                    Minecraft.getInstance().getSoundManager().stop(old.music);
             }
         }
         TickingSoundChannel ch = FADING_CHANNEL.get(id);
@@ -65,19 +65,13 @@ public class BossBarTracker {
         ACTIVE_BOSS_BARS.put(id, data);
     }
 
-    public static void stopMusic(UUID id, boolean stop) {
+    public static void updateMusic(UUID id, boolean stop) {
         BossBarData data = ACTIVE_BOSS_BARS.get(id);
         if (data != null && data.music != null) {
             if (stop)
                 stopMusic(data.music);
             else {
-                ACTIVE_BOSS_BARS.forEach((uuid, d) -> {
-                    SoundEngineUtil engine = (SoundEngineUtil) ((SoundManagerAccessor) Minecraft.getInstance().getSoundManager()).getSoundEngine();
-                    ChannelAccess.ChannelHandle handle = engine.getHandle(d.music);
-                    if (handle != null)
-                        handle.execute(Channel::pause);
-                });
-                Minecraft.getInstance().getSoundManager().play(data.music);
+                playMusic(data.music);
             }
         }
     }
@@ -117,27 +111,22 @@ public class BossBarTracker {
     }
 
     private static void playMusic(SoundInstance sound) {
-        ACTIVE_BOSS_BARS.values().stream().findFirst()
-                .ifPresent(d -> {
-                    SoundEngineUtil engine = (SoundEngineUtil) ((SoundManagerAccessor) Minecraft.getInstance().getSoundManager()).getSoundEngine();
-                    ChannelAccess.ChannelHandle handle = engine.getHandle(d.music);
-                    if (handle != null)
-                        handle.execute(Channel::pause);
-                });
+        if (activeMusic != null) {
+            Minecraft.getInstance().getSoundManager().stop(activeMusic);
+        }
         Minecraft.getInstance().getSoundManager().play(sound);
+        activeMusic = sound;
     }
 
     private static void stopMusic(SoundInstance sound) {
-        ACTIVE_BOSS_BARS.values().stream().findFirst()
-                .ifPresent(d -> {
-                    SoundEngineUtil engine = (SoundEngineUtil) ((SoundManagerAccessor) Minecraft.getInstance().getSoundManager()).getSoundEngine();
-                    ChannelAccess.ChannelHandle handle = engine.getHandle(d.music);
-                    if (handle != null)
-                        handle.execute(Channel::unpause);
-                    else
+        if (activeMusic == sound) {
+            Minecraft.getInstance().getSoundManager().stop(sound);
+            ACTIVE_BOSS_BARS.values().stream().filter(d -> d.music != sound).findFirst()
+                    .ifPresent(d -> {
                         Minecraft.getInstance().getSoundManager().play(d.music);
-                });
-        Minecraft.getInstance().getSoundManager().stop(sound);
+                        activeMusic = d.music;
+                    });
+        }
     }
 
     public record BossBarData(ResourceLocation type, SoundInstance music) {
