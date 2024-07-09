@@ -33,6 +33,7 @@ public class SoundGen extends SoundDefinitionsProvider {
         ResourceLocation bgm4 = new ResourceLocation(RuneCraftory.MODID, "bgm/cruising-down-8bit-lane");
         ResourceLocation bgm5 = new ResourceLocation(RuneCraftory.MODID, "bgm/yami-no-sekai-no-tatakai");
         ResourceLocation bgm6 = new ResourceLocation(RuneCraftory.MODID, "bgm/yurei");
+        ResourceLocation bgm7 = new ResourceLocation(RuneCraftory.MODID, "bgm/golem_battle");
         this.addBgmWith(ModSounds.AMBROSIA_FIGHT.get(), bgm4);
         this.addBgmWith(ModSounds.CHIMERA_FIGHT.get(), bgm2);
         this.addBgmWith(ModSounds.DEAD_TREE_FIGHT.get(), bgm2);
@@ -41,8 +42,9 @@ public class SoundGen extends SoundDefinitionsProvider {
         this.addBgmWith(ModSounds.SKELEFANG_FIGHT.get(), bgm5);
         this.addBgmWith(ModSounds.RAFFLESIA_FIGHT.get(), bgm3);
         this.addBgmWith(ModSounds.THUNDERBOLT_FIGHT.get(), bgm4);
-        this.addBgmWith(ModSounds.GRIMOIRE_FIGHT.get(), bgm4);
+        this.addBgmWith(ModSounds.GRIMOIRE_FIGHT.get(), bgm2);
         this.addBgmWith(ModSounds.SANO_UNO_FIGHT.get(), bgm4);
+        this.addBgmWith(ModSounds.SARCOPHAGUS_FIGHT.get(), bgm7);
     }
 
     private void add(SoundEvent event) {

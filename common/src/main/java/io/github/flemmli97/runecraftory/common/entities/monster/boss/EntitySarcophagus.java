@@ -95,7 +95,7 @@ public class EntitySarcophagus extends BossMonster implements MobAttackExt {
                     }
                 });
                 if (entity.tickCount % 5 == 0) {
-                    entity.playSound(ModSounds.ENTITY_SKELEFANG_CHARGE.get(), 1, (entity.random.nextFloat() - entity.random.nextFloat()) * 0.2f + 1.0f);
+                    entity.playSound(ModSounds.ENTITY_GENERIC_HEAVY_CHARGE.get(), 1, (entity.random.nextFloat() - entity.random.nextFloat()) * 0.2f + 1.0f);
                 }
             } else {
                 entity.setDeltaMovement(entity.getDeltaMovement().scale(0.6));

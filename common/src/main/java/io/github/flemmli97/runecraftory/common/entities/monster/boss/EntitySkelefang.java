@@ -170,7 +170,7 @@ public class EntitySkelefang extends BossMonster {
                 entity.setDeltaMovement(dir.x(), entity.getDeltaMovement().y, dir.z());
             }
             if (entity.tickCount % 5 == 0) {
-                entity.playSound(ModSounds.ENTITY_SKELEFANG_CHARGE.get(), 1, (entity.random.nextFloat() - entity.random.nextFloat()) * 0.2f + 1.0f);
+                entity.playSound(ModSounds.ENTITY_GENERIC_HEAVY_CHARGE.get(), 1, (entity.random.nextFloat() - entity.random.nextFloat()) * 0.2f + 1.0f);
                 Platform.INSTANCE.sendToTrackingAndSelf(new S2CScreenShake(10, 0.4f), entity);
             }
             entity.mobAttack(anim, null, e -> {

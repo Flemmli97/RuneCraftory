@@ -32,7 +32,7 @@ public class StarFallSummoner extends ProjectileSummonHelperEntity {
                 proj.setPos(randX, this.getY() + 11 + this.random.nextDouble() * 2, randZ);
                 this.level.addFreshEntity(proj);
             }
-            this.playSound(ModSounds.SPELL_STARFALL_AMBIENT.get(), 0.4f, (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.0f);
+            this.playSound(ModSounds.ENTITY_FAIRY_AMBIENT.get(), 0.4f, (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.3f);
         }
     }
 }

@@ -26,6 +26,7 @@ public class ModSounds {
     public static final RegistryEntrySupplier<SoundEvent> ENTITY_DEAD_TREE_DEATH = register("entity.dead_tree.death");
     public static final RegistryEntrySupplier<SoundEvent> ENTITY_FAIRY_AMBIENT = register("entity.fairy.ambient");
     public static final RegistryEntrySupplier<SoundEvent> ENTITY_FLOWER_LILY_STEP = register("entity.flower_lily.step", 2);
+    public static final RegistryEntrySupplier<SoundEvent> ENTITY_GENERIC_HEAVY_CHARGE = register("entity.generic.heavy_charge");
     public static final RegistryEntrySupplier<SoundEvent> ENTITY_GHOST_AMBIENT = register("entity.ghost.ambient", 3);
     public static final RegistryEntrySupplier<SoundEvent> ENTITY_GOBLING_AMBIENT = register("entity.goblin.ambient", 3);
     public static final RegistryEntrySupplier<SoundEvent> ENTITY_GOBLING_HURT = register("entity.goblin.hurt");
@@ -37,7 +38,6 @@ public class ModSounds {
     public static final RegistryEntrySupplier<SoundEvent> ENTITY_RAFFLESIA_DEATH = register("entity.rafflesia.death");
     public static final RegistryEntrySupplier<SoundEvent> ENTITY_SCORPION_STEP = register("entity.scorpion.step");
     public static final RegistryEntrySupplier<SoundEvent> ENTITY_SKELEFANG_ROAR = register("entity.skelefang.roar");
-    public static final RegistryEntrySupplier<SoundEvent> ENTITY_SKELEFANG_CHARGE = register("entity.skelefang.charge");
     public static final RegistryEntrySupplier<SoundEvent> ENTITY_THUNDERBOLT_NEIGH = register("entity.thunderbolt.neigh");
     public static final RegistryEntrySupplier<SoundEvent> ENTITY_WASP_BUZZ = register("entity.wasp.buzz", 3);
     public static final RegistryEntrySupplier<SoundEvent> ENTITY_WEAGLE_FLAP = register("entity.weagle.flap");
@@ -63,7 +63,6 @@ public class ModSounds {
     public static final RegistryEntrySupplier<SoundEvent> SPELL_GENERIC_WIND_LONG = register("spell.generic.wind_long");
     public static final RegistryEntrySupplier<SoundEvent> SPELL_NAIVE_BLADE = register("spell.naive_blade");
     public static final RegistryEntrySupplier<SoundEvent> SPELL_STRAIGHT_PUNCH = register("spell.straight_punch");
-    public static final RegistryEntrySupplier<SoundEvent> SPELL_STARFALL_AMBIENT = register("spell.starfall");
 
     public static final RegistryEntrySupplier<SoundEvent> AMBROSIA_FIGHT = registerBgm("bgm.ambrosia_fight");
     public static final RegistryEntrySupplier<SoundEvent> CHIMERA_FIGHT = registerBgm("bgm.chimera_fight");

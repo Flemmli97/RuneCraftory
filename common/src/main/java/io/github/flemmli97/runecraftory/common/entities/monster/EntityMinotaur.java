@@ -126,7 +126,7 @@ public class EntityMinotaur extends ChargingMonster {
         boolean res = super.handleChargeMovement(anim);
         if (res) {
             if (this.tickCount % 7 == 0)
-                this.playSound(ModSounds.ENTITY_SKELEFANG_CHARGE.get(), 1, (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.0f);
+                this.playSound(ModSounds.ENTITY_GENERIC_HEAVY_CHARGE.get(), 1, (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.0f);
         }
         return res;
     }

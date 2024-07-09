@@ -38,6 +38,12 @@
       "runecraftory:entity/flower_lily/step_2"
     ]
   },
+  "entity.generic.heavy_charge": {
+    "subtitle": "runecraftory:entity.generic.heavy_charge",
+    "sounds": [
+      "runecraftory:entity/generic/heavy_charge"
+    ]
+  },
   "entity.ghost.ambient": {
     "subtitle": "runecraftory:entity.ghost.ambient",
     "sounds": [
@@ -106,12 +112,6 @@
     "subtitle": "runecraftory:entity.skelefang.roar",
     "sounds": [
       "runecraftory:entity/skelefang/roar"
-    ]
-  },
-  "entity.skelefang.charge": {
-    "subtitle": "runecraftory:entity.skelefang.charge",
-    "sounds": [
-      "runecraftory:entity/skelefang/charge"
     ]
   },
   "entity.thunderbolt.neigh": {
@@ -276,12 +276,6 @@
       "runecraftory:spell/straight_punch"
     ]
   },
-  "spell.starfall": {
-    "subtitle": "runecraftory:spell.starfall",
-    "sounds": [
-      "runecraftory:spell/starfall"
-    ]
-  },
   "bgm.ambrosia_fight": {
     "subtitle": "runecraftory:bgm.ambrosia_fight",
     "sounds": [
@@ -358,7 +352,7 @@
     "subtitle": "runecraftory:bgm.grimoire_fight",
     "sounds": [
       {
-        "name": "runecraftory:bgm/cruising-down-8bit-lane",
+        "name": "runecraftory:bgm/area12",
         "stream": true
       }
     ]
@@ -368,6 +362,15 @@
     "sounds": [
       {
         "name": "runecraftory:bgm/cruising-down-8bit-lane",
+        "stream": true
+      }
+    ]
+  },
+  "bgm.sarcophagus_fight": {
+    "subtitle": "runecraftory:bgm.sarcophagus_fight",
+    "sounds": [
+      {
+        "name": "runecraftory:bgm/golem_battle",
         "stream": true
       }
     ]
