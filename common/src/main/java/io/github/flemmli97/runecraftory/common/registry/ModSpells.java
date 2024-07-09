@@ -53,6 +53,7 @@ import io.github.flemmli97.runecraftory.common.spells.LaserAOESpell;
 import io.github.flemmli97.runecraftory.common.spells.LightBarrierSpell;
 import io.github.flemmli97.runecraftory.common.spells.LightBeamSpell;
 import io.github.flemmli97.runecraftory.common.spells.MissileSpell;
+import io.github.flemmli97.runecraftory.common.spells.MultiArrowSpell;
 import io.github.flemmli97.runecraftory.common.spells.MultiFireballSpell;
 import io.github.flemmli97.runecraftory.common.spells.ParaHealSpell;
 import io.github.flemmli97.runecraftory.common.spells.PenetrateWindBladeSpell;
@@ -81,7 +82,6 @@ import io.github.flemmli97.runecraftory.common.spells.StoneThrowSpell;
 import io.github.flemmli97.runecraftory.common.spells.TeleportSpell;
 import io.github.flemmli97.runecraftory.common.spells.ThrowHandItemSpell;
 import io.github.flemmli97.runecraftory.common.spells.TornadoSpell;
-import io.github.flemmli97.runecraftory.common.spells.TripleArrowSpell;
 import io.github.flemmli97.runecraftory.common.spells.TripleFireBulletSpell;
 import io.github.flemmli97.runecraftory.common.spells.TripleWaterLaserSpell;
 import io.github.flemmli97.runecraftory.common.spells.UnsealSpell;
@@ -121,7 +121,8 @@ public class ModSpells {
     public static final RegistryEntrySupplier<Spell> STAFF_CAST = registerSpell("base_staff_spell", BaseStaffSpell::new, new SpellProperties.Builder(0, 0));
 
     public static final RegistryEntrySupplier<Spell> ARROW = registerSpell("vanilla_arrow", ArrowSpell::new, new SpellProperties.Builder(2, 5));
-    public static final RegistryEntrySupplier<Spell> TRIPLE_ARROW = registerSpell("triple_arrow", TripleArrowSpell::new, new SpellProperties.Builder(10, 8));
+    public static final RegistryEntrySupplier<Spell> DOUBLE_ARROW = registerSpell("double_arrow", () -> new MultiArrowSpell(2, 1, 10), new SpellProperties.Builder(10, 8));
+    public static final RegistryEntrySupplier<Spell> TRIPLE_ARROW = registerSpell("triple_arrow", () -> new MultiArrowSpell(3, 1, 15), new SpellProperties.Builder(10, 8));
     public static final RegistryEntrySupplier<Spell> WITHER_SKULL = registerSpell("vanilla_wither_skull", () -> new SimpleVanillaProjectileSpell(SimpleVanillaProjectileSpell.WITHER_SKULL, SoundEvents.WITHER_SHOOT), new SpellProperties.Builder(10, 3));
     public static final RegistryEntrySupplier<Spell> EVOKER_FANG = registerSpell("vanilla_evoker_fang", EvokerFangSpell::new, new SpellProperties.Builder(10, 2));
     public static final RegistryEntrySupplier<Spell> SNOWBALL = registerSpell("vanilla_snowball", () -> new SimpleVanillaProjectileSpell(SimpleVanillaProjectileSpell.SNOWBALL, SoundEvents.SNOWBALL_THROW), new SpellProperties.Builder(0, 0));
