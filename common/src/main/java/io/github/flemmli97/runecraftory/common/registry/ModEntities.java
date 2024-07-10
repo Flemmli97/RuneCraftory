@@ -1287,7 +1287,7 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntitySano>> SANO = regBoss(EntityType.Builder.of(EntitySano::new, MobCategory.MONSTER).sized(3, 4.1f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "sano"),
             0xa18c4a, 0xa82626,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 350).putLevelGains(() -> Attributes.MAX_HEALTH, 550)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 300).putLevelGains(() -> Attributes.MAX_HEALTH, 550)
                     .putAttributes(() -> Attributes.ATTACK_DAMAGE, 14).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 260)
                     .putAttributes(ModAttributes.DEFENCE, 5).putLevelGains(ModAttributes.DEFENCE, 259)
                     .putAttributes(ModAttributes.MAGIC, 20).putLevelGains(ModAttributes.MAGIC, 282)
@@ -1320,7 +1320,7 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntityUno>> UNO = regBoss(EntityType.Builder.of(EntityUno::new, MobCategory.MONSTER).sized(3, 4.1f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "uno"),
             0xa18c4a, 0x1b7f9c,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 350).putLevelGains(() -> Attributes.MAX_HEALTH, 550)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 300).putLevelGains(() -> Attributes.MAX_HEALTH, 550)
                     .putAttributes(() -> Attributes.ATTACK_DAMAGE, 14).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 260)
                     .putAttributes(ModAttributes.DEFENCE, 4).putLevelGains(ModAttributes.DEFENCE, 259)
                     .putAttributes(ModAttributes.MAGIC, 20).putLevelGains(ModAttributes.MAGIC, 282)
