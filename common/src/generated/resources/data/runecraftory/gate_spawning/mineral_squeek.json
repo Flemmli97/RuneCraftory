@@ -1,15 +1,11 @@
 {
   "entity": "runecraftory:mineral_squeek",
   "minDistanceFromSpawn": 0,
-  "minGateLevel": 5,
+  "minGateLevel": 60,
   "allowUnderwater": false,
   "biomes": {
-    "c:is_plains": 1,
-    "minecraft:is_forest": 1,
-    "minecraft:is_hill": 1,
-    "minecraft:is_mountain": 1,
-    "c:is_lush": 1,
-    "c:is_savanna": 1
+    "minecraft:is_hill": 12,
+    "minecraft:is_mountain": 12
   },
   "structures": {}
 }

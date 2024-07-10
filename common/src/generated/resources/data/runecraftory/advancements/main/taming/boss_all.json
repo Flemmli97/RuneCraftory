@@ -16,6 +16,66 @@
     "hidden": false
   },
   "criteria": {
+    "runecraftory:chimera": {
+      "trigger": "runecraftory:tame_monster",
+      "conditions": {
+        "amount": 1,
+        "bosses": false,
+        "entity": {
+          "type": "runecraftory:chimera"
+        }
+      }
+    },
+    "runecraftory:rafflesia": {
+      "trigger": "runecraftory:tame_monster",
+      "conditions": {
+        "amount": 1,
+        "bosses": false,
+        "entity": {
+          "type": "runecraftory:rafflesia"
+        }
+      }
+    },
+    "runecraftory:grimoire": {
+      "trigger": "runecraftory:tame_monster",
+      "conditions": {
+        "amount": 1,
+        "bosses": false,
+        "entity": {
+          "type": "runecraftory:grimoire"
+        }
+      }
+    },
+    "runecraftory:dead_tree": {
+      "trigger": "runecraftory:tame_monster",
+      "conditions": {
+        "amount": 1,
+        "bosses": false,
+        "entity": {
+          "type": "runecraftory:dead_tree"
+        }
+      }
+    },
+    "runecraftory:raccoon": {
+      "trigger": "runecraftory:tame_monster",
+      "conditions": {
+        "amount": 1,
+        "bosses": false,
+        "entity": {
+          "type": "runecraftory:raccoon"
+        }
+      }
+    },
+    "runecraftory:skelefang": {
+      "trigger": "runecraftory:tame_monster",
+      "conditions": {
+        "amount": 1,
+        "bosses": false,
+        "entity": {
+          "type": "runecraftory:skelefang"
+        }
+      }
+    },
     "runecraftory:ambrosia": {
       "trigger": "runecraftory:tame_monster",
       "conditions": {
@@ -43,66 +103,6 @@
         "bosses": false,
         "entity": {
           "type": "runecraftory:marionetta"
-        }
-      }
-    },
-    "runecraftory:dead_tree": {
-      "trigger": "runecraftory:tame_monster",
-      "conditions": {
-        "amount": 1,
-        "bosses": false,
-        "entity": {
-          "type": "runecraftory:dead_tree"
-        }
-      }
-    },
-    "runecraftory:chimera": {
-      "trigger": "runecraftory:tame_monster",
-      "conditions": {
-        "amount": 1,
-        "bosses": false,
-        "entity": {
-          "type": "runecraftory:chimera"
-        }
-      }
-    },
-    "runecraftory:raccoon": {
-      "trigger": "runecraftory:tame_monster",
-      "conditions": {
-        "amount": 1,
-        "bosses": false,
-        "entity": {
-          "type": "runecraftory:raccoon"
-        }
-      }
-    },
-    "runecraftory:skelefang": {
-      "trigger": "runecraftory:tame_monster",
-      "conditions": {
-        "amount": 1,
-        "bosses": false,
-        "entity": {
-          "type": "runecraftory:skelefang"
-        }
-      }
-    },
-    "runecraftory:rafflesia": {
-      "trigger": "runecraftory:tame_monster",
-      "conditions": {
-        "amount": 1,
-        "bosses": false,
-        "entity": {
-          "type": "runecraftory:rafflesia"
-        }
-      }
-    },
-    "runecraftory:grimoire": {
-      "trigger": "runecraftory:tame_monster",
-      "conditions": {
-        "amount": 1,
-        "bosses": false,
-        "entity": {
-          "type": "runecraftory:grimoire"
         }
       }
     },
@@ -139,19 +139,16 @@
   },
   "requirements": [
     [
-      "runecraftory:ambrosia"
+      "runecraftory:chimera"
     ],
     [
-      "runecraftory:thunderbolt"
+      "runecraftory:rafflesia"
     ],
     [
-      "runecraftory:marionetta"
+      "runecraftory:grimoire"
     ],
     [
       "runecraftory:dead_tree"
-    ],
-    [
-      "runecraftory:chimera"
     ],
     [
       "runecraftory:raccoon"
@@ -160,10 +157,13 @@
       "runecraftory:skelefang"
     ],
     [
-      "runecraftory:rafflesia"
+      "runecraftory:ambrosia"
     ],
     [
-      "runecraftory:grimoire"
+      "runecraftory:thunderbolt"
+    ],
+    [
+      "runecraftory:marionetta"
     ],
     [
       "runecraftory:sano"

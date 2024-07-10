@@ -1,7 +1,7 @@
 {
   "entity": "runecraftory:goblin",
   "minDistanceFromSpawn": 0,
-  "minGateLevel": 12,
+  "minGateLevel": 7,
   "allowUnderwater": false,
   "biomes": {
     "c:is_plains": 70,

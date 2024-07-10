@@ -1,7 +1,7 @@
 {
   "entity": "runecraftory:ghost",
   "minDistanceFromSpawn": 0,
-  "minGateLevel": 25,
+  "minGateLevel": 10,
   "allowUnderwater": false,
   "biomes": {
     "c:is_spooky": 75,

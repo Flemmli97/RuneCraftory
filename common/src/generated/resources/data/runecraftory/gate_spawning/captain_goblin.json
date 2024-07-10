@@ -7,7 +7,8 @@
     "c:is_hot": 50,
     "c:is_savanna": 50,
     "c:is_sandy": 50,
-    "minecraft:is_badlands": 50
+    "minecraft:is_badlands": 50,
+    "minecraft:is_hill": 50
   },
   "structures": {}
 }

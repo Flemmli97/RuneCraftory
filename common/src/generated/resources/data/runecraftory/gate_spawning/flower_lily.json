@@ -1,7 +1,7 @@
 {
   "entity": "runecraftory:flower_lily",
   "minDistanceFromSpawn": 0,
-  "minGateLevel": 40,
+  "minGateLevel": 30,
   "allowUnderwater": false,
   "biomes": {
     "c:is_lush": 60,

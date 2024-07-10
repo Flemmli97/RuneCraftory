@@ -25,7 +25,7 @@ public class EntityRideActionCosts {
                     RideActionCost.CODEC.optionalFieldOf("command_4").forGetter(d -> Optional.ofNullable(d.command4))
             ).apply(instance, (c1, c2, c3, c4) -> new EntityRideActionCosts(c1, c2.orElse(null), c3.orElse(null), c4.orElse(null))));
 
-    public static final EntityRideActionCosts DEFAULT = new EntityRideActionCosts.Builder(0, false).build();
+    public static final EntityRideActionCosts DEFAULT = new EntityRideActionCosts.Builder(0.5f, true).build();
 
     private final RideActionCost command1;
     private final RideActionCost command2;
@@ -44,6 +44,8 @@ public class EntityRideActionCosts {
         return !(entity instanceof ServerPlayer player) || Platform.INSTANCE.getPlayerData(player)
                 .map(data -> {
                     if (spell == null || !cost.multiplier) {
+                        if (cost.multiplier)
+                            return true;
                         if (!LevelCalc.useRP(player, data, cost.cost, false, false, false)) {
                             player.connection.send(
                                     new ClientboundSoundPacket(SoundEvents.VILLAGER_NO, SoundSource.PLAYERS, player.position().x, player.position().y, player.position().z, 1, 1));

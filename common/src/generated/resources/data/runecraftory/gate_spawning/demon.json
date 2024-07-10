@@ -1,11 +1,13 @@
 {
   "entity": "runecraftory:demon",
   "minDistanceFromSpawn": 0,
-  "minGateLevel": 40,
+  "minGateLevel": 45,
   "allowUnderwater": false,
   "biomes": {
-    "minecraft:is_forest": 40,
-    "minecraft:is_taiga": 40
+    "c:is_spooky": 70,
+    "c:is_magical": 70,
+    "c:is_dead": 70,
+    "minecraft:is_mountain": 70
   },
   "structures": {}
 }

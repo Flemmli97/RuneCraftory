@@ -1,11 +1,14 @@
 {
   "entity": "runecraftory:malm_tiger",
   "minDistanceFromSpawn": 0,
-  "minGateLevel": 40,
+  "minGateLevel": 60,
   "allowUnderwater": false,
   "biomes": {
-    "minecraft:is_forest": 40,
-    "minecraft:is_taiga": 40
+    "minecraft:is_forest": 20,
+    "minecraft:is_taiga": 20,
+    "minecraft:is_hill": 20,
+    "minecraft:is_mountain": 20,
+    "c:is_snowy": 20
   },
   "structures": {}
 }

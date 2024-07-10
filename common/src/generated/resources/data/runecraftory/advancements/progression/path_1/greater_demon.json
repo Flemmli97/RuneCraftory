@@ -1,0 +1,20 @@
+{
+  "display": {
+    "icon": {
+      "item": "runecraftory:wooly_spawn_egg"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.progression.boss.greater_demon.title"
+    },
+    "description": {
+      "translate": "runecraftory.advancements.progression.boss.greater_demon.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false,
+    "background": "minecraft:textures/block/dirt.png"
+  },
+  "criteria": {},
+  "requirements": []
+}

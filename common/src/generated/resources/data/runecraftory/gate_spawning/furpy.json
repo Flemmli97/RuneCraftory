@@ -1,7 +1,7 @@
 {
   "entity": "runecraftory:furpy",
   "minDistanceFromSpawn": 0,
-  "minGateLevel": 40,
+  "minGateLevel": 30,
   "allowUnderwater": false,
   "biomes": {
     "minecraft:is_forest": 60,

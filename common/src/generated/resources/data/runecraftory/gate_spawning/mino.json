@@ -1,7 +1,7 @@
 {
   "entity": "runecraftory:mino",
   "minDistanceFromSpawn": 0,
-  "minGateLevel": 40,
+  "minGateLevel": 15,
   "allowUnderwater": false,
   "biomes": {
     "minecraft:is_forest": 80,

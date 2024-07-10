@@ -134,9 +134,11 @@ public class EntityGhost extends ChargingMonster {
     @Override
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
-            if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), null))
+            if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), command == 2 ? ModSpells.DARK_BALL.get() : null))
                 return;
-            if (command == 1)
+            if (command == 2)
+                this.getAnimationHandler().setAnimation(DARKBALL);
+            else if (command == 1)
                 this.getAnimationHandler().setAnimation(CHARGE);
             else
                 this.getAnimationHandler().setAnimation(SWING);

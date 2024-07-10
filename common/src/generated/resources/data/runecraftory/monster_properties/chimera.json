@@ -1,7 +1,7 @@
 {
-  "minLevel": 5,
-  "xp": 950,
-  "money": 150,
+  "minLevel": 12,
+  "xp": 150,
+  "money": 0,
   "tamingChance": 0.005,
   "rideable": true,
   "flying": false,
@@ -40,11 +40,11 @@
     }
   },
   "baseValues": {
-    "minecraft:generic.max_health": 300.0,
-    "minecraft:generic.attack_damage": 21.0,
-    "runecraftory:defence": 4.1,
-    "runecraftory:magic_attack": 15.3,
-    "runecraftory:magic_defence": 3.9,
+    "minecraft:generic.max_health": 315.0,
+    "minecraft:generic.attack_damage": 19.0,
+    "runecraftory:defence": 4.0,
+    "runecraftory:magic_attack": 15.0,
+    "runecraftory:magic_defence": 4.0,
     "runecraftory:poison": 2.0,
     "runecraftory:paralysis": 2.0,
     "runecraftory:seal": 2.0,
@@ -67,10 +67,17 @@
     "runecraftory:res_faint": 100.0
   },
   "levelGains": {
-    "minecraft:generic.max_health": 525.0,
-    "minecraft:generic.attack_damage": 266.0,
-    "runecraftory:defence": 230.0,
-    "runecraftory:magic_attack": 235.0,
-    "runecraftory:magic_defence": 225.0
+    "minecraft:generic.max_health": 515.0,
+    "minecraft:generic.attack_damage": 302.0,
+    "runecraftory:defence": 242.0,
+    "runecraftory:magic_attack": 289.0,
+    "runecraftory:magic_defence": 248.0
+  },
+  "spawnerPredicate": {
+    "player": {
+      "advancements": {
+        "runecraftory:progression/path_1/greater_demon": true
+      }
+    }
   }
 }

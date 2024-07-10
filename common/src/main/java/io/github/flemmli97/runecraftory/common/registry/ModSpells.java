@@ -120,9 +120,8 @@ public class ModSpells {
 
     public static final RegistryEntrySupplier<Spell> STAFF_CAST = registerSpell("base_staff_spell", BaseStaffSpell::new, new SpellProperties.Builder(0, 0));
 
+    // Vanilla
     public static final RegistryEntrySupplier<Spell> ARROW = registerSpell("vanilla_arrow", ArrowSpell::new, new SpellProperties.Builder(2, 5));
-    public static final RegistryEntrySupplier<Spell> DOUBLE_ARROW = registerSpell("double_arrow", () -> new MultiArrowSpell(2, 1, 10), new SpellProperties.Builder(10, 8));
-    public static final RegistryEntrySupplier<Spell> TRIPLE_ARROW = registerSpell("triple_arrow", () -> new MultiArrowSpell(3, 1, 15), new SpellProperties.Builder(10, 8));
     public static final RegistryEntrySupplier<Spell> WITHER_SKULL = registerSpell("vanilla_wither_skull", () -> new SimpleVanillaProjectileSpell(SimpleVanillaProjectileSpell.WITHER_SKULL, SoundEvents.WITHER_SHOOT), new SpellProperties.Builder(10, 3));
     public static final RegistryEntrySupplier<Spell> EVOKER_FANG = registerSpell("vanilla_evoker_fang", EvokerFangSpell::new, new SpellProperties.Builder(10, 2));
     public static final RegistryEntrySupplier<Spell> SNOWBALL = registerSpell("vanilla_snowball", () -> new SimpleVanillaProjectileSpell(SimpleVanillaProjectileSpell.SNOWBALL, SoundEvents.SNOWBALL_THROW), new SpellProperties.Builder(0, 0));
@@ -189,6 +188,8 @@ public class ModSpells {
 
     public static final RegistryEntrySupplier<Spell> TELEPORT = registerSpell("teleport", TeleportSpell::new, new SpellProperties.Builder(30, 0));
 
+    public static final RegistryEntrySupplier<Spell> DOUBLE_ARROW = registerSpell("double_arrow", () -> new MultiArrowSpell(2, 1, 10), new SpellProperties.Builder(10, 8));
+    public static final RegistryEntrySupplier<Spell> TRIPLE_ARROW = registerSpell("triple_arrow", () -> new MultiArrowSpell(3, 1, 15), new SpellProperties.Builder(10, 8));
     public static final RegistryEntrySupplier<Spell> SPORE_CIRCLE_SPELL = registerSpell("spore_circle", SporeCircleSpell::new, new SpellProperties.Builder(10, 5).withXPGain(EnumSkills.EARTH, 5).affectedSkill(EnumSkills.EARTH));
     public static final RegistryEntrySupplier<Spell> GUST_SPELL = registerSpell("gust_wind", GustSpell::new, new SpellProperties.Builder(10, 0).withXPGain(EnumSkills.WIND, 5));
     public static final RegistryEntrySupplier<Spell> STONE_THROW = registerSpell("stone_throw", StoneThrowSpell::new, new SpellProperties.Builder(10, 7));

@@ -143,12 +143,12 @@ public class EntitySano extends BossMonster implements MobAttackExt {
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
             if (command == 2) {
-                if (this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), ModSpells.WAVE.get()))
+                if (this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), ModSpells.FIRE_WALL.get()))
                     this.getAnimationHandler().setAnimation(FIRE_BREATH);
             } else if (command == 1) {
-                if (this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), ModSpells.SLEEP_BALLS.get()))
+                if (this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), ModSpells.FIREBALL_BARRAGE.get()))
                     this.getAnimationHandler().setAnimation(FIREBALL_BARRAGE);
-            } else if (this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), null))
+            } else if (this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), ModSpells.TRIPLE_FIRE_BALL.get()))
                 this.getAnimationHandler().setAnimation(FIREBALL_3X);
         }
     }

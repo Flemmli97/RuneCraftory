@@ -50,6 +50,7 @@ public class LibAdvancements {
     public static final ResourceLocation HIGH_TIER_TOOL = main("final_tool");
 
     public static final ResourceLocation ROOT_PROGRESSION = progression("root");
+    public static final ResourceLocation GREATER_DEMON = progression("path_1/greater_demon");
     public static final ResourceLocation CHIMERA = progression("path_1/chimera");
     public static final ResourceLocation RAFFLESIA = progression("path_1/rafflesia");
     public static final ResourceLocation GRIMOIRE = progression("path_1/grimoire");

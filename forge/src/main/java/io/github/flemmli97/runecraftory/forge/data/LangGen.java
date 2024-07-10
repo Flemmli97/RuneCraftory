@@ -718,6 +718,8 @@ public class LangGen implements DataProvider {
 
         this.add("runecraftory.advancements.progression.root.title", "Runecraftory - Milestones");
         this.add("runecraftory.advancements.progression.root.description", "Defeating them will increase overall mob levels!");
+        this.add("runecraftory.advancements.progression.boss.greater_demon.title", "Monke!");
+        this.add("runecraftory.advancements.progression.boss.greater_demon.description", "Defeat the greater demon. But I don't think he exists yet!");
         this.add("runecraftory.advancements.progression.boss.chimera.title", "What is this creature!");
         this.add("runecraftory.advancements.progression.boss.chimera.description", "Defeat a chimera in a water ruin");
         this.add("runecraftory.advancements.progression.boss.rafflesia.title", "Status gallore");

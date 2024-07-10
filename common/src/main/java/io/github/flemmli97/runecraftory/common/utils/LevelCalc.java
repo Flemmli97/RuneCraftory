@@ -71,7 +71,7 @@ public class LevelCalc {
             LEVEL_XP_TOTAL[0] = 50;
             long prev = LEVEL_XP_TOTAL[0];
             for (int l = 1; l < len; l++) {
-                LEVEL_XP_TOTAL[l] = (long) (prev + 20 + l * 30L + 15 * Math.pow(l, 1.25) + (l / 10) * 250L + (l / 20) * (l / 20) * 1000L);
+                LEVEL_XP_TOTAL[l] = (long) (prev + 5 + l * 10L + 15 * Math.pow(l, 1.25) + (l / 10) * 250L + (l / 20) * (l / 20) * 1000L);
                 //Old calc. here for now
                 //levelXPTotal[l] = (long) (prev + 170 + 9 * Math.pow(l, 2.455) - 12 * Math.pow(l, 1.549) + (l - 1) * 125L);
                 prev = LEVEL_XP_TOTAL[l];

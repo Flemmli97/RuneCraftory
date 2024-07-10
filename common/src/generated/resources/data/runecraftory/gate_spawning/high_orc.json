@@ -1,7 +1,7 @@
 {
   "entity": "runecraftory:high_orc",
   "minDistanceFromSpawn": 0,
-  "minGateLevel": 35,
+  "minGateLevel": 20,
   "allowUnderwater": false,
   "biomes": {
     "c:is_plains": 70,

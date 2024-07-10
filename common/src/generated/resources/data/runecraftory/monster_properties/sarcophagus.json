@@ -1,16 +1,16 @@
 {
-  "minLevel": 12,
-  "xp": 950,
-  "money": 150,
-  "tamingChance": 0.0,
+  "minLevel": 70,
+  "xp": 450,
+  "money": 0,
+  "tamingChance": 0.005,
   "rideable": true,
   "flying": false,
-  "size": 3,
+  "size": 2,
   "needsRoof": true,
   "levelIncreaseOnKill": [
     {
       "minKilled": 1,
-      "increase": 10
+      "increase": 12
     },
     {
       "minKilled": 2,
@@ -32,36 +32,31 @@
     }
   },
   "baseValues": {
-    "minecraft:generic.max_health": 275.0,
-    "minecraft:generic.attack_damage": 13.0,
-    "runecraftory:defence": 4.5,
-    "runecraftory:magic_attack": 16.5,
-    "runecraftory:magic_defence": 3.8,
-    "runecraftory:res_earth": 15.0,
-    "runecraftory:res_water": 15.0,
-    "runecraftory:res_fire": 15.0,
-    "runecraftory:res_wind": -25.0,
-    "runecraftory:res_light": -15.0,
-    "runecraftory:res_love": -15.0,
+    "minecraft:generic.max_health": 340.0,
+    "minecraft:generic.attack_damage": 15.0,
+    "runecraftory:defence": 5.0,
+    "runecraftory:magic_attack": 21.0,
+    "runecraftory:magic_defence": 5.0,
+    "runecraftory:res_love": -25.0,
     "runecraftory:res_crit": 25.0,
     "runecraftory:res_drain": 25.0,
     "runecraftory:res_dizzy": 100.0,
     "minecraft:generic.knockback_resistance": 1.0,
     "runecraftory:res_stun": 100.0,
-    "runecraftory:res_paralysis": 97.0,
+    "runecraftory:res_paralysis": 100.0,
     "runecraftory:res_poison": 100.0,
-    "runecraftory:res_seal": 80.0,
+    "runecraftory:res_seal": 100.0,
     "runecraftory:res_sleep": 100.0,
     "runecraftory:res_fatigue": 100.0,
     "runecraftory:res_cold": 100.0,
     "runecraftory:res_faint": 100.0
   },
   "levelGains": {
-    "minecraft:generic.max_health": 575.0,
-    "minecraft:generic.attack_damage": 200.0,
-    "runecraftory:defence": 228.0,
-    "runecraftory:magic_attack": 240.0,
-    "runecraftory:magic_defence": 224.0
+    "minecraft:generic.max_health": 533.0,
+    "minecraft:generic.attack_damage": 276.0,
+    "runecraftory:defence": 243.0,
+    "runecraftory:magic_attack": 280.0,
+    "runecraftory:magic_defence": 243.0
   },
   "spawnerPredicate": {
     "player": {

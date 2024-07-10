@@ -1,11 +1,10 @@
 {
   "entity": "runecraftory:minotaur_king",
   "minDistanceFromSpawn": 0,
-  "minGateLevel": 40,
+  "minGateLevel": 75,
   "allowUnderwater": false,
   "biomes": {
-    "minecraft:is_forest": 40,
-    "minecraft:is_taiga": 40
+    "minecraft:is_mountain": 18
   },
   "structures": {}
 }

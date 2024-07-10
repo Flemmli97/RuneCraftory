@@ -1,12 +1,12 @@
 {
   "entity": "runecraftory:ghost_ray",
   "minDistanceFromSpawn": 0,
-  "minGateLevel": 25,
+  "minGateLevel": 15,
   "allowUnderwater": false,
   "biomes": {
-    "c:is_spooky": 20,
-    "c:is_dead": 20,
-    "c:is_swamp": 20
+    "c:is_spooky": 15,
+    "c:is_dead": 15,
+    "c:is_swamp": 15
   },
   "structures": {}
 }

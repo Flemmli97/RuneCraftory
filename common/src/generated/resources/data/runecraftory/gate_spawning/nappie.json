@@ -1,12 +1,13 @@
 {
   "entity": "runecraftory:nappie",
   "minDistanceFromSpawn": 0,
-  "minGateLevel": 5,
+  "minGateLevel": 25,
   "allowUnderwater": false,
   "biomes": {
     "c:is_plains": 70,
     "minecraft:is_forest": 70,
     "minecraft:is_hill": 70,
+    "c:is_beach": 70,
     "c:is_magical": 70
   },
   "structures": {}

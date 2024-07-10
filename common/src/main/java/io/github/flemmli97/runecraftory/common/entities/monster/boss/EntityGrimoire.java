@@ -231,7 +231,7 @@ public class EntityGrimoire extends BossMonster {
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
             if (command == 2) {
-                if (this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), ModSpells.WAVE.get()))
+                if (this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), ModSpells.WIND_BLADE_BARRAGE.get()))
                     this.getAnimationHandler().setAnimation(WIND_BREATH);
             } else if (command == 1) {
                 if (this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), null))

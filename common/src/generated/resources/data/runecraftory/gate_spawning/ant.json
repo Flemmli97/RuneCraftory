@@ -4,11 +4,11 @@
   "minGateLevel": 0,
   "allowUnderwater": false,
   "biomes": {
-    "c:is_plains": 70,
-    "minecraft:is_forest": 70,
-    "minecraft:is_hill": 70,
-    "c:is_lush": 70,
-    "c:is_savanna": 70
+    "c:is_plains": 80,
+    "minecraft:is_forest": 80,
+    "minecraft:is_hill": 80,
+    "c:is_lush": 80,
+    "c:is_savanna": 80
   },
   "structures": {}
 }

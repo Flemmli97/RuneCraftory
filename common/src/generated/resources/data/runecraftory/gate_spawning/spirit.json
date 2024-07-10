@@ -1,7 +1,7 @@
 {
   "entity": "runecraftory:spirit",
   "minDistanceFromSpawn": 0,
-  "minGateLevel": 25,
+  "minGateLevel": 15,
   "allowUnderwater": false,
   "biomes": {
     "c:is_spooky": 60,

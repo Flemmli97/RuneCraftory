@@ -100,7 +100,12 @@ public class AdvancementGen implements DataProvider {
         Advancement hightTierTool = Advancement.Builder.advancement().parent(helper).display(ModItems.WATERING_CAN_PLATINUM.get(), new TranslatableComponent("runecraftory.advancements.final.tool.title"), new TranslatableComponent("runecraftory.advancements.final.tool.description"), null, FrameType.CHALLENGE, true, true, false).addCriterion("final_tool", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(RunecraftoryTags.HIGH_TIER_TOOLS).build())).save(cons, LibAdvancements.HIGH_TIER_TOOL.toString());
 
         Advancement rootProgression = Advancement.Builder.advancement().display(ModItems.SHORT_DAGGER.get(), new TranslatableComponent("runecraftory.advancements.progression.root.title"), new TranslatableComponent("runecraftory.advancements.progression.root.description"), new ResourceLocation("textures/block/dirt.png"), FrameType.TASK, false, false, false).addCriterion("crafting_table", InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.CRAFTING_TABLE)).save(cons, LibAdvancements.ROOT_PROGRESSION.toString());
-        Advancement chimera = bossProgression(ModEntities.CHIMERA, cons, LibAdvancements.CHIMERA, rootProgression);
+        Advancement.Builder builder = Advancement.Builder.advancement().display(SpawnEgg.fromType(ModEntities.WOOLY.get()).get(),
+                new TranslatableComponent("runecraftory.advancements.progression.boss.greater_demon.title"),
+                new TranslatableComponent("runecraftory.advancements.progression.boss.greater_demon.description"),
+                new ResourceLocation("textures/block/dirt.png"), FrameType.TASK, true, true, false);
+        Advancement greater_demon = builder.save(cons, LibAdvancements.GREATER_DEMON.toString());
+        Advancement chimera = bossProgression(ModEntities.CHIMERA, cons, LibAdvancements.CHIMERA, greater_demon);
         Advancement rafflesia = bossProgression(ModEntities.RAFFLESIA, cons, LibAdvancements.RAFFLESIA, chimera);
         Advancement grimoire = bossProgression(ModEntities.GRIMOIRE, cons, LibAdvancements.GRIMOIRE, rafflesia);
         Advancement deadTree = bossProgression(ModEntities.DEAD_TREE, cons, LibAdvancements.DEAD_TREE, rootProgression);
@@ -109,7 +114,7 @@ public class AdvancementGen implements DataProvider {
         Advancement ambrosia = bossProgression(ModEntities.AMBROSIA, cons, LibAdvancements.AMBROSIA, rootProgression);
         Advancement thunderbolt = bossProgression(ModEntities.THUNDERBOLT, cons, LibAdvancements.THUNDERBOLT, ambrosia);
         Advancement marionetta = bossProgression(ModEntities.MARIONETTA, cons, LibAdvancements.MARIONETTA, thunderbolt);
-        Advancement.Builder builder = Advancement.Builder.advancement().display(SpawnEgg.fromType(ModEntities.SANO.get()).get(),
+        builder = Advancement.Builder.advancement().display(SpawnEgg.fromType(ModEntities.SANO.get()).get(),
                         new TranslatableComponent("runecraftory.advancements.progression.boss.sano_uno.title"),
                         new TranslatableComponent("runecraftory.advancements.progression.boss.sano_uno.description"),
                         new ResourceLocation("textures/block/dirt.png"), FrameType.TASK, true, true, false)

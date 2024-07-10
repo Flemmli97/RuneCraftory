@@ -1,7 +1,7 @@
 {
   "entity": "runecraftory:tomato_ghost",
   "minDistanceFromSpawn": 0,
-  "minGateLevel": 60,
+  "minGateLevel": 40,
   "allowUnderwater": false,
   "biomes": {
     "c:is_hot": 75,

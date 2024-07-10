@@ -1,14 +1,14 @@
 {
   "entity": "runecraftory:buffaloo",
   "minDistanceFromSpawn": 0,
-  "minGateLevel": 50,
+  "minGateLevel": 25,
   "allowUnderwater": false,
   "biomes": {
-    "c:is_slope": 65,
-    "c:is_hot": 65,
-    "minecraft:is_mountain": 65,
-    "minecraft:is_hill": 65,
-    "minecraft:is_badlands": 65
+    "c:is_slope": 60,
+    "c:is_hot": 60,
+    "minecraft:is_mountain": 60,
+    "minecraft:is_hill": 60,
+    "minecraft:is_badlands": 60
   },
   "structures": {}
 }

@@ -1,7 +1,7 @@
 {
   "entity": "runecraftory:sky_fish",
   "minDistanceFromSpawn": 0,
-  "minGateLevel": 12,
+  "minGateLevel": 7,
   "allowUnderwater": true,
   "biomes": {
     "c:is_beach": 60,

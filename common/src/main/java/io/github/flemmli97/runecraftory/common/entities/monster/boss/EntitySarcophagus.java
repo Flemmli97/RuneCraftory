@@ -354,13 +354,13 @@ public class EntitySarcophagus extends BossMonster implements MobAttackExt {
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
             if (command == 2) {
-                if (this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), null))
+                if (this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), ModSpells.FIRE_CIRCLE.get()))
                     this.getAnimationHandler().setAnimation(FIRE_CIRCLE);
             } else if (command == 1) {
-                if (this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), null))
+                if (this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), ModSpells.MISSILE_8X.get()))
                     this.getAnimationHandler().setAnimation(MISSILE);
             } else {
-                if (this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), null))
+                if (this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), ModSpells.LIGHT_BEAM.get()))
                     this.getAnimationHandler().setAnimation(BEAM);
             }
         }

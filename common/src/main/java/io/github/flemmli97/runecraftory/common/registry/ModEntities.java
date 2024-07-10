@@ -174,965 +174,834 @@ public class ModEntities {
     private static final Map<ResourceLocation, GateSpawnData> DEFAULT_SPAWN_DATA = new HashMap<>();
     private static final Map<ResourceLocation, EntityProperties.Builder> DEFAULT_MOB_PROPERTIES = new HashMap<>();
 
+    private static final float BOSS_TAMING_CHANCE = 0.005f;
+
     public static final RegistryEntrySupplier<EntityType<EntityWooly>> WOOLY = regMonster(EntityType.Builder.of(EntityWooly::new, MobCategory.MONSTER).sized(0.7f, 1.55f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "wooly"),
             0xffffcc, 0xffffff,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 18).putLevelGains(() -> Attributes.MAX_HEALTH, 400)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 3).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 200)
-                    .putAttributes(ModAttributes.DEFENCE, 0).putLevelGains(ModAttributes.DEFENCE, 130)
-                    .putAttributes(ModAttributes.MAGIC, 1).putLevelGains(ModAttributes.MAGIC, 130)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 0).putLevelGains(ModAttributes.MAGIC_DEFENCE, 130)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 18).putLevelGains(() -> Attributes.MAX_HEALTH, 430)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 3).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 260)
+                    .putAttributes(ModAttributes.DEFENCE, 0).putLevelGains(ModAttributes.DEFENCE, 240)
+                    .putAttributes(ModAttributes.MAGIC, 1).putLevelGains(ModAttributes.MAGIC, 230)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 0).putLevelGains(ModAttributes.MAGIC_DEFENCE, 240)
                     .putAttributes(ModAttributes.DIZZY, 5)
                     .putAttributes(ModAttributes.CRIT, 1)
                     .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .xp(5).money(3).tamingChance(0.2f).setRideable(),
+                    .xp(5).tamingChance(0.2f).setRideable(),
             new GateSpawnData.Builder(0, 0).addToBiomeTag(100, RunecraftoryTags.IS_PLAINS, RunecraftoryTags.IS_BEACH, BiomeTags.IS_FOREST, BiomeTags.IS_HILL,
                     RunecraftoryTags.IS_MAGICAL).addToBiomeTag(60, RunecraftoryTags.IS_SAVANNA, BiomeTags.IS_MOUNTAIN, BiomeTags.IS_TAIGA));
-    public static final RegistryEntrySupplier<EntityType<EntityOrc>> ORC = regMonster(EntityType.Builder.of(EntityOrc::new, MobCategory.MONSTER).sized(0.73f, 2.3f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "orc"),
-            0x663300, 0xffbf80,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 24).putLevelGains(() -> Attributes.MAX_HEALTH, 400)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 12).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 230)
-                    .putAttributes(ModAttributes.DEFENCE, 0).putLevelGains(ModAttributes.DEFENCE, 145)
-                    .putAttributes(ModAttributes.MAGIC, 4).putLevelGains(ModAttributes.MAGIC, 100)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 0).putLevelGains(ModAttributes.MAGIC_DEFENCE, 120)
-                    .putAttributes(ModAttributes.DIZZY, 3)
-                    .putAttributes(ModAttributes.CRIT, 1)
-                    .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_EARTH, 10)
-                    .xp(10).money(4).tamingChance(0.15f).setRideable(),
-            new GateSpawnData.Builder(0, 0).addToBiomeTag(100, RunecraftoryTags.IS_PLAINS, RunecraftoryTags.IS_BEACH, BiomeTags.IS_FOREST, BiomeTags.IS_HILL,
-                    RunecraftoryTags.IS_MAGICAL).addToBiomeTag(60, RunecraftoryTags.IS_SAVANNA, BiomeTags.IS_MOUNTAIN, BiomeTags.IS_TAIGA));
-    public static final RegistryEntrySupplier<EntityType<EntityOrcArcher>> ORC_ARCHER = regMonster(EntityType.Builder.of(EntityOrcArcher::new, MobCategory.MONSTER).sized(0.73f, 2.3f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "orc_archer"),
-            0x663300, 0xffbf80,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 24).putLevelGains(() -> Attributes.MAX_HEALTH, 400)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 11).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 220)
-                    .putAttributes(ModAttributes.DEFENCE, 0).putLevelGains(ModAttributes.DEFENCE, 150)
-                    .putAttributes(ModAttributes.MAGIC, 4).putLevelGains(ModAttributes.MAGIC, 100)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 0).putLevelGains(ModAttributes.MAGIC_DEFENCE, 120)
-                    .putAttributes(ModAttributes.DIZZY, 3)
-                    .putAttributes(ModAttributes.CRIT, 1)
-                    .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_EARTH, 10)
-                    .xp(10).money(4).tamingChance(0.15f).setRideable(),
-            new GateSpawnData.Builder(0, 0).addToBiomeTag(100, RunecraftoryTags.IS_PLAINS, RunecraftoryTags.IS_BEACH, BiomeTags.IS_FOREST, BiomeTags.IS_HILL,
-                    RunecraftoryTags.IS_MAGICAL).addToBiomeTag(60, RunecraftoryTags.IS_SAVANNA, BiomeTags.IS_MOUNTAIN, BiomeTags.IS_TAIGA));
-    public static final RegistryEntrySupplier<EntityType<EntityAnt>> ANT = regMonster(EntityType.Builder.of(EntityAnt::new, MobCategory.MONSTER).sized(1.1f, 0.44f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "ant"),
-            0x800000, 0x1a0000,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 26).putLevelGains(() -> Attributes.MAX_HEALTH, 420)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 9).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 210)
-                    .putAttributes(ModAttributes.DEFENCE, 1).putLevelGains(ModAttributes.DEFENCE, 135)
-                    .putAttributes(ModAttributes.MAGIC, 4).putLevelGains(ModAttributes.MAGIC, 100)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 0).putLevelGains(ModAttributes.DEFENCE, 120)
-                    .putAttributes(ModAttributes.DIZZY, 3)
-                    .putAttributes(ModAttributes.CRIT, 1)
-                    .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_WATER, -10)
-                    .xp(10).money(5).tamingChance(0.1f),
-            new GateSpawnData.Builder(0, 0).addToBiomeTag(70, RunecraftoryTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, RunecraftoryTags.IS_LUSH, RunecraftoryTags.IS_SAVANNA));
-    public static final RegistryEntrySupplier<EntityType<EntityBeetle>> BEETLE = regMonster(EntityType.Builder.of(EntityBeetle::new, MobCategory.MONSTER).sized(0.7f, 1.7f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "beetle"),
-            0x9c6a43, 0x244a69,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 23).putLevelGains(() -> Attributes.MAX_HEALTH, 405)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 14).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 225)
-                    .putAttributes(ModAttributes.DEFENCE, 0).putLevelGains(ModAttributes.DEFENCE, 122)
-                    .putAttributes(ModAttributes.MAGIC, 5).putLevelGains(ModAttributes.MAGIC, 120)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 0).putLevelGains(ModAttributes.MAGIC_DEFENCE, 125)
-                    .putAttributes(ModAttributes.DIZZY, 3)
-                    .putAttributes(ModAttributes.CRIT, 1)
-                    .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_FIRE, -10)
-                    .putAttributes(ModAttributes.RES_WIND, 10)
-                    .xp(15).money(3).tamingChance(0.05f).setRideable().setFlying(),
-            new GateSpawnData.Builder(0, 0).addToBiomeTag(70, RunecraftoryTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, RunecraftoryTags.IS_LUSH));
-    public static final RegistryEntrySupplier<EntityType<EntityBigMuck>> BIG_MUCK = regMonster(EntityType.Builder.of(EntityBigMuck::new, MobCategory.MONSTER).sized(0.9f, 1.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "big_muck"),
-            0xd7ce4a, 0xad5c25,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 25).putLevelGains(() -> Attributes.MAX_HEALTH, 395)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 8).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 130)
-                    .putAttributes(ModAttributes.DEFENCE, 0).putLevelGains(ModAttributes.DEFENCE, 120)
-                    .putAttributes(ModAttributes.MAGIC, 12).putLevelGains(ModAttributes.MAGIC, 210)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 1).putLevelGains(ModAttributes.MAGIC_DEFENCE, 145)
-                    .putAttributes(ModAttributes.DIZZY, 3)
-                    .putAttributes(ModAttributes.CRIT, 1)
-                    .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_LOVE, 10)
-                    .putAttributes(ModAttributes.RES_DARK, -5)
-                    .xp(20).money(3).tamingChance(0.05f).setRideable()
-                    .withRideActionCosts(new EntityRideActionCosts.Builder().secondCost(0.5f, true)
-                            .thirdCost(0.5f, true)),
-            new GateSpawnData.Builder(0, 5).addToBiomeTag(60, RunecraftoryTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, RunecraftoryTags.IS_LUSH, RunecraftoryTags.IS_MAGICAL, RunecraftoryTags.IS_MUSHROOM));
-    public static final RegistryEntrySupplier<EntityType<EntityBuffamoo>> BUFFAMOO = regMonster(EntityType.Builder.of(EntityBuffamoo::new, MobCategory.MONSTER).sized(1.2f, 1.45f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "buffamoo"),
-            0xd8d8d0, 0x4e4e4c,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 28).putLevelGains(() -> Attributes.MAX_HEALTH, 415)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 15).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 200)
-                    .putAttributes(ModAttributes.DEFENCE, 1.6).putLevelGains(ModAttributes.DEFENCE, 160)
-                    .putAttributes(ModAttributes.MAGIC, 9).putLevelGains(ModAttributes.MAGIC, 150)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 0).putLevelGains(ModAttributes.MAGIC_DEFENCE, 140)
-                    .putAttributes(ModAttributes.DIZZY, 3)
-                    .putAttributes(ModAttributes.CRIT, 1)
-                    .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_LOVE, 10)
-                    .xp(20).money(5).tamingChance(0.15f).setRideable(),
-            new GateSpawnData.Builder(0, 5).addToBiomeTag(70, RunecraftoryTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, BiomeTags.IS_MOUNTAIN, RunecraftoryTags.IS_LUSH));
-    public static final RegistryEntrySupplier<EntityType<EntityChipsqueek>> CHIPSQUEEK = regMonster(EntityType.Builder.of(EntityChipsqueek::new, MobCategory.MONSTER).sized(0.65f, 0.95f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "chipsqueek"),
-            0xff3b5b, 0xf9ffbb,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 22).putLevelGains(() -> Attributes.MAX_HEALTH, 390)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 11.5).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 160)
-                    .putAttributes(ModAttributes.DEFENCE, 0).putLevelGains(ModAttributes.DEFENCE, 120)
-                    .putAttributes(ModAttributes.MAGIC, 9.2).putLevelGains(ModAttributes.MAGIC, 160)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 1).putLevelGains(ModAttributes.MAGIC_DEFENCE, 120)
-                    .putAttributes(ModAttributes.DIZZY, 3)
-                    .putAttributes(ModAttributes.CRIT, 1)
-                    .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_LOVE, 10)
-                    .xp(15).money(1).tamingChance(0.15f),
-            new GateSpawnData.Builder(0, 5).addToBiomeTag(70, RunecraftoryTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, BiomeTags.IS_MOUNTAIN, RunecraftoryTags.IS_LUSH, RunecraftoryTags.IS_SAVANNA));
-    public static final RegistryEntrySupplier<EntityType<EntityCluckadoodle>> CLUCKADOODLE = regMonster(EntityType.Builder.of(EntityCluckadoodle::new, MobCategory.MONSTER).sized(0.6f, 1.1f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "cluckadoodle"),
-            0xc2c2c2, 0xdc2121,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 22).putLevelGains(() -> Attributes.MAX_HEALTH, 395)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 13).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 205)
-                    .putAttributes(ModAttributes.DEFENCE, 0.5).putLevelGains(ModAttributes.DEFENCE, 100)
-                    .putAttributes(ModAttributes.MAGIC, 3).putLevelGains(ModAttributes.MAGIC, 100)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 0.5).putLevelGains(ModAttributes.MAGIC_DEFENCE, 90)
-                    .putAttributes(ModAttributes.DIZZY, 3)
-                    .putAttributes(ModAttributes.CRIT, 1)
-                    .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_FIRE, -25)
-                    .putAttributes(ModAttributes.RES_LOVE, 10)
-                    .xp(20).money(2).tamingChance(0.15f),
-            new GateSpawnData.Builder(0, 5).addToBiomeTag(70, RunecraftoryTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, BiomeTags.IS_MOUNTAIN));
-    public static final RegistryEntrySupplier<EntityType<EntityPommePomme>> POMME_POMME = regMonster(EntityType.Builder.of(EntityPommePomme::new, MobCategory.MONSTER).sized(1.0f, 1.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "pomme_pomme"),
-            0xff1c2b, 0xf7b4b8,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 24).putLevelGains(() -> Attributes.MAX_HEALTH, 415)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 14).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 160)
-                    .putAttributes(ModAttributes.DEFENCE, 0).putLevelGains(ModAttributes.DEFENCE, 175)
-                    .putAttributes(ModAttributes.MAGIC, 9).putLevelGains(ModAttributes.MAGIC, 120)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 0).putLevelGains(ModAttributes.MAGIC_DEFENCE, 120)
-                    .putAttributes(ModAttributes.DIZZY, 3)
-                    .putAttributes(ModAttributes.CRIT, 1)
-                    .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_EARTH, 15)
-                    .putAttributes(ModAttributes.RES_WIND, -25)
-                    .xp(30).money(4).tamingChance(0.1f).setRideable(),
-            new GateSpawnData.Builder(0, 5).addToBiomeTag(70, RunecraftoryTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, RunecraftoryTags.IS_MAGICAL));
-    public static final RegistryEntrySupplier<EntityType<EntityTortas>> TORTAS = regMonster(EntityType.Builder.of(EntityTortas::new, MobCategory.MONSTER).sized(1.4f, 0.70f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "tortas"),
-            0x5c6682, 0xa5848c,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 32).putLevelGains(() -> Attributes.MAX_HEALTH, 420)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 16.5).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 230)
-                    .putAttributes(ModAttributes.DEFENCE, 2.1).putLevelGains(ModAttributes.DEFENCE, 195)
-                    .putAttributes(ModAttributes.MAGIC, 8.4).putLevelGains(ModAttributes.MAGIC, 100)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 0).putLevelGains(ModAttributes.MAGIC_DEFENCE, 140)
-                    .putAttributes(ModAttributes.DIZZY, 3)
-                    .putAttributes(ModAttributes.CRIT, 1)
-                    .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_FIRE, -25)
-                    .putAttributes(ModAttributes.RES_WATER, 15)
-                    .xp(50).money(10).tamingChance(0.05f).setRideable().setMinLevel(5),
-            new GateSpawnData.Builder(0, 12).canSpawnUnderwater().addToBiomeTag(70, RunecraftoryTags.IS_BEACH, RunecraftoryTags.IS_WATER));
-    public static final RegistryEntrySupplier<EntityType<EntitySkyFish>> SKY_FISH = regMonster(EntityType.Builder.of(EntitySkyFish::new, MobCategory.MONSTER).sized(1.2f, 0.7f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "sky_fish"),
-            0x8fa4c5, 0x5a3536,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 25).putLevelGains(() -> Attributes.MAX_HEALTH, 415)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 9).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 170)
-                    .putAttributes(ModAttributes.DEFENCE, 0).putLevelGains(ModAttributes.DEFENCE, 130)
-                    .putAttributes(ModAttributes.MAGIC, 14.5).putLevelGains(ModAttributes.MAGIC, 245)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 1).putLevelGains(ModAttributes.MAGIC_DEFENCE, 160)
-                    .putAttributes(ModAttributes.DIZZY, 3)
-                    .putAttributes(ModAttributes.CRIT, 1)
-                    .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_FIRE, -25)
-                    .putAttributes(ModAttributes.RES_WATER, 15)
-                    .xp(50).money(6).tamingChance(0.05f).setRideable().setFlying()
-                    .withRideActionCosts(new EntityRideActionCosts.Builder().secondCost(0.5f, true)),
-            new GateSpawnData.Builder(0, 12).canSpawnUnderwater().addToBiomeTag(60, RunecraftoryTags.IS_BEACH, RunecraftoryTags.IS_WATER));
-    public static final RegistryEntrySupplier<EntityType<EntityWeagle>> WEAGLE = regMonster(EntityType.Builder.of(EntityWeagle::new, MobCategory.MONSTER).sized(0.8f, 1.1f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "weagle"),
-            0x8e127b, 0xdb9dd2, true,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 22).putLevelGains(() -> Attributes.MAX_HEALTH, 410)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 11.25).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 145)
-                    .putAttributes(ModAttributes.DEFENCE, 0).putLevelGains(ModAttributes.DEFENCE, 130)
-                    .putAttributes(ModAttributes.MAGIC, 7).putLevelGains(ModAttributes.MAGIC, 160)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 1.2).putLevelGains(ModAttributes.MAGIC_DEFENCE, 110)
-                    .putAttributes(ModAttributes.DIZZY, 3)
-                    .putAttributes(ModAttributes.CRIT, 1)
-                    .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_WIND, 15)
-                    .putAttributes(ModAttributes.RES_EARTH, -10)
-                    .xp(45).money(4).tamingChance(0.05f).setRideable().doesntNeedBarnRoof().setFlying(),
-            new GateSpawnData.Builder(0, 12).addToBiomeTag(50, RunecraftoryTags.IS_PLAINS, RunecraftoryTags.IS_PEAK, RunecraftoryTags.IS_SLOPE, BiomeTags.IS_MOUNTAIN, BiomeTags.IS_HILL));
-    public static final RegistryEntrySupplier<EntityType<EntityGoblin>> GOBLIN = regMonster(EntityType.Builder.of(EntityGoblin::new, MobCategory.MONSTER).sized(0.6f, 1.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "goblin"),
-            0x21b322, 0x462f2a,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 24).putLevelGains(() -> Attributes.MAX_HEALTH, 400)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 15.55).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 227)
-                    .putAttributes(ModAttributes.DEFENCE, 0).putLevelGains(ModAttributes.DEFENCE, 140)
-                    .putAttributes(ModAttributes.MAGIC, 10).putLevelGains(ModAttributes.MAGIC, 105)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 0).putLevelGains(ModAttributes.MAGIC_DEFENCE, 120)
-                    .putAttributes(ModAttributes.DIZZY, 3)
-                    .putAttributes(ModAttributes.CRIT, 1)
-                    .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_EARTH, 10)
-                    .xp(55).money(8).tamingChance(0.05f).setRideable(),
-            new GateSpawnData.Builder(0, 12).addToBiomeTag(70, RunecraftoryTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, BiomeTags.IS_MOUNTAIN, RunecraftoryTags.IS_SAVANNA, RunecraftoryTags.IS_SANDY));
-    public static final RegistryEntrySupplier<EntityType<EntityGoblinArcher>> GOBLIN_ARCHER = regMonster(EntityType.Builder.of(EntityGoblinArcher::new, MobCategory.MONSTER).sized(0.6f, 1.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "goblin_archer"),
-            0x21b322, 0x462f2a,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 24).putLevelGains(() -> Attributes.MAX_HEALTH, 400)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 13.55).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 227)
-                    .putAttributes(ModAttributes.DEFENCE, 0).putLevelGains(ModAttributes.DEFENCE, 140)
-                    .putAttributes(ModAttributes.MAGIC, 10).putLevelGains(ModAttributes.MAGIC, 105)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 0).putLevelGains(ModAttributes.MAGIC_DEFENCE, 120)
-                    .putAttributes(ModAttributes.DIZZY, 3)
-                    .putAttributes(ModAttributes.CRIT, 1)
-                    .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_EARTH, 10)
-                    .xp(55).money(8).tamingChance(0.05f).setRideable(),
-            new GateSpawnData.Builder(0, 12).addToBiomeTag(70, RunecraftoryTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, BiomeTags.IS_MOUNTAIN, RunecraftoryTags.IS_SAVANNA, RunecraftoryTags.IS_SANDY));
-    public static final RegistryEntrySupplier<EntityType<EntityDuck>> DUCK = regMonster(EntityType.Builder.of(EntityDuck::new, MobCategory.MONSTER).sized(0.65f, 1.35f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "duck"),
-            0xdabf33, 0x845242,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 27.5).putLevelGains(() -> Attributes.MAX_HEALTH, 430)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 15).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 180)
-                    .putAttributes(ModAttributes.DEFENCE, 0).putLevelGains(ModAttributes.DEFENCE, 180)
-                    .putAttributes(ModAttributes.MAGIC, 2).putLevelGains(ModAttributes.MAGIC, 170)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 0).putLevelGains(ModAttributes.MAGIC_DEFENCE, 180)
-                    .putAttributes(ModAttributes.DIZZY, 3)
-                    .putAttributes(ModAttributes.CRIT, 1)
-                    .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_EARTH, -10)
-                    .putAttributes(ModAttributes.RES_WATER, 10)
-                    .xp(50).money(5).tamingChance(0.1f).setRideable(),
-            new GateSpawnData.Builder(0, 15).addToBiomeTag(50, RunecraftoryTags.IS_PLAINS, RunecraftoryTags.IS_WATER, BiomeTags.IS_BEACH));
-    public static final RegistryEntrySupplier<EntityType<EntityFairy>> FAIRY = regMonster(EntityType.Builder.of(EntityFairy::new, MobCategory.MONSTER).sized(0.45f, 1.1f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "fairy"),
-            0x4dad2a, 0xcdc41f, true,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 22).putLevelGains(() -> Attributes.MAX_HEALTH, 400)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 10).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 140)
-                    .putAttributes(ModAttributes.DEFENCE, 0).putLevelGains(ModAttributes.DEFENCE, 130)
-                    .putAttributes(ModAttributes.MAGIC, 17.5).putLevelGains(ModAttributes.MAGIC, 250)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 2).putLevelGains(ModAttributes.MAGIC_DEFENCE, 170)
-                    .putAttributes(ModAttributes.DIZZY, 3)
-                    .putAttributes(ModAttributes.CRIT, 1)
-                    .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_LOVE, 10)
-                    .putAttributes(ModAttributes.RES_LIGHT, 10)
-                    .putAttributes(ModAttributes.RES_DARK, -10)
-                    .xp(66).money(6).tamingChance(0.05f).setFlying()
-                    .withRideActionCosts(new EntityRideActionCosts.Builder(0.5f, true).secondCost(0.5f, true)),
-            new GateSpawnData.Builder(0, 15).addToBiomeTag(50, RunecraftoryTags.IS_PLAINS, BiomeTags.IS_FOREST, RunecraftoryTags.IS_MAGICAL));
-    public static final RegistryEntrySupplier<EntityType<EntityGhost>> GHOST = regMonster(EntityType.Builder.of(EntityGhost::new, MobCategory.MONSTER).sized(0.8f, 2.1f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "ghost"),
-            0x4d3d35, 0x838383, true,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 24).putLevelGains(() -> Attributes.MAX_HEALTH, 420)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 13.7).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 150)
-                    .putAttributes(ModAttributes.DEFENCE, 1).putLevelGains(ModAttributes.DEFENCE, 170)
-                    .putAttributes(ModAttributes.MAGIC, 9.5).putLevelGains(ModAttributes.MAGIC, 250)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 1).putLevelGains(ModAttributes.MAGIC_DEFENCE, 170)
-                    .putAttributes(ModAttributes.DIZZY, 3)
-                    .putAttributes(ModAttributes.CRIT, 1)
-                    .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_LIGHT, -10)
-                    .putAttributes(ModAttributes.RES_DARK, 10)
-                    .xp(70).money(7).tamingChance(0.05f).setFlying(),
-            new GateSpawnData.Builder(0, 25).addToBiomeTag(75, RunecraftoryTags.IS_SPOOKY, RunecraftoryTags.IS_DEAD, RunecraftoryTags.IS_SWAMP));
-    public static final RegistryEntrySupplier<EntityType<EntitySpirit>> SPIRIT = regMonster(EntityType.Builder.of(EntitySpirit::new, MobCategory.MONSTER).sized(0.5f, 0.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "spirit"),
-            0xfdfdfd, 0xc3f8f7, true,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 21).putLevelGains(() -> Attributes.MAX_HEALTH, 417)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 7.8).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 200)
-                    .putAttributes(ModAttributes.DEFENCE, 0.5).putLevelGains(ModAttributes.DEFENCE, 160)
-                    .putAttributes(ModAttributes.MAGIC, 17.1).putLevelGains(ModAttributes.MAGIC, 240)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 2).putLevelGains(ModAttributes.MAGIC_DEFENCE, 180)
-                    .putAttributes(ModAttributes.DIZZY, 3)
-                    .putAttributes(ModAttributes.CRIT, 1)
-                    .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_LIGHT, -10)
-                    .putAttributes(ModAttributes.RES_DARK, 10)
-                    .xp(75).money(5).tamingChance(0.05f).setFlying()
-                    .withRideActionCosts(new EntityRideActionCosts.Builder(0.5f, true)),
-            new GateSpawnData.Builder(0, 25).addToBiomeTag(60, RunecraftoryTags.IS_SPOOKY, RunecraftoryTags.IS_DEAD, RunecraftoryTags.IS_SWAMP, RunecraftoryTags.IS_MAGICAL, RunecraftoryTags.IS_END));
-    public static final RegistryEntrySupplier<EntityType<EntityGhostRay>> GHOST_RAY = regMonster(EntityType.Builder.of(EntityGhostRay::new, MobCategory.MONSTER).sized(1f, 3.2f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "ghost_ray"),
-            0x552217, 0x905a5a, true,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 45).putLevelGains(() -> Attributes.MAX_HEALTH, 450)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 18.3).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 255)
-                    .putAttributes(ModAttributes.DEFENCE, 2.25).putLevelGains(ModAttributes.DEFENCE, 180)
-                    .putAttributes(ModAttributes.MAGIC, 19).putLevelGains(ModAttributes.MAGIC, 260)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 2.25).putLevelGains(ModAttributes.MAGIC_DEFENCE, 180)
-                    .putAttributes(ModAttributes.DIZZY, 3)
-                    .putAttributes(ModAttributes.CRIT, 1)
-                    .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_LIGHT, -10)
-                    .putAttributes(ModAttributes.RES_DARK, 10)
-                    .setMinLevel(27)
-                    .xp(150).money(10).tamingChance(0.02f).setBarnOccupancy(2).setFlying(),
-            new GateSpawnData.Builder(0, 25).addToBiomeTag(20, RunecraftoryTags.IS_SPOOKY, RunecraftoryTags.IS_DEAD, RunecraftoryTags.IS_SWAMP));
-    public static final RegistryEntrySupplier<EntityType<EntitySpider>> SPIDER = regMonster(EntityType.Builder.of(EntitySpider::new, MobCategory.MONSTER).sized(1.1f, 0.7f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "spider"),
-            0x6f6751, 0x404148,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 22).putLevelGains(() -> Attributes.MAX_HEALTH, 415)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 17.5).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 210)
-                    .putAttributes(ModAttributes.DEFENCE, 0).putLevelGains(ModAttributes.DEFENCE, 150)
-                    .putAttributes(ModAttributes.MAGIC, 14).putLevelGains(ModAttributes.MAGIC, 170)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 0).putLevelGains(ModAttributes.MAGIC_DEFENCE, 130)
-                    .putAttributes(ModAttributes.DIZZY, 3)
-                    .putAttributes(ModAttributes.CRIT, 1)
-                    .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_LIGHT, -10)
-                    .putAttributes(ModAttributes.RES_FIRE, -10)
-                    .putAttributes(ModAttributes.RES_EARTH, 10)
-                    .putAttributes(ModAttributes.RES_DARK, 10)
-                    .xp(65).money(8).tamingChance(0.05f)
-                    .withRideActionCosts(new EntityRideActionCosts.Builder(0.5f, true).secondCost(0.5f, true)),
-            new GateSpawnData.Builder(0, 25).addToBiomeTag(80, RunecraftoryTags.IS_SPOOKY, BiomeTags.IS_FOREST, BiomeTags.IS_JUNGLE, RunecraftoryTags.IS_LUSH));
-    public static final RegistryEntrySupplier<EntityType<EntityPanther>> SHADOW_PANTHER = regMonster(EntityType.Builder.of(EntityPanther::new, MobCategory.MONSTER).sized(1.3f, 2.2f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "shadow_panther"),
-            0x27375b, 0x733838,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 35).putLevelGains(() -> Attributes.MAX_HEALTH, 416)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 15.5).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 255)
-                    .putAttributes(ModAttributes.DEFENCE, 2).putLevelGains(ModAttributes.DEFENCE, 185)
-                    .putAttributes(ModAttributes.MAGIC, 10).putLevelGains(ModAttributes.MAGIC, 150)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 2).putLevelGains(ModAttributes.MAGIC_DEFENCE, 163)
-                    .putAttributes(ModAttributes.DIZZY, 3)
-                    .putAttributes(ModAttributes.CRIT, 1)
-                    .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_LIGHT, -10)
-                    .putAttributes(ModAttributes.RES_DARK, 10)
-                    .xp(100).money(9).tamingChance(0.05f).setRideable(),
-            new GateSpawnData.Builder(0, 25).addToBiomeTag(30, RunecraftoryTags.IS_SPOOKY, RunecraftoryTags.IS_SWAMP, RunecraftoryTags.IS_PEAK, RunecraftoryTags.IS_SLOPE));
-    public static final RegistryEntrySupplier<EntityType<EntityMimic>> MONSTER_BOX = regMonster(EntityType.Builder.of(EntityMimic::new, MobCategory.MONSTER).sized(1, 1).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "monster_box"),
-            0xac935e, 0x462f10,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 30).putLevelGains(() -> Attributes.MAX_HEALTH, 440)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 15).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 210)
-                    .putAttributes(ModAttributes.DEFENCE, 2.5).putLevelGains(ModAttributes.DEFENCE, 210)
-                    .putAttributes(ModAttributes.MAGIC, 13).putLevelGains(ModAttributes.MAGIC, 180)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 1).putLevelGains(ModAttributes.MAGIC_DEFENCE, 180)
-                    .putAttributes(ModAttributes.DIZZY, 3)
-                    .putAttributes(ModAttributes.CRIT, 1)
-                    .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_LIGHT, 10)
-                    .putAttributes(ModAttributes.RES_DARK, 10)
-                    .putAttributes(ModAttributes.RES_LOVE, 10)
-                    .xp(300).money(9).tamingChance(0.02f),
-            new GateSpawnData.Builder(0, 0));
-    public static final RegistryEntrySupplier<EntityType<EntityMimic>> GOBBLE_BOX = regMonster(EntityType.Builder.of(EntityMimic::new, MobCategory.MONSTER).sized(1, 1).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "gobble_box"),
-            0x8f9cc4, 0x343843,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 50).putLevelGains(() -> Attributes.MAX_HEALTH, 445)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 22).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 215)
-                    .putAttributes(ModAttributes.DEFENCE, 3.5).putLevelGains(ModAttributes.DEFENCE, 205)
-                    .putAttributes(ModAttributes.MAGIC, 4).putLevelGains(ModAttributes.MAGIC, 183)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 1.5).putLevelGains(ModAttributes.MAGIC_DEFENCE, 183)
-                    .putAttributes(ModAttributes.DIZZY, 3)
-                    .putAttributes(ModAttributes.CRIT, 1)
-                    .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_LIGHT, 15)
-                    .putAttributes(ModAttributes.RES_DARK, 15)
-                    .putAttributes(ModAttributes.RES_LOVE, 15)
-                    .xp(500).money(9).tamingChance(0.015f),
-            new GateSpawnData.Builder(0, 25));
-    public static final RegistryEntrySupplier<EntityType<EntityBigAnt>> KILLER_ANT = regMonster(EntityType.Builder.of(EntityBigAnt::new, MobCategory.MONSTER).sized(1.35f, 0.54f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "killer_ant"),
-            0x0f0e0e, 0x754848,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 28).putLevelGains(() -> Attributes.MAX_HEALTH, 425)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 16).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 215)
-                    .putAttributes(ModAttributes.DEFENCE, 5).putLevelGains(ModAttributes.DEFENCE, 130)
-                    .putAttributes(ModAttributes.MAGIC, 11).putLevelGains(ModAttributes.MAGIC, 100)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 4).putLevelGains(ModAttributes.DEFENCE, 115)
-                    .putAttributes(ModAttributes.DIZZY, 3)
-                    .putAttributes(ModAttributes.CRIT, 1)
-                    .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_FIRE, 5)
-                    .putAttributes(ModAttributes.RES_EARTH, 15)
-                    .xp(120).money(5).tamingChance(0.05f).setMinLevel(10),
-            new GateSpawnData.Builder(0, 30).addToBiomeTag(40, RunecraftoryTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, RunecraftoryTags.IS_LUSH, RunecraftoryTags.IS_SAVANNA));
-    public static final RegistryEntrySupplier<EntityType<EntityOrc>> HIGH_ORC = regMonster(EntityType.Builder.of(EntityOrc::new, MobCategory.MONSTER).sized(0.73f, 2.3f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "high_orc"),
-            0x9f6c4e, 0x333e78,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 30).putLevelGains(() -> Attributes.MAX_HEALTH, 410)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 18).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 235)
-                    .putAttributes(ModAttributes.DEFENCE, 6).putLevelGains(ModAttributes.DEFENCE, 140)
-                    .putAttributes(ModAttributes.MAGIC, 9).putLevelGains(ModAttributes.MAGIC, 105)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 6).putLevelGains(ModAttributes.MAGIC_DEFENCE, 123)
-                    .putAttributes(ModAttributes.DIZZY, 3)
-                    .putAttributes(ModAttributes.CRIT, 1)
-                    .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_EARTH, 15)
-                    .xp(155).money(4).tamingChance(0.05f).setRideable().setMinLevel(10),
-            new GateSpawnData.Builder(0, 35).addToBiomeTag(70, RunecraftoryTags.IS_PLAINS, RunecraftoryTags.IS_BEACH, BiomeTags.IS_FOREST, BiomeTags.IS_HILL,
-                    RunecraftoryTags.IS_MAGICAL).addToBiomeTag(44, RunecraftoryTags.IS_SAVANNA, BiomeTags.IS_MOUNTAIN));
-    public static final RegistryEntrySupplier<EntityType<EntityOrcHunter>> ORC_HUNTER = regMonster(EntityType.Builder.of(EntityOrcHunter::new, MobCategory.MONSTER).sized(0.73f, 2.3f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "orc_hunter"),
-            0x9f6c4e, 0x333e78,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 30).putLevelGains(() -> Attributes.MAX_HEALTH, 410)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 16).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 235)
-                    .putAttributes(ModAttributes.DEFENCE, 6).putLevelGains(ModAttributes.DEFENCE, 140)
-                    .putAttributes(ModAttributes.MAGIC, 9).putLevelGains(ModAttributes.MAGIC, 105)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 6).putLevelGains(ModAttributes.MAGIC_DEFENCE, 123)
-                    .putAttributes(ModAttributes.DIZZY, 3)
-                    .putAttributes(ModAttributes.CRIT, 1)
-                    .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_EARTH, 15)
-                    .xp(155).money(4).tamingChance(0.05f).setRideable().setMinLevel(10),
-            new GateSpawnData.Builder(0, 35).addToBiomeTag(70, RunecraftoryTags.IS_PLAINS, RunecraftoryTags.IS_BEACH, BiomeTags.IS_FOREST, BiomeTags.IS_HILL,
-                    RunecraftoryTags.IS_MAGICAL, BiomeTags.IS_MOUNTAIN, RunecraftoryTags.IS_SAVANNA));
-    public static final RegistryEntrySupplier<EntityType<EntityHornet>> HORNET = regMonster(EntityType.Builder.of(EntityHornet::new, MobCategory.MONSTER).sized(0.7f, 0.85f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "hornet"),
-            0x627d73, 0x20201f, true,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 26).putLevelGains(() -> Attributes.MAX_HEALTH, 415)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 12).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 200)
-                    .putAttributes(ModAttributes.DEFENCE, 3).putLevelGains(ModAttributes.DEFENCE, 120)
-                    .putAttributes(ModAttributes.MAGIC, 8.5).putLevelGains(ModAttributes.MAGIC, 100)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 4).putLevelGains(ModAttributes.MAGIC_DEFENCE, 115)
-                    .putAttributes(ModAttributes.DIZZY, 3)
-                    .putAttributes(ModAttributes.CRIT, 1)
-                    .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_FIRE, -15)
-                    .xp(135).money(4).tamingChance(0.05f).setRideable().setMinLevel(5)
-                    .withRideActionCosts(new EntityRideActionCosts.Builder(0.5f, true)),
-            new GateSpawnData.Builder(0, 35).addToBiomeTag(55, RunecraftoryTags.IS_PLAINS, BiomeTags.IS_FOREST));
-    public static final RegistryEntrySupplier<EntityType<EntityWolf>> SILVER_WOLF = regMonster(EntityType.Builder.of(EntityWolf::new, MobCategory.MONSTER).sized(0.8f, 1.15f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "silver_wolf"),
-            0x9bb9c3, 0x436ea1,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 32).putLevelGains(() -> Attributes.MAX_HEALTH, 435)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 11).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 245)
-                    .putAttributes(ModAttributes.DEFENCE, 4).putLevelGains(ModAttributes.DEFENCE, 125)
-                    .putAttributes(ModAttributes.MAGIC, 7).putLevelGains(ModAttributes.MAGIC, 100)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 2).putLevelGains(ModAttributes.MAGIC_DEFENCE, 125)
-                    .putAttributes(ModAttributes.DIZZY, 3)
-                    .putAttributes(ModAttributes.CRIT, 1)
-                    .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_LIGHT, -5)
-                    .putAttributes(ModAttributes.RES_DARK, -5)
-                    .putAttributes(ModAttributes.RES_LOVE, 5)
-                    .xp(35).money(4).tamingChance(0.05f).setRideable().setMinLevel(10),
-            new GateSpawnData.Builder(0, 35).addToBiomeTag(45, RunecraftoryTags.IS_PLAINS, BiomeTags.IS_FOREST, RunecraftoryTags.IS_SNOWY));
-    public static final RegistryEntrySupplier<EntityType<EntityLeafBall>> LEAF_BALL = regMonster(EntityType.Builder.of(EntityLeafBall::new, MobCategory.MONSTER).sized(0.8f, 1.2f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "leaf_ball"),
-            0xdcb5f0, 0xb72fd3, true,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 29).putLevelGains(() -> Attributes.MAX_HEALTH, 420)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 9).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 150)
-                    .putAttributes(ModAttributes.DEFENCE, 4.5).putLevelGains(ModAttributes.DEFENCE, 115)
-                    .putAttributes(ModAttributes.MAGIC, 14.5).putLevelGains(ModAttributes.MAGIC, 235)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 6).putLevelGains(ModAttributes.MAGIC_DEFENCE, 115)
-                    .putAttributes(ModAttributes.DIZZY, 3)
-                    .putAttributes(ModAttributes.CRIT, 1)
-                    .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_FIRE, -15)
-                    .putAttributes(ModAttributes.RES_WIND, 15)
-                    .xp(35).money(4).tamingChance(0.05f).setRideable().setMinLevel(10)
-                    .withRideActionCosts(new EntityRideActionCosts.Builder(0.5f, true).secondCost(0, false)),
-            new GateSpawnData.Builder(0, 40).addToBiomeTag(70, RunecraftoryTags.IS_LUSH, BiomeTags.IS_FOREST, RunecraftoryTags.IS_MAGICAL));
-    public static final RegistryEntrySupplier<EntityType<EntityChipsqueek>> FURPY = regMonster(EntityType.Builder.of(EntityChipsqueek::new, MobCategory.MONSTER).sized(0.65f, 0.95f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "furpy"),
-            0xab8620, 0xf9ffbb,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 28).putLevelGains(() -> Attributes.MAX_HEALTH, 405)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 13).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 130)
-                    .putAttributes(ModAttributes.DEFENCE, 3).putLevelGains(ModAttributes.DEFENCE, 120)
-                    .putAttributes(ModAttributes.MAGIC, 11).putLevelGains(ModAttributes.MAGIC, 130)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 3).putLevelGains(ModAttributes.MAGIC_DEFENCE, 120)
-                    .putAttributes(ModAttributes.DIZZY, 3)
-                    .putAttributes(ModAttributes.CRIT, 1)
-                    .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_EARTH, 15)
-                    .putAttributes(ModAttributes.RES_LOVE, -10)
-                    .xp(35).money(1).tamingChance(0.1f).setMinLevel(5),
-            new GateSpawnData.Builder(0, 40).addToBiomeTag(60, BiomeTags.IS_FOREST, RunecraftoryTags.IS_SANDY, RunecraftoryTags.IS_SAVANNA));
-    public static final RegistryEntrySupplier<EntityType<EntityPalmCat>> PALM_CAT = regMonster(EntityType.Builder.of(EntityPalmCat::new, MobCategory.MONSTER).sized(0.6f, 1.9f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "palm_cat"),
-            0xc98f2d, 0xb46d28,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 25).putLevelGains(() -> Attributes.MAX_HEALTH, 420)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 13).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 220)
-                    .putAttributes(ModAttributes.DEFENCE, 2).putLevelGains(ModAttributes.DEFENCE, 125)
-                    .putAttributes(ModAttributes.MAGIC, 7.5).putLevelGains(ModAttributes.MAGIC, 130)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 4).putLevelGains(ModAttributes.MAGIC_DEFENCE, 125)
-                    .putAttributes(ModAttributes.DIZZY, 3)
-                    .putAttributes(ModAttributes.CRIT, 1)
-                    .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_EARTH, 15)
-                    .putAttributes(ModAttributes.RES_WIND, 15)
-                    .xp(35).money(1).tamingChance(0.05f),
-            new GateSpawnData.Builder(0, 40).addToBiomeTag(40, BiomeTags.IS_FOREST, BiomeTags.IS_TAIGA));
-    public static final RegistryEntrySupplier<EntityType<EntityPommePomme>> MINO = regMonster(EntityType.Builder.of(EntityPommePomme::new, MobCategory.MONSTER).sized(0.9f, 1.8f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "mino"),
-            0x8b573d, 0xc0916d,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 26).putLevelGains(() -> Attributes.MAX_HEALTH, 420)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 15).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 150)
-                    .putAttributes(ModAttributes.DEFENCE, 3.3).putLevelGains(ModAttributes.DEFENCE, 180)
-                    .putAttributes(ModAttributes.MAGIC, 10).putLevelGains(ModAttributes.MAGIC, 125)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 3.3).putLevelGains(ModAttributes.MAGIC_DEFENCE, 125)
-                    .putAttributes(ModAttributes.DIZZY, 3)
-                    .putAttributes(ModAttributes.CRIT, 1)
-                    .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_EARTH, 15)
-                    .putAttributes(ModAttributes.RES_WIND, -10)
-                    .xp(40).money(4).tamingChance(0.05f).setMinLevel(5).setRideable(),
-            new GateSpawnData.Builder(0, 40).addToBiomeTag(80, BiomeTags.IS_FOREST, BiomeTags.IS_TAIGA, RunecraftoryTags.IS_MAGICAL));
-    public static final RegistryEntrySupplier<EntityType<EntityTrickyMuck>> TRICKY_MUCK = regMonster(EntityType.Builder.of(EntityTrickyMuck::new, MobCategory.MONSTER).sized(0.9f, 1.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "tricky_muck"),
-            0x207316, 0x90d681,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 28.5).putLevelGains(() -> Attributes.MAX_HEALTH, 420)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 14).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 120)
-                    .putAttributes(ModAttributes.DEFENCE, 1.5).putLevelGains(ModAttributes.DEFENCE, 120)
-                    .putAttributes(ModAttributes.MAGIC, 18.5).putLevelGains(ModAttributes.MAGIC, 240)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 2).putLevelGains(ModAttributes.MAGIC_DEFENCE, 150)
-                    .putAttributes(ModAttributes.DIZZY, 3)
-                    .putAttributes(ModAttributes.CRIT, 1)
-                    .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_EARTH, 15)
-                    .putAttributes(ModAttributes.RES_LOVE, -10)
-                    .xp(40).money(3).tamingChance(0.05f).setRideable()
-                    .withRideActionCosts(new EntityRideActionCosts.Builder().secondCost(0.5f, true)
-                            .thirdCost(0.5f, true)),
-            new GateSpawnData.Builder(0, 40).addToBiomeTag(40, BiomeTags.IS_FOREST, RunecraftoryTags.IS_LUSH, RunecraftoryTags.IS_MAGICAL, RunecraftoryTags.IS_MUSHROOM));
-    public static final RegistryEntrySupplier<EntityType<EntityFlowerLily>> FLOWER_LILY = regMonster(EntityType.Builder.of(EntityFlowerLily::new, MobCategory.MONSTER).sized(0.75f, 1.65f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "flower_lily"),
-            0xe8b3e7, 0x156e12,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 23).putLevelGains(() -> Attributes.MAX_HEALTH, 410)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 16.4).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 215)
-                    .putAttributes(ModAttributes.DEFENCE, 1).putLevelGains(ModAttributes.DEFENCE, 130)
-                    .putAttributes(ModAttributes.MAGIC, 13.5).putLevelGains(ModAttributes.MAGIC, 170)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 1).putLevelGains(ModAttributes.MAGIC_DEFENCE, 130)
-                    .putAttributes(ModAttributes.DIZZY, 3)
-                    .putAttributes(ModAttributes.CRIT, 1)
-                    .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_WIND, 7)
-                    .putAttributes(ModAttributes.RES_EARTH, 7)
-                    .putAttributes(ModAttributes.RES_FIRE, -10)
-                    .xp(40).money(3).tamingChance(0.06f).setRideable()
-                    .withRideActionCosts(new EntityRideActionCosts.Builder(0.5f, true).secondCost(0, false)),
-            new GateSpawnData.Builder(0, 40).addToBiomeTag(60, RunecraftoryTags.IS_LUSH, RunecraftoryTags.IS_MAGICAL, BiomeTags.IS_JUNGLE));
     public static final RegistryEntrySupplier<EntityType<EntityKingWooly>> KING_WOOLY = regMonster(EntityType.Builder.of(EntityKingWooly::new, MobCategory.MONSTER).sized(1.8f, 3.9f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "king_wooly"),
             0xffffcc, 0xffffff,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 100).putLevelGains(() -> Attributes.MAX_HEALTH, 425)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 25).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 200)
-                    .putAttributes(ModAttributes.DEFENCE, 5.5).putLevelGains(ModAttributes.DEFENCE, 135)
-                    .putAttributes(ModAttributes.MAGIC, 16).putLevelGains(ModAttributes.MAGIC, 130)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 5.5).putLevelGains(ModAttributes.MAGIC_DEFENCE, 135)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 100).putLevelGains(() -> Attributes.MAX_HEALTH, 450)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 20).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 286)
+                    .putAttributes(ModAttributes.DEFENCE, 6).putLevelGains(ModAttributes.DEFENCE, 255)
+                    .putAttributes(ModAttributes.MAGIC, 16).putLevelGains(ModAttributes.MAGIC, 246)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 6).putLevelGains(ModAttributes.MAGIC_DEFENCE, 255)
                     .putAttributes(ModAttributes.DIZZY, 7)
                     .putAttributes(ModAttributes.CRIT, 2)
                     .putAttributes(ModAttributes.RES_CRIT, 7)
                     .putAttributes(ModAttributes.RES_FIRE, -10)
                     .putAttributes(ModAttributes.RES_LOVE, -10)
                     .putAttributes(ModAttributes.RES_WATER, 10)
-                    .xp(25).money(3).tamingChance(0.05f).setRideable(),
-            new GateSpawnData.Builder(0, 60).addToBiomeTag(10, RunecraftoryTags.IS_PLAINS, RunecraftoryTags.IS_BEACH, BiomeTags.IS_FOREST, BiomeTags.IS_HILL,
-                    RunecraftoryTags.IS_MAGICAL).addToBiomeTag(5, RunecraftoryTags.IS_SAVANNA, BiomeTags.IS_MOUNTAIN));
+                    .xp(25).tamingChance(0.05f).setRideable(),
+            new GateSpawnData.Builder(0, 40).addToBiomeTag(8, RunecraftoryTags.IS_PLAINS, RunecraftoryTags.IS_BEACH, BiomeTags.IS_FOREST, BiomeTags.IS_HILL,
+                    RunecraftoryTags.IS_MAGICAL).addToBiomeTag(60, RunecraftoryTags.IS_SAVANNA, BiomeTags.IS_MOUNTAIN, BiomeTags.IS_TAIGA));
+    public static final RegistryEntrySupplier<EntityType<EntityOrc>> ORC = regMonster(EntityType.Builder.of(EntityOrc::new, MobCategory.MONSTER).sized(0.73f, 2.3f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "orc"),
+            0x663300, 0xffbf80,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 20).putLevelGains(() -> Attributes.MAX_HEALTH, 380)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 9).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 277)
+                    .putAttributes(ModAttributes.DEFENCE, 0).putLevelGains(ModAttributes.DEFENCE, 216)
+                    .putAttributes(ModAttributes.MAGIC, 4).putLevelGains(ModAttributes.MAGIC, 245)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 0).putLevelGains(ModAttributes.MAGIC_DEFENCE, 210)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_EARTH, 10)
+                    .xp(10).tamingChance(0.15f).setRideable(),
+            new GateSpawnData.Builder(0, 0).addToBiomeTag(100, RunecraftoryTags.IS_PLAINS, RunecraftoryTags.IS_BEACH, BiomeTags.IS_FOREST, BiomeTags.IS_HILL,
+                    RunecraftoryTags.IS_MAGICAL).addToBiomeTag(60, RunecraftoryTags.IS_SAVANNA, BiomeTags.IS_MOUNTAIN, BiomeTags.IS_TAIGA));
+    public static final RegistryEntrySupplier<EntityType<EntityOrcArcher>> ORC_ARCHER = regMonster(EntityType.Builder.of(EntityOrcArcher::new, MobCategory.MONSTER).sized(0.73f, 2.3f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "orc_archer"),
+            0x663300, 0xffbf80,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 20).putLevelGains(() -> Attributes.MAX_HEALTH, 380)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 9).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 277)
+                    .putAttributes(ModAttributes.DEFENCE, 0).putLevelGains(ModAttributes.DEFENCE, 216)
+                    .putAttributes(ModAttributes.MAGIC, 4).putLevelGains(ModAttributes.MAGIC, 245)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 0).putLevelGains(ModAttributes.MAGIC_DEFENCE, 210)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_EARTH, 10)
+                    .xp(10).tamingChance(0.15f).setRideable(),
+            new GateSpawnData.Builder(0, 0).addToBiomeTag(100, RunecraftoryTags.IS_PLAINS, RunecraftoryTags.IS_BEACH, BiomeTags.IS_FOREST, BiomeTags.IS_HILL,
+                    RunecraftoryTags.IS_MAGICAL).addToBiomeTag(60, RunecraftoryTags.IS_SAVANNA, BiomeTags.IS_MOUNTAIN, BiomeTags.IS_TAIGA));
+    public static final RegistryEntrySupplier<EntityType<EntityOrc>> HIGH_ORC = regMonster(EntityType.Builder.of(EntityOrc::new, MobCategory.MONSTER).sized(0.73f, 2.3f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "high_orc"),
+            0x9f6c4e, 0x333e78,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 28).putLevelGains(() -> Attributes.MAX_HEALTH, 405)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 17).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 289)
+                    .putAttributes(ModAttributes.DEFENCE, 5).putLevelGains(ModAttributes.DEFENCE, 231)
+                    .putAttributes(ModAttributes.MAGIC, 9).putLevelGains(ModAttributes.MAGIC, 254)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 5).putLevelGains(ModAttributes.MAGIC_DEFENCE, 229)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_EARTH, 15)
+                    .xp(155).tamingChance(0.05f).setRideable().setMinLevel(10),
+            new GateSpawnData.Builder(0, 20).addToBiomeTag(70, RunecraftoryTags.IS_PLAINS, RunecraftoryTags.IS_BEACH, BiomeTags.IS_FOREST, BiomeTags.IS_HILL,
+                    RunecraftoryTags.IS_MAGICAL).addToBiomeTag(44, RunecraftoryTags.IS_SAVANNA, BiomeTags.IS_MOUNTAIN));
+    public static final RegistryEntrySupplier<EntityType<EntityOrcHunter>> ORC_HUNTER = regMonster(EntityType.Builder.of(EntityOrcHunter::new, MobCategory.MONSTER).sized(0.73f, 2.3f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "orc_hunter"),
+            0x9f6c4e, 0x333e78,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 28).putLevelGains(() -> Attributes.MAX_HEALTH, 405)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 17).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 289)
+                    .putAttributes(ModAttributes.DEFENCE, 5).putLevelGains(ModAttributes.DEFENCE, 231)
+                    .putAttributes(ModAttributes.MAGIC, 9).putLevelGains(ModAttributes.MAGIC, 254)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 5).putLevelGains(ModAttributes.MAGIC_DEFENCE, 229)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_EARTH, 15)
+                    .xp(155).tamingChance(0.05f).setRideable().setMinLevel(10),
+            new GateSpawnData.Builder(0, 20).addToBiomeTag(70, RunecraftoryTags.IS_PLAINS, RunecraftoryTags.IS_BEACH, BiomeTags.IS_FOREST, BiomeTags.IS_HILL,
+                    RunecraftoryTags.IS_MAGICAL, BiomeTags.IS_MOUNTAIN, RunecraftoryTags.IS_SAVANNA));
+    public static final RegistryEntrySupplier<EntityType<EntityAnt>> ANT = regMonster(EntityType.Builder.of(EntityAnt::new, MobCategory.MONSTER).sized(1.1f, 0.44f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "ant"),
+            0x800000, 0x1a0000,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 22).putLevelGains(() -> Attributes.MAX_HEALTH, 403)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 7).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 267)
+                    .putAttributes(ModAttributes.DEFENCE, 1).putLevelGains(ModAttributes.DEFENCE, 229)
+                    .putAttributes(ModAttributes.MAGIC, 4).putLevelGains(ModAttributes.MAGIC, 218)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 0).putLevelGains(ModAttributes.DEFENCE, 225)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_WATER, -10)
+                    .xp(10).tamingChance(0.1f),
+            new GateSpawnData.Builder(0, 0).addToBiomeTag(80, RunecraftoryTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, RunecraftoryTags.IS_LUSH, RunecraftoryTags.IS_SAVANNA));
+    public static final RegistryEntrySupplier<EntityType<EntityBigAnt>> KILLER_ANT = regMonster(EntityType.Builder.of(EntityBigAnt::new, MobCategory.MONSTER).sized(1.35f, 0.54f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "killer_ant"),
+            0x0f0e0e, 0x754848,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 28).putLevelGains(() -> Attributes.MAX_HEALTH, 425)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 16).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 282)
+                    .putAttributes(ModAttributes.DEFENCE, 4).putLevelGains(ModAttributes.DEFENCE, 238)
+                    .putAttributes(ModAttributes.MAGIC, 11).putLevelGains(ModAttributes.MAGIC, 221)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 4).putLevelGains(ModAttributes.DEFENCE, 227)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_FIRE, 5)
+                    .putAttributes(ModAttributes.RES_EARTH, 15)
+                    .xp(120).tamingChance(0.05f).setMinLevel(10),
+            new GateSpawnData.Builder(0, 20).addToBiomeTag(40, RunecraftoryTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, RunecraftoryTags.IS_LUSH, RunecraftoryTags.IS_SAVANNA));
+    public static final RegistryEntrySupplier<EntityType<EntityBeetle>> BEETLE = regMonster(EntityType.Builder.of(EntityBeetle::new, MobCategory.MONSTER).sized(0.7f, 1.7f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "beetle"),
+            0x9c6a43, 0x244a69,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 23).putLevelGains(() -> Attributes.MAX_HEALTH, 398)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 11).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 273)
+                    .putAttributes(ModAttributes.DEFENCE, 0).putLevelGains(ModAttributes.DEFENCE, 219)
+                    .putAttributes(ModAttributes.MAGIC, 5).putLevelGains(ModAttributes.MAGIC, 209)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 0).putLevelGains(ModAttributes.MAGIC_DEFENCE, 214)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_FIRE, -10)
+                    .putAttributes(ModAttributes.RES_WIND, 10)
+                    .xp(15).tamingChance(0.05f).setRideable().setFlying(),
+            new GateSpawnData.Builder(0, 0).addToBiomeTag(70, RunecraftoryTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, RunecraftoryTags.IS_LUSH));
+    public static final RegistryEntrySupplier<EntityType<EntityBigMuck>> BIG_MUCK = regMonster(EntityType.Builder.of(EntityBigMuck::new, MobCategory.MONSTER).sized(0.9f, 1.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "big_muck"),
+            0xd7ce4a, 0xad5c25,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 20).putLevelGains(() -> Attributes.MAX_HEALTH, 386)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 8).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 234)
+                    .putAttributes(ModAttributes.DEFENCE, 0).putLevelGains(ModAttributes.DEFENCE, 210)
+                    .putAttributes(ModAttributes.MAGIC, 12).putLevelGains(ModAttributes.MAGIC, 275)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 1).putLevelGains(ModAttributes.MAGIC_DEFENCE, 215)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_LOVE, 10)
+                    .putAttributes(ModAttributes.RES_DARK, -5)
+                    .xp(20).tamingChance(0.05f).setRideable()
+                    .withRideActionCosts(new EntityRideActionCosts.Builder().secondCost(0.5f, true)
+                            .thirdCost(0.5f, true)),
+            new GateSpawnData.Builder(0, 5).addToBiomeTag(60, RunecraftoryTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, RunecraftoryTags.IS_LUSH, RunecraftoryTags.IS_MAGICAL, RunecraftoryTags.IS_MUSHROOM));
+    public static final RegistryEntrySupplier<EntityType<EntityTrickyMuck>> TRICKY_MUCK = regMonster(EntityType.Builder.of(EntityTrickyMuck::new, MobCategory.MONSTER).sized(0.9f, 1.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "tricky_muck"),
+            0x207316, 0x90d681,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 29).putLevelGains(() -> Attributes.MAX_HEALTH, 398)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 13).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 254)
+                    .putAttributes(ModAttributes.DEFENCE, 1).putLevelGains(ModAttributes.DEFENCE, 223)
+                    .putAttributes(ModAttributes.MAGIC, 19).putLevelGains(ModAttributes.MAGIC, 291)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 2).putLevelGains(ModAttributes.MAGIC_DEFENCE, 239)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_EARTH, 15)
+                    .putAttributes(ModAttributes.RES_LOVE, -10)
+                    .xp(40).tamingChance(0.05f).setRideable()
+                    .withRideActionCosts(new EntityRideActionCosts.Builder().secondCost(0.5f, true)
+                            .thirdCost(0.5f, true)),
+            new GateSpawnData.Builder(0, 25).addToBiomeTag(40, BiomeTags.IS_FOREST, RunecraftoryTags.IS_LUSH, RunecraftoryTags.IS_MAGICAL, RunecraftoryTags.IS_MUSHROOM));
+    public static final RegistryEntrySupplier<EntityType<EntityBuffamoo>> BUFFAMOO = regMonster(EntityType.Builder.of(EntityBuffamoo::new, MobCategory.MONSTER).sized(1.2f, 1.45f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "buffamoo"),
+            0xd8d8d0, 0x4e4e4c,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 25).putLevelGains(() -> Attributes.MAX_HEALTH, 406)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 11).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 263)
+                    .putAttributes(ModAttributes.DEFENCE, 1).putLevelGains(ModAttributes.DEFENCE, 222)
+                    .putAttributes(ModAttributes.MAGIC, 9).putLevelGains(ModAttributes.MAGIC, 220)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 0).putLevelGains(ModAttributes.MAGIC_DEFENCE, 222)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_LOVE, 10)
+                    .xp(20).tamingChance(0.15f).setRideable(),
+            new GateSpawnData.Builder(0, 5).addToBiomeTag(70, RunecraftoryTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, BiomeTags.IS_MOUNTAIN, RunecraftoryTags.IS_LUSH));
     public static final RegistryEntrySupplier<EntityType<EntityBuffamoo>> BUFFALOO = regMonster(EntityType.Builder.of(EntityBuffamoo::new, MobCategory.MONSTER).sized(1.2f, 1.45f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "buffaloo"),
             0x8a8a5e, 0xb5b489,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 35).putLevelGains(() -> Attributes.MAX_HEALTH, 420)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 18).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 210)
-                    .putAttributes(ModAttributes.DEFENCE, 2).putLevelGains(ModAttributes.DEFENCE, 180)
-                    .putAttributes(ModAttributes.MAGIC, 14).putLevelGains(ModAttributes.MAGIC, 150)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 2).putLevelGains(ModAttributes.MAGIC_DEFENCE, 125)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 35).putLevelGains(() -> Attributes.MAX_HEALTH, 421)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 18).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 286)
+                    .putAttributes(ModAttributes.DEFENCE, 2).putLevelGains(ModAttributes.DEFENCE, 243)
+                    .putAttributes(ModAttributes.MAGIC, 13).putLevelGains(ModAttributes.MAGIC, 231)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 2).putLevelGains(ModAttributes.MAGIC_DEFENCE, 243)
                     .putAttributes(ModAttributes.DIZZY, 3)
                     .putAttributes(ModAttributes.CRIT, 1)
                     .putAttributes(ModAttributes.RES_CRIT, 5)
                     .putAttributes(ModAttributes.RES_LOVE, -10)
-                    .xp(40).money(6).tamingChance(0.05f).setRideable().setMinLevel(5),
-            new GateSpawnData.Builder(0, 50).addToBiomeTag(65, RunecraftoryTags.IS_SLOPE, RunecraftoryTags.IS_HOT, BiomeTags.IS_MOUNTAIN, BiomeTags.IS_HILL, BiomeTags.IS_BADLANDS));
+                    .xp(40).tamingChance(0.05f).setRideable().setMinLevel(5),
+            new GateSpawnData.Builder(0, 25).addToBiomeTag(60, RunecraftoryTags.IS_SLOPE, RunecraftoryTags.IS_HOT, BiomeTags.IS_MOUNTAIN, BiomeTags.IS_HILL, BiomeTags.IS_BADLANDS));
+    public static final RegistryEntrySupplier<EntityType<EntityChipsqueek>> CHIPSQUEEK = regMonster(EntityType.Builder.of(EntityChipsqueek::new, MobCategory.MONSTER).sized(0.65f, 0.95f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "chipsqueek"),
+            0xff3b5b, 0xf9ffbb,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 21).putLevelGains(() -> Attributes.MAX_HEALTH, 389)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 11).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 261)
+                    .putAttributes(ModAttributes.DEFENCE, 0).putLevelGains(ModAttributes.DEFENCE, 213)
+                    .putAttributes(ModAttributes.MAGIC, 9).putLevelGains(ModAttributes.MAGIC, 205)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 1).putLevelGains(ModAttributes.MAGIC_DEFENCE, 210)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_LOVE, 10)
+                    .xp(15).tamingChance(0.15f),
+            new GateSpawnData.Builder(0, 5).addToBiomeTag(70, RunecraftoryTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, BiomeTags.IS_MOUNTAIN, RunecraftoryTags.IS_LUSH, RunecraftoryTags.IS_SAVANNA));
+    public static final RegistryEntrySupplier<EntityType<EntityChipsqueek>> FURPY = regMonster(EntityType.Builder.of(EntityChipsqueek::new, MobCategory.MONSTER).sized(0.65f, 0.95f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "furpy"),
+            0xab8620, 0xf9ffbb,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 28).putLevelGains(() -> Attributes.MAX_HEALTH, 405)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 16).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 279)
+                    .putAttributes(ModAttributes.DEFENCE, 3).putLevelGains(ModAttributes.DEFENCE, 237)
+                    .putAttributes(ModAttributes.MAGIC, 11).putLevelGains(ModAttributes.MAGIC, 223)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 3).putLevelGains(ModAttributes.MAGIC_DEFENCE, 231)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_EARTH, 15)
+                    .putAttributes(ModAttributes.RES_LOVE, -10)
+                    .xp(35).tamingChance(0.1f).setMinLevel(5),
+            new GateSpawnData.Builder(0, 30).addToBiomeTag(60, BiomeTags.IS_FOREST, RunecraftoryTags.IS_SANDY, RunecraftoryTags.IS_SAVANNA));
+    public static final RegistryEntrySupplier<EntityType<EntityMineralSqueek>> MINERAL_SQUEEK = regMonster(EntityType.Builder.of(EntityMineralSqueek::new, MobCategory.MONSTER).sized(0.65f, 0.95f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "mineral_squeek"),
+            0xfa5a74, 0xf9ffbb,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 10)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 13).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 250)
+                    .putAttributes(ModAttributes.DEFENCE, 0)
+                    .putAttributes(ModAttributes.MAGIC, 9).putLevelGains(ModAttributes.MAGIC, 200)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 0)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .xp(15).tamingChance(0.15f),
+            new GateSpawnData.Builder(0, 60).addToBiomeTag(12, BiomeTags.IS_HILL, BiomeTags.IS_MOUNTAIN));
+    public static final RegistryEntrySupplier<EntityType<EntityCluckadoodle>> CLUCKADOODLE = regMonster(EntityType.Builder.of(EntityCluckadoodle::new, MobCategory.MONSTER).sized(0.6f, 1.1f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "cluckadoodle"),
+            0xc2c2c2, 0xdc2121,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 19).putLevelGains(() -> Attributes.MAX_HEALTH, 395)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 13).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 265)
+                    .putAttributes(ModAttributes.DEFENCE, 0).putLevelGains(ModAttributes.DEFENCE, 231)
+                    .putAttributes(ModAttributes.MAGIC, 3).putLevelGains(ModAttributes.MAGIC, 200)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 0).putLevelGains(ModAttributes.MAGIC_DEFENCE, 225)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_FIRE, -25)
+                    .putAttributes(ModAttributes.RES_LOVE, 10)
+                    .xp(20).tamingChance(0.15f),
+            new GateSpawnData.Builder(0, 5).addToBiomeTag(70, RunecraftoryTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, BiomeTags.IS_MOUNTAIN));
+    public static final RegistryEntrySupplier<EntityType<EntityPommePomme>> POMME_POMME = regMonster(EntityType.Builder.of(EntityPommePomme::new, MobCategory.MONSTER).sized(1.0f, 1.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "pomme_pomme"),
+            0xff1c2b, 0xf7b4b8,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 24).putLevelGains(() -> Attributes.MAX_HEALTH, 415)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 10).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 248)
+                    .putAttributes(ModAttributes.DEFENCE, 0).putLevelGains(ModAttributes.DEFENCE, 251)
+                    .putAttributes(ModAttributes.MAGIC, 9).putLevelGains(ModAttributes.MAGIC, 215)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 0).putLevelGains(ModAttributes.MAGIC_DEFENCE, 242)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_EARTH, 15)
+                    .putAttributes(ModAttributes.RES_WIND, -25)
+                    .xp(30).tamingChance(0.1f).setRideable(),
+            new GateSpawnData.Builder(0, 5).addToBiomeTag(70, RunecraftoryTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, RunecraftoryTags.IS_MAGICAL));
+    public static final RegistryEntrySupplier<EntityType<EntityPommePomme>> MINO = regMonster(EntityType.Builder.of(EntityPommePomme::new, MobCategory.MONSTER).sized(0.9f, 1.8f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "mino"),
+            0x8b573d, 0xc0916d,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 28).putLevelGains(() -> Attributes.MAX_HEALTH, 425)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 14).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 255)
+                    .putAttributes(ModAttributes.DEFENCE, 2).putLevelGains(ModAttributes.DEFENCE, 268)
+                    .putAttributes(ModAttributes.MAGIC, 10).putLevelGains(ModAttributes.MAGIC, 220)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 2).putLevelGains(ModAttributes.MAGIC_DEFENCE, 259)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_EARTH, 15)
+                    .putAttributes(ModAttributes.RES_WIND, -10)
+                    .xp(40).tamingChance(0.05f).setMinLevel(5).setRideable(),
+            new GateSpawnData.Builder(0, 15).addToBiomeTag(80, BiomeTags.IS_FOREST, BiomeTags.IS_TAIGA, RunecraftoryTags.IS_MAGICAL));
+    public static final RegistryEntrySupplier<EntityType<EntityNappie>> NAPPIE = regMonster(EntityType.Builder.of(EntityNappie::new, MobCategory.MONSTER).sized(1.0f, 1.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "nappie"),
+            0xb4843c, 0x1b5a0d,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 30).putLevelGains(() -> Attributes.MAX_HEALTH, 425)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 13).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 249)
+                    .putAttributes(ModAttributes.DEFENCE, 3).putLevelGains(ModAttributes.DEFENCE, 259)
+                    .putAttributes(ModAttributes.MAGIC, 14).putLevelGains(ModAttributes.MAGIC, 247)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 2).putLevelGains(ModAttributes.MAGIC_DEFENCE, 268)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_EARTH, 15)
+                    .putAttributes(ModAttributes.RES_WIND, -25)
+                    .xp(30).tamingChance(0.1f).setRideable(),
+            new GateSpawnData.Builder(0, 25).addToBiomeTag(70, RunecraftoryTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, RunecraftoryTags.IS_BEACH, RunecraftoryTags.IS_MAGICAL));
+    public static final RegistryEntrySupplier<EntityType<EntityTortas>> TORTAS = regMonster(EntityType.Builder.of(EntityTortas::new, MobCategory.MONSTER).sized(1.4f, 0.70f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "tortas"),
+            0x5c6682, 0xa5848c,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 28).putLevelGains(() -> Attributes.MAX_HEALTH, 420)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 15).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 269)
+                    .putAttributes(ModAttributes.DEFENCE, 2).putLevelGains(ModAttributes.DEFENCE, 261)
+                    .putAttributes(ModAttributes.MAGIC, 9).putLevelGains(ModAttributes.MAGIC, 208)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 0).putLevelGains(ModAttributes.MAGIC_DEFENCE, 244)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_FIRE, -25)
+                    .putAttributes(ModAttributes.RES_WATER, 15)
+                    .xp(50).tamingChance(0.05f).setRideable().setMinLevel(5),
+            new GateSpawnData.Builder(0, 12).canSpawnUnderwater().addToBiomeTag(70, RunecraftoryTags.IS_BEACH, RunecraftoryTags.IS_WATER));
+    public static final RegistryEntrySupplier<EntityType<EntitySkyFish>> SKY_FISH = regMonster(EntityType.Builder.of(EntitySkyFish::new, MobCategory.MONSTER).sized(1.2f, 0.7f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "sky_fish"),
+            0x8fa4c5, 0x5a3536,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 23).putLevelGains(() -> Attributes.MAX_HEALTH, 397)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 9).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 203)
+                    .putAttributes(ModAttributes.DEFENCE, 0).putLevelGains(ModAttributes.DEFENCE, 218)
+                    .putAttributes(ModAttributes.MAGIC, 14).putLevelGains(ModAttributes.MAGIC, 285)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 1).putLevelGains(ModAttributes.MAGIC_DEFENCE, 231)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_FIRE, -25)
+                    .putAttributes(ModAttributes.RES_WATER, 15)
+                    .xp(50).tamingChance(0.05f).setRideable().setFlying()
+                    .withRideActionCosts(new EntityRideActionCosts.Builder().secondCost(0.5f, true)),
+            new GateSpawnData.Builder(0, 7).canSpawnUnderwater().addToBiomeTag(60, RunecraftoryTags.IS_BEACH, RunecraftoryTags.IS_WATER));
+    public static final RegistryEntrySupplier<EntityType<EntityWeagle>> WEAGLE = regMonster(EntityType.Builder.of(EntityWeagle::new, MobCategory.MONSTER).sized(0.8f, 1.1f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "weagle"),
+            0x8e127b, 0xdb9dd2, true,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 22).putLevelGains(() -> Attributes.MAX_HEALTH, 410)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 11).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 255)
+                    .putAttributes(ModAttributes.DEFENCE, 0).putLevelGains(ModAttributes.DEFENCE, 231)
+                    .putAttributes(ModAttributes.MAGIC, 8).putLevelGains(ModAttributes.MAGIC, 210)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 1).putLevelGains(ModAttributes.MAGIC_DEFENCE, 227)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_WIND, 15)
+                    .putAttributes(ModAttributes.RES_EARTH, -10)
+                    .xp(45).tamingChance(0.05f).setRideable().doesntNeedBarnRoof().setFlying(),
+            new GateSpawnData.Builder(0, 7).addToBiomeTag(50, RunecraftoryTags.IS_PLAINS, RunecraftoryTags.IS_PEAK, RunecraftoryTags.IS_SLOPE, BiomeTags.IS_MOUNTAIN, BiomeTags.IS_HILL));
+    public static final RegistryEntrySupplier<EntityType<EntityGoblin>> GOBLIN = regMonster(EntityType.Builder.of(EntityGoblin::new, MobCategory.MONSTER).sized(0.6f, 1.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "goblin"),
+            0x21b322, 0x462f2a,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 24).putLevelGains(() -> Attributes.MAX_HEALTH, 400)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 13).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 267)
+                    .putAttributes(ModAttributes.DEFENCE, 0).putLevelGains(ModAttributes.DEFENCE, 240)
+                    .putAttributes(ModAttributes.MAGIC, 10).putLevelGains(ModAttributes.MAGIC, 228)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 0).putLevelGains(ModAttributes.MAGIC_DEFENCE, 220)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_EARTH, 10)
+                    .xp(55).tamingChance(0.05f).setRideable(),
+            new GateSpawnData.Builder(0, 7).addToBiomeTag(70, RunecraftoryTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, BiomeTags.IS_MOUNTAIN, RunecraftoryTags.IS_SAVANNA, RunecraftoryTags.IS_SANDY));
+    public static final RegistryEntrySupplier<EntityType<EntityGoblinArcher>> GOBLIN_ARCHER = regMonster(EntityType.Builder.of(EntityGoblinArcher::new, MobCategory.MONSTER).sized(0.6f, 1.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "goblin_archer"),
+            0x21b322, 0x462f2a,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 24).putLevelGains(() -> Attributes.MAX_HEALTH, 400)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 13).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 267)
+                    .putAttributes(ModAttributes.DEFENCE, 0).putLevelGains(ModAttributes.DEFENCE, 240)
+                    .putAttributes(ModAttributes.MAGIC, 10).putLevelGains(ModAttributes.MAGIC, 228)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 0).putLevelGains(ModAttributes.MAGIC_DEFENCE, 220)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_EARTH, 10)
+                    .xp(55).tamingChance(0.05f).setRideable(),
+            new GateSpawnData.Builder(0, 7).addToBiomeTag(70, RunecraftoryTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, BiomeTags.IS_MOUNTAIN, RunecraftoryTags.IS_SAVANNA, RunecraftoryTags.IS_SANDY));
     public static final RegistryEntrySupplier<EntityType<EntityGoblinPirate>> GOBLIN_PIRATE = regMonster(EntityType.Builder.of(EntityGoblinPirate::new, MobCategory.MONSTER).sized(0.6f, 1.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "goblin_pirate"),
             0x484209, 0x29307f,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 24.5).putLevelGains(() -> Attributes.MAX_HEALTH, 403)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 17).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 235)
-                    .putAttributes(ModAttributes.DEFENCE, 1.5).putLevelGains(ModAttributes.DEFENCE, 145)
-                    .putAttributes(ModAttributes.MAGIC, 4).putLevelGains(ModAttributes.MAGIC, 115)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 1).putLevelGains(ModAttributes.MAGIC_DEFENCE, 130)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 26).putLevelGains(() -> Attributes.MAX_HEALTH, 421)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 17).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 288)
+                    .putAttributes(ModAttributes.DEFENCE, 1).putLevelGains(ModAttributes.DEFENCE, 258)
+                    .putAttributes(ModAttributes.MAGIC, 4).putLevelGains(ModAttributes.MAGIC, 237)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 1).putLevelGains(ModAttributes.MAGIC_DEFENCE, 246)
                     .putAttributes(ModAttributes.DIZZY, 3)
                     .putAttributes(ModAttributes.CRIT, 1)
                     .putAttributes(ModAttributes.RES_CRIT, 5)
                     .putAttributes(ModAttributes.RES_EARTH, 10)
                     .putAttributes(ModAttributes.RES_WATER, 5)
-                    .xp(50).money(8).tamingChance(0.05f).setRideable(),
-            new GateSpawnData.Builder(0, 50).addToBiomeTag(50, RunecraftoryTags.IS_HOT, RunecraftoryTags.IS_SAVANNA, RunecraftoryTags.IS_SANDY, BiomeTags.IS_BADLANDS));
+                    .xp(50).tamingChance(0.05f).setRideable(),
+            new GateSpawnData.Builder(0, 30).addToBiomeTag(50, RunecraftoryTags.IS_HOT, RunecraftoryTags.IS_SAVANNA, RunecraftoryTags.IS_SANDY, BiomeTags.IS_BADLANDS));
     public static final RegistryEntrySupplier<EntityType<EntityGoblinGangster>> GOBLIN_GANGSTER = regMonster(EntityType.Builder.of(EntityGoblinGangster::new, MobCategory.MONSTER).sized(0.6f, 1.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "goblin_gangster"),
             0x6e5d2d, 0x316275,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 24.5).putLevelGains(() -> Attributes.MAX_HEALTH, 408)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 17).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 230)
-                    .putAttributes(ModAttributes.DEFENCE, 1.5).putLevelGains(ModAttributes.DEFENCE, 140)
-                    .putAttributes(ModAttributes.MAGIC, 4).putLevelGains(ModAttributes.MAGIC, 120)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 1).putLevelGains(ModAttributes.MAGIC_DEFENCE, 131)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 26).putLevelGains(() -> Attributes.MAX_HEALTH, 421)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 17).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 288)
+                    .putAttributes(ModAttributes.DEFENCE, 1).putLevelGains(ModAttributes.DEFENCE, 258)
+                    .putAttributes(ModAttributes.MAGIC, 4).putLevelGains(ModAttributes.MAGIC, 237)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 1).putLevelGains(ModAttributes.MAGIC_DEFENCE, 246)
                     .putAttributes(ModAttributes.DIZZY, 3)
                     .putAttributes(ModAttributes.CRIT, 1)
                     .putAttributes(ModAttributes.RES_CRIT, 5)
                     .putAttributes(ModAttributes.RES_EARTH, 10)
                     .putAttributes(ModAttributes.RES_FIRE, 5)
-                    .xp(50).money(8).tamingChance(0.05f).setRideable(),
-            new GateSpawnData.Builder(0, 50).addToBiomeTag(50, RunecraftoryTags.IS_HOT, RunecraftoryTags.IS_SAVANNA, RunecraftoryTags.IS_SANDY, BiomeTags.IS_BADLANDS));
+                    .xp(50).tamingChance(0.05f).setRideable(),
+            new GateSpawnData.Builder(0, 30).addToBiomeTag(50, RunecraftoryTags.IS_HOT, RunecraftoryTags.IS_SAVANNA, RunecraftoryTags.IS_SANDY, BiomeTags.IS_BADLANDS));
+    public static final RegistryEntrySupplier<EntityType<EntityGoblinPirate>> GOBLIN_CAPTAIN = regMonster(EntityType.Builder.of(EntityGoblinPirate::new, MobCategory.MONSTER).sized(0.6f, 1.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "captain_goblin"),
+            0x452621, 0xe9e9e9,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 30).putLevelGains(() -> Attributes.MAX_HEALTH, 444)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 21).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 301)
+                    .putAttributes(ModAttributes.DEFENCE, 2).putLevelGains(ModAttributes.DEFENCE, 255)
+                    .putAttributes(ModAttributes.MAGIC, 16).putLevelGains(ModAttributes.MAGIC, 253)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 1).putLevelGains(ModAttributes.MAGIC_DEFENCE, 249)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_EARTH, 10)
+                    .putAttributes(ModAttributes.RES_WATER, 10)
+                    .xp(50).tamingChance(0.05f).setRideable(),
+            new GateSpawnData.Builder(0, 50).addToBiomeTag(50, RunecraftoryTags.IS_HOT, RunecraftoryTags.IS_SAVANNA, RunecraftoryTags.IS_SANDY, BiomeTags.IS_BADLANDS, BiomeTags.IS_HILL));
+    public static final RegistryEntrySupplier<EntityType<EntityGoblinGangster>> GOBLIN_DON = regMonster(EntityType.Builder.of(EntityGoblinGangster::new, MobCategory.MONSTER).sized(0.6f, 1.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "goblin_don"),
+            0x474133, 0x286c83,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 30).putLevelGains(() -> Attributes.MAX_HEALTH, 444)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 21).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 301)
+                    .putAttributes(ModAttributes.DEFENCE, 2).putLevelGains(ModAttributes.DEFENCE, 255)
+                    .putAttributes(ModAttributes.MAGIC, 16).putLevelGains(ModAttributes.MAGIC, 253)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 1).putLevelGains(ModAttributes.MAGIC_DEFENCE, 249)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_EARTH, 10)
+                    .putAttributes(ModAttributes.RES_FIRE, 10)
+                    .xp(50).tamingChance(0.05f).setRideable(),
+            new GateSpawnData.Builder(0, 50).addToBiomeTag(40, RunecraftoryTags.IS_HOT, RunecraftoryTags.IS_SAVANNA, RunecraftoryTags.IS_SANDY, BiomeTags.IS_BADLANDS, BiomeTags.IS_HILL));
+    public static final RegistryEntrySupplier<EntityType<EntityDuck>> DUCK = regMonster(EntityType.Builder.of(EntityDuck::new, MobCategory.MONSTER).sized(0.65f, 1.35f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "duck"),
+            0xdabf33, 0x845242,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 23).putLevelGains(() -> Attributes.MAX_HEALTH, 430)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 13).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 263)
+                    .putAttributes(ModAttributes.DEFENCE, 0).putLevelGains(ModAttributes.DEFENCE, 225)
+                    .putAttributes(ModAttributes.MAGIC, 6).putLevelGains(ModAttributes.MAGIC, 240)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 0).putLevelGains(ModAttributes.MAGIC_DEFENCE, 235)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_EARTH, -10)
+                    .putAttributes(ModAttributes.RES_WATER, 10)
+                    .xp(50).tamingChance(0.1f).setRideable(),
+            new GateSpawnData.Builder(0, 7).addToBiomeTag(40, RunecraftoryTags.IS_PLAINS, RunecraftoryTags.IS_WATER, BiomeTags.IS_BEACH));
+    public static final RegistryEntrySupplier<EntityType<EntityFairy>> FAIRY = regMonster(EntityType.Builder.of(EntityFairy::new, MobCategory.MONSTER).sized(0.45f, 1.1f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "fairy"),
+            0x4dad2a, 0xcdc41f, true,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 19).putLevelGains(() -> Attributes.MAX_HEALTH, 385)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 10).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 210)
+                    .putAttributes(ModAttributes.DEFENCE, 0).putLevelGains(ModAttributes.DEFENCE, 215)
+                    .putAttributes(ModAttributes.MAGIC, 16).putLevelGains(ModAttributes.MAGIC, 280)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 2).putLevelGains(ModAttributes.MAGIC_DEFENCE, 228)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_LOVE, 10)
+                    .putAttributes(ModAttributes.RES_LIGHT, 10)
+                    .putAttributes(ModAttributes.RES_DARK, -10)
+                    .xp(66).tamingChance(0.05f).setFlying()
+                    .withRideActionCosts(new EntityRideActionCosts.Builder(0.5f, true).secondCost(0.5f, true)),
+            new GateSpawnData.Builder(0, 7).addToBiomeTag(50, RunecraftoryTags.IS_PLAINS, BiomeTags.IS_FOREST, RunecraftoryTags.IS_MAGICAL));
+    public static final RegistryEntrySupplier<EntityType<EntityGhost>> GHOST = regMonster(EntityType.Builder.of(EntityGhost::new, MobCategory.MONSTER).sized(0.8f, 2.1f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "ghost"),
+            0x4d3d35, 0x838383, true,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 23).putLevelGains(() -> Attributes.MAX_HEALTH, 410)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 10).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 271)
+                    .putAttributes(ModAttributes.DEFENCE, 1).putLevelGains(ModAttributes.DEFENCE, 213)
+                    .putAttributes(ModAttributes.MAGIC, 12).putLevelGains(ModAttributes.MAGIC, 263)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 1).putLevelGains(ModAttributes.MAGIC_DEFENCE, 220)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_LIGHT, -10)
+                    .putAttributes(ModAttributes.RES_DARK, 10)
+                    .xp(70).tamingChance(0.05f).setFlying(),
+            new GateSpawnData.Builder(0, 10).addToBiomeTag(75, RunecraftoryTags.IS_SPOOKY, RunecraftoryTags.IS_DEAD, RunecraftoryTags.IS_SWAMP));
+    public static final RegistryEntrySupplier<EntityType<EntityGhostRay>> GHOST_RAY = regMonster(EntityType.Builder.of(EntityGhostRay::new, MobCategory.MONSTER).sized(1f, 3.2f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "ghost_ray"),
+            0x552217, 0x905a5a, true,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 45).putLevelGains(() -> Attributes.MAX_HEALTH, 440)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 18).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 296)
+                    .putAttributes(ModAttributes.DEFENCE, 2).putLevelGains(ModAttributes.DEFENCE, 232)
+                    .putAttributes(ModAttributes.MAGIC, 19).putLevelGains(ModAttributes.MAGIC, 289)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 2).putLevelGains(ModAttributes.MAGIC_DEFENCE, 241)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_LIGHT, -10)
+                    .putAttributes(ModAttributes.RES_DARK, 10)
+                    .setMinLevel(27)
+                    .xp(150).tamingChance(0.02f).setBarnOccupancy(2).setFlying(),
+            new GateSpawnData.Builder(0, 15).addToBiomeTag(15, RunecraftoryTags.IS_SPOOKY, RunecraftoryTags.IS_DEAD, RunecraftoryTags.IS_SWAMP));
+    public static final RegistryEntrySupplier<EntityType<EntitySpirit>> SPIRIT = regMonster(EntityType.Builder.of(EntitySpirit::new, MobCategory.MONSTER).sized(0.5f, 0.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "spirit"),
+            0xfdfdfd, 0xc3f8f7, true,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 21).putLevelGains(() -> Attributes.MAX_HEALTH, 397)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 9).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 210)
+                    .putAttributes(ModAttributes.DEFENCE, 1).putLevelGains(ModAttributes.DEFENCE, 210)
+                    .putAttributes(ModAttributes.MAGIC, 17).putLevelGains(ModAttributes.MAGIC, 284)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 2).putLevelGains(ModAttributes.MAGIC_DEFENCE, 224)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_LIGHT, -10)
+                    .putAttributes(ModAttributes.RES_DARK, 10)
+                    .xp(75).tamingChance(0.05f).setFlying(),
+            new GateSpawnData.Builder(0, 15).addToBiomeTag(60, RunecraftoryTags.IS_SPOOKY, RunecraftoryTags.IS_DEAD, RunecraftoryTags.IS_SWAMP, RunecraftoryTags.IS_MAGICAL, RunecraftoryTags.IS_END));
     public static final RegistryEntrySupplier<EntityType<EntityIgnis>> IGNIS = regMonster(EntityType.Builder.of(EntityIgnis::new, MobCategory.MONSTER).sized(0.5f, 0.6f).fireImmune().clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "ignis"),
             0xaa3100, 0x9f5e3f, true,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 24).putLevelGains(() -> Attributes.MAX_HEALTH, 420)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 15).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 160)
-                    .putAttributes(ModAttributes.DEFENCE, 1).putLevelGains(ModAttributes.DEFENCE, 160)
-                    .putAttributes(ModAttributes.MAGIC, 18.8).putLevelGains(ModAttributes.MAGIC, 245)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 1.5).putLevelGains(ModAttributes.MAGIC_DEFENCE, 170)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 23).putLevelGains(() -> Attributes.MAX_HEALTH, 402)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 14).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 214)
+                    .putAttributes(ModAttributes.DEFENCE, 2).putLevelGains(ModAttributes.DEFENCE, 219)
+                    .putAttributes(ModAttributes.MAGIC, 19).putLevelGains(ModAttributes.MAGIC, 291)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 3).putLevelGains(ModAttributes.MAGIC_DEFENCE, 228)
                     .putAttributes(ModAttributes.DIZZY, 3)
                     .putAttributes(ModAttributes.CRIT, 1)
                     .putAttributes(ModAttributes.RES_CRIT, 5)
                     .putAttributes(ModAttributes.RES_FIRE, 25)
                     .putAttributes(ModAttributes.RES_WATER, -25)
-                    .xp(75).money(5).tamingChance(0.05f).setFlying()
-                    .withRideActionCosts(new EntityRideActionCosts.Builder(0.5f, true)),
-            new GateSpawnData.Builder(0, 50).addToBiomeTag(60, RunecraftoryTags.IS_SPOOKY, RunecraftoryTags.IS_DEAD, RunecraftoryTags.IS_HOT, BiomeTags.IS_BADLANDS));
-    public static final RegistryEntrySupplier<EntityType<EntityScorpion>> SCORPION = regMonster(EntityType.Builder.of(EntityScorpion::new, MobCategory.MONSTER).sized(1.1f, 0.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "scorpion"),
-            0x606060, 0xacacac,
+                    .xp(75).tamingChance(0.05f).setFlying(),
+            new GateSpawnData.Builder(0, 15).addToBiomeTag(60, RunecraftoryTags.IS_SPOOKY, RunecraftoryTags.IS_DEAD, RunecraftoryTags.IS_HOT, BiomeTags.IS_BADLANDS));
+    public static final RegistryEntrySupplier<EntityType<EntitySpider>> SPIDER = regMonster(EntityType.Builder.of(EntitySpider::new, MobCategory.MONSTER).sized(1.1f, 0.7f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "spider"),
+            0x6f6751, 0x404148,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 22).putLevelGains(() -> Attributes.MAX_HEALTH, 425)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 14).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 190)
-                    .putAttributes(ModAttributes.DEFENCE, 2).putLevelGains(ModAttributes.DEFENCE, 180)
-                    .putAttributes(ModAttributes.MAGIC, 9).putLevelGains(ModAttributes.MAGIC, 150)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 0).putLevelGains(ModAttributes.MAGIC_DEFENCE, 200)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 19).putLevelGains(() -> Attributes.MAX_HEALTH, 389)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 13).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 267)
+                    .putAttributes(ModAttributes.DEFENCE, 0).putLevelGains(ModAttributes.DEFENCE, 227)
+                    .putAttributes(ModAttributes.MAGIC, 11).putLevelGains(ModAttributes.MAGIC, 209)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 0).putLevelGains(ModAttributes.MAGIC_DEFENCE, 222)
                     .putAttributes(ModAttributes.DIZZY, 3)
                     .putAttributes(ModAttributes.CRIT, 1)
                     .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.POISON, 5)
+                    .putAttributes(ModAttributes.RES_LIGHT, -10)
                     .putAttributes(ModAttributes.RES_FIRE, -10)
-                    .xp(75).money(5).tamingChance(0.05f).setFlying(),
-            new GateSpawnData.Builder(0, 50).addToBiomeTag(50, RunecraftoryTags.IS_HOT, RunecraftoryTags.IS_SAVANNA, RunecraftoryTags.IS_SANDY, BiomeTags.IS_BADLANDS));
-    public static final RegistryEntrySupplier<EntityType<EntityTroll>> TROLL = regMonster(EntityType.Builder.of(EntityTroll::new, MobCategory.MONSTER).sized(1.5f, 3f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "troll"),
-            0xac924b, 0xcfcbbc,
+                    .putAttributes(ModAttributes.RES_EARTH, 10)
+                    .putAttributes(ModAttributes.RES_DARK, 10)
+                    .xp(65).tamingChance(0.05f)
+                    .withRideActionCosts(new EntityRideActionCosts.Builder(0.5f, true).secondCost(0.5f, true)),
+            new GateSpawnData.Builder(0, 15).addToBiomeTag(80, RunecraftoryTags.IS_SPOOKY, BiomeTags.IS_FOREST, BiomeTags.IS_JUNGLE, RunecraftoryTags.IS_LUSH));
+    public static final RegistryEntrySupplier<EntityType<EntityPanther>> SHADOW_PANTHER = regMonster(EntityType.Builder.of(EntityPanther::new, MobCategory.MONSTER).sized(1.3f, 2.2f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "shadow_panther"),
+            0x27375b, 0x733838,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 40).putLevelGains(() -> Attributes.MAX_HEALTH, 430)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 21).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 250)
-                    .putAttributes(ModAttributes.DEFENCE, 2).putLevelGains(ModAttributes.DEFENCE, 160)
-                    .putAttributes(ModAttributes.MAGIC, 4.4).putLevelGains(ModAttributes.MAGIC, 90)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 1).putLevelGains(ModAttributes.MAGIC_DEFENCE, 140)
-                    .putAttributes(ModAttributes.DIZZY, 8)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 28).putLevelGains(() -> Attributes.MAX_HEALTH, 415)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 17).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 275)
+                    .putAttributes(ModAttributes.DEFENCE, 2).putLevelGains(ModAttributes.DEFENCE, 225)
+                    .putAttributes(ModAttributes.MAGIC, 10).putLevelGains(ModAttributes.MAGIC, 238)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 2).putLevelGains(ModAttributes.MAGIC_DEFENCE, 233)
+                    .putAttributes(ModAttributes.DIZZY, 3)
                     .putAttributes(ModAttributes.CRIT, 1)
                     .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .xp(100).money(5).tamingChance(0.05f).setFlying(),
-            new GateSpawnData.Builder(0, 55).addToBiomeTag(40, BiomeTags.IS_MOUNTAIN, RunecraftoryTags.IS_SPARSE, RunecraftoryTags.IS_SLOPE, BiomeTags.IS_HILL));
+                    .putAttributes(ModAttributes.RES_LIGHT, -10)
+                    .putAttributes(ModAttributes.RES_DARK, 10)
+                    .xp(100).tamingChance(0.05f).setRideable(),
+            new GateSpawnData.Builder(0, 15).addToBiomeTag(30, RunecraftoryTags.IS_SPOOKY, RunecraftoryTags.IS_SWAMP, RunecraftoryTags.IS_PEAK, RunecraftoryTags.IS_SLOPE));
+    public static final RegistryEntrySupplier<EntityType<EntityMimic>> MONSTER_BOX = regMonster(EntityType.Builder.of(EntityMimic::new, MobCategory.MONSTER).sized(1, 1).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "monster_box"),
+            0xac935e, 0x462f10,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 30).putLevelGains(() -> Attributes.MAX_HEALTH, 430)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 15).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 265)
+                    .putAttributes(ModAttributes.DEFENCE, 2).putLevelGains(ModAttributes.DEFENCE, 235)
+                    .putAttributes(ModAttributes.MAGIC, 13).putLevelGains(ModAttributes.MAGIC, 265)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 1).putLevelGains(ModAttributes.MAGIC_DEFENCE, 235)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_LIGHT, 10)
+                    .putAttributes(ModAttributes.RES_DARK, 10)
+                    .putAttributes(ModAttributes.RES_LOVE, 10)
+                    .xp(300).tamingChance(0.02f),
+            new GateSpawnData.Builder(0, 0));
+    public static final RegistryEntrySupplier<EntityType<EntityMimic>> GOBBLE_BOX = regMonster(EntityType.Builder.of(EntityMimic::new, MobCategory.MONSTER).sized(1, 1).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "gobble_box"),
+            0x8f9cc4, 0x343843,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 50).putLevelGains(() -> Attributes.MAX_HEALTH, 450)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 20).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 279)
+                    .putAttributes(ModAttributes.DEFENCE, 3).putLevelGains(ModAttributes.DEFENCE, 254)
+                    .putAttributes(ModAttributes.MAGIC, 16).putLevelGains(ModAttributes.MAGIC, 279)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 2).putLevelGains(ModAttributes.MAGIC_DEFENCE, 254)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_LIGHT, 15)
+                    .putAttributes(ModAttributes.RES_DARK, 15)
+                    .putAttributes(ModAttributes.RES_LOVE, 15)
+                    .xp(500).tamingChance(0.015f),
+            new GateSpawnData.Builder(0, 20));
+    public static final RegistryEntrySupplier<EntityType<EntityHornet>> HORNET = regMonster(EntityType.Builder.of(EntityHornet::new, MobCategory.MONSTER).sized(0.7f, 0.85f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "hornet"),
+            0x627d73, 0x20201f, true,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 19).putLevelGains(() -> Attributes.MAX_HEALTH, 399)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 11).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 258)
+                    .putAttributes(ModAttributes.DEFENCE, 3).putLevelGains(ModAttributes.DEFENCE, 226)
+                    .putAttributes(ModAttributes.MAGIC, 8).putLevelGains(ModAttributes.MAGIC, 210)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 4).putLevelGains(ModAttributes.MAGIC_DEFENCE, 229)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_FIRE, -15)
+                    .xp(135).tamingChance(0.05f).setRideable().setMinLevel(5),
+            new GateSpawnData.Builder(0, 20).addToBiomeTag(55, RunecraftoryTags.IS_PLAINS, BiomeTags.IS_FOREST));
+    public static final RegistryEntrySupplier<EntityType<EntityWolf>> SILVER_WOLF = regMonster(EntityType.Builder.of(EntityWolf::new, MobCategory.MONSTER).sized(0.8f, 1.15f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "silver_wolf"),
+            0x9bb9c3, 0x436ea1,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 23).putLevelGains(() -> Attributes.MAX_HEALTH, 415)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 12).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 267)
+                    .putAttributes(ModAttributes.DEFENCE, 4).putLevelGains(ModAttributes.DEFENCE, 225)
+                    .putAttributes(ModAttributes.MAGIC, 7).putLevelGains(ModAttributes.MAGIC, 210)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 2).putLevelGains(ModAttributes.MAGIC_DEFENCE, 225)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_LIGHT, -5)
+                    .putAttributes(ModAttributes.RES_DARK, -5)
+                    .putAttributes(ModAttributes.RES_LOVE, 5)
+                    .xp(35).tamingChance(0.05f).setRideable().setMinLevel(10),
+            new GateSpawnData.Builder(0, 20).addToBiomeTag(45, RunecraftoryTags.IS_PLAINS, BiomeTags.IS_FOREST, RunecraftoryTags.IS_SNOWY));
+    public static final RegistryEntrySupplier<EntityType<EntityLeafBall>> LEAF_BALL = regMonster(EntityType.Builder.of(EntityLeafBall::new, MobCategory.MONSTER).sized(0.8f, 1.2f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "leaf_ball"),
+            0xdcb5f0, 0xb72fd3, true,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 24).putLevelGains(() -> Attributes.MAX_HEALTH, 420)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 9).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 250)
+                    .putAttributes(ModAttributes.DEFENCE, 3).putLevelGains(ModAttributes.DEFENCE, 215)
+                    .putAttributes(ModAttributes.MAGIC, 14).putLevelGains(ModAttributes.MAGIC, 277)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 4).putLevelGains(ModAttributes.MAGIC_DEFENCE, 215)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_FIRE, -15)
+                    .putAttributes(ModAttributes.RES_WIND, 15)
+                    .xp(35).tamingChance(0.05f).setRideable().setMinLevel(10)
+                    .withRideActionCosts(new EntityRideActionCosts.Builder(0.5f, true).secondCost(0, false)),
+            new GateSpawnData.Builder(0, 20).addToBiomeTag(70, RunecraftoryTags.IS_LUSH, BiomeTags.IS_FOREST, RunecraftoryTags.IS_MAGICAL));
+    public static final RegistryEntrySupplier<EntityType<EntityPalmCat>> PALM_CAT = regMonster(EntityType.Builder.of(EntityPalmCat::new, MobCategory.MONSTER).sized(0.6f, 1.9f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "palm_cat"),
+            0xc98f2d, 0xb46d28,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 24).putLevelGains(() -> Attributes.MAX_HEALTH, 409)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 13).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 280)
+                    .putAttributes(ModAttributes.DEFENCE, 2).putLevelGains(ModAttributes.DEFENCE, 233)
+                    .putAttributes(ModAttributes.MAGIC, 8).putLevelGains(ModAttributes.MAGIC, 230)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 4).putLevelGains(ModAttributes.MAGIC_DEFENCE, 233)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_EARTH, 15)
+                    .putAttributes(ModAttributes.RES_WIND, 15)
+                    .xp(35).tamingChance(0.05f),
+            new GateSpawnData.Builder(0, 30).addToBiomeTag(40, BiomeTags.IS_FOREST, BiomeTags.IS_TAIGA));
+    public static final RegistryEntrySupplier<EntityType<EntityPalmCat>> MALM_TIGER = regMonster(EntityType.Builder.of(EntityPalmCat::new, MobCategory.MONSTER).sized(0.6f, 1.9f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "malm_tiger"),
+            0x8596ae, 0x3a5573,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 29).putLevelGains(() -> Attributes.MAX_HEALTH, 411)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 20).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 281)
+                    .putAttributes(ModAttributes.DEFENCE, 3).putLevelGains(ModAttributes.DEFENCE, 227)
+                    .putAttributes(ModAttributes.MAGIC, 13).putLevelGains(ModAttributes.MAGIC, 230)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 4).putLevelGains(ModAttributes.MAGIC_DEFENCE, 238)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_EARTH, 20)
+                    .putAttributes(ModAttributes.RES_WIND, 15)
+                    .xp(35).tamingChance(0.05f),
+            new GateSpawnData.Builder(0, 60).addToBiomeTag(20, BiomeTags.IS_FOREST, BiomeTags.IS_TAIGA, BiomeTags.IS_HILL, BiomeTags.IS_MOUNTAIN, RunecraftoryTags.IS_SNOWY));
+    public static final RegistryEntrySupplier<EntityType<EntityFlowerLily>> FLOWER_LILY = regMonster(EntityType.Builder.of(EntityFlowerLily::new, MobCategory.MONSTER).sized(0.75f, 1.65f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "flower_lily"),
+            0xe8b3e7, 0x156e12,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 23).putLevelGains(() -> Attributes.MAX_HEALTH, 413)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 16).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 273)
+                    .putAttributes(ModAttributes.DEFENCE, 1).putLevelGains(ModAttributes.DEFENCE, 248)
+                    .putAttributes(ModAttributes.MAGIC, 14).putLevelGains(ModAttributes.MAGIC, 238)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 1).putLevelGains(ModAttributes.MAGIC_DEFENCE, 232)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.RES_WIND, 7)
+                    .putAttributes(ModAttributes.RES_EARTH, 7)
+                    .putAttributes(ModAttributes.RES_FIRE, -10)
+                    .xp(40).tamingChance(0.06f).setRideable()
+                    .withRideActionCosts(new EntityRideActionCosts.Builder(0.5f, true).secondCost(0, false)),
+            new GateSpawnData.Builder(0, 30).addToBiomeTag(60, RunecraftoryTags.IS_LUSH, RunecraftoryTags.IS_MAGICAL, BiomeTags.IS_JUNGLE));
     public static final RegistryEntrySupplier<EntityType<EntityFlowerLion>> FLOWER_LION = regMonster(EntityType.Builder.of(EntityFlowerLion::new, MobCategory.MONSTER).sized(0.75f, 1.65f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "flower_lion"),
             0xf2ad7a, 0x893a1d,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 25).putLevelGains(() -> Attributes.MAX_HEALTH, 420)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 18).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 215)
-                    .putAttributes(ModAttributes.DEFENCE, 2).putLevelGains(ModAttributes.DEFENCE, 130)
-                    .putAttributes(ModAttributes.MAGIC, 15).putLevelGains(ModAttributes.MAGIC, 165)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 2).putLevelGains(ModAttributes.MAGIC_DEFENCE, 140)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 26).putLevelGains(() -> Attributes.MAX_HEALTH, 420)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 18).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 285)
+                    .putAttributes(ModAttributes.DEFENCE, 2).putLevelGains(ModAttributes.DEFENCE, 258)
+                    .putAttributes(ModAttributes.MAGIC, 16).putLevelGains(ModAttributes.MAGIC, 245)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 2).putLevelGains(ModAttributes.MAGIC_DEFENCE, 251)
                     .putAttributes(ModAttributes.DIZZY, 3)
                     .putAttributes(ModAttributes.CRIT, 1)
                     .putAttributes(ModAttributes.RES_CRIT, 5)
                     .putAttributes(ModAttributes.RES_FIRE, -5)
                     .putAttributes(ModAttributes.RES_WIND, -5)
-                    .xp(100).money(3).tamingChance(0.05f).setRideable()
+                    .xp(100).tamingChance(0.05f).setRideable()
                     .withRideActionCosts(new EntityRideActionCosts.Builder().secondCost(0.5f, true)
                             .thirdCost(0, false)),
-            new GateSpawnData.Builder(0, 50).addToBiomeTag(60, RunecraftoryTags.IS_HOT, RunecraftoryTags.IS_SAVANNA));
+            new GateSpawnData.Builder(0, 40).addToBiomeTag(60, RunecraftoryTags.IS_HOT, RunecraftoryTags.IS_SAVANNA));
+    public static final RegistryEntrySupplier<EntityType<EntityScorpion>> SCORPION = regMonster(EntityType.Builder.of(EntityScorpion::new, MobCategory.MONSTER).sized(1.1f, 0.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "scorpion"),
+            0x606060, 0xacacac,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 21).putLevelGains(() -> Attributes.MAX_HEALTH, 405)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 13).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 271)
+                    .putAttributes(ModAttributes.DEFENCE, 2).putLevelGains(ModAttributes.DEFENCE, 244)
+                    .putAttributes(ModAttributes.MAGIC, 9).putLevelGains(ModAttributes.MAGIC, 220)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 0).putLevelGains(ModAttributes.MAGIC_DEFENCE, 238)
+                    .putAttributes(ModAttributes.DIZZY, 3)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .putAttributes(ModAttributes.POISON, 5)
+                    .putAttributes(ModAttributes.RES_FIRE, -10)
+                    .xp(75).tamingChance(0.05f).setFlying(),
+            new GateSpawnData.Builder(0, 20).addToBiomeTag(50, RunecraftoryTags.IS_HOT, RunecraftoryTags.IS_SAVANNA, RunecraftoryTags.IS_SANDY, BiomeTags.IS_BADLANDS));
+    public static final RegistryEntrySupplier<EntityType<EntityTroll>> TROLL = regMonster(EntityType.Builder.of(EntityTroll::new, MobCategory.MONSTER).sized(1.5f, 3f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "troll"),
+            0xac924b, 0xcfcbbc,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 35).putLevelGains(() -> Attributes.MAX_HEALTH, 440)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 21).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 290)
+                    .putAttributes(ModAttributes.DEFENCE, 3).putLevelGains(ModAttributes.DEFENCE, 245)
+                    .putAttributes(ModAttributes.MAGIC, 4).putLevelGains(ModAttributes.MAGIC, 200)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 2).putLevelGains(ModAttributes.MAGIC_DEFENCE, 235)
+                    .putAttributes(ModAttributes.DIZZY, 8)
+                    .putAttributes(ModAttributes.CRIT, 1)
+                    .putAttributes(ModAttributes.RES_CRIT, 5)
+                    .xp(100).tamingChance(0.05f).setFlying(),
+            new GateSpawnData.Builder(0, 40).addToBiomeTag(40, BiomeTags.IS_MOUNTAIN, RunecraftoryTags.IS_SPARSE, RunecraftoryTags.IS_SLOPE, BiomeTags.IS_HILL, RunecraftoryTags.IS_DEAD));
     public static final RegistryEntrySupplier<EntityType<EntityVeggieGhost>> TOMATO_GHOST = regMonster(EntityType.Builder.of(EntityVeggieGhost::new, MobCategory.MONSTER).sized(0.75f, 1.65f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "tomato_ghost"),
             0x902323, 0x85268b, true,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 24).putLevelGains(() -> Attributes.MAX_HEALTH, 420)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 15.5).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 120)
-                    .putAttributes(ModAttributes.DEFENCE, 0).putLevelGains(ModAttributes.DEFENCE, 130)
-                    .putAttributes(ModAttributes.MAGIC, 16).putLevelGains(ModAttributes.MAGIC, 235)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 2).putLevelGains(ModAttributes.MAGIC_DEFENCE, 140)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 22).putLevelGains(() -> Attributes.MAX_HEALTH, 410)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 16).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 260)
+                    .putAttributes(ModAttributes.DEFENCE, 1).putLevelGains(ModAttributes.DEFENCE, 230)
+                    .putAttributes(ModAttributes.MAGIC, 18).putLevelGains(ModAttributes.MAGIC, 260)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 2).putLevelGains(ModAttributes.MAGIC_DEFENCE, 230)
                     .putAttributes(ModAttributes.DIZZY, 3)
                     .putAttributes(ModAttributes.CRIT, 1)
                     .putAttributes(ModAttributes.RES_CRIT, 5)
                     .putAttributes(ModAttributes.RES_WIND, -5)
                     .putAttributes(ModAttributes.RES_DARK, 10)
                     .putAttributes(ModAttributes.RES_LIGHT, 10)
-                    .xp(100).money(3).tamingChance(0.05f).setRideable()
+                    .xp(100).tamingChance(0.05f).setRideable()
                     .withRideActionCosts(new EntityRideActionCosts.Builder().secondCost(0.5f, true)),
-            new GateSpawnData.Builder(0, 60).addToBiomeTag(75, RunecraftoryTags.IS_HOT, RunecraftoryTags.IS_DEAD, RunecraftoryTags.IS_WASTELAND, RunecraftoryTags.IS_MAGICAL));
-    public static final RegistryEntrySupplier<EntityType<EntityGoblinPirate>> GOBLIN_CAPTAIN = regMonster(EntityType.Builder.of(EntityGoblinPirate::new, MobCategory.MONSTER).sized(0.6f, 1.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "captain_goblin"),
-            0x452621, 0xe9e9e9,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 24.5).putLevelGains(() -> Attributes.MAX_HEALTH, 403)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 17).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 235)
-                    .putAttributes(ModAttributes.DEFENCE, 1.5).putLevelGains(ModAttributes.DEFENCE, 145)
-                    .putAttributes(ModAttributes.MAGIC, 4).putLevelGains(ModAttributes.MAGIC, 115)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 1).putLevelGains(ModAttributes.MAGIC_DEFENCE, 130)
-                    .putAttributes(ModAttributes.DIZZY, 3)
-                    .putAttributes(ModAttributes.CRIT, 1)
-                    .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_EARTH, 10)
-                    .putAttributes(ModAttributes.RES_WATER, 5)
-                    .xp(50).money(8).tamingChance(0.05f).setRideable(),
-            new GateSpawnData.Builder(0, 50).addToBiomeTag(50, RunecraftoryTags.IS_HOT, RunecraftoryTags.IS_SAVANNA, RunecraftoryTags.IS_SANDY, BiomeTags.IS_BADLANDS));
-    public static final RegistryEntrySupplier<EntityType<EntityGoblinGangster>> GOBLIN_DON = regMonster(EntityType.Builder.of(EntityGoblinGangster::new, MobCategory.MONSTER).sized(0.6f, 1.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "goblin_don"),
-            0x474133, 0x286c83,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 24.5).putLevelGains(() -> Attributes.MAX_HEALTH, 408)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 17).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 230)
-                    .putAttributes(ModAttributes.DEFENCE, 1.5).putLevelGains(ModAttributes.DEFENCE, 140)
-                    .putAttributes(ModAttributes.MAGIC, 4).putLevelGains(ModAttributes.MAGIC, 120)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 1).putLevelGains(ModAttributes.MAGIC_DEFENCE, 131)
-                    .putAttributes(ModAttributes.DIZZY, 3)
-                    .putAttributes(ModAttributes.CRIT, 1)
-                    .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_EARTH, 10)
-                    .putAttributes(ModAttributes.RES_FIRE, 5)
-                    .xp(50).money(8).tamingChance(0.05f).setRideable(),
-            new GateSpawnData.Builder(0, 50).addToBiomeTag(50, RunecraftoryTags.IS_HOT, RunecraftoryTags.IS_SAVANNA, RunecraftoryTags.IS_SANDY, BiomeTags.IS_BADLANDS));
-    public static final RegistryEntrySupplier<EntityType<EntityMineralSqueek>> MINERAL_SQUEEK = regMonster(EntityType.Builder.of(EntityMineralSqueek::new, MobCategory.MONSTER).sized(0.65f, 0.95f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "mineral_squeek"),
-            0xfa5a74, 0xf9ffbb,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 10)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 11.5).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 160)
-                    .putAttributes(ModAttributes.DEFENCE, 0).putLevelGains(ModAttributes.DEFENCE, 120)
-                    .putAttributes(ModAttributes.MAGIC, 9.2).putLevelGains(ModAttributes.MAGIC, 160)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 1).putLevelGains(ModAttributes.MAGIC_DEFENCE, 120)
-                    .putAttributes(ModAttributes.DIZZY, 3)
-                    .putAttributes(ModAttributes.CRIT, 1)
-                    .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_LOVE, 10)
-                    .xp(15).money(1).tamingChance(0.15f),
-            new GateSpawnData.Builder(0, 5).addToBiomeTag(1, RunecraftoryTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, BiomeTags.IS_MOUNTAIN, RunecraftoryTags.IS_LUSH, RunecraftoryTags.IS_SAVANNA));
-    public static final RegistryEntrySupplier<EntityType<EntityNappie>> NAPPIE = regMonster(EntityType.Builder.of(EntityNappie::new, MobCategory.MONSTER).sized(1.0f, 1.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "nappie"),
-            0xb4843c, 0x1b5a0d,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 24).putLevelGains(() -> Attributes.MAX_HEALTH, 415)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 14).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 160)
-                    .putAttributes(ModAttributes.DEFENCE, 0).putLevelGains(ModAttributes.DEFENCE, 175)
-                    .putAttributes(ModAttributes.MAGIC, 9).putLevelGains(ModAttributes.MAGIC, 120)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 0).putLevelGains(ModAttributes.MAGIC_DEFENCE, 120)
-                    .putAttributes(ModAttributes.DIZZY, 3)
-                    .putAttributes(ModAttributes.CRIT, 1)
-                    .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_EARTH, 15)
-                    .putAttributes(ModAttributes.RES_WIND, -25)
-                    .xp(30).money(4).tamingChance(0.1f).setRideable(),
-            new GateSpawnData.Builder(0, 5).addToBiomeTag(70, RunecraftoryTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, RunecraftoryTags.IS_MAGICAL));
-    public static final RegistryEntrySupplier<EntityType<EntityPalmCat>> MALM_TIGER = regMonster(EntityType.Builder.of(EntityPalmCat::new, MobCategory.MONSTER).sized(0.6f, 1.9f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "malm_tiger"),
-            0x8596ae, 0x3a5573,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 25).putLevelGains(() -> Attributes.MAX_HEALTH, 420)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 13).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 220)
-                    .putAttributes(ModAttributes.DEFENCE, 2).putLevelGains(ModAttributes.DEFENCE, 125)
-                    .putAttributes(ModAttributes.MAGIC, 7.5).putLevelGains(ModAttributes.MAGIC, 130)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 4).putLevelGains(ModAttributes.MAGIC_DEFENCE, 125)
-                    .putAttributes(ModAttributes.DIZZY, 3)
-                    .putAttributes(ModAttributes.CRIT, 1)
-                    .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_EARTH, 15)
-                    .putAttributes(ModAttributes.RES_WIND, 15)
-                    .xp(35).money(1).tamingChance(0.05f),
-            new GateSpawnData.Builder(0, 40).addToBiomeTag(40, BiomeTags.IS_FOREST, BiomeTags.IS_TAIGA));
+            new GateSpawnData.Builder(0, 40).addToBiomeTag(75, RunecraftoryTags.IS_HOT, RunecraftoryTags.IS_DEAD, RunecraftoryTags.IS_WASTELAND, RunecraftoryTags.IS_MAGICAL));
     public static final RegistryEntrySupplier<EntityType<EntityMage>> LITTLE_EMPEROR = regMonster(EntityType.Builder.of(EntityMage::new, MobCategory.MONSTER).sized(0.6f, 1.7f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "little_emperor"),
             0x49ab5f, 0xdedede,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 25).putLevelGains(() -> Attributes.MAX_HEALTH, 420)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 13).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 220)
-                    .putAttributes(ModAttributes.DEFENCE, 2).putLevelGains(ModAttributes.DEFENCE, 125)
-                    .putAttributes(ModAttributes.MAGIC, 7.5).putLevelGains(ModAttributes.MAGIC, 130)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 4).putLevelGains(ModAttributes.MAGIC_DEFENCE, 125)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 21).putLevelGains(() -> Attributes.MAX_HEALTH, 420)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 13).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 258)
+                    .putAttributes(ModAttributes.DEFENCE, 1).putLevelGains(ModAttributes.DEFENCE, 225)
+                    .putAttributes(ModAttributes.MAGIC, 19).putLevelGains(ModAttributes.MAGIC, 271)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 4).putLevelGains(ModAttributes.MAGIC_DEFENCE, 252)
                     .putAttributes(ModAttributes.DIZZY, 3)
                     .putAttributes(ModAttributes.CRIT, 1)
                     .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_EARTH, 15)
-                    .putAttributes(ModAttributes.RES_WIND, 15)
-                    .xp(35).money(1).tamingChance(0.05f),
-            new GateSpawnData.Builder(0, 40).addToBiomeTag(40, BiomeTags.IS_FOREST, BiomeTags.IS_TAIGA));
+                    .putAttributes(ModAttributes.RES_LIGHT, 15)
+                    .putAttributes(ModAttributes.RES_DARK, 15)
+                    .xp(35).tamingChance(0.05f),
+            new GateSpawnData.Builder(0, 60).addToBiomeTag(40, RunecraftoryTags.IS_SPOOKY, RunecraftoryTags.IS_MAGICAL, BiomeTags.IS_MOUNTAIN));
     public static final RegistryEntrySupplier<EntityType<EntityDemon>> DEMON = regMonster(EntityType.Builder.of(EntityDemon::new, MobCategory.MONSTER).sized(0.6f, 1.8f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "demon"),
             0xba8b84, 0x6a5450,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 25).putLevelGains(() -> Attributes.MAX_HEALTH, 420)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 13).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 220)
-                    .putAttributes(ModAttributes.DEFENCE, 2).putLevelGains(ModAttributes.DEFENCE, 125)
-                    .putAttributes(ModAttributes.MAGIC, 7.5).putLevelGains(ModAttributes.MAGIC, 130)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 4).putLevelGains(ModAttributes.MAGIC_DEFENCE, 125)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 27).putLevelGains(() -> Attributes.MAX_HEALTH, 415)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 19).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 264)
+                    .putAttributes(ModAttributes.DEFENCE, 3).putLevelGains(ModAttributes.DEFENCE, 235)
+                    .putAttributes(ModAttributes.MAGIC, 18).putLevelGains(ModAttributes.MAGIC, 269)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 4).putLevelGains(ModAttributes.MAGIC_DEFENCE, 235)
                     .putAttributes(ModAttributes.DIZZY, 3)
                     .putAttributes(ModAttributes.CRIT, 1)
                     .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_EARTH, 15)
-                    .putAttributes(ModAttributes.RES_WIND, 15)
-                    .xp(35).money(1).tamingChance(0.05f),
-            new GateSpawnData.Builder(0, 40).addToBiomeTag(40, BiomeTags.IS_FOREST, BiomeTags.IS_TAIGA));
+                    .putAttributes(ModAttributes.RES_LIGHT, -15)
+                    .putAttributes(ModAttributes.RES_DARK, 15)
+                    .xp(35).tamingChance(0.05f),
+            new GateSpawnData.Builder(0, 45).addToBiomeTag(70, RunecraftoryTags.IS_SPOOKY, RunecraftoryTags.IS_MAGICAL, RunecraftoryTags.IS_DEAD, BiomeTags.IS_MOUNTAIN));
     public static final RegistryEntrySupplier<EntityType<EntityDemon>> ARCH_DEMON = regMonster(EntityType.Builder.of(EntityDemon::new, MobCategory.MONSTER).sized(0.65f, 2.1f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "arch_demon"),
             0x9f6a63, 0x372321,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 25).putLevelGains(() -> Attributes.MAX_HEALTH, 420)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 13).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 220)
-                    .putAttributes(ModAttributes.DEFENCE, 2).putLevelGains(ModAttributes.DEFENCE, 125)
-                    .putAttributes(ModAttributes.MAGIC, 7.5).putLevelGains(ModAttributes.MAGIC, 130)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 4).putLevelGains(ModAttributes.MAGIC_DEFENCE, 125)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 40).putLevelGains(() -> Attributes.MAX_HEALTH, 440)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 22).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 279)
+                    .putAttributes(ModAttributes.DEFENCE, 3).putLevelGains(ModAttributes.DEFENCE, 244)
+                    .putAttributes(ModAttributes.MAGIC, 20).putLevelGains(ModAttributes.MAGIC, 284)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 5).putLevelGains(ModAttributes.MAGIC_DEFENCE, 244)
                     .putAttributes(ModAttributes.DIZZY, 3)
                     .putAttributes(ModAttributes.CRIT, 1)
                     .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_EARTH, 15)
-                    .putAttributes(ModAttributes.RES_WIND, 15)
-                    .xp(35).money(1).tamingChance(0.05f),
-            new GateSpawnData.Builder(0, 40).addToBiomeTag(40, BiomeTags.IS_FOREST, BiomeTags.IS_TAIGA));
+                    .putAttributes(ModAttributes.RES_LIGHT, -10)
+                    .putAttributes(ModAttributes.RES_DARK, 10)
+                    .xp(35).tamingChance(0.05f),
+            new GateSpawnData.Builder(0, 50).addToBiomeTag(30, RunecraftoryTags.IS_SPOOKY, RunecraftoryTags.IS_MAGICAL, RunecraftoryTags.IS_DEAD, BiomeTags.IS_MOUNTAIN));
     public static final RegistryEntrySupplier<EntityType<EntityMinotaur>> MINOTAUR = regMonster(EntityType.Builder.of(EntityMinotaur::new, MobCategory.MONSTER).sized(1.4f, 2.9f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "minotaur"),
             0x61423d, 0x2c2825,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 25).putLevelGains(() -> Attributes.MAX_HEALTH, 420)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 13).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 220)
-                    .putAttributes(ModAttributes.DEFENCE, 2).putLevelGains(ModAttributes.DEFENCE, 125)
-                    .putAttributes(ModAttributes.MAGIC, 7.5).putLevelGains(ModAttributes.MAGIC, 130)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 4).putLevelGains(ModAttributes.MAGIC_DEFENCE, 125)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 40).putLevelGains(() -> Attributes.MAX_HEALTH, 425)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 23).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 290)
+                    .putAttributes(ModAttributes.DEFENCE, 4).putLevelGains(ModAttributes.DEFENCE, 245)
+                    .putAttributes(ModAttributes.MAGIC, 14).putLevelGains(ModAttributes.MAGIC, 230)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 3).putLevelGains(ModAttributes.MAGIC_DEFENCE, 235)
                     .putAttributes(ModAttributes.DIZZY, 3)
                     .putAttributes(ModAttributes.CRIT, 1)
                     .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_EARTH, 15)
-                    .putAttributes(ModAttributes.RES_WIND, 15)
-                    .xp(35).money(1).tamingChance(0.05f),
-            new GateSpawnData.Builder(0, 40).addToBiomeTag(40, BiomeTags.IS_FOREST, BiomeTags.IS_TAIGA));
+                    .xp(35).tamingChance(0.05f),
+            new GateSpawnData.Builder(0, 50).addToBiomeTag(60, BiomeTags.IS_MOUNTAIN));
     public static final RegistryEntrySupplier<EntityType<EntityMinotaur>> MINOTAUR_KING = regMonster(EntityType.Builder.of(EntityMinotaur::new, MobCategory.MONSTER).sized(1.4f, 2.9f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "minotaur_king"),
             0x344a53, 0x907822,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 25).putLevelGains(() -> Attributes.MAX_HEALTH, 420)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 13).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 220)
-                    .putAttributes(ModAttributes.DEFENCE, 2).putLevelGains(ModAttributes.DEFENCE, 125)
-                    .putAttributes(ModAttributes.MAGIC, 7.5).putLevelGains(ModAttributes.MAGIC, 130)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 4).putLevelGains(ModAttributes.MAGIC_DEFENCE, 125)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 70).putLevelGains(() -> Attributes.MAX_HEALTH, 450)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 30).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 305)
+                    .putAttributes(ModAttributes.DEFENCE, 5).putLevelGains(ModAttributes.DEFENCE, 256)
+                    .putAttributes(ModAttributes.MAGIC, 14).putLevelGains(ModAttributes.MAGIC, 235)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 5).putLevelGains(ModAttributes.MAGIC_DEFENCE, 248)
                     .putAttributes(ModAttributes.DIZZY, 3)
                     .putAttributes(ModAttributes.CRIT, 1)
                     .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .putAttributes(ModAttributes.RES_EARTH, 15)
-                    .putAttributes(ModAttributes.RES_WIND, 15)
-                    .xp(35).money(1).tamingChance(0.05f),
-            new GateSpawnData.Builder(0, 40).addToBiomeTag(40, BiomeTags.IS_FOREST, BiomeTags.IS_TAIGA));
+                    .xp(35).tamingChance(0.05f),
+            new GateSpawnData.Builder(0, 75).addToBiomeTag(18, BiomeTags.IS_MOUNTAIN));
 
-    public static final RegistryEntrySupplier<EntityType<EntityAmbrosia>> AMBROSIA = regBoss(EntityType.Builder.of(EntityAmbrosia::new, MobCategory.MONSTER).sized(0.85f, 2.3f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "ambrosia"),
-            0x00ff00, 0xe600e6,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 250).putLevelGains(() -> Attributes.MAX_HEALTH, 530)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 16.5).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 275)
-                    .putAttributes(ModAttributes.DEFENCE, 4).putLevelGains(ModAttributes.DEFENCE, 220)
-                    .putAttributes(ModAttributes.MAGIC, 19).putLevelGains(ModAttributes.MAGIC, 280)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 4).putLevelGains(ModAttributes.MAGIC_DEFENCE, 245)
-                    .putAttributes(ModAttributes.RES_EARTH, 25)
-                    .putAttributes(ModAttributes.RES_WIND, -25)
-                    .putAttributes(ModAttributes.RES_LOVE, -25)
-                    .putAttributes(ModAttributes.RES_CRIT, 25)
-                    .putAttributes(ModAttributes.RES_STUN, 50)
-                    .putAttributes(ModAttributes.RES_DRAIN, 50)
-                    .putAttributes(ModAttributes.RES_DIZZY, 100)
-                    .putAttributes(() -> Attributes.KNOCKBACK_RESISTANCE, 1)
-                    .putAttributes(ModAttributes.RES_STUN, 100)
-                    .putAttributes(ModAttributes.RES_PARA, 100)
-                    .putAttributes(ModAttributes.RES_POISON, 100)
-                    .putAttributes(ModAttributes.RES_SEAL, 100)
-                    .putAttributes(ModAttributes.RES_SLEEP, 100)
-                    .putAttributes(ModAttributes.RES_FAT, 100)
-                    .putAttributes(ModAttributes.RES_COLD, 100)
-                    .putAttributes(ModAttributes.RES_FAINT, 100)
-                    .xp(500).money(150).tamingChance(0.005f).setBarnOccupancy(2).setRideable().setFlying()
-                    .withLevelIncrease(1, 5)
-                    .withLevelIncrease(2, 1)
-                    .withLevelIncrease(7, 3)
-                    .withLevelIncrease(15, 5)
-                    .setMinLevel(5)
-                    .withRideActionCosts(new EntityRideActionCosts.Builder().secondCost(0.5f, true)
-                            .thirdCost(0.5f, true)));
-    public static final RegistryEntrySupplier<EntityType<EntityThunderbolt>> THUNDERBOLT = regBoss(EntityType.Builder.of(EntityThunderbolt::new, MobCategory.MONSTER).sized(1.6f, 1.8f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "thunderbolt"),
-            0x212121, 0x2f1177,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 275).putLevelGains(() -> Attributes.MAX_HEALTH, 520)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 20).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 270)
-                    .putAttributes(ModAttributes.DEFENCE, 4).putLevelGains(ModAttributes.DEFENCE, 230)
-                    .putAttributes(ModAttributes.MAGIC, 15).putLevelGains(ModAttributes.MAGIC, 260)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 2).putLevelGains(ModAttributes.MAGIC_DEFENCE, 210)
-                    .putAttributes(ModAttributes.RES_WIND, 25)
-                    .putAttributes(ModAttributes.RES_EARTH, -25)
-                    .putAttributes(ModAttributes.RES_CRIT, 25)
-                    .putAttributes(ModAttributes.RES_DRAIN, 30)
-                    .putAttributes(ModAttributes.RES_DIZZY, 100)
-                    .putAttributes(() -> Attributes.KNOCKBACK_RESISTANCE, 1)
-                    .putAttributes(ModAttributes.RES_STUN, 100)
-                    .putAttributes(ModAttributes.RES_PARA, 100)
-                    .putAttributes(ModAttributes.RES_POISON, 100)
-                    .putAttributes(ModAttributes.RES_SEAL, 100)
-                    .putAttributes(ModAttributes.RES_SLEEP, 100)
-                    .putAttributes(ModAttributes.RES_FAT, 100)
-                    .putAttributes(ModAttributes.RES_COLD, 100)
-                    .putAttributes(ModAttributes.RES_FAINT, 100)
-                    .xp(650).money(150).tamingChance(0.005f).setBarnOccupancy(2).setRideable()
-                    .withLevelIncrease(1, 10)
-                    .withLevelIncrease(2, 1)
-                    .withLevelIncrease(7, 3)
-                    .withLevelIncrease(15, 5)
-                    .setMinLevel(12)
-                    .withSpawnerPredicate(LibAdvancements.playerAdvancementCheck(LibAdvancements.AMBROSIA))
-                    .withRideActionCosts(new EntityRideActionCosts.Builder()
-                            .thirdCost(0.5f, true)));
-    public static final RegistryEntrySupplier<EntityType<EntityMarionetta>> MARIONETTA = regBoss(EntityType.Builder.of(EntityMarionetta::new, MobCategory.MONSTER).sized(0.8f, 2.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "marionetta"),
-            0xb86b13, 0xd8d7d7,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 300).putLevelGains(() -> Attributes.MAX_HEALTH, 525)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 23).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 260)
-                    .putAttributes(ModAttributes.DEFENCE, 5).putLevelGains(ModAttributes.DEFENCE, 220)
-                    .putAttributes(ModAttributes.MAGIC, 17.6).putLevelGains(ModAttributes.MAGIC, 255)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 3.7).putLevelGains(ModAttributes.MAGIC_DEFENCE, 220)
-                    .putAttributes(ModAttributes.RES_DARK, 25)
-                    .putAttributes(ModAttributes.RES_LIGHT, -25)
-                    .putAttributes(ModAttributes.RES_CRIT, 25)
-                    .putAttributes(ModAttributes.RES_DRAIN, 30)
-                    .putAttributes(ModAttributes.RES_DIZZY, 100)
-                    .putAttributes(() -> Attributes.KNOCKBACK_RESISTANCE, 1)
-                    .putAttributes(ModAttributes.RES_STUN, 100)
-                    .putAttributes(ModAttributes.RES_PARA, 100)
-                    .putAttributes(ModAttributes.RES_POISON, 100)
-                    .putAttributes(ModAttributes.RES_SEAL, 100)
-                    .putAttributes(ModAttributes.RES_SLEEP, 100)
-                    .putAttributes(ModAttributes.RES_FAT, 100)
-                    .putAttributes(ModAttributes.RES_COLD, 100)
-                    .putAttributes(ModAttributes.RES_FAINT, 100)
-                    .xp(900).money(150).tamingChance(0.005f).setBarnOccupancy(2).setRideable()
-                    .withLevelIncrease(1, 15)
-                    .withLevelIncrease(2, 1)
-                    .withLevelIncrease(7, 3)
-                    .withLevelIncrease(15, 5)
-                    .setMinLevel(20)
-                    .withSpawnerPredicate(LibAdvancements.playerAdvancementCheck(LibAdvancements.THUNDERBOLT))
-                    .withRideActionCosts(new EntityRideActionCosts.Builder()
-                            .thirdCost(0.5f, true)));
-    public static final RegistryEntrySupplier<EntityType<EntityDeadTree>> DEAD_TREE = regBoss(EntityType.Builder.of(EntityDeadTree::new, MobCategory.MONSTER).sized(1.8f, 7f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "dead_tree"),
-            0x3e4a40, 0x227904,
-            new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 290).putLevelGains(() -> Attributes.MAX_HEALTH, 533)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 21.5).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 250)
-                    .putAttributes(ModAttributes.DEFENCE, 4.8).putLevelGains(ModAttributes.DEFENCE, 220)
-                    .putAttributes(ModAttributes.MAGIC, 13).putLevelGains(ModAttributes.MAGIC, 230)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 3.9).putLevelGains(ModAttributes.MAGIC_DEFENCE, 215)
-                    .putAttributes(ModAttributes.RES_FIRE, -50)
-                    .putAttributes(ModAttributes.RES_EARTH, 50)
-                    .putAttributes(ModAttributes.RES_WATER, 50)
-                    .putAttributes(ModAttributes.RES_CRIT, 50)
-                    .putAttributes(ModAttributes.RES_DRAIN, 20)
-                    .putAttributes(ModAttributes.RES_DIZZY, 100)
-                    .putAttributes(() -> Attributes.KNOCKBACK_RESISTANCE, 1)
-                    .putAttributes(ModAttributes.RES_STUN, 100)
-                    .putAttributes(ModAttributes.RES_PARA, 90)
-                    .putAttributes(ModAttributes.RES_POISON, 100)
-                    .putAttributes(ModAttributes.RES_SEAL, 100)
-                    .putAttributes(ModAttributes.RES_SLEEP, 100)
-                    .putAttributes(ModAttributes.RES_FAT, 100)
-                    .putAttributes(ModAttributes.RES_COLD, 100)
-                    .putAttributes(ModAttributes.RES_FAINT, 100)
-                    .xp(950).money(150).tamingChance(0.005f).setBarnOccupancy(2).setRideable()
-                    .withLevelIncrease(1, 5)
-                    .withLevelIncrease(2, 1)
-                    .withLevelIncrease(7, 3)
-                    .withLevelIncrease(15, 5)
-                    .setMinLevel(5)
-                    .withRideActionCosts(new EntityRideActionCosts.Builder().secondCost(0.5f, true)
-                            .thirdCost(0.5f, true)));
     public static final RegistryEntrySupplier<EntityType<EntityChimera>> CHIMERA = regBoss(EntityType.Builder.of(EntityChimera::new, MobCategory.MONSTER).sized(1.45f, 1.45f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "chimera"),
             0x536983, 0xaaa7c8,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 300).putLevelGains(() -> Attributes.MAX_HEALTH, 525)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 21).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 266)
-                    .putAttributes(ModAttributes.DEFENCE, 4.1).putLevelGains(ModAttributes.DEFENCE, 230)
-                    .putAttributes(ModAttributes.MAGIC, 15.3).putLevelGains(ModAttributes.MAGIC, 235)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 3.9).putLevelGains(ModAttributes.MAGIC_DEFENCE, 225)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 315).putLevelGains(() -> Attributes.MAX_HEALTH, 515)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 19).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 302)
+                    .putAttributes(ModAttributes.DEFENCE, 4).putLevelGains(ModAttributes.DEFENCE, 242)
+                    .putAttributes(ModAttributes.MAGIC, 15).putLevelGains(ModAttributes.MAGIC, 289)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 4).putLevelGains(ModAttributes.MAGIC_DEFENCE, 248)
                     .putAttributes(ModAttributes.POISON, 2)
                     .putAttributes(ModAttributes.PARA, 2)
                     .putAttributes(ModAttributes.SEAL, 2)
@@ -1153,8 +1022,104 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_FAT, 100)
                     .putAttributes(ModAttributes.RES_COLD, 100)
                     .putAttributes(ModAttributes.RES_FAINT, 100)
-                    .xp(950).money(150).tamingChance(0.005f).setBarnOccupancy(2).setRideable()
+                    .xp(150).tamingChance(BOSS_TAMING_CHANCE).setBarnOccupancy(2).setRideable()
                     .withLevelIncrease(1, 5)
+                    .withLevelIncrease(2, 1)
+                    .withLevelIncrease(7, 3)
+                    .withLevelIncrease(15, 5)
+                    .setMinLevel(12)
+                    .withSpawnerPredicate(LibAdvancements.playerAdvancementCheck(LibAdvancements.GREATER_DEMON))
+                    .withRideActionCosts(new EntityRideActionCosts.Builder().secondCost(0.5f, true)
+                            .thirdCost(0.5f, true)));
+    public static final RegistryEntrySupplier<EntityType<EntityRafflesia>> RAFFLESIA = regBoss(EntityType.Builder.of(EntityRafflesia::new, MobCategory.MONSTER).sized(1.15f, 2.8f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "rafflesia"),
+            0x9b58ba, 0x0a8414,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 330).putLevelGains(() -> Attributes.MAX_HEALTH, 525)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 14).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 271)
+                    .putAttributes(ModAttributes.DEFENCE, 4).putLevelGains(ModAttributes.DEFENCE, 238)
+                    .putAttributes(ModAttributes.MAGIC, 17).putLevelGains(ModAttributes.MAGIC, 291)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 5).putLevelGains(ModAttributes.MAGIC_DEFENCE, 249)
+                    .putAttributes(ModAttributes.RES_EARTH, 15)
+                    .putAttributes(ModAttributes.RES_WATER, 15)
+                    .putAttributes(ModAttributes.RES_FIRE, 15)
+                    .putAttributes(ModAttributes.RES_WIND, -25)
+                    .putAttributes(ModAttributes.RES_LIGHT, -15)
+                    .putAttributes(ModAttributes.RES_LOVE, -25)
+                    .putAttributes(ModAttributes.RES_CRIT, 25)
+                    .putAttributes(ModAttributes.RES_DRAIN, 25)
+                    .putAttributes(ModAttributes.RES_DIZZY, 100)
+                    .putAttributes(() -> Attributes.KNOCKBACK_RESISTANCE, 1)
+                    .putAttributes(ModAttributes.RES_STUN, 100)
+                    .putAttributes(ModAttributes.RES_PARA, 97)
+                    .putAttributes(ModAttributes.RES_POISON, 100)
+                    .putAttributes(ModAttributes.RES_SEAL, 80)
+                    .putAttributes(ModAttributes.RES_SLEEP, 100)
+                    .putAttributes(ModAttributes.RES_FAT, 100)
+                    .putAttributes(ModAttributes.RES_COLD, 100)
+                    .putAttributes(ModAttributes.RES_FAINT, 100)
+                    .xp(350).tamingChance(0).setBarnOccupancy(3).setRideable()
+                    .withLevelIncrease(1, 7)
+                    .withLevelIncrease(2, 1)
+                    .withLevelIncrease(7, 3)
+                    .withLevelIncrease(15, 5)
+                    .setMinLevel(20)
+                    .withSpawnerPredicate(LibAdvancements.playerAdvancementCheck(LibAdvancements.CHIMERA)));
+    public static final RegistryEntrySupplier<EntityType<EntityGrimoire>> GRIMOIRE = regBoss(EntityType.Builder.of(EntityGrimoire::new, MobCategory.MONSTER).sized(3.5f, 4).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "grimoire"),
+            0x3b785c, 0x2e4d3f,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 350).putLevelGains(() -> Attributes.MAX_HEALTH, 525)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 22).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 292)
+                    .putAttributes(ModAttributes.DEFENCE, 5).putLevelGains(ModAttributes.DEFENCE, 253)
+                    .putAttributes(ModAttributes.MAGIC, 18).putLevelGains(ModAttributes.MAGIC, 278)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 3).putLevelGains(ModAttributes.MAGIC_DEFENCE, 253)
+                    .putAttributes(ModAttributes.RES_EARTH, 10)
+                    .putAttributes(ModAttributes.RES_WIND, -100)
+                    .putAttributes(ModAttributes.RES_CRIT, 25)
+                    .putAttributes(ModAttributes.RES_DRAIN, 25)
+                    .putAttributes(ModAttributes.RES_DIZZY, 100)
+                    .putAttributes(() -> Attributes.KNOCKBACK_RESISTANCE, 1)
+                    .putAttributes(ModAttributes.RES_STUN, 100)
+                    .putAttributes(ModAttributes.RES_PARA, 97)
+                    .putAttributes(ModAttributes.RES_POISON, 100)
+                    .putAttributes(ModAttributes.RES_SEAL, 80)
+                    .putAttributes(ModAttributes.RES_SLEEP, 100)
+                    .putAttributes(ModAttributes.RES_FAT, 100)
+                    .putAttributes(ModAttributes.RES_COLD, 100)
+                    .putAttributes(ModAttributes.RES_FAINT, 100)
+                    .xp(450).tamingChance(BOSS_TAMING_CHANCE).setBarnOccupancy(3).setRideable()
+                    .withLevelIncrease(1, 10)
+                    .withLevelIncrease(2, 1)
+                    .withLevelIncrease(7, 3)
+                    .withLevelIncrease(15, 5)
+                    .setMinLevel(50)
+                    .withSpawnerPredicate(LibAdvancements.playerAdvancementCheck(LibAdvancements.RAFFLESIA)));
+    public static final RegistryEntrySupplier<EntityType<EntityDeadTree>> DEAD_TREE = regBoss(EntityType.Builder.of(EntityDeadTree::new, MobCategory.MONSTER).sized(1.8f, 7f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "dead_tree"),
+            0x3e4a40, 0x227904,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 300).putLevelGains(() -> Attributes.MAX_HEALTH, 540)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 18).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 287)
+                    .putAttributes(ModAttributes.DEFENCE, 4).putLevelGains(ModAttributes.DEFENCE, 246)
+                    .putAttributes(ModAttributes.MAGIC, 15).putLevelGains(ModAttributes.MAGIC, 282)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 4).putLevelGains(ModAttributes.MAGIC_DEFENCE, 246)
+                    .putAttributes(ModAttributes.RES_FIRE, -100)
+                    .putAttributes(ModAttributes.RES_EARTH, 50)
+                    .putAttributes(ModAttributes.RES_EARTH, 50)
+                    .putAttributes(ModAttributes.RES_WIND, -10)
+                    .putAttributes(ModAttributes.RES_LOVE, 25)
+                    .putAttributes(ModAttributes.RES_CRIT, 50)
+                    .putAttributes(ModAttributes.RES_DRAIN, 20)
+                    .putAttributes(ModAttributes.RES_DIZZY, 100)
+                    .putAttributes(() -> Attributes.KNOCKBACK_RESISTANCE, 1)
+                    .putAttributes(ModAttributes.RES_STUN, 100)
+                    .putAttributes(ModAttributes.RES_PARA, 90)
+                    .putAttributes(ModAttributes.RES_POISON, 100)
+                    .putAttributes(ModAttributes.RES_SEAL, 100)
+                    .putAttributes(ModAttributes.RES_SLEEP, 100)
+                    .putAttributes(ModAttributes.RES_FAT, 100)
+                    .putAttributes(ModAttributes.RES_COLD, 100)
+                    .putAttributes(ModAttributes.RES_FAINT, 100)
+                    .xp(70).tamingChance(BOSS_TAMING_CHANCE).setBarnOccupancy(3).setRideable()
+                    .withLevelIncrease(1, 3)
                     .withLevelIncrease(2, 1)
                     .withLevelIncrease(7, 3)
                     .withLevelIncrease(15, 5)
@@ -1164,14 +1129,14 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntityRaccoon>> RACCOON = regBoss(EntityType.Builder.of(EntityRaccoon::new, MobCategory.MONSTER).sized(0.9f, 1.5f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "raccoon"),
             0xcb8055, 0x6d4342,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 240).putLevelGains(() -> Attributes.MAX_HEALTH, 545)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 17.5).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 226)
-                    .putAttributes(ModAttributes.DEFENCE, 4.5).putLevelGains(ModAttributes.DEFENCE, 205)
-                    .putAttributes(ModAttributes.MAGIC, 14.7).putLevelGains(ModAttributes.MAGIC, 218)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 3.7).putLevelGains(ModAttributes.MAGIC_DEFENCE, 200)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 290).putLevelGains(() -> Attributes.MAX_HEALTH, 515)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 17).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 283)
+                    .putAttributes(ModAttributes.DEFENCE, 3).putLevelGains(ModAttributes.DEFENCE, 249)
+                    .putAttributes(ModAttributes.MAGIC, 14).putLevelGains(ModAttributes.MAGIC, 278)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 3).putLevelGains(ModAttributes.MAGIC_DEFENCE, 255)
                     .putAttributes(ModAttributes.RES_EARTH, 25)
                     .putAttributes(ModAttributes.RES_WIND, 25)
-                    .putAttributes(ModAttributes.RES_LOVE, -15)
+                    .putAttributes(ModAttributes.RES_LOVE, -25)
                     .putAttributes(ModAttributes.RES_CRIT, 25)
                     .putAttributes(ModAttributes.RES_DRAIN, 10)
                     .putAttributes(ModAttributes.RES_DIZZY, 100)
@@ -1184,8 +1149,8 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_FAT, 100)
                     .putAttributes(ModAttributes.RES_COLD, 100)
                     .putAttributes(ModAttributes.RES_FAINT, 100)
-                    .xp(950).money(150).tamingChance(0.005f).setBarnOccupancy(2).setRideable()
-                    .withLevelIncrease(1, 5)
+                    .xp(70).tamingChance(BOSS_TAMING_CHANCE).setBarnOccupancy(2).setRideable()
+                    .withLevelIncrease(1, 3)
                     .withLevelIncrease(2, 1)
                     .withLevelIncrease(7, 3)
                     .withLevelIncrease(15, 5)
@@ -1195,15 +1160,15 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntitySkelefang>> SKELEFANG = regBoss(EntityType.Builder.of(EntitySkelefang::new, MobCategory.MONSTER).sized(1.95f, 3).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "skelefang"),
             0x615237, 0xc2a982,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 225).putLevelGains(() -> Attributes.MAX_HEALTH, 565)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 20).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 274)
-                    .putAttributes(ModAttributes.DEFENCE, 4.4).putLevelGains(ModAttributes.DEFENCE, 230)
-                    .putAttributes(ModAttributes.MAGIC, 16).putLevelGains(ModAttributes.MAGIC, 234)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 4.1).putLevelGains(ModAttributes.MAGIC_DEFENCE, 215)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 275).putLevelGains(() -> Attributes.MAX_HEALTH, 500)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 20).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 294)
+                    .putAttributes(ModAttributes.DEFENCE, 4).putLevelGains(ModAttributes.DEFENCE, 261)
+                    .putAttributes(ModAttributes.MAGIC, 16).putLevelGains(ModAttributes.MAGIC, 264)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 3).putLevelGains(ModAttributes.MAGIC_DEFENCE, 237)
+                    .putAttributes(ModAttributes.RES_FIRE, -25)
                     .putAttributes(ModAttributes.RES_EARTH, 50)
                     .putAttributes(ModAttributes.RES_DARK, 200)
                     .putAttributes(ModAttributes.RES_LIGHT, -50)
-                    .putAttributes(ModAttributes.RES_FIRE, -25)
                     .putAttributes(ModAttributes.RES_LOVE, -25)
                     .putAttributes(ModAttributes.RES_CRIT, 25)
                     .putAttributes(ModAttributes.RES_DRAIN, 30)
@@ -1217,89 +1182,116 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_FAT, 100)
                     .putAttributes(ModAttributes.RES_COLD, 100)
                     .putAttributes(ModAttributes.RES_FAINT, 100)
-                    .xp(950).money(150).tamingChance(0.003f).setBarnOccupancy(3).setRideable()
-                    .withLevelIncrease(1, 10)
+                    .xp(150).tamingChance(BOSS_TAMING_CHANCE).setBarnOccupancy(3).setRideable()
+                    .withLevelIncrease(1, 5)
                     .withLevelIncrease(2, 1)
                     .withLevelIncrease(7, 3)
                     .withLevelIncrease(15, 5)
                     .setMinLevel(12)
                     .withSpawnerPredicate(LibAdvancements.playerAdvancementCheck(LibAdvancements.RACCOON)));
-    public static final RegistryEntrySupplier<EntityType<EntityRafflesia>> RAFFLESIA = regBoss(EntityType.Builder.of(EntityRafflesia::new, MobCategory.MONSTER).sized(1.15f, 2.8f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "rafflesia"),
-            0x9b58ba, 0x0a8414,
+    public static final RegistryEntrySupplier<EntityType<EntityAmbrosia>> AMBROSIA = regBoss(EntityType.Builder.of(EntityAmbrosia::new, MobCategory.MONSTER).sized(0.85f, 2.3f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "ambrosia"),
+            0x00ff00, 0xe600e6,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 275).putLevelGains(() -> Attributes.MAX_HEALTH, 575)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 13).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 200)
-                    .putAttributes(ModAttributes.DEFENCE, 4.5).putLevelGains(ModAttributes.DEFENCE, 228)
-                    .putAttributes(ModAttributes.MAGIC, 16.5).putLevelGains(ModAttributes.MAGIC, 240)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 3.8).putLevelGains(ModAttributes.MAGIC_DEFENCE, 224)
-                    .putAttributes(ModAttributes.RES_EARTH, 15)
-                    .putAttributes(ModAttributes.RES_WATER, 15)
-                    .putAttributes(ModAttributes.RES_FIRE, 15)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 300).putLevelGains(() -> Attributes.MAX_HEALTH, 530)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 16).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 275)
+                    .putAttributes(ModAttributes.DEFENCE, 4).putLevelGains(ModAttributes.DEFENCE, 230)
+                    .putAttributes(ModAttributes.MAGIC, 14).putLevelGains(ModAttributes.MAGIC, 280)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 4).putLevelGains(ModAttributes.MAGIC_DEFENCE, 245)
+                    .putAttributes(ModAttributes.RES_EARTH, 25)
                     .putAttributes(ModAttributes.RES_WIND, -25)
-                    .putAttributes(ModAttributes.RES_LIGHT, -15)
-                    .putAttributes(ModAttributes.RES_LOVE, -15)
+                    .putAttributes(ModAttributes.RES_LOVE, -25)
                     .putAttributes(ModAttributes.RES_CRIT, 25)
-                    .putAttributes(ModAttributes.RES_DRAIN, 25)
+                    .putAttributes(ModAttributes.RES_STUN, 50)
+                    .putAttributes(ModAttributes.RES_DRAIN, 50)
                     .putAttributes(ModAttributes.RES_DIZZY, 100)
                     .putAttributes(() -> Attributes.KNOCKBACK_RESISTANCE, 1)
                     .putAttributes(ModAttributes.RES_STUN, 100)
-                    .putAttributes(ModAttributes.RES_PARA, 97)
+                    .putAttributes(ModAttributes.RES_PARA, 100)
                     .putAttributes(ModAttributes.RES_POISON, 100)
-                    .putAttributes(ModAttributes.RES_SEAL, 80)
+                    .putAttributes(ModAttributes.RES_SEAL, 100)
                     .putAttributes(ModAttributes.RES_SLEEP, 100)
                     .putAttributes(ModAttributes.RES_FAT, 100)
                     .putAttributes(ModAttributes.RES_COLD, 100)
                     .putAttributes(ModAttributes.RES_FAINT, 100)
-                    .xp(950).money(150).tamingChance(0).setBarnOccupancy(3).setRideable()
-                    .withLevelIncrease(1, 10)
+                    .xp(70).tamingChance(BOSS_TAMING_CHANCE).setBarnOccupancy(2).setRideable().setFlying()
+                    .withLevelIncrease(1, 3)
                     .withLevelIncrease(2, 1)
                     .withLevelIncrease(7, 3)
                     .withLevelIncrease(15, 5)
-                    .setMinLevel(12)
-                    .withSpawnerPredicate(LibAdvancements.playerAdvancementCheck(LibAdvancements.CHIMERA))
-                    .withRideActionCosts(new EntityRideActionCosts.Builder(0.5f, true)));
-    public static final RegistryEntrySupplier<EntityType<EntityGrimoire>> GRIMOIRE = regBoss(EntityType.Builder.of(EntityGrimoire::new, MobCategory.MONSTER).sized(3.5f, 4).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "grimoire"),
-            0x3b785c, 0x2e4d3f,
+                    .setMinLevel(5)
+                    .withRideActionCosts(new EntityRideActionCosts.Builder().secondCost(0.5f, true)
+                            .thirdCost(0.5f, true)));
+    public static final RegistryEntrySupplier<EntityType<EntityThunderbolt>> THUNDERBOLT = regBoss(EntityType.Builder.of(EntityThunderbolt::new, MobCategory.MONSTER).sized(1.6f, 1.8f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "thunderbolt"),
+            0x212121, 0x2f1177,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 275).putLevelGains(() -> Attributes.MAX_HEALTH, 575)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 13).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 200)
-                    .putAttributes(ModAttributes.DEFENCE, 4.5).putLevelGains(ModAttributes.DEFENCE, 228)
-                    .putAttributes(ModAttributes.MAGIC, 16.5).putLevelGains(ModAttributes.MAGIC, 240)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 3.8).putLevelGains(ModAttributes.MAGIC_DEFENCE, 224)
-                    .putAttributes(ModAttributes.RES_EARTH, 15)
-                    .putAttributes(ModAttributes.RES_WATER, 15)
-                    .putAttributes(ModAttributes.RES_FIRE, 15)
-                    .putAttributes(ModAttributes.RES_WIND, -25)
-                    .putAttributes(ModAttributes.RES_LIGHT, -15)
-                    .putAttributes(ModAttributes.RES_LOVE, -15)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 325).putLevelGains(() -> Attributes.MAX_HEALTH, 510)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 20).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 280)
+                    .putAttributes(ModAttributes.DEFENCE, 4).putLevelGains(ModAttributes.DEFENCE, 240)
+                    .putAttributes(ModAttributes.MAGIC, 16).putLevelGains(ModAttributes.MAGIC, 272)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 2).putLevelGains(ModAttributes.MAGIC_DEFENCE, 240)
+                    .putAttributes(ModAttributes.RES_WIND, 50)
+                    .putAttributes(ModAttributes.RES_EARTH, -25)
+                    .putAttributes(ModAttributes.RES_LOVE, -25)
                     .putAttributes(ModAttributes.RES_CRIT, 25)
-                    .putAttributes(ModAttributes.RES_DRAIN, 25)
+                    .putAttributes(ModAttributes.RES_DRAIN, 30)
                     .putAttributes(ModAttributes.RES_DIZZY, 100)
                     .putAttributes(() -> Attributes.KNOCKBACK_RESISTANCE, 1)
                     .putAttributes(ModAttributes.RES_STUN, 100)
-                    .putAttributes(ModAttributes.RES_PARA, 97)
+                    .putAttributes(ModAttributes.RES_PARA, 100)
                     .putAttributes(ModAttributes.RES_POISON, 100)
-                    .putAttributes(ModAttributes.RES_SEAL, 80)
+                    .putAttributes(ModAttributes.RES_SEAL, 100)
                     .putAttributes(ModAttributes.RES_SLEEP, 100)
                     .putAttributes(ModAttributes.RES_FAT, 100)
                     .putAttributes(ModAttributes.RES_COLD, 100)
                     .putAttributes(ModAttributes.RES_FAINT, 100)
-                    .xp(950).money(150).tamingChance(0).setBarnOccupancy(3).setRideable()
-                    .withLevelIncrease(1, 10)
+                    .xp(150).tamingChance(BOSS_TAMING_CHANCE).setBarnOccupancy(2).setRideable()
+                    .withLevelIncrease(1, 5)
                     .withLevelIncrease(2, 1)
                     .withLevelIncrease(7, 3)
                     .withLevelIncrease(15, 5)
                     .setMinLevel(12)
-                    .withSpawnerPredicate(LibAdvancements.playerAdvancementCheck(LibAdvancements.RAFFLESIA))
-                    .withRideActionCosts(new EntityRideActionCosts.Builder(0.5f, true)));
+                    .withSpawnerPredicate(LibAdvancements.playerAdvancementCheck(LibAdvancements.AMBROSIA))
+                    .withRideActionCosts(new EntityRideActionCosts.Builder()
+                            .thirdCost(0.5f, true)));
+    public static final RegistryEntrySupplier<EntityType<EntityMarionetta>> MARIONETTA = regBoss(EntityType.Builder.of(EntityMarionetta::new, MobCategory.MONSTER).sized(0.8f, 2.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "marionetta"),
+            0xb86b13, 0xd8d7d7,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 320).putLevelGains(() -> Attributes.MAX_HEALTH, 520)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 23).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 286)
+                    .putAttributes(ModAttributes.DEFENCE, 5).putLevelGains(ModAttributes.DEFENCE, 247)
+                    .putAttributes(ModAttributes.MAGIC, 18).putLevelGains(ModAttributes.MAGIC, 279)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 4).putLevelGains(ModAttributes.MAGIC_DEFENCE, 247)
+                    .putAttributes(ModAttributes.RES_DARK, 25)
+                    .putAttributes(ModAttributes.RES_LIGHT, -25)
+                    .putAttributes(ModAttributes.RES_CRIT, 25)
+                    .putAttributes(ModAttributes.RES_DRAIN, 30)
+                    .putAttributes(ModAttributes.RES_DIZZY, 100)
+                    .putAttributes(() -> Attributes.KNOCKBACK_RESISTANCE, 1)
+                    .putAttributes(ModAttributes.RES_STUN, 100)
+                    .putAttributes(ModAttributes.RES_PARA, 100)
+                    .putAttributes(ModAttributes.RES_POISON, 100)
+                    .putAttributes(ModAttributes.RES_SEAL, 100)
+                    .putAttributes(ModAttributes.RES_SLEEP, 100)
+                    .putAttributes(ModAttributes.RES_FAT, 100)
+                    .putAttributes(ModAttributes.RES_COLD, 100)
+                    .putAttributes(ModAttributes.RES_FAINT, 100)
+                    .xp(250).tamingChance(0.005f).setBarnOccupancy(2).setRideable()
+                    .withLevelIncrease(1, 7)
+                    .withLevelIncrease(2, 1)
+                    .withLevelIncrease(7, 3)
+                    .withLevelIncrease(15, 5)
+                    .setMinLevel(20)
+                    .withSpawnerPredicate(LibAdvancements.playerAdvancementCheck(LibAdvancements.THUNDERBOLT))
+                    .withRideActionCosts(new EntityRideActionCosts.Builder()
+                            .thirdCost(0.5f, true)));
     public static final RegistryEntrySupplier<EntityType<EntitySano>> SANO = regBoss(EntityType.Builder.of(EntitySano::new, MobCategory.MONSTER).sized(3, 4.1f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "sano"),
             0xa18c4a, 0xa82626,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 275).putLevelGains(() -> Attributes.MAX_HEALTH, 575)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 13).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 200)
-                    .putAttributes(ModAttributes.DEFENCE, 4.5).putLevelGains(ModAttributes.DEFENCE, 228)
-                    .putAttributes(ModAttributes.MAGIC, 16.5).putLevelGains(ModAttributes.MAGIC, 240)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 3.8).putLevelGains(ModAttributes.MAGIC_DEFENCE, 224)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 350).putLevelGains(() -> Attributes.MAX_HEALTH, 550)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 14).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 260)
+                    .putAttributes(ModAttributes.DEFENCE, 5).putLevelGains(ModAttributes.DEFENCE, 259)
+                    .putAttributes(ModAttributes.MAGIC, 20).putLevelGains(ModAttributes.MAGIC, 282)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 4).putLevelGains(ModAttributes.MAGIC_DEFENCE, 249)
                     .putAttributes(ModAttributes.RES_EARTH, 15)
                     .putAttributes(ModAttributes.RES_WATER, 15)
                     .putAttributes(ModAttributes.RES_FIRE, 15)
@@ -1318,22 +1310,21 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_FAT, 100)
                     .putAttributes(ModAttributes.RES_COLD, 100)
                     .putAttributes(ModAttributes.RES_FAINT, 100)
-                    .xp(950).money(150).tamingChance(0).setBarnOccupancy(3).setRideable()
-                    .withLevelIncrease(1, 10)
+                    .xp(200).setBarnOccupancy(3).setRideable()
+                    .withLevelIncrease(1, 6)
                     .withLevelIncrease(2, 1)
                     .withLevelIncrease(7, 3)
                     .withLevelIncrease(15, 5)
-                    .setMinLevel(12)
-                    .withSpawnerPredicate(LibAdvancements.playerAdvancementCheck(LibAdvancements.MARIONETTA))
-                    .withRideActionCosts(new EntityRideActionCosts.Builder(0.5f, true)));
+                    .setMinLevel(50)
+                    .withSpawnerPredicate(LibAdvancements.playerAdvancementCheck(LibAdvancements.MARIONETTA)));
     public static final RegistryEntrySupplier<EntityType<EntityUno>> UNO = regBoss(EntityType.Builder.of(EntityUno::new, MobCategory.MONSTER).sized(3, 4.1f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "uno"),
             0xa18c4a, 0x1b7f9c,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 275).putLevelGains(() -> Attributes.MAX_HEALTH, 575)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 13).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 200)
-                    .putAttributes(ModAttributes.DEFENCE, 4.5).putLevelGains(ModAttributes.DEFENCE, 228)
-                    .putAttributes(ModAttributes.MAGIC, 16.5).putLevelGains(ModAttributes.MAGIC, 240)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 3.8).putLevelGains(ModAttributes.MAGIC_DEFENCE, 224)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 350).putLevelGains(() -> Attributes.MAX_HEALTH, 550)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 14).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 260)
+                    .putAttributes(ModAttributes.DEFENCE, 4).putLevelGains(ModAttributes.DEFENCE, 259)
+                    .putAttributes(ModAttributes.MAGIC, 20).putLevelGains(ModAttributes.MAGIC, 282)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 5).putLevelGains(ModAttributes.MAGIC_DEFENCE, 249)
                     .putAttributes(ModAttributes.RES_EARTH, 15)
                     .putAttributes(ModAttributes.RES_WATER, 15)
                     .putAttributes(ModAttributes.RES_FIRE, 15)
@@ -1352,48 +1343,41 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_FAT, 100)
                     .putAttributes(ModAttributes.RES_COLD, 100)
                     .putAttributes(ModAttributes.RES_FAINT, 100)
-                    .xp(950).money(150).tamingChance(0).setBarnOccupancy(3).setRideable()
-                    .withLevelIncrease(1, 10)
+                    .xp(200).setBarnOccupancy(3).setRideable()
+                    .withLevelIncrease(1, 6)
                     .withLevelIncrease(2, 1)
                     .withLevelIncrease(7, 3)
                     .withLevelIncrease(15, 5)
-                    .setMinLevel(12)
-                    .withSpawnerPredicate(LibAdvancements.playerAdvancementCheck(LibAdvancements.MARIONETTA))
-                    .withRideActionCosts(new EntityRideActionCosts.Builder(0.5f, true)));
+                    .setMinLevel(50)
+                    .withSpawnerPredicate(LibAdvancements.playerAdvancementCheck(LibAdvancements.MARIONETTA)));
     public static final RegistryEntrySupplier<EntityType<EntitySarcophagus>> SARCOPHAGUS = regBoss(EntityType.Builder.of(EntitySarcophagus::new, MobCategory.MONSTER).sized(1.1f, 3.5f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "sarcophagus"),
             0x482f27, 0xf3d07f,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 275).putLevelGains(() -> Attributes.MAX_HEALTH, 575)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 13).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 200)
-                    .putAttributes(ModAttributes.DEFENCE, 4.5).putLevelGains(ModAttributes.DEFENCE, 228)
-                    .putAttributes(ModAttributes.MAGIC, 16.5).putLevelGains(ModAttributes.MAGIC, 240)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 3.8).putLevelGains(ModAttributes.MAGIC_DEFENCE, 224)
-                    .putAttributes(ModAttributes.RES_EARTH, 15)
-                    .putAttributes(ModAttributes.RES_WATER, 15)
-                    .putAttributes(ModAttributes.RES_FIRE, 15)
-                    .putAttributes(ModAttributes.RES_WIND, -25)
-                    .putAttributes(ModAttributes.RES_LIGHT, -15)
-                    .putAttributes(ModAttributes.RES_LOVE, -15)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 340).putLevelGains(() -> Attributes.MAX_HEALTH, 533)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 15).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 276)
+                    .putAttributes(ModAttributes.DEFENCE, 5).putLevelGains(ModAttributes.DEFENCE, 243)
+                    .putAttributes(ModAttributes.MAGIC, 21).putLevelGains(ModAttributes.MAGIC, 280)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 5).putLevelGains(ModAttributes.MAGIC_DEFENCE, 243)
+                    .putAttributes(ModAttributes.RES_LOVE, -25)
                     .putAttributes(ModAttributes.RES_CRIT, 25)
                     .putAttributes(ModAttributes.RES_DRAIN, 25)
                     .putAttributes(ModAttributes.RES_DIZZY, 100)
                     .putAttributes(() -> Attributes.KNOCKBACK_RESISTANCE, 1)
                     .putAttributes(ModAttributes.RES_STUN, 100)
-                    .putAttributes(ModAttributes.RES_PARA, 97)
+                    .putAttributes(ModAttributes.RES_PARA, 100)
                     .putAttributes(ModAttributes.RES_POISON, 100)
-                    .putAttributes(ModAttributes.RES_SEAL, 80)
+                    .putAttributes(ModAttributes.RES_SEAL, 100)
                     .putAttributes(ModAttributes.RES_SLEEP, 100)
                     .putAttributes(ModAttributes.RES_FAT, 100)
                     .putAttributes(ModAttributes.RES_COLD, 100)
                     .putAttributes(ModAttributes.RES_FAINT, 100)
-                    .xp(950).money(150).tamingChance(0).setBarnOccupancy(3).setRideable()
-                    .withLevelIncrease(1, 10)
+                    .xp(450).tamingChance(BOSS_TAMING_CHANCE).setBarnOccupancy(2).setRideable()
+                    .withLevelIncrease(1, 12)
                     .withLevelIncrease(2, 1)
                     .withLevelIncrease(7, 3)
                     .withLevelIncrease(15, 5)
-                    .setMinLevel(12)
-                    .withSpawnerPredicate(LibAdvancements.playerAdvancementCheck(LibAdvancements.MARIONETTA))
-                    .withRideActionCosts(new EntityRideActionCosts.Builder(0.5f, true)));
+                    .setMinLevel(70)
+                    .withSpawnerPredicate(LibAdvancements.playerAdvancementCheck(LibAdvancements.MARIONETTA)));
 
     public static final RegistryEntrySupplier<EntityType<EntityNPCBase>> NPC = npc(EntityType.Builder.of(EntityNPCBase::new, MobCategory.MISC).sized(0.6f, 1.8f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "npc"));
 

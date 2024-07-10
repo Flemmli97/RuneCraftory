@@ -140,12 +140,12 @@ public class EntityUno extends BossMonster implements MobAttackExt {
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
             if (command == 2) {
-                if (this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), null))
+                if (this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), ModSpells.ICE_BALL_DROP.get()))
                     this.getAnimationHandler().setAnimation(ICEBALLS_5);
             } else if (command == 1) {
-                if (this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), null))
+                if (this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), ModSpells.PARALLEL_LASER.get()))
                     this.getAnimationHandler().setAnimation(WATER_LASER_2);
-            } else if (this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), null))
+            } else if (this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), ModSpells.WATER_LASER.get()))
                 this.getAnimationHandler().setAnimation(WATER_LASER);
         }
     }

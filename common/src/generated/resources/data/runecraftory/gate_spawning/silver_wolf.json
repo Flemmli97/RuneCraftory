@@ -1,7 +1,7 @@
 {
   "entity": "runecraftory:silver_wolf",
   "minDistanceFromSpawn": 0,
-  "minGateLevel": 35,
+  "minGateLevel": 20,
   "allowUnderwater": false,
   "biomes": {
     "c:is_plains": 45,
