@@ -70,13 +70,13 @@ public class EntityUno extends BossMonster implements MobAttackExt {
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityUno>>> ATTACKS = List.of(
             WeightedEntry.wrap(MonsterActionUtils.<EntityUno>nonRepeatableAttack(WATER_LASER)
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 3),
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 10),
             WeightedEntry.wrap(MonsterActionUtils.<EntityUno>nonRepeatableAttack(WATER_LASER_2)
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 3),
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 10),
             WeightedEntry.wrap(MonsterActionUtils.<EntityUno>nonRepeatableAttack(ICEBALLS_5)
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 3),
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 10),
             WeightedEntry.wrap(MonsterActionUtils.<EntityUno>nonRepeatableAttack(HOMING_WATER_WAVE)
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 3)
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 10)
     );
     private static final List<WeightedEntry.Wrapper<IdleAction<EntityUno>>> IDLE_ACTIONS = List.of(
             WeightedEntry.wrap(new IdleAction<EntityUno>(DoNothingRunner::new)

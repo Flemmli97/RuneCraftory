@@ -103,15 +103,15 @@ public class EntityAmbrosia extends BossMonster implements MobAttackExt {
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityAmbrosia>>> ATTACKS = List.of(
             WeightedEntry.wrap(MonsterActionUtils.<EntityAmbrosia>nonRepeatableAttack(BUTTERFLY)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveAwayRunner<>(4.5, 1.1, 6), e -> 40 + e.getRandom().nextInt(10))), 3),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveAwayRunner<>(4.5, 1.1, 6), e -> 40 + e.getRandom().nextInt(10))), 8),
             WeightedEntry.wrap(MonsterActionUtils.<EntityAmbrosia>nonRepeatableAttack(KICK_1)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.2), e -> 50 + e.getRandom().nextInt(10))), 2),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.2), e -> 50 + e.getRandom().nextInt(10))), 11),
             WeightedEntry.wrap(MonsterActionUtils.<EntityAmbrosia>nonRepeatableAttack(SLEEP)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.2, 2), e -> 50 + e.getRandom().nextInt(10))), 3),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.2, 2), e -> 50 + e.getRandom().nextInt(10))), 10),
             WeightedEntry.wrap(MonsterActionUtils.<EntityAmbrosia>nonRepeatableAttack(WAVE)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 1.5), e -> 20 + e.getRandom().nextInt(10))), 3),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 1.5), e -> 20 + e.getRandom().nextInt(10))), 10),
             WeightedEntry.wrap(MonsterActionUtils.<EntityAmbrosia>enragedBossAttack(POLLEN)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 2), e -> 45 + e.getRandom().nextInt(10))), 3)
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 2), e -> 45 + e.getRandom().nextInt(10))), 9)
     );
     private static final List<WeightedEntry.Wrapper<IdleAction<EntityAmbrosia>>> IDLE_ACTIONS = List.of(
             WeightedEntry.wrap(new IdleAction<>(() -> new StrafingRunner<>(7, 1, 0.2f)), 1)

@@ -170,7 +170,7 @@ public class EntitySarcophagus extends BossMonster implements MobAttackExt {
                 ModSpells.STARFALL_LONG.get().use(entity);
             }
             if (anim.isAtTick(7.96)) {
-                entity.teleportAround(6, 12);
+                entity.teleportAround(6, 20);
             }
         });
     });
@@ -205,7 +205,8 @@ public class EntitySarcophagus extends BossMonster implements MobAttackExt {
             WeightedEntry.wrap(MonsterActionUtils.<EntitySarcophagus>nonRepeatableAttack(MISSILE)
                     .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 8),
             WeightedEntry.wrap(MonsterActionUtils.<EntitySarcophagus>enragedBossAttack(STARFALL)
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 7)
+                    .withCondition(((goal, target, previous) -> goal.attacker.isEnraged() && goal.attacker.starfallCooldown <= 0))
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 10)
     );
     private static final List<WeightedEntry.Wrapper<IdleAction<EntitySarcophagus>>> IDLE_ACTIONS = List.of(
             WeightedEntry.wrap(new IdleAction<>(() -> new DoNothingRunner<>(true)), 1)
@@ -223,6 +224,7 @@ public class EntitySarcophagus extends BossMonster implements MobAttackExt {
             }
             if (STARFALL.is(anim)) {
                 this.gravityPre = this.isNoGravity();
+                this.starfallCooldown = 220 + this.getRandom().nextInt(200);
                 this.setNoGravity(true);
             }
         } else if (this.getAnimationHandler().isCurrent(STARFALL)) {
@@ -234,6 +236,7 @@ public class EntitySarcophagus extends BossMonster implements MobAttackExt {
     protected List<LivingEntity> hitEntity;
     private boolean teleported, gravityPre;
     private String previousAttack = "";
+    private int starfallCooldown;
 
     public EntitySarcophagus(EntityType<? extends EntitySarcophagus> type, Level world) {
         super(type, world);
@@ -375,6 +378,9 @@ public class EntitySarcophagus extends BossMonster implements MobAttackExt {
         if (this.getAnimationHandler().isCurrent(CHARGE) && this.getAnimationHandler().getAnimation().isPastTick(0.28)) {
             this.setXRot(0);
             this.setYRot(this.entityData.get(LOCKED_YAW));
+        }
+        if (!this.level.isClientSide) {
+            --this.starfallCooldown;
         }
     }
 

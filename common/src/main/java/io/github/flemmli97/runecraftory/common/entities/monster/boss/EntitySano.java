@@ -74,13 +74,13 @@ public class EntitySano extends BossMonster implements MobAttackExt {
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntitySano>>> ATTACKS = List.of(
             WeightedEntry.wrap(MonsterActionUtils.<EntitySano>nonRepeatableAttack(FIREBALL_3X)
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 3),
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 10),
             WeightedEntry.wrap(MonsterActionUtils.<EntitySano>nonRepeatableAttack(FIREBALL_BARRAGE)
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 3),
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 10),
             WeightedEntry.wrap(MonsterActionUtils.<EntitySano>nonRepeatableAttack(EXPLOSION)
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 3),
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 10),
             WeightedEntry.wrap(MonsterActionUtils.<EntitySano>nonRepeatableAttack(FIRE_BREATH)
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 3)
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 10)
     );
     private static final List<WeightedEntry.Wrapper<IdleAction<EntitySano>>> IDLE_ACTIONS = List.of(
             WeightedEntry.wrap(new IdleAction<EntitySano>(DoNothingRunner::new)

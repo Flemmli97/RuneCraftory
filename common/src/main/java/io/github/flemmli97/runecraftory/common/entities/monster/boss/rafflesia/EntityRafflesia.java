@@ -96,34 +96,38 @@ public class EntityRafflesia extends BossMonster implements MobAttackExt {
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityRafflesia>>> ATTACKS = List.of(
             WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(POISON_BREATH)
                     .cooldown(e -> e.animationCooldown(POISON_BREATH))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 4),
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 6),
             WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(POISON_BREATH_REV)
                     .cooldown(e -> e.animationCooldown(POISON_BREATH_REV))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 4),
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 6),
             WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(PARA_BREATH)
                     .cooldown(e -> e.animationCooldown(PARA_BREATH))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 4),
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 6),
             WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(PARA_BREATH_REV)
                     .cooldown(e -> e.animationCooldown(PARA_BREATH_REV))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 4),
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 6),
             WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(SLEEP_BREATH)
                     .cooldown(e -> e.animationCooldown(SLEEP_BREATH))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 4),
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 6),
             WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(SLEEP_BREATH_REV)
                     .cooldown(e -> e.animationCooldown(SLEEP_BREATH_REV))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 4),
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 6),
             WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(WIND_BLADE_X8)
                     .cooldown(e -> e.animationCooldown(WIND_BLADE_X8))
                     .withCondition(((goal, target, previous) -> !goal.attacker.isEnraged()))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 3),
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 8),
             WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(WIND_BLADE_X16)
                     .cooldown(e -> e.animationCooldown(WIND_BLADE_X16))
                     .withCondition(((goal, target, previous) -> goal.attacker.isEnraged()))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 3),
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 8),
+            WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(STATUS_CIRCLE)
+                    .cooldown(e -> e.animationCooldown(STATUS_CIRCLE))
+                    .withCondition(((goal, target, previous) -> goal.attacker.isEnraged()))
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 8),
             WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(RESUMMON)
                     .cooldown(e -> e.animationCooldown(RESUMMON))
                     .withCondition(((goal, target, previous) -> goal.attacker.getHorseTail() == null || goal.attacker.getPitcher() == null || goal.attacker.getFlower() == null))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 2)
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 7)
     );
     private static final List<WeightedEntry.Wrapper<IdleAction<EntityRafflesia>>> IDLE_ACTIONS = List.of(
             WeightedEntry.wrap(new IdleAction<>(DoNothingRunner::new), 1)

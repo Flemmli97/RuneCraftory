@@ -140,23 +140,23 @@ public class EntityMarionetta extends BossMonster {
     });
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityMarionetta>>> ATTACKS = List.of(
             WeightedEntry.wrap(MonsterActionUtils.<EntityMarionetta>nonRepeatableAttack(MELEE)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.1), e -> 30 + e.getRandom().nextInt(20))), 1),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.1), e -> 30 + e.getRandom().nextInt(20))), 10),
             WeightedEntry.wrap(MonsterActionUtils.<EntityMarionetta>nonRepeatableAttack(SPIN)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 6.5), e -> 35 + e.getRandom().nextInt(20))), 1),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 6.5), e -> 35 + e.getRandom().nextInt(20))), 10),
             WeightedEntry.wrap(MonsterActionUtils.<EntityMarionetta>nonRepeatableAttack(CARD_ATTACK)
-                    .prepare(() -> new TimedWrappedRunner<>(new JumpEvadeAction<>(2, 0.9, 0.5f, 0, 0.5f, new DoNothingRunner<>(true)), e -> 5)), 1),
+                    .prepare(() -> new TimedWrappedRunner<>(new JumpEvadeAction<>(2, 0.9, 0.5f, 0, 0.5f, new DoNothingRunner<>(true)), e -> 5)), 10),
             WeightedEntry.wrap(MonsterActionUtils.<EntityMarionetta>nonRepeatableAttack(CHEST_ATTACK)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 6.5), e -> 35 + e.getRandom().nextInt(20))), 1),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 6.5), e -> 35 + e.getRandom().nextInt(20))), 10),
             WeightedEntry.wrap(MonsterActionUtils.<EntityMarionetta>nonRepeatableAttack(STUFFED_ANIMALS)
-                    .prepare(() -> new TimedWrappedRunner<>(new EvadingRangedRunner<>(7, 3, 1.2), e -> 30 + e.getRandom().nextInt(20))), 1),
+                    .prepare(() -> new TimedWrappedRunner<>(new EvadingRangedRunner<>(7, 3, 1.2), e -> 30 + e.getRandom().nextInt(20))), 10),
             WeightedEntry.wrap(MonsterActionUtils.<EntityMarionetta>enragedBossAttack(DARK_BEAM)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 6, true, true), e -> 30 + e.getRandom().nextInt(20))), 1),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 6, true, true), e -> 30 + e.getRandom().nextInt(20))), 10),
             WeightedEntry.wrap(MonsterActionUtils.<EntityMarionetta>enragedBossAttack(FURNITURE)
                     .prepare(() -> new TimedWrappedRunner<>(new DoNothingRunner<>(true), e -> 5)), 1)
     );
     private static final List<WeightedEntry.Wrapper<IdleAction<EntityMarionetta>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<>(() -> new JumpEvadeAction<>(2, 0.9, 0.5f, 0.015f, 0.4f, new StrafingRunner<>(7, 1))), 2),
-            WeightedEntry.wrap(new IdleAction<>(() -> new StrafingRunner<>(7, 1)), 3)
+            WeightedEntry.wrap(new IdleAction<>(() -> new JumpEvadeAction<>(2, 0.9, 0.5f, 0.015f, 0.4f, new StrafingRunner<>(7, 1))), 10),
+            WeightedEntry.wrap(new IdleAction<>(() -> new StrafingRunner<>(7, 1)), 8)
     );
 
     public final AnimatedAttackGoal<EntityMarionetta> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);

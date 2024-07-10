@@ -221,49 +221,49 @@ public class EntityRaccoon extends BossMonster {
             WeightedEntry.wrap(new GoalAttackAction<EntityRaccoon>(DOUBLE_PUNCH)
                     .cooldown(e -> e.animationCooldown(DOUBLE_PUNCH))
                     .withCondition(((goal, target, previous) -> !goal.attacker.isBerserk()))
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveAwayRunner<>(4, 1.2, 5), e -> 20 + e.getRandom().nextInt(10))), 3),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveAwayRunner<>(4, 1.2, 5), e -> 20 + e.getRandom().nextInt(10))), 10),
             WeightedEntry.wrap(new GoalAttackAction<EntityRaccoon>(DOUBLE_PUNCH)
                     .cooldown(e -> e.animationCooldown(DOUBLE_PUNCH))
                     .withCondition(((goal, target, previous) -> !goal.attacker.isBerserk()))
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.2), e -> 35 + e.getRandom().nextInt(15))), 1),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.2), e -> 35 + e.getRandom().nextInt(15))), 7),
             WeightedEntry.wrap(new GoalAttackAction<EntityRaccoon>(PUNCH)
                     .cooldown(e -> e.animationCooldown(PUNCH))
                     .withCondition(((goal, target, previous) -> goal.attacker.isBerserk() && !PUNCH.getID().equals(previous)))
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1), e -> 25 + e.getRandom().nextInt(10))), 7),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1), e -> 25 + e.getRandom().nextInt(10))), 9),
             WeightedEntry.wrap(new GoalAttackAction<EntityRaccoon>(JUMP)
                     .cooldown(e -> e.animationCooldown(JUMP))
                     .withCondition(((goal, target, previous) -> goal.attacker.isBerserk() && !JUMP.getID().equals(previous)))
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 6), e -> 25 + e.getRandom().nextInt(10))), 7),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 6), e -> 25 + e.getRandom().nextInt(10))), 10),
             WeightedEntry.wrap(new GoalAttackAction<EntityRaccoon>(STOMP)
                     .cooldown(e -> e.animationCooldown(STOMP))
                     .withCondition(((goal, target, previous) -> goal.attacker.isBerserk() && !STOMP.getID().equals(previous)))
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1), e -> 25 + e.getRandom().nextInt(10))), 7),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1), e -> 25 + e.getRandom().nextInt(10))), 10),
             WeightedEntry.wrap(new GoalAttackAction<EntityRaccoon>(LEAF_SHOOT)
                     .cooldown(e -> e.animationCooldown(LEAF_SHOOT))
                     .withCondition(((goal, target, previous) -> goal.attacker.isBerserk() && !LEAF_SHOOT.getID().equals(previous)))
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveAwayRunner<>(3, 1, 5), e -> 25 + e.getRandom().nextInt(10))), 7),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveAwayRunner<>(3, 1, 5), e -> 25 + e.getRandom().nextInt(10))), 9),
             WeightedEntry.wrap(new GoalAttackAction<EntityRaccoon>(LEAF_BOOMERANG)
                     .cooldown(e -> e.animationCooldown(LEAF_BOOMERANG))
                     .withCondition(((goal, target, previous) -> goal.attacker.isBerserk() && !LEAF_BOOMERANG.getID().equals(previous)))
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveAwayRunner<>(3, 1, 5), e -> 25 + e.getRandom().nextInt(10))), 7),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveAwayRunner<>(3, 1, 5), e -> 25 + e.getRandom().nextInt(10))), 9),
             WeightedEntry.wrap(new GoalAttackAction<EntityRaccoon>(ROAR)
                     .cooldown(e -> e.animationCooldown(ROAR))
                     .withCondition(((goal, target, previous) -> goal.attacker.isBerserk() && !ROAR.getID().equals(previous)))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 4),
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 6),
             WeightedEntry.wrap(new GoalAttackAction<EntityRaccoon>(BARRAGE)
                     .cooldown(e -> e.animationCooldown(BARRAGE))
                     .withCondition(((goal, target, previous) -> goal.attacker.isBerserk() && !BARRAGE.getID().equals(previous)))
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1), e -> 25 + e.getRandom().nextInt(10))), 1),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1), e -> 25 + e.getRandom().nextInt(10))), 3),
             WeightedEntry.wrap(new GoalAttackAction<EntityRaccoon>(CLONE)
                     .cooldown(e -> e.animationCooldown(CLONE))
                     .withCondition(((goal, target, previous) -> goal.attacker.isEnraged() && !CLONE.getID().equals(previous)))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 8)
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 9)
     );
     private static final List<WeightedEntry.Wrapper<IdleAction<EntityRaccoon>>> IDLE_ACTIONS = List.of(
             WeightedEntry.wrap(new IdleAction<EntityRaccoon>(() -> new MoveToTargetRunner<>(1, 1))
-                    .withCondition(((goal, target) -> goal.attacker.isBerserk())), 1),
+                    .withCondition(((goal, target) -> goal.attacker.isBerserk())), 10),
             WeightedEntry.wrap(new IdleAction<EntityRaccoon>(() -> new MoveAwayRunner<>(1, 1, 5))
-                    .withCondition(((goal, target) -> !goal.attacker.isBerserk())), 1)
+                    .withCondition(((goal, target) -> !goal.attacker.isBerserk())), 10)
     );
 
     public final AnimatedAttackGoal<EntityRaccoon> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);

@@ -122,29 +122,29 @@ public class EntityDeadTree extends BossMonster {
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityDeadTree>>> ATTACKS = List.of(
             WeightedEntry.wrap(MonsterActionUtils.<EntityDeadTree>nonRepeatableAttack(ATTACK)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1), e -> 35 + e.getRandom().nextInt(15))), 2),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1), e -> 35 + e.getRandom().nextInt(15))), 9),
             WeightedEntry.wrap(new GoalAttackAction<EntityDeadTree>(FALLING_APPLES)
                     .cooldown(e -> e.animationCooldown(FALLING_APPLES))
                     .withCondition(((goal, target, previous) -> !goal.attacker.isEnraged()))
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 4), e -> 35 + e.getRandom().nextInt(15))), 3),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 4), e -> 35 + e.getRandom().nextInt(15))), 10),
             WeightedEntry.wrap(new GoalAttackAction<EntityDeadTree>(APPLE_SHIELD)
                     .cooldown(e -> e.animationCooldown(APPLE_SHIELD))
                     .withCondition(((goal, target, previous) -> goal.attacker.shieldCooldown <= 0))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 2),
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 8),
             WeightedEntry.wrap(MonsterActionUtils.<EntityDeadTree>nonRepeatableAttack(SPIKE)
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 3),
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 9),
             WeightedEntry.wrap(new GoalAttackAction<EntityDeadTree>(BIG_FALLING_APPLES)
                     .cooldown(e -> e.animationCooldown(BIG_FALLING_APPLES))
                     .withCondition(((goal, target, previous) -> goal.attacker.isEnraged()))
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 4), e -> 40 + e.getRandom().nextInt(20))), 2),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 4), e -> 40 + e.getRandom().nextInt(20))), 9),
             WeightedEntry.wrap(new GoalAttackAction<EntityDeadTree>(MORE_FALLING_APPLES)
                     .cooldown(e -> e.animationCooldown(MORE_FALLING_APPLES))
                     .withCondition(((goal, target, previous) -> goal.attacker.isEnraged()))
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 4), e -> 40 + e.getRandom().nextInt(20))), 3),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 4), e -> 40 + e.getRandom().nextInt(20))), 10),
             WeightedEntry.wrap(new GoalAttackAction<EntityDeadTree>(HEAL)
                     .cooldown(e -> e.animationCooldown(HEAL))
                     .withCondition(((goal, target, previous) -> goal.attacker.healCooldown <= 0))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 5)
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 11)
     );
     private static final List<WeightedEntry.Wrapper<IdleAction<EntityDeadTree>>> IDLE_ACTIONS = List.of(
             WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 3)), 1)
