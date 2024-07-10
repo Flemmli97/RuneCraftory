@@ -25,11 +25,13 @@ public class StarFallSummoner extends ProjectileSummonHelperEntity {
     protected void summonProjectiles() {
         if (this.tickCount % 10 == 0) {
             for (int i = 0; i < 12; i++) {
+                double randX = this.random.nextDouble() * 32 - 16;
+                double randZ = this.random.nextDouble() * 32 - 16;
+                if (randX * randX + randZ * randZ > 16 * 16)
+                    continue;
                 EntityStarfall proj = new EntityStarfall(this.level, this.getOwner());
                 proj.setDamageMultiplier(this.damageMultiplier);
-                double randX = this.getX() + this.random.nextDouble() * 24 - 12;
-                double randZ = this.getZ() + this.random.nextDouble() * 24 - 12;
-                proj.setPos(randX, this.getY() + 11 + this.random.nextDouble() * 2, randZ);
+                proj.setPos(this.getX() + randX, this.getY() + 11 + this.random.nextDouble() * 2, this.getZ() + randZ);
                 this.level.addFreshEntity(proj);
             }
             this.playSound(ModSounds.ENTITY_FAIRY_AMBIENT.get(), 0.4f, (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.3f);

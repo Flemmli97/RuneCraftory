@@ -269,7 +269,12 @@ public class EntitySarcophagus extends BossMonster implements MobAttackExt {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        return (!this.getAnimationHandler().hasAnimation() || !(this.getAnimationHandler().isCurrent(DEFEAT, ANGRY)) || this.isTeleporting()) && super.hurt(source, amount);
+        return (!this.getAnimationHandler().hasAnimation() || (!this.getAnimationHandler().isCurrent(DEFEAT, ANGRY) && !this.isTeleporting())) && super.hurt(source, amount);
+    }
+
+    @Override
+    public boolean causeFallDamage(float fallDistance, float multiplier, DamageSource source) {
+        return false;
     }
 
     @Override
