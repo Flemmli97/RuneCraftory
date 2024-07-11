@@ -26,7 +26,7 @@
     "runecraftory:res_wind": 10.0
   },
   "levelGains": {
-    "minecraft:generic.max_health": 398.0,
+    "minecraft:generic.max_health": 498.0,
     "minecraft:generic.attack_damage": 273.0,
     "runecraftory:defence": 219.0,
     "runecraftory:magic_attack": 209.0,

@@ -24,7 +24,7 @@
     "runecraftory:res_crit": 5.0
   },
   "levelGains": {
-    "minecraft:generic.max_health": 450.0,
+    "minecraft:generic.max_health": 550.0,
     "minecraft:generic.attack_damage": 305.0,
     "runecraftory:defence": 256.0,
     "runecraftory:magic_attack": 235.0,

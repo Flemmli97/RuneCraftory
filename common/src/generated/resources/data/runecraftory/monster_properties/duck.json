@@ -26,7 +26,7 @@
     "runecraftory:res_water": 10.0
   },
   "levelGains": {
-    "minecraft:generic.max_health": 430.0,
+    "minecraft:generic.max_health": 530.0,
     "minecraft:generic.attack_damage": 263.0,
     "runecraftory:defence": 225.0,
     "runecraftory:magic_attack": 240.0,

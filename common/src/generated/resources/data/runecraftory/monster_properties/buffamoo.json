@@ -25,7 +25,7 @@
     "runecraftory:res_love": 10.0
   },
   "levelGains": {
-    "minecraft:generic.max_health": 406.0,
+    "minecraft:generic.max_health": 506.0,
     "minecraft:generic.attack_damage": 263.0,
     "runecraftory:defence": 222.0,
     "runecraftory:magic_attack": 220.0,

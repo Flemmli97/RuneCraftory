@@ -1697,10 +1697,6 @@ public class ItemStatGen extends ItemStatProvider {
 
     }
 
-    private static double attackSpeedFor(double delay) {
-        return delay - 5;
-    }
-
     private static double attackRangeFor(double range) {
         return range - 3;
     }
