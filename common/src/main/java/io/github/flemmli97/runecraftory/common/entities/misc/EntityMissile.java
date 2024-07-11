@@ -45,7 +45,7 @@ public class EntityMissile extends BaseProjectile {
     public void tick() {
         super.tick();
         if (!this.level.isClientSide) {
-            if (this.target == null) {
+            if (this.target == null || !this.target.isAlive()) {
                 List<Entity> list = this.level.getEntities(this, this.getBoundingBox().inflate(16).expandTowards(this.getDeltaMovement()), e -> {
                     if (!e.isPickable() || !e.isAttackable())
                         return false;
@@ -92,6 +92,7 @@ public class EntityMissile extends BaseProjectile {
             this.discard();
             return true;
         }
+        this.discard();
         return false;
     }
 

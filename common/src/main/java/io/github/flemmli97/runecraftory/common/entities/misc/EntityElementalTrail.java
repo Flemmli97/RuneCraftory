@@ -141,7 +141,7 @@ public class EntityElementalTrail extends BaseDamageCloud {
         } else {
             if (this.livingTicks % 2 == 0) {
                 if (this.element == EnumElement.WATER)
-                    this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.GLASS_BREAK, this.getSoundSource(), 2, 0.8f, false);
+                    this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.GLASS_BREAK, this.getSoundSource(), 0.9f, 0.8f, false);
                 if (this.element == EnumElement.EARTH)
                     this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.ROOTED_DIRT_BREAK, this.getSoundSource(), 2, 0.8f, false);
             }

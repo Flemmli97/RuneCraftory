@@ -37,7 +37,7 @@ public class BoneNeedleSpell extends Spell {
             Vec3 random = needle.position().add(0, -entity.getBbHeight() * 0.25, 0).add(side.multiply(offset * 0.5, 0, offset * 0.5));
             offset += entity.getRandom().nextDouble() * inc * 0.5 + inc * 0.5;
             needle.setPos(random);
-            needle.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.75f));
+            needle.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.8f));
             level.addFreshEntity(needle);
         }
         level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ARROW_SHOOT, entity.getSoundSource(), 1.0f, 1.2f + level.getRandom().nextFloat() * 0.1f);

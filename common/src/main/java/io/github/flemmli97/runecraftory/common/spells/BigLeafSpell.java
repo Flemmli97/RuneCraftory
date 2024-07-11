@@ -24,7 +24,7 @@ public class BigLeafSpell extends Spell {
         int leafs = this.doubleShot ? 2 : 1;
         for (int i = 0; i < leafs; i++) {
             EntityBigRaccoonLeaf leaf = new EntityBigRaccoonLeaf(level, entity);
-            leaf.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1));
+            leaf.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1.1f));
             float vel = i % 2 == 0 ? 1 : 0.7f;
             if (entity instanceof Mob mob && mob.getTarget() != null) {
                 leaf.shootAtEntity(mob.getTarget(), vel, 0, 0, 0);

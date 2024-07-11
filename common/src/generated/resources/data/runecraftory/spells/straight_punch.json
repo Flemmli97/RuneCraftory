@@ -1,10 +1,10 @@
 {
   "cooldown": 5,
-  "rpCost": 10,
+  "rpCost": 18,
   "skillXP": {
-    "FIST": 10.0
+    "FIST": 12.0
   },
-  "percentage": false,
+  "percentage": 0.0,
   "skills": [
     "FIST"
   ]

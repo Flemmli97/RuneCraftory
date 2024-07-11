@@ -1,10 +1,10 @@
 {
   "cooldown": 5,
-  "rpCost": 10,
+  "rpCost": 5,
   "skillXP": {
-    "SHORTSWORD": 10.0
+    "SHORTSWORD": 9.0
   },
-  "percentage": false,
+  "percentage": 0.0,
   "skills": [
     "SHORTSWORD"
   ]

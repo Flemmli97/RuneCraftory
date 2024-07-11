@@ -20,7 +20,7 @@ public class ExpandingLight extends Spell {
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
-        EntityLightBall.createLights(level, entity, EntityLightBall.Type.EXPAND, CombatUtils.getAbilityDamageBonus(lvl, 0.9f), this.amount);
+        EntityLightBall.createLights(level, entity, EntityLightBall.Type.EXPAND, CombatUtils.getAbilityDamageBonus(lvl, 1.1f), this.amount);
         playSound(entity, ModSounds.SPELL_GENERIC_LIGHT.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         return true;
     }

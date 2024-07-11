@@ -19,12 +19,12 @@ public class SpellProperties {
 
     public final Map<EnumSkills, Float> skillXP;
     public final int cooldown, rpCost;
-    public final boolean percentage;
+    public final float percentage;
     public final Set<EnumSkills> skills;
 
     public static final Codec<SpellProperties> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(
-                    Codec.BOOL.fieldOf("percentage").forGetter(d -> d.percentage),
+                    Codec.FLOAT.fieldOf("percentage").forGetter(d -> d.percentage),
                     CodecUtils.stringEnumCodec(EnumSkills.class, null).listOf().optionalFieldOf("skills").forGetter(d -> d.skills.isEmpty() ? Optional.empty() : Optional.of(List.copyOf(d.skills))),
 
                     ExtraCodecs.NON_NEGATIVE_INT.fieldOf("cooldown").forGetter(d -> d.cooldown),
@@ -32,9 +32,9 @@ public class SpellProperties {
                     Codec.unboundedMap(CodecUtils.stringEnumCodec(EnumSkills.class, null), Codec.FLOAT).fieldOf("skillXP").forGetter(d -> d.skillXP)
             ).apply(instance, (percentage, skills, cooldown, rpCost, skillXp) -> new SpellProperties(skillXp, cooldown, rpCost, percentage, skills.orElse(List.of()))));
 
-    public static final SpellProperties DEFAULT_PROP = new SpellProperties(new EnumMap<>(EnumSkills.class), 20, 0, false, List.of());
+    public static final SpellProperties DEFAULT_PROP = new SpellProperties(new EnumMap<>(EnumSkills.class), 20, 0, 0, List.of());
 
-    public SpellProperties(Map<EnumSkills, Float> skillXP, int cooldown, int rpCost, boolean percentage, List<EnumSkills> skills) {
+    public SpellProperties(Map<EnumSkills, Float> skillXP, int cooldown, int rpCost, float percentage, List<EnumSkills> skills) {
         this.percentage = percentage;
         EnumSet<EnumSkills> reducingSkills = skills.isEmpty() ? EnumSet.noneOf(EnumSkills.class) : EnumSet.copyOf(skills);
         this.skills = Collections.unmodifiableSet(reducingSkills);
@@ -53,7 +53,7 @@ public class SpellProperties {
         private final Map<EnumSkills, Float> xp = new EnumMap<>(EnumSkills.class);
 
         private final int cooldown, rpCost;
-        private boolean percentage;
+        private float percentage;
         private final List<EnumSkills> skills = new ArrayList<>();
 
         public Builder(int cooldown, int rpCost) {
@@ -66,8 +66,8 @@ public class SpellProperties {
             return this;
         }
 
-        public SpellProperties.Builder usePercentageCost() {
-            this.percentage = true;
+        public SpellProperties.Builder percentageCost(float cost) {
+            this.percentage = cost;
             return this;
         }
 

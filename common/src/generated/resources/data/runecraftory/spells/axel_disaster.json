@@ -1,10 +1,10 @@
 {
   "cooldown": 5,
-  "rpCost": 10,
+  "rpCost": 17,
   "skillXP": {
-    "SPEAR": 10.0
+    "SPEAR": 5.0
   },
-  "percentage": false,
+  "percentage": 0.0,
   "skills": [
     "SPEAR"
   ]

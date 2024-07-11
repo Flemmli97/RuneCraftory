@@ -1,10 +1,10 @@
 {
   "cooldown": 30,
-  "rpCost": 40,
+  "rpCost": 60,
   "skillXP": {
-    "LIGHT": 10.0
+    "LIGHT": 7.0
   },
-  "percentage": false,
+  "percentage": 0.0,
   "skills": [
     "LIGHT"
   ]

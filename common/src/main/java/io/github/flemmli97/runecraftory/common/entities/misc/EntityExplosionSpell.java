@@ -21,6 +21,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 
@@ -44,6 +45,8 @@ public class EntityExplosionSpell extends BaseProjectile {
     public void tick() {
         super.tick();
         if (this.level.isClientSide) {
+            Vec3 dir = this.getDeltaMovement().scale(0.5);
+            this.level.addParticle(new ColoredParticleData(ModParticles.LIGHT.get(), 246 / 255F, 52 / 255F, 52 / 255F, 0.5f, 3f), this.getX() + dir.x(), this.getY() + dir.y(), this.getZ() + dir.z(), 0, 0, 0);
             this.level.addParticle(new ColoredParticleData(ModParticles.LIGHT.get(), 246 / 255F, 52 / 255F, 52 / 255F, 0.5f, 3f), this.getX(), this.getY(), this.getZ(), 0, 0, 0);
         }
     }

@@ -14,7 +14,6 @@ public class StarFallSummoner extends ProjectileSummonHelperEntity {
 
     public StarFallSummoner(Level level, LivingEntity caster) {
         super(ModEntities.STARFALL_SUMMONER.get(), level, caster);
-        this.damageMultiplier = 1;
     }
 
     public void setMaxLivingTicks(int maxLivingTicks) {
@@ -23,8 +22,8 @@ public class StarFallSummoner extends ProjectileSummonHelperEntity {
 
     @Override
     protected void summonProjectiles() {
-        if (this.tickCount % 10 == 0) {
-            for (int i = 0; i < 12; i++) {
+        if (this.tickCount % 5 == 0) {
+            for (int i = 0; i < 6; i++) {
                 double randX = this.random.nextDouble() * 32 - 16;
                 double randZ = this.random.nextDouble() * 32 - 16;
                 if (randX * randX + randZ * randZ > 16 * 16)

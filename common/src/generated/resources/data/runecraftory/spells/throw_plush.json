@@ -1,6 +1,11 @@
 {
-  "cooldown": 25,
-  "rpCost": 100,
-  "skillXP": {},
-  "percentage": false
+  "cooldown": 50,
+  "rpCost": 60,
+  "skillXP": {
+    "DARK": 4.0
+  },
+  "percentage": 0.05,
+  "skills": [
+    "DARK"
+  ]
 }

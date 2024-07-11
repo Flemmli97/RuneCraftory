@@ -4,7 +4,7 @@
   "skillXP": {
     "DARK": 8.0
   },
-  "percentage": false,
+  "percentage": 0.0,
   "skills": [
     "DARK"
   ]

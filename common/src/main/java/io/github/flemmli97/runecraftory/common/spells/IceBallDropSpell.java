@@ -33,7 +33,7 @@ public class IceBallDropSpell extends Spell {
         ball.setPos(target.x(), target.y() + 5, target.z());
         ball.withMaxLivingTicks(25);
         ball.setDeltaMovement(new Vec3(0, -1, 0).scale(0.3));
-        ball.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1f));
+        ball.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.9f));
         level.addFreshEntity(ball);
         playSound(entity, ModSounds.SPELL_GENERIC_FIRE_BALL.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         return true;

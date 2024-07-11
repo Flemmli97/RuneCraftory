@@ -36,7 +36,7 @@ public class SmallLeafSpell extends Spell {
         for (Vector3f vec : RayTraceUtils.rotatedVecs(direct, MathUtils.normalY, -degs, degs, degs * 2 / this.amount)) {
             EntitySmallRaccoonLeaf leaf = new EntitySmallRaccoonLeaf(level, entity);
             leaf.setPos(leaf.getX() + vec.x() * 0.1, leaf.getY() + vec.y() * 0.1, leaf.getZ() + vec.z() * 0.1);
-            leaf.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.85f));
+            leaf.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.9f));
             leaf.shoot(vec.x(), vec.y(), vec.z(), 0.75f, 0);
             level.addFreshEntity(leaf);
         }

@@ -24,7 +24,7 @@ public class WindBladeCircle extends Spell {
         for (int i = 0; i < this.amount; i++) {
             EntityWindBlade wind = new EntityWindBlade(level, entity);
             wind.setPos(wind.getX(), entity.getY() + entity.getBbHeight() * 0.4, wind.getZ());
-            wind.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.8f));
+            wind.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.9f));
             wind.setType(EntityWindBlade.Type.PIERCING);
             wind.shoot(entity, entity.getXRot(), entity.getYRot() + i * angle, 0, 0.35f, 0);
             level.addFreshEntity(wind);

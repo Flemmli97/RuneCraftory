@@ -59,7 +59,7 @@ public class EntityWindBlade extends BaseProjectile {
     public void tick() {
         super.tick();
         if (!this.level.isClientSide) {
-            if (this.target == null && this.type == Type.HOMING) {
+            if ((this.target == null || !this.target.isAlive()) && this.type == Type.HOMING) {
                 List<Entity> list = this.level.getEntities(this, this.getBoundingBox().inflate(16).expandTowards(this.getDeltaMovement()), e -> {
                     if (!e.isPickable() || !e.isAttackable())
                         return false;

@@ -90,7 +90,7 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
     public static void onHammering(ServerPlayer player, boolean level) {
         if (getUseRPFlag(player.getMainHandItem()))
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                LevelCalc.useRP(player, data, 5, true, false, true, EnumSkills.MINING);
+                LevelCalc.useRP(player, data, 5, true, 0, true, EnumSkills.MINING);
                 if (level)
                     LevelCalc.levelSkill(player, data, EnumSkills.MINING, 10);
             });

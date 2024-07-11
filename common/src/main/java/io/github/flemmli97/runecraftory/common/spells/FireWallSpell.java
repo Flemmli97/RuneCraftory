@@ -29,7 +29,7 @@ public class FireWallSpell extends Spell {
             Vec3 look = entity.getLookAngle().scale(10);
             wall.setTarget(look.x, look.y, look.z);
         }
-        wall.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.9f));
+        wall.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.85f));
         level.addFreshEntity(wall);
         playSound(entity, ModSounds.SPELL_GENERIC_FIRE_BALL.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         return true;

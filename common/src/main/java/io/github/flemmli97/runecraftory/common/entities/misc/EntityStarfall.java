@@ -34,7 +34,7 @@ public class EntityStarfall extends BaseProjectile {
         this.setDeltaMovement(this.getDeltaMovement().add(0, 0.01, 0));
         if (this.level.isClientSide) {
             float width = this.getBbWidth() / 2;
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 6; i++)
                 this.level.addParticle(new ColoredParticleData(ModParticles.LIGHT.get(), 49 / 255f, 103 / 255f, 189 / 255f, 0.7f, 1),
                         this.getX() + this.random.nextGaussian() * width, this.getY() + this.random.nextGaussian() * width, this.getZ() + this.random.nextGaussian() * width, this.random.nextGaussian() * 0.01, Math.abs(this.random.nextGaussian() * 0.03), this.random.nextGaussian() * 0.01);
         }

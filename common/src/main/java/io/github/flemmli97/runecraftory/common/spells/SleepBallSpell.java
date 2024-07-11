@@ -19,7 +19,7 @@ public class SleepBallSpell extends Spell {
             double x = Math.cos(angle) * 1.3;
             double z = Math.sin(angle) * 1.3;
             EntityStatusBall pollen = new EntityStatusBall(level, entity);
-            pollen.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.65f));
+            pollen.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.75f));
             pollen.setPos(entity.getX() + x, entity.getY() + 0.4, entity.getZ() + z);
             level.addFreshEntity(pollen);
         }

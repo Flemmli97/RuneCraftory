@@ -4,7 +4,7 @@
   "skillXP": {
     "FIRE": 5.0
   },
-  "percentage": false,
+  "percentage": 0.0,
   "skills": [
     "FIRE"
   ]

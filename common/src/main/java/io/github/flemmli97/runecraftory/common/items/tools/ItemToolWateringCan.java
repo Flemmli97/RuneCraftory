@@ -79,7 +79,7 @@ public class ItemToolWateringCan extends TieredItem implements IItemUsable, ICha
     @Override
     public void onBlockBreak(ServerPlayer player) {
         Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-            LevelCalc.useRP(player, data, 2, true, false, true, EnumSkills.FARMING, EnumSkills.WATER);
+            LevelCalc.useRP(player, data, 2, true, 0, true, EnumSkills.FARMING, EnumSkills.WATER);
             LevelCalc.levelSkill(player, data, EnumSkills.FARMING, 4);
             LevelCalc.levelSkill(player, data, EnumSkills.WATER, 1);
         });
@@ -180,7 +180,7 @@ public class ItemToolWateringCan extends TieredItem implements IItemUsable, ICha
                         .count();
                 if (amount > 0)
                     Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                        LevelCalc.useRP(player, data, range * 18.5f, true, true, true, EnumSkills.FARMING);
+                        LevelCalc.useRP(player, data, 0, true, range * 17.5f, true, EnumSkills.FARMING);
                         LevelCalc.levelSkill(player, data, EnumSkills.FARMING, range * 10);
                         LevelCalc.levelSkill(player, data, EnumSkills.WATER, range * 3);
                     });

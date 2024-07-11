@@ -29,7 +29,7 @@ public class TripleFireBulletSpell extends Spell {
         projectile.setElement(EnumElement.FIRE);
         projectile.setStraight();
         projectile.shoot(dir.x, dir.y, dir.z, 1, 0);
-        projectile.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.85f));
+        projectile.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.9f));
         level.addFreshEntity(projectile);
 
         Vec3 up = entity.getUpVector(1);

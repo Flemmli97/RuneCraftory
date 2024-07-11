@@ -18,7 +18,7 @@ public class CardThrowSpell extends Spell {
             return false;
         for (Vector3f vec : RayTraceUtils.rotatedVecs(entity.getLookAngle(), new Vec3(0, 1, 0), -80, 80, 10)) {
             EntityCards cards = new EntityCards(level, entity, entity.getRandom().nextInt(8));
-            cards.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.9f));
+            cards.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1f));
             cards.shoot(vec.x(), vec.y(), vec.z(), 1.5f, 0);
             level.addFreshEntity(cards);
         }

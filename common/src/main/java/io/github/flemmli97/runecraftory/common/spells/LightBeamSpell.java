@@ -16,7 +16,7 @@ public class LightBeamSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         EntityLightBeam beam = new EntityLightBeam(level, entity);
-        beam.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.95f));
+        beam.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.9f));
         if (entity instanceof Mob mob && mob.getTarget() != null)
             beam.setRotationTo(mob.getTarget(), 1);
         else {

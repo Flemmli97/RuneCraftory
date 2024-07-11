@@ -138,7 +138,7 @@ public class ItemToolHoe extends HoeItem implements IItemUsable, IChargeable {
                         .count();
                 if (amount > 0)
                     Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                        LevelCalc.useRP(player, data, range * 18.75f, true, true, true, EnumSkills.FARMING);
+                        LevelCalc.useRP(player, data, 0, true, range * 17.5f, true, EnumSkills.FARMING);
                         LevelCalc.levelSkill(player, data, EnumSkills.FARMING, range * 15);
                         LevelCalc.levelSkill(player, data, EnumSkills.EARTH, range * 2);
                     });
@@ -195,7 +195,7 @@ public class ItemToolHoe extends HoeItem implements IItemUsable, IChargeable {
 
     public static void onHoeUse(ServerPlayer player) {
         Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-            LevelCalc.useRP(player, data, 3, true, false, true, EnumSkills.FARMING, EnumSkills.EARTH);
+            LevelCalc.useRP(player, data, 3, true, 0, true, EnumSkills.FARMING, EnumSkills.EARTH);
             LevelCalc.levelSkill(player, data, EnumSkills.FARMING, 3);
             LevelCalc.levelSkill(player, data, EnumSkills.EARTH, 1.5f);
         });

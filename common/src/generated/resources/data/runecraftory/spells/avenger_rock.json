@@ -4,7 +4,7 @@
   "skillXP": {
     "EARTH": 10.0
   },
-  "percentage": false,
+  "percentage": 0.0,
   "skills": [
     "EARTH"
   ]

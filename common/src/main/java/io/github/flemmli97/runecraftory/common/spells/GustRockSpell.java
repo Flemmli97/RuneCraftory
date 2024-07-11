@@ -18,7 +18,7 @@ public class GustRockSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         EntityGustRocks gust = new EntityGustRocks(level, entity);
-        gust.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1.15f));
+        gust.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1.1f));
         gust.setPos(entity.getX(), entity.getY(), entity.getZ());
         if (entity instanceof Mob mob && mob.getTarget() != null) {
             Vec3 targetPos = EntityUtil.getStraightProjectileTarget(gust.position(), mob.getTarget());

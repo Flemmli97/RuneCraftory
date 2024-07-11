@@ -1,10 +1,10 @@
 {
   "cooldown": 5,
-  "rpCost": 10,
+  "rpCost": 8,
   "skillXP": {
-    "LONGSWORD": 10.0
+    "LONGSWORD": 6.0
   },
-  "percentage": false,
+  "percentage": 0.0,
   "skills": [
     "LONGSWORD"
   ]

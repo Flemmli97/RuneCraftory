@@ -30,7 +30,7 @@ public class PollenPuffSpell extends Spell {
         for (Vec3 dir : DIRS) {
             EntityPollenPuff puff = new EntityPollenPuff(level, entity);
             puff.setPos(puff.getX(), entity.getY() + entity.getBbHeight() * 0.2, puff.getZ());
-            puff.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.75f));
+            puff.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.8f));
             puff.shoot(dir.x(), dir.y(), dir.z(), 0.23f, 0);
             level.addFreshEntity(puff);
         }

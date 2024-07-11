@@ -24,7 +24,7 @@ public class EnergyOrbSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         EntityHomingEnergyOrb orb = new EntityHomingEnergyOrb(level, entity);
-        orb.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.9f));
+        orb.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.95f));
         level.addFreshEntity(orb);
         return true;
     }

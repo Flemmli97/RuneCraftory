@@ -291,7 +291,7 @@ public class LevelCalc {
         return level + Math.round((float) ((random.nextDouble() * 2 - 1) * Math.ceil(level * 0.15)));
     }
 
-    public static boolean useRP(Player player, PlayerData data, float amount, boolean hurt, boolean percent, boolean mean, EnumSkills... skills) {
+    public static boolean useRP(Player player, PlayerData data, float amount, boolean hurt, float percent, boolean mean, EnumSkills... skills) {
         int skillVal = 0;
         if (skills.length == 0)
             skillVal = 1;
@@ -312,8 +312,11 @@ public class LevelCalc {
                 }
             }
         }
-        float val = amount * Math.max(1 - (skillVal - 1) * 0.0065f, 0.3f);
-        int usage = Mth.ceil(percent ? data.getMaxRunePoints() * val * 0.01 : val);
+        float skillReduction = Math.max(1 - (skillVal - 1) * 0.0065f, 0.3f);
+        float val = amount * skillReduction;
+        float percentAmount = percent > 0 ? data.getMaxRunePoints() * percent * skillReduction : 0;
+        val = Math.max(percentAmount, val);
+        int usage = Mth.ceil(val);
         return data.decreaseRunePoints(player, usage, hurt);
     }
 

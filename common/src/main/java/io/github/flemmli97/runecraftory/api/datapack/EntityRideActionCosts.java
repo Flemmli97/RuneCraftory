@@ -46,7 +46,7 @@ public class EntityRideActionCosts {
                     if (spell == null || !cost.multiplier) {
                         if (cost.multiplier)
                             return true;
-                        if (!LevelCalc.useRP(player, data, cost.cost, false, false, false)) {
+                        if (!LevelCalc.useRP(player, data, cost.cost, false, 0, false)) {
                             player.connection.send(
                                     new ClientboundSoundPacket(SoundEvents.VILLAGER_NO, SoundSource.PLAYERS, player.position().x, player.position().y, player.position().z, 1, 1));
                             return false;

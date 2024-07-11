@@ -89,7 +89,7 @@ public class ItemToolSickle extends DiggerItem implements IItemUsable, IChargeab
     @Override
     public void onBlockBreak(ServerPlayer player) {
         Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-            LevelCalc.useRP(player, data, 2, true, false, true, EnumSkills.FARMING, EnumSkills.WIND);
+            LevelCalc.useRP(player, data, 2, true, 0, true, EnumSkills.FARMING, EnumSkills.WIND);
             LevelCalc.levelSkill(player, data, EnumSkills.FARMING, 3);
             LevelCalc.levelSkill(player, data, EnumSkills.WIND, 2);
         });
@@ -176,7 +176,7 @@ public class ItemToolSickle extends DiggerItem implements IItemUsable, IChargeab
                         .count();
                 if (amount > 0)
                     Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                        LevelCalc.useRP(player, data, range * 10, true, false, true, EnumSkills.FARMING);
+                        LevelCalc.useRP(player, data, range * 10, true, 0, true, EnumSkills.FARMING);
                         LevelCalc.levelSkill(player, data, EnumSkills.FARMING, 3.5f);
                         LevelCalc.levelSkill(player, data, EnumSkills.WIND, 2.5f);
                     });

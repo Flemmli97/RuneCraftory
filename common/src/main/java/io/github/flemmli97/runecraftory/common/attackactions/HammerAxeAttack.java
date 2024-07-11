@@ -66,7 +66,7 @@ public class HammerAxeAttack extends AttackAction {
     @Override
     public void onStart(LivingEntity entity, WeaponHandler handler) {
         if (handler.getChainCount() == 3 && entity instanceof ServerPlayer player)
-            Platform.INSTANCE.getPlayerData(player).ifPresent(d -> LevelCalc.useRP(player, d, GeneralConfig.hammerAxeUltimate, true, false, false));
+            Platform.INSTANCE.getPlayerData(player).ifPresent(d -> LevelCalc.useRP(player, d, GeneralConfig.hammerAxeUltimate, true, 0, false));
     }
 
     @Override

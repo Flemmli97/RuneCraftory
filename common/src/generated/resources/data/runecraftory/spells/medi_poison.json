@@ -1,10 +1,10 @@
 {
   "cooldown": 20,
-  "rpCost": 10,
+  "rpCost": 0,
   "skillXP": {
     "LOVE": 10.0
   },
-  "percentage": true,
+  "percentage": 0.1,
   "skills": [
     "LOVE"
   ]

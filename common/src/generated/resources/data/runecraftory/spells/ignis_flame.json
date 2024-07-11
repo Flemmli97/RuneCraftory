@@ -1,10 +1,10 @@
 {
-  "cooldown": 10,
-  "rpCost": 7,
+  "cooldown": 20,
+  "rpCost": 15,
   "skillXP": {
     "FIRE": 7.0
   },
-  "percentage": false,
+  "percentage": 0.0,
   "skills": [
     "FIRE"
   ]

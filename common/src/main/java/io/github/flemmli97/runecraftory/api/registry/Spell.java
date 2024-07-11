@@ -67,7 +67,7 @@ public abstract class Spell extends CustomRegistryEntry<Spell> {
         return DataPackHandler.INSTANCE.spellPropertiesManager().getPropertiesFor(this).rpCost;
     }
 
-    public boolean percentageCost() {
+    public float percentageCost() {
         return DataPackHandler.INSTANCE.spellPropertiesManager().getPropertiesFor(this).percentage;
     }
 

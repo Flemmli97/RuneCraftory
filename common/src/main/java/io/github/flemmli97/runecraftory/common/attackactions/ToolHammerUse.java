@@ -38,7 +38,7 @@ public class ToolHammerUse extends AttackAction {
                     .count();
             if (amount > 0 && entity instanceof ServerPlayer player) {
                 Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                    LevelCalc.useRP(player, data, range * 15, true, false, true, EnumSkills.MINING);
+                    LevelCalc.useRP(player, data, range * 15, true, 0, true, EnumSkills.MINING);
                     LevelCalc.levelSkill(player, data, EnumSkills.MINING, (range + 1) * 10);
                 });
             }

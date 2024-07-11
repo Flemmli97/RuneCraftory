@@ -2,5 +2,5 @@
   "cooldown": 10,
   "rpCost": 3,
   "skillXP": {},
-  "percentage": false
+  "percentage": 0.0
 }

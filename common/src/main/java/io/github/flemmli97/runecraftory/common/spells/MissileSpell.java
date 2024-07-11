@@ -30,7 +30,7 @@ public class MissileSpell extends Spell {
         Vec3 side = new Vec3(entity.getLookAngle().x, 0, entity.getLookAngle().z).yRot(90).normalize();
         for (int i = 0; i < left; i++) {
             EntityMissile missile = new EntityMissile(level, entity);
-            missile.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.9f));
+            missile.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.85f));
             missile.setPos(missile.getX() + side.x() + entity.getRandom().nextGaussian() * 0.1, missile.getY(), missile.getZ() + side.z() + entity.getRandom().nextGaussian() * 0.1);
             missile.shoot(entity, 0, entity.getYRot(), 0, 0.18f, 8);
             if (entity instanceof Mob mob && mob.getTarget() != null) {

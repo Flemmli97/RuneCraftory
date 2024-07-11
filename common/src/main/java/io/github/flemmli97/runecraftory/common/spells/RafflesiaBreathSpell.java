@@ -25,7 +25,7 @@ public class RafflesiaBreathSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         RafflesiaBreathSummoner summoner = new RafflesiaBreathSummoner(level, entity, this.type);
-        summoner.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.7f));
+        summoner.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.75f));
         Vec3 position = entity.position().add(0, entity.getBbHeight() * 0.5, 0);
         float dirScale = 5;
         Vec3 target = position.add(entity.getLookAngle().scale(dirScale));
