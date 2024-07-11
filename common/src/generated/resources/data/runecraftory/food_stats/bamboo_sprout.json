@@ -1,7 +1,7 @@
 {
-  "duration": 100,
+  "duration": 0,
   "effects": {
-    "runecraftory:health_gain": 10.0,
+    "runecraftory:health_gain": 12.0,
     "runecraftory:rp_gain": 5.0
   },
   "effectsPercentage": {},

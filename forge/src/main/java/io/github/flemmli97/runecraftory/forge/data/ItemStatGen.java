@@ -1366,7 +1366,6 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.CURRY_POWDER.get(), 0, 0, 0);
         this.addStat(ModItems.OIL.get(), 500, 100, 0);
         this.addStat(ModItems.FLOUR.get(), 0, 0, 0);
-        this.addStat(ModItems.HONEY.get(), 0, 0, 0);
         this.addStat(ModItems.YOGURT.get(), 0, 0, 0);
         this.addStat(ModItems.CHEESE.get(), 0, 0, 0);
         this.addStat(ModItems.MAYONNAISE.get(), 0, 0, 0);

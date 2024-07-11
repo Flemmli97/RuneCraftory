@@ -518,9 +518,12 @@ public class PlayerData {
     }
 
     public void applyFoodEffect(Player player, ItemStack stack) {
-        this.removeFoodEffect(player);
+        FoodProperties food = DataPackHandler.INSTANCE.foodManager().get(stack.getItem());
+        if (food == null)
+            return;
+        if (food.duration() > 0)
+            this.removeFoodEffect(player);
         Pair<Map<Attribute, Double>, Map<Attribute, Double>> foodStats = ItemNBT.foodStats(stack);
-        FoodProperties prop = DataPackHandler.INSTANCE.foodManager().get(stack.getItem());
         Map<Attribute, Double> gain = foodStats.getFirst();
         foodStats.getSecond().forEach((att, d) -> {
             float percent = (float) (d * 0.01f);
@@ -543,7 +546,8 @@ public class PlayerData {
         this.foodBuffs = gain;
         if (this.foodBuffs.containsKey(Attributes.MAX_HEALTH))
             this.setFoodHealthBonus(player, this.foodBuffs.get(Attributes.MAX_HEALTH));
-        this.foodDuration = prop.duration();
+        if (food.duration() > 0)
+            this.foodDuration = food.duration();
         this.lastFood = stack.getItem();
         if (player instanceof ServerPlayer serverPlayer) {
             Platform.INSTANCE.sendToClient(new S2CFoodPkt(stack), serverPlayer);

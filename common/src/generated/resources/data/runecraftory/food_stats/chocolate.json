@@ -1,6 +1,8 @@
 {
   "duration": 0,
-  "effects": {},
+  "effects": {
+    "runecraftory:rp_gain": 25.0
+  },
   "effectsPercentage": {},
   "cookingBonus": {},
   "cookingBonusPercent": {},

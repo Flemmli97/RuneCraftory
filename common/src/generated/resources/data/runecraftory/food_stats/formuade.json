@@ -1,5 +1,5 @@
 {
-  "duration": 100,
+  "duration": 6000,
   "effects": {
     "minecraft:generic.attack_damage": 70.0,
     "runecraftory:defence": 35.0,

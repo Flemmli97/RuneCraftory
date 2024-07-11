@@ -1002,7 +1002,6 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> CURRY_POWDER = food("curry_powder", Texture.N, LOW_FOOD_PROP);
     public static final RegistryEntrySupplier<Item> OIL = drinkable("oil", Texture.Y, LOW_FOOD_PROP);
     public static final RegistryEntrySupplier<Item> FLOUR = food("flour", Texture.N, LOW_FOOD_PROP);
-    public static final RegistryEntrySupplier<Item> HONEY = food("honey", Texture.N, FOOD_PROP);
     public static final RegistryEntrySupplier<Item> YOGURT = food("yogurt", Texture.N);
     public static final RegistryEntrySupplier<Item> CHEESE = food("cheese", Texture.N, LOW_FOOD_PROP);
     public static final RegistryEntrySupplier<Item> MAYONNAISE = food("mayonnaise", Texture.N, LOW_FOOD_PROP);

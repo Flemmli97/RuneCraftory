@@ -1,8 +1,8 @@
 {
-  "duration": 4800,
+  "duration": 6000,
   "effects": {
-    "minecraft:generic.attack_damage": 1.0,
-    "runecraftory:health_gain": 130.0
+    "minecraft:generic.attack_damage": 2.0,
+    "runecraftory:health_gain": 60.0
   },
   "effectsPercentage": {},
   "cookingBonus": {},

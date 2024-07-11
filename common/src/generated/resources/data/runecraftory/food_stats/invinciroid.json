@@ -1,6 +1,13 @@
 {
-  "duration": 100,
-  "effects": {},
+  "duration": 6000,
+  "effects": {
+    "runecraftory:res_paralysis": 100.0,
+    "runecraftory:res_poison": 100.0,
+    "runecraftory:res_seal": 100.0,
+    "runecraftory:res_sleep": 100.0,
+    "runecraftory:res_fatigue": 100.0,
+    "runecraftory:res_cold": 100.0
+  },
   "effectsPercentage": {},
   "cookingBonus": {},
   "cookingBonusPercent": {},

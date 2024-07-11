@@ -224,7 +224,7 @@ public class EntitySarcophagus extends BossMonster implements MobAttackExt {
             }
             if (STARFALL.is(anim)) {
                 this.gravityPre = this.isNoGravity();
-                this.starfallCooldown = 220 + this.getRandom().nextInt(200);
+                this.starfallCooldown = 240 + this.getRandom().nextInt(600);
                 this.setNoGravity(true);
             }
         } else if (this.getAnimationHandler().isCurrent(STARFALL)) {

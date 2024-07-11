@@ -891,7 +891,6 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             return false;
         if (stack.getItem() == ModItems.OBJECT_X.get())
             ItemObjectX.applyEffect(this, stack);
-        this.removeFoodEffect();
         FoodProperties food = DataPackHandler.INSTANCE.foodManager().get(stack.getItem());
         if (food == null) {
             net.minecraft.world.food.FoodProperties mcFood = stack.getItem().getFoodProperties();
@@ -902,6 +901,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             }
             return false;
         }
+        if (food.duration() > 0)
+            this.removeFoodEffect();
         this.eat(this.level, stack);
         Pair<Map<Attribute, Double>, Map<Attribute, Double>> foodStats = ItemNBT.foodStats(stack);
         for (Map.Entry<Attribute, Double> entry : foodStats.getSecond().entrySet()) {
@@ -918,7 +919,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             inst.removeModifier(LibConstants.FOOD_UUID);
             inst.addPermanentModifier(new AttributeModifier(LibConstants.FOOD_UUID, "foodBuff_" + entry.getKey().getDescriptionId(), entry.getValue(), AttributeModifier.Operation.ADDITION));
         }
-        this.foodBuffTick = food.duration();
+        if (food.duration() > 0)
+            this.foodBuffTick = food.duration();
         EntityUtils.foodHealing(this, food.getHPGain());
         EntityUtils.foodHealing(this, this.getMaxHealth() * food.getHpPercentGain() * 0.01F);
         if (food.potionHeals() != null)

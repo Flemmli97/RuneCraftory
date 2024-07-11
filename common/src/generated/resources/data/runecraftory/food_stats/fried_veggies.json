@@ -1,8 +1,8 @@
 {
-  "duration": 4800,
+  "duration": 6000,
   "effects": {
-    "runecraftory:health_gain": 300.0,
-    "runecraftory:rp_gain": 250.0,
+    "runecraftory:health_gain": 250.0,
+    "runecraftory:rp_gain": 150.0,
     "runecraftory:defence": 1.0,
     "runecraftory:magic_attack": 1.0
   },
