@@ -6,7 +6,7 @@
     "runecraftory:magic_attack": 1.0
   },
   "monsterBonus": {
-    "runecraftory:magic_attack": 0.1
+    "runecraftory:magic_attack": 0.5
   },
   "element": "NONE",
   "item": "#minecraft:candles"

@@ -8,7 +8,7 @@
     "runecraftory:res_dizzy": 10.0
   },
   "monsterBonus": {
-    "runecraftory:defence": 0.5
+    "runecraftory:defence": 1.0
   },
   "element": "NONE",
   "item": "runecraftory:fur_m"

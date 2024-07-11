@@ -40,8 +40,8 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat("wool", ItemTags.WOOL, new ItemStat.Builder(25, 3, 5)
                 .addAttribute(ModAttributes.DEFENCE.get(), 2)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 2)
-                .addMonsterStat(ModAttributes.DEFENCE.get(), 0.2)
-                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 0.2));
+                .addMonsterStat(ModAttributes.DEFENCE.get(), 0.3)
+                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 0.3));
         this.addStat("obsidian", Items.OBSIDIAN, new ItemStat.Builder(100, 5, 7)
                 .addAttribute(ModAttributes.DEFENCE.get(), 5)
                 .addAttribute(Attributes.KNOCKBACK_RESISTANCE, 0.2)
@@ -50,20 +50,20 @@ public class ItemStatGen extends ItemStatProvider {
         //Misc
         this.addStat("sapling", ItemTags.SAPLINGS, new ItemStat.Builder(0, 0, 5)
                 .addAttribute(Attributes.MAX_HEALTH, 3)
-                .addMonsterStat(Attributes.MAX_HEALTH, 0.15));
+                .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat("flowers", ItemTags.FLOWERS, new ItemStat.Builder(0, 0, 3)
                 .addAttribute(Attributes.MAX_HEALTH, 2)
-                .addMonsterStat(Attributes.MAX_HEALTH, 0.1));
+                .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat("candles", ItemTags.CANDLES, new ItemStat.Builder(0, 0, 1)
                 .addAttribute(ModAttributes.MAGIC.get(), 1)
-                .addMonsterStat(ModAttributes.MAGIC.get(), 0.1));
+                .addMonsterStat(ModAttributes.MAGIC.get(), 0.5));
 
         this.addStat(Items.STICK, new ItemStat.Builder(11, 1, 1)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 1)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.2));
         this.addStat("arrows", ItemTags.ARROWS, new ItemStat.Builder(45, 2, 2)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 2)
-                .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.22)
+                .addMonsterStat(Attributes.ATTACK_DAMAGE, 1)
                 .setSpell(ModSpells.ARROW.get(), null, null));
 
         this.addStat("coals", ItemTags.COALS, new ItemStat.Builder(65, 5, 2)
@@ -72,58 +72,57 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(Items.SNOWBALL, new ItemStat.Builder(15, 1, 5)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 1)
                 .addAttribute(ModAttributes.MAGIC.get(), 1)
-                .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.1)
-                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 0.1)
+                .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.2)
                 .setSpell(ModSpells.SNOWBALL.get(), null, null));
         this.addStat(Items.STRING, new ItemStat.Builder(75, 7, 13)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 2)
                 .addAttribute(ModAttributes.MAGIC.get(), 2)
                 .addAttribute(ModAttributes.PARA.get(), 3)
-                .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.1)
-                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 0.1)
-                .addAttribute(ModAttributes.PARA.get(), 0.25));
+                .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5)
+                .addAttribute(ModAttributes.PARA.get(), 0.25)
+                .setSpell(null, ModSpells.WEB_SHOT.get(), null));
         this.addStat(Items.FEATHER, new ItemStat.Builder(85, 7, 11)
                 .addAttribute(ModAttributes.MAGIC.get(), 2)
-                .addMonsterStat(ModAttributes.MAGIC.get(), 0.3));
+                .addMonsterStat(ModAttributes.MAGIC.get(), 0.5)
+                .setSpell(null, null, ModSpells.GUST_SPELL.get()));
         this.addStat(Items.ROTTEN_FLESH, new ItemStat.Builder(50, 5, 9)
                 .addAttribute(Attributes.MAX_HEALTH, 5)
                 .addMonsterStat(Attributes.MAX_HEALTH, 0.5));
         this.addStat(Items.BONE, new ItemStat.Builder(75, 5, 6)
                 .addAttribute(ModAttributes.DEFENCE.get(), 2)
-                .addMonsterStat(ModAttributes.DEFENCE.get(), 0.3));
+                .addMonsterStat(ModAttributes.DEFENCE.get(), 0.5));
         this.addStat(Items.GUNPOWDER, new ItemStat.Builder(100, 7, 21)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 1)
                 .addAttribute(ModAttributes.MAGIC.get(), 5)
-                .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.3)
-                .addMonsterStat(ModAttributes.MAGIC.get(), 0.7));
+                .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(Items.REDSTONE, new ItemStat.Builder(120, 7, 15)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 3)
                 .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 0.5));
         this.addStat(Items.FLINT, new ItemStat.Builder(103, 9, 8)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 3)
-                .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.3));
+                .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(Items.QUARTZ, new ItemStat.Builder(263, 21, 14)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 7)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(Items.GLOWSTONE_DUST, new ItemStat.Builder(200, 17, 17)
                 .addAttribute(ModAttributes.MAGIC.get(), 4)
-                .addMonsterStat(ModAttributes.MAGIC.get(), 0.3));
+                .addMonsterStat(ModAttributes.MAGIC.get(), 0.5));
         this.addStat(Items.LAPIS_LAZULI, new ItemStat.Builder(54, 4, 13)
                 .addAttribute(ModAttributes.MAGIC.get(), 2)
-                .addMonsterStat(ModAttributes.MAGIC.get(), 0.1));
+                .addMonsterStat(ModAttributes.MAGIC.get(), 0.5));
         this.addStat(Items.LEATHER, new ItemStat.Builder(170, 14, 23)
                 .addAttribute(ModAttributes.DEFENCE.get(), 9)
                 .addMonsterStat(ModAttributes.DEFENCE.get(), 1));
         this.addStat(Items.CLAY_BALL, new ItemStat.Builder(100, 9, 19)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 2)
-                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 0.1));
+                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 0.5));
         this.addStat(Items.BRICK, new ItemStat.Builder(132, 11, 20)
                 .addAttribute(ModAttributes.DEFENCE.get(), 5)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 2)
                 .addMonsterStat(ModAttributes.DEFENCE.get(), 1));
         this.addStat(Items.PAPER, new ItemStat.Builder(167, 13, 4)
                 .addAttribute(ModAttributes.MAGIC.get(), 3)
-                .addMonsterStat(ModAttributes.MAGIC.get(), 0.3));
+                .addMonsterStat(ModAttributes.MAGIC.get(), 0.5));
         this.addStat(Items.BOOK, new ItemStat.Builder(500, 42, 26)
                 .addAttribute(ModAttributes.MAGIC.get(), 12)
                 .addMonsterStat(ModAttributes.MAGIC.get(), 0.5));
@@ -145,13 +144,12 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(Items.SLIME_BALL, new ItemStat.Builder(375, 31, 18)
                 .addAttribute(ModAttributes.MAGIC.get(), 5)
                 .addAttribute(ModAttributes.DEFENCE.get(), 12)
-                .addMonsterStat(ModAttributes.DEFENCE.get(), 0.6));
+                .addMonsterStat(ModAttributes.DEFENCE.get(), 0.5));
         this.addStat(Items.MAGMA_CREAM, new ItemStat.Builder(250, 21, 20)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 3)
                 .addAttribute(ModAttributes.MAGIC.get(), 3)
                 .addAttribute(ModAttributes.DEFENCE.get(), 8)
-                .addMonsterStat(ModAttributes.MAGIC.get(), 0.4)
-                .addMonsterStat(ModAttributes.DEFENCE.get(), 0.6));
+                .addMonsterStat(ModAttributes.MAGIC.get(), 0.5));
         this.addStat(Items.GHAST_TEAR, new ItemStat.Builder(750, 49, 22)
                 .addAttribute(Attributes.MAX_HEALTH, 15)
                 .addAttribute(ModAttributes.MAGIC.get(), 2)
@@ -160,21 +158,21 @@ public class ItemStatGen extends ItemStatProvider {
                 .setSpell(ModSpells.GHAST_FIREBALL.get(), null, null));
         this.addStat(Items.PHANTOM_MEMBRANE, new ItemStat.Builder(600, 55, 19)
                 .addAttribute(Attributes.MOVEMENT_SPEED, 0.03)
-                .addMonsterStat(Attributes.MAX_HEALTH, 0.0008));
+                .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(Items.SUGAR, new ItemStat.Builder(25, 13, 18)
                 .addAttribute(Attributes.MOVEMENT_SPEED, 0.01)
-                .addMonsterStat(Attributes.MAX_HEALTH, 0.0005));
+                .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(Items.TOTEM_OF_UNDYING, new ItemStat.Builder(3500, 110, 17)
                 .addAttribute(ModAttributes.DEFENCE.get(), 9)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 9)
-                .addMonsterStat(ModAttributes.DEFENCE.get(), 0.4)
-                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 0.4)
-                .setSpell(ModSpells.EVOKER_FANG.get(), null, null));
+                .addMonsterStat(ModAttributes.DEFENCE.get(), 1)
+                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 1)
+                .setSpell(null, ModSpells.EVOKER_FANG.get(), null));
         this.addStat(Items.DRAGON_BREATH, new ItemStat.Builder(2000, 150, 24)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 4)
                 .addAttribute(ModAttributes.MAGIC.get(), 15)
-                .addMonsterStat(ModAttributes.MAGIC.get(), 0.8)
-                .setSpell(ModSpells.DRAGON_FIREBALL.get(), null, null));
+                .addMonsterStat(ModAttributes.MAGIC.get(), 1)
+                .setSpell(null, ModSpells.DRAGON_FIREBALL.get(), null));
         this.addStat(Items.SHULKER_SHELL, new ItemStat.Builder(700, 80, 29)
                 .addAttribute(ModAttributes.DEFENCE.get(), 17)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 12)
@@ -199,25 +197,25 @@ public class ItemStatGen extends ItemStatProvider {
 
         //=======
         this.addStat(ModItems.ROUNDOFF.get(), new ItemStat.Builder(750, 50, 0)
-                .addMonsterStat(Attributes.MAX_HEALTH, 5)
+                .addMonsterStat(Attributes.MAX_HEALTH, 3)
                 .addMonsterStat(ModAttributes.RES_SEAL.get(), 0.5));
         this.addStat(ModItems.PARA_GONE.get(), new ItemStat.Builder(750, 50, 0)
-                .addMonsterStat(Attributes.MAX_HEALTH, 5)
+                .addMonsterStat(Attributes.MAX_HEALTH, 3)
                 .addMonsterStat(ModAttributes.RES_PARA.get(), 0.5));
         this.addStat(ModItems.COLD_MED.get(), new ItemStat.Builder(750, 50, 0)
-                .addMonsterStat(Attributes.MAX_HEALTH, 5)
+                .addMonsterStat(Attributes.MAX_HEALTH, 3)
                 .addMonsterStat(ModAttributes.RES_COLD.get(), 0.5));
         this.addStat(ModItems.ANTIDOTE.get(), new ItemStat.Builder(750, 50, 0)
-                .addMonsterStat(Attributes.MAX_HEALTH, 5)
+                .addMonsterStat(Attributes.MAX_HEALTH, 3)
                 .addMonsterStat(ModAttributes.RES_POISON.get(), 0.5));
         this.addStat(ModItems.RECOVERY_POTION.get(), new ItemStat.Builder(300, 25, 0)
                 .addMonsterStat(Attributes.MAX_HEALTH, 3));
         this.addStat(ModItems.HEALING_POTION.get(), new ItemStat.Builder(500, 35, 0)
-                .addMonsterStat(Attributes.MAX_HEALTH, 5));
+                .addMonsterStat(Attributes.MAX_HEALTH, 3));
         this.addStat(ModItems.MYSTERY_POTION.get(), new ItemStat.Builder(3000, 250, 0)
-                .addMonsterStat(Attributes.MAX_HEALTH, 6));
+                .addMonsterStat(Attributes.MAX_HEALTH, 5));
         this.addStat(ModItems.MAGICAL_POTION.get(), new ItemStat.Builder(6000, 500, 0)
-                .addMonsterStat(Attributes.MAX_HEALTH, 7));
+                .addMonsterStat(Attributes.MAX_HEALTH, 5));
         this.addStat(ModItems.INVINCIROID.get(), new ItemStat.Builder(25000, 1500, 0));
         this.addStat(ModItems.LOVE_POTION.get(), new ItemStat.Builder(50000, 2000, 0));
         this.addStat(ModItems.FORMUADE.get(), new ItemStat.Builder(20000, 700, 0));
@@ -233,18 +231,18 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3.0))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(ModItems.STEEL_SWORD_PLUS.get(), new ItemStat.Builder(2310, 99, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 14)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 15)
                 .addAttribute(ModAttributes.DIZZY.get(), 5)
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3.0))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(ModItems.CUTLASS.get(), new ItemStat.Builder(5240, 210, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 21)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 23)
                 .addAttribute(ModAttributes.DIZZY.get(), 5)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 2)
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3.0))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(ModItems.AQUA_SWORD.get(), new ItemStat.Builder(7850, 357, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 34)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 37)
                 .addAttribute(ModAttributes.MAGIC.get(), 9)
                 .addAttribute(ModAttributes.DIZZY.get(), 5)
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3.0))
@@ -265,7 +263,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(4.5))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(ModItems.ZWEIHAENDER.get(), new ItemStat.Builder(1360, 58, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 12)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 11)
                 .addAttribute(ModAttributes.DIZZY.get(), 10)
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(4.5))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
@@ -276,17 +274,17 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(4.5))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(ModItems.GREAT_SWORD.get(), new ItemStat.Builder(4960, 231, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 27)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 29)
                 .addAttribute(ModAttributes.DIZZY.get(), 10)
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(4.5))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(ModItems.SEA_CUTTER.get(), new ItemStat.Builder(9170, 404, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 41)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 42)
                 .addAttribute(ModAttributes.DIZZY.get(), 10)
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(4.5))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(ModItems.CYCLONE_BLADE.get(), new ItemStat.Builder(13680, 623, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 53)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 55)
                 .addAttribute(ModAttributes.DIZZY.get(), 10)
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(4.5))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
@@ -302,13 +300,13 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(5.3))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(ModItems.LANCE.get(), new ItemStat.Builder(2310, 101, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 12)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 13)
                 .addAttribute(ModAttributes.DEFENCE.get(), 1)
                 .addAttribute(ModAttributes.DIZZY.get(), 6)
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(5.3))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(ModItems.LANCE_PLUS.get(), new ItemStat.Builder(4460, 198, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 20)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 21)
                 .addAttribute(ModAttributes.DEFENCE.get(), 2)
                 .addAttribute(ModAttributes.DIZZY.get(), 6)
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(5.3))
@@ -333,7 +331,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(4.5))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(ModItems.BATTLE_SCYTHE.get(), new ItemStat.Builder(1430, 60, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 15)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 14)
                 .addAttribute(ModAttributes.CRIT.get(), 15)
                 .addAttribute(ModAttributes.DIZZY.get(), 2)
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(4.5))
@@ -382,7 +380,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(4.5))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(ModItems.WAR_HAMMER_PLUS.get(), new ItemStat.Builder(6340, 265, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 30)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 31)
                 .addAttribute(ModAttributes.STUN.get(), 7)
                 .addAttribute(ModAttributes.DIZZY.get(), 20)
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(4.5))
@@ -394,7 +392,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(4.5))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(ModItems.GREAT_HAMMER.get(), new ItemStat.Builder(14740, 658, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 61)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 63)
                 .addAttribute(ModAttributes.STUN.get(), 11)
                 .addAttribute(ModAttributes.DIZZY.get(), 20)
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(4.5))
@@ -423,12 +421,12 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3.0f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(ModItems.THIEF_KNIFE.get(), new ItemStat.Builder(7940, 384, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 27)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 28)
                 .addAttribute(ModAttributes.DIZZY.get(), 3)
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3.0f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(ModItems.WIND_EDGE.get(), new ItemStat.Builder(11600, 568, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 40)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 44)
                 .addAttribute(ModAttributes.MAGIC.get(), 9)
                 .addAttribute(ModAttributes.DIZZY.get(), 3)
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3.0f))
@@ -460,13 +458,13 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3.0f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(ModItems.BEAR_CLAWS.get(), new ItemStat.Builder(8140, 394, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 33)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 34)
                 .addAttribute(ModAttributes.DEFENCE.get(), 9)
                 .addAttribute(ModAttributes.DIZZY.get(), 3)
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3.0f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(ModItems.FIST_EARTH.get(), new ItemStat.Builder(12640, 587, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 48)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 49)
                 .addAttribute(ModAttributes.MAGIC.get(), 10)
                 .addAttribute(ModAttributes.DEFENCE.get(), 14)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 5)
@@ -507,7 +505,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(ModAttributes.MAGIC.get(), 1)
                 .setElement(EnumElement.LOVE));
         this.addStat(ModItems.STAFF.get(), new ItemStat.Builder(14110, 599, 0)
-                .addAttribute(ModAttributes.MAGIC.get(), 66)
+                .addAttribute(ModAttributes.MAGIC.get(), 65)
                 .addAttribute(ModAttributes.DIZZY.get(), 15)
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3.0))
                 .addMonsterStat(ModAttributes.MAGIC.get(), 1)
@@ -707,21 +705,17 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 0.5));
         this.addStat(ModItems.PLATINUM_BRACELET.get(), new ItemStat.Builder(50000, 1000, 0)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 50)
-                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 0.5));
+                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 1));
         this.addStat(ModItems.SILVER_RING.get(), new ItemStat.Builder(20000, 600, 0)
                 .addAttribute(ModAttributes.RES_LIGHT.get(), 50)
                 .addAttribute(ModAttributes.RES_DARK.get(), 50)
-                .addMonsterStat(ModAttributes.RES_LIGHT.get(), 1)
-                .addMonsterStat(ModAttributes.RES_DARK.get(), 1));
+                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 1));
         this.addStat(ModItems.GOLD_RING.get(), new ItemStat.Builder(0, 5000, 0)
                 .addAttribute(ModAttributes.RES_WIND.get(), 15)
                 .addAttribute(ModAttributes.RES_WATER.get(), 15)
                 .addAttribute(ModAttributes.RES_EARTH.get(), 15)
                 .addAttribute(ModAttributes.RES_FIRE.get(), 15)
-                .addMonsterStat(ModAttributes.RES_WIND.get(), 1)
-                .addMonsterStat(ModAttributes.RES_WATER.get(), 1)
-                .addMonsterStat(ModAttributes.RES_EARTH.get(), 1)
-                .addMonsterStat(ModAttributes.RES_FIRE.get(), 1));
+                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 2));
         this.addStat(ModItems.PLATINUM_RING.get(), new ItemStat.Builder(0, 7500, 0)
                 .addAttribute(ModAttributes.RES_WIND.get(), 10)
                 .addAttribute(ModAttributes.RES_WATER.get(), 10)
@@ -729,10 +723,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.RES_FIRE.get(), 10)
                 .addAttribute(ModAttributes.RES_LIGHT.get(), 25)
                 .addAttribute(ModAttributes.RES_DARK.get(), 25)
-                .addMonsterStat(ModAttributes.RES_WIND.get(), 1)
-                .addMonsterStat(ModAttributes.RES_WATER.get(), 1)
-                .addMonsterStat(ModAttributes.RES_EARTH.get(), 1)
-                .addMonsterStat(ModAttributes.RES_FIRE.get(), 1));
+                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 2));
 
         this.addStat(ModItems.SHIRT.get(), new ItemStat.Builder(120, 13, 0)
                 .addAttribute(ModAttributes.DEFENCE.get(), 2)
@@ -777,7 +768,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.RES_LOVE.get(), 1)
                 .addAttribute(ModAttributes.RES_DIZZY.get(), 50)
                 .addAttribute(ModAttributes.DIZZY.get(), 20)
-                .addMonsterStat(ModAttributes.RES_DIZZY.get(), 0.7));
+                .addMonsterStat(ModAttributes.RES_DIZZY.get(), 0.5));
 
         this.addStat(Items.SHIELD, new ItemStat.Builder(200, 14, 0)
                 .addAttribute(ModAttributes.DEFENCE.get(), 2)
@@ -808,135 +799,149 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(ModAttributes.DEFENCE.get(), 0.5));
         this.addStat("silver", RunecraftoryTags.SILVER, new ItemStat.Builder(1500, 27, 15)
                 .addAttribute(ModAttributes.DEFENCE.get(), 5)
-                .addMonsterStat(ModAttributes.DEFENCE.get(), 0.6));
+                .addMonsterStat(ModAttributes.DEFENCE.get(), 1));
         this.addStat("gold", RunecraftoryTags.GOLD, new ItemStat.Builder(3500, 34, 20)
                 .addAttribute(ModAttributes.DEFENCE.get(), 7)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 5)
-                .addMonsterStat(ModAttributes.DEFENCE.get(), 0.7));
+                .addMonsterStat(ModAttributes.DEFENCE.get(), 2));
         this.addStat("platinum", RunecraftoryTags.PLATINUM, new ItemStat.Builder(5000, 111, 34)
                 .addAttribute(ModAttributes.DEFENCE.get(), 30)
-                .addMonsterStat(ModAttributes.DEFENCE.get(), 0.8));
+                .addMonsterStat(ModAttributes.DEFENCE.get(), 3));
         this.addStat("orichalcum", RunecraftoryTags.ORICHALCUM, new ItemStat.Builder(20000, 750, 65)
                 .addAttribute(ModAttributes.DEFENCE.get(), 70)
-                .addMonsterStat(ModAttributes.DEFENCE.get(), 1));
+                .addMonsterStat(ModAttributes.DEFENCE.get(), 4));
         this.addStat("dragonic", RunecraftoryTags.DRAGONIC, new ItemStat.Builder(0, 1000, 70)
                 .addAttribute(ModAttributes.DEFENCE.get(), 130)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 90)
-                .addMonsterStat(ModAttributes.DEFENCE.get(), 1.5));
+                .addMonsterStat(ModAttributes.DEFENCE.get(), 5));
         this.addStat(Items.NETHERITE_INGOT, new ItemStat.Builder(0, 200, 40)
                 .addAttribute(ModAttributes.DEFENCE.get(), 20)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 20)
-                .addMonsterStat(ModAttributes.DEFENCE.get(), 0.9));
+                .addMonsterStat(ModAttributes.DEFENCE.get(), 2));
 
         this.addStat("emerald", RunecraftoryTags.EMERALDS, new ItemStat.Builder(2500, 5, 24)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 5)
                 .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 0.5));
         this.addStat(Items.DIAMOND, new ItemStat.Builder(5000, 21, 29)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 15)
-                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 1));
+                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 2));
         this.addStat("amethyst", RunecraftoryTags.AMETHYSTS, new ItemStat.Builder(3500, 18, 24)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 7)
-                .addMonsterStat(ModAttributes.DEFENCE.get(), 0.75));
+                .addMonsterStat(ModAttributes.DEFENCE.get(), 2));
         this.addStat("aquamarine", RunecraftoryTags.AQUAMARINES, new ItemStat.Builder(3500, 23, 24)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 7)
-                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 0.5));
+                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 3));
         this.addStat("ruby", RunecraftoryTags.RUBIES, new ItemStat.Builder(4000, 37, 24)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 7)
-                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 0.5));
+                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 4));
         this.addStat("sapphire", RunecraftoryTags.SAPPHIRES, new ItemStat.Builder(3500, 24, 24)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 7)
-                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 7));
+                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 5));
         this.addStat(ModItems.CORE_GREEN.get(), new ItemStat.Builder(15000, 1050, 24)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 50)
-                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 2));
+                .addMonsterStat(ModAttributes.RES_WIND.get(), 6)
+                .addMonsterStat(ModAttributes.RES_EARTH.get(), -3));
         this.addStat(ModItems.CORE_RED.get(), new ItemStat.Builder(15000, 1050, 24)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 50)
-                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 2));
+                .addMonsterStat(ModAttributes.RES_FIRE.get(), 6)
+                .addMonsterStat(ModAttributes.RES_WATER.get(), -3));
         this.addStat(ModItems.CORE_BLUE.get(), new ItemStat.Builder(15000, 1050, 24)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 50)
-                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 2));
+                .addMonsterStat(ModAttributes.RES_WATER.get(), 6)
+                .addMonsterStat(ModAttributes.RES_FIRE.get(), -3));
         this.addStat(ModItems.CORE_YELLOW.get(), new ItemStat.Builder(15000, 1050, 24)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 50)
-                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 2));
+                .addMonsterStat(ModAttributes.RES_EARTH.get(), 6)
+                .addMonsterStat(ModAttributes.RES_WIND.get(), -3));
         this.addStat(ModItems.CRYSTAL_SKULL.get(), new ItemStat.Builder(25000, 2300, 24)
                 .addAttribute(ModAttributes.MAGIC.get(), 40)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 70)
                 .addMonsterStat(ModAttributes.MAGIC.get(), 2)
-                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 4));
+                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 3));
 
         this.addStat(ModItems.CRYSTAL_WATER.get(), new ItemStat.Builder(2000, 150, 20)
                 .addAttribute(ModAttributes.MAGIC.get(), 5)
-                .addMonsterStat(ModAttributes.MAGIC.get(), 0.5)
-                .addMonsterStat(ModAttributes.MAGIC.get(), 0.5)
-                .setElement(EnumElement.WATER));
+                .addMonsterStat(ModAttributes.MAGIC.get(), 2)
+                .setElement(EnumElement.WATER)
+                .setSpell(ModSpells.WATER_SWIPE.get(), ModSpells.WATER_SWIPE_140.get(), ModSpells.WATER_SWIPE_360.get()));
         this.addStat(ModItems.CRYSTAL_EARTH.get(), new ItemStat.Builder(2000, 150, 20)
                 .addAttribute(ModAttributes.DEFENCE.get(), 5)
-                .addMonsterStat(ModAttributes.DEFENCE.get(), 0.5)
-                .setElement(EnumElement.EARTH));
+                .addMonsterStat(ModAttributes.DEFENCE.get(), 1)
+                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 1)
+                .setElement(EnumElement.EARTH)
+                .setSpell(null, null, null)); // TODO
         this.addStat(ModItems.CRYSTAL_FIRE.get(), new ItemStat.Builder(2000, 150, 20)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 5)
-                .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5)
-                .setElement(EnumElement.FIRE));
+                .addMonsterStat(Attributes.ATTACK_DAMAGE, 2)
+                .setElement(EnumElement.FIRE)
+                .setSpell(ModSpells.DOUBLE_FIRE_BALL.get(), ModSpells.TRIPLE_FIRE_BALL.get(), ModSpells.QUAD_FIRE_BALL.get()));
         this.addStat(ModItems.CRYSTAL_WIND.get(), new ItemStat.Builder(2000, 150, 20)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 5)
-                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 0.5)
-                .setElement(EnumElement.WIND));
+                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 2)
+                .setElement(EnumElement.WIND)
+                .setSpell(ModSpells.DOUBLE_SONIC.get(), ModSpells.QUADRUPLE_WIND_BLADE.get(), ModSpells.SEXTUPLE_WIND_BLADE.get()));
         this.addStat(ModItems.CRYSTAL_LIGHT.get(), new ItemStat.Builder(2000, 150, 20)
                 .addAttribute(ModAttributes.DEFENCE.get(), 1.5)
                 .addAttribute(ModAttributes.MAGIC.get(), 3)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 1.5)
-                .addMonsterStat(ModAttributes.MAGIC.get(), 0.5)
-                .setElement(EnumElement.LIGHT));
+                .addMonsterStat(ModAttributes.MAGIC.get(), 1)
+                .addMonsterStat(ModAttributes.DEFENCE.get(), 0.5)
+                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 0.5)
+                .setElement(EnumElement.LIGHT)
+                .setSpell(ModSpells.EXPANDING_DOUBLE_LIGHT.get(), ModSpells.EXPANDING_QUAD_LIGHT.get(), ModSpells.EXPANDING_OCTO_LIGHT.get()));
         this.addStat(ModItems.CRYSTAL_DARK.get(), new ItemStat.Builder(2000, 150, 20)
                 .addAttribute(ModAttributes.DEFENCE.get(), 1.5)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 3)
-                .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 1.5)
-                .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5)
-                .setElement(EnumElement.DARK));
+                .addMonsterStat(ModAttributes.MAGIC.get(), 1)
+                .addMonsterStat(Attributes.ATTACK_DAMAGE, 1)
+                .setElement(EnumElement.DARK)
+                .setSpell(null, null, null)); // TODO
         this.addStat(ModItems.CRYSTAL_LOVE.get(), new ItemStat.Builder(2000, 150, 20)
                 .addAttribute(ModAttributes.DRAIN.get(), 3)
-                .addMonsterStat(ModAttributes.DRAIN.get(), 0.5)
+                .addMonsterStat(ModAttributes.DRAIN.get(), 1)
                 .setElement(EnumElement.LOVE));
         this.addStat(ModItems.CRYSTAL_SMALL.get(), 0, 0, 0);
         this.addStat(ModItems.CRYSTAL_BIG.get(), 0, 0, 0);
         this.addStat(ModItems.CRYSTAL_MAGIC.get(), new ItemStat.Builder(45, 400, 25)
                 .addAttribute(ModAttributes.MAGIC.get(), 7)
-                .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 1));
+                .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 1)
+                .addMonsterStat(ModAttributes.MAGIC.get(), 1));
         this.addStat(ModItems.CRYSTAL_RUNE.get(), 0, 0, 0);
         this.addStat(ModItems.CRYSTAL_ELECTRO.get(), 0, 0, 0);
 
         this.addStat(ModItems.STICK_THICK.get(), new ItemStat.Builder(1900, 200, 45)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 15));
+                .addAttribute(Attributes.ATTACK_DAMAGE, 15)
+                .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(ModItems.HORN_INSECT.get(), new ItemStat.Builder(130, 21, 8)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 3)
-                .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
+                .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(ModItems.HORN_RIGID.get(), new ItemStat.Builder(200, 44, 11)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 10)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(ModItems.PLANT_STEM.get(), new ItemStat.Builder(300, 52, 17)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 3)
                 .addAttribute(ModAttributes.MAGIC.get(), 3)
-                .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.4));
+                .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(ModItems.HORN_BULL.get(), new ItemStat.Builder(450, 64, 26)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 8)
                 .addAttribute(ModAttributes.DEFENCE.get(), 1)
-                .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.7));
+                .addMonsterStat(Attributes.ATTACK_DAMAGE, 2));
         this.addStat(ModItems.HORN_DEVIL.get(), new ItemStat.Builder(850, 91, 43)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 30)
                 .addAttribute(ModAttributes.MAGIC.get(), 30)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1)
-                .addMonsterStat(ModAttributes.MAGIC.get(), 1));
+                .addMonsterStat(ModAttributes.MAGIC.get(), 2));
         this.addStat(ModItems.MOVING_BRANCH.get(), new ItemStat.Builder(22000, 2300, 77)
                 .addAttribute(Attributes.ATTACK_DAMAGE, -10)
                 .addAttribute(ModAttributes.MAGIC.get(), 150)
+                .addMonsterStat(ModAttributes.MAGIC.get(), 3)
                 .setSpell(ModSpells.ROOT_SPIKE.get(), ModSpells.APPLE_SHIELD.get(), null));
 
         this.addStat(ModItems.GLUE.get(), new ItemStat.Builder(380, 41, 13)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 1)
                 .addAttribute(ModAttributes.DEFENCE.get(), 1)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 1)
-                .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.3)
-                .addMonsterStat(ModAttributes.MAGIC.get(), 0.3));
+                .addMonsterStat(ModAttributes.DEFENCE.get(), 1));
         this.addStat(ModItems.DEVIL_BLOOD.get(), 0, 0, 0);
         this.addStat(ModItems.PARA_POISON.get(), 0, 0, 0);
         this.addStat(ModItems.POISON_KING.get(), 0, 0, 0);
@@ -945,7 +950,7 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.FEATHER_THUNDER.get(), 0, 0, 0);
         this.addStat(ModItems.FEATHER_YELLOW.get(), new ItemStat.Builder(500, 20, 15)
                 .addAttribute(ModAttributes.MAGIC.get(), 13)
-                .addMonsterStat(ModAttributes.MAGIC.get(), 0.7));
+                .addMonsterStat(ModAttributes.MAGIC.get(), 2));
         this.addStat(ModItems.DRAGON_FIN.get(), 0, 0, 0);
 
         this.addStat(ModItems.TURTLE_SHELL.get(), new ItemStat.Builder(160, 30, 16)
@@ -962,11 +967,11 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 4)
                 .addAttribute(ModAttributes.COLD.get(), 5)
                 .addMonsterStat(ModAttributes.MAGIC.get(), 1)
-                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 0.3));
+                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 1));
         this.addStat(ModItems.DRAGON_BONES.get(), new ItemStat.Builder(0, 0, 52)
                 .addAttribute(ModAttributes.DEFENCE.get(), 13)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 13)
-                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 0.5)
+                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 3)
                 .setSpell(null, ModSpells.BONE_NEEDLES.get(), ModSpells.ENERGY_ORB_SPELL.get()));
         this.addStat(ModItems.TORTOISE_SHELL.get(), 0, 0, 0);
 
@@ -981,18 +986,16 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.YARN.get(), new ItemStat.Builder(400, 75, 0)
                 .addAttribute(ModAttributes.DEFENCE.get(), 3)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 1)
-                .addMonsterStat(ModAttributes.DEFENCE.get(), 0.3));
+                .addMonsterStat(ModAttributes.DEFENCE.get(), 1));
         this.addStat(ModItems.OLD_BANDAGE.get(), new ItemStat.Builder(0, 0, 0)
                 .addAttribute(ModAttributes.MAGIC.get(), 2)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 1)
-                .addMonsterStat(ModAttributes.MAGIC.get(), 0.3));
+                .addMonsterStat(ModAttributes.MAGIC.get(), 1));
         this.addStat(ModItems.AMBROSIAS_THORNS.get(), new ItemStat.Builder(7500, 350, 21)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 7)
                 .addAttribute(ModAttributes.MAGIC.get(), 7)
                 .addAttribute(ModAttributes.SLEEP.get(), 10)
-                .addMonsterStat(Attributes.ATTACK_DAMAGE, 1)
-                .addMonsterStat(ModAttributes.MAGIC.get(), 1)
-                .addMonsterStat(ModAttributes.SLEEP.get(), 0.4)
+                .addMonsterStat(ModAttributes.SLEEP.get(), 1)
                 .setSpell(ModSpells.POLLEN_PUFF.get(), ModSpells.WAVE.get(), ModSpells.BUTTERFLY.get()));
         this.addStat(ModItems.THREAD_SPIDER.get(), new ItemStat.Builder(370, 28, 17)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 2)
@@ -1005,16 +1008,16 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.SEAL.get(), 15)
                 .addAttribute(ModAttributes.PARA.get(), 5)
                 .addMonsterStat(ModAttributes.SEAL.get(), 0.5)
-                .addMonsterStat(ModAttributes.PARA.get(), 0.3)
+                .addMonsterStat(ModAttributes.PARA.get(), 0.5)
                 .setSpell(ModSpells.DARK_BEAM.get(), ModSpells.PLATE.get(), ModSpells.DARK_BULLETS.get()));
         this.addStat(ModItems.VINE.get(), new ItemStat.Builder(515, 58, 34)
                 .addAttribute(ModAttributes.MAGIC.get(), 10)
                 .addAttribute(ModAttributes.SEAL.get(), 5)
-                .addMonsterStat(ModAttributes.SEAL.get(), 0.33));
+                .addMonsterStat(ModAttributes.SEAL.get(), 0.3));
         this.addStat(ModItems.TAIL_SCORPION.get(), new ItemStat.Builder(610, 62, 31)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 5)
                 .addAttribute(ModAttributes.POISON.get(), 2)
-                .addMonsterStat(ModAttributes.POISON.get(), 0.35));
+                .addMonsterStat(ModAttributes.POISON.get(), 0.3));
         this.addStat(ModItems.STRONG_VINE.get(), 0, 0, 0);
         this.addStat(ModItems.THREAD_PRETTY.get(), 0, 0, 0);
         this.addStat(ModItems.TAIL_CHIMERA.get(), new ItemStat.Builder(20000, 2600, 87)
@@ -1029,10 +1032,11 @@ public class ItemStatGen extends ItemStatProvider {
 
         this.addStat(ModItems.ARROW_HEAD.get(), new ItemStat.Builder(80, 10, 2)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 2)
-                .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.2));
+                .addMonsterStat(Attributes.ATTACK_DAMAGE, 1)
+                .setSpell(null, ModSpells.DOUBLE_ARROW.get(), null));
         this.addStat(ModItems.BLADE_SHARD.get(), new ItemStat.Builder(139, 25, 9)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 3)
-                .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.3));
+                .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(ModItems.BROKEN_HILT.get(), new ItemStat.Builder(550, 50, 22)
                 .addAttribute(ModAttributes.DEFENCE.get(), 2)
                 .addAttribute(ModAttributes.RES_POISON.get(), 5)
@@ -1077,48 +1081,50 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.DEFENCE.get(), 1)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 1)
                 .addAttribute(ModAttributes.RES_DIZZY.get(), 1)
-                .addMonsterStat(ModAttributes.DEFENCE.get(), 0.3));
+                .addMonsterStat(ModAttributes.DEFENCE.get(), 1));
         this.addStat(ModItems.FUR_MEDIUM.get(), new ItemStat.Builder(1000, 100, 29)
                 .addAttribute(ModAttributes.DEFENCE.get(), 5)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 3)
                 .addAttribute(ModAttributes.RES_DIZZY.get(), 10)
-                .addMonsterStat(ModAttributes.DEFENCE.get(), 0.5));
+                .addMonsterStat(ModAttributes.DEFENCE.get(), 1));
         this.addStat(ModItems.FUR_LARGE.get(), new ItemStat.Builder(3000, 500, 55)
                 .addAttribute(ModAttributes.DEFENCE.get(), 10)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 5)
                 .addAttribute(ModAttributes.RES_DIZZY.get(), 25)
                 .addAttribute(ModAttributes.RES_SLEEP.get(), 5)
-                .addMonsterStat(ModAttributes.DEFENCE.get(), 0.7));
+                .addMonsterStat(ModAttributes.DEFENCE.get(), 1));
         this.addStat(ModItems.FUR.get(), new ItemStat.Builder(130, 23, 7)
                 .addAttribute(ModAttributes.DEFENCE.get(), 2)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 1)
                 .addAttribute(ModAttributes.RES_DIZZY.get(), 3)
-                .addMonsterStat(ModAttributes.DEFENCE.get(), 0.3));
+                .addMonsterStat(ModAttributes.DEFENCE.get(), 1));
         this.addStat(ModItems.FURBALL.get(), new ItemStat.Builder(900, 120, 38)
                 .addAttribute(ModAttributes.DEFENCE.get(), 8)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 4)
                 .addAttribute(ModAttributes.RES_DIZZY.get(), 10)
                 .addAttribute(ModAttributes.RES_SLEEP.get(), 3)
-                .addMonsterStat(ModAttributes.DEFENCE.get(), 0.5));
+                .addMonsterStat(ModAttributes.DEFENCE.get(), 2));
         this.addStat(ModItems.DOWN_YELLOW.get(), new ItemStat.Builder(300, 33, 21)
                 .addAttribute(ModAttributes.DEFENCE.get(), 3)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 2)
                 .addAttribute(ModAttributes.RES_DIZZY.get(), 5)
-                .addMonsterStat(ModAttributes.DEFENCE.get(), 0.5));
+                .addMonsterStat(ModAttributes.DEFENCE.get(), 2));
         this.addStat(ModItems.FUR_QUALITY.get(), new ItemStat.Builder(650, 45, 36)
                 .addAttribute(ModAttributes.DEFENCE.get(), 4)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 3)
                 .addAttribute(ModAttributes.RES_DIZZY.get(), 7)
-                .addMonsterStat(ModAttributes.DEFENCE.get(), 0.5));
+                .addMonsterStat(ModAttributes.DEFENCE.get(), 2));
         this.addStat(ModItems.DOWN_PENGUIN.get(), new ItemStat.Builder(1250, 129, 59)
                 .addAttribute(ModAttributes.DEFENCE.get(), 13)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 7)
                 .addAttribute(ModAttributes.RES_DIZZY.get(), 13)
-                .addMonsterStat(ModAttributes.DEFENCE.get(), 0.6));
+                .addMonsterStat(ModAttributes.DEFENCE.get(), 3));
         this.addStat(ModItems.LIGHTNING_MANE.get(), new ItemStat.Builder(13000, 600, 31)
                 .addAttribute(ModAttributes.DEFENCE.get(), 8)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 6)
                 .addAttribute(ModAttributes.RES_DIZZY.get(), 17)
+                .addMonsterStat(ModAttributes.DEFENCE.get(), 1)
+                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 1)
                 .addMonsterStat(ModAttributes.RES_DIZZY.get(), 1)
                 .setSpell(ModSpells.LASER3.get(), ModSpells.LASER5.get(), ModSpells.BIG_LIGHTNING.get()));
         this.addStat(ModItems.FUR_RED_LION.get(), 0, 0, 0);
@@ -1127,22 +1133,25 @@ public class ItemStatGen extends ItemStatProvider {
 
         this.addStat(ModItems.SPORE.get(), new ItemStat.Builder(110, 19, 9)
                 .addAttribute(ModAttributes.MAGIC.get(), 2)
-                .addMonsterStat(ModAttributes.MAGIC.get(), 0.3));
+                .addMonsterStat(ModAttributes.MAGIC.get(), 1)
+                .setSpell(null, ModSpells.SPORE_CIRCLE_SPELL.get(), null));
         this.addStat(ModItems.POWDER_POISON.get(), new ItemStat.Builder(550, 80, 21)
                 .addAttribute(ModAttributes.MAGIC.get(), 2)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 2)
                 .addAttribute(ModAttributes.POISON.get(), 5)
-                .addMonsterStat(ModAttributes.MAGIC.get(), 0.3)
-                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 0.3)
-                .addMonsterStat(ModAttributes.POISON.get(), 0.5));
+                .addMonsterStat(ModAttributes.MAGIC.get(), 1)
+                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 1)
+                .addMonsterStat(ModAttributes.POISON.get(), 0.5)
+                .setSpell(null, ModSpells.POISON_BALL.get(), null));
         this.addStat(ModItems.SPORE_HOLY.get(), 0, 0, 0);
         this.addStat(ModItems.FAIRY_DUST.get(), new ItemStat.Builder(300, 40, 19)
                 .addAttribute(ModAttributes.MAGIC.get(), 5)
-                .addMonsterStat(ModAttributes.MAGIC.get(), 0.33));
+                .addMonsterStat(ModAttributes.MAGIC.get(), 1)
+                .setSpell(null, ModSpells.SLEEP_AURA.get(), null));
         this.addStat(ModItems.FAIRY_ELIXIR.get(), 0, 0, 0);
         this.addStat(ModItems.ROOT.get(), new ItemStat.Builder(770, 68, 25)
                 .addAttribute(ModAttributes.MAGIC.get(), 8)
-                .addMonsterStat(ModAttributes.MAGIC.get(), 0.4));
+                .addMonsterStat(ModAttributes.MAGIC.get(), 1));
         this.addStat(ModItems.POWDER_MAGIC.get(), 0, 0, 0);
         this.addStat(ModItems.POWDER_MYSTERIOUS.get(), 0, 0, 0);
         this.addStat(ModItems.MAGIC.get(), 0, 0, 0);
@@ -1155,11 +1164,11 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.CLOTH_CHEAP.get(), new ItemStat.Builder(80, 12, 4)
                 .addAttribute(ModAttributes.DEFENCE.get(), 1)
                 .addAttribute(ModAttributes.RES_CRIT.get(), 1)
-                .addMonsterStat(ModAttributes.DEFENCE.get(), 0.3));
+                .addMonsterStat(ModAttributes.DEFENCE.get(), 1));
         this.addStat(ModItems.CLOTH_QUALITY.get(), new ItemStat.Builder(800, 100, 18)
                 .addAttribute(ModAttributes.DEFENCE.get(), 5)
                 .addAttribute(ModAttributes.RES_CRIT.get(), 5)
-                .addMonsterStat(ModAttributes.DEFENCE.get(), 0.3));
+                .addMonsterStat(ModAttributes.DEFENCE.get(), 1));
         this.addStat(ModItems.CLOTH_QUALITY_WORN.get(), 0, 0, 0);
         this.addStat(ModItems.CLOTH_SILK.get(), 0, 0, 0);
         this.addStat(ModItems.GHOST_HOOD.get(), new ItemStat.Builder(70, 650, 21)
@@ -1189,19 +1198,19 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.3));
         this.addStat(ModItems.CLAW_PANTHER.get(), new ItemStat.Builder(450, 55, 28)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 4)
-                .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
+                .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(ModItems.CLAW_MAGIC.get(), 0, 0, 0);
         this.addStat(ModItems.FANG_WOLF.get(), new ItemStat.Builder(470, 60, 31)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 6)
-                .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.6));
+                .addMonsterStat(Attributes.ATTACK_DAMAGE, 2));
         this.addStat(ModItems.FANG_GOLD_WOLF.get(), 0, 0, 0);
         this.addStat(ModItems.CLAW_PALM.get(), new ItemStat.Builder(640, 74, 37)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 9)
-                .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.8));
+                .addMonsterStat(Attributes.ATTACK_DAMAGE, 2));
         this.addStat(ModItems.CLAW_MALM.get(), 0, 0, 0);
         this.addStat(ModItems.GIANTS_NAIL.get(), new ItemStat.Builder(980, 103, 44)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 11)
-                .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.6));
+                .addMonsterStat(Attributes.ATTACK_DAMAGE, 2));
         this.addStat(ModItems.CLAW_CHIMERA.get(), new ItemStat.Builder(18000, 1500, 50)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 15)
                 .addAttribute(ModAttributes.MAGIC.get(), 2)
@@ -1209,12 +1218,13 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.PARA.get(), 5)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 2)
                 .addMonsterStat(ModAttributes.POISON.get(), 1)
-                .addMonsterStat(ModAttributes.PARA.get(), 1));
+                .addMonsterStat(ModAttributes.PARA.get(), 1)
+                .setSpell(null, ModSpells.SLASH.get(), null));
         this.addStat(ModItems.TUSK_IVORY.get(), 0, 0, 0);
         this.addStat(ModItems.TUSK_UNBROKEN_IVORY.get(), 0, 0, 0);
         this.addStat(ModItems.SCORPION_PINCER.get(), new ItemStat.Builder(1470, 138, 55)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 20)
-                .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
+                .addMonsterStat(Attributes.ATTACK_DAMAGE, 2));
         this.addStat(ModItems.DANGEROUS_SCISSORS.get(), 0, 0, 0);
         this.addStat(ModItems.PROPELLOR_CHEAP.get(), 0, 0, 0);
         this.addStat(ModItems.PROPELLOR_QUALITY.get(), 0, 0, 0);

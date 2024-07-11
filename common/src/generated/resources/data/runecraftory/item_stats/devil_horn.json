@@ -8,7 +8,7 @@
   },
   "monsterBonus": {
     "minecraft:generic.attack_damage": 1.0,
-    "runecraftory:magic_attack": 1.0
+    "runecraftory:magic_attack": 2.0
   },
   "element": "NONE",
   "item": "runecraftory:devil_horn"

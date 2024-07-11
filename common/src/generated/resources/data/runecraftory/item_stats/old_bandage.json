@@ -7,7 +7,7 @@
     "runecraftory:magic_defence": 1.0
   },
   "monsterBonus": {
-    "runecraftory:magic_attack": 0.3
+    "runecraftory:magic_attack": 1.0
   },
   "element": "NONE",
   "item": "runecraftory:old_bandage"

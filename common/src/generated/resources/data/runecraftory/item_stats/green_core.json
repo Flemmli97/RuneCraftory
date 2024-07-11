@@ -6,7 +6,8 @@
     "runecraftory:magic_defence": 50.0
   },
   "monsterBonus": {
-    "runecraftory:magic_defence": 2.0
+    "runecraftory:res_earth": -3.0,
+    "runecraftory:res_wind": 6.0
   },
   "element": "NONE",
   "item": "runecraftory:green_core"

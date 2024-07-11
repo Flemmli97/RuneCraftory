@@ -7,8 +7,7 @@
     "runecraftory:magic_attack": 1.0
   },
   "monsterBonus": {
-    "minecraft:generic.attack_damage": 0.1,
-    "runecraftory:magic_defence": 0.1
+    "minecraft:generic.attack_damage": 0.2
   },
   "element": "NONE",
   "tier1Spell": "runecraftory:vanilla_snowball",

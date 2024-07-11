@@ -6,7 +6,7 @@
     "runecraftory:magic_attack": 8.0
   },
   "monsterBonus": {
-    "runecraftory:magic_attack": 0.4
+    "runecraftory:magic_attack": 1.0
   },
   "element": "NONE",
   "item": "runecraftory:root"

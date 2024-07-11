@@ -26,7 +26,6 @@ import io.github.flemmli97.runecraftory.common.spells.DarkBulletsSpell;
 import io.github.flemmli97.runecraftory.common.spells.DarknessSpell;
 import io.github.flemmli97.runecraftory.common.spells.DoubleBulletSpell;
 import io.github.flemmli97.runecraftory.common.spells.DoubleWaterLaserSpell;
-import io.github.flemmli97.runecraftory.common.spells.DoubleWindBladeSpell;
 import io.github.flemmli97.runecraftory.common.spells.EarthSpikeSpell;
 import io.github.flemmli97.runecraftory.common.spells.ElementBallBarrageSpell;
 import io.github.flemmli97.runecraftory.common.spells.ElementalCircleSpell;
@@ -139,8 +138,8 @@ public class ModSpells {
     public static final RegistryEntrySupplier<Spell> SCREW_ROCK = registerSpell("screw_rock", () -> new RockSpearSpell(false), new SpellProperties.Builder(20, 5).withXPGain(EnumSkills.EARTH, 6).affectedSkill(EnumSkills.EARTH));
     public static final RegistryEntrySupplier<Spell> EARTH_SPIKE = registerSpell("earth_spike", EarthSpikeSpell::new, new SpellProperties.Builder(20, 10).withXPGain(EnumSkills.EARTH, 8).affectedSkill(EnumSkills.EARTH));
     public static final RegistryEntrySupplier<Spell> AVENGER_ROCK = registerSpell("avenger_rock", () -> new RockSpearSpell(true), new SpellProperties.Builder(20, 16).withXPGain(EnumSkills.EARTH, 10).affectedSkill(EnumSkills.EARTH));
-    public static final RegistryEntrySupplier<Spell> SONIC = registerSpell("sonic", WindBladeSpell::new, new SpellProperties.Builder(20, 5).withXPGain(EnumSkills.WIND, 6).affectedSkill(EnumSkills.WIND));
-    public static final RegistryEntrySupplier<Spell> DOUBLE_SONIC = registerSpell("double_sonic", DoubleWindBladeSpell::new, new SpellProperties.Builder(20, 9).withXPGain(EnumSkills.WIND, 8).affectedSkill(EnumSkills.WIND));
+    public static final RegistryEntrySupplier<Spell> SONIC = registerSpell("sonic", () -> new WindBladeSpell(1, 1f, 0), new SpellProperties.Builder(20, 5).withXPGain(EnumSkills.WIND, 6).affectedSkill(EnumSkills.WIND));
+    public static final RegistryEntrySupplier<Spell> DOUBLE_SONIC = registerSpell("double_sonic", () -> new WindBladeSpell(2, 0.95f, 40), new SpellProperties.Builder(20, 9).withXPGain(EnumSkills.WIND, 8).affectedSkill(EnumSkills.WIND));
     public static final RegistryEntrySupplier<Spell> PENETRATE_SONIC = registerSpell("penetrate_sonic", PenetrateWindBladeSpell::new, new SpellProperties.Builder(20, 13).withXPGain(EnumSkills.WIND, 10).affectedSkill(EnumSkills.WIND));
     public static final RegistryEntrySupplier<Spell> LIGHT_BARRIER = registerSpell("light_barrier", LightBarrierSpell::new, new SpellProperties.Builder(20, 7).withXPGain(EnumSkills.LIGHT, 6).affectedSkill(EnumSkills.LIGHT));
     public static final RegistryEntrySupplier<Spell> SHINE = registerSpell("shine", ShineSpell::new, new SpellProperties.Builder(20, 15).withXPGain(EnumSkills.LIGHT, 8).affectedSkill(EnumSkills.LIGHT));
@@ -188,10 +187,12 @@ public class ModSpells {
 
     public static final RegistryEntrySupplier<Spell> TELEPORT = registerSpell("teleport", TeleportSpell::new, new SpellProperties.Builder(30, 0));
 
+    public static final RegistryEntrySupplier<Spell> QUADRUPLE_WIND_BLADE = registerSpell("quadruple_wind_blade", () -> new WindBladeSpell(4, 0.95f, 40), new SpellProperties.Builder(20, 14).withXPGain(EnumSkills.WIND, 8).affectedSkill(EnumSkills.WIND));
+    public static final RegistryEntrySupplier<Spell> SEXTUPLE_WIND_BLADE = registerSpell("sextuple_wind_blade", () -> new WindBladeSpell(6, 0.95f, 40), new SpellProperties.Builder(20, 25).withXPGain(EnumSkills.WIND, 10).affectedSkill(EnumSkills.WIND));
     public static final RegistryEntrySupplier<Spell> DOUBLE_ARROW = registerSpell("double_arrow", () -> new MultiArrowSpell(7, 1, 10), new SpellProperties.Builder(10, 10));
     public static final RegistryEntrySupplier<Spell> TRIPLE_ARROW = registerSpell("triple_arrow", () -> new MultiArrowSpell(7, 1, 15), new SpellProperties.Builder(10, 14));
     public static final RegistryEntrySupplier<Spell> SPORE_CIRCLE_SPELL = registerSpell("spore_circle", SporeCircleSpell::new, new SpellProperties.Builder(20, 20).withXPGain(EnumSkills.EARTH, 5).affectedSkill(EnumSkills.EARTH));
-    public static final RegistryEntrySupplier<Spell> GUST_SPELL = registerSpell("gust_wind", GustSpell::new, new SpellProperties.Builder(10, 5).withXPGain(EnumSkills.WIND, 5));
+    public static final RegistryEntrySupplier<Spell> GUST_SPELL = registerSpell("gust_wind", GustSpell::new, new SpellProperties.Builder(30, 5).withXPGain(EnumSkills.WIND, 5));
     public static final RegistryEntrySupplier<Spell> STONE_THROW = registerSpell("stone_throw", StoneThrowSpell::new, new SpellProperties.Builder(10, 15));
     public static final RegistryEntrySupplier<Spell> WEB_SHOT = registerSpell("web_shot", WebShotSpell::new, new SpellProperties.Builder(15, 15));
     public static final RegistryEntrySupplier<Spell> SPIRIT_FLAME = registerSpell("spirit_flame", () -> new ElementalSpell(EnumElement.DARK), new SpellProperties.Builder(20, 15).withXPGain(EnumSkills.DARK, 7).affectedSkill(EnumSkills.DARK));
@@ -241,13 +242,16 @@ public class ModSpells {
     public static final RegistryEntrySupplier<Spell> RAFFLESIA_CIRCLE = registerSpell("rafflesia_cicle", RafflesiaCircleSpell::new, new SpellProperties.Builder(30, 50).percentageCost(0.05f).withXPGain(EnumSkills.EARTH, 6).affectedSkill(EnumSkills.EARTH));
     public static final RegistryEntrySupplier<Spell> WIND_CIRCLE_X8 = registerSpell("wind_circle_x8", () -> new WindBladeCircle(8), new SpellProperties.Builder(30, 40).withXPGain(EnumSkills.WIND, 8).affectedSkill(EnumSkills.WIND));
     public static final RegistryEntrySupplier<Spell> WIND_CIRCLE_X16 = registerSpell("wind_circle_x16", () -> new WindBladeCircle(16), new SpellProperties.Builder(30, 60).withXPGain(EnumSkills.WIND, 10).affectedSkill(EnumSkills.WIND));
-    public static final RegistryEntrySupplier<Spell> EXPANDING_DOUBLE_LIGHT = registerSpell("expanding_double_light", () -> new ExpandingLight(2), new SpellProperties.Builder(30, 40).withXPGain(EnumSkills.LIGHT, 6).affectedSkill(EnumSkills.LIGHT));
-    public static final RegistryEntrySupplier<Spell> EXPANDING_QUAD_LIGHT = registerSpell("expanding_quad_light", () -> new ExpandingLight(4), new SpellProperties.Builder(30, 60).withXPGain(EnumSkills.LIGHT, 7).affectedSkill(EnumSkills.LIGHT));
+    public static final RegistryEntrySupplier<Spell> EXPANDING_DOUBLE_LIGHT = registerSpell("expanding_double_light", () -> new ExpandingLight(2), new SpellProperties.Builder(30, 12).withXPGain(EnumSkills.LIGHT, 6).affectedSkill(EnumSkills.LIGHT));
+    public static final RegistryEntrySupplier<Spell> EXPANDING_QUAD_LIGHT = registerSpell("expanding_quad_light", () -> new ExpandingLight(4), new SpellProperties.Builder(30, 17).withXPGain(EnumSkills.LIGHT, 7).affectedSkill(EnumSkills.LIGHT));
+    public static final RegistryEntrySupplier<Spell> EXPANDING_OCTO_LIGHT = registerSpell("expanding_octo_light", () -> new ExpandingLight(8), new SpellProperties.Builder(30, 24).withXPGain(EnumSkills.LIGHT, 9).affectedSkill(EnumSkills.LIGHT));
     public static final RegistryEntrySupplier<Spell> PARALYSIS_BALL = registerSpell("paralysis_ball", () -> new StatusBallSpell(EntityStatusBall.Type.PARALYSIS), new SpellProperties.Builder(30, 30).withXPGain(EnumSkills.LIGHT, 7).affectedSkill(EnumSkills.LIGHT));
     public static final RegistryEntrySupplier<Spell> WIND_BLADE_BARRAGE = registerSpell("wind_blade_barrage", WindBladeBarrageSpell::new, new SpellProperties.Builder(60, 40).percentageCost(0.05f).withXPGain(EnumSkills.WIND, 7).affectedSkill(EnumSkills.WIND));
     public static final RegistryEntrySupplier<Spell> GUST_ROCKS = registerSpell("gust_rocks", GustRockSpell::new, new SpellProperties.Builder(60, 65).percentageCost(0.07f).withXPGain(EnumSkills.EARTH, 5));
     public static final RegistryEntrySupplier<Spell> TORNADO = registerSpell("tornado", TornadoSpell::new, new SpellProperties.Builder(60, 75).percentageCost(0.1f).withXPGain(EnumSkills.WIND, 5));
-    public static final RegistryEntrySupplier<Spell> WATER_SWIPE = registerSpell("water_swipe", WaterLaserSwipe::new, new SpellProperties.Builder(50, 40).withXPGain(EnumSkills.WATER, 5));
+    public static final RegistryEntrySupplier<Spell> WATER_SWIPE = registerSpell("water_swipe", () -> new WaterLaserSwipe(10, 25), new SpellProperties.Builder(50, 40).withXPGain(EnumSkills.WATER, 5));
+    public static final RegistryEntrySupplier<Spell> WATER_SWIPE_140 = registerSpell("water_swipe_140", () -> new WaterLaserSwipe(12, 70), new SpellProperties.Builder(50, 40).withXPGain(EnumSkills.WATER, 5));
+    public static final RegistryEntrySupplier<Spell> WATER_SWIPE_360 = registerSpell("water_swipe_360", () -> new WaterLaserSwipe(18, 180), new SpellProperties.Builder(50, 40).withXPGain(EnumSkills.WATER, 5));
     public static final RegistryEntrySupplier<Spell> FIRE_WALL = registerSpell("fire_wall", FireWallSpell::new, new SpellProperties.Builder(60, 80).percentageCost(0.05f).withXPGain(EnumSkills.FIRE, 5));
     public static final RegistryEntrySupplier<Spell> ICE_BALL_DROP = registerSpell("ice_ball_drop", IceBallDropSpell::new, new SpellProperties.Builder(50, 70).withXPGain(EnumSkills.WATER, 5));
     public static final RegistryEntrySupplier<Spell> ICE_TRAIL = registerSpell("ice_trail", () -> new IceTrailSpell(true), new SpellProperties.Builder(60, 75).withXPGain(EnumSkills.WATER, 5));

@@ -7,7 +7,7 @@
     "runecraftory:magic_defence": 20.0
   },
   "monsterBonus": {
-    "runecraftory:defence": 0.9
+    "runecraftory:defence": 2.0
   },
   "element": "NONE",
   "item": "minecraft:netherite_ingot"

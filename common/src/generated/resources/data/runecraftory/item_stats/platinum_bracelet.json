@@ -6,7 +6,7 @@
     "runecraftory:magic_defence": 50.0
   },
   "monsterBonus": {
-    "runecraftory:magic_defence": 0.5
+    "runecraftory:magic_defence": 1.0
   },
   "element": "NONE",
   "item": "runecraftory:platinum_bracelet"

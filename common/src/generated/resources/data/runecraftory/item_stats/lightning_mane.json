@@ -8,6 +8,8 @@
     "runecraftory:res_dizzy": 17.0
   },
   "monsterBonus": {
+    "runecraftory:defence": 1.0,
+    "runecraftory:magic_defence": 1.0,
     "runecraftory:res_dizzy": 1.0
   },
   "element": "NONE",

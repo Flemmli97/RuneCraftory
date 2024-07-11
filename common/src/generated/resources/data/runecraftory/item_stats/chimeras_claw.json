@@ -14,5 +14,6 @@
     "runecraftory:poison": 1.0
   },
   "element": "NONE",
+  "tier2Spell": "runecraftory:slash",
   "item": "runecraftory:chimeras_claw"
 }

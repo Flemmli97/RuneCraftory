@@ -8,9 +8,7 @@
     "runecraftory:sleep": 10.0
   },
   "monsterBonus": {
-    "minecraft:generic.attack_damage": 1.0,
-    "runecraftory:magic_attack": 1.0,
-    "runecraftory:sleep": 0.4
+    "runecraftory:sleep": 1.0
   },
   "element": "NONE",
   "tier1Spell": "runecraftory:pollen_puff",

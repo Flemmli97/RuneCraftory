@@ -6,8 +6,11 @@
     "minecraft:generic.attack_damage": 5.0
   },
   "monsterBonus": {
-    "minecraft:generic.attack_damage": 0.5
+    "minecraft:generic.attack_damage": 2.0
   },
   "element": "FIRE",
+  "tier1Spell": "runecraftory:double_fire_ball",
+  "tier2Spell": "runecraftory:triple_fire_ball",
+  "tier3Spell": "runecraftory:quad_fire_ball",
   "item": "runecraftory:fire_crystal"
 }

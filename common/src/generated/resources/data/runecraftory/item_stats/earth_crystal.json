@@ -6,7 +6,8 @@
     "runecraftory:defence": 5.0
   },
   "monsterBonus": {
-    "runecraftory:defence": 0.5
+    "runecraftory:defence": 1.0,
+    "runecraftory:magic_defence": 1.0
   },
   "element": "EARTH",
   "item": "runecraftory:earth_crystal"

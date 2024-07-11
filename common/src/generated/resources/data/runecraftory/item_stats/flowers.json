@@ -6,7 +6,7 @@
     "minecraft:generic.max_health": 2.0
   },
   "monsterBonus": {
-    "minecraft:generic.max_health": 0.1
+    "minecraft:generic.max_health": 1.0
   },
   "element": "NONE",
   "item": "#minecraft:flowers"

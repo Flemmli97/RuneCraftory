@@ -7,7 +7,7 @@
     "runecraftory:magic_attack": 3.0
   },
   "monsterBonus": {
-    "minecraft:generic.attack_damage": 0.4
+    "minecraft:generic.attack_damage": 1.0
   },
   "element": "NONE",
   "item": "runecraftory:plant_stem"

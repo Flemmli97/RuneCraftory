@@ -3,7 +3,7 @@
   "sellPrice": 623,
   "upgradeDifficulty": 0,
   "itemStats": {
-    "minecraft:generic.attack_damage": 53.0,
+    "minecraft:generic.attack_damage": 55.0,
     "runecraftory:dizzy": 10.0,
     "runecraftory:attack_range": 1.5
   },

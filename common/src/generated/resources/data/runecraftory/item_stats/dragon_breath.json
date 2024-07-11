@@ -7,9 +7,9 @@
     "runecraftory:magic_attack": 15.0
   },
   "monsterBonus": {
-    "runecraftory:magic_attack": 0.8
+    "runecraftory:magic_attack": 1.0
   },
   "element": "NONE",
-  "tier1Spell": "runecraftory:vanilla_dragon_fireball",
+  "tier2Spell": "runecraftory:vanilla_dragon_fireball",
   "item": "minecraft:dragon_breath"
 }

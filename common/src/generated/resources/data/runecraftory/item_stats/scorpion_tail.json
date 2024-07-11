@@ -7,7 +7,7 @@
     "runecraftory:poison": 2.0
   },
   "monsterBonus": {
-    "runecraftory:poison": 0.35
+    "runecraftory:poison": 0.3
   },
   "element": "NONE",
   "item": "runecraftory:scorpion_tail"

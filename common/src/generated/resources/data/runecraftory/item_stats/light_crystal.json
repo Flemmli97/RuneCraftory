@@ -8,8 +8,13 @@
     "runecraftory:magic_defence": 1.5
   },
   "monsterBonus": {
-    "runecraftory:magic_attack": 0.5
+    "runecraftory:defence": 0.5,
+    "runecraftory:magic_attack": 1.0,
+    "runecraftory:magic_defence": 0.5
   },
   "element": "LIGHT",
+  "tier1Spell": "runecraftory:expanding_double_light",
+  "tier2Spell": "runecraftory:expanding_quad_light",
+  "tier3Spell": "runecraftory:expanding_octo_light",
   "item": "runecraftory:light_crystal"
 }

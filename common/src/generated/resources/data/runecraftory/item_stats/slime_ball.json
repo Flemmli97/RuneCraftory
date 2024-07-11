@@ -7,7 +7,7 @@
     "runecraftory:magic_attack": 5.0
   },
   "monsterBonus": {
-    "runecraftory:defence": 0.6
+    "runecraftory:defence": 0.5
   },
   "element": "NONE",
   "item": "minecraft:slime_ball"

@@ -11,19 +11,28 @@ import net.minecraft.world.phys.Vec3;
 
 public class WaterLaserSwipe extends Spell {
 
+    private final int duration;
+    private final float angle;
+
+    public WaterLaserSwipe(int duration, float angle) {
+        this.duration = duration;
+        this.angle = angle;
+    }
+
     @Override
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
-        float motion = entity instanceof MobAttackExt ext && ext.reversed() ? 5 : -5;
-        EntityWaterLaser laser = new EntityWaterLaser(level, entity, motion).setMaxTicks(10);
+        float motion = (this.angle * 2) / this.duration;
+        motion = entity instanceof MobAttackExt ext && ext.reversed() ? motion : -motion;
+        EntityWaterLaser laser = new EntityWaterLaser(level, entity, motion).setMaxTicks(this.duration);
         Vec3 dir;
         if (entity instanceof Mob mob && mob.getTarget() != null) {
             dir = mob.getTarget().getEyePosition(1).subtract(laser.position());
         } else {
             dir = entity.getLookAngle();
         }
-        float offset = entity instanceof MobAttackExt ext && ext.reversed() ? -25 : 25;
+        float offset = entity instanceof MobAttackExt ext && ext.reversed() ? -this.angle : this.angle;
         laser.setRotationToDirWithOffset(dir.x(), dir.y(), dir.z(), 0, offset);
         level.addFreshEntity(laser);
         return true;

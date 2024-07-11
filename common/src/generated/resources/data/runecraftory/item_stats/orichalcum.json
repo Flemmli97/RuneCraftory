@@ -6,7 +6,7 @@
     "runecraftory:defence": 70.0
   },
   "monsterBonus": {
-    "runecraftory:defence": 1.0
+    "runecraftory:defence": 4.0
   },
   "element": "NONE",
   "item": "#c:orichalcum"

@@ -9,7 +9,7 @@
   },
   "monsterBonus": {
     "runecraftory:magic_attack": 1.0,
-    "runecraftory:magic_defence": 0.3
+    "runecraftory:magic_defence": 1.0
   },
   "element": "NONE",
   "item": "runecraftory:skull"

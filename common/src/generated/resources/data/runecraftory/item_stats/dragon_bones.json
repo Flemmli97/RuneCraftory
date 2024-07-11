@@ -7,7 +7,7 @@
     "runecraftory:magic_defence": 13.0
   },
   "monsterBonus": {
-    "runecraftory:magic_defence": 0.5
+    "runecraftory:magic_defence": 3.0
   },
   "element": "NONE",
   "tier2Spell": "runecraftory:bone_needles",

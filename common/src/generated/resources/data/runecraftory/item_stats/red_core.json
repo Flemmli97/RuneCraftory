@@ -6,7 +6,8 @@
     "runecraftory:magic_defence": 50.0
   },
   "monsterBonus": {
-    "runecraftory:magic_defence": 2.0
+    "runecraftory:res_water": -3.0,
+    "runecraftory:res_fire": 6.0
   },
   "element": "NONE",
   "item": "runecraftory:red_core"

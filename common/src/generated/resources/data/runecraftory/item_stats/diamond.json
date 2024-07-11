@@ -6,7 +6,7 @@
     "runecraftory:magic_defence": 15.0
   },
   "monsterBonus": {
-    "runecraftory:magic_defence": 1.0
+    "runecraftory:magic_defence": 2.0
   },
   "element": "NONE",
   "item": "minecraft:diamond"

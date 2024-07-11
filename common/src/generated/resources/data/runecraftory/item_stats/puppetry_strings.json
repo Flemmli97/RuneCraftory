@@ -9,7 +9,7 @@
     "runecraftory:seal": 15.0
   },
   "monsterBonus": {
-    "runecraftory:paralysis": 0.3,
+    "runecraftory:paralysis": 0.5,
     "runecraftory:seal": 0.5
   },
   "element": "NONE",

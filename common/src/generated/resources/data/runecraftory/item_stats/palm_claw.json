@@ -6,7 +6,7 @@
     "minecraft:generic.attack_damage": 9.0
   },
   "monsterBonus": {
-    "minecraft:generic.attack_damage": 0.8
+    "minecraft:generic.attack_damage": 2.0
   },
   "element": "NONE",
   "item": "runecraftory:palm_claw"

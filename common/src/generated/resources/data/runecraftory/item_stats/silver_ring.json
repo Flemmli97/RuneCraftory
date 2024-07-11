@@ -7,8 +7,7 @@
     "runecraftory:res_light": 50.0
   },
   "monsterBonus": {
-    "runecraftory:res_dark": 1.0,
-    "runecraftory:res_light": 1.0
+    "runecraftory:magic_defence": 1.0
   },
   "element": "NONE",
   "item": "runecraftory:silver_ring"

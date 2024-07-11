@@ -7,7 +7,7 @@
     "runecraftory:magic_defence": 1.0
   },
   "monsterBonus": {
-    "runecraftory:defence": 0.3
+    "runecraftory:defence": 1.0
   },
   "element": "NONE",
   "item": "runecraftory:yarn"

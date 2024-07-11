@@ -9,7 +9,7 @@
     "runecraftory:res_dizzy": 50.0
   },
   "monsterBonus": {
-    "runecraftory:res_dizzy": 0.7
+    "runecraftory:res_dizzy": 0.5
   },
   "element": "NONE",
   "armorEffect": "runecraftory:piyo_sandals",

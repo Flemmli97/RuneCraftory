@@ -6,8 +6,9 @@
     "runecraftory:magic_attack": 2.0
   },
   "monsterBonus": {
-    "runecraftory:magic_attack": 0.3
+    "runecraftory:magic_attack": 1.0
   },
   "element": "NONE",
+  "tier2Spell": "runecraftory:spore_circle",
   "item": "runecraftory:spore"
 }

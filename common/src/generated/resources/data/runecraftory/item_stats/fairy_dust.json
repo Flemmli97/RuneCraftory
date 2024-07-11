@@ -6,8 +6,9 @@
     "runecraftory:magic_attack": 5.0
   },
   "monsterBonus": {
-    "runecraftory:magic_attack": 0.33
+    "runecraftory:magic_attack": 1.0
   },
   "element": "NONE",
+  "tier2Spell": "runecraftory:sleep_aura",
   "item": "runecraftory:fairy_dust"
 }

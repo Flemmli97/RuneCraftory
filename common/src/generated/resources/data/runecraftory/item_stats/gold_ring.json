@@ -9,10 +9,7 @@
     "runecraftory:res_fire": 15.0
   },
   "monsterBonus": {
-    "runecraftory:res_water": 1.0,
-    "runecraftory:res_earth": 1.0,
-    "runecraftory:res_wind": 1.0,
-    "runecraftory:res_fire": 1.0
+    "runecraftory:magic_defence": 2.0
   },
   "element": "NONE",
   "item": "runecraftory:gold_ring"

@@ -6,7 +6,7 @@
     "minecraft:generic.movement_speed": 0.01
   },
   "monsterBonus": {
-    "minecraft:generic.max_health": 5.0E-4
+    "minecraft:generic.max_health": 1.0
   },
   "element": "NONE",
   "item": "minecraft:sugar"

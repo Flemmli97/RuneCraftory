@@ -7,8 +7,8 @@
     "runecraftory:magic_defence": 2.0
   },
   "monsterBonus": {
-    "runecraftory:defence": 0.2,
-    "runecraftory:magic_defence": 0.2
+    "runecraftory:defence": 0.3,
+    "runecraftory:magic_defence": 0.3
   },
   "element": "NONE",
   "item": "#minecraft:wool"

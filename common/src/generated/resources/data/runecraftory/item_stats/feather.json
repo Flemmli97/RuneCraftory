@@ -6,8 +6,9 @@
     "runecraftory:magic_attack": 2.0
   },
   "monsterBonus": {
-    "runecraftory:magic_attack": 0.3
+    "runecraftory:magic_attack": 0.5
   },
   "element": "NONE",
+  "tier3Spell": "runecraftory:gust_wind",
   "item": "minecraft:feather"
 }

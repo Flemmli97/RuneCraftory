@@ -4,11 +4,11 @@
   "upgradeDifficulty": 20,
   "itemStats": {
     "minecraft:generic.attack_damage": 3.0,
-    "runecraftory:defence": 1.5,
-    "runecraftory:magic_defence": 1.5
+    "runecraftory:defence": 1.5
   },
   "monsterBonus": {
-    "minecraft:generic.attack_damage": 0.5
+    "minecraft:generic.attack_damage": 1.0,
+    "runecraftory:magic_attack": 1.0
   },
   "element": "DARK",
   "item": "runecraftory:dark_crystal"

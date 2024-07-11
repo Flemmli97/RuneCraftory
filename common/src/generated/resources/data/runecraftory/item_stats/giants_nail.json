@@ -6,7 +6,7 @@
     "minecraft:generic.attack_damage": 11.0
   },
   "monsterBonus": {
-    "minecraft:generic.attack_damage": 0.6
+    "minecraft:generic.attack_damage": 2.0
   },
   "element": "NONE",
   "item": "runecraftory:giants_nail"

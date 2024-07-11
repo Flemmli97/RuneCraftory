@@ -8,10 +8,11 @@
     "runecraftory:poison": 5.0
   },
   "monsterBonus": {
-    "runecraftory:magic_attack": 0.3,
-    "runecraftory:magic_defence": 0.3,
+    "runecraftory:magic_attack": 1.0,
+    "runecraftory:magic_defence": 1.0,
     "runecraftory:poison": 0.5
   },
   "element": "NONE",
+  "tier2Spell": "runecraftory:poison_ball",
   "item": "runecraftory:poison_powder"
 }

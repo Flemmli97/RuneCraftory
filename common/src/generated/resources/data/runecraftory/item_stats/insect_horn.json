@@ -6,7 +6,7 @@
     "minecraft:generic.attack_damage": 3.0
   },
   "monsterBonus": {
-    "minecraft:generic.attack_damage": 0.5
+    "minecraft:generic.attack_damage": 1.0
   },
   "element": "NONE",
   "item": "runecraftory:insect_horn"

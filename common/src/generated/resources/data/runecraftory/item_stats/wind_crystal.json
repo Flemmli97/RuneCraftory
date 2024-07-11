@@ -6,8 +6,11 @@
     "runecraftory:magic_defence": 5.0
   },
   "monsterBonus": {
-    "runecraftory:magic_defence": 0.5
+    "runecraftory:magic_defence": 2.0
   },
   "element": "WIND",
+  "tier1Spell": "runecraftory:double_sonic",
+  "tier2Spell": "runecraftory:quadruple_wind_blade",
+  "tier3Spell": "runecraftory:sextuple_wind_blade",
   "item": "runecraftory:wind_crystal"
 }

@@ -7,7 +7,7 @@
     "runecraftory:defence": 1.0
   },
   "monsterBonus": {
-    "minecraft:generic.attack_damage": 0.7
+    "minecraft:generic.attack_damage": 2.0
   },
   "element": "NONE",
   "item": "runecraftory:bulls_horn"

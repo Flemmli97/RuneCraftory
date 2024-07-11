@@ -6,8 +6,11 @@
     "runecraftory:magic_attack": 5.0
   },
   "monsterBonus": {
-    "runecraftory:magic_attack": 0.5
+    "runecraftory:magic_attack": 2.0
   },
   "element": "WATER",
+  "tier1Spell": "runecraftory:water_swipe",
+  "tier2Spell": "runecraftory:water_swipe_140",
+  "tier3Spell": "runecraftory:water_swipe_360",
   "item": "runecraftory:water_crystal"
 }

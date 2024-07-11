@@ -4,7 +4,7 @@
   "upgradeDifficulty": 0,
   "itemStats": {},
   "monsterBonus": {
-    "minecraft:generic.max_health": 5.0
+    "minecraft:generic.max_health": 3.0
   },
   "element": "NONE",
   "item": "runecraftory:healing_potion"

@@ -6,7 +6,7 @@
     "runecraftory:magic_defence": 7.0
   },
   "monsterBonus": {
-    "runecraftory:magic_defence": 0.5
+    "runecraftory:magic_defence": 3.0
   },
   "element": "NONE",
   "item": "#c:aquamarines"

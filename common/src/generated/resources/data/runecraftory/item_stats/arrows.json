@@ -6,7 +6,7 @@
     "minecraft:generic.attack_damage": 2.0
   },
   "monsterBonus": {
-    "minecraft:generic.attack_damage": 0.22
+    "minecraft:generic.attack_damage": 1.0
   },
   "element": "NONE",
   "tier1Spell": "runecraftory:vanilla_arrow",
