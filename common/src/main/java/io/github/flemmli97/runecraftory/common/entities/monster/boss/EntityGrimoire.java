@@ -1,14 +1,19 @@
 package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 
 import com.google.common.collect.ImmutableMap;
+import com.mojang.math.Vector3f;
+import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.MoveToTargetAttackRunner;
+import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
+import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
+import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
@@ -17,10 +22,13 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveAwayRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.TimedWrappedRunner;
+import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
+import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
@@ -39,12 +47,14 @@ import java.util.function.BiConsumer;
 
 public class EntityGrimoire extends BossMonster {
 
+    private static final List<Vector3f> CIRCLE_PARTICLE_MOTION = RayTraceUtils.rotatedVecs(new Vec3(0.25, 0, 0), new Vec3(0, 1, 0), -180, 175, 5);
+
     protected static final EntityDataAccessor<Float> LOCKED_YAW = SynchedEntityData.defineId(EntityGrimoire.class, EntityDataSerializers.FLOAT);
 
     public static final AnimatedAction TAIL_SWIPE = new AnimatedAction(0.84, 0.48, "tail_swipe");
     public static final AnimatedAction BITE = new AnimatedAction(0.8, 0.44, "bite");
     public static final AnimatedAction GUST = new AnimatedAction(1.96, 0.32, "gust");
-    public static final AnimatedAction CHARGE = new AnimatedAction(1.72, 0.16, "charge");
+    public static final AnimatedAction CHARGE = new AnimatedAction(2.08, 0.16, "charge");
     public static final AnimatedAction WIND_BREATH = new AnimatedAction(1.36, 0.44, "wind_breath");
     public static final AnimatedAction TORNADO = new AnimatedAction(1.24, 0.4, "tornado");
     public static final AnimatedAction DEFEAT = AnimatedAction.builder(150, "defeat").marker(150).infinite().build();
@@ -94,6 +104,13 @@ public class EntityGrimoire extends BossMonster {
                         entity.hitEntity.add(e);
                     }
                 });
+            }
+            if (anim.isAtTick(1.76)) {
+                CustomDamage.Builder source = new CustomDamage.Builder(entity).noKnockback().element(EnumElement.WIND).hurtResistant(5);
+                entity.mobAttack(anim, entity.getTarget(), e -> CombatUtils.mobAttack(entity, e, source));
+                Platform.INSTANCE.sendToTrackingAndSelf(new S2CScreenShake(4, 3), entity);
+                entity.level.playSound(null, entity.blockPosition(), SoundEvents.GENERIC_EXPLODE, entity.getSoundSource(), 1.0f, 0.9f);
+                entity.level.broadcastEntityEvent(entity, (byte) 66);
             }
         });
     });
@@ -200,6 +217,16 @@ public class EntityGrimoire extends BossMonster {
     @Override
     public AnimatedAction getDeathAnimation() {
         return DEFEAT;
+    }
+
+    @Override
+    public void handleEntityEvent(byte id) {
+        super.handleEntityEvent(id);
+        if (id == 66) {
+            for (Vector3f vec : CIRCLE_PARTICLE_MOTION) {
+                this.level.addParticle(new ColoredParticleData(ModParticles.WIND.get(), 67 / 255F, 163 / 255F, 65 / 255F, 1, 0.4f), this.getX(), this.getY() + 0.2, this.getZ(), vec.x(), vec.y(), vec.z());
+            }
+        }
     }
 
     @Override

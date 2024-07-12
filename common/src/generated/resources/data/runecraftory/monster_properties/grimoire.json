@@ -36,7 +36,7 @@
     "minecraft:generic.attack_damage": 20.0,
     "runecraftory:defence": 5.0,
     "runecraftory:magic_attack": 18.0,
-    "runecraftory:magic_defence": 3.0,
+    "runecraftory:magic_defence": 4.0,
     "runecraftory:res_earth": 10.0,
     "runecraftory:res_wind": -100.0,
     "runecraftory:res_crit": 25.0,

@@ -133,6 +133,11 @@ public class EntitySano extends BossMonster implements MobAttackExt {
     }
 
     @Override
+    protected boolean checkRage() {
+        return false;
+    }
+
+    @Override
     public void handleAttack(AnimatedAction anim) {
         BiConsumer<AnimatedAction, EntitySano> handler = ATTACK_HANDLER.get(anim.getID());
         if (handler != null)

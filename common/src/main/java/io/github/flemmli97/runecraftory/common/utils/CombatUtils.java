@@ -505,7 +505,7 @@ public class CombatUtils {
             target.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 80, 1, true, false));
         }
         if (stunAmount > 0.1 && attackingEntity.level.random.nextDouble() < stunAmount) {
-            target.addEffect(new MobEffectInstance(ModEffects.STUNNED.get(), Mth.floor(Math.min(1, stunAmount) * 40), 0, true, false));
+            target.addEffect(new MobEffectInstance(ModEffects.STUNNED.get(), Mth.floor(Math.min(1, stunAmount) * 50), 0, true, false));
         }
         if (sleepChance) {
             target.addEffect(new MobEffectInstance(ModEffects.SLEEP.get(), 80, 0, true, false));

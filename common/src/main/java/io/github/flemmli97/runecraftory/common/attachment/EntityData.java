@@ -11,7 +11,8 @@ import net.minecraft.world.item.ItemStack;
 
 public class EntityData {
 
-    private boolean sleeping, noAI, isSilent, paralysis, stunned, cold, poison, invis, orthoView;
+    private boolean sleeping, noAISleeping, isSilent, paralysis, stunned, noAIStunned, cold, poison, invis, orthoView;
+    private int disabledState;
 
     public EntityCustomFishingHook fishingHook;
 
@@ -29,23 +30,7 @@ public class EntityData {
 
     public void setSleeping(LivingEntity entity, boolean flag) {
         this.sleeping = flag;
-        if (flag) {
-            if (entity instanceof Mob mob) {
-                this.noAI = mob.isNoAi();
-                if (!this.noAI)
-                    mob.setNoAi(true);
-            }
-            this.isSilent = entity.isSilent();
-            if (!this.isSilent)
-                entity.setSilent(true);
-        } else {
-            if (entity instanceof Mob mob && !this.noAI) {
-                mob.setNoAi(false);
-            }
-            if (!this.isSilent) {
-                entity.setSilent(false);
-            }
-        }
+        this.updateAiState(entity, flag);
         this.setOrthoView(entity, flag);
         if (!entity.level.isClientSide) {
             Platform.INSTANCE.sendToTrackingAndSelf(new S2CEntityDataSync(entity.getId(), S2CEntityDataSync.Type.SLEEP, this.sleeping), entity);
@@ -92,6 +77,7 @@ public class EntityData {
 
     public void setStunned(LivingEntity entity, boolean flag) {
         this.stunned = flag;
+        this.updateAiState(entity, flag);
         if (!entity.level.isClientSide) {
             Platform.INSTANCE.sendToTrackingAndSelf(new S2CEntityDataSync(entity.getId(), S2CEntityDataSync.Type.STUN, this.stunned), entity);
         }
@@ -130,6 +116,31 @@ public class EntityData {
             this.off = this.main.copy();
         }
         return this.off;
+    }
+
+    private void updateAiState(LivingEntity entity, boolean increase) {
+        int pre = this.disabledState;
+        if (increase)
+            this.disabledState++;
+        else
+            this.disabledState--;
+        if (pre == 0 && increase) {
+            if (entity instanceof Mob mob) {
+                this.noAIStunned = mob.isNoAi();
+                if (!this.noAIStunned)
+                    mob.setNoAi(true);
+            }
+            this.isSilent = entity.isSilent();
+            if (!this.isSilent)
+                entity.setSilent(true);
+        } else if (pre == 1 && !increase) {
+            if (entity instanceof Mob mob && !this.noAIStunned) {
+                mob.setNoAi(false);
+            }
+            if (!this.isSilent) {
+                entity.setSilent(false);
+            }
+        }
     }
 
     public enum SleepState {

@@ -167,9 +167,13 @@ public class EntitySarcophagus extends BossMonster implements MobAttackExt {
                 } else {
                     entity.teleportTo(entity.getX(), entity.getY() + 8, entity.getZ());
                 }
+                entity.starFallPos = entity.position();
                 ModSpells.STARFALL_LONG.get().use(entity);
             }
+            if (entity.starFallPos != null)
+                entity.setPos(entity.starFallPos);
             if (anim.isAtTick(7.96)) {
+                entity.starFallPos = null;
                 entity.teleportAround(6, 20);
             }
         });
@@ -232,7 +236,7 @@ public class EntitySarcophagus extends BossMonster implements MobAttackExt {
         }
     });
 
-    private Vec3 chargeMotion;
+    private Vec3 chargeMotion, starFallPos;
     protected List<LivingEntity> hitEntity;
     private boolean teleported, gravityPre;
     private String previousAttack = "";

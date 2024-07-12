@@ -130,6 +130,11 @@ public class EntityUno extends BossMonster implements MobAttackExt {
     }
 
     @Override
+    protected boolean checkRage() {
+        return false;
+    }
+
+    @Override
     public void handleAttack(AnimatedAction anim) {
         BiConsumer<AnimatedAction, EntityUno> handler = ATTACK_HANDLER.get(anim.getID());
         if (handler != null)
