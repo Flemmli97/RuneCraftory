@@ -788,7 +788,11 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     @Override
     public boolean doHurtTarget(Entity entity) {
-        return CombatUtils.mobAttack(this, entity);
+        return CombatUtils.mobAttack(this, entity, this.damageSourceAttack());
+    }
+
+    public CustomDamage.Builder damageSourceAttack() {
+        return new CustomDamage.Builder(this).hurtResistant(5);
     }
 
     public int animationCooldown(@Nullable AnimatedAction anim) {

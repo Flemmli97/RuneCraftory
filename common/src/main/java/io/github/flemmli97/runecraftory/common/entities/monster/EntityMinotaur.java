@@ -4,8 +4,10 @@ import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.ChargeAction;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
+import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
+import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
@@ -107,11 +109,21 @@ public class EntityMinotaur extends ChargingMonster {
             }
         } else {
             if (anim.is(SWING) && anim.canAttack()) {
-                Platform.INSTANCE.sendToTrackingAndSelf(new S2CScreenShake(5, 0.8f), this);
+                Platform.INSTANCE.sendToTrackingAndSelf(new S2CScreenShake(5, 3), this);
                 this.level.playSound(null, this.blockPosition(), SoundEvents.GENERIC_EXPLODE, this.getSoundSource(), 1.0f, 0.9f);
             }
             super.handleAttack(anim);
         }
+    }
+
+    @Override
+    public CustomDamage.Builder damageSourceAttack() {
+        CustomDamage.Builder source = super.damageSourceAttack();
+        if (this.getAnimationHandler().isCurrent(CHARGE))
+            source.knock(CustomDamage.KnockBackType.BACK).knockAmount(2);
+        else if (this.getAnimationHandler().isCurrent(SWING))
+            source.withChangedAttribute(ModAttributes.STUN.get(), 30);
+        return source;
     }
 
     @Override

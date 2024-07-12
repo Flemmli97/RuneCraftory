@@ -121,8 +121,9 @@ public class EntityPalmCat extends LeapingMonster {
     @Override
     public boolean doHurtTarget(Entity entity) {
         CustomDamage.Builder source = new CustomDamage.Builder(this).noKnockback().hurtResistant(1);
-        double damagePhys = CombatUtils.getAttributeValue(this, Attributes.ATTACK_DAMAGE);
-        boolean hurt = CombatUtils.mobAttack(this, entity, source, damagePhys);
+        if (this.getAnimationHandler().isCurrent(LEAP))
+            source.knock(CustomDamage.KnockBackType.UP).knockAmount(1);
+        boolean hurt = CombatUtils.mobAttack(this, entity, source);
         if (hurt)
             this.hitAny = true;
         return hurt;

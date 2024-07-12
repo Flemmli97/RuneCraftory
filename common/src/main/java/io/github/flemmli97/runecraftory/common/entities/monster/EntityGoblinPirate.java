@@ -17,7 +17,6 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
@@ -86,8 +85,7 @@ public class EntityGoblinPirate extends EntityGoblin {
 
     public boolean quickAttack(Entity target) {
         CustomDamage.Builder source = new CustomDamage.Builder(this).noKnockback().hurtResistant(1);
-        double damagePhys = CombatUtils.getAttributeValue(this, Attributes.ATTACK_DAMAGE);
-        return CombatUtils.mobAttack(this, target, source, damagePhys);
+        return CombatUtils.mobAttack(this, target, source);
     }
 
     @Override

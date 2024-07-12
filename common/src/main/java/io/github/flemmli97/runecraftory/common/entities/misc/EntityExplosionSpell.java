@@ -76,7 +76,7 @@ public class EntityExplosionSpell extends BaseProjectile {
             for (ServerPlayer player : serverLevel.players()) {
                 if (!area.contains(player.getX(), player.getY(), player.getZ()))
                     continue;
-                Platform.INSTANCE.sendToClient(new S2CScreenShake(8, 1), player);
+                Platform.INSTANCE.sendToClient(new S2CScreenShake(8, 2), player);
             }
         }
     }

@@ -14,7 +14,7 @@ public class S2CEntityDataSyncAll implements Packet {
 
     public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "s2c_entity_data_all");
 
-    private boolean sleeping, paralysis, cold, poison;
+    private boolean sleeping, paralysis, cold, poison, stunned;
     private final int entityID;
 
     public S2CEntityDataSyncAll(LivingEntity entity) {
@@ -23,21 +23,23 @@ public class S2CEntityDataSyncAll implements Packet {
                 .ifPresent(data -> {
                     this.sleeping = data.isSleeping();
                     this.paralysis = data.isParalysed();
+                    this.stunned = data.isStunned();
                     this.cold = data.hasCold();
                     this.poison = data.isPoisoned();
                 });
     }
 
-    private S2CEntityDataSyncAll(int entityID, boolean sleeping, boolean paralysis, boolean cold, boolean poison) {
+    private S2CEntityDataSyncAll(int entityID, boolean sleeping, boolean paralysis, boolean cold, boolean poison, boolean stunned) {
         this.entityID = entityID;
         this.sleeping = sleeping;
         this.paralysis = paralysis;
         this.cold = cold;
         this.poison = poison;
+        this.stunned = stunned;
     }
 
     public static S2CEntityDataSyncAll read(FriendlyByteBuf buf) {
-        return new S2CEntityDataSyncAll(buf.readInt(), buf.readBoolean(), buf.readBoolean(), buf.readBoolean(), buf.readBoolean());
+        return new S2CEntityDataSyncAll(buf.readInt(), buf.readBoolean(), buf.readBoolean(), buf.readBoolean(), buf.readBoolean(), buf.readBoolean());
     }
 
     public static void handle(S2CEntityDataSyncAll pkt) {
@@ -51,6 +53,7 @@ public class S2CEntityDataSyncAll implements Packet {
                 data.setParalysis(living, pkt.paralysis);
                 data.setCold(living, pkt.cold);
                 data.setPoison(living, pkt.poison);
+                data.setStunned(living, pkt.stunned);
             });
         }
     }
@@ -62,6 +65,7 @@ public class S2CEntityDataSyncAll implements Packet {
         buf.writeBoolean(this.paralysis);
         buf.writeBoolean(this.cold);
         buf.writeBoolean(this.poison);
+        buf.writeBoolean(this.stunned);
     }
 
     @Override

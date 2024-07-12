@@ -11,6 +11,7 @@ import io.github.flemmli97.runecraftory.common.network.S2CAttackDebug;
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.common.particles.DurationalParticleData;
 import io.github.flemmli97.runecraftory.common.particles.SkelefangParticleData;
+import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
@@ -171,11 +172,11 @@ public class EntitySkelefang extends BossMonster {
             }
             if (entity.tickCount % 5 == 0) {
                 entity.playSound(ModSounds.ENTITY_GENERIC_HEAVY_CHARGE.get(), 1, (entity.random.nextFloat() - entity.random.nextFloat()) * 0.2f + 1.0f);
-                Platform.INSTANCE.sendToTrackingAndSelf(new S2CScreenShake(10, 0.4f), entity);
+                Platform.INSTANCE.sendToTrackingAndSelf(new S2CScreenShake(10, 1), entity);
             }
             entity.mobAttack(anim, null, e -> {
                 if (!entity.hitEntity.contains(e) && CombatUtils.mobAttack(entity, e,
-                        new CustomDamage.Builder(entity).hurtResistant(5).knock(CustomDamage.KnockBackType.UP), CombatUtils.getAttributeValue(entity, Attributes.ATTACK_DAMAGE))) {
+                        new CustomDamage.Builder(entity).hurtResistant(5).knock(CustomDamage.KnockBackType.UP).withChangedAttribute(ModAttributes.STUN.get(), 70))) {
                     entity.hitEntity.add(e);
                 }
             });
@@ -193,7 +194,7 @@ public class EntitySkelefang extends BossMonster {
         b.put(ROAR, (anim, entity) -> {
             if (anim.canAttack()) {
                 entity.playSound(ModSounds.ENTITY_SKELEFANG_ROAR.get(), 1, (entity.random.nextFloat() - entity.random.nextFloat()) * 0.2f + 1.0f);
-                Platform.INSTANCE.sendToTrackingAndSelf(new S2CScreenShake(40, 1.5f), entity);
+                Platform.INSTANCE.sendToTrackingAndSelf(new S2CScreenShake(40, 2), entity);
             }
         });
     });

@@ -47,7 +47,6 @@ import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
-import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
@@ -780,14 +779,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     public static boolean attack(LivingEntity attacker, Entity target) {
         ItemStack stack = attacker.getMainHandItem();
         CustomDamage.Builder source = new CustomDamage.Builder(attacker).hurtResistant(0).element(ItemNBT.getElement(stack));
-        double damagePhys = CombatUtils.getAttributeValue(attacker, Attributes.ATTACK_DAMAGE);
-        if (attacker.level instanceof ServerLevel serverLevel)
-            ModSpells.STAFF_CAST.get().use(serverLevel, attacker, stack);
-        if (ItemNBT.doesFixedOneDamage(stack)) {
-            source.damageType(CustomDamage.DamageType.FIXED);
-            damagePhys = 1;
-        }
-        return CombatUtils.mobAttack(attacker, target, source, damagePhys);
+        return CombatUtils.mobAttack(attacker, target, source);
     }
 
     @Override

@@ -110,7 +110,7 @@ public class EntityUtils {
     }
 
     public static boolean isDisabled(LivingEntity entity) {
-        return entity.hasEffect(ModEffects.SLEEP.get());
+        return entity.hasEffect(ModEffects.SLEEP.get()) || entity.hasEffect(ModEffects.STUNNED.get());
     }
 
     @Nullable

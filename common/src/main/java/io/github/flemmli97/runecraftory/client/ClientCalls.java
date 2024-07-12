@@ -21,6 +21,7 @@ import io.github.flemmli97.runecraftory.common.network.C2SOpenInfo;
 import io.github.flemmli97.runecraftory.common.network.C2SRideJump;
 import io.github.flemmli97.runecraftory.common.network.C2SSpellKey;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
+import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.mixin.ContainerScreenAccessor;
@@ -267,7 +268,6 @@ public class ClientCalls {
             int mod = entity.tickCount % 20;
             if (mod == 0 && data.isSleeping()) {
                 entity.level.addParticle(ModParticles.SLEEP.get(), entity.getX(), entity.getY() + entity.getBbHeight() + 0.5, entity.getZ(), 0, 0, 0);
-
             }
             if (mod == 5 && data.isPoisoned()) {
                 entity.level.addParticle(ModParticles.POISON.get(), entity.getX(), entity.getY() + entity.getBbHeight() + 0.1, entity.getZ(), 0, 0, 0);
@@ -300,12 +300,29 @@ public class ClientCalls {
 
     public static void renderShaking(Camera camera, float yaw, float pitch, float roll, float partialTicks,
                                      Consumer<Float> setYaw, Consumer<Float> setPitch, Consumer<Float> setRoll) {
+        boolean stunned = Minecraft.getInstance().player.hasEffect(ModEffects.STUNNED.get());
+        if (stunned) {
+            float pT = Minecraft.getInstance().player.tickCount * 10 - partialTicks;
+            setYaw.accept(yaw + Mth.sin(pT) * 0.5f);
+            setPitch.accept(pitch + Mth.sin(pT * 2) * 1);
+        }
         int t = ShakeHandler.shakeTick;
         if (t <= 0)
             return;
-        float pT = t * 2 - partialTicks;
-        setPitch.accept(pitch + Mth.sin(pT * pT) * ShakeHandler.shakeStrength);
-        setRoll.accept(roll + Mth.sin(pT * 2) * ShakeHandler.shakeStrength);
+        float strengthPitch = ShakeHandler.shakeStrength;
+        float strengthRoll = ShakeHandler.shakeStrength;
+        float pT = t * 24 - partialTicks;
+        setPitch.accept(pitch + Mth.sin(pT * 2) * strengthPitch);
+        setRoll.accept(roll + Mth.sin(pT) * strengthRoll);
+    }
+
+    public static void renderEntityShake(LivingEntity entity, PoseStack stack, float partialTicks) {
+        boolean stunned = Platform.INSTANCE.getEntityData(entity).map(EntityData::isStunned).orElse(false);
+        if (!stunned)
+            return;
+        Vec3 dir = Vec3.directionFromRotation(0, entity.getViewYRot(partialTicks) + 90).scale(0.1);
+        float pT = Minecraft.getInstance().player.tickCount * 10 - partialTicks;
+        stack.translate(Mth.sin(pT) * dir.x(), 0, Mth.sin(pT) * dir.z());
     }
 
     public static boolean onBlockHighlightRender(Level level, PoseStack poseStack, VertexConsumer consumer, Entity entity, double camX, double camY, double camZ, BlockPos pos, BlockState state) {

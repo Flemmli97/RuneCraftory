@@ -197,16 +197,17 @@ public class LangGen implements DataProvider {
         this.add(ModAttributes.ATTACK_SPEED.get().getDescriptionId(), "Attack Speed");
         this.add(ModAttributes.ATTACK_RANGE.get().getDescriptionId(), "Attack Range");
 
-        this.add(ModEffects.COLD.get(), "Cold");
-        this.add(ModEffects.SLEEP.get(), "Sleeping");
-        this.add(ModEffects.POISON.get(), "Poison");
-        this.add(ModEffects.PARALYSIS.get(), "Paralysis");
-        this.add(ModEffects.SEAL.get(), "Sealed");
-        this.add(ModEffects.FATIGUE.get(), "Fatigue");
         this.add(ModEffects.BATH.get(), "Bath");
-        this.add(ModEffects.TRUE_INVIS.get(), "True Invisibility");
         this.add(ModEffects.BLITZ.get(), "Blitz");
+        this.add(ModEffects.COLD.get(), "Cold");
+        this.add(ModEffects.FATIGUE.get(), "Fatigue");
+        this.add(ModEffects.PARALYSIS.get(), "Paralysis");
+        this.add(ModEffects.POISON.get(), "Poison");
+        this.add(ModEffects.SEAL.get(), "Sealed");
+        this.add(ModEffects.SLEEP.get(), "Sleeping");
         this.add(ModEffects.STEEL_HEART.get(), "Steel Heart");
+        this.add(ModEffects.STUNNED.get(), "Stunned");
+        this.add(ModEffects.TRUE_INVIS.get(), "True Invisibility");
 
         for (EnumDay day : EnumDay.values()) {
             this.add(day.translation(), day.toString().substring(0, 3));

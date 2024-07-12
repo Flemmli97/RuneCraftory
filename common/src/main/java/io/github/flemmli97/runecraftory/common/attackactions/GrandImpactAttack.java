@@ -27,7 +27,7 @@ public class GrandImpactAttack extends AttackAction {
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
         if (!entity.level.isClientSide && (anim.isAtTick(0.4) || anim.isAtTick(1.08))) {
             float reach = (float) entity.getAttributeValue(ModAttributes.ATTACK_RANGE.get());
-            Platform.INSTANCE.sendToTrackingAndSelf(new S2CScreenShake(4, 1), entity);
+            Platform.INSTANCE.sendToTrackingAndSelf(new S2CScreenShake(6, 3), entity);
             entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, entity.getSoundSource(), 1.0f, 1.0f);
             CombatUtils.applyTempAttribute(entity, Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack));
             ItemAxeBase.performRightClickAction(stack, entity, reach + 1, 0.1f);

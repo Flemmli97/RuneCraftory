@@ -5,7 +5,6 @@ import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
-import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.ElementalAttackMob;
 import io.github.flemmli97.runecraftory.common.entities.IBaseMob;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
@@ -118,8 +117,8 @@ public class CombatUtils {
         return null;
     }
 
-    public static double statusEffectChance(LivingEntity entity, Attribute att, Entity target) {
-        double chance = getAttributeValue(entity, att) * 0.01;
+    public static double statusEffectValue(LivingEntity entity, Attribute att, Entity target) {
+        double value = getAttributeValue(entity, att) * 0.01;
         Attribute opposing = opposing(att);
         double res = target instanceof LivingEntity livingTarget && opposing != null ? getAttributeValue(livingTarget, opposing) : 0;
         if (target instanceof Player player) {
@@ -128,7 +127,7 @@ public class CombatUtils {
                 res += Platform.INSTANCE.getPlayerData(player).map(d -> d.getSkillLevel(matchingSkill).getLevel() * 0.005).orElse(0d);
         }
         res *= 0.01;
-        return chance * (1 - res);
+        return value * (1 - res);
     }
 
     public static float reduceDamageFromStats(LivingEntity entity, DamageSource source, float amount) {
@@ -218,6 +217,8 @@ public class CombatUtils {
         Entity attacker = source.getEntity();
         float strength = source.knockAmount();
         strength = (float) (strength * (1.0D - entity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE)));
+        if (strength == 0)
+            return;
         double xRatio = 0.0;
         double zRatio = 0.0;
         double yRatio = strength;
@@ -225,8 +226,8 @@ public class CombatUtils {
             switch (source.getKnockBackType()) {
                 case BACK:
                     Vec3 distVec = entity.position().subtract(attacker.position()).normalize();
-                    xRatio = -distVec.x;
-                    zRatio = -distVec.z;
+                    xRatio = distVec.x;
+                    zRatio = distVec.z;
                     break;
                 case VANILLA:
                     xRatio = Mth.sin(attacker.getYRot() * ((float) Math.PI / 180F));
@@ -236,7 +237,7 @@ public class CombatUtils {
                     break;
             }
         }
-        if (source.getKnockBackType() == CustomDamage.KnockBackType.VANILLA && strength > 0) {
+        if (source.getKnockBackType() == CustomDamage.KnockBackType.VANILLA) {
             entity.knockback(strength, xRatio, zRatio);
         } else {
             Vec3 mot = entity.getDeltaMovement();
@@ -282,23 +283,18 @@ public class CombatUtils {
                     player.getCooldowns().addCooldown(stack.getItem(), Mth.ceil(20 * ItemNBT.attackSpeedModifier(player)));
                     playSound = true;
                 }
-                boolean faintChance = player.level.random.nextDouble() < statusEffectChance(player, ModAttributes.FAINT.get(), target);
-                boolean critChance = player.level.random.nextDouble() < statusEffectChance(player, ModAttributes.CRIT.get(), target);
+                boolean faintChance = player.level.random.nextDouble() < statusEffectValue(player, ModAttributes.FAINT.get(), target);
+                boolean critChance = player.level.random.nextDouble() < statusEffectValue(player, ModAttributes.CRIT.get(), target);
                 CustomDamage.DamageType damageType = CustomDamage.DamageType.NORMAL;
                 if (faintChance)
                     damageType = CustomDamage.DamageType.FAINT;
                 else if (critChance)
                     damageType = CustomDamage.DamageType.IGNOREDEF;
-                boolean knockBackChance = player.level.random.nextDouble() < statusEffectChance(player, ModAttributes.KNOCK.get(), target);
-                int i = knockBackChance ? 1 : 0;
-                if (player.isSprinting()) {
-                    player.level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_KNOCKBACK, player.getSoundSource(), 1.0f, 1.0f);
-                    ++i;
-                }
-                float knockback = i * 0.5f + 0.1f;
-                if (target instanceof BaseMonster) {
-                    knockback *= 0.85f;
-                }
+
+                double knockbackAtt = statusEffectValue(player, ModAttributes.KNOCK.get(), target);
+                int i = player.isSprinting() ? 1 : 0;
+                i += EnchantmentHelper.getKnockbackBonus(player);
+                float knockback = (float) (i * 0.5f + knockbackAtt * 3);
                 if (player.level instanceof ServerLevel serverLevel)
                     ModSpells.STAFF_CAST.get().use(serverLevel, player, stack);
                 if (ItemNBT.doesFixedOneDamage(stack)) {
@@ -344,6 +340,11 @@ public class CombatUtils {
     public static boolean mobAttack(LivingEntity attacker, Entity target) {
         ItemStack stack = attacker.getMainHandItem();
         CustomDamage.Builder source = new CustomDamage.Builder(attacker).hurtResistant(5).element(ItemNBT.getElement(stack));
+        return mobAttack(attacker, target, source);
+    }
+
+    public static boolean mobAttack(LivingEntity attacker, Entity target, CustomDamage.Builder source) {
+        ItemStack stack = attacker.getMainHandItem();
         double damagePhys = getAttributeValue(attacker, Attributes.ATTACK_DAMAGE);
         if (attacker.level instanceof ServerLevel serverLevel)
             ModSpells.STAFF_CAST.get().use(serverLevel, attacker, stack);
@@ -376,24 +377,19 @@ public class CombatUtils {
         // Setup some more things
         if (attacker instanceof LivingEntity livingAttacker) {
             builder.getAttributesChanges().forEach((att, val) -> CombatUtils.applyTempAttribute(livingAttacker, att, val));
-            if (allowFaint && livingAttacker.level.random.nextDouble() < statusEffectChance(livingAttacker, ModAttributes.FAINT.get(), target)) {
+            if (allowFaint && livingAttacker.level.random.nextDouble() < statusEffectValue(livingAttacker, ModAttributes.FAINT.get(), target)) {
                 builder.damageType(CustomDamage.DamageType.FAINT);
-            } else if (allowCrit && livingAttacker.level.random.nextDouble() < statusEffectChance(livingAttacker, ModAttributes.CRIT.get(), target)) {
+            } else if (allowCrit && livingAttacker.level.random.nextDouble() < statusEffectValue(livingAttacker, ModAttributes.CRIT.get(), target)) {
                 switch (builder.getDamageType()) {
                     case MAGIC -> builder.damageType(CustomDamage.DamageType.IGNOREMAGICDEF);
                     case NORMAL -> builder.damageType(CustomDamage.DamageType.IGNOREDEF);
                 }
             }
             if (builder.calculateKnockback()) {
-                boolean knockBackChance = livingAttacker.level.random.nextDouble() < statusEffectChance(livingAttacker, ModAttributes.KNOCK.get(), target);
-                int i = knockBackChance ? 2 : 1;
-                if (livingAttacker.isSprinting()) {
-                    ++i;
-                }
-                float knockback = i * 0.5f - 0.1f;
-                if (target instanceof BaseMonster) {
-                    knockback *= 0.85f;
-                }
+                double knockbackAtt = statusEffectValue(livingAttacker, ModAttributes.KNOCK.get(), target);
+                int i = livingAttacker.isSprinting() ? 1 : 0;
+                i += EnchantmentHelper.getKnockbackBonus(livingAttacker);
+                float knockback = (float) (i * 0.5f + knockbackAtt * 3);
                 builder.knockAmount(knockback);
             }
         }
@@ -461,16 +457,15 @@ public class CombatUtils {
         }
     }
 
-    //TODO: Need to look more into stun and dizzy
     public static void applyStatusEffects(LivingEntity attackingEntity, LivingEntity target) {
-        boolean poisonChance = attackingEntity.level.random.nextDouble() < statusEffectChance(attackingEntity, ModAttributes.POISON.get(), target);
-        boolean sleepChance = attackingEntity.level.random.nextDouble() < statusEffectChance(attackingEntity, ModAttributes.SLEEP.get(), target);
-        boolean fatigueChance = attackingEntity.level.random.nextDouble() < statusEffectChance(attackingEntity, ModAttributes.FATIGUE.get(), target);
-        boolean coldChance = attackingEntity.level.random.nextDouble() < statusEffectChance(attackingEntity, ModAttributes.COLD.get(), target);
-        boolean paraChance = attackingEntity.level.random.nextDouble() < statusEffectChance(attackingEntity, ModAttributes.PARA.get(), target);
-        boolean sealChance = attackingEntity.level.random.nextDouble() < statusEffectChance(attackingEntity, ModAttributes.SEAL.get(), target);
-        boolean dizzyChance = attackingEntity.level.random.nextDouble() < statusEffectChance(attackingEntity, ModAttributes.DIZZY.get(), target);
-        boolean stunChance = attackingEntity.level.random.nextDouble() < statusEffectChance(attackingEntity, ModAttributes.STUN.get(), target);
+        boolean poisonChance = attackingEntity.level.random.nextDouble() < statusEffectValue(attackingEntity, ModAttributes.POISON.get(), target);
+        boolean sleepChance = attackingEntity.level.random.nextDouble() < statusEffectValue(attackingEntity, ModAttributes.SLEEP.get(), target);
+        boolean fatigueChance = attackingEntity.level.random.nextDouble() < statusEffectValue(attackingEntity, ModAttributes.FATIGUE.get(), target);
+        boolean coldChance = attackingEntity.level.random.nextDouble() < statusEffectValue(attackingEntity, ModAttributes.COLD.get(), target);
+        boolean paraChance = attackingEntity.level.random.nextDouble() < statusEffectValue(attackingEntity, ModAttributes.PARA.get(), target);
+        boolean sealChance = attackingEntity.level.random.nextDouble() < statusEffectValue(attackingEntity, ModAttributes.SEAL.get(), target);
+        boolean dizzyChance = attackingEntity.level.random.nextDouble() < statusEffectValue(attackingEntity, ModAttributes.DIZZY.get(), target);
+        double stunAmount = statusEffectValue(attackingEntity, ModAttributes.STUN.get(), target);
         if (poisonChance) {
             EntityUtils.applyPermanentEffect(target, ModEffects.POISON.get(), 0);
             if (attackingEntity instanceof ServerPlayer player)
@@ -509,9 +504,8 @@ public class CombatUtils {
         if (dizzyChance) {
             target.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 80, 1, true, false));
         }
-        if (stunChance) {
-            target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 80, 4, true, false));
-            target.addEffect(new MobEffectInstance(MobEffects.JUMP, 80, 1, true, false));
+        if (stunAmount > 0.1 && attackingEntity.level.random.nextDouble() < stunAmount) {
+            target.addEffect(new MobEffectInstance(ModEffects.STUNNED.get(), Mth.floor(Math.min(1, stunAmount) * 40), 0, true, false));
         }
         if (sleepChance) {
             target.addEffect(new MobEffectInstance(ModEffects.SLEEP.get(), 80, 0, true, false));

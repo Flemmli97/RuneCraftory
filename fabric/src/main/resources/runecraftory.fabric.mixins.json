@@ -25,6 +25,7 @@
     "GameRendererMixin",
     "GuiMixin",
     "LocalPlayerMixin",
+    "LivingEntityRendererMixin",
     "ParticleEngineMixin",
     "ScreenMixin"
   ],

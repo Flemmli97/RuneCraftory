@@ -90,7 +90,7 @@ public class EntitySarcophagus extends BossMonster implements MobAttackExt {
                 entity.setDeltaMovement(entity.chargeMotion);
                 entity.mobAttack(anim, null, e -> {
                     if (!entity.hitEntity.contains(e) && CombatUtils.mobAttack(entity, e,
-                            new CustomDamage.Builder(entity).hurtResistant(5).knock(CustomDamage.KnockBackType.UP), CombatUtils.getAttributeValue(entity, Attributes.ATTACK_DAMAGE))) {
+                            new CustomDamage.Builder(entity).hurtResistant(5).knock(CustomDamage.KnockBackType.BACK).knockAmount(2))) {
                         entity.hitEntity.add(e);
                     }
                 });

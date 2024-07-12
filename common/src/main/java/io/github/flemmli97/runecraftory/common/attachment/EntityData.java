@@ -11,7 +11,7 @@ import net.minecraft.world.item.ItemStack;
 
 public class EntityData {
 
-    private boolean sleeping, noAI, isSilent, paralysis, cold, poison, invis, orthoView;
+    private boolean sleeping, noAI, isSilent, paralysis, stunned, cold, poison, invis, orthoView;
 
     public EntityCustomFishingHook fishingHook;
 
@@ -88,6 +88,17 @@ public class EntityData {
 
     public boolean isParalysed() {
         return this.paralysis;
+    }
+
+    public void setStunned(LivingEntity entity, boolean flag) {
+        this.stunned = flag;
+        if (!entity.level.isClientSide) {
+            Platform.INSTANCE.sendToTrackingAndSelf(new S2CEntityDataSync(entity.getId(), S2CEntityDataSync.Type.STUN, this.stunned), entity);
+        }
+    }
+
+    public boolean isStunned() {
+        return this.stunned;
     }
 
     public void setInvis(LivingEntity entity, boolean flag) {

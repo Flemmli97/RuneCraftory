@@ -3,6 +3,8 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
+import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
+import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
@@ -68,9 +70,17 @@ public class EntityTroll extends BaseMonster {
     public void mobAttack(AnimatedAction anim, LivingEntity target, Consumer<LivingEntity> cons) {
         super.mobAttack(anim, target, cons);
         if (anim.is(SLAM)) {
-            Platform.INSTANCE.sendToTrackingAndSelf(new S2CScreenShake(10, 0.75f), this);
+            Platform.INSTANCE.sendToTrackingAndSelf(new S2CScreenShake(10, 2), this);
             this.level.playSound(null, this.blockPosition(), SoundEvents.GENERIC_EXPLODE, this.getSoundSource(), 1.0f, 1.0f);
         }
+    }
+
+    @Override
+    public CustomDamage.Builder damageSourceAttack() {
+        CustomDamage.Builder source = super.damageSourceAttack();
+        if (this.getAnimationHandler().isCurrent(SLAM, DOUBLE_PUNCH))
+            source.withChangedAttribute(ModAttributes.STUN.get(), 30);
+        return source;
     }
 
     @Override

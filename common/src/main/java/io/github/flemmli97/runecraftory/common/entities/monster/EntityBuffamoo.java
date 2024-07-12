@@ -3,6 +3,8 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.ChargeAction;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
+import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
+import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
@@ -103,6 +105,16 @@ public class EntityBuffamoo extends ChargingMonster {
     @Override
     public AnimationHandler<EntityBuffamoo> getAnimationHandler() {
         return this.animationHandler;
+    }
+
+    @Override
+    public CustomDamage.Builder damageSourceAttack() {
+        CustomDamage.Builder source = super.damageSourceAttack();
+        if (this.getAnimationHandler().isCurrent(CHARGE_ATTACK))
+            source.knock(CustomDamage.KnockBackType.BACK).knockAmount(2);
+        else if (this.getAnimationHandler().isCurrent(STAMP))
+            source.withChangedAttribute(ModAttributes.STUN.get(), 20);
+        return source;
     }
 
     @Override

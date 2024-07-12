@@ -33,6 +33,7 @@ public record S2CEntityDataSync(int entityID,
                     case COLD -> data.setCold(living, pkt.flag);
                     case INVIS -> data.setInvis(living, pkt.flag);
                     case ORTHOVIEW -> data.setOrthoView(living, pkt.flag);
+                    case STUN -> data.setStunned(living, pkt.flag);
                 }
             });
         }
@@ -55,6 +56,7 @@ public record S2CEntityDataSync(int entityID,
         POISON,
         SLEEP,
         PARALYSIS,
+        STUN,
         COLD,
         FATIGUE,
         SEAL,

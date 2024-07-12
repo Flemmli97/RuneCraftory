@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.MoveToTargetAttackRunner;
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
+import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
@@ -136,10 +137,10 @@ public class EntityRaccoon extends BossMonster {
                 double d = Math.sin((anim.getTick() - 3) * Math.PI / length * 2) * 0.95;
                 entity.setDeltaMovement(entity.jumpDir.x, d < 0 ? d * 1.65 : d, entity.jumpDir.z);
                 if (anim.canAttack()) {
-                    CustomDamage.Builder source = new CustomDamage.Builder(entity).noKnockback().element(EnumElement.EARTH).hurtResistant(5);
-                    double damagePhys = CombatUtils.getAttributeValue(entity, Attributes.ATTACK_DAMAGE);
-                    entity.mobAttack(anim, entity.getTarget(), e -> CombatUtils.mobAttack(entity, e, source, damagePhys));
-                    Platform.INSTANCE.sendToTrackingAndSelf(new S2CScreenShake(8, 0.8f), entity);
+                    CustomDamage.Builder source = new CustomDamage.Builder(entity).noKnockback().element(EnumElement.EARTH).hurtResistant(5)
+                            .withChangedAttribute(ModAttributes.STUN.get(), 80);
+                    entity.mobAttack(anim, entity.getTarget(), e -> CombatUtils.mobAttack(entity, e, source));
+                    Platform.INSTANCE.sendToTrackingAndSelf(new S2CScreenShake(8, 3), entity);
                     entity.level.playSound(null, entity.blockPosition(), SoundEvents.GENERIC_EXPLODE, entity.getSoundSource(), 1.0f, 0.9f);
                 }
                 if (anim.getTick() >= anim.getAttackTime())
@@ -152,8 +153,10 @@ public class EntityRaccoon extends BossMonster {
                 entity.lookAt(entity.getTarget(), 180.0f, 50.0f);
             }
             if (anim.canAttack() || anim.getTick() == 24) {
-                entity.mobAttack(anim, entity.getTarget(), entity::doHurtTarget);
-                Platform.INSTANCE.sendToTrackingAndSelf(new S2CScreenShake(8, 0.5f), entity);
+                CustomDamage.Builder source = new CustomDamage.Builder(entity).noKnockback().element(EnumElement.EARTH).hurtResistant(5)
+                        .withChangedAttribute(ModAttributes.STUN.get(), 50);
+                entity.mobAttack(anim, entity.getTarget(), e -> CombatUtils.mobAttack(entity, e, source));
+                Platform.INSTANCE.sendToTrackingAndSelf(new S2CScreenShake(8, 3), entity);
                 entity.level.playSound(null, entity.blockPosition(), SoundEvents.GENERIC_EXPLODE, entity.getSoundSource(), 1.0f, 0.9f);
             }
         });
@@ -253,7 +256,7 @@ public class EntityRaccoon extends BossMonster {
             WeightedEntry.wrap(new GoalAttackAction<EntityRaccoon>(BARRAGE)
                     .cooldown(e -> e.animationCooldown(BARRAGE))
                     .withCondition(((goal, target, previous) -> goal.attacker.isBerserk() && !BARRAGE.getID().equals(previous)))
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1), e -> 25 + e.getRandom().nextInt(10))), 3),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1), e -> 25 + e.getRandom().nextInt(10))), 2),
             WeightedEntry.wrap(new GoalAttackAction<EntityRaccoon>(CLONE)
                     .cooldown(e -> e.animationCooldown(CLONE))
                     .withCondition(((goal, target, previous) -> goal.attacker.isEnraged() && !CLONE.getID().equals(previous)))

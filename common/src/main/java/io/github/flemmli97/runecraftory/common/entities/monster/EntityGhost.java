@@ -9,6 +9,7 @@ import io.github.flemmli97.runecraftory.common.entities.ai.pathing.NoClipFlyEval
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.NoClipFlyMoveController;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
+import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
@@ -124,6 +125,14 @@ public class EntityGhost extends ChargingMonster {
         if (ret)
             this.vanishNext = this.getRandom().nextFloat() < 0.4;
         return ret;
+    }
+
+    @Override
+    public CustomDamage.Builder damageSourceAttack() {
+        CustomDamage.Builder source = super.damageSourceAttack();
+        if (this.getAnimationHandler().isCurrent(CHARGE))
+            source.knock(CustomDamage.KnockBackType.BACK).knockAmount(1);
+        return source;
     }
 
     @Override

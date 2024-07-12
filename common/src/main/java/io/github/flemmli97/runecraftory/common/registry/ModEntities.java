@@ -998,7 +998,7 @@ public class ModEntities {
             0x536983, 0xaaa7c8,
             new EntityProperties.Builder()
                     .putAttributes(() -> Attributes.MAX_HEALTH, 315).putLevelGains(() -> Attributes.MAX_HEALTH, 615)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 19).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 302)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 18).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 302)
                     .putAttributes(ModAttributes.DEFENCE, 4).putLevelGains(ModAttributes.DEFENCE, 242)
                     .putAttributes(ModAttributes.MAGIC, 15).putLevelGains(ModAttributes.MAGIC, 289)
                     .putAttributes(ModAttributes.MAGIC_DEFENCE, 4).putLevelGains(ModAttributes.MAGIC_DEFENCE, 248)
@@ -1068,7 +1068,7 @@ public class ModEntities {
             0x3b785c, 0x2e4d3f,
             new EntityProperties.Builder()
                     .putAttributes(() -> Attributes.MAX_HEALTH, 350).putLevelGains(() -> Attributes.MAX_HEALTH, 625)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 22).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 292)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 20).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 292)
                     .putAttributes(ModAttributes.DEFENCE, 5).putLevelGains(ModAttributes.DEFENCE, 253)
                     .putAttributes(ModAttributes.MAGIC, 18).putLevelGains(ModAttributes.MAGIC, 278)
                     .putAttributes(ModAttributes.MAGIC_DEFENCE, 3).putLevelGains(ModAttributes.MAGIC_DEFENCE, 253)
@@ -1161,7 +1161,7 @@ public class ModEntities {
             0x615237, 0xc2a982,
             new EntityProperties.Builder()
                     .putAttributes(() -> Attributes.MAX_HEALTH, 275).putLevelGains(() -> Attributes.MAX_HEALTH, 600)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 20).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 294)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 19).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 294)
                     .putAttributes(ModAttributes.DEFENCE, 4).putLevelGains(ModAttributes.DEFENCE, 261)
                     .putAttributes(ModAttributes.MAGIC, 16).putLevelGains(ModAttributes.MAGIC, 264)
                     .putAttributes(ModAttributes.MAGIC_DEFENCE, 3).putLevelGains(ModAttributes.MAGIC_DEFENCE, 237)
@@ -1201,7 +1201,6 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_WIND, -25)
                     .putAttributes(ModAttributes.RES_LOVE, -25)
                     .putAttributes(ModAttributes.RES_CRIT, 25)
-                    .putAttributes(ModAttributes.RES_STUN, 50)
                     .putAttributes(ModAttributes.RES_DRAIN, 50)
                     .putAttributes(ModAttributes.RES_DIZZY, 100)
                     .putAttributes(() -> Attributes.KNOCKBACK_RESISTANCE, 1)

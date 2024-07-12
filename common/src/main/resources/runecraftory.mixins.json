@@ -44,6 +44,7 @@
   "client": [
     "AtlasMixin",
     "BiomeColorsMixin",
+    "CameraAccessor",
     "ClientPacketListenerMixin",
     "ContainerScreenAccessor",
     "EntityRendererDispatcherMixin",

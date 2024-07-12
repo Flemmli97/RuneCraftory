@@ -22,6 +22,7 @@ import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.MovementInputUpdateEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
+import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.client.gui.ForgeIngameGui;
@@ -116,7 +117,12 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
-    public static void shaking(ClientPlayerNetworkEvent.LoggedOutEvent event) {
+    public static void livingShaking(RenderLivingEvent.Pre<?, ?> event) {
+        ClientCalls.renderEntityShake(event.getEntity(), event.getPoseStack(), event.getPartialTick());
+    }
+
+    @SubscribeEvent
+    public static void logout(ClientPlayerNetworkEvent.LoggedOutEvent event) {
         ClientFarmlandHandler.INSTANCE.onDisconnect();
     }
 

@@ -90,7 +90,7 @@ public class EntityGrimoire extends BossMonster {
                 entity.setDeltaMovement(entity.moveDirection);
                 entity.mobAttack(anim, null, e -> {
                     if (!entity.hitEntity.contains(e) && CombatUtils.mobAttack(entity, e,
-                            new CustomDamage.Builder(entity).hurtResistant(5).knock(CustomDamage.KnockBackType.UP), CombatUtils.getAttributeValue(entity, Attributes.ATTACK_DAMAGE))) {
+                            new CustomDamage.Builder(entity).hurtResistant(5).knock(CustomDamage.KnockBackType.BACK).knockAmount(2))) {
                         entity.hitEntity.add(e);
                     }
                 });
@@ -217,7 +217,7 @@ public class EntityGrimoire extends BossMonster {
     @Override
     public AABB calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
         if (anim.is(CHARGE)) {
-            return this.getBoundingBox().inflate(0.5, 0.1, 0.5);
+            return this.getBoundingBox().expandTowards(this.getDeltaMovement().scale(0.3)).inflate(0.7, 0.1, 0.7);
         }
         return super.calculateAttackAABB(anim, target, grow);
     }

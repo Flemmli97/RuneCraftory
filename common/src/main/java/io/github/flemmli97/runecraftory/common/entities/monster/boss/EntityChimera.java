@@ -89,7 +89,7 @@ public class EntityChimera extends BossMonster implements MobAttackExt {
                 }
                 entity.mobAttack(anim, null, e -> {
                     if (!entity.hitEntity.contains(e) && CombatUtils.mobAttack(entity, e,
-                            new CustomDamage.Builder(entity).hurtResistant(5).knock(CustomDamage.KnockBackType.UP), CombatUtils.getAttributeValue(entity, Attributes.ATTACK_DAMAGE))) {
+                            new CustomDamage.Builder(entity).hurtResistant(5).knock(CustomDamage.KnockBackType.UP))) {
                         entity.chargeAttackSuccess = true;
                         entity.hitEntity.add(e);
                     }
@@ -107,7 +107,7 @@ public class EntityChimera extends BossMonster implements MobAttackExt {
             }
             if (anim.getTick() == anim.getAttackTime()) {
                 entity.mobAttack(anim, entity.getTarget(), e -> CombatUtils.mobAttack(entity, e,
-                        new CustomDamage.Builder(entity).hurtResistant(5).knockAmount(0), CombatUtils.getAttributeValue(entity, Attributes.ATTACK_DAMAGE)));
+                        new CustomDamage.Builder(entity).hurtResistant(5).knockAmount(0)));
             } else if (anim.getTick() == 17) {
                 entity.mobAttack(anim, entity.getTarget(), entity::doHurtTarget);
             }
