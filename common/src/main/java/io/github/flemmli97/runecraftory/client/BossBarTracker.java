@@ -19,13 +19,17 @@ import net.minecraft.world.BossEvent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 public class BossBarTracker {
 
     private static final Map<ResourceLocation, ClientBossBarType> BOSS_BARS = new HashMap<>();
+    // The bossbars that are visible on the screen for the player
     private static final Map<UUID, BossBarData> ACTIVE_BOSS_BARS = new HashMap<>();
+    private static final Map<UUID, BossSoundInstance> ACTIVE_BOSS_BGM = new HashMap<>();
     private static final Map<UUID, BossSoundInstance> FADING_CHANNEL = new HashMap<>();
     private static SoundInstance activeMusic;
     private static int lastPlay, tick;
@@ -43,40 +47,62 @@ public class BossBarTracker {
         FADING_CHANNEL.values().removeIf(BossSoundInstance::done);
     }
 
-    public static void addActiveBossbar(UUID id, ResourceLocation type, SoundEvent music) {
+    public static void addActiveBossbar(UUID id, UUID musicID, ResourceLocation type, SoundEvent music) {
         BossBarData old = ACTIVE_BOSS_BARS.get(id);
         // If an old one exist adjust the old one
         if (old != null) {
-            if(old.music != null) {
-                // Update old music
-                if (music == null || !old.music.getLocation().equals(music.getLocation())) {
-                    Minecraft.getInstance().getSoundManager().stop(old.music);
-                    old.music = createSound(id, music);
-                    playMusic(old.music);
+            BossSoundInstance sound;
+            if (old.music != null && (sound = ACTIVE_BOSS_BGM.get(old.music)) != null) {
+                // Update old music if music changed
+                if (music == null || !sound.getLocation().equals(music.getLocation())) {
+                    // Stop old music
+                    sound.instances.remove(id);
+                    if (sound.instances.isEmpty())
+                        ACTIVE_BOSS_BGM.remove(old.music);
+                    Minecraft.getInstance().getSoundManager().stop(sound);
+                    // Generate and play the changed music
+                    BossSoundInstance bgm = createSound(musicID, music);
+                    old.music = musicID;
+                    ACTIVE_BOSS_BGM.put(musicID, bgm);
+                    playMusic(bgm);
                 }
             }
             return;
         }
         // Try lookup if the music is fading away
-        BossSoundInstance inst = FADING_CHANNEL.get(id);
+        BossSoundInstance inst = FADING_CHANNEL.get(musicID);
         if (inst != null) {
             inst.reverse(true);
+        } else {
+            BossSoundInstance existing = ACTIVE_BOSS_BGM.get(musicID);
+            if (existing == null) {
+                // Create a new music instance if missing
+                inst = createSound(musicID, music);
+                playMusic(inst);
+                inst.instances.add(id);
+                ACTIVE_BOSS_BGM.put(musicID, inst);
+            } else {
+                existing.instances.add(id);
+            }
         }
-        BossBarData data = new BossBarData(type, inst != null ? inst : createSound(id, music));
-        if (data.music != null && inst == null) {
-            playMusic(data.music);
-        }
+        BossBarData data = new BossBarData(type, musicID);
         ACTIVE_BOSS_BARS.put(id, data);
     }
 
-    public static void updateMusic(UUID id, boolean stop) {
-        BossBarData data = ACTIVE_BOSS_BARS.get(id);
-        if (data != null && data.music != null) {
-            data.music.stop(stop);
-            if (stop)
-                stopMusic(data.music);
-            else {
-                playMusic(data.music);
+    public static void updateMusic(UUID id, UUID musicID, boolean stop) {
+        BossSoundInstance bgm = ACTIVE_BOSS_BGM.get(musicID);
+        if (bgm != null) {
+            if (stop) {
+                bgm.instances.remove(id);
+                if (bgm.instances.isEmpty()) {
+                    stopMusic(bgm);
+                }
+            } else {
+                boolean empty = bgm.instances.isEmpty();
+                bgm.instances.add(id);
+                if (empty) {
+                    playMusic(bgm);
+                }
             }
         }
     }
@@ -84,16 +110,23 @@ public class BossBarTracker {
     public static void removeActiveBossbar(UUID id, boolean immediate) {
         BossBarData data = ACTIVE_BOSS_BARS.remove(id);
         if (data != null && data.music != null) {
+            BossSoundInstance sound = ACTIVE_BOSS_BGM.get(data.music);
+            if (sound == null)
+                return;
+            sound.instances.remove(id);
+            if (!sound.instances.isEmpty())
+                return;
+            ACTIVE_BOSS_BGM.remove(data.music);
             if (immediate || ClientConfig.bossMusicFadeDelay == 0) {
                 // Stop the sound without fading away
                 FADING_CHANNEL.remove(id);
-                stopMusic(data.music);
+                stopMusic(sound);
             } else {
                 BossSoundInstance inst = FADING_CHANNEL.get(id);
                 if (inst != null) {
                     inst.reverse(false);
                 } else {
-                    FADING_CHANNEL.put(id, data.music.reverse(false));
+                    FADING_CHANNEL.put(id, sound.reverse(false));
                 }
             }
         }
@@ -115,7 +148,7 @@ public class BossBarTracker {
         return new BossSoundInstance(id, sound, SoundSource.RECORDS, 1, 1, ClientConfig.bossMusicFadeDelay);
     }
 
-    private static void playMusic(SoundInstance sound) {
+    private static void playMusic(BossSoundInstance sound) {
         // Attempting to play more than one at the same time will make it unable to stop the previous one so we just cancel it
         if (lastPlay == tick)
             return;
@@ -127,14 +160,14 @@ public class BossBarTracker {
         activeMusic = sound;
     }
 
-    private static void stopMusic(SoundInstance sound) {
-        if (activeMusic == sound) {
+    private static void stopMusic(BossSoundInstance sound) {
+        if (activeMusic == sound && sound.instances.isEmpty()) {
             Minecraft.getInstance().getSoundManager().stop(sound);
             // Find any other active boss music to play
-            ACTIVE_BOSS_BARS.values().stream().filter(d -> d.music != sound && !d.music.stopped).findFirst()
-                    .ifPresent(d -> {
-                        Minecraft.getInstance().getSoundManager().play(d.music);
-                        activeMusic = d.music;
+            ACTIVE_BOSS_BGM.values().stream().filter(bgm -> bgm != sound && !bgm.instances.isEmpty()).findFirst()
+                    .ifPresent(bgm -> {
+                        Minecraft.getInstance().getSoundManager().play(bgm);
+                        activeMusic = bgm;
                     });
         }
     }
@@ -142,9 +175,9 @@ public class BossBarTracker {
     public static class BossBarData {
 
         public final ResourceLocation type;
-        public BossSoundInstance music;
+        public UUID music;
 
-        public BossBarData(ResourceLocation type, BossSoundInstance music) {
+        public BossBarData(ResourceLocation type, UUID music) {
             this.type = type;
             this.music = music;
         }
@@ -157,8 +190,9 @@ public class BossBarTracker {
         private final float defaultVol, volDecrease;
         private int tick = 1;
         private boolean reverse, fade;
-        // A flag to check if this sound instance is stopped. This differs from AbstractTickableSoundInstance#stopped as this can be continued again
-        private boolean stopped;
+
+        // Amount of bossbars assigned to this sound instance
+        private final Set<UUID> instances = new HashSet<>();
 
         public BossSoundInstance(UUID id, SoundEvent soundEvent, SoundSource soundSource, float volume, float pitch, int fadeTime) {
             super(soundEvent, soundSource);
@@ -188,10 +222,6 @@ public class BossBarTracker {
 
         public boolean done() {
             return this.tick > this.fadeTime || this.tick < 0;
-        }
-
-        public void stop(boolean stopped) {
-            this.stopped = stopped;
         }
 
         @Override
@@ -255,7 +285,7 @@ public class BossBarTracker {
             float vol = this.defaultVol * Mth.clamp(1 - this.volDecrease * this.tick, 0, 1);
             this.channel.execute(ch -> ch.setVolume(vol));
             if (done && !this.reverse)
-                stopMusic(this.inst);
+                ;//stopMusic(this.inst);
             return done;
         }
 

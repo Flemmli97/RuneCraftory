@@ -16,6 +16,7 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.entity.Entity;
@@ -29,6 +30,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.function.BiConsumer;
 
 public class EntityUno extends BossMonster implements MobAttackExt {
@@ -87,6 +89,7 @@ public class EntityUno extends BossMonster implements MobAttackExt {
     private final AnimationHandler<EntityUno> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     private boolean reversedSwipe;
+    private UUID linkedID = Mth.createInsecureUUID();
 
     public EntityUno(EntityType<? extends EntityUno> type, Level world) {
         super(type, world);
@@ -99,6 +102,11 @@ public class EntityUno extends BossMonster implements MobAttackExt {
     public RunecraftoryBossbar createBossBar() {
         return new RunecraftoryBossbar(null, this.getDisplayName(), BossEvent.BossBarColor.YELLOW, BossEvent.BossBarOverlay.PROGRESS)
                 .setMusic(ModSounds.SANO_UNO_FIGHT.get());
+    }
+
+    public void linkUsing(UUID uuid) {
+        this.linkedID = uuid;
+        this.bossInfo.setMusicID(this.linkedID);
     }
 
     @Override

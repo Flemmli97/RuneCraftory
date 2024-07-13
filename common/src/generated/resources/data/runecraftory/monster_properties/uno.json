@@ -35,7 +35,7 @@
     "minecraft:generic.max_health": 280.0,
     "minecraft:generic.attack_damage": 14.0,
     "runecraftory:defence": 4.0,
-    "runecraftory:magic_attack": 20.0,
+    "runecraftory:magic_attack": 18.0,
     "runecraftory:magic_defence": 5.0,
     "runecraftory:res_earth": 15.0,
     "runecraftory:res_water": 15.0,

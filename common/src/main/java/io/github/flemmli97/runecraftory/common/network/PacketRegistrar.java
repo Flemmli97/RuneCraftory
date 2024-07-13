@@ -59,7 +59,8 @@ public class PacketRegistrar {
         register.registerMessage(id++, S2CSyncConfig.ID, S2CSyncConfig.class, S2CSyncConfig::write, S2CSyncConfig::read, S2CSyncConfig::handle);
         register.registerMessage(id++, S2CSpawnEggScreen.ID, S2CSpawnEggScreen.class, S2CSpawnEggScreen::write, S2CSpawnEggScreen::read, S2CSpawnEggScreen::handle);
         register.registerMessage(id++, S2CEntityLevelPkt.ID, S2CEntityLevelPkt.class, S2CEntityLevelPkt::write, S2CEntityLevelPkt::read, S2CEntityLevelPkt::handle);
-        register.registerMessage(id++, S2CBossbarInfo.ID, S2CBossbarInfo.class, S2CBossbarInfo::write, S2CBossbarInfo::read, S2CBossbarInfo::handle);
+        register.registerMessage(id++, S2CBossbarInfoAdd.ID, S2CBossbarInfoAdd.class, S2CBossbarInfoAdd::write, S2CBossbarInfoAdd::read, S2CBossbarInfoAdd::handle);
+        register.registerMessage(id++, S2CBossbarInfoRemove.ID, S2CBossbarInfoRemove.class, S2CBossbarInfoRemove::write, S2CBossbarInfoRemove::read, S2CBossbarInfoRemove::handle);
         register.registerMessage(id++, S2CBossbarMusicUpdate.ID, S2CBossbarMusicUpdate.class, S2CBossbarMusicUpdate::write, S2CBossbarMusicUpdate::read, S2CBossbarMusicUpdate::handle);
         return id;
     }

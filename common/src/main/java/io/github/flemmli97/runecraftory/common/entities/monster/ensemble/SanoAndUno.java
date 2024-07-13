@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityUno;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -14,6 +15,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Supplier;
 
 public class SanoAndUno extends EnsembleMonsters {
@@ -33,8 +35,10 @@ public class SanoAndUno extends EnsembleMonsters {
         Entity e = ModEntities.SANO.get().create(serverLevel, null, null, null, this.blockPosition()
                         .offset(off.rotate(this.rotation)),
                 MobSpawnType.SPAWNER, false, false);
+        UUID link = Mth.createInsecureUUID();
         if (e instanceof EntitySano sano) {
             sano.setLevel(this.monsterLevel);
+            sano.linkUsing(link);
             if (this.restrictRadius != -1)
                 sano.restrictTo(this.blockPosition(), this.restrictRadius);
             sano.setXRot(0);
@@ -49,6 +53,7 @@ public class SanoAndUno extends EnsembleMonsters {
                 MobSpawnType.SPAWNER, false, false);
         if (e instanceof EntityUno uno) {
             uno.setLevel(this.monsterLevel);
+            uno.linkUsing(link);
             if (this.restrictRadius != -1)
                 uno.restrictTo(this.blockPosition(), this.restrictRadius);
             uno.setXRot(0);

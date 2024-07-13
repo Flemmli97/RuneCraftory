@@ -17,6 +17,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.entity.Entity;
@@ -30,6 +32,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.function.BiConsumer;
 
 public class EntitySano extends BossMonster implements MobAttackExt {
@@ -89,7 +92,9 @@ public class EntitySano extends BossMonster implements MobAttackExt {
 
     public final AnimatedAttackGoal<EntitySano> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntitySano> animationHandler = new AnimationHandler<>(this, ANIMS);
+
     private Vec3 targetPos;
+    private UUID linkedID = Mth.createInsecureUUID();
 
     public EntitySano(EntityType<? extends EntitySano> type, Level world) {
         super(type, world);
@@ -104,9 +109,28 @@ public class EntitySano extends BossMonster implements MobAttackExt {
                 .setMusic(ModSounds.SANO_UNO_FIGHT.get());
     }
 
+    public void linkUsing(UUID uuid) {
+        this.linkedID = uuid;
+        this.bossInfo.setMusicID(this.linkedID);
+    }
+
     @Override
     protected PathNavigation createNavigation(Level level) {
         return new StaticNavigator(this, level);
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        if (this.linkedID != null)
+            compound.putUUID("LinkedID", this.linkedID);
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        if (compound.hasUUID("LinkedID"))
+            this.linkedID = compound.getUUID("LinkedID");
     }
 
     @Override
