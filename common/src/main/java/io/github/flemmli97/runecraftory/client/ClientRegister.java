@@ -420,6 +420,8 @@ public class ClientRegister {
         consumer.register(ModEntities.RAFFLESIA_FLOWER.get(), EmptyRender::new);
         consumer.register(ModEntities.RAFFLESIA_PITCHER.get(), EmptyRender::new);
 
+        consumer.register(ModEntities.SANO_AND_UNO.get(), EmptyRender::new);
+
         NPCFeatureRenderers.init();
     }
 

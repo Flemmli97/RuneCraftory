@@ -26,7 +26,6 @@ public class BlockCashRegister extends HorizontalDirectionalBlock {
     @Nullable
     public BlockState getStateForPlacement(BlockPlaceContext ctx) {
         return this.defaultBlockState().setValue(FACING, ctx.getHorizontalDirection());
-
     }
 
     @Override

@@ -1,8 +1,10 @@
 package io.github.flemmli97.runecraftory.common.blocks.tile;
 
 import io.github.flemmli97.runecraftory.api.datapack.EntityProperties;
+import io.github.flemmli97.runecraftory.common.blocks.BlockBossSpawner;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
-import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
+import io.github.flemmli97.runecraftory.common.entities.EnsembleMonsters;
+import io.github.flemmli97.runecraftory.common.entities.IBaseMob;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
@@ -25,6 +27,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
@@ -96,10 +99,21 @@ public class BossSpawnerBlockEntity extends BlockEntity {
             Entity e = this.savedEntity.create(this.level);
             if (e != null) {
                 this.lastUpdateDay = WorldUtils.day(this.level);
-                if (!this.level.getEntitiesOfClass(e.getClass(), new AABB(this.worldPosition).inflate(32)).isEmpty())
+                if (e instanceof EnsembleMonsters ensemble) {
+                    if (!ensemble.canSpawnerSpawn((ServerLevel) this.level, this.worldPosition, 32))
+                        return;
+                    ensemble.setLevel(LevelCalc.levelFromPos((ServerLevel) this.level, Vec3.atCenterOf(this.worldPosition), nearby));
+                    ensemble.setRestrictRadius(14);
+                    switch (this.getBlockState().getValue(BlockBossSpawner.FACING)) {
+                        case SOUTH -> ensemble.withDirection(Rotation.CLOCKWISE_180);
+                        case WEST -> ensemble.withDirection(Rotation.COUNTERCLOCKWISE_90);
+                        case EAST -> ensemble.withDirection(Rotation.CLOCKWISE_90);
+                        default -> ensemble.withDirection(Rotation.NONE);
+                    }
+                } else if (!this.level.getEntitiesOfClass(e.getClass(), new AABB(this.worldPosition).inflate(32)).isEmpty())
                     return;
-                if (e instanceof BaseMonster)
-                    ((BaseMonster) e).setLevel(LevelCalc.levelFromPos((ServerLevel) this.level, Vec3.atCenterOf(this.worldPosition), nearby));
+                if (e instanceof IBaseMob mob)
+                    mob.setLevel(LevelCalc.levelFromPos((ServerLevel) this.level, Vec3.atCenterOf(this.worldPosition), nearby));
                 e.moveTo(this.worldPosition.getX() + 0.5, this.worldPosition.getY() + 5, this.worldPosition.getZ() + 0.5, this.level.random.nextFloat() * 360.0F, 0.0F);
                 if (e instanceof Mob mob) {
                     mob.restrictTo(this.worldPosition, 14);

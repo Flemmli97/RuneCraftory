@@ -1,9 +1,11 @@
 package io.github.flemmli97.runecraftory.common.world.structure.processors;
 
 import com.mojang.serialization.Codec;
+import io.github.flemmli97.runecraftory.common.blocks.BlockBossSpawner;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.registry.ModStructures;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -65,7 +67,8 @@ public class BossSpawnerProcessor extends DataStructureBlockProcessor {
             if (!types.isEmpty())
                 entity = types.get(settings.getRandom(pos).nextInt(types.size()));
         }
-        BlockState state = ModBlocks.BOSS_SPAWNER.get().defaultBlockState();
+        BlockState state = ModBlocks.BOSS_SPAWNER.get().defaultBlockState()
+                .setValue(BlockBossSpawner.FACING, settings.getRotation().rotate(Direction.NORTH));
         CompoundTag tag = new CompoundTag();
         tag.putString("Entity", entity.toString());
         tag.putInt("LastUpdate", -1);

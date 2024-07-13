@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.common.items;
+package io.github.flemmli97.runecraftory.common.items.creative;
 
 import io.github.flemmli97.runecraftory.api.datapack.NPCData;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;

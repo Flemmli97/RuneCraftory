@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.common.items;
+package io.github.flemmli97.runecraftory.common.items.creative;
 
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityTreasureChest;
 import io.github.flemmli97.tenshilib.common.item.SpawnEgg;

@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.network;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.common.items.NPCSpawnEgg;
-import io.github.flemmli97.runecraftory.common.items.RuneCraftoryEggItem;
+import io.github.flemmli97.runecraftory.common.items.creative.NPCSpawnEgg;
+import io.github.flemmli97.runecraftory.common.items.creative.RuneCraftoryEggItem;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;

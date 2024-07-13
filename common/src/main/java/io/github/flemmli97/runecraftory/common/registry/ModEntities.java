@@ -128,12 +128,14 @@ import io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia.E
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia.EntityRafflesiaHorseTail;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia.EntityRafflesiaPart;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia.EntityRafflesiaPitcher;
+import io.github.flemmli97.runecraftory.common.entities.monster.ensemble.SanoAndUno;
 import io.github.flemmli97.runecraftory.common.entities.monster.wisp.EntityIgnis;
 import io.github.flemmli97.runecraftory.common.entities.monster.wisp.EntitySpirit;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.items.NPCSpawnEgg;
-import io.github.flemmli97.runecraftory.common.items.RuneCraftoryEggItem;
-import io.github.flemmli97.runecraftory.common.items.TreasureChestSpawnegg;
+import io.github.flemmli97.runecraftory.common.items.creative.EnsembleEggItem;
+import io.github.flemmli97.runecraftory.common.items.creative.NPCSpawnEgg;
+import io.github.flemmli97.runecraftory.common.items.creative.RuneCraftoryEggItem;
+import io.github.flemmli97.runecraftory.common.items.creative.TreasureChestSpawnegg;
 import io.github.flemmli97.runecraftory.common.lib.LibAdvancements;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -1349,6 +1351,7 @@ public class ModEntities {
                     .withLevelIncrease(15, 5)
                     .setMinLevel(50)
                     .withSpawnerPredicate(LibAdvancements.playerAdvancementCheck(LibAdvancements.MARIONETTA)));
+    public static final RegistryEntrySupplier<EntityType<SanoAndUno>> SANO_AND_UNO = regEnsemble(EntityType.Builder.of(SanoAndUno::new, MobCategory.MISC).noSummon().noSave().sized(0.01f, 0.01f), new ResourceLocation(RuneCraftory.MODID, "sano_and_uno"), 0xa18c4a, 0xa236d9);
     public static final RegistryEntrySupplier<EntityType<EntitySarcophagus>> SARCOPHAGUS = regBoss(EntityType.Builder.of(EntitySarcophagus::new, MobCategory.MONSTER).sized(1.1f, 3.5f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "sarcophagus"),
             0x482f27, 0xf3d07f,
             new EntityProperties.Builder()
@@ -1484,6 +1487,12 @@ public class ModEntities {
 
     public static <V extends Entity> RegistryEntrySupplier<EntityType<V>> reg(EntityType.Builder<V> v, ResourceLocation name) {
         return ENTITIES.register(name.getPath(), () -> v.build(name.getPath()));
+    }
+
+    public static <V extends Entity> RegistryEntrySupplier<EntityType<V>> regEnsemble(EntityType.Builder<V> v, ResourceLocation name, int primary, int secondary) {
+        RegistryEntrySupplier<EntityType<V>> reg = reg(v, name);
+        ModItems.ITEMS.register(name.getPath() + "_spawn_egg", () -> new EnsembleEggItem(reg, primary, secondary, new Item.Properties().tab(RFCreativeTabs.MONSTERS)));
+        return reg;
     }
 
     public static <V extends Mob> RegistryEntrySupplier<EntityType<V>> regWithEgg(EntityType.Builder<V> v, ResourceLocation name, int primary, int secondary) {

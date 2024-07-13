@@ -1,10 +1,12 @@
 package io.github.flemmli97.runecraftory.client.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import io.github.flemmli97.runecraftory.common.items.NPCSpawnEgg;
-import io.github.flemmli97.runecraftory.common.items.RuneCraftoryEggItem;
+import io.github.flemmli97.runecraftory.common.entities.EnsembleMonsters;
+import io.github.flemmli97.runecraftory.common.items.creative.NPCSpawnEgg;
+import io.github.flemmli97.runecraftory.common.items.creative.RuneCraftoryEggItem;
 import io.github.flemmli97.runecraftory.common.network.C2SSpawnEgg;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
 import net.minecraft.ResourceLocationException;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
@@ -14,6 +16,7 @@ import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -21,13 +24,17 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Supplier;
+
 public class SpawnEggScreen extends Screen {
 
     private final Player player;
-    protected LivingEntity entity;
+    protected List<LivingEntity> entities;
     private final InteractionHand hand;
     private int leftPos, topPos;
-    private final int sizeX = 200;
+    private final int sizeX = 240;
     private final int sizeY = 200;
 
     private EditBox levelEditor, npcIDEditor;
@@ -44,15 +51,25 @@ public class SpawnEggScreen extends Screen {
     protected void init() {
         super.init();
         ItemStack stack = this.player.getItemInHand(this.hand);
-        if (stack.getItem() instanceof RuneCraftoryEggItem egg) {
-            EntityType<?> type = egg.getType(stack.getTag());
-            Entity e = type.create(Minecraft.getInstance().level);
-            if (!(e instanceof LivingEntity living)) {
-                Minecraft.getInstance().setScreen(null);
-                return;
+        EntityType<?> type;
+        if (stack.getItem() instanceof SpawnEgg egg) {
+            type = egg.getType(stack.getTag());
+        } else {
+            Minecraft.getInstance().setScreen(null);
+            return;
+        }
+        Entity e = type.create(Minecraft.getInstance().level);
+        if (e instanceof EnsembleMonsters ensemble) {
+            List<LivingEntity> list = new ArrayList<>();
+            for (Supplier<? extends EntityType<?>> t : ensemble.entities()) {
+                Entity sub = t.get().create(Minecraft.getInstance().level);
+                if (sub instanceof LivingEntity livingSub) {
+                    list.add(livingSub);
+                }
             }
-            EntityType.updateCustomEntityTag(Minecraft.getInstance().level, null, living, stack.getTag());
-            this.entity = living;
+            this.entities = List.copyOf(list);
+        } else if (e instanceof LivingEntity living) {
+            this.entities = List.of(living);
         } else {
             Minecraft.getInstance().setScreen(null);
             return;
@@ -65,7 +82,7 @@ public class SpawnEggScreen extends Screen {
     @Override
     public void tick() {
         super.tick();
-        this.entity.tickCount++;
+        this.entities.forEach(entity -> entity.tickCount++);
     }
 
     @Override
@@ -80,14 +97,27 @@ public class SpawnEggScreen extends Screen {
             this.minecraft.font.draw(stack, new TranslatableComponent("runecraftory.gui.npc.id"), this.leftPos + xPadding, this.topPos + yOff, 0xffffff);
             this.npcIDEditor.render(stack, mouseX, mouseY, partialTick);
         }
-        float scale = 1;
-        if (this.entity.getBbWidth() > 1.2) {
-            scale = 2f / this.entity.getBbWidth();
+        int max = Math.min(4, this.entities.size());
+        double middle = (max - 1) / 2.;
+        for (int i = 0; i < max; i++) {
+            LivingEntity entity = this.entities.get(i);
+            float scale = 1;
+            if (entity.getBbWidth() > 1.2) {
+                scale = 2f / entity.getBbWidth();
+            }
+            if (entity.getBbHeight() > 1.6) {
+                scale = Math.min(scale, 2.4f / entity.getBbHeight());
+            }
+            int offset = Math.min(Math.abs(i - (int) middle), Math.abs(i - Mth.ceil(middle)));
+            scale *= (1 - offset * 0.2);
+            int posX = 160;
+            int posY = 100;
+            if (max > 1) {
+                posX += (int) ((i - middle) * 90 * scale);
+                posY -= offset * 15;
+            }
+            InventoryScreen.renderEntityInInventory(this.leftPos + posX, this.topPos + posY, (int) (29 * scale), this.leftPos + posX - mouseX, this.topPos + (posY - 35) - mouseY, entity);
         }
-        if (this.entity.getBbHeight() > 1.6) {
-            scale = Math.min(scale, 2.4f / this.entity.getBbHeight());
-        }
-        InventoryScreen.renderEntityInInventory(this.leftPos + 150, this.topPos + 100, (int) (29 * scale), this.leftPos + 150 - mouseX, this.topPos + 65 - mouseY, this.entity);
         super.render(stack, mouseX, mouseY, partialTick);
     }
 
