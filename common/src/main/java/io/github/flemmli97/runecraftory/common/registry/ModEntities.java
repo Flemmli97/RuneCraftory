@@ -67,6 +67,7 @@ import io.github.flemmli97.runecraftory.common.entities.misc.EntityWindGust;
 import io.github.flemmli97.runecraftory.common.entities.misc.RafflesiaBreathSummoner;
 import io.github.flemmli97.runecraftory.common.entities.misc.RafflesiaCircleSummoner;
 import io.github.flemmli97.runecraftory.common.entities.misc.RootSpikeSummoner;
+import io.github.flemmli97.runecraftory.common.entities.misc.SarcophagusTeleporter;
 import io.github.flemmli97.runecraftory.common.entities.misc.SporeCircleSummoner;
 import io.github.flemmli97.runecraftory.common.entities.misc.StarFallSummoner;
 import io.github.flemmli97.runecraftory.common.entities.misc.WindBladeBarrageSummoner;
@@ -128,7 +129,7 @@ import io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia.E
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia.EntityRafflesiaHorseTail;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia.EntityRafflesiaPart;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia.EntityRafflesiaPitcher;
-import io.github.flemmli97.runecraftory.common.entities.monster.ensemble.SanoAndUno;
+import io.github.flemmli97.runecraftory.common.entities.monster.ensemble.SanoAndUnoDuo;
 import io.github.flemmli97.runecraftory.common.entities.monster.wisp.EntityIgnis;
 import io.github.flemmli97.runecraftory.common.entities.monster.wisp.EntitySpirit;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
@@ -1351,7 +1352,7 @@ public class ModEntities {
                     .withLevelIncrease(15, 5)
                     .setMinLevel(50)
                     .withSpawnerPredicate(LibAdvancements.playerAdvancementCheck(LibAdvancements.MARIONETTA)));
-    public static final RegistryEntrySupplier<EntityType<SanoAndUno>> SANO_AND_UNO = regEnsemble(EntityType.Builder.of(SanoAndUno::new, MobCategory.MISC).noSummon().noSave().sized(0.01f, 0.01f), new ResourceLocation(RuneCraftory.MODID, "sano_and_uno"), 0xa18c4a, 0xa236d9);
+    public static final RegistryEntrySupplier<EntityType<SanoAndUnoDuo>> SANO_AND_UNO = regEnsemble(EntityType.Builder.of(SanoAndUnoDuo::new, MobCategory.MISC).noSummon().noSave().sized(0.01f, 0.01f), new ResourceLocation(RuneCraftory.MODID, "sano_and_uno"), 0xa18c4a, 0xa236d9);
     public static final RegistryEntrySupplier<EntityType<EntitySarcophagus>> SARCOPHAGUS = regBoss(EntityType.Builder.of(EntitySarcophagus::new, MobCategory.MONSTER).sized(1.1f, 3.5f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "sarcophagus"),
             0x482f27, 0xf3d07f,
             new EntityProperties.Builder()
@@ -1444,6 +1445,8 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<WindBladeBarrageSummoner>> WIND_BLADE_BARRAGE_SUMMONER = reg(EntityType.Builder.<WindBladeBarrageSummoner>of(WindBladeBarrageSummoner::new, MobCategory.MISC).sized(0.01f, 0.01f).noSummon().clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "wind_blade_barrage_summoner"));
     public static final RegistryEntrySupplier<EntityType<ElementalCircleSummoner>> ELEMENTAL_CIRCLE_SUMMONER = reg(EntityType.Builder.<ElementalCircleSummoner>of(ElementalCircleSummoner::new, MobCategory.MISC).sized(0.01f, 0.01f).noSummon().clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "elemental_circle_summoner"));
     public static final RegistryEntrySupplier<EntityType<StarFallSummoner>> STARFALL_SUMMONER = reg(EntityType.Builder.<StarFallSummoner>of(StarFallSummoner::new, MobCategory.MISC).sized(0.01f, 0.01f).noSummon().clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "star_fall_summoner"));
+
+    public static final RegistryEntrySupplier<EntityType<SarcophagusTeleporter>> SARCOPHAGUS_TELEPORTER = reg(EntityType.Builder.of(SarcophagusTeleporter::new, MobCategory.MISC).sized(1f, 1f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "sarcophagus_teleporter"));
 
     public static final RegistryEntrySupplier<EntityType<EntityCustomFishingHook>> FISHING_HOOK = reg(EntityType.Builder.<EntityCustomFishingHook>of(EntityCustomFishingHook::new, MobCategory.MISC).noSave().noSummon().sized(0.25f, 0.25f).clientTrackingRange(4).updateInterval(5), new ResourceLocation(RuneCraftory.MODID, "fishing_hook"));
 

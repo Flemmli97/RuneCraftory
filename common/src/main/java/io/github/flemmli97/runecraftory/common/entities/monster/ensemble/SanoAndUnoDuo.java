@@ -18,9 +18,9 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-public class SanoAndUno extends EnsembleMonsters {
+public class SanoAndUnoDuo extends EnsembleMonsters {
 
-    public SanoAndUno(EntityType<?> entityType, Level level) {
+    public SanoAndUnoDuo(EntityType<?> entityType, Level level) {
         super(entityType, level);
     }
 
@@ -31,7 +31,7 @@ public class SanoAndUno extends EnsembleMonsters {
 
     @Override
     public void spawnEntities(ServerLevel serverLevel) {
-        BlockPos off = new BlockPos(-6, 0, -3);
+        BlockPos off = new BlockPos(-5, 0, -4);
         Entity e = ModEntities.SANO.get().create(serverLevel, null, null, null, this.blockPosition()
                         .offset(off.rotate(this.rotation)),
                 MobSpawnType.SPAWNER, false, false);
@@ -47,7 +47,7 @@ public class SanoAndUno extends EnsembleMonsters {
             sano.yBodyRot = sano.getYRot();
             serverLevel.addFreshEntityWithPassengers(sano);
         }
-        off = new BlockPos(6, 0, -3);
+        off = new BlockPos(5, 0, -4);
         e = ModEntities.UNO.get().create(serverLevel, null, null, null, this.blockPosition()
                         .offset(off.rotate(this.rotation)),
                 MobSpawnType.SPAWNER, false, false);

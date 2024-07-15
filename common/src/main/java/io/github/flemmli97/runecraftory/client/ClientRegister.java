@@ -414,6 +414,7 @@ public class ClientRegister {
         consumer.register(ModEntities.STARFALL_SUMMONER.get(), EmptyRender::new);
 
         consumer.register(ModEntities.FISHING_HOOK.get(), CustomFishingHookRenderer::new);
+        consumer.register(ModEntities.SARCOPHAGUS_TELEPORTER.get(), EmptyRender::new);
 
         consumer.register(ModEntities.MULTIPART.get(), EmptyRender::new);
         consumer.register(ModEntities.RAFFLESIA_HORSETAIL.get(), EmptyRender::new);

@@ -51,11 +51,10 @@ public class BossSpawnerProcessor extends DataStructureBlockProcessor {
     @Override
     protected StructureTemplate.StructureBlockInfo handleDataMarker(String data, StructureTemplate.StructureBlockInfo origin, LevelReader level, StructurePlaceSettings settings) {
         String[] s = data.split("#");
-        int off = 0;
+        int off = -2;
         if (s.length != 1) {
             try {
                 off = Integer.parseInt(s[1]);
-
             } catch (NumberFormatException ignored) {
             }
         }

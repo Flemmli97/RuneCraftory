@@ -163,6 +163,8 @@ public class RunecraftoryTags {
     public static final TagKey<EntityType<?>> PLAINS_ARENA_BOSSES = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(RuneCraftory.MODID, "plains_arena_bosses"));
     public static final TagKey<EntityType<?>> DESERT_ARENA_BOSSES = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(RuneCraftory.MODID, "desert_arena_bosses"));
     public static final TagKey<EntityType<?>> NETHER_ARENA_BOSSES = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(RuneCraftory.MODID, "nether_arena_bosses"));
+    public static final TagKey<EntityType<?>> WIND_SHRINE_BOSSES = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(RuneCraftory.MODID, "wind_shrine_bosses"));
+    public static final TagKey<EntityType<?>> LEON_KARNAK_BOSSES = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(RuneCraftory.MODID, "leon_karnak_bosses"));
 
     public static final TagKey<EntityType<?>> HELD_WEAPON_EXEMPT = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(RuneCraftory.MODID, "held_weapon_exempt"));
 

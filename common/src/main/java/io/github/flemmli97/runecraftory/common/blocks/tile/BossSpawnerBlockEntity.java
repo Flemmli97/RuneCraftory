@@ -103,7 +103,7 @@ public class BossSpawnerBlockEntity extends BlockEntity {
                     if (!ensemble.canSpawnerSpawn((ServerLevel) this.level, this.worldPosition, 32))
                         return;
                     ensemble.setLevel(LevelCalc.levelFromPos((ServerLevel) this.level, Vec3.atCenterOf(this.worldPosition), nearby));
-                    ensemble.setRestrictRadius(14);
+                    ensemble.setRestrictRadius(13);
                     switch (this.getBlockState().getValue(BlockBossSpawner.FACING)) {
                         case SOUTH -> ensemble.withDirection(Rotation.CLOCKWISE_180);
                         case WEST -> ensemble.withDirection(Rotation.COUNTERCLOCKWISE_90);
@@ -116,7 +116,7 @@ public class BossSpawnerBlockEntity extends BlockEntity {
                     mob.setLevel(LevelCalc.levelFromPos((ServerLevel) this.level, Vec3.atCenterOf(this.worldPosition), nearby));
                 e.moveTo(this.worldPosition.getX() + 0.5, this.worldPosition.getY() + 5, this.worldPosition.getZ() + 0.5, this.level.random.nextFloat() * 360.0F, 0.0F);
                 if (e instanceof Mob mob) {
-                    mob.restrictTo(this.worldPosition, 14);
+                    mob.restrictTo(this.worldPosition, 13);
                     mob.finalizeSpawn((ServerLevelAccessor) this.level, this.level.getCurrentDifficultyAt(e.blockPosition()), MobSpawnType.SPAWNER, null, null);
                 }
                 this.level.addFreshEntity(e);
