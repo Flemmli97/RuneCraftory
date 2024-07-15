@@ -1,0 +1,11 @@
+{
+  "cooldown": 20,
+  "rpCost": 15,
+  "skillXP": {
+    "WATER": 8.0
+  },
+  "percentage": 0.0,
+  "skills": [
+    "WATER"
+  ]
+}
