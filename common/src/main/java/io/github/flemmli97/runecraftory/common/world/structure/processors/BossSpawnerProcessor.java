@@ -67,7 +67,8 @@ public class BossSpawnerProcessor extends DataStructureBlockProcessor {
                 entity = types.get(settings.getRandom(pos).nextInt(types.size()));
         }
         BlockState state = ModBlocks.BOSS_SPAWNER.get().defaultBlockState()
-                .setValue(BlockBossSpawner.FACING, settings.getRotation().rotate(Direction.NORTH));
+                .setValue(BlockBossSpawner.FACING, Direction.SOUTH)
+                .mirror(settings.getMirror()).rotate(settings.getRotation());
         CompoundTag tag = new CompoundTag();
         tag.putString("Entity", entity.toString());
         tag.putInt("LastUpdate", -1);

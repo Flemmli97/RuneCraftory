@@ -154,7 +154,11 @@ public class LangGen implements DataProvider {
         this.add(ModBlocks.SNOW.get(), "Snow");
 
         for (RegistryEntrySupplier<EntityType<?>> sup : ModEntities.ENTITIES.getEntries()) {
-            this.add(sup.get(), this.simpleTranslation(sup.getID()));
+            if (sup.get() == ModEntities.SARCOPHAGUS_TELEPORTER.get()) {
+                this.add(sup.get(), "Teleporter");
+            } else {
+                this.add(sup.get(), this.simpleTranslation(sup.getID()));
+            }
         }
 
         this.add(ModAttributes.HEALTHGAIN.get().getDescriptionId(), "HP");
@@ -761,6 +765,8 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.dependency.tooltips.npc.follow", "Party: %s");
         this.add("runecraftory.dependency.tooltips.barn.1", "Roof: %1$s - Size: %2$s");
         this.add("runecraftory.dependency.tooltips.barn.2", "Capacity: %1$s / %2$s");
+
+        this.add("runecraftory.coming.soon", "Coming Soon!");
     }
 
     private String simpleTranslation(ResourceLocation res) {

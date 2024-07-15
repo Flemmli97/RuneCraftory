@@ -2,12 +2,12 @@
   "structures": [
     {
       "weight": 1,
-      "structure": "runecraftory:forest_grove"
+      "structure": "runecraftory:leon_karnak"
     }
   ],
   "placement": {
-    "salt": 1224466880,
-    "spacing": 23,
+    "salt": 1224466887,
+    "spacing": 21,
     "separation": 8,
     "type": "minecraft:random_spread"
   }

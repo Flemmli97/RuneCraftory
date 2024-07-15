@@ -1,0 +1,10 @@
+{
+  "config": {
+    "size": 1,
+    "start_pool": "runecraftory:leon_karnak"
+  },
+  "biomes": "#c:is_peak",
+  "adapt_noise": true,
+  "spawn_overrides": {},
+  "type": "runecraftory:leon_karnak"
+}

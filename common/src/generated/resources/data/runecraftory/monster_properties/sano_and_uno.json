@@ -1,0 +1,25 @@
+{
+  "minLevel": 1,
+  "xp": 0,
+  "money": 0,
+  "tamingChance": 0.0,
+  "rideable": false,
+  "flying": false,
+  "size": 1,
+  "needsRoof": true,
+  "rideActionCosts": {
+    "command_1": {
+      "cost": 0.5,
+      "multiplier": true
+    }
+  },
+  "baseValues": {},
+  "levelGains": {},
+  "spawnerPredicate": {
+    "player": {
+      "advancements": {
+        "runecraftory:progression/path_4/marionetta": true
+      }
+    }
+  }
+}

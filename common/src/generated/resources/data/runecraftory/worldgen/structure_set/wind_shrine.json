@@ -2,13 +2,13 @@
   "structures": [
     {
       "weight": 1,
-      "structure": "runecraftory:forest_grove"
+      "structure": "runecraftory:wind_shrine"
     }
   ],
   "placement": {
-    "salt": 1224466880,
-    "spacing": 23,
-    "separation": 8,
+    "salt": 1224466886,
+    "spacing": 20,
+    "separation": 7,
     "type": "minecraft:random_spread"
   }
 }

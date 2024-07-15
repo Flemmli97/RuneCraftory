@@ -15,6 +15,14 @@
     "hidden": false,
     "background": "minecraft:textures/block/dirt.png"
   },
-  "criteria": {},
-  "requirements": []
+  "criteria": {
+    "dummy": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "dummy"
+    ]
+  ]
 }

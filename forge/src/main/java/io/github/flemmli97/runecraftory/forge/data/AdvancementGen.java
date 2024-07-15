@@ -27,6 +27,7 @@ import net.minecraft.advancements.FrameType;
 import net.minecraft.advancements.RequirementsStrategy;
 import net.minecraft.advancements.critereon.DamageSourcePredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.critereon.ImpossibleTrigger;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.KilledTrigger;
@@ -101,9 +102,10 @@ public class AdvancementGen implements DataProvider {
 
         Advancement rootProgression = Advancement.Builder.advancement().display(ModItems.SHORT_DAGGER.get(), new TranslatableComponent("runecraftory.advancements.progression.root.title"), new TranslatableComponent("runecraftory.advancements.progression.root.description"), new ResourceLocation("textures/block/dirt.png"), FrameType.TASK, false, false, false).addCriterion("crafting_table", InventoryChangeTrigger.TriggerInstance.hasItems(Blocks.CRAFTING_TABLE)).save(cons, LibAdvancements.ROOT_PROGRESSION.toString());
         Advancement.Builder builder = Advancement.Builder.advancement().display(SpawnEgg.fromType(ModEntities.WOOLY.get()).get(),
-                new TranslatableComponent("runecraftory.advancements.progression.boss.greater_demon.title"),
-                new TranslatableComponent("runecraftory.advancements.progression.boss.greater_demon.description"),
-                new ResourceLocation("textures/block/dirt.png"), FrameType.TASK, true, true, false);
+                        new TranslatableComponent("runecraftory.advancements.progression.boss.greater_demon.title"),
+                        new TranslatableComponent("runecraftory.advancements.progression.boss.greater_demon.description"),
+                        new ResourceLocation("textures/block/dirt.png"), FrameType.TASK, true, true, false)
+                .addCriterion("dummy", new ImpossibleTrigger.TriggerInstance());
         Advancement greater_demon = builder.save(cons, LibAdvancements.GREATER_DEMON.toString());
         Advancement chimera = bossProgression(ModEntities.CHIMERA, cons, LibAdvancements.CHIMERA, greater_demon);
         Advancement rafflesia = bossProgression(ModEntities.RAFFLESIA, cons, LibAdvancements.RAFFLESIA, chimera);

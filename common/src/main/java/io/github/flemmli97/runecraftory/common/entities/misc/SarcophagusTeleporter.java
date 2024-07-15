@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.entities.misc;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
+import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -72,7 +73,7 @@ public class SarcophagusTeleporter extends Entity {
     @Override
     public InteractionResult interact(Player player, InteractionHand hand) {
         if (!player.level.isClientSide && hand == InteractionHand.MAIN_HAND) {
-            player.sendMessage(new TranslatableComponent("runecraftory.coming.soon"), Util.NIL_UUID);
+            player.sendMessage(new TranslatableComponent("runecraftory.coming.soon").withStyle(ChatFormatting.DARK_RED), Util.NIL_UUID);
         }
         // TODO: teleport to boss room
         return super.interact(player, hand);

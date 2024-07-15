@@ -1,0 +1,15 @@
+{
+  "name": "runecraftory:leon_karnak",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "location": "runecraftory:leon_karnak",
+        "processors": "runecraftory:leon_karnak_processor",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

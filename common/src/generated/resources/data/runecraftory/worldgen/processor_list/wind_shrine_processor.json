@@ -1,0 +1,8 @@
+{
+  "processors": [
+    {
+      "boss": "#runecraftory:wind_shrine_bosses",
+      "processor_type": "runecraftory:boss_processor"
+    }
+  ]
+}

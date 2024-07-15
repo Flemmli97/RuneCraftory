@@ -43,30 +43,38 @@ public class MainWorldGenData implements DataProvider {
     @Override
     public void run(HashCache cache) {
         this.addBossStructure(ModStructures.FOREST_GROVE.getID(),
-                new RandomSpreadStructurePlacement(22, 8, RandomSpreadType.LINEAR, 1224466880),
+                new RandomSpreadStructurePlacement(23, 8, RandomSpreadType.LINEAR, 1224466880),
                 ModStructures.FOREST_GROVE.get(), BiomeTags.IS_FOREST, true,
                 this.simpleTag(RunecraftoryTags.FOREST_BOSSES));
         this.addBossStructure(ModStructures.WATER_RUINS.getID(),
-                new RandomSpreadStructurePlacement(32, 16, RandomSpreadType.LINEAR, 1224567480),
+                new RandomSpreadStructurePlacement(32, 16, RandomSpreadType.LINEAR, 1224466881),
                 ModStructures.WATER_RUINS.get(), BiomeTags.IS_OCEAN, true,
                 this.simpleTag(RunecraftoryTags.WATER_RUIN_BOSSES));
         this.addBossStructure(ModStructures.THEATER_RUINS.getID(),
-                new RandomSpreadStructurePlacement(21, 7, RandomSpreadType.LINEAR, 1226867120),
+                new RandomSpreadStructurePlacement(21, 7, RandomSpreadType.LINEAR, 1224466882),
                 ModStructures.THEATER_RUINS.get(), RunecraftoryTags.IS_SPOOKY, true,
                 new StructureProcessorList(List.of(new BossSpawnerProcessor(RunecraftoryTags.THEATER_RUIN_BOSSES),
                         WaterUnlogProcessor.INST)));
         this.addBossStructure(ModStructures.PLAINS_ARENA.getID(),
-                new RandomSpreadStructurePlacement(23, 7, RandomSpreadType.LINEAR, 1226867124),
+                new RandomSpreadStructurePlacement(24, 8, RandomSpreadType.LINEAR, 1224466883),
                 ModStructures.PLAINS_ARENA.get(), RunecraftoryTags.IS_PLAINS, true,
                 this.simpleTag(RunecraftoryTags.PLAINS_ARENA_BOSSES));
         this.addBossStructure(ModStructures.DESERT_ARENA.getID(),
-                new RandomSpreadStructurePlacement(23, 8, RandomSpreadType.LINEAR, 1274867120),
+                new RandomSpreadStructurePlacement(24, 8, RandomSpreadType.LINEAR, 1224466884),
                 ModStructures.DESERT_ARENA.get(), RunecraftoryTags.IS_SANDY, true,
                 this.simpleTag(RunecraftoryTags.DESERT_ARENA_BOSSES));
         this.addBossStructure(ModStructures.NETHER_ARENA.getID(),
-                new RandomSpreadStructurePlacement(20, 9, RandomSpreadType.LINEAR, 1226869984),
+                new RandomSpreadStructurePlacement(20, 9, RandomSpreadType.LINEAR, 1224466885),
                 ModStructures.NETHER_ARENA.get(), BiomeTags.IS_NETHER, true,
                 this.simpleTag(RunecraftoryTags.NETHER_ARENA_BOSSES));
+        this.addBossStructure(ModStructures.WIND_SHRINE.getID(),
+                new RandomSpreadStructurePlacement(20, 7, RandomSpreadType.LINEAR, 1224466886),
+                ModStructures.WIND_SHRINE.get(), RunecraftoryTags.IS_PEAK, true,
+                this.simpleTag(RunecraftoryTags.WIND_SHRINE_BOSSES));
+        this.addBossStructure(ModStructures.LEON_KARNAK.getID(),
+                new RandomSpreadStructurePlacement(21, 8, RandomSpreadType.LINEAR, 1224466887),
+                ModStructures.LEON_KARNAK.get(), RunecraftoryTags.IS_PEAK, true,
+                this.simpleTag(RunecraftoryTags.LEON_KARNAK_BOSSES));
         this.templatePoolGen.runExternal(cache);
         this.processorListGen.runExternal(cache);
         this.configuredStructureFeatureGen.runExternal(cache);

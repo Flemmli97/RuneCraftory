@@ -36,6 +36,8 @@ public class ModStructures {
     public static final RegistryEntrySupplier<StructureFeature<JigsawConfiguration>> PLAINS_ARENA = register("plains_arena", () -> new SurfaceJigsawStructure(JigsawConfiguration.CODEC));
     public static final RegistryEntrySupplier<StructureFeature<JigsawConfiguration>> DESERT_ARENA = register("desert_arena", () -> new SurfaceJigsawStructure(JigsawConfiguration.CODEC));
     public static final RegistryEntrySupplier<StructureFeature<JigsawConfiguration>> NETHER_ARENA = register("nether_arena", () -> new NetherJigsawStructure(JigsawConfiguration.CODEC, 40, 80));
+    public static final RegistryEntrySupplier<StructureFeature<JigsawConfiguration>> WIND_SHRINE = register("wind_shrine", () -> new SurfaceJigsawStructure(JigsawConfiguration.CODEC));
+    public static final RegistryEntrySupplier<StructureFeature<JigsawConfiguration>> LEON_KARNAK = register("leon_karnak", () -> new SurfaceJigsawStructure(JigsawConfiguration.CODEC));
 
     public static final RegistryEntrySupplier<StructureProcessorType<BossSpawnerProcessor>> BOSS_PROCESSOR = STRUCTURESPROCESSORS.register("boss_processor", () -> () -> BossSpawnerProcessor.CODEC);
     public static final RegistryEntrySupplier<StructureProcessorType<NPCDataProcessor>> NPC_PROCESSOR = STRUCTURESPROCESSORS.register("npc_processor", () -> () -> NPCDataProcessor.CODEC);

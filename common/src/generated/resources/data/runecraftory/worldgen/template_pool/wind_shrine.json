@@ -1,0 +1,15 @@
+{
+  "name": "runecraftory:wind_shrine",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "location": "runecraftory:wind_shrine",
+        "processors": "runecraftory:wind_shrine_processor",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

@@ -117,6 +117,8 @@ public abstract class EntitySanoUno extends BossMonster implements MobAttackExt 
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
+        if (source == DamageSource.IN_WALL)
+            return false;
         if (source == DamageSource.OUT_OF_WORLD && this.deathTime == this.maxDeathTime() - 1) {
             this.remove(RemovalReason.KILLED);
             return true;
