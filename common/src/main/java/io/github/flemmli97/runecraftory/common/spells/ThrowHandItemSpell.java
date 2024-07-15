@@ -20,7 +20,7 @@ public class ThrowHandItemSpell extends Spell {
         item.setItem(entity.getMainHandItem());
         item.setRotating(true);
         if (entity instanceof Mob mob && mob.getTarget() != null) {
-            item.shootAtEntity(mob.getTarget(), 1.2f, 7 - level.getDifficulty().getId() * 2, 0.2f);
+            item.shootAtEntity(mob.getTarget(), 1.2f, 7 - level.getDifficulty().getId() * 2);
         } else {
             item.shootFromRotation(entity, entity.getXRot() + 5, entity.getYRot(), 0.0F, 1.2f, 1.0F);
         }

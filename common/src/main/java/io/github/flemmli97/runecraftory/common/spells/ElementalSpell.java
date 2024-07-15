@@ -27,7 +27,7 @@ public class ElementalSpell extends Spell {
         flame.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.9f));
         if (this.element == EnumElement.DARK) {
             if (entity instanceof Mob mob && mob.getTarget() != null)
-                flame.shootAtEntity(mob.getTarget(), 0.05f, 0, 0, 0.2);
+                flame.shootAtEntity(mob.getTarget(), 0.05f, 0);
             else
                 flame.shoot(entity, entity.getXRot(), entity.getYRot(), 0, 0.05f, 0);
         } else {

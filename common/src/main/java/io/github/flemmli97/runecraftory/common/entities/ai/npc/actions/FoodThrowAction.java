@@ -76,7 +76,7 @@ public class FoodThrowAction implements NPCAction {
             EntityThrownItem entity = new EntityThrownItem(npc.level, npc);
             entity.setItem(stack);
             entity.setActAsFood(true);
-            entity.shootAtEntity(npc.followEntity(), 0.6f, 0, 0.2f);
+            entity.shootAtEntity(npc.followEntity(), 0.6f, 0);
             npc.level.addFreshEntity(entity);
             npc.getNavigation().stop();
             return true;

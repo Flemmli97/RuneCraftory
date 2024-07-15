@@ -31,9 +31,9 @@ public class EntityUno extends EntitySanoUno {
     private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntityUno>> ATTACK_HANDLER = createAnimationHandler(b -> {
         b.put(WATER_LASER, (anim, entity) -> {
             if (anim.isAtTick(15))
-                ModSpells.WATER_LASER.get().use(entity);
+                ModSpells.WATER_LASER_LONG.get().use(entity);
             if (anim.isAtTick(25))
-                ModSpells.PARALLEL_LASER.get().use(entity);
+                ModSpells.PARALLEL_LASER_LONG.get().use(entity);
         });
         b.put(WATER_LASER_2, (anim, entity) -> {
             if (anim.isAtTick(15)) {

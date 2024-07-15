@@ -27,7 +27,7 @@ public class BigLeafSpell extends Spell {
             leaf.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1.1f));
             float vel = i % 2 == 0 ? 1 : 0.7f;
             if (entity instanceof Mob mob && mob.getTarget() != null) {
-                leaf.shootAtEntity(mob.getTarget(), vel, 0, 0, 0);
+                leaf.shootAtEntity(mob.getTarget(), vel, 0);
             } else
                 leaf.shoot(entity, entity.getXRot(), entity.getYRot(), 0, vel, 0);
             leaf.setDiameter(i % 2 == 0 ? 4 : 7);

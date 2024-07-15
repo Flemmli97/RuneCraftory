@@ -42,6 +42,11 @@ public class EntityThrownItem extends BaseProjectile {
         this.getEntityData().define(ROTATING, false);
     }
 
+    @Override
+    public int livingTickMax() {
+        return 30;
+    }
+
     public void setItem(ItemStack stack) {
         this.entityData.set(STACK, Util.make(stack.copy(), itemStack -> itemStack.setCount(1)));
     }

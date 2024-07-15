@@ -25,7 +25,7 @@ public class EntitySmallRaccoonLeaf extends BaseProjectile {
 
     @Override
     public int livingTickMax() {
-        return 20;
+        return 18;
     }
 
     @Override

@@ -32,7 +32,7 @@ public class ExplosionSpell extends Spell {
         EntityExplosionSpell spell = new EntityExplosionSpell(level, entity);
         spell.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1.25f));
         if (entity instanceof Mob mob && mob.getTarget() != null) {
-            spell.shootAtEntity(mob.getTarget(), 1.3f, 0, 0);
+            spell.shootAtEntity(mob.getTarget(), 1.3f, 0);
         } else {
             spell.shootFromRotation(entity, entity.getXRot() + 5, entity.getYRot(), 0.0F, 1.5F, 1.0F);
         }

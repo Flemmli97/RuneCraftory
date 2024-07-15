@@ -18,7 +18,7 @@ public class PoisonNeedleSpell extends Spell {
         EntityPoisonNeedle projectile = new EntityPoisonNeedle(level, entity);
         projectile.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.8f));
         if (entity instanceof Mob mob && mob.getTarget() != null) {
-            projectile.shootAtEntity(mob.getTarget(), 1.2f, 4 - level.getDifficulty().getId(), 0);
+            projectile.shootAtEntity(mob.getTarget(), 1.2f, 4 - level.getDifficulty().getId());
         } else {
             projectile.shootFromRotation(entity, entity.getXRot() + 5, entity.getYRot(), 0.0F, 1.2F, 0.4F);
         }

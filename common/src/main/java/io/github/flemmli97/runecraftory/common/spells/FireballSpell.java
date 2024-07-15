@@ -27,7 +27,7 @@ public class FireballSpell extends Spell {
             return false;
         EntityFireball ball = new EntityFireball(level, entity, this.big);
         if (entity instanceof Mob mob && mob.getTarget() != null) {
-            ball.shootAtEntity(mob.getTarget(), 1, 0, 0.2f);
+            ball.shootAtEntity(mob.getTarget(), 1, 0);
         } else {
             ball.shoot(entity, entity.getXRot(), entity.getYRot(), 0, 1, 0);
         }

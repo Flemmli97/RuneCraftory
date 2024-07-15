@@ -64,6 +64,7 @@ import io.github.flemmli97.runecraftory.common.entities.misc.EntityTreasureChest
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityWaterLaser;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityWindBlade;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityWindGust;
+import io.github.flemmli97.runecraftory.common.entities.misc.FireWallSummoner;
 import io.github.flemmli97.runecraftory.common.entities.misc.RafflesiaBreathSummoner;
 import io.github.flemmli97.runecraftory.common.entities.misc.RafflesiaCircleSummoner;
 import io.github.flemmli97.runecraftory.common.entities.misc.RootSpikeSummoner;
@@ -1443,6 +1444,7 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<RafflesiaCircleSummoner>> RAFFLESIA_CIRCLE_SUMMONER = reg(EntityType.Builder.<RafflesiaCircleSummoner>of(RafflesiaCircleSummoner::new, MobCategory.MISC).sized(0.01f, 0.01f).noSummon().clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "rafflesia_circle_summoner"));
     public static final RegistryEntrySupplier<EntityType<BlazeBarrageSummoner>> BLAZE_BARRAGE = reg(EntityType.Builder.<BlazeBarrageSummoner>of(BlazeBarrageSummoner::new, MobCategory.MISC).sized(0.01f, 0.01f).noSummon().clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "blaze_barrage"));
     public static final RegistryEntrySupplier<EntityType<WindBladeBarrageSummoner>> WIND_BLADE_BARRAGE_SUMMONER = reg(EntityType.Builder.<WindBladeBarrageSummoner>of(WindBladeBarrageSummoner::new, MobCategory.MISC).sized(0.01f, 0.01f).noSummon().clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "wind_blade_barrage_summoner"));
+    public static final RegistryEntrySupplier<EntityType<FireWallSummoner>> FIRE_WALL_SUMMONER = reg(EntityType.Builder.<FireWallSummoner>of(FireWallSummoner::new, MobCategory.MISC).sized(0.01f, 0.01f).noSummon().clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "fire_wall_summoner"));
     public static final RegistryEntrySupplier<EntityType<ElementalCircleSummoner>> ELEMENTAL_CIRCLE_SUMMONER = reg(EntityType.Builder.<ElementalCircleSummoner>of(ElementalCircleSummoner::new, MobCategory.MISC).sized(0.01f, 0.01f).noSummon().clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "elemental_circle_summoner"));
     public static final RegistryEntrySupplier<EntityType<StarFallSummoner>> STARFALL_SUMMONER = reg(EntityType.Builder.<StarFallSummoner>of(StarFallSummoner::new, MobCategory.MISC).sized(0.01f, 0.01f).noSummon().clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "star_fall_summoner"));
 

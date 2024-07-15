@@ -31,7 +31,7 @@ public class SanoAndUnoDuo extends EnsembleMonsters {
 
     @Override
     public void spawnEntities(ServerLevel serverLevel) {
-        BlockPos off = new BlockPos(-5, 0, 4);
+        BlockPos off = new BlockPos(5, 0, 4);
         Entity e = ModEntities.SANO.get().create(serverLevel, null, null, null, this.blockPosition()
                         .offset(off.rotate(this.rotation)),
                 MobSpawnType.SPAWNER, false, false);
@@ -42,12 +42,12 @@ public class SanoAndUnoDuo extends EnsembleMonsters {
             if (this.restrictRadius != -1)
                 sano.restrictTo(this.blockPosition(), this.restrictRadius);
             sano.setXRot(0);
-            sano.setYRot(this.rotation.rotate(225, 360));
+            sano.setYRot(this.rotation.rotate(135, 360));
             sano.yHeadRot = sano.getYRot();
             sano.yBodyRot = sano.getYRot();
             serverLevel.addFreshEntityWithPassengers(sano);
         }
-        off = new BlockPos(5, 0, 4);
+        off = new BlockPos(-5, 0, 4);
         e = ModEntities.UNO.get().create(serverLevel, null, null, null, this.blockPosition()
                         .offset(off.rotate(this.rotation)),
                 MobSpawnType.SPAWNER, false, false);
@@ -57,7 +57,7 @@ public class SanoAndUnoDuo extends EnsembleMonsters {
             if (this.restrictRadius != -1)
                 uno.restrictTo(this.blockPosition(), this.restrictRadius);
             uno.setXRot(0);
-            uno.setYRot(this.rotation.rotate(135, 360));
+            uno.setYRot(this.rotation.rotate(225, 360));
             uno.yHeadRot = uno.getYRot();
             uno.yBodyRot = uno.getYRot();
             serverLevel.addFreshEntityWithPassengers(uno);

@@ -18,7 +18,7 @@ public class BigLightningBoltSpell extends Spell {
         EntityThiccLightningBolt bolt = new EntityThiccLightningBolt(level, entity);
         bolt.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.95f));
         if (entity instanceof Mob mob && mob.getTarget() != null) {
-            bolt.shootAtEntity(mob.getTarget(), 0.2f, 0, 0);
+            bolt.shootAtEntity(mob.getTarget(), 0.2f, 0);
         } else
             bolt.shoot(entity, 17, entity.getYRot(), 0, 0.2f, 0);
         level.addFreshEntity(bolt);

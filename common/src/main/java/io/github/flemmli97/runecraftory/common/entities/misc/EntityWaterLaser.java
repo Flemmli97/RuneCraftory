@@ -33,6 +33,7 @@ public class EntityWaterLaser extends BaseBeam {
     private static final EntityDataAccessor<Integer> MAX_LIVING_TICK = SynchedEntityData.defineId(EntityWaterLaser.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Float> YAW_OFFSET = SynchedEntityData.defineId(EntityWaterLaser.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Float> POSITION_YAW_OFFSET = SynchedEntityData.defineId(EntityWaterLaser.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Float> RANGE = SynchedEntityData.defineId(EntityWaterLaser.class, EntityDataSerializers.FLOAT);
 
     private final Object2IntMap<Entity> hitEntities = new Object2IntOpenHashMap<>();
     private float accumulatedRot;
@@ -73,9 +74,13 @@ public class EntityWaterLaser extends BaseBeam {
         this.other = other;
     }
 
+    public void setRange(float range) {
+        this.entityData.set(RANGE, range);
+    }
+
     @Override
     public float getRange() {
-        return 9;
+        return this.entityData.get(RANGE);
     }
 
     @Override
@@ -121,6 +126,7 @@ public class EntityWaterLaser extends BaseBeam {
         this.entityData.define(MAX_LIVING_TICK, 20);
         this.entityData.define(YAW_OFFSET, 0f);
         this.entityData.define(POSITION_YAW_OFFSET, 0f);
+        this.entityData.define(RANGE, 9f);
     }
 
     @Override
@@ -179,11 +185,13 @@ public class EntityWaterLaser extends BaseBeam {
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.entityData.set(YAW_OFFSET, compound.getFloat("YawOffset"));
+        this.entityData.set(RANGE, compound.getFloat("Range"));
     }
 
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putFloat("YawOffset", this.entityData.get(YAW_OFFSET));
+        compound.putFloat("Float", this.entityData.get(RANGE));
     }
 }

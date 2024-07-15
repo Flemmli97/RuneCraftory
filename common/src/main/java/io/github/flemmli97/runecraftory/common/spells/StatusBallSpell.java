@@ -25,7 +25,7 @@ public class StatusBallSpell extends Spell {
         ball.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.9f));
         ball.setPos(entity.getX(), entity.getY() + 0.4, entity.getZ());
         if (entity instanceof Mob mob && mob.getTarget() != null) {
-            ball.shootAtEntity(mob.getTarget(), 0.13f, 7 - level.getDifficulty().getId() * 2, 0.1f);
+            ball.shootAtEntity(mob.getTarget(), 0.13f, 7 - level.getDifficulty().getId() * 2);
         } else {
             ball.shootFromRotation(entity, entity.getXRot() + 5, entity.getYRot(), 0.0F, 0.13f, 1.0F);
         }

@@ -24,8 +24,6 @@ public class BlazeBarrageSummoner extends ProjectileSummonHelperEntity {
     protected void summonProjectiles() {
         if (this.ticksExisted % 5 == 0) {
             LivingEntity owner = this.getOwner();
-            if (owner == null)
-                return;
             Vec3 look;
             if (owner instanceof Mob mob && mob.getTarget() != null)
                 look = new Vec3(mob.getTarget().getX() - owner.getX(), mob.getTarget().getY() - owner.getY(), mob.getTarget().getZ() - owner.getZ()).normalize();

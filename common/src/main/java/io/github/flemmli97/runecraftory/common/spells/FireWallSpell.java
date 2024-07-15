@@ -26,8 +26,8 @@ public class FireWallSpell extends Spell {
         } else if (entity instanceof Mob mob && mob.getTarget() != null) {
             wall.setTarget(mob.getTarget().position().x, mob.getTarget().position().y, mob.getTarget().position().z);
         } else {
-            Vec3 look = entity.getLookAngle().scale(10);
-            wall.setTarget(look.x, look.y, look.z);
+            Vec3 target = entity.position().add(entity.getLookAngle().scale(10));
+            wall.setTarget(target.x, target.y, target.z);
         }
         wall.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.85f));
         level.addFreshEntity(wall);

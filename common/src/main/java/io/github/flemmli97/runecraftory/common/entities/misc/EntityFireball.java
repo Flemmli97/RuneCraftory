@@ -35,7 +35,7 @@ public class EntityFireball extends BaseProjectile {
 
     @Override
     public int livingTickMax() {
-        return 200;
+        return 30;
     }
 
     @Override

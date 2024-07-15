@@ -17,6 +17,12 @@ import net.minecraft.world.phys.Vec3;
 
 public class WaterLaserSpell extends Spell {
 
+    private final float range;
+
+    public WaterLaserSpell(float range) {
+        this.range = range;
+    }
+
     @Override
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         if (!Spell.tryUseWithCost(entity, stack, this))
@@ -24,6 +30,7 @@ public class WaterLaserSpell extends Spell {
         EntityWaterLaser laser = new EntityWaterLaser(level, entity);
         laser.setMaxTicks(entity instanceof Player ? PlayerModelAnimations.WATER_LASER_ONE.getLength() : 15);
         laser.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.95f));
+        laser.setRange(this.range);
         if (entity instanceof Mob mob) {
             Vec3 delayedPos;
             if (entity instanceof MobAttackExt attacker && (delayedPos = attacker.targetPosition(laser.position())) != null) {

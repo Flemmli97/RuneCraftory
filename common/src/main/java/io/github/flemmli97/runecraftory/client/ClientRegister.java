@@ -410,6 +410,7 @@ public class ClientRegister {
         consumer.register(ModEntities.RAFFLESIA_CIRCLE_SUMMONER.get(), EmptyRender::new);
         consumer.register(ModEntities.BLAZE_BARRAGE.get(), EmptyRender::new);
         consumer.register(ModEntities.WIND_BLADE_BARRAGE_SUMMONER.get(), EmptyRender::new);
+        consumer.register(ModEntities.FIRE_WALL_SUMMONER.get(), EmptyRender::new);
         consumer.register(ModEntities.ELEMENTAL_CIRCLE_SUMMONER.get(), EmptyRender::new);
         consumer.register(ModEntities.STARFALL_SUMMONER.get(), EmptyRender::new);
 

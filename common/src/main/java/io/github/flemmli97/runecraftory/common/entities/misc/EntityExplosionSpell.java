@@ -38,7 +38,7 @@ public class EntityExplosionSpell extends BaseProjectile {
 
     @Override
     public int livingTickMax() {
-        return 200;
+        return 15;
     }
 
     @Override

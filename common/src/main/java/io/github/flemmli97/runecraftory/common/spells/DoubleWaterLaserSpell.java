@@ -21,6 +21,12 @@ import java.util.UUID;
 
 public class DoubleWaterLaserSpell extends Spell {
 
+    private final float range;
+
+    public DoubleWaterLaserSpell(float range) {
+        this.range = range;
+    }
+
     @Override
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         if (!Spell.tryUseWithCost(entity, stack, this))
@@ -40,6 +46,7 @@ public class DoubleWaterLaserSpell extends Spell {
             if (i == 0)
                 other = laser.getUUID();
             else laser.setTwinId(other);
+            laser.setRange(this.range);
             laser.setPos(laser.getX() + vec.x(), laser.getY() + vec.y(), laser.getZ() + vec.z());
             laser.setMaxTicks(entity instanceof Player ? PlayerModelAnimations.WATER_LASER_TWO.getLength() : 15);
             laser.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1.1f));

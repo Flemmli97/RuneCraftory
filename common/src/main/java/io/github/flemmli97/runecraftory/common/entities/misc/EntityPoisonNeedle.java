@@ -23,7 +23,7 @@ public class EntityPoisonNeedle extends BaseProjectile {
 
     @Override
     public int livingTickMax() {
-        return 100;
+        return 50;
     }
 
     @Override

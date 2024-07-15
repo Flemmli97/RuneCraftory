@@ -7,6 +7,7 @@ import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.common.entity.EntityProjectile;
+import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -41,10 +42,10 @@ public class EntityElementalTrail extends BaseDamageCloud {
         this.setRadius(0.5f);
     }
 
-    public void shootAtEntity(Entity target, float velocity, float inaccuracy, float yOffsetModifier, double heighMod) {
-        Vec3 dir = (new Vec3(target.getX() - this.getX(), target.getY(heighMod) - this.getY(), target.getZ() - this.getZ()));
-        double l = Math.sqrt(dir.x * dir.x + dir.z * dir.z);
-        this.shoot(dir.x, dir.y + l * yOffsetModifier, dir.z, velocity, inaccuracy);
+    public void shootAtEntity(Entity target, float velocity, float inaccuracy) {
+        Vec3 targetPos = EntityUtil.getStraightProjectileTarget(this.position(), target);
+        Vec3 dir = (new Vec3(targetPos.x() - this.getX(), targetPos.y() - this.getY(), targetPos.z() - this.getZ()));
+        this.shoot(dir.x, dir.y, dir.z, velocity, inaccuracy);
     }
 
     public void shoot(Entity entityThrower, float rotationPitchIn, float rotationYawIn, float pitchOffset, float velocity, float inaccuracy) {

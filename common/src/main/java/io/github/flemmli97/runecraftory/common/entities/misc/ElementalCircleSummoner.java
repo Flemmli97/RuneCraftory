@@ -40,7 +40,7 @@ public class ElementalCircleSummoner extends ProjectileSummonHelperEntity {
                 EntityElementalTrail proj = new EntityElementalTrail(this.level, this.getOwner(), this.element);
                 proj.setDamageMultiplier(this.damageMultiplier);
                 proj.shoot(this, 0, rot, 0, 0.32f, 0);
-                proj.withMaxLiving(45);
+                proj.withMaxLiving(40);
                 double y = this.getY();
                 if (this.element == EnumElement.WATER || this.element == EnumElement.EARTH)
                     y -= 0.5;

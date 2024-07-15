@@ -25,7 +25,7 @@ public class PowerWaveSpell extends WeaponSpell {
             wave.setPos(wave.getX(), entity.getY() + entity.getBbHeight() * 0.1, wave.getZ());
             wave.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.75f));
             if (entity instanceof Mob mob && mob.getTarget() != null) {
-                wave.shootAtEntity(mob.getTarget(), 0.9f, 0, 0);
+                wave.shootAtEntity(mob.getTarget(), 0.9f, 0);
             } else {
                 Vec3 dir = entity.getEyePosition().add(Vec3.directionFromRotation(entity.getXRot() + 5, entity.getYRot()).scale(10));
                 wave.shootAtPosition(dir.x(), dir.y(), dir.z(), 0.9f, 0);

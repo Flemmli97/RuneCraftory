@@ -18,7 +18,7 @@ public class StoneThrowSpell extends Spell {
         EntityStone stone = new EntityStone(level, entity);
         stone.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.95f));
         if (entity instanceof Mob mob && mob.getTarget() != null) {
-            stone.shootAtEntity(mob.getTarget(), 1.3f, 7 - level.getDifficulty().getId() * 2, 0.2f);
+            stone.shootAtEntity(mob.getTarget(), 1.3f, 7 - level.getDifficulty().getId() * 2);
         } else {
             stone.shootFromRotation(entity, entity.getXRot() + 5, entity.getYRot(), 0.0F, 1.5F, 1.0F);
         }

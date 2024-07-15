@@ -53,8 +53,8 @@ public class EntitySano extends EntitySanoUno {
         });
         b.put(FIRE_BREATH, (anim, entity) -> {
             if (anim.isAtTick(15) || anim.isAtTick(25)) {
-                Vec3 dir = entity.getTarget() != null ? EntityUtils.getStraightProjectileTarget(entity.position(), entity.getTarget()).subtract(entity.position()).normalize() : entity.getLookAngle();
-                dir = dir.scale(10).add(entity.random.nextDouble() * 3, 0, entity.random.nextDouble() * 3);
+                Vec3 dir = entity.getTarget() != null ? EntityUtils.getStraightProjectileTarget(entity.position().add(0, entity.getEyeHeight() - 0.1 - entity.getBbHeight() * 0.2, 0), entity.getTarget()).subtract(entity.position()).normalize() : entity.getLookAngle();
+                dir = dir.scale(10).add(entity.random.nextGaussian() * 2.3, -Math.abs(entity.random.nextGaussian()) * 0.6, entity.random.nextGaussian() * 2.3);
                 entity.targetPos = entity.position().add(dir);
                 ModSpells.FIRE_WALL.get().use(entity);
             }

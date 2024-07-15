@@ -52,7 +52,7 @@ public class EntityWindBlade extends BaseProjectile {
 
     @Override
     public int livingTickMax() {
-        return this.isPiercing() ? 80 : 30;
+        return this.isPiercing() ? 60 : 30;
     }
 
     @Override

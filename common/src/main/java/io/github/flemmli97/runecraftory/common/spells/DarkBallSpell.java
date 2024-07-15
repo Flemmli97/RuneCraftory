@@ -25,7 +25,7 @@ public class DarkBallSpell extends Spell {
         ball.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this.type == EntityDarkBall.Type.BALL ? 1 : 0.9f));
         float vel = this.type == EntityDarkBall.Type.BALL ? 0.09f : 0.23f;
         if (entity instanceof Mob mob && mob.getTarget() != null) {
-            ball.shootAtEntity(mob.getTarget(), vel * 1.3f, 0, 0.2f, 0.3);
+            ball.shootAtEntity(mob.getTarget(), vel * 1.3f, 0);
         } else
             ball.shoot(entity, entity.getXRot(), entity.getYRot(), 0, vel, 0);
         level.addFreshEntity(ball);

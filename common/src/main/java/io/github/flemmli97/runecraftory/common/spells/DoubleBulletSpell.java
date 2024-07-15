@@ -21,8 +21,8 @@ public class DoubleBulletSpell extends Spell {
         bullet2.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.8f));
         bullet2.reverseMovement();
         if (entity instanceof Mob mob && mob.getTarget() != null) {
-            bullet.shootAtEntity(mob.getTarget(), 0.3f, 7 - level.getDifficulty().getId() * 2, 0);
-            bullet2.shootAtEntity(mob.getTarget(), 0.3f, 7 - level.getDifficulty().getId() * 2, 0);
+            bullet.shootAtEntity(mob.getTarget(), 0.3f, 7 - level.getDifficulty().getId() * 2);
+            bullet2.shootAtEntity(mob.getTarget(), 0.3f, 7 - level.getDifficulty().getId() * 2);
         } else {
             bullet.shootFromRotation(entity, entity.getXRot() + 5, entity.getYRot(), 0.0F, 0.3f, 1.0F);
             bullet2.shootFromRotation(entity, entity.getXRot() + 5, entity.getYRot(), 0.0F, 0.3f, 1.0F);

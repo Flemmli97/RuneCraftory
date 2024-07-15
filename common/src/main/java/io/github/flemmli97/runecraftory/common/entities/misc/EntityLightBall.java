@@ -69,7 +69,7 @@ public class EntityLightBall extends BaseDamageCloud {
     @Override
     public int livingTickMax() {
         return switch (this.lightType) {
-            case EXPAND -> 40;
+            case EXPAND -> 30;
             case PIERCING_SHORT -> 140;
             case PIERCING_LONG -> 240;
             case LONG, FRONT -> 144000;
