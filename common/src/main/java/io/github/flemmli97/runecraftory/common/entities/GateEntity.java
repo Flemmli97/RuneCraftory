@@ -367,7 +367,8 @@ public class GateEntity extends Mob implements IBaseMob {
         return false;
     }
 
-    protected float reduceDamage(DamageSource damageSrc, float damageAmount) {
+    @Override
+    protected float getDamageAfterArmorAbsorb(DamageSource damageSrc, float damageAmount) {
         float reduce = 0.0f;
         if (!damageSrc.isBypassMagic() && !damageSrc.isBypassArmor()) {
             if (damageSrc.isMagic()) {
@@ -377,7 +378,7 @@ public class GateEntity extends Mob implements IBaseMob {
             }
         }
         float min = reduce > damageAmount * 2 ? 0 : 0.5f;
-        return Math.max(min, damageAmount - reduce);
+        return super.getDamageAfterArmorAbsorb(damageSrc, Math.max(min, damageAmount - reduce));
     }
 
     @Override
@@ -400,23 +401,6 @@ public class GateEntity extends Mob implements IBaseMob {
 
     @Override
     public void knockback(double strength, double x, double z) {
-    }
-
-    @Override
-    protected void actuallyHurt(DamageSource damageSrc, float damageAmount) {
-        super.actuallyHurt(damageSrc, damageAmount);
-        if (!this.isInvulnerableTo(damageSrc)) {
-            damageAmount = Platform.INSTANCE.onLivingHurt(this, damageSrc, damageAmount);
-            if (damageAmount <= 0.0f) {
-                return;
-            }
-            damageAmount = this.reduceDamage(damageSrc, damageAmount);
-            if (damageAmount != 0.0f) {
-                float f1 = this.getHealth();
-                this.setHealth(f1 - damageAmount);
-                this.getCombatTracker().recordDamage(damageSrc, f1, damageAmount);
-            }
-        }
     }
 
     @Override
