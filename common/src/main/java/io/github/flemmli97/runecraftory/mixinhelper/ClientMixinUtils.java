@@ -171,6 +171,8 @@ public class ClientMixinUtils {
             if (data != null && data.getWeaponHandler().getCurrentAnim() != null) {
                 if (leftHand == (livingEntity.getMainArm() == HumanoidArm.RIGHT))
                     return true;
+                transformType = transformType == ItemTransforms.TransformType.FIRST_PERSON_LEFT_HAND ?
+                        ItemTransforms.TransformType.THIRD_PERSON_LEFT_HAND : ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND;
                 poseStack.popPose();
                 poseStack.pushPose();
                 poseStack.scale(-1.0f, -1.0f, 1.0f);
