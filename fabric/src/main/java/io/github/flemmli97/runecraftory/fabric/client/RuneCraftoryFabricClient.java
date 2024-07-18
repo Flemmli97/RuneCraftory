@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.client.BossBarTracker;
 import io.github.flemmli97.runecraftory.client.ClientCalls;
 import io.github.flemmli97.runecraftory.client.ClientFarmlandHandler;
 import io.github.flemmli97.runecraftory.client.ClientRegister;
+import io.github.flemmli97.runecraftory.client.render.RunecraftoryShaders;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.fabric.config.ClientConfigSpec;
 import io.github.flemmli97.runecraftory.fabric.config.ConfigHolder;
@@ -17,6 +18,7 @@ import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.CoreShaderRegistrationCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRenderEvents;
@@ -81,6 +83,7 @@ public class RuneCraftoryFabricClient implements ClientModInitializer {
                 ArmorRendererRegistryImpl.register(new ArmorRendererImpl(r, new ResourceLocation(e.getID().getNamespace(), "textures/models/armor/" + e.getID().getPath() + ".png")), e.get());
         });
         ClientChunkEvents.CHUNK_UNLOAD.register(((world, chunk) -> ClientFarmlandHandler.INSTANCE.onChunkUnLoad(chunk.getPos())));
+        CoreShaderRegistrationCallback.EVENT.register(reg -> RunecraftoryShaders.registerShader(reg::register));
         BossBarTracker.register();
     }
 }

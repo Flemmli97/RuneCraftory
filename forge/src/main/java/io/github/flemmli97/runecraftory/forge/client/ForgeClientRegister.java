@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.forge.client;
 
 import io.github.flemmli97.runecraftory.client.ClientRegister;
+import io.github.flemmli97.runecraftory.client.render.RunecraftoryShaders;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.gui.screens.Screen;
@@ -9,6 +10,7 @@ import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
@@ -18,6 +20,7 @@ import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
+import net.minecraftforge.client.event.RegisterShadersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
@@ -65,5 +68,11 @@ public class ForgeClientRegister {
                 manager.register(type, provider::apply);
             }
         });
+    }
+
+    @SubscribeEvent
+    public static void registerShader(RegisterShadersEvent event) {
+        RunecraftoryShaders.registerShader(((id, vertexFormat, onLoad) ->
+                event.registerShader(new ShaderInstance(event.getResourceManager(), id, vertexFormat), onLoad)));
     }
 }
