@@ -71,6 +71,35 @@ public class VortexParticle extends TextureSheetParticle {
         return ParticleRenderTypes.TRANSLUCENTADD;
     }
 
+
+    @Override
+    protected float getU0() {
+        float u0 = super.getU0();
+        float u1 = super.getU1();
+        return u0 + (u1 - u0) * 0.125f;
+    }
+
+    @Override
+    protected float getU1() {
+        float u0 = super.getU0();
+        float u1 = super.getU1();
+        return u1 - (u1 - u0) * 0.125f;
+    }
+
+    @Override
+    protected float getV0() {
+        float v0 = super.getV0();
+        float v1 = super.getV1();
+        return v0 + (v1 - v0) * 0.125f;
+    }
+
+    @Override
+    protected float getV1() {
+        float v0 = super.getV0();
+        float v1 = super.getV1();
+        return v1 - (v1 - v0) * 0.125f;
+    }
+
     @Override
     public void render(VertexConsumer buffer, Camera renderInfo, float partialTicks) {
         Vec3 vector3d = renderInfo.getPosition();
