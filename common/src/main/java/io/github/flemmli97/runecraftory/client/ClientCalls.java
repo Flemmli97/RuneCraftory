@@ -36,7 +36,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.player.Input;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -279,10 +278,12 @@ public class ClientCalls {
                 }
             }
         });
-        if (entity instanceof LocalPlayer player && entity.getVehicle() instanceof BaseMonster && player.input.jumping)
-            Platform.INSTANCE.sendToServer(new C2SRideJump());
-        if (entity == Minecraft.getInstance().cameraEntity) {
+        if (entity == Minecraft.getInstance().player) {
             ShakeHandler.shakeTick--;
+            if (entity.getVehicle() instanceof BaseMonster && Minecraft.getInstance().player.input.jumping)
+                Platform.INSTANCE.sendToServer(new C2SRideJump());
+        }
+        if (entity == Minecraft.getInstance().cameraEntity) {
             if (ClientHandlers.CLIENT_CALENDAR.currentWeather() == EnumWeather.RUNEY) {
                 int tries = Minecraft.getInstance().options.particles != ParticleStatus.ALL ? 1 : 2;
                 for (int i = 0; i < tries; i++)
