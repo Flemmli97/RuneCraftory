@@ -23,7 +23,7 @@ public class StarFallSummoner extends ProjectileSummonHelperEntity {
     @Override
     protected void summonProjectiles() {
         if (this.tickCount % 5 == 0) {
-            for (int i = 0; i < 6; i++) {
+            for (int i = 0; i < 9; i++) {
                 double randX = this.random.nextDouble() * 32 - 16;
                 double randZ = this.random.nextDouble() * 32 - 16;
                 if (randX * randX + randZ * randZ > 16 * 16)

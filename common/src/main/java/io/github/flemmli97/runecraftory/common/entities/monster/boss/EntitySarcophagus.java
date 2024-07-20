@@ -22,6 +22,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
@@ -66,8 +67,11 @@ public class EntitySarcophagus extends BossMonster implements MobAttackExt {
     private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntitySarcophagus>> ATTACK_HANDLER = createAnimationHandler(b -> {
         b.put(TELEPORT, (anim, entity) -> {
             entity.getNavigation().stop();
+            if (anim.isAtTick(0.2) || anim.isAtTick(0.44) || anim.isAtTick(1.2) || anim.isAtTick(1.44) || anim.isAtTick(2.2) || anim.isAtTick(2.44)) {
+                entity.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
+            }
             if (anim.isAtTick(0.28) || anim.isAtTick(1.28) || anim.isAtTick(2.28))
-                entity.teleportAround(8, 7);
+                entity.teleportAround(8, 10);
         });
         b.put(CHARGE, (anim, entity) -> {
             if (anim.isPastTick(0.28) && !anim.isPastTick(1.48)) {
@@ -84,10 +88,10 @@ public class EntitySarcophagus extends BossMonster implements MobAttackExt {
                         entity.lookAt(entity.getTarget(), 360, 10);
                         yaw = entity.getYRot();
                     }
-                    entity.chargeMotion = dir.scale(0.24);
+                    entity.chargeMotion = dir.scale(0.28);
                     entity.entityData.set(LOCKED_YAW, yaw);
                 }
-                entity.setDeltaMovement(entity.chargeMotion);
+                entity.setDeltaMovement(entity.chargeMotion.x(), entity.getDeltaMovement().y(), entity.chargeMotion.z());
                 entity.mobAttack(anim, null, e -> {
                     if (!entity.hitEntity.contains(e) && CombatUtils.mobAttack(entity, e,
                             new CustomDamage.Builder(entity).hurtResistant(5).knock(CustomDamage.KnockBackType.BACK).knockAmount(2))) {
@@ -159,6 +163,7 @@ public class EntitySarcophagus extends BossMonster implements MobAttackExt {
         b.put(STARFALL, (anim, entity) -> {
             entity.getNavigation().stop();
             if (anim.isAtTick(0.24)) {
+                entity.starFallPre = entity.position();
                 if (entity.hasRestriction()) {
                     Vec3 pos = Vec3.atCenterOf(entity.getRestrictCenter());
                     entity.teleportTo(pos.x, pos.y + 8, pos.z);
@@ -173,8 +178,10 @@ public class EntitySarcophagus extends BossMonster implements MobAttackExt {
             if (entity.starFallPos != null)
                 entity.setPos(entity.starFallPos);
             if (anim.isAtTick(7.96)) {
+                entity.teleportTo(entity.starFallPre.x(), entity.starFallPre.y(), entity.starFallPre.z());
+                entity.starFallPre = null;
                 entity.starFallPos = null;
-                entity.teleportAround(6, 20);
+                entity.teleportAround(6, 12);
             }
         });
     });
@@ -225,22 +232,31 @@ public class EntitySarcophagus extends BossMonster implements MobAttackExt {
                 this.previousAttack = anim.getID();
             if (CHARGE.is(anim)) {
                 this.chargeMotion = null;
+                this.prevStepHeight = this.maxUpStep;
+                this.maxUpStep = 1 + this.maxUpStep;
             }
             if (STARFALL.is(anim)) {
                 this.gravityPre = this.isNoGravity();
                 this.starfallCooldown = 240 + this.getRandom().nextInt(600);
                 this.setNoGravity(true);
             }
-        } else if (this.getAnimationHandler().isCurrent(STARFALL)) {
-            this.setNoGravity(this.gravityPre);
+        } else {
+            if (this.prevStepHeight != -1) {
+                this.maxUpStep = this.prevStepHeight;
+                this.prevStepHeight = -1;
+            }
+            if (this.getAnimationHandler().isCurrent(STARFALL)) {
+                this.setNoGravity(this.gravityPre);
+            }
         }
     });
 
-    private Vec3 chargeMotion, starFallPos;
+    private Vec3 chargeMotion, starFallPre, starFallPos;
     protected List<LivingEntity> hitEntity;
     private boolean teleported, gravityPre;
     private String previousAttack = "";
     private int starfallCooldown;
+    private float prevStepHeight = -1;
 
     public EntitySarcophagus(EntityType<? extends EntitySarcophagus> type, Level world) {
         super(type, world);
@@ -430,7 +446,6 @@ public class EntitySarcophagus extends BossMonster implements MobAttackExt {
             pos = this.getTarget().position();
         else
             pos = this.position();
-
         for (int i = 0; i < 10; i++) {
             double x = pos.x() + (this.getRandom().nextDouble() * 2 - 1) * range;
             double y = pos.y() + 4;
@@ -444,16 +459,23 @@ public class EntitySarcophagus extends BossMonster implements MobAttackExt {
     }
 
     private boolean teleport(double x, double y, double z, int yRange) {
-        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(x, y, z);
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(x, y - 1, z);
         ChunkAccess chunk = this.level.getChunk(pos);
         while (yRange > 0 && pos.getY() > this.level.getMinBuildHeight() && !chunk.getBlockState(pos).getMaterial().blocksMotion()) {
             pos.move(Direction.DOWN);
             yRange--;
+            y--;
         }
         BlockState blockState = chunk.getBlockState(pos);
         if (!blockState.getMaterial().blocksMotion()) {
             return false;
         }
-        return this.randomTeleport(x, y, z, false);
+        Vec3 current = this.position();
+        this.teleportTo(x, y, z);
+        if (!this.level.noCollision(this) || this.level.containsAnyLiquid(this.getBoundingBox())) {
+            this.teleportTo(current.x(), current.y(), current.z());
+            return false;
+        }
+        return true;
     }
 }

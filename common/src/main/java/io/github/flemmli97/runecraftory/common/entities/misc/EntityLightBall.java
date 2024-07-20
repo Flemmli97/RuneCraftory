@@ -14,6 +14,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 public class EntityLightBall extends BaseDamageCloud {
@@ -82,6 +83,11 @@ public class EntityLightBall extends BaseDamageCloud {
     }
 
     @Override
+    protected AABB damageBoundingBox() {
+        return this.getBoundingBox().inflate(0.25, 0.25, 0.25);
+    }
+
+    @Override
     public void tick() {
         super.tick();
         Vec3 motion = this.getDeltaMovement();
@@ -95,7 +101,7 @@ public class EntityLightBall extends BaseDamageCloud {
             this.discard();
         if (this.level.isClientSide) {
             for (int i = 0; i < 2; i++)
-                this.level.addParticle(new ColoredParticleData(ModParticles.SHORT_LIGHT.get(), 246 / 255F, 252 / 255F, 197 / 255F, 0.5f, 3f), this.getX(), this.getY(), this.getZ(), 0, 0, 0);
+                this.level.addParticle(new ColoredParticleData(ModParticles.SHORT_LIGHT.get(), 246 / 255F, 252 / 255F, 197 / 255F, 0.5f, 3f), this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ(), 0, 0, 0);
         } else {
             if (this.getOwner() != null) {
                 Entity owner = this.getOwner();
@@ -111,7 +117,7 @@ public class EntityLightBall extends BaseDamageCloud {
                     case EXPAND ->
                             MathUtils.rotate(0, 1, 0, owner.getBbWidth() + this.livingTicks * this.livingTicks * 0.01, 0, 0, Mth.DEG_TO_RAD * (13 * this.livingTicks + this.angleOffset));
                 };
-                this.setDeltaMovement(ownerPos.x + pos[0] - this.getX(), ownerPos.y + this.getOwner().getBbHeight() * 0.6 - this.getY(), ownerPos.z + pos[2] - this.getZ());
+                this.setDeltaMovement(ownerPos.x + pos[0] - this.getX(), ownerPos.y + this.getOwner().getBbHeight() * 0.5 - this.getY(0.5), ownerPos.z + pos[2] - this.getZ());
                 this.hasImpulse = true;
             }
         }
