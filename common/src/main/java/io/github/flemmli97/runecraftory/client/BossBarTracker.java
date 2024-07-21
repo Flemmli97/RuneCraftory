@@ -119,14 +119,14 @@ public class BossBarTracker {
             ACTIVE_BOSS_BGM.remove(data.music);
             if (immediate || ClientConfig.bossMusicFadeDelay == 0) {
                 // Stop the sound without fading away
-                FADING_CHANNEL.remove(id);
+                FADING_CHANNEL.remove(data.music);
                 stopMusic(sound);
             } else {
-                BossSoundInstance inst = FADING_CHANNEL.get(id);
+                BossSoundInstance inst = FADING_CHANNEL.get(data.music);
                 if (inst != null) {
                     inst.reverse(false);
                 } else {
-                    FADING_CHANNEL.put(id, sound.reverse(false));
+                    FADING_CHANNEL.put(data.music, sound.reverse(false));
                 }
             }
         }
