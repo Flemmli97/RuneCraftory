@@ -18,8 +18,7 @@ public class FireWallSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         FireWallSummoner wall = new FireWallSummoner(level, entity);
-        Vec3 lookDir = new Vec3(entity.getLookAngle().x, 0, entity.getLookAngle().z).normalize().scale(entity.getBbWidth() * 0.8);
-        wall.setPos(wall.position().add(lookDir).add(0, -entity.getBbHeight() * 0.2, 0));
+        wall.setPos(offset(entity));
         Vec3 delayedPos;
         if (entity instanceof MobAttackExt attacker && (delayedPos = attacker.targetPosition(wall.position())) != null) {
             wall.setTarget(delayedPos.x(), delayedPos.y(), delayedPos.z());
@@ -33,5 +32,11 @@ public class FireWallSpell extends Spell {
         level.addFreshEntity(wall);
         playSound(entity, ModSounds.SPELL_GENERIC_FIRE_BALL.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         return true;
+    }
+
+    public static Vec3 offset(LivingEntity entity) {
+        Vec3 pos = entity.position().add(0, entity.getEyeHeight(), 0);
+        Vec3 lookDir = new Vec3(entity.getLookAngle().x, 0, entity.getLookAngle().z).normalize().scale(entity.getBbWidth() * 0.8);
+        return pos.add(lookDir).add(0, -entity.getBbHeight() * 0.2, 0);
     }
 }

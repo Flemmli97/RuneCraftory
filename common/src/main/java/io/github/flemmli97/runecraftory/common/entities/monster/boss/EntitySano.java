@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntitySanoUno;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
+import io.github.flemmli97.runecraftory.common.spells.FireWallSpell;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
@@ -53,7 +54,8 @@ public class EntitySano extends EntitySanoUno {
         });
         b.put(FIRE_BREATH, (anim, entity) -> {
             if (anim.isAtTick(15) || anim.isAtTick(25)) {
-                Vec3 dir = entity.getTarget() != null ? EntityUtils.getStraightProjectileTarget(entity.position().add(0, entity.getEyeHeight() - 0.1 - entity.getBbHeight() * 0.2, 0), entity.getTarget()).subtract(entity.position()).normalize() : entity.getLookAngle();
+                Vec3 from = FireWallSpell.offset(entity);
+                Vec3 dir = entity.getTarget() != null ? EntityUtils.getStraightProjectileTarget(from, entity.getTarget()).subtract(from).normalize() : entity.getLookAngle();
                 dir = dir.scale(10).add(entity.random.nextGaussian() * 2.3, -Math.abs(entity.random.nextGaussian()) * 0.6, entity.random.nextGaussian() * 2.3);
                 entity.targetPos = entity.position().add(dir);
                 ModSpells.FIRE_WALL.get().use(entity);

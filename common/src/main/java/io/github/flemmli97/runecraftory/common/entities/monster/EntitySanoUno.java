@@ -89,6 +89,10 @@ public abstract class EntitySanoUno extends BossMonster implements MobAttackExt 
     }
 
     @Override
+    public void lookAt(Entity entity, float maxYRotIncrease, float maxXRotIncrease) {
+    }
+
+    @Override
     public boolean canBeCollidedWith() {
         return true;
     }
@@ -181,6 +185,7 @@ public abstract class EntitySanoUno extends BossMonster implements MobAttackExt 
 
         @Override
         public void tick() {
+            boolean b = false;
         }
     }
 }
