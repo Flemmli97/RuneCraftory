@@ -199,6 +199,14 @@
         },
         {
           "type": "minecraft:item",
+          "name": "runecraftory:strong_vine"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:pretty_thread"
+        },
+        {
+          "type": "minecraft:item",
           "name": "runecraftory:arrowhead"
         },
         {
@@ -212,6 +220,14 @@
         {
           "type": "minecraft:item",
           "name": "runecraftory:broken_box"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:great_hammer_shard"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:hammer_piece"
         },
         {
           "type": "minecraft:item",
@@ -263,6 +279,18 @@
         },
         {
           "type": "minecraft:item",
+          "name": "runecraftory:magic_powder"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:mysterious_powder"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:magic"
+        },
+        {
+          "type": "minecraft:item",
           "name": "runecraftory:cheap_cloth"
         },
         {
@@ -272,6 +300,10 @@
         {
           "type": "minecraft:item",
           "name": "runecraftory:quality_worn_cloth"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:silk_cloth"
         },
         {
           "type": "minecraft:item",
@@ -292,6 +324,10 @@
         {
           "type": "minecraft:item",
           "name": "runecraftory:pretty_carapace"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:ancient_orc_cloth"
         },
         {
           "type": "minecraft:item",
@@ -371,6 +407,10 @@
         },
         {
           "type": "minecraft:item",
+          "name": "runecraftory:ten_fold_steel"
+        },
+        {
+          "type": "minecraft:item",
           "name": "runecraftory:invisible_stone"
         },
         {
@@ -416,6 +456,14 @@
         {
           "type": "minecraft:item",
           "name": "runecraftory:conqueror_melon"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:pineapple"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:king_pineapple"
         },
         {
           "type": "minecraft:item",

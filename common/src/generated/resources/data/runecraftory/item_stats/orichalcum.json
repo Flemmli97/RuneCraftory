@@ -3,7 +3,7 @@
   "sellPrice": 750,
   "upgradeDifficulty": 65,
   "itemStats": {
-    "runecraftory:defence": 70.0
+    "runecraftory:defence": 50.0
   },
   "monsterBonus": {
     "runecraftory:defence": 4.0

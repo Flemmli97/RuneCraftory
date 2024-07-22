@@ -1,0 +1,57 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "runecraftory:luck_and_looting",
+              "baseChance": 0.2,
+              "luckBonus": 0.05,
+              "lootingBonus": 0.2,
+              "limit": 0
+            }
+          ],
+          "name": "runecraftory:dragons_fang"
+        }
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "runecraftory:first_kill"
+                }
+              ],
+              "name": "runecraftory:grimoire_scale"
+            },
+            {
+              "type": "minecraft:item",
+              "functions": [
+                {
+                  "function": "runecraftory:luck_and_looting",
+                  "baseChance": 0.6,
+                  "luckBonus": 0.05,
+                  "lootingBonus": 0.2,
+                  "limit": 2
+                }
+              ],
+              "name": "runecraftory:grimoire_scale"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

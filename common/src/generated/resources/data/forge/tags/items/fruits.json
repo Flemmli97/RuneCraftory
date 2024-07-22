@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "#forge:fruits/pink_melon",
-    "#forge:fruits/conqueror_melon"
+    "#forge:fruits/conqueror_melon",
+    "#forge:fruits/pineapple",
+    "#forge:fruits/king_pineapple"
   ]
 }

@@ -1,9 +1,14 @@
 {
-  "buyPrice": 0,
-  "sellPrice": 0,
-  "upgradeDifficulty": 0,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buyPrice": 730,
+  "sellPrice": 49,
+  "upgradeDifficulty": 27,
+  "itemStats": {
+    "runecraftory:magic_attack": 10.0,
+    "runecraftory:drain": 15.0
+  },
+  "monsterBonus": {
+    "runecraftory:drain": 1.0
+  },
   "element": "NONE",
   "item": "runecraftory:devil_blood"
 }

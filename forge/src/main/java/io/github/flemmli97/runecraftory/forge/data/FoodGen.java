@@ -155,7 +155,7 @@ public class FoodGen extends FoodProvider {
                 .addCookingBonusPercent(ModAttributes.HEALTHGAIN.get(), 40)
                 .addCookingBonusPercent(ModAttributes.RPGAIN.get(), 50));
         this.addStat(ModItems.WINE.get(), new FoodProperties.Builder(0).setRPRegen(15, 0)
-                .addPotion(ModEffects.SLEEP.get(), 10, 0));
+                .addPotion(ModEffects.SLEEP.get(), 80, 0));
         this.addStat(ModItems.CHOCOLATE.get(), new FoodProperties.Builder(0).setRPRegen(25, 0));
         this.addStat(ModItems.RICE.get(), new FoodProperties.Builder(0).setRPRegen(20, 0));
 

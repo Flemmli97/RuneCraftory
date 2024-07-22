@@ -1,6 +1,6 @@
 {
-  "buyPrice": 750,
-  "sellPrice": 27000,
+  "buyPrice": 27000,
+  "sellPrice": 750,
   "upgradeDifficulty": 39,
   "itemStats": {
     "runecraftory:defence": 4.0,

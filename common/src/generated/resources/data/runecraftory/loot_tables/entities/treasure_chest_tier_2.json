@@ -319,6 +319,10 @@
         },
         {
           "type": "minecraft:item",
+          "name": "runecraftory:wine"
+        },
+        {
+          "type": "minecraft:item",
           "name": "runecraftory:onigiri"
         },
         {

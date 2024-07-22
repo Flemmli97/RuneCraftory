@@ -1,9 +1,13 @@
 {
-  "buyPrice": 0,
-  "sellPrice": 0,
-  "upgradeDifficulty": 0,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buyPrice": 2300,
+  "sellPrice": 199,
+  "upgradeDifficulty": 68,
+  "itemStats": {
+    "minecraft:generic.attack_damage": 40.0
+  },
+  "monsterBonus": {
+    "minecraft:generic.attack_damage": 2.0
+  },
   "element": "NONE",
   "item": "runecraftory:dragon_fang"
 }

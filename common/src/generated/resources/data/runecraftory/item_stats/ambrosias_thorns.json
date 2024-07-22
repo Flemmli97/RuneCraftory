@@ -1,6 +1,6 @@
 {
   "buyPrice": 7500,
-  "sellPrice": 350,
+  "sellPrice": 500,
   "upgradeDifficulty": 21,
   "itemStats": {
     "minecraft:generic.attack_damage": 7.0,

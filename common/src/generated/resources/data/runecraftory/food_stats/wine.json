@@ -9,7 +9,7 @@
   "potionApply": [
     {
       "potion": "runecraftory:sleep",
-      "duration": 10,
+      "duration": 80,
       "amplifier": 0
     }
   ],

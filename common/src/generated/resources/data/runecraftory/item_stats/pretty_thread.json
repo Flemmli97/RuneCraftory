@@ -1,9 +1,15 @@
 {
-  "buyPrice": 0,
-  "sellPrice": 0,
-  "upgradeDifficulty": 0,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buyPrice": 386,
+  "sellPrice": 41,
+  "upgradeDifficulty": 24,
+  "itemStats": {
+    "runecraftory:magic_attack": 15.0,
+    "runecraftory:paralysis": 20.0
+  },
+  "monsterBonus": {
+    "runecraftory:paralysis": 2.0
+  },
   "element": "NONE",
+  "tier2Spell": "runecraftory:web_shot",
   "item": "runecraftory:pretty_thread"
 }

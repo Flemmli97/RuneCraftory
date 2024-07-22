@@ -1,9 +1,17 @@
 {
-  "buyPrice": 0,
-  "sellPrice": 0,
-  "upgradeDifficulty": 0,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buyPrice": 75000,
+  "sellPrice": 3000,
+  "upgradeDifficulty": 70,
+  "itemStats": {
+    "minecraft:generic.attack_damage": 35.0,
+    "runecraftory:defence": 40.0,
+    "runecraftory:magic_attack": 35.0,
+    "runecraftory:magic_defence": 40.0
+  },
+  "monsterBonus": {
+    "minecraft:generic.attack_damage": 5.0,
+    "runecraftory:magic_attack": 5.0
+  },
   "element": "NONE",
   "item": "runecraftory:grimoire_scale"
 }

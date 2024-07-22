@@ -1,9 +1,19 @@
 {
-  "buyPrice": 0,
-  "sellPrice": 0,
-  "upgradeDifficulty": 0,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buyPrice": 14000,
+  "sellPrice": 937,
+  "upgradeDifficulty": 88,
+  "itemStats": {
+    "minecraft:generic.knockback_resistance": 15.0,
+    "runecraftory:defence": 30.0,
+    "runecraftory:magic_defence": 75.0,
+    "runecraftory:res_dizzy": 5.0,
+    "runecraftory:res_crit": 3.0
+  },
+  "monsterBonus": {
+    "minecraft:generic.knockback_resistance": 3.0,
+    "runecraftory:res_dizzy": 1.0,
+    "runecraftory:res_crit": 1.0
+  },
   "element": "NONE",
   "item": "runecraftory:right_rock_shard"
 }

@@ -168,7 +168,8 @@ public class ItemTagGen extends ItemTagsProvider {
                         ModItems.FISH_FOSSIL.get(),
                         ModItems.SKULL.get(),
                         ModItems.DRAGON_BONES.get(),
-                        ModItems.TORTOISE_SHELL.get());
+                        ModItems.TORTOISE_SHELL.get(),
+                        ModItems.AMMONITE.get());
         this.tag(RunecraftoryTags.STONES)
                 .add(ModItems.ROCK.get(),
                         ModItems.STONE_ROUND.get(),

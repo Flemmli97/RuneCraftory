@@ -1,7 +1,7 @@
 {
   "buyPrice": 2500,
   "sellPrice": 5,
-  "upgradeDifficulty": 24,
+  "upgradeDifficulty": 19,
   "itemStats": {
     "runecraftory:magic_defence": 5.0
   },

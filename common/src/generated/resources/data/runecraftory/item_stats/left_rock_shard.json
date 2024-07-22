@@ -1,9 +1,22 @@
 {
-  "buyPrice": 0,
-  "sellPrice": 0,
-  "upgradeDifficulty": 0,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buyPrice": 14000,
+  "sellPrice": 937,
+  "upgradeDifficulty": 88,
+  "itemStats": {
+    "runecraftory:defence": 75.0,
+    "runecraftory:magic_defence": 30.0,
+    "runecraftory:res_paralysis": 2.0,
+    "runecraftory:res_poison": 2.0,
+    "runecraftory:res_seal": 2.0,
+    "runecraftory:res_sleep": 2.0,
+    "runecraftory:res_fatigue": 1.0,
+    "runecraftory:res_cold": 1.0,
+    "runecraftory:res_faint": 1.0,
+    "runecraftory:res_drain": 1.0
+  },
+  "monsterBonus": {
+    "minecraft:generic.attack_damage": 1.0
+  },
   "element": "NONE",
   "item": "runecraftory:left_rock_shard"
 }
