@@ -1,17 +1,29 @@
 package io.github.flemmli97.runecraftory.forge.data;
 
+import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.ConversationContext;
 import io.github.flemmli97.runecraftory.api.datapack.NPCData;
 import io.github.flemmli97.runecraftory.api.datapack.provider.NPCDataProvider;
+import io.github.flemmli97.runecraftory.api.registry.NPCFeature;
+import io.github.flemmli97.runecraftory.api.registry.NPCFeatureHolder;
+import io.github.flemmli97.runecraftory.api.registry.NPCFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.AttackMeleeAction;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.NPCAttackActions;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.RunAwayAction;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.SpellAttackAction;
+import io.github.flemmli97.runecraftory.common.entities.npc.features.BlushFeatureType;
+import io.github.flemmli97.runecraftory.common.entities.npc.features.ColorSetting;
+import io.github.flemmli97.runecraftory.common.entities.npc.features.HairFeatureType;
+import io.github.flemmli97.runecraftory.common.entities.npc.features.IndexRange;
+import io.github.flemmli97.runecraftory.common.entities.npc.features.IndexedColorSettingType;
+import io.github.flemmli97.runecraftory.common.entities.npc.features.OutfitFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.SizeFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.SlimLookFeatureType;
+import io.github.flemmli97.runecraftory.common.entities.npc.features.TypedIndexRange;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
+import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.advancements.critereon.LocationPredicate;
@@ -19,6 +31,7 @@ import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.predicates.LocationCheck;
@@ -142,21 +155,9 @@ public class NPCDataGen extends NPCDataProvider {
                 Map.of());
 
         this.addLook(new ResourceLocation(RuneCraftory.MODID, "generic/male_1"), new NPCData.NPCLook(NPCData.Gender.MALE,
-                npcTexture("generic/male_1"), null, 50, List.of()));
-        this.addLook(new ResourceLocation(RuneCraftory.MODID, "generic/male_2"), new NPCData.NPCLook(NPCData.Gender.MALE,
-                npcTexture("generic/male_2"), null, 50, List.of()));
-        this.addLook(new ResourceLocation(RuneCraftory.MODID, "generic/male_3"), new NPCData.NPCLook(NPCData.Gender.MALE,
-                npcTexture("generic/male_3"), null, 50, List.of()));
-        this.addLook(new ResourceLocation(RuneCraftory.MODID, "generic/male_4"), new NPCData.NPCLook(NPCData.Gender.MALE,
-                npcTexture("generic/male_4"), null, 50, List.of()));
+                null, 50, defaultNPCFeatures(false, m -> m.put(ModNPCLooks.OUTFIT.get(), new OutfitFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("generic", new IndexRange.FirstNIndices(3)), 1))))))));
         this.addLook(new ResourceLocation(RuneCraftory.MODID, "generic/female_1"), new NPCData.NPCLook(NPCData.Gender.FEMALE,
-                npcTexture("generic/female_1"), null, 50, List.of()));
-        this.addLook(new ResourceLocation(RuneCraftory.MODID, "generic/female_2"), new NPCData.NPCLook(NPCData.Gender.FEMALE,
-                npcTexture("generic/female_2"), null, 50, List.of()));
-        this.addLook(new ResourceLocation(RuneCraftory.MODID, "generic/female_3"), new NPCData.NPCLook(NPCData.Gender.FEMALE,
-                npcTexture("generic/female_3"), null, 50, List.of()));
-        this.addLook(new ResourceLocation(RuneCraftory.MODID, "generic/female_4"), new NPCData.NPCLook(NPCData.Gender.FEMALE,
-                npcTexture("generic/female_4"), null, 50, List.of()));
+                null, 50, defaultNPCFeatures(true, m -> m.put(ModNPCLooks.OUTFIT.get(), new OutfitFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("generic", new IndexRange.FirstNIndices(3)), 1))))))));
 
         this.addNPCDataAll("smith/male_1", new NPCData.Builder(50, null, NPCData.Gender.MALE)
                         .withLook(new ResourceLocation(RuneCraftory.MODID, "smith/male_1"))
@@ -185,7 +186,7 @@ public class NPCDataGen extends NPCDataProvider {
                     m.put(ConversationContext.DIVORCE_ERROR, new NPCData.ConversationSet.Builder("npc.smith.male.1.divorce.not", "Huh? Why are you giving me that?"));
                     m.put(ConversationContext.PROCREATION_COOLDOWN, new NPCData.ConversationSet.Builder("npc.smith.male.1.procreation.no", "No i don't think so"));
                 }),
-                new NPCData.NPCLook(NPCData.Gender.MALE, npcTexture("smith/male_1"), null, 0, List.of()),
+                new NPCData.NPCLook(NPCData.Gender.MALE, null, 0, defaultNPCFeatures(false, m -> m.put(ModNPCLooks.OUTFIT.get(), new OutfitFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("smith", new IndexRange.FirstNIndices(3)), 1))))))),
                 of(m -> {
                     m.put(QuestGen.MINING, new QuestResponseBuilder(
                             new NPCData.ConversationSet.Builder("npc.generic.quest.mining.start", """
@@ -223,7 +224,7 @@ public class NPCDataGen extends NPCDataProvider {
                     m.put(ConversationContext.DIVORCE_ERROR, new NPCData.ConversationSet.Builder("npc.smith.female.1.divorce.not", "Huh? Why are you giving me that?"));
                     m.put(ConversationContext.PROCREATION_COOLDOWN, new NPCData.ConversationSet.Builder("npc.smith.female.1.procreation.no", "No i don't think so"));
                 }),
-                new NPCData.NPCLook(NPCData.Gender.FEMALE, npcTexture("smith/female_1"), null, 0, List.of(new SlimLookFeatureType())),
+                new NPCData.NPCLook(NPCData.Gender.FEMALE, null, 0, defaultNPCFeatures(true, m -> m.put(ModNPCLooks.OUTFIT.get(), new OutfitFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("smith", new IndexRange.FirstNIndices(3)), 1))))))),
                 of(m -> {
                     m.put(QuestGen.MINING, new QuestResponseBuilder(
                             new NPCData.ConversationSet.Builder("npc.generic.quest.mining.start", """
@@ -262,7 +263,7 @@ public class NPCDataGen extends NPCDataProvider {
                     m.put(ConversationContext.DIVORCE_ERROR, new NPCData.ConversationSet.Builder("npc.shop_owner.male.1.divorce.not", "Huh? Why are you giving me that?"));
                     m.put(ConversationContext.PROCREATION_COOLDOWN, new NPCData.ConversationSet.Builder("npc.shop_owner.male.1.procreation.no", "No i don't think so"));
                 }),
-                new NPCData.NPCLook(NPCData.Gender.MALE, npcTexture("shop_owner/male_1"), null, 0, List.of()),
+                new NPCData.NPCLook(NPCData.Gender.MALE, null, 0, defaultNPCFeatures(false, m -> m.put(ModNPCLooks.OUTFIT.get(), new OutfitFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("shop", new IndexRange.FirstNIndices(3)), 1))))))),
                 of(m -> {
                     m.put(QuestGen.SHIP_TURNIP, new QuestResponseBuilder(
                             new NPCData.ConversationSet.Builder("npc.generic.quest.ship_turnip.start", """
@@ -297,7 +298,7 @@ public class NPCDataGen extends NPCDataProvider {
                     m.put(ConversationContext.DIVORCE_ERROR, new NPCData.ConversationSet.Builder("npc.shop_owner.female.1.divorce.not", "Huh? Why are you giving me that?"));
                     m.put(ConversationContext.PROCREATION_COOLDOWN, new NPCData.ConversationSet.Builder("npc.shop_owner.female.1.procreation.no", "No i don't think so"));
                 }),
-                new NPCData.NPCLook(NPCData.Gender.FEMALE, npcTexture("shop_owner/female_1"), null, 0, List.of(new SlimLookFeatureType(), new SizeFeatureType(UniformGenerator.between(0.85f, 1)))),
+                new NPCData.NPCLook(NPCData.Gender.FEMALE, null, 0, defaultNPCFeatures(true, m -> m.put(ModNPCLooks.OUTFIT.get(), new OutfitFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("shop", new IndexRange.FirstNIndices(3)), 1))))))),
                 of(m -> {
                     m.put(QuestGen.SHIP_TURNIP, new QuestResponseBuilder(
                             new NPCData.ConversationSet.Builder("npc.generic.quest.ship_turnip.start", """
@@ -352,6 +353,27 @@ public class NPCDataGen extends NPCDataProvider {
                 Map.of());*/
     }
 
+    private static <T extends NPCFeature> Map<NPCFeatureType<?>, NPCFeatureHolder<?>> defaultNPCFeatures(boolean female, Consumer<FeatureBuilderHelper> cons) {
+        Map<NPCFeatureType<?>, NPCFeatureHolder<?>> map = new LinkedHashMap<>();
+        // Just for generic sanity check
+        FeatureBuilderHelper builder = map::put;
+        builder.put(ModNPCLooks.SKIN.get(), new IndexedColorSettingType(List.of(0, 1, 2), ColorSetting.SKIN_COLOR_RANGE, ModNPCLooks.SKIN));
+        builder.put(ModNPCLooks.IRIS.get(), new IndexedColorSettingType(List.of(0, 1), ColorSetting.EYE_COLOR_RANGE, ModNPCLooks.IRIS));
+        builder.put(ModNPCLooks.SCLERA.get(), new IndexedColorSettingType(List.of(0, 1), ColorSetting.DEFAULT, ModNPCLooks.SCLERA));
+        builder.put(ModNPCLooks.EYEBROWS.get(), new IndexedColorSettingType(List.of(0, 1), ColorSetting.EYEBROW_COLOR_RANGE, ModNPCLooks.EYEBROWS));
+        if (female) {
+            builder.put(ModNPCLooks.SLIM.get(), SlimLookFeatureType.INSTANCE);
+            builder.put(ModNPCLooks.SIZE.get(), new SizeFeatureType(UniformGenerator.between(0.9f, 1.05f)));
+            builder.put(ModNPCLooks.BLUSH.get(), new BlushFeatureType(0.5f, ColorSetting.BLUSH_COLOR_RANGE));
+            builder.put(ModNPCLooks.HAIR.get(), new HairFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("long", new IndexRange.FirstNIndices(5)), 1))), ColorSetting.HAIR_COLOR_RANGE));
+        } else {
+            builder.put(ModNPCLooks.SIZE.get(), new SizeFeatureType(UniformGenerator.between(0.95f, 1.1f)));
+            builder.put(ModNPCLooks.HAIR.get(), new HairFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("short", new IndexRange.FirstNIndices(5)), 1))), ColorSetting.HAIR_COLOR_RANGE));
+        }
+        cons.accept(builder);
+        return map;
+    }
+
     //For consistent order
     private static <K, V> Map<K, V> of(Consumer<Map<K, V>> cons) {
         Map<K, V> map = new LinkedHashMap<>();
@@ -365,5 +387,10 @@ public class NPCDataGen extends NPCDataProvider {
 
     private static ResourceLocation npcTexture(String texture) {
         return new ResourceLocation(RuneCraftory.MODID, "textures/entity/npc/" + texture + ".png");
+    }
+
+    private interface FeatureBuilderHelper {
+
+        <T extends NPCFeature> void put(NPCFeatureType<T> type, NPCFeatureHolder<T> holder);
     }
 }

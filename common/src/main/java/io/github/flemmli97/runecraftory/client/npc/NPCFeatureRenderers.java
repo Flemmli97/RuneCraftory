@@ -12,8 +12,20 @@ public class NPCFeatureRenderers {
     private static final Map<NPCFeatureType<?>, NPCFeatureRenderer<?>> RENDERERS = new HashMap<>();
 
     public static void init() {
-        register(ModNPCLooks.SLIM.get(), new SlimLookRenderer());
+        empty(ModNPCLooks.SLIM.get());
         register(ModNPCLooks.SIZE.get(), new SizeRenderer());
+        empty(ModNPCLooks.SKIN.get());
+        empty(ModNPCLooks.IRIS.get());
+        empty(ModNPCLooks.SCLERA.get());
+        empty(ModNPCLooks.EYEBROWS.get());
+        empty(ModNPCLooks.BLUSH.get());
+        empty(ModNPCLooks.HAIR.get());
+        empty(ModNPCLooks.OUTFIT.get());
+        empty(ModNPCLooks.HAT.get());
+    }
+
+    public static synchronized <F extends NPCFeature> void empty(NPCFeatureType<F> type) {
+        RENDERERS.put(type, NPCFeatureRenderer.EMPTY);
     }
 
     public static synchronized <F extends NPCFeature> void register(NPCFeatureType<F> type, NPCFeatureRenderer<F> renderer) {

@@ -1580,7 +1580,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
                 this.schedule.load(new NPCSchedule(this, this.random).save());
             else
                 this.schedule.with(data.schedule());
-            this.lookFeatures.buildFromLooks(this, this.look.additionalFeatures());
+            this.lookFeatures.buildFromLooks(this, this.look.additionalFeatures().values());
         } else {
             // Apply non null things else
             if (this.data.look() != null) {
@@ -1612,7 +1612,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         }
         this.refreshDimensions();
         if (!this.level.isClientSide)
-            Platform.INSTANCE.sendToTrackingAndSelf(new S2CNPCLook(this.getId(), this.look, this.lookFeatures.save()), this);
+            Platform.INSTANCE.sendToTrackingAndSelf(new S2CNPCLook(this.getId(), this.look, this.lookFeatures), this);
     }
 
     private CompoundTag saveNPCData() {
@@ -1648,7 +1648,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     @Override
     public void startSeenByPlayer(ServerPlayer player) {
-        Platform.INSTANCE.sendToClient(new S2CNPCLook(this.getId(), this.look, this.lookFeatures.save()), player);
+        Platform.INSTANCE.sendToClient(new S2CNPCLook(this.getId(), this.look, this.lookFeatures), player);
         Platform.INSTANCE.sendToClient(S2CEntityLevelPkt.create(this), player);
     }
 

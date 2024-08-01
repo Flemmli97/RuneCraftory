@@ -22,6 +22,6 @@
   "npc.generic.dislike": "Eh... thanks I guess?",
   "npc.generic.like": "Thanks %player% for the gift. I really like this.",
   "npc.generic.gift.default": "Thank you for your gift",
-  "quest/tame_monster.quest.runecraftory": "Tame a monster",
-  "quest/tame_monster.quest.runecraftory_description": "I need you to tame a monster. Come see me."
+  "runecraftory.quest.tame_monster": "Tame a monster",
+  "runecraftory.quest.tame_monster.description": "I need you to tame a monster. Come see me."
 }

@@ -68,6 +68,7 @@ import io.github.flemmli97.runecraftory.client.model.monster.ModelWolf;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelWooly;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelWoolyWool;
 import io.github.flemmli97.runecraftory.client.npc.NPCFeatureRenderers;
+import io.github.flemmli97.runecraftory.client.npc.NPCTextureLayer;
 import io.github.flemmli97.runecraftory.client.npc.RenderNPC;
 import io.github.flemmli97.runecraftory.client.particles.CirclingParticle;
 import io.github.flemmli97.runecraftory.client.particles.LightningParticle;
@@ -152,6 +153,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
@@ -526,6 +528,13 @@ public class ClientRegister {
         consumer.accept(RingsArmorModel.LAYER_LOCATION, RingsArmorModel::createBodyLayer);
 
         consumer.accept(ModelPlate.LAYER_LOCATION, ModelPlate::createBodyLayer);
+
+        for (NPCTextureLayer.LayerType layerType : NPCTextureLayer.LayerType.values()) {
+            if (layerType == NPCTextureLayer.LayerType.SKIN_LAYER)
+                continue;
+            consumer.accept(layerType.location, () -> LayerDefinition.create(PlayerModel.createMesh(new CubeDeformation(layerType.expand), false), 64, 64));
+            consumer.accept(layerType.slimeLocation, () -> LayerDefinition.create(PlayerModel.createMesh(new CubeDeformation(layerType.expand), true), 64, 64));
+        }
     }
 
     public static <T extends ParticleOptions> void registerParticles(PartileRegister consumer) {

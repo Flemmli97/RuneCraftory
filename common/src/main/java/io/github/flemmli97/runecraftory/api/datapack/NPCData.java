@@ -16,6 +16,7 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeature;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureHolder;
+import io.github.flemmli97.runecraftory.api.registry.NPCFeatureType;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCSchedule;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
@@ -43,6 +44,7 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -52,6 +54,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public record NPCData(@Nullable String name, @Nullable String surname,
                       Gender gender, List<NPCJob> profession, @Nullable ResourceLocation look,
@@ -555,41 +558,33 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         }
     }
 
-    public record NPCLook(Gender gender, @Nullable ResourceLocation texture, @Nullable String playerSkin, int weight,
-                          List<NPCFeatureHolder<?>> additionalFeatures) {
+    public record NPCLook(Gender gender, @Nullable String playerSkin, int weight,
+                          Map<NPCFeatureType<?>, NPCFeatureHolder<?>> additionalFeatures) {
 
-        public static final ResourceLocation DEFAULT_SKIN = new ResourceLocation("textures/entity/steve.png");
         public static final ResourceLocation DEFAULT_LOOK_ID = new ResourceLocation(RuneCraftory.MODID, "default_look");
-        public static final NPCLook DEFAULT_LOOK = new NPCLook(Gender.MALE, DEFAULT_SKIN, null, 0, List.of());
+        public static final NPCLook DEFAULT_LOOK = new NPCLook(Gender.MALE, null, 0, Map.of());
 
         public static final Codec<NPCLook> CODEC = RecordCodecBuilder.create(inst ->
-                inst.group(
+                inst.group(Codec.STRING.optionalFieldOf("player_skin").forGetter(d -> Optional.ofNullable(d.playerSkin)),
+                        CodecUtils.stringEnumCodec(Gender.class, Gender.UNDEFINED).fieldOf("gender").forGetter(d -> d.gender),
                         ExtraCodecs.NON_NEGATIVE_INT.fieldOf("weight").forGetter(d -> d.weight),
-                        NPCFeature.CODEC.listOf().fieldOf("additionalFeatures").forGetter(d -> d.additionalFeatures),
-
-                        ResourceLocation.CODEC.optionalFieldOf("texture").forGetter(d -> Optional.ofNullable(d.texture)),
-                        Codec.STRING.optionalFieldOf("player_skin").forGetter(d -> Optional.ofNullable(d.playerSkin)),
-                        CodecUtils.stringEnumCodec(Gender.class, Gender.UNDEFINED).fieldOf("gender").forGetter(d -> d.gender)
-                ).apply(inst, (weight, features, text, skin, gender) -> {
-                    if (text.isEmpty() && skin.isEmpty())
-                        throw new IllegalArgumentException("Both texture or skin cant be null");
-                    return new NPCLook(gender, text.orElse(null), skin.orElse(null), weight, features);
-                }));
+                        NPCFeature.CODEC.listOf().fieldOf("additionalFeatures").forGetter(d -> List.copyOf(d.additionalFeatures.values()))
+                ).apply(inst, (skin, gender, weight, features) -> new NPCLook(gender, skin.orElse(null), weight, features
+                        .stream().collect(Collectors.toMap(
+                                NPCFeatureHolder::getType,
+                                h -> h,
+                                (e1, e2) -> e1,
+                                HashMap::new
+                        )))));
 
         public static NPCLook fromBuffer(FriendlyByteBuf buf) {
-            ResourceLocation text = null;
-            if (buf.readBoolean())
-                text = buf.readResourceLocation();
             String skin = null;
             if (buf.readBoolean())
                 skin = buf.readUtf();
-            return new NPCLook(buf.readEnum(Gender.class), text, skin, buf.readInt(), List.of());
+            return new NPCLook(buf.readEnum(Gender.class), skin, buf.readInt(), Map.of());
         }
 
         public void writeToBuffer(FriendlyByteBuf buf) {
-            buf.writeBoolean(this.texture != null);
-            if (this.texture != null)
-                buf.writeResourceLocation(this.texture);
             buf.writeBoolean(this.playerSkin != null);
             if (this.playerSkin != null)
                 buf.writeUtf(this.playerSkin);

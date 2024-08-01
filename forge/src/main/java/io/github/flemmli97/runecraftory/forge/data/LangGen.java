@@ -756,6 +756,13 @@ public class LangGen implements DataProvider {
         this.add(QuestTasks.SkillLevelEntry.ID.toString(), "Reach level %1$s in %s");
         this.add(QuestTasks.TamingEntry.ID.toString(), "%s");
 
+        this.add(QuestGen.getTask(QuestGen.MINING), "Precious Ores");
+        this.add(QuestGen.getDescription(QuestGen.MINING), "");
+        this.add(QuestGen.getTask(QuestGen.TAMING), "Tame monster!");
+        this.add(QuestGen.getDescription(QuestGen.TAMING), "");
+        this.add(QuestGen.getTask(QuestGen.SHIP_TURNIP), "First Shipment!");
+        this.add(QuestGen.getDescription(QuestGen.SHIP_TURNIP), "");
+
         this.add("runecraftory.dependency.tooltips.owner.none", "Unknown owner");
         this.add("runecraftory.dependency.tooltips.owner", "Owned by: %s");
         this.add("runecraftory.dependency.tooltips.friendpoints", "FP: %s");

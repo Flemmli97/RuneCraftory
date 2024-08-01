@@ -1,6 +1,167 @@
 {
-  "texture": "runecraftory:textures/entity/npc/generic/female_1.png",
   "gender": "FEMALE",
   "weight": 50,
-  "additionalFeatures": []
+  "additionalFeatures": [
+    {
+      "indices": [
+        0,
+        1,
+        2
+      ],
+      "colors": [
+        {
+          "colorMin": "feead9",
+          "colorMax": "f4a98b"
+        },
+        {
+          "colorMin": "efdbca",
+          "colorMax": "eca188"
+        },
+        {
+          "colorMin": "d5bfa7",
+          "colorMax": "c18356"
+        },
+        {
+          "colorMin": "a1836d",
+          "colorMax": "94563c"
+        },
+        {
+          "colorMin": "664f44",
+          "colorMax": "592e19"
+        },
+        {
+          "colorMin": "312926",
+          "colorMax": "2c130c"
+        }
+      ],
+      "type": "runecraftory:skin_feature"
+    },
+    {
+      "indices": [
+        0,
+        1
+      ],
+      "colors": [
+        {
+          "colorMin": "000000",
+          "colorMax": "2f2f2f"
+        },
+        {
+          "colorMin": "462a05",
+          "colorMax": "6d4720"
+        },
+        {
+          "colorMin": "0b2a75",
+          "colorMax": "204a87"
+        },
+        {
+          "colorMin": "42a20c",
+          "colorMax": "6fbe36"
+        },
+        {
+          "colorMin": "b9ae08",
+          "colorMax": "dbbf41"
+        }
+      ],
+      "type": "runecraftory:iris_feature"
+    },
+    {
+      "indices": [
+        0,
+        1
+      ],
+      "colors": [],
+      "type": "runecraftory:sclera_feature"
+    },
+    {
+      "indices": [
+        0,
+        1
+      ],
+      "colors": [
+        {
+          "colorMin": "3c1d05",
+          "colorMax": "8d7053"
+        }
+      ],
+      "type": "runecraftory:eyebrows_feature"
+    },
+    {
+      "type": "runecraftory:slim_feature"
+    },
+    {
+      "size": {
+        "type": "minecraft:uniform",
+        "min": 0.9,
+        "max": 1.05
+      },
+      "type": "runecraftory:size_feature"
+    },
+    {
+      "chance": 0.5,
+      "colors": [
+        {
+          "colorMin": "e1a9e8",
+          "colorMax": "f5cffa"
+        }
+      ],
+      "type": "runecraftory:blush_feature"
+    },
+    {
+      "styles": [
+        {
+          "weight": 1,
+          "type": "long",
+          "range": {
+            "amount": 5,
+            "type": "FIRST_N"
+          }
+        }
+      ],
+      "colors": [
+        {
+          "colorMin": "000000",
+          "colorMax": "161616"
+        },
+        {
+          "colorMin": "321503",
+          "colorMax": "663d24"
+        },
+        {
+          "colorMin": "d8c811",
+          "colorMax": "f1eaa0"
+        },
+        {
+          "colorMin": "750808",
+          "colorMax": "c55252"
+        },
+        {
+          "colorMin": "b93aa3",
+          "colorMax": "c37bb7"
+        },
+        {
+          "colorMin": "3d41a5",
+          "colorMax": "7287d2"
+        },
+        {
+          "colorMin": "ffffff",
+          "colorMax": "dde5f7"
+        }
+      ],
+      "type": "runecraftory:hair_feature"
+    },
+    {
+      "outfits": [
+        {
+          "weight": 1,
+          "type": "generic",
+          "range": {
+            "amount": 3,
+            "type": "FIRST_N"
+          }
+        }
+      ],
+      "type": "runecraftory:outfit_feature"
+    }
+  ]
 }

@@ -19,6 +19,6 @@
   "npc.smith.male.1.dislike": "Hmm you better get rid of your trash yourself next time.",
   "npc.smith.male.1.like": "You're giving this to me? Thanks! I will make good use of this",
   "npc.smith.male.1.gift.default": "Thank you for your gift. I really like ores",
-  "quest/mining.quest.runecraftory": "Acquire Hardware??",
-  "quest/mining.quest.runecraftory_description": "Come see me."
+  "runecraftory.quest.mining": "Acquire Hardware??",
+  "runecraftory.quest.mining.description": "Come see me."
 }

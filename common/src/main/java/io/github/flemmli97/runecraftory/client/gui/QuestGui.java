@@ -2,11 +2,14 @@ package io.github.flemmli97.runecraftory.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
+import io.github.flemmli97.runecraftory.client.npc.NPCTextureLayer;
 import io.github.flemmli97.runecraftory.client.npc.RenderNPC;
 import io.github.flemmli97.runecraftory.common.network.C2SQuestSelect;
 import io.github.flemmli97.runecraftory.common.network.C2SSubmitQuestBoard;
+import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
 import io.github.flemmli97.runecraftory.integration.simplequest.ClientSideQuestDisplay;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.ChatFormatting;
@@ -23,6 +26,7 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,6 +44,7 @@ public class QuestGui extends Screen {
     protected int topPos;
 
     protected final List<ClientSideQuestDisplay> quests;
+    protected final List<Pair<String, List<Pair<Integer, ResourceLocation>>>> heads;
 
     private Rect scrollBar = new Rect(212, 14, 12, 147);
     private Rect scrollArea = new Rect(14, 14, 210, 147);
@@ -56,6 +61,19 @@ public class QuestGui extends Screen {
         super(new TextComponent(""));
         this.hasActive = hasActive;
         this.quests = quests;
+        this.heads = this.quests.stream().map(display -> {
+            // Resolve the textures of the npcs
+            List<Pair<Integer, ResourceLocation>> textures = new ArrayList<>();
+            if (display.features() != null) {
+                for (NPCTextureLayer.LayerType layerType : NPCTextureLayer.LayerType.values()) {
+                    ResourceLocation text = RenderNPC.getTextureFromLook(display.features(), display.features().view.containsKey(ModNPCLooks.SLIM.get()), layerType);
+                    if (!text.equals(RenderNPC.EMPTY)) {
+                        textures.add(Pair.of(NPCTextureLayer.color(display.features(), layerType), text));
+                    }
+                }
+            }
+            return Pair.of(display.npcSkin(), textures);
+        }).toList();
     }
 
     @Override
@@ -219,8 +237,9 @@ public class QuestGui extends Screen {
                 this.blit(poseStack, this.x, this.y, 0, 0, this.width, this.height);
             }
             ClientSideQuestDisplay display = QuestGui.this.quests.get(this.getActualIndex());
-            int offset = RenderNPC.renderForTooltip(this.x + 11, this.y + 18, 30,
-                    QuestGui.this.MODEL, display.npcSkin(), display.npcTexture()) ? 18 : 0;
+            Pair<String, List<Pair<Integer, ResourceLocation>>> head = QuestGui.this.heads.get(this.getActualIndex());
+            int offset = RenderNPC.renderForTooltip(poseStack, this.x + 2, this.y + 2,
+                    head.getFirst(), head.getSecond()) ? 18 : 0;
             Minecraft.getInstance().font.draw(poseStack, display.task(), this.x + 2 + offset, this.y + 6, display.active() ? 0x518203 : 0);
             this.renderToolTip(poseStack, mouseX, mouseY);
         }

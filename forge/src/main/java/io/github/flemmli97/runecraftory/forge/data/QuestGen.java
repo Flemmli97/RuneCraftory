@@ -42,9 +42,9 @@ public class QuestGen extends QuestProvider {
             .setSilent()
             .setMaxConcurrent(1).build();
 
-    public static final ResourceLocation MINING = id("quest/mining");
-    public static final ResourceLocation TAMING = id("quest/tame_monster");
-    public static final ResourceLocation SHIP_TURNIP = id("quest/ship_turnip");
+    public static final ResourceLocation MINING = id("mining");
+    public static final ResourceLocation TAMING = id("tame_monster");
+    public static final ResourceLocation SHIP_TURNIP = id("ship_turnip");
 
     public QuestGen(DataGenerator gen) {
         super(gen, false);
@@ -112,11 +112,11 @@ public class QuestGen extends QuestProvider {
     }
 
     public static String getTask(ResourceLocation id) {
-        return String.format("%s.quest.%s", id.getPath(), id.getNamespace());
+        return String.format("%s.quest.%s", id.getNamespace(), id.getPath());
     }
 
     public static String getDescription(ResourceLocation id) {
-        return String.format("%s.quest.%s_description", id.getPath(), id.getNamespace());
+        return String.format("%s.quest.%s.description", id.getNamespace(), id.getPath());
     }
 
     private static <K, V> Map<K, V> of(Consumer<Map<K, V>> cons) {

@@ -11,8 +11,12 @@ import net.minecraft.network.FriendlyByteBuf;
 
 public class SlimLookFeatureType implements NPCFeatureHolder<SlimLookFeatureType.SlimLookFeature> {
 
-    public static final Codec<SlimLookFeatureType> CODEC = Codec.unit(SlimLookFeatureType::new);
+    public static final SlimLookFeatureType INSTANCE = new SlimLookFeatureType();
+    public static final Codec<SlimLookFeatureType> CODEC = Codec.unit(INSTANCE);
     public static final SlimLookFeature FEATURE = new SlimLookFeature();
+
+    private SlimLookFeatureType() {
+    }
 
     @Override
     public SlimLookFeature create(EntityNPCBase npc) {

@@ -60,7 +60,7 @@ public class SimpleQuestIntegrationImpl extends SimpleQuestIntegration {
                                         npcQuest.getNpc(player.level).blockPosition().getY(), npcQuest.getNpc(player.level).blockPosition().getZ()).withStyle(ChatFormatting.GOLD),
                                 (MutableComponent) TextComponent.EMPTY), description.stream()).toList();
                         return new ClientSideQuestDisplay(e.getKey(), e.getValue().getTask(player), description,
-                                npcQuest.getNpc(player.level).getLook().texture(), npcQuest.getNpc(player.level).getLook().playerSkin(), data.isActive(e.getKey()));
+                                npcQuest.getNpc(player.level).lookFeatures, npcQuest.getNpc(player.level).getLook().playerSkin(), data.isActive(e.getKey())); //npcQuest.getNpc(player.level).getLook().texture()
                     }
                     return new ClientSideQuestDisplay(e.getKey(), e.getValue().getTask(player), description,
                             null, null, data.isActive(e.getKey()));

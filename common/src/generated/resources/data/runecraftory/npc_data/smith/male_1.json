@@ -40,11 +40,11 @@
   },
   "questHandler": {
     "responses": {
-      "runecraftory:quest/mining": {
-        "startID": "runecraftory:smith/male_1/quest_start_quest/mining",
-        "activeID": "runecraftory:smith/male_1/quest_active_quest/mining",
+      "runecraftory:mining": {
+        "startID": "runecraftory:smith/male_1/quest_start_mining",
+        "activeID": "runecraftory:smith/male_1/quest_active_mining",
         "hasSequence": false,
-        "endID": "runecraftory:smith/male_1/quest_end_quest/mining"
+        "endID": "runecraftory:smith/male_1/quest_end_mining"
       }
     },
     "requiredQuests": []

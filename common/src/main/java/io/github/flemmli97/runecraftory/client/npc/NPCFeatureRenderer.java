@@ -7,6 +7,8 @@ import net.minecraft.client.renderer.MultiBufferSource;
 
 public class NPCFeatureRenderer<T extends NPCFeature> {
 
+    public static final NPCFeatureRenderer<?> EMPTY = new NPCFeatureRenderer<>();
+
     /**
      * Use this if you want to change the setup before anything is rendered
      */

@@ -18,6 +18,6 @@
   "npc.shop_owner.male.1.dislike": "Eh... what is this?",
   "npc.shop_owner.male.1.like": "Thank you. Appreciate it.",
   "npc.shop_owner.male.1.gift.default": "Thanks. I would really like some crops.",
-  "quest/ship_turnip.quest.runecraftory": "First Shipment",
-  "quest/ship_turnip.quest.runecraftory_description": "Come see me."
+  "runecraftory.quest.ship_turnip": "First Shipment",
+  "runecraftory.quest.ship_turnip.description": "Come see me."
 }
