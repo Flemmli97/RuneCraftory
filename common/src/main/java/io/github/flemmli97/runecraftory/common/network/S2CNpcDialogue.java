@@ -11,15 +11,17 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.List;
+import java.util.Map;
 
 public record S2CNpcDialogue(int entity, ConversationContext convCtx, String conversationID, Component component,
+                             Map<String, Component> data,
                              List<Component> actions) implements Packet {
 
     public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "s2c_npc_dialogue");
 
     public static S2CNpcDialogue read(FriendlyByteBuf buf) {
         return new S2CNpcDialogue(buf.readInt(), buf.readBoolean() ? ConversationContext.get(buf.readResourceLocation()) : null,
-                buf.readBoolean() ? buf.readUtf() : null, buf.readComponent(), buf.readList(FriendlyByteBuf::readComponent));
+                buf.readBoolean() ? buf.readUtf() : null, buf.readComponent(), buf.readMap(FriendlyByteBuf::readUtf, FriendlyByteBuf::readComponent), buf.readList(FriendlyByteBuf::readComponent));
     }
 
     public static void handle(S2CNpcDialogue pkt) {
@@ -28,7 +30,7 @@ public record S2CNpcDialogue(int entity, ConversationContext convCtx, String con
             return;
         Entity entity = player.level.getEntity(pkt.entity);
         if (entity instanceof EntityNPCBase npc)
-            ClientHandlers.updateNPCDialogue(npc, pkt.convCtx, pkt.conversationID, pkt.component, pkt.actions);
+            ClientHandlers.updateNPCDialogue(npc, pkt.convCtx, pkt.conversationID, pkt.component, pkt.data, pkt.actions);
     }
 
     @Override
@@ -41,6 +43,7 @@ public record S2CNpcDialogue(int entity, ConversationContext convCtx, String con
         if (this.conversationID != null)
             buf.writeUtf(this.conversationID);
         buf.writeComponent(this.component);
+        buf.writeMap(this.data, FriendlyByteBuf::writeUtf, FriendlyByteBuf::writeComponent);
         buf.writeCollection(this.actions, FriendlyByteBuf::writeComponent);
     }
 

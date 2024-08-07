@@ -4,9 +4,9 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.ConversationContext;
-import io.github.flemmli97.runecraftory.client.PlaceHolderComponent;
 import io.github.flemmli97.runecraftory.client.gui.widgets.DialogueOptionButton;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.entities.npc.PlaceHolderComponent;
 import io.github.flemmli97.runecraftory.common.network.C2SDialogueAction;
 import io.github.flemmli97.runecraftory.common.network.C2SNPCInteraction;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -17,7 +17,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
-import net.minecraft.world.entity.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +47,7 @@ public class NPCDialogueGui<T extends EntityNPCBase> extends Screen {
     private ConversationContext convCtx;
     private String conversationID;
     private List<ConversationLine> conversation;
+    private Map<String, Component> replacements = Map.of();
     private List<Component> actions;
 
     private final List<DialogueOptionButton> buttons = new ArrayList<>();
@@ -104,7 +104,7 @@ public class NPCDialogueGui<T extends EntityNPCBase> extends Screen {
         int y = 0;
         for (int i = this.actions.size() - 1; i >= 0; i--) {
             int actionIdx = i;
-            DialogueOptionButton btn = new DialogueOptionButton(this.width / 2, this.topPos - 20 + y, this.font, PlaceHolderComponent.parseDialogueComponent(this.actions.get(i), this.replacements(this.minecraft.player)), b -> {
+            DialogueOptionButton btn = new DialogueOptionButton(this.width / 2, this.topPos - 20 + y, this.font, PlaceHolderComponent.parseDialogueComponent(this.actions.get(i), this.replacements), b -> {
                 if (this.convCtx != null && this.conversationID != null)
                     Platform.INSTANCE.sendToServer(new C2SDialogueAction(this.entity.getId(), this.convCtx, this.conversationID, actionIdx));
             });
@@ -176,22 +176,18 @@ public class NPCDialogueGui<T extends EntityNPCBase> extends Screen {
         }
     }
 
-    public void updateConversation(Minecraft mc, ConversationContext convCtx, String conversationID, Component conversation, List<Component> actions) {
-        conversation = PlaceHolderComponent.parseDialogueComponent(conversation, this.replacements(mc.player));
+    public void updateConversation(Minecraft mc, ConversationContext convCtx, String conversationID, Component conversation, Map<String, Component> data, List<Component> actions) {
+        conversation = PlaceHolderComponent.parseDialogueComponent(conversation, data);
         this.conversation = mc.font.getSplitter().splitLines(conversation, LINE_WIDTH, conversation.getStyle())
                 .stream().map(txt -> new ConversationLine(mc.font.width(txt), txt, Language.getInstance().getVisualOrder(txt))).toList();
         this.actions = actions;
         this.convCtx = convCtx;
         this.conversationID = conversationID;
+        this.replacements = data;
         this.lineProgress = 0;
         this.textProgress = 0;
         this.pageIndex = 0;
         this.reset = true;
-    }
-
-    private Map<String, Object> replacements(Player player) {
-        return Map.of(PlaceHolderComponent.NPC, this.entity.getDisplayName(),
-                PlaceHolderComponent.PLAYER, player.getDisplayName());
     }
 
     record ConversationLine(int width, FormattedText raw, FormattedCharSequence txt) {

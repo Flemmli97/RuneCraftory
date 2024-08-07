@@ -81,8 +81,8 @@ public class NPCDataGen extends NPCDataProvider {
 
         this.addNPCData("random_npc_1", new NPCData.Builder(50)
                         .addGiftResponse("hate", new NPCData.Gift(RunecraftoryTags.GENERIC_TRASH, "npc.generic.1.hate", -15), "What... why would you give me this?")
-                        .addGiftResponse("dislike", new NPCData.Gift(null, "npc.generic.1.dislike", -10), "Uh, thanks... but I’m not really into this.")
-                        .addGiftResponse("like", new NPCData.Gift(null, "npc.generic.1.like", 20), "Thanks %player% for the gift. I really like this.")
+                        .addGiftResponse("dislike", new NPCData.Gift(null, "npc.generic.1.dislike", -7), "Uh, thanks... but I’m not really into this.")
+                        .addGiftResponse("like", new NPCData.Gift(null, "npc.generic.1.like", 10), "Thanks %player% for the gift. I really like this.")
                         .setNeutralGiftResponse("npc.generic.1.gift.default", "Not bad, thanks. I’ll find a use for it.")
                         .withCombatActions(genericAttack, meleeAndHeal, meleeAndHeal),
                 of(m -> {
@@ -158,8 +158,8 @@ public class NPCDataGen extends NPCDataProvider {
                 }));
         this.addNPCData("random_npc_2", new NPCData.Builder(50)
                         .addGiftResponse("hate", new NPCData.Gift(RunecraftoryTags.GENERIC_TRASH, "npc.generic.2.hate", -15), "Oh... I’m sorry, but I really don’t like this.")
-                        .addGiftResponse("dislike", new NPCData.Gift(null, "npc.generic.2.dislike", -10), "I... I appreciate it, but I’m not sure what to do with this.")
-                        .addGiftResponse("like", new NPCData.Gift(null, "npc.generic.2.like", 20), "Oh, this is... really nice. Thank you %player%.")
+                        .addGiftResponse("dislike", new NPCData.Gift(null, "npc.generic.2.dislike", -7), "I... I appreciate it, but I’m not sure what to do with this.")
+                        .addGiftResponse("like", new NPCData.Gift(null, "npc.generic.2.like", 10), "Oh, this is... really nice. Thank you %player%.")
                         .setNeutralGiftResponse("npc.generic.2.gift.default", "This is okay... Thanks for thinking of me.")
                         .withCombatActions(genericAttack, meleeAndHeal, meleeAndHeal),
                 of(m -> {
@@ -216,8 +216,8 @@ public class NPCDataGen extends NPCDataProvider {
                 Map.of());
         this.addNPCData("random_npc_3", new NPCData.Builder(50)
                         .addGiftResponse("hate", new NPCData.Gift(RunecraftoryTags.GENERIC_TRASH, "npc.generic.3.hate", -15), "Uhh... what should I do with this?")
-                        .addGiftResponse("dislike", new NPCData.Gift(null, "npc.generic.3.dislike", -10), "Sorry... but this isn't really my thing.")
-                        .addGiftResponse("like", new NPCData.Gift(null, "npc.generic.3.like", 20), "Oh, nice... this is something I can appreciate.")
+                        .addGiftResponse("dislike", new NPCData.Gift(null, "npc.generic.3.dislike", -7), "Sorry... but this isn't really my thing.")
+                        .addGiftResponse("like", new NPCData.Gift(null, "npc.generic.3.like", 10), "Oh, nice... this is something I can appreciate.")
                         .setNeutralGiftResponse("npc.generic.3.gift.default", "Oh... thanks... it’s... alright.")
                         .withCombatActions(genericAttack, meleeAndHeal, meleeAndHeal),
                 of(m -> {
@@ -285,8 +285,8 @@ public class NPCDataGen extends NPCDataProvider {
                         .withLook(new NPCData.NPCLookId(shopMale, NPCData.Gender.MALE), new NPCData.NPCLookId(shopFemale, NPCData.Gender.FEMALE))
                         .withProfession(ModNPCJobs.GENERAL.getSecond(), ModNPCJobs.FLOWER.getSecond())
                         .addGiftResponse("hate", new NPCData.Gift(RunecraftoryTags.GENERIC_TRASH, "npc.shop_owner.1.hate", -15), "Uhh... what should I do with this?")
-                        .addGiftResponse("dislike", new NPCData.Gift(null, "npc.shop_owner.1.dislike", -10), "Sorry... but this isn't really my thing.")
-                        .addGiftResponse("like", new NPCData.Gift(null, "npc.shop_owner.1.like", 20), "Oh, nice... this is something I can appreciate.")
+                        .addGiftResponse("dislike", new NPCData.Gift(null, "npc.shop_owner.1.dislike", -7), "Sorry... but this isn't really my thing.")
+                        .addGiftResponse("like", new NPCData.Gift(null, "npc.shop_owner.1.like", 10), "Oh, nice... this is something I can appreciate.")
                         .setNeutralGiftResponse("npc.shop_owner.1.gift.default", "Oh... thanks... it’s... alright.")
                         .withCombatActions(genericAttack),
                 of(m -> {
@@ -347,8 +347,8 @@ public class NPCDataGen extends NPCDataProvider {
         this.addNPCData("smith/1", new NPCData.Builder(50)
                         .withLook(new NPCData.NPCLookId(smithMale, NPCData.Gender.MALE), new NPCData.NPCLookId(smithFemale, NPCData.Gender.FEMALE))
                         .withProfession(ModNPCJobs.GENERAL.getSecond(), ModNPCJobs.SMITH.getSecond())
-                        .addGiftResponse("dislike", new NPCData.Gift(RunecraftoryTags.SMITH_TRASH, "npc.smith.2.dislike", -10), "Hey! I'm not your trashcan!")
-                        .addGiftResponse("like", new NPCData.Gift(RunecraftoryTags.MINERALS, "npc.smith.2.like", 25), "Wow thanks! I can make something great using this")
+                        .addGiftResponse("dislike", new NPCData.Gift(RunecraftoryTags.SMITH_TRASH, "npc.smith.2.dislike", -7), "Hey! I'm not your trashcan!")
+                        .addGiftResponse("like", new NPCData.Gift(RunecraftoryTags.MINERALS, "npc.smith.2.like", 10), "Wow thanks! I can make something great using this")
                         .setNeutralGiftResponse("npc.smith.2.gift.default", "Thanks. Did you know ores are one of my favorite things?")
                         .withCombatActions(meleeAndFireball),
                 of(m -> {
@@ -407,8 +407,8 @@ public class NPCDataGen extends NPCDataProvider {
         this.addNPCData("doctor/1", new NPCData.Builder(50)
                         .withLook(new NPCData.NPCLookId(doctorMale, NPCData.Gender.MALE), new NPCData.NPCLookId(doctorFemale, NPCData.Gender.FEMALE))
                         .withProfession(ModNPCJobs.DOCTOR.getSecond())
-                        .addGiftResponse("dislike", new NPCData.Gift(null, "npc.doctor.2.dislike", -10), "I can't use this...")
-                        .addGiftResponse("like", new NPCData.Gift(null, "npc.doctor.2.like", 25), "Thanks! I really like this!")
+                        .addGiftResponse("dislike", new NPCData.Gift(null, "npc.doctor.2.dislike", -7), "I can't use this...")
+                        .addGiftResponse("like", new NPCData.Gift(null, "npc.doctor.2.like", 10), "Thanks! I really like this!")
                         .setNeutralGiftResponse("npc.doctor.2.gift.default", "Oh? this might be useful. Thanks")
                         .withCombatActions(meleeAndFireball),
                 of(m -> {
@@ -457,8 +457,8 @@ public class NPCDataGen extends NPCDataProvider {
         this.addNPCData("cook/1", new NPCData.Builder(50)
                         .withLook(new NPCData.NPCLookId(cookMale, NPCData.Gender.MALE), new NPCData.NPCLookId(cookFemale, NPCData.Gender.FEMALE))
                         .withProfession(ModNPCJobs.COOK.getSecond())
-                        .addGiftResponse("dislike", new NPCData.Gift(null, "npc.cook.2.dislike", -10), "This can't even be used in my dishes...")
-                        .addGiftResponse("like", new NPCData.Gift(null, "npc.cook.2.like", 25), "Wow thanks! I really like this!")
+                        .addGiftResponse("dislike", new NPCData.Gift(null, "npc.cook.2.dislike", -7), "This can't even be used in my dishes...")
+                        .addGiftResponse("like", new NPCData.Gift(null, "npc.cook.2.like", 10), "Wow thanks! I really like this!")
                         .setNeutralGiftResponse("npc.cook.2.gift.default", "It’s nice of you to think of me. I’ll find a use for this.")
                         .withCombatActions(meleeAndFireball),
                 of(m -> {

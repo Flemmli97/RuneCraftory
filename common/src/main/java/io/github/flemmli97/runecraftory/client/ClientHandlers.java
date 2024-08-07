@@ -278,12 +278,12 @@ public class ClientHandlers {
         }
     }
 
-    public static void updateNPCDialogue(EntityNPCBase npc, ConversationContext convCtx, String conversationID, Component component, List<Component> actions) {
+    public static void updateNPCDialogue(EntityNPCBase npc, ConversationContext convCtx, String conversationID, Component component, Map<String, Component> data, List<Component> actions) {
         if (Minecraft.getInstance().screen instanceof NPCDialogueGui<?> gui) {
-            gui.updateConversation(Minecraft.getInstance(), convCtx, conversationID, component, actions);
+            gui.updateConversation(Minecraft.getInstance(), convCtx, conversationID, component, data, actions);
         } else {
             NPCDialogueGui<EntityNPCBase> gui = new NPCDialogueGui<>(npc);
-            gui.updateConversation(Minecraft.getInstance(), convCtx, conversationID, component, actions);
+            gui.updateConversation(Minecraft.getInstance(), convCtx, conversationID, component, data, actions);
             Minecraft.getInstance().setScreen(gui);
         }
     }

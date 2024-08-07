@@ -1,5 +1,6 @@
-package io.github.flemmli97.runecraftory.client;
+package io.github.flemmli97.runecraftory.common.entities.npc;
 
+import io.github.flemmli97.runecraftory.client.NPCDialogueLanguageManager;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -14,6 +15,10 @@ public class PlaceHolderComponent {
 
     public static final String PLAYER = addReplacement("%player%");
     public static final String NPC = addReplacement("%npc%");
+    public static final String FAVORITE = addReplacement("%favorite%");
+    public static final String LIKE = addReplacement("%like%");
+    public static final String DISLIKE = addReplacement("%dislike%");
+    public static final String HATE = addReplacement("%hate%");
 
     private static String addReplacement(String pattern) {
         PLACEHOLDERS.add(pattern);
@@ -23,7 +28,7 @@ public class PlaceHolderComponent {
     /**
      * Parse the component by replacing the placeholder texts
      */
-    public static Component parseDialogueComponent(Component component, Map<String, Object> replacements) {
+    public static Component parseDialogueComponent(Component component, Map<String, Component> replacements) {
         Component parse;
         if (component instanceof TranslatableComponent translatable) {
             String translation = NPCDialogueLanguageManager.INSTANCE
@@ -34,7 +39,7 @@ public class PlaceHolderComponent {
             }
             List<Object> args = new ArrayList<>(List.of(translatable.getArgs()));
             for (String pattern : PLACEHOLDERS) {
-                Object replacement = replacements.get(pattern);
+                Component replacement = replacements.get(pattern);
                 if (replacement != null) {
                     translation = translation.replace(pattern, "%" + (args.size() + 1) + "$s");
                     args.add(replacement);

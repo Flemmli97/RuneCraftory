@@ -74,6 +74,8 @@ import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -153,6 +155,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
@@ -606,7 +609,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
                 if (this.relationManager.getFriendPointData(player.getUUID()).giftXP(this.level, (int) (gift.xp() * mult)))
                     this.tellDialogue(serverPlayer, null, null, new TranslatableComponent(gift.responseKey()), List.of());
             } else {
-                if (this.relationManager.getFriendPointData(player.getUUID()).giftXP(this.level, (int) (15 * mult)))
+                if (this.relationManager.getFriendPointData(player.getUUID()).giftXP(this.level, (int) (5 * mult)))
                     this.tellDialogue(serverPlayer, null, null, new TranslatableComponent(this.data.neutralGiftResponse()), List.of());
             }
         }
@@ -697,7 +700,18 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     private void tellDialogue(ServerPlayer player, ConversationContext convCtx, String conversationID, Component component, List<Component> actions) {
         this.interactWithPlayer(player);
-        Platform.INSTANCE.sendToClient(new S2CNpcDialogue(this.getId(), convCtx, conversationID, component, actions), player);
+        Platform.INSTANCE.sendToClient(new S2CNpcDialogue(this.getId(), convCtx, conversationID, component, this.conversationData(player), actions), player);
+    }
+
+    private Map<String, Component> conversationData(ServerPlayer player) {
+        Map<String, Component> map = new HashMap<>();
+        map.put(PlaceHolderComponent.NPC, this.getDisplayName());
+        map.put(PlaceHolderComponent.PLAYER, player.getDisplayName());
+        this.randomGiftItem(15, Integer.MAX_VALUE).ifPresent(item -> map.put(PlaceHolderComponent.FAVORITE, item.getDescription()));
+        this.randomGiftItem(7, 14).ifPresent(item -> map.put(PlaceHolderComponent.LIKE, item.getDescription()));
+        this.randomGiftItem(-14, -1).ifPresent(item -> map.put(PlaceHolderComponent.DISLIKE, item.getDescription()));
+        this.randomGiftItem(Integer.MIN_VALUE, -15).ifPresent(item -> map.put(PlaceHolderComponent.HATE, item.getDescription()));
+        return map;
     }
 
     public void handleDialogueAction(ServerPlayer sender, ConversationContext convCtx, String conversationID, int actionIdx) {
@@ -1513,6 +1527,22 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
                 return e.getValue();
         }
         return null;
+    }
+
+    public Optional<Item> randomGiftItem(int min, int max) {
+        for (Map.Entry<String, NPCData.Gift> e : this.data.giftItems().entrySet()) {
+            if (min > e.getValue().xp() || e.getValue().xp() < max)
+                continue;
+            TagKey<Item> tag = e.getValue().item() == null ? this.gift.computeIfAbsent(e.getKey(), s -> DataPackHandler.INSTANCE.giftManager().getRandomGift(NPCData.GiftType.ofXP(e.getValue().xp()), this.random)) : e.getValue().item();
+            if (tag != null)
+                return Registry.ITEM.getTag(tag).map(n -> {
+                    List<Item> items = n.stream().map(Holder::value).toList();
+                    if (items.isEmpty())
+                        return null;
+                    return items.get(this.updater.getDailyRandom().nextInt(items.size()));
+                });
+        }
+        return Optional.empty();
     }
 
     public void openShopForPlayer(ServerPlayer player) {
