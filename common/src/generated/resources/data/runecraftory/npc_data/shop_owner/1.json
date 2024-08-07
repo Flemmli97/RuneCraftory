@@ -32,11 +32,11 @@
     },
     "dislike": {
       "responseKey": "npc.shop_owner.1.dislike",
-      "xp": -10
+      "xp": -7
     },
     "like": {
       "responseKey": "npc.shop_owner.1.like",
-      "xp": 20
+      "xp": 10
     }
   },
   "interactions": {

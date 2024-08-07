@@ -20,11 +20,11 @@
     },
     "dislike": {
       "responseKey": "npc.generic.2.dislike",
-      "xp": -10
+      "xp": -7
     },
     "like": {
       "responseKey": "npc.generic.2.like",
-      "xp": 20
+      "xp": 10
     }
   },
   "interactions": {

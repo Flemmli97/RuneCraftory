@@ -28,12 +28,12 @@
     "dislike": {
       "items": "runecraftory:smith_trash",
       "responseKey": "npc.smith.2.dislike",
-      "xp": -10
+      "xp": -7
     },
     "like": {
       "items": "runecraftory:mineral",
       "responseKey": "npc.smith.2.like",
-      "xp": 25
+      "xp": 10
     }
   },
   "interactions": {

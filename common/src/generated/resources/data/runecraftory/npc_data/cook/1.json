@@ -26,11 +26,11 @@
   "giftItems": {
     "dislike": {
       "responseKey": "npc.cook.2.dislike",
-      "xp": -10
+      "xp": -7
     },
     "like": {
       "responseKey": "npc.cook.2.like",
-      "xp": 25
+      "xp": 10
     }
   },
   "interactions": {
