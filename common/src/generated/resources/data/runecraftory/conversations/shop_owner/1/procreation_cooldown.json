@@ -1,0 +1,13 @@
+{
+  "fallbackKey": "",
+  "conversations": {
+    "npc.shop_owner.1.procreation.fail.1": {
+      "translationKey": "npc.shop_owner.1.procreation.fail.1",
+      "conditions": []
+    },
+    "npc.shop_owner.1.procreation.fail.2": {
+      "translationKey": "npc.shop_owner.1.procreation.fail.2",
+      "conditions": []
+    }
+  }
+}

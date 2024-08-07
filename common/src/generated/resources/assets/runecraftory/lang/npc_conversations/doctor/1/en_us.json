@@ -1,0 +1,22 @@
+{
+  "npc.doctor.1.first.1": "Hello! Who are you?\n...\nI see. I'm %npc% and I run a clinic here. If you ever need help feel free to drop by there.",
+  "npc.doctor.1.greeting.1": "Good day %player%. How are you today?",
+  "npc.doctor.1.talk.1": "Medicine isn\u2019t just a job to me; it\u2019s a passion. Every patient has a story, and sometimes, understanding that story is the key to their treatment.",
+  "npc.doctor.1.talk.2": "Whenever you have a status condition you let me check that out. They can be quite detrimental. Though i heard a good night's rest also helps with that.",
+  "npc.doctor.1.talk.3": "Various herbs and grass are very useful in medicine",
+  "npc.doctor.1.talk.4": "Being a doctor lots of people come to me for a variety of problems. Helping them with it is my duty.",
+  "npc.doctor.1.follow.yes.1": "Sure. But don't overexert yourself!",
+  "npc.doctor.1.follow.no.1": "Ah sorry but I'm quite busy right now.",
+  "npc.doctor.1.follow.stop.1": "Ok. Take care of yourself!",
+  "npc.doctor.1.dating.yes.1": "That sounds wonderful. I\u2019d love to.",
+  "npc.doctor.1.dating.yes.2": "I\u2019d like that. Let\u2019s see where this goes.",
+  "npc.doctor.1.dating.no.1": "I\u2019m flattered, but I don't see us in that way.",
+  "npc.doctor.1.marry.yes.1": "Wow. I would've never expected that I would walk down this path. Yes lets do it!",
+  "npc.doctor.1.marry.no.1": "That\u2019s a big step, and I don\u2019t think I\u2019m ready to take it.",
+  "npc.doctor.1.divorce.success.1": "I... was never expecting this. Especially from you...",
+  "npc.doctor.1.divorce.fail.1": "Hmm... why are you giving me this?",
+  "npc.doctor.1.procreation.fail.1": "We should take this more slowly and not rush things.",
+  "npc.doctor.2.dislike": "I can't use this...",
+  "npc.doctor.2.like": "Thanks! I really like this!",
+  "npc.doctor.2.gift.default": "Oh? this might be useful. Thanks"
+}

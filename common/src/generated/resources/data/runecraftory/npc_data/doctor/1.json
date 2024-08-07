@@ -1,0 +1,55 @@
+{
+  "gender": "UNDEFINED",
+  "profession": [
+    "runecraftory:doctor"
+  ],
+  "look": [
+    {
+      "look": "runecraftory:doctor/male_1",
+      "gender": "MALE"
+    },
+    {
+      "look": "runecraftory:doctor/female_1",
+      "gender": "FEMALE"
+    }
+  ],
+  "weight": 50,
+  "combat": {
+    "combatActions": [
+      "runecraftory:melee_fireball_attack"
+    ]
+  },
+  "relation": {
+    "relationShipState": "DEFAULT"
+  },
+  "neutralGiftResponse": "npc.doctor.2.gift.default",
+  "giftItems": {
+    "dislike": {
+      "responseKey": "npc.doctor.2.dislike",
+      "xp": -10
+    },
+    "like": {
+      "responseKey": "npc.doctor.2.like",
+      "xp": 25
+    }
+  },
+  "interactions": {
+    "runecraftory:first": "runecraftory:doctor/1/first",
+    "runecraftory:greeting": "runecraftory:doctor/1/greeting",
+    "runecraftory:talk": "runecraftory:doctor/1/talk",
+    "runecraftory:follow_yes": "runecraftory:doctor/1/follow_yes",
+    "runecraftory:follow_no": "runecraftory:doctor/1/follow_no",
+    "runecraftory:follow_stop": "runecraftory:doctor/1/follow_stop",
+    "runecraftory:dating_accept": "runecraftory:doctor/1/dating_accept",
+    "runecraftory:dating_deny": "runecraftory:doctor/1/dating_deny",
+    "runecraftory:marriage_accept": "runecraftory:doctor/1/marriage_accept",
+    "runecraftory:marriage_deny": "runecraftory:doctor/1/marriage_deny",
+    "runecraftory:divorce": "runecraftory:doctor/1/divorce",
+    "runecraftory:divorce_error": "runecraftory:doctor/1/divorce_error",
+    "runecraftory:procreation_cooldown": "runecraftory:doctor/1/procreation_cooldown"
+  },
+  "questHandler": {
+    "responses": {},
+    "requiredQuests": []
+  }
+}

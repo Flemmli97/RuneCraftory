@@ -1,0 +1,21 @@
+{
+  "fallbackKey": "",
+  "conversations": {
+    "npc.shop_owner.1.greeting.1": {
+      "translationKey": "npc.shop_owner.1.greeting.1",
+      "conditions": [
+        {
+          "type": "minecraft:time_check",
+          "value": {
+            "max": 12000.0,
+            "min": 6000.0
+          }
+        }
+      ]
+    },
+    "npc.shop_owner.1.greeting.2": {
+      "translationKey": "npc.shop_owner.1.greeting.2",
+      "conditions": []
+    }
+  }
+}

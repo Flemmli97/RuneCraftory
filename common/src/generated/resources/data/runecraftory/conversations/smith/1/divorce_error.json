@@ -1,0 +1,13 @@
+{
+  "fallbackKey": "",
+  "conversations": {
+    "npc.smith.1.divorce.fail.1": {
+      "translationKey": "npc.smith.1.divorce.fail.1",
+      "conditions": []
+    },
+    "npc.smith.1.divorce.fail.2": {
+      "translationKey": "npc.smith.1.divorce.fail.2",
+      "conditions": []
+    }
+  }
+}

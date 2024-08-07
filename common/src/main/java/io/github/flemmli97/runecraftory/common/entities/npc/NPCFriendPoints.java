@@ -19,6 +19,10 @@ public class NPCFriendPoints {
     public final LevelExpPair points = new LevelExpPair();
     private int talkCount;
 
+    public boolean talked() {
+        return this.lastUpdateTalk != -1;
+    }
+
     public boolean talkTo(Level level, int xp) {
         int day = WorldUtils.day(level);
         if (day != this.lastUpdateTalk) {

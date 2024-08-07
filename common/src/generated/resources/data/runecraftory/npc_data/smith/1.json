@@ -1,0 +1,65 @@
+{
+  "gender": "UNDEFINED",
+  "profession": [
+    "runecraftory:general",
+    "runecraftory:smith"
+  ],
+  "look": [
+    {
+      "look": "runecraftory:smith/male_1",
+      "gender": "MALE"
+    },
+    {
+      "look": "runecraftory:smith/female_1",
+      "gender": "FEMALE"
+    }
+  ],
+  "weight": 50,
+  "combat": {
+    "combatActions": [
+      "runecraftory:melee_fireball_attack"
+    ]
+  },
+  "relation": {
+    "relationShipState": "DEFAULT"
+  },
+  "neutralGiftResponse": "npc.smith.2.gift.default",
+  "giftItems": {
+    "dislike": {
+      "items": "runecraftory:smith_trash",
+      "responseKey": "npc.smith.2.dislike",
+      "xp": -10
+    },
+    "like": {
+      "items": "runecraftory:mineral",
+      "responseKey": "npc.smith.2.like",
+      "xp": 25
+    }
+  },
+  "interactions": {
+    "runecraftory:first": "runecraftory:smith/1/first",
+    "runecraftory:greeting": "runecraftory:smith/1/greeting",
+    "runecraftory:talk": "runecraftory:smith/1/talk",
+    "runecraftory:follow_yes": "runecraftory:smith/1/follow_yes",
+    "runecraftory:follow_no": "runecraftory:smith/1/follow_no",
+    "runecraftory:follow_stop": "runecraftory:smith/1/follow_stop",
+    "runecraftory:dating_accept": "runecraftory:smith/1/dating_accept",
+    "runecraftory:dating_deny": "runecraftory:smith/1/dating_deny",
+    "runecraftory:marriage_accept": "runecraftory:smith/1/marriage_accept",
+    "runecraftory:marriage_deny": "runecraftory:smith/1/marriage_deny",
+    "runecraftory:divorce": "runecraftory:smith/1/divorce",
+    "runecraftory:divorce_error": "runecraftory:smith/1/divorce_error",
+    "runecraftory:procreation_cooldown": "runecraftory:smith/1/procreation_cooldown"
+  },
+  "questHandler": {
+    "responses": {
+      "runecraftory:mining": {
+        "startID": "runecraftory:smith/1/quest_start_mining",
+        "activeID": "runecraftory:smith/1/quest_active_mining",
+        "hasSequence": false,
+        "endID": "runecraftory:smith/1/quest_end_mining"
+      }
+    },
+    "requiredQuests": []
+  }
+}

@@ -2,23 +2,33 @@
   "gender": "UNDEFINED",
   "weight": 50,
   "combat": {
-    "combatActions": "runecraftory:generic_melee_attack"
+    "combatActions": [
+      "runecraftory:generic_melee_attack",
+      "runecraftory:melee_fireball_attack",
+      "runecraftory:melee_fireball_attack"
+    ]
   },
   "relation": {
     "relationShipState": "DEFAULT"
   },
   "neutralGiftResponse": "npc.generic.3.gift.default",
   "giftItems": {
+    "hate": {
+      "items": "runecraftory:generic_trash",
+      "responseKey": "npc.generic.3.hate",
+      "xp": -15
+    },
     "dislike": {
       "responseKey": "npc.generic.3.dislike",
       "xp": -10
     },
     "like": {
       "responseKey": "npc.generic.3.like",
-      "xp": 25
+      "xp": 20
     }
   },
   "interactions": {
+    "runecraftory:first": "runecraftory:random_npc_3/first",
     "runecraftory:greeting": "runecraftory:random_npc_3/greeting",
     "runecraftory:talk": "runecraftory:random_npc_3/talk",
     "runecraftory:follow_yes": "runecraftory:random_npc_3/follow_yes",

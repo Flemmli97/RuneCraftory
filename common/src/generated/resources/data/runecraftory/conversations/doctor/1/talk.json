@@ -1,0 +1,21 @@
+{
+  "fallbackKey": "",
+  "conversations": {
+    "npc.doctor.1.talk.1": {
+      "translationKey": "npc.doctor.1.talk.1",
+      "conditions": []
+    },
+    "npc.doctor.1.talk.2": {
+      "translationKey": "npc.doctor.1.talk.2",
+      "conditions": []
+    },
+    "npc.doctor.1.talk.3": {
+      "translationKey": "npc.doctor.1.talk.3",
+      "conditions": []
+    },
+    "npc.doctor.1.talk.4": {
+      "translationKey": "npc.doctor.1.talk.4",
+      "conditions": []
+    }
+  }
+}

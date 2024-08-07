@@ -12,6 +12,7 @@ public record ConversationContext(ResourceLocation key) {
 
     private static final Map<ResourceLocation, ConversationContext> CONTEXTS = new HashMap<>();
 
+    public static final ConversationContext FIRST_TALK = register("first");
     public static final ConversationContext GREETING = register("greeting");
     public static final ConversationContext TALK = register("talk");
     public static final ConversationContext FOLLOW_YES = register("follow_yes");
@@ -41,11 +42,6 @@ public record ConversationContext(ResourceLocation key) {
 
     public static Collection<ConversationContext> getRegistered() {
         return ImmutableList.copyOf(CONTEXTS.values());
-    }
-
-
-    public static Collection<ConversationContext> dataGenVerify() {
-        return ImmutableList.of(GREETING, TALK, FOLLOW_STOP, FOLLOW_NO, FOLLOW_YES);
     }
 
     @Override

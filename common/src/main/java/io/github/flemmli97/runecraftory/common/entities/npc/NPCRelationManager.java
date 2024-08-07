@@ -22,6 +22,10 @@ public class NPCRelationManager {
     private UUIDNameMapper motherUUID;
     private UUIDNameMapper[] childUUIDs;
 
+    public boolean talkedTo(UUID uuid) {
+        return this.playerHearts.containsKey(uuid);
+    }
+
     public NPCFriendPoints getFriendPointData(UUID uuid) {
         return this.playerHearts.computeIfAbsent(uuid, key -> new NPCFriendPoints());
     }

@@ -36,7 +36,7 @@ public class PlaceHolderComponent {
             for (String pattern : PLACEHOLDERS) {
                 Object replacement = replacements.get(pattern);
                 if (replacement != null) {
-                    translation = translation.replace("%player%", "%" + (args.size() + 1) + "$s");
+                    translation = translation.replace(pattern, "%" + (args.size() + 1) + "$s");
                     args.add(replacement);
                 }
             }

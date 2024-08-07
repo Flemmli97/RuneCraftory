@@ -1,4 +1,13 @@
 {
-  "fallbackKey": "npc.generic.2.follow.stop",
-  "conversations": {}
+  "fallbackKey": "",
+  "conversations": {
+    "npc.generic.2.follow.stop.1": {
+      "translationKey": "npc.generic.2.follow.stop.1",
+      "conditions": []
+    },
+    "npc.generic.2.follow.stop.2": {
+      "translationKey": "npc.generic.2.follow.stop.2",
+      "conditions": []
+    }
+  }
 }

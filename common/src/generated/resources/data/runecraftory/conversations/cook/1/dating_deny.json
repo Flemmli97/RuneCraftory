@@ -1,0 +1,9 @@
+{
+  "fallbackKey": "",
+  "conversations": {
+    "npc.cook.1.dating.no.1": {
+      "translationKey": "npc.cook.1.dating.no.1",
+      "conditions": []
+    }
+  }
+}

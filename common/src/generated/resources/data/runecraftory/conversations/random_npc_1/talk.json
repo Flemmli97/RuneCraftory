@@ -1,0 +1,58 @@
+{
+  "fallbackKey": "",
+  "conversations": {
+    "npc.generic.1.talk.1": {
+      "translationKey": "npc.generic.1.talk.1",
+      "actions": [
+        {
+          "translationKey": "npc.generic.1.talk.1.answer.same",
+          "actions": "ANSWER",
+          "value": "npc.generic.1.talk.1.response.same"
+        },
+        {
+          "translationKey": "npc.generic.1.talk.1.answer.ok",
+          "actions": "ANSWER",
+          "value": "npc.generic.1.talk.1.response.ok"
+        }
+      ],
+      "conditions": [
+        {
+          "type": "minecraft:weather_check",
+          "raining": false
+        }
+      ]
+    },
+    "npc.generic.1.talk.1.response.same": {
+      "translationKey": "npc.generic.1.talk.1.response.same",
+      "startingConversation": false,
+      "conditions": []
+    },
+    "npc.generic.1.talk.1.response.ok": {
+      "translationKey": "npc.generic.1.talk.1.response.ok",
+      "startingConversation": false,
+      "conditions": []
+    },
+    "npc.generic.1.talk.2": {
+      "translationKey": "npc.generic.1.talk.2",
+      "conditions": []
+    },
+    "npc.generic.1.talk.rain.1": {
+      "translationKey": "npc.generic.1.talk.rain.1",
+      "conditions": [
+        {
+          "type": "minecraft:weather_check",
+          "raining": true
+        }
+      ]
+    },
+    "npc.generic.1.talk.rain.2": {
+      "translationKey": "npc.generic.1.talk.rain.2",
+      "conditions": [
+        {
+          "type": "minecraft:weather_check",
+          "raining": true
+        }
+      ]
+    }
+  }
+}

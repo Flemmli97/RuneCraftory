@@ -1,10 +1,36 @@
 {
-  "fallbackKey": "npc.generic.3.talk.default",
+  "fallbackKey": "",
   "conversations": {
+    "npc.generic.3.talk.1": {
+      "translationKey": "npc.generic.3.talk.1",
+      "conditions": []
+    },
     "npc.generic.3.talk.2": {
       "translationKey": "npc.generic.3.talk.2",
-      "minHearts": 0,
-      "maxHearts": 10,
+      "conditions": []
+    },
+    "npc.generic.3.talk.3": {
+      "translationKey": "npc.generic.3.talk.3",
+      "actions": [
+        {
+          "translationKey": "npc.generic.3.talk.3.answer.nice",
+          "actions": "ANSWER",
+          "value": "npc.generic.3.talk.3.response.nice"
+        },
+        {
+          "translationKey": "npc.generic.3.talk.3.answer.uhh",
+          "actions": "ANSWER",
+          "value": "npc.generic.3.talk.3.response.uhh"
+        }
+      ],
+      "conditions": []
+    },
+    "npc.generic.3.talk.3.response.nice": {
+      "translationKey": "npc.generic.3.talk.3.response.nice",
+      "conditions": []
+    },
+    "npc.generic.3.talk.3.response.uhh": {
+      "translationKey": "npc.generic.3.talk.3.response.uhh",
       "conditions": []
     }
   }

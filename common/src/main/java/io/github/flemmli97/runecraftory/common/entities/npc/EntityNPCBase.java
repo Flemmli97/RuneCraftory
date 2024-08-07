@@ -614,9 +614,16 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     public void talkTo(ServerPlayer player) {
-        boolean doGreet = this.relationManager.getFriendPointData(player.getUUID())
-                .talkTo(this.level, 15);
-        this.speak(player, doGreet ? ConversationContext.GREETING : ConversationContext.TALK);
+        ConversationContext ctx = ConversationContext.TALK;
+        NPCFriendPoints fp = this.relationManager.getFriendPointData(player.getUUID());
+        boolean talkedTo = fp.talked();
+        boolean doGreet = fp.talkTo(this.level, 15);
+        if (!talkedTo) {
+            ctx = ConversationContext.FIRST_TALK;
+        } else if (doGreet) {
+            ctx = ConversationContext.GREETING;
+        }
+        this.speak(player, ctx);
     }
 
     public void speak(ServerPlayer player, ConversationContext convCtx) {
@@ -1453,10 +1460,14 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         if (this.look == null) {
             if (this.data == NPCData.DEFAULT_DATA)
                 this.look = NPCData.NPCLook.DEFAULT_LOOK;
-            else if (this.data.look() != null)
-                this.look = DataPackHandler.INSTANCE.npcLookManager().get(this.data.look());
-            else
-                this.look = DataPackHandler.INSTANCE.npcLookManager().getRandom(this.random, this.isMale());
+            else {
+                List<ResourceLocation> looks = this.data.look() == null ? List.of() : this.data.look().stream().filter(e -> e.gender() == NPCData.Gender.UNDEFINED || (e.gender() == NPCData.Gender.MALE) == this.isMale())
+                        .map(NPCData.NPCLookId::id).toList();
+                if (!looks.isEmpty())
+                    this.look = DataPackHandler.INSTANCE.npcLookManager().get(looks.get(this.random.nextInt(looks.size())));
+                else
+                    this.look = DataPackHandler.INSTANCE.npcLookManager().getRandom(this.random, this.isMale());
+            }
         }
         return this.look;
     }
@@ -1465,8 +1476,10 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         if (this.attackActions == null) {
             if (this.data == NPCData.DEFAULT_DATA)
                 this.attackActions = NPCAttackActions.DEFAULT;
-            else
-                this.attackActions = DataPackHandler.INSTANCE.npcActionsManager().get(this.data.combatActions());
+            else {
+                List<ResourceLocation> actions = this.data.combatActions();
+                this.attackActions = DataPackHandler.INSTANCE.npcActionsManager().get(actions.isEmpty() ? null : actions.get(this.random.nextInt(actions.size())));
+            }
         }
         return this.attackActions;
     }
@@ -1583,7 +1596,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             this.lookFeatures.buildFromLooks(this, this.look.additionalFeatures().values());
         } else {
             // Apply non null things else
-            if (this.data.look() != null) {
+            if (this.data.look() != null && !this.data.look().isEmpty()) {
                 this.look = null;
                 this.getLook();
             }
@@ -1601,7 +1614,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
                 this.birthday = null;
                 this.getBirthday();
             }
-            if (this.data.combatActions() != null)
+            if (this.data.combatActions() != null && !this.data.combatActions().isEmpty())
                 this.attackActions = null;
             if (data.schedule() != null)
                 this.schedule.with(data.schedule());

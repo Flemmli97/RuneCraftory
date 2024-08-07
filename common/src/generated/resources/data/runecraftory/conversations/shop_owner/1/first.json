@@ -1,0 +1,17 @@
+{
+  "fallbackKey": "",
+  "conversations": {
+    "npc.shop_owner.1.first.1": {
+      "translationKey": "npc.shop_owner.1.first.1",
+      "conditions": []
+    },
+    "npc.shop_owner.1.first.2": {
+      "translationKey": "npc.shop_owner.1.first.2",
+      "conditions": []
+    },
+    "npc.shop_owner.1.first.3": {
+      "translationKey": "npc.shop_owner.1.first.3",
+      "conditions": []
+    }
+  }
+}

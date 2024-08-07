@@ -6,6 +6,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSyntaxException;
+import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
@@ -39,6 +40,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.Serializer;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Type;
@@ -57,14 +59,14 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public record NPCData(@Nullable String name, @Nullable String surname,
-                      Gender gender, List<NPCJob> profession, @Nullable ResourceLocation look,
+                      Gender gender, List<NPCJob> profession, @Nullable List<NPCLookId> look,
                       @Nullable Pair<EnumSeason, Integer> birthday,
                       int weight, String neutralGiftResponse,
                       Map<ConversationContext, ResourceLocation> interactions,
                       QuestHandler questHandler,
                       Map<String, Gift> giftItems, @Nullable NPCSchedule.Schedule schedule,
                       @Nullable Map<Attribute, Double> baseStats, @Nullable Map<Attribute, Double> statIncrease,
-                      int baseLevel, @Nullable ResourceLocation combatActions, int unique,
+                      int baseLevel, @Nullable List<ResourceLocation> combatActions, int unique,
                       RelationShipState relationShipState, List<ResourceLocation> possibleChildren) {
 
     public static final Map<Attribute, Double> DEFAULT_GAIN = Map.of(Attributes.MAX_HEALTH, 3d, Attributes.ATTACK_DAMAGE, 1d,
@@ -104,7 +106,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                     Codec.STRING.fieldOf("neutralGiftResponse").forGetter(d -> d.neutralGiftResponse),
                     Codec.unboundedMap(Codec.STRING, Gift.CODEC).fieldOf("giftItems").forGetter(d -> d.giftItems),
 
-                    ResourceLocation.CODEC.optionalFieldOf("look").forGetter(d -> Optional.ofNullable(d.look)),
+                    NPCLookId.CODEC.listOf().optionalFieldOf("look").forGetter(d -> Optional.ofNullable(d.look == null || d.look.isEmpty() ? null : d.look)),
                     WorldUtils.DATE.optionalFieldOf("birthday").forGetter(d -> Optional.ofNullable(d.birthday)),
                     ExtraCodecs.POSITIVE_INT.fieldOf("weight").forGetter(d -> d.weight),
                     ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("unique").forGetter(d -> d.unique == 0 ? Optional.empty() : Optional.of(d.unique)),
@@ -168,12 +170,12 @@ public record NPCData(@Nullable String name, @Nullable String surname,
     }
 
     record NPCCombat(@Nullable Map<Attribute, Double> baseStats, @Nullable Map<Attribute, Double> statIncrease,
-                     int baseLevel, @Nullable ResourceLocation npcAction) {
+                     int baseLevel, @Nullable List<ResourceLocation> npcAction) {
 
         public static final Codec<NPCCombat> CODEC = RecordCodecBuilder.create(inst ->
                 inst.group(
                         ExtraCodecs.POSITIVE_INT.optionalFieldOf("baseLevel").forGetter(d -> d.baseLevel != 1 ? Optional.of(d.baseLevel) : Optional.empty()),
-                        ResourceLocation.CODEC.optionalFieldOf("combatActions").forGetter(d -> Optional.ofNullable(d.npcAction)),
+                        ResourceLocation.CODEC.listOf().optionalFieldOf("combatActions").forGetter(d -> Optional.ofNullable(d.npcAction == null || d.npcAction.isEmpty() ? null : d.npcAction)),
                         Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).optionalFieldOf("baseStats").forGetter(d -> Optional.ofNullable(d.baseStats)),
                         Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).optionalFieldOf("statIncrease").forGetter(d -> Optional.ofNullable(d.statIncrease))
                 ).apply(inst, (lvl, action, stats, inc) -> new NPCCombat(stats.orElse(null), inc.orElse(null), lvl.orElse(1), action.orElse(null))));
@@ -214,7 +216,8 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         private final Map<String, Gift> giftItems = new LinkedHashMap<>();
         private Pair<EnumSeason, Integer> birthday;
         private NPCSchedule.Schedule schedule;
-        private ResourceLocation look, combatAction;
+        private List<NPCLookId> look;
+        private List<ResourceLocation> combatAction;
 
         private final Map<Attribute, Double> baseStats = new TreeMap<>(ModAttributes.SORTED);
         private final Map<Attribute, Double> statIncrease = new TreeMap<>(ModAttributes.SORTED);
@@ -252,8 +255,8 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             return this;
         }
 
-        public Builder withLook(ResourceLocation id) {
-            this.look = id;
+        public Builder withLook(NPCLookId... looks) {
+            this.look = List.of(looks);
             return this;
         }
 
@@ -323,8 +326,8 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             return this;
         }
 
-        public Builder withCombatAction(ResourceLocation action) {
-            this.combatAction = action;
+        public Builder withCombatActions(ResourceLocation... actions) {
+            this.combatAction = List.of(actions);
             return this;
         }
 
@@ -345,7 +348,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         public NPCData build() {
             if (this.neutralGiftResponse == null)
                 throw new IllegalStateException("Neutral gift response not set.");
-            for (ConversationContext convCtx : ConversationContext.dataGenVerify()) {
+            for (ConversationContext convCtx : ConversationContext.getRegistered()) {
                 if (!this.interactions.containsKey(convCtx))
                     throw new IllegalStateException("Missing interactions for " + convCtx);
             }
@@ -356,31 +359,36 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         }
     }
 
-    public static class ConversationSet {
+    public record NPCLookId(ResourceLocation id, Gender gender) {
+
+        public static final Codec<NPCLookId> CODEC = Codec.either(ResourceLocation.CODEC, RecordCodecBuilder.<NPCLookId>create(inst ->
+                inst.group(
+                        ResourceLocation.CODEC.fieldOf("look").forGetter(NPCLookId::id),
+                        CodecUtils.stringEnumCodec(Gender.class, Gender.UNDEFINED).fieldOf("gender").forGetter(NPCLookId::gender)
+                ).apply(inst, NPCLookId::new))).flatXmap(d -> {
+            if (d.left().isPresent())
+                return DataResult.success(new NPCLookId(d.left().get()));
+            return d.right().map(DataResult::success).orElse(DataResult.error("Failed to parse npc look id"));
+        }, i -> DataResult.success(i.gender == Gender.UNDEFINED ? Either.left(i.id()) : Either.right(i)));
+
+        public NPCLookId(String namespace, String path) {
+            this(new ResourceLocation(namespace, path));
+        }
+
+        public NPCLookId(ResourceLocation id) {
+            this(id, Gender.UNDEFINED);
+        }
+    }
+
+    public record ConversationSet(String fallbackKey, Map<String, Conversation> conversations) {
 
         public static final Codec<ConversationSet> CODEC = RecordCodecBuilder.create(inst ->
                 inst.group(
-                        Codec.STRING.fieldOf("fallbackKey").forGetter(d -> d.fallbackKey),
+                        Codec.STRING.optionalFieldOf("fallbackKey").forGetter(d -> Optional.of(d.fallbackKey)),
                         Codec.unboundedMap(Codec.STRING, Conversation.CODEC).fieldOf("conversations").forGetter(d -> d.conversations)
-                ).apply(inst, ConversationSet::new));
+                ).apply(inst, (fallback, convs) -> new ConversationSet(fallback.orElse(""), convs)));
 
         public static final ConversationSet DEFAULT = new ConversationSet("npc.conversation.missing", Map.of());
-
-        private final String fallbackKey;
-        private final Map<String, Conversation> conversations;
-
-        public ConversationSet(String fallbackKey, Map<String, Conversation> conversations) {
-            this.fallbackKey = fallbackKey;
-            this.conversations = conversations;
-        }
-
-        public String fallbackKey() {
-            return this.fallbackKey;
-        }
-
-        public Map<String, Conversation> conversations() {
-            return this.conversations;
-        }
 
         public static class Builder {
 
@@ -388,6 +396,10 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             private final Map<String, Conversation> greetings = new LinkedHashMap<>();
 
             private final Map<String, String> translations = new LinkedHashMap<>();
+
+            public Builder() {
+                this.fallback = "";
+            }
 
             public Builder(String fallback, String enTranslation) {
                 this.fallback = fallback;
@@ -400,6 +412,8 @@ public record NPCData(@Nullable String name, @Nullable String surname,
 
             public Builder addConversation(String key, Conversation.Builder conversation, String enTranslation) {
                 this.greetings.put(key, conversation.build());
+                if (this.translations.containsKey(conversation.translationKey))
+                    throw new IllegalStateException("Duplicate translation key " + conversation.translationKey);
                 this.translations.put(conversation.translationKey, enTranslation);
                 this.translations.putAll(conversation.actionTranslation);
                 return this;
@@ -415,7 +429,8 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         }
     }
 
-    public record Conversation(String translationKey, int minHearts, int maxHearts, boolean startingConversation,
+    public record Conversation(String translationKey, @Nullable NumberProvider minHearts,
+                               @Nullable NumberProvider maxHearts, boolean startingConversation,
                                List<ConversationActionHolder> actions, LootItemCondition... conditions) {
 
         private static final Gson GSON = Deserializers.createConditionSerializer().create();
@@ -453,7 +468,6 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             ((Serializer<LootItemCondition>) conditon.getType().getSerializer()).serialize(obj, conditon, CTX_SERIALIZER);
             return new Dynamic<>(JsonOps.INSTANCE, obj);
         });
-
         public static final Codec<Conversation> CODEC = RecordCodecBuilder.create(inst ->
                 inst.group(
                         Codec.BOOL.optionalFieldOf("startingConversation").forGetter(d -> d.startingConversation ? Optional.empty() : Optional.of(false)),
@@ -461,12 +475,14 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                         LOOT_ITEM_CONDITION_CODEC.listOf().fieldOf("conditions").forGetter(d -> Arrays.stream(d.conditions).toList()),
 
                         Codec.STRING.fieldOf("translationKey").forGetter(d -> d.translationKey),
-                        ExtraCodecs.NON_NEGATIVE_INT.fieldOf("minHearts").forGetter(d -> d.minHearts),
-                        ExtraCodecs.NON_NEGATIVE_INT.fieldOf("maxHearts").forGetter(d -> d.maxHearts)
-                ).apply(inst, (start, action, cond, key, min, max) -> new Conversation(key, min, max, start.orElse(true), action.orElse(List.of()), cond.toArray(new LootItemCondition[0]))));
+                        CodecUtils.jsonCodecBuilder(GSON, NumberProvider.class, "NumberProvider").optionalFieldOf("minHearts").forGetter(d -> Optional.ofNullable(d.minHearts)),
+                        CodecUtils.jsonCodecBuilder(GSON, NumberProvider.class, "NumberProvider").optionalFieldOf("maxHearts").forGetter(d -> Optional.ofNullable(d.maxHearts))
+                ).apply(inst, (start, action, cond, key, min, max) -> new Conversation(key, min.orElse(null), max.orElse(null), start.orElse(true), action.orElse(List.of()), cond.toArray(new LootItemCondition[0]))));
 
         public boolean test(int hearts, LootContext ctx) {
-            if (this.minHearts > hearts || this.maxHearts < hearts)
+            if (this.minHearts != null && this.minHearts.getInt(ctx) > hearts)
+                return false;
+            if (this.maxHearts != null && this.maxHearts.getInt(ctx) < hearts)
                 return false;
             for (LootItemCondition condition : this.conditions)
                 if (!condition.test(ctx))
@@ -477,16 +493,24 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         public static class Builder {
 
             private final String translationKey;
-            private final int minHearts, maxHearts;
+            private NumberProvider minHearts, maxHearts;
             private boolean startingConversation = true;
             private final List<ConversationActionHolder> action = new ArrayList<>();
             private final Map<String, String> actionTranslation = new LinkedHashMap<>();
             private final List<LootItemCondition> conditions = new ArrayList<>();
 
-            public Builder(String translationKey, int minHearts, int maxHearts) {
+            public Builder(String translationKey) {
                 this.translationKey = translationKey;
+            }
+
+            public Builder min(@Nullable NumberProvider minHearts) {
                 this.minHearts = minHearts;
+                return this;
+            }
+
+            public Builder max(@Nullable NumberProvider maxHearts) {
                 this.maxHearts = maxHearts;
+                return this;
             }
 
             public Builder setAnswer() {

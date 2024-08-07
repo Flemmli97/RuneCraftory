@@ -61,7 +61,7 @@ public class DialogueOptionButton extends Button {
         int y = 0;
         for (FormattedCharSequence comp : this.text) {
             AbstractWidget.drawCenteredString(stack, font, comp, this.txtX, this.y + NPCDialogueGui.BORDER_SIZE + y, j | Mth.ceil(this.alpha * 255.0f) << 24);
-            y++;
+            y += font.lineHeight;
         }
     }
 }

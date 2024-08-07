@@ -1,0 +1,13 @@
+{
+  "fallbackKey": "",
+  "conversations": {
+    "npc.smith.1.dating.no.1": {
+      "translationKey": "npc.smith.1.dating.no.1",
+      "conditions": []
+    },
+    "npc.smith.1.dating.no.2": {
+      "translationKey": "npc.smith.1.dating.no.2",
+      "conditions": []
+    }
+  }
+}

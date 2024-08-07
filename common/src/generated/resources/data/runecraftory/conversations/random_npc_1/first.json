@@ -1,0 +1,17 @@
+{
+  "fallbackKey": "",
+  "conversations": {
+    "npc.generic.1.first.1": {
+      "translationKey": "npc.generic.1.first.1",
+      "conditions": []
+    },
+    "npc.generic.1.first.2": {
+      "translationKey": "npc.generic.1.first.2",
+      "conditions": []
+    },
+    "npc.generic.1.first.3": {
+      "translationKey": "npc.generic.1.first.3",
+      "conditions": []
+    }
+  }
+}

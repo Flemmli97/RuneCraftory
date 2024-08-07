@@ -1,0 +1,160 @@
+{
+  "gender": "MALE",
+  "weight": 0,
+  "additionalFeatures": [
+    {
+      "indices": [
+        0,
+        1,
+        2
+      ],
+      "colors": [
+        {
+          "colorMin": "feead9",
+          "colorMax": "f4a98b"
+        },
+        {
+          "colorMin": "efdbca",
+          "colorMax": "eca188"
+        },
+        {
+          "colorMin": "d5bfa7",
+          "colorMax": "c18356"
+        },
+        {
+          "colorMin": "a1836d",
+          "colorMax": "94563c"
+        },
+        {
+          "colorMin": "664f44",
+          "colorMax": "592e19"
+        },
+        {
+          "colorMin": "312926",
+          "colorMax": "2c130c"
+        }
+      ],
+      "type": "runecraftory:skin_feature"
+    },
+    {
+      "indices": [
+        0,
+        1
+      ],
+      "colors": [
+        {
+          "colorMin": "000000",
+          "colorMax": "2f2f2f"
+        },
+        {
+          "colorMin": "462a05",
+          "colorMax": "6d4720"
+        },
+        {
+          "colorMin": "0b2a75",
+          "colorMax": "204a87"
+        },
+        {
+          "colorMin": "42a20c",
+          "colorMax": "6fbe36"
+        },
+        {
+          "colorMin": "b9ae08",
+          "colorMax": "dbbf41"
+        }
+      ],
+      "type": "runecraftory:iris_feature"
+    },
+    {
+      "indices": [
+        0,
+        1
+      ],
+      "colors": [],
+      "type": "runecraftory:sclera_feature"
+    },
+    {
+      "indices": [
+        0,
+        1
+      ],
+      "colors": [
+        {
+          "colorMin": "3c1d05",
+          "colorMax": "8d7053"
+        }
+      ],
+      "type": "runecraftory:eyebrows_feature"
+    },
+    {
+      "size": {
+        "type": "minecraft:uniform",
+        "min": 0.95,
+        "max": 1.1
+      },
+      "type": "runecraftory:size_feature"
+    },
+    {
+      "styles": [
+        {
+          "weight": 1,
+          "type": "short",
+          "range": {
+            "amount": 5,
+            "type": "FIRST_N"
+          }
+        }
+      ],
+      "colors": [
+        {
+          "colorMin": "000000",
+          "colorMax": "161616"
+        },
+        {
+          "colorMin": "321503",
+          "colorMax": "663d24"
+        },
+        {
+          "colorMin": "d8c811",
+          "colorMax": "f1eaa0"
+        },
+        {
+          "colorMin": "750808",
+          "colorMax": "c55252"
+        },
+        {
+          "colorMin": "b93aa3",
+          "colorMax": "c37bb7"
+        },
+        {
+          "colorMin": "3d41a5",
+          "colorMax": "7287d2"
+        },
+        {
+          "colorMin": "ffffff",
+          "colorMax": "dde5f7"
+        }
+      ],
+      "type": "runecraftory:hair_feature"
+    },
+    {
+      "type": "runecraftory:simple_hat_feature",
+      "value": [
+        "chef_hat"
+      ]
+    },
+    {
+      "outfits": [
+        {
+          "weight": 1,
+          "type": "doctor",
+          "range": {
+            "amount": 1,
+            "type": "FIRST_N"
+          }
+        }
+      ],
+      "type": "runecraftory:outfit_feature"
+    }
+  ]
+}

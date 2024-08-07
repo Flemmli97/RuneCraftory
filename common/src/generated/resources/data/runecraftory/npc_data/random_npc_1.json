@@ -1,0 +1,56 @@
+{
+  "gender": "UNDEFINED",
+  "weight": 50,
+  "combat": {
+    "combatActions": [
+      "runecraftory:generic_melee_attack",
+      "runecraftory:melee_fireball_attack",
+      "runecraftory:melee_fireball_attack"
+    ]
+  },
+  "relation": {
+    "relationShipState": "DEFAULT"
+  },
+  "neutralGiftResponse": "npc.generic.1.gift.default",
+  "giftItems": {
+    "hate": {
+      "items": "runecraftory:generic_trash",
+      "responseKey": "npc.generic.1.hate",
+      "xp": -15
+    },
+    "dislike": {
+      "responseKey": "npc.generic.1.dislike",
+      "xp": -10
+    },
+    "like": {
+      "responseKey": "npc.generic.1.like",
+      "xp": 20
+    }
+  },
+  "interactions": {
+    "runecraftory:first": "runecraftory:random_npc_1/first",
+    "runecraftory:greeting": "runecraftory:random_npc_1/greeting",
+    "runecraftory:talk": "runecraftory:random_npc_1/talk",
+    "runecraftory:follow_yes": "runecraftory:random_npc_1/follow_yes",
+    "runecraftory:follow_no": "runecraftory:random_npc_1/follow_no",
+    "runecraftory:follow_stop": "runecraftory:random_npc_1/follow_stop",
+    "runecraftory:dating_accept": "runecraftory:random_npc_1/dating_accept",
+    "runecraftory:dating_deny": "runecraftory:random_npc_1/dating_deny",
+    "runecraftory:marriage_accept": "runecraftory:random_npc_1/marriage_accept",
+    "runecraftory:marriage_deny": "runecraftory:random_npc_1/marriage_deny",
+    "runecraftory:divorce": "runecraftory:random_npc_1/divorce",
+    "runecraftory:divorce_error": "runecraftory:random_npc_1/divorce_error",
+    "runecraftory:procreation_cooldown": "runecraftory:random_npc_1/procreation_cooldown"
+  },
+  "questHandler": {
+    "responses": {
+      "runecraftory:tame_monster": {
+        "startID": "runecraftory:random_npc_1/quest_start_tame_monster",
+        "activeID": "runecraftory:random_npc_1/quest_active_tame_monster",
+        "hasSequence": false,
+        "endID": "runecraftory:random_npc_1/quest_end_tame_monster"
+      }
+    },
+    "requiredQuests": []
+  }
+}

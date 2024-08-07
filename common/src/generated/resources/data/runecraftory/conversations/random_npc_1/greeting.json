@@ -1,0 +1,37 @@
+{
+  "fallbackKey": "",
+  "conversations": {
+    "npc.generic.1.greeting.1": {
+      "translationKey": "npc.generic.1.greeting.1",
+      "conditions": [
+        {
+          "type": "minecraft:time_check",
+          "value": {
+            "max": 12000.0,
+            "min": 0.0
+          }
+        }
+      ]
+    },
+    "npc.generic.1.greeting.2": {
+      "translationKey": "npc.generic.1.greeting.2",
+      "conditions": [
+        {
+          "type": "minecraft:time_check",
+          "value": {
+            "max": 14000.0,
+            "min": 12000.0
+          }
+        }
+      ]
+    },
+    "npc.generic.1.greeting.3": {
+      "translationKey": "npc.generic.1.greeting.3",
+      "conditions": []
+    },
+    "npc.generic.1.greeting.4": {
+      "translationKey": "npc.generic.1.greeting.4",
+      "conditions": []
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "fallbackKey": "",
+  "conversations": {
+    "npc.cook.1.first.1": {
+      "translationKey": "npc.cook.1.first.1",
+      "conditions": []
+    },
+    "npc.cook.1.first.2": {
+      "translationKey": "npc.cook.1.first.2",
+      "conditions": []
+    }
+  }
+}

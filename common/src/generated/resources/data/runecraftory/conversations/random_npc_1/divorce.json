@@ -1,0 +1,17 @@
+{
+  "fallbackKey": "",
+  "conversations": {
+    "npc.generic.1.divorce.success.1": {
+      "translationKey": "npc.generic.1.divorce.success.1",
+      "conditions": []
+    },
+    "npc.generic.1.divorce.success.2": {
+      "translationKey": "npc.generic.1.divorce.success.2",
+      "conditions": []
+    },
+    "npc.generic.1.divorce.success.3": {
+      "translationKey": "npc.generic.1.divorce.success.3",
+      "conditions": []
+    }
+  }
+}

@@ -1,16 +1,16 @@
 {
-  "fallbackKey": "npc.generic.2.greeting.default",
+  "fallbackKey": "",
   "conversations": {
     "npc.generic.2.greeting.1": {
       "translationKey": "npc.generic.2.greeting.1",
-      "minHearts": 0,
-      "maxHearts": 10,
       "conditions": []
     },
     "npc.generic.2.greeting.2": {
       "translationKey": "npc.generic.2.greeting.2",
-      "minHearts": 0,
-      "maxHearts": 10,
+      "conditions": []
+    },
+    "npc.generic.2.greeting.3": {
+      "translationKey": "npc.generic.2.greeting.3",
       "conditions": []
     }
   }

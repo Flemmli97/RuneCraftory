@@ -76,7 +76,7 @@ public class NPCTextureLayer<T extends EntityNPCBase, M extends HumanoidModel<T>
         };
         int a = 255;
         if (layer == LayerType.BLUSH_LAYER)
-            a = 128;
+            a = 88;
         return a << 24 | color;
     }
 
@@ -84,6 +84,11 @@ public class NPCTextureLayer<T extends EntityNPCBase, M extends HumanoidModel<T>
     public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T npc, float limbSwing, float limbSwingAmount, float partialTick, float ageInTicks, float netHeadYaw, float headPitch) {
         A layerModel = RenderNPC.isSlim(npc) ? this.slimModel : this.model;
         this.getParentModel().copyPropertiesTo(layerModel);
+        layerModel.leftPants.copyFrom(this.getParentModel().leftLeg);
+        layerModel.rightPants.copyFrom(this.getParentModel().rightLeg);
+        layerModel.leftSleeve.copyFrom(this.getParentModel().leftArm);
+        layerModel.rightSleeve.copyFrom(this.getParentModel().rightArm);
+        layerModel.jacket.copyFrom(this.getParentModel().body);
         this.setPartVisibility(layerModel);
         Minecraft mc = Minecraft.getInstance();
         boolean bl = !npc.isInvisible();
@@ -132,20 +137,16 @@ public class NPCTextureLayer<T extends EntityNPCBase, M extends HumanoidModel<T>
         model.head.visible = true;
         model.hat.visible = true;
         switch (this.layer) {
-            case SKIN_LAYER: {
+            case SKIN_LAYER, OUTFIT_LAYER: {
                 model.setAllVisible(true);
             }
             case HAIR_LAYER: {
                 model.body.visible = true;
+                model.jacket.visible = true;
                 model.rightArm.visible = true;
+                model.rightSleeve.visible = true;
                 model.leftArm.visible = true;
-            }
-            case OUTFIT_LAYER: {
-                model.body.visible = true;
-                model.rightArm.visible = true;
-                model.leftArm.visible = true;
-                model.rightLeg.visible = true;
-                model.leftLeg.visible = true;
+                model.leftSleeve.visible = true;
             }
         }
     }

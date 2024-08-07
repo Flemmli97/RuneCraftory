@@ -1,0 +1,9 @@
+{
+  "fallbackKey": "",
+  "conversations": {
+    "npc.shop_owner.1.follow.stop.1": {
+      "translationKey": "npc.shop_owner.1.follow.stop.1",
+      "conditions": []
+    }
+  }
+}

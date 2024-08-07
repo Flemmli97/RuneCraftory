@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.entities.npc.features;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
+import net.minecraft.util.ExtraCodecs;
 
 import java.util.List;
 import java.util.Random;
@@ -28,7 +29,7 @@ public interface IndexRange {
 
     record FirstNIndices(int n) implements IndexRange {
 
-        public static final Codec<FirstNIndices> CODEC = Codec.INT.fieldOf("amount").xmap(FirstNIndices::new, FirstNIndices::n).codec();
+        public static final Codec<FirstNIndices> CODEC = ExtraCodecs.POSITIVE_INT.fieldOf("amount").xmap(FirstNIndices::new, FirstNIndices::n).codec();
 
         @Override
         public Type getType() {
@@ -37,6 +38,8 @@ public interface IndexRange {
 
         @Override
         public int getRandom(Random random) {
+            if (this.n <= 0)
+                return 0;
             return random.nextInt(this.n);
         }
     }

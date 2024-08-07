@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.api.datapack.ConversationContext;
 import io.github.flemmli97.runecraftory.api.datapack.NPCData;
@@ -177,16 +178,17 @@ public abstract class NPCDataProvider implements DataProvider {
         this.data.put(new ResourceLocation(this.modid, id), data.build());
     }
 
-    public void addNPCDataWithLook(String id, NPCData.Builder builder, NPCData.NPCLook look) {
+    public void addNPCDataWithLook(String id, NPCData.Builder builder, Pair<ResourceLocation, NPCData.NPCLook> look) {
         this.translations.computeIfAbsent(id, o -> new LinkedHashMap<>())
                 .putAll(builder.getTranslations());
+        builder.withLook(new NPCData.NPCLookId(look.getFirst()));
         NPCData data = builder.build();
         this.data.put(new ResourceLocation(this.modid, id), data);
-        this.looks.put(data.look(), look);
+        this.looks.put(look.getFirst(), look.getSecond());
     }
 
     public void addNPCDataAll(String id, NPCData.Builder data, Map<ConversationContext, NPCData.ConversationSet.Builder> conversations,
-                              NPCData.NPCLook look, Map<ResourceLocation, QuestResponseBuilder> questConversations) {
+                              Pair<ResourceLocation, NPCData.NPCLook> look, Map<ResourceLocation, QuestResponseBuilder> questConversations) {
         conversations.forEach((key, value) -> {
             ResourceLocation conversationId = new ResourceLocation(this.modid, id + "/" + key.key().getPath());
             this.translations.computeIfAbsent(id, o -> new LinkedHashMap<>())
@@ -220,13 +222,15 @@ public abstract class NPCDataProvider implements DataProvider {
         });
         this.translations.computeIfAbsent(id, o -> new LinkedHashMap<>())
                 .putAll(data.getTranslations());
+        data.withLook(new NPCData.NPCLookId(look.getFirst()));
         NPCData npcData = data.build();
         this.data.put(new ResourceLocation(this.modid, id), npcData);
-        this.looks.put(npcData.look(), look);
+        this.looks.put(look.getFirst(), look.getSecond());
     }
 
-    public void addLook(ResourceLocation id, NPCData.NPCLook look) {
+    public ResourceLocation addLook(ResourceLocation id, NPCData.NPCLook look) {
         this.looks.put(id, look);
+        return id;
     }
 
     public void addSelectableGiftTag(NPCData.GiftType type, TagKey<Item> tag) {

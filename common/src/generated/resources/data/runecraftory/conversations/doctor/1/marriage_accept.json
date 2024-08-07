@@ -1,0 +1,9 @@
+{
+  "fallbackKey": "",
+  "conversations": {
+    "npc.doctor.1.marry.yes.1": {
+      "translationKey": "npc.doctor.1.marry.yes.1",
+      "conditions": []
+    }
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "gender": "UNDEFINED",
+  "profession": [
+    "runecraftory:cook"
+  ],
+  "look": [
+    {
+      "look": "runecraftory:cook/male_1",
+      "gender": "MALE"
+    },
+    {
+      "look": "runecraftory:cook/female_1",
+      "gender": "FEMALE"
+    }
+  ],
+  "weight": 50,
+  "combat": {
+    "combatActions": [
+      "runecraftory:melee_fireball_attack"
+    ]
+  },
+  "relation": {
+    "relationShipState": "DEFAULT"
+  },
+  "neutralGiftResponse": "npc.cook.2.gift.default",
+  "giftItems": {
+    "dislike": {
+      "responseKey": "npc.cook.2.dislike",
+      "xp": -10
+    },
+    "like": {
+      "responseKey": "npc.cook.2.like",
+      "xp": 25
+    }
+  },
+  "interactions": {
+    "runecraftory:first": "runecraftory:cook/1/first",
+    "runecraftory:greeting": "runecraftory:cook/1/greeting",
+    "runecraftory:talk": "runecraftory:cook/1/talk",
+    "runecraftory:follow_yes": "runecraftory:cook/1/follow_yes",
+    "runecraftory:follow_no": "runecraftory:cook/1/follow_no",
+    "runecraftory:follow_stop": "runecraftory:cook/1/follow_stop",
+    "runecraftory:dating_accept": "runecraftory:cook/1/dating_accept",
+    "runecraftory:dating_deny": "runecraftory:cook/1/dating_deny",
+    "runecraftory:marriage_accept": "runecraftory:cook/1/marriage_accept",
+    "runecraftory:marriage_deny": "runecraftory:cook/1/marriage_deny",
+    "runecraftory:divorce": "runecraftory:cook/1/divorce",
+    "runecraftory:divorce_error": "runecraftory:cook/1/divorce_error",
+    "runecraftory:procreation_cooldown": "runecraftory:cook/1/procreation_cooldown"
+  },
+  "questHandler": {
+    "responses": {},
+    "requiredQuests": []
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "fallbackKey": "",
+  "conversations": {
+    "npc.cook.1.marry.yes.1": {
+      "translationKey": "npc.cook.1.marry.yes.1",
+      "conditions": []
+    },
+    "npc.cook.1.marry.yes.2": {
+      "translationKey": "npc.cook.1.marry.yes.2",
+      "conditions": []
+    }
+  }
+}
