@@ -1,3 +1,29 @@
+RuneCraftory 1.10.0
+================
+- Added monsters: Goblin don/captain, nappie, malm tiger, mineral squeek  
+  demon, minotaur, little emperor
+- Added bosses: Grimoire, Sano & Uno, Sarcophagus
+- Rework the whole attack ai system
+- Improve riding monsters on both client and server side
+- Improve rafflesia breath attack to not only attack horizontally
+- Increase boss arena range if they are not spawned from a spawner
+- Changes some projectiles to actually deal projectile type damage
+- Added double/tenfold steel mechanic
+- Added stun effect. Some monsters can inflict this effect
+- Improved boss bgm. Fixing various issues there and allow bgm sharing
+- Gates now use a custom shader
+- Rework npc rendering allowing more randomly generated npcs
+- Added some more dialogues
+- Added some more items
+- Tweaked monster stats
+- Tweaked spell costs
+- Fix boss music pausing sometimes throwing null
+- Fix angry attribute boost for bosses sometimes causing a crash
+- Fix rafflesia parts sometimes spawning a lot
+- Fix mobs being able to heal their targets sometimes
+- Fix gates taking double the amount of damage
+- Fix first person weapon rendering
+
 RuneCraftory 1.9.6
 ================
 - Only one boss music now plays if there are multiple bosses present
