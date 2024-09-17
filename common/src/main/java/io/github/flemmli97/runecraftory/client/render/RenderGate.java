@@ -16,14 +16,6 @@ import net.minecraft.util.Mth;
 
 public class RenderGate extends LivingEntityRenderer<GateEntity, ModelGate> {
 
-    /*private static final ResourceLocation NONE = new ResourceLocation(RuneCraftory.MODID, "textures/entity/gate_none.png");
-    private static final ResourceLocation FIRE = new ResourceLocation(RuneCraftory.MODID, "textures/entity/gate_fire.png");
-    private static final ResourceLocation WATER = new ResourceLocation(RuneCraftory.MODID, "textures/entity/gate_water.png");
-    private static final ResourceLocation EARTH = new ResourceLocation(RuneCraftory.MODID, "textures/entity/gate_earth.png");
-    private static final ResourceLocation WIND = new ResourceLocation(RuneCraftory.MODID, "textures/entity/gate_wind.png");
-    private static final ResourceLocation LIGHT = new ResourceLocation(RuneCraftory.MODID, "textures/entity/gate_light.png");
-    private static final ResourceLocation DARK = new ResourceLocation(RuneCraftory.MODID, "textures/entity/gate_dark.png");
-    private static final ResourceLocation LOVE = new ResourceLocation(RuneCraftory.MODID, "textures/entity/gate_love.png");*/
     private static final float[][] NONE = new float[][]{
             new float[]{0.310f, 0.470f, 0.298f},
             new float[]{0.414f, 0.083f, 0.495f}
@@ -56,7 +48,6 @@ public class RenderGate extends LivingEntityRenderer<GateEntity, ModelGate> {
             new float[]{0.295f, 0.155f, 0.258f},
             new float[]{0.920f, 0.846f, 0.723f}
     };
-    //protected final RenderUtils.TextureBuilder textureBuilder = new RenderUtils.TextureBuilder();
 
     public RenderGate(EntityRendererProvider.Context ctx) {
         super(ctx, new ModelGate(ctx.bakeLayer(ModelGate.LAYER_LOCATION)), 0);
@@ -78,19 +69,18 @@ public class RenderGate extends LivingEntityRenderer<GateEntity, ModelGate> {
         Matrix4f matrix4f = stack.last().pose();
         float[][] colors = this.getColor(entity);
         VertexConsumer builder = bufferIn.getBuffer(RunecraftoryShaders.GATE_RENDER);
-        builder.vertex(matrix4f, -xSize, -ySize, 0).color(colors[0][0], colors[0][1], colors[0][2], 1)
-                .color(colors[1][0], colors[1][1], colors[1][2], 1).uv(0, 1).overlayCoords(getOverlayCoords(entity, this.getWhiteOverlayProgress(entity, partialTicks))).endVertex();
-        builder.vertex(matrix4f, xSize, -ySize, 0).color(colors[0][0], colors[0][1], colors[0][2], 1)
-                .color(colors[1][0], colors[1][1], colors[1][2], 1).uv(1, 1).overlayCoords(getOverlayCoords(entity, this.getWhiteOverlayProgress(entity, partialTicks))).endVertex();
-        builder.vertex(matrix4f, xSize, ySize, 0).color(colors[0][0], colors[0][1], colors[0][2], 1)
-                .color(colors[1][0], colors[1][1], colors[1][2], 1).uv(1, 0).overlayCoords(getOverlayCoords(entity, this.getWhiteOverlayProgress(entity, partialTicks))).endVertex();
-        builder.vertex(matrix4f, -xSize, ySize, 0).color(colors[0][0], colors[0][1], colors[0][2], 1)
-                .color(colors[1][0], colors[1][1], colors[1][2], 1).uv(0, 0).overlayCoords(getOverlayCoords(entity, this.getWhiteOverlayProgress(entity, partialTicks))).endVertex();
-        // Legacy
-        // stack.translate(0, 0, 0.1);
-        // this.textureBuilder.setOverlay(getOverlayCoords(entity, this.getWhiteOverlayProgress(entity, partialTicks)));
-        // this.textureBuilder.setLight(packedLightIn);
-        // RenderUtils.renderTexture(stack, bufferIn.getBuffer(RenderType.entityTranslucent(new ResourceLocation(RuneCraftory.MODID, "textures/entity/gate_dark.png"))), 1, 1, this.textureBuilder);
+        VertexHelper.time(builder.vertex(matrix4f, -xSize, -ySize, 0).color(colors[0][0], colors[0][1], colors[0][2], 1)
+                        .color(colors[1][0], colors[1][1], colors[1][2], 1).uv(0, 1).overlayCoords(getOverlayCoords(entity, this.getWhiteOverlayProgress(entity, partialTicks))),
+                entity.tickCount, partialTicks).endVertex();
+        VertexHelper.time(builder.vertex(matrix4f, xSize, -ySize, 0).color(colors[0][0], colors[0][1], colors[0][2], 1)
+                        .color(colors[1][0], colors[1][1], colors[1][2], 1).uv(1, 1).overlayCoords(getOverlayCoords(entity, this.getWhiteOverlayProgress(entity, partialTicks))),
+                entity.tickCount, partialTicks).endVertex();
+        VertexHelper.time(builder.vertex(matrix4f, xSize, ySize, 0).color(colors[0][0], colors[0][1], colors[0][2], 1)
+                        .color(colors[1][0], colors[1][1], colors[1][2], 1).uv(1, 0).overlayCoords(getOverlayCoords(entity, this.getWhiteOverlayProgress(entity, partialTicks))),
+                entity.tickCount, partialTicks).endVertex();
+        VertexHelper.time(builder.vertex(matrix4f, -xSize, ySize, 0).color(colors[0][0], colors[0][1], colors[0][2], 1)
+                        .color(colors[1][0], colors[1][1], colors[1][2], 1).uv(0, 0).overlayCoords(getOverlayCoords(entity, this.getWhiteOverlayProgress(entity, partialTicks))),
+                entity.tickCount, partialTicks).endVertex();
         stack.popPose();
     }
 

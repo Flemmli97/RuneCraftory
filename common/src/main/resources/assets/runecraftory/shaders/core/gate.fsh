@@ -1,13 +1,13 @@
 #version 150
 
 uniform vec4 ColorModulator;
-uniform float GameTime;
 
 in vec4 vertexColor;
 in vec4 vertexColor2;
 in vec4 overlayColor;
 in vec2 texCoord0;
 in vec2 position;
+in float tickTime;
 
 out vec4 fragColor;
 
@@ -79,11 +79,11 @@ void main() {
 
     float dist = distance(uv, center);
     float rad = 1. - pow(dist * radiantLen, radiantPow);
-    vec4 finalColor = portalSwirl(color, density, GameTime * speed, radius, angle, uv, center, vec2(1.)) * rad;
+    vec4 finalColor = portalSwirl(color, density, tickTime * speed, radius, angle, uv, center, vec2(1.)) * rad;
     if (rad > 0.) {
         finalColor.rgb = max(color.rgb * 0.5, finalColor.rgb);
     }
-    finalColor += portalSwirl(color2, density, GameTime * speed + 500., radius, angle, uv, center, vec2(1.)) * (rad * radInner);
+    finalColor += portalSwirl(color2, density, tickTime * speed + 500., radius, angle, uv, center, vec2(1.)) * (rad * radInner);
     fragColor = finalColor;
 
     if (fragColor.a < 0.1) {

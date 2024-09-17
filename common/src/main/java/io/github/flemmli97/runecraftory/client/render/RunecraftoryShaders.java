@@ -19,7 +19,8 @@ public class RunecraftoryShaders extends RenderType {
     public static final ShaderStateShard GATE_SHADER = new ShaderStateShard(() -> GATE_SHADER_INSTANCE);
     public static final VertexFormat POSITION_COLOR_2X_TEX = new VertexFormat(ImmutableMap.<String, VertexFormatElement>builder().put("Position", DefaultVertexFormat.ELEMENT_POSITION)
             .put("Color", DefaultVertexFormat.ELEMENT_COLOR).put("Color2", DefaultVertexFormat.ELEMENT_COLOR).put("UV0", DefaultVertexFormat.ELEMENT_UV0)
-            .put("UV1", DefaultVertexFormat.ELEMENT_UV1).build());
+            .put("UV1", DefaultVertexFormat.ELEMENT_UV1)
+            .put("Time", VertexHelper.TIME).build());
 
     public static final RenderType GATE_RENDER = CustomRenderTypesHelper.createType("runecraftory:gate", POSITION_COLOR_2X_TEX, VertexFormat.Mode.QUADS, 256, false, false, CompositeState.builder()
             .setShaderState(GATE_SHADER)
