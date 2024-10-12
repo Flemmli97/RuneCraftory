@@ -1,3 +1,10 @@
+RuneCraftory 1.10.1
+================
+- Expose some player stuff in api
+- Increase attack range of monsters a bit
+- Update wooly texture
+- Fix King Wooly not attacking
+
 RuneCraftory 1.10.0
 ================
 - Added monsters: Goblin don/captain, nappie, malm tiger, mineral squeek  
