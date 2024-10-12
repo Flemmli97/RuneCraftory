@@ -54,16 +54,16 @@ public class EntityWooly extends LeapingMonster {
     public static final AnimatedAction[] ANIMS = new AnimatedAction[]{SLAP, KICK, HEADBUTT, INTERACT, SLEEP};
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityWooly>>> ATTACKS = List.of(
-            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(SLAP, e -> e.getEntityData().get(SPAWNSHEARED) || e.isTamed() ? 0.8f : 0), 2),
+            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(SLAP, EntityWooly::attackChance), 2),
             WeightedEntry.wrap(new GoalAttackAction<EntityWooly>(KICK)
                     .cooldown(e -> e.animationCooldown(KICK))
-                    .withCondition(ActionUtils.chanced(e -> e.getEntityData().get(SPAWNSHEARED) || e.isTamed() ? 0.8f : 0))
+                    .withCondition(ActionUtils.chanced(EntityWooly::attackChance))
                     .prepare(() -> new WrappedRunner<>(new MoveAwayRunner<>(1.5, 1, 4))), 1),
             WeightedEntry.wrap(new GoalAttackAction<EntityWooly>(KICK)
                     .cooldown(e -> e.animationCooldown(KICK))
-                    .withCondition(ActionUtils.chanced(e -> e.getEntityData().get(SPAWNSHEARED) || e.isTamed() ? 0.8f : 0))
+                    .withCondition(ActionUtils.chanced(EntityWooly::attackChance))
                     .prepare(() -> new WrappedRunner<>(new MoveToTargetRunner<>(1, 3))), 1),
-            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(HEADBUTT, e -> e.getEntityData().get(SPAWNSHEARED) || e.isTamed() ? 0.8f : 0), 2)
+            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(HEADBUTT, EntityWooly::attackChance), 2)
     );
     private static final List<WeightedEntry.Wrapper<IdleAction<EntityWooly>>> IDLE_ACTIONS = List.of(
             WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 1)), 1),
@@ -222,6 +222,10 @@ public class EntityWooly extends LeapingMonster {
     @Override
     public Vec3 passengerOffset(Entity passenger) {
         return new Vec3(0, 13.5 / 16d, -6 / 16d);
+    }
+
+    protected float attackChance() {
+        return this.getEntityData().get(SPAWNSHEARED) || this.isTamed() ? 0.8f : 0;
     }
 
     public static ResourceLocation shearedLootTable(ResourceLocation def) {

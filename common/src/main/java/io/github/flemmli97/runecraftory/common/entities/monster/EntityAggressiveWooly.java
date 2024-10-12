@@ -17,6 +17,11 @@ public class EntityAggressiveWooly extends EntityWooly {
     }
 
     @Override
+    protected float attackChance() {
+        return 1;
+    }
+
+    @Override
     public float getVoicePitch() {
         return (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 0.9f;
     }
