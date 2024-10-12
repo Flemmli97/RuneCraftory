@@ -133,7 +133,7 @@ public class EntityPalmCat extends LeapingMonster {
     public double maxAttackRange(AnimatedAction anim) {
         if (LEAP.is(anim))
             return 1.15;
-        return 1.2;
+        return 1.3;
     }
 
     @Override

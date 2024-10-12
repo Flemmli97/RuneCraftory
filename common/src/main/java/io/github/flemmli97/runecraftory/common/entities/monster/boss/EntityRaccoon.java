@@ -464,7 +464,7 @@ public class EntityRaccoon extends BossMonster {
 
     @Override
     public double maxAttackRange(AnimatedAction anim) {
-        return this.isBerserk() ? 2.5 : 1.5;
+        return this.isBerserk() ? 2.5 : 1.6;
     }
 
     @Override

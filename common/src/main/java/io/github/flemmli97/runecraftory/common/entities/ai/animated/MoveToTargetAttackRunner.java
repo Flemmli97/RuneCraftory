@@ -22,7 +22,7 @@ public class MoveToTargetAttackRunner<T extends BaseMonster> implements ActionRu
             return false;
         goal.moveToTarget(this.speed);
         goal.attacker.lookAt(target, 30.0F, 30.0F);
-        AABB aabb = goal.attacker.attackCheckAABB(anim, target, -0.3);
+        AABB aabb = goal.attacker.attackCheckAABB(anim, target, -0.15);
         S2CAttackDebug.sendDebugPacket(aabb, S2CAttackDebug.EnumAABBType.ATTEMPT, goal.attacker);
         if (aabb.intersects(target.getBoundingBox())) {
             goal.attacker.getLookControl().setLookAt(target, 360, 90);

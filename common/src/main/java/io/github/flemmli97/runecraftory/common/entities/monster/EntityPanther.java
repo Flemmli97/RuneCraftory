@@ -117,7 +117,7 @@ public class EntityPanther extends LeapingMonster {
     public double maxAttackRange(AnimatedAction anim) {
         if (LEAP.is(anim))
             return 2;
-        return 1.4;
+        return 1.5;
     }
 
     @Override

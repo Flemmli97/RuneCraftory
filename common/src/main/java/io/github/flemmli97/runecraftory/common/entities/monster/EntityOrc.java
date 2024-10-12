@@ -69,8 +69,8 @@ public class EntityOrc extends BaseMonster {
     @Override
     public double maxAttackRange(AnimatedAction anim) {
         if (anim.is(MELEE_2))
-            return 1.4;
-        return 1.2;
+            return 1.45;
+        return 1.35;
     }
 
     @Override

@@ -109,7 +109,7 @@ public class EntityVeggieGhost extends BaseMonster {
 
     @Override
     public double maxAttackRange(AnimatedAction anim) {
-        return 1.5;
+        return 1.55;
     }
 
     @Override

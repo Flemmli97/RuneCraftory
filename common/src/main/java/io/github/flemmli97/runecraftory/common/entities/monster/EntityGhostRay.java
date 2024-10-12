@@ -14,7 +14,7 @@ public class EntityGhostRay extends EntityGhost {
 
     @Override
     public double maxAttackRange(AnimatedAction anim) {
-        return 2.2;
+        return 1.9;
     }
 
     @Override

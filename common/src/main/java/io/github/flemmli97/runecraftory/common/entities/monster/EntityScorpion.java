@@ -55,7 +55,7 @@ public class EntityScorpion extends BaseMonster {
 
     @Override
     public double maxAttackRange(AnimatedAction anim) {
-        return 1.1;
+        return 1.15;
     }
 
     @Override

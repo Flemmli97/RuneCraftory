@@ -63,7 +63,7 @@ public class EntityTroll extends BaseMonster {
     public double maxAttackRange(AnimatedAction anim) {
         if (anim.is(SLAM))
             return this.getBbWidth() + 4;
-        return 1.5;
+        return 1.6;
     }
 
     @Override

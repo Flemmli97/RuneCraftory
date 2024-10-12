@@ -70,7 +70,7 @@ public class EntityChipsqueek extends ChargingMonster {
 
     @Override
     public double maxAttackRange(AnimatedAction anim) {
-        return 1;
+        return 1.15;
     }
 
     @Override

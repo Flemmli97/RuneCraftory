@@ -60,7 +60,7 @@ public class EntityBuffamoo extends ChargingMonster {
 
     @Override
     public double maxAttackRange(AnimatedAction anim) {
-        return 1.3;
+        return 1.35;
     }
 
     @Override

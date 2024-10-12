@@ -118,7 +118,7 @@ public class EntityMimic extends LeapingMonster {
 
     @Override
     public double maxAttackRange(AnimatedAction anim) {
-        return 1.2;
+        return 1.35;
     }
 
     @Override

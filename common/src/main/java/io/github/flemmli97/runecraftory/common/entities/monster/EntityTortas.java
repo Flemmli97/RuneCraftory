@@ -104,7 +104,7 @@ public class EntityTortas extends ChargingMonster {
 
     @Override
     public double maxAttackRange(AnimatedAction anim) {
-        return 1;
+        return 1.1;
     }
 
     @Override

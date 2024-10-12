@@ -145,7 +145,7 @@ public class EntitySpider extends BaseMonster {
 
     @Override
     public double maxAttackRange(AnimatedAction anim) {
-        return 1;
+        return 1.25;
     }
 
     @Override

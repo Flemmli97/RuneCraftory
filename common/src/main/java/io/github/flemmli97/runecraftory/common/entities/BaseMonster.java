@@ -1556,7 +1556,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     public double maxAttackRange(AnimatedAction anim) {
-        return 1.15;
+        return 1.2;
     }
 
     public void handleAttack(AnimatedAction anim) {
