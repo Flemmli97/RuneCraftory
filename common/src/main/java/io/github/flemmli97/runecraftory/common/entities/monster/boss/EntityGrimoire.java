@@ -37,6 +37,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -54,14 +55,15 @@ public class EntityGrimoire extends BossMonster {
     public static final AnimatedAction TAIL_SWIPE = new AnimatedAction(0.84, 0.48, "tail_swipe");
     public static final AnimatedAction BITE = new AnimatedAction(0.8, 0.44, "bite");
     public static final AnimatedAction GUST = new AnimatedAction(1.96, 0.32, "gust");
-    public static final AnimatedAction CHARGE = new AnimatedAction(2.08, 0.16, "charge");
+    public static final AnimatedAction CHARGE = AnimatedAction.builder((int) Math.ceil(2.08 * 20), "charge").infinite().marker((int) Math.ceil(0.16 * 20)).build();
+    public static final AnimatedAction CHARGE_LAND = new AnimatedAction(0.48, 0.16, "charge_land");
     public static final AnimatedAction WIND_BREATH = new AnimatedAction(1.36, 0.44, "wind_breath");
     public static final AnimatedAction TORNADO = new AnimatedAction(1.24, 0.4, "tornado");
     public static final AnimatedAction DEFEAT = AnimatedAction.builder(150, "defeat").marker(150).infinite().build();
     public static final AnimatedAction ANGRY = new AnimatedAction(1.44, 0, "angry");
     public static final AnimatedAction SLEEP = new AnimatedAction(0.2, 0, "sleep");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(TAIL_SWIPE, "interact");
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{TAIL_SWIPE, BITE, GUST, CHARGE, WIND_BREATH, TORNADO, DEFEAT, ANGRY, INTERACT};
+    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{TAIL_SWIPE, BITE, GUST, CHARGE, CHARGE_LAND, WIND_BREATH, TORNADO, DEFEAT, ANGRY, INTERACT};
 
     private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntityGrimoire>> ATTACK_HANDLER = createAnimationHandler(b -> {
         BiConsumer<AnimatedAction, EntityGrimoire> melee = (anim, entity) -> {
@@ -90,7 +92,7 @@ public class EntityGrimoire extends BossMonster {
             if (anim.isPastTick(0.16) && !anim.isPastTick(1.6)) {
                 if (entity.moveDirection == null) {
                     Vec3 dir = entity.getTarget() != null ? entity.getTarget().position().subtract(entity.position()) : entity.getLookAngle();
-                    dir = new Vec3(dir.x(), 0, dir.z()).normalize().scale(7);
+                    dir = new Vec3(dir.x(), 0, dir.z()).normalize().scale(11);
                     int length = anim.getLength();
                     entity.moveDirection = new Vec3(dir.x / length, 0, dir.z / length);
                 }
@@ -105,7 +107,22 @@ public class EntityGrimoire extends BossMonster {
                     }
                 });
             }
-            if (anim.isAtTick(1.76)) {
+            if (anim.isPastTick(1.76)) {
+                entity.setDeltaMovement(entity.getDeltaMovement().add(0, -0.06, 0));
+                if (entity.getDeltaMovement().y < -0.72) {
+                    entity.setDeltaMovement(entity.getDeltaMovement().x, -0.72, entity.getDeltaMovement().z);
+                }
+                if (entity.isOnGround()) {
+                    entity.getAnimationHandler().setAnimation(CHARGE_LAND);
+                }
+                // Stuck check. Or e.g. if in water
+                if (anim.isPastTick(6.0) && (!entity.getFeetBlockState().is(Blocks.AIR) || !entity.getBlockStateOn().is(Blocks.AIR))) {
+                    entity.getAnimationHandler().setAnimation(CHARGE_LAND);
+                }
+            }
+        });
+        b.put(CHARGE_LAND, (anim, entity) -> {
+            if (anim.canAttack()) {
                 CustomDamage.Builder source = new CustomDamage.Builder(entity).noKnockback().element(EnumElement.WIND).hurtResistant(5);
                 entity.mobAttack(anim, entity.getTarget(), e -> CombatUtils.mobAttack(entity, e, source));
                 Platform.INSTANCE.sendToTrackingAndSelf(new S2CScreenShake(4, 3), entity);
@@ -198,6 +215,11 @@ public class EntityGrimoire extends BossMonster {
     }
 
     @Override
+    public boolean causeFallDamage(float fallDistance, float multiplier, DamageSource source) {
+        return false;
+    }
+
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         return (!this.getAnimationHandler().isCurrent(ANGRY)) && super.hurt(source, amount);
     }
@@ -243,6 +265,8 @@ public class EntityGrimoire extends BossMonster {
 
     @Override
     public AABB calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
+        if (anim.is(CHARGE_LAND))
+            return this.getBoundingBox().inflate(0.7, 0.1, 0.7);
         if (anim.is(CHARGE)) {
             return this.getBoundingBox().expandTowards(this.getDeltaMovement().scale(0.3)).inflate(0.7, 0.1, 0.7);
         }

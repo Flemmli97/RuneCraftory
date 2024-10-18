@@ -19,7 +19,7 @@ public abstract class ChargingMonster extends BaseMonster {
 
     protected static final EntityDataAccessor<Float> LOCKED_YAW = SynchedEntityData.defineId(ChargingMonster.class, EntityDataSerializers.FLOAT);
     protected List<LivingEntity> hitEntity;
-    protected double[] chargeMotion;
+    protected Vec3 chargeMotion;
     private float prevStepHeight = -1;
     private final Consumer<AnimatedAction> chargingAnim;
     private boolean initAnim;
@@ -63,8 +63,11 @@ public abstract class ChargingMonster extends BaseMonster {
             this.getAnimationHandler().setAnimationChangeCons(this.chargingAnim);
             this.initAnim = true;
         }
-        if (this.isChargingAnimation()) {
+        if (this.fixedYaw()) {
             this.setXRot(0);
+            this.yBodyRotO = this.chargingYaw();
+            this.yBodyRot = this.chargingYaw();
+            this.yRotO = this.chargingYaw();
             this.setYRot(this.chargingYaw());
         }
     }
@@ -93,6 +96,10 @@ public abstract class ChargingMonster extends BaseMonster {
 
     protected abstract boolean isChargingAnim(AnimatedAction anim);
 
+    protected boolean fixedYaw() {
+        return this.isChargingAnimation();
+    }
+
     @Override
     public AABB calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
         if (!this.isChargingAnim(anim))
@@ -107,7 +114,7 @@ public abstract class ChargingMonster extends BaseMonster {
         return !this.isChargingAnimation();
     }
 
-    public void setChargeMotion(double[] chargeMotion) {
+    public void setChargeMotion(Vec3 chargeMotion) {
         this.chargeMotion = chargeMotion;
     }
 
@@ -124,7 +131,7 @@ public abstract class ChargingMonster extends BaseMonster {
 
     public boolean handleChargeMovement(AnimatedAction anim) {
         if (this.chargeMotion != null) {
-            this.setDeltaMovement(this.chargeMotion[0], this.getDeltaMovement().y, this.chargeMotion[2]);
+            this.setDeltaMovement(this.chargeMotion.x, this.getDeltaMovement().y, this.chargeMotion.z);
             return true;
         }
         return false;
@@ -138,10 +145,10 @@ public abstract class ChargingMonster extends BaseMonster {
         return 6;
     }
 
-    public double[] getChargeTo(AnimatedAction anim, Vec3 pos) {
+    public Vec3 getChargeTo(AnimatedAction anim, Vec3 pos) {
         int length = anim.getLength() - anim.getAttackTime();
         Vec3 vec = pos.subtract(this.position()).normalize().scale(this.chargingLength());
-        return new double[]{vec.x / length, this.getY(), vec.z / length};
+        return new Vec3(vec.x / length, this.getY(), vec.z / length);
     }
 
     public void lockYaw(float yaw) {

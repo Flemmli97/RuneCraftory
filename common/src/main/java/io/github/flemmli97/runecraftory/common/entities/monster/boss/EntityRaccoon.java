@@ -40,6 +40,7 @@ import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
@@ -61,7 +62,8 @@ public class EntityRaccoon extends BossMonster {
 
     public static final AnimatedAction DOUBLE_PUNCH = new AnimatedAction(0.88, 0.4, "double_punch");
     public static final AnimatedAction PUNCH = new AnimatedAction(0.92, 0.56, "punch");
-    public static final AnimatedAction JUMP = new AnimatedAction(1.48, 1.32, "jump");
+    public static final AnimatedAction JUMP = AnimatedAction.builder((int) Math.ceil(1.08 * 20), "jump").infinite().build();
+    public static final AnimatedAction LAND = new AnimatedAction(0.4, 0.24, "land");
     public static final AnimatedAction STOMP = new AnimatedAction(1.36, 0.56, "stomp");
     public static final AnimatedAction LEAF_SHOOT = new AnimatedAction(0.88, 0.44, "shoot");
     public static final AnimatedAction LEAF_BOOMERANG = AnimatedAction.copyOf(LEAF_SHOOT, "spinning_shoot");
@@ -76,7 +78,7 @@ public class EntityRaccoon extends BossMonster {
     public static final AnimatedAction UNTRANSFORM = new AnimatedAction(2.2, 0, "untransform");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(DOUBLE_PUNCH, "interact");
     public static final AnimatedAction INTERACT_BERSERK = AnimatedAction.copyOf(PUNCH, "interact_berserk");
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{DOUBLE_PUNCH, PUNCH, JUMP, STOMP, LEAF_SHOOT, LEAF_BOOMERANG, LEAF_SHOT_CLONE, BARRAGE, ROAR, ANGRY, CLONE, DEFEAT, TRANSFORM, UNTRANSFORM, INTERACT, INTERACT_BERSERK};
+    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{DOUBLE_PUNCH, PUNCH, JUMP, LAND, STOMP, LEAF_SHOOT, LEAF_BOOMERANG, LEAF_SHOT_CLONE, BARRAGE, ROAR, ANGRY, CLONE, DEFEAT, TRANSFORM, UNTRANSFORM, INTERACT, INTERACT_BERSERK};
 
     private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntityRaccoon>> ATTACK_HANDLER = createAnimationHandler(b -> {
         b.put(DOUBLE_PUNCH, (anim, entity) -> {
@@ -120,31 +122,38 @@ public class EntityRaccoon extends BossMonster {
         });
         b.put(JUMP, (anim, entity) -> {
             entity.getNavigation().stop();
-            LivingEntity target = entity.getTarget();
-            double length = anim.getAttackTime() - 3;
+            double length = anim.getLength() - 3;
             if (entity.jumpDir == null) {
-                Vec3 jumpDir;
-                if (target != null) {
-                    Vec3 targetPos = target.position();
-                    jumpDir = new Vec3(targetPos.x - entity.getX(), 0.0, targetPos.z - entity.getZ());
-                    if (jumpDir.lengthSqr() > 25) // 14
-                        jumpDir = jumpDir.normalize().scale(8);
-                } else
-                    jumpDir = new Vec3(entity.getLookAngle().x(), 0, entity.getLookAngle().z()).normalize().scale(8);
-                entity.jumpDir = jumpDir.multiply(1 / length, 1, 1 / length);
+                Vec3 dir = entity.getTarget() != null ? entity.getTarget().position().subtract(entity.position()) : entity.getLookAngle();
+                dir = new Vec3(dir.x(), 0, dir.z()).normalize().scale(8);
+                entity.jumpDir = dir.multiply(1 / length, 1, 1 / length);
             }
-            if (anim.getTick() > 3 && anim.getTick() <= anim.getAttackTime()) {
-                double d = Math.sin((anim.getTick() - 3) * Math.PI / length * 2) * 0.95;
-                entity.setDeltaMovement(entity.jumpDir.x, d < 0 ? d * 1.65 : d, entity.jumpDir.z);
-                if (anim.canAttack()) {
-                    CustomDamage.Builder source = new CustomDamage.Builder(entity).noKnockback().element(EnumElement.EARTH).hurtResistant(5)
-                            .withChangedAttribute(ModAttributes.STUN.get(), 80);
-                    entity.mobAttack(anim, entity.getTarget(), e -> CombatUtils.mobAttack(entity, e, source));
-                    Platform.INSTANCE.sendToTrackingAndSelf(new S2CScreenShake(8, 3), entity);
-                    entity.level.playSound(null, entity.blockPosition(), SoundEvents.GENERIC_EXPLODE, entity.getSoundSource(), 1.0f, 0.9f);
+            if (anim.isAtTick(0.2))
+                entity.setDeltaMovement(entity.jumpDir.x, 2, entity.jumpDir.z);
+            if (anim.isPastTick(0.2)) {
+                entity.fallDistance = 0;
+                entity.setDeltaMovement(entity.getDeltaMovement().add(0, -0.08, 0));
+                if (entity.getDeltaMovement().y < -1.1) {
+                    entity.setDeltaMovement(entity.getDeltaMovement().x, -1.1, entity.getDeltaMovement().z);
                 }
-                if (anim.getTick() >= anim.getAttackTime())
-                    entity.setDeltaMovement(Vec3.ZERO);
+                if (anim.isPastTick(anim.getLength())) {
+                    if (entity.isOnGround()) {
+                        entity.getAnimationHandler().setAnimation(LAND);
+                    }
+                }
+                // Stuck check. Or e.g. if in water
+                if (anim.isPastTick(6.0) && (!entity.getFeetBlockState().is(Blocks.AIR) || !entity.getBlockStateOn().is(Blocks.AIR))) {
+                    entity.getAnimationHandler().setAnimation(LAND);
+                }
+            }
+        });
+        b.put(LAND, (anim, entity) -> {
+            if (anim.canAttack()) {
+                CustomDamage.Builder source = new CustomDamage.Builder(entity).noKnockback().element(EnumElement.EARTH).hurtResistant(5)
+                        .withChangedAttribute(ModAttributes.STUN.get(), 80);
+                entity.mobAttack(anim, entity.getTarget(), e -> CombatUtils.mobAttack(entity, e, source));
+                Platform.INSTANCE.sendToTrackingAndSelf(new S2CScreenShake(8, 3), entity);
+                entity.level.playSound(null, entity.blockPosition(), SoundEvents.GENERIC_EXPLODE, entity.getSoundSource(), 1.0f, 0.9f);
             }
         });
         b.put(STOMP, (anim, entity) -> {
@@ -352,7 +361,7 @@ public class EntityRaccoon extends BossMonster {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if (this.getAnimationHandler().isCurrent(JUMP, DEFEAT, TRANSFORM, UNTRANSFORM, ANGRY))
+        if (this.getAnimationHandler().isCurrent(JUMP, LAND, DEFEAT, TRANSFORM, UNTRANSFORM, ANGRY))
             return false;
         return super.hurt(source, amount);
     }
@@ -445,7 +454,7 @@ public class EntityRaccoon extends BossMonster {
 
     @Override
     public AABB calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
-        if (anim.is(JUMP)) {
+        if (anim.is(JUMP, LAND)) {
             return this.attackAABB(anim).move(this.position());
         }
         if (anim.is(STOMP)) {
@@ -469,8 +478,8 @@ public class EntityRaccoon extends BossMonster {
 
     @Override
     public AABB attackAABB(AnimatedAction anim) {
-        if (anim.is(JUMP)) {
-            double attackSize = this.getBbWidth() + 2.75;
+        if (anim.is(JUMP, LAND)) {
+            double attackSize = this.getBbWidth() + 2.25;
             return new AABB(-attackSize, -0.5, -attackSize, attackSize, 2, attackSize);
         }
         if (anim.is(STOMP)) {

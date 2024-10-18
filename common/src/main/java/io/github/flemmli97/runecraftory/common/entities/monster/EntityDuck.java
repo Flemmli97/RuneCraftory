@@ -1,7 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.animated.ChargeAction;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
@@ -9,7 +8,10 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoa
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -24,16 +26,17 @@ import java.util.List;
 public class EntityDuck extends ChargingMonster {
 
     private static final AnimatedAction MELEE = new AnimatedAction(15, 8, "slap");
-    private static final AnimatedAction DIVE = new AnimatedAction(48, 22, "dive");
+    public static final AnimatedAction DIVE = AnimatedAction.builder((int) Math.ceil(1.84 * 20), "dive").marker((int) Math.ceil(1.08 * 20)).infinite().build();
+    private static final AnimatedAction LAND = new AnimatedAction(0.48, 0, "land");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
     public static final AnimatedAction STILL = AnimatedAction.builder(1, "still").infinite().build();
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, DIVE, INTERACT, STILL};
+    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, DIVE, LAND, INTERACT, STILL};
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityDuck>>> ATTACKS = List.of(
             WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(MELEE, e -> 1), 1),
             WeightedEntry.wrap(new GoalAttackAction<EntityDuck>(DIVE)
                     .cooldown(e -> e.animationCooldown(DIVE))
-                    .prepare(ChargeAction::new), 1)
+                    .prepare(() -> new WrappedRunner<>(new MoveToTargetRunner<>(1, 6))), 1)
     );
     private static final List<WeightedEntry.Wrapper<IdleAction<EntityDuck>>> IDLE_ACTIONS = List.of(
             WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 2),
@@ -62,45 +65,54 @@ public class EntityDuck extends ChargingMonster {
     @Override
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(DIVE)) {
-            if (anim.canAttack()) {
-                Vec3 targetDir = this.chargeMotion != null ? new Vec3(this.chargeMotion[0], this.chargeMotion[1], this.chargeMotion[2]) : this.getLookAngle();
-                Vec3 vec32 = new Vec3(targetDir.x, 0, targetDir.z)
-                        .normalize().scale(0.9);
-                this.setDeltaMovement(vec32.x, -0.35f, vec32.z);
-                this.getNavigation().stop();
-            }
-            if (anim.getTick() >= anim.getAttackTime() && !this.onGround) {
-                if (this.hitEntity == null)
-                    this.hitEntity = new ArrayList<>();
-                this.mobAttack(anim, null, e -> {
-                    if (!this.hitEntity.contains(e)) {
-                        this.hitEntity.add(e);
-                        this.doHurtTarget(e);
-                    }
-                });
+            if (anim.isPastTick(anim.getAttackTime())) {
+                if (this.chargeMotion == null) {
+                    Vec3 dir = this.getTarget() != null ? this.getTarget().position().subtract(this.position()) : this.getLookAngle();
+                    this.lookAt(EntityAnchorArgument.Anchor.EYES, this.position().add(dir));
+                    dir = new Vec3(dir.x(), 0, dir.z()).normalize().scale(0.7);
+                    this.chargeMotion = dir;
+                    this.lockYaw(this.getYRot());
+                }
+                this.setDeltaMovement(this.chargeMotion.x, -0.25f, this.chargeMotion.z);
+                if (!this.isOnGround()) {
+                    if (this.hitEntity == null)
+                        this.hitEntity = new ArrayList<>();
+                    this.mobAttack(anim, null, e -> {
+                        if (!this.hitEntity.contains(e)) {
+                            this.hitEntity.add(e);
+                            this.doHurtTarget(e);
+                        }
+                    });
+                } else {
+                    this.getAnimationHandler().setAnimation(LAND);
+                    this.chargeMotion = null;
+                }
             } else {
                 Vec3 delta = this.getDeltaMovement();
                 this.setDeltaMovement(delta.x, 0.1f, delta.z);
+                if (this.getTarget() != null) {
+                    this.lookAt(this.getTarget(), 20, 30);
+                }
             }
-        } else
+        } else if (!anim.is(LAND))
             super.handleAttack(anim);
     }
 
     @Override
-    protected boolean isChargingAnim(AnimatedAction anim) {
-        return anim.is(DIVE);
-    }
-
-    @Override
-    public float chargingYaw() {
+    protected boolean fixedYaw() {
         AnimatedAction anim = this.getAnimationHandler().getAnimation();
-        return this.isVehicle() || ((anim != null && anim.is(DIVE) && anim.getTick() >= anim.getAttackTime())) ? this.getYRot() : this.entityData.get(LOCKED_YAW);
+        return anim != null && (anim.is(DIVE) ? anim.isPastTick(anim.getAttackTime() + 1) : anim.is(LAND));
     }
 
     @Override
-    public double[] getChargeTo(AnimatedAction anim, Vec3 pos) {
+    protected boolean isChargingAnim(AnimatedAction anim) {
+        return anim.is(DIVE, LAND);
+    }
+
+    @Override
+    public Vec3 getChargeTo(AnimatedAction anim, Vec3 pos) {
         Vec3 vec = pos.subtract(this.position());
-        return new double[]{vec.x, vec.y, vec.z};
+        return new Vec3(vec.x, vec.y, vec.z);
     }
 
     @Override

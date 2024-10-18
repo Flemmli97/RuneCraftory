@@ -167,7 +167,7 @@ public class EntityGhost extends ChargingMonster {
     @Override
     public boolean handleChargeMovement(AnimatedAction anim) {
         if (this.chargeMotion != null) {
-            this.setDeltaMovement(this.chargeMotion[0] * 0.98f, this.getDeltaMovement().y, this.chargeMotion[2] * 0.98f);
+            this.setDeltaMovement(this.chargeMotion.x * 0.98f, this.getDeltaMovement().y, this.chargeMotion.z * 0.98f);
             return true;
         }
         return false;

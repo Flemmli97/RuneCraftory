@@ -1,3 +1,7 @@
+RuneCraftory 1.10.2
+================
+- Update some mob attacks
+
 RuneCraftory 1.10.1
 ================
 - Expose some player stuff in api
