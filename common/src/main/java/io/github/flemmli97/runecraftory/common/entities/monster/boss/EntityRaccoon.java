@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.RunecraftoryBossbar;
-import io.github.flemmli97.runecraftory.common.entities.ai.animated.MoveToTargetAttackRunner;
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
@@ -20,9 +19,11 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveAwayRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetAttackRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.TimedWrappedRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
+import io.github.flemmli97.tenshilib.common.utils.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -92,7 +93,7 @@ public class EntityRaccoon extends BossMonster {
             if (anim.getTick() == 1 && entity.getTarget() != null) {
                 entity.targetPosition = entity.getTarget().position();
             }
-            if (anim.canAttack() || anim.getTick() == 13) {
+            if (anim.canAttack() || anim.isAtTick(0.64)) {
                 entity.mobAttack(anim, target, entity::doHurtTarget);
             }
         });
@@ -100,7 +101,7 @@ public class EntityRaccoon extends BossMonster {
             if (anim.getTick() == 1 && entity.getTarget() != null) {
                 entity.targetPosition = entity.getTarget().position();
             }
-            if (anim.canAttack() || anim.getTick() == 13) {
+            if (anim.canAttack() || anim.isAtTick(0.64)) {
                 entity.mobAttack(anim, entity.getTarget(), entity::doHurtTarget);
             }
         });
@@ -272,7 +273,7 @@ public class EntityRaccoon extends BossMonster {
                     .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 9)
     );
     private static final List<WeightedEntry.Wrapper<IdleAction<EntityRaccoon>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<EntityRaccoon>(() -> new MoveToTargetRunner<>(1, 1))
+            WeightedEntry.wrap(new IdleAction<EntityRaccoon>(() -> new MoveToTargetRunner<>(1, 0.5))
                     .withCondition(((goal, target) -> goal.attacker.isBerserk())), 10),
             WeightedEntry.wrap(new IdleAction<EntityRaccoon>(() -> new MoveAwayRunner<>(1, 1, 5))
                     .withCondition(((goal, target) -> !goal.attacker.isBerserk())), 10)
@@ -444,7 +445,8 @@ public class EntityRaccoon extends BossMonster {
     public void handleAttack(AnimatedAction anim) {
         LivingEntity target = this.getTarget();
         if (target != null && !anim.is(STOMP)) {
-            this.lookAt(target, 180.0f, 50.0f);
+            this.lookAtNow(target, 60.0f, 50.0f);
+
         }
         this.getNavigation().stop();
         BiConsumer<AnimatedAction, EntityRaccoon> handler = ATTACK_HANDLER.get(anim.getID());
@@ -453,9 +455,9 @@ public class EntityRaccoon extends BossMonster {
     }
 
     @Override
-    public AABB calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
+    public OrientedBoundingBox calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
         if (anim.is(JUMP, LAND)) {
-            return this.attackAABB(anim).move(this.position());
+            return new OrientedBoundingBox(this.attackAABB(anim), 0, 0, this.position());
         }
         if (anim.is(STOMP)) {
             double reach = this.getBbWidth() * 0.55;
@@ -466,14 +468,14 @@ public class EntityRaccoon extends BossMonster {
             else
                 dir = Vec3.directionFromRotation(this.getXRot(), this.getYRot() + offset);
             Vec3 attackPos = this.position().add(dir.scale(reach));
-            return this.attackAABB(anim).move(attackPos.x, attackPos.y, attackPos.z);
+            return new OrientedBoundingBox(this.attackAABB(anim), this.getYRot(), 0, attackPos);
         }
         return super.calculateAttackAABB(anim, target, grow);
     }
 
     @Override
     public double maxAttackRange(AnimatedAction anim) {
-        return this.isBerserk() ? 2.5 : 1.6;
+        return this.isBerserk() ? 2.5 : 1.4;
     }
 
     @Override

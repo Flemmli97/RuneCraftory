@@ -6,7 +6,6 @@ import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
-import io.github.flemmli97.runecraftory.common.entities.ai.animated.MoveToTargetAttackRunner;
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
@@ -20,9 +19,11 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoa
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveAwayRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetAttackRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.TimedWrappedRunner;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
+import io.github.flemmli97.tenshilib.common.utils.OrientedBoundingBox;
 import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -138,7 +139,7 @@ public class EntityGrimoire extends BossMonster {
             WeightedEntry.wrap(MonsterActionUtils.<EntityGrimoire>nonRepeatableAttack(BITE)
                     .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.1), e -> 40 + e.getRandom().nextInt(15))), 10),
             WeightedEntry.wrap(MonsterActionUtils.<EntityGrimoire>nonRepeatableAttack(GUST)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveAwayRunner<>(3, 1, 6), e -> 40 + e.getRandom().nextInt(15))), 9),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveAwayRunner<>(4, 1, 7), e -> 40 + e.getRandom().nextInt(15))), 9),
             WeightedEntry.wrap(MonsterActionUtils.<EntityGrimoire>nonRepeatableAttack(CHARGE)
                     .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 6), e -> 40 + e.getRandom().nextInt(15))), 8),
             WeightedEntry.wrap(MonsterActionUtils.<EntityGrimoire>nonRepeatableAttack(WIND_BREATH)
@@ -147,7 +148,7 @@ public class EntityGrimoire extends BossMonster {
                     .prepare(() -> new TimedWrappedRunner<>(new MoveAwayRunner<>(3, 1, 6), e -> 40 + e.getRandom().nextInt(15))), 10)
     );
     private static final List<WeightedEntry.Wrapper<IdleAction<EntityGrimoire>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 3)), 1)
+            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 1.5)), 1)
     );
 
     public final AnimatedAttackGoal<EntityGrimoire> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
@@ -208,7 +209,7 @@ public class EntityGrimoire extends BossMonster {
     @Override
     public void tick() {
         super.tick();
-        if (this.getAnimationHandler().isCurrent(CHARGE)) {
+        if (this.getAnimationHandler().isCurrent(CHARGE, CHARGE_LAND)) {
             this.setXRot(0);
             this.setYRot(this.entityData.get(LOCKED_YAW));
         }
@@ -255,7 +256,7 @@ public class EntityGrimoire extends BossMonster {
     public void handleAttack(AnimatedAction anim) {
         LivingEntity target = this.getTarget();
         if (target != null) {
-            this.lookAt(target, 180.0f, 50.0f);
+            this.lookAtNow(target, 60.0f, 50.0f);
         }
         BiConsumer<AnimatedAction, EntityGrimoire> handler = ATTACK_HANDLER.get(anim.getID());
         if (handler != null)
@@ -264,13 +265,25 @@ public class EntityGrimoire extends BossMonster {
 
 
     @Override
-    public AABB calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
+    public OrientedBoundingBox calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
         if (anim.is(CHARGE_LAND))
-            return this.getBoundingBox().inflate(0.7, 0.1, 0.7);
+            return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this).inflate(1.2, 0.1, 1.2), this.entityData.get(LOCKED_YAW), 0, this.position());
         if (anim.is(CHARGE)) {
-            return this.getBoundingBox().expandTowards(this.getDeltaMovement().scale(0.3)).inflate(0.7, 0.1, 0.7);
+            double width = this.getBbWidth();
+            double speed = Math.max(width, this.getDeltaMovement().length() - width);
+            return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
+                    .inflate(grow + 0.5, 0.1, grow + 0.5).expandTowards(0, 0, speed), this.entityData.get(LOCKED_YAW), 0, this.position());
         }
         return super.calculateAttackAABB(anim, target, grow);
+    }
+
+    @Override
+    public AABB attackAABB(AnimatedAction anim) {
+        if (anim.is(TAIL_SWIPE)) {
+            double range = this.maxAttackRange(anim) + this.getBbWidth() * 0.5;
+            return new AABB(-range * 0.5, -0.02, 0, range * 0.5, this.getBbHeight() + 0.02, range);
+        }
+        return super.attackAABB(anim);
     }
 
     @Override

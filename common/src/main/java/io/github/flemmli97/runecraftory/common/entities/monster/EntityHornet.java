@@ -12,7 +12,7 @@ import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.EvadingRangedRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.KeepDistanceRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
@@ -46,7 +46,7 @@ public class EntityHornet extends BaseMonster {
             WeightedEntry.wrap(MonsterActionUtils.simpleRangedEvadingAction(ATTACK, 9, 2, 1, e -> 1), 1)
     );
     private static final List<WeightedEntry.Wrapper<IdleAction<EntityHornet>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<>(() -> new EvadingRangedRunner<EntityHornet>(10, 2, 1))
+            WeightedEntry.wrap(new IdleAction<>(() -> new KeepDistanceRunner<EntityHornet>(2, 10, 1))
                     .withCondition(((goal, target) -> goal.distanceToTargetSq < 9)), 5),
             WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(12, 5)), 3)
     );

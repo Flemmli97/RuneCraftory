@@ -49,7 +49,7 @@ public class EntityGoblin extends LeapingMonster {
             WeightedEntry.wrap(MonsterActionUtils.simpleRangedEvadingAction(STONE, 8, 3, 1, e -> 1), 3)
     );
     private static final List<WeightedEntry.Wrapper<IdleAction<EntityGoblin>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 1)), 1),
+            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 0.5)), 1),
             WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 2)
     );
 

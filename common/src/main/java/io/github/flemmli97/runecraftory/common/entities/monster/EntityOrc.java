@@ -42,7 +42,7 @@ public class EntityOrc extends BaseMonster {
             WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(MELEE_2, e -> e.getType() == ModEntities.ORC.get() ? 0.85f : 0.95f), 1)
     );
     private static final List<WeightedEntry.Wrapper<IdleAction<EntityOrc>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 1)), 3),
+            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 0.5)), 3),
             WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 1),
             WeightedEntry.wrap(new IdleAction<>(DoNothingRunner::new), 2)
     );
@@ -69,8 +69,8 @@ public class EntityOrc extends BaseMonster {
     @Override
     public double maxAttackRange(AnimatedAction anim) {
         if (anim.is(MELEE_2))
-            return 1.45;
-        return 1.35;
+            return 1.4;
+        return 1.3;
     }
 
     @Override

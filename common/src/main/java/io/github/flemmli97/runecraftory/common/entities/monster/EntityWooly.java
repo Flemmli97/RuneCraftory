@@ -66,7 +66,7 @@ public class EntityWooly extends LeapingMonster {
             WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(HEADBUTT, EntityWooly::attackChance), 2)
     );
     private static final List<WeightedEntry.Wrapper<IdleAction<EntityWooly>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 1)), 1),
+            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 0.5)), 1),
             WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(10, 5)), 2),
             WeightedEntry.wrap(new IdleAction<EntityWooly>(DoNothingRunner::new)
                     .duration(e -> e.getRandom().nextInt(10) + 15), 3)

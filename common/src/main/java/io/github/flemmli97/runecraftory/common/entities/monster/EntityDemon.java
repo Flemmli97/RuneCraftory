@@ -54,7 +54,7 @@ public class EntityDemon extends BaseMonster implements HealingPredicateEntity, 
     );
     private static final List<WeightedEntry.Wrapper<IdleAction<EntityDemon>>> IDLE_ACTIONS = List.of(
             WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 2),
-            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 1)), 1)
+            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 0.5)), 1)
     );
 
     public final AnimatedAttackGoal<EntityDemon> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);

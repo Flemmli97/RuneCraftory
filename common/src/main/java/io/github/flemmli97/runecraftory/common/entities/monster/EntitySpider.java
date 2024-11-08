@@ -48,7 +48,7 @@ public class EntitySpider extends BaseMonster {
             WeightedEntry.wrap(MonsterActionUtils.simpleRangedStrafingAction(WEBSHOT, 7, 1, e -> 1), 2)
     );
     private static final List<WeightedEntry.Wrapper<IdleAction<EntitySpider>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 1)), 5),
+            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 0.5)), 5),
             WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(9, 3)), 3),
             WeightedEntry.wrap(new IdleAction<>(DoNothingRunner::new), 1)
     );

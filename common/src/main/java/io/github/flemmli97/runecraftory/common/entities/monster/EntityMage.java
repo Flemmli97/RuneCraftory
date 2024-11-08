@@ -11,7 +11,7 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoa
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.EvadingRangedRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.KeepDistanceRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.entity.Entity;
@@ -42,7 +42,7 @@ public class EntityMage extends BaseMonster implements HealingPredicateEntity {
             WeightedEntry.wrap(MonsterActionUtils.simpleRangedStrafingAction(CAST_2, 8, 1, e -> 1), 4)
     );
     private static final List<WeightedEntry.Wrapper<IdleAction<EntityMage>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<>(() -> new EvadingRangedRunner<>(10, 4, 1)), 3),
+            WeightedEntry.wrap(new IdleAction<>(() -> new KeepDistanceRunner<>(4, 10, 1)), 3),
             WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 1),
             WeightedEntry.wrap(new IdleAction<>(DoNothingRunner::new), 2)
     );

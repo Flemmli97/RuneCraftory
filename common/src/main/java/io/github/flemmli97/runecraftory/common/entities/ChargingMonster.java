@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.entities;
 
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.utils.OrientedBoundingBox;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -8,7 +9,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
@@ -76,7 +76,7 @@ public abstract class ChargingMonster extends BaseMonster {
     public void handleAttack(AnimatedAction anim) {
         if (this.isChargingAnim(anim)) {
             this.getNavigation().stop();
-            if (anim.getTick() > anim.getAttackTime()) {
+            if (anim.isPastTick(anim.getAttackTime())) {
                 if (!this.handleChargeMovement(anim))
                     return;
                 if (this.hitEntity == null)
@@ -101,12 +101,13 @@ public abstract class ChargingMonster extends BaseMonster {
     }
 
     @Override
-    public AABB calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
+    public OrientedBoundingBox calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
         if (!this.isChargingAnim(anim))
             return super.calculateAttackAABB(anim, target, grow);
-        double reach = this.maxAttackRange(anim) * 0.5 + this.getBbWidth() * 0.5;
-        Vec3 attackPos = this.position().add(Vec3.directionFromRotation(0, this.getYRot()).scale(reach));
-        return this.attackAABB(anim).inflate(grow, 0, grow).move(attackPos.x, attackPos.y, attackPos.z);
+        double width = this.getBbWidth();
+        double speed = Math.max(width, this.getDeltaMovement().length() - width);
+        return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
+                .inflate(grow).expandTowards(0, 0, speed), this.entityData.get(LOCKED_YAW), 0, this.position());
     }
 
     @Override

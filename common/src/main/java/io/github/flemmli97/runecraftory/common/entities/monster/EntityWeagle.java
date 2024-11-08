@@ -14,6 +14,7 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.StrafingRunner;
+import io.github.flemmli97.tenshilib.common.utils.OrientedBoundingBox;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.entity.Entity;
@@ -27,7 +28,6 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -96,7 +96,7 @@ public class EntityWeagle extends BaseMonster {
 
     @Override
     public double maxAttackRange(AnimatedAction anim) {
-        return 1.5;
+        return this.getBbWidth();
     }
 
     @Override
@@ -144,9 +144,10 @@ public class EntityWeagle extends BaseMonster {
     }
 
     @Override
-    public AABB calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
+    public OrientedBoundingBox calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
         if (anim.is(SWOOP))
-            return super.calculateAttackAABB(anim, target, grow).move(this.getDeltaMovement());
+            return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
+                    .inflate(grow), this.getYRot(), 0, this.position().add(this.getDeltaMovement()));
         return super.calculateAttackAABB(anim, target, grow);
     }
 

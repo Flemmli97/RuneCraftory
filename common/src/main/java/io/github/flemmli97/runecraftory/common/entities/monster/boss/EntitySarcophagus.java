@@ -17,6 +17,7 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
+import io.github.flemmli97.tenshilib.common.utils.OrientedBoundingBox;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -33,7 +34,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
@@ -351,9 +351,12 @@ public class EntitySarcophagus extends BossMonster implements MobAttackExt {
     }
 
     @Override
-    public AABB calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
+    public OrientedBoundingBox calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
         if (anim.is(CHARGE)) {
-            return this.getBoundingBox().inflate(0.4, 0.1, 0.4);
+            double width = this.getBbWidth();
+            double speed = Math.max(width, this.getDeltaMovement().length() - width);
+            return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
+                    .inflate(0.4, 0.1, 0.4).expandTowards(0, 0, speed), this.entityData.get(LOCKED_YAW), 0, this.position());
         }
         return super.calculateAttackAABB(anim, target, grow);
     }

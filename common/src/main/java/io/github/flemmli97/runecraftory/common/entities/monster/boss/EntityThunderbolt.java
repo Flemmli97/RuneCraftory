@@ -5,7 +5,6 @@ import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.entities.ai.RestrictedWaterAvoidingStrollGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
-import io.github.flemmli97.runecraftory.common.entities.ai.animated.MoveToTargetAttackRunner;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
@@ -16,10 +15,12 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoa
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveAwayRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetAttackRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.StrafingRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.TimedWrappedRunner;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
+import io.github.flemmli97.tenshilib.common.utils.OrientedBoundingBox;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -38,7 +39,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -185,7 +185,7 @@ public class EntityThunderbolt extends BossMonster {
                     .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.2, 7), e -> 35 + e.getRandom().nextInt(15))), 7)
     );
     private static final List<WeightedEntry.Wrapper<IdleAction<EntityThunderbolt>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1.1, 1)), 8),
+            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1.1, 0.5)), 8),
             WeightedEntry.wrap(new IdleAction<>(() -> new StrafingRunner<>(7, 1.1f, 0.2f)), 10)
     );
 
@@ -294,7 +294,7 @@ public class EntityThunderbolt extends BossMonster {
         LivingEntity target = this.getTarget();
         if (target != null) {
             this.getNavigation().stop();
-            this.getLookControl().setLookAt(target, 30.0f, 30.0f);
+            this.lookAtNow(target, 60.0f, 50.0f);
         }
         BiConsumer<AnimatedAction, EntityThunderbolt> handler = ATTACK_HANDLER.get(anim.getID());
         if (handler != null)
@@ -302,11 +302,13 @@ public class EntityThunderbolt extends BossMonster {
     }
 
     @Override
-    public AABB calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
+    public OrientedBoundingBox calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
         if (anim.is(STOMP)) {
-            return this.getBoundingBox().inflate(1.5, -0.4, 1.5);
+            return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
+                    .inflate(1.7, -0.4, 1.7), this.getYRot(), 0, this.position());
         } else if (anim.is(CHARGE, CHARGE_2, CHARGE_3)) {
-            return this.getBoundingBox().inflate(1);
+            return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
+                    .inflate(grow + 1), this.entityData.get(LOCKED_YAW), 0, this.position());
         } else
             return super.calculateAttackAABB(anim, target, grow);
     }

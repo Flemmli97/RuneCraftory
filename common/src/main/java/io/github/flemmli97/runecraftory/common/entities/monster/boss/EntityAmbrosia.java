@@ -5,7 +5,6 @@ import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.MobAttackExt;
 import io.github.flemmli97.runecraftory.common.entities.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
-import io.github.flemmli97.runecraftory.common.entities.ai.animated.MoveToTargetAttackRunner;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityPollen;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
@@ -16,9 +15,11 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoa
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveAwayRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetAttackRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.StrafingRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.TimedWrappedRunner;
+import io.github.flemmli97.tenshilib.common.utils.OrientedBoundingBox;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.BossEvent;
@@ -29,7 +30,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -55,6 +55,7 @@ public class EntityAmbrosia extends BossMonster implements MobAttackExt {
             if (entity.targetPosition == null && entity.getTarget() != null) {
                 LivingEntity target = entity.getTarget();
                 entity.setAiVarHelper(new Vec3(target.getX(), target.getEyeY() - target.getBbHeight() * 0.5, target.getZ()));
+                entity.lookAtNow(target, 30, 30);
             }
             if (anim.canAttack()) {
                 ModSpells.BUTTERFLY.get().use(entity);
@@ -187,7 +188,7 @@ public class EntityAmbrosia extends BossMonster implements MobAttackExt {
         LivingEntity target = this.getTarget();
         if (target != null) {
             if (!anim.is(POLLEN))
-                this.lookAt(target, 180.0f, 50.0f);
+                this.lookAtNow(target, 60.0f, 50.0f);
         }
         BiConsumer<AnimatedAction, EntityAmbrosia> handler = ATTACK_HANDLER.get(anim.getID());
         if (handler != null)
@@ -195,9 +196,10 @@ public class EntityAmbrosia extends BossMonster implements MobAttackExt {
     }
 
     @Override
-    public AABB calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
+    public OrientedBoundingBox calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
         if (anim.is(POLLEN)) {
-            return this.getBoundingBox().inflate(2.0);
+            return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
+                    .inflate(grow + 2, grow, grow + 2), this.getYRot(), this.getXRot(), this.position());
         }
         return super.calculateAttackAABB(anim, target, grow);
     }

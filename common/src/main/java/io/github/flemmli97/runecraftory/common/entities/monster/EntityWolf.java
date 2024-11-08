@@ -46,7 +46,7 @@ public class EntityWolf extends LeapingMonster {
                     .prepare(() -> new WrappedRunner<>(new MoveToTargetRunner<>(1, 4))), 2)
     );
     private static final List<WeightedEntry.Wrapper<IdleAction<EntityWolf>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 1)), 1),
+            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 0.5)), 1),
             WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 2)
     );
 
@@ -110,7 +110,7 @@ public class EntityWolf extends LeapingMonster {
                 this.lookAtNow(this.getTarget(), 360, 90);
                 this.targetPosition = this.getTarget().position();
             }
-            if (anim.getTick() == 10 || anim.getTick() == 17 || anim.getTick() == 23 || anim.getTick() == 30) {
+            if (anim.isAtTick(0.52) || anim.isAtTick(0.84) || anim.isAtTick(1.16) || anim.isAtTick(1.52)) {
                 this.mobAttack(anim, this.getTarget(), target -> wolfAttack(this, target));
             }
         } else

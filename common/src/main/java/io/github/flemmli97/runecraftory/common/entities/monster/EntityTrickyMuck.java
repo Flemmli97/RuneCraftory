@@ -26,7 +26,7 @@ public class EntityTrickyMuck extends EntityBigMuck {
             WeightedEntry.wrap(MonsterActionUtils.simpleRangedEvadingAction(SPORE_BALL, 8, 3, 1, e -> 1), 2)
     );
     private static final List<WeightedEntry.Wrapper<IdleAction<EntityTrickyMuck>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 1)), 2),
+            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 0.5)), 2),
             WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(12, 4)), 1)
     );
 

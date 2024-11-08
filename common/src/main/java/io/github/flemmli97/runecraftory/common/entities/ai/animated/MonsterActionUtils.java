@@ -6,11 +6,12 @@ import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.ActionUtils;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.EvadingRangedRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.KeepDistanceRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetAttackRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.StrafingRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.TimedWrappedRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
-import net.minecraft.world.phys.AABB;
+import io.github.flemmli97.tenshilib.common.utils.OrientedBoundingBox;
 
 public class MonsterActionUtils {
 
@@ -35,8 +36,8 @@ public class MonsterActionUtils {
 
     public static <T extends BaseMonster> GoalAttackAction.Condition<T> inAABBRange(AnimatedAction anim) {
         return (goal, target, previousAnim) -> {
-            AABB aabb = goal.attacker.attackCheckAABB(anim, target, -0.3);
-            return aabb.intersects(target.getBoundingBox());
+            OrientedBoundingBox obb = goal.attacker.prepareAttackBox(anim, target, -0.3, false);
+            return obb.intersects(target.getBoundingBox());
         };
     }
 
@@ -69,6 +70,6 @@ public class MonsterActionUtils {
         return new GoalAttackAction<T>(anim)
                 .cooldown(e -> e.animationCooldown(anim))
                 .withCondition(ActionUtils.chanced(chance))
-                .prepare(() -> new WrappedRunner<>(new EvadingRangedRunner<>(max, min, speed)));
+                .prepare(() -> new WrappedRunner<>(new KeepDistanceRunner<>(min, max, speed)));
     }
 }

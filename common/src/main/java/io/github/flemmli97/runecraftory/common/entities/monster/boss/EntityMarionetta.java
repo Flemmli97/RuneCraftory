@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
-import io.github.flemmli97.runecraftory.common.entities.ai.animated.MoveToTargetAttackRunner;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityMarionettaTrap;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
@@ -18,15 +17,18 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoa
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.EvadingRangedRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.JumpEvadeAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.KeepDistanceRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetAttackRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.StrafingRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.TimedWrappedRunner;
+import io.github.flemmli97.tenshilib.common.utils.OrientedBoundingBox;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
@@ -36,7 +38,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
@@ -81,7 +82,7 @@ public class EntityMarionetta extends BossMonster {
                 entity.aiVarHelper = dir;
             }
             entity.setDeltaMovement(entity.aiVarHelper);
-            if (anim.getTick() >= anim.getAttackTime()) {
+            if (anim.isPastTick(anim.getAttackTime())) {
                 entity.mobAttack(anim, null, e -> CombatUtils.mobAttack(entity, e, new CustomDamage.Builder(entity).hurtResistant(8)));
             }
         });
@@ -98,7 +99,7 @@ public class EntityMarionetta extends BossMonster {
                 entity.aiVarHelper = dir;
             }
             entity.setDeltaMovement(entity.aiVarHelper);
-            if (anim.getTick() >= anim.getAttackTime()) {
+            if (anim.isPastTick(anim.getAttackTime())) {
                 entity.mobAttack(anim, null, e -> {
                     if (!entity.caughtEntities.contains(e)) {
                         entity.catchEntity(e);
@@ -148,9 +149,9 @@ public class EntityMarionetta extends BossMonster {
             WeightedEntry.wrap(MonsterActionUtils.<EntityMarionetta>nonRepeatableAttack(CHEST_ATTACK)
                     .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 6.5), e -> 35 + e.getRandom().nextInt(20))), 10),
             WeightedEntry.wrap(MonsterActionUtils.<EntityMarionetta>nonRepeatableAttack(STUFFED_ANIMALS)
-                    .prepare(() -> new TimedWrappedRunner<>(new EvadingRangedRunner<>(7, 3, 1.2), e -> 30 + e.getRandom().nextInt(20))), 10),
+                    .prepare(() -> new TimedWrappedRunner<>(new KeepDistanceRunner<>(3, 7, 1.2), e -> 30 + e.getRandom().nextInt(20))), 10),
             WeightedEntry.wrap(MonsterActionUtils.<EntityMarionetta>enragedBossAttack(DARK_BEAM)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 6, true, true), e -> 30 + e.getRandom().nextInt(20))), 10),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 6), e -> 30 + e.getRandom().nextInt(20))), 10),
             WeightedEntry.wrap(MonsterActionUtils.<EntityMarionetta>enragedBossAttack(FURNITURE)
                     .prepare(() -> new TimedWrappedRunner<>(new DoNothingRunner<>(true), e -> 5)), 1)
     );
@@ -241,7 +242,8 @@ public class EntityMarionetta extends BossMonster {
         LivingEntity target = this.getTarget();
         if (target != null) {
             if (!anim.is(SPIN))
-                this.lookAt(target, 180.0f, 50.0f);
+                this.lookAtNow(target, 60.0f, 50.0f);
+
         }
         BiConsumer<AnimatedAction, EntityMarionetta> handler = ATTACK_HANDLER.get(anim.getID());
         if (handler != null)
@@ -249,12 +251,16 @@ public class EntityMarionetta extends BossMonster {
     }
 
     @Override
-    public AABB calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
+    public OrientedBoundingBox calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
         if (anim.is(SPIN)) {
-            return this.getBoundingBox().inflate(1.6, 0.1, 1.6);
+            float rotY = -Mth.wrapDegrees((float) (Mth.atan2(this.aiVarHelper.x(), this.aiVarHelper.z()) * Mth.RAD_TO_DEG));
+            return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
+                    .inflate(1.6, 0.1, 1.6), rotY, 0, this.position());
         }
         if (anim.is(CHEST_ATTACK)) {
-            return this.getBoundingBox().inflate(1.2, 0.1, 1.2);
+            float rotY = -Mth.wrapDegrees((float) (Mth.atan2(this.aiVarHelper.x(), this.aiVarHelper.z()) * Mth.RAD_TO_DEG));
+            return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
+                    .inflate(1.2, 0.1, 1.2), rotY, 0, this.position());
         }
         return super.calculateAttackAABB(anim, target, grow);
     }

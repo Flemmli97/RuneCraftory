@@ -14,6 +14,7 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
+import io.github.flemmli97.tenshilib.common.utils.OrientedBoundingBox;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -29,7 +30,6 @@ import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -50,7 +50,7 @@ public class EntityTortas extends ChargingMonster {
                     .prepare(ChargeAction::new), 2)
     );
     private static final List<WeightedEntry.Wrapper<IdleAction<EntityTortas>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 1)), 3),
+            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 0.5)), 3),
             WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(12, 5)), 5),
             WeightedEntry.wrap(new IdleAction<>(DoNothingRunner::new), 1)
     );
@@ -113,9 +113,10 @@ public class EntityTortas extends ChargingMonster {
     }
 
     @Override
-    public AABB calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
-        if (anim != null && anim.is(SPIN))
-            return this.attackAABB(anim).move(this.getX(), this.getY(), this.getZ());
+    public OrientedBoundingBox calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
+        if (anim != null && anim.is(SPIN)) {
+            return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this).inflate(0.2), this.getYRot(), 0, this.position());
+        }
         return super.calculateAttackAABB(anim, target, grow);
     }
 

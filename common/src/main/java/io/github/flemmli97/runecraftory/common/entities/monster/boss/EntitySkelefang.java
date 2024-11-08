@@ -25,6 +25,7 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.TimedWrappedRunner;
 import io.github.flemmli97.tenshilib.common.utils.MathUtils;
+import io.github.flemmli97.tenshilib.common.utils.OrientedBoundingBox;
 import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -32,7 +33,6 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.Mth;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
@@ -96,7 +96,7 @@ public class EntitySkelefang extends BossMonster {
                 entity.targetPosition = entity.getTarget().position();
             }
             if (entity.remainingTailBones() > 10 || entity.isEnraged()) {
-                if (anim.canAttack() || anim.getTick() == 24 || anim.getTick() == 32) {
+                if (anim.canAttack() || anim.isAtTick(1.2) || anim.isAtTick(1.64)) {
                     entity.mobAttack(anim, entity.getTarget(), entity::doHurtTarget);
                     entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 2, 0.7f);
                 }
@@ -182,13 +182,13 @@ public class EntitySkelefang extends BossMonster {
             });
         });
         b.put(BEAM, (anim, entity) -> {
-            if (anim.getTick() == 90)
+            if (anim.isAtTick(90))
                 entity.level.broadcastEntityEvent(entity, CHARGE_BEAM);
-            if (anim.getTick() == 130)
+            if (anim.isAtTick(130))
                 ModSpells.ENERGY_ORB_SPELL.get().use(entity);
-            if (anim.getTick() == 230)
+            if (anim.isAtTick(230))
                 entity.restoreDragon();
-            if (anim.getTick() >= 250)
+            if (anim.isPastTick(250))
                 entity.getAnimationHandler().setAnimation(null);
         });
         b.put(ROAR, (anim, entity) -> {
@@ -623,7 +623,8 @@ public class EntitySkelefang extends BossMonster {
     public void handleAttack(AnimatedAction anim) {
         LivingEntity target = this.getTarget();
         if (target != null) {
-            this.lookAt(target, 180.0f, 50.0f);
+            this.lookAtNow(target, 60.0f, 50.0f);
+
         }
         this.getNavigation().stop();
         BiConsumer<AnimatedAction, EntitySkelefang> handler = ATTACK_HANDLER.get(anim.getID());
@@ -634,57 +635,32 @@ public class EntitySkelefang extends BossMonster {
     @Override
     public void mobAttack(AnimatedAction anim, LivingEntity target, Consumer<LivingEntity> cons) {
         if (anim.is(CHARGE)) {
-            double widthH = this.getBbWidth() * 0.5 + 1.3;
-            AABB aabb = new AABB(-widthH, -0.02, -widthH, widthH, this.getBbHeight() + 0.02, widthH).move(this.getX(), this.getY(), this.getZ())
-                    .move(Vec3.directionFromRotation(0, this.yBodyRot).scale(0.7));
-            this.level.getEntitiesOfClass(LivingEntity.class, aabb, this.hitPred).forEach(cons);
+            double width = this.getBbWidth();
+            double speed = Math.max(width, this.getDeltaMovement().length() - width);
+            OrientedBoundingBox obb = new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
+                    .expandTowards(0, 0, speed), this.getYRot(), 0, this.position());
+            this.level.getEntitiesOfClass(LivingEntity.class, obb.getEncompassingBox(),
+                    entity -> this.hitPred.test(entity) && obb.intersects(entity.getBoundingBox())).forEach(cons);
             if (!this.level.isClientSide)
-                S2CAttackDebug.sendDebugPacket(aabb, S2CAttackDebug.EnumAABBType.ATTACK, this);
+                S2CAttackDebug.sendDebugPacket(obb, S2CAttackDebug.EnumAABBType.ATTACK, this);
             return;
         }
-        List<AABB> aabbs = new ArrayList<>();
+        List<OrientedBoundingBox> obbs = new ArrayList<>();
         if (anim.is(TAIL_SLAP)) {
-            double reach = this.maxAttackRange(anim) * 0.5 + this.getBbWidth() * 0.5;
-            Vec3 dir;
-            if (target != null && !this.canBeControlledByRider()) {
-                dir = target.position().subtract(this.position());
-                dir = new Vec3(dir.x(), Mth.clamp(dir.y(), -0.1, 0.1), dir.z()).normalize();
-            } else {
-                if (this.getControllingPassenger() instanceof Player player)
-                    dir = player.getLookAngle();
-                else
-                    dir = Vec3.directionFromRotation(this.getXRot(), this.getYRot());
-            }
-            double attackSize = 1.25;
-            Vec3 attackPos = this.position().add(dir.scale(this.getBbWidth() + reach + 3));
-            aabbs.add(new AABB(-attackSize, -0.02, -attackSize, attackSize, 1.8 + 0.02, attackSize).move(attackPos.x, attackPos.y, attackPos.z));
-            attackPos = this.position().add(dir.scale(this.getBbWidth() + reach));
-            aabbs.add(new AABB(-attackSize, -0.02, -attackSize, attackSize, 1.8 + 0.02, attackSize).move(attackPos.x, attackPos.y, attackPos.z));
-            attackPos = this.position().add(dir.scale(this.getBbWidth()));
-            aabbs.add(new AABB(-attackSize, -0.02, -attackSize, attackSize, 1.8 + 0.02, attackSize).move(attackPos.x, attackPos.y, attackPos.z));
+            double range = this.getBbWidth() + 5;
+            obbs.add(new OrientedBoundingBox(new AABB(-range * 0.75, -0.02, 0, range * 0.75, 1.8 + 0.02, range),
+                    this.getYRot(), 0, this.position()));
         }
         if (anim.is(TAIL_SLAM)) {
-            double reach = this.maxAttackRange(anim) * 0.5 + this.getBbWidth() * 0.5;
-            Vec3 dir;
+            float angle = this.yHeadRot;
             if (this.getControllingPassenger() instanceof Player player)
-                dir = Vec3.directionFromRotation(0, player.getYRot());
-            else
-                dir = Vec3.directionFromRotation(0, this.getYRot());
-            double angle = 0;
-            Vec3 offset = dir;
+                angle = player.yHeadRot;
             if (anim.canAttack())
-                angle = 50;
-            else if (anim.getTick() == 32)
-                angle = -30;
-            if (angle != 0)
-                offset = MathUtils.rotate(MathUtils.normalY, dir, (float) (Mth.DEG_TO_RAD * angle));
-            double attackSize = 1.25;
-            Vec3 attackPos = this.position().add(dir.scale(this.getBbWidth())).add(offset.scale(reach + 3));
-            aabbs.add(new AABB(-attackSize, -0.02, -attackSize, attackSize, 1.8 + 0.02, attackSize).move(attackPos.x, attackPos.y, attackPos.z));
-            attackPos = this.position().add(dir.scale(this.getBbWidth())).add(offset.scale(reach));
-            aabbs.add(new AABB(-attackSize, -0.02, -attackSize, attackSize, 1.8 + 0.02, attackSize).move(attackPos.x, attackPos.y, attackPos.z));
-            attackPos = this.position().add(dir.scale(this.getBbWidth()));
-            aabbs.add(new AABB(-attackSize, -0.02, -attackSize, attackSize, 1.8 + 0.02, attackSize).move(attackPos.x, attackPos.y, attackPos.z));
+                angle -= 35;
+            else if (anim.isAtTick(1.64))
+                angle += 20;
+            obbs.add(new OrientedBoundingBox(new AABB(-1.25, -0.02, -0, 1.25, 2.1 + 0.02, 7),
+                    angle, 0, this.position()));
         }
         if (anim.is(SLASH)) {
             double reach = 1;
@@ -701,18 +677,18 @@ public class EntitySkelefang extends BossMonster {
             double attackSize = 1.65;
             if (this.remainingLeftLegBones() > 0) {
                 Vec3 rightPos = this.position().add(dir).add(side.scale(1.3));
-                aabbs.add(new AABB(-attackSize, -0.02, -attackSize, attackSize, 1.8 + 0.02, attackSize).move(rightPos.x, rightPos.y, rightPos.z));
+                obbs.add(new OrientedBoundingBox(new AABB(-attackSize, -0.02, -attackSize, attackSize, 1.8 + 0.02, attackSize), this.getYRot(), 0, rightPos));
             }
             if (this.remainingRightLegBones() > 0) {
                 Vec3 leftPos = this.position().add(dir).add(side.scale(-1.3));
-                aabbs.add(new AABB(-attackSize, -0.02, -attackSize, attackSize, 1.8 + 0.02, attackSize).move(leftPos.x, leftPos.y, leftPos.z));
+                obbs.add(new OrientedBoundingBox(new AABB(-attackSize, -0.02, -attackSize, attackSize, 1.8 + 0.02, attackSize), this.getYRot(), 0, leftPos));
             }
         }
         Set<LivingEntity> targets = new HashSet<>();
-        for (AABB aabb : aabbs) {
-            targets.addAll(this.level.getEntitiesOfClass(LivingEntity.class, aabb, this.hitPred));
+        for (OrientedBoundingBox obb : obbs) {
+            targets.addAll(this.level.getEntitiesOfClass(LivingEntity.class, obb.getEncompassingBox(), entity -> this.hitPred.test(entity) && obb.intersects(entity.getBoundingBox())));
             if (!this.level.isClientSide)
-                S2CAttackDebug.sendDebugPacket(aabb, S2CAttackDebug.EnumAABBType.ATTACK, this);
+                S2CAttackDebug.sendDebugPacket(obb, S2CAttackDebug.EnumAABBType.ATTACK, this);
         }
         targets.forEach(cons);
     }

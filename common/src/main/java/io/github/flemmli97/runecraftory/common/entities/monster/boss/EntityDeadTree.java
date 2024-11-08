@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
-import io.github.flemmli97.runecraftory.common.entities.ai.animated.MoveToTargetAttackRunner;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
@@ -16,6 +15,7 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoa
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetAttackRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.TimedWrappedRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
@@ -80,7 +80,7 @@ public class EntityDeadTree extends BossMonster {
             if (anim.getTick() == 1 && entity.getTarget() != null) {
                 entity.targetPosition = entity.getTarget().position();
             }
-            if (anim.canAttack() || anim.getTick() == 14) {
+            if (anim.canAttack() || anim.isAtTick(0.64)) {
                 entity.mobAttack(anim, entity.getTarget(), entity::doHurtTarget);
             }
         });
@@ -260,7 +260,7 @@ public class EntityDeadTree extends BossMonster {
     public void handleAttack(AnimatedAction anim) {
         LivingEntity target = this.getTarget();
         if (target != null) {
-            this.lookAt(target, 180.0f, 50.0f);
+            this.lookAtNow(target, 60.0f, 50.0f);
         }
         this.getNavigation().stop();
         BiConsumer<AnimatedAction, EntityDeadTree> handler = ATTACK_HANDLER.get(anim.getID());

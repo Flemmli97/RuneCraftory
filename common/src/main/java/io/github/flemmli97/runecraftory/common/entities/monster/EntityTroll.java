@@ -41,7 +41,7 @@ public class EntityTroll extends BaseMonster {
             WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(SLAM, e -> 1), 1)
     );
     private static final List<WeightedEntry.Wrapper<IdleAction<EntityTroll>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 1)), 3),
+            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 0.5)), 3),
             WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(12, 4)), 1)
     );
 
@@ -62,7 +62,7 @@ public class EntityTroll extends BaseMonster {
     @Override
     public double maxAttackRange(AnimatedAction anim) {
         if (anim.is(SLAM))
-            return this.getBbWidth() + 4;
+            return 3;
         return 1.6;
     }
 
@@ -84,10 +84,12 @@ public class EntityTroll extends BaseMonster {
     }
 
     @Override
-    public AABB calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
-        if (anim.is(SLAM))
-            return this.attackAABB(anim).inflate(grow, 0, grow).move(this.getX(), this.getY(), this.getZ());
-        return super.calculateAttackAABB(anim, target, grow);
+    public AABB attackAABB(AnimatedAction anim) {
+        if (anim.is(SLAM)) {
+            double range = this.maxAttackRange(anim) + this.getBbWidth() * 0.5;
+            return new AABB(-range * 0.5, -0.02, -range * 0.25, range * 0.5, this.getBbHeight() + 0.02, range * 0.75);
+        }
+        return super.attackAABB(anim);
     }
 
     @Override

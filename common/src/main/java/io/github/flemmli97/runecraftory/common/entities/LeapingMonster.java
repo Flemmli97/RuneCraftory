@@ -1,12 +1,12 @@
 package io.github.flemmli97.runecraftory.common.entities;
 
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.utils.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -54,7 +54,7 @@ public abstract class LeapingMonster extends BaseMonster {
                 Vec3 vec32 = this.getLeapVec(this.getTarget() == null ? this.targetPosition : this.getTarget().position());
                 this.setDeltaMovement(vec32.x, this.leapHeightMotion(), vec32.z);
             }
-            if (anim.getTick() >= anim.getAttackTime()) {
+            if (anim.isPastTick(anim.getAttackTime())) {
                 if (this.hitEntity == null)
                     this.hitEntity = new ArrayList<>();
                 this.mobAttack(anim, this.getTarget(), e -> {
@@ -87,12 +87,13 @@ public abstract class LeapingMonster extends BaseMonster {
     }
 
     @Override
-    public AABB calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
+    public OrientedBoundingBox calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
         if (!this.isLeapingAnim(anim))
             return super.calculateAttackAABB(anim, target, grow);
-        double reach = this.maxAttackRange(anim) * 0.5 + this.getBbWidth() * 0.5;
-        Vec3 attackPos = this.position().add(Vec3.directionFromRotation(0, this.getYRot()).scale(reach));
-        return this.attackAABB(anim).inflate(grow, 0, grow).move(attackPos.x, attackPos.y, attackPos.z);
+        double width = this.getBbWidth();
+        double speed = Math.max(width, this.getDeltaMovement().length() - width);
+        return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
+                .inflate(grow).expandTowards(0, 0, speed), this.getYRot(), 0, this.position());
     }
 
     @Override

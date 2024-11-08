@@ -74,6 +74,11 @@ public class EntityBeetle extends ChargingMonster {
     }
 
     @Override
+    public double maxAttackRange(AnimatedAction anim) {
+        return 1.3;
+    }
+
+    @Override
     public MobType getMobType() {
         return MobType.ARTHROPOD;
     }

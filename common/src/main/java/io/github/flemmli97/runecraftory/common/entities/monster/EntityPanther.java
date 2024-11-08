@@ -46,7 +46,7 @@ public class EntityPanther extends LeapingMonster {
                     .prepare(() -> new WrappedRunner<>(new MoveToTargetRunner<>(1, 4))), 2)
     );
     private static final List<WeightedEntry.Wrapper<IdleAction<EntityPanther>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 1)), 1),
+            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 0.5)), 1),
             WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 2)
     );
 

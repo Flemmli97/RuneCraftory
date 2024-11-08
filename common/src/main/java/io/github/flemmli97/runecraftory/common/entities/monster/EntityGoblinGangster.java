@@ -35,7 +35,7 @@ public class EntityGoblinGangster extends EntityGoblin {
                     .withCondition(((goal, target, previous) -> !goal.attacker.getMainHandItem().isEmpty())), 3)
     );
     private static final List<WeightedEntry.Wrapper<IdleAction<EntityGoblinGangster>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 1)), 1),
+            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 0.5)), 1),
             WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 2)
     );
 
@@ -79,7 +79,7 @@ public class EntityGoblinGangster extends EntityGoblin {
             this.getNavigation().stop();
             if (anim.getTick() == 1 && this.getTarget() != null)
                 this.lookAt(this.getTarget(), 360, 90);
-            if (anim.canAttack() || anim.getTick() == 16) {
+            if (anim.canAttack() || anim.isAtTick(0.8)) {
                 if (this.getTarget() != null && this.getSensing().hasLineOfSight(this.getTarget())) {
                     ModSpells.THROW_HAND_ITEM.get().use(this);
                 }
@@ -91,7 +91,7 @@ public class EntityGoblinGangster extends EntityGoblin {
                 this.lookAtNow(this.getTarget(), 360, 90);
                 this.targetPosition = this.getTarget().position();
             }
-            if (anim.canAttack() || anim.getTick() == 14) {
+            if (anim.canAttack() || anim.isAtTick(0.72)) {
                 this.mobAttack(anim, this.getTarget(), this::quickAttack);
             }
         }
