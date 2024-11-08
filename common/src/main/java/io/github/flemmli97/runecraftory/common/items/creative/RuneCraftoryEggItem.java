@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.items.creative;
 
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.blocks.tile.BossSpawnerBlockEntity;
 import io.github.flemmli97.runecraftory.common.entities.IBaseMob;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
@@ -31,7 +32,7 @@ import java.util.function.Supplier;
 
 public class RuneCraftoryEggItem extends SpawnEgg {
 
-    public static final String EGG_LEVEL = "SpawnEggLevel";
+    public static final String EGG_LEVEL = RuneCraftory.MODID + ":SpawnEggLevel";
 
     public RuneCraftoryEggItem(Supplier<? extends EntityType<? extends Mob>> type, int primary, int secondary, Properties props) {
         super(new EntityTypeHolder<>(Mob.class, type), primary, secondary, props);
@@ -47,20 +48,6 @@ public class RuneCraftoryEggItem extends SpawnEgg {
             e.setPos(e.getX() + 0.05, e.getY(), e.getZ());
         }
         return super.onEntitySpawned(e, stack, player);
-    }
-
-    @Override
-    public Component getEntityName(ItemStack stack) {
-        Component comp = super.getEntityName(stack);
-        if (comp != null) {
-            try {
-                Integer.parseInt(comp.getContents());
-                return null;
-            } catch (NumberFormatException e) {
-                return comp;
-            }
-        }
-        return null;
     }
 
     @Override
