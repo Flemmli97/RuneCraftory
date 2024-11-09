@@ -1,3 +1,8 @@
+RuneCraftory 1.10.3
+================
+- Update dependency
+- Attacks now use oriented boundingbox instead of AABB
+
 RuneCraftory 1.10.2
 ================
 - Update some mob attacks
