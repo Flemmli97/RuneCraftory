@@ -7,7 +7,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
@@ -39,8 +39,8 @@ public abstract class BaseBeam extends EntityBeam {
     }
 
     @Override
-    protected boolean check(Entity e, Vec3 from, Vec3 to) {
-        return (!(e instanceof LivingEntity) || this.pred == null || this.pred.test((LivingEntity) e)) && super.check(e, from, to);
+    protected boolean check(Entity e, Predicate<AABB> intersects) {
+        return (!(e instanceof LivingEntity) || this.pred == null || this.pred.test((LivingEntity) e)) && super.check(e, intersects);
     }
 
     @Override

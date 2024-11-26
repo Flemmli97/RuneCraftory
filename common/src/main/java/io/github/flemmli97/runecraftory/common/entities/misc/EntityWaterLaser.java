@@ -22,10 +22,12 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.UUID;
+import java.util.function.Predicate;
 
 public class EntityWaterLaser extends BaseBeam {
 
@@ -170,10 +172,10 @@ public class EntityWaterLaser extends BaseBeam {
     }
 
     @Override
-    protected boolean check(Entity e, Vec3 from, Vec3 to) {
+    protected boolean check(Entity e, Predicate<AABB> intersects) {
         if (this.tickCount - this.hitEntities.getOrDefault(e, this.tickCount - 20) <= 19)
             return false;
-        return super.check(e, from, to);
+        return super.check(e, intersects);
     }
 
     @Override

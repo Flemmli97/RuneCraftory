@@ -11,6 +11,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -78,8 +79,8 @@ public class EntityWindGust extends EntityBeam {
     }
 
     @Override
-    protected boolean check(Entity entity, Vec3 from, Vec3 to) {
-        return super.check(entity, from, to) && (!(entity instanceof LivingEntity) || this.pred.test((LivingEntity) entity));
+    protected boolean check(Entity e, Predicate<AABB> intersects) {
+        return super.check(e, intersects) && (!(e instanceof LivingEntity living) || this.pred.test(living));
     }
 
     @Override

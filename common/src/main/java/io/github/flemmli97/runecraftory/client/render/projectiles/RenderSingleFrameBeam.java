@@ -14,7 +14,7 @@ public class RenderSingleFrameBeam<T extends EntityBeam> extends RenderBeam<T> {
     private final ResourceLocation texture;
 
     public RenderSingleFrameBeam(EntityRendererProvider.Context ctx, ResourceLocation texture) {
-        this(ctx, texture, 0.8f, 0.65f);
+        this(ctx, texture, 1, 0.85f);
     }
 
     public RenderSingleFrameBeam(EntityRendererProvider.Context ctx, ResourceLocation texture, float glowWidth, float innerWidth) {
