@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
+import io.github.flemmli97.runecraftory.common.entities.TargetableOpponent;
 import io.github.flemmli97.tenshilib.common.entity.EntityBeam;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
@@ -27,6 +28,8 @@ public abstract class BaseBeam extends EntityBeam {
 
     public BaseBeam(EntityType<? extends BaseBeam> type, Level world, LivingEntity shooter) {
         super(type, world, shooter);
+        if (shooter instanceof TargetableOpponent targetableOpponent)
+            this.pred = targetableOpponent.validTargetPredicate();
     }
 
     public void setDamageMultiplier(float damageMultiplier) {
@@ -46,8 +49,8 @@ public abstract class BaseBeam extends EntityBeam {
     @Override
     public Entity getOwner() {
         Entity owner = super.getOwner();
-        if (owner instanceof BaseMonster)
-            this.pred = ((BaseMonster) owner).hitPred;
+        if (owner instanceof TargetableOpponent targetableOpponent)
+            this.pred = targetableOpponent.validTargetPredicate();
         return owner;
     }
 

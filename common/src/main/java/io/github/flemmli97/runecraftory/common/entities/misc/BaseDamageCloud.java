@@ -26,8 +26,8 @@ public abstract class BaseDamageCloud extends EntityDamageCloud {
 
     public BaseDamageCloud(EntityType<? extends BaseDamageCloud> type, Level world, LivingEntity shooter) {
         super(type, world, shooter);
-        if (shooter instanceof TargetableOpponent tO)
-            this.pred = tO.validTargetPredicate();
+        if (shooter instanceof TargetableOpponent targetableOpponent)
+            this.pred = targetableOpponent.validTargetPredicate();
     }
 
     public void setDamageMultiplier(float damageMultiplier) {
@@ -59,8 +59,8 @@ public abstract class BaseDamageCloud extends EntityDamageCloud {
     @Override
     public Entity getOwner() {
         Entity owner = super.getOwner();
-        if (owner instanceof TargetableOpponent tO)
-            this.pred = tO.validTargetPredicate();
+        if (owner instanceof TargetableOpponent targetableOpponent)
+            this.pred = targetableOpponent.validTargetPredicate();
         return owner;
     }
 }
