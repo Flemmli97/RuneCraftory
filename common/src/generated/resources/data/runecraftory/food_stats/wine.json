@@ -8,7 +8,7 @@
   "cookingBonusPercent": {},
   "potionApply": [
     {
-      "potion": "runecraftory:sleep",
+      "potion": "runecraftory:sleeping",
       "duration": 80,
       "amplifier": 0
     }

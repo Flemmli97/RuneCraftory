@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.utils;
 
 import com.google.common.collect.ImmutableMap;
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.client.resources.language.I18n;
@@ -19,8 +20,8 @@ import java.util.Map;
 
 public class CustomDamage extends EntityDamageSource {
 
-    public static final DamageSource EXHAUST = Platform.INSTANCE.createDamageSource("rfExhaust", true, true, true);
-    public static final DamageSource POISON = Platform.INSTANCE.createDamageSource("poison", true, true, false);
+    public static final DamageSource EXHAUST = Platform.INSTANCE.createDamageSource(RuneCraftory.MODID + ".exhaust", true, true, true);
+    public static final DamageSource POISON = Platform.INSTANCE.createDamageSource(RuneCraftory.MODID + ".poison", true, true, false);
 
     private final EnumElement element;
     private final KnockBackType knock;
@@ -33,7 +34,7 @@ public class CustomDamage extends EntityDamageSource {
     private final ImmutableMap<Attribute, Double> attributesChange;
 
     public CustomDamage(Entity attacker, @Nullable Entity cause, EnumElement element, KnockBackType knock, float knockBackAmount, int hurtTimeProtection, boolean faintEntity, boolean fixedDamage, Map<Attribute, Double> attributesChange) {
-        super("rfAttack", attacker);
+        super(RuneCraftory.MODID + ".attack", attacker);
         this.element = element;
         this.knock = knock;
         this.trueSourceEntity = cause;

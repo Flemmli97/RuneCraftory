@@ -20,10 +20,10 @@
     "minecraft:blindness",
     "minecraft:levitation",
     "minecraft:nausea",
-    "runecraftory:sleep",
+    "runecraftory:sleeping",
     "runecraftory:poison",
     "runecraftory:paralysis",
-    "runecraftory:seal",
+    "runecraftory:sealed",
     "runecraftory:fatigue",
     "runecraftory:cold"
   ],

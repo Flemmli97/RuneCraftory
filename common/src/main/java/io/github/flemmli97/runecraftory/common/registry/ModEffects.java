@@ -28,11 +28,11 @@ public class ModEffects {
     public static final RegistryEntrySupplier<MobEffect> FATIGUE = EFFECTS.register("fatigue", () -> new PermanentEffect(MobEffectCategory.HARMFUL, 0, S2CEntityDataSync.Type.FATIGUE));
     public static final RegistryEntrySupplier<MobEffect> PARALYSIS = EFFECTS.register("paralysis", ParalysisEffect::new);
     public static final RegistryEntrySupplier<MobEffect> POISON = EFFECTS.register("poison", PoisonEffect::new);
-    public static final RegistryEntrySupplier<MobEffect> SEAL = EFFECTS.register("seal", () -> new PermanentEffect(MobEffectCategory.HARMFUL, 0, S2CEntityDataSync.Type.SEAL));
-    public static final RegistryEntrySupplier<MobEffect> SLEEP = EFFECTS.register("sleep", SleepEffect::new);
+    public static final RegistryEntrySupplier<MobEffect> SEAL = EFFECTS.register("sealed", () -> new PermanentEffect(MobEffectCategory.HARMFUL, 0, S2CEntityDataSync.Type.SEAL));
+    public static final RegistryEntrySupplier<MobEffect> SLEEP = EFFECTS.register("sleeping", SleepEffect::new);
     public static final RegistryEntrySupplier<MobEffect> STEEL_HEART = EFFECTS.register("steel_heart", BathEffect::new);
     public static final RegistryEntrySupplier<MobEffect> STUNNED = EFFECTS.register("stunned", StunEffect::new);
 
-    public static final RegistryEntrySupplier<MobEffect> TRUE_INVIS = EFFECTS.register("true_invis", TrueInvis::new);
+    public static final RegistryEntrySupplier<MobEffect> TRUE_INVIS = EFFECTS.register("true_invisibility", TrueInvis::new);
 
 }

@@ -8,7 +8,7 @@
   "cookingBonusPercent": {},
   "potionApply": [],
   "potionRemove": [
-    "runecraftory:seal"
+    "runecraftory:sealed"
   ],
   "item": "runecraftory:roundoff"
 }

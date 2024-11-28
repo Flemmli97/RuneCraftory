@@ -87,19 +87,19 @@ public class ModAttributes {
     public static final RegistryEntrySupplier<Attribute> ATTACK_RANGE = registerSyncable(LibAttributes.ATTACK_RANGE, ID++, 3, 0, 9999);
 
     private static RegistryEntrySupplier<Attribute> register(ResourceLocation reg, int id, double base, double min, double max) {
-        RegistryEntrySupplier<Attribute> sup = ATTRIBUTES.register(reg.getPath(), () -> new OrderedAttribute(reg.toString(), id, base, min, max));
+        RegistryEntrySupplier<Attribute> sup = ATTRIBUTES.register(reg.getPath(), () -> new OrderedAttribute("attribute." + reg, id, base, min, max));
         ENTITY_ATTRIBUTES.add(sup);
         return sup;
     }
 
     private static RegistryEntrySupplier<Attribute> registerSyncable(ResourceLocation reg, int id, double base, double min, double max) {
-        RegistryEntrySupplier<Attribute> sup = ATTRIBUTES.register(reg.getPath(), () -> new OrderedAttribute(reg.toString(), id, base, min, max).setSyncable(true));
+        RegistryEntrySupplier<Attribute> sup = ATTRIBUTES.register(reg.getPath(), () -> new OrderedAttribute("attribute." + reg, id, base, min, max).setSyncable(true));
         ENTITY_ATTRIBUTES.add(sup);
         return sup;
     }
 
     private static RegistryEntrySupplier<Attribute> registerAdditional(ResourceLocation reg, int id, double base, double min, double max) {
-        return ATTRIBUTES.register(reg.getPath(), () -> new OrderedAttribute(reg.toString(), id, base, min, max));
+        return ATTRIBUTES.register(reg.getPath(), () -> new OrderedAttribute("attribute." + reg, id, base, min, max));
     }
 
     public static class OrderedAttribute extends RangedAttribute {

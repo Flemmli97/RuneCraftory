@@ -8,7 +8,6 @@ import io.github.flemmli97.runecraftory.api.enums.EnumDay;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
-import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.BathhouseAttendant;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.Cook;
@@ -146,12 +145,8 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.item.creative.tooltip", "Debug item used for testing things");
 
         for (RegistryEntrySupplier<Block> sup : ModBlocks.BLOCKS.getEntries()) {
-            if (sup.get() instanceof BlockCrop)
-                this.add(sup.get(), this.simpleTranslation(sup.getID()));
+            this.add(sup.get(), this.simpleTranslation(sup.getID()));
         }
-        this.add(ModBlocks.MUSHROOM.get(), "Mushroom");
-        this.add(ModBlocks.MONARCH_MUSHROOM.get(), "Monach Mushroom");
-        this.add(ModBlocks.SNOW.get(), "Snow");
 
         for (RegistryEntrySupplier<EntityType<?>> sup : ModEntities.ENTITIES.getEntries()) {
             if (sup.get() == ModEntities.SARCOPHAGUS_TELEPORTER.get()) {
@@ -201,17 +196,9 @@ public class LangGen implements DataProvider {
         this.add(ModAttributes.ATTACK_SPEED.get().getDescriptionId(), "Attack Speed");
         this.add(ModAttributes.ATTACK_RANGE.get().getDescriptionId(), "Attack Range");
 
-        this.add(ModEffects.BATH.get(), "Bath");
-        this.add(ModEffects.BLITZ.get(), "Blitz");
-        this.add(ModEffects.COLD.get(), "Cold");
-        this.add(ModEffects.FATIGUE.get(), "Fatigue");
-        this.add(ModEffects.PARALYSIS.get(), "Paralysis");
-        this.add(ModEffects.POISON.get(), "Poison");
-        this.add(ModEffects.SEAL.get(), "Sealed");
-        this.add(ModEffects.SLEEP.get(), "Sleeping");
-        this.add(ModEffects.STEEL_HEART.get(), "Steel Heart");
-        this.add(ModEffects.STUNNED.get(), "Stunned");
-        this.add(ModEffects.TRUE_INVIS.get(), "True Invisibility");
+        for (RegistryEntrySupplier<MobEffect> reg : ModEffects.EFFECTS.getEntries()) {
+            this.add(reg.get(), this.simpleTranslation(reg.getID()));
+        }
 
         for (EnumDay day : EnumDay.values()) {
             this.add(day.translation(), day.toString().substring(0, 3));
@@ -287,8 +274,11 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.crafting.rpMax.missing", "Missing total rp");
 
         this.add("runecraftory.display.level", "Level: %s");
-        this.add("death.attack.rfExhaust", "%1$s fainted");
-        this.add("death.attack.rfAttack", "%1$s was knocked down by %2$s");
+
+        this.add("death.attack.runecraftory.exhaust", "%1$s fainted");
+        this.add("death.attack.runecraftory.attack", "%1$s was knocked down by %2$s");
+        this.add("death.attack.runecraftory.poison", "%1$s was to weak and died of poison");
+
         this.add("itemGroup.runecraftory.weapons_tools", "Weapons and Tools");
         this.add("itemGroup.runecraftory.equipment", "Armor");
         this.add("itemGroup.runecraftory.upgrade", "Materials");
@@ -839,7 +829,8 @@ public class LangGen implements DataProvider {
     }
 
     public void add(Block key, String name) {
-        this.add(key.getDescriptionId(), name);
+        if (!key.getDescriptionId().equals(key.asItem().getDescriptionId()))
+            this.add(key.getDescriptionId(), name);
     }
 
     public void addItem(Supplier<? extends Item> key, String name) {

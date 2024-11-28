@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
-import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.TargetableOpponent;
 import io.github.flemmli97.tenshilib.common.entity.EntityBeam;
 import net.minecraft.nbt.CompoundTag;
