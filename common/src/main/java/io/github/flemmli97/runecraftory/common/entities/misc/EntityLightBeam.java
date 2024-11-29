@@ -27,7 +27,7 @@ public class EntityLightBeam extends BaseBeam {
 
     @Override
     public float radius() {
-        return 0.8f;
+        return 0.5f;
     }
 
     @Override

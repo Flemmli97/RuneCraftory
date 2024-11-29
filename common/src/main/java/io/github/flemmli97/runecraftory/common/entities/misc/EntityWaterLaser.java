@@ -86,7 +86,7 @@ public class EntityWaterLaser extends BaseBeam {
 
     @Override
     public float radius() {
-        return 0.6f;
+        return 0.4f;
     }
 
     @Override

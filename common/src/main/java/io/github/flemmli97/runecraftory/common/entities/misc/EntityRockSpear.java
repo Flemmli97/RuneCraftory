@@ -34,7 +34,7 @@ public class EntityRockSpear extends BaseBeam {
 
     @Override
     public float getRange() {
-        return this.bigRock() ? 8 : 4;
+        return this.bigRock() ? 6 : 4;
     }
 
     @Override

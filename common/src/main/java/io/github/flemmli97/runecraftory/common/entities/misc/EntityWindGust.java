@@ -41,7 +41,7 @@ public class EntityWindGust extends EntityBeam {
 
     @Override
     public float radius() {
-        return 1.5f;
+        return 2.5f;
     }
 
     @Override
@@ -59,7 +59,7 @@ public class EntityWindGust extends EntityBeam {
         super.tick();
         if (this.level.isClientSide) {
             Vec3 pos = this.position();
-            for (int i = 0; i < 2; i++) {
+            for (int i = 0; i < 4; i++) {
                 double upScale = this.random.nextDouble() * 2 - 1;
                 double sideScale = this.random.nextDouble() * 2 - 1;
                 Vec3 ppos = pos.add(this.up.scale(upScale)).add(this.side.scale(sideScale));
@@ -71,10 +71,11 @@ public class EntityWindGust extends EntityBeam {
     @Override
     public HitResult getHitRay() {
         HitResult res = super.getHitRay();
-        this.pMotion = res.getLocation().subtract(this.position()).normalize().scale(0.5);
+        Vec3 dir = res.getLocation().subtract(this.getEyePosition()).normalize();
         this.up = this.getUpVector(1).normalize().scale(this.radius());
-        this.side = new Vec3(RayTraceUtils.rotatedAround(this.pMotion, new Vector3f(this.up), 90))
+        this.side = new Vec3(RayTraceUtils.rotatedAround(this.up, new Vector3f(dir), 90))
                 .normalize().scale(this.radius());
+        this.pMotion = dir.scale(0.5);
         return res;
     }
 

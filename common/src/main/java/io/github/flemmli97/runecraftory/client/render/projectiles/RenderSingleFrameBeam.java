@@ -5,6 +5,7 @@ import io.github.flemmli97.tenshilib.client.render.RenderBeam;
 import io.github.flemmli97.tenshilib.common.entity.EntityBeam;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 
 public class RenderSingleFrameBeam<T extends EntityBeam> extends RenderBeam<T> {
 
@@ -13,12 +14,15 @@ public class RenderSingleFrameBeam<T extends EntityBeam> extends RenderBeam<T> {
 
     private final ResourceLocation texture;
 
+    private final float widthMod;
+
     public RenderSingleFrameBeam(EntityRendererProvider.Context ctx, ResourceLocation texture) {
         this(ctx, texture, 1, 0.85f);
     }
 
     public RenderSingleFrameBeam(EntityRendererProvider.Context ctx, ResourceLocation texture, float glowWidth, float innerWidth) {
         super(ctx, glowWidth, innerWidth, 4);
+        this.widthMod = Mth.sqrt(innerWidth * innerWidth / 2) * 2;
         this.texture = texture;
     }
 
@@ -34,7 +38,7 @@ public class RenderSingleFrameBeam<T extends EntityBeam> extends RenderBeam<T> {
 
     @Override
     public float widthFunc(T entity) {
-        return (float) (this.radius * (Math.sin(Math.sqrt(entity.tickCount / (float) entity.livingTickMax()) * Math.PI))) + 0.2f;
+        return super.widthFunc(entity) / this.widthMod;
     }
 
     @Override

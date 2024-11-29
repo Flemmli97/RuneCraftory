@@ -1,6 +1,8 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
 import io.github.flemmli97.runecraftory.common.entities.TargetableOpponent;
+import io.github.flemmli97.runecraftory.common.network.S2CAttackDebug;
+import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.entity.EntityBeam;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
@@ -8,7 +10,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
 
@@ -33,11 +34,6 @@ public abstract class BaseBeam extends EntityBeam {
 
     public void setDamageMultiplier(float damageMultiplier) {
         this.damageMultiplier = damageMultiplier;
-    }
-
-    @Nullable
-    public Predicate<LivingEntity> getHitPredicate() {
-        return this.pred;
     }
 
     @Override

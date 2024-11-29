@@ -7,7 +7,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
 
@@ -32,11 +31,6 @@ public abstract class BaseProjectile extends EntityProjectile {
 
     public void setDamageMultiplier(float damageMultiplier) {
         this.damageMultiplier = damageMultiplier;
-    }
-
-    @Nullable
-    public Predicate<LivingEntity> getHitPredicate() {
-        return this.pred;
     }
 
     @Override

@@ -30,7 +30,7 @@ public class EntityThunderboltBeam extends BaseBeam {
 
     @Override
     public float radius() {
-        return 0.5f;
+        return 0.3f;
     }
 
     @Override

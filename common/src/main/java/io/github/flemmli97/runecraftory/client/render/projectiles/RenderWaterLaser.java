@@ -1,17 +1,23 @@
 package io.github.flemmli97.runecraftory.client.render.projectiles;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityWaterLaser;
 import io.github.flemmli97.tenshilib.client.render.RenderBeam;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 
 public class RenderWaterLaser extends RenderBeam<EntityWaterLaser> {
 
     private static final ResourceLocation TEX = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/water_laser.png");
 
+    private final float widthMod;
+
     public RenderWaterLaser(EntityRendererProvider.Context ctx) {
-        super(ctx, 1.1f, 0.9f, 4);
+        super(ctx, 1, 0.8f, 4);
+        this.widthMod = Mth.sqrt(0.8f * 0.8f / 2) * 2;
     }
 
     @Override
@@ -26,7 +32,7 @@ public class RenderWaterLaser extends RenderBeam<EntityWaterLaser> {
 
     @Override
     public float widthFunc(EntityWaterLaser entity) {
-        return (float) (this.radius * (Math.sin(Math.sqrt(entity.tickCount / (float) entity.livingTickMax()) * Math.PI))) + 0.2f;
+        return super.widthFunc(entity) / this.widthMod;
     }
 
     @Override
