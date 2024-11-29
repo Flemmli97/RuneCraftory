@@ -1,6 +1,7 @@
 RuneCraftory 1.10.4
 ================
 - Update dependency
+- Update lang stuff
 
 RuneCraftory 1.10.3
 ================
