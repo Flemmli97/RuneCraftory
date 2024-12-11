@@ -27,6 +27,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
+import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.integration.simplequest.QuestTasks;
 import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
 import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
@@ -275,9 +276,9 @@ public class LangGen implements DataProvider {
 
         this.add("runecraftory.display.level", "Level: %s");
 
-        this.add("death.attack.runecraftory.exhaust", "%1$s fainted");
-        this.add("death.attack.runecraftory.attack", "%1$s was knocked down by %2$s");
-        this.add("death.attack.runecraftory.poison", "%1$s was to weak and died of poison");
+        this.add("death.attack." + CustomDamage.EXHAUST.msgId, "%1$s fainted");
+        this.add("death.attack." + CustomDamage.ENTITY_DAMAGE_SOURCE, "%1$s was knocked down by %2$s");
+        this.add("death.attack." + CustomDamage.POISON.msgId, "%1$s was to weak and died of poison");
 
         this.add("itemGroup.runecraftory.weapons_tools", "Weapons and Tools");
         this.add("itemGroup.runecraftory.equipment", "Armor");

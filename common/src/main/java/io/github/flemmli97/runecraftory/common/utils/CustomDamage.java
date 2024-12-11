@@ -23,6 +23,7 @@ public class CustomDamage extends EntityDamageSource {
     public static final DamageSource EXHAUST = Platform.INSTANCE.createDamageSource(RuneCraftory.MODID + ".exhaust", true, true, true);
     public static final DamageSource POISON = Platform.INSTANCE.createDamageSource(RuneCraftory.MODID + ".poison", true, true, false);
 
+    public static final String ENTITY_DAMAGE_SOURCE = RuneCraftory.MODID + ".attack";
     private final EnumElement element;
     private final KnockBackType knock;
     private final Entity trueSourceEntity;
@@ -34,7 +35,7 @@ public class CustomDamage extends EntityDamageSource {
     private final ImmutableMap<Attribute, Double> attributesChange;
 
     public CustomDamage(Entity attacker, @Nullable Entity cause, EnumElement element, KnockBackType knock, float knockBackAmount, int hurtTimeProtection, boolean faintEntity, boolean fixedDamage, Map<Attribute, Double> attributesChange) {
-        super(RuneCraftory.MODID + ".attack", attacker);
+        super(ENTITY_DAMAGE_SOURCE, attacker);
         this.element = element;
         this.knock = knock;
         this.trueSourceEntity = cause;
