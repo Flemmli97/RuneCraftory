@@ -118,6 +118,7 @@ import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityAmbro
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityChimera;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityDeadTree;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityGrimoire;
+import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityHandonetta;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityMarionetta;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityRaccoon;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntitySano;
@@ -1287,6 +1288,38 @@ public class ModEntities {
                     .withSpawnerPredicate(LibAdvancements.playerAdvancementCheck(LibAdvancements.THUNDERBOLT))
                     .withRideActionCosts(new EntityRideActionCosts.Builder()
                             .thirdCost(0.5f, true)));
+    public static final RegistryEntrySupplier<EntityType<EntityHandonetta>> HANDONETTA = regBoss(EntityType.Builder.of(EntityHandonetta::new, MobCategory.MONSTER).sized(2.3f, 2.8f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "handonetta"),
+            0xb86b13, 0xd8d7d7, true,
+            new EntityProperties.Builder()
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 320).putLevelGains(() -> Attributes.MAX_HEALTH, 620)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 23).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 286)
+                    .putAttributes(ModAttributes.DEFENCE, 4).putLevelGains(ModAttributes.DEFENCE, 247)
+                    .putAttributes(ModAttributes.MAGIC, 18).putLevelGains(ModAttributes.MAGIC, 279)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 3).putLevelGains(ModAttributes.MAGIC_DEFENCE, 247)
+                    .putAttributes(ModAttributes.RES_DARK, 25)
+                    .putAttributes(ModAttributes.RES_LIGHT, -25)
+                    .putAttributes(ModAttributes.RES_CRIT, 25)
+                    .putAttributes(ModAttributes.RES_DRAIN, 30)
+                    .putAttributes(ModAttributes.RES_DIZZY, 100)
+                    .putAttributes(() -> Attributes.KNOCKBACK_RESISTANCE, 1)
+                    .putAttributes(ModAttributes.RES_STUN, 100)
+                    .putAttributes(ModAttributes.RES_PARA, 100)
+                    .putAttributes(ModAttributes.RES_POISON, 100)
+                    .putAttributes(ModAttributes.RES_SEAL, 100)
+                    .putAttributes(ModAttributes.RES_SLEEP, 100)
+                    .putAttributes(ModAttributes.RES_FAT, 100)
+                    .putAttributes(ModAttributes.RES_COLD, 100)
+                    .putAttributes(ModAttributes.RES_FAINT, 100)
+                    .xp(250).tamingChance(0.005f).setBarnOccupancy(2).setRideable()
+                    .withLevelIncrease(1, 7)
+                    .withLevelIncrease(2, 1)
+                    .withLevelIncrease(7, 3)
+                    .withLevelIncrease(15, 5)
+                    .setMinLevel(20)
+                    .setFlying()
+                    .withSpawnerPredicate(LibAdvancements.playerAdvancementCheck(LibAdvancements.THUNDERBOLT))
+                    .withRideActionCosts(new EntityRideActionCosts.Builder()
+                            .thirdCost(0.5f, true)));
     public static final RegistryEntrySupplier<EntityType<EntitySano>> SANO = regBoss(EntityType.Builder.of(EntitySano::new, MobCategory.MONSTER).sized(3, 4.1f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "sano"),
             0xa18c4a, 0xa82626,
             new EntityProperties.Builder()
@@ -1514,11 +1547,17 @@ public class ModEntities {
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     public static <V extends BaseMonster> RegistryEntrySupplier<EntityType<V>> regBoss(EntityType.Builder<V> v, ResourceLocation name, int primary, int secondary, EntityProperties.Builder props) {
-        RegistryEntrySupplier<EntityType<V>> sup = regMonster(v, name, primary, secondary, false, props);
+        return regBoss(v, name, primary, secondary, false, props);
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public static <V extends BaseMonster> RegistryEntrySupplier<EntityType<V>> regBoss(EntityType.Builder<V> v, ResourceLocation name, int primary, int secondary, boolean flying, EntityProperties.Builder props) {
+        RegistryEntrySupplier<EntityType<V>> sup = regMonster(v, name, primary, secondary, flying, props);
         if (Platform.INSTANCE.isDatagen())
             BOSSES.add((RegistryEntrySupplier) sup);
         return sup;
     }
+
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     public static <V extends BaseMonster> RegistryEntrySupplier<EntityType<V>> regMonster(EntityType.Builder<V> v, ResourceLocation name, int primary, int secondary, boolean flying, EntityProperties.Builder props) {

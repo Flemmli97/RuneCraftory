@@ -68,6 +68,7 @@ public class ModSounds {
     public static final RegistryEntrySupplier<SoundEvent> CHIMERA_FIGHT = registerBgm("bgm.chimera_fight");
     public static final RegistryEntrySupplier<SoundEvent> DEAD_TREE_FIGHT = registerBgm("bgm.dead_tree_fight");
     public static final RegistryEntrySupplier<SoundEvent> MARIONETTA_FIGHT = registerBgm("bgm.marionetta_fight");
+    public static final RegistryEntrySupplier<SoundEvent> HANDONETTA_FIGHT = registerBgm("bgm.handonetta_fight");
     public static final RegistryEntrySupplier<SoundEvent> RACCOON_FIGHT = registerBgm("bgm.raccoon_fight");
     public static final RegistryEntrySupplier<SoundEvent> SKELEFANG_FIGHT = registerBgm("bgm.skelefang_fight");
     public static final RegistryEntrySupplier<SoundEvent> RAFFLESIA_FIGHT = registerBgm("bgm.rafflesia_fight");

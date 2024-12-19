@@ -22,7 +22,7 @@ public class EntityDarkBeam extends BaseBeam {
 
     @Override
     public float getRange() {
-        return 8;
+        return 9;
     }
 
     @Override

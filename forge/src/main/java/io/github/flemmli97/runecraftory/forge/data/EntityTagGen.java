@@ -38,14 +38,10 @@ public class EntityTagGen extends TagsProvider<EntityType<?>> {
             this.tag(MINECOLONIES).add(type.get());
             this.tag(RunecraftoryTags.MONSTERS).add(type.get());
         }
-        this.tag(RunecraftoryTags.BOSS_MONSTERS)
-                .add(ModEntities.AMBROSIA.get())
-                .add(ModEntities.THUNDERBOLT.get())
-                .add(ModEntities.MARIONETTA.get())
-                .add(ModEntities.DEAD_TREE.get())
-                .add(ModEntities.CHIMERA.get())
-                .add(ModEntities.RACCOON.get())
-                .add(ModEntities.SKELEFANG.get());
+        for (RegistryEntrySupplier<EntityType<?>> sup : ModEntities.getBosses()) {
+            this.tag(RunecraftoryTags.BOSS_MONSTERS)
+                    .add(sup.get());
+        }
         TagKey<EntityType<?>> forgeBosses = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("forge", "bosses"));
         this.tag(forgeBosses)
                 .addTag(RunecraftoryTags.BOSS_MONSTERS);

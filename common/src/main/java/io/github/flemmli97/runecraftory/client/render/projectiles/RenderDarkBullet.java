@@ -28,7 +28,7 @@ public class RenderDarkBullet<T extends EntityDarkBullet> extends EntityRenderer
         this.textureBuilder.setColor(1, 1, 1, 1f);
         stack.pushPose();
         stack.mulPose(Vector3f.YP.rotationDegrees(Mth.lerp(partialTicks, entity.yRotO, entity.getYRot()) + 90.0f));
-        stack.mulPose(Vector3f.ZP.rotationDegrees(Mth.lerp(partialTicks, entity.xRotO, entity.getXRot())));
+        stack.mulPose(Vector3f.ZP.rotationDegrees(-Mth.lerp(partialTicks, entity.xRotO, entity.getXRot())));
         stack.translate(0, 0.125, 0);
         stack.mulPose(Vector3f.XP.rotationDegrees(45.0f));
         for (int r = 0; r < 4; ++r) {

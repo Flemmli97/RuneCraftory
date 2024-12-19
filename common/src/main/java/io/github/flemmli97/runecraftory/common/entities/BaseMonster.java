@@ -493,9 +493,10 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             if (this.foodBuffTick == 0) {
                 this.removeFoodEffect();
             }
-            this.getAnimationHandler().runIfNotNull(this::handleAttack);
-            if (this.getAnimationHandler().getAnimation() == null)
-                this.targetPosition = null;
+            this.getAnimationHandler().runIfNotNull(anim -> {
+                this.setupAttack(anim);
+                this.handleAttack(anim);
+            });
             if (this.assignedBarn != null && this.assignedBarn.isInvalidFor(this))
                 this.assignedBarn = null;
             if (this.isTamed()) {
@@ -508,6 +509,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             if (!this.playDeath() && TendCropsGoal.cantTendToCropsAnymore(this) && this.behaviour == Behaviour.FARM && this.tickCount % 20 == 0)
                 this.level.addParticle(ParticleTypes.ANGRY_VILLAGER, this.getX(), this.getY() + this.getBbHeight() + 0.3, this.getZ(), 0, 0, 0);
         }
+        if (this.getAnimationHandler().getAnimation() == null)
+            this.targetPosition = null;
     }
 
     @Override
@@ -1561,18 +1564,27 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         return 1.1;
     }
 
+    public void setupAttack(AnimatedAction anim) {
+        if (this.getTarget() != null) {
+            if (anim.isAtTick(1)) {
+                this.setTargetPosition(this.getTarget().position());
+            }
+        }
+    }
+
     public void handleAttack(AnimatedAction anim) {
         this.getNavigation().stop();
         if (this.getTarget() != null) {
             this.lookAtNow(this.getTarget(), 60, 90);
-            if (anim.getTick() == 1) {
-                this.targetPosition = this.getTarget().position();
-            }
         }
         if (anim.canAttack()) {
             this.mobAttack(anim, this.getTarget(), this::doHurtTarget);
             this.targetPosition = null;
         }
+    }
+
+    public void setTargetPosition(Vec3 position) {
+        this.targetPosition = position;
     }
 
     public void mobAttack(AnimatedAction anim, LivingEntity target, Consumer<LivingEntity> cons) {

@@ -152,8 +152,11 @@ public class EntityChimera extends BossMonster implements MobAttackExt {
                             this.lockYaw(this.getYRot());
                         }
                     } else if (anim.is(FIRE_TAIL_BUBBLE, WATER_TAIL_BUBBLE, WATER_TAIL_BEAM, FIRE_BREATH, BUBBLE_BEAM)) {
-                        if (this.getTarget() != null)
+                        if (this.getTarget() != null) {
                             this.targetPosition = EntityUtil.getStraightProjectileTarget(this.getEyePosition(), this.getTarget());
+                            this.lookAt(this.getTarget(), 360, 10);
+                            this.lockYaw(this.getYRot());
+                        }
                     }
                     if (this.getAnimationHandler().isCurrent(LEAP)) {
                         this.hitEntity = null;

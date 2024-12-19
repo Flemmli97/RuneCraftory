@@ -1,8 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
 import io.github.flemmli97.runecraftory.common.entities.TargetableOpponent;
-import io.github.flemmli97.runecraftory.common.network.S2CAttackDebug;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.entity.EntityBeam;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;

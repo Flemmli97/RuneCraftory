@@ -1,0 +1,73 @@
+{
+  "minLevel": 20,
+  "xp": 250,
+  "money": 0,
+  "tamingChance": 0.005,
+  "rideable": true,
+  "flying": false,
+  "size": 2,
+  "needsRoof": true,
+  "levelIncreaseOnKill": [
+    {
+      "minKilled": 1,
+      "increase": 7
+    },
+    {
+      "minKilled": 2,
+      "increase": 1
+    },
+    {
+      "minKilled": 7,
+      "increase": 3
+    },
+    {
+      "minKilled": 15,
+      "increase": 5
+    }
+  ],
+  "rideActionCosts": {
+    "command_1": {
+      "cost": 0.0,
+      "multiplier": false
+    },
+    "command_3": {
+      "cost": 0.5,
+      "multiplier": true
+    }
+  },
+  "baseValues": {
+    "minecraft:generic.max_health": 320.0,
+    "minecraft:generic.attack_damage": 23.0,
+    "runecraftory:defence": 4.0,
+    "runecraftory:magic_attack": 18.0,
+    "runecraftory:magic_defence": 3.0,
+    "runecraftory:res_dark": 25.0,
+    "runecraftory:res_light": -25.0,
+    "runecraftory:res_crit": 25.0,
+    "runecraftory:res_drain": 30.0,
+    "runecraftory:res_dizzy": 100.0,
+    "minecraft:generic.knockback_resistance": 1.0,
+    "runecraftory:res_stun": 100.0,
+    "runecraftory:res_paralysis": 100.0,
+    "runecraftory:res_poison": 100.0,
+    "runecraftory:res_seal": 100.0,
+    "runecraftory:res_sleep": 100.0,
+    "runecraftory:res_fatigue": 100.0,
+    "runecraftory:res_cold": 100.0,
+    "runecraftory:res_faint": 100.0
+  },
+  "levelGains": {
+    "minecraft:generic.max_health": 620.0,
+    "minecraft:generic.attack_damage": 286.0,
+    "runecraftory:defence": 247.0,
+    "runecraftory:magic_attack": 279.0,
+    "runecraftory:magic_defence": 247.0
+  },
+  "spawnerPredicate": {
+    "player": {
+      "advancements": {
+        "runecraftory:progression/path_4/thunderbolt": true
+      }
+    }
+  }
+}

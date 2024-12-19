@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
@@ -13,7 +14,7 @@ public class EntityDarkBulletSummoner extends ProjectileSummonHelperEntity {
 
     public EntityDarkBulletSummoner(Level level, LivingEntity caster) {
         super(ModEntities.DARK_BULLET_SUMMONER.get(), level, caster);
-        this.maxLivingTicks = 30;
+        this.maxLivingTicks = 18;
     }
 
     @Override
@@ -25,6 +26,7 @@ public class EntityDarkBulletSummoner extends ProjectileSummonHelperEntity {
         fly.shootAtPosition(this.targetX, this.targetY, this.targetZ, 1.2f, 0);
         fly.setDamageMultiplier(this.damageMultiplier);
         fly.setPos(fly.getX() + this.random.nextFloat() * 1.3 - 0.65, fly.getY() + this.random.nextFloat() * 0.05 - 0.1, fly.getZ() + this.random.nextFloat() * 1.3 - 0.65);
+        this.level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ARROW_SHOOT, this.getSoundSource(), 1.0f, 1.5f + this.level.getRandom().nextFloat() * 0.1f);
         this.level.addFreshEntity(fly);
     }
 }
