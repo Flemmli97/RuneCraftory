@@ -29,4 +29,17 @@ public class MathsHelper {
     public static float YRotFrom(double x, double z) {
         return (float) (Mth.atan2(z, x) * Mth.RAD_TO_DEG) - 90.0f;
     }
+
+    public static float rotlerp(float angle, float targetAngle, float maxIncrease) {
+        float f = Mth.wrapDegrees(targetAngle - angle);
+        if (f > maxIncrease) {
+            f = maxIncrease;
+        }
+
+        if (f < -maxIncrease) {
+            f = -maxIncrease;
+        }
+
+        return angle + f;
+    }
 }

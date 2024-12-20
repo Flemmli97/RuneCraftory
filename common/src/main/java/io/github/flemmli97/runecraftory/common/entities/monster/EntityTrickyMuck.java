@@ -53,8 +53,6 @@ public class EntityTrickyMuck extends EntityBigMuck {
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(SPORE_BALL)) {
             this.getNavigation().stop();
-            if (anim.getTick() == 1 && this.getTarget() != null)
-                this.lookAt(this.getTarget(), 360, 90);
             if (anim.canAttack()) {
                 ModSpells.POISON_BALL.get().use(this);
             }

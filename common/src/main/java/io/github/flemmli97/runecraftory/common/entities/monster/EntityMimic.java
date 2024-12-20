@@ -35,7 +35,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class EntityMimic extends LeapingMonster {
@@ -143,25 +142,7 @@ public class EntityMimic extends LeapingMonster {
 
     @Override
     public void handleAttack(AnimatedAction anim) {
-        if (anim.is(LEAP)) {
-            if (anim.getTick() == 1 && this.getTarget() != null) {
-                this.targetPosition = this.getTarget().position();
-            }
-            if (anim.canAttack()) {
-                Vec3 vec32 = this.getLeapVec(this.getTarget() == null ? this.targetPosition : this.getTarget().position());
-                this.setDeltaMovement(vec32.x, 0.25f, vec32.z);
-            }
-            if (anim.getTick() >= anim.getAttackTime()) {
-                if (this.hitEntity == null)
-                    this.hitEntity = new ArrayList<>();
-                this.mobAttack(anim, null, e -> {
-                    if (!this.hitEntity.contains(e)) {
-                        this.hitEntity.add(e);
-                        this.doHurtTarget(e);
-                    }
-                });
-            }
-        } else if (anim.is(THROW)) {
+        if (anim.is(THROW)) {
             this.getNavigation().stop();
             if (anim.canAttack()) {
                 ItemStack held = this.getMainHandItem();
@@ -178,8 +159,10 @@ public class EntityMimic extends LeapingMonster {
             if (anim.canAttack())
                 ModSpells.DOUBLE_ARROW.get().use(this);
         } else {
-            Vec3 vec32 = this.getLeapVec(this.getTarget() == null ? this.targetPosition : this.getTarget().position()).scale(0.1);
-            this.setDeltaMovement(vec32.x, 0.05f, vec32.z);
+            if (!this.isLeapingAnim(anim)) {
+                Vec3 vec32 = this.getLeapVec(this.getTarget() == null ? this.getTargetPosition() : this.getTarget().position()).scale(0.1);
+                this.setDeltaMovement(vec32.x, 0.05f, vec32.z);
+            }
             super.handleAttack(anim);
         }
     }

@@ -57,8 +57,8 @@ public class EntityBeetle extends ChargingMonster {
     }
 
     @Override
-    public float chargingLength() {
-        return 8;
+    public double chargingSpeed() {
+        return 0.45;
     }
 
     @Override

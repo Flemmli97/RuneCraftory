@@ -86,29 +86,17 @@ public class EntityRaccoon extends BossMonster {
             LivingEntity target = entity.getTarget();
             if (target != null) {
                 entity.getNavigation().moveTo(target, 1.0);
-                if (anim.getTick() == 1) {
-                    entity.targetPosition = target.position();
-                }
-            }
-            if (anim.getTick() == 1 && entity.getTarget() != null) {
-                entity.targetPosition = entity.getTarget().position();
             }
             if (anim.canAttack() || anim.isAtTick(0.64)) {
                 entity.mobAttack(anim, target, entity::doHurtTarget);
             }
         });
         b.put(PUNCH, (anim, entity) -> {
-            if (anim.getTick() == 1 && entity.getTarget() != null) {
-                entity.targetPosition = entity.getTarget().position();
-            }
             if (anim.canAttack() || anim.isAtTick(0.64)) {
                 entity.mobAttack(anim, entity.getTarget(), entity::doHurtTarget);
             }
         });
         b.put(BARRAGE, (anim, entity) -> {
-            if (anim.getTick() == 1 && entity.getTarget() != null) {
-                entity.targetPosition = entity.getTarget().position();
-            }
             if (anim.canAttack() || anim.isAtTick(0.84) || anim.isAtTick(1.28)) {
                 entity.mobAttack(anim, entity.getTarget(), entity::doHurtTarget);
                 LivingEntity target = entity.getTarget();
@@ -159,9 +147,6 @@ public class EntityRaccoon extends BossMonster {
         });
         b.put(STOMP, (anim, entity) -> {
             entity.getNavigation().stop();
-            if (anim.getTick() == 1 && entity.getTarget() != null) {
-                entity.lookAt(entity.getTarget(), 180.0f, 50.0f);
-            }
             if (anim.canAttack() || anim.getTick() == 24) {
                 CustomDamage.Builder source = new CustomDamage.Builder(entity).noKnockback().element(EnumElement.EARTH).hurtResistant(5)
                         .withChangedAttribute(ModAttributes.STUN.get(), 50);
@@ -443,11 +428,6 @@ public class EntityRaccoon extends BossMonster {
 
     @Override
     public void handleAttack(AnimatedAction anim) {
-        LivingEntity target = this.getTarget();
-        if (target != null && !anim.is(STOMP)) {
-            this.lookAtNow(target, 60.0f, 50.0f);
-
-        }
         this.getNavigation().stop();
         BiConsumer<AnimatedAction, EntityRaccoon> handler = ATTACK_HANDLER.get(anim.getID());
         if (handler != null)

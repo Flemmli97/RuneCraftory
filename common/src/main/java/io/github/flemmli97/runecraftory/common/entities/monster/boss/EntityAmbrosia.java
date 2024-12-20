@@ -5,7 +5,10 @@ import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.MobAttackExt;
 import io.github.flemmli97.runecraftory.common.entities.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
+import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
+import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityPollen;
+import io.github.flemmli97.runecraftory.common.network.S2CMobUpdate;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
@@ -20,6 +23,7 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTarget
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.StrafingRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.TimedWrappedRunner;
 import io.github.flemmli97.tenshilib.common.utils.OrientedBoundingBox;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.BossEvent;
@@ -52,11 +56,6 @@ public class EntityAmbrosia extends BossMonster implements MobAttackExt {
 
     private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntityAmbrosia>> ATTACK_HANDLER = createAnimationHandler(b -> {
         b.put(BUTTERFLY, (anim, entity) -> {
-            if (entity.targetPosition == null && entity.getTarget() != null) {
-                LivingEntity target = entity.getTarget();
-                entity.setAiVarHelper(new Vec3(target.getX(), target.getEyeY() - target.getBbHeight() * 0.5, target.getZ()));
-                entity.lookAtNow(target, 30, 30);
-            }
             if (anim.canAttack()) {
                 ModSpells.BUTTERFLY.get().use(entity);
             }
@@ -85,10 +84,8 @@ public class EntityAmbrosia extends BossMonster implements MobAttackExt {
         });
         BiConsumer<AnimatedAction, EntityAmbrosia> pollenHandler = (anim, entity) -> {
             if (entity.moveDirection == null) {
-                Vec3 dir = entity.getTarget() != null ? entity.getTarget().position().subtract(entity.position()) : entity.getLookAngle();
-                dir = new Vec3(dir.x(), 0, dir.z()).normalize().scale(5);
-                int length = anim.getLength();
-                entity.moveDirection = new Vec3(dir.x / length, 0, dir.z / length);
+                entity.setMoveDirection(EntityUtils.getTargetDirection(entity, EntityAnchorArgument.Anchor.FEET, true)
+                        .scale(0.35));
             }
             entity.setDeltaMovement(entity.moveDirection);
             if (anim.canAttack() && !EntityUtils.sealed(entity)) {
@@ -122,7 +119,7 @@ public class EntityAmbrosia extends BossMonster implements MobAttackExt {
     private final AnimationHandler<EntityAmbrosia> animationHandler = new AnimationHandler<>(this, ANIMS).setAnimationChangeFunc(anim -> {
         if (!this.level.isClientSide && anim == null) {
             boolean chain = !this.commanded;
-            this.moveDirection = null;
+            this.setMoveDirection(null);
             this.commanded = false;
             if (chain) {
                 AnimatedAction chainAnim = this.chainAnim(this.getAnimationHandler().getAnimation());
@@ -184,12 +181,24 @@ public class EntityAmbrosia extends BossMonster implements MobAttackExt {
     }
 
     @Override
-    public void handleAttack(AnimatedAction anim) {
-        LivingEntity target = this.getTarget();
-        if (target != null) {
-            if (!anim.is(POLLEN))
-                this.lookAtNow(target, 60.0f, 50.0f);
+    protected Vec3 directionToLookAt() {
+        if (this.getAnimationHandler().isCurrent(POLLEN, POLLEN_2)) {
+            return this.moveDirection;
         }
+        return super.directionToLookAt();
+    }
+
+    @Override
+    public void setupAttack(AnimatedAction anim) {
+        if (anim.is(BUTTERFLY) && anim.isAtTick(1) && this.getTarget() != null) {
+            LivingEntity target = this.getTarget();
+            this.setTargetPosition(new Vec3(target.getX(), target.getEyeY() - target.getBbHeight() * 0.5, target.getZ()));
+        } else
+            super.setupAttack(anim);
+    }
+
+    @Override
+    public void handleAttack(AnimatedAction anim) {
         BiConsumer<AnimatedAction, EntityAmbrosia> handler = ATTACK_HANDLER.get(anim.getID());
         if (handler != null)
             handler.accept(anim, this);
@@ -224,10 +233,6 @@ public class EntityAmbrosia extends BossMonster implements MobAttackExt {
         super.setEnraged(flag, load);
         if (flag && !load)
             this.getAnimationHandler().setAnimation(ANGRY);
-    }
-
-    public void setAiVarHelper(Vec3 aiVarHelper) {
-        this.targetPosition = aiVarHelper;
     }
 
     @Override
@@ -271,6 +276,17 @@ public class EntityAmbrosia extends BossMonster implements MobAttackExt {
 
     @Override
     public Vec3 targetPosition(Vec3 from) {
-        return this.targetPosition;
+        return this.getTargetPosition();
+    }
+
+    protected void setMoveDirection(Vec3 moveDirection) {
+        this.moveDirection = moveDirection;
+        S2CMobUpdate.send(this, SyncableDatas.MOTION_DIR, this.moveDirection);
+    }
+
+    @Override
+    public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
+        super.onUpdate(data);
+        data.runIf(SyncableDatas.MOTION_DIR, motion -> this.moveDirection = motion);
     }
 }

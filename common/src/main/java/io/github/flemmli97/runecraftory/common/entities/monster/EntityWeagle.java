@@ -5,8 +5,13 @@ import io.github.flemmli97.runecraftory.common.entities.ai.AirWanderGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.NearestTargetHorizontal;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.FloatingFlyNavigator;
+import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
+import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
+import io.github.flemmli97.runecraftory.common.network.S2CMobUpdate;
+import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
@@ -15,6 +20,7 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.StrafingRunner;
 import io.github.flemmli97.tenshilib.common.utils.OrientedBoundingBox;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.entity.Entity;
@@ -58,7 +64,13 @@ public class EntityWeagle extends BaseMonster {
 
     protected List<LivingEntity> hitEntity;
     private final AnimationHandler<EntityWeagle> animationHandler = new AnimationHandler<>(this, ANIMS)
-            .setAnimationChangeCons(anim -> this.hitEntity = null);
+            .setAnimationChangeCons(anim -> {
+                S2CScreenShake
+                this.hitEntity = null;
+                this.setSwoopMotion(null);
+            });
+
+    private Vec3 swoopMotion;
 
     public EntityWeagle(EntityType<? extends BaseMonster> type, Level world) {
         super(type, world);
@@ -100,6 +112,14 @@ public class EntityWeagle extends BaseMonster {
     }
 
     @Override
+    protected Vec3 directionToLookAt() {
+        if (this.getAnimationHandler().isCurrent(SWOOP)) {
+            return this.swoopMotion;
+        }
+        return super.directionToLookAt();
+    }
+
+    @Override
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(GALE)) {
             if (anim.canAttack()) {
@@ -108,19 +128,13 @@ public class EntityWeagle extends BaseMonster {
         } else if (anim.is(SWOOP)) {
             if (this.hitEntity == null)
                 this.hitEntity = new ArrayList<>();
-            if (anim.getTick() == 1 && this.getTarget() != null) {
-                this.targetPosition = this.getTarget().position();
+            if (this.swoopMotion == null) {
+                this.setSwoopMotion(EntityUtils.getTargetDirection(this, EntityAnchorArgument.Anchor.FEET, true)
+                        .scale(0.2)
+                        .add(0, -0.3, 0));
             }
-            Vec3 target = this.targetPosition != null || this.getTarget() == null ? this.targetPosition : this.getTarget().position();
-            Vec3 dir;
-            if (target != null) {
-                dir = target.subtract(this.position()).normalize();
-            } else {
-                dir = this.getLookAngle();
-            }
-            dir = new Vec3(dir.x(), -1.5, dir.z()).normalize().scale(0.5);
             if (anim.getTick() > anim.getAttackTime() && anim.getLength() - anim.getTick() > 3) {
-                this.setDeltaMovement(dir.scale(0.55));
+                this.setDeltaMovement(this.swoopMotion);
                 this.mobAttack(anim, null, e -> {
                     if (!this.hitEntity.contains(e)) {
                         this.hitEntity.add(e);
@@ -128,7 +142,7 @@ public class EntityWeagle extends BaseMonster {
                     }
                 });
             } else {
-                this.setDeltaMovement(dir.multiply(-0.3, -0.225, -0.3));
+                this.setDeltaMovement(this.swoopMotion.multiply(-1, -0.7, -1));
             }
         } else
             super.handleAttack(anim);
@@ -205,5 +219,16 @@ public class EntityWeagle extends BaseMonster {
     @Override
     public Vec3 passengerOffset(Entity passenger) {
         return new Vec3(0, 16 / 16d, -1 / 16d);
+    }
+
+    public void setSwoopMotion(Vec3 swoopMotion) {
+        this.swoopMotion = swoopMotion;
+        S2CMobUpdate.send(this, SyncableDatas.MOTION_DIR, this.swoopMotion);
+    }
+
+    @Override
+    public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
+        super.onUpdate(data);
+        data.runIf(SyncableDatas.MOTION_DIR, charge -> this.swoopMotion = charge);
     }
 }

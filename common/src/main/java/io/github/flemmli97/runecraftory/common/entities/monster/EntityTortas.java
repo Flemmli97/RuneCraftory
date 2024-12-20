@@ -163,8 +163,11 @@ public class EntityTortas extends ChargingMonster {
     }
 
     @Override
-    public float chargingYaw() {
-        return this.getYRot();
+    protected Vec3 directionToLookAt() {
+        if (this.getAnimationHandler().isCurrent(SPIN)) {
+            return this.getDeltaMovement();
+        }
+        return super.directionToLookAt();
     }
 
     @Override
@@ -198,8 +201,8 @@ public class EntityTortas extends ChargingMonster {
     //==========Water stuff
 
     @Override
-    public float chargingLength() {
-        return 10;
+    public double chargingSpeed() {
+        return 0.3f;
     }
 
     @Override

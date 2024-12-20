@@ -18,7 +18,7 @@ public class MonsterActionUtils {
     public static <T extends ChargingMonster> GoalAttackAction.Condition<T> chargeCondition() {
         return (goal, target, previousAnim) -> {
             double heightDiff = target.getY() - goal.attacker.getY();
-            return goal.distanceToTargetSq <= (goal.attacker.chargingLength() * goal.attacker.chargingLength() + 1) && heightDiff <= 1 && heightDiff >= -goal.attacker.getMaxFallDistance();
+            return (goal.distanceToTargetSq >= 3 * 3 && heightDiff <= 1 && heightDiff >= -goal.attacker.getMaxFallDistance()) || goal.attacker.getRandom().nextFloat() < 0.5;
         };
     }
 

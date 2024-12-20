@@ -10,6 +10,7 @@ import io.github.flemmli97.runecraftory.common.entities.ai.pathing.NoClipFlyMove
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
@@ -18,6 +19,7 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvent;
@@ -166,8 +168,8 @@ public class EntityGhost extends ChargingMonster {
 
     @Override
     public boolean handleChargeMovement(AnimatedAction anim) {
-        if (this.chargeMotion != null) {
-            this.setDeltaMovement(this.chargeMotion.x * 0.98f, this.getDeltaMovement().y, this.chargeMotion.z * 0.98f);
+        if (this.getChargeMotion() != null) {
+            this.setDeltaMovement(this.getChargeMotion().x * 0.98f, this.getDeltaMovement().y, this.getChargeMotion().z * 0.98f);
             return true;
         }
         return false;
@@ -177,8 +179,6 @@ public class EntityGhost extends ChargingMonster {
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(DARKBALL)) {
             this.getNavigation().stop();
-            if (anim.getTick() == 1 && this.getTarget() != null)
-                this.lookAt(this.getTarget(), 360, 90);
             if (anim.canAttack()) {
                 ModSpells.DARK_BALL.get().use(this);
             }
@@ -215,6 +215,12 @@ public class EntityGhost extends ChargingMonster {
                 vec = new Vec3(vec.x, 0.006, vec.z);
             super.travel(vec);
         }
+    }
+
+    @Override
+    public Vec3 getChargeTo(AnimatedAction anim) {
+        return EntityUtils.getTargetDirection(this, EntityAnchorArgument.Anchor.FEET)
+                .scale(this.chargingSpeed());
     }
 
     private void teleportTowards(Entity entity) {

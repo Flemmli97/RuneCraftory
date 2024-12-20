@@ -19,12 +19,16 @@ import io.github.flemmli97.runecraftory.common.entities.ai.RestrictedWaterAvoidi
 import io.github.flemmli97.runecraftory.common.entities.ai.RiderAttackTargetGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.StayGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.TendCropsGoal;
+import io.github.flemmli97.runecraftory.common.entities.data.MobUpdateHandler;
+import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
+import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemObjectX;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.loot.LootCtxParameters;
 import io.github.flemmli97.runecraftory.common.network.S2CAttackDebug;
 import io.github.flemmli97.runecraftory.common.network.S2CEntityLevelPkt;
+import io.github.flemmli97.runecraftory.common.network.S2CMobUpdate;
 import io.github.flemmli97.runecraftory.common.network.S2COpenCompanionGui;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
@@ -35,6 +39,7 @@ import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
+import io.github.flemmli97.runecraftory.common.utils.MathsHelper;
 import io.github.flemmli97.runecraftory.common.utils.TeleportUtils;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import io.github.flemmli97.runecraftory.common.world.BarnData;
@@ -127,7 +132,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnimated, IExtendedMob, ExtendedEntity, SleepingEntity, TargetableOpponent, AoeAttackEntity {
+public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnimated, IExtendedMob, ExtendedEntity, SleepingEntity, TargetableOpponent, AoeAttackEntity, MobUpdateHandler {
 
     private static final EntityDataAccessor<Optional<UUID>> OWNER_UUID = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.OPTIONAL_UUID);
     private static final EntityDataAccessor<Byte> MOVE_FLAGS = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.BYTE);
@@ -169,7 +174,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     public HurtByTargetPredicate hurt = new HurtByTargetPredicate(this, this.defendPred);
 
     public TendCropsGoal farm = new TendCropsGoal(this);
-    protected Vec3 targetPosition;
+    private Vec3 targetPosition;
     private BlockPos seedInventory, cropInventory;
 
     public final Predicate<LivingEntity> hitPred = (e) -> {
@@ -508,6 +513,15 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         } else {
             if (!this.playDeath() && TendCropsGoal.cantTendToCropsAnymore(this) && this.behaviour == Behaviour.FARM && this.tickCount % 20 == 0)
                 this.level.addParticle(ParticleTypes.ANGRY_VILLAGER, this.getX(), this.getY() + this.getBbHeight() + 0.3, this.getZ(), 0, 0, 0);
+        }
+        Vec3 lookDir = this.directionToLookAt();
+        if (lookDir != null) {
+            float[] yxRot = MathsHelper.YXRotFrom(lookDir);
+            float[] clamp = this.targetLookClamp();
+            this.setYRot(MathsHelper.rotlerp(this.getYRot(), yxRot[0], clamp[0]));
+            this.setXRot(MathsHelper.rotlerp(this.getXRot(), yxRot[1], clamp[1]));
+            this.yBodyRot = this.getYRot();
+            this.yHeadRot = this.getYRot();
         }
         if (this.getAnimationHandler().getAnimation() == null)
             this.targetPosition = null;
@@ -1540,12 +1554,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         return null;
     }
 
-    public void lookAtNow(Entity entity, float maxYRotIncrease, float maxXRotIncrease) {
-        super.lookAt(entity, maxYRotIncrease, maxXRotIncrease);
-        this.yHeadRot = this.getYRot();
-        this.yBodyRot = this.yHeadRot;
-    }
-
     private boolean canAttackFrom(Vec3 pos) {
         if (this.isTamed())
             return true;
@@ -1574,21 +1582,32 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     public void handleAttack(AnimatedAction anim) {
         this.getNavigation().stop();
-        if (this.getTarget() != null) {
-            this.lookAtNow(this.getTarget(), 60, 90);
-        }
         if (anim.canAttack()) {
             this.mobAttack(anim, this.getTarget(), this::doHurtTarget);
             this.targetPosition = null;
         }
     }
 
+    protected Vec3 directionToLookAt() {
+        return this.getAnimationHandler().hasAnimation() && this.targetPosition != null ? this.targetPosition.subtract(this.position()) : null;
+    }
+
+    protected float[] targetLookClamp() {
+        return new float[]{60, 30};
+    }
+
     public void setTargetPosition(Vec3 position) {
         this.targetPosition = position;
+        if (!this.level.isClientSide)
+            S2CMobUpdate.send(this, SyncableDatas.TARGET_POS, this.targetPosition);
+    }
+
+    public Vec3 getTargetPosition() {
+        return this.targetPosition;
     }
 
     public void mobAttack(AnimatedAction anim, LivingEntity target, Consumer<LivingEntity> cons) {
-        OrientedBoundingBox obb = this.calculateAttackAABB(anim, this.targetPosition != null || target == null ? this.targetPosition : target.position(), 0.2);
+        OrientedBoundingBox obb = this.calculateAttackAABB(anim, this.getTargetPosition() != null || target == null ? this.getTargetPosition() : target.position(), 0.2);
         this.level.getEntitiesOfClass(LivingEntity.class, obb.getEncompassingBox(),
                 entity -> this.hitPred.test(entity) && obb.intersects(entity.getBoundingBox())).forEach(cons);
         if (!this.level.isClientSide)
@@ -1830,6 +1849,11 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     public boolean allowAnimation(String prev, @Nullable AnimatedAction other) {
         return true;
+    }
+
+    @Override
+    public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
+        data.runIf(SyncableDatas.TARGET_POS, pos -> this.targetPosition = pos);
     }
 
     public enum Behaviour {

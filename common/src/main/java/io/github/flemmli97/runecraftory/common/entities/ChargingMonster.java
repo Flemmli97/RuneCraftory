@@ -1,10 +1,12 @@
 package io.github.flemmli97.runecraftory.common.entities;
 
+import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
+import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
+import io.github.flemmli97.runecraftory.common.network.S2CMobUpdate;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.common.utils.OrientedBoundingBox;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -17,9 +19,8 @@ import java.util.function.Consumer;
 
 public abstract class ChargingMonster extends BaseMonster {
 
-    protected static final EntityDataAccessor<Float> LOCKED_YAW = SynchedEntityData.defineId(ChargingMonster.class, EntityDataSerializers.FLOAT);
     protected List<LivingEntity> hitEntity;
-    protected Vec3 chargeMotion;
+    private Vec3 chargeMotion;
     private float prevStepHeight = -1;
     private final Consumer<AnimatedAction> chargingAnim;
     private boolean initAnim;
@@ -36,8 +37,7 @@ public abstract class ChargingMonster extends BaseMonster {
                     this.prevStepHeight = this.maxUpStep;
                     this.maxUpStep = Math.max(1.5f, 1f + this.maxUpStep);
                     if (this.isVehicle()) {
-                        this.lockYaw(this.getControllingPassenger().getYHeadRot());
-                        this.setChargeMotion(this.getChargeTo(anim, this.position().add(this.getControllingPassenger().getLookAngle())));
+                        this.setChargeMotion(this.getChargeTo(anim));
                     }
                 } else if (this.prevStepHeight != -1) {
                     this.maxUpStep = this.prevStepHeight;
@@ -45,15 +45,11 @@ public abstract class ChargingMonster extends BaseMonster {
                 }
                 if (this.isChargingAnimation()) {
                     this.hitEntity = null;
+                } else {
+                    this.chargeMotion = null;
                 }
             }
         };
-    }
-
-    @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(LOCKED_YAW, 0f);
     }
 
     @Override
@@ -63,13 +59,14 @@ public abstract class ChargingMonster extends BaseMonster {
             this.getAnimationHandler().setAnimationChangeCons(this.chargingAnim);
             this.initAnim = true;
         }
+    }
+
+    @Override
+    protected Vec3 directionToLookAt() {
         if (this.fixedYaw()) {
-            this.setXRot(0);
-            this.yBodyRotO = this.chargingYaw();
-            this.yBodyRot = this.chargingYaw();
-            this.yRotO = this.chargingYaw();
-            this.setYRot(this.chargingYaw());
+            return this.chargeMotion;
         }
+        return super.directionToLookAt();
     }
 
     @Override
@@ -107,7 +104,7 @@ public abstract class ChargingMonster extends BaseMonster {
         double width = this.getBbWidth();
         double speed = Math.max(width, this.getDeltaMovement().length() - width);
         return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
-                .inflate(grow).expandTowards(0, 0, speed), this.entityData.get(LOCKED_YAW), 0, this.position());
+                .inflate(grow).expandTowards(0, 0, speed), this.getYRot(), 0, this.position());
     }
 
     @Override
@@ -117,10 +114,11 @@ public abstract class ChargingMonster extends BaseMonster {
 
     public void setChargeMotion(Vec3 chargeMotion) {
         this.chargeMotion = chargeMotion;
+        S2CMobUpdate.send(this, SyncableDatas.MOTION_DIR, this.chargeMotion);
     }
 
-    public float chargingYaw() {
-        return this.isVehicle() ? this.getYRot() : this.entityData.get(LOCKED_YAW);
+    public Vec3 getChargeMotion() {
+        return this.chargeMotion;
     }
 
     @Override
@@ -142,22 +140,23 @@ public abstract class ChargingMonster extends BaseMonster {
 
     }
 
-    public float chargingLength() {
-        return 6;
+    public double chargingSpeed() {
+        return 0.4;
     }
 
-    public Vec3 getChargeTo(AnimatedAction anim, Vec3 pos) {
-        int length = anim.getLength() - anim.getAttackTime();
-        Vec3 vec = pos.subtract(this.position()).normalize().scale(this.chargingLength());
-        return new Vec3(vec.x / length, this.getY(), vec.z / length);
-    }
-
-    public void lockYaw(float yaw) {
-        this.entityData.set(LOCKED_YAW, yaw);
+    public Vec3 getChargeTo(AnimatedAction anim) {
+        return EntityUtils.getTargetDirection(this, EntityAnchorArgument.Anchor.FEET, true)
+                .scale(this.chargingSpeed());
     }
 
     private boolean isChargingAnimation() {
         AnimatedAction anim = this.getAnimationHandler().getAnimation();
         return anim != null && this.isChargingAnim(anim);
+    }
+
+    @Override
+    public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
+        super.onUpdate(data);
+        data.runIf(SyncableDatas.MOTION_DIR, charge -> this.chargeMotion = charge);
     }
 }

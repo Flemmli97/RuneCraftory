@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.common.entities;
 
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.common.utils.OrientedBoundingBox;
-import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -43,15 +42,21 @@ public abstract class LeapingMonster extends BaseMonster {
     }
 
     @Override
+    protected Vec3 directionToLookAt() {
+        if (this.getAnimationHandler().hasAnimation() && this.isLeapingAnim(this.getAnimationHandler().getAnimation())) {
+            if (this.getDeltaMovement().lengthSqr() > 0.01)
+                return this.getDeltaMovement();
+            return null;
+        }
+        return super.directionToLookAt();
+    }
+
+    @Override
     public void handleAttack(AnimatedAction anim) {
         if (this.isLeapingAnim(anim)) {
             this.getNavigation().stop();
-            this.lookAt(EntityAnchorArgument.Anchor.FEET, this.position().add(this.getDeltaMovement().x, 0, this.getDeltaMovement().z));
-            if (anim.getTick() == 1 && this.getTarget() != null) {
-                this.targetPosition = this.getTarget().position();
-            }
             if (anim.canAttack()) {
-                Vec3 vec32 = this.getLeapVec(this.getTarget() == null ? this.targetPosition : this.getTarget().position());
+                Vec3 vec32 = this.getLeapVec(this.getTarget() == null ? this.getTargetPosition() : this.getTarget().position());
                 this.setDeltaMovement(vec32.x, this.leapHeightMotion(), vec32.z);
             }
             if (anim.isPastTick(anim.getAttackTime())) {

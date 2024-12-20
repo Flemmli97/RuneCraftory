@@ -6,12 +6,16 @@ import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
+import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
+import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
+import io.github.flemmli97.runecraftory.common.network.S2CMobUpdate;
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
@@ -25,10 +29,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.TimedWrapped
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
 import io.github.flemmli97.tenshilib.common.utils.OrientedBoundingBox;
 import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.BossEvent;
@@ -50,8 +52,6 @@ import java.util.function.BiConsumer;
 public class EntityGrimoire extends BossMonster {
 
     private static final List<Vector3f> CIRCLE_PARTICLE_MOTION = RayTraceUtils.rotatedVecs(new Vec3(0.25, 0, 0), new Vec3(0, 1, 0), -180, 175, 5);
-
-    protected static final EntityDataAccessor<Float> LOCKED_YAW = SynchedEntityData.defineId(EntityGrimoire.class, EntityDataSerializers.FLOAT);
 
     public static final AnimatedAction TAIL_SWIPE = new AnimatedAction(0.84, 0.48, "tail_swipe");
     public static final AnimatedAction BITE = new AnimatedAction(0.8, 0.44, "bite");
@@ -91,14 +91,12 @@ public class EntityGrimoire extends BossMonster {
         });
         b.put(CHARGE, (anim, entity) -> {
             if (anim.isPastTick(0.16) && !anim.isPastTick(1.6)) {
-                if (entity.moveDirection == null) {
-                    Vec3 dir = entity.getTarget() != null ? entity.getTarget().position().subtract(entity.position()) : entity.getLookAngle();
-                    dir = new Vec3(dir.x(), 0, dir.z()).normalize().scale(11);
-                    int length = anim.getLength();
-                    entity.moveDirection = new Vec3(dir.x / length, 0, dir.z / length);
-                }
                 if (entity.hitEntity == null) {
                     entity.hitEntity = new ArrayList<>();
+                }
+                if (entity.moveDirection == null) {
+                    entity.setMoveDirection(EntityUtils.getTargetDirection(entity, EntityAnchorArgument.Anchor.FEET, true)
+                            .scale(0.35));
                 }
                 entity.setDeltaMovement(entity.moveDirection);
                 entity.mobAttack(anim, null, e -> {
@@ -155,18 +153,10 @@ public class EntityGrimoire extends BossMonster {
     private final AnimationHandler<EntityGrimoire> animationHandler = new AnimationHandler<>(this, ANIMS).setAnimationChangeFunc(anim -> {
         if (CHARGE.is(anim)) {
             this.hitEntity = null;
-            if (!this.level.isClientSide) {
-                if (this.isVehicle()) {
-                    this.entityData.set(LOCKED_YAW, this.getControllingPassenger().getYHeadRot());
-                } else if (this.getTarget() != null) {
-                    this.lookAt(this.getTarget(), 360, 10);
-                    this.entityData.set(LOCKED_YAW, this.getYRot());
-                }
-            }
         }
         if (!this.level.isClientSide && anim == null) {
             boolean chain = !this.commanded;
-            this.moveDirection = null;
+            this.setMoveDirection(null);
             this.commanded = false;
             if (chain) {
                 if (this.isEnraged() && this.getAnimationHandler().isCurrent(BITE)) {
@@ -195,24 +185,9 @@ public class EntityGrimoire extends BossMonster {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(LOCKED_YAW, 0f);
-    }
-
-    @Override
     protected void applyAttributes() {
         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.29);
         super.applyAttributes();
-    }
-
-    @Override
-    public void tick() {
-        super.tick();
-        if (this.getAnimationHandler().isCurrent(CHARGE, CHARGE_LAND)) {
-            this.setXRot(0);
-            this.setYRot(this.entityData.get(LOCKED_YAW));
-        }
     }
 
     @Override
@@ -243,6 +218,14 @@ public class EntityGrimoire extends BossMonster {
     }
 
     @Override
+    protected Vec3 directionToLookAt() {
+        if (this.getAnimationHandler().isCurrent(CHARGE, CHARGE_LAND)) {
+            return this.moveDirection;
+        }
+        return super.directionToLookAt();
+    }
+
+    @Override
     public void handleEntityEvent(byte id) {
         super.handleEntityEvent(id);
         if (id == 66) {
@@ -254,10 +237,6 @@ public class EntityGrimoire extends BossMonster {
 
     @Override
     public void handleAttack(AnimatedAction anim) {
-        LivingEntity target = this.getTarget();
-        if (target != null) {
-            this.lookAtNow(target, 60.0f, 50.0f);
-        }
         BiConsumer<AnimatedAction, EntityGrimoire> handler = ATTACK_HANDLER.get(anim.getID());
         if (handler != null)
             handler.accept(anim, this);
@@ -267,12 +246,12 @@ public class EntityGrimoire extends BossMonster {
     @Override
     public OrientedBoundingBox calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
         if (anim.is(CHARGE_LAND))
-            return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this).inflate(1.2, 0.1, 1.2), this.entityData.get(LOCKED_YAW), 0, this.position());
+            return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this).inflate(1.2, 0.1, 1.2), this.getYRot(), 0, this.position());
         if (anim.is(CHARGE)) {
             double width = this.getBbWidth();
             double speed = Math.max(width, this.getDeltaMovement().length() - width);
             return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
-                    .inflate(grow + 0.5, 0.1, grow + 0.5).expandTowards(0, 0, speed), this.entityData.get(LOCKED_YAW), 0, this.position());
+                    .inflate(grow + 0.5, 0.1, grow + 0.5).expandTowards(0, 0, speed), this.getYRot(), 0, this.position());
         }
         return super.calculateAttackAABB(anim, target, grow);
     }
@@ -342,5 +321,16 @@ public class EntityGrimoire extends BossMonster {
     @Override
     public AnimatedAction getSleepAnimation() {
         return SLEEP;
+    }
+
+    protected void setMoveDirection(Vec3 moveDirection) {
+        this.moveDirection = moveDirection;
+        S2CMobUpdate.send(this, SyncableDatas.MOTION_DIR, this.moveDirection);
+    }
+
+    @Override
+    public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
+        super.onUpdate(data);
+        data.runIf(SyncableDatas.MOTION_DIR, motion -> this.moveDirection = motion);
     }
 }

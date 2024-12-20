@@ -74,8 +74,6 @@ public class EntityGoblinPirate extends EntityGoblin {
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(DOUBLE_SLASH)) {
             this.getNavigation().stop();
-            if (anim.getTick() == 1 && this.getTarget() != null)
-                this.lookAt(this.getTarget(), 360, 90);
             if (anim.canAttack() || anim.isAtTick(0.8)) {
                 this.mobAttack(anim, this.getTarget(), this::quickAttack);
             }

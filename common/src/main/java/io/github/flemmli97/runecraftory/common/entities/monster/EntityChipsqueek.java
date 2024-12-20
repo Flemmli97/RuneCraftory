@@ -59,8 +59,8 @@ public class EntityChipsqueek extends ChargingMonster {
     }
 
     @Override
-    public float chargingLength() {
-        return 5;
+    public double chargingSpeed() {
+        return 0.45f;
     }
 
     @Override

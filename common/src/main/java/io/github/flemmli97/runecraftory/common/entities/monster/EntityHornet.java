@@ -101,8 +101,6 @@ public class EntityHornet extends BaseMonster {
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(ATTACK)) {
             this.getNavigation().stop();
-            if (anim.getTick() == 1 && this.getTarget() != null)
-                this.lookAt(this.getTarget(), 360, 90);
             if (anim.canAttack()) {
                 ModSpells.POISON_NEEDLE.get().use(this);
             }

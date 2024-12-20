@@ -13,6 +13,7 @@ import io.github.flemmli97.runecraftory.common.network.S2CUpdateAttributesWithAd
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.Direction;
 import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
 import net.minecraft.server.level.ServerPlayer;
@@ -192,6 +193,27 @@ public class EntityUtils {
     public static Vec3 getStraightProjectileTarget(Vec3 from, Entity target) {
         AABB aabb = target.getBoundingBox().inflate(target.getBbHeight() * 0.1);
         return new Vec3(target.getX(), Mth.clamp(from.y(), aabb.minY, aabb.maxY), target.getZ());
+    }
+
+    public static Vec3 getTargetDirection(Mob mob, EntityAnchorArgument.Anchor anchor) {
+        return getTargetDirection(mob, anchor, false);
+    }
+
+    public static Vec3 getTargetDirection(Mob mob, EntityAnchorArgument.Anchor anchor, boolean horizontalOnly) {
+        Vec3 pos = anchor.apply(mob);
+        Vec3 dir;
+        if (mob.getControllingPassenger() != null) {
+            dir = mob.getControllingPassenger().getLookAngle();
+        } else if (mob.getTarget() != null) {
+            LivingEntity target = mob.getTarget();
+            dir = anchor.apply(target).subtract(pos);
+        } else {
+            dir = mob.getLookAngle();
+        }
+        if (horizontalOnly) {
+            dir = new Vec3(dir.x(), 0, dir.z());
+        }
+        return dir.normalize();
     }
 
     public static LivingEntity ownedProjectileTarget(Entity owner, int range) {

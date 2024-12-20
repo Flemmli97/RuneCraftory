@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
@@ -66,14 +67,10 @@ public class EntityDuck extends ChargingMonster {
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(DIVE)) {
             if (anim.isPastTick(anim.getAttackTime())) {
-                if (this.chargeMotion == null) {
-                    Vec3 dir = this.getTarget() != null ? this.getTarget().position().subtract(this.position()) : this.getLookAngle();
-                    this.lookAt(EntityAnchorArgument.Anchor.EYES, this.position().add(dir));
-                    dir = new Vec3(dir.x(), 0, dir.z()).normalize().scale(0.7);
-                    this.chargeMotion = dir;
-                    this.lockYaw(this.getYRot());
+                if (this.getChargeMotion() == null) {
+                    this.setChargeMotion(this.getChargeTo(anim));
                 }
-                this.setDeltaMovement(this.chargeMotion.x, -0.25f, this.chargeMotion.z);
+                this.setDeltaMovement(this.getChargeMotion().x, -0.25f, this.getChargeMotion().z);
                 if (!this.isOnGround()) {
                     if (this.hitEntity == null)
                         this.hitEntity = new ArrayList<>();
@@ -85,7 +82,7 @@ public class EntityDuck extends ChargingMonster {
                     });
                 } else {
                     this.getAnimationHandler().setAnimation(LAND);
-                    this.chargeMotion = null;
+                    this.setChargeMotion(null);
                 }
             } else {
                 Vec3 delta = this.getDeltaMovement();
@@ -110,9 +107,8 @@ public class EntityDuck extends ChargingMonster {
     }
 
     @Override
-    public Vec3 getChargeTo(AnimatedAction anim, Vec3 pos) {
-        Vec3 vec = pos.subtract(this.position());
-        return new Vec3(vec.x, vec.y, vec.z);
+    public Vec3 getChargeTo(AnimatedAction anim) {
+        return EntityUtils.getTargetDirection(this, EntityAnchorArgument.Anchor.FEET, true).scale(0.7);
     }
 
     @Override

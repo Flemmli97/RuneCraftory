@@ -6,10 +6,14 @@ import io.github.flemmli97.runecraftory.common.entities.MobAttackExt;
 import io.github.flemmli97.runecraftory.common.entities.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.entities.ai.RestrictedWaterAvoidingStrollGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
+import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
+import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
+import io.github.flemmli97.runecraftory.common.network.S2CMobUpdate;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
@@ -18,11 +22,9 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
 import io.github.flemmli97.tenshilib.common.utils.OrientedBoundingBox;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.BossEvent;
@@ -41,8 +43,6 @@ import java.util.List;
 import java.util.function.BiConsumer;
 
 public class EntitySarcophagus extends BossMonster implements MobAttackExt {
-
-    private static final EntityDataAccessor<Float> LOCKED_YAW = SynchedEntityData.defineId(EntitySarcophagus.class, EntityDataSerializers.FLOAT);
 
     public static final AnimatedAction TELEPORT = new AnimatedAction(2.64, "teleport");
     public static final AnimatedAction CHARGE = new AnimatedAction(1.6, 0.44, "charge");
@@ -78,18 +78,8 @@ public class EntitySarcophagus extends BossMonster implements MobAttackExt {
                 if (entity.hitEntity == null)
                     entity.hitEntity = new ArrayList<>();
                 if (entity.chargeMotion == null) {
-                    Vec3 dir = entity.getLookAngle();
-                    float yaw = entity.getYRot();
-                    if (entity.isVehicle()) {
-                        yaw = entity.getControllingPassenger().getYHeadRot();
-                        dir = entity.getControllingPassenger().getLookAngle();
-                    } else if (entity.getTarget() != null) {
-                        dir = entity.getTarget().position().subtract(entity.position()).normalize();
-                        entity.lookAt(entity.getTarget(), 360, 10);
-                        yaw = entity.getYRot();
-                    }
-                    entity.chargeMotion = dir.scale(0.28);
-                    entity.entityData.set(LOCKED_YAW, yaw);
+                    entity.setChargeDirection(EntityUtils.getTargetDirection(entity, EntityAnchorArgument.Anchor.FEET, true)
+                            .scale(0.3));
                 }
                 entity.setDeltaMovement(entity.chargeMotion.x(), entity.getDeltaMovement().y(), entity.chargeMotion.z());
                 entity.mobAttack(anim, null, e -> {
@@ -356,7 +346,7 @@ public class EntitySarcophagus extends BossMonster implements MobAttackExt {
             double width = this.getBbWidth();
             double speed = Math.max(width, this.getDeltaMovement().length() - width);
             return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
-                    .inflate(0.4, 0.1, 0.4).expandTowards(0, 0, speed), this.entityData.get(LOCKED_YAW), 0, this.position());
+                    .inflate(0.4, 0.1, 0.4).expandTowards(0, 0, speed), this.getYRot(), 0, this.position());
         }
         return super.calculateAttackAABB(anim, target, grow);
     }
@@ -390,21 +380,21 @@ public class EntitySarcophagus extends BossMonster implements MobAttackExt {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(LOCKED_YAW, 0f);
-    }
-
-    @Override
     public void tick() {
         super.tick();
-        if (this.getAnimationHandler().isCurrent(CHARGE) && this.getAnimationHandler().getAnimation().isPastTick(0.28)) {
-            this.setXRot(0);
-            this.setYRot(this.entityData.get(LOCKED_YAW));
-        }
         if (!this.level.isClientSide) {
             --this.starfallCooldown;
         }
+    }
+
+    @Override
+    protected Vec3 directionToLookAt() {
+        if (this.getAnimationHandler().isCurrent(CHARGE)) {
+            if (this.getAnimationHandler().getAnimation().isPastTick(0.28))
+                return this.chargeMotion;
+            return null;
+        }
+        return super.directionToLookAt();
     }
 
     @Override
@@ -438,7 +428,7 @@ public class EntitySarcophagus extends BossMonster implements MobAttackExt {
 
     @Override
     public Vec3 targetPosition(Vec3 from) {
-        return this.targetPosition;
+        return this.getTargetPosition();
     }
 
     private void teleportAround(int range, int yRange) {
@@ -480,5 +470,16 @@ public class EntitySarcophagus extends BossMonster implements MobAttackExt {
             return false;
         }
         return true;
+    }
+
+    protected void setChargeDirection(Vec3 moveDirection) {
+        this.chargeMotion = moveDirection;
+        S2CMobUpdate.send(this, SyncableDatas.MOTION_DIR, this.chargeMotion);
+    }
+
+    @Override
+    public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
+        super.onUpdate(data);
+        data.runIf(SyncableDatas.MOTION_DIR, motion -> this.chargeMotion = motion);
     }
 }

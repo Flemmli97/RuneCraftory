@@ -90,9 +90,6 @@ public class EntityDemon extends BaseMonster implements HealingPredicateEntity, 
             }
         } else if (anim.is(STAB) || anim.is(STAB_LONG)) {
             this.getNavigation().stop();
-            if (anim.getTick() == 1 && this.getTarget() != null) {
-                this.lookAtNow(this.getTarget(), 360, 90);
-            }
             if (anim.canAttack()) {
                 final float range = anim.is(STAB_LONG) ? 5 : 2.5f;
                 AABB aabb = AABB.ofSize(this.position(), 2 * (range + 1), 2 * (range + 1), 2 * (range + 1));

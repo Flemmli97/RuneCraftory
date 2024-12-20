@@ -116,8 +116,6 @@ public class EntityVeggieGhost extends BaseMonster {
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(CAST)) {
             this.getNavigation().stop();
-            if (anim.getTick() == 1 && this.getTarget() != null)
-                this.lookAt(this.getTarget(), 360, 90);
             if (anim.canAttack()) {
                 ModSpells.TRIPLE_FIRE_BALL.get().use(this);
             }

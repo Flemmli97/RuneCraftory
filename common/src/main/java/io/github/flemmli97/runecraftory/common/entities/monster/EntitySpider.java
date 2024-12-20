@@ -152,10 +152,6 @@ public class EntitySpider extends BaseMonster {
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(WEBSHOT)) {
             this.getNavigation().stop();
-            if (anim.getTick() == 1 && this.getTarget() != null) {
-                this.lookAtNow(this.getTarget(), 360, 90);
-                this.targetPosition = this.getTarget().position();
-            }
             if (anim.canAttack()) {
                 if (this.getTarget() != null && this.getSensing().hasLineOfSight(this.getTarget()) || this.getFirstPassenger() instanceof Player) {
                     ModSpells.WEB_SHOT.get().use(this);

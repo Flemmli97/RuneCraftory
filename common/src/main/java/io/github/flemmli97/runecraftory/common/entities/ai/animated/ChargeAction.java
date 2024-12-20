@@ -17,9 +17,8 @@ public class ChargeAction<T extends ChargingMonster> implements ActionStart<T> {
     public boolean start(AnimatedAttackGoal<T> goal, LivingEntity target) {
         if (goal.current == null)
             return false;
-        goal.attacker.setChargeMotion(goal.attacker.getChargeTo(goal.current.anim(), target.position()));
+        goal.attacker.setChargeMotion(goal.attacker.getChargeTo(goal.current.anim()));
         goal.attacker.lookAt(target, 360, 10);
-        goal.attacker.lockYaw(goal.attacker.getYRot());
         return true;
     }
 }

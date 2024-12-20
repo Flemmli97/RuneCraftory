@@ -14,7 +14,6 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
-import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -55,8 +54,6 @@ public class EntityRafflesia extends BossMonster implements MobAttackExt {
     private static final EntityDataAccessor<Optional<UUID>> FLOWER = SynchedEntityData.defineId(EntityRafflesia.class, EntityDataSerializers.OPTIONAL_UUID);
     private static final EntityDataAccessor<Optional<UUID>> PITCHER = SynchedEntityData.defineId(EntityRafflesia.class, EntityDataSerializers.OPTIONAL_UUID);
     private static final EntityDataAccessor<Direction> SPAWN_DIRECTION = SynchedEntityData.defineId(EntityRafflesia.class, EntityDataSerializers.DIRECTION);
-    private static final EntityDataAccessor<Float> LOCKED_YAW = SynchedEntityData.defineId(EntityRafflesia.class, EntityDataSerializers.FLOAT);
-    private static final EntityDataAccessor<Float> LOCKED_PITCH = SynchedEntityData.defineId(EntityRafflesia.class, EntityDataSerializers.FLOAT);
 
     public static final AnimatedAction POISON_BREATH = new AnimatedAction(1.96, 0.56, "breath");
     public static final AnimatedAction POISON_BREATH_REV = AnimatedAction.copyOf(POISON_BREATH, "breath_2");
@@ -214,8 +211,6 @@ public class EntityRafflesia extends BossMonster implements MobAttackExt {
         this.entityData.define(FLOWER, Optional.empty());
         this.entityData.define(PITCHER, Optional.empty());
         this.entityData.define(SPAWN_DIRECTION, Direction.NORTH);
-        this.entityData.define(LOCKED_YAW, 0f);
-        this.entityData.define(LOCKED_PITCH, 0f);
     }
 
     @Override
@@ -254,10 +249,6 @@ public class EntityRafflesia extends BossMonster implements MobAttackExt {
     @Override
     public void baseTick() {
         super.baseTick();
-        if (this.getAnimationHandler().hasAnimation() && this.getAnimationHandler().getAnimation().getAnimationClient().equals("breath")) {
-            this.setRot(this.entityData.get(LOCKED_YAW), this.entityData.get(LOCKED_PITCH));
-            this.setYHeadRot(this.getYRot());
-        }
         if (!this.level.isClientSide) {
             LivingEntity target = this.getTarget();
             if (target != null && !this.getAnimationHandler().hasAnimation()) {
@@ -282,19 +273,20 @@ public class EntityRafflesia extends BossMonster implements MobAttackExt {
     }
 
     @Override
-    public void handleAttack(AnimatedAction anim) {
-        LivingEntity target = this.getTarget();
+    public void setupAttack(AnimatedAction anim) {
         if (anim.getTick() == 1) {
+            LivingEntity target = this.getTarget();
             if (target != null) {
                 AABB aabb = target.getBoundingBox();
-                this.targetPosition = EntityUtil.getStraightProjectileTarget(this.position().add(0, this.getEyeHeight(), 0), target.position(), aabb.minY + target.getBbHeight() * 0.25, aabb.maxY - target.getBbHeight() * 0.25);
+                this.setTargetPosition(EntityUtil.getStraightProjectileTarget(this.position().add(0, this.getEyeHeight(), 0), target.position(), aabb.minY + target.getBbHeight() * 0.25, aabb.maxY - target.getBbHeight() * 0.25));
             } else {
-                this.targetPosition = this.getLookAngle().scale(5);
+                this.setTargetPosition(this.position().add(this.getLookAngle().scale(5)));
             }
-            this.lookAt(EntityAnchorArgument.Anchor.EYES, this.targetPosition);
-            this.entityData.set(LOCKED_PITCH, this.getXRot());
-            this.entityData.set(LOCKED_YAW, this.getYRot());
         }
+    }
+
+    @Override
+    public void handleAttack(AnimatedAction anim) {
         BiConsumer<AnimatedAction, EntityRafflesia> handler = ATTACK_HANDLER.get(anim.getID());
         if (handler != null)
             handler.accept(anim, this);
@@ -427,7 +419,7 @@ public class EntityRafflesia extends BossMonster implements MobAttackExt {
 
     @Override
     public Vec3 targetPosition(Vec3 from) {
-        return this.targetPosition;
+        return this.getTargetPosition();
     }
 
     @Nullable

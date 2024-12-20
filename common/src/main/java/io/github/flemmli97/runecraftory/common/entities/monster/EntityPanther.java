@@ -13,7 +13,6 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveAwayRunn
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
-import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.damagesource.DamageSource;
@@ -29,7 +28,7 @@ import java.util.List;
 public class EntityPanther extends LeapingMonster {
 
     private static final AnimatedAction MELEE = new AnimatedAction(16, 9, "attack");
-    private static final AnimatedAction LEAP = new AnimatedAction(23, 6, "leap");
+    private static final AnimatedAction LEAP = new AnimatedAction(23, 5, "leap");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
     public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, LEAP, INTERACT, SLEEP};
@@ -76,15 +75,11 @@ public class EntityPanther extends LeapingMonster {
     @Override
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(LEAP)) {
-            this.lookAt(EntityAnchorArgument.Anchor.FEET, this.position().add(this.getDeltaMovement().x, 0, this.getDeltaMovement().z));
-            if (anim.getTick() == 1 && this.getTarget() != null) {
-                this.targetPosition = this.getTarget().position();
-            }
             if (anim.canAttack()) {
-                Vec3 vec32 = this.getLeapVec(this.getTarget() == null ? this.targetPosition : this.getTarget().position());
+                Vec3 vec32 = this.getLeapVec(this.getTarget() == null ? this.getTargetPosition() : this.getTarget().position());
                 this.setDeltaMovement(vec32.x, 0.25f, vec32.z);
             }
-            if (anim.getTick() >= anim.getAttackTime()) {
+            if (anim.getTick() > anim.getAttackTime()) {
                 if (this.hitEntity == null)
                     this.hitEntity = new ArrayList<>();
                 this.mobAttack(anim, null, e -> {
@@ -105,7 +100,7 @@ public class EntityPanther extends LeapingMonster {
 
     @Override
     public Vec3 getLeapVec(@Nullable Vec3 target) {
-        return super.getLeapVec(target).scale(1.15);
+        return super.getLeapVec(target).scale(1.2);
     }
 
     @Override

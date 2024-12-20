@@ -64,7 +64,7 @@ public class EntityMinotaur extends ChargingMonster {
     @Override
     protected Consumer<AnimatedAction> animatedActionConsumer() {
         return (anim) -> {
-            super.animatedActionConsumer();
+            super.animatedActionConsumer().accept(anim);
             if (!this.level.isClientSide) {
                 if (anim == null || anim.is(SPIN)) {
                     this.hitEntity = null;
@@ -88,7 +88,6 @@ public class EntityMinotaur extends ChargingMonster {
                 Vec3 dir;
                 if (this.getTarget() != null) {
                     dir = this.getTarget().position().subtract(this.position());
-                    this.lookAtNow(this.getTarget(), 360, 90);
                 } else
                     dir = this.getLookAngle();
                 this.spinDirection = new Vec3(dir.x(), 0, dir.z()).normalize().scale(0.1);
@@ -161,8 +160,8 @@ public class EntityMinotaur extends ChargingMonster {
     }
 
     @Override
-    public float chargingLength() {
-        return 9;
+    public double chargingSpeed() {
+        return 0.45f;
     }
 
     @Override

@@ -74,8 +74,8 @@ public class EntityPommePomme extends ChargingMonster {
     }
 
     @Override
-    public float chargingLength() {
-        return 9;
+    public double chargingSpeed() {
+        return 0.3;
     }
 
     @Override

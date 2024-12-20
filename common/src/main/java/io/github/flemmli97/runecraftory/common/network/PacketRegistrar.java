@@ -62,6 +62,7 @@ public class PacketRegistrar {
         register.registerMessage(id++, S2CBossbarInfoAdd.ID, S2CBossbarInfoAdd.class, S2CBossbarInfoAdd::write, S2CBossbarInfoAdd::read, S2CBossbarInfoAdd::handle);
         register.registerMessage(id++, S2CBossbarInfoRemove.ID, S2CBossbarInfoRemove.class, S2CBossbarInfoRemove::write, S2CBossbarInfoRemove::read, S2CBossbarInfoRemove::handle);
         register.registerMessage(id++, S2CBossbarMusicUpdate.ID, S2CBossbarMusicUpdate.class, S2CBossbarMusicUpdate::write, S2CBossbarMusicUpdate::read, S2CBossbarMusicUpdate::handle);
+        register.registerMessage(id++, S2CMobUpdate.ID, S2CMobUpdate.class, S2CMobUpdate::write, S2CMobUpdate::read, S2CMobUpdate::handle);
         return id;
     }
 

@@ -77,9 +77,6 @@ public class EntityDeadTree extends BossMonster {
 
     private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntityDeadTree>> ATTACK_HANDLER = createAnimationHandler(b -> {
         b.put(ATTACK, (anim, entity) -> {
-            if (anim.getTick() == 1 && entity.getTarget() != null) {
-                entity.targetPosition = entity.getTarget().position();
-            }
             if (anim.canAttack() || anim.isAtTick(0.64)) {
                 entity.mobAttack(anim, entity.getTarget(), entity::doHurtTarget);
             }
@@ -259,9 +256,6 @@ public class EntityDeadTree extends BossMonster {
     @Override
     public void handleAttack(AnimatedAction anim) {
         LivingEntity target = this.getTarget();
-        if (target != null) {
-            this.lookAtNow(target, 60.0f, 50.0f);
-        }
         this.getNavigation().stop();
         BiConsumer<AnimatedAction, EntityDeadTree> handler = ATTACK_HANDLER.get(anim.getID());
         if (handler != null)

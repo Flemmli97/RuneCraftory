@@ -6,10 +6,14 @@ import io.github.flemmli97.runecraftory.common.entities.MobAttackExt;
 import io.github.flemmli97.runecraftory.common.entities.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.entities.ai.RestrictedWaterAvoidingStrollGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
+import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
+import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
+import io.github.flemmli97.runecraftory.common.network.S2CMobUpdate;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
@@ -22,9 +26,7 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTarget
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.TimedWrappedRunner;
 import io.github.flemmli97.tenshilib.common.utils.MathUtils;
 import io.github.flemmli97.tenshilib.common.utils.OrientedBoundingBox;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.util.random.WeightedEntry;
@@ -43,8 +45,6 @@ import java.util.List;
 import java.util.function.BiConsumer;
 
 public class EntityChimera extends BossMonster implements MobAttackExt {
-
-    private static final EntityDataAccessor<Float> LOCKED_YAW = SynchedEntityData.defineId(EntityChimera.class, EntityDataSerializers.FLOAT);
 
     public static final AnimatedAction LEAP = new AnimatedAction(1.36, "leap");
     public static final AnimatedAction FIRE_TAIL_BUBBLE = new AnimatedAction(1.48, 0.44, "tail_beam");
@@ -84,9 +84,13 @@ public class EntityChimera extends BossMonster implements MobAttackExt {
             if ((anim.getTick() < anim.getLength() - 3 && anim.getTick() > anim.getAttackTime())) {
                 if (entity.hitEntity == null)
                     entity.hitEntity = new ArrayList<>();
-                if (entity.chargeMotion != null) {
-                    entity.setDeltaMovement(entity.chargeMotion[0], entity.getDeltaMovement().y, entity.chargeMotion[2]);
+
+                if (entity.chargeMotion == null) {
+                    Vec3 dir = EntityUtils.getTargetDirection(entity, EntityAnchorArgument.Anchor.FEET, true)
+                            .scale(0.4);
+                    entity.setChargeMotion(new Vec3(dir.x, 0, dir.z));
                 }
+                entity.setDeltaMovement(entity.chargeMotion.x, entity.getDeltaMovement().y, entity.chargeMotion.z);
                 entity.mobAttack(anim, null, e -> {
                     if (!entity.hitEntity.contains(e) && CombatUtils.mobAttack(entity, e,
                             new CustomDamage.Builder(entity).hurtResistant(5).knock(CustomDamage.KnockBackType.UP))) {
@@ -102,9 +106,6 @@ public class EntityChimera extends BossMonster implements MobAttackExt {
             }
         });
         b.put(BITE, (anim, entity) -> {
-            if (anim.getTick() == 1 && entity.getTarget() != null) {
-                entity.targetPosition = entity.getTarget().position();
-            }
             if (anim.canAttack()) {
                 entity.mobAttack(anim, entity.getTarget(), e -> CombatUtils.mobAttack(entity, e,
                         new CustomDamage.Builder(entity).hurtResistant(5).knockAmount(0)));
@@ -140,23 +141,7 @@ public class EntityChimera extends BossMonster implements MobAttackExt {
             .setAnimationChangeFunc(anim -> {
                 if (!this.level.isClientSide) {
                     if (anim == null) {
-                        this.chargeMotion = null;
-                    } else if (anim.is(LEAP)) {
-                        if (this.isVehicle()) {
-                            this.lockYaw(this.getControllingPassenger().getYHeadRot());
-                            this.setChargeMotion(this.getChargeTo(anim, this.position().add(this.getControllingPassenger().getLookAngle())));
-                        } else if (this.getTarget() != null) {
-                            LivingEntity target = this.getTarget();
-                            this.setChargeMotion(this.getChargeTo(anim, target.position().subtract(this.position())));
-                            this.lookAt(target, 360, 10);
-                            this.lockYaw(this.getYRot());
-                        }
-                    } else if (anim.is(FIRE_TAIL_BUBBLE, WATER_TAIL_BUBBLE, WATER_TAIL_BEAM, FIRE_BREATH, BUBBLE_BEAM)) {
-                        if (this.getTarget() != null) {
-                            this.targetPosition = EntityUtil.getStraightProjectileTarget(this.getEyePosition(), this.getTarget());
-                            this.lookAt(this.getTarget(), 360, 10);
-                            this.lockYaw(this.getYRot());
-                        }
+                        this.setChargeMotion(null);
                     }
                     if (this.getAnimationHandler().isCurrent(LEAP)) {
                         this.hitEntity = null;
@@ -172,7 +157,7 @@ public class EntityChimera extends BossMonster implements MobAttackExt {
             });
 
     protected boolean chargeAttackSuccess;
-    private double[] chargeMotion;
+    private Vec3 chargeMotion;
     protected List<LivingEntity> hitEntity;
 
     public EntityChimera(EntityType<? extends EntityChimera> type, Level world) {
@@ -239,7 +224,7 @@ public class EntityChimera extends BossMonster implements MobAttackExt {
     public OrientedBoundingBox calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
         if (anim.is(LEAP)) {
             return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
-                    .inflate(0.3, 0.1, 0.3 + this.getDeltaMovement().scale(0.3).length()), this.entityData.get(LOCKED_YAW), 0, this.position());
+                    .inflate(0.3, 0.1, 0.3 + this.getDeltaMovement().scale(0.3).length()), this.getYRot(), 0, this.position());
         }
         if (!anim.is(BITE)) {
             return super.calculateAttackAABB(anim, target, grow);
@@ -261,12 +246,14 @@ public class EntityChimera extends BossMonster implements MobAttackExt {
     }
 
     @Override
+    public void setupAttack(AnimatedAction anim) {
+        if (anim.is(FIRE_TAIL_BUBBLE, WATER_TAIL_BUBBLE, WATER_TAIL_BEAM, FIRE_BREATH, BUBBLE_BEAM) && anim.isAtTick(1) && this.getTarget() != null) {
+            this.setTargetPosition(EntityUtil.getStraightProjectileTarget(this.getEyePosition(), this.getTarget()));
+        } else super.setupAttack(anim);
+    }
+
+    @Override
     public void handleAttack(AnimatedAction anim) {
-        LivingEntity target = this.getTarget();
-        if (target != null) {
-            this.getNavigation().stop();
-            this.lookAtNow(target, 60.0f, 50.0f);
-        }
         BiConsumer<AnimatedAction, EntityChimera> handler = ATTACK_HANDLER.get(anim.getID());
         if (handler != null)
             handler.accept(anim, this);
@@ -299,18 +286,11 @@ public class EntityChimera extends BossMonster implements MobAttackExt {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(LOCKED_YAW, 0f);
-    }
-
-    @Override
-    public void tick() {
-        super.tick();
-        if (this.getAnimationHandler().isCurrent(LEAP, FIRE_BREATH, FIRE_TAIL_BUBBLE, BUBBLE_BEAM, WATER_TAIL_BUBBLE, WATER_TAIL_BUBBLE)) {
-            this.setXRot(0);
-            this.setYRot(this.entityData.get(LOCKED_YAW));
+    protected Vec3 directionToLookAt() {
+        if (this.getAnimationHandler().isCurrent(LEAP)) {
+            return this.chargeMotion;
         }
+        return super.directionToLookAt();
     }
 
     @Override
@@ -325,23 +305,14 @@ public class EntityChimera extends BossMonster implements MobAttackExt {
         return new Vec3(0, 22.75 / 16d, -5 / 16d);
     }
 
-    public void setChargeMotion(double[] charge) {
+    public void setChargeMotion(Vec3 charge) {
         this.chargeMotion = charge;
-    }
-
-    public double[] getChargeTo(AnimatedAction anim, Vec3 dir) {
-        int length = anim.getLength() - anim.getAttackTime() - 4;
-        Vec3 vec = dir.normalize().scale(4.5);
-        return new double[]{vec.x / length, this.getY(), vec.z / length};
+        S2CMobUpdate.send(this, SyncableDatas.MOTION_DIR, this.chargeMotion);
     }
 
     @Override
     public AnimationHandler<EntityChimera> getAnimationHandler() {
         return this.animationHandler;
-    }
-
-    public void lockYaw(float yaw) {
-        this.entityData.set(LOCKED_YAW, yaw);
     }
 
     @Override
@@ -356,6 +327,13 @@ public class EntityChimera extends BossMonster implements MobAttackExt {
 
     @Override
     public Vec3 targetPosition(Vec3 from) {
-        return this.targetPosition;
+        return this.getTargetPosition();
+    }
+
+
+    @Override
+    public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
+        super.onUpdate(data);
+        data.runIf(SyncableDatas.MOTION_DIR, motion -> this.chargeMotion = motion);
     }
 }

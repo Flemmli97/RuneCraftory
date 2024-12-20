@@ -92,9 +92,6 @@ public class EntitySkelefang extends BossMonster {
 
     private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntitySkelefang>> ATTACK_HANDLER = createAnimationHandler(b -> {
         b.put(TAIL_SLAM, (anim, entity) -> {
-            if (anim.getTick() == 1 && entity.getTarget() != null) {
-                entity.targetPosition = entity.getTarget().position();
-            }
             if (entity.remainingTailBones() > 10 || entity.isEnraged()) {
                 if (anim.canAttack() || anim.isAtTick(1.2) || anim.isAtTick(1.64)) {
                     entity.mobAttack(anim, entity.getTarget(), entity::doHurtTarget);
@@ -115,9 +112,6 @@ public class EntitySkelefang extends BossMonster {
             }
         });
         b.put(TAIL_SLAP, (anim, entity) -> {
-            if (anim.getTick() == 1 && entity.getTarget() != null) {
-                entity.targetPosition = entity.getTarget().position();
-            }
             if (entity.remainingTailBones() > 10 || entity.isEnraged()) {
                 if (anim.canAttack()) {
                     entity.mobAttack(anim, entity.getTarget(), entity::doHurtTarget);
@@ -620,12 +614,15 @@ public class EntitySkelefang extends BossMonster {
     }
 
     @Override
-    public void handleAttack(AnimatedAction anim) {
-        LivingEntity target = this.getTarget();
-        if (target != null) {
-            this.lookAtNow(target, 60.0f, 50.0f);
-
+    protected Vec3 directionToLookAt() {
+        if (this.getAnimationHandler().isCurrent(CHARGE)) {
+            return null;
         }
+        return super.directionToLookAt();
+    }
+
+    @Override
+    public void handleAttack(AnimatedAction anim) {
         this.getNavigation().stop();
         BiConsumer<AnimatedAction, EntitySkelefang> handler = ATTACK_HANDLER.get(anim.getID());
         if (handler != null)

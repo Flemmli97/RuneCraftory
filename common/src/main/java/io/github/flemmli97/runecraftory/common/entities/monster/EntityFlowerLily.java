@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
@@ -40,7 +41,7 @@ public class EntityFlowerLily extends BaseMonster {
     );
     private static final List<WeightedEntry.Wrapper<IdleAction<EntityFlowerLily>>> IDLE_ACTIONS = List.of(
             WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 2),
-            WeightedEntry.wrap(new IdleAction<>(() -> new StrafingRunner<>(16, 5)), 1)
+            WeightedEntry.wrap(new IdleAction<>(() -> new StrafingRunner<>(16, 1)), 1)
     );
 
     public final AnimatedAttackGoal<EntityFlowerLily> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
@@ -63,27 +64,26 @@ public class EntityFlowerLily extends BaseMonster {
     }
 
     @Override
+    protected Vec3 directionToLookAt() {
+        if (this.getAnimationHandler().isCurrent(LEAP)) {
+            if (this.getDeltaMovement().lengthSqr() > 0.01)
+                return this.getDeltaMovement();
+            return null;
+        }
+        return super.directionToLookAt();
+    }
+
+    @Override
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(LEAP)) {
             this.getNavigation().stop();
-            if (anim.getTick() == 1 && this.getTarget() != null) {
-                this.targetPosition = this.getTarget().position();
-            }
             if (anim.canAttack()) {
-                Vec3 target = this.targetPosition != null || this.getTarget() == null ? this.targetPosition : this.getTarget().position();
-                Vec3 vec32;
-                if (target != null) {
-                    vec32 = new Vec3(target.x - this.getX(), 0.0, target.z - this.getZ()).normalize();
-                } else
-                    vec32 = this.getLookAngle();
-                vec32 = vec32.scale(-2);
-                this.setDeltaMovement(vec32.x, 0.1, vec32.z);
-                this.lookAt(EntityAnchorArgument.Anchor.EYES, this.position().add(vec32.x, 0, vec32.z));
+                Vec3 vec32 = EntityUtils.getTargetDirection(this, EntityAnchorArgument.Anchor.FEET, true)
+                        .scale(-1.8);
+                this.setDeltaMovement(vec32.x, 0.15, vec32.z);
             }
         } else if (anim.is(ATTACK)) {
             this.getNavigation().stop();
-            if (anim.getTick() == 1 && this.getTarget() != null)
-                this.lookAt(this.getTarget(), 360, 90);
             if (anim.canAttack()) {
                 this.rangedAttackSpell().use(this);
             }

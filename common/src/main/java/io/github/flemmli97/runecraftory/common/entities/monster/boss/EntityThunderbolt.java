@@ -5,9 +5,13 @@ import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.entities.ai.RestrictedWaterAvoidingStrollGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
+import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
+import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
+import io.github.flemmli97.runecraftory.common.network.S2CMobUpdate;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
@@ -21,11 +25,9 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.StrafingRunn
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.TimedWrappedRunner;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
 import io.github.flemmli97.tenshilib.common.utils.OrientedBoundingBox;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.random.WeightedEntry;
@@ -46,8 +48,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
 
 public class EntityThunderbolt extends BossMonster {
-
-    private static final EntityDataAccessor<Float> LOCKED_YAW = SynchedEntityData.defineId(EntityThunderbolt.class, EntityDataSerializers.FLOAT);
 
     public static final AnimatedAction BACK_KICK = new AnimatedAction(0.64, 0.32, "back_kick");
     public static final AnimatedAction LASER_X5 = new AnimatedAction(1.44, 1.2, "laser_x5");
@@ -73,9 +73,6 @@ public class EntityThunderbolt extends BossMonster {
     private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntityThunderbolt>> ATTACK_HANDLER = createAnimationHandler(b -> {
         BiConsumer<AnimatedAction, EntityThunderbolt> kick = (anim, entity) -> {
             LivingEntity target = entity.getTarget();
-            if (anim.getTick() == 1 && entity.getTarget() != null) {
-                entity.targetPosition = entity.getTarget().position();
-            }
             if (anim.canAttack()) {
                 entity.mobAttack(anim, target, e -> {
                     if (entity.doHurtTarget(e)) {
@@ -90,9 +87,6 @@ public class EntityThunderbolt extends BossMonster {
         b.put(BACK_KICK_HORN, kick);
         b.put(HORN_ATTACK, (anim, entity) -> {
             LivingEntity target = entity.getTarget();
-            if (anim.getTick() == 1 && entity.getTarget() != null) {
-                entity.targetPosition = entity.getTarget().position();
-            }
             if (anim.canAttack()) {
                 AtomicBoolean bool = new AtomicBoolean(false);
                 entity.mobAttack(anim, target, e -> {
@@ -137,10 +131,12 @@ public class EntityThunderbolt extends BossMonster {
         b.put(LASER_KICK_2, bigLaser);
         b.put(LASER_KICK_3, bigLaser);
         BiConsumer<AnimatedAction, EntityThunderbolt> charge = (anim, entity) -> {
+            if (entity.chargeMotion == null) {
+                entity.setChargeDirection(EntityUtils.getTargetDirection(entity, EntityAnchorArgument.Anchor.FEET, true)
+                        .scale(2));
+            }
             if (anim.canAttack()) {
-                if (entity.chargeMotion != null) {
-                    entity.setDeltaMovement(entity.chargeMotion.x(), 0.2, entity.chargeMotion.z());
-                }
+                entity.setDeltaMovement(entity.chargeMotion.x(), 0.2, entity.chargeMotion.z());
             }
             if ((anim.getTick() < anim.getLength() - 6 && anim.getTick() > anim.getAttackTime()) && !entity.chargeAttackSuccess) {
                 entity.mobAttack(anim, null, e -> {
@@ -205,20 +201,6 @@ public class EntityThunderbolt extends BossMonster {
                                 this.getAnimationHandler().setAnimation(chainAnim);
                                 return true;
                             }
-                        }
-                    } else if (anim.is(CHARGE, CHARGE_2, CHARGE_3)) {
-                        if (this.isVehicle()) {
-                            this.lockYaw(this.getControllingPassenger().getYHeadRot());
-                            Vec3 dir = this.getControllingPassenger().getLookAngle();
-                            dir = new Vec3(dir.x(), 0, dir.z()).normalize().scale(2);
-                            this.chargeMotion = dir;
-                        } else if (this.getTarget() != null) {
-                            LivingEntity target = this.getTarget();
-                            Vec3 dir = target.position().subtract(this.position());
-                            dir = new Vec3(dir.x(), 0, dir.z()).normalize().scale(2);
-                            this.chargeMotion = dir;
-                            this.lookAt(target, 360, 10);
-                            this.lockYaw(this.getYRot());
                         }
                     }
                     return false;
@@ -291,11 +273,6 @@ public class EntityThunderbolt extends BossMonster {
 
     @Override
     public void handleAttack(AnimatedAction anim) {
-        LivingEntity target = this.getTarget();
-        if (target != null) {
-            this.getNavigation().stop();
-            this.lookAtNow(target, 60.0f, 50.0f);
-        }
         BiConsumer<AnimatedAction, EntityThunderbolt> handler = ATTACK_HANDLER.get(anim.getID());
         if (handler != null)
             handler.accept(anim, this);
@@ -308,7 +285,7 @@ public class EntityThunderbolt extends BossMonster {
                     .inflate(1.7, -0.4, 1.7), this.getYRot(), 0, this.position());
         } else if (anim.is(CHARGE, CHARGE_2, CHARGE_3)) {
             return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
-                    .inflate(grow + 1), this.entityData.get(LOCKED_YAW), 0, this.position());
+                    .inflate(grow + 1), this.getYRot(), 0, this.position());
         } else
             return super.calculateAttackAABB(anim, target, grow);
     }
@@ -349,12 +326,6 @@ public class EntityThunderbolt extends BossMonster {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(LOCKED_YAW, 0f);
-    }
-
-    @Override
     public void tick() {
         super.tick();
         if (!this.level.isClientSide && this.getHealth() > 0 && this.getAnimationHandler().isCurrent(DEFEAT) && !this.feintedDeath && !this.isTamed()) {
@@ -363,10 +334,6 @@ public class EntityThunderbolt extends BossMonster {
                 this.feintedDeath = true;
                 this.getAnimationHandler().setAnimation(FEINT);
             }
-        }
-        if (this.getAnimationHandler().isCurrent(CHARGE, CHARGE_2, CHARGE_3)) {
-            this.setXRot(0);
-            this.setYRot(this.entityData.get(LOCKED_YAW));
         }
         if (this.getAnimationHandler().isCurrent(FEINT, DEFEAT) && !this.isTamed()) {
             Vec3 delta = this.getDeltaMovement();
@@ -405,6 +372,14 @@ public class EntityThunderbolt extends BossMonster {
                 }
             }
         }
+    }
+
+    @Override
+    protected Vec3 directionToLookAt() {
+        if (this.getAnimationHandler().isCurrent(CHARGE, CHARGE_2, CHARGE_3)) {
+            return this.chargeMotion;
+        }
+        return super.directionToLookAt();
     }
 
     @Override
@@ -508,10 +483,6 @@ public class EntityThunderbolt extends BossMonster {
         };
     }
 
-    public void lockYaw(float yaw) {
-        this.entityData.set(LOCKED_YAW, yaw);
-    }
-
     @Override
     public void playInteractionAnimation() {
         this.getAnimationHandler().setAnimation(INTERACT);
@@ -519,5 +490,16 @@ public class EntityThunderbolt extends BossMonster {
 
     @Override
     public void playAngrySound() {
+    }
+
+    protected void setChargeDirection(Vec3 moveDirection) {
+        this.chargeMotion = moveDirection;
+        S2CMobUpdate.send(this, SyncableDatas.MOTION_DIR, this.chargeMotion);
+    }
+
+    @Override
+    public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
+        super.onUpdate(data);
+        data.runIf(SyncableDatas.MOTION_DIR, motion -> this.chargeMotion = motion);
     }
 }

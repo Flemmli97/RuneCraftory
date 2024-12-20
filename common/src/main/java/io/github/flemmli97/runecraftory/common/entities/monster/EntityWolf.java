@@ -106,10 +106,6 @@ public class EntityWolf extends LeapingMonster {
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(MELEE)) {
             this.getNavigation().stop();
-            if (anim.getTick() == 1 && this.getTarget() != null) {
-                this.lookAtNow(this.getTarget(), 360, 90);
-                this.targetPosition = this.getTarget().position();
-            }
             if (anim.isAtTick(0.52) || anim.isAtTick(0.84) || anim.isAtTick(1.16) || anim.isAtTick(1.52)) {
                 this.mobAttack(anim, this.getTarget(), target -> wolfAttack(this, target));
             }

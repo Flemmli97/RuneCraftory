@@ -77,8 +77,6 @@ public class EntityGoblinGangster extends EntityGoblin {
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(DOUBLE_THROW)) {
             this.getNavigation().stop();
-            if (anim.getTick() == 1 && this.getTarget() != null)
-                this.lookAt(this.getTarget(), 360, 90);
             if (anim.canAttack() || anim.isAtTick(0.8)) {
                 if (this.getTarget() != null && this.getSensing().hasLineOfSight(this.getTarget())) {
                     ModSpells.THROW_HAND_ITEM.get().use(this);
@@ -87,10 +85,6 @@ public class EntityGoblinGangster extends EntityGoblin {
             }
         } else if (anim.is(DOUBLE_STAB)) {
             this.getNavigation().stop();
-            if (anim.getTick() == 1 && this.getTarget() != null) {
-                this.lookAtNow(this.getTarget(), 360, 90);
-                this.targetPosition = this.getTarget().position();
-            }
             if (anim.canAttack() || anim.isAtTick(0.72)) {
                 this.mobAttack(anim, this.getTarget(), this::quickAttack);
             }
