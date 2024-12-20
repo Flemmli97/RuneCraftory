@@ -16,7 +16,6 @@ import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
@@ -166,7 +165,7 @@ public class EntitySkelefang extends BossMonster {
             }
             if (entity.tickCount % 5 == 0) {
                 entity.playSound(ModSounds.ENTITY_GENERIC_HEAVY_CHARGE.get(), 1, (entity.random.nextFloat() - entity.random.nextFloat()) * 0.2f + 1.0f);
-                Platform.INSTANCE.sendToTrackingAndSelf(new S2CScreenShake(10, 1), entity);
+                S2CScreenShake.sendAround(entity, 14, 10, 1);
             }
             entity.mobAttack(anim, null, e -> {
                 if (!entity.hitEntity.contains(e) && CombatUtils.mobAttack(entity, e,
@@ -188,7 +187,7 @@ public class EntitySkelefang extends BossMonster {
         b.put(ROAR, (anim, entity) -> {
             if (anim.canAttack()) {
                 entity.playSound(ModSounds.ENTITY_SKELEFANG_ROAR.get(), 1, (entity.random.nextFloat() - entity.random.nextFloat()) * 0.2f + 1.0f);
-                Platform.INSTANCE.sendToTrackingAndSelf(new S2CScreenShake(40, 2), entity);
+                S2CScreenShake.sendAround(entity, 16, 40, 2);
             }
         });
     });

@@ -8,7 +8,6 @@ import io.github.flemmli97.runecraftory.common.entities.ai.pathing.FloatingFlyNa
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
 import io.github.flemmli97.runecraftory.common.network.S2CMobUpdate;
-import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
@@ -65,7 +64,6 @@ public class EntityWeagle extends BaseMonster {
     protected List<LivingEntity> hitEntity;
     private final AnimationHandler<EntityWeagle> animationHandler = new AnimationHandler<>(this, ANIMS)
             .setAnimationChangeCons(anim -> {
-                S2CScreenShake
                 this.hitEntity = null;
                 this.setSwoopMotion(null);
             });

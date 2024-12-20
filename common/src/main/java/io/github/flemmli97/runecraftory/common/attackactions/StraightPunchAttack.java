@@ -7,7 +7,6 @@ import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -28,7 +27,7 @@ public class StraightPunchAttack extends AttackAction {
         if (anim.canAttack()) {
             entity.playSound(ModSounds.SPELL_STRAIGHT_PUNCH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
             if (!entity.level.isClientSide) {
-                Platform.INSTANCE.sendToTrackingAndSelf(new S2CScreenShake(8, 3), entity);
+                S2CScreenShake.sendAround(entity, 8, 8, 3);
                 CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets(entity.getLookAngle(), Math.min(5, CombatUtils.getAOE(entity, stack, 0)), 1))
                         .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
                         .doOnSuccess(e -> CombatUtils.knockBackEntity(entity, e, 2.5f))

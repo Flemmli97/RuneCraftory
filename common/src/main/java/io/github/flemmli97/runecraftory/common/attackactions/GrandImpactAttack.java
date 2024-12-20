@@ -8,7 +8,6 @@ import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
@@ -27,7 +26,7 @@ public class GrandImpactAttack extends AttackAction {
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
         if (!entity.level.isClientSide && (anim.isAtTick(0.4) || anim.isAtTick(1.08))) {
             float reach = (float) entity.getAttributeValue(ModAttributes.ATTACK_RANGE.get());
-            Platform.INSTANCE.sendToTrackingAndSelf(new S2CScreenShake(6, 3), entity);
+            S2CScreenShake.sendAround(entity, 12, 6, 3);
             entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, entity.getSoundSource(), 1.0f, 1.0f);
             CombatUtils.applyTempAttribute(entity, Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack));
             ItemAxeBase.performRightClickAction(stack, entity, reach + 1, 0.1f);

@@ -5,7 +5,6 @@ import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActio
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
@@ -70,7 +69,7 @@ public class EntityTroll extends BaseMonster {
     public void mobAttack(AnimatedAction anim, LivingEntity target, Consumer<LivingEntity> cons) {
         super.mobAttack(anim, target, cons);
         if (anim.is(SLAM)) {
-            Platform.INSTANCE.sendToTrackingAndSelf(new S2CScreenShake(10, 2), this);
+            S2CScreenShake.sendAround(this, 10, 10, 2);
             this.level.playSound(null, this.blockPosition(), SoundEvents.GENERIC_EXPLODE, this.getSoundSource(), 1.0f, 1.0f);
         }
     }

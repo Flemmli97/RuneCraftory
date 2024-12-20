@@ -16,7 +16,6 @@ import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
@@ -124,7 +123,7 @@ public class EntityGrimoire extends BossMonster {
             if (anim.canAttack()) {
                 CustomDamage.Builder source = new CustomDamage.Builder(entity).noKnockback().element(EnumElement.WIND).hurtResistant(5);
                 entity.mobAttack(anim, entity.getTarget(), e -> CombatUtils.mobAttack(entity, e, source));
-                Platform.INSTANCE.sendToTrackingAndSelf(new S2CScreenShake(4, 3), entity);
+                S2CScreenShake.sendAround(entity, 16, 4, 3);
                 entity.level.playSound(null, entity.blockPosition(), SoundEvents.GENERIC_EXPLODE, entity.getSoundSource(), 1.0f, 0.9f);
                 entity.level.broadcastEntityEvent(entity, (byte) 66);
             }

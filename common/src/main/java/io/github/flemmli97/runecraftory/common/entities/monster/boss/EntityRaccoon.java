@@ -10,7 +10,6 @@ import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.CustomDataSerializers;
@@ -141,7 +140,7 @@ public class EntityRaccoon extends BossMonster {
                 CustomDamage.Builder source = new CustomDamage.Builder(entity).noKnockback().element(EnumElement.EARTH).hurtResistant(5)
                         .withChangedAttribute(ModAttributes.STUN.get(), 80);
                 entity.mobAttack(anim, entity.getTarget(), e -> CombatUtils.mobAttack(entity, e, source));
-                Platform.INSTANCE.sendToTrackingAndSelf(new S2CScreenShake(8, 3), entity);
+                S2CScreenShake.sendAround(entity, 12, 8, 3);
                 entity.level.playSound(null, entity.blockPosition(), SoundEvents.GENERIC_EXPLODE, entity.getSoundSource(), 1.0f, 0.9f);
             }
         });
@@ -151,7 +150,7 @@ public class EntityRaccoon extends BossMonster {
                 CustomDamage.Builder source = new CustomDamage.Builder(entity).noKnockback().element(EnumElement.EARTH).hurtResistant(5)
                         .withChangedAttribute(ModAttributes.STUN.get(), 50);
                 entity.mobAttack(anim, entity.getTarget(), e -> CombatUtils.mobAttack(entity, e, source));
-                Platform.INSTANCE.sendToTrackingAndSelf(new S2CScreenShake(8, 3), entity);
+                S2CScreenShake.sendAround(entity, 8, 8, 3);
                 entity.level.playSound(null, entity.blockPosition(), SoundEvents.GENERIC_EXPLODE, entity.getSoundSource(), 1.0f, 0.9f);
             }
         });

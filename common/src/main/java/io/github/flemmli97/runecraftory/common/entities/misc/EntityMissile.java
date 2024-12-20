@@ -5,7 +5,6 @@ import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -88,7 +87,7 @@ public class EntityMissile extends BaseProjectile {
         }
         if (CombatUtils.damageWithFaintAndCrit(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).magic().noKnockback().hurtResistant(10).element(EnumElement.LIGHT).projectile(), CombatUtils.getAttributeValue(this.getOwner(), Attributes.ATTACK_DAMAGE) * this.damageMultiplier, null)) {
             this.playSound(SoundEvents.GENERIC_EXPLODE, 1, (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.0f);
-            Platform.INSTANCE.sendToTrackingAndSelf(new S2CScreenShake(4, 2), this);
+            S2CScreenShake.sendAround(this, 10, 4, 2);
             this.discard();
             return true;
         }
@@ -99,7 +98,7 @@ public class EntityMissile extends BaseProjectile {
     @Override
     protected void onBlockHit(BlockHitResult blockRayTraceResult) {
         this.playSound(SoundEvents.GENERIC_EXPLODE, 1, (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.0f);
-        Platform.INSTANCE.sendToTrackingAndSelf(new S2CScreenShake(4, 2), this);
+        S2CScreenShake.sendAround(this, 10, 4, 2);
         this.discard();
     }
 }

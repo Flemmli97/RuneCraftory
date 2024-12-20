@@ -8,7 +8,6 @@ import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
@@ -108,7 +107,7 @@ public class EntityMinotaur extends ChargingMonster {
             }
         } else {
             if (anim.is(SWING) && anim.canAttack()) {
-                Platform.INSTANCE.sendToTrackingAndSelf(new S2CScreenShake(5, 3), this);
+                S2CScreenShake.sendAround(this, 10, 5, 3);
                 this.level.playSound(null, this.blockPosition(), SoundEvents.GENERIC_EXPLODE, this.getSoundSource(), 1.0f, 0.9f);
             }
             super.handleAttack(anim);

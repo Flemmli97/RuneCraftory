@@ -320,6 +320,11 @@ public class EntityHandonetta extends BossMonster {
     }
 
     @Override
+    public void travel(Vec3 vec) {
+        this.handleNoGravTravel(vec);
+    }
+
+    @Override
     public AnimationHandler<EntityHandonetta> getAnimationHandler() {
         return this.animationHandler;
     }
@@ -332,11 +337,6 @@ public class EntityHandonetta extends BossMonster {
     @Override
     public void playInteractionAnimation() {
         this.getAnimationHandler().setAnimation(INTERACT);
-    }
-
-    @Override
-    public boolean isNoGravity() {
-        return this.isAlive() && super.isNoGravity();
     }
 
     protected void setMoveDirection(Vec3 moveDirection) {

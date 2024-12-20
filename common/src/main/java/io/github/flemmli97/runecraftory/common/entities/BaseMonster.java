@@ -1283,7 +1283,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     @Override
     public boolean isNoGravity() {
-        return super.isNoGravity() && !this.playDeath();
+        return super.isNoGravity() && !this.playDeath() && this.isAlive();
     }
 
     @Override
