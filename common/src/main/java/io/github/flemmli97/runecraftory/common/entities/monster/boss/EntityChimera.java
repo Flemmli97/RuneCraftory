@@ -282,7 +282,7 @@ public class EntityChimera extends BossMonster implements MobAttackExt {
 
     @Override
     public double ridingSpeedModifier() {
-        return 1.1;
+        return 1.5;
     }
 
     @Override

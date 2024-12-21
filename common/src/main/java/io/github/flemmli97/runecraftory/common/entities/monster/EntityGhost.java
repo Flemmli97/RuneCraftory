@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
+import io.github.flemmli97.runecraftory.common.entities.ai.AirWanderGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.NearestTargetNoLoS;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.ChargeAction;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
@@ -75,6 +76,9 @@ public class EntityGhost extends ChargingMonster {
 
     public EntityGhost(EntityType<? extends EntityGhost> type, Level world) {
         super(type, world);
+        this.goalSelector.removeGoal(this.wander);
+        this.goalSelector.addGoal(6, this.wander = new AirWanderGoal(this));
+        this.goalSelector.removeGoal(this.swimGoal);
         this.goalSelector.addGoal(2, this.attack);
         this.setNoGravity(true);
         this.noPhysics = true;
@@ -105,7 +109,7 @@ public class EntityGhost extends ChargingMonster {
     protected void applyAttributes() {
         super.applyAttributes();
         this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(32);
-        this.getAttribute(Attributes.FLYING_SPEED).setBaseValue(0.4);
+        this.getAttribute(Attributes.FLYING_SPEED).setBaseValue(0.37);
         this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
     }
 
@@ -206,15 +210,15 @@ public class EntityGhost extends ChargingMonster {
 
     @Override
     public void travel(Vec3 vec) {
-        if (this.isEffectiveAi() && this.isVehicle() && this.canBeControlledByRider() && this.getControllingPassenger() instanceof LivingEntity entity) {
+        if (this.getFirstPassenger() instanceof LivingEntity entity) {
             this.noPhysics = entity.noPhysics;
-            this.handleNoGravTravel(vec);
         } else {
             this.noPhysics = !this.playDeath();
             if (this.getY() < this.level.getMinBuildHeight() + 1)
                 vec = new Vec3(vec.x, 0.006, vec.z);
-            super.travel(vec);
         }
+        this.handleFreeTravel(vec);
+
     }
 
     @Override

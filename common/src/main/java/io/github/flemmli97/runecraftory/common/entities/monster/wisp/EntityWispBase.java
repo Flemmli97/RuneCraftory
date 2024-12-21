@@ -74,6 +74,7 @@ public abstract class EntityWispBase extends BaseMonster {
     public EntityWispBase(EntityType<? extends EntityWispBase> type, Level world) {
         super(type, world);
         this.goalSelector.addGoal(2, this.attack);
+        this.goalSelector.removeGoal(this.swimGoal);
         this.setNoGravity(true);
         this.noPhysics = true;
         this.moveControl = new FreeMoveControl(this);
@@ -94,7 +95,7 @@ public abstract class EntityWispBase extends BaseMonster {
     protected void applyAttributes() {
         super.applyAttributes();
         this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(32);
-        this.getAttribute(Attributes.FLYING_SPEED).setBaseValue(0.12);
+        this.getAttribute(Attributes.FLYING_SPEED).setBaseValue(0.2);
         this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
     }
 
@@ -184,13 +185,14 @@ public abstract class EntityWispBase extends BaseMonster {
 
     @Override
     public void travel(Vec3 vec) {
-        if (this.isEffectiveAi() && this.isVehicle() && this.canBeControlledByRider() && this.getControllingPassenger() instanceof LivingEntity entity) {
+        if (this.getFirstPassenger() instanceof LivingEntity entity) {
             this.noPhysics = entity.noPhysics;
-            this.handleNoGravTravel(vec);
         } else {
             this.noPhysics = !this.playDeath();
-            super.travel(vec);
+            if (this.getY() < this.level.getMinBuildHeight() + 1)
+                vec = new Vec3(vec.x, 0.006, vec.z);
         }
+        this.handleFreeTravel(vec);
     }
 
     private void teleportTowards(Entity entity) {

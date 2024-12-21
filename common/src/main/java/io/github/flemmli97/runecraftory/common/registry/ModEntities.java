@@ -784,7 +784,7 @@ public class ModEntities {
                     .putAttributes(ModAttributes.CRIT, 1)
                     .putAttributes(ModAttributes.RES_CRIT, 5)
                     .putAttributes(ModAttributes.RES_FIRE, -15)
-                    .xp(135).tamingChance(0.05f).setRideable().setMinLevel(5),
+                    .xp(135).tamingChance(0.05f).setRideable().setMinLevel(5).setFlying(),
             new GateSpawnData.Builder(0, 20).addToBiomeTag(55, RunecraftoryTags.IS_PLAINS, BiomeTags.IS_FOREST));
     public static final RegistryEntrySupplier<EntityType<EntityWolf>> SILVER_WOLF = regMonster(EntityType.Builder.of(EntityWolf::new, MobCategory.MONSTER).sized(0.8f, 1.15f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "silver_wolf"),
             0x9bb9c3, 0x436ea1,
@@ -815,7 +815,7 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_CRIT, 5)
                     .putAttributes(ModAttributes.RES_FIRE, -15)
                     .putAttributes(ModAttributes.RES_WIND, 15)
-                    .xp(35).tamingChance(0.05f).setRideable().setMinLevel(10)
+                    .xp(35).tamingChance(0.05f).setRideable().setMinLevel(10).setFlying()
                     .withRideActionCosts(new EntityRideActionCosts.Builder(0.5f, true).secondCost(0, false)),
             new GateSpawnData.Builder(0, 20).addToBiomeTag(70, RunecraftoryTags.IS_LUSH, BiomeTags.IS_FOREST, RunecraftoryTags.IS_MAGICAL));
     public static final RegistryEntrySupplier<EntityType<EntityPalmCat>> PALM_CAT = regMonster(EntityType.Builder.of(EntityPalmCat::new, MobCategory.MONSTER).sized(0.6f, 1.9f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "palm_cat"),
@@ -924,7 +924,7 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_WIND, -5)
                     .putAttributes(ModAttributes.RES_DARK, 10)
                     .putAttributes(ModAttributes.RES_LIGHT, 10)
-                    .xp(100).tamingChance(0.05f).setRideable()
+                    .xp(100).tamingChance(0.05f).setRideable().setFlying()
                     .withRideActionCosts(new EntityRideActionCosts.Builder().secondCost(0.5f, true)),
             new GateSpawnData.Builder(0, 40).addToBiomeTag(75, RunecraftoryTags.IS_HOT, RunecraftoryTags.IS_DEAD, RunecraftoryTags.IS_WASTELAND, RunecraftoryTags.IS_MAGICAL));
     public static final RegistryEntrySupplier<EntityType<EntityMage>> LITTLE_EMPEROR = regMonster(EntityType.Builder.of(EntityMage::new, MobCategory.MONSTER).sized(0.6f, 1.7f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "little_emperor"),

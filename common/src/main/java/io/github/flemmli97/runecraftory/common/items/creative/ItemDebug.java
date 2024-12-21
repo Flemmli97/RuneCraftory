@@ -12,6 +12,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -70,6 +71,8 @@ public class ItemDebug extends Item {
     @Override
     public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity interactionTarget, InteractionHand usedHand) {
         if (player.level instanceof ServerLevel serverLevel) {
+            if (interactionTarget instanceof Mob mob)
+                mob.travel(new Vec3(0, 0, 5));
             return InteractionResult.SUCCESS;
         }
         return super.interactLivingEntity(stack, player, interactionTarget, usedHand);

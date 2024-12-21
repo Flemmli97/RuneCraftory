@@ -82,6 +82,7 @@ public class EntityWeagle extends BaseMonster {
     @Override
     protected void applyAttributes() {
         super.applyAttributes();
+        this.getAttribute(Attributes.FLYING_SPEED).setBaseValue(0.4);
         this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(32);
     }
 
@@ -97,11 +98,7 @@ public class EntityWeagle extends BaseMonster {
 
     @Override
     public void travel(Vec3 vec) {
-        if (this.isEffectiveAi() && this.isVehicle() && this.canBeControlledByRider() && this.getControllingPassenger() instanceof LivingEntity) {
-            this.handleNoGravTravel(vec);
-        } else {
-            super.travel(vec);
-        }
+        super.handleFreeTravel(vec);
     }
 
     @Override

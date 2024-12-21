@@ -22,7 +22,6 @@ import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
@@ -67,7 +66,7 @@ public class EntityHornet extends BaseMonster {
     protected void applyAttributes() {
         super.applyAttributes();
         this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(32);
-        this.getAttribute(Attributes.FLYING_SPEED).setBaseValue(0.5f);
+        this.getAttribute(Attributes.FLYING_SPEED).setBaseValue(0.33);
     }
 
     @Override
@@ -82,11 +81,7 @@ public class EntityHornet extends BaseMonster {
 
     @Override
     public void travel(Vec3 vec) {
-        if (this.isEffectiveAi() && this.isVehicle() && this.canBeControlledByRider() && this.getControllingPassenger() instanceof LivingEntity) {
-            this.handleNoGravTravel(vec);
-        } else {
-            super.travel(vec);
-        }
+        this.handleFreeTravel(vec);
     }
 
     @Override

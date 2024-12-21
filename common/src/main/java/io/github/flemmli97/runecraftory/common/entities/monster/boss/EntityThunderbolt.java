@@ -322,7 +322,7 @@ public class EntityThunderbolt extends BossMonster {
 
     @Override
     public double ridingSpeedModifier() {
-        return 1.1;
+        return 1.5;
     }
 
     @Override

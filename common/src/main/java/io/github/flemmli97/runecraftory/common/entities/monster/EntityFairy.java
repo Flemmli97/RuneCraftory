@@ -83,7 +83,7 @@ public class EntityFairy extends BaseMonster implements HealingPredicateEntity {
     protected void applyAttributes() {
         super.applyAttributes();
         this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(32);
-        this.getAttribute(Attributes.FLYING_SPEED).setBaseValue(0.35);
+        this.getAttribute(Attributes.FLYING_SPEED).setBaseValue(0.3);
     }
 
     @Override

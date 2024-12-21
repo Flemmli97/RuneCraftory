@@ -27,6 +27,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
@@ -72,6 +73,7 @@ public class EntityVeggieGhost extends BaseMonster {
         super(type, world);
         this.goalSelector.removeGoal(this.wander);
         this.goalSelector.addGoal(6, this.wander = new AirWanderGoal(this));
+        this.goalSelector.removeGoal(this.swimGoal);
         this.goalSelector.addGoal(2, this.attack);
         this.noPhysics = true;
         this.moveControl = new FreeMoveControl(this);
@@ -82,7 +84,7 @@ public class EntityVeggieGhost extends BaseMonster {
     protected void applyAttributes() {
         super.applyAttributes();
         this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(32);
-        this.getAttribute(Attributes.FLYING_SPEED).setBaseValue(0.5f);
+        this.getAttribute(Attributes.FLYING_SPEED).setBaseValue(0.35);
     }
 
     @Override
@@ -97,15 +99,14 @@ public class EntityVeggieGhost extends BaseMonster {
 
     @Override
     public void travel(Vec3 vec) {
-        if (this.isEffectiveAi() && this.isVehicle() && this.canBeControlledByRider() && this.getControllingPassenger() instanceof LivingEntity entity) {
+        if (this.getFirstPassenger() instanceof LivingEntity entity) {
             this.noPhysics = entity.noPhysics;
-            this.handleNoGravTravel(vec);
         } else {
             this.noPhysics = !this.playDeath();
             if (this.getY() < this.level.getMinBuildHeight() + 1)
                 vec = new Vec3(vec.x, 0.006, vec.z);
-            super.travel(vec);
         }
+        this.handleFreeTravel(vec);
     }
 
     @Override
@@ -228,5 +229,10 @@ public class EntityVeggieGhost extends BaseMonster {
     @Override
     public Vec3 passengerOffset(Entity passenger) {
         return new Vec3(0, 12 / 16d, -4 / 16d);
+    }
+
+    @Override
+    public MobType getMobType() {
+        return MobType.UNDEAD;
     }
 }

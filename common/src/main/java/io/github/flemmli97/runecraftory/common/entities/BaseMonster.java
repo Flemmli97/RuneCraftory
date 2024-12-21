@@ -1363,120 +1363,98 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             return;
         }
         if (this.canBeControlledByRider() && this.getControllingPassenger() instanceof Player player) {
-            if (!this.level.isClientSide) {
-                if (this.adjustRotFromRider(player)) {
-                    this.setYRot(this.rotateClamped(this.getYRot(), player.getYRot(), this.getHeadRotSpeed() * 2));
-                    this.setXRot(this.rotateClamped(this.getXRot(), player.getXRot(), this.getMaxHeadXRot()));
-                }
-                this.yBodyRot = this.getYRot();
-                this.yHeadRot = this.yBodyRot;
-            }
-            double strafing = player.xxa * 0.5f;
-            double forward = player.zza;
-            if (forward <= 0.0f) {
-                forward *= 0.25f;
-            }
-            if (this.getAnimationHandler().hasAnimation()) {
-                strafing = 0;
-                forward = 0;
-            }
-
-            if (this.doJumping) {
-                if (this.onGround && !this.isFlyingEntity()) {
-                    this.hasImpulse = true;
-                    this.jumpFromGround();
-                    if (forward > 0.0f) {
-                        float f = Mth.sin(this.getYRot() * 0.017453292f);
-                        float f2 = Mth.cos(this.getYRot() * 0.017453292f);
-                        this.setDeltaMovement(this.getDeltaMovement().add(-0.4f * f, 0, 0.4f * f2));
-                    }
-                } else if (this.isFlyingEntity()) {
-                    float speed = this.getSpeed() * 0.5f;
-                    double motionY = Math.min(this.getDeltaMovement().y + speed, this.maxAscensionSpeed());
-                    this.setDeltaMovement(new Vec3(this.getDeltaMovement().x, motionY, this.getDeltaMovement().z));
-                    if (forward > 0.0f) {
-                        float f = Mth.sin(this.getYRot() * 0.017453292f);
-                        float f2 = Mth.cos(this.getYRot() * 0.017453292f);
-                        speed *= 0.1;
-                        this.setDeltaMovement(this.getDeltaMovement().add(-speed * f, 0, speed * f2));
-                    }
-                }
-            }
-            this.flyingSpeed = this.getSpeed() * 0.1f;
-            if (this.isControlledByLocalInstance()) {
-                this.setSpeed((float) this.getAttributeValue(Attributes.MOVEMENT_SPEED) * 0.7f);
-                MoveType type = forward > 0 ? MoveType.RUN : (forward != 0 || strafing != 0 ? MoveType.WALK : MoveType.NONE);
-                this.setMovingFlag(type);
-                this.setSprinting(type == MoveType.RUN);
-                forward *= this.ridingSpeedModifier();
-                strafing *= this.ridingSpeedModifier();
-                super.travel(new Vec3(strafing, vec.y, forward));
-            } else if (player instanceof Player) {
-                this.setDeltaMovement(Vec3.ZERO);
-            }
-            if (this.onGround || this.isFlyingEntity()) {
-                this.doJumping = false;
-            }
-            this.calculateEntityAnimation(this, false);
+            this.handlePlayerInput(player, this.isNoGravity(), this::handleLandTravel);
         } else {
             this.handleLandTravel(vec);
         }
     }
 
     public void handleLandTravel(Vec3 vec) {
-        this.flyingSpeed = 0.02f;
+        this.flyingSpeed = 0.02f; // Default Val
         super.travel(vec);
     }
 
-    public void handleNoGravTravel(Vec3 vec) {
-        if (this.isVehicle()) {
-            if (this.canBeControlledByRider() && this.getControllingPassenger() instanceof Player player
-                    && !this.getAnimationHandler().hasAnimation()) {
-                if (!this.level.isClientSide) {
-                    if (this.adjustRotFromRider(player)) {
-                        this.setYRot(this.rotateClamped(this.getYRot(), player.getYRot(), this.getHeadRotSpeed() * 2));
-                        this.setXRot(this.rotateClamped(this.getXRot(), player.getXRot(), this.getMaxHeadXRot()));
-                    }
-                    this.yBodyRot = this.getYRot();
-                    this.yHeadRot = this.yBodyRot;
+    public void handleFreeTravel(Vec3 vec) {
+        if (this.canBeControlledByRider() && this.getControllingPassenger() instanceof Player player) {
+            this.handlePlayerInput(player, true, this::freeTravel);
+        } else {
+            this.freeTravel(vec);
+        }
+    }
+
+    private void freeTravel(Vec3 vec) {
+        this.moveRelative(this.getSpeed() * 0.2f, vec);
+        this.move(MoverType.SELF, this.getDeltaMovement());
+        this.setDeltaMovement(this.getDeltaMovement().scale(0.91));
+    }
+
+    protected void handlePlayerInput(Player player, boolean hovers, Consumer<Vec3> cons) {
+        if (this.getAnimationHandler().hasAnimation()) {
+            this.setMovingFlag(MoveType.NONE);
+            this.setSprinting(false);
+            cons.accept(Vec3.ZERO);
+            this.calculateEntityAnimation(this, false);
+            return;
+        }
+        if (!this.isControlledByLocalInstance()) {
+            this.setDeltaMovement(Vec3.ZERO);
+            this.setDoJumping(false);
+            this.calculateEntityAnimation(this, false);
+            return;
+        }
+        if (!this.level.isClientSide) {
+            if (this.adjustRotFromRider(player)) {
+                this.setYRot(this.rotateClamped(this.getYRot(), player.getYRot(), this.getHeadRotSpeed() * 2));
+                this.setXRot(this.rotateClamped(this.getXRot(), player.getXRot(), this.getMaxHeadXRot()));
+            }
+            this.yBodyRot = this.getYRot();
+            this.yHeadRot = this.yBodyRot;
+        }
+        // For info: Vanilla speed has a constant 0.98 modifier
+        double attrSpeed = !this.isOnGround() && this.getAttributes().hasAttribute(Attributes.FLYING_SPEED) ? this.getAttributeValue(Attributes.FLYING_SPEED) : this.getAttributeValue(Attributes.MOVEMENT_SPEED);
+        float speed = (float) (attrSpeed / 1.3 * this.ridingSpeedModifier());
+        float strafing = (player.xxa / 0.98f) * speed * 0.8f;
+        if (player.xxa < 0)
+            strafing *= -1;
+        float forward = (player.zza / 0.98f) * speed;
+        if (player.zza < 0)
+            forward *= -0.5f;
+        float vertical = 0;
+        this.flyingSpeed = speed * 0.2f;
+
+        if (hovers && forward > 0) {
+            vertical = (float) Math.min(0, player.getLookAngle().y + 0.45) * speed;
+            if (player.getXRot() > 85)
+                forward = 0;
+            else if (vertical < 0)
+                forward = (float) Math.sqrt(forward * forward - vertical * vertical);
+        }
+
+        if (this.doJumping()) {
+            if (this.onGround && !this.isFlyingEntity()) {
+                this.hasImpulse = true;
+                this.jumpFromGround();
+                if (forward > 0.0f) {
+                    float x = -Mth.sin(this.getYRot() * Mth.DEG_TO_RAD);
+                    float z = Mth.cos(this.getYRot() * Mth.DEG_TO_RAD);
+                    this.setDeltaMovement(this.getDeltaMovement().add(0.3 * x, 0, 0.3 * z));
                 }
-                float strafing = player.xxa * 0.5f;
-                float forward = player.zza;
-                double vert = 0;
-                if (forward <= 0.0f) {
-                    forward *= 0.25f;
-                } else {
-                    vert = Math.min(0, player.getLookAngle().y + 0.45);
-                    if (player.getXRot() > 85)
-                        forward = 0;
-                    else if (vert < 0)
-                        forward = (float) Math.sqrt(forward * forward - vert * vert);
+            } else if (this.isFlyingEntity()) {
+                vertical = speed * 0.7f;
+                if (this.getDeltaMovement().y() < vertical) {
+                    this.setDeltaMovement(new Vec3(this.getDeltaMovement().x, this.getDeltaMovement().y + 0.1, this.getDeltaMovement().z));
                 }
-                if (this.doJumping()) {
-                    vert += Math.min(this.getDeltaMovement().y + 0.5, this.maxAscensionSpeed());
-                }
-                this.flyingSpeed = this.getSpeed() * 0.1f;
-                if (this.isControlledByLocalInstance()) {
-                    float attVal = (float) (this.getAttribute(Attributes.FLYING_SPEED) != null ? this.getAttribute(Attributes.FLYING_SPEED).getValue() : this.getAttributeValue(Attributes.MOVEMENT_SPEED));
-                    this.setSpeed(attVal * 1.15f);
-                    MoveType type = forward > 0 ? MoveType.RUN : (forward != 0 || strafing != 0 ? MoveType.WALK : MoveType.NONE);
-                    this.setMovingFlag(type);
-                    this.setSprinting(type == MoveType.RUN);
-                    forward *= this.ridingSpeedModifier();
-                    strafing *= this.ridingSpeedModifier();
-                    vec = new Vec3(strafing * this.getSpeed(), vec.y, forward * this.getSpeed());
-                } else {
-                    vec = Vec3.ZERO;
-                }
-                vec = vec.add(0, vert, 0);
-                this.setDoJumping(false);
-                this.calculateEntityAnimation(this, false);
             }
         }
 
-        this.moveRelative(0.1F, vec);
-        this.move(MoverType.SELF, this.getDeltaMovement());
-        this.setDeltaMovement(this.getDeltaMovement().scale(0.9D));
+        this.setSpeed(speed);
+        MoveType type = forward > 0 ? MoveType.RUN : (forward != 0 || strafing != 0 ? MoveType.WALK : MoveType.NONE);
+        this.setMovingFlag(type);
+        this.setSprinting(type == MoveType.RUN);
+        cons.accept(new Vec3(strafing, vertical, forward));
+
+        this.setDoJumping(false);
+        this.calculateEntityAnimation(this, false);
     }
 
     private float rotateClamped(float current, float target, float maxChange) {
@@ -1486,14 +1464,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     public double ridingSpeedModifier() {
-        return 0.85;
-    }
-
-    /**
-     * @return For flying entities: The max speed for flying up
-     */
-    public double maxAscensionSpeed() {
-        return this.getAttributeValue(Attributes.MOVEMENT_SPEED) * 2;
+        return 1.3;
     }
 
     public boolean shouldFreezeTravel() {
@@ -1739,6 +1710,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     private boolean assignBarn() {
+        if (!this.isAlive())
+            return false;
         if (this.assignedBarn == null || this.assignedBarn.isInvalidFor(this))
             this.assignedBarn = WorldHandler.get(this.getServer()).findFittingBarn(this);
         if (this.assignedBarn != null) {

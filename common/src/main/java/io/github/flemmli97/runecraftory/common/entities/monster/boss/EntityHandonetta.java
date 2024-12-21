@@ -145,22 +145,22 @@ public class EntityHandonetta extends BossMonster {
     });
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityHandonetta>>> ATTACKS = List.of(
             WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>nonRepeatableAttack(SWIPE)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.1), e -> 60 + e.getRandom().nextInt(20))), 10),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.1), e -> 60 + e.getRandom().nextInt(30))), 10),
             WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>nonRepeatableAttack(FLICK)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.1), e -> 60 + e.getRandom().nextInt(20))), 10),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.1), e -> 60 + e.getRandom().nextInt(30))), 10),
             WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>nonRepeatableAttack(PUNCH)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 8, true, true, true), e -> 35 + e.getRandom().nextInt(20))), 10),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 8, true, true, true), e -> 60 + e.getRandom().nextInt(30))), 10),
             WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>nonRepeatableAttack(LASER)
-                    .prepare(() -> new TimedWrappedRunner<>(new KeepDistanceRunner<>(5, 7, 1), e -> 35 + e.getRandom().nextInt(20))), 10),
+                    .prepare(() -> new TimedWrappedRunner<>(new KeepDistanceRunner<>(5, 7, 1), e -> 60 + e.getRandom().nextInt(30))), 10),
             WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>nonRepeatableAttack(PLATE)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 7), e -> 35 + e.getRandom().nextInt(20))), 10),
+                    .prepare(() -> new TimedWrappedRunner<>(new KeepDistanceRunner<>(6, 9, 1), e -> 60 + e.getRandom().nextInt(30))), 10),
             WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>enragedBossAttack(GRAB)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 5, true, true, true), e -> 35 + e.getRandom().nextInt(20))), 10),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 5, true, true, true), e -> 60 + e.getRandom().nextInt(30))), 10),
             WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>enragedBossAttack(SHOOT)
-                    .prepare(() -> new TimedWrappedRunner<>(new KeepDistanceRunner<>(6, 9, 1), e -> 35 + e.getRandom().nextInt(20))), 10)
+                    .prepare(() -> new TimedWrappedRunner<>(new KeepDistanceRunner<>(6, 9, 1), e -> 60 + e.getRandom().nextInt(30))), 10)
     );
     private static final List<WeightedEntry.Wrapper<IdleAction<EntityHandonetta>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<>(() -> new StrafingRunner<>(10, 8, 1, 0.3f)), 2)
+            WeightedEntry.wrap(new IdleAction<>(() -> new StrafingRunner<>(10, 8, 0.6f, 0.3f)), 2)
     );
 
     public final AnimatedAttackGoal<EntityHandonetta> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
@@ -181,7 +181,7 @@ public class EntityHandonetta extends BossMonster {
         if (!world.isClientSide)
             this.goalSelector.addGoal(1, this.attack);
         this.setNoGravity(true);
-        this.moveControl = new FreeMoveControl(this);
+        this.moveControl = new HandonettaMoveController(this);
     }
 
     @Override
@@ -312,12 +312,12 @@ public class EntityHandonetta extends BossMonster {
 
     @Override
     public boolean isOnGround() {
-        return this.isAlive() && super.isOnGround();
+        return super.isOnGround();
     }
 
     @Override
     public void travel(Vec3 vec) {
-        this.handleNoGravTravel(vec);
+        this.handleFreeTravel(vec);
     }
 
     @Override
@@ -344,5 +344,17 @@ public class EntityHandonetta extends BossMonster {
     public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
         super.onUpdate(data);
         data.runIf(SyncableDatas.MOTION_DIR, motion -> this.moveDirection = motion);
+    }
+
+    static class HandonettaMoveController extends FreeMoveControl {
+
+        public HandonettaMoveController(Mob mob) {
+            super(mob);
+        }
+
+        @Override
+        public void tick() {
+            super.tick();
+        }
     }
 }
