@@ -1,9 +1,10 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
-import io.github.flemmli97.runecraftory.common.entities.SwimWalkMoveController;
+import io.github.flemmli97.runecraftory.common.entities.ai.AmphibiousStrollGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.ChargeAction;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
+import io.github.flemmli97.runecraftory.common.entities.ai.control.SwimWalkMoveController;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.AmphibiousNavigator;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
@@ -68,14 +69,16 @@ public class EntityTortas extends ChargingMonster {
         this.goalSelector.removeGoal(this.swimGoal);
         this.waterNavigator = new AmphibiousNavigator(this, world);
         this.groundNavigator = new GroundPathNavigation(this, world);
-        this.wander.setInterval(2);
+        this.goalSelector.removeGoal(this.wander);
+        this.wander = new AmphibiousStrollGoal(this, 1, 2);
+        this.goalSelector.addGoal(6, this.wander);
         this.maxUpStep = 1;
     }
 
     @Override
     protected void applyAttributes() {
         super.applyAttributes();
-        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.16);
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.18);
     }
 
     @Override

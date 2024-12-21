@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
-import io.github.flemmli97.runecraftory.common.entities.TargetableOpponent;
+import io.github.flemmli97.runecraftory.common.entities.utils.TargetableOpponent;
 import io.github.flemmli97.tenshilib.common.entity.EntityProjectile;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
@@ -56,11 +56,5 @@ public abstract class BaseProjectile extends EntityProjectile {
         if (owner instanceof TargetableOpponent targetableOpponent)
             this.pred = targetableOpponent.validTargetPredicate();
         return owner;
-    }
-
-    @Override
-    public void onUpdateOwner() {
-        super.onUpdateOwner();
-        this.getOwner();
     }
 }

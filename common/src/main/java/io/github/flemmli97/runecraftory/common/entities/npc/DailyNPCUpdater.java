@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.npc;
 
-import io.github.flemmli97.runecraftory.common.entities.DailyEntityUpdater;
+import io.github.flemmli97.runecraftory.common.entities.utils.DailyEntityUpdater;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;

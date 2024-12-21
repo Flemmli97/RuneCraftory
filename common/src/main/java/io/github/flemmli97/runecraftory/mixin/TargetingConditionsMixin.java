@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.mixin;
 
-import io.github.flemmli97.runecraftory.common.entities.ExtendedEntity;
+import io.github.flemmli97.runecraftory.common.entities.utils.ExtendedEntity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import org.spongepowered.asm.mixin.Mixin;

@@ -19,9 +19,15 @@ import io.github.flemmli97.runecraftory.common.entities.ai.RestrictedWaterAvoidi
 import io.github.flemmli97.runecraftory.common.entities.ai.RiderAttackTargetGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.StayGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.TendCropsGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.control.MoveControlerEx;
 import io.github.flemmli97.runecraftory.common.entities.data.MobUpdateHandler;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
+import io.github.flemmli97.runecraftory.common.entities.utils.DailyMonsterUpdater;
+import io.github.flemmli97.runecraftory.common.entities.utils.ExtendedEntity;
+import io.github.flemmli97.runecraftory.common.entities.utils.IExtendedMob;
+import io.github.flemmli97.runecraftory.common.entities.utils.SleepingEntity;
+import io.github.flemmli97.runecraftory.common.entities.utils.TargetableOpponent;
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemObjectX;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
@@ -236,7 +242,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     public BaseMonster(EntityType<? extends BaseMonster> type, Level level) {
         super(type, level);
-        this.moveControl = new NewMoveController(this);
+        this.moveControl = new MoveControlerEx(this);
         //Client will get default value. This is intentional
         this.prop = DataPackHandler.INSTANCE.monsterPropertiesManager().getPropertiesFor(type);
         this.applyAttributes();
@@ -1374,6 +1380,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 strafing = 0;
                 forward = 0;
             }
+
             if (this.doJumping) {
                 if (this.onGround && !this.isFlyingEntity()) {
                     this.hasImpulse = true;

@@ -1,10 +1,10 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.entities.SwimWalkMoveController;
 import io.github.flemmli97.runecraftory.common.entities.ai.AirWanderGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.NearestTargetHorizontal;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
+import io.github.flemmli97.runecraftory.common.entities.ai.control.FreeMoveControl;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.FloatingFlyNavigator;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
@@ -63,7 +63,7 @@ public class EntitySkyFish extends BaseMonster {
         this.setPathfindingMalus(BlockPathTypes.WATER, 0.0F);
         //this.setPathPriority(BlockPathTypes.OPEN, 0.5f);
         this.goalSelector.addGoal(2, this.attack);
-        this.moveControl = new FlySwimMoveController(this);
+        this.moveControl = new FreeMoveControl(this, () -> false);
         this.goalSelector.removeGoal(this.swimGoal);
         this.wander.setInterval(50);
         this.setNoGravity(true);
@@ -209,22 +209,5 @@ public class EntitySkyFish extends BaseMonster {
     @Override
     public Vec3 passengerOffset(Entity passenger) {
         return new Vec3(0, 12 / 16d, -2 / 16d);
-    }
-
-    static class FlySwimMoveController extends SwimWalkMoveController {
-
-        public FlySwimMoveController(Mob entity) {
-            super(entity);
-        }
-
-        @Override
-        protected void moveSpeed() {
-        }
-
-        @Override
-        public void tick() {
-            this.handleWaterMovement();
-        }
-
     }
 }

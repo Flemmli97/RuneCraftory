@@ -4,9 +4,9 @@ import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.NearestTargetNoLoS;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.ChargeAction;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
+import io.github.flemmli97.runecraftory.common.entities.ai.control.FreeMoveControl;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.FloatingFlyNavigator;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.NoClipFlyEvaluator;
-import io.github.flemmli97.runecraftory.common.entities.ai.pathing.NoClipFlyMoveController;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
@@ -78,7 +78,7 @@ public class EntityGhost extends ChargingMonster {
         this.goalSelector.addGoal(2, this.attack);
         this.setNoGravity(true);
         this.noPhysics = true;
-        this.moveControl = new NoClipFlyMoveController(this);
+        this.moveControl = new FreeMoveControl(this);
     }
 
     @Override
@@ -105,7 +105,7 @@ public class EntityGhost extends ChargingMonster {
     protected void applyAttributes() {
         super.applyAttributes();
         this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(32);
-        this.getAttribute(Attributes.FLYING_SPEED).setBaseValue(0.2);
+        this.getAttribute(Attributes.FLYING_SPEED).setBaseValue(0.4);
         this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
     }
 

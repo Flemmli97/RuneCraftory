@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.common.entities;
+package io.github.flemmli97.runecraftory.common.entities.utils;
 
 import net.minecraft.world.entity.LivingEntity;
 

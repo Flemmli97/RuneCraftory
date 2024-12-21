@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.entities.ai.NearestTargetHorizontal;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
+import io.github.flemmli97.runecraftory.common.entities.ai.control.FreeMoveControl;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.FloatingFlyNavigator;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
@@ -29,7 +30,6 @@ import io.github.flemmli97.tenshilib.common.utils.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.Mth;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
@@ -39,8 +39,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.control.FlyingMoveControl;
-import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.player.Player;
@@ -150,21 +148,19 @@ public class EntityHandonetta extends BossMonster {
                     .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.1), e -> 60 + e.getRandom().nextInt(20))), 10),
             WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>nonRepeatableAttack(FLICK)
                     .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.1), e -> 60 + e.getRandom().nextInt(20))), 10),
-            WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>nonRepeatableAttack(SHOOT)
-                    .prepare(() -> new TimedWrappedRunner<>(new KeepDistanceRunner<>(6, 9, 1), e -> 35 + e.getRandom().nextInt(20))), 10),
+            WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>nonRepeatableAttack(PUNCH)
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 8, true, true, true), e -> 35 + e.getRandom().nextInt(20))), 10),
             WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>nonRepeatableAttack(LASER)
                     .prepare(() -> new TimedWrappedRunner<>(new KeepDistanceRunner<>(5, 7, 1), e -> 35 + e.getRandom().nextInt(20))), 10),
-//            WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>nonRepeatableAttack(PLATE)
-//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 7), e -> 35 + e.getRandom().nextInt(20))), 10),
-            WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>nonRepeatableAttack(GRAB)
+            WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>nonRepeatableAttack(PLATE)
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 7), e -> 35 + e.getRandom().nextInt(20))), 10),
+            WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>enragedBossAttack(GRAB)
                     .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 5, true, true, true), e -> 35 + e.getRandom().nextInt(20))), 10),
-            WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>nonRepeatableAttack(PUNCH)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 8, true, true, true), e -> 35 + e.getRandom().nextInt(20))), 10)
+            WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>enragedBossAttack(SHOOT)
+                    .prepare(() -> new TimedWrappedRunner<>(new KeepDistanceRunner<>(6, 9, 1), e -> 35 + e.getRandom().nextInt(20))), 10)
     );
     private static final List<WeightedEntry.Wrapper<IdleAction<EntityHandonetta>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<>(() -> new KeepDistanceRunner<>(4, 8, 1)), 1),
-            WeightedEntry.wrap(new IdleAction<>(() -> new StrafingRunner<EntityHandonetta>(10, 8, 1, 0.3f))
-                    .withCondition((goal, target) -> goal.distanceToTargetSq < 36 && goal.distanceToTargetSq > 12), 2)
+            WeightedEntry.wrap(new IdleAction<>(() -> new StrafingRunner<>(10, 8, 1, 0.3f)), 2)
     );
 
     public final AnimatedAttackGoal<EntityHandonetta> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
@@ -185,7 +181,7 @@ public class EntityHandonetta extends BossMonster {
         if (!world.isClientSide)
             this.goalSelector.addGoal(1, this.attack);
         this.setNoGravity(true);
-        this.moveControl = new HandMoveController(this);
+        this.moveControl = new FreeMoveControl(this);
     }
 
     @Override
@@ -216,7 +212,7 @@ public class EntityHandonetta extends BossMonster {
         super.applyAttributes();
         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.26);
         this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(32);
-        this.getAttribute(Attributes.FLYING_SPEED).setBaseValue(0.75);
+        this.getAttribute(Attributes.FLYING_SPEED).setBaseValue(0.4);
     }
 
     @Override
@@ -348,41 +344,5 @@ public class EntityHandonetta extends BossMonster {
     public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
         super.onUpdate(data);
         data.runIf(SyncableDatas.MOTION_DIR, motion -> this.moveDirection = motion);
-    }
-
-    static class HandMoveController extends FlyingMoveControl {
-
-        public HandMoveController(Mob mob) {
-            super(mob, 90, true);
-        }
-
-        @Override
-        public void tick() {
-            if (this.operation == Operation.STRAFE) {
-                float f = (float) this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED);
-                float g = (float) this.speedModifier * f;
-                float h = this.strafeForwards;
-                float i = this.strafeRight;
-                float j = Mth.sqrt(h * h + i * i);
-                if (j < 1.0F) {
-                    j = 1.0F;
-                }
-
-                j = g / j;
-                h *= j;
-                i *= j;
-                float k = Mth.sin(this.mob.getYRot() * 0.017453292F);
-                float l = Mth.cos(this.mob.getYRot() * 0.017453292F);
-                float m = h * l - i * k;
-
-                this.operation = MoveControl.Operation.WAIT;
-            } else {
-                super.tick();
-            }
-            LivingEntity target = this.mob.getTarget();
-            if (target != null && target.distanceToSqr(this.mob) < 24 * 24) {
-                this.mob.lookAt(target, 60.0F, 30.0F);
-            }
-        }
     }
 }

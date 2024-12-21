@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.effects;
 
-import io.github.flemmli97.runecraftory.common.entities.SleepingEntity;
+import io.github.flemmli97.runecraftory.common.entities.utils.SleepingEntity;
 import io.github.flemmli97.runecraftory.mixinhelper.MobNoAIHandler;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.world.effect.MobEffect;

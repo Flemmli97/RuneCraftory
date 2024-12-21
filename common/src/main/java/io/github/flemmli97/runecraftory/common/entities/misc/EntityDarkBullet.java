@@ -23,7 +23,7 @@ public class EntityDarkBullet extends BaseProjectile {
 
     @Override
     public int livingTickMax() {
-        return 7;
+        return 14;
     }
 
     @Override

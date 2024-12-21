@@ -895,7 +895,7 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_CRIT, 5)
                     .putAttributes(ModAttributes.POISON, 5)
                     .putAttributes(ModAttributes.RES_FIRE, -10)
-                    .xp(75).tamingChance(0.05f).setFlying(),
+                    .xp(75).tamingChance(0.05f),
             new GateSpawnData.Builder(0, 20).addToBiomeTag(50, RunecraftoryTags.IS_HOT, RunecraftoryTags.IS_SAVANNA, RunecraftoryTags.IS_SANDY, BiomeTags.IS_BADLANDS));
     public static final RegistryEntrySupplier<EntityType<EntityTroll>> TROLL = regMonster(EntityType.Builder.of(EntityTroll::new, MobCategory.MONSTER).sized(1.5f, 3f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "troll"),
             0xac924b, 0xcfcbbc,
@@ -908,7 +908,7 @@ public class ModEntities {
                     .putAttributes(ModAttributes.DIZZY, 8)
                     .putAttributes(ModAttributes.CRIT, 1)
                     .putAttributes(ModAttributes.RES_CRIT, 5)
-                    .xp(100).tamingChance(0.05f).setFlying(),
+                    .xp(100).tamingChance(0.05f),
             new GateSpawnData.Builder(0, 40).addToBiomeTag(40, BiomeTags.IS_MOUNTAIN, RunecraftoryTags.IS_SPARSE, RunecraftoryTags.IS_SLOPE, BiomeTags.IS_HILL, RunecraftoryTags.IS_DEAD));
     public static final RegistryEntrySupplier<EntityType<EntityVeggieGhost>> TOMATO_GHOST = regMonster(EntityType.Builder.of(EntityVeggieGhost::new, MobCategory.MONSTER).sized(0.75f, 1.65f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "tomato_ghost"),
             0x902323, 0x85268b, true,
@@ -1289,7 +1289,7 @@ public class ModEntities {
                     .withRideActionCosts(new EntityRideActionCosts.Builder()
                             .thirdCost(0.5f, true)));
     public static final RegistryEntrySupplier<EntityType<EntityHandonetta>> HANDONETTA = regBoss(EntityType.Builder.of(EntityHandonetta::new, MobCategory.MONSTER).sized(2.3f, 2.8f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "handonetta"),
-            0xb86b13, 0xd8d7d7, true,
+            0xffffff, 0x631123, true,
             new EntityProperties.Builder()
                     .putAttributes(() -> Attributes.MAX_HEALTH, 320).putLevelGains(() -> Attributes.MAX_HEALTH, 620)
                     .putAttributes(() -> Attributes.ATTACK_DAMAGE, 23).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 286)
@@ -1310,13 +1310,12 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_FAT, 100)
                     .putAttributes(ModAttributes.RES_COLD, 100)
                     .putAttributes(ModAttributes.RES_FAINT, 100)
-                    .xp(250).tamingChance(0.005f).setBarnOccupancy(2).setRideable()
+                    .xp(250).tamingChance(0.005f).setBarnOccupancy(2).setRideable().setFlying()
                     .withLevelIncrease(1, 7)
                     .withLevelIncrease(2, 1)
                     .withLevelIncrease(7, 3)
                     .withLevelIncrease(15, 5)
                     .setMinLevel(20)
-                    .setFlying()
                     .withSpawnerPredicate(LibAdvancements.playerAdvancementCheck(LibAdvancements.THUNDERBOLT))
                     .withRideActionCosts(new EntityRideActionCosts.Builder()
                             .thirdCost(0.5f, true)));

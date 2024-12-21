@@ -4,9 +4,9 @@ import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.NearestTargetNoLoS;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
+import io.github.flemmli97.runecraftory.common.entities.ai.control.FreeMoveControl;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.FloatingFlyNavigator;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.NoClipFlyEvaluator;
-import io.github.flemmli97.runecraftory.common.entities.ai.pathing.NoClipFlyMoveController;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
@@ -76,7 +76,7 @@ public abstract class EntityWispBase extends BaseMonster {
         this.goalSelector.addGoal(2, this.attack);
         this.setNoGravity(true);
         this.noPhysics = true;
-        this.moveControl = new NoClipFlyMoveController(this);
+        this.moveControl = new FreeMoveControl(this);
     }
 
     @Override

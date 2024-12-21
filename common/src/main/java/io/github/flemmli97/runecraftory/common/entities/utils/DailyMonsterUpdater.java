@@ -1,5 +1,6 @@
-package io.github.flemmli97.runecraftory.common.entities;
+package io.github.flemmli97.runecraftory.common.entities.utils;
 
+import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import net.minecraft.nbt.CompoundTag;
 
 public class DailyMonsterUpdater extends DailyEntityUpdater<BaseMonster> {
