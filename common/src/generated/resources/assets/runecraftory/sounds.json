@@ -312,6 +312,15 @@
       }
     ]
   },
+  "bgm.handonetta_fight": {
+    "subtitle": "runecraftory:bgm.handonetta_fight",
+    "sounds": [
+      {
+        "name": "runecraftory:bgm/yurei",
+        "stream": true
+      }
+    ]
+  },
   "bgm.raccoon_fight": {
     "subtitle": "runecraftory:bgm.raccoon_fight",
     "sounds": [

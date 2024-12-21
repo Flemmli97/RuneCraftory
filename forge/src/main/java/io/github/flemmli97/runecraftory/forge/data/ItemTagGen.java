@@ -492,6 +492,11 @@ public class ItemTagGen extends ItemTagsProvider {
                 .add(ModItems.CHEESECAKE.get())
                 .add(ModItems.CHOCOLATE_CAKE.get())
                 .add(ModItems.APPLE_PIE.get());
+        this.tag(RunecraftoryTags.tamingTag(ModEntities.HANDONETTA.get()))
+                .add(Items.CAKE)
+                .add(ModItems.CHEESECAKE.get())
+                .add(ModItems.CHOCOLATE_CAKE.get())
+                .add(ModItems.APPLE_PIE.get());
         this.tag(RunecraftoryTags.tamingTag(ModEntities.DEAD_TREE.get()))
                 .add(ModItems.GREENIFIER_PLUS.get());
         this.tag(RunecraftoryTags.tamingTag(ModEntities.CHIMERA.get()))

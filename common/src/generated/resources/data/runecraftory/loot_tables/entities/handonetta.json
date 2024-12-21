@@ -15,20 +15,20 @@
                   "condition": "runecraftory:first_kill"
                 }
               ],
-              "name": "runecraftory:cursed_doll"
+              "name": "runecraftory:puppetry_strings"
             },
             {
               "type": "minecraft:item",
               "functions": [
                 {
                   "function": "runecraftory:luck_and_looting",
-                  "baseChance": 0.65,
+                  "baseChance": 0.4,
                   "luckBonus": 0.05,
                   "lootingBonus": 0.2,
                   "limit": 2
                 }
               ],
-              "name": "runecraftory:cursed_doll"
+              "name": "runecraftory:puppetry_strings"
             }
           ]
         }

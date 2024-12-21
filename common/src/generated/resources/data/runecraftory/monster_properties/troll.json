@@ -4,7 +4,7 @@
   "money": 0,
   "tamingChance": 0.05,
   "rideable": false,
-  "flying": true,
+  "flying": false,
   "size": 1,
   "needsRoof": true,
   "rideActionCosts": {

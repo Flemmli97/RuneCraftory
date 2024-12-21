@@ -145,22 +145,22 @@ public class EntityHandonetta extends BossMonster {
     });
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityHandonetta>>> ATTACKS = List.of(
             WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>nonRepeatableAttack(SWIPE)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.1), e -> 60 + e.getRandom().nextInt(30))), 10),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.1), e -> 70 + e.getRandom().nextInt(50))), 11),
             WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>nonRepeatableAttack(FLICK)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.1), e -> 60 + e.getRandom().nextInt(30))), 10),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.1), e -> 70 + e.getRandom().nextInt(50))), 11),
             WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>nonRepeatableAttack(PUNCH)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 8, true, true, true), e -> 60 + e.getRandom().nextInt(30))), 10),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 8, true, true, true), e -> 70 + e.getRandom().nextInt(50))), 10),
             WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>nonRepeatableAttack(LASER)
-                    .prepare(() -> new TimedWrappedRunner<>(new KeepDistanceRunner<>(5, 7, 1), e -> 60 + e.getRandom().nextInt(30))), 10),
+                    .prepare(() -> new TimedWrappedRunner<>(new KeepDistanceRunner<>(7, 9, 1), e -> 70 + e.getRandom().nextInt(50))), 10),
             WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>nonRepeatableAttack(PLATE)
-                    .prepare(() -> new TimedWrappedRunner<>(new KeepDistanceRunner<>(6, 9, 1), e -> 60 + e.getRandom().nextInt(30))), 10),
+                    .prepare(() -> new TimedWrappedRunner<>(new KeepDistanceRunner<>(7, 11, 1), e -> 70 + e.getRandom().nextInt(50))), 9),
             WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>enragedBossAttack(GRAB)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 5, true, true, true), e -> 60 + e.getRandom().nextInt(30))), 10),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 5, true, true, true), e -> 70 + e.getRandom().nextInt(50))), 8),
             WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>enragedBossAttack(SHOOT)
-                    .prepare(() -> new TimedWrappedRunner<>(new KeepDistanceRunner<>(6, 9, 1), e -> 60 + e.getRandom().nextInt(30))), 10)
+                    .prepare(() -> new TimedWrappedRunner<>(new KeepDistanceRunner<>(7, 10, 1), e -> 70 + e.getRandom().nextInt(50))), 9)
     );
     private static final List<WeightedEntry.Wrapper<IdleAction<EntityHandonetta>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<>(() -> new StrafingRunner<>(10, 8, 0.6f, 0.3f)), 2)
+            WeightedEntry.wrap(new IdleAction<>(() -> new StrafingRunner<>(10, 8, 0.8f, 0.1f)), 2)
     );
 
     public final AnimatedAttackGoal<EntityHandonetta> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
@@ -354,7 +354,22 @@ public class EntityHandonetta extends BossMonster {
 
         @Override
         public void tick() {
+            Operation current = this.operation;
             super.tick();
+            if (current == Operation.STRAFE && this.mob.getTarget() != null) {
+                Vec3 target = this.mob.getTarget().position();
+                Vec3 dist = this.mob.position().subtract(target);
+                if (dist.y() < 4) {
+                    this.mob.setYya(1);
+                } else {
+                    this.mob.setYya(-1);
+                }
+                if (dist.horizontalDistanceSqr() < 16) {
+                    this.mob.setSpeed(this.mob.getSpeed() * 2);
+                    this.mob.setZza(-1);
+                    this.mob.setXxa(this.mob.xxa * 0.5f);
+                }
+            }
         }
     }
 }

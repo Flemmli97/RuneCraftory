@@ -38,6 +38,7 @@ public class SoundGen extends SoundDefinitionsProvider {
         this.addBgmWith(ModSounds.CHIMERA_FIGHT.get(), bgm2);
         this.addBgmWith(ModSounds.DEAD_TREE_FIGHT.get(), bgm2);
         this.addBgmWith(ModSounds.MARIONETTA_FIGHT.get(), bgm6);
+        this.addBgmWith(ModSounds.HANDONETTA_FIGHT.get(), bgm6);
         this.addBgmWith(ModSounds.RACCOON_FIGHT.get(), bgm1);
         this.addBgmWith(ModSounds.SKELEFANG_FIGHT.get(), bgm5);
         this.addBgmWith(ModSounds.RAFFLESIA_FIGHT.get(), bgm3);

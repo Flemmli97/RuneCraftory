@@ -543,6 +543,7 @@ public class LangGen implements DataProvider {
         this.addPatchouliEntityDesc(entities, ModEntities.AMBROSIA, "Butterfly boss monster");
         this.addPatchouliEntityDesc(entities, ModEntities.THUNDERBOLT, "Horse said to be as fast as lightning");
         this.addPatchouliEntityDesc(entities, ModEntities.MARIONETTA, "Spooky old doll");
+        this.addPatchouliEntityDesc(entities, ModEntities.HANDONETTA, "Whose hand is this???");
 
         for (RegistryEntrySupplier<EntityType<?>> sup : ModEntities.getMonsters()) {
             if (entities.contains(sup))

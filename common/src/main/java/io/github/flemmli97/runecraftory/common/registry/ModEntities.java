@@ -1291,11 +1291,11 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntityHandonetta>> HANDONETTA = regBoss(EntityType.Builder.of(EntityHandonetta::new, MobCategory.MONSTER).sized(2.3f, 2.8f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "handonetta"),
             0xffffff, 0x631123, true,
             new EntityProperties.Builder()
-                    .putAttributes(() -> Attributes.MAX_HEALTH, 320).putLevelGains(() -> Attributes.MAX_HEALTH, 620)
-                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 23).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 286)
-                    .putAttributes(ModAttributes.DEFENCE, 4).putLevelGains(ModAttributes.DEFENCE, 247)
-                    .putAttributes(ModAttributes.MAGIC, 18).putLevelGains(ModAttributes.MAGIC, 279)
-                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 3).putLevelGains(ModAttributes.MAGIC_DEFENCE, 247)
+                    .putAttributes(() -> Attributes.MAX_HEALTH, 300).putLevelGains(() -> Attributes.MAX_HEALTH, 610)
+                    .putAttributes(() -> Attributes.ATTACK_DAMAGE, 24).putLevelGains(() -> Attributes.ATTACK_DAMAGE, 290)
+                    .putAttributes(ModAttributes.DEFENCE, 3).putLevelGains(ModAttributes.DEFENCE, 245)
+                    .putAttributes(ModAttributes.MAGIC, 17).putLevelGains(ModAttributes.MAGIC, 276)
+                    .putAttributes(ModAttributes.MAGIC_DEFENCE, 3).putLevelGains(ModAttributes.MAGIC_DEFENCE, 245)
                     .putAttributes(ModAttributes.RES_DARK, 25)
                     .putAttributes(ModAttributes.RES_LIGHT, -25)
                     .putAttributes(ModAttributes.RES_CRIT, 25)

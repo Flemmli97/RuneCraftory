@@ -371,7 +371,10 @@ public class Loottables extends LootTableProvider {
                     new ItemLootData(ModItems.FUR_QUALITY.get(), 0.15f, RARE_LUCK_BONUS, LOOTING_BONUS, 0)));
             this.registerLootTable(ModEntities.MARIONETTA.get(), this.table(
                     new ItemLootData(ModItems.CURSED_DOLL.get(), 0.65f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2, true, false),
-                    new ItemLootData(ModItems.PUPPETRY_STRINGS.get(), 0.1f, COMMON_LUCK_BONUS, LOOTING_BONUS, 1),
+                    new ItemLootData(ModItems.FUR_SMALL.get(), 0.8f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(ModItems.FUR_MEDIUM.get(), 0.25f, RARE_LUCK_BONUS, LOOTING_BONUS, 0)));
+            this.registerLootTable(ModEntities.HANDONETTA.get(), this.table(
+                    new ItemLootData(ModItems.PUPPETRY_STRINGS.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2, true, false),
                     new ItemLootData(ModItems.FUR_SMALL.get(), 0.8f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
                     new ItemLootData(ModItems.FUR_MEDIUM.get(), 0.25f, RARE_LUCK_BONUS, LOOTING_BONUS, 0)));
             this.registerLootTable(ModEntities.DEAD_TREE.get(), this.table(

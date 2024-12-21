@@ -21,12 +21,12 @@ public class EntityDarkBulletSummoner extends ProjectileSummonHelperEntity {
     protected void summonProjectiles() {
         if (this.random.nextBoolean())
             return;
-        EntityDarkBullet fly = new EntityDarkBullet(this.level, this.getOwner());
-        fly.setPos(this.getX(), this.getY(), this.getZ());
-        fly.shootAtPosition(this.targetX, this.targetY, this.targetZ, 1.2f, 0);
-        fly.setDamageMultiplier(this.damageMultiplier);
-        fly.setPos(fly.getX() + this.random.nextFloat() * 1.3 - 0.65, fly.getY() + this.random.nextFloat() * 0.05 - 0.1, fly.getZ() + this.random.nextFloat() * 1.3 - 0.65);
+        EntityDarkBullet bullet = new EntityDarkBullet(this.level, this.getOwner());
+        bullet.setPos(this.getX(), this.getY(), this.getZ());
+        bullet.shootAtPosition(this.targetX, this.targetY, this.targetZ, 1.2f, 0);
+        bullet.setDamageMultiplier(this.damageMultiplier);
+        bullet.setPos(bullet.getX() + this.random.nextFloat() * 1.3 - 0.65, bullet.getY() + this.random.nextFloat() * 0.05 - 0.1, bullet.getZ() + this.random.nextFloat() * 1.3 - 0.65);
         this.level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ARROW_SHOOT, this.getSoundSource(), 1.0f, 1.5f + this.level.getRandom().nextFloat() * 0.1f);
-        this.level.addFreshEntity(fly);
+        this.level.addFreshEntity(bullet);
     }
 }

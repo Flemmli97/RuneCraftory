@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:cake",
+    "runecraftory:cheesecake",
+    "runecraftory:chocolate_cake",
+    "runecraftory:apple_pie"
+  ]
+}
