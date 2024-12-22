@@ -171,20 +171,27 @@ public class QuestTasks {
         public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "npc_talk");
         public static final Codec<NPCTalk> CODEC = RecordCodecBuilder.create((instance) ->
                 instance.group(ResourceLocation.CODEC.optionalFieldOf("targetNPCId").forGetter(d -> Optional.ofNullable(d.targetNPCId)),
+                                JsonCodecs.ENTITY_PREDICATE_CODEC.fieldOf("predicate").forGetter(d -> d.predicate),
                                 Codec.STRING.optionalFieldOf("targetNPC").forGetter(d -> d.targetNPC != null ? Optional.of(d.targetNPC.toString()) : Optional.empty()))
-                        .apply(instance, (generic, target) -> new NPCTalk(generic.orElse(null), target.map(UUID::fromString).orElse(null))));
+                        .apply(instance, (generic, predicate, target) -> new NPCTalk(generic.orElse(null), predicate, target.map(UUID::fromString).orElse(null))));
 
         private final ResourceLocation targetNPCId;
 
-        public final UUID targetNPC;
+        private final UUID targetNPC;
+        private final EntityPredicate predicate;
         private EntityNPCBase npc;
 
         public NPCTalk(ResourceLocation generic) {
-            this(generic, null);
+            this(generic, EntityPredicate.ANY, null);
         }
 
-        protected NPCTalk(ResourceLocation generic, UUID targetNPC) {
+        public NPCTalk(ResourceLocation generic, EntityPredicate predicate) {
+            this(generic, predicate, null);
+        }
+
+        protected NPCTalk(ResourceLocation generic, EntityPredicate predicate, UUID targetNPC) {
             this.targetNPCId = generic;
+            this.predicate = predicate;
             this.targetNPC = targetNPC;
         }
 
@@ -211,11 +218,15 @@ public class QuestTasks {
             return new TranslatableComponent(this.getId().toString());
         }
 
+        public boolean trySubmit(ServerPlayer player, EntityNPCBase npc) {
+            return npc.getUUID().equals(this.targetNPC) && this.predicate.matches(player, npc);
+        }
+
         @Override
         public QuestEntry resolve(ServerPlayer player, QuestBase quest) {
             if (quest instanceof NPCQuest npcQuest)
-                return new NPCTalk(this.targetNPCId, npcQuest.getNpcUuid());
-            return new NPCTalk(this.targetNPCId, this.targetNPC);
+                return new NPCTalk(this.targetNPCId, this.predicate, npcQuest.getNpcUuid());
+            return new NPCTalk(this.targetNPCId, this.predicate, this.targetNPC);
         }
     }
 }

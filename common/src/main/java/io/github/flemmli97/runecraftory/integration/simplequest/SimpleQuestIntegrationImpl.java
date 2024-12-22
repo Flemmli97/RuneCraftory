@@ -137,7 +137,7 @@ public class SimpleQuestIntegrationImpl extends SimpleQuestIntegration {
 
     @Override
     public Map<ResourceLocation, ProgressState> triggerNPCTalk(ServerPlayer player, EntityNPCBase npc) {
-        return SimpleQuestAPI.trigger(player, QuestTasks.NPCTalk.class, (name, e, prog) -> npc.getUUID().equals(e.targetNPC),
+        return SimpleQuestAPI.trigger(player, QuestTasks.NPCTalk.class, (name, e, prog) -> e.trySubmit(player, npc),
                 (prog, pair) -> {
                 }).entrySet().stream().collect(Collectors.toMap(
                 Map.Entry::getKey,
@@ -183,7 +183,7 @@ public class SimpleQuestIntegrationImpl extends SimpleQuestIntegration {
     @Override
     public void submit(ServerPlayer player, EntityNPCBase npc) {
         if (PlayerData.get(player).submit(npc.getUUID().toString(), false).isEmpty()) {
-            SimpleQuestAPI.trigger(player, QuestTasks.NPCTalk.class, (name, e, prog) -> npc.getUUID().equals(e.targetNPC),
+            SimpleQuestAPI.trigger(player, QuestTasks.NPCTalk.class, (name, e, prog) -> e.trySubmit(player, npc),
                     (prog, pair) -> {
                     }, npc.getUUID().toString());
         }
