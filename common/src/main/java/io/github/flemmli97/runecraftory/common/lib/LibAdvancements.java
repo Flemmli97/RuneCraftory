@@ -60,6 +60,7 @@ public class LibAdvancements {
     public static final ResourceLocation AMBROSIA = progression("path_4/ambrosia");
     public static final ResourceLocation THUNDERBOLT = progression("path_4/thunderbolt");
     public static final ResourceLocation MARIONETTA = progression("path_4/marionetta");
+    public static final ResourceLocation HANDONETTA = progression("path_4/handonetta");
     public static final ResourceLocation SANO_UNO = progression("path_4/sano_uno");
     public static final ResourceLocation SARCOPHAGUS = progression("path_4/sarcophagus");
 

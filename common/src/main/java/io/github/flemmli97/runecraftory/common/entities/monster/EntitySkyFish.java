@@ -30,6 +30,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -77,7 +78,7 @@ public class EntitySkyFish extends BaseMonster {
     @Override
     protected void applyAttributes() {
         super.applyAttributes();
-        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.13);
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.25);
         this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(32);
     }
 
@@ -105,6 +106,13 @@ public class EntitySkyFish extends BaseMonster {
     @Override
     public void travel(Vec3 vec) {
         this.handleFreeTravel(vec);
+    }
+
+    @Override
+    public AABB attackBB(AnimatedAction anim) {
+        double width = this.getBbWidth() * 1.5;
+        double length = this.getBbWidth() * 1.6;
+        return new AABB(-width * 0.2, -0.02, 0, width * 0.8, this.getBbHeight() + 0.02, length);
     }
 
     @Override

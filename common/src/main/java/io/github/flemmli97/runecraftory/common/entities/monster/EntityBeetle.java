@@ -15,6 +15,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -58,7 +59,7 @@ public class EntityBeetle extends ChargingMonster {
 
     @Override
     public double chargingSpeed() {
-        return 0.45;
+        return 0.3;
     }
 
     @Override
@@ -74,8 +75,10 @@ public class EntityBeetle extends ChargingMonster {
     }
 
     @Override
-    public double maxAttackRange(AnimatedAction anim) {
-        return 1.3;
+    public AABB attackBB(AnimatedAction anim) {
+        double width = this.getBbWidth() * 1.4;
+        double length = this.getBbWidth() * 2.6;
+        return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
     }
 
     @Override

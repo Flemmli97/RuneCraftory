@@ -13,6 +13,7 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.StrafingRunner;
+import io.github.flemmli97.tenshilib.common.utils.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.random.WeightedEntry;
@@ -21,6 +22,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -59,8 +61,17 @@ public class EntityFlowerLily extends BaseMonster {
     }
 
     @Override
-    public double maxAttackRange(AnimatedAction anim) {
-        return 1.5;
+    public OrientedBoundingBox calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
+        if (anim.is(LEAP)) {
+            return new OrientedBoundingBox(this.attackBB(anim), this.getYRot(), 0, this.position());
+        }
+        return super.calculateAttackAABB(anim, target, grow);
+    }
+
+    @Override
+    public AABB attackBB(AnimatedAction anim) {
+        double attackSize = this.getBbWidth() * 2.1;
+        return new AABB(-attackSize, -0.2, -attackSize, attackSize, this.getBbHeight() + 0.2, attackSize);
     }
 
     @Override

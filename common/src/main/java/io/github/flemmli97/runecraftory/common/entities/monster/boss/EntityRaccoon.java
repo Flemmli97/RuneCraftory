@@ -436,7 +436,7 @@ public class EntityRaccoon extends BossMonster {
     @Override
     public OrientedBoundingBox calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
         if (anim.is(JUMP, LAND)) {
-            return new OrientedBoundingBox(this.attackAABB(anim), 0, 0, this.position());
+            return new OrientedBoundingBox(this.attackBB(anim), 0, 0, this.position());
         }
         if (anim.is(STOMP)) {
             double reach = this.getBbWidth() * 0.55;
@@ -447,26 +447,31 @@ public class EntityRaccoon extends BossMonster {
             else
                 dir = Vec3.directionFromRotation(this.getXRot(), this.getYRot() + offset);
             Vec3 attackPos = this.position().add(dir.scale(reach));
-            return new OrientedBoundingBox(this.attackAABB(anim), this.getYRot(), 0, attackPos);
+            return new OrientedBoundingBox(this.attackBB(anim), this.getYRot(), 0, attackPos);
         }
         return super.calculateAttackAABB(anim, target, grow);
     }
 
     @Override
-    public double maxAttackRange(AnimatedAction anim) {
-        return this.isBerserk() ? 2.5 : 1.4;
-    }
-
-    @Override
-    public AABB attackAABB(AnimatedAction anim) {
+    public AABB attackBB(AnimatedAction anim) {
         if (anim.is(JUMP, LAND)) {
-            double attackSize = this.getBbWidth() + 2.25;
+            double attackSize = this.getBbWidth() * 1.5;
             return new AABB(-attackSize, -0.5, -attackSize, attackSize, 2, attackSize);
         }
         if (anim.is(STOMP)) {
-            return new AABB(-2, -0.5, -2, 2, 2, 2);
+            return new AABB(-1.8, -0.5, -2.2, 1.8, 2, 2.2);
         }
-        return super.attackAABB(anim);
+        double width = this.getBbWidth() * 1.4;
+        double length = this.getBbWidth() * 1.5;
+        if (anim.is(DOUBLE_PUNCH)) {
+            width = this.getBbWidth() * 1.5;
+            length = this.getBbWidth() * 1.7;
+        }
+        if (anim.is(PUNCH)) {
+            width = this.getBbWidth() * 1.5;
+            length = this.getBbWidth() * 1.6;
+        }
+        return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
     }
 
     @Override

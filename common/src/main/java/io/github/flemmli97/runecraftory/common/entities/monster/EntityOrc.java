@@ -24,6 +24,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -67,10 +68,10 @@ public class EntityOrc extends BaseMonster {
     }
 
     @Override
-    public double maxAttackRange(AnimatedAction anim) {
-        if (anim.is(MELEE_2))
-            return 1.4;
-        return 1.3;
+    public AABB attackBB(AnimatedAction anim) {
+        double width = this.getBbWidth() * 1.8;
+        double length = this.getBbWidth() * 2.1;
+        return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
     }
 
     @Override

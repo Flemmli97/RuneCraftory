@@ -21,6 +21,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -59,8 +60,10 @@ public class EntityBuffamoo extends ChargingMonster {
     }
 
     @Override
-    public double maxAttackRange(AnimatedAction anim) {
-        return 1.4;
+    public AABB attackBB(AnimatedAction anim) {
+        double width = this.getBbWidth() * 1.4;
+        double length = this.getBbWidth() * 1.8;
+        return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
     }
 
     @Override
@@ -130,7 +133,7 @@ public class EntityBuffamoo extends ChargingMonster {
 
     @Override
     public double chargingSpeed() {
-        return 0.35f;
+        return 0.28f;
     }
 
     @Override

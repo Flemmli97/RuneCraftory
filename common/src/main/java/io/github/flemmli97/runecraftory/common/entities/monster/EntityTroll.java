@@ -12,6 +12,7 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
+import io.github.flemmli97.tenshilib.common.utils.OrientedBoundingBox;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.entity.Entity;
@@ -59,10 +60,22 @@ public class EntityTroll extends BaseMonster {
     }
 
     @Override
-    public double maxAttackRange(AnimatedAction anim) {
-        if (anim.is(SLAM))
-            return 3;
-        return 1.6;
+    public OrientedBoundingBox calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
+        if (anim.is(SLAM)) {
+            return new OrientedBoundingBox(this.attackBB(anim), this.getYRot(), 0, this.position());
+        }
+        return super.calculateAttackAABB(anim, target, grow);
+    }
+
+    @Override
+    public AABB attackBB(AnimatedAction anim) {
+        if (anim.is(SLAM)) {
+            double range = this.getBbWidth() * 2.1;
+            return new AABB(-range * 0.5, -0.02, -range * 0.25, range * 0.5, this.getBbHeight() + 0.02, range * 0.75);
+        }
+        double width = this.getBbWidth() * 1.4;
+        double length = this.getBbWidth() * 1.8;
+        return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
     }
 
     @Override
@@ -80,15 +93,6 @@ public class EntityTroll extends BaseMonster {
         if (this.getAnimationHandler().isCurrent(SLAM, DOUBLE_PUNCH))
             source.withChangedAttribute(ModAttributes.STUN.get(), 30);
         return source;
-    }
-
-    @Override
-    public AABB attackAABB(AnimatedAction anim) {
-        if (anim.is(SLAM)) {
-            double range = this.maxAttackRange(anim) + this.getBbWidth() * 0.5;
-            return new AABB(-range * 0.5, -0.02, -range * 0.25, range * 0.5, this.getBbHeight() + 0.02, range * 0.75);
-        }
-        return super.attackAABB(anim);
     }
 
     @Override

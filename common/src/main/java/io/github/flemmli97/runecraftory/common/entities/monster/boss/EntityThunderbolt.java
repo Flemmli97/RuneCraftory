@@ -41,6 +41,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -267,11 +268,6 @@ public class EntityThunderbolt extends BossMonster {
     }
 
     @Override
-    public double maxAttackRange(AnimatedAction anim) {
-        return this.getBbWidth() * 0.8;
-    }
-
-    @Override
     public void handleAttack(AnimatedAction anim) {
         BiConsumer<AnimatedAction, EntityThunderbolt> handler = ATTACK_HANDLER.get(anim.getID());
         if (handler != null)
@@ -288,6 +284,17 @@ public class EntityThunderbolt extends BossMonster {
                     .inflate(grow + 1), this.getYRot(), 0, this.position());
         } else
             return super.calculateAttackAABB(anim, target, grow);
+    }
+
+    @Override
+    public AABB attackBB(AnimatedAction anim) {
+        double width = this.getBbWidth() * 1.6;
+        double length = this.getBbWidth() * 1.5;
+        if (anim.is(HORN_ATTACK)) {
+            width = this.getBbWidth() * 1.3;
+            length = this.getBbWidth() * 1.8;
+        }
+        return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
     }
 
     @Override

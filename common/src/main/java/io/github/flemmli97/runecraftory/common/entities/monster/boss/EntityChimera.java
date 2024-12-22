@@ -38,6 +38,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
@@ -216,8 +217,14 @@ public class EntityChimera extends BossMonster implements MobAttackExt {
     }
 
     @Override
-    public double maxAttackRange(AnimatedAction anim) {
-        return this.getBbWidth() * 0.8;
+    public AABB attackBB(AnimatedAction anim) {
+        double width = this.getBbWidth() * 1.6;
+        double length = this.getBbWidth() * 1.7;
+        if (anim.is(BITE)) {
+            width = this.getBbWidth() * 1.2;
+            length = this.getBbWidth() * 1.3;
+        }
+        return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
     }
 
     @Override
@@ -229,9 +236,9 @@ public class EntityChimera extends BossMonster implements MobAttackExt {
         if (!anim.is(BITE)) {
             return super.calculateAttackAABB(anim, target, grow);
         }
-        double reach = this.maxAttackRange(anim) * 0.5 + this.getBbWidth() * 0.5;
+        double reach = this.getBbWidth() * 0.9;
         Vec3 dir;
-        float offset = anim.canAttack() ? 10 : -10;
+        float offset = anim.canAttack() ? 45 : -5;
         if (target != null && !this.canBeControlledByRider()) {
             reach = Math.min(reach, this.position().distanceTo(target));
             dir = MathUtils.rotate(MathUtils.normalY, target.subtract(this.position()).normalize(), offset * Mth.DEG_TO_RAD);
@@ -242,7 +249,7 @@ public class EntityChimera extends BossMonster implements MobAttackExt {
                 dir = Vec3.directionFromRotation(this.getXRot(), this.getYRot() + offset);
         }
         Vec3 attackPos = this.position().add(dir.scale(reach));
-        return new OrientedBoundingBox(this.attackAABB(anim).inflate(grow, 0, grow), this.getYRot() + 45, 0, attackPos);
+        return new OrientedBoundingBox(this.attackBB(anim).inflate(grow, 0, grow), this.getYRot() + 45, 0, attackPos);
     }
 
     @Override

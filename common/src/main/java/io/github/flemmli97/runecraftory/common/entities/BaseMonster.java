@@ -146,6 +146,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     private static final EntityDataAccessor<Boolean> PLAY_DEATH_STATE = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> FRIEND_POINTS_SYNC = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.INT);
 
+    private static boolean TESTING = false;
+
     public final Predicate<LivingEntity> targetPred = (e) -> {
         if (e != this) {
             if (this.getControllingPassenger() instanceof Player)
@@ -516,6 +518,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                         this.setBehaviour(Behaviour.STAY);
                 }
             }
+            this.handleTestingTick();
         } else {
             if (!this.playDeath() && TendCropsGoal.cantTendToCropsAnymore(this) && this.behaviour == Behaviour.FARM && this.tickCount % 20 == 0)
                 this.level.addParticle(ParticleTypes.ANGRY_VILLAGER, this.getX(), this.getY() + this.getBbHeight() + 0.3, this.getZ(), 0, 0, 0);
@@ -1546,10 +1549,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         return result;
     }
 
-    public double maxAttackRange(AnimatedAction anim) {
-        return 1.1;
-    }
-
     public void setupAttack(AnimatedAction anim) {
         if (this.getTarget() != null) {
             if (anim.isAtTick(1)) {
@@ -1585,7 +1584,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     public void mobAttack(AnimatedAction anim, LivingEntity target, Consumer<LivingEntity> cons) {
-        OrientedBoundingBox obb = this.calculateAttackAABB(anim, this.getTargetPosition() != null || target == null ? this.getTargetPosition() : target.position(), 0.2);
+        OrientedBoundingBox obb = this.calculateAttackAABB(anim, this.getTargetPosition() != null || target == null ? this.getTargetPosition() : target.position(), 0);
         this.level.getEntitiesOfClass(LivingEntity.class, obb.getEncompassingBox(),
                 entity -> this.hitPred.test(entity) && obb.intersects(entity.getBoundingBox())).forEach(cons);
         if (!this.level.isClientSide)
@@ -1598,18 +1597,17 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         Vec3 dir;
         if (target != null && !this.canBeControlledByRider()) {
             dir = target.subtract(this.position()).normalize();
-            double f = Math.sqrt(dir.x * dir.x + dir.z * dir.z);
-            yRot = -((float) (Mth.atan2(dir.x, dir.z) * Mth.RAD_TO_DEG));
-            xRot = ((float) (Mth.atan2(dir.y, f) * Mth.RAD_TO_DEG));
+            float[] xYRot = MathsHelper.YXRotFrom(dir);
+            yRot = xYRot[0];
+            xRot = -xYRot[1];
         } else if (this.getControllingPassenger() instanceof Player player) {
             yRot = player.getYRot();
             xRot = player.getXRot();
         }
         double off = this.getBbHeight() * 0.5;
-        return new OrientedBoundingBox(this.attackAABB(anim)
+        return new OrientedBoundingBox(this.attackBB(anim)
                 .inflate(grow, 0, grow)
-                .move(0, -off, grow)
-                .expandTowards(0, 0, -this.getBbWidth() * 0.3), yRot, Mth.clamp(xRot, -15, 15), this.position().add(0, off, 0));
+                .move(0, -off, grow), yRot, Mth.clamp(xRot, -15, 15), this.position().add(0, off, 0));
     }
 
     @Override
@@ -1620,9 +1618,9 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         return obb;
     }
 
-    public AABB attackAABB(AnimatedAction anim) {
-        double range = this.maxAttackRange(anim);
-        return new AABB(-range * 0.5 + this.getBbWidth() * 0.25, -0.02, 0, range * 0.5 + this.getBbWidth() * 0.25, this.getBbHeight() + 0.02, range + this.getBbWidth() * 0.5);
+    public AABB attackBB(AnimatedAction anim) {
+        double range = 1;
+        return new AABB(-range * 0.5, -0.02, 0, range * 0.5, this.getBbHeight() + 0.02, range);
     }
 
     public abstract void handleRidingCommand(int command);
@@ -1834,6 +1832,17 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     @Override
     public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
         data.runIf(SyncableDatas.TARGET_POS, pos -> this.targetPosition = pos);
+    }
+
+    private void handleTestingTick() {
+        if (!TESTING)
+            return;
+        AnimatedAction anim = null;
+        if (anim != null) {
+            if (!this.getAnimationHandler().isCurrent(anim)) {
+                this.getAnimationHandler().setAnimation(anim);
+            }
+        }
     }
 
     public enum Behaviour {

@@ -4,6 +4,7 @@ import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
 import io.github.flemmli97.runecraftory.common.network.S2CMobUpdate;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
+import io.github.flemmli97.runecraftory.common.utils.MathsHelper;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.common.utils.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -36,9 +37,6 @@ public abstract class ChargingMonster extends BaseMonster {
                 if (anim != null && this.isChargingAnim(anim)) {
                     this.prevStepHeight = this.maxUpStep;
                     this.maxUpStep = Math.max(1.5f, 1f + this.maxUpStep);
-                    if (this.isVehicle()) {
-                        this.setChargeMotion(this.getChargeTo(anim));
-                    }
                 } else if (this.prevStepHeight != -1) {
                     this.maxUpStep = this.prevStepHeight;
                     this.prevStepHeight = -1;
@@ -72,6 +70,9 @@ public abstract class ChargingMonster extends BaseMonster {
     @Override
     public void handleAttack(AnimatedAction anim) {
         if (this.isChargingAnim(anim)) {
+            if (this.chargeMotion == null) {
+                this.setChargeMotion(this.getChargeTo(anim));
+            }
             this.getNavigation().stop();
             if (anim.isPastTick(anim.getAttackTime())) {
                 if (!this.handleChargeMovement(anim))
@@ -103,8 +104,13 @@ public abstract class ChargingMonster extends BaseMonster {
             return super.calculateAttackAABB(anim, target, grow);
         double width = this.getBbWidth();
         double speed = Math.max(width, this.getDeltaMovement().length() - width);
+        float yRot = 0;
+        if (this.chargeMotion != null) {
+            yRot = MathsHelper.YRotFrom(this.chargeMotion);
+        }
         return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
-                .inflate(grow).expandTowards(0, 0, speed), this.getYRot(), 0, this.position());
+                .inflate(0.2)
+                .inflate(grow).expandTowards(0, 0, speed), yRot, 0, this.position());
     }
 
     @Override

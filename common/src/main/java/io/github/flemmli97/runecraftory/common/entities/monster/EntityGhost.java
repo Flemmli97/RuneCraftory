@@ -38,6 +38,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.PathFinder;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -142,8 +143,10 @@ public class EntityGhost extends ChargingMonster {
     }
 
     @Override
-    public double maxAttackRange(AnimatedAction anim) {
-        return 1.4;
+    public AABB attackBB(AnimatedAction anim) {
+        double width = this.getBbWidth() * 2.9;
+        double length = this.getBbWidth() * 2.5;
+        return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
     }
 
     @Override

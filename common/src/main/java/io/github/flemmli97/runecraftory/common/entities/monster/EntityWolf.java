@@ -23,6 +23,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -134,10 +135,10 @@ public class EntityWolf extends LeapingMonster {
     }
 
     @Override
-    public double maxAttackRange(AnimatedAction anim) {
-        if (LEAP.is(anim))
-            return 1.15;
-        return 1.25;
+    public AABB attackBB(AnimatedAction anim) {
+        double width = this.getBbWidth() * 1.4;
+        double length = this.getBbWidth() * 2.1;
+        return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
     }
 
     @Override

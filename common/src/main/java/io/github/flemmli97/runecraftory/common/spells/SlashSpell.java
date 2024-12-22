@@ -19,8 +19,8 @@ public class SlashSpell extends Spell {
             return false;
         EntitySlashResidue slash = new EntitySlashResidue(level, entity);
         Vec3 pos = entity.position();
-        Vec3 dir = entity instanceof Mob mob && mob.getTarget() != null ? mob.getTarget().position().subtract(pos).normalize().scale(1.1)
-                : entity.getLookAngle().scale(1.1);
+        Vec3 dir = entity instanceof Mob mob && mob.getTarget() != null ? mob.getTarget().position().subtract(pos).normalize().scale(1.2)
+                : entity.getLookAngle().scale(1.2);
         slash.setPos(pos.x + dir.x, pos.y + Mth.clamp(dir.y, -0.3, 0.8), pos.z + dir.z);
         slash.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.85f));
         slash.lookAt(EntityAnchorArgument.Anchor.FEET, entity.position());

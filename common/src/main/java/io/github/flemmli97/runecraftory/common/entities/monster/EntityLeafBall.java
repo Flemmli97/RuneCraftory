@@ -22,6 +22,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -79,11 +80,6 @@ public class EntityLeafBall extends BaseMonster {
     }
 
     @Override
-    public double maxAttackRange(AnimatedAction anim) {
-        return 1.15;
-    }
-
-    @Override
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(WIND)) {
             this.getNavigation().stop();
@@ -97,6 +93,13 @@ public class EntityLeafBall extends BaseMonster {
             }
         } else
             super.handleAttack(anim);
+    }
+
+    @Override
+    public AABB attackBB(AnimatedAction anim) {
+        double width = this.getBbWidth() * 1.4;
+        double length = this.getBbWidth() * 2;
+        return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
     }
 
     @Override

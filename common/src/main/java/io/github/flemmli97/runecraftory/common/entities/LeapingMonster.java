@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities;
 
+import io.github.flemmli97.runecraftory.common.utils.MathsHelper;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.common.utils.OrientedBoundingBox;
 import net.minecraft.world.entity.Entity;
@@ -17,6 +18,7 @@ public abstract class LeapingMonster extends BaseMonster {
 
     protected List<LivingEntity> hitEntity;
     private final Consumer<AnimatedAction> chargingAnim;
+    private Vec3 leapingDir;
     private boolean initAnim;
 
     public LeapingMonster(EntityType<? extends LeapingMonster> type, Level level) {
@@ -28,6 +30,8 @@ public abstract class LeapingMonster extends BaseMonster {
         return anim -> {
             if (this.isLeapingAnimation()) {
                 this.hitEntity = null;
+            } else {
+                this.leapingDir = null;
             }
         };
     }
@@ -58,6 +62,7 @@ public abstract class LeapingMonster extends BaseMonster {
             if (anim.canAttack()) {
                 Vec3 vec32 = this.getLeapVec(this.getTarget() == null ? this.getTargetPosition() : this.getTarget().position());
                 this.setDeltaMovement(vec32.x, this.leapHeightMotion(), vec32.z);
+                this.leapingDir = this.getDeltaMovement();
             }
             if (anim.isPastTick(anim.getAttackTime())) {
                 if (this.hitEntity == null)
@@ -87,18 +92,19 @@ public abstract class LeapingMonster extends BaseMonster {
         return 0.1f;
     }
 
-    public float maxLeapDistance() {
-        return 3;
-    }
-
     @Override
     public OrientedBoundingBox calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
         if (!this.isLeapingAnim(anim))
             return super.calculateAttackAABB(anim, target, grow);
         double width = this.getBbWidth();
         double speed = Math.max(width, this.getDeltaMovement().length() - width);
+        float yRot = 0;
+        if (this.leapingDir != null) {
+            yRot = MathsHelper.YRotFrom(this.leapingDir);
+        }
         return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
-                .inflate(grow).expandTowards(0, 0, speed), this.getYRot(), 0, this.position());
+                .inflate(0.2)
+                .inflate(grow).expandTowards(0, 0, speed), yRot, 0, this.position());
     }
 
     @Override

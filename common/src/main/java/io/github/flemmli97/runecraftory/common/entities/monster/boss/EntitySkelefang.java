@@ -196,21 +196,21 @@ public class EntitySkelefang extends BossMonster {
             WeightedEntry.wrap(new GoalAttackAction<EntitySkelefang>(TAIL_SLAM)
                     .cooldown(e -> e.animationCooldown(TAIL_SLAM))
                     .withCondition(((goal, target, previous) -> goal.attacker.remainingTailBones() > 10))
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 4), e -> 40 + e.getRandom().nextInt(20))), 8),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 4), e -> 40 + e.getRandom().nextInt(20))), 10),
             WeightedEntry.wrap(new GoalAttackAction<EntitySkelefang>(NEEDLE_THROW)
                     .cooldown(e -> e.animationCooldown(NEEDLE_THROW))
                     .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 6), e -> 40 + e.getRandom().nextInt(20))), 9),
             WeightedEntry.wrap(new GoalAttackAction<EntitySkelefang>(TAIL_SLAP)
                     .cooldown(e -> e.animationCooldown(TAIL_SLAP))
                     .withCondition(((goal, target, previous) -> goal.attacker.remainingTailBones() > 10))
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 4), e -> 40 + e.getRandom().nextInt(20))), 11),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 3), e -> 40 + e.getRandom().nextInt(20))), 12),
             WeightedEntry.wrap(new GoalAttackAction<EntitySkelefang>(SLASH)
                     .cooldown(e -> e.animationCooldown(SLASH))
                     .withCondition(((goal, target, previous) -> goal.attacker.remainingRightLegBones() > 0 || goal.attacker.remainingLeftLegBones() > 0))
                     .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 4), e -> 40 + e.getRandom().nextInt(20))), 9),
             WeightedEntry.wrap(new GoalAttackAction<EntitySkelefang>(CHARGE)
                     .cooldown(e -> e.animationCooldown(CHARGE))
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 7), e -> 20 + e.getRandom().nextInt(20))), 10)
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 7), e -> 20 + e.getRandom().nextInt(20))), 11)
     );
     private static final List<WeightedEntry.Wrapper<IdleAction<EntitySkelefang>>> IDLE_ACTIONS = List.of(
             WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 3)), 1)
@@ -634,6 +634,7 @@ public class EntitySkelefang extends BossMonster {
             double width = this.getBbWidth();
             double speed = Math.max(width, this.getDeltaMovement().length() - width);
             OrientedBoundingBox obb = new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
+                    .inflate(0.2, 0, 0.2)
                     .expandTowards(0, 0, speed), this.getYRot(), 0, this.position());
             this.level.getEntitiesOfClass(LivingEntity.class, obb.getEncompassingBox(),
                     entity -> this.hitPred.test(entity) && obb.intersects(entity.getBoundingBox())).forEach(cons);

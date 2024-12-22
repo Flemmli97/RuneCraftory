@@ -14,6 +14,7 @@ import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -47,8 +48,10 @@ public class EntityPommePomme extends ChargingMonster {
     }
 
     @Override
-    public double maxAttackRange(AnimatedAction anim) {
-        return 1.15;
+    public AABB attackBB(AnimatedAction anim) {
+        double width = this.getBbWidth() * 1.3;
+        double length = this.getBbWidth() * 1.7;
+        return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
     }
 
     @Override

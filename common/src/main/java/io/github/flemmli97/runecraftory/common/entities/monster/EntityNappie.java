@@ -11,6 +11,7 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -28,7 +29,9 @@ public class EntityNappie extends EntityPommePomme implements HealingPredicateEn
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityPommePomme>>> ATTACKS = List.of(
             WeightedEntry.wrap(MonsterActionUtils.simpleMeleeActionInRange(KICK, e -> 1), 5),
-            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(HEAL, e -> 1), 1),
+            WeightedEntry.wrap(new GoalAttackAction<EntityPommePomme>(HEAL)
+                    .cooldown(e -> e.animationCooldown(HEAL))
+                    .prepare(() -> new WrappedRunner<>(new MoveToTargetRunner<>(1, 12))), 1),
             WeightedEntry.wrap(new GoalAttackAction<EntityPommePomme>(CHARGE_ATTACK)
                     .cooldown(e -> e.animationCooldown(CHARGE_ATTACK))
                     .withCondition(MonsterActionUtils.chargeCondition())
@@ -74,13 +77,6 @@ public class EntityNappie extends EntityPommePomme implements HealingPredicateEn
     @Override
     public AnimationHandler<EntityNappie> getAnimationHandler() {
         return this.animationHandler;
-    }
-
-    @Override
-    public double maxAttackRange(AnimatedAction anim) {
-        if (anim.is(HEAL))
-            return 10;
-        return super.maxAttackRange(anim);
     }
 
     @Override

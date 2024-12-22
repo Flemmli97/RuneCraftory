@@ -33,6 +33,7 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -102,8 +103,10 @@ public class EntityWeagle extends BaseMonster {
     }
 
     @Override
-    public double maxAttackRange(AnimatedAction anim) {
-        return this.getBbWidth();
+    public AABB attackBB(AnimatedAction anim) {
+        double width = this.getBbWidth() * 1.5;
+        double length = this.getBbWidth() * 1.7;
+        return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
     }
 
     @Override
@@ -156,6 +159,7 @@ public class EntityWeagle extends BaseMonster {
     public OrientedBoundingBox calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
         if (anim.is(SWOOP))
             return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
+                    .inflate(0.2)
                     .inflate(grow), this.getYRot(), 0, this.position().add(this.getDeltaMovement()));
         return super.calculateAttackAABB(anim, target, grow);
     }

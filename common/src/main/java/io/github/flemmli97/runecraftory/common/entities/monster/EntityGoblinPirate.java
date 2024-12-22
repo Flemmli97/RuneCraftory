@@ -19,6 +19,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 
 import java.util.List;
 
@@ -68,6 +69,13 @@ public class EntityGoblinPirate extends EntityGoblin {
     @Override
     public AnimationHandler<EntityGoblinPirate> getAnimationHandler() {
         return this.animationHandler;
+    }
+
+    @Override
+    public AABB attackBB(AnimatedAction anim) {
+        double width = this.getBbWidth() * 1.5;
+        double length = this.getBbWidth() * 2;
+        return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
     }
 
     @Override

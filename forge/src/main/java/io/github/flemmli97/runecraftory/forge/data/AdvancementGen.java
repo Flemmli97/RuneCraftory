@@ -116,6 +116,7 @@ public class AdvancementGen implements DataProvider {
         Advancement ambrosia = bossProgression(ModEntities.AMBROSIA, cons, LibAdvancements.AMBROSIA, rootProgression);
         Advancement thunderbolt = bossProgression(ModEntities.THUNDERBOLT, cons, LibAdvancements.THUNDERBOLT, ambrosia);
         Advancement marionetta = bossProgression(ModEntities.MARIONETTA, cons, LibAdvancements.MARIONETTA, thunderbolt);
+        Advancement handonetta = bossProgression(ModEntities.HANDONETTA, cons, LibAdvancements.HANDONETTA, thunderbolt);
         builder = Advancement.Builder.advancement().display(SpawnEgg.fromType(ModEntities.SANO.get()).get(),
                         new TranslatableComponent("runecraftory.advancements.progression.boss.sano_uno.title"),
                         new TranslatableComponent("runecraftory.advancements.progression.boss.sano_uno.description"),
@@ -163,6 +164,10 @@ public class AdvancementGen implements DataProvider {
     }
 
     private static <T extends Entity> Advancement bossProgression(RegistryEntrySupplier<EntityType<T>> entity, Consumer<Advancement> cons, ResourceLocation id, Advancement parent) {
+        return bossProgression(entity, cons, id, parent, false);
+    }
+
+    private static <T extends Entity> Advancement bossProgression(RegistryEntrySupplier<EntityType<T>> entity, Consumer<Advancement> cons, ResourceLocation id, Advancement parent, boolean hidden) {
         CriterionTriggerInstance trigger = parent != null ? new KilledTrigger.TriggerInstance(
                 CriteriaTriggers.PLAYER_KILLED_ENTITY.getId(),
                 EntityPredicate.Composite.wrap(LibAdvancements.playerAdvancementCheck(parent.getId()).build()),
@@ -173,7 +178,7 @@ public class AdvancementGen implements DataProvider {
         Advancement.Builder builder = Advancement.Builder.advancement().display(SpawnEgg.fromType(entity.get()).get(),
                         new TranslatableComponent(String.format("runecraftory.advancements.progression.boss.%s.title", entity.getID().getPath())),
                         new TranslatableComponent(String.format("runecraftory.advancements.progression.boss.%s.description", entity.getID().getPath())),
-                        new ResourceLocation("textures/block/dirt.png"), FrameType.TASK, true, true, false)
+                        new ResourceLocation("textures/block/dirt.png"), FrameType.TASK, true, true, hidden)
                 .addCriterion("boss", trigger);
         if (parent != null)
             builder.parent(parent);

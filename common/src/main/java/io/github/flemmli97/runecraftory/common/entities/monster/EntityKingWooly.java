@@ -1,7 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -32,11 +31,6 @@ public class EntityKingWooly extends EntityAggressiveWooly {
     @Override
     public float getSoundVolume() {
         return 1.15f;
-    }
-
-    @Override
-    public double maxAttackRange(AnimatedAction anim) {
-        return 1.7;
     }
 
     @Override

@@ -16,6 +16,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
+import io.github.flemmli97.runecraftory.common.utils.MathsHelper;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
@@ -44,6 +45,7 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
@@ -51,7 +53,6 @@ import java.util.List;
 import java.util.function.BiConsumer;
 
 public class EntityHandonetta extends BossMonster {
-
 
     public static final AnimatedAction SWIPE = new AnimatedAction(1.28, 0.64, "swipe");
     public static final AnimatedAction FLICK = new AnimatedAction(1.32, 0.64, "flick");
@@ -264,9 +265,31 @@ public class EntityHandonetta extends BossMonster {
             handler.accept(anim, this);
     }
 
+
     @Override
     public OrientedBoundingBox calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
+        if (anim.is(PUNCH)) {
+            float[] rots = MathsHelper.YXRotFrom(this.moveDirection);
+            return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
+                    .inflate(grow + 0.2, grow, grow + 0.2), rots[0], rots[1], this.position());
+        }
+        if (anim.is(GRAB)) {
+            float[] rots = MathsHelper.YXRotFrom(this.moveDirection);
+            return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
+                    .inflate(grow, 0, grow), rots[0], rots[1], this.position());
+        }
         return super.calculateAttackAABB(anim, target, grow);
+    }
+
+    @Override
+    public AABB attackBB(AnimatedAction anim) {
+        double width = this.getBbWidth() * 2.2;
+        double length = this.getBbWidth() * 1.7;
+        if (anim.is(FLICK)) {
+            width = this.getBbWidth() * 1.6;
+            length = this.getBbWidth() * 1.8;
+        }
+        return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
     }
 
     @Override

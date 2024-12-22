@@ -241,7 +241,6 @@ public class EntityGrimoire extends BossMonster {
             handler.accept(anim, this);
     }
 
-
     @Override
     public OrientedBoundingBox calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
         if (anim.is(CHARGE_LAND))
@@ -256,17 +255,19 @@ public class EntityGrimoire extends BossMonster {
     }
 
     @Override
-    public AABB attackAABB(AnimatedAction anim) {
+    public AABB attackBB(AnimatedAction anim) {
+        double width = this.getBbWidth() * 1.4;
+        double length = this.getBbWidth() * 1.5;
         if (anim.is(TAIL_SWIPE)) {
-            double range = this.maxAttackRange(anim) + this.getBbWidth() * 0.5;
-            return new AABB(-range * 0.5, -0.02, 0, range * 0.5, this.getBbHeight() + 0.02, range);
+            width = this.getBbWidth() * 1.5;
+            length = this.getBbWidth() * 1.45;
+            return new AABB(-width * 0.65, -0.02, 0, width * 0.35, this.getBbHeight() + 0.02, length);
         }
-        return super.attackAABB(anim);
-    }
-
-    @Override
-    public double maxAttackRange(AnimatedAction anim) {
-        return 2.5;
+        if (anim.is(BITE)) {
+            width = this.getBbWidth() * 1.1;
+            length = this.getBbWidth() * 1.4;
+        }
+        return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
     }
 
     @Override

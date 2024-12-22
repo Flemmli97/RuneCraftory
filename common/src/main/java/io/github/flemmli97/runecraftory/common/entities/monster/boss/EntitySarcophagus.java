@@ -26,6 +26,7 @@ import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
@@ -336,17 +337,13 @@ public class EntitySarcophagus extends BossMonster implements MobAttackExt {
     }
 
     @Override
-    public double maxAttackRange(AnimatedAction anim) {
-        return this.getBbWidth() * 0.8;
-    }
-
-    @Override
     public OrientedBoundingBox calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
         if (anim.is(CHARGE)) {
             double width = this.getBbWidth();
             double speed = Math.max(width, this.getDeltaMovement().length() - width);
+            float rotY = -Mth.wrapDegrees((float) (Mth.atan2(this.getDeltaMovement().x(), this.getDeltaMovement().z()) * Mth.RAD_TO_DEG));
             return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
-                    .inflate(0.4, 0.1, 0.4).expandTowards(0, 0, speed), this.getYRot(), 0, this.position());
+                    .inflate(grow + 0.4, 0.1, grow + 0.4).expandTowards(0, 0, speed), rotY, 0, this.position());
         }
         return super.calculateAttackAABB(anim, target, grow);
     }

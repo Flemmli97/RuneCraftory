@@ -8,6 +8,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
@@ -15,12 +16,15 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
+import io.github.flemmli97.tenshilib.common.utils.OrientedBoundingBox;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
@@ -74,8 +78,22 @@ public class EntityMinotaur extends ChargingMonster {
     }
 
     @Override
-    public double maxAttackRange(AnimatedAction anim) {
-        return anim.is(SPIN) ? 6 : 2;
+    public OrientedBoundingBox calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
+        if (anim.is(SPIN)) {
+            return new OrientedBoundingBox(this.attackBB(anim), this.getYRot(), 0, this.position());
+        }
+        return super.calculateAttackAABB(anim, target, grow);
+    }
+
+    @Override
+    public AABB attackBB(AnimatedAction anim) {
+        if (anim.is(SPIN)) {
+            double attackSize = this.getBbWidth() * 1.4;
+            return new AABB(-attackSize, -0.2, -attackSize, attackSize, this.getBbHeight() + 0.2, attackSize);
+        }
+        double width = this.getBbWidth() * 1.6;
+        double length = this.getBbWidth() * 2.1;
+        return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
     }
 
     @Override
@@ -84,12 +102,8 @@ public class EntityMinotaur extends ChargingMonster {
             if (this.hitEntity == null)
                 this.hitEntity = new ArrayList<>();
             if (this.spinDirection == null) {
-                Vec3 dir;
-                if (this.getTarget() != null) {
-                    dir = this.getTarget().position().subtract(this.position());
-                } else
-                    dir = this.getLookAngle();
-                this.spinDirection = new Vec3(dir.x(), 0, dir.z()).normalize().scale(0.1);
+                this.spinDirection = EntityUtils.getTargetDirection(this, EntityAnchorArgument.Anchor.FEET, true)
+                        .scale(0.1);
                 this.spinAngle = this.getYRot() + 90;
             }
             if (anim.isPastTick(0.24) && !anim.isPastTick(1.28)) {

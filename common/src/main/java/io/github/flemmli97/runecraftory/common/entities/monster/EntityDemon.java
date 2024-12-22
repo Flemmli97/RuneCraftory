@@ -15,7 +15,6 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRun
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
-import io.github.flemmli97.tenshilib.common.utils.MathUtils;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -27,7 +26,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Predicate;
 
 public class EntityDemon extends BaseMonster implements HealingPredicateEntity, ElementalAttackMob {
@@ -88,33 +86,9 @@ public class EntityDemon extends BaseMonster implements HealingPredicateEntity, 
             if (anim.canAttack()) {
                 ModSpells.CURE_ALL.get().use(this);
             }
-        } else if (anim.is(STAB) || anim.is(STAB_LONG)) {
-            this.getNavigation().stop();
-            if (anim.canAttack()) {
-                final float range = anim.is(STAB_LONG) ? 5 : 2.5f;
-                AABB aabb = AABB.ofSize(this.position(), 2 * (range + 1), 2 * (range + 1), 2 * (range + 1));
-                this.level.getEntitiesOfClass(LivingEntity.class, aabb, e -> this.hitPred.test(e) && this.spearHit(e, range))
-                        .forEach(this::doHurtTarget);
-            }
         } else {
             super.handleAttack(anim);
         }
-    }
-
-    protected boolean spearHit(Entity e, float range) {
-        final float width = 2;
-        Vec3 from = this.position().add(0, this.getBbHeight() * 0.5, 0);
-        Vec3 to = from.add(this.getLookAngle().scale(range));
-        if (e.isSpectator() || !e.isAlive() || !e.isPickable())
-            return false;
-        AABB aabb = e.getBoundingBox().inflate(width + 0.3);
-        Optional<Vec3> ray = aabb.clip(from, to);
-        if (ray.isEmpty() && !aabb.contains(this.position()))
-            return false;
-        double dist = MathUtils.distTo(e, from, to);
-        Vec3 dir = to.subtract(from).normalize().scale(0.1);
-        double maxdist = width + e.getBbWidth() + 0.3;
-        return dist <= maxdist * maxdist && MathUtils.isInFront(e.position(), from, dir);
     }
 
     @Override
@@ -132,14 +106,20 @@ public class EntityDemon extends BaseMonster implements HealingPredicateEntity, 
     }
 
     @Override
-    public double maxAttackRange(AnimatedAction anim) {
-        if (anim.is(STAB))
-            return 2;
-        if (anim.is(STAB_LONG))
-            return 4;
-        if (anim.is(SWIPE))
-            return 2.5;
-        return super.maxAttackRange(anim);
+    public AABB attackBB(AnimatedAction anim) {
+        double width = this.getBbWidth() * 1;
+        double length = width;
+        if (anim.is(STAB)) {
+            width = this.getBbWidth() * 1.4;
+            length = this.getBbWidth() * 2.6;
+        } else if (anim.is(STAB_LONG)) {
+            width = this.getBbWidth() * 1.4;
+            length = this.getBbWidth() * 3.2;
+        } else if (anim.is(SWIPE)) {
+            width = this.getBbWidth() * 2.75;
+            length = this.getBbWidth() * 2.3;
+        }
+        return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
     }
 
     @Override

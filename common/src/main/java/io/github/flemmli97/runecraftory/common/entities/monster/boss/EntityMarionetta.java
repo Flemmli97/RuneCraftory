@@ -42,6 +42,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
@@ -256,14 +257,21 @@ public class EntityMarionetta extends BossMonster {
         if (anim.is(SPIN)) {
             float rotY = -Mth.wrapDegrees((float) (Mth.atan2(this.moveDirection.x(), this.moveDirection.z()) * Mth.RAD_TO_DEG));
             return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
-                    .inflate(1.6, 0.1, 1.6), rotY, 0, this.position());
+                    .inflate(grow + 1.6, 0.1, grow + 1.6), rotY, 0, this.position());
         }
         if (anim.is(CHEST_ATTACK)) {
             float rotY = -Mth.wrapDegrees((float) (Mth.atan2(this.moveDirection.x(), this.moveDirection.z()) * Mth.RAD_TO_DEG));
             return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
-                    .inflate(1.2, 0.1, 1.2), rotY, 0, this.position());
+                    .inflate(grow + 1.2, 0.1, grow + 1.2), rotY, 0, this.position());
         }
         return super.calculateAttackAABB(anim, target, grow);
+    }
+
+    @Override
+    public AABB attackBB(AnimatedAction anim) {
+        double width = this.getBbWidth() * 1.5;
+        double length = this.getBbWidth() * 1.7;
+        return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
     }
 
     @Override

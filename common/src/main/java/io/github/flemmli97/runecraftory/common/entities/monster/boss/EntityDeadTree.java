@@ -33,7 +33,6 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
@@ -41,6 +40,7 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -254,17 +254,18 @@ public class EntityDeadTree extends BossMonster {
     }
 
     @Override
+    public AABB attackBB(AnimatedAction anim) {
+        double width = this.getBbWidth() * 2.1;
+        double length = this.getBbWidth() * 1.85;
+        return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
+    }
+
+    @Override
     public void handleAttack(AnimatedAction anim) {
-        LivingEntity target = this.getTarget();
         this.getNavigation().stop();
         BiConsumer<AnimatedAction, EntityDeadTree> handler = ATTACK_HANDLER.get(anim.getID());
         if (handler != null)
             handler.accept(anim, this);
-    }
-
-    @Override
-    public double maxAttackRange(AnimatedAction anim) {
-        return 3;
     }
 
     @Override

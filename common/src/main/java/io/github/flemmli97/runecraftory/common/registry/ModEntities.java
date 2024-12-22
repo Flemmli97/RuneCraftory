@@ -74,7 +74,6 @@ import io.github.flemmli97.runecraftory.common.entities.misc.StarFallSummoner;
 import io.github.flemmli97.runecraftory.common.entities.misc.WindBladeBarrageSummoner;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityAnt;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityBeetle;
-import io.github.flemmli97.runecraftory.common.entities.monster.EntityBigAnt;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityBigMuck;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityBuffamoo;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityChipsqueek;
@@ -286,7 +285,7 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_WATER, -10)
                     .xp(10).tamingChance(0.1f),
             new GateSpawnData.Builder(0, 0).addToBiomeTag(80, RunecraftoryTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, RunecraftoryTags.IS_LUSH, RunecraftoryTags.IS_SAVANNA));
-    public static final RegistryEntrySupplier<EntityType<EntityBigAnt>> KILLER_ANT = regMonster(EntityType.Builder.of(EntityBigAnt::new, MobCategory.MONSTER).sized(1.35f, 0.54f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "killer_ant"),
+    public static final RegistryEntrySupplier<EntityType<EntityAnt>> KILLER_ANT = regMonster(EntityType.Builder.of(EntityAnt::new, MobCategory.MONSTER).sized(1.35f, 0.54f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "killer_ant"),
             0x0f0e0e, 0x754848,
             new EntityProperties.Builder()
                     .putAttributes(() -> Attributes.MAX_HEALTH, 28).putLevelGains(() -> Attributes.MAX_HEALTH, 525)
