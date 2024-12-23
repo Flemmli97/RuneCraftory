@@ -1293,11 +1293,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     @Override
-    public boolean isNoGravity() {
-        return super.isNoGravity() && !this.playDeath() && this.isAlive();
-    }
-
-    @Override
     public boolean hurt(DamageSource source, float amount) {
         if (source.getEntity() instanceof Player player && player.getUUID().equals(this.getOwnerUUID())
                 && !player.isShiftKeyDown()) {
@@ -1376,10 +1371,19 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     public void handleLandTravel(Vec3 vec) {
         this.flyingSpeed = 0.02f; // Default Val
+        if (!this.isAlive() || this.playDeath()) {
+            vec = Vec3.ZERO;
+        }
         super.travel(vec);
     }
 
     public void handleFreeTravel(Vec3 vec) {
+        if (this.shouldFreezeTravel()) {
+            this.xxa = 0;
+            this.yya = 0;
+            this.zza = 0;
+            return;
+        }
         if (this.canBeControlledByRider() && this.getControllingPassenger() instanceof Player player) {
             this.handlePlayerInput(player, true, this::freeTravel);
         } else {
@@ -1388,9 +1392,15 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     private void freeTravel(Vec3 vec) {
+        boolean currentNophysics = this.noPhysics;
+        if (!this.isAlive() || this.playDeath()) {
+            this.noPhysics = false;
+            vec = Vec3.ZERO;
+        }
         this.moveRelative(this.getSpeed() * 0.2f, vec);
         this.move(MoverType.SELF, this.getDeltaMovement());
         this.setDeltaMovement(this.getDeltaMovement().scale(0.91));
+        this.noPhysics = currentNophysics;
     }
 
     protected void handlePlayerInput(Player player, boolean hovers, Consumer<Vec3> cons) {

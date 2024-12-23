@@ -83,7 +83,7 @@ public class EntityWeagle extends BaseMonster {
     @Override
     protected void applyAttributes() {
         super.applyAttributes();
-        this.getAttribute(Attributes.FLYING_SPEED).setBaseValue(0.4);
+        this.getAttribute(Attributes.FLYING_SPEED).setBaseValue(0.33);
         this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(32);
     }
 

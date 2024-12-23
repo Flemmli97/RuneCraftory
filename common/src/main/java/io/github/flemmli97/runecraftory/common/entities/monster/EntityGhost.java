@@ -110,7 +110,7 @@ public class EntityGhost extends ChargingMonster {
     protected void applyAttributes() {
         super.applyAttributes();
         this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(32);
-        this.getAttribute(Attributes.FLYING_SPEED).setBaseValue(0.37);
+        this.getAttribute(Attributes.FLYING_SPEED).setBaseValue(0.31);
         this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
     }
 
@@ -221,7 +221,6 @@ public class EntityGhost extends ChargingMonster {
                 vec = new Vec3(vec.x, 0.006, vec.z);
         }
         this.handleFreeTravel(vec);
-
     }
 
     @Override

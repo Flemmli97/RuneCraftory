@@ -192,7 +192,7 @@ public class EntityHandonetta extends BossMonster {
 
     @Override
     public RunecraftoryBossbar createBossBar() {
-        return new RunecraftoryBossbar(null, this.getDisplayName(), BossEvent.BossBarColor.PINK, BossEvent.BossBarOverlay.PROGRESS)
+        return new RunecraftoryBossbar(null, this.getDisplayName(), BossEvent.BossBarColor.WHITE, BossEvent.BossBarOverlay.PROGRESS)
                 .setMusic(ModSounds.HANDONETTA_FIGHT.get());
     }
 
@@ -213,7 +213,7 @@ public class EntityHandonetta extends BossMonster {
         super.applyAttributes();
         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.26);
         this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(32);
-        this.getAttribute(Attributes.FLYING_SPEED).setBaseValue(0.4);
+        this.getAttribute(Attributes.FLYING_SPEED).setBaseValue(0.32);
     }
 
     @Override
