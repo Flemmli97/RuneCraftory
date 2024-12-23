@@ -14,6 +14,7 @@ public class EntityButterflySummoner extends ProjectileSummonHelperEntity {
 
     public EntityButterflySummoner(Level level, LivingEntity caster) {
         super(ModEntities.BUTTERFLY_SUMMONER.get(), level, caster);
+        this.maxLivingTicks = 26;
     }
 
     @Override

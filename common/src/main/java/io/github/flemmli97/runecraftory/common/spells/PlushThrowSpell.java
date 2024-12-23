@@ -15,10 +15,10 @@ public class PlushThrowSpell extends Spell {
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
-        int plushAmount = entity.getRandom().nextInt(7) + 9;
+        int plushAmount = entity.getRandom().nextInt(6) + 7;
         for (int i = 0; i < plushAmount; ++i) {
             EntityFurniture furniture = new EntityFurniture(level, entity, entity.getRandom().nextBoolean() ? EntityFurniture.Type.WOOLYPLUSH : EntityFurniture.Type.CHIPSQUEEKPLUSH);
-            furniture.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.9f));
+            furniture.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.8f));
             if (entity instanceof Mob mob && mob.getTarget() != null) {
                 Vec3 dir = mob.getTarget().position().subtract(entity.position()).scale(0.35 + entity.getRandom().nextDouble() * 0.2);
                 furniture.shootAtPosition(entity.getX() + dir.x(), mob.getTarget().getY() + 10, entity.getZ() + dir.z(), 0.95f + entity.getRandom().nextFloat() * 0.2f, 10);

@@ -74,11 +74,11 @@ public class EntityButterfly extends BaseProjectile {
             this.setYRot(this.entityData.get(LOCKED_YAW));
             Vec3 pos = stuck.position().add(this.entityData.get(HIT_X), this.entityData.get(HIT_Y), this.entityData.get(HIT_Z));
             this.setPos(pos);
-            if (!this.level.isClientSide && this.livingTicks % 30 == 0 && this.getOwner() != null) {
+            if (!this.level.isClientSide && this.livingTicks % 40 == 0 && this.getOwner() != null) {
                 if (this.getOwner() instanceof LivingEntity living)
                     CombatUtils.applyTempAttribute(living, ModAttributes.DRAIN.get(), 80);
                 CustomDamage.Builder builder = new CustomDamage.Builder(this, this.getOwner()).magic().noKnockback().hurtResistant(0);
-                stuck.hurt(builder.get(), (float) (CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier * 0.8));
+                stuck.hurt(builder.get(), (float) (CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier * 0.7));
                 if (this.getOwner() instanceof LivingEntity living)
                     CombatUtils.removeTempAttribute(living, ModAttributes.DRAIN.get());
             }

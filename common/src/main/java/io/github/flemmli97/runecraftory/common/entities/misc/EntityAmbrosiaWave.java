@@ -68,7 +68,7 @@ public class EntityAmbrosiaWave extends BaseDamageCloud {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(MAX_TICK, 200);
+        this.entityData.define(MAX_TICK, 140);
     }
 
     @Override
