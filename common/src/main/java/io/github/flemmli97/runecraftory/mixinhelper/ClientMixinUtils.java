@@ -96,8 +96,9 @@ public class ClientMixinUtils {
                 Math.min(255, FastColor.ARGB32.blue(packedColourOne) + FastColor.ARGB32.blue(packedColorTwo)));
     }
 
-    public static void translateSleepingEntity(LivingEntity entity, PoseStack poseStack) {
-        if (EntityData.getSleepState(entity) == EntityData.SleepState.VANILLA) {
+    public static void translateSleepingEntity(LivingEntity entity, PoseStack poseStack, float flipDegrees) {
+        if (EntityData.getSleepStateFrom(entity) == EntityData.SleepState.VANILLA) {
+            poseStack.mulPose(Vector3f.XP.rotationDegrees(flipDegrees));
             float standOffset = entity.getEyeHeight(Pose.STANDING) * 0.6f;
             poseStack.translate(0, -standOffset, 0);
         }

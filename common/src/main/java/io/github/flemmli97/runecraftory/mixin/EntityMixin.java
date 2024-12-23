@@ -1,12 +1,10 @@
 package io.github.flemmli97.runecraftory.mixin;
 
-import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.entities.GateEntity;
 import io.github.flemmli97.runecraftory.mixinhelper.MixinUtils;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MoverType;
-import net.minecraft.world.entity.Pose;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -46,13 +44,6 @@ public abstract class EntityMixin {
             }
         }
         return orig;
-    }
-
-    @Inject(method = "getPose", at = @At("HEAD"), cancellable = true)
-    private void checkSleepingPose(CallbackInfoReturnable<Pose> info) {
-        if ((Object) this instanceof LivingEntity living && EntityData.getSleepState(living) == EntityData.SleepState.VANILLA) {
-            info.setReturnValue(Pose.SLEEPING);
-        }
     }
 
     @Shadow

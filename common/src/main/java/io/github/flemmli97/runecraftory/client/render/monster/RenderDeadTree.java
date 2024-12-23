@@ -15,7 +15,7 @@ public class RenderDeadTree<T extends EntityDeadTree> extends ScaledEntityRender
 
     @Override
     public ResourceLocation getTextureLocation(T entity) {
-        if (entity.playDeath() || entity.deathTime > 0 || entity.isSleeping() || EntityData.getSleepState(entity) != EntityData.SleepState.NONE)
+        if (entity.playDeath() || entity.deathTime > 0 || entity.isSleeping() || EntityData.getSleepStateFrom(entity) != EntityData.SleepState.NONE)
             return new ResourceLocation(RuneCraftory.MODID, "textures/entity/monsters/dead_tree_sleep.png");
         return super.getTextureLocation(entity);
     }

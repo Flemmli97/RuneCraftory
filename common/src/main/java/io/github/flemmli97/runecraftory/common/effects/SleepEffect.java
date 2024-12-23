@@ -29,7 +29,7 @@ public class SleepEffect extends MobEffect {
             // Setting no ai prevents mobs moving/getting moved. So we do it here
             if (living instanceof MobNoAIHandler mob) {
                 mob.setIgnoreNoAI();
-                living.travel(new Vec3(living.xxa, living.yya, living.zza));
+                living.travel(new Vec3(0, 0, 0));
             }
         }
         MobEffectInstance eff = living.getEffect(this);

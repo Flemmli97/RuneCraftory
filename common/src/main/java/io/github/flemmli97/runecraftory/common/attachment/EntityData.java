@@ -18,20 +18,25 @@ public class EntityData {
 
     private ItemStack main, off;
 
-    public static SleepState getSleepState(LivingEntity entity) {
-        return Platform.INSTANCE.getEntityData(entity).map(e -> {
-            if (!e.isSleeping())
-                return SleepState.NONE;
-            if (entity instanceof SleepingEntity sleeping && sleeping.hasSleepingAnimation())
-                return SleepState.CUSTOM;
-            return SleepState.VANILLA;
-        }).orElse(SleepState.NONE);
+    public float sleepYRot;
+
+    public static SleepState getSleepStateFrom(LivingEntity entity) {
+        return Platform.INSTANCE.getEntityData(entity).map(e -> e.getSleepState(entity)).orElse(SleepState.NONE);
+    }
+
+    public SleepState getSleepState(LivingEntity entity) {
+        if (!this.isSleeping())
+            return SleepState.NONE;
+        if (entity instanceof SleepingEntity sleeping && sleeping.hasSleepingAnimation())
+            return SleepState.CUSTOM;
+        return SleepState.VANILLA;
     }
 
     public void setSleeping(LivingEntity entity, boolean flag) {
         this.sleeping = flag;
         this.updateAiState(entity, flag);
         this.setOrthoView(entity, flag);
+        this.sleepYRot = entity.yBodyRot;
         if (!entity.level.isClientSide) {
             Platform.INSTANCE.sendToTrackingAndSelf(new S2CEntityDataSync(entity.getId(), S2CEntityDataSync.Type.SLEEP, this.sleeping), entity);
         } else

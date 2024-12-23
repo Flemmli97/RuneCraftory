@@ -19,7 +19,7 @@ public class RenderDuck<T extends EntityDuck> extends ScaledEntityRenderer<T, Mo
 
     @Override
     public ResourceLocation getTextureLocation(T entity) {
-        if (EntityData.getSleepState(entity) != EntityData.SleepState.NONE)
+        if (EntityData.getSleepStateFrom(entity) != EntityData.SleepState.NONE)
             return this.sleepTexture;
         return super.getTextureLocation(entity);
     }

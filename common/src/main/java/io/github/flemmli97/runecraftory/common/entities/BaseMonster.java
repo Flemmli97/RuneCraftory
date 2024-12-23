@@ -485,11 +485,13 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         }
         if (!this.level.isClientSide) {
             this.updater.tick();
-            if (this.tamingTick > 0) {
-                --this.tamingTick;
+            if (this.tamingTick > 0 || this.isNoAi()) {
                 if (this.getMoveFlag() != MoveType.NONE) {
                     this.setMovingFlag(MoveType.NONE);
                     this.setDeltaMovement(Vec3.ZERO);
+                }
+                if (this.tamingTick > 0) {
+                    --this.tamingTick;
                 }
             }
             if (this.tamingTick == 0) {
@@ -1558,6 +1560,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     public void handleAttack(AnimatedAction anim) {
+        if (anim.is(this.getDeathAnimation(), this.getSleepAnimation()))
+            return;
         this.getNavigation().stop();
         if (anim.canAttack()) {
             this.mobAttack(anim, this.getTarget(), this::doHurtTarget);
