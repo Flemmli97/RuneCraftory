@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.common.entities;
+package io.github.flemmli97.runecraftory.common.entities.utils;
 
 import io.github.flemmli97.runecraftory.common.network.Packet;
 import io.github.flemmli97.runecraftory.common.network.S2CBossbarInfoAdd;

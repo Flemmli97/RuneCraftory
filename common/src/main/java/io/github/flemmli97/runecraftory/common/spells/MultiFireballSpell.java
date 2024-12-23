@@ -6,10 +6,9 @@ import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityFireball;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
+import io.github.flemmli97.runecraftory.common.utils.ProjectileUtil;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
@@ -29,10 +28,10 @@ public class MultiFireballSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         Vec3 pos = entity.position().add(0, entity.getEyeHeight() - 0.1, 0);
+        Vec3 target = ProjectileUtil.getAimTarget(entity);
         Vec3 dir;
-        if (entity instanceof Mob mob && mob.getTarget() != null) {
-            Vec3 targetPos = EntityUtil.getStraightProjectileTarget(pos, mob.getTarget());
-            dir = new Vec3(targetPos.x() - pos.x(), targetPos.y() - pos.y(), targetPos.z() - pos.z());
+        if (target != null) {
+            dir = target.subtract(pos);
         } else {
             dir = entity.getLookAngle();
         }

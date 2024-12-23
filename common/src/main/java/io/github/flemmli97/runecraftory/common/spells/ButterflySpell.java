@@ -2,13 +2,11 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityButterflySummoner;
-import io.github.flemmli97.runecraftory.common.entities.utils.MobAttackExt;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
+import io.github.flemmli97.runecraftory.common.utils.ProjectileUtil;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
@@ -20,16 +18,10 @@ public class ButterflySpell extends Spell {
             return false;
         EntityButterflySummoner summoner = new EntityButterflySummoner(level, entity);
         summoner.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.5f));
-        Vec3 delayedPos;
-        if (entity instanceof MobAttackExt attacker && (delayedPos = attacker.targetPosition(summoner.position())) != null) {
-            summoner.setTarget(delayedPos.x(), delayedPos.y(), delayedPos.z());
-        } else if (entity instanceof Mob mob && mob.getTarget() != null) {
-            Vec3 target = EntityUtil.getStraightProjectileTarget(summoner.position(), mob.getTarget());
-            summoner.setTarget(target.x(), target.y(), target.z());
-        } else {
-            Vec3 look = Vec3.directionFromRotation(Mth.clamp(entity.getXRot(), -10, 10), entity.getYRot()).scale(5);
-            summoner.setTarget(entity.getX() + look.x(), entity.getEyeY() + look.y(), entity.getZ() + look.z());
-        }
+        Vec3 target = ProjectileUtil.getAimTarget(entity);
+        if (target == null)
+            target = Vec3.directionFromRotation(Mth.clamp(entity.getXRot(), -10, 10), entity.getYRot()).scale(5);
+        summoner.setTarget(target.x(), target.y(), target.z());
         level.addFreshEntity(summoner);
         return true;
     }

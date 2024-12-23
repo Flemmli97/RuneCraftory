@@ -6,11 +6,11 @@ import io.github.flemmli97.runecraftory.common.entities.misc.EntityExplosionSpel
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
+import io.github.flemmli97.runecraftory.common.utils.ProjectileUtil;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 
 public class ExplosionSpell extends Spell {
@@ -31,11 +31,7 @@ public class ExplosionSpell extends Spell {
             return false;
         EntityExplosionSpell spell = new EntityExplosionSpell(level, entity);
         spell.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1.25f));
-        if (entity instanceof Mob mob && mob.getTarget() != null) {
-            spell.shootAtEntity(mob.getTarget(), 1.3f, 0);
-        } else {
-            spell.shootFromRotation(entity, entity.getXRot() + 5, entity.getYRot(), 0.0F, 1.5F, 1.0F);
-        }
+        ProjectileUtil.shoot(entity, spell, 1.3f, 0);
         level.addFreshEntity(spell);
         playSound(entity, ModSounds.SPELL_GENERIC_FIRE_BALL.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         return true;

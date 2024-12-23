@@ -2,8 +2,7 @@ package io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia;
 
 import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
-import io.github.flemmli97.runecraftory.common.entities.RunecraftoryBossbar;
-import io.github.flemmli97.runecraftory.common.entities.utils.MobAttackExt;
+import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
@@ -48,7 +47,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 
-public class EntityRafflesia extends BossMonster implements MobAttackExt {
+public class EntityRafflesia extends BossMonster {
 
     private static final EntityDataAccessor<Optional<UUID>> HORSE_TAIL = SynchedEntityData.defineId(EntityRafflesia.class, EntityDataSerializers.OPTIONAL_UUID);
     private static final EntityDataAccessor<Optional<UUID>> FLOWER = SynchedEntityData.defineId(EntityRafflesia.class, EntityDataSerializers.OPTIONAL_UUID);
@@ -415,11 +414,6 @@ public class EntityRafflesia extends BossMonster implements MobAttackExt {
         } else
             this.pitcherEntity = null;
         return this.pitcherEntity;
-    }
-
-    @Override
-    public Vec3 targetPosition(Vec3 from) {
-        return this.getTargetPosition();
     }
 
     @Nullable

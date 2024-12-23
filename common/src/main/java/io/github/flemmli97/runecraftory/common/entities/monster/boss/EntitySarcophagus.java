@@ -2,12 +2,11 @@ package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 
 import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
-import io.github.flemmli97.runecraftory.common.entities.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.entities.ai.RestrictedWaterAvoidingStrollGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
-import io.github.flemmli97.runecraftory.common.entities.utils.MobAttackExt;
+import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.network.S2CMobUpdate;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
@@ -43,7 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 
-public class EntitySarcophagus extends BossMonster implements MobAttackExt {
+public class EntitySarcophagus extends BossMonster {
 
     public static final AnimatedAction TELEPORT = new AnimatedAction(2.64, "teleport");
     public static final AnimatedAction CHARGE = new AnimatedAction(1.6, 0.44, "charge");
@@ -421,11 +420,6 @@ public class EntitySarcophagus extends BossMonster implements MobAttackExt {
     @Override
     public void playInteractionAnimation() {
         this.getAnimationHandler().setAnimation(INTERACT);
-    }
-
-    @Override
-    public Vec3 targetPosition(Vec3 from) {
-        return this.getTargetPosition();
     }
 
     private void teleportAround(int range, int yRange) {

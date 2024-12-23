@@ -2,12 +2,11 @@ package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 
 import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
-import io.github.flemmli97.runecraftory.common.entities.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.entities.ai.RestrictedWaterAvoidingStrollGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
-import io.github.flemmli97.runecraftory.common.entities.utils.MobAttackExt;
+import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.network.S2CMobUpdate;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
@@ -45,7 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 
-public class EntityChimera extends BossMonster implements MobAttackExt {
+public class EntityChimera extends BossMonster {
 
     public static final AnimatedAction LEAP = new AnimatedAction(1.36, "leap");
     public static final AnimatedAction FIRE_TAIL_BUBBLE = new AnimatedAction(1.48, 0.44, "tail_beam");
@@ -331,12 +330,6 @@ public class EntityChimera extends BossMonster implements MobAttackExt {
     public AnimatedAction getSleepAnimation() {
         return SLEEP;
     }
-
-    @Override
-    public Vec3 targetPosition(Vec3 from) {
-        return this.getTargetPosition();
-    }
-
 
     @Override
     public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {

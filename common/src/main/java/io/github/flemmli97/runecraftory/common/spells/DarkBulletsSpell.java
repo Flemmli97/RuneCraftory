@@ -2,12 +2,10 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityDarkBulletSummoner;
-import io.github.flemmli97.runecraftory.common.entities.utils.MobAttackExt;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
+import io.github.flemmli97.runecraftory.common.utils.ProjectileUtil;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
@@ -19,11 +17,8 @@ public class DarkBulletsSpell extends Spell {
             return false;
         EntityDarkBulletSummoner summoner = new EntityDarkBulletSummoner(level, entity);
         summoner.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.85f));
-        Vec3 delayedPos;
-        if (entity instanceof MobAttackExt attacker && (delayedPos = attacker.targetPosition(summoner.position())) != null) {
-            summoner.setTarget(delayedPos.x(), delayedPos.y(), delayedPos.z());
-        } else if (entity instanceof Mob mob && mob.getTarget() != null) {
-            Vec3 target = EntityUtil.getStraightProjectileTarget(summoner.position(), mob.getTarget());
+        Vec3 target = ProjectileUtil.getAimTarget(entity);
+        if (target != null) {
             summoner.setTarget(target.x(), target.y(), target.z());
         } else {
             Vec3 look = Vec3.directionFromRotation(entity.getXRot(), entity.getYRot()).scale(5);

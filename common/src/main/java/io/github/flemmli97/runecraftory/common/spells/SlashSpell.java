@@ -3,11 +3,11 @@ package io.github.flemmli97.runecraftory.common.spells;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntitySlashResidue;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
+import io.github.flemmli97.runecraftory.common.utils.ProjectileUtil;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
@@ -19,8 +19,13 @@ public class SlashSpell extends Spell {
             return false;
         EntitySlashResidue slash = new EntitySlashResidue(level, entity);
         Vec3 pos = entity.position();
-        Vec3 dir = entity instanceof Mob mob && mob.getTarget() != null ? mob.getTarget().position().subtract(pos).normalize().scale(1.2)
-                : entity.getLookAngle().scale(1.2);
+        Vec3 target = ProjectileUtil.getAimTarget(entity);
+        Vec3 dir;
+        if (target != null) {
+            dir = target.subtract(pos).normalize().scale(1.2);
+        } else {
+            dir = entity.getLookAngle().scale(1.2);
+        }
         slash.setPos(pos.x + dir.x, pos.y + Mth.clamp(dir.y, -0.3, 0.8), pos.z + dir.z);
         slash.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.85f));
         slash.lookAt(EntityAnchorArgument.Anchor.FEET, entity.position());

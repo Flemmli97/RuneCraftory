@@ -1,10 +1,9 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
-import io.github.flemmli97.runecraftory.common.entities.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.StaticNavigator;
 import io.github.flemmli97.runecraftory.common.entities.misc.SarcophagusTeleporter;
-import io.github.flemmli97.runecraftory.common.entities.utils.MobAttackExt;
+import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import net.minecraft.core.BlockPos;
@@ -27,7 +26,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public abstract class EntitySanoUno extends BossMonster implements MobAttackExt {
+public abstract class EntitySanoUno extends BossMonster {
 
     private static final EntityDataAccessor<Boolean> CAN_BE_REMOVED = SynchedEntityData.defineId(EntitySanoUno.class, EntityDataSerializers.BOOLEAN);
 
@@ -163,11 +162,6 @@ public abstract class EntitySanoUno extends BossMonster implements MobAttackExt 
     @Override
     public Vec3 passengerOffset(Entity passenger) {
         return new Vec3(0, 30.5 / 16d, 6 / 16d).scale(2);
-    }
-
-    @Override
-    public Vec3 targetPosition(Vec3 from) {
-        return this.targetPos;
     }
 
     @Override

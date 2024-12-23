@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.entities;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
+import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;

@@ -2,12 +2,11 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.FireWallSummoner;
-import io.github.flemmli97.runecraftory.common.entities.utils.MobAttackExt;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
+import io.github.flemmli97.runecraftory.common.utils.ProjectileUtil;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
@@ -19,15 +18,10 @@ public class FireWallSpell extends Spell {
             return false;
         FireWallSummoner wall = new FireWallSummoner(level, entity);
         wall.setPos(offset(entity));
-        Vec3 delayedPos;
-        if (entity instanceof MobAttackExt attacker && (delayedPos = attacker.targetPosition(wall.position())) != null) {
-            wall.setTarget(delayedPos.x(), delayedPos.y(), delayedPos.z());
-        } else if (entity instanceof Mob mob && mob.getTarget() != null) {
-            wall.setTarget(mob.getTarget().position().x, mob.getTarget().position().y, mob.getTarget().position().z);
-        } else {
-            Vec3 target = entity.position().add(entity.getLookAngle().scale(10));
-            wall.setTarget(target.x, target.y, target.z);
-        }
+        Vec3 target = ProjectileUtil.getAimTarget(entity);
+        if (target == null)
+            target = entity.position().add(entity.getLookAngle().scale(10));
+        wall.setTarget(target.x, target.y, target.z);
         wall.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.85f));
         level.addFreshEntity(wall);
         playSound(entity, ModSounds.SPELL_GENERIC_FIRE_BALL.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);

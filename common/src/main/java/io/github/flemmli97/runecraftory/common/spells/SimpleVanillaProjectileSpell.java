@@ -1,11 +1,11 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
+import io.github.flemmli97.runecraftory.common.utils.ProjectileUtil;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.projectile.DragonFireball;
 import net.minecraft.world.entity.projectile.LargeFireball;
 import net.minecraft.world.entity.projectile.Snowball;
@@ -38,12 +38,14 @@ public class SimpleVanillaProjectileSpell extends Spell {
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
-        Vec3 look;
-        if (entity instanceof Mob mob && mob.getTarget() != null)
-            look = new Vec3(mob.getTarget().getX() - entity.getX(), mob.getTarget().getY() - entity.getY(), mob.getTarget().getZ() - entity.getZ()).normalize();
-        else
-            look = entity.getLookAngle();
-        Entity proj = this.factory.create(level, entity, look);
+        Vec3 target = ProjectileUtil.getAimTarget(entity);
+        Vec3 dir;
+        if (target != null) {
+            dir = target.subtract(entity.getEyePosition());
+        } else {
+            dir = entity.getLookAngle();
+        }
+        Entity proj = this.factory.create(level, entity, dir);
         proj.setPos(entity.getX(), entity.getEyeY(), entity.getZ());
         level.addFreshEntity(proj);
         playSound(entity, this.sound, 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);

@@ -72,8 +72,7 @@ public class EntityStatusBall extends BaseDamageCloud {
         }
     }
 
-    public void shootAtEntity(Entity target, float velocity, float inaccuracy) {
-        Vec3 targetPos = EntityUtil.getStraightProjectileTarget(this.position(), target);
+    public void shootAtPos(Vec3 targetPos, float velocity, float inaccuracy) {
         Vec3 dir = (new Vec3(targetPos.x() - this.getX(), targetPos.y() - this.getY(), targetPos.z() - this.getZ()));
         this.shoot(dir.x, dir.y, dir.z, velocity, inaccuracy);
     }

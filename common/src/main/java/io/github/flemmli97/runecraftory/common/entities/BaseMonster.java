@@ -26,6 +26,7 @@ import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
 import io.github.flemmli97.runecraftory.common.entities.utils.DailyMonsterUpdater;
 import io.github.flemmli97.runecraftory.common.entities.utils.ExtendedEntity;
 import io.github.flemmli97.runecraftory.common.entities.utils.IExtendedMob;
+import io.github.flemmli97.runecraftory.common.entities.utils.MobAttackExt;
 import io.github.flemmli97.runecraftory.common.entities.utils.SleepingEntity;
 import io.github.flemmli97.runecraftory.common.entities.utils.TargetableOpponent;
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemObjectX;
@@ -138,7 +139,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnimated, IExtendedMob, ExtendedEntity, SleepingEntity, TargetableOpponent, AoeAttackEntity, MobUpdateHandler {
+public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnimated, IExtendedMob, ExtendedEntity, SleepingEntity, TargetableOpponent, AoeAttackEntity, MobUpdateHandler, MobAttackExt {
 
     private static final EntityDataAccessor<Optional<UUID>> OWNER_UUID = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.OPTIONAL_UUID);
     private static final EntityDataAccessor<Byte> MOVE_FLAGS = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.BYTE);
@@ -1564,7 +1565,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     public void setupAttack(AnimatedAction anim) {
         if (this.getTarget() != null) {
             if (anim.isAtTick(1)) {
-                this.setTargetPosition(this.getTarget().position());
+                this.setTargetPosition(EntityUtils.getStraightProjectileTarget(this.position(), this.getTarget()));
             }
         }
     }
@@ -1593,6 +1594,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             S2CMobUpdate.send(this, SyncableDatas.TARGET_POS, this.targetPosition);
     }
 
+    @Override
     public Vec3 getTargetPosition() {
         return this.targetPosition;
     }

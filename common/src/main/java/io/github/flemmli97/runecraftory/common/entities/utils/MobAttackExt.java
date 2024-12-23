@@ -4,7 +4,7 @@ import net.minecraft.world.phys.Vec3;
 
 public interface MobAttackExt {
 
-    Vec3 targetPosition(Vec3 from);
+    Vec3 getTargetPosition();
 
     default boolean reversed() {
         return false;

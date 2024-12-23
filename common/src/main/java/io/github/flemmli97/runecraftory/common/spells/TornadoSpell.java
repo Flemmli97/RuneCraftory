@@ -2,12 +2,10 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityTornado;
-import io.github.flemmli97.runecraftory.common.entities.utils.MobAttackExt;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
+import io.github.flemmli97.runecraftory.common.utils.ProjectileUtil;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
@@ -20,15 +18,9 @@ public class TornadoSpell extends Spell {
         EntityTornado tornado = new EntityTornado(level, entity);
         tornado.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.8f));
         Vec3 pos = entity.position();
-        float dirScale = 5;
-        Vec3 target = pos.add(entity.getLookAngle().scale(dirScale));
-        if (entity instanceof Mob mob) {
-            Vec3 delayedPos;
-            if (mob instanceof MobAttackExt delayed && (delayedPos = delayed.targetPosition(tornado.position())) != null) {
-                target = delayedPos;
-            } else if (mob.getTarget() != null) {
-                target = EntityUtil.getStraightProjectileTarget(pos, mob.getTarget());
-            }
+        Vec3 target = ProjectileUtil.getAimTarget(entity);
+        if (target == null) {
+            target = pos.add(entity.getLookAngle().scale(10));
         }
         tornado.setPos(pos.x, pos.y, pos.z);
         Vec3 dir = target.subtract(pos);

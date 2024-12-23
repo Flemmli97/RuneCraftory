@@ -3,10 +3,11 @@ package io.github.flemmli97.runecraftory.common.spells;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntitySpiderWeb;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
+import io.github.flemmli97.runecraftory.common.utils.ProjectileUtil;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 public class WebShotSpell extends Spell {
@@ -17,11 +18,7 @@ public class WebShotSpell extends Spell {
             return false;
         EntitySpiderWeb web = new EntitySpiderWeb(level, entity);
         web.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.8f));
-        if (entity instanceof Mob mob && mob.getTarget() != null) {
-            web.shootAtEntity(mob.getTarget(), 1.3f, 7 - level.getDifficulty().getId() * 2);
-        } else {
-            web.shootFromRotation(entity, entity.getXRot() + 5, entity.getYRot(), 0.0F, 1.5F, 1.0F);
-        }
+        ProjectileUtil.shoot(entity, web, 1.3f, entity instanceof Player ? 1 : 7 - level.getDifficulty().getId() * 2);
         level.addFreshEntity(web);
         level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.SKELETON_SHOOT, entity.getSoundSource(), 1.0f, 1.0F / (entity.getRandom().nextFloat() * 0.4F + 0.8F));
         return true;

@@ -7,9 +7,9 @@ import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityBullet;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
+import io.github.flemmli97.runecraftory.common.utils.ProjectileUtil;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
@@ -20,9 +20,10 @@ public class TripleFireBulletSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         EntityBullet projectile = new EntityBullet(level, entity);
+        Vec3 target = ProjectileUtil.getAimTarget(entity);
         Vec3 dir;
-        if (entity instanceof Mob mob && mob.getTarget() != null) {
-            dir = (new Vec3(mob.getTarget().getX() - mob.getX(), mob.getTarget().getY(0.2) - mob.getY(), mob.getTarget().getZ() - mob.getZ()));
+        if (target != null) {
+            dir = target.subtract(projectile.position());
         } else {
             dir = entity.getLookAngle();
         }

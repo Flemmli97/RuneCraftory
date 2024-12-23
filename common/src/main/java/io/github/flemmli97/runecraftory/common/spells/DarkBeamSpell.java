@@ -4,9 +4,9 @@ import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityDarkBeam;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
+import io.github.flemmli97.runecraftory.common.utils.ProjectileUtil;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 
 public class DarkBeamSpell extends Spell {
@@ -17,12 +17,7 @@ public class DarkBeamSpell extends Spell {
             return false;
         EntityDarkBeam beam = new EntityDarkBeam(level, entity);
         beam.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.95f));
-        if (entity instanceof Mob mob && mob.getTarget() != null)
-            beam.setRotationTo(mob.getTarget(), 0);
-        else {
-            beam.setYRot((entity.yHeadRot - 180) % 360.0F);
-            beam.setXRot(entity.getXRot() % 360.0F);
-        }
+        ProjectileUtil.shoot(entity, beam, 0);
         level.addFreshEntity(beam);
         playSound(entity, ModSounds.SPELL_GENERIC_DARK.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         return true;

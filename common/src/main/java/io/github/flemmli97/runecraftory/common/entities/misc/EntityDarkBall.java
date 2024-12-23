@@ -8,7 +8,6 @@ import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.tenshilib.common.entity.EntityProjectile;
-import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
 import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import net.minecraft.nbt.CompoundTag;
@@ -45,8 +44,7 @@ public class EntityDarkBall extends BaseDamageCloud {
         return arr;
     }
 
-    public void shootAtEntity(Entity target, float velocity, float inaccuracy) {
-        Vec3 targetPos = EntityUtil.getStraightProjectileTarget(this.position(), target);
+    public void shootAtPos(Vec3 targetPos, float velocity, float inaccuracy) {
         Vec3 dir = (new Vec3(targetPos.x() - this.getX(), targetPos.y() - this.getY(), targetPos.z() - this.getZ()));
         this.shoot(dir.x, dir.y, dir.z, velocity, inaccuracy);
     }
