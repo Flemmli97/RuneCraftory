@@ -52,10 +52,6 @@ public class EntityBigMuck extends BaseMonster {
         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.2);
     }
 
-    protected AnimationHandler<EntityBigMuck> getOrCreateAnimationHandler() {
-        return this.animationHandler;
-    }
-
     @Override
     public AnimationHandler<EntityBigMuck> getAnimationHandler() {
         return this.animationHandler;

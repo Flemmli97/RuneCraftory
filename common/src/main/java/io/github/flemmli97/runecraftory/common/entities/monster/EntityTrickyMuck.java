@@ -31,17 +31,12 @@ public class EntityTrickyMuck extends EntityBigMuck {
     );
 
     public final AnimatedAttackGoal<EntityTrickyMuck> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
-    private AnimationHandler<EntityBigMuck> animationHandler;
+    private final AnimationHandler<EntityBigMuck> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityTrickyMuck(EntityType<? extends EntityTrickyMuck> type, Level world) {
         super(type, world);
         this.goalSelector.removeGoal(super.attack);
         this.goalSelector.addGoal(2, this.attack);
-    }
-
-    @Override
-    protected AnimationHandler<EntityBigMuck> getOrCreateAnimationHandler() {
-        return this.animationHandler = new AnimationHandler<>(this, ANIMS);
     }
 
     @Override

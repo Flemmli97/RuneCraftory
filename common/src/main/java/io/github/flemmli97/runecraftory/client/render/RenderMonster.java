@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.tenshilib.client.model.RideableModel;
 import io.github.flemmli97.tenshilib.client.render.RiderLayerRenderer;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
@@ -25,6 +26,11 @@ public class RenderMonster<T extends BaseMonster, M extends EntityModel<T> & Rid
         this.tex = texture;
         if (withDefaultRiderLayer)
             this.layers.add(new RiderLayerRenderer<>(this));
+    }
+
+    @Override
+    public void render(T entity, float entityYaw, float partialTicks, PoseStack matrixStack, MultiBufferSource buffer, int packedLight) {
+        super.render(entity, entityYaw, partialTicks, matrixStack, buffer, packedLight);
     }
 
     @Override
