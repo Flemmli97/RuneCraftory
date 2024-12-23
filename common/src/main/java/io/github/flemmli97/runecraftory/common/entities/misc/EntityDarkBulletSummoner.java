@@ -19,7 +19,7 @@ public class EntityDarkBulletSummoner extends ProjectileSummonHelperEntity {
 
     @Override
     protected void summonProjectiles() {
-        if (this.random.nextBoolean())
+        if (this.random.nextInt(3) == 0)
             return;
         EntityDarkBullet bullet = new EntityDarkBullet(this.level, this.getOwner());
         bullet.setPos(this.getX(), this.getY(), this.getZ());
