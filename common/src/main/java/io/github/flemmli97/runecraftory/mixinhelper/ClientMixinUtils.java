@@ -97,7 +97,7 @@ public class ClientMixinUtils {
     }
 
     public static void translateSleepingEntity(LivingEntity entity, PoseStack poseStack, float flipDegrees) {
-        if (EntityData.getSleepStateFrom(entity) == EntityData.SleepState.VANILLA) {
+        if (EntityData.getSleepStateFrom(entity) == EntityData.SleepState.VANILLA && flipDegrees != 0) {
             poseStack.mulPose(Vector3f.XP.rotationDegrees(flipDegrees));
             float standOffset = entity.getEyeHeight(Pose.STANDING) * 0.6f;
             poseStack.translate(0, -standOffset, 0);
