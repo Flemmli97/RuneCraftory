@@ -8,10 +8,7 @@
   },
   "repeat_delay": -1,
   "visibility": "NEVER",
-  "npc_id": [
-    "runecraftory:shop_owner/male_1",
-    "runecraftory:shop_owner/female_1"
-  ],
+  "npc_id": "runecraftory:shop_owner/1",
   "quest": "runecraftory:ship_turnip_ref",
   "loot_table": "runecraftory:ship_turnip",
   "type": "runecraftory:npc_quest"

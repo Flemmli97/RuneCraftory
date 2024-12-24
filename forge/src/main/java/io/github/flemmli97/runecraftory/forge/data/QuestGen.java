@@ -17,6 +17,8 @@ import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
 import net.minecraft.advancements.critereon.BlockPredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.advancements.critereon.LocationPredicate;
+import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -53,7 +55,7 @@ public class QuestGen extends QuestProvider {
     @Override
     protected void add() {
         this.createNPCQuest(new NPCQuest.Builder(SHIP_TURNIP, getTask(SHIP_TURNIP),
-                        List.of(id("shop_owner/male_1"), id("shop_owner/female_1")), SHIP_TURNIP)
+                        List.of(id("shop_owner/1")), SHIP_TURNIP)
                         .setRepeatDelay(-1)
                         .withCategory(this.main)
                         .withIcon(new ItemStack(ModItems.TURNIP_SEEDS.get())),
@@ -61,7 +63,7 @@ public class QuestGen extends QuestProvider {
                         of(m -> m.put("shipping", new QuestTasks.ShippingEntry(ItemPredicate.Builder.item().of(ModItems.TURNIP.get()).build(), 1)))));
 
         this.createNPCQuest(new NPCQuest.Builder(MINING, getTask(MINING),
-                        List.of(id("smith/male_1"), id("smith/female_1")), MINING)
+                        List.of(id("smith/1")), MINING)
                         .setRepeatDelay(-1)
                         .withCategory(this.main)
                         .withIcon(new ItemStack(ModItems.HAMMER_SCRAP.get())),
@@ -70,11 +72,13 @@ public class QuestGen extends QuestProvider {
                                 10, false, false, true, "", "", "", EntityPredicate.ANY)))));
 
         this.createNPCQuest(new NPCQuest.Builder(TAMING, getTask(TAMING),
-                        id("random_npc"), TAMING)
+                        id("random_npc_1"), TAMING)
                         .setRepeatDelay(-1)
                         .withCategory(this.main)
                         .withIcon(new ItemStack(SpawnEgg.fromType(ModEntities.WOOLY.get()).get())),
                 List.of(of(m -> m.put("talk", new QuestTasks.NPCTalk(null))),
+                        of(m -> m.put("walk", new QuestTasks.NPCTalk(null, EntityPredicate.Builder.entity()
+                                .located(LocationPredicate.atYLocation(MinMaxBounds.Doubles.atLeast(64))).build()))),
                         of(m -> m.put("tame", new QuestTasks.TamingEntry(EntityPredicate.ANY, 1, "")))));
     }
 

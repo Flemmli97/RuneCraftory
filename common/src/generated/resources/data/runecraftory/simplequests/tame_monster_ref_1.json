@@ -3,9 +3,17 @@
   "task": "NPC_SUBQUEST",
   "loot_table": "minecraft:empty",
   "entries": {
-    "tame": {
-      "amount": 1,
-      "id": "runecraftory:taming"
+    "walk": {
+      "predicate": {
+        "location": {
+          "position": {
+            "y": {
+              "min": 64
+            }
+          }
+        }
+      },
+      "id": "runecraftory:npc_talk"
     }
   },
   "type": "simplequests:quest"

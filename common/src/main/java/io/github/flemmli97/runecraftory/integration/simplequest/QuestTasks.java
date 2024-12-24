@@ -171,9 +171,9 @@ public class QuestTasks {
         public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "npc_talk");
         public static final Codec<NPCTalk> CODEC = RecordCodecBuilder.create((instance) ->
                 instance.group(ResourceLocation.CODEC.optionalFieldOf("targetNPCId").forGetter(d -> Optional.ofNullable(d.targetNPCId)),
-                                JsonCodecs.ENTITY_PREDICATE_CODEC.fieldOf("predicate").forGetter(d -> d.predicate),
+                                JsonCodecs.ENTITY_PREDICATE_CODEC.optionalFieldOf("predicate").forGetter(d -> d.predicate == EntityPredicate.ANY ? Optional.empty() : Optional.of(d.predicate)),
                                 Codec.STRING.optionalFieldOf("targetNPC").forGetter(d -> d.targetNPC != null ? Optional.of(d.targetNPC.toString()) : Optional.empty()))
-                        .apply(instance, (generic, predicate, target) -> new NPCTalk(generic.orElse(null), predicate, target.map(UUID::fromString).orElse(null))));
+                        .apply(instance, (generic, predicate, target) -> new NPCTalk(generic.orElse(null), predicate.orElse(EntityPredicate.ANY), target.map(UUID::fromString).orElse(null))));
 
         private final ResourceLocation targetNPCId;
 
