@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.SimpleEffect;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.attackactions.NaiveBladeAttack;
 import io.github.flemmli97.runecraftory.common.blocks.BlockMineral;
@@ -40,6 +41,7 @@ import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import io.github.flemmli97.runecraftory.common.world.family.FamilyHandler;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.integration.simplequest.SimpleQuestIntegration;
+import io.github.flemmli97.runecraftory.mixin.LivingEntityAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
@@ -383,6 +385,21 @@ public class EntityCalls {
             if (disabled && !mob.getNavigation().isDone())
                 mob.getNavigation().stop();
         }
+    }
+
+    // Blocking normally at Entity#tick wont work due to overrides etc.
+    // Block at level instead
+    public static boolean rootTick(LivingEntity entity) {
+        // Ignore the player. Its enough to simply block player actions which is already done
+        if (entity instanceof Player) {
+            return false;
+        }
+        // Block all ticking if stunned
+        if (Platform.INSTANCE.getEntityData(entity).map(EntityData::isStunned).orElse(false)) {
+            ((LivingEntityAccessor) entity).tickEffectsManually();
+            return true;
+        }
+        return false;
     }
 
     public static void foodHandling(LivingEntity entity, ItemStack stack) {
