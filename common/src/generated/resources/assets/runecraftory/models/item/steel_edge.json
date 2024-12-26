@@ -8,7 +8,7 @@
       "predicate": {
         "runecraftory:held": 1.0
       },
-      "model": "runecraftory:item/steel_sword_plus"
+      "model": "runecraftory:item/steel_sword"
     }
   ]
 }

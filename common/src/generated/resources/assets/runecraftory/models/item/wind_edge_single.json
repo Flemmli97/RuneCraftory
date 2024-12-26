@@ -1,5 +1,5 @@
 {
-  "parent": "runecraftory:item/handheld_reverse",
+  "parent": "minecraft:item/handheld",
   "textures": {
     "layer0": "runecraftory:item/wind_edge_single"
   }

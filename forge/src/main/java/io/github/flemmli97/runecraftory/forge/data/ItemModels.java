@@ -14,6 +14,7 @@ import io.github.flemmli97.runecraftory.common.items.tools.ItemToolHoe;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolSickle;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolWateringCan;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemAxeBase;
+import io.github.flemmli97.runecraftory.common.items.weapons.ItemDualBladeBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemGloveBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemHammerBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemLongSwordBase;
@@ -30,19 +31,16 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.item.TieredItem;
-import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Supplier;
 
 public class ItemModels extends ItemModelProvider {
 
     private final Map<RegistryEntrySupplier<Item>, ResourceLocation> dualItemMapping = this.getDualItemMapping();
-    private final Map<RegistryEntrySupplier<Item>, Supplier<ItemModelBuilder>> dualItemGenMapping = this.generateDualItemMapping();
     private final Set<RegistryEntrySupplier<Item>> existingSameGloveItems = this.generateSameGloveItemMapping();
 
 
@@ -88,18 +86,17 @@ public class ItemModels extends ItemModelProvider {
                 this.withExistingParent(sup.getID().getPath(), this.modLoc("item/" + ModItems.UNKNOWN.getID().getPath()));
             else if (sup == ModItems.TAME)
                 this.withExistingParent(sup.getID().getPath(), this.mcLoc("item/template_spawn_egg"));
-            else if (sup == ModItems.SEA_CUTTER)
-                this.createBigWeaponModel(sup, new ResourceLocation(RuneCraftory.MODID, "item/handheld_long_sword_reverse"));
-            else if (sup == ModItems.CUTLASS)
-                this.singleTexture(sup.getID().getPath(), new ResourceLocation(RuneCraftory.MODID, "item/handheld_reverse"), "layer0", this.modLoc("item/" + sup.getID().getPath()));
-            else if (this.dualItemGenMapping.containsKey(sup)) {
-                this.dualItemGenMapping.get(sup).get();
-                this.singleTexture(sup.getID().getPath(), this.mcLoc("item/handheld"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath()))
-                        .override().predicate(ItemModelProps.HELD_ID, 1).model(this.getExistingFile(new ResourceLocation(sup.getID().getNamespace(), sup.getID().getPath() + "_single")));
-            } else if (this.dualItemMapping.containsKey(sup))
-                this.singleTexture(sup.getID().getPath(), this.mcLoc("item/handheld"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath()))
-                        .override().predicate(ItemModelProps.HELD_ID, 1).model(this.getExistingFile(this.dualItemMapping.get(sup)));
-            else if (sup.get() instanceof ItemGloveBase)
+            else if (sup.get() instanceof ItemDualBladeBase) {
+                if (this.dualItemMapping.containsKey(sup))
+                    this.singleTexture(sup.getID().getPath(), this.mcLoc("item/handheld"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath()))
+                            .override().predicate(ItemModelProps.HELD_ID, 1).model(this.getExistingFile(this.dualItemMapping.get(sup)));
+                else {
+                    this.singleTexture(sup.getID().getPath() + "_single", this.mcLoc("item/handheld"),
+                            "layer0", this.modLoc("item/" + sup.getID().getPath() + "_single"));
+                    this.singleTexture(sup.getID().getPath(), this.mcLoc("item/handheld"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath()))
+                            .override().predicate(ItemModelProps.HELD_ID, 1).model(this.getExistingFile(new ResourceLocation(sup.getID().getNamespace(), sup.getID().getPath() + "_single")));
+                }
+            } else if (sup.get() instanceof ItemGloveBase)
                 this.createGloveModels(sup);
             else if (sup.get() instanceof ItemToolHammer)
                 this.singleTexture(sup.getID().getPath(), new ResourceLocation(RuneCraftory.MODID, "item/hammer_tool"), "layer0", this.modLoc("item/" + sup.getID().getPath()));
@@ -154,18 +151,9 @@ public class ItemModels extends ItemModelProvider {
     private Map<RegistryEntrySupplier<Item>, ResourceLocation> getDualItemMapping() {
         ImmutableMap.Builder<RegistryEntrySupplier<Item>, ResourceLocation> map = new ImmutableMap.Builder<>();
         map.put(ModItems.SHORT_DAGGER, ModItems.BROAD_SWORD.getID());
-        map.put(ModItems.STEEL_EDGE, ModItems.STEEL_SWORD_PLUS.getID());
-        map.put(ModItems.IRON_EDGE, ModItems.STEEL_SWORD.getID());
+        map.put(ModItems.STEEL_EDGE, ModItems.STEEL_SWORD.getID());
+        map.put(ModItems.IRON_EDGE, ModItems.STEEL_SWORD_PLUS.getID());
         map.put(ModItems.FROST_EDGE, ModItems.AQUA_SWORD.getID());
-        return map.build();
-    }
-
-    private Map<RegistryEntrySupplier<Item>, Supplier<ItemModelBuilder>> generateDualItemMapping() {
-        ImmutableMap.Builder<RegistryEntrySupplier<Item>, Supplier<ItemModelBuilder>> map = new ImmutableMap.Builder<>();
-        map.put(ModItems.THIEF_KNIFE, () -> this.singleTexture(ModItems.THIEF_KNIFE.getID().getPath() + "_single", new ResourceLocation(RuneCraftory.MODID, "item/handheld_reverse"),
-                "layer0", this.modLoc("item/" + ModItems.THIEF_KNIFE.getID().getPath() + "_single")));
-        map.put(ModItems.WIND_EDGE, () -> this.singleTexture(ModItems.WIND_EDGE.getID().getPath() + "_single", new ResourceLocation(RuneCraftory.MODID, "item/handheld_reverse"),
-                "layer0", this.modLoc("item/" + ModItems.WIND_EDGE.getID().getPath() + "_single")));
         return map.build();
     }
 
@@ -173,6 +161,7 @@ public class ItemModels extends ItemModelProvider {
         ImmutableSet.Builder<RegistryEntrySupplier<Item>> builder = new ImmutableSet.Builder<>();
         builder.add(ModItems.BRASS_KNUCKLES);
         builder.add(ModItems.BEAR_CLAWS);
+        builder.add(ModItems.DRAGON_CLAWS);
         return builder.build();
     }
 

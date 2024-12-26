@@ -35,6 +35,22 @@
         },
         {
           "type": "minecraft:item",
+          "name": "runecraftory:defender"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:burning_sword"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:gorgeous_sword"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:gaia_sword"
+        },
+        {
+          "type": "minecraft:item",
           "name": "runecraftory:claymore"
         },
         {
@@ -56,6 +72,22 @@
         {
           "type": "minecraft:item",
           "name": "runecraftory:cyclone_blade"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:poison_blade"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:katzbalger"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:earth_shade"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:big_knife"
         },
         {
           "type": "minecraft:item",
@@ -83,6 +115,22 @@
         },
         {
           "type": "minecraft:item",
+          "name": "runecraftory:water_spear"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:halberd"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:corsesca"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:corsesca_plus"
+        },
+        {
+          "type": "minecraft:item",
           "name": "runecraftory:battle_axe"
         },
         {
@@ -104,6 +152,18 @@
         {
           "type": "minecraft:item",
           "name": "runecraftory:tomahawk"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:basilisk_fang"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:rock_axe"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:demon_axe"
         },
         {
           "type": "minecraft:item",
@@ -131,6 +191,18 @@
         },
         {
           "type": "minecraft:item",
+          "name": "runecraftory:ice_hammer"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:bone_hammer"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:strong_stone"
+        },
+        {
+          "type": "minecraft:item",
           "name": "runecraftory:short_dagger"
         },
         {
@@ -152,6 +224,22 @@
         {
           "type": "minecraft:item",
           "name": "runecraftory:wind_edge"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:gorgeous_lx"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:steel_katana"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:twin_blade"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:rampage"
         },
         {
           "type": "minecraft:item",
@@ -179,6 +267,22 @@
         },
         {
           "type": "minecraft:item",
+          "name": "runecraftory:fist_of_fire"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:fist_of_water"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:dragon_claws"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:fist_of_dark"
+        },
+        {
+          "type": "minecraft:item",
           "name": "runecraftory:rod"
         },
         {
@@ -200,6 +304,26 @@
         {
           "type": "minecraft:item",
           "name": "runecraftory:staff"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:emerald_rod"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:silver_staff"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:flare_staff"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:ruby_rod"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:sapphire_rod"
         },
         {
           "type": "minecraft:item",
@@ -235,6 +359,46 @@
         },
         {
           "type": "minecraft:item",
+          "name": "runecraftory:shield_ring"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:critical_ring"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:silent_ring"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:paralysis_ring"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:poison_ring"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:aquamarine_ring"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:amethyst_ring"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:emerald_ring"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:sapphire_ring"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:ruby_ring"
+        },
+        {
+          "type": "minecraft:item",
           "name": "runecraftory:magic_earrings"
         },
         {
@@ -251,6 +415,18 @@
         },
         {
           "type": "minecraft:item",
+          "name": "runecraftory:mail"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:chain_mail"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:scale_vest"
+        },
+        {
+          "type": "minecraft:item",
           "name": "runecraftory:headband"
         },
         {
@@ -264,6 +440,18 @@
         {
           "type": "minecraft:item",
           "name": "runecraftory:purple_ribbon"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:spectacles"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:straw_hat"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:fancy_hat"
         },
         {
           "type": "minecraft:item",
@@ -303,11 +491,39 @@
         },
         {
           "type": "minecraft:item",
+          "name": "runecraftory:secret_shoes"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:silver_boots"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:heavy_boots"
+        },
+        {
+          "type": "minecraft:item",
           "name": "runecraftory:small_shield"
         },
         {
           "type": "minecraft:item",
+          "name": "runecraftory:umbrella"
+        },
+        {
+          "type": "minecraft:item",
           "name": "runecraftory:iron_shield"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:monkey_plush"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:round_shield"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:turtle_shield"
         }
       ]
     }

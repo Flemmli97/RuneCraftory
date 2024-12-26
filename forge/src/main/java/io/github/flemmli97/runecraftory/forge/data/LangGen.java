@@ -765,7 +765,7 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.dependency.tooltips.barn.1", "Roof: %1$s - Size: %2$s");
         this.add("runecraftory.dependency.tooltips.barn.2", "Capacity: %1$s / %2$s");
 
-        this.add("runecraftory.coming.soon", "Coming Soon!");
+        this.add("runecraftory.sarcophagus.coming.soon", "This looks like a teleporter but it seems to not lead to anywhere yet...");
     }
 
     private String simpleTranslation(ResourceLocation res) {

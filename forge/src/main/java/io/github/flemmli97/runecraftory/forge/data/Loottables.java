@@ -398,7 +398,7 @@ public class Loottables extends LootTableProvider {
                     new ItemLootData(ModItems.ROOT.get(), 0.65f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
                     new ItemLootData(ModItems.RAFFLESIA_PETAL.get(), 0.6f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2, true, false)));
             this.registerLootTable(ModEntities.GRIMOIRE.get(), this.table(
-                    new ItemLootData(ModItems.DRAGONS_FANG.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(ModItems.FANG_DRAGON.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
                     new ItemLootData(ModItems.SCALE_GRIMOIRE.get(), 0.6f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2, true, false)));
             this.registerLootTable(ModEntities.SANO.get(), this.table(
                             new ItemLootData(ModItems.ROCK_SHARD_LEFT.get(), 0.5f, COMMON_LUCK_BONUS, LOOTING_BONUS, 1, true, false))

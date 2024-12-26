@@ -291,7 +291,31 @@
         },
         {
           "type": "minecraft:item",
+          "name": "runecraftory:rice_flour"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:curry_powder"
+        },
+        {
+          "type": "minecraft:item",
           "name": "runecraftory:oil"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:flour"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:yogurt"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:cheese"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:mayonnaise"
         },
         {
           "type": "minecraft:item",
@@ -323,6 +347,18 @@
         },
         {
           "type": "minecraft:item",
+          "name": "runecraftory:chocolate"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:rice"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:salmon_onigiri"
+        },
+        {
+          "type": "minecraft:item",
           "name": "runecraftory:onigiri"
         },
         {
@@ -335,7 +371,83 @@
         },
         {
           "type": "minecraft:item",
+          "name": "runecraftory:butter"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:ketchup"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:mixed_smoothie"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:mixed_juice"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:veggie_smoothie"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:vegetable_juice"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:fruit_smoothie"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:fruit_juice"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:apple_juice"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:orange_juice"
+        },
+        {
+          "type": "minecraft:item",
           "name": "runecraftory:grape_juice"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:tomato_juice"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:pineapple_juice"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:apple_pie"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:cheesecake"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:chocolate_cake"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:choco_cookie"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:cookie"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:toast"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:baked_onigiri"
         },
         {
           "type": "minecraft:item",
@@ -348,6 +460,22 @@
         {
           "type": "minecraft:item",
           "name": "runecraftory:udon"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:marmalade"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:grape_jam"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:apple_jam"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:strawberry_jam"
         },
         {
           "type": "minecraft:item",
@@ -375,11 +503,31 @@
         },
         {
           "type": "minecraft:item",
+          "name": "runecraftory:mixed_herbs"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:sour_drop"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:sweet_powder"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:heavy_spice"
+        },
+        {
+          "type": "minecraft:item",
           "name": "runecraftory:orange"
         },
         {
           "type": "minecraft:item",
           "name": "runecraftory:grapes"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:mealy_apple"
         },
         {
           "type": "minecraft:item",

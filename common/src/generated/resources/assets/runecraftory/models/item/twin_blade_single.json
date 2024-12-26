@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/handheld",
   "textures": {
-    "layer0": "runecraftory:item/gourgeous_lx"
+    "layer0": "runecraftory:item/twin_blade_single"
   }
 }

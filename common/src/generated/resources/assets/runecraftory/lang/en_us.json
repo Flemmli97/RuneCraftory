@@ -195,7 +195,7 @@
   "item.runecraftory.iron_edge": "Iron Edge",
   "item.runecraftory.thief_knife": "Thief Knife",
   "item.runecraftory.wind_edge": "Wind Edge",
-  "item.runecraftory.gourgeous_lx": "Gourgeous Lx",
+  "item.runecraftory.gorgeous_lx": "Gorgeous Lx",
   "item.runecraftory.steel_katana": "Steel Katana",
   "item.runecraftory.twin_blade": "Twin Blade",
   "item.runecraftory.rampage": "Rampage",
@@ -1984,5 +1984,5 @@
   "runecraftory.dependency.tooltips.npc.follow": "Party: %s",
   "runecraftory.dependency.tooltips.barn.1": "Roof: %1$s - Size: %2$s",
   "runecraftory.dependency.tooltips.barn.2": "Capacity: %1$s / %2$s",
-  "runecraftory.coming.soon": "Coming Soon!"
+  "runecraftory.sarcophagus.coming.soon": "This looks like a teleporter but it seems to not lead to anywhere yet..."
 }

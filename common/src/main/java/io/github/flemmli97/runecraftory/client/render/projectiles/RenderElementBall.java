@@ -19,7 +19,7 @@ public class RenderElementBall extends EntityRenderer<EntityElementalBall> {
     private static final ResourceLocation WATER = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/bubble.png");
     private static final ResourceLocation WATER_2 = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/ice_ball.png");
     private static final ResourceLocation EARTH = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/earth_ball.png");
-    private static final ResourceLocation LOVE = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/staff_love.png");
+    private static final ResourceLocation LOVE = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/love_ball.png");
 
     public final float xSize = 1, ySize = 1;
 
