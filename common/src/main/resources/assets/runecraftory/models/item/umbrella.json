@@ -1,0 +1,133 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+		"layer0": "runecraftory:item/umbrella"
+	},
+	"elements": [
+		{
+			"name": "handle",
+			"from": [7, 0, 7],
+			"to": [9, 17, 9],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"north": {"uv": [0, 9, 0.5, 13.25], "texture": "#layer0"},
+				"east": {"uv": [0.5, 9, 1, 13.25], "texture": "#layer0"},
+				"south": {"uv": [1, 9, 1.5, 13.25], "texture": "#layer0"},
+				"west": {"uv": [1.5, 9, 2, 13.25], "texture": "#layer0"},
+				"up": {"uv": [2.5, 9.5, 2, 9], "texture": "#layer0"},
+				"down": {"uv": [3, 9, 2.5, 9.5], "texture": "#layer0"}
+			}
+		},
+		{
+			"from": [-3, 17, -1],
+			"to": [8, 17, 17],
+			"rotation": {"angle": 22.5, "axis": "z", "origin": [8, 17, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 2.75, 0], "texture": "#layer0"},
+				"east": {"uv": [0, 0, 4.5, 0], "texture": "#layer0"},
+				"south": {"uv": [0, 0, 2.75, 0], "texture": "#layer0"},
+				"west": {"uv": [0, 0, 4.5, 0], "texture": "#layer0"},
+				"up": {"uv": [2.75, 4.5, 0, 0], "texture": "#layer0"},
+				"down": {"uv": [2.75, 0, 0, 4.5], "texture": "#layer0"}
+			}
+		},
+		{
+			"from": [8, 17, -1],
+			"to": [19, 17, 17],
+			"rotation": {"angle": -22.5, "axis": "z", "origin": [8, 17, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 2.75, 0], "texture": "#layer0"},
+				"east": {"uv": [0, 0, 4.5, 0], "texture": "#layer0"},
+				"south": {"uv": [0, 0, 2.75, 0], "texture": "#layer0"},
+				"west": {"uv": [0, 0, 4.5, 0], "texture": "#layer0"},
+				"up": {"uv": [2.75, 9, 0, 4.5], "texture": "#layer0"},
+				"down": {"uv": [2.75, 4.5, 0, 9], "texture": "#layer0"}
+			}
+		},
+		{
+			"from": [-1, 17, -3],
+			"to": [17, 17, 8],
+			"rotation": {"angle": -22.5, "axis": "x", "origin": [8, 17, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 4.5, 0], "texture": "#layer0"},
+				"east": {"uv": [0, 0, 2.75, 0], "texture": "#layer0"},
+				"south": {"uv": [0, 0, 4.5, 0], "texture": "#layer0"},
+				"west": {"uv": [0, 0, 2.75, 0], "texture": "#layer0"},
+				"up": {"uv": [10, 2.75, 5.5, 0], "texture": "#layer0"},
+				"down": {"uv": [10, 0, 5.5, 2.75], "texture": "#layer0"}
+			}
+		},
+		{
+			"from": [-1, 17, 8],
+			"to": [17, 17, 19],
+			"rotation": {"angle": 22.5, "axis": "x", "origin": [8, 17, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 4.5, 0], "texture": "#layer0"},
+				"east": {"uv": [0, 0, 2.75, 0], "texture": "#layer0"},
+				"south": {"uv": [0, 0, 4.5, 0], "texture": "#layer0"},
+				"west": {"uv": [0, 0, 2.75, 0], "texture": "#layer0"},
+				"up": {"uv": [10, 8.25, 5.5, 5.5], "texture": "#layer0"},
+				"down": {"uv": [10, 5.5, 5.5, 8.25], "texture": "#layer0"}
+			}
+		}
+	],
+	"gui_light": "front",
+	"overrides": [
+		{"predicate": {"blocking": 1}, "model": "runecraftory:item/umbrella_blocking"}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 7.25, 2.75]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 7.25, 2.75]
+		},
+		"firstperson_righthand": {
+			"translation": [0.63, 0.95, 1.13],
+			"scale": [0.58, 0.58, 0.58]
+		},
+		"firstperson_lefthand": {
+			"translation": [0.63, 0.95, 1.13],
+			"scale": [0.58, 0.58, 0.58]
+		},
+		"ground": {
+			"translation": [0, 2, 0],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"gui": {
+			"rotation": [-150, 50, 175],
+			"translation": [0.25, -1.25, 0],
+			"scale": [0.6, 0.6, 0.6]
+		},
+		"head": {
+			"rotation": [0, 180, 0],
+			"translation": [0, 13, 0.25]
+		},
+		"fixed": {
+			"rotation": [0, 180, 0]
+		}
+	},
+	"groups": [
+		{
+			"name": "shield",
+			"origin": [-1, 15.5, 3],
+			"color": 0,
+			"children": [
+				0,
+				{
+					"name": "group",
+					"origin": [8, 7, 8],
+					"color": 0,
+					"children": [1, 2]
+				},
+				{
+					"name": "group",
+					"origin": [8, 7, 8],
+					"color": 0,
+					"children": [3, 4]
+				}
+			]
+		}
+	]
+}

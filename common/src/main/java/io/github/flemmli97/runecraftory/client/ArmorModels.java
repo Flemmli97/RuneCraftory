@@ -36,7 +36,7 @@ public class ArmorModels {
 
     public static final Map<ResourceLocation, ArmorModelGetter> ARMOR_GETTER = getArmorRenderer();
     private static final Map<ResourceLocation, FirstPersonArmorRenderer> FIRST_PERSON_GETTER = getFirstPersonHandRenderer();
-    private static final Map<Item, ResourceLocation> ARMOR_TEX = new HashMap<>();
+    private static final Map<String, ResourceLocation> ARMOR_TEXT_CACHE = new HashMap<>();
 
     private static final ArmorSimpleItemModel ITEM_MODEL = new ArmorSimpleItemModel();
     private static PiyoSandals PIYO_SANDALS_MODEL;
@@ -66,12 +66,12 @@ public class ArmorModels {
         });
         for (RegistryEntrySupplier<Item> sup : bracelets())
             builder.put(sup.getID(), bracelet);
-        ArmorModelGetter ribbons = (entityLiving, itemStack, slot, origin) -> {
+        ArmorModelGetter normalItemModel = (entityLiving, itemStack, slot, origin) -> {
             ITEM_MODEL.setProperties(entityLiving, itemStack, origin.getHead(), ArmorSimpleItemModel.TRANSLATE_TO_HEAD);
             return ITEM_MODEL;
         };
         for (RegistryEntrySupplier<Item> sup : ModItems.ribbons())
-            builder.put(sup.getID(), ribbons);
+            builder.put(sup.getID(), normalItemModel);
         builder.put(ModItems.PIYO_SANDALS.getID(), ((entityLiving, itemStack, slot, origin) -> {
             origin.copyPropertiesTo((HumanoidModel) PIYO_SANDALS_MODEL);
             PIYO_SANDALS_MODEL.setAllVisible(false);
@@ -79,6 +79,8 @@ public class ArmorModels {
             PIYO_SANDALS_MODEL.rightLeg.visible = true;
             return PIYO_SANDALS_MODEL;
         }));
+        for (RegistryEntrySupplier<Item> sup : ModItems.hatItems())
+            builder.put(sup.getID(), normalItemModel);
         ArmorModelGetter rings = ((entityLiving, itemStack, slot, origin) -> {
             origin.copyPropertiesTo((HumanoidModel) RINGS_MODEL);
             RINGS_MODEL.setAllVisible(false);
@@ -125,7 +127,7 @@ public class ArmorModels {
 
     private static VertexConsumer forArmor(MultiBufferSource buffer, ItemStack stack, Player player) {
         if (stack.getItem() instanceof ItemArmorBase armor)
-            return ItemRenderer.getArmorFoilBuffer(buffer, RenderType.armorCutoutNoCull(ARMOR_TEX.computeIfAbsent(stack.getItem(), i -> new ResourceLocation(armor.getArmorTexture(stack, player, armor.getSlot(), null)))), false, stack.hasFoil());
+            return ItemRenderer.getArmorFoilBuffer(buffer, RenderType.armorCutoutNoCull(ARMOR_TEXT_CACHE.computeIfAbsent(armor.getArmorTexture(stack, player, armor.getSlot(), null), i -> new ResourceLocation(i))), false, stack.hasFoil());
         return null;
     }
 
@@ -165,7 +167,11 @@ public class ArmorModels {
     }
 
     private static List<RegistryEntrySupplier<Item>> rings() {
-        return List.of(ModItems.SILVER_RING, ModItems.GOLD_RING, ModItems.PLATINUM_RING, ModItems.ENGAGEMENT_RING);
+        return List.of(ModItems.SILVER_RING, ModItems.GOLD_RING, ModItems.PLATINUM_RING, ModItems.ENGAGEMENT_RING,
+                ModItems.SHIELD_RING, ModItems.CRITICAL_RING, ModItems.SILENT_RING, ModItems.PARALYSIS_RING, ModItems.POISON_RING, ModItems.MAGIC_RING, ModItems.THROWING_RING, ModItems.STAY_UP_RING,
+                ModItems.AQUAMARINE_RING, ModItems.AMETHYST_RING, ModItems.EMERALD_RING, ModItems.SAPPHIRE_RING, ModItems.RUBY_RING,
+                ModItems.CURSED_RING, ModItems.DIAMOND_RING,
+                ModItems.FIRE_RING, ModItems.WIND_RING, ModItems.WATER_RING, ModItems.EARTH_RING, ModItems.HAPPY_RING);
     }
 
     public interface ArmorModelGetter {

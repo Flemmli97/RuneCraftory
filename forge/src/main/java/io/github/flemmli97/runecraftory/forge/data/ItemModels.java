@@ -57,11 +57,13 @@ public class ItemModels extends ItemModelProvider {
                 .transform(ItemTransforms.TransformType.THIRD_PERSON_LEFT_HAND).rotation(-2.5f, 0, 0).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end()
                 .transform(ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND).rotation(-2.5f, 0, 0).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end();
         List<RegistryEntrySupplier<Item>> ribbons = ModItems.ribbons();
+        List<RegistryEntrySupplier<Item>> hats = ModItems.hatItems();
 
         for (RegistryEntrySupplier<Item> sup : ModItems.ITEMS.getEntries()) {
             if (sup == ModItems.MEDICINAL_HERB || sup == ModItems.ITEM_BLOCK_FORGE || sup == ModItems.ITEM_BLOCK_ACCESS
                     || sup == ModItems.ITEM_BLOCK_CHEM || sup == ModItems.ITEM_BLOCK_COOKING || sup == ModItems.QUEST_BOARD
-                    || sup == ModItems.ORC_MAZE)
+                    || sup == ModItems.ORC_MAZE
+                    || sup == ModItems.STRAW_HAT || sup == ModItems.FANCY_HAT || hats.contains(sup))
                 continue;
             if (ribbons.contains(sup)) {
                 this.singleTexture(sup.getID().getPath(), this.mcLoc("item/generated"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath()))
@@ -73,13 +75,19 @@ public class ItemModels extends ItemModelProvider {
                 //this.singleTexture(sup.getID().getPath(), this.mcLoc("item/generated"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath()))
                 //        .transforms().transform(ItemTransforms.TransformType.HEAD).rotation(0, 180, 35).translation(4.5f, 5, -6.75f).scale(0.35f);*/
             } else if (sup.get() instanceof ShieldItem) {
-                if (sup == ModItems.UMBRELLA)
-                    continue;
-                this.withExistingParent(sup.getID().getPath() + "_blocking", this.modLoc(sup.getID().getPath())).transforms()
-                        .transform(ItemTransforms.TransformType.FIRST_PERSON_RIGHT_HAND).rotation(9.25f, 0.37f, 8).translation(-0.5f, -4.25f, 0).end()
-                        .transform(ItemTransforms.TransformType.FIRST_PERSON_LEFT_HAND).rotation(9.25f, 0.37f, 8).translation(-0.5f, -4.25f, 0).end()
-                        .transform(ItemTransforms.TransformType.THIRD_PERSON_LEFT_HAND).rotation(55, -47.5f, 0).translation(6, -1.25f, -4).end()
-                        .transform(ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND).rotation(55, -47.5f, 0).translation(6, -1.25f, -4).end();
+                if (sup == ModItems.UMBRELLA) {
+                    this.withExistingParent(sup.getID().getPath() + "_blocking", this.modLoc(sup.getID().getPath())).transforms()
+                            .transform(ItemTransforms.TransformType.FIRST_PERSON_RIGHT_HAND).rotation(-21, 0, 17).translation(0, 0, 0).end()
+                            .transform(ItemTransforms.TransformType.FIRST_PERSON_LEFT_HAND).rotation(-21, 0, 17).translation(0, 0, 0).end()
+                            .transform(ItemTransforms.TransformType.THIRD_PERSON_LEFT_HAND).rotation(-44, 0, -20).translation(3, 4.5f, -3).end()
+                            .transform(ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND).rotation(-44, 0, -20).translation(3, 4.5f, -3).end();
+                } else {
+                    this.withExistingParent(sup.getID().getPath() + "_blocking", this.modLoc(sup.getID().getPath())).transforms()
+                            .transform(ItemTransforms.TransformType.FIRST_PERSON_RIGHT_HAND).rotation(15, 0, 10).translation(0.5f, -4, 0).end()
+                            .transform(ItemTransforms.TransformType.FIRST_PERSON_LEFT_HAND).rotation(15, 0, 10).translation(0.5f, -4, 0).end()
+                            .transform(ItemTransforms.TransformType.THIRD_PERSON_LEFT_HAND).rotation(50, -45f, 0).translation(4.5f, -1.5f, -3).end()
+                            .transform(ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND).rotation(50, -45f, 0).translation(4.5f, -1.5f, -3).end();
+                }
             } else if (sup == ModItems.SPAWNER)
                 this.withExistingParent(sup.getID().getPath(), "block/spawner");
             else if (sup == ModItems.DEBUG)

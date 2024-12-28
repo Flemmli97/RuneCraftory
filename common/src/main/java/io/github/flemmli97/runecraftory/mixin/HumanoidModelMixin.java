@@ -31,8 +31,7 @@ public abstract class HumanoidModelMixin<T extends LivingEntity> implements Huma
 
     @Inject(method = "setupAnim", at = @At("RETURN"))
     private void modifyModel(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, CallbackInfo info) {
-        if (this.runecraftoryDoAnimation)
-            ClientMixinUtils.transformHumanoidModel(entity, (HumanoidModel<?>) (Object) this);
+        ClientMixinUtils.transformHumanoidModel(entity, (HumanoidModel<?>) (Object) this, this.runecraftoryDoAnimation);
     }
 
     @Override

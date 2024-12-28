@@ -379,6 +379,18 @@
         },
         {
           "type": "minecraft:item",
+          "name": "runecraftory:magic_ring"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:throwing_ring"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:stay_up_ring"
+        },
+        {
+          "type": "minecraft:item",
           "name": "runecraftory:aquamarine_ring"
         },
         {

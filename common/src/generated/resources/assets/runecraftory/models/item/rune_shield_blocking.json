@@ -3,50 +3,50 @@
   "display": {
     "firstperson_righthand": {
       "rotation": [
-        9.25,
-        0.37,
-        8
+        15,
+        0,
+        10
       ],
       "translation": [
-        -0.5,
-        -4.25,
+        0.5,
+        -4,
         0
       ]
     },
     "firstperson_lefthand": {
       "rotation": [
-        9.25,
-        0.37,
-        8
+        15,
+        0,
+        10
       ],
       "translation": [
-        -0.5,
-        -4.25,
+        0.5,
+        -4,
         0
       ]
     },
     "thirdperson_lefthand": {
       "rotation": [
-        55,
-        -47.5,
+        50,
+        -45,
         0
       ],
       "translation": [
-        6,
-        -1.25,
-        -4
+        4.5,
+        -1.5,
+        -3
       ]
     },
     "thirdperson_righthand": {
       "rotation": [
-        55,
-        -47.5,
+        50,
+        -45,
         0
       ],
       "translation": [
-        6,
-        -1.25,
-        -4
+        4.5,
+        -1.5,
+        -3
       ]
     }
   }

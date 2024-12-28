@@ -780,7 +780,8 @@ public class LangGen implements DataProvider {
         return Stream.of(s.trim().split("_"))
                 .filter(word -> !word.isEmpty())
                 .map(word -> word.substring(0, 1).toUpperCase() + word.substring(1))
-                .collect(Collectors.joining(" ")).replace("Plus", "+")
+                .collect(Collectors.joining(" "))
+                .replaceAll("Plus($| )", "+")
                 .replace("Four Leaf", "4-Leaf")
                 .replace("Pom Pom", "Pom-Pom");
     }

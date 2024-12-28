@@ -78,6 +78,7 @@ public class ModItems {
     public static final List<RegistryEntrySupplier<Item>> FRUITS = new ArrayList<>();
     public static final List<RegistryEntrySupplier<Item>> FLOWERS = new ArrayList<>();
     public static final List<RegistryEntrySupplier<Item>> CROPS = new ArrayList<>();
+    public static final List<RegistryEntrySupplier<Item>> ITEM_HATS = new ArrayList<>();
 
     public static final List<RegistryEntrySupplier<Item>> TIER_1_CHEST = new ArrayList<>();
     public static final List<RegistryEntrySupplier<Item>> TIER_2_CHEST = new ArrayList<>();
@@ -391,9 +392,9 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> SILENT_RING = equipment(EquipmentSlot.LEGS, "silent_ring", Texture.Y);
     public static final RegistryEntrySupplier<Item> PARALYSIS_RING = equipment(EquipmentSlot.LEGS, "paralysis_ring", Texture.Y);
     public static final RegistryEntrySupplier<Item> POISON_RING = equipment(EquipmentSlot.LEGS, "poison_ring", Texture.Y);
-    public static final RegistryEntrySupplier<Item> MAGIC_RING = equipment(EquipmentSlot.LEGS, "magic_ring", Texture.N);
-    public static final RegistryEntrySupplier<Item> THROWING_RING = equipment(EquipmentSlot.LEGS, "throwing_ring", Texture.N);
-    public static final RegistryEntrySupplier<Item> STAY_UP_RING = equipment(EquipmentSlot.LEGS, "stay_up_ring", Texture.N);
+    public static final RegistryEntrySupplier<Item> MAGIC_RING = equipment(EquipmentSlot.LEGS, "magic_ring", Texture.Y);
+    public static final RegistryEntrySupplier<Item> THROWING_RING = equipment(EquipmentSlot.LEGS, "throwing_ring", Texture.Y);
+    public static final RegistryEntrySupplier<Item> STAY_UP_RING = equipment(EquipmentSlot.LEGS, "stay_up_ring", Texture.Y);
     public static final RegistryEntrySupplier<Item> AQUAMARINE_RING = equipment(EquipmentSlot.LEGS, "aquamarine_ring", Texture.Y);
     public static final RegistryEntrySupplier<Item> AMETHYST_RING = equipment(EquipmentSlot.LEGS, "amethyst_ring", Texture.Y);
     public static final RegistryEntrySupplier<Item> EMERALD_RING = equipment(EquipmentSlot.LEGS, "emerald_ring", Texture.Y);
@@ -471,8 +472,8 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> GREEN_RIBBON = equipment(EquipmentSlot.HEAD, "green_ribbon", Texture.Y, true);
     public static final RegistryEntrySupplier<Item> PURPLE_RIBBON = equipment(EquipmentSlot.HEAD, "purple_ribbon", Texture.Y, true);
     public static final RegistryEntrySupplier<Item> SPECTACLES = equipment(EquipmentSlot.HEAD, "spectacles", Texture.Y);
-    public static final RegistryEntrySupplier<Item> STRAW_HAT = equipment(EquipmentSlot.HEAD, "straw_hat", Texture.Y);
-    public static final RegistryEntrySupplier<Item> FANCY_HAT = equipment(EquipmentSlot.HEAD, "fancy_hat", Texture.Y);
+    public static final RegistryEntrySupplier<Item> STRAW_HAT = equipment(EquipmentSlot.HEAD, "straw_hat", Texture.Y, true);
+    public static final RegistryEntrySupplier<Item> FANCY_HAT = equipment(EquipmentSlot.HEAD, "fancy_hat", Texture.Y, true);
     public static final RegistryEntrySupplier<Item> BRAND_GLASSES = equipment(EquipmentSlot.HEAD, "brand_glasses", Texture.N);
     public static final RegistryEntrySupplier<Item> CUTE_KNITTING = equipment(EquipmentSlot.HEAD, "cute_knitting", Texture.N);
     public static final RegistryEntrySupplier<Item> INTELLIGENT_GLASSES = equipment(EquipmentSlot.HEAD, "intelligent_glasses", Texture.N);
@@ -1584,6 +1585,10 @@ public class ModItems {
         return List.of(ModItems.BLUE_RIBBON, ModItems.GREEN_RIBBON, ModItems.PURPLE_RIBBON, ModItems.BLACK_RIBBON,
                 ModItems.YELLOW_RIBBON, ModItems.RED_RIBBON, ModItems.ORANGE_RIBBON, ModItems.WHITE_RIBBON,
                 ModItems.INDIGO_RIBBON);
+    }
+
+    public static List<RegistryEntrySupplier<Item>> hatItems() {
+        return List.of(ModItems.STRAW_HAT, ModItems.FANCY_HAT);
     }
 
     //Here till all items have a texture

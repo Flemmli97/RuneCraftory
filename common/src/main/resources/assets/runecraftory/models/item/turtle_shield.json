@@ -1,0 +1,80 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+		"layer0": "runecraftory:item/turtle_shield"
+	},
+	"elements": [
+		{
+			"name": "handle",
+			"from": [7, 8, 8.5],
+			"to": [9, 14, 14.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 11, 11.5]},
+			"faces": {
+				"north": {"uv": [3.5, 4.5, 4, 6], "texture": "#layer0"},
+				"east": {"uv": [0, 4.5, 1.5, 6], "texture": "#layer0"},
+				"south": {"uv": [4, 4.5, 4.5, 6], "texture": "#layer0"},
+				"west": {"uv": [1.5, 4.5, 3, 6], "texture": "#layer0"},
+				"up": {"uv": [5, 6, 4.5, 4.5], "texture": "#layer0"},
+				"down": {"uv": [5.5, 4.5, 5, 6], "texture": "#layer0"}
+			}
+		},
+		{
+			"name": "shield",
+			"from": [2, 2, 7.5],
+			"to": [14, 20, 8.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 0, -0.5]},
+			"faces": {
+				"north": {"uv": [0, 0, 3, 4.5], "texture": "#layer0"},
+				"east": {"uv": [3, 4.5, 3.25, 9], "texture": "#layer0"},
+				"south": {"uv": [3, 0, 6, 4.5], "texture": "#layer0"},
+				"west": {"uv": [3.25, 4.5, 3.5, 9], "texture": "#layer0"},
+				"up": {"uv": [8.5, 4.75, 5.5, 4.5], "texture": "#layer0"},
+				"down": {"uv": [8.5, 4.75, 5.5, 5], "texture": "#layer0"}
+			}
+		}
+	],
+	"gui_light": "front",
+	"overrides": [
+		{"predicate": {"blocking": 1}, "model": "runecraftory:item/turtle_shield_blocking"}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [0, -90, 0],
+			"translation": [3.5, -5, 4]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [0, -90, 0],
+			"translation": [3.5, -5, 4]
+		},
+		"firstperson_righthand": {
+			"translation": [3, -5.5, 0]
+		},
+		"firstperson_lefthand": {
+			"translation": [3, -5.5, 0]
+		},
+		"ground": {
+			"translation": [0, 2, 0],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"gui": {
+			"rotation": [180, 35, -175],
+			"translation": [-0.5, -2.5, 0],
+			"scale": [0.75, 0.75, 0.75]
+		},
+		"head": {
+			"translation": [0, 5.25, -7]
+		},
+		"fixed": {
+			"translation": [0, -3, 0]
+		}
+	},
+	"groups": [
+		{
+			"name": "shield",
+			"origin": [-1, 15.5, 3],
+			"color": 0,
+			"children": [0, 1]
+		}
+	]
+}

@@ -5,7 +5,6 @@ import com.google.common.collect.Multimap;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.platform.ExtendedItem;
 import io.github.flemmli97.tenshilib.api.item.DynamicArmorTextureItem;
-import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -35,7 +34,7 @@ public class ItemArmorBase extends ArmorItem implements ExtendedItem, DynamicArm
 
     @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-        return this.useItemTexture ? ITEM_PATH : (ARMOR_MODEL_PATH + PlatformUtils.INSTANCE.items().getIDFrom(this).getPath() + ".png");
+        return this.useItemTexture ? ITEM_PATH : (ARMOR_MODEL_PATH + this.registryID.getPath() + ".png");
     }
 
     @Override

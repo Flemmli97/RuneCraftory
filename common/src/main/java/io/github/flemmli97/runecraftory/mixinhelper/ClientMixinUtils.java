@@ -12,6 +12,7 @@ import io.github.flemmli97.runecraftory.common.items.BigWeapon;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemDualBladeBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemGloveBase;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
+import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -26,6 +27,8 @@ import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.FastColor;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
@@ -126,8 +129,16 @@ public class ClientMixinUtils {
         return false;
     }
 
-    public static void transformHumanoidModel(LivingEntity entity, HumanoidModel<?> model) {
-        if (ClientHandlers.getAnimatedPlayerModel() != null) {
+    public static void transformHumanoidModel(LivingEntity entity, HumanoidModel<?> model, boolean animated) {
+        InteractionHand main = entity.getMainArm() == HumanoidArm.RIGHT ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
+        InteractionHand off = entity.getMainArm() == HumanoidArm.RIGHT ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
+        if (model.rightArmPose == HumanoidModel.ArmPose.ITEM && entity.getItemInHand(main).is(ModItems.UMBRELLA.get())) {
+            model.rightArm.xRot -= 70 * Mth.DEG_TO_RAD;
+        }
+        if (model.leftArmPose == HumanoidModel.ArmPose.ITEM && entity.getItemInHand(off).is(ModItems.UMBRELLA.get())) {
+            model.leftArm.xRot -= 70 * Mth.DEG_TO_RAD;
+        }
+        if (animated && ClientHandlers.getAnimatedPlayerModel() != null) {
             boolean ignoreRiding = false;
             if (entity instanceof Player player)
                 ignoreRiding = Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().getCurrentAction() == ModAttackActions.DUAL_USE.get()).orElse(false);
