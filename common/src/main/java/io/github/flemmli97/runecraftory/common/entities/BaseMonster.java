@@ -953,26 +953,26 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             }
             return false;
         }
-        if (food.duration() > 0)
-            this.removeFoodEffect();
         this.eat(this.level, stack);
         Pair<Map<Attribute, Double>, Map<Attribute, Double>> foodStats = ItemNBT.foodStats(stack);
-        for (Map.Entry<Attribute, Double> entry : foodStats.getSecond().entrySet()) {
-            AttributeInstance inst = this.getAttribute(entry.getKey());
-            if (inst == null)
-                continue;
-            inst.removeModifier(LibConstants.FOOD_UUID_MULTI);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.FOOD_UUID_MULTI, "foodBuffMulti_" + entry.getKey().getDescriptionId(), entry.getValue(), AttributeModifier.Operation.MULTIPLY_BASE));
-        }
-        for (Map.Entry<Attribute, Double> entry : foodStats.getFirst().entrySet()) {
-            AttributeInstance inst = this.getAttribute(entry.getKey());
-            if (inst == null)
-                continue;
-            inst.removeModifier(LibConstants.FOOD_UUID);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.FOOD_UUID, "foodBuff_" + entry.getKey().getDescriptionId(), entry.getValue(), AttributeModifier.Operation.ADDITION));
-        }
-        if (food.duration() > 0)
+        if (!foodStats.getFirst().isEmpty() || !foodStats.getSecond().isEmpty()) {
+            this.removeFoodEffect();
+            for (Map.Entry<Attribute, Double> entry : foodStats.getSecond().entrySet()) {
+                AttributeInstance inst = this.getAttribute(entry.getKey());
+                if (inst == null)
+                    continue;
+                inst.removeModifier(LibConstants.FOOD_UUID_MULTI);
+                inst.addPermanentModifier(new AttributeModifier(LibConstants.FOOD_UUID_MULTI, "foodBuffMulti_" + entry.getKey().getDescriptionId(), entry.getValue(), AttributeModifier.Operation.MULTIPLY_BASE));
+            }
+            for (Map.Entry<Attribute, Double> entry : foodStats.getFirst().entrySet()) {
+                AttributeInstance inst = this.getAttribute(entry.getKey());
+                if (inst == null)
+                    continue;
+                inst.removeModifier(LibConstants.FOOD_UUID);
+                inst.addPermanentModifier(new AttributeModifier(LibConstants.FOOD_UUID, "foodBuff_" + entry.getKey().getDescriptionId(), entry.getValue(), AttributeModifier.Operation.ADDITION));
+            }
             this.foodBuffTick = food.duration();
+        }
         EntityUtils.foodHealing(this, food.getHPGain());
         EntityUtils.foodHealing(this, this.getMaxHealth() * food.getHpPercentGain() * 0.01F);
         if (food.potionHeals() != null)

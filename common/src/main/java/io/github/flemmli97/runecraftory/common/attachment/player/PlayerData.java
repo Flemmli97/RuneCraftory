@@ -100,7 +100,7 @@ public class PlayerData {
     private final Map<NPCJob, NonNullList<ItemStack>> shopItems = new HashMap<>();
     private final InventoryShippingBin shipping = new InventoryShippingBin();
     //Food buff
-    private Item lastFood;
+    private Item lastFoodBuff;
     private Map<Attribute, Double> foodBuffs = new HashMap<>();
     private int foodDuration;
 
@@ -514,15 +514,13 @@ public class PlayerData {
     }
 
     public Item lastEatenFood() {
-        return this.lastFood;
+        return this.lastFoodBuff;
     }
 
     public void applyFoodEffect(Player player, ItemStack stack) {
         FoodProperties food = DataPackHandler.INSTANCE.foodManager().get(stack.getItem());
         if (food == null)
             return;
-        if (food.duration() > 0)
-            this.removeFoodEffect(player);
         Pair<Map<Attribute, Double>, Map<Attribute, Double>> foodStats = ItemNBT.foodStats(stack);
         Map<Attribute, Double> gain = foodStats.getFirst();
         foodStats.getSecond().forEach((att, d) -> {
@@ -543,12 +541,14 @@ public class PlayerData {
             mult += gain.getOrDefault(att, 0d);
             gain.put(att, mult);
         });
-        this.foodBuffs = gain;
-        if (this.foodBuffs.containsKey(Attributes.MAX_HEALTH))
-            this.setFoodHealthBonus(player, this.foodBuffs.get(Attributes.MAX_HEALTH));
-        if (food.duration() > 0)
+        if (!gain.isEmpty()) {
+            this.removeFoodEffect(player);
+            this.foodBuffs = gain;
+            if (this.foodBuffs.containsKey(Attributes.MAX_HEALTH))
+                this.setFoodHealthBonus(player, this.foodBuffs.get(Attributes.MAX_HEALTH));
             this.foodDuration = food.duration();
-        this.lastFood = stack.getItem();
+            this.lastFoodBuff = stack.getItem();
+        }
         if (player instanceof ServerPlayer serverPlayer) {
             Platform.INSTANCE.sendToClient(new S2CFoodPkt(stack), serverPlayer);
         }
@@ -557,7 +557,7 @@ public class PlayerData {
     public void removeFoodEffect(Player player) {
         this.foodBuffs = Collections.emptyMap();
         this.foodDuration = -1;
-        this.lastFood = null;
+        this.lastFoodBuff = null;
         this.setFoodHealthBonus(player, 0);
         if (player instanceof ServerPlayer serverPlayer) {
             Platform.INSTANCE.sendToClient(new S2CFoodPkt(null), serverPlayer);
@@ -574,8 +574,8 @@ public class PlayerData {
 
     public CompoundTag foodBuffNBT() {
         CompoundTag nbt = new CompoundTag();
-        if (this.lastFood != null)
-            nbt.putString("LastFood", PlatformUtils.INSTANCE.items().getIDFrom(this.lastFood).toString());
+        if (this.lastFoodBuff != null)
+            nbt.putString("LastFood", PlatformUtils.INSTANCE.items().getIDFrom(this.lastFoodBuff).toString());
         CompoundTag compound3 = new CompoundTag();
         for (Map.Entry<Attribute, Double> entry : this.foodBuffs.entrySet()) {
             compound3.putDouble(PlatformUtils.INSTANCE.attributes().getIDFrom(entry.getKey()).toString(), entry.getValue());
@@ -586,7 +586,7 @@ public class PlayerData {
     }
 
     public void readFoodBuffFromNBT(CompoundTag nbt) {
-        this.lastFood = nbt.contains("LastFood") ? PlatformUtils.INSTANCE.items().getFromId(new ResourceLocation(nbt.getString("LastFood"))) : null;
+        this.lastFoodBuff = nbt.contains("LastFood") ? PlatformUtils.INSTANCE.items().getFromId(new ResourceLocation(nbt.getString("LastFood"))) : null;
         this.foodBuffs.clear();
         CompoundTag tag = nbt.getCompound("FoodBuffs");
         for (String s : tag.getAllKeys()) {
