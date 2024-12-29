@@ -1,3 +1,16 @@
+RuneCraftory 1.10.5
+================
+- Added handonetta
+- Update movements of mobs
+- Update attack boxes of mobs
+- Fix sleeping pose for some mobs
+- Update shadow sizes
+- Fix mobs moving when dead sometimes
+- Stun effect now fully stops entities
+- Fix quests not working. (System will get complete redo in future)
+- Add entity predicate to talking quest
+- Added more textures + stats
+
 RuneCraftory 1.10.4
 ================
 - Update dependency
