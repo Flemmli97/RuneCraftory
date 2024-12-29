@@ -57,8 +57,8 @@ public class EntityHandonetta extends BossMonster {
 
     public static final AnimatedAction SWIPE = new AnimatedAction(1.28, 0.64, "swipe");
     public static final AnimatedAction FLICK = new AnimatedAction(1.32, 0.64, "flick");
-    public static final AnimatedAction SHOOT = new AnimatedAction(1.56, 0.52, "shoot");
-    public static final AnimatedAction LASER = new AnimatedAction(1.36, 0.64, "laser");
+    public static final AnimatedAction SHOOT = new AnimatedAction(1.44, 0.36, "shoot");
+    public static final AnimatedAction LASER = new AnimatedAction(1.24, 0.4, "laser");
     public static final AnimatedAction PLATE = new AnimatedAction(0.88, 0.56, "plate");
     public static final AnimatedAction GRAB = new AnimatedAction(1.2, 0.48, "grab");
     public static final AnimatedAction GRAB_CAUGHT = new AnimatedAction(1.96, 0.12, "grab_caught");
@@ -95,6 +95,7 @@ public class EntityHandonetta extends BossMonster {
                 entity.mobAttack(anim, null, e -> {
                     if (!entity.caughtEntities.contains(e) && CombatUtils.mobAttack(entity, e, new CustomDamage.Builder(entity).hurtResistant(8))) {
                         entity.caughtEntities.add(e);
+                        S2CScreenShake.sendAround(entity, 12, 4, 2);
                     }
                 });
             }
@@ -106,6 +107,8 @@ public class EntityHandonetta extends BossMonster {
         });
         b.put(LASER, (anim, entity) -> {
             entity.getNavigation().stop();
+            if (entity.getTarget() != null && !anim.isPastTick(0.3))
+                entity.setTargetPosition(EntityUtils.getStraightProjectileTarget(entity.position(), entity.getTarget()));
             if (anim.canAttack())
                 ModSpells.DARK_BEAM.get().use(entity);
         });
@@ -148,9 +151,13 @@ public class EntityHandonetta extends BossMonster {
     });
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityHandonetta>>> ATTACKS = List.of(
             WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>nonRepeatableAttack(SWIPE)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.1), e -> 70 + e.getRandom().nextInt(50))), 11),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.1), e -> 70 + e.getRandom().nextInt(50)))
+                    .withCondition((goal, target, previous) -> goal.attacker.allowAnimation(previous, SWIPE)
+                            && (goal.distanceToTargetSq < 16 || goal.attacker.random.nextFloat() < 0.5)), 11),
             WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>nonRepeatableAttack(FLICK)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.1), e -> 70 + e.getRandom().nextInt(50))), 11),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.1), e -> 70 + e.getRandom().nextInt(50)))
+                    .withCondition((goal, target, previous) -> goal.attacker.allowAnimation(previous, FLICK)
+                            && (goal.distanceToTargetSq < 16 || goal.attacker.random.nextFloat() < 0.5)), 11),
             WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>nonRepeatableAttack(PUNCH)
                     .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 8, true, true, true), e -> 70 + e.getRandom().nextInt(50))), 10),
             WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>nonRepeatableAttack(LASER)
@@ -269,6 +276,20 @@ public class EntityHandonetta extends BossMonster {
 
 
     @Override
+    public CustomDamage.Builder damageSourceAttack() {
+        CustomDamage.Builder builder = super.damageSourceAttack();
+        if (this.getAnimationHandler().isCurrent(SWIPE)) {
+            builder.knock(CustomDamage.KnockBackType.BACK);
+            builder.knockAmount(1.2f);
+        }
+        if (this.getAnimationHandler().isCurrent(FLICK)) {
+            builder.knock(CustomDamage.KnockBackType.UP);
+            builder.knockAmount(0.9f);
+        }
+        return builder;
+    }
+
+    @Override
     public OrientedBoundingBox calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
         if (anim.is(PUNCH)) {
             float[] rots = MathsHelper.YXRotFrom(this.moveDirection);
@@ -280,7 +301,7 @@ public class EntityHandonetta extends BossMonster {
             return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
                     .inflate(grow, 0, grow), rots[0], rots[1], this.position());
         }
-        return super.calculateAttackAABB(anim, target, grow);
+        return super.calculateAttackAABB(anim, target, grow).inflate(0, grow * 2, 0);
     }
 
     @Override
@@ -291,7 +312,7 @@ public class EntityHandonetta extends BossMonster {
             width = this.getBbWidth() * 1.6;
             length = this.getBbWidth() * 1.8;
         }
-        return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
+        return new AABB(-width * 0.5, -0.5, 0, width * 0.5, this.getBbHeight() + 0.5, length);
     }
 
     @Override
