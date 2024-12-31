@@ -29,7 +29,7 @@ public class ChemistryRecipe extends SextupleRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModCrafting.CHEMISTRYSERIALIZER.get();
+        return ModCrafting.CHEMISTRY_SERIALIZER.get();
     }
 
     @Override

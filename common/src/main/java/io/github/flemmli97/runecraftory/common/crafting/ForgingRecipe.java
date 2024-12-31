@@ -22,7 +22,7 @@ public class ForgingRecipe extends SextupleRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModCrafting.FORGESERIALIZER.get();
+        return ModCrafting.FORGING_SERIALIZER.get();
     }
 
     @Override

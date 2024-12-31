@@ -28,7 +28,7 @@ public class CookingRecipe extends SextupleRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModCrafting.COOKINGSERIALIZER.get();
+        return ModCrafting.COOKING_SERIALIZER.get();
     }
 
     @Override

@@ -1,0 +1,10 @@
+{
+  "type": "runecraftory:level_upgrade",
+  "current_level": 6,
+  "item": {
+    "tag": "runecraftory:magic_spells"
+  },
+  "material": {
+    "item": "minecraft:nether_star"
+  }
+}

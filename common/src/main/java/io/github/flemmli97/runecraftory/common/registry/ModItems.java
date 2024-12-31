@@ -744,65 +744,65 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> BOOTS = mat("boots", Texture.N);
     public static final RegistryEntrySupplier<Item> LAWN = mat("ayngondaia_lawn", Rarity.UNCOMMON, Texture.N);
 
-    public static final RegistryEntrySupplier<Item> FIRE_BALL_SMALL = spell(() -> ModSpells.FIREBALL, "fireball");
-    public static final RegistryEntrySupplier<Item> FIRE_BALL_BIG = spell(() -> ModSpells.BIG_FIREBALL, "fireball_big");
-    public static final RegistryEntrySupplier<Item> EXPLOSION = spell(() -> ModSpells.EXPLOSION, "explosion");
-    public static final RegistryEntrySupplier<Item> WATER_LASER = spell(() -> ModSpells.WATER_LASER, "water_laser", true);
-    public static final RegistryEntrySupplier<Item> PARALLEL_LASER = spell(() -> ModSpells.PARALLEL_LASER, "parallel_laser", true);
-    public static final RegistryEntrySupplier<Item> DELTA_LASER = spell(() -> ModSpells.DELTA_LASER, "delta_laser", true);
-    public static final RegistryEntrySupplier<Item> SCREW_ROCK = spell(() -> ModSpells.SCREW_ROCK, "screw_rock");
-    public static final RegistryEntrySupplier<Item> EARTH_SPIKE = spell(() -> ModSpells.EARTH_SPIKE, "earth_spike");
-    public static final RegistryEntrySupplier<Item> AVENGER_ROCK = spell(() -> ModSpells.AVENGER_ROCK, "avenger_rock");
-    public static final RegistryEntrySupplier<Item> SONIC_WIND = spell(() -> ModSpells.SONIC, "sonic_wind");
-    public static final RegistryEntrySupplier<Item> DOUBLE_SONIC = spell(() -> ModSpells.DOUBLE_SONIC, "double_sonic");
-    public static final RegistryEntrySupplier<Item> PENETRATE_SONIC = spell(() -> ModSpells.PENETRATE_SONIC, "penetrate_sonic");
-    public static final RegistryEntrySupplier<Item> LIGHT_BARRIER = spell(() -> ModSpells.LIGHT_BARRIER, "light_barrier");
-    public static final RegistryEntrySupplier<Item> SHINE = spell(() -> ModSpells.SHINE, "shine");
-    public static final RegistryEntrySupplier<Item> PRISM = spell(() -> ModSpells.PRISM, "prism");
-    public static final RegistryEntrySupplier<Item> DARK_SNAKE = spell(() -> ModSpells.DARK_SNAKE, "dark_snake");
-    public static final RegistryEntrySupplier<Item> DARK_BALL = spell(() -> ModSpells.DARK_BALL, "dark_ball");
-    public static final RegistryEntrySupplier<Item> DARKNESS = spell(() -> ModSpells.DARKNESS, "darkness");
-    public static final RegistryEntrySupplier<Item> CURE = spell(() -> ModSpells.CURE, "cure");
-    public static final RegistryEntrySupplier<Item> CURE_ALL = spell(() -> ModSpells.CURE_ALL, "cure_all");
-    public static final RegistryEntrySupplier<Item> CURE_MASTER = spell(() -> ModSpells.MASTER_CURE, "cure_master");
-    public static final RegistryEntrySupplier<Item> MEDI_POISON = spell(() -> ModSpells.MEDI_POISON, "medi_poison");
-    public static final RegistryEntrySupplier<Item> MEDI_PARA = spell(() -> ModSpells.MEDI_PARA, "medi_paralysis");
-    public static final RegistryEntrySupplier<Item> MEDI_SEAL = spell(() -> ModSpells.MEDI_SEAL, "medi_seal");
-    public static final RegistryEntrySupplier<Item> GREETING = spell(() -> ModSpells.EMPTY, "greeting");
-    public static final RegistryEntrySupplier<Item> POWER_WAVE = spell(() -> ModSpells.POWER_WAVE, "power_wave");
-    public static final RegistryEntrySupplier<Item> DASH_SLASH = spell(() -> ModSpells.DASH_SLASH, "dash_slash");
-    public static final RegistryEntrySupplier<Item> RUSH_ATTACK = spell(() -> ModSpells.RUSH_ATTACK, "rush_attack");
-    public static final RegistryEntrySupplier<Item> ROUND_BREAK = spell(() -> ModSpells.ROUND_BREAK, "round_break");
-    public static final RegistryEntrySupplier<Item> MIND_THRUST = spell(() -> ModSpells.MIND_THRUST, "mind_thrust");
-    public static final RegistryEntrySupplier<Item> GUST = spell(() -> ModSpells.GUST, "gust");
-    public static final RegistryEntrySupplier<Item> STORM = spell(() -> ModSpells.STORM, "storm");
-    public static final RegistryEntrySupplier<Item> BLITZ = spell(() -> ModSpells.BLITZ, "blitz");
-    public static final RegistryEntrySupplier<Item> TWIN_ATTACK = spell(() -> ModSpells.TWIN_ATTACK, "twin_attack");
-    public static final RegistryEntrySupplier<Item> RAIL_STRIKE = spell(() -> ModSpells.RAIL_STRIKE, "rail_strike");
-    public static final RegistryEntrySupplier<Item> WIND_SLASH = spell(() -> ModSpells.WIND_SLASH, "wind_slash");
-    public static final RegistryEntrySupplier<Item> FLASH_STRIKE = spell(() -> ModSpells.FLASH_STRIKE, "flash_strike");
-    public static final RegistryEntrySupplier<Item> NAIVE_BLADE = spell(() -> ModSpells.NAIVE_BLADE, "naive_blade");
-    public static final RegistryEntrySupplier<Item> STEEL_HEART = spell(() -> ModSpells.STEEL_HEART, "steel_heart");
-    public static final RegistryEntrySupplier<Item> DELTA_STRIKE = spell(() -> ModSpells.DELTA_STRIKE, "delta_strike");
-    public static final RegistryEntrySupplier<Item> HURRICANE = spell(() -> ModSpells.HURRICANE, "hurricane");
-    public static final RegistryEntrySupplier<Item> REAPER_SLASH = spell(() -> ModSpells.REAPER_SLASH, "reaper_slash");
-    public static final RegistryEntrySupplier<Item> MILLION_STRIKE = spell(() -> ModSpells.MILLION_STRIKE, "million_strike");
-    public static final RegistryEntrySupplier<Item> AXEL_DISASTER = spell(() -> ModSpells.AXEL_DISASTER, "axel_disaster");
-    public static final RegistryEntrySupplier<Item> STARDUST_UPPER = spell(() -> ModSpells.STARDUST_UPPER, "stardust_upper");
-    public static final RegistryEntrySupplier<Item> TORNADO_SWING = spell(() -> ModSpells.TORNADO_SWING, "tornado_swing");
-    public static final RegistryEntrySupplier<Item> GRAND_IMPACT = spell(() -> ModSpells.GRAND_IMPACT, "grand_impact");
-    public static final RegistryEntrySupplier<Item> GIGA_SWING = spell(() -> ModSpells.GIGA_SWING, "giga_swing");
-    public static final RegistryEntrySupplier<Item> UPPER_CUT = spell(() -> ModSpells.UPPER_CUT, "upper_cut");
-    public static final RegistryEntrySupplier<Item> DOUBLE_KICK = spell(() -> ModSpells.DOUBLE_KICK, "double_kick");
-    public static final RegistryEntrySupplier<Item> STRAIGHT_PUNCH = spell(() -> ModSpells.STRAIGHT_PUNCH, "straight_punch");
-    public static final RegistryEntrySupplier<Item> NEKO_DAMASHI = spell(() -> ModSpells.NEKO_DAMASHI, "neko_damashi");
-    public static final RegistryEntrySupplier<Item> RUSH_PUNCH = spell(() -> ModSpells.RUSH_PUNCH, "rush_punch");
-    public static final RegistryEntrySupplier<Item> CYCLONE = spell(() -> ModSpells.CYCLONE, "cyclone");
-    public static final RegistryEntrySupplier<Item> RAPID_MOVE = spell(() -> ModSpells.RAPID_MOVE, "rapid_move");
-    public static final RegistryEntrySupplier<Item> BONUS_CONCERTO = spell(() -> ModSpells.EMPTY, "bonus_concerto");
-    public static final RegistryEntrySupplier<Item> STRIKING_MARCH = spell(() -> ModSpells.EMPTY, "striking_march");
-    public static final RegistryEntrySupplier<Item> IRON_WALTZ = spell(() -> ModSpells.EMPTY, "iron_waltz");
-    public static final RegistryEntrySupplier<Item> TELEPORT = spell(() -> ModSpells.TELEPORT, "teleport");
+    public static final RegistryEntrySupplier<Item> FIRE_BALL_SMALL = spell(() -> ModSpells.FIREBALL, "fireball", 2);
+    public static final RegistryEntrySupplier<Item> FIRE_BALL_BIG = spell(() -> ModSpells.BIG_FIREBALL, "fireball_big", 2);
+    public static final RegistryEntrySupplier<Item> EXPLOSION = spell(() -> ModSpells.EXPLOSION, "explosion", 2);
+    public static final RegistryEntrySupplier<Item> WATER_LASER = spell(() -> ModSpells.WATER_LASER, "water_laser", true, 2);
+    public static final RegistryEntrySupplier<Item> PARALLEL_LASER = spell(() -> ModSpells.PARALLEL_LASER, "parallel_laser", true, 2);
+    public static final RegistryEntrySupplier<Item> DELTA_LASER = spell(() -> ModSpells.DELTA_LASER, "delta_laser", true, 2);
+    public static final RegistryEntrySupplier<Item> SCREW_ROCK = spell(() -> ModSpells.SCREW_ROCK, "screw_rock", 2);
+    public static final RegistryEntrySupplier<Item> EARTH_SPIKE = spell(() -> ModSpells.EARTH_SPIKE, "earth_spike", 2);
+    public static final RegistryEntrySupplier<Item> AVENGER_ROCK = spell(() -> ModSpells.AVENGER_ROCK, "avenger_rock", 2);
+    public static final RegistryEntrySupplier<Item> SONIC_WIND = spell(() -> ModSpells.SONIC, "sonic_wind", 2);
+    public static final RegistryEntrySupplier<Item> DOUBLE_SONIC = spell(() -> ModSpells.DOUBLE_SONIC, "double_sonic", 2);
+    public static final RegistryEntrySupplier<Item> PENETRATE_SONIC = spell(() -> ModSpells.PENETRATE_SONIC, "penetrate_sonic", 2);
+    public static final RegistryEntrySupplier<Item> LIGHT_BARRIER = spell(() -> ModSpells.LIGHT_BARRIER, "light_barrier", 2);
+    public static final RegistryEntrySupplier<Item> SHINE = spell(() -> ModSpells.SHINE, "shine", 2);
+    public static final RegistryEntrySupplier<Item> PRISM = spell(() -> ModSpells.PRISM, "prism", 2);
+    public static final RegistryEntrySupplier<Item> DARK_SNAKE = spell(() -> ModSpells.DARK_SNAKE, "dark_snake", 2);
+    public static final RegistryEntrySupplier<Item> DARK_BALL = spell(() -> ModSpells.DARK_BALL, "dark_ball", 2);
+    public static final RegistryEntrySupplier<Item> DARKNESS = spell(() -> ModSpells.DARKNESS, "darkness", 2);
+    public static final RegistryEntrySupplier<Item> CURE = spell(() -> ModSpells.CURE, "cure", 2);
+    public static final RegistryEntrySupplier<Item> CURE_ALL = spell(() -> ModSpells.CURE_ALL, "cure_all", 2);
+    public static final RegistryEntrySupplier<Item> CURE_MASTER = spell(() -> ModSpells.MASTER_CURE, "cure_master", 2);
+    public static final RegistryEntrySupplier<Item> MEDI_POISON = spell(() -> ModSpells.MEDI_POISON, "medi_poison", 2);
+    public static final RegistryEntrySupplier<Item> MEDI_PARA = spell(() -> ModSpells.MEDI_PARA, "medi_paralysis", 2);
+    public static final RegistryEntrySupplier<Item> MEDI_SEAL = spell(() -> ModSpells.MEDI_SEAL, "medi_seal", 2);
+    public static final RegistryEntrySupplier<Item> GREETING = spell(() -> ModSpells.EMPTY, "greeting", 0);
+    public static final RegistryEntrySupplier<Item> POWER_WAVE = spell(() -> ModSpells.POWER_WAVE, "power_wave", 1);
+    public static final RegistryEntrySupplier<Item> DASH_SLASH = spell(() -> ModSpells.DASH_SLASH, "dash_slash", 1);
+    public static final RegistryEntrySupplier<Item> RUSH_ATTACK = spell(() -> ModSpells.RUSH_ATTACK, "rush_attack", 1);
+    public static final RegistryEntrySupplier<Item> ROUND_BREAK = spell(() -> ModSpells.ROUND_BREAK, "round_break", 1);
+    public static final RegistryEntrySupplier<Item> MIND_THRUST = spell(() -> ModSpells.MIND_THRUST, "mind_thrust", 1);
+    public static final RegistryEntrySupplier<Item> GUST = spell(() -> ModSpells.GUST, "gust", 1);
+    public static final RegistryEntrySupplier<Item> STORM = spell(() -> ModSpells.STORM, "storm", 1);
+    public static final RegistryEntrySupplier<Item> BLITZ = spell(() -> ModSpells.BLITZ, "blitz", 1);
+    public static final RegistryEntrySupplier<Item> TWIN_ATTACK = spell(() -> ModSpells.TWIN_ATTACK, "twin_attack", 1);
+    public static final RegistryEntrySupplier<Item> RAIL_STRIKE = spell(() -> ModSpells.RAIL_STRIKE, "rail_strike", 1);
+    public static final RegistryEntrySupplier<Item> WIND_SLASH = spell(() -> ModSpells.WIND_SLASH, "wind_slash", 1);
+    public static final RegistryEntrySupplier<Item> FLASH_STRIKE = spell(() -> ModSpells.FLASH_STRIKE, "flash_strike", 1);
+    public static final RegistryEntrySupplier<Item> NAIVE_BLADE = spell(() -> ModSpells.NAIVE_BLADE, "naive_blade", 1);
+    public static final RegistryEntrySupplier<Item> STEEL_HEART = spell(() -> ModSpells.STEEL_HEART, "steel_heart", 1);
+    public static final RegistryEntrySupplier<Item> DELTA_STRIKE = spell(() -> ModSpells.DELTA_STRIKE, "delta_strike", 1);
+    public static final RegistryEntrySupplier<Item> HURRICANE = spell(() -> ModSpells.HURRICANE, "hurricane", 1);
+    public static final RegistryEntrySupplier<Item> REAPER_SLASH = spell(() -> ModSpells.REAPER_SLASH, "reaper_slash", 1);
+    public static final RegistryEntrySupplier<Item> MILLION_STRIKE = spell(() -> ModSpells.MILLION_STRIKE, "million_strike", 1);
+    public static final RegistryEntrySupplier<Item> AXEL_DISASTER = spell(() -> ModSpells.AXEL_DISASTER, "axel_disaster", 1);
+    public static final RegistryEntrySupplier<Item> STARDUST_UPPER = spell(() -> ModSpells.STARDUST_UPPER, "stardust_upper", 1);
+    public static final RegistryEntrySupplier<Item> TORNADO_SWING = spell(() -> ModSpells.TORNADO_SWING, "tornado_swing", 1);
+    public static final RegistryEntrySupplier<Item> GRAND_IMPACT = spell(() -> ModSpells.GRAND_IMPACT, "grand_impact", 1);
+    public static final RegistryEntrySupplier<Item> GIGA_SWING = spell(() -> ModSpells.GIGA_SWING, "giga_swing", 1);
+    public static final RegistryEntrySupplier<Item> UPPER_CUT = spell(() -> ModSpells.UPPER_CUT, "upper_cut", 1);
+    public static final RegistryEntrySupplier<Item> DOUBLE_KICK = spell(() -> ModSpells.DOUBLE_KICK, "double_kick", 1);
+    public static final RegistryEntrySupplier<Item> STRAIGHT_PUNCH = spell(() -> ModSpells.STRAIGHT_PUNCH, "straight_punch", 1);
+    public static final RegistryEntrySupplier<Item> NEKO_DAMASHI = spell(() -> ModSpells.NEKO_DAMASHI, "neko_damashi", 1);
+    public static final RegistryEntrySupplier<Item> RUSH_PUNCH = spell(() -> ModSpells.RUSH_PUNCH, "rush_punch", 1);
+    public static final RegistryEntrySupplier<Item> CYCLONE = spell(() -> ModSpells.CYCLONE, "cyclone", 1);
+    public static final RegistryEntrySupplier<Item> RAPID_MOVE = spell(() -> ModSpells.RAPID_MOVE, "rapid_move", 1);
+    public static final RegistryEntrySupplier<Item> BONUS_CONCERTO = spell(() -> ModSpells.EMPTY, "bonus_concerto", 0);
+    public static final RegistryEntrySupplier<Item> STRIKING_MARCH = spell(() -> ModSpells.EMPTY, "striking_march", 0);
+    public static final RegistryEntrySupplier<Item> IRON_WALTZ = spell(() -> ModSpells.EMPTY, "iron_waltz", 0);
+    public static final RegistryEntrySupplier<Item> TELEPORT = spell(() -> ModSpells.TELEPORT, "teleport", 0);
 
     public static final RegistryEntrySupplier<Item> ROCKFISH = fish("rockfish", Texture.N);
     public static final RegistryEntrySupplier<Item> SAND_FLOUNDER = fish("sand_flounder", Texture.N);
@@ -1483,17 +1483,21 @@ public class ModItems {
         return sup;
     }
 
-    public static RegistryEntrySupplier<Item> spell(Supplier<Supplier<Spell>> sup, String name) {
-        return spell(sup, name, false);
+    public static RegistryEntrySupplier<Item> spell(Supplier<Supplier<Spell>> sup, String name, int type) {
+        return spell(sup, name, false, type);
     }
 
-    public static RegistryEntrySupplier<Item> spell(Supplier<Supplier<Spell>> sup, String name, boolean canHold) {
+    public static RegistryEntrySupplier<Item> spell(Supplier<Supplier<Spell>> sup, String name, boolean canHold, int type) {
         RegistryEntrySupplier<Item> ret = ITEMS.register(name, () -> canHold ?
                 new ItemHoldSpell(sup.get(), new Item.Properties().stacksTo(1).tab(RFCreativeTabs.CAST)) :
                 new ItemSpell(sup.get(), new Item.Properties().stacksTo(1).tab(RFCreativeTabs.CAST)));
         if (Platform.INSTANCE.isDatagen()) {
             TIER_2_CHEST.add(ret);
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.SPELLS, t -> new ArrayList<>()).add(ret);
+            if (type == 2)
+                DATAGENTAGS.computeIfAbsent(RunecraftoryTags.MAGIC_SPELLS, t -> new ArrayList<>()).add(ret);
+            else if (type == 1)
+                DATAGENTAGS.computeIfAbsent(RunecraftoryTags.RUNE_ABILITIES, t -> new ArrayList<>()).add(ret);
         }
         return ret;
     }

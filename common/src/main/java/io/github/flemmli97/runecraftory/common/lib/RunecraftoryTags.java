@@ -92,6 +92,8 @@ public class RunecraftoryTags {
 
     //Other
     public static final TagKey<Item> SPELLS = tag("spells");
+    public static final TagKey<Item> MAGIC_SPELLS = tag("magic_spells");
+    public static final TagKey<Item> RUNE_ABILITIES = tag("rune_abilities");
     public static final TagKey<Item> HIGH_TIER_TOOLS = tag("high_tier_tools");
 
     public static final TagKey<Item> UPGRADABLE_HELD = tag("upgradable_held");

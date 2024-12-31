@@ -4,10 +4,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
+import io.github.flemmli97.runecraftory.common.crafting.LevelUpRecipeBuilder;
 import io.github.flemmli97.runecraftory.common.crafting.RecipeBuilder;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
-import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
@@ -15,12 +15,9 @@ import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.level.block.CraftingTableBlock;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
@@ -203,6 +200,25 @@ public class RecipesGen extends RecipeProvider {
                 .define('P', Items.PAPER)
                 .unlockedBy("divorce_paper", has(Items.PAPER))
                 .save(consumer);
+
+        LevelUpRecipeBuilder.build(consumer, 1, Ingredient.of(RunecraftoryTags.MAGIC_SPELLS), Ingredient.of(RunecraftoryTags.BRONZE),
+                new ResourceLocation(RuneCraftory.MODID, "spells_tier_2"));
+        LevelUpRecipeBuilder.build(consumer, 2, Ingredient.of(RunecraftoryTags.MAGIC_SPELLS), Ingredient.of(RunecraftoryTags.GOLD),
+                new ResourceLocation(RuneCraftory.MODID, "spells_tier_3"));
+        LevelUpRecipeBuilder.build(consumer, 3, Ingredient.of(RunecraftoryTags.MAGIC_SPELLS), Ingredient.of(Items.DIAMOND_BLOCK),
+                new ResourceLocation(RuneCraftory.MODID, "spells_tier_4"));
+        LevelUpRecipeBuilder.build(consumer, 4, Ingredient.of(RunecraftoryTags.MAGIC_SPELLS), Ingredient.of(RunecraftoryTags.PLATINUM),
+                new ResourceLocation(RuneCraftory.MODID, "spells_tier_5"));
+        LevelUpRecipeBuilder.build(consumer, 5, Ingredient.of(RunecraftoryTags.MAGIC_SPELLS), Ingredient.of(RunecraftoryTags.ORICHALCUM),
+                new ResourceLocation(RuneCraftory.MODID, "spells_tier_6"));
+        LevelUpRecipeBuilder.build(consumer, 6, Ingredient.of(RunecraftoryTags.MAGIC_SPELLS), Ingredient.of(Items.NETHER_STAR),
+                new ResourceLocation(RuneCraftory.MODID, "spells_tier_7"));
+        LevelUpRecipeBuilder.build(consumer, 7, Ingredient.of(RunecraftoryTags.MAGIC_SPELLS), Ingredient.of(ModItems.DRAGONIC.get()),
+                new ResourceLocation(RuneCraftory.MODID, "spells_tier_8"));
+        LevelUpRecipeBuilder.build(consumer, 8, Ingredient.of(RunecraftoryTags.MAGIC_SPELLS), Ingredient.of(ModItems.CRYSTAL_RUNE.get()),
+                new ResourceLocation(RuneCraftory.MODID, "spells_tier_9"));
+        LevelUpRecipeBuilder.build(consumer, 9, Ingredient.of(RunecraftoryTags.MAGIC_SPELLS), Ingredient.of(ModItems.RUNE_SPHERE_SHARD.get()),
+                new ResourceLocation(RuneCraftory.MODID, "spells_tier_10"));
 
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.HOE_SCRAP.get(), 1, 5, 0)
                 .addIngredient(RunecraftoryTags.STICKS).addIngredient(RunecraftoryTags.MINERALS).build(consumer);
@@ -473,19 +489,19 @@ public class RecipesGen extends RecipeProvider {
                 .addIngredient(RunecraftoryTags.GOLD).addIngredient(ModItems.ORICHALCUM.get()).addIngredient(ModItems.TURNIPS_MIRACLE.get()).build(consumer);
         RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.PLATINUM_RING.get(), 1, 70, 0)
                 .addIngredient(RunecraftoryTags.PLATINUM).addIngredient(ModItems.DRAGONIC.get()).build(consumer);
-       RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.SHIELD_RING.get(), 1, 1, 0).build(consumer);
-       RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.CRITICAL_RING.get(), 1, 1, 0).build(consumer);
-       RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.SILENT_RING.get(), 1, 1, 0).build(consumer);
-       RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.PARALYSIS_RING.get(), 1, 1, 0).build(consumer);
-       RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.POISON_RING.get(), 1, 1, 0).build(consumer);
-       RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.MAGIC_RING.get(), 1, 1, 0).build(consumer);
-       RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.THROWING_RING.get(), 1, 1, 0).build(consumer);
-       RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.STAY_UP_RING.get(), 1, 1, 0).build(consumer);
-       RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.AQUAMARINE_RING.get(), 1, 1, 0).build(consumer);
-       RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.AMETHYST_RING.get(), 1, 1, 0).build(consumer);
-       RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.EMERALD_RING.get(), 1, 1, 0).build(consumer);
-       RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.SAPPHIRE_RING.get(), 1, 1, 0).build(consumer);
-       RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.RUBY_RING.get(), 1, 1, 0).build(consumer);
+        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.SHIELD_RING.get(), 1, 1, 0).build(consumer);
+        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.CRITICAL_RING.get(), 1, 1, 0).build(consumer);
+        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.SILENT_RING.get(), 1, 1, 0).build(consumer);
+        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.PARALYSIS_RING.get(), 1, 1, 0).build(consumer);
+        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.POISON_RING.get(), 1, 1, 0).build(consumer);
+        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.MAGIC_RING.get(), 1, 1, 0).build(consumer);
+        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.THROWING_RING.get(), 1, 1, 0).build(consumer);
+        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.STAY_UP_RING.get(), 1, 1, 0).build(consumer);
+        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.AQUAMARINE_RING.get(), 1, 1, 0).build(consumer);
+        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.AMETHYST_RING.get(), 1, 1, 0).build(consumer);
+        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.EMERALD_RING.get(), 1, 1, 0).build(consumer);
+        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.SAPPHIRE_RING.get(), 1, 1, 0).build(consumer);
+        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.RUBY_RING.get(), 1, 1, 0).build(consumer);
 
         RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.SHIRT.get(), 1, 2, 0)
                 .addIngredient(RunecraftoryTags.CLOTHS).build(consumer);

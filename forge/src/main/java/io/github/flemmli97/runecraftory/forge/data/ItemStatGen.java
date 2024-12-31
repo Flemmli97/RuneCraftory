@@ -9,11 +9,9 @@ import io.github.flemmli97.runecraftory.common.registry.ModArmorEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
-import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 
 public class ItemStatGen extends ItemStatProvider {

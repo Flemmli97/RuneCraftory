@@ -107,9 +107,9 @@ public abstract class ItemStatProvider implements DataProvider {
 
     protected int calcValueOf(double multiplier, ToIntFunction<ItemStat.Builder> agg, ResourceLocation... others) {
         int price = 0;
-        for(ResourceLocation other : others) {
+        for (ResourceLocation other : others) {
             ItemStat.Builder s = this.data.get(other);
-            if(s != null) {
+            if (s != null) {
                 price += agg.applyAsInt(s);
             }
         }

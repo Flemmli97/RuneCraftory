@@ -22,7 +22,7 @@ public class ArmorRecipe extends SextupleRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModCrafting.ARMORSERIALIZER.get();
+        return ModCrafting.ARMOR_SERIALIZER.get();
     }
 
     @Override

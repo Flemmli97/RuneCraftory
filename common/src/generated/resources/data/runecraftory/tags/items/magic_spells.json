@@ -1,0 +1,29 @@
+{
+  "replace": false,
+  "values": [
+    "runecraftory:fireball",
+    "runecraftory:fireball_big",
+    "runecraftory:explosion",
+    "runecraftory:water_laser",
+    "runecraftory:parallel_laser",
+    "runecraftory:delta_laser",
+    "runecraftory:screw_rock",
+    "runecraftory:earth_spike",
+    "runecraftory:avenger_rock",
+    "runecraftory:sonic_wind",
+    "runecraftory:double_sonic",
+    "runecraftory:penetrate_sonic",
+    "runecraftory:light_barrier",
+    "runecraftory:shine",
+    "runecraftory:prism",
+    "runecraftory:dark_snake",
+    "runecraftory:dark_ball",
+    "runecraftory:darkness",
+    "runecraftory:cure",
+    "runecraftory:cure_all",
+    "runecraftory:cure_master",
+    "runecraftory:medi_poison",
+    "runecraftory:medi_paralysis",
+    "runecraftory:medi_seal"
+  ]
+}
