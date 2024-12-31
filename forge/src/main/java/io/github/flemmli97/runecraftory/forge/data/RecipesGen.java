@@ -7,6 +7,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
 import io.github.flemmli97.runecraftory.common.crafting.LevelUpRecipeBuilder;
 import io.github.flemmli97.runecraftory.common.crafting.RecipeBuilder;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
+import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -15,11 +16,13 @@ import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 public class RecipesGen extends RecipeProvider {
@@ -200,6 +203,10 @@ public class RecipesGen extends RecipeProvider {
                 .define('P', Items.PAPER)
                 .unlockedBy("divorce_paper", has(Items.PAPER))
                 .save(consumer);
+
+        consumer.accept(dustRecipe(new ResourceLocation(RuneCraftory.MODID, "bronze_dust"), ModItems.BRONZE_DUST.get(),
+                List.of(Ingredient.of(RunecraftoryTags.COPPER), Ingredient.of(RunecraftoryTags.TIN),
+                        Ingredient.of(RunecraftoryTags.HAMMER_TOOLS))));
 
         LevelUpRecipeBuilder.build(consumer, 1, Ingredient.of(RunecraftoryTags.MAGIC_SPELLS), Ingredient.of(RunecraftoryTags.BRONZE),
                 new ResourceLocation(RuneCraftory.MODID, "spells_tier_2"));
@@ -692,6 +699,27 @@ public class RecipesGen extends RecipeProvider {
             @Override
             public RecipeSerializer<?> getType() {
                 return null;
+            }
+
+            @Nullable
+            @Override
+            public JsonObject serializeAdvancement() {
+                return null;
+            }
+
+            @Nullable
+            @Override
+            public ResourceLocation getAdvancementId() {
+                return null;
+            }
+        };
+    }
+
+    static FinishedRecipe dustRecipe(ResourceLocation id, Item result, List<Ingredient> ingredients) {
+        return new ShapelessRecipeBuilder.Result(id, result, 2, "", ingredients, null, null) {
+            @Override
+            public RecipeSerializer<?> getType() {
+                return ModCrafting.HAMMER_REMAINDER_SERIALIZER.get();
             }
 
             @Nullable
