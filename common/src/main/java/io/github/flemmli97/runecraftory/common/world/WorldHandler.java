@@ -246,7 +246,7 @@ public class WorldHandler extends SavedData {
     @Nullable
     public BarnData findFittingBarn(BaseMonster monster, UUID owner) {
         return this.barnsOf(owner)
-                .stream().filter(b -> b.hasCapacityFor(monster.getProp().size, monster.getProp().needsRoof))
+                .stream().filter(b -> b.hasCapacityFor(monster))
                 .findFirst().orElse(null);
     }
 
@@ -258,7 +258,7 @@ public class WorldHandler extends SavedData {
                 .stream().filter(b -> b.pos.dimension() == monster.level.dimension() &&
                         new AABB(monster.blockPosition())
                                 .inflate(radius).contains(Vec3.atCenterOf(b.pos.pos()))
-                        && b.hasCapacityFor(monster.getProp().size, monster.getProp().needsRoof))
+                        && b.hasCapacityFor(monster))
                 .findFirst().orElse(null);
     }
 

@@ -47,6 +47,7 @@ public class JadePlugin implements IWailaPlugin {
                 BarnData data = barn.getBarnData();
                 if (data != null) {
                     compoundTag.putBoolean("Roof", data.hasRoof());
+                    compoundTag.putInt("RoofHeight", data.roofHeight());
                     compoundTag.putInt("Size", data.getSize());
                     compoundTag.putInt("Used", data.usedCapacity());
                     compoundTag.putInt("Capacity", data.getCapacity());
@@ -117,8 +118,13 @@ public class JadePlugin implements IWailaPlugin {
                 int size = tag.getInt("Size");
                 Component sizeText = size > 1 ? new TextComponent("" + size).withStyle(ChatFormatting.GREEN)
                         : new TextComponent("" + size).withStyle(ChatFormatting.DARK_RED);
-                iTooltip.add(new TranslatableComponent("runecraftory.dependency.tooltips.barn.1", new TranslatableComponent(tag.getBoolean("Roof") ? "runecraftory.generic.yes" : "runecraftory.generic.no").withStyle(ChatFormatting.YELLOW),
-                        sizeText));
+                if (!tag.getBoolean("Roof")) {
+                    iTooltip.add(new TranslatableComponent("runecraftory.dependency.tooltips.barn.1",
+                            sizeText));
+                } else {
+                    iTooltip.add(new TranslatableComponent("runecraftory.dependency.tooltips.barn.1.alt", new TranslatableComponent("" + tag.getInt("RoofHeight")).withStyle(ChatFormatting.YELLOW),
+                            sizeText));
+                }
                 iTooltip.add(new TranslatableComponent("runecraftory.dependency.tooltips.barn.2", tag.getInt("Used"), tag.getInt("Capacity")));
             }
         }, TooltipPosition.BODY, BlockMonsterBarn.class);

@@ -18,7 +18,7 @@ public class BarnData {
 
     public final GlobalPos pos;
     private int size = 0;
-    private boolean hasRoof;
+    private int roofHeight;
 
     private int changeCooldown;
 
@@ -38,11 +38,11 @@ public class BarnData {
         return data;
     }
 
-    public void update(int size, boolean hasRoof) {
-        if (this.size != size || this.hasRoof != hasRoof)
+    public void update(int size, int roofHeight) {
+        if (this.size != size || this.roofHeight != roofHeight)
             this.changeCooldown = 150;
         this.size = size;
-        this.hasRoof = hasRoof;
+        this.roofHeight = roofHeight;
         --this.changeCooldown;
         this.listeners.removeIf(m -> {
             if (m.behaviourState() == BaseMonster.Behaviour.WANDER_HOME) {
@@ -63,9 +63,14 @@ public class BarnData {
         this.listeners.remove(monster);
     }
 
-    public boolean hasCapacityFor(int size, boolean needsRoof) {
-        if (needsRoof && !this.hasRoof)
+    public boolean hasCapacityFor(BaseMonster monster) {
+        int size = monster.getProp().size;
+        boolean needsRoof = monster.getProp().needsRoof;
+        if (needsRoof && this.roofHeight <= 0)
             return false;
+        if (this.roofHeight <= monster.getBbHeight() + 1) {
+            return false;
+        }
         return this.usedCapacity() + size <= this.getCapacity();
     }
 
@@ -83,7 +88,11 @@ public class BarnData {
     }
 
     public boolean hasRoof() {
-        return this.hasRoof;
+        return this.roofHeight > 0;
+    }
+
+    public int roofHeight() {
+        return this.roofHeight;
     }
 
     public int getSize() {
@@ -99,7 +108,10 @@ public class BarnData {
             return true;
         if (this.monsters.containsKey(monster.getUUID()) && this.changeCooldown > 0)
             return false;
-        return !monster.getProp().needsRoof || !this.hasRoof;
+        if (this.roofHeight > 0) {
+            return this.roofHeight > monster.getBbHeight() + 1;
+        }
+        return !monster.getProp().needsRoof;
     }
 
     public void remove() {
@@ -108,7 +120,7 @@ public class BarnData {
 
     public void load(CompoundTag tag) {
         this.size = tag.getInt("Size");
-        this.hasRoof = tag.getBoolean("HasRoof");
+        this.roofHeight = tag.getInt("RoofHeight");
         this.changeCooldown = tag.getInt("ChangeCooldown");
         CompoundTag monsters = tag.getCompound("Monsters");
         monsters.getAllKeys().forEach(key -> this.monsters.put(UUID.fromString(key), monsters.getInt(key)));
@@ -119,7 +131,7 @@ public class BarnData {
         GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, this.pos).resultOrPartial(RuneCraftory.LOGGER::error)
                 .ifPresent(t -> tag.put("Pos", t));
         tag.putInt("Size", this.size);
-        tag.putBoolean("HasRoof", this.hasRoof);
+        tag.putInt("RoofHeight", this.roofHeight);
         tag.putInt("ChangeCooldown", this.changeCooldown);
         CompoundTag monsters = new CompoundTag();
         this.monsters.forEach((uuid, integer) -> monsters.putInt(uuid.toString(), integer));
@@ -130,6 +142,6 @@ public class BarnData {
     @Override
     public String toString() {
         return String.format("Barn[%s]; Size: %d, With Roof: %s, Capacity: %d, FreeCapacity: %d", this.pos,
-                this.size, this.hasRoof, this.getCapacity(), this.getCapacity() - this.monsters.values().stream().mapToInt(i -> i).sum());
+                this.size, this.roofHeight, this.getCapacity(), this.getCapacity() - this.monsters.values().stream().mapToInt(i -> i).sum());
     }
 }

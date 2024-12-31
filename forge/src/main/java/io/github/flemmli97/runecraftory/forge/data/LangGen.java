@@ -762,7 +762,8 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.dependency.tooltips.barn.no", "No Barn assigned!");
         this.add("runecraftory.dependency.tooltips.behaviour", "Behaviour: %s");
         this.add("runecraftory.dependency.tooltips.npc.follow", "Party: %s");
-        this.add("runecraftory.dependency.tooltips.barn.1", "Roof: %1$s - Size: %2$s");
+        this.add("runecraftory.dependency.tooltips.barn.1", "No Roof - Size: %1$s");
+        this.add("runecraftory.dependency.tooltips.barn.1.alt", "Roof Height: %1$s - Size: %2$s");
         this.add("runecraftory.dependency.tooltips.barn.2", "Capacity: %1$s / %2$s");
 
         this.add("runecraftory.sarcophagus.coming.soon", "This looks like a teleporter but it seems to not lead to anywhere yet...");

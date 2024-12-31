@@ -37,8 +37,13 @@ public class BlockProvider implements IProbeInfoProvider {
                     int size = data.getSize();
                     Component sizeText = size > 1 ? withTextColored(new TextComponent("" + size), ChatFormatting.GREEN)
                             : withTextColored(new TextComponent("" + size), ChatFormatting.DARK_RED);
-                    iProbeInfo.text(new TranslatableComponent("runecraftory.dependency.tooltips.barn.1", withTextColored(new TranslatableComponent(data.hasRoof() ? "runecraftory.generic.yes" : "runecraftory.generic.no"), ChatFormatting.YELLOW),
-                            sizeText));
+                    if (!data.hasRoof()) {
+                        iProbeInfo.text(new TranslatableComponent("runecraftory.dependency.tooltips.barn.1",
+                                sizeText));
+                    } else {
+                        iProbeInfo.text(new TranslatableComponent("runecraftory.dependency.tooltips.barn.1.alt", withTextColored(new TranslatableComponent("" + data.roofHeight()), ChatFormatting.YELLOW),
+                                sizeText));
+                    }
                     iProbeInfo.text(new TranslatableComponent("runecraftory.dependency.tooltips.barn.2", data.usedCapacity(), data.getCapacity()));
                 }
             }

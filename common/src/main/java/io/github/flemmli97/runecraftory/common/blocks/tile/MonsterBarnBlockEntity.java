@@ -47,33 +47,41 @@ public class MonsterBarnBlockEntity extends BlockEntity {
             if (!matches(level, pos, true)) {
                 size = Math.max(Math.abs(pos.getX() - blockPos.getX()), Math.abs(pos.getZ() - blockPos.getZ())) - 1;
                 if (size < 2) {
-                    blockEntity.barnData.update(0, false);
+                    blockEntity.barnData.update(0, -1);
                     return;
                 }
             }
         }
-        int airLayers = 5;
-        for (BlockPos pos : BlockPos.betweenClosed(blockPos.getX() - size, blockPos.getY(), blockPos.getZ() - size,
-                blockPos.getX() + size, blockPos.getY() + 5, blockPos.getZ() + size)) {
-            if ((Math.abs(pos.getY() - blockPos.getY()) > airLayers)) // Skip blocks not needing checks
-                continue;
-            if (pos.equals(blockPos)) //Barn block position
-                continue;
-            if (!matches(level, pos, false)) {
-                airLayers = pos.getY() - blockPos.getY();
-                break;
+        int airLayers = 10;
+        // Check if barn area is empty
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+        exit:
+        for (int y = 0; y < airLayers; y++) {
+            for (int x = blockPos.getX() - size; x < blockPos.getX() + size; x++) {
+                for (int z = blockPos.getZ() - size; z < blockPos.getZ() + size; z++) {
+                    pos.set(x, blockPos.getY() + y, z);
+                    if (pos.equals(blockPos)) //Barn block position
+                        continue;
+                    if (!matches(level, pos, false)) {
+                        airLayers = y;
+                        break exit;
+                    }
+                }
             }
         }
+        // Barn require at least 3 layers of air
         if (airLayers >= 3) {
             boolean hasRoof = true;
-            for (BlockPos pos : BlockPos.betweenClosed(blockPos.getX() - size, blockPos.getY() + airLayers, blockPos.getZ() - size,
+            for (BlockPos pos2 : BlockPos.betweenClosed(blockPos.getX() - size, blockPos.getY() + airLayers, blockPos.getZ() - size,
                     blockPos.getX() + size, blockPos.getY() + airLayers, blockPos.getZ() + size)) {
-                if (level.getHeight(Heightmap.Types.MOTION_BLOCKING, pos.getX(), pos.getZ()) <= pos.getY()) {
+                if (level.getHeight(Heightmap.Types.MOTION_BLOCKING, pos2.getX(), pos2.getZ()) <= pos2.getY()) {
                     hasRoof = false;
                     break;
                 }
             }
-            blockEntity.barnData.update(Math.min(size, airLayers), hasRoof);
+            blockEntity.barnData.update(size, hasRoof ? airLayers : -1);
+        } else {
+            blockEntity.barnData.update(0, -1);
         }
     }
 
