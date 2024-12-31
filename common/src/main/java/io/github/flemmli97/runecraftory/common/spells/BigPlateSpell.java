@@ -21,7 +21,7 @@ public class BigPlateSpell extends Spell {
             return false;
         Vec3 pos = null;
         if (entity instanceof Mob mob && mob.getTarget() != null)
-            pos = mob.getTarget().position();
+            pos = mob.getTarget().position().add(0, mob.getTarget().getBbHeight(), 0);
         if (entity instanceof Player) {
             TargetingConditions target = TargetingConditions.forCombat();
             target.selector(e -> {
@@ -31,14 +31,14 @@ public class BigPlateSpell extends Spell {
             });
             LivingEntity nearest = level.getNearestEntity(LivingEntity.class, target, entity, entity.getX(), entity.getY(), entity.getZ(), entity.getBoundingBox().inflate(16));
             if (nearest != null)
-                pos = nearest.position();
+                pos = nearest.position().add(0, nearest.getBbHeight(), 0);
         }
         if (pos == null) {
             Vec3 horizontalLook = new Vec3(entity.getLookAngle().x(), 0, entity.getLookAngle().z()).normalize();
             pos = entity.position().add(horizontalLook);
         }
         EntityBigPlate plate = new EntityBigPlate(level, entity);
-        plate.setPos(pos.x(), pos.y() + 6, pos.z());
+        plate.setPos(pos.x(), pos.y() + 4, pos.z());
         plate.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1.25f));
         level.addFreshEntity(plate);
         return true;
