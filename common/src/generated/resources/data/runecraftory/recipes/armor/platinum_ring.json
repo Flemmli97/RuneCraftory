@@ -1,7 +1,7 @@
 {
   "type": "runecraftory:armor",
   "level": 70,
-  "cost": 50,
+  "additional_cost": 0,
   "ingredients": [
     {
       "tag": "c:platinum_ingots"

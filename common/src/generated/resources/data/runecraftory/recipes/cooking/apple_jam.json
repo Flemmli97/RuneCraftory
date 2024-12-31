@@ -1,0 +1,13 @@
+{
+  "type": "runecraftory:cooking",
+  "level": 8,
+  "additional_cost": 0,
+  "ingredients": [
+    {
+      "item": "minecraft:apple"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:apple_jam"
+  }
+}

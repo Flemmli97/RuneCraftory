@@ -1,7 +1,7 @@
 {
   "type": "runecraftory:cooking",
-  "level": 5,
-  "cost": 20,
+  "level": 15,
+  "additional_cost": 0,
   "ingredients": [
     {
       "tag": "c:milks"

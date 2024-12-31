@@ -1,0 +1,16 @@
+{
+  "type": "runecraftory:cooking",
+  "level": 37,
+  "additional_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:vegetable_juice"
+    },
+    {
+      "tag": "c:milks"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:veggie_smoothie"
+  }
+}

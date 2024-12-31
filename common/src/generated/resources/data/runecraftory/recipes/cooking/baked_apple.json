@@ -1,7 +1,7 @@
 {
   "type": "runecraftory:cooking",
-  "level": 3,
-  "cost": 12,
+  "level": 5,
+  "additional_cost": 0,
   "ingredients": [
     {
       "item": "minecraft:apple"

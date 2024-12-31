@@ -1,7 +1,14 @@
 {
   "duration": 6000,
-  "effects": {},
-  "effectsPercentage": {},
+  "effects": {
+    "minecraft:generic.attack_damage": 10.0,
+    "runecraftory:health_gain": 250.0,
+    "runecraftory:defence": 5.0,
+    "runecraftory:magic_attack": 7.0
+  },
+  "effectsPercentage": {
+    "runecraftory:health_gain": 5.0
+  },
   "cookingBonus": {},
   "cookingBonusPercent": {},
   "potionApply": [],

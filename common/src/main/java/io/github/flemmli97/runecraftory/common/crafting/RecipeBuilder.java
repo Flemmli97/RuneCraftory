@@ -25,17 +25,17 @@ import java.util.function.Consumer;
 public class RecipeBuilder {
 
     private final ItemStack result;
-    private final int level, cost;
+    private final int level, addCost;
     private final List<Ingredient> ingredients = new ArrayList<>();
     private final RecipeSerializer<?> serializer;
     private final EnumCrafting type;
     private String group;
 
-    private RecipeBuilder(EnumCrafting type, ItemStack item, int level, int cost, RecipeSerializer<?> serializer) {
+    private RecipeBuilder(EnumCrafting type, ItemStack item, int level, int addCost, RecipeSerializer<?> serializer) {
         this.type = type;
         this.result = item;
         this.level = level;
-        this.cost = cost;
+        this.addCost = addCost;
         this.serializer = serializer;
     }
 
@@ -47,18 +47,18 @@ public class RecipeBuilder {
         return create(type, new ItemStack(item, count), level, 1);
     }
 
-    public static RecipeBuilder create(EnumCrafting type, ItemLike item, int count, int level, int cost) {
-        return create(type, new ItemStack(item, count), level, cost);
+    public static RecipeBuilder create(EnumCrafting type, ItemLike item, int count, int level, int addCost) {
+        return create(type, new ItemStack(item, count), level, addCost);
     }
 
-    public static RecipeBuilder create(EnumCrafting type, ItemStack item, int level, int cost) {
+    public static RecipeBuilder create(EnumCrafting type, ItemStack item, int level, int addCost) {
         RecipeSerializer<?> serializer = switch (type) {
             case FORGE -> ModCrafting.FORGESERIALIZER.get();
             case ARMOR -> ModCrafting.ARMORSERIALIZER.get();
             case CHEM -> ModCrafting.CHEMISTRYSERIALIZER.get();
             default -> ModCrafting.COOKINGSERIALIZER.get();
         };
-        return new RecipeBuilder(type, item, level, cost, serializer);
+        return new RecipeBuilder(type, item, level, addCost, serializer);
     }
 
     public RecipeBuilder addIngredient(TagKey<Item> tag) {
@@ -103,7 +103,7 @@ public class RecipeBuilder {
 
     public void build(Consumer<FinishedRecipe> cons, ResourceLocation res) {
         this.validate(res);
-        cons.accept(new Result(new ResourceLocation(res.getNamespace(), this.type.getId() + "/" + res.getPath()), this.result, this.level, this.cost, this.group == null ? "" : this.group, this.ingredients) {
+        cons.accept(new Result(new ResourceLocation(res.getNamespace(), this.type.getId() + "/" + res.getPath()), this.result, this.level, this.addCost, this.group == null ? "" : this.group, this.ingredients) {
             @Override
             public RecipeSerializer<?> getType() {
                 return RecipeBuilder.this.serializer;
@@ -139,7 +139,7 @@ public class RecipeBuilder {
                 obj.addProperty("group", this.group);
             }
             obj.addProperty("level", this.level);
-            obj.addProperty("cost", this.cost);
+            obj.addProperty("additional_cost", this.cost);
             JsonArray jsonarray = new JsonArray();
 
             for (Ingredient ingredient : this.ingredients) {

@@ -115,6 +115,58 @@
     {
       "item": "runecraftory:onion",
       "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": "runecraftory:rice",
+      "unlock_type": "ALWAYS"
+    },
+    {
+      "item": "runecraftory:chocolate",
+      "unlock_type": "ALWAYS"
+    },
+    {
+      "item": "runecraftory:flour",
+      "unlock_type": "ALWAYS"
+    },
+    {
+      "item": "runecraftory:oil",
+      "unlock_type": "ALWAYS"
+    },
+    {
+      "item": "runecraftory:curry_powder",
+      "unlock_type": "ALWAYS"
+    },
+    {
+      "item": "runecraftory:rice_flour",
+      "unlock_type": "ALWAYS"
+    },
+    {
+      "item": "runecraftory:mixed_herbs",
+      "unlock_type": "ALWAYS"
+    },
+    {
+      "item": "runecraftory:sweet_powder",
+      "unlock_type": "ALWAYS"
+    },
+    {
+      "item": "runecraftory:sour_drop",
+      "unlock_type": "ALWAYS"
+    },
+    {
+      "item": "runecraftory:heavy_spice",
+      "unlock_type": "ALWAYS"
+    },
+    {
+      "item": "runecraftory:monster_command_staff",
+      "unlock_type": "ALWAYS"
+    },
+    {
+      "item": "runecraftory:brush",
+      "unlock_type": "ALWAYS"
+    },
+    {
+      "item": "runecraftory:magnifying_glass",
+      "unlock_type": "ALWAYS"
     }
   ]
 }

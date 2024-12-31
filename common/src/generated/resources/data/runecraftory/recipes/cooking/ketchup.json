@@ -1,0 +1,16 @@
+{
+  "type": "runecraftory:cooking",
+  "level": 5,
+  "additional_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:sour_drop"
+    },
+    {
+      "tag": "c:crops/tomato"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:ketchup"
+  }
+}

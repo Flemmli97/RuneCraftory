@@ -1,0 +1,13 @@
+{
+  "type": "runecraftory:cooking",
+  "level": 66,
+  "additional_cost": 0,
+  "ingredients": [
+    {
+      "tag": "c:crops/pineapple"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:pineapple_juice"
+  }
+}

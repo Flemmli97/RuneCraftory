@@ -1,0 +1,22 @@
+{
+  "type": "runecraftory:cooking",
+  "level": 27,
+  "additional_cost": 0,
+  "ingredients": [
+    {
+      "tag": "c:crops/pumpkin"
+    },
+    {
+      "tag": "c:crops/turnip"
+    },
+    {
+      "tag": "c:crops/carrot"
+    },
+    {
+      "tag": "c:crops/spinach"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:vegetable_juice"
+  }
+}

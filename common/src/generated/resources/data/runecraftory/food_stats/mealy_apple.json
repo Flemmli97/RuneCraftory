@@ -1,7 +1,16 @@
 {
-  "duration": 0,
+  "duration": 6000,
   "effects": {},
-  "effectsPercentage": {},
+  "effectsPercentage": {
+    "minecraft:generic.attack_damage": -50.0,
+    "runecraftory:defence": -50.0,
+    "runecraftory:magic_attack": -50.0,
+    "runecraftory:magic_defence": -50.0,
+    "runecraftory:res_water": -20.0,
+    "runecraftory:res_earth": -20.0,
+    "runecraftory:res_wind": -20.0,
+    "runecraftory:res_fire": -20.0
+  },
   "cookingBonus": {},
   "cookingBonusPercent": {},
   "potionApply": [],

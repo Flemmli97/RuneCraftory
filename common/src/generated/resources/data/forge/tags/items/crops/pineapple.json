@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "runecraftory:pineapple"
+    "runecraftory:pineapple",
+    "runecraftory:king_pineapple"
   ]
 }

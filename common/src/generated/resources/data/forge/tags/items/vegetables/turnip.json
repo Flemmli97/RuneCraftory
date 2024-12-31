@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "runecraftory:turnip"
+    "runecraftory:turnip",
+    "runecraftory:tyrant_turnip"
   ]
 }

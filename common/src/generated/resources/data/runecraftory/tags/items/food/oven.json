@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "runecraftory:baked_onigiri",
+    "runecraftory:toast",
+    "runecraftory:apple_pie",
+    "runecraftory:cheesecake",
+    "runecraftory:chocolate_cake",
+    "runecraftory:cookie",
+    "runecraftory:choco_cookie"
+  ]
+}

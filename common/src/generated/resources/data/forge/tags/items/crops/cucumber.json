@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "runecraftory:cucumber"
+    "runecraftory:cucumber",
+    "runecraftory:kaiser_cucumber"
   ]
 }

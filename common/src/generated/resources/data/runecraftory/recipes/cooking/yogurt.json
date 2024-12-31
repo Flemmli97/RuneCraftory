@@ -1,0 +1,13 @@
+{
+  "type": "runecraftory:cooking",
+  "level": 7,
+  "additional_cost": 0,
+  "ingredients": [
+    {
+      "tag": "c:milks"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:yogurt"
+  }
+}

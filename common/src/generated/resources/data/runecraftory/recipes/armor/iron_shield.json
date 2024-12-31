@@ -1,7 +1,7 @@
 {
   "type": "runecraftory:armor",
-  "level": 10,
-  "cost": 10,
+  "level": 12,
+  "additional_cost": 0,
   "ingredients": [
     {
       "item": "minecraft:shield"

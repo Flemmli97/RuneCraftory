@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "runecraftory:tomato"
+    "runecraftory:tomato",
+    "runecraftory:titan_tomato"
   ]
 }

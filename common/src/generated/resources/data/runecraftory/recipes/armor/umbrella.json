@@ -1,0 +1,19 @@
+{
+  "type": "runecraftory:armor",
+  "level": 8,
+  "additional_cost": 0,
+  "ingredients": [
+    {
+      "tag": "runecraftory:sticks"
+    },
+    {
+      "tag": "c:string"
+    },
+    {
+      "tag": "runecraftory:cloths"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:umbrella"
+  }
+}

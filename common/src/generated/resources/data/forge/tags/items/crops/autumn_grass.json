@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "runecraftory:autumn_grass"
+    "runecraftory:autumn_grass",
+    "runecraftory:big_autumn_grass"
   ]
 }

@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "runecraftory:toyherb"
+    "runecraftory:toyherb",
+    "runecraftory:ultra_toyherb"
   ]
 }

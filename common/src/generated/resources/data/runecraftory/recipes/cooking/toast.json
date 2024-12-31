@@ -1,0 +1,13 @@
+{
+  "type": "runecraftory:cooking",
+  "level": 11,
+  "additional_cost": 0,
+  "ingredients": [
+    {
+      "tag": "c:foods/bread"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:toast"
+  }
+}

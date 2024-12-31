@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "runecraftory:emery_flower"
+    "runecraftory:emery_flower",
+    "runecraftory:great_emery_flower"
   ]
 }

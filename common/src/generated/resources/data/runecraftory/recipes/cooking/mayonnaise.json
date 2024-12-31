@@ -1,0 +1,13 @@
+{
+  "type": "runecraftory:cooking",
+  "level": 3,
+  "additional_cost": 0,
+  "ingredients": [
+    {
+      "tag": "c:eggs"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:mayonnaise"
+  }
+}

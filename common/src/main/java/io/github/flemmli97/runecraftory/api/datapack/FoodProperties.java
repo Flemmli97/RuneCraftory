@@ -23,6 +23,7 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -226,6 +227,8 @@ public class FoodProperties {
         if (!rpIncrease.getSiblings().isEmpty())
             translationTexts.add(rpIncrease.withStyle(ChatFormatting.AQUA));
         translationTexts.addAll(attributes);
+        if (translationTexts.size() == 1)
+            return Collections.emptyList();
         return translationTexts;
     }
 

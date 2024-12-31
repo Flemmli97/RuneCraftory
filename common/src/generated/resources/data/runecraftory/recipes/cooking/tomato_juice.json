@@ -1,0 +1,13 @@
+{
+  "type": "runecraftory:cooking",
+  "level": 26,
+  "additional_cost": 0,
+  "ingredients": [
+    {
+      "tag": "c:crops/tomato"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:tomato_juice"
+  }
+}

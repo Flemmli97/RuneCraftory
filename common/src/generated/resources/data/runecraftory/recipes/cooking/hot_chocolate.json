@@ -1,0 +1,16 @@
+{
+  "type": "runecraftory:cooking",
+  "level": 20,
+  "additional_cost": 0,
+  "ingredients": [
+    {
+      "tag": "c:foods/chocolate"
+    },
+    {
+      "tag": "c:foods/chocolate"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:hot_chocolate"
+  }
+}

@@ -1,21 +1,30 @@
 package io.github.flemmli97.runecraftory.forge.data;
 
+import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
+import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.Tag;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.function.Function;
 
 public class ItemTagGen extends ItemTagsProvider {
 
@@ -30,6 +39,15 @@ public class ItemTagGen extends ItemTagsProvider {
                 .add(ModItems.PLANT_SWORD.get());
         this.tag(RunecraftoryTags.SHIELDS)
                 .add(ModItems.PLANT_SHIELD.get());
+        ModItems.DATAGENTAGS.keySet().forEach(key -> {
+            if (key.location().getPath().startsWith("foods/")) {
+                this.tag(RunecraftoryTags.FOODS).addTag(key);
+            }
+        });
+
+        this.tag(RunecraftoryTags.SUGAR).add(Items.SUGAR);
+        this.tag(tempKeyFabric("crops/carrot")).add(Items.CARROT);
+        this.tag(tempKeyFabric("crops/potato")).add(Items.POTATO);
 
         //Forge copy tags
         this.tag(RunecraftoryTags.IRON)
@@ -79,19 +97,19 @@ public class ItemTagGen extends ItemTagsProvider {
                 .add(Items.POTATO)
                 .add(Items.WHEAT);
 
-        this.forgeAndCommonTag(Tags.Items.SLIMEBALLS, RunecraftoryTags.SLIME, ModItems.GLUE.get());
+        handleWithForge(this::tag, Tags.Items.SLIMEBALLS, RunecraftoryTags.SLIME, ModItems.GLUE.get());
         this.tag(RunecraftoryTags.SLIME)
                 .add(Items.SLIME_BALL);
-        this.forgeAndCommonTag(RunecraftoryTags.BRONZE_F, RunecraftoryTags.BRONZE, ModItems.BRONZE.get());
-        this.forgeAndCommonTag(RunecraftoryTags.SILVER_F, RunecraftoryTags.SILVER, ModItems.SILVER.get());
-        this.forgeAndCommonTag(RunecraftoryTags.PLATINUM_F, RunecraftoryTags.PLATINUM, ModItems.PLATINUM.get());
+        handleWithForge(this::tag, RunecraftoryTags.BRONZE_F, RunecraftoryTags.BRONZE, ModItems.BRONZE.get());
+        handleWithForge(this::tag, RunecraftoryTags.SILVER_F, RunecraftoryTags.SILVER, ModItems.SILVER.get());
+        handleWithForge(this::tag, RunecraftoryTags.PLATINUM_F, RunecraftoryTags.PLATINUM, ModItems.PLATINUM.get());
 
-        this.forgeAndCommonTag(RunecraftoryTags.AMETHYST_F, RunecraftoryTags.AMETHYSTS, ModItems.AMETHYST.get());
+        handleWithForge(this::tag, RunecraftoryTags.AMETHYST_F, RunecraftoryTags.AMETHYSTS, ModItems.AMETHYST.get());
         this.tag(RunecraftoryTags.AMETHYSTS)
                 .add(Items.AMETHYST_SHARD);
-        this.forgeAndCommonTag(RunecraftoryTags.AQUAMARINE_F, RunecraftoryTags.AQUAMARINES, ModItems.AQUAMARINE.get());
-        this.forgeAndCommonTag(RunecraftoryTags.RUBY_F, RunecraftoryTags.RUBIES, ModItems.RUBY.get());
-        this.forgeAndCommonTag(RunecraftoryTags.SAPPHIRE_F, RunecraftoryTags.SAPPHIRES, ModItems.SAPPHIRE.get());
+        handleWithForge(this::tag, RunecraftoryTags.AQUAMARINE_F, RunecraftoryTags.AQUAMARINES, ModItems.AQUAMARINE.get());
+        handleWithForge(this::tag, RunecraftoryTags.RUBY_F, RunecraftoryTags.RUBIES, ModItems.RUBY.get());
+        handleWithForge(this::tag, RunecraftoryTags.SAPPHIRE_F, RunecraftoryTags.SAPPHIRES, ModItems.SAPPHIRE.get());
 
         this.tag(RunecraftoryTags.ORICHALCUM)
                 .add(ModItems.ORICHALCUM.get());
@@ -117,17 +135,19 @@ public class ItemTagGen extends ItemTagsProvider {
                 .addTag(RunecraftoryTags.PLATINUM)
                 .addTag(RunecraftoryTags.ORICHALCUM)
                 .addTag(RunecraftoryTags.DRAGONIC);
-        this.forgeAndCommonTag(Tags.Items.GEMS, RunecraftoryTags.JEWELS,
-                ModItems.AMETHYST.get(),
-                ModItems.AQUAMARINE.get(),
-                ModItems.RUBY.get(),
-                ModItems.SAPPHIRE.get(),
-                ModItems.CORE_RED.get(),
-                ModItems.CORE_BLUE.get(),
-                ModItems.CORE_YELLOW.get(),
-                ModItems.CORE_GREEN.get(),
-                ModItems.CRYSTAL_SKULL.get());
-        this.tag(RunecraftoryTags.JEWELS).add(Items.EMERALD, Items.DIAMOND);
+        this.tag(RunecraftoryTags.JEWELS)
+                .add(ModItems.AMETHYST.get())
+                .add(ModItems.AQUAMARINE.get())
+                .add(ModItems.RUBY.get())
+                .add(ModItems.SAPPHIRE.get())
+                .add(ModItems.CORE_RED.get())
+                .add(ModItems.CORE_BLUE.get())
+                .add(ModItems.CORE_YELLOW.get())
+                .add(ModItems.CORE_GREEN.get())
+                .add(ModItems.CRYSTAL_SKULL.get())
+                .add(Items.EMERALD)
+                .add(Items.DIAMOND);
+        handleWithForgeTags(this::tag, Tags.Items.GEMS, tempKeyFabric("gems"), RunecraftoryTags.JEWELS);
         this.tag(RunecraftoryTags.CRYSTALS)
                 .add(ModItems.CRYSTAL_WATER.get())
                 .add(ModItems.CRYSTAL_EARTH.get())
@@ -280,10 +300,6 @@ public class ItemTagGen extends ItemTagsProvider {
                         ModItems.SCALE_EARTH.get(),
                         ModItems.SCALE_LEGEND.get());
 
-        this.tag(RunecraftoryTags.TURNIP)
-                .add(ModItems.TURNIP.get(), ModItems.TURNIP_GIANT.get(), ModItems.TURNIP_PINK.get(), ModItems.TURNIP_PINK_GIANT.get(),
-                        ModItems.GOLDEN_TURNIP.get(), ModItems.GOLDEN_TURNIP_GIANT.get());
-
         this.tag(RunecraftoryTags.HIGH_TIER_TOOLS)
                 .add(ModItems.HOE_PLATINUM.get())
                 .add(ModItems.WATERING_CAN_PLATINUM.get())
@@ -297,10 +313,8 @@ public class ItemTagGen extends ItemTagsProvider {
                 .addTag(RunecraftoryTags.SICKLES).addTag(RunecraftoryTags.HAMMER_TOOLS)
                 .addTag(RunecraftoryTags.AXE_TOOLS).addTag(RunecraftoryTags.FISHING_RODS);
 
-        this.tag(tempKeyFabric("hoes")).addTag(tempKeyForge("tools/hoes"));
-        this.tag(tempKeyForge("tools/hoes")).addTag(RunecraftoryTags.HOES);
-        this.tag(tempKeyFabric("fishing_rods")).addTag(tempKeyForge("tools/fishing_rods"));
-        this.tag(tempKeyForge("tools/fishing_rods")).addTag(RunecraftoryTags.FISHING_RODS);
+        handleWithForgeTags(this::tag, tempKeyForge("tools/hoes"), tempKeyFabric("hoes"), RunecraftoryTags.HOES);
+        handleWithForgeTags(this::tag, tempKeyForge("tools/fishing_rods"), tempKeyFabric("fishing_rods"), RunecraftoryTags.FISHING_RODS);
 
         this.tag(RunecraftoryTags.WEAPONS).addTag(RunecraftoryTags.SHORTSWORDS).addTag(RunecraftoryTags.LONGSWORDS)
                 .addTag(RunecraftoryTags.SPEARS).addTag(RunecraftoryTags.AXES)
@@ -309,24 +323,18 @@ public class ItemTagGen extends ItemTagsProvider {
         this.tag(RunecraftoryTags.HAMMER_AXES)
                 .addTag(RunecraftoryTags.HAMMERS).addTag(RunecraftoryTags.AXES);
 
-        this.tag(tempKeyFabric("swords")).addTag(tempKeyForge("tools/swords"));
-        this.tag(tempKeyForge("tools/swords"))
-                .addTag(RunecraftoryTags.SHORTSWORDS).addTag(RunecraftoryTags.LONGSWORDS).addTag(RunecraftoryTags.DUALBLADES);
+        handleWithForgeTags(this::tag, tempKeyForge("tools/swords"), tempKeyFabric("swords"), RunecraftoryTags.SHORTSWORDS, RunecraftoryTags.LONGSWORDS, RunecraftoryTags.DUALBLADES);
 
         this.tag(RunecraftoryTags.EQUIPMENT).addTag(RunecraftoryTags.HELMET).addTag(RunecraftoryTags.CHESTPLATE)
                 .addTag(RunecraftoryTags.ACCESSORIES).addTag(RunecraftoryTags.BOOTS)
                 .addTag(RunecraftoryTags.SHIELDS);
 
-        this.tag(tempKeyFabric("helmets")).addTag(tempKeyForge("armors/helmets"));
-        this.tag(tempKeyForge("armors/helmets")).addTag(RunecraftoryTags.HELMET);
-        this.tag(tempKeyFabric("chestplates")).addTag(tempKeyForge("armors/chestplates"));
-        this.tag(tempKeyForge("armors/chestplates")).addTag(RunecraftoryTags.CHESTPLATE);
-        this.tag(tempKeyFabric("boots")).addTag(tempKeyForge("armors/boots"));
-        this.tag(tempKeyForge("armors/boots")).addTag(RunecraftoryTags.BOOTS);
-        this.tag(tempKeyFabric("shields")).addTag(tempKeyForge("tools/shields"));
-        this.tag(tempKeyForge("tools/shields")).addTag(RunecraftoryTags.SHIELDS);
+        handleWithForgeTags(this::tag, tempKeyForge("armors/helmets"), tempKeyFabric("helmets"), RunecraftoryTags.HELMET);
+        handleWithForgeTags(this::tag, tempKeyForge("armors/chestplates"), tempKeyFabric("chestplates"), RunecraftoryTags.CHESTPLATE);
+        handleWithForgeTags(this::tag, tempKeyForge("armors/boots"), tempKeyFabric("boots"), RunecraftoryTags.BOOTS);
+        handleWithForgeTags(this::tag, tempKeyForge("tools/shields"), tempKeyFabric("shields"), RunecraftoryTags.SHIELDS);
 
-        this.forgeAndCommonTag(Tags.Items.EGGS, RunecraftoryTags.EGGS, ModItems.EGG_S.get(),
+        handleWithForge(this::tag, Tags.Items.EGGS, RunecraftoryTags.EGGS, ModItems.EGG_S.get(),
                 ModItems.EGG_M.get(), ModItems.EGG_L.get(), Items.EGG);
         this.tag(RunecraftoryTags.MILKS)
                 .add(ModItems.MILK_S.get())
@@ -334,6 +342,7 @@ public class ItemTagGen extends ItemTagsProvider {
                 .add(ModItems.MILK_L.get())
                 .add(Items.MILK_BUCKET);
 
+        // Taming tags
         this.tag(RunecraftoryTags.tamingTag(ModEntities.WOOLY.get()))
                 .addTag(RunecraftoryTags.SHEARS)
                 .addTag(ItemTags.WOOL)
@@ -509,76 +518,76 @@ public class ItemTagGen extends ItemTagsProvider {
         this.tag(RunecraftoryTags.tamingTag(ModEntities.SKELEFANG.get()))
                 .add(Items.DRAGON_HEAD);
 
-        TagKey<Item> temp = tempKeyForge("fruits/grapes");
-        this.tag(RunecraftoryTags.GRAPES)
-                .add(ModItems.GRAPES.get())
-                .addTag(temp);
-        this.tag(temp)
-                .add(ModItems.GRAPES.get());
+        // Crops stuff
+        handleWithForge(Registry.ITEM_REGISTRY, this::tag, RunecraftoryTags.TURNIP, ModItems.TURNIP.get(), ModItems.TURNIP_GIANT.get(), ModItems.TURNIP_PINK.get(), ModItems.TURNIP_PINK_GIANT.get(),
+                ModItems.GOLDEN_TURNIP.get(), ModItems.GOLDEN_TURNIP_GIANT.get());
+        handleWithForge(Registry.ITEM_REGISTRY, this::tag, RunecraftoryTags.GRAPES, ModItems.GRAPES.get());
+        handleWithForge(Registry.ITEM_REGISTRY, this::tag, RunecraftoryTags.ORANGE, ModItems.ORANGE.get());
 
-        //Note: Add items to the matching forge tags and make fabric common tag include the corresponding forge tag
         TagKey<Item> forgeParentTag = tempKeyForge("seeds");
-        //this.tag(Tags.Items.SEEDS).addTag(forgeParentTag); Already done above. Just here in case of confusion
         for (RegistryEntrySupplier<Item> sup : ModItems.SEEDS) {
             TagKey<Item> forgeTag = tempKeyForge("seeds/" + sup.getID().getPath().replace("seed_", ""));
-            this.tag(forgeTag).add(sup.get());
-            this.tag(forgeParentTag).addTag(forgeTag);
-
             TagKey<Item> commonTag = tempKeyFabric("seeds/" + sup.getID().getPath().replace("seed_", ""));
-            this.tag(commonTag).addTag(forgeTag);
+            handleWithForge(this::tag, forgeTag, commonTag, sup.get());
+            this.tag(forgeParentTag).addTag(forgeTag);
         }
+        handleWithForge(this::tag, forgeParentTag, RunecraftoryTags.SEEDS);
 
         forgeParentTag = tempKeyForge("vegetables");
         TagKey<Item> forgeCropParentTag = tempKeyForge("crops");
         this.tag(RunecraftoryTags.VEGGIES).addTag(forgeParentTag);
         this.tag(RunecraftoryTags.CROPS).addTag(forgeCropParentTag);
-        for (RegistryEntrySupplier<Item> sup : ModItems.VEGGIES) {
-            String name = sup.getID().getPath().replace("crop_", "");
-            TagKey<Item> forgeTag = tempKeyForge("vegetables/" + name);
-            this.tag(forgeTag).add(sup.get());
-            this.tag(forgeParentTag).addTag(forgeTag);
-
+        Set<String> done = new HashSet<>();
+        for (Pair<String, RegistryEntrySupplier<Item>> sup : ModItems.VEGGIES) {
+            String name = sup.getFirst();
+            boolean none = done.add(name);
             TagKey<Item> commonTag = tempKeyFabric("vegetables/" + name);
-            this.tag(commonTag).addTag(forgeTag);
+            TagKey<Item> forgeTag = tempKeyForge("vegetables/" + name);
+            handleWithForge(this::tag, forgeTag, commonTag, sup.getSecond().get());
+            if (none)
+                this.tag(forgeParentTag).addTag(forgeTag);
 
             //Also add to crops tag
-            forgeTag = tempKeyForge("crops/" + name);
-            this.tag(forgeTag).add(sup.get());
-            this.tag(forgeCropParentTag).addTag(forgeTag);
-
             commonTag = tempKeyFabric("crops/" + name);
-            this.tag(commonTag).addTag(forgeTag);
+            forgeTag = tempKeyForge("crops/" + name);
+            if (sup.getSecond() != ModItems.TURNIP && sup.getSecond() != ModItems.TURNIP_GIANT) { // Normal turnip handled already before
+                handleWithForge(this::tag, forgeTag, commonTag, sup.getSecond().get());
+            }
+            if (none)
+                this.tag(forgeCropParentTag).addTag(forgeTag);
         }
 
         forgeParentTag = tempKeyForge("fruits");
         this.tag(RunecraftoryTags.FRUITS).addTag(forgeParentTag);
-        for (RegistryEntrySupplier<Item> sup : ModItems.FRUITS) {
-            String name = sup.getID().getPath().replace("crop_", "");
-            TagKey<Item> forgeTag = tempKeyForge("fruits/" + name);
-            this.tag(forgeTag).add(sup.get());
-            this.tag(forgeParentTag).addTag(forgeTag);
-
+        for (Pair<String, RegistryEntrySupplier<Item>> sup : ModItems.FRUITS) {
+            String name = sup.getFirst();
+            boolean none = done.add(name);
             TagKey<Item> commonTag = tempKeyFabric("fruits/" + name);
-            this.tag(commonTag).addTag(forgeTag);
+            TagKey<Item> forgeTag = tempKeyForge("fruits/" + name);
+            handleWithForge(this::tag, forgeTag, commonTag, sup.getSecond().get());
+            if (none)
+                this.tag(forgeParentTag).addTag(forgeTag);
 
             //Also add to crops tag
-            forgeTag = tempKeyForge("crops/" + name);
-            this.tag(forgeTag).add(sup.get());
-            this.tag(forgeCropParentTag).addTag(forgeTag);
-
             commonTag = tempKeyFabric("crops/" + name);
-            this.tag(commonTag).addTag(forgeTag);
+            forgeTag = tempKeyForge("crops/" + name);
+            handleWithForge(this::tag, forgeTag, commonTag, sup.getSecond().get());
+            if (none)
+                this.tag(forgeCropParentTag).addTag(forgeTag);
         }
 
         forgeParentTag = tempKeyForge("flowers");
         this.tag(RunecraftoryTags.FLOWERS).addTag(forgeParentTag);
-        for (RegistryEntrySupplier<Item> sup : ModItems.FLOWERS) {
-            this.tag(forgeParentTag).add(sup.get());
+        for (Pair<String, RegistryEntrySupplier<Item>> sup : ModItems.FLOWERS) {
+            this.tag(forgeParentTag).add(sup.getSecond().get());
             //Also add to crops tag
-            String name = sup.getID().getPath().replace("crop_", "");
+            String name = sup.getFirst();
+            boolean none = done.add(name);
+            TagKey<Item> commonTag = tempKeyFabric("crops/" + name);
             TagKey<Item> forgeTag = tempKeyForge("crops/" + name);
-            this.tag(forgeTag).add(sup.get());
-            this.tag(forgeCropParentTag).addTag(forgeTag);
+            handleWithForge(this::tag, forgeTag, commonTag, sup.getSecond().get());
+            if (none)
+                this.tag(forgeCropParentTag).addTag(forgeTag);
         }
 
         this.tag(RunecraftoryTags.QUICKHARVEST_BYPASS)
@@ -588,19 +597,45 @@ public class ItemTagGen extends ItemTagsProvider {
                         ModItems.WATERING_CAN_SILVER.get(), ModItems.WATERING_CAN_GOLD.get(), ModItems.WATERING_CAN_PLATINUM.get());
     }
 
-    protected void forgeAndCommonTag(TagKey<Item> forge, TagKey<Item> common, Item... items) {
-        TagAppender<Item> a = this.tag(forge);
-        for (Item item : items)
-            a.add(item);
-        a = this.tag(common);
-        a.addTag(forge);
-    }
-
     protected static TagKey<Item> tempKeyForge(String path) {
         return PlatformUtils.INSTANCE.itemTag(new ResourceLocation("forge", path));
     }
 
     protected static TagKey<Item> tempKeyFabric(String path) {
         return PlatformUtils.INSTANCE.itemTag(new ResourceLocation("c", path));
+    }
+
+    @SafeVarargs
+    public static <T> void handleWithForge(ResourceKey<? extends Registry<T>> key,
+                                           Function<TagKey<T>, TagsProvider.TagAppender<T>> provider, TagKey<T> fabricTag, T... elements) {
+        TagKey<T> forgeTag = TagKey.create(key, new ResourceLocation("forge", fabricTag.location().getPath()));
+        handleWithForge(provider, forgeTag, fabricTag, elements);
+    }
+
+    @SafeVarargs
+    public static <T> void handleWithForge(Function<TagKey<T>, TagsProvider.TagAppender<T>> provider, TagKey<T> forgeTag, TagKey<T> fabricTag, T... elements) {
+        provider.apply(forgeTag).add(elements);        // Use forge as base so add to forge
+        TagsProvider.TagAppender<T> appender = provider.apply(fabricTag); // On fabric end simply refer to the forge tag
+        Tag.Entry ent = new Tag.TagEntry(forgeTag.location());
+        if (appender.getInternalBuilder().getEntries().noneMatch(e -> e.entry().equals(ent))) {
+            appender.add(ent);
+        }
+    }
+
+    @SafeVarargs
+    public static <T> void handleWithForgeTags(ResourceKey<? extends Registry<T>> key,
+                                               Function<TagKey<T>, TagsProvider.TagAppender<T>> provider, TagKey<T> fabricTag, TagKey<T>... elements) {
+        TagKey<T> forgeTag = TagKey.create(key, new ResourceLocation("forge", fabricTag.location().getPath()));
+        handleWithForgeTags(provider, forgeTag, fabricTag, elements);
+    }
+
+    @SafeVarargs
+    public static <T> void handleWithForgeTags(Function<TagKey<T>, TagsProvider.TagAppender<T>> provider, TagKey<T> forgeTag, TagKey<T> fabricTag, TagKey<T>... elements) {
+        provider.apply(forgeTag).addTags(elements);        // Use forge as base so add to forge
+        TagsProvider.TagAppender<T> appender = provider.apply(fabricTag); // On fabric end simply refer to the forge tag
+        Tag.Entry ent = new Tag.TagEntry(forgeTag.location());
+        if (appender.getInternalBuilder().getEntries().noneMatch(e -> e.entry().equals(ent))) {
+            appender.add(ent);
+        }
     }
 }

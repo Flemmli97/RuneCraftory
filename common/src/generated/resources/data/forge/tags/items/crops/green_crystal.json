@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "runecraftory:green_crystal"
+    "runecraftory:green_crystal",
+    "runecraftory:big_green_crystal"
   ]
 }

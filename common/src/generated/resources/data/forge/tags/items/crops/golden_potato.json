@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "runecraftory:golden_potato"
+    "runecraftory:golden_potato",
+    "runecraftory:golden_prince_potato"
   ]
 }

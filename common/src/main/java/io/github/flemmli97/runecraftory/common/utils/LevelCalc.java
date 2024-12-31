@@ -320,22 +320,17 @@ public class LevelCalc {
         return data.decreaseRunePoints(player, usage, hurt);
     }
 
-    public static float getHealthIncreaseFor(float base, int level) {
-        int healthMultiplierLvl = Math.min(MAX_HEALTH_MULTIPLIER, 1 + (level / HEALTH_MULTIPLIER_INTERVAL));
-        return healthMultiplierLvl * base;
-    }
-
-    public static float getHealthTotalFor(float base, int level) {
-        if (level < HEALTH_MULTIPLIER_INTERVAL)
-            return (level - 1) * base;
-        int mod = level % HEALTH_MULTIPLIER_INTERVAL;
-        int completed = level / HEALTH_MULTIPLIER_INTERVAL;
-        int multiplier = HEALTH_MULTIPLIER_INTERVAL - 2;
+    public static float getMultiplierInterval(int level, int interval, float max, float bonus) {
+        if (level < interval || bonus == 0)
+            return (level - 1);
+        int mod = level % interval;
+        int completed = (level / interval);
+        float multiplier = interval - 2;
         for (int i = 1; i < completed; i++) {
-            multiplier += HEALTH_MULTIPLIER_INTERVAL * Math.min(MAX_HEALTH_MULTIPLIER, i + 1);
+            multiplier += interval * Math.min(max, i + bonus);
         }
-        multiplier += (mod + 1) * Math.min(MAX_HEALTH_MULTIPLIER, (completed + 1));
-        return base * multiplier;
+        multiplier += (mod + 1) * Math.min(max, (1 + completed * bonus));
+        return multiplier;
     }
 
     @Nullable

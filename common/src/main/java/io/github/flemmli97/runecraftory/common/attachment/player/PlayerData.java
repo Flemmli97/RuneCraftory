@@ -369,11 +369,12 @@ public class PlayerData {
     }
 
     private void updateHealth(Player player) {
-        this.setMaxHealth(player, GeneralConfig.startingHealth + LevelCalc.getHealthTotalFor(GeneralConfig.hpPerLevel, this.level.getLevel()) +
-                (float) this.skillValLevelFunc((skillLvl, prop) -> {
-                    int skillHealthMultiplier = 1 + (skillLvl / 25);
-                    return skillHealthMultiplier * prop.healthIncrease() * skillLvl;
-                }), true);
+        this.setMaxHealth(player, GeneralConfig.startingHealth
+                + GeneralConfig.hpPerLevel * LevelCalc.getMultiplierInterval(this.level.getLevel(), 10, 30, 0.5f)
+                + (float) this.skillValLevelFunc((skillLvl, prop) -> {
+            int skillHealthMultiplier = 1 + (skillLvl / 25);
+            return skillHealthMultiplier * prop.healthIncrease() * skillLvl;
+        }), true);
     }
 
     public void increaseStatBonus(Player player, ItemStatIncrease.Stat type) {

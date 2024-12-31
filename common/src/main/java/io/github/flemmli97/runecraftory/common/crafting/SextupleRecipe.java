@@ -157,7 +157,7 @@ public abstract class SextupleRecipe implements Recipe<PlayerContainerInv> {
         return this.craftingLevel;
     }
 
-    public int getBaseCost() {
+    public int getAdditionalCost() {
         return this.baseCost;
     }
 
@@ -189,7 +189,7 @@ public abstract class SextupleRecipe implements Recipe<PlayerContainerInv> {
             String s = GsonHelper.getAsString(obj, "group", "");
             NonNullList<Ingredient> nonnulllist = readIngredients(GsonHelper.getAsJsonArray(obj, "ingredients"));
             int level = GsonHelper.getAsInt(obj, "level", 1);
-            int baseCost = GsonHelper.getAsInt(obj, "cost", 1);
+            int baseCost = GsonHelper.getAsInt(obj, "additional_cost", 1);
             if (nonnulllist.isEmpty()) {
                 throw new JsonParseException("No ingredients for shapeless recipe");
             } else if (nonnulllist.size() > 6) {
@@ -215,7 +215,7 @@ public abstract class SextupleRecipe implements Recipe<PlayerContainerInv> {
         @Override
         public void toNetwork(FriendlyByteBuf buffer, T recipe) {
             buffer.writeInt(recipe.getCraftingLevel());
-            buffer.writeInt(recipe.getBaseCost());
+            buffer.writeInt(recipe.getAdditionalCost());
             buffer.writeUtf(recipe.getGroup());
             buffer.writeVarInt(recipe.getIngredients().size());
 

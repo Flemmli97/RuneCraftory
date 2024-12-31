@@ -1,10 +1,10 @@
 {
   "type": "runecraftory:cooking",
   "level": 5,
-  "cost": 12,
+  "additional_cost": 0,
   "ingredients": [
     {
-      "tag": "c:turnip"
+      "tag": "c:crops/turnip"
     }
   ],
   "result": {

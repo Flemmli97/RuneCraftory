@@ -42,11 +42,7 @@ public class EntityTagGen extends TagsProvider<EntityType<?>> {
             this.tag(RunecraftoryTags.BOSS_MONSTERS)
                     .add(sup.get());
         }
-        TagKey<EntityType<?>> forgeBosses = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("forge", "bosses"));
-        this.tag(forgeBosses)
-                .addTag(RunecraftoryTags.BOSS_MONSTERS);
-        this.tag(RunecraftoryTags.BOSSES)
-                .addTag(forgeBosses);
+        ItemTagGen.handleWithForgeTags(Registry.ENTITY_TYPE_REGISTRY, this::tag, RunecraftoryTags.BOSSES, RunecraftoryTags.BOSS_MONSTERS);
 
         this.tag(RunecraftoryTags.RAFFLESIA_SUMMONS)
                 .add(ModEntities.HORNET.get())

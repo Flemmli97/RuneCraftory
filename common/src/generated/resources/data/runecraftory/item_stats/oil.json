@@ -1,6 +1,6 @@
 {
-  "buyPrice": 500,
-  "sellPrice": 100,
+  "buyPrice": 100,
+  "sellPrice": 30,
   "upgradeDifficulty": 0,
   "itemStats": {},
   "monsterBonus": {},

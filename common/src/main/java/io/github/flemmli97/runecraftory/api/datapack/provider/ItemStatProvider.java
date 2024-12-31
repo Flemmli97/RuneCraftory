@@ -23,6 +23,8 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.ToIntFunction;
+import java.util.stream.Stream;
 
 public abstract class ItemStatProvider implements DataProvider {
 
@@ -89,5 +91,34 @@ public abstract class ItemStatProvider implements DataProvider {
         ResourceLocation res = new ResourceLocation(this.modid, id);
         this.data.put(res, builder);
         this.item.put(res, obj -> obj.addProperty("item", "#" + tag.location()));
+    }
+
+    protected int calcBuyOf(double multiplier, ItemLike... others) {
+        return this.calcValueOf(multiplier, b -> b.buyPrice, Stream.of(others)
+                .map(other -> new ResourceLocation(this.modid, PlatformUtils.INSTANCE.items().getIDFrom(other.asItem()).getPath()))
+                .toArray(ResourceLocation[]::new));
+    }
+
+    protected int calcSellOf(double multiplier, ItemLike... others) {
+        return this.calcValueOf(multiplier, b -> b.sellPrice, Stream.of(others)
+                .map(other -> new ResourceLocation(this.modid, PlatformUtils.INSTANCE.items().getIDFrom(other.asItem()).getPath()))
+                .toArray(ResourceLocation[]::new));
+    }
+
+    protected int calcValueOf(double multiplier, ToIntFunction<ItemStat.Builder> agg, ResourceLocation... others) {
+        int price = 0;
+        for(ResourceLocation other : others) {
+            ItemStat.Builder s = this.data.get(other);
+            if(s != null) {
+                price += agg.applyAsInt(s);
+            }
+        }
+        return (int) (price * multiplier);
+    }
+
+    public static int truncate(double value) {
+        if (value < 10)
+            return (int) value;
+        return ((int) (value / 10.)) * 10;
     }
 }

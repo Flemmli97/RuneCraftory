@@ -1,10 +1,10 @@
 {
   "type": "runecraftory:cooking",
-  "level": 20,
-  "cost": 25,
+  "level": 25,
+  "additional_cost": 0,
   "ingredients": [
     {
-      "item": "runecraftory:cabbage"
+      "tag": "c:crops/cabbage"
     }
   ],
   "result": {

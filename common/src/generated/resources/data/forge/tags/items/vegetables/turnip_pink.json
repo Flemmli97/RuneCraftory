@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "runecraftory:turnip_pink"
+    "runecraftory:turnip_pink",
+    "runecraftory:colossal_pink"
   ]
 }

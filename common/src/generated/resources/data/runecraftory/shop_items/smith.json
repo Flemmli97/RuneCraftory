@@ -2,7 +2,7 @@
   "values": [
     {
       "item": "runecraftory:hoe_scrap",
-      "unlock_type": "DEFAULT"
+      "unlock_type": "ALWAYS"
     },
     {
       "item": "runecraftory:hoe_iron",
@@ -14,7 +14,7 @@
     },
     {
       "item": "runecraftory:watering_can_scrap",
-      "unlock_type": "DEFAULT"
+      "unlock_type": "ALWAYS"
     },
     {
       "item": "runecraftory:watering_can_iron",
@@ -26,7 +26,7 @@
     },
     {
       "item": "runecraftory:sickle_scrap",
-      "unlock_type": "DEFAULT"
+      "unlock_type": "ALWAYS"
     },
     {
       "item": "runecraftory:sickle_iron",
@@ -38,7 +38,7 @@
     },
     {
       "item": "runecraftory:hammer_scrap",
-      "unlock_type": "DEFAULT"
+      "unlock_type": "ALWAYS"
     },
     {
       "item": "runecraftory:hammer_iron",
@@ -50,7 +50,7 @@
     },
     {
       "item": "runecraftory:axe_scrap",
-      "unlock_type": "DEFAULT"
+      "unlock_type": "ALWAYS"
     },
     {
       "item": "runecraftory:axe_iron",
@@ -62,7 +62,7 @@
     },
     {
       "item": "runecraftory:fishing_rod_scrap",
-      "unlock_type": "DEFAULT"
+      "unlock_type": "ALWAYS"
     },
     {
       "item": "runecraftory:fishing_rod_iron",
@@ -71,18 +71,6 @@
     {
       "item": "runecraftory:fishing_rod_silver",
       "unlock_type": "NEEDS_SHIPPING"
-    },
-    {
-      "item": "runecraftory:monster_command_staff",
-      "unlock_type": "DEFAULT"
-    },
-    {
-      "item": "runecraftory:brush",
-      "unlock_type": "DEFAULT"
-    },
-    {
-      "item": "runecraftory:magnifying_glass",
-      "unlock_type": "DEFAULT"
     },
     {
       "item": "runecraftory:broad_sword",

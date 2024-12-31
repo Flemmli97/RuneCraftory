@@ -839,6 +839,11 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
                 AttributeInstance inst = this.getAttribute(att);
                 if (inst != null) {
                     float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
+                    if (att == Attributes.MAX_HEALTH) {
+                        multiplier += LevelCalc.getMultiplierInterval(this.level().getLevel(), 20, 30, 0.12f) * 0.015f;
+                    } else {
+                        multiplier += LevelCalc.getMultiplierInterval(this.level().getLevel(), 20, 30, 0) * 0.01f;
+                    }
                     inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, RuneCraftory.MODID + ".levelMod", (this.level().getLevel() - 1) * val * multiplier, AttributeModifier.Operation.ADDITION));
                     if (att == Attributes.MAX_HEALTH)
                         this.setHealth(this.getMaxHealth() - preHealthDiff);

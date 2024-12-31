@@ -1,6 +1,11 @@
 {
   "duration": 6000,
-  "effects": {},
+  "effects": {
+    "runecraftory:health_gain": 950.0,
+    "runecraftory:rp_gain": 280.0,
+    "runecraftory:defence": 19.0,
+    "runecraftory:magic_defence": 19.0
+  },
   "effectsPercentage": {},
   "cookingBonus": {},
   "cookingBonusPercent": {},

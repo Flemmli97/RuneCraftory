@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "runecraftory:yam"
+    "runecraftory:yam",
+    "runecraftory:lordly_yam"
   ]
 }

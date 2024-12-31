@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "runecraftory:apple_juice",
+    "runecraftory:orange_juice",
+    "runecraftory:grape_juice",
+    "runecraftory:tomato_juice",
+    "runecraftory:pineapple_juice",
+    "runecraftory:fruit_juice",
+    "runecraftory:vegetable_juice",
+    "runecraftory:veggie_smoothie",
+    "runecraftory:mixed_juice"
+  ]
+}

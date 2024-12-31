@@ -1,0 +1,13 @@
+{
+  "type": "runecraftory:cooking",
+  "level": 12,
+  "additional_cost": 0,
+  "ingredients": [
+    {
+      "tag": "c:fruits/strawberry"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:strawberry_jam"
+  }
+}

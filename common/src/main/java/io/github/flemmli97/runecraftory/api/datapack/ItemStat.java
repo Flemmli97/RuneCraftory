@@ -401,9 +401,9 @@ public class ItemStat {
 
         private final Map<Attribute, Double> itemStats = new HashMap<>();
         private final Map<Attribute, Double> monsterGiftIncrease = new HashMap<>();
-        private final int buyPrice;
-        private final int sellPrice;
-        private final int upgradeDifficulty;
+        public final int buyPrice;
+        public final int sellPrice;
+        public final int upgradeDifficulty;
         private EnumElement element = EnumElement.NONE;
         private Spell tier1Spell;
         private Spell tier2Spell;

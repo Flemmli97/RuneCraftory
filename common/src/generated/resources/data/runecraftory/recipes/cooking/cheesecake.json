@@ -1,0 +1,22 @@
+{
+  "type": "runecraftory:cooking",
+  "level": 35,
+  "additional_cost": 0,
+  "ingredients": [
+    {
+      "tag": "c:foods/sugar"
+    },
+    {
+      "tag": "c:foods/cheese"
+    },
+    {
+      "tag": "c:milks"
+    },
+    {
+      "tag": "c:eggs"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:cheesecake"
+  }
+}

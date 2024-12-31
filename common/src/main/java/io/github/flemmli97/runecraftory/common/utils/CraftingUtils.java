@@ -67,7 +67,7 @@ public class CraftingUtils {
         if (!GeneralConfig.useRp)
             return 0;
         if (GeneralConfig.recipeSystem.baseCost) {
-            int cost = recipe.getBaseCost();
+            int cost = Math.max((recipe.getCraftingLevel() * 2) + recipe.getAdditionalCost(), 10);
             int additionalMaterial = 0;
             for (ItemStack items : bonusItems) {
                 additionalMaterial += DataPackHandler.INSTANCE.itemStatManager().get(items.getItem()).map(ItemStat::getDiff).orElse(10);
@@ -84,11 +84,11 @@ public class CraftingUtils {
             case COOKING -> data.getSkillLevel(EnumSkills.COOKING).getLevel();
         };
         int lvlDifference = recipe.getCraftingLevel() - skillLevel;
-        int cost;
+        int cost = recipe.getCraftingLevel() * 2;
         if (lvlDifference <= 0) {
-            cost = Math.max(2 * recipe.getCraftingLevel() + lvlDifference, 10);
+            cost = Math.max(cost + lvlDifference, 10) + recipe.getAdditionalCost();
         } else {
-            cost = Math.max(2 * recipe.getCraftingLevel(), 10) * (int) ((1 + lvlDifference) * 1.5);
+            cost = Math.max(cost + recipe.getAdditionalCost(), 10) * (int) ((1 + lvlDifference) * 1.5);
         }
         int additionalMaterial = 0;
         for (ItemStack items : bonusItems) {

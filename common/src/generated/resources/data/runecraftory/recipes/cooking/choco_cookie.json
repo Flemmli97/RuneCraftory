@@ -1,0 +1,25 @@
+{
+  "type": "runecraftory:cooking",
+  "level": 45,
+  "additional_cost": 0,
+  "ingredients": [
+    {
+      "tag": "c:foods/butter"
+    },
+    {
+      "tag": "c:foods/flour"
+    },
+    {
+      "tag": "c:foods/sugar"
+    },
+    {
+      "tag": "c:foods/chocolate"
+    },
+    {
+      "tag": "c:eggs"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:choco_cookie"
+  }
+}

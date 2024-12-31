@@ -1,0 +1,16 @@
+{
+  "type": "runecraftory:cooking",
+  "level": 38,
+  "additional_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:fruit_juice"
+    },
+    {
+      "item": "runecraftory:vegetable_juice"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:mixed_juice"
+  }
+}

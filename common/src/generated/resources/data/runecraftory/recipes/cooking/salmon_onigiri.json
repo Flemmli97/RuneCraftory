@@ -1,0 +1,16 @@
+{
+  "type": "runecraftory:cooking",
+  "level": 20,
+  "additional_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:salted_salmon"
+    },
+    {
+      "tag": "c:foods/rice"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:salmon_onigiri"
+  }
+}

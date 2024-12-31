@@ -57,7 +57,16 @@ public class RunecraftoryTags {
     public static final TagKey<Item> EGGS = tagCommon("eggs");
     public static final TagKey<Item> MILKS = tagCommon("milks");
 
-    public static final TagKey<Item> GRAPES = tagCommon("grapes");
+    public static final TagKey<Item> GRAPES = tagCommon("fruits/grapes");
+    public static final TagKey<Item> ORANGE = tagCommon("fruits/orange");
+
+    public static final TagKey<Item> VEGGIES = tagCommon("vegetables");
+    public static final TagKey<Item> FRUITS = tagCommon("fruits");
+    public static final TagKey<Item> FLOWERS = tagCommon("flowers");
+    public static final TagKey<Item> CROPS = tagCommon("crops");
+
+    public static final TagKey<Item> FOODS = tagCommon("foods");
+    public static final TagKey<Item> TURNIP = tagCommon("crops/turnip");
 
     //Gifts
     public static final TagKey<Item> GENERIC_TRASH = tag("generic_trash");
@@ -112,15 +121,36 @@ public class RunecraftoryTags {
     public static final TagKey<Item> BOOTS = tag("equipment/boots");
     public static final TagKey<Item> SHIELDS = tag("equipment/shields");
 
-    public static final TagKey<Item> VEGGIES = tagCommon("vegetables");
-    public static final TagKey<Item> FRUITS = tagCommon("fruits");
-    public static final TagKey<Item> FLOWERS = tagCommon("flowers");
-    public static final TagKey<Item> CROPS = tagCommon("crops");
-
     public static final TagKey<Item> QUICKHARVEST_BYPASS = tag("quick_harvest_bypass");
 
-    public static final TagKey<Item> FOODS = tagCommon("foods");
-    public static final TagKey<Item> TURNIP = tagCommon("turnip");
+    // FOOD
+    public static final TagKey<Item> SIMPLE = tag("food/simple");
+    public static final TagKey<Item> FRIED = tag("food/fried");
+    public static final TagKey<Item> POT = tag("food/pot");
+    public static final TagKey<Item> STEAMED = tag("food/steamed");
+    public static final TagKey<Item> KNIFE = tag("food/knife");
+    public static final TagKey<Item> MIXED = tag("food/mixed");
+    public static final TagKey<Item> OVEN = tag("food/oven");
+
+    public static final TagKey<Item> OIL = tagCommon("foods/oil");
+    public static final TagKey<Item> FLOUR = tagCommon("foods/flour");
+    public static final TagKey<Item> CHEESE = tagCommon("foods/cheese");
+    public static final TagKey<Item> MAYO = tagCommon("foods/mayo");
+    public static final TagKey<Item> FOOD_EGG = tagCommon("foods/egg");
+    public static final TagKey<Item> FOOD_MILK = tagCommon("foods/milk");
+    public static final TagKey<Item> CHOCOLATE = tagCommon("foods/chocolate");
+    public static final TagKey<Item> RICE = tagCommon("foods/rice");
+    public static final TagKey<Item> BUTTER = tagCommon("foods/butter");
+    public static final TagKey<Item> KETCHUP = tagCommon("foods/ketchup");
+    public static final TagKey<Item> SUGAR = tagCommon("foods/sugar");
+    public static final TagKey<Item> BREAD = tagCommon("foods/bread");
+
+    public static final TagKey<Item> ONIGIRI = tagCommon("foods/onigiri");
+    public static final TagKey<Item> PIE = tagCommon("foods/pie");
+    public static final TagKey<Item> JUICE = tagCommon("foods/juice");
+    public static final TagKey<Item> TOAST = tagCommon("foods/toast");
+    public static final TagKey<Item> UDON = tagCommon("foods/udon");
+    public static final TagKey<Item> JAM = tagCommon("foods/jam");
 
     private static final Map<EntityType<?>, TagKey<Item>> ENTITY_TAMING_TAGS = new HashMap<>();
 
@@ -229,7 +259,7 @@ public class RunecraftoryTags {
         return PlatformUtils.INSTANCE.itemTag(new ResourceLocation(RuneCraftory.MODID, name));
     }
 
-    private static TagKey<Item> tagCommon(String name) {
+    public static TagKey<Item> tagCommon(String name) {
         return PlatformUtils.INSTANCE.itemTag(new ResourceLocation("c", name));
     }
 

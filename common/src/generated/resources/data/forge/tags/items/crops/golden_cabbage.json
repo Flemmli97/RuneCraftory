@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "runecraftory:golden_cabbage"
+    "runecraftory:golden_cabbage",
+    "runecraftory:golden_king_cabbage"
   ]
 }

@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "runecraftory:noel_grass"
+    "runecraftory:noel_grass",
+    "runecraftory:large_noel_grass"
   ]
 }

@@ -1,7 +1,7 @@
 {
   "type": "runecraftory:forge",
   "level": 30,
-  "cost": 20,
+  "additional_cost": 0,
   "ingredients": [
     {
       "tag": "c:silver_ingots"

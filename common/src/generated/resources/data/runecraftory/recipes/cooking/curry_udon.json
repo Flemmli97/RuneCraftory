@@ -1,0 +1,22 @@
+{
+  "type": "runecraftory:cooking",
+  "level": 52,
+  "additional_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:udon"
+    },
+    {
+      "item": "runecraftory:curry_powder"
+    },
+    {
+      "tag": "c:crops/carrot"
+    },
+    {
+      "item": "runecraftory:heavy_spice"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:curry_udon"
+  }
+}

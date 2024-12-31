@@ -1,7 +1,7 @@
 {
   "type": "runecraftory:armor",
   "level": 10,
-  "cost": 25,
+  "additional_cost": 0,
   "ingredients": [
     {
       "tag": "runecraftory:cloths"

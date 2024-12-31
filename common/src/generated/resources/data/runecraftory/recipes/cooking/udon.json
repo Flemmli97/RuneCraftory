@@ -1,0 +1,13 @@
+{
+  "type": "runecraftory:cooking",
+  "level": 17,
+  "additional_cost": 0,
+  "ingredients": [
+    {
+      "tag": "c:foods/flour"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:udon"
+  }
+}

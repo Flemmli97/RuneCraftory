@@ -138,35 +138,35 @@
     },
     {
       "item": "runecraftory:formular_a",
-      "unlock_type": "DEFAULT"
+      "unlock_type": "ALWAYS"
     },
     {
       "item": "runecraftory:formular_b",
-      "unlock_type": "DEFAULT"
+      "unlock_type": "ALWAYS"
     },
     {
       "item": "runecraftory:formular_c",
-      "unlock_type": "DEFAULT"
+      "unlock_type": "ALWAYS"
     },
     {
       "item": "runecraftory:minimizer",
-      "unlock_type": "DEFAULT"
+      "unlock_type": "ALWAYS"
     },
     {
       "item": "runecraftory:giantizer",
-      "unlock_type": "DEFAULT"
+      "unlock_type": "ALWAYS"
     },
     {
       "item": "runecraftory:greenifier",
-      "unlock_type": "DEFAULT"
+      "unlock_type": "ALWAYS"
     },
     {
       "item": "runecraftory:greenifier_plus",
-      "unlock_type": "DEFAULT"
+      "unlock_type": "ALWAYS"
     },
     {
       "item": "runecraftory:wettable_powder",
-      "unlock_type": "DEFAULT"
+      "unlock_type": "ALWAYS"
     }
   ]
 }

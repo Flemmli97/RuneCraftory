@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "runecraftory:charm_blue"
+    "runecraftory:charm_blue",
+    "runecraftory:great_charm_blue"
   ]
 }

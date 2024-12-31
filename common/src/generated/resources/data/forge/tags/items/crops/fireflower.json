@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "runecraftory:fireflower"
+    "runecraftory:fireflower",
+    "runecraftory:big_fireflower"
   ]
 }

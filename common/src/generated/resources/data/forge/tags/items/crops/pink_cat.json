@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "runecraftory:pink_cat"
+    "runecraftory:pink_cat",
+    "runecraftory:king_pink_cat"
   ]
 }

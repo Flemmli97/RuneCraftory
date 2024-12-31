@@ -1,0 +1,13 @@
+{
+  "type": "runecraftory:cooking",
+  "level": 12,
+  "additional_cost": 0,
+  "ingredients": [
+    {
+      "tag": "c:fruits/orange"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:orange_juice"
+  }
+}

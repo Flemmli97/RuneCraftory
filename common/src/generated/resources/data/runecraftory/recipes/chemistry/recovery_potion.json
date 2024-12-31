@@ -1,7 +1,7 @@
 {
   "type": "runecraftory:chemistry",
   "level": 3,
-  "cost": 30,
+  "additional_cost": 0,
   "ingredients": [
     {
       "item": "runecraftory:medicinal_herb"

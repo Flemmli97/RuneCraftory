@@ -1,7 +1,7 @@
 {
   "type": "runecraftory:forge",
   "level": 16,
-  "cost": 40,
+  "additional_cost": 0,
   "ingredients": [
     {
       "item": "runecraftory:invisible_stone"
@@ -14,6 +14,7 @@
     }
   ],
   "result": {
-    "item": "runecraftory:invisiblade"
+    "item": "runecraftory:invisiblade",
+    "count": 13
   }
 }
