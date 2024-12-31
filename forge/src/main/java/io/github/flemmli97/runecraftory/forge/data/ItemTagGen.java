@@ -59,10 +59,6 @@ public class ItemTagGen extends ItemTagsProvider {
         this.tag(RunecraftoryTags.COPPER)
                 .add(Items.COPPER_INGOT)
                 .addOptional(Tags.Items.INGOTS_COPPER.location());
-        this.tag(RunecraftoryTags.COPPER_BLOCK)
-                .add(Items.COPPER_BLOCK)
-                .add(Items.CUT_COPPER)
-                .addOptional(Tags.Items.STORAGE_BLOCKS_COPPER.location());
         this.tag(RunecraftoryTags.EMERALDS)
                 .add(Items.EMERALD)
                 .addOptional(Tags.Items.GEMS_EMERALD.location());
@@ -100,9 +96,14 @@ public class ItemTagGen extends ItemTagsProvider {
         handleWithForge(this::tag, Tags.Items.SLIMEBALLS, RunecraftoryTags.SLIME, ModItems.GLUE.get());
         this.tag(RunecraftoryTags.SLIME)
                 .add(Items.SLIME_BALL);
-        handleWithForge(this::tag, RunecraftoryTags.BRONZE_F, RunecraftoryTags.BRONZE, ModItems.BRONZE.get());
-        handleWithForge(this::tag, RunecraftoryTags.SILVER_F, RunecraftoryTags.SILVER, ModItems.SILVER.get());
-        handleWithForge(this::tag, RunecraftoryTags.PLATINUM_F, RunecraftoryTags.PLATINUM, ModItems.PLATINUM.get());
+        handleWithForge(Registry.ITEM_REGISTRY, this::tag, RunecraftoryTags.tagCommon("raw_materials/tin"), ModItems.RAW_TIN.get());
+        handleWithForge(this::tag, RunecraftoryTags.TIN_F, RunecraftoryTags.TIN, ModItems.TIN_INGOT.get());
+        handleWithForge(Registry.ITEM_REGISTRY, this::tag, RunecraftoryTags.tagCommon("dusts/bronze"), ModItems.BRONZE_DUST.get());
+        handleWithForge(this::tag, RunecraftoryTags.BRONZE_F, RunecraftoryTags.BRONZE, ModItems.BRONZE_INGOT.get());
+        handleWithForge(Registry.ITEM_REGISTRY, this::tag, RunecraftoryTags.tagCommon("raw_materials/silver"), ModItems.RAW_SILVER.get());
+        handleWithForge(this::tag, RunecraftoryTags.SILVER_F, RunecraftoryTags.SILVER, ModItems.SILVER_INGOT.get());
+        handleWithForge(Registry.ITEM_REGISTRY, this::tag, RunecraftoryTags.tagCommon("raw_materials/platinum"), ModItems.RAW_PLATINUM.get());
+        handleWithForge(this::tag, RunecraftoryTags.PLATINUM_F, RunecraftoryTags.PLATINUM, ModItems.PLATINUM_INGOT.get());
 
         handleWithForge(this::tag, RunecraftoryTags.AMETHYST_F, RunecraftoryTags.AMETHYSTS, ModItems.AMETHYST.get());
         this.tag(RunecraftoryTags.AMETHYSTS)
@@ -129,6 +130,7 @@ public class ItemTagGen extends ItemTagsProvider {
                 .add(ModItems.SCRAP_PLUS.get())
                 .addTag(RunecraftoryTags.IRON)
                 .addTag(RunecraftoryTags.GOLD)
+                .addTag(RunecraftoryTags.COPPER)
                 .addTag(RunecraftoryTags.COPPER)
                 .addTag(RunecraftoryTags.BRONZE)
                 .addTag(RunecraftoryTags.SILVER)

@@ -93,7 +93,7 @@ public class ModFeatures {
         ImmutableList.Builder<Holder<PlacedFeature>> builder = new ImmutableList.Builder<>();
         ImmutableList.Builder<Holder<PlacedFeature>> nether = new ImmutableList.Builder<>();
         registerMineralFeatures(builder, nether, ModBlocks.MINERAL_IRON, null, RunecraftoryTags.WATER_NETHER_END, 15, 2, 5);
-        registerMineralFeatures(builder, nether, ModBlocks.MINERAL_BRONZE, null, RunecraftoryTags.WATER_NETHER_END, 20, 2, 4);
+        registerMineralFeatures(builder, nether, ModBlocks.MINERAL_TIN, null, RunecraftoryTags.WATER_NETHER_END, 20, 2, 4);
         registerMineralFeatures(builder, nether, ModBlocks.MINERAL_SILVER, null, RunecraftoryTags.WATER_NETHER_END, 40, 2, 3);
         registerMineralFeatures(builder, nether, ModBlocks.MINERAL_GOLD, null, RunecraftoryTags.WATER_NETHER_END, 60, 2, 3);
         registerMineralFeatures(builder, nether, ModBlocks.MINERAL_PLATINUM, null, RunecraftoryTags.WATER_NETHER_END, 100, 1, 3);

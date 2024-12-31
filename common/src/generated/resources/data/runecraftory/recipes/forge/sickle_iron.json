@@ -4,7 +4,7 @@
   "additional_cost": 0,
   "ingredients": [
     {
-      "tag": "c:copper_blocks"
+      "tag": "c:bronze_ingots"
     },
     {
       "tag": "runecraftory:shards"

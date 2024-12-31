@@ -20,6 +20,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.block.CraftingTableBlock;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
@@ -206,7 +207,7 @@ public class RecipesGen extends RecipeProvider {
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.HOE_SCRAP.get(), 1, 5, 0)
                 .addIngredient(RunecraftoryTags.STICKS).addIngredient(RunecraftoryTags.MINERALS).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.HOE_IRON.get(), 1, 15, 0)
-                .addIngredient(RunecraftoryTags.STICKS).addIngredient(RunecraftoryTags.COPPER_BLOCK).build(consumer);
+                .addIngredient(RunecraftoryTags.STICKS).addIngredient(RunecraftoryTags.BRONZE).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.HOE_SILVER.get(), 1, 30, 0)
                 .addIngredient(RunecraftoryTags.STICKS).addIngredient(RunecraftoryTags.SILVER).addIngredient(ModItems.THREAD_PRETTY.get()).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.HOE_GOLD.get(), 1, 45, 0)
@@ -220,7 +221,7 @@ public class RecipesGen extends RecipeProvider {
                 .addIngredient(RunecraftoryTags.CLOTHS).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.WATERING_CAN_IRON.get(), 1, 15, 0)
                 .addIngredient(Items.BUCKET)
-                .addIngredient(RunecraftoryTags.COPPER_BLOCK)
+                .addIngredient(RunecraftoryTags.BRONZE)
                 .addIngredient(RunecraftoryTags.CLOTHS).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.WATERING_CAN_SILVER.get(), 1, 30, 0)
                 .addIngredient(Items.BUCKET)
@@ -239,7 +240,7 @@ public class RecipesGen extends RecipeProvider {
                 .addIngredient(RunecraftoryTags.MINERALS)
                 .addIngredient(RunecraftoryTags.SHARDS).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.SICKLE_IRON.get(), 1, 15, 0)
-                .addIngredient(RunecraftoryTags.COPPER_BLOCK)
+                .addIngredient(RunecraftoryTags.BRONZE)
                 .addIngredient(RunecraftoryTags.SHARDS).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.SICKLE_SILVER.get(), 1, 30, 0)
                 .addIngredient(RunecraftoryTags.SILVER)
@@ -256,7 +257,7 @@ public class RecipesGen extends RecipeProvider {
                 .addIngredient(RunecraftoryTags.IRON)
                 .addIngredient(RunecraftoryTags.STICKS).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.HAMMER_IRON.get(), 1, 15, 0)
-                .addIngredient(RunecraftoryTags.COPPER_BLOCK)
+                .addIngredient(RunecraftoryTags.BRONZE)
                 .addIngredient(RunecraftoryTags.IRON)
                 .addIngredient(RunecraftoryTags.STICKS).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.HAMMER_SILVER.get(), 1, 30, 0)
@@ -277,7 +278,7 @@ public class RecipesGen extends RecipeProvider {
                 .addIngredient(RunecraftoryTags.STICKS)
                 .addIngredient(RunecraftoryTags.STICKS).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.AXE_IRON.get(), 1, 15, 0)
-                .addIngredient(RunecraftoryTags.COPPER_BLOCK)
+                .addIngredient(RunecraftoryTags.BRONZE)
                 .addIngredient(RunecraftoryTags.STICKS)
                 .addIngredient(RunecraftoryTags.STICKS).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.AXE_SILVER.get(), 1, 30, 0)
@@ -297,7 +298,7 @@ public class RecipesGen extends RecipeProvider {
                 .addIngredient(RunecraftoryTags.STRINGS)
                 .addIngredient(RunecraftoryTags.STICKS).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.FISHING_ROD_IRON.get(), 1, 15, 0)
-                .addIngredient(RunecraftoryTags.COPPER_BLOCK)
+                .addIngredient(RunecraftoryTags.BRONZE)
                 .addIngredient(RunecraftoryTags.STRINGS)
                 .addIngredient(RunecraftoryTags.STICKS).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.FISHING_ROD_SILVER.get(), 1, 30, 0)
@@ -320,7 +321,7 @@ public class RecipesGen extends RecipeProvider {
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.STEEL_SWORD_PLUS.get(), 1, 7, 0)
                 .addIngredient(ModItems.STEEL_SWORD.get()).addIngredient(RunecraftoryTags.MINERALS).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.CUTLASS.get(), 1, 10, 0)
-                .addIngredient(RunecraftoryTags.COPPER_BLOCK).addIngredient(RunecraftoryTags.CLAWS_FANGS).build(consumer);
+                .addIngredient(RunecraftoryTags.BRONZE).addIngredient(RunecraftoryTags.CLAWS_FANGS).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.AQUA_SWORD.get(), 1, 13, 0)
                 .addIngredient(RunecraftoryTags.SILVER).addIngredient(ModItems.AQUAMARINE.get()).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.INVISI_BLADE.get(), 13, 16, 0)
@@ -335,9 +336,9 @@ public class RecipesGen extends RecipeProvider {
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.ZWEIHAENDER.get(), 1, 5, 0)
                 .addIngredient(RunecraftoryTags.MINERALS).addIngredient(RunecraftoryTags.CLAWS_FANGS).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.ZWEIHAENDER_PLUS.get(), 1, 7, 0)
-                .addIngredient(ModItems.ZWEIHAENDER.get()).addIngredient(RunecraftoryTags.COPPER_BLOCK).build(consumer);
+                .addIngredient(ModItems.ZWEIHAENDER.get()).addIngredient(RunecraftoryTags.BRONZE).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.GREAT_SWORD.get(), 1, 13, 0)
-                .addIngredient(RunecraftoryTags.COPPER_BLOCK).addIngredient(RunecraftoryTags.LIQUIDS).build(consumer);
+                .addIngredient(RunecraftoryTags.BRONZE).addIngredient(RunecraftoryTags.LIQUIDS).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.SEA_CUTTER.get(), 1, 15, 0)
                 .addIngredient(RunecraftoryTags.SILVER).addIngredient(ModItems.AQUAMARINE.get()).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.CYCLONE_BLADE.get(), 1, 18, 0)
@@ -354,9 +355,9 @@ public class RecipesGen extends RecipeProvider {
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.LANCE.get(), 1, 10, 0)
                 .addIngredient(RunecraftoryTags.STICKS).addIngredient(RunecraftoryTags.MINERALS).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.LANCE_PLUS.get(), 1, 13, 0)
-                .addIngredient(ModItems.LANCE.get()).addIngredient(RunecraftoryTags.COPPER_BLOCK).build(consumer);
+                .addIngredient(ModItems.LANCE.get()).addIngredient(RunecraftoryTags.BRONZE).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.NEEDLE_SPEAR.get(), 1, 16, 0)
-                .addIngredient(RunecraftoryTags.STICKS).addIngredient(RunecraftoryTags.COPPER_BLOCK)
+                .addIngredient(RunecraftoryTags.STICKS).addIngredient(RunecraftoryTags.BRONZE)
                 .addIngredient(ModItems.FANG_WOLF.get()).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.TRIDENT.get(), 1, 19, 0)
                 .addIngredient(RunecraftoryTags.SILVER).addIngredient(RunecraftoryTags.AQUAMARINES).addIngredient(RunecraftoryTags.STICKS).build(consumer);
@@ -368,9 +369,9 @@ public class RecipesGen extends RecipeProvider {
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.BATTLE_AXE.get(), 1, 5, 0)
                 .addIngredient(RunecraftoryTags.MINERALS).addIngredient(RunecraftoryTags.CLAWS_FANGS).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.BATTLE_SCYTHE.get(), 1, 9, 0)
-                .addIngredient(RunecraftoryTags.COPPER_BLOCK).addIngredient(RunecraftoryTags.CLAWS_FANGS).build(consumer);
+                .addIngredient(RunecraftoryTags.BRONZE).addIngredient(RunecraftoryTags.CLAWS_FANGS).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.POLE_AXE.get(), 1, 15, 0)
-                .addIngredient(RunecraftoryTags.COPPER_BLOCK).addIngredient(ModItems.FANG_WOLF.get()).addIngredient(RunecraftoryTags.STICKS).build(consumer);
+                .addIngredient(RunecraftoryTags.BRONZE).addIngredient(ModItems.FANG_WOLF.get()).addIngredient(RunecraftoryTags.STICKS).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.POLE_AXE_PLUS.get(), 1, 19, 0)
                 .addIngredient(ModItems.POLE_AXE.get()).addIngredient(RunecraftoryTags.SILVER).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.GREAT_AXE.get(), 1, 24, 0)
@@ -385,9 +386,9 @@ public class RecipesGen extends RecipeProvider {
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.BATTLE_HAMMER.get(), 1, 3, 0)
                 .addIngredient(RunecraftoryTags.MINERALS).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.BAT.get(), 1, 8, 0)
-                .addIngredient(RunecraftoryTags.COPPER_BLOCK).build(consumer);
+                .addIngredient(RunecraftoryTags.BRONZE).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.WAR_HAMMER.get(), 1, 14, 0)
-                .addIngredient(RunecraftoryTags.COPPER_BLOCK).addIngredient(RunecraftoryTags.SHARDS).build(consumer);
+                .addIngredient(RunecraftoryTags.BRONZE).addIngredient(RunecraftoryTags.SHARDS).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.WAR_HAMMER_PLUS.get(), 1, 17, 0)
                 .addIngredient(ModItems.WAR_HAMMER.get()).addIngredient(RunecraftoryTags.LIQUIDS).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.IRON_BAT.get(), 1, 21, 0)
@@ -401,7 +402,7 @@ public class RecipesGen extends RecipeProvider {
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.SHORT_DAGGER.get(), 1, 3, 0)
                 .addIngredient(RunecraftoryTags.MINERALS).addIngredient(RunecraftoryTags.MINERALS).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.STEEL_EDGE.get(), 1, 7, 0)
-                .addIngredient(RunecraftoryTags.IRON).addIngredient(RunecraftoryTags.IRON).addIngredient(RunecraftoryTags.COPPER_BLOCK).build(consumer);
+                .addIngredient(RunecraftoryTags.IRON).addIngredient(RunecraftoryTags.IRON).addIngredient(RunecraftoryTags.BRONZE).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.FROST_EDGE.get(), 1, 11, 0)
                 .addIngredient(ModItems.AQUAMARINE.get()).addIngredient(ModItems.AQUAMARINE.get()).addIngredient(RunecraftoryTags.LIQUIDS).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.IRON_EDGE.get(), 1, 15, 0)
@@ -419,7 +420,7 @@ public class RecipesGen extends RecipeProvider {
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.LEATHER_GLOVE.get(), 1, 3, 0)
                 .addIngredient(RunecraftoryTags.CLOTHS).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.BRASS_KNUCKLES.get(), 1, 8, 0)
-                .addIngredient(RunecraftoryTags.CLOTHS).addIngredient(RunecraftoryTags.COPPER_BLOCK).build(consumer);
+                .addIngredient(RunecraftoryTags.CLOTHS).addIngredient(RunecraftoryTags.BRONZE).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.KOTE.get(), 1, 12, 0)
                 .addIngredient(RunecraftoryTags.CLOTHS).addIngredient(RunecraftoryTags.IRON).addIngredient(ModItems.CLAW_PALM.get()).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.GLOVES.get(), 1, 14, 0)
@@ -459,7 +460,7 @@ public class RecipesGen extends RecipeProvider {
         RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.CHEAP_BRACELET.get(), 1, 3, 0)
                 .addIngredient(RunecraftoryTags.MINERALS).build(consumer);
         RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.BRONZE_BRACELET.get(), 1, 15, 0)
-                .addIngredient(RunecraftoryTags.COPPER_BLOCK).addIngredient(RunecraftoryTags.CLOTHS).build(consumer);
+                .addIngredient(RunecraftoryTags.BRONZE).addIngredient(RunecraftoryTags.CLOTHS).build(consumer);
         RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.SILVER_BRACELET.get(), 1, 25, 0)
                 .addIngredient(RunecraftoryTags.SILVER).addIngredient(RunecraftoryTags.CLOTHS).build(consumer);
         RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.GOLD_BRACELET.get(), 1, 35, 0)

@@ -701,7 +701,7 @@ public class Loottables extends LootTableProvider {
                     build.add(ore(10, 3, ModItems.INVIS_STONE.get(), 10));
                     build.add(ore(1, 7, ModItems.CRYSTAL_SMALL.get(), 40));
                 }
-                case BRONZE -> {
+                case TIN -> {
                     build.add(ore(100, 3, ModItems.SCRAP.get()));
                     build.add(ore(40, 15, Items.IRON_INGOT));
                     build.add(ore(25, 24, Items.COPPER_INGOT));
@@ -712,7 +712,7 @@ public class Loottables extends LootTableProvider {
                 case SILVER -> {
                     build.add(ore(100, 3, ModItems.SCRAP.get()));
                     build.add(ore(40, 12, Items.IRON_INGOT));
-                    build.add(ore(20, 31, ModItems.SILVER.get()));
+                    build.add(ore(20, 31, ModItems.RAW_SILVER.get()));
                     build.add(ore(2, 2, ModItems.INVIS_STONE.get(), 5));
                     build.add(ore(3, 2, ModItems.INVIS_STONE.get(), 10));
                     build.add(ore(3, 2, ModItems.INVIS_STONE.get(), 15));
@@ -732,8 +732,8 @@ public class Loottables extends LootTableProvider {
                 }
                 case PLATINUM -> {
                     build.add(ore(100, 3, ModItems.SCRAP.get()));
-                    build.add(ore(4, 12, ModItems.PLATINUM.get()));
-                    build.add(ore(20, 29, ModItems.PLATINUM.get(), 30));
+                    build.add(ore(4, 12, ModItems.RAW_PLATINUM.get()));
+                    build.add(ore(20, 29, ModItems.RAW_PLATINUM.get(), 30));
                     build.add(ore(3, 8, ModItems.CRYSTAL_SMALL.get(), 40));
                 }
                 case ORICHALCUM -> {

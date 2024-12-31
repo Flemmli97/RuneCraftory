@@ -1,0 +1,9 @@
+{
+  "type": "runecraftory:armor",
+  "level": 1,
+  "additional_cost": 0,
+  "ingredients": [],
+  "result": {
+    "item": "runecraftory:stay_up_ring"
+  }
+}

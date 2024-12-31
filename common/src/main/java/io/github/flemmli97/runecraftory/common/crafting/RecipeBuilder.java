@@ -53,10 +53,10 @@ public class RecipeBuilder {
 
     public static RecipeBuilder create(EnumCrafting type, ItemStack item, int level, int addCost) {
         RecipeSerializer<?> serializer = switch (type) {
-            case FORGE -> ModCrafting.FORGESERIALIZER.get();
-            case ARMOR -> ModCrafting.ARMORSERIALIZER.get();
-            case CHEM -> ModCrafting.CHEMISTRYSERIALIZER.get();
-            default -> ModCrafting.COOKINGSERIALIZER.get();
+            case FORGE -> ModCrafting.FORGING_SERIALIZER.get();
+            case ARMOR -> ModCrafting.ARMOR_SERIALIZER.get();
+            case CHEM -> ModCrafting.CHEMISTRY_SERIALIZER.get();
+            default -> ModCrafting.COOKING_SERIALIZER.get();
         };
         return new RecipeBuilder(type, item, level, addCost, serializer);
     }

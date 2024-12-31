@@ -11,15 +11,19 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "runecraftory:bronze"
+          "name": "runecraftory:tin_ingot"
         },
         {
           "type": "minecraft:item",
-          "name": "runecraftory:silver"
+          "name": "runecraftory:bronze_ingot"
         },
         {
           "type": "minecraft:item",
-          "name": "runecraftory:platinum"
+          "name": "runecraftory:silver_ingot"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:platinum_ingot"
         },
         {
           "type": "minecraft:item",

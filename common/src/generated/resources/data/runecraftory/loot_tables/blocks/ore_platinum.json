@@ -15,7 +15,7 @@
           "type": "minecraft:item",
           "weight": 4,
           "quality": 12,
-          "name": "runecraftory:platinum"
+          "name": "runecraftory:raw_platinum"
         },
         {
           "type": "minecraft:item",
@@ -28,7 +28,7 @@
           ],
           "weight": 20,
           "quality": 29,
-          "name": "runecraftory:platinum"
+          "name": "runecraftory:raw_platinum"
         },
         {
           "type": "minecraft:item",

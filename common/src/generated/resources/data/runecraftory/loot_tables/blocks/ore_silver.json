@@ -21,7 +21,7 @@
           "type": "minecraft:item",
           "weight": 20,
           "quality": 31,
-          "name": "runecraftory:silver"
+          "name": "runecraftory:raw_silver"
         },
         {
           "type": "minecraft:item",

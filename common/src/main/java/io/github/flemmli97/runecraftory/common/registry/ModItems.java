@@ -545,7 +545,7 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> ITEM_BLOCK_CHEM = ITEMS.register("chemistry_set", () -> new CraftingBlockItem(ModBlocks.CHEMISTRY.get(), new Item.Properties().tab(RFCreativeTabs.BLOCKS)));
 
     public static final RegistryEntrySupplier<Item> MINERAL_IRON = mineral(EnumMineralTier.IRON);
-    public static final RegistryEntrySupplier<Item> MINERAL_BRONZE = mineral(EnumMineralTier.BRONZE);
+    public static final RegistryEntrySupplier<Item> MINERAL_TIN = mineral(EnumMineralTier.TIN);
     public static final RegistryEntrySupplier<Item> MINERAL_SILVER = mineral(EnumMineralTier.SILVER);
     public static final RegistryEntrySupplier<Item> MINERAL_GOLD = mineral(EnumMineralTier.GOLD);
     public static final RegistryEntrySupplier<Item> MINERAL_PLATINUM = mineral(EnumMineralTier.PLATINUM);
@@ -558,7 +558,7 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> MINERAL_EMERALD = mineral(EnumMineralTier.EMERALD);
     public static final RegistryEntrySupplier<Item> MINERAL_SAPPHIRE = mineral(EnumMineralTier.SAPPHIRE);
     public static final RegistryEntrySupplier<Item> BROKEN_MINERAL_IRON = brokenMineral(EnumMineralTier.IRON);
-    public static final RegistryEntrySupplier<Item> BROKEN_MINERAL_BRONZE = brokenMineral(EnumMineralTier.BRONZE);
+    public static final RegistryEntrySupplier<Item> BROKEN_MINERAL_TIN = brokenMineral(EnumMineralTier.TIN);
     public static final RegistryEntrySupplier<Item> BROKEN_MINERAL_SILVER = brokenMineral(EnumMineralTier.SILVER);
     public static final RegistryEntrySupplier<Item> BROKEN_MINERAL_GOLD = brokenMineral(EnumMineralTier.GOLD);
     public static final RegistryEntrySupplier<Item> BROKEN_MINERAL_PLATINUM = brokenMineral(EnumMineralTier.PLATINUM);
@@ -571,9 +571,14 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> BROKEN_MINERAL_EMERALD = brokenMineral(EnumMineralTier.EMERALD);
     public static final RegistryEntrySupplier<Item> BROKEN_MINERAL_SAPPHIRE = brokenMineral(EnumMineralTier.SAPPHIRE);
 
-    public static final RegistryEntrySupplier<Item> BRONZE = mat("bronze", Texture.Y);
-    public static final RegistryEntrySupplier<Item> SILVER = mat("silver", Texture.Y);
-    public static final RegistryEntrySupplier<Item> PLATINUM = mat("platinum", Texture.Y);
+    public static final RegistryEntrySupplier<Item> RAW_TIN = ITEMS.register("raw_tin", () -> new Item(new Item.Properties().tab(RFCreativeTabs.UPGRADE_ITEMS)));
+    public static final RegistryEntrySupplier<Item> TIN_INGOT = mat("tin_ingot", Texture.Y);
+    public static final RegistryEntrySupplier<Item> BRONZE_DUST = ITEMS.register("bronze_dust", () -> new Item(new Item.Properties().tab(RFCreativeTabs.UPGRADE_ITEMS)));
+    public static final RegistryEntrySupplier<Item> BRONZE_INGOT = mat("bronze_ingot", Texture.Y);
+    public static final RegistryEntrySupplier<Item> RAW_SILVER = ITEMS.register("raw_silver", () -> new Item(new Item.Properties().tab(RFCreativeTabs.UPGRADE_ITEMS)));
+    public static final RegistryEntrySupplier<Item> SILVER_INGOT = mat("silver_ingot", Texture.Y);
+    public static final RegistryEntrySupplier<Item> RAW_PLATINUM = ITEMS.register("raw_platinum", () -> new Item(new Item.Properties().tab(RFCreativeTabs.UPGRADE_ITEMS)));
+    public static final RegistryEntrySupplier<Item> PLATINUM_INGOT = mat("platinum_ingot", Texture.Y);
     public static final RegistryEntrySupplier<Item> ORICHALCUM = mat("orichalcum", Rarity.UNCOMMON, Texture.Y);
     public static final RegistryEntrySupplier<Item> DRAGONIC = mat("dragonic_stone", Rarity.UNCOMMON, Texture.Y);
     public static final RegistryEntrySupplier<Item> SCRAP = mat("scrap", Texture.Y);

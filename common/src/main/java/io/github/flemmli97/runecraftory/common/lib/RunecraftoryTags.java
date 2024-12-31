@@ -16,6 +16,7 @@ import java.util.Map;
 public class RunecraftoryTags {
 
     //Forge Tags
+    public static final TagKey<Item> TIN_F = forge("ingots/tin");
     public static final TagKey<Item> BRONZE_F = forge("ingots/bronze");
     public static final TagKey<Item> SILVER_F = forge("ingots/silver");
     public static final TagKey<Item> PLATINUM_F = forge("ingots/platinum");
@@ -33,8 +34,8 @@ public class RunecraftoryTags {
 
     public static final TagKey<Item> IRON = tagCommon("iron_ingots");
     public static final TagKey<Item> GOLD = tagCommon("gold_ingots");
+    public static final TagKey<Item> TIN = tagCommon("tin_ingots");
     public static final TagKey<Item> COPPER = tagCommon("copper_ingots");
-    public static final TagKey<Item> COPPER_BLOCK = tagCommon("copper_blocks");
 
     public static final TagKey<Item> EMERALDS = tagCommon("emeralds");
 

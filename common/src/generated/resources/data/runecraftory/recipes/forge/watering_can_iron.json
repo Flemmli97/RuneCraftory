@@ -4,7 +4,10 @@
   "additional_cost": 0,
   "ingredients": [
     {
-      "tag": "c:copper_blocks"
+      "item": "minecraft:bucket"
+    },
+    {
+      "tag": "c:bronze_ingots"
     },
     {
       "tag": "runecraftory:cloths"

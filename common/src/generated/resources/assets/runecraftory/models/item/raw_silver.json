@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "runecraftory:item/platinum"
+    "layer0": "runecraftory:item/raw_silver"
   }
 }

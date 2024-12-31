@@ -7,7 +7,7 @@ import java.util.Random;
 public enum EnumMineralTier implements StringRepresentable {
 
     IRON("iron"),
-    BRONZE("bronze"),
+    TIN("tin"),
     SILVER("silver"),
     GOLD("gold"),
     DIAMOND("diamond"),

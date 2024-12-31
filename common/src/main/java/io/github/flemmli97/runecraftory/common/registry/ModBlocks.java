@@ -75,7 +75,7 @@ public class ModBlocks {
     public static final RegistryEntrySupplier<Block> ACCESSORY = BLOCKS.register("accessory_workbench", () -> new BlockAccessory(BlockBehaviour.Properties.of(Material.METAL).noOcclusion().strength(3, 100)));
 
     public static final RegistryEntrySupplier<Block> MINERAL_IRON = mineral(EnumMineralTier.IRON);
-    public static final RegistryEntrySupplier<Block> MINERAL_BRONZE = mineral(EnumMineralTier.BRONZE);
+    public static final RegistryEntrySupplier<Block> MINERAL_TIN = mineral(EnumMineralTier.TIN);
     public static final RegistryEntrySupplier<Block> MINERAL_SILVER = mineral(EnumMineralTier.SILVER);
     public static final RegistryEntrySupplier<Block> MINERAL_GOLD = mineral(EnumMineralTier.GOLD);
     public static final RegistryEntrySupplier<Block> MINERAL_PLATINUM = mineral(EnumMineralTier.PLATINUM);
@@ -89,7 +89,7 @@ public class ModBlocks {
     public static final RegistryEntrySupplier<Block> MINERAL_SAPPHIRE = mineral(EnumMineralTier.SAPPHIRE);
 
     public static final RegistryEntrySupplier<Block> BROKEN_MINERAL_IRON = brokenMineral(EnumMineralTier.IRON);
-    public static final RegistryEntrySupplier<Block> BROKEN_MINERAL_BRONZE = brokenMineral(EnumMineralTier.BRONZE);
+    public static final RegistryEntrySupplier<Block> BROKEN_MINERAL_TIN = brokenMineral(EnumMineralTier.TIN);
     public static final RegistryEntrySupplier<Block> BROKEN_MINERAL_SILVER = brokenMineral(EnumMineralTier.SILVER);
     public static final RegistryEntrySupplier<Block> BROKEN_MINERAL_GOLD = brokenMineral(EnumMineralTier.GOLD);
     public static final RegistryEntrySupplier<Block> BROKEN_MINERAL_PLATINUM = brokenMineral(EnumMineralTier.PLATINUM);

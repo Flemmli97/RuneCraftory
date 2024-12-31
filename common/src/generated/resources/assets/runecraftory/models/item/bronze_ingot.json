@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "runecraftory:item/silver"
+    "layer0": "runecraftory:item/bronze_ingot"
   }
 }
