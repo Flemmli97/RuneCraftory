@@ -38,9 +38,6 @@ import java.util.function.ToIntBiFunction;
 
 public class LevelCalc {
 
-    private static final int MAX_HEALTH_MULTIPLIER = 20;
-    private static final int HEALTH_MULTIPLIER_INTERVAL = 10;
-
     private static long[] LEVEL_XP_TOTAL;
 
     private static long[] COMMON_SKILL_XP;

@@ -370,7 +370,7 @@ public class PlayerData {
 
     private void updateHealth(Player player) {
         this.setMaxHealth(player, GeneralConfig.startingHealth
-                + GeneralConfig.hpPerLevel * LevelCalc.getMultiplierInterval(this.level.getLevel(), 10, 30, 0.5f)
+                + GeneralConfig.hpPerLevel * LevelCalc.getMultiplierInterval(this.level.getLevel(), 30, 30, 0.5f)
                 + (float) this.skillValLevelFunc((skillLvl, prop) -> {
             int skillHealthMultiplier = 1 + (skillLvl / 25);
             return skillHealthMultiplier * prop.healthIncrease() * skillLvl;
