@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.items.consumables;
 
+import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
@@ -29,8 +30,12 @@ import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ItemRecipeBread extends Item {
@@ -54,10 +59,17 @@ public class ItemRecipeBread extends Item {
             int amount = Math.max(1, ItemNBT.itemLevel(stack) / 3);
             Platform.INSTANCE.getPlayerData(player)
                     .ifPresent(data -> {
-                        Collection<SextupleRecipe> unlocked = player.getServer().getRecipeManager().getAllRecipesFor(CraftingUtils.getType(this.type))
+                        // Group equal recipes together. E.g. if an item has multiple variants of a recipe
+                        Map<Pair<Item, Integer>, List<SextupleRecipe>> grouped = new HashMap<>();
+                        player.getServer().getRecipeManager().getAllRecipesFor(CraftingUtils.getType(this.type))
                                 .stream().filter(r -> canUnlockRecipe(r, data, this.getSkill()))
-                                .sorted(Comparator.comparingInt(SextupleRecipe::getCraftingLevel))
-                                .limit(amount).collect(Collectors.toList());
+                                .forEach(r -> grouped.computeIfAbsent(Pair.of(r.getResultItem().getItem(), r.getCraftingLevel()), k -> new ArrayList<>())
+                                        .add(r));
+                        Collection<SextupleRecipe> unlocked = new ArrayList<>();
+                        grouped.entrySet().stream()
+                                .sorted(Comparator.comparingInt(p -> p.getKey().getSecond()))
+                                .limit(amount)
+                                .forEach(r -> unlocked.addAll(r.getValue()));
                         data.getRecipeKeeper().unlockRecipes(player, unlocked);
                         if (unlocked.isEmpty())
                             player.sendMessage(new TranslatableComponent("runecraftory.recipe.eat.fail"), Util.NIL_UUID);
