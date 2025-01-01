@@ -50,8 +50,6 @@ public class ModelAmbrosia<T extends EntityAmbrosia> extends EntityModel<T> impl
         this.ridingPosition = this.model.getPart("ridingPos");
     }
 
-    ;
-
     public static LayerDefinition createBodyLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();

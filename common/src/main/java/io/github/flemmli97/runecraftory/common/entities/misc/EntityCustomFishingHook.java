@@ -386,7 +386,7 @@ public class EntityCustomFishingHook extends EntityProjectile {
             ResourceLocation loot = this.inSand ? LootTableResources.SAND_FISHING : LootTableResources.FISHING;
             LootTable lootTable = this.level.getServer().getLootTables().get(loot);
             List<ItemStack> list = lootTable.getRandomItems(builder.create(LootContextParamSets.FISHING));
-            ((ExtendedFishingRodHookTrigger) CriteriaTriggers.FISHING_ROD_HOOKED).customTrigger(owner, stack, this, list);
+            ((ExtendedFishingRodHookTrigger) CriteriaTriggers.FISHING_ROD_HOOKED).runecraftory$customTrigger(owner, stack, this, list);
             for (ItemStack itemStack2 : list) {
                 ItemEntity itemEntity = new ItemEntity(this.level, this.getX(), this.getY(), this.getZ(), itemStack2);
                 double d = owner.getX() - this.getX();

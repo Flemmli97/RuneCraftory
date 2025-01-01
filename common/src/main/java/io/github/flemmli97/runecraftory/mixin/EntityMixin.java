@@ -47,5 +47,5 @@ public abstract class EntityMixin {
     }
 
     @Shadow
-    abstract float nextStep();
+    protected abstract float nextStep();
 }

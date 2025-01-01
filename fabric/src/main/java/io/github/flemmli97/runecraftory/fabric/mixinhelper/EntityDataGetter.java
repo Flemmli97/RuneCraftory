@@ -5,7 +5,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 
 public interface EntityDataGetter {
 
-    EntityData getEntityData();
+    EntityData runecraftory$getEntityData();
 
-    void onCureEffect(MobEffectInstance effect);
+    void runecraftory$onCureEffect(MobEffectInstance effect);
 }

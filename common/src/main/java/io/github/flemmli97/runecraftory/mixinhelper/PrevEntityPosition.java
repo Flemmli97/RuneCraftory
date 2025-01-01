@@ -2,9 +2,9 @@ package io.github.flemmli97.runecraftory.mixinhelper;
 
 public interface PrevEntityPosition {
 
-    double getOldPlayerX();
+    double runecraftory$getOldPlayerX();
 
-    double getOldPlayerY();
+    double runecraftory$getOldPlayerY();
 
-    double getOldPlayerZ();
+    double runecraftory$getOldPlayerZ();
 }

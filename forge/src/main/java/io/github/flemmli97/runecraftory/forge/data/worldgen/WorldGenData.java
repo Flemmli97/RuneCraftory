@@ -6,6 +6,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
+import io.github.flemmli97.runecraftory.RuneCraftory;
+import net.minecraft.CrashReport;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
@@ -24,14 +26,12 @@ public abstract class WorldGenData<T> implements DataProvider {
     protected final Map<ResourceLocation, T> elements = new HashMap<>();
     private final ResourceKey<? extends Registry<?>> registryKey;
     private final Codec<T> elementCodec;
-    private final String modid;
     private final DataGenerator generator;
 
-    public WorldGenData(DataGenerator generator, String modid, ResourceKey<? extends Registry<?>> registryKey, Codec<T> elementCodec) {
+    public WorldGenData(DataGenerator generator, ResourceKey<? extends Registry<?>> registryKey, Codec<T> elementCodec) {
         this.generator = generator;
         this.registryKey = registryKey;
         this.elementCodec = elementCodec;
-        this.modid = modid;
     }
 
     protected abstract void gen();

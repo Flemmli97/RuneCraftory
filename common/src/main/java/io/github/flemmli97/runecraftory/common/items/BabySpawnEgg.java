@@ -62,7 +62,7 @@ public class BabySpawnEgg extends Item {
     }
 
     public static boolean isBoy(ItemStack stack) {
-        return stack.hasTag() ? stack.getTag().getBoolean("Boy") : true;
+        return !stack.hasTag() || stack.getTag().getBoolean("Boy");
     }
 
     @Override
@@ -83,7 +83,7 @@ public class BabySpawnEgg extends Item {
                 if (component != null) {
                     return component;
                 }
-            } catch (Exception exception) {
+            } catch (Exception ignored) {
             }
         }
         return null;

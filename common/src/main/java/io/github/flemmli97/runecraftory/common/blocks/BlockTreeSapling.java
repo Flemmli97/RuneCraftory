@@ -56,19 +56,19 @@ public class BlockTreeSapling extends BushBlock implements Growable {
     }
 
     @Override
-    public int getGrowableMaxAge() {
+    public int runecraftory$getGrowableMaxAge() {
         return BlockTreeBase.MAX_AGE;
     }
 
     @Override
-    public BlockState getGrowableStateForAge(BlockState current, int age) {
+    public BlockState runecraftory$getGrowableStateForAge(BlockState current, int age) {
         if (age == 0)
             return this.defaultBlockState();
         return this.treeBase.get().defaultBlockState().setValue(BlockTreeBase.AGE, 0);
     }
 
     @Override
-    public boolean isAtMaxAge(BlockState state) {
+    public boolean runecraftory$isAtMaxAge(BlockState state) {
         return false;
     }
 

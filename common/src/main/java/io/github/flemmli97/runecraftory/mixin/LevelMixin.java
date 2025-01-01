@@ -36,7 +36,7 @@ public abstract class LevelMixin implements LevelSnapshotHandler {
     }
 
     @Override
-    public LevelSetBlockSnapshot getSnapshotHandler() {
+    public LevelSetBlockSnapshot runecraftory$getSnapshotHandler() {
         return this.runecraftory_level_snapshot;
     }
 }

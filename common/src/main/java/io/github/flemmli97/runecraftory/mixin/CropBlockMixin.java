@@ -23,17 +23,17 @@ public abstract class CropBlockMixin implements Growable {
     }
 
     @Override
-    public int getGrowableMaxAge() {
+    public int runecraftory$getGrowableMaxAge() {
         return ((CropBlock) (Object) this).getMaxAge();
     }
 
     @Override
-    public BlockState getGrowableStateForAge(BlockState current, int age) {
+    public BlockState runecraftory$getGrowableStateForAge(BlockState current, int age) {
         return ((CropBlock) (Object) this).getStateForAge(age);
     }
 
     @Override
-    public boolean isAtMaxAge(BlockState state) {
+    public boolean runecraftory$isAtMaxAge(BlockState state) {
         return ((CropBlock) (Object) this).isMaxAge(state);
     }
 }

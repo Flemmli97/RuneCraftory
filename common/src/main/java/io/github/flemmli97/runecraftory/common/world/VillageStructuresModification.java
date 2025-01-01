@@ -77,6 +77,6 @@ public class VillageStructuresModification {
         if (pool == null)
             return;
         for (Pair<StructurePoolElement, Integer> p : houses)
-            ((StructureTemplateModifier) pool).addPoolElement(p);
+            ((StructureTemplateModifier) pool).runecraftory$addPoolElement(p);
     }
 }

@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.fabric.mixinhelper.CameraInject;
 import net.minecraft.client.Camera;
 import net.minecraft.client.renderer.GameRenderer;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -13,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(GameRenderer.class)
 public abstract class GameRendererMixin {
 
+    @Final
     @Shadow
     private Camera mainCamera;
 

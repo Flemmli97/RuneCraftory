@@ -8,8 +8,10 @@ import net.minecraft.server.level.ServerPlayerGameMode;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -20,6 +22,7 @@ public abstract class ServerPlayerGameModeMixin {
 
     @Shadow
     protected ServerLevel level;
+    @Final
     @Shadow
     protected ServerPlayer player;
 
@@ -43,6 +46,7 @@ public abstract class ServerPlayerGameModeMixin {
         }
     }
 
+    @Unique
     private boolean removeBlock(BlockState state, ExtendedBlock extendedBlock, BlockPos arg, boolean canHarvest) {
         boolean removed = extendedBlock.onDestroyedByPlayer(state, this.level, arg, this.player, canHarvest, this.level.getFluidState(arg));
         if (removed) {

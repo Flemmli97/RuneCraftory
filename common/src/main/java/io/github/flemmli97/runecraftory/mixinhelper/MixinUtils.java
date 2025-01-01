@@ -47,8 +47,8 @@ public class MixinUtils {
         if (!player.isDeadOrDying()) {
             entity.setThrower(player.getUUID());
             PrevEntityPosition pos = (PrevEntityPosition) player;
-            double dX = player.getX() - pos.getOldPlayerX();
-            double dZ = player.getZ() - pos.getOldPlayerZ();
+            double dX = player.getX() - pos.runecraftory$getOldPlayerX();
+            double dZ = player.getZ() - pos.runecraftory$getOldPlayerZ();
             double spd = dX * dX + dZ * dZ;
             if (spd > 0.01) {
                 entity.setDeltaMovement(entity.getDeltaMovement().scale(2));

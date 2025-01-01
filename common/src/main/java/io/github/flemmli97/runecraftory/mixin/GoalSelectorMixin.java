@@ -21,7 +21,7 @@ public abstract class GoalSelectorMixin implements DisableTicking {
     }
 
     @Override
-    public void disable(boolean disable) {
+    public void runecraftory$disable(boolean disable) {
         this.runecraftoryDisabled = disable;
     }
 }

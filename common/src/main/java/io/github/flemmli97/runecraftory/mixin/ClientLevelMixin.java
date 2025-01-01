@@ -26,5 +26,5 @@ public abstract class ClientLevelMixin {
     }
 
     @Shadow
-    abstract void tickPassenger(Entity ridingEntity, Entity passengerEntity);
+    protected abstract void tickPassenger(Entity ridingEntity, Entity passengerEntity);
 }

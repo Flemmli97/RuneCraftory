@@ -4,8 +4,8 @@ import net.minecraft.client.model.geom.ModelPart;
 
 public interface HumanoidMainHand {
 
-    ModelPart getRightHandItem();
+    ModelPart runecraftory$getRightHandItem();
 
-    ModelPart getLeftHandItem();
+    ModelPart runecraftory$getLeftHandItem();
 
 }

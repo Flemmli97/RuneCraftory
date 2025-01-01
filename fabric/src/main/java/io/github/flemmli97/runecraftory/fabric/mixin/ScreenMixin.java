@@ -22,9 +22,9 @@ import java.util.Optional;
 public abstract class ScreenMixin {
 
     @Shadow
-    private int width;
+    public int width;
     @Shadow
-    private int height;
+    public int height;
 
     @Unique
     private ItemStack runecraftoryTooltipStack = ItemStack.EMPTY;

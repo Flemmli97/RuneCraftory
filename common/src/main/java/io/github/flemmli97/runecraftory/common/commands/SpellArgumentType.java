@@ -13,10 +13,11 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class SpellArgumentType implements ArgumentType<ResourceLocation> {
-    private static final Collection<String> EXAMPLES = Arrays.asList("");
+    private static final Collection<String> EXAMPLES = List.of("");
 
     public SpellArgumentType() {
     }

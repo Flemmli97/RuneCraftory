@@ -14,6 +14,7 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -32,6 +33,7 @@ public abstract class ItemStackMixin implements ItemStackDataGetter {
     @Unique
     private ArmorEffectData runecraftoryArmorEffectData;
 
+    @Final
     @Shadow
     private Item item;
 
@@ -67,21 +69,21 @@ public abstract class ItemStackMixin implements ItemStackDataGetter {
 
     @Inject(method = "copy", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;setPopTime(I)V"), locals = LocalCapture.CAPTURE_FAILHARD)
     private void onCopy(CallbackInfoReturnable<ItemStack> info, ItemStack stack) {
-        StaffData staff = ((ItemStackDataGetter) (Object) stack).getStaffData();
+        StaffData staff = ((ItemStackDataGetter) (Object) stack).runecraftory$getStaffData();
         if (staff != null)
             staff.readFromNBT(this.runecraftoryStaffData.writeToNBT(new CompoundTag()));
-        ArmorEffectData armor = ((ItemStackDataGetter) (Object) stack).getArmorEffectData();
+        ArmorEffectData armor = ((ItemStackDataGetter) (Object) stack).runecraftory$getArmorEffectData();
         if (armor != null)
             armor.readFromNBT(this.runecraftoryArmorEffectData.writeToNBT(new CompoundTag()));
     }
 
     @Override
-    public StaffData getStaffData() {
+    public StaffData runecraftory$getStaffData() {
         return this.runecraftoryStaffData;
     }
 
     @Override
-    public ArmorEffectData getArmorEffectData() {
+    public ArmorEffectData runecraftory$getArmorEffectData() {
         return this.runecraftoryArmorEffectData;
     }
 

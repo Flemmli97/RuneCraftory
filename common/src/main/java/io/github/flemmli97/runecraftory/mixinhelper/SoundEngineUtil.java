@@ -5,5 +5,5 @@ import net.minecraft.client.sounds.ChannelAccess;
 
 public interface SoundEngineUtil {
 
-    ChannelAccess.ChannelHandle getHandle(SoundInstance inst);
+    ChannelAccess.ChannelHandle runecraftory$getHandle(SoundInstance inst);
 }

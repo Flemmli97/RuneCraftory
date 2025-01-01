@@ -1543,7 +1543,6 @@ public class ModEntities {
         return regMonster(v, name, primary, secondary, false, props);
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
     public static <V extends BaseMonster> RegistryEntrySupplier<EntityType<V>> regBoss(EntityType.Builder<V> v, ResourceLocation name, int primary, int secondary, EntityProperties.Builder props) {
         return regBoss(v, name, primary, secondary, false, props);
     }

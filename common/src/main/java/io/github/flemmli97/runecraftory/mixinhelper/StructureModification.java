@@ -5,5 +5,5 @@ import net.minecraft.world.level.levelgen.structure.StructureSpawnOverride;
 
 public interface StructureModification {
 
-    void addSpawn(MobCategory category, StructureSpawnOverride override);
+    void runecraftory$addSpawn(MobCategory category, StructureSpawnOverride override);
 }

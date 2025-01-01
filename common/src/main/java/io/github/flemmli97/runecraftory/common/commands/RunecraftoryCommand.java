@@ -274,7 +274,7 @@ public class RunecraftoryCommand {
             return 0;
         }
         WorldHandler.get(ctx.getSource().getServer()).updateWeatherTo(ctx.getSource().getLevel(), weather);
-        ctx.getSource().sendSuccess(new TranslatableComponent("runecraftory.command.set.weather", weather), false);
+        ctx.getSource().sendSuccess(new TranslatableComponent("runecraftory.command.set.weather", weather.translation), false);
         return 1;
     }
 

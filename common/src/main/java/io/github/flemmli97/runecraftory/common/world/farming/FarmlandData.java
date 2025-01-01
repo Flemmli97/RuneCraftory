@@ -192,10 +192,10 @@ public class FarmlandData {
         }
         float max = props.growth();
         this.cropAge = max * 0.5f;
-        int maxAge = crop.getGrowableMaxAge();
+        int maxAge = crop.runecraftory$getGrowableMaxAge();
         int stage = Math.round(this.cropAge * maxAge) / props.growth();
         //Update the blockstate according to the growth age
-        BlockState newState = crop.getGrowableStateForAge(state, Math.min(stage, maxAge));
+        BlockState newState = crop.runecraftory$getGrowableStateForAge(state, Math.min(stage, maxAge));
         level.getServer().tell(new TickTask(1, () -> level.setBlock(pos, newState, Block.UPDATE_ALL)));
         this.cropProgress = this.growthPercent(level, state);
         FarmlandHandler.get(level.getServer()).scheduleUpdate(level, this);
@@ -345,7 +345,7 @@ public class FarmlandData {
 
             //Dont do stuff if crop is fully grown.
             //No withering unlike game (for e.g. building purposes)
-            if (crop.isAtMaxAge(cropState) && (!hasGiantVersion || this.size == 0 || (this.size < 0 && this.cropSize <= 0))) {
+            if (crop.runecraftory$isAtMaxAge(cropState) && (!hasGiantVersion || this.size == 0 || (this.size < 0 && this.cropSize <= 0))) {
                 break;
             }
             //Handle crop growth
@@ -356,10 +356,10 @@ public class FarmlandData {
                     cropRecalc = true;
                     if (crop.canGrow(level, cropPos, cropState)) {
                         run.add(() -> {
-                            int maxAge = crop.getGrowableMaxAge();
+                            int maxAge = crop.runecraftory$getGrowableMaxAge();
                             int stage = Mth.floor(this.cropAge * maxAge) / props.growth();
                             //Update the blockstate according to the growth age
-                            BlockState newState = crop.getGrowableStateForAge(cropState, Math.min(stage, maxAge));
+                            BlockState newState = crop.runecraftory$getGrowableStateForAge(cropState, Math.min(stage, maxAge));
                             if (newState.getBlock() instanceof Growable newGrowable)
                                 newGrowable.onGrow(level, cropPos, newState, cropState);
                             else
@@ -386,7 +386,7 @@ public class FarmlandData {
                     speed *= 0.5f;
                 this.cropAge += Math.min(props.growth(), speed);
                 this.cropLevel += this.quality * (level.getRandom().nextFloat() * 0.5 + 0.5);
-                if (crop.isAtMaxAge(cropState) && hasGiantVersion) {
+                if (crop.runecraftory$isAtMaxAge(cropState) && hasGiantVersion) {
                     if (this.size != 0) {
                         this.cropSize += this.size * (level.getRandom().nextFloat() * 0.2 + 0.1);
                         didCropGrow = this.size > 0 ? this.cropSize < 1 : this.cropSize > 0;

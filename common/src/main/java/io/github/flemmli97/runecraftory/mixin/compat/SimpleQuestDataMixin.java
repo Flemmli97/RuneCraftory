@@ -17,12 +17,12 @@ public class SimpleQuestDataMixin implements SimpleQuestData {
     private Map<ResourceLocation, QuestBase> runecraftory_quest_board;
 
     @Override
-    public Map<ResourceLocation, QuestBase> getQuestboardQuests() {
+    public Map<ResourceLocation, QuestBase> runecraftory$getQuestboardQuests() {
         return this.runecraftory_quest_board;
     }
 
     @Override
-    public void setQuestboardQuests(Map<ResourceLocation, QuestBase> map) {
+    public void runecraftory$setQuestboardQuests(Map<ResourceLocation, QuestBase> map) {
         this.runecraftory_quest_board = map;
     }
 }

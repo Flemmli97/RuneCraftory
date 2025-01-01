@@ -19,5 +19,5 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity> {
     }
 
     @Shadow
-    abstract float getFlipDegrees(T livingEntity);
+    protected abstract float getFlipDegrees(T livingEntity);
 }

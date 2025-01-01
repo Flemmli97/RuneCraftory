@@ -65,15 +65,15 @@ public class SimpleQuestIntegrationImpl extends SimpleQuestIntegration {
                     return new ClientSideQuestDisplay(e.getKey(), e.getValue().getTask(player), description,
                             null, null, data.isActive(e.getKey()));
                 }).toList()), player);
-        ((SimpleQuestData) PlayerData.get(player)).setQuestboardQuests(quest);
+        ((SimpleQuestData) PlayerData.get(player)).runecraftory$setQuestboardQuests(quest);
     }
 
     @Override
     public void acceptQuest(ServerPlayer player, ResourceLocation res) {
         PlayerData data = PlayerData.get(player);
-        if (((SimpleQuestData) data).getQuestboardQuests() == null)
+        if (((SimpleQuestData) data).runecraftory$getQuestboardQuests() == null)
             return;
-        QuestBase quest = ((SimpleQuestData) data).getQuestboardQuests().get(res);
+        QuestBase quest = ((SimpleQuestData) data).runecraftory$getQuestboardQuests().get(res);
         if (quest != null) {
             if (!(quest instanceof NPCQuest npcQuest) || WorldHandler.get(player.getServer()).npcHandler.doesNPCExist(npcQuest.getNpcUuid())) {
                 if (data.acceptQuest(quest, 0)) {
@@ -93,7 +93,7 @@ public class SimpleQuestIntegrationImpl extends SimpleQuestIntegration {
 
     @Override
     public void resetQuestData(ServerPlayer player) {
-        ((SimpleQuestData) PlayerData.get(player)).setQuestboardQuests(null);
+        ((SimpleQuestData) PlayerData.get(player)).runecraftory$setQuestboardQuests(null);
     }
 
     @Override

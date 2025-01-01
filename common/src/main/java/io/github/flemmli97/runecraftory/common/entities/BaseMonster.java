@@ -331,7 +331,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                             }
                         } else {
                             if (this.tickCount > 20)
-                                this.getOwner().sendMessage(new TranslatableComponent("runecraftory.monster.interact.barn.no.ext", this.getDisplayName(), this.blockPosition()), Util.NIL_UUID);
+                                this.getOwner().sendMessage(new TranslatableComponent("runecraftory.monster.interact.barn.no.ext", this.getDisplayName(), this.blockPosition().toShortString()), Util.NIL_UUID);
                             this.setBehaviour(Behaviour.WANDER);
                         }
                         this.goalSelector.addGoal(6, this.wander);

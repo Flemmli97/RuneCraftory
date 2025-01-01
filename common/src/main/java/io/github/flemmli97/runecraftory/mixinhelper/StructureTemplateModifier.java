@@ -5,5 +5,5 @@ import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 
 public interface StructureTemplateModifier {
 
-    void addPoolElement(Pair<StructurePoolElement, Integer> pair);
+    void runecraftory$addPoolElement(Pair<StructurePoolElement, Integer> pair);
 }

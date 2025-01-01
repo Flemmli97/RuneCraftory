@@ -55,21 +55,21 @@ public class BlockTreeBase extends RotatedPillarBlock implements EntityBlock, Gr
     public boolean growTree(ServerLevel level, BlockPos pos, BlockState state, Random rand) {
         return switch (state.getValue(AGE)) {
             case 2 -> {
-                ((LevelSnapshotHandler) level).getSnapshotHandler().takeSnapshot(null);
+                ((LevelSnapshotHandler) level).runecraftory$getSnapshotHandler().takeSnapshot(null);
                 if (level.getBlockEntity(pos) instanceof TreeBlockEntity tree) {
                     tree.onRemove(level, false);
                 }
                 boolean result = this.tree2.get().place(level, level.getChunkSource().getGenerator(), rand, pos);
-                ((LevelSnapshotHandler) level).getSnapshotHandler().popSnapshots(result);
+                ((LevelSnapshotHandler) level).runecraftory$getSnapshotHandler().popSnapshots(result);
                 yield result;
             }
             case 1 -> {
-                ((LevelSnapshotHandler) level).getSnapshotHandler().takeSnapshot(null);
+                ((LevelSnapshotHandler) level).runecraftory$getSnapshotHandler().takeSnapshot(null);
                 if (level.getBlockEntity(pos) instanceof TreeBlockEntity tree) {
                     tree.onRemove(level, false);
                 }
                 boolean result = this.tree1.get().place(level, level.getChunkSource().getGenerator(), rand, pos);
-                ((LevelSnapshotHandler) level).getSnapshotHandler().popSnapshots(result);
+                ((LevelSnapshotHandler) level).runecraftory$getSnapshotHandler().popSnapshots(result);
                 yield result;
             }
             case 0 -> this.stump.get().place(level, level.getChunkSource().getGenerator(), rand, pos);
@@ -112,7 +112,7 @@ public class BlockTreeBase extends RotatedPillarBlock implements EntityBlock, Gr
     }
 
     @Override
-    public int getGrowableMaxAge() {
+    public int runecraftory$getGrowableMaxAge() {
         return MAX_AGE;
     }
 
@@ -125,20 +125,20 @@ public class BlockTreeBase extends RotatedPillarBlock implements EntityBlock, Gr
     }
 
     @Override
-    public BlockState getGrowableStateForAge(BlockState current, int age) {
+    public BlockState runecraftory$getGrowableStateForAge(BlockState current, int age) {
         int newAge = current.getOptionalValue(AGE).map(i -> Mth.clamp(age - 1, 0, i + 1)).orElse(age - 1);
         return this.defaultBlockState().setValue(AGE, newAge);
     }
 
     @Override
-    public boolean isAtMaxAge(BlockState state) {
+    public boolean runecraftory$isAtMaxAge(BlockState state) {
         return state.getValue(AGE) == 4;
     }
 
     @Override
     public void onGrow(ServerLevel level, BlockPos pos, BlockState state, BlockState old) {
         int age = state.getValue(AGE);
-        if (!old.is(this) || !Objects.equals(old.getValue(AGE), age) || this.isAtMaxAge(state)) {
+        if (!old.is(this) || !Objects.equals(old.getValue(AGE), age) || this.runecraftory$isAtMaxAge(state)) {
             if (age == 0 || old.getOptionalValue(AGE).orElse(0) == 2)
                 Growable.super.onGrow(level, pos, state, old);
             if (this.growTree(level, pos, state, level.getRandom())) {

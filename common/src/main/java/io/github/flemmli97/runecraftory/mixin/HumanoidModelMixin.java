@@ -35,14 +35,14 @@ public abstract class HumanoidModelMixin<T extends LivingEntity> implements Huma
     }
 
     @Override
-    public ModelPart getRightHandItem() {
+    public ModelPart runecraftory$getRightHandItem() {
         if (this.runecraftoryRightHandItem == null)
             this.runecraftoryRightHandItem = new ModelPart(List.of(), Map.of());
         return this.runecraftoryRightHandItem;
     }
 
     @Override
-    public ModelPart getLeftHandItem() {
+    public ModelPart runecraftory$getLeftHandItem() {
         if (this.runecraftoryLeftHandItem == null)
             this.runecraftoryLeftHandItem = new ModelPart(List.of(), Map.of());
         return this.runecraftoryLeftHandItem;

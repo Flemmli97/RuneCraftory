@@ -121,9 +121,9 @@ public class GateSpawnsManager extends SimpleJsonResourceReloadListener {
                             SpawnResource resource = new SpawnResource(type, spawnData, weight);
                             structureSpawns.computeIfAbsent(feat, o -> new ArrayList<>())
                                     .add(resource);
-                        }, () -> RuneCraftory.LOGGER.error("No such feature " + key + " for spawn data " + fres));
+                        }, () -> RuneCraftory.LOGGER.error("No such feature {} for spawn data {}", key, fres));
                     });
-                }, () -> RuneCraftory.LOGGER.error("No such entity " + spawnData.entity() + " for spawn data " + fres));
+                }, () -> RuneCraftory.LOGGER.error("No such entity {} for spawn data {}", spawnData.entity(), fres));
             } catch (Exception ex) {
                 RuneCraftory.LOGGER.error("Couldnt parse spawn data json {} {}", fres, ex);
                 ex.fillInStackTrace();

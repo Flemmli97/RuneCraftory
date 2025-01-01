@@ -64,5 +64,5 @@ public abstract class ServerLevelMixin {
     }
 
     @Shadow
-    abstract void tickPassenger(Entity ridingEntity, Entity passengerEntity);
+    protected abstract void tickPassenger(Entity ridingEntity, Entity passengerEntity);
 }

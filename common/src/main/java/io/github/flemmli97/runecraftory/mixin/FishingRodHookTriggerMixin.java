@@ -16,7 +16,7 @@ import java.util.Collection;
 public abstract class FishingRodHookTriggerMixin extends SimpleCriterionTrigger<FishingRodHookedTrigger.TriggerInstance> implements ExtendedFishingRodHookTrigger {
 
     @Override
-    public void customTrigger(ServerPlayer player, ItemStack rod, EntityCustomFishingHook entity, Collection<ItemStack> stacks) {
+    public void runecraftory$customTrigger(ServerPlayer player, ItemStack rod, EntityCustomFishingHook entity, Collection<ItemStack> stacks) {
         LootContext lootContext = EntityPredicate.createContext(player, entity);
         this.trigger(player, triggerInstance -> triggerInstance.matches(rod, lootContext, stacks));
     }

@@ -7,7 +7,7 @@ import java.util.Map;
 
 public interface SimpleQuestData {
 
-    Map<ResourceLocation, QuestBase> getQuestboardQuests();
+    Map<ResourceLocation, QuestBase> runecraftory$getQuestboardQuests();
 
-    void setQuestboardQuests(Map<ResourceLocation, QuestBase> map);
+    void runecraftory$setQuestboardQuests(Map<ResourceLocation, QuestBase> map);
 }

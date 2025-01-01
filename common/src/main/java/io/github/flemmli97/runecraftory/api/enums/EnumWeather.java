@@ -1,22 +1,26 @@
 package io.github.flemmli97.runecraftory.api.enums;
 
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 
 import java.util.function.Consumer;
 
 public enum EnumWeather {
 
-    CLEAR(false, clearWeather()),
-    CLOUDY(false, clearWeather()),
-    RAIN(false, rainyWeather()),
-    STORM(true, stormyWeather()),
-    RUNEY(true, clearWeather());
+    CLEAR(false, "runecraftory.weather.clear", clearWeather()),
+    CLOUDY(false, "runecraftory.weather.cloudy", clearWeather()),
+    RAIN(false, "runecraftory.weather.rain", rainyWeather()),
+    STORM(true, "runecraftory.weather.storm", stormyWeather()),
+    RUNEY(true, "runecraftory.weather.runey", clearWeather());
 
     public final boolean wholeDay;
+    public final Component translation;
     public final Consumer<ServerLevel> setWeather;
 
-    EnumWeather(boolean wholeDay, Consumer<ServerLevel> setWeather) {
+    EnumWeather(boolean wholeDay, String translation, Consumer<ServerLevel> setWeather) {
         this.wholeDay = wholeDay;
+        this.translation = new TranslatableComponent(translation);
         this.setWeather = setWeather;
     }
 

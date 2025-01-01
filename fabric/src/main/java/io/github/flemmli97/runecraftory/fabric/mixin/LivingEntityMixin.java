@@ -59,15 +59,15 @@ public abstract class LivingEntityMixin implements EntityDataGetter {
     }
 
     @Override
-    public EntityData getEntityData() {
+    public EntityData runecraftory$getEntityData() {
         return this.runecraftoryEntityData;
     }
 
     @Override
-    public void onCureEffect(MobEffectInstance effect) {
+    public void runecraftory$onCureEffect(MobEffectInstance effect) {
         this.onEffectRemoved(effect);
     }
 
     @Shadow
-    public abstract void onEffectRemoved(MobEffectInstance effect);
+    protected abstract void onEffectRemoved(MobEffectInstance effect);
 }

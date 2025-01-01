@@ -11,7 +11,7 @@ public interface ItemStackDataGetter {
 
     ResourceLocation ARMOR_EFFECT_ID = new ResourceLocation(RuneCraftory.MODID, "armor_effects");
 
-    StaffData getStaffData();
+    StaffData runecraftory$getStaffData();
 
-    ArmorEffectData getArmorEffectData();
+    ArmorEffectData runecraftory$getArmorEffectData();
 }

@@ -40,7 +40,7 @@ public class TransformationHelper {
                 matrix4f.multiply(Vector3f.YP.rotation(child.yRot));
             if (child.xRot != 0)
                 matrix4f.multiply(Vector3f.XP.rotation(child.xRot));
-            rot = ((RotationFromMatrix) (Object) matrix4f).getMatrixRotationZYX();
+            rot = ((RotationFromMatrix) (Object) matrix4f).runecraftory$getMatrixRotationZYX();
         }
         return PartPose.offsetAndRotation((pos.x()),
                 (pos.y()),

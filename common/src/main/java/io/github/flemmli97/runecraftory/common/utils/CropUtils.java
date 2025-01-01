@@ -37,7 +37,7 @@ import java.util.function.Function;
 public class CropUtils {
 
     public static void attemptGiantize(ServerLevel level, BlockPos cropPos, Growable crop, BlockState state, float progress, CropProperties props) {
-        if (crop.isAtMaxAge(state) && props.getGiantVersion() != Blocks.AIR && progress >= 0.5) {
+        if (crop.runecraftory$isAtMaxAge(state) && props.getGiantVersion() != Blocks.AIR && progress >= 0.5) {
             if (state.is(props.getGiantVersion()))
                 return;
             if (state.getBlock() instanceof BlockCrop blockCrop) {

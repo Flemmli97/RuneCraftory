@@ -11,22 +11,22 @@ import org.spongepowered.asm.mixin.Shadow;
 public abstract class Matrix4fMixin implements RotationFromMatrix {
 
     @Shadow
-    private float m00;
+    protected float m00;
     @Shadow
-    private float m01;
+    protected float m01;
     @Shadow
-    private float m10;
+    protected float m10;
     @Shadow
-    private float m11;
+    protected float m11;
     @Shadow
-    private float m20;
+    protected float m20;
     @Shadow
-    private float m21;
+    protected float m21;
     @Shadow
-    private float m22;
+    protected float m22;
 
     @Override
-    public Vector3f getMatrixRotationZYX() {
+    public Vector3f runecraftory$getMatrixRotationZYX() {
         if (this.m00 == 0 && this.m10 == 0) {
             float y = Mth.HALF_PI;
             float z = 0;

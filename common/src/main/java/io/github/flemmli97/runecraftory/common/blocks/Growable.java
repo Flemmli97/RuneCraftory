@@ -7,14 +7,14 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public interface Growable {
 
-    int getGrowableMaxAge();
+    int runecraftory$getGrowableMaxAge();
 
-    BlockState getGrowableStateForAge(BlockState current, int age);
+    BlockState runecraftory$getGrowableStateForAge(BlockState current, int age);
 
-    boolean isAtMaxAge(BlockState state);
+    boolean runecraftory$isAtMaxAge(BlockState state);
 
     default boolean canGrow(ServerLevel level, BlockPos pos, BlockState state) {
-        return !this.isAtMaxAge(state);
+        return !this.runecraftory$isAtMaxAge(state);
     }
 
     default void onGrow(ServerLevel level, BlockPos pos, BlockState state, BlockState old) {

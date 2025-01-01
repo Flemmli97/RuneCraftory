@@ -56,11 +56,6 @@ public class EntityButterfly extends BaseProjectile {
     }
 
     @Override
-    public boolean isPiercing() {
-        return false;
-    }
-
-    @Override
     public int livingTickMax() {
         return this.livingTickMax;
     }

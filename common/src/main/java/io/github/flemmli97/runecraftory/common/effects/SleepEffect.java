@@ -28,7 +28,7 @@ public class SleepEffect extends MobEffect {
                 living.setDeltaMovement(new Vec3(living.getDeltaMovement().x, -0.08, living.getDeltaMovement().z));
             // Setting no ai prevents mobs moving/getting moved. So we do it here
             if (living instanceof MobNoAIHandler mob) {
-                mob.setIgnoreNoAI();
+                mob.runecraftory$setIgnoreNoAI();
                 living.travel(new Vec3(0, 0, 0));
             }
         }

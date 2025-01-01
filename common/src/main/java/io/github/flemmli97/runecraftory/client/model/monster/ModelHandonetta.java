@@ -102,9 +102,7 @@ public class ModelHandonetta<T extends EntityHandonetta> extends EntityModel<T> 
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.model.resetPoses();
         float partialTicks = Minecraft.getInstance().getFrameTime();
-        this.anim.setVariable("head_x_rotation", () -> {
-            return entity.getXRot();
-        });
+        this.anim.setVariable("head_x_rotation", entity::getXRot);
         if (entity.deathTime <= 0 && !entity.playDeath()) {
             this.anim.doAnimation(this, "idle", entity.tickCount, partialTicks);
         }

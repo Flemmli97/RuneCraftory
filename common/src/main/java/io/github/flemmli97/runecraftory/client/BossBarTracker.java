@@ -256,7 +256,7 @@ public class BossBarTracker {
         public TickingSoundChannel(SoundInstance inst, int fadeTime) {
             this.inst = inst;
             SoundEngineUtil engine = (SoundEngineUtil) ((SoundManagerAccessor) Minecraft.getInstance().getSoundManager()).getSoundEngine();
-            this.channel = engine.getHandle(inst);
+            this.channel = engine.runecraftory$getHandle(inst);
             this.fadeTime = fadeTime;
             this.tick = 0;
             this.volDecrease = 1f / this.fadeTime;

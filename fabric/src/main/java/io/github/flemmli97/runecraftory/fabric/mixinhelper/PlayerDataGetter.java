@@ -4,5 +4,5 @@ import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 
 public interface PlayerDataGetter {
 
-    PlayerData getPlayerData();
+    PlayerData runecraftory$getPlayerData();
 }

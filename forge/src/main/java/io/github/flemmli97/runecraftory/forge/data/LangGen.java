@@ -210,6 +210,8 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.recipe.eat.fail", "Didn't learn any recipe. Maybe your crafting level is too low");
 
         this.add("runecraftory.container.shipping_bin", "Shipping Bin");
+        this.add("runecraftory.container.info", "Info Screen");
+        this.add("runecraftory.container.info.sub", "Info Screen");
 
         this.add("runecraftory.shipping.money", "Earning from shipped items: %s");
 
@@ -264,6 +266,7 @@ public class LangGen implements DataProvider {
         this.add(BaseMonster.Behaviour.STAY.interactKey, "%s is now staying");
         this.add(BaseMonster.Behaviour.WANDER.interactKey, "%s is now wandering around in this area");
         this.add(BaseMonster.Behaviour.FARM.interactKey, "%s is now tending the crops");
+        this.add("runecraftory.monster.interact.notowner", "This is not your monster!");
         this.add("runecraftory.monster.interact.party.full", "Your party is full");
         this.add("runecraftory.monster.interact.ride.no", "You can't ride this monster");
         this.add("runecraftory.monster.interact.barn.no", "%s has no barn");
@@ -299,6 +302,7 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.generic.yes", "Yes");
         this.add("runecraftory.generic.no", "No");
 
+        this.add("runecraftory.command.skill.no", "No such skill %s!");
         this.add("runecraftory.command.skill.lvl.add", "Added %3$s %1$s skill level to %2$s");
         this.add("runecraftory.command.skill.xp.add", "Added %3$s %1$s skill xp points to %2$s");
         this.add("runecraftory.command.skill.lvl.set", "Set level of skill %1$s to %3$s for %2$s");
@@ -306,10 +310,17 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.command.lvl.set", "Set level of %1$s to %2$s");
         this.add("runecraftory.command.reset.all", "Reset all player data for %s");
         this.add("runecraftory.command.unlock.recipes", "Unlocked all crafting recipes for %s");
+        this.add("runecraftory.command.unlock.recipe", "Unlockeded crafting %2$s recipes for %1$s");
         this.add("runecraftory.command.reset.recipe", "Locked all crafting recipes for %s again");
         this.add("runecraftory.command.weather.no", "No such weather %s");
         this.add("runecraftory.command.set.weather", "Set current weather to %s");
         this.add("runecraftory.command.recalc.stats", "Recalculated level stats for %s entities");
+
+        this.add("runecraftory.weather.clear", "clear");
+        this.add("runecraftory.weather.cloudy", "cloudy");
+        this.add("runecraftory.weather.rain", "raining");
+        this.add("runecraftory.weather.storm", "storming");
+        this.add("runecraftory.weather.runey", "runey");
 
         this.add("runecraftory.recipe_integration.locked", "Unknown Recipe");
         this.add("runecraftory.recipe_integration.crafting_level", "Lvl: %s");

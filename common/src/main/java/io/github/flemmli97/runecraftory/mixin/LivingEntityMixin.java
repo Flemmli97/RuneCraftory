@@ -41,7 +41,7 @@ public abstract class LivingEntityMixin {
     private void onChange(CallbackInfoReturnable<Map<EquipmentSlot, ItemStack>> info, Map<EquipmentSlot, ItemStack> map) {
         if (map != null)
             // Can't be a method reference!
-            EntityCalls.updateEquipmentNew((LivingEntity) (Object) this, map, this.getLastHandItem(EquipmentSlot.MAINHAND), slot -> this.getLastArmorItem(slot));
+            EntityCalls.updateEquipmentNew((LivingEntity) (Object) this, map, this.getLastHandItem(EquipmentSlot.MAINHAND), this::getLastArmorItem);
     }
 
     /**
@@ -61,8 +61,8 @@ public abstract class LivingEntityMixin {
     }
 
     @Shadow
-    abstract ItemStack getLastHandItem(EquipmentSlot slot);
+    protected abstract ItemStack getLastHandItem(EquipmentSlot slot);
 
     @Shadow
-    abstract ItemStack getLastArmorItem(EquipmentSlot slot);
+    protected abstract ItemStack getLastArmorItem(EquipmentSlot slot);
 }

@@ -19,7 +19,7 @@ public class PotionCureHelper {
             MobEffectInstance effect = itr.next();
             if (effect.getEffect() instanceof ExtendedEffect extendedEffect && extendedEffect.getCurativeItems().stream().anyMatch(e -> e.sameItem(stack)))
                 continue;
-            ((EntityDataGetter) entity).onCureEffect(effect);
+            ((EntityDataGetter) entity).runecraftory$onCureEffect(effect);
             itr.remove();
             ret = true;
         }

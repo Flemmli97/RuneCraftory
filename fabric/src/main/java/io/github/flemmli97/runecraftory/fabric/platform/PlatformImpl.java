@@ -79,25 +79,25 @@ public class PlatformImpl implements Platform {
 
     @Override
     public Optional<PlayerData> getPlayerData(Player player) {
-        return Optional.of(((PlayerDataGetter) player).getPlayerData());
+        return Optional.of(((PlayerDataGetter) player).runecraftory$getPlayerData());
     }
 
     @Override
     public Optional<EntityData> getEntityData(LivingEntity living) {
-        return Optional.of(((EntityDataGetter) living).getEntityData());
+        return Optional.of(((EntityDataGetter) living).runecraftory$getEntityData());
     }
 
     @Override
     public Optional<StaffData> getStaffData(Object stack) {
         if (stack instanceof ItemStackDataGetter getter)
-            return Optional.ofNullable(getter.getStaffData());
+            return Optional.ofNullable(getter.runecraftory$getStaffData());
         return Optional.empty();
     }
 
     @Override
     public Optional<ArmorEffectData> getArmorEffects(Object stack) {
         if (stack instanceof ItemStackDataGetter getter)
-            return Optional.ofNullable(getter.getArmorEffectData());
+            return Optional.ofNullable(getter.runecraftory$getArmorEffectData());
         return Optional.empty();
     }
 

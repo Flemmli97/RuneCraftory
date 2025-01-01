@@ -42,11 +42,6 @@ public class RenderSingleFrameBeam<T extends EntityBeam> extends RenderBeam<T> {
     }
 
     @Override
-    public int animationFrames(RenderBeam.BeamPart part) {
-        return 1;
-    }
-
-    @Override
     public ResourceLocation getTextureLocation(T entity) {
         return this.texture;
     }

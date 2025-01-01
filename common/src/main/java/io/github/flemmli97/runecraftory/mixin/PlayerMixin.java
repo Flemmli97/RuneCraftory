@@ -51,17 +51,17 @@ public abstract class PlayerMixin implements PrevEntityPosition {
     }
 
     @Override
-    public double getOldPlayerX() {
+    public double runecraftory$getOldPlayerX() {
         return this.saveAt2 ? this.oldMPosX2 : this.oldMPosX1;
     }
 
     @Override
-    public double getOldPlayerY() {
+    public double runecraftory$getOldPlayerY() {
         return this.saveAt2 ? this.oldMPosY2 : this.oldMPosY1;
     }
 
     @Override
-    public double getOldPlayerZ() {
+    public double runecraftory$getOldPlayerZ() {
         return this.saveAt2 ? this.oldMPosZ2 : this.oldMPosZ1;
     }
 }

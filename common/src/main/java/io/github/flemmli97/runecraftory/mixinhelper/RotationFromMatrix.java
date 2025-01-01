@@ -7,5 +7,5 @@ public interface RotationFromMatrix {
     /**
      * Gets the matrix rotation assuming they are done in ZYX order
      */
-    Vector3f getMatrixRotationZYX();
+    Vector3f runecraftory$getMatrixRotationZYX();
 }

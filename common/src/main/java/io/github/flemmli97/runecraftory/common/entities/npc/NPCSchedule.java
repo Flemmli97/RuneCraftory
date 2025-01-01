@@ -74,7 +74,7 @@ public class NPCSchedule {
 
     public void load(CompoundTag tag) {
         this.schedule = Schedule.CODEC.parse(NbtOps.INSTANCE, tag)
-                .resultOrPartial(s -> RuneCraftory.LOGGER.error("Couldn't load schedule for " + this.npc + ". " + s)).orElse(new Schedule(this.npc.getRandom()));
+                .resultOrPartial(s -> RuneCraftory.LOGGER.error("Couldn't load schedule for {}. {}", this.npc, s)).orElse(new Schedule(this.npc.getRandom()));
         this.view = null;
     }
 
@@ -110,7 +110,7 @@ public class NPCSchedule {
                     case 1 ->
                             newList.add(new TranslatableComponent("npc.schedule.days.1", new TranslatableComponent(weekDayCounts.get(0).translationFull())));
                     case 2 ->
-                            newList.add(new TranslatableComponent("npc.schedule.days.2", new TranslatableComponent(weekDayCounts.get(0).translationFull(), weekDayCounts.get(1))));
+                            newList.add(new TranslatableComponent("npc.schedule.days.2", new TranslatableComponent(weekDayCounts.get(0).translationFull()), new TranslatableComponent(weekDayCounts.get(1).translationFull())));
                     default ->
                             newList.add(new TranslatableComponent("npc.schedule.days.with", this.schedule.workDays.stream().filter(day -> day != EnumDay.SATURDAY && day != EnumDay.SUNDAY).map(e -> new TranslatableComponent(e.translationFull())).toArray()));
                 }

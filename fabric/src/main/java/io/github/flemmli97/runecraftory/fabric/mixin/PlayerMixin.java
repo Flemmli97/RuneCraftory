@@ -48,7 +48,7 @@ public abstract class PlayerMixin implements PlayerDataGetter {
     }
 
     @Override
-    public PlayerData getPlayerData() {
+    public PlayerData runecraftory$getPlayerData() {
         return this.runecraftoryPlayerData;
     }
 }

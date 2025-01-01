@@ -30,7 +30,7 @@ public abstract class MobMixin extends LivingEntity implements MobNoAIHandler {
     }
 
     @Override
-    public void setIgnoreNoAI() {
+    public void runecraftory$setIgnoreNoAI() {
         this.runecraftory_ignoreNoAI = true;
     }
 }

@@ -115,9 +115,9 @@ public class AnimatedPlayerModel<T extends LivingEntity & IAnimated> extends Ent
         this.apply(model.head, main, this.head);
         model.body.loadPose(main);
         this.apply(model.leftArm, main, this.leftArm);
-        hands.getLeftHandItem().loadPose(this.leftArmItem.storePose());
+        hands.runecraftory$getLeftHandItem().loadPose(this.leftArmItem.storePose());
         this.apply(model.rightArm, main, this.rightArm);
-        hands.getRightHandItem().loadPose(this.rightArmItem.storePose());
+        hands.runecraftory$getRightHandItem().loadPose(this.rightArmItem.storePose());
         if (plain) {
             this.apply(model.leftLeg, main, this.leftLeg);
             this.apply(model.rightLeg, main, this.rightLeg);

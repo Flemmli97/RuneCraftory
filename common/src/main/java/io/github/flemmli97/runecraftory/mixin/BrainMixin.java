@@ -23,7 +23,7 @@ public abstract class BrainMixin implements DisableTicking {
     }
 
     @Override
-    public void disable(boolean disable) {
+    public void runecraftory$disable(boolean disable) {
         this.runecraftoryDisabled = disable;
     }
 }

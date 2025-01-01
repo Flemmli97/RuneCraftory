@@ -127,7 +127,7 @@ public class ArmorModels {
 
     private static VertexConsumer forArmor(MultiBufferSource buffer, ItemStack stack, Player player) {
         if (stack.getItem() instanceof ItemArmorBase armor)
-            return ItemRenderer.getArmorFoilBuffer(buffer, RenderType.armorCutoutNoCull(ARMOR_TEXT_CACHE.computeIfAbsent(armor.getArmorTexture(stack, player, armor.getSlot(), null), i -> new ResourceLocation(i))), false, stack.hasFoil());
+            return ItemRenderer.getArmorFoilBuffer(buffer, RenderType.armorCutoutNoCull(ARMOR_TEXT_CACHE.computeIfAbsent(armor.getArmorTexture(stack, player, armor.getSlot(), null), ResourceLocation::new)), false, stack.hasFoil());
         return null;
     }
 
