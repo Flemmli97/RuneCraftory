@@ -6,10 +6,14 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.suggestion.Suggestions;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeather;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.attachment.player.LevelExpPair;
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
+import io.github.flemmli97.runecraftory.common.crafting.SextupleRecipe;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
@@ -21,6 +25,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -29,7 +34,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 
 public class RunecraftoryCommand {
@@ -49,7 +56,11 @@ public class RunecraftoryCommand {
                                 .then(Commands.literal("set").then(Commands.argument("amount", IntegerArgumentType.integer()).executes(RunecraftoryCommand::setLevel)))
                                 .then(Commands.literal("xp").then(Commands.argument("amount", IntegerArgumentType.integer()).executes(RunecraftoryCommand::addLevelXP))))
                 )
-                .then(Commands.literal("unlockRecipes").requires(src -> src.hasPermission(2)).then(Commands.argument("player", EntityArgument.players()).executes(RunecraftoryCommand::unlockRecipes)))
+                .then(Commands.literal("unlockRecipes").requires(src -> src.hasPermission(2))
+                        .then(Commands.argument("player", EntityArgument.players())
+                                .then(Commands.literal("all").executes(RunecraftoryCommand::unlockRecipes))
+                                .then(Commands.literal("id").then(Commands.argument("id", ResourceLocationArgument.id())
+                                        .suggests(RunecraftoryCommand::allRecipes).executes(RunecraftoryCommand::unlockRecipe)))))
                 .then(Commands.literal("recalcStats").requires(src -> src.hasPermission(2)).then(Commands.argument("entities", EntityArgument.entities()).executes(RunecraftoryCommand::recalcStats)))
                 .then(Commands.literal("weather").requires(src -> src.hasPermission(2)).then(Commands.argument("weather", StringArgumentType.string()).suggests((context, builder) -> SharedSuggestionProvider.suggest(Stream.of(EnumWeather.values()).map(Object::toString), builder)).executes(RunecraftoryCommand::setWeather)))
                 .then(Commands.literal("reset").requires(src -> src.hasPermission(2))
@@ -188,6 +199,41 @@ public class RunecraftoryCommand {
                 Platform.INSTANCE.sendToClient(new S2CCapSync(data), player);
             });
             ctx.getSource().sendSuccess(new TranslatableComponent("runecraftory.command.reset.all", player.getName()), false);
+            ret++;
+        }
+        return ret;
+    }
+
+    private static CompletableFuture<Suggestions> allRecipes(CommandContext<CommandSourceStack> ctx, SuggestionsBuilder builder) throws CommandSyntaxException {
+        Set<ResourceLocation> allRecipes = Sets.newHashSet();
+        PlayerData data = Platform.INSTANCE.getPlayerData(ctx.getSource().getPlayerOrException()).orElse(null);
+        if (data != null) {
+            for (SextupleRecipe r : ctx.getSource().getServer().getRecipeManager().getAllRecipesFor(ModCrafting.FORGE.get())) {
+                if (!data.getRecipeKeeper().isUnlocked(r))
+                    allRecipes.add(r.getId());
+            }
+            for (SextupleRecipe r : ctx.getSource().getServer().getRecipeManager().getAllRecipesFor(ModCrafting.CHEMISTRY.get())) {
+                if (!data.getRecipeKeeper().isUnlocked(r))
+                    allRecipes.add(r.getId());
+            }
+            for (SextupleRecipe r : ctx.getSource().getServer().getRecipeManager().getAllRecipesFor(ModCrafting.ARMOR.get())) {
+                if (!data.getRecipeKeeper().isUnlocked(r))
+                    allRecipes.add(r.getId());
+            }
+            for (SextupleRecipe r : ctx.getSource().getServer().getRecipeManager().getAllRecipesFor(ModCrafting.COOKING.get())) {
+                if (!data.getRecipeKeeper().isUnlocked(r))
+                    allRecipes.add(r.getId());
+            }
+        }
+        return SharedSuggestionProvider.suggest(allRecipes.stream().map(ResourceLocation::toString), builder);
+    }
+
+    private static int unlockRecipe(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+        ResourceLocation res = ResourceLocationArgument.getId(ctx, "id");
+        int ret = 0;
+        for (ServerPlayer player : EntityArgument.getPlayers(ctx, "player")) {
+            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.getRecipeKeeper().unlockRecipesRes(player, List.of(res)));
+            ctx.getSource().sendSuccess(new TranslatableComponent("runecraftory.command.unlock.recipe", player.getName(), res), false);
             ret++;
         }
         return ret;
