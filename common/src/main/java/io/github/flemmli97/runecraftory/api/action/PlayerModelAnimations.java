@@ -91,7 +91,7 @@ public class PlayerModelAnimations {
     );
 
     public static final AnimatedAction STAFF = addTo(AnimatedAction.builder((int) Math.ceil(0.6 * 20) + 1, "staff").marker(9).build());
-    public static final AnimatedAction STAFF_USE = addTo(new AnimatedAction(length(0.8), 0.3, "staff_use"));
+    public static final AnimatedAction STAFF_USE = addTo(new AnimatedAction(length(0.8), 0.26, "staff_use"));
 
     public static final AnimatedAction WATER_LASER_ONE = addTo(new AnimatedAction(length(2.64), 0.3, "water_laser_one"));
     public static final AnimatedAction WATER_LASER_TWO = addTo(new AnimatedAction(length(1.68), 0.3, "water_laser_two"));
