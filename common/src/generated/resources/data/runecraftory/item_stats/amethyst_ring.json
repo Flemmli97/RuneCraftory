@@ -1,0 +1,13 @@
+{
+  "buyPrice": 13000,
+  "sellPrice": 600,
+  "upgradeDifficulty": 0,
+  "itemStats": {
+    "runecraftory:res_earth": 50.0
+  },
+  "monsterBonus": {
+    "runecraftory:res_earth": 1.0
+  },
+  "element": "EARTH",
+  "item": "runecraftory:amethyst_ring"
+}

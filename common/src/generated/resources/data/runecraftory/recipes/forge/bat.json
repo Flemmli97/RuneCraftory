@@ -5,6 +5,12 @@
   "ingredients": [
     {
       "tag": "c:bronze_ingots"
+    },
+    {
+      "tag": "c:bronze_ingots"
+    },
+    {
+      "tag": "c:bronze_ingots"
     }
   ],
   "result": {

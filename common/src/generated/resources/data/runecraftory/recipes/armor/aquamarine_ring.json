@@ -1,8 +1,15 @@
 {
   "type": "runecraftory:armor",
-  "level": 1,
+  "level": 15,
   "additional_cost": 0,
-  "ingredients": [],
+  "ingredients": [
+    {
+      "tag": "c:gold_ingots"
+    },
+    {
+      "tag": "c:aquamarines"
+    }
+  ],
   "result": {
     "item": "runecraftory:aquamarine_ring"
   }

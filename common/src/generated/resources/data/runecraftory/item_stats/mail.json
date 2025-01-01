@@ -1,0 +1,14 @@
+{
+  "buyPrice": 7500,
+  "sellPrice": 350,
+  "upgradeDifficulty": 0,
+  "itemStats": {
+    "runecraftory:defence": 19.0,
+    "runecraftory:magic_defence": 13.0
+  },
+  "monsterBonus": {
+    "runecraftory:defence": 1.0
+  },
+  "element": "NONE",
+  "item": "runecraftory:mail"
+}

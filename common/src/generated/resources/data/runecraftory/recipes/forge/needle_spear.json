@@ -4,6 +4,9 @@
   "additional_cost": 0,
   "ingredients": [
     {
+      "item": "runecraftory:spear"
+    },
+    {
       "tag": "runecraftory:sticks"
     },
     {

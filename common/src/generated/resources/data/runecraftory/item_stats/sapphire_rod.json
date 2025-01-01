@@ -1,0 +1,15 @@
+{
+  "buyPrice": 24620,
+  "sellPrice": 2350,
+  "upgradeDifficulty": 0,
+  "itemStats": {
+    "runecraftory:magic_attack": 149.0,
+    "runecraftory:dizzy": 15.0,
+    "runecraftory:attack_range": 0.0
+  },
+  "monsterBonus": {
+    "runecraftory:magic_attack": 1.0
+  },
+  "element": "LIGHT",
+  "item": "runecraftory:sapphire_rod"
+}

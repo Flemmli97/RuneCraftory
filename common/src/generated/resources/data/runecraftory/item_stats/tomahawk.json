@@ -1,5 +1,5 @@
 {
-  "buyPrice": 14360,
+  "buyPrice": 11360,
   "sellPrice": 683,
   "upgradeDifficulty": 0,
   "itemStats": {
@@ -11,6 +11,6 @@
   "monsterBonus": {
     "minecraft:generic.attack_damage": 1.0
   },
-  "element": "NONE",
+  "element": "WIND",
   "item": "runecraftory:tomahawk"
 }

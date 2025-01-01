@@ -1,0 +1,16 @@
+{
+  "type": "runecraftory:forge",
+  "level": 28,
+  "additional_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:rod"
+    },
+    {
+      "tag": "c:silver_ingots"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:silver_staff"
+  }
+}

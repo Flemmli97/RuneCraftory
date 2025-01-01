@@ -1,0 +1,22 @@
+{
+  "type": "runecraftory:forge",
+  "level": 20,
+  "additional_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:broad_sword"
+    },
+    {
+      "tag": "c:sapphires"
+    },
+    {
+      "item": "minecraft:shield"
+    },
+    {
+      "tag": "runecraftory:claws_fangs"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:defender"
+  }
+}

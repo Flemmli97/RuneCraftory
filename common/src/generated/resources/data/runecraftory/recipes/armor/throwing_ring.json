@@ -1,8 +1,18 @@
 {
   "type": "runecraftory:armor",
-  "level": 1,
+  "level": 25,
   "additional_cost": 0,
-  "ingredients": [],
+  "ingredients": [
+    {
+      "tag": "c:silver_ingots"
+    },
+    {
+      "item": "minecraft:dispenser"
+    },
+    {
+      "item": "runecraftory:puppetry_strings"
+    }
+  ],
   "result": {
     "item": "runecraftory:throwing_ring"
   }

@@ -1,5 +1,5 @@
 {
-  "buyPrice": 13680,
+  "buyPrice": 10680,
   "sellPrice": 623,
   "upgradeDifficulty": 0,
   "itemStats": {
@@ -10,6 +10,6 @@
   "monsterBonus": {
     "minecraft:generic.attack_damage": 1.0
   },
-  "element": "NONE",
+  "element": "WIND",
   "item": "runecraftory:cyclone_blade"
 }

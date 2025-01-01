@@ -4,6 +4,9 @@
   "additional_cost": 0,
   "ingredients": [
     {
+      "item": "runecraftory:battle_axe"
+    },
+    {
       "tag": "c:silver_ingots"
     },
     {
@@ -11,9 +14,6 @@
     },
     {
       "item": "runecraftory:silk_cloth"
-    },
-    {
-      "tag": "runecraftory:claws_fangs"
     }
   ],
   "result": {

@@ -1,8 +1,18 @@
 {
   "type": "runecraftory:armor",
-  "level": 1,
+  "level": 55,
   "additional_cost": 0,
-  "ingredients": [],
+  "ingredients": [
+    {
+      "tag": "c:gold_ingots"
+    },
+    {
+      "tag": "c:platinum_ingots"
+    },
+    {
+      "item": "minecraft:experience_bottle"
+    }
+  ],
   "result": {
     "item": "runecraftory:magic_ring"
   }

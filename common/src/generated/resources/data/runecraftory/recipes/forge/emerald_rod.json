@@ -1,0 +1,19 @@
+{
+  "type": "runecraftory:forge",
+  "level": 24,
+  "additional_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:rod"
+    },
+    {
+      "tag": "c:emeralds"
+    },
+    {
+      "tag": "c:emeralds"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:emerald_rod"
+  }
+}

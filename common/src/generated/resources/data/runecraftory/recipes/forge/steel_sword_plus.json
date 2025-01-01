@@ -7,6 +7,9 @@
       "item": "runecraftory:steel_sword"
     },
     {
+      "tag": "c:iron_ingots"
+    },
+    {
       "tag": "runecraftory:mineral"
     }
   ],

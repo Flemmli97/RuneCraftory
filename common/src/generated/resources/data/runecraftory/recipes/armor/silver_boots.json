@@ -1,0 +1,19 @@
+{
+  "type": "runecraftory:armor",
+  "level": 18,
+  "additional_cost": 0,
+  "ingredients": [
+    {
+      "item": "minecraft:leather_boots"
+    },
+    {
+      "tag": "c:silver_ingots"
+    },
+    {
+      "tag": "runecraftory:shards"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:silver_boots"
+  }
+}

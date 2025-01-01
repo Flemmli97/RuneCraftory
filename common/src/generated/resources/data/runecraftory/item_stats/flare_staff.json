@@ -1,0 +1,15 @@
+{
+  "buyPrice": 18000,
+  "sellPrice": 1330,
+  "upgradeDifficulty": 0,
+  "itemStats": {
+    "runecraftory:magic_attack": 112.0,
+    "runecraftory:dizzy": 15.0,
+    "runecraftory:attack_range": 0.0
+  },
+  "monsterBonus": {
+    "runecraftory:magic_attack": 1.0
+  },
+  "element": "FIRE",
+  "item": "runecraftory:flare_staff"
+}

@@ -4,10 +4,10 @@
   "additional_cost": 0,
   "ingredients": [
     {
-      "tag": "c:silver_ingots"
+      "item": "minecraft:trident"
     },
     {
-      "tag": "c:aquamarines"
+      "tag": "c:silver_ingots"
     },
     {
       "tag": "runecraftory:sticks"

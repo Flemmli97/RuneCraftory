@@ -1,0 +1,19 @@
+{
+  "type": "runecraftory:armor",
+  "level": 12,
+  "additional_cost": 0,
+  "ingredients": [
+    {
+      "item": "minecraft:hay_block"
+    },
+    {
+      "tag": "c:string"
+    },
+    {
+      "tag": "c:string"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:straw_hat"
+  }
+}

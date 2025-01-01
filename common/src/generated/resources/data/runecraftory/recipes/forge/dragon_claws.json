@@ -1,0 +1,19 @@
+{
+  "type": "runecraftory:forge",
+  "level": 30,
+  "additional_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:leather_glove"
+    },
+    {
+      "tag": "runecraftory:scales"
+    },
+    {
+      "item": "runecraftory:dragon_fang"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:dragon_claws"
+  }
+}

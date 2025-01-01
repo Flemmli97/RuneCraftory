@@ -4,6 +4,9 @@
   "additional_cost": 0,
   "ingredients": [
     {
+      "item": "runecraftory:leather_glove"
+    },
+    {
       "item": "minecraft:string"
     },
     {

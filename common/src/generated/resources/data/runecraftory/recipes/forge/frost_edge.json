@@ -4,7 +4,10 @@
   "additional_cost": 0,
   "ingredients": [
     {
-      "item": "runecraftory:aquamarine"
+      "item": "runecraftory:short_dagger"
+    },
+    {
+      "item": "minecraft:ice"
     },
     {
       "item": "runecraftory:aquamarine"

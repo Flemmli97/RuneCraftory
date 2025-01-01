@@ -1,0 +1,15 @@
+{
+  "buyPrice": 14600,
+  "sellPrice": 917,
+  "upgradeDifficulty": 0,
+  "itemStats": {
+    "runecraftory:magic_attack": 98.0,
+    "runecraftory:dizzy": 15.0,
+    "runecraftory:attack_range": 0.0
+  },
+  "monsterBonus": {
+    "runecraftory:magic_attack": 1.0
+  },
+  "element": "DARK",
+  "item": "runecraftory:silver_staff"
+}

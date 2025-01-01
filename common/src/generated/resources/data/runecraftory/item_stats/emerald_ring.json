@@ -1,0 +1,13 @@
+{
+  "buyPrice": 13000,
+  "sellPrice": 600,
+  "upgradeDifficulty": 0,
+  "itemStats": {
+    "runecraftory:res_wind": 50.0
+  },
+  "monsterBonus": {
+    "runecraftory:res_wind": 1.0
+  },
+  "element": "WIND",
+  "item": "runecraftory:emerald_ring"
+}

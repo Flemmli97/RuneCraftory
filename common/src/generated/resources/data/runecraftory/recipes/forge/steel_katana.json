@@ -1,0 +1,22 @@
+{
+  "type": "runecraftory:forge",
+  "level": 26,
+  "additional_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:short_dagger"
+    },
+    {
+      "tag": "c:gold_ingots"
+    },
+    {
+      "tag": "c:gold_ingots"
+    },
+    {
+      "item": "runecraftory:black_feather"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:steel_katana"
+  }
+}

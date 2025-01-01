@@ -7,6 +7,9 @@
       "item": "runecraftory:zweihaender"
     },
     {
+      "tag": "c:iron_ingots"
+    },
+    {
       "tag": "c:bronze_ingots"
     }
   ],

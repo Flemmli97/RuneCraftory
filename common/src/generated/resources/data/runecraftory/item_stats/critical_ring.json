@@ -1,0 +1,12 @@
+{
+  "buyPrice": 25000,
+  "sellPrice": 0,
+  "upgradeDifficulty": 0,
+  "itemStats": {
+    "runecraftory:dizzy": 5.0,
+    "runecraftory:crit": 20.0
+  },
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:critical_ring"
+}

@@ -1,0 +1,22 @@
+{
+  "type": "runecraftory:forge",
+  "level": 33,
+  "additional_cost": 0,
+  "ingredients": [
+    {
+      "tag": "runecraftory:cloths"
+    },
+    {
+      "item": "runecraftory:cursed_doll"
+    },
+    {
+      "item": "runecraftory:malm_claw"
+    },
+    {
+      "item": "runecraftory:dark_crystal"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:fist_of_dark"
+  }
+}

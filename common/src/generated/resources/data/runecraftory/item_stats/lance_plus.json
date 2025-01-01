@@ -1,5 +1,5 @@
 {
-  "buyPrice": 4460,
+  "buyPrice": 3460,
   "sellPrice": 198,
   "upgradeDifficulty": 0,
   "itemStats": {
@@ -9,7 +9,7 @@
     "runecraftory:attack_range": 2.3
   },
   "monsterBonus": {
-    "minecraft:generic.attack_damage": 1.0
+    "minecraft:generic.attack_damage": 0.5
   },
   "element": "NONE",
   "item": "runecraftory:lance_plus"

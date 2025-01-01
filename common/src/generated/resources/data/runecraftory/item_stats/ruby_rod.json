@@ -1,0 +1,15 @@
+{
+  "buyPrice": 21530,
+  "sellPrice": 1940,
+  "upgradeDifficulty": 0,
+  "itemStats": {
+    "runecraftory:magic_attack": 127.0,
+    "runecraftory:dizzy": 15.0,
+    "runecraftory:attack_range": 0.0
+  },
+  "monsterBonus": {
+    "runecraftory:magic_attack": 1.0
+  },
+  "element": "FIRE",
+  "item": "runecraftory:ruby_rod"
+}

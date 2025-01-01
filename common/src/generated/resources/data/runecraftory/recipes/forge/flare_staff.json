@@ -1,0 +1,16 @@
+{
+  "type": "runecraftory:forge",
+  "level": 30,
+  "additional_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:rod"
+    },
+    {
+      "item": "runecraftory:fire_crystal"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:flare_staff"
+  }
+}

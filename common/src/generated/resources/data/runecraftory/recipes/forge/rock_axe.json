@@ -1,0 +1,22 @@
+{
+  "type": "runecraftory:forge",
+  "level": 33,
+  "additional_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:battle_axe"
+    },
+    {
+      "tag": "c:gold_ingots"
+    },
+    {
+      "item": "runecraftory:earth_crystal"
+    },
+    {
+      "item": "runecraftory:giants_glove"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:rock_axe"
+  }
+}

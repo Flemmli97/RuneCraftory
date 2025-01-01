@@ -1,0 +1,13 @@
+{
+  "buyPrice": 30000,
+  "sellPrice": 1000,
+  "upgradeDifficulty": 0,
+  "itemStats": {
+    "minecraft:generic.max_health": 50.0,
+    "runecraftory:defence": 25.0,
+    "runecraftory:magic_defence": 20.0
+  },
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:shield_ring"
+}

@@ -1,0 +1,13 @@
+{
+  "buyPrice": 13000,
+  "sellPrice": 600,
+  "upgradeDifficulty": 0,
+  "itemStats": {
+    "runecraftory:res_light": 50.0
+  },
+  "monsterBonus": {
+    "runecraftory:res_light": 1.0
+  },
+  "element": "LIGHT",
+  "item": "runecraftory:sapphire_ring"
+}

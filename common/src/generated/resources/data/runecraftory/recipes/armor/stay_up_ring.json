@@ -1,8 +1,18 @@
 {
   "type": "runecraftory:armor",
-  "level": 1,
+  "level": 27,
   "additional_cost": 0,
-  "ingredients": [],
+  "ingredients": [
+    {
+      "item": "runecraftory:holy_spore"
+    },
+    {
+      "tag": "runecraftory:mineral"
+    },
+    {
+      "item": "minecraft:phantom_membrane"
+    }
+  ],
   "result": {
     "item": "runecraftory:stay_up_ring"
   }

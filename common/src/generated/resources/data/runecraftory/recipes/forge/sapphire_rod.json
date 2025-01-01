@@ -1,0 +1,16 @@
+{
+  "type": "runecraftory:forge",
+  "level": 36,
+  "additional_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:rod"
+    },
+    {
+      "tag": "c:sapphires"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:sapphire_rod"
+  }
+}

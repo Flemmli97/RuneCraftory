@@ -11,7 +11,6 @@ import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.resources.ResourceLocation;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;

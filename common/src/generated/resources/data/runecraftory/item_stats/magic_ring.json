@@ -1,0 +1,11 @@
+{
+  "buyPrice": 50000,
+  "sellPrice": 1500,
+  "upgradeDifficulty": 0,
+  "itemStats": {
+    "runecraftory:magic_defence": 50.0
+  },
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:magic_ring"
+}

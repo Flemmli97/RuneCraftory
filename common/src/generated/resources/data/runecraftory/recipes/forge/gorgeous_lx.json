@@ -1,0 +1,16 @@
+{
+  "type": "runecraftory:forge",
+  "level": 23,
+  "additional_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:gorgeous_sword"
+    },
+    {
+      "item": "runecraftory:gorgeous_sword"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:gorgeous_lx"
+  }
+}

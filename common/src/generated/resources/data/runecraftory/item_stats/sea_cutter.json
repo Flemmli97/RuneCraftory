@@ -1,5 +1,5 @@
 {
-  "buyPrice": 9170,
+  "buyPrice": 7170,
   "sellPrice": 404,
   "upgradeDifficulty": 0,
   "itemStats": {
@@ -10,6 +10,6 @@
   "monsterBonus": {
     "minecraft:generic.attack_damage": 1.0
   },
-  "element": "NONE",
+  "element": "WATER",
   "item": "runecraftory:sea_cutter"
 }

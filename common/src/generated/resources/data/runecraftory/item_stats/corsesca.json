@@ -1,0 +1,15 @@
+{
+  "buyPrice": 20630,
+  "sellPrice": 1830,
+  "upgradeDifficulty": 0,
+  "itemStats": {
+    "minecraft:generic.attack_damage": 98.0,
+    "runecraftory:dizzy": 6.0,
+    "runecraftory:attack_range": 2.3
+  },
+  "monsterBonus": {
+    "minecraft:generic.attack_damage": 1.0
+  },
+  "element": "NONE",
+  "item": "runecraftory:corsesca"
+}

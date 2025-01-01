@@ -4,10 +4,10 @@
   "additional_cost": 0,
   "ingredients": [
     {
-      "item": "runecraftory:magic_crystal"
+      "item": "runecraftory:rod"
     },
     {
-      "tag": "runecraftory:sticks"
+      "item": "runecraftory:magic_crystal"
     }
   ],
   "result": {

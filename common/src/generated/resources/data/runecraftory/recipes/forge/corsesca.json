@@ -1,0 +1,19 @@
+{
+  "type": "runecraftory:forge",
+  "level": 27,
+  "additional_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:spear"
+    },
+    {
+      "tag": "c:gold_ingots"
+    },
+    {
+      "item": "runecraftory:rigid_horn"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:corsesca"
+  }
+}

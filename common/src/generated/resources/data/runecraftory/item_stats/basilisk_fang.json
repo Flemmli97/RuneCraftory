@@ -1,0 +1,17 @@
+{
+  "buyPrice": 14280,
+  "sellPrice": 1220,
+  "upgradeDifficulty": 0,
+  "itemStats": {
+    "minecraft:generic.attack_damage": 105.0,
+    "runecraftory:poison": 10.0,
+    "runecraftory:dizzy": 2.0,
+    "runecraftory:crit": 15.0,
+    "runecraftory:attack_range": 1.5
+  },
+  "monsterBonus": {
+    "minecraft:generic.attack_damage": 1.0
+  },
+  "element": "NONE",
+  "item": "runecraftory:basilisk_fang"
+}

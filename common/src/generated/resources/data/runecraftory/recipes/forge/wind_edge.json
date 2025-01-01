@@ -4,13 +4,16 @@
   "additional_cost": 0,
   "ingredients": [
     {
+      "item": "runecraftory:short_dagger"
+    },
+    {
       "tag": "c:gold_ingots"
     },
     {
       "item": "minecraft:emerald"
     },
     {
-      "item": "minecraft:emerald"
+      "item": "runecraftory:wind_crystal"
     },
     {
       "tag": "runecraftory:claws_fangs"

@@ -1,0 +1,17 @@
+{
+  "buyPrice": 15930,
+  "sellPrice": 910,
+  "upgradeDifficulty": 0,
+  "itemStats": {
+    "minecraft:generic.attack_damage": 88.0,
+    "runecraftory:magic_attack": 15.0,
+    "runecraftory:dizzy": 20.0,
+    "runecraftory:stun": 11.0,
+    "runecraftory:attack_range": 1.5
+  },
+  "monsterBonus": {
+    "minecraft:generic.attack_damage": 1.0
+  },
+  "element": "WATER",
+  "item": "runecraftory:ice_hammer"
+}

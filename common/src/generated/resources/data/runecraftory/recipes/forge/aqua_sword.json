@@ -4,6 +4,9 @@
   "additional_cost": 0,
   "ingredients": [
     {
+      "item": "runecraftory:broad_sword"
+    },
+    {
       "tag": "c:silver_ingots"
     },
     {

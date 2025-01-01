@@ -1,0 +1,22 @@
+{
+  "type": "runecraftory:forge",
+  "level": 31,
+  "additional_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:battle_hammer"
+    },
+    {
+      "item": "minecraft:bone_block"
+    },
+    {
+      "tag": "c:gold_ingots"
+    },
+    {
+      "tag": "runecraftory:shells_bones"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:bone_hammer"
+  }
+}

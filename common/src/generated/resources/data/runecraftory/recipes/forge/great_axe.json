@@ -4,6 +4,9 @@
   "additional_cost": 0,
   "ingredients": [
     {
+      "item": "runecraftory:battle_axe"
+    },
+    {
       "tag": "c:gold_ingots"
     },
     {

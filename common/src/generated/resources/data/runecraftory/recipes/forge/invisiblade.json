@@ -4,6 +4,9 @@
   "additional_cost": 0,
   "ingredients": [
     {
+      "item": "runecraftory:broad_sword"
+    },
+    {
       "item": "runecraftory:invisible_stone"
     },
     {
@@ -14,7 +17,6 @@
     }
   ],
   "result": {
-    "item": "runecraftory:invisiblade",
-    "count": 13
+    "item": "runecraftory:invisiblade"
   }
 }

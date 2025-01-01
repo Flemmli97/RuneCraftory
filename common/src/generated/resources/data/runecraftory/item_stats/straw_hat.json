@@ -1,0 +1,14 @@
+{
+  "buyPrice": 1500,
+  "sellPrice": 140,
+  "upgradeDifficulty": 0,
+  "itemStats": {
+    "runecraftory:defence": 5.0,
+    "runecraftory:magic_defence": 3.0
+  },
+  "monsterBonus": {
+    "runecraftory:defence": 0.5
+  },
+  "element": "NONE",
+  "item": "runecraftory:straw_hat"
+}

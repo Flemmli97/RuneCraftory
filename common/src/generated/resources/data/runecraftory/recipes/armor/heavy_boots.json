@@ -1,0 +1,19 @@
+{
+  "type": "runecraftory:armor",
+  "level": 21,
+  "additional_cost": 0,
+  "ingredients": [
+    {
+      "item": "minecraft:iron_boots"
+    },
+    {
+      "tag": "c:silver_ingots"
+    },
+    {
+      "item": "runecraftory:pretty_carapace"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:heavy_boots"
+  }
+}

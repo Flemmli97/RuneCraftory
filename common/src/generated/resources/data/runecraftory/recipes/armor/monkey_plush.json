@@ -1,0 +1,19 @@
+{
+  "type": "runecraftory:armor",
+  "level": 14,
+  "additional_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:yellow_down"
+    },
+    {
+      "tag": "runecraftory:cloths"
+    },
+    {
+      "tag": "runecraftory:cloths"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:monkey_plush"
+  }
+}

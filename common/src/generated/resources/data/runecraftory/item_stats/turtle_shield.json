@@ -1,0 +1,16 @@
+{
+  "buyPrice": 8700,
+  "sellPrice": 0,
+  "upgradeDifficulty": 0,
+  "itemStats": {
+    "minecraft:generic.knockback_resistance": 0.2,
+    "runecraftory:defence": 20.0,
+    "runecraftory:magic_defence": 13.0,
+    "runecraftory:res_crit": 15.0
+  },
+  "monsterBonus": {
+    "runecraftory:defence": 1.0
+  },
+  "element": "NONE",
+  "item": "runecraftory:turtle_shield"
+}

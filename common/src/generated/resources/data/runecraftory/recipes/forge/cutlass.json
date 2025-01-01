@@ -4,6 +4,12 @@
   "additional_cost": 0,
   "ingredients": [
     {
+      "item": "runecraftory:broad_sword"
+    },
+    {
+      "tag": "c:emeralds"
+    },
+    {
       "tag": "c:bronze_ingots"
     },
     {

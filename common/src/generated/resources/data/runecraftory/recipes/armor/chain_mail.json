@@ -1,0 +1,19 @@
+{
+  "type": "runecraftory:armor",
+  "level": 21,
+  "additional_cost": 0,
+  "ingredients": [
+    {
+      "item": "minecraft:chain"
+    },
+    {
+      "tag": "c:silver_ingots"
+    },
+    {
+      "tag": "c:string"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:chain_mail"
+  }
+}
