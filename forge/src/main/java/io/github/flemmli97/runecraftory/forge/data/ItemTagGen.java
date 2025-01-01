@@ -22,6 +22,7 @@ import net.minecraft.world.item.Items;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
@@ -39,7 +40,7 @@ public class ItemTagGen extends ItemTagsProvider {
                 .add(ModItems.PLANT_SWORD.get());
         this.tag(RunecraftoryTags.SHIELDS)
                 .add(ModItems.PLANT_SHIELD.get());
-        ModItems.DATAGENTAGS.keySet().forEach(key -> {
+        ModItems.DATAGENTAGS.keySet().stream().sorted(Comparator.comparing(TagKey::location)).forEach(key -> {
             if (key.location().getPath().startsWith("foods/")) {
                 this.tag(RunecraftoryTags.FOODS).addTag(key);
             }
@@ -616,7 +617,7 @@ public class ItemTagGen extends ItemTagsProvider {
 
     @SafeVarargs
     public static <T> void handleWithForge(Function<TagKey<T>, TagsProvider.TagAppender<T>> provider, TagKey<T> forgeTag, TagKey<T> fabricTag, T... elements) {
-        provider.apply(forgeTag).add(elements);        // Use forge as base so add to forge
+        provider.apply(forgeTag).add(elements); // Use forge as base so add to forge
         TagsProvider.TagAppender<T> appender = provider.apply(fabricTag); // On fabric end simply refer to the forge tag
         Tag.Entry ent = new Tag.TagEntry(forgeTag.location());
         if (appender.getInternalBuilder().getEntries().noneMatch(e -> e.entry().equals(ent))) {
@@ -633,7 +634,7 @@ public class ItemTagGen extends ItemTagsProvider {
 
     @SafeVarargs
     public static <T> void handleWithForgeTags(Function<TagKey<T>, TagsProvider.TagAppender<T>> provider, TagKey<T> forgeTag, TagKey<T> fabricTag, TagKey<T>... elements) {
-        provider.apply(forgeTag).addTags(elements);        // Use forge as base so add to forge
+        provider.apply(forgeTag).addTags(elements); // Use forge as base so add to forge
         TagsProvider.TagAppender<T> appender = provider.apply(fabricTag); // On fabric end simply refer to the forge tag
         Tag.Entry ent = new Tag.TagEntry(forgeTag.location());
         if (appender.getInternalBuilder().getEntries().noneMatch(e -> e.entry().equals(ent))) {

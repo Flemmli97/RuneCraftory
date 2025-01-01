@@ -1,22 +1,22 @@
 {
   "replace": false,
   "values": [
-    "#c:foods/sugar",
-    "#c:foods/chocolate",
-    "#c:foods/juice",
-    "#c:foods/mayo",
-    "#c:foods/toast",
-    "#c:foods/udon",
-    "#c:foods/onigiri",
-    "#c:foods/ketchup",
-    "#c:foods/milk",
-    "#c:foods/rice",
-    "#c:foods/oil",
-    "#c:foods/jam",
-    "#c:foods/pie",
     "#c:foods/butter",
     "#c:foods/cheese",
+    "#c:foods/chocolate",
     "#c:foods/egg",
-    "#c:foods/flour"
+    "#c:foods/flour",
+    "#c:foods/jam",
+    "#c:foods/juice",
+    "#c:foods/ketchup",
+    "#c:foods/mayo",
+    "#c:foods/milk",
+    "#c:foods/oil",
+    "#c:foods/onigiri",
+    "#c:foods/pie",
+    "#c:foods/rice",
+    "#c:foods/sugar",
+    "#c:foods/toast",
+    "#c:foods/udon"
   ]
 }
