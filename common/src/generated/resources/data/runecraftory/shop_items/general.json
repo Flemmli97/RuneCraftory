@@ -1,6 +1,38 @@
 {
   "values": [
     {
+      "item": {
+        "id": "minecraft:diamond",
+        "Count": 1,
+        "tag": {
+          "Enchantments": [
+            {
+              "lvl": 5,
+              "id": "minecraft:sharpness"
+            }
+          ]
+        }
+      },
+      "unlock_type": "ALWAYS"
+    },
+    {
+      "item": "minecraft:emerald",
+      "unlock_type": "ALWAYS"
+    },
+    {
+      "item": "minecraft:gold_ingot",
+      "unlock_type": "ALWAYS",
+      "predicate": {
+        "location": {
+          "position": {
+            "y": {
+              "min": 64
+            }
+          }
+        }
+      }
+    },
+    {
       "item": "runecraftory:turnip_seeds",
       "unlock_type": "DEFAULT"
     },

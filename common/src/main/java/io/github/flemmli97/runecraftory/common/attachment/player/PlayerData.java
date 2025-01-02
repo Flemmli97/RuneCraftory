@@ -40,7 +40,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.TickTask;
@@ -64,10 +63,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -96,7 +93,6 @@ public class PlayerData {
     private final RecipeKeeper keeper = new RecipeKeeper();
 
     private final Map<Item, ShippedItemData> shippedItems = new HashMap<>();
-    private final Set<Item> unlockedItem = new HashSet<>();
     private final Map<NPCJob, NonNullList<ItemStack>> shopItems = new HashMap<>();
     private final InventoryShippingBin shipping = new InventoryShippingBin();
     //Food buff
@@ -457,19 +453,18 @@ public class PlayerData {
     }
 
     public void refreshShop(Player player) {
-        if (!player.level.isClientSide) {
+        if (player instanceof ServerPlayer serverPlayer) {
             for (NPCJob profession : ModNPCJobs.allJobs()) {
                 Collection<ShopItemProperties> datapack = DataPackHandler.INSTANCE.shopItemsManager().get(profession);
                 List<ItemStack> shopItems = new ArrayList<>();
-                datapack.forEach(item -> {
-                    boolean canAdd = switch (item.unlockType()) {
+                datapack.forEach(shopProps -> {
+                    boolean canAdd = shopProps.predicate().matches(serverPlayer, serverPlayer) && switch (shopProps.unlockType()) {
                         case DEFAULT -> false;
                         case ALWAYS -> true;
-                        case NEEDS_SHIPPING -> this.shippedItems.containsKey(item.stack().getItem());
-                        case AFTER_UNLOCK -> this.unlockedItem.contains(item.stack().getItem());
+                        case NEEDS_SHIPPING -> this.shippedItems.containsKey(shopProps.stack().getItem());
                     };
                     if (canAdd)
-                        shopItems.add(item.stack().copy());
+                        shopItems.add(shopProps.stack().copy());
                 });
                 NonNullList<ItemStack> shop = NonNullList.create();
                 if (!shopItems.isEmpty()) {
@@ -480,7 +475,7 @@ public class PlayerData {
                             break;
                     }
                 }
-                DataPackHandler.INSTANCE.shopItemsManager().getDefaultItems(profession).forEach(item -> shop.add(item.stack().copy()));
+                DataPackHandler.INSTANCE.shopItemsManager().getDefaultItems(profession).forEach(props -> shop.add(props.stack()));
                 this.shopItems.put(profession, shop);
             }
         }
@@ -504,10 +499,6 @@ public class PlayerData {
 
     public int getShippedTypesAmount() {
         return this.shippedItems.size();
-    }
-
-    public void unlockItem(ItemStack item) {
-        this.unlockedItem.add(item.getItem());
     }
 
     public RecipeKeeper getRecipeKeeper() {
@@ -712,8 +703,6 @@ public class PlayerData {
             CompoundTag d = shipped.getCompound(key);
             this.shippedItems.put(PlatformUtils.INSTANCE.items().getFromId(new ResourceLocation(key)), new ShippedItemData(d.getInt("Amount"), d.getInt("Level")));
         });
-        ListTag unlocked = nbt.getList("UnlockedItems", Tag.TAG_STRING);
-        unlocked.forEach(t -> this.unlockedItem.add(PlatformUtils.INSTANCE.items().getFromId(new ResourceLocation(t.getAsString()))));
         CompoundTag shops = nbt.getCompound("ShopItems");
         shops.getAllKeys().forEach(key -> {
             NonNullList<ItemStack> items = NonNullList.create();
@@ -784,9 +773,6 @@ public class PlayerData {
             ship.put(key.toString(), d);
         });
         nbt.put("ShippedItems", ship);
-        ListTag unlocked = new ListTag();
-        this.unlockedItem.forEach(i -> unlocked.add(StringTag.valueOf(PlatformUtils.INSTANCE.items().getIDFrom(i).toString())));
-        nbt.put("UnlockedItems", unlocked);
         CompoundTag shop = new CompoundTag();
         for (Map.Entry<NPCJob, NonNullList<ItemStack>> entry : this.shopItems.entrySet()) {
             ListTag l = new ListTag();

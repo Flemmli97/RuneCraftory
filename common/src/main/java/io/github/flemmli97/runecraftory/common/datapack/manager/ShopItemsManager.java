@@ -9,6 +9,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
 import io.github.flemmli97.runecraftory.api.datapack.RegistryObjectSerializer;
@@ -19,6 +20,7 @@ import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
+import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
@@ -26,12 +28,8 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -78,14 +76,14 @@ public class ShopItemsManager extends SimpleJsonResourceReloadListener {
         ImmutableMap.Builder<NPCJob, Collection<ShopItemProperties>> bD = ImmutableMap.builder();
         b.put(ModNPCJobs.RANDOM.getSecond(), DataPackHandler.INSTANCE.itemStatManager().all()
                 .stream().filter(p -> p.getSecond().getBuy() > 0)
-                .map(p -> new ShopItemProperties(p.getFirst(), ShopItemProperties.UnlockType.NEEDS_SHIPPING))
+                .map(p -> new ShopItemProperties(p.getFirst(), ShopItemProperties.UnlockType.NEEDS_SHIPPING, EntityPredicate.ANY))
                 .toList());
         this.shopItems.forEach((s, c) -> {
             if (s != ModNPCJobs.RANDOM.getSecond()) {
                 Collection<ShopItemProperties> newCollection = new ArrayList<>();
-                c.forEach(stack -> {
-                    if (DataPackHandler.INSTANCE.itemStatManager().get(stack.stack().getItem()).map(ItemStat::getBuy).orElse(0) > 0)
-                        newCollection.add(stack);
+                c.forEach(props -> {
+                    if (DataPackHandler.INSTANCE.itemStatManager().get(props.stack().getItem()).map(ItemStat::getBuy).orElse(0) > 0)
+                        newCollection.add(props);
                 });
                 b.put(s, ImmutableList.copyOf(newCollection));
             }
@@ -105,6 +103,8 @@ public class ShopItemsManager extends SimpleJsonResourceReloadListener {
     @Override
     protected void apply(Map<ResourceLocation, JsonElement> data, ResourceManager manager, ProfilerFiller profiler) {
         HashMap<NPCJob, Collection<ShopItemProperties>> shopBuilder = new HashMap<>();
+        HashMap<NPCJob, Collection<ShopItemProperties>> defaultItemsBuilder = new HashMap<>();
+
         this.checkedStats = false;
         data.forEach((fres, el) -> {
             try {
@@ -114,47 +114,48 @@ public class ShopItemsManager extends SimpleJsonResourceReloadListener {
                 JsonObject obj = el.getAsJsonObject();
                 boolean replace = GsonHelper.getAsBoolean(obj, "replace", false);
                 JsonArray array = GsonHelper.getAsJsonArray(obj, "values");
+                // Separate tag based and non tag based entries as non tag based should take priority
                 Collection<ShopItemProperties> items = new ArrayList<>();
+                Collection<ShopItemProperties> itemTags = new ArrayList<>();
                 array.forEach(val -> {
-                    if (val.isJsonObject()) {
-                        JsonObject valObj = val.getAsJsonObject();
-                        JsonElement itemVal = valObj.get("item");
-                        List<ItemStack> itemList = new ArrayList<>();
-                        ShopItemProperties.UnlockType unlockType;
-                        try {
-                            unlockType = ShopItemProperties.UnlockType.valueOf(valObj.get("unlock_type").getAsString());
-                        } catch (IllegalArgumentException e) {
-                            throw new JsonSyntaxException("No such unlock type " + valObj.get("unlock_type").getAsString() + " for " + fres);
-                        }
-                        if (itemVal.isJsonPrimitive()) {
-                            Item item = PlatformUtils.INSTANCE.items().getFromId(new ResourceLocation(itemVal.getAsString()));
-                            if (item != Items.AIR) {
-                                itemList.add(new ItemStack(item));
-                            }
-                        } else {
-                            itemList.addAll(Arrays.asList(Ingredient.fromJson(val).getItems()));
-                        }
-                        itemList.forEach(s -> items.add(new ShopItemProperties(s, unlockType)));
-                    }
+                    ShopItemProperties.IntermediaryShopItem prop = ShopItemProperties.CODEC.parse(JsonOps.INSTANCE, val)
+                            .getOrThrow(false, RuneCraftory.LOGGER::error);
+                    List<ShopItemProperties> props = ShopItemProperties.from(prop);
+                    if (prop.isTag())
+                        itemTags.addAll(props);
+                    else
+                        items.addAll(props);
                 });
+                Collection<ShopItemProperties> shopItems = new ArrayList<>();
+                // Track if item already has been added before handling tags
+                HashMap<Item, ShopItemProperties> dupeTracker = new HashMap<>();
+                for (ShopItemProperties prop : items) {
+                    shopItems.add(prop);
+                    if (!prop.stack().hasTag())
+                        dupeTracker.put(prop.stack().getItem(), prop);
+                }
+                for (ShopItemProperties prop : itemTags) {
+                    if (!dupeTracker.containsKey(prop.stack().getItem()))
+                        shopItems.add(prop);
+                }
                 if (replace)
-                    shopBuilder.put(shop, items);
+                    shopBuilder.put(shop, shopItems);
                 else
                     shopBuilder.compute(shop, (k, v) -> {
                         if (v == null)
-                            return items;
-                        v.addAll(items);
+                            return shopItems;
+                        v.addAll(shopItems);
                         return v;
                     });
             } catch (JsonSyntaxException ex) {
-                RuneCraftory.LOGGER.error("Couldnt parse shop items json {} {}", fres, ex);
+                RuneCraftory.LOGGER.error("Couldnt parse shop stack json {} {}", fres, ex);
                 ex.fillInStackTrace();
             }
         });
         ImmutableMap.Builder<NPCJob, Collection<ShopItemProperties>> b = ImmutableMap.builder();
         ImmutableMap.Builder<NPCJob, Collection<ShopItemProperties>> bD = ImmutableMap.builder();
         shopBuilder.forEach((s, c) -> {
-            b.put(s, ImmutableList.copyOf(c));
+            b.put(s, c.stream().filter(p -> p.unlockType() != ShopItemProperties.UnlockType.DEFAULT).toList());
             bD.put(s, c.stream().filter(p -> p.unlockType() == ShopItemProperties.UnlockType.DEFAULT).toList());
         });
         this.shopItems = b.build();

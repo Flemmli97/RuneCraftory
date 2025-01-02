@@ -1579,7 +1579,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.getNavigation().stop();
         if (anim.canAttack()) {
             this.mobAttack(anim, this.getTarget(), this::doHurtTarget);
-            this.targetPosition = null;
         }
     }
 

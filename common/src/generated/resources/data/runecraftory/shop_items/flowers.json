@@ -18,55 +18,55 @@
     },
     {
       "item": "runecraftory:lamp_grass_seeds",
-      "unlock_type": "AFTER_UNLOCK"
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:cherry_grass_seeds",
-      "unlock_type": "AFTER_UNLOCK"
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:pom_pom_grass_seeds",
-      "unlock_type": "AFTER_UNLOCK"
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:autumn_grass_seeds",
-      "unlock_type": "AFTER_UNLOCK"
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:noel_grass_seeds",
-      "unlock_type": "AFTER_UNLOCK"
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:fireflower_seeds",
-      "unlock_type": "AFTER_UNLOCK"
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:four_leaf_clover_seeds",
-      "unlock_type": "AFTER_UNLOCK"
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:ironleaf_seeds",
-      "unlock_type": "AFTER_UNLOCK"
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:white_crystal_seeds",
-      "unlock_type": "AFTER_UNLOCK"
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:red_crystal_seeds",
-      "unlock_type": "AFTER_UNLOCK"
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:green_crystal_seeds",
-      "unlock_type": "AFTER_UNLOCK"
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:blue_crystal_seeds",
-      "unlock_type": "AFTER_UNLOCK"
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:emery_flower_seeds",
-      "unlock_type": "AFTER_UNLOCK"
+      "unlock_type": "NEEDS_SHIPPING"
     },
     {
       "item": "runecraftory:toyherb",
