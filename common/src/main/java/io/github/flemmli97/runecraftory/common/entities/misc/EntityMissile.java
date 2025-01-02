@@ -87,7 +87,7 @@ public class EntityMissile extends BaseProjectile {
         }
         if (CombatUtils.damageWithFaintAndCrit(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).magic().noKnockback().hurtResistant(10).element(EnumElement.LIGHT).projectile(), CombatUtils.getAttributeValue(this.getOwner(), Attributes.ATTACK_DAMAGE) * this.damageMultiplier, null)) {
             this.playSound(SoundEvents.GENERIC_EXPLODE, 1, (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.0f);
-            S2CScreenShake.sendAround(this, 10, 4, 2);
+            S2CScreenShake.sendAround(this, 20, 4, 2);
             this.discard();
             return true;
         }
@@ -98,7 +98,7 @@ public class EntityMissile extends BaseProjectile {
     @Override
     protected void onBlockHit(BlockHitResult blockRayTraceResult) {
         this.playSound(SoundEvents.GENERIC_EXPLODE, 1, (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.0f);
-        S2CScreenShake.sendAround(this, 10, 4, 2);
+        S2CScreenShake.sendAround(this, 20, 4, 2);
         this.discard();
     }
 }

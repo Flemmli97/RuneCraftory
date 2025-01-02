@@ -69,7 +69,7 @@ public class EntityExplosionSpell extends BaseProjectile {
         this.doExplosion(hit);
         this.level.playSound(null, x, y, z, SoundEvents.GENERIC_EXPLODE, this.getSoundSource(), 1.0f, 1.0f);
         this.discard();
-        S2CScreenShake.sendAround(this.level, new Vec3(x, y, z), 8, 8, 2);
+        S2CScreenShake.sendAround(this.level, new Vec3(x, y, z), 16, 8, 2);
     }
 
     protected void doExplosion(Entity hit) {

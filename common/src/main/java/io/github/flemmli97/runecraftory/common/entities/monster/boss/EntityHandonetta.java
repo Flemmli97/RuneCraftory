@@ -95,7 +95,7 @@ public class EntityHandonetta extends BossMonster {
                 entity.mobAttack(anim, null, e -> {
                     if (!entity.caughtEntities.contains(e) && CombatUtils.mobAttack(entity, e, new CustomDamage.Builder(entity).hurtResistant(8))) {
                         entity.caughtEntities.add(e);
-                        S2CScreenShake.sendAround(entity, 12, 4, 2);
+                        S2CScreenShake.sendAround(entity, 32, 4, 2);
                     }
                 });
             }
@@ -141,7 +141,7 @@ public class EntityHandonetta extends BossMonster {
             if (anim.canAttack() || anim.isAtTick(0.6)
                     || anim.isAtTick(1.04) || anim.isAtTick(1.48)) {
                 entity.caughtEntities.forEach(entity::doHurtTarget);
-                S2CScreenShake.sendAround(entity, 12, 4, 1);
+                S2CScreenShake.sendAround(entity, 24, 4, 1);
             }
             if (anim.isPastTick(1.8) && !entity.caughtEntities.isEmpty()) {
                 entity.caughtEntities.forEach(e -> e.removeEffect(ModEffects.TRUE_INVIS.get()));

@@ -82,7 +82,7 @@ public class EntityTroll extends BaseMonster {
     public void mobAttack(AnimatedAction anim, LivingEntity target, Consumer<LivingEntity> cons) {
         super.mobAttack(anim, target, cons);
         if (anim.is(SLAM)) {
-            S2CScreenShake.sendAround(this, 10, 10, 2);
+            S2CScreenShake.sendAround(this, 16, 10, 2);
             this.level.playSound(null, this.blockPosition(), SoundEvents.GENERIC_EXPLODE, this.getSoundSource(), 1.0f, 1.0f);
         }
     }

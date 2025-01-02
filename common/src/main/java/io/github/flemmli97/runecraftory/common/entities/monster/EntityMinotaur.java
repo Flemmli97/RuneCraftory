@@ -121,7 +121,7 @@ public class EntityMinotaur extends ChargingMonster {
             }
         } else {
             if (anim.is(SWING) && anim.canAttack()) {
-                S2CScreenShake.sendAround(this, 10, 5, 3);
+                S2CScreenShake.sendAround(this, 16, 5, 3);
                 this.level.playSound(null, this.blockPosition(), SoundEvents.GENERIC_EXPLODE, this.getSoundSource(), 1.0f, 0.9f);
             }
             super.handleAttack(anim);

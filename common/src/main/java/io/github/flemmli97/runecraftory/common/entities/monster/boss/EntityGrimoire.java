@@ -123,7 +123,7 @@ public class EntityGrimoire extends BossMonster {
             if (anim.canAttack()) {
                 CustomDamage.Builder source = new CustomDamage.Builder(entity).noKnockback().element(EnumElement.WIND).hurtResistant(5);
                 entity.mobAttack(anim, entity.getTarget(), e -> CombatUtils.mobAttack(entity, e, source));
-                S2CScreenShake.sendAround(entity, 16, 4, 3);
+                S2CScreenShake.sendAround(entity, 24, 4, 3);
                 entity.level.playSound(null, entity.blockPosition(), SoundEvents.GENERIC_EXPLODE, entity.getSoundSource(), 1.0f, 0.9f);
                 entity.level.broadcastEntityEvent(entity, (byte) 66);
             }

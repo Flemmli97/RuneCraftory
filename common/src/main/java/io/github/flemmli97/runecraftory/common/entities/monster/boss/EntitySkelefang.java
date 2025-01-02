@@ -165,7 +165,7 @@ public class EntitySkelefang extends BossMonster {
             }
             if (entity.tickCount % 5 == 0) {
                 entity.playSound(ModSounds.ENTITY_GENERIC_HEAVY_CHARGE.get(), 1, (entity.random.nextFloat() - entity.random.nextFloat()) * 0.2f + 1.0f);
-                S2CScreenShake.sendAround(entity, 14, 10, 1);
+                S2CScreenShake.sendAround(entity, 24, 10, 1);
             }
             entity.mobAttack(anim, null, e -> {
                 if (!entity.hitEntity.contains(e) && CombatUtils.mobAttack(entity, e,
@@ -187,7 +187,7 @@ public class EntitySkelefang extends BossMonster {
         b.put(ROAR, (anim, entity) -> {
             if (anim.canAttack()) {
                 entity.playSound(ModSounds.ENTITY_SKELEFANG_ROAR.get(), 1, (entity.random.nextFloat() - entity.random.nextFloat()) * 0.2f + 1.0f);
-                S2CScreenShake.sendAround(entity, 16, 40, 2);
+                S2CScreenShake.sendAround(entity, 32, 40, 2);
             }
         });
     });

@@ -181,7 +181,7 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IA
 
     public static void delayedRightClickAction(LivingEntity entity, ItemStack stack) {
         float reach = (float) entity.getAttributeValue(ModAttributes.ATTACK_RANGE.get());
-        S2CScreenShake.sendAround(entity, 8, 4, 3);
+        S2CScreenShake.sendAround(entity, 16, 4, 3);
         if (performRightClickAction(stack, entity, reach, 0.7f) && entity instanceof ServerPlayer player) {
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.HAMMERAXE, 5));
         }

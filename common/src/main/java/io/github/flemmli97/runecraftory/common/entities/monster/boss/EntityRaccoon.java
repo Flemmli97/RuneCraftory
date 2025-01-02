@@ -140,7 +140,7 @@ public class EntityRaccoon extends BossMonster {
                 CustomDamage.Builder source = new CustomDamage.Builder(entity).noKnockback().element(EnumElement.EARTH).hurtResistant(5)
                         .withChangedAttribute(ModAttributes.STUN.get(), 80);
                 entity.mobAttack(anim, entity.getTarget(), e -> CombatUtils.mobAttack(entity, e, source));
-                S2CScreenShake.sendAround(entity, 12, 8, 3);
+                S2CScreenShake.sendAround(entity, 24, 8, 3);
                 entity.level.playSound(null, entity.blockPosition(), SoundEvents.GENERIC_EXPLODE, entity.getSoundSource(), 1.0f, 0.9f);
             }
         });
@@ -150,7 +150,7 @@ public class EntityRaccoon extends BossMonster {
                 CustomDamage.Builder source = new CustomDamage.Builder(entity).noKnockback().element(EnumElement.EARTH).hurtResistant(5)
                         .withChangedAttribute(ModAttributes.STUN.get(), 50);
                 entity.mobAttack(anim, entity.getTarget(), e -> CombatUtils.mobAttack(entity, e, source));
-                S2CScreenShake.sendAround(entity, 8, 8, 3);
+                S2CScreenShake.sendAround(entity, 24, 8, 3);
                 entity.level.playSound(null, entity.blockPosition(), SoundEvents.GENERIC_EXPLODE, entity.getSoundSource(), 1.0f, 0.9f);
             }
         });
