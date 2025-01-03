@@ -61,8 +61,8 @@ public class AttackAction extends CustomRegistryEntry<AttackAction> {
         return true;
     }
 
-    public boolean disableMovement(AnimatedAction current) {
-        return true;
+    public float movementReduction(AnimatedAction current) {
+        return 1;
     }
 
     public Pose getPose(LivingEntity entity, WeaponHandler handler) {

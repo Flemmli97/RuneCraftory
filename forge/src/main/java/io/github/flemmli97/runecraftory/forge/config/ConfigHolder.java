@@ -80,7 +80,7 @@ public record ConfigHolder<T>(ModConfig.Type configType, String configName,
         GeneralConfig.silverWateringCanWater = spec.silverWateringCanWater.get();
         GeneralConfig.goldWateringCanWater = spec.goldWateringCanWater.get();
         GeneralConfig.platinumWateringCanWater = spec.platinumWateringCanWater.get();
-        GeneralConfig.allowMoveOnAttack.read(spec.allowMoveOnAttack.get());
+        GeneralConfig.moveSpeedAttack.read(spec.moveSpeedAttack.get());
 
         GeneralConfig.xpMultiplier = spec.xpMultiplier.get().floatValue();
         GeneralConfig.skillXpMultiplier = spec.skillXpMultiplier.get().floatValue();

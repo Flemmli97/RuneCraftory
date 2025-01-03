@@ -69,7 +69,7 @@ public class GeneralConfigSpec {
     public final CommentedJsonConfig.IntVal silverWateringCanWater;
     public final CommentedJsonConfig.IntVal goldWateringCanWater;
     public final CommentedJsonConfig.IntVal platinumWateringCanWater;
-    public final CommentedJsonConfig.CommentedVal<Boolean> allowMoveOnAttack;
+    public final CommentedJsonConfig.DoubleVal moveSpeedAttack;
 
     public final CommentedJsonConfig.DoubleVal xpMultiplier;
     public final CommentedJsonConfig.DoubleVal skillXpMultiplier;
@@ -163,7 +163,7 @@ public class GeneralConfigSpec {
         this.silverWateringCanWater = builder.defineInRange("Silver Watering Can Water", GeneralConfig.silverWateringCanWater, 0, Integer.MAX_VALUE);
         this.goldWateringCanWater = builder.defineInRange("Gold Watering Can Water", GeneralConfig.goldWateringCanWater, 0, Integer.MAX_VALUE);
         this.platinumWateringCanWater = builder.defineInRange("Platinum Watering Can Water", GeneralConfig.platinumWateringCanWater, 0, Integer.MAX_VALUE);
-        this.allowMoveOnAttack = builder.comment("Whether to allow moving during a normal melee attack. Synced to clients. Will look janky as the animation will not match player movements!").define("Allow Move On Attack", GeneralConfig.allowMoveOnAttack.get());
+        this.moveSpeedAttack = builder.comment("Move speed reduction when attacking.", "Allowing movement during attack will look janky as the animation will not match player movements!", "Synced to clients").defineInRange("Attack MoveSpeed ", GeneralConfig.moveSpeedAttack.get(), 0, 1);
         builder.pop();
         builder.pop();
         builder.registerReloadHandler(() -> ConfigHolder.loadGeneral(this));

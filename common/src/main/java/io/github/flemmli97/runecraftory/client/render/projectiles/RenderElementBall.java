@@ -71,7 +71,7 @@ public class RenderElementBall extends EntityRenderer<EntityElementalBall> {
     }
 
     protected RenderType getRenderType(EntityElementalBall entity, ResourceLocation loc) {
-        if(entity.getElement() == EnumElement.DARK || entity.getElement() == EnumElement.LIGHT)
+        if (entity.getElement() == EnumElement.DARK || entity.getElement() == EnumElement.LIGHT)
             return RenderType.entityTranslucent(loc);
         return RenderType.entityCutoutNoCull(loc);
     }

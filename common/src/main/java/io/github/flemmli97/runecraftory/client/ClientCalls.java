@@ -121,7 +121,7 @@ public class ClientCalls {
     }
 
     public static void handleInputUpdate(Player player, Input input) {
-        if (EntityUtils.isDisabled(player) || Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().isMovementBlocked()).orElse(false)) {
+        if (EntityUtils.isDisabled(player)) {
             input.leftImpulse = 0;
             input.forwardImpulse = 0;
             input.up = false;
@@ -130,6 +130,19 @@ public class ClientCalls {
             input.right = false;
             input.jumping = false;
             input.shiftKeyDown = false;
+        }
+        float reduction = Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().movementReduction()).orElse(1f);
+        if (reduction != 1) {
+            input.leftImpulse *= reduction;
+            input.forwardImpulse *= reduction;
+            input.jumping = false;
+            if (reduction == 0) {
+                input.up = false;
+                input.down = false;
+                input.left = false;
+                input.right = false;
+                input.shiftKeyDown = false;
+            }
         }
     }
 

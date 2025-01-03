@@ -87,7 +87,7 @@ public class LongSwordAttack extends AttackAction {
     }
 
     @Override
-    public boolean disableMovement(AnimatedAction current) {
-        return !GeneralConfig.allowMoveOnAttack.get() && super.disableMovement(current);
+    public float movementReduction(AnimatedAction current) {
+        return GeneralConfig.moveSpeedAttack.get().floatValue() * super.movementReduction(current);
     }
 }

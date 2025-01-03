@@ -194,8 +194,8 @@ public class WeaponHandler {
         return this.chainCount;
     }
 
-    public boolean isMovementBlocked() {
-        return this.currentAction.disableMovement(this.currentAnim);
+    public float movementReduction() {
+        return this.currentAction.movementReduction(this.currentAnim);
     }
 
     public boolean isItemSwapBlocked() {

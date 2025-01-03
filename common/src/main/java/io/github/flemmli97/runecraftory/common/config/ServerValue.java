@@ -53,7 +53,7 @@ public abstract class ServerValue<T> {
 
     public static class SyncedBoolean extends ServerValue<Boolean> {
 
-        public SyncedBoolean(Boolean init, String key) {
+        public SyncedBoolean(boolean init, String key) {
             super(init, key);
         }
 
@@ -65,6 +65,23 @@ public abstract class ServerValue<T> {
         @Override
         public void readFromBuffer(FriendlyByteBuf buf) {
             this.sync(buf.readBoolean());
+        }
+    }
+
+    public static class SyncedDouble extends ServerValue<Double> {
+
+        public SyncedDouble(double init, String key) {
+            super(init, key);
+        }
+
+        @Override
+        public void writeToBuffer(FriendlyByteBuf buf) {
+            buf.writeDouble(this.getConfigValue());
+        }
+
+        @Override
+        public void readFromBuffer(FriendlyByteBuf buf) {
+            this.sync(buf.readDouble());
         }
     }
 }
