@@ -23,6 +23,7 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
@@ -75,7 +76,7 @@ public class ModelWisp<T extends EntityWispBase> extends EntityModel<T> implemen
     public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         //poseStack.scale(0.85f, 0.85f, 0.85f);
         //poseStack.translate(0, 0.2, 0);
-        this.model.getMainPart().render(poseStack, buffer, 0xff00ff, packedOverlay, red, green, blue, 0.8f);
+        this.model.getMainPart().render(poseStack, buffer, LightTexture.FULL_BRIGHT, packedOverlay, red, green, blue, 0.8f);
     }
 
     @Override

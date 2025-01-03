@@ -22,7 +22,6 @@ import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -144,8 +143,7 @@ public class RenderFurnitures extends EntityRenderer<EntityFurniture> {
     private void renderBlockModel(BlockState state, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         stack.translate(-0.5, 0, -0.5);
         BlockRenderDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
-        BakedModel model = dispatcher.getBlockModel(state);
-        dispatcher.getModelRenderer().renderModel(stack.last(), buffer.getBuffer(Sheets.solidBlockSheet()), state, model, 0.0f, 0.0f, 0.0f, packedLight, OverlayTexture.NO_OVERLAY);
+        dispatcher.renderSingleBlock(state, stack, buffer, packedLight, OverlayTexture.NO_OVERLAY);
     }
 
     private VertexConsumer simpleConsumer(MultiBufferSource buffer, ResourceLocation tex) {

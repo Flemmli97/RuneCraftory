@@ -141,6 +141,7 @@ public class EntityFurniture extends BaseProjectile {
         } catch (IllegalArgumentException e) {
             this.furnitureType = EntityFurniture.Type.CHEST;
         }
+        this.entityData.set(FURNITURE_TYPE_SYNC, this.furnitureType.ordinal());
     }
 
     @Override

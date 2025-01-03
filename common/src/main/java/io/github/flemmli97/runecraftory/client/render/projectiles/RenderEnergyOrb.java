@@ -11,6 +11,7 @@ import io.github.flemmli97.runecraftory.client.render.layer.EnergyOrbSwirlLayer;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityHomingEnergyOrb;
 import io.github.flemmli97.tenshilib.client.render.RenderProjectileModel;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -124,7 +125,7 @@ public class RenderEnergyOrb extends RenderProjectileModel<EntityHomingEnergyOrb
     }
 
     private static void vertex(VertexConsumer vertexConsumer, Matrix4f matrix4f, Matrix3f matrix3f, float x, float y, float z, int r, int g, int b, float u, float v) {
-        vertexConsumer.vertex(matrix4f, x, y, z).color(r, g, b, 200).uv(u, v).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(0xF000F0).normal(matrix3f, 0.0f, 1.0f, 0.0f).endVertex();
+        vertexConsumer.vertex(matrix4f, x, y, z).color(r, g, b, 200).uv(u, v).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(LightTexture.FULL_BRIGHT).normal(matrix3f, 0.0f, 1.0f, 0.0f).endVertex();
     }
 
     @Override

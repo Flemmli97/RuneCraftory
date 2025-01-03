@@ -71,6 +71,7 @@ import io.github.flemmli97.runecraftory.client.model.monster.ModelWoolyWool;
 import io.github.flemmli97.runecraftory.client.npc.NPCFeatureRenderers;
 import io.github.flemmli97.runecraftory.client.npc.NPCTextureLayer;
 import io.github.flemmli97.runecraftory.client.npc.RenderNPC;
+import io.github.flemmli97.runecraftory.client.particles.BlockParticle;
 import io.github.flemmli97.runecraftory.client.particles.CirclingParticle;
 import io.github.flemmli97.runecraftory.client.particles.LightningParticle;
 import io.github.flemmli97.runecraftory.client.particles.MoveToGoalParticle;
@@ -416,7 +417,7 @@ public class ClientRegister {
         consumer.register(ModEntities.WIND_BLADE_BARRAGE_SUMMONER.get(), EmptyRender::new);
         consumer.register(ModEntities.FIRE_WALL_SUMMONER.get(), EmptyRender::new);
         consumer.register(ModEntities.ELEMENTAL_CIRCLE_SUMMONER.get(), EmptyRender::new);
-        consumer.register(ModEntities.STARFALL_SUMMONER.get(), EmptyRender::new);
+        consumer.register(ModEntities.GROUND_SHAKE_PARTICLES.get(), EmptyRender::new);
 
         consumer.register(ModEntities.FISHING_HOOK.get(), CustomFishingHookRenderer::new);
         consumer.register(ModEntities.SARCOPHAGUS_TELEPORTER.get(), EmptyRender::new);
@@ -556,6 +557,7 @@ public class ClientRegister {
         consumer.register(ModParticles.PARALYSIS.get(), LightningParticle.Factory::new);
         consumer.register(ModParticles.LIGHTNING.get(), LightningParticle.Factory::new);
         consumer.register(ModParticles.TORNADO.get(), TornadoParticle.TornadoFactoryBase::new);
+        consumer.register(ModParticles.BLOCK.get(), BlockParticle.Factory::new);
 
         consumer.register(ModParticles.RUNEY.get(), RuneyParticle.Provider::new);
 

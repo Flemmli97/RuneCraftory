@@ -6,13 +6,12 @@ import io.github.flemmli97.runecraftory.common.entities.misc.EntityElementalTrai
 import io.github.flemmli97.tenshilib.client.render.RenderTexture;
 import io.github.flemmli97.tenshilib.client.render.RenderUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -60,7 +59,6 @@ public class RenderElementalTrail extends RenderTexture<EntityElementalTrail> {
     private void renderBlockModel(BlockState state, PoseStack stack, MultiBufferSource buffer) {
         stack.translate(-0.5, -0.5, -0.5);
         BlockRenderDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
-        BakedModel model = dispatcher.getBlockModel(state);
-        dispatcher.getModelRenderer().renderModel(stack.last(), buffer.getBuffer(Sheets.solidBlockSheet()), state, model, 0.0f, 0.0f, 0.0f, 16711935, OverlayTexture.NO_OVERLAY);
+        dispatcher.renderSingleBlock(state, stack, buffer, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY);
     }
 }

@@ -8,6 +8,7 @@ import io.github.flemmli97.runecraftory.client.model.misc.ModelChest;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityMarionettaTrap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -60,7 +61,7 @@ public class RenderMarionettaTrap extends EntityRenderer<EntityMarionettaTrap> {
                 stack.mulPose(Vector3f.YP.rotationDegrees(90));
                 stack.mulPose(Vector3f.XP.rotationDegrees(-50));
                 Minecraft.getInstance().getItemRenderer().renderStatic(this.sword, ItemTransforms.TransformType.FIRST_PERSON_LEFT_HAND,
-                        0xff00ff, OverlayTexture.NO_OVERLAY, stack, buffer, 0);
+                        LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, stack, buffer, 0);
                 stack.popPose();
             }
         }

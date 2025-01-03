@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
+import io.github.flemmli97.runecraftory.common.entities.misc.GroundShakeParticleSpawner;
 import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
@@ -97,15 +98,16 @@ public class EntityRaccoon extends BossMonster {
         });
         b.put(BARRAGE, (anim, entity) -> {
             if (anim.canAttack() || anim.isAtTick(0.84) || anim.isAtTick(1.28)) {
-                entity.mobAttack(anim, entity.getTarget(), entity::doHurtTarget);
                 LivingEntity target = entity.getTarget();
                 Vec3 dir;
                 if (target != null) {
                     Vec3 targetPos = target.position();
                     dir = new Vec3(targetPos.x - entity.getX(), 0.0, targetPos.z - entity.getZ()).normalize();
+                    entity.setTargetPosition(targetPos);
                 } else
                     dir = new Vec3(entity.getLookAngle().x(), 0, entity.getLookAngle().z()).normalize();
                 entity.setDeltaMovement(entity.getDeltaMovement().add(dir.scale(0.6)));
+                entity.mobAttack(anim, entity.getTarget(), entity::doHurtTarget);
             }
         });
         b.put(JUMP, (anim, entity) -> {
@@ -141,6 +143,7 @@ public class EntityRaccoon extends BossMonster {
                         .withChangedAttribute(ModAttributes.STUN.get(), 80);
                 entity.mobAttack(anim, entity.getTarget(), e -> CombatUtils.mobAttack(entity, e, source));
                 S2CScreenShake.sendAround(entity, 24, 8, 3);
+                entity.level.addFreshEntity(new GroundShakeParticleSpawner(entity.level, entity, 360, entity.getBbWidth() * 1.8));
                 entity.level.playSound(null, entity.blockPosition(), SoundEvents.GENERIC_EXPLODE, entity.getSoundSource(), 1.0f, 0.9f);
             }
         });
@@ -218,35 +221,35 @@ public class EntityRaccoon extends BossMonster {
             WeightedEntry.wrap(new GoalAttackAction<EntityRaccoon>(DOUBLE_PUNCH)
                     .cooldown(e -> e.animationCooldown(DOUBLE_PUNCH))
                     .withCondition(((goal, target, previous) -> !goal.attacker.isBerserk()))
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveAwayRunner<>(4, 1.2, 5), e -> 20 + e.getRandom().nextInt(10))), 10),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveAwayRunner<>(4, 1.2, 5), e -> 20 + e.getRandom().nextInt(10))), 13),
             WeightedEntry.wrap(new GoalAttackAction<EntityRaccoon>(DOUBLE_PUNCH)
                     .cooldown(e -> e.animationCooldown(DOUBLE_PUNCH))
                     .withCondition(((goal, target, previous) -> !goal.attacker.isBerserk()))
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.2), e -> 35 + e.getRandom().nextInt(15))), 7),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.2), e -> 35 + e.getRandom().nextInt(15))), 10),
             WeightedEntry.wrap(new GoalAttackAction<EntityRaccoon>(PUNCH)
                     .cooldown(e -> e.animationCooldown(PUNCH))
                     .withCondition(((goal, target, previous) -> goal.attacker.isBerserk() && !PUNCH.getID().equals(previous)))
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1), e -> 25 + e.getRandom().nextInt(10))), 9),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1), e -> 25 + e.getRandom().nextInt(10))), 13),
             WeightedEntry.wrap(new GoalAttackAction<EntityRaccoon>(JUMP)
                     .cooldown(e -> e.animationCooldown(JUMP))
                     .withCondition(((goal, target, previous) -> goal.attacker.isBerserk() && !JUMP.getID().equals(previous)))
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 6), e -> 25 + e.getRandom().nextInt(10))), 10),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 6), e -> 25 + e.getRandom().nextInt(10))), 12),
             WeightedEntry.wrap(new GoalAttackAction<EntityRaccoon>(STOMP)
                     .cooldown(e -> e.animationCooldown(STOMP))
                     .withCondition(((goal, target, previous) -> goal.attacker.isBerserk() && !STOMP.getID().equals(previous)))
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1), e -> 25 + e.getRandom().nextInt(10))), 10),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1), e -> 25 + e.getRandom().nextInt(10))), 12),
             WeightedEntry.wrap(new GoalAttackAction<EntityRaccoon>(LEAF_SHOOT)
                     .cooldown(e -> e.animationCooldown(LEAF_SHOOT))
                     .withCondition(((goal, target, previous) -> goal.attacker.isBerserk() && !LEAF_SHOOT.getID().equals(previous)))
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveAwayRunner<>(3, 1, 5), e -> 25 + e.getRandom().nextInt(10))), 9),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveAwayRunner<>(3, 1, 5), e -> 25 + e.getRandom().nextInt(10))), 11),
             WeightedEntry.wrap(new GoalAttackAction<EntityRaccoon>(LEAF_BOOMERANG)
                     .cooldown(e -> e.animationCooldown(LEAF_BOOMERANG))
                     .withCondition(((goal, target, previous) -> goal.attacker.isBerserk() && !LEAF_BOOMERANG.getID().equals(previous)))
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveAwayRunner<>(3, 1, 5), e -> 25 + e.getRandom().nextInt(10))), 9),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveAwayRunner<>(3, 1, 5), e -> 25 + e.getRandom().nextInt(10))), 11),
             WeightedEntry.wrap(new GoalAttackAction<EntityRaccoon>(ROAR)
                     .cooldown(e -> e.animationCooldown(ROAR))
                     .withCondition(((goal, target, previous) -> goal.attacker.isBerserk() && !ROAR.getID().equals(previous)))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 6),
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 5),
             WeightedEntry.wrap(new GoalAttackAction<EntityRaccoon>(BARRAGE)
                     .cooldown(e -> e.animationCooldown(BARRAGE))
                     .withCondition(((goal, target, previous) -> goal.attacker.isBerserk() && !BARRAGE.getID().equals(previous)))
@@ -254,7 +257,7 @@ public class EntityRaccoon extends BossMonster {
             WeightedEntry.wrap(new GoalAttackAction<EntityRaccoon>(CLONE)
                     .cooldown(e -> e.animationCooldown(CLONE))
                     .withCondition(((goal, target, previous) -> goal.attacker.isEnraged() && !CLONE.getID().equals(previous)))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 9)
+                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 10)
     );
     private static final List<WeightedEntry.Wrapper<IdleAction<EntityRaccoon>>> IDLE_ACTIONS = List.of(
             WeightedEntry.wrap(new IdleAction<EntityRaccoon>(() -> new MoveToTargetRunner<>(1, 0.5))
