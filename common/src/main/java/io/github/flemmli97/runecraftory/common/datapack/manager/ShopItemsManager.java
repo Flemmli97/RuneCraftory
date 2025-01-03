@@ -27,7 +27,6 @@ import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.item.Item;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -49,63 +48,59 @@ public class ShopItemsManager extends SimpleJsonResourceReloadListener {
 
     private Map<NPCJob, Collection<ShopItemProperties>> shopItems = ImmutableMap.of();
     private Map<NPCJob, Collection<ShopItemProperties>> shopItemsDefaults = ImmutableMap.of();
-    private boolean checkedStats;
+    private boolean resolved;
+    private Map<NPCJob, Collection<ShopItemProperties.IntermediaryShopItem>> intermediaryData = ImmutableMap.of();
 
     public ShopItemsManager() {
         super(GSON, DIRECTORY);
     }
 
     public Collection<ShopItemProperties> get(NPCJob shop) {
-        if (!this.checkedStats) {
-            this.removeNoneBuyable();
-            this.checkedStats = true;
-        }
+        this.resolve();
         return this.shopItems.getOrDefault(shop, Collections.emptyList());
     }
 
     public Collection<ShopItemProperties> getDefaultItems(NPCJob shop) {
-        if (!this.checkedStats) {
-            this.removeNoneBuyable();
-            this.checkedStats = true;
-        }
+        this.resolve();
         return this.shopItemsDefaults.getOrDefault(shop, Collections.emptyList());
     }
 
-    private void removeNoneBuyable() {
-        ImmutableMap.Builder<NPCJob, Collection<ShopItemProperties>> b = ImmutableMap.builder();
-        ImmutableMap.Builder<NPCJob, Collection<ShopItemProperties>> bD = ImmutableMap.builder();
-        b.put(ModNPCJobs.RANDOM.getSecond(), DataPackHandler.INSTANCE.itemStatManager().all()
-                .stream().filter(p -> p.getSecond().getBuy() > 0)
-                .map(p -> new ShopItemProperties(p.getFirst(), ShopItemProperties.UnlockType.NEEDS_SHIPPING, EntityPredicate.ANY))
-                .toList());
-        this.shopItems.forEach((s, c) -> {
-            if (s != ModNPCJobs.RANDOM.getSecond()) {
+    public void resolve() {
+        if (!this.resolved) {
+            this.resolved = true;
+            ImmutableMap.Builder<NPCJob, Collection<ShopItemProperties>> builder = ImmutableMap.builder();
+            ImmutableMap.Builder<NPCJob, Collection<ShopItemProperties>> defaultsBuilder = ImmutableMap.builder();
+            this.intermediaryData.forEach((job, items) -> {
                 Collection<ShopItemProperties> newCollection = new ArrayList<>();
-                c.forEach(props -> {
-                    if (DataPackHandler.INSTANCE.itemStatManager().get(props.stack().getItem()).map(ItemStat::getBuy).orElse(0) > 0)
-                        newCollection.add(props);
+                Collection<ShopItemProperties> defaultCollection = new ArrayList<>();
+                items.forEach(props -> {
+                    List<ShopItemProperties> contents = ShopItemProperties.from(props);
+                    contents.forEach((prop -> {
+                        if (DataPackHandler.INSTANCE.itemStatManager().get(prop.stack().getItem()).map(ItemStat::getBuy).orElse(0) > 0) {
+                            if (prop.unlockType() == ShopItemProperties.UnlockType.DEFAULT) {
+                                defaultCollection.add(prop);
+                            } else {
+                                newCollection.add(prop);
+                            }
+                        }
+                    }));
                 });
-                b.put(s, ImmutableList.copyOf(newCollection));
-            }
-        });
-        this.shopItemsDefaults.forEach((s, c) -> {
-            Collection<ShopItemProperties> newCollection = new ArrayList<>();
-            c.forEach(stack -> {
-                if (DataPackHandler.INSTANCE.itemStatManager().get(stack.stack().getItem()).map(ItemStat::getBuy).orElse(0) > 0)
-                    newCollection.add(stack);
+                builder.put(job, ImmutableList.copyOf(newCollection));
+                defaultsBuilder.put(job, ImmutableList.copyOf(defaultCollection));
             });
-            bD.put(s, ImmutableList.copyOf(newCollection));
-        });
-        this.shopItems = b.build();
-        this.shopItemsDefaults = bD.build();
+            builder.put(ModNPCJobs.RANDOM.getSecond(), DataPackHandler.INSTANCE.itemStatManager().all()
+                    .stream().filter(p -> p.getSecond().getBuy() > 0)
+                    .map(p -> new ShopItemProperties(p.getFirst(), ShopItemProperties.UnlockType.NEEDS_SHIPPING, EntityPredicate.ANY))
+                    .toList());
+            this.shopItems = builder.build();
+            this.shopItemsDefaults = defaultsBuilder.build();
+        }
     }
 
     @Override
     protected void apply(Map<ResourceLocation, JsonElement> data, ResourceManager manager, ProfilerFiller profiler) {
-        HashMap<NPCJob, Collection<ShopItemProperties>> shopBuilder = new HashMap<>();
-        HashMap<NPCJob, Collection<ShopItemProperties>> defaultItemsBuilder = new HashMap<>();
-
-        this.checkedStats = false;
+        HashMap<NPCJob, Collection<ShopItemProperties.IntermediaryShopItem>> shops = new HashMap<>();
+        this.resolved = false;
         data.forEach((fres, el) -> {
             try {
                 NPCJob shop = ModNPCJobs.getFromID(new ResourceLocation(fres.getNamespace(), fres.getPath()));
@@ -115,50 +110,26 @@ public class ShopItemsManager extends SimpleJsonResourceReloadListener {
                 boolean replace = GsonHelper.getAsBoolean(obj, "replace", false);
                 JsonArray array = GsonHelper.getAsJsonArray(obj, "values");
                 // Separate tag based and non tag based entries as non tag based should take priority
-                Collection<ShopItemProperties> items = new ArrayList<>();
-                Collection<ShopItemProperties> itemTags = new ArrayList<>();
+                List<ShopItemProperties.IntermediaryShopItem> contents = new ArrayList<>();
                 array.forEach(val -> {
                     ShopItemProperties.IntermediaryShopItem prop = ShopItemProperties.CODEC.parse(JsonOps.INSTANCE, val)
                             .getOrThrow(false, RuneCraftory.LOGGER::error);
-                    List<ShopItemProperties> props = ShopItemProperties.from(prop);
-                    if (prop.isTag())
-                        itemTags.addAll(props);
-                    else
-                        items.addAll(props);
+                    contents.add(prop);
                 });
-                Collection<ShopItemProperties> shopItems = new ArrayList<>();
-                // Track if item already has been added before handling tags
-                HashMap<Item, ShopItemProperties> dupeTracker = new HashMap<>();
-                for (ShopItemProperties prop : items) {
-                    shopItems.add(prop);
-                    if (!prop.stack().hasTag())
-                        dupeTracker.put(prop.stack().getItem(), prop);
-                }
-                for (ShopItemProperties prop : itemTags) {
-                    if (!dupeTracker.containsKey(prop.stack().getItem()))
-                        shopItems.add(prop);
-                }
                 if (replace)
-                    shopBuilder.put(shop, shopItems);
+                    shops.put(shop, contents);
                 else
-                    shopBuilder.compute(shop, (k, v) -> {
+                    shops.compute(shop, (k, v) -> {
                         if (v == null)
-                            return shopItems;
-                        v.addAll(shopItems);
+                            return contents;
+                        v.addAll(contents);
                         return v;
                     });
             } catch (JsonSyntaxException ex) {
-                RuneCraftory.LOGGER.error("Couldnt parse shop stack json {} {}", fres, ex);
+                RuneCraftory.LOGGER.error("Couldn't parse shop stack json {} {}", fres, ex);
                 ex.fillInStackTrace();
             }
         });
-        ImmutableMap.Builder<NPCJob, Collection<ShopItemProperties>> b = ImmutableMap.builder();
-        ImmutableMap.Builder<NPCJob, Collection<ShopItemProperties>> bD = ImmutableMap.builder();
-        shopBuilder.forEach((s, c) -> {
-            b.put(s, c.stream().filter(p -> p.unlockType() != ShopItemProperties.UnlockType.DEFAULT).toList());
-            bD.put(s, c.stream().filter(p -> p.unlockType() == ShopItemProperties.UnlockType.DEFAULT).toList());
-        });
-        this.shopItems = b.build();
-        this.shopItemsDefaults = bD.build();
+        this.intermediaryData = shops;
     }
 }

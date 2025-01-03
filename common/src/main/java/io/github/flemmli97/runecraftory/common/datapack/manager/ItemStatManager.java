@@ -9,7 +9,7 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
 import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
-import io.github.flemmli97.tenshilib.platform.PlatformUtils;
+import io.github.flemmli97.runecraftory.common.utils.MiscUtils;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -20,8 +20,11 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -31,8 +34,9 @@ public class ItemStatManager extends SimpleJsonResourceReloadListener {
 
     public static final String DIRECTORY = "item_stats";
 
-    private Map<ResourceLocation, ItemStat> itemstat = ImmutableMap.of();
-    private Map<TagKey<Item>, ItemStat> itemstatTag = ImmutableMap.of();
+    private Map<Item, ItemStat> itemstats = ImmutableMap.of();
+    private boolean resolved;
+    private Map<TagKey<Item>, ItemStat> tagStats = ImmutableMap.of();
 
     public ItemStatManager() {
         super(GsonInstances.ATTRIBUTE_SPELLS, DIRECTORY);
@@ -41,17 +45,8 @@ public class ItemStatManager extends SimpleJsonResourceReloadListener {
     public Optional<ItemStat> get(Item item) {
         if (GeneralConfig.disableItemStatSystem)
             return Optional.empty();
-        ResourceLocation res = PlatformUtils.INSTANCE.items().getIDFrom(item);
-        ItemStat stat = this.itemstat.get(res);
-        if (stat != null) {
-            return Optional.of(stat);
-        }
-        if (!this.itemstatTag.isEmpty()) {
-            return item.builtInRegistryHolder().tags()
-                    .filter(this.itemstatTag::containsKey)
-                    .findFirst().map(t -> this.itemstatTag.get(t));
-        }
-        return Optional.empty();
+        this.resolveTags(false);
+        return Optional.ofNullable(this.itemstats.get(item));
     }
 
     public List<Pair<ItemStack, ItemStat>> all() {
@@ -60,73 +55,74 @@ public class ItemStatManager extends SimpleJsonResourceReloadListener {
 
     public List<Pair<ItemStack, ItemStat>> all(Predicate<ItemStack> test) {
         List<Pair<ItemStack, ItemStat>> list = new ArrayList<>();
-        this.itemstat.forEach((res, stat) -> {
-            ItemStack stack = new ItemStack(PlatformUtils.INSTANCE.items().getFromId(res));
+        this.itemstats.forEach((item, stat) -> {
+            ItemStack stack = new ItemStack(item);
             if (!stack.isEmpty() && test.test(stack))
                 list.add(Pair.of(stack, stat));
         });
-        this.itemstatTag.forEach((key, value) -> Registry.ITEM.getTag(key).ifPresent(n -> n.forEach(h -> {
-            ItemStack stack = new ItemStack(h.value());
-            if (!stack.isEmpty() && test.test(stack))
-                list.add(Pair.of(stack, value));
-        })));
         return list;
+    }
+
+    public void resolveTags(boolean forced) {
+        if (!this.resolved || forced) {
+            this.resolved = true;
+            HashMap<Item, ItemStat> itemEntries = new HashMap<>(this.itemstats);
+            this.tagStats.entrySet().stream().sorted(Comparator.comparing(e -> e.getKey().location()))
+                    .forEach(entry -> MiscUtils.expandTag(Registry.ITEM, entry.getKey()).forEach(item -> {
+                        if (!itemEntries.containsKey(item))
+                            itemEntries.put(item, entry.getValue());
+                    }));
+            this.itemstats = ImmutableMap.copyOf(itemEntries);
+        }
     }
 
     @Override
     protected void apply(Map<ResourceLocation, JsonElement> data, ResourceManager manager, ProfilerFiller profiler) {
-        ImmutableMap.Builder<ResourceLocation, ItemStat> builder = ImmutableMap.builder();
-        ImmutableMap.Builder<TagKey<Item>, ItemStat> tagBuilder = ImmutableMap.builder();
+        this.resolved = false;
+        ImmutableMap.Builder<Item, ItemStat> itemEntries = ImmutableMap.builder();
+        ImmutableMap.Builder<TagKey<Item>, ItemStat> tagEntries = ImmutableMap.builder();
         data.forEach((fres, el) -> {
             try {
                 JsonObject obj = el.getAsJsonObject();
-                String item = GsonHelper.getAsString(obj, "item");
-                if (item.startsWith("#")) {
-                    TagKey<Item> tag = PlatformUtils.INSTANCE.itemTag(new ResourceLocation(item.substring(1)));
-                    ItemStat stat = ItemStat.CODEC.parse(JsonOps.INSTANCE, el)
+                String key = GsonHelper.getAsString(obj, "item");
+                if (key.startsWith("#")) {
+                    TagKey<Item> tag = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(key.substring(1)));
+                    ItemStat props = ItemStat.CODEC.parse(JsonOps.INSTANCE, el)
                             .getOrThrow(false, RuneCraftory.LOGGER::error);
-                    stat.setID(fres);
-                    tagBuilder.put(tag, stat);
+                    props.setID(fres);
+                    tagEntries.put(tag, props);
                 } else {
-                    ResourceLocation res = new ResourceLocation(item);
-                    ItemStat stat = ItemStat.CODEC.parse(JsonOps.INSTANCE, el)
-                            .getOrThrow(false, RuneCraftory.LOGGER::error);
-                    stat.setID(fres);
-                    builder.put(res, stat);
+                    Item item = Registry.ITEM.get(new ResourceLocation(key));
+                    if (item != Items.AIR) {
+                        ItemStat props = ItemStat.CODEC.parse(JsonOps.INSTANCE, el)
+                                .getOrThrow(false, RuneCraftory.LOGGER::error);
+                        props.setID(fres);
+                        itemEntries.put(item, props);
+                    }
                 }
             } catch (Exception ex) {
-                RuneCraftory.LOGGER.error("Couldnt parse item stat json {} {}", fres, ex);
+                RuneCraftory.LOGGER.error("Couldn't parse item stat json {} {}", fres, ex);
                 ex.fillInStackTrace();
             }
         });
-        this.itemstat = builder.build();
-        this.itemstatTag = tagBuilder.build();
-        ItemCraftingLevelManager.reset();
+        this.itemstats = itemEntries.build();
+        this.tagStats = tagEntries.build();
     }
 
     public void toPacket(FriendlyByteBuf buffer) {
-        buffer.writeInt(this.itemstat.size());
-        this.itemstat.forEach((res, stat) -> {
-            buffer.writeResourceLocation(res);
-            stat.toPacket(buffer);
-        });
-        buffer.writeInt(this.itemstatTag.size());
-        this.itemstatTag.forEach((tag, stat) -> {
-            buffer.writeResourceLocation(tag.location());
-            stat.toPacket(buffer);
+        this.resolveTags(false);
+        buffer.writeInt(this.itemstats.size());
+        this.itemstats.forEach((item, prop) -> {
+            buffer.writeResourceLocation(Registry.ITEM.getKey(item));
+            prop.toPacket(buffer);
         });
     }
 
     public void fromPacket(FriendlyByteBuf buffer) {
-        ImmutableMap.Builder<ResourceLocation, ItemStat> builder = ImmutableMap.builder();
+        ImmutableMap.Builder<Item, ItemStat> builder = ImmutableMap.builder();
         int size = buffer.readInt();
         for (int i = 0; i < size; i++)
-            builder.put(buffer.readResourceLocation(), ItemStat.fromPacket(buffer));
-        this.itemstat = builder.build();
-        ImmutableMap.Builder<TagKey<Item>, ItemStat> tagBuilder = ImmutableMap.builder();
-        int tagSize = buffer.readInt();
-        for (int i = 0; i < tagSize; i++)
-            tagBuilder.put(PlatformUtils.INSTANCE.itemTag(buffer.readResourceLocation()), ItemStat.fromPacket(buffer));
-        this.itemstatTag = tagBuilder.build();
+            builder.put(Registry.ITEM.get(buffer.readResourceLocation()), ItemStat.fromPacket(buffer));
+        this.itemstats = builder.build();
     }
 }

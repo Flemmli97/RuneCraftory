@@ -9,7 +9,7 @@ import com.google.gson.JsonParseException;
 import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.NPCData;
-import io.github.flemmli97.tenshilib.platform.PlatformUtils;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -78,7 +78,7 @@ public class GiftManager extends SimplePreparableReloadListener<Map<ResourceLoca
         data.forEach((res, arr) -> {
             try {
                 NPCData.GiftType giftType = NPCData.GiftType.valueOf(res.getPath().toUpperCase(Locale.ROOT));
-                arr.forEach(e -> gifts.add(Pair.of(giftType, PlatformUtils.INSTANCE.itemTag(new ResourceLocation(e.getAsString())))));
+                arr.forEach(e -> gifts.add(Pair.of(giftType, TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(e.getAsString())))));
             } catch (IllegalArgumentException ignored) {
                 RuneCraftory.LOGGER.error("No such gift type {}", res.getPath());
             }

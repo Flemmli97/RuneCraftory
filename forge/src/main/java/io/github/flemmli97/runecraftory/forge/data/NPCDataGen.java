@@ -27,7 +27,7 @@ import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
-import io.github.flemmli97.tenshilib.platform.PlatformUtils;
+import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -564,7 +564,7 @@ public class NPCDataGen extends NPCDataProvider {
     }
 
     private static TagKey<Item> giftTag(String tag) {
-        return PlatformUtils.INSTANCE.itemTag(new ResourceLocation(RuneCraftory.MODID, "npc/" + tag));
+        return TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(RuneCraftory.MODID, "npc/" + tag));
     }
 
     private static ResourceLocation npcTexture(String texture) {

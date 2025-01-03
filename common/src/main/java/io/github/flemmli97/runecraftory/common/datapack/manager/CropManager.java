@@ -9,7 +9,8 @@ import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
-import io.github.flemmli97.tenshilib.platform.PlatformUtils;
+import io.github.flemmli97.runecraftory.common.utils.MiscUtils;
+import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -18,8 +19,11 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Map;
 
 public class CropManager extends SimpleJsonResourceReloadListener {
@@ -27,8 +31,9 @@ public class CropManager extends SimpleJsonResourceReloadListener {
     public static final String DIRECTORY = "crop_properties";
     private static final Gson GSON = new GsonBuilder().create();
 
-    private Map<ResourceLocation, CropProperties> crops = ImmutableMap.of();
-    private Map<TagKey<Item>, CropProperties> cropTag = ImmutableMap.of();
+    private Map<Item, CropProperties> crops = ImmutableMap.of();
+    private boolean resolved;
+    private Map<TagKey<Item>, CropProperties> tagCrops = ImmutableMap.of();
 
     public CropManager() {
         super(GSON, DIRECTORY);
@@ -38,73 +43,70 @@ public class CropManager extends SimpleJsonResourceReloadListener {
     public CropProperties get(Item item) {
         if (GeneralConfig.disableCropSystem)
             return null;
-        ResourceLocation res = PlatformUtils.INSTANCE.items().getIDFrom(item);
-        CropProperties props = this.crops.get(res);
-        if (props != null) {
-            return props;
+        this.resolveTags(false);
+        return this.crops.get(item);
+    }
+
+    public void resolveTags(boolean forced) {
+        if (!this.resolved || forced) {
+            this.resolved = true;
+            HashMap<Item, CropProperties> itemEntries = new HashMap<>(this.crops);
+            this.tagCrops.entrySet().stream().sorted(Comparator.comparing(e -> e.getKey().location()))
+                    .forEach(entry -> MiscUtils.expandTag(Registry.ITEM, entry.getKey()).forEach(item -> {
+                        if (!itemEntries.containsKey(item))
+                            itemEntries.put(item, entry.getValue());
+                    }));
+            this.crops = ImmutableMap.copyOf(itemEntries);
         }
-        if (!this.cropTag.isEmpty()) {
-            return item.builtInRegistryHolder().tags()
-                    .filter(this.cropTag::containsKey)
-                    .findFirst().map(this.cropTag::get)
-                    .orElse(null);
-        }
-        return null;
     }
 
     @Override
     protected void apply(Map<ResourceLocation, JsonElement> data, ResourceManager manager, ProfilerFiller profiler) {
-        ImmutableMap.Builder<ResourceLocation, CropProperties> builder = ImmutableMap.builder();
-        ImmutableMap.Builder<TagKey<Item>, CropProperties> tagBuilder = ImmutableMap.builder();
+        this.resolved = false;
+        ImmutableMap.Builder<Item, CropProperties> itemEntries = ImmutableMap.builder();
+        ImmutableMap.Builder<TagKey<Item>, CropProperties> tagEntries = ImmutableMap.builder();
         data.forEach((fres, el) -> {
             try {
                 JsonObject obj = el.getAsJsonObject();
-                String item = GsonHelper.getAsString(obj, "item");
-                if (item.startsWith("#")) {
-                    TagKey<Item> tag = PlatformUtils.INSTANCE.itemTag(new ResourceLocation(item.substring(1)));
+                String key = GsonHelper.getAsString(obj, "item");
+                if (key.startsWith("#")) {
+                    TagKey<Item> tag = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(key.substring(1)));
                     CropProperties props = CropProperties.CODEC.parse(JsonOps.INSTANCE, el)
                             .getOrThrow(false, RuneCraftory.LOGGER::error);
                     props.setID(fres);
-                    tagBuilder.put(tag, props);
+                    tagEntries.put(tag, props);
                 } else {
-                    ResourceLocation res = new ResourceLocation(item);
-                    CropProperties props = CropProperties.CODEC.parse(JsonOps.INSTANCE, el)
-                            .getOrThrow(false, RuneCraftory.LOGGER::error);
-                    props.setID(fres);
-                    builder.put(res, props);
+                    Item item = Registry.ITEM.get(new ResourceLocation(key));
+                    if (item != Items.AIR) {
+                        CropProperties props = CropProperties.CODEC.parse(JsonOps.INSTANCE, el)
+                                .getOrThrow(false, RuneCraftory.LOGGER::error);
+                        props.setID(fres);
+                        itemEntries.put(item, props);
+                    }
                 }
             } catch (Exception ex) {
-                RuneCraftory.LOGGER.error("Couldnt parse crop properties json {} {}", fres, ex);
+                RuneCraftory.LOGGER.error("Couldn't parse crop properties json {} {}", fres, ex);
                 ex.fillInStackTrace();
             }
         });
-        this.crops = builder.build();
-        this.cropTag = tagBuilder.build();
+        this.crops = itemEntries.build();
+        this.tagCrops = tagEntries.build();
     }
 
     public void toPacket(FriendlyByteBuf buffer) {
+        this.resolveTags(false);
         buffer.writeInt(this.crops.size());
-        this.crops.forEach((res, prop) -> {
-            buffer.writeResourceLocation(res);
+        this.crops.forEach((item, prop) -> {
+            buffer.writeResourceLocation(Registry.ITEM.getKey(item));
             prop.toPacket(buffer);
-        });
-        buffer.writeInt(this.cropTag.size());
-        this.cropTag.forEach((tag, stat) -> {
-            buffer.writeResourceLocation(tag.location());
-            stat.toPacket(buffer);
         });
     }
 
     public void fromPacket(FriendlyByteBuf buffer) {
-        ImmutableMap.Builder<ResourceLocation, CropProperties> builder = ImmutableMap.builder();
+        ImmutableMap.Builder<Item, CropProperties> builder = ImmutableMap.builder();
         int size = buffer.readInt();
         for (int i = 0; i < size; i++)
-            builder.put(buffer.readResourceLocation(), CropProperties.fromPacket(buffer));
+            builder.put(Registry.ITEM.get(buffer.readResourceLocation()), CropProperties.fromPacket(buffer));
         this.crops = builder.build();
-        ImmutableMap.Builder<TagKey<Item>, CropProperties> tagBuilder = ImmutableMap.builder();
-        int tagSize = buffer.readInt();
-        for (int i = 0; i < tagSize; i++)
-            tagBuilder.put(PlatformUtils.INSTANCE.itemTag(buffer.readResourceLocation()), CropProperties.fromPacket(buffer));
-        this.cropTag = tagBuilder.build();
     }
 }

@@ -5,7 +5,6 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
-import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
@@ -601,11 +600,11 @@ public class ItemTagGen extends ItemTagsProvider {
     }
 
     protected static TagKey<Item> tempKeyForge(String path) {
-        return PlatformUtils.INSTANCE.itemTag(new ResourceLocation("forge", path));
+        return TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("forge", path));
     }
 
     protected static TagKey<Item> tempKeyFabric(String path) {
-        return PlatformUtils.INSTANCE.itemTag(new ResourceLocation("c", path));
+        return TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("c", path));
     }
 
     @SafeVarargs

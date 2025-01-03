@@ -18,6 +18,7 @@ import io.github.flemmli97.runecraftory.common.items.tools.ItemToolHammer;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolSickle;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
+import io.github.flemmli97.runecraftory.common.network.Packet;
 import io.github.flemmli97.runecraftory.common.network.S2CCalendar;
 import io.github.flemmli97.runecraftory.common.network.S2CCapSync;
 import io.github.flemmli97.runecraftory.common.network.S2CDataPackSync;
@@ -47,6 +48,7 @@ import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -107,6 +109,15 @@ public class EntityCalls {
             FamilyHandler.get(serverPlayer.getServer())
                     .getOrCreateEntry(serverPlayer)
                     .updateName(player);
+        }
+    }
+
+    // These datapack need resync. Do this at a stage where resource reloading is finished
+    public static void onResourceReloadEnd(MinecraftServer server) {
+        for (S2CDataPackSync.SyncedType type : S2CDataPackSync.SyncedType.values()) {
+            DataPackHandler.prepareResync(type);
+            Packet pkt = new S2CDataPackSync(type);
+            Platform.INSTANCE.sendToAll(pkt, server);
         }
     }
 

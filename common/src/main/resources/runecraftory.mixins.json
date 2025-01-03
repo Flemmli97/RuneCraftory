@@ -31,6 +31,7 @@
     "MobAccessor",
     "MobMixin",
     "PlayerMixin",
+    "PlayerListMixin",
     "PoiTypeAccessor",
     "PoolsMixin",
     "RandomizableCBEMixin",

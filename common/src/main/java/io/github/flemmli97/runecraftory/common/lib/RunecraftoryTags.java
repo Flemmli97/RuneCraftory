@@ -259,15 +259,15 @@ public class RunecraftoryTags {
     public static final TagKey<Biome> GENERAL_HERBS = biomeMod("herb_tree_biomes");
 
     private static TagKey<Item> tag(String name) {
-        return PlatformUtils.INSTANCE.itemTag(new ResourceLocation(RuneCraftory.MODID, name));
+        return TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(RuneCraftory.MODID, name));
     }
 
     public static TagKey<Item> tagCommon(String name) {
-        return PlatformUtils.INSTANCE.itemTag(new ResourceLocation("c", name));
+        return TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("c", name));
     }
 
     private static TagKey<Item> forge(String name) {
-        return PlatformUtils.INSTANCE.itemTag(new ResourceLocation("forge", name));
+        return TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("forge", name));
     }
 
     private static TagKey<Block> blockForge(String name) {

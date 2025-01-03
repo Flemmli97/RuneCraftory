@@ -93,6 +93,14 @@ public class DataPackHandler {
         }
     }
 
+    public static void prepareResync(S2CDataPackSync.SyncedType type) {
+        switch (type) {
+            case ITEMSTATS -> INSTANCE.itemStats.resolveTags(true);
+            case CROPS -> INSTANCE.crops.resolveTags(true);
+            case FOOD -> INSTANCE.foods.resolveTags(true);
+        }
+    }
+
     private DataPackHandler() {
     }
 
