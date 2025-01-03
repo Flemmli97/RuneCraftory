@@ -14,7 +14,7 @@ public enum EnumElement {
     EARTH(ChatFormatting.YELLOW, "runecraftory.element.earth", 0xe6e610, Suppliers.memoize(() -> new ItemStack(ModItems.CRYSTAL_EARTH.get()))),
     WIND(ChatFormatting.GREEN, "runecraftory.element.wind", 0x55ff55, Suppliers.memoize(() -> new ItemStack(ModItems.CRYSTAL_WIND.get()))),
     FIRE(ChatFormatting.DARK_RED, "runecraftory.element.fire", 0x991010, Suppliers.memoize(() -> new ItemStack(ModItems.CRYSTAL_FIRE.get()))),
-    LIGHT(ChatFormatting.WHITE, "runecraftory.element.light", 0xffff60, Suppliers.memoize(() -> new ItemStack(ModItems.CRYSTAL_FIRE.get()))),
+    LIGHT(ChatFormatting.WHITE, "runecraftory.element.light", 0xffff60, Suppliers.memoize(() -> new ItemStack(ModItems.CRYSTAL_LIGHT.get()))),
     DARK(ChatFormatting.DARK_PURPLE, "runecraftory.element.dark", 0x821082, Suppliers.memoize(() -> new ItemStack(ModItems.CRYSTAL_DARK.get()))),
     LOVE(ChatFormatting.RED, "runecraftory.element.love", 0xfc60fc, Suppliers.memoize(() -> new ItemStack(ModItems.CRYSTAL_LOVE.get())));
 

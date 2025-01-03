@@ -20,12 +20,15 @@ public class RenderElementBall extends EntityRenderer<EntityElementalBall> {
     private static final ResourceLocation WATER_2 = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/ice_ball.png");
     private static final ResourceLocation EARTH = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/earth_ball.png");
     private static final ResourceLocation LOVE = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/love_ball.png");
+    private static final ResourceLocation WIND = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/wind_blade.png");
+    private static final ResourceLocation BLOB = new ResourceLocation(RuneCraftory.MODID, "textures/particle/light.png");
 
     public final float xSize = 1, ySize = 1;
 
     protected final RenderUtils.TextureBuilder textureBuilder = new RenderUtils.TextureBuilder();
 
     protected final AnimatedTexture fireTexAnim = new AnimatedTexture(6, 1);
+    protected final AnimatedTexture windTexAnim = new AnimatedTexture(8, 1);
 
     public RenderElementBall(EntityRendererProvider.Context ctx) {
         super(ctx);
@@ -35,10 +38,17 @@ public class RenderElementBall extends EntityRenderer<EntityElementalBall> {
     public void render(EntityElementalBall entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         stack.mulPose(this.entityRenderDispatcher.cameraOrientation());
         stack.mulPose(Vector3f.YP.rotationDegrees(180));
-        if (entity.getElement() == EnumElement.FIRE) {
-            float[] uvOffset = this.fireTexAnim.uvOffset((int) (entity.tickCount * 0.5));
+        AnimatedTexture text = null;
+        switch (entity.getElement()) {
+            case FIRE -> text = this.fireTexAnim;
+            case WIND -> text = this.windTexAnim;
+            case DARK -> this.textureBuilder.setColor(0xff5d17a3);
+            case LIGHT -> this.textureBuilder.setColor(0xfff4f788);
+        }
+        if (text != null) {
+            float[] uvOffset = text.uvOffset((int) ((entity.tickCount + entity.getId()) * 0.5));
             this.textureBuilder.setUV(uvOffset[0], uvOffset[1]);
-            this.textureBuilder.setUVLength(this.fireTexAnim.uLength, this.fireTexAnim.vLength);
+            this.textureBuilder.setUVLength(text.uLength, text.vLength);
         } else {
             this.textureBuilder.setUV(0, 0);
             this.textureBuilder.setUVLength(1, 1);
@@ -54,11 +64,15 @@ public class RenderElementBall extends EntityRenderer<EntityElementalBall> {
             case WATER -> entity.getVariant() == 1 ? WATER_2 : WATER;
             case LOVE -> LOVE;
             case EARTH -> EARTH;
+            case WIND -> WIND;
+            case DARK, LIGHT -> BLOB;
             default -> FIRE;
         };
     }
 
     protected RenderType getRenderType(EntityElementalBall entity, ResourceLocation loc) {
+        if(entity.getElement() == EnumElement.DARK || entity.getElement() == EnumElement.LIGHT)
+            return RenderType.entityTranslucent(loc);
         return RenderType.entityCutoutNoCull(loc);
     }
 }
