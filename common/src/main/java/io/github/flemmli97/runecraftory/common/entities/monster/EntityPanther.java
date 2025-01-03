@@ -77,7 +77,7 @@ public class EntityPanther extends LeapingMonster {
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(LEAP)) {
             if (anim.canAttack()) {
-                Vec3 vec32 = this.getLeapVec(this.getTarget() == null ? this.getTargetPosition() : this.getTarget().position());
+                Vec3 vec32 = this.getLeapVec(this.getTarget() == null ? this.getTargetPosition().asVec(this.position()) : this.getTarget().position());
                 this.setDeltaMovement(vec32.x, 0.25f, vec32.z);
             }
             if (anim.getTick() > anim.getAttackTime()) {

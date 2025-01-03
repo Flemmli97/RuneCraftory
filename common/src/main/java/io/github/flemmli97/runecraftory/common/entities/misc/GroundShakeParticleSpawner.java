@@ -28,7 +28,7 @@ public class GroundShakeParticleSpawner extends ProjectileSummonHelperEntity {
     public GroundShakeParticleSpawner(Level level, LivingEntity caster, double arc, double range) {
         super(ModEntities.GROUND_SHAKE_PARTICLES.get(), level, caster);
         this.setPos(caster.getX(), caster.getY(), caster.getZ());
-        this.maxLivingTicks = 10;
+        this.maxLivingTicks = 8;
         this.arc = arc;
         this.range = range;
     }
@@ -52,6 +52,5 @@ public class GroundShakeParticleSpawner extends ProjectileSummonHelperEntity {
             ((ServerLevel) this.level).sendParticles(new BlockStateParticleData(ModParticles.BLOCK.get(), state, this.random.nextFloat() * 360, this.random.nextFloat() * 10, 30),
                     pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 0, 0, this.random.nextDouble() * 0.05 + 0.15, 0, 1);
         }
-        this.pos.clear();
     }
 }

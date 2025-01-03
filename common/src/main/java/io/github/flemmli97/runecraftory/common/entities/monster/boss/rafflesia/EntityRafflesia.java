@@ -37,7 +37,6 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.level.pathfinder.Path;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -276,10 +275,9 @@ public class EntityRafflesia extends BossMonster {
         if (anim.getTick() == 1) {
             LivingEntity target = this.getTarget();
             if (target != null) {
-                AABB aabb = target.getBoundingBox();
-                this.setTargetPosition(EntityUtil.getStraightProjectileTarget(this.position().add(0, this.getEyeHeight(), 0), target.position(), aabb.minY + target.getBbHeight() * 0.25, aabb.maxY - target.getBbHeight() * 0.25));
+                this.setTargetPosition(target);
             } else {
-                this.setTargetPosition(this.position().add(this.getLookAngle().scale(5)));
+                this.setTargetPosition(TargetPosition.of(this.position().add(this.getLookAngle().scale(5))));
             }
         }
     }

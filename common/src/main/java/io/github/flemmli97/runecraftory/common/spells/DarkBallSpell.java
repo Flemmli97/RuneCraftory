@@ -25,7 +25,7 @@ public class DarkBallSpell extends Spell {
         EntityDarkBall ball = new EntityDarkBall(level, entity, this.type);
         ball.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this.type == EntityDarkBall.Type.BALL ? 1 : 0.9f));
         float vel = this.type == EntityDarkBall.Type.BALL ? 0.09f : 0.23f;
-        Vec3 target = ProjectileUtil.getAimTarget(entity);
+        Vec3 target = ProjectileUtil.getAimTarget(entity, ball.position());
         if (target != null) {
             ball.shootAtPos(target, vel, 0);
         } else {

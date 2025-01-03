@@ -60,7 +60,7 @@ public abstract class LeapingMonster extends BaseMonster {
         if (this.isLeapingAnim(anim)) {
             this.getNavigation().stop();
             if (anim.canAttack()) {
-                Vec3 vec32 = this.getLeapVec(this.getTarget() == null ? this.getTargetPosition() : this.getTarget().position());
+                Vec3 vec32 = this.getLeapVec(this.getTarget() == null ? this.getTargetPosition().asVec(this.position()) : this.getTarget().position());
                 this.setDeltaMovement(vec32.x, this.leapHeightMotion(), vec32.z);
                 this.leapingDir = this.getDeltaMovement();
             }

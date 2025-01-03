@@ -192,7 +192,11 @@ public class EntityUtils {
 
     public static Vec3 getStraightProjectileTarget(Vec3 from, Entity target) {
         AABB aabb = target.getBoundingBox().inflate(target.getBbHeight() * 0.1);
-        return new Vec3(target.getX(), Mth.clamp(from.y(), aabb.minY, aabb.maxY), target.getZ());
+        return getStraightProjectileTarget(from, target.position(), aabb.minY, aabb.maxY);
+    }
+
+    public static Vec3 getStraightProjectileTarget(Vec3 from, Vec3 target, double minY, double maxY) {
+        return new Vec3(target.x(), Mth.clamp(from.y(), minY, maxY), target.z());
     }
 
     public static Vec3 getTargetDirection(Mob mob, EntityAnchorArgument.Anchor anchor) {

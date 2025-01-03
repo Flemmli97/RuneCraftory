@@ -183,7 +183,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     public HurtByTargetPredicate hurt = new HurtByTargetPredicate(this, this.defendPred);
 
     public TendCropsGoal farm = new TendCropsGoal(this);
-    private Vec3 targetPosition;
+    private TargetPosition targetPosition;
     private BlockPos seedInventory, cropInventory;
 
     public final Predicate<LivingEntity> hitPred = (e) -> {
@@ -479,6 +479,15 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     @Override
     public void tick() {
         super.tick();
+        Vec3 lookDir = this.directionToLookAt();
+        if (lookDir != null) {
+            float[] yxRot = MathsHelper.YXRotFrom(lookDir);
+            float[] clamp = this.targetLookClamp();
+            this.setYRot(MathsHelper.rotlerp(this.getYRot(), yxRot[0], clamp[0]));
+            this.setXRot(MathsHelper.rotlerp(this.getXRot(), yxRot[1], clamp[1]));
+            this.yBodyRot = this.getYRot();
+            this.yHeadRot = this.getYRot();
+        }
         if (this.getMoveFlag() != MoveType.NONE) {
             this.moveTick = Math.min(MOVE_TICK_MAX, ++this.moveTick);
         } else {
@@ -525,15 +534,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         } else {
             if (!this.playDeath() && TendCropsGoal.cantTendToCropsAnymore(this) && this.behaviour == Behaviour.FARM && this.tickCount % 20 == 0)
                 this.level.addParticle(ParticleTypes.ANGRY_VILLAGER, this.getX(), this.getY() + this.getBbHeight() + 0.3, this.getZ(), 0, 0, 0);
-        }
-        Vec3 lookDir = this.directionToLookAt();
-        if (lookDir != null) {
-            float[] yxRot = MathsHelper.YXRotFrom(lookDir);
-            float[] clamp = this.targetLookClamp();
-            this.setYRot(MathsHelper.rotlerp(this.getYRot(), yxRot[0], clamp[0]));
-            this.setXRot(MathsHelper.rotlerp(this.getXRot(), yxRot[1], clamp[1]));
-            this.yBodyRot = this.getYRot();
-            this.yHeadRot = this.getYRot();
         }
         if (this.getAnimationHandler().getAnimation() == null)
             this.targetPosition = null;
@@ -1568,7 +1568,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     public void setupAttack(AnimatedAction anim) {
         if (this.getTarget() != null) {
             if (anim.isAtTick(1)) {
-                this.setTargetPosition(EntityUtils.getStraightProjectileTarget(this.position(), this.getTarget()));
+                this.setTargetPosition(this.getTarget());
             }
         }
     }
@@ -1583,26 +1583,32 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     protected Vec3 directionToLookAt() {
-        return this.getAnimationHandler().hasAnimation() && this.targetPosition != null ? this.targetPosition.subtract(this.position()) : null;
+        return this.getAnimationHandler().hasAnimation() && this.targetPosition != null ? this.targetPosition
+                .asVec(this.position()).subtract(this.position()) : null;
     }
 
     protected float[] targetLookClamp() {
         return new float[]{60, 30};
     }
 
-    public void setTargetPosition(Vec3 position) {
+    public void setTargetPosition(LivingEntity target) {
+        this.setTargetPosition(TargetPosition.of(target));
+    }
+
+    public void setTargetPosition(TargetPosition position) {
         this.targetPosition = position;
         if (!this.level.isClientSide)
             S2CMobUpdate.send(this, SyncableDatas.TARGET_POS, this.targetPosition);
     }
 
     @Override
-    public Vec3 getTargetPosition() {
+    public TargetPosition getTargetPosition() {
         return this.targetPosition;
     }
 
     public void mobAttack(AnimatedAction anim, LivingEntity target, Consumer<LivingEntity> cons) {
-        OrientedBoundingBox obb = this.calculateAttackAABB(anim, this.getTargetPosition() != null || target == null ? this.getTargetPosition() : target.position(), 0);
+        OrientedBoundingBox obb = this.calculateAttackAABB(anim, this.getTargetPosition() != null || target == null ? this.getTargetPosition()
+                .asVec(this.position()) : target.position(), 0);
         this.level.getEntitiesOfClass(LivingEntity.class, obb.getEncompassingBox(),
                 entity -> this.hitPred.test(entity) && obb.intersects(entity.getBoundingBox())).forEach(cons);
         if (!this.level.isClientSide)

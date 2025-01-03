@@ -163,7 +163,7 @@ public class EntityMimic extends LeapingMonster {
                 ModSpells.DOUBLE_ARROW.get().use(this);
         } else {
             if (!this.isLeapingAnim(anim)) {
-                Vec3 vec32 = this.getLeapVec(this.getTarget() == null ? this.getTargetPosition() : this.getTarget().position()).scale(0.1);
+                Vec3 vec32 = this.getLeapVec(this.getTarget() == null ? this.getTargetPosition().asVec(this.position()) : this.getTarget().position()).scale(0.1);
                 this.setDeltaMovement(vec32.x, 0.05f, vec32.z);
             }
             super.handleAttack(anim);

@@ -11,11 +11,7 @@ import net.minecraft.world.phys.Vec3;
 public class ProjectileUtil {
 
     public static void shoot(LivingEntity shooter, EntityProjectile projectile, float velocity, float inaccuracy) {
-        shoot(shooter, projectile, velocity, inaccuracy, 0);
-    }
-
-    public static void shoot(LivingEntity shooter, EntityProjectile projectile, float velocity, float inaccuracy, float heightMod) {
-        Vec3 target = getAimTarget(shooter);
+        Vec3 target = getAimTarget(shooter, projectile.position());
         if (target != null) {
             projectile.shootAtPosition(target.x(), target.y(), target.z(), velocity, inaccuracy);
         } else
@@ -23,8 +19,9 @@ public class ProjectileUtil {
     }
 
     public static void shoot(LivingEntity shooter, EntityBeam beam, float inaccuracy) {
-        Vec3 v;
-        if (shooter instanceof MobAttackExt ext && (v = ext.getTargetPosition()) != null) {
+        MobAttackExt.TargetPosition target;
+        if (shooter instanceof MobAttackExt ext && (target = ext.getTargetPosition()) != null) {
+            Vec3 v = target.asVec(beam.position());
             beam.setRotationTo(v.x(), v.y(), v.z(), inaccuracy);
         } else if (shooter instanceof Mob mob && mob.getTarget() != null) {
             beam.setRotationTo(mob.getTarget(), inaccuracy);
@@ -35,9 +32,22 @@ public class ProjectileUtil {
     }
 
     public static Vec3 getAimTarget(LivingEntity shooter) {
-        Vec3 target;
+        return getAimTarget(shooter, shooter.getEyeHeight() - 0.1);
+    }
+
+    /**
+     * Use for when projectile has a non default offset
+     *
+     * @param from The projectiles position
+     */
+    public static Vec3 getAimTarget(LivingEntity shooter, Vec3 from) {
+        return getAimTarget(shooter, from.y() - shooter.getY());
+    }
+
+    public static Vec3 getAimTarget(LivingEntity shooter, double offset) {
+        MobAttackExt.TargetPosition target;
         if (shooter instanceof MobAttackExt ext && (target = ext.getTargetPosition()) != null) {
-            return target;
+            return target.asVec(shooter.position().add(0, offset, 0));
         } else if (shooter instanceof Mob mob && mob.getTarget() != null) {
             return EntityUtil.getStraightProjectileTarget(shooter.position(), mob.getTarget());
         }

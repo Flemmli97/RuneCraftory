@@ -15,7 +15,6 @@ import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
-import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
@@ -249,13 +248,6 @@ public class EntityChimera extends BossMonster {
         }
         Vec3 attackPos = this.position().add(dir.scale(reach));
         return new OrientedBoundingBox(this.attackBB(anim).inflate(grow, 0, grow), this.getYRot() + 45, 0, attackPos);
-    }
-
-    @Override
-    public void setupAttack(AnimatedAction anim) {
-        if (anim.is(FIRE_TAIL_BUBBLE, WATER_TAIL_BUBBLE, WATER_TAIL_BEAM, FIRE_BREATH, BUBBLE_BEAM) && anim.isAtTick(1) && this.getTarget() != null) {
-            this.setTargetPosition(EntityUtil.getStraightProjectileTarget(this.getEyePosition(), this.getTarget()));
-        } else super.setupAttack(anim);
     }
 
     @Override

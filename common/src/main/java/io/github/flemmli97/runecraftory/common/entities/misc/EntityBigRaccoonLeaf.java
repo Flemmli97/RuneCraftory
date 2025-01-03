@@ -56,6 +56,11 @@ public class EntityBigRaccoonLeaf extends BaseProjectile {
     }
 
     @Override
+    public float radius() {
+        return 0.5f;
+    }
+
+    @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(SPIN, false);

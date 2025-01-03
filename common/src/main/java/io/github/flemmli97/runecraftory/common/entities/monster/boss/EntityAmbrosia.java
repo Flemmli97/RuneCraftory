@@ -192,7 +192,8 @@ public class EntityAmbrosia extends BossMonster {
     public void setupAttack(AnimatedAction anim) {
         if (anim.is(BUTTERFLY) && anim.isAtTick(1) && this.getTarget() != null) {
             LivingEntity target = this.getTarget();
-            this.setTargetPosition(new Vec3(target.getX(), target.getEyeY() - target.getBbHeight() * 0.5, target.getZ()));
+            this.setTargetPosition(new TargetPosition(target.position(),
+                    target.getY(), target.getY() + target.getBbHeight() * 0.3));
         } else
             super.setupAttack(anim);
     }

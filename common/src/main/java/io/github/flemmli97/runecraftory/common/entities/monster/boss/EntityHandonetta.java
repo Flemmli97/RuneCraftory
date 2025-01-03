@@ -108,7 +108,7 @@ public class EntityHandonetta extends BossMonster {
         b.put(LASER, (anim, entity) -> {
             entity.getNavigation().stop();
             if (entity.getTarget() != null && !anim.isPastTick(0.3))
-                entity.setTargetPosition(EntityUtils.getStraightProjectileTarget(entity.position(), entity.getTarget()));
+                entity.setTargetPosition(entity.getTarget());
             if (anim.canAttack())
                 ModSpells.DARK_BEAM.get().use(entity);
         });

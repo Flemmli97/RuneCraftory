@@ -116,7 +116,7 @@ public class EntityElementalBall extends BaseProjectile {
     protected void playHitSound() {
         if (this.element == EnumElement.WATER) {
             SoundEvent event = this.getVariant() == 1 ? SoundEvents.GENERIC_EXPLODE : ModSounds.SPELL_GENERIC_WATER.get();
-            this.playSound(event, 0.9f, 1);
+            this.playSound(event, this.getVariant() == 1 ? 0.9f : 0.35f, 1);
         }
     }
 }

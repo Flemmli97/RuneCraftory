@@ -25,10 +25,10 @@ public class SmallLeafSpell extends Spell {
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
-        Vec3 target = ProjectileUtil.getAimTarget(entity);
+        Vec3 pos = new EntitySmallRaccoonLeaf(level, entity).position();
+        Vec3 target = ProjectileUtil.getAimTarget(entity, pos);
         Vec3 dir;
         if (target != null) {
-            Vec3 pos = new EntitySmallRaccoonLeaf(level, entity).position();
             dir = target.subtract(pos);
         } else {
             dir = entity.getLookAngle();
