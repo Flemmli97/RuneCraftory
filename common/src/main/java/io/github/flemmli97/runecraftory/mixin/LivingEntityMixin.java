@@ -41,7 +41,7 @@ public abstract class LivingEntityMixin {
     private void onChange(CallbackInfoReturnable<Map<EquipmentSlot, ItemStack>> info, Map<EquipmentSlot, ItemStack> map) {
         if (map != null)
             // Can't be a method reference!
-            EntityCalls.updateEquipmentNew((LivingEntity) (Object) this, map, this.getLastHandItem(EquipmentSlot.MAINHAND), this::getLastArmorItem);
+            EntityCalls.updateEquipment((LivingEntity) (Object) this, map, this.getLastHandItem(EquipmentSlot.MAINHAND), this::getLastArmorItem);
     }
 
     /**

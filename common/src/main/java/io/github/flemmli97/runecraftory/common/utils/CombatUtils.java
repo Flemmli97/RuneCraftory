@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.utils;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
+import io.github.flemmli97.runecraftory.api.registry.ArmorEffect;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
@@ -11,6 +12,7 @@ import io.github.flemmli97.runecraftory.common.entities.utils.IBaseMob;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
+import io.github.flemmli97.runecraftory.common.registry.ModArmorEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
@@ -131,6 +133,8 @@ public class CombatUtils {
     }
 
     public static float reduceDamageFromStats(LivingEntity entity, DamageSource source, float amount) {
+        if (ArmorEffect.hasArmorEffect(entity, ModArmorEffects.SHIELD_RING.get()) && entity.getRandom().nextFloat() < 0.1)
+            return 1;
         float reduce = 0;
         boolean ignoreDefence = switch (GeneralConfig.defenceSystem) {
             case NO_DEFENCE -> true;

@@ -159,7 +159,7 @@ public class EntityCalls {
      * We are doing this roundabout way cause the attack damage bonus of equipment should only come into play when the player has a fitting weapon in
      * the main hand.
      */
-    public static void updateEquipmentNew(LivingEntity entity, Map<EquipmentSlot, ItemStack> changed, ItemStack lastMainhandItem, Function<EquipmentSlot, ItemStack> lastArmor) {
+    public static void updateEquipment(LivingEntity entity, Map<EquipmentSlot, ItemStack> changed, ItemStack lastMainhandItem, Function<EquipmentSlot, ItemStack> lastArmor) {
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             //Readd attack damage to unchanged slots. This is to make sure the client gets send the correct data
             if (!changed.containsKey(slot)) {

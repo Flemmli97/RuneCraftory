@@ -9,5 +9,6 @@
   },
   "monsterBonus": {},
   "element": "NONE",
+  "armorEffect": "runecraftory:shield_ring",
   "item": "runecraftory:shield_ring"
 }

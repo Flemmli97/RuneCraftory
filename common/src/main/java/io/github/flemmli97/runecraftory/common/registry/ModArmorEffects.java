@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.registry;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.registry.ArmorEffect;
 import io.github.flemmli97.runecraftory.common.armoreffects.PiyoSandalsEffect;
+import io.github.flemmli97.runecraftory.common.armoreffects.SimpleAccessoryEffect;
 import io.github.flemmli97.runecraftory.platform.LazyGetter;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import io.github.flemmli97.tenshilib.platform.registry.PlatformRegistry;
@@ -23,5 +24,8 @@ public class ModArmorEffects {
     public static final RegistryEntrySupplier<ArmorEffect> EMPTY = ARMOR_EFFECTS.register("none", ArmorEffect::new);
 
     public static final RegistryEntrySupplier<ArmorEffect> PIYO_SANDALS = ARMOR_EFFECTS.register("piyo_sandals", PiyoSandalsEffect::new);
+    public static final RegistryEntrySupplier<ArmorEffect> SHIELD_RING = ARMOR_EFFECTS.register("shield_ring", SimpleAccessoryEffect::new);
+    public static final RegistryEntrySupplier<ArmorEffect> MAGIC_RING = ARMOR_EFFECTS.register("magic_ring", SimpleAccessoryEffect::new);
+    public static final RegistryEntrySupplier<ArmorEffect> THROWING_RING = ARMOR_EFFECTS.register("throwing_ring", SimpleAccessoryEffect::new);
 
 }

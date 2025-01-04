@@ -1,10 +1,15 @@
 package io.github.flemmli97.runecraftory.api.registry;
 
+import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.platform.registry.CustomRegistryEntry;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
 public class ArmorEffect extends CustomRegistryEntry<ArmorEffect> {
+
+    public static boolean hasArmorEffect(LivingEntity entity, ArmorEffect effect) {
+        return Platform.INSTANCE.getEntityData(entity).map(d -> d.hasArmorFlag(effect.getRegistryName())).orElse(false);
+    }
 
     public boolean canBeAppliedTo(ItemStack stack) {
         return true;

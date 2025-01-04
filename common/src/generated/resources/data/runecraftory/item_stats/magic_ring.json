@@ -7,5 +7,6 @@
   },
   "monsterBonus": {},
   "element": "NONE",
+  "armorEffect": "runecraftory:magic_ring",
   "item": "runecraftory:magic_ring"
 }

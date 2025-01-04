@@ -1,8 +1,10 @@
 package io.github.flemmli97.runecraftory.mixinhelper;
 
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
+import io.github.flemmli97.runecraftory.api.registry.ArmorEffect;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.entities.utils.IBaseMob;
+import io.github.flemmli97.runecraftory.common.registry.ModArmorEffects;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
@@ -51,7 +53,8 @@ public class MixinUtils {
             double dZ = player.getZ() - pos.runecraftory$getOldPlayerZ();
             double spd = dX * dX + dZ * dZ;
             if (spd > 0.01) {
-                entity.setDeltaMovement(entity.getDeltaMovement().scale(2));
+                double scale = ArmorEffect.hasArmorEffect(player, ModArmorEffects.THROWING_RING.get()) ? 2.5 : 1.7;
+                entity.setDeltaMovement(entity.getDeltaMovement().scale(scale));
             }
         }
     }

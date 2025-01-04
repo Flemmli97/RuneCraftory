@@ -5,9 +5,11 @@ import io.github.flemmli97.runecraftory.api.enums.EnumToolCharge;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import io.github.flemmli97.runecraftory.api.items.IChargeable;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
+import io.github.flemmli97.runecraftory.api.registry.ArmorEffect;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.attachment.StaffData;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
+import io.github.flemmli97.runecraftory.common.registry.ModArmorEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
@@ -45,6 +47,13 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable, Ext
     public int getChargeTime(ItemStack stack) {
         return Platform.INSTANCE.getStaffData(stack).map(StaffData::getChargeTime)
                 .orElse(DataPackHandler.INSTANCE.weaponPropertiesManager().getPropertiesFor(this.getWeaponType()).chargeTime());
+    }
+
+    public int getStaffChargeTime(LivingEntity entity, ItemStack stack) {
+        int time = this.getChargeTime(stack);
+        if (ArmorEffect.hasArmorEffect(entity, ModArmorEffects.MAGIC_RING.get()))
+            time *= 0.75;
+        return time;
     }
 
     @Override
@@ -96,7 +105,7 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable, Ext
     public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int remainingUseDuration) {
         if (livingEntity instanceof ServerPlayer player) {
             int duration = stack.getUseDuration() - remainingUseDuration;
-            if (duration > 0 && duration / this.getChargeTime(stack) <= this.chargeAmount(stack) && duration % this.getChargeTime(stack) == 0)
+            if (duration > 0 && duration / this.getStaffChargeTime(livingEntity, stack) <= this.chargeAmount(stack) && duration % this.getStaffChargeTime(livingEntity, stack) == 0)
                 player.connection.send(new ClientboundSoundPacket(SoundEvents.NOTE_BLOCK_XYLOPHONE, player.getSoundSource(), player.getX(), player.getY(), player.getZ(), 1, 1));
         }
     }
@@ -113,7 +122,7 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable, Ext
             return InteractionResultHolder.fail(stack);
         if (this.chargeAmount(stack) > 0) {
             if (!world.isClientSide) {
-                if (this.getChargeTime(stack) <= 0) {
+                if (this.getStaffChargeTime(player, stack) <= 0) {
                     int level = Math.min(3, this.chargeAmount(stack));
                     Spell spell = this.getSpell(stack, level);
                     if (spell != null && player instanceof ServerPlayer serverPlayer) {
@@ -140,7 +149,7 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable, Ext
     @Override
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
         if (!world.isClientSide) {
-            int tier = (this.getUseDuration(stack) - timeLeft - 1) / this.getChargeTime(stack);
+            int tier = (this.getUseDuration(stack) - timeLeft - 1) / this.getStaffChargeTime(entity, stack);
             int level = Math.min(tier, this.chargeAmount(stack));
             Spell spell = this.getSpell(stack, level);
             if (spell != null) {

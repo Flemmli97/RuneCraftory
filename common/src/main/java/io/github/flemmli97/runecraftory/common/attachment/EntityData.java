@@ -5,9 +5,12 @@ import io.github.flemmli97.runecraftory.common.entities.misc.EntityCustomFishing
 import io.github.flemmli97.runecraftory.common.entities.utils.SleepingEntity;
 import io.github.flemmli97.runecraftory.common.network.S2CEntityDataSync;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
+
+import java.util.HashSet;
 
 public class EntityData {
 
@@ -19,6 +22,8 @@ public class EntityData {
     private ItemStack main, off;
 
     public float sleepYRot;
+
+    private final HashSet<ResourceLocation> armorFlags = new HashSet<>();
 
     public static SleepState getSleepStateFrom(LivingEntity entity) {
         return Platform.INSTANCE.getEntityData(entity).map(e -> e.getSleepState(entity)).orElse(SleepState.NONE);
@@ -121,6 +126,18 @@ public class EntityData {
             this.off = this.main.copy();
         }
         return this.off;
+    }
+
+    public void addArmorFlag(ResourceLocation key) {
+        this.armorFlags.add(key);
+    }
+
+    public void removeArmorFlag(ResourceLocation key) {
+        this.armorFlags.remove(key);
+    }
+
+    public boolean hasArmorFlag(ResourceLocation key) {
+        return this.armorFlags.contains(key);
     }
 
     private void updateAiState(LivingEntity entity, boolean increase) {
