@@ -62,7 +62,7 @@ public class AttackAction extends CustomRegistryEntry<AttackAction> {
     }
 
     public float movementReduction(AnimatedAction current) {
-        return 1;
+        return 0;
     }
 
     public Pose getPose(LivingEntity entity, WeaponHandler handler) {

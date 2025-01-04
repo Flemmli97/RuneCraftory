@@ -88,6 +88,6 @@ public class LongSwordAttack extends AttackAction {
 
     @Override
     public float movementReduction(AnimatedAction current) {
-        return GeneralConfig.moveSpeedAttack.get().floatValue() * super.movementReduction(current);
+        return GeneralConfig.moveSpeedAttack.get().floatValue();
     }
 }
