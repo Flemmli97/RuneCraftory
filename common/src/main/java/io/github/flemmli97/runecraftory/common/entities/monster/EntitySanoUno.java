@@ -92,6 +92,11 @@ public abstract class EntitySanoUno extends BossMonster {
     }
 
     @Override
+    protected Vec3 directionToLookAt() {
+        return null;
+    }
+
+    @Override
     public boolean canBeCollidedWith() {
         return true;
     }

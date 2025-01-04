@@ -190,7 +190,7 @@ public class EntityThunderbolt extends BossMonster {
     private final AnimationHandler<EntityThunderbolt> animationHandler = new AnimationHandler<>(this, ANIMATED_ACTIONS)
             .setAnimationChangeFunc(anim -> {
                 if (!this.level.isClientSide) {
-                    this.chargeMotion = null;
+                    this.setChargeDirection(null);
                     if (anim == null) {
                         AnimatedAction chainAnim = this.chainAnim(this.getAnimationHandler().getAnimation());
                         this.chargeAttackSuccess = false;
