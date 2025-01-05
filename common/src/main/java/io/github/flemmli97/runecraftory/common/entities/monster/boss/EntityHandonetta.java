@@ -60,7 +60,7 @@ public class EntityHandonetta extends BossMonster {
     public static final AnimatedAction SHOOT = new AnimatedAction(1.44, 0.36, "shoot");
     public static final AnimatedAction LASER = new AnimatedAction(1.24, 0.4, "laser");
     public static final AnimatedAction PLATE = new AnimatedAction(0.88, 0.56, "plate");
-    public static final AnimatedAction GRAB = new AnimatedAction(1.2, 0.48, "grab");
+    public static final AnimatedAction GRAB = new AnimatedAction(1.2, 0.56, "grab");
     public static final AnimatedAction GRAB_CAUGHT = new AnimatedAction(1.96, 0.12, "grab_caught");
     public static final AnimatedAction PUNCH = new AnimatedAction(1.2, 0.28, "punch");
     public static final AnimatedAction DEFEAT = AnimatedAction.builder(204, "defeat").marker(150).infinite().build();
@@ -333,13 +333,15 @@ public class EntityHandonetta extends BossMonster {
     public void baseTick() {
         super.baseTick();
         if (this.getAnimationHandler().isCurrent(GRAB, GRAB_CAUGHT)) {
+            boolean invis = this.getAnimationHandler().isCurrent(GRAB) ? this.getAnimationHandler().getAnimation().isPastTick(0.72) : this.getAnimationHandler().isCurrent(GRAB_CAUGHT);
             this.caughtEntities.forEach(e -> {
                 if (e.isAlive()) {
                     if (e instanceof ServerPlayer player)
                         player.moveTo(this.getX(), this.getY(), this.getZ());
                     else
                         e.setPos(this.getX(), this.getY(), this.getZ());
-                    e.addEffect(new MobEffectInstance(ModEffects.TRUE_INVIS.get(), 10, 1, true, false, false));
+                    if (invis)
+                        e.addEffect(new MobEffectInstance(ModEffects.TRUE_INVIS.get(), 10, 1, true, false, false));
                 }
             });
         }
