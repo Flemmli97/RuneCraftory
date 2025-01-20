@@ -18,6 +18,7 @@ import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
+import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveAwayRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetAttackRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
@@ -163,27 +164,48 @@ public class EntityThunderbolt extends BossMonster {
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityThunderbolt>>> ATTACKS = List.of(
             WeightedEntry.wrap(MonsterActionUtils.<EntityThunderbolt>nonRepeatableAttack(BACK_KICK)
+                    .withCondition((goal, target, previous) -> goal.attacker.allowAnimation(previous, BACK_KICK) && !goal.attacker.feintedDeath)
                     .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.2), e -> 35 + e.getRandom().nextInt(15))), 10),
             WeightedEntry.wrap(MonsterActionUtils.<EntityThunderbolt>nonRepeatableAttack(LASER_X5)
-                    .withCondition((goal, target, previous) -> !goal.attacker.isEnraged() && goal.attacker.allowAnimation(previous, LASER_X5))
+                    .withCondition((goal, target, previous) -> !goal.attacker.isEnraged() && goal.attacker.allowAnimation(previous, LASER_X5) && !goal.attacker.feintedDeath)
                     .prepare(() -> new TimedWrappedRunner<>(new MoveAwayRunner<>(2, 1.2, 4), e -> 35 + e.getRandom().nextInt(15))), 10),
             WeightedEntry.wrap(MonsterActionUtils.<EntityThunderbolt>nonRepeatableAttack(STOMP)
+                    .withCondition((goal, target, previous) -> goal.attacker.allowAnimation(previous, STOMP) && !goal.attacker.feintedDeath)
                     .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.2), e -> 35 + e.getRandom().nextInt(15))), 11),
             WeightedEntry.wrap(MonsterActionUtils.<EntityThunderbolt>nonRepeatableAttack(HORN_ATTACK)
+                    .withCondition((goal, target, previous) -> goal.attacker.allowAnimation(previous, HORN_ATTACK) && !goal.attacker.feintedDeath)
                     .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.2), e -> 35 + e.getRandom().nextInt(15))), 11),
             WeightedEntry.wrap(MonsterActionUtils.<EntityThunderbolt>nonRepeatableAttack(CHARGE)
-                    .withCondition((goal, target, previous) -> goal.attacker.allowAnimation(previous, CHARGE))
+                    .withCondition((goal, target, previous) -> goal.attacker.allowAnimation(previous, CHARGE) && !goal.attacker.feintedDeath)
                     .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.2), e -> 35 + e.getRandom().nextInt(15))), 10),
-            WeightedEntry.wrap(MonsterActionUtils.<EntityThunderbolt>enragedBossAttack(LASER_AOE)
+            WeightedEntry.wrap(MonsterActionUtils.<EntityThunderbolt>nonRepeatableAttack(LASER_AOE)
+                    .withCondition((goal, target, previous) -> goal.attacker.isEnraged() && goal.attacker.allowAnimation(previous, LASER_AOE) && !goal.attacker.feintedDeath)
                     .prepare(() -> new TimedWrappedRunner<>(new MoveAwayRunner<>(2, 1.2, 4), e -> 35 + e.getRandom().nextInt(15))), 8),
-            WeightedEntry.wrap(MonsterActionUtils.<EntityThunderbolt>enragedBossAttack(LASER_KICK)
+            WeightedEntry.wrap(MonsterActionUtils.<EntityThunderbolt>nonRepeatableAttack(LASER_KICK)
+                    .withCondition((goal, target, previous) -> goal.attacker.isEnraged() && goal.attacker.allowAnimation(previous, LASER_KICK) && !goal.attacker.feintedDeath)
                     .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.2), e -> 35 + e.getRandom().nextInt(15))), 8),
             WeightedEntry.wrap(MonsterActionUtils.<EntityThunderbolt>nonRepeatableAttack(WIND_BLADE)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.2, 7), e -> 35 + e.getRandom().nextInt(15))), 7)
+                    .withCondition((goal, target, previous) -> goal.attacker.allowAnimation(previous, WIND_BLADE) && !goal.attacker.feintedDeath)
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.2, 7), e -> 35 + e.getRandom().nextInt(15))), 7),
+
+            WeightedEntry.wrap(new GoalAttackAction<EntityThunderbolt>(LASER_AOE)
+                    .cooldown(e -> e.animationCooldown(LASER_AOE) + 30)
+                    .withCondition((goal, target, previous) -> goal.attacker.afterFeint())
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveAwayRunner<>(2, 1.2, 4), e -> 35 + e.getRandom().nextInt(15))), 4),
+            WeightedEntry.wrap(new GoalAttackAction<EntityThunderbolt>(CHARGE)
+                    .cooldown(e -> e.animationCooldown(CHARGE) + 40)
+                    .withCondition((goal, target, previous) -> goal.attacker.afterFeint())
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.2), e -> 35 + e.getRandom().nextInt(15))), 20),
+            WeightedEntry.wrap(new GoalAttackAction<EntityThunderbolt>(LASER_KICK)
+                    .cooldown(e -> e.animationCooldown(LASER_KICK) + 50)
+                    .withCondition((goal, target, previous) -> goal.attacker.afterFeint())
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.2), e -> 35 + e.getRandom().nextInt(15))), 17)
     );
     private static final List<WeightedEntry.Wrapper<IdleAction<EntityThunderbolt>>> IDLE_ACTIONS = List.of(
             WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1.1, 0.5)), 8),
-            WeightedEntry.wrap(new IdleAction<>(() -> new StrafingRunner<>(7, 1.1f, 0.2f)), 10)
+            WeightedEntry.wrap(new IdleAction<>(() -> new StrafingRunner<>(7, 1.1f, 0.2f)), 10),
+            WeightedEntry.wrap(new IdleAction<EntityThunderbolt>(DoNothingRunner::new)
+                    .withCondition(((goal, target) -> goal.attacker.afterFeint())), 6)
     );
 
     public final AnimatedAttackGoal<EntityThunderbolt> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
@@ -224,6 +246,10 @@ public class EntityThunderbolt extends BossMonster {
     public RunecraftoryBossbar createBossBar() {
         return new RunecraftoryBossbar(null, this.getDisplayName(), BossEvent.BossBarColor.BLUE, BossEvent.BossBarOverlay.PROGRESS)
                 .setMusic(ModSounds.THUNDERBOLT_FIGHT.get());
+    }
+
+    private boolean afterFeint() {
+        return !this.isTamed() && this.isEnraged() && this.feintedDeath;
     }
 
     @Override
@@ -468,6 +494,9 @@ public class EntityThunderbolt extends BossMonster {
 
     @Override
     public boolean allowAnimation(String prev, AnimatedAction other) {
+        if (!this.isTamed() && this.isEnraged() && this.feintedDeath) {
+            return other.is(CHARGE, LASER_KICK, LASER_AOE);
+        }
         if (prev.equals(CHARGE_2.getID()) || prev.equals(CHARGE_3.getID()))
             return !other.getID().equals(CHARGE.getID());
         if (prev.equals(LASER_KICK_2.getID()) || prev.equals(LASER_KICK_3.getID()))

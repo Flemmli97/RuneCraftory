@@ -253,7 +253,7 @@ public class EntityRaccoon extends BossMonster {
             WeightedEntry.wrap(new GoalAttackAction<EntityRaccoon>(BARRAGE)
                     .cooldown(e -> e.animationCooldown(BARRAGE))
                     .withCondition(((goal, target, previous) -> goal.attacker.isBerserk() && !BARRAGE.getID().equals(previous)))
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1), e -> 25 + e.getRandom().nextInt(10))), 2),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1), e -> 25 + e.getRandom().nextInt(10))), 1),
             WeightedEntry.wrap(new GoalAttackAction<EntityRaccoon>(CLONE)
                     .cooldown(e -> e.animationCooldown(CLONE))
                     .withCondition(((goal, target, previous) -> goal.attacker.isEnraged() && !CLONE.getID().equals(previous)))
