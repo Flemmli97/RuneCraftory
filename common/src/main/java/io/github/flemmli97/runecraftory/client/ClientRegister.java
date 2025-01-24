@@ -269,7 +269,7 @@ public class ClientRegister {
         factory.register(ModContainer.SHOP_CONTAINER.get(), NPCShopGui::new);
     }
 
-    public static <T extends Entity> void registerRenderers(EntityRendererRegister consumer) {
+    public static void registerRenderers(EntityRendererRegister consumer) {
         consumer.register(ModEntities.GATE.get(), RenderGate::new);
 
         consumer.register(ModEntities.WOOLY.get(), RenderWooly::new);
@@ -417,6 +417,7 @@ public class ClientRegister {
         consumer.register(ModEntities.WIND_BLADE_BARRAGE_SUMMONER.get(), EmptyRender::new);
         consumer.register(ModEntities.FIRE_WALL_SUMMONER.get(), EmptyRender::new);
         consumer.register(ModEntities.ELEMENTAL_CIRCLE_SUMMONER.get(), EmptyRender::new);
+        consumer.register(ModEntities.STARFALL_SUMMONER.get(), EmptyRender::new);
         consumer.register(ModEntities.GROUND_SHAKE_PARTICLES.get(), EmptyRender::new);
 
         consumer.register(ModEntities.FISHING_HOOK.get(), CustomFishingHookRenderer::new);
