@@ -9,6 +9,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
@@ -21,16 +22,20 @@ import java.util.stream.Collectors;
 
 public class NPCHandler {
 
-    private final Set<UUID> npcs = new HashSet<>();
+    private final Map<UUID, Component> npcs = new HashMap<>();
     private final Map<ResourceLocation, Set<UUID>> uniqueNPCS = new HashMap<>();
     private final Map<UUID, Set<Pair<UUID, ResourceLocation>>> resetQuestNPCS = new HashMap<>();
 
     public boolean doesNPCExist(UUID uuid) {
-        return this.npcs.contains(uuid);
+        return this.npcs.containsKey(uuid);
     }
 
-    public boolean addNPC(EntityNPCBase npc) {
-        return this.npcs.add(npc.getUUID());
+    public void addNPC(EntityNPCBase npc) {
+        this.npcs.put(npc.getUUID(), npc.getName());
+    }
+
+    public Component getName(UUID uuid) {
+        return this.npcs.get(uuid);
     }
 
     public void removeNPC(EntityNPCBase npc, Entity.RemovalReason reason) {
@@ -38,6 +43,8 @@ public class NPCHandler {
             npc.getServer().getPlayerList().getPlayers().forEach(p -> QuestHandler.removeQuestFor(p, npc));
             npc.getFamily().markAsDead();
             this.npcs.remove(npc.getUUID());
+        } else {
+            this.npcs.put(npc.getUUID(), npc.getName());
         }
     }
 
@@ -79,8 +86,8 @@ public class NPCHandler {
 
     public CompoundTag save() {
         CompoundTag tag = new CompoundTag();
-        ListTag npcs = new ListTag();
-        this.npcs.forEach(uuid -> npcs.add(StringTag.valueOf(uuid.toString())));
+        CompoundTag npcs = new CompoundTag();
+        this.npcs.forEach((uuid, comp) -> npcs.put(uuid.toString(), StringTag.valueOf(Component.Serializer.toJson(comp))));
         tag.put("NPCs", npcs);
         CompoundTag uniques = new CompoundTag();
         this.uniqueNPCS.forEach((res, ids) -> {
@@ -100,8 +107,9 @@ public class NPCHandler {
     }
 
     public void load(CompoundTag tag) {
-        tag.getList("NPCs", Tag.TAG_STRING)
-                .forEach(t -> this.npcs.add(UUID.fromString(t.getAsString())));
+        CompoundTag npcs = tag.getCompound("NPCs");
+        npcs.getAllKeys()
+                .forEach(key -> this.npcs.put(UUID.fromString(key), Component.Serializer.fromJson(npcs.getString(key))));
         CompoundTag uniques = tag.getCompound("UniqueNPCs");
         uniques.getAllKeys().forEach(key -> {
             ListTag idTag = uniques.getList(key, Tag.TAG_STRING);

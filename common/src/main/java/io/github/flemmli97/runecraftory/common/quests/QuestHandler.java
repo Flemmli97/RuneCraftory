@@ -3,7 +3,6 @@ package io.github.flemmli97.runecraftory.common.quests;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.network.S2COpenQuestGui;
-import io.github.flemmli97.runecraftory.common.network.S2CSimpleToast;
 import io.github.flemmli97.runecraftory.common.quests.progress.NPCTalkTracker;
 import io.github.flemmli97.runecraftory.common.quests.progress.ShippingTracker;
 import io.github.flemmli97.runecraftory.common.quests.progress.TamingTracker;

@@ -469,6 +469,16 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     @Override
+    public void setCustomName(@Nullable Component name) {
+        super.setCustomName(name);
+        if (this.getServer() != null) {
+            this.getFamily().updateName(this);
+            WorldHandler.get(this.getServer())
+                    .npcHandler.addNPC(this);
+        }
+    }
+
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         if (!(player instanceof ServerPlayer serverPlayer))
             return InteractionResult.CONSUME;
@@ -519,8 +529,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         };
         if (stack.getItem() == ModItems.DIVORCE_PAPER.get()) {
             if (player instanceof ServerPlayer serverPlayer) {
-                FamilyHandler families = FamilyHandler.get(this.getServer());
-                FamilyEntry family = families.getOrCreateEntry(this);
+                FamilyEntry family = this.getFamily();
                 if (player.getUUID().equals(family.getPartner())) {
                     this.speak(serverPlayer, ConversationContext.DIVORCE);
                     family.updateRelationship(FamilyEntry.Relationship.NONE, null);
@@ -781,11 +790,10 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
      */
     @Nullable
     public Player getPartner() {
-        if (this.getServer() != null) {
-            FamilyEntry family = FamilyHandler.get(this.getServer())
-                    .getOrCreateEntry(this);
+        FamilyEntry family = this.getFamily();
+        if (family != null) {
             if (family.getPartner() != null && family.hasPlayerRelationShip())
-                return this.level.getServer().getPlayerList().getPlayer(family.getPartner());
+                return this.getServer().getPlayerList().getPlayer(family.getPartner());
         }
         return null;
     }

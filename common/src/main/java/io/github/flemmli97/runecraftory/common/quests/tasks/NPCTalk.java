@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.quests.NPCQuest;
+import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import io.github.flemmli97.simplequests_api.player.PlayerQuestData;
 import io.github.flemmli97.simplequests_api.quest.QuestBase;
 import io.github.flemmli97.simplequests_api.quest.entry.QuestEntry;
@@ -12,6 +13,7 @@ import io.github.flemmli97.simplequests_api.quest.entry.QuestEntryKey;
 import io.github.flemmli97.simplequests_api.util.JsonCodecs;
 import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
 import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -67,8 +69,15 @@ public class NPCTalk implements QuestEntry {
             else
                 this.npc = EntityUtil.findFromUUID(EntityNPCBase.class, player.getLevel(), this.targetNPC);
         }
-        if (this.npc != null)
-            return new TranslatableComponent(this.getId().toString(), this.npc.getCustomName());
+        Component name;
+        if (this.npc == null) {
+            name = this.targetNPC != null ? WorldHandler.get(player.getServer())
+                    .npcHandler.getName(this.targetNPC) : null;
+        } else {
+            name = this.npc.getName();
+        }
+        if (name != null)
+            return new TranslatableComponent(this.getId().toString(), name);
         return new TranslatableComponent(this.getId().toString() + ".generic");
     }
 
