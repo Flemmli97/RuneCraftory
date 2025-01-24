@@ -37,6 +37,8 @@ import io.github.flemmli97.runecraftory.common.network.S2CAttackDebug;
 import io.github.flemmli97.runecraftory.common.network.S2CEntityLevelPkt;
 import io.github.flemmli97.runecraftory.common.network.S2CMobUpdate;
 import io.github.flemmli97.runecraftory.common.network.S2COpenCompanionGui;
+import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
+import io.github.flemmli97.runecraftory.common.quests.progress.TamingTracker;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
@@ -52,7 +54,6 @@ import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import io.github.flemmli97.runecraftory.common.world.BarnData;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
-import io.github.flemmli97.runecraftory.integration.simplequest.SimpleQuestIntegration;
 import io.github.flemmli97.runecraftory.mixin.AttributeMapAccessor;
 import io.github.flemmli97.runecraftory.mixin.CombatTrackerAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -1709,7 +1710,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 ModCriteria.TAME_MONSTER_TRIGGER.trigger(serverPlayer, this, data.entityStatsTracker);
                 LevelCalc.levelSkill(serverPlayer, data, EnumSkills.TAMING, 10);
             });
-            SimpleQuestIntegration.INST().triggerTaming(serverPlayer, this);
+            QuestHandler.getData(serverPlayer).trigger(TamingTracker.KEY, this);
         }
         if (this.getServer() != null) {
             this.assignBarn();

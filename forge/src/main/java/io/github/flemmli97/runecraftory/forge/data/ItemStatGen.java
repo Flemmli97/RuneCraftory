@@ -1104,10 +1104,10 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.POISON.get(), 10)
                 .addAttribute(ModAttributes.RES_POISON.get(), 100));
         this.addStat(ModItems.MAGIC_RING.get(), new ItemStat.Builder(50000, 1500, 0)
-                        .withArmorEffect(ModArmorEffects.MAGIC_RING.get())
+                .withArmorEffect(ModArmorEffects.MAGIC_RING.get())
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 50));
         this.addStat(ModItems.THROWING_RING.get(), new ItemStat.Builder(10000, 500, 0)
-                        .withArmorEffect(ModArmorEffects.THROWING_RING.get()));
+                .withArmorEffect(ModArmorEffects.THROWING_RING.get()));
         this.addStat(ModItems.STAY_UP_RING.get(), new ItemStat.Builder(8000, 500, 0)
                 .addAttribute(ModAttributes.SLEEP.get(), -20)
                 .addAttribute(ModAttributes.RES_FAT.get(), 25));

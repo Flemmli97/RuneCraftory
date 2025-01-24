@@ -9,7 +9,10 @@
   "repeat_delay": -1,
   "visibility": "NEVER",
   "npc_id": "runecraftory:smith/1",
-  "quest": "runecraftory:mining_ref",
+  "quests": [
+    "runecraftory:mining_ref_0",
+    "runecraftory:mining_ref_1"
+  ],
   "loot_table": "runecraftory:mining",
   "type": "runecraftory:npc_quest"
 }

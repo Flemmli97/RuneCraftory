@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.integration.simplequest;
+package io.github.flemmli97.runecraftory.common.quests;
 
 import io.github.flemmli97.runecraftory.common.entities.npc.features.NPCFeatureContainer;
 import net.minecraft.network.FriendlyByteBuf;

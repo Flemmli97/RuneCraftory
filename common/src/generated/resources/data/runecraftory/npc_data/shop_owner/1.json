@@ -59,7 +59,6 @@
       "runecraftory:ship_turnip": {
         "startID": "runecraftory:shop_owner/1/quest_start_ship_turnip",
         "activeID": "runecraftory:shop_owner/1/quest_active_ship_turnip",
-        "hasSequence": false,
         "endID": "runecraftory:shop_owner/1/quest_end_ship_turnip"
       }
     },

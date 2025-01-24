@@ -20,6 +20,7 @@ import io.github.flemmli97.runecraftory.api.registry.NPCFeatureHolder;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureType;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCSchedule;
+import io.github.flemmli97.runecraftory.common.entities.npc.QuestConversationContext;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
@@ -123,26 +124,34 @@ public record NPCData(@Nullable String name, @Nullable String surname,
 
     public ConversationSet getConversation(ConversationContext convCtx) {
         ResourceLocation conversationId = this.interactions().get(convCtx);
+        ConversationSet fallback = new ConversationSet("npc.conversation.context.missing", convCtx.key(), Map.of());
         if (conversationId == null)
-            return ConversationSet.DEFAULT;
-        return DataPackHandler.INSTANCE.npcConversationManager().get(conversationId, ConversationSet.DEFAULT);
+            return fallback;
+        fallback = new ConversationSet("npc.conversation.missing", convCtx.key(), Map.of());
+        return DataPackHandler.INSTANCE.npcConversationManager().get(conversationId, fallback);
     }
 
-    public ConversationSet getFromQuest(ResourceLocation quest, int state) {
+    public ConversationSet getFromQuest(ResourceLocation quest, QuestConversationContext ctx, int state) {
         QuestResponses responses = this.questHandler().responses().get(quest);
-        ConversationSet fallback = new ConversationSet("npc.default.quest.response.default", Map.of());
+        ConversationSet fallback = new ConversationSet("npc.default.quest.response.missing", quest, Map.of());
         if (responses == null)
             return fallback;
-        ResourceLocation conversationId = switch (state) {
-            case -2 -> responses.endID;
-            case -1 -> responses.startID;
-            default -> {
-                if (state == 0 || !responses.hasSequence)
+        ResourceLocation conversationId = switch (ctx) {
+            case NOT_STARTED -> {
+                if (state <= 0)
+                    yield responses.startID;
+                else
+                    yield new ResourceLocation(responses.startID.getNamespace(), responses.startID.getPath() + "_" + state);
+            }
+            case IN_PROGRESS -> {
+                if (state == 0)
                     yield responses.activeID;
                 else
                     yield new ResourceLocation(responses.activeID.getNamespace(), responses.activeID.getPath() + "_" + state);
             }
+            case COMPLETED -> responses.endID;
         };
+        fallback = new ConversationSet("npc.conversation.missing", conversationId, Map.of());
         return DataPackHandler.INSTANCE.npcConversationManager().get(conversationId, fallback);
     }
 
@@ -193,13 +202,12 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                 ).apply(inst, (responses, required) -> new QuestHandler(responses, Set.copyOf(required))));
     }
 
-    public record QuestResponses(ResourceLocation startID, ResourceLocation activeID, boolean hasSequence,
+    public record QuestResponses(ResourceLocation startID, ResourceLocation activeID,
                                  ResourceLocation endID) {
         public static final Codec<QuestResponses> CODEC = RecordCodecBuilder.create(inst ->
                 inst.group(
                         ResourceLocation.CODEC.fieldOf("startID").forGetter(d -> d.startID),
                         ResourceLocation.CODEC.fieldOf("activeID").forGetter(d -> d.activeID),
-                        Codec.BOOL.fieldOf("hasSequence").forGetter(d -> d.hasSequence),
                         ResourceLocation.CODEC.fieldOf("endID").forGetter(d -> d.endID)
                 ).apply(inst, QuestResponses::new));
     }
@@ -224,7 +232,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         private int baseLevel = 1;
         private int unique;
         private RelationShipState relationShipState = RelationShipState.DEFAULT;
-        private List<ResourceLocation> possibleChildIds = new ArrayList<>();
+        private final List<ResourceLocation> possibleChildIds = new ArrayList<>();
 
         private final Map<ResourceLocation, QuestResponses> responses = new LinkedHashMap<>();
         private final Set<ResourceLocation> requiredQuests = new LinkedHashSet<>();
@@ -336,8 +344,8 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             return this;
         }
 
-        public Builder addQuestResponse(ResourceLocation quest, ResourceLocation startingID, ResourceLocation activeID, boolean hasSequence, ResourceLocation endID) {
-            this.responses.put(quest, new QuestResponses(startingID, activeID, hasSequence, endID));
+        public Builder addQuestResponse(ResourceLocation quest, ResourceLocation startingID, ResourceLocation activeID, ResourceLocation endID) {
+            this.responses.put(quest, new QuestResponses(startingID, activeID, endID));
             return this;
         }
 
@@ -380,15 +388,18 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         }
     }
 
-    public record ConversationSet(String fallbackKey, Map<String, Conversation> conversations) {
+    public record ConversationSet(String fallbackKey, @Nullable ResourceLocation missing,
+                                  Map<String, Conversation> conversations) {
 
         public static final Codec<ConversationSet> CODEC = RecordCodecBuilder.create(inst ->
                 inst.group(
-                        Codec.STRING.optionalFieldOf("fallbackKey").forGetter(d -> Optional.of(d.fallbackKey)),
+                        Codec.STRING.optionalFieldOf("fallbackKey").forGetter(d -> Optional.of(d.fallbackKey())),
                         Codec.unboundedMap(Codec.STRING, Conversation.CODEC).fieldOf("conversations").forGetter(d -> d.conversations)
                 ).apply(inst, (fallback, convs) -> new ConversationSet(fallback.orElse(""), convs)));
 
-        public static final ConversationSet DEFAULT = new ConversationSet("npc.conversation.missing", Map.of());
+        public ConversationSet(String fallbackKey, Map<String, Conversation> conversations) {
+            this(fallbackKey, null, conversations);
+        }
 
         public static class Builder {
 

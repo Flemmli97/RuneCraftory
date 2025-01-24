@@ -63,6 +63,7 @@ public class PacketRegistrar {
         register.registerMessage(id++, S2CBossbarInfoRemove.ID, S2CBossbarInfoRemove.class, S2CBossbarInfoRemove::write, S2CBossbarInfoRemove::read, S2CBossbarInfoRemove::handle);
         register.registerMessage(id++, S2CBossbarMusicUpdate.ID, S2CBossbarMusicUpdate.class, S2CBossbarMusicUpdate::write, S2CBossbarMusicUpdate::read, S2CBossbarMusicUpdate::handle);
         register.registerMessage(id++, S2CMobUpdate.ID, S2CMobUpdate.class, S2CMobUpdate::write, S2CMobUpdate::read, S2CMobUpdate::handle);
+        register.registerMessage(id++, S2CSimpleToast.ID, S2CSimpleToast.class, S2CSimpleToast::write, S2CSimpleToast::read, S2CSimpleToast::handle);
         return id;
     }
 

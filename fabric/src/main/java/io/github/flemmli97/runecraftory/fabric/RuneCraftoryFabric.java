@@ -7,6 +7,7 @@ import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.GateEntity;
 import io.github.flemmli97.runecraftory.common.events.EntityCalls;
 import io.github.flemmli97.runecraftory.common.events.WorldCalls;
+import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
 import io.github.flemmli97.runecraftory.common.registry.ModActivities;
 import io.github.flemmli97.runecraftory.common.registry.ModArmorEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
@@ -35,7 +36,6 @@ import io.github.flemmli97.runecraftory.fabric.config.MobConfigSpec;
 import io.github.flemmli97.runecraftory.fabric.event.CropGrowEvent;
 import io.github.flemmli97.runecraftory.fabric.loot.CropLootModifiers;
 import io.github.flemmli97.runecraftory.fabric.network.ServerPacketHandler;
-import io.github.flemmli97.runecraftory.integration.simplequest.SimpleQuestIntegration;
 import io.github.flemmli97.runecraftory.mixin.AttributeAccessor;
 import io.github.flemmli97.tenshilib.fabric.events.AOEAttackEvent;
 import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
@@ -100,7 +100,6 @@ public class RuneCraftoryFabric implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        RuneCraftory.simpleQuests = FabricLoader.getInstance().isModLoaded("simplequests");
         RuneCraftory.iris = FabricLoader.getInstance().isModLoaded("iris");
 
         this.initContent();
@@ -260,7 +259,7 @@ public class RuneCraftoryFabric implements ModInitializer {
                 tableBuilder.withPool(LootPool.lootPool().add(LootTableReference.lootTableReference(LootTableResources.CHEST_LOOT_SPELLS)));
         }));
 
-        SimpleQuestIntegration.INST().register();
+        QuestHandler.register();
     }
 
     public void initContent() {

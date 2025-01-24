@@ -25,6 +25,7 @@ import io.github.flemmli97.runecraftory.common.network.S2CDataPackSync;
 import io.github.flemmli97.runecraftory.common.network.S2CEntityDataSyncAll;
 import io.github.flemmli97.runecraftory.common.network.S2CSyncConfig;
 import io.github.flemmli97.runecraftory.common.network.S2CTriggers;
+import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
@@ -41,7 +42,6 @@ import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import io.github.flemmli97.runecraftory.common.world.family.FamilyHandler;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
-import io.github.flemmli97.runecraftory.integration.simplequest.SimpleQuestIntegration;
 import io.github.flemmli97.runecraftory.mixin.LivingEntityAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -104,7 +104,7 @@ public class EntityCalls {
                     player.setHealth(player.getMaxHealth());
                 }
             });
-            SimpleQuestIntegration.INST().removeNPCQuestsFor(serverPlayer);
+            QuestHandler.removeNPCQuestsFor(serverPlayer);
             Platform.INSTANCE.sendToClient(new S2CSyncConfig(), serverPlayer);
             FamilyHandler.get(serverPlayer.getServer())
                     .getOrCreateEntry(serverPlayer)

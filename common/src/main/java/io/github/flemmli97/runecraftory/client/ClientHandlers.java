@@ -15,6 +15,7 @@ import io.github.flemmli97.runecraftory.client.gui.OverlayGui;
 import io.github.flemmli97.runecraftory.client.gui.QuestGui;
 import io.github.flemmli97.runecraftory.client.gui.SpawnEggScreen;
 import io.github.flemmli97.runecraftory.client.gui.SpellInvOverlayGui;
+import io.github.flemmli97.runecraftory.client.gui.widgets.QuestToast;
 import io.github.flemmli97.runecraftory.client.model.AnimatedPlayerModel;
 import io.github.flemmli97.runecraftory.client.model.SittingModel;
 import io.github.flemmli97.runecraftory.client.render.ScaledRenderer;
@@ -23,10 +24,10 @@ import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.ShopState;
 import io.github.flemmli97.runecraftory.common.network.S2CTriggers;
+import io.github.flemmli97.runecraftory.common.quests.ClientSideQuestDisplay;
 import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.world.family.SyncedFamilyData;
-import io.github.flemmli97.runecraftory.integration.simplequest.ClientSideQuestDisplay;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.KeyMapping;
@@ -128,6 +129,10 @@ public class ClientHandlers {
     public static void recipeToast(Collection<ResourceLocation> recipes) {
         recipes.forEach(res -> Minecraft.getInstance().level.getRecipeManager().byKey(res).ifPresent(rec ->
                 RecipeToast.addOrUpdate(Minecraft.getInstance().getToasts(), rec)));
+    }
+
+    public static void simpleToast(Component title, Component subtitle) {
+        Minecraft.getInstance().getToasts().addToast(new QuestToast(title, subtitle));
     }
 
     public static void setToThirdPerson(boolean reset) {

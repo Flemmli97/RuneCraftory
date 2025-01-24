@@ -4,7 +4,6 @@
   "package": "io.github.flemmli97.runecraftory.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "compat.SimpleQuestDataMixin",
     "compat.CompatJei",
     "AbstractContainerMenuAccessor",
     "AttributeAccessor",
@@ -36,6 +35,7 @@
     "PoolsMixin",
     "RandomizableCBEMixin",
     "ServerLevelMixin",
+    "ServerPlayerMixin",
     "SinglePoolElementMixin",
     "SnowLayerBlockMixin",
     "SpreadingSnowyDirtBlockMixin",

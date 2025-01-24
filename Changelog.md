@@ -1,4 +1,4 @@
-RuneCraftory 1.10.5
+RuneCraftory 1.11.0
 ================
 - Added handonetta
 - Update movements of mobs
@@ -8,8 +8,18 @@ RuneCraftory 1.10.5
 - Fix mobs moving when dead sometimes
 - Stun effect now fully stops entities
 - Fix quests not working. (System will get complete redo in future)
+- "minecraftify" ore things:
+  - Add tin for bronze, replaces copper in recipes
+  - Ores drop raw version now
+  - Metal materials are ingots now
+- Spells can be upgraded in smithing table with various materials
+- Redo monster barn space
+  - Max roof height it checks is now 10
+  - Monster needing a roof need to physically fit under the roof
+  - Barn size is not capped by roof anymore
 - Add entity predicate to talking quest
 - Added more textures + stats
+- Rewrite shop item datapack to take a entity predicate 
 
 RuneCraftory 1.10.4
 ================

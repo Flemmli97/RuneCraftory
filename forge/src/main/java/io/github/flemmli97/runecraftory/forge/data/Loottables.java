@@ -84,15 +84,17 @@ public class Loottables extends LootTableProvider {
     private static final float LOOTING_BONUS = 0.2f;
     private static final float RARE_LOOTING_BONUS = 0.1f;
 
-    private final List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> loot =
-            ImmutableList.of(Pair.of(EntityLoot::new, LootContextParamSets.ENTITY),
-                    Pair.of(WoolyShearedEntityLoot::new, LootContextParamSets.FISHING),
-                    Pair.of(BlockLootData::new, LootContextParamSets.BLOCK),
-                    Pair.of(FishingLootData::new, LootContextParamSets.FISHING),
-                    Pair.of(ChestLoots::new, LootContextParamSets.CHEST));
+    private final List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> loot;
 
-    public Loottables(DataGenerator gen) {
+    public Loottables(DataGenerator gen, QuestGen questGen) {
         super(gen);
+        this.loot = ImmutableList.of(Pair.of(EntityLoot::new, LootContextParamSets.ENTITY),
+                Pair.of(WoolyShearedEntityLoot::new, LootContextParamSets.FISHING),
+                Pair.of(BlockLootData::new, LootContextParamSets.BLOCK),
+                Pair.of(FishingLootData::new, LootContextParamSets.FISHING),
+                Pair.of(ChestLoots::new, LootContextParamSets.CHEST),
+                Pair.of(() -> new QuestLootData(questGen), LootContextParamSets.CHEST));
+
     }
 
     @Override
@@ -593,15 +595,15 @@ public class Loottables extends LootTableProvider {
             }
             biConsumer.accept(LootTableResources.TIER_4_LOOT, LootTable.lootTable().withPool(tier4));
 
-            biConsumer.accept(QuestGen.MINING, LootTable.lootTable().withPool(LootPool.lootPool()
-                            .add(LootItem.lootTableItem(ModItems.HAMMER_SCRAP.get())))
-                    .withPool(LootPool.lootPool()
-                            .add(LootItem.lootTableItem(Items.IRON_INGOT).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 5))))
-                            .add(LootItem.lootTableItem(Items.COPPER_INGOT).apply(SetItemCountFunction.setCount(UniformGenerator.between(6, 10))))));
-            biConsumer.accept(QuestGen.TAMING, LootTable.lootTable().withPool(LootPool.lootPool()
-                    .add(LootItem.lootTableItem(ModItems.BRUSH.get()))));
-            biConsumer.accept(QuestGen.SHIP_TURNIP, LootTable.lootTable().withPool(LootPool.lootPool()
-                    .add(LootItem.lootTableItem(ModItems.TURNIP_SEEDS.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 5))))));
+//            biConsumer.accept(QuestGen.MINING, LootTable.lootTable().withPool(LootPool.lootPool()
+//                            .add(LootItem.lootTableItem(ModItems.HAMMER_SCRAP.get())))
+//                    .withPool(LootPool.lootPool()
+//                            .add(LootItem.lootTableItem(Items.IRON_INGOT).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 5))))
+//                            .add(LootItem.lootTableItem(Items.COPPER_INGOT).apply(SetItemCountFunction.setCount(UniformGenerator.between(6, 10))))));
+//            biConsumer.accept(QuestGen.TAMING, LootTable.lootTable().withPool(LootPool.lootPool()
+//                    .add(LootItem.lootTableItem(ModItems.BRUSH.get()))));
+//            biConsumer.accept(QuestGen.SHIP_TURNIP, LootTable.lootTable().withPool(LootPool.lootPool()
+//                    .add(LootItem.lootTableItem(ModItems.TURNIP_SEEDS.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 5))))));
 
             LootPool.Builder spells = LootPool.lootPool().setRolls(UniformGenerator.between(-2, 1));
             spells.add(LootItem.lootTableItem(ModItems.FIRE_BALL_SMALL.get()).setWeight(140));
@@ -880,6 +882,20 @@ public class Loottables extends LootTableProvider {
                     .add(LootTableReference.lootTableReference(BuiltInLootTables.FISHING))));
             biConsumer.accept(LootTableResources.SAND_FISHING, LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
                     .add(LootItem.lootTableItem(Items.SAND))));
+        }
+    }
+
+    static class QuestLootData implements Consumer<BiConsumer<ResourceLocation, LootTable.Builder>> {
+
+        private final QuestGen questGen;
+
+        QuestLootData(QuestGen questGen) {
+            this.questGen = questGen;
+        }
+
+        @Override
+        public void accept(BiConsumer<ResourceLocation, LootTable.Builder> biConsumer) {
+            this.questGen.loot.forEach(biConsumer);
         }
     }
 }

@@ -18,6 +18,7 @@ import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.network.S2CCapSync;
+import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
 import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -198,6 +199,7 @@ public class RunecraftoryCommand {
                 data.resetAll(player);
                 Platform.INSTANCE.sendToClient(new S2CCapSync(data), player);
             });
+            QuestHandler.getData(player).resetAll();
             ctx.getSource().sendSuccess(new TranslatableComponent("runecraftory.command.reset.all", player.getName()), false);
             ret++;
         }

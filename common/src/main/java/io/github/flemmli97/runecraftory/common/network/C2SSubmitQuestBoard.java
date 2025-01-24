@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.network;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.integration.simplequest.SimpleQuestIntegration;
+import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -16,7 +16,7 @@ public class C2SSubmitQuestBoard implements Packet {
 
     public static void handle(C2SSubmitQuestBoard pkt, ServerPlayer sender) {
         if (sender != null) {
-            SimpleQuestIntegration.INST().questBoardComplete(sender);
+            QuestHandler.getData(sender).submit(null);
         }
     }
 

@@ -3,7 +3,7 @@
   "task": "NPC_SUBQUEST",
   "loot_table": "minecraft:empty",
   "entries": {
-    "shipping": {
+    "0": {
       "predicate": {
         "items": [
           "runecraftory:turnip"
@@ -13,5 +13,5 @@
       "id": "runecraftory:shipping"
     }
   },
-  "type": "simplequests:quest"
+  "type": "simplequests_api:quest"
 }

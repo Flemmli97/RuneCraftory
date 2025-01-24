@@ -3,18 +3,11 @@
   "task": "NPC_SUBQUEST",
   "loot_table": "minecraft:empty",
   "entries": {
-    "walk": {
-      "predicate": {
-        "location": {
-          "position": {
-            "y": {
-              "min": 64
-            }
-          }
-        }
-      },
-      "id": "runecraftory:npc_talk"
+    "0": {
+      "amount": 1,
+      "description": "runecraftory.quest.tame_monster.sub.1.task.0",
+      "id": "runecraftory:taming"
     }
   },
-  "type": "simplequests:quest"
+  "type": "simplequests_api:quest"
 }

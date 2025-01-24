@@ -9,7 +9,10 @@
   "repeat_delay": -1,
   "visibility": "NEVER",
   "npc_id": "runecraftory:random_npc_1",
-  "quest": "runecraftory:tame_monster_ref",
+  "quests": [
+    "runecraftory:tame_monster_ref_0",
+    "runecraftory:tame_monster_ref_1"
+  ],
   "loot_table": "runecraftory:tame_monster",
   "type": "runecraftory:npc_quest"
 }

@@ -3,9 +3,9 @@
   "task": "NPC_SUBQUEST",
   "loot_table": "minecraft:empty",
   "entries": {
-    "talk": {
+    "0": {
       "id": "runecraftory:npc_talk"
     }
   },
-  "type": "simplequests:quest"
+  "type": "simplequests_api:quest"
 }

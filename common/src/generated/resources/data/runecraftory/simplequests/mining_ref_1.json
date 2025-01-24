@@ -3,7 +3,7 @@
   "task": "NPC_SUBQUEST",
   "loot_table": "minecraft:empty",
   "entries": {
-    "mine": {
+    "0": {
       "amount": 10,
       "use": false,
       "allowDupes": true,
@@ -11,9 +11,9 @@
         "tag": "runecraftory:ores"
       },
       "consumeItem": false,
-      "description": "",
-      "id": "simplequests:block_interact"
+      "description": "runecraftory.quest.mining.sub.1.task.0",
+      "id": "simplequests_api:block_interact"
     }
   },
-  "type": "simplequests:quest"
+  "type": "simplequests_api:quest"
 }

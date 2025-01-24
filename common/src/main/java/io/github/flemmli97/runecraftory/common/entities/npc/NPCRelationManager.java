@@ -15,12 +15,12 @@ import java.util.UUID;
 
 public class NPCRelationManager {
 
+    public static final int QUEST_COMPLETED = -2;
+    public static final int QUEST_NOT_STARTED = -1;
+
     private final Map<UUID, NPCFriendPoints> playerHearts = new HashMap<>();
     private final Map<UUID, Set<ResourceLocation>> completedQuests = new HashMap<>();
     private final Map<UUID, Map<ResourceLocation, Integer>> questTracker = new HashMap<>();
-    private UUIDNameMapper fatherUUID;
-    private UUIDNameMapper motherUUID;
-    private UUIDNameMapper[] childUUIDs;
 
     public boolean talkedTo(UUID uuid) {
         return this.playerHearts.containsKey(uuid);
@@ -41,18 +41,19 @@ public class NPCRelationManager {
 
     public int questStateFor(UUID uuid, ResourceLocation questID) {
         return this.questTracker.computeIfAbsent(uuid, key -> new HashMap<>())
-                .getOrDefault(questID, -1);
+                .getOrDefault(questID, QUEST_NOT_STARTED);
     }
 
-    public void advanceQuest(UUID uuid, ResourceLocation questID) {
+    public int advanceQuest(UUID uuid, ResourceLocation questID) {
         int newState = this.questStateFor(uuid, questID) + 1;
         Map<ResourceLocation, Integer> map = this.questTracker.computeIfAbsent(uuid, key -> new HashMap<>());
         map.put(questID, newState);
+        return newState;
     }
 
     public void endQuest(UUID uuid, ResourceLocation questID) {
         Map<ResourceLocation, Integer> map = this.questTracker.computeIfAbsent(uuid, key -> new HashMap<>());
-        map.put(questID, -2);
+        map.put(questID, QUEST_COMPLETED);
     }
 
     public void resetQuest(UUID uuid, ResourceLocation questID) {

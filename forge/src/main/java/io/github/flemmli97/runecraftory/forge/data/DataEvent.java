@@ -22,13 +22,15 @@ public class DataEvent {
         DataGenerator data = event.getGenerator();
         IgnoreFileHelper ignore = new IgnoreFileHelper(event.getExistingFileHelper());
         NPCDataGen npcDataGen = null;
+        QuestGen questGen = null;
         if (event.includeServer()) {
-            data.addProvider(npcDataGen = new NPCDataGen(data));
+            data.addProvider(questGen = new QuestGen(data));
+            data.addProvider(npcDataGen = new NPCDataGen(data, questGen));
         }
         if (event.includeClient()) {
             data.addProvider(new BlockStatesGen(data, ignore));
             data.addProvider(new ItemModels(data, ignore));
-            data.addProvider(new LangGen(data));
+            data.addProvider(new LangGen(data, questGen));
             data.addProvider(new NPCDialogLangGen(data, npcDataGen));
             data.addProvider(new ParticleGen(data));
             data.addProvider(new SoundGen(data, event.getExistingFileHelper()));
@@ -42,14 +44,13 @@ public class DataEvent {
             data.addProvider(new CropGen(data));
             //data.addProvider(new GlobalLootModifierGen(data));
             data.addProvider(new RecipesGen(data));
-            data.addProvider(new Loottables(data));
+            data.addProvider(new Loottables(data, questGen));
             data.addProvider(new BiomeTagGen(data, event.getExistingFileHelper()));
             data.addProvider(new MainWorldGenData(data));
             data.addProvider(new PatchouliGen(data));
             data.addProvider(new EntityTagGen(data, event.getExistingFileHelper()));
             data.addProvider(new ShopItemGen(data));
             data.addProvider(new AdvancementGen(data));
-            data.addProvider(new QuestGen(data));
             data.addProvider(new GateSpawnGen(data));
             data.addProvider(new MobPropertiesgen(data));
             data.addProvider(new SpellPropertiesgen(data));

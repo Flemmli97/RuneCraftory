@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.blocks;
 
 import com.mojang.datafixers.util.Pair;
+import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
-import io.github.flemmli97.runecraftory.integration.simplequest.SimpleQuestIntegration;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -86,7 +86,7 @@ public class BlockQuestboard extends HorizontalDirectionalBlock {
         if (!(player instanceof ServerPlayer serverPlayer)) {
             return InteractionResult.CONSUME;
         } else {
-            SimpleQuestIntegration.INST().openGui(serverPlayer);
+            QuestHandler.openGui(serverPlayer);
             return InteractionResult.SUCCESS;
         }
     }

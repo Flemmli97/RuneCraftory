@@ -11,7 +11,6 @@ import io.github.flemmli97.runecraftory.common.network.C2SProcreationRequest;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.common.registry.ModPoiTypes;
 import io.github.flemmli97.runecraftory.common.world.family.SyncedFamilyData;
-import io.github.flemmli97.runecraftory.integration.simplequest.SimpleQuestIntegration;
 import io.github.flemmli97.runecraftory.mixin.PoiTypeAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.ChatFormatting;
@@ -218,7 +217,7 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
         }
         if (this.quest != null) {
             y += 30;
-            this.addRenderableWidget(new Button(this.leftPos + x, this.topPos + y, xSize, 20, new TranslatableComponent(SimpleQuestIntegration.QUEST_GUI_KEY), b -> {
+            this.addRenderableWidget(new Button(this.leftPos + x, this.topPos + y, xSize, 20, new TranslatableComponent(C2SNPCInteraction.Type.QUEST.translation), b -> {
                 Platform.INSTANCE.sendToServer(new C2SNPCInteraction(this.entity.getId(), C2SNPCInteraction.Type.QUEST, this.quest.toString()));
                 this.minecraft.setScreen(null);
             }));

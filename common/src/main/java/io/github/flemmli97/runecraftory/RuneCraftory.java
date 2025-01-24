@@ -13,7 +13,7 @@ public class RuneCraftory {
     public static final String MODID = "runecraftory";
     public static final Logger LOGGER = LogManager.getLogger(RuneCraftory.MODID);
 
-    public static boolean simpleQuests, iris;
+    public static boolean iris;
 
     /**
      * Simple loot context. Needs server side entity

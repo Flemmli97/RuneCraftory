@@ -47,7 +47,7 @@ dependencies {
 
     modRuntimeOnly "io.github.flemmli97:debugutils:1.18.2-1.0.1-fabric"
 
-    modRuntimeOnly ("io.github.flemmli97:simplequests:${simplequests_version}-fabric") {
+    modRuntimeOnly include("io.github.flemmli97:simplequests_api:${simplequests_version}-fabric") {
         transitive = false
     }
 }

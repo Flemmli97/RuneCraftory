@@ -1,13 +1,14 @@
-package io.github.flemmli97.runecraftory.integration.simplequest;
+package io.github.flemmli97.runecraftory.common.quests;
 
 import com.google.gson.JsonObject;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityTreasureChest;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
-import io.github.flemmli97.simplequests.api.QuestEntry;
-import io.github.flemmli97.simplequests.datapack.QuestsManager;
-import io.github.flemmli97.simplequests.quest.QuestCategory;
-import io.github.flemmli97.simplequests.quest.types.QuestBase;
+import io.github.flemmli97.simplequests_api.datapack.QuestsManager;
+import io.github.flemmli97.simplequests_api.player.PlayerQuestData;
+import io.github.flemmli97.simplequests_api.quest.QuestBase;
+import io.github.flemmli97.simplequests_api.quest.QuestCategory;
+import io.github.flemmli97.simplequests_api.quest.entry.QuestEntry;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -29,7 +30,7 @@ public class QuestBoardQuest extends QuestBase {
         this.quest = base;
     }
 
-    public static QuestBoardQuest of(ResourceLocation id, QuestCategory category, JsonObject obj) {
+    public static QuestBoardQuest of(ResourceLocation _id, QuestCategory _category, JsonObject obj) {
         QuestBase wrapped = QuestsManager.instance().getAllQuests().get(new ResourceLocation(obj.get("WrappedQuest").getAsString()));
         return new QuestBoardQuest(wrapped);
     }
@@ -72,8 +73,8 @@ public class QuestBoardQuest extends QuestBase {
     }
 
     @Override
-    public Map<String, QuestEntry> resolveTasks(ServerPlayer player, int questIndex) {
-        return this.quest.resolveTasks(player, questIndex);
+    public Map<String, QuestEntry> resolveTasks(PlayerQuestData data, int questIndex) {
+        return this.quest.resolveTasks(data, questIndex);
     }
 
     @Override

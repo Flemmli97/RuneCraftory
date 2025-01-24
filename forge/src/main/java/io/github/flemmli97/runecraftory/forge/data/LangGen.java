@@ -21,6 +21,12 @@ import io.github.flemmli97.runecraftory.common.items.tools.ItemToolSickle;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolWateringCan;
 import io.github.flemmli97.runecraftory.common.network.C2SNPCInteraction;
 import io.github.flemmli97.runecraftory.common.network.C2SSetMonsterBehaviour;
+import io.github.flemmli97.runecraftory.common.quests.QuestData;
+import io.github.flemmli97.runecraftory.common.quests.tasks.LevelEntry;
+import io.github.flemmli97.runecraftory.common.quests.tasks.NPCTalk;
+import io.github.flemmli97.runecraftory.common.quests.tasks.ShippingEntry;
+import io.github.flemmli97.runecraftory.common.quests.tasks.SkillLevelEntry;
+import io.github.flemmli97.runecraftory.common.quests.tasks.TamingEntry;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
@@ -28,7 +34,6 @@ import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
-import io.github.flemmli97.runecraftory.integration.simplequest.QuestTasks;
 import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
 import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
 import net.minecraft.data.DataGenerator;
@@ -71,10 +76,13 @@ public class LangGen implements DataProvider {
     private final String modid;
     private final String locale;
 
-    public LangGen(DataGenerator gen) {
+    private final QuestGen questGen;
+
+    public LangGen(DataGenerator gen, QuestGen questGen) {
         this.gen = gen;
         this.modid = RuneCraftory.MODID;
         this.locale = "en_us";
+        this.questGen = questGen;
     }
 
     protected void addTranslations() {
@@ -589,9 +597,7 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.gui.quests.accept", "Accept");
         this.add("runecraftory.gui.quests.reset", "Cancel");
         this.add("runecraftory.gui.quest.submit.button", "Submit");
-        this.add("runecraftory.quest.gui.button", "Requests");
-        this.add("runecraftory.quest.npc.none", "The NPC for this quest doesn't exist anymore!");
-        this.add("runecraftory.quest.npc.header", "Requester: %1$s [%2$s,%3$s,%4$s]");
+        this.add("runecraftory.gui.quest.button", "Requests");
 
         this.add(ModNPCJobs.NONE.getSecond().getTranslationKey(), "None");
         this.add(ModNPCJobs.GENERAL.getSecond().getTranslationKey(), "General Store");
@@ -647,9 +653,10 @@ public class LangGen implements DataProvider {
         this.add("npc.shop.money.no", "You don't have enough money");
         this.add("npc.shop.success", "Thank you for your purchase");
 
-        this.add("npc.conversation.missing", "-Missing Conversation for context %s-");
+        this.add("npc.conversation.missing", "-Missing Conversation with id %s-");
+        this.add("npc.conversation.context.missing", "-Missing Conversation for context %s-");
+        this.add("npc.conversation.response.missing", "-Missing quest response for quest %s-");
         this.add("npc.default.gift.neutral", "Thank you for your gift.");
-        this.add("npc.default.quest.response.default", "Placeholder text for quest response");
 
         this.add("runecraftory.advancements.root.title", "Runecraftory");
         this.add("runecraftory.advancements.root.description", "A minecrafty harvest moon");
@@ -751,20 +758,32 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.advancements.progression.boss.sarcophagus.title", "Don't get cursed!");
         this.add("runecraftory.advancements.progression.boss.sarcophagus.description", "Defeat sarcophagus after proving your worth to sano and uno");
 
-        this.add("runecraftory.dependency.simplequest.missing", "Simplequest is needed for quests");
-        this.add(QuestTasks.ShippingEntry.ID + ".single", "Ship %1$s x%2$s");
-        this.add(QuestTasks.ShippingEntry.ID + ".multi", "Ship any of the following x%2$s: %1$s");
-        this.add(QuestTasks.ShippingEntry.ID + ".empty", "<Empty tag/items>");
-        this.add(QuestTasks.LevelEntry.ID.toString(), "Reach level %s");
-        this.add(QuestTasks.SkillLevelEntry.ID.toString(), "Reach level %1$s in %s");
-        this.add(QuestTasks.TamingEntry.ID.toString(), "%s");
+        this.add("runecraftory.quest.npc.header", "Requester: %1$s [%2$s,%3$s,%4$s]");
 
-        this.add(QuestGen.getTask(QuestGen.MINING), "Acquire Hardware??");
-        this.add(QuestGen.getDescription(QuestGen.MINING), "Come see me.");
-        this.add(QuestGen.getTask(QuestGen.TAMING), "Tame a monster");
-        this.add(QuestGen.getDescription(QuestGen.TAMING), "I need you to tame a monster. Come see me.");
-        this.add(QuestGen.getTask(QuestGen.SHIP_TURNIP), "First Shipment!");
-        this.add(QuestGen.getDescription(QuestGen.SHIP_TURNIP), "Come see me.");
+        this.add(ShippingEntry.ID + ".single", "Ship %1$s x%2$s");
+        this.add(ShippingEntry.ID + ".multi", "Ship any of the following x%2$s: %1$s");
+        this.add(ShippingEntry.ID + ".empty", "<Empty tag/items>");
+        this.add(LevelEntry.ID.toString(), "Reach level %s");
+        this.add(SkillLevelEntry.ID.toString(), "Reach level %1$s in %s");
+        this.add(TamingEntry.ID.toString(), "Missing task description...");
+        this.add(NPCTalk.ID.toString(), "Talk to %s");
+        this.add(NPCTalk.ID + ".generic", "Could not find NPC to talk to");
+
+        this.add(QuestData.AcceptType.MISSING.langKey(), "Data is missing");
+        this.add(QuestData.AcceptType.REQUIREMENTS.langKey(), "You do not meet the requirement for this quest");
+        this.add(QuestData.AcceptType.ACCEPT.langKey(), "Quest accepted");
+        this.add(QuestData.AcceptType.LIMIT.langKey(), "You reached your daily quest limit");
+        this.add(QuestData.AcceptType.NONPC.langKey(), "NPC for this quest does not exist anymore!");
+
+        if (this.questGen != null) {
+            this.questGen.translations.forEach(this::add);
+        }
+//        this.add(QuestGen.getTask(QuestGen.MINING), "Acquire Hardware??");
+//        this.add(QuestGen.getDescription(QuestGen.MINING), "Come see me.");
+//        this.add(QuestGen.getTask(QuestGen.TAMING), "Tame a monster");
+//        this.add(QuestGen.getDescription(QuestGen.TAMING), "I need you to tame a monster. Come see me.");
+//        this.add(QuestGen.getTask(QuestGen.SHIP_TURNIP), "First Shipment!");
+//        this.add(QuestGen.getDescription(QuestGen.SHIP_TURNIP), "Come see me.");
 
         this.add("runecraftory.dependency.tooltips.owner.none", "Unknown owner");
         this.add("runecraftory.dependency.tooltips.owner", "Owned by: %s");

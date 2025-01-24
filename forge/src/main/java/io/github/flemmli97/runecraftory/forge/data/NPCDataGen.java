@@ -45,8 +45,11 @@ import java.util.function.Consumer;
 
 public class NPCDataGen extends NPCDataProvider {
 
-    public NPCDataGen(DataGenerator gen) {
+    private final QuestGen questGen;
+
+    public NPCDataGen(DataGenerator gen, QuestGen questGen) {
         super(gen, RuneCraftory.MODID);
+        this.questGen = questGen;
     }
 
     @Override
@@ -143,18 +146,6 @@ public class NPCDataGen extends NPCDataProvider {
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.1.procreation.fail.1"), "I understand, but I’m not sure I want that right now.")
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.1.procreation.fail.2"), "It's a big decision, and I’m not comfortable with it at this time.")
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.1.procreation.fail.3"), "I don't feel like we're in the right place for that yet."));
-                }),
-                of(m -> {
-                    m.put(QuestGen.TAMING, new QuestResponseBuilder(
-                            new NPCData.ConversationSet.Builder("npc.generic.quest.tame_monster.start", """
-                                    Did you know that you can tame the monsters in this world?
-                                    You would need to setup a barn first and then just give them an item.
-
-                                    With that said I would like you to tame a monster."""),
-                            new NPCData.ConversationSet.Builder("npc.generic.quest.tame_monster.active", "You still need to tame a monster.\n" +
-                                    "Some monsters prefer certain items more."),
-                            new NPCData.ConversationSet.Builder("npc.generic.quest.tame_monster.end", "I see you've successfully tamed a monster. Congrats!")
-                    ));
                 }));
         this.addNPCData("random_npc_2", new NPCData.Builder(50)
                         .addGiftResponse("hate", new NPCData.Gift(RunecraftoryTags.GENERIC_TRASH, "npc.generic.2.hate", -15), "Oh... I’m sorry, but I really don’t like this.")
@@ -212,8 +203,7 @@ public class NPCDataGen extends NPCDataProvider {
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.2.procreation.fail.1"), "I... I don’t think having a child is right for me, not now.")
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.2.procreation.fail.2"), "I’ve thought about it, but... I don't think now is the right time.")
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.2.procreation.fail.3"), "I... I’m not ready for that kind of responsibility. I’m sorry."));
-                }),
-                Map.of());
+                }));
         this.addNPCData("random_npc_3", new NPCData.Builder(50)
                         .addGiftResponse("hate", new NPCData.Gift(RunecraftoryTags.GENERIC_TRASH, "npc.generic.3.hate", -15), "Uhh... what should I do with this?")
                         .addGiftResponse("dislike", new NPCData.Gift(null, "npc.generic.3.dislike", -7), "Sorry... but this isn't really my thing.")
@@ -275,8 +265,7 @@ public class NPCDataGen extends NPCDataProvider {
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.3.procreation.fail.1"), "A kid? I’m too tired just thinking about it...")
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.3.procreation.fail.2"), "I’m sorry, but... I don’t think I can handle that right now.")
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.3.procreation.fail.3"), "Mmm... a child? I don’t think I have the energy for that right now."));
-                }),
-                Map.of());
+                }));
 
         ResourceLocation shopMale = this.addLook(new ResourceLocation(RuneCraftory.MODID, "shop_owner/male_1"), new NPCData.NPCLook(NPCData.Gender.MALE, null, 0, defaultNPCFeatures(false, m -> m.put(ModNPCLooks.OUTFIT.get(), new OutfitFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("shop", new IndexRange.FirstNIndices(3)), 1))))))));
         ResourceLocation shopFemale = this.addLook(new ResourceLocation(RuneCraftory.MODID, "shop_owner/female_1"), new NPCData.NPCLook(NPCData.Gender.FEMALE, null, 0, defaultNPCFeatures(true, m -> m.put(ModNPCLooks.OUTFIT.get(), new OutfitFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("shop", new IndexRange.FirstNIndices(3)), 1))))))));
@@ -328,17 +317,6 @@ public class NPCDataGen extends NPCDataProvider {
                     m.put(ConversationContext.PROCREATION_COOLDOWN, new NPCData.ConversationSet.Builder()
                             .addConversation(new NPCData.Conversation.Builder("npc.shop_owner.1.procreation.fail.1"), "Now is not the time for that. Sorry.")
                             .addConversation(new NPCData.Conversation.Builder("npc.shop_owner.1.procreation.fail.2"), "I think we shoul wait a bit more before that step."));
-                }),
-                of(m -> {
-                    m.put(QuestGen.SHIP_TURNIP, new QuestResponseBuilder(
-                            new NPCData.ConversationSet.Builder("npc.shop_owner.quest.ship_turnip.start", """
-                                    Are you here for my request?
-                                    I will show you how to ship items to make money: Shipping items is very simple. First you need a shipping bin. It can hold any shippable items in it.
-                                    Put the items you want to ship in it and everyday in the morning your items will be automatically shipped. Lets try it out now: I want you to ship a turnip."""),
-                            new NPCData.ConversationSet.Builder("npc.shop_owner.quest.ship_turnip.active", "Please ship a turnip."),
-                            new NPCData.ConversationSet.Builder("npc.shop_owner.quest.ship_turnip.end", "Great. There are a lot of items you can ship to make money. Here take" +
-                                    "these turnip seeds. It should come in handy.")
-                    ));
                 }));
 
         ResourceLocation smithMale = this.addLook(new ResourceLocation(RuneCraftory.MODID, "smith/male_1"), new NPCData.NPCLook(NPCData.Gender.MALE, null, 0, defaultNPCFeatures(false, m -> m.put(ModNPCLooks.OUTFIT.get(), new OutfitFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("smith", new IndexRange.FirstNIndices(3)), 1))))))));
@@ -387,18 +365,6 @@ public class NPCDataGen extends NPCDataProvider {
                             .addConversation(new NPCData.Conversation.Builder("npc.smith.1.divorce.fail.2"), "Uhh are you ok? We are not married or anything you know..."));
                     m.put(ConversationContext.PROCREATION_COOLDOWN, new NPCData.ConversationSet.Builder()
                             .addConversation(new NPCData.Conversation.Builder("npc.smith.1.procreation.fail.1"), "This is a huge step, and i feel like now is not the right time for that"));
-                }),
-                of(m -> {
-                    m.put(QuestGen.MINING, new QuestResponseBuilder(
-                            new NPCData.ConversationSet.Builder("npc.smith.quest.mining.start", """
-                                    You saw my request? Great!
-                                    You might have noticed various strange stones around the world. Those are minerals and they provide various different ores.
-                                    I want you to mine 10 of them for me."""),
-                            new NPCData.ConversationSet.Builder("npc.smith.quest.mining.active", "To mine minerals you need atleast an iron pickaxe or a hammer. " +
-                                    "I want you to mine 10 mineral blocks for me."),
-                            new NPCData.ConversationSet.Builder("npc.smith.quest.mining.end", "Nice! Mining ores increases your mining level. " +
-                                    "With higher level you can get better ores from minerals. Here take this hammer, it should make mining minerals a bit easier.")
-                    ));
                 }));
 
         ResourceLocation doctorMale = this.addLook(new ResourceLocation(RuneCraftory.MODID, "doctor/male_1"), new NPCData.NPCLook(NPCData.Gender.MALE, null, 0, defaultNPCFeatures(false, m -> m.put(ModNPCLooks.OUTFIT.get(), new OutfitFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("doctor", new IndexRange.FirstNIndices(1)), 1))))))));
@@ -442,8 +408,7 @@ public class NPCDataGen extends NPCDataProvider {
                             .addConversation(new NPCData.Conversation.Builder("npc.doctor.1.divorce.fail.1"), "Hmm... why are you giving me this?"));
                     m.put(ConversationContext.PROCREATION_COOLDOWN, new NPCData.ConversationSet.Builder()
                             .addConversation(new NPCData.Conversation.Builder("npc.doctor.1.procreation.fail.1"), "We should take this more slowly and not rush things."));
-                }),
-                Map.of());
+                }));
 
         ResourceLocation cookMale = this.addLook(new ResourceLocation(RuneCraftory.MODID, "cook/male_1"), new NPCData.NPCLook(NPCData.Gender.MALE, null, 0, defaultNPCFeatures(false, m -> {
             m.put(ModNPCLooks.HAT.get(), new SimpleHatFeatureType(List.of("chef_hat")));
@@ -495,8 +460,7 @@ public class NPCDataGen extends NPCDataProvider {
                             .addConversation(new NPCData.Conversation.Builder("npc.cook.1.divorce.fail.2"), "Wait, divorce? But we never got married! Maybe you need to spend more time in the kitchen clearing your head."));
                     m.put(ConversationContext.PROCREATION_COOLDOWN, new NPCData.ConversationSet.Builder()
                             .addConversation(new NPCData.Conversation.Builder("npc.cook.1.procreation.fail.1"), "I’ve thought about it, but I don’t think kids are in the cards for me right now."));
-                }),
-                Map.of());
+                }));
 
         //Test data using all possible fields
         /*ResourceLocation attackAll = this.addAttackActions(new ResourceLocation(RuneCraftory.MODID, "attack_all"), new NPCAttackActions.Builder()
@@ -556,6 +520,11 @@ public class NPCDataGen extends NPCDataProvider {
         return map;
     }
 
+    public void addNPCData(String id, NPCData.Builder data, Map<ConversationContext, NPCData.ConversationSet.Builder> conversations) {
+        this.addNPCData(id, data, conversations,
+                this.questGen.questResponses.getOrDefault(new ResourceLocation(this.modid, id), Map.of()));
+    }
+
     //For consistent order
     private static <K, V> Map<K, V> of(Consumer<Map<K, V>> cons) {
         Map<K, V> map = new LinkedHashMap<>();
@@ -565,10 +534,6 @@ public class NPCDataGen extends NPCDataProvider {
 
     private static TagKey<Item> giftTag(String tag) {
         return TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(RuneCraftory.MODID, "npc/" + tag));
-    }
-
-    private static ResourceLocation npcTexture(String texture) {
-        return new ResourceLocation(RuneCraftory.MODID, "textures/entity/npc/" + texture + ".png");
     }
 
     private interface FeatureBuilderHelper {

@@ -4,7 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.datapack.NPCData;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.integration.simplequest.SimpleQuestIntegration;
+import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -35,7 +35,7 @@ public class NPCHandler {
 
     public void removeNPC(EntityNPCBase npc, Entity.RemovalReason reason) {
         if (reason.shouldDestroy()) {
-            npc.getServer().getPlayerList().getPlayers().forEach(p -> SimpleQuestIntegration.INST().removeQuestFor(p, npc));
+            npc.getServer().getPlayerList().getPlayers().forEach(p -> QuestHandler.removeQuestFor(p, npc));
             npc.getFamily().markAsDead();
             this.npcs.remove(npc.getUUID());
         }

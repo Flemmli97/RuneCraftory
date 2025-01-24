@@ -114,8 +114,6 @@ public class PlayerData {
 
     private int craftingSeed;
 
-    public final QuestTracker questTracker = new QuestTracker();
-
     private int boughtBarns;
 
     private BlockPos blockBreakPosForMsg;
@@ -124,7 +122,6 @@ public class PlayerData {
     private int mobLevelIncrease;
 
     private NPCData.Gender gender;
-
 
     public PlayerData() {
         for (EnumSkills skill : EnumSkills.values()) {
@@ -727,7 +724,6 @@ public class PlayerData {
         this.walkingTracker.read(nbt.getCompound("WalkingTracker"));
         this.party.load(nbt.getCompound("PartyTag"));
         this.craftingSeed = nbt.getInt("CraftingSeed");
-        this.questTracker.load(nbt.getCompound("QuestTracker"));
         this.boughtBarns = nbt.getInt("BoughtBarns");
         this.mobLevelIncrease = nbt.getInt("MobLevelIncrease");
     }
@@ -791,7 +787,6 @@ public class PlayerData {
         nbt.put("TamedEntityTracker", this.entityStatsTracker.save());
         nbt.put("PartyTag", this.party.save());
         nbt.putInt("CraftingSeed", this.craftingSeed);
-        nbt.put("QuestTracker", this.questTracker.save());
         nbt.putInt("BoughtBarns", this.boughtBarns);
         nbt.putInt("MobLevelIncrease", this.mobLevelIncrease);
         return nbt;

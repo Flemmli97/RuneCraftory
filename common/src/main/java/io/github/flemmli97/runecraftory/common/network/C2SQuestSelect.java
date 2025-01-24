@@ -1,7 +1,8 @@
 package io.github.flemmli97.runecraftory.common.network;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.integration.simplequest.SimpleQuestIntegration;
+import io.github.flemmli97.runecraftory.common.quests.QuestData;
+import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -16,12 +17,13 @@ public record C2SQuestSelect(ResourceLocation quest, boolean active) implements 
 
     public static void handle(C2SQuestSelect pkt, ServerPlayer sender) {
         if (sender != null) {
+            QuestData data = QuestHandler.getData(sender);
             if (pkt.quest() == null)
-                SimpleQuestIntegration.INST().resetQuestData(sender);
+                data.setQuestboardQuests(null);
             else if (pkt.active())
-                SimpleQuestIntegration.INST().resetQuest(sender, pkt.quest());
+                data.reset(pkt.quest());
             else
-                SimpleQuestIntegration.INST().acceptQuest(sender, pkt.quest());
+                data.acceptQuest(pkt.quest());
         }
     }
 

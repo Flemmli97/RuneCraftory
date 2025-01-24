@@ -1,8 +1,6 @@
 {
   "name": "runecraftory.quests.category",
-  "only_same_category": true,
-  "max_concurrent_quests": 1,
-  "selectable": false,
-  "is_visible": false,
-  "is_silent": true
+  "required_contexts": [
+    "runecraftory:contexts"
+  ]
 }

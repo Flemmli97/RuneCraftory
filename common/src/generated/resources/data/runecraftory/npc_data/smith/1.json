@@ -56,7 +56,6 @@
       "runecraftory:mining": {
         "startID": "runecraftory:smith/1/quest_start_mining",
         "activeID": "runecraftory:smith/1/quest_active_mining",
-        "hasSequence": false,
         "endID": "runecraftory:smith/1/quest_end_mining"
       }
     },

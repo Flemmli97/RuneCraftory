@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.forge;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.GateEntity;
+import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
 import io.github.flemmli97.runecraftory.common.registry.ModActivities;
 import io.github.flemmli97.runecraftory.common.registry.ModArmorEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
@@ -31,7 +32,6 @@ import io.github.flemmli97.runecraftory.forge.integration.jade.JadePlugin;
 import io.github.flemmli97.runecraftory.forge.integration.top.TOP;
 import io.github.flemmli97.runecraftory.forge.loot.ModGlobalLootModifiers;
 import io.github.flemmli97.runecraftory.forge.network.PacketHandler;
-import io.github.flemmli97.runecraftory.integration.simplequest.SimpleQuestIntegration;
 import io.github.flemmli97.runecraftory.mixin.AttributeAccessor;
 import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
 import net.minecraft.world.entity.EntityType;
@@ -68,7 +68,6 @@ public class RuneCraftoryForge {
     public static final String MODID = "runecraftory";
 
     public RuneCraftoryForge() {
-        RuneCraftory.simpleQuests = ModList.get().isLoaded("simplequests");
         RuneCraftory.iris = ModList.get().isLoaded("oculus");
 
         Path confDir = FMLPaths.CONFIGDIR.get().resolve(MODID);
@@ -95,7 +94,7 @@ public class RuneCraftoryForge {
             ConfigHolder<?> loader = confs.getValue();
             ModLoadingContext.get().registerConfig(loader.configType(), confs.getKey(), loader.configName());
         }
-        SimpleQuestIntegration.INST().register();
+        QuestHandler.register();
     }
 
     public static void registries() {

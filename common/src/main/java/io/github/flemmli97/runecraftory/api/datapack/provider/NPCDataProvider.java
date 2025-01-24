@@ -51,7 +51,7 @@ public abstract class NPCDataProvider implements DataProvider {
     public final Map<String, Map<String, String>> translations = new LinkedHashMap<>();
 
     private final DataGenerator gen;
-    private final String modid;
+    protected final String modid;
 
     public NPCDataProvider(DataGenerator gen, String modid) {
         this.gen = gen;
@@ -151,27 +151,30 @@ public abstract class NPCDataProvider implements DataProvider {
         });
         questConversations.forEach((key, value) -> {
             ResourceLocation startId = new ResourceLocation(this.modid, id + "/quest_start_" + key.getPath());
-            this.translations.computeIfAbsent(id, o -> new LinkedHashMap<>())
-                    .putAll(value.start.getTranslations());
-            this.conversations.put(startId, value.start.build());
-            ResourceLocation runId = new ResourceLocation(this.modid, id + "/quest_active_" + key.getPath());
-            if (value.active.size() == 1) {
+            for (int i = 0; i < value.start.size(); i++) {
+                String path = startId.getPath();
+                if (i != 0)
+                    path += "_" + i;
+                ResourceLocation runIdI = new ResourceLocation(this.modid, path);
                 this.translations.computeIfAbsent(id, o -> new LinkedHashMap<>())
-                        .putAll(value.active.get(0).getTranslations());
-                this.conversations.put(runId, value.active.get(0).build());
-            } else {
-                for (int i = 0; i < value.active.size(); i++) {
-                    ResourceLocation runIdI = new ResourceLocation(this.modid, id + "/quest_active_" + key.getPath() + "_" + i);
-                    this.translations.computeIfAbsent(id, o -> new LinkedHashMap<>())
-                            .putAll(value.active.get(i).getTranslations());
-                    this.conversations.put(runIdI, value.active.get(i).build());
-                }
+                        .putAll(value.start.get(i).getTranslations());
+                this.conversations.put(runIdI, value.start.get(i).build());
+            }
+            ResourceLocation runId = new ResourceLocation(this.modid, id + "/quest_active_" + key.getPath());
+            for (int i = 0; i < value.active.size(); i++) {
+                String path = runId.getPath();
+                if (i != 0)
+                    path += "_" + i;
+                ResourceLocation runIdI = new ResourceLocation(this.modid, path);
+                this.translations.computeIfAbsent(id, o -> new LinkedHashMap<>())
+                        .putAll(value.active.get(i).getTranslations());
+                this.conversations.put(runIdI, value.active.get(i).build());
             }
             ResourceLocation endId = new ResourceLocation(this.modid, id + "/quest_end_" + key.getPath());
             this.translations.computeIfAbsent(id, o -> new LinkedHashMap<>())
                     .putAll(value.end.getTranslations());
             this.conversations.put(endId, value.end.build());
-            data.addQuestResponse(key, startId, runId, value.active.size() > 1, endId);
+            data.addQuestResponse(key, startId, runId, endId);
         });
         this.translations.computeIfAbsent(id, o -> new LinkedHashMap<>())
                 .putAll(data.getTranslations());
@@ -198,27 +201,30 @@ public abstract class NPCDataProvider implements DataProvider {
         });
         questConversations.forEach((key, value) -> {
             ResourceLocation startId = new ResourceLocation(this.modid, id + "/quest_start_" + key.getPath());
-            this.translations.computeIfAbsent(id, o -> new LinkedHashMap<>())
-                    .putAll(value.start.getTranslations());
-            this.conversations.put(startId, value.start.build());
-            ResourceLocation runId = new ResourceLocation(this.modid, id + "/quest_active_" + key.getPath());
-            if (value.active.size() == 1) {
+            for (int i = 0; i < value.start.size(); i++) {
+                String path = startId.getPath();
+                if (i != 0)
+                    path += "_" + i;
+                ResourceLocation runIdI = new ResourceLocation(this.modid, path);
                 this.translations.computeIfAbsent(id, o -> new LinkedHashMap<>())
-                        .putAll(value.active.get(0).getTranslations());
-                this.conversations.put(runId, value.active.get(0).build());
-            } else {
-                for (int i = 0; i < value.active.size(); i++) {
-                    ResourceLocation runIdI = new ResourceLocation(this.modid, id + "/quest_active_" + key.getPath() + "_" + i);
-                    this.translations.computeIfAbsent(id, o -> new LinkedHashMap<>())
-                            .putAll(value.active.get(i).getTranslations());
-                    this.conversations.put(runIdI, value.active.get(i).build());
-                }
+                        .putAll(value.start.get(i).getTranslations());
+                this.conversations.put(runIdI, value.start.get(i).build());
+            }
+            ResourceLocation runId = new ResourceLocation(this.modid, id + "/quest_active_" + key.getPath());
+            for (int i = 0; i < value.active.size(); i++) {
+                String path = runId.getPath();
+                if (i != 0)
+                    path += "_" + i;
+                ResourceLocation runIdI = new ResourceLocation(this.modid, path);
+                this.translations.computeIfAbsent(id, o -> new LinkedHashMap<>())
+                        .putAll(value.active.get(i).getTranslations());
+                this.conversations.put(runIdI, value.active.get(i).build());
             }
             ResourceLocation endId = new ResourceLocation(this.modid, id + "/quest_end_" + key.getPath());
             this.translations.computeIfAbsent(id, o -> new LinkedHashMap<>())
                     .putAll(value.end.getTranslations());
             this.conversations.put(endId, value.end.build());
-            data.addQuestResponse(key, startId, runId, value.active.size() > 1, endId);
+            data.addQuestResponse(key, startId, runId, endId);
         });
         this.translations.computeIfAbsent(id, o -> new LinkedHashMap<>())
                 .putAll(data.getTranslations());
@@ -250,13 +256,13 @@ public abstract class NPCDataProvider implements DataProvider {
         return id;
     }
 
-    public record QuestResponseBuilder(NPCData.ConversationSet.Builder start,
+    public record QuestResponseBuilder(List<NPCData.ConversationSet.Builder> start,
                                        List<NPCData.ConversationSet.Builder> active,
                                        NPCData.ConversationSet.Builder end) {
 
         public QuestResponseBuilder(NPCData.ConversationSet.Builder start, NPCData.ConversationSet.Builder active,
                                     NPCData.ConversationSet.Builder end) {
-            this(start, List.of(active), end);
+            this(List.of(start), List.of(active), end);
         }
     }
 

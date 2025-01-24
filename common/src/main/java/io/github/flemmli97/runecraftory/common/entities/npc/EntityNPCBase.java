@@ -41,6 +41,9 @@ import io.github.flemmli97.runecraftory.common.network.S2CNPCLook;
 import io.github.flemmli97.runecraftory.common.network.S2CNpcDialogue;
 import io.github.flemmli97.runecraftory.common.network.S2COpenNPCGui;
 import io.github.flemmli97.runecraftory.common.network.S2CUpdateNPCData;
+import io.github.flemmli97.runecraftory.common.quests.NPCQuest;
+import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
+import io.github.flemmli97.runecraftory.common.quests.progress.NPCTalkTracker;
 import io.github.flemmli97.runecraftory.common.registry.ModActivities;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
@@ -59,11 +62,9 @@ import io.github.flemmli97.runecraftory.common.world.NPCHandler;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import io.github.flemmli97.runecraftory.common.world.family.FamilyEntry;
 import io.github.flemmli97.runecraftory.common.world.family.FamilyHandler;
-import io.github.flemmli97.runecraftory.integration.simplequest.NPCQuest;
-import io.github.flemmli97.runecraftory.integration.simplequest.ProgressState;
-import io.github.flemmli97.runecraftory.integration.simplequest.SimpleQuestIntegration;
 import io.github.flemmli97.runecraftory.mixin.AttributeMapAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.simplequests_api.quest.QuestState;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.api.entity.IAnimated;
@@ -641,7 +642,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
                 .filter(c -> {
                     //Disable if player already has a quest from this npc
                     if (c.getValue().actions().stream().anyMatch(h -> h.action() == NPCData.ConversationAction.QUEST) &&
-                            SimpleQuestIntegration.INST().questForExists(player, this) != null &&
+                            QuestHandler.questForExists(player, this) != null &&
                             !this.updater.alreadyAcceptedRandomquest(player))
                         return false;
                     return c.getValue().startingConversation() && c.getValue().test(heart, ctx);
@@ -653,27 +654,31 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             Map.Entry<String, NPCData.Conversation> randomLine = filtered.get(this.random.nextInt(size));
             this.tellDialogue(player, convCtx, randomLine.getKey(), randomLine.getValue());
         } else {
-            Component dialog = conversations.fallbackKey().equals(NPCData.ConversationSet.DEFAULT.fallbackKey())
-                    ? new TranslatableComponent(conversations.fallbackKey(), convCtx.key()) : new TranslatableComponent(conversations.fallbackKey());
+            Component dialog = conversations.missing() != null
+                    ? new TranslatableComponent(conversations.fallbackKey(), conversations.missing()) : new TranslatableComponent(conversations.fallbackKey());
             this.tellDialogue(player, convCtx, null, dialog, List.of());
         }
     }
 
     public void respondToQuest(ServerPlayer player, ResourceLocation quest) {
-        SimpleQuestIntegration.INST().triggerNPCTalk(player, this);
-        ProgressState result = SimpleQuestIntegration.INST().checkCompletionQuest(player, this);
+        QuestHandler.getData(player).trigger(NPCTalkTracker.KEY, this);
+        QuestState result = QuestHandler.checkCompletionQuest(player, this);
         int questState = this.relationManager.questStateFor(player.getUUID(), quest);
-        if (questState != -1) {
-            if (result == ProgressState.COMPLETE) {
+        QuestConversationContext questCtx = QuestConversationContext.NOT_STARTED;
+        if (questState != NPCRelationManager.QUEST_NOT_STARTED) {
+            questCtx = QuestConversationContext.IN_PROGRESS;
+            if (result == QuestState.COMPLETE) {
                 this.relationManager.endQuest(player.getUUID(), quest);
-                questState = -2;
-            } else if (result == ProgressState.PARTIAL) {
-                this.relationManager.advanceQuest(player.getUUID(), quest);
-                questState++;
+                questState = NPCRelationManager.QUEST_COMPLETED;
+                questCtx = QuestConversationContext.COMPLETED;
+            } else if (result == QuestState.PARTIAL_COMPLETE) {
+                questState = this.relationManager.advanceQuest(player.getUUID(), quest);
+                questCtx = QuestConversationContext.NOT_STARTED;
             }
-        }
+        } else
+            this.relationManager.advanceQuest(player.getUUID(), quest);
         int heart = this.relationManager.getFriendPointData(player.getUUID()).points.getLevel();
-        NPCData.ConversationSet conversations = this.data.getFromQuest(quest, questState);
+        NPCData.ConversationSet conversations = this.data.getFromQuest(quest, questCtx, questState);
         LootContext ctx = new LootContext.Builder((ServerLevel) this.level).withRandom(this.random)
                 .withParameter(LootContextParams.THIS_ENTITY, this)
                 .withParameter(LootContextParams.ORIGIN, this.position())
@@ -687,10 +692,10 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             Map.Entry<String, NPCData.Conversation> randomLine = filtered.get(this.random.nextInt(size));
             this.tellDialogue(player, null, randomLine.getKey(), randomLine.getValue());
         } else {
-            this.tellDialogue(player, null, null, new TranslatableComponent(conversations.fallbackKey()), List.of());
+            Component dialog = conversations.missing() != null
+                    ? new TranslatableComponent(conversations.fallbackKey(), conversations.missing()) : new TranslatableComponent(conversations.fallbackKey());
+            this.tellDialogue(player, null, null, dialog, List.of());
         }
-        if (questState == -1)
-            this.relationManager.advanceQuest(player.getUUID(), quest);
     }
 
     private void tellDialogue(ServerPlayer player, ConversationContext convCtx, String conversationID, NPCData.Conversation conversation) {
@@ -730,7 +735,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
                         }
                     }
                     case QUEST ->
-                            SimpleQuestIntegration.INST().acceptQuestRandom(sender, this, new ResourceLocation(action.actionValue()));
+                            QuestHandler.acceptQuestRandom(sender, this, new ResourceLocation(action.actionValue()));
                 }
             }
         }
@@ -742,9 +747,9 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     public void closedQuestDialogue(ServerPlayer sender) {
         this.closedDialogue(sender);
-        ResourceLocation quest = SimpleQuestIntegration.INST().questForExists(sender, this);
+        ResourceLocation quest = QuestHandler.questForExists(sender, this);
         if (quest != null && this.relationManager.questStateFor(sender.getUUID(), quest) == -2)
-            SimpleQuestIntegration.INST().submit(sender, this);
+            QuestHandler.getData(sender).submit(this);
     }
 
     public void resetQuestProcess(ServerPlayer player, ResourceLocation quest) {
