@@ -107,7 +107,7 @@ public class QuestGen extends QuestProvider {
                                 new NPCData.ConversationSet.Builder("npc.generic.quest.tame_monster.start", """
                                         Did you know that you can tame the monsters in this world?
                                         You would need to setup a barn first and then just give them an item.
-                                        
+                                                                                
                                         With that said I would like you to tame a monster."""),
                                 new NPCData.ConversationSet.Builder("npc.generic.quest.tame_monster.active", "You still need to tame a monster.\n" +
                                         "Some monsters prefer certain items more."),

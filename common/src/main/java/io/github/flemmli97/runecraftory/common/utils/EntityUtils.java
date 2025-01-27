@@ -25,6 +25,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.OwnableEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
@@ -44,6 +45,13 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class EntityUtils {
+
+    public static double tryGetAttribute(LivingEntity entity, Attribute attribute) {
+        AttributeInstance inst = entity.getAttribute(attribute);
+        if (inst == null)
+            return attribute.getDefaultValue();
+        return inst.getValue();
+    }
 
     public static Rotation fromDirection(Direction direction) {
         return switch (direction) {

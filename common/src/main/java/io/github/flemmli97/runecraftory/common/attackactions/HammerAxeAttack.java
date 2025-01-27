@@ -11,6 +11,7 @@ import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.api.item.IAOEWeapon;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
@@ -28,7 +29,10 @@ public class HammerAxeAttack extends AttackAction {
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
         if (anim.canAttack() && handler.getChainCount() != 3) {
-            CombatUtils.attack(entity, stack);
+            CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(IAOEWeapon.createOBB(entity, stack,
+                            CombatUtils.getRange(entity, 0),
+                            CombatUtils.getWidth(entity, 0))))
+                    .executeAttack();
         }
         if (handler.getChainCount() == 3) {
             if (anim.isAtTick(0.12)) {
@@ -49,12 +53,13 @@ public class HammerAxeAttack extends AttackAction {
                 if (anim.isAtTick(0.76))
                     handler.setMoveTargetDir(dir.scale(3).add(0, -2, 0), anim, 1.28);
                 entity.resetFallDistance();
-                if (!entity.level.isClientSide)
+                if (!entity.level.isClientSide) {
                     handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity,
                                     CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox().inflate(1)))
                             .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
                             .withAttackSound(SoundEvents.PLAYER_ATTACK_STRONG)
                             .executeAttack());
+                }
             } else
                 handler.clearMoveTarget();
             handler.lockLook(anim.isPastTick(0.12) && !anim.isPastTick(1.28));

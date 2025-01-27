@@ -13,8 +13,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.Map;
-
 public class MindThrustAttack extends AttackAction {
 
     @Override
@@ -31,11 +29,11 @@ public class MindThrustAttack extends AttackAction {
         }
         if (anim.canAttack()) {
             if (!entity.level.isClientSide)
-                CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets(entity.getLookAngle(), CombatUtils.getAOE(entity, stack, 0), 0.5f))
-                        .withBonusAttributes(Map.of(ModAttributes.PARA.get(), 0.4,
-                                ModAttributes.POISON.get(), 0.1,
-                                ModAttributes.SEAL.get(), 0.25))
-                        .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
+                CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(entity.getYRot(), entity.getXRot(), 1, 0.5f, false))
+                        .withBonusAttributes(ModAttributes.PARA.get(), 40)
+                        .withBonusAttributes(ModAttributes.POISON.get(), 10)
+                        .withBonusAttributes(ModAttributes.SEAL.get(), 25)
+                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
                         .executeAttack();
             entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_LIGHT.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         }

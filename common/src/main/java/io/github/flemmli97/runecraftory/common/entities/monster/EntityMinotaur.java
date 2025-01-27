@@ -115,7 +115,8 @@ public class EntityMinotaur extends ChargingMonster {
                 float angleInc = -490 / len;
                 if (anim.isAtTick(0.84))
                     this.hitEntity.clear();
-                this.hitEntity.addAll(CombatUtils.EntityAttack.create(this, CombatUtils.EntityAttack.circleTargetsFixedRange((this.spinAngle + f * angleInc), (this.spinAngle + (f + 1) * angleInc), 4.5f))
+                this.hitEntity.addAll(CombatUtils.EntityAttack.create(this,
+                                CombatUtils.EntityAttack.circleTargetsFixedRange((this.spinAngle + f * angleInc), (this.spinAngle + (f + 1) * angleInc), 4.5f))
                         .withTargetPredicate(e -> this.hitPred.test(e) && !this.hitEntity.contains(e))
                         .executeAttack());
             }

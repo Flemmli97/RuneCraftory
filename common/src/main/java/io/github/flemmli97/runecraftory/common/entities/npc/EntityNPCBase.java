@@ -71,6 +71,7 @@ import io.github.flemmli97.tenshilib.api.entity.IAnimated;
 import io.github.flemmli97.tenshilib.api.item.IAOEWeapon;
 import io.github.flemmli97.tenshilib.api.item.IExtendedWeapon;
 import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
+import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -1146,9 +1147,9 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     public List<LivingEntity> attackableEntites() {
         ItemStack held = this.getMainHandItem();
         if (held.getItem() instanceof IAOEWeapon weapon) {
-            return CombatUtils.EntityAttack.create(this, CombatUtils.EntityAttack.circleTargets(this.getLookAngle(), Math.max(0, weapon.getFOV(this, held) - 20), 0))
-                    .withTargetPredicate(this.hitPred)
-                    .executeAttack();
+            return RayTraceUtils.getEntitiesIn(this,
+                    weapon.attackOBB(this, held, false),
+                    true, EntityTypeTest.forClass(LivingEntity.class), this.hitPred);
         }
         LivingEntity target = this.getTarget();
         if (target == null)

@@ -150,7 +150,7 @@ public class EntityEvents {
 
     @SubscribeEvent
     public void playerUseItem(PlayerInteractEvent.RightClickItem event) {
-        if (!EntityCalls.onPlayerUseItem(event.getPlayer())) {
+        if (!EntityCalls.onPlayerUseItem(event.getPlayer(), event.getHand())) {
             event.setCanceled(true);
         }
     }

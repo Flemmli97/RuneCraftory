@@ -1,9 +1,9 @@
 package io.github.flemmli97.runecraftory.common.attachment;
 
 import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
-import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
+import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -45,7 +45,7 @@ public class StaffData {
     }
 
     public int getChargeTime() {
-        return this.chargeTime == 0 ? DataPackHandler.INSTANCE.weaponPropertiesManager().getPropertiesFor(EnumWeaponType.STAFF).chargeTime() : this.chargeTime;
+        return this.chargeTime == 0 ? (int) ModAttributes.CHARGE_TIME.get().getDefaultValue() : this.chargeTime;
     }
 
     public void readFromNBT(CompoundTag nbt) {

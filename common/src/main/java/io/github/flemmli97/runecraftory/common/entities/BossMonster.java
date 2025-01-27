@@ -40,13 +40,13 @@ import java.util.function.Supplier;
 
 public abstract class BossMonster extends BaseMonster implements IOverlayEntityRender {
 
-    private static final List<Supplier<Attribute>> STAT_INCREASE = List.of(
+    protected static final List<Supplier<Attribute>> STAT_INCREASE = List.of(
             () -> Attributes.ATTACK_DAMAGE,
             ModAttributes.DEFENCE,
             ModAttributes.MAGIC,
             ModAttributes.MAGIC_DEFENCE
     );
-    private static final UUID STAT_INCREASE_ID = UUID.fromString("fc5aaf23-4e83-4f7d-a4f0-675350d6e5e7");
+    protected static final UUID STAT_INCREASE_ID = UUID.fromString("fc5aaf23-4e83-4f7d-a4f0-675350d6e5e7");
     private static final EntityDataAccessor<Boolean> ENRAGED = SynchedEntityData.defineId(BossMonster.class, EntityDataSerializers.BOOLEAN);
 
     protected final RunecraftoryBossbar bossInfo;

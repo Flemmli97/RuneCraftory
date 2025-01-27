@@ -12,8 +12,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 
-import java.util.Map;
-
 public class TwinAttack extends AttackAction {
 
     @Override
@@ -27,9 +25,9 @@ public class TwinAttack extends AttackAction {
         if (anim.canAttack()) {
             entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_LIGHT.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
             if (!entity.level.isClientSide)
-                CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets(entity.getLookAngle(), Math.min(15, CombatUtils.getAOE(entity, stack, 0)), 1))
-                        .withBonusAttributes(Map.of(ModAttributes.FAINT.get(), 0.15))
-                        .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
+                CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(entity.getYRot(), 0, 1.5, 1, false))
+                        .withBonusAttributes(ModAttributes.FAINT.get(), 1.5)
+                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
                         .executeAttack();
         }
     }

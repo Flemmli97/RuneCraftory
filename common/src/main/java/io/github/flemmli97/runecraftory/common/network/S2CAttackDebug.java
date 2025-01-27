@@ -8,6 +8,7 @@ import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.utils.OrientedBoundingBox;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 
@@ -16,8 +17,13 @@ public class S2CAttackDebug implements Packet {
     public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "s2c_attack_debug");
 
     public static void sendDebugPacket(OrientedBoundingBox aabb, EnumAABBType type, Entity entity) {
-        if (GeneralConfig.debugAttack)
-            Platform.INSTANCE.sendToTrackingAndSelf(new S2CAttackDebug(aabb, type), entity);
+        if (GeneralConfig.debugAttack) {
+            if (entity instanceof ServerPlayer player) {
+                Platform.INSTANCE.sendToClient(new S2CAttackDebug(aabb, EnumAABBType.PLAYER), player);
+            } else {
+                Platform.INSTANCE.sendToTrackingAndSelf(new S2CAttackDebug(aabb, type), entity);
+            }
+        }
     }
 
     private final OrientedBoundingBox obb;
@@ -25,11 +31,11 @@ public class S2CAttackDebug implements Packet {
     private final EnumAABBType type;
 
     public S2CAttackDebug(OrientedBoundingBox aabb) {
-        this(aabb, 300, EnumAABBType.ATTACK);
+        this(aabb, 200, EnumAABBType.ATTACK);
     }
 
     public S2CAttackDebug(OrientedBoundingBox aabb, EnumAABBType type) {
-        this(aabb, 300, type);
+        this(aabb, 200, type);
     }
 
     public S2CAttackDebug(OrientedBoundingBox aabb, int duration, EnumAABBType type) {
@@ -64,6 +70,7 @@ public class S2CAttackDebug implements Packet {
     public enum EnumAABBType {
 
         ATTEMPT,
-        ATTACK
+        ATTACK,
+        PLAYER
     }
 }

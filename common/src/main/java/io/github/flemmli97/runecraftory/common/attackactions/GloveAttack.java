@@ -11,6 +11,7 @@ import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.api.item.IAOEWeapon;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
@@ -32,7 +33,10 @@ public class GloveAttack extends AttackAction {
         if (anim.canAttack() && handler.getChainCount() != 5) {
             if (!entity.level.isClientSide) {
                 if (handler.getChainCount() != 4)
-                    CombatUtils.attack(entity, stack);
+                    CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(IAOEWeapon.createOBB(entity, stack,
+                                    CombatUtils.getRange(entity, 0),
+                                    CombatUtils.getWidth(entity, 0))))
+                            .executeAttack();
                 else
                     CombatUtils.EntityAttack.create(entity,
                                     CombatUtils.EntityAttack.aabbTargets(new AABB(-1, -1, -1, 1, 1, 1).move(entity.position().add(0, 0.2, 0)

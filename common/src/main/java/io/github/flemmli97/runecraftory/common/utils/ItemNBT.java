@@ -68,6 +68,12 @@ public class ItemNBT {
             ModAttributes.RES_FAINT.getID(),
             ModAttributes.RES_DRAIN.getID()
     );
+    private static final List<ResourceLocation> NON_INHERITABLE = List.of(
+            ModAttributes.ATTACK_SPEED.getID(),
+            ModAttributes.ATTACK_RANGE.getID(),
+            ModAttributes.ATTACK_WIDTH.getID(),
+            ModAttributes.CHARGE_TIME.getID()
+    );
 
     public static int itemLevel(ItemStack stack) {
         CompoundTag tag = getItemNBT(stack);
@@ -354,7 +360,7 @@ public class ItemNBT {
                     Map<Attribute, Double> origin = DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem())
                             .map(ItemStat::itemStats).orElse(Map.of());
                     for (Map.Entry<Attribute, Double> entry : base.itemStats().entrySet()) {
-                        if (entry.getKey() == ModAttributes.ATTACK_SPEED.get() || entry.getKey() == ModAttributes.ATTACK_RANGE.get()) //Do not copy att speed and range
+                        if (NON_INHERITABLE.contains(PlatformUtils.INSTANCE.attributes().getIDFrom(entry.getKey())))
                             statsTag.putDouble(PlatformUtils.INSTANCE.attributes().getIDFrom(entry.getKey()).toString(), origin.getOrDefault(entry.getKey(), 5d));
                         else
                             statsTag.putDouble(PlatformUtils.INSTANCE.attributes().getIDFrom(entry.getKey()).toString(), entry.getValue());

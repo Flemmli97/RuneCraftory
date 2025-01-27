@@ -11,6 +11,7 @@ import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.api.item.IAOEWeapon;
 import io.github.flemmli97.tenshilib.common.utils.MathUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -37,7 +38,10 @@ public class SpearAttack extends AttackAction {
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
         if (anim.canAttack() && handler.getChainCount() != 5) {
-            CombatUtils.attack(entity, stack);
+            CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(IAOEWeapon.createOBB(entity, stack,
+                            CombatUtils.getRange(entity, 0),
+                            CombatUtils.getWidth(entity, 0))))
+                    .executeAttack();
         }
         Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
         switch (handler.getChainCount()) {
@@ -53,7 +57,7 @@ public class SpearAttack extends AttackAction {
             }
             case 5 -> {
                 if (anim.isAtTick(0.12)) {
-                    handler.setSpinStartRot(entity.getYRot() + 180);
+                    handler.setSpinStartRot(entity.getYRot());
                     handler.resetHitEntityTracker();
                     entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
                 }
@@ -61,14 +65,10 @@ public class SpearAttack extends AttackAction {
                     handler.resetHitEntityTracker();
                     entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
                 }
-                if (anim.isPastTick(0.12)) {
-                    int start = Mth.ceil(0.12 * 20.0D);
-                    int end = Mth.ceil(1.08 * 20.0D);
-                    float len = (end - start) / anim.getSpeed();
-                    float f = (anim.getTick() - start) / anim.getSpeed();
-                    float angleInc = 720 / len;
-                    float rot = handler.getSpinStartRot();
-                    handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets((rot + f * angleInc), (rot + (f + 1) * angleInc), 0))
+                CombatUtils.EntityAttack attack = spinAttack(entity, anim, 0.12, 1.08,
+                        handler.getSpinStartRot() + 180, handler.getSpinStartRot() + 900, -1);
+                if (attack != null) {
+                    handler.addHitEntityTracker(attack
                             .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
                             .executeAttack());
                 }

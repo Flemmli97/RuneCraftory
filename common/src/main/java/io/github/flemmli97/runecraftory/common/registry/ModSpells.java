@@ -77,6 +77,7 @@ import io.github.flemmli97.runecraftory.common.spells.SmallLeafSpell;
 import io.github.flemmli97.runecraftory.common.spells.SporeCircleSpell;
 import io.github.flemmli97.runecraftory.common.spells.StarFallSpell;
 import io.github.flemmli97.runecraftory.common.spells.StatusBallSpell;
+import io.github.flemmli97.runecraftory.common.spells.SteelHeartSpell;
 import io.github.flemmli97.runecraftory.common.spells.StoneThrowSpell;
 import io.github.flemmli97.runecraftory.common.spells.TeleportSpell;
 import io.github.flemmli97.runecraftory.common.spells.ThrowHandItemSpell;
@@ -166,7 +167,7 @@ public class ModSpells {
     public static final RegistryEntrySupplier<Spell> RAIL_STRIKE = registerSpell("rail_strike", () -> new WeaponSpell(ModAttackActions.RAIL_STRIKE, RunecraftoryTags.DUALBLADES), new SpellProperties.Builder(5, 25).withXPGain(EnumSkills.DUAL, 9).affectedSkill(EnumSkills.DUAL));
     public static final RegistryEntrySupplier<Spell> WIND_SLASH = registerSpell("wind_slash", () -> new WeaponSpell(ModAttackActions.WIND_SLASH, RunecraftoryTags.LONGSWORDS), new SpellProperties.Builder(5, 8).withXPGain(EnumSkills.LONGSWORD, 6).affectedSkill(EnumSkills.LONGSWORD));
     public static final RegistryEntrySupplier<Spell> FLASH_STRIKE = registerSpell("flash_strike", () -> new WeaponSpell(ModAttackActions.FLASH_STRIKE, RunecraftoryTags.LONGSWORDS), new SpellProperties.Builder(5, 20).withXPGain(EnumSkills.LONGSWORD, 5).affectedSkill(EnumSkills.LONGSWORD));
-    public static final RegistryEntrySupplier<Spell> STEEL_HEART = registerSpell("steel_heart", () -> new WeaponSpell(ModAttackActions.STEEL_HEART, RunecraftoryTags.LONGSWORDS), new SpellProperties.Builder(5, 10).percentageCost(0.15f).withXPGain(EnumSkills.LONGSWORD, 11).affectedSkill(EnumSkills.LONGSWORD));
+    public static final RegistryEntrySupplier<Spell> STEEL_HEART = registerSpell("steel_heart", SteelHeartSpell::new, new SpellProperties.Builder(5, 10).percentageCost(0.15f).withXPGain(EnumSkills.LONGSWORD, 11).affectedSkill(EnumSkills.LONGSWORD));
     public static final RegistryEntrySupplier<Spell> DELTA_STRIKE = registerSpell("delta_strike", () -> new WeaponSpell(ModAttackActions.DELTA_STRIKE, RunecraftoryTags.LONGSWORDS), new SpellProperties.Builder(5, 17).withXPGain(EnumSkills.LONGSWORD, 8).affectedSkill(EnumSkills.LONGSWORD));
     public static final RegistryEntrySupplier<Spell> NAIVE_BLADE = registerSpell("naive_blade", () -> new WeaponSpell(ModAttackActions.NAIVE_BLADE, RunecraftoryTags.LONGSWORDS), new SpellProperties.Builder(5, 13).withXPGain(EnumSkills.LONGSWORD, 15).affectedSkill(EnumSkills.LONGSWORD));
     public static final RegistryEntrySupplier<Spell> HURRICANE = registerSpell("hurricane", () -> new WeaponSpell(ModAttackActions.HURRICANE, RunecraftoryTags.SPEARS), new SpellProperties.Builder(5, 6).withXPGain(EnumSkills.SPEAR, 6).affectedSkill(EnumSkills.SPEAR));

@@ -12,8 +12,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 
-import java.util.Map;
-
 public class TornadoSwingAttack extends AttackAction {
 
     @Override
@@ -46,7 +44,7 @@ public class TornadoSwingAttack extends AttackAction {
                 if (!entity.level.isClientSide) {
                     handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets((rot + f * angleInc), (rot + (f + 1) * angleInc), 0.5f))
                             .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
-                            .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
+                            .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
                             .executeAttack());
                 }
             }
@@ -67,7 +65,7 @@ public class TornadoSwingAttack extends AttackAction {
                 if (!entity.level.isClientSide) {
                     handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets((rot + f * angleInc), (rot + (f + 1) * angleInc), 0.5f))
                             .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
-                            .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
+                            .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
                             .executeAttack());
                 }
             }
@@ -83,7 +81,7 @@ public class TornadoSwingAttack extends AttackAction {
     @Override
     public boolean canOverride(LivingEntity entity, WeaponHandler handler) {
         if (handler.getChainCount() == 1)
-            return handler.getCurrentAnim().isPastTick(0.60) && !handler.getCurrentAnim().isPastTick(0.84);
+            return handler.getCurrentAnim().isPastTick(0.76) && !handler.getCurrentAnim().isPastTick(0.84);
         return handler.getCurrentAnim().isPastTick(0.48) && !handler.getCurrentAnim().isPastTick(0.76);
     }
 

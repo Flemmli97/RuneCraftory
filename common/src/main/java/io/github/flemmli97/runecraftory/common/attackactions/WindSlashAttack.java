@@ -12,8 +12,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.Map;
-
 public class WindSlashAttack extends AttackAction {
 
     @Override
@@ -51,7 +49,7 @@ public class WindSlashAttack extends AttackAction {
             }
             if (!entity.level.isClientSide && anim.isPastTick(0.2) && !anim.isPastTick(1.08))
                 handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox().inflate(0.75)))
-                        .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
+                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
                         .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
                         .executeAttack());
         } else {
@@ -66,7 +64,7 @@ public class WindSlashAttack extends AttackAction {
             }
             if (!entity.level.isClientSide && !anim.isPastTick(0.88))
                 handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox().inflate(0.75)))
-                        .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
+                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
                         .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
                         .executeAttack());
         }

@@ -6,20 +6,20 @@ import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.api.registry.ArmorEffect;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.entities.utils.ElementalAttackMob;
 import io.github.flemmli97.runecraftory.common.entities.utils.IBaseMob;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
+import io.github.flemmli97.runecraftory.common.network.S2CAttackDebug;
 import io.github.flemmli97.runecraftory.common.registry.ModArmorEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.item.IAOEWeapon;
-import io.github.flemmli97.tenshilib.common.utils.AOEWeaponHandler;
-import io.github.flemmli97.tenshilib.common.utils.CircleSector;
+import io.github.flemmli97.tenshilib.common.utils.OrientedBoundingBox;
+import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.server.level.ServerLevel;
@@ -47,9 +47,13 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -327,7 +331,7 @@ public class CombatUtils {
                         }
                         player.crit(target);
                         player.magicCrit(target);
-                    } else if (stack.getItem() instanceof IAOEWeapon aoe && aoe.getFOV(player, stack) == 0.0f && playSound) {
+                    } else if (stack.getItem() instanceof IAOEWeapon aoe && aoe.getWidth(player, stack) == 0.0f && playSound) {
                         player.level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, player.getSoundSource(), 1.0f, 1.0f);
                     } else if (playSound) {
                         player.level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, player.getSoundSource(), 1.0f, 1.0f);
@@ -608,10 +612,12 @@ public class CombatUtils {
         }
     }
 
-    public static float getAOE(LivingEntity entity, ItemStack held, float bonus) {
-        if (held.getItem() instanceof IAOEWeapon weapon)
-            return weapon.getFOV(entity, held) + bonus;
-        return bonus;
+    public static double getRange(LivingEntity entity, double bonus) {
+        return (EntityUtils.tryGetAttribute(entity, ModAttributes.ATTACK_RANGE.get()) + bonus);
+    }
+
+    public static double getWidth(LivingEntity entity, double bonus) {
+        return (EntityUtils.tryGetAttribute(entity, ModAttributes.ATTACK_WIDTH.get()) + bonus);
     }
 
     public static int getSpellLevelFromStack(ItemStack stack) {
@@ -645,76 +651,98 @@ public class CombatUtils {
         return player.isCreative() || Platform.INSTANCE.getPlayerData(player).map(d -> d.getSkillLevel(skill).getLevel() >= requiredLvl).orElse(false);
     }
 
-    public static void attack(LivingEntity entity, ItemStack stack) {
-        if (entity instanceof Player player) {
-            if (stack.getItem() instanceof IAOEWeapon weapon)
-                AOEWeaponHandler.onAOEWeaponSwing(player, stack, weapon);
-        } else if (entity instanceof EntityNPCBase npc) {
-            npc.npcAttack(npc::doHurtTarget);
-        }
-    }
-
     public static class EntityAttack {
 
         private final LivingEntity attacker;
         private Predicate<LivingEntity> targetPred;
-        private Map<Attribute, Double> bonusAttributes;
-        private Map<Attribute, Double> bonusAttributesMultiplier;
+        private Map<Attribute, Double> bonusAttributes = new HashMap<>();
+        private Map<Attribute, Double> bonusAttributesMultiplier = new HashMap<>();
 
         private Consumer<LivingEntity> onSuccess;
 
         private SoundEvent soundToPlay;
 
-        private final BiFunction<LivingEntity, Predicate<LivingEntity>, List<LivingEntity>> targets;
+        private final BiFunction<LivingEntity, Predicate<LivingEntity>, Collection<LivingEntity>> targets;
 
-        protected EntityAttack(LivingEntity attacker, BiFunction<LivingEntity, Predicate<LivingEntity>, List<LivingEntity>> targets) {
+        protected EntityAttack(LivingEntity attacker, BiFunction<LivingEntity, Predicate<LivingEntity>, Collection<LivingEntity>> targets) {
             this.attacker = attacker;
             this.targets = targets;
         }
 
-        public static EntityAttack create(LivingEntity attacker, BiFunction<LivingEntity, Predicate<LivingEntity>, List<LivingEntity>> targets) {
+        public static EntityAttack create(LivingEntity attacker, BiFunction<LivingEntity, Predicate<LivingEntity>, Collection<LivingEntity>> targets) {
             return new EntityAttack(attacker, targets);
         }
 
-        public static BiFunction<LivingEntity, Predicate<LivingEntity>, List<LivingEntity>> circleTargets(Vec3 dir, float aoe, float rangeBonus) {
+        public static BiFunction<LivingEntity, Predicate<LivingEntity>, Collection<LivingEntity>> circleTargets(float startRot, float endRot, float rangeBonus) {
+            return circleTargets(startRot, endRot, null, rangeBonus);
+        }
+
+        public static BiFunction<LivingEntity, Predicate<LivingEntity>, Collection<LivingEntity>> circleTargets(float startRot, float endRot, FloatMap xRot, float rangeBonus) {
             return (attacker, predicate) -> {
-                float reach = (float) attacker.getAttributeValue(ModAttributes.ATTACK_RANGE.get()) + rangeBonus;
-                CircleSector circ = new CircleSector(attacker.position().add(0, attacker.getBbHeight() * 0.6, 0), dir, reach, Mth.abs(aoe * 0.5f), attacker);
-                return attacker.level.getEntities(EntityTypeTest.forClass(LivingEntity.class), attacker.getBoundingBox().inflate(reach + 1),
-                        t -> t != attacker && (predicate == null || predicate.test(t)) && !t.isAlliedTo(attacker) && t.isPickable()
-                                && (t.getBoundingBox().minY <= attacker.getBoundingBox().maxY || t.getBoundingBox().maxY >= attacker.getBoundingBox().minY)
-                                && circ.intersects(t.level, t.getBoundingBox().inflate(0.15, attacker.getBbHeight() * 1.5, 0.15)));
+                double reach = getRange(attacker, rangeBonus);
+                double incHalf = Math.asin(0.5 / reach) * Mth.RAD_TO_DEG;
+                float minYRot = Math.min(startRot, endRot);
+                float maxYRot = Math.max(startRot, endRot);
+                AABB aabb = new AABB(-0.5, -0.02, 0, 0.5, attacker.getBbHeight() + 0.02, reach);
+                int rotationSteps = (int) ((maxYRot - minYRot) / (incHalf * 2)) + 2;
+                float inc = (maxYRot - minYRot) / rotationSteps;
+                Set<LivingEntity> entities = new HashSet<>();
+                for (int steps = 0; steps <= rotationSteps; steps++) {
+                    float yRot = minYRot + inc * steps;
+                    OrientedBoundingBox obb = new OrientedBoundingBox(aabb, yRot, xRot == null ? 0 : xRot.get((float) steps / rotationSteps), attacker.position());
+                    entities.addAll(RayTraceUtils.getEntitiesIn(attacker, obb, false, EntityTypeTest.forClass(LivingEntity.class), predicate));
+                    S2CAttackDebug.sendDebugPacket(obb, S2CAttackDebug.EnumAABBType.ATTACK, attacker);
+                }
+                return entities;
             };
         }
 
-        public static BiFunction<LivingEntity, Predicate<LivingEntity>, List<LivingEntity>> circleTargets(float minYRot, float maxYRot, float rangeBonus) {
+        public static BiFunction<LivingEntity, Predicate<LivingEntity>, Collection<LivingEntity>> circleTargetsFixedRange(float startRot, float endRot, float reach) {
             return (attacker, predicate) -> {
-                float rot = Mth.wrapDegrees(maxYRot - minYRot);
-                Vec3 dir = Vec3.directionFromRotation(0, Mth.wrapDegrees(minYRot + rot * 0.5f));
-                float reach = (float) attacker.getAttributeValue(ModAttributes.ATTACK_RANGE.get()) + rangeBonus;
-                CircleSector circ = new CircleSector(attacker.position().add(0, attacker.getBbHeight() * 0.6, 0), dir, reach, Mth.abs(rot * 0.5f), attacker);
-                return attacker.level.getEntities(EntityTypeTest.forClass(LivingEntity.class), attacker.getBoundingBox().inflate(reach + 1),
-                        t -> t != attacker && (predicate == null || predicate.test(t)) && !t.isAlliedTo(attacker) && t.isPickable()
-                                && (t.getBoundingBox().minY <= attacker.getBoundingBox().maxY || t.getBoundingBox().maxY >= attacker.getBoundingBox().minY)
-                                && circ.intersects(t.level, t.getBoundingBox().inflate(0.15, attacker.getBbHeight() * 1.5, 0.15)));
+                double incHalf = Math.asin(0.5 / reach) * Mth.RAD_TO_DEG;
+                float minYRot = Math.min(startRot, endRot);
+                float maxYRot = Math.max(startRot, endRot);
+                AABB aabb = new AABB(-0.5, -0.02, 0, 0.5, attacker.getBbHeight() + 0.02, reach);
+                int rotationSteps = (int) ((maxYRot - minYRot) / (incHalf * 2)) + 2;
+                float inc = (maxYRot - minYRot) / rotationSteps;
+                Set<LivingEntity> entities = new HashSet<>();
+                for (int steps = 0; steps <= rotationSteps; steps++) {
+                    float yRot = minYRot + inc * steps;
+                    OrientedBoundingBox obb = new OrientedBoundingBox(aabb, yRot, 0, attacker.position());
+                    entities.addAll(RayTraceUtils.getEntitiesIn(attacker, obb, false, EntityTypeTest.forClass(LivingEntity.class), predicate));
+                    S2CAttackDebug.sendDebugPacket(obb, S2CAttackDebug.EnumAABBType.ATTACK, attacker);
+                }
+                return entities;
             };
         }
 
-        public static BiFunction<LivingEntity, Predicate<LivingEntity>, List<LivingEntity>> circleTargetsFixedRange(float minYRot, float maxYRot, float reach) {
+        public static BiFunction<LivingEntity, Predicate<LivingEntity>, Collection<LivingEntity>> aabbTargets(AABB aabb) {
+            return aabbTargets(aabb, true);
+        }
+
+        public static BiFunction<LivingEntity, Predicate<LivingEntity>, Collection<LivingEntity>> aabbTargets(AABB aabb, boolean relative) {
             return (attacker, predicate) -> {
-                float rot = Mth.wrapDegrees(maxYRot - minYRot);
-                Vec3 dir = Vec3.directionFromRotation(0, Mth.wrapDegrees(minYRot + rot * 0.5f));
-                CircleSector circ = new CircleSector(attacker.position().add(0, attacker.getBbHeight() * 0.6, 0), dir, reach, Mth.abs(rot * 0.5f), attacker);
-                return attacker.level.getEntities(EntityTypeTest.forClass(LivingEntity.class), attacker.getBoundingBox().inflate(reach + 1),
-                        t -> t != attacker && (predicate == null || predicate.test(t)) && !t.isAlliedTo(attacker) && t.isPickable()
-                                && (t.getBoundingBox().minY <= attacker.getBoundingBox().maxY || t.getBoundingBox().maxY >= attacker.getBoundingBox().minY)
-                                && circ.intersects(t.level, t.getBoundingBox().inflate(0.15, attacker.getBbHeight() * 1.5, 0.15)));
+                OrientedBoundingBox obb = new OrientedBoundingBox(relative ? aabb.move(attacker.position().scale(-1)) : aabb, attacker.getYRot(), 0, attacker.position());
+                S2CAttackDebug.sendDebugPacket(obb, S2CAttackDebug.EnumAABBType.ATTACK, attacker);
+                return RayTraceUtils.getEntitiesIn(attacker, obb, true, EntityTypeTest.forClass(LivingEntity.class), predicate);
             };
         }
 
-        public static BiFunction<LivingEntity, Predicate<LivingEntity>, List<LivingEntity>> aabbTargets(AABB aabb) {
-            return (attacker, predicate) -> attacker.level.getEntities(EntityTypeTest.forClass(LivingEntity.class), aabb,
-                    t -> t != attacker && (predicate == null || predicate.test(t)) && !t.isAlliedTo(attacker) && t.isPickable());
+        public static BiFunction<LivingEntity, Predicate<LivingEntity>, Collection<LivingEntity>> obbTargets(float yRot, float xRot, double width, double range, boolean fixed) {
+            return (attacker, predicate) -> {
+                double reach = fixed ? range : getRange(attacker, range);
+                AABB aabb = new AABB(-width * 0.5, -0.02, 0, width * 0.5, attacker.getBbHeight(), reach);
+                OrientedBoundingBox obb = new OrientedBoundingBox(aabb, yRot, -xRot, attacker.position());
+                S2CAttackDebug.sendDebugPacket(obb, S2CAttackDebug.EnumAABBType.ATTACK, attacker);
+                return RayTraceUtils.getEntitiesIn(attacker, obb, false, EntityTypeTest.forClass(LivingEntity.class), predicate);
+            };
+        }
+
+        public static BiFunction<LivingEntity, Predicate<LivingEntity>, Collection<LivingEntity>> obbTargets(OrientedBoundingBox obb) {
+            return (attacker, predicate) -> {
+                S2CAttackDebug.sendDebugPacket(obb, S2CAttackDebug.EnumAABBType.ATTACK, attacker);
+                return RayTraceUtils.getEntitiesIn(attacker, obb, false, EntityTypeTest.forClass(LivingEntity.class), predicate);
+            };
         }
 
         public EntityAttack withTargetPredicate(Predicate<LivingEntity> targetPred) {
@@ -722,13 +750,13 @@ public class CombatUtils {
             return this;
         }
 
-        public EntityAttack withBonusAttributes(Map<Attribute, Double> bonusAttributes) {
-            this.bonusAttributes = bonusAttributes;
+        public EntityAttack withBonusAttributes(Attribute att, double val) {
+            this.bonusAttributes.put(att, val);
             return this;
         }
 
-        public EntityAttack withBonusAttributesMultiplier(Map<Attribute, Double> multiplier) {
-            this.bonusAttributesMultiplier = multiplier;
+        public EntityAttack withBonusAttributesMultiplier(Attribute att, double val) {
+            this.bonusAttributesMultiplier.put(att, val);
             return this;
         }
 
@@ -742,16 +770,12 @@ public class CombatUtils {
             return this;
         }
 
-        public List<LivingEntity> executeAttack() {
+        public Collection<LivingEntity> executeAttack() {
             if (this.attacker.level.isClientSide)
                 return List.of();
-            List<LivingEntity> list = this.targets.apply(this.attacker, this.targetPred);
-            if (this.bonusAttributes != null) {
-                this.bonusAttributes.forEach((att, val) -> applyTempAttribute(this.attacker, att, val));
-            }
-            if (this.bonusAttributesMultiplier != null) {
-                this.bonusAttributesMultiplier.forEach((att, val) -> applyTempAttributeMult(this.attacker, att, val));
-            }
+            Collection<LivingEntity> list = this.targets.apply(this.attacker, this.targetPred);
+            this.bonusAttributes.forEach((att, val) -> applyTempAttribute(this.attacker, att, val));
+            this.bonusAttributesMultiplier.forEach((att, val) -> applyTempAttributeMult(this.attacker, att, val));
             for (LivingEntity livingEntity : list) {
                 boolean flag = false;
                 if (this.attacker instanceof Player player)
@@ -766,13 +790,13 @@ public class CombatUtils {
                                 this.soundToPlay, this.attacker.getSoundSource(), 1.0f, 1.0f);
                 }
             }
-            if (this.bonusAttributes != null) {
-                this.bonusAttributes.forEach((att, val) -> removeTempAttribute(this.attacker, att));
-            }
-            if (this.bonusAttributesMultiplier != null) {
-                this.bonusAttributesMultiplier.forEach((att, val) -> removeTempAttribute(this.attacker, att));
-            }
+            this.bonusAttributes.forEach((att, val) -> removeTempAttribute(this.attacker, att));
+            this.bonusAttributesMultiplier.forEach((att, val) -> removeTempAttribute(this.attacker, att));
             return list;
         }
+    }
+
+    public interface FloatMap {
+        float get(float val);
     }
 }

@@ -228,7 +228,7 @@ public class RuneCraftoryFabric implements ModInitializer {
             return InteractionResult.PASS;
         }));
         UseItemCallback.EVENT.register((player, world, hand) -> {
-            if (!EntityCalls.onPlayerUseItem(player))
+            if (!EntityCalls.onPlayerUseItem(player, hand))
                 return InteractionResultHolder.pass(player.getItemInHand(hand));
             return InteractionResultHolder.pass(ItemStack.EMPTY);
         });
@@ -305,6 +305,14 @@ public class RuneCraftoryFabric implements ModInitializer {
             INIT_ATTRIBUTES = true;
         }
         return ModAttributes.ENTITY_ATTRIBUTES;
+    }
+
+    public static Collection<RegistryEntrySupplier<Attribute>> playerAttributes() {
+        if (!INIT_ATTRIBUTES) {
+            ModAttributes.ATTRIBUTES.registerContent();
+            INIT_ATTRIBUTES = true;
+        }
+        return ModAttributes.PLAYER_ATTRIBUTES;
     }
 
     private void tweakVanillaAttribute(Attribute attribute, double value) {

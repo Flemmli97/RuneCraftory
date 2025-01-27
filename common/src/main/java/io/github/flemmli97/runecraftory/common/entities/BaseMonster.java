@@ -663,13 +663,17 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         if (!this.canBeControlledByRider() && this.getMoveControl().operation != MoveControl.Operation.WAIT
                 && this.getDeltaMovement().lengthSqr() > 0.004) {
             double d0 = this.getMoveControl().getSpeedModifier();
+            MoveType move;
             if (d0 > this.sprintSpeedThreshold()) {
-                this.setMovingFlag(MoveType.RUN);
+                move = MoveType.RUN;
             } else if (d0 <= this.crouchSpeedThreshold()) {
-                this.setMovingFlag(MoveType.SNEAK);
+                move = MoveType.SNEAK;
             } else {
-                this.setMovingFlag(MoveType.WALK);
+                move = MoveType.WALK;
             }
+            if (this.isImmobile())
+                move = MoveType.NONE;
+            this.setMovingFlag(move);
             this.updateMoveAnimation();
         } else {
             this.setMovingFlag(MoveType.NONE);
@@ -1619,9 +1623,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     public OrientedBoundingBox calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
         float yRot = this.getYRot();
         float xRot = this.getXRot();
-        Vec3 dir;
         if (target != null && !this.canBeControlledByRider()) {
-            dir = target.subtract(this.position()).normalize();
+            Vec3 dir = target.subtract(this.position()).normalize();
             float[] xYRot = MathsHelper.YXRotFrom(dir);
             yRot = xYRot[0];
             xRot = -xYRot[1];

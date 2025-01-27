@@ -12,8 +12,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 
-import java.util.Map;
-
 public class StraightPunchAttack extends AttackAction {
 
     @Override
@@ -28,8 +26,8 @@ public class StraightPunchAttack extends AttackAction {
             entity.playSound(ModSounds.SPELL_STRAIGHT_PUNCH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
             if (!entity.level.isClientSide) {
                 S2CScreenShake.sendAround(entity, 12, 8, 3);
-                CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets(entity.getLookAngle(), Math.min(5, CombatUtils.getAOE(entity, stack, 0)), 1))
-                        .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
+                CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(entity.getYRot(), 0, 1.5f, 0, false))
+                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
                         .doOnSuccess(e -> CombatUtils.knockBackEntity(entity, e, 2.5f))
                         .executeAttack();
             }

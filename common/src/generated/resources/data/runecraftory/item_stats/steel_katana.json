@@ -6,7 +6,8 @@
     "minecraft:generic.attack_damage": 71.0,
     "runecraftory:defence": 21.0,
     "runecraftory:dizzy": 3.0,
-    "runecraftory:attack_range": 0.0
+    "runecraftory:attack_range": 0.0,
+    "runecraftory:attack_width": 1.5
   },
   "monsterBonus": {
     "minecraft:generic.attack_damage": 1.0

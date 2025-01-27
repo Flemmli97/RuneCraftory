@@ -4,14 +4,11 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
-import io.github.flemmli97.runecraftory.api.enums.EnumToolCharge;
 import io.github.flemmli97.runecraftory.api.enums.EnumToolTier;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
-import io.github.flemmli97.runecraftory.api.items.IChargeable;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
-import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
-import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
+import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
@@ -47,7 +44,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public class ItemToolHoe extends HoeItem implements IItemUsable, IChargeable {
+public class ItemToolHoe extends HoeItem implements IItemUsable {
 
     public final EnumToolTier tier;
 
@@ -56,21 +53,8 @@ public class ItemToolHoe extends HoeItem implements IItemUsable, IChargeable {
         this.tier = tier;
     }
 
-    @Override
-    public int getChargeTime(ItemStack stack) {
-        if (this.tier == EnumToolTier.PLATINUM)
-            return (int) (DataPackHandler.INSTANCE.weaponPropertiesManager().getPropertiesFor(this.getWeaponType()).chargeTime() * GeneralConfig.platinumChargeTime);
-        return DataPackHandler.INSTANCE.weaponPropertiesManager().getPropertiesFor(this.getWeaponType()).chargeTime();
-    }
-
-    @Override
-    public int chargeAmount(ItemStack stack) {
+    public int chargeAmount() {
         return this.tier.getTierLevel();
-    }
-
-    @Override
-    public EnumToolCharge chargeType(ItemStack stack) {
-        return EnumToolCharge.CHARGEUPTOOL;
     }
 
     @Override
@@ -89,10 +73,11 @@ public class ItemToolHoe extends HoeItem implements IItemUsable, IChargeable {
     }
 
     @Override
-    public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int remainingUseDuration) {
-        if (livingEntity instanceof ServerPlayer player) {
+    public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingUseDuration) {
+        if (entity instanceof ServerPlayer player) {
             int duration = stack.getUseDuration() - remainingUseDuration;
-            if (duration > 0 && duration / this.getChargeTime(stack) <= this.chargeAmount(stack) && duration % this.getChargeTime(stack) == 0)
+            int chargeTime = ItemUtils.getChargeTime(entity, this.tier);
+            if (duration > 0 && duration / chargeTime <= this.chargeAmount() && duration % chargeTime == 0)
                 player.connection.send(new ClientboundSoundPacket(SoundEvents.NOTE_BLOCK_XYLOPHONE, player.getSoundSource(), player.getX(), player.getY(), player.getZ(), 1, 1));
         }
     }
@@ -120,7 +105,7 @@ public class ItemToolHoe extends HoeItem implements IItemUsable, IChargeable {
     @Override
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
         if (this.tier.getTierLevel() != 0 && entity instanceof ServerPlayer player) {
-            int useTime = (stack.getUseDuration() - timeLeft - 1) / this.getChargeTime(stack);
+            int useTime = (stack.getUseDuration() - timeLeft - 1) / ItemUtils.getChargeTime(entity, this.tier);
             int range = Math.min(useTime, this.tier.getTierLevel());
             BlockHitResult result = getPlayerPOVHitResult(world, player, ClipContext.Fluid.NONE);
             if (range == 0) {

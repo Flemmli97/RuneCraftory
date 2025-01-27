@@ -3,7 +3,6 @@ package io.github.flemmli97.runecraftory.common.attackactions;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.registry.AttackAction;
-import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
@@ -12,8 +11,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.Map;
 
 public class GustAttack extends AttackAction {
 
@@ -38,12 +35,12 @@ public class GustAttack extends AttackAction {
         if (anim.isAtTick(0.44)) {
             entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         }
-        if (!entity.level.isClientSide && anim.isAtTick(0.52)) {
-            double range = entity.getAttributeValue(ModAttributes.ATTACK_RANGE.get());
-            dir = dir.scale(range);
-            handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox().inflate(1).expandTowards(dir)))
+        if (!entity.level.isClientSide && anim.isAtTick(0.56)) {
+            double range = CombatUtils.getRange(entity, 0);
+            handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox().inflate(2, 0, 0)
+                            .expandTowards(0, 0, range)))
                     .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
-                    .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
+                    .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
                     .doOnSuccess(e -> CombatUtils.knockBackEntity(entity, e, 1.1f))
                     .executeAttack());
         }

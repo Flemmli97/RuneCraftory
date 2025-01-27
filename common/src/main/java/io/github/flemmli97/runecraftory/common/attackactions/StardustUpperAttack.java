@@ -13,8 +13,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.Map;
-
 public class StardustUpperAttack extends AttackAction {
 
     @Override
@@ -26,7 +24,7 @@ public class StardustUpperAttack extends AttackAction {
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
         if (anim.isAtTick(0.12)) {
-            handler.setSpinStartRot(entity.getYRot() - 90);
+            handler.setSpinStartRot(entity.getYRot() - 110);
         }
         if (anim.isAtTick(0.28))
             entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_HEAVY.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1f);
@@ -39,23 +37,26 @@ public class StardustUpperAttack extends AttackAction {
         }
         if (anim.isAtTick(0.92))
             entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_HEAVY.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1f);
-        if (!entity.level.isClientSide) {
-            if (anim.isPastTick(0.16) && !anim.isPastTick(1.52)) {
-                int start = Mth.ceil(0.16 * 20.0D);
-                int end = Mth.ceil(1.52 * 20.0D);
-                float len = (end - start) / anim.getSpeed();
-                float f = (anim.getTick() - start) / anim.getSpeed();
-                float angleInc = 690 / len;
-                float rot = handler.getSpinStartRot();
-                handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets((rot + f * angleInc), (rot + (f + 1) * angleInc), 0.5f))
-                        .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
-                        .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
-                        .doOnSuccess(target -> {
-                            CombatUtils.knockBackEntity(entity, target, 0.4f);
-                            target.setDeltaMovement(target.getDeltaMovement().add(0, 0.3, 0));
-                        })
-                        .executeAttack());
-            }
+
+        CombatUtils.EntityAttack attack = spinAttack(entity, anim, 0.16, 0.88,
+                handler.getSpinStartRot(), handler.getSpinStartRot() + 410, 0);
+        if (attack != null) {
+            handler.addHitEntityTracker(attack
+                    .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
+                    .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
+                    .executeAttack());
+        }
+        CombatUtils.EntityAttack attack2 = spinAttack(entity, anim, 0.88, 1.48,
+                handler.getSpinStartRot() + 410, handler.getSpinStartRot() + 680, p -> Mth.sin(p * Mth.PI) * 50, 0);
+        if (attack2 != null) {
+            handler.addHitEntityTracker(attack2
+                    .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
+                    .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
+                    .doOnSuccess(target -> {
+                        CombatUtils.knockBackEntity(entity, target, 0.4f);
+                        target.setDeltaMovement(target.getDeltaMovement().add(0, 0.3, 0));
+                    })
+                    .executeAttack());
         }
     }
 }

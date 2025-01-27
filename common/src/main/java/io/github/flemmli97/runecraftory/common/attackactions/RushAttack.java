@@ -12,8 +12,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.Map;
-
 public class RushAttack extends AttackAction {
 
     @Override
@@ -35,12 +33,12 @@ public class RushAttack extends AttackAction {
                 entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
             }
             entity.fallDistance = 0;
-            if (!entity.level.isClientSide && anim.canAttack()) {
-                CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets(entity.getLookAngle(), CombatUtils.getAOE(entity, stack, 10), 0.5f))
-                        .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
+            if (!entity.level.isClientSide && anim.isPastTick(0.2) && !anim.isPastTick(0.52)) {
+                handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(entity.getYRot(), 0, CombatUtils.getWidth(entity, 1.5f), -1f, false))
+                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
+                        .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
                         .doOnSuccess(e -> CombatUtils.knockBackEntity(entity, e, 0.8f))
-                        .executeAttack();
-
+                        .executeAttack());
             }
         } else {
             if (anim.isAtTick(0.32) || anim.isAtTick(0.48)) {
@@ -56,8 +54,8 @@ public class RushAttack extends AttackAction {
             entity.fallDistance = 0;
             if (!entity.level.isClientSide) {
                 if (anim.canAttack() || anim.isAtTick(0.52) || anim.isAtTick(1.08)) {
-                    CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets(entity.getLookAngle(), CombatUtils.getAOE(entity, stack, 10), 0.5f))
-                            .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
+                    CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(entity.getYRot(), 0, CombatUtils.getWidth(entity, 0.5f), 0.5f, false))
+                            .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
                             .executeAttack();
 
                 }

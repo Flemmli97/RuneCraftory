@@ -177,9 +177,8 @@ public class EntityCalls {
         boolean hasWeapon = ItemNBT.isWeapon(entity.getMainHandItem());
         float shieldEfficiency = ItemUtils.getShieldEfficiency(entity);
         if (changed.containsKey(EquipmentSlot.MAINHAND)) {
-            float lastShieldEfficiency = ItemUtils.getShieldEfficiency(lastMainhandItem);
             //Recalc offhand stats if mainhand changed but offhand did not
-            if (!changed.containsKey(EquipmentSlot.OFFHAND) && shieldEfficiency != lastShieldEfficiency) {
+            if (!changed.containsKey(EquipmentSlot.OFFHAND)) {
                 recalcOffhandBonus(entity, entity.getOffhandItem(), shieldEfficiency);
             }
         }
@@ -531,7 +530,8 @@ public class EntityCalls {
         return GeneralConfig.disableFarmlandTrample;
     }
 
-    public static boolean onPlayerUseItem(Player player) {
-        return Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().getCurrentAction() == ModAttackActions.NONE.get()).orElse(true);
+    public static boolean onPlayerUseItem(Player player, InteractionHand hand) {
+        return Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().getCurrentAction() == ModAttackActions.NONE.get()
+                || ItemStack.isSameItemSameTags(player.getItemInHand(hand), d.getWeaponHandler().getUsedWeapon())).orElse(true);
     }
 }

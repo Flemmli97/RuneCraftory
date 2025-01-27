@@ -8,7 +8,6 @@ import io.github.flemmli97.runecraftory.common.datapack.manager.MonsterPropertie
 import io.github.flemmli97.runecraftory.common.datapack.manager.ShopItemsManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.SkillPropertiesManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.SpellPropertiesManager;
-import io.github.flemmli97.runecraftory.common.datapack.manager.WeaponPropertiesManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.GiftManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCActionManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCConversationManager;
@@ -33,7 +32,6 @@ public class DataPackHandler {
     private final MonsterPropertiesManager mobProperties = new MonsterPropertiesManager();
     private final SpellPropertiesManager spellProperties = new SpellPropertiesManager();
     private final SkillPropertiesManager skillPropertiesManager = new SkillPropertiesManager();
-    private final WeaponPropertiesManager weaponPropertiesManager = new WeaponPropertiesManager();
     private final NameManager names = new NameManager();
     private final GiftManager gifts = new GiftManager();
     private final NPCDataManager npcData = new NPCDataManager();
@@ -65,7 +63,6 @@ public class DataPackHandler {
         cons.accept(INSTANCE.mobProperties);
         cons.accept(INSTANCE.spellProperties);
         cons.accept(INSTANCE.skillPropertiesManager);
-        cons.accept(INSTANCE.weaponPropertiesManager);
     }
 
     public static void reloadNPCData(Consumer<PreparableReloadListener> cons) {
@@ -134,10 +131,6 @@ public class DataPackHandler {
 
     public SkillPropertiesManager skillPropertiesManager() {
         return this.skillPropertiesManager;
-    }
-
-    public WeaponPropertiesManager weaponPropertiesManager() {
-        return this.weaponPropertiesManager;
     }
 
     public NameManager nameManager() {

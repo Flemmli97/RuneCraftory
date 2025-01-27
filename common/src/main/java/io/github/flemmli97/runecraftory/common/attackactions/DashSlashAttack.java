@@ -3,22 +3,17 @@ package io.github.flemmli97.runecraftory.common.attackactions;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.registry.AttackAction;
-import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.utils.OrientedBoundingBox;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.List;
-import java.util.Map;
 
 public class DashSlashAttack extends AttackAction {
 
@@ -35,9 +30,10 @@ public class DashSlashAttack extends AttackAction {
             entity.setDeltaMovement(entity.getDeltaMovement().multiply(0.95, 1, 0.95));
             if (anim.canAttack()) {
                 if (!entity.level.isClientSide) {
-                    Vec3 attackPos = entity.position().add(0, 0.2, 0).add(entity.getLookAngle().scale(0.5));
-                    CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(new AABB(-0.5, -1, -0.8, 0.8, 1, 0.5).move(attackPos)))
-                            .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
+                    OrientedBoundingBox obb = new OrientedBoundingBox(new AABB(-entity.getBbWidth(), 0, 0, entity.getBbWidth(), 1, entity.getBbWidth() + 1)
+                            .inflate(0.3), entity.getYRot(), 0, entity.position());
+                    CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(obb))
+                            .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
                             .doOnSuccess(e -> CombatUtils.knockBackEntity(entity, e, 1))
                             .executeAttack();
                 }
@@ -55,19 +51,12 @@ public class DashSlashAttack extends AttackAction {
                 if (anim.isAtTick(0.32))
                     entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
                 if (!entity.level.isClientSide && !anim.isPastTick(0.72)) {
-                    double range = entity.getAttributeValue(ModAttributes.ATTACK_RANGE.get());
-                    dir = dir.normalize().scale(range);
-                    List<LivingEntity> entites = entity.level.getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(1).expandTowards(dir),
-                            target -> target != entity && !handler.getHitEntityTracker().contains(target) && !target.isAlliedTo(entity) && target.isPickable());
-                    handler.addHitEntityTracker(entites);
-                    CombatUtils.applyTempAttributeMult(entity, Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack));
-                    for (LivingEntity entite : entites) {
-                        if (entity instanceof Player player)
-                            CombatUtils.playerAttackWithItem(player, entite, false, false);
-                        else if (entity instanceof Mob mob)
-                            mob.doHurtTarget(entite);
-                    }
-                    CombatUtils.removeTempAttribute(entity, Attributes.ATTACK_DAMAGE);
+                    double range = CombatUtils.getRange(entity, -1);
+                    handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox().inflate(range * 0.5, 0, 0)
+                                    .expandTowards(0, 0, range)))
+                            .withBonusAttributes(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
+                            .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
+                            .executeAttack());
                 }
             }
         }

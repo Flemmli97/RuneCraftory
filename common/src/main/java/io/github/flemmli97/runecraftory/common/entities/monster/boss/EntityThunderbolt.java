@@ -37,6 +37,8 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -68,6 +70,9 @@ public class EntityThunderbolt extends BossMonster {
     public static final AnimatedAction DEFEAT = AnimatedAction.builder(80, "defeat").marker(60).infinite().build();
     public static final AnimatedAction NEIGH = new AnimatedAction(24, 9, "neigh");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(STOMP, "interact");
+
+    private static final float RANGE_THRESHOLD = 0.7f;
+    private static final float FEINT_THRESHOLD = 0.35f;
 
     private static final AnimatedAction[] ANIMATED_ACTIONS = new AnimatedAction[]{BACK_KICK, LASER_X5, STOMP, HORN_ATTACK, BACK_KICK_HORN, CHARGE, CHARGE_2, CHARGE_3,
             LASER_AOE, LASER_KICK, LASER_KICK_2, WIND_BLADE, LASER_KICK_3, FEINT, DEFEAT, NEIGH, INTERACT};
@@ -174,7 +179,7 @@ public class EntityThunderbolt extends BossMonster {
                     .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.2), e -> 35 + e.getRandom().nextInt(15))), 11),
             WeightedEntry.wrap(MonsterActionUtils.<EntityThunderbolt>nonRepeatableAttack(HORN_ATTACK)
                     .withCondition((goal, target, previous) -> goal.attacker.allowAnimation(previous, HORN_ATTACK) && !goal.attacker.feintedDeath)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.2), e -> 35 + e.getRandom().nextInt(15))), 11),
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.2), e -> 35 + e.getRandom().nextInt(15))), 9),
             WeightedEntry.wrap(MonsterActionUtils.<EntityThunderbolt>nonRepeatableAttack(CHARGE)
                     .withCondition((goal, target, previous) -> goal.attacker.allowAnimation(previous, CHARGE) && !goal.attacker.feintedDeath)
                     .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.2), e -> 35 + e.getRandom().nextInt(15))), 10),
@@ -187,6 +192,10 @@ public class EntityThunderbolt extends BossMonster {
             WeightedEntry.wrap(MonsterActionUtils.<EntityThunderbolt>nonRepeatableAttack(WIND_BLADE)
                     .withCondition((goal, target, previous) -> goal.attacker.allowAnimation(previous, WIND_BLADE) && !goal.attacker.feintedDeath)
                     .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.2, 7), e -> 35 + e.getRandom().nextInt(15))), 7),
+            WeightedEntry.wrap(MonsterActionUtils.<EntityThunderbolt>nonRepeatableAttack(WIND_BLADE)
+                    .withCondition((goal, target, previous) -> goal.attacker.allowAnimation(previous, WIND_BLADE) && !goal.attacker.feintedDeath
+                            && (goal.attacker.getTarget() != null && goal.attacker.getTarget().getY() - goal.attacker.getY() > 4))
+                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.2, 7), e -> 35 + e.getRandom().nextInt(15))), 6),
 
             WeightedEntry.wrap(new GoalAttackAction<EntityThunderbolt>(LASER_AOE)
                     .cooldown(e -> e.animationCooldown(LASER_AOE) + 30)
@@ -364,8 +373,7 @@ public class EntityThunderbolt extends BossMonster {
         if (!this.level.isClientSide && this.getHealth() > 0 && this.getAnimationHandler().isCurrent(DEFEAT) && !this.feintedDeath && !this.isTamed()) {
             AnimatedAction anim = this.getAnimationHandler().getAnimation();
             if (anim.getTick() > anim.getLength()) {
-                this.feintedDeath = true;
-                this.getAnimationHandler().setAnimation(FEINT);
+                this.feintDeath();
             }
         }
         if (this.getAnimationHandler().isCurrent(FEINT, DEFEAT) && !this.isTamed()) {
@@ -407,6 +415,16 @@ public class EntityThunderbolt extends BossMonster {
         }
     }
 
+    protected void feintDeath() {
+        this.feintedDeath = true;
+        this.getAnimationHandler().setAnimation(FEINT);
+        STAT_INCREASE.forEach(att -> {
+            AttributeInstance inst = this.getAttribute(att.get());
+            inst.removeModifier(STAT_INCREASE_ID);
+            inst.addPermanentModifier(new AttributeModifier(STAT_INCREASE_ID, "rf.boss_stat_increase", 0.2, AttributeModifier.Operation.MULTIPLY_TOTAL));
+        });
+    }
+
     @Override
     protected Vec3 directionToLookAt() {
         if (this.getAnimationHandler().isCurrent(CHARGE, CHARGE_2, CHARGE_3)) {
@@ -445,16 +463,16 @@ public class EntityThunderbolt extends BossMonster {
     @Override
     protected void updateBossBar() {
         if (!this.feintedDeath)
-            this.bossInfo.setProgress((this.getHealth() - (this.getMaxHealth() * 0.3f)) / (this.getMaxHealth() * 0.7f));
+            this.bossInfo.setProgress((this.getHealth() - (this.getMaxHealth() * FEINT_THRESHOLD)) / (this.getMaxHealth() * RANGE_THRESHOLD));
         else
             this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
     }
 
     @Override
     protected boolean checkRage() {
-        if (this.getHealth() / this.getMaxHealth() < 0.3)
+        if (this.getHealth() / this.getMaxHealth() < FEINT_THRESHOLD)
             return !this.feintedDeath;
-        if (this.getHealth() / this.getMaxHealth() < 0.7)
+        if (this.getHealth() / this.getMaxHealth() < RANGE_THRESHOLD)
             return !this.isEnraged();
         return false;
     }

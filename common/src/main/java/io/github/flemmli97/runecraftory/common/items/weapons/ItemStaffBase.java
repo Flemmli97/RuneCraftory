@@ -1,14 +1,11 @@
 package io.github.flemmli97.runecraftory.common.items.weapons;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
-import io.github.flemmli97.runecraftory.api.enums.EnumToolCharge;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
-import io.github.flemmli97.runecraftory.api.items.IChargeable;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.api.registry.ArmorEffect;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.attachment.StaffData;
-import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.registry.ModArmorEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
@@ -32,7 +29,7 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class ItemStaffBase extends Item implements IItemUsable, IChargeable, ExtendedItem, IExtendedWeapon {
+public class ItemStaffBase extends Item implements IItemUsable, ExtendedItem, IExtendedWeapon {
 
     public final EnumElement startElement;
     public final int amount;
@@ -43,10 +40,9 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable, Ext
         this.amount = Math.max(1, amount);
     }
 
-    @Override
     public int getChargeTime(ItemStack stack) {
         return Platform.INSTANCE.getStaffData(stack).map(StaffData::getChargeTime)
-                .orElse(DataPackHandler.INSTANCE.weaponPropertiesManager().getPropertiesFor(this.getWeaponType()).chargeTime());
+                .orElse((int) ModAttributes.CHARGE_TIME.get().getDefaultValue());
     }
 
     public int getStaffChargeTime(LivingEntity entity, ItemStack stack) {
@@ -56,7 +52,6 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable, Ext
         return time;
     }
 
-    @Override
     public int chargeAmount(ItemStack stack) {
         return Platform.INSTANCE.getStaffData(stack).map(cap ->
                 cap.getTier3Spell(stack) != null && ItemNBT.itemLevel(stack) >= 3 ? 3 : cap.getTier2Spell(stack) != null ? 2 : cap.getTier1Spell(stack) != null ? 1 : 0).orElse(0);
@@ -80,11 +75,6 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable, Ext
             return false;
         }
         return true;
-    }
-
-    @Override
-    public EnumToolCharge chargeType(ItemStack stack) {
-        return EnumToolCharge.CHARGEUPWEAPON;
     }
 
     @Override

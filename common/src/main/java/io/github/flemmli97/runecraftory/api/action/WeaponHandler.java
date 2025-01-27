@@ -18,8 +18,8 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class WeaponHandler {
@@ -238,7 +238,7 @@ public class WeaponHandler {
         this.hitEntityTracker.clear();
     }
 
-    public void addHitEntityTracker(List<LivingEntity> list) {
+    public void addHitEntityTracker(Collection<LivingEntity> list) {
         this.hitEntityTracker.addAll(list);
     }
 

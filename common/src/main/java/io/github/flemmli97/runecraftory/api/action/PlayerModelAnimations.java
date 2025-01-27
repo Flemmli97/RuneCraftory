@@ -125,7 +125,7 @@ public class PlayerModelAnimations {
     public static final AnimatedAction DELTA_STRIKE = addTo(new AnimatedAction(length(1.08), 0.28, "delta_strike"));
     public static final AnimatedAction NAIVE_BLADE = addTo(new AnimatedAction(length(0.84), 0.12, "naive_blade"));
     public static final AnimatedAction NAIVE_BLADE_SUCCESS = addTo(new AnimatedAction(length(1.16), 0.36, "naive_blade_success"));
-    public static final AnimatedAction HURRICANE = addTo(new AnimatedAction(length(1.68), 0.12, "hurricane"));
+    public static final AnimatedAction HURRICANE = addTo(new AnimatedAction(length(1.76), 0.12, "hurricane"));
     public static final AnimatedAction REAPER_SLASH = addTo(new AnimatedAction(length(0.84), 0.24, "reaper_slash"));
     public static final AnimatedAction MILLION_STRIKE = addTo(new AnimatedAction(length(0.8), 0.32, "million_strike"));
     public static final AnimatedAction AXEL_DISASTER = addTo(new AnimatedAction(length(1.2), 0.36, "axel_disaster"));
@@ -141,7 +141,7 @@ public class PlayerModelAnimations {
     public static final AnimatedAction NEKO_DAMASHI = addTo(new AnimatedAction(length(0.6), 0.36, "neko_damashi"));
     public static final AnimatedAction RUSH_PUNCH = addTo(new AnimatedAction(length(0.96), 0.2, "rush_punch"));
     public static final AnimatedAction CYCLONE = addTo(new AnimatedAction(length(1.44), 0.28, "cyclone"));
-    public static final AnimatedAction RAPID_MOVE = addTo(new AnimatedAction(length(0.6), 0.52, "rapid_move"));
+    public static final AnimatedAction RAPID_MOVE = addTo(new AnimatedAction(length(0.8), 0.72, "rapid_move"));
 
     public static List<AnimatedAction> getAll() {
         return ImmutableList.copyOf(ALL);

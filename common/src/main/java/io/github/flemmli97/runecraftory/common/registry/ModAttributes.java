@@ -20,6 +20,7 @@ public class ModAttributes {
     public static final PlatformRegistry<Attribute> ATTRIBUTES = PlatformUtils.INSTANCE.of(Registry.ATTRIBUTE_REGISTRY, RuneCraftory.MODID);
 
     public static final Collection<RegistryEntrySupplier<Attribute>> ENTITY_ATTRIBUTES = new ArrayList<>();
+    public static final Collection<RegistryEntrySupplier<Attribute>> PLAYER_ATTRIBUTES = new ArrayList<>();
 
     public static final Comparator<Attribute> SORTED = (o1, o2) -> {
         if (o1 == Attributes.MAX_HEALTH && o2 != Attributes.MAX_HEALTH)
@@ -83,8 +84,10 @@ public class ModAttributes {
      * We use a custom attribute for this to remove other influences like haste etc.
      * Attack speed is in ticks
      */
-    public static final RegistryEntrySupplier<Attribute> ATTACK_SPEED = registerSyncable(LibAttributes.ATTACK_SPEED, ID++, 1, 0, 2);
-    public static final RegistryEntrySupplier<Attribute> ATTACK_RANGE = registerSyncable(LibAttributes.ATTACK_RANGE, ID++, 3, 0, 9999);
+    public static final RegistryEntrySupplier<Attribute> ATTACK_SPEED = registerPlayerSyncable(LibAttributes.ATTACK_SPEED, ID++, 1, 0, 2);
+    public static final RegistryEntrySupplier<Attribute> ATTACK_RANGE = registerPlayerSyncable(LibAttributes.ATTACK_RANGE, ID++, 3, 0, 9999);
+    public static final RegistryEntrySupplier<Attribute> ATTACK_WIDTH = registerPlayerSyncable(LibAttributes.ATTACK_WIDTH, ID++, 0, 0, 9999);
+    public static final RegistryEntrySupplier<Attribute> CHARGE_TIME = registerPlayerSyncable(LibAttributes.CHARGE_TIME, ID++, 20, 0, 9999);
 
     private static RegistryEntrySupplier<Attribute> register(ResourceLocation reg, int id, double base, double min, double max) {
         RegistryEntrySupplier<Attribute> sup = ATTRIBUTES.register(reg.getPath(), () -> new OrderedAttribute("attribute." + reg, id, base, min, max));
@@ -95,6 +98,12 @@ public class ModAttributes {
     private static RegistryEntrySupplier<Attribute> registerSyncable(ResourceLocation reg, int id, double base, double min, double max) {
         RegistryEntrySupplier<Attribute> sup = ATTRIBUTES.register(reg.getPath(), () -> new OrderedAttribute("attribute." + reg, id, base, min, max).setSyncable(true));
         ENTITY_ATTRIBUTES.add(sup);
+        return sup;
+    }
+
+    private static RegistryEntrySupplier<Attribute> registerPlayerSyncable(ResourceLocation reg, int id, double base, double min, double max) {
+        RegistryEntrySupplier<Attribute> sup = ATTRIBUTES.register(reg.getPath(), () -> new OrderedAttribute("attribute." + reg, id, base, min, max).setSyncable(true));
+        PLAYER_ATTRIBUTES.add(sup);
         return sup;
     }
 

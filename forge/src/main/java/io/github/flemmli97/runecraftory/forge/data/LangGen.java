@@ -204,6 +204,8 @@ public class LangGen implements DataProvider {
 
         this.add(ModAttributes.ATTACK_SPEED.get().getDescriptionId(), "Attack Speed");
         this.add(ModAttributes.ATTACK_RANGE.get().getDescriptionId(), "Attack Range");
+        this.add(ModAttributes.ATTACK_WIDTH.get().getDescriptionId(), "Attack Width");
+        this.add(ModAttributes.CHARGE_TIME.get().getDescriptionId(), "Charge Time");
 
         for (RegistryEntrySupplier<MobEffect> reg : ModEffects.EFFECTS.getEntries()) {
             this.add(reg.get(), this.simpleTranslation(reg.getID()));
@@ -475,11 +477,11 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.patchouli.entry.weapon", "Weapons");
         this.add("runecraftory.patchouli.entry.weapon.1", "The mod adds a plethora of weapons and you will find a short explanation of each weapon type here. By reaching at least level 5 for a weapon type you are able to " +
                 "use a charge attack. Simply hold right click and release after a while to use it. This will consume a bit of runepoints though. " +
-                "They also have unlike vanilla swords an aoe effect. See it as sweeping but all mobs take equal damage.");
+                "They also have unlike vanilla swords an width effect. See it as sweeping but all mobs take equal damage.");
         this.add("runecraftory.patchouli.entry.weapon.2.title", "Short Swords");
-        this.add("runecraftory.patchouli.entry.weapon.2", "Weapons with a shorter reach and attack power but quite fast with a small aoe effect. The closest to vanilla swords.");
+        this.add("runecraftory.patchouli.entry.weapon.2", "Weapons with a shorter reach and attack power but quite fast with a small width effect. The closest to vanilla swords.");
         this.add("runecraftory.patchouli.entry.weapon.3.title", "Long Swords");
-        this.add("runecraftory.patchouli.entry.weapon.3", "Bigger reach and more attack power but kinda slow. Has a decent aoe.");
+        this.add("runecraftory.patchouli.entry.weapon.3", "Bigger reach and more attack power but kinda slow. Has a decent width.");
         this.add("runecraftory.patchouli.entry.weapon.4.title", "Spears");
         this.add("runecraftory.patchouli.entry.weapon.4", "Big reach and fairly quick. The charge attack is special: After charging and releasing repeatedly right click to keep attacking");
         this.add("runecraftory.patchouli.entry.weapon.5.title", "Axe/Hammers");
@@ -487,7 +489,7 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.patchouli.entry.weapon.6.title", "Dual Blades");
         this.add("runecraftory.patchouli.entry.weapon.6", "Dual weapons. Fast but weaker than other weapons with a shorter reach. You will also not be able to use offhand items.");
         this.add("runecraftory.patchouli.entry.weapon.7.title", "Fists");
-        this.add("runecraftory.patchouli.entry.weapon.7", "Dual weapons. Fast but with shorter reach and small aoe. Charge attack will push you into the direction you are looking and during that hitting any mobs in your way");
+        this.add("runecraftory.patchouli.entry.weapon.7", "Dual weapons. Fast but with shorter reach and small width. Charge attack will push you into the direction you are looking and during that hitting any mobs in your way");
         this.add("runecraftory.patchouli.entry.weapon.8.title", "Staffs");
         this.add("runecraftory.patchouli.entry.weapon.8", "Magic weapon. Each staff has a base spell used per weapon swing. Additionally upgrading a staff with items can give it spells too. To use them simply hold right click. " +
                 "A staff can have max 3 spells attached to it.");

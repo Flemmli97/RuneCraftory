@@ -17,9 +17,14 @@ RuneCraftory 1.11.0
   - Max roof height it checks is now 10
   - Monster needing a roof need to physically fit under the roof
   - Barn size is not capped by roof anymore
-- Add entity predicate to talking quest
 - Added more textures + stats
-- Rewrite shop item datapack to take a entity predicate 
+- Rewrite shop item datapack to take an entity predicate 
+- Rewrote the whole questing system
+  - Fixes issue with quests loosing npc contexts
+- Add entity predicate to talking quest
+- Update player attack + rune abilities to use obb
+- Removed weapon type properties
+- Added attack width and charge time attribute replacing weapon type properties
 
 RuneCraftory 1.10.4
 ================

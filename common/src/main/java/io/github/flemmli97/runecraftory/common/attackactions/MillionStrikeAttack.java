@@ -13,8 +13,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 
-import java.util.Map;
-
 public class MillionStrikeAttack extends AttackAction {
 
     @Override
@@ -28,10 +26,11 @@ public class MillionStrikeAttack extends AttackAction {
         if (anim.isPastTick(0.28) && !anim.isPastTick(0.68) && anim.getTickRaw() % (2 * anim.getSpeed()) == 0) {
             if (!entity.level.isClientSide) {
                 float mod = (anim.getTickRaw() - Mth.ceil(0.28 * 20)) % (8 * anim.getSpeed());
-                CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets(entity.getLookAngle(), 15, 2))
-                        .withBonusAttributes(mod == 6 ? Map.of(ModAttributes.CRIT.get(), 100d) : Map.of())
-                        .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
-                        .executeAttack();
+                CombatUtils.EntityAttack attack = CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(entity.getYRot(), 0, 1, 1, false))
+                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack));
+                if (mod == 6)
+                    attack.withBonusAttributes(ModAttributes.CRIT.get(), 100d);
+                attack.executeAttack();
             }
             entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.7f);
         }

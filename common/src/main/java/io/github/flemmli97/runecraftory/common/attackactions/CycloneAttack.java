@@ -7,12 +7,9 @@ import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
-
-import java.util.Map;
 
 public class CycloneAttack extends AttackAction {
 
@@ -38,16 +35,12 @@ public class CycloneAttack extends AttackAction {
             handler.resetHitEntityTracker();
             entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         }
-        if (!entity.level.isClientSide && anim.isPastTick(0.2) && !anim.isPastTick(1.04)) {
-            int start = Mth.ceil(0.2 * 20.0D);
-            int end = Mth.ceil(1.04 * 20.0D);
-            float len = (end - start) / anim.getSpeed();
-            float f = (anim.getTick() - start) / anim.getSpeed();
-            float angleInc = -(360 * 5) / len;
-            float rot = handler.getSpinStartRot();
-            handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets((rot + f * angleInc), (rot + (f + 1) * angleInc), 0))
+        CombatUtils.EntityAttack attack = spinAttack(entity, anim, 0.2, 1.04,
+                handler.getSpinStartRot(), handler.getSpinStartRot() - 360 * 4.5f, 0);
+        if (attack != null) {
+            handler.addHitEntityTracker(attack
                     .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
-                    .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
+                    .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
                     .doOnSuccess(e -> CombatUtils.knockBackEntity(entity, e, 1.5f))
                     .executeAttack());
         }

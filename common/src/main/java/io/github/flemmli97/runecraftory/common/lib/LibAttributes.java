@@ -15,6 +15,8 @@ public class LibAttributes {
 
     public static final ResourceLocation ATTACK_SPEED = new ResourceLocation(RuneCraftory.MODID, "attack_speed_modifier");
     public static final ResourceLocation ATTACK_RANGE = new ResourceLocation(RuneCraftory.MODID, "attack_range");
+    public static final ResourceLocation ATTACK_WIDTH = new ResourceLocation(RuneCraftory.MODID, "attack_width");
+    public static final ResourceLocation CHARGE_TIME = new ResourceLocation(RuneCraftory.MODID, "charge_time");
 
     public static final ResourceLocation DEFENCE = new ResourceLocation(RuneCraftory.MODID, "defence");
     public static final ResourceLocation MAGIC = new ResourceLocation(RuneCraftory.MODID, "magic_attack");

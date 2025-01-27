@@ -3,15 +3,13 @@ package io.github.flemmli97.runecraftory.common.items.weapons;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
-import io.github.flemmli97.runecraftory.api.enums.EnumToolCharge;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
-import io.github.flemmli97.runecraftory.api.items.IChargeable;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
-import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.items.BigWeapon;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
+import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.item.IAOEWeapon;
 import net.minecraft.core.BlockPos;
@@ -32,20 +30,10 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class ItemHammerBase extends PickaxeItem implements IItemUsable, IChargeable, IAOEWeapon, BigWeapon {
+public class ItemHammerBase extends PickaxeItem implements IItemUsable, IAOEWeapon, BigWeapon {
 
     public ItemHammerBase(Item.Properties props) {
         super(ItemTiers.TIER, 0, 0, props);
-    }
-
-    @Override
-    public int getChargeTime(ItemStack stack) {
-        return DataPackHandler.INSTANCE.weaponPropertiesManager().getPropertiesFor(this.getWeaponType()).chargeTime();
-    }
-
-    @Override
-    public int chargeAmount(ItemStack stack) {
-        return 1;
     }
 
     @Override
@@ -69,11 +57,6 @@ public class ItemHammerBase extends PickaxeItem implements IItemUsable, IChargea
     }
 
     @Override
-    public EnumToolCharge chargeType(ItemStack stack) {
-        return EnumToolCharge.CHARGEUPWEAPON;
-    }
-
-    @Override
     public EnumWeaponType getWeaponType() {
         return EnumWeaponType.HAXE;
     }
@@ -88,8 +71,8 @@ public class ItemHammerBase extends PickaxeItem implements IItemUsable, IChargea
     }
 
     @Override
-    public float getFOV(LivingEntity entity, ItemStack stack) {
-        return DataPackHandler.INSTANCE.weaponPropertiesManager().getPropertiesFor(this.getWeaponType()).aoe();
+    public float getWidth(LivingEntity entity, ItemStack stack) {
+        return (float) entity.getAttributeValue(ModAttributes.ATTACK_WIDTH.get());
     }
 
     @Override
@@ -103,10 +86,10 @@ public class ItemHammerBase extends PickaxeItem implements IItemUsable, IChargea
     }
 
     @Override
-    public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int remainingUseDuration) {
-        if (livingEntity instanceof ServerPlayer player) {
+    public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingUseDuration) {
+        if (entity instanceof ServerPlayer player) {
             int duration = stack.getUseDuration() - remainingUseDuration;
-            if (duration == this.getChargeTime(stack))
+            if (duration == ItemUtils.getChargeTime(entity))
                 player.connection.send(new ClientboundSoundPacket(SoundEvents.NOTE_BLOCK_XYLOPHONE, player.getSoundSource(), player.getX(), player.getY(), player.getZ(), 1, 1));
         }
     }
@@ -142,7 +125,7 @@ public class ItemHammerBase extends PickaxeItem implements IItemUsable, IChargea
 
     @Override
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
-        if (!world.isClientSide && stack.getUseDuration() - timeLeft - 1 >= this.getChargeTime(stack)) {
+        if (!world.isClientSide && stack.getUseDuration() - timeLeft - 1 >= ItemUtils.getChargeTime(entity)) {
             if (entity instanceof ServerPlayer player) {
                 Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.getWeaponHandler().doWeaponAttack(player, ModAttackActions.HAMMER_AXE_USE.get(), stack));
                 return;

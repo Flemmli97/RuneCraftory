@@ -7,12 +7,9 @@ import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
-
-import java.util.Map;
 
 public class HurricaneAttack extends AttackAction {
 
@@ -24,33 +21,29 @@ public class HurricaneAttack extends AttackAction {
 
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
-        if (anim.isAtTick(0.4)) {
+        if (anim.isAtTick(0.48)) {
             handler.setSpinStartRot(entity.getYRot() + 180);
             handler.resetHitEntityTracker();
             entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.2f);
         }
-        if (anim.isAtTick(0.72) || anim.isAtTick(1.04)) {
+        if (anim.isAtTick(0.8) || anim.isAtTick(1.12)) {
             entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.2f);
         }
-        if (anim.isAtTick(0.76) || anim.isAtTick(1.08)) {
+        if (anim.isAtTick(0.84) || anim.isAtTick(1.16)) {
             handler.resetHitEntityTracker();
         }
         if (!entity.level.isClientSide) {
-            if (anim.isAtTick(0.2)) {
-                CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets(entity.getLookAngle(), 20, 0.5f))
-                        .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
+            if (anim.isAtTick(0.24)) {
+                CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets(entity.getYRot() - 90, entity.getYRot() + 50, 0))
+                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
                         .executeAttack();
                 entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_LIGHT.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
             }
-            if (anim.isPastTick(0.44) && !anim.isPastTick(1.44)) {
-                int start = Mth.ceil(0.44 * 20.0D);
-                int end = Mth.ceil(1.44 * 20.0D);
-                float len = (end - start) / anim.getSpeed();
-                float f = (anim.getTick() - start) / anim.getSpeed();
-                float angleInc = 1080 / len;
-                float rot = handler.getSpinStartRot();
-                handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets((rot + f * angleInc), (rot + (f + 1) * angleInc), 0.5f))
-                        .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
+            CombatUtils.EntityAttack attack = spinAttack(entity, anim, 0.52, 1.52,
+                    handler.getSpinStartRot(), handler.getSpinStartRot() + 1080, 0);
+            if (attack != null) {
+                handler.addHitEntityTracker(attack
+                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
                         .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
                         .executeAttack());
             }

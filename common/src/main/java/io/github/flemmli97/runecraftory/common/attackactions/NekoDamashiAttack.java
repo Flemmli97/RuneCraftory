@@ -12,8 +12,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 
-import java.util.Map;
-
 public class NekoDamashiAttack extends AttackAction {
 
     @Override
@@ -27,9 +25,11 @@ public class NekoDamashiAttack extends AttackAction {
         if (anim.canAttack()) {
             entity.playSound(ModSounds.SPELL_GENERIC_POP.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
             if (!entity.level.isClientSide) {
-                CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets(entity.getLookAngle(), Math.min(10, CombatUtils.getAOE(entity, stack, 0)), 0.5f))
-                        .withBonusAttributes(Map.of(ModAttributes.PARA.get(), 0.3))
-                        .withBonusAttributesMultiplier(Map.of(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)))
+                double range = Math.min(2.5, CombatUtils.getRange(entity, 0));
+                CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(entity.getYRot(), 0, 1.5, range, true))
+                        .withBonusAttributes(ModAttributes.PARA.get(), 30)
+                        .withBonusAttributes(ModAttributes.STUN.get(), 20)
+                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
                         .executeAttack();
             }
         }

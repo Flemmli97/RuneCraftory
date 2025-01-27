@@ -1,27 +1,23 @@
 package io.github.flemmli97.runecraftory.common.items.weapons;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
-import io.github.flemmli97.runecraftory.api.enums.EnumToolCharge;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
-import io.github.flemmli97.runecraftory.api.items.IChargeable;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
-import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.items.BigWeapon;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
+import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.item.IAOEWeapon;
-import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -30,22 +26,12 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.List;
+import java.util.Collection;
 
-public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAOEWeapon, BigWeapon {
+public class ItemSpearBase extends Item implements IItemUsable, IAOEWeapon, BigWeapon {
 
     public ItemSpearBase(Item.Properties props) {
         super(props.stacksTo(1));
-    }
-
-    @Override
-    public int getChargeTime(ItemStack stack) {
-        return DataPackHandler.INSTANCE.weaponPropertiesManager().getPropertiesFor(this.getWeaponType()).chargeTime();
-    }
-
-    @Override
-    public int chargeAmount(ItemStack stack) {
-        return 1;
     }
 
     @Override
@@ -69,11 +55,6 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
     }
 
     @Override
-    public EnumToolCharge chargeType(ItemStack stack) {
-        return EnumToolCharge.CHARGEUPWEAPON;
-    }
-
-    @Override
     public EnumWeaponType getWeaponType() {
         return EnumWeaponType.SPEAR;
     }
@@ -89,8 +70,8 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
     }
 
     @Override
-    public float getFOV(LivingEntity entity, ItemStack stack) {
-        return DataPackHandler.INSTANCE.weaponPropertiesManager().getPropertiesFor(this.getWeaponType()).aoe();
+    public float getWidth(LivingEntity entity, ItemStack stack) {
+        return (float) entity.getAttributeValue(ModAttributes.ATTACK_WIDTH.get());
     }
 
     @Override
@@ -99,10 +80,10 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
     }
 
     @Override
-    public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int remainingUseDuration) {
-        if (livingEntity instanceof ServerPlayer player) {
+    public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingUseDuration) {
+        if (entity instanceof ServerPlayer player) {
             int duration = stack.getUseDuration() - remainingUseDuration;
-            if (duration == this.getChargeTime(stack))
+            if (duration == ItemUtils.getChargeTime(entity))
                 player.connection.send(new ClientboundSoundPacket(SoundEvents.NOTE_BLOCK_XYLOPHONE, player.getSoundSource(), player.getX(), player.getY(), player.getZ(), 1, 1));
         }
     }
@@ -150,7 +131,7 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
         if (entity instanceof ServerPlayer serverPlayer) {
             Platform.INSTANCE.getPlayerData(serverPlayer).ifPresent(data -> {
                 int time = stack.getUseDuration() - timeLeft - 1;
-                if (time >= this.getChargeTime(stack) && data.getWeaponHandler().canExecuteAction(serverPlayer, ModAttackActions.SPEAR_USE.get())) {
+                if (time >= ItemUtils.getChargeTime(entity) && data.getWeaponHandler().canExecuteAction(serverPlayer, ModAttackActions.SPEAR_USE.get())) {
                     data.getWeaponHandler().doWeaponAttack(serverPlayer, ModAttackActions.SPEAR_USE.get(), stack);
                 }
             });
@@ -163,7 +144,8 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
     }
 
     public void useSpear(ServerPlayer player, ItemStack stack, boolean finishing) {
-        List<Entity> list = RayTraceUtils.getEntities(player, this.getRange(player, stack), 10);
+        Collection<LivingEntity> list = CombatUtils.EntityAttack.obbTargets(IAOEWeapon.createOBB(player, stack, this.getRange(player, stack), 0.5))
+                .apply(player, null);
         if (!list.isEmpty()) {
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.SPEAR, 2));
             list.forEach(e -> CombatUtils.playerAttackWithItem(player, e, player.getMainHandItem(), 0.6f, false, false));

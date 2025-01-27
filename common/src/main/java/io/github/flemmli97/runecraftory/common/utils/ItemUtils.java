@@ -1,16 +1,20 @@
 package io.github.flemmli97.runecraftory.common.utils;
 
 import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
+import io.github.flemmli97.runecraftory.api.enums.EnumToolTier;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
+import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.EnumShopResult;
+import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -28,6 +32,17 @@ public class ItemUtils {
         ItemStack hammer = new ItemStack(ModItems.HAMMER_SCRAP.get());
         spawnItemAtEntity(player, broadSword);
         spawnItemAtEntity(player, hammer);
+    }
+
+    public static int getChargeTime(LivingEntity entity) {
+        return Mth.ceil(EntityUtils.tryGetAttribute(entity, ModAttributes.CHARGE_TIME.get()));
+    }
+
+    public static int getChargeTime(LivingEntity entity, EnumToolTier toolTier) {
+        int time = Mth.ceil(EntityUtils.tryGetAttribute(entity, ModAttributes.CHARGE_TIME.get()));
+        if (toolTier == EnumToolTier.PLATINUM)
+            time *= GeneralConfig.platinumChargeTime;
+        return time;
     }
 
     public static void spawnItemAtEntity(LivingEntity entity, ItemStack stack) {

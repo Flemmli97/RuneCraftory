@@ -3,17 +3,15 @@ package io.github.flemmli97.runecraftory.common.items.weapons;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
-import io.github.flemmli97.runecraftory.api.enums.EnumToolCharge;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
-import io.github.flemmli97.runecraftory.api.items.IChargeable;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
-import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
+import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.item.IAOEWeapon;
@@ -39,20 +37,10 @@ import net.minecraft.world.level.Level;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class ItemShortSwordBase extends SwordItem implements IItemUsable, IChargeable, IAOEWeapon {
+public class ItemShortSwordBase extends SwordItem implements IItemUsable, IAOEWeapon {
 
     public ItemShortSwordBase(Item.Properties props) {
         super(ItemTiers.TIER, 0, 0, props);
-    }
-
-    @Override
-    public int getChargeTime(ItemStack stack) {
-        return DataPackHandler.INSTANCE.weaponPropertiesManager().getPropertiesFor(this.getWeaponType()).chargeTime();
-    }
-
-    @Override
-    public int chargeAmount(ItemStack stack) {
-        return 1;
     }
 
     @Override
@@ -76,11 +64,6 @@ public class ItemShortSwordBase extends SwordItem implements IItemUsable, ICharg
     }
 
     @Override
-    public EnumToolCharge chargeType(ItemStack stack) {
-        return EnumToolCharge.CHARGEUPWEAPON;
-    }
-
-    @Override
     public EnumWeaponType getWeaponType() {
         return EnumWeaponType.SHORTSWORD;
     }
@@ -96,8 +79,8 @@ public class ItemShortSwordBase extends SwordItem implements IItemUsable, ICharg
     }
 
     @Override
-    public float getFOV(LivingEntity entity, ItemStack stack) {
-        return DataPackHandler.INSTANCE.weaponPropertiesManager().getPropertiesFor(this.getWeaponType()).aoe();
+    public float getWidth(LivingEntity entity, ItemStack stack) {
+        return (float) entity.getAttributeValue(ModAttributes.ATTACK_WIDTH.get());
     }
 
     @Override
@@ -106,10 +89,10 @@ public class ItemShortSwordBase extends SwordItem implements IItemUsable, ICharg
     }
 
     @Override
-    public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int remainingUseDuration) {
-        if (livingEntity instanceof ServerPlayer player) {
+    public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingUseDuration) {
+        if (entity instanceof ServerPlayer player) {
             int duration = stack.getUseDuration() - remainingUseDuration;
-            if (duration == this.getChargeTime(stack))
+            if (duration == ItemUtils.getChargeTime(entity))
                 player.connection.send(new ClientboundSoundPacket(SoundEvents.NOTE_BLOCK_XYLOPHONE, player.getSoundSource(), player.getX(), player.getY(), player.getZ(), 1, 1));
         }
     }
@@ -140,28 +123,29 @@ public class ItemShortSwordBase extends SwordItem implements IItemUsable, ICharg
 
     @Override
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
-        if (!world.isClientSide && stack.getUseDuration() - timeLeft - 1 >= this.getChargeTime(stack)) {
+        if (!world.isClientSide && stack.getUseDuration() - timeLeft - 1 >= ItemUtils.getChargeTime(entity)) {
             if (entity instanceof ServerPlayer player) {
                 Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.getWeaponHandler().doWeaponAttack(player, ModAttackActions.SHORT_SWORD_USE.get(), stack));
                 return;
             }
-            if (performRightClickAction(stack, entity, this.getRange(entity, stack), this.getFOV(entity, stack))) {
+            if (performRightClickAction(stack, entity, this.getRange(entity, stack), this.getWidth(entity, stack))) {
                 entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 1.0f, 1.0f);
             }
         }
     }
 
     public static void delayedRightClickAction(LivingEntity entity, ItemStack stack) {
-        float aoe = CombatUtils.getAOE(entity, stack, 10);
-        float reach = (float) entity.getAttributeValue(ModAttributes.ATTACK_RANGE.get()) + 2;
+        double width = CombatUtils.getWidth(entity, 0);
+        double reach = CombatUtils.getRange(entity, 2);
         entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 1.0f, 1.0f);
-        if (performRightClickAction(stack, entity, reach, aoe) && entity instanceof ServerPlayer player) {
+        if (performRightClickAction(stack, entity, reach, width) && entity instanceof ServerPlayer player) {
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.SHORTSWORD, 6));
         }
     }
 
-    public static boolean performRightClickAction(ItemStack stack, LivingEntity entity, float range, float fov) {
-        List<Entity> list = RayTraceUtils.getEntities(entity, range + 2, fov + 10);
+    public static boolean performRightClickAction(ItemStack stack, LivingEntity entity, double range, double width) {
+        List<Entity> list = RayTraceUtils.getEntitiesIn(entity,
+                IAOEWeapon.createOBB(entity, stack, range + 2, width), null);
         if (!list.isEmpty()) {
             Supplier<CustomDamage.Builder> base = () -> new CustomDamage.Builder(entity).element(ItemNBT.getElement(stack)).knock(CustomDamage.KnockBackType.UP).knockAmount(0.7f).hurtResistant(20);
             boolean success = false;

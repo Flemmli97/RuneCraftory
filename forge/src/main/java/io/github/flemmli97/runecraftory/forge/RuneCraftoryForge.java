@@ -151,6 +151,9 @@ public class RuneCraftoryForge {
                     event.add(t, s.get());
             }
         }
+        for (RegistryEntrySupplier<Attribute> s : ModAttributes.PLAYER_ATTRIBUTES) {
+            event.add(EntityType.PLAYER, s.get());
+        }
     }
 
     public void conf(ModConfigEvent event) {
