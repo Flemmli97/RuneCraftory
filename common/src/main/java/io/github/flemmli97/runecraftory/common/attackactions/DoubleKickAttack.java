@@ -15,7 +15,7 @@ import net.minecraft.world.phys.Vec3;
 public class DoubleKickAttack extends AttackAction {
 
     @Override
-    public AnimatedAction getAnimation(LivingEntity entity, int chain) {
+    public AnimatedAction getAnimation(LivingEntity entity, int comboIdx) {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
         return PlayerModelAnimations.DOUBLE_KICK.create(speed);
     }

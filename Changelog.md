@@ -25,6 +25,7 @@ RuneCraftory 1.11.0
 - Update player attack + rune abilities to use obb
 - Removed weapon type properties
 - Added attack width and charge time attribute replacing weapon type properties
+- Updated combo attack system. Is now more lenient with responses
 
 RuneCraftory 1.10.4
 ================

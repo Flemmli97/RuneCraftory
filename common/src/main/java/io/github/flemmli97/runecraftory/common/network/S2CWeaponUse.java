@@ -45,9 +45,9 @@ public class S2CWeaponUse implements Packet {
             return;
         Entity target = client.level.getEntity(pkt.entity);
         if (target instanceof Player player)
-            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.getWeaponHandler().clientSideUpdate(player, pkt.action, pkt.stack, pkt.count));
+            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.getWeaponHandler().clientSideUpdate(pkt.action, pkt.stack, pkt.count));
         else if (target instanceof EntityNPCBase npc)
-            npc.weaponHandler.clientSideUpdate(npc, pkt.action, pkt.stack, pkt.count);
+            npc.weaponHandler.clientSideUpdate(pkt.action, pkt.stack, pkt.count);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
+import io.github.flemmli97.runecraftory.api.action.ComboContainer;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.registry.AttackAction;
@@ -17,15 +18,19 @@ import net.minecraft.world.phys.Vec3;
 
 public class DashSlashAttack extends AttackAction {
 
+    private final ComboContainer combo = ComboContainer.Builder.builder()
+            .addCombo(handler -> handler.getCurrentAnim().isPastTick(0.36), 0)
+            .build();
+
     @Override
-    public AnimatedAction getAnimation(LivingEntity entity, int chain) {
+    public AnimatedAction getAnimation(LivingEntity entity, int comboIdx) {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
-        return PlayerModelAnimations.DASH_SLASH.get(chain).create(speed);
+        return PlayerModelAnimations.DASH_SLASH.get(comboIdx).create(speed);
     }
 
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
-        if (handler.getChainCount() == 2) {
+        if (handler.getComboCount() == 2) {
             handler.clearMoveTarget();
             entity.setDeltaMovement(entity.getDeltaMovement().multiply(0.95, 1, 0.95));
             if (anim.canAttack()) {
@@ -64,7 +69,7 @@ public class DashSlashAttack extends AttackAction {
 
     @Override
     public void onEnd(LivingEntity entity, WeaponHandler handler) {
-        if (handler.getChainCount() != 1)
+        if (handler.getComboCount() != 1)
             return;
         Vec3 mot = entity.getDeltaMovement();
         double lenHor = mot.x * mot.x + mot.z * mot.z;
@@ -72,18 +77,12 @@ public class DashSlashAttack extends AttackAction {
     }
 
     @Override
-    public AttackChain attackChain(LivingEntity entity, int chain) {
-        return new AttackChain(2, 0);
-    }
-
-    @Override
-    public boolean canOverride(LivingEntity entity, WeaponHandler handler) {
-        AnimatedAction anim = handler.getCurrentAnim();
-        return anim != null && handler.getChainCount() == 1 && anim.isPastTick(0.36);
-    }
-
-    @Override
     public boolean isInvulnerable(LivingEntity entity, WeaponHandler handler) {
-        return handler.getChainCount() == 1;
+        return handler.getComboCount() == 1;
+    }
+
+    @Override
+    public ComboContainer combos() {
+        return this.combo;
     }
 }

@@ -19,7 +19,7 @@ import java.util.List;
 public class GloveUseAttack extends AttackAction {
 
     @Override
-    public AnimatedAction getAnimation(LivingEntity entity, int chain) {
+    public AnimatedAction getAnimation(LivingEntity entity, int comboIdx) {
         return new AnimatedAction(27 + 1, 4, "glove_use");
     }
 

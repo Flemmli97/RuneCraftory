@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
+import io.github.flemmli97.runecraftory.api.action.ComboContainer;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.registry.AttackAction;
@@ -14,17 +15,24 @@ import net.minecraft.world.phys.Vec3;
 
 public class StormAttack extends AttackAction {
 
+    private final ComboContainer combo = ComboContainer.Builder.builder()
+            .addCombo(ComboContainer.AFTER_ANIM, 4)
+            .addCombo(ComboContainer.AFTER_ANIM, 4)
+            .addCombo(ComboContainer.AFTER_ANIM, 4)
+            .addCombo(ComboContainer.AFTER_ANIM, 4)
+            .build();
+
     @Override
-    public AnimatedAction getAnimation(LivingEntity entity, int chain) {
+    public AnimatedAction getAnimation(LivingEntity entity, int comboIdx) {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
-        return PlayerModelAnimations.STORM.get(chain).create(speed);
+        return PlayerModelAnimations.STORM.get(comboIdx).create(speed);
     }
 
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
-        if (!entity.level.isClientSide && anim.canAttack() && handler.getChainCount() != 5) {
+        if (!entity.level.isClientSide && anim.canAttack() && handler.getComboCount() != 5) {
             double range = CombatUtils.getRange(entity, 0) * 0.5;
-            if (handler.getChainCount() == 3) {
+            if (handler.getComboCount() == 3) {
                 range *= 2;
             }
             CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(entity.getYRot(), 0, range, 0.5f, false))
@@ -32,9 +40,9 @@ public class StormAttack extends AttackAction {
                     .executeAttack();
         }
         Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-        if (handler.getChainCount() != 5 && anim.isAtTick(0.12))
+        if (handler.getComboCount() != 5 && anim.isAtTick(0.12))
             entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_LIGHT.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
-        switch (handler.getChainCount()) {
+        switch (handler.getComboCount()) {
             case 1 -> {
                 if (anim.isAtTick(0.08)) {
                     handler.setMoveTargetDir(dir.scale(1.6).add(0, 0.75, 0), anim, anim.getLength());
@@ -89,7 +97,7 @@ public class StormAttack extends AttackAction {
     }
 
     @Override
-    public AttackChain attackChain(LivingEntity entity, int chain) {
-        return new AttackChain(5, 8);
+    public ComboContainer combos() {
+        return this.combo;
     }
 }

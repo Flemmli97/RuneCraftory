@@ -50,6 +50,8 @@ public class PlayerModelAnimations {
                 return Pair.of(defaultLength, attack);
             }
     );
+    public static final AnimatedAction SPEAR_USE = addTo(new AnimatedAction(length(1.16), 0.2, "spear_use"));
+    public static final AnimatedAction SPEAR_USE_CONTINUE = addTo(new AnimatedAction(length(1.08), 0.12, "spear_use_continue"));
 
     public static final List<AnimatedAction> HAMMER_AXE = addTo(3, "hammer_axe", count -> {
                 int defaultLength = (int) Math.ceil(0.6 * 20);

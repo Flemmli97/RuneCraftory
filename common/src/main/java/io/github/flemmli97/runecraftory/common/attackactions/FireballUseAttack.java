@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
+import io.github.flemmli97.runecraftory.api.action.ComboContainer;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.registry.AttackAction;
@@ -15,14 +16,18 @@ import net.minecraft.world.item.ItemStack;
 
 public class FireballUseAttack extends AttackAction {
 
-    private final boolean big;
+    private final ComboContainer combo;
 
     public FireballUseAttack(boolean big) {
-        this.big = big;
+        ComboContainer.Builder builder = ComboContainer.Builder.builder()
+                .addCombo(handler -> handler.getCurrentAnim().isPastTick(handler.getCurrentAnim().getAttackTime()), 4);
+        if (!big)
+            builder.addCombo(handler -> handler.getCurrentAnim().isPastTick(handler.getCurrentAnim().getAttackTime()), 4);
+        this.combo = builder.build();
     }
 
     @Override
-    public AnimatedAction getAnimation(LivingEntity entity, int chain) {
+    public AnimatedAction getAnimation(LivingEntity entity, int comboIdx) {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
         return PlayerModelAnimations.STAFF_USE.create(speed);
     }
@@ -43,18 +48,12 @@ public class FireballUseAttack extends AttackAction {
     }
 
     @Override
-    public AttackChain attackChain(LivingEntity entity, int chain) {
-        return new AttackChain(this.big ? 2 : 3, 4);
-    }
-
-    @Override
     public boolean disableItemSwitch() {
         return false;
     }
 
     @Override
-    public boolean canOverride(LivingEntity entity, WeaponHandler handler) {
-        AnimatedAction anim = handler.getCurrentAnim();
-        return anim == null || anim.isPastTick(anim.getAttackTime());
+    public ComboContainer combos() {
+        return this.combo;
     }
 }

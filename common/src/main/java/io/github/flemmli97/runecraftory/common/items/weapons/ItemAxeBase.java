@@ -76,7 +76,7 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IAOEWeapon, Big
     public boolean onServerSwing(LivingEntity entity, ItemStack stack) {
         if (entity instanceof Player player) {
             Platform.INSTANCE.getPlayerData(player)
-                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(player, ModAttackActions.HAMMER_AXE.get(), stack));
+                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(ModAttackActions.HAMMER_AXE.get(), stack));
             return false;
         }
         return true;
@@ -133,7 +133,7 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IAOEWeapon, Big
         if (hand == InteractionHand.OFF_HAND)
             return InteractionResultHolder.pass(itemstack);
         boolean canCharge = Platform.INSTANCE.getPlayerData(player)
-                .map(data -> (data.getSkillLevel(EnumSkills.HAMMERAXE).getLevel() >= 5 || player.isCreative()) && data.getWeaponHandler().canExecuteAction(player, ModAttackActions.HAMMER_AXE_USE.get())).orElse(false);
+                .map(data -> (data.getSkillLevel(EnumSkills.HAMMERAXE).getLevel() >= 5 || player.isCreative()) && data.getWeaponHandler().canExecuteAction(ModAttackActions.HAMMER_AXE_USE.get())).orElse(false);
         if (canCharge) {
             player.startUsingItem(hand);
             return InteractionResultHolder.consume(itemstack);
@@ -155,7 +155,7 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IAOEWeapon, Big
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
         if (!world.isClientSide && stack.getUseDuration() - timeLeft - 1 >= ItemUtils.getChargeTime(entity)) {
             if (entity instanceof ServerPlayer player) {
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.getWeaponHandler().doWeaponAttack(player, ModAttackActions.HAMMER_AXE_USE.get(), stack));
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.getWeaponHandler().doWeaponAttack(ModAttackActions.HAMMER_AXE_USE.get(), stack));
                 return;
             }
             if (performRightClickAction(stack, entity, this.getRange(entity, stack), 0.7f)) {

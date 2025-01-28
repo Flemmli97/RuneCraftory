@@ -127,7 +127,7 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable {
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
         if (this.tier.getTierLevel() != 0 && entity instanceof ServerPlayer player) {
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                int useTime = data.getWeaponHandler().canExecuteAction(player, ModAttackActions.TOOL_HAMMER_USE.get(), false, false) ? data.getWeaponHandler().getToolUseData().charge() : ((stack.getUseDuration() - timeLeft - 1) / ItemUtils.getChargeTime(entity, this.tier));
+                int useTime = data.getWeaponHandler().canExecuteAction(ModAttackActions.TOOL_HAMMER_USE.get(), false) ? data.getWeaponHandler().getToolUseData().charge() : ((stack.getUseDuration() - timeLeft - 1) / ItemUtils.getChargeTime(entity, this.tier));
                 int range = Math.min(useTime, this.tier.getTierLevel());
                 BlockHitResult result = getPlayerPOVHitResult(world, player, ClipContext.Fluid.NONE);
                 if (range == 0) {
@@ -135,7 +135,7 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable {
                         this.useOnBlock(new UseOnContext((Player) entity, entity.getUsedItemHand(), result), false);
                     }
                 } else {
-                    data.getWeaponHandler().doWeaponAttack(player, ModAttackActions.TOOL_HAMMER_USE.get(), stack);
+                    data.getWeaponHandler().doWeaponAttack(ModAttackActions.TOOL_HAMMER_USE.get(), stack);
                     data.getWeaponHandler().updateToolCharge(new WeaponHandler.ToolUseData(result, range));
                 }
             });

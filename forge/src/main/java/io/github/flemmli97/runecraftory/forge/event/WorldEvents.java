@@ -36,8 +36,8 @@ public class WorldEvents {
 
     @SubscribeEvent
     public void attachCapability(AttachCapabilitiesEvent<Entity> event) {
-        if (event.getObject() instanceof Player) {
-            event.addCapability(PLAYER_CAP, new PlayerCap());
+        if (event.getObject() instanceof Player player) {
+            event.addCapability(PLAYER_CAP, new PlayerCap(player));
         }
         if (event.getObject() instanceof LivingEntity) {
             event.addCapability(ENTITY_CAP, new EntityCap());

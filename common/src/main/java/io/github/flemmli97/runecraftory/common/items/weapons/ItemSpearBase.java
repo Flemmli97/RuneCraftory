@@ -48,7 +48,7 @@ public class ItemSpearBase extends Item implements IItemUsable, IAOEWeapon, BigW
     public boolean onServerSwing(LivingEntity entity, ItemStack stack) {
         if (entity instanceof Player player) {
             Platform.INSTANCE.getPlayerData(player)
-                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(player, ModAttackActions.SPEAR.get(), stack));
+                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(ModAttackActions.SPEAR.get(), stack));
             return false;
         }
         return true;
@@ -102,8 +102,8 @@ public class ItemSpearBase extends Item implements IItemUsable, IAOEWeapon, BigW
             if (player instanceof ServerPlayer serverPlayer) {
                 if (Platform.INSTANCE.getPlayerData(player).map(data -> {
                     // Check if insta use is possible
-                    if (data.getWeaponHandler().canExecuteAction(serverPlayer, ModAttackActions.SPEAR_USE.get(), false, false)) {
-                        data.getWeaponHandler().doWeaponAttack(serverPlayer, ModAttackActions.SPEAR_USE.get(), itemstack);
+                    if (data.getWeaponHandler().canExecuteAction(ModAttackActions.SPEAR_USE.get(), false)) {
+                        data.getWeaponHandler().doWeaponAttack(ModAttackActions.SPEAR_USE.get(), itemstack);
                         return false;
                     }
                     return data.getWeaponHandler().getCurrentAction() == ModAttackActions.NONE.get();
@@ -131,8 +131,8 @@ public class ItemSpearBase extends Item implements IItemUsable, IAOEWeapon, BigW
         if (entity instanceof ServerPlayer serverPlayer) {
             Platform.INSTANCE.getPlayerData(serverPlayer).ifPresent(data -> {
                 int time = stack.getUseDuration() - timeLeft - 1;
-                if (time >= ItemUtils.getChargeTime(entity) && data.getWeaponHandler().canExecuteAction(serverPlayer, ModAttackActions.SPEAR_USE.get())) {
-                    data.getWeaponHandler().doWeaponAttack(serverPlayer, ModAttackActions.SPEAR_USE.get(), stack);
+                if (time >= ItemUtils.getChargeTime(entity) && data.getWeaponHandler().canExecuteAction(ModAttackActions.SPEAR_USE.get())) {
+                    data.getWeaponHandler().doWeaponAttack(ModAttackActions.SPEAR_USE.get(), stack);
                 }
             });
         }

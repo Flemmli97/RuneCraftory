@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
+import io.github.flemmli97.runecraftory.api.action.ComboContainer;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.registry.AttackAction;
@@ -16,8 +17,14 @@ import net.minecraft.world.item.ItemStack;
 
 public class GrandImpactAttack extends AttackAction {
 
+    private final ComboContainer combos = ComboContainer.Builder.builder()
+            .addCombo(handler -> handler.getCurrentAnim().isPastTick(0.48) && !handler.getCurrentAnim().isPastTick(0.72))
+            .addCombo(handler -> handler.getCurrentAnim().isPastTick(0.48) && !handler.getCurrentAnim().isPastTick(0.72))
+            .addCombo(handler -> handler.getCurrentAnim().isPastTick(0.48) && !handler.getCurrentAnim().isPastTick(0.72))
+            .build();
+
     @Override
-    public AnimatedAction getAnimation(LivingEntity entity, int chain) {
+    public AnimatedAction getAnimation(LivingEntity entity, int comboIdx) {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
         return PlayerModelAnimations.GRAND_IMPACT.create(speed);
     }
@@ -35,12 +42,7 @@ public class GrandImpactAttack extends AttackAction {
     }
 
     @Override
-    public boolean canOverride(LivingEntity entity, WeaponHandler handler) {
-        return handler.getCurrentAnim().isPastTick(0.48) && !handler.getCurrentAnim().isPastTick(0.72);
-    }
-
-    @Override
-    public AttackChain attackChain(LivingEntity entity, int chain) {
-        return new AttackChain(4, 0);
+    public ComboContainer combos() {
+        return this.combos;
     }
 }

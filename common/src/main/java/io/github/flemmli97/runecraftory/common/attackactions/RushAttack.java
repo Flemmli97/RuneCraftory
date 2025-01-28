@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
+import io.github.flemmli97.runecraftory.api.action.ComboContainer;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.registry.AttackAction;
@@ -12,21 +13,39 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.function.Function;
+import java.util.function.Predicate;
+
 public class RushAttack extends AttackAction {
 
+    private final ComboContainer combo;
+
+    public RushAttack() {
+        Predicate<WeaponHandler> MAIN = handler -> (!handler.getCurrentAnim().isPastTick(0.84) && handler.getCurrentAnim().isPastTick(0.6)) || (handler.getCurrentAnim().isPastTick(1.16) && !handler.getCurrentAnim().isPastTick(1.48));
+        Function<Integer, ComboContainer.ComboGetter> IDX = idx -> handler -> (!handler.getCurrentAnim().isPastTick(0.84)) ? idx : 6;
+        this.combo = ComboContainer.Builder.builder()
+                .addCombo(new ComboContainer.ComboHandler.Builder(MAIN).advanceTo(IDX))
+                .addCombo(new ComboContainer.ComboHandler.Builder(MAIN).advanceTo(IDX))
+                .addCombo(new ComboContainer.ComboHandler.Builder(MAIN).advanceTo(IDX))
+                .addCombo(new ComboContainer.ComboHandler.Builder(MAIN).advanceTo(IDX))
+                .addCombo(new ComboContainer.ComboHandler.Builder(MAIN).advanceTo(IDX))
+                .addCombo(handler -> handler.getCurrentAnim().isPastTick(1.16) && !handler.getCurrentAnim().isPastTick(1.48), 0)
+                .build();
+    }
+
     @Override
-    public AnimatedAction getAnimation(LivingEntity entity, int chain) {
+    public AnimatedAction getAnimation(LivingEntity entity, int comboIdx) {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
-        if (chain < 6)
-            chain = 0;
+        if (comboIdx < 6)
+            comboIdx = 0;
         else
-            chain = 1;
-        return PlayerModelAnimations.RUSH_ATTACK.get(chain).create(speed);
+            comboIdx = 1;
+        return PlayerModelAnimations.RUSH_ATTACK.get(comboIdx).create(speed);
     }
 
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
-        if (handler.getChainCount() == 7) {
+        if (handler.getComboCount() == 7) {
             if (anim.isAtTick(0.28)) {
                 Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
                 handler.setMoveTargetDir(dir.scale(3).add(0, -1.5, 0), anim, 0.4);
@@ -65,22 +84,12 @@ public class RushAttack extends AttackAction {
 
     @Override
     public void onSetup(LivingEntity entity, WeaponHandler handler) {
-        if (handler.getCurrentAnim() != null && handler.getChainCount() < 7 && handler.getCurrentAnim().isPastTick(1.12))
-            handler.setChainCount(6);
+        if (handler.getCurrentAnim() != null && handler.getComboCount() < 7 && handler.getCurrentAnim().isPastTick(1.12))
+            handler.setComboCount(6);
     }
 
     @Override
-    public boolean canOverride(LivingEntity entity, WeaponHandler handler) {
-        return switch (handler.getChainCount()) {
-            case 1, 2, 3, 4, 5 ->
-                    (!handler.getCurrentAnim().isPastTick(0.92) && handler.getCurrentAnim().isPastTick(0.6)) || handler.getCurrentAnim().isPastTick(1.12);
-            case 6 -> handler.getCurrentAnim().isPastTick(1.12);
-            default -> false;
-        };
-    }
-
-    @Override
-    public AttackChain attackChain(LivingEntity entity, int chain) {
-        return new AttackChain(7, 0);
+    public ComboContainer combos() {
+        return this.combo;
     }
 }

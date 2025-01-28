@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
+import io.github.flemmli97.runecraftory.api.action.ComboContainer;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
@@ -19,22 +20,30 @@ import net.minecraft.world.phys.Vec3;
 
 public class ShortSwordAttack extends AttackAction {
 
+    private final ComboContainer combo = ComboContainer.Builder.builder()
+            .addCombo(ComboContainer.AFTER_ANIM, 4)
+            .addCombo(ComboContainer.AFTER_ANIM, 4)
+            .addCombo(ComboContainer.AFTER_ANIM, 4)
+            .addCombo(ComboContainer.AFTER_ANIM, 4)
+            .addCombo(handler -> handler.isCurrentAnimationDone() && CombatUtils.canPerform(handler.getEntity(), EnumSkills.SHORTSWORD, 20), 0)
+            .build();
+
     @Override
-    public AnimatedAction getAnimation(LivingEntity entity, int chain) {
+    public AnimatedAction getAnimation(LivingEntity entity, int comboIdx) {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
-        return PlayerModelAnimations.SHORT_SWORD.get(chain).create(speed);
+        return PlayerModelAnimations.SHORT_SWORD.get(comboIdx).create(speed);
     }
 
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
-        if (anim.canAttack() && handler.getChainCount() != 6) {
+        if (anim.canAttack() && handler.getComboCount() != 6) {
             CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(IAOEWeapon.createOBB(entity, stack,
                             CombatUtils.getRange(entity, 0),
                             CombatUtils.getWidth(entity, 0))))
                     .executeAttack();
         }
         Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-        switch (handler.getChainCount()) {
+        switch (handler.getComboCount()) {
             case 1 -> {
                 if (anim.isAtTick(0.28)) {
                     handler.setMoveTargetDir(dir.scale(0.25), anim, anim.getTick());
@@ -89,7 +98,7 @@ public class ShortSwordAttack extends AttackAction {
 
     @Override
     public void onStart(LivingEntity entity, WeaponHandler handler) {
-        if (handler.getChainCount() != 6) {
+        if (handler.getComboCount() != 6) {
             entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         } else if (entity instanceof ServerPlayer player)
             Platform.INSTANCE.getPlayerData(player).ifPresent(d -> LevelCalc.useRP(player, d, GeneralConfig.shortSwordUltimate, true, 0, false));
@@ -97,16 +106,16 @@ public class ShortSwordAttack extends AttackAction {
 
     @Override
     public boolean isInvulnerable(LivingEntity entity, WeaponHandler handler) {
-        return handler.getChainCount() == 6;
-    }
-
-    @Override
-    public AttackChain attackChain(LivingEntity entity, int chain) {
-        return new AttackChain(CombatUtils.canPerform(entity, EnumSkills.SHORTSWORD, 20) ? 6 : 5, chain == 6 ? 0 : 8);
+        return handler.getComboCount() == 6;
     }
 
     @Override
     public float movementReduction(AnimatedAction current) {
         return GeneralConfig.moveSpeedAttack.get().floatValue();
+    }
+
+    @Override
+    public ComboContainer combos() {
+        return this.combo;
     }
 }

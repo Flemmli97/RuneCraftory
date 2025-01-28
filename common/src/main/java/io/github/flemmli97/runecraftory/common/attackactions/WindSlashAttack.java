@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
+import io.github.flemmli97.runecraftory.api.action.ComboContainer;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.registry.AttackAction;
@@ -14,16 +15,20 @@ import net.minecraft.world.phys.Vec3;
 
 public class WindSlashAttack extends AttackAction {
 
+    private final ComboContainer combo = ComboContainer.Builder.builder()
+            .addCombo(handler -> handler.getCurrentAnim().isPastTick(1.08) && !handler.getCurrentAnim().isPastTick(1.20))
+            .build();
+
     @Override
-    public AnimatedAction getAnimation(LivingEntity entity, int chain) {
+    public AnimatedAction getAnimation(LivingEntity entity, int comboIdx) {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
-        return PlayerModelAnimations.WIND_SLASH.get(chain).create(speed);
+        return PlayerModelAnimations.WIND_SLASH.get(comboIdx).create(speed);
     }
 
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
         handler.lockLook(true);
-        if (handler.getChainCount() == 1) {
+        if (handler.getComboCount() == 1) {
             if (anim.isAtTick(0.12)) {
                 handler.setSpinStartRot(entity.getYRot());
                 handler.resetHitEntityTracker();
@@ -73,7 +78,7 @@ public class WindSlashAttack extends AttackAction {
     @Override
     public void onStart(LivingEntity entity, WeaponHandler handler) {
         super.onStart(entity, handler);
-        if (handler.getChainCount() == 2) {
+        if (handler.getComboCount() == 2) {
             handler.setSpinStartRot(entity.getYRot());
             handler.resetHitEntityTracker();
             entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
@@ -84,12 +89,7 @@ public class WindSlashAttack extends AttackAction {
     }
 
     @Override
-    public boolean canOverride(LivingEntity entity, WeaponHandler handler) {
-        return (handler.getCurrentAnim().isPastTick(0.96) && !handler.getCurrentAnim().isPastTick(1.20));
-    }
-
-    @Override
-    public AttackChain attackChain(LivingEntity entity, int chain) {
-        return new AttackChain(2, 0);
+    public ComboContainer combos() {
+        return this.combo;
     }
 }

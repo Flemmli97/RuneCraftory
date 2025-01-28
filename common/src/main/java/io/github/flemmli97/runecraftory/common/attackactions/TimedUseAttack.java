@@ -22,7 +22,7 @@ public class TimedUseAttack extends AttackAction {
     }
 
     @Override
-    public AnimatedAction getAnimation(LivingEntity entity, int chain) {
+    public AnimatedAction getAnimation(LivingEntity entity, int comboIdx) {
         return this.animation.get();
     }
 

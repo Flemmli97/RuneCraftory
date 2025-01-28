@@ -24,10 +24,13 @@ import java.util.Set;
 
 public class WeaponHandler {
 
-    private static final float FADE_TICK = 3;
+    private static final float FADE_TICK = 5;
+
+    private final LivingEntity entity;
 
     private AttackAction currentAction = ModAttackActions.NONE.get();
-    private int chainCount;
+    private int comboCount;
+    private boolean scheduledAction;
 
     private AnimatedAction currentAnim, lastAnim;
     private ItemStack usedWeapon = ItemStack.EMPTY;
@@ -53,91 +56,110 @@ public class WeaponHandler {
     private int moveDuration;
     private Entity target;
 
-    public boolean doWeaponAttack(LivingEntity entity, AttackAction action, ItemStack stack) {
-        return this.doWeaponAttack(entity, action, stack, null, false);
+    public WeaponHandler(LivingEntity entity) {
+        this.entity = entity;
     }
 
-    public boolean doWeaponAttack(LivingEntity entity, AttackAction action, ItemStack stack, @Nullable Spell spell, boolean ignoreCurrent) {
-        if (entity.level.isClientSide || this.canExecuteAction(entity, action, true, ignoreCurrent)) {
-            action.onSetup(entity, this);
+    public boolean doWeaponAttack(AttackAction action, ItemStack stack) {
+        return this.doWeaponAttack(action, stack, null);
+    }
+
+    public boolean doWeaponAttack(AttackAction action, ItemStack stack, @Nullable Spell spell) {
+        AttackAction.OverrideType overrideType = this.checkOverride(action, true);
+        if (this.entity.level.isClientSide || overrideType != AttackAction.OverrideType.NONE) {
+            if (overrideType == AttackAction.OverrideType.SCHEDULE) {
+                this.scheduledAction = true;
+                return true;
+            }
+            action.onSetup(this.entity, this);
             this.spell = spell;
             this.usedWeapon = stack;
-            this.setAnimationBasedOnState(entity, action, true);
+            this.setAnimationBasedOnState(action, -1, true);
             return true;
         }
         return false;
     }
 
-    public boolean canExecuteAction(LivingEntity entity, AttackAction action) {
-        return this.canExecuteAction(entity, action, true, false);
+    public boolean canExecuteAction(AttackAction action) {
+        return this.canExecuteAction(action, true);
     }
 
-    public boolean canExecuteAction(LivingEntity entity, AttackAction action, boolean allowNone, boolean ignoreCurrent) {
+    public boolean canExecuteAction(AttackAction action, boolean allowNone) {
+        return this.checkOverride(action, allowNone) != AttackAction.OverrideType.NONE;
+    }
+
+    private AttackAction.OverrideType checkOverride(AttackAction action, boolean allowNone) {
         if (allowNone && (this.currentAction == ModAttackActions.NONE.get() || this.currentAnim == null))
-            return true;
-        if (!ignoreCurrent && !this.currentAction.canOverride(entity, this) && !this.isCurrentAnimationDone())
-            return false;
-        if (this.currentAction != action)
-            return true;
-        return this.chainCount < action.attackChain(entity, this.chainCount).maxChains();
+            return AttackAction.OverrideType.REPLACE;
+        if (this.currentAction == action && action.combos() != null) {
+            ComboContainer.ComboHandler combo = action.combos().get(this.comboCount - 1);
+            return combo != null && combo.canExecute().test(this) ? AttackAction.OverrideType.SCHEDULE : AttackAction.OverrideType.NONE;
+        }
+        return AttackAction.OverrideType.NONE;
     }
 
-    private void setAnimationBasedOnState(LivingEntity entity, AttackAction action, boolean packet) {
-        AttackAction change = this.currentAction.onChange(entity, this);
+    private void setAnimationBasedOnState(AttackAction action, int comboIdx, boolean packet) {
+        AttackAction change = this.currentAction.onChange(this.entity, this);
         if (change != null)
             action = change;
         this.moveDir = null;
+        if (comboIdx != -1)
+            this.comboCount = comboIdx;
         if (action == ModAttackActions.NONE.get()) {
             this.resetStates();
         }
         this.lastAnim = this.currentAnim;
         this.timeSinceLastChange = 0;
         this.currentAction = action;
-        int chain = this.getChainCount();
-        this.currentAnim = action.getAnimation(entity, chain);
+        this.scheduledAction = false;
+        this.currentAnim = action.getAnimation(this.entity, this.getComboCount());
         if (this.currentAction != ModAttackActions.NONE.get()) {
-            this.chainCount++;
+            this.comboCount++;
         } else
             this.usedWeapon = ItemStack.EMPTY;
-        entity.yBodyRot = entity.yHeadRot;
+        this.entity.yBodyRot = this.entity.yHeadRot;
         this.resetHitEntityTracker();
         this.lockLook = false;
-        this.currentAction.onStart(entity, this);
+        this.currentAction.onStart(this.entity, this);
         this.consumeSpellOnStart = false;
-        if (!entity.level.isClientSide) {
-            if (entity instanceof IAnimated animated && this.currentAnim != null) {
+        if (!this.entity.level.isClientSide) {
+            if (this.entity instanceof IAnimated animated && this.currentAnim != null) {
                 animated.getAnimationHandler().setAnimation(this.currentAnim);
             }
             if (packet) {
-                Platform.INSTANCE.sendToTrackingAndSelf(new S2CWeaponUse(this.currentAction, this.usedWeapon, chain, entity), entity);
+                Platform.INSTANCE.sendToTrackingAndSelf(new S2CWeaponUse(this.currentAction, this.usedWeapon, this.comboCount - 1, this.entity), this.entity);
             }
         }
     }
 
-    public void clientSideUpdate(LivingEntity entity, AttackAction action, ItemStack stack, int count) {
-        if (!entity.level.isClientSide)
+    public void clientSideUpdate(AttackAction action, ItemStack stack, int count) {
+        if (!this.entity.level.isClientSide)
             return;
-        this.chainCount = count;
-        this.setAnimationBasedOnState(entity, action, false);
+        this.comboCount = count;
+        this.setAnimationBasedOnState(action, -1, false);
         this.usedWeapon = stack;
     }
 
     private void resetStates() {
         this.spell = null;
-        this.chainCount = 0;
+        this.comboCount = 0;
         this.toolUseData = null;
         this.hitEntityTracker.clear();
         this.target = null;
     }
 
-    public void tick(LivingEntity entity) {
+    public void tick() {
         if (this.currentAnim != null) {
-            if (this.currentAnim.tick(1 + (int) (this.currentAnim.getSpeed() * this.currentAction.attackChain(entity, this.chainCount).chainFrameTime()))) {
-                this.setAnimationBasedOnState(entity, ModAttackActions.NONE.get(), false);
+            ComboContainer.ComboHandler handler = this.currentAction.combos() != null ? this.currentAction.combos().get(this.comboCount - 1) : null;
+            if (this.scheduledAction && handler != null && handler.canAdvance().test(this)) {
+                this.setAnimationBasedOnState(this.currentAction, handler.advanceTo().get(this), true);
+                return;
+            } else if (this.currentAnim.tick(2 + (int) (this.currentAnim.getSpeed() * (handler != null ? handler.resetTime() : 0)))) {
+                this.setAnimationBasedOnState(ModAttackActions.NONE.get(), -1, false);
             } else {
-                if (entity instanceof ServerPlayer player) {
+                if (this.entity instanceof ServerPlayer player) {
                     PlayerData data = Platform.INSTANCE.getPlayerData(player).orElse(null);
-                    boolean changedItem = entity.getMainHandItem() != this.usedWeapon;
+                    boolean changedItem = this.entity.getMainHandItem() != this.usedWeapon;
                     if (changedItem && this.usedWeapon.getItem() instanceof ItemSpell && data != null) {
                         for (int i = 0; i < data.getInv().getContainerSize(); i++) {
                             if (data.getInv().getItem(i) == this.usedWeapon) {
@@ -147,14 +169,14 @@ public class WeaponHandler {
                         }
                     }
                     if (changedItem) {
-                        this.setAnimationBasedOnState(entity, ModAttackActions.NONE.get(), true);
+                        this.setAnimationBasedOnState(ModAttackActions.NONE.get(), -1, true);
                     }
                 }
-                this.currentAction.run(entity, this.usedWeapon, this, this.currentAnim);
+                this.currentAction.run(this.entity, this.usedWeapon, this, this.currentAnim);
             }
         }
         if (this.moveDir != null) {
-            entity.setDeltaMovement(this.moveDir);
+            this.entity.setDeltaMovement(this.moveDir);
             this.moveDuration--;
             if (this.moveDuration <= 0)
                 this.moveDir = null;
@@ -162,7 +184,11 @@ public class WeaponHandler {
         this.timeSinceLastChange++;
     }
 
-    private boolean isCurrentAnimationDone() {
+    public LivingEntity getEntity() {
+        return this.entity;
+    }
+
+    public boolean isCurrentAnimationDone() {
         return this.currentAnim != null && this.currentAnim.isPastTick(1 + this.currentAnim.getLength());
     }
 
@@ -186,12 +212,12 @@ public class WeaponHandler {
         return this.usedWeapon;
     }
 
-    public void setChainCount(int count) {
-        this.chainCount = count;
+    public void setComboCount(int count) {
+        this.comboCount = count;
     }
 
-    public int getChainCount() {
-        return this.chainCount;
+    public int getComboCount() {
+        return this.comboCount;
     }
 
     public float movementReduction() {

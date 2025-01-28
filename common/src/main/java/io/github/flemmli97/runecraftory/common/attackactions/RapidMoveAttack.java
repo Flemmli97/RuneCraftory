@@ -19,7 +19,7 @@ import net.minecraft.world.phys.Vec3;
 public class RapidMoveAttack extends AttackAction {
 
     @Override
-    public AnimatedAction getAnimation(LivingEntity entity, int chain) {
+    public AnimatedAction getAnimation(LivingEntity entity, int comboIdx) {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
         return PlayerModelAnimations.RAPID_MOVE.create(speed);
     }
@@ -66,10 +66,5 @@ public class RapidMoveAttack extends AttackAction {
             if (target != null)
                 handler.setTarget(target);
         }
-    }
-
-    @Override
-    public boolean hasAnimation() {
-        return false;
     }
 }

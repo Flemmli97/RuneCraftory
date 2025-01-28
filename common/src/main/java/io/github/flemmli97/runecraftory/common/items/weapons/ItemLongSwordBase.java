@@ -16,13 +16,11 @@ import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.item.IAOEWeapon;
-import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -35,7 +33,7 @@ import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.function.Supplier;
 
 public class ItemLongSwordBase extends SwordItem implements IItemUsable, IAOEWeapon, BigWeapon {
@@ -58,7 +56,7 @@ public class ItemLongSwordBase extends SwordItem implements IItemUsable, IAOEWea
     public boolean onServerSwing(LivingEntity entity, ItemStack stack) {
         if (entity instanceof Player player) {
             Platform.INSTANCE.getPlayerData(player)
-                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(player, ModAttackActions.LONG_SWORD.get(), stack));
+                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(ModAttackActions.LONG_SWORD.get(), stack));
             return false;
         }
         return true;
@@ -104,7 +102,7 @@ public class ItemLongSwordBase extends SwordItem implements IItemUsable, IAOEWea
         if (hand == InteractionHand.OFF_HAND)
             return InteractionResultHolder.pass(itemstack);
         boolean canCharge = Platform.INSTANCE.getPlayerData(player)
-                .map(data -> (data.getSkillLevel(EnumSkills.LONGSWORD).getLevel() >= 5 || player.isCreative()) && data.getWeaponHandler().canExecuteAction(player, ModAttackActions.LONGSWORD_USE.get())).orElse(false);
+                .map(data -> (data.getSkillLevel(EnumSkills.LONGSWORD).getLevel() >= 5 || player.isCreative()) && data.getWeaponHandler().canExecuteAction(ModAttackActions.LONGSWORD_USE.get())).orElse(false);
         if (canCharge) {
             player.startUsingItem(hand);
             return InteractionResultHolder.consume(itemstack);
@@ -126,33 +124,32 @@ public class ItemLongSwordBase extends SwordItem implements IItemUsable, IAOEWea
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
         if (!world.isClientSide && stack.getUseDuration() - timeLeft - 1 >= ItemUtils.getChargeTime(entity)) {
             if (entity instanceof ServerPlayer player) {
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.getWeaponHandler().doWeaponAttack(player, ModAttackActions.LONGSWORD_USE.get(), stack));
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.getWeaponHandler().doWeaponAttack(ModAttackActions.LONGSWORD_USE.get(), stack));
                 return;
             }
-            if (performRightClickAction(stack, entity, this.getRange(entity, stack))) {
+            if (performRightClickAction(stack, entity, 0)) {
                 entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 1.0f, 1.0f);
             }
         }
     }
 
     public static void delayedRightClickAction(LivingEntity entity, ItemStack stack) {
-        double reach = CombatUtils.getRange(entity, 0);
         entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 1.0f, 1.0f);
         if (entity instanceof ServerPlayer player)
             player.sweepAttack();
-        if (performRightClickAction(stack, entity, reach) && entity instanceof ServerPlayer player) {
+        if (performRightClickAction(stack, entity, 0) && entity instanceof ServerPlayer player) {
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.LONGSWORD, 7));
         }
     }
 
     public static boolean performRightClickAction(ItemStack stack, LivingEntity entity, double range) {
-        List<Entity> list = RayTraceUtils.getEntitiesIn(entity,
-                IAOEWeapon.createOBB(entity, stack, range + 2, 4), null);
+        Collection<LivingEntity> list = CombatUtils.EntityAttack.circleTargets(entity.getYRot() - 60, entity.getYRot() + 60, (float) range)
+                .apply(entity, null);
         if (!list.isEmpty()) {
             Supplier<CustomDamage.Builder> base = () -> new CustomDamage.Builder(entity).element(ItemNBT.getElement(stack)).knock(CustomDamage.KnockBackType.UP).knockAmount(1f).hurtResistant(10);
             boolean success = false;
             double damagePhys = CombatUtils.getAttributeValue(entity, Attributes.ATTACK_DAMAGE) * 1.2;
-            for (Entity e : list) {
+            for (LivingEntity e : list) {
                 if (CombatUtils.damageWithFaintAndCrit(entity, e, base.get(), damagePhys, stack))
                     success = true;
             }

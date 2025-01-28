@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
+import io.github.flemmli97.runecraftory.api.action.ComboContainer;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.registry.AttackAction;
@@ -17,10 +18,13 @@ import net.minecraft.world.phys.HitResult;
 
 public class ToolHammerUse extends AttackAction {
 
-    private static final AttackChain CHAIN = new AttackChain(3, 15);
+    private final ComboContainer combo = ComboContainer.Builder.builder()
+            .addCombo(handler -> handler.getCurrentAnim().isPastTick(handler.getCurrentAnim().getAttackTime()), 8)
+            .addCombo(handler -> handler.getCurrentAnim().isPastTick(handler.getCurrentAnim().getAttackTime()), 8)
+            .build();
 
     @Override
-    public AnimatedAction getAnimation(LivingEntity entity, int chain) {
+    public AnimatedAction getAnimation(LivingEntity entity, int comboIdx) {
         return AnimatedAction.builder(20 + 1, "hammer_axe_use").marker(12).speed(1.3f).build();
     }
 
@@ -52,7 +56,7 @@ public class ToolHammerUse extends AttackAction {
     }
 
     @Override
-    public AttackChain attackChain(LivingEntity entity, int chain) {
-        return CHAIN;
+    public ComboContainer combos() {
+        return this.combo;
     }
 }

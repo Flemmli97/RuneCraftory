@@ -247,11 +247,11 @@ public class ModelRafflesia<T extends EntityRafflesia> extends EntityModel<T> im
         boolean changed = false;
         if (last != null && interpolationRev > 0) {
             boolean mirror = EntityRafflesia.isMirrorAttack(last);
-            changed = this.anim.doAnimation(model, last.getAnimationClient(), last.getTick(), partialTicks, current != null ? 1 : interpolationRev, mirror, BlockBenchAnimations.InterpolationCheck.END, false);
+            changed = this.anim.doAnimation(model, last.getAnimationClient(), last.getTick(), partialTicks, current != null ? 1 : interpolationRev, mirror, BlockBenchAnimations.InterpolationCheck.END);
         }
         if (current != null) {
             boolean mirror = EntityRafflesia.isMirrorAttack(current);
-            changed = this.anim.doAnimation(model, current.getAnimationClient(), current.getTick(), partialTicks, interpolation, mirror, BlockBenchAnimations.InterpolationCheck.START, changed);
+            changed = this.anim.doAnimation(model, current.getAnimationClient(), current.getTick(), partialTicks, interpolation, mirror, BlockBenchAnimations.InterpolationCheck.START);
         }
         return changed;
     }

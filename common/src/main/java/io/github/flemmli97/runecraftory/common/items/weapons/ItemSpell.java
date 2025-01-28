@@ -45,7 +45,7 @@ public class ItemSpell extends Item {
                         if (player.getCooldowns().getCooldownPercent(this, 0) <= 0) {
                             if (this.getSpell().getClass() == WeaponSpell.class)
                                 d.getWeaponHandler().setConsumeSpellOnStart();
-                            return d.getWeaponHandler().doWeaponAttack(player, this.getSpell().useAction(), stack, this.getSpell(), false);
+                            return d.getWeaponHandler().doWeaponAttack(this.getSpell().useAction(), stack, this.getSpell());
                         }
                         return false;
                     }).orElse(false);

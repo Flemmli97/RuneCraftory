@@ -12,7 +12,7 @@ import net.minecraft.world.phys.Vec3;
 public class PowerWaveAttack extends SpellUseAttack {
 
     @Override
-    public AnimatedAction getAnimation(LivingEntity entity, int chain) {
+    public AnimatedAction getAnimation(LivingEntity entity, int comboIdx) {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
         return PlayerModelAnimations.POWER_WAVE.create(speed);
     }

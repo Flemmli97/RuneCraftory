@@ -8,7 +8,7 @@ import net.minecraft.world.entity.LivingEntity;
 public class SelfBuffSpell extends SpellUseAttack {
 
     @Override
-    public AnimatedAction getAnimation(LivingEntity entity, int chain) {
+    public AnimatedAction getAnimation(LivingEntity entity, int comboIdx) {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
         return PlayerModelAnimations.BUFF.create(speed);
     }

@@ -84,7 +84,7 @@ public class AttackMeleeAction implements NPCAction {
                 npc.swing(InteractionHand.MAIN_HAND);
                 npc.npcAttack(npc::doHurtTarget);
             }
-            npc.weaponHandler.setChainCount(npc.getRandom().nextInt(2));
+            npc.weaponHandler.setComboCount(npc.getRandom().nextInt(2));
             return true;
         }
         return false;

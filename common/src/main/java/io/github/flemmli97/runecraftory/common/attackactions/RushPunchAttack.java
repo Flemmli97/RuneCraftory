@@ -16,7 +16,7 @@ import net.minecraft.world.item.ItemStack;
 public class RushPunchAttack extends AttackAction {
 
     @Override
-    public AnimatedAction getAnimation(LivingEntity entity, int chain) {
+    public AnimatedAction getAnimation(LivingEntity entity, int comboIdx) {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
         return PlayerModelAnimations.RUSH_PUNCH.create(speed);
     }

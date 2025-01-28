@@ -16,13 +16,11 @@ import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.item.IAOEWeapon;
 import io.github.flemmli97.tenshilib.api.item.IDualWeapon;
-import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -34,8 +32,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.function.Supplier;
 
 public class ItemDualBladeBase extends SwordItem implements IItemUsable, IDualWeapon, IAOEWeapon {
@@ -58,7 +57,7 @@ public class ItemDualBladeBase extends SwordItem implements IItemUsable, IDualWe
     public boolean onServerSwing(LivingEntity entity, ItemStack stack) {
         if (entity instanceof Player player) {
             Platform.INSTANCE.getPlayerData(player)
-                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(player, ModAttackActions.DUAL_BLADES.get(), stack));
+                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(ModAttackActions.DUAL_BLADES.get(), stack));
             return false;
         }
         return true;
@@ -104,7 +103,7 @@ public class ItemDualBladeBase extends SwordItem implements IItemUsable, IDualWe
         if (hand == InteractionHand.OFF_HAND)
             return InteractionResultHolder.pass(itemstack);
         boolean canCharge = Platform.INSTANCE.getPlayerData(player)
-                .map(data -> (data.getSkillLevel(EnumSkills.DUAL).getLevel() >= 5 || player.isCreative()) && data.getWeaponHandler().canExecuteAction(player, ModAttackActions.DUAL_USE.get())).orElse(false);
+                .map(data -> (data.getSkillLevel(EnumSkills.DUAL).getLevel() >= 5 || player.isCreative()) && data.getWeaponHandler().canExecuteAction(ModAttackActions.DUAL_USE.get())).orElse(false);
         if (canCharge) {
             player.startUsingItem(hand);
             return InteractionResultHolder.consume(itemstack);
@@ -126,10 +125,10 @@ public class ItemDualBladeBase extends SwordItem implements IItemUsable, IDualWe
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
         if (!world.isClientSide && stack.getUseDuration() - timeLeft - 1 >= ItemUtils.getChargeTime(entity)) {
             if (entity instanceof ServerPlayer player) {
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.getWeaponHandler().doWeaponAttack(player, ModAttackActions.DUAL_USE.get(), stack));
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.getWeaponHandler().doWeaponAttack(ModAttackActions.DUAL_USE.get(), stack));
                 return;
             }
-            if (performRightClickAction(stack, entity, this.getRange(entity, stack), this.getWidth(entity, stack))) {
+            if (performRightClickAction(stack, entity, CombatUtils.getRange(entity, 0), CombatUtils.getWidth(entity, 0))) {
                 entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 1.0f, 1.0f);
             }
         }
@@ -148,13 +147,13 @@ public class ItemDualBladeBase extends SwordItem implements IItemUsable, IDualWe
     }
 
     public static boolean performRightClickAction(ItemStack stack, LivingEntity entity, double range, double width) {
-        List<Entity> list = RayTraceUtils.getEntitiesIn(entity,
-                IAOEWeapon.createOBB(entity, stack, range + 2, width), null);
+        Collection<LivingEntity> list = CombatUtils.EntityAttack.aabbTargets(new AABB(-width * 0.5, 0, 0, width * 0.5, entity.getBbHeight() + 0.2, range), false)
+                .apply(entity, null);
         if (!list.isEmpty()) {
             Supplier<CustomDamage.Builder> base = () -> new CustomDamage.Builder(entity).element(ItemNBT.getElement(stack)).knock(CustomDamage.KnockBackType.UP).knockAmount(0.7f).hurtResistant(20);
             boolean success = false;
             double damagePhys = CombatUtils.getAttributeValue(entity, Attributes.ATTACK_DAMAGE) * 1.25;
-            for (Entity e : list) {
+            for (LivingEntity e : list) {
                 if (CombatUtils.damageWithFaintAndCrit(entity, e, base.get(), damagePhys, stack))
                     success = true;
             }

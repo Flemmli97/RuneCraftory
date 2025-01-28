@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
+import io.github.flemmli97.runecraftory.api.action.ComboContainer;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
@@ -20,21 +21,26 @@ import net.minecraft.world.phys.Vec3;
 
 public class HammerAxeAttack extends AttackAction {
 
+    private final ComboContainer combo = ComboContainer.Builder.builder()
+            .addCombo(ComboContainer.AFTER_ANIM, 4)
+            .addCombo(handler -> handler.isCurrentAnimationDone() && CombatUtils.canPerform(handler.getEntity(), EnumSkills.HAMMERAXE, 20), 0)
+            .build();
+
     @Override
-    public AnimatedAction getAnimation(LivingEntity entity, int chain) {
+    public AnimatedAction getAnimation(LivingEntity entity, int comboIdx) {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
-        return PlayerModelAnimations.HAMMER_AXE.get(chain).create(speed);
+        return PlayerModelAnimations.HAMMER_AXE.get(comboIdx).create(speed);
     }
 
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
-        if (anim.canAttack() && handler.getChainCount() != 3) {
+        if (anim.canAttack() && handler.getComboCount() != 3) {
             CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(IAOEWeapon.createOBB(entity, stack,
                             CombatUtils.getRange(entity, 0),
                             CombatUtils.getWidth(entity, 0))))
                     .executeAttack();
         }
-        if (handler.getChainCount() == 3) {
+        if (handler.getComboCount() == 3) {
             if (anim.isAtTick(0.12)) {
                 handler.setSpinStartRot(entity.getYRot());
                 handler.resetHitEntityTracker();
@@ -70,22 +76,22 @@ public class HammerAxeAttack extends AttackAction {
 
     @Override
     public void onStart(LivingEntity entity, WeaponHandler handler) {
-        if (handler.getChainCount() == 3 && entity instanceof ServerPlayer player)
+        if (handler.getComboCount() == 3 && entity instanceof ServerPlayer player)
             Platform.INSTANCE.getPlayerData(player).ifPresent(d -> LevelCalc.useRP(player, d, GeneralConfig.hammerAxeUltimate, true, 0, false));
     }
 
     @Override
     public boolean isInvulnerable(LivingEntity entity, WeaponHandler handler) {
-        return handler.getChainCount() == 3;
-    }
-
-    @Override
-    public AttackChain attackChain(LivingEntity entity, int chain) {
-        return new AttackChain(CombatUtils.canPerform(entity, EnumSkills.HAMMERAXE, 20) ? 3 : 2, chain == 3 ? 0 : 8);
+        return handler.getComboCount() == 3;
     }
 
     @Override
     public float movementReduction(AnimatedAction current) {
         return GeneralConfig.moveSpeedAttack.get().floatValue();
+    }
+
+    @Override
+    public ComboContainer combos() {
+        return this.combo;
     }
 }

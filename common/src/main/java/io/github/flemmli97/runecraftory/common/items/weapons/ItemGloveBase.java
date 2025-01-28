@@ -43,7 +43,7 @@ public class ItemGloveBase extends Item implements IItemUsable, IDualWeapon, IAO
     public boolean onServerSwing(LivingEntity entity, ItemStack stack) {
         if (entity instanceof Player player) {
             Platform.INSTANCE.getPlayerData(player)
-                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(player, ModAttackActions.GLOVES.get(), stack));
+                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(ModAttackActions.GLOVES.get(), stack));
             return false;
         }
         return true;
@@ -94,7 +94,7 @@ public class ItemGloveBase extends Item implements IItemUsable, IDualWeapon, IAO
         if (hand == InteractionHand.OFF_HAND)
             return InteractionResultHolder.fail(itemstack);
         boolean canCharge = Platform.INSTANCE.getPlayerData(player)
-                .map(data -> (data.getSkillLevel(EnumSkills.FIST).getLevel() >= 5 || player.isCreative()) && data.getWeaponHandler().canExecuteAction(player, ModAttackActions.GLOVE_USE.get())).orElse(false);
+                .map(data -> (data.getSkillLevel(EnumSkills.FIST).getLevel() >= 5 || player.isCreative()) && data.getWeaponHandler().canExecuteAction(ModAttackActions.GLOVE_USE.get())).orElse(false);
         if (canCharge) {
             player.startUsingItem(hand);
             return InteractionResultHolder.consume(itemstack);
@@ -116,7 +116,7 @@ public class ItemGloveBase extends Item implements IItemUsable, IDualWeapon, IAO
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
         if (entity instanceof ServerPlayer serverPlayer && stack.getUseDuration() - timeLeft - 1 >= ItemUtils.getChargeTime(entity)) {
             Platform.INSTANCE.getPlayerData(serverPlayer)
-                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(serverPlayer, ModAttackActions.GLOVE_USE.get(), stack));
+                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(ModAttackActions.GLOVE_USE.get(), stack));
         }
     }
 

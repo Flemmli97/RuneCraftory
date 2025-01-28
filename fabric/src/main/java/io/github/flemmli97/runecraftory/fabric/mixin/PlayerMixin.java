@@ -23,7 +23,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class PlayerMixin implements PlayerDataGetter {
 
     @Unique
-    private final PlayerData runecraftoryPlayerData = new PlayerData();
+    private final PlayerData runecraftoryPlayerData = new PlayerData((Player) (Object) this);
 
     @Inject(method = "createAttributes", at = @At("RETURN"))
     private static void addToAttributes(CallbackInfoReturnable<AttributeSupplier.Builder> info) {

@@ -229,7 +229,7 @@ public class EntityCalls {
                 if (data != null) {
                     if (NaiveBladeAttack.canCounter(data.getWeaponHandler())) {
                         data.getWeaponHandler().setConsumeSpellOnStart();
-                        data.getWeaponHandler().doWeaponAttack(player, ModAttackActions.NAIVE_BLADE.get(), player.getMainHandItem(), null, true);
+                        data.getWeaponHandler().doWeaponAttack(ModAttackActions.NAIVE_BLADE.get(), player.getMainHandItem(), null);
                         return true;
                     }
                 }

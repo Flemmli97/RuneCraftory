@@ -16,7 +16,7 @@ import net.minecraft.world.phys.AABB;
 public class UpperCutAttack extends AttackAction {
 
     @Override
-    public AnimatedAction getAnimation(LivingEntity entity, int chain) {
+    public AnimatedAction getAnimation(LivingEntity entity, int comboIdx) {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
         return PlayerModelAnimations.UPPER_CUT.create(speed);
     }

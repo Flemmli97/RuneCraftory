@@ -250,7 +250,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     public final DailyNPCUpdater updater = new DailyNPCUpdater(this);
 
-    public final WeaponHandler weaponHandler = new WeaponHandler();
+    public final WeaponHandler weaponHandler = new WeaponHandler(this);
 
     public EntityNPCBase(EntityType<? extends EntityNPCBase> type, Level level) {
         super(type, level);
@@ -422,7 +422,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         this.updateSwingTime();
         super.aiStep();
         this.getAnimationHandler().tick();
-        this.weaponHandler.tick(this);
+        this.weaponHandler.tick();
         boolean teleported = false;
         if (this.level instanceof ServerLevel serverLevel) {
             if (this.behaviourState().following && --this.tpCooldown <= 0) {

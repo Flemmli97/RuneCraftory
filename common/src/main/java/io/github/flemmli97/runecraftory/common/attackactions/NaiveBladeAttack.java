@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
+import io.github.flemmli97.runecraftory.api.action.ComboContainer;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.registry.AttackAction;
@@ -16,17 +17,21 @@ import net.minecraft.world.phys.Vec3;
 
 public class NaiveBladeAttack extends AttackAction {
 
+    private final ComboContainer combo = ComboContainer.Builder.builder()
+            .addCombo(handler -> handler.getCurrentAnim().isPastTick(0.12))
+            .build();
+
     @Override
-    public AnimatedAction getAnimation(LivingEntity entity, int chain) {
+    public AnimatedAction getAnimation(LivingEntity entity, int comboIdx) {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
-        if (chain == 1)
+        if (comboIdx == 1)
             return PlayerModelAnimations.NAIVE_BLADE_SUCCESS.create(speed);
         return PlayerModelAnimations.NAIVE_BLADE.create(speed);
     }
 
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
-        if (handler.getChainCount() == 2) {
+        if (handler.getComboCount() == 2) {
             if (anim.canAttack()) {
                 entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
                 handler.setMoveTargetDir(new Vec3(0, 1, 0), anim, 0.76);
@@ -59,24 +64,24 @@ public class NaiveBladeAttack extends AttackAction {
     @Override
     public void onStart(LivingEntity entity, WeaponHandler handler) {
         super.onStart(entity, handler);
-        if (handler.getChainCount() == 2) {
+        if (handler.getComboCount() == 2) {
             entity.playSound(ModSounds.SPELL_NAIVE_BLADE.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         }
     }
 
     @Override
-    public AttackChain attackChain(LivingEntity entity, int chain) {
-        return new AttackChain(2, 0);
-    }
-
-    @Override
     public boolean isInvulnerable(LivingEntity entity, WeaponHandler handler) {
-        return handler.getChainCount() == 2;
+        return handler.getComboCount() == 2;
     }
 
     public static boolean canCounter(WeaponHandler handler) {
         AnimatedAction anim = handler.getCurrentAnim();
         return handler.getCurrentAction() instanceof NaiveBladeAttack
-                && anim != null && handler.getChainCount() == 1 && anim.isPastTick(0.12) && !anim.isPastTick(0.72);
+                && anim != null && handler.getComboCount() == 1 && anim.isPastTick(0.12) && !anim.isPastTick(0.72);
+    }
+
+    @Override
+    public ComboContainer combos() {
+        return this.combo;
     }
 }

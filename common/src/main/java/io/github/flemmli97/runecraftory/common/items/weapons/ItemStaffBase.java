@@ -71,7 +71,7 @@ public class ItemStaffBase extends Item implements IItemUsable, ExtendedItem, IE
     public boolean onServerSwing(LivingEntity entity, ItemStack stack) {
         if (entity instanceof Player player) {
             Platform.INSTANCE.getPlayerData(player)
-                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(player, ModAttackActions.STAFF.get(), stack));
+                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(ModAttackActions.STAFF.get(), stack));
             return false;
         }
         return true;
@@ -116,7 +116,7 @@ public class ItemStaffBase extends Item implements IItemUsable, ExtendedItem, IE
                     int level = Math.min(3, this.chargeAmount(stack));
                     Spell spell = this.getSpell(stack, level);
                     if (spell != null && player instanceof ServerPlayer serverPlayer) {
-                        Platform.INSTANCE.getPlayerData(serverPlayer).ifPresent(data -> data.getWeaponHandler().doWeaponAttack(serverPlayer, ModAttackActions.STAFF_USE.get(), stack, spell, false));
+                        Platform.INSTANCE.getPlayerData(serverPlayer).ifPresent(data -> data.getWeaponHandler().doWeaponAttack(ModAttackActions.STAFF_USE.get(), stack, spell));
                     }
                 } else
                     player.startUsingItem(hand);
@@ -144,7 +144,7 @@ public class ItemStaffBase extends Item implements IItemUsable, ExtendedItem, IE
             Spell spell = this.getSpell(stack, level);
             if (spell != null) {
                 if (entity instanceof ServerPlayer player) {
-                    Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.getWeaponHandler().doWeaponAttack(player, ModAttackActions.STAFF_USE.get(), stack, spell, false));
+                    Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.getWeaponHandler().doWeaponAttack(ModAttackActions.STAFF_USE.get(), stack, spell));
                     return;
                 }
                 spell.use((ServerLevel) world, entity, stack);

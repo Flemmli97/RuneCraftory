@@ -101,7 +101,7 @@ public class NPCAttackGoal<T extends EntityNPCBase> extends Goal {
         boolean done = npcAction.doAction(this.attacker, this, this.attackAction);
         if (done || this.actionDuration <= 0) {
             if (done && this.attackAction != null) {
-                this.attacker.weaponHandler.doWeaponAttack(this.attacker, this.attackAction, this.attacker.getMainHandItem(), npcAction.getSpell(), false);
+                this.attacker.weaponHandler.doWeaponAttack(this.attackAction, this.attacker.getMainHandItem(), npcAction.getSpell());
             }
             this.idleTime = npcAction.getCooldown(this.attacker);
             this.idx++;

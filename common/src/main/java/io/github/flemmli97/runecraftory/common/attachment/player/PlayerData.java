@@ -100,7 +100,7 @@ public class PlayerData {
     private Map<Attribute, Double> foodBuffs = new HashMap<>();
     private int foodDuration;
 
-    private final WeaponHandler weaponHandler = new WeaponHandler();
+    private final WeaponHandler weaponHandler;
 
     private final WalkingTracker walkingTracker = new WalkingTracker();
 
@@ -123,10 +123,11 @@ public class PlayerData {
 
     private NPCData.Gender gender;
 
-    public PlayerData() {
+    public PlayerData(Player player) {
         for (EnumSkills skill : EnumSkills.values()) {
             this.skillLevels.put(skill, new LevelExpPair());
         }
+        this.weaponHandler = new WeaponHandler(player);
     }
 
     public void setMaxHealth(Player player, float amount, boolean asBaseHealth) {
@@ -589,7 +590,7 @@ public class PlayerData {
     }
 
     public void tick(Player player) {
-        this.weaponHandler.tick(player);
+        this.weaponHandler.tick();
         if (player instanceof ServerPlayer serverPlayer) {
             this.updater.tick(serverPlayer);
             if (serverPlayer.tickCount % 10 == 0) {
@@ -793,7 +794,7 @@ public class PlayerData {
     }
 
     public void resetAll(ServerPlayer player) {
-        PlayerData newData = new PlayerData();
+        PlayerData newData = new PlayerData(player);
         newData.spells.load(this.spells.save());
         newData.shipping.load(this.shipping.save());
         this.readFromNBT(newData.writeToNBTPlain(new CompoundTag()), null);

@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.api.registry;
 
+import io.github.flemmli97.runecraftory.api.action.ComboContainer;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
@@ -39,7 +40,7 @@ public class AttackAction extends CustomRegistryEntry<AttackAction> {
         return null;
     }
 
-    public AnimatedAction getAnimation(LivingEntity entity, int chain) {
+    public AnimatedAction getAnimation(LivingEntity entity, int comboIdx) {
         return null;
     }
 
@@ -72,16 +73,8 @@ public class AttackAction extends CustomRegistryEntry<AttackAction> {
     public void onEnd(LivingEntity entity, WeaponHandler handler) {
     }
 
-    public boolean canOverride(LivingEntity entity, WeaponHandler handler) {
-        return false;
-    }
-
     public boolean isInvulnerable(LivingEntity entity, WeaponHandler handler) {
         return false;
-    }
-
-    public AttackChain attackChain(LivingEntity entity, int chain) {
-        return AttackChain.DEFAULT;
     }
 
     public boolean disableItemSwitch() {
@@ -96,17 +89,13 @@ public class AttackAction extends CustomRegistryEntry<AttackAction> {
         return null;
     }
 
-    public boolean hasAnimation() {
-        return true;
+    public ComboContainer combos() {
+        return null;
     }
 
-    /**
-     * Record for handling attack chains
-     *
-     * @param maxChains      Max amount of possible chains
-     * @param chainFrameTime Timeframe after finished animation to click for next chain attack
-     */
-    public record AttackChain(int maxChains, int chainFrameTime) {
-        public static final AttackChain DEFAULT = new AttackChain(1, 0);
+    public enum OverrideType {
+        NONE,
+        SCHEDULE,
+        REPLACE
     }
 }

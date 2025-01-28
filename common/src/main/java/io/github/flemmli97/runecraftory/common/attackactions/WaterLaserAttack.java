@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
+import io.github.flemmli97.runecraftory.api.action.ComboContainer;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.registry.AttackAction;
@@ -16,6 +17,10 @@ import net.minecraft.world.item.ItemStack;
 
 public class WaterLaserAttack extends AttackAction {
 
+    private final ComboContainer combo = ComboContainer.Builder.builder()
+            .addCombo(handler -> true, 0)
+            .build();
+
     private final int type;
 
     public WaterLaserAttack(int type) {
@@ -23,9 +28,9 @@ public class WaterLaserAttack extends AttackAction {
     }
 
     @Override
-    public AnimatedAction getAnimation(LivingEntity entity, int chain) {
+    public AnimatedAction getAnimation(LivingEntity entity, int comboIdx) {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
-        if (chain == 1)
+        if (comboIdx == 1)
             return PlayerModelAnimations.WATER_LASER_END.create(speed);
         return switch (this.type) {
             case 2 -> PlayerModelAnimations.WATER_LASER_THREE.create(speed);
@@ -36,7 +41,7 @@ public class WaterLaserAttack extends AttackAction {
 
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
-        if (handler.getChainCount() == 1) {
+        if (handler.getComboCount() == 1) {
             if (entity.getLevel() instanceof ServerLevel serverLevel && anim.canAttack()) {
                 entity.swing(InteractionHand.MAIN_HAND);
                 if (handler.getSpellToCast() != null) {
@@ -49,7 +54,7 @@ public class WaterLaserAttack extends AttackAction {
             if (entity instanceof ServerPlayer player && anim.isPastTick(0.4)) {
                 if (entity.getUseItem().isEmpty() && Platform.INSTANCE.getPlayerData(player)
                         .map(d -> d.getInv().getInUseStack() != handler.getUsedWeapon()).orElse(false)) {
-                    handler.doWeaponAttack(entity, this, handler.getUsedWeapon(), handler.getSpellToCast(), true);
+                    handler.doWeaponAttack(this, handler.getUsedWeapon(), handler.getSpellToCast());
                 }
             }
         }
@@ -57,7 +62,7 @@ public class WaterLaserAttack extends AttackAction {
 
     @Override
     public AttackAction onChange(LivingEntity entity, WeaponHandler handler) {
-        if (handler.getChainCount() == 1) {
+        if (handler.getComboCount() == 1) {
             if (entity instanceof ServerPlayer player) {
                 Spell spell = handler.getSpellToCast();
                 ItemStack stack = handler.getUsedWeapon();
@@ -70,12 +75,12 @@ public class WaterLaserAttack extends AttackAction {
     }
 
     @Override
-    public AttackChain attackChain(LivingEntity entity, int chain) {
-        return new AttackChain(2, 0);
+    public boolean disableItemSwitch() {
+        return false;
     }
 
     @Override
-    public boolean disableItemSwitch() {
-        return false;
+    public ComboContainer combos() {
+        return this.combo;
     }
 }
