@@ -221,13 +221,17 @@ public class BossBarTracker {
         }
 
         public boolean done() {
-            return this.tick > this.fadeTime || this.tick < 0;
+            return this.tick > this.fadeTime || this.tick < 0 || this.instances.isEmpty();
         }
 
         @Override
         public void tick() {
             if (!this.fade)
                 return;
+            if (this.instances.isEmpty()) {
+                this.stop();
+                return;
+            }
             boolean done = this.done();
             if (this.reverse)
                 --this.tick;
