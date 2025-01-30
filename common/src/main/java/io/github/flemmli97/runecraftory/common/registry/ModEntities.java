@@ -1502,15 +1502,16 @@ public class ModEntities {
         for (RegistryEntrySupplier<EntityType<?>> reg : MONSTERS) {
             EntityType<? extends LivingEntity> type = (EntityType<? extends LivingEntity>) reg.get();
             if (FLYING_MONSTERS.contains(reg))
-                cons.accept(type, BaseMonster.createAttributes(ModAttributes.ENTITY_ATTRIBUTES).add(Attributes.FLYING_SPEED));
+                cons.accept(type, BaseMonster.createAttributes().add(Attributes.FLYING_SPEED));
             else
-                cons.accept(type, BaseMonster.createAttributes(ModAttributes.ENTITY_ATTRIBUTES));
+                cons.accept(type, BaseMonster.createAttributes());
         }
-        cons.accept(NPC.get(), EntityNPCBase.createAttributes(ModAttributes.ENTITY_ATTRIBUTES));
 
-        cons.accept(RAFFLESIA_HORSETAIL.get(), EntityRafflesiaPart.createAttributes(ModAttributes.ENTITY_ATTRIBUTES));
-        cons.accept(RAFFLESIA_FLOWER.get(), EntityRafflesiaPart.createAttributes(ModAttributes.ENTITY_ATTRIBUTES));
-        cons.accept(RAFFLESIA_PITCHER.get(), EntityRafflesiaPart.createAttributes(ModAttributes.ENTITY_ATTRIBUTES));
+        cons.accept(NPC.get(), EntityNPCBase.createAttributes());
+
+        cons.accept(RAFFLESIA_HORSETAIL.get(), EntityRafflesiaPart.createAttributes());
+        cons.accept(RAFFLESIA_FLOWER.get(), EntityRafflesiaPart.createAttributes());
+        cons.accept(RAFFLESIA_PITCHER.get(), EntityRafflesiaPart.createAttributes());
     }
 
     public static <V extends Entity> RegistryEntrySupplier<EntityType<V>> reg(EntityType.Builder<V> v, ResourceLocation name) {

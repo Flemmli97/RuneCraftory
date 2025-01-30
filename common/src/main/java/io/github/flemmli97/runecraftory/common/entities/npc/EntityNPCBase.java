@@ -152,7 +152,6 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -261,12 +260,13 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         this.schedule = new NPCSchedule(this, this.getRandom());
     }
 
-    public static AttributeSupplier.Builder createAttributes(Collection<? extends RegistryEntrySupplier<Attribute>> atts) {
+    public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder map = Monster.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.24)
                 .add(Attributes.FOLLOW_RANGE, 32);
-        if (atts != null)
-            for (RegistryEntrySupplier<Attribute> att : atts)
-                map.add(att.get());
+        for (RegistryEntrySupplier<Attribute> att : ModAttributes.ENTITY_ATTRIBUTES)
+            map.add(att.get());
+        for (RegistryEntrySupplier<Attribute> att : ModAttributes.PLAYER_ATTRIBUTES)
+            map.add(att.get());
         return map;
     }
 

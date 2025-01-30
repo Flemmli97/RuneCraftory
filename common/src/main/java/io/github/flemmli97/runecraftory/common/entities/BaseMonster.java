@@ -131,7 +131,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -255,13 +254,12 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         }
     }
 
-    public static AttributeSupplier.Builder createAttributes(Collection<? extends RegistryEntrySupplier<Attribute>> atts) {
+    public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder map = Monster.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.23)
                 .add(Attributes.FOLLOW_RANGE, 24.0)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1);
-        if (atts != null)
-            for (RegistryEntrySupplier<Attribute> att : atts)
-                map.add(att.get());
+        for (RegistryEntrySupplier<Attribute> att : ModAttributes.ENTITY_ATTRIBUTES)
+            map.add(att.get());
         return map;
     }
 

@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia;
 
 import io.github.flemmli97.runecraftory.common.entities.ai.RafflesiaPartAttackGoal;
+import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.IAnimated;
 import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
@@ -26,7 +27,6 @@ import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -61,12 +61,11 @@ public abstract class EntityRafflesiaPart extends Mob implements IAnimated, Owna
         this.setHealth(this.getMaxHealth());
     }
 
-    public static AttributeSupplier.Builder createAttributes(Collection<? extends RegistryEntrySupplier<Attribute>> atts) {
+    public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder map = Monster.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0)
                 .add(Attributes.FOLLOW_RANGE, 32);
-        if (atts != null)
-            for (RegistryEntrySupplier<Attribute> att : atts)
-                map.add(att.get());
+        for (RegistryEntrySupplier<Attribute> att : ModAttributes.ENTITY_ATTRIBUTES)
+            map.add(att.get());
         return map;
     }
 
