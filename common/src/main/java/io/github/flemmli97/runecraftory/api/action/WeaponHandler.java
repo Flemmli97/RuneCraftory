@@ -25,6 +25,7 @@ import java.util.Set;
 public class WeaponHandler {
 
     private static final float FADE_TICK = 5;
+    private static final int COOLDOWN = 6;
 
     private final LivingEntity entity;
 
@@ -154,7 +155,7 @@ public class WeaponHandler {
             if (this.scheduledAction && handler != null && handler.canAdvance().test(this)) {
                 this.setAnimationBasedOnState(this.currentAction, handler.advanceTo().get(this), true);
                 return;
-            } else if (this.currentAnim.tick(2 + (int) (this.currentAnim.getSpeed() * (handler != null ? handler.resetTime() : 0)))) {
+            } else if (this.currentAnim.tick(COOLDOWN + (int) (this.currentAnim.getSpeed() * (handler != null ? handler.resetTime() : 0)))) {
                 this.setAnimationBasedOnState(ModAttackActions.NONE.get(), -1, false);
             } else {
                 if (this.entity instanceof ServerPlayer player) {
