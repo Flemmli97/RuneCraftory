@@ -51,10 +51,12 @@ public class WaterLaserAttack extends AttackAction {
                     }
                 }
             }
-            if (entity instanceof ServerPlayer player && anim.isPastTick(0.4)) {
-                if (entity.getUseItem().isEmpty() && Platform.INSTANCE.getPlayerData(player)
-                        .map(d -> d.getInv().getInUseStack() != handler.getUsedWeapon()).orElse(false)) {
-                    handler.doWeaponAttack(this, handler.getUsedWeapon(), handler.getSpellToCast());
+            if (!entity.level.isClientSide) {
+                if (anim.isPastTick(0.4)) {
+                    if (!(entity instanceof ServerPlayer player) || entity.getUseItem().isEmpty() && Platform.INSTANCE.getPlayerData(player)
+                            .map(d -> d.getInv().getInUseStack() != handler.getUsedWeapon()).orElse(false)) {
+                        handler.doWeaponAttack(this, handler.getUsedWeapon(), handler.getSpellToCast());
+                    }
                 }
             }
         }
