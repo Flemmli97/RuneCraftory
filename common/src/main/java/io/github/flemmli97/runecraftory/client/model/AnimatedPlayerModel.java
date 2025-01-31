@@ -3,7 +3,6 @@ package io.github.flemmli97.runecraftory.client.model;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.client.TransformationHelper;
 import io.github.flemmli97.runecraftory.mixinhelper.HumanoidMainHand;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
@@ -89,11 +88,14 @@ public class AnimatedPlayerModel<T extends LivingEntity & IAnimated> extends Ent
     }
 
     public boolean setUpModel(LivingEntity entity, HumanoidModel<?> model, AnimatedAction anim, AnimatedAction last, float partialTicks, float interpolation) {
-        boolean reset = last == null || interpolation == 1;
-        ClientHandlers.getAnimatedPlayerModel().setup(model, reset);
         if (entity instanceof IAnimated animated) {
+            interpolation = animated.getAnimationHandler().getInterpolatedAnimationVal(partialTicks);
+            boolean reset = animated.getAnimationHandler().getLastAnim() == null || interpolation == 1;
+            this.setup(model, reset);
             return this.anim.doAnimation(this, animated.getAnimationHandler(), partialTicks, 5, entity.getMainArm() == HumanoidArm.LEFT);
         }
+        boolean reset = last == null || interpolation == 1;
+        this.setup(model, reset);
         return this.doAnimation(anim, last, partialTicks, interpolation, entity.getMainArm() == HumanoidArm.LEFT);
     }
 
@@ -126,16 +128,19 @@ public class AnimatedPlayerModel<T extends LivingEntity & IAnimated> extends Ent
     public void copyTo(HumanoidModel<?> model, boolean ignoreRiding) {
         HumanoidMainHand hands = (HumanoidMainHand) model;
         PartPose main = this.model.getMainPart().storePose();
+        PartPose body = model.body.storePose();
         this.apply(model.head, main, this.head);
         model.body.loadPose(main);
         this.apply(model.leftArm, main, this.leftArm);
         hands.runecraftory$getLeftHandItem().loadPose(this.leftArmItem.storePose());
         this.apply(model.rightArm, main, this.rightArm);
         hands.runecraftory$getRightHandItem().loadPose(this.rightArmItem.storePose());
-        if (ignoreRiding || !model.riding) {
-            this.apply(model.leftLeg, main, this.leftLeg);
-            this.apply(model.rightLeg, main, this.rightLeg);
+        if (model.riding) {
+            this.leftLeg.loadPose(TransformationHelper.withoutParent(body, model.leftLeg.storePose()));
+            this.rightLeg.loadPose(TransformationHelper.withoutParent(body, model.rightLeg.storePose()));
         }
+        this.apply(model.leftLeg, main, this.leftLeg);
+        this.apply(model.rightLeg, main, this.rightLeg);
         model.hat.copyFrom(model.head);
     }
 

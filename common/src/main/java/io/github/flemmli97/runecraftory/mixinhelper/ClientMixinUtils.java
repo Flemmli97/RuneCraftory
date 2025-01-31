@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.mixinhelper;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
+import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.client.ArmorModels;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
@@ -17,6 +18,7 @@ import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.api.entity.IAnimated;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
@@ -108,7 +110,7 @@ public class ClientMixinUtils {
     }
 
     public static boolean shouldAnimate(LivingEntity entity) {
-        return ClientHandlers.getAnimatedPlayerModel() != null && entity instanceof Player;
+        return ClientHandlers.getAnimatedPlayerModel() != null && (entity instanceof Player || entity instanceof IAnimated);
     }
 
     public static void transformHumanoidModel(LivingEntity entity, HumanoidModel<?> model) {
@@ -120,15 +122,21 @@ public class ClientMixinUtils {
         if (model.leftArmPose == HumanoidModel.ArmPose.ITEM && entity.getItemInHand(off).is(ModItems.UMBRELLA.get())) {
             model.leftArm.xRot -= 70 * Mth.DEG_TO_RAD;
         }
-        if (ClientHandlers.getAnimatedPlayerModel() != null && entity instanceof Player player) {
-            PlayerData data = Platform.INSTANCE.getPlayerData(player).orElse(null);
-            if (data == null)
-                return;
-            boolean ignoreRiding = Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().getCurrentAction() == ModAttackActions.DUAL_USE.get()).orElse(false);
+        if (ClientHandlers.getAnimatedPlayerModel() != null) {
             float partialTicks = Minecraft.getInstance().getFrameTime();
-            AnimatedAction anim = data.getWeaponHandler().getCurrentAnim();
-            AnimatedAction last = data.getWeaponHandler().getLastAnim();
-            float interpolation = data.getWeaponHandler().interpolatedLastChange(partialTicks);
+            if (entity instanceof IAnimated) {
+                boolean result = ClientHandlers.getAnimatedPlayerModel().setUpModel(entity, model, null, null, partialTicks, 0);
+                if (result)
+                    ClientHandlers.getAnimatedPlayerModel().copyTo(model, false);
+                return;
+            }
+            WeaponHandler weaponHandler = entity instanceof Player player ? Platform.INSTANCE.getPlayerData(player).map(PlayerData::getWeaponHandler).orElse(null) : null;
+            if (weaponHandler == null)
+                return;
+            boolean ignoreRiding = weaponHandler.getCurrentAction() == ModAttackActions.DUAL_USE.get();
+            AnimatedAction anim = weaponHandler.getCurrentAnim();
+            AnimatedAction last = weaponHandler.getLastAnim();
+            float interpolation = weaponHandler.interpolatedLastChange(partialTicks);
 
             boolean result = ClientHandlers.getAnimatedPlayerModel().setUpModel(entity, model, anim, last, partialTicks, interpolation);
             if (result)
