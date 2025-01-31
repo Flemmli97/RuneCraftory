@@ -90,8 +90,9 @@ public class WeaponHandler {
     }
 
     private AttackAction.OverrideType checkOverride(AttackAction action, boolean allowNone) {
-        if (allowNone && (this.currentAction == ModAttackActions.NONE.get() || this.currentAnim == null))
-            return AttackAction.OverrideType.REPLACE;
+        if (allowNone && (this.currentAction == ModAttackActions.NONE.get() || this.currentAnim == null)) {
+            return this.timeSinceLastChange < COOLDOWN ? AttackAction.OverrideType.NONE : AttackAction.OverrideType.REPLACE;
+        }
         if (this.currentAction == action && action.combos() != null) {
             ComboContainer.ComboHandler combo = action.combos().get(this.comboCount - 1);
             return combo != null && combo.canExecute().test(this) ? AttackAction.OverrideType.SCHEDULE : AttackAction.OverrideType.NONE;
@@ -155,7 +156,7 @@ public class WeaponHandler {
             if (this.scheduledAction && handler != null && handler.canAdvance().test(this)) {
                 this.setAnimationBasedOnState(this.currentAction, handler.advanceTo().get(this), true);
                 return;
-            } else if (this.currentAnim.tick(COOLDOWN + (int) (this.currentAnim.getSpeed() * (handler != null ? handler.resetTime() : 0)))) {
+            } else if (this.currentAnim.tick(1 + (int) (this.currentAnim.getSpeed() * (handler != null ? handler.resetTime() : 0)))) {
                 this.setAnimationBasedOnState(ModAttackActions.NONE.get(), -1, false);
             } else {
                 if (this.entity instanceof ServerPlayer player) {
@@ -183,6 +184,8 @@ public class WeaponHandler {
                 this.moveDir = null;
         }
         this.timeSinceLastChange++;
+        if (this.interpolatedLastChange(1) == 1)
+            this.lastAnim = null;
     }
 
     public LivingEntity getEntity() {
@@ -190,7 +193,7 @@ public class WeaponHandler {
     }
 
     public boolean isCurrentAnimationDone() {
-        return this.currentAnim != null && this.currentAnim.isPastTick(1 + this.currentAnim.getLength());
+        return this.currentAnim != null && this.currentAnim.isPastTick(this.currentAnim.getLength());
     }
 
     public AttackAction getCurrentAction() {
