@@ -20,26 +20,28 @@ public class RunAwayAction implements NPCAction {
     public static final Codec<RunAwayAction> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(CodecHelper.NUMER_PROVIDER_CODEC.fieldOf("duration").forGetter(d -> d.duration),
                     NPCAction.optionalCooldown(d -> d.cooldown),
-                    Codec.FLOAT.fieldOf("maxDist").forGetter(d -> d.maxDist)
+                    Codec.FLOAT.fieldOf("maxDist").forGetter(d -> d.maxDist),
+                    Codec.FLOAT.fieldOf("speed").forGetter(d -> d.speed)
             ).apply(instance, RunAwayAction::new));
 
     private final NumberProvider duration;
     private final NumberProvider cooldown;
-    private final float maxDist;
+    private final float maxDist, speed;
 
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-    private RunAwayAction(NumberProvider duration, Optional<NumberProvider> cooldown, float maxDist) {
-        this(duration, cooldown.orElse(NPCAction.CONST_ZERO), maxDist);
+    private RunAwayAction(NumberProvider duration, Optional<NumberProvider> cooldown, float maxDist, float speed) {
+        this(duration, cooldown.orElse(NPCAction.CONST_ZERO), maxDist, speed);
     }
 
     public RunAwayAction(NumberProvider duration, float maxDist) {
-        this(duration, NPCAction.CONST_ZERO, maxDist);
+        this(duration, NPCAction.CONST_ZERO, maxDist, 1.3f);
     }
 
-    public RunAwayAction(NumberProvider duration, NumberProvider cooldown, float maxDist) {
+    public RunAwayAction(NumberProvider duration, NumberProvider cooldown, float maxDist, float speed) {
         this.duration = duration;
         this.cooldown = cooldown;
         this.maxDist = maxDist;
+        this.speed = speed;
     }
 
     @Override
@@ -71,7 +73,7 @@ public class RunAwayAction implements NPCAction {
             if (vec3 == null) {
                 return false;
             }
-            npc.getNavigation().moveTo(vec3.x, vec3.y, vec3.z, 1f);
+            npc.getNavigation().moveTo(vec3.x, vec3.y, vec3.z, this.speed);
         }
         return false;
     }

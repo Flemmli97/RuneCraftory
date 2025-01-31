@@ -268,6 +268,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             map.add(att.get());
         for (RegistryEntrySupplier<Attribute> att : ModAttributes.PLAYER_ATTRIBUTES)
             map.add(att.get());
+        map.add(ModAttributes.ATTACK_RANGE.get(), 1.5);
         return map;
     }
 

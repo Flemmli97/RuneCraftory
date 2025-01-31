@@ -21,24 +21,31 @@ public class AttackMeleeAction implements NPCAction {
 
     public static final Codec<AttackMeleeAction> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(CodecHelper.NUMER_PROVIDER_CODEC.fieldOf("walkTime").forGetter(d -> d.walkTime),
-                    NPCAction.optionalCooldown(d -> d.cooldown)
+                    NPCAction.optionalCooldown(d -> d.cooldown),
+                    Codec.FLOAT.fieldOf("speed").forGetter(d -> d.speed)
             ).apply(instance, AttackMeleeAction::new));
 
     private final NumberProvider walkTime;
     private final NumberProvider cooldown;
+    private final float speed;
 
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-    private AttackMeleeAction(NumberProvider walkTime, Optional<NumberProvider> cooldown) {
-        this(walkTime, cooldown.orElse(NPCAction.CONST_SEC));
+    private AttackMeleeAction(NumberProvider walkTime, Optional<NumberProvider> cooldown, float speed) {
+        this(walkTime, cooldown.orElse(NPCAction.CONST_SEC), speed);
     }
 
     public AttackMeleeAction(NumberProvider walkTime) {
-        this(walkTime, NPCAction.CONST_SEC);
+        this(walkTime, NPCAction.CONST_SEC, 1.2f);
     }
 
-    public AttackMeleeAction(NumberProvider walkTime, NumberProvider cooldown) {
+    public AttackMeleeAction(NumberProvider walkTime, float speed) {
+        this(walkTime, NPCAction.CONST_SEC, speed);
+    }
+
+    public AttackMeleeAction(NumberProvider walkTime, NumberProvider cooldown, float speed) {
         this.walkTime = walkTime;
         this.cooldown = cooldown;
+        this.speed = speed;
     }
 
     @Override
@@ -76,7 +83,7 @@ public class AttackMeleeAction implements NPCAction {
 
     @Override
     public boolean doAction(EntityNPCBase npc, NPCAttackGoal<?> goal, AttackAction action) {
-        goal.moveToEntityNearer(goal.getAttackTarget(), 1.1f);
+        goal.moveToEntityNearer(goal.getAttackTarget(), this.speed);
         npc.getLookControl().setLookAt(goal.getAttackTarget(), 30, 30);
         double minDist = npc.getMeleeAttackRangeSqr(goal.getAttackTarget());
         if (goal.getDistSqr() <= minDist) {
