@@ -7,7 +7,7 @@ import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 public class AvoidWhenNotFollowing extends AvoidEntityGoal<LivingEntity> {
 
     public AvoidWhenNotFollowing(EntityNPCBase npc, Class<LivingEntity> clss, float dist, double walkSpd, double sprintSpd) {
-        super(npc, clss, dist, walkSpd, sprintSpd, e -> e == npc.getLastHurtByMob());
+        super(npc, clss, dist, walkSpd, sprintSpd, e -> npc.getTarget() == null && e == npc.getLastHurtByMob());
     }
 
     @Override
