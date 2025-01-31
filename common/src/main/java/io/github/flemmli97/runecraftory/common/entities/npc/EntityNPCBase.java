@@ -30,6 +30,7 @@ import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.ShopState;
 import io.github.flemmli97.runecraftory.common.entities.pathing.NPCWalkNodeEvaluator;
 import io.github.flemmli97.runecraftory.common.entities.utils.IBaseMob;
+import io.github.flemmli97.runecraftory.common.entities.utils.TargetableOpponent;
 import io.github.flemmli97.runecraftory.common.inventory.InventoryShop;
 import io.github.flemmli97.runecraftory.common.inventory.container.ContainerShop;
 import io.github.flemmli97.runecraftory.common.items.BabySpawnEgg;
@@ -164,7 +165,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimated {
+public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimated, TargetableOpponent {
 
     public static final float PATH_FIND_LENGTH = 100;
 
@@ -1712,6 +1713,11 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     public void startSeenByPlayer(ServerPlayer player) {
         Platform.INSTANCE.sendToClient(new S2CNPCLook(this.getId(), this.look, this.lookFeatures), player);
         Platform.INSTANCE.sendToClient(S2CEntityLevelPkt.create(this), player);
+    }
+
+    @Override
+    public Predicate<LivingEntity> validTargetPredicate() {
+        return this.hitPred;
     }
 
     public enum Behaviour {

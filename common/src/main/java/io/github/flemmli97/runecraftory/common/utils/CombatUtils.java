@@ -8,6 +8,7 @@ import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.entities.utils.ElementalAttackMob;
 import io.github.flemmli97.runecraftory.common.entities.utils.IBaseMob;
+import io.github.flemmli97.runecraftory.common.entities.utils.TargetableOpponent;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
@@ -773,14 +774,19 @@ public class CombatUtils {
         public Collection<LivingEntity> executeAttack() {
             if (this.attacker.level.isClientSide)
                 return List.of();
+            if (this.attacker instanceof TargetableOpponent pred)
+                this.targetPred = this.targetPred == null ? pred.validTargetPredicate() :
+                        pred.validTargetPredicate().and(this.targetPred);
             Collection<LivingEntity> list = this.targets.apply(this.attacker, this.targetPred);
             this.bonusAttributes.forEach((att, val) -> applyTempAttribute(this.attacker, att, val));
             this.bonusAttributesMultiplier.forEach((att, val) -> applyTempAttributeMult(this.attacker, att, val));
             for (LivingEntity livingEntity : list) {
                 boolean flag = false;
-                if (this.attacker instanceof Player player)
+                if (this.attacker instanceof Player player) {
+                    if (player.getVehicle() == livingEntity)
+                        continue;
                     flag = CombatUtils.playerAttackWithItem(player, livingEntity, false, false);
-                else if (this.attacker instanceof Mob mob)
+                } else if (this.attacker instanceof Mob mob)
                     flag = mob.doHurtTarget(livingEntity);
                 if (flag) {
                     if (this.onSuccess != null)
