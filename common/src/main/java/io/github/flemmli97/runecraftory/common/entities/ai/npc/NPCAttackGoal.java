@@ -135,7 +135,8 @@ public class NPCAttackGoal<T extends EntityNPCBase> extends Goal {
             return false;
         int combo = this.attacker.weaponHandler.getComboCount();
         if (this.attackAction != null && combo < this.attackAction.comboCount()) {
-            this.attacker.weaponHandler.doWeaponAttack(this.attackAction.action(), this.attacker.getMainHandItem(), null);
+            NPCAction npcAction = this.actions.get(this.idx);
+            this.attacker.weaponHandler.doWeaponAttack(this.attackAction.action(), this.attacker.getMainHandItem(), npcAction.getSpell());
             return true;
         }
         return false;

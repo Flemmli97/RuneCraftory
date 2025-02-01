@@ -131,6 +131,9 @@ public class WeaponHandler {
             if (packet) {
                 Platform.INSTANCE.sendToTrackingAndSelf(new S2CWeaponUse(this.currentAction, this.usedWeapon, this.comboCount - 1, this.entity), this.entity);
             }
+        } else if (this.entity instanceof IAnimated animated) {
+            // Tick once on client. Otherwise it can flicker for some reason. dont wanna investigate atm
+            animated.getAnimationHandler().tick();
         }
     }
 

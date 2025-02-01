@@ -423,7 +423,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     public void aiStep() {
         this.updateSwingTime();
         super.aiStep();
-        this.getAnimationHandler().tick(2);
+        this.getAnimationHandler().tick();
         this.weaponHandler.tick();
         boolean teleported = false;
         if (this.level instanceof ServerLevel serverLevel) {
