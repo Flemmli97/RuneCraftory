@@ -7,7 +7,6 @@ import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.api.registry.NPCAction;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCAttackGoal;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCActions;
 import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
 import net.minecraft.world.InteractionHand;
@@ -21,7 +20,7 @@ public class AttackMeleeAction implements NPCAction {
 
     public static final Codec<AttackMeleeAction> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(CodecHelper.NUMER_PROVIDER_CODEC.fieldOf("walkTime").forGetter(d -> d.walkTime),
-                    NPCAction.optionalCooldown(d -> d.cooldown),
+                    NPCAction.optionalNum(d -> d.cooldown),
                     Codec.FLOAT.fieldOf("speed").forGetter(d -> d.speed)
             ).apply(instance, AttackMeleeAction::new));
 
@@ -64,25 +63,20 @@ public class AttackMeleeAction implements NPCAction {
     }
 
     @Override
-    public AttackAction getAction(EntityNPCBase npc) {
+    public NPCAttackAction getAction(EntityNPCBase npc) {
         ItemStack hand = npc.getMainHandItem();
         if (hand.getItem() instanceof IItemUsable usabe) {
-            return switch (usabe.getWeaponType()) {
-                case FARM -> null;
-                case SHORTSWORD -> ModAttackActions.SHORT_SWORD.get();
-                case LONGSWORD -> ModAttackActions.LONG_SWORD.get();
-                case SPEAR -> ModAttackActions.SPEAR.get();
-                case HAXE -> ModAttackActions.HAMMER_AXE.get();
-                case DUAL -> ModAttackActions.DUAL_BLADES.get();
-                case GLOVE -> ModAttackActions.GLOVES.get();
-                case STAFF -> ModAttackActions.STAFF.get();
-            };
+            AttackAction action = usabe.getWeaponType().getAction();
+            if (action != null) {
+                int amount = npc.getRandom().nextInt(action.combos().size()) + 1;
+                return new NPCAttackAction(action, amount);
+            }
         }
         return null;
     }
 
     @Override
-    public boolean doAction(EntityNPCBase npc, NPCAttackGoal<?> goal, AttackAction action) {
+    public boolean doAction(EntityNPCBase npc, NPCAttackGoal<?> goal, NPCAttackAction action) {
         goal.moveToEntityNearer(goal.getAttackTarget(), this.speed);
         npc.getLookControl().setLookAt(goal.getAttackTarget(), 30, 30);
         double minDist = npc.getMeleeAttackRangeSqr(goal.getAttackTarget());

@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.common.entities.ai.npc;
 
-import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.api.registry.NPCAction;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
@@ -24,7 +23,8 @@ public class NPCAttackGoal<T extends EntityNPCBase> extends Goal {
     private List<NPCAction> actions;
     private int idx, actionDuration, idleTime;
     private boolean initialSelect = true;
-    private AttackAction attackAction;
+    private NPCAction.NPCAttackAction attackAction;
+    private boolean combo;
 
     public NPCAttackGoal(T entity) {
         super();
@@ -86,12 +86,24 @@ public class NPCAttackGoal<T extends EntityNPCBase> extends Goal {
     public void tick() {
         --this.actionDuration;
         --this.pathFindDelay;
-        if (this.attacker.getTarget() == null || --this.idleTime > 0) {
+        if (this.attacker.getTarget() == null) {
+            return;
+        }
+        if (this.combo) {
+            this.combo = this.attacker.weaponHandler.isScheduledAction() || this.tryScheduleCombo();
+            if (!this.combo && !this.attacker.weaponHandler.isScheduledAction()) {
+                this.idx++;
+                this.initialSelect = true;
+                if (this.idx >= this.actions.size()) {
+                    this.selectActionSequence();
+                }
+            }
             return;
         }
         AnimatedAction anim = this.attacker.getAnimationHandler().getAnimation();
-        if (anim != null)
+        if (anim != null || --this.idleTime > 0) {
             return;
+        }
         if (this.actions == null || this.actions.isEmpty()) {
             this.selectActionSequence();
             return;
@@ -101,17 +113,32 @@ public class NPCAttackGoal<T extends EntityNPCBase> extends Goal {
         boolean done = npcAction.doAction(this.attacker, this, this.attackAction);
         if (done || this.actionDuration <= 0) {
             if (done && this.attackAction != null) {
-                this.attacker.weaponHandler.doWeaponAttack(this.attackAction, this.attacker.getMainHandItem(), npcAction.getSpell());
+                this.attacker.weaponHandler.setComboCount(0);
+                this.attacker.weaponHandler.doWeaponAttack(this.attackAction.action(), this.attacker.getMainHandItem(), npcAction.getSpell());
+                this.combo = this.tryScheduleCombo();
             }
             this.idleTime = npcAction.getCooldown(this.attacker);
-            this.idx++;
-            this.initialSelect = true;
             if (done)
                 this.attacker.getNavigation().stop();
-            if (this.idx >= this.actions.size()) {
-                this.selectActionSequence();
+            if (!this.combo) {
+                this.idx++;
+                this.initialSelect = true;
+                if (this.idx >= this.actions.size()) {
+                    this.selectActionSequence();
+                }
             }
         }
+    }
+
+    private boolean tryScheduleCombo() {
+        if (this.attacker.weaponHandler.isScheduledAction())
+            return false;
+        int combo = this.attacker.weaponHandler.getComboCount();
+        if (this.attackAction != null && combo < this.attackAction.comboCount()) {
+            this.attacker.weaponHandler.doWeaponAttack(this.attackAction.action(), this.attacker.getMainHandItem(), null);
+            return true;
+        }
+        return false;
     }
 
     public LivingEntity getAttackTarget() {

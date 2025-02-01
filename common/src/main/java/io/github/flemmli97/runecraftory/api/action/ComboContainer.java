@@ -25,6 +25,10 @@ public class ComboContainer {
         return this.handlers.get(comboIdx);
     }
 
+    public int size() {
+        return this.handlers.size();
+    }
+
     public record ComboHandler(Predicate<WeaponHandler> canExecute, Predicate<WeaponHandler> canAdvance,
                                ComboGetter advanceTo, int resetTime) {
 

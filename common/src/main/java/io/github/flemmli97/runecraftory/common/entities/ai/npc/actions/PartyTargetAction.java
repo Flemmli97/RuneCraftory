@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.common.entities.ai.npc.actions;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.api.registry.NPCAction;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCAttackGoal;
@@ -21,7 +20,7 @@ public class PartyTargetAction implements NPCAction {
     public static final Codec<PartyTargetAction> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(CodecUtils.registryCodec(ModSpells.SPELL_REGISTRY_KEY).fieldOf("spell").forGetter(d -> d.spell),
                     Codec.BOOL.fieldOf("ignoreSeal").forGetter(d -> d.ignoreSeal),
-                    NPCAction.optionalCooldown(d -> d.cooldown)
+                    NPCAction.optionalNum(d -> d.cooldown)
             ).apply(instance, PartyTargetAction::new));
 
     private final Spell spell;
@@ -60,8 +59,8 @@ public class PartyTargetAction implements NPCAction {
     }
 
     @Override
-    public AttackAction getAction(EntityNPCBase npc) {
-        return ModAttackActions.STAFF_USE.get();
+    public NPCAttackAction getAction(EntityNPCBase npc) {
+        return NPCAttackAction.of(ModAttackActions.STAFF_USE.get());
     }
 
     @Override
@@ -70,7 +69,7 @@ public class PartyTargetAction implements NPCAction {
     }
 
     @Override
-    public boolean doAction(EntityNPCBase npc, NPCAttackGoal<?> goal, AttackAction action) {
+    public boolean doAction(EntityNPCBase npc, NPCAttackGoal<?> goal, NPCAttackAction action) {
         if (npc.followEntity() == null)
             return true;
         npc.getLookControl().setLookAt(npc.followEntity(), 360, 90);

@@ -21,16 +21,21 @@ import java.util.function.Supplier;
 public interface NPCAction {
 
     NumberProvider CONST_ZERO = ConstantValue.exactly(0);
+    NumberProvider CONST_ONE = ConstantValue.exactly(1);
     NumberProvider CONST_SEC = ConstantValue.exactly(20);
 
     static Optional<NumberProvider> asOpt(NumberProvider val, NumberProvider def) {
         return val.equals(def) ? Optional.empty() : Optional.of(val);
     }
 
-    static <T> RecordCodecBuilder<T, Optional<NumberProvider>> optionalCooldown(Function<T, NumberProvider> getter) {
+    static <T> RecordCodecBuilder<T, Optional<NumberProvider>> optionalNum(Function<T, NumberProvider> getter) {
+        return optionalNum(getter, CONST_ZERO);
+    }
+
+    static <T> RecordCodecBuilder<T, Optional<NumberProvider>> optionalNum(Function<T, NumberProvider> getter, NumberProvider def) {
         Function<T, Optional<NumberProvider>> optGetter = t -> {
             NumberProvider provider = getter.apply(t);
-            if (provider.equals(CONST_ZERO))
+            if (provider.equals(def))
                 return Optional.empty();
             return Optional.of(provider);
         };
@@ -47,13 +52,21 @@ public interface NPCAction {
 
     int getCooldown(EntityNPCBase npc);
 
-    AttackAction getAction(EntityNPCBase npc);
+    default NPCAttackAction getAction(EntityNPCBase npc) {
+        return null;
+    }
 
     default Spell getSpell() {
         return null;
     }
 
-    boolean doAction(EntityNPCBase npc, NPCAttackGoal<?> goal, @Nullable AttackAction action);
+    boolean doAction(EntityNPCBase npc, NPCAttackGoal<?> goal, @Nullable NPCAttackAction action);
+
+    record NPCAttackAction(AttackAction action, int comboCount) {
+        public static NPCAttackAction of(AttackAction action) {
+            return new NPCAttackAction(action, 1);
+        }
+    }
 
     //Wrapper needed for registries on forge
     class NPCActionCodec extends CustomRegistryEntry<NPCActionCodec> {

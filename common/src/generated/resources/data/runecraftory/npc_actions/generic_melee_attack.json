@@ -10,6 +10,7 @@
             "max": 80
           },
           "cooldown": 20,
+          "speed": 1.2,
           "type": "runecraftory:melee_attack"
         }
       ]

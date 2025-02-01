@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.common.entities.ai.npc.actions;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.api.registry.NPCAction;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCAttackGoal;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
@@ -19,7 +18,7 @@ public class WalkAroundAction implements NPCAction {
 
     public static final Codec<WalkAroundAction> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(CodecHelper.NUMER_PROVIDER_CODEC.fieldOf("duration").forGetter(d -> d.duration),
-                    NPCAction.optionalCooldown(d -> d.cooldown)
+                    NPCAction.optionalNum(d -> d.cooldown)
             ).apply(instance, WalkAroundAction::new));
 
     private final NumberProvider duration;
@@ -55,12 +54,7 @@ public class WalkAroundAction implements NPCAction {
     }
 
     @Override
-    public AttackAction getAction(EntityNPCBase npc) {
-        return null;
-    }
-
-    @Override
-    public boolean doAction(EntityNPCBase npc, NPCAttackGoal<?> goal, AttackAction action) {
+    public boolean doAction(EntityNPCBase npc, NPCAttackGoal<?> goal, NPCAttackAction action) {
         if (npc.getNavigation().isDone()) {
             Vec3 vec3 = DefaultRandomPos.getPos(npc, 16, 7);
             if (vec3 == null) {

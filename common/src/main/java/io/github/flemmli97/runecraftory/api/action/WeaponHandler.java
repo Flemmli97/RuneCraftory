@@ -192,6 +192,10 @@ public class WeaponHandler {
         return this.entity;
     }
 
+    public boolean isScheduledAction() {
+        return this.scheduledAction;
+    }
+
     public boolean isCurrentAnimationDone() {
         return this.currentAnim != null && this.currentAnim.isPastTick(this.currentAnim.getLength());
     }

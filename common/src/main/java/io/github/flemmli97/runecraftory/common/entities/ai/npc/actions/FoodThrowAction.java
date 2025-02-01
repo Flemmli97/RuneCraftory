@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.common.entities.ai.npc.actions;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.api.registry.NPCAction;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCAttackGoal;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityThrownItem;
@@ -22,7 +21,7 @@ public class FoodThrowAction implements NPCAction {
     public static final Codec<FoodThrowAction> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(ItemStack.CODEC.listOf().fieldOf("items").forGetter(d -> d.items),
                     CodecHelper.NUMER_PROVIDER_CODEC.fieldOf("walkTime").forGetter(d -> d.walkTime),
-                    NPCAction.optionalCooldown(d -> d.cooldown)
+                    NPCAction.optionalNum(d -> d.cooldown)
             ).apply(instance, FoodThrowAction::new));
 
     private final List<ItemStack> items;
@@ -60,12 +59,7 @@ public class FoodThrowAction implements NPCAction {
     }
 
     @Override
-    public AttackAction getAction(EntityNPCBase npc) {
-        return null;
-    }
-
-    @Override
-    public boolean doAction(EntityNPCBase npc, NPCAttackGoal<?> goal, AttackAction action) {
+    public boolean doAction(EntityNPCBase npc, NPCAttackGoal<?> goal, NPCAttackAction action) {
         if (npc.followEntity() == null || this.items.isEmpty())
             return true;
         goal.moveToEntity(npc.followEntity(), 1, 2);

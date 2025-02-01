@@ -11,6 +11,8 @@ import io.github.flemmli97.runecraftory.common.registry.ModNPCActions;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 
 import java.util.function.Supplier;
@@ -19,25 +21,32 @@ public class SpellAttackAction implements NPCAction {
 
     public static final Codec<SpellAttackAction> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(CodecHelper.NUMER_PROVIDER_CODEC.fieldOf("walkTime").forGetter(d -> d.walkTime),
-                    NPCAction.optionalCooldown(d -> d.cooldown),
+                    NPCAction.optionalNum(d -> d.cooldown),
+                    NPCAction.optionalNum(d -> d.combos, CONST_ONE),
 
                     CodecUtils.registryCodec(ModSpells.SPELL_REGISTRY_KEY).fieldOf("spell").forGetter(d -> d.spell),
                     Codec.DOUBLE.fieldOf("range").forGetter(d -> d.range),
                     Codec.BOOL.fieldOf("ignoreSeal").forGetter(d -> d.ignoreSeal)
-            ).apply(instance, (walkTime, cooldown, spell, range, ignoreSeal) -> new SpellAttackAction(spell, range, ignoreSeal, walkTime, cooldown.orElse(NPCAction.CONST_ZERO))));
+            ).apply(instance, (walkTime, cooldown, combos, spell, range, ignoreSeal) -> new SpellAttackAction(spell, range, ignoreSeal, walkTime, cooldown.orElse(NPCAction.CONST_ZERO), combos.orElse(NPCAction.CONST_ONE))));
 
     private final Spell spell;
     private final double range;
     private final boolean ignoreSeal;
     private final NumberProvider walkTime;
     private final NumberProvider cooldown;
+    private final NumberProvider combos;
 
     public SpellAttackAction(Spell spell, double range, boolean ignoreSeal, NumberProvider walkTime, NumberProvider cooldown) {
+        this(spell, range, ignoreSeal, walkTime, cooldown, ConstantValue.exactly(1));
+    }
+
+    public SpellAttackAction(Spell spell, double range, boolean ignoreSeal, NumberProvider walkTime, NumberProvider cooldown, NumberProvider combos) {
         this.spell = spell;
         this.range = range;
         this.ignoreSeal = ignoreSeal;
         this.walkTime = walkTime;
         this.cooldown = cooldown;
+        this.combos = combos;
     }
 
     @Override
@@ -56,8 +65,10 @@ public class SpellAttackAction implements NPCAction {
     }
 
     @Override
-    public AttackAction getAction(EntityNPCBase npc) {
-        return this.spell.useAction();
+    public NPCAttackAction getAction(EntityNPCBase npc) {
+        AttackAction act = this.spell.useAction();
+        int combos = Mth.clamp(this.combos.getInt(NPCAction.createLootContext(npc)), 1, act.combos().size());
+        return new NPCAttackAction(act, combos);
     }
 
     @Override
@@ -66,7 +77,7 @@ public class SpellAttackAction implements NPCAction {
     }
 
     @Override
-    public boolean doAction(EntityNPCBase npc, NPCAttackGoal<?> goal, AttackAction action) {
+    public boolean doAction(EntityNPCBase npc, NPCAttackGoal<?> goal, NPCAttackAction action) {
         goal.moveToEntityNearer(goal.getAttackTarget(), 1);
         npc.getLookControl().setLookAt(goal.getAttackTarget(), 60, 30);
         return goal.canSeeTarget() && (this.range < 0 || goal.getDistSqr() <= this.range * this.range);
