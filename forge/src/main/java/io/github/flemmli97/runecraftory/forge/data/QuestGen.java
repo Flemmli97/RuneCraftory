@@ -49,10 +49,6 @@ public class QuestGen extends QuestProvider {
             .setHidden()
             .build();
 
-    public static final ResourceLocation MINING = id("mining");
-    public static final ResourceLocation TAMING = id("tame_monster");
-    public static final ResourceLocation SHIP_TURNIP = id("ship_turnip");
-
     public final Map<String, String> translations = new LinkedHashMap<>();
     public final Map<ResourceLocation, LootTable.Builder> loot = new HashMap<>();
     public final Map<ResourceLocation, Map<ResourceLocation, NPCDataProvider.QuestResponseBuilder>> questResponses = new HashMap<>();
@@ -63,7 +59,7 @@ public class QuestGen extends QuestProvider {
 
     @Override
     protected void add() {
-        this.addQuest(this.createNPCQuest(SHIP_TURNIP, "First Shipment!", "Come see me.",
+        this.addQuest(this.createNPCQuest(id("ship_turnip"), "First Shipment!", "Come see me.",
                         b -> b.addNPC("shop_owner/1", new NPCDataProvider.QuestResponseBuilder(
                                 new NPCData.ConversationSet.Builder("npc.shop_owner.quest.ship_turnip.start", """
                                         Are you here for my request?
@@ -80,7 +76,7 @@ public class QuestGen extends QuestProvider {
                 .withCategory(this.main)
                 .withIcon(new ItemStack(ModItems.TURNIP_SEEDS.get())));
 
-        this.addQuest(this.createNPCQuest(MINING, "Acquire Hardware??", "Come see me.",
+        this.addQuest(this.createNPCQuest(id("mining"), "Acquire Hardware??", "Come see me.",
                         b -> b.addNPC("smith/1", new NPCDataProvider.QuestResponseBuilder(
                                 new NPCData.ConversationSet.Builder("npc.smith.quest.mining.start", """
                                         You saw my request? Great!
@@ -102,12 +98,12 @@ public class QuestGen extends QuestProvider {
                 .withCategory(this.main)
                 .withIcon(new ItemStack(ModItems.HAMMER_SCRAP.get())));
 
-        this.addQuest(this.createNPCQuest(TAMING, "Tame a monster", "I need you to tame a monster. Come see me.",
+        this.addQuest(this.createNPCQuest(id("tame_monster"), "Tame a monster", "I need you to tame a monster. Come see me.",
                         b -> b.addNPC("random_npc_1", new NPCDataProvider.QuestResponseBuilder(
                                 new NPCData.ConversationSet.Builder("npc.generic.quest.tame_monster.start", """
                                         Did you know that you can tame the monsters in this world?
                                         You would need to setup a barn first and then just give them an item.
-                                                                                
+                                        
                                         With that said I would like you to tame a monster."""),
                                 new NPCData.ConversationSet.Builder("npc.generic.quest.tame_monster.active", "You still need to tame a monster.\n" +
                                         "Some monsters prefer certain items more."),

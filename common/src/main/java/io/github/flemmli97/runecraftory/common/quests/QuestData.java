@@ -224,6 +224,7 @@ public class QuestData implements PlayerQuestData {
         if (this.questTrackerTime == null || this.questTrackerTime.getDayOfYear() != now.getDayOfYear()) {
             this.dailySeed = this.player.getRandom().nextLong();
             this.questTrackerTime = now;
+            this.finishedQuestDay = 0;
         }
     }
 
@@ -318,6 +319,7 @@ public class QuestData implements PlayerQuestData {
         this.questBoardContent = null;
         this.unlockTracker.clear();
         this.finishedQuestsTracker.clear();
+        this.finishedQuestDay = 0;
     }
 
     public enum AcceptType {

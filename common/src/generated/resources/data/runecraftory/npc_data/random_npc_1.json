@@ -4,8 +4,8 @@
   "combat": {
     "combatActions": [
       "runecraftory:generic_melee_attack",
-      "runecraftory:melee_fireball_attack",
-      "runecraftory:melee_fireball_attack"
+      "runecraftory:melee_heal_attack",
+      "runecraftory:melee_heal_attack"
     ]
   },
   "relation": {

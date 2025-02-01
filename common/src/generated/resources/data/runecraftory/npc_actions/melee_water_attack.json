@@ -29,7 +29,7 @@
           "type": "runecraftory:run_away"
         },
         {
-          "spell": "runecraftory:fireball",
+          "spell": "runecraftory:water_laser",
           "range": 8.0,
           "ignoreSeal": false,
           "walkTime": {

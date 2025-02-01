@@ -29,20 +29,14 @@
           "type": "runecraftory:run_away"
         },
         {
-          "spell": "runecraftory:fireball",
-          "range": 8.0,
+          "spell": "runecraftory:cure_all",
           "ignoreSeal": false,
-          "walkTime": {
+          "cooldown": {
             "type": "minecraft:uniform",
             "min": 20,
             "max": 40
           },
-          "cooldown": {
-            "type": "minecraft:uniform",
-            "min": 10,
-            "max": 20
-          },
-          "type": "runecraftory:spell_attack"
+          "type": "runecraftory:party_target_action"
         }
       ]
     }

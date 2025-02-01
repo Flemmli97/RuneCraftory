@@ -64,13 +64,13 @@ public class NPCDataGen extends NPCDataProvider {
                 .addAction(new NPCAttackActions.ActionBuilder(1)
                         .action(new RunAwayAction(UniformGenerator.between(25, 40), 7))
                         .action(new SpellAttackAction(ModSpells.FIREBALL.get(), 8, false, UniformGenerator.between(20, 40), UniformGenerator.between(10, 20)))));
-        ResourceLocation meleeAndHeal = this.addAttackActions(new ResourceLocation(RuneCraftory.MODID, "melee_fireball_attack"), new NPCAttackActions.Builder()
+        ResourceLocation meleeAndHeal = this.addAttackActions(new ResourceLocation(RuneCraftory.MODID, "melee_heal_attack"), new NPCAttackActions.Builder()
                 .addAction(new NPCAttackActions.ActionBuilder(5)
                         .action(new AttackMeleeAction(UniformGenerator.between(30, 80))))
                 .addAction(new NPCAttackActions.ActionBuilder(1)
                         .action(new RunAwayAction(UniformGenerator.between(25, 40), 7))
                         .action(new PartyTargetAction(ModSpells.CURE_ALL.get(), false, UniformGenerator.between(20, 40)))));
-        ResourceLocation meleeAndWater = this.addAttackActions(new ResourceLocation(RuneCraftory.MODID, "melee_fireball_attack"), new NPCAttackActions.Builder()
+        ResourceLocation meleeAndWater = this.addAttackActions(new ResourceLocation(RuneCraftory.MODID, "melee_water_attack"), new NPCAttackActions.Builder()
                 .addAction(new NPCAttackActions.ActionBuilder(5)
                         .action(new AttackMeleeAction(UniformGenerator.between(30, 80))))
                 .addAction(new NPCAttackActions.ActionBuilder(1)
@@ -152,7 +152,7 @@ public class NPCDataGen extends NPCDataProvider {
                         .addGiftResponse("dislike", new NPCData.Gift(null, "npc.generic.2.dislike", -7), "I... I appreciate it, but I’m not sure what to do with this.")
                         .addGiftResponse("like", new NPCData.Gift(null, "npc.generic.2.like", 10), "Oh, this is... really nice. Thank you %player%.")
                         .setNeutralGiftResponse("npc.generic.2.gift.default", "This is okay... Thanks for thinking of me.")
-                        .withCombatActions(genericAttack, meleeAndHeal, meleeAndHeal),
+                        .withCombatActions(genericAttack, meleeAndHeal, meleeAndWater),
                 of(m -> {
                     m.put(ConversationContext.FIRST_TALK, new NPCData.ConversationSet.Builder()
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.2.first.1"), "Um, welcome. I'm ... %npc%. I hope you’ll like it here.")
@@ -209,7 +209,7 @@ public class NPCDataGen extends NPCDataProvider {
                         .addGiftResponse("dislike", new NPCData.Gift(null, "npc.generic.3.dislike", -7), "Sorry... but this isn't really my thing.")
                         .addGiftResponse("like", new NPCData.Gift(null, "npc.generic.3.like", 10), "Oh, nice... this is something I can appreciate.")
                         .setNeutralGiftResponse("npc.generic.3.gift.default", "Oh... thanks... it’s... alright.")
-                        .withCombatActions(genericAttack, meleeAndHeal, meleeAndHeal),
+                        .withCombatActions(genericAttack, meleeAndHeal, meleeAndWater),
                 of(m -> {
                     m.put(ConversationContext.FIRST_TALK, new NPCData.ConversationSet.Builder()
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.3.first.1"), "Zzzz... huh? Oh a new face! I... wasn't sleeping no. Anyway Im' %npc%. Nice to meet you")
