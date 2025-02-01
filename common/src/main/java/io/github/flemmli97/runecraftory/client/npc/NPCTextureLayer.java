@@ -159,7 +159,7 @@ public class NPCTextureLayer<T extends EntityNPCBase, M extends HumanoidModel<T>
         SCLERA_LAYER("sclera", 0.007f),
         EYEBROWS_LAYER("eyebrows", 0.008f),
         BLUSH_LAYER("blush", 0.009f),
-        HAIR_LAYER("hair", 0.01f),
+        HAIR_LAYER("hair", 0.5f),
         HAT_LAYER("hats", 0.8f);
 
         public final ModelLayerLocation location, slimeLocation;
