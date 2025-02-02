@@ -50,16 +50,18 @@ public class NPCQuest extends QuestBase {
     public final List<ResourceLocation> quests;
     public final ResourceLocation loot;
     public final List<ResourceLocation> parentQuests;
+    public final boolean global;
     private ResourceLocation originID;
 
     protected NPCQuest(ResourceLocation id, QuestCategory category, String questTaskString, List<String> questTaskDesc,
-                       List<ResourceLocation> parents, boolean redoParent, int repeatDelay, int sortingId, EntityPredicate unlockCondition, List<ResourceLocation> npcDataIDs, List<ResourceLocation> quests, ResourceLocation loot) {
+                       List<ResourceLocation> parents, boolean redoParent, int repeatDelay, int sortingId, EntityPredicate unlockCondition, List<ResourceLocation> npcDataIDs, List<ResourceLocation> quests, ResourceLocation loot, boolean global) {
         super(id, category, questTaskString, questTaskDesc,
                 List.of(), redoParent, false, ItemStack.EMPTY, repeatDelay, 0, sortingId, false, unlockCondition, Visibility.NEVER);
         this.npcDataIDs = npcDataIDs;
         this.parentQuests = parents;
         this.quests = quests;
         this.loot = loot;
+        this.global = global;
         this.originID = this.id;
     }
 
@@ -90,9 +92,14 @@ public class NPCQuest extends QuestBase {
             JsonArray arr = GsonHelper.getAsJsonArray(obj, "quests");
             arr.forEach(element -> quests.add(new ResourceLocation(element.getAsString())));
         }
-        NPCQuest quest = QuestBase.of(task -> new Builder(withUuid(id, uuid), task, npc_ids,
-                new ResourceLocation(GsonHelper.getAsString(obj, "loot_table")))
-                .withQuests(quests), category, obj).build();
+        NPCQuest quest = QuestBase.of(task -> {
+            Builder builder = new Builder(withUuid(id, uuid), task, npc_ids,
+                    new ResourceLocation(GsonHelper.getAsString(obj, "loot_table")))
+                    .withQuests(quests);
+            if (GsonHelper.getAsBoolean(obj, "global", false))
+                builder.global();
+            return builder;
+        }, category, obj).build();
         quest.withNPC(uuid, id);
         return quest;
     }
@@ -173,6 +180,9 @@ public class NPCQuest extends QuestBase {
             obj.addProperty("npc_uuid", this.npcUuid.toString());
         if (withId) {
             obj.addProperty("id", this.originID.toString());
+        }
+        if (full || this.global) {
+            obj.addProperty("global", this.global);
         }
         obj.addProperty(QuestBase.TYPE_ID, ID.toString());
         return obj;
@@ -267,6 +277,7 @@ public class NPCQuest extends QuestBase {
         private final List<ResourceLocation> npcDataID;
         private final List<ResourceLocation> quests = new ArrayList<>();
         private final ResourceLocation loot;
+        private boolean global;
 
         public Builder(ResourceLocation id, String task, ResourceLocation npcDataID, ResourceLocation loot) {
             this(id, task, List.of(npcDataID), loot);
@@ -288,6 +299,11 @@ public class NPCQuest extends QuestBase {
             return this;
         }
 
+        public Builder global() {
+            this.global = true;
+            return this;
+        }
+
         public ResourceLocation getID() {
             return this.id;
         }
@@ -302,7 +318,7 @@ public class NPCQuest extends QuestBase {
             if (this.quests.isEmpty())
                 throw new IllegalStateException("Quests not defined");
             return new NPCQuest(this.id, this.category, this.questTaskString, this.questDesc, this.neededParentQuests, this.redoParent, this.repeatDelay, this.sortingId,
-                    this.unlockCondition, this.npcDataID, this.quests, this.loot);
+                    this.unlockCondition, this.npcDataID, this.quests, this.loot, this.global);
         }
     }
 }

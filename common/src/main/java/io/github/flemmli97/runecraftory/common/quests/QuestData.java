@@ -100,7 +100,8 @@ public class QuestData implements PlayerQuestData {
                 || (!quest.neededParentQuests.isEmpty() && !this.unlockTracker.containsAll(quest.neededParentQuests))) {
             return AcceptType.REQUIREMENTS;
         }
-        if (this.finishedQuestDay > 3) {
+        ResourceLocation id = quest instanceof NPCQuest npcQuest && npcQuest.global ? npcQuest.getOriginID() : quest.id;
+        if (this.finishedQuestDay > 3 || (quest.repeatDelay < 0 && this.getTimesCompleted(id) > 0)) {
             return AcceptType.LIMIT;
         }
         return AcceptType.ACCEPT;
@@ -194,6 +195,10 @@ public class QuestData implements PlayerQuestData {
             this.unlockTracker.add(id);
             this.finishedQuestsTracker.compute(id, (key, i) -> i == null ? 1 : ++i);
         });
+        if (prog.getQuest() instanceof NPCQuest npcQuest && npcQuest.global) {
+            this.unlockTracker.add(npcQuest.getOriginID());
+            this.finishedQuestsTracker.compute(npcQuest.getOriginID(), (key, i) -> i == null ? 1 : ++i);
+        }
         this.finishedQuestDay++;
         this.player.level.playSound(null, this.player.getX(), this.player.getY(), this.player.getZ(), SoundEvents.PLAYER_LEVELUP, this.player.getSoundSource(), 2 * 0.75f, 1.0f);
         if (!prog.getQuest().neededParentQuests.isEmpty() && prog.getQuest().redoParent) {
