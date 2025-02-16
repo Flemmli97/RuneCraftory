@@ -74,11 +74,11 @@ public class SkelefangParticleData implements ParticleOptions {
     public static Codec<SkelefangParticleData> codec() {
         return RecordCodecBuilder.create((builder) -> builder.group(
                         CodecUtils.stringEnumCodec(SkelefangBoneType.class, SkelefangBoneType.GENERIC).fieldOf("bone").forGetter(SkelefangParticleData::getBoneType),
-                        Codec.FLOAT.fieldOf("initX").forGetter(SkelefangParticleData::getInitialRotX),
-                        Codec.FLOAT.fieldOf("initY").forGetter(SkelefangParticleData::getInitialRotY),
-                        Codec.FLOAT.fieldOf("rotX").forGetter(SkelefangParticleData::getPitchSpin),
-                        Codec.FLOAT.fieldOf("rotY").forGetter(SkelefangParticleData::getYawSpin),
-                        Codec.INT.fieldOf("maxTicks").forGetter(SkelefangParticleData::getMaxTime),
+                        Codec.FLOAT.fieldOf("init_x").forGetter(SkelefangParticleData::getInitialRotX),
+                        Codec.FLOAT.fieldOf("init_y").forGetter(SkelefangParticleData::getInitialRotY),
+                        Codec.FLOAT.fieldOf("rot_x").forGetter(SkelefangParticleData::getPitchSpin),
+                        Codec.FLOAT.fieldOf("rot_y").forGetter(SkelefangParticleData::getYawSpin),
+                        Codec.INT.fieldOf("max_ticks").forGetter(SkelefangParticleData::getMaxTime),
                         Codec.BOOL.fieldOf("gravity").forGetter(SkelefangParticleData::hasGravity))
                 .apply(builder, (bone, initX, initY, rotX, rotY, maxTick, gravity) -> new SkelefangParticleData(bone, initX, initY, rotX, rotX, maxTick, gravity)));
     }

@@ -30,22 +30,22 @@ public class EntityProperties {
 
     public static final Codec<EntityProperties> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(
-                    Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("baseValues").forGetter(d -> d.baseValues),
-                    Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("levelGains").forGetter(d -> d.levelGains),
-                    CodecHelper.ENTITY_PREDICATE_CODEC.optionalFieldOf("spawnerPredicate").forGetter(d -> Optional.ofNullable(d.spawnerPredicate == EntityPredicate.ANY ? null : d.spawnerPredicate)),
+                    Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("base_values").forGetter(d -> d.baseValues),
+                    Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("level_gains").forGetter(d -> d.levelGains),
+                    CodecHelper.ENTITY_PREDICATE_CODEC.optionalFieldOf("spawner_predicate").forGetter(d -> Optional.ofNullable(d.spawnerPredicate == EntityPredicate.ANY ? null : d.spawnerPredicate)),
 
-                    Codec.BOOL.fieldOf("needsRoof").forGetter(d -> d.needsRoof),
-                    OnKilledIncrease.CODEC.listOf().optionalFieldOf("levelIncreaseOnKill").forGetter(d -> d.levelIncreaseOnKill.isEmpty() ? Optional.empty() : Optional.of(d.levelIncreaseOnKill)),
-                    EntityRideActionCosts.CODEC.fieldOf("rideActionCosts").forGetter(d -> d.rideActionCosts),
+                    Codec.BOOL.fieldOf("needs_roof").forGetter(d -> d.needsRoof),
+                    OnKilledIncrease.CODEC.listOf().optionalFieldOf("level_increase_on_kill").forGetter(d -> d.levelIncreaseOnKill.isEmpty() ? Optional.empty() : Optional.of(d.levelIncreaseOnKill)),
+                    EntityRideActionCosts.CODEC.fieldOf("ride_action_costs").forGetter(d -> d.rideActionCosts),
 
                     Codec.BOOL.fieldOf("rideable").forGetter(d -> d.rideable),
                     Codec.BOOL.fieldOf("flying").forGetter(d -> d.flying),
                     ExtraCodecs.POSITIVE_INT.fieldOf("size").forGetter(d -> d.size),
 
-                    ExtraCodecs.POSITIVE_INT.fieldOf("minLevel").forGetter(d -> d.minLevel),
+                    ExtraCodecs.POSITIVE_INT.fieldOf("min_level").forGetter(d -> d.minLevel),
                     ExtraCodecs.NON_NEGATIVE_INT.fieldOf("xp").forGetter(d -> d.xp),
                     ExtraCodecs.NON_NEGATIVE_INT.fieldOf("money").forGetter(d -> d.money),
-                    Codec.FLOAT.fieldOf("tamingChance").forGetter(d -> d.tamingChance)
+                    Codec.FLOAT.fieldOf("taming_chance").forGetter(d -> d.tamingChance)
             ).apply(instance, (baseValues, levelGains, spawnerPredicate, needsRoof, levelIncreaseOnKill, rideActionCosts, rideable, flying, size, minLevel, xp, money, tamingChance) ->
                     new EntityProperties(minLevel, xp, money, tamingChance, rideable, flying, size, needsRoof, rideActionCosts, baseValues, levelGains, levelIncreaseOnKill.orElse(List.of()), spawnerPredicate.orElse(EntityPredicate.ANY))));
 
@@ -101,7 +101,7 @@ public class EntityProperties {
 
         public static final Codec<OnKilledIncrease> CODEC = RecordCodecBuilder.create(inst ->
                 inst.group(
-                        Codec.INT.fieldOf("minKilled").forGetter(d -> d.minKilled),
+                        Codec.INT.fieldOf("min_killed").forGetter(d -> d.minKilled),
                         Codec.INT.fieldOf("increase").forGetter(d -> d.increase),
                         CodecHelper.ENTITY_PREDICATE_CODEC.optionalFieldOf("predicate").forGetter(d -> Optional.ofNullable(d.condition == EntityPredicate.ANY ? null : d.condition))
                 ).apply(inst, (minKilled, increase, predicate) -> new OnKilledIncrease(minKilled, increase, predicate.orElse(EntityPredicate.ANY))));

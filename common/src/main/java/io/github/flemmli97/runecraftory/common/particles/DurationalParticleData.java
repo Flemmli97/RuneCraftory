@@ -55,7 +55,7 @@ public class DurationalParticleData extends ColoredParticleData {
                         Codec.FLOAT.fieldOf("alpha").forGetter(ColoredParticleData::getAlpha),
                         Codec.FLOAT.fieldOf("scale").forGetter(ColoredParticleData::getScale),
                         Codec.INT.fieldOf("duration").forGetter(DurationalParticleData::getDuration),
-                        Codec.INT.fieldOf("entityAnchor").forGetter(DurationalParticleData::getEntityAnchor))
+                        Codec.INT.fieldOf("entity_anchor").forGetter(DurationalParticleData::getEntityAnchor))
                 .apply(builder, DurationalParticleData::new));
     }
 

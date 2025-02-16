@@ -94,7 +94,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             inst.group(
                     filledMap(Codec.unboundedMap(ResourceLocation.CODEC.flatComapMap(ConversationContext::get, ctx -> DataResult.success(ctx.key())), ResourceLocation.CODEC))
                             .fieldOf("interactions").forGetter(d -> d.interactions),
-                    QuestHandler.CODEC.fieldOf("questHandler").forGetter(d -> d.questHandler),
+                    QuestHandler.CODEC.fieldOf("quest_handler").forGetter(d -> d.questHandler),
                     NPCSchedule.Schedule.CODEC.optionalFieldOf("schedule").forGetter(d -> Optional.ofNullable(d.schedule)),
                     NPCCombat.CODEC.optionalFieldOf("combat").forGetter(d -> {
                         NPCCombat combat = new NPCCombat(d.baseStats, d.statIncrease, d.baseLevel, d.combatActions);
@@ -104,8 +104,8 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                     }),
 
                     RelationStruct.CODEC.fieldOf("relation").forGetter(d -> new RelationStruct(d.relationShipState, d.possibleChildren)),
-                    Codec.STRING.fieldOf("neutralGiftResponse").forGetter(d -> d.neutralGiftResponse),
-                    Codec.unboundedMap(Codec.STRING, Gift.CODEC).fieldOf("giftItems").forGetter(d -> d.giftItems),
+                    Codec.STRING.fieldOf("neutral_gift_response").forGetter(d -> d.neutralGiftResponse),
+                    Codec.unboundedMap(Codec.STRING, Gift.CODEC).fieldOf("gift_items").forGetter(d -> d.giftItems),
 
                     NPCLookId.CODEC.listOf().optionalFieldOf("look").forGetter(d -> Optional.ofNullable(d.look == null || d.look.isEmpty() ? null : d.look)),
                     WorldUtils.DATE.optionalFieldOf("birthday").forGetter(d -> Optional.ofNullable(d.birthday)),
@@ -172,8 +172,8 @@ public record NPCData(@Nullable String name, @Nullable String surname,
 
         public static final Codec<RelationStruct> CODEC = RecordCodecBuilder.create(inst ->
                 inst.group(
-                        CodecUtils.stringEnumCodec(RelationShipState.class, RelationShipState.DEFAULT).fieldOf("relationShipState").forGetter(d -> d.relationShipState),
-                        ResourceLocation.CODEC.listOf().optionalFieldOf("possibleChildren").forGetter(d -> d.possibleChildren.isEmpty() ? Optional.empty() : Optional.of(d.possibleChildren))
+                        CodecUtils.stringEnumCodec(RelationShipState.class, RelationShipState.DEFAULT).fieldOf("relation_ship_state").forGetter(d -> d.relationShipState),
+                        ResourceLocation.CODEC.listOf().optionalFieldOf("possible_children").forGetter(d -> d.possibleChildren.isEmpty() ? Optional.empty() : Optional.of(d.possibleChildren))
                 ).apply(inst, (state, childs) -> new RelationStruct(state, childs.orElse(List.of()))));
 
     }
@@ -183,10 +183,10 @@ public record NPCData(@Nullable String name, @Nullable String surname,
 
         public static final Codec<NPCCombat> CODEC = RecordCodecBuilder.create(inst ->
                 inst.group(
-                        ExtraCodecs.POSITIVE_INT.optionalFieldOf("baseLevel").forGetter(d -> d.baseLevel != 1 ? Optional.of(d.baseLevel) : Optional.empty()),
-                        ResourceLocation.CODEC.listOf().optionalFieldOf("combatActions").forGetter(d -> Optional.ofNullable(d.npcAction == null || d.npcAction.isEmpty() ? null : d.npcAction)),
-                        Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).optionalFieldOf("baseStats").forGetter(d -> Optional.ofNullable(d.baseStats)),
-                        Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).optionalFieldOf("statIncrease").forGetter(d -> Optional.ofNullable(d.statIncrease))
+                        ExtraCodecs.POSITIVE_INT.optionalFieldOf("base_level").forGetter(d -> d.baseLevel != 1 ? Optional.of(d.baseLevel) : Optional.empty()),
+                        ResourceLocation.CODEC.listOf().optionalFieldOf("combat_actions").forGetter(d -> Optional.ofNullable(d.npcAction == null || d.npcAction.isEmpty() ? null : d.npcAction)),
+                        Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).optionalFieldOf("base_stats").forGetter(d -> Optional.ofNullable(d.baseStats)),
+                        Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).optionalFieldOf("stat_increase").forGetter(d -> Optional.ofNullable(d.statIncrease))
                 ).apply(inst, (lvl, action, stats, inc) -> new NPCCombat(stats.orElse(null), inc.orElse(null), lvl.orElse(1), action.orElse(null))));
 
         public boolean isNone() {
@@ -198,7 +198,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         public static final Codec<QuestHandler> CODEC = RecordCodecBuilder.create(inst ->
                 inst.group(
                         Codec.unboundedMap(ResourceLocation.CODEC, QuestResponses.CODEC).fieldOf("responses").forGetter(d -> d.responses),
-                        ResourceLocation.CODEC.listOf().fieldOf("requiredQuests").forGetter(d -> List.copyOf(d.requiredQuests))
+                        ResourceLocation.CODEC.listOf().fieldOf("required_quests").forGetter(d -> List.copyOf(d.requiredQuests))
                 ).apply(inst, (responses, required) -> new QuestHandler(responses, Set.copyOf(required))));
     }
 
@@ -206,9 +206,9 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                                  ResourceLocation endID) {
         public static final Codec<QuestResponses> CODEC = RecordCodecBuilder.create(inst ->
                 inst.group(
-                        ResourceLocation.CODEC.fieldOf("startID").forGetter(d -> d.startID),
-                        ResourceLocation.CODEC.fieldOf("activeID").forGetter(d -> d.activeID),
-                        ResourceLocation.CODEC.fieldOf("endID").forGetter(d -> d.endID)
+                        ResourceLocation.CODEC.fieldOf("start_id").forGetter(d -> d.startID),
+                        ResourceLocation.CODEC.fieldOf("active_id").forGetter(d -> d.activeID),
+                        ResourceLocation.CODEC.fieldOf("end_id").forGetter(d -> d.endID)
                 ).apply(inst, QuestResponses::new));
     }
 
@@ -393,7 +393,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
 
         public static final Codec<ConversationSet> CODEC = RecordCodecBuilder.create(inst ->
                 inst.group(
-                        Codec.STRING.optionalFieldOf("fallbackKey").forGetter(d -> Optional.of(d.fallbackKey())),
+                        Codec.STRING.optionalFieldOf("fallback_key").forGetter(d -> Optional.of(d.fallbackKey())),
                         Codec.unboundedMap(Codec.STRING, Conversation.CODEC).fieldOf("conversations").forGetter(d -> d.conversations)
                 ).apply(inst, (fallback, convs) -> new ConversationSet(fallback.orElse(""), convs)));
 
@@ -481,13 +481,13 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         });
         public static final Codec<Conversation> CODEC = RecordCodecBuilder.create(inst ->
                 inst.group(
-                        Codec.BOOL.optionalFieldOf("startingConversation").forGetter(d -> d.startingConversation ? Optional.empty() : Optional.of(false)),
+                        Codec.BOOL.optionalFieldOf("starting_conversation").forGetter(d -> d.startingConversation ? Optional.empty() : Optional.of(false)),
                         ConversationActionHolder.CODEC.listOf().optionalFieldOf("actions").forGetter(d -> d.actions.isEmpty() ? Optional.empty() : Optional.of(d.actions)),
                         LOOT_ITEM_CONDITION_CODEC.listOf().fieldOf("conditions").forGetter(d -> Arrays.stream(d.conditions).toList()),
 
-                        Codec.STRING.fieldOf("translationKey").forGetter(d -> d.translationKey),
-                        CodecUtils.jsonCodecBuilder(GSON, NumberProvider.class, "NumberProvider").optionalFieldOf("minHearts").forGetter(d -> Optional.ofNullable(d.minHearts)),
-                        CodecUtils.jsonCodecBuilder(GSON, NumberProvider.class, "NumberProvider").optionalFieldOf("maxHearts").forGetter(d -> Optional.ofNullable(d.maxHearts))
+                        Codec.STRING.fieldOf("translation_key").forGetter(d -> d.translationKey),
+                        CodecUtils.jsonCodecBuilder(GSON, NumberProvider.class, "NumberProvider").optionalFieldOf("min_hearts").forGetter(d -> Optional.ofNullable(d.minHearts)),
+                        CodecUtils.jsonCodecBuilder(GSON, NumberProvider.class, "NumberProvider").optionalFieldOf("max_hearts").forGetter(d -> Optional.ofNullable(d.maxHearts))
                 ).apply(inst, (start, action, cond, key, min, max) -> new Conversation(key, min.orElse(null), max.orElse(null), start.orElse(true), action.orElse(List.of()), cond.toArray(new LootItemCondition[0]))));
 
         public boolean test(int hearts, LootContext ctx) {
@@ -551,10 +551,10 @@ public record NPCData(@Nullable String name, @Nullable String surname,
 
         public static final Codec<ConversationActionHolder> CODEC = RecordCodecBuilder.create(inst ->
                 inst.group(
-                        Codec.STRING.fieldOf("translationKey").forGetter(d -> d.translationKey),
+                        Codec.STRING.fieldOf("translation_key").forGetter(d -> d.translationKey),
                         CodecUtils.stringEnumCodec(ConversationAction.class, null).fieldOf("actions").forGetter(d -> d.action),
                         Codec.STRING.fieldOf("value").forGetter(d -> d.actionValue),
-                        Codec.INT.optionalFieldOf("friendXP").forGetter(d -> d.friendXP != 0 ? Optional.of(d.friendXP) : Optional.empty())
+                        Codec.INT.optionalFieldOf("friend_xp").forGetter(d -> d.friendXP != 0 ? Optional.of(d.friendXP) : Optional.empty())
                 ).apply(inst, (key, action, value, xp) -> new ConversationActionHolder(key, action, value, xp.orElse(0))));
     }
 
@@ -568,7 +568,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         public static final Codec<Gift> CODEC = RecordCodecBuilder.create(inst ->
                 inst.group(
                         ResourceLocation.CODEC.optionalFieldOf("items").forGetter(d -> Optional.ofNullable(d.item).map(TagKey::location)),
-                        Codec.STRING.fieldOf("responseKey").forGetter(d -> d.responseKey),
+                        Codec.STRING.fieldOf("response_key").forGetter(d -> d.responseKey),
                         Codec.INT.fieldOf("xp").forGetter(d -> d.xp)
                 ).apply(inst, (items, respone, xp) -> new Gift(items.map(PlatformUtils.INSTANCE::itemTag).orElse(null), respone, xp)));
     }
@@ -603,7 +603,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                 inst.group(Codec.STRING.optionalFieldOf("player_skin").forGetter(d -> Optional.ofNullable(d.playerSkin)),
                         CodecUtils.stringEnumCodec(Gender.class, Gender.UNDEFINED).fieldOf("gender").forGetter(d -> d.gender),
                         ExtraCodecs.NON_NEGATIVE_INT.fieldOf("weight").forGetter(d -> d.weight),
-                        NPCFeature.CODEC.listOf().fieldOf("additionalFeatures").forGetter(d -> List.copyOf(d.additionalFeatures.values()))
+                        NPCFeature.CODEC.listOf().fieldOf("additional_features").forGetter(d -> List.copyOf(d.additionalFeatures.values()))
                 ).apply(inst, (skin, gender, weight, features) -> new NPCLook(gender, skin.orElse(null), weight, features
                         .stream().collect(Collectors.toMap(
                                 NPCFeatureHolder::getType,

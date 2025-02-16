@@ -71,7 +71,7 @@ public class ColoredParticleData4f extends ColoredParticleData {
                         Codec.FLOAT.fieldOf("radius").forGetter(ColoredParticleData4f::getRadius),
                         Codec.FLOAT.fieldOf("speed").forGetter(ColoredParticleData4f::getSpeed),
                         Codec.FLOAT.fieldOf("offset").forGetter(ColoredParticleData4f::getOffset),
-                        Codec.FLOAT.fieldOf("angleIncrease").forGetter(ColoredParticleData4f::getAngleIncrease),
+                        Codec.FLOAT.fieldOf("angle_increase").forGetter(ColoredParticleData4f::getAngleIncrease),
                         Codec.FLOAT.fieldOf("expansion").forGetter(ColoredParticleData4f::getExpansion))
                 .apply(builder, (r, g, b, a, scale, radius, inc, offset, angle, exp) -> new ColoredParticleData4f(type, r, g, b, a, scale, radius, inc, offset, angle, exp)));
     }

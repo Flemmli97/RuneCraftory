@@ -25,12 +25,12 @@ public class CropProperties {
 
     public static final Codec<CropProperties> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(Codec.INT.fieldOf("growth").forGetter(d -> d.growth),
-                    Codec.INT.fieldOf("maxDrops").forGetter(d -> d.maxDrops),
+                    Codec.INT.fieldOf("max_drops").forGetter(d -> d.maxDrops),
                     Codec.BOOL.fieldOf("regrowable").forGetter(d -> d.regrowable),
 
-                    Registry.BLOCK.byNameCodec().optionalFieldOf("giantCrop").forGetter(d -> d.giantVersion == Blocks.AIR ? Optional.empty() : Optional.of(d.giantVersion)),
-                    Codec.list(CodecUtils.stringEnumCodec(EnumSeason.class, EnumSeason.SPRING)).fieldOf("bestSeason").forGetter(d -> List.copyOf(d.bestSeason)),
-                    Codec.list(CodecUtils.stringEnumCodec(EnumSeason.class, EnumSeason.SPRING)).fieldOf("badSeason").forGetter(d -> List.copyOf(d.badSeason))
+                    Registry.BLOCK.byNameCodec().optionalFieldOf("giant_crop").forGetter(d -> d.giantVersion == Blocks.AIR ? Optional.empty() : Optional.of(d.giantVersion)),
+                    Codec.list(CodecUtils.stringEnumCodec(EnumSeason.class, EnumSeason.SPRING)).fieldOf("best_season").forGetter(d -> List.copyOf(d.bestSeason)),
+                    Codec.list(CodecUtils.stringEnumCodec(EnumSeason.class, EnumSeason.SPRING)).fieldOf("bad_season").forGetter(d -> List.copyOf(d.badSeason))
             ).apply(instance, (growth, drops, regrowable, giant, best, bad) -> new CropProperties(growth, drops, regrowable, giant.orElse(Blocks.AIR), best, bad)));
 
     public static final CropProperties DEFAULT_PROP = new CropProperties();

@@ -26,9 +26,9 @@ public class NPCTalk implements QuestEntry {
 
     public static final QuestEntryKey<NPCTalk> ID = new QuestEntryKey<>(new ResourceLocation(RuneCraftory.MODID, "npc_talk"));
     public static final Codec<NPCTalk> CODEC = RecordCodecBuilder.create((instance) ->
-            instance.group(ResourceLocation.CODEC.optionalFieldOf("targetNPCId").forGetter(d -> Optional.ofNullable(d.targetNPCId)),
+            instance.group(ResourceLocation.CODEC.optionalFieldOf("target_npcid").forGetter(d -> Optional.ofNullable(d.targetNPCId)),
                             JsonCodecs.ENTITY_PREDICATE_CODEC.optionalFieldOf("predicate").forGetter(d -> d.predicate == EntityPredicate.ANY ? Optional.empty() : Optional.of(d.predicate)),
-                            Codec.STRING.optionalFieldOf("targetNPC").forGetter(d -> d.targetNPC != null ? Optional.of(d.targetNPC.toString()) : Optional.empty()))
+                            Codec.STRING.optionalFieldOf("target_npc").forGetter(d -> d.targetNPC != null ? Optional.of(d.targetNPC.toString()) : Optional.empty()))
                     .apply(instance, (generic, predicate, target) -> new NPCTalk(generic.orElse(null), predicate.orElse(EntityPredicate.ANY), target.map(UUID::fromString).orElse(null))));
 
     private final ResourceLocation targetNPCId;

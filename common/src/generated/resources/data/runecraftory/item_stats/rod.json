@@ -1,17 +1,17 @@
 {
-  "buyPrice": 281,
-  "sellPrice": 32,
-  "upgradeDifficulty": 0,
-  "itemStats": {
+  "buy_price": 281,
+  "sell_price": 32,
+  "upgrade_difficulty": 0,
+  "item_stats": {
     "runecraftory:magic_attack": 5.0,
     "runecraftory:dizzy": 15.0,
     "runecraftory:attack_range": 0.0,
     "runecraftory:attack_width": 1.5
   },
-  "monsterBonus": {
+  "monster_bonus": {
     "runecraftory:magic_attack": 0.5
   },
   "element": "FIRE",
-  "tier1Spell": "runecraftory:fireball",
+  "tier_1_Spell": "runecraftory:fireball",
   "item": "runecraftory:rod"
 }

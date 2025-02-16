@@ -87,8 +87,8 @@ public record ColorSetting(List<Either<Integer, ColorRange>> colors) {
             }
         }, i -> DataResult.success(String.format("%06x", i)));
         public static final Codec<ColorRange> CODEC = RecordCodecBuilder.create(inst ->
-                inst.group(HEX_COLOR.fieldOf("colorMin").forGetter(d -> d.colorMin),
-                        HEX_COLOR.fieldOf("colorMax").forGetter(d -> d.colorMax)).apply(inst, ColorRange::new));
+                inst.group(HEX_COLOR.fieldOf("color_min").forGetter(d -> d.colorMin),
+                        HEX_COLOR.fieldOf("color_max").forGetter(d -> d.colorMax)).apply(inst, ColorRange::new));
 
         static int randomRange(Random random, int first, int second) {
             if (first > second)

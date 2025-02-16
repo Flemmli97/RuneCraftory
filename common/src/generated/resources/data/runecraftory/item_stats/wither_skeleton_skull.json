@@ -1,15 +1,15 @@
 {
-  "buyPrice": 5000,
-  "sellPrice": 170,
-  "upgradeDifficulty": 29,
-  "itemStats": {
+  "buy_price": 5000,
+  "sell_price": 170,
+  "upgrade_difficulty": 29,
+  "item_stats": {
     "minecraft:generic.attack_damage": 5.0,
     "runecraftory:magic_attack": 20.0
   },
-  "monsterBonus": {
+  "monster_bonus": {
     "runecraftory:magic_attack": 1.0
   },
   "element": "DARK",
-  "tier1Spell": "runecraftory:vanilla_wither_skull",
+  "tier_1_Spell": "runecraftory:vanilla_wither_skull",
   "item": "minecraft:wither_skeleton_skull"
 }

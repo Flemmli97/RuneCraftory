@@ -1,20 +1,20 @@
 {
-  "buyPrice": 30000,
-  "sellPrice": 1000,
-  "upgradeDifficulty": 37,
-  "itemStats": {
+  "buy_price": 30000,
+  "sell_price": 1000,
+  "upgrade_difficulty": 37,
+  "item_stats": {
     "minecraft:generic.attack_damage": 6.0,
     "runecraftory:magic_attack": 9.0,
     "runecraftory:paralysis": 5.0,
     "runecraftory:seal": 15.0
   },
-  "monsterBonus": {
+  "monster_bonus": {
     "runecraftory:paralysis": 0.5,
     "runecraftory:seal": 0.5
   },
   "element": "NONE",
-  "tier1Spell": "runecraftory:dark_beam",
-  "tier2Spell": "runecraftory:big_plate",
-  "tier3Spell": "runecraftory:dark_bullets",
+  "tier_1_Spell": "runecraftory:dark_beam",
+  "tier_2_Spell": "runecraftory:big_plate",
+  "tier_3_Spell": "runecraftory:dark_bullets",
   "item": "runecraftory:puppetry_strings"
 }

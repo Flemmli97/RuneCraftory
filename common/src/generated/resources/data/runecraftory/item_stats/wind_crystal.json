@@ -1,16 +1,16 @@
 {
-  "buyPrice": 2000,
-  "sellPrice": 150,
-  "upgradeDifficulty": 20,
-  "itemStats": {
+  "buy_price": 2000,
+  "sell_price": 150,
+  "upgrade_difficulty": 20,
+  "item_stats": {
     "runecraftory:magic_defence": 5.0
   },
-  "monsterBonus": {
+  "monster_bonus": {
     "runecraftory:magic_defence": 2.0
   },
   "element": "WIND",
-  "tier1Spell": "runecraftory:double_sonic",
-  "tier2Spell": "runecraftory:quadruple_wind_blade",
-  "tier3Spell": "runecraftory:sextuple_wind_blade",
+  "tier_1_Spell": "runecraftory:double_sonic",
+  "tier_2_Spell": "runecraftory:quadruple_wind_blade",
+  "tier_3_Spell": "runecraftory:sextuple_wind_blade",
   "item": "runecraftory:wind_crystal"
 }

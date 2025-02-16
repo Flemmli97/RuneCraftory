@@ -1,16 +1,16 @@
 {
-  "buyPrice": 750,
-  "sellPrice": 49,
-  "upgradeDifficulty": 22,
-  "itemStats": {
+  "buy_price": 750,
+  "sell_price": 49,
+  "upgrade_difficulty": 22,
+  "item_stats": {
     "minecraft:generic.max_health": 15.0,
     "runecraftory:defence": 3.0,
     "runecraftory:magic_attack": 2.0
   },
-  "monsterBonus": {
+  "monster_bonus": {
     "minecraft:generic.max_health": 2.0
   },
   "element": "NONE",
-  "tier1Spell": "runecraftory:vanilla_ghast_fireball",
+  "tier_1_Spell": "runecraftory:vanilla_ghast_fireball",
   "item": "minecraft:ghast_tear"
 }

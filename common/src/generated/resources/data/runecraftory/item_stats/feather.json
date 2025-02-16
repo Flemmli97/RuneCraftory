@@ -1,14 +1,14 @@
 {
-  "buyPrice": 85,
-  "sellPrice": 7,
-  "upgradeDifficulty": 11,
-  "itemStats": {
+  "buy_price": 85,
+  "sell_price": 7,
+  "upgrade_difficulty": 11,
+  "item_stats": {
     "runecraftory:magic_attack": 2.0
   },
-  "monsterBonus": {
+  "monster_bonus": {
     "runecraftory:magic_attack": 0.5
   },
   "element": "NONE",
-  "tier3Spell": "runecraftory:gust_wind",
+  "tier_3_Spell": "runecraftory:gust_wind",
   "item": "minecraft:feather"
 }

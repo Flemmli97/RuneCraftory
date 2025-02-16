@@ -1,14 +1,14 @@
 {
-  "buyPrice": 110,
-  "sellPrice": 19,
-  "upgradeDifficulty": 9,
-  "itemStats": {
+  "buy_price": 110,
+  "sell_price": 19,
+  "upgrade_difficulty": 9,
+  "item_stats": {
     "runecraftory:magic_attack": 2.0
   },
-  "monsterBonus": {
+  "monster_bonus": {
     "runecraftory:magic_attack": 1.0
   },
   "element": "NONE",
-  "tier2Spell": "runecraftory:spore_circle",
+  "tier_2_Spell": "runecraftory:spore_circle",
   "item": "runecraftory:spore"
 }

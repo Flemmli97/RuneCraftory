@@ -48,19 +48,19 @@ public class ItemStat {
 
     public static final Codec<ItemStat> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(
-                    CodecUtils.registryCodec(ModSpells.SPELL_REGISTRY_KEY).optionalFieldOf("tier3Spell").forGetter(s -> Optional.ofNullable(s.getTier3Spell())),
-                    CodecUtils.registryCodec(ModArmorEffects.ARMOR_EFFECT_KEY).optionalFieldOf("armorEffect").forGetter(s -> Optional.ofNullable(s.getArmorEffect())),
+                    CodecUtils.registryCodec(ModSpells.SPELL_REGISTRY_KEY).optionalFieldOf("tier_3_Spell").forGetter(s -> Optional.ofNullable(s.getTier3Spell())),
+                    CodecUtils.registryCodec(ModArmorEffects.ARMOR_EFFECT_KEY).optionalFieldOf("armor_effect").forGetter(s -> Optional.ofNullable(s.getArmorEffect())),
 
                     CodecUtils.stringEnumCodec(EnumElement.class, EnumElement.NONE).orElse(EnumElement.NONE).fieldOf("element").forGetter(ItemStat::element),
-                    CodecUtils.registryCodec(ModSpells.SPELL_REGISTRY_KEY).optionalFieldOf("tier1Spell").forGetter(s -> Optional.ofNullable(s.getTier1Spell())),
-                    CodecUtils.registryCodec(ModSpells.SPELL_REGISTRY_KEY).optionalFieldOf("tier2Spell").forGetter(s -> Optional.ofNullable(s.getTier2Spell())),
+                    CodecUtils.registryCodec(ModSpells.SPELL_REGISTRY_KEY).optionalFieldOf("tier_1_Spell").forGetter(s -> Optional.ofNullable(s.getTier1Spell())),
+                    CodecUtils.registryCodec(ModSpells.SPELL_REGISTRY_KEY).optionalFieldOf("tier_2_Spell").forGetter(s -> Optional.ofNullable(s.getTier2Spell())),
 
-                    Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("itemStats").forGetter(ItemStat::itemStats),
-                    Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("monsterBonus").forGetter(ItemStat::getMonsterGiftIncrease),
+                    Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("item_stats").forGetter(ItemStat::itemStats),
+                    Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("monster_bonus").forGetter(ItemStat::getMonsterGiftIncrease),
 
-                    ExtraCodecs.NON_NEGATIVE_INT.fieldOf("buyPrice").forGetter(ItemStat::getBuy),
-                    ExtraCodecs.NON_NEGATIVE_INT.fieldOf("sellPrice").forGetter(ItemStat::getSell),
-                    ExtraCodecs.NON_NEGATIVE_INT.fieldOf("upgradeDifficulty").forGetter(ItemStat::getDiff)
+                    ExtraCodecs.NON_NEGATIVE_INT.fieldOf("buy_price").forGetter(ItemStat::getBuy),
+                    ExtraCodecs.NON_NEGATIVE_INT.fieldOf("sell_price").forGetter(ItemStat::getSell),
+                    ExtraCodecs.NON_NEGATIVE_INT.fieldOf("upgrade_difficulty").forGetter(ItemStat::getDiff)
             ).apply(instance, ((spell3, armorEffect, element, spell, spell2, atts, monster, buy, sell, upgrade) ->
                     new ItemStat(buy, sell, upgrade, element, spell.orElse(null), spell2.orElse(null), spell3.orElse(null), armorEffect.orElse(null), atts, monster))));
 

@@ -1,19 +1,19 @@
 {
-  "buyPrice": 18000,
-  "sellPrice": 1500,
-  "upgradeDifficulty": 50,
-  "itemStats": {
+  "buy_price": 18000,
+  "sell_price": 1500,
+  "upgrade_difficulty": 50,
+  "item_stats": {
     "minecraft:generic.attack_damage": 15.0,
     "runecraftory:magic_attack": 2.0,
     "runecraftory:paralysis": 5.0,
     "runecraftory:poison": 5.0
   },
-  "monsterBonus": {
+  "monster_bonus": {
     "minecraft:generic.attack_damage": 2.0,
     "runecraftory:paralysis": 1.0,
     "runecraftory:poison": 1.0
   },
   "element": "NONE",
-  "tier2Spell": "runecraftory:slash",
+  "tier_2_Spell": "runecraftory:slash",
   "item": "runecraftory:chimeras_claw"
 }

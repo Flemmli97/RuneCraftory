@@ -20,13 +20,13 @@ import java.util.function.Supplier;
 public class SpellAttackAction implements NPCAction {
 
     public static final Codec<SpellAttackAction> CODEC = RecordCodecBuilder.create((instance) ->
-            instance.group(CodecHelper.NUMER_PROVIDER_CODEC.fieldOf("walkTime").forGetter(d -> d.walkTime),
+            instance.group(CodecHelper.NUMER_PROVIDER_CODEC.fieldOf("walk_time").forGetter(d -> d.walkTime),
                     NPCAction.optionalNum(d -> d.cooldown),
                     NPCAction.optionalNum(d -> d.combos, CONST_ONE),
 
                     CodecUtils.registryCodec(ModSpells.SPELL_REGISTRY_KEY).fieldOf("spell").forGetter(d -> d.spell),
                     Codec.DOUBLE.fieldOf("range").forGetter(d -> d.range),
-                    Codec.BOOL.fieldOf("ignoreSeal").forGetter(d -> d.ignoreSeal)
+                    Codec.BOOL.fieldOf("ignore_seal").forGetter(d -> d.ignoreSeal)
             ).apply(instance, (walkTime, cooldown, combos, spell, range, ignoreSeal) -> new SpellAttackAction(spell, range, ignoreSeal, walkTime, cooldown.orElse(NPCAction.CONST_ZERO), combos.orElse(NPCAction.CONST_ONE))));
 
     private final Spell spell;

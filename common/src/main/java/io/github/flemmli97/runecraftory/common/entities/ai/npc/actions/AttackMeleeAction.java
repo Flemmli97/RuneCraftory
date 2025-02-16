@@ -19,7 +19,7 @@ import java.util.function.Supplier;
 public class AttackMeleeAction implements NPCAction {
 
     public static final Codec<AttackMeleeAction> CODEC = RecordCodecBuilder.create((instance) ->
-            instance.group(CodecHelper.NUMER_PROVIDER_CODEC.fieldOf("walkTime").forGetter(d -> d.walkTime),
+            instance.group(CodecHelper.NUMER_PROVIDER_CODEC.fieldOf("walk_time").forGetter(d -> d.walkTime),
                     NPCAction.optionalNum(d -> d.cooldown),
                     Codec.FLOAT.fieldOf("speed").forGetter(d -> d.speed)
             ).apply(instance, AttackMeleeAction::new));

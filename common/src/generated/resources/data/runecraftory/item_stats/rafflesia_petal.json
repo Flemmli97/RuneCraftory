@@ -1,21 +1,21 @@
 {
-  "buyPrice": 30000,
-  "sellPrice": 3400,
-  "upgradeDifficulty": 55,
-  "itemStats": {
+  "buy_price": 30000,
+  "sell_price": 3400,
+  "upgrade_difficulty": 55,
+  "item_stats": {
     "minecraft:generic.attack_damage": 5.0,
     "runecraftory:magic_attack": 18.0,
     "runecraftory:fatigue": 20.0,
     "runecraftory:cold": 15.0
   },
-  "monsterBonus": {
+  "monster_bonus": {
     "runecraftory:magic_attack": 1.0,
     "runecraftory:fatigue": 1.0,
     "runecraftory:cold": 1.0
   },
   "element": "NONE",
-  "tier1Spell": "runecraftory:wind_circle_x8",
-  "tier2Spell": "runecraftory:rafflesia_cicle",
-  "tier3Spell": "runecraftory:rafflesia_poison",
+  "tier_1_Spell": "runecraftory:wind_circle_x8",
+  "tier_2_Spell": "runecraftory:rafflesia_cicle",
+  "tier_3_Spell": "runecraftory:rafflesia_poison",
   "item": "runecraftory:rafflesia_petal"
 }

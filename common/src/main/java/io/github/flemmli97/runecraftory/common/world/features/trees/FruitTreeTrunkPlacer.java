@@ -25,10 +25,10 @@ import java.util.function.BiConsumer;
 public class FruitTreeTrunkPlacer extends TrunkPlacer {
 
     public static final Codec<FruitTreeTrunkPlacer> CODEC = RecordCodecBuilder.create(instance ->
-            instance.group(Codec.INT.fieldOf("baseHeight").forGetter(d -> d.baseHeight),
-                    Codec.INT.fieldOf("heightRandA").forGetter(d -> d.heightRandA),
-                    Codec.INT.fieldOf("minBranches").forGetter(d -> d.minBranches),
-                    Codec.INT.fieldOf("maxBranches").forGetter(d -> d.maxBranches)
+            instance.group(Codec.INT.fieldOf("base_height").forGetter(d -> d.baseHeight),
+                    Codec.INT.fieldOf("height_rand_a").forGetter(d -> d.heightRandA),
+                    Codec.INT.fieldOf("min_branches").forGetter(d -> d.minBranches),
+                    Codec.INT.fieldOf("max_branches").forGetter(d -> d.maxBranches)
             ).apply(instance, FruitTreeTrunkPlacer::new));
 
     private final int minBranches, maxBranches;

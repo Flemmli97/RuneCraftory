@@ -19,7 +19,7 @@ public class RunAwayAction implements NPCAction {
     public static final Codec<RunAwayAction> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(CodecHelper.NUMER_PROVIDER_CODEC.fieldOf("duration").forGetter(d -> d.duration),
                     NPCAction.optionalNum(d -> d.cooldown),
-                    Codec.FLOAT.fieldOf("maxDist").forGetter(d -> d.maxDist),
+                    Codec.FLOAT.fieldOf("max_dist").forGetter(d -> d.maxDist),
                     Codec.FLOAT.fieldOf("speed").forGetter(d -> d.speed)
             ).apply(instance, RunAwayAction::new));
 

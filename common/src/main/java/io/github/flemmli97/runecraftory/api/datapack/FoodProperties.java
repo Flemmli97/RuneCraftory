@@ -34,14 +34,14 @@ public class FoodProperties {
 
     public static final Codec<FoodProperties> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(
-                    Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("cookingBonusPercent").forGetter(d -> d.cookingBonusPercent),
-                    SimpleEffect.CODEC.listOf().fieldOf("potionApply").forGetter(d -> Arrays.asList(d.potionApply)),
-                    Registry.MOB_EFFECT.byNameCodec().listOf().fieldOf("potionRemove").forGetter(d -> Arrays.asList(d.potionRemove)),
+                    Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("cooking_bonus_percent").forGetter(d -> d.cookingBonusPercent),
+                    SimpleEffect.CODEC.listOf().fieldOf("potion_apply").forGetter(d -> Arrays.asList(d.potionApply)),
+                    Registry.MOB_EFFECT.byNameCodec().listOf().fieldOf("potion_remove").forGetter(d -> Arrays.asList(d.potionRemove)),
 
                     Codec.INT.fieldOf("duration").forGetter(d -> d.duration),
                     Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("effects").forGetter(d -> d.effects),
-                    Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("effectsPercentage").forGetter(d -> d.effectsPercentage),
-                    Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("cookingBonus").forGetter(d -> d.cookingBonus)
+                    Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("effects_percentage").forGetter(d -> d.effectsPercentage),
+                    Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("cooking_bonus").forGetter(d -> d.cookingBonus)
             ).apply(instance, (cookingPercent, potion, remove, duration, effects, effPercent, cooking) -> new FoodProperties(duration, effects, effPercent, cooking, cookingPercent, potion, remove)));
 
     private final Map<Attribute, Double> effects = new TreeMap<>(ModAttributes.SORTED);
