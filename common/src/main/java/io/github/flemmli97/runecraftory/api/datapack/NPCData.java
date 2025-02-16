@@ -95,6 +95,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                     filledMap(Codec.unboundedMap(ResourceLocation.CODEC.flatComapMap(ConversationContext::get, ctx -> DataResult.success(ctx.key())), ResourceLocation.CODEC))
                             .fieldOf("interactions").forGetter(d -> d.interactions),
                     QuestHandler.CODEC.fieldOf("quest_handler").forGetter(d -> d.questHandler),
+
                     NPCSchedule.Schedule.CODEC.optionalFieldOf("schedule").forGetter(d -> Optional.ofNullable(d.schedule)),
                     NPCCombat.CODEC.optionalFieldOf("combat").forGetter(d -> {
                         NPCCombat combat = new NPCCombat(d.baseStats, d.statIncrease, d.baseLevel, d.combatActions);

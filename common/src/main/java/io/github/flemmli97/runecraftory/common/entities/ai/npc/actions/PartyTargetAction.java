@@ -20,7 +20,7 @@ public class PartyTargetAction implements NPCAction {
     public static final Codec<PartyTargetAction> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(CodecUtils.registryCodec(ModSpells.SPELL_REGISTRY_KEY).fieldOf("spell").forGetter(d -> d.spell),
                     Codec.BOOL.fieldOf("ignore_seal").forGetter(d -> d.ignoreSeal),
-                    NPCAction.optionalNum(d -> d.cooldown)
+                    NPCAction.optionalNumCooldown(d -> d.cooldown)
             ).apply(instance, PartyTargetAction::new));
 
     private final Spell spell;

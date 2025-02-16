@@ -16,7 +16,7 @@ public class DoNothingAction implements NPCAction {
 
     public static final Codec<DoNothingAction> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(CodecHelper.NUMER_PROVIDER_CODEC.fieldOf("duration").forGetter(d -> d.duration),
-                    NPCAction.optionalNum(d -> d.cooldown)
+                    NPCAction.optionalNumCooldown(d -> d.cooldown)
             ).apply(instance, DoNothingAction::new));
 
     private final NumberProvider duration;

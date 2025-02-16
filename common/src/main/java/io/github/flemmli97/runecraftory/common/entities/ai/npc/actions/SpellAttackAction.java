@@ -21,8 +21,8 @@ public class SpellAttackAction implements NPCAction {
 
     public static final Codec<SpellAttackAction> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(CodecHelper.NUMER_PROVIDER_CODEC.fieldOf("walk_time").forGetter(d -> d.walkTime),
-                    NPCAction.optionalNum(d -> d.cooldown),
-                    NPCAction.optionalNum(d -> d.combos, CONST_ONE),
+                    NPCAction.optionalNumCooldown(d -> d.cooldown),
+                    NPCAction.optionalNum(d -> d.combos, "combos", CONST_ONE),
 
                     CodecUtils.registryCodec(ModSpells.SPELL_REGISTRY_KEY).fieldOf("spell").forGetter(d -> d.spell),
                     Codec.DOUBLE.fieldOf("range").forGetter(d -> d.range),

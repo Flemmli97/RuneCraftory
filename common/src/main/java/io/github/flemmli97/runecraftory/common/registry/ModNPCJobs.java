@@ -40,15 +40,15 @@ public class ModNPCJobs {
 
     public static final Pair<ResourceLocation, NPCJob> NONE = register(DEFAULT_KEY, new NPCJob(new NPCJob.Builder(null).noShop().noWorkSchedule()));
 
-    public static final Pair<ResourceLocation, NPCJob> GENERAL = register("general", new NPCJob(new NPCJob.Builder(() -> PoiType.FARMER)));
-    public static final Pair<ResourceLocation, NPCJob> FLOWER = register("flowers", new NPCJob(new NPCJob.Builder(() -> PoiType.FARMER)));
+    public static final Pair<ResourceLocation, NPCJob> GENERAL = register("general_store", new NPCJob(new NPCJob.Builder(() -> PoiType.FARMER)));
+    public static final Pair<ResourceLocation, NPCJob> FLOWER = register("florist", new NPCJob(new NPCJob.Builder(() -> PoiType.FARMER)));
     public static final Pair<ResourceLocation, NPCJob> SMITH = register("smith", new Smith(new NPCJob.Builder(() -> PoiType.TOOLSMITH)));
     public static final Pair<ResourceLocation, NPCJob> DOCTOR = register("doctor", new Doctor(new NPCJob.Builder(() -> PoiType.CLERIC)));
     public static final Pair<ResourceLocation, NPCJob> COOK = register("cook", new Cook(new NPCJob.Builder(() -> PoiType.BUTCHER)));
-    public static final Pair<ResourceLocation, NPCJob> MAGIC = register("magic", new NPCJob(new NPCJob.Builder(ModPoiTypes.CASH_REGISTER)));
-    public static final Pair<ResourceLocation, NPCJob> RUNE_SKILLS = register("rune_skills", new NPCJob(new NPCJob.Builder(ModPoiTypes.CASH_REGISTER)));
-    public static final Pair<ResourceLocation, NPCJob> BATHHOUSE = register("bath_house", new BathhouseAttendant(new NPCJob.Builder(ModPoiTypes.CASH_REGISTER).noShop()));
-    public static final Pair<ResourceLocation, NPCJob> RANDOM = register("random", new NPCJob(new NPCJob.Builder(null).noSchedule()));
+    public static final Pair<ResourceLocation, NPCJob> MAGIC = register("magicskill_merchant", new NPCJob(new NPCJob.Builder(ModPoiTypes.CASH_REGISTER)));
+    public static final Pair<ResourceLocation, NPCJob> RUNE_SKILLS = register("runeskill_merchant", new NPCJob(new NPCJob.Builder(ModPoiTypes.CASH_REGISTER)));
+    public static final Pair<ResourceLocation, NPCJob> BATHHOUSE = register("bathhouse_attendant", new BathhouseAttendant(new NPCJob.Builder(ModPoiTypes.CASH_REGISTER).noShop()));
+    public static final Pair<ResourceLocation, NPCJob> RANDOM = register("travelling_merchant", new NPCJob(new NPCJob.Builder(null).noSchedule()));
 
     private static List<NPCJob> ALLJOBS;
 

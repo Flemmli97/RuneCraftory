@@ -1,7 +1,7 @@
 {
   "gender": "FEMALE",
   "weight": 0,
-  "additionalFeatures": [
+  "additional_features": [
     {
       "indices": [
         0,
@@ -10,28 +10,28 @@
       ],
       "colors": [
         {
-          "colorMin": "feead9",
-          "colorMax": "f4a98b"
+          "color_min": "feead9",
+          "color_max": "f4a98b"
         },
         {
-          "colorMin": "efdbca",
-          "colorMax": "eca188"
+          "color_min": "efdbca",
+          "color_max": "eca188"
         },
         {
-          "colorMin": "d5bfa7",
-          "colorMax": "c18356"
+          "color_min": "d5bfa7",
+          "color_max": "c18356"
         },
         {
-          "colorMin": "a1836d",
-          "colorMax": "94563c"
+          "color_min": "a1836d",
+          "color_max": "94563c"
         },
         {
-          "colorMin": "664f44",
-          "colorMax": "592e19"
+          "color_min": "664f44",
+          "color_max": "592e19"
         },
         {
-          "colorMin": "312926",
-          "colorMax": "2c130c"
+          "color_min": "312926",
+          "color_max": "2c130c"
         }
       ],
       "type": "runecraftory:skin_feature"
@@ -43,24 +43,24 @@
       ],
       "colors": [
         {
-          "colorMin": "000000",
-          "colorMax": "2f2f2f"
+          "color_min": "000000",
+          "color_max": "2f2f2f"
         },
         {
-          "colorMin": "462a05",
-          "colorMax": "6d4720"
+          "color_min": "462a05",
+          "color_max": "6d4720"
         },
         {
-          "colorMin": "0b2a75",
-          "colorMax": "204a87"
+          "color_min": "0b2a75",
+          "color_max": "204a87"
         },
         {
-          "colorMin": "42a20c",
-          "colorMax": "6fbe36"
+          "color_min": "42a20c",
+          "color_max": "6fbe36"
         },
         {
-          "colorMin": "b9ae08",
-          "colorMax": "dbbf41"
+          "color_min": "b9ae08",
+          "color_max": "dbbf41"
         }
       ],
       "type": "runecraftory:iris_feature"
@@ -80,8 +80,8 @@
       ],
       "colors": [
         {
-          "colorMin": "3c1d05",
-          "colorMax": "8d7053"
+          "color_min": "3c1d05",
+          "color_max": "8d7053"
         }
       ],
       "type": "runecraftory:eyebrows_feature"
@@ -101,8 +101,8 @@
       "chance": 0.5,
       "colors": [
         {
-          "colorMin": "e1a9e8",
-          "colorMax": "f5cffa"
+          "color_min": "e1a9e8",
+          "color_max": "f5cffa"
         }
       ],
       "type": "runecraftory:blush_feature"
@@ -111,7 +111,7 @@
       "styles": [
         {
           "weight": 1,
-          "type": "long",
+          "outfit": "long",
           "range": {
             "amount": 5,
             "type": "FIRST_N"
@@ -120,32 +120,32 @@
       ],
       "colors": [
         {
-          "colorMin": "000000",
-          "colorMax": "161616"
+          "color_min": "000000",
+          "color_max": "161616"
         },
         {
-          "colorMin": "321503",
-          "colorMax": "663d24"
+          "color_min": "321503",
+          "color_max": "663d24"
         },
         {
-          "colorMin": "d8c811",
-          "colorMax": "f1eaa0"
+          "color_min": "d8c811",
+          "color_max": "f1eaa0"
         },
         {
-          "colorMin": "750808",
-          "colorMax": "c55252"
+          "color_min": "750808",
+          "color_max": "c55252"
         },
         {
-          "colorMin": "b93aa3",
-          "colorMax": "c37bb7"
+          "color_min": "b93aa3",
+          "color_max": "c37bb7"
         },
         {
-          "colorMin": "3d41a5",
-          "colorMax": "7287d2"
+          "color_min": "3d41a5",
+          "color_max": "7287d2"
         },
         {
-          "colorMin": "ffffff",
-          "colorMax": "dde5f7"
+          "color_min": "ffffff",
+          "color_max": "dde5f7"
         }
       ],
       "type": "runecraftory:hair_feature"
@@ -154,7 +154,7 @@
       "outfits": [
         {
           "weight": 1,
-          "type": "shop",
+          "outfit": "shop",
           "range": {
             "amount": 3,
             "type": "FIRST_N"

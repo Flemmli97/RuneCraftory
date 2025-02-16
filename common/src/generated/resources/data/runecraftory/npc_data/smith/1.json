@@ -1,7 +1,7 @@
 {
   "gender": "UNDEFINED",
   "profession": [
-    "runecraftory:general",
+    "runecraftory:general_store",
     "runecraftory:smith"
   ],
   "look": [
@@ -16,23 +16,23 @@
   ],
   "weight": 50,
   "combat": {
-    "combatActions": [
+    "combat_actions": [
       "runecraftory:melee_fireball_attack"
     ]
   },
   "relation": {
-    "relationShipState": "DEFAULT"
+    "relation_ship_state": "DEFAULT"
   },
-  "neutralGiftResponse": "npc.smith.2.gift.default",
-  "giftItems": {
+  "neutral_gift_response": "npc.smith.2.gift.default",
+  "gift_items": {
     "dislike": {
       "items": "runecraftory:smith_trash",
-      "responseKey": "npc.smith.2.dislike",
+      "response_key": "npc.smith.2.dislike",
       "xp": -7
     },
     "like": {
       "items": "runecraftory:mineral",
-      "responseKey": "npc.smith.2.like",
+      "response_key": "npc.smith.2.like",
       "xp": 10
     }
   },
@@ -51,14 +51,14 @@
     "runecraftory:divorce_error": "runecraftory:smith/1/divorce_error",
     "runecraftory:procreation_cooldown": "runecraftory:smith/1/procreation_cooldown"
   },
-  "questHandler": {
+  "quest_handler": {
     "responses": {
       "runecraftory:mining": {
-        "startID": "runecraftory:smith/1/quest_start_mining",
-        "activeID": "runecraftory:smith/1/quest_active_mining",
-        "endID": "runecraftory:smith/1/quest_end_mining"
+        "start_id": "runecraftory:smith/1/quest_start_mining",
+        "active_id": "runecraftory:smith/1/quest_active_mining",
+        "end_id": "runecraftory:smith/1/quest_end_mining"
       }
     },
-    "requiredQuests": []
+    "required_quests": []
   }
 }

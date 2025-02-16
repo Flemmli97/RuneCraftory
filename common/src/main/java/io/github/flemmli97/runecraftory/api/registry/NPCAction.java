@@ -28,18 +28,18 @@ public interface NPCAction {
         return val.equals(def) ? Optional.empty() : Optional.of(val);
     }
 
-    static <T> RecordCodecBuilder<T, Optional<NumberProvider>> optionalNum(Function<T, NumberProvider> getter) {
-        return optionalNum(getter, CONST_ZERO);
+    static <T> RecordCodecBuilder<T, Optional<NumberProvider>> optionalNumCooldown(Function<T, NumberProvider> getter) {
+        return optionalNum(getter, "cooldown", CONST_ZERO);
     }
 
-    static <T> RecordCodecBuilder<T, Optional<NumberProvider>> optionalNum(Function<T, NumberProvider> getter, NumberProvider def) {
+    static <T> RecordCodecBuilder<T, Optional<NumberProvider>> optionalNum(Function<T, NumberProvider> getter, String field, NumberProvider def) {
         Function<T, Optional<NumberProvider>> optGetter = t -> {
             NumberProvider provider = getter.apply(t);
             if (provider.equals(def))
                 return Optional.empty();
             return Optional.of(provider);
         };
-        return CodecHelper.NUMER_PROVIDER_CODEC.optionalFieldOf("cooldown").forGetter(optGetter);
+        return CodecHelper.NUMER_PROVIDER_CODEC.optionalFieldOf(field).forGetter(optGetter);
     }
 
     static LootContext createLootContext(EntityNPCBase npc) {

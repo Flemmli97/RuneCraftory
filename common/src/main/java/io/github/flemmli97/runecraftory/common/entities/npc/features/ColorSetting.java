@@ -51,7 +51,7 @@ public record ColorSetting(List<Either<Integer, ColorRange>> colors) {
             Either.right(new ColorRange(0xe1a9e8, 0xf5cffa)) // Pink
     ));
 
-    public static final Codec<ColorSetting> CODEC = Codec.either(Codec.INT, ColorRange.CODEC).listOf()
+    public static final Codec<ColorSetting> CODEC = Codec.either(ColorRange.HEX_COLOR, ColorRange.CODEC).listOf()
             .xmap(ColorSetting::new, ColorSetting::colors);
 
     public int getRandom(Random random) {

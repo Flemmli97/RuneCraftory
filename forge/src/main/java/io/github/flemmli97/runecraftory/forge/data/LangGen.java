@@ -601,16 +601,16 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.gui.quest.submit.button", "Submit");
         this.add("runecraftory.gui.quest.button", "Requests");
 
-        this.add(ModNPCJobs.NONE.getSecond().getTranslationKey(), "None");
-        this.add(ModNPCJobs.GENERAL.getSecond().getTranslationKey(), "General Store");
-        this.add(ModNPCJobs.FLOWER.getSecond().getTranslationKey(), "Florist");
-        this.add(ModNPCJobs.SMITH.getSecond().getTranslationKey(), "Smith");
-        this.add(ModNPCJobs.DOCTOR.getSecond().getTranslationKey(), "Doctor");
-        this.add(ModNPCJobs.COOK.getSecond().getTranslationKey(), "Cook");
-        this.add(ModNPCJobs.MAGIC.getSecond().getTranslationKey(), "Magicskill merchant");
-        this.add(ModNPCJobs.RUNE_SKILLS.getSecond().getTranslationKey(), "Runeskill merchant");
-        this.add(ModNPCJobs.BATHHOUSE.getSecond().getTranslationKey(), "Bathhouse attendant");
-        this.add(ModNPCJobs.RANDOM.getSecond().getTranslationKey(), "Travelling merchant");
+        this.add(ModNPCJobs.NONE.getSecond().getTranslationKey(), this.simpleTranslation(ModNPCJobs.NONE.getFirst()));
+        this.add(ModNPCJobs.GENERAL.getSecond().getTranslationKey(), this.simpleTranslation(ModNPCJobs.GENERAL.getFirst()));
+        this.add(ModNPCJobs.FLOWER.getSecond().getTranslationKey(), this.simpleTranslation(ModNPCJobs.FLOWER.getFirst()));
+        this.add(ModNPCJobs.SMITH.getSecond().getTranslationKey(), this.simpleTranslation(ModNPCJobs.SMITH.getFirst()));
+        this.add(ModNPCJobs.DOCTOR.getSecond().getTranslationKey(), this.simpleTranslation(ModNPCJobs.DOCTOR.getFirst()));
+        this.add(ModNPCJobs.COOK.getSecond().getTranslationKey(), this.simpleTranslation(ModNPCJobs.COOK.getFirst()));
+        this.add(ModNPCJobs.MAGIC.getSecond().getTranslationKey(), this.simpleTranslation(ModNPCJobs.MAGIC.getFirst()));
+        this.add(ModNPCJobs.RUNE_SKILLS.getSecond().getTranslationKey(), this.simpleTranslation(ModNPCJobs.RUNE_SKILLS.getFirst()));
+        this.add(ModNPCJobs.BATHHOUSE.getSecond().getTranslationKey(), this.simpleTranslation(ModNPCJobs.BATHHOUSE.getFirst()));
+        this.add(ModNPCJobs.RANDOM.getSecond().getTranslationKey(), this.simpleTranslation(ModNPCJobs.RANDOM.getFirst()));
 
         this.add(Smith.BARN_ACTION, "Monster barn");
         this.add(Smith.BARN_ACTION_DESCRIPTION, "You can buy a monster barn to house your tamed monsters. Each barn bought increases the costs of the next one");

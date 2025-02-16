@@ -138,15 +138,15 @@ public class NPCSchedule {
 
         public static final Codec<Schedule> CODEC = RecordCodecBuilder.create(inst ->
                 inst.group(
-                        ExtraCodecs.NON_NEGATIVE_INT.fieldOf("WakeUpTime").forGetter(d -> d.wakeUpTime),
-                        ExtraCodecs.POSITIVE_INT.fieldOf("WorkTime").forGetter(d -> d.workTime),
-                        ExtraCodecs.POSITIVE_INT.fieldOf("BreakTime").forGetter(d -> d.breakTime),
-                        ExtraCodecs.POSITIVE_INT.fieldOf("WorkTimeAfter").forGetter(d -> d.workTimeAfter),
-                        ExtraCodecs.POSITIVE_INT.fieldOf("DoneWorkTime").forGetter(d -> d.doneWorkTime),
-                        ExtraCodecs.POSITIVE_INT.fieldOf("MeetTime").forGetter(d -> d.meetTime),
-                        ExtraCodecs.POSITIVE_INT.fieldOf("MeetTimeAfter").forGetter(d -> d.meetTimeAfter),
-                        ExtraCodecs.POSITIVE_INT.fieldOf("SleepTime").forGetter(d -> d.sleepTime),
-                        CodecUtils.stringEnumCodec(EnumDay.class, null).listOf().fieldOf("WorkDays").forGetter(d -> d.workDays.stream().toList())
+                        ExtraCodecs.NON_NEGATIVE_INT.fieldOf("wake_up_time").forGetter(d -> d.wakeUpTime),
+                        ExtraCodecs.POSITIVE_INT.fieldOf("work_time").forGetter(d -> d.workTime),
+                        ExtraCodecs.POSITIVE_INT.fieldOf("break_time").forGetter(d -> d.breakTime),
+                        ExtraCodecs.POSITIVE_INT.fieldOf("work_time_after").forGetter(d -> d.workTimeAfter),
+                        ExtraCodecs.POSITIVE_INT.fieldOf("done_work_time").forGetter(d -> d.doneWorkTime),
+                        ExtraCodecs.POSITIVE_INT.fieldOf("meet_time").forGetter(d -> d.meetTime),
+                        ExtraCodecs.POSITIVE_INT.fieldOf("meet_time_after").forGetter(d -> d.meetTimeAfter),
+                        ExtraCodecs.POSITIVE_INT.fieldOf("sleep_time").forGetter(d -> d.sleepTime),
+                        CodecUtils.stringEnumCodec(EnumDay.class, null).listOf().fieldOf("work_days").forGetter(d -> d.workDays.stream().toList())
                 ).apply(inst, Schedule::new)
         );
 

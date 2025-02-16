@@ -18,7 +18,7 @@ public class WalkAroundAction implements NPCAction {
 
     public static final Codec<WalkAroundAction> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(CodecHelper.NUMER_PROVIDER_CODEC.fieldOf("duration").forGetter(d -> d.duration),
-                    NPCAction.optionalNum(d -> d.cooldown)
+                    NPCAction.optionalNumCooldown(d -> d.cooldown)
             ).apply(instance, WalkAroundAction::new));
 
     private final NumberProvider duration;

@@ -21,7 +21,7 @@ public class FoodThrowAction implements NPCAction {
     public static final Codec<FoodThrowAction> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(ItemStack.CODEC.listOf().fieldOf("items").forGetter(d -> d.items),
                     CodecHelper.NUMER_PROVIDER_CODEC.fieldOf("walk_time").forGetter(d -> d.walkTime),
-                    NPCAction.optionalNum(d -> d.cooldown)
+                    NPCAction.optionalNumCooldown(d -> d.cooldown)
             ).apply(instance, FoodThrowAction::new));
 
     private final List<ItemStack> items;
