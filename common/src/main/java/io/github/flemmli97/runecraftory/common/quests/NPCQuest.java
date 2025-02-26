@@ -1,20 +1,19 @@
 package io.github.flemmli97.runecraftory.common.quests;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityTreasureChest;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.quests.tasks.NPCTalk;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import io.github.flemmli97.simplequests_api.datapack.QuestsManager;
 import io.github.flemmli97.simplequests_api.player.PlayerQuestData;
+import io.github.flemmli97.simplequests_api.player.QuestProgress;
 import io.github.flemmli97.simplequests_api.quest.QuestBase;
 import io.github.flemmli97.simplequests_api.quest.QuestCategory;
-import io.github.flemmli97.simplequests_api.quest.entry.QuestEntry;
+import io.github.flemmli97.simplequests_api.quest.entry.ResolvedQuestTask;
 import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.network.chat.MutableComponent;
@@ -30,7 +29,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -135,8 +133,8 @@ public class NPCQuest extends QuestBase {
     }
 
     @Override
-    public MutableComponent getTask(ServerPlayer player, int idx) {
-        return new TranslatableComponent(this.questTaskString);
+    public MutableComponent getName(ServerPlayer player, int idx) {
+        return new TranslatableComponent(this.name);
     }
 
     @Override
@@ -144,7 +142,7 @@ public class NPCQuest extends QuestBase {
         if (this.npcUuid != null) {
             EntityNPCBase npc = EntityUtil.findFromUUID(EntityNPCBase.class, player.getLevel(), this.npcUuid);
             if (npc != null)
-                return this.questTaskDesc.stream().map(s -> new TranslatableComponent(s, npc.getCustomName(), npc.getX(), npc.getY(), npc.getZ())).collect(Collectors.toList());
+                return this.description.stream().map(s -> new TranslatableComponent(s, npc.getCustomName(), npc.getX(), npc.getY(), npc.getZ())).collect(Collectors.toList());
         }
         return super.getDescription(player, idx);
     }
@@ -257,14 +255,11 @@ public class NPCQuest extends QuestBase {
     }
 
     @Override
-    public Map<String, QuestEntry> resolveTasks(PlayerQuestData data, int idx) {
+    public Map<String, ResolvedQuestTask> resolveTasks(PlayerQuestData data, QuestProgress progress, int idx) {
         QuestBase base = this.resolveToQuest(data.getPlayer(), idx);
         if (base == null)
             return Map.of();
-        Map<String, QuestEntry> result = new HashMap<>(base.resolveTasks(data, 0));
-        List<Map.Entry<String, QuestEntry>> talks = result.entrySet().stream().filter(e -> e.getValue() instanceof NPCTalk).toList();
-        talks.forEach(e -> result.put(e.getKey(), e.getValue().resolve(data, this)));
-        return ImmutableMap.copyOf(result);
+        return base.resolveTasks(data, progress, 0);
     }
 
     @Override
@@ -317,7 +312,7 @@ public class NPCQuest extends QuestBase {
         public NPCQuest build() {
             if (this.quests.isEmpty())
                 throw new IllegalStateException("Quests not defined");
-            return new NPCQuest(this.id, this.category, this.questTaskString, this.questDesc, this.neededParentQuests, this.redoParent, this.repeatDelay, this.sortingId,
+            return new NPCQuest(this.id, this.category, this.name, this.description, this.neededParentQuests, this.redoParent, this.repeatDelay, this.sortingId,
                     this.unlockCondition, this.npcDataID, this.quests, this.loot, this.global);
         }
     }

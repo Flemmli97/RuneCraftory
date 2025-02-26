@@ -6,16 +6,17 @@ import io.github.flemmli97.runecraftory.api.datapack.provider.NPCDataProvider;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.quests.NPCQuest;
 import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
-import io.github.flemmli97.runecraftory.common.quests.tasks.NPCTalk;
-import io.github.flemmli97.runecraftory.common.quests.tasks.ShippingEntry;
-import io.github.flemmli97.runecraftory.common.quests.tasks.TamingEntry;
+import io.github.flemmli97.runecraftory.common.quests.tasks.NPCTalkTask;
+import io.github.flemmli97.runecraftory.common.quests.tasks.ShippingTask;
+import io.github.flemmli97.runecraftory.common.quests.tasks.TamingTask;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.simplequests_api.datapack.provider.QuestProvider;
-import io.github.flemmli97.simplequests_api.impls.entries.single.BlockInteractEntry;
 import io.github.flemmli97.simplequests_api.impls.quests.Quest;
+import io.github.flemmli97.simplequests_api.impls.tasks.BlockInteractTask;
 import io.github.flemmli97.simplequests_api.quest.QuestCategory;
-import io.github.flemmli97.simplequests_api.quest.entry.QuestEntry;
+import io.github.flemmli97.simplequests_api.quest.entry.QuestTask;
+import io.github.flemmli97.simplequests_api.util.DescriptiveValue;
 import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
 import net.minecraft.advancements.critereon.BlockPredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
@@ -29,6 +30,7 @@ import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 
 import java.util.ArrayList;
@@ -71,7 +73,7 @@ public class QuestGen extends QuestProvider {
                         )),
                         LootTable.lootTable().withPool(LootPool.lootPool()
                                 .add(LootItem.lootTableItem(ModItems.TURNIP_SEEDS.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 5))))),
-                        b -> b.addEntry(new ShippingEntry(ItemPredicate.Builder.item().of(ModItems.TURNIP.get()).build(), 1)))
+                        b -> b.addEntry("Ship %s turnips", desc -> new ShippingTask("", DescriptiveValue.list(ItemPredicate.Builder.item().of(ModItems.TURNIP.get()).build(), desc).build(), ConstantValue.exactly(1))))
                 .setRepeatDelay(-1)
                 .withCategory(this.main)
                 .withIcon(new ItemStack(ModItems.TURNIP_SEEDS.get())));
@@ -92,8 +94,8 @@ public class QuestGen extends QuestProvider {
                                 .withPool(LootPool.lootPool()
                                         .add(LootItem.lootTableItem(Items.IRON_INGOT).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 5))))
                                         .add(LootItem.lootTableItem(Items.COPPER_INGOT).apply(SetItemCountFunction.setCount(UniformGenerator.between(6, 10))))),
-                        builder -> builder.addEntry("Break 10 mineral blocks", desc -> new BlockInteractEntry(ItemPredicate.ANY, BlockPredicate.Builder.block().of(RunecraftoryTags.ORES).build(),
-                                10, false, false, true, desc, "", "", EntityPredicate.ANY)))
+                        builder -> builder.addEntry("Break %s mineral blocks", desc -> new BlockInteractTask(DescriptiveValue.list(BlockPredicate.Builder.block().of(RunecraftoryTags.ORES).build(), desc).build(),
+                                List.of(), ConstantValue.exactly(10), false, false, true, "", EntityPredicate.ANY)))
                 .setRepeatDelay(-1)
                 .withCategory(this.main)
                 .withIcon(new ItemStack(ModItems.HAMMER_SCRAP.get())));
@@ -111,7 +113,7 @@ public class QuestGen extends QuestProvider {
                         )),
                         LootTable.lootTable().withPool(LootPool.lootPool()
                                 .add(LootItem.lootTableItem(ModItems.BRUSH.get()))),
-                        builder -> builder.addEntry("Tame a monster", desc -> new TamingEntry(EntityPredicate.ANY, 1, desc)))
+                        builder -> builder.addEntry("Tame a monster", desc -> new TamingTask("", DescriptiveValue.list(EntityPredicate.ANY, desc).build(), ConstantValue.exactly(1))))
                 .setRepeatDelay(-1)
                 .withCategory(this.main)
                 .withIcon(new ItemStack(SpawnEgg.fromType(ModEntities.WOOLY.get()).get())));
@@ -136,7 +138,7 @@ public class QuestGen extends QuestProvider {
         QuestEntryBuilder entryBuilder = new QuestEntryBuilder(id, this.translations);
         cons.accept(entryBuilder);
         for (int i = 0; i < entryBuilder.entries.size(); i++) {
-            Map<String, QuestEntry> entries = entryBuilder.entries.get(i);
+            Map<String, QuestTask<?>> entries = entryBuilder.entries.get(i);
             ResourceLocation subID = new ResourceLocation(builder.getID().getNamespace(), builder.getID().getPath() + "_ref_" + i);
             Quest.Builder questBuilder = new Quest.Builder(subID, "NPC_SUBQUEST", BuiltInLootTables.EMPTY)
                     .withCategory(this.hidden);
@@ -165,7 +167,7 @@ public class QuestGen extends QuestProvider {
 
     private static class QuestEntryBuilder {
 
-        private final List<Map<String, QuestEntry>> entries = new ArrayList<>();
+        private final List<Map<String, QuestTask<?>>> entries = new ArrayList<>();
         private final Map<String, String> translations;
         private final ResourceLocation id;
 
@@ -174,18 +176,18 @@ public class QuestGen extends QuestProvider {
             this.translations = translations;
         }
 
-        void addEntry(QuestEntry entry) {
+        void addEntry(QuestTask<?> entry) {
             this.addEntry("", _n -> entry);
         }
 
-        void addEntry(String translation, Function<String, QuestEntry> entry) {
+        void addEntry(String translation, Function<String, QuestTask<?>> entry) {
             if (this.entries.isEmpty()) {
                 this.push();
-                this.addEntry(new NPCTalk(null));
+                this.addEntry(new NPCTalkTask(null));
                 this.push();
             }
             int subIdx = this.entries.size() - 1;
-            Map<String, QuestEntry> current = this.entries.get(subIdx);
+            Map<String, QuestTask<?>> current = this.entries.get(subIdx);
             int taskIdx = current.size();
             String desc = getTaskDescription(this.id, subIdx, taskIdx);
             current.put(taskIdx + "", entry.apply(desc));

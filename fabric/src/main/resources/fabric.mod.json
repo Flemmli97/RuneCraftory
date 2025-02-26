@@ -13,7 +13,7 @@
     "sources": "https://github.com/Flemmli97/RuneCraftory"
   },
   "license": "ARR",
-  "icon": "icon.png",
+  "icon": "logo.png",
   "environment": "*",
   "entrypoints": {
     "main": [
@@ -43,6 +43,6 @@
     "tenshilib": ">=${tenshilib_version}"
   },
   "breaks": {
-    "simplequests": "<${simple_quest_version}"
+    "simplequests": "<${simplequest_api_version}"
   }
 }

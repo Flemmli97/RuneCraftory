@@ -6,9 +6,10 @@ import io.github.flemmli97.runecraftory.common.entities.misc.EntityTreasureChest
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.simplequests_api.datapack.QuestsManager;
 import io.github.flemmli97.simplequests_api.player.PlayerQuestData;
+import io.github.flemmli97.simplequests_api.player.QuestProgress;
 import io.github.flemmli97.simplequests_api.quest.QuestBase;
 import io.github.flemmli97.simplequests_api.quest.QuestCategory;
-import io.github.flemmli97.simplequests_api.quest.entry.QuestEntry;
+import io.github.flemmli97.simplequests_api.quest.entry.ResolvedQuestTask;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -48,8 +49,8 @@ public class QuestBoardQuest extends QuestBase {
     }
 
     @Override
-    public MutableComponent getTask(ServerPlayer player, int idx) {
-        return this.quest.getTask(player, idx);
+    public MutableComponent getName(ServerPlayer player, int idx) {
+        return this.quest.getName(player, idx);
     }
 
     @Override
@@ -73,8 +74,8 @@ public class QuestBoardQuest extends QuestBase {
     }
 
     @Override
-    public Map<String, QuestEntry> resolveTasks(PlayerQuestData data, int questIndex) {
-        return this.quest.resolveTasks(data, questIndex);
+    public Map<String, ResolvedQuestTask> resolveTasks(PlayerQuestData data, QuestProgress progress, int questIndex) {
+        return this.quest.resolveTasks(data, progress, questIndex);
     }
 
     @Override

@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.quests.progress;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.quests.tasks.NPCTalk;
+import io.github.flemmli97.runecraftory.common.quests.tasks.NPCTalkTask;
 import io.github.flemmli97.simplequests_api.impls.progression.ProgressionTrackerBase;
 import io.github.flemmli97.simplequests_api.player.ProgressionTrackerKey;
 import io.github.flemmli97.simplequests_api.player.QuestProgress;
@@ -11,12 +11,12 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
 
-public class NPCTalkTracker extends ProgressionTrackerBase<EntityNPCBase, NPCTalk> {
+public class NPCTalkTracker extends ProgressionTrackerBase<EntityNPCBase, NPCTalkTask.NPCTalkResolved> {
 
-    public static final ProgressionTrackerKey<EntityNPCBase, NPCTalk> KEY = new ProgressionTrackerKey<>(RuneCraftory.MODID, "talking_tracker",
-            NPCTalk.ID);
+    public static final ProgressionTrackerKey<EntityNPCBase, NPCTalkTask.NPCTalkResolved> KEY = new ProgressionTrackerKey<>(RuneCraftory.MODID, "talking_tracker",
+            NPCTalkTask.ID);
 
-    public NPCTalkTracker(NPCTalk questEntry) {
+    public NPCTalkTracker(NPCTalkTask.NPCTalkResolved questEntry) {
         super(questEntry);
     }
 

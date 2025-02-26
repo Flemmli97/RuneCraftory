@@ -6,7 +6,7 @@ loom {
 
 ext {
     mod_meta.tenshilib_version = tenshilib_version
-    mod_meta.simple_quest_version = simplequests_version
+    mod_meta.simplequest_api_version = simplequests_api_version
 }
 
 repositories {
@@ -43,7 +43,9 @@ dependencies {
 
     modRuntimeOnly "io.github.flemmli97:debugutils:1.18.2-1.0.1-fabric"
 
-    modRuntimeOnly include("io.github.flemmli97:simplequests_api:${simplequests_version}-fabric") {
+    modRuntimeOnly include("io.github.flemmli97:simplequests_api:${simplequests_api_version}-fabric") {
         transitive = false
     }
+    // Jar-Jar not added otherwise
+    modRuntimeOnly "io.github.flemmli97:lingua_bib:1.18.2-1.0.1-fabric"
 }

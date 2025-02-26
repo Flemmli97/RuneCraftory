@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.quests;
 import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.network.S2CSimpleToast;
-import io.github.flemmli97.runecraftory.common.quests.tasks.NPCTalk;
+import io.github.flemmli97.runecraftory.common.quests.tasks.NPCTalkTask;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.simplequests_api.datapack.QuestsManager;
@@ -14,7 +14,7 @@ import io.github.flemmli97.simplequests_api.player.ProgressionTrackerKey;
 import io.github.flemmli97.simplequests_api.player.QuestProgress;
 import io.github.flemmli97.simplequests_api.quest.QuestBase;
 import io.github.flemmli97.simplequests_api.quest.QuestState;
-import io.github.flemmli97.simplequests_api.quest.entry.QuestEntry;
+import io.github.flemmli97.simplequests_api.quest.entry.ResolvedQuestTask;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
@@ -66,7 +66,7 @@ public class QuestData implements PlayerQuestData {
 
     @Override
     public ServerPlayer getPlayer() {
-        return null;
+        return this.player;
     }
 
     @Override
@@ -114,15 +114,19 @@ public class QuestData implements PlayerQuestData {
         Map<ResourceLocation, QuestState> completion = new HashMap<>();
         List<QuestProgress> completed = new ArrayList<>();
         for (QuestProgress prog : this.currentQuests) {
-            switch (prog.submit(this, npc == null ? QuestHandler.QUEST_BOARD_TRIGGER : npc.getUUID().toString())) {
+            List<ResolvedQuestTask> tasks = new ArrayList<>();
+            switch (prog.submit(this, npc == null ? QuestHandler.QUEST_BOARD_TRIGGER : npc.getUUID().toString(), tasks::add)) {
                 case COMPLETE -> {
                     this.completeQuest(prog);
                     completed.add(prog);
                     completion.put(prog.getQuest().id, QuestState.COMPLETE);
                 }
                 case PARTIAL_COMPLETE -> completion.put(prog.getQuest().id, QuestState.PARTIAL_COMPLETE);
-                case PARTIAL ->
-                        this.player.level.playSound(null, this.player.getX(), this.player.getY(), this.player.getZ(), SoundEvents.VILLAGER_YES, this.player.getSoundSource(), 2 * 0.75f, 1.0f);
+                case PARTIAL -> {
+                    this.player.level.playSound(null, this.player.getX(), this.player.getY(), this.player.getZ(), SoundEvents.VILLAGER_YES, this.player.getSoundSource(), 2 * 0.75f, 1.0f);
+                    tasks.forEach(t -> Platform.INSTANCE.sendToClient(new S2CSimpleToast(prog.getName(this.player).withStyle(ChatFormatting.DARK_PURPLE),
+                            t.translation(this.player).withStyle(ChatFormatting.GOLD)), this.player));
+                }
                 case NOTHING ->
                         this.player.level.playSound(null, this.player.getX(), this.player.getY(), this.player.getZ(), SoundEvents.VILLAGER_NO, this.player.getSoundSource(), 2 * 0.75f, 1.0f);
             }
@@ -153,12 +157,12 @@ public class QuestData implements PlayerQuestData {
         return this.finishedQuestsTracker.getOrDefault(quest, 0);
     }
 
-    public <V, T extends QuestEntry> Map<ResourceLocation, QuestState> trigger(ProgressionTrackerKey<V, T> key, V with) {
+    public <V, T extends ResolvedQuestTask> Map<ResourceLocation, QuestState> trigger(ProgressionTrackerKey<V, T> key, V with) {
         return this.trigger(key, with, "");
     }
 
     @Override
-    public <V, T extends QuestEntry> Map<ResourceLocation, QuestState> trigger(ProgressionTrackerKey<V, T> key, V with, @NotNull String trigger) {
+    public <V, T extends ResolvedQuestTask> Map<ResourceLocation, QuestState> trigger(ProgressionTrackerKey<V, T> key, V with, @NotNull String trigger) {
         if (key.equals(EntityTracker.KEY)) {
             if (this.interactionCooldown > 0)
                 return Map.of();
@@ -168,15 +172,15 @@ public class QuestData implements PlayerQuestData {
         Map<ResourceLocation, QuestState> completion = new HashMap<>();
         this.currentQuests.forEach(prog -> {
             Set<Pair<String, T>> fulfilled = prog.tryFullFill(this.player, key, with);
-            if (!fulfilled.isEmpty()) {
+            QuestState state = prog.tryComplete(this, "");
+            if ((state == QuestState.NO) && !fulfilled.isEmpty()) {
                 fulfilled.forEach(p -> {
-                    if (!(p.getSecond() instanceof NPCTalk)) {
-                        Platform.INSTANCE.sendToClient(new S2CSimpleToast(prog.getTask(this.player).withStyle(ChatFormatting.DARK_PURPLE),
+                    if (!(p.getSecond() instanceof NPCTalkTask.NPCTalkResolved)) {
+                        Platform.INSTANCE.sendToClient(new S2CSimpleToast(prog.getName(this.player).withStyle(ChatFormatting.DARK_PURPLE),
                                 p.getSecond().translation(this.player).withStyle(ChatFormatting.GOLD)), this.player);
                     }
                 });
             }
-            QuestState state = prog.tryComplete(this, "");
             if (state == QuestState.COMPLETE) {
                 this.completeQuest(prog);
                 completed.add(prog);
@@ -212,9 +216,9 @@ public class QuestData implements PlayerQuestData {
 
     public void tickTickableQuests() {
         this.tickables.removeIf(prog -> {
-            Pair<Boolean, Set<QuestEntry>> fulfilled = prog.tickProgress(this);
+            Pair<Boolean, Set<ResolvedQuestTask>> fulfilled = prog.tickProgress(this);
             if (!fulfilled.getSecond().isEmpty()) {
-                fulfilled.getSecond().forEach(p -> Platform.INSTANCE.sendToClient(new S2CSimpleToast(prog.getTask(this.player).withStyle(ChatFormatting.DARK_PURPLE),
+                fulfilled.getSecond().forEach(p -> Platform.INSTANCE.sendToClient(new S2CSimpleToast(prog.getName(this.player).withStyle(ChatFormatting.DARK_PURPLE),
                         p.translation(this.player).withStyle(ChatFormatting.GOLD)), this.player));
             }
             return fulfilled.getFirst();

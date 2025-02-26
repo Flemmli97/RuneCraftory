@@ -22,11 +22,11 @@ import io.github.flemmli97.runecraftory.common.items.tools.ItemToolWateringCan;
 import io.github.flemmli97.runecraftory.common.network.C2SNPCInteraction;
 import io.github.flemmli97.runecraftory.common.network.C2SSetMonsterBehaviour;
 import io.github.flemmli97.runecraftory.common.quests.QuestData;
-import io.github.flemmli97.runecraftory.common.quests.tasks.LevelEntry;
-import io.github.flemmli97.runecraftory.common.quests.tasks.NPCTalk;
-import io.github.flemmli97.runecraftory.common.quests.tasks.ShippingEntry;
-import io.github.flemmli97.runecraftory.common.quests.tasks.SkillLevelEntry;
-import io.github.flemmli97.runecraftory.common.quests.tasks.TamingEntry;
+import io.github.flemmli97.runecraftory.common.quests.tasks.LevelTask;
+import io.github.flemmli97.runecraftory.common.quests.tasks.NPCTalkTask;
+import io.github.flemmli97.runecraftory.common.quests.tasks.ShippingTask;
+import io.github.flemmli97.runecraftory.common.quests.tasks.SkillLevelTask;
+import io.github.flemmli97.runecraftory.common.quests.tasks.TamingTask;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
@@ -762,14 +762,15 @@ public class LangGen implements DataProvider {
 
         this.add("runecraftory.quest.npc.header", "Requester: %1$s [%2$s,%3$s,%4$s]");
 
-        this.add(ShippingEntry.ID + ".single", "Ship %1$s x%2$s");
-        this.add(ShippingEntry.ID + ".multi", "Ship any of the following x%2$s: %1$s");
-        this.add(ShippingEntry.ID + ".empty", "<Empty tag/items>");
-        this.add(LevelEntry.ID.toString(), "Reach level %s");
-        this.add(SkillLevelEntry.ID.toString(), "Reach level %1$s in %s");
-        this.add(TamingEntry.ID.toString(), "Missing task description...");
-        this.add(NPCTalk.ID.toString(), "Talk to %s");
-        this.add(NPCTalk.ID + ".generic", "Could not find NPC to talk to");
+        this.add(LevelTask.ID.toString(), "Reach level %s");
+        this.add(NPCTalkTask.ID.toString(), "Talk to %s");
+        this.add(NPCTalkTask.ID + ".generic", "Could not find NPC to talk to");
+        this.add(NPCTalkTask.ID + ".not_resolved", "Unresolved NPC talk task");
+        this.add(ShippingTask.ID + ".single", "Ship %1$s x%2$s");
+        this.add(ShippingTask.ID + ".multi", "Ship any of the following x%2$s: %1$s");
+        this.add(ShippingTask.ID + ".empty", "<Empty tag/items>");
+        this.add(SkillLevelTask.ID.toString(), "Reach level %1$s in %s");
+        this.add(TamingTask.ID.toString(), "Tame %2$s %1$s");
 
         this.add(QuestData.AcceptType.MISSING.langKey(), "Data is missing");
         this.add(QuestData.AcceptType.REQUIREMENTS.langKey(), "You do not meet the requirement for this quest");

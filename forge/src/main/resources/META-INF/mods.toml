@@ -7,7 +7,7 @@ modId="runecraftory"
 version="${version}"
 displayName="RuneCraftory"
 displayURL="${homepage}"
-logoFile="icon.png"
+logoFile="logo.png"
 authors="Flemmli97"
 description='''A minecrafty Harvest Moon'''
 [[dependencies.runecraftory]]
@@ -31,5 +31,5 @@ side="BOTH"
 [[dependencies.runecraftory]]
 modId="simplequests"
 mandatory=false
-versionRange="[${simple_quest_version},)"
+versionRange="[${simplequest_api_version},)"
 ordering="NONE"

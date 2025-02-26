@@ -6,11 +6,11 @@ import io.github.flemmli97.runecraftory.common.network.S2COpenQuestGui;
 import io.github.flemmli97.runecraftory.common.quests.progress.NPCTalkTracker;
 import io.github.flemmli97.runecraftory.common.quests.progress.ShippingTracker;
 import io.github.flemmli97.runecraftory.common.quests.progress.TamingTracker;
-import io.github.flemmli97.runecraftory.common.quests.tasks.LevelEntry;
-import io.github.flemmli97.runecraftory.common.quests.tasks.NPCTalk;
-import io.github.flemmli97.runecraftory.common.quests.tasks.ShippingEntry;
-import io.github.flemmli97.runecraftory.common.quests.tasks.SkillLevelEntry;
-import io.github.flemmli97.runecraftory.common.quests.tasks.TamingEntry;
+import io.github.flemmli97.runecraftory.common.quests.tasks.LevelTask;
+import io.github.flemmli97.runecraftory.common.quests.tasks.NPCTalkTask;
+import io.github.flemmli97.runecraftory.common.quests.tasks.ShippingTask;
+import io.github.flemmli97.runecraftory.common.quests.tasks.SkillLevelTask;
+import io.github.flemmli97.runecraftory.common.quests.tasks.TamingTask;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import io.github.flemmli97.runecraftory.mixinhelper.QuestDataGet;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -43,11 +43,11 @@ public class QuestHandler {
     public static final String QUEST_BOARD_TRIGGER = RuneCraftory.MODID + "_quest_board_trigger";
 
     public static void register() {
-        QuestEntryRegistry.registerSerializer(ShippingEntry.ID, ShippingEntry.CODEC);
-        QuestEntryRegistry.registerSerializer(LevelEntry.ID, LevelEntry.CODEC);
-        QuestEntryRegistry.registerSerializer(SkillLevelEntry.ID, SkillLevelEntry.CODEC);
-        QuestEntryRegistry.registerSerializer(TamingEntry.ID, TamingEntry.CODEC);
-        QuestEntryRegistry.registerSerializer(NPCTalk.ID, NPCTalk.CODEC);
+        QuestEntryRegistry.registerSerializer(ShippingTask.ID, ShippingTask.CODEC, ShippingTask.SkillLevelTaskResolved.CODEC);
+        QuestEntryRegistry.registerSerializer(LevelTask.ID, LevelTask.CODEC, LevelTask.LevelTaskResolved.CODEC);
+        QuestEntryRegistry.registerSerializer(SkillLevelTask.ID, SkillLevelTask.CODEC, SkillLevelTask.SkillLevelTaskResolved.CODEC);
+        QuestEntryRegistry.registerSerializer(TamingTask.ID, TamingTask.CODEC, TamingTask.TamingTaskResolved.CODEC);
+        QuestEntryRegistry.registerSerializer(NPCTalkTask.ID, NPCTalkTask.CODEC, NPCTalkTask.NPCTalkResolved.CODEC);
         QuestBaseRegistry.registerSerializer(NPCQuest.ID, NPCQuest::of);
         QuestBaseRegistry.registerSerializer(QuestBoardQuest.ID, QuestBoardQuest::of);
         ProgressionTrackerRegistry.registerSerializer(ShippingTracker.KEY, ShippingTracker::new);
@@ -71,10 +71,10 @@ public class QuestHandler {
                         description = Stream.concat(Stream.of(new TranslatableComponent("runecraftory.quest.npc.header", npc.getName(), npc.blockPosition().getX(),
                                         npc.blockPosition().getY(), npc.blockPosition().getZ()).withStyle(ChatFormatting.GOLD),
                                 (MutableComponent) TextComponent.EMPTY), description.stream()).toList();
-                        return new ClientSideQuestDisplay(e.getKey(), e.getValue().getTask(player), description,
+                        return new ClientSideQuestDisplay(e.getKey(), e.getValue().getName(player), description,
                                 npc.lookFeatures, npc.getLook().playerSkin(), data.isActive(e.getKey()));
                     }
-                    return new ClientSideQuestDisplay(e.getKey(), e.getValue().getTask(player), description,
+                    return new ClientSideQuestDisplay(e.getKey(), e.getValue().getName(player), description,
                             null, null, data.isActive(e.getKey()));
                 }).toList()), player);
         data.setQuestboardQuests(quest);

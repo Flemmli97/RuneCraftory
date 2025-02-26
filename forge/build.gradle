@@ -17,7 +17,7 @@ loom {
 
 ext {
     mod_meta.tenshilib_version = tenshilib_version
-    mod_meta.simple_quest_version = simplequests_version
+    mod_meta.simplequest_api_version = simplequests_api_version
 }
 
 repositories {
@@ -48,7 +48,9 @@ dependencies {
     modImplementation "io.github.flemmli97:tenshilib:${tenshilib_version}-forge"
     modImplementation patchouli
     modImplementation patchouli_datagen
-    modImplementation include("io.github.flemmli97:simplequests_api:${simplequests_version}-forge")
+    modImplementation include("io.github.flemmli97:simplequests_api:${simplequests_api_version}-forge")
+    // Jar-Jar not added otherwise
+    modRuntimeOnly "io.github.flemmli97:lingua_bib:1.18.2-1.0.1-forge"
     modCompileOnly("mcjty.theoneprobe:theoneprobe:${top_version}") {
         transitive = false
     }
