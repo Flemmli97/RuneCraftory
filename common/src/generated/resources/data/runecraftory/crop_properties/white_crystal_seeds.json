@@ -1,15 +1,15 @@
 {
-  "giantCrop": "runecraftory:big_white_crystal",
-  "bestSeason": [
+  "giant_crop": "runecraftory:big_white_crystal",
+  "best_season": [
     "WINTER"
   ],
-  "badSeason": [
+  "bad_season": [
     "SPRING",
     "SUMMER",
     "FALL"
   ],
   "growth": 90,
-  "maxDrops": 3,
+  "max_drops": 3,
   "regrowable": false,
   "item": "runecraftory:white_crystal_seeds"
 }

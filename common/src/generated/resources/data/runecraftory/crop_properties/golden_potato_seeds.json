@@ -1,13 +1,13 @@
 {
-  "giantCrop": "runecraftory:gold_prince_potato",
-  "bestSeason": [
+  "giant_crop": "runecraftory:gold_prince_potato",
+  "best_season": [
     "WINTER"
   ],
-  "badSeason": [
+  "bad_season": [
     "SUMMER"
   ],
   "growth": 50,
-  "maxDrops": 3,
+  "max_drops": 3,
   "regrowable": false,
   "item": "runecraftory:golden_potato_seeds"
 }

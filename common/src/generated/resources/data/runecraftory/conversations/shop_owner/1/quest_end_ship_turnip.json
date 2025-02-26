@@ -1,4 +1,4 @@
 {
-  "fallbackKey": "npc.shop_owner.quest.ship_turnip.end",
+  "fallback_key": "npc.shop_owner.quest.ship_turnip.end",
   "conversations": {}
 }

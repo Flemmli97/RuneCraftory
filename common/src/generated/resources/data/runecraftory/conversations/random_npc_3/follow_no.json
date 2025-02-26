@@ -1,16 +1,16 @@
 {
-  "fallbackKey": "",
+  "fallback_key": "",
   "conversations": {
     "npc.generic.3.follow.no.1": {
-      "translationKey": "npc.generic.3.follow.no.1",
+      "translation_key": "npc.generic.3.follow.no.1",
       "conditions": []
     },
     "npc.generic.3.follow.no.2": {
-      "translationKey": "npc.generic.3.follow.no.2",
+      "translation_key": "npc.generic.3.follow.no.2",
       "conditions": []
     },
     "npc.generic.3.follow.no.3": {
-      "translationKey": "npc.generic.3.follow.no.3",
+      "translation_key": "npc.generic.3.follow.no.3",
       "conditions": []
     }
   }

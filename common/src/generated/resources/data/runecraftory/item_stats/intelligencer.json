@@ -1,9 +1,9 @@
 {
-  "buyPrice": 1500000,
-  "sellPrice": 1500,
-  "upgradeDifficulty": 0,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buy_price": 1500000,
+  "sell_price": 1500,
+  "upgrade_difficulty": 0,
+  "item_stats": {},
+  "monster_bonus": {},
   "element": "NONE",
   "item": "runecraftory:intelligencer"
 }

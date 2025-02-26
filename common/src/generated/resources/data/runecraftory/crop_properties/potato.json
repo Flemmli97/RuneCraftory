@@ -1,11 +1,11 @@
 {
-  "giantCrop": "runecraftory:potato",
-  "bestSeason": [
+  "giant_crop": "runecraftory:potato",
+  "best_season": [
     "SUMMER"
   ],
-  "badSeason": [],
+  "bad_season": [],
   "growth": 4,
-  "maxDrops": 4,
+  "max_drops": 4,
   "regrowable": false,
   "item": "minecraft:potato"
 }

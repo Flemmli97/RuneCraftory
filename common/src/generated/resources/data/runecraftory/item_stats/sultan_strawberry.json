@@ -1,9 +1,9 @@
 {
-  "buyPrice": 0,
-  "sellPrice": 900,
-  "upgradeDifficulty": 45,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buy_price": 0,
+  "sell_price": 900,
+  "upgrade_difficulty": 45,
+  "item_stats": {},
+  "monster_bonus": {},
   "element": "NONE",
   "item": "runecraftory:sultan_strawberry"
 }

@@ -1,8 +1,8 @@
 {
-  "bestSeason": [],
-  "badSeason": [],
+  "best_season": [],
+  "bad_season": [],
   "growth": 20,
-  "maxDrops": 1,
+  "max_drops": 1,
   "regrowable": false,
   "item": "runecraftory:orange_sapling"
 }

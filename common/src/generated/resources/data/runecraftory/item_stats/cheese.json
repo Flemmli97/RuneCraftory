@@ -1,9 +1,9 @@
 {
-  "buyPrice": 300,
-  "sellPrice": 160,
-  "upgradeDifficulty": 0,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buy_price": 300,
+  "sell_price": 160,
+  "upgrade_difficulty": 0,
+  "item_stats": {},
+  "monster_bonus": {},
   "element": "NONE",
   "item": "runecraftory:cheese"
 }

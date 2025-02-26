@@ -1,7 +1,7 @@
 {
   "duration": 6000,
   "effects": {},
-  "effectsPercentage": {
+  "effects_percentage": {
     "minecraft:generic.attack_damage": -50.0,
     "runecraftory:defence": -50.0,
     "runecraftory:magic_attack": -50.0,
@@ -11,9 +11,9 @@
     "runecraftory:res_wind": -20.0,
     "runecraftory:res_fire": -20.0
   },
-  "cookingBonus": {},
-  "cookingBonusPercent": {},
-  "potionApply": [],
-  "potionRemove": [],
+  "cooking_bonus": {},
+  "cooking_bonus_percent": {},
+  "potion_apply": [],
+  "potion_remove": [],
   "item": "runecraftory:mealy_apple"
 }

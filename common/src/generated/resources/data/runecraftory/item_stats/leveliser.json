@@ -1,9 +1,9 @@
 {
-  "buyPrice": 2000000,
-  "sellPrice": 3000,
-  "upgradeDifficulty": 0,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buy_price": 2000000,
+  "sell_price": 3000,
+  "upgrade_difficulty": 0,
+  "item_stats": {},
+  "monster_bonus": {},
   "element": "NONE",
   "item": "runecraftory:leveliser"
 }

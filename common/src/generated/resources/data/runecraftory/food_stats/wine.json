@@ -3,16 +3,16 @@
   "effects": {
     "runecraftory:rp_gain": 15.0
   },
-  "effectsPercentage": {},
-  "cookingBonus": {},
-  "cookingBonusPercent": {},
-  "potionApply": [
+  "effects_percentage": {},
+  "cooking_bonus": {},
+  "cooking_bonus_percent": {},
+  "potion_apply": [
     {
       "potion": "runecraftory:sleeping",
       "duration": 80,
       "amplifier": 0
     }
   ],
-  "potionRemove": [],
+  "potion_remove": [],
   "item": "runecraftory:wine"
 }

@@ -1,7 +1,7 @@
 {
   "cooldown": 20,
-  "rpCost": 25,
-  "skillXP": {
+  "rp_cost": 25,
+  "skill_xp": {
     "WIND": 10.0
   },
   "percentage": 0.0,

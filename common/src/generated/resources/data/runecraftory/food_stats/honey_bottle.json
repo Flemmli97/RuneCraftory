@@ -3,14 +3,14 @@
   "effects": {
     "runecraftory:rp_gain": 15.0
   },
-  "effectsPercentage": {
+  "effects_percentage": {
     "runecraftory:rp_gain": 1.0
   },
-  "cookingBonus": {
+  "cooking_bonus": {
     "runecraftory:rp_gain": 10.0
   },
-  "cookingBonusPercent": {},
-  "potionApply": [],
-  "potionRemove": [],
+  "cooking_bonus_percent": {},
+  "potion_apply": [],
+  "potion_remove": [],
   "item": "minecraft:honey_bottle"
 }

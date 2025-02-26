@@ -1,13 +1,13 @@
 {
-  "giantCrop": "runecraftory:boss_bok_choy",
-  "bestSeason": [
+  "giant_crop": "runecraftory:boss_bok_choy",
+  "best_season": [
     "FALL"
   ],
-  "badSeason": [
+  "bad_season": [
     "SUMMER"
   ],
   "growth": 5,
-  "maxDrops": 4,
+  "max_drops": 4,
   "regrowable": false,
   "item": "runecraftory:bok_choy_seeds"
 }

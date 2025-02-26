@@ -1,9 +1,9 @@
 {
-  "buyPrice": 0,
-  "sellPrice": 840,
-  "upgradeDifficulty": 28,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buy_price": 0,
+  "sell_price": 840,
+  "upgrade_difficulty": 28,
+  "item_stats": {},
+  "monster_bonus": {},
   "element": "NONE",
   "item": "runecraftory:lordly_yam"
 }

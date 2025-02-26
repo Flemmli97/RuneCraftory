@@ -8,11 +8,11 @@
     "runecraftory:res_fatigue": 100.0,
     "runecraftory:res_cold": 100.0
   },
-  "effectsPercentage": {},
-  "cookingBonus": {},
-  "cookingBonusPercent": {},
-  "potionApply": [],
-  "potionRemove": [
+  "effects_percentage": {},
+  "cooking_bonus": {},
+  "cooking_bonus_percent": {},
+  "potion_apply": [],
+  "potion_remove": [
     "minecraft:poison",
     "minecraft:wither",
     "minecraft:slowness",

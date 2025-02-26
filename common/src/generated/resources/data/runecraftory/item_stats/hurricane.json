@@ -1,9 +1,9 @@
 {
-  "buyPrice": 2000,
-  "sellPrice": 200,
-  "upgradeDifficulty": 0,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buy_price": 2000,
+  "sell_price": 200,
+  "upgrade_difficulty": 0,
+  "item_stats": {},
+  "monster_bonus": {},
   "element": "NONE",
   "item": "runecraftory:hurricane"
 }

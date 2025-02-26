@@ -1,7 +1,7 @@
 {
   "cooldown": 50,
-  "rpCost": 40,
-  "skillXP": {
+  "rp_cost": 40,
+  "skill_xp": {
     "WATER": 5.0
   },
   "percentage": 0.0

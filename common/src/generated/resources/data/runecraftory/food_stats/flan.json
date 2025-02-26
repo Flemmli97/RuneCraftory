@@ -7,16 +7,16 @@
     "runecraftory:res_fatigue": 15.0,
     "runecraftory:res_cold": 15.0
   },
-  "effectsPercentage": {},
-  "cookingBonus": {},
-  "cookingBonusPercent": {},
-  "potionApply": [
+  "effects_percentage": {},
+  "cooking_bonus": {},
+  "cooking_bonus_percent": {},
+  "potion_apply": [
     {
       "potion": "minecraft:speed",
       "duration": 200,
       "amplifier": 1
     }
   ],
-  "potionRemove": [],
+  "potion_remove": [],
   "item": "runecraftory:flan"
 }

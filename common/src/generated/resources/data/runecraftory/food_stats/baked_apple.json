@@ -7,12 +7,12 @@
     "runecraftory:magic_attack": 5.0,
     "runecraftory:magic_defence": 2.0
   },
-  "effectsPercentage": {
+  "effects_percentage": {
     "minecraft:generic.max_health": 10.0
   },
-  "cookingBonus": {},
-  "cookingBonusPercent": {},
-  "potionApply": [],
-  "potionRemove": [],
+  "cooking_bonus": {},
+  "cooking_bonus_percent": {},
+  "potion_apply": [],
+  "potion_remove": [],
   "item": "runecraftory:baked_apple"
 }

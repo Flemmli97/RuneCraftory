@@ -3,10 +3,10 @@
   "effects": {
     "runecraftory:res_fire": -30.0
   },
-  "effectsPercentage": {},
-  "cookingBonus": {},
-  "cookingBonusPercent": {},
-  "potionApply": [],
-  "potionRemove": [],
+  "effects_percentage": {},
+  "cooking_bonus": {},
+  "cooking_bonus_percent": {},
+  "potion_apply": [],
+  "potion_remove": [],
   "item": "runecraftory:heavy_spice"
 }

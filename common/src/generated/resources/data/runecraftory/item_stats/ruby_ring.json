@@ -1,11 +1,11 @@
 {
-  "buyPrice": 13000,
-  "sellPrice": 600,
-  "upgradeDifficulty": 0,
-  "itemStats": {
+  "buy_price": 13000,
+  "sell_price": 600,
+  "upgrade_difficulty": 0,
+  "item_stats": {
     "runecraftory:res_fire": 50.0
   },
-  "monsterBonus": {
+  "monster_bonus": {
     "runecraftory:res_fire": 1.0
   },
   "element": "FIRE",

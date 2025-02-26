@@ -1,9 +1,9 @@
 {
-  "buyPrice": 70000,
-  "sellPrice": 23000,
-  "upgradeDifficulty": 77,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buy_price": 70000,
+  "sell_price": 23000,
+  "upgrade_difficulty": 77,
+  "item_stats": {},
+  "monster_bonus": {},
   "element": "NONE",
   "item": "runecraftory:white_crystal"
 }

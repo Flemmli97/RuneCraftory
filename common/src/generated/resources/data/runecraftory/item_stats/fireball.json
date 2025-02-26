@@ -1,9 +1,9 @@
 {
-  "buyPrice": 2400,
-  "sellPrice": 120,
-  "upgradeDifficulty": 0,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buy_price": 2400,
+  "sell_price": 120,
+  "upgrade_difficulty": 0,
+  "item_stats": {},
+  "monster_bonus": {},
   "element": "NONE",
   "item": "runecraftory:fireball"
 }

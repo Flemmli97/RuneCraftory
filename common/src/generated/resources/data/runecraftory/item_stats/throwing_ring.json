@@ -1,10 +1,10 @@
 {
-  "buyPrice": 10000,
-  "sellPrice": 500,
-  "upgradeDifficulty": 0,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buy_price": 10000,
+  "sell_price": 500,
+  "upgrade_difficulty": 0,
+  "item_stats": {},
+  "monster_bonus": {},
   "element": "NONE",
-  "armorEffect": "runecraftory:throwing_ring",
+  "armor_effect": "runecraftory:throwing_ring",
   "item": "runecraftory:throwing_ring"
 }

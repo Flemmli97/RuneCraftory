@@ -1,9 +1,9 @@
 {
-  "buyPrice": 100,
-  "sellPrice": 30,
-  "upgradeDifficulty": 0,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buy_price": 100,
+  "sell_price": 30,
+  "upgrade_difficulty": 0,
+  "item_stats": {},
+  "monster_bonus": {},
   "element": "NONE",
   "item": "runecraftory:rice"
 }

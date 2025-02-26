@@ -1,9 +1,9 @@
 {
-  "buyPrice": 6000,
-  "sellPrice": 500,
-  "upgradeDifficulty": 15,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buy_price": 6000,
+  "sell_price": 500,
+  "upgrade_difficulty": 15,
+  "item_stats": {},
+  "monster_bonus": {},
   "element": "NONE",
   "item": "runecraftory:object_x"
 }

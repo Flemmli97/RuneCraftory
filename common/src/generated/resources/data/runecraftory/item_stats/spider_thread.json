@@ -1,13 +1,13 @@
 {
-  "buyPrice": 370,
-  "sellPrice": 28,
-  "upgradeDifficulty": 17,
-  "itemStats": {
+  "buy_price": 370,
+  "sell_price": 28,
+  "upgrade_difficulty": 17,
+  "item_stats": {
     "minecraft:generic.attack_damage": 2.0,
     "runecraftory:magic_attack": 2.0,
     "runecraftory:paralysis": 5.0
   },
-  "monsterBonus": {
+  "monster_bonus": {
     "runecraftory:paralysis": 0.3
   },
   "element": "NONE",

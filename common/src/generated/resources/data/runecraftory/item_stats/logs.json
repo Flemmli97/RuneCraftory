@@ -1,12 +1,12 @@
 {
-  "buyPrice": 10,
-  "sellPrice": 2,
-  "upgradeDifficulty": 3,
-  "itemStats": {
+  "buy_price": 10,
+  "sell_price": 2,
+  "upgrade_difficulty": 3,
+  "item_stats": {
     "minecraft:generic.max_health": 3.0,
     "runecraftory:defence": 2.0
   },
-  "monsterBonus": {
+  "monster_bonus": {
     "runecraftory:defence": 0.25
   },
   "element": "NONE",

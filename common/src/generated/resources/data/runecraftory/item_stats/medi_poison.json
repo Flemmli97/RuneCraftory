@@ -1,9 +1,9 @@
 {
-  "buyPrice": 1500,
-  "sellPrice": 75,
-  "upgradeDifficulty": 0,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buy_price": 1500,
+  "sell_price": 75,
+  "upgrade_difficulty": 0,
+  "item_stats": {},
+  "monster_bonus": {},
   "element": "NONE",
   "item": "runecraftory:medi_poison"
 }

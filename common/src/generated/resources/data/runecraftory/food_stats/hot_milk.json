@@ -5,18 +5,18 @@
     "runecraftory:rp_gain": 150.0,
     "runecraftory:rp_increase": 20.0
   },
-  "effectsPercentage": {
+  "effects_percentage": {
     "runecraftory:rp_gain": 1.0
   },
-  "cookingBonus": {},
-  "cookingBonusPercent": {},
-  "potionApply": [
+  "cooking_bonus": {},
+  "cooking_bonus_percent": {},
+  "potion_apply": [
     {
       "potion": "minecraft:speed",
       "duration": 100,
       "amplifier": 1
     }
   ],
-  "potionRemove": [],
+  "potion_remove": [],
   "item": "runecraftory:hot_milk"
 }

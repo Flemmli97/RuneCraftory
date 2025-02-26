@@ -4,13 +4,13 @@
     "runecraftory:health_gain": 10.0,
     "runecraftory:rp_gain": 5.0
   },
-  "effectsPercentage": {},
-  "cookingBonus": {
+  "effects_percentage": {},
+  "cooking_bonus": {
     "runecraftory:health_gain": 10.0,
     "runecraftory:rp_gain": 3.0
   },
-  "cookingBonusPercent": {},
-  "potionApply": [],
-  "potionRemove": [],
+  "cooking_bonus_percent": {},
+  "potion_apply": [],
+  "potion_remove": [],
   "item": "runecraftory:black_grass"
 }

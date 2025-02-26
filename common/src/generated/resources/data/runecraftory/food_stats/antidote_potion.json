@@ -3,11 +3,11 @@
   "effects": {
     "runecraftory:health_gain": 500.0
   },
-  "effectsPercentage": {},
-  "cookingBonus": {},
-  "cookingBonusPercent": {},
-  "potionApply": [],
-  "potionRemove": [
+  "effects_percentage": {},
+  "cooking_bonus": {},
+  "cooking_bonus_percent": {},
+  "potion_apply": [],
+  "potion_remove": [
     "minecraft:poison",
     "runecraftory:poison",
     "minecraft:wither"

@@ -1,9 +1,9 @@
 {
-  "buyPrice": 13000,
-  "sellPrice": 650,
-  "upgradeDifficulty": 0,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buy_price": 13000,
+  "sell_price": 650,
+  "upgrade_difficulty": 0,
+  "item_stats": {},
+  "monster_bonus": {},
   "element": "NONE",
   "item": "runecraftory:cyclone"
 }

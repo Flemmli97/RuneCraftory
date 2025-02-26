@@ -1,14 +1,14 @@
 {
-  "buyPrice": 9500,
-  "sellPrice": 680,
-  "upgradeDifficulty": 0,
-  "itemStats": {
+  "buy_price": 9500,
+  "sell_price": 680,
+  "upgrade_difficulty": 0,
+  "item_stats": {
     "minecraft:generic.knockback_resistance": 0.5,
     "runecraftory:defence": 15.0,
     "runecraftory:res_fatigue": -20.0,
     "runecraftory:res_crit": 10.0
   },
-  "monsterBonus": {
+  "monster_bonus": {
     "runecraftory:defence": 1.0
   },
   "element": "NONE",

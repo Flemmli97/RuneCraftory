@@ -1,11 +1,11 @@
 {
-  "buyPrice": 263,
-  "sellPrice": 21,
-  "upgradeDifficulty": 14,
-  "itemStats": {
+  "buy_price": 263,
+  "sell_price": 21,
+  "upgrade_difficulty": 14,
+  "item_stats": {
     "minecraft:generic.attack_damage": 7.0
   },
-  "monsterBonus": {
+  "monster_bonus": {
     "minecraft:generic.attack_damage": 0.5
   },
   "element": "NONE",

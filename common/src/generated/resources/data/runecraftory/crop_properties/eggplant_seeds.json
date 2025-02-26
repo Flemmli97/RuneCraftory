@@ -1,14 +1,14 @@
 {
-  "giantCrop": "runecraftory:emperor_eggplant",
-  "bestSeason": [
+  "giant_crop": "runecraftory:emperor_eggplant",
+  "best_season": [
     "SPRING",
     "SUMMER"
   ],
-  "badSeason": [
+  "bad_season": [
     "WINTER"
   ],
   "growth": 7,
-  "maxDrops": 4,
+  "max_drops": 4,
   "regrowable": true,
   "item": "runecraftory:eggplant_seeds"
 }

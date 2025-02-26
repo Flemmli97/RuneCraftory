@@ -1,9 +1,9 @@
 {
-  "buyPrice": 380,
-  "sellPrice": 38,
-  "upgradeDifficulty": 0,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buy_price": 380,
+  "sell_price": 38,
+  "upgrade_difficulty": 0,
+  "item_stats": {},
+  "monster_bonus": {},
   "element": "NONE",
   "item": "runecraftory:cherry_grass_seeds"
 }

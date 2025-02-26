@@ -1,11 +1,11 @@
 {
-  "buyPrice": 350,
-  "sellPrice": 60,
-  "upgradeDifficulty": 0,
-  "itemStats": {
+  "buy_price": 350,
+  "sell_price": 60,
+  "upgrade_difficulty": 0,
+  "item_stats": {
     "runecraftory:magic_defence": 7.0
   },
-  "monsterBonus": {
+  "monster_bonus": {
     "runecraftory:magic_defence": 0.5
   },
   "element": "NONE",

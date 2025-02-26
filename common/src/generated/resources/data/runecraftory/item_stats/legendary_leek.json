@@ -1,9 +1,9 @@
 {
-  "buyPrice": 0,
-  "sellPrice": 1950,
-  "upgradeDifficulty": 37,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buy_price": 0,
+  "sell_price": 1950,
+  "upgrade_difficulty": 37,
+  "item_stats": {},
+  "monster_bonus": {},
   "element": "NONE",
   "item": "runecraftory:legendary_leek"
 }

@@ -1,6 +1,6 @@
 {
   "category": "runecraftory:quests",
-  "task": "runecraftory.quest.mining",
+  "name": "runecraftory.quest.mining",
   "description": "runecraftory.quest.mining.description",
   "icon": {
     "item": "minecraft:air",

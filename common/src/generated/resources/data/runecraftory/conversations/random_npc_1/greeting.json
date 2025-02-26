@@ -1,8 +1,8 @@
 {
-  "fallbackKey": "",
+  "fallback_key": "",
   "conversations": {
     "npc.generic.1.greeting.1": {
-      "translationKey": "npc.generic.1.greeting.1",
+      "translation_key": "npc.generic.1.greeting.1",
       "conditions": [
         {
           "type": "minecraft:time_check",
@@ -14,7 +14,7 @@
       ]
     },
     "npc.generic.1.greeting.2": {
-      "translationKey": "npc.generic.1.greeting.2",
+      "translation_key": "npc.generic.1.greeting.2",
       "conditions": [
         {
           "type": "minecraft:time_check",
@@ -26,11 +26,11 @@
       ]
     },
     "npc.generic.1.greeting.3": {
-      "translationKey": "npc.generic.1.greeting.3",
+      "translation_key": "npc.generic.1.greeting.3",
       "conditions": []
     },
     "npc.generic.1.greeting.4": {
-      "translationKey": "npc.generic.1.greeting.4",
+      "translation_key": "npc.generic.1.greeting.4",
       "conditions": []
     }
   }

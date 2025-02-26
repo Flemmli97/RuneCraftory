@@ -1,9 +1,9 @@
 {
-  "buyPrice": 4000,
-  "sellPrice": 200,
-  "upgradeDifficulty": 0,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buy_price": 4000,
+  "sell_price": 200,
+  "upgrade_difficulty": 0,
+  "item_stats": {},
+  "monster_bonus": {},
   "element": "NONE",
   "item": "runecraftory:steel_heart"
 }

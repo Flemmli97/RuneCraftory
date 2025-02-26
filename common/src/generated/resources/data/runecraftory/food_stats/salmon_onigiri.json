@@ -6,12 +6,12 @@
     "runecraftory:defence": 5.0,
     "runecraftory:magic_attack": 7.0
   },
-  "effectsPercentage": {
+  "effects_percentage": {
     "runecraftory:health_gain": 5.0
   },
-  "cookingBonus": {},
-  "cookingBonusPercent": {},
-  "potionApply": [],
-  "potionRemove": [],
+  "cooking_bonus": {},
+  "cooking_bonus_percent": {},
+  "potion_apply": [],
+  "potion_remove": [],
   "item": "runecraftory:salmon_onigiri"
 }

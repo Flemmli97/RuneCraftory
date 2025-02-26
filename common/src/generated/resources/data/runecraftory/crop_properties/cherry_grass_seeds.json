@@ -1,13 +1,13 @@
 {
-  "giantCrop": "runecraftory:king_cherry_grass",
-  "bestSeason": [
+  "giant_crop": "runecraftory:king_cherry_grass",
+  "best_season": [
     "SPRING"
   ],
-  "badSeason": [
+  "bad_season": [
     "WINTER"
   ],
   "growth": 10,
-  "maxDrops": 4,
+  "max_drops": 4,
   "regrowable": false,
   "item": "runecraftory:cherry_grass_seeds"
 }

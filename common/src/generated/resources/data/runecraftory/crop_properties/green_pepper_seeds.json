@@ -1,13 +1,13 @@
 {
-  "giantCrop": "runecraftory:green_pepper_rex",
-  "bestSeason": [
+  "giant_crop": "runecraftory:green_pepper_rex",
+  "best_season": [
     "SUMMER"
   ],
-  "badSeason": [
+  "bad_season": [
     "WINTER"
   ],
   "growth": 8,
-  "maxDrops": 5,
+  "max_drops": 5,
   "regrowable": true,
   "item": "runecraftory:green_pepper_seeds"
 }

@@ -1,9 +1,9 @@
 {
-  "buyPrice": 240,
-  "sellPrice": 110,
-  "upgradeDifficulty": 2,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buy_price": 240,
+  "sell_price": 110,
+  "upgrade_difficulty": 2,
+  "item_stats": {},
+  "monster_bonus": {},
   "element": "NONE",
   "item": "runecraftory:toyherb"
 }

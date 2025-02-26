@@ -4,13 +4,13 @@
     "runecraftory:health_gain": 40.0,
     "runecraftory:rp_gain": 20.0
   },
-  "effectsPercentage": {},
-  "cookingBonus": {},
-  "cookingBonusPercent": {
+  "effects_percentage": {},
+  "cooking_bonus": {},
+  "cooking_bonus_percent": {
     "runecraftory:health_gain": 40.0,
     "runecraftory:rp_gain": 20.0
   },
-  "potionApply": [],
-  "potionRemove": [],
+  "potion_apply": [],
+  "potion_remove": [],
   "item": "runecraftory:egg_l"
 }

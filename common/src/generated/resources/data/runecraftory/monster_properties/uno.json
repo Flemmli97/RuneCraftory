@@ -1,37 +1,37 @@
 {
-  "minLevel": 50,
+  "min_level": 50,
   "xp": 200,
   "money": 0,
-  "tamingChance": 0.0,
+  "taming_chance": 0.0,
   "rideable": true,
   "flying": false,
   "size": 3,
-  "needsRoof": true,
-  "levelIncreaseOnKill": [
+  "needs_roof": true,
+  "level_increase_on_kill": [
     {
-      "minKilled": 1,
+      "min_killed": 1,
       "increase": 6
     },
     {
-      "minKilled": 2,
+      "min_killed": 2,
       "increase": 1
     },
     {
-      "minKilled": 7,
+      "min_killed": 7,
       "increase": 3
     },
     {
-      "minKilled": 15,
+      "min_killed": 15,
       "increase": 5
     }
   ],
-  "rideActionCosts": {
+  "ride_action_costs": {
     "command_1": {
       "cost": 0.5,
       "multiplier": true
     }
   },
-  "baseValues": {
+  "base_values": {
     "minecraft:generic.max_health": 280.0,
     "minecraft:generic.attack_damage": 14.0,
     "runecraftory:defence": 4.0,
@@ -51,14 +51,14 @@
     "runecraftory:res_cold": 100.0,
     "runecraftory:res_faint": 100.0
   },
-  "levelGains": {
+  "level_gains": {
     "minecraft:generic.max_health": 650.0,
     "minecraft:generic.attack_damage": 260.0,
     "runecraftory:defence": 259.0,
     "runecraftory:magic_attack": 282.0,
     "runecraftory:magic_defence": 249.0
   },
-  "spawnerPredicate": {
+  "spawner_predicate": {
     "player": {
       "advancements": {
         "runecraftory:progression/path_4/marionetta": true

@@ -1,9 +1,9 @@
 {
-  "buyPrice": 350,
-  "sellPrice": 130,
-  "upgradeDifficulty": 12,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buy_price": 350,
+  "sell_price": 130,
+  "upgrade_difficulty": 12,
+  "item_stats": {},
+  "monster_bonus": {},
   "element": "NONE",
   "item": "runecraftory:cucumber"
 }

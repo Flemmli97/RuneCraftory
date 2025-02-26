@@ -1,14 +1,20 @@
 {
   "category": "runecraftory:hidden_quests",
-  "task": "NPC_SUBQUEST",
+  "name": "NPC_SUBQUEST",
   "loot_table": "minecraft:empty",
   "entries": {
     "0": {
-      "predicate": {
-        "items": [
-          "runecraftory:turnip"
-        ]
-      },
+      "description": "",
+      "item_predicates": [
+        {
+          "description": "runecraftory.quest.ship_turnip.sub.1.task.0",
+          "value": {
+            "items": [
+              "runecraftory:turnip"
+            ]
+          }
+        }
+      ],
       "amount": 1,
       "id": "runecraftory:shipping"
     }

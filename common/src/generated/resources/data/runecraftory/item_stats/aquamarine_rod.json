@@ -1,14 +1,14 @@
 {
-  "buyPrice": 3430,
-  "sellPrice": 186,
-  "upgradeDifficulty": 0,
-  "itemStats": {
+  "buy_price": 3430,
+  "sell_price": 186,
+  "upgrade_difficulty": 0,
+  "item_stats": {
     "runecraftory:magic_attack": 17.0,
     "runecraftory:dizzy": 15.0,
     "runecraftory:attack_range": 0.0,
     "runecraftory:attack_width": 0.5
   },
-  "monsterBonus": {
+  "monster_bonus": {
     "runecraftory:magic_attack": 0.5
   },
   "element": "WATER",

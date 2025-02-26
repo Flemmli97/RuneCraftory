@@ -1,19 +1,19 @@
 {
-  "minLevel": 10,
+  "min_level": 10,
   "xp": 35,
   "money": 0,
-  "tamingChance": 0.05,
+  "taming_chance": 0.05,
   "rideable": true,
   "flying": false,
   "size": 1,
-  "needsRoof": true,
-  "rideActionCosts": {
+  "needs_roof": true,
+  "ride_action_costs": {
     "command_1": {
       "cost": 0.5,
       "multiplier": true
     }
   },
-  "baseValues": {
+  "base_values": {
     "minecraft:generic.max_health": 23.0,
     "minecraft:generic.attack_damage": 12.0,
     "runecraftory:defence": 4.0,
@@ -26,7 +26,7 @@
     "runecraftory:res_dark": -5.0,
     "runecraftory:res_love": 5.0
   },
-  "levelGains": {
+  "level_gains": {
     "minecraft:generic.max_health": 515.0,
     "minecraft:generic.attack_damage": 267.0,
     "runecraftory:defence": 225.0,

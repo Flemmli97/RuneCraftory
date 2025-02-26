@@ -1,13 +1,13 @@
 {
-  "buyPrice": 450,
-  "sellPrice": 40,
-  "upgradeDifficulty": 0,
-  "itemStats": {
+  "buy_price": 450,
+  "sell_price": 40,
+  "upgrade_difficulty": 0,
+  "item_stats": {
     "runecraftory:defence": 3.0,
     "runecraftory:res_fatigue": 3.0,
     "runecraftory:res_cold": 3.0
   },
-  "monsterBonus": {
+  "monster_bonus": {
     "runecraftory:defence": 0.5
   },
   "element": "NONE",

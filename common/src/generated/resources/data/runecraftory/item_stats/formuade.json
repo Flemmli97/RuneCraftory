@@ -1,9 +1,9 @@
 {
-  "buyPrice": 20000,
-  "sellPrice": 700,
-  "upgradeDifficulty": 0,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buy_price": 20000,
+  "sell_price": 700,
+  "upgrade_difficulty": 0,
+  "item_stats": {},
+  "monster_bonus": {},
   "element": "NONE",
   "item": "runecraftory:formuade"
 }

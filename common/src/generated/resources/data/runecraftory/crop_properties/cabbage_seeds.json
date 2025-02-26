@@ -1,14 +1,14 @@
 {
-  "giantCrop": "runecraftory:king_cabbage",
-  "bestSeason": [
+  "giant_crop": "runecraftory:king_cabbage",
+  "best_season": [
     "SPRING",
     "FALL"
   ],
-  "badSeason": [
+  "bad_season": [
     "WINTER"
   ],
   "growth": 7,
-  "maxDrops": 3,
+  "max_drops": 3,
   "regrowable": false,
   "item": "runecraftory:cabbage_seeds"
 }

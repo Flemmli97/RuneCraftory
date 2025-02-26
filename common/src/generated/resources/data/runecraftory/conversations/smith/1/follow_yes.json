@@ -1,8 +1,8 @@
 {
-  "fallbackKey": "",
+  "fallback_key": "",
   "conversations": {
     "npc.smith.1.follow.yes.1": {
-      "translationKey": "npc.smith.1.follow.yes.1",
+      "translation_key": "npc.smith.1.follow.yes.1",
       "conditions": []
     }
   }

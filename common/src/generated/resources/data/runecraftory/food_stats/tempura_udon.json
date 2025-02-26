@@ -5,12 +5,12 @@
     "runecraftory:rp_gain": 200.0,
     "runecraftory:res_earth": 15.0
   },
-  "effectsPercentage": {
+  "effects_percentage": {
     "runecraftory:health_gain": 30.0
   },
-  "cookingBonus": {},
-  "cookingBonusPercent": {},
-  "potionApply": [],
-  "potionRemove": [],
+  "cooking_bonus": {},
+  "cooking_bonus_percent": {},
+  "potion_apply": [],
+  "potion_remove": [],
   "item": "runecraftory:tempura_udon"
 }

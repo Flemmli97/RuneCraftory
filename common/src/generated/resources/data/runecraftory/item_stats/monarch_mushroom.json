@@ -1,9 +1,9 @@
 {
-  "buyPrice": 300,
-  "sellPrice": 15,
-  "upgradeDifficulty": 1,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buy_price": 300,
+  "sell_price": 15,
+  "upgrade_difficulty": 1,
+  "item_stats": {},
+  "monster_bonus": {},
   "element": "NONE",
   "item": "runecraftory:monarch_mushroom"
 }

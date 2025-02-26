@@ -5,10 +5,10 @@
     "runecraftory:rp_gain": 200.0,
     "runecraftory:magic_attack": 22.0
   },
-  "effectsPercentage": {},
-  "cookingBonus": {},
-  "cookingBonusPercent": {},
-  "potionApply": [],
-  "potionRemove": [],
+  "effects_percentage": {},
+  "cooking_bonus": {},
+  "cooking_bonus_percent": {},
+  "potion_apply": [],
+  "potion_remove": [],
   "item": "runecraftory:vegetable_juice"
 }

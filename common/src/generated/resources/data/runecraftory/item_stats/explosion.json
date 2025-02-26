@@ -1,9 +1,9 @@
 {
-  "buyPrice": 9600,
-  "sellPrice": 480,
-  "upgradeDifficulty": 0,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buy_price": 9600,
+  "sell_price": 480,
+  "upgrade_difficulty": 0,
+  "item_stats": {},
+  "monster_bonus": {},
   "element": "NONE",
   "item": "runecraftory:explosion"
 }

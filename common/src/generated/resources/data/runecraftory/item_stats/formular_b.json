@@ -1,9 +1,9 @@
 {
-  "buyPrice": 2500,
-  "sellPrice": 250,
-  "upgradeDifficulty": 0,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buy_price": 2500,
+  "sell_price": 250,
+  "upgrade_difficulty": 0,
+  "item_stats": {},
+  "monster_bonus": {},
   "element": "NONE",
   "item": "runecraftory:formular_b"
 }

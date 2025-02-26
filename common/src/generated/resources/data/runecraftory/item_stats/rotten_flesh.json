@@ -1,11 +1,11 @@
 {
-  "buyPrice": 50,
-  "sellPrice": 5,
-  "upgradeDifficulty": 9,
-  "itemStats": {
+  "buy_price": 50,
+  "sell_price": 5,
+  "upgrade_difficulty": 9,
+  "item_stats": {
     "minecraft:generic.max_health": 5.0
   },
-  "monsterBonus": {
+  "monster_bonus": {
     "minecraft:generic.max_health": 0.5
   },
   "element": "NONE",

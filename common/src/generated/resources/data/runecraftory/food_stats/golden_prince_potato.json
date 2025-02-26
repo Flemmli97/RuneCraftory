@@ -3,15 +3,15 @@
   "effects": {
     "runecraftory:health_gain": 400.0
   },
-  "effectsPercentage": {
+  "effects_percentage": {
     "runecraftory:health_gain": 7.0
   },
-  "cookingBonus": {
+  "cooking_bonus": {
     "runecraftory:health_gain": 10.0,
     "runecraftory:rp_gain": 5.0
   },
-  "cookingBonusPercent": {},
-  "potionApply": [],
-  "potionRemove": [],
+  "cooking_bonus_percent": {},
+  "potion_apply": [],
+  "potion_remove": [],
   "item": "runecraftory:golden_prince_potato"
 }

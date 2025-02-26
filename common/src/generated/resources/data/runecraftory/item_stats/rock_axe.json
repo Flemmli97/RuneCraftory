@@ -1,15 +1,15 @@
 {
-  "buyPrice": 20280,
-  "sellPrice": 2420,
-  "upgradeDifficulty": 0,
-  "itemStats": {
+  "buy_price": 20280,
+  "sell_price": 2420,
+  "upgrade_difficulty": 0,
+  "item_stats": {
     "minecraft:generic.attack_damage": 128.0,
     "runecraftory:dizzy": 2.0,
     "runecraftory:crit": 15.0,
     "runecraftory:attack_range": 1.5,
     "runecraftory:attack_width": 3.0
   },
-  "monsterBonus": {
+  "monster_bonus": {
     "minecraft:generic.attack_damage": 1.0
   },
   "element": "EARTH",

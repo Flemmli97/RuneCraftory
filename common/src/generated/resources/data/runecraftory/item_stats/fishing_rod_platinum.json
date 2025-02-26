@@ -1,13 +1,13 @@
 {
-  "buyPrice": 0,
-  "sellPrice": 2000,
-  "upgradeDifficulty": 0,
-  "itemStats": {
+  "buy_price": 0,
+  "sell_price": 2000,
+  "upgrade_difficulty": 0,
+  "item_stats": {
     "minecraft:generic.attack_damage": 89.0,
     "runecraftory:magic_attack": 98.0,
     "runecraftory:attack_range": 0.0
   },
-  "monsterBonus": {
+  "monster_bonus": {
     "minecraft:generic.max_health": 1.0
   },
   "element": "NONE",

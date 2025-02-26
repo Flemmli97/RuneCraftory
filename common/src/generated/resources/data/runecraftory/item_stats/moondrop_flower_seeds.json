@@ -1,9 +1,9 @@
 {
-  "buyPrice": 190,
-  "sellPrice": 19,
-  "upgradeDifficulty": 0,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buy_price": 190,
+  "sell_price": 19,
+  "upgrade_difficulty": 0,
+  "item_stats": {},
+  "monster_bonus": {},
   "element": "NONE",
   "item": "runecraftory:moondrop_flower_seeds"
 }

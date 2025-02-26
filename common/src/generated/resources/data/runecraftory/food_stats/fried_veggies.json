@@ -6,15 +6,15 @@
     "runecraftory:defence": 1.0,
     "runecraftory:magic_attack": 1.0
   },
-  "effectsPercentage": {
+  "effects_percentage": {
     "minecraft:generic.max_health": 300.0,
     "runecraftory:health_gain": 30.0,
     "runecraftory:rp_gain": 25.0,
     "runecraftory:rp_increase": 20.0
   },
-  "cookingBonus": {},
-  "cookingBonusPercent": {},
-  "potionApply": [],
-  "potionRemove": [],
+  "cooking_bonus": {},
+  "cooking_bonus_percent": {},
+  "potion_apply": [],
+  "potion_remove": [],
   "item": "runecraftory:fried_veggies"
 }

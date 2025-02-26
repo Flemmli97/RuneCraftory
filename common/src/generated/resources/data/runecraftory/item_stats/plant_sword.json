@@ -1,11 +1,11 @@
 {
-  "buyPrice": 2000,
-  "sellPrice": 700,
-  "upgradeDifficulty": 0,
-  "itemStats": {
+  "buy_price": 2000,
+  "sell_price": 700,
+  "upgrade_difficulty": 0,
+  "item_stats": {
     "minecraft:generic.attack_damage": 5.0
   },
-  "monsterBonus": {},
+  "monster_bonus": {},
   "element": "NONE",
   "item": "runecraftory:plant_sword"
 }

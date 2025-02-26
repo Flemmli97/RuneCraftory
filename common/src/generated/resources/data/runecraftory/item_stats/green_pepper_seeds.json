@@ -1,9 +1,9 @@
 {
-  "buyPrice": 400,
-  "sellPrice": 40,
-  "upgradeDifficulty": 0,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buy_price": 400,
+  "sell_price": 40,
+  "upgrade_difficulty": 0,
+  "item_stats": {},
+  "monster_bonus": {},
   "element": "NONE",
   "item": "runecraftory:green_pepper_seeds"
 }

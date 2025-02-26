@@ -1,8 +1,8 @@
 {
-  "fallbackKey": "",
+  "fallback_key": "",
   "conversations": {
     "npc.shop_owner.1.greeting.1": {
-      "translationKey": "npc.shop_owner.1.greeting.1",
+      "translation_key": "npc.shop_owner.1.greeting.1",
       "conditions": [
         {
           "type": "minecraft:time_check",
@@ -14,7 +14,7 @@
       ]
     },
     "npc.shop_owner.1.greeting.2": {
-      "translationKey": "npc.shop_owner.1.greeting.2",
+      "translation_key": "npc.shop_owner.1.greeting.2",
       "conditions": []
     }
   }

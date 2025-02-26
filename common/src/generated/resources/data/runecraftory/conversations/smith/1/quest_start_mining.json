@@ -1,4 +1,4 @@
 {
-  "fallbackKey": "npc.smith.quest.mining.start",
+  "fallback_key": "npc.smith.quest.mining.start",
   "conversations": {}
 }

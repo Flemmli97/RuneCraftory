@@ -1,9 +1,9 @@
 {
-  "buyPrice": 0,
-  "sellPrice": 450,
-  "upgradeDifficulty": 21,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buy_price": 0,
+  "sell_price": 450,
+  "upgrade_difficulty": 21,
+  "item_stats": {},
+  "monster_bonus": {},
   "element": "NONE",
   "item": "runecraftory:great_charm_blue"
 }

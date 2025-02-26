@@ -1,6 +1,6 @@
 {
   "category": "runecraftory:quests",
-  "task": "runecraftory.quest.ship_turnip",
+  "name": "runecraftory.quest.ship_turnip",
   "description": "runecraftory.quest.ship_turnip.description",
   "icon": {
     "item": "minecraft:air",

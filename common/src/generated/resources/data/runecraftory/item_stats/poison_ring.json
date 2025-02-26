@@ -1,12 +1,12 @@
 {
-  "buyPrice": 15000,
-  "sellPrice": 750,
-  "upgradeDifficulty": 0,
-  "itemStats": {
+  "buy_price": 15000,
+  "sell_price": 750,
+  "upgrade_difficulty": 0,
+  "item_stats": {
     "runecraftory:poison": 10.0,
     "runecraftory:res_poison": 100.0
   },
-  "monsterBonus": {},
+  "monster_bonus": {},
   "element": "NONE",
   "item": "runecraftory:poison_ring"
 }

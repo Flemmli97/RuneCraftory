@@ -1,14 +1,14 @@
 {
-  "buyPrice": 75000,
-  "sellPrice": 3000,
-  "upgradeDifficulty": 70,
-  "itemStats": {
+  "buy_price": 75000,
+  "sell_price": 3000,
+  "upgrade_difficulty": 70,
+  "item_stats": {
     "minecraft:generic.attack_damage": 35.0,
     "runecraftory:defence": 40.0,
     "runecraftory:magic_attack": 35.0,
     "runecraftory:magic_defence": 40.0
   },
-  "monsterBonus": {
+  "monster_bonus": {
     "minecraft:generic.attack_damage": 5.0,
     "runecraftory:magic_attack": 5.0
   },

@@ -4,12 +4,12 @@
     "runecraftory:health_gain": 20.0,
     "runecraftory:rp_gain": 15.0
   },
-  "effectsPercentage": {
+  "effects_percentage": {
     "runecraftory:health_gain": 2.0
   },
-  "cookingBonus": {},
-  "cookingBonusPercent": {},
-  "potionApply": [],
-  "potionRemove": [],
+  "cooking_bonus": {},
+  "cooking_bonus_percent": {},
+  "potion_apply": [],
+  "potion_remove": [],
   "item": "runecraftory:monarch_mushroom"
 }

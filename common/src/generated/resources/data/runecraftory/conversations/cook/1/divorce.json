@@ -1,12 +1,12 @@
 {
-  "fallbackKey": "",
+  "fallback_key": "",
   "conversations": {
     "npc.cook.1.divorce.success.1": {
-      "translationKey": "npc.cook.1.divorce.success.1",
+      "translation_key": "npc.cook.1.divorce.success.1",
       "conditions": []
     },
     "npc.cook.1.divorce.success.2": {
-      "translationKey": "npc.cook.1.divorce.success.2",
+      "translation_key": "npc.cook.1.divorce.success.2",
       "conditions": []
     }
   }

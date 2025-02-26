@@ -1,12 +1,12 @@
 {
-  "fallbackKey": "",
+  "fallback_key": "",
   "conversations": {
     "npc.shop_owner.1.divorce.success.1": {
-      "translationKey": "npc.shop_owner.1.divorce.success.1",
+      "translation_key": "npc.shop_owner.1.divorce.success.1",
       "conditions": []
     },
     "npc.shop_owner.1.divorce.success.2": {
-      "translationKey": "npc.shop_owner.1.divorce.success.2",
+      "translation_key": "npc.shop_owner.1.divorce.success.2",
       "conditions": []
     }
   }

@@ -1,9 +1,9 @@
 {
-  "buyPrice": 1300,
-  "sellPrice": 440,
-  "upgradeDifficulty": 34,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buy_price": 1300,
+  "sell_price": 440,
+  "upgrade_difficulty": 34,
+  "item_stats": {},
+  "monster_bonus": {},
   "element": "NONE",
   "item": "runecraftory:bok_choy"
 }

@@ -1,16 +1,16 @@
 {
-  "fallbackKey": "",
+  "fallback_key": "",
   "conversations": {
     "npc.shop_owner.1.first.1": {
-      "translationKey": "npc.shop_owner.1.first.1",
+      "translation_key": "npc.shop_owner.1.first.1",
       "conditions": []
     },
     "npc.shop_owner.1.first.2": {
-      "translationKey": "npc.shop_owner.1.first.2",
+      "translation_key": "npc.shop_owner.1.first.2",
       "conditions": []
     },
     "npc.shop_owner.1.first.3": {
-      "translationKey": "npc.shop_owner.1.first.3",
+      "translation_key": "npc.shop_owner.1.first.3",
       "conditions": []
     }
   }

@@ -1,13 +1,13 @@
 {
-  "giantCrop": "runecraftory:great_charm_blue",
-  "bestSeason": [
+  "giant_crop": "runecraftory:great_charm_blue",
+  "best_season": [
     "FALL"
   ],
-  "badSeason": [
+  "bad_season": [
     "WINTER"
   ],
   "growth": 8,
-  "maxDrops": 3,
+  "max_drops": 3,
   "regrowable": false,
   "item": "runecraftory:charm_blue_seeds"
 }

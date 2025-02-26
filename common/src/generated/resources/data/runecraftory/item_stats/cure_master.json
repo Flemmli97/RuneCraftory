@@ -1,9 +1,9 @@
 {
-  "buyPrice": 12000,
-  "sellPrice": 600,
-  "upgradeDifficulty": 0,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buy_price": 12000,
+  "sell_price": 600,
+  "upgrade_difficulty": 0,
+  "item_stats": {},
+  "monster_bonus": {},
   "element": "NONE",
   "item": "runecraftory:cure_master"
 }

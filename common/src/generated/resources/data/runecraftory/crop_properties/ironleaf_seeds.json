@@ -1,13 +1,13 @@
 {
-  "giantCrop": "runecraftory:super_ironleaf",
-  "bestSeason": [
+  "giant_crop": "runecraftory:super_ironleaf",
+  "best_season": [
     "WINTER"
   ],
-  "badSeason": [
+  "bad_season": [
     "SUMMER"
   ],
   "growth": 21,
-  "maxDrops": 2,
+  "max_drops": 2,
   "regrowable": false,
   "item": "runecraftory:ironleaf_seeds"
 }

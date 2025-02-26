@@ -1,9 +1,9 @@
 {
-  "buyPrice": 5400,
-  "sellPrice": 270,
-  "upgradeDifficulty": 0,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buy_price": 5400,
+  "sell_price": 270,
+  "upgrade_difficulty": 0,
+  "item_stats": {},
+  "monster_bonus": {},
   "element": "NONE",
   "item": "runecraftory:dark_ball"
 }

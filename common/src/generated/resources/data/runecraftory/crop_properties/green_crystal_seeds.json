@@ -1,15 +1,15 @@
 {
-  "giantCrop": "runecraftory:big_green_crystal",
-  "bestSeason": [
+  "giant_crop": "runecraftory:big_green_crystal",
+  "best_season": [
     "SUMMER"
   ],
-  "badSeason": [
+  "bad_season": [
     "SPRING",
     "FALL",
     "WINTER"
   ],
   "growth": 70,
-  "maxDrops": 3,
+  "max_drops": 3,
   "regrowable": false,
   "item": "runecraftory:green_crystal_seeds"
 }

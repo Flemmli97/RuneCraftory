@@ -1,9 +1,9 @@
 {
-  "buyPrice": 1200,
-  "sellPrice": 330,
-  "upgradeDifficulty": 14,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buy_price": 1200,
+  "sell_price": 330,
+  "upgrade_difficulty": 14,
+  "item_stats": {},
+  "monster_bonus": {},
   "element": "NONE",
   "item": "runecraftory:cabbage"
 }

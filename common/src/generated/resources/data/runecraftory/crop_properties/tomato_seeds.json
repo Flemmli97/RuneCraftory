@@ -1,14 +1,14 @@
 {
-  "giantCrop": "runecraftory:titan_tomato",
-  "bestSeason": [
+  "giant_crop": "runecraftory:titan_tomato",
+  "best_season": [
     "SPRING",
     "SUMMER"
   ],
-  "badSeason": [
+  "bad_season": [
     "WINTER"
   ],
   "growth": 8,
-  "maxDrops": 2,
+  "max_drops": 2,
   "regrowable": true,
   "item": "runecraftory:tomato_seeds"
 }

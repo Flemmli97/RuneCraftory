@@ -1,12 +1,12 @@
 {
-  "fallbackKey": "",
+  "fallback_key": "",
   "conversations": {
     "npc.doctor.1.dating.yes.1": {
-      "translationKey": "npc.doctor.1.dating.yes.1",
+      "translation_key": "npc.doctor.1.dating.yes.1",
       "conditions": []
     },
     "npc.doctor.1.dating.yes.2": {
-      "translationKey": "npc.doctor.1.dating.yes.2",
+      "translation_key": "npc.doctor.1.dating.yes.2",
       "conditions": []
     }
   }

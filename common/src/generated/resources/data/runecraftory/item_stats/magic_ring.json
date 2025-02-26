@@ -1,12 +1,12 @@
 {
-  "buyPrice": 50000,
-  "sellPrice": 1500,
-  "upgradeDifficulty": 0,
-  "itemStats": {
+  "buy_price": 50000,
+  "sell_price": 1500,
+  "upgrade_difficulty": 0,
+  "item_stats": {
     "runecraftory:magic_defence": 50.0
   },
-  "monsterBonus": {},
+  "monster_bonus": {},
   "element": "NONE",
-  "armorEffect": "runecraftory:magic_ring",
+  "armor_effect": "runecraftory:magic_ring",
   "item": "runecraftory:magic_ring"
 }

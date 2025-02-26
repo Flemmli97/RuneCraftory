@@ -4,12 +4,12 @@
     "runecraftory:health_gain": 15.0,
     "runecraftory:rp_gain": 10.0
   },
-  "effectsPercentage": {},
-  "cookingBonus": {
+  "effects_percentage": {},
+  "cooking_bonus": {
     "runecraftory:rp_gain": 15.0
   },
-  "cookingBonusPercent": {},
-  "potionApply": [],
-  "potionRemove": [],
+  "cooking_bonus_percent": {},
+  "potion_apply": [],
+  "potion_remove": [],
   "item": "runecraftory:pom_pom_grass"
 }

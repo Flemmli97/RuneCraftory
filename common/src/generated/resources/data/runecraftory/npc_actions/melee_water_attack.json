@@ -4,7 +4,7 @@
       "weight": 5,
       "concurrent_actions": [
         {
-          "walkTime": {
+          "walk_time": {
             "type": "minecraft:uniform",
             "min": 30,
             "max": 80
@@ -24,15 +24,15 @@
             "min": 25,
             "max": 40
           },
-          "maxDist": 7.0,
+          "max_dist": 7.0,
           "speed": 1.3,
           "type": "runecraftory:run_away"
         },
         {
           "spell": "runecraftory:water_laser",
           "range": 8.0,
-          "ignoreSeal": false,
-          "walkTime": {
+          "ignore_seal": false,
+          "walk_time": {
             "type": "minecraft:uniform",
             "min": 20,
             "max": 40

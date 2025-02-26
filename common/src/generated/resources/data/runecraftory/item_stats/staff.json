@@ -1,14 +1,14 @@
 {
-  "buyPrice": 11110,
-  "sellPrice": 599,
-  "upgradeDifficulty": 0,
-  "itemStats": {
+  "buy_price": 11110,
+  "sell_price": 599,
+  "upgrade_difficulty": 0,
+  "item_stats": {
     "runecraftory:magic_attack": 65.0,
     "runecraftory:dizzy": 15.0,
     "runecraftory:attack_range": 0.0,
     "runecraftory:attack_width": 0.5
   },
-  "monsterBonus": {
+  "monster_bonus": {
     "runecraftory:magic_attack": 1.0
   },
   "element": "EARTH",

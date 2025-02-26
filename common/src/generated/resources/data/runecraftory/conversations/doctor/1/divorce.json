@@ -1,8 +1,8 @@
 {
-  "fallbackKey": "",
+  "fallback_key": "",
   "conversations": {
     "npc.doctor.1.divorce.success.1": {
-      "translationKey": "npc.doctor.1.divorce.success.1",
+      "translation_key": "npc.doctor.1.divorce.success.1",
       "conditions": []
     }
   }

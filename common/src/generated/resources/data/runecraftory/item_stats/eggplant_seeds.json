@@ -1,9 +1,9 @@
 {
-  "buyPrice": 700,
-  "sellPrice": 70,
-  "upgradeDifficulty": 0,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buy_price": 700,
+  "sell_price": 70,
+  "upgrade_difficulty": 0,
+  "item_stats": {},
+  "monster_bonus": {},
   "element": "NONE",
   "item": "runecraftory:eggplant_seeds"
 }

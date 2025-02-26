@@ -1,11 +1,11 @@
 {
-  "buyPrice": 2000,
-  "sellPrice": 150,
-  "upgradeDifficulty": 20,
-  "itemStats": {
+  "buy_price": 2000,
+  "sell_price": 150,
+  "upgrade_difficulty": 20,
+  "item_stats": {
     "runecraftory:drain": 3.0
   },
-  "monsterBonus": {
+  "monster_bonus": {
     "runecraftory:drain": 1.0
   },
   "element": "LOVE",

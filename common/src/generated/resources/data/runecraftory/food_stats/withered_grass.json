@@ -1,20 +1,20 @@
 {
   "duration": 6000,
   "effects": {},
-  "effectsPercentage": {
+  "effects_percentage": {
     "runecraftory:rp_gain": -35.0
   },
-  "cookingBonus": {},
-  "cookingBonusPercent": {
+  "cooking_bonus": {},
+  "cooking_bonus_percent": {
     "runecraftory:health_gain": -10.0
   },
-  "potionApply": [
+  "potion_apply": [
     {
       "potion": "runecraftory:poison",
       "duration": 60,
       "amplifier": 0
     }
   ],
-  "potionRemove": [],
+  "potion_remove": [],
   "item": "runecraftory:withered_grass"
 }

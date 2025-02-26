@@ -1,6 +1,6 @@
 {
   "category": "runecraftory:quests",
-  "task": "runecraftory.quest.tame_monster",
+  "name": "runecraftory.quest.tame_monster",
   "description": "runecraftory.quest.tame_monster.description",
   "icon": {
     "item": "minecraft:air",

@@ -1,11 +1,11 @@
 {
-  "buyPrice": 0,
-  "sellPrice": 0,
-  "upgradeDifficulty": 0,
-  "itemStats": {
+  "buy_price": 0,
+  "sell_price": 0,
+  "upgrade_difficulty": 0,
+  "item_stats": {
     "runecraftory:res_water": 50.0
   },
-  "monsterBonus": {
+  "monster_bonus": {
     "runecraftory:res_water": 1.0
   },
   "element": "WATER",

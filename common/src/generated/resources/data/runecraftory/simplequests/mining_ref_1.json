@@ -1,17 +1,23 @@
 {
   "category": "runecraftory:hidden_quests",
-  "task": "NPC_SUBQUEST",
+  "name": "NPC_SUBQUEST",
   "loot_table": "minecraft:empty",
   "entries": {
     "0": {
+      "block_predicates": [
+        {
+          "description": "runecraftory.quest.mining.sub.1.task.0",
+          "value": {
+            "tag": "runecraftory:ores"
+          }
+        }
+      ],
       "amount": 10,
+      "consume": false,
       "use": false,
-      "allowDupes": true,
-      "block": {
-        "tag": "runecraftory:ores"
-      },
-      "consumeItem": false,
-      "description": "runecraftory.quest.mining.sub.1.task.0",
+      "allow_dupes": true,
+      "description": "",
+      "player_predicate": {},
       "id": "simplequests_api:block_interact"
     }
   },

@@ -1,11 +1,17 @@
 {
   "category": "runecraftory:hidden_quests",
-  "task": "NPC_SUBQUEST",
+  "name": "NPC_SUBQUEST",
   "loot_table": "minecraft:empty",
   "entries": {
     "0": {
+      "description": "",
+      "predicates": [
+        {
+          "description": "runecraftory.quest.tame_monster.sub.1.task.0",
+          "value": {}
+        }
+      ],
       "amount": 1,
-      "description": "runecraftory.quest.tame_monster.sub.1.task.0",
       "id": "runecraftory:taming"
     }
   },

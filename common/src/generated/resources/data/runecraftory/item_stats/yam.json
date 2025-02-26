@@ -1,9 +1,9 @@
 {
-  "buyPrice": 5500,
-  "sellPrice": 220,
-  "upgradeDifficulty": 20,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buy_price": 5500,
+  "sell_price": 220,
+  "upgrade_difficulty": 20,
+  "item_stats": {},
+  "monster_bonus": {},
   "element": "NONE",
   "item": "runecraftory:yam"
 }

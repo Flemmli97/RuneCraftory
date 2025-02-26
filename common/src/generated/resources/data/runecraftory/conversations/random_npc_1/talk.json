@@ -1,16 +1,16 @@
 {
-  "fallbackKey": "",
+  "fallback_key": "",
   "conversations": {
     "npc.generic.1.talk.1": {
-      "translationKey": "npc.generic.1.talk.1",
+      "translation_key": "npc.generic.1.talk.1",
       "actions": [
         {
-          "translationKey": "npc.generic.1.talk.1.answer.same",
+          "translation_key": "npc.generic.1.talk.1.answer.same",
           "actions": "ANSWER",
           "value": "npc.generic.1.talk.1.response.same"
         },
         {
-          "translationKey": "npc.generic.1.talk.1.answer.ok",
+          "translation_key": "npc.generic.1.talk.1.answer.ok",
           "actions": "ANSWER",
           "value": "npc.generic.1.talk.1.response.ok"
         }
@@ -23,21 +23,21 @@
       ]
     },
     "npc.generic.1.talk.1.response.same": {
-      "translationKey": "npc.generic.1.talk.1.response.same",
-      "startingConversation": false,
+      "translation_key": "npc.generic.1.talk.1.response.same",
+      "starting_conversation": false,
       "conditions": []
     },
     "npc.generic.1.talk.1.response.ok": {
-      "translationKey": "npc.generic.1.talk.1.response.ok",
-      "startingConversation": false,
+      "translation_key": "npc.generic.1.talk.1.response.ok",
+      "starting_conversation": false,
       "conditions": []
     },
     "npc.generic.1.talk.2": {
-      "translationKey": "npc.generic.1.talk.2",
+      "translation_key": "npc.generic.1.talk.2",
       "conditions": []
     },
     "npc.generic.1.talk.rain.1": {
-      "translationKey": "npc.generic.1.talk.rain.1",
+      "translation_key": "npc.generic.1.talk.rain.1",
       "conditions": [
         {
           "type": "minecraft:weather_check",
@@ -46,7 +46,7 @@
       ]
     },
     "npc.generic.1.talk.rain.2": {
-      "translationKey": "npc.generic.1.talk.rain.2",
+      "translation_key": "npc.generic.1.talk.rain.2",
       "conditions": [
         {
           "type": "minecraft:weather_check",

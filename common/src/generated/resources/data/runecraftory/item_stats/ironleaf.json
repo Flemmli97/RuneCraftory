@@ -1,9 +1,9 @@
 {
-  "buyPrice": 1500,
-  "sellPrice": 980,
-  "upgradeDifficulty": 23,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buy_price": 1500,
+  "sell_price": 980,
+  "upgrade_difficulty": 23,
+  "item_stats": {},
+  "monster_bonus": {},
   "element": "NONE",
   "item": "runecraftory:ironleaf"
 }

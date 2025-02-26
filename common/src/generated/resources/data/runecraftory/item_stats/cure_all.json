@@ -1,9 +1,9 @@
 {
-  "buyPrice": 4500,
-  "sellPrice": 225,
-  "upgradeDifficulty": 0,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buy_price": 4500,
+  "sell_price": 225,
+  "upgrade_difficulty": 0,
+  "item_stats": {},
+  "monster_bonus": {},
   "element": "NONE",
   "item": "runecraftory:cure_all"
 }

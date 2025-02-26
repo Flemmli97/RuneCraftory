@@ -13,13 +13,13 @@
     "runecraftory:res_cold": 25.0,
     "runecraftory:res_faint": 25.0
   },
-  "effectsPercentage": {
+  "effects_percentage": {
     "minecraft:generic.max_health": -50.0,
     "runecraftory:rp_increase": 75.0
   },
-  "cookingBonus": {},
-  "cookingBonusPercent": {},
-  "potionApply": [],
-  "potionRemove": [],
+  "cooking_bonus": {},
+  "cooking_bonus_percent": {},
+  "potion_apply": [],
+  "potion_remove": [],
   "item": "runecraftory:formuade"
 }

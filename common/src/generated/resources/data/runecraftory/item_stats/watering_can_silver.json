@@ -1,12 +1,12 @@
 {
-  "buyPrice": 25000,
-  "sellPrice": 300,
-  "upgradeDifficulty": 0,
-  "itemStats": {
+  "buy_price": 25000,
+  "sell_price": 300,
+  "upgrade_difficulty": 0,
+  "item_stats": {
     "runecraftory:magic_attack": 19.0,
     "runecraftory:attack_range": 0.0
   },
-  "monsterBonus": {
+  "monster_bonus": {
     "minecraft:generic.max_health": 1.0
   },
   "element": "WATER",

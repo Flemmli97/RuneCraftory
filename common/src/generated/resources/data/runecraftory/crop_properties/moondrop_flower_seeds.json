@@ -1,14 +1,14 @@
 {
-  "giantCrop": "runecraftory:ultra_moondrop_flower",
-  "bestSeason": [
+  "giant_crop": "runecraftory:ultra_moondrop_flower",
+  "best_season": [
     "SPRING",
     "FALL"
   ],
-  "badSeason": [
+  "bad_season": [
     "WINTER"
   ],
   "growth": 7,
-  "maxDrops": 4,
+  "max_drops": 4,
   "regrowable": false,
   "item": "runecraftory:moondrop_flower_seeds"
 }

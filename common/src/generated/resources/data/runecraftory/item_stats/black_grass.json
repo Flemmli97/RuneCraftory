@@ -1,9 +1,9 @@
 {
-  "buyPrice": 120,
-  "sellPrice": 5,
-  "upgradeDifficulty": 1,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buy_price": 120,
+  "sell_price": 5,
+  "upgrade_difficulty": 1,
+  "item_stats": {},
+  "monster_bonus": {},
   "element": "NONE",
   "item": "runecraftory:black_grass"
 }

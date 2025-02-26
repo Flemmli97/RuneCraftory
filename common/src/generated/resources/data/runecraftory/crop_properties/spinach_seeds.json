@@ -1,11 +1,11 @@
 {
-  "giantCrop": "runecraftory:sovereign_spinach",
-  "bestSeason": [
+  "giant_crop": "runecraftory:sovereign_spinach",
+  "best_season": [
     "FALL"
   ],
-  "badSeason": [],
+  "bad_season": [],
   "growth": 2,
-  "maxDrops": 2,
+  "max_drops": 2,
   "regrowable": false,
   "item": "runecraftory:spinach_seeds"
 }

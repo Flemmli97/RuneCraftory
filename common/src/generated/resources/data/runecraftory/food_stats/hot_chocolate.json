@@ -5,19 +5,19 @@
     "runecraftory:rp_gain": 300.0,
     "runecraftory:rp_increase": 50.0
   },
-  "effectsPercentage": {
+  "effects_percentage": {
     "runecraftory:rp_gain": 3.0,
     "runecraftory:rp_increase": 5.0
   },
-  "cookingBonus": {},
-  "cookingBonusPercent": {},
-  "potionApply": [
+  "cooking_bonus": {},
+  "cooking_bonus_percent": {},
+  "potion_apply": [
     {
       "potion": "minecraft:speed",
       "duration": 200,
       "amplifier": 1
     }
   ],
-  "potionRemove": [],
+  "potion_remove": [],
   "item": "runecraftory:hot_chocolate"
 }

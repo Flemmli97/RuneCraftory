@@ -1,9 +1,9 @@
 {
-  "buyPrice": 100,
-  "sellPrice": 10,
-  "upgradeDifficulty": 1,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buy_price": 100,
+  "sell_price": 10,
+  "upgrade_difficulty": 1,
+  "item_stats": {},
+  "monster_bonus": {},
   "element": "NONE",
   "item": "runecraftory:mushroom"
 }

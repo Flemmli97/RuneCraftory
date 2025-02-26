@@ -1,9 +1,9 @@
 {
-  "buyPrice": 800,
-  "sellPrice": 350,
-  "upgradeDifficulty": 25,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buy_price": 800,
+  "sell_price": 350,
+  "upgrade_difficulty": 25,
+  "item_stats": {},
+  "monster_bonus": {},
   "element": "NONE",
   "item": "runecraftory:tomato"
 }

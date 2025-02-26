@@ -1,13 +1,13 @@
 {
-  "giantCrop": "runecraftory:big_fireflower",
-  "bestSeason": [
+  "giant_crop": "runecraftory:big_fireflower",
+  "best_season": [
     "SUMMER"
   ],
-  "badSeason": [
+  "bad_season": [
     "WINTER"
   ],
   "growth": 42,
-  "maxDrops": 4,
+  "max_drops": 4,
   "regrowable": false,
   "item": "runecraftory:fireflower_seeds"
 }

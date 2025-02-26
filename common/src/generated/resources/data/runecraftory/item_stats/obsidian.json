@@ -1,12 +1,12 @@
 {
-  "buyPrice": 100,
-  "sellPrice": 5,
-  "upgradeDifficulty": 7,
-  "itemStats": {
+  "buy_price": 100,
+  "sell_price": 5,
+  "upgrade_difficulty": 7,
+  "item_stats": {
     "minecraft:generic.knockback_resistance": 0.2,
     "runecraftory:defence": 5.0
   },
-  "monsterBonus": {
+  "monster_bonus": {
     "runecraftory:defence": 0.5
   },
   "element": "NONE",
