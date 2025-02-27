@@ -1,0 +1,7 @@
+{
+  "tag": "runecraftory:generic_trash",
+  "selectable": false,
+  "translations": [
+    "runecraftory.gift.trash"
+  ]
+}

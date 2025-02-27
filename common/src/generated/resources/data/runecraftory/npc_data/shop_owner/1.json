@@ -26,7 +26,7 @@
   "neutral_gift_response": "npc.shop_owner.1.gift.default",
   "gift_items": {
     "hate": {
-      "items": "runecraftory:generic_trash",
+      "gift_id": "runecraftory:trash",
       "response_key": "npc.shop_owner.1.hate",
       "xp": -15
     },

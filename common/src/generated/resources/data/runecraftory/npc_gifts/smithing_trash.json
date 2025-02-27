@@ -1,0 +1,7 @@
+{
+  "tag": "runecraftory:smith_trash",
+  "selectable": false,
+  "translations": [
+    "runecraftory.gift.trash.smith"
+  ]
+}

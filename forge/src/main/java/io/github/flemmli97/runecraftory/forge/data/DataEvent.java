@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.forge.data;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.api.datapack.provider.FileVerifier;
 import io.github.flemmli97.runecraftory.forge.data.worldgen.MainWorldGenData;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
@@ -20,17 +21,26 @@ public class DataEvent {
     @SubscribeEvent
     public static void data(GatherDataEvent event) {
         DataGenerator data = event.getGenerator();
-        IgnoreFileHelper ignore = new IgnoreFileHelper(event.getExistingFileHelper());
         NPCDataGen npcDataGen = null;
         QuestGen questGen = null;
         if (event.includeServer()) {
             data.addProvider(questGen = new QuestGen(data));
-            data.addProvider(npcDataGen = new NPCDataGen(data, questGen));
+            data.addProvider(npcDataGen = new NPCDataGen(data, new FileVerifier() {
+                @Override
+                public boolean exists(ResourceLocation loc, PackType packType, String prefix) {
+                    return event.getExistingFileHelper().exists(loc, packType, ".json", prefix);
+                }
+                @Override
+                public void track(ResourceLocation loc, PackType packType, String prefix) {
+                    event.getExistingFileHelper().trackGenerated(loc, packType, ".json", prefix);
+                }
+            }, questGen));
         }
         if (event.includeClient()) {
+            IgnoreFileHelper ignore = new IgnoreFileHelper(event.getExistingFileHelper());
             data.addProvider(new BlockStatesGen(data, ignore));
             data.addProvider(new ItemModels(data, ignore));
-            data.addProvider(new LangGen(data, questGen));
+            data.addProvider(new LangGen(data, npcDataGen, questGen));
             data.addProvider(new NPCDialogLangGen(data, npcDataGen));
             data.addProvider(new ParticleGen(data));
             data.addProvider(new SoundGen(data, event.getExistingFileHelper()));
@@ -42,7 +52,6 @@ public class DataEvent {
             data.addProvider(new ItemStatGen(data));
             data.addProvider(new FoodGen(data));
             data.addProvider(new CropGen(data));
-            //data.addProvider(new GlobalLootModifierGen(data));
             data.addProvider(new RecipesGen(data));
             data.addProvider(new Loottables(data, questGen));
             data.addProvider(new BiomeTagGen(data, event.getExistingFileHelper()));

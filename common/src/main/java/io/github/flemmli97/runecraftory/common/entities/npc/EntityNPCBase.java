@@ -1,14 +1,18 @@
 package io.github.flemmli97.runecraftory.common.entities.npc;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.datapack.ConversationContext;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
-import io.github.flemmli97.runecraftory.api.datapack.NPCData;
 import io.github.flemmli97.runecraftory.api.datapack.SimpleEffect;
+import io.github.flemmli97.runecraftory.api.datapack.npc.ConversationSet;
+import io.github.flemmli97.runecraftory.api.datapack.npc.GiftData;
+import io.github.flemmli97.runecraftory.api.datapack.npc.NPCData;
+import io.github.flemmli97.runecraftory.api.datapack.npc.NPCLook;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.common.attachment.player.LevelExpPair;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
@@ -77,8 +81,6 @@ import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
-import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -216,12 +218,11 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     public boolean ignoreInit;
     private NPCData data = NPCData.DEFAULT_DATA;
-    private NPCData.NPCLook look = NPCData.NPCLook.DEFAULT_LOOK;
+    private NPCLook look = NPCLook.DEFAULT_LOOK;
     public final NPCFeatureContainer lookFeatures = new NPCFeatureContainer();
     private NPCAttackActions attackActions = NPCAttackActions.DEFAULT;
     private Pair<EnumSeason, Integer> birthday = Pair.of(EnumSeason.SPRING, 1);
-    //Will be used if data returns null for these values
-    private final Map<String, TagKey<Item>> gift = new HashMap<>();
+    private Map<String, GiftData> gifts;
     private final Random dataRandom = new Random();
 
     private Activity activity = Activity.IDLE;
@@ -644,16 +645,16 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     public void speak(ServerPlayer player, ConversationContext convCtx) {
         int heart = this.relationManager.getFriendPointData(player.getUUID()).points.getLevel();
-        NPCData.ConversationSet conversations = this.data.getConversation(convCtx);
+        ConversationSet conversations = this.data.getConversation(convCtx);
         LootContext ctx = new LootContext.Builder((ServerLevel) this.level).withRandom(this.random)
                 .withParameter(LootContextParams.THIS_ENTITY, this)
                 .withParameter(LootContextParams.ORIGIN, this.position())
                 .withParameter(LootCtxParameters.UUID_CONTEXT, player.getUUID())
                 .withLuck(player.getLuck()).create(LootCtxParameters.NPC_INTERACTION);
-        List<Map.Entry<String, NPCData.Conversation>> filtered = conversations.conversations().entrySet().stream()
+        List<Map.Entry<String, ConversationSet.Conversation>> filtered = conversations.conversations().entrySet().stream()
                 .filter(c -> {
                     //Disable if player already has a quest from this npc
-                    if (c.getValue().actions().stream().anyMatch(h -> h.action() == NPCData.ConversationAction.QUEST) &&
+                    if (c.getValue().actions().stream().anyMatch(h -> h.action() == ConversationSet.ConversationAction.QUEST) &&
                             QuestHandler.questForExists(player, this) != null &&
                             !this.updater.alreadyAcceptedRandomquest(player))
                         return false;
@@ -663,7 +664,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         Collections.shuffle(filtered, this.updater.getDailyRandom());
         int size = Math.min(filtered.size(), 2 + this.updater.getDailyRandom().nextInt(2)); //Select 2-3 random lines
         if (size > 0) {
-            Map.Entry<String, NPCData.Conversation> randomLine = filtered.get(this.random.nextInt(size));
+            Map.Entry<String, ConversationSet.Conversation> randomLine = filtered.get(this.random.nextInt(size));
             this.tellDialogue(player, convCtx, randomLine.getKey(), randomLine.getValue());
         } else {
             Component dialog = conversations.missing() != null
@@ -690,18 +691,18 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         } else
             this.relationManager.advanceQuest(player.getUUID(), quest);
         int heart = this.relationManager.getFriendPointData(player.getUUID()).points.getLevel();
-        NPCData.ConversationSet conversations = this.data.getFromQuest(quest, questCtx, questState);
+        ConversationSet conversations = this.data.getFromQuest(quest, questCtx, questState);
         LootContext ctx = new LootContext.Builder((ServerLevel) this.level).withRandom(this.random)
                 .withParameter(LootContextParams.THIS_ENTITY, this)
                 .withParameter(LootContextParams.ORIGIN, this.position())
                 .withParameter(LootCtxParameters.UUID_CONTEXT, player.getUUID())
                 .withLuck(player.getLuck()).create(LootCtxParameters.NPC_INTERACTION);
-        List<Map.Entry<String, NPCData.Conversation>> filtered = conversations.conversations().entrySet().stream().filter(c -> c.getValue().startingConversation() && c.getValue().test(heart, ctx))
+        List<Map.Entry<String, ConversationSet.Conversation>> filtered = conversations.conversations().entrySet().stream().filter(c -> c.getValue().startingConversation() && c.getValue().test(heart, ctx))
                 .collect(Collectors.toList());
         Collections.shuffle(filtered, this.updater.getDailyRandom());
         int size = Math.min(filtered.size(), 2 + this.updater.getDailyRandom().nextInt(2)); //Select 2-3 random lines
         if (size > 0) {
-            Map.Entry<String, NPCData.Conversation> randomLine = filtered.get(this.random.nextInt(size));
+            Map.Entry<String, ConversationSet.Conversation> randomLine = filtered.get(this.random.nextInt(size));
             this.tellDialogue(player, null, randomLine.getKey(), randomLine.getValue());
         } else {
             Component dialog = conversations.missing() != null
@@ -710,7 +711,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         }
     }
 
-    private void tellDialogue(ServerPlayer player, ConversationContext convCtx, String conversationID, NPCData.Conversation conversation) {
+    private void tellDialogue(ServerPlayer player, ConversationContext convCtx, String conversationID, ConversationSet.Conversation conversation) {
         List<Component> actions = conversation.actions().stream().map(e -> (Component) new TranslatableComponent(e.translationKey())).toList();
         this.tellDialogue(player, convCtx, conversationID, new TranslatableComponent(conversation.translationKey()), actions);
     }
@@ -724,22 +725,22 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         Map<String, Component> map = new HashMap<>();
         map.put(PlaceHolderComponent.NPC, this.getDisplayName());
         map.put(PlaceHolderComponent.PLAYER, player.getDisplayName());
-        this.randomGiftItem(15, Integer.MAX_VALUE).ifPresent(item -> map.put(PlaceHolderComponent.FAVORITE, item.getDescription()));
-        this.randomGiftItem(7, 14).ifPresent(item -> map.put(PlaceHolderComponent.LIKE, item.getDescription()));
-        this.randomGiftItem(-14, -1).ifPresent(item -> map.put(PlaceHolderComponent.DISLIKE, item.getDescription()));
-        this.randomGiftItem(Integer.MIN_VALUE, -15).ifPresent(item -> map.put(PlaceHolderComponent.HATE, item.getDescription()));
+        this.randomGiftContext(15, Integer.MAX_VALUE).ifPresent(comp -> map.put(PlaceHolderComponent.FAVORITE, comp));
+        this.randomGiftContext(7, 14).ifPresent(comp -> map.put(PlaceHolderComponent.LIKE, comp));
+        this.randomGiftContext(-14, -1).ifPresent(comp -> map.put(PlaceHolderComponent.DISLIKE, comp));
+        this.randomGiftContext(Integer.MIN_VALUE, -15).ifPresent(comp -> map.put(PlaceHolderComponent.HATE, comp));
         return map;
     }
 
     public void handleDialogueAction(ServerPlayer sender, ConversationContext convCtx, String conversationID, int actionIdx) {
-        NPCData.ConversationSet conversations = this.data.getConversation(convCtx);
-        NPCData.Conversation conversation = conversations.conversations().get(conversationID);
+        ConversationSet conversations = this.data.getConversation(convCtx);
+        ConversationSet.Conversation conversation = conversations.conversations().get(conversationID);
         if (conversation != null && actionIdx < conversation.actions().size()) {
-            NPCData.ConversationActionHolder action = conversation.actions().get(actionIdx);
+            ConversationSet.ConversationActionHolder action = conversation.actions().get(actionIdx);
             if (action != null) {
                 switch (action.action()) {
                     case ANSWER -> {
-                        NPCData.Conversation answer = conversations.conversations().get(action.actionValue());
+                        ConversationSet.Conversation answer = conversations.conversations().get(action.actionValue());
                         if (answer != null) {
                             this.relationManager.getFriendPointData(sender.getUUID())
                                     .answer(conversationID, action.friendXP());
@@ -1491,10 +1492,10 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         this.entityData.set(MALE, flag);
     }
 
-    public NPCData.NPCLook getLook() {
+    public NPCLook getLook() {
         if (this.look == null) {
             if (this.data == NPCData.DEFAULT_DATA)
-                this.look = NPCData.NPCLook.DEFAULT_LOOK;
+                this.look = NPCLook.DEFAULT_LOOK;
             else {
                 List<ResourceLocation> looks = this.data.look() == null ? List.of() : this.data.look().stream().filter(e -> e.gender() == NPCData.Gender.UNDEFINED || (e.gender() == NPCData.Gender.MALE) == this.isMale())
                         .map(NPCData.NPCLookId::id).toList();
@@ -1534,7 +1535,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         return this.birthday;
     }
 
-    public void setClientLook(NPCData.NPCLook look) {
+    public void setClientLook(NPCLook look) {
         if (this.level.isClientSide) {
             this.look = look;
             this.refreshDimensions();
@@ -1542,28 +1543,39 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     public NPCData.Gift giftOf(ItemStack stack) {
+        this.calcGifts();
         for (Map.Entry<String, NPCData.Gift> e : this.data.giftItems().entrySet()) {
-            TagKey<Item> tag = e.getValue().item() == null ? this.gift.computeIfAbsent(e.getKey(), s -> DataPackHandler.INSTANCE.giftManager().getRandomGift(NPCData.GiftType.ofXP(e.getValue().xp()), this.random)) : e.getValue().item();
+            TagKey<Item> tag = this.gifts.get(e.getKey()).tag();
             if (tag == null || stack.is(tag))
                 return e.getValue();
         }
         return null;
     }
 
-    public Optional<Item> randomGiftItem(int min, int max) {
-        for (Map.Entry<String, NPCData.Gift> e : this.data.giftItems().entrySet()) {
-            if (min > e.getValue().xp() || e.getValue().xp() < max)
-                continue;
-            TagKey<Item> tag = e.getValue().item() == null ? this.gift.computeIfAbsent(e.getKey(), s -> DataPackHandler.INSTANCE.giftManager().getRandomGift(NPCData.GiftType.ofXP(e.getValue().xp()), this.random)) : e.getValue().item();
-            if (tag != null)
-                return Registry.ITEM.getTag(tag).map(n -> {
-                    List<Item> items = n.stream().map(Holder::value).toList();
-                    if (items.isEmpty())
-                        return null;
-                    return items.get(this.updater.getDailyRandom().nextInt(items.size()));
-                });
+    protected Optional<Component> randomGiftContext(int min, int max) {
+        this.calcGifts();
+        List<GiftData> gifts = new ArrayList<>();
+        this.data.giftItems().forEach((key, gift) -> {
+            if (gift.xp() >= min && gift.xp() <= max)
+                gifts.add(this.gifts.get(key));
+        });
+        if (gifts.isEmpty())
+            return Optional.empty();
+        GiftData gift = gifts.get(this.updater.getDailyRandom().nextInt(gifts.size()));
+        return Optional.of(new TranslatableComponent(gift.translation(this.updater.getDailyRandom())));
+    }
+
+    private void calcGifts() {
+        if (this.gifts == null) {
+            ImmutableMap.Builder<String, GiftData> b = ImmutableMap.builder();
+            this.data.giftItems().forEach((s, g) -> {
+                GiftData giftData = g.giftID() == null ? DataPackHandler.INSTANCE.giftManager().getRandomGift(this.updater.getDailyRandom())
+                        : DataPackHandler.INSTANCE.giftManager().get(g.giftID());
+                if (giftData != null)
+                    b.put(s, giftData);
+            });
+            this.gifts = b.build();
         }
-        return Optional.empty();
     }
 
     public void openShopForPlayer(ServerPlayer player) {
@@ -1645,6 +1657,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             else
                 this.schedule.with(data.schedule());
             this.lookFeatures.buildFromLooks(this, this.look.additionalFeatures().values());
+            this.gifts = null;
+            this.calcGifts();
         } else {
             // Apply non null things else
             if (this.data.look() != null && !this.data.look().isEmpty()) {
@@ -1690,6 +1704,9 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         tag.putString("Combat", DataPackHandler.INSTANCE.npcActionsManager().getId(this.getAttackActions()).toString());
         tag.put("Schedule", this.schedule.save());
         tag.put("LookFeatures", this.lookFeatures.save());
+        CompoundTag gifts = new CompoundTag();
+        this.gifts.forEach((s, g) -> gifts.putString(s, DataPackHandler.INSTANCE.giftManager().getId(g).toString()));
+        tag.put("GiftData", gifts);
         return tag;
     }
 
@@ -1707,6 +1724,14 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         this.attackActions = DataPackHandler.INSTANCE.npcActionsManager().get(new ResourceLocation(tag.getString("Combat")));
         this.schedule.load(tag.getCompound("Schedule"));
         this.lookFeatures.read(tag.getCompound("LookFeatures"));
+        CompoundTag gifts = tag.getCompound("GiftData");
+        ImmutableMap.Builder<String, GiftData> b = ImmutableMap.builder();
+        gifts.getAllKeys().forEach(key -> {
+            GiftData giftData = DataPackHandler.INSTANCE.giftManager().get(new ResourceLocation(gifts.getString(key)));
+            if (giftData != null)
+                b.put(key, giftData);
+        });
+        this.gifts = b.build();
         this.setNPCData(data, true);
     }
 

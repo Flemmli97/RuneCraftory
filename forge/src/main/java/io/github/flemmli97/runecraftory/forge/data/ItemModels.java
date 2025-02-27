@@ -43,7 +43,6 @@ public class ItemModels extends ItemModelProvider {
     private final Map<RegistryEntrySupplier<Item>, ResourceLocation> dualItemMapping = this.getDualItemMapping();
     private final Set<RegistryEntrySupplier<Item>> existingSameGloveItems = this.generateSameGloveItemMapping();
 
-
     public ItemModels(DataGenerator generator, ExistingFileHelper existingFileHelper) {
         super(generator, RuneCraftory.MODID, existingFileHelper);
     }

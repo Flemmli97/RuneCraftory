@@ -26,12 +26,12 @@
   "neutral_gift_response": "npc.smith.2.gift.default",
   "gift_items": {
     "dislike": {
-      "items": "runecraftory:smith_trash",
+      "gift_id": "runecraftory:smithing_trash",
       "response_key": "npc.smith.2.dislike",
       "xp": -7
     },
     "like": {
-      "items": "runecraftory:mineral",
+      "gift_id": "runecraftory:minerals",
       "response_key": "npc.smith.2.like",
       "xp": 10
     }

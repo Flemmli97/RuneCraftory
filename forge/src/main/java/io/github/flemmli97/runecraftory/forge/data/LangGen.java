@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.api.datapack.provider.AdditionalLanguages;
 import io.github.flemmli97.runecraftory.api.enums.EnumDay;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
@@ -76,13 +77,13 @@ public class LangGen implements DataProvider {
     private final String modid;
     private final String locale;
 
-    private final QuestGen questGen;
+    private final AdditionalLanguages[] additionalLanguages;
 
-    public LangGen(DataGenerator gen, QuestGen questGen) {
+    public LangGen(DataGenerator gen, AdditionalLanguages... additionalLanguages) {
         this.gen = gen;
         this.modid = RuneCraftory.MODID;
         this.locale = "en_us";
-        this.questGen = questGen;
+        this.additionalLanguages = additionalLanguages;
     }
 
     protected void addTranslations() {
@@ -778,15 +779,11 @@ public class LangGen implements DataProvider {
         this.add(QuestData.AcceptType.LIMIT.langKey(), "You reached your daily quest limit");
         this.add(QuestData.AcceptType.NONPC.langKey(), "NPC for this quest does not exist anymore!");
 
-        if (this.questGen != null) {
-            this.questGen.translations.forEach(this::add);
+        for (AdditionalLanguages langs : this.additionalLanguages) {
+            if (langs != null) {
+                langs.translations().forEach(this::add);
+            }
         }
-//        this.add(QuestGen.getTask(QuestGen.MINING), "Acquire Hardware??");
-//        this.add(QuestGen.getDescription(QuestGen.MINING), "Come see me.");
-//        this.add(QuestGen.getTask(QuestGen.TAMING), "Tame a monster");
-//        this.add(QuestGen.getDescription(QuestGen.TAMING), "I need you to tame a monster. Come see me.");
-//        this.add(QuestGen.getTask(QuestGen.SHIP_TURNIP), "First Shipment!");
-//        this.add(QuestGen.getDescription(QuestGen.SHIP_TURNIP), "Come see me.");
 
         this.add("runecraftory.dependency.tooltips.owner.none", "Unknown owner");
         this.add("runecraftory.dependency.tooltips.owner", "Owned by: %s");

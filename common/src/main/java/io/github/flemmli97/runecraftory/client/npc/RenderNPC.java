@@ -7,7 +7,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.api.datapack.NPCData;
+import io.github.flemmli97.runecraftory.api.datapack.npc.NPCLook;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeature;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.BlushFeatureType;
@@ -78,7 +78,7 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
     }
 
     public static ResourceLocation getTextureFromLook(EntityNPCBase npc, NPCTextureLayer.LayerType type) {
-        NPCData.NPCLook look = npc.getLook();
+        NPCLook look = npc.getLook();
         if (type == NPCTextureLayer.LayerType.SKIN_LAYER) {
             String skin = look.playerSkin();
             if (skin != null) {

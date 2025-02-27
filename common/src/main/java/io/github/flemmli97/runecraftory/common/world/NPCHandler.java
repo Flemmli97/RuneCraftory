@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.world;
 
 import com.mojang.datafixers.util.Pair;
-import io.github.flemmli97.runecraftory.api.datapack.NPCData;
+import io.github.flemmli97.runecraftory.api.datapack.npc.NPCData;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.quests.QuestHandler;

@@ -8,7 +8,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.api.datapack.NPCData;
+import io.github.flemmli97.runecraftory.api.datapack.npc.NPCData;
+import io.github.flemmli97.runecraftory.api.datapack.npc.NPCLook;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
@@ -25,41 +26,41 @@ public class NPCLookManager extends SimpleJsonResourceReloadListener {
     private static final Gson GSON = new GsonBuilder().create();
     public static final ResourceLocation DEFAULT_ID = new ResourceLocation(RuneCraftory.MODID, "default_look");
 
-    private Map<ResourceLocation, NPCData.NPCLook> keyData = ImmutableMap.of();
-    private Map<NPCData.NPCLook, ResourceLocation> dataKey = ImmutableMap.of();
-    private List<NPCData.NPCLook> selectable = ImmutableList.of();
+    private Map<ResourceLocation, NPCLook> keyData = ImmutableMap.of();
+    private Map<NPCLook, ResourceLocation> dataKey = ImmutableMap.of();
+    private List<NPCLook> selectable = ImmutableList.of();
 
     public NPCLookManager() {
         super(GSON, DIRECTORY);
     }
 
-    public NPCData.NPCLook get(ResourceLocation res) {
-        return this.keyData.getOrDefault(res, NPCData.NPCLook.DEFAULT_LOOK);
+    public NPCLook get(ResourceLocation res) {
+        return this.keyData.getOrDefault(res, NPCLook.DEFAULT_LOOK);
     }
 
-    public ResourceLocation getId(NPCData.NPCLook data) {
+    public ResourceLocation getId(NPCLook data) {
         return this.dataKey.getOrDefault(data, DEFAULT_ID);
     }
 
-    public NPCData.NPCLook getRandom(Random random, boolean male) {
+    public NPCLook getRandom(Random random, boolean male) {
         if (this.selectable.isEmpty())
-            return NPCData.NPCLook.DEFAULT_LOOK;
-        List<NPCData.NPCLook> looks = this.selectable.stream().filter(l ->
+            return NPCLook.DEFAULT_LOOK;
+        List<NPCLook> looks = this.selectable.stream().filter(l ->
                 l.gender() == NPCData.Gender.UNDEFINED
                         || l.gender() == (male ? NPCData.Gender.MALE : NPCData.Gender.FEMALE)).toList();
         if (looks.isEmpty())
-            return NPCData.NPCLook.DEFAULT_LOOK;
+            return NPCLook.DEFAULT_LOOK;
         return looks.get(random.nextInt(looks.size()));
     }
 
     @Override
     protected void apply(Map<ResourceLocation, JsonElement> map, ResourceManager resourceManager, ProfilerFiller profiler) {
-        ImmutableMap.Builder<ResourceLocation, NPCData.NPCLook> builder = ImmutableMap.builder();
+        ImmutableMap.Builder<ResourceLocation, NPCLook> builder = ImmutableMap.builder();
         map.forEach((fres, el) -> {
             if (!fres.equals(DEFAULT_ID)) {
                 try {
                     JsonObject obj = el.getAsJsonObject();
-                    builder.put(fres, NPCData.NPCLook.CODEC.parse(JsonOps.INSTANCE, obj)
+                    builder.put(fres, NPCLook.CODEC.parse(JsonOps.INSTANCE, obj)
                             .getOrThrow(false, RuneCraftory.LOGGER::error));
                 } catch (Exception ex) {
                     RuneCraftory.LOGGER.error("Couldnt parse npc look json {} {}", fres, ex);
@@ -67,12 +68,12 @@ public class NPCLookManager extends SimpleJsonResourceReloadListener {
                 }
             }
         });
-        builder.put(NPCData.NPCLook.DEFAULT_LOOK_ID, NPCData.NPCLook.DEFAULT_LOOK);
+        builder.put(NPCLook.DEFAULT_LOOK_ID, NPCLook.DEFAULT_LOOK);
         this.keyData = builder.build();
-        ImmutableMap.Builder<NPCData.NPCLook, ResourceLocation> reverse = ImmutableMap.builder();
+        ImmutableMap.Builder<NPCLook, ResourceLocation> reverse = ImmutableMap.builder();
         this.keyData.forEach((resourceLocation, data) -> reverse.put(data, resourceLocation));
         this.dataKey = reverse.build();
-        ImmutableList.Builder<NPCData.NPCLook> selectable = ImmutableList.builder();
+        ImmutableList.Builder<NPCLook> selectable = ImmutableList.builder();
         this.keyData.entrySet().stream().filter(e -> e.getValue().weight() > 0)
                 .forEach(e -> selectable.add(e.getValue()));
         this.selectable = selectable.build();

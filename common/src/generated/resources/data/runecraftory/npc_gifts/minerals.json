@@ -1,0 +1,7 @@
+{
+  "tag": "runecraftory:mineral",
+  "selectable": false,
+  "translations": [
+    "runecraftory.gift.minerals"
+  ]
+}

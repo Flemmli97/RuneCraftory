@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.world.family;
 
-import io.github.flemmli97.runecraftory.api.datapack.NPCData;
+import io.github.flemmli97.runecraftory.api.datapack.npc.NPCData;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;

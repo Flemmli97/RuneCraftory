@@ -2,59 +2,57 @@ package io.github.flemmli97.runecraftory.api.datapack.provider;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.api.datapack.ConversationContext;
-import io.github.flemmli97.runecraftory.api.datapack.NPCData;
+import io.github.flemmli97.runecraftory.api.datapack.npc.ConversationSet;
+import io.github.flemmli97.runecraftory.api.datapack.npc.GiftData;
+import io.github.flemmli97.runecraftory.api.datapack.npc.NPCData;
+import io.github.flemmli97.runecraftory.api.datapack.npc.NPCLook;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.GiftManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCActionManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCConversationManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCDataManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCLookManager;
-import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NameManager;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.NPCAttackActions;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.HashCache;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
+import net.minecraft.server.packs.PackType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
-public abstract class NPCDataProvider implements DataProvider {
+public abstract class NPCDataProvider implements DataProvider, AdditionalLanguages {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
-    private final Map<NPCData.GiftType, List<ResourceLocation>> gifts = new HashMap<>();
-    private final Map<ResourceLocation, NPCData> data = new HashMap<>();
-    private final Map<ResourceLocation, NPCData.NPCLook> looks = new HashMap<>();
-    private final Map<ResourceLocation, NPCData.ConversationSet> conversations = new HashMap<>();
+    private final Map<ResourceLocation, NPCLook> looks = new HashMap<>();
+    private final Map<ResourceLocation, ConversationSet> conversations = new HashMap<>();
+    private final Map<ResourceLocation, GiftData> giftData = new LinkedHashMap<>();
     private final Map<ResourceLocation, NPCAttackActions> actions = new HashMap<>();
-
-    private final Map<NPCData.GiftType, List<TagKey<Item>>> giftTags = new LinkedHashMap<>();
+    private final Map<ResourceLocation, NPCData> data = new HashMap<>();
 
     //Translation for lang
-    public final Map<String, Map<String, String>> translations = new LinkedHashMap<>();
+    public final Map<String, Map<String, String>> dialogueTranslations = new LinkedHashMap<>();
+    private final Map<String, String> translations = new LinkedHashMap<>();
 
     private final DataGenerator gen;
+    private final FileVerifier verifier;
     protected final String modid;
 
-    public NPCDataProvider(DataGenerator gen, String modid) {
+    public NPCDataProvider(DataGenerator gen, FileVerifier verifier, String modid) {
         this.gen = gen;
+        this.verifier = verifier;
         this.modid = modid;
     }
 
@@ -63,19 +61,9 @@ public abstract class NPCDataProvider implements DataProvider {
     @Override
     public void run(HashCache cache) {
         this.add();
-        this.gifts.forEach((type, giftList) -> {
-            JsonArray giftArr = new JsonArray();
-            giftList.forEach(r -> giftArr.add(r.toString()));
-            Path path1 = this.gen.getOutputFolder().resolve("data/" + this.modid + "/" + NameManager.DIRECTORY + "/" + type.name().toLowerCase(Locale.ROOT) + "_gifts.json");
-            try {
-                DataProvider.save(GSON, cache, giftArr, path1);
-            } catch (IOException e) {
-                LOGGER.error("Couldn't save gifts {}", path1, e);
-            }
-        });
-
         this.data.forEach((res, val) -> {
             Path path = this.gen.getOutputFolder().resolve("data/" + res.getNamespace() + "/" + NPCDataManager.DIRECTORY + "/" + res.getPath() + ".json");
+            this.verifyData(val);
             try {
                 JsonElement obj = NPCData.CODEC.encodeStart(JsonOps.INSTANCE, val)
                         .getOrThrow(false, LOGGER::error);
@@ -87,7 +75,7 @@ public abstract class NPCDataProvider implements DataProvider {
         this.looks.forEach((res, val) -> {
             Path path = this.gen.getOutputFolder().resolve("data/" + res.getNamespace() + "/" + NPCLookManager.DIRECTORY + "/" + res.getPath() + ".json");
             try {
-                JsonElement obj = NPCData.NPCLook.CODEC.encodeStart(JsonOps.INSTANCE, val)
+                JsonElement obj = NPCLook.CODEC.encodeStart(JsonOps.INSTANCE, val)
                         .getOrThrow(false, LOGGER::error);
                 DataProvider.save(GSON, cache, obj, path);
             } catch (IOException e) {
@@ -97,20 +85,21 @@ public abstract class NPCDataProvider implements DataProvider {
         this.conversations.forEach((res, val) -> {
             Path path = this.gen.getOutputFolder().resolve("data/" + res.getNamespace() + "/" + NPCConversationManager.DIRECTORY + "/" + res.getPath() + ".json");
             try {
-                JsonElement obj = NPCData.ConversationSet.CODEC.encodeStart(JsonOps.INSTANCE, val)
+                JsonElement obj = ConversationSet.CODEC.encodeStart(JsonOps.INSTANCE, val)
                         .getOrThrow(false, LOGGER::error);
                 DataProvider.save(GSON, cache, obj, path);
             } catch (IOException e) {
                 LOGGER.error("Couldn't save npc conversations {}", path, e);
             }
         });
-        this.gifts.forEach((type, list) -> {
-            Path path1 = this.gen.getOutputFolder().resolve("data/" + this.modid + "/" + GiftManager.DIRECTORY + "/" + type.name().toLowerCase() + ".json");
+        this.giftData.forEach((res, val) -> {
+            Path path = this.gen.getOutputFolder().resolve("data/" + res.getNamespace() + "/" + GiftManager.DIRECTORY + "/" + res.getPath() + ".json");
             try {
-                JsonElement obj = GSON.toJsonTree(list);
-                DataProvider.save(GSON, cache, obj, path1);
+                JsonElement obj = GiftData.CODEC.encodeStart(JsonOps.INSTANCE, val)
+                        .getOrThrow(false, LOGGER::error);
+                DataProvider.save(GSON, cache, obj, path);
             } catch (IOException e) {
-                LOGGER.error("Couldn't save gifts {}", path1, e);
+                LOGGER.error("Couldn't save gift data {}", path, e);
             }
         });
         this.actions.forEach((res, val) -> {
@@ -130,21 +119,11 @@ public abstract class NPCDataProvider implements DataProvider {
         return "NPCData";
     }
 
-    public void addNPCData(String id, NPCData.Builder data) {
-        //if (data.look() != null && !this.looks.containsKey(data.look()))
-        //    throw new IllegalStateException("NPC has look defined but there is no such look registered");
-        this.translations.computeIfAbsent(id, o -> new LinkedHashMap<>())
-                .putAll(data.getTranslations());
-        this.data.put(new ResourceLocation(this.modid, id), data.build());
-    }
-
-    public void addNPCData(String id, NPCData.Builder data, Map<ConversationContext, NPCData.ConversationSet.Builder> conversations,
+    public void addNPCData(String id, NPCData.Builder data, Map<ConversationContext, ConversationSet.Builder> conversations,
                            Map<ResourceLocation, QuestResponseBuilder> questConversations) {
-        //if (data.look() != null && !this.looks.containsKey(data.look()))
-        //    throw new IllegalStateException("NPC has look defined but there is no such look registered");
         conversations.forEach((key, value) -> {
             ResourceLocation conversationId = new ResourceLocation(this.modid, id + "/" + key.key().getPath());
-            this.translations.computeIfAbsent(id, o -> new LinkedHashMap<>())
+            this.dialogueTranslations.computeIfAbsent(id, o -> new LinkedHashMap<>())
                     .putAll(value.getTranslations());
             this.conversations.put(conversationId, value.build());
             data.addInteractionIfAbsent(key, conversationId);
@@ -156,7 +135,7 @@ public abstract class NPCDataProvider implements DataProvider {
                 if (i != 0)
                     path += "_" + i;
                 ResourceLocation runIdI = new ResourceLocation(this.modid, path);
-                this.translations.computeIfAbsent(id, o -> new LinkedHashMap<>())
+                this.dialogueTranslations.computeIfAbsent(id, o -> new LinkedHashMap<>())
                         .putAll(value.start.get(i).getTranslations());
                 this.conversations.put(runIdI, value.start.get(i).build());
             }
@@ -166,109 +145,74 @@ public abstract class NPCDataProvider implements DataProvider {
                 if (i != 0)
                     path += "_" + i;
                 ResourceLocation runIdI = new ResourceLocation(this.modid, path);
-                this.translations.computeIfAbsent(id, o -> new LinkedHashMap<>())
+                this.dialogueTranslations.computeIfAbsent(id, o -> new LinkedHashMap<>())
                         .putAll(value.active.get(i).getTranslations());
                 this.conversations.put(runIdI, value.active.get(i).build());
             }
             ResourceLocation endId = new ResourceLocation(this.modid, id + "/quest_end_" + key.getPath());
-            this.translations.computeIfAbsent(id, o -> new LinkedHashMap<>())
+            this.dialogueTranslations.computeIfAbsent(id, o -> new LinkedHashMap<>())
                     .putAll(value.end.getTranslations());
             this.conversations.put(endId, value.end.build());
             data.addQuestResponse(key, startId, runId, endId);
         });
-        this.translations.computeIfAbsent(id, o -> new LinkedHashMap<>())
+        this.dialogueTranslations.computeIfAbsent(id, o -> new LinkedHashMap<>())
                 .putAll(data.getTranslations());
         this.data.put(new ResourceLocation(this.modid, id), data.build());
     }
 
-    public void addNPCDataWithLook(String id, NPCData.Builder builder, Pair<ResourceLocation, NPCData.NPCLook> look) {
-        this.translations.computeIfAbsent(id, o -> new LinkedHashMap<>())
-                .putAll(builder.getTranslations());
-        builder.withLook(new NPCData.NPCLookId(look.getFirst()));
-        NPCData data = builder.build();
-        this.data.put(new ResourceLocation(this.modid, id), data);
-        this.looks.put(look.getFirst(), look.getSecond());
-    }
-
-    public void addNPCDataAll(String id, NPCData.Builder data, Map<ConversationContext, NPCData.ConversationSet.Builder> conversations,
-                              Pair<ResourceLocation, NPCData.NPCLook> look, Map<ResourceLocation, QuestResponseBuilder> questConversations) {
-        conversations.forEach((key, value) -> {
-            ResourceLocation conversationId = new ResourceLocation(this.modid, id + "/" + key.key().getPath());
-            this.translations.computeIfAbsent(id, o -> new LinkedHashMap<>())
-                    .putAll(value.getTranslations());
-            this.conversations.put(conversationId, value.build());
-            data.addInteractionIfAbsent(key, conversationId);
-        });
-        questConversations.forEach((key, value) -> {
-            ResourceLocation startId = new ResourceLocation(this.modid, id + "/quest_start_" + key.getPath());
-            for (int i = 0; i < value.start.size(); i++) {
-                String path = startId.getPath();
-                if (i != 0)
-                    path += "_" + i;
-                ResourceLocation runIdI = new ResourceLocation(this.modid, path);
-                this.translations.computeIfAbsent(id, o -> new LinkedHashMap<>())
-                        .putAll(value.start.get(i).getTranslations());
-                this.conversations.put(runIdI, value.start.get(i).build());
-            }
-            ResourceLocation runId = new ResourceLocation(this.modid, id + "/quest_active_" + key.getPath());
-            for (int i = 0; i < value.active.size(); i++) {
-                String path = runId.getPath();
-                if (i != 0)
-                    path += "_" + i;
-                ResourceLocation runIdI = new ResourceLocation(this.modid, path);
-                this.translations.computeIfAbsent(id, o -> new LinkedHashMap<>())
-                        .putAll(value.active.get(i).getTranslations());
-                this.conversations.put(runIdI, value.active.get(i).build());
-            }
-            ResourceLocation endId = new ResourceLocation(this.modid, id + "/quest_end_" + key.getPath());
-            this.translations.computeIfAbsent(id, o -> new LinkedHashMap<>())
-                    .putAll(value.end.getTranslations());
-            this.conversations.put(endId, value.end.build());
-            data.addQuestResponse(key, startId, runId, endId);
-        });
-        this.translations.computeIfAbsent(id, o -> new LinkedHashMap<>())
-                .putAll(data.getTranslations());
-        data.withLook(new NPCData.NPCLookId(look.getFirst()));
-        NPCData npcData = data.build();
-        this.data.put(new ResourceLocation(this.modid, id), npcData);
-        this.looks.put(look.getFirst(), look.getSecond());
-    }
-
-    public ResourceLocation addLook(ResourceLocation id, NPCData.NPCLook look) {
-        this.looks.put(id, look);
+    public ResourceLocation addLook(ResourceLocation id, NPCLook look) {
+        if (this.looks.put(id, look) != null)
+            throw new IllegalStateException("Look already registered");
+        this.verifier.track(id, PackType.SERVER_DATA, NPCLookManager.DIRECTORY);
         return id;
     }
 
-    public void addSelectableGiftTag(NPCData.GiftType type, TagKey<Item> tag) {
-        this.addSelectableGiftTag(type, tag.location());
-    }
-
-    public void addSelectableGiftTag(NPCData.GiftType type, ResourceLocation tag) {
-        this.gifts.computeIfAbsent(type, t -> new ArrayList<>()).add(tag);
-    }
-
-    public void addGenericGift(NPCData.GiftType type, TagKey<Item> tag) {
-        this.gifts.computeIfAbsent(type, r -> new ArrayList<>()).add(tag.location());
+    public ResourceLocation addGiftData(ResourceLocation id, GiftData.Builder giftData) {
+        if (this.giftData.put(id, giftData.build()) != null)
+            throw new IllegalStateException("GiftData already registered");
+        this.translations.putAll(giftData.translations);
+        this.verifier.track(id, PackType.SERVER_DATA, GiftManager.DIRECTORY);
+        return id;
     }
 
     public ResourceLocation addAttackActions(ResourceLocation id, NPCAttackActions.Builder actions) {
-        this.actions.put(id, actions.build());
+        if (this.actions.put(id, actions.build()) != null)
+            throw new IllegalStateException("Attack action already registered");
+        this.verifier.track(id, PackType.SERVER_DATA, NPCActionManager.DIRECTORY);
         return id;
     }
 
-    public record QuestResponseBuilder(List<NPCData.ConversationSet.Builder> start,
-                                       List<NPCData.ConversationSet.Builder> active,
-                                       NPCData.ConversationSet.Builder end) {
-
-        public QuestResponseBuilder(NPCData.ConversationSet.Builder start, NPCData.ConversationSet.Builder active,
-                                    NPCData.ConversationSet.Builder end) {
-            this(List.of(start), List.of(active), end);
+    private void verifyData(NPCData data) {
+        if (data.look() != null) {
+            for (NPCData.NPCLookId look : data.look()) {
+                if (!this.verifier.exists(look.id(), PackType.SERVER_DATA, NPCLookManager.DIRECTORY))
+                    throw new IllegalStateException("No look registered for " + look.id());
+            }
         }
+        if (data.combatActions() != null) {
+            for (ResourceLocation action : data.combatActions()) {
+                if (!this.verifier.exists(action, PackType.SERVER_DATA, NPCActionManager.DIRECTORY))
+                    throw new IllegalStateException("No npc action registered for " + action);
+            }
+        }
+        data.giftItems().forEach((s, g) -> {
+            if (g.giftID() != null && !this.verifier.exists(g.giftID(), PackType.SERVER_DATA, GiftManager.DIRECTORY))
+                throw new IllegalStateException("No gift registered for " + g.giftID());
+        });
     }
 
-    private record NameStructure(List<String> surnames, List<String> male_names, List<String> female_names) {
-        private NameStructure() {
-            this(new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+    @Override
+    public Map<String, String> translations() {
+        return this.translations;
+    }
+
+    public record QuestResponseBuilder(List<ConversationSet.Builder> start,
+                                       List<ConversationSet.Builder> active,
+                                       ConversationSet.Builder end) {
+
+        public QuestResponseBuilder(ConversationSet.Builder start, ConversationSet.Builder active,
+                                    ConversationSet.Builder end) {
+            this(List.of(start), List.of(active), end);
         }
     }
 }

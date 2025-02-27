@@ -38,7 +38,7 @@ public class NPCDialogLangGen implements DataProvider {
     @Override
     public void run(HashCache cache) throws IOException {
         if (this.npcDataGen != null) {
-            for (Map.Entry<String, Map<String, String>> entry : this.npcDataGen.translations.entrySet()) {
+            for (Map.Entry<String, Map<String, String>> entry : this.npcDataGen.dialogueTranslations.entrySet()) {
                 this.save(cache, entry.getValue(), this.gen.getOutputFolder().resolve("assets/" + this.modid + "/" + NPCDialogueLanguageManager.DIRECTORY + "/" + entry.getKey() + "/" + this.locale + ".json"));
             }
         }

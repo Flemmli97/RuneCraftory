@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.world.family;
 
 import com.google.common.collect.ImmutableMap;
-import io.github.flemmli97.runecraftory.api.datapack.NPCData;
+import io.github.flemmli97.runecraftory.api.datapack.npc.NPCData;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
