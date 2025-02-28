@@ -1,6 +1,9 @@
 {
-  "tag": "runecraftory:smith_trash",
-  "selectable": false,
+  "items": [
+    "#runecraftory:generic_trash",
+    "runecraftory:scrap",
+    "runecraftory:scrap_plus"
+  ],
   "translations": [
     "runecraftory.gift.trash.smith"
   ]

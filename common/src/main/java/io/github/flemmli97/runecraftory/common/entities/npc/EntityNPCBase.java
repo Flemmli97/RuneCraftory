@@ -98,7 +98,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
@@ -140,7 +139,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.AxeItem;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.level.GameRules;
@@ -1545,8 +1543,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     public NPCData.Gift giftOf(ItemStack stack) {
         this.calcGifts();
         for (Map.Entry<String, NPCData.Gift> e : this.data.giftItems().entrySet()) {
-            TagKey<Item> tag = this.gifts.get(e.getKey()).tag();
-            if (tag == null || stack.is(tag))
+            if (this.gifts.get(e.getKey()).is(stack))
                 return e.getValue();
         }
         return null;
@@ -1569,7 +1566,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         if (this.gifts == null) {
             ImmutableMap.Builder<String, GiftData> b = ImmutableMap.builder();
             this.data.giftItems().forEach((s, g) -> {
-                GiftData giftData = g.giftID() == null ? DataPackHandler.INSTANCE.giftManager().getRandomGift(this.updater.getDailyRandom())
+                GiftData giftData = g.giftID() == null ? DataPackHandler.INSTANCE.giftManager().getRandomGift(this.updater.getDailyRandom(), g.xp())
                         : DataPackHandler.INSTANCE.giftManager().get(g.giftID());
                 if (giftData != null)
                     b.put(s, giftData);

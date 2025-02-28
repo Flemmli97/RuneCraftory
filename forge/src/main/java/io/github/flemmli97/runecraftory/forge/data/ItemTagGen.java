@@ -122,9 +122,6 @@ public class ItemTagGen extends ItemTagsProvider {
                         ModItems.WEEDS.get(), ModItems.WITHERED_GRASS.get())
                 .addTag(ItemTags.DIRT)
                 .addTag(RunecraftoryTags.COBBLESTONE);
-        this.tag(RunecraftoryTags.SMITH_TRASH)
-                .add(ModItems.SCRAP.get(), ModItems.SCRAP_PLUS.get())
-                .addTag(RunecraftoryTags.GENERIC_TRASH);
 
         this.tag(RunecraftoryTags.MINERALS)
                 .add(ModItems.SCRAP_PLUS.get())

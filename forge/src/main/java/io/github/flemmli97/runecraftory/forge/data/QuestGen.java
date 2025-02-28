@@ -105,8 +105,7 @@ public class QuestGen extends QuestProvider implements AdditionalLanguages {
                         b -> b.addNPC("random_npc_1", new NPCDataProvider.QuestResponseBuilder(
                                 new ConversationSet.Builder("npc.generic.quest.tame_monster.start", """
                                         Did you know that you can tame the monsters in this world?
-                                        You would need to setup a barn first and then just give them an item.
-                                                                                
+                                        You would need to setup a barn first and then just give them an item. \n
                                         With that said I would like you to tame a monster."""),
                                 new ConversationSet.Builder("npc.generic.quest.tame_monster.active", "You still need to tame a monster.\n" +
                                         "Some monsters prefer certain items more."),

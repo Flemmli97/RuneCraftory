@@ -28,6 +28,7 @@ import io.github.flemmli97.runecraftory.common.entities.npc.features.SizeFeature
 import io.github.flemmli97.runecraftory.common.entities.npc.features.SlimLookFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.TypedIndexRange;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
+import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
@@ -37,6 +38,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.predicates.TimeCheck;
 import net.minecraft.world.level.storage.loot.predicates.WeatherCheck;
@@ -82,11 +84,41 @@ public class NPCDataGen extends NPCDataProvider {
                         .action(new SpellAttackAction(ModSpells.WATER_LASER.get(), 8, false, UniformGenerator.between(20, 40), UniformGenerator.between(10, 20)))));
 
         ResourceLocation trashGift = this.addGiftData(new ResourceLocation(RuneCraftory.MODID, "trash"),
-                GiftData.builder(RunecraftoryTags.GENERIC_TRASH, "runecraftory.gift.trash", "Trash").noSelect());
+                GiftData.builder(RunecraftoryTags.GENERIC_TRASH, "runecraftory.gift.trash", "Trash"));
         ResourceLocation smithTrashGift = this.addGiftData(new ResourceLocation(RuneCraftory.MODID, "smithing_trash"),
-                GiftData.builder(RunecraftoryTags.SMITH_TRASH, "runecraftory.gift.trash.smith", "Trash").noSelect());
+                GiftData.builder(RunecraftoryTags.GENERIC_TRASH, "runecraftory.gift.trash.smith", "Trash")
+                        .add(ModItems.SCRAP.get(), ModItems.SCRAP_PLUS.get()));
+
         ResourceLocation mineralGift = this.addGiftData(new ResourceLocation(RuneCraftory.MODID, "minerals"),
-                GiftData.builder(RunecraftoryTags.MINERALS, "runecraftory.gift.minerals", "Minerals").noSelect());
+                GiftData.builder(RunecraftoryTags.MINERALS, "runecraftory.gift.minerals", "Minerals").max(7));
+        ResourceLocation flowers = this.addGiftData(new ResourceLocation(RuneCraftory.MODID, "flowers"),
+                GiftData.builder(RunecraftoryTags.FLOWERS, "runecraftory.gift.flowers", "Flowers").max(7));
+        ResourceLocation fruits = this.addGiftData(new ResourceLocation(RuneCraftory.MODID, "fruits"),
+                GiftData.builder(RunecraftoryTags.FRUITS, "runecraftory.gift.fruits", "Fruits").max(7));
+        ResourceLocation veggies = this.addGiftData(new ResourceLocation(RuneCraftory.MODID, "vegetables"),
+                GiftData.builder(RunecraftoryTags.VEGGIES, "runecraftory.gift.vegetables", "Vegetables").max(7));
+        ResourceLocation turnip = this.addGiftData(new ResourceLocation(RuneCraftory.MODID, "turnip"),
+                GiftData.builder(RunecraftoryTags.TURNIP, "runecraftory.gift.turnip", "Turnip").max(7));
+        ResourceLocation metals = this.addGiftData(new ResourceLocation(RuneCraftory.MODID, "ingots"),
+                GiftData.builder(RunecraftoryTags.IRON, "runecraftory.gift.ingots", "Metals")
+                        .add(RunecraftoryTags.GOLD).add(RunecraftoryTags.TIN).add(RunecraftoryTags.COPPER)
+                        .add(RunecraftoryTags.BRONZE).add(RunecraftoryTags.SILVER).add(RunecraftoryTags.PLATINUM).max(7));
+        ResourceLocation gems = this.addGiftData(new ResourceLocation(RuneCraftory.MODID, "gems"),
+                GiftData.builder(Items.DIAMOND, "runecraftory.gift.gems", "Gems")
+                        .add(RunecraftoryTags.EMERALDS).add(RunecraftoryTags.AMETHYSTS).add(RunecraftoryTags.AQUAMARINES)
+                        .add(RunecraftoryTags.RUBIES).add(RunecraftoryTags.SAPPHIRES).max(7));
+        ResourceLocation onigiri = this.addGiftData(new ResourceLocation(RuneCraftory.MODID, "onigiri"),
+                GiftData.builder(RunecraftoryTags.ONIGIRI, "runecraftory.gift.onigiri", "Onigiri").selectable());
+        ResourceLocation pie = this.addGiftData(new ResourceLocation(RuneCraftory.MODID, "pie"),
+                GiftData.builder(RunecraftoryTags.PIE, "runecraftory.gift.pie", "Cake and Pies").selectable());
+        ResourceLocation juice = this.addGiftData(new ResourceLocation(RuneCraftory.MODID, "juice"),
+                GiftData.builder(RunecraftoryTags.JUICE, "runecraftory.gift.juice", "Juice").selectable());
+        ResourceLocation toast = this.addGiftData(new ResourceLocation(RuneCraftory.MODID, "toast"),
+                GiftData.builder(RunecraftoryTags.TOAST, "runecraftory.gift.toast", "Toasts").selectable());
+        ResourceLocation udon = this.addGiftData(new ResourceLocation(RuneCraftory.MODID, "udon"),
+                GiftData.builder(RunecraftoryTags.UDON, "runecraftory.gift.udon", "Udon").selectable());
+        ResourceLocation jam = this.addGiftData(new ResourceLocation(RuneCraftory.MODID, "jam"),
+                GiftData.builder(RunecraftoryTags.JAM, "runecraftory.gift.jam", "Jam").selectable());
 
         this.addLook(new ResourceLocation(RuneCraftory.MODID, "generic/male_1"), new NPCLook(NPCData.Gender.MALE,
                 null, 50, defaultNPCFeatures(false, m -> m.put(ModNPCLooks.OUTFIT.get(), new OutfitFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("generic", new IndexRange.FirstNIndices(3)), 1))))))));

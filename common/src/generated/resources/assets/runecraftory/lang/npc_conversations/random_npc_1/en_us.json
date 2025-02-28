@@ -43,7 +43,7 @@
   "npc.generic.1.procreation.fail.1": "I understand, but I\u2019m not sure I want that right now.",
   "npc.generic.1.procreation.fail.2": "It's a big decision, and I\u2019m not comfortable with it at this time.",
   "npc.generic.1.procreation.fail.3": "I don't feel like we're in the right place for that yet.",
-  "npc.generic.quest.tame_monster.start": "Did you know that you can tame the monsters in this world?\nYou would need to setup a barn first and then just give them an item.\n\nWith that said I would like you to tame a monster.",
+  "npc.generic.quest.tame_monster.start": "Did you know that you can tame the monsters in this world?\nYou would need to setup a barn first and then just give them an item. \n\nWith that said I would like you to tame a monster.",
   "npc.generic.quest.tame_monster.active": "You still need to tame a monster.\nSome monsters prefer certain items more.",
   "npc.generic.quest.tame_monster.end": "I see you've successfully tamed a monster. Congrats!",
   "npc.generic.1.hate": "What... why would you give me this?",

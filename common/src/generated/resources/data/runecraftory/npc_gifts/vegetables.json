@@ -1,11 +1,11 @@
 {
   "items": [
-    "#runecraftory:mineral"
+    "#c:vegetables"
   ],
   "range": {
     "max": 7
   },
   "translations": [
-    "runecraftory.gift.minerals"
+    "runecraftory.gift.vegetables"
   ]
 }

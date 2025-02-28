@@ -1,0 +1,16 @@
+{
+  "items": [
+    "minecraft:diamond",
+    "#c:emeralds",
+    "#c:amethysts",
+    "#c:aquamarines",
+    "#c:rubies",
+    "#c:sapphires"
+  ],
+  "range": {
+    "max": 7
+  },
+  "translations": [
+    "runecraftory.gift.gems"
+  ]
+}

@@ -1,11 +1,11 @@
 {
   "items": [
-    "#runecraftory:mineral"
+    "#c:crops/turnip"
   ],
   "range": {
     "max": 7
   },
   "translations": [
-    "runecraftory.gift.minerals"
+    "runecraftory.gift.turnip"
   ]
 }

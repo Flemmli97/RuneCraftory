@@ -1,8 +1,0 @@
-{
-  "replace": false,
-  "values": [
-    "runecraftory:scrap",
-    "runecraftory:scrap_plus",
-    "#runecraftory:generic_trash"
-  ]
-}

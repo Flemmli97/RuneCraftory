@@ -71,7 +71,6 @@ public class RunecraftoryTags {
 
     //Gifts
     public static final TagKey<Item> GENERIC_TRASH = tag("generic_trash");
-    public static final TagKey<Item> SMITH_TRASH = tag("smith_trash");
 
     //Runefactory categories
     public static final TagKey<Item> MINERALS = tag("mineral");

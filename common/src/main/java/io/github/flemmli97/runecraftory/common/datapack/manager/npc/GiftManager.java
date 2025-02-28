@@ -24,7 +24,7 @@ public class GiftManager extends SimpleJsonResourceReloadListener {
 
     private Map<ResourceLocation, GiftData> gifts;
     private Map<GiftData, ResourceLocation> giftsLookup;
-    private List<GiftData> selectables;
+    private List<GiftData> giftsList;
 
     public GiftManager() {
         super(GSON, DIRECTORY);
@@ -38,10 +38,11 @@ public class GiftManager extends SimpleJsonResourceReloadListener {
         return this.giftsLookup.get(data);
     }
 
-    public GiftData getRandomGift(Random random) {
-        if (this.selectables == null || this.selectables.isEmpty())
+    public GiftData getRandomGift(Random random, int xp) {
+        List<GiftData> selectables = this.giftsList.stream().filter(g -> g.matches(xp)).toList();
+        if (selectables.isEmpty())
             return null;
-        return this.selectables.get(random.nextInt(this.selectables.size()));
+        return selectables.get(random.nextInt(selectables.size()));
     }
 
     @Override
@@ -59,6 +60,6 @@ public class GiftManager extends SimpleJsonResourceReloadListener {
         ImmutableMap.Builder<GiftData, ResourceLocation> reverse = ImmutableMap.builder();
         this.gifts.forEach((resourceLocation, giftData) -> reverse.put(giftData, resourceLocation));
         this.giftsLookup = reverse.build();
-        this.selectables = this.gifts.values().stream().filter(GiftData::selectable).toList();
+        this.giftsList = this.gifts.keySet().stream().sorted().map(this.gifts::get).toList();
     }
 }
