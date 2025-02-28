@@ -19,7 +19,7 @@ public class SoundGen extends SoundDefinitionsProvider {
     @Override
     public void registerSounds() {
         for (RegistryEntrySupplier<SoundEvent> sup : ModSounds.SOUND_EVENTS.getEntries()) {
-            if (ModSounds.BGM.contains(sup.getID()))
+            if (ModSounds.BGM.stream().anyMatch(h -> h.sound().equals(sup)))
                 continue;
             int num = ModSounds.VARIATIONS.getInt(sup.getID());
             if (num > 0)
@@ -27,25 +27,9 @@ public class SoundGen extends SoundDefinitionsProvider {
             else
                 this.add(sup.get());
         }
-        ResourceLocation bgm1 = new ResourceLocation(RuneCraftory.MODID, "bgm/aiwa-konomunede-kuchiteyuku");
-        ResourceLocation bgm2 = new ResourceLocation(RuneCraftory.MODID, "bgm/area12");
-        ResourceLocation bgm3 = new ResourceLocation(RuneCraftory.MODID, "bgm/catch-them-all");
-        ResourceLocation bgm4 = new ResourceLocation(RuneCraftory.MODID, "bgm/cruising-down-8bit-lane");
-        ResourceLocation bgm5 = new ResourceLocation(RuneCraftory.MODID, "bgm/yami-no-sekai-no-tatakai");
-        ResourceLocation bgm6 = new ResourceLocation(RuneCraftory.MODID, "bgm/yurei");
-        ResourceLocation bgm7 = new ResourceLocation(RuneCraftory.MODID, "bgm/golem_battle");
-        this.addBgmWith(ModSounds.AMBROSIA_FIGHT.get(), bgm4);
-        this.addBgmWith(ModSounds.CHIMERA_FIGHT.get(), bgm2);
-        this.addBgmWith(ModSounds.DEAD_TREE_FIGHT.get(), bgm2);
-        this.addBgmWith(ModSounds.MARIONETTA_FIGHT.get(), bgm6);
-        this.addBgmWith(ModSounds.HANDONETTA_FIGHT.get(), bgm6);
-        this.addBgmWith(ModSounds.RACCOON_FIGHT.get(), bgm1);
-        this.addBgmWith(ModSounds.SKELEFANG_FIGHT.get(), bgm5);
-        this.addBgmWith(ModSounds.RAFFLESIA_FIGHT.get(), bgm3);
-        this.addBgmWith(ModSounds.THUNDERBOLT_FIGHT.get(), bgm4);
-        this.addBgmWith(ModSounds.GRIMOIRE_FIGHT.get(), bgm2);
-        this.addBgmWith(ModSounds.SANO_UNO_FIGHT.get(), bgm4);
-        this.addBgmWith(ModSounds.SARCOPHAGUS_FIGHT.get(), bgm7);
+        for (ModSounds.BGMHolder bgm : ModSounds.BGM) {
+            this.addBgmWith(bgm.sound().get(), bgm.bgm());
+        }
     }
 
     private void add(SoundEvent event) {

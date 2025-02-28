@@ -30,6 +30,7 @@ public class DataEvent {
                 public boolean exists(ResourceLocation loc, PackType packType, String prefix) {
                     return event.getExistingFileHelper().exists(loc, packType, ".json", prefix);
                 }
+
                 @Override
                 public void track(ResourceLocation loc, PackType packType, String prefix) {
                     event.getExistingFileHelper().trackGenerated(loc, packType, ".json", prefix);

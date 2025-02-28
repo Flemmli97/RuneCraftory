@@ -14,6 +14,7 @@ import io.github.flemmli97.runecraftory.forge.item.ForgeArmorBase;
 import io.github.flemmli97.runecraftory.forge.item.StaffItem;
 import io.github.flemmli97.runecraftory.forge.network.PacketHandler;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.FriendlyByteBuf;
@@ -21,6 +22,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.MenuProvider;
@@ -38,6 +40,7 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.RecordItem;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.BaseSpawner;
 import net.minecraft.world.level.ChunkPos;
@@ -289,5 +292,10 @@ public class PlatformImpl implements Platform {
     @Override
     public int getLootingFromEntity(Entity entity, Entity killer, DamageSource source) {
         return ForgeHooks.getLootingLevel(entity, killer, source);
+    }
+
+    @Override
+    public Supplier<Item> registerRecord(int analogOutput, RegistryEntrySupplier<SoundEvent> sound, Item.Properties properties) {
+        return () -> new RecordItem(analogOutput, sound, properties);
     }
 }

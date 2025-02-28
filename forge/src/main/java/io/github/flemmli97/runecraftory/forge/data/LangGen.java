@@ -46,6 +46,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.RecordItem;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
 import org.apache.commons.lang3.text.translate.JavaUnicodeEscaper;
@@ -148,7 +149,11 @@ public class LangGen implements DataProvider {
                 this.add(sup.get(), "Grape Sapling?");
             } else if (sup.get() instanceof SpawnEgg)
                 this.add(sup.get(), "%s" + " Spawn Egg");
-            else
+            else if (sup.get() instanceof RecordItem record) {
+                this.add(sup.get(), "Music Disc");
+                this.add(record.getDescriptionId() + ".desc", this.simpleTranslation(sup.getID().getPath()
+                        .replace("music_disc_", "").replace("-", "_")));
+            } else
                 this.add(sup.get(), this.simpleTranslation(sup.getID()));
         }
 
@@ -801,6 +806,10 @@ public class LangGen implements DataProvider {
 
     private String simpleTranslation(ResourceLocation res) {
         String s = res.getPath();
+        return this.simpleTranslation(s);
+    }
+
+    private String simpleTranslation(String s) {
         if (s.startsWith("ore_broken")) {
             s = s.replace("ore_broken", "");
             s = "broken_" + s + "_mineral";

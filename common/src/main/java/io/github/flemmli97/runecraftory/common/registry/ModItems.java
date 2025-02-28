@@ -1218,7 +1218,6 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> MONSTER_BARN = blockItem("monster_barn", () -> ModBlocks.MONSTER_BARN);
     public static final RegistryEntrySupplier<Item> QUEST_BOARD = ITEMS.register("quest_board", () -> new QuestBoardItem(ModBlocks.QUEST_BOARD.get(), new Item.Properties().tab(RFCreativeTabs.BLOCKS)));
 
-
     public static final RegistryEntrySupplier<Item> ICON_0 = ITEMS.register("icon_0", () -> new Item(new Item.Properties()));
     public static final RegistryEntrySupplier<Item> DEBUG = ITEMS.register("debug_item", () -> new ItemDebug(new Item.Properties()));
     public static final RegistryEntrySupplier<Item> LEVEL = ITEMS.register("level_item", () -> new ItemLevelUp(new Item.Properties()));

@@ -10,15 +10,20 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ModSounds {
 
     public static final PlatformRegistry<SoundEvent> SOUND_EVENTS = PlatformUtils.INSTANCE.of(Registry.SOUND_EVENT_REGISTRY, RuneCraftory.MODID);
     public static final Object2IntMap<ResourceLocation> VARIATIONS = new Object2IntArrayMap<>();
-    public static final Set<ResourceLocation> BGM = new HashSet<>();
+    public static final List<BGMHolder> BGM = new ArrayList<>();
+    public static final Map<ResourceLocation, RegistryEntrySupplier<Item>> BGM_RECORD = new HashMap<>();
 
     public static final RegistryEntrySupplier<SoundEvent> ENTITY_AMBROSIA_WAVE = register("entity.ambrosia.wave");
     public static final RegistryEntrySupplier<SoundEvent> ENTITY_CHIMERA_AMBIENT = register("entity.chimera.ambient", 2);
@@ -64,18 +69,26 @@ public class ModSounds {
     public static final RegistryEntrySupplier<SoundEvent> SPELL_NAIVE_BLADE = register("spell.naive_blade");
     public static final RegistryEntrySupplier<SoundEvent> SPELL_STRAIGHT_PUNCH = register("spell.straight_punch");
 
-    public static final RegistryEntrySupplier<SoundEvent> AMBROSIA_FIGHT = registerBgm("bgm.ambrosia_fight");
-    public static final RegistryEntrySupplier<SoundEvent> CHIMERA_FIGHT = registerBgm("bgm.chimera_fight");
-    public static final RegistryEntrySupplier<SoundEvent> DEAD_TREE_FIGHT = registerBgm("bgm.dead_tree_fight");
-    public static final RegistryEntrySupplier<SoundEvent> MARIONETTA_FIGHT = registerBgm("bgm.marionetta_fight");
-    public static final RegistryEntrySupplier<SoundEvent> HANDONETTA_FIGHT = registerBgm("bgm.handonetta_fight");
-    public static final RegistryEntrySupplier<SoundEvent> RACCOON_FIGHT = registerBgm("bgm.raccoon_fight");
-    public static final RegistryEntrySupplier<SoundEvent> SKELEFANG_FIGHT = registerBgm("bgm.skelefang_fight");
-    public static final RegistryEntrySupplier<SoundEvent> RAFFLESIA_FIGHT = registerBgm("bgm.rafflesia_fight");
-    public static final RegistryEntrySupplier<SoundEvent> THUNDERBOLT_FIGHT = registerBgm("bgm.thunderbolt_fight");
-    public static final RegistryEntrySupplier<SoundEvent> GRIMOIRE_FIGHT = registerBgm("bgm.grimoire_fight");
-    public static final RegistryEntrySupplier<SoundEvent> SANO_UNO_FIGHT = registerBgm("bgm.sano_uno_fight");
-    public static final RegistryEntrySupplier<SoundEvent> SARCOPHAGUS_FIGHT = registerBgm("bgm.sarcophagus_fight");
+    public static final ResourceLocation BGM_1 = new ResourceLocation(RuneCraftory.MODID, "bgm/aiwa-konomunede-kuchiteyuku");
+    public static final ResourceLocation BGM_2 = new ResourceLocation(RuneCraftory.MODID, "bgm/area-12");
+    public static final ResourceLocation BGM_3 = new ResourceLocation(RuneCraftory.MODID, "bgm/catch-them-all");
+    public static final ResourceLocation BGM_4 = new ResourceLocation(RuneCraftory.MODID, "bgm/cruising-down-8bit-lane");
+    public static final ResourceLocation BGM_5 = new ResourceLocation(RuneCraftory.MODID, "bgm/yami-no-sekai-no-tatakai");
+    public static final ResourceLocation BGM_6 = new ResourceLocation(RuneCraftory.MODID, "bgm/yurei");
+    public static final ResourceLocation BGM_7 = new ResourceLocation(RuneCraftory.MODID, "bgm/golem_battle");
+
+    public static final RegistryEntrySupplier<SoundEvent> AMBROSIA_FIGHT = registerBgm("bgm.ambrosia_fight", BGM_4);
+    public static final RegistryEntrySupplier<SoundEvent> CHIMERA_FIGHT = registerBgm("bgm.chimera_fight", BGM_2);
+    public static final RegistryEntrySupplier<SoundEvent> DEAD_TREE_FIGHT = registerBgm("bgm.dead_tree_fight", BGM_2);
+    public static final RegistryEntrySupplier<SoundEvent> MARIONETTA_FIGHT = registerBgm("bgm.marionetta_fight", BGM_6);
+    public static final RegistryEntrySupplier<SoundEvent> HANDONETTA_FIGHT = registerBgm("bgm.handonetta_fight", BGM_6);
+    public static final RegistryEntrySupplier<SoundEvent> RACCOON_FIGHT = registerBgm("bgm.raccoon_fight", BGM_1);
+    public static final RegistryEntrySupplier<SoundEvent> SKELEFANG_FIGHT = registerBgm("bgm.skelefang_fight", BGM_5);
+    public static final RegistryEntrySupplier<SoundEvent> RAFFLESIA_FIGHT = registerBgm("bgm.rafflesia_fight", BGM_3);
+    public static final RegistryEntrySupplier<SoundEvent> THUNDERBOLT_FIGHT = registerBgm("bgm.thunderbolt_fight", BGM_4);
+    public static final RegistryEntrySupplier<SoundEvent> GRIMOIRE_FIGHT = registerBgm("bgm.grimoire_fight", BGM_2);
+    public static final RegistryEntrySupplier<SoundEvent> SANO_UNO_FIGHT = registerBgm("bgm.sano_uno_fight", BGM_4);
+    public static final RegistryEntrySupplier<SoundEvent> SARCOPHAGUS_FIGHT = registerBgm("bgm.sarcophagus_fight", BGM_7);
 
     private static RegistryEntrySupplier<SoundEvent> register(String name) {
         return SOUND_EVENTS.register(name, () -> new SoundEvent(new ResourceLocation(RuneCraftory.MODID, name)));
@@ -88,11 +101,19 @@ public class ModSounds {
         return res;
     }
 
-    private static RegistryEntrySupplier<SoundEvent> registerBgm(String name) {
+    private static RegistryEntrySupplier<SoundEvent> registerBgm(String name, ResourceLocation bgm) {
         RegistryEntrySupplier<SoundEvent> res = SOUND_EVENTS.register(name, () -> new SoundEvent(new ResourceLocation(RuneCraftory.MODID, name)));
-        if (Platform.INSTANCE.isDatagen())
-            BGM.add(res.getID());
+        if (BGM.stream().noneMatch(h -> h.bgm.equals(bgm))) {
+            String music = bgm.getPath().replace("bgm/", "");
+            RegistryEntrySupplier<Item> record = ModItems.ITEMS.register("music_disc_" + music.replace("-", "_"), Platform.INSTANCE.registerRecord(5, res, new Item.Properties()
+                    .stacksTo(1).rarity(Rarity.RARE)));
+            ModItems.NOTEX.add(record);
+            BGM_RECORD.put(bgm, record);
+        }
+        BGM.add(new BGMHolder(res, bgm));
         return res;
     }
 
+    public record BGMHolder(RegistryEntrySupplier<SoundEvent> sound, ResourceLocation bgm) {
+    }
 }

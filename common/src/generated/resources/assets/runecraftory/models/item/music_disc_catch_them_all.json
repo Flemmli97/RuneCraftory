@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "runecraftory:item/music_disc_catch_them_all"
+  }
+}

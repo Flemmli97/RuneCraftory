@@ -15,6 +15,7 @@ import io.github.flemmli97.runecraftory.fabric.mixinhelper.ItemStackDataGetter;
 import io.github.flemmli97.runecraftory.fabric.mixinhelper.PlayerDataGetter;
 import io.github.flemmli97.runecraftory.fabric.network.ClientPacketHandler;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
@@ -30,6 +31,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.MenuProvider;
@@ -47,6 +49,7 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.RecordItem;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.BaseSpawner;
@@ -349,6 +352,11 @@ public class PlatformImpl implements Platform {
         if (killer instanceof LivingEntity living)
             return EnchantmentHelper.getMobLooting(living);
         return 0;
+    }
+
+    @Override
+    public Supplier<Item> registerRecord(int analogOutput, RegistryEntrySupplier<SoundEvent> sound, Item.Properties properties) {
+        return () -> new RecordItem(analogOutput, sound.get(), properties);
     }
 
     public static class CustomDamageSource extends DamageSource {
