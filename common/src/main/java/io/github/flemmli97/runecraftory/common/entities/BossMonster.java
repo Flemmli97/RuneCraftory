@@ -5,14 +5,20 @@ import com.google.common.collect.Sets;
 import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
+import io.github.flemmli97.runecraftory.common.spells.TeleportSpell;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.IOverlayEntityRender;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.BossEvent;
@@ -53,6 +59,8 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
 
     private int combatTick, noPlayerRegenTick, fullHealDelay;
 
+    private ResourceKey<Level> restrictDimension;
+
     public BossMonster(EntityType<? extends BossMonster> type, Level level) {
         super(type, level);
         this.bossInfo = this.createBossBar();
@@ -90,6 +98,16 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
                             this.noPlayerRegenTick = 0;
                         }
                     }
+                    if (this.combatTick > 600 && this.hasRestriction() && !this.isWithinRestriction() && this.restrictDimension != null) {
+                        BlockPos restrict = this.getRestrictCenter();
+                        if (this.level.dimension().equals(this.restrictDimension)) {
+                            TeleportSpell.safeTeleportTo(this, restrict.getX(), restrict.getY(), restrict.getZ());
+                        } else {
+                            ServerLevel serverLevel = this.getServer().getLevel(this.restrictDimension);
+                            if (serverLevel != null)
+                                TeleportSpell.changeDimension(this, serverLevel, restrict.getX(), restrict.getY(), restrict.getZ());
+                        }
+                    }
                 } else {
                     this.combatTick = 0;
                     this.noPlayerRegenTick = 0;
@@ -102,10 +120,24 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
     }
 
     @Override
+    public void restrictTo(@Nullable BlockPos pos, int distance) {
+        super.restrictTo(pos, distance);
+        this.restrictDimension = this.level.dimension();
+    }
+
+    @Override
+    public void clearRestriction() {
+        super.clearRestriction();
+        this.restrictDimension = null;
+    }
+
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Enraged", this.isEnraged());
         compound.putInt("FullHealDelay", this.fullHealDelay);
+        if (this.restrictDimension != null)
+            compound.putString("RestrictDim", this.restrictDimension.location().toString());
     }
 
     @Override
@@ -116,6 +148,8 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
         if (this.hasCustomName()) {
             this.bossInfo.setName(this.getDisplayName());
         }
+        if (compound.contains("RestrictDim"))
+            this.restrictDimension = ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(compound.getString("RestrictDim")));
     }
 
     @Override
