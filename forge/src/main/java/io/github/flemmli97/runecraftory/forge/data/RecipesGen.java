@@ -168,6 +168,16 @@ public class RecipesGen extends RecipeProvider {
                 .define('P', Items.PAPER)
                 .unlockedBy("quest_board", has(ItemTags.SIGNS))
                 .save(consumer);
+        ShapedRecipeBuilder.shaped(ModItems.CASH_REGISTER.get())
+                .pattern("wgw")
+                .pattern("ece")
+                .pattern("www")
+                .define('w', Items.WHITE_CONCRETE)
+                .define('e', RunecraftoryTags.EMERALDS)
+                .define('c', RunecraftoryTags.CHEST)
+                .define('g', Items.GRAY_CONCRETE)
+                .unlockedBy("shipping_bin", has(Items.CHEST))
+                .save(consumer);
 
         ShapedRecipeBuilder.shaped(ModItems.TELEPORT.get())
                 .pattern(" e ")
