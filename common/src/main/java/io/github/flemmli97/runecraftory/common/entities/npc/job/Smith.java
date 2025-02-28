@@ -23,13 +23,13 @@ import java.util.function.IntUnaryOperator;
 
 public class Smith extends NPCJob {
 
-    public static final String BARN_ACTION = "npc.action.barn";
-    public static final String BARN_ACTION_DESCRIPTION = "npc.action.barn.description";
-    public static final String BARN_ACTION_SUCCESS = "npc.action.barn.success";
-    public static final String BARN_ACTION_FAIL = "npc.action.barn.fail";
-    public static final String BARN_COST = "npc.shop.barn.cost";
-    public static final String BARN_COST_MAT = "npc.shop.barn.cost.mat";
-    public static final String BARN_COST_FAIL = "npc.shop.barn.cost.fail";
+    public static final String BARN_ACTION = "runecraftory.npc.action.barn";
+    public static final String BARN_ACTION_DESCRIPTION = "runecraftory.npc.action.barn.description";
+    public static final String BARN_ACTION_SUCCESS = "runecraftory.npc.action.barn.success";
+    public static final String BARN_ACTION_FAIL = "runecraftory.npc.action.barn.fail";
+    public static final String BARN_COST = "runecraftory.npc.shop.barn.cost";
+    public static final String BARN_COST_MAT = "runecraftory.npc.shop.barn.cost.mat";
+    public static final String BARN_COST_FAIL = "runecraftory.npc.shop.barn.cost.fail";
 
     private static final IntUnaryOperator COST_FUNC = count -> {
         int clamped = Math.min(20, count + 1);

@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.integration.rei;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
+import io.github.flemmli97.runecraftory.common.blocks.tile.CraftingBlockEntity;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import me.shedaniel.math.Point;
@@ -48,7 +49,7 @@ public class SextupleCategory implements DisplayCategory<SextupleDisplay> {
 
     @Override
     public Component getTitle() {
-        return new TranslatableComponent("runecraftory.tile.crafting." + this.type.getId());
+        return new TranslatableComponent(CraftingBlockEntity.DISPLAY_PREFIX + this.type.getId());
     }
 
     @Override

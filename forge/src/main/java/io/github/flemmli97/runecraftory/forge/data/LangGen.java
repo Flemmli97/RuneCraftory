@@ -5,15 +5,20 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.provider.AdditionalLanguages;
+import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
 import io.github.flemmli97.runecraftory.api.enums.EnumDay;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.api.enums.EnumWeather;
+import io.github.flemmli97.runecraftory.common.blocks.BlockShippingBin;
+import io.github.flemmli97.runecraftory.common.blocks.tile.CraftingBlockEntity;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.BathhouseAttendant;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.Cook;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.Doctor;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.Smith;
+import io.github.flemmli97.runecraftory.common.inventory.container.ContainerInfoScreen;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolAxe;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolFishingRod;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolHammer;
@@ -163,6 +168,15 @@ public class LangGen implements DataProvider {
             this.add(sup.get(), this.simpleTranslation(sup.getID()));
         }
 
+        this.add(CraftingBlockEntity.DISPLAY_PREFIX + EnumCrafting.FORGE.getId(), "Forging");
+        this.add(CraftingBlockEntity.DISPLAY_PREFIX + EnumCrafting.ARMOR.getId(), "Crafting");
+        this.add(CraftingBlockEntity.DISPLAY_PREFIX + EnumCrafting.CHEM.getId(), "Chemistry");
+        this.add(CraftingBlockEntity.DISPLAY_PREFIX + EnumCrafting.COOKING.getId(), "Cooking");
+
+        this.add(BlockShippingBin.NAME, "Shipping Bin");
+        this.add(ContainerInfoScreen.TITLE, "Info Screen");
+        this.add(ContainerInfoScreen.TITLE_SUB, "Info Screen");
+
         for (RegistryEntrySupplier<EntityType<?>> sup : ModEntities.ENTITIES.getEntries()) {
             if (sup.get() == ModEntities.SARCOPHAGUS_TELEPORTER.get()) {
                 this.add(sup.get(), "Teleporter");
@@ -223,26 +237,24 @@ public class LangGen implements DataProvider {
             this.add(day.translationFull(), d.substring(0, 1).toUpperCase(Locale.ROOT) + d.substring(1));
         }
 
-        this.add("runecraftory.recipe.eat.fail", "Didn't learn any recipe. Maybe your crafting level is too low");
+        for (EnumElement element : EnumElement.values()) {
+            this.add(element.getTranslation(), "Attribute: " + this.simpleTranslation(element.getTranslation().replace(EnumElement.PREFIX, "")));
+        }
 
-        this.add("runecraftory.container.shipping_bin", "Shipping Bin");
-        this.add("runecraftory.container.info", "Info Screen");
-        this.add("runecraftory.container.info.sub", "Info Screen");
+        for (EnumSeason season : EnumSeason.values()) {
+            this.add(season.translationKey(), this.simpleTranslation(season.translationKey().replace(EnumSeason.PREFIX, "")));
+        }
 
-        this.add("runecraftory.shipping.money", "Earning from shipped items: %s");
+        for (EnumWeather weather : EnumWeather.values()) {
+            this.add(weather.translation, this.simpleTranslation(weather.translation.replace(EnumWeather.PREFIX, "")));
+        }
 
-        this.add("runecraftory.tile.crafting.forge", "Forging");
-        this.add("runecraftory.tile.crafting.armor", "Crafting");
-        this.add("runecraftory.tile.crafting.chemistry", "Chemistry");
-        this.add("runecraftory.tile.crafting.cooking", "Cooking");
+        for (EnumSkills s : EnumSkills.values()) {
+            this.add(s.getTranslation(),
+                    this.capitalize(s.getTranslation().replace(EnumSkills.PREFIX, "").replace("_", " "),
+                            Lists.newArrayList("and")));
+        }
 
-        this.add(EnumElement.WATER.getTranslation(), "Attribute: Water");
-        this.add(EnumElement.EARTH.getTranslation(), "Attribute: Earth");
-        this.add(EnumElement.WIND.getTranslation(), "Attribute: Wind");
-        this.add(EnumElement.FIRE.getTranslation(), "Attribute: Fire");
-        this.add(EnumElement.LIGHT.getTranslation(), "Attribute: Light");
-        this.add(EnumElement.DARK.getTranslation(), "Attribute: Dark");
-        this.add(EnumElement.LOVE.getTranslation(), "Attribute: Love");
         this.add("runecraftory.tooltip.item.level", "Level: %s");
         this.add("runecraftory.tooltip.item.buy", "Buy: %s$");
         this.add("runecraftory.tooltip.item.sell", "Sell: %s$");
@@ -264,17 +276,16 @@ public class LangGen implements DataProvider {
 
         this.add("runecraftory.tooltip.growth", "Growth: %sd");
         this.add("runecraftory.tooltip.harvested", "Harvest Amount: %s");
-        this.add(EnumSeason.SPRING.translationKey(), "Spring");
-        this.add(EnumSeason.SUMMER.translationKey(), "Summer");
-        this.add(EnumSeason.FALL.translationKey(), "Fall");
-        this.add(EnumSeason.WINTER.translationKey(), "Winter");
         this.add("runecraftory.tooltip.season.best", "Good Season");
         this.add("runecraftory.tooltip.season.bad", "Bad Season");
 
         this.add("runecraftory.tooltip.baby.boy", "Boy");
         this.add("runecraftory.tooltip.baby.girl", "Girl");
         this.add("runecraftory.tooltip.baby.owner", "Parent: %s");
-        this.add("runecraftory.npc.spawn.name.missing", "Missing name for baby!");
+
+        this.add("death.attack." + CustomDamage.EXHAUST.msgId, "%1$s fainted");
+        this.add("death.attack." + CustomDamage.ENTITY_DAMAGE_SOURCE, "%1$s was knocked down by %2$s");
+        this.add("death.attack." + CustomDamage.POISON.msgId, "%1$s was to weak and died of poison");
 
         this.add(BaseMonster.Behaviour.WANDER_HOME.interactKey, "You send %s home");
         this.add(BaseMonster.Behaviour.FOLLOW.interactKey, "%s is now following you");
@@ -290,14 +301,6 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.barn.interact.not.owner", "This barn belongs to %s.");
         this.add("runecraftory.barn.interact.block", "Barn with capacity %1$s (Free: %2$s).");
         this.add("runecraftory.barn.interact.block.roofed", "Roofed barn with capacity %1$s (Free: %2$s).");
-        this.add("runecraftory.spawner.entry.deny", "A mystical force prevents you from entering!");
-        this.add("runecraftory.crafting.rpMax.missing", "Missing total rp");
-
-        this.add("runecraftory.display.level", "Level: %s");
-
-        this.add("death.attack." + CustomDamage.EXHAUST.msgId, "%1$s fainted");
-        this.add("death.attack." + CustomDamage.ENTITY_DAMAGE_SOURCE, "%1$s was knocked down by %2$s");
-        this.add("death.attack." + CustomDamage.POISON.msgId, "%1$s was to weak and died of poison");
 
         this.add("itemGroup.runecraftory.weapons_tools", "Weapons and Tools");
         this.add("itemGroup.runecraftory.equipment", "Armor");
@@ -315,9 +318,6 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.key.spell_3", "Interaction Key 3");
         this.add("runecraftory.key.spell_4", "Interaction Key 4");
 
-        this.add("runecraftory.generic.yes", "Yes");
-        this.add("runecraftory.generic.no", "No");
-
         this.add("runecraftory.command.skill.no", "No such skill %s!");
         this.add("runecraftory.command.skill.lvl.add", "Added %3$s %1$s skill level to %2$s");
         this.add("runecraftory.command.skill.xp.add", "Added %3$s %1$s skill xp points to %2$s");
@@ -331,12 +331,6 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.command.weather.no", "No such weather %s");
         this.add("runecraftory.command.set.weather", "Set current weather to %s");
         this.add("runecraftory.command.recalc.stats", "Recalculated level stats for %s entities");
-
-        this.add("runecraftory.weather.clear", "clear");
-        this.add("runecraftory.weather.cloudy", "cloudy");
-        this.add("runecraftory.weather.rain", "raining");
-        this.add("runecraftory.weather.storm", "storming");
-        this.add("runecraftory.weather.runey", "runey");
 
         this.add("runecraftory.recipe_integration.locked", "Unknown Recipe");
         this.add("runecraftory.recipe_integration.crafting_level", "Lvl: %s");
@@ -370,6 +364,238 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.magnifying_glass.view.giant", "Size: %s");
         this.add("runecraftory.magnifying_glass.view.defence", "Defence: %s");
 
+        this.add(C2SNPCInteraction.Type.TALK.translation, "Talk");
+        this.add(C2SNPCInteraction.Type.FOLLOW.translation, "Follow me");
+        this.add(C2SNPCInteraction.Type.FOLLOWDISTANCE.translation, "Stay back a bit");
+        this.add(C2SNPCInteraction.Type.STAY.translation, "Stay here");
+        this.add(C2SNPCInteraction.Type.STOPFOLLOW.translation, "Stop following");
+        this.add(C2SNPCInteraction.Type.SHOP.translation, "I want to shop");
+        this.add("runecraftory.gui.level", "Level");
+        this.add("runecraftory.gui.npc.id", "Npc data-id");
+        this.add("runecraftory.gui.npc.profession", "Npc Profession");
+        this.add("runecraftory.gui.save", "Save");
+        this.add("runecraftory.gui.crafting.rpMax.missing", "Missing total rp");
+        this.add("runecraftory.gui.display.level", "Level: %s");
+        this.add("runecraftory.gui.npc.shop.owner", "Owner of %s");
+        this.add("runecraftory.gui.npc.bed.no", "I don't have a bed");
+        this.add("runecraftory.gui.npc.workplace.no", "I don't have a work place. Valid workplaces are [%s]");
+        this.add("runecraftory.gui.npc.parent", "Parent:");
+        this.add("runecraftory.gui.npc.parents", "Parents:");
+        this.add("runecraftory.gui.npc.relationship.dating", "Dating %s");
+        this.add("runecraftory.gui.npc.relationship.married", "Married to %s");
+        this.add("runecraftory.gui.npc.procreate", "Procreate");
+
+        this.add("runecraftory.gui.quests.accept", "Accept");
+        this.add("runecraftory.gui.quests.reset", "Cancel");
+        this.add("runecraftory.gui.quest.submit.button", "Submit");
+        this.add("runecraftory.gui.quest.button", "Requests");
+
+        this.add("runecraftory.advancements.root.title", "Runecraftory");
+        this.add("runecraftory.advancements.root.description", "A minecrafty harvest moon");
+        this.add("runecraftory.advancements.tame.first.title", "First buddy");
+        this.add("runecraftory.advancements.tame.first.description", "Tame your first monster");
+        this.add("runecraftory.advancements.tame.ten.title", "Monster tamer");
+        this.add("runecraftory.advancements.tame.ten.description", "Tame 10 monster");
+        this.add("runecraftory.advancements.tame.boss.title", "Boss tamer");
+        this.add("runecraftory.advancements.tame.boss.description", "Tame a boss monster");
+        this.add("runecraftory.advancements.tame.boss.five.title", "More Bosses");
+        this.add("runecraftory.advancements.tame.boss.five.description", "Tame 5 boss monster");
+        this.add("runecraftory.advancements.tame.boss.all.title", "Legendary Hunter!");
+        this.add("runecraftory.advancements.tame.boss.all.description", "Tame all the boss monsters");
+
+        this.add("runecraftory.advancements.shipping.title", "First earnings");
+        this.add("runecraftory.advancements.shipping.description", "Ship your first item");
+        this.add("runecraftory.advancements.shipping.fifty.title", "Shipping Milestone");
+        this.add("runecraftory.advancements.shipping.fifty.description", "Ship 50 different items");
+        this.add("runecraftory.advancements.shop.title", "Time for shopping");
+        this.add("runecraftory.advancements.shop.description", "Buy your first item");
+        this.add("runecraftory.advancements.100k.title", "10 OK!");
+        this.add("runecraftory.advancements.100k.description", "Reach 100k gold");
+        this.add("runecraftory.advancements.million.title", "One Million!");
+        this.add("runecraftory.advancements.million.description", "Have one million gold");
+
+        this.add("runecraftory.advancements.skill.weapon.5.title", "Gotta start somewhere");
+        this.add("runecraftory.advancements.skill.weapon.5.description", "Get to level 5 in any weapon skill");
+        this.add("runecraftory.advancements.skill.10.title", "Skill Level 10");
+        this.add("runecraftory.advancements.skill.10.description", "Get to level 10 in any skill");
+        this.add("runecraftory.advancements.skill.25.title", "Skill Level 25");
+        this.add("runecraftory.advancements.skill.25.description", "Get to level 25 in any skill");
+        this.add("runecraftory.advancements.skill.50.title", "Skill Level 50");
+        this.add("runecraftory.advancements.skill.50.description", "Get to level 50 in any skill");
+        this.add("runecraftory.advancements.skill.100.title", "Skill Level 100");
+        this.add("runecraftory.advancements.skill.100.description", "Get to level 100 in any skill");
+
+        this.add("runecraftory.advancements.level.10.title", "Small steps");
+        this.add("runecraftory.advancements.level.10.description", "Get to level 10");
+        this.add("runecraftory.advancements.level.25.title", "Level 25");
+        this.add("runecraftory.advancements.level.25.description", "Get to level 25");
+        this.add("runecraftory.advancements.level.50.title", "Level 50");
+        this.add("runecraftory.advancements.level.50.description", "Get to level 50");
+        this.add("runecraftory.advancements.level.100.title", "Level 100");
+        this.add("runecraftory.advancements.level.100.description", "Get to level 100");
+
+        this.add("runecraftory.advancements.crafting.forging.title", "Art of Forging");
+        this.add("runecraftory.advancements.crafting.forging.description", "Craft a weapon using the forge");
+        this.add("runecraftory.advancements.crafting.armor.title", "Art of Protection");
+        this.add("runecraftory.advancements.crafting.armor.description", "Craft an armor piece using the accessory workbench");
+        this.add("runecraftory.advancements.crafting.chemistry.title", "Art of Alchemy");
+        this.add("runecraftory.advancements.crafting.chemistry.description", "Make some medicine using the chemistry set");
+        this.add("runecraftory.advancements.crafting.cooking.title", "Culinary Art");
+        this.add("runecraftory.advancements.crafting.cooking.description", "Make some food using the cooking table");
+
+        this.add("runecraftory.advancements.upgrade.title", "Better equipment");
+        this.add("runecraftory.advancements.upgrade.description", "Upgrade any equipment");
+        this.add("runecraftory.advancements.change.element.title", "Its super effective!");
+        this.add("runecraftory.advancements.change.element.description", "Change an element of a weapon");
+        this.add("runecraftory.advancements.spell.title", "Magick");
+        this.add("runecraftory.advancements.spell.description", "Find or craft a spell");
+        this.add("runecraftory.advancements.change.spell.title", "Staff power");
+        this.add("runecraftory.advancements.change.spell.description", "Change or add a spell to a staff");
+        this.add("runecraftory.advancements.lightore.title", "Faker");
+        this.add("runecraftory.advancements.lightore.description", "Transfer the stats of a weapon to another using a light ore");
+
+        this.add("runecraftory.advancements.fertilizer.title", "Increased production");
+        this.add("runecraftory.advancements.fertilizer.description", "Use a fertilizer to improve your farmland");
+        this.add("runecraftory.advancements.giant_crop.title", "Big Boy");
+        this.add("runecraftory.advancements.giant_crop.description", "Grow and harvest a giant crop");
+        this.add("runecraftory.advancements.monster.help.title", "Useful helper");
+        this.add("runecraftory.advancements.monster.help.description", "Command a monster to help you out with farming");
+        this.add("runecraftory.advancements.final.tool.title", "The best");
+        this.add("runecraftory.advancements.final.tool.description", "Obtain a final tier tool");
+
+        this.add("runecraftory.advancements.progression.root.title", "Runecraftory - Milestones");
+        this.add("runecraftory.advancements.progression.root.description", "Defeating them will increase overall mob levels!");
+        this.add("runecraftory.advancements.progression.boss.greater_demon.title", "Monke!");
+        this.add("runecraftory.advancements.progression.boss.greater_demon.description", "Defeat the greater demon. But I don't think he exists yet!");
+        this.add("runecraftory.advancements.progression.boss.chimera.title", "What is this creature!");
+        this.add("runecraftory.advancements.progression.boss.chimera.description", "Defeat a chimera in a water ruin");
+        this.add("runecraftory.advancements.progression.boss.rafflesia.title", "Status gallore");
+        this.add("runecraftory.advancements.progression.boss.rafflesia.description", "Defeat rafflesia in the nether");
+        this.add("runecraftory.advancements.progression.boss.grimoire.title", "Don't get blown away");
+        this.add("runecraftory.advancements.progression.boss.grimoire.description", "Defeat a grimoire at a mountain top");
+        this.add("runecraftory.advancements.progression.boss.dead_tree.title", "Whispies cousin");
+        this.add("runecraftory.advancements.progression.boss.dead_tree.description", "Defeat the dead tree in a forest grove");
+        this.add("runecraftory.advancements.progression.boss.raccoon.title", "Caught thief");
+        this.add("runecraftory.advancements.progression.boss.raccoon.description", "Defeat a raccon somewhere in the plains");
+        this.add("runecraftory.advancements.progression.boss.skelefang.title", "Ancient bone");
+        this.add("runecraftory.advancements.progression.boss.skelefang.description", "Defeat skelefang found in the desert");
+        this.add("runecraftory.advancements.progression.boss.ambrosia.title", "Butterfly?");
+        this.add("runecraftory.advancements.progression.boss.ambrosia.description", "Defeat ambrosia in a forest grove");
+        this.add("runecraftory.advancements.progression.boss.thunderbolt.title", "Demonic Horse");
+        this.add("runecraftory.advancements.progression.boss.thunderbolt.description", "Defeat thunderbolt in the water ruins");
+        this.add("runecraftory.advancements.progression.boss.marionetta.title", "It's not a ghost right?");
+        this.add("runecraftory.advancements.progression.boss.marionetta.description", "Defeat marionetta in the theater ruins");
+        this.add("runecraftory.advancements.progression.boss.sano_uno.title", "Are you worthy?");
+        this.add("runecraftory.advancements.progression.boss.sano_uno.description", "Defeat sano and uno. Now where are they...");
+        this.add("runecraftory.advancements.progression.boss.sarcophagus.title", "Don't get cursed!");
+        this.add("runecraftory.advancements.progression.boss.sarcophagus.description", "Defeat sarcophagus after proving your worth to sano and uno");
+
+        this.add("runecraftory.generic.yes", "Yes");
+        this.add("runecraftory.generic.no", "No");
+
+        this.add("runecraftory.misc.recipe.eat.fail", "Didn't learn any recipe. Maybe your crafting level is too low");
+        this.add("runecraftory.misc.sarcophagus.coming.soon", "This looks like a teleporter but it seems to not lead to anywhere yet...");
+        this.add("runecraftory.misc.shipping.money", "Earning from shipped items: %s");
+        this.add("runecraftory.misc.spawner.entry.deny", "A mystical force prevents you from entering!");
+
+        // NPC stuff
+        this.add(ModNPCJobs.NONE.getSecond().getTranslationKey(), this.simpleTranslation(ModNPCJobs.NONE.getFirst()));
+        this.add(ModNPCJobs.GENERAL.getSecond().getTranslationKey(), this.simpleTranslation(ModNPCJobs.GENERAL.getFirst()));
+        this.add(ModNPCJobs.FLOWER.getSecond().getTranslationKey(), this.simpleTranslation(ModNPCJobs.FLOWER.getFirst()));
+        this.add(ModNPCJobs.SMITH.getSecond().getTranslationKey(), this.simpleTranslation(ModNPCJobs.SMITH.getFirst()));
+        this.add(ModNPCJobs.DOCTOR.getSecond().getTranslationKey(), this.simpleTranslation(ModNPCJobs.DOCTOR.getFirst()));
+        this.add(ModNPCJobs.COOK.getSecond().getTranslationKey(), this.simpleTranslation(ModNPCJobs.COOK.getFirst()));
+        this.add(ModNPCJobs.MAGIC.getSecond().getTranslationKey(), this.simpleTranslation(ModNPCJobs.MAGIC.getFirst()));
+        this.add(ModNPCJobs.RUNE_SKILLS.getSecond().getTranslationKey(), this.simpleTranslation(ModNPCJobs.RUNE_SKILLS.getFirst()));
+        this.add(ModNPCJobs.BATHHOUSE.getSecond().getTranslationKey(), this.simpleTranslation(ModNPCJobs.BATHHOUSE.getFirst()));
+        this.add(ModNPCJobs.RANDOM.getSecond().getTranslationKey(), this.simpleTranslation(ModNPCJobs.RANDOM.getFirst()));
+
+        this.add(Smith.BARN_ACTION, "Monster barn");
+        this.add(Smith.BARN_ACTION_DESCRIPTION, "You can buy a monster barn to house your tamed monsters. Each barn bought increases the costs of the next one");
+        this.add(Smith.BARN_ACTION_SUCCESS, "Thank you for your purchase.");
+        this.add(Smith.BARN_ACTION_FAIL, "You don't have enough materials for that.");
+        this.add(Smith.BARN_COST, "A barn costs %1$s$ and following materials:");
+        this.add(Smith.BARN_COST_MAT, "Logs x%1$s, Cobblestone x%2$s");
+        this.add(Smith.BARN_COST_FAIL, "Error getting the cost of a barn");
+
+        this.add(Cook.FORGE_BREAD_ACTION, "Weapon bread");
+        this.add(Cook.ARMOR_BREAD_DESCRIPTION, "Accessory bread");
+        this.add(Cook.CHEM_BREAD_SUCCESS, "Medicine bread");
+        this.add(Cook.COOKING_BREAD_SUCCESS, "Cooking bread");
+        this.add(Cook.BREAD_ACTION_SUCCESS, "Here you go");
+        this.add(Cook.BREAD_ACTION_SUCCESS_GOOD, "Here you go. This one was made very well.");
+        this.add(Cook.BREAD_ACTION_FAIL, "Seems you don't have enough money");
+        this.add(Cook.BREAD_COST, "One loaf costs: %1$s. %2$s left");
+
+        this.add(BathhouseAttendant.BATH_ACTION, "Take a bath");
+        this.add(BathhouseAttendant.BATH_ACTION_SUCCESS, "Have a relaxing bath.");
+        this.add(BathhouseAttendant.BATH_ACTION_FAIL, "You don't have enough money for that. You need %2$s.");
+        this.add(BathhouseAttendant.BATH_COST, "Cost: %s$");
+
+        this.add(Doctor.CURE_ACTION, "Cure");
+        this.add(Doctor.CURE_ACTION_DESC, "Cure all negative status effects");
+        this.add(Doctor.CURE_ACTION_SUCCESS, "There you go. Please take more care in the future.");
+        this.add(Doctor.CURE_ACTION_FAIL, "It seems you don't have enough money.");
+        this.add(Doctor.CURE_COST, "Cost: %s$");
+
+        this.add("runecraftory.npc.schedule.work", "From: %1$s - %2$s");
+        this.add("runecraftory.npc.schedule.work.2", "And: %1$s - %2$s");
+        this.add("runecraftory.npc.schedule.days.header", "Open on:");
+        this.add("runecraftory.npc.schedule.days.all", "Everyday");
+        this.add("runecraftory.npc.schedule.days.0", "All weekdays");
+        this.add("runecraftory.npc.schedule.days.1", "All weekdays except %s");
+        this.add("runecraftory.npc.schedule.days.2", "All weekdays except %1$s and %2$s");
+        this.add("runecraftory.npc.schedule.days.weekend.1", "%s");
+        this.add("runecraftory.npc.schedule.days.weekend.2", "%1$s and %2$s");
+        this.add("runecraftory.npc.schedule.days.with", "%1$s");
+
+        this.add("runecraftory.npc.shop.inventory.full", "You don't have enough inventory space for it");
+        this.add("runecraftory.npc.shop.money.no", "You don't have enough money");
+        this.add("runecraftory.npc.shop.success", "Thank you for your purchase");
+
+        this.add("runecraftory.npc.conversation.missing", "-Missing Conversation with id %s-");
+        this.add("runecraftory.npc.conversation.context.missing", "-Missing Conversation for context %s-");
+        this.add("runecraftory.npc.conversation.response.missing", "-Missing quest response for quest %s-");
+        this.add("runecraftory.npc.default.gift.neutral", "Thank you for your gift.");
+
+        this.add("runecraftory.npc.spawn.name.missing", "Missing name for baby!");
+
+        this.add("runecraftory.quest.npc.header", "Requester: %1$s [%2$s,%3$s,%4$s]");
+
+        this.add(LevelTask.ID.toString(), "Reach level %s");
+        this.add(NPCTalkTask.ID.toString(), "Talk to %s");
+        this.add(NPCTalkTask.ID + ".generic", "Could not find NPC to talk to");
+        this.add(NPCTalkTask.ID + ".not_resolved", "Unresolved NPC talk task");
+        this.add(ShippingTask.ID + ".single", "Ship %1$s x%2$s");
+        this.add(ShippingTask.ID + ".multi", "Ship any of the following x%2$s: %1$s");
+        this.add(ShippingTask.ID + ".empty", "<Empty tag/items>");
+        this.add(SkillLevelTask.ID.toString(), "Reach level %1$s in %s");
+        this.add(TamingTask.ID.toString(), "Tame %2$s %1$s");
+
+        for (AdditionalLanguages langs : this.additionalLanguages) {
+            if (langs != null) {
+                langs.translations().forEach(this::add);
+            }
+        }
+
+        this.add(QuestData.AcceptType.MISSING.langKey(), "Data is missing");
+        this.add(QuestData.AcceptType.REQUIREMENTS.langKey(), "You do not meet the requirement for this quest");
+        this.add(QuestData.AcceptType.ACCEPT.langKey(), "Quest accepted");
+        this.add(QuestData.AcceptType.LIMIT.langKey(), "You reached your daily quest limit");
+        this.add(QuestData.AcceptType.NONPC.langKey(), "NPC for this quest does not exist anymore!");
+
+        this.add("runecraftory.dependency.tooltips.owner.none", "Unknown owner");
+        this.add("runecraftory.dependency.tooltips.owner", "Owned by: %s");
+        this.add("runecraftory.dependency.tooltips.friendpoints", "FP: %s");
+        this.add("runecraftory.dependency.tooltips.barn", "Barn at: %s");
+        this.add("runecraftory.dependency.tooltips.barn.no", "No Barn assigned!");
+        this.add("runecraftory.dependency.tooltips.behaviour", "Behaviour: %s");
+        this.add("runecraftory.dependency.tooltips.npc.follow", "Party: %s");
+        this.add("runecraftory.dependency.tooltips.barn.1", "No Roof - Size: %1$s");
+        this.add("runecraftory.dependency.tooltips.barn.1.alt", "Roof Height: %1$s - Size: %2$s");
+        this.add("runecraftory.dependency.tooltips.barn.2", "Capacity: %1$s / %2$s");
+
+        // Guidebook
         this.add("runecraftory_book", "Runepedia");
         this.add("runecraftory.patchouli.subtitle", "");
         this.add("runecraftory.patchouli.landing", "This Guidebook will explain to you various feature of the mod and what it has to offer.");
@@ -577,231 +803,6 @@ public class LangGen implements DataProvider {
                 continue;
             this.add(patchouliEntity(sup.getID()), "");
         }
-
-        for (EnumSkills s : EnumSkills.values())
-            this.add(s.getTranslation(),
-                    this.capitalize(s.getTranslation().replace("skill.", "").replace("_", " "),
-                            Lists.newArrayList("and")));
-
-        this.add(C2SNPCInteraction.Type.TALK.translation, "Talk");
-        this.add(C2SNPCInteraction.Type.FOLLOW.translation, "Follow me");
-        this.add(C2SNPCInteraction.Type.FOLLOWDISTANCE.translation, "Stay back a bit");
-        this.add(C2SNPCInteraction.Type.STAY.translation, "Stay here");
-        this.add(C2SNPCInteraction.Type.STOPFOLLOW.translation, "Stop following");
-        this.add(C2SNPCInteraction.Type.SHOP.translation, "I want to shop");
-        this.add("runecraftory.gui.level", "Level");
-        this.add("runecraftory.gui.npc.id", "Npc data-id");
-        this.add("runecraftory.gui.npc.profession", "Npc Profession");
-        this.add("runecraftory.gui.save", "Save");
-        this.add("runecraftory.gui.npc.shop.owner", "Owner of %s");
-        this.add("runecraftory.gui.npc.bed.no", "I don't have a bed");
-        this.add("runecraftory.gui.npc.workplace.no", "I don't have a work place. Valid workplaces are [%s]");
-        this.add("runecraftory.gui.npc.parent", "Parent:");
-        this.add("runecraftory.gui.npc.parents", "Parents:");
-        this.add("runecraftory.gui.npc.relationship.dating", "Dating %s");
-        this.add("runecraftory.gui.npc.relationship.married", "Married to %s");
-        this.add("runecraftory.gui.npc.procreate", "Procreate");
-
-        this.add("runecraftory.gui.quests.accept", "Accept");
-        this.add("runecraftory.gui.quests.reset", "Cancel");
-        this.add("runecraftory.gui.quest.submit.button", "Submit");
-        this.add("runecraftory.gui.quest.button", "Requests");
-
-        this.add(ModNPCJobs.NONE.getSecond().getTranslationKey(), this.simpleTranslation(ModNPCJobs.NONE.getFirst()));
-        this.add(ModNPCJobs.GENERAL.getSecond().getTranslationKey(), this.simpleTranslation(ModNPCJobs.GENERAL.getFirst()));
-        this.add(ModNPCJobs.FLOWER.getSecond().getTranslationKey(), this.simpleTranslation(ModNPCJobs.FLOWER.getFirst()));
-        this.add(ModNPCJobs.SMITH.getSecond().getTranslationKey(), this.simpleTranslation(ModNPCJobs.SMITH.getFirst()));
-        this.add(ModNPCJobs.DOCTOR.getSecond().getTranslationKey(), this.simpleTranslation(ModNPCJobs.DOCTOR.getFirst()));
-        this.add(ModNPCJobs.COOK.getSecond().getTranslationKey(), this.simpleTranslation(ModNPCJobs.COOK.getFirst()));
-        this.add(ModNPCJobs.MAGIC.getSecond().getTranslationKey(), this.simpleTranslation(ModNPCJobs.MAGIC.getFirst()));
-        this.add(ModNPCJobs.RUNE_SKILLS.getSecond().getTranslationKey(), this.simpleTranslation(ModNPCJobs.RUNE_SKILLS.getFirst()));
-        this.add(ModNPCJobs.BATHHOUSE.getSecond().getTranslationKey(), this.simpleTranslation(ModNPCJobs.BATHHOUSE.getFirst()));
-        this.add(ModNPCJobs.RANDOM.getSecond().getTranslationKey(), this.simpleTranslation(ModNPCJobs.RANDOM.getFirst()));
-
-        this.add(Smith.BARN_ACTION, "Monster barn");
-        this.add(Smith.BARN_ACTION_DESCRIPTION, "You can buy a monster barn to house your tamed monsters. Each barn bought increases the costs of the next one");
-        this.add(Smith.BARN_ACTION_SUCCESS, "Thank you for your purchase.");
-        this.add(Smith.BARN_ACTION_FAIL, "You don't have enough materials for that.");
-        this.add(Smith.BARN_COST, "A barn costs %1$s$ and following materials:");
-        this.add(Smith.BARN_COST_MAT, "Logs x%1$s, Cobblestone x%2$s");
-        this.add(Smith.BARN_COST_FAIL, "Error getting the cost of a barn");
-
-        this.add(Cook.FORGE_BREAD_ACTION, "Weapon bread");
-        this.add(Cook.ARMOR_BREAD_DESCRIPTION, "Accessory bread");
-        this.add(Cook.CHEM_BREAD_SUCCESS, "Medicine bread");
-        this.add(Cook.COOKING_BREAD_SUCCESS, "Cooking bread");
-        this.add(Cook.BREAD_ACTION_SUCCESS, "Here you go");
-        this.add(Cook.BREAD_ACTION_SUCCESS_GOOD, "Here you go. This one was made very well.");
-        this.add(Cook.BREAD_ACTION_FAIL, "Seems you don't have enough money");
-        this.add(Cook.BREAD_COST, "One loaf costs: %1$s. %2$s left");
-
-        this.add(BathhouseAttendant.BATH_ACTION, "Take a bath");
-        this.add(BathhouseAttendant.BATH_ACTION_SUCCESS, "Have a relaxing bath.");
-        this.add(BathhouseAttendant.BATH_ACTION_FAIL, "You don't have enough money for that. You need %2$s.");
-        this.add(BathhouseAttendant.BATH_COST, "Cost: %s$");
-
-        this.add(Doctor.CURE_ACTION, "Cure");
-        this.add(Doctor.CURE_ACTION_DESC, "Cure all negative status effects");
-        this.add(Doctor.CURE_ACTION_SUCCESS, "There you go. Please take more care in the future.");
-        this.add(Doctor.CURE_ACTION_FAIL, "It seems you don't have enough money.");
-        this.add(Doctor.CURE_COST, "Cost: %s$");
-
-        this.add("npc.schedule.work", "From: %1$s - %2$s");
-        this.add("npc.schedule.work.2", "And: %1$s - %2$s");
-        this.add("npc.schedule.days.header", "Open on:");
-        this.add("npc.schedule.days.all", "Everyday");
-        this.add("npc.schedule.days.0", "All weekdays");
-        this.add("npc.schedule.days.1", "All weekdays except %s");
-        this.add("npc.schedule.days.2", "All weekdays except %1$s and %2$s");
-        this.add("npc.schedule.days.weekend.1", "%s");
-        this.add("npc.schedule.days.weekend.2", "%1$s and %2$s");
-        this.add("npc.schedule.days.with", "%1$s");
-
-        this.add("npc.shop.inventory.full", "You don't have enough inventory space for it");
-        this.add("npc.shop.money.no", "You don't have enough money");
-        this.add("npc.shop.success", "Thank you for your purchase");
-
-        this.add("npc.conversation.missing", "-Missing Conversation with id %s-");
-        this.add("npc.conversation.context.missing", "-Missing Conversation for context %s-");
-        this.add("npc.conversation.response.missing", "-Missing quest response for quest %s-");
-        this.add("npc.default.gift.neutral", "Thank you for your gift.");
-
-        this.add("runecraftory.advancements.root.title", "Runecraftory");
-        this.add("runecraftory.advancements.root.description", "A minecrafty harvest moon");
-        this.add("runecraftory.advancements.tame.first.title", "First buddy");
-        this.add("runecraftory.advancements.tame.first.description", "Tame your first monster");
-        this.add("runecraftory.advancements.tame.ten.title", "Monster tamer");
-        this.add("runecraftory.advancements.tame.ten.description", "Tame 10 monster");
-        this.add("runecraftory.advancements.tame.boss.title", "Boss tamer");
-        this.add("runecraftory.advancements.tame.boss.description", "Tame a boss monster");
-        this.add("runecraftory.advancements.tame.boss.five.title", "More Bosses");
-        this.add("runecraftory.advancements.tame.boss.five.description", "Tame 5 boss monster");
-        this.add("runecraftory.advancements.tame.boss.all.title", "Legendary Hunter!");
-        this.add("runecraftory.advancements.tame.boss.all.description", "Tame all the boss monsters");
-
-        this.add("runecraftory.advancements.shipping.title", "First earnings");
-        this.add("runecraftory.advancements.shipping.description", "Ship your first item");
-        this.add("runecraftory.advancements.shipping.fifty.title", "Shipping Milestone");
-        this.add("runecraftory.advancements.shipping.fifty.description", "Ship 50 different items");
-        this.add("runecraftory.advancements.shop.title", "Time for shopping");
-        this.add("runecraftory.advancements.shop.description", "Buy your first item");
-        this.add("runecraftory.advancements.100k.title", "10 OK!");
-        this.add("runecraftory.advancements.100k.description", "Reach 100k gold");
-        this.add("runecraftory.advancements.million.title", "One Million!");
-        this.add("runecraftory.advancements.million.description", "Have one million gold");
-
-        this.add("runecraftory.advancements.skill.weapon.5.title", "Gotta start somewhere");
-        this.add("runecraftory.advancements.skill.weapon.5.description", "Get to level 5 in any weapon skill");
-        this.add("runecraftory.advancements.skill.10.title", "Skill Level 10");
-        this.add("runecraftory.advancements.skill.10.description", "Get to level 10 in any skill");
-        this.add("runecraftory.advancements.skill.25.title", "Skill Level 25");
-        this.add("runecraftory.advancements.skill.25.description", "Get to level 25 in any skill");
-        this.add("runecraftory.advancements.skill.50.title", "Skill Level 50");
-        this.add("runecraftory.advancements.skill.50.description", "Get to level 50 in any skill");
-        this.add("runecraftory.advancements.skill.100.title", "Skill Level 100");
-        this.add("runecraftory.advancements.skill.100.description", "Get to level 100 in any skill");
-
-        this.add("runecraftory.advancements.level.10.title", "Small steps");
-        this.add("runecraftory.advancements.level.10.description", "Get to level 10");
-        this.add("runecraftory.advancements.level.25.title", "Level 25");
-        this.add("runecraftory.advancements.level.25.description", "Get to level 25");
-        this.add("runecraftory.advancements.level.50.title", "Level 50");
-        this.add("runecraftory.advancements.level.50.description", "Get to level 50");
-        this.add("runecraftory.advancements.level.100.title", "Level 100");
-        this.add("runecraftory.advancements.level.100.description", "Get to level 100");
-
-        this.add("runecraftory.advancements.crafting.forging.title", "Art of Forging");
-        this.add("runecraftory.advancements.crafting.forging.description", "Craft a weapon using the forge");
-        this.add("runecraftory.advancements.crafting.armor.title", "Art of Protection");
-        this.add("runecraftory.advancements.crafting.armor.description", "Craft an armor piece using the accessory workbench");
-        this.add("runecraftory.advancements.crafting.chemistry.title", "Art of Alchemy");
-        this.add("runecraftory.advancements.crafting.chemistry.description", "Make some medicine using the chemistry set");
-        this.add("runecraftory.advancements.crafting.cooking.title", "Culinary Art");
-        this.add("runecraftory.advancements.crafting.cooking.description", "Make some food using the cooking table");
-
-        this.add("runecraftory.advancements.upgrade.title", "Better equipment");
-        this.add("runecraftory.advancements.upgrade.description", "Upgrade any equipment");
-        this.add("runecraftory.advancements.change.element.title", "Its super effective!");
-        this.add("runecraftory.advancements.change.element.description", "Change an element of a weapon");
-        this.add("runecraftory.advancements.spell.title", "Magick");
-        this.add("runecraftory.advancements.spell.description", "Find or craft a spell");
-        this.add("runecraftory.advancements.change.spell.title", "Staff power");
-        this.add("runecraftory.advancements.change.spell.description", "Change or add a spell to a staff");
-        this.add("runecraftory.advancements.lightore.title", "Faker");
-        this.add("runecraftory.advancements.lightore.description", "Transfer the stats of a weapon to another using a light ore");
-
-        this.add("runecraftory.advancements.fertilizer.title", "Increased production");
-        this.add("runecraftory.advancements.fertilizer.description", "Use a fertilizer to improve your farmland");
-        this.add("runecraftory.advancements.giant_crop.title", "Big Boy");
-        this.add("runecraftory.advancements.giant_crop.description", "Grow and harvest a giant crop");
-        this.add("runecraftory.advancements.monster.help.title", "Useful helper");
-        this.add("runecraftory.advancements.monster.help.description", "Command a monster to help you out with farming");
-        this.add("runecraftory.advancements.final.tool.title", "The best");
-        this.add("runecraftory.advancements.final.tool.description", "Obtain a final tier tool");
-
-        this.add("runecraftory.advancements.progression.root.title", "Runecraftory - Milestones");
-        this.add("runecraftory.advancements.progression.root.description", "Defeating them will increase overall mob levels!");
-        this.add("runecraftory.advancements.progression.boss.greater_demon.title", "Monke!");
-        this.add("runecraftory.advancements.progression.boss.greater_demon.description", "Defeat the greater demon. But I don't think he exists yet!");
-        this.add("runecraftory.advancements.progression.boss.chimera.title", "What is this creature!");
-        this.add("runecraftory.advancements.progression.boss.chimera.description", "Defeat a chimera in a water ruin");
-        this.add("runecraftory.advancements.progression.boss.rafflesia.title", "Status gallore");
-        this.add("runecraftory.advancements.progression.boss.rafflesia.description", "Defeat rafflesia in the nether");
-        this.add("runecraftory.advancements.progression.boss.grimoire.title", "Don't get blown away");
-        this.add("runecraftory.advancements.progression.boss.grimoire.description", "Defeat a grimoire at a mountain top");
-        this.add("runecraftory.advancements.progression.boss.dead_tree.title", "Whispies cousin");
-        this.add("runecraftory.advancements.progression.boss.dead_tree.description", "Defeat the dead tree in a forest grove");
-        this.add("runecraftory.advancements.progression.boss.raccoon.title", "Caught thief");
-        this.add("runecraftory.advancements.progression.boss.raccoon.description", "Defeat a raccon somewhere in the plains");
-        this.add("runecraftory.advancements.progression.boss.skelefang.title", "Ancient bone");
-        this.add("runecraftory.advancements.progression.boss.skelefang.description", "Defeat skelefang found in the desert");
-        this.add("runecraftory.advancements.progression.boss.ambrosia.title", "Butterfly?");
-        this.add("runecraftory.advancements.progression.boss.ambrosia.description", "Defeat ambrosia in a forest grove");
-        this.add("runecraftory.advancements.progression.boss.thunderbolt.title", "Demonic Horse");
-        this.add("runecraftory.advancements.progression.boss.thunderbolt.description", "Defeat thunderbolt in the water ruins");
-        this.add("runecraftory.advancements.progression.boss.marionetta.title", "It's not a ghost right?");
-        this.add("runecraftory.advancements.progression.boss.marionetta.description", "Defeat marionetta in the theater ruins");
-        this.add("runecraftory.advancements.progression.boss.sano_uno.title", "Are you worthy?");
-        this.add("runecraftory.advancements.progression.boss.sano_uno.description", "Defeat sano and uno. Now where are they...");
-        this.add("runecraftory.advancements.progression.boss.sarcophagus.title", "Don't get cursed!");
-        this.add("runecraftory.advancements.progression.boss.sarcophagus.description", "Defeat sarcophagus after proving your worth to sano and uno");
-
-        this.add("runecraftory.quest.npc.header", "Requester: %1$s [%2$s,%3$s,%4$s]");
-
-        this.add(LevelTask.ID.toString(), "Reach level %s");
-        this.add(NPCTalkTask.ID.toString(), "Talk to %s");
-        this.add(NPCTalkTask.ID + ".generic", "Could not find NPC to talk to");
-        this.add(NPCTalkTask.ID + ".not_resolved", "Unresolved NPC talk task");
-        this.add(ShippingTask.ID + ".single", "Ship %1$s x%2$s");
-        this.add(ShippingTask.ID + ".multi", "Ship any of the following x%2$s: %1$s");
-        this.add(ShippingTask.ID + ".empty", "<Empty tag/items>");
-        this.add(SkillLevelTask.ID.toString(), "Reach level %1$s in %s");
-        this.add(TamingTask.ID.toString(), "Tame %2$s %1$s");
-
-        this.add(QuestData.AcceptType.MISSING.langKey(), "Data is missing");
-        this.add(QuestData.AcceptType.REQUIREMENTS.langKey(), "You do not meet the requirement for this quest");
-        this.add(QuestData.AcceptType.ACCEPT.langKey(), "Quest accepted");
-        this.add(QuestData.AcceptType.LIMIT.langKey(), "You reached your daily quest limit");
-        this.add(QuestData.AcceptType.NONPC.langKey(), "NPC for this quest does not exist anymore!");
-
-        for (AdditionalLanguages langs : this.additionalLanguages) {
-            if (langs != null) {
-                langs.translations().forEach(this::add);
-            }
-        }
-
-        this.add("runecraftory.dependency.tooltips.owner.none", "Unknown owner");
-        this.add("runecraftory.dependency.tooltips.owner", "Owned by: %s");
-        this.add("runecraftory.dependency.tooltips.friendpoints", "FP: %s");
-        this.add("runecraftory.dependency.tooltips.barn", "Barn at: %s");
-        this.add("runecraftory.dependency.tooltips.barn.no", "No Barn assigned!");
-        this.add("runecraftory.dependency.tooltips.behaviour", "Behaviour: %s");
-        this.add("runecraftory.dependency.tooltips.npc.follow", "Party: %s");
-        this.add("runecraftory.dependency.tooltips.barn.1", "No Roof - Size: %1$s");
-        this.add("runecraftory.dependency.tooltips.barn.1.alt", "Roof Height: %1$s - Size: %2$s");
-        this.add("runecraftory.dependency.tooltips.barn.2", "Capacity: %1$s / %2$s");
-
-        this.add("runecraftory.sarcophagus.coming.soon", "This looks like a teleporter but it seems to not lead to anywhere yet...");
     }
 
     private String simpleTranslation(ResourceLocation res) {
@@ -941,17 +942,6 @@ public class LangGen implements DataProvider {
         ITEM,
         BLOCK,
         ENTITY,
-        CONTAINER,
-        ELEMENT,
-        ATTRIBUTE,
-        ADVANCEMENT,
-        SKILL,
-        TOOLTIP,
-        DAY,
-        SEASON,
-        DEATH,
-        ITEMGROUP,
-        NPC,
         OTHER;
 
         public static LangType get(String s) {
@@ -961,28 +951,6 @@ public class LangGen implements DataProvider {
                 return BLOCK;
             if (s.startsWith("entity."))
                 return ENTITY;
-            if (s.startsWith("container."))
-                return CONTAINER;
-            if (s.startsWith("runecraftory.element."))
-                return ELEMENT;
-            if (s.startsWith("attribute.rf."))
-                return ATTRIBUTE;
-            if (s.startsWith("runecraftory.advancements"))
-                return ADVANCEMENT;
-            if (s.startsWith("skill."))
-                return SKILL;
-            if (s.startsWith("runecraftory.tooltip."))
-                return TOOLTIP;
-            if (s.startsWith("runecraftory.day."))
-                return DAY;
-            if (s.startsWith("runecraftory.season."))
-                return SEASON;
-            if (s.startsWith("death."))
-                return DEATH;
-            if (s.startsWith("itemGroup."))
-                return ITEMGROUP;
-            if (s.startsWith("runecraftory.npc."))
-                return NPC;
             return OTHER;
         }
     }

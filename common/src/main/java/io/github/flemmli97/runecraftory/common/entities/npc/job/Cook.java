@@ -21,14 +21,14 @@ import java.util.Map;
 
 public class Cook extends NPCJob {
 
-    public static final String FORGE_BREAD_ACTION = "npc.action.bread.forge";
-    public static final String ARMOR_BREAD_DESCRIPTION = "npc.action.bread.armor";
-    public static final String CHEM_BREAD_SUCCESS = "npc.action.bread.chem";
-    public static final String COOKING_BREAD_SUCCESS = "npc.action.bread.cooking";
-    public static final String BREAD_ACTION_SUCCESS = "npc.action.bread.success";
-    public static final String BREAD_ACTION_SUCCESS_GOOD = "npc.action.bread.success.good";
-    public static final String BREAD_ACTION_FAIL = "npc.action.bread.fail";
-    public static final String BREAD_COST = "npc.shop.bread.cost";
+    public static final String FORGE_BREAD_ACTION = "runecraftory.npc.action.bread.forge";
+    public static final String ARMOR_BREAD_DESCRIPTION = "runecraftory.npc.action.bread.armor";
+    public static final String CHEM_BREAD_SUCCESS = "runecraftory.npc.action.bread.chem";
+    public static final String COOKING_BREAD_SUCCESS = "runecraftory.npc.action.bread.cooking";
+    public static final String BREAD_ACTION_SUCCESS = "runecraftory.npc.action.bread.success";
+    public static final String BREAD_ACTION_SUCCESS_GOOD = "runecraftory.npc.action.bread.success.good";
+    public static final String BREAD_ACTION_FAIL = "runecraftory.npc.action.bread.fail";
+    public static final String BREAD_COST = "runecraftory.npc.shop.bread.cost";
 
     public static final int BREAD_PRICE = 500;
 

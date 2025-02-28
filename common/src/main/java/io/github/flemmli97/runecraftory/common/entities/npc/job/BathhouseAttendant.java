@@ -15,10 +15,10 @@ import java.util.Map;
 
 public class BathhouseAttendant extends NPCJob {
 
-    public static final String BATH_ACTION = "npc.action.bath";
-    public static final String BATH_ACTION_SUCCESS = "npc.action.bath.success";
-    public static final String BATH_ACTION_FAIL = "npc.action.bath.fail";
-    public static final String BATH_COST = "npc.shop.bath.cost";
+    public static final String BATH_ACTION = "runecraftory.npc.action.bath";
+    public static final String BATH_ACTION_SUCCESS = "runecraftory.npc.action.bath.success";
+    public static final String BATH_ACTION_FAIL = "runecraftory.npc.action.bath.fail";
+    public static final String BATH_COST = "runecraftory.npc.shop.bath.cost";
 
     public BathhouseAttendant(NPCJob.Builder builder) {
         super(builder);

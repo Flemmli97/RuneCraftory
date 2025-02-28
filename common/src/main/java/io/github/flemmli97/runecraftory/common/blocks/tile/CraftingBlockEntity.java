@@ -20,6 +20,8 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class CraftingBlockEntity extends BlockEntity implements MenuProvider {
 
+    public static final String DISPLAY_PREFIX = "runecraftory.container.crafting.";
+
     private final SaveItemContainer inventory;
     private final EnumCrafting type;
     private int craftingIndex;
@@ -36,7 +38,7 @@ public class CraftingBlockEntity extends BlockEntity implements MenuProvider {
 
     @Override
     public Component getDisplayName() {
-        return new TranslatableComponent("runecraftory.tile.crafting." + this.type.getId());
+        return new TranslatableComponent(DISPLAY_PREFIX + this.type.getId());
     }
 
     @Override

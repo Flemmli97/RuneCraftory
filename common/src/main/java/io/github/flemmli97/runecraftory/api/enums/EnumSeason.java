@@ -4,17 +4,19 @@ import net.minecraft.ChatFormatting;
 
 public enum EnumSeason {
 
-    SPRING(ChatFormatting.RED, "runecraftory.season.spring"),
-    SUMMER(ChatFormatting.DARK_GREEN, "runecraftory.season.summer"),
-    FALL(ChatFormatting.GOLD, "runecraftory.season.fall"),
-    WINTER(ChatFormatting.BLUE, "runecraftory.season.winter");
+    SPRING(ChatFormatting.RED, "spring"),
+    SUMMER(ChatFormatting.DARK_GREEN, "summer"),
+    FALL(ChatFormatting.GOLD, "fall"),
+    WINTER(ChatFormatting.BLUE, "winter");
+
+    public static final String PREFIX = "runecraftory.season.";
 
     private final ChatFormatting color;
     private final String translationKey;
 
-    EnumSeason(ChatFormatting color, String id) {
+    EnumSeason(ChatFormatting color, String key) {
         this.color = color;
-        this.translationKey = id;
+        this.translationKey = PREFIX + key;
     }
 
     public static EnumSeason nextSeason(EnumSeason season) {

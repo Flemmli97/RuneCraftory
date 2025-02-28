@@ -73,7 +73,7 @@ public class SarcophagusTeleporter extends Entity {
     @Override
     public InteractionResult interact(Player player, InteractionHand hand) {
         if (!player.level.isClientSide && hand == InteractionHand.MAIN_HAND) {
-            player.sendMessage(new TranslatableComponent("runecraftory.sarcophagus.coming.soon").withStyle(ChatFormatting.DARK_RED), Util.NIL_UUID);
+            player.sendMessage(new TranslatableComponent("runecraftory.misc.sarcophagus.coming.soon").withStyle(ChatFormatting.DARK_RED), Util.NIL_UUID);
         }
         // TODO: teleport to boss room
         return super.interact(player, hand);

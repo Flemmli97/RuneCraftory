@@ -61,7 +61,7 @@ import java.util.stream.Collectors;
 public class ModBlocks {
 
     public static final PlatformRegistry<Block> BLOCKS = PlatformUtils.INSTANCE.of(Registry.BLOCK_REGISTRY, RuneCraftory.MODID);
-    public static final PlatformRegistry<BlockEntityType<?>> TILES = PlatformUtils.INSTANCE.of(Registry.BLOCK_ENTITY_TYPE_REGISTRY, RuneCraftory.MODID);
+    public static final PlatformRegistry<BlockEntityType<?>> BLOCK_ENTITY_TYPES = PlatformUtils.INSTANCE.of(Registry.BLOCK_ENTITY_TYPE_REGISTRY, RuneCraftory.MODID);
     public static final List<RegistryEntrySupplier<Block>> CROPS = new ArrayList<>();
     public static final List<RegistryEntrySupplier<Block>> FLOWERS = new ArrayList<>();
     public static final List<RegistryEntrySupplier<Block>> HERBS = new ArrayList<>();
@@ -238,14 +238,14 @@ public class ModBlocks {
     public static final RegistryEntrySupplier<Block> GRAPE = BLOCKS.register("grape_leaves_fruit", () -> new BlockFruitTreeLeaf(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES).strength(-1, 99999), ModItems.GRAPES::get));
 
     public static final RegistryEntrySupplier<BlockEntityType<BrokenMineralBlockEntity>> BROKEN_MINERAL_TILE = brokenMineralTile("broken_mineral_tile", BROKEN_MINERAL_MAP.values());
-    public static final RegistryEntrySupplier<BlockEntityType<AccessoryBlockEntity>> ACCESSORY_TILE = TILES.register("accessory_tile", () -> Platform.INSTANCE.blockEntityType(AccessoryBlockEntity::new, ACCESSORY.get()));
-    public static final RegistryEntrySupplier<BlockEntityType<ForgingBlockEntity>> FORGING_TILE = TILES.register("forge_tile", () -> Platform.INSTANCE.blockEntityType(ForgingBlockEntity::new, FORGE.get()));
-    public static final RegistryEntrySupplier<BlockEntityType<ChemistryBlockEntity>> CHEMISTRY_TILE = TILES.register("chemistry_tile", () -> Platform.INSTANCE.blockEntityType(ChemistryBlockEntity::new, CHEMISTRY.get()));
-    public static final RegistryEntrySupplier<BlockEntityType<CookingBlockEntity>> COOKING_TILE = TILES.register("cooking_tile", () -> Platform.INSTANCE.blockEntityType(CookingBlockEntity::new, COOKING.get()));
-    public static final RegistryEntrySupplier<BlockEntityType<BossSpawnerBlockEntity>> BOSS_SPAWNER_TILE = TILES.register("spawner_tile", () -> Platform.INSTANCE.blockEntityType(BossSpawnerBlockEntity::new, BOSS_SPAWNER.get()));
-    public static final RegistryEntrySupplier<BlockEntityType<SingleTimeSpawner>> SINGLE_SPAWNER_TILE = TILES.register("single_spawner_tile", () -> Platform.INSTANCE.blockEntityType(SingleTimeSpawner::new, SINGLE_SPAWN_BLOCK.get()));
-    public static final RegistryEntrySupplier<BlockEntityType<MonsterBarnBlockEntity>> MONSTER_BARN_BLOCK_ENTITY = TILES.register("monster_barn_block_entity", () -> Platform.INSTANCE.blockEntityType(MonsterBarnBlockEntity::new, MONSTER_BARN.get()));
-    public static final RegistryEntrySupplier<BlockEntityType<TreeBlockEntity>> TREE_BLOCK_ENTITY = TILES.register("tree", () -> Platform.INSTANCE.blockEntityType(TreeBlockEntity::new, APPLE_TREE.get()));
+    public static final RegistryEntrySupplier<BlockEntityType<AccessoryBlockEntity>> ACCESSORY_TILE = BLOCK_ENTITY_TYPES.register("accessory_tile", () -> Platform.INSTANCE.blockEntityType(AccessoryBlockEntity::new, ACCESSORY.get()));
+    public static final RegistryEntrySupplier<BlockEntityType<ForgingBlockEntity>> FORGING_TILE = BLOCK_ENTITY_TYPES.register("forge_tile", () -> Platform.INSTANCE.blockEntityType(ForgingBlockEntity::new, FORGE.get()));
+    public static final RegistryEntrySupplier<BlockEntityType<ChemistryBlockEntity>> CHEMISTRY_TILE = BLOCK_ENTITY_TYPES.register("chemistry_tile", () -> Platform.INSTANCE.blockEntityType(ChemistryBlockEntity::new, CHEMISTRY.get()));
+    public static final RegistryEntrySupplier<BlockEntityType<CookingBlockEntity>> COOKING_TILE = BLOCK_ENTITY_TYPES.register("cooking_tile", () -> Platform.INSTANCE.blockEntityType(CookingBlockEntity::new, COOKING.get()));
+    public static final RegistryEntrySupplier<BlockEntityType<BossSpawnerBlockEntity>> BOSS_SPAWNER_TILE = BLOCK_ENTITY_TYPES.register("spawner_tile", () -> Platform.INSTANCE.blockEntityType(BossSpawnerBlockEntity::new, BOSS_SPAWNER.get()));
+    public static final RegistryEntrySupplier<BlockEntityType<SingleTimeSpawner>> SINGLE_SPAWNER_TILE = BLOCK_ENTITY_TYPES.register("single_spawner_tile", () -> Platform.INSTANCE.blockEntityType(SingleTimeSpawner::new, SINGLE_SPAWN_BLOCK.get()));
+    public static final RegistryEntrySupplier<BlockEntityType<MonsterBarnBlockEntity>> MONSTER_BARN_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("monster_barn_block_entity", () -> Platform.INSTANCE.blockEntityType(MonsterBarnBlockEntity::new, MONSTER_BARN.get()));
+    public static final RegistryEntrySupplier<BlockEntityType<TreeBlockEntity>> TREE_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("tree", () -> Platform.INSTANCE.blockEntityType(TreeBlockEntity::new, APPLE_TREE.get(), ORANGE_TREE.get(), GRAPE_TREE.get()));
 
     public static RegistryEntrySupplier<Block> mineral(EnumMineralTier name) {
         RegistryEntrySupplier<Block> reg = BLOCKS.register("ore_" + name.getSerializedName(), () -> new BlockMineral(name, BlockBehaviour.Properties.of(Material.STONE).strength(5, 10)
@@ -303,7 +303,7 @@ public class ModBlocks {
     }
 
     public static RegistryEntrySupplier<BlockEntityType<BrokenMineralBlockEntity>> brokenMineralTile(String name, Collection<RegistryEntrySupplier<Block>> blocks) {
-        return TILES.register(name, () -> Platform.INSTANCE.blockEntityType(BrokenMineralBlockEntity::new, blocks.stream().map(RegistryEntrySupplier::get).collect(Collectors.toSet())));
+        return BLOCK_ENTITY_TYPES.register(name, () -> Platform.INSTANCE.blockEntityType(BrokenMineralBlockEntity::new, blocks.stream().map(RegistryEntrySupplier::get).collect(Collectors.toSet())));
     }
 
     private static BlockBehaviour.Properties logProps() {

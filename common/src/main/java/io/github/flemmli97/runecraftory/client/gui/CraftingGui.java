@@ -82,7 +82,7 @@ public class CraftingGui extends AbstractContainerScreen<ContainerCrafting> {
             int rpMax = data != null ? data.getMaxRunePoints() : 0;
             MutableComponent cost = new TextComponent("" + this.menu.rpCost());
             if (rpMax < this.menu.rpCost() && !this.minecraft.player.isCreative()) {
-                cost = new TranslatableComponent("runecraftory.crafting.rpMax.missing").withStyle(ChatFormatting.DARK_RED);
+                cost = new TranslatableComponent("runecraftory.gui.crafting.rpMax.missing").withStyle(ChatFormatting.DARK_RED);
             }
             ClientHandlers.drawCenteredScaledString(stack, this.font, cost, this.leftPos + 123, this.topPos + 20, 1, 0);
         }
@@ -99,7 +99,7 @@ public class CraftingGui extends AbstractContainerScreen<ContainerCrafting> {
             this.blit(stack, 17, 3, 18, 40, runePointsWidth, 9);
             ClientHandlers.drawCenteredScaledString(stack, this.font, data.getRunePoints() + "/" + data.getMaxRunePoints(), 18 + 75 * 0.5f, 5, 0.7f, 0xffffff);
             stack.popPose();
-            this.font.draw(stack, new TranslatableComponent("runecraftory.display.level", data.getSkillLevel(this.skill).getLevel()),
+            this.font.draw(stack, new TranslatableComponent("runecraftory.gui.display.level", data.getSkillLevel(this.skill).getLevel()),
                     this.leftPos + this.titleLabelX + this.font.width(this.title) + 6, this.topPos + this.titleLabelY, 0x404040);
         }
     }

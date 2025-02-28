@@ -7,7 +7,6 @@ RuneCraftory 1.11.0
 - Update shadow sizes
 - Fix mobs moving when dead sometimes
 - Stun effect now fully stops entities
-- Fix quests not working. (System will get complete redo in future)
 - "minecraftify" ore things:
   - Add tin for bronze, replaces copper in recipes
   - Ores drop raw version now
@@ -26,6 +25,7 @@ RuneCraftory 1.11.0
 - Removed weapon type properties
 - Added attack width and charge time attribute replacing weapon type properties
 - Updated combo attack system. Is now more lenient with responses
+- Redo gift data system
 
 RuneCraftory 1.10.4
 ================

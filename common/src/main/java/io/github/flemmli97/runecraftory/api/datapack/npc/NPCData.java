@@ -46,7 +46,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
 
     public static final Map<Attribute, Double> DEFAULT_GAIN = Map.of(Attributes.MAX_HEALTH, 3d, Attributes.ATTACK_DAMAGE, 1d,
             ModAttributes.DEFENCE.get(), 0.5d, ModAttributes.MAGIC.get(), 1d, ModAttributes.MAGIC_DEFENCE.get(), 0.5d);
-    public static final NPCData DEFAULT_DATA = new NPCData(null, null, Gender.UNDEFINED, List.of(), null, null, 1, "npc.default.gift.neutral",
+    public static final NPCData DEFAULT_DATA = new NPCData(null, null, Gender.UNDEFINED, List.of(), null, null, 1, "runecraftory.npc.default.gift.neutral",
             Map.of(), new QuestHandler(Map.of(), Set.of()), Map.of(), null, null, null, 1, null, 0, RelationShipState.DEFAULT, List.of());
 
     public static <T> Codec<Map<ConversationContext, T>> filledMap(Codec<Map<ConversationContext, T>> codec) {
@@ -99,16 +99,16 @@ public record NPCData(@Nullable String name, @Nullable String surname,
 
     public ConversationSet getConversation(ConversationContext convCtx) {
         ResourceLocation conversationId = this.interactions().get(convCtx);
-        ConversationSet fallback = new ConversationSet("npc.conversation.context.missing", convCtx.key(), Map.of());
+        ConversationSet fallback = new ConversationSet("runecraftory.npc.conversation.context.missing", convCtx.key(), Map.of());
         if (conversationId == null)
             return fallback;
-        fallback = new ConversationSet("npc.conversation.missing", convCtx.key(), Map.of());
+        fallback = new ConversationSet("runecraftory.npc.conversation.missing", convCtx.key(), Map.of());
         return DataPackHandler.INSTANCE.npcConversationManager().get(conversationId, fallback);
     }
 
     public ConversationSet getFromQuest(ResourceLocation quest, QuestConversationContext ctx, int state) {
         QuestResponses responses = this.questHandler().responses().get(quest);
-        ConversationSet fallback = new ConversationSet("npc.default.quest.response.missing", quest, Map.of());
+        ConversationSet fallback = new ConversationSet("runecraftory.npc.default.quest.response.missing", quest, Map.of());
         if (responses == null)
             return fallback;
         ResourceLocation conversationId = switch (ctx) {

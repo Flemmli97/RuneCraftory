@@ -6,7 +6,6 @@ import io.github.flemmli97.runecraftory.common.inventory.container.ShippingConta
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -27,7 +26,7 @@ import net.minecraft.world.phys.BlockHitResult;
 public class BlockShippingBin extends Block {
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
-    private static final Component NAME = new TranslatableComponent("runecraftory.container.shipping_bin");
+    public static final String NAME = "runecraftory.container.shipping_bin";
 
     public BlockShippingBin(BlockBehaviour.Properties props) {
         super(props);
@@ -50,7 +49,7 @@ public class BlockShippingBin extends Block {
             return InteractionResult.SUCCESS;
         InventoryShippingBin shippingInv = Platform.INSTANCE.getPlayerData(player).map(PlayerData::getShippingInv).orElse(null);
         if (shippingInv != null) {
-            player.openMenu(new SimpleMenuProvider((id, inventory, playerIn) -> new ShippingContainer(id, inventory, shippingInv), NAME));
+            player.openMenu(new SimpleMenuProvider((id, inventory, playerIn) -> new ShippingContainer(id, inventory, shippingInv), new TranslatableComponent(NAME)));
             return InteractionResult.SUCCESS;
         }
         return super.use(state, level, pos, player, hand, result);

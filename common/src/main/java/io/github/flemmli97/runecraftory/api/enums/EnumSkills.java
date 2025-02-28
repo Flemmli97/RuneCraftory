@@ -2,54 +2,56 @@ package io.github.flemmli97.runecraftory.api.enums;
 
 public enum EnumSkills {
 
-    SHORTSWORD("skill.short_sword", GainType.SLOW),
-    LONGSWORD("skill.long_sword", GainType.SLOW),
-    SPEAR("skill.spear", GainType.SLOW),
-    HAMMERAXE("skill.hammer_and_axe", GainType.SLOW),
-    DUAL("skill.dual_sword", GainType.SLOW),
-    FIST("skill.fists", GainType.SLOW),
+    SHORTSWORD("short_sword", GainType.SLOW),
+    LONGSWORD("long_sword", GainType.SLOW),
+    SPEAR("spear", GainType.SLOW),
+    HAMMERAXE("hammer_and_axe", GainType.SLOW),
+    DUAL("dual_sword", GainType.SLOW),
+    FIST("fists", GainType.SLOW),
 
-    FIRE("skill.fire", GainType.SLOW),
-    WATER("skill.water", GainType.SLOW),
-    EARTH("skill.earth", GainType.SLOW),
-    WIND("skill.wind", GainType.SLOW),
-    DARK("skill.dark", GainType.SLOW),
-    LIGHT("skill.light", GainType.SLOW),
-    LOVE("skill.love", GainType.SLOW),
+    FIRE("fire", GainType.SLOW),
+    WATER("water", GainType.SLOW),
+    EARTH("earth", GainType.SLOW),
+    WIND("wind", GainType.SLOW),
+    DARK("dark", GainType.SLOW),
+    LIGHT("light", GainType.SLOW),
+    LOVE("love", GainType.SLOW),
 
-    FARMING("skill.farming", GainType.COMMON),
-    LOGGING("skill.logging", GainType.COMMON),
-    MINING("skill.mining", GainType.COMMON),
-    FISHING("skill.fishing", GainType.VERY_FAST),
+    FARMING("farming", GainType.COMMON),
+    LOGGING("logging", GainType.COMMON),
+    MINING("mining", GainType.COMMON),
+    FISHING("fishing", GainType.VERY_FAST),
 
-    COOKING("skill.cooking", GainType.CRAFTING),
-    FORGING("skill.forging", GainType.CRAFTING),
-    CHEMISTRY("skill.chemistry", GainType.CRAFTING),
-    CRAFTING("skill.crafting", GainType.CRAFTING),
+    COOKING("cooking", GainType.CRAFTING),
+    FORGING("forging", GainType.CRAFTING),
+    CHEMISTRY("chemistry", GainType.CRAFTING),
+    CRAFTING("crafting", GainType.CRAFTING),
 
-    SLEEPING("skill.sleeping", GainType.FAST),
-    SEARCHING("skill.searching", GainType.VERY_FAST),
-    WALKING("skill.walking", GainType.COMMON),
-    EATING("skill.eating", GainType.VERY_FAST),
-    DEFENCE("skill.defence", GainType.COMMON),
+    SLEEPING("sleeping", GainType.FAST),
+    SEARCHING("searching", GainType.VERY_FAST),
+    WALKING("walking", GainType.COMMON),
+    EATING("eating", GainType.VERY_FAST),
+    DEFENCE("defence", GainType.COMMON),
 
-    RES_POISON("skill.poison_res", GainType.FAST),
-    RES_SEAL("skill.seal_res", GainType.FAST),
-    RES_PARA("skill.paralysis_res", GainType.FAST),
-    RES_SLEEP("skill.sleep_res", GainType.FAST),
-    RES_FATIGUE("skill.fatigue_res", GainType.FAST),
-    RES_COLD("skill.cold_res", GainType.FAST),
+    RES_POISON("poison_res", GainType.FAST),
+    RES_SEAL("seal_res", GainType.FAST),
+    RES_PARA("paralysis_res", GainType.FAST),
+    RES_SLEEP("sleep_res", GainType.FAST),
+    RES_FATIGUE("fatigue_res", GainType.FAST),
+    RES_COLD("cold_res", GainType.FAST),
 
-    BATH("skill.bathing", GainType.FAST),
-    TAMING("skill.taming", GainType.FAST),
-    LEADER("skill.leadership", GainType.FAST);
+    BATH("bathing", GainType.FAST),
+    TAMING("taming", GainType.FAST),
+    LEADER("leadership", GainType.FAST);
+
+    public static final String PREFIX = "runecraftory.skill.";
 
     private final String translation;
 
     public final GainType gainType;
 
     EnumSkills(String translation, GainType type) {
-        this.translation = translation;
+        this.translation = PREFIX + translation;
         this.gainType = type;
     }
 

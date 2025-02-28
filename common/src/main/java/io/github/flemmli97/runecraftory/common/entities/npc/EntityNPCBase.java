@@ -1748,10 +1748,10 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     public enum Behaviour {
 
-        WANDER("npc.interact.home", false),
-        FOLLOW("npc.interact.follow", true),
-        FOLLOW_DISTANCE("npc.interact.follow.distance", true),
-        STAY("npc.interact.stay", true);
+        WANDER("runecraftory.npc.interact.home", false),
+        FOLLOW("runecraftory.npc.interact.follow", true),
+        FOLLOW_DISTANCE("runecraftory.npc.interact.follow.distance", true),
+        STAY("runecraftory.npc.interact.stay", true);
 
         public final String interactKey;
 

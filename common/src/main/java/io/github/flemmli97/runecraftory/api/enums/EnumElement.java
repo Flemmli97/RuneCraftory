@@ -9,14 +9,16 @@ import java.util.function.Supplier;
 
 public enum EnumElement {
 
-    NONE(ChatFormatting.GRAY, "runecraftory.element.none", 0xffffff, null),
-    WATER(ChatFormatting.DARK_BLUE, "runecraftory.element.water", 0x101099, Suppliers.memoize(() -> new ItemStack(ModItems.CRYSTAL_WATER.get()))),
-    EARTH(ChatFormatting.YELLOW, "runecraftory.element.earth", 0xe6e610, Suppliers.memoize(() -> new ItemStack(ModItems.CRYSTAL_EARTH.get()))),
-    WIND(ChatFormatting.GREEN, "runecraftory.element.wind", 0x55ff55, Suppliers.memoize(() -> new ItemStack(ModItems.CRYSTAL_WIND.get()))),
-    FIRE(ChatFormatting.DARK_RED, "runecraftory.element.fire", 0x991010, Suppliers.memoize(() -> new ItemStack(ModItems.CRYSTAL_FIRE.get()))),
-    LIGHT(ChatFormatting.WHITE, "runecraftory.element.light", 0xffff60, Suppliers.memoize(() -> new ItemStack(ModItems.CRYSTAL_LIGHT.get()))),
-    DARK(ChatFormatting.DARK_PURPLE, "runecraftory.element.dark", 0x821082, Suppliers.memoize(() -> new ItemStack(ModItems.CRYSTAL_DARK.get()))),
-    LOVE(ChatFormatting.RED, "runecraftory.element.love", 0xfc60fc, Suppliers.memoize(() -> new ItemStack(ModItems.CRYSTAL_LOVE.get())));
+    NONE(ChatFormatting.GRAY, "none", 0xffffff, null),
+    WATER(ChatFormatting.DARK_BLUE, "water", 0x101099, Suppliers.memoize(() -> new ItemStack(ModItems.CRYSTAL_WATER.get()))),
+    EARTH(ChatFormatting.YELLOW, "earth", 0xe6e610, Suppliers.memoize(() -> new ItemStack(ModItems.CRYSTAL_EARTH.get()))),
+    WIND(ChatFormatting.GREEN, "wind", 0x55ff55, Suppliers.memoize(() -> new ItemStack(ModItems.CRYSTAL_WIND.get()))),
+    FIRE(ChatFormatting.DARK_RED, "fire", 0x991010, Suppliers.memoize(() -> new ItemStack(ModItems.CRYSTAL_FIRE.get()))),
+    LIGHT(ChatFormatting.WHITE, "light", 0xffff60, Suppliers.memoize(() -> new ItemStack(ModItems.CRYSTAL_LIGHT.get()))),
+    DARK(ChatFormatting.DARK_PURPLE, "dark", 0x821082, Suppliers.memoize(() -> new ItemStack(ModItems.CRYSTAL_DARK.get()))),
+    LOVE(ChatFormatting.RED, "love", 0xfc60fc, Suppliers.memoize(() -> new ItemStack(ModItems.CRYSTAL_LOVE.get())));
+
+    public static final String PREFIX = "runecraftory.element.";
 
     private final String translation;
     private final ChatFormatting color;
@@ -24,9 +26,9 @@ public enum EnumElement {
 
     public final Supplier<ItemStack> icon;
 
-    EnumElement(ChatFormatting color, String name, int particleColor, Supplier<ItemStack> icon) {
+    EnumElement(ChatFormatting color, String key, int particleColor, Supplier<ItemStack> icon) {
         this.color = color;
-        this.translation = name;
+        this.translation = PREFIX + key;
         this.particleColor = particleColor;
         this.icon = icon;
     }

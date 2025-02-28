@@ -69,7 +69,7 @@ public class BossSpawnerBlockEntity extends BlockEntity {
                             Vec3 opposite = player.position().subtract(pos).normalize();
                             player.fallDistance = 0;
                             player.setDeltaMovement(opposite);
-                            player.sendMessage(new TranslatableComponent("runecraftory.spawner.entry.deny").withStyle(ChatFormatting.DARK_PURPLE),
+                            player.sendMessage(new TranslatableComponent("runecraftory.misc.spawner.entry.deny").withStyle(ChatFormatting.DARK_PURPLE),
                                     ChatType.GAME_INFO, Util.NIL_UUID);
                             player.connection.send(new ClientboundSetEntityMotionPacket(player));
                         }

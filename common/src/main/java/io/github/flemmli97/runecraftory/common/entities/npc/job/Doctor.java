@@ -16,11 +16,11 @@ import java.util.Map;
 
 public class Doctor extends NPCJob {
 
-    public static final String CURE_ACTION = "npc.action.doctor.cure";
-    public static final String CURE_ACTION_DESC = "npc.action.doctor.cure.desc";
-    public static final String CURE_ACTION_SUCCESS = "npc.action.doctor.cure.success";
-    public static final String CURE_ACTION_FAIL = "npc.action.doctor.cure.fail";
-    public static final String CURE_COST = "npc.shop.doctor.cure.cost";
+    public static final String CURE_ACTION = "runecraftory.npc.action.doctor.cure";
+    public static final String CURE_ACTION_DESC = "runecraftory.npc.action.doctor.cure.desc";
+    public static final String CURE_ACTION_SUCCESS = "runecraftory.npc.action.doctor.cure.success";
+    public static final String CURE_ACTION_FAIL = "runecraftory.npc.action.doctor.cure.fail";
+    public static final String CURE_COST = "runecraftory.npc.shop.doctor.cure.cost";
 
     public static final int CURE_PRICE = 100;
 

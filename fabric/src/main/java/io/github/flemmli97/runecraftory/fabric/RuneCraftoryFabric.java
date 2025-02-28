@@ -269,7 +269,7 @@ public class RuneCraftoryFabric implements ModInitializer {
         ModBlocks.BLOCKS.registerContent();
         ModItems.ITEMS.registerContent();
 
-        ModBlocks.TILES.registerContent();
+        ModBlocks.BLOCK_ENTITY_TYPES.registerContent();
         ModContainer.CONTAINERS.registerContent();
         //ModAttributes.ATTRIBUTES.registerContent();
         ModEffects.EFFECTS.registerContent();

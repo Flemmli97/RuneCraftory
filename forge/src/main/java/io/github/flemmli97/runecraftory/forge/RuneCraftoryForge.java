@@ -99,7 +99,7 @@ public class RuneCraftoryForge {
 
     public static void registries() {
         ModBlocks.BLOCKS.registerContent();
-        ModBlocks.TILES.registerContent();
+        ModBlocks.BLOCK_ENTITY_TYPES.registerContent();
         ModItems.ITEMS.registerContent();
         ModContainer.CONTAINERS.registerContent();
         ModEntities.ENTITIES.registerContent();

@@ -24,6 +24,8 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 
 public class ContainerInfoScreen extends AbstractContainerMenu {
 
+    public static final String TITLE = "runecraftory.container.info";
+    public static final String TITLE_SUB = "runecraftory.container.info.sub";
     private static final ResourceLocation[] ARMOR_SLOT_TEXTURES = new ResourceLocation[]{InventoryMenu.EMPTY_ARMOR_SLOT_BOOTS, InventoryMenu.EMPTY_ARMOR_SLOT_LEGGINGS, InventoryMenu.EMPTY_ARMOR_SLOT_CHESTPLATE, InventoryMenu.EMPTY_ARMOR_SLOT_HELMET};
     private static final EquipmentSlot[] VALID_EQUIPMENT_SLOTS = new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
 
@@ -102,7 +104,7 @@ public class ContainerInfoScreen extends AbstractContainerMenu {
         return new MenuProvider() {
             @Override
             public Component getDisplayName() {
-                return new TranslatableComponent("runecraftory.container.info");
+                return new TranslatableComponent(TITLE);
             }
 
             @Override
@@ -116,7 +118,7 @@ public class ContainerInfoScreen extends AbstractContainerMenu {
         return new MenuProvider() {
             @Override
             public Component getDisplayName() {
-                return new TranslatableComponent("runecraftory.container.info.sub");
+                return new TranslatableComponent(TITLE_SUB);
             }
 
             @Override
