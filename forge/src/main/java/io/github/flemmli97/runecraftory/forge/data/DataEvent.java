@@ -23,19 +23,20 @@ public class DataEvent {
         DataGenerator data = event.getGenerator();
         NPCDataGen npcDataGen = null;
         QuestGen questGen = null;
+        FileVerifier verifier = new FileVerifier() {
+            @Override
+            public boolean exists(ResourceLocation loc, PackType packType, String prefix) {
+                return event.getExistingFileHelper().exists(loc, packType, ".json", prefix);
+            }
+
+            @Override
+            public void track(ResourceLocation loc, PackType packType, String prefix) {
+                event.getExistingFileHelper().trackGenerated(loc, packType, ".json", prefix);
+            }
+        };
         if (event.includeServer()) {
             data.addProvider(questGen = new QuestGen(data));
-            data.addProvider(npcDataGen = new NPCDataGen(data, new FileVerifier() {
-                @Override
-                public boolean exists(ResourceLocation loc, PackType packType, String prefix) {
-                    return event.getExistingFileHelper().exists(loc, packType, ".json", prefix);
-                }
-
-                @Override
-                public void track(ResourceLocation loc, PackType packType, String prefix) {
-                    event.getExistingFileHelper().trackGenerated(loc, packType, ".json", prefix);
-                }
-            }, questGen));
+            data.addProvider(npcDataGen = new NPCDataGen(data, verifier, questGen));
         }
         if (event.includeClient()) {
             IgnoreFileHelper ignore = new IgnoreFileHelper(event.getExistingFileHelper());
@@ -56,7 +57,8 @@ public class DataEvent {
             data.addProvider(new RecipesGen(data));
             data.addProvider(new Loottables(data, questGen));
             data.addProvider(new BiomeTagGen(data, event.getExistingFileHelper()));
-            data.addProvider(new MainWorldGenData(data));
+            data.addProvider(new StructureBossGen(data, verifier));
+            data.addProvider(new MainWorldGenData(data, verifier));
             data.addProvider(new PatchouliGen(data));
             data.addProvider(new EntityTagGen(data, event.getExistingFileHelper()));
             data.addProvider(new ShopItemGen(data));

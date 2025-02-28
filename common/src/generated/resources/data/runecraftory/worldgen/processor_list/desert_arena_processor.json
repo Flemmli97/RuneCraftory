@@ -1,7 +1,7 @@
 {
   "processors": [
     {
-      "boss": "#runecraftory:desert_arena_bosses",
+      "boss": "runecraftory:desert",
       "processor_type": "runecraftory:boss_processor"
     }
   ]

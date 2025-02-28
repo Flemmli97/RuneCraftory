@@ -1,7 +1,7 @@
 {
   "processors": [
     {
-      "boss": "#runecraftory:forest_bosses",
+      "boss": "runecraftory:forest",
       "processor_type": "runecraftory:boss_processor"
     }
   ]

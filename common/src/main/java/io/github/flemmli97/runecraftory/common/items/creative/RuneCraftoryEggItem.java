@@ -7,7 +7,6 @@ import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.network.S2CSpawnEggScreen;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
-import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -64,7 +63,7 @@ public class RuneCraftoryEggItem extends SpawnEgg {
     @Override
     public InteractionResult onBlockUse(ItemStack stack, BlockPos pos, BlockState state, @Nullable BlockEntity tile) {
         if (tile instanceof BossSpawnerBlockEntity) {
-            ((BossSpawnerBlockEntity) tile).setEntity(PlatformUtils.INSTANCE.entities().getIDFrom(this.getType(stack.getTag())));
+            ((BossSpawnerBlockEntity) tile).setEntity(this.getType(stack.getTag()));
             return InteractionResult.SUCCESS;
         }
         return super.onBlockUse(stack, pos, state, tile);

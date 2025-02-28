@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.blocks.tile;
 import io.github.flemmli97.runecraftory.api.datapack.EntityProperties;
 import io.github.flemmli97.runecraftory.common.blocks.BlockBossSpawner;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
+import io.github.flemmli97.runecraftory.common.datapack.manager.StructureBossManager;
 import io.github.flemmli97.runecraftory.common.entities.EnsembleMonsters;
 import io.github.flemmli97.runecraftory.common.entities.utils.IBaseMob;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
@@ -36,15 +37,22 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class BossSpawnerBlockEntity extends BlockEntity {
 
     private int lastUpdateDay = -1;
     private int ticker;
-    private EntityType<?> savedEntity;
+
+    private ResourceLocation spawnListId;
+    private StructureBossManager.BossSpawnList spawnList;
+    private EntityType<?> nextSpawn;
+
     private BlockPos structurePos;
     private ResourceLocation structureID;
     private StructureStart structure;
+
+    private final Random random = new Random();
 
     public BossSpawnerBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(ModBlocks.BOSS_SPAWNER_TILE.get(), blockPos, blockState);
@@ -56,8 +64,8 @@ public class BossSpawnerBlockEntity extends BlockEntity {
             return;
         Vec3 pos = Vec3.atCenterOf(blockPos.above(2));
         List<ServerPlayer> nearby = LevelCalc.playersAround(level, pos, 20);
-        if (!nearby.isEmpty()) {
-            EntityProperties prop = DataPackHandler.INSTANCE.monsterPropertiesManager().getPropertiesFor(blockEntity.savedEntity);
+        if (!nearby.isEmpty() && blockEntity.nextSpawn != null) {
+            EntityProperties prop = DataPackHandler.INSTANCE.monsterPropertiesManager().getPropertiesFor(blockEntity.nextSpawn);
             boolean canSpawn = false;
             if (prop.spawnerPredicate != EntityPredicate.ANY) {
                 // Throw out all non matching players
@@ -82,7 +90,7 @@ public class BossSpawnerBlockEntity extends BlockEntity {
                 canSpawn = true;
             }
             boolean flag = blockEntity.lastUpdateDay != WorldUtils.day(level);
-            if (canSpawn && blockEntity.savedEntity != null && flag) {
+            if (canSpawn && flag) {
                 blockEntity.spawnEntity(nearby, pos);
             }
         }
@@ -95,8 +103,8 @@ public class BossSpawnerBlockEntity extends BlockEntity {
     }
 
     public void spawnEntity(List<ServerPlayer> nearby, Vec3 pos) {
-        if (!this.level.isClientSide && this.savedEntity != null) {
-            Entity e = this.savedEntity.create(this.level);
+        if (!this.level.isClientSide && this.nextSpawn != null) {
+            Entity e = this.nextSpawn.create(this.level);
             if (e != null) {
                 this.lastUpdateDay = WorldUtils.day(this.level);
                 if (e instanceof EnsembleMonsters ensemble) {
@@ -110,7 +118,7 @@ public class BossSpawnerBlockEntity extends BlockEntity {
                         case EAST -> ensemble.withDirection(Rotation.CLOCKWISE_90);
                         default -> ensemble.withDirection(Rotation.NONE);
                     }
-                } else if (!this.level.getEntitiesOfClass(e.getClass(), new AABB(this.worldPosition).inflate(32)).isEmpty())
+                } else if (!this.noNearby())
                     return;
                 if (e instanceof IBaseMob mob)
                     mob.setLevel(LevelCalc.levelFromPos((ServerLevel) this.level, Vec3.atCenterOf(this.worldPosition), nearby));
@@ -120,27 +128,53 @@ public class BossSpawnerBlockEntity extends BlockEntity {
                     mob.finalizeSpawn((ServerLevelAccessor) this.level, this.level.getCurrentDifficultyAt(e.blockPosition()), MobSpawnType.SPAWNER, null, null);
                 }
                 this.level.addFreshEntity(e);
+                this.updateEntity();
             }
         }
     }
 
-    public void setEntity(ResourceLocation entity) {
-        this.savedEntity = PlatformUtils.INSTANCE.entities().getFromId(entity);
+    public void setEntity(EntityType<?> entity) {
+        this.nextSpawn = entity;
+    }
+
+    private void updateEntity() {
+        if (this.spawnList != null)
+            this.spawnList.getRandom(this.random).ifPresent(this::setEntity);
+    }
+
+    private boolean noNearby() {
+        return this.level.getEntitiesOfClass(Mob.class, new AABB(this.worldPosition).inflate(32),
+                e -> e.getType() == this.nextSpawn || (this.spawnList != null && this.spawnList.has(e.getType()))).isEmpty();
     }
 
     @Override
-    public void load(CompoundTag nbt) {
-        super.load(nbt);
-        this.lastUpdateDay = nbt.getInt("LastUpdate");
-        if (nbt.contains("Entity"))
-            this.savedEntity = PlatformUtils.INSTANCE.entities().getFromId(new ResourceLocation(nbt.getString("Entity")));
+    public void load(CompoundTag tag) {
+        super.load(tag);
+        this.lastUpdateDay = tag.getInt("LastUpdate");
+        if (tag.contains("SpawnListId")) {
+            this.spawnListId = new ResourceLocation(tag.getString("SpawnListId"));
+            this.spawnList = DataPackHandler.INSTANCE.structureBossManager().getBoss(new ResourceLocation(tag.getString("SpawnListId")));
+            this.updateEntity();
+        }
+        if (tag.contains("Entity")) {
+            this.nextSpawn = Registry.ENTITY_TYPE.get(new ResourceLocation(tag.getString("Entity")));
+        }
     }
 
     @Override
-    public void saveAdditional(CompoundTag nbt) {
-        super.saveAdditional(nbt);
-        nbt.putInt("LastUpdate", this.lastUpdateDay);
-        if (this.savedEntity != null)
-            nbt.putString("Entity", PlatformUtils.INSTANCE.entities().getIDFrom(this.savedEntity).toString());
+    public void saveAdditional(CompoundTag tag) {
+        super.saveAdditional(tag);
+        tag.putInt("LastUpdate", this.lastUpdateDay);
+        if (this.spawnListId != null)
+            tag.putString("SpawnListId", this.spawnListId.toString());
+        if (this.nextSpawn != null)
+            tag.putString("Entity", Registry.ENTITY_TYPE.getKey(this.nextSpawn).toString());
+    }
+
+    public static CompoundTag creatTagFor(ResourceLocation spawnListId) {
+        CompoundTag tag = new CompoundTag();
+        tag.putString("SpawnListId", spawnListId.toString());
+        tag.putInt("LastUpdate", -1);
+        return tag;
     }
 }

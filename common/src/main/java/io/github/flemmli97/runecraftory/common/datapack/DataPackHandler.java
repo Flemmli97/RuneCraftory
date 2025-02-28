@@ -8,6 +8,7 @@ import io.github.flemmli97.runecraftory.common.datapack.manager.MonsterPropertie
 import io.github.flemmli97.runecraftory.common.datapack.manager.ShopItemsManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.SkillPropertiesManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.SpellPropertiesManager;
+import io.github.flemmli97.runecraftory.common.datapack.manager.StructureBossManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.GiftManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCActionManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCConversationManager;
@@ -29,6 +30,7 @@ public class DataPackHandler {
     private final FoodManager foods = new FoodManager();
     private final ShopItemsManager shopItems = new ShopItemsManager();
     private final GateSpawnsManager gateSpawnsManager = new GateSpawnsManager();
+    private final StructureBossManager structureBossManager = new StructureBossManager();
     private final MonsterPropertiesManager mobProperties = new MonsterPropertiesManager();
     private final SpellPropertiesManager spellProperties = new SpellPropertiesManager();
     private final SkillPropertiesManager skillPropertiesManager = new SkillPropertiesManager();
@@ -57,6 +59,7 @@ public class DataPackHandler {
 
     public static void reloadGateSpawns(Consumer<PreparableReloadListener> cons) {
         cons.accept(INSTANCE.gateSpawnsManager);
+        cons.accept(INSTANCE.structureBossManager);
     }
 
     public static void reloadProperties(Consumer<PreparableReloadListener> cons) {
@@ -119,6 +122,10 @@ public class DataPackHandler {
 
     public GateSpawnsManager gateSpawnsManager() {
         return this.gateSpawnsManager;
+    }
+
+    public StructureBossManager structureBossManager() {
+        return this.structureBossManager;
     }
 
     public MonsterPropertiesManager monsterPropertiesManager() {

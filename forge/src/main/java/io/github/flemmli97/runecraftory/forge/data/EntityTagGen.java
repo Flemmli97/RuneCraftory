@@ -49,25 +49,6 @@ public class EntityTagGen extends TagsProvider<EntityType<?>> {
                 .add(ModEntities.ANT.get())
                 .add(ModEntities.KILLER_ANT.get());
 
-        this.tag(RunecraftoryTags.FOREST_BOSSES)
-                .add(ModEntities.AMBROSIA.get())
-                .add(ModEntities.DEAD_TREE.get());
-        this.tag(RunecraftoryTags.WATER_RUIN_BOSSES)
-                .add(ModEntities.CHIMERA.get())
-                .add(ModEntities.THUNDERBOLT.get());
-        this.tag(RunecraftoryTags.THEATER_RUIN_BOSSES)
-                .add(ModEntities.MARIONETTA.get());
-        this.tag(RunecraftoryTags.PLAINS_ARENA_BOSSES)
-                .add(ModEntities.RACCOON.get());
-        this.tag(RunecraftoryTags.DESERT_ARENA_BOSSES)
-                .add(ModEntities.SKELEFANG.get());
-        this.tag(RunecraftoryTags.NETHER_ARENA_BOSSES)
-                .add(ModEntities.RAFFLESIA.get());
-        this.tag(RunecraftoryTags.WIND_SHRINE_BOSSES)
-                .add(ModEntities.GRIMOIRE.get());
-        this.tag(RunecraftoryTags.LEON_KARNAK_BOSSES)
-                .add(ModEntities.SANO_AND_UNO.get());
-
         this.tag(RunecraftoryTags.TAMED_MONSTER_IGNORE)
                 .add(EntityType.SNOW_GOLEM)
                 .add(EntityType.IRON_GOLEM)
