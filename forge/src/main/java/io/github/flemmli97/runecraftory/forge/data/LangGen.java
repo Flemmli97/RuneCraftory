@@ -1,9 +1,8 @@
 package io.github.flemmli97.runecraftory.forge.data;
 
 import com.google.common.collect.Lists;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
 import io.github.flemmli97.runecraftory.api.datapack.provider.AdditionalLanguages;
 import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
 import io.github.flemmli97.runecraftory.api.enums.EnumDay;
@@ -76,7 +75,6 @@ import java.util.stream.Stream;
  */
 public class LangGen implements DataProvider {
 
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
     private static final Comparator<String> ORDER = Comparator.comparingInt(o -> LangType.get(o).ordinal());
     private final Map<String, String> data = new LinkedHashMap<>();
     private final DataGenerator gen;
@@ -512,7 +510,7 @@ public class LangGen implements DataProvider {
 
         this.add(Smith.BARN_ACTION, "Monster barn");
         this.add(Smith.BARN_ACTION_DESCRIPTION, "You can buy a monster barn to house your tamed monsters. Each barn bought increases the costs of the next one");
-        this.add(Smith.BARN_ACTION_SUCCESS, "Thank you for your purchase.");
+        this.add(Smith.BARN_ACTION_SUCCESS, "Thank you %s for your purchase.");
         this.add(Smith.BARN_ACTION_FAIL, "You don't have enough materials for that.");
         this.add(Smith.BARN_COST, "A barn costs %1$s$ and following materials:");
         this.add(Smith.BARN_COST_MAT, "Logs x%1$s, Cobblestone x%2$s");
@@ -854,7 +852,7 @@ public class LangGen implements DataProvider {
 
     @SuppressWarnings("deprecation")
     private void save(HashCache cache, Object object, Path target) throws IOException {
-        String data = GSON.toJson(object);
+        String data = GsonInstances.GSON.toJson(object);
         data = JavaUnicodeEscaper.outsideOf(0, 0x7f).translate(data); // Escape unicode after the fact so that it's not double escaped by GSON
         String hash = DataProvider.SHA1.hashUnencodedChars(data).toString();
         if (!Objects.equals(cache.getHash(target), hash) || !Files.exists(target)) {

@@ -34,7 +34,7 @@ public class FoodManager extends SimpleJsonResourceReloadListener {
     private Map<TagKey<Item>, FoodProperties> tagFood = ImmutableMap.of();
 
     public FoodManager() {
-        super(GsonInstances.ATTRIBUTE_EFFECTS, DIRECTORY);
+        super(GsonInstances.GSON, DIRECTORY);
     }
 
     @Nullable

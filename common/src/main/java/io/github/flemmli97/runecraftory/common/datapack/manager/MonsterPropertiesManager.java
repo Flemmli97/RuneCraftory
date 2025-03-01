@@ -1,13 +1,12 @@
 package io.github.flemmli97.runecraftory.common.datapack.manager;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.EntityProperties;
-import io.github.flemmli97.tenshilib.platform.PlatformUtils;
+import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
@@ -21,16 +20,14 @@ public class MonsterPropertiesManager extends SimpleJsonResourceReloadListener {
 
     public static final String DIRECTORY = "monster_properties";
 
-    private static final Gson GSON = new GsonBuilder().create();
-
     private Map<ResourceLocation, EntityProperties> propertiesMap = new HashMap<>();
 
     public MonsterPropertiesManager() {
-        super(GSON, DIRECTORY);
+        super(GsonInstances.GSON, DIRECTORY);
     }
 
     public EntityProperties getPropertiesFor(EntityType<?> type) {
-        ResourceLocation res = PlatformUtils.INSTANCE.entities().getIDFrom(type);
+        ResourceLocation res = Registry.ENTITY_TYPE.getKey(type);
         return this.propertiesMap.getOrDefault(res, EntityProperties.DEFAULT_PROP);
     }
 

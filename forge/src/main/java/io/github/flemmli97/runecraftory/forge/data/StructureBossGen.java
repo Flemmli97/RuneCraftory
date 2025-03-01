@@ -22,7 +22,7 @@ public class StructureBossGen extends StructureBossProvider {
     public static final ResourceLocation LEON_KARNAK_BOSSES = new ResourceLocation(RuneCraftory.MODID, "leon_karnak");
 
     public StructureBossGen(DataGenerator gen, FileVerifier verifier) {
-        super(gen, RuneCraftory.MODID, verifier);
+        super(gen, verifier);
     }
 
     @Override

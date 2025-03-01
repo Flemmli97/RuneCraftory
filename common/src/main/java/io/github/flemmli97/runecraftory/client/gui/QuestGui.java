@@ -17,8 +17,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.model.PlayerModel;
-import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
@@ -34,8 +32,6 @@ public class QuestGui extends Screen {
 
     protected static final ResourceLocation TEXTUREPATH = new ResourceLocation(RuneCraftory.MODID, "textures/gui/quest_gui.png");
     protected static final ResourceLocation TEXTUREPATH_WIDGETS = new ResourceLocation(RuneCraftory.MODID, "textures/gui/quest_gui_widgets.png");
-
-    private final PlayerModel<?> MODEL = new PlayerModel<>(Minecraft.getInstance().getEntityModels().bakeLayer(ModelLayers.PLAYER), false);
 
     private final int textureX = 238;
     private final int textureY = 175;

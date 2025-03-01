@@ -11,7 +11,6 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Rarity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -103,13 +102,14 @@ public class ModSounds {
 
     private static RegistryEntrySupplier<SoundEvent> registerBgm(String name, ResourceLocation bgm) {
         RegistryEntrySupplier<SoundEvent> res = SOUND_EVENTS.register(name, () -> new SoundEvent(new ResourceLocation(RuneCraftory.MODID, name)));
-        if (BGM.stream().noneMatch(h -> h.bgm.equals(bgm))) {
-            String music = bgm.getPath().replace("bgm/", "");
-            RegistryEntrySupplier<Item> record = ModItems.ITEMS.register("music_disc_" + music.replace("-", "_"), Platform.INSTANCE.registerRecord(5, res, new Item.Properties()
-                    .stacksTo(1).rarity(Rarity.RARE)));
-            ModItems.NOTEX.add(record);
-            BGM_RECORD.put(bgm, record);
-        }
+        // For now not added
+        //        if (BGM.stream().noneMatch(h -> h.bgm.equals(bgm))) {
+        //            String music = bgm.getPath().replace("bgm/", "");
+        //            RegistryEntrySupplier<Item> record = ModItems.ITEMS.register("music_disc_" + music.replace("-", "_"), Platform.INSTANCE.registerRecord(5, res, new Item.Properties()
+        //                    .stacksTo(1).rarity(Rarity.RARE)));
+        //            ModItems.NOTEX.add(record);
+        //            BGM_RECORD.put(bgm, record);
+        //        }
         BGM.add(new BGMHolder(res, bgm));
         return res;
     }

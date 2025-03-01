@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.common.items.tools;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import com.google.common.collect.Sets;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.enums.EnumToolTier;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
@@ -37,17 +36,12 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 
-import java.util.Set;
-
 public class ItemToolSickle extends DiggerItem implements IItemUsable {
-
-    private static final Set<Block> EFFECTIVE_ON = Sets.newHashSet(Blocks.CACTUS, Blocks.CHORUS_FLOWER, Blocks.CHORUS_PLANT, Blocks.PUMPKIN, Blocks.RED_MUSHROOM, Blocks.BROWN_MUSHROOM, Blocks.BROWN_MUSHROOM_BLOCK, Blocks.RED_MUSHROOM_BLOCK, Blocks.VINE);
 
     public final EnumToolTier tier;
 

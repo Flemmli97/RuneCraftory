@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.fabric.platform;
 
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.world.entity.schedule.Activity;
 
@@ -17,7 +18,7 @@ public class ReflectiveInvokers {
             return ret;
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException |
                  InvocationTargetException e) {
-            e.printStackTrace();
+            RuneCraftory.LOGGER.error(e);
         }
         return null;
     }

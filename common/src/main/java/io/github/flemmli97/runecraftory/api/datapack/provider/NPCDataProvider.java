@@ -1,10 +1,9 @@
 package io.github.flemmli97.runecraftory.api.datapack.provider;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.api.datapack.ConversationContext;
+import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
 import io.github.flemmli97.runecraftory.api.datapack.npc.ConversationSet;
 import io.github.flemmli97.runecraftory.api.datapack.npc.GiftData;
 import io.github.flemmli97.runecraftory.api.datapack.npc.NPCData;
@@ -33,8 +32,6 @@ import java.util.Map;
 public abstract class NPCDataProvider implements DataProvider, AdditionalLanguages {
 
     private static final Logger LOGGER = LogManager.getLogger();
-
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
     private final Map<ResourceLocation, NPCLook> looks = new HashMap<>();
     private final Map<ResourceLocation, ConversationSet> conversations = new HashMap<>();
@@ -67,7 +64,7 @@ public abstract class NPCDataProvider implements DataProvider, AdditionalLanguag
             try {
                 JsonElement obj = NPCData.CODEC.encodeStart(JsonOps.INSTANCE, val)
                         .getOrThrow(false, LOGGER::error);
-                DataProvider.save(GSON, cache, obj, path);
+                DataProvider.save(GsonInstances.GSON, cache, obj, path);
             } catch (IOException e) {
                 LOGGER.error("Couldn't save npc data {}", path, e);
             }
@@ -77,7 +74,7 @@ public abstract class NPCDataProvider implements DataProvider, AdditionalLanguag
             try {
                 JsonElement obj = NPCLook.CODEC.encodeStart(JsonOps.INSTANCE, val)
                         .getOrThrow(false, LOGGER::error);
-                DataProvider.save(GSON, cache, obj, path);
+                DataProvider.save(GsonInstances.GSON, cache, obj, path);
             } catch (IOException e) {
                 LOGGER.error("Couldn't save npc looks {}", path, e);
             }
@@ -87,7 +84,7 @@ public abstract class NPCDataProvider implements DataProvider, AdditionalLanguag
             try {
                 JsonElement obj = ConversationSet.CODEC.encodeStart(JsonOps.INSTANCE, val)
                         .getOrThrow(false, LOGGER::error);
-                DataProvider.save(GSON, cache, obj, path);
+                DataProvider.save(GsonInstances.GSON, cache, obj, path);
             } catch (IOException e) {
                 LOGGER.error("Couldn't save npc conversations {}", path, e);
             }
@@ -97,7 +94,7 @@ public abstract class NPCDataProvider implements DataProvider, AdditionalLanguag
             try {
                 JsonElement obj = GiftData.CODEC.encodeStart(JsonOps.INSTANCE, val)
                         .getOrThrow(false, LOGGER::error);
-                DataProvider.save(GSON, cache, obj, path);
+                DataProvider.save(GsonInstances.GSON, cache, obj, path);
             } catch (IOException e) {
                 LOGGER.error("Couldn't save gift data {}", path, e);
             }
@@ -107,7 +104,7 @@ public abstract class NPCDataProvider implements DataProvider, AdditionalLanguag
             try {
                 JsonElement obj = NPCAttackActions.CODEC.encodeStart(JsonOps.INSTANCE, val)
                         .getOrThrow(false, LOGGER::error);
-                DataProvider.save(GSON, cache, obj, path1);
+                DataProvider.save(GsonInstances.GSON, cache, obj, path1);
             } catch (IOException e) {
                 LOGGER.error("Couldn't combat action {}", path1, e);
             }

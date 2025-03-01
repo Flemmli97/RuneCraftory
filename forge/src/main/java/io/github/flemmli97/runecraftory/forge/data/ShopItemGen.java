@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.forge.data;
 
-import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.ShopItemProperties;
 import io.github.flemmli97.runecraftory.api.datapack.provider.ShopItemProvider;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
@@ -12,7 +11,7 @@ import net.minecraft.world.item.Item;
 public class ShopItemGen extends ShopItemProvider {
 
     public ShopItemGen(DataGenerator gen) {
-        super(gen, RuneCraftory.MODID);
+        super(gen);
     }
 
     @Override

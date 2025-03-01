@@ -17,8 +17,6 @@ import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import io.github.flemmli97.tenshilib.common.utils.MapUtils;
-import io.github.flemmli97.tenshilib.platform.PlatformUtils;
-import io.github.flemmli97.tenshilib.platform.registry.SimpleRegistryWrapper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
@@ -144,19 +142,18 @@ public class ItemStat {
         stat.element = buffer.readEnum(EnumElement.class);
         int size = buffer.readInt();
         for (int i = 0; i < size; i++)
-            stat.itemStats.put(PlatformUtils.INSTANCE.attributes().getFromId(buffer.readResourceLocation()), buffer.readDouble());
+            stat.itemStats.put(Registry.ATTRIBUTE.get(buffer.readResourceLocation()), buffer.readDouble());
         size = buffer.readInt();
         ImmutableSortedMap.Builder<Attribute, Double> builder = new ImmutableSortedMap.Builder<>(ModAttributes.SORTED);
         for (int i = 0; i < size; i++)
-            builder.put(PlatformUtils.INSTANCE.attributes().getFromId(buffer.readResourceLocation()), buffer.readDouble());
+            builder.put(Registry.ATTRIBUTE.get(buffer.readResourceLocation()), buffer.readDouble());
         stat.monsterGiftIncrease = builder.build();
-        SimpleRegistryWrapper<Spell> spellRegistry = PlatformUtils.INSTANCE.registry(ModSpells.SPELL_REGISTRY_KEY);
         if (buffer.readBoolean())
-            stat.tier1Spell = spellRegistry.getFromId(buffer.readResourceLocation());
+            stat.tier1Spell = ModSpells.SPELL_REGISTRY.get().getFromId(buffer.readResourceLocation());
         if (buffer.readBoolean())
-            stat.tier2Spell = spellRegistry.getFromId(buffer.readResourceLocation());
+            stat.tier2Spell = ModSpells.SPELL_REGISTRY.get().getFromId(buffer.readResourceLocation());
         if (buffer.readBoolean())
-            stat.tier3Spell = spellRegistry.getFromId(buffer.readResourceLocation());
+            stat.tier3Spell = ModSpells.SPELL_REGISTRY.get().getFromId(buffer.readResourceLocation());
         if (buffer.readBoolean())
             stat.armorEffect = ModArmorEffects.ARMOR_EFFECT_REGISTRY.get().getFromId(buffer.readResourceLocation());
         return stat;
@@ -228,12 +225,12 @@ public class ItemStat {
         buffer.writeEnum(this.element);
         buffer.writeInt(this.itemStats.size());
         this.itemStats.forEach((att, val) -> {
-            buffer.writeResourceLocation(PlatformUtils.INSTANCE.attributes().getIDFrom(att));
+            buffer.writeResourceLocation(Registry.ATTRIBUTE.getKey(att));
             buffer.writeDouble(val);
         });
         buffer.writeInt(this.monsterGiftIncrease.size());
         this.monsterGiftIncrease.forEach((att, val) -> {
-            buffer.writeResourceLocation(PlatformUtils.INSTANCE.attributes().getIDFrom(att));
+            buffer.writeResourceLocation(Registry.ATTRIBUTE.getKey(att));
             buffer.writeDouble(val);
         });
         buffer.writeBoolean(this.tier1Spell != null);
@@ -303,7 +300,7 @@ public class ItemStat {
             List<Component> list = new ArrayList<>();
             if (this.flat != null) {
                 for (Map.Entry<Attribute, Double> entry : this.flat.entrySet()) {
-                    ResourceLocation key = PlatformUtils.INSTANCE.attributes().getIDFrom(entry.getKey());
+                    ResourceLocation key = Registry.ATTRIBUTE.getKey(entry.getKey());
                     if (IGNORED.contains(key))
                         continue;
                     double d = entry.getKey().equals(Attributes.KNOCKBACK_RESISTANCE) ? entry.getValue() * 10 : entry.getValue();
@@ -315,7 +312,7 @@ public class ItemStat {
                 }
             } else if (this.ext != null) {
                 for (Map.Entry<Attribute, AttributeValues> entry : this.ext.entrySet()) {
-                    ResourceLocation key = PlatformUtils.INSTANCE.attributes().getIDFrom(entry.getKey());
+                    ResourceLocation key = Registry.ATTRIBUTE.getKey(entry.getKey());
                     if (IGNORED.contains(key))
                         continue;
                     if (entry.getValue().flat != 0) {
@@ -391,7 +388,7 @@ public class ItemStat {
 
     @Override
     public String toString() {
-        String s = "[Buy:" + this.buyPrice + ";Sell:" + this.sellPrice + ";UpgradeDifficulty:" + this.upgradeDifficulty + ";DefaultElement:" + this.element + "];{stats:[" + MapUtils.toString(this.itemStats, reg -> PlatformUtils.INSTANCE.attributes().getIDFrom(reg).toString(), Object::toString) + "]}";
+        String s = "[Buy:" + this.buyPrice + ";Sell:" + this.sellPrice + ";UpgradeDifficulty:" + this.upgradeDifficulty + ";DefaultElement:" + this.element + "];{stats:[" + MapUtils.toString(this.itemStats, reg -> Registry.ATTRIBUTE.getKey(reg).toString(), Object::toString) + "]}";
         if (this.id != null)
             s = this.id + ":" + s;
         return s;

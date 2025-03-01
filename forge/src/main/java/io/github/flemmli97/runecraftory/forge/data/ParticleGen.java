@@ -1,11 +1,10 @@
 package io.github.flemmli97.runecraftory.forge.data;
 
 import com.google.common.collect.Lists;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.data.DataGenerator;
@@ -23,7 +22,6 @@ import java.util.Map;
 
 public class ParticleGen implements DataProvider {
 
-    private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
     protected final Map<ResourceLocation, List<ResourceLocation>> particleTextures = new LinkedHashMap<>();
     private final DataGenerator generator;
 
@@ -82,7 +80,7 @@ public class ParticleGen implements DataProvider {
             list.forEach(res -> textures.add(res.toString()));
             obj.add("textures", textures);
             try {
-                DataProvider.save(GSON, cache, obj, path);
+                DataProvider.save(GsonInstances.GSON, cache, obj, path);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

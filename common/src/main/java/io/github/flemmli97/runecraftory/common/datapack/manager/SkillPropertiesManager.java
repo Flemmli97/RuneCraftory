@@ -1,12 +1,11 @@
 package io.github.flemmli97.runecraftory.common.datapack.manager;
 
 import com.google.common.collect.Maps;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
 import io.github.flemmli97.runecraftory.api.datapack.SkillProperties;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import net.minecraft.resources.ResourceLocation;
@@ -32,8 +31,6 @@ public class SkillPropertiesManager extends SimplePreparableReloadListener<Map<R
 
     public static final String DIRECTORY = "skills";
 
-    private static final Gson GSON = new GsonBuilder().create();
-
     private Map<EnumSkills, SkillProperties> propertiesMap = new EnumMap<>(EnumSkills.class);
 
     public SkillProperties getPropertiesFor(EnumSkills skills) {
@@ -53,7 +50,7 @@ public class SkillPropertiesManager extends SimplePreparableReloadListener<Map<R
             try {
                 try (Resource resource = resourceManager.getResource(resourceLocation)) {
                     try (InputStream inputStream = resource.getInputStream(); BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
-                        JsonElement element = GsonHelper.fromJson(GSON, reader, JsonElement.class);
+                        JsonElement element = GsonHelper.fromJson(GsonInstances.GSON, reader, JsonElement.class);
                         if (element != null) {
                             map.put(res, element);
                         }

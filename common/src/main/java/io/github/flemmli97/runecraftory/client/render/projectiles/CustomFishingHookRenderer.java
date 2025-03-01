@@ -113,7 +113,7 @@ public class CustomFishingHookRenderer extends EntityRenderer<EntityCustomFishin
         float o = g * (j * j + j) * 0.5f + 0.25f - l;
         float p = h * j - m;
         float q = Mth.sqrt(n * n + o * o + p * p);
-        vertexConsumer.vertex(pose.pose(), k, l, m).color(0, 0, 0, 255).normal(pose.normal(), n /= q, o /= q, p /= q).endVertex();
+        vertexConsumer.vertex(pose.pose(), k, l, m).color(0, 0, 0, 255).normal(pose.normal(), n / q, o / q, p / q).endVertex();
     }
 
     @Override

@@ -220,17 +220,6 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IAOEWeapon, Big
         return entities;
     }
 
-    private static boolean inReach(Vec3 origin, Entity entity, double reach) {
-        double dX = entity.getX() - origin.x;
-        double dY = entity.getY() - origin.y();
-        if (dY < -0.15 || dY > 1.15)
-            return false;
-        dY = Math.abs(dY) + 0.75;
-        double dZ = entity.getZ() - origin.z;
-        reach += entity.getBbWidth() * 0.5;
-        return dX * dX + dY * dY + dZ * dZ <= reach * reach;
-    }
-
     private static Vec3[] generateParticleDir(int range) {
         Vec3[] arr = new Vec3[(2 * range + 1) * (2 * range + 1) - 1];
         int i = 0;

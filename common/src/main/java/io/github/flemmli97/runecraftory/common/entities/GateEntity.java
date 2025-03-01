@@ -14,11 +14,11 @@ import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -76,8 +76,7 @@ public class GateEntity extends Mob implements IBaseMob {
     private static final EntityDataAccessor<Integer> ELEMENT = SynchedEntityData.defineId(GateEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> MOB_LEVEL = SynchedEntityData.defineId(GateEntity.class, EntityDataSerializers.INT);
     private static final UUID ATTRIBUTE_LEVEL_MOD = UUID.fromString("EC84560E-5266-4DC3-A4E1-388b97DBC0CB");
-    public int rotate, clientParticles;
-    public boolean clientParticleFlag;
+    public int rotate, clientRenderTick;
     private final List<EntityType<?>> spawnList = new ArrayList<>();
     private EnumElement type = EnumElement.NONE;
     private boolean initialSpawn = true;
@@ -197,8 +196,7 @@ public class GateEntity extends Mob implements IBaseMob {
             this.setSharedFlag(6, this.isCurrentlyGlowing());
 
         } else {
-            this.clientParticles += 10;
-            this.clientParticleFlag = true;
+            this.clientRenderTick += 10;
         }
         this.baseTick();
         if (this.lerpSteps > 0) {
@@ -227,7 +225,7 @@ public class GateEntity extends Mob implements IBaseMob {
         super.addAdditionalSaveData(compound);
         compound.putInt("MobLevel", this.entityData.get(MOB_LEVEL));
         ListTag list = new ListTag();
-        this.spawnList.forEach(type -> list.add(StringTag.valueOf(PlatformUtils.INSTANCE.entities().getIDFrom(type).toString())));
+        this.spawnList.forEach(type -> list.add(StringTag.valueOf(Registry.ENTITY_TYPE.getKey(type).toString())));
         compound.put("Spawns", list);
         compound.putString("Element", this.type.toString());
         compound.putBoolean("FirstSpawn", this.initialSpawn);
@@ -242,7 +240,7 @@ public class GateEntity extends Mob implements IBaseMob {
             this.entityData.set(MOB_LEVEL, compound.getInt("MobLevel"));
         }
         compound.getList("Spawns", Tag.TAG_STRING)
-                .forEach(nbt -> this.spawnList.add(PlatformUtils.INSTANCE.entities().getFromId(new ResourceLocation(nbt.getAsString()))));
+                .forEach(nbt -> this.spawnList.add(Registry.ENTITY_TYPE.get(new ResourceLocation(nbt.getAsString()))));
         if (compound.contains("Element")) {
             String el = compound.getString("Element");
             try {

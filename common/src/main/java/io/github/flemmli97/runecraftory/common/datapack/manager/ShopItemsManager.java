@@ -1,32 +1,25 @@
 package io.github.flemmli97.runecraftory.common.datapack.manager;
 
-import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
 import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
-import io.github.flemmli97.runecraftory.api.datapack.RegistryObjectSerializer;
 import io.github.flemmli97.runecraftory.api.datapack.ShopItemProperties;
-import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
-import io.github.flemmli97.runecraftory.common.registry.ModSpells;
-import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.profiling.ProfilerFiller;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -42,17 +35,13 @@ public class ShopItemsManager extends SimpleJsonResourceReloadListener {
 
     public static final String DIRECTORY = "shop_items";
 
-    public static final Gson GSON = new GsonBuilder().enableComplexMapKeySerialization()
-            .registerTypeAdapter(Attribute.class, new RegistryObjectSerializer<>(Suppliers.memoize(PlatformUtils.INSTANCE::attributes)))
-            .registerTypeAdapter(Spell.class, new RegistryObjectSerializer<>(Suppliers.memoize(ModSpells.SPELL_REGISTRY::get))).create();
-
     private Map<NPCJob, Collection<ShopItemProperties>> shopItems = ImmutableMap.of();
     private Map<NPCJob, Collection<ShopItemProperties>> shopItemsDefaults = ImmutableMap.of();
     private boolean resolved;
     private Map<NPCJob, Collection<ShopItemProperties.IntermediaryShopItem>> intermediaryData = ImmutableMap.of();
 
     public ShopItemsManager() {
-        super(GSON, DIRECTORY);
+        super(GsonInstances.GSON, DIRECTORY);
     }
 
     public Collection<ShopItemProperties> get(NPCJob shop) {

@@ -3,12 +3,11 @@ package io.github.flemmli97.runecraftory.common.datapack.manager.npc;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -27,8 +26,6 @@ import java.util.Map;
 import java.util.Random;
 
 public class NameManager extends SimplePreparableReloadListener<Map<ResourceLocation, JsonObject>> {
-
-    private static final Gson GSON = new GsonBuilder().create();
 
     public static final String DIRECTORY = "names";
 
@@ -87,7 +84,7 @@ public class NameManager extends SimplePreparableReloadListener<Map<ResourceLoca
             try {
                 try (Resource resource = resourceManager.getResource(fileRes)) {
                     try (InputStream inputStream = resource.getInputStream(); BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
-                        JsonObject obj = GsonHelper.fromJson(GSON, reader, JsonObject.class);
+                        JsonObject obj = GsonHelper.fromJson(GsonInstances.GSON, reader, JsonObject.class);
                         if (obj != null) {
                             map.put(res, obj);
                         }

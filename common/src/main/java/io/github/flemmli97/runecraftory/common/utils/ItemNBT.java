@@ -17,7 +17,7 @@ import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import io.github.flemmli97.tenshilib.platform.PlatformUtils;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -111,14 +111,14 @@ public class ItemNBT {
         Map<Attribute, Double> map = new TreeMap<>(ModAttributes.SORTED);
         CompoundTag base = compound.getCompound(LibNBT.BASE);
         for (String attName : base.getAllKeys()) {
-            Attribute att = PlatformUtils.INSTANCE.attributes().getFromId(new ResourceLocation(attName));
-            if (PlatformUtils.INSTANCE.attributes().getIDFrom(att).toString().equals(attName))
+            Attribute att = Registry.ATTRIBUTE.get(new ResourceLocation(attName));
+            if (Registry.ATTRIBUTE.getKey(att).toString().equals(attName))
                 map.put(att, base.getDouble(attName));
         }
         CompoundTag tag = compound.getCompound(LibNBT.STATS);
         for (String attName : tag.getAllKeys()) {
-            Attribute att = PlatformUtils.INSTANCE.attributes().getFromId(new ResourceLocation(attName));
-            if (PlatformUtils.INSTANCE.attributes().getIDFrom(att).toString().equals(attName))
+            Attribute att = Registry.ATTRIBUTE.get(new ResourceLocation(attName));
+            if (Registry.ATTRIBUTE.getKey(att).toString().equals(attName))
                 map.compute(att, (key, old) -> old == null ? tag.getDouble(attName) : old + tag.getDouble(attName));
         }
         return map;
@@ -147,8 +147,8 @@ public class ItemNBT {
             CompoundTag tag = compound.getCompound(LibNBT.FOOD_STATS);
             map = new TreeMap<>(ModAttributes.SORTED);
             for (String attName : tag.getAllKeys()) {
-                Attribute att = PlatformUtils.INSTANCE.attributes().getFromId(new ResourceLocation(attName));
-                if (PlatformUtils.INSTANCE.attributes().getIDFrom(att).toString().equals(attName))
+                Attribute att = Registry.ATTRIBUTE.get(new ResourceLocation(attName));
+                if (Registry.ATTRIBUTE.getKey(att).toString().equals(attName))
                     map.put(att, tag.getDouble(attName));
             }
         } else
@@ -157,8 +157,8 @@ public class ItemNBT {
             CompoundTag tag = compound.getCompound(LibNBT.FOOD_STATS_MULT);
             mapMulti = new TreeMap<>(ModAttributes.SORTED);
             for (String attName : tag.getAllKeys()) {
-                Attribute att = PlatformUtils.INSTANCE.attributes().getFromId(new ResourceLocation(attName));
-                if (PlatformUtils.INSTANCE.attributes().getIDFrom(att).toString().equals(attName))
+                Attribute att = Registry.ATTRIBUTE.get(new ResourceLocation(attName));
+                if (Registry.ATTRIBUTE.getKey(att).toString().equals(attName))
                     mapMulti.put(att, tag.getDouble(attName));
             }
         } else
@@ -230,20 +230,20 @@ public class ItemNBT {
             //Searches for items, which are already applied to the itemstack. Reduces the efficiency for each identical item found.
             for (Tag item : upgrades) {
                 CompoundTag nbt = (CompoundTag) item;
-                if (PlatformUtils.INSTANCE.items().getIDFrom(stackToAdd.getItem()).toString().equals(nbt.getString("Id"))) {
+                if (Registry.ITEM.getKey(stackToAdd.getItem()).toString().equals(nbt.getString("Id"))) {
                     ++similar;
                 }
             }
             efficiency = similar > 0 ? (float) (1 - Math.pow(0.5, similar)) : 1;
             CompoundTag upgradeItem = new CompoundTag();
-            upgradeItem.putString("Id", PlatformUtils.INSTANCE.items().getIDFrom(stackToAdd.getItem()).toString());
+            upgradeItem.putString("Id", Registry.ITEM.getKey(stackToAdd.getItem()).toString());
             upgradeItem.putInt("Level", ItemNBT.itemLevel(stackToAdd));
             upgrades.add(upgradeItem);
             tag.put(LibNBT.UPGRADES, upgrades);
         } else {
             ListTag bonus = tag.getList(LibNBT.CRAFTING_BONUS, Tag.TAG_COMPOUND);
             CompoundTag bonusItem = new CompoundTag();
-            bonusItem.putString("Id", PlatformUtils.INSTANCE.items().getIDFrom(stackToAdd.getItem()).toString());
+            bonusItem.putString("Id", Registry.ITEM.getKey(stackToAdd.getItem()).toString());
             bonusItem.putInt("Level", ItemNBT.itemLevel(stackToAdd));
             bonus.add(bonusItem);
             tag.put(LibNBT.CRAFTING_BONUS, bonus);
@@ -294,7 +294,7 @@ public class ItemNBT {
                             if (stackToAdd.getItem() == ModItems.GLITTA_AUGITE.get() && tag.getBoolean(LibNBT.GLITTA_AUGITE))
                                 continue;
                         }
-                        statsTag.putDouble(PlatformUtils.INSTANCE.attributes().getIDFrom(entry.getKey()).toString(), entry.getValue());
+                        statsTag.putDouble(Registry.ATTRIBUTE.getKey(entry.getKey()).toString(), entry.getValue());
                     }
                     tag.put(LibNBT.BASE, statsTag);
                 }
@@ -307,7 +307,7 @@ public class ItemNBT {
                 blacklist = WEAPON_ONLY;
             CompoundTag statCompound = tag.getCompound(LibNBT.STATS);
             for (Map.Entry<Attribute, Double> entry : stat.itemStats().entrySet()) {
-                if (blacklist.contains(PlatformUtils.INSTANCE.attributes().getIDFrom(entry.getKey())))
+                if (blacklist.contains(Registry.ATTRIBUTE.getKey(entry.getKey())))
                     continue;
                 double amount = entry.getValue() * efficiency;
                 if (hasObjectX)
@@ -360,10 +360,10 @@ public class ItemNBT {
                     Map<Attribute, Double> origin = DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem())
                             .map(ItemStat::itemStats).orElse(Map.of());
                     for (Map.Entry<Attribute, Double> entry : base.itemStats().entrySet()) {
-                        if (NON_INHERITABLE.contains(PlatformUtils.INSTANCE.attributes().getIDFrom(entry.getKey())))
-                            statsTag.putDouble(PlatformUtils.INSTANCE.attributes().getIDFrom(entry.getKey()).toString(), origin.getOrDefault(entry.getKey(), 5d));
+                        if (NON_INHERITABLE.contains(Registry.ATTRIBUTE.getKey(entry.getKey())))
+                            statsTag.putDouble(Registry.ATTRIBUTE.getKey(entry.getKey()).toString(), origin.getOrDefault(entry.getKey(), 5d));
                         else
-                            statsTag.putDouble(PlatformUtils.INSTANCE.attributes().getIDFrom(entry.getKey()).toString(), entry.getValue());
+                            statsTag.putDouble(Registry.ATTRIBUTE.getKey(entry.getKey()).toString(), entry.getValue());
                     }
                     tag.put(LibNBT.BASE, statsTag);
                 }
@@ -382,7 +382,7 @@ public class ItemNBT {
             if (stat.getArmorEffect() != null && stat.getArmorEffect().canBeAppliedTo(stack))
                 Platform.INSTANCE.getArmorEffects(stack).ifPresent(data -> data.addArmorEffects(stat.getArmorEffect()));
         }
-        tag.putString(LibNBT.ORIGINITEM, PlatformUtils.INSTANCE.items().getIDFrom(toApply.getItem()).toString());
+        tag.putString(LibNBT.ORIGINITEM, Registry.ITEM.getKey(toApply.getItem()).toString());
         CompoundTag stackTag = stack.getOrCreateTag();
         stackTag.put(RuneCraftory.MODID, tag);
         //Reapply all items used to craft the applied item
@@ -391,7 +391,7 @@ public class ItemNBT {
             ListTag bonus = other.getList(LibNBT.CRAFTING_BONUS, Tag.TAG_COMPOUND);
             bonus.forEach(t -> {
                 CompoundTag nbt = (CompoundTag) t;
-                Item item = PlatformUtils.INSTANCE.items().getFromId(new ResourceLocation(nbt.getString("Id")));
+                Item item = Registry.ITEM.get(new ResourceLocation(nbt.getString("Id")));
                 if (item != Items.AIR)
                     addUpgradeItem(stack, new ItemStack(item), true, crafting);
             });
@@ -407,7 +407,7 @@ public class ItemNBT {
             tag = new CompoundTag();
         ListTag bonus = tag.getList(LibNBT.CRAFTING_BONUS, Tag.TAG_COMPOUND);
         CompoundTag bonusItem = new CompoundTag();
-        bonusItem.putString("Id", PlatformUtils.INSTANCE.items().getIDFrom(stackToAdd.getItem()).toString());
+        bonusItem.putString("Id", Registry.ITEM.getKey(stackToAdd.getItem()).toString());
         bonusItem.putInt("Level", ItemNBT.itemLevel(stackToAdd));
         bonus.add(bonusItem);
         tag.put(LibNBT.CRAFTING_BONUS, bonus);
@@ -419,12 +419,12 @@ public class ItemNBT {
                 if (base != null) {
                     CompoundTag statsTag = new CompoundTag();
                     for (Map.Entry<Attribute, Double> entry : base.effects().entrySet()) {
-                        statsTag.putDouble(PlatformUtils.INSTANCE.attributes().getIDFrom(entry.getKey()).toString(), entry.getValue());
+                        statsTag.putDouble(Registry.ATTRIBUTE.getKey(entry.getKey()).toString(), entry.getValue());
                     }
                     tag.put(LibNBT.FOOD_STATS, statsTag);
                     statsTag = new CompoundTag();
                     for (Map.Entry<Attribute, Double> entry : base.effectsMultiplier().entrySet()) {
-                        statsTag.putDouble(PlatformUtils.INSTANCE.attributes().getIDFrom(entry.getKey()).toString(), entry.getValue());
+                        statsTag.putDouble(Registry.ATTRIBUTE.getKey(entry.getKey()).toString(), entry.getValue());
                     }
                     tag.put(LibNBT.FOOD_STATS_MULT, statsTag);
                 }
@@ -451,35 +451,9 @@ public class ItemNBT {
     }
 
     public static void updateStatIncrease(Attribute attribute, double amount, CompoundTag stats) {
-        String att = PlatformUtils.INSTANCE.attributes().getIDFrom(attribute).toString();
+        String att = Registry.ATTRIBUTE.getKey(attribute).toString();
         double oldValue = stats.getDouble(att);
         stats.putDouble(att, oldValue + Math.floor(amount));
-    }
-
-    private static void addAsAttributeModifier(Attribute attribute, double val, ItemStack stack) {
-        CompoundTag tag = stack.getOrCreateTag();
-        ListTag list = tag.contains("AttributeModifiers", Tag.TAG_LIST) ? tag.getList("AttributeModifiers", Tag.TAG_COMPOUND) : new ListTag();
-        EquipmentSlot slot = ItemUtils.slotOf(stack);
-        CompoundTag attComp = new CompoundTag();
-        String att = PlatformUtils.INSTANCE.attributes().getIDFrom(attribute).toString();
-        for (int i = 0; i < list.size(); ++i) {
-            CompoundTag compoundTag = list.getCompound(i);
-            if (compoundTag.getString("AttributeName").equals(att) && compoundTag.getString("Slot").equals(slot.getName())) {
-                AttributeModifier attributeModifier = AttributeModifier.load(compoundTag);
-                if (attributeModifier != null && attributeModifier.getId().equals(LibConstants.EQUIPMENT_MODIFIERS[slot.ordinal()])) {
-                    val += attributeModifier.getAmount();
-                    attComp = compoundTag;
-                    break;
-                }
-            }
-        }
-        list.remove(attComp);
-        AttributeModifier mod = new AttributeModifier(LibConstants.EQUIPMENT_MODIFIERS[slot.ordinal()], "rf.stat_increase", val, AttributeModifier.Operation.ADDITION);
-        attComp = mod.save();
-        attComp.putString("AttributeName", att);
-        attComp.putString("Slot", slot.getName());
-        list.add(attComp);
-        tag.put("AttributeModifiers", list);
     }
 
     public static CompoundTag getItemNBT(ItemStack stack) {
@@ -549,7 +523,7 @@ public class ItemNBT {
             String s = tag.getString(LibNBT.ORIGINITEM);
             if (s.isEmpty())
                 return ItemStack.EMPTY;
-            return new ItemStack(PlatformUtils.INSTANCE.items().getFromId(new ResourceLocation(s)));
+            return new ItemStack(Registry.ITEM.get(new ResourceLocation(s)));
         }
         return ItemStack.EMPTY;
     }
@@ -560,7 +534,7 @@ public class ItemNBT {
             String s = tag.getString(LibNBT.ORIGINITEM);
             if (s.isEmpty())
                 return false;
-            ItemStack changed = new ItemStack(PlatformUtils.INSTANCE.items().getFromId(new ResourceLocation(s)));
+            ItemStack changed = new ItemStack(Registry.ITEM.get(new ResourceLocation(s)));
             return changed.isEmpty() && tag.getBoolean(LibNBT.LIGHTORETAG);
         }
         return false;

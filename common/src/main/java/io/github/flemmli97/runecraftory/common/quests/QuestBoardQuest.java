@@ -31,7 +31,7 @@ public class QuestBoardQuest extends QuestBase {
         this.quest = base;
     }
 
-    public static QuestBoardQuest of(ResourceLocation _id, QuestCategory _category, JsonObject obj) {
+    public static QuestBoardQuest of(ResourceLocation id, QuestCategory category, JsonObject obj) {
         QuestBase wrapped = QuestsManager.instance().getAllQuests().get(new ResourceLocation(obj.get("WrappedQuest").getAsString()));
         return new QuestBoardQuest(wrapped);
     }

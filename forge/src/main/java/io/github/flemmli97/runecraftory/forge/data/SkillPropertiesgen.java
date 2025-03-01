@@ -78,7 +78,7 @@ public class SkillPropertiesgen implements DataProvider {
             try {
                 JsonElement obj = SkillProperties.CODEC.encodeStart(JsonOps.INSTANCE, builder)
                         .getOrThrow(false, LOGGER::error);
-                DataProvider.save(GsonInstances.ATTRIBUTE_EFFECTS, cache, obj, path);
+                DataProvider.save(GsonInstances.GSON, cache, obj, path);
             } catch (IOException e) {
                 LOGGER.error("Couldn't save skill properties {}", path, e);
             }

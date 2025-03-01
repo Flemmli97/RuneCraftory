@@ -137,7 +137,6 @@ public class EntityBigRaccoonLeaf extends BaseProjectile {
         this.dir = new Vec3(listTag.getDouble(0), listTag.getDouble(1), listTag.getDouble(2));
         listTag = compound.getList("Center", Tag.TAG_DOUBLE);
         this.center = new Vec3(listTag.getDouble(0), listTag.getDouble(1), listTag.getDouble(2));
-        listTag = compound.getList("Point", Tag.TAG_DOUBLE);
         this.sumAngles = compound.getFloat("Angles");
     }
 

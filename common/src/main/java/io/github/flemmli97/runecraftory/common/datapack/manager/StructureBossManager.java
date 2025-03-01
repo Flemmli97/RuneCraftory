@@ -1,12 +1,11 @@
 package io.github.flemmli97.runecraftory.common.datapack.manager;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -28,12 +27,10 @@ public class StructureBossManager extends SimpleJsonResourceReloadListener {
 
     public static final String DIRECTORY = "runecraftory_bosses";
 
-    private static final Gson GSON = new GsonBuilder().create();
-
     private Map<ResourceLocation, BossSpawnList> spawnList = new HashMap<>();
 
     public StructureBossManager() {
-        super(GSON, DIRECTORY);
+        super(GsonInstances.GSON, DIRECTORY);
     }
 
     @Nullable

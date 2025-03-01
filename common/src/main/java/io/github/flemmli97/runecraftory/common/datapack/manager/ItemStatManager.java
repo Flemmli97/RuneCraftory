@@ -39,7 +39,7 @@ public class ItemStatManager extends SimpleJsonResourceReloadListener {
     private Map<TagKey<Item>, ItemStat> tagStats = ImmutableMap.of();
 
     public ItemStatManager() {
-        super(GsonInstances.ATTRIBUTE_SPELLS, DIRECTORY);
+        super(GsonInstances.GSON, DIRECTORY);
     }
 
     public Optional<ItemStat> get(Item item) {

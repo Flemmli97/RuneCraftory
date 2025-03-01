@@ -1,8 +1,7 @@
 package io.github.flemmli97.runecraftory.api.datapack.provider;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NameManager;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
@@ -20,8 +19,6 @@ import java.util.Map;
 public abstract class NPCNameDataProvider implements DataProvider {
 
     private static final Logger LOGGER = LogManager.getLogger();
-
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
     private final Map<String, NameStructure> names = new HashMap<>();
 
@@ -42,8 +39,8 @@ public abstract class NPCNameDataProvider implements DataProvider {
             Path dataPath = this.gen.getOutputFolder()
                     .resolve(String.format("data/%1$s/%2$s/%3$s.json", this.modid, NameManager.DIRECTORY, key));
             try {
-                JsonElement obj = GSON.toJsonTree(vals);
-                DataProvider.save(GSON, cache, obj, dataPath);
+                JsonElement obj = GsonInstances.GSON.toJsonTree(vals);
+                DataProvider.save(GsonInstances.GSON, cache, obj, dataPath);
             } catch (IOException e) {
                 LOGGER.error("Couldn't save npc names {}", dataPath, e);
             }

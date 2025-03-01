@@ -1,7 +1,6 @@
 package io.github.flemmli97.runecraftory.common.lib;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -261,26 +260,26 @@ public class RunecraftoryTags {
     }
 
     private static TagKey<Block> blockForge(String name) {
-        return PlatformUtils.INSTANCE.blockTag(new ResourceLocation("forge", name));
+        return TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation("forge", name));
     }
 
     private static TagKey<Block> blockCommon(String name) {
-        return PlatformUtils.INSTANCE.blockTag(new ResourceLocation("c", name));
+        return TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation("c", name));
     }
 
     private static TagKey<Block> blockMod(String name) {
-        return PlatformUtils.INSTANCE.blockTag(new ResourceLocation(RuneCraftory.MODID, name));
+        return TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(RuneCraftory.MODID, name));
     }
 
     private static TagKey<Biome> biomeMod(String name) {
-        return PlatformUtils.INSTANCE.tag(Registry.BIOME_REGISTRY, new ResourceLocation(RuneCraftory.MODID, name));
+        return TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(RuneCraftory.MODID, name));
     }
 
     private static TagKey<Biome> biomeCommon(String name) {
-        return PlatformUtils.INSTANCE.tag(Registry.BIOME_REGISTRY, new ResourceLocation("c", name));
+        return TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation("c", name));
     }
 
     public static TagKey<Item> tamingTag(EntityType<?> type) {
-        return ENTITY_TAMING_TAGS.computeIfAbsent(type, r -> tag("taming/" + PlatformUtils.INSTANCE.entities().getIDFrom(type).getPath()));
+        return ENTITY_TAMING_TAGS.computeIfAbsent(type, r -> tag("taming/" + Registry.ENTITY_TYPE.getKey(type).getPath()));
     }
 }

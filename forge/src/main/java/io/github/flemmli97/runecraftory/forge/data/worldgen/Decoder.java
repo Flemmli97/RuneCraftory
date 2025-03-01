@@ -34,11 +34,6 @@ public class Decoder {
             this(List.of(pair), placement);
         }
 
-        public StructureSetData(List<Pair<ResourceLocation, Integer>> structures, StructurePlacement placement) {
-            this.structures = structures;
-            this.placement = placement;
-        }
-
     }
 
     public record TemplatePoolData(ResourceLocation name,

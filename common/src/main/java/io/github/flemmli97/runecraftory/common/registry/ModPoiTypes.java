@@ -27,7 +27,7 @@ public class ModPoiTypes {
             return cons.newInstance(RuneCraftory.MODID + ":" + string, set, i, j);
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException |
                  InvocationTargetException e) {
-            e.printStackTrace();
+            RuneCraftory.LOGGER.error(e);
         }
         return null;
     }

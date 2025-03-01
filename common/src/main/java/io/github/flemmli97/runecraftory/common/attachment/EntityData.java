@@ -14,7 +14,7 @@ import java.util.HashSet;
 
 public class EntityData {
 
-    private boolean sleeping, noAISleeping, isSilent, paralysis, stunned, noAIStunned, cold, poison, invis, orthoView;
+    private boolean sleeping, isSilent, paralysis, stunned, noAIStunned, cold, poison, invis, orthoView;
     private int disabledState;
 
     public EntityCustomFishingHook fishingHook;

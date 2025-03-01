@@ -34,9 +34,9 @@ import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -565,10 +565,10 @@ public class PlayerData {
     public CompoundTag foodBuffNBT() {
         CompoundTag nbt = new CompoundTag();
         if (this.lastFoodBuff != null)
-            nbt.putString("LastFood", PlatformUtils.INSTANCE.items().getIDFrom(this.lastFoodBuff).toString());
+            nbt.putString("LastFood", Registry.ITEM.getKey(this.lastFoodBuff).toString());
         CompoundTag compound3 = new CompoundTag();
         for (Map.Entry<Attribute, Double> entry : this.foodBuffs.entrySet()) {
-            compound3.putDouble(PlatformUtils.INSTANCE.attributes().getIDFrom(entry.getKey()).toString(), entry.getValue());
+            compound3.putDouble(Registry.ATTRIBUTE.getKey(entry.getKey()).toString(), entry.getValue());
         }
         nbt.put("FoodBuffs", compound3);
         nbt.putInt("FoodBuffDuration", this.foodDuration);
@@ -576,11 +576,11 @@ public class PlayerData {
     }
 
     public void readFoodBuffFromNBT(CompoundTag nbt) {
-        this.lastFoodBuff = nbt.contains("LastFood") ? PlatformUtils.INSTANCE.items().getFromId(new ResourceLocation(nbt.getString("LastFood"))) : null;
+        this.lastFoodBuff = nbt.contains("LastFood") ? Registry.ITEM.get(new ResourceLocation(nbt.getString("LastFood"))) : null;
         this.foodBuffs.clear();
         CompoundTag tag = nbt.getCompound("FoodBuffs");
         for (String s : tag.getAllKeys()) {
-            this.foodBuffs.put(PlatformUtils.INSTANCE.attributes().getFromId(new ResourceLocation(s)), tag.getDouble(s));
+            this.foodBuffs.put(Registry.ATTRIBUTE.get(new ResourceLocation(s)), tag.getDouble(s));
         }
         this.foodDuration = nbt.getInt("FoodBuffDuration");
     }
@@ -699,7 +699,7 @@ public class PlayerData {
         CompoundTag shipped = nbt.getCompound("ShippedItems");
         shipped.getAllKeys().forEach(key -> {
             CompoundTag d = shipped.getCompound(key);
-            this.shippedItems.put(PlatformUtils.INSTANCE.items().getFromId(new ResourceLocation(key)), new ShippedItemData(d.getInt("Amount"), d.getInt("Level")));
+            this.shippedItems.put(Registry.ITEM.get(new ResourceLocation(key)), new ShippedItemData(d.getInt("Amount"), d.getInt("Level")));
         });
         CompoundTag shops = nbt.getCompound("ShopItems");
         shops.getAllKeys().forEach(key -> {

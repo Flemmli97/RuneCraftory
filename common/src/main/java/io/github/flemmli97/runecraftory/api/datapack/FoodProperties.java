@@ -7,7 +7,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.tenshilib.common.utils.ArrayUtils;
-import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
@@ -52,8 +51,7 @@ public class FoodProperties {
     private SimpleEffect[] potionApply = new SimpleEffect[0];
     private MobEffect[] potionRemove = new MobEffect[0];
 
-    private transient List<Component> translationTexts;
-    private transient ResourceLocation id;
+    private ResourceLocation id;
 
     private FoodProperties() {
     }
@@ -74,24 +72,24 @@ public class FoodProperties {
         prop.duration = buffer.readInt();
         int size = buffer.readInt();
         for (int i = 0; i < size; i++)
-            prop.effects.put(PlatformUtils.INSTANCE.attributes().getFromId(buffer.readResourceLocation()), buffer.readDouble());
+            prop.effects.put(Registry.ATTRIBUTE.get(buffer.readResourceLocation()), buffer.readDouble());
         size = buffer.readInt();
         for (int i = 0; i < size; i++)
-            prop.effectsPercentage.put(PlatformUtils.INSTANCE.attributes().getFromId(buffer.readResourceLocation()), buffer.readDouble());
+            prop.effectsPercentage.put(Registry.ATTRIBUTE.get(buffer.readResourceLocation()), buffer.readDouble());
         /*size = buffer.readInt();
         for (int i = 0; i < size; i++)
-            prop.cookingBonus.put(PlatformUtils.INSTANCE.attributes().getFromId(buffer.readResourceLocation()), buffer.readDouble());
+            prop.cookingBonus.put(Registry.ATTRIBUTE.get(buffer.readResourceLocation()), buffer.readDouble());
         size = buffer.readInt();
         for (int i = 0; i < size; i++)
-            prop.cookingBonusPercent.put(PlatformUtils.INSTANCE.attributes().getFromId(buffer.readResourceLocation()), buffer.readDouble());*/
+            prop.cookingBonusPercent.put(Registry.ATTRIBUTE.get(buffer.readResourceLocation()), buffer.readDouble());*/
         size = buffer.readInt();
         prop.potionRemove = new MobEffect[size];
         for (int i = 0; i < size; i++)
-            prop.potionRemove[i] = PlatformUtils.INSTANCE.effects().getFromId(buffer.readResourceLocation());
+            prop.potionRemove[i] = Registry.MOB_EFFECT.get(buffer.readResourceLocation());
         size = buffer.readInt();
         prop.potionApply = new SimpleEffect[size];
         for (int i = 0; i < size; i++)
-            prop.potionApply[i] = new SimpleEffect(PlatformUtils.INSTANCE.effects().getFromId(buffer.readResourceLocation()), buffer.readInt(), buffer.readInt());
+            prop.potionApply[i] = new SimpleEffect(Registry.MOB_EFFECT.get(buffer.readResourceLocation()), buffer.readInt(), buffer.readInt());
         return prop;
     }
 
@@ -153,32 +151,32 @@ public class FoodProperties {
         buffer.writeInt(this.duration);
         buffer.writeInt(this.effects.size());
         this.effects.forEach((att, val) -> {
-            buffer.writeResourceLocation(PlatformUtils.INSTANCE.attributes().getIDFrom(att));
+            buffer.writeResourceLocation(Registry.ATTRIBUTE.getKey(att));
             buffer.writeDouble(val);
         });
         buffer.writeInt(this.effectsPercentage.size());
         this.effectsPercentage.forEach((att, val) -> {
-            buffer.writeResourceLocation(PlatformUtils.INSTANCE.attributes().getIDFrom(att));
+            buffer.writeResourceLocation(Registry.ATTRIBUTE.getKey(att));
             buffer.writeDouble(val);
         });
         /*
         buffer.writeInt(this.cookingBonus.size());
         this.cookingBonus.forEach((att, val) -> {
-            buffer.writeResourceLocation(PlatformUtils.INSTANCE.attributes().getIDFrom(att));
+            buffer.writeResourceLocation(Registry.ATTRIBUTE.getKey(att));
             buffer.writeDouble(val);
         });
         buffer.writeInt(this.cookingBonusPercent.size());
         this.cookingBonusPercent.forEach((att, val) -> {
-            buffer.writeResourceLocation(PlatformUtils.INSTANCE.attributes().getIDFrom(att));
+            buffer.writeResourceLocation(Registry.ATTRIBUTE.getKey(att));
             buffer.writeDouble(val);
         });*/
         buffer.writeInt(this.potionRemove.length);
         for (MobEffect eff : this.potionRemove) {
-            buffer.writeResourceLocation(PlatformUtils.INSTANCE.effects().getIDFrom(eff));
+            buffer.writeResourceLocation(Registry.MOB_EFFECT.getKey(eff));
         }
         buffer.writeInt(this.potionApply.length);
         for (SimpleEffect eff : this.potionApply) {
-            buffer.writeResourceLocation(PlatformUtils.INSTANCE.effects().getIDFrom(eff.getPotion()));
+            buffer.writeResourceLocation(Registry.MOB_EFFECT.getKey(eff.getPotion()));
             buffer.writeInt(eff.getDuration());
             buffer.writeInt(eff.getAmplifier());
         }

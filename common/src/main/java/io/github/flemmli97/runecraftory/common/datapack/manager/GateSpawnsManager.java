@@ -1,17 +1,16 @@
 package io.github.flemmli97.runecraftory.common.datapack.manager;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.GateSpawnData;
+import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
 import io.github.flemmli97.runecraftory.common.entities.GateEntity;
-import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
 import net.minecraft.core.SectionPos;
 import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -43,13 +42,11 @@ public class GateSpawnsManager extends SimpleJsonResourceReloadListener {
 
     public static final String DIRECTORY = "gate_spawning";
 
-    private static final Gson GSON = new GsonBuilder().create();
-
     private Map<TagKey<Biome>, List<SpawnResource>> biomeSpawns = new HashMap<>();
     private Map<ConfiguredStructureFeature<?, ?>, List<SpawnResource>> structureSpawns = new HashMap<>();
 
     public GateSpawnsManager() {
-        super(GSON, DIRECTORY);
+        super(GsonInstances.GSON, DIRECTORY);
     }
 
     public List<EntityType<?>> pickRandomMobs(ServerLevel level, GateEntity gate, Holder<Biome> biome, Random rand, int amount, BlockPos pos, List<ServerPlayer> players) {
@@ -108,7 +105,7 @@ public class GateSpawnsManager extends SimpleJsonResourceReloadListener {
             try {
                 GateSpawnData spawnData = GateSpawnData.CODEC.parse(JsonOps.INSTANCE, el)
                         .getOrThrow(false, RuneCraftory.LOGGER::error);
-                Optional<EntityType<?>> optType = PlatformUtils.INSTANCE.entities().getOptionalFromId(spawnData.entity());
+                Optional<EntityType<?>> optType = Registry.ENTITY_TYPE.getOptional(spawnData.entity());
                 optType.ifPresentOrElse(type -> {
                     spawnData.biomes().forEach((key, weight) -> {
                         SpawnResource resource = new SpawnResource(type, spawnData, weight);
@@ -163,7 +160,7 @@ public class GateSpawnsManager extends SimpleJsonResourceReloadListener {
 
         @Override
         public String toString() {
-            return String.format("Entity: %s, MinSpawnSq: %d, Weight: %s, MinGateLevel: %s", PlatformUtils.INSTANCE.entities().getIDFrom(this.entity), this.distToSpawnSq, this.getWeight(), this.minGateLevel);
+            return String.format("Entity: %s, MinSpawnSq: %d, Weight: %s, MinGateLevel: %s", Registry.ENTITY_TYPE.getKey(this.entity), this.distToSpawnSq, this.getWeight(), this.minGateLevel);
         }
     }
 }

@@ -90,17 +90,6 @@ public class MonsterBarnBlockEntity extends BlockEntity {
         return ground ? state.is(RunecraftoryTags.BARN_GROUND) : !state.is(ModBlocks.MONSTER_BARN.get()) && state.getCollisionShape(level, pos).isEmpty();
     }
 
-    private static boolean cornersMatch(int size, Level level, BlockPos center) {
-        BlockPos.MutableBlockPos mutable = center.mutable();
-        if (!matches(level, mutable.set(center.getX() + size, center.getY(), center.getZ() + size), true))
-            return false;
-        if (!matches(level, mutable.set(center.getX() - size, center.getY(), center.getZ() + size), true))
-            return false;
-        if (!matches(level, mutable.set(center.getX() + size, center.getY(), center.getZ() - size), true))
-            return false;
-        return matches(level, mutable.set(center.getX() - size, center.getY(), center.getZ() - size), true);
-    }
-
     @Nullable
     public BarnData getBarnData() {
         return this.barnData;

@@ -27,7 +27,6 @@ public class FarmlandInfo extends GuiComponent {
 
     private static final ResourceLocation TEXTURE_PATH = new ResourceLocation(RuneCraftory.MODID, "textures/gui/farmland_view.png");
     private final Minecraft mc;
-    private final int sizeX = 100, sizeY = 100;
 
     public FarmlandInfo(Minecraft mc) {
         this.mc = mc;

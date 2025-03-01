@@ -179,7 +179,7 @@ public class ModFeatures {
             return cons.newInstance(codec);
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException |
                  InvocationTargetException e) {
-            e.printStackTrace();
+            RuneCraftory.LOGGER.error(e);
         }
         return null;
     }

@@ -5,7 +5,6 @@ import net.minecraft.client.KeyMapping;
 public class TriggerKeyBind extends KeyMapping {
 
     private int press;
-    private boolean isPressing;
     private boolean lastState;
 
     public TriggerKeyBind(String name, int defaultKey, String category) {

@@ -5,7 +5,6 @@ import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -158,11 +157,6 @@ public class PlayerModelAnimations {
             list.add(anim);
         }
         return list.build();
-    }
-
-    private static List<AnimatedAction> addTo(AnimatedAction... anims) {
-        Collections.addAll(ALL, anims);
-        return List.of(anims);
     }
 
     private static AnimatedAction addTo(AnimatedAction anim) {

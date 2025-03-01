@@ -10,7 +10,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.resources.ResourceLocation;
 
-import java.io.IOException;
 import java.util.function.Consumer;
 
 public class RunecraftoryShaders extends RenderType {
@@ -28,12 +27,8 @@ public class RunecraftoryShaders extends RenderType {
             .setOverlayState(OVERLAY).createCompositeState(false));
 
     public static void registerShader(ShaderRegister register) {
-        try {
-            register.register(new ResourceLocation(RuneCraftory.MODID, "gate"), POSITION_COLOR_2X_TEX,
-                    shaderInstance -> RunecraftoryShaders.GATE_SHADER_INSTANCE = shaderInstance);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        register.register(new ResourceLocation(RuneCraftory.MODID, "gate"), POSITION_COLOR_2X_TEX,
+                shaderInstance -> RunecraftoryShaders.GATE_SHADER_INSTANCE = shaderInstance);
     }
 
     private RunecraftoryShaders(String string, VertexFormat vertexFormat, VertexFormat.Mode mode, int i, boolean bl, boolean bl2, Runnable runnable, Runnable runnable2) {
@@ -42,7 +37,7 @@ public class RunecraftoryShaders extends RenderType {
 
     public interface ShaderRegister {
 
-        void register(ResourceLocation id, VertexFormat vertexFormat, Consumer<ShaderInstance> onLoad) throws IOException;
+        void register(ResourceLocation id, VertexFormat vertexFormat, Consumer<ShaderInstance> onLoad);
 
     }
 }

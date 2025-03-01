@@ -5,8 +5,8 @@ import com.google.gson.JsonObject;
 import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
-import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.advancements.critereon.SerializationContext;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
@@ -78,13 +78,13 @@ public class CropLootModifier {
 
         public CropLootModifier read(ResourceLocation id, JsonObject object) {
             LootItemCondition[] lootConditions = GSON_INSTANCE.fromJson(object.get("conditions"), LootItemCondition[].class);
-            return new CropLootModifier(lootConditions, PlatformUtils.INSTANCE.items().getFromId(new ResourceLocation(GsonHelper.getAsString(object, "exclude"))));
+            return new CropLootModifier(lootConditions, Registry.ITEM.get(new ResourceLocation(GsonHelper.getAsString(object, "exclude"))));
         }
 
         public JsonObject write(CropLootModifier instance) {
             JsonObject obj = new JsonObject();
             obj.add("conditions", SerializationContext.INSTANCE.serializeConditions(instance.conditions));
-            obj.addProperty("exclude", PlatformUtils.INSTANCE.items().getIDFrom(instance.remove).toString());
+            obj.addProperty("exclude", Registry.ITEM.getKey(instance.remove).toString());
             return obj;
         }
     }

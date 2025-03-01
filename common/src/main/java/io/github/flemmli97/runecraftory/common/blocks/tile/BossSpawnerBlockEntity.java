@@ -9,7 +9,6 @@ import io.github.flemmli97.runecraftory.common.entities.utils.IBaseMob;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
-import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.advancements.critereon.EntityPredicate;
@@ -48,7 +47,6 @@ public class BossSpawnerBlockEntity extends BlockEntity {
     private StructureBossManager.BossSpawnList spawnList;
     private EntityType<?> nextSpawn;
 
-    private BlockPos structurePos;
     private ResourceLocation structureID;
     private StructureStart structure;
 
@@ -98,7 +96,8 @@ public class BossSpawnerBlockEntity extends BlockEntity {
 
     public StructureStart getStructure() {
         if (this.structureID != null && this.level instanceof ServerLevel serverLevel)
-            this.structure = serverLevel.structureFeatureManager().getStructureAt(this.getBlockPos(), PlatformUtils.INSTANCE.registry(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY).getFromId(this.structureID));
+            this.structure = serverLevel.structureFeatureManager().getStructureAt(this.getBlockPos(), this.level.registryAccess().registry(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY)
+                    .map(r -> r.get(this.structureID)).orElseThrow());
         return this.structure;
     }
 

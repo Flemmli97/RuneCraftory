@@ -147,7 +147,6 @@ import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.tenshilib.client.model.RideableModel;
 import io.github.flemmli97.tenshilib.client.particles.ColoredParticle;
 import io.github.flemmli97.tenshilib.client.render.RenderProjectileItem;
-import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColor;
@@ -167,6 +166,7 @@ import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
+import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.chat.Component;
@@ -458,11 +458,11 @@ public class ClientRegister {
     }
 
     public static ResourceLocation mobTexture(EntityType<?> reg) {
-        return new ResourceLocation(RuneCraftory.MODID, "textures/entity/monsters/" + PlatformUtils.INSTANCE.entities().getIDFrom(reg).getPath() + ".png");
+        return new ResourceLocation(RuneCraftory.MODID, "textures/entity/monsters/" + Registry.ENTITY_TYPE.getKey(reg).getPath() + ".png");
     }
 
     public static ResourceLocation mobTexture(EntityType<?> reg, String append) {
-        return new ResourceLocation(RuneCraftory.MODID, "textures/entity/monsters/" + PlatformUtils.INSTANCE.entities().getIDFrom(reg).getPath() + append + ".png");
+        return new ResourceLocation(RuneCraftory.MODID, "textures/entity/monsters/" + Registry.ENTITY_TYPE.getKey(reg).getPath() + append + ".png");
     }
 
     public static void layerRegister(BiConsumer<ModelLayerLocation, Supplier<LayerDefinition>> consumer) {

@@ -30,7 +30,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 public class WorldEvents {
 
     public static final ResourceLocation PLAYER_CAP = new ResourceLocation(RuneCraftory.MODID, "player_cap");
-    public static final ResourceLocation STAFF_CAP = new ResourceLocation(RuneCraftory.MODID, "staff_cap");
     public static final ResourceLocation ARMOR_CAP = new ResourceLocation(RuneCraftory.MODID, "armor_cap");
     public static final ResourceLocation ENTITY_CAP = new ResourceLocation(RuneCraftory.MODID, "entity_cap");
 

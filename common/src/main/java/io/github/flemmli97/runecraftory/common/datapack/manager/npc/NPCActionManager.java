@@ -1,12 +1,11 @@
 package io.github.flemmli97.runecraftory.common.datapack.manager.npc;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.NPCAttackActions;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -21,7 +20,6 @@ public class NPCActionManager extends SimpleJsonResourceReloadListener {
 
     public static final String DIRECTORY = "npc_actions";
 
-    private static final Gson GSON = new GsonBuilder().create();
     public static final ResourceLocation DEFAULT_ID = new ResourceLocation(RuneCraftory.MODID, "default_action");
 
     private Map<ResourceLocation, NPCAttackActions> keyData = ImmutableMap.of();
@@ -29,7 +27,7 @@ public class NPCActionManager extends SimpleJsonResourceReloadListener {
     private List<NPCAttackActions> actions = List.of();
 
     public NPCActionManager() {
-        super(GSON, DIRECTORY);
+        super(GsonInstances.GSON, DIRECTORY);
     }
 
     public NPCAttackActions get(ResourceLocation res) {

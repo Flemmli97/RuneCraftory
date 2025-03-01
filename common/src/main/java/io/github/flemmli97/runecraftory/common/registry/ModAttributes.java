@@ -28,7 +28,7 @@ public class ModAttributes {
         if (o1 != Attributes.MAX_HEALTH && o2 == Attributes.MAX_HEALTH)
             return 1;
         if (!(o1 instanceof OrderedAttribute) && !(o2 instanceof OrderedAttribute))
-            return PlatformUtils.INSTANCE.attributes().getIDFrom(o1).compareTo(PlatformUtils.INSTANCE.attributes().getIDFrom(o2));
+            return Registry.ATTRIBUTE.getKey(o1).compareTo(Registry.ATTRIBUTE.getKey(o2));
         if (o1 instanceof OrderedAttribute) {
             if (o2 instanceof OrderedAttribute)
                 return Integer.compare(((OrderedAttribute) o1).order, ((OrderedAttribute) o2).order);

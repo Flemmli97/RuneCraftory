@@ -1,9 +1,8 @@
 package io.github.flemmli97.runecraftory.forge.data;
 
 import com.google.common.collect.Sets;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.advancements.CropHarvestTrigger;
 import io.github.flemmli97.runecraftory.common.advancements.LevelTrigger;
@@ -51,7 +50,6 @@ import java.util.function.Consumer;
 
 public class AdvancementGen implements DataProvider {
 
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private final DataGenerator generator;
 
     public AdvancementGen(DataGenerator dataGenerator) {
@@ -195,7 +193,7 @@ public class AdvancementGen implements DataProvider {
             }
             Path path2 = createPath(path, advancement);
             try {
-                DataProvider.save(GSON, cache, advancement.deconstruct().serializeToJson(), path2);
+                DataProvider.save(GsonInstances.GSON, cache, advancement.deconstruct().serializeToJson(), path2);
             } catch (IOException iOException) {
                 RuneCraftory.LOGGER.error("Couldn't save advancement {}", path2, iOException);
             }

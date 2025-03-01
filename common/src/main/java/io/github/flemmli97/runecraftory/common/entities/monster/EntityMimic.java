@@ -273,13 +273,11 @@ public class EntityMimic extends LeapingMonster {
     protected static class JumpingMover extends MoveControl {
 
         private final EntityMimic mimic;
-        private final float yRot;
         private int jumpDelay;
 
         public JumpingMover(EntityMimic mimic) {
             super(mimic);
             this.mimic = mimic;
-            this.yRot = 180.0f * mimic.getYRot() / (float) Math.PI;
         }
 
         @Override

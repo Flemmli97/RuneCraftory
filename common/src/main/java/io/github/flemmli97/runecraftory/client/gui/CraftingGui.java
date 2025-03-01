@@ -68,7 +68,7 @@ public class CraftingGui extends AbstractContainerScreen<ContainerCrafting> {
 
     @Override
     protected void renderBg(PoseStack stack, float partialTicks, int mouseX, int mouseY) {
-        ResourceLocation texture = FORGING;
+        ResourceLocation texture;
         texture = switch (this.menu.craftingType()) {
             case ARMOR -> CRAFTING;
             case COOKING -> COOKING;

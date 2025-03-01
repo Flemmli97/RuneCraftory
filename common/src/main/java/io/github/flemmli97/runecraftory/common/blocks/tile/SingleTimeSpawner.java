@@ -2,8 +2,8 @@ package io.github.flemmli97.runecraftory.common.blocks.tile;
 
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
-import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -59,7 +59,7 @@ public class SingleTimeSpawner extends BlockEntity {
     }
 
     public void setEntity(ResourceLocation entity, CompoundTag tag) {
-        this.savedEntity = PlatformUtils.INSTANCE.entities().getFromId(entity);
+        this.savedEntity = Registry.ENTITY_TYPE.get(entity);
         this.tag = tag;
         if (this.tag != null && this.tag.hasUUID(Entity.UUID_TAG))
             this.tag.remove(Entity.UUID_TAG);
@@ -68,7 +68,7 @@ public class SingleTimeSpawner extends BlockEntity {
     @Override
     public void load(CompoundTag nbt) {
         super.load(nbt);
-        this.savedEntity = PlatformUtils.INSTANCE.entities().getFromId(new ResourceLocation(nbt.getString("Entity")));
+        this.savedEntity = Registry.ENTITY_TYPE.get(new ResourceLocation(nbt.getString("Entity")));
         if (nbt.contains("EntityNBT"))
             this.tag = nbt.getCompound("EntityNBT");
         if (nbt.contains("NPCShop"))
@@ -79,7 +79,7 @@ public class SingleTimeSpawner extends BlockEntity {
     public void saveAdditional(CompoundTag nbt) {
         super.saveAdditional(nbt);
         if (this.savedEntity != null)
-            nbt.putString("Entity", PlatformUtils.INSTANCE.entities().getIDFrom(this.savedEntity).toString());
+            nbt.putString("Entity", Registry.ENTITY_TYPE.getKey(this.savedEntity).toString());
         if (this.tag != null)
             nbt.put("EntityNBT", this.tag);
         if (this.shop != null)

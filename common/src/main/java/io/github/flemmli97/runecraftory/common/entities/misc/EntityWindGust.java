@@ -21,7 +21,6 @@ import java.util.function.Predicate;
 public class EntityWindGust extends EntityBeam {
 
     private Vec3 pMotion, up, side;
-    private double maxX, maxY, maxZ, minX, minY, minZ;
     private Predicate<LivingEntity> pred = (e) -> !e.equals(this.getOwner());
 
     public EntityWindGust(EntityType<? extends EntityWindGust> type, Level world) {

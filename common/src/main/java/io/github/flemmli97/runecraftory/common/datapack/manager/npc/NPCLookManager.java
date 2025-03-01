@@ -2,12 +2,11 @@ package io.github.flemmli97.runecraftory.common.datapack.manager.npc;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
 import io.github.flemmli97.runecraftory.api.datapack.npc.NPCData;
 import io.github.flemmli97.runecraftory.api.datapack.npc.NPCLook;
 import net.minecraft.resources.ResourceLocation;
@@ -23,7 +22,6 @@ public class NPCLookManager extends SimpleJsonResourceReloadListener {
 
     public static final String DIRECTORY = "npc_looks";
 
-    private static final Gson GSON = new GsonBuilder().create();
     public static final ResourceLocation DEFAULT_ID = new ResourceLocation(RuneCraftory.MODID, "default_look");
 
     private Map<ResourceLocation, NPCLook> keyData = ImmutableMap.of();
@@ -31,7 +29,7 @@ public class NPCLookManager extends SimpleJsonResourceReloadListener {
     private List<NPCLook> selectable = ImmutableList.of();
 
     public NPCLookManager() {
-        super(GSON, DIRECTORY);
+        super(GsonInstances.GSON, DIRECTORY);
     }
 
     public NPCLook get(ResourceLocation res) {

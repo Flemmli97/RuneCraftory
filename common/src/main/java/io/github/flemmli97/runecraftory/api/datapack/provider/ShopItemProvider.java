@@ -1,11 +1,10 @@
 package io.github.flemmli97.runecraftory.api.datapack.provider;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
 import io.github.flemmli97.runecraftory.api.datapack.ShopItemProperties;
 import io.github.flemmli97.runecraftory.common.datapack.manager.ShopItemsManager;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
@@ -34,18 +33,14 @@ public abstract class ShopItemProvider implements DataProvider {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private static final Gson GSON = new GsonBuilder().enableComplexMapKeySerialization().setPrettyPrinting().disableHtmlEscaping().create();
-
     private final Map<ResourceLocation, Collection<ShopItemProperties.IntermediaryShopItem>> props = new HashMap<>();
 
     private final Map<ResourceLocation, Boolean> overwrite = new HashMap<>();
 
     private final DataGenerator gen;
-    private final String modid;
 
-    public ShopItemProvider(DataGenerator gen, String modid) {
+    public ShopItemProvider(DataGenerator gen) {
         this.gen = gen;
-        this.modid = modid;
     }
 
     protected abstract void add();
@@ -63,7 +58,7 @@ public abstract class ShopItemProvider implements DataProvider {
                 builder.forEach(prop -> arr.add(ShopItemProperties.CODEC.encodeStart(JsonOps.INSTANCE, prop)
                         .getOrThrow(false, RuneCraftory.LOGGER::error)));
                 obj.add("values", arr);
-                DataProvider.save(GSON, cache, obj, path);
+                DataProvider.save(GsonInstances.GSON, cache, obj, path);
             } catch (IOException e) {
                 LOGGER.error("Couldn't save itemstat {}", path, e);
             }

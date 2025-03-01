@@ -33,7 +33,7 @@ public record MobPropertiesgen(DataGenerator gen) implements DataProvider {
             try {
                 JsonElement obj = EntityProperties.CODEC.encodeStart(JsonOps.INSTANCE, builder.build())
                         .getOrThrow(false, LOGGER::error);
-                DataProvider.save(GsonInstances.ATTRIBUTE_EFFECTS, cache, obj, path);
+                DataProvider.save(GsonInstances.GSON, cache, obj, path);
             } catch (IOException e) {
                 LOGGER.error("Couldn't save entity properties {}", path, e);
             }

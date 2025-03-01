@@ -164,7 +164,7 @@ public class RunecraftoryCommand {
         }
         for (ServerPlayer player : EntityArgument.getPlayers(ctx, "player")) {
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.setSkillLevel(skill, player, amount, 0, true));
-            ctx.getSource().sendSuccess(new TranslatableComponent("runecraftory.command.skill.lvl.set", skill, player.getName(), amount), false);
+            ctx.getSource().sendSuccess(new TranslatableComponent("runecraftory.command.skill.lvl.set", new TranslatableComponent(skill.getTranslation()), player.getName(), amount), false);
             ret++;
         }
         return ret;
@@ -235,7 +235,7 @@ public class RunecraftoryCommand {
         int ret = 0;
         for (ServerPlayer player : EntityArgument.getPlayers(ctx, "player")) {
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.getRecipeKeeper().unlockRecipesRes(player, List.of(res)));
-            ctx.getSource().sendSuccess(new TranslatableComponent("runecraftory.command.unlock.recipe", player.getName(), res), false);
+            ctx.getSource().sendSuccess(new TranslatableComponent("runecraftory.command.unlock.recipe", player.getName(), res.toString()), false);
             ret++;
         }
         return ret;

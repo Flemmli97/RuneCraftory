@@ -62,7 +62,7 @@ public class RenderGate extends LivingEntityRenderer<GateEntity, ModelGate> {
         stack.translate(0, entity.getBbHeight() * 0.5 - 0.1, 0);
         stack.mulPose(this.entityRenderDispatcher.cameraOrientation());
         stack.mulPose(Vector3f.YP.rotationDegrees(180.0F));
-        stack.mulPose(Vector3f.ZP.rotationDegrees(entity.clientParticles * 0.1f));
+        stack.mulPose(Vector3f.ZP.rotationDegrees(entity.clientRenderTick * 0.1f));
 
         float xSize = 1.5f / 2f;
         float ySize = 1.5f / 2f;

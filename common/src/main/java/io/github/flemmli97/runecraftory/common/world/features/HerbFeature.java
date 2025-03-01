@@ -6,7 +6,6 @@ package io.github.flemmli97.runecraftory.common.world.features;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
@@ -82,9 +81,9 @@ public class HerbFeature extends Feature<HerbFeatureConfig> {
         public Entry(Block block, int weight) {
             this.block = block;
             this.weight = Weight.of(weight);
-            ResourceLocation res = PlatformUtils.INSTANCE.blocks().getIDFrom(block);
-            this.whitelist = PlatformUtils.INSTANCE.tag(Registry.BIOME_REGISTRY, new ResourceLocation(RuneCraftory.MODID, "herb/in_" + res.getPath()));
-            this.blacklist = PlatformUtils.INSTANCE.tag(Registry.BIOME_REGISTRY, new ResourceLocation(RuneCraftory.MODID, "herb/not_" + res.getPath()));
+            ResourceLocation res = Registry.BLOCK.getKey(block);
+            this.whitelist = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(RuneCraftory.MODID, "herb/in_" + res.getPath()));
+            this.blacklist = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(RuneCraftory.MODID, "herb/not_" + res.getPath()));
         }
 
         public Entry(Block block, TagKey<Biome> whitelist, TagKey<Biome> blacklist, int weight) {

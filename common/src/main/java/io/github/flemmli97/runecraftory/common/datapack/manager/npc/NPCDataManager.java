@@ -1,12 +1,11 @@
 package io.github.flemmli97.runecraftory.common.datapack.manager.npc;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
 import io.github.flemmli97.runecraftory.api.datapack.npc.NPCData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -23,7 +22,6 @@ public class NPCDataManager extends SimpleJsonResourceReloadListener {
 
     public static final String DIRECTORY = "npc_data";
 
-    private static final Gson GSON = new GsonBuilder().create();
     public static final ResourceLocation DEFAULT_ID = new ResourceLocation(RuneCraftory.MODID, "default_npc");
 
     private Map<ResourceLocation, NPCData> keyData = ImmutableMap.of();
@@ -32,7 +30,7 @@ public class NPCDataManager extends SimpleJsonResourceReloadListener {
     private final WeightedList<NPCData> viewNoJobDef = new WeightedList<>();
 
     public NPCDataManager() {
-        super(GSON, DIRECTORY);
+        super(GsonInstances.GSON, DIRECTORY);
     }
 
     public NPCData get(ResourceLocation res) {

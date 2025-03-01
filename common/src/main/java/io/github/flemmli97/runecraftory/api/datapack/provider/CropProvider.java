@@ -1,13 +1,12 @@
 package io.github.flemmli97.runecraftory.api.datapack.provider;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
+import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
 import io.github.flemmli97.runecraftory.common.datapack.manager.CropManager;
-import io.github.flemmli97.tenshilib.platform.PlatformUtils;
+import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.HashCache;
@@ -27,8 +26,6 @@ import java.util.function.Consumer;
 public abstract class CropProvider implements DataProvider {
 
     private static final Logger LOGGER = LogManager.getLogger();
-
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
     private final Map<ResourceLocation, CropProperties.Builder> data = new HashMap<>();
     private final Map<ResourceLocation, Consumer<JsonObject>> item = new HashMap<>();
@@ -53,7 +50,7 @@ public abstract class CropProvider implements DataProvider {
                         .getOrThrow(false, LOGGER::error);
                 if (obj.isJsonObject())
                     this.item.get(res).accept(obj.getAsJsonObject());
-                DataProvider.save(GSON, cache, obj, path);
+                DataProvider.save(GsonInstances.GSON, cache, obj, path);
             } catch (IOException e) {
                 LOGGER.error("Couldn't save crop properties {}", path, e);
             }
@@ -74,13 +71,13 @@ public abstract class CropProvider implements DataProvider {
     }
 
     public void addStat(ItemLike item, CropProperties.Builder builder) {
-        this.addStat(PlatformUtils.INSTANCE.items().getIDFrom(item.asItem()).getPath(), item, builder);
+        this.addStat(Registry.ITEM.getKey(item.asItem()).getPath(), item, builder);
     }
 
     public void addStat(String id, ItemLike item, CropProperties.Builder builder) {
         ResourceLocation res = new ResourceLocation(this.modid, id);
         this.data.put(res, builder);
-        this.item.put(res, obj -> obj.addProperty("item", (PlatformUtils.INSTANCE.items().getIDFrom(item.asItem()).toString())));
+        this.item.put(res, obj -> obj.addProperty("item", (Registry.ITEM.getKey(item.asItem()).toString())));
     }
 
     public void addStat(String id, TagKey<Item> tag, int growth, int maxDrops, boolean regrowable) {

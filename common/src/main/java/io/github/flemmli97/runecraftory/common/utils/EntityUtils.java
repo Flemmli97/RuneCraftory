@@ -113,9 +113,7 @@ public class EntityUtils {
     }
 
     public static float playerLuck(Player player) {
-        float luckAtt = player.getLuck();
-
-        return luckAtt;
+        return player.getLuck();
     }
 
     public static boolean isDisabled(LivingEntity entity) {

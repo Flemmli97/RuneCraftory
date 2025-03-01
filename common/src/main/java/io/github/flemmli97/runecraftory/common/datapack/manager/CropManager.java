@@ -1,13 +1,12 @@
 package io.github.flemmli97.runecraftory.common.datapack.manager;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
+import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.utils.MiscUtils;
 import net.minecraft.core.Registry;
@@ -29,14 +28,13 @@ import java.util.Map;
 public class CropManager extends SimpleJsonResourceReloadListener {
 
     public static final String DIRECTORY = "crop_properties";
-    private static final Gson GSON = new GsonBuilder().create();
 
     private Map<Item, CropProperties> crops = ImmutableMap.of();
     private boolean resolved;
     private Map<TagKey<Item>, CropProperties> tagCrops = ImmutableMap.of();
 
     public CropManager() {
-        super(GSON, DIRECTORY);
+        super(GsonInstances.GSON, DIRECTORY);
     }
 
     @Nullable

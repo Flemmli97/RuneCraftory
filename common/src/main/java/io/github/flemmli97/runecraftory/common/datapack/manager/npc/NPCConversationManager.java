@@ -1,12 +1,11 @@
 package io.github.flemmli97.runecraftory.common.datapack.manager.npc;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
 import io.github.flemmli97.runecraftory.api.datapack.npc.ConversationSet;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -19,13 +18,11 @@ public class NPCConversationManager extends SimpleJsonResourceReloadListener {
 
     public static final String DIRECTORY = "conversations";
 
-    private static final Gson GSON = new GsonBuilder().create();
-
     private Map<ResourceLocation, ConversationSet> keyData = ImmutableMap.of();
     private Map<ConversationSet, ResourceLocation> dataKey = ImmutableMap.of();
 
     public NPCConversationManager() {
-        super(GSON, DIRECTORY);
+        super(GsonInstances.GSON, DIRECTORY);
     }
 
     public ConversationSet get(ResourceLocation res, ConversationSet fallback) {

@@ -1,11 +1,10 @@
 package io.github.flemmli97.runecraftory.common.datapack.manager;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
 import io.github.flemmli97.runecraftory.api.datapack.SpellProperties;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
@@ -21,12 +20,10 @@ public class SpellPropertiesManager extends SimpleJsonResourceReloadListener {
 
     public static final String DIRECTORY = "spells";
 
-    private static final Gson GSON = new GsonBuilder().create();
-
     private Map<ResourceLocation, SpellProperties> propertiesMap = new HashMap<>();
 
     public SpellPropertiesManager() {
-        super(GSON, DIRECTORY);
+        super(GsonInstances.GSON, DIRECTORY);
     }
 
     public SpellProperties getPropertiesFor(Spell spell) {

@@ -1,7 +1,5 @@
 package io.github.flemmli97.runecraftory.api.datapack.provider;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.RuneCraftory;
@@ -24,16 +22,12 @@ public abstract class GateSpawnProvider implements DataProvider {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private static final Gson GSON = new GsonBuilder().enableComplexMapKeySerialization().setPrettyPrinting().disableHtmlEscaping().create();
-
     private final Map<ResourceLocation, GateSpawnData> data = new HashMap<>();
 
     private final DataGenerator gen;
-    private final String modid;
 
-    public GateSpawnProvider(DataGenerator gen, String modid) {
+    public GateSpawnProvider(DataGenerator gen) {
         this.gen = gen;
-        this.modid = modid;
     }
 
     protected abstract void add();
@@ -46,7 +40,7 @@ public abstract class GateSpawnProvider implements DataProvider {
             try {
                 JsonElement obj = GateSpawnData.CODEC.encodeStart(JsonOps.INSTANCE, spawnData)
                         .getOrThrow(false, RuneCraftory.LOGGER::error);
-                DataProvider.save(GsonInstances.ATTRIBUTE_SPELLS, cache, obj, path);
+                DataProvider.save(GsonInstances.GSON, cache, obj, path);
             } catch (IOException e) {
                 LOGGER.error("Couldn't save itemstat {}", path, e);
             }

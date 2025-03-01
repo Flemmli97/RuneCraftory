@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.items.consumables;
 
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
-import io.github.flemmli97.tenshilib.platform.PlatformUtils;
+import net.minecraft.core.Registry;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -34,8 +34,7 @@ public class ItemObjectX extends Item {
 
     public static ItemStack applyEffect(LivingEntity livingEntity, ItemStack stack) {
         ItemStack eat = livingEntity.eat(livingEntity.level, stack);
-        List<MobEffect> list = PlatformUtils.INSTANCE.effects().values()
-                .stream().filter(effect -> effect.getCategory() == MobEffectCategory.HARMFUL).toList();
+        List<MobEffect> list = Registry.MOB_EFFECT.stream().filter(effect -> effect.getCategory() == MobEffectCategory.HARMFUL).toList();
         if (!list.isEmpty()) {
             int r = livingEntity.getRandom().nextInt(5) + 1;
             for (int i = 0; i < r; i++) {

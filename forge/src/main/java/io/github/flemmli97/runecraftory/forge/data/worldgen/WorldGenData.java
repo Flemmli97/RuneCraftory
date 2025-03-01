@@ -1,11 +1,11 @@
 package io.github.flemmli97.runecraftory.forge.data.worldgen;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
+import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
@@ -20,7 +20,6 @@ import java.util.Map;
 
 public abstract class WorldGenData<T> implements DataProvider {
 
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
     protected final Map<ResourceLocation, T> elements = new HashMap<>();
     private final ResourceKey<? extends Registry<?>> registryKey;
     private final Codec<T> elementCodec;
@@ -47,7 +46,7 @@ public abstract class WorldGenData<T> implements DataProvider {
             try {
                 this.save(cache, res, e);
             } catch (IOException ex) {
-                ex.printStackTrace();
+                RuneCraftory.LOGGER.error(ex);
             }
         });
     }
@@ -62,7 +61,7 @@ public abstract class WorldGenData<T> implements DataProvider {
             try {
                 this.save(cache, res, e);
             } catch (IOException ex) {
-                ex.printStackTrace();
+                RuneCraftory.LOGGER.error(ex);
             }
         });
     }
@@ -70,7 +69,7 @@ public abstract class WorldGenData<T> implements DataProvider {
     private void save(HashCache cache, ResourceLocation res, T e) throws IOException {
         Path path = this.getPath(res);
         JsonElement obj = this.elementCodec.encode(e, JsonOps.INSTANCE, new JsonObject()).result().orElseThrow();
-        DataProvider.save(GSON, cache, obj, path);
+        DataProvider.save(GsonInstances.GSON, cache, obj, path);
     }
 
     protected Path getPath(ResourceLocation id) {

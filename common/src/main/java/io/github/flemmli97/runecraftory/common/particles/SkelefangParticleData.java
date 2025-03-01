@@ -7,7 +7,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
-import io.github.flemmli97.tenshilib.platform.PlatformUtils;
+import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.FriendlyByteBuf;
@@ -101,7 +101,7 @@ public class SkelefangParticleData implements ParticleOptions {
 
     @Override
     public String writeToString() {
-        return PlatformUtils.INSTANCE.particles().getIDFrom(this.getType()).toString();
+        return Registry.PARTICLE_TYPE.getKey(this.getType()).toString();
     }
 
     public SkelefangBoneType getBoneType() {

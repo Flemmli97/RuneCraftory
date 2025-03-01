@@ -31,7 +31,7 @@ public class ShippingTask implements QuestTask<ShippingTask.SkillLevelTaskResolv
     public static final QuestEntryKey<ShippingTask> ID = new QuestEntryKey<>(new ResourceLocation(RuneCraftory.MODID, "shipping"));
     public static final Codec<ShippingTask> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(Codec.STRING.fieldOf("description").forGetter(d -> d.description),
-                    CodecHelper.nonEmptyList(DescriptiveValue.withTranslation(JsonCodecs.ITEM_PREDICATE_CODEC), "Item predicates can't be empty").fieldOf("item_predicates").forGetter(d -> d.itemPredicates),
+                    CodecHelper.nonEmptyList(DescriptiveValue.withTranslation(CodecHelper.ITEM_PREDICATE_CODEC), "Item predicates can't be empty").fieldOf("item_predicates").forGetter(d -> d.itemPredicates),
                     CodecHelper.NUMER_PROVIDER_CODEC.fieldOf("amount").forGetter(d -> d.amount)
             ).apply(instance, ShippingTask::new));
 

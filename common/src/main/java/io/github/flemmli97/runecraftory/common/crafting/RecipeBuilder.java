@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
 import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
-import io.github.flemmli97.tenshilib.platform.PlatformUtils;
+import net.minecraft.core.Registry;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -94,7 +94,7 @@ public class RecipeBuilder {
     }
 
     public void build(Consumer<FinishedRecipe> cons) {
-        this.build(cons, PlatformUtils.INSTANCE.items().getIDFrom(this.result.getItem()));
+        this.build(cons, Registry.ITEM.getKey(this.result.getItem()));
     }
 
     public void build(Consumer<FinishedRecipe> cons, String string) {
@@ -174,7 +174,7 @@ public class RecipeBuilder {
 
         private JsonElement itemStackToJson(ItemStack stack) {
             JsonObject obj = new JsonObject();
-            obj.addProperty("item", PlatformUtils.INSTANCE.items().getIDFrom(stack.getItem()).toString());
+            obj.addProperty("item", Registry.ITEM.getKey(stack.getItem()).toString());
             if (stack.getCount() > 1)
                 obj.addProperty("count", stack.getCount());
             if (stack.hasTag())

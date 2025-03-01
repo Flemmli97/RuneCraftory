@@ -46,7 +46,6 @@ import net.minecraft.world.phys.BlockHitResult;
 public class ItemToolHammer extends PickaxeItem implements IItemUsable {
 
     public final EnumToolTier tier;
-    private final int[] chargeRunes = new int[]{1, 5, 15, 50, 100};
 
     public ItemToolHammer(EnumToolTier tier, Properties props) {
         super(ItemTiers.TIER, 0, 0, props);
