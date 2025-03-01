@@ -24,6 +24,7 @@ import net.minecraftforge.client.event.RegisterShadersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
+import java.io.IOException;
 import java.util.function.Function;
 
 public class ForgeClientRegister {
@@ -71,7 +72,7 @@ public class ForgeClientRegister {
     }
 
     @SubscribeEvent
-    public static void registerShader(RegisterShadersEvent event) {
+    public static void registerShader(RegisterShadersEvent event) throws IOException {
         RunecraftoryShaders.registerShader(((id, vertexFormat, onLoad) ->
                 event.registerShader(new ShaderInstance(event.getResourceManager(), id, vertexFormat), onLoad)));
     }
