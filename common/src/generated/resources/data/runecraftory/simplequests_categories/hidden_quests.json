@@ -1,6 +1,7 @@
 {
   "name": "runecraftory.quests.category.hidden",
-  "required_contexts": [
+  "max_daily": -1,
+  "required_context": [
     "runecraftory:contexts"
   ],
   "is_visible": false

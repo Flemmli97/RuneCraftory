@@ -23,21 +23,21 @@ public class GiftData {
     public static final Codec<GiftData> CODEC = RecordCodecBuilder.create(inst ->
             inst.group(Codec.either(ShopItemProperties.TAG_CODEC, Registry.ITEM.byNameCodec())
                             .listOf().fieldOf("items").forGetter(d -> d.items),
-                    Range.CODEC.optionalFieldOf("range").forGetter(d -> Optional.ofNullable(d.range)),
+                    Range.CODEC.optionalFieldOf("xp_range").forGetter(d -> Optional.ofNullable(d.xp_range)),
                     CodecHelper.nonEmptyList(Codec.STRING, "Translations can't be empty").fieldOf("translations").forGetter(d -> d.translations)
             ).apply(inst, GiftData::new));
 
     private final List<Either<TagKey<Item>, Item>> items;
-    private final Range range;
+    private final Range xp_range;
     private final List<String> translations;
 
-    private GiftData(List<Either<TagKey<Item>, Item>> items, Optional<Range> range, List<String> translations) {
-        this(items, range.orElse(null), translations);
+    private GiftData(List<Either<TagKey<Item>, Item>> items, Optional<Range> xp_range, List<String> translations) {
+        this(items, xp_range.orElse(null), translations);
     }
 
-    private GiftData(List<Either<TagKey<Item>, Item>> items, Range range, List<String> translations) {
+    private GiftData(List<Either<TagKey<Item>, Item>> items, Range xp_range, List<String> translations) {
         this.items = items;
-        this.range = range;
+        this.xp_range = xp_range;
         this.translations = translations;
     }
 
@@ -54,9 +54,9 @@ public class GiftData {
     }
 
     public boolean matches(int xp) {
-        return this.range != null &&
-                (this.range.min == null || this.range.min <= xp) &&
-                (this.range.max == null || this.range.max >= xp);
+        return this.xp_range != null &&
+                (this.xp_range.min == null || this.xp_range.min <= xp) &&
+                (this.xp_range.max == null || this.xp_range.max >= xp);
     }
 
     public static Builder builder(TagKey<Item> tag, String key, String translation) {

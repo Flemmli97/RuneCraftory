@@ -27,6 +27,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
@@ -54,6 +55,8 @@ public class BlockQuestboard extends HorizontalDirectionalBlock {
 
     public static final EnumProperty<Part> PART = EnumProperty.create("part", Part.class);
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+
+    public static final double RANGE = 48;
 
     public BlockQuestboard(Properties properties) {
         super(properties);
@@ -86,7 +89,7 @@ public class BlockQuestboard extends HorizontalDirectionalBlock {
         if (!(player instanceof ServerPlayer serverPlayer)) {
             return InteractionResult.CONSUME;
         } else {
-            QuestHandler.openGui(serverPlayer);
+            QuestHandler.openGui(serverPlayer, Vec3.atCenterOf(pos));
             return InteractionResult.SUCCESS;
         }
     }

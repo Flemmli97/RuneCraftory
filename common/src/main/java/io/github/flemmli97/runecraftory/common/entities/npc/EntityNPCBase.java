@@ -772,7 +772,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     public boolean canAcceptNPCQuest(ServerPlayer player, NPCQuest quest) {
-        return this.relationManager.getCompletedQuests(player.getUUID()).containsAll(quest.parentQuests);
+        return this.relationManager.getCompletedQuests(player.getUUID()).containsAll(quest.neededParentQuests);
     }
 
     /**

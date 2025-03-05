@@ -8,7 +8,7 @@
     "#c:silver_ingots",
     "#c:platinum_ingots"
   ],
-  "range": {
+  "xp_range": {
     "max": 7
   },
   "translations": [

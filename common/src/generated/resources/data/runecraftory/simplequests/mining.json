@@ -2,13 +2,11 @@
   "category": "runecraftory:quests",
   "name": "runecraftory.quest.mining",
   "description": "runecraftory.quest.mining.description",
-  "icon": {
-    "item": "minecraft:air",
-    "count": 0
-  },
   "repeat_delay": -1,
   "visibility": "NEVER",
-  "npc_id": "runecraftory:smith/1",
+  "target_npc_ids": [
+    "runecraftory:smith/1"
+  ],
   "quests": [
     "runecraftory:mining_ref_0",
     "runecraftory:mining_ref_1"

@@ -2,7 +2,7 @@
   "items": [
     "#c:foods/juice"
   ],
-  "range": {},
+  "xp_range": {},
   "translations": [
     "runecraftory.gift.juice"
   ]

@@ -10,7 +10,6 @@ import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
 import io.github.flemmli97.runecraftory.common.quests.tasks.NPCTalkTask;
 import io.github.flemmli97.runecraftory.common.quests.tasks.ShippingTask;
 import io.github.flemmli97.runecraftory.common.quests.tasks.TamingTask;
-import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.simplequests_api.datapack.provider.QuestProvider;
 import io.github.flemmli97.simplequests_api.impls.quests.Quest;
@@ -18,13 +17,11 @@ import io.github.flemmli97.simplequests_api.impls.tasks.BlockInteractTask;
 import io.github.flemmli97.simplequests_api.quest.QuestCategory;
 import io.github.flemmli97.simplequests_api.quest.entry.QuestTask;
 import io.github.flemmli97.simplequests_api.util.DescriptiveValue;
-import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
 import net.minecraft.advancements.critereon.BlockPredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -76,8 +73,7 @@ public class QuestGen extends QuestProvider implements AdditionalLanguages {
                                 .add(LootItem.lootTableItem(ModItems.TURNIP_SEEDS.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 5))))),
                         b -> b.addEntry("Ship %s turnips", desc -> new ShippingTask("", DescriptiveValue.list(ItemPredicate.Builder.item().of(ModItems.TURNIP.get()).build(), desc).build(), ConstantValue.exactly(1))))
                 .setRepeatDelay(-1)
-                .withCategory(this.main)
-                .withIcon(new ItemStack(ModItems.TURNIP_SEEDS.get())));
+                .withCategory(this.main));
 
         this.addQuest(this.createNPCQuest(id("mining"), "Acquire Hardware??", "Come see me.",
                         b -> b.addNPC("smith/1", new NPCDataProvider.QuestResponseBuilder(
@@ -98,8 +94,7 @@ public class QuestGen extends QuestProvider implements AdditionalLanguages {
                         builder -> builder.addEntry("Break %s mineral blocks", desc -> new BlockInteractTask(DescriptiveValue.list(BlockPredicate.Builder.block().of(RunecraftoryTags.ORES).build(), desc).build(),
                                 List.of(), ConstantValue.exactly(10), false, false, true, "", EntityPredicate.ANY)))
                 .setRepeatDelay(-1)
-                .withCategory(this.main)
-                .withIcon(new ItemStack(ModItems.HAMMER_SCRAP.get())));
+                .withCategory(this.main));
 
         this.addQuest(this.createNPCQuest(id("tame_monster"), "Tame a monster", "I need you to tame a monster. Come see me.",
                         b -> b.addNPC("random_npc_1", new NPCDataProvider.QuestResponseBuilder(
@@ -115,8 +110,7 @@ public class QuestGen extends QuestProvider implements AdditionalLanguages {
                                 .add(LootItem.lootTableItem(ModItems.BRUSH.get()))),
                         builder -> builder.addEntry("Tame a monster", desc -> new TamingTask("", DescriptiveValue.list(EntityPredicate.ANY, desc).build(), ConstantValue.exactly(1))))
                 .setRepeatDelay(-1)
-                .withCategory(this.main)
-                .withIcon(new ItemStack(SpawnEgg.fromType(ModEntities.WOOLY.get()).get())));
+                .withCategory(this.main));
     }
 
     private NPCQuest.Builder createNPCQuest(ResourceLocation id, String task, String description, Consumer<NPCEntryBuilder> npcs,

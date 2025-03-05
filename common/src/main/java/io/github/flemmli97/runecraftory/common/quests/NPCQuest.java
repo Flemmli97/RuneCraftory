@@ -1,9 +1,10 @@
 package io.github.flemmli97.runecraftory.common.quests;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.common.blocks.BlockQuestboard;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityTreasureChest;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
@@ -14,107 +15,98 @@ import io.github.flemmli97.simplequests_api.player.QuestProgress;
 import io.github.flemmli97.simplequests_api.quest.QuestBase;
 import io.github.flemmli97.simplequests_api.quest.QuestCategory;
 import io.github.flemmli97.simplequests_api.quest.entry.ResolvedQuestTask;
+import io.github.flemmli97.simplequests_api.registry.QuestBaseRegistry;
 import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
+import net.minecraft.Util;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
  * A quest linked with a npc entity.
- * NPC quests can only depend on npc quests (parents)
  */
 public class NPCQuest extends QuestBase {
 
     public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "npc_quest");
 
+    public static final Function<QuestBaseRegistry.CodecContext, Codec<NPCQuest>> CODEC = Util.memoize(ctx ->
+            QuestBase.buildCodec(NPCQuestData.CODEC
+                    .forGetter(q -> new NPCQuest.NPCQuestData(q.npcDataIDs,
+                            q.quests, q.loot, q.global, q.dynamicData)), ctx, (id, task, data) -> {
+                NPCQuest.Builder builder = new NPCQuest.Builder(id, task, data.npcIDs, data.loot);
+                if (data.global)
+                    builder.global();
+                builder.withQuests(data.quests);
+                if (data.dynamic != null)
+                    builder.withData(data.dynamic());
+                return builder;
+            }));
+
     private EntityNPCBase npc;
-    private UUID npcUuid;
+    private DynamicQuestData dynamicData;
+
     public final List<ResourceLocation> npcDataIDs;
     public final List<ResourceLocation> quests;
     public final ResourceLocation loot;
-    public final List<ResourceLocation> parentQuests;
     public final boolean global;
-    private ResourceLocation originID;
 
-    protected NPCQuest(ResourceLocation id, QuestCategory category, String questTaskString, List<String> questTaskDesc,
-                       List<ResourceLocation> parents, boolean redoParent, int repeatDelay, int sortingId, EntityPredicate unlockCondition, List<ResourceLocation> npcDataIDs, List<ResourceLocation> quests, ResourceLocation loot, boolean global) {
+    private NPCQuest(ResourceLocation id, QuestCategory category, String questTaskString, List<String> questTaskDesc,
+                     List<ResourceLocation> parents, boolean redoParent, int repeatDelay, int maxRepeat, int sortingId, EntityPredicate unlockCondition, List<ResourceLocation> npcDataIDs, List<ResourceLocation> quests, ResourceLocation loot, boolean global) {
         super(id, category, questTaskString, questTaskDesc,
-                List.of(), redoParent, false, ItemStack.EMPTY, repeatDelay, 0, sortingId, false, unlockCondition, Visibility.NEVER);
+                parents, redoParent, false, ItemStack.EMPTY, repeatDelay, 0, maxRepeat, sortingId, false, unlockCondition, Visibility.NEVER);
         this.npcDataIDs = npcDataIDs;
-        this.parentQuests = parents;
         this.quests = quests;
         this.loot = loot;
         this.global = global;
-        this.originID = this.id;
     }
 
-    public static ResourceLocation withUuid(ResourceLocation original, UUID uuid) {
+    private static ResourceLocation withUuid(ResourceLocation original, UUID uuid) {
         if (uuid == null)
             return original;
         return new ResourceLocation(original.getNamespace(), original.getPath() + "/" + uuid);
     }
 
-    public static NPCQuest of(ResourceLocation id, EntityNPCBase npc, QuestBase quest) {
-        return QuestBase.of(task -> new Builder(id, task, List.of(npc.getDataID()),
-                quest.getLoot()).withQuests(quest.id), quest.category, quest.serialize(true, false)).build();
+    private static AABB aabbOf(Vec3 pos) {
+        return new AABB(pos.add(-BlockQuestboard.RANGE, -BlockQuestboard.RANGE, -BlockQuestboard.RANGE),
+                pos.add(BlockQuestboard.RANGE, BlockQuestboard.RANGE, BlockQuestboard.RANGE));
     }
 
-    public static NPCQuest of(ResourceLocation id, QuestCategory category, JsonObject obj) {
-        UUID uuid = obj.has("npc_uuid") ? UUID.fromString(obj.get("npc_uuid").getAsString()) : null;
-        List<ResourceLocation> npc_ids = new ArrayList<>();
-        try {
-            npc_ids.add(new ResourceLocation(GsonHelper.getAsString(obj, "npc_id")));
-        } catch (JsonSyntaxException e) {
-            JsonArray arr = GsonHelper.getAsJsonArray(obj, "npc_id");
-            arr.forEach(element -> npc_ids.add(new ResourceLocation(element.getAsString())));
-        }
-        List<ResourceLocation> quests = new ArrayList<>();
-        try {
-            quests.add(new ResourceLocation(GsonHelper.getAsString(obj, "quests")));
-        } catch (JsonSyntaxException e) {
-            JsonArray arr = GsonHelper.getAsJsonArray(obj, "quests");
-            arr.forEach(element -> quests.add(new ResourceLocation(element.getAsString())));
-        }
-        NPCQuest quest = QuestBase.of(task -> {
-            Builder builder = new Builder(withUuid(id, uuid), task, npc_ids,
-                    new ResourceLocation(GsonHelper.getAsString(obj, "loot_table")))
-                    .withQuests(quests);
-            if (GsonHelper.getAsBoolean(obj, "global", false))
-                builder.global();
-            return builder;
-        }, category, obj).build();
-        quest.withNPC(uuid, id);
-        return quest;
-    }
-
-    public static List<NPCQuest> of(NPCQuest quest, ServerPlayer player) {
-        return player.level.getEntities(EntityTypeTest.forClass(EntityNPCBase.class), player.getBoundingBox().inflate(48), e -> {
+    public static List<NPCQuest> resolve(NPCQuest quest, ServerPlayer player, Vec3 at) {
+        return player.level.getEntities(EntityTypeTest.forClass(EntityNPCBase.class), aabbOf(at), e -> {
                     if (quest.npcDataIDs.contains(e.getDataID()) && e.canAcceptNPCQuest(player, quest)) {
                         ResourceLocation id = QuestHandler.questForExists(player, e);
                         return id == null || quest.getOriginID().equals(id);
                     }
                     return false;
                 })
-                .stream().map(npc -> {
-                    NPCQuest ret = of(withUuid(quest.id, npc.getUUID()), quest.category, quest.serialize(true, false));
-                    ret.withNPC(npc, quest.id);
-                    return ret;
-                }).toList();
+                .stream().map(quest::forNPC).toList();
+    }
+
+    private NPCQuest forNPC(EntityNPCBase npc) {
+        ResourceLocation newID = withUuid(this.id, npc.getUUID());
+        NPCQuest quest = new NPCQuest(newID, this.category, this.name, this.description,
+                this.npcDataIDs, this.redoParent, this.repeatDelay, this.maxRepeat, this.sortingId,
+                this.unlockCondition, this.npcDataIDs, this.quests, this.loot, this.global);
+        quest.withNPC(npc, this.id);
+        return quest;
     }
 
     private void withNPC(EntityNPCBase npc, ResourceLocation originID) {
@@ -123,8 +115,12 @@ public class NPCQuest extends QuestBase {
     }
 
     private void withNPC(UUID npc, ResourceLocation originID) {
-        this.npcUuid = npc;
-        this.originID = originID;
+        this.dynamicData = new DynamicQuestData(npc, originID);
+    }
+
+    @Override
+    public ResourceLocation getTypeId() {
+        return ID;
     }
 
     @Override
@@ -139,73 +135,33 @@ public class NPCQuest extends QuestBase {
 
     @Override
     public List<MutableComponent> getDescription(ServerPlayer player, int idx) {
-        if (this.npcUuid != null) {
-            EntityNPCBase npc = EntityUtil.findFromUUID(EntityNPCBase.class, player.getLevel(), this.npcUuid);
-            if (npc != null)
-                return this.description.stream().map(s -> new TranslatableComponent(s, npc.getCustomName(), npc.getX(), npc.getY(), npc.getZ())).collect(Collectors.toList());
+        EntityNPCBase npc = this.getNpc(player.level);
+        if (npc != null) {
+            return this.description.stream().map(s -> new TranslatableComponent(s, npc.getCustomName(), npc.getX(), npc.getY(), npc.getZ())).collect(Collectors.toList());
         }
         return super.getDescription(player, idx);
     }
 
-    @Override
-    public JsonObject serialize(boolean withId, boolean full) {
-        JsonObject obj = super.serialize(withId, full);
-        if (!this.parentQuests.isEmpty() || full) {
-            if (this.parentQuests.size() == 1) {
-                obj.addProperty("parent_id", this.parentQuests.get(0).toString());
-            } else {
-                JsonArray arr = new JsonArray();
-                this.parentQuests.forEach((r) -> arr.add(r.toString()));
-                obj.add("parent_id", arr);
-            }
-        }
-        if (this.npcDataIDs.size() == 1)
-            obj.addProperty("npc_id", this.npcDataIDs.get(0).toString());
-        else {
-            JsonArray arr = new JsonArray();
-            this.npcDataIDs.forEach(res -> arr.add(res.toString()));
-            obj.add("npc_id", arr);
-        }
-        if (this.quests.size() == 1)
-            obj.addProperty("quests", this.quests.get(0).toString());
-        else {
-            JsonArray arr = new JsonArray();
-            this.quests.forEach(res -> arr.add(res.toString()));
-            obj.add("quests", arr);
-        }
-        obj.addProperty("loot_table", this.loot.toString());
-        if (this.npcUuid != null)
-            obj.addProperty("npc_uuid", this.npcUuid.toString());
-        if (withId) {
-            obj.addProperty("id", this.originID.toString());
-        }
-        if (full || this.global) {
-            obj.addProperty("global", this.global);
-        }
-        obj.addProperty(QuestBase.TYPE_ID, ID.toString());
-        return obj;
-    }
-
     public UUID getNpcUuid() {
-        return this.npcUuid;
+        return this.dynamicData != null ? this.dynamicData.npcUuid() : null;
     }
 
     @Nullable
     public EntityNPCBase getNpc(Level level) {
-        if (this.npcUuid != null && this.npc == null)
-            this.npc = EntityUtil.findFromUUID(EntityNPCBase.class, level, this.npcUuid);
+        if (this.dynamicData != null && this.npc == null)
+            this.npc = EntityUtil.findFromUUID(EntityNPCBase.class, level, this.dynamicData.npcUuid());
         return this.npc;
     }
 
     public ResourceLocation getOriginID() {
-        return this.originID;
+        return this.dynamicData != null ? this.dynamicData.origin() : this.id;
     }
 
     @Override
     public String submissionTrigger(ServerPlayer player, int idx) {
-        if (this.npcUuid == null)
+        if (this.dynamicData == null)
             return super.submissionTrigger(player, idx);
-        return this.npcUuid.toString();
+        return this.dynamicData.npcUuid().toString();
     }
 
     @Override
@@ -244,12 +200,12 @@ public class NPCQuest extends QuestBase {
 
     @Override
     public void onReset(ServerPlayer player) {
-        if (this.npcUuid != null) {
-            EntityNPCBase npc = EntityUtil.findFromUUID(EntityNPCBase.class, player.level, this.npcUuid);
+        if (this.dynamicData != null) {
+            EntityNPCBase npc = this.getNpc(player.level);
             if (npc != null)
-                npc.resetQuestProcess(player, this.originID);
+                npc.resetQuestProcess(player, this.dynamicData.origin());
             else {
-                WorldHandler.get(player.getServer()).npcHandler.scheduleQuestTrackerReset(this.npcUuid, player.getUUID(), this.originID);
+                WorldHandler.get(player.getServer()).npcHandler.scheduleQuestTrackerReset(this.dynamicData.npcUuid(), player.getUUID(), this.dynamicData.origin());
             }
         }
     }
@@ -264,15 +220,16 @@ public class NPCQuest extends QuestBase {
 
     @Override
     public boolean isDynamic() {
-        return true;
+        return this.dynamicData != null;
     }
 
-    public static class Builder extends BuilderBase<NPCQuest.Builder> {
+    public static class Builder extends BuilderBase<NPCQuest, NPCQuest.Builder> {
 
         private final List<ResourceLocation> npcDataID;
         private final List<ResourceLocation> quests = new ArrayList<>();
         private final ResourceLocation loot;
         private boolean global;
+        private DynamicQuestData dynamic;
 
         public Builder(ResourceLocation id, String task, ResourceLocation npcDataID, ResourceLocation loot) {
             this(id, task, List.of(npcDataID), loot);
@@ -299,6 +256,11 @@ public class NPCQuest extends QuestBase {
             return this;
         }
 
+        private Builder withData(DynamicQuestData dynamic) {
+            this.dynamic = dynamic;
+            return this;
+        }
+
         public ResourceLocation getID() {
             return this.id;
         }
@@ -312,8 +274,33 @@ public class NPCQuest extends QuestBase {
         public NPCQuest build() {
             if (this.quests.isEmpty())
                 throw new IllegalStateException("Quests not defined");
-            return new NPCQuest(this.id, this.category, this.name, this.description, this.neededParentQuests, this.redoParent, this.repeatDelay, this.sortingId,
+            NPCQuest quest = new NPCQuest(this.id, this.category, this.name, this.description, this.neededParentQuests,
+                    this.redoParent, this.repeatDelay, this.maxRepeat, this.sortingId,
                     this.unlockCondition, this.npcDataID, this.quests, this.loot, this.global);
+            if (this.dynamic != null)
+                quest.withNPC(this.dynamic.npcUuid(), this.dynamic.origin());
+            return quest;
         }
+    }
+
+    private record NPCQuestData(List<ResourceLocation> npcIDs, List<ResourceLocation> quests, ResourceLocation loot,
+                                boolean global, DynamicQuestData dynamic) {
+
+        static final MapCodec<NPCQuestData> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
+                        Codec.BOOL.optionalFieldOf("global").forGetter(d -> d.global ? Optional.of(true) : Optional.empty()),
+                        DynamicQuestData.CODEC.optionalFieldOf("dynamic_data").forGetter(d -> Optional.ofNullable(d.dynamic)),
+
+                        ResourceLocation.CODEC.listOf().fieldOf("target_npc_ids").forGetter(d -> d.npcIDs),
+                        ResourceLocation.CODEC.listOf().fieldOf("quests").forGetter(d -> d.quests),
+                        ResourceLocation.CODEC.fieldOf("loot_table").forGetter(d -> d.loot)
+                ).apply(inst, (global, dynamic, target, quests, loot) -> new NPCQuestData(target, quests, loot, global.orElse(false), dynamic.orElse(null)))
+        );
+    }
+
+    private record DynamicQuestData(UUID npcUuid, ResourceLocation origin) {
+        static final Codec<DynamicQuestData> CODEC = RecordCodecBuilder.create(inst -> inst.group(
+                Codec.STRING.xmap(UUID::fromString, UUID::toString).fieldOf("npcUuid").forGetter(d -> d.npcUuid),
+                ResourceLocation.CODEC.fieldOf("origin_id").forGetter(d -> d.origin)
+        ).apply(inst, DynamicQuestData::new));
     }
 }

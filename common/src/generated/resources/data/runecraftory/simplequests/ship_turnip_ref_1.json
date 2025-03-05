@@ -2,7 +2,7 @@
   "category": "runecraftory:hidden_quests",
   "name": "NPC_SUBQUEST",
   "loot_table": "minecraft:empty",
-  "entries": {
+  "tasks": {
     "0": {
       "description": "",
       "item_predicates": [

@@ -2,13 +2,11 @@
   "category": "runecraftory:quests",
   "name": "runecraftory.quest.ship_turnip",
   "description": "runecraftory.quest.ship_turnip.description",
-  "icon": {
-    "item": "minecraft:air",
-    "count": 0
-  },
   "repeat_delay": -1,
   "visibility": "NEVER",
-  "npc_id": "runecraftory:shop_owner/1",
+  "target_npc_ids": [
+    "runecraftory:shop_owner/1"
+  ],
   "quests": [
     "runecraftory:ship_turnip_ref_0",
     "runecraftory:ship_turnip_ref_1"

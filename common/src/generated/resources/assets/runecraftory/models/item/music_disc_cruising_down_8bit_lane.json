@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "runecraftory:item/music_disc_cruising_down_8bit_lane"
-  }
-}

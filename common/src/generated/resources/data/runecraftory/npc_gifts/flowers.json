@@ -2,7 +2,7 @@
   "items": [
     "#c:flowers"
   ],
-  "range": {
+  "xp_range": {
     "max": 7
   },
   "translations": [

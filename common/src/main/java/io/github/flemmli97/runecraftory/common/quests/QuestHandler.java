@@ -28,6 +28,7 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.HashMap;
 import java.util.List;
@@ -48,8 +49,7 @@ public class QuestHandler {
         QuestEntryRegistry.registerSerializer(SkillLevelTask.ID, SkillLevelTask.CODEC, SkillLevelTask.SkillLevelTaskResolved.CODEC);
         QuestEntryRegistry.registerSerializer(TamingTask.ID, TamingTask.CODEC, TamingTask.TamingTaskResolved.CODEC);
         QuestEntryRegistry.registerSerializer(NPCTalkTask.ID, NPCTalkTask.CODEC, NPCTalkTask.NPCTalkResolved.CODEC);
-        QuestBaseRegistry.registerSerializer(NPCQuest.ID, NPCQuest::of);
-        QuestBaseRegistry.registerSerializer(QuestBoardQuest.ID, QuestBoardQuest::of);
+        QuestBaseRegistry.registerSerializer(NPCQuest.ID, NPCQuest.CODEC);
         ProgressionTrackerRegistry.registerSerializer(ShippingTracker.KEY, ShippingTracker::new);
         ProgressionTrackerRegistry.registerSerializer(TamingTracker.KEY, TamingTracker::new);
         ProgressionTrackerRegistry.registerSerializer(NPCTalkTracker.KEY, NPCTalkTracker::new);
@@ -60,45 +60,38 @@ public class QuestHandler {
         return ((QuestDataGet) player).runecraftory$getQuestData();
     }
 
-    public static void openGui(ServerPlayer player) {
-        Map<ResourceLocation, QuestBase> quest = getQuestsFor(player);
+    public static void openGui(ServerPlayer player, Vec3 at) {
+        Map<ResourceLocation, QuestBase> quest = getQuestsFor(player, at);
         QuestData data = getData(player);
-        Platform.INSTANCE.sendToClient(new S2COpenQuestGui(data.getCurrentQuest().stream().anyMatch(p -> p.getQuest() instanceof QuestBoardQuest), quest.entrySet().stream().sorted(Map.Entry.comparingByKey())
-                .map(e -> {
-                    List<MutableComponent> description = e.getValue().getDescription(player);
-                    EntityNPCBase npc;
-                    if (e.getValue() instanceof NPCQuest npcQuest && (npc = npcQuest.getNpc(player.level)) != null) {
-                        description = Stream.concat(Stream.of(new TranslatableComponent("runecraftory.quest.npc.header", npc.getName(), npc.blockPosition().getX(),
-                                        npc.blockPosition().getY(), npc.blockPosition().getZ()).withStyle(ChatFormatting.GOLD),
-                                (MutableComponent) TextComponent.EMPTY), description.stream()).toList();
-                        return new ClientSideQuestDisplay(e.getKey(), e.getValue().getName(player), description,
-                                npc.lookFeatures, npc.getLook().playerSkin(), data.isActive(e.getKey()));
-                    }
-                    return new ClientSideQuestDisplay(e.getKey(), e.getValue().getName(player), description,
-                            null, null, data.isActive(e.getKey()));
-                }).toList()), player);
+        Platform.INSTANCE.sendToClient(new S2COpenQuestGui(false, quest.entrySet().stream().sorted(Map.Entry.comparingByKey()).map(e -> {
+            List<MutableComponent> description = e.getValue().getDescription(player);
+            EntityNPCBase npc;
+            if (e.getValue() instanceof NPCQuest npcQuest && (npc = npcQuest.getNpc(player.level)) != null) {
+                description = Stream.concat(Stream.of(new TranslatableComponent("runecraftory.quest.npc.header", npc.getName(), npc.blockPosition().getX(),
+                                npc.blockPosition().getY(), npc.blockPosition().getZ()).withStyle(ChatFormatting.GOLD),
+                        (MutableComponent) TextComponent.EMPTY), description.stream()).toList();
+                return new ClientSideQuestDisplay(e.getKey(), e.getValue().getName(player), description,
+                        npc.lookFeatures, npc.getLook().playerSkin(), data.isActive(e.getKey()));
+            }
+            return new ClientSideQuestDisplay(e.getKey(), e.getValue().getName(player), description,
+                    null, null, data.isActive(e.getKey()));
+        }).toList()), player);
         data.setQuestboardQuests(quest);
     }
 
     public static void acceptQuestRandom(ServerPlayer player, EntityNPCBase npc, ResourceLocation res) {
-        QuestData data = getData(player);
-        QuestBase quest = QuestsManager.instance().getQuest(res);
-        if (quest != null && questForExists(player, npc) == null) {
-            if (data.acceptQuest(NPCQuest.of(NPCQuest.withUuid(quest.id, npc.getUUID()), npc, quest))) {
-                npc.updater.acceptRandomQuest(player);
-            }
-        }
+        // TODO
     }
 
-    public static Map<ResourceLocation, QuestBase> getQuestsFor(ServerPlayer player) {
+    public static Map<ResourceLocation, QuestBase> getQuestsFor(ServerPlayer player, Vec3 at) {
         QuestData data = getData(player);
         return Stream.concat(QuestsManager.instance().getQuestsForCategory(QUEST_CATEGORY, QUEST_CONTEXT)
                                 .entrySet().stream()
                                 .flatMap(e -> {
                                     if (e.getValue() instanceof NPCQuest npcQuest) {
-                                        return NPCQuest.of(npcQuest, player).stream();
+                                        return NPCQuest.resolve(npcQuest, player, at).stream();
                                     }
-                                    return Stream.of(new QuestBoardQuest(e.getValue()));
+                                    return Stream.of();
                                 })
                                 .filter(q -> data.canAcceptQuest(q, true) == QuestData.AcceptType.ACCEPT)
                         , data.getCurrentQuest().stream().map(QuestProgress::getQuest).filter(quest -> quest.category.id.equals(QUEST_CATEGORY)))
