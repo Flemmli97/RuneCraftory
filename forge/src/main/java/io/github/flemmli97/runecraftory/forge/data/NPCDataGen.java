@@ -90,35 +90,35 @@ public class NPCDataGen extends NPCDataProvider {
                         .add(ModItems.SCRAP.get(), ModItems.SCRAP_PLUS.get()));
 
         ResourceLocation mineralGift = this.addGiftData(new ResourceLocation(RuneCraftory.MODID, "minerals"),
-                GiftData.builder(RunecraftoryTags.MINERALS, "runecraftory.gift.minerals", "Minerals").max(7));
+                GiftData.builder(RunecraftoryTags.MINERALS, "runecraftory.gift.minerals", "minerals").max(7));
         ResourceLocation flowers = this.addGiftData(new ResourceLocation(RuneCraftory.MODID, "flowers"),
-                GiftData.builder(RunecraftoryTags.FLOWERS, "runecraftory.gift.flowers", "Flowers").max(7));
+                GiftData.builder(RunecraftoryTags.FLOWERS, "runecraftory.gift.flowers", "flowers").max(7));
         ResourceLocation fruits = this.addGiftData(new ResourceLocation(RuneCraftory.MODID, "fruits"),
-                GiftData.builder(RunecraftoryTags.FRUITS, "runecraftory.gift.fruits", "Fruits").max(7));
+                GiftData.builder(RunecraftoryTags.FRUITS, "runecraftory.gift.fruits", "fruits").max(7));
         ResourceLocation veggies = this.addGiftData(new ResourceLocation(RuneCraftory.MODID, "vegetables"),
-                GiftData.builder(RunecraftoryTags.VEGGIES, "runecraftory.gift.vegetables", "Vegetables").max(7));
+                GiftData.builder(RunecraftoryTags.VEGGIES, "runecraftory.gift.vegetables", "vegetables").max(7));
         ResourceLocation turnip = this.addGiftData(new ResourceLocation(RuneCraftory.MODID, "turnip"),
-                GiftData.builder(RunecraftoryTags.TURNIP, "runecraftory.gift.turnip", "Turnip").max(7));
+                GiftData.builder(RunecraftoryTags.TURNIP, "runecraftory.gift.turnip", "turnip").max(7));
         ResourceLocation metals = this.addGiftData(new ResourceLocation(RuneCraftory.MODID, "ingots"),
-                GiftData.builder(RunecraftoryTags.IRON, "runecraftory.gift.ingots", "Metals")
+                GiftData.builder(RunecraftoryTags.IRON, "runecraftory.gift.ingots", "metals")
                         .add(RunecraftoryTags.GOLD).add(RunecraftoryTags.TIN).add(RunecraftoryTags.COPPER)
                         .add(RunecraftoryTags.BRONZE).add(RunecraftoryTags.SILVER).add(RunecraftoryTags.PLATINUM).max(7));
         ResourceLocation gems = this.addGiftData(new ResourceLocation(RuneCraftory.MODID, "gems"),
-                GiftData.builder(Items.DIAMOND, "runecraftory.gift.gems", "Gems")
+                GiftData.builder(Items.DIAMOND, "runecraftory.gift.gems", "gems")
                         .add(RunecraftoryTags.EMERALDS).add(RunecraftoryTags.AMETHYSTS).add(RunecraftoryTags.AQUAMARINES)
                         .add(RunecraftoryTags.RUBIES).add(RunecraftoryTags.SAPPHIRES).max(7));
         ResourceLocation onigiri = this.addGiftData(new ResourceLocation(RuneCraftory.MODID, "onigiri"),
-                GiftData.builder(RunecraftoryTags.ONIGIRI, "runecraftory.gift.onigiri", "Onigiri").selectable());
+                GiftData.builder(RunecraftoryTags.ONIGIRI, "runecraftory.gift.onigiri", "onigiri").selectable());
         ResourceLocation pie = this.addGiftData(new ResourceLocation(RuneCraftory.MODID, "pie"),
-                GiftData.builder(RunecraftoryTags.PIE, "runecraftory.gift.pie", "Cake and Pies").selectable());
+                GiftData.builder(RunecraftoryTags.PIE, "runecraftory.gift.pie", "cake and pies").selectable());
         ResourceLocation juice = this.addGiftData(new ResourceLocation(RuneCraftory.MODID, "juice"),
-                GiftData.builder(RunecraftoryTags.JUICE, "runecraftory.gift.juice", "Juice").selectable());
+                GiftData.builder(RunecraftoryTags.JUICE, "runecraftory.gift.juice", "juice").selectable());
         ResourceLocation toast = this.addGiftData(new ResourceLocation(RuneCraftory.MODID, "toast"),
-                GiftData.builder(RunecraftoryTags.TOAST, "runecraftory.gift.toast", "Toasts").selectable());
+                GiftData.builder(RunecraftoryTags.TOAST, "runecraftory.gift.toast", "toasts").selectable());
         ResourceLocation udon = this.addGiftData(new ResourceLocation(RuneCraftory.MODID, "udon"),
-                GiftData.builder(RunecraftoryTags.UDON, "runecraftory.gift.udon", "Udon").selectable());
+                GiftData.builder(RunecraftoryTags.UDON, "runecraftory.gift.udon", "udon").selectable());
         ResourceLocation jam = this.addGiftData(new ResourceLocation(RuneCraftory.MODID, "jam"),
-                GiftData.builder(RunecraftoryTags.JAM, "runecraftory.gift.jam", "Jam").selectable());
+                GiftData.builder(RunecraftoryTags.JAM, "runecraftory.gift.jam", "jam").selectable());
 
         this.addLook(new ResourceLocation(RuneCraftory.MODID, "generic/male_1"), new NPCLook(NPCData.Gender.MALE,
                 null, 50, defaultNPCFeatures(false, m -> m.put(ModNPCLooks.OUTFIT.get(), new OutfitFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("generic", new IndexRange.FirstNIndices(3)), 1))))))));
@@ -370,7 +370,7 @@ public class NPCDataGen extends NPCDataProvider {
                         .withProfession(ModNPCJobs.GENERAL.getSecond(), ModNPCJobs.SMITH.getSecond())
                         .addGiftResponse("dislike", new NPCData.Gift(smithTrashGift, "npc.smith.2.dislike", -7), "Hey! I'm not your trashcan!")
                         .addGiftResponse("like", new NPCData.Gift(mineralGift, "npc.smith.2.like", 10), "Wow thanks! I can make something great using this")
-                        .setNeutralGiftResponse("npc.smith.2.gift.default", "Thanks. Did you know ores are one of my favorite things?")
+                        .setNeutralGiftResponse("npc.smith.2.gift.default", "Thanks. Btw did you know that I really like %like%?")
                         .withCombatActions(meleeAndFireball),
                 of(m -> {
                     m.put(ConversationContext.FIRST_TALK, new ConversationSet.Builder()

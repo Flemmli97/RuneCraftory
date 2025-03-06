@@ -26,5 +26,5 @@
   "npc.smith.quest.mining.end": "Nice! Mining ores increases your mining level. With higher level you can get better ores from minerals. Here take this hammer, it should make mining minerals a bit easier.",
   "npc.smith.2.dislike": "Hey! I'm not your trashcan!",
   "npc.smith.2.like": "Wow thanks! I can make something great using this",
-  "npc.smith.2.gift.default": "Thanks. Did you know ores are one of my favorite things?"
+  "npc.smith.2.gift.default": "Thanks. Btw did you know that I really like %like%?"
 }

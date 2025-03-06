@@ -1,8 +1,10 @@
 package io.github.flemmli97.runecraftory.common.entities.npc;
 
 import io.github.flemmli97.runecraftory.client.NPCDialogueLanguageManager;
+import net.minecraft.ChatFormatting;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.ArrayList;
@@ -42,6 +44,8 @@ public class PlaceHolderComponent {
                 Component replacement = replacements.get(pattern);
                 if (replacement != null) {
                     translation = translation.replace(pattern, "%" + (args.size() + 1) + "$s");
+                    if (replacement instanceof MutableComponent mut)
+                        mut.withStyle(ChatFormatting.AQUA);
                     args.add(replacement);
                 }
             }
