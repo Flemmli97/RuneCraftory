@@ -23,40 +23,39 @@ public class StardustUpperAttack extends AttackAction {
 
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
-        if (anim.isAtTick(0.12)) {
+        if (anim.isAt("attack_start_1")) {
             handler.setSpinStartRot(entity.getYRot() - 110);
-        }
-        if (anim.isAtTick(0.28))
             entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_HEAVY.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1f);
-        if (anim.isAtTick(0.24) || anim.isAtTick(0.88)) {
             Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-            handler.setMoveTargetDir(dir.scale(0.8), anim, anim.getTick() + 1);
+            entity.setDeltaMovement(dir.scale(0.6));
         }
-        if (anim.isAtTick(0.84)) {
+        if (anim.isAt("attack_start_2")) {
             handler.resetHitEntityTracker();
-        }
-        if (anim.isAtTick(0.92))
             entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_HEAVY.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1f);
-
-        CombatUtils.EntityAttack attack = spinAttack(entity, anim, 0.16, 0.88,
-                handler.getSpinStartRot(), handler.getSpinStartRot() + 410, 0);
-        if (attack != null) {
-            handler.addHitEntityTracker(attack
-                    .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
-                    .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
-                    .executeAttack());
+            Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
+            entity.setDeltaMovement(dir.scale(0.6));
         }
-        CombatUtils.EntityAttack attack2 = spinAttack(entity, anim, 0.88, 1.48,
-                handler.getSpinStartRot() + 410, handler.getSpinStartRot() + 680, p -> Mth.sin(p * Mth.PI) * 50, 0);
-        if (attack2 != null) {
-            handler.addHitEntityTracker(attack2
-                    .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
-                    .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
-                    .doOnSuccess(target -> {
-                        CombatUtils.knockBackEntity(entity, target, 0.4f);
-                        target.setDeltaMovement(target.getDeltaMovement().add(0, 0.3, 0));
-                    })
-                    .executeAttack());
+        if (!entity.level.isClientSide) {
+            CombatUtils.EntityAttack attack = spinAttack(entity, anim, anim.getMarker("attack_start_1", 0), anim.getMarker("attack_end_1", 0),
+                    handler.getSpinStartRot(), handler.getSpinStartRot() + 410, 0);
+            if (attack != null) {
+                handler.addHitEntityTracker(attack
+                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
+                        .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
+                        .executeAttack());
+            }
+            CombatUtils.EntityAttack attack2 = spinAttack(entity, anim, anim.getMarker("attack_start_2", 0), anim.getMarker("attack_end_2", 0),
+                    handler.getSpinStartRot() + 410, handler.getSpinStartRot() + 680, p -> Mth.sin(p * Mth.PI) * 50, 0);
+            if (attack2 != null) {
+                handler.addHitEntityTracker(attack2
+                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
+                        .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
+                        .doOnSuccess(target -> {
+                            CombatUtils.knockBackEntity(entity, target, 0.4f);
+                            target.setDeltaMovement(target.getDeltaMovement().add(0, 0.3, 0));
+                        })
+                        .executeAttack());
+            }
         }
     }
 }

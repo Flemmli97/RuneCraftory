@@ -38,10 +38,10 @@ public class EntitySpider extends BaseMonster {
 
     private static final EntityDataAccessor<Boolean> CLIMBING_SYNC = SynchedEntityData.defineId(EntitySpider.class, EntityDataSerializers.BOOLEAN);
 
-    public static final AnimatedAction MELEE = new AnimatedAction(13, 9, "attack");
-    public static final AnimatedAction WEBSHOT = new AnimatedAction(14, 6, "webshot");
+    public static final AnimatedAction MELEE = AnimatedAction.builder(0.6, "attack").marker("attack", 0.48).build();
+    public static final AnimatedAction WEBSHOT = AnimatedAction.builder(0.68, "webshot").marker("attack", 0.36).build();
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
-    public static final AnimatedAction STILL = AnimatedAction.builder(1, "still").infinite().build();
+    public static final AnimatedAction STILL = AnimatedAction.builder(0, "still").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, WEBSHOT, INTERACT, STILL};
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntitySpider>>> ATTACKS = List.of(
@@ -155,7 +155,7 @@ public class EntitySpider extends BaseMonster {
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(WEBSHOT)) {
             this.getNavigation().stop();
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 if (this.getTarget() != null && this.getSensing().hasLineOfSight(this.getTarget()) || this.getFirstPassenger() instanceof Player) {
                     ModSpells.WEB_SHOT.get().use(this);
                 }

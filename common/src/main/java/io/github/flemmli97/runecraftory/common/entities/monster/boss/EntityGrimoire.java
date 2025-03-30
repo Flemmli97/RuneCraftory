@@ -52,44 +52,45 @@ public class EntityGrimoire extends BossMonster {
 
     private static final List<Vector3f> CIRCLE_PARTICLE_MOTION = RayTraceUtils.rotatedVecs(new Vec3(0.25, 0, 0), new Vec3(0, 1, 0), -180, 175, 5);
 
-    public static final AnimatedAction TAIL_SWIPE = new AnimatedAction(0.84, 0.48, "tail_swipe");
-    public static final AnimatedAction BITE = new AnimatedAction(0.8, 0.44, "bite");
-    public static final AnimatedAction GUST = new AnimatedAction(1.96, 0.32, "gust");
-    public static final AnimatedAction CHARGE = AnimatedAction.builder((int) Math.ceil(2.08 * 20), "charge").infinite().marker((int) Math.ceil(0.16 * 20)).build();
-    public static final AnimatedAction CHARGE_LAND = new AnimatedAction(0.48, 0.16, "charge_land");
-    public static final AnimatedAction WIND_BREATH = new AnimatedAction(1.36, 0.44, "wind_breath");
-    public static final AnimatedAction TORNADO = new AnimatedAction(1.24, 0.4, "tornado");
-    public static final AnimatedAction DEFEAT = AnimatedAction.builder(150, "defeat").marker(150).infinite().build();
-    public static final AnimatedAction ANGRY = new AnimatedAction(1.44, 0, "angry");
-    public static final AnimatedAction SLEEP = new AnimatedAction(0.2, 0, "sleep");
+    public static final AnimatedAction TAIL_SWIPE = AnimatedAction.builder(0.84, "tail_swipe").marker("attack", 0.48).build();
+    public static final AnimatedAction BITE = AnimatedAction.builder(0.8, "bite").marker("attack", 0.44).build();
+    public static final AnimatedAction GUST = AnimatedAction.builder(1.96, "gust").marker("attack", 0.32).build();
+    public static final AnimatedAction CHARGE = AnimatedAction.builder(1.72, "charge").infinite()
+            .marker("charge_start", 0.16).marker("charge_end", 1.6).build();
+    public static final AnimatedAction CHARGE_LAND = AnimatedAction.builder(0.48, "charge_land").marker("attack", 0.16).build();
+    public static final AnimatedAction WIND_BREATH = AnimatedAction.builder(1.36, "wind_breath").marker("attack", 0.44).build();
+    public static final AnimatedAction TORNADO = AnimatedAction.builder(1.24, "tornado").marker("attack", 0.4).build();
+    public static final AnimatedAction DEFEAT = AnimatedAction.builder(10, "defeat").infinite().build();
+    public static final AnimatedAction ANGRY = new AnimatedAction(1.44, "angry");
+    public static final AnimatedAction SLEEP = new AnimatedAction(0, "sleep");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(TAIL_SWIPE, "interact");
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{TAIL_SWIPE, BITE, GUST, CHARGE, CHARGE_LAND, WIND_BREATH, TORNADO, DEFEAT, ANGRY, INTERACT};
 
     private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntityGrimoire>> ATTACK_HANDLER = createAnimationHandler(b -> {
         BiConsumer<AnimatedAction, EntityGrimoire> melee = (anim, entity) -> {
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 entity.mobAttack(anim, entity.getTarget(), entity::doHurtTarget);
             }
         };
         b.put(TAIL_SWIPE, melee);
         b.put(BITE, melee);
         b.put(GUST, (anim, entity) -> {
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 ModSpells.GUST_ROCKS.get().use(entity);
             }
         });
         b.put(WIND_BREATH, (anim, entity) -> {
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 ModSpells.WIND_BLADE_BARRAGE.get().use(entity);
             }
         });
         b.put(TORNADO, (anim, entity) -> {
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 ModSpells.TORNADO.get().use(entity);
             }
         });
         b.put(CHARGE, (anim, entity) -> {
-            if (anim.isPastTick(0.16) && !anim.isPastTick(1.6)) {
+            if (anim.isPast("charge_start") && !anim.isPast("charge_end")) {
                 if (entity.hitEntity == null) {
                     entity.hitEntity = new ArrayList<>();
                 }
@@ -105,7 +106,7 @@ public class EntityGrimoire extends BossMonster {
                     }
                 });
             }
-            if (anim.isPastTick(1.76)) {
+            if (anim.isPast("charge_end")) {
                 entity.setDeltaMovement(entity.getDeltaMovement().add(0, -0.06, 0));
                 if (entity.getDeltaMovement().y < -0.72) {
                     entity.setDeltaMovement(entity.getDeltaMovement().x, -0.72, entity.getDeltaMovement().z);
@@ -114,13 +115,13 @@ public class EntityGrimoire extends BossMonster {
                     entity.getAnimationHandler().setAnimation(CHARGE_LAND);
                 }
                 // Stuck check. Or e.g. if in water
-                if (anim.isPastTick(6.0) && (!entity.getFeetBlockState().is(Blocks.AIR) || !entity.getBlockStateOn().is(Blocks.AIR))) {
+                if (anim.isPast(6) && (!entity.getFeetBlockState().is(Blocks.AIR) || !entity.getBlockStateOn().is(Blocks.AIR))) {
                     entity.getAnimationHandler().setAnimation(CHARGE_LAND);
                 }
             }
         });
         b.put(CHARGE_LAND, (anim, entity) -> {
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 CustomDamage.Builder source = new CustomDamage.Builder(entity).noKnockback().element(EnumElement.WIND).hurtResistant(5);
                 entity.mobAttack(anim, entity.getTarget(), e -> CombatUtils.mobAttack(entity, e, source));
                 S2CScreenShake.sendAround(entity, 24, 4, 3);
@@ -149,7 +150,7 @@ public class EntityGrimoire extends BossMonster {
     );
 
     public final AnimatedAttackGoal<EntityGrimoire> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
-    private final AnimationHandler<EntityGrimoire> animationHandler = new AnimationHandler<>(this, ANIMS).setAnimationChangeFunc(anim -> {
+    private final AnimationHandler<EntityGrimoire> animationHandler = new AnimationHandler<>(this, ANIMS).withChangeListener(anim -> {
         if (CHARGE.is(anim)) {
             this.hitEntity = null;
         }

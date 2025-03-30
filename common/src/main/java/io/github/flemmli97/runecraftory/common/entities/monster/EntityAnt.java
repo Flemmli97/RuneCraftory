@@ -23,7 +23,7 @@ import java.util.List;
 
 public class EntityAnt extends BaseMonster {
 
-    public static final AnimatedAction MELEE = new AnimatedAction(23, 12, "attack");
+    public static final AnimatedAction MELEE = AnimatedAction.builder(1.16, "attack").marker("attack", 0.6).build();
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, INTERACT};
 

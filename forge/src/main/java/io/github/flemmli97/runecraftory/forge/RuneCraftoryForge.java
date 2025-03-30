@@ -57,9 +57,7 @@ import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.fml.loading.FMLPaths;
 
-import java.nio.file.Path;
 import java.util.Map;
 
 @Mod(value = RuneCraftoryForge.MODID)
@@ -70,7 +68,6 @@ public class RuneCraftoryForge {
     public RuneCraftoryForge() {
         RuneCraftory.iris = ModList.get().isLoaded("oculus");
 
-        Path confDir = FMLPaths.CONFIGDIR.get().resolve(MODID);
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
         modBus.addListener(this::common);
         modBus.addListener(this::conf);

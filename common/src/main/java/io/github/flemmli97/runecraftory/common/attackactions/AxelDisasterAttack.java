@@ -23,29 +23,33 @@ public class AxelDisasterAttack extends AttackAction {
 
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
-        if (anim.isAtTick(0.24)) {
+        if (anim.isAt("move_1")) {
             Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-            handler.setMoveTargetDir(dir.scale(0.5).add(0, 0.75, 0), anim, 0.36);
-        }
-        if (anim.isAtTick(0.28)) {
+            handler.setMoveDirection(dir.scale(0.5).add(0, 0.5, 0));
             entity.playSound(ModSounds.SPELL_GENERIC_LEAP.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.2f);
         }
-        if (anim.isAtTick(0.36)) {
+        if (anim.isAt("move_2")) {
             Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-            handler.setMoveTargetDir(dir.scale(9), anim, 0.8);
+            handler.setMoveDirection(dir.scale(0.5));
         }
-        if (anim.isAtTick(0.8)) {
+        if (anim.isAt("move_3")) {
             Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-            handler.setMoveTargetDir(dir.scale(0.5).add(0, -0.75, 0), anim, 0.96);
+            handler.setMoveDirection(dir.scale(0.5).add(0, -0.5, 0));
         }
-        if (!entity.level.isClientSide && anim.isPastTick(0.28) && !anim.isPastTick(0.88)) {
-            if (anim.getTickRaw() % (8 * anim.getSpeed()) == 0)
-                handler.resetHitEntityTracker();
-            handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox()
-                            .inflate(0.75).expandTowards(0, 0, 0.5)))
-                    .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
-                    .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
-                    .executeAttack());
+        if (anim.isAt("move_done")) {
+            handler.setMoveDirection(null);
+        }
+        handler.applyMoveDirection();
+        if (anim.isPast("attack_start") && !anim.isPast("attack_end")) {
+            if (!entity.level.isClientSide) {
+                if (anim.isAt("reset"))
+                    handler.resetHitEntityTracker();
+                handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox()
+                                .inflate(0.75).expandTowards(0, 0, 0.5)))
+                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
+                        .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
+                        .executeAttack());
+            }
         }
     }
 
@@ -56,6 +60,8 @@ public class AxelDisasterAttack extends AttackAction {
 
     @Override
     public Pose getPose(LivingEntity entity, WeaponHandler handler) {
-        return Pose.SPIN_ATTACK;
+        if (handler.getAnimation().isPast("move_1") && !handler.getAnimation().isPast("move_done"))
+            return Pose.SPIN_ATTACK;
+        return null;
     }
 }

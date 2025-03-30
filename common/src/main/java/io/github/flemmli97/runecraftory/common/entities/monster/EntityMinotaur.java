@@ -19,7 +19,6 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAr
 import io.github.flemmli97.tenshilib.common.utils.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.Mth;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -33,11 +32,13 @@ import java.util.function.Consumer;
 
 public class EntityMinotaur extends ChargingMonster {
 
-    public static final AnimatedAction SWING = new AnimatedAction(1.08, 0.72, "swing");
-    public static final AnimatedAction SPIN = new AnimatedAction(1.48, 0.24, "spin");
-    public static final AnimatedAction CHARGE = new AnimatedAction(2.64, 0.64, "charge");
+    public static final AnimatedAction SWING = AnimatedAction.builder(1.08, "swing").marker("attack", 0.72).build();
+    public static final AnimatedAction SPIN = AnimatedAction.builder(1.48, "spin")
+            .marker("attack_start", 0.24).marker("attack_end", 1.28).marker("reset", 0.84).build();
+    public static final AnimatedAction CHARGE = AnimatedAction.builder(2.64, "charge")
+            .marker("attack_start", 0.64).marker("attack_end", 2.2).build();
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(SWING, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(0, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{SWING, SPIN, CHARGE, INTERACT, SLEEP};
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityMinotaur>>> ATTACKS = List.of(
@@ -106,22 +107,22 @@ public class EntityMinotaur extends ChargingMonster {
                         .scale(0.1);
                 this.spinAngle = this.getYRot() + 90;
             }
-            if (anim.isPastTick(0.24) && !anim.isPastTick(1.28)) {
+            if (anim.isPast("attack_start") && !anim.isPast("attack_end")) {
                 this.setDeltaMovement(this.spinDirection.x(), this.getDeltaMovement().y, this.spinDirection.z());
-                int start = Mth.ceil(0.24 * 20.0D);
-                int end = Mth.ceil(1.28 * 20.0D);
-                float len = (end - start) / anim.getSpeed();
-                float f = (anim.getTick() - start) / anim.getSpeed();
-                float angleInc = -490 / len;
-                if (anim.isAtTick(0.84))
+                float start = (float) (anim.getMarker("attack_start", 0) * 20);
+                float end = (float) (anim.getMarker("attack_end", 0) * 20);
+                float f = anim.progress(start, end, 1, 0);
+                float fNext = anim.progress(start, end, 1, 1);
+                float angleInc = -490;
+                if (anim.isAt("reset"))
                     this.hitEntity.clear();
                 this.hitEntity.addAll(CombatUtils.EntityAttack.create(this,
-                                CombatUtils.EntityAttack.circleTargetsFixedRange((this.spinAngle + f * angleInc), (this.spinAngle + (f + 1) * angleInc), 4.5f))
+                                CombatUtils.EntityAttack.circleTargetsFixedRange(this.spinAngle + f * angleInc, this.spinAngle + fNext * angleInc, 4.5f))
                         .withTargetPredicate(e -> this.hitPred.test(e) && !this.hitEntity.contains(e))
                         .executeAttack());
             }
         } else {
-            if (anim.is(SWING) && anim.canAttack()) {
+            if (anim.is(SWING) && anim.isAt("attack")) {
                 S2CScreenShake.sendAround(this, 16, 5, 3);
                 this.level.playSound(null, this.blockPosition(), SoundEvents.GENERIC_EXPLODE, this.getSoundSource(), 1.0f, 0.9f);
             }
@@ -146,8 +147,6 @@ public class EntityMinotaur extends ChargingMonster {
 
     @Override
     public boolean handleChargeMovement(AnimatedAction anim) {
-        if (anim.isPastTick(2.2))
-            return false;
         boolean res = super.handleChargeMovement(anim);
         if (res) {
             if (this.tickCount % 7 == 0)

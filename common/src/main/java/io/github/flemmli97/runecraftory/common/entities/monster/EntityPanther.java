@@ -28,10 +28,12 @@ import java.util.List;
 
 public class EntityPanther extends LeapingMonster {
 
-    private static final AnimatedAction MELEE = new AnimatedAction(16, 9, "attack");
-    private static final AnimatedAction LEAP = new AnimatedAction(23, 5, "leap");
+    private static final AnimatedAction MELEE = AnimatedAction.builder(0.76, "attack").marker("attack", 0.32, 0.6).build();
+    private static final AnimatedAction LEAP = AnimatedAction.builder(1.12, "leap")
+            .marker("attack_start", 0.2).marker("attack_end", 1)
+            .marker("attack", 0.48).build();
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(0, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, LEAP, INTERACT, SLEEP};
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityPanther>>> ATTACKS = List.of(
@@ -76,11 +78,11 @@ public class EntityPanther extends LeapingMonster {
     @Override
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(LEAP)) {
-            if (anim.canAttack()) {
-                Vec3 vec32 = this.getLeapVec(this.getTarget() == null ? this.getTargetPosition().asVec(this.position()) : this.getTarget().position());
+            if (anim.isPast("attack_start")) {
+                Vec3 vec32 = this.getLeapVec(this.tryGetTargetPosition(this.getTarget()));
                 this.setDeltaMovement(vec32.x, 0.25f, vec32.z);
             }
-            if (anim.getTick() > anim.getAttackTime()) {
+            if (anim.isPast("attack_start") && !anim.isPast("attack_end")) {
                 if (this.hitEntity == null)
                     this.hitEntity = new ArrayList<>();
                 this.mobAttack(anim, null, e -> {

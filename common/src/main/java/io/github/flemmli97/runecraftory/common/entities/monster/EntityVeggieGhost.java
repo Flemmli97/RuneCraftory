@@ -42,12 +42,12 @@ import java.util.List;
 
 public class EntityVeggieGhost extends BaseMonster {
 
-    public static final AnimatedAction ATTACK = new AnimatedAction(23, 12, "head_attack");
-    public static final AnimatedAction CAST = new AnimatedAction(14, 7, "cast");
-    public static final AnimatedAction SPIN = new AnimatedAction(14, 6, "spin");
-    public static final AnimatedAction VANISH = new AnimatedAction(100, 50, "vanish");
+    public static final AnimatedAction ATTACK = AnimatedAction.builder(1.16, "head_attack").marker("attack", 0.68).build();
+    public static final AnimatedAction CAST = AnimatedAction.builder(0.68, "cast").marker("attack", 0.36).build();
+    public static final AnimatedAction SPIN = AnimatedAction.builder(0.68, "spin").marker("attack", 0.36).build();
+    public static final AnimatedAction VANISH = AnimatedAction.builder(5, "vanish").marker("attack", 2.5).build();
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(CAST, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(0, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{ATTACK, CAST, SPIN, VANISH, INTERACT, SLEEP};
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityVeggieGhost>>> ATTACKS = List.of(
@@ -64,9 +64,10 @@ public class EntityVeggieGhost extends BaseMonster {
     );
 
     public final AnimatedAttackGoal<EntityVeggieGhost> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
-    private final AnimationHandler<EntityVeggieGhost> animationHandler = new AnimationHandler<>(this, ANIMS).setAnimationChangeCons(anim -> {
+    private final AnimationHandler<EntityVeggieGhost> animationHandler = new AnimationHandler<>(this, ANIMS).withChangeListener(anim -> {
         if (anim != null && anim.is(VANISH))
             this.vanishNext = this.getRandom().nextFloat() < 0.6;
+        return false;
     });
 
     private boolean vanishNext;
@@ -134,12 +135,12 @@ public class EntityVeggieGhost extends BaseMonster {
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(CAST)) {
             this.getNavigation().stop();
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 ModSpells.TRIPLE_FIRE_BALL.get().use(this);
             }
         } else if (anim.is(VANISH)) {
             this.getNavigation().stop();
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 LivingEntity target = this.getTarget();
                 if (target == null) {
                     double rX = this.getX() + (this.random.nextDouble() - 0.5) * 16;

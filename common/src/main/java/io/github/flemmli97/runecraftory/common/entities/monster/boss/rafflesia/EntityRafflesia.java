@@ -53,18 +53,18 @@ public class EntityRafflesia extends BossMonster {
     private static final EntityDataAccessor<Optional<UUID>> PITCHER = SynchedEntityData.defineId(EntityRafflesia.class, EntityDataSerializers.OPTIONAL_UUID);
     private static final EntityDataAccessor<Direction> SPAWN_DIRECTION = SynchedEntityData.defineId(EntityRafflesia.class, EntityDataSerializers.DIRECTION);
 
-    public static final AnimatedAction POISON_BREATH = new AnimatedAction(1.96, 0.56, "breath");
+    public static final AnimatedAction POISON_BREATH = AnimatedAction.builder(1.96, "breath").marker("attack", 0.56).build();
     public static final AnimatedAction POISON_BREATH_REV = AnimatedAction.copyOf(POISON_BREATH, "breath_2");
     public static final AnimatedAction PARA_BREATH = AnimatedAction.copyOf(POISON_BREATH, "paralysis_breath");
     public static final AnimatedAction PARA_BREATH_REV = AnimatedAction.copyOf(POISON_BREATH, "paralysis_breath_2");
     public static final AnimatedAction SLEEP_BREATH = AnimatedAction.copyOf(POISON_BREATH, "sleep_breath");
     public static final AnimatedAction SLEEP_BREATH_REV = AnimatedAction.copyOf(POISON_BREATH, "sleep_breath_2");
-    public static final AnimatedAction WIND_BLADE_X8 = new AnimatedAction(0.88, 0.44, "casting");
+    public static final AnimatedAction WIND_BLADE_X8 = AnimatedAction.builder(0.88, "casting").marker("attack", 0.44).build();
     public static final AnimatedAction WIND_BLADE_X16 = AnimatedAction.copyOf(WIND_BLADE_X8, "wind_blade_x16");
     public static final AnimatedAction RESUMMON = AnimatedAction.copyOf(WIND_BLADE_X8, "resummon");
     public static final AnimatedAction STATUS_CIRCLE = AnimatedAction.copyOf(WIND_BLADE_X8, "status_circle");
 
-    public static final AnimatedAction DEATH = AnimatedAction.builder(120, "death").infinite().build();
+    public static final AnimatedAction DEATH = AnimatedAction.builder(10, "death").infinite().build();
     public static final AnimatedAction ANGRY = AnimatedAction.copyOf(WIND_BLADE_X8, "roar");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(POISON_BREATH, "interact");
 
@@ -72,7 +72,7 @@ public class EntityRafflesia extends BossMonster {
             WIND_BLADE_X8, WIND_BLADE_X16, RESUMMON, STATUS_CIRCLE, DEATH, ANGRY, INTERACT};
     private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntityRafflesia>> ATTACK_HANDLER = createAnimationHandler(b -> {
         BiConsumer<AnimatedAction, EntityRafflesia> cons = (anim, entity) -> {
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 entity.useAttack(anim);
             }
         };
@@ -132,10 +132,11 @@ public class EntityRafflesia extends BossMonster {
     private boolean mirrorAttack;
 
     private final AnimationHandler<EntityRafflesia> animationHandler = new AnimationHandler<>(this, ANIMS)
-            .setAnimationChangeCons(anim -> {
+            .withChangeListener(anim -> {
                 if (!this.level.isClientSide) {
                     this.mirrorAttack = isMirrorAttack(anim);
                 }
+                return false;
             });
 
     private EntityRafflesiaPart horseTailEntity;
@@ -272,13 +273,11 @@ public class EntityRafflesia extends BossMonster {
 
     @Override
     public void setupAttack(AnimatedAction anim) {
-        if (anim.getTick() == 1) {
-            LivingEntity target = this.getTarget();
-            if (target != null) {
-                this.setTargetPosition(target);
-            } else {
-                this.setTargetPosition(TargetPosition.of(this.position().add(this.getLookAngle().scale(5))));
-            }
+        LivingEntity target = this.getTarget();
+        if (target != null) {
+            this.setTargetPosition(target);
+        } else {
+            this.setTargetPosition(TargetPosition.of(this.position().add(this.getLookAngle().scale(5))));
         }
     }
 

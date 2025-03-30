@@ -16,7 +16,7 @@ import net.minecraft.world.phys.Vec3;
 public class WindSlashAttack extends AttackAction {
 
     private final ComboContainer combo = ComboContainer.Builder.builder()
-            .addCombo(handler -> handler.getCurrentAnim().isPastTick(1.08) && !handler.getCurrentAnim().isPastTick(1.20))
+            .addCombo(handler -> handler.getAnimation().isPast("chain_start") && !handler.getAnimation().isPast("spin_end"))
             .build();
 
     @Override
@@ -28,51 +28,36 @@ public class WindSlashAttack extends AttackAction {
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
         handler.lockLook(true);
-        if (handler.getComboCount() == 1) {
-            if (anim.isAtTick(0.12)) {
-                handler.setSpinStartRot(entity.getYRot());
-                handler.resetHitEntityTracker();
-                entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
-                        SoundEvents.ENDER_DRAGON_FLAP, entity.getSoundSource(), 1, 0.7f);
-            }
-            if (anim.isAtTick(0.64)) {
-                entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
-                        SoundEvents.ENDER_DRAGON_FLAP, entity.getSoundSource(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.7f);
-                handler.resetHitEntityTracker();
-            }
-            if (anim.isAtTick(0.12)) {
-                Vec3 dir = CombatUtils.fromRelativeVector(handler.getSpinStartRot(), new Vec3(0, 0, 1));
-                handler.setMoveTargetDir(dir.scale(1).add(0, 0.9, 0), anim, 0.32);
-            }
-            if (anim.isAtTick(0.32)) {
-                Vec3 dir = CombatUtils.fromRelativeVector(handler.getSpinStartRot(), new Vec3(0, 0, 1));
-                handler.setMoveTargetDir(dir.scale(5), anim, 1.12);
-            }
-            if (anim.isAtTick(1.20)) {
-                Vec3 dir = CombatUtils.fromRelativeVector(handler.getSpinStartRot(), new Vec3(0, 0, 1));
-                handler.setMoveTargetDir(dir.scale(1).add(0, -0.9, 0), anim, 1.36);
-            }
-            if (!entity.level.isClientSide && anim.isPastTick(0.2) && !anim.isPastTick(1.08))
-                handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox().inflate(0.75)))
-                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
-                        .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
-                        .executeAttack());
-        } else {
-            if (anim.isAtTick(0.44)) {
-                handler.resetHitEntityTracker();
-                entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
-                        SoundEvents.ENDER_DRAGON_FLAP, entity.getSoundSource(), 1, 0.7f);
-            }
-            if (anim.isAtTick(0.88)) {
-                Vec3 dir = CombatUtils.fromRelativeVector(handler.getSpinStartRot(), new Vec3(0, 0, 1));
-                handler.setMoveTargetDir(dir.scale(1).add(0, -0.9, 0), anim, 1.12);
-            }
-            if (!entity.level.isClientSide && !anim.isPastTick(0.88))
-                handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox().inflate(0.75)))
-                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
-                        .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
-                        .executeAttack());
+        if (anim.isAt("spin_start")) {
+            handler.setSpinStartRot(entity.getYRot());
+            handler.resetHitEntityTracker();
+            entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
+                    SoundEvents.ENDER_DRAGON_FLAP, entity.getSoundSource(), 0.7f, 0.5f);
+            Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
+            handler.setMoveDirection(dir.scale(0.35));
         }
+        if (anim.isAt("reset")) {
+            handler.resetHitEntityTracker();
+            entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
+                    SoundEvents.ENDER_DRAGON_FLAP, entity.getSoundSource(), 1, 0.7f);
+        }
+        if (anim.isAt("leap")) {
+            Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
+            handler.setMoveDirection(dir.scale(0.35).add(0, 0.3, 0));
+        }
+        if (anim.isAt("spin_end")) {
+            handler.setMoveDirection(null);
+        }
+        if (anim.isPast("spin_start") && !anim.isPast("spin_end")) {
+            entity.resetFallDistance();
+            if (!entity.level.isClientSide) {
+                handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox().inflate(0.75)))
+                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
+                        .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
+                        .executeAttack());
+            }
+        }
+        handler.applyMoveDirection();
     }
 
     @Override
@@ -83,8 +68,8 @@ public class WindSlashAttack extends AttackAction {
             handler.resetHitEntityTracker();
             entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
                     SoundEvents.ENDER_DRAGON_FLAP, entity.getSoundSource(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.7f);
-            Vec3 dir = CombatUtils.fromRelativeVector(handler.getSpinStartRot(), new Vec3(0, 0, 1));
-            handler.setMoveTargetDir(dir.scale(5), handler.getCurrentAnim(), 0.84);
+            Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
+            handler.setMoveDirection(dir.scale(0.35));
         }
     }
 

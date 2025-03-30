@@ -21,12 +21,12 @@ import net.minecraft.world.phys.Vec3;
 public class DualBladeAttack extends AttackAction {
 
     private final ComboContainer combo = ComboContainer.Builder.builder()
-            .addCombo(ComboContainer.AFTER_ANIM, 4)
-            .addCombo(ComboContainer.AFTER_ANIM, 4)
-            .addCombo(ComboContainer.AFTER_ANIM, 4)
-            .addCombo(ComboContainer.AFTER_ANIM, 4)
-            .addCombo(ComboContainer.AFTER_ANIM, 4)
-            .addCombo(ComboContainer.AFTER_ANIM, 4)
+            .addCombo(ComboContainer.past("done"), 2)
+            .addCombo(ComboContainer.past("done"), 2)
+            .addCombo(ComboContainer.past("done"), 2)
+            .addCombo(ComboContainer.past("done"), 2)
+            .addCombo(ComboContainer.past("done"), 2)
+            .addCombo(ComboContainer.past("done"), 2)
             .addCombo(handler -> handler.isCurrentAnimationDone() && CombatUtils.canPerform(handler.getEntity(), EnumSkills.DUAL, 20), 0)
             .build();
 
@@ -38,39 +38,49 @@ public class DualBladeAttack extends AttackAction {
 
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
-        if (!entity.level.isClientSide && anim.canAttack() && handler.getComboCount() != 5 && handler.getComboCount() != 6) {
-            CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(IAOEWeapon.createOBB(entity, stack,
-                            CombatUtils.getRange(entity, 0),
-                            CombatUtils.getWidth(entity, 0))))
-                    .executeAttack();
+        if (handler.getComboCount() != 5 && handler.getComboCount() != 6 && handler.getComboCount() != 8) {
+            if (anim.isAt("attack")) {
+                if (!entity.level.isClientSide) {
+                    CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(IAOEWeapon.createOBB(entity, stack,
+                                    CombatUtils.getRange(entity, 0),
+                                    CombatUtils.getWidth(entity, handler.getComboCount() == 7 ? 1 : 0))))
+                            .executeAttack();
+                }
+                entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+            }
         }
-        Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
         switch (handler.getComboCount()) {
             case 1 -> {
-                if (anim.isAtTick(0.2)) {
-                    handler.setMoveTargetDir(dir.scale(0.25), anim, anim.getTick());
+                if (anim.isAt("step")) {
+                    Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
+                    entity.setDeltaMovement(dir.scale(0.15));
+                }
+            }
+            case 2 -> {
+                if (anim.isAt("step")) {
+                    Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
+                    entity.setDeltaMovement(dir.scale(0.2));
                 }
             }
             case 3 -> {
-                if (anim.isAtTick(0.16)) {
-                    handler.setMoveTargetDir(dir.scale(0.15), anim, anim.getTick());
+                if (anim.isAt("step")) {
+                    Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
+                    entity.setDeltaMovement(dir.scale(0.25));
                 }
             }
             case 4 -> {
-                if (anim.isAtTick(0.16)) {
-                    handler.setMoveTargetDir(dir.scale(0.3), anim, anim.getTick());
+                if (anim.isAt("step")) {
+                    Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
+                    entity.setDeltaMovement(dir.scale(0.3));
                 }
             }
             case 5 -> {
-                if (anim.isAtTick(0.2)) {
-                    handler.setMoveTargetDir(dir.scale(0.25), anim, anim.getTick());
+                if (anim.isAt("step")) {
                     handler.setSpinStartRot(entity.getYRot());
-                    handler.resetHitEntityTracker();
+                    Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
+                    entity.setDeltaMovement(dir.scale(0.3));
                 }
-                if (anim.isAtTick(0.4)) {
-                    handler.resetHitEntityTracker();
-                }
-                CombatUtils.EntityAttack attack = spinAttack(entity, anim, 0.16, 0.28,
+                CombatUtils.EntityAttack attack = spinAttack(entity, anim, anim.getMarker("spin_start", 0), anim.getMarker("spin_end", 0),
                         handler.getSpinStartRot(), handler.getSpinStartRot() + 360, 0);
                 if (attack != null) {
                     handler.addHitEntityTracker(attack
@@ -79,24 +89,24 @@ public class DualBladeAttack extends AttackAction {
                 }
             }
             case 6 -> {
-                if (anim.isAtTick(0.08)) {
+                if (anim.isAt("spin_start")) {
                     handler.setSpinStartRot(entity.getYRot() - 90);
+                    entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+                    Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
+                    entity.setDeltaMovement(dir.scale(0.3));
+                }
+                if (anim.isAt("reset")) {
                     handler.resetHitEntityTracker();
                     entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
                 }
-                if (anim.isAtTick(0.28)) {
-                    handler.setMoveTargetDir(dir.scale(0.5), anim, anim.getTick());
-                    handler.resetHitEntityTracker();
-                    entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
-                }
-                CombatUtils.EntityAttack attack = spinAttack(entity, anim, 0.16, 0.28,
+                CombatUtils.EntityAttack attack = spinAttack(entity, anim, anim.getMarker("spin_start", 0), anim.getMarker("spin_end", 0),
                         handler.getSpinStartRot(), handler.getSpinStartRot() + 360, 0);
                 if (attack != null) {
                     handler.addHitEntityTracker(attack
                             .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
                             .executeAttack());
                 }
-                attack = spinAttack(entity, anim, 0.16, 0.28,
+                attack = spinAttack(entity, anim, anim.getMarker("spin_start", 0), anim.getMarker("spin_end", 0),
                         handler.getSpinStartRot() + 180, handler.getSpinStartRot() + 180 + 360, 0);
                 if (attack != null) {
                     handler.addHitEntityTracker(attack
@@ -105,26 +115,27 @@ public class DualBladeAttack extends AttackAction {
                 }
             }
             case 7 -> {
-                if (anim.isAtTick(0.2)) {
-                    handler.setMoveTargetDir(dir.scale(0.8).add(0, -1.5, 0), anim, anim.getLength());
-                } else if (anim.isAtTick(0.08)) {
-                    handler.setMoveTargetDir(dir.scale(0.55).add(0, 1.5, 0), anim, 0.2);
+                if (anim.isAt("leap")) {
+                    Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
+                    entity.setDeltaMovement(dir.scale(1.1).add(0, 0.6, 0));
+                }
+                if (anim.isAt("down")) {
+                    Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
+                    entity.setDeltaMovement(dir.scale(0.9).add(0, -0.4, 0));
                 }
             }
             case 8 -> {
-                if (anim.isAtTick(0.24)) {
+                if (anim.isAt("spin_start")) {
                     handler.setSpinStartRot(entity.getYRot() + 120);
+                    entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+                }
+                if (anim.isAt("reset")) {
                     handler.resetHitEntityTracker();
                     entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
                 }
-                if (anim.isAtTick(0.48) || anim.isAtTick(0.68) || anim.isAtTick(0.92)) {
-                    handler.resetHitEntityTracker();
-                    entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
-                }
-                if (anim.isAtTick(0.92))
+                if (anim.isAt("last"))
                     entity.playSound(ModSounds.SPELL_GENERIC_WIND_LONG.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.5f);
-
-                CombatUtils.EntityAttack attack = spinAttack(entity, anim, 0.24, 1.12,
+                CombatUtils.EntityAttack attack = spinAttack(entity, anim, anim.getMarker("spin_start", 0), anim.getMarker("spin_end", 0),
                         handler.getSpinStartRot(), handler.getSpinStartRot() - 4 * 360, 0);
                 if (attack != null) {
                     handler.addHitEntityTracker(attack
@@ -137,9 +148,7 @@ public class DualBladeAttack extends AttackAction {
 
     @Override
     public void onStart(LivingEntity entity, WeaponHandler handler) {
-        if (handler.getComboCount() != 8) {
-            entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
-        } else if (entity instanceof ServerPlayer player)
+        if (handler.getComboCount() != 8 && entity instanceof ServerPlayer player)
             Platform.INSTANCE.getPlayerData(player).ifPresent(d -> LevelCalc.useRP(player, d, GeneralConfig.dualBladeUltimate, true, 0, false));
     }
 

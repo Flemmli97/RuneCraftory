@@ -16,10 +16,10 @@ import net.minecraft.world.phys.Vec3;
 public class StormAttack extends AttackAction {
 
     private final ComboContainer combo = ComboContainer.Builder.builder()
-            .addCombo(ComboContainer.AFTER_ANIM, 4)
-            .addCombo(ComboContainer.AFTER_ANIM, 4)
-            .addCombo(ComboContainer.AFTER_ANIM, 4)
-            .addCombo(ComboContainer.AFTER_ANIM, 4)
+            .addCombo(ComboContainer.past("done"), 0)
+            .addCombo(ComboContainer.past("done"), 0)
+            .addCombo(ComboContainer.past("done"), 0)
+            .addCombo(ComboContainer.past("done"), 0)
             .build();
 
     @Override
@@ -30,56 +30,67 @@ public class StormAttack extends AttackAction {
 
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
-        if (!entity.level.isClientSide && anim.canAttack() && handler.getComboCount() != 5) {
-            double range = CombatUtils.getRange(entity, 0) * 0.5;
-            if (handler.getComboCount() == 3) {
-                range *= 2;
+        if (anim.isAt("attack") && handler.getComboCount() != 5) {
+            if (!entity.level.isClientSide) {
+                double range = CombatUtils.getRange(entity, 0) * 0.5;
+                if (handler.getComboCount() == 3) {
+                    range *= 2;
+                }
+                CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(entity.getYRot(), 0, range, 0.5f, false))
+                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
+                        .executeAttack();
             }
-            CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(entity.getYRot(), 0, range, 0.5f, false))
-                    .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
-                    .executeAttack();
-        }
-        Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-        if (handler.getComboCount() != 5 && anim.isAtTick(0.12))
             entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_LIGHT.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+        }
         switch (handler.getComboCount()) {
             case 1 -> {
-                if (anim.isAtTick(0.08)) {
-                    handler.setMoveTargetDir(dir.scale(1.6).add(0, 0.75, 0), anim, anim.getLength());
+                if (anim.isAt("move")) {
+                    Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
+                    entity.setDeltaMovement(dir.scale(0.2).add(0, 0.1, 0));
                 }
-                if (anim.isAtTick(0.4)) {
-                    handler.clearMoveTarget();
-                    entity.setDeltaMovement(entity.getDeltaMovement().scale(0.2));
+            }
+            case 2 -> {
+                if (anim.isAt("move")) {
+                    Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
+                    entity.setDeltaMovement(dir.scale(0.3));
                 }
             }
             case 3 -> {
-                if (anim.isAtTick(0.04)) {
-                    handler.setMoveTargetDir(dir.scale(0.8), anim, anim.getLength());
+                if (anim.isAt("move")) {
+                    Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
+                    entity.setDeltaMovement(dir.scale(0.2));
                 }
             }
             case 4 -> {
-                if (anim.isAtTick(0.16)) {
-                    handler.setMoveTargetDir(dir.scale(0.4).add(0, -0.05, 0), anim, anim.getTick());
+                if (anim.isAt("up")) {
+                    Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
+                    entity.setDeltaMovement(dir.scale(0.15).add(0, 0.05, 0));
                 }
-                if (anim.isAtTick(0.4)) {
-                    handler.clearMoveTarget();
-                    entity.setDeltaMovement(entity.getDeltaMovement().scale(0.2));
+                if (anim.isAt("down")) {
+                    Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
+                    entity.setDeltaMovement(dir.scale(0.15).add(0, -0.05, 0));
                 }
             }
             case 5 -> {
-                if (anim.isAtTick(0.04))
-                    handler.setMoveTargetDir(dir.scale(1.8).add(0, 1.9, 0), anim, 0.36);
-                if (anim.isAtTick(0.36)) {
-                    handler.setMoveTargetDir(dir.scale(2).add(0, -2.5, 0), anim, 0.6);
-                    entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+                if (anim.isAt("up")) {
+                    Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
+                    entity.setDeltaMovement(dir.scale(0.2).add(0, 0.15, 0));
                 }
+                if (anim.isAt("down")) {
+                    Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
+                    entity.setDeltaMovement(dir.scale(0.25).add(0, -0.35, 0));
+                }
+                handler.applyMoveDirection();
                 entity.fallDistance = 0;
-                if (!entity.level.isClientSide && anim.canAttack()) {
-                    CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox().inflate(1, 0.5, 0)
-                                    .expandTowards(0, -1, CombatUtils.getRange(entity, 0))))
-                            .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
-                            .doOnSuccess(target -> CombatUtils.knockBackEntity(entity, target, 1.1f))
-                            .executeAttack();
+                if (anim.isAt("attack")) {
+                    if (!entity.level.isClientSide) {
+                        CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox().inflate(1, 0.5, 0)
+                                        .expandTowards(0, -1, CombatUtils.getRange(entity, 0))))
+                                .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
+                                .doOnSuccess(target -> CombatUtils.knockBackEntity(entity, target, 1.1f))
+                                .executeAttack();
+                    }
+                    entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
                 }
             }
         }

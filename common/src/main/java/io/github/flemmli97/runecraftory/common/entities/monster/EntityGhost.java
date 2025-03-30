@@ -46,12 +46,12 @@ import java.util.function.Consumer;
 
 public class EntityGhost extends ChargingMonster {
 
-    public static final AnimatedAction DARKBALL = new AnimatedAction(13, 5, "darkball");
-    public static final AnimatedAction CHARGE = new AnimatedAction(24, 7, "charge");
-    public static final AnimatedAction SWING = new AnimatedAction(11, 6, "swing");
-    public static final AnimatedAction VANISH = new AnimatedAction(100, 50, "vanish");
+    public static final AnimatedAction DARKBALL = AnimatedAction.builder(0.64, "darkball").marker("attack", 0.28).build();
+    public static final AnimatedAction CHARGE = AnimatedAction.builder(1.2, "charge").marker("attack_start", 0.36).build();
+    public static final AnimatedAction SWING = AnimatedAction.builder(0.52, "swing").marker("attack", 0.24).build();
+    public static final AnimatedAction VANISH = AnimatedAction.builder(5, "vanish").marker("teleport", 2.5).build();
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(SWING, "interact");
-    public static final AnimatedAction STILL = AnimatedAction.builder(1, "still").infinite().build();
+    public static final AnimatedAction STILL = AnimatedAction.builder(0, "still").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{DARKBALL, CHARGE, SWING, VANISH, INTERACT, STILL};
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityGhost>>> ATTACKS = List.of(
@@ -186,12 +186,12 @@ public class EntityGhost extends ChargingMonster {
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(DARKBALL)) {
             this.getNavigation().stop();
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 ModSpells.DARK_BALL.get().use(this);
             }
         } else if (anim.is(VANISH)) {
             this.getNavigation().stop();
-            if (anim.canAttack()) {
+            if (anim.isAt("teleport")) {
                 LivingEntity target = this.getTarget();
                 if (target == null) {
                     double rX = this.getX() + (this.random.nextDouble() - 0.5) * 16;

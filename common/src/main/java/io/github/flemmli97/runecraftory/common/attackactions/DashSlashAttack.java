@@ -19,7 +19,7 @@ import net.minecraft.world.phys.Vec3;
 public class DashSlashAttack extends AttackAction {
 
     private final ComboContainer combo = ComboContainer.Builder.builder()
-            .addCombo(handler -> handler.getCurrentAnim().isPastTick(0.36), 0)
+            .addCombo(handler -> handler.getAnimation().isPast("attack_start") && !handler.getAnimation().isPast("attack_end"), 0)
             .build();
 
     @Override
@@ -31,9 +31,9 @@ public class DashSlashAttack extends AttackAction {
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
         if (handler.getComboCount() == 2) {
-            handler.clearMoveTarget();
+            handler.setMoveDirection(null);
             entity.setDeltaMovement(entity.getDeltaMovement().multiply(0.95, 1, 0.95));
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 if (!entity.level.isClientSide) {
                     OrientedBoundingBox obb = new OrientedBoundingBox(new AABB(-entity.getBbWidth(), 0, 0, entity.getBbWidth(), 1, entity.getBbWidth() + 1)
                             .inflate(0.3), entity.getYRot(), 0, entity.position());
@@ -46,16 +46,19 @@ public class DashSlashAttack extends AttackAction {
             }
         } else {
             handler.lockLook(true);
-            if (anim.isPastTick(0.2)) {
+            if (anim.isAt("move_start")) {
                 Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-                if (anim.isAtTick(0.2)) {
-                    handler.setMoveTargetDir(dir.scale(0.5).add(0, 0.3, 0), anim, 0.28);
-                } else if (anim.isAtTick(0.28)) {
-                    handler.setMoveTargetDir(dir.scale(5), anim, anim.getLength());
+                handler.setMoveDirection(dir.scale(0.5).add(0, 0.3, 0));
+            }
+            if (anim.isPast("attack_start")) {
+                if (anim.isAt("attack_start")) {
+                    Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
+                    handler.setMoveDirection(dir.scale(0.5));
                 }
-                if (anim.isAtTick(0.32))
+                handler.applyMoveDirection();
+                if (anim.isAt("sound"))
                     entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
-                if (!entity.level.isClientSide && !anim.isPastTick(0.72)) {
+                if (!entity.level.isClientSide && !anim.isPast("attack_end")) {
                     double range = CombatUtils.getRange(entity, -1);
                     handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox().inflate(range * 0.5, 0, 0)
                                     .expandTowards(0, 0, range)))
@@ -64,6 +67,10 @@ public class DashSlashAttack extends AttackAction {
                             .executeAttack());
                 }
             }
+            if (anim.isAt("attack_end")) {
+                handler.setMoveDirection(null);
+            }
+            handler.applyMoveDirection();
         }
     }
 

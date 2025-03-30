@@ -30,10 +30,10 @@ import java.util.List;
 
 public class EntityFlowerLily extends BaseMonster {
 
-    public static final AnimatedAction LEAP = new AnimatedAction(18, 3, "leap");
-    public static final AnimatedAction ATTACK = new AnimatedAction(12, 6, "attack");
+    public static final AnimatedAction LEAP = AnimatedAction.builder(0.88, "leap").marker("leap", 0.28).build();
+    public static final AnimatedAction ATTACK = AnimatedAction.builder(0.56, "attack").marker("attack", 0.32).build();
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(ATTACK, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(0, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{LEAP, ATTACK, INTERACT, SLEEP};
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityFlowerLily>>> ATTACKS = List.of(
@@ -88,14 +88,14 @@ public class EntityFlowerLily extends BaseMonster {
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(LEAP)) {
             this.getNavigation().stop();
-            if (anim.canAttack()) {
+            if (anim.isAt("leap")) {
                 Vec3 vec32 = EntityUtils.getTargetDirection(this, EntityAnchorArgument.Anchor.FEET, true)
                         .scale(-1.8);
                 this.setDeltaMovement(vec32.x, 0.15, vec32.z);
             }
         } else if (anim.is(ATTACK)) {
             this.getNavigation().stop();
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 this.rangedAttackSpell().use(this);
             }
         }

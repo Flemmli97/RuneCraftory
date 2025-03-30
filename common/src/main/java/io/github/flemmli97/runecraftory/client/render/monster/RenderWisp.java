@@ -18,7 +18,7 @@ public class RenderWisp<T extends EntityWispBase> extends RenderMonster<T, Model
     public boolean shouldRender(T entity, Frustum camera, double camX, double camY, double camZ) {
         AnimatedAction anim = entity.getAnimationHandler().getAnimation();
         if (anim != null && anim.is(EntityWispBase.VANISH)) {
-            int tick = anim.getTick();
+            int tick = (int) anim.getTick(1);
             if (tick < 10 || tick > 90)
                 return tick % 8 == 0;
             else if (tick < 20 || tick > 80)

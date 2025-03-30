@@ -19,12 +19,18 @@ public class EntityOrcHunter extends EntityOrcArcher {
     }
 
     @Override
+    public void setupAttack(AnimatedAction anim) {
+        if (anim.is(EntityOrcArcher.RANGED)) {
+            this.startUsingItem(InteractionHand.MAIN_HAND);
+        }
+        super.setupAttack(anim);
+    }
+
+    @Override
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(EntityOrcArcher.RANGED)) {
-            if (anim.getTick() == 1)
-                this.startUsingItem(InteractionHand.MAIN_HAND);
             this.getNavigation().stop();
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 if (this.getTarget() != null && this.getSensing().hasLineOfSight(this.getTarget())) {
                     this.shootTripleArrow(this.getTarget());
                 } else if (this.getFirstPassenger() instanceof Player)

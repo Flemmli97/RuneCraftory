@@ -32,10 +32,10 @@ import java.util.function.Consumer;
 
 public class EntityOrc extends BaseMonster {
 
-    private static final AnimatedAction MELEE_1 = new AnimatedAction(22, 14, "attack_1");
-    private static final AnimatedAction MELEE_2 = new AnimatedAction(23, 13, "attack_2");
+    private static final AnimatedAction MELEE_1 = AnimatedAction.builder(1, "attack_1").marker("attack", 0.72).build();
+    private static final AnimatedAction MELEE_2 = AnimatedAction.builder(1.04, "attack_2").marker("attack", 0.56).build();
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE_1, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(0, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE_1, MELEE_2, INTERACT, SLEEP};
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityOrc>>> ATTACKS = List.of(

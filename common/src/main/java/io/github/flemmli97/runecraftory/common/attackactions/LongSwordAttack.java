@@ -21,8 +21,8 @@ import net.minecraft.world.phys.Vec3;
 public class LongSwordAttack extends AttackAction {
 
     private final ComboContainer combo = ComboContainer.Builder.builder()
-            .addCombo(ComboContainer.AFTER_ANIM, 4)
-            .addCombo(ComboContainer.AFTER_ANIM, 4)
+            .addCombo(ComboContainer.past("done"), 2)
+            .addCombo(ComboContainer.past("done"), 2)
             .addCombo(handler -> handler.isCurrentAnimationDone() && CombatUtils.canPerform(handler.getEntity(), EnumSkills.LONGSWORD, 20), 0)
             .build();
 
@@ -34,44 +34,36 @@ public class LongSwordAttack extends AttackAction {
 
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
-        if (!entity.level.isClientSide && anim.canAttack() && handler.getComboCount() != 4) {
-            CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(IAOEWeapon.createOBB(entity, stack,
-                            CombatUtils.getRange(entity, 0),
-                            CombatUtils.getWidth(entity, 0))))
-                    .executeAttack();
-        }
-        Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-        if (handler.getComboCount() != 4 && anim.isAtTick(0.24)) {
-            entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.8f);
-        }
-        switch (handler.getComboCount()) {
-            case 2 -> {
-                if (anim.isAtTick(0.4)) {
-                    handler.setMoveTargetDir(dir.scale(0.4), anim, anim.getTick());
-                }
+        if (handler.getComboCount() != 4) {
+            if (!entity.level.isClientSide && anim.isAt("attack")) {
+                CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(IAOEWeapon.createOBB(entity, stack,
+                                CombatUtils.getRange(entity, 0),
+                                CombatUtils.getWidth(entity, 0))))
+                        .executeAttack();
             }
-            case 3 -> {
-                if (anim.isAtTick(0.44)) {
-                    handler.setMoveTargetDir(dir.scale(0.4), anim, anim.getTick());
-                }
+            if (anim.isAt("attack")) {
+                entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.8f);
             }
-            case 4 -> {
-                if (anim.isAtTick(0.2)) {
-                    handler.setSpinStartRot(entity.getYRot());
-                    handler.resetHitEntityTracker();
-                    entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.8f);
-                }
-                if (anim.isAtTick(0.68)) {
-                    handler.resetHitEntityTracker();
-                    entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.8f);
-                }
-                CombatUtils.EntityAttack attack = spinAttack(entity, anim, 0.2, 1.24,
-                        handler.getSpinStartRot() + 150, handler.getSpinStartRot() - 500, 0);
-                if (attack != null) {
-                    handler.addHitEntityTracker(attack
-                            .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
-                            .executeAttack());
-                }
+            if (anim.isAt("step")) {
+                Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
+                entity.setDeltaMovement(dir.scale(0.5));
+            }
+        } else {
+            if (anim.isAt("spin_start")) {
+                handler.setSpinStartRot(entity.getYRot());
+                handler.resetHitEntityTracker();
+                entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.8f);
+            }
+            if (anim.isAt("reset")) {
+                handler.resetHitEntityTracker();
+                entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.8f);
+            }
+            CombatUtils.EntityAttack attack = spinAttack(entity, anim, anim.getMarker("spin_start", 0), anim.getMarker("spin_end", 0),
+                    handler.getSpinStartRot() + 150, handler.getSpinStartRot() - 500, 0);
+            if (attack != null) {
+                handler.addHitEntityTracker(attack
+                        .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
+                        .executeAttack());
             }
         }
     }

@@ -6,7 +6,6 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.client.model.SittingModel;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityMarionetta;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.client.AnimationManager;
 import io.github.flemmli97.tenshilib.client.model.BlockBenchAnimations;
 import io.github.flemmli97.tenshilib.client.model.ExtendedModel;
@@ -114,17 +113,13 @@ public class ModelMarionetta<T extends EntityMarionetta> extends EntityModel<T> 
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.model.resetPoses();
-        AnimatedAction anim = entity.getAnimationHandler().getAnimation();
         float partialTicks = Minecraft.getInstance().getFrameTime();
         if (entity.deathTime <= 0 && !entity.playDeath()) {
             this.anim.doAnimation(this, "idle", entity.tickCount, partialTicks);
             if (entity.moveTick() > 0)
                 this.anim.doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
         }
-        if (anim != null && entity.caughtTarget()) {
-            this.anim.doAnimation(this, "chest_attack_hit", anim.getTick(), partialTicks);
-        } else
-            this.anim.doAnimation(this, entity.getAnimationHandler(), partialTicks);
+        this.anim.doAnimation(this, entity.getAnimationHandler(), partialTicks, a -> false, a -> a.is(EntityMarionetta.CHEST_ATTACK) && entity.caughtTarget() ? "chest_attack_hit" : a.getClientIdentifier());
     }
 
     @Override

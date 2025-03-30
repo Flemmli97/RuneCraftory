@@ -32,7 +32,7 @@ public class BoneNeedleSpell extends Spell {
         double inc = max * 2.7 / 16;
         while (offset <= max) {
             EntityBoneNeedle needle = new EntityBoneNeedle(level, entity);
-            Vec3 direction = MathUtils.rotate(MathUtils.normalY, direct, (float) (Mth.DEG_TO_RAD * 15 * offset));
+            Vec3 direction = MathUtils.rotate(MathUtils.NORMAL_Y, direct, (float) (Mth.DEG_TO_RAD * 15 * offset));
             needle.shoot(direction.x(), direction.y(), direction.z(), entity.getRandom().nextFloat() * 0.1f + 0.6f, 2);
             Vec3 random = needle.position().add(0, -entity.getBbHeight() * 0.25, 0).add(side.multiply(offset * 0.5, 0, offset * 0.5));
             offset += entity.getRandom().nextDouble() * inc * 0.5 + inc * 0.5;

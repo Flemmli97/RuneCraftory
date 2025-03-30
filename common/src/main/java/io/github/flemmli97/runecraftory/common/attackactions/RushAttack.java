@@ -8,6 +8,8 @@ import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
@@ -21,15 +23,16 @@ public class RushAttack extends AttackAction {
     private final ComboContainer combo;
 
     public RushAttack() {
-        Predicate<WeaponHandler> MAIN = handler -> (!handler.getCurrentAnim().isPastTick(0.84) && handler.getCurrentAnim().isPastTick(0.6)) || (handler.getCurrentAnim().isPastTick(1.16) && !handler.getCurrentAnim().isPastTick(1.48));
-        Function<Integer, ComboContainer.ComboGetter> IDX = idx -> handler -> (!handler.getCurrentAnim().isPastTick(0.84)) ? idx : 6;
+        Predicate<WeaponHandler> MAIN = handler -> (handler.getAnimation().isPast("chain_1_start") && !handler.getAnimation().isPast("chain_1_end"))
+                || (handler.getAnimation().isPast("chain_2_start") && !handler.getAnimation().isPast("chain_2_end"));
+        Function<Integer, ComboContainer.ComboGetter> IDX = idx -> handler -> !handler.getAnimation().isPast("chain_1_end") ? idx : 6;
         this.combo = ComboContainer.Builder.builder()
                 .addCombo(new ComboContainer.ComboHandler.Builder(MAIN).advanceTo(IDX))
                 .addCombo(new ComboContainer.ComboHandler.Builder(MAIN).advanceTo(IDX))
                 .addCombo(new ComboContainer.ComboHandler.Builder(MAIN).advanceTo(IDX))
                 .addCombo(new ComboContainer.ComboHandler.Builder(MAIN).advanceTo(IDX))
                 .addCombo(new ComboContainer.ComboHandler.Builder(MAIN).advanceTo(IDX))
-                .addCombo(handler -> handler.getCurrentAnim().isPastTick(1.16) && !handler.getCurrentAnim().isPastTick(1.48), 0)
+                .addCombo(handler -> handler.getAnimation().isPast("chain_2_start") && !handler.getAnimation().isPast("chain_2_end"), 0)
                 .build();
     }
 
@@ -46,13 +49,15 @@ public class RushAttack extends AttackAction {
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
         if (handler.getComboCount() == 7) {
-            if (anim.isAtTick(0.28)) {
+            if (anim.isAt("leap")) {
                 Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-                handler.setMoveTargetDir(dir.scale(3).add(0, -1.5, 0), anim, 0.4);
+                entity.setDeltaMovement(dir.scale(1.6).add(0, -0.6, 0));
+            }
+            if (anim.isAt("attack_start")) {
                 entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
             }
             entity.fallDistance = 0;
-            if (!entity.level.isClientSide && anim.isPastTick(0.2) && !anim.isPastTick(0.52)) {
+            if (!entity.level.isClientSide && anim.isPast("attack_start") && !anim.isPast("attack_end")) {
                 handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(entity.getYRot(), 0, CombatUtils.getWidth(entity, 1.5f), -1f, false))
                         .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
                         .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
@@ -60,31 +65,30 @@ public class RushAttack extends AttackAction {
                         .executeAttack());
             }
         } else {
-            if (anim.isAtTick(0.32) || anim.isAtTick(0.48)) {
+            if (anim.isAt("step")) {
                 Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-                handler.setMoveTargetDir(dir.scale(0.2), anim, anim.getTick());
-                entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+                entity.setDeltaMovement(dir.scale(0.2));
             }
-            if (anim.isAtTick(0.92)) {
+            if (anim.isAt("jump")) {
                 Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-                handler.setMoveTargetDir(dir.scale(0.5).add(0, 1.5, 0), anim, 1.4);
-                entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+                entity.setDeltaMovement(dir.scale(0.5).add(0, 0.5, 0));
+                entity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 12, 2, true, false, false));
             }
             entity.fallDistance = 0;
-            if (!entity.level.isClientSide) {
-                if (anim.canAttack() || anim.isAtTick(0.52) || anim.isAtTick(1.08)) {
+            if (anim.isAt("attack")) {
+                if (!entity.level.isClientSide) {
                     CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(entity.getYRot(), 0, CombatUtils.getWidth(entity, 0.5f), 0.5f, false))
                             .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
                             .executeAttack();
-
                 }
+                entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
             }
         }
     }
 
     @Override
     public void onSetup(LivingEntity entity, WeaponHandler handler) {
-        if (handler.getCurrentAnim() != null && handler.getComboCount() < 7 && handler.getCurrentAnim().isPastTick(1.12))
+        if (handler.getAnimation() != null && handler.getComboCount() < 7 && handler.getAnimation().isPast("chain_2_start"))
             handler.setComboCount(6);
     }
 

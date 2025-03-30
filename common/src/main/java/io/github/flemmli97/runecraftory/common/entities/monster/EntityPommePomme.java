@@ -21,10 +21,10 @@ import java.util.List;
 
 public class EntityPommePomme extends ChargingMonster {
 
-    public static final AnimatedAction CHARGE_ATTACK = new AnimatedAction(34, 2, "roll");
-    public static final AnimatedAction KICK = new AnimatedAction(17, 11, "kick");
+    public static final AnimatedAction CHARGE_ATTACK = AnimatedAction.builder(2, "roll").marker("attack", 0.05).build();
+    public static final AnimatedAction KICK = AnimatedAction.builder(0.88, "kick").marker("attack", 0.52).build();
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(KICK, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(0, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{KICK, CHARGE_ATTACK, INTERACT, SLEEP};
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityPommePomme>>> ATTACKS = List.of(

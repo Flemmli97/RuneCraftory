@@ -17,17 +17,17 @@ import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.IAnimated;
+import io.github.flemmli97.tenshilib.client.model.ModelPartHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -37,7 +37,9 @@ import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.phys.Vec3;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -50,6 +52,8 @@ public class ClientMixinUtils {
 
     private static final Map<SeasonedTint, Integer> LEAVE_TINTS = new ConcurrentHashMap<>();
     private static final Map<SeasonedTint, Integer> GRASS_TINTS = new ConcurrentHashMap<>();
+
+    private static boolean ItemRenderContext;
 
     public static int modifyColoredTint(BlockAndTintGetter getter, int old) {
         CalendarImpl calendar = ClientHandlers.CLIENT_CALENDAR;
@@ -125,7 +129,7 @@ public class ClientMixinUtils {
         if (ClientHandlers.getAnimatedPlayerModel() != null) {
             float partialTicks = Minecraft.getInstance().getFrameTime();
             if (entity instanceof IAnimated) {
-                boolean result = ClientHandlers.getAnimatedPlayerModel().setUpModel(entity, model, null, null, partialTicks, 0);
+                boolean result = ClientHandlers.getAnimatedPlayerModel().setUpModel(entity, model, null, partialTicks);
                 if (result)
                     ClientHandlers.getAnimatedPlayerModel().copyTo(model, false);
                 return;
@@ -134,13 +138,19 @@ public class ClientMixinUtils {
             if (weaponHandler == null)
                 return;
             boolean ignoreRiding = weaponHandler.getCurrentAction() == ModAttackActions.DUAL_USE.get();
-            AnimatedAction anim = weaponHandler.getCurrentAnim();
-            AnimatedAction last = weaponHandler.getLastAnim();
-            float interpolation = weaponHandler.interpolatedLastChange(partialTicks);
-
-            boolean result = ClientHandlers.getAnimatedPlayerModel().setUpModel(entity, model, anim, last, partialTicks, interpolation);
-            if (result)
+            boolean result = ClientHandlers.getAnimatedPlayerModel().setUpModel(entity, model, weaponHandler, partialTicks);
+            if (result) {
                 ClientHandlers.getAnimatedPlayerModel().copyTo(model, ignoreRiding);
+                if (ItemRenderContext) {
+                    model.setAllVisible(false);
+                    model.leftArm.visible = true;
+                    model.rightArm.visible = true;
+                    if (model instanceof PlayerModel<?> playerModel) {
+                        playerModel.leftSleeve.copyFrom(model.leftArm);
+                        playerModel.rightSleeve.copyFrom(model.rightArm);
+                    }
+                }
+            }
         }
     }
 
@@ -178,46 +188,48 @@ public class ClientMixinUtils {
     public static boolean onRenderHeldItem(LivingEntity livingEntity, ItemStack itemStack, ItemTransforms.TransformType transformType, boolean leftHand, PoseStack poseStack, MultiBufferSource buffer, int combinedLight) {
         if (livingEntity instanceof AbstractClientPlayer player && transformType.firstPerson()) {
             PlayerData data = Platform.INSTANCE.getPlayerData(player).orElse(null);
-            if (data != null && data.getWeaponHandler().getCurrentAnim() != null) {
+            if (data != null) {
+                PlayerRenderer playerRenderer = (PlayerRenderer) Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(player);
+                boolean animated = ClientHandlers.getAnimatedPlayerModel().setUpModel(player, playerRenderer.getModel(), data.getWeaponHandler(), Minecraft.getInstance().getFrameTime());
+                if (!animated)
+                    return false;
                 if (leftHand == (livingEntity.getMainArm() == HumanoidArm.RIGHT))
                     return true;
-                transformType = transformType == ItemTransforms.TransformType.FIRST_PERSON_LEFT_HAND ?
-                        ItemTransforms.TransformType.THIRD_PERSON_LEFT_HAND : ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND;
-                poseStack.popPose();
+                player.resetAttackStrengthTicker();
+                poseStack = new PoseStack();
                 poseStack.pushPose();
-                poseStack.scale(-1.0f, -1.0f, 1.0f);
-                poseStack.translate(0, 0.06, 0);
-                poseStack.scale(0.6f, 0.6f, 0.6f);
-                PlayerRenderer playerRenderer = (PlayerRenderer) Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(player);
-                ClientHandlers.getAnimatedPlayerModel().setUpModel(player, playerRenderer.getModel(), data.getWeaponHandler().getCurrentAnim(), null, Minecraft.getInstance().getFrameTime(), 1);
-                ClientHandlers.getAnimatedPlayerModel().copyTo(playerRenderer.getModel(), true);
-                playerRenderer.getModel().leftArm.render(poseStack, buffer.getBuffer(RenderType.entitySolid(player.getSkinTextureLocation())), combinedLight, OverlayTexture.NO_OVERLAY);
-                playerRenderer.getModel().rightArm.render(poseStack, buffer.getBuffer(RenderType.entitySolid(player.getSkinTextureLocation())), combinedLight, OverlayTexture.NO_OVERLAY);
-                if (!ItemNBT.isInvis(itemStack)) {
-                    poseStack.pushPose();
-                    playerRenderer.getModel().translateToHand(leftHand ? HumanoidArm.LEFT : HumanoidArm.RIGHT, poseStack);
-                    poseStack.mulPose(Vector3f.XP.rotationDegrees(-90.0f));
-                    poseStack.mulPose(Vector3f.YP.rotationDegrees(180.0f));
-                    poseStack.translate((float) 1 / 16.0f, 0.125, -0.625);
-                    Minecraft.getInstance().getItemRenderer().renderStatic(livingEntity, itemStack, transformType, leftHand, poseStack, buffer, livingEntity.level, combinedLight, OverlayTexture.NO_OVERLAY, livingEntity.getId() + transformType.ordinal());
-                    poseStack.popPose();
-                }
-                itemStack = player.getOffhandItem();
-                if (!itemStack.isEmpty() && !ItemNBT.isInvis(itemStack)) {
-                    poseStack.pushPose();
-                    playerRenderer.getModel().translateToHand(leftHand ? HumanoidArm.RIGHT : HumanoidArm.LEFT, poseStack);
-                    poseStack.mulPose(Vector3f.XP.rotationDegrees(-90.0f));
-                    poseStack.mulPose(Vector3f.YP.rotationDegrees(180.0f));
-                    poseStack.translate((float) -1 / 16.0f, 0.125, -0.625);
-                    Minecraft.getInstance().getItemRenderer().renderStatic(livingEntity, itemStack, transformType, leftHand, poseStack, buffer, livingEntity.level, combinedLight, OverlayTexture.NO_OVERLAY, livingEntity.getId() + transformType.ordinal());
-                    poseStack.popPose();
-                }
+                float partialTicks = Minecraft.getInstance().getFrameTime();
+                Vec3 camPos = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
+                double camX = camPos.x();
+                double camY = camPos.y();
+                double camZ = camPos.z();
+                Vec3 vec3 = playerRenderer.getRenderOffset(player, partialTicks);
+                double x = Mth.lerp(partialTicks, player.xOld, player.getX());
+                double y = Mth.lerp(partialTicks, player.yOld, player.getY());
+                double z = Mth.lerp(partialTicks, player.zOld, player.getZ());
+                x += vec3.x() - camX;
+                y += vec3.y() - camY;
+                z += vec3.z() - camZ;
+                poseStack.translate(x, y, z);
+                poseStack.translate(0, 0.1, 0.1);
+                float rot = Mth.lerp(partialTicks, player.yRotO, player.getYRot());
+                poseStack.mulPose(Vector3f.YP.rotationDegrees(rot + 180));
+                ItemRenderContext = true;
+                playerRenderer.render(player, 0, partialTicks, poseStack, buffer, combinedLight);
+                ItemRenderContext = false;
                 poseStack.popPose();
-                poseStack.pushPose();
                 return true;
             }
         }
         return ItemNBT.isInvis(itemStack);
+    }
+
+    public static ModelPartHandler.ModelPartExtended createPlayerItemPart(boolean left) {
+        ModelPart item = new ModelPart(List.of(), Map.of());
+        item.loadPose(PartPose.offset(left ? -1.0F : 1.0F, -8.0F, 0.0F));
+        ModelPart root = new ModelPart(List.of(), Map.of(left ? "LeftItem" : "RightItem", item));
+        root.loadPose(PartPose.offset(left ? 1.0F : -1.0F, 8.0F, 0.0F));
+        return new ModelPartHandler.ModelPartExtended(root);
     }
 
     record SeasonedTint(int origin, EnumSeason season) {

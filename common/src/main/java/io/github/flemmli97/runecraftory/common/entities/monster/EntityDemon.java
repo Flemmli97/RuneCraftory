@@ -30,13 +30,13 @@ import java.util.function.Predicate;
 
 public class EntityDemon extends BaseMonster implements HealingPredicateEntity, ElementalAttackMob {
 
-    public static final AnimatedAction DARK = new AnimatedAction(0.88, 0.52, "cast");
+    public static final AnimatedAction DARK = AnimatedAction.builder(0.88, "cast").marker("attack", 0.52).build();
     public static final AnimatedAction HEAL = AnimatedAction.copyOf(DARK, "heal");
-    public static final AnimatedAction STAB = new AnimatedAction(0.68, 0.4, "stab");
-    public static final AnimatedAction STAB_LONG = new AnimatedAction(0.8, 0.48, "stab_long");
-    public static final AnimatedAction SWIPE = new AnimatedAction(0.88, 0.44, "swipe");
+    public static final AnimatedAction STAB = AnimatedAction.builder(0.68, "stab").marker("attack", 0.4).build();
+    public static final AnimatedAction STAB_LONG = AnimatedAction.builder(0.8, "stab_long").marker("attack", 0.48).build();
+    public static final AnimatedAction SWIPE = AnimatedAction.builder(0.88, "swipe").marker("attack", 0.44).build();
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(DARK, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(0, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{DARK, HEAL, STAB, STAB_LONG, SWIPE, INTERACT, SLEEP};
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityDemon>>> ATTACKS = List.of(
@@ -78,12 +78,12 @@ public class EntityDemon extends BaseMonster implements HealingPredicateEntity, 
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(DARK)) {
             this.getNavigation().stop();
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 ModSpells.DARK_BALL.get().use(this);
             }
         } else if (anim.is(HEAL)) {
             this.getNavigation().stop();
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 ModSpells.CURE_ALL.get().use(this);
             }
         } else {

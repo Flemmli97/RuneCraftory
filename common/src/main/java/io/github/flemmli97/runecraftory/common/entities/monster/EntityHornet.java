@@ -36,9 +36,9 @@ import java.util.List;
 
 public class EntityHornet extends BaseMonster {
 
-    public static final AnimatedAction ATTACK = new AnimatedAction(14, 6, "attack");
+    public static final AnimatedAction ATTACK = AnimatedAction.builder(0.68, "attack").marker("attack", 0.36).build();
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(ATTACK, "interact");
-    public static final AnimatedAction STILL = AnimatedAction.builder(1, "still").infinite().build();
+    public static final AnimatedAction STILL = AnimatedAction.builder(0, "still").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{ATTACK, INTERACT, STILL};
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityHornet>>> ATTACKS = List.of(
@@ -96,7 +96,7 @@ public class EntityHornet extends BaseMonster {
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(ATTACK)) {
             this.getNavigation().stop();
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 ModSpells.POISON_NEEDLE.get().use(this);
             }
         }

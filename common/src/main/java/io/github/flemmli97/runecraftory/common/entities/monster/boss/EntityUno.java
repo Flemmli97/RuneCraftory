@@ -21,37 +21,39 @@ import java.util.function.BiConsumer;
 
 public class EntityUno extends EntitySanoUno {
 
-    public static final AnimatedAction WATER_LASER = new AnimatedAction(40, 15, "water_laser");
-    public static final AnimatedAction WATER_LASER_2 = new AnimatedAction(40, 15, "water_swipe");
-    public static final AnimatedAction ICEBALLS_5 = new AnimatedAction(50, 15, "iceballs");
-    public static final AnimatedAction HOMING_WATER_WAVE = new AnimatedAction(40, 15, "water_wave");
-    public static final AnimatedAction DEFEAT = AnimatedAction.builder(150, "defeat").marker(150).infinite().build();
+    public static final AnimatedAction WATER_LASER = AnimatedAction.builder(2, "water_laser")
+            .marker("attack_1", 0.8).marker("attack_2", 1.2).build();
+    public static final AnimatedAction WATER_LASER_2 = AnimatedAction.builder(2, "water_swipe")
+            .marker("attack_1", 0.8).marker("attack_2", 1.6).build();
+    public static final AnimatedAction ICEBALLS_5 = AnimatedAction.builder(3, "iceballs").marker("attack", 0.8, 1.2, 1.6, 2, 2.4).build();
+    public static final AnimatedAction HOMING_WATER_WAVE = AnimatedAction.builder(2, "water_wave").marker("attack", 0.8).build();
+    public static final AnimatedAction DEFEAT = AnimatedAction.builder(10, "defeat").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{WATER_LASER, WATER_LASER_2, ICEBALLS_5, HOMING_WATER_WAVE, DEFEAT};
 
     private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntityUno>> ATTACK_HANDLER = createAnimationHandler(b -> {
         b.put(WATER_LASER, (anim, entity) -> {
-            if (anim.isAtTick(15))
+            if (anim.isAt("attack_1"))
                 ModSpells.WATER_LASER_LONG.get().use(entity);
-            if (anim.isAtTick(25))
+            if (anim.isAt("attack_2"))
                 ModSpells.PARALLEL_LASER_LONG.get().use(entity);
         });
         b.put(WATER_LASER_2, (anim, entity) -> {
-            if (anim.isAtTick(15)) {
+            if (anim.isAt("attack_1")) {
                 entity.reversedSwipe = false;
                 ModSpells.WATER_SWIPE.get().use(entity);
             }
-            if (anim.isAtTick(30)) {
+            if (anim.isAt("attack_2")) {
                 entity.reversedSwipe = true;
                 ModSpells.WATER_SWIPE.get().use(entity);
             }
         });
         b.put(ICEBALLS_5, (anim, entity) -> {
-            if (anim.isAtTick(15) || anim.isAtTick(20) || anim.isAtTick(25) || anim.isAtTick(30) || anim.isAtTick(35)) {
+            if (anim.isAt("attack")) {
                 ModSpells.ICE_BALL_DROP.get().use(entity);
             }
         });
         b.put(HOMING_WATER_WAVE, (anim, entity) -> {
-            if (anim.canAttack())
+            if (anim.isAt("attack"))
                 ModSpells.ICE_TRAIL.get().use(entity);
         });
     });

@@ -21,28 +21,30 @@ public class CycloneAttack extends AttackAction {
 
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
-        if (!anim.isPastTick(0.2) || anim.isPastTick(1.16)) {
+        if (!anim.isPast("attack_start") || anim.isPast("attack_end")) {
             entity.setDeltaMovement(entity.getDeltaMovement().multiply(0, 1, 0));
             entity.xxa = 0;
             entity.zza = 0;
         }
-        if (anim.isAtTick(0.16)) {
+        if (anim.isAt("attack_start")) {
             handler.setSpinStartRot(entity.getYRot() + 170);
             handler.resetHitEntityTracker();
             entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         }
-        if (anim.isAtTick(0.36) || anim.isAtTick(0.56) || anim.isAtTick(0.72) || anim.isAtTick(0.88)) {
+        if (anim.isAt("reset")) {
             handler.resetHitEntityTracker();
             entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         }
-        CombatUtils.EntityAttack attack = spinAttack(entity, anim, 0.2, 1.04,
-                handler.getSpinStartRot(), handler.getSpinStartRot() - 360 * 4.5f, 0);
-        if (attack != null) {
-            handler.addHitEntityTracker(attack
-                    .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
-                    .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
-                    .doOnSuccess(e -> CombatUtils.knockBackEntity(entity, e, 1.5f))
-                    .executeAttack());
+        if (!entity.level.isClientSide) {
+            CombatUtils.EntityAttack attack = spinAttack(entity, anim, anim.getMarker("attack_start", 0), anim.getMarker("attack_end", 0),
+                    handler.getSpinStartRot(), handler.getSpinStartRot() - 360 * 4.5f, 0);
+            if (attack != null) {
+                handler.addHitEntityTracker(attack
+                        .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
+                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
+                        .doOnSuccess(e -> CombatUtils.knockBackEntity(entity, e, 1.5f))
+                        .executeAttack());
+            }
         }
     }
 

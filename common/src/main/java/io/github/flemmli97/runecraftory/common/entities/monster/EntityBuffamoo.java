@@ -28,10 +28,11 @@ import java.util.List;
 
 public class EntityBuffamoo extends ChargingMonster {
 
-    public static final AnimatedAction CHARGE_ATTACK = new AnimatedAction(44, 16, "charge");
-    public static final AnimatedAction STAMP = new AnimatedAction(8, 4, "stamp");
+    public static final AnimatedAction CHARGE_ATTACK = AnimatedAction.builder(2.2, "charge")
+            .marker("attack_start", 0.72).marker("attack_end", 1.92).build();
+    public static final AnimatedAction STAMP = AnimatedAction.builder(0.48, "stamp").marker("attack", 0.28).build();
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(STAMP, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(0, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{STAMP, CHARGE_ATTACK, INTERACT, SLEEP};
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityBuffamoo>>> ATTACKS = List.of(
@@ -81,13 +82,6 @@ public class EntityBuffamoo extends ChargingMonster {
     @Override
     protected boolean isChargingAnim(AnimatedAction anim) {
         return anim.is(CHARGE_ATTACK);
-    }
-
-    @Override
-    public boolean handleChargeMovement(AnimatedAction anim) {
-        if (anim.isPastTick(2.04))
-            return false;
-        return super.handleChargeMovement(anim);
     }
 
     @Override

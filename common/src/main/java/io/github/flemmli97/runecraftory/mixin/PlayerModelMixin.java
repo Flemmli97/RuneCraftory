@@ -14,9 +14,12 @@ public abstract class PlayerModelMixin {
 
     @Inject(method = "translateToHand", at = @At("RETURN"))
     private void onHandTranslate(HumanoidArm side, PoseStack poseStack, CallbackInfo info) {
-        if (side == HumanoidArm.RIGHT)
+        if (side == HumanoidArm.RIGHT) {
             ((HumanoidMainHand) this).runecraftory$getRightHandItem().translateAndRotate(poseStack);
-        else
+            ((HumanoidMainHand) this).runecraftory$getRightHandItem().getChild("RightItem").translateAndRotate(poseStack);
+        } else {
             ((HumanoidMainHand) this).runecraftory$getLeftHandItem().translateAndRotate(poseStack);
+            ((HumanoidMainHand) this).runecraftory$getLeftHandItem().getChild("LeftItem").translateAndRotate(poseStack);
+        }
     }
 }

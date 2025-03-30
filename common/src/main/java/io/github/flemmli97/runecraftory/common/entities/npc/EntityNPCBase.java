@@ -178,7 +178,11 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             MemoryModuleType.DOORS_TO_CLOSE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.WALK_TARGET, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE);
 
     public static final AnimatedAction[] ANIMS = PlayerModelAnimations.getAll().toArray(new AnimatedAction[0]);
-    private final AnimationHandler<EntityNPCBase> animationHandler = new AnimationHandler<>(this, ANIMS);
+    private final AnimationHandler<EntityNPCBase> animationHandler = new AnimationHandler<>(this, ANIMS).withChangeListener(anim -> {
+        if (this.getTarget() != null)
+            this.lookAt(this.getTarget(), 360, 90);
+        return false;
+    });
 
     public final Predicate<LivingEntity> targetPred = (e) -> {
         if (e != this) {
@@ -1137,8 +1141,6 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     public void handleAttack(AnimatedAction anim) {
         this.getNavigation().stop();
-        if (anim.getTick() == 1 && this.getTarget() != null)
-            this.lookAt(this.getTarget(), 360, 90);
     }
 
     public void npcAttack(Consumer<LivingEntity> cons) {

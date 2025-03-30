@@ -41,11 +41,12 @@ import java.util.List;
 
 public abstract class EntityWispBase extends BaseMonster {
 
-    public static final AnimatedAction ATTACK_FAR = new AnimatedAction(15, 6, "attack");
-    public static final AnimatedAction ATTACK_CLOSE = AnimatedAction.builder(15, "attack_close").marker(10).withClientID("attack").build();
+    public static final AnimatedAction ATTACK_FAR = AnimatedAction.builder(0.48, "attack").marker("attack", 0.36).build();
+    public static final AnimatedAction ATTACK_CLOSE = AnimatedAction.copyOf(ATTACK_FAR, "attack_close");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(ATTACK_FAR, "interact");
-    public static final AnimatedAction VANISH = new AnimatedAction(100, 50, "vanish");
-    public static final AnimatedAction STILL = AnimatedAction.builder(1, "still").infinite().build();
+    public static final AnimatedAction VANISH = AnimatedAction.builder(5, "vanish")
+            .marker("teleport", 2.5).marker("teleport_done", 2.6).build();
+    public static final AnimatedAction STILL = AnimatedAction.builder(0, "still").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{ATTACK_FAR, ATTACK_CLOSE, INTERACT, VANISH, STILL};
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityWispBase>>> ATTACKS = List.of(
@@ -66,9 +67,10 @@ public abstract class EntityWispBase extends BaseMonster {
     private boolean vanishNext;
 
     private final AnimationHandler<EntityWispBase> animationHandler = new AnimationHandler<>(this, ANIMS)
-            .setAnimationChangeCons(anim -> {
+            .withChangeListener(anim -> {
                 if (anim != null && anim.is(VANISH))
                     this.vanishNext = this.getRandom().nextFloat() < 0.6;
+                return false;
             });
 
     public EntityWispBase(EntityType<? extends EntityWispBase> type, Level world) {
@@ -126,19 +128,19 @@ public abstract class EntityWispBase extends BaseMonster {
             this.getNavigation().stop();
             if (target != null)
                 this.getLookControl().setLookAt(target, 360, 90);
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 this.attackFar(target);
             }
         } else if (anim.is(ATTACK_CLOSE)) {
             this.getNavigation().stop();
             if (target != null)
                 this.getLookControl().setLookAt(target, 360, 90);
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 this.attackClose(target);
             }
         } else if (anim.is(VANISH)) {
             this.getNavigation().stop();
-            if (anim.canAttack()) {
+            if (anim.isAt("teleport")) {
                 if (target == null) {
                     double rX = this.getX() + (this.random.nextDouble() - 0.5) * 16;
                     double rY = this.getY() + (this.random.nextDouble() - 0.5) * 4;

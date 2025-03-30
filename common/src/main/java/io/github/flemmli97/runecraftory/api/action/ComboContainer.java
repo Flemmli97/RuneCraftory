@@ -12,6 +12,14 @@ public class ComboContainer {
 
     public static final Predicate<WeaponHandler> AFTER_ANIM = WeaponHandler::isCurrentAnimationDone;
 
+    public static Predicate<WeaponHandler> past(String marker) {
+        return handler -> handler.getAnimation() == null || handler.isCurrentAnimationDone() || handler.getAnimation().isPast(marker);
+    }
+
+    public static Predicate<WeaponHandler> past(double time) {
+        return handler -> handler.getAnimation() == null || handler.isCurrentAnimationDone() || handler.getAnimation().isPast(time);
+    }
+
     private final List<ComboHandler> handlers;
 
     public ComboContainer(List<ComboHandler> handlers) {

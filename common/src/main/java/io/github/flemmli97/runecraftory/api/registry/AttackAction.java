@@ -15,27 +15,27 @@ import net.minecraft.world.item.ItemStack;
 public class AttackAction extends CustomRegistryEntry<AttackAction> {
 
     public static CombatUtils.EntityAttack spinAttack(LivingEntity entity, AnimatedAction anim, double startSec, double endSec, float startRot, float endRot, float range) {
-        if (!entity.level.isClientSide() && anim.isPastTick(startSec) && !anim.isPastTick(endSec)) {
-            int start = (int) Math.ceil(startSec * 20);
-            int end = (int) Math.ceil(endSec * 20);
-            float len = (end - start) / anim.getSpeed();
-            float f = (anim.getTick() - start) / anim.getSpeed();
-            float inc = (endRot - startRot) / len;
-            return CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets((startRot + f * inc), (startRot + (f + 1) * inc), range));
+        if (!entity.level.isClientSide() && anim.isBetween(startSec, endSec)) {
+            float start = (float) (startSec * 20);
+            float end = (float) (endSec * 20);
+            float f = anim.progress(start, end, 1, 0);
+            float fNext = anim.progress(start, end, 1, 1);
+            float add = endRot - startRot;
+            return CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets(startRot + f * add, startRot + fNext * add, range));
         }
         return null;
     }
 
     public static CombatUtils.EntityAttack spinAttack(LivingEntity entity, AnimatedAction anim, double startSec, double endSec, float startRot, float endRot,
                                                       CombatUtils.FloatMap xRot, float range) {
-        if (!entity.level.isClientSide() && anim.isPastTick(startSec) && !anim.isPastTick(endSec)) {
-            int start = (int) Math.ceil(startSec * 20);
-            int end = (int) Math.ceil(endSec * 20);
-            float len = (end - start) / anim.getSpeed();
-            float f = (anim.getTick() - start) / anim.getSpeed();
-            float inc = (endRot - startRot) / len;
-            CombatUtils.FloatMap xRot2 = p -> xRot.get((p + f) / len);
-            return CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets((startRot + f * inc), (startRot + (f + 1) * inc), xRot2, range));
+        if (!entity.level.isClientSide() && anim.isBetween(startSec, endSec)) {
+            float start = (float) (startSec * 20);
+            float end = (float) (endSec * 20);
+            float f = anim.progress(start, end, 1, 0);
+            float fNext = anim.progress(start, end, 1, 1);
+            float add = endRot - startRot;
+            CombatUtils.FloatMap xRot2 = p -> xRot.get(f + (fNext - f) * p);
+            return CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets(startRot + f * add, startRot + fNext * add, xRot2, range));
         }
         return null;
     }

@@ -7,7 +7,6 @@ import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.client.model.SittingModel;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityThunderbolt;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.client.AnimationManager;
 import io.github.flemmli97.tenshilib.client.model.BlockBenchAnimations;
 import io.github.flemmli97.tenshilib.client.model.ExtendedModel;
@@ -129,22 +128,19 @@ public class ModelThunderbolt<T extends EntityThunderbolt> extends EntityModel<T
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.model.resetPoses();
-        AnimatedAction anim = entity.getAnimationHandler().getAnimation();
         this.head.yRot += (netHeadYaw % 360) * Mth.DEG_TO_RAD * 0.15f;
         this.head.xRot += headPitch * Mth.DEG_TO_RAD * 0.15f;
         this.neck.yRot += (netHeadYaw % 360) * Mth.DEG_TO_RAD * 0.15f;
         this.neck.xRot += headPitch * Mth.DEG_TO_RAD * 0.15f;
 
         float partialTicks = Minecraft.getInstance().getFrameTime();
-        if (anim == null) {
-            if (entity.deathTime <= 0 && !entity.playDeath()) {
-                if (entity.getMoveFlag() == BaseMonster.MoveType.RUN)
-                    this.anim.doAnimation(this, "run", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
-                else if (entity.moveTick() > 0)
-                    this.anim.doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
-            }
-        } else
-            this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks);
+        if (entity.deathTime <= 0 && !entity.playDeath()) {
+            if (entity.getMoveFlag() == BaseMonster.MoveType.RUN)
+                this.anim.doAnimation(this, "run", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
+            else if (entity.moveTick() > 0)
+                this.anim.doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
+        }
+        this.anim.doAnimation(this, entity.getAnimationHandler(), partialTicks);
     }
 
     @Override

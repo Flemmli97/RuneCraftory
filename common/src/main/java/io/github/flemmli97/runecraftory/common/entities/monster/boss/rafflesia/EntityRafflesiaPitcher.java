@@ -89,7 +89,7 @@ public class EntityRafflesiaPitcher extends EntityRafflesiaPart {
         super.baseTick();
         if (!this.level.isClientSide) {
             this.getAnimationHandler().runIfNotNull(anim -> {
-                if (anim.canAttack()) {
+                if (anim.isAt("attack")) {
                     rafflesiaSpawning(this);
                 }
             });

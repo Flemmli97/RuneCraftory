@@ -25,7 +25,7 @@ import java.util.List;
 
 public class EntityGoblinPirate extends EntityGoblin {
 
-    private static final AnimatedAction DOUBLE_SLASH = new AnimatedAction(20, 9, "double_slash");
+    private static final AnimatedAction DOUBLE_SLASH = AnimatedAction.builder(1, "double_slash").marker("attack", 0.4, 0.8).build();
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(DOUBLE_SLASH, "interact");
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{DOUBLE_SLASH, LEAP, INTERACT, SLEEP};
 
@@ -82,7 +82,7 @@ public class EntityGoblinPirate extends EntityGoblin {
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(DOUBLE_SLASH)) {
             this.getNavigation().stop();
-            if (anim.canAttack() || anim.isAtTick(0.8)) {
+            if (anim.isAt("attack")) {
                 this.mobAttack(anim, this.getTarget(), this::quickAttack);
             }
         } else

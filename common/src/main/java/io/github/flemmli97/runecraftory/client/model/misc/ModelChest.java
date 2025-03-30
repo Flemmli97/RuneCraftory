@@ -3,7 +3,6 @@ package io.github.flemmli97.runecraftory.client.model.misc;// Made with Blockben
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.IAnimated;
 import io.github.flemmli97.tenshilib.client.AnimationManager;
 import io.github.flemmli97.tenshilib.client.model.BlockBenchAnimations;
@@ -57,10 +56,8 @@ public class ModelChest<T extends Entity & IAnimated> extends EntityModel<T> imp
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.model.resetPoses();
-        AnimatedAction anim = entity.getAnimationHandler().getAnimation();
         float partialTicks = Minecraft.getInstance().getFrameTime();
-        if (anim != null)
-            this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks);
+        this.anim.doAnimation(this, entity.getAnimationHandler(), partialTicks);
     }
 
     @Override

@@ -42,12 +42,12 @@ public class EntityMimic extends LeapingMonster {
 
     private static final EntityDataAccessor<Boolean> AWAKE = SynchedEntityData.defineId(EntityMimic.class, EntityDataSerializers.BOOLEAN);
 
-    private static final AnimatedAction MELEE = new AnimatedAction(0.6, 0.44, "attack");
-    private static final AnimatedAction LEAP = new AnimatedAction(0.6, 0.2, "leap");
-    private static final AnimatedAction THROW = new AnimatedAction(0.6, 0.44, "throw");
+    private static final AnimatedAction MELEE = AnimatedAction.builder(0.6, "attack").marker("attack", 0.44).build();
+    private static final AnimatedAction LEAP = AnimatedAction.builder(0.6, "leap").marker("attack", 0.2).build();
+    private static final AnimatedAction THROW = AnimatedAction.builder(0.6, "throw").marker("attack", 0.44).build();
     private static final AnimatedAction ARROW = AnimatedAction.copyOf(THROW, "arrow");
-    private static final AnimatedAction CAST = new AnimatedAction(0.6, 0.44, "cast");
-    private static final AnimatedAction CLOSE = new AnimatedAction(6, 6, "close");
+    private static final AnimatedAction CAST = AnimatedAction.builder(0.6, "cast").marker("attack", 0.44).build();
+    private static final AnimatedAction CLOSE = AnimatedAction.builder(0.32, "close").build();
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, LEAP, THROW, ARROW, CAST, CLOSE, INTERACT};
 
@@ -147,7 +147,7 @@ public class EntityMimic extends LeapingMonster {
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(THROW)) {
             this.getNavigation().stop();
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 ItemStack held = this.getMainHandItem();
                 this.setItemSlot(EquipmentSlot.MAINHAND, this.throwables.get(this.random.nextInt(this.throwables.size())));
                 ModSpells.THROW_HAND_ITEM.get().use(this);
@@ -155,15 +155,15 @@ public class EntityMimic extends LeapingMonster {
             }
         } else if (anim.is(CAST)) {
             this.getNavigation().stop();
-            if (anim.canAttack())
+            if (anim.isAt("attack"))
                 ModSpells.WATER_LASER.get().use(this);
         } else if (anim.is(ARROW)) {
             this.getNavigation().stop();
-            if (anim.canAttack())
+            if (anim.isAt("attack"))
                 ModSpells.DOUBLE_ARROW.get().use(this);
         } else {
             if (!this.isLeapingAnim(anim)) {
-                Vec3 vec32 = this.getLeapVec(this.getTarget() == null ? this.getTargetPosition().asVec(this.position()) : this.getTarget().position()).scale(0.1);
+                Vec3 vec32 = this.getLeapVec(this.tryGetTargetPosition(this.getTarget())).scale(0.1);
                 this.setDeltaMovement(vec32.x, 0.05f, vec32.z);
             }
             super.handleAttack(anim);

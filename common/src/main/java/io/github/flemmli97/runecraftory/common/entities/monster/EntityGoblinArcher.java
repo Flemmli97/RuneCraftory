@@ -32,9 +32,9 @@ import java.util.List;
 
 public class EntityGoblinArcher extends EntityGoblin {
 
-    private static final AnimatedAction BOW = new AnimatedAction(15, 9, "bow");
+    private static final AnimatedAction BOW = AnimatedAction.builder(0.8, "bow").marker("attack", 0.52).build();
     private static final AnimatedAction TRIPLE = AnimatedAction.copyOf(BOW, "triple");
-    private static final AnimatedAction KICK = new AnimatedAction(11, 7, "kick");
+    private static final AnimatedAction KICK = AnimatedAction.builder(0.56, "kick").marker("attack", 0.32).build();
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(KICK, "interact");
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{BOW, TRIPLE, KICK, INTERACT, SLEEP};
 
@@ -95,12 +95,18 @@ public class EntityGoblinArcher extends EntityGoblin {
     }
 
     @Override
+    public void setupAttack(AnimatedAction anim) {
+        if (anim.is(BOW, TRIPLE)) {
+            this.startUsingItem(InteractionHand.MAIN_HAND);
+        }
+        super.setupAttack(anim);
+    }
+
+    @Override
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(BOW, TRIPLE)) {
-            if (anim.getTick() == 1)
-                this.startUsingItem(InteractionHand.MAIN_HAND);
             this.getNavigation().stop();
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 boolean withTarget = this.getTarget() != null && this.getSensing().hasLineOfSight(this.getTarget());
                 if (anim.is(BOW)) {
                     if (withTarget)

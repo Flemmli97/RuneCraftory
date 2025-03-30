@@ -50,7 +50,7 @@ public class RenderRaccoon<T extends EntityRaccoon> extends RenderMonster<T, Mod
             this.shadowRadius = 0.5f;
         AnimatedAction anim = entity.getAnimationHandler().getAnimation();
         if (anim != null && (anim.is(EntityRaccoon.TRANSFORM) || anim.is(EntityRaccoon.UNTRANSFORM))) {
-            int tick = anim.getTick();
+            int tick = (int) anim.getTick(1);
             if (tick < 10)
                 this.model = tick % 3 == 0 ? this.berserkModel : this.normalModel;
             else if (tick < 20)

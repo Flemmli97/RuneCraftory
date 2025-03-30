@@ -44,11 +44,16 @@ import java.util.function.BiConsumer;
 
 public class EntitySarcophagus extends BossMonster {
 
-    public static final AnimatedAction TELEPORT = new AnimatedAction(2.64, "teleport");
-    public static final AnimatedAction CHARGE = new AnimatedAction(1.6, 0.44, "charge");
-    public static final AnimatedAction BEAM = new AnimatedAction(0.68, 0.48, "cast");
-    public static final AnimatedAction BEAM_3X = new AnimatedAction(2.2, 0.48, "cast_3x");
-    public static final AnimatedAction FIRE_CIRCLE = new AnimatedAction(2.32, 0.4, "circle_cast");
+    public static final AnimatedAction TELEPORT = AnimatedAction.builder(2.64, "teleport")
+            .marker("teleport_start_1", 0.2).marker("teleport_end_1", 0.44)
+            .marker("teleport_start_2", 1.2).marker("teleport_end_2", 1.44)
+            .marker("teleport_start_3", 2.2).marker("teleport_end_3", 2.44)
+            .marker("teleport", 0.28, 1.28, 2.28).build();
+    public static final AnimatedAction CHARGE = AnimatedAction.builder(1.6, "charge")
+            .marker("attack_start", 0.28).marker("attack_end", 1.48).build();
+    public static final AnimatedAction BEAM = AnimatedAction.builder(0.68, "cast").marker("attack", 0.48).build();
+    public static final AnimatedAction BEAM_3X = AnimatedAction.builder(2.2, "cast_3x").marker("attack", 0.48, 1.24, 2.0).build();
+    public static final AnimatedAction FIRE_CIRCLE = AnimatedAction.builder(2.32, "circle_cast").marker("attack", 0.4).build();
     public static final AnimatedAction WIND_CIRCLE = AnimatedAction.copyOf(FIRE_CIRCLE, "wind_circle");
     public static final AnimatedAction ICE_CIRCLE = AnimatedAction.copyOf(FIRE_CIRCLE, "ice_circle");
     public static final AnimatedAction EARTH_CIRCLE = AnimatedAction.copyOf(FIRE_CIRCLE, "earth_circle");
@@ -56,10 +61,12 @@ public class EntitySarcophagus extends BossMonster {
     public static final AnimatedAction LIGHT_4X = AnimatedAction.copyOf(BEAM, "light_4x");
     public static final AnimatedAction SHINE = AnimatedAction.copyOf(BEAM, "shine");
     public static final AnimatedAction PRISM = AnimatedAction.copyOf(BEAM, "prism");
-    public static final AnimatedAction MISSILE = new AnimatedAction(1.04, 0.72, "missile");
-    public static final AnimatedAction STARFALL = new AnimatedAction(8.2, 0.8, "starfall");
+    public static final AnimatedAction MISSILE = AnimatedAction.builder(1.04, "missile").marker("attack", 0.72).build();
+    public static final AnimatedAction STARFALL = AnimatedAction.builder(8.2, "starfall").marker("attack", 0.8)
+            .marker("attack_start", 0.24).marker("attack_end", 7.96)
+            .marker("teleport_start", 0.2).marker("teleport_end", 8.0).build();
     public static final AnimatedAction ANGRY = new AnimatedAction(1.04, "angry");
-    public static final AnimatedAction DEFEAT = AnimatedAction.builder(80, "defeat").marker(60).infinite().build();
+    public static final AnimatedAction DEFEAT = AnimatedAction.builder(10, "defeat").infinite().build();
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(BEAM, "interact");
     private static final AnimatedAction[] ANIMATED_ACTIONS = new AnimatedAction[]{TELEPORT, CHARGE, BEAM, BEAM_3X, FIRE_CIRCLE, WIND_CIRCLE, ICE_CIRCLE, EARTH_CIRCLE,
             LIGHT_2X, LIGHT_4X, SHINE, PRISM, MISSILE, STARFALL, DEFEAT, INTERACT, ANGRY};
@@ -67,14 +74,16 @@ public class EntitySarcophagus extends BossMonster {
     private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntitySarcophagus>> ATTACK_HANDLER = createAnimationHandler(b -> {
         b.put(TELEPORT, (anim, entity) -> {
             entity.getNavigation().stop();
-            if (anim.isAtTick(0.2) || anim.isAtTick(0.44) || anim.isAtTick(1.2) || anim.isAtTick(1.44) || anim.isAtTick(2.2) || anim.isAtTick(2.44)) {
+            if (anim.isAt("teleport_start_1") || anim.isAt("teleport_end_1")
+                    || anim.isAt("teleport_start_2") || anim.isAt("teleport_end_2")
+                    || anim.isAt("teleport_start_3") || anim.isAt("teleport_end_3")) {
                 entity.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
             }
-            if (anim.isAtTick(0.28) || anim.isAtTick(1.28) || anim.isAtTick(2.28))
+            if (anim.isAt("teleport"))
                 entity.teleportAround(8, 10);
         });
         b.put(CHARGE, (anim, entity) -> {
-            if (anim.isPastTick(0.28) && !anim.isPastTick(1.48)) {
+            if (anim.isPast("attack_start") && !anim.isPast("attack_end")) {
                 if (entity.hitEntity == null)
                     entity.hitEntity = new ArrayList<>();
                 if (entity.chargeMotion == null) {
@@ -97,62 +106,62 @@ public class EntitySarcophagus extends BossMonster {
         });
         b.put(BEAM, (anim, entity) -> {
             entity.getNavigation().stop();
-            if (anim.canAttack())
+            if (anim.isAt("attack"))
                 ModSpells.LIGHT_BEAM.get().use(entity);
         });
         b.put(BEAM_3X, (anim, entity) -> {
             entity.getNavigation().stop();
-            if (anim.canAttack() || anim.isAtTick(1.24) || anim.isAtTick(2.0))
+            if (anim.isAt("attack"))
                 ModSpells.LIGHT_BEAM.get().use(entity);
         });
         b.put(FIRE_CIRCLE, (anim, entity) -> {
             entity.getNavigation().stop();
-            if (anim.canAttack())
+            if (anim.isAt("attack"))
                 ModSpells.FIRE_CIRCLE.get().use(entity);
         });
         b.put(WIND_CIRCLE, (anim, entity) -> {
             entity.getNavigation().stop();
-            if (anim.canAttack())
+            if (anim.isAt("attack"))
                 ModSpells.WIND_CIRCLE.get().use(entity);
         });
         b.put(ICE_CIRCLE, (anim, entity) -> {
             entity.getNavigation().stop();
-            if (anim.canAttack())
+            if (anim.isAt("attack"))
                 ModSpells.ICE_CIRCLE.get().use(entity);
         });
         b.put(EARTH_CIRCLE, (anim, entity) -> {
             entity.getNavigation().stop();
-            if (anim.canAttack())
+            if (anim.isAt("attack"))
                 ModSpells.EARTH_CIRCLE.get().use(entity);
         });
         b.put(LIGHT_2X, (anim, entity) -> {
             entity.getNavigation().stop();
-            if (anim.canAttack())
+            if (anim.isAt("attack"))
                 ModSpells.EXPANDING_DOUBLE_LIGHT.get().use(entity);
         });
         b.put(LIGHT_4X, (anim, entity) -> {
             entity.getNavigation().stop();
-            if (anim.canAttack())
+            if (anim.isAt("attack"))
                 ModSpells.EXPANDING_QUAD_LIGHT.get().use(entity);
         });
         b.put(SHINE, (anim, entity) -> {
             entity.getNavigation().stop();
-            if (anim.canAttack())
+            if (anim.isAt("attack"))
                 ModSpells.SHINE.get().use(entity);
         });
         b.put(PRISM, (anim, entity) -> {
             entity.getNavigation().stop();
-            if (anim.canAttack())
+            if (anim.isAt("attack"))
                 ModSpells.PRISM_LONG.get().use(entity);
         });
         b.put(MISSILE, (anim, entity) -> {
             entity.getNavigation().stop();
-            if (anim.canAttack())
+            if (anim.isAt("attack"))
                 ModSpells.MISSILE_8X.get().use(entity);
         });
         b.put(STARFALL, (anim, entity) -> {
             entity.getNavigation().stop();
-            if (anim.isAtTick(0.24)) {
+            if (anim.isAt("attack_start")) {
                 entity.starFallPre = entity.position();
                 if (entity.hasRestriction()) {
                     Vec3 pos = Vec3.atCenterOf(entity.getRestrictCenter());
@@ -167,7 +176,7 @@ public class EntitySarcophagus extends BossMonster {
             }
             if (entity.starFallPos != null)
                 entity.setPos(entity.starFallPos);
-            if (anim.isAtTick(7.96)) {
+            if (anim.isAt("attack_end")) {
                 entity.teleportTo(entity.starFallPre.x(), entity.starFallPre.y(), entity.starFallPre.z());
                 entity.starFallPre = null;
                 entity.starFallPos = null;
@@ -214,7 +223,7 @@ public class EntitySarcophagus extends BossMonster {
     );
 
     public final AnimatedAttackGoal<EntitySarcophagus> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
-    private final AnimationHandler<EntitySarcophagus> animationHandler = new AnimationHandler<>(this, ANIMATED_ACTIONS).setAnimationChangeCons(anim -> {
+    private final AnimationHandler<EntitySarcophagus> animationHandler = new AnimationHandler<>(this, ANIMATED_ACTIONS).withChangeListener(anim -> {
         this.hitEntity = null;
         if (anim != null) {
             this.teleported = TELEPORT.is(anim);
@@ -239,6 +248,7 @@ public class EntitySarcophagus extends BossMonster {
                 this.setNoGravity(this.gravityPre);
             }
         }
+        return false;
     });
 
     private Vec3 chargeMotion, starFallPre, starFallPos;
@@ -305,13 +315,13 @@ public class EntitySarcophagus extends BossMonster {
     private boolean isTeleporting() {
         AnimatedAction anim = this.getAnimationHandler().getAnimation();
         if (TELEPORT.is(anim)) {
-            if (anim.isPastTick(0.2) && !anim.isPastTick(0.44))
+            if (anim.isPast("teleport_start_1") && !anim.isPast("teleport_end_1"))
                 return true;
-            if (anim.isPastTick(1.2) && !anim.isPastTick(1.44))
+            if (anim.isPast("teleport_start_2") && !anim.isPast("teleport_end_2"))
                 return true;
-            return anim.isPastTick(2.2) && !anim.isPastTick(2.44);
+            return anim.isPast("teleport_start_3") && !anim.isPast("teleport_end_3");
         } else if (STARFALL.is(anim)) {
-            return anim.isPastTick(0.2) && !anim.isPastTick(8.0);
+            return anim.isPast("teleport_start") && !anim.isPast("teleport_end");
         }
         return false;
     }
@@ -386,7 +396,7 @@ public class EntitySarcophagus extends BossMonster {
     @Override
     protected Vec3 directionToLookAt() {
         if (this.getAnimationHandler().isCurrent(CHARGE)) {
-            if (this.getAnimationHandler().getAnimation().isPastTick(0.28))
+            if (this.getAnimationHandler().getAnimation().isPast("attack_start"))
                 return this.chargeMotion;
             return null;
         }

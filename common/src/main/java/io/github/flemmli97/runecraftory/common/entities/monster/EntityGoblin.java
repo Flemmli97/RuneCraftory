@@ -32,11 +32,11 @@ import java.util.List;
 
 public class EntityGoblin extends LeapingMonster {
 
-    protected static final AnimatedAction MELEE = new AnimatedAction(12, 7, "slash");
-    protected static final AnimatedAction LEAP = new AnimatedAction(19, 6, "leap");
-    protected static final AnimatedAction STONE = new AnimatedAction(14, 9, "throw");
+    protected static final AnimatedAction MELEE = AnimatedAction.builder(0.72, "slash").marker("attack", 0.36).build();
+    protected static final AnimatedAction LEAP = AnimatedAction.builder(0.92, "leap").marker("attack_start", 0.36).build();
+    protected static final AnimatedAction STONE = AnimatedAction.builder(0.72, "throw").marker("attack", 0.48).build();
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(0, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, LEAP, STONE, INTERACT, SLEEP};
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityGoblin>>> ATTACKS = List.of(
@@ -119,7 +119,7 @@ public class EntityGoblin extends LeapingMonster {
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(STONE)) {
             this.getNavigation().stop();
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 ModSpells.STONE_THROW.get().use(this);
             }
         } else

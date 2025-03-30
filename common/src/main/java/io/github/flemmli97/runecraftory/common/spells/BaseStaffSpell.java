@@ -35,7 +35,7 @@ public class BaseStaffSpell extends Spell {
                 entity.level.addFreshEntity(ball);
             } else if (staff.amount == 2) {
                 for (float offset : OFFSET_TWO) {
-                    Vec3 side = MathUtils.rotate(MathUtils.normalY, MathUtils.normalX, -entity.getYRot() * Mth.DEG_TO_RAD);
+                    Vec3 side = MathUtils.rotate(MathUtils.NORMAL_Y, MathUtils.NORMAL_X, -entity.getYRot() * Mth.DEG_TO_RAD);
                     Vec3 newPos = entity.position().add(side.scale(offset)).add(0, entity.getEyeHeight() - 0.1, 0);
                     EntityElementalBall ball = new EntityElementalBall(level, entity, element);
                     Vec3 look = entity.getLookAngle();
@@ -45,7 +45,7 @@ public class BaseStaffSpell extends Spell {
                 }
             } else {
                 for (float offset : OFFSET_THREE) {
-                    Vec3 side = MathUtils.rotate(MathUtils.normalY, MathUtils.normalX, -entity.getYRot() * Mth.DEG_TO_RAD);
+                    Vec3 side = MathUtils.rotate(MathUtils.NORMAL_Y, MathUtils.NORMAL_X, -entity.getYRot() * Mth.DEG_TO_RAD);
                     Vec3 newPos = entity.position().add(side.scale(offset)).add(0, entity.getEyeHeight() - 0.1, 0);
                     EntityElementalBall ball = new EntityElementalBall(level, entity, element);
                     Vec3 look = entity.getLookAngle();

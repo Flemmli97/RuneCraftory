@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.client.model;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.client.TransformationHelper;
 import io.github.flemmli97.runecraftory.mixinhelper.HumanoidMainHand;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
@@ -46,9 +47,9 @@ public class AnimatedPlayerModel<T extends LivingEntity & IAnimated> extends Ent
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "player"));
         this.head = this.model.getPart("Head");
         this.rightArm = this.model.getPart("RightArm");
-        this.rightArmItem = this.model.getPart("RightItem");
+        this.rightArmItem = this.model.getPart("RightItemRoot");
         this.leftArm = this.model.getPart("LeftArm");
-        this.leftArmItem = this.model.getPart("LeftItem");
+        this.leftArmItem = this.model.getPart("LeftItemRoot");
         this.rightLeg = this.model.getPart("RightLeg");
         this.leftLeg = this.model.getPart("LeftLeg");
     }
@@ -63,11 +64,15 @@ public class AnimatedPlayerModel<T extends LivingEntity & IAnimated> extends Ent
 
         PartDefinition LeftArm = Body.addOrReplaceChild("LeftArm", CubeListBuilder.create().texOffs(32, 48).addBox(-1.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(5.0F, 2.0F, 0.0F));
 
-        PartDefinition LeftItem = LeftArm.addOrReplaceChild("LeftItem", CubeListBuilder.create().texOffs(0, 0).addBox(0.0F, 4.7F, -12.0F, 1.0F, 4.0F, 13.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition LeftItemRoot = LeftArm.addOrReplaceChild("LeftItemRoot", CubeListBuilder.create(), PartPose.offset(1.0F, 8.0F, 0.0F));
+
+        PartDefinition LeftItem = LeftItemRoot.addOrReplaceChild("LeftItem", CubeListBuilder.create(), PartPose.offset(-1.0F, -8.0F, 0.0F));
 
         PartDefinition RightArm = Body.addOrReplaceChild("RightArm", CubeListBuilder.create().texOffs(40, 16).addBox(-3.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(-5.0F, 2.0F, 0.0F));
 
-        PartDefinition RightItem = RightArm.addOrReplaceChild("RightItem", CubeListBuilder.create().texOffs(0, 0).addBox(-1.0F, 4.7F, -12.0F, 1.0F, 4.0F, 13.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition RightItemRoot = RightArm.addOrReplaceChild("RightItemRoot", CubeListBuilder.create(), PartPose.offset(-1.0F, 8.0F, 0.0F));
+
+        PartDefinition RightItem = RightItemRoot.addOrReplaceChild("RightItem", CubeListBuilder.create(), PartPose.offset(1.0F, -8.0F, 0.0F));
 
         PartDefinition LeftLeg = Body.addOrReplaceChild("LeftLeg", CubeListBuilder.create().texOffs(16, 48).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(1.9F, 12.0F, 0.0F));
 
@@ -87,26 +92,34 @@ public class AnimatedPlayerModel<T extends LivingEntity & IAnimated> extends Ent
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
     }
 
-    public boolean setUpModel(LivingEntity entity, HumanoidModel<?> model, AnimatedAction anim, AnimatedAction last, float partialTicks, float interpolation) {
+    public boolean setUpModel(LivingEntity entity, HumanoidModel<?> model, WeaponHandler handler, float partialTicks) {
+        HumanoidMainHand hands = (HumanoidMainHand) model;
+        hands.runecraftory$getLeftHandItem().resetAll();
+        hands.runecraftory$getRightHandItem().resetAll();
         if (entity instanceof IAnimated animated) {
-            interpolation = animated.getAnimationHandler().getInterpolatedAnimationVal(partialTicks);
-            boolean reset = animated.getAnimationHandler().getLastAnim() == null || interpolation == 1;
-            this.setup(model, reset);
-            return this.anim.doAnimation(this, animated.getAnimationHandler(), partialTicks, 5, entity.getMainArm() == HumanoidArm.LEFT);
+//            interpolation = animated.getAnimationHandler().getInterpolatedAnimationVal(partialTicks);
+//            boolean reset = animated.getAnimationHandler().getLastAnim() == null || interpolation == 1;
+//            this.setup(model, reset);
+            return this.anim.doAnimation(this, animated.getAnimationHandler(), partialTicks, entity.getMainArm() == HumanoidArm.LEFT);
         }
-        boolean reset = last == null || interpolation == 1;
+        boolean reset = handler.getLastAnimation() == null;
         this.setup(model, reset);
-        return this.doAnimation(anim, last, partialTicks, interpolation, entity.getMainArm() == HumanoidArm.LEFT);
+        return this.doAnimation(handler, partialTicks, entity.getMainArm() == HumanoidArm.LEFT);
     }
 
-    private boolean doAnimation(AnimatedAction anim, AnimatedAction last, float partialTicks, float interpolation, boolean mirror) {
-        float interpolationRev = 1 - interpolation;
+    private boolean doAnimation(WeaponHandler handler, float partialTicks, boolean mirror) {
+        AnimatedAction current = handler.getAnimation();
+        AnimatedAction last = handler.getLastAnimation();
+        float interpolationLast = handler.getLastTransitionProgress(partialTicks);
+        float interpolation = handler.getCurrentTransitionProgress(partialTicks);
         boolean changed = false;
-        if (last != null && interpolationRev > 0) {
-            changed = this.anim.doAnimation(this, last.getAnimationClient(), last.getTick(), partialTicks, anim != null ? 1 : interpolationRev, mirror, BlockBenchAnimations.InterpolationCheck.END);
+        if (last != null && interpolationLast > 0) {
+            changed = this.anim.doAnimation(this, last.getClientIdentifier(), last.getTick(partialTicks), interpolationLast, false, false);
         }
-        if (anim != null) {
-            changed = this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks, interpolation, mirror, BlockBenchAnimations.InterpolationCheck.START);
+        if (current != null) {
+            if (this.anim.doAnimation(this, current.getClientIdentifier(), current.getTick(partialTicks), interpolation, false, false) && !changed) {
+                changed = true;
+            }
         }
         return changed;
     }
@@ -151,15 +164,5 @@ public class AnimatedPlayerModel<T extends LivingEntity & IAnimated> extends Ent
 
     private void apply(ModelPart model, PartPose main, ModelPartHandler.ModelPartExtended first) {
         model.loadPose(TransformationHelper.withParent(main, first.storePose()));
-    }
-
-    public void renderHand(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, boolean left) {
-        this.leftArmItem.visible = false;
-        this.rightArmItem.visible = false;
-        this.model.getMainPart().translateAndRotate(poseStack);
-        if (left) {
-            this.leftArm.render(poseStack, buffer, packedLight, packedOverlay, 1, 1, 1, 1);
-        } else
-            this.rightArm.render(poseStack, buffer, packedLight, packedOverlay, 1, 1, 1, 1);
     }
 }

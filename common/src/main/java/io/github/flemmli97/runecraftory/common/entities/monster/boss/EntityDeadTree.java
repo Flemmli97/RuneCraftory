@@ -53,9 +53,10 @@ public class EntityDeadTree extends BossMonster {
     private static final EntityDataAccessor<Byte> SUMMON_ANIMATION = SynchedEntityData.defineId(EntityDeadTree.class, EntityDataSerializers.BYTE);
 
     //Swipes x2
-    public static final AnimatedAction ATTACK = new AnimatedAction(19, 10, "attack");
+    public static final AnimatedAction ATTACK = AnimatedAction.builder(0.92, "attack").marker("attack", 0.44, 0.68).build();
 
-    public static final AnimatedAction FALLING_APPLES = AnimatedAction.builder(15, "falling_apples").marker(6).withClientID("summon").build();
+    public static final AnimatedAction FALLING_APPLES = AnimatedAction.builder(0.72, "falling_apples")
+            .marker("attack", 0.36).withClientID("summon").build();
     public static final AnimatedAction APPLE_SHIELD = AnimatedAction.copyOf(FALLING_APPLES, "apple_shield");
     public static final AnimatedAction SPIKE = AnimatedAction.copyOf(FALLING_APPLES, "spike");
 
@@ -63,51 +64,45 @@ public class EntityDeadTree extends BossMonster {
     public static final AnimatedAction MORE_FALLING_APPLES = AnimatedAction.copyOf(FALLING_APPLES, "more_falling_apples");
     public static final AnimatedAction HEAL = AnimatedAction.copyOf(FALLING_APPLES, "heal");
 
-    public static final AnimatedAction DEFEAT = AnimatedAction.builder(120, "defeat").marker(15).infinite().build();
-    public static final AnimatedAction ANGRY = new AnimatedAction(25, 0, "angry");
+    public static final AnimatedAction DEFEAT = AnimatedAction.builder(10, "defeat").infinite().build();
+    public static final AnimatedAction ANGRY = AnimatedAction.builder(1.24, "angry").build();
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(ATTACK, "interact");
 
-    private static final List<String> SUMMONS = List.of(FALLING_APPLES.getID(),
-            APPLE_SHIELD.getID(),
-            SPIKE.getID(),
-            BIG_FALLING_APPLES.getID(),
-            MORE_FALLING_APPLES.getID()
-    );
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{ATTACK, FALLING_APPLES, APPLE_SHIELD, SPIKE, BIG_FALLING_APPLES, MORE_FALLING_APPLES, HEAL, DEFEAT, ANGRY, INTERACT};
 
     private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntityDeadTree>> ATTACK_HANDLER = createAnimationHandler(b -> {
         b.put(ATTACK, (anim, entity) -> {
-            if (anim.canAttack() || anim.isAtTick(0.64)) {
+            if (anim.isAt("attack")) {
                 entity.mobAttack(anim, entity.getTarget(), entity::doHurtTarget);
             }
         });
         b.put(FALLING_APPLES, (anim, entity) -> {
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 ModSpells.APPLE_RAIN.get().use(entity);
             }
         });
         b.put(APPLE_SHIELD, (anim, entity) -> {
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 ModSpells.APPLE_SHIELD.get().use(entity);
             }
         });
         b.put(BIG_FALLING_APPLES, (anim, entity) -> {
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 ModSpells.APPLE_RAIN_BIG.get().use(entity);
             }
         });
         b.put(MORE_FALLING_APPLES, (anim, entity) -> {
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 ModSpells.APPLE_RAIN_MORE.get().use(entity);
             }
         });
         b.put(SPIKE, (anim, entity) -> {
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 ModSpells.ROOT_SPIKE_TRIPLE.get().use(entity);
             }
         });
         b.put(HEAL, (anim, entity) -> {
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 float healAmount = (float) (CombatUtils.getAttributeValue(entity, ModAttributes.MAGIC.get()) * 2);
                 entity.heal(healAmount);
                 ServerLevel serverLevel = (ServerLevel) entity.level;
@@ -151,17 +146,20 @@ public class EntityDeadTree extends BossMonster {
 
     public final AnimatedAttackGoal<EntityDeadTree> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityDeadTree> animationHandler = new AnimationHandler<>(this, ANIMS)
-            .setAnimationChangeCons(anim -> {
+            .withChangeListener(anim -> {
                 if (!this.level.isClientSide && anim != null) {
                     if (anim.is(APPLE_SHIELD))
                         this.shieldCooldown = 100;
                     if (anim.is(HEAL))
                         this.healCooldown = 100;
-                    if (SUMMONS.contains(anim.getID())) {
-                        int rand = this.random.nextInt(3);
-                        this.entityData.set(SUMMON_ANIMATION, (byte) rand);
-                    }
+                } else if (anim != null && anim.getClientIdentifier().equals("summon")) {
+                    int rand = this.random.nextInt(3);
+                    AnimatedAction animNew = AnimatedAction.builder(anim.getLength(), anim.getID()).withClientID(anim.getClientIdentifier() + "_" + rand)
+                            .withTransitionTime(anim.getStartTransition(), anim.getEndTransitionTime()).speed(anim.getSpeed()).build();
+                    this.getAnimationHandler().setAnimation(animNew);
+                    return true;
                 }
+                return false;
             });
 
     private int shieldCooldown, healCooldown;

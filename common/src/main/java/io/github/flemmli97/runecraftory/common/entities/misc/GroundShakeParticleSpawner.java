@@ -42,7 +42,7 @@ public class GroundShakeParticleSpawner extends ProjectileSummonHelperEntity {
         int amount = Mth.ceil(1.2 * this.arc * Math.ceil(range) / 90);
         for (int i = 0; i < amount; i++) {
             float angle = yRot + (360 * ((float) i / amount) - 0.5f);
-            Vec3 target = MathUtils.rotate(MathUtils.normalY, dir.scale(range), angle * Mth.DEG_TO_RAD);
+            Vec3 target = MathUtils.rotate(MathUtils.NORMAL_Y, dir.scale(range), angle * Mth.DEG_TO_RAD);
             target = this.position().add(target.x, -1, target.z);
             BlockPos pos = new BlockPos(target);
             if (this.pos.contains(pos))

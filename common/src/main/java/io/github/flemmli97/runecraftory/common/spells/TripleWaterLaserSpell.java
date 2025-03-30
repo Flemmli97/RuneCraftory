@@ -10,6 +10,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -26,7 +27,7 @@ public class TripleWaterLaserSpell extends Spell {
             EntityWaterLaser laser = new EntityWaterLaser(level, entity);
             laser.setPos(laser.getX() + vec.x(), laser.getY() + vec.y(), laser.getZ() + vec.z());
             laser.setMaxTicks(entity instanceof Player ?
-                    PlayerModelAnimations.WATER_LASER_THREE.getLength() : 15);
+                    Mth.ceil(PlayerModelAnimations.WATER_LASER_THREE.getLength()) : 15);
             laser.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1.2f));
             laser.setYawOffset(-i * 130);
             laser.setPositionYawOffset(posYawOff);

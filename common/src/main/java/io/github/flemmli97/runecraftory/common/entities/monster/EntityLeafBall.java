@@ -30,11 +30,11 @@ import java.util.List;
 
 public class EntityLeafBall extends BaseMonster {
 
-    public static final AnimatedAction MELEE = new AnimatedAction(15, 6, "tackle");
-    public static final AnimatedAction WIND = new AnimatedAction(15, 10, "wind_blade");
-    public static final AnimatedAction SLEEP_ATTACK = new AnimatedAction(15, 10, "sleep_aura");
+    public static final AnimatedAction MELEE = AnimatedAction.builder(0.68, "tackle").marker("attack", 0.36).build();
+    public static final AnimatedAction WIND = AnimatedAction.builder(1.12, "wind_blade").marker("attack", 0.52).build();
+    public static final AnimatedAction SLEEP_ATTACK = AnimatedAction.builder(0.8, "sleep_aura").marker("attack", 0.44).build();
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
-    public static final AnimatedAction STILL = AnimatedAction.builder(1, "still").infinite().build();
+    public static final AnimatedAction STILL = AnimatedAction.builder(0, "still").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, WIND, SLEEP_ATTACK, INTERACT, STILL};
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityLeafBall>>> ATTACKS = List.of(
@@ -83,12 +83,12 @@ public class EntityLeafBall extends BaseMonster {
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(WIND)) {
             this.getNavigation().stop();
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 ModSpells.DOUBLE_SONIC.get().use(this);
             }
         } else if (anim.is(SLEEP_ATTACK)) {
             this.getNavigation().stop();
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 ModSpells.SLEEP_AURA.get().use(this);
             }
         } else

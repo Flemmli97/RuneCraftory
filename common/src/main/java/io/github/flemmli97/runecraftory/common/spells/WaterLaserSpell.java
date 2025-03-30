@@ -9,6 +9,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ProjectileUtil;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -26,7 +27,7 @@ public class WaterLaserSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         EntityWaterLaser laser = new EntityWaterLaser(level, entity);
-        laser.setMaxTicks(entity instanceof Player ? PlayerModelAnimations.WATER_LASER_ONE.getLength() : 15);
+        laser.setMaxTicks(entity instanceof Player ? Mth.ceil(PlayerModelAnimations.WATER_LASER_ONE.getLength()) : 15);
         laser.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.95f));
         laser.setRange(this.range);
         ProjectileUtil.shoot(entity, laser, 0);

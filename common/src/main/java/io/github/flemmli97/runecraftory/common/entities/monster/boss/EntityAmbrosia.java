@@ -41,22 +41,22 @@ import java.util.function.BiConsumer;
 
 public class EntityAmbrosia extends BossMonster {
 
-    public static final AnimatedAction KICK_1 = new AnimatedAction(12, 6, "kick_1");
-    public static final AnimatedAction KICK_2 = new AnimatedAction(12, 6, "kick_2");
-    public static final AnimatedAction KICK_3 = new AnimatedAction(16, 6, "kick_3");
-    public static final AnimatedAction BUTTERFLY = new AnimatedAction(45, 5, "butterfly");
-    public static final AnimatedAction WAVE = new AnimatedAction(45, 5, "wave");
-    public static final AnimatedAction SLEEP = new AnimatedAction(15, 5, "sleep");
-    public static final AnimatedAction POLLEN = new AnimatedAction(15, 5, "pollen");
+    public static final AnimatedAction KICK_1 = AnimatedAction.builder(0.6, "kick_1").marker("attack", 0.32).build();
+    public static final AnimatedAction KICK_2 = AnimatedAction.builder(0.6, "kick_2").marker("attack", 0.32).build();
+    public static final AnimatedAction KICK_3 = AnimatedAction.builder(0.84, "kick_3").marker("attack", 0.28).build();
+    public static final AnimatedAction BUTTERFLY = AnimatedAction.builder(2.04, "butterfly").marker("attack", 0.32).build();
+    public static final AnimatedAction WAVE = AnimatedAction.builder(2.24, "wave").marker("attack", 0.24).build();
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(0.76, "sleep").marker("attack", 0.24).build();
+    public static final AnimatedAction POLLEN = AnimatedAction.builder(0.72, "pollen").marker("attack", 0.28).build();
     public static final AnimatedAction POLLEN_2 = AnimatedAction.copyOf(POLLEN, "pollen_2");
-    public static final AnimatedAction DEFEAT = AnimatedAction.builder(204, "defeat").marker(150).infinite().build();
-    public static final AnimatedAction ANGRY = new AnimatedAction(48, 0, "angry");
+    public static final AnimatedAction DEFEAT = AnimatedAction.builder(10, "defeat").infinite().build();
+    public static final AnimatedAction ANGRY = AnimatedAction.builder(2.4, "angry").build();
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(KICK_1, "interact");
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{KICK_1, BUTTERFLY, WAVE, SLEEP, POLLEN, POLLEN_2, KICK_2, KICK_3, DEFEAT, ANGRY, INTERACT};
 
     private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntityAmbrosia>> ATTACK_HANDLER = createAnimationHandler(b -> {
         b.put(BUTTERFLY, (anim, entity) -> {
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 ModSpells.BUTTERFLY.get().use(entity);
             }
         });
@@ -65,7 +65,7 @@ public class EntityAmbrosia extends BossMonster {
             if (target != null) {
                 entity.getNavigation().moveTo(target, 1.0);
             }
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 entity.mobAttack(anim, target, entity::doHurtTarget);
             }
         };
@@ -74,12 +74,12 @@ public class EntityAmbrosia extends BossMonster {
         b.put(KICK_3, kick);
         b.put(SLEEP, (anim, entity) -> {
             entity.getNavigation().stop();
-            if (anim.canAttack())
+            if (anim.isAt("attack"))
                 ModSpells.SLEEP_BALLS.get().use(entity);
         });
         b.put(WAVE, (anim, entity) -> {
             entity.getNavigation().stop();
-            if (anim.canAttack())
+            if (anim.isAt("attack"))
                 ModSpells.WAVE.get().use(entity);
         });
         BiConsumer<AnimatedAction, EntityAmbrosia> pollenHandler = (anim, entity) -> {
@@ -88,7 +88,7 @@ public class EntityAmbrosia extends BossMonster {
                         .scale(0.35));
             }
             entity.setDeltaMovement(entity.moveDirection);
-            if (anim.canAttack() && !EntityUtils.sealed(entity)) {
+            if (anim.isAt("attack") && !EntityUtils.sealed(entity)) {
                 entity.getNavigation().stop();
                 EntityPollen pollen = new EntityPollen(entity.level, entity);
                 pollen.setPos(pollen.getX(), pollen.getY() + 0.5, pollen.getZ());
@@ -116,7 +116,7 @@ public class EntityAmbrosia extends BossMonster {
     );
 
     public final AnimatedAttackGoal<EntityAmbrosia> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
-    private final AnimationHandler<EntityAmbrosia> animationHandler = new AnimationHandler<>(this, ANIMS).setAnimationChangeFunc(anim -> {
+    private final AnimationHandler<EntityAmbrosia> animationHandler = new AnimationHandler<>(this, ANIMS).withChangeListener(anim -> {
         if (!this.level.isClientSide && anim == null) {
             boolean chain = !this.commanded;
             this.setMoveDirection(null);
@@ -190,7 +190,7 @@ public class EntityAmbrosia extends BossMonster {
 
     @Override
     public void setupAttack(AnimatedAction anim) {
-        if (anim.is(BUTTERFLY) && anim.isAtTick(1) && this.getTarget() != null) {
+        if (anim.is(BUTTERFLY) && this.getTarget() != null) {
             LivingEntity target = this.getTarget();
             this.setTargetPosition(new TargetPosition(target.position(),
                     target.getY(), target.getY() + target.getBbHeight() * 0.3));

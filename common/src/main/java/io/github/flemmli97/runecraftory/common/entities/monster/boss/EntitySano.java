@@ -24,36 +24,36 @@ import java.util.function.BiConsumer;
 
 public class EntitySano extends EntitySanoUno {
 
-    public static final AnimatedAction FIREBALL_3X = new AnimatedAction(40, 15, "fireball_3x");
-    public static final AnimatedAction FIREBALL_BARRAGE = new AnimatedAction(90, 15, "fireball_barrage");
-    public static final AnimatedAction EXPLOSION = new AnimatedAction(30, 15, "explosion");
-    public static final AnimatedAction FIRE_BREATH = new AnimatedAction(40, 15, "fire_breath");
-    public static final AnimatedAction DEFEAT = AnimatedAction.builder(150, "defeat").marker(150).infinite().build();
+    public static final AnimatedAction FIREBALL_3X = AnimatedAction.builder(2, "fireball_3x").marker("attack", 0.8, 1, 1.2).build();
+    public static final AnimatedAction FIREBALL_BARRAGE = AnimatedAction.builder(4.5, "fireball_barrage")
+            .marker("single", 3).marker("double", 3.8)
+            .marker("triple", 0.8).marker("quad", 1.2, 3.4).build();
+    public static final AnimatedAction EXPLOSION = AnimatedAction.builder(1.5, "explosion").marker("attack", 0.8).build();
+    public static final AnimatedAction FIRE_BREATH = AnimatedAction.builder(2, "fire_breath").marker("attack", 0.8, 1.2).build();
+    public static final AnimatedAction DEFEAT = AnimatedAction.builder(10, "defeat").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{FIREBALL_3X, FIREBALL_BARRAGE, EXPLOSION, FIRE_BREATH, DEFEAT};
 
     private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntitySano>> ATTACK_HANDLER = createAnimationHandler(b -> {
         b.put(FIREBALL_3X, (anim, entity) -> {
-            if (anim.isAtTick(15) || anim.isAtTick(20) || anim.isAtTick(25))
+            if (anim.isAt("attack"))
                 ModSpells.FIREBALL.get().use(entity);
         });
         b.put(FIREBALL_BARRAGE, (anim, entity) -> {
-            if (anim.isAtTick(15))
-                ModSpells.TRIPLE_FIRE_BALL.get().use(entity);
-            if (anim.isAtTick(20))
-                ModSpells.QUAD_FIRE_BALL.get().use(entity);
-            if (anim.isAtTick(60))
+            if (anim.isAt("single"))
                 ModSpells.FIREBALL.get().use(entity);
-            if (anim.isAtTick(65))
-                ModSpells.QUAD_FIRE_BALL.get().use(entity);
-            if (anim.isAtTick(70))
+            if (anim.isAt("double"))
                 ModSpells.DOUBLE_FIRE_BALL.get().use(entity);
+            if (anim.isAt("triple"))
+                ModSpells.TRIPLE_FIRE_BALL.get().use(entity);
+            if (anim.isAt("quad"))
+                ModSpells.QUAD_FIRE_BALL.get().use(entity);
         });
         b.put(EXPLOSION, (anim, entity) -> {
-            if (anim.canAttack())
+            if (anim.isAt("attack"))
                 ModSpells.EXPLOSION.get().use(entity);
         });
         b.put(FIRE_BREATH, (anim, entity) -> {
-            if (anim.isAtTick(15) || anim.isAtTick(25)) {
+            if (anim.isAt("attack")) {
                 Vec3 from = FireWallSpell.offset(entity);
                 Vec3 dir = entity.getTarget() != null ? EntityUtils.getStraightProjectileTarget(from, entity.getTarget()).subtract(from).normalize() : entity.getLookAngle();
                 dir = dir.scale(10).add(entity.random.nextGaussian() * 2.3, -Math.abs(entity.random.nextGaussian()) * 0.6, entity.random.nextGaussian() * 2.3);

@@ -242,6 +242,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     private int moveTick;
 
     public static final int MOVE_TICK_MAX = 3;
+    private boolean initAnim;
 
     public BaseMonster(EntityType<? extends BaseMonster> type, Level level) {
         super(type, level);
@@ -477,6 +478,14 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     @Override
     public void tick() {
+        if (!this.initAnim) {
+            this.getAnimationHandler().withChangeListener(anim -> {
+                if (anim != null)
+                    this.setupAttack(anim);
+                return false;
+            });
+            this.initAnim = true;
+        }
         super.tick();
         Vec3 lookDir = this.directionToLookAt();
         if (lookDir != null) {
@@ -517,10 +526,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             if (this.foodBuffTick == 0) {
                 this.removeFoodEffect();
             }
-            this.getAnimationHandler().runIfNotNull(anim -> {
-                this.setupAttack(anim);
-                this.handleAttack(anim);
-            });
+            this.getAnimationHandler().runIfNotNull(this::handleAttack);
             if (this.assignedBarn != null && this.assignedBarn.isInvalidFor(this))
                 this.assignedBarn = null;
             if (this.isTamed()) {
@@ -1504,7 +1510,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             this.getAnimationHandler().setAnimation(this.getDeathAnimation());
             if (load && this.level.isClientSide) {
                 AnimatedAction anim = this.getAnimationHandler().getAnimation();
-                while (anim.getTick() < anim.getLength())
+                while (!anim.done(0))
                     anim.tick();
             }
         }
@@ -1542,7 +1548,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 this.getAnimationHandler().setAnimation(this.getSleepAnimation());
                 if (this.firstTick && this.level.isClientSide) {
                     AnimatedAction anim = this.getAnimationHandler().getAnimation();
-                    while (anim.getTick() < anim.getLength())
+                    while (!anim.done(0))
                         anim.tick();
                 }
             }
@@ -1570,9 +1576,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     public void setupAttack(AnimatedAction anim) {
         if (this.getTarget() != null) {
-            if (anim.isAtTick(1)) {
-                this.setTargetPosition(this.getTarget());
-            }
+            this.setTargetPosition(this.getTarget());
         }
     }
 
@@ -1580,7 +1584,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         if (anim.is(this.getDeathAnimation(), this.getSleepAnimation()))
             return;
         this.getNavigation().stop();
-        if (anim.canAttack()) {
+        if (anim.isAt("attack")) {
             this.mobAttack(anim, this.getTarget(), this::doHurtTarget);
         }
     }
@@ -1609,16 +1613,23 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         return this.targetPosition;
     }
 
+    @Nullable
+    public Vec3 tryGetTargetPosition(LivingEntity target) {
+        if (this.getTargetPosition() != null)
+            return this.getTargetPosition()
+                    .asVec(this.position());
+        return target != null ? target.position() : null;
+    }
+
     public void mobAttack(AnimatedAction anim, LivingEntity target, Consumer<LivingEntity> cons) {
-        OrientedBoundingBox obb = this.calculateAttackAABB(anim, this.getTargetPosition() != null || target == null ? this.getTargetPosition()
-                .asVec(this.position()) : target.position(), 0);
+        OrientedBoundingBox obb = this.calculateAttackAABB(anim, this.tryGetTargetPosition(target), 0);
         this.level.getEntitiesOfClass(LivingEntity.class, obb.getEncompassingBox(),
                 entity -> this.hitPred.test(entity) && obb.intersects(entity.getBoundingBox())).forEach(cons);
         if (!this.level.isClientSide)
             S2CAttackDebug.sendDebugPacket(obb, S2CAttackDebug.EnumAABBType.ATTACK, this);
     }
 
-    public OrientedBoundingBox calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
+    public OrientedBoundingBox calculateAttackAABB(AnimatedAction anim, @Nullable Vec3 target, double grow) {
         float yRot = this.getYRot();
         float xRot = this.getXRot();
         if (target != null && !this.canBeControlledByRider()) {

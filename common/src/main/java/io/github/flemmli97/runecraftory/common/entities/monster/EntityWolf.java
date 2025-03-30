@@ -31,10 +31,12 @@ import java.util.List;
 
 public class EntityWolf extends LeapingMonster {
 
-    private static final AnimatedAction MELEE = new AnimatedAction(36, 10, "attack");
-    private static final AnimatedAction LEAP = new AnimatedAction(23, 7, "leap");
+    private static final AnimatedAction MELEE = AnimatedAction.builder(1.76, "attack")
+            .marker("attack", 0.48, 0.84, 1.16, 1.52).build();
+    private static final AnimatedAction LEAP = AnimatedAction.builder(1.12, "leap")
+            .marker("attack_start", 0.36).marker("attack_end", 0.96).build();
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(0, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, LEAP, INTERACT, SLEEP};
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityWolf>>> ATTACKS = List.of(
@@ -107,7 +109,7 @@ public class EntityWolf extends LeapingMonster {
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(MELEE)) {
             this.getNavigation().stop();
-            if (anim.isAtTick(0.52) || anim.isAtTick(0.84) || anim.isAtTick(1.16) || anim.isAtTick(1.52)) {
+            if (anim.isAt("attack")) {
                 this.mobAttack(anim, this.getTarget(), target -> wolfAttack(this, target));
             }
         } else

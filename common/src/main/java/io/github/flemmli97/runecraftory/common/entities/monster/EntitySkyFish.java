@@ -37,11 +37,11 @@ import java.util.List;
 
 public class EntitySkyFish extends BaseMonster {
 
-    public static final AnimatedAction SLAP = new AnimatedAction(11, 6, "slap");
-    public static final AnimatedAction BEAM = new AnimatedAction(14, 7, "beam");
-    public static final AnimatedAction SWIPE = new AnimatedAction(16, 4, "swipe");
+    public static final AnimatedAction SLAP = AnimatedAction.builder(0.56, "slap").marker("attack", 0.28).build();
+    public static final AnimatedAction BEAM = AnimatedAction.builder(0.68, "beam").marker("attack", 0.4).build();
+    public static final AnimatedAction SWIPE = AnimatedAction.builder(0.76, "swipe").marker("attack", 0.28).build();
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(SLAP, "interact");
-    public static final AnimatedAction STILL = AnimatedAction.builder(1, "still").infinite().build();
+    public static final AnimatedAction STILL = AnimatedAction.builder(0, "still").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{SLAP, BEAM, SWIPE, INTERACT, STILL};
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntitySkyFish>>> ATTACKS = List.of(
@@ -119,11 +119,11 @@ public class EntitySkyFish extends BaseMonster {
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(BEAM)) {
             this.getNavigation().stop();
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 ModSpells.WATER_LASER.get().use(this);
             }
         } else if (anim.is(SWIPE)) {
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 ModSpells.WATER_SWIPE.get().use(this);
             }
         } else

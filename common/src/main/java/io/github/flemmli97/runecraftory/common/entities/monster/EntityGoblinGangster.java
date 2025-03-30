@@ -25,8 +25,8 @@ import java.util.List;
 
 public class EntityGoblinGangster extends EntityGoblin {
 
-    private static final AnimatedAction DOUBLE_STAB = new AnimatedAction(18, 8, "double_stab");
-    private static final AnimatedAction DOUBLE_THROW = new AnimatedAction(20, 9, "double_throw");
+    private static final AnimatedAction DOUBLE_STAB = AnimatedAction.builder(0.88, "double_stab").marker("attack", 0.4, 0.72).build();
+    private static final AnimatedAction DOUBLE_THROW = AnimatedAction.builder(0.96, "double_throw").marker("attack", 0.4, 0.76).build();
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(DOUBLE_THROW, "interact");
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{DOUBLE_STAB, DOUBLE_THROW, INTERACT, SLEEP};
 
@@ -85,7 +85,7 @@ public class EntityGoblinGangster extends EntityGoblin {
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(DOUBLE_THROW)) {
             this.getNavigation().stop();
-            if (anim.canAttack() || anim.isAtTick(0.8)) {
+            if (anim.isAt("attack")) {
                 if (this.getTarget() != null && this.getSensing().hasLineOfSight(this.getTarget())) {
                     ModSpells.THROW_HAND_ITEM.get().use(this);
                 }
@@ -93,7 +93,7 @@ public class EntityGoblinGangster extends EntityGoblin {
             }
         } else if (anim.is(DOUBLE_STAB)) {
             this.getNavigation().stop();
-            if (anim.canAttack() || anim.isAtTick(0.72)) {
+            if (anim.isAt("attack")) {
                 this.mobAttack(anim, this.getTarget(), this::quickAttack);
             }
         }

@@ -106,7 +106,7 @@ public class ModelHandonetta<T extends EntityHandonetta> extends EntityModel<T> 
         if (entity.deathTime <= 0 && !entity.playDeath()) {
             this.anim.doAnimation(this, "idle", entity.tickCount, partialTicks);
         }
-        this.anim.doAnimation(this, entity.getAnimationHandler(), partialTicks, entity.getAnimationHandler().isCurrent(EntityHandonetta.GRAB_CAUGHT) ? 0 : 1, false);
+        this.anim.doAnimation(this, entity.getAnimationHandler(), partialTicks);
     }
 
     @Override

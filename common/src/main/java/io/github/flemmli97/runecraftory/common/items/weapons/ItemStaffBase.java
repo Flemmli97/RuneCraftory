@@ -9,7 +9,6 @@ import io.github.flemmli97.runecraftory.common.attachment.StaffData;
 import io.github.flemmli97.runecraftory.common.registry.ModArmorEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
-import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.platform.ExtendedItem;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -165,13 +164,6 @@ public class ItemStaffBase extends Item implements IItemUsable, ExtendedItem, IE
             case 1 -> cap.getTier1Spell(stack);
             default -> null;
         };
-    }
-
-    public void castBaseSpell(ItemStack stack, LivingEntity entity) {
-        if (entity.level instanceof ServerLevel serverLevel) {
-            ModSpells.STAFF_CAST.get().use(serverLevel, entity, stack);
-            entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 1.0f, 1.0f);
-        }
     }
 
     @Override

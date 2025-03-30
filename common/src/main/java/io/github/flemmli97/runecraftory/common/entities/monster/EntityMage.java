@@ -28,12 +28,12 @@ import java.util.function.Predicate;
 
 public class EntityMage extends BaseMonster implements HealingPredicateEntity {
 
-    public static final AnimatedAction SWING = new AnimatedAction(0.64, 0.36, "swing");
-    public static final AnimatedAction CAST_1 = new AnimatedAction(0.84, 0.4, "cast_1");
-    public static final AnimatedAction CAST_DOUBLE = AnimatedAction.copyOf(CAST_1, "cast");
-    public static final AnimatedAction CAST_2 = new AnimatedAction(0.92, 0.36, "cast_2");
+    public static final AnimatedAction SWING = AnimatedAction.builder(0.64, "swing").marker("attack", 0.36).build();
+    public static final AnimatedAction CAST_1 = AnimatedAction.builder(0.84, "cast_1").marker("attack", 0.4).build();
+    public static final AnimatedAction CAST_DOUBLE = AnimatedAction.builder(0.84, "cast_double").marker("attack", 0.4, 0.6).build();
+    public static final AnimatedAction CAST_2 = AnimatedAction.builder(0.92, "cast_2").marker("attack", 0.36).build();
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(SWING, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(0, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{SWING, CAST_1, CAST_2, CAST_DOUBLE, INTERACT, SLEEP};
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityMage>>> ATTACKS = List.of(
@@ -78,17 +78,17 @@ public class EntityMage extends BaseMonster implements HealingPredicateEntity {
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(CAST_1)) {
             this.getNavigation().stop();
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 this.getFirstSpell().use(this);
             }
         } else if (anim.is(CAST_DOUBLE)) {
             this.getNavigation().stop();
-            if (anim.canAttack() || anim.isAtTick(anim.getAttackTime() + 8)) {
+            if (anim.isAt("attack")) {
                 ModSpells.DARK_BALL.get().use(this);
             }
         } else if (anim.is(CAST_2)) {
             this.getNavigation().stop();
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 this.getSecondSpell().use(this);
             }
         } else {

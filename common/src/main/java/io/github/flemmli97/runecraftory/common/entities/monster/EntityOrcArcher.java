@@ -30,8 +30,8 @@ import java.util.List;
 
 public class EntityOrcArcher extends EntityOrc {
 
-    public static final AnimatedAction MELEE = new AnimatedAction(19, 13, "kick");
-    public static final AnimatedAction RANGED = new AnimatedAction(20, 12, "bow");
+    public static final AnimatedAction MELEE = AnimatedAction.builder(0.92, "kick").marker("attack", 0.58).build();
+    public static final AnimatedAction RANGED = AnimatedAction.builder(1, "bow").marker("attack", 0.6).build();
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, RANGED, INTERACT, SLEEP};
 
@@ -69,13 +69,20 @@ public class EntityOrcArcher extends EntityOrc {
         return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
     }
 
+
+    @Override
+    public void setupAttack(AnimatedAction anim) {
+        if (anim.is(RANGED)) {
+            this.startUsingItem(InteractionHand.MAIN_HAND);
+        }
+        super.setupAttack(anim);
+    }
+
     @Override
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(RANGED)) {
-            if (anim.getTick() == 1)
-                this.startUsingItem(InteractionHand.MAIN_HAND);
             this.getNavigation().stop();
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 if (this.getTarget() != null && this.getSensing().hasLineOfSight(this.getTarget())) {
                     this.shootArrow(this.getTarget());
                 } else if (this.getFirstPassenger() instanceof Player)

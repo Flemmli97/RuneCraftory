@@ -53,16 +53,18 @@ public class EntityMarionetta extends BossMonster {
 
     private static final EntityDataAccessor<Boolean> CAUGHT = SynchedEntityData.defineId(EntityMarionetta.class, EntityDataSerializers.BOOLEAN);
 
-    public static final AnimatedAction MELEE = new AnimatedAction(10, 5, "melee");
-    public static final AnimatedAction SPIN = new AnimatedAction(31, 6, "spin");
-    public static final AnimatedAction CARD_ATTACK = new AnimatedAction(13, 9, "card_attack");
-    public static final AnimatedAction CHEST_ATTACK = new AnimatedAction(24, 6, "chest_attack");
-    public static final AnimatedAction CHEST_THROW = new AnimatedAction(105, 7, "chest_throw");
-    public static final AnimatedAction STUFFED_ANIMALS = new AnimatedAction(15, 9, "stuffed_animals");
-    public static final AnimatedAction DARK_BEAM = new AnimatedAction(16, 6, "dark_beam");
-    public static final AnimatedAction FURNITURE = new AnimatedAction(24, 8, "furniture");
-    public static final AnimatedAction DEFEAT = AnimatedAction.builder(204, "defeat").marker(150).infinite().build();
-    public static final AnimatedAction ANGRY = new AnimatedAction(28, 0, "angry");
+    public static final AnimatedAction MELEE = AnimatedAction.builder(0.48, "melee").marker("attack", 0.28).build();
+    public static final AnimatedAction SPIN = AnimatedAction.builder(1.52, "spin")
+            .marker("attack_start", 0.28).marker("attack_end", 1.4).build();
+    public static final AnimatedAction CARD_ATTACK = AnimatedAction.builder(0.64, "card_attack").marker("attack", 0.36).build();
+    public static final AnimatedAction CHEST_ATTACK = AnimatedAction.builder(1.2, "chest_attack")
+            .marker("attack_start", 0.28).marker("attack_end", 1).build();
+    public static final AnimatedAction CHEST_THROW = AnimatedAction.builder(5, "chest_throw").marker("attack", 0.28).build();
+    public static final AnimatedAction STUFFED_ANIMALS = AnimatedAction.builder(0.76, "stuffed_animals").marker("attack", 0.44).build();
+    public static final AnimatedAction DARK_BEAM = AnimatedAction.builder(0.8, "dark_beam").marker("attack", 0.36).build();
+    public static final AnimatedAction FURNITURE = AnimatedAction.builder(1.2, "furniture").marker("attack", 0.4).build();
+    public static final AnimatedAction DEFEAT = AnimatedAction.builder(10, "defeat").infinite().build();
+    public static final AnimatedAction ANGRY = AnimatedAction.builder(1.2, "angry").build();
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
 
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, SPIN, CARD_ATTACK, CHEST_ATTACK, CHEST_THROW, STUFFED_ANIMALS, DARK_BEAM, FURNITURE, DEFEAT, ANGRY, INTERACT};
@@ -72,7 +74,7 @@ public class EntityMarionetta extends BossMonster {
             if (target != null) {
                 entity.getNavigation().moveTo(target, 1.0);
             }
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 entity.mobAttack(anim, target, entity::doHurtTarget);
             }
         });
@@ -83,13 +85,13 @@ public class EntityMarionetta extends BossMonster {
                         .scale(0.5));
             }
             entity.setDeltaMovement(entity.moveDirection);
-            if (anim.isPastTick(anim.getAttackTime())) {
+            if (anim.isPast("attack_start") && !anim.isPast("attack_end")) {
                 entity.mobAttack(anim, null, e -> CombatUtils.mobAttack(entity, e, new CustomDamage.Builder(entity).hurtResistant(8)));
             }
         });
         b.put(CARD_ATTACK, (anim, entity) -> {
             entity.getNavigation().stop();
-            if (anim.canAttack())
+            if (anim.isAt("attack"))
                 ModSpells.CARD_THROW.get().use(entity);
         });
         b.put(CHEST_ATTACK, (anim, entity) -> {
@@ -99,7 +101,7 @@ public class EntityMarionetta extends BossMonster {
                         .scale(0.5));
             }
             entity.setDeltaMovement(entity.moveDirection);
-            if (anim.isPastTick(anim.getAttackTime())) {
+            if (anim.isPast("attack_start") && !anim.isPast("attack_end")) {
                 entity.mobAttack(anim, null, e -> {
                     if (!entity.caughtEntities.contains(e)) {
                         entity.catchEntity(e);
@@ -109,7 +111,7 @@ public class EntityMarionetta extends BossMonster {
         });
         b.put(CHEST_THROW, (anim, entity) -> {
             entity.getNavigation().stop();
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 Vec3 throwVec = new Vec3(entity.getLookAngle().x(), 0, entity.getLookAngle().z())
                         .normalize().scale(1.2).add(0, 0.85, 0);
                 EntityMarionettaTrap trap = new EntityMarionettaTrap(entity.level, entity);
@@ -125,17 +127,17 @@ public class EntityMarionetta extends BossMonster {
         });
         b.put(STUFFED_ANIMALS, (anim, entity) -> {
             entity.getNavigation().stop();
-            if (anim.canAttack())
+            if (anim.isAt("attack"))
                 ModSpells.PLUSH_THROW.get().use(entity);
         });
         b.put(DARK_BEAM, (anim, entity) -> {
             entity.getNavigation().stop();
-            if (anim.canAttack() && !EntityUtils.sealed(entity))
+            if (anim.isAt("attack") && !EntityUtils.sealed(entity))
                 ModSpells.DARK_BEAM.get().use(entity);
         });
         b.put(FURNITURE, (anim, entity) -> {
             entity.getNavigation().stop();
-            if (anim.canAttack() && !EntityUtils.sealed(entity))
+            if (anim.isAt("attack") && !EntityUtils.sealed(entity))
                 ModSpells.FURNITURE.get().use(entity);
         });
     });
@@ -162,7 +164,7 @@ public class EntityMarionetta extends BossMonster {
 
     public final AnimatedAttackGoal<EntityMarionetta> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityMarionetta> animationHandler = new AnimationHandler<>(this, ANIMS)
-            .setAnimationChangeFunc(anim -> {
+            .withChangeListener(anim -> {
                 this.moveDirection = null;
                 if (this.entityData.get(CAUGHT)) {
                     if (!this.level.isClientSide) {

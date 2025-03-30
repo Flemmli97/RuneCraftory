@@ -42,7 +42,7 @@ public class EntityTreasureChest extends Entity implements IAnimated {
 
     private static final EntityDataAccessor<Integer> TIER = SynchedEntityData.defineId(EntityTreasureChest.class, EntityDataSerializers.INT);
 
-    private static final AnimatedAction OPEN = AnimatedAction.builder(12, "open").marker(12).infinite().build();
+    private static final AnimatedAction OPEN = AnimatedAction.builder(0.32, "open").infinite().build();
 
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{OPEN};
 
@@ -68,7 +68,7 @@ public class EntityTreasureChest extends Entity implements IAnimated {
         super.baseTick();
         this.getAnimationHandler().tick();
         AnimatedAction anim = this.getAnimationHandler().getAnimation();
-        if (!this.isRemoved() && !this.level.isClientSide && anim != null && anim.is(OPEN) && anim.canAttack()) {
+        if (!this.isRemoved() && !this.level.isClientSide && anim != null && anim.is(OPEN) && anim.done(0)) {
             if (this.openChest != null)
                 this.openChest.run();
             this.discard();

@@ -8,7 +8,6 @@ import io.github.flemmli97.runecraftory.client.model.SittingModel;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia.EntityRafflesia;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia.EntityRafflesiaPart;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.client.AnimationManager;
 import io.github.flemmli97.tenshilib.client.model.BlockBenchAnimations;
 import io.github.flemmli97.tenshilib.client.model.ExtendedModel;
@@ -209,11 +208,11 @@ public class ModelRafflesia<T extends EntityRafflesia> extends EntityModel<T> im
         this.mainRoot.yRot = (Mth.lerp(partialTicks, entity.yHeadRotO, entity.yHeadRot) - entity.getSpawnDirection().toYRot()) * Mth.DEG_TO_RAD;
         this.head.yRot += (netHeadYaw % 360) * Mth.DEG_TO_RAD * 0.3f;
         AnimatedAction current = entity.getAnimationHandler().getAnimation();
-        if (entity.deathTime <= 0 && !entity.playDeath() && (current == null || !current.getAnimationClient().equals("breath"))) {
+        if (entity.deathTime <= 0 && !entity.playDeath() && (current == null || !current.getClientIdentifier().equals("breath"))) {
             this.anim.doAnimation(this, "idle", entity.tickCount, partialTicks);
         }
-        this.doAnimation(this, entity.getAnimationHandler(), partialTicks);
-        if (current == null || current.getAnimationClient().equals("breath")) {
+        this.anim.doAnimation(this, entity.getAnimationHandler(), partialTicks, EntityRafflesia::isMirrorAttack, null);
+        if (current == null || current.getClientIdentifier().equals("breath")) {
             this.head.xRot += headPitch * Mth.DEG_TO_RAD * 1;
         }
         EntityRafflesiaPart horseTail = entity.getHorseTail();
@@ -237,23 +236,6 @@ public class ModelRafflesia<T extends EntityRafflesia> extends EntityModel<T> im
         } else {
             this.pitcher.visible = false;
         }
-    }
-
-    public boolean doAnimation(ExtendedModel model, AnimationHandler<?> handler, float partialTicks) {
-        AnimatedAction current = handler.getAnimation();
-        AnimatedAction last = handler.getLastAnim();
-        float interpolation = handler.getInterpolatedAnimationVal(partialTicks, AnimationHandler.DEFAULT_ADJUST_TIME);
-        float interpolationRev = 1 - interpolation;
-        boolean changed = false;
-        if (last != null && interpolationRev > 0) {
-            boolean mirror = EntityRafflesia.isMirrorAttack(last);
-            changed = this.anim.doAnimation(model, last.getAnimationClient(), last.getTick(), partialTicks, current != null ? 1 : interpolationRev, mirror, BlockBenchAnimations.InterpolationCheck.END);
-        }
-        if (current != null) {
-            boolean mirror = EntityRafflesia.isMirrorAttack(current);
-            changed = this.anim.doAnimation(model, current.getAnimationClient(), current.getTick(), partialTicks, interpolation, mirror, BlockBenchAnimations.InterpolationCheck.START);
-        }
-        return changed;
     }
 
     @Override

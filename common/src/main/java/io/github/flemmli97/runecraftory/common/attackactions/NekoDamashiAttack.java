@@ -22,7 +22,7 @@ public class NekoDamashiAttack extends AttackAction {
 
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
-        if (anim.canAttack()) {
+        if (anim.isAt("attack")) {
             entity.playSound(ModSounds.SPELL_GENERIC_POP.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
             if (!entity.level.isClientSide) {
                 double range = Math.min(2.5, CombatUtils.getRange(entity, 0));

@@ -1,3 +1,7 @@
+RuneCraftory 1.11.1
+================
+- Update for library changes
+
 RuneCraftory 1.11.0
 ================
 - Added handonetta

@@ -23,9 +23,9 @@ import java.util.List;
 
 public class EntityCluckadoodle extends BaseMonster {
 
-    public static final AnimatedAction MELEE = new AnimatedAction(16, 10, "attack");
+    public static final AnimatedAction MELEE = AnimatedAction.builder(0.76, "attack").marker("attack", 0.52).build();
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(0, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, INTERACT, SLEEP};
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityCluckadoodle>>> ATTACKS = List.of(

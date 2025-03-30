@@ -11,6 +11,7 @@ import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ProjectileUtil;
 import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -46,7 +47,7 @@ public class DoubleWaterLaserSpell extends Spell {
             else laser.setTwinId(other);
             laser.setRange(this.range);
             laser.setPos(laser.getX() + vec.x(), laser.getY() + vec.y(), laser.getZ() + vec.z());
-            laser.setMaxTicks(entity instanceof Player ? PlayerModelAnimations.WATER_LASER_TWO.getLength() : 15);
+            laser.setMaxTicks(entity instanceof Player ? Mth.ceil(PlayerModelAnimations.WATER_LASER_TWO.getLength()) : 15);
             laser.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1.1f));
             Vec3 target = laser.position().add(dir);
             laser.setRotationTo(target.x(), target.y(), target.z(), 0);

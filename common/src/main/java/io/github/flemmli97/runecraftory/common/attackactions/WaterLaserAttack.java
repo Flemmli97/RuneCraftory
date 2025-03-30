@@ -42,7 +42,7 @@ public class WaterLaserAttack extends AttackAction {
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
         if (handler.getComboCount() == 1) {
-            if (entity.getLevel() instanceof ServerLevel serverLevel && anim.canAttack()) {
+            if (entity.getLevel() instanceof ServerLevel serverLevel && anim.isAt("attack")) {
                 entity.swing(InteractionHand.MAIN_HAND);
                 if (handler.getSpellToCast() != null) {
                     Spell spell = handler.getSpellToCast();
@@ -52,7 +52,7 @@ public class WaterLaserAttack extends AttackAction {
                 }
             }
             if (!entity.level.isClientSide) {
-                if (anim.isPastTick(0.4)) {
+                if (anim.isPast("continue")) {
                     if (!(entity instanceof ServerPlayer player) || entity.getUseItem().isEmpty() && Platform.INSTANCE.getPlayerData(player)
                             .map(d -> d.getInv().getInUseStack() != handler.getUsedWeapon()).orElse(false)) {
                         handler.doWeaponAttack(this, handler.getUsedWeapon(), handler.getSpellToCast());

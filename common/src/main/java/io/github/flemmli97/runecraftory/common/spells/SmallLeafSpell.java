@@ -34,7 +34,7 @@ public class SmallLeafSpell extends Spell {
             dir = entity.getLookAngle();
         }
         float degs = this.amount < 5 ? 25 : 35;
-        for (Vector3f vec : RayTraceUtils.rotatedVecs(dir, MathUtils.normalY, -degs, degs, degs * 2 / this.amount)) {
+        for (Vector3f vec : RayTraceUtils.rotatedVecs(dir, MathUtils.NORMAL_Y, -degs, degs, degs * 2 / this.amount)) {
             EntitySmallRaccoonLeaf leaf = new EntitySmallRaccoonLeaf(level, entity);
             leaf.setPos(leaf.getX() + vec.x() * 0.1, leaf.getY() + vec.y() * 0.1, leaf.getZ() + vec.z() * 0.1);
             leaf.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.9f));

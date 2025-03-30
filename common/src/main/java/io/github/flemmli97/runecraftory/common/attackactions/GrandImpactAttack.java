@@ -18,9 +18,9 @@ import net.minecraft.world.item.ItemStack;
 public class GrandImpactAttack extends AttackAction {
 
     private final ComboContainer combos = ComboContainer.Builder.builder()
-            .addCombo(handler -> handler.getCurrentAnim().isPastTick(0.48) && !handler.getCurrentAnim().isPastTick(0.72))
-            .addCombo(handler -> handler.getCurrentAnim().isPastTick(0.48) && !handler.getCurrentAnim().isPastTick(0.72))
-            .addCombo(handler -> handler.getCurrentAnim().isPastTick(0.48) && !handler.getCurrentAnim().isPastTick(0.72))
+            .addCombo(handler -> handler.getAnimation().isPast("attack_1") && !handler.getAnimation().isPast("combo_end"))
+            .addCombo(handler -> handler.getAnimation().isPast("attack_1") && !handler.getAnimation().isPast("combo_end"))
+            .addCombo(handler -> handler.getAnimation().isPast("attack_1") && !handler.getAnimation().isPast("combo_end"))
             .build();
 
     @Override
@@ -31,7 +31,7 @@ public class GrandImpactAttack extends AttackAction {
 
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
-        if (!entity.level.isClientSide && (anim.isAtTick(0.4) || anim.isAtTick(1.08))) {
+        if (!entity.level.isClientSide && (anim.isAt("attack_1") || anim.isAt("attack_2"))) {
             float reach = (float) entity.getAttributeValue(ModAttributes.ATTACK_RANGE.get());
             S2CScreenShake.sendAround(entity, 16, 6, 3);
             entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, entity.getSoundSource(), 1.0f, 1.0f);

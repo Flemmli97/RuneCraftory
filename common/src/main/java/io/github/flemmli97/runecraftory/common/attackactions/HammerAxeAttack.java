@@ -22,7 +22,7 @@ import net.minecraft.world.phys.Vec3;
 public class HammerAxeAttack extends AttackAction {
 
     private final ComboContainer combo = ComboContainer.Builder.builder()
-            .addCombo(ComboContainer.AFTER_ANIM, 4)
+            .addCombo(ComboContainer.past("done"), 2)
             .addCombo(handler -> handler.isCurrentAnimationDone() && CombatUtils.canPerform(handler.getEntity(), EnumSkills.HAMMERAXE, 20), 0)
             .build();
 
@@ -34,30 +34,31 @@ public class HammerAxeAttack extends AttackAction {
 
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
-        if (anim.canAttack() && handler.getComboCount() != 3) {
+        if (anim.isAt("attack") && handler.getComboCount() != 3) {
             CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(IAOEWeapon.createOBB(entity, stack,
                             CombatUtils.getRange(entity, 0),
                             CombatUtils.getWidth(entity, 0))))
                     .executeAttack();
+            entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_HEAVY.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.8f);
         }
         if (handler.getComboCount() == 3) {
-            if (anim.isAtTick(0.12)) {
+            if (anim.isAt("spin_start")) {
                 handler.setSpinStartRot(entity.getYRot());
                 handler.resetHitEntityTracker();
                 entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
                         SoundEvents.ENDER_DRAGON_FLAP, entity.getSoundSource(), 0.7f, 0.5f);
             }
-            if (anim.isAtTick(0.64)) {
+            if (anim.isAt("reset")) {
                 handler.resetHitEntityTracker();
                 entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
                         SoundEvents.ENDER_DRAGON_FLAP, entity.getSoundSource(), 1, 0.7f);
             }
-            if (anim.isPastTick(0.12) && !anim.isPastTick(1.28)) {
+            if (anim.isPast("spin_start") && !anim.isPast("spin_end")) {
                 Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-                if (anim.isAtTick(0.12))
-                    handler.setMoveTargetDir(dir.scale(3).add(0, 2, 0), anim, 0.76);
-                if (anim.isAtTick(0.76))
-                    handler.setMoveTargetDir(dir.scale(3).add(0, -2, 0), anim, 1.28);
+                if (anim.isAt("spin_start"))
+                    handler.setMoveDirection(dir.scale(0.35).add(0, 0.15, 0));
+                if (anim.isAt("spin_middle"))
+                    handler.setMoveDirection(dir.scale(0.35).add(0, -0.15, 0));
                 entity.resetFallDistance();
                 if (!entity.level.isClientSide) {
                     handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity,
@@ -67,10 +68,9 @@ public class HammerAxeAttack extends AttackAction {
                             .executeAttack());
                 }
             } else
-                handler.clearMoveTarget();
-            handler.lockLook(anim.isPastTick(0.12) && !anim.isPastTick(1.28));
-        } else if (anim.isAtTick(0.4)) {
-            entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_HEAVY.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.8f);
+                handler.setMoveDirection(null);
+            handler.applyMoveDirection();
+            handler.lockLook(anim.isPast("spin_start") && !anim.isPast("spin_end"));
         }
     }
 

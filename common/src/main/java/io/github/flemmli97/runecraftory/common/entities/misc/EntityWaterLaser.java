@@ -148,7 +148,7 @@ public class EntityWaterLaser extends BaseBeam {
         if (this.getOwner() instanceof ServerPlayer player) {
             boolean keep = Platform.INSTANCE.getPlayerData(player)
                     .map(d -> {
-                        AnimatedAction action = d.getWeaponHandler().getCurrentAnim();
+                        AnimatedAction action = d.getWeaponHandler().getAnimation();
                         return action != null && action.is(PlayerModelAnimations.WATER_LASER_ONE, PlayerModelAnimations.WATER_LASER_TWO, PlayerModelAnimations.WATER_LASER_THREE);
                     }).orElse(false);
             if (!keep && this.tickCount < this.livingTickMax() - 5) {

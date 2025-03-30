@@ -47,11 +47,12 @@ public class EntityWooly extends LeapingMonster {
     private static final EntityDataAccessor<Boolean> SHEARED = SynchedEntityData.defineId(EntityWooly.class, EntityDataSerializers.BOOLEAN);
     protected static final EntityDataAccessor<Boolean> SPAWNSHEARED = SynchedEntityData.defineId(EntityWooly.class, EntityDataSerializers.BOOLEAN);
 
-    public static final AnimatedAction SLAP = new AnimatedAction(16, 7, "slap");
-    public static final AnimatedAction KICK = new AnimatedAction(20, 3, "kick");
-    public static final AnimatedAction HEADBUTT = new AnimatedAction(16, 7, "headbutt");
+    public static final AnimatedAction SLAP = AnimatedAction.builder(0.76, "slap").marker("attack", 0.28, 0.56).build();
+    public static final AnimatedAction KICK = AnimatedAction.builder(1, "kick")
+            .marker("attack_start", 0.24).marker("attack_end", 0.92).build();
+    public static final AnimatedAction HEADBUTT = AnimatedAction.builder(0.8, "headbutt").marker("attack", 0.44).build();
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(HEADBUTT, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(0, "sleep").infinite().build();
     public static final AnimatedAction[] ANIMS = new AnimatedAction[]{SLAP, KICK, HEADBUTT, INTERACT, SLEEP};
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityWooly>>> ATTACKS = List.of(

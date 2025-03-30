@@ -42,12 +42,13 @@ import java.util.List;
 
 public class EntityWeagle extends BaseMonster {
 
-    public static final AnimatedAction GALE = new AnimatedAction(19, 5, "gale");
-    public static final AnimatedAction PECK = new AnimatedAction(11, 4, "peck");
-    public static final AnimatedAction SWOOP = new AnimatedAction(14, 4, "swoop");
+    public static final AnimatedAction GALE = AnimatedAction.builder(0.96, "gale").marker("attack", 0.28).build();
+    public static final AnimatedAction PECK = AnimatedAction.builder(0.56, "peck").marker("attack", 0.2).build();
+    public static final AnimatedAction SWOOP = AnimatedAction.builder(0.6, "swoop")
+            .marker("swoop_start", 0.2).marker("swoop_end", 0.48).build();
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(PECK, "interact");
     public static final AnimatedAction DEFEAT = AnimatedAction.builder(2, "defeat").infinite().build();
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(0, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{GALE, PECK, SWOOP, INTERACT, DEFEAT, SLEEP};
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityWeagle>>> ATTACKS = List.of(
@@ -64,9 +65,10 @@ public class EntityWeagle extends BaseMonster {
 
     protected List<LivingEntity> hitEntity;
     private final AnimationHandler<EntityWeagle> animationHandler = new AnimationHandler<>(this, ANIMS)
-            .setAnimationChangeCons(anim -> {
+            .withChangeListener(anim -> {
                 this.hitEntity = null;
                 this.setSwoopMotion(null);
+                return false;
             });
 
     private Vec3 swoopMotion;
@@ -120,7 +122,7 @@ public class EntityWeagle extends BaseMonster {
     @Override
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(GALE)) {
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 ModSpells.GUST_SPELL.get().use(this);
             }
         } else if (anim.is(SWOOP)) {
@@ -131,7 +133,7 @@ public class EntityWeagle extends BaseMonster {
                         .scale(0.2)
                         .add(0, -0.3, 0));
             }
-            if (anim.getTick() > anim.getAttackTime() && anim.getLength() - anim.getTick() > 3) {
+            if (anim.isPast("swoop_start") && !anim.isPast("swoop_end")) {
                 this.setDeltaMovement(this.swoopMotion);
                 this.mobAttack(anim, null, e -> {
                     if (!this.hitEntity.contains(e)) {

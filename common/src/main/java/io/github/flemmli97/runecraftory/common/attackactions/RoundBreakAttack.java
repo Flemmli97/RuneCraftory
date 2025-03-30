@@ -22,23 +22,22 @@ public class RoundBreakAttack extends AttackAction {
 
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
-        Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1)).scale(0.4);
-        if (anim.isAtTick(0.2)) {
-            handler.setMoveTargetDir(dir.scale(1.8).add(0, 1.6, 0), anim, 0.48);
+        if (anim.isAt("attack_start")) {
+            Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
+            entity.setDeltaMovement(dir.scale(0.8).add(0, 0.3, 0));
             handler.setSpinStartRot(entity.getYRot() + 90);
-        }
-        if (anim.isAtTick(0.24))
             entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_LIGHT.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
-        if (anim.isAtTick(0.48))
-            handler.setMoveTargetDir(dir.scale(3.3).add(0, -1.6, 0), anim, 0.68);
-        CombatUtils.EntityAttack attack = spinAttack(entity, anim, 0.24, 0.6,
-                handler.getSpinStartRot(), handler.getSpinStartRot() - 360, 0);
-        if (attack != null) {
-            handler.addHitEntityTracker(attack
-                    .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
-                    .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
-                    .doOnSuccess(e -> CombatUtils.knockBackEntity(entity, e, 1.5f))
-                    .executeAttack());
+        }
+        if (!entity.level.isClientSide) {
+            CombatUtils.EntityAttack attack = spinAttack(entity, anim, anim.getMarker("attack_start", 0), anim.getMarker("attack_end", 0),
+                    handler.getSpinStartRot(), handler.getSpinStartRot() - 480, 0);
+            if (attack != null) {
+                handler.addHitEntityTracker(attack
+                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
+                        .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
+                        .doOnSuccess(e -> CombatUtils.knockBackEntity(entity, e, 1.5f))
+                        .executeAttack());
+            }
         }
     }
 

@@ -37,11 +37,11 @@ import java.util.function.Predicate;
 
 public class EntityFairy extends BaseMonster implements HealingPredicateEntity {
 
-    public static final AnimatedAction LIGHT = new AnimatedAction(15, 6, "light");
-    public static final AnimatedAction WIND = new AnimatedAction(15, 10, "wind");
+    public static final AnimatedAction LIGHT = AnimatedAction.builder(0.72, "light").marker("attack", 0.32).build();
+    public static final AnimatedAction WIND = AnimatedAction.builder(0.72, "wind").marker("attack", 0.48).build();
     public static final AnimatedAction HEAL = AnimatedAction.copyOf(LIGHT, "heal");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(LIGHT, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(0, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{LIGHT, WIND, HEAL, INTERACT, SLEEP};
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityFairy>>> ATTACKS = List.of(
@@ -105,17 +105,17 @@ public class EntityFairy extends BaseMonster implements HealingPredicateEntity {
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(LIGHT)) {
             this.getNavigation().stop();
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 ModSpells.SHINE.get().use(this);
             }
         } else if (anim.is(WIND)) {
             this.getNavigation().stop();
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 ModSpells.DOUBLE_SONIC.get().use(this);
             }
         } else if (anim.is(HEAL)) {
             this.getNavigation().stop();
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 ModSpells.CURE_ALL.get().use(this);
             }
         }

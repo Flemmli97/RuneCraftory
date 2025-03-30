@@ -7,6 +7,7 @@ import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpearBase;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -18,10 +19,9 @@ public class SpearUseAttack extends AttackAction {
     private final ComboContainer combo;
 
     public SpearUseAttack() {
-        Predicate<WeaponHandler> MAIN = handler -> handler.getCurrentAnim().isPastTick(handler.getCurrentAnim().getAttackTime()) && !handler.getCurrentAnim().isPastTick(0.44);
-        ComboContainer.Builder builder = ComboContainer.Builder.builder()
-                .addCombo(handler -> handler.getCurrentAnim().isPastTick(handler.getCurrentAnim().getAttackTime()) && !handler.getCurrentAnim().isPastTick(0.4));
-        for (int i = 0; i < 19; i++) {
+        Predicate<WeaponHandler> MAIN = handler -> handler.getAnimation().isPast("attack") && !handler.getAnimation().isPast("0.52");
+        ComboContainer.Builder builder = ComboContainer.Builder.builder();
+        for (int i = 0; i < 20; i++) {
             builder.addCombo(MAIN);
         }
         this.combo = builder.build();
@@ -30,15 +30,22 @@ public class SpearUseAttack extends AttackAction {
     @Override
     public AnimatedAction getAnimation(LivingEntity entity, int comboIdx) {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
-        return comboIdx > 1 ? PlayerModelAnimations.SPEAR_USE_CONTINUE.create(speed) :
-                PlayerModelAnimations.SPEAR_USE.create(speed);
+        if (comboIdx > 0) {
+            float offset = (float) (PlayerModelAnimations.SPEAR_USE.getMarker("chain_offset", 0) * 20);
+            return PlayerModelAnimations.SPEAR_USE.create(1, AnimationHandler.FALLBACK_TRANSIT_TIME, offset, speed);
+        }
+        return PlayerModelAnimations.SPEAR_USE.create(speed);
     }
 
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
-        boolean finish = (anim.getID().equals("spear_use_continue") ? anim.isAtTick(0.88) : anim.isAtTick(0.96));
-        if ((anim.canAttack() || finish) && entity instanceof ServerPlayer serverPlayer && stack.getItem() instanceof ItemSpearBase spear) {
-            spear.useSpear(serverPlayer, stack, finish);
+        if (entity instanceof ServerPlayer serverPlayer && stack.getItem() instanceof ItemSpearBase spear) {
+            if (anim.isAt("attack")) {
+                spear.useSpear(serverPlayer, stack, false);
+            }
+            if (anim.isAt("final")) {
+                spear.useSpear(serverPlayer, stack, true);
+            }
         }
     }
 

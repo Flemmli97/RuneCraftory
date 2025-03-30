@@ -21,10 +21,10 @@ import net.minecraft.world.phys.Vec3;
 public class ShortSwordAttack extends AttackAction {
 
     private final ComboContainer combo = ComboContainer.Builder.builder()
-            .addCombo(ComboContainer.AFTER_ANIM, 4)
-            .addCombo(ComboContainer.AFTER_ANIM, 4)
-            .addCombo(ComboContainer.AFTER_ANIM, 4)
-            .addCombo(ComboContainer.AFTER_ANIM, 4)
+            .addCombo(ComboContainer.past("done"), 2)
+            .addCombo(ComboContainer.past("done"), 2)
+            .addCombo(ComboContainer.past("done"), 2)
+            .addCombo(ComboContainer.past("done"), 2)
             .addCombo(handler -> handler.isCurrentAnimationDone() && CombatUtils.canPerform(handler.getEntity(), EnumSkills.SHORTSWORD, 20), 0)
             .build();
 
@@ -36,56 +36,58 @@ public class ShortSwordAttack extends AttackAction {
 
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
-        if (anim.canAttack() && handler.getComboCount() != 6) {
-            CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(IAOEWeapon.createOBB(entity, stack,
-                            CombatUtils.getRange(entity, 0),
-                            CombatUtils.getWidth(entity, 0))))
-                    .executeAttack();
+        if (handler.getComboCount() != 6) {
+            if (anim.isAt("attack")) {
+                if (!entity.level.isClientSide) {
+                    CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(IAOEWeapon.createOBB(entity, stack,
+                                    CombatUtils.getRange(entity, 0),
+                                    CombatUtils.getWidth(entity, 0))))
+                            .executeAttack();
+                }
+                entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+            }
         }
         Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
         switch (handler.getComboCount()) {
-            case 1 -> {
-                if (anim.isAtTick(0.28)) {
-                    handler.setMoveTargetDir(dir.scale(0.25), anim, anim.getTick());
-                }
-            }
-            case 2 -> {
-                if (anim.isAtTick(0.16)) {
-                    handler.setMoveTargetDir(dir.scale(0.25), anim, anim.getTick());
+            case 1, 2 -> {
+                if (anim.isAt("step")) {
+                    entity.setDeltaMovement(dir.scale(0.35));
                 }
             }
             case 3 -> {
-                if (anim.isAtTick(0.16)) {
-                    handler.setMoveTargetDir(dir.scale(0.15), anim, anim.getTick());
+                if (anim.isAt("step")) {
+                    entity.setDeltaMovement(dir.scale(0.25));
                 }
             }
             case 4 -> {
-                if (anim.isAtTick(0.2)) {
-                    handler.setMoveTargetDir(dir.scale(0.35).add(0, 0.9, 0), anim, anim.getLength());
+                if (anim.isAt("step")) {
+                    entity.setDeltaMovement(dir.scale(0.35).add(0, 0.4, 0));
                 }
             }
             case 5 -> {
-                if (anim.isAtTick(0.04)) {
-                    handler.setMoveTargetDir(new Vec3(0, -0.8, 0), anim, 0.2);
+                if (anim.isAt("step")) {
+                    entity.setDeltaMovement(new Vec3(0, -0.4, 0));
                 }
             }
             case 6 -> {
-                if (anim.isAtTick(0.24)) {
+                if (anim.isAt("spin_start")) {
                     handler.setSpinStartRot(entity.getYRot());
                     handler.resetHitEntityTracker();
                     entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
                 }
-                if (anim.isAtTick(0.48) || anim.isAtTick(0.72)) {
+                if (anim.isAt("reset")) {
                     handler.resetHitEntityTracker();
                     entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
                 }
-                if (anim.isAtTick(0.24)) {
-                    handler.setMoveTargetDir(new Vec3(0, 2, 0), anim, 1.18);
+                if (anim.isAt("spin_start")) {
+                    handler.setMoveDirection(new Vec3(0, 0.1, 0));
                 }
-                if (anim.isAtTick(1.18)) {
-                    handler.setMoveTargetDir(new Vec3(0, -2, 0), anim, anim.getLength());
+                if (anim.isAt("spin_end")) {
+                    entity.setDeltaMovement(new Vec3(0, -0.1, 0));
+                    handler.setMoveDirection(null);
                 }
-                CombatUtils.EntityAttack attack = spinAttack(entity, anim, 0.24, 0.96,
+                handler.applyMoveDirection();
+                CombatUtils.EntityAttack attack = spinAttack(entity, anim, anim.getMarker("spin_start", 0), anim.getMarker("spin_end", 0),
                         handler.getSpinStartRot() + 30, handler.getSpinStartRot() - 1100, 0);
                 if (attack != null) {
                     handler.addHitEntityTracker(attack
@@ -98,9 +100,7 @@ public class ShortSwordAttack extends AttackAction {
 
     @Override
     public void onStart(LivingEntity entity, WeaponHandler handler) {
-        if (handler.getComboCount() != 6) {
-            entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
-        } else if (entity instanceof ServerPlayer player)
+        if (handler.getComboCount() == 6 && entity instanceof ServerPlayer player)
             Platform.INSTANCE.getPlayerData(player).ifPresent(d -> LevelCalc.useRP(player, d, GeneralConfig.shortSwordUltimate, true, 0, false));
     }
 

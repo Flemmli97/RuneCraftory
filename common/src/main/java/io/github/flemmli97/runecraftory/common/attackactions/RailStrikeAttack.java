@@ -23,16 +23,18 @@ public class RailStrikeAttack extends AttackAction {
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
         Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1)).scale(-0.4);
-        if (anim.isAtTick(0.12))
-            handler.setMoveTargetDir(dir.scale(5).add(0, 1.1, 0), anim, 0.76);
-        if (anim.isAtTick(0.76))
-            handler.setMoveTargetDir(dir.scale(3).add(0, -1.1, 0), anim, 1.28);
-        if (anim.getTickRaw() % (3 * anim.getSpeed()) == 0) {
+        if (anim.isAt("move_1"))
+            handler.setMoveDirection(dir.scale(0.9).add(0, 0.17, 0));
+        if (anim.isAt("move_2"))
+            handler.setMoveDirection(dir.scale(0.6).add(0, -0.17, 0));
+        if (anim.isAt("move_end"))
+            handler.setMoveDirection(null);
+        if (anim.isAt("reset")) {
             handler.resetHitEntityTracker();
-            if (!anim.isPastTick(1))
-                entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_LIGHT.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+            entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_LIGHT.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         }
-        if (!entity.level.isClientSide && anim.isPastTick(0.24) && !anim.isPastTick(1.08)) {
+        handler.applyMoveDirection();
+        if (!entity.level.isClientSide && anim.isPast("attack_start") && !anim.isPast("attack_end")) {
             double range = CombatUtils.getRange(entity, 0);
             handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox().inflate(1, 0.3, range * 0.7)
                             .expandTowards(0, 0, -range * 0.3)))

@@ -8,7 +8,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
-import net.minecraft.util.Mth;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
@@ -23,16 +23,20 @@ public class MillionStrikeAttack extends AttackAction {
 
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
-        if (anim.isPastTick(0.28) && !anim.isPastTick(0.68) && anim.getTickRaw() % (2 * anim.getSpeed()) == 0) {
+        if (anim.isAt("attack")) {
             if (!entity.level.isClientSide) {
-                float mod = (anim.getTickRaw() - Mth.ceil(0.28 * 20)) % (8 * anim.getSpeed());
-                CombatUtils.EntityAttack attack = CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(entity.getYRot(), 0, 1, 1, false))
-                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack));
-                if (mod == 6)
-                    attack.withBonusAttributes(ModAttributes.CRIT.get(), 100d);
-                attack.executeAttack();
+                CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(entity.getYRot(), 0, 0, 1, false))
+                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack)).executeAttack();
             }
             entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.7f);
+        }
+        if (anim.isAt("attack_crit")) {
+            if (!entity.level.isClientSide) {
+                CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(entity.getYRot(), 0, 0, 1, false))
+                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
+                        .withBonusAttributes(ModAttributes.CRIT.get(), 100d).executeAttack();
+            }
+            entity.playSound(SoundEvents.PLAYER_ATTACK_CRIT, 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.7f);
         }
     }
 }

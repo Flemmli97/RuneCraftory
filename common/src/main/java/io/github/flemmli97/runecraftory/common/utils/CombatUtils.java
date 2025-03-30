@@ -304,8 +304,6 @@ public class CombatUtils {
                 int i = player.isSprinting() ? 1 : 0;
                 i += EnchantmentHelper.getKnockbackBonus(player);
                 float knockback = (float) (i * 0.5f + knockbackAtt * 3);
-                if (player.level instanceof ServerLevel serverLevel)
-                    ModSpells.STAFF_CAST.get().use(serverLevel, player, stack);
                 if (ItemNBT.doesFixedOneDamage(stack)) {
                     damageType = CustomDamage.DamageType.FIXED;
                     damagePhys = 1;
@@ -631,6 +629,10 @@ public class CombatUtils {
         return getAbilityDamageBonus(getSpellLevelFromStack(stack), 1);
     }
 
+    public static double getAbilityDamageBonus(ItemStack stack, float origin) {
+        return getAbilityDamageBonus(getSpellLevelFromStack(stack), origin);
+    }
+
     public static float getAbilityDamageBonus(int level, float origin) {
         return origin * (1 + (level - 1) * 0.025f);
     }
@@ -656,8 +658,8 @@ public class CombatUtils {
 
         private final LivingEntity attacker;
         private Predicate<LivingEntity> targetPred;
-        private Map<Attribute, Double> bonusAttributes = new HashMap<>();
-        private Map<Attribute, Double> bonusAttributesMultiplier = new HashMap<>();
+        private final Map<Attribute, Double> bonusAttributes = new HashMap<>();
+        private final Map<Attribute, Double> bonusAttributesMultiplier = new HashMap<>();
 
         private Consumer<LivingEntity> onSuccess;
 

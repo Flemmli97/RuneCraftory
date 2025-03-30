@@ -40,7 +40,10 @@ public abstract class LeapingMonster extends BaseMonster {
     public void tick() {
         super.tick();
         if (!this.initAnim) {
-            this.getAnimationHandler().setAnimationChangeCons(this.chargingAnim);
+            this.getAnimationHandler().withChangeListener(anim -> {
+                this.chargingAnim.accept(anim);
+                return false;
+            });
             this.initAnim = true;
         }
     }
@@ -59,12 +62,12 @@ public abstract class LeapingMonster extends BaseMonster {
     public void handleAttack(AnimatedAction anim) {
         if (this.isLeapingAnim(anim)) {
             this.getNavigation().stop();
-            if (anim.canAttack()) {
-                Vec3 vec32 = this.getLeapVec(this.getTarget() == null ? this.getTargetPosition().asVec(this.position()) : this.getTarget().position());
+            if (anim.isAt("attack_start")) {
+                Vec3 vec32 = this.getLeapVec(this.tryGetTargetPosition(this.getTarget()));
                 this.setDeltaMovement(vec32.x, this.leapHeightMotion(), vec32.z);
                 this.leapingDir = this.getDeltaMovement();
             }
-            if (anim.isPastTick(anim.getAttackTime())) {
+            if (anim.isPast("attack_start") && !anim.isPast("attack_end")) {
                 if (this.hitEntity == null)
                     this.hitEntity = new ArrayList<>();
                 this.mobAttack(anim, this.getTarget(), e -> {

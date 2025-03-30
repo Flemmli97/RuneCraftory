@@ -27,9 +27,9 @@ import java.util.List;
 
 public class EntityScorpion extends BaseMonster {
 
-    public static final AnimatedAction MELEE = new AnimatedAction(12, 6, "attack");
+    public static final AnimatedAction MELEE = AnimatedAction.builder(0.56, "attack").marker("attack", 0.32).build();
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
-    public static final AnimatedAction STILL = AnimatedAction.builder(1, "still").infinite().build();
+    public static final AnimatedAction STILL = AnimatedAction.builder(0, "still").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, INTERACT, STILL};
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityScorpion>>> ATTACKS = List.of(

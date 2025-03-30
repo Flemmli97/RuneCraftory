@@ -22,10 +22,10 @@ import java.util.List;
 
 public class EntityBeetle extends ChargingMonster {
 
-    public static final AnimatedAction CHARGE_ATTACK = new AnimatedAction(30, 2, "ramm");
-    public static final AnimatedAction MELEE = new AnimatedAction(15, 8, "attack");
+    public static final AnimatedAction CHARGE_ATTACK = AnimatedAction.builder(1.52, "ramm").marker("attack_start", 0.16).build();
+    public static final AnimatedAction MELEE = AnimatedAction.builder(0.72, "attack").marker("attack", 0.4).build();
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(0, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, CHARGE_ATTACK, INTERACT, SLEEP};
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityBeetle>>> ATTACKS = List.of(

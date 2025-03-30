@@ -24,9 +24,9 @@ import net.minecraft.world.phys.Vec3;
 public class GloveAttack extends AttackAction {
 
     private final ComboContainer combo = ComboContainer.Builder.builder()
-            .addCombo(ComboContainer.AFTER_ANIM, 4)
-            .addCombo(ComboContainer.AFTER_ANIM, 4)
-            .addCombo(ComboContainer.AFTER_ANIM, 4)
+            .addCombo(ComboContainer.past("done"), 2)
+            .addCombo(ComboContainer.past("done"), 2)
+            .addCombo(ComboContainer.past("done"), 2)
             .addCombo(handler -> handler.isCurrentAnimationDone() && CombatUtils.canPerform(handler.getEntity(), EnumSkills.FIST, 20), 0)
             .build();
 
@@ -38,7 +38,7 @@ public class GloveAttack extends AttackAction {
 
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
-        if (anim.canAttack() && handler.getComboCount() != 5) {
+        if (anim.isAt("attack") && handler.getComboCount() != 5) {
             if (!entity.level.isClientSide) {
                 if (handler.getComboCount() != 4)
                     CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(IAOEWeapon.createOBB(entity, stack,
@@ -47,54 +47,55 @@ public class GloveAttack extends AttackAction {
                             .executeAttack();
                 else
                     CombatUtils.EntityAttack.create(entity,
-                                    CombatUtils.EntityAttack.aabbTargets(new AABB(-1, -1, -1, 1, 1, 1).move(entity.position().add(0, 0.2, 0)
+                                    CombatUtils.EntityAttack.aabbTargets(new AABB(-1, -1, -1, 1, 1.5, 1.5).move(entity.position().add(0, 0.2, 0)
                                             .add(entity.getDeltaMovement().normalize().scale(0.4)))))
                             .executeAttack();
             }
             entity.playSound(SoundEvents.PLAYER_ATTACK_STRONG, 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         }
-        Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
         switch (handler.getComboCount()) {
             case 1 -> {
-                if (anim.isAtTick(0.24)) {
-                    handler.setMoveTargetDir(dir.scale(0.15), anim, anim.getTick());
+                if (anim.isAt("step")) {
+                    Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
+                    entity.setDeltaMovement(dir.scale(0.2));
                 }
             }
             case 2, 3 -> {
-                if (anim.isAtTick(0.24)) {
-                    handler.setMoveTargetDir(dir.scale(0.12), anim, anim.getTick());
+                if (anim.isAt("step")) {
+                    Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
+                    entity.setDeltaMovement(dir.scale(0.3));
                 }
             }
             case 4 -> {
-                if (anim.isAtTick(0.14)) {
-                    handler.setMoveTargetDir(dir.scale(3).add(0, -3, 0), anim, 0.44);
-                    entity.resetFallDistance();
+                if (anim.isAt("jump")) {
+                    Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
+                    entity.setDeltaMovement(dir.scale(1.2).add(0, 0.9, 0));
                 }
-                if (anim.isAtTick(0.04)) {
-                    handler.setMoveTargetDir(dir.scale(1).add(0, 3, 0), anim, 0.14);
+                if (anim.isAt("down")) {
+                    Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
+                    entity.setDeltaMovement(dir.scale(0.9).add(0, -0.5, 0));
                 }
-                if (anim.isPastTick(0.40) && entity.isOnGround()) {
-                    handler.clearMoveTarget();
-                    entity.setDeltaMovement(entity.getDeltaMovement().scale(0.01));
-                }
+                entity.resetFallDistance();
             }
             case 5 -> {
-                if (anim.isAtTick(0.16)) {
+                if (anim.isAt("move_start")) {
                     handler.setSpinStartRot(entity.getYRot());
                     handler.resetHitEntityTracker();
-                    Vec3 dir2 = CombatUtils.fromRelativeVector(handler.getSpinStartRot(), new Vec3(0, 0, 1)).scale(6);
-                    handler.setMoveTargetDir(dir2.add(0, 2.5, 0), anim, 0.68);
+                    Vec3 dir = CombatUtils.fromRelativeVector(handler.getSpinStartRot(), new Vec3(0, 0, 1));
+                    handler.setMoveDirection(dir.scale(0.4).add(0, 1.2, 0));
                 }
-                if (anim.isAtTick(0.68)) {
-                    Vec3 dir2 = CombatUtils.fromRelativeVector(handler.getSpinStartRot(), new Vec3(0, 0, 1)).scale(4);
-                    handler.setMoveTargetDir(dir2.add(0, -2.5, 0), anim, 1.12);
+                if (anim.isAt("attack_start")) {
+                    Vec3 dir = CombatUtils.fromRelativeVector(handler.getSpinStartRot(), new Vec3(0, 0, 1));
+                    handler.setMoveDirection(dir.scale(0.4));
                 }
-                if (anim.isPastTick(0.16) && !anim.isPastTick(1.12)) {
-                    entity.resetFallDistance();
+                if (anim.isAt("move_end")) {
+                    handler.setMoveDirection(null);
                 }
-                if (anim.isAtTick(0.24))
+                handler.applyMoveDirection();
+                entity.resetFallDistance();
+                if (anim.isAt("attack_start"))
                     entity.playSound(ModSounds.SPELL_GENERIC_WIND_LONG.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.3f);
-                if (!entity.level.isClientSide && anim.isPastTick(0.2) && !anim.isPastTick(1.08)) {
+                if (!entity.level.isClientSide && anim.isPast("attack_start") && !anim.isPast("attack_end")) {
                     handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity,
                                     CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox().inflate(0.5)))
                             .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
@@ -103,7 +104,7 @@ public class GloveAttack extends AttackAction {
             }
         }
         if (handler.getComboCount() == 5) {
-            handler.lockLook(anim.isPastTick(0.08) && !anim.isPastTick(1.2));
+            handler.lockLook(anim.isPast("move_start") && !anim.isPast("move_end"));
         }
     }
 
@@ -125,9 +126,9 @@ public class GloveAttack extends AttackAction {
 
     @Override
     public Pose getPose(LivingEntity entity, WeaponHandler handler) {
-        if (handler.getCurrentAnim() == null)
+        if (handler.getAnimation() == null)
             return null;
-        if (handler.getComboCount() == 5 && handler.getCurrentAnim().isPastTick(0.24) && !handler.getCurrentAnim().isPastTick(1.04))
+        if (handler.getComboCount() == 5 && handler.getAnimation().isPast("attack_start") && !handler.getAnimation().isPast("attack_end"))
             return Pose.SPIN_ATTACK;
         return null;
     }

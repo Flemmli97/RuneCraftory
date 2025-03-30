@@ -55,16 +55,20 @@ import java.util.function.BiConsumer;
 
 public class EntityHandonetta extends BossMonster {
 
-    public static final AnimatedAction SWIPE = new AnimatedAction(1.28, 0.64, "swipe");
-    public static final AnimatedAction FLICK = new AnimatedAction(1.32, 0.64, "flick");
-    public static final AnimatedAction SHOOT = new AnimatedAction(1.44, 0.36, "shoot");
-    public static final AnimatedAction LASER = new AnimatedAction(1.24, 0.4, "laser");
-    public static final AnimatedAction PLATE = new AnimatedAction(0.88, 0.56, "plate");
-    public static final AnimatedAction GRAB = new AnimatedAction(1.2, 0.56, "grab");
-    public static final AnimatedAction GRAB_CAUGHT = new AnimatedAction(1.96, 0.12, "grab_caught");
-    public static final AnimatedAction PUNCH = new AnimatedAction(1.2, 0.28, "punch");
-    public static final AnimatedAction DEFEAT = AnimatedAction.builder(204, "defeat").marker(150).infinite().build();
-    public static final AnimatedAction ANGRY = new AnimatedAction(28, 0, "angry");
+    public static final AnimatedAction SWIPE = AnimatedAction.builder(1.28, "swipe").marker("attack", 0.64).build();
+    public static final AnimatedAction FLICK = AnimatedAction.builder(1.32, "flick").marker("attack", 0.64).build();
+    public static final AnimatedAction SHOOT = AnimatedAction.builder(1.44, "shoot").marker("attack", 0.36).build();
+    public static final AnimatedAction LASER = AnimatedAction.builder(1.24, "laser")
+            .marker("aim", 0.3).marker("attack", 0.4).build();
+    public static final AnimatedAction PLATE = AnimatedAction.builder(0.88, "plate").marker("attack", 0.56).build();
+    public static final AnimatedAction GRAB = AnimatedAction.builder(1.2, "grab")
+            .marker("attack", 0.56).marker("invis_start", 0.72).marker("grab_done", 1.04).build();
+    public static final AnimatedAction GRAB_CAUGHT = AnimatedAction.builder(1.96, "grab_caught")
+            .marker("attack", 0.12, 0.6, 1.04, 1.48).marker("attack_end", 1.8).build();
+    public static final AnimatedAction PUNCH = AnimatedAction.builder(1.2, "punch")
+            .marker("attack_start", 0.28).marker("attack_end", 1.04).build();
+    public static final AnimatedAction DEFEAT = AnimatedAction.builder(10, "defeat").infinite().build();
+    public static final AnimatedAction ANGRY = AnimatedAction.builder(1.56, "angry").build();
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(SWIPE, "interact");
 
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{SWIPE, FLICK, SHOOT, LASER, PLATE, GRAB, GRAB_CAUGHT, PUNCH, DEFEAT, ANGRY, INTERACT};
@@ -72,14 +76,14 @@ public class EntityHandonetta extends BossMonster {
         b.put(SWIPE, (anim, entity) -> {
             LivingEntity target = entity.getTarget();
             entity.getNavigation().stop();
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 entity.mobAttack(anim, target, entity::doHurtTarget);
             }
         });
         b.put(FLICK, (anim, entity) -> {
             LivingEntity target = entity.getTarget();
             entity.getNavigation().stop();
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 entity.mobAttack(anim, target, entity::doHurtTarget);
             }
         });
@@ -91,7 +95,7 @@ public class EntityHandonetta extends BossMonster {
                 entity.caughtEntities.clear();
             }
             entity.setDeltaMovement(entity.moveDirection);
-            if (anim.isPastTick(anim.getAttackTime())) {
+            if (anim.isPast("attack_start") && !anim.isPast("attack_end")) {
                 entity.mobAttack(anim, null, e -> {
                     if (!entity.caughtEntities.contains(e) && CombatUtils.mobAttack(entity, e, new CustomDamage.Builder(entity).hurtResistant(8))) {
                         entity.caughtEntities.add(e);
@@ -102,19 +106,19 @@ public class EntityHandonetta extends BossMonster {
         });
         b.put(SHOOT, (anim, entity) -> {
             entity.getNavigation().stop();
-            if (anim.canAttack())
+            if (anim.isAt("attack"))
                 ModSpells.DARK_BULLETS.get().use(entity);
         });
         b.put(LASER, (anim, entity) -> {
             entity.getNavigation().stop();
-            if (entity.getTarget() != null && !anim.isPastTick(0.3))
+            if (entity.getTarget() != null && !anim.isPast("aim"))
                 entity.setTargetPosition(entity.getTarget());
-            if (anim.canAttack())
+            if (anim.isAt("attack"))
                 ModSpells.DARK_BEAM.get().use(entity);
         });
         b.put(PLATE, (anim, entity) -> {
             entity.getNavigation().stop();
-            if (anim.canAttack())
+            if (anim.isAt("attack"))
                 ModSpells.PLATE.get().use(entity);
         });
         b.put(GRAB, (anim, entity) -> {
@@ -124,10 +128,10 @@ public class EntityHandonetta extends BossMonster {
                         .scale(0.45));
             }
             entity.setDeltaMovement(entity.moveDirection);
-            if (anim.isPastTick(1.)) {
+            if (anim.isPast("grab_done")) {
                 if (!entity.caughtEntities.isEmpty())
                     entity.getAnimationHandler().setAnimation(GRAB_CAUGHT);
-            } else if (anim.isPastTick(anim.getAttackTime()) && !anim.isPastTick(1.)) {
+            } else if (anim.isPast("attack") && !anim.isPast("grab_done")) {
                 entity.mobAttack(anim, null, e -> {
                     if (!entity.caughtEntities.contains(e)) {
                         entity.catchEntity(e);
@@ -138,12 +142,11 @@ public class EntityHandonetta extends BossMonster {
         b.put(GRAB_CAUGHT, (anim, entity) -> {
             entity.getNavigation().stop();
             entity.setDeltaMovement(entity.getDeltaMovement().scale(0.1));
-            if (anim.canAttack() || anim.isAtTick(0.6)
-                    || anim.isAtTick(1.04) || anim.isAtTick(1.48)) {
+            if (anim.isAt("attack")) {
                 entity.caughtEntities.forEach(entity::doHurtTarget);
                 S2CScreenShake.sendAround(entity, 24, 4, 1);
             }
-            if (anim.isPastTick(1.8) && !entity.caughtEntities.isEmpty()) {
+            if (anim.isPast("attack_end") && !entity.caughtEntities.isEmpty()) {
                 entity.caughtEntities.forEach(e -> e.removeEffect(ModEffects.TRUE_INVIS.get()));
                 entity.caughtEntities.clear();
             }
@@ -175,7 +178,7 @@ public class EntityHandonetta extends BossMonster {
 
     public final AnimatedAttackGoal<EntityHandonetta> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityHandonetta> animationHandler = new AnimationHandler<>(this, ANIMS)
-            .setAnimationChangeFunc(anim -> {
+            .withChangeListener(anim -> {
                 this.moveDirection = null;
                 if (anim != null) {
                     this.setDeltaMovement(this.getDeltaMovement().scale(0.1));
@@ -333,7 +336,7 @@ public class EntityHandonetta extends BossMonster {
     public void baseTick() {
         super.baseTick();
         if (this.getAnimationHandler().isCurrent(GRAB, GRAB_CAUGHT)) {
-            boolean invis = this.getAnimationHandler().isCurrent(GRAB) ? this.getAnimationHandler().getAnimation().isPastTick(0.72) : this.getAnimationHandler().isCurrent(GRAB_CAUGHT);
+            boolean invis = this.getAnimationHandler().isCurrent(GRAB) ? this.getAnimationHandler().getAnimation().isPast("invis_start") : this.getAnimationHandler().isCurrent(GRAB_CAUGHT);
             this.caughtEntities.forEach(e -> {
                 if (e.isAlive()) {
                     if (e instanceof ServerPlayer player)

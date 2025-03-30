@@ -60,7 +60,7 @@ public class ModelSkelefang<T extends EntitySkelefang> extends EntityModel<T> im
     public ModelPartHandler.ModelPartExtended ridingPositionBones;
     public ModelPartHandler.ModelPartExtended ridingPositionHeart;
 
-    private int beamTick = -1, entityTick;
+    private float restoreProgress = -1, entityTick;
     private boolean translucentTail, translucentTailBase, translucentSpineBack, translucentSpineFront, translucentBackRibs, translucentFrontRibs;
 
     public ModelSkelefang(ModelPart root, Function<ResourceLocation, RenderType> function) {
@@ -252,8 +252,8 @@ public class ModelSkelefang<T extends EntitySkelefang> extends EntityModel<T> im
 
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-        if (this.beamTick >= 220) {
-            float newAlpha = Math.min(1, (this.beamTick - 220) / 20f);
+        if (this.restoreProgress != -1) {
+            float newAlpha = Math.min(1, this.restoreProgress);
             this.translateTo(poseStack, this.body);
             this.heart.render(poseStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
             this.spineBack.render(poseStack, buffer, packedLight, packedOverlay, red, green, blue, newAlpha);
@@ -341,9 +341,10 @@ public class ModelSkelefang<T extends EntitySkelefang> extends EntityModel<T> im
         }
         this.anim.doAnimation(this, entity.getAnimationHandler(), partialTicks);
         if (anim != null && anim.is(EntitySkelefang.BEAM)) {
-            this.beamTick = anim.getTick();
+            this.restoreProgress = anim.progress((float) anim.getMarker("restore_start", 0) * 20,
+                    (float) anim.getMarker("restore_end", 0) * 20, partialTicks, 0);
         } else
-            this.beamTick = -1;
+            this.restoreProgress = -1;
     }
 
     @Override

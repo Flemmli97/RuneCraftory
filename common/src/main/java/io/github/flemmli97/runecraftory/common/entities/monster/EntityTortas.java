@@ -38,10 +38,10 @@ import java.util.List;
 
 public class EntityTortas extends ChargingMonster {
 
-    public static final AnimatedAction BITE = new AnimatedAction(11, 6, "bite");
-    public static final AnimatedAction SPIN = new AnimatedAction(51, 0, "spin");
+    public static final AnimatedAction BITE = AnimatedAction.builder(0.56, "bite").marker("attack", 0.32).build();
+    public static final AnimatedAction SPIN = AnimatedAction.builder(2.5, "spin").marker("attack_start", 0).build();
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(BITE, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(0, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{BITE, SPIN, INTERACT, SLEEP};
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityTortas>>> ATTACKS = List.of(

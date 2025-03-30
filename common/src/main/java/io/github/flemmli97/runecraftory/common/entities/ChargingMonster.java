@@ -54,7 +54,10 @@ public abstract class ChargingMonster extends BaseMonster {
     public void tick() {
         super.tick();
         if (!this.initAnim) {
-            this.getAnimationHandler().setAnimationChangeCons(this.chargingAnim);
+            this.getAnimationHandler().withChangeListener(anim -> {
+                this.chargingAnim.accept(anim);
+                return false;
+            });
             this.initAnim = true;
         }
     }
@@ -74,7 +77,7 @@ public abstract class ChargingMonster extends BaseMonster {
                 this.setChargeMotion(this.getChargeTo(anim));
             }
             this.getNavigation().stop();
-            if (anim.isPastTick(anim.getAttackTime())) {
+            if (anim.isPast("attack_start") && !anim.isPast("attack_end")) {
                 if (!this.handleChargeMovement(anim))
                     return;
                 if (this.hitEntity == null)

@@ -19,7 +19,7 @@ public class PollenPuffSpell extends Spell {
         Vec3 dir = new Vec3(2, 1, 0).normalize();
         float step = 360f / amount;
         for (int i = 0; i < amount; i++)
-            arr[i] = MathUtils.rotate(MathUtils.normalY, dir, i * step);
+            arr[i] = MathUtils.rotate(MathUtils.NORMAL_Y, dir, i * step);
         return arr;
     }
 

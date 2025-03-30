@@ -19,9 +19,9 @@ public class PowerWaveAttack extends SpellUseAttack {
 
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
-        if (anim.isAtTick(0.4)) {
-            Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1)).scale(0.4);
-            handler.setMoveTargetDir(dir, anim, anim.getTick());
+        if (anim.isAt("step")) {
+            Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1)).scale(0.55);
+            entity.setDeltaMovement(dir);
         }
         super.run(entity, stack, handler, anim);
     }

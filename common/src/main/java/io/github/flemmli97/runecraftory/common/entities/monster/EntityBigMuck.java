@@ -23,10 +23,10 @@ import java.util.List;
 
 public class EntityBigMuck extends BaseMonster {
 
-    public static final AnimatedAction SLAP = new AnimatedAction(24, 7, "slap");
-    public static final AnimatedAction SPORE = new AnimatedAction(44, 18, "spore");
+    public static final AnimatedAction SLAP = AnimatedAction.builder(1.2, "slap").marker("attack", 0.36).build();
+    public static final AnimatedAction SPORE = AnimatedAction.builder(2.16, "spore").marker("attack", 0.96).build();
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(SLAP, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(0, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{SLAP, SPORE, INTERACT, SLEEP};
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityBigMuck>>> ATTACKS = List.of(
@@ -80,7 +80,7 @@ public class EntityBigMuck extends BaseMonster {
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(SPORE)) {
             this.getNavigation().stop();
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 ModSpells.SPORE_CIRCLE_SPELL.get().use(this);
             }
         } else

@@ -23,26 +23,22 @@ public class GustAttack extends AttackAction {
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
         handler.lockLook(true);
-        Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-        if (anim.isAtTick(0.12)) {
-            handler.setMoveTargetDir(dir.scale(1).add(0, 2.2, 0), anim, 0.28);
+        if (anim.isAt("jump")) {
+            Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
+            entity.setDeltaMovement(dir.scale(1.6).add(0, 0.4, 0));
             entity.playSound(ModSounds.SPELL_GENERIC_WIND_LONG.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.2f);
         }
-        if (anim.isAtTick(0.28))
-            handler.setMoveTargetDir(dir.scale(6).add(0, -1.2, 0), anim, 0.6);
-        if (anim.isAtTick(0.6))
-            handler.setMoveTargetDir(dir.scale(0.7).add(0, -1, 0), anim, 0.76);
-        if (anim.isAtTick(0.44)) {
+        if (anim.isAt("attack")) {
+            if (!entity.level.isClientSide) {
+                double range = CombatUtils.getRange(entity, 0);
+                handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox().inflate(2, 0, 0)
+                                .expandTowards(0, 0, range)))
+                        .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
+                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
+                        .doOnSuccess(e -> CombatUtils.knockBackEntity(entity, e, 1.1f))
+                        .executeAttack());
+            }
             entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
-        }
-        if (!entity.level.isClientSide && anim.isAtTick(0.56)) {
-            double range = CombatUtils.getRange(entity, 0);
-            handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox().inflate(2, 0, 0)
-                            .expandTowards(0, 0, range)))
-                    .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
-                    .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
-                    .doOnSuccess(e -> CombatUtils.knockBackEntity(entity, e, 1.1f))
-                    .executeAttack());
         }
         handler.lockLook(true);
     }

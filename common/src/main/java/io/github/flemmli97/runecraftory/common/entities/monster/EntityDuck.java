@@ -27,11 +27,11 @@ import java.util.List;
 
 public class EntityDuck extends ChargingMonster {
 
-    private static final AnimatedAction MELEE = new AnimatedAction(15, 8, "slap");
-    public static final AnimatedAction DIVE = AnimatedAction.builder((int) Math.ceil(1.84 * 20), "dive").marker((int) Math.ceil(1.08 * 20)).infinite().build();
-    private static final AnimatedAction LAND = new AnimatedAction(0.48, 0, "land");
+    private static final AnimatedAction MELEE = AnimatedAction.builder(0.72, "slap").marker("attack", 0.4).build();
+    public static final AnimatedAction DIVE = AnimatedAction.builder(1.84, "dive").marker("dive", 1.08).infinite().build();
+    private static final AnimatedAction LAND = new AnimatedAction(0.48, "land");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
-    public static final AnimatedAction STILL = AnimatedAction.builder(1, "still").infinite().build();
+    public static final AnimatedAction STILL = AnimatedAction.builder(0, "still").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, DIVE, LAND, INTERACT, STILL};
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityDuck>>> ATTACKS = List.of(
@@ -67,7 +67,7 @@ public class EntityDuck extends ChargingMonster {
     @Override
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(DIVE)) {
-            if (anim.isPastTick(anim.getAttackTime())) {
+            if (anim.isPast("dive")) {
                 if (this.getChargeMotion() == null) {
                     this.setChargeMotion(this.getChargeTo(anim));
                 }
@@ -99,7 +99,7 @@ public class EntityDuck extends ChargingMonster {
     @Override
     protected boolean fixedYaw() {
         AnimatedAction anim = this.getAnimationHandler().getAnimation();
-        return anim != null && (anim.is(DIVE) ? anim.isPastTick(anim.getAttackTime() + 1) : anim.is(LAND));
+        return anim != null && (anim.is(DIVE) ? anim.isPast("dive") : anim.is(LAND));
     }
 
     @Override

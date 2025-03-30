@@ -28,11 +28,11 @@ import java.util.function.Consumer;
 
 public class EntityTroll extends BaseMonster {
 
-    public static final AnimatedAction PUNCH = new AnimatedAction(16, 10, "punch");
-    public static final AnimatedAction DOUBLE_PUNCH = new AnimatedAction(16, 10, "double_fist_punch");
-    public static final AnimatedAction SLAM = new AnimatedAction(16, 10, "fist_slam");
+    public static final AnimatedAction PUNCH = AnimatedAction.builder(0.8, "punch").marker("attack", 0.52).build();
+    public static final AnimatedAction DOUBLE_PUNCH = AnimatedAction.builder(0.8, "double_fist_punch").marker("attack", 0.52).build();
+    public static final AnimatedAction SLAM = AnimatedAction.builder(0.8, "fist_slam").marker("attack", 0.52).build();
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(PUNCH, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(0, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{PUNCH, DOUBLE_PUNCH, SLAM, INTERACT, SLEEP};
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityTroll>>> ATTACKS = List.of(

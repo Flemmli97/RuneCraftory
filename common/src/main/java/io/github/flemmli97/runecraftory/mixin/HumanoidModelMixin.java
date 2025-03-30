@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.mixinhelper.ClientMixinUtils;
 import io.github.flemmli97.runecraftory.mixinhelper.HumanoidMainHand;
+import io.github.flemmli97.tenshilib.client.model.ModelPartHandler;
 import io.github.flemmli97.tenshilib.mixin.ModelPartAccessor;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
@@ -18,16 +19,15 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 
 @Mixin(HumanoidModel.class)
 public abstract class HumanoidModelMixin<T extends LivingEntity> implements HumanoidMainHand {
 
     @Unique
-    private ModelPart runecraftory$LeftHandItem;
+    private ModelPartHandler.ModelPartExtended runecraftory$LeftHandItem;
     @Unique
-    private ModelPart runecraftory$RightHandItem;
+    private ModelPartHandler.ModelPartExtended runecraftory$RightHandItem;
     @Unique
     private List<Pair<ModelPart, PartPose>> runecraftory$defaultPoses;
 
@@ -51,16 +51,16 @@ public abstract class HumanoidModelMixin<T extends LivingEntity> implements Huma
     }
 
     @Override
-    public ModelPart runecraftory$getRightHandItem() {
+    public ModelPartHandler.ModelPartExtended runecraftory$getRightHandItem() {
         if (this.runecraftory$RightHandItem == null)
-            this.runecraftory$RightHandItem = new ModelPart(List.of(), Map.of());
+            this.runecraftory$RightHandItem = ClientMixinUtils.createPlayerItemPart(false);
         return this.runecraftory$RightHandItem;
     }
 
     @Override
-    public ModelPart runecraftory$getLeftHandItem() {
+    public ModelPartHandler.ModelPartExtended runecraftory$getLeftHandItem() {
         if (this.runecraftory$LeftHandItem == null)
-            this.runecraftory$LeftHandItem = new ModelPart(List.of(), Map.of());
+            this.runecraftory$LeftHandItem = ClientMixinUtils.createPlayerItemPart(true);
         return this.runecraftory$LeftHandItem;
     }
 }

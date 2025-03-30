@@ -31,9 +31,9 @@ import net.minecraft.world.phys.Vec3;
 public class SpearAttack extends AttackAction {
 
     private final ComboContainer combo = ComboContainer.Builder.builder()
-            .addCombo(ComboContainer.AFTER_ANIM, 4)
-            .addCombo(ComboContainer.AFTER_ANIM, 4)
-            .addCombo(ComboContainer.AFTER_ANIM, 4)
+            .addCombo(ComboContainer.past("done"), 2)
+            .addCombo(ComboContainer.past("done"), 2)
+            .addCombo(ComboContainer.past("done"), 2)
             .addCombo(handler -> handler.isCurrentAnimationDone() && CombatUtils.canPerform(handler.getEntity(), EnumSkills.SPEAR, 20), 0)
             .build();
 
@@ -45,50 +45,53 @@ public class SpearAttack extends AttackAction {
 
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
-        if (anim.canAttack() && handler.getComboCount() != 5) {
-            CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(IAOEWeapon.createOBB(entity, stack,
-                            CombatUtils.getRange(entity, 0),
-                            CombatUtils.getWidth(entity, 0))))
-                    .executeAttack();
+        if (handler.getComboCount() != 5) {
+            if (anim.isAt("attack")) {
+                if (!entity.level.isClientSide) {
+                    CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(IAOEWeapon.createOBB(entity, stack,
+                                    CombatUtils.getRange(entity, 0),
+                                    CombatUtils.getWidth(entity, 0))))
+                            .executeAttack();
+                }
+                entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_LIGHT.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+            }
         }
         Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
         switch (handler.getComboCount()) {
             case 1, 3, 4 -> {
-                if (anim.isAtTick(0.28)) {
-                    handler.setMoveTargetDir(dir.scale(0.15), anim, anim.getTick());
+                if (anim.isAt("step")) {
+                    entity.setDeltaMovement(dir.scale(0.3));
                 }
             }
             case 2 -> {
-                if (anim.isAtTick(0.2)) {
-                    handler.setMoveTargetDir(dir.scale(0.2), anim, anim.getTick());
+                if (anim.isAt("step")) {
+                    entity.setDeltaMovement(dir.scale(0.15));
                 }
             }
             case 5 -> {
-                if (anim.isAtTick(0.12)) {
+                if (anim.isAt("spin_start")) {
                     handler.setSpinStartRot(entity.getYRot());
                     handler.resetHitEntityTracker();
                     entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
                 }
-                if (anim.isAtTick(0.6)) {
+                if (anim.isAt("reset")) {
                     handler.resetHitEntityTracker();
                     entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
                 }
-                CombatUtils.EntityAttack attack = spinAttack(entity, anim, 0.12, 1.08,
-                        handler.getSpinStartRot() + 180, handler.getSpinStartRot() + 900, -1);
+                CombatUtils.EntityAttack attack = spinAttack(entity, anim, anim.getMarker("spin_start", 0), anim.getMarker("spin_end", 0),
+                        handler.getSpinStartRot() + 180, handler.getSpinStartRot() + 1260, -1);
                 if (attack != null) {
                     handler.addHitEntityTracker(attack
                             .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
                             .executeAttack());
                 }
-                if (anim.isAtTick(1.2))
-                    handler.setMoveTargetDir(dir.scale(1.8).add(0, 1.5, 0), anim, 1.4);
-                if (anim.isAtTick(1.4))
-                    handler.setMoveTargetDir(dir.scale(2.5).add(0, -1.5, 0), anim, 1.64);
-                if (anim.isAtTick(1.63)) {
+                if (anim.isAt("leap"))
+                    entity.setDeltaMovement(dir.scale(1.3).add(0, 0.4, 0));
+                if (anim.isAt("slam")) {
                     Vec3 look = entity.getLookAngle();
                     look = new Vec3(look.x(), 0, look.z()).scale(1.2);
                     Vec3 attackPos = entity.position().add(0, 0.2, 0).add(look);
-                    CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(new AABB(-0.8, -1.2, -0.8, 0.8, 1.2, 0.8).move(attackPos)))
+                    CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(new AABB(-1, -1.2, 0, 1, 1.2, 2.5), false))
                             .executeAttack();
                     Vec3 pos = entity.position().add(0, -1, 0);
                     BlockPos.MutableBlockPos mut = new BlockPos.MutableBlockPos();
@@ -106,15 +109,13 @@ public class SpearAttack extends AttackAction {
             }
         }
         if (handler.getComboCount() == 5) {
-            handler.lockLook(anim.isPastTick(01.16) && !anim.isPastTick(1.6));
+            handler.lockLook(anim.isPast("leap") && !anim.isPast("leap_end"));
         }
     }
 
     @Override
     public void onStart(LivingEntity entity, WeaponHandler handler) {
-        if (handler.getComboCount() != 5) {
-            entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_LIGHT.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
-        } else if (entity instanceof ServerPlayer player)
+        if (handler.getComboCount() == 5 && entity instanceof ServerPlayer player)
             Platform.INSTANCE.getPlayerData(player).ifPresent(d -> LevelCalc.useRP(player, d, GeneralConfig.spearUltimate, true, 0, false));
     }
 

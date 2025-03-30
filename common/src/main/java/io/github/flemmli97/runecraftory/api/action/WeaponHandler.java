@@ -33,7 +33,7 @@ public class WeaponHandler {
     private int comboCount;
     private boolean scheduledAction;
 
-    private AnimatedAction currentAnim, lastAnim;
+    private AnimatedAction currentAnimation, lastAnimation;
     private ItemStack usedWeapon = ItemStack.EMPTY;
     private Spell spell;
     /**
@@ -54,7 +54,6 @@ public class WeaponHandler {
 
     private Vec3 moveDir;
     private boolean oldGravity;
-    private int moveDuration;
     private Entity target;
 
     public WeaponHandler(LivingEntity entity) {
@@ -90,7 +89,7 @@ public class WeaponHandler {
     }
 
     private AttackAction.OverrideType checkOverride(AttackAction action, boolean allowNone) {
-        if (allowNone && (this.currentAction == ModAttackActions.NONE.get() || this.currentAnim == null)) {
+        if (allowNone && (this.currentAction == ModAttackActions.NONE.get() || this.currentAnimation == null)) {
             return this.timeSinceLastChange < COOLDOWN ? AttackAction.OverrideType.NONE : AttackAction.OverrideType.REPLACE;
         }
         if (this.currentAction == action && action.combos() != null) {
@@ -110,11 +109,11 @@ public class WeaponHandler {
         if (action == ModAttackActions.NONE.get()) {
             this.resetStates();
         }
-        this.lastAnim = this.currentAnim;
+        this.lastAnimation = this.currentAnimation;
         this.timeSinceLastChange = 0;
         this.currentAction = action;
         this.scheduledAction = false;
-        this.currentAnim = action.getAnimation(this.entity, this.getComboCount());
+        this.currentAnimation = action.getAnimation(this.entity, this.getComboCount());
         if (this.currentAction != ModAttackActions.NONE.get()) {
             this.comboCount++;
         } else
@@ -125,11 +124,14 @@ public class WeaponHandler {
         this.currentAction.onStart(this.entity, this);
         this.consumeSpellOnStart = false;
         if (!this.entity.level.isClientSide) {
-            if (this.entity instanceof IAnimated animated && this.currentAnim != null) {
-                animated.getAnimationHandler().setAnimation(this.currentAnim);
+            if (this.entity instanceof IAnimated animated && this.currentAnimation != null) {
+                animated.getAnimationHandler().setAnimation(this.currentAnimation,
+                        this.currentAnimation.getStartTransition(), this.currentAnimation.getEndTransitionTime(),
+                        this.currentAnimation.getTick(1));
             }
             if (packet) {
-                Platform.INSTANCE.sendToTrackingAndSelf(new S2CWeaponUse(this.currentAction, this.usedWeapon, this.comboCount - 1, this.entity), this.entity);
+                Platform.INSTANCE.sendToTrackingAndSelf(new S2CWeaponUse(this.currentAction, this.usedWeapon,
+                        this.comboCount - 1, this.entity), this.entity);
             }
         } else if (this.entity instanceof IAnimated animated) {
             // Tick once on client. Otherwise it can flicker for some reason. dont wanna investigate atm
@@ -154,12 +156,12 @@ public class WeaponHandler {
     }
 
     public void tick() {
-        if (this.currentAnim != null) {
+        if (this.currentAnimation != null) {
             ComboContainer.ComboHandler handler = this.currentAction.combos() != null ? this.currentAction.combos().get(this.comboCount - 1) : null;
             if (this.scheduledAction && handler != null && handler.canAdvance().test(this)) {
                 this.setAnimationBasedOnState(this.currentAction, handler.advanceTo().get(this), true);
                 return;
-            } else if (this.currentAnim.tick(1 + (int) (this.currentAnim.getSpeed() * (handler != null ? handler.resetTime() : 0)))) {
+            } else if (this.currentAnimation.tick(1 + (int) (this.currentAnimation.getSpeed() * (handler != null ? handler.resetTime() : 0)))) {
                 this.setAnimationBasedOnState(ModAttackActions.NONE.get(), -1, false);
             } else {
                 if (this.entity instanceof ServerPlayer player) {
@@ -177,18 +179,13 @@ public class WeaponHandler {
                         this.setAnimationBasedOnState(ModAttackActions.NONE.get(), -1, true);
                     }
                 }
-                this.currentAction.run(this.entity, this.usedWeapon, this, this.currentAnim);
+                this.currentAction.run(this.entity, this.usedWeapon, this, this.currentAnimation);
             }
         }
-        if (this.moveDir != null) {
-            this.entity.setDeltaMovement(this.moveDir);
-            this.moveDuration--;
-            if (this.moveDuration <= 0)
-                this.moveDir = null;
-        }
         this.timeSinceLastChange++;
-        if (this.interpolatedLastChange(1) == 1)
-            this.lastAnim = null;
+        if (this.lastAnimation != null && this.timeSinceLastChange > this.lastAnimation.getEndTransitionTime()) {
+//            this.lastAnimation = null;
+        }
     }
 
     public LivingEntity getEntity() {
@@ -200,7 +197,7 @@ public class WeaponHandler {
     }
 
     public boolean isCurrentAnimationDone() {
-        return this.currentAnim != null && this.currentAnim.isPastTick(this.currentAnim.getLength());
+        return this.currentAnimation != null && this.currentAnimation.done(0);
     }
 
     public AttackAction getCurrentAction() {
@@ -215,8 +212,18 @@ public class WeaponHandler {
         return this.toolUseData;
     }
 
-    public float interpolatedLastChange(float partialTicks) {
-        return Mth.clamp((this.timeSinceLastChange + partialTicks) / FADE_TICK, 0, 1);
+    public float getCurrentTransitionProgress(float partialTicks) {
+        if (this.currentAnimation == null) {
+            return 1;
+        }
+        return this.currentAnimation.getStartTransitionProgress(partialTicks);
+    }
+
+    public float getLastTransitionProgress(float partialTicks) {
+        if (this.lastAnimation == null) {
+            return 0;
+        }
+        return 1 - Mth.clamp((this.timeSinceLastChange - 1 + partialTicks) / this.lastAnimation.getEndTransitionTime(), 0, 1);
     }
 
     public ItemStack getUsedWeapon() {
@@ -232,7 +239,7 @@ public class WeaponHandler {
     }
 
     public float movementReduction() {
-        return this.currentAction.movementReduction(this.currentAnim);
+        return this.currentAction.movementReduction(this.currentAnimation);
     }
 
     public boolean isItemSwapBlocked() {
@@ -247,12 +254,12 @@ public class WeaponHandler {
         this.lockLook = flag;
     }
 
-    public AnimatedAction getCurrentAnim() {
-        return this.currentAnim;
+    public AnimatedAction getAnimation() {
+        return this.currentAnimation;
     }
 
-    public AnimatedAction getLastAnim() {
-        return this.lastAnim;
+    public AnimatedAction getLastAnimation() {
+        return this.lastAnimation;
     }
 
     public Spell getSpellToCast() {
@@ -283,14 +290,13 @@ public class WeaponHandler {
         return this.currentAction.isInvulnerable(entity, this);
     }
 
-    public void setMoveTargetDir(Vec3 direction, AnimatedAction animation, double endTick) {
-        this.setMoveTargetDir(direction, animation, Mth.ceil(endTick * 20));
+    public void setMoveDirection(Vec3 direction) {
+        this.moveDir = direction;
     }
 
-    public void setMoveTargetDir(Vec3 direction, AnimatedAction animation, int endTick) {
-        double duration = Math.max(1, (endTick - animation.getTick()) / animation.getSpeed());
-        this.moveDir = direction.scale(1d / duration);
-        this.moveDuration = Mth.ceil(duration);
+    public void applyMoveDirection() {
+        if (this.moveDir != null)
+            this.entity.setDeltaMovement(this.moveDir);
     }
 
     public Entity getTarget() {
@@ -299,10 +305,6 @@ public class WeaponHandler {
 
     public void setTarget(Entity target) {
         this.target = target;
-    }
-
-    public void clearMoveTarget() {
-        this.moveDir = null;
     }
 
     public void setNoGravity(LivingEntity entity) {

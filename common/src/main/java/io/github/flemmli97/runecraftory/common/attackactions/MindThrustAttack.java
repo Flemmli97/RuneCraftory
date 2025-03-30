@@ -23,11 +23,12 @@ public class MindThrustAttack extends AttackAction {
 
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
-        if (anim.isAtTick(0.68)) {
-            Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-            handler.setMoveTargetDir(dir.scale(0.5), anim, anim.getTick());
+        if (anim.isAt("step")) {
+            Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1)).scale(0.4);
+            entity.setDeltaMovement(dir);
+            entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_LIGHT.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         }
-        if (anim.canAttack()) {
+        if (anim.isAt("attack")) {
             if (!entity.level.isClientSide)
                 CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(entity.getYRot(), entity.getXRot(), 1, 0.5f, false))
                         .withBonusAttributes(ModAttributes.PARA.get(), 40)
@@ -35,7 +36,6 @@ public class MindThrustAttack extends AttackAction {
                         .withBonusAttributes(ModAttributes.SEAL.get(), 25)
                         .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
                         .executeAttack();
-            entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_LIGHT.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         }
     }
 }

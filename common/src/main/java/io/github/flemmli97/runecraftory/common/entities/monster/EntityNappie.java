@@ -24,7 +24,7 @@ import java.util.function.Predicate;
 
 public class EntityNappie extends EntityPommePomme implements HealingPredicateEntity {
 
-    public static final AnimatedAction HEAL = new AnimatedAction(0.72, 0.32, "cast");
+    public static final AnimatedAction HEAL = AnimatedAction.builder(0.72, "cast").marker("attack", 0.32).build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{HEAL, KICK, CHARGE_ATTACK, INTERACT, SLEEP};
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityPommePomme>>> ATTACKS = List.of(
@@ -66,7 +66,7 @@ public class EntityNappie extends EntityPommePomme implements HealingPredicateEn
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(HEAL)) {
             this.getNavigation().stop();
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 ModSpells.CURE_ALL.get().use(this);
             }
         } else {

@@ -8,7 +8,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
-import net.minecraft.util.Mth;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
@@ -23,16 +23,20 @@ public class RushPunchAttack extends AttackAction {
 
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
-        if (anim.isPastTick(0.16) && !anim.isPastTick(0.92) && anim.getTickRaw() % (3 * anim.getSpeed()) == 0) {
-            entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_LIGHT.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+        if (anim.isAt("attack")) {
             if (!entity.level.isClientSide) {
-                float mod = (anim.getTickRaw() - Mth.ceil(0.16 * 20)) % (15 * anim.getSpeed());
-                CombatUtils.EntityAttack attack = CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(entity.getYRot(), 0, 1.5, 0, false))
-                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack));
-                if (mod == 12)
-                    attack.withBonusAttributes(ModAttributes.CRIT.get(), 100d);
-                attack.executeAttack();
+                CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(entity.getYRot(), 0, 1, 0, false))
+                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack, 1.1f)).executeAttack();
             }
+            entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_LIGHT.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.7f);
+        }
+        if (anim.isAt("attack_crit")) {
+            if (!entity.level.isClientSide) {
+                CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(entity.getYRot(), 0, 1, 0, false))
+                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack, 1.1f))
+                        .withBonusAttributes(ModAttributes.CRIT.get(), 100d).executeAttack();
+            }
+            entity.playSound(SoundEvents.PLAYER_ATTACK_CRIT, 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.7f);
         }
     }
 }

@@ -23,18 +23,23 @@ public class FlashStrikeAttack extends AttackAction {
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
         handler.lockLook(true);
-        if (anim.isPastTick(0.2)) {
-            if (anim.isAtTick(0.2)) {
-                Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-                handler.setMoveTargetDir(dir.scale(0.5).add(0, 0.3, 0), anim, 0.28);
-                entity.playSound(ModSounds.SPELL_GENERIC_LEAP.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.7f);
-            } else if (anim.isAtTick(0.28)) {
-                Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-                handler.setMoveTargetDir(dir.scale(5), anim, 0.88);
-            }
-            if (!entity.level.isClientSide && anim.isPastTick(0.2) && !anim.isPastTick(1.0)) {
-                if (anim.getTickRaw() % (4 * anim.getSpeed()) == 0)
-                    handler.resetHitEntityTracker();
+        if (anim.isAt("move_1")) {
+            Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
+            handler.setMoveDirection(dir.scale(0.5).add(0, 0.3, 0));
+            entity.playSound(ModSounds.SPELL_GENERIC_LEAP.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.7f);
+        }
+        if (anim.isAt("move_2")) {
+            Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
+            handler.setMoveDirection(dir.scale(0.6));
+        }
+        if (anim.isAt("move_end")) {
+            handler.setMoveDirection(null);
+        }
+        handler.applyMoveDirection();
+        if (!entity.level.isClientSide) {
+            if (anim.isAt("reset"))
+                handler.resetHitEntityTracker();
+            if (anim.isPast("attack_start") && !anim.isPast("attack_end")) {
                 double range = Math.max(0, CombatUtils.getRange(entity, -1));
                 handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox()
                                 .inflate(1, 0, 0).expandTowards(0, 0, range)))

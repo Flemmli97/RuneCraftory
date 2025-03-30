@@ -22,13 +22,13 @@ public class DeltaStrikeAttack extends AttackAction {
 
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
-        if (anim.isAtTick(0.28) || anim.isAtTick(0.88)) {
+        if (anim.isAt("step")) {
             Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-            handler.setMoveTargetDir(dir.scale(0.33), anim, anim.getTick());
+            entity.setDeltaMovement(dir.scale(0.33));
         }
-        if (anim.canAttack() || anim.isAtTick(0.48) || anim.isAtTick(0.88)) {
+        if (anim.isAt("attack")) {
             if (!entity.level.isClientSide) {
-                CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(entity.getYRot(), entity.getXRot(), CombatUtils.getWidth(entity, 0.5f), 1, false))
+                CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(entity.getYRot(), entity.getXRot(), CombatUtils.getWidth(entity, 1), 0, false))
                         .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
                         .executeAttack();
             }

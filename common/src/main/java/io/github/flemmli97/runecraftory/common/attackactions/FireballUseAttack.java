@@ -20,9 +20,9 @@ public class FireballUseAttack extends AttackAction {
 
     public FireballUseAttack(boolean big) {
         ComboContainer.Builder builder = ComboContainer.Builder.builder()
-                .addCombo(handler -> handler.getCurrentAnim().isPastTick(handler.getCurrentAnim().getAttackTime()), 4);
+                .addCombo(handler -> handler.getAnimation().isPast("attack"), 4);
         if (!big)
-            builder.addCombo(handler -> handler.getCurrentAnim().isPastTick(handler.getCurrentAnim().getAttackTime()), 4);
+            builder.addCombo(handler -> handler.getAnimation().isPast("attack"), 4);
         this.combo = builder.build();
     }
 
@@ -34,7 +34,7 @@ public class FireballUseAttack extends AttackAction {
 
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
-        if (entity.getLevel() instanceof ServerLevel serverLevel && anim.canAttack()) {
+        if (entity.getLevel() instanceof ServerLevel serverLevel && anim.isAt("attack")) {
             entity.swing(InteractionHand.MAIN_HAND);
             if (handler.getSpellToCast() != null) {
                 Spell spell = handler.getSpellToCast();

@@ -27,10 +27,11 @@ import java.util.function.Consumer;
 
 public class EntityPalmCat extends LeapingMonster {
 
-    private static final AnimatedAction MELEE = new AnimatedAction(15, 9, "attack");
-    private static final AnimatedAction LEAP = new AnimatedAction(15, 8, "attack_2");
+    private static final AnimatedAction MELEE = AnimatedAction.builder(0.72, "attack").marker("attack", 0.44).build();
+    private static final AnimatedAction LEAP = AnimatedAction.builder(0.76, "attack_2")
+            .marker("attack_start", 0.28).marker("attack_end", 0.64).build();
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(0, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, LEAP, INTERACT, SLEEP};
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityPalmCat>>> ATTACKS = List.of(

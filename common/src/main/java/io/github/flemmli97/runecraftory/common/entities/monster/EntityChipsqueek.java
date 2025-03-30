@@ -24,10 +24,10 @@ import java.util.List;
 
 public class EntityChipsqueek extends ChargingMonster {
 
-    public static final AnimatedAction MELEE = new AnimatedAction(11, 6, "tail_slap");
-    public static final AnimatedAction ROLL = new AnimatedAction(12, 2, "roll");
+    public static final AnimatedAction MELEE = AnimatedAction.builder(0.44, "tail_slap").marker("attack", 0.28).build();
+    public static final AnimatedAction ROLL = AnimatedAction.builder(0.56, "roll").marker("attack_start", 0.2).build();
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().build();
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(0, "sleep").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, ROLL, MELEE, SLEEP};
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityChipsqueek>>> ATTACKS = List.of(

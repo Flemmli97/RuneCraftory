@@ -37,9 +37,9 @@ public abstract class EntityRafflesiaPart extends Mob implements IAnimated, Owna
     private static final EntityDataAccessor<Optional<UUID>> PARENT = SynchedEntityData.defineId(EntityRafflesiaPart.class, EntityDataSerializers.OPTIONAL_UUID);
     private static final EntityDataAccessor<Direction> SPAWN_DIRECTION = SynchedEntityData.defineId(EntityRafflesiaPart.class, EntityDataSerializers.DIRECTION);
 
-    public static final AnimatedAction HORSE_TAIL_ACTION = new AnimatedAction(1.28, 0.56, "horse_tail_action");
-    public static final AnimatedAction FLOWER_ACTION = new AnimatedAction(1, 0.44, "flower_action");
-    public static final AnimatedAction PITCHER_ACTION = new AnimatedAction(0.96, 0.4, "pitcher_action");
+    public static final AnimatedAction HORSE_TAIL_ACTION = AnimatedAction.builder(1.28, "horse_tail_action").marker("attack", 0.56).build();
+    public static final AnimatedAction FLOWER_ACTION = AnimatedAction.builder(1, "flower_action").marker("attack", 0.4456).build();
+    public static final AnimatedAction PITCHER_ACTION = AnimatedAction.builder(0.96, "pitcher_action").marker("attack", 0.4).build();
 
     public final RafflesiaPartAttackGoal attack = new RafflesiaPartAttackGoal(this);
 

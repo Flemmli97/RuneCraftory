@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
 import io.github.flemmli97.runecraftory.api.action.ComboContainer;
+import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.registry.AttackAction;
@@ -19,18 +20,18 @@ import net.minecraft.world.phys.HitResult;
 public class ToolHammerUse extends AttackAction {
 
     private final ComboContainer combo = ComboContainer.Builder.builder()
-            .addCombo(handler -> handler.getCurrentAnim().isPastTick(handler.getCurrentAnim().getAttackTime()), 8)
-            .addCombo(handler -> handler.getCurrentAnim().isPastTick(handler.getCurrentAnim().getAttackTime()), 8)
+            .addCombo(handler -> handler.getAnimation().isPast("attack"), 4)
+            .addCombo(handler -> handler.getAnimation().isPast("attack"), 4)
             .build();
 
     @Override
     public AnimatedAction getAnimation(LivingEntity entity, int comboIdx) {
-        return AnimatedAction.builder(20 + 1, "hammer_axe_use").marker(12).speed(1.3f).build();
+        return PlayerModelAnimations.HAMME_AXE_USE.create(1.1f);
     }
 
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
-        if (entity.getLevel() instanceof ServerLevel serverLevel && anim.canAttack() && stack.getItem() instanceof ItemToolHammer hammer) {
+        if (entity.getLevel() instanceof ServerLevel serverLevel && anim.isAt("attack") && stack.getItem() instanceof ItemToolHammer hammer) {
             ItemToolHammer.setDontUseRPFlagTemp(stack, true);
             int range = handler.getToolUseData().charge();
             BlockPos pos = entity.blockPosition();

@@ -18,7 +18,7 @@ import net.minecraft.world.phys.Vec3;
 public class NaiveBladeAttack extends AttackAction {
 
     private final ComboContainer combo = ComboContainer.Builder.builder()
-            .addCombo(handler -> handler.getCurrentAnim().isPastTick(0.12))
+            .addCombo(handler -> handler.getAnimation().isPast("prepared"))
             .build();
 
     @Override
@@ -32,16 +32,12 @@ public class NaiveBladeAttack extends AttackAction {
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
         if (handler.getComboCount() == 2) {
-            if (anim.canAttack()) {
-                entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
-                handler.setMoveTargetDir(new Vec3(0, 1, 0), anim, 0.76);
+            if (anim.isAt("jump")) {
+                entity.setDeltaMovement(new Vec3(0, 0.37, 0));
             }
-            if (anim.isAtTick(0.76)) {
+            if (anim.isAt("attack_1")) {
                 entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
-                handler.setMoveTargetDir(new Vec3(0, -1, 0), anim, 0.96);
-            }
-            if (!entity.level.isClientSide) {
-                if (anim.canAttack()) {
+                if (!entity.level.isClientSide) {
                     CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets(entity.getYRot() - 150, entity.getYRot() + 150, 0))
                             .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
                             .doOnSuccess(target -> CombatUtils.knockBackEntity(entity, target, 1.3f))
@@ -49,13 +45,17 @@ public class NaiveBladeAttack extends AttackAction {
                     if (entity instanceof ServerPlayer player)
                         player.sweepAttack();
                 }
-                if (anim.isAtTick(0.96)) {
+            }
+            if (anim.isAt("attack_2")) {
+                entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+                if (!entity.level.isClientSide) {
                     CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(entity.getYRot(), 0, 3, 0, false))
                             .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
                             .executeAttack();
                 }
             }
-        } else if (anim.canAttack()) {
+
+        } else if (anim.isAt("prepared")) {
             entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.CHAIN_PLACE, entity.getSoundSource(), 1.5f, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         }
     }
@@ -75,9 +75,9 @@ public class NaiveBladeAttack extends AttackAction {
     }
 
     public static boolean canCounter(WeaponHandler handler) {
-        AnimatedAction anim = handler.getCurrentAnim();
+        AnimatedAction anim = handler.getAnimation();
         return handler.getCurrentAction() instanceof NaiveBladeAttack
-                && anim != null && handler.getComboCount() == 1 && anim.isPastTick(0.12) && !anim.isPastTick(0.72);
+                && anim != null && handler.getComboCount() == 1 && anim.isPast("prepared") && !anim.done(0);
     }
 
     @Override

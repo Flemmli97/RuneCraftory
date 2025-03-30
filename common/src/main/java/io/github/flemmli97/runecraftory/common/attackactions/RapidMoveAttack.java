@@ -45,7 +45,7 @@ public class RapidMoveAttack extends AttackAction {
             entity.lookAt(EntityAnchorArgument.Anchor.EYES, direct);
             entity.hurtMarked = true;
         }
-        if (anim.canAttack()) {
+        if (anim.isAt("attack")) {
             entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_LIGHT.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
             if (!entity.level.isClientSide) {
                 handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox().inflate(0.5)

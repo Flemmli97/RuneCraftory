@@ -76,30 +76,34 @@ public class EntitySkelefang extends BossMonster {
     private static final EntityDataAccessor<Integer> RIGHT_LEG_BONES = SynchedEntityData.defineId(EntitySkelefang.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> BODY_BONES = SynchedEntityData.defineId(EntitySkelefang.class, EntityDataSerializers.INT);
 
-    public static final AnimatedAction TAIL_SLAM = new AnimatedAction(2, 0.72, "tail_slam");
-    public static final AnimatedAction NEEDLE_THROW = new AnimatedAction(1.16, 0.8, "needle_throw");
-    public static final AnimatedAction TAIL_SLAP = new AnimatedAction(0.84, 0.52, "tail_slap");
-    public static final AnimatedAction SLASH = new AnimatedAction(0.96, 0.6, "slash");
-    public static final AnimatedAction CHARGE = new AnimatedAction(1.5, 0, "charge");
+    public static final AnimatedAction TAIL_SLAM = AnimatedAction.builder(2, "tail_slam")
+            .marker("attack_1", 0.72).marker("attack_2", 1.2).marker("attack_3", 1.64).build();
+    public static final AnimatedAction NEEDLE_THROW = AnimatedAction.builder(1.16, "needle_throw").marker("attack", 0.8).build();
+    public static final AnimatedAction TAIL_SLAP = AnimatedAction.builder(0.84, "tail_slap").marker("attack", 0.52).build();
+    public static final AnimatedAction SLASH = AnimatedAction.builder(0.96, "slash").marker("attack", 0.6).build();
+    public static final AnimatedAction CHARGE = AnimatedAction.builder(1.5, "charge").marker("attack_start", 0).marker("attack_end").build();
     // 4.5 till start beam, 2 sec beam charge, 4 sec beam duration, 2 sec till restore, 1 sec restoring time
-    public static final AnimatedAction BEAM = AnimatedAction.builder(1, "beam").infinite().build();
+    public static final AnimatedAction BEAM = AnimatedAction.builder(13, "beam")
+            .marker("charge", 4.5).marker("beam", 6.5)
+            .marker("restore_start", 11).marker("restore_end", 12)
+            .marker("restore", 11.5).build();
 
-    public static final AnimatedAction DEATH = AnimatedAction.builder(120, "death").infinite().build();
-    public static final AnimatedAction ROAR = new AnimatedAction(2, 0.2, "roar");
+    public static final AnimatedAction DEATH = AnimatedAction.builder(10, "death").infinite().build();
+    public static final AnimatedAction ROAR = AnimatedAction.builder(2, "roar").marker("roar", 0.28).build();
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(TAIL_SLAM, "interact");
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{TAIL_SLAP, NEEDLE_THROW, TAIL_SLAM, SLASH, CHARGE, BEAM, DEATH, ROAR, INTERACT};
 
     private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntitySkelefang>> ATTACK_HANDLER = createAnimationHandler(b -> {
         b.put(TAIL_SLAM, (anim, entity) -> {
             if (entity.remainingTailBones() > 10 || entity.isEnraged()) {
-                if (anim.canAttack() || anim.isAtTick(1.2) || anim.isAtTick(1.64)) {
+                if (anim.isAt("attack_1") || anim.isAt("attack_2") || anim.isAt("attack_3")) {
                     entity.mobAttack(anim, entity.getTarget(), entity::doHurtTarget);
                     entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 2, 0.7f);
                 }
             }
         });
         b.put(NEEDLE_THROW, (anim, entity) -> {
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 ModSpells.BONE_NEEDLES.get().use(entity);
                 if (entity.remainingHeadBones() > 10) {
                     entity.level.broadcastEntityEvent(entity, HEAD_THROW);
@@ -112,13 +116,13 @@ public class EntitySkelefang extends BossMonster {
         });
         b.put(TAIL_SLAP, (anim, entity) -> {
             if (entity.remainingTailBones() > 10 || entity.isEnraged()) {
-                if (anim.canAttack()) {
+                if (anim.isAt("attack")) {
                     entity.mobAttack(anim, entity.getTarget(), entity::doHurtTarget);
                 }
             }
         });
         b.put(SLASH, (anim, entity) -> {
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 entity.mobAttack(anim, entity.getTarget(), entity::doHurtTarget);
                 Vec3 dir;
                 Vec3 side;
@@ -175,17 +179,15 @@ public class EntitySkelefang extends BossMonster {
             });
         });
         b.put(BEAM, (anim, entity) -> {
-            if (anim.isAtTick(90))
+            if (anim.isAt("charge"))
                 entity.level.broadcastEntityEvent(entity, CHARGE_BEAM);
-            if (anim.isAtTick(130))
+            if (anim.isAt("beam"))
                 ModSpells.ENERGY_ORB_SPELL.get().use(entity);
-            if (anim.isAtTick(230))
+            if (anim.isAt("restore"))
                 entity.restoreDragon();
-            if (anim.isPastTick(250))
-                entity.getAnimationHandler().setAnimation(null);
         });
         b.put(ROAR, (anim, entity) -> {
-            if (anim.canAttack()) {
+            if (anim.isAt("roar")) {
                 entity.playSound(ModSounds.ENTITY_SKELEFANG_ROAR.get(), 1, (entity.random.nextFloat() - entity.random.nextFloat()) * 0.2f + 1.0f);
                 S2CScreenShake.sendAround(entity, 32, 40, 2);
             }
@@ -218,11 +220,10 @@ public class EntitySkelefang extends BossMonster {
 
     public final AnimatedAttackGoal<EntitySkelefang> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntitySkelefang> animationHandler = new AnimationHandler<>(this, ANIMS)
-            .setAnimationChangeCons(anim -> {
+            .withChangeListener(anim -> {
                 if (anim != null) {
                     this.hitEntity = null;
                 }
-            }).setAnimationChangeFunc(anim -> {
                 if (!this.level.isClientSide && anim == null) {
                     boolean chain = !this.commanded;
                     this.commanded = false;
@@ -502,9 +503,9 @@ public class EntitySkelefang extends BossMonster {
                 Vec3 center = this.position().add(0, this.getBbHeight() * 0.5, 0);
                 List<Vector3f> locations = new ArrayList<>();
                 double speed = (this.getBbWidth() + 2) / 40;
-                locations.addAll(RayTraceUtils.rotatedVecs(MathUtils.normalX.scale(this.getBbWidth() + 2), MathUtils.normalZ, -180, 180, 10));
-                locations.addAll(RayTraceUtils.rotatedVecs(MathUtils.normalX.scale(this.getBbWidth() + 2), MathUtils.normalY, -180, 180, 10));
-                locations.addAll(RayTraceUtils.rotatedVecs(MathUtils.normalY.scale(this.getBbWidth() + 2), MathUtils.normalX, -180, 180, 10));
+                locations.addAll(RayTraceUtils.rotatedVecs(MathUtils.NORMAL_X.scale(this.getBbWidth() + 2), MathUtils.NORMAL_Z, -180, 180, 10));
+                locations.addAll(RayTraceUtils.rotatedVecs(MathUtils.NORMAL_X.scale(this.getBbWidth() + 2), MathUtils.NORMAL_Y, -180, 180, 10));
+                locations.addAll(RayTraceUtils.rotatedVecs(MathUtils.NORMAL_Y.scale(this.getBbWidth() + 2), MathUtils.NORMAL_X, -180, 180, 10));
                 for (Vector3f vec : locations) {
                     Vec3 pos = center.add(vec.x(), vec.y(), vec.z());
                     Vec3 dir = new Vec3(vec.x(), vec.y(), vec.z()).normalize().scale(speed);
@@ -652,9 +653,9 @@ public class EntitySkelefang extends BossMonster {
             float angle = this.yHeadRot;
             if (this.getControllingPassenger() instanceof Player player)
                 angle = player.yHeadRot;
-            if (anim.canAttack())
+            if (anim.isAt("attack_2"))
                 angle -= 35;
-            else if (anim.isAtTick(1.64))
+            else if (anim.isAt("attack_3"))
                 angle += 20;
             obbs.add(new OrientedBoundingBox(new AABB(-1.25, -0.02, -0, 1.25, 2.1 + 0.02, 7),
                     angle, 0, this.position()));

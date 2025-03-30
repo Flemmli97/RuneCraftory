@@ -45,42 +45,42 @@ import java.util.function.BiConsumer;
 
 public class EntityChimera extends BossMonster {
 
-    public static final AnimatedAction LEAP = new AnimatedAction(1.36, "leap");
-    public static final AnimatedAction FIRE_TAIL_BUBBLE = new AnimatedAction(1.48, 0.44, "tail_beam");
+    public static final AnimatedAction LEAP = AnimatedAction.builder(1.36, "leap").marker("attack_start", 0).marker("attack_end", 1.2).build();
+    public static final AnimatedAction FIRE_TAIL_BUBBLE = AnimatedAction.builder(1.48, "tail_beam").marker("attack", 0.44).build();
     public static final AnimatedAction WATER_TAIL_BUBBLE = AnimatedAction.copyOf(FIRE_TAIL_BUBBLE, "water_tail_bubble");
     public static final AnimatedAction WATER_TAIL_BEAM = AnimatedAction.copyOf(FIRE_TAIL_BUBBLE, "water_tail_beam");
-    public static final AnimatedAction FIRE_BREATH = new AnimatedAction(1.2, 0.4, "breath_attack");
+    public static final AnimatedAction FIRE_BREATH = AnimatedAction.builder(1.2, "breath_attack").marker("attack", 0.4).build();
     public static final AnimatedAction BUBBLE_BEAM = AnimatedAction.copyOf(FIRE_BREATH, "bubble_beam");
-    public static final AnimatedAction SLASH = new AnimatedAction(0.64, 0.36, "claw_attack");
-    public static final AnimatedAction BITE = new AnimatedAction(1.04, 0.4, "bite_attack");
+    public static final AnimatedAction SLASH = AnimatedAction.builder(0.64, "claw_attack").marker("attack", 0.36, 0.72).build();
+    public static final AnimatedAction BITE = AnimatedAction.builder(1.04, "bite_attack").marker("attack_1", 0.4).marker("attack_2", 0.72).build();
     public static final AnimatedAction ANGRY = new AnimatedAction(1.04, "angry");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(4, "sleep").infinite().build();
-    public static final AnimatedAction DEFEAT = AnimatedAction.builder(80, "defeat").marker(60).infinite().build();
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(0, "sleep").infinite().build();
+    public static final AnimatedAction DEFEAT = AnimatedAction.builder(10, "defeat").infinite().build();
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(SLASH, "interact");
     private static final AnimatedAction[] ANIMATED_ACTIONS = new AnimatedAction[]{LEAP, FIRE_TAIL_BUBBLE, WATER_TAIL_BUBBLE, WATER_TAIL_BEAM, FIRE_BREATH, BUBBLE_BEAM, SLASH, BITE, DEFEAT, INTERACT, ANGRY, SLEEP};
 
     private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntityChimera>> ATTACK_HANDLER = createAnimationHandler(b -> {
         BiConsumer<AnimatedAction, EntityChimera> summonFire = (anim, entity) -> {
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 ModSpells.FIREBALL_BARRAGE.get().use(entity);
             }
         };
         b.put(FIRE_TAIL_BUBBLE, summonFire);
         b.put(FIRE_BREATH, summonFire);
         BiConsumer<AnimatedAction, EntityChimera> summonWater = (anim, entity) -> {
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 ModSpells.BUBBLE_BEAM.get().use(entity);
             }
         };
         b.put(BUBBLE_BEAM, summonWater);
         b.put(WATER_TAIL_BUBBLE, summonWater);
         b.put(WATER_TAIL_BEAM, (anim, entity) -> {
-            if (anim.canAttack()) {
+            if (anim.isAt("attack")) {
                 ModSpells.WATER_LASER.get().use(entity);
             }
         });
         b.put(LEAP, (anim, entity) -> {
-            if ((anim.getTick() < anim.getLength() - 3 && anim.getTick() > anim.getAttackTime())) {
+            if (anim.isPast("attack_start") && !anim.isPast("attack_end")) {
                 if (entity.hitEntity == null)
                     entity.hitEntity = new ArrayList<>();
 
@@ -100,15 +100,15 @@ public class EntityChimera extends BossMonster {
             }
         });
         b.put(SLASH, (anim, entity) -> {
-            if (anim.canAttack() || anim.isAtTick(0.72)) {
+            if (anim.isAt("attack")) {
                 ModSpells.SLASH.get().use(entity);
             }
         });
         b.put(BITE, (anim, entity) -> {
-            if (anim.canAttack()) {
+            if (anim.isAt("attack_1")) {
                 entity.mobAttack(anim, entity.getTarget(), e -> CombatUtils.mobAttack(entity, e,
                         new CustomDamage.Builder(entity).hurtResistant(5).knockAmount(0)));
-            } else if (anim.isAtTick(0.72)) {
+            } else if (anim.isAt("attack_2")) {
                 entity.mobAttack(anim, entity.getTarget(), entity::doHurtTarget);
             }
         });
@@ -137,7 +137,7 @@ public class EntityChimera extends BossMonster {
 
     public final AnimatedAttackGoal<EntityChimera> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityChimera> animationHandler = new AnimationHandler<>(this, ANIMATED_ACTIONS)
-            .setAnimationChangeFunc(anim -> {
+            .withChangeListener(anim -> {
                 if (!this.level.isClientSide) {
                     if (anim == null) {
                         this.setChargeMotion(null);
@@ -236,10 +236,10 @@ public class EntityChimera extends BossMonster {
         }
         double reach = this.getBbWidth() * 0.9;
         Vec3 dir;
-        float offset = anim.canAttack() ? 45 : -5;
+        float offset = anim.isAt("attack") ? 45 : -5;
         if (target != null && !this.canBeControlledByRider()) {
             reach = Math.min(reach, this.position().distanceTo(target));
-            dir = MathUtils.rotate(MathUtils.normalY, target.subtract(this.position()).normalize(), offset * Mth.DEG_TO_RAD);
+            dir = MathUtils.rotate(MathUtils.NORMAL_Y, target.subtract(this.position()).normalize(), offset * Mth.DEG_TO_RAD);
         } else {
             if (this.getControllingPassenger() instanceof Player player)
                 dir = Vec3.directionFromRotation(player.getXRot(), player.getYRot() + offset);
