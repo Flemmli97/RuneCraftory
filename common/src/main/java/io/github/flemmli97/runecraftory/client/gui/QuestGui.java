@@ -62,7 +62,7 @@ public class QuestGui extends Screen {
             List<Pair<Integer, ResourceLocation>> textures = new ArrayList<>();
             if (display.features() != null) {
                 for (NPCTextureLayer.LayerType layerType : NPCTextureLayer.LayerType.values()) {
-                    ResourceLocation text = RenderNPC.getTextureFromLook(display.features(), display.features().view.containsKey(ModNPCLooks.SLIM.get()), layerType);
+                    ResourceLocation text = RenderNPC.getTextureFromLook(display.features(), display.features().view.containsKey(ModNPCLooks.SLIM.get()), layerType, null);
                     if (!text.equals(RenderNPC.EMPTY)) {
                         textures.add(Pair.of(NPCTextureLayer.color(display.features(), layerType), text));
                     }

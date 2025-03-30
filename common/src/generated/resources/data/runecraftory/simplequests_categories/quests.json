@@ -1,6 +1,5 @@
 {
   "name": "runecraftory.quests.category",
-  "max_daily": -1,
   "required_context": [
     "runecraftory:contexts"
   ]

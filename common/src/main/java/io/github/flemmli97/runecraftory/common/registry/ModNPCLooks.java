@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.registry;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.BlushFeatureType;
+import io.github.flemmli97.runecraftory.common.entities.npc.features.FaceFeaturesType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.HairFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.IndexedColorSettingType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.OutfitFeatureType;
@@ -30,9 +31,7 @@ public class ModNPCLooks {
     public static final RegistryEntrySupplier<NPCFeatureType<SizeFeatureType.SizeFeature>> SIZE = NPC_FEATURES.register("size_feature", () -> new NPCFeatureType<>(SizeFeatureType.CODEC, SizeFeatureType.SizeFeature::new, SizeFeatureType.SizeFeature::new));
 
     public static final RegistryEntrySupplier<NPCFeatureType<IndexedColorSettingType.IndexedColorFeature>> SKIN = NPC_FEATURES.register("skin_feature", ModNPCLooks::skin);
-    public static final RegistryEntrySupplier<NPCFeatureType<IndexedColorSettingType.IndexedColorFeature>> IRIS = NPC_FEATURES.register("iris_feature", ModNPCLooks::iris);
-    public static final RegistryEntrySupplier<NPCFeatureType<IndexedColorSettingType.IndexedColorFeature>> SCLERA = NPC_FEATURES.register("sclera_feature", ModNPCLooks::sclera);
-    public static final RegistryEntrySupplier<NPCFeatureType<IndexedColorSettingType.IndexedColorFeature>> EYEBROWS = NPC_FEATURES.register("eyebrows_feature", ModNPCLooks::eyebrows);
+    public static final RegistryEntrySupplier<NPCFeatureType<FaceFeaturesType.FaceFeatures>> FACE = NPC_FEATURES.register("face_feature", () -> new NPCFeatureType<>(FaceFeaturesType.CODEC, FaceFeaturesType.FaceFeatures::new, FaceFeaturesType.FaceFeatures::new));
     public static final RegistryEntrySupplier<NPCFeatureType<BlushFeatureType.BlushFeature>> BLUSH = NPC_FEATURES.register("blush_feature", () -> new NPCFeatureType<>(BlushFeatureType.CODEC, BlushFeatureType.BlushFeature::new, BlushFeatureType.BlushFeature::new));
     public static final RegistryEntrySupplier<NPCFeatureType<HairFeatureType.HairFeature>> HAIR = NPC_FEATURES.register("hair_feature", () -> new NPCFeatureType<>(HairFeatureType.CODEC, HairFeatureType.HairFeature::new, HairFeatureType.HairFeature::new));
     public static final RegistryEntrySupplier<NPCFeatureType<OutfitFeatureType.OutfitFeature>> OUTFIT = NPC_FEATURES.register("outfit_feature", () -> new NPCFeatureType<>(OutfitFeatureType.CODEC, OutfitFeatureType.OutfitFeature::new, OutfitFeatureType.OutfitFeature::new));
@@ -45,17 +44,5 @@ public class ModNPCLooks {
 
     private static NPCFeatureType<IndexedColorSettingType.IndexedColorFeature> skin() {
         return IndexedColorSettingType.createSimple(SKIN);
-    }
-
-    private static NPCFeatureType<IndexedColorSettingType.IndexedColorFeature> iris() {
-        return IndexedColorSettingType.createSimple(IRIS);
-    }
-
-    private static NPCFeatureType<IndexedColorSettingType.IndexedColorFeature> sclera() {
-        return IndexedColorSettingType.createSimple(SCLERA);
-    }
-
-    private static NPCFeatureType<IndexedColorSettingType.IndexedColorFeature> eyebrows() {
-        return IndexedColorSettingType.createSimple(EYEBROWS);
     }
 }

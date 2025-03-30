@@ -19,8 +19,10 @@ import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.RunAwayAc
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.SpellAttackAction;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.BlushFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.ColorSetting;
+import io.github.flemmli97.runecraftory.common.entities.npc.features.FaceFeaturesType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.HairFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.IndexRange;
+import io.github.flemmli97.runecraftory.common.entities.npc.features.IndexedColorSetting;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.IndexedColorSettingType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.OutfitFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.SimpleHatFeatureType;
@@ -32,12 +34,9 @@ import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
-import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
 import net.minecraft.util.random.WeightedEntry;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.predicates.TimeCheck;
@@ -547,17 +546,24 @@ public class NPCDataGen extends NPCDataProvider {
         // Just for generic sanity check
         FeatureBuilderHelper builder = map::put;
         builder.put(ModNPCLooks.SKIN.get(), new IndexedColorSettingType(List.of(0, 1, 2), ColorSetting.SKIN_COLOR_RANGE, ModNPCLooks.SKIN));
-        builder.put(ModNPCLooks.IRIS.get(), new IndexedColorSettingType(List.of(0, 1), ColorSetting.EYE_COLOR_RANGE, ModNPCLooks.IRIS));
-        builder.put(ModNPCLooks.SCLERA.get(), new IndexedColorSettingType(List.of(0, 1), ColorSetting.DEFAULT, ModNPCLooks.SCLERA));
-        builder.put(ModNPCLooks.EYEBROWS.get(), new IndexedColorSettingType(List.of(0, 1), ColorSetting.EYEBROW_COLOR_RANGE, ModNPCLooks.EYEBROWS));
         if (female) {
             builder.put(ModNPCLooks.SLIM.get(), SlimLookFeatureType.INSTANCE);
             builder.put(ModNPCLooks.SIZE.get(), new SizeFeatureType(UniformGenerator.between(0.9f, 1.05f)));
             builder.put(ModNPCLooks.BLUSH.get(), new BlushFeatureType(0.5f, ColorSetting.BLUSH_COLOR_RANGE));
             builder.put(ModNPCLooks.HAIR.get(), new HairFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("long", new IndexRange.FirstNIndices(5)), 1))), ColorSetting.HAIR_COLOR_RANGE));
+            builder.put(ModNPCLooks.FACE.get(), new FaceFeaturesType(
+                    new IndexedColorSetting(List.of(0, 1), ColorSetting.EYE_COLOR_RANGE),
+                    new IndexedColorSetting(List.of(0, 1), ColorSetting.DEFAULT),
+                    new IndexedColorSetting(List.of(1, 2), ColorSetting.EYEBROW_COLOR_RANGE),
+                    FaceFeaturesType.DEFAULT_EXPRESSIONS));
         } else {
             builder.put(ModNPCLooks.SIZE.get(), new SizeFeatureType(UniformGenerator.between(0.95f, 1.1f)));
             builder.put(ModNPCLooks.HAIR.get(), new HairFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("short", new IndexRange.FirstNIndices(5)), 1))), ColorSetting.HAIR_COLOR_RANGE));
+            builder.put(ModNPCLooks.FACE.get(), new FaceFeaturesType(
+                    new IndexedColorSetting(List.of(0, 1), ColorSetting.EYE_COLOR_RANGE),
+                    new IndexedColorSetting(List.of(0, 1), ColorSetting.DEFAULT),
+                    new IndexedColorSetting(List.of(0, 1), ColorSetting.EYEBROW_COLOR_RANGE),
+                    FaceFeaturesType.DEFAULT_EXPRESSIONS));
         }
         cons.accept(builder);
         return map;
@@ -573,10 +579,6 @@ public class NPCDataGen extends NPCDataProvider {
         Map<K, V> map = new LinkedHashMap<>();
         cons.accept(map);
         return map;
-    }
-
-    private static TagKey<Item> giftTag(String tag) {
-        return TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(RuneCraftory.MODID, "npc/" + tag));
     }
 
     private interface FeatureBuilderHelper {

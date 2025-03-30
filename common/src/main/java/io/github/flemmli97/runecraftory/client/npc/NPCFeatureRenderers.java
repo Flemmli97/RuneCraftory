@@ -15,9 +15,7 @@ public class NPCFeatureRenderers {
         empty(ModNPCLooks.SLIM.get());
         register(ModNPCLooks.SIZE.get(), new SizeRenderer());
         empty(ModNPCLooks.SKIN.get());
-        empty(ModNPCLooks.IRIS.get());
-        empty(ModNPCLooks.SCLERA.get());
-        empty(ModNPCLooks.EYEBROWS.get());
+        empty(ModNPCLooks.FACE.get());
         empty(ModNPCLooks.BLUSH.get());
         empty(ModNPCLooks.HAIR.get());
         empty(ModNPCLooks.OUTFIT.get());

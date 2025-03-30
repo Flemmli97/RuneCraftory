@@ -97,9 +97,6 @@ public class AnimatedPlayerModel<T extends LivingEntity & IAnimated> extends Ent
         hands.runecraftory$getLeftHandItem().resetAll();
         hands.runecraftory$getRightHandItem().resetAll();
         if (entity instanceof IAnimated animated) {
-//            interpolation = animated.getAnimationHandler().getInterpolatedAnimationVal(partialTicks);
-//            boolean reset = animated.getAnimationHandler().getLastAnim() == null || interpolation == 1;
-//            this.setup(model, reset);
             return this.anim.doAnimation(this, animated.getAnimationHandler(), partialTicks, entity.getMainArm() == HumanoidArm.LEFT);
         }
         boolean reset = handler.getLastAnimation() == null;

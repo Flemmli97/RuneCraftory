@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.BlushFeatureType;
+import io.github.flemmli97.runecraftory.common.entities.npc.features.FaceFeaturesType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.HairFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.IndexedColorSettingType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.NPCFeatureContainer;
@@ -25,7 +26,7 @@ public class NPCTextureLayer<T extends EntityNPCBase, M extends HumanoidModel<T>
 
     private final A model;
     private final A slimModel;
-    private final LayerType layer;
+    protected LayerType layer;
 
     public NPCTextureLayer(RenderLayerParent<T, M> renderer, A model, A slimModel, LayerType layer) {
         super(renderer);
@@ -43,22 +44,22 @@ public class NPCTextureLayer<T extends EntityNPCBase, M extends HumanoidModel<T>
                 yield feat.color;
             }
             case IRIS_LAYER -> {
-                IndexedColorSettingType.IndexedColorFeature feat = features.getFeature(ModNPCLooks.IRIS.get());
-                if (feat == null)
+                FaceFeaturesType.FaceFeatures feat = features.getFeature(ModNPCLooks.FACE.get());
+                if (feat == null || feat.iris == null)
                     yield 0x000000;
-                yield feat.color;
+                yield feat.iris.color();
             }
             case SCLERA_LAYER -> {
-                IndexedColorSettingType.IndexedColorFeature feat = features.getFeature(ModNPCLooks.SCLERA.get());
-                if (feat == null)
-                    yield 0xffffff;
-                yield feat.color;
+                FaceFeaturesType.FaceFeatures feat = features.getFeature(ModNPCLooks.FACE.get());
+                if (feat == null || feat.sclera == null)
+                    yield 0x000000;
+                yield feat.sclera.color();
             }
             case EYEBROWS_LAYER -> {
-                IndexedColorSettingType.IndexedColorFeature feat = features.getFeature(ModNPCLooks.EYEBROWS.get());
-                if (feat == null)
-                    yield 0xffffff;
-                yield feat.color;
+                FaceFeaturesType.FaceFeatures feat = features.getFeature(ModNPCLooks.FACE.get());
+                if (feat == null || feat.eyebrow == null)
+                    yield 0x000000;
+                yield feat.eyebrow.color();
             }
             case BLUSH_LAYER -> {
                 BlushFeatureType.BlushFeature feat = features.getFeature(ModNPCLooks.BLUSH.get());
@@ -82,7 +83,16 @@ public class NPCTextureLayer<T extends EntityNPCBase, M extends HumanoidModel<T>
 
     @Override
     public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T npc, float limbSwing, float limbSwingAmount, float partialTick, float ageInTicks, float netHeadYaw, float headPitch) {
-        A layerModel = RenderNPC.isSlim(npc) ? this.slimModel : this.model;
+        A layerModel = this.getModel(npc);
+        this.setup(layerModel);
+        this.actualRender(poseStack, buffer, packedLight, npc, layerModel);
+    }
+
+    protected A getModel(T npc) {
+        return RenderNPC.isSlim(npc) ? this.slimModel : this.model;
+    }
+
+    protected void setup(A layerModel) {
         this.getParentModel().copyPropertiesTo(layerModel);
         layerModel.leftPants.copyFrom(this.getParentModel().leftLeg);
         layerModel.rightPants.copyFrom(this.getParentModel().rightLeg);
@@ -90,6 +100,9 @@ public class NPCTextureLayer<T extends EntityNPCBase, M extends HumanoidModel<T>
         layerModel.rightSleeve.copyFrom(this.getParentModel().rightArm);
         layerModel.jacket.copyFrom(this.getParentModel().body);
         this.setPartVisibility(layerModel);
+    }
+
+    protected void actualRender(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T npc, A layerModel) {
         Minecraft mc = Minecraft.getInstance();
         boolean bl = !npc.isInvisible();
         boolean bl2 = !bl && !npc.isInvisibleTo(mc.player);
@@ -98,7 +111,7 @@ public class NPCTextureLayer<T extends EntityNPCBase, M extends HumanoidModel<T>
         if (renderType != null) {
             VertexConsumer vertexConsumer = buffer.getBuffer(renderType);
             int m = LivingEntityRenderer.getOverlayCoords(npc, 0);
-            int color = color(npc.lookFeatures, this.layer);
+            int color = this.color(npc);
             float a = (float) (color >> 24 & 0xFF) / 255.0f;
             float r = (float) (color >> 16 & 0xFF) / 255.0f;
             float g = (float) (color >> 8 & 0xFF) / 255.0f;
@@ -117,7 +130,7 @@ public class NPCTextureLayer<T extends EntityNPCBase, M extends HumanoidModel<T>
             if (entity.getPlayDeathTick() % 3 == 0)
                 return null;
         }
-        ResourceLocation resourceLocation = RenderNPC.getTextureFromLook(entity, this.layer);
+        ResourceLocation resourceLocation = this.getTexture(entity);
         if (resourceLocation.equals(RenderNPC.EMPTY))
             return null;
         if (translucent) {
@@ -130,6 +143,14 @@ public class NPCTextureLayer<T extends EntityNPCBase, M extends HumanoidModel<T>
             return RenderType.outline(resourceLocation);
         }
         return null;
+    }
+
+    protected int color(T entity) {
+        return color(entity.lookFeatures, this.layer);
+    }
+
+    protected ResourceLocation getTexture(T entity) {
+        return RenderNPC.getTextureFromLook(entity, this.layer, null);
     }
 
     protected void setPartVisibility(A model) {
@@ -155,19 +176,19 @@ public class NPCTextureLayer<T extends EntityNPCBase, M extends HumanoidModel<T>
 
         SKIN_LAYER("skin", 0),
         OUTFIT_LAYER("outft", 0.005f),
-        IRIS_LAYER("iris", 0.006f),
-        SCLERA_LAYER("sclera", 0.007f),
-        EYEBROWS_LAYER("eyebrows", 0.008f),
+        IRIS_LAYER("eyes", 0.006f),
+        SCLERA_LAYER(null, 0.007f),
+        EYEBROWS_LAYER(null, 0.008f),
         BLUSH_LAYER("blush", 0.009f),
         HAIR_LAYER("hair", 0.5f),
         HAT_LAYER("hats", 0.8f);
 
-        public final ModelLayerLocation location, slimeLocation;
+        public final ModelLayerLocation location, slimLocation;
         public final float expand;
 
         LayerType(String name, float expand) {
-            this.location = new ModelLayerLocation(new ResourceLocation(RuneCraftory.MODID, "npc_" + name), "main");
-            this.slimeLocation = new ModelLayerLocation(new ResourceLocation(RuneCraftory.MODID, "npc_slim_" + name), "main");
+            this.location = name == null ? null : new ModelLayerLocation(new ResourceLocation(RuneCraftory.MODID, "npc_" + name), "main");
+            this.slimLocation = name == null ? null : new ModelLayerLocation(new ResourceLocation(RuneCraftory.MODID, "npc_slim_" + name), "main");
             this.expand = expand;
         }
     }

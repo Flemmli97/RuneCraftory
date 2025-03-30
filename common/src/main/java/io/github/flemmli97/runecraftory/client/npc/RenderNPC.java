@@ -11,6 +11,7 @@ import io.github.flemmli97.runecraftory.api.datapack.npc.NPCLook;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeature;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.BlushFeatureType;
+import io.github.flemmli97.runecraftory.common.entities.npc.features.FaceFeaturesType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.HairFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.IndexedColorSettingType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.NPCFeatureContainer;
@@ -60,10 +61,14 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
         this.addLayer(this.armorLayerSlim = new NPCArmorLayer<>(this, new HumanoidModel<>(ctx.bakeLayer(ModelLayers.PLAYER_SLIM_INNER_ARMOR)), new HumanoidModel<>(ctx.bakeLayer(ModelLayers.PLAYER_SLIM_OUTER_ARMOR))));
         this.addLayer(new ItemInHandLayer<>(this));
         for (NPCTextureLayer.LayerType layerType : NPCTextureLayer.LayerType.values()) {
+            if (layerType.location == null)
+                continue;
             if (layerType == NPCTextureLayer.LayerType.SKIN_LAYER)
                 this.textureLayers.add(new NPCTextureLayer<>(this, this.model, new PlayerModel<>(ctx.bakeLayer(ModelLayers.PLAYER_SLIM), true), layerType));
+            else if (layerType == NPCTextureLayer.LayerType.IRIS_LAYER)
+                this.textureLayers.add(new NPCFaceLayer<>(this, new PlayerModel<>(ctx.bakeLayer(layerType.location), false), new PlayerModel<>(ctx.bakeLayer(layerType.slimLocation), true)));
             else
-                this.textureLayers.add(new NPCTextureLayer<>(this, new PlayerModel<>(ctx.bakeLayer(layerType.location), false), new PlayerModel<>(ctx.bakeLayer(layerType.slimeLocation), true), layerType));
+                this.textureLayers.add(new NPCTextureLayer<>(this, new PlayerModel<>(ctx.bakeLayer(layerType.location), false), new PlayerModel<>(ctx.bakeLayer(layerType.slimLocation), true), layerType));
         }
         this.textureLayers.forEach(this::addLayer);
     }
@@ -77,7 +82,7 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
         return npc.lookFeatures.view.containsKey(ModNPCLooks.SLIM.get());
     }
 
-    public static ResourceLocation getTextureFromLook(EntityNPCBase npc, NPCTextureLayer.LayerType type) {
+    public static ResourceLocation getTextureFromLook(EntityNPCBase npc, NPCTextureLayer.LayerType type, @Nullable String subType) {
         NPCLook look = npc.getLook();
         if (type == NPCTextureLayer.LayerType.SKIN_LAYER) {
             String skin = look.playerSkin();
@@ -91,10 +96,10 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
         boolean slim = isSlim(npc);
         if (type == NPCTextureLayer.LayerType.HAT_LAYER && npc.hasItemInSlot(EquipmentSlot.HEAD))
             return EMPTY;
-        return getTextureFromLook(npc.lookFeatures, slim, type);
+        return getTextureFromLook(npc.lookFeatures, slim, type, subType);
     }
 
-    public static ResourceLocation getTextureFromLook(NPCFeatureContainer features, boolean slim, NPCTextureLayer.LayerType type) {
+    public static ResourceLocation getTextureFromLook(NPCFeatureContainer features, boolean slim, NPCTextureLayer.LayerType type, @Nullable String subType) {
         ResourceLocation texture = switch (type) {
             case SKIN_LAYER -> {
                 IndexedColorSettingType.IndexedColorFeature feat = features.getFeature(ModNPCLooks.SKIN.get());
@@ -105,27 +110,42 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
                 yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, RenderNPC::modLoc);
             }
             case IRIS_LAYER -> {
-                IndexedColorSettingType.IndexedColorFeature feat = features.getFeature(ModNPCLooks.IRIS.get());
+                FaceFeaturesType.FaceFeatures feat = features.getFeature(ModNPCLooks.FACE.get());
                 int num = 0;
-                if (feat != null)
-                    num = feat.index;
-                String location = String.format("textures/entity/npc/eye/iris_%s.png", num);
+                if (feat != null) {
+                    num = feat.iris.index();
+                    if (subType != null) {
+                        subType = feat.expressionTexture(features, subType, FaceFeaturesType.ExpressionType.IRIS);
+                    }
+                }
+                String location = String.format("textures/entity/npc/eye/iris_%s%s.png", num,
+                        subType != null ? "_" + subType : "");
                 yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, RenderNPC::modLoc);
             }
             case SCLERA_LAYER -> {
-                IndexedColorSettingType.IndexedColorFeature feat = features.getFeature(ModNPCLooks.SCLERA.get());
+                FaceFeaturesType.FaceFeatures feat = features.getFeature(ModNPCLooks.FACE.get());
                 int num = 0;
-                if (feat != null)
-                    num = feat.index;
-                String location = String.format("textures/entity/npc/eye/sclera_%s.png", num);
+                if (feat != null) {
+                    num = feat.sclera.index();
+                    if (subType != null) {
+                        subType = feat.expressionTexture(features, subType, FaceFeaturesType.ExpressionType.SCLERA);
+                    }
+                }
+                String location = String.format("textures/entity/npc/eye/sclera_%s%s.png", num,
+                        subType != null ? "_" + subType : "");
                 yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, RenderNPC::modLoc);
             }
             case EYEBROWS_LAYER -> {
-                IndexedColorSettingType.IndexedColorFeature feat = features.getFeature(ModNPCLooks.EYEBROWS.get());
-                if (feat == null || feat.index == 0)
-                    yield null;
-                int num = feat.index;
-                String location = String.format("textures/entity/npc/eye/eyebrows_%s.png", num);
+                FaceFeaturesType.FaceFeatures feat = features.getFeature(ModNPCLooks.FACE.get());
+                int num = 0;
+                if (feat != null) {
+                    num = feat.eyebrow.index();
+                    if (subType != null) {
+                        subType = feat.expressionTexture(features, subType, FaceFeaturesType.ExpressionType.EYEBROWS);
+                    }
+                }
+                String location = String.format("textures/entity/npc/eye/eyebrows_%s%s.png", num,
+                        subType != null ? "_" + subType : "");
                 yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, RenderNPC::modLoc);
             }
             case BLUSH_LAYER -> {
@@ -260,7 +280,7 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
 
     @Override
     public ResourceLocation getTextureLocation(T entity) {
-        return getTextureFromLook(entity, NPCTextureLayer.LayerType.SKIN_LAYER);
+        return getTextureFromLook(entity, NPCTextureLayer.LayerType.SKIN_LAYER, null);
     }
 
     @Override

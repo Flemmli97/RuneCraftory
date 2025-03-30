@@ -1722,7 +1722,11 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         }
         this.attackActions = DataPackHandler.INSTANCE.npcActionsManager().get(new ResourceLocation(tag.getString("Combat")));
         this.schedule.load(tag.getCompound("Schedule"));
-        this.lookFeatures.read(tag.getCompound("LookFeatures"));
+        try {
+            this.lookFeatures.read(tag.getCompound("LookFeatures"));
+        } catch (Exception e) {
+            this.lookFeatures.buildFromLooks(this, this.look.additionalFeatures().values());
+        }
         CompoundTag gifts = tag.getCompound("GiftData");
         ImmutableMap.Builder<String, GiftData> b = ImmutableMap.builder();
         gifts.getAllKeys().forEach(key -> {

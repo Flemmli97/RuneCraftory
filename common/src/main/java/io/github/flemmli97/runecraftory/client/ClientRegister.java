@@ -535,10 +535,10 @@ public class ClientRegister {
         consumer.accept(ModelPlate.LAYER_LOCATION, ModelPlate::createBodyLayer);
 
         for (NPCTextureLayer.LayerType layerType : NPCTextureLayer.LayerType.values()) {
-            if (layerType == NPCTextureLayer.LayerType.SKIN_LAYER)
+            if (layerType == NPCTextureLayer.LayerType.SKIN_LAYER || layerType.location == null)
                 continue;
             consumer.accept(layerType.location, () -> LayerDefinition.create(PlayerModel.createMesh(new CubeDeformation(layerType.expand), false), 64, 64));
-            consumer.accept(layerType.slimeLocation, () -> LayerDefinition.create(PlayerModel.createMesh(new CubeDeformation(layerType.expand), true), 64, 64));
+            consumer.accept(layerType.slimLocation, () -> LayerDefinition.create(PlayerModel.createMesh(new CubeDeformation(layerType.expand), true), 64, 64));
         }
     }
 
