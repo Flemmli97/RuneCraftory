@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
+import io.github.flemmli97.runecraftory.api.action.AttackActionHandler;
 import io.github.flemmli97.runecraftory.api.action.ComboContainer;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
-import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpearBase;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
@@ -19,7 +19,7 @@ public class SpearUseAttack extends AttackAction {
     private final ComboContainer combo;
 
     public SpearUseAttack() {
-        Predicate<WeaponHandler> MAIN = handler -> handler.getAnimation().isPast("attack") && !handler.getAnimation().isPast("0.52");
+        Predicate<AttackActionHandler> MAIN = handler -> handler.getAnimation().isPast("attack") && !handler.getAnimation().isPast("0.52");
         ComboContainer.Builder builder = ComboContainer.Builder.builder();
         for (int i = 0; i < 20; i++) {
             builder.addCombo(MAIN);
@@ -38,7 +38,7 @@ public class SpearUseAttack extends AttackAction {
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
+    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimatedAction anim) {
         if (entity instanceof ServerPlayer serverPlayer && stack.getItem() instanceof ItemSpearBase spear) {
             if (anim.isAt("attack")) {
                 spear.useSpear(serverPlayer, stack, false);

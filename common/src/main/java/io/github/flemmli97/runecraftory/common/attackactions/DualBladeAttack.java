@@ -1,8 +1,9 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
+import io.github.flemmli97.runecraftory.api.action.AttackActionHandler;
 import io.github.flemmli97.runecraftory.api.action.ComboContainer;
+import io.github.flemmli97.runecraftory.api.action.DataKey;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
-import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
@@ -37,7 +38,7 @@ public class DualBladeAttack extends AttackAction {
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
+    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimatedAction anim) {
         if (handler.getComboCount() != 5 && handler.getComboCount() != 6 && handler.getComboCount() != 8) {
             if (anim.isAt("attack")) {
                 if (!entity.level.isClientSide) {
@@ -76,12 +77,12 @@ public class DualBladeAttack extends AttackAction {
             }
             case 5 -> {
                 if (anim.isAt("step")) {
-                    handler.setSpinStartRot(entity.getYRot());
+                    handler.store(DataKey.SPIN_ROTATION, entity.getYRot());
                     Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
                     entity.setDeltaMovement(dir.scale(0.3));
                 }
                 CombatUtils.EntityAttack attack = spinAttack(entity, anim, anim.getMarker("spin_start", 0), anim.getMarker("spin_end", 0),
-                        handler.getSpinStartRot(), handler.getSpinStartRot() + 360, 0);
+                        handler.get(DataKey.SPIN_ROTATION), handler.get(DataKey.SPIN_ROTATION) + 360, 0);
                 if (attack != null) {
                     handler.addHitEntityTracker(attack
                             .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
@@ -90,7 +91,7 @@ public class DualBladeAttack extends AttackAction {
             }
             case 6 -> {
                 if (anim.isAt("spin_start")) {
-                    handler.setSpinStartRot(entity.getYRot() - 90);
+                    handler.store(DataKey.SPIN_ROTATION, entity.getYRot() - 90);
                     entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
                     Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
                     entity.setDeltaMovement(dir.scale(0.3));
@@ -100,14 +101,14 @@ public class DualBladeAttack extends AttackAction {
                     entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
                 }
                 CombatUtils.EntityAttack attack = spinAttack(entity, anim, anim.getMarker("spin_start", 0), anim.getMarker("spin_end", 0),
-                        handler.getSpinStartRot(), handler.getSpinStartRot() + 360, 0);
+                        handler.get(DataKey.SPIN_ROTATION), handler.get(DataKey.SPIN_ROTATION) + 360, 0);
                 if (attack != null) {
                     handler.addHitEntityTracker(attack
                             .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
                             .executeAttack());
                 }
                 attack = spinAttack(entity, anim, anim.getMarker("spin_start", 0), anim.getMarker("spin_end", 0),
-                        handler.getSpinStartRot() + 180, handler.getSpinStartRot() + 180 + 360, 0);
+                        handler.get(DataKey.SPIN_ROTATION) + 180, handler.get(DataKey.SPIN_ROTATION) + 180 + 360, 0);
                 if (attack != null) {
                     handler.addHitEntityTracker(attack
                             .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
@@ -126,7 +127,7 @@ public class DualBladeAttack extends AttackAction {
             }
             case 8 -> {
                 if (anim.isAt("spin_start")) {
-                    handler.setSpinStartRot(entity.getYRot() + 120);
+                    handler.store(DataKey.SPIN_ROTATION, entity.getYRot() + 120);
                     entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
                 }
                 if (anim.isAt("reset")) {
@@ -136,7 +137,7 @@ public class DualBladeAttack extends AttackAction {
                 if (anim.isAt("last"))
                     entity.playSound(ModSounds.SPELL_GENERIC_WIND_LONG.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.5f);
                 CombatUtils.EntityAttack attack = spinAttack(entity, anim, anim.getMarker("spin_start", 0), anim.getMarker("spin_end", 0),
-                        handler.getSpinStartRot(), handler.getSpinStartRot() - 4 * 360, 0);
+                        handler.get(DataKey.SPIN_ROTATION), handler.get(DataKey.SPIN_ROTATION) - 4 * 360, 0);
                 if (attack != null) {
                     handler.addHitEntityTracker(attack
                             .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
@@ -147,13 +148,13 @@ public class DualBladeAttack extends AttackAction {
     }
 
     @Override
-    public void onStart(LivingEntity entity, WeaponHandler handler) {
+    public void onStart(LivingEntity entity, AttackActionHandler handler) {
         if (handler.getComboCount() != 8 && entity instanceof ServerPlayer player)
             Platform.INSTANCE.getPlayerData(player).ifPresent(d -> LevelCalc.useRP(player, d, GeneralConfig.dualBladeUltimate, true, 0, false));
     }
 
     @Override
-    public boolean isInvulnerable(LivingEntity entity, WeaponHandler handler) {
+    public boolean isInvulnerable(LivingEntity entity, AttackActionHandler handler) {
         return handler.getComboCount() == 8;
     }
 

@@ -1,8 +1,9 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
+import io.github.flemmli97.runecraftory.api.action.AttackActionHandler;
 import io.github.flemmli97.runecraftory.api.action.ComboContainer;
+import io.github.flemmli97.runecraftory.api.action.DataKey;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
-import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolHammer;
@@ -30,12 +31,12 @@ public class ToolHammerUse extends AttackAction {
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
+    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimatedAction anim) {
         if (entity.getLevel() instanceof ServerLevel serverLevel && anim.isAt("attack") && stack.getItem() instanceof ItemToolHammer hammer) {
             ItemToolHammer.setDontUseRPFlagTemp(stack, true);
-            int range = handler.getToolUseData().charge();
+            int range = handler.get(DataKey.TOOL_DATA).charge();
             BlockPos pos = entity.blockPosition();
-            if (handler.getToolUseData().result() instanceof BlockHitResult hitResult && hitResult.getType() != HitResult.Type.MISS) {
+            if (handler.get(DataKey.TOOL_DATA).result() instanceof BlockHitResult hitResult && hitResult.getType() != HitResult.Type.MISS) {
                 pos = hitResult.getBlockPos();
             }
             int amount = (int) BlockPos.betweenClosedStream(pos.offset(-range, -1, -range), pos.offset(range, 0, range))

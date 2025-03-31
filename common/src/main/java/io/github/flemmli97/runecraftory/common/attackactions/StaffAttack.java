@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
+import io.github.flemmli97.runecraftory.api.action.AttackActionHandler;
 import io.github.flemmli97.runecraftory.api.action.ComboContainer;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
-import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
@@ -28,7 +28,7 @@ public class StaffAttack extends AttackAction {
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
+    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimatedAction anim) {
         if (anim.isAt("attack")) {
             if (entity.level instanceof ServerLevel serverLevel) {
                 CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(IAOEWeapon.createOBB(entity, stack,

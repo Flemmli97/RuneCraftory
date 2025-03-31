@@ -4,8 +4,8 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.api.action.AttackActionHandler;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
-import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.datapack.ConversationContext;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.SimpleEffect;
@@ -34,6 +34,7 @@ import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.ShopState;
 import io.github.flemmli97.runecraftory.common.entities.pathing.NPCWalkNodeEvaluator;
 import io.github.flemmli97.runecraftory.common.entities.utils.IBaseMob;
+import io.github.flemmli97.runecraftory.common.entities.utils.MobAttackExt;
 import io.github.flemmli97.runecraftory.common.entities.utils.TargetableOpponent;
 import io.github.flemmli97.runecraftory.common.inventory.InventoryShop;
 import io.github.flemmli97.runecraftory.common.inventory.container.ContainerShop;
@@ -165,7 +166,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimated, TargetableOpponent {
+public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimated, TargetableOpponent, MobAttackExt {
 
     public static final float PATH_FIND_LENGTH = 100;
 
@@ -179,8 +180,10 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     public static final AnimatedAction[] ANIMS = PlayerModelAnimations.getAll().toArray(new AnimatedAction[0]);
     private final AnimationHandler<EntityNPCBase> animationHandler = new AnimationHandler<>(this, ANIMS).withChangeListener(anim -> {
-        if (this.getTarget() != null)
+        if (this.getTarget() != null) {
             this.lookAt(this.getTarget(), 360, 90);
+            this.targetPosition = TargetPosition.of(this.getTarget());
+        }
         return false;
     });
 
@@ -253,7 +256,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     public final DailyNPCUpdater updater = new DailyNPCUpdater(this);
 
-    public final WeaponHandler weaponHandler = new WeaponHandler(this);
+    public final AttackActionHandler weaponHandler = new EntityWeaponHandler<>(this);
+    private TargetPosition targetPosition;
 
     public EntityNPCBase(EntityType<? extends EntityNPCBase> type, Level level) {
         super(type, level);
@@ -420,6 +424,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             if (this.getSleepingPos().map(pos -> !pos.closerToCenterThan(this.position(), 1) || this.getActivity() != Activity.REST).orElse(false))
                 this.stopSleeping();
         }
+        if (this.getAnimationHandler().getAnimation() == null)
+            this.targetPosition = null;
     }
 
     @Override
@@ -1747,6 +1753,11 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     @Override
     public Predicate<LivingEntity> validTargetPredicate() {
         return this.hitPred;
+    }
+
+    @Override
+    public TargetPosition getTargetPosition() {
+        return this.targetPosition;
     }
 
     public enum Behaviour {

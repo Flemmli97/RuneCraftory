@@ -10,13 +10,13 @@ import java.util.function.Predicate;
 
 public class ComboContainer {
 
-    public static final Predicate<WeaponHandler> AFTER_ANIM = WeaponHandler::isCurrentAnimationDone;
+    public static final Predicate<AttackActionHandler> AFTER_ANIM = AttackActionHandler::isCurrentAnimationDone;
 
-    public static Predicate<WeaponHandler> past(String marker) {
+    public static Predicate<AttackActionHandler> past(String marker) {
         return handler -> handler.getAnimation() == null || handler.isCurrentAnimationDone() || handler.getAnimation().isPast(marker);
     }
 
-    public static Predicate<WeaponHandler> past(double time) {
+    public static Predicate<AttackActionHandler> past(double time) {
         return handler -> handler.getAnimation() == null || handler.isCurrentAnimationDone() || handler.getAnimation().isPast(time);
     }
 
@@ -37,21 +37,21 @@ public class ComboContainer {
         return this.handlers.size();
     }
 
-    public record ComboHandler(Predicate<WeaponHandler> canExecute, Predicate<WeaponHandler> canAdvance,
+    public record ComboHandler(Predicate<AttackActionHandler> canExecute, Predicate<AttackActionHandler> canAdvance,
                                ComboGetter advanceTo, int resetTime) {
 
         public static class Builder {
 
-            private Predicate<WeaponHandler> canExecute = Predicates.alwaysTrue();
-            private final Predicate<WeaponHandler> canAdvance;
+            private Predicate<AttackActionHandler> canExecute = Predicates.alwaysTrue();
+            private final Predicate<AttackActionHandler> canAdvance;
             private Function<Integer, ComboGetter> advanceTo = i -> h -> i;
             private int resetTime;
 
-            public Builder(Predicate<WeaponHandler> canAdvance) {
+            public Builder(Predicate<AttackActionHandler> canAdvance) {
                 this.canAdvance = canAdvance;
             }
 
-            public Builder withCheck(Predicate<WeaponHandler> canAdvance) {
+            public Builder withCheck(Predicate<AttackActionHandler> canAdvance) {
                 this.canExecute = canAdvance;
                 return this;
             }
@@ -73,7 +73,7 @@ public class ComboContainer {
     }
 
     public interface ComboGetter {
-        int get(WeaponHandler handler);
+        int get(AttackActionHandler handler);
     }
 
     public static class Builder {
@@ -84,13 +84,13 @@ public class ComboContainer {
             return new Builder();
         }
 
-        public Builder addCombo(Predicate<WeaponHandler> canAdvance) {
+        public Builder addCombo(Predicate<AttackActionHandler> canAdvance) {
             int idx = this.handlers.size() + 1;
             this.handlers.add(new ComboHandler(Predicates.alwaysTrue(), canAdvance, h -> idx, 0));
             return this;
         }
 
-        public Builder addCombo(Predicate<WeaponHandler> canAdvance, int resetTime) {
+        public Builder addCombo(Predicate<AttackActionHandler> canAdvance, int resetTime) {
             int idx = this.handlers.size() + 1;
             this.handlers.add(new ComboHandler(Predicates.alwaysTrue(), canAdvance, h -> idx, resetTime));
             return this;

@@ -111,6 +111,10 @@ public abstract class Spell extends CustomRegistryEntry<Spell> {
         return true;
     }
 
+    public boolean delayedUse() {
+        return true;
+    }
+
     @Override
     public String toString() {
         return this.getRegistryName().toString();

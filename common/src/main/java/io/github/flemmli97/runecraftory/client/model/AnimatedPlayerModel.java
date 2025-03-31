@@ -2,8 +2,9 @@ package io.github.flemmli97.runecraftory.client.model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
+import io.github.flemmli97.runecraftory.api.action.AttackActionHandler;
 import io.github.flemmli97.runecraftory.client.TransformationHelper;
 import io.github.flemmli97.runecraftory.mixinhelper.HumanoidMainHand;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
@@ -25,6 +26,7 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
+import org.jetbrains.annotations.Nullable;
 
 public class AnimatedPlayerModel<T extends LivingEntity & IAnimated> extends EntityModel<T> implements ExtendedModel {
 
@@ -92,29 +94,31 @@ public class AnimatedPlayerModel<T extends LivingEntity & IAnimated> extends Ent
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
     }
 
-    public boolean setUpModel(LivingEntity entity, HumanoidModel<?> model, WeaponHandler handler, float partialTicks) {
+    public boolean setUpModel(LivingEntity entity, HumanoidModel<?> model, @Nullable AttackActionHandler handler, float partialTicks) {
         HumanoidMainHand hands = (HumanoidMainHand) model;
         hands.runecraftory$getLeftHandItem().resetAll();
         hands.runecraftory$getRightHandItem().resetAll();
         if (entity instanceof IAnimated animated) {
+            this.setup(model, false);
             return this.anim.doAnimation(this, animated.getAnimationHandler(), partialTicks, entity.getMainArm() == HumanoidArm.LEFT);
         }
-        boolean reset = handler.getLastAnimation() == null;
-        this.setup(model, reset);
+        if (handler == null)
+            return false;
+        this.setup(model, false);
         return this.doAnimation(handler, partialTicks, entity.getMainArm() == HumanoidArm.LEFT);
     }
 
-    private boolean doAnimation(WeaponHandler handler, float partialTicks, boolean mirror) {
+    private boolean doAnimation(AttackActionHandler handler, float partialTicks, boolean mirror) {
         AnimatedAction current = handler.getAnimation();
         AnimatedAction last = handler.getLastAnimation();
         float interpolationLast = handler.getLastTransitionProgress(partialTicks);
         float interpolation = handler.getCurrentTransitionProgress(partialTicks);
         boolean changed = false;
         if (last != null && interpolationLast > 0) {
-            changed = this.anim.doAnimation(this, last.getClientIdentifier(), last.getTick(partialTicks), interpolationLast, false, false);
+            changed = this.anim.doAnimation(this, last.getClientIdentifier(), last.getTick(partialTicks), interpolationLast, mirror, false);
         }
         if (current != null) {
-            if (this.anim.doAnimation(this, current.getClientIdentifier(), current.getTick(partialTicks), interpolation, false, false) && !changed) {
+            if (this.anim.doAnimation(this, current.getClientIdentifier(), current.getTick(partialTicks), interpolation, mirror, false) && !changed) {
                 changed = true;
             }
         }
@@ -123,34 +127,42 @@ public class AnimatedPlayerModel<T extends LivingEntity & IAnimated> extends Ent
 
     private void setup(HumanoidModel<?> model, boolean reset) {
         PartPose body = model.body.storePose();
-        if (reset)
-            this.model.resetPoses();
-        else {
-            this.model.getMainPart().loadPose(body);
-            this.leftArm.loadPose(TransformationHelper.withoutParent(body, model.leftArm.storePose()));
-            this.rightArm.loadPose(TransformationHelper.withoutParent(body, model.rightArm.storePose()));
-            this.leftLeg.loadPose(TransformationHelper.withoutParent(body, model.leftLeg.storePose()));
-            this.rightLeg.loadPose(TransformationHelper.withoutParent(body, model.rightLeg.storePose()));
-        }
+        this.model.resetPoses();
+        this.model.getMainPart().loadPose(body);
+        this.leftArm.loadPose(TransformationHelper.withoutParent(body, model.leftArm.storePose()));
+        this.rightArm.loadPose(TransformationHelper.withoutParent(body, model.rightArm.storePose()));
+        this.leftLeg.loadPose(TransformationHelper.withoutParent(body, model.leftLeg.storePose()));
+        this.rightLeg.loadPose(TransformationHelper.withoutParent(body, model.rightLeg.storePose()));
         this.head.loadPose(TransformationHelper.withoutParent(body, model.head.storePose()));
     }
 
-    public void copyTo(HumanoidModel<?> model, boolean ignoreRiding) {
+    public void copyTo(HumanoidModel<?> model) {
         HumanoidMainHand hands = (HumanoidMainHand) model;
+        if (model.riding) {
+            ModelPartHandler.ModelPartExtended body = this.model.getMainPart();
+            body.x = body.getDefaultPose().x;
+            body.y = body.getDefaultPose().y;
+            body.z = body.getDefaultPose().z;
+            PoseStack stack = new PoseStack();
+            body.translateAndRotate(stack);
+            float bodyLength = -12;
+            Vector3f v = new Vector3f(0, bodyLength, 0);
+            v.transform(stack.last().normal());
+            body.x += v.x();
+            body.y += v.y() - bodyLength;
+            body.z += v.z();
+        }
         PartPose main = this.model.getMainPart().storePose();
-        PartPose body = model.body.storePose();
         this.apply(model.head, main, this.head);
         model.body.loadPose(main);
         this.apply(model.leftArm, main, this.leftArm);
         hands.runecraftory$getLeftHandItem().loadPose(this.leftArmItem.storePose());
         this.apply(model.rightArm, main, this.rightArm);
         hands.runecraftory$getRightHandItem().loadPose(this.rightArmItem.storePose());
-        if (model.riding) {
-            this.leftLeg.loadPose(TransformationHelper.withoutParent(body, model.leftLeg.storePose()));
-            this.rightLeg.loadPose(TransformationHelper.withoutParent(body, model.rightLeg.storePose()));
+        if (!model.riding) {
+            this.apply(model.leftLeg, main, this.leftLeg);
+            this.apply(model.rightLeg, main, this.rightLeg);
         }
-        this.apply(model.leftLeg, main, this.leftLeg);
-        this.apply(model.rightLeg, main, this.rightLeg);
         model.hat.copyFrom(model.head);
     }
 

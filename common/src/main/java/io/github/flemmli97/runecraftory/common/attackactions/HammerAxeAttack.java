@@ -1,8 +1,9 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
+import io.github.flemmli97.runecraftory.api.action.AttackActionHandler;
 import io.github.flemmli97.runecraftory.api.action.ComboContainer;
+import io.github.flemmli97.runecraftory.api.action.DataKey;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
-import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
@@ -33,7 +34,7 @@ public class HammerAxeAttack extends AttackAction {
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
+    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimatedAction anim) {
         if (anim.isAt("attack") && handler.getComboCount() != 3) {
             CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(IAOEWeapon.createOBB(entity, stack,
                             CombatUtils.getRange(entity, 0),
@@ -43,7 +44,7 @@ public class HammerAxeAttack extends AttackAction {
         }
         if (handler.getComboCount() == 3) {
             if (anim.isAt("spin_start")) {
-                handler.setSpinStartRot(entity.getYRot());
+                handler.store(DataKey.SPIN_ROTATION, entity.getYRot());
                 handler.resetHitEntityTracker();
                 entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
                         SoundEvents.ENDER_DRAGON_FLAP, entity.getSoundSource(), 0.7f, 0.5f);
@@ -56,9 +57,9 @@ public class HammerAxeAttack extends AttackAction {
             if (anim.isPast("spin_start") && !anim.isPast("spin_end")) {
                 Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
                 if (anim.isAt("spin_start"))
-                    handler.setMoveDirection(dir.scale(0.35).add(0, 0.15, 0));
+                    handler.store(DataKey.MOVE_DIRECTION, dir.scale(0.35).add(0, 0.15, 0));
                 if (anim.isAt("spin_middle"))
-                    handler.setMoveDirection(dir.scale(0.35).add(0, -0.15, 0));
+                    handler.store(DataKey.MOVE_DIRECTION, dir.scale(0.35).add(0, -0.15, 0));
                 entity.resetFallDistance();
                 if (!entity.level.isClientSide) {
                     handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity,
@@ -68,20 +69,20 @@ public class HammerAxeAttack extends AttackAction {
                             .executeAttack());
                 }
             } else
-                handler.setMoveDirection(null);
+                handler.store(DataKey.MOVE_DIRECTION, null);
             handler.applyMoveDirection();
-            handler.lockLook(anim.isPast("spin_start") && !anim.isPast("spin_end"));
+            handler.store(DataKey.FIXED_LOOK, anim.isPast("spin_start") && !anim.isPast("spin_end"));
         }
     }
 
     @Override
-    public void onStart(LivingEntity entity, WeaponHandler handler) {
+    public void onStart(LivingEntity entity, AttackActionHandler handler) {
         if (handler.getComboCount() == 3 && entity instanceof ServerPlayer player)
             Platform.INSTANCE.getPlayerData(player).ifPresent(d -> LevelCalc.useRP(player, d, GeneralConfig.hammerAxeUltimate, true, 0, false));
     }
 
     @Override
-    public boolean isInvulnerable(LivingEntity entity, WeaponHandler handler) {
+    public boolean isInvulnerable(LivingEntity entity, AttackActionHandler handler) {
         return handler.getComboCount() == 3;
     }
 

@@ -1,62 +1,50 @@
-package io.github.flemmli97.runecraftory.api.action;
+package io.github.flemmli97.runecraftory.common.attachment.player;
 
+import io.github.flemmli97.runecraftory.api.action.AttackActionHandler;
+import io.github.flemmli97.runecraftory.api.action.ComboContainer;
+import io.github.flemmli97.runecraftory.api.action.DataKey;
 import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
-import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
 import io.github.flemmli97.runecraftory.common.network.S2CWeaponUse;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.api.entity.IAnimated;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 
-public class WeaponHandler {
+public class PlayerWeaponHandler implements AttackActionHandler {
 
-    private static final float FADE_TICK = 5;
     private static final int COOLDOWN = 6;
 
-    private final LivingEntity entity;
+    private final Player entity;
 
     private AttackAction currentAction = ModAttackActions.NONE.get();
     private int comboCount;
     private boolean scheduledAction;
 
     private AnimatedAction currentAnimation, lastAnimation;
-    private ItemStack usedWeapon = ItemStack.EMPTY;
-    private Spell spell;
-    /**
-     * Whether {@link Spell#use} should be called at {@link AttackAction#onStart}
-     * Usually holds true for weapon abilities
-     */
-    private boolean consumeSpellOnStart;
+
     /**
      * Value used to interpolate animation transitions
      */
     private int timeSinceLastChange;
 
-    private ToolUseData toolUseData;
-
-    private float spinStartRot;
     private final Set<LivingEntity> hitEntityTracker = new HashSet<>();
-    private boolean lockLook;
 
-    private Vec3 moveDir;
-    private boolean oldGravity;
-    private Entity target;
+    private final Map<DataKey<?>, Object> dataMap = new HashMap<>();
 
-    public WeaponHandler(LivingEntity entity) {
+    public PlayerWeaponHandler(Player entity) {
         this.entity = entity;
     }
 
@@ -64,6 +52,7 @@ public class WeaponHandler {
         return this.doWeaponAttack(action, stack, null);
     }
 
+    @Override
     public boolean doWeaponAttack(AttackAction action, ItemStack stack, @Nullable Spell spell) {
         AttackAction.OverrideType overrideType = this.checkOverride(action, true);
         if (this.entity.level.isClientSide || overrideType != AttackAction.OverrideType.NONE) {
@@ -72,9 +61,9 @@ public class WeaponHandler {
                 return true;
             }
             action.onSetup(this.entity, this);
-            this.spell = spell;
-            this.usedWeapon = stack;
             this.setAnimationBasedOnState(action, -1, true);
+            this.store(DataKey.USED_WEAPON, stack);
+            this.store(DataKey.USED_SPELL, spell);
             return true;
         }
         return false;
@@ -103,7 +92,6 @@ public class WeaponHandler {
         AttackAction change = this.currentAction.onChange(this.entity, this);
         if (change != null)
             action = change;
-        this.moveDir = null;
         if (comboIdx != -1)
             this.comboCount = comboIdx;
         if (action == ModAttackActions.NONE.get()) {
@@ -116,26 +104,13 @@ public class WeaponHandler {
         this.currentAnimation = action.getAnimation(this.entity, this.getComboCount());
         if (this.currentAction != ModAttackActions.NONE.get()) {
             this.comboCount++;
-        } else
-            this.usedWeapon = ItemStack.EMPTY;
+        }
         this.entity.yBodyRot = this.entity.yHeadRot;
         this.resetHitEntityTracker();
-        this.lockLook = false;
         this.currentAction.onStart(this.entity, this);
-        this.consumeSpellOnStart = false;
-        if (!this.entity.level.isClientSide) {
-            if (this.entity instanceof IAnimated animated && this.currentAnimation != null) {
-                animated.getAnimationHandler().setAnimation(this.currentAnimation,
-                        this.currentAnimation.getStartTransition(), this.currentAnimation.getEndTransitionTime(),
-                        this.currentAnimation.getTick(1));
-            }
-            if (packet) {
-                Platform.INSTANCE.sendToTrackingAndSelf(new S2CWeaponUse(this.currentAction, this.usedWeapon,
-                        this.comboCount - 1, this.entity), this.entity);
-            }
-        } else if (this.entity instanceof IAnimated animated) {
-            // Tick once on client. Otherwise it can flicker for some reason. dont wanna investigate atm
-            animated.getAnimationHandler().tick();
+        if (!this.entity.level.isClientSide && packet) {
+            Platform.INSTANCE.sendToTrackingAndSelf(new S2CWeaponUse(this.currentAction, this.get(DataKey.USED_WEAPON),
+                    this.comboCount - 1, this.entity), this.entity);
         }
     }
 
@@ -144,17 +119,16 @@ public class WeaponHandler {
             return;
         this.comboCount = count;
         this.setAnimationBasedOnState(action, -1, false);
-        this.usedWeapon = stack;
+        this.store(DataKey.USED_WEAPON, stack);
     }
 
     private void resetStates() {
-        this.spell = null;
         this.comboCount = 0;
-        this.toolUseData = null;
         this.hitEntityTracker.clear();
-        this.target = null;
+        Set.copyOf(this.dataMap.keySet()).forEach(this::clear);
     }
 
+    @Override
     public void tick() {
         if (this.currentAnimation != null) {
             ComboContainer.ComboHandler handler = this.currentAction.combos() != null ? this.currentAction.combos().get(this.comboCount - 1) : null;
@@ -164,12 +138,13 @@ public class WeaponHandler {
             } else if (this.currentAnimation.tick(1 + (int) (this.currentAnimation.getSpeed() * (handler != null ? handler.resetTime() : 0)))) {
                 this.setAnimationBasedOnState(ModAttackActions.NONE.get(), -1, false);
             } else {
+                ItemStack weapon = this.get(DataKey.USED_WEAPON);
                 if (this.entity instanceof ServerPlayer player) {
                     PlayerData data = Platform.INSTANCE.getPlayerData(player).orElse(null);
-                    boolean changedItem = this.entity.getMainHandItem() != this.usedWeapon;
-                    if (changedItem && this.usedWeapon.getItem() instanceof ItemSpell && data != null) {
+                    boolean changedItem = this.entity.getMainHandItem() != weapon;
+                    if (changedItem && weapon.getItem() instanceof ItemSpell && data != null) {
                         for (int i = 0; i < data.getInv().getContainerSize(); i++) {
-                            if (data.getInv().getItem(i) == this.usedWeapon) {
+                            if (data.getInv().getItem(i) == weapon) {
                                 changedItem = false;
                                 break;
                             }
@@ -179,39 +154,52 @@ public class WeaponHandler {
                         this.setAnimationBasedOnState(ModAttackActions.NONE.get(), -1, true);
                     }
                 }
-                this.currentAction.run(this.entity, this.usedWeapon, this, this.currentAnimation);
+                this.currentAction.run(this.entity, weapon, this, this.currentAnimation);
             }
         }
         this.timeSinceLastChange++;
         if (this.lastAnimation != null && this.timeSinceLastChange > this.lastAnimation.getEndTransitionTime()) {
-//            this.lastAnimation = null;
+            this.lastAnimation = null;
         }
     }
 
+    @Override
     public LivingEntity getEntity() {
         return this.entity;
     }
 
+    @Override
     public boolean isScheduledAction() {
         return this.scheduledAction;
     }
 
-    public boolean isCurrentAnimationDone() {
-        return this.currentAnimation != null && this.currentAnimation.done(0);
+    @Override
+    public <T> void store(DataKey<T> key, T value) {
+        this.dataMap.put(key, value);
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T get(DataKey<T> key) {
+        return (T) this.dataMap.getOrDefault(key, key.defaultValue());
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> void clearWith(DataKey<T> key, @Nullable Consumer<T> apply) {
+        if (apply == null) {
+            this.dataMap.remove(key);
+        } else {
+            apply.accept((T) this.dataMap.remove(key));
+        }
+    }
+
+    @Override
     public AttackAction getCurrentAction() {
         return this.currentAction;
     }
 
-    public void updateToolCharge(ToolUseData toolUseData) {
-        this.toolUseData = toolUseData;
-    }
-
-    public ToolUseData getToolUseData() {
-        return this.toolUseData;
-    }
-
+    @Override
     public float getCurrentTransitionProgress(float partialTicks) {
         if (this.currentAnimation == null) {
             return 1;
@@ -219,6 +207,7 @@ public class WeaponHandler {
         return this.currentAnimation.getStartTransitionProgress(partialTicks);
     }
 
+    @Override
     public float getLastTransitionProgress(float partialTicks) {
         if (this.lastAnimation == null) {
             return 0;
@@ -226,14 +215,22 @@ public class WeaponHandler {
         return 1 - Mth.clamp((this.timeSinceLastChange - 1 + partialTicks) / this.lastAnimation.getEndTransitionTime(), 0, 1);
     }
 
-    public ItemStack getUsedWeapon() {
-        return this.usedWeapon;
+    @Override
+    public AnimatedAction getAnimation() {
+        return this.currentAnimation;
     }
 
+    @Override
+    public AnimatedAction getLastAnimation() {
+        return this.lastAnimation;
+    }
+
+    @Override
     public void setComboCount(int count) {
         this.comboCount = count;
     }
 
+    @Override
     public int getComboCount() {
         return this.comboCount;
     }
@@ -246,84 +243,8 @@ public class WeaponHandler {
         return this.currentAction.disableItemSwitch();
     }
 
-    public boolean lockedLook() {
-        return this.lockLook;
-    }
-
-    public void lockLook(boolean flag) {
-        this.lockLook = flag;
-    }
-
-    public AnimatedAction getAnimation() {
-        return this.currentAnimation;
-    }
-
-    public AnimatedAction getLastAnimation() {
-        return this.lastAnimation;
-    }
-
-    public Spell getSpellToCast() {
-        return this.spell;
-    }
-
-    public void setSpinStartRot(float rot) {
-        this.spinStartRot = rot;
-    }
-
-    public float getSpinStartRot() {
-        return this.spinStartRot;
-    }
-
+    @Override
     public Set<LivingEntity> getHitEntityTracker() {
         return this.hitEntityTracker;
-    }
-
-    public void resetHitEntityTracker() {
-        this.hitEntityTracker.clear();
-    }
-
-    public void addHitEntityTracker(Collection<LivingEntity> list) {
-        this.hitEntityTracker.addAll(list);
-    }
-
-    public boolean isInvulnerable(LivingEntity entity) {
-        return this.currentAction.isInvulnerable(entity, this);
-    }
-
-    public void setMoveDirection(Vec3 direction) {
-        this.moveDir = direction;
-    }
-
-    public void applyMoveDirection() {
-        if (this.moveDir != null)
-            this.entity.setDeltaMovement(this.moveDir);
-    }
-
-    public Entity getTarget() {
-        return this.target;
-    }
-
-    public void setTarget(Entity target) {
-        this.target = target;
-    }
-
-    public void setNoGravity(LivingEntity entity) {
-        this.oldGravity = entity.isNoGravity();
-        entity.setNoGravity(true);
-    }
-
-    public boolean consumeSpellOnStart() {
-        return this.consumeSpellOnStart;
-    }
-
-    public void setConsumeSpellOnStart() {
-        this.consumeSpellOnStart = true;
-    }
-
-    public void restoreGravity(LivingEntity entity) {
-        entity.setNoGravity(this.oldGravity);
-    }
-
-    public record ToolUseData(HitResult result, int charge) {
     }
 }

@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.events;
 
 import com.mojang.datafixers.util.Pair;
+import io.github.flemmli97.runecraftory.api.action.DataKey;
 import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.SimpleEffect;
@@ -228,7 +229,6 @@ public class EntityCalls {
                 PlayerData data = Platform.INSTANCE.getPlayerData(player).orElse(null);
                 if (data != null) {
                     if (NaiveBladeAttack.canCounter(data.getWeaponHandler())) {
-                        data.getWeaponHandler().setConsumeSpellOnStart();
                         data.getWeaponHandler().doWeaponAttack(ModAttackActions.NAIVE_BLADE.get(), player.getMainHandItem(), null);
                         return true;
                     }
@@ -532,6 +532,6 @@ public class EntityCalls {
 
     public static boolean onPlayerUseItem(Player player, InteractionHand hand) {
         return Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().getCurrentAction() == ModAttackActions.NONE.get()
-                || ItemStack.isSameItemSameTags(player.getItemInHand(hand), d.getWeaponHandler().getUsedWeapon())).orElse(true);
+                || ItemStack.isSameItemSameTags(player.getItemInHand(hand), d.getWeaponHandler().get(DataKey.USED_WEAPON))).orElse(true);
     }
 }

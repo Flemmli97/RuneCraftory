@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
+import io.github.flemmli97.runecraftory.api.action.AttackActionHandler;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
-import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemAxeBase;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import net.minecraft.world.entity.LivingEntity;
@@ -15,7 +15,7 @@ public class HammerAxeUseAttack extends TimedUseAttack {
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
+    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimatedAction anim) {
         if (anim.isAt("jump")) {
             entity.setDeltaMovement(new Vec3(0, 0.35, 0));
         }

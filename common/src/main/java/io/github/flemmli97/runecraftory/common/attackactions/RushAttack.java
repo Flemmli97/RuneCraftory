@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
+import io.github.flemmli97.runecraftory.api.action.AttackActionHandler;
 import io.github.flemmli97.runecraftory.api.action.ComboContainer;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
-import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
@@ -23,7 +23,7 @@ public class RushAttack extends AttackAction {
     private final ComboContainer combo;
 
     public RushAttack() {
-        Predicate<WeaponHandler> MAIN = handler -> (handler.getAnimation().isPast("chain_1_start") && !handler.getAnimation().isPast("chain_1_end"))
+        Predicate<AttackActionHandler> MAIN = handler -> (handler.getAnimation().isPast("chain_1_start") && !handler.getAnimation().isPast("chain_1_end"))
                 || (handler.getAnimation().isPast("chain_2_start") && !handler.getAnimation().isPast("chain_2_end"));
         Function<Integer, ComboContainer.ComboGetter> IDX = idx -> handler -> !handler.getAnimation().isPast("chain_1_end") ? idx : 6;
         this.combo = ComboContainer.Builder.builder()
@@ -47,7 +47,7 @@ public class RushAttack extends AttackAction {
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
+    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimatedAction anim) {
         if (handler.getComboCount() == 7) {
             if (anim.isAt("leap")) {
                 Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
@@ -87,7 +87,7 @@ public class RushAttack extends AttackAction {
     }
 
     @Override
-    public void onSetup(LivingEntity entity, WeaponHandler handler) {
+    public void onSetup(LivingEntity entity, AttackActionHandler handler) {
         if (handler.getAnimation() != null && handler.getComboCount() < 7 && handler.getAnimation().isPast("chain_2_start"))
             handler.setComboCount(6);
     }

@@ -1,7 +1,8 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
+import io.github.flemmli97.runecraftory.api.action.AttackActionHandler;
+import io.github.flemmli97.runecraftory.api.action.DataKey;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
-import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
@@ -22,16 +23,16 @@ public class GigaSwingAttack extends AttackAction {
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
+    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimatedAction anim) {
         if (anim.isAt("attack_start")) {
-            handler.setSpinStartRot(entity.getYRot() - 50);
+            handler.store(DataKey.SPIN_ROTATION, entity.getYRot() - 50);
             Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1)).scale(-1);
-            handler.setMoveDirection(dir.scale(2));
+            handler.store(DataKey.MOVE_DIRECTION, dir.scale(2));
             entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_HEAVY.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         }
         if (!entity.level.isClientSide) {
             CombatUtils.EntityAttack attack = spinAttack(entity, anim, anim.getMarker("attack_start", 0), anim.getMarker("attack_end", 0),
-                    handler.getSpinStartRot(), handler.getSpinStartRot() + 250, p -> Mth.sin(p * Mth.PI) * 50, 0);
+                    handler.get(DataKey.SPIN_ROTATION), handler.get(DataKey.SPIN_ROTATION) + 250, p -> Mth.sin(p * Mth.PI) * 50, 0);
             if (attack != null) {
                 handler.addHitEntityTracker(attack
                         .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
@@ -43,7 +44,7 @@ public class GigaSwingAttack extends AttackAction {
     }
 
     @Override
-    public boolean isInvulnerable(LivingEntity entity, WeaponHandler handler) {
+    public boolean isInvulnerable(LivingEntity entity, AttackActionHandler handler) {
         return true;
     }
 }

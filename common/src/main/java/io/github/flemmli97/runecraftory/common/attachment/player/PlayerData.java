@@ -1,7 +1,6 @@
 package io.github.flemmli97.runecraftory.common.attachment.player;
 
 import com.mojang.datafixers.util.Pair;
-import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.ShopItemProperties;
 import io.github.flemmli97.runecraftory.api.datapack.SkillProperties;
@@ -100,7 +99,7 @@ public class PlayerData {
     private Map<Attribute, Double> foodBuffs = new HashMap<>();
     private int foodDuration;
 
-    private final WeaponHandler weaponHandler;
+    private final PlayerWeaponHandler weaponHandler;
 
     private final WalkingTracker walkingTracker = new WalkingTracker();
 
@@ -127,7 +126,7 @@ public class PlayerData {
         for (EnumSkills skill : EnumSkills.values()) {
             this.skillLevels.put(skill, new LevelExpPair());
         }
-        this.weaponHandler = new WeaponHandler(player);
+        this.weaponHandler = new PlayerWeaponHandler(player);
     }
 
     public void setMaxHealth(Player player, float amount, boolean asBaseHealth) {
@@ -585,7 +584,7 @@ public class PlayerData {
         this.foodDuration = nbt.getInt("FoodBuffDuration");
     }
 
-    public WeaponHandler getWeaponHandler() {
+    public PlayerWeaponHandler getWeaponHandler() {
         return this.weaponHandler;
     }
 

@@ -1,8 +1,9 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
+import io.github.flemmli97.runecraftory.api.action.AttackActionHandler;
 import io.github.flemmli97.runecraftory.api.action.ComboContainer;
+import io.github.flemmli97.runecraftory.api.action.DataKey;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
-import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
@@ -29,7 +30,7 @@ public class StormAttack extends AttackAction {
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
+    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimatedAction anim) {
         if (anim.isAt("attack") && handler.getComboCount() != 5) {
             if (!entity.level.isClientSide) {
                 double range = CombatUtils.getRange(entity, 0) * 0.5;
@@ -97,14 +98,15 @@ public class StormAttack extends AttackAction {
     }
 
     @Override
-    public void onStart(LivingEntity entity, WeaponHandler handler) {
+    public void onStart(LivingEntity entity, AttackActionHandler handler) {
         super.onStart(entity, handler);
-        handler.setNoGravity(entity);
+        handler.store(DataKey.GRAVITY, entity.isNoGravity());
+        entity.setNoGravity(true);
     }
 
     @Override
-    public void onEnd(LivingEntity entity, WeaponHandler handler) {
-        handler.restoreGravity(entity);
+    public void onEnd(LivingEntity entity, AttackActionHandler handler) {
+        handler.clearWith(DataKey.GRAVITY, entity::setNoGravity);
     }
 
     @Override

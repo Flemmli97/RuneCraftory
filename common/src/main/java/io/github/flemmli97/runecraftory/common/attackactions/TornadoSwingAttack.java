@@ -1,8 +1,9 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
+import io.github.flemmli97.runecraftory.api.action.AttackActionHandler;
 import io.github.flemmli97.runecraftory.api.action.ComboContainer;
+import io.github.flemmli97.runecraftory.api.action.DataKey;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
-import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
@@ -20,7 +21,7 @@ public class TornadoSwingAttack extends AttackAction {
     private final ComboContainer combo;
 
     public TornadoSwingAttack() {
-        Predicate<WeaponHandler> MAIN = handler -> handler.getAnimation().isAt("attack_end_1");
+        Predicate<AttackActionHandler> MAIN = handler -> handler.getAnimation().isAt("attack_end_1");
         this.combo = ComboContainer.Builder.builder()
                 .addCombo(MAIN)
                 .addCombo(MAIN)
@@ -39,7 +40,7 @@ public class TornadoSwingAttack extends AttackAction {
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
+    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimatedAction anim) {
         if (anim.isAt("attack_start_1")) {
             entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_HEAVY.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.8f);
         }
@@ -48,7 +49,7 @@ public class TornadoSwingAttack extends AttackAction {
             entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_HEAVY.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.8f);
         }
         CombatUtils.EntityAttack attack = spinAttack(entity, anim, anim.getMarker("attack_start_1", 0), anim.getMarker("attack_end_1", 0),
-                handler.getSpinStartRot() + 110, handler.getSpinStartRot() - 285, 0.5f);
+                handler.get(DataKey.SPIN_ROTATION) + 110, handler.get(DataKey.SPIN_ROTATION) - 285, 0.5f);
         if (attack != null) {
             handler.addHitEntityTracker(attack
                     .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
@@ -56,7 +57,7 @@ public class TornadoSwingAttack extends AttackAction {
                     .executeAttack());
         }
         attack = spinAttack(entity, anim, anim.getMarker("attack_start_2", 0), anim.getMarker("attack_end_2", 0),
-                handler.getSpinStartRot() + 75, handler.getSpinStartRot() - 35, 0.5f);
+                handler.get(DataKey.SPIN_ROTATION) + 75, handler.get(DataKey.SPIN_ROTATION) - 35, 0.5f);
         if (attack != null) {
             handler.addHitEntityTracker(attack
                     .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
@@ -66,9 +67,9 @@ public class TornadoSwingAttack extends AttackAction {
     }
 
     @Override
-    public void onStart(LivingEntity entity, WeaponHandler handler) {
+    public void onStart(LivingEntity entity, AttackActionHandler handler) {
         super.onStart(entity, handler);
-        handler.setSpinStartRot(entity.getYRot());
+        handler.store(DataKey.SPIN_ROTATION, entity.getYRot());
         if (handler.getComboCount() != 1) {
             entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_HEAVY.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.8f);
         }

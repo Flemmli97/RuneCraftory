@@ -2,13 +2,13 @@ package io.github.flemmli97.runecraftory.mixinhelper;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
-import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.client.ArmorModels;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.client.ItemModelProps;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerWeaponHandler;
 import io.github.flemmli97.runecraftory.common.items.BigWeapon;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemDualBladeBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemGloveBase;
@@ -131,16 +131,16 @@ public class ClientMixinUtils {
             if (entity instanceof IAnimated) {
                 boolean result = ClientHandlers.getAnimatedPlayerModel().setUpModel(entity, model, null, partialTicks);
                 if (result)
-                    ClientHandlers.getAnimatedPlayerModel().copyTo(model, false);
+                    ClientHandlers.getAnimatedPlayerModel().copyTo(model);
                 return;
             }
-            WeaponHandler weaponHandler = entity instanceof Player player ? Platform.INSTANCE.getPlayerData(player).map(PlayerData::getWeaponHandler).orElse(null) : null;
+            PlayerWeaponHandler weaponHandler = entity instanceof Player player ? Platform.INSTANCE.getPlayerData(player).map(PlayerData::getWeaponHandler).orElse(null) : null;
             if (weaponHandler == null)
                 return;
             boolean ignoreRiding = weaponHandler.getCurrentAction() == ModAttackActions.DUAL_USE.get();
             boolean result = ClientHandlers.getAnimatedPlayerModel().setUpModel(entity, model, weaponHandler, partialTicks);
             if (result) {
-                ClientHandlers.getAnimatedPlayerModel().copyTo(model, ignoreRiding);
+                ClientHandlers.getAnimatedPlayerModel().copyTo(model);
                 if (ItemRenderContext) {
                     model.setAllVisible(false);
                     model.leftArm.visible = true;

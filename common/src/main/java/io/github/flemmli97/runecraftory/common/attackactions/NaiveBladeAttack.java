@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
+import io.github.flemmli97.runecraftory.api.action.AttackActionHandler;
 import io.github.flemmli97.runecraftory.api.action.ComboContainer;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
-import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
@@ -30,7 +30,7 @@ public class NaiveBladeAttack extends AttackAction {
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
+    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimatedAction anim) {
         if (handler.getComboCount() == 2) {
             if (anim.isAt("jump")) {
                 entity.setDeltaMovement(new Vec3(0, 0.37, 0));
@@ -62,7 +62,7 @@ public class NaiveBladeAttack extends AttackAction {
 
 
     @Override
-    public void onStart(LivingEntity entity, WeaponHandler handler) {
+    public void onStart(LivingEntity entity, AttackActionHandler handler) {
         super.onStart(entity, handler);
         if (handler.getComboCount() == 2) {
             entity.playSound(ModSounds.SPELL_NAIVE_BLADE.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
@@ -70,11 +70,11 @@ public class NaiveBladeAttack extends AttackAction {
     }
 
     @Override
-    public boolean isInvulnerable(LivingEntity entity, WeaponHandler handler) {
+    public boolean isInvulnerable(LivingEntity entity, AttackActionHandler handler) {
         return handler.getComboCount() == 2;
     }
 
-    public static boolean canCounter(WeaponHandler handler) {
+    public static boolean canCounter(AttackActionHandler handler) {
         AnimatedAction anim = handler.getAnimation();
         return handler.getCurrentAction() instanceof NaiveBladeAttack
                 && anim != null && handler.getComboCount() == 1 && anim.isPast("prepared") && !anim.done(0);

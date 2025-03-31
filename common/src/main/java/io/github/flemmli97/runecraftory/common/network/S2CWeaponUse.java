@@ -3,7 +3,6 @@ package io.github.flemmli97.runecraftory.common.network;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.network.FriendlyByteBuf;
@@ -46,8 +45,6 @@ public class S2CWeaponUse implements Packet {
         Entity target = client.level.getEntity(pkt.entity);
         if (target instanceof Player player)
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.getWeaponHandler().clientSideUpdate(pkt.action, pkt.stack, pkt.count));
-        else if (target instanceof EntityNPCBase npc)
-            npc.weaponHandler.clientSideUpdate(pkt.action, pkt.stack, pkt.count);
     }
 
     @Override

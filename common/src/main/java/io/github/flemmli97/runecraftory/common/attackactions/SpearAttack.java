@@ -1,8 +1,9 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
+import io.github.flemmli97.runecraftory.api.action.AttackActionHandler;
 import io.github.flemmli97.runecraftory.api.action.ComboContainer;
+import io.github.flemmli97.runecraftory.api.action.DataKey;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
-import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
@@ -44,7 +45,7 @@ public class SpearAttack extends AttackAction {
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
+    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimatedAction anim) {
         if (handler.getComboCount() != 5) {
             if (anim.isAt("attack")) {
                 if (!entity.level.isClientSide) {
@@ -70,7 +71,7 @@ public class SpearAttack extends AttackAction {
             }
             case 5 -> {
                 if (anim.isAt("spin_start")) {
-                    handler.setSpinStartRot(entity.getYRot());
+                    handler.store(DataKey.SPIN_ROTATION, entity.getYRot());
                     handler.resetHitEntityTracker();
                     entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
                 }
@@ -79,7 +80,7 @@ public class SpearAttack extends AttackAction {
                     entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
                 }
                 CombatUtils.EntityAttack attack = spinAttack(entity, anim, anim.getMarker("spin_start", 0), anim.getMarker("spin_end", 0),
-                        handler.getSpinStartRot() + 180, handler.getSpinStartRot() + 1260, -1);
+                        handler.get(DataKey.SPIN_ROTATION) + 180, handler.get(DataKey.SPIN_ROTATION) + 1260, -1);
                 if (attack != null) {
                     handler.addHitEntityTracker(attack
                             .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
@@ -109,18 +110,18 @@ public class SpearAttack extends AttackAction {
             }
         }
         if (handler.getComboCount() == 5) {
-            handler.lockLook(anim.isPast("leap") && !anim.isPast("leap_end"));
+            handler.store(DataKey.FIXED_LOOK, anim.isPast("leap") && !anim.isPast("leap_end"));
         }
     }
 
     @Override
-    public void onStart(LivingEntity entity, WeaponHandler handler) {
+    public void onStart(LivingEntity entity, AttackActionHandler handler) {
         if (handler.getComboCount() == 5 && entity instanceof ServerPlayer player)
             Platform.INSTANCE.getPlayerData(player).ifPresent(d -> LevelCalc.useRP(player, d, GeneralConfig.spearUltimate, true, 0, false));
     }
 
     @Override
-    public boolean isInvulnerable(LivingEntity entity, WeaponHandler handler) {
+    public boolean isInvulnerable(LivingEntity entity, AttackActionHandler handler) {
         return handler.getComboCount() == 5;
     }
 

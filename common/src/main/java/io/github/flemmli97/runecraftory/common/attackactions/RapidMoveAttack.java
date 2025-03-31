@@ -1,7 +1,8 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
+import io.github.flemmli97.runecraftory.api.action.AttackActionHandler;
+import io.github.flemmli97.runecraftory.api.action.DataKey;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
-import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
@@ -25,12 +26,12 @@ public class RapidMoveAttack extends AttackAction {
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
-        Entity target = handler.getTarget();
+    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimatedAction anim) {
+        Entity target = handler.get(DataKey.TARGET);
         if (target != null) {
             Vec3 dir = target.position().subtract(entity.position());
             double width = 0.5 * entity.getBbWidth();
-            double targetWidth = 0.5 * handler.getTarget().getBbWidth();
+            double targetWidth = 0.5 * target.getBbWidth();
             double closeDist = width * width + targetWidth * targetWidth;
             closeDist += 1;
             if (dir.lengthSqr() < closeDist) {
@@ -58,13 +59,13 @@ public class RapidMoveAttack extends AttackAction {
     }
 
     @Override
-    public void onStart(LivingEntity entity, WeaponHandler handler) {
+    public void onStart(LivingEntity entity, AttackActionHandler handler) {
         super.onStart(entity, handler);
         if (!entity.level.isClientSide()) {
             LivingEntity target = entity.level.getNearestEntity(LivingEntity.class, TargetingConditions.forCombat(), entity, entity.getX(),
                     entity.getY(), entity.getZ(), entity.getBoundingBox().inflate(20, 10, 20));
             if (target != null)
-                handler.setTarget(target);
+                handler.store(DataKey.TARGET, target);
         }
     }
 }

@@ -40,4 +40,9 @@ public class WeaponSpell extends Spell {
     public AttackAction useAction() {
         return this.attackAction.get();
     }
+
+    @Override
+    public boolean delayedUse() {
+        return false;
+    }
 }

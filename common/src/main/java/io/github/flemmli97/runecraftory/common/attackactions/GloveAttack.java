@@ -1,8 +1,9 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
+import io.github.flemmli97.runecraftory.api.action.AttackActionHandler;
 import io.github.flemmli97.runecraftory.api.action.ComboContainer;
+import io.github.flemmli97.runecraftory.api.action.DataKey;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
-import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
@@ -37,7 +38,7 @@ public class GloveAttack extends AttackAction {
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
+    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimatedAction anim) {
         if (anim.isAt("attack") && handler.getComboCount() != 5) {
             if (!entity.level.isClientSide) {
                 if (handler.getComboCount() != 4)
@@ -79,17 +80,17 @@ public class GloveAttack extends AttackAction {
             }
             case 5 -> {
                 if (anim.isAt("move_start")) {
-                    handler.setSpinStartRot(entity.getYRot());
+                    handler.store(DataKey.SPIN_ROTATION, entity.getYRot());
                     handler.resetHitEntityTracker();
-                    Vec3 dir = CombatUtils.fromRelativeVector(handler.getSpinStartRot(), new Vec3(0, 0, 1));
-                    handler.setMoveDirection(dir.scale(0.4).add(0, 1.2, 0));
+                    Vec3 dir = CombatUtils.fromRelativeVector(handler.get(DataKey.SPIN_ROTATION), new Vec3(0, 0, 1));
+                    handler.store(DataKey.MOVE_DIRECTION, dir.scale(0.4).add(0, 1.2, 0));
                 }
                 if (anim.isAt("attack_start")) {
-                    Vec3 dir = CombatUtils.fromRelativeVector(handler.getSpinStartRot(), new Vec3(0, 0, 1));
-                    handler.setMoveDirection(dir.scale(0.4));
+                    Vec3 dir = CombatUtils.fromRelativeVector(handler.get(DataKey.SPIN_ROTATION), new Vec3(0, 0, 1));
+                    handler.store(DataKey.MOVE_DIRECTION, dir.scale(0.4));
                 }
                 if (anim.isAt("move_end")) {
-                    handler.setMoveDirection(null);
+                    handler.store(DataKey.MOVE_DIRECTION, null);
                 }
                 handler.applyMoveDirection();
                 entity.resetFallDistance();
@@ -104,18 +105,18 @@ public class GloveAttack extends AttackAction {
             }
         }
         if (handler.getComboCount() == 5) {
-            handler.lockLook(anim.isPast("move_start") && !anim.isPast("move_end"));
+            handler.store(DataKey.FIXED_LOOK, anim.isPast("move_start") && !anim.isPast("move_end"));
         }
     }
 
     @Override
-    public void onStart(LivingEntity entity, WeaponHandler handler) {
+    public void onStart(LivingEntity entity, AttackActionHandler handler) {
         if (handler.getComboCount() == 5 && entity instanceof ServerPlayer player)
             Platform.INSTANCE.getPlayerData(player).ifPresent(d -> LevelCalc.useRP(player, d, GeneralConfig.gloveUltimate, true, 0, false));
     }
 
     @Override
-    public boolean isInvulnerable(LivingEntity entity, WeaponHandler handler) {
+    public boolean isInvulnerable(LivingEntity entity, AttackActionHandler handler) {
         return handler.getComboCount() == 5;
     }
 
@@ -125,7 +126,7 @@ public class GloveAttack extends AttackAction {
     }
 
     @Override
-    public Pose getPose(LivingEntity entity, WeaponHandler handler) {
+    public Pose getPose(LivingEntity entity, AttackActionHandler handler) {
         if (handler.getAnimation() == null)
             return null;
         if (handler.getComboCount() == 5 && handler.getAnimation().isPast("attack_start") && !handler.getAnimation().isPast("attack_end"))

@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import io.github.flemmli97.runecraftory.api.action.DataKey;
 import io.github.flemmli97.runecraftory.api.datapack.ConversationContext;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.client.gui.CraftingGui;
@@ -103,7 +104,7 @@ public class ClientHandlers {
     public static boolean disableMouseMove() {
         Minecraft mc = Minecraft.getInstance();
         return mc.player != null && (EntityUtils.isDisabled(mc.player) || Platform.INSTANCE.getPlayerData(mc.player)
-                .map(d -> d.getWeaponHandler().lockedLook()).orElse(false)) && (mc.screen == null || mc.screen instanceof AbstractContainerScreen<?>);
+                .map(d -> d.getWeaponHandler().get(DataKey.FIXED_LOOK)).orElse(false)) && (mc.screen == null || mc.screen instanceof AbstractContainerScreen<?>);
     }
 
     public static boolean disableMouseClick() {

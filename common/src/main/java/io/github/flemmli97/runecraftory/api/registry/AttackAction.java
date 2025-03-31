@@ -1,7 +1,8 @@
 package io.github.flemmli97.runecraftory.api.registry;
 
+import io.github.flemmli97.runecraftory.api.action.AttackActionHandler;
 import io.github.flemmli97.runecraftory.api.action.ComboContainer;
-import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
+import io.github.flemmli97.runecraftory.api.action.DataKey;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.platform.registry.CustomRegistryEntry;
@@ -44,36 +45,34 @@ public class AttackAction extends CustomRegistryEntry<AttackAction> {
         return null;
     }
 
-    public void run(LivingEntity entity, ItemStack stack, WeaponHandler handler, AnimatedAction anim) {
+    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimatedAction anim) {
 
     }
 
-    public void onSetup(LivingEntity entity, WeaponHandler handler) {
+    public void onSetup(LivingEntity entity, AttackActionHandler handler) {
 
     }
 
-    public void onStart(LivingEntity entity, WeaponHandler handler) {
-        if (handler.consumeSpellOnStart() && entity.getLevel() instanceof ServerLevel serverLevel) {
+    public void onStart(LivingEntity entity, AttackActionHandler handler) {
+        Spell spell = handler.get(DataKey.USED_SPELL);
+        if (spell != null && !spell.delayedUse() && entity.getLevel() instanceof ServerLevel serverLevel) {
             entity.swing(InteractionHand.MAIN_HAND);
-            ItemStack stack = handler.getUsedWeapon();
-            if (handler.getSpellToCast() != null) {
-                Spell spell = handler.getSpellToCast();
-                if (spell.use(serverLevel, entity, stack) && entity instanceof ServerPlayer player) {
-                    spell.levelSkill(player);
-                }
+            ItemStack stack = handler.get(DataKey.USED_WEAPON);
+            if (spell.use(serverLevel, entity, stack) && entity instanceof ServerPlayer player) {
+                spell.levelSkill(player);
             }
         }
     }
 
-    public AttackAction onChange(LivingEntity entity, WeaponHandler handler) {
+    public AttackAction onChange(LivingEntity entity, AttackActionHandler handler) {
         this.onEnd(entity, handler);
         return null;
     }
 
-    public void onEnd(LivingEntity entity, WeaponHandler handler) {
+    public void onEnd(LivingEntity entity, AttackActionHandler handler) {
     }
 
-    public boolean isInvulnerable(LivingEntity entity, WeaponHandler handler) {
+    public boolean isInvulnerable(LivingEntity entity, AttackActionHandler handler) {
         return false;
     }
 
@@ -85,7 +84,7 @@ public class AttackAction extends CustomRegistryEntry<AttackAction> {
         return 0;
     }
 
-    public Pose getPose(LivingEntity entity, WeaponHandler handler) {
+    public Pose getPose(LivingEntity entity, AttackActionHandler handler) {
         return null;
     }
 
