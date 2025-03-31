@@ -47,4 +47,9 @@ public class DoubleKickAttack extends AttackAction {
             }
         }
     }
+
+    @Override
+    public boolean usableOnMounts(int targetCombo) {
+        return false;
+    }
 }

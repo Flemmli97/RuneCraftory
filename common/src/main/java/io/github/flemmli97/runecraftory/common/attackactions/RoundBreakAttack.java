@@ -46,4 +46,9 @@ public class RoundBreakAttack extends AttackAction {
     public boolean isInvulnerable(LivingEntity entity, AttackActionHandler handler) {
         return true;
     }
+
+    @Override
+    public boolean usableOnMounts(int targetCombo) {
+        return false;
+    }
 }

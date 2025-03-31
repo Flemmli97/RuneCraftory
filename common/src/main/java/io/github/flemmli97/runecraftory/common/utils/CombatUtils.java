@@ -782,11 +782,12 @@ public class CombatUtils {
             Collection<LivingEntity> list = this.targets.apply(this.attacker, this.targetPred);
             this.bonusAttributes.forEach((att, val) -> applyTempAttribute(this.attacker, att, val));
             this.bonusAttributesMultiplier.forEach((att, val) -> applyTempAttributeMult(this.attacker, att, val));
+            LivingEntity target = this.attacker instanceof Mob mob ? mob.getTarget() : null;
             for (LivingEntity livingEntity : list) {
                 boolean flag = false;
+                if (target != livingEntity && this.attacker.getVehicle() == livingEntity)
+                    continue;
                 if (this.attacker instanceof Player player) {
-                    if (player.getVehicle() == livingEntity)
-                        continue;
                     flag = CombatUtils.playerAttackWithItem(player, livingEntity, false, false);
                 } else if (this.attacker instanceof Mob mob)
                     flag = mob.doHurtTarget(livingEntity);

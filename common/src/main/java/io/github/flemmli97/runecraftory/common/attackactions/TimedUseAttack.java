@@ -16,15 +16,17 @@ public class TimedUseAttack extends AttackAction {
     private final boolean ignoreAttackSpeed;
 
     private final BiConsumer<LivingEntity, ItemStack> attack;
+    private final boolean mountedUse;
 
     public TimedUseAttack(AnimatedAction animation, BiConsumer<LivingEntity, ItemStack> attack) {
-        this(animation, false, attack);
+        this(animation, false, attack, true);
     }
 
-    public TimedUseAttack(AnimatedAction animation, boolean ignoreAttackSpeed, BiConsumer<LivingEntity, ItemStack> attack) {
+    public TimedUseAttack(AnimatedAction animation, boolean ignoreAttackSpeed, BiConsumer<LivingEntity, ItemStack> attack, boolean mountedUse) {
         this.animation = animation;
         this.ignoreAttackSpeed = ignoreAttackSpeed;
         this.attack = attack;
+        this.mountedUse = mountedUse;
     }
 
     @Override
@@ -46,5 +48,10 @@ public class TimedUseAttack extends AttackAction {
     @Override
     public boolean disableItemSwitch() {
         return false;
+    }
+
+    @Override
+    public boolean usableOnMounts(int targetCombo) {
+        return this.mountedUse;
     }
 }

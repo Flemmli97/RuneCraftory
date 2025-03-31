@@ -83,16 +83,8 @@ public class GloveAttack extends AttackAction {
                     handler.store(DataKey.SPIN_ROTATION, entity.getYRot());
                     handler.resetHitEntityTracker();
                     Vec3 dir = CombatUtils.fromRelativeVector(handler.get(DataKey.SPIN_ROTATION), new Vec3(0, 0, 1));
-                    handler.store(DataKey.MOVE_DIRECTION, dir.scale(0.4).add(0, 1.2, 0));
+                    entity.setDeltaMovement(dir.scale(2.5).add(0, 0.6, 0));
                 }
-                if (anim.isAt("attack_start")) {
-                    Vec3 dir = CombatUtils.fromRelativeVector(handler.get(DataKey.SPIN_ROTATION), new Vec3(0, 0, 1));
-                    handler.store(DataKey.MOVE_DIRECTION, dir.scale(0.4));
-                }
-                if (anim.isAt("move_end")) {
-                    handler.store(DataKey.MOVE_DIRECTION, null);
-                }
-                handler.applyMoveDirection();
                 entity.resetFallDistance();
                 if (anim.isAt("attack_start"))
                     entity.playSound(ModSounds.SPELL_GENERIC_WIND_LONG.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.3f);
@@ -137,5 +129,10 @@ public class GloveAttack extends AttackAction {
     @Override
     public ComboContainer combos() {
         return this.combo;
+    }
+
+    @Override
+    public boolean usableOnMounts(int targetCombo) {
+        return targetCombo < 4;
     }
 }

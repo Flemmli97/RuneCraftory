@@ -85,7 +85,7 @@ public class ModAttackActions {
     public static final RegistryEntrySupplier<AttackAction> HAMMER_AXE_USE = register("hammer_axe_use", HammerAxeUseAttack::new);
 
     public static final RegistryEntrySupplier<AttackAction> DUAL_BLADES = register("dual_blades", DualBladeAttack::new);
-    public static final RegistryEntrySupplier<AttackAction> DUAL_USE = register("dual_blade_use", () -> new TimedUseAttack(PlayerModelAnimations.DUAL_BLADES_USE, ItemDualBladeBase::delayedRightClickAction));
+    public static final RegistryEntrySupplier<AttackAction> DUAL_USE = register("dual_blade_use", () -> new TimedUseAttack(PlayerModelAnimations.DUAL_BLADES_USE, false, ItemDualBladeBase::delayedRightClickAction, true));
 
     public static final RegistryEntrySupplier<AttackAction> GLOVES = register("gloves", GloveAttack::new);
     public static final RegistryEntrySupplier<AttackAction> GLOVE_USE = register("glove_use", GloveUseAttack::new);
@@ -96,7 +96,7 @@ public class ModAttackActions {
 
     public static final RegistryEntrySupplier<AttackAction> TOOL_AXE_USE = register("tool_axe", () -> new TimedUseAttack(PlayerModelAnimations.HAMME_AXE_USE.create(1.1f), true, (entity, stack) -> {
         //TODO
-    }));
+    }, false));
     public static final RegistryEntrySupplier<AttackAction> TOOL_HAMMER_USE = register("tool_hammer", ToolHammerUse::new);
     public static final RegistryEntrySupplier<AttackAction> FIREBALL_USE = register("fireball_use", () -> new FireballUseAttack(false));
     public static final RegistryEntrySupplier<AttackAction> FIREBALL_BIG_USE = register("fireball_big_use", () -> new FireballUseAttack(true));
@@ -107,7 +107,7 @@ public class ModAttackActions {
 
     public static final RegistryEntrySupplier<AttackAction> TOOL_ATTACK = register("tool_attack", () -> new TimedUseAttack(AnimatedAction.builder(1, "tool_attack").build(), true, (entity, stack) -> {
         //TODO
-    }));
+    }, false));
 
     public static final RegistryEntrySupplier<AttackAction> POWER_WAVE = register("power_wave", PowerWaveAttack::new);
     public static final RegistryEntrySupplier<AttackAction> DASH_SLASH = register("dash_slash", DashSlashAttack::new);

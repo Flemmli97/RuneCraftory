@@ -10,6 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import java.util.function.Supplier;
 
 public class GroundedAbilitySpell extends WeaponSpell {
+
     public GroundedAbilitySpell(Supplier<AttackAction> attackAction, TagKey<Item> weapon) {
         super(attackAction, weapon);
     }

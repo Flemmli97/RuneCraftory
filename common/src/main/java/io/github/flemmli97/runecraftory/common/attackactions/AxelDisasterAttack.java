@@ -65,4 +65,9 @@ public class AxelDisasterAttack extends AttackAction {
             return Pose.SPIN_ATTACK;
         return null;
     }
+
+    @Override
+    public boolean usableOnMounts(int targetCombo) {
+        return false;
+    }
 }

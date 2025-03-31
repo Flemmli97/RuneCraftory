@@ -81,6 +81,9 @@ public class PlayerWeaponHandler implements AttackActionHandler {
         if (allowNone && (this.currentAction == ModAttackActions.NONE.get() || this.currentAnimation == null)) {
             return this.timeSinceLastChange < COOLDOWN ? AttackAction.OverrideType.NONE : AttackAction.OverrideType.REPLACE;
         }
+        if (this.entity.getVehicle() != null && !action.usableOnMounts(this.comboCount + 1)) {
+            return AttackAction.OverrideType.NONE;
+        }
         if (this.currentAction == action && action.combos() != null) {
             ComboContainer.ComboHandler combo = action.combos().get(this.comboCount - 1);
             return combo != null && combo.canExecute().test(this) ? AttackAction.OverrideType.SCHEDULE : AttackAction.OverrideType.NONE;

@@ -167,4 +167,9 @@ public class DualBladeAttack extends AttackAction {
     public ComboContainer combos() {
         return this.combo;
     }
+
+    @Override
+    public boolean usableOnMounts(int targetCombo) {
+        return targetCombo < 5;
+    }
 }

@@ -86,9 +86,9 @@ public class PlayerModelAnimations {
     public static final List<AnimatedAction> GLOVES = addTo(5, "glove", (count, builder) -> switch (count) {
         case 4 -> builder.apply(0.76)
                 .marker("jump", 0.24).marker("down", 0.4).marker("attack", 0.56).build();
-        case 5 -> builder.apply(1.64)
-                .marker("move_start", 0.16).marker("move_end", 1.24)
-                .marker("attack_start", 0.24).marker("attack_end", 1.16).build();
+        case 5 -> builder.apply(1.48)
+                .marker("move_start", 0.16).marker("move_end", 1.08)
+                .marker("attack_start", 0.24).marker("attack_end", 1).build();
         default -> builder.apply(0.48)
                 .marker("attack", 0.36).marker("step", 0.28).marker("done", 0.36).build();
     });

@@ -58,4 +58,9 @@ public class CycloneAttack extends AttackAction {
     public float movementReduction(AnimatedAction current) {
         return 1;
     }
+
+    @Override
+    public boolean usableOnMounts(int targetCombo) {
+        return false;
+    }
 }

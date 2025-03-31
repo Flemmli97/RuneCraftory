@@ -92,6 +92,10 @@ public class AttackAction extends CustomRegistryEntry<AttackAction> {
         return null;
     }
 
+    public boolean usableOnMounts(int targetCombo) {
+        return true;
+    }
+
     public enum OverrideType {
         NONE,
         SCHEDULE,

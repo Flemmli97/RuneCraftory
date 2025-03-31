@@ -95,4 +95,9 @@ public class HammerAxeAttack extends AttackAction {
     public ComboContainer combos() {
         return this.combo;
     }
+
+    @Override
+    public boolean usableOnMounts(int targetCombo) {
+        return targetCombo != 3;
+    }
 }

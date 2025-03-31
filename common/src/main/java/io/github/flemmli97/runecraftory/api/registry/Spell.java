@@ -108,11 +108,15 @@ public abstract class Spell extends CustomRegistryEntry<Spell> {
     }
 
     public boolean canUse(ServerLevel world, LivingEntity entity, ItemStack stack) {
-        return true;
+        return entity.getVehicle() == null || this.usableOnMounts();
     }
 
     public boolean delayedUse() {
         return true;
+    }
+
+    public boolean usableOnMounts() {
+        return this.useAction().usableOnMounts(0);
     }
 
     @Override

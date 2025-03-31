@@ -59,4 +59,9 @@ public class StardustUpperAttack extends AttackAction {
             }
         }
     }
+
+    @Override
+    public boolean usableOnMounts(int targetCombo) {
+        return false;
+    }
 }

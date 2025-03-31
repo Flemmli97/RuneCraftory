@@ -211,10 +211,11 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IAOEWeapon, Big
         int rotationSteps = (int) ((maxYRot - minYRot) / (incHalf * 2)) + 2;
         float inc = (maxYRot - minYRot) / rotationSteps;
         Set<LivingEntity> entities = new HashSet<>();
+        Predicate<LivingEntity> predicate = e -> entity.getVehicle() != e && (pred == null || pred.test(e));
         for (int steps = 0; steps <= rotationSteps; steps++) {
             float yRot = minYRot + inc * steps;
             OrientedBoundingBox obb = new OrientedBoundingBox(aabb, yRot, 0, entity.position());
-            entities.addAll(RayTraceUtils.getEntitiesIn(entity, obb, true, EntityTypeTest.forClass(LivingEntity.class), pred));
+            entities.addAll(RayTraceUtils.getEntitiesIn(entity, obb, true, EntityTypeTest.forClass(LivingEntity.class), predicate));
             S2CAttackDebug.sendDebugPacket(obb, S2CAttackDebug.EnumAABBType.ATTACK, entity);
         }
         return entities;

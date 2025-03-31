@@ -70,4 +70,9 @@ public class GloveUseAttack extends AttackAction {
     public boolean disableItemSwitch() {
         return false;
     }
+
+    @Override
+    public boolean usableOnMounts(int targetCombo) {
+        return false;
+    }
 }

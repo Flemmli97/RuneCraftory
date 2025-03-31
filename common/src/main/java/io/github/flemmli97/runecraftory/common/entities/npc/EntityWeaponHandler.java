@@ -60,6 +60,9 @@ public class EntityWeaponHandler<T extends LivingEntity & IAnimated> implements 
         if (allowNone && (this.currentAction == ModAttackActions.NONE.get() || this.getAnimation() == null)) {
             return AttackAction.OverrideType.REPLACE;
         }
+        if (this.entity.getVehicle() != null && !action.usableOnMounts(this.comboCount + 1)) {
+            return AttackAction.OverrideType.NONE;
+        }
         if (this.currentAction == action && action.combos() != null) {
             ComboContainer.ComboHandler combo = action.combos().get(this.comboCount - 1);
             return combo != null && combo.canExecute().test(this) ? AttackAction.OverrideType.SCHEDULE : AttackAction.OverrideType.NONE;
