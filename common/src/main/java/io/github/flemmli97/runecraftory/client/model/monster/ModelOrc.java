@@ -12,7 +12,6 @@ import io.github.flemmli97.tenshilib.client.model.ExtendedModel;
 import io.github.flemmli97.tenshilib.client.model.IItemArmModel;
 import io.github.flemmli97.tenshilib.client.model.ModelPartHandler;
 import io.github.flemmli97.tenshilib.client.model.RideableModel;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.IllagerModel;
@@ -111,7 +110,7 @@ public class ModelOrc<T extends EntityOrc> extends EntityModel<T> implements Ext
         this.model.resetPoses();
         this.head.yRot += (netHeadYaw % 360) * Mth.DEG_TO_RAD * 0.5f;
         this.head.xRot += headPitch * Mth.DEG_TO_RAD * 0.5f;
-        float partialTicks = Minecraft.getInstance().getFrameTime();
+        float partialTicks = ClientHandlers.getPartialTicks();
         if (entity.deathTime <= 0 && !entity.playDeath()) {
             this.anim.doAnimation(this, "idle", entity.tickCount, partialTicks);
             if (entity.moveTick() > 0)

@@ -127,7 +127,7 @@ public class ClientMixinUtils {
             model.leftArm.xRot -= 70 * Mth.DEG_TO_RAD;
         }
         if (ClientHandlers.getAnimatedPlayerModel() != null) {
-            float partialTicks = Minecraft.getInstance().getFrameTime();
+            float partialTicks = ClientHandlers.getPartialTicks();
             if (entity instanceof IAnimated) {
                 boolean result = ClientHandlers.getAnimatedPlayerModel().setUpModel(entity, model, null, partialTicks);
                 if (result)
@@ -190,7 +190,8 @@ public class ClientMixinUtils {
             PlayerData data = Platform.INSTANCE.getPlayerData(player).orElse(null);
             if (data != null) {
                 PlayerRenderer playerRenderer = (PlayerRenderer) Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(player);
-                boolean animated = ClientHandlers.getAnimatedPlayerModel().setUpModel(player, playerRenderer.getModel(), data.getWeaponHandler(), Minecraft.getInstance().getFrameTime());
+                float partialTicks = ClientHandlers.getPartialTicks();
+                boolean animated = ClientHandlers.getAnimatedPlayerModel().setUpModel(player, playerRenderer.getModel(), data.getWeaponHandler(), partialTicks);
                 if (!animated)
                     return false;
                 if (leftHand == (livingEntity.getMainArm() == HumanoidArm.RIGHT))
@@ -198,7 +199,6 @@ public class ClientMixinUtils {
                 player.resetAttackStrengthTicker();
                 poseStack = new PoseStack();
                 poseStack.pushPose();
-                float partialTicks = Minecraft.getInstance().getFrameTime();
                 Vec3 camPos = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
                 double camX = camPos.x();
                 double camY = camPos.y();

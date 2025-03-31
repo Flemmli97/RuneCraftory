@@ -12,7 +12,6 @@ import io.github.flemmli97.tenshilib.client.model.BlockBenchAnimations;
 import io.github.flemmli97.tenshilib.client.model.ExtendedModel;
 import io.github.flemmli97.tenshilib.client.model.ModelPartHandler;
 import io.github.flemmli97.tenshilib.client.model.RideableModel;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.IllagerModel;
@@ -111,7 +110,7 @@ public class ModelWolf<T extends EntityWolf> extends EntityModel<T> implements E
         this.model.resetPoses();
         this.upper.yRot += (netHeadYaw % 360) * Mth.DEG_TO_RAD * 0.5f;
         this.upper.xRot += headPitch * Mth.DEG_TO_RAD * 0.5f;
-        float partialTicks = Minecraft.getInstance().getFrameTime();
+        float partialTicks = ClientHandlers.getPartialTicks();
         if (entity.deathTime <= 0 && !entity.playDeath()) {
             this.anim.doAnimation(this, "idle", entity.tickCount, partialTicks);
             if (entity.moveTick() > 0) {

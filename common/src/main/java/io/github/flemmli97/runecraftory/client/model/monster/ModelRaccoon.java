@@ -10,7 +10,6 @@ import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityRacco
 import io.github.flemmli97.tenshilib.client.AnimationManager;
 import io.github.flemmli97.tenshilib.client.model.BlockBenchAnimations;
 import io.github.flemmli97.tenshilib.client.model.ModelPartHandler;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.IllagerModel;
@@ -100,7 +99,7 @@ public class ModelRaccoon<T extends EntityRaccoon> extends ModelRaccoonBase<T> {
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.model.resetPoses();
-        float partialTicks = Minecraft.getInstance().getFrameTime();
+        float partialTicks = ClientHandlers.getPartialTicks();
         if (entity.deathTime <= 0 && !entity.playDeath()) {
             this.head.yRot += (netHeadYaw % 360) * Mth.DEG_TO_RAD * 0.8;
             this.head.xRot += headPitch * Mth.DEG_TO_RAD;

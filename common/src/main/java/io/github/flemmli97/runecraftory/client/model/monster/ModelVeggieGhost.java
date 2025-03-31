@@ -12,7 +12,6 @@ import io.github.flemmli97.tenshilib.client.model.BlockBenchAnimations;
 import io.github.flemmli97.tenshilib.client.model.ExtendedModel;
 import io.github.flemmli97.tenshilib.client.model.ModelPartHandler;
 import io.github.flemmli97.tenshilib.client.model.RideableModel;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.IllagerModel;
@@ -87,7 +86,7 @@ public class ModelVeggieGhost<T extends EntityVeggieGhost> extends EntityModel<T
         this.head.yRot += (netHeadYaw % 360) * Mth.DEG_TO_RAD * 0.5f;
         this.head.xRot += headPitch * Mth.DEG_TO_RAD * 0.5f;
         this.model.getMainPart().visible = true;
-        float partialTicks = Minecraft.getInstance().getFrameTime();
+        float partialTicks = ClientHandlers.getPartialTicks();
         if (entity.deathTime <= 0 && !entity.playDeath()) {
             this.anim.doAnimation(this, "idle", entity.tickCount, partialTicks);
         }

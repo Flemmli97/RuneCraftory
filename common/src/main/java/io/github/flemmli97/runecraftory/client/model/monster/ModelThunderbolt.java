@@ -12,7 +12,6 @@ import io.github.flemmli97.tenshilib.client.model.BlockBenchAnimations;
 import io.github.flemmli97.tenshilib.client.model.ExtendedModel;
 import io.github.flemmli97.tenshilib.client.model.ModelPartHandler;
 import io.github.flemmli97.tenshilib.client.model.RideableModel;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.IllagerModel;
@@ -133,7 +132,7 @@ public class ModelThunderbolt<T extends EntityThunderbolt> extends EntityModel<T
         this.neck.yRot += (netHeadYaw % 360) * Mth.DEG_TO_RAD * 0.15f;
         this.neck.xRot += headPitch * Mth.DEG_TO_RAD * 0.15f;
 
-        float partialTicks = Minecraft.getInstance().getFrameTime();
+        float partialTicks = ClientHandlers.getPartialTicks();
         if (entity.deathTime <= 0 && !entity.playDeath()) {
             if (entity.getMoveFlag() == BaseMonster.MoveType.RUN)
                 this.anim.doAnimation(this, "run", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));

@@ -73,8 +73,20 @@ public class ClientHandlers {
 
     private static CameraType pastType = CameraType.FIRST_PERSON;
 
+    private static boolean paused;
+    private static float pausedPartial;
+
     public static Player getPlayer() {
         return Minecraft.getInstance().player;
+    }
+
+    public static float getPartialTicks() {
+        boolean isPaused = Minecraft.getInstance().isPaused();
+        if (isPaused && !paused) {
+            pausedPartial =  Minecraft.getInstance().getFrameTime();
+        }
+        paused = isPaused;
+        return isPaused ? pausedPartial : Minecraft.getInstance().getFrameTime();
     }
 
     public static void updateClientCalendar(FriendlyByteBuf buffer) {

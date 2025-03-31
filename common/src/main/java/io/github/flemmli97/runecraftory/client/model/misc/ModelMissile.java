@@ -3,12 +3,12 @@ package io.github.flemmli97.runecraftory.client.model.misc;// Made with Blockben
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityMissile;
 import io.github.flemmli97.tenshilib.client.AnimationManager;
 import io.github.flemmli97.tenshilib.client.model.BlockBenchAnimations;
 import io.github.flemmli97.tenshilib.client.model.ExtendedModel;
 import io.github.flemmli97.tenshilib.client.model.ModelPartHandler;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -58,7 +58,7 @@ public class ModelMissile<T extends EntityMissile> extends EntityModel<T> implem
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.model.resetPoses();
-        this.anim.doAnimation(this, "animation", entity.tickCount, Minecraft.getInstance().getFrameTime());
+        this.anim.doAnimation(this, "animation", entity.tickCount, ClientHandlers.getPartialTicks());
     }
 
     @Override
