@@ -79,11 +79,11 @@ public class GloveAttack extends AttackAction {
                 entity.resetFallDistance();
             }
             case 5 -> {
-                if (anim.isAt("move_start")) {
+                if (anim.isAt("leap")) {
                     handler.store(DataKey.SPIN_ROTATION, entity.getYRot());
                     handler.resetHitEntityTracker();
                     Vec3 dir = CombatUtils.fromRelativeVector(handler.get(DataKey.SPIN_ROTATION), new Vec3(0, 0, 1));
-                    entity.setDeltaMovement(dir.scale(2.5).add(0, 0.6, 0));
+                    entity.setDeltaMovement(dir.scale(2.7).add(0, 0.6, 0));
                 }
                 entity.resetFallDistance();
                 if (anim.isAt("attack_start"))
