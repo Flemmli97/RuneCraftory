@@ -8,6 +8,7 @@ import net.minecraft.core.GlobalPos;
 import net.minecraft.core.SectionPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
@@ -238,7 +239,7 @@ public class NPCWanderGoal extends Goal {
             Vec3 vec3 = null;
             int attempts = 300;
             for (i = 0; i < attempts && (vec3 == null || this.distManhattan(this.npc.position(), vec3) > 100); ++i) {
-                vec3 = DefaultRandomPos.getPosTowards(this.npc, 15, 7, Vec3.atCenterOf(pos), 1.5707963705062866);
+                vec3 = DefaultRandomPos.getPosTowards(this.npc, 15, 7, Vec3.atCenterOf(pos), 90 * Mth.DEG_TO_RAD);
             }
             if (i == attempts || vec3 == null) {
                 onFail.run();
@@ -308,6 +309,6 @@ public class NPCWanderGoal extends Goal {
     }
 
     private Vec3 setTargetedPosTowards(SectionPos sectionPos) {
-        return DefaultRandomPos.getPosTowards(this.npc, 10, 7, Vec3.atBottomCenterOf(sectionPos.center()), 1.5707963705062866);
+        return DefaultRandomPos.getPosTowards(this.npc, 10, 7, Vec3.atBottomCenterOf(sectionPos.center()), 90 * Mth.DEG_TO_RAD);
     }
 }
