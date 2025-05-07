@@ -1,6 +1,9 @@
 RuneCraftory 1.11.1
 ================
 - Update for library changes
+- Add blinking to npc
+- Fix npc attack animations
+- Improve animation on mounts. Some skills now disabled on mounts
 
 RuneCraftory 1.11.0
 ================
