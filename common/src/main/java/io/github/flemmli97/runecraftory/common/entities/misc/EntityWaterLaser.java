@@ -160,13 +160,14 @@ public class EntityWaterLaser extends BaseBeam {
     @Override
     public void onImpact(EntityHitResult res) {
         Entity e = res.getEntity();
+        int invul_time = 5;
         if (e instanceof LivingEntity living) {
             if (living.getLastDamageSource() != null && living.getLastDamageSource().getDirectEntity() != null &&
                     living.getLastDamageSource().getDirectEntity().getUUID().equals(this.other)) {
-                living.invulnerableTime = 10;
+                invul_time = 0;
             }
         }
-        CombatUtils.damageWithFaintAndCrit(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(5).magic().noKnockback().element(EnumElement.WATER), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier, null);
+        CombatUtils.damageWithFaintAndCrit(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(invul_time).magic().noKnockback().element(EnumElement.WATER), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier, null);
         this.hitEntities.put(e, this.tickCount);
     }
 

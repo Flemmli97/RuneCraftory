@@ -80,12 +80,13 @@ public class EntityMissile extends BaseProjectile {
     @Override
     protected boolean entityRayTraceHit(EntityHitResult result) {
         Entity e = result.getEntity();
+        int invul_time = 10;
         if (e instanceof LivingEntity living) {
             if (living.getLastDamageSource() != null && living.getLastDamageSource().getDirectEntity() instanceof EntityMissile) {
-                living.invulnerableTime = 10;
+                invul_time = 0;
             }
         }
-        if (CombatUtils.damageWithFaintAndCrit(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).magic().noKnockback().hurtResistant(10).element(EnumElement.LIGHT).projectile(), CombatUtils.getAttributeValue(this.getOwner(), Attributes.ATTACK_DAMAGE) * this.damageMultiplier, null)) {
+        if (CombatUtils.damageWithFaintAndCrit(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).magic().noKnockback().hurtResistant(invul_time).element(EnumElement.LIGHT).projectile(), CombatUtils.getAttributeValue(this.getOwner(), Attributes.ATTACK_DAMAGE) * this.damageMultiplier, null)) {
             this.playSound(SoundEvents.GENERIC_EXPLODE, 1, (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.0f);
             S2CScreenShake.sendAround(this, 20, 4, 2);
             this.discard();

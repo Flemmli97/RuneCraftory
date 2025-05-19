@@ -170,8 +170,13 @@ public class PlayerData {
                 int diff = amount - this.runePoints;
                 this.runePoints = 0;
                 if (!player.level.isClientSide) {
-                    player.hurt(CustomDamage.EXHAUST, Math.min(player.getMaxHealth() * 0.25f, (float) (diff * 2)));
+                    int invul = player.invulnerableTime;
                     player.invulnerableTime = 10;
+                    boolean res = player.hurt(CustomDamage.EXHAUST, Math.min(player.getMaxHealth() * 0.25f, (float) (diff * 2)));
+                    if (res)
+                        player.invulnerableTime = 10;
+                    else
+                        player.invulnerableTime = invul;
                 }
             } else
                 return false;

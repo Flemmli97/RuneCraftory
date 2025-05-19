@@ -73,7 +73,7 @@ public class EntityButterfly extends BaseProjectile {
                 if (this.getOwner() instanceof LivingEntity living)
                     CombatUtils.applyTempAttribute(living, ModAttributes.DRAIN.get(), 80);
                 CustomDamage.Builder builder = new CustomDamage.Builder(this, this.getOwner()).magic().noKnockback().hurtResistant(0);
-                stuck.hurt(builder.get(), (float) (CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier * 0.7));
+                builder.get().hurtEntity(stuck, (float) (CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier * 0.7));
                 if (this.getOwner() instanceof LivingEntity living)
                     CombatUtils.removeTempAttribute(living, ModAttributes.DRAIN.get());
             }

@@ -407,7 +407,7 @@ public class CombatUtils {
             dmg = Float.MAX_VALUE;
         else if (!source.fixedDamage())
             dmg = modifyDmgElement(source.getElement(), target, dmg);
-        boolean success = target.hurt(source, dmg);
+        boolean success = source.hurtEntity(target, dmg);
         if (success) {
             spawnElementalParticle(target, source.getElement());
             if (attacker instanceof LivingEntity livingAttacker) {

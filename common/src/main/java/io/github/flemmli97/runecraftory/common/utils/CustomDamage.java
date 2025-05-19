@@ -94,6 +94,23 @@ public class CustomDamage extends EntityDamageSource {
         return this.entity;
     }
 
+    /**
+     * Attacks entity with a reduced invulnerability timer
+     */
+    public boolean hurtEntity(Entity target, float dmg) {
+        int invul = target.invulnerableTime;
+        boolean modified = false;
+        if (target.invulnerableTime + this.hurtProtection() <= 20) {
+            target.invulnerableTime = Math.min(target.invulnerableTime, 10);
+            modified = true;
+        }
+        boolean success = target.hurt(this, dmg);
+        if (!success && modified) {
+            target.invulnerableTime = invul;
+        }
+        return success;
+    }
+
     public enum DamageType {
         NORMAL,
         MAGIC,

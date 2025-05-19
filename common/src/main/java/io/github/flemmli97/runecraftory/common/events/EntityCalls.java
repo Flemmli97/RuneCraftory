@@ -235,12 +235,7 @@ public class EntityCalls {
                 }
             }
         }
-        if (source instanceof CustomDamage customDamage) {
-            if (target.invulnerableTime + customDamage.hurtProtection() <= 20)
-                target.invulnerableTime = 10;
-            return false;
-        }
-        if (attacker instanceof Player) {
+        if (source instanceof CustomDamage || attacker instanceof Player) {
             return false;
         }
         if (attacker instanceof LivingEntity living && living.getMainHandItem().is(RunecraftoryTags.UPGRADABLE_HELD) && !living.getType().is(RunecraftoryTags.HELD_WEAPON_EXEMPT)) {
