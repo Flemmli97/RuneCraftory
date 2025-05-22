@@ -161,6 +161,9 @@ public class LangGen implements DataProvider {
         }
 
         this.add("runecraftory.item.creative.tooltip", "Debug item used for testing things");
+        this.add("runecraftory.item.creative.tooltip.mode", "Mode: %s");
+        this.add("runecraftory.item.creative.tooltip.mode.default", "Default");
+        this.add("runecraftory.item.creative.tooltip.mode.animation", "Entity Animations");
 
         for (RegistryEntrySupplier<Block> sup : ModBlocks.BLOCKS.getEntries()) {
             this.add(sup.get(), this.simpleTranslation(sup.getID()));

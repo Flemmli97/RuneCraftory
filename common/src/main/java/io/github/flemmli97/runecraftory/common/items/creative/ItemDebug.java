@@ -1,13 +1,18 @@
 package io.github.flemmli97.runecraftory.common.items.creative;
 
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
+import io.github.flemmli97.tenshilib.api.item.IExtendedWeapon;
+import io.github.flemmli97.tenshilib.common.item.AnimationDebugger;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -24,7 +29,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class ItemDebug extends Item {
+public class ItemDebug extends AnimationDebugger implements IExtendedWeapon {
+
+    private static final String ITEM_MODE = RuneCraftory.MODID + ":debug_mode";
 
     public ItemDebug(Item.Properties props) {
         super(props);
@@ -34,10 +41,14 @@ public class ItemDebug extends Item {
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> components, TooltipFlag isAdvanced) {
         super.appendHoverText(stack, level, components, isAdvanced);
         components.add(new TranslatableComponent("runecraftory.item.creative.tooltip").withStyle(ChatFormatting.DARK_RED));
+        components.add(new TranslatableComponent("runecraftory.item.creative.tooltip.mode",
+                new TranslatableComponent(this.getCurrentMode(stack).translationKey).withStyle(ChatFormatting.AQUA)).withStyle(ChatFormatting.DARK_RED));
     }
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        if (this.getCurrentMode(player.getItemInHand(hand)) == Mode.ANIMATION)
+            return super.use(level, player, hand);
         if (level instanceof ServerLevel serverLevel) {
             /*long time = System.nanoTime();
             Set<ConfiguredStructureFeature<?, ?>> structures = GateSpawning.getStructuresAt(serverLevel, player.blockPosition());
@@ -69,17 +80,55 @@ public class ItemDebug extends Item {
     }
 
     @Override
-    public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity interactionTarget, InteractionHand usedHand) {
+    public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity target, InteractionHand usedHand) {
+        if (this.getCurrentMode(stack) == Mode.ANIMATION)
+            return super.interactLivingEntity(stack, player, target, usedHand);
         if (player.level instanceof ServerLevel serverLevel) {
-            if (interactionTarget instanceof Mob mob)
+            if (target instanceof Mob mob)
                 mob.travel(new Vec3(0, 0, 5));
             return InteractionResult.SUCCESS;
         }
-        return super.interactLivingEntity(stack, player, interactionTarget, usedHand);
+        return super.interactLivingEntity(stack, player, target, usedHand);
     }
 
     @Override
-    public boolean isFoil(ItemStack stack) {
-        return true;
+    public float getRange(LivingEntity entity, ItemStack stack) {
+        return 4;
+    }
+
+    @Override
+    public boolean onServerSwing(LivingEntity entity, ItemStack stack) {
+        ItemStack main = entity.getMainHandItem();
+        if (entity instanceof ServerPlayer player && player.isShiftKeyDown() && stack == main) {
+            this.changeMode(stack);
+        }
+        return false;
+    }
+
+    private void changeMode(ItemStack stack) {
+        CompoundTag compound = new CompoundTag();
+        if (stack.hasTag())
+            compound = stack.getTag();
+        Mode mode = this.getCurrentMode(stack);
+        compound.putInt(ITEM_MODE, (mode.ordinal() + 1) % Mode.values().length);
+        compound.remove(SAVED_ENTITY);
+        compound.remove(ANIMATION_IDX);
+        stack.setTag(compound);
+    }
+
+    private Mode getCurrentMode(ItemStack stack) {
+        return stack.hasTag() ? Mode.values()[stack.getTag().getInt(ITEM_MODE)] : Mode.DEFAULT;
+    }
+
+    private enum Mode {
+
+        DEFAULT("runecraftory.item.creative.tooltip.mode.default"),
+        ANIMATION("runecraftory.item.creative.tooltip.mode.animation");
+
+        private final String translationKey;
+
+        Mode(String translationKey) {
+            this.translationKey = translationKey;
+        }
     }
 }

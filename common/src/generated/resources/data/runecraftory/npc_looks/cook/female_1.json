@@ -149,11 +149,6 @@
         ]
       },
       "expressions": {
-        "angry": {
-          "iris": "",
-          "sclera": "",
-          "eyebrow": "angry"
-        },
         "eyes_closed": {
           "iris": {
             "suffix": "closed",
@@ -164,6 +159,11 @@
             "use_skin_color": true
           },
           "eyebrow": "closed"
+        },
+        "angry": {
+          "iris": "",
+          "sclera": "",
+          "eyebrow": "angry"
         }
       },
       "type": "runecraftory:face_feature"
