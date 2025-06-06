@@ -50,7 +50,7 @@ public class ClientConfig {
             return switch (this) {
                 case TOPLEFT, MIDDLELEFT, BOTTOMLEFT -> componentX;
                 case TOPMIDDLE, MIDDLERIGHT -> (int) (screenWidth * 0.5 - componentWidth * 0.5) + componentX;
-                case TOPRIGHT, BOTTOMRIGHT -> screenWidth - componentWidth + componentX;
+                case TOPRIGHT, BOTTOMRIGHT -> screenWidth - componentWidth - componentX;
             };
         }
 
@@ -58,7 +58,7 @@ public class ClientConfig {
             return switch (this) {
                 case TOPLEFT, TOPMIDDLE, TOPRIGHT -> componentY;
                 case MIDDLELEFT, MIDDLERIGHT -> (int) (screenHeight * 0.5 - componentHeight * 0.5) + componentY;
-                case BOTTOMLEFT, BOTTOMRIGHT -> screenHeight - componentHeight + componentY;
+                case BOTTOMLEFT, BOTTOMRIGHT -> screenHeight - componentHeight - componentY;
             };
         }
     }
