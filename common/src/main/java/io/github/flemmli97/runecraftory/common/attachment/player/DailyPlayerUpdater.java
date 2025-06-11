@@ -27,7 +27,7 @@ public class DailyPlayerUpdater {
     public void tick(ServerPlayer player) {
         if (this.dailyRandomSeed == 0)
             this.dailyRandomSeed = player.getRandom().nextInt();
-        int day = WorldUtils.day(player.level);
+        int day = WorldUtils.day(player.level());
         if (this.lastUpdateDay != day) {
             this.lastUpdateDay = day;
             this.data.getShippingInv().shipItems(player);

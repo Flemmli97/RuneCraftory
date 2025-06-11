@@ -80,11 +80,11 @@ public class TeleportSpell extends Spell {
         AABB oldBox = entity.getBoundingBox();
         entity.teleportTo(x, y, z);
         entity.resetFallDistance();
-        while (!entity.level.noCollision(entity) && entity.getY() < entity.level.getMaxBuildHeight()) {
+        while (!entity.level().noCollision(entity) && entity.getY() < entity.level().getMaxBuildHeight()) {
             entity.setPos(entity.getX(), entity.getY() + 1.0, entity.getZ());
         }
-        entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENDERMAN_TELEPORT, SoundSource.MASTER, 1, 1);
-        if (entity.level instanceof ServerLevel serverLevel)
+        entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENDERMAN_TELEPORT, SoundSource.MASTER, 1, 1);
+        if (entity.level() instanceof ServerLevel serverLevel)
             for (int i = 0; i < 32; ++i) {
                 serverLevel.sendParticles(ParticleTypes.PORTAL, entity.getX(), entity.getY() + serverLevel.random.nextDouble() * 2.0, entity.getZ(), 0, serverLevel.random.nextGaussian(), 0.0, serverLevel.random.nextGaussian(), 1);
             }

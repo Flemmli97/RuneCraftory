@@ -19,7 +19,6 @@ import io.github.flemmli97.runecraftory.common.items.tools.ItemToolHammer;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolSickle;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
-import io.github.flemmli97.runecraftory.common.network.Packet;
 import io.github.flemmli97.runecraftory.common.network.S2CCalendar;
 import io.github.flemmli97.runecraftory.common.network.S2CCapSync;
 import io.github.flemmli97.runecraftory.common.network.S2CDataPackSync;
@@ -45,10 +44,12 @@ import io.github.flemmli97.runecraftory.common.world.family.FamilyHandler;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.mixin.LivingEntityAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
@@ -95,18 +96,17 @@ public class EntityCalls {
     public static void joinPlayer(Player player) {
         if (player instanceof ServerPlayer serverPlayer) {
             for (S2CDataPackSync.SyncedType type : S2CDataPackSync.SyncedType.values())
-                Platform.INSTANCE.sendToClient(new S2CDataPackSync(type), serverPlayer);
-            Platform.INSTANCE.sendToClient(new S2CCalendar(WorldHandler.get(serverPlayer.getServer()).getCalendar()), serverPlayer);
-            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                data.recalculateStats(serverPlayer, false);
-                if (!data.starting) {
-                    data.starting = true;
-                    data.setMaxHealth(player, GeneralConfig.startingHealth, true);
-                    player.setHealth(player.getMaxHealth());
-                }
-            });
+                LoaderNetwork.INSTANCE.sendToPlayer(new S2CDataPackSync(type), serverPlayer);
+            LoaderNetwork.INSTANCE.sendToPlayer(new S2CCalendar(WorldHandler.get(serverPlayer.getServer()).getCalendar()), serverPlayer);
+            PlayerData data = Platform.INSTANCE.getPlayerData(player);
+            data.recalculateStats(false);
+            if (!data.starting) {
+                data.starting = true;
+                data.setMaxHealth(GeneralConfig.startingHealth, true);
+                player.setHealth(player.getMaxHealth());
+            }
             QuestHandler.removeNPCQuestsFor(serverPlayer);
-            Platform.INSTANCE.sendToClient(new S2CSyncConfig(), serverPlayer);
+            LoaderNetwork.INSTANCE.sendToPlayer(new S2CSyncConfig(), serverPlayer);
             FamilyHandler.get(serverPlayer.getServer())
                     .getOrCreateEntry(serverPlayer)
                     .updateName(player);
@@ -117,8 +117,8 @@ public class EntityCalls {
     public static void onResourceReloadEnd(MinecraftServer server) {
         for (S2CDataPackSync.SyncedType type : S2CDataPackSync.SyncedType.values()) {
             DataPackHandler.prepareResync(type);
-            Packet pkt = new S2CDataPackSync(type);
-            Platform.INSTANCE.sendToAll(pkt, server);
+            CustomPacketPayload pkt = new S2CDataPackSync(type);
+            LoaderNetwork.INSTANCE.sendToAll(pkt, server);
         }
     }
 
@@ -128,7 +128,7 @@ public class EntityCalls {
             Set<WorldHandler.UnloadedPartyMember> party = WorldHandler.get(serverPlayer.getServer()).getUnloadedPartyMembersFor(serverPlayer);
             party.forEach(p -> {
                 GlobalPos pos = p.pos();
-                ServerLevel level = serverPlayer.getLevel();
+                ServerLevel level = serverPlayer.serverLevel();
                 if (level.dimension() != p.pos().dimension())
                     level = serverPlayer.getServer().getLevel(pos.dimension());
                 if (level != null)
@@ -138,20 +138,20 @@ public class EntityCalls {
         }));
         //If the party member still got killed somehow remove them here
         Set<UUID> toRemove = WorldHandler.get(serverPlayer.getServer()).removedPartyMembersFor(serverPlayer);
-        Platform.INSTANCE.getPlayerData(serverPlayer)
-                .ifPresent(d -> toRemove.forEach(d.party::removePartyMember));
+        PlayerData data = Platform.INSTANCE.getPlayerData(serverPlayer);
+        toRemove.forEach(data.party::removePartyMember);
         toRemove.clear();
     }
 
     public static void trackEntity(Player player, Entity target) {
         if (player instanceof ServerPlayer serverPlayer && target instanceof LivingEntity living)
-            Platform.INSTANCE.sendToClient(new S2CEntityDataSyncAll(living), serverPlayer);
+            LoaderNetwork.INSTANCE.sendToPlayer(new S2CEntityDataSyncAll(living), serverPlayer);
     }
 
     public static void onLoadEntity(LivingEntity living) {
         if (living instanceof ServerPlayer player) {
             onPlayerLoad(player);
-            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> Platform.INSTANCE.sendToClient(new S2CCapSync(data), player));
+            LoaderNetwork.INSTANCE.sendToPlayer(new S2CCapSync(Platform.INSTANCE.getPlayerData(player)), player);
         }
     }
 
@@ -264,7 +264,7 @@ public class EntityCalls {
     }
 
     public static boolean playerDeath(LivingEntity entity, DamageSource source) {
-        if (!entity.level.isClientSide) {
+        if (!entity.level().isClientSide) {
             if (!source.isBypassInvul()) {
                 ItemStack deathProt = ItemStack.EMPTY;
                 for (ItemStack stack : entity.getAllSlots()) {
@@ -287,7 +287,7 @@ public class EntityCalls {
                     entity.setHealth(entity.getMaxHealth() * 0.33f);
                     entity.removeAllEffects();
                     entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 5, 100));
-                    entity.level.broadcastEntityEvent(entity, (byte) 35);
+                    entity.level().broadcastEntityEvent(entity, (byte) 35);
                     deathProt.shrink(1);
                     return true;
                 }
@@ -356,7 +356,7 @@ public class EntityCalls {
                             if (d.canUseBonemeal()) {
                                 d.applyBonemeal(serverLevel);
                                 stack.shrink(1);
-                                Platform.INSTANCE.sendToAll(new S2CTriggers(S2CTriggers.Type.FERTILIZER, target), level.getServer());
+                                Platform.INSTANCE.sendToAll(new S2CTriggers(S2CTriggers.TriggerType.FERTILIZER, target), level.getServer());
                             }
                         });
                 return true;
@@ -408,7 +408,7 @@ public class EntityCalls {
     }
 
     public static void foodHandling(LivingEntity entity, ItemStack stack) {
-        if (!entity.level.isClientSide) {
+        if (!entity.level().isClientSide) {
             if (entity instanceof IBaseMob mob) {
                 mob.applyFoodEffect(stack);
                 return;

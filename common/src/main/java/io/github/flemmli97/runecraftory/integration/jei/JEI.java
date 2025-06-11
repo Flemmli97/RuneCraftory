@@ -39,7 +39,7 @@ import java.util.stream.Stream;
 @REIPluginCompatIgnore
 public class JEI implements IModPlugin {
 
-    private static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "jei_integration");
+    private static final ResourceLocation ID = RuneCraftory.modRes("jei_integration");
     public static IJeiRuntime JEI_RUNTIME;
 
     @Override

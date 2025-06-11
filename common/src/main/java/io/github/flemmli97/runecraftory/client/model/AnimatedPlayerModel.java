@@ -7,12 +7,9 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.action.AttackActionHandler;
 import io.github.flemmli97.runecraftory.client.TransformationHelper;
 import io.github.flemmli97.runecraftory.mixinhelper.HumanoidMainHand;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.api.entity.IAnimated;
 import io.github.flemmli97.tenshilib.client.AnimationManager;
-import io.github.flemmli97.tenshilib.client.model.BlockBenchAnimations;
 import io.github.flemmli97.tenshilib.client.model.ExtendedModel;
-import io.github.flemmli97.tenshilib.client.model.ModelPartHandler;
+import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -23,14 +20,13 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import org.jetbrains.annotations.Nullable;
 
 public class AnimatedPlayerModel<T extends LivingEntity & IAnimated> extends EntityModel<T> implements ExtendedModel {
 
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(RuneCraftory.MODID, "animated_player"), "main");
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(RuneCraftory.modRes("animated_player"), "main");
 
     protected final ModelPartHandler model;
     protected final ModelPartHandler.ModelPartExtended head;
@@ -46,7 +42,7 @@ public class AnimatedPlayerModel<T extends LivingEntity & IAnimated> extends Ent
     public AnimatedPlayerModel(ModelPart root) {
         super();
         this.model = new ModelPartHandler(root.getChild("Body"), "Body");
-        this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "player"));
+        this.anim = AnimationManager.getInstance().getAnimation(RuneCraftory.modRes("player"));
         this.head = this.model.getPart("Head");
         this.rightArm = this.model.getPart("RightArm");
         this.rightArmItem = this.model.getPart("RightItemRoot");

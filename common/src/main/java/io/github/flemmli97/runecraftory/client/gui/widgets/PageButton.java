@@ -14,7 +14,7 @@ import net.minecraft.util.Mth;
 
 public class PageButton extends Button {
 
-    private static final ResourceLocation TEXTURE_PATH = new ResourceLocation(RuneCraftory.MODID, "textures/gui/bars.png");
+    private static final ResourceLocation TEXTURE_PATH = RuneCraftory.modRes("textures/gui/bars.png");
 
     public PageButton(int x, int y, Component display, OnPress press) {
         super(x, y, 12, 12, display, press);

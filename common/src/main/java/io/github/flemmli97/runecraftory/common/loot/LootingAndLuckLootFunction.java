@@ -82,7 +82,7 @@ public class LootingAndLuckLootFunction extends LootItemConditionalFunction {
         Entity entity = ctx.getParamOrNull(LootContextParams.KILLER_ENTITY);
         if (entity instanceof Player player) {
             return Platform.INSTANCE.getPlayerData(player)
-                    .map(d -> entity.level.getEntities(EntityTypeTest.forClass(LivingEntity.class), entity.getBoundingBox().inflate(64), d.party::isPartyMember))
+                    .map(d -> entity.level().getEntities(EntityTypeTest.forClass(LivingEntity.class), entity.getBoundingBox().inflate(64), d.party::isPartyMember))
                     .orElse(List.of());
         } else if (entity instanceof BaseMonster monster) {
             if (monster.getOwner() != null && Platform.INSTANCE.getPlayerData(monster.getOwner()).map(d -> d.party.isPartyMember(monster)).orElse(false))

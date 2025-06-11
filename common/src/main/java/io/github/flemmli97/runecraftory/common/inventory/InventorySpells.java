@@ -37,7 +37,7 @@ public class InventorySpells extends SaveItemContainer {
     }
 
     public void dropItemsAt(LivingEntity entity) {
-        if (!entity.level.isClientSide) {
+        if (!entity.level().isClientSide) {
             for (ItemStack stack : this.stacks) {
                 if (stack.isEmpty())
                     continue;

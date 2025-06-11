@@ -9,7 +9,6 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.model.misc.ModelEnergyOrb;
 import io.github.flemmli97.runecraftory.client.render.layer.EnergyOrbSwirlLayer;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityHomingEnergyOrb;
-import io.github.flemmli97.tenshilib.client.render.RenderProjectileModel;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -24,7 +23,7 @@ import net.minecraft.world.phys.Vec3;
 
 public class RenderEnergyOrb extends RenderProjectileModel<EntityHomingEnergyOrb> implements RenderLayerParent<EntityHomingEnergyOrb, EntityModel<EntityHomingEnergyOrb>> {
 
-    public static final ResourceLocation TEXTURE = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/energy_orb.png");
+    public static final ResourceLocation TEXTURE = RuneCraftory.modRes("textures/entity/projectile/energy_orb.png");
     private static final RenderType BEAM_RENDER_TYPE = RenderType.entityCutoutNoCull(new ResourceLocation("textures/entity/guardian_beam.png"));
 
     private final EnergyOrbSwirlLayer layer;

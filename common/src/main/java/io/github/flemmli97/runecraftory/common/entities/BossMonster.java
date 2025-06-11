@@ -6,8 +6,7 @@ import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossba
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.spells.TeleportSpell;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.api.entity.IOverlayEntityRender;
+import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;

@@ -10,13 +10,13 @@ import net.minecraft.resources.ResourceLocation;
 public class RenderDeadTree<T extends EntityDeadTree> extends ScaledEntityRenderer<T, ModelDeadTree<T>> {
 
     public RenderDeadTree(EntityRendererProvider.Context ctx, float scale) {
-        super(ctx, new ModelDeadTree<>(ctx.bakeLayer(ModelDeadTree.LAYER_LOCATION)), new ResourceLocation(RuneCraftory.MODID, "textures/entity/monsters/dead_tree.png"), scale, 0.65f * scale);
+        super(ctx, new ModelDeadTree<>(ctx.bakeLayer(ModelDeadTree.LAYER_LOCATION)), RuneCraftory.modRes("textures/entity/monsters/dead_tree.png"), scale, 0.65f * scale);
     }
 
     @Override
     public ResourceLocation getTextureLocation(T entity) {
         if (entity.playDeath() || entity.deathTime > 0 || entity.isSleeping() || EntityData.getSleepStateFrom(entity) != EntityData.SleepState.NONE)
-            return new ResourceLocation(RuneCraftory.MODID, "textures/entity/monsters/dead_tree_sleep.png");
+            return RuneCraftory.modRes("textures/entity/monsters/dead_tree_sleep.png");
         return super.getTextureLocation(entity);
     }
 }

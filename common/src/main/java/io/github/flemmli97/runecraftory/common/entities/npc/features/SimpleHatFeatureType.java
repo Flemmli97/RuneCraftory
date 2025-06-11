@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.entities.npc.features;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeature;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureHolder;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureType;
@@ -15,7 +16,8 @@ import java.util.List;
 public record SimpleHatFeatureType(
         List<String> hats) implements NPCFeatureHolder<SimpleHatFeatureType.SimpleHatFeature> {
 
-    public static final Codec<SimpleHatFeatureType> CODEC = Codec.STRING.listOf().xmap(SimpleHatFeatureType::new, SimpleHatFeatureType::hats);
+    public static final MapCodec<SimpleHatFeatureType> CODEC = Codec.STRING.listOf().fieldOf("hats")
+            .xmap(SimpleHatFeatureType::new, SimpleHatFeatureType::hats);
 
     @Override
     public SimpleHatFeature create(EntityNPCBase npc) {

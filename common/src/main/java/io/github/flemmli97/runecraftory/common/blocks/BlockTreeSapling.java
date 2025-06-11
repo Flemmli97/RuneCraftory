@@ -4,7 +4,6 @@ import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -32,7 +31,7 @@ public class BlockTreeSapling extends BushBlock implements Growable {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(new TranslatableComponent("runecraftory.tooltip.sapling").withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("runecraftory.tooltip.sapling").withStyle(ChatFormatting.GRAY));
         super.appendHoverText(stack, level, tooltip, flag);
     }
 

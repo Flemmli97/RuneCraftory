@@ -13,10 +13,10 @@ import java.util.function.Supplier;
 
 public class WeaponSpell extends Spell {
 
-    private final Supplier<AttackAction> attackAction;
+    private final Supplier<? extends AttackAction> attackAction;
     private final TagKey<Item> weapon;
 
-    public WeaponSpell(Supplier<AttackAction> attackAction, TagKey<Item> weapon) {
+    public WeaponSpell(Supplier<? extends AttackAction> attackAction, TagKey<Item> weapon) {
         this.attackAction = attackAction;
         this.weapon = weapon;
     }

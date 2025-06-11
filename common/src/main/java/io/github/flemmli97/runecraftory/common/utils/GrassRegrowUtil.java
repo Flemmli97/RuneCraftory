@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.utils;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
-import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
+import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.random.Weight;
@@ -53,9 +53,9 @@ public class GrassRegrowUtil {
     private static class HerbEntry implements WeightedEntry {
 
         private final Weight weight;
-        public final RegistryEntrySupplier<Block> sup;
+        public final RegistryEntrySupplier<Block, ?> sup;
 
-        public HerbEntry(int weight, RegistryEntrySupplier<Block> sup) {
+        public HerbEntry(int weight, RegistryEntrySupplier<Block, ?> sup) {
             this.weight = Weight.of(weight);
             this.sup = sup;
         }

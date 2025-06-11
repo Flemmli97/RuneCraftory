@@ -163,7 +163,7 @@ public class GeneralConfigSpec {
         this.silverWateringCanWater = builder.defineInRange("Silver Watering Can Water", GeneralConfig.silverWateringCanWater, 0, Integer.MAX_VALUE);
         this.goldWateringCanWater = builder.defineInRange("Gold Watering Can Water", GeneralConfig.goldWateringCanWater, 0, Integer.MAX_VALUE);
         this.platinumWateringCanWater = builder.defineInRange("Platinum Watering Can Water", GeneralConfig.platinumWateringCanWater, 0, Integer.MAX_VALUE);
-        this.moveSpeedAttack = builder.comment("Move speed reduction when attacking.", "Allowing movement during attack will look janky as the animation will not match player movements!", "Synced to clients").defineInRange("Attack MoveSpeed ", GeneralConfig.moveSpeedAttack.get(), 0, 1);
+        this.moveSpeedAttack = builder.comment("Move speed reduction when attacking.", "Allowing movement during attack will look janky as the animation will not match player movements!", "Synced to clients").defineInRange("Attack MoveSpeed ", GeneralConfig.MOVE_SPEED_ATTACK.get(), 0, 1);
         builder.pop();
         builder.pop();
         builder.registerReloadHandler(() -> ConfigHolder.loadGeneral(this));

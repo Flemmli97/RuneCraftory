@@ -355,7 +355,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         }, i -> DataResult.success(i.gender == Gender.UNDEFINED ? Either.left(i.id()) : Either.right(i)));
 
         public NPCLookId(String namespace, String path) {
-            this(new ResourceLocation(namespace, path));
+            this(ResourceLocation.fromNamespaceAndPath(namespace, path));
         }
 
         public NPCLookId(ResourceLocation id) {

@@ -65,11 +65,11 @@ public class LibAdvancements {
     public static final ResourceLocation SARCOPHAGUS = progression("path_4/sarcophagus");
 
     private static ResourceLocation main(String id) {
-        return new ResourceLocation(RuneCraftory.MODID, "main/" + id);
+        return RuneCraftory.modRes("main/" + id);
     }
 
     private static ResourceLocation progression(String id) {
-        return new ResourceLocation(RuneCraftory.MODID, "progression/" + id);
+        return RuneCraftory.modRes("progression/" + id);
     }
 
     public static EntityPredicate.Builder playerAdvancementCheck(ResourceLocation advancement) {

@@ -14,7 +14,7 @@ import java.util.List;
 
 public class SpeechBubble extends GuiComponent implements Widget {
 
-    protected static final ResourceLocation TEX = new ResourceLocation(RuneCraftory.MODID, "textures/gui/bars.png");
+    protected static final ResourceLocation TEX = RuneCraftory.modRes("textures/gui/bars.png");
 
     private final Minecraft mc;
     private final int x;

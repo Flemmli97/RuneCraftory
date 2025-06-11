@@ -6,8 +6,8 @@ import io.github.flemmli97.runecraftory.api.registry.NPCAction;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCAttackGoal;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCActions;
-import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -15,7 +15,7 @@ import java.util.function.Supplier;
 public class RunToLeadAction implements NPCAction {
 
     public static final Codec<RunToLeadAction> CODEC = RecordCodecBuilder.create((instance) ->
-            instance.group(CodecHelper.NUMER_PROVIDER_CODEC.fieldOf("duration").forGetter(d -> d.duration),
+            instance.group(NumberProviders.CODEC.fieldOf("duration").forGetter(d -> d.duration),
                     NPCAction.optionalNumCooldown(d -> d.cooldown)
             ).apply(instance, RunToLeadAction::new));
 
@@ -37,7 +37,7 @@ public class RunToLeadAction implements NPCAction {
     }
 
     @Override
-    public Supplier<NPCActionCodec> codec() {
+    public Supplier<Codec<RunToLeadAction>> codec() {
         return ModNPCActions.RUN_TO_LEADER;
     }
 

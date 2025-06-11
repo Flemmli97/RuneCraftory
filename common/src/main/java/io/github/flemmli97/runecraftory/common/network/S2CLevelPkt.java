@@ -1,17 +1,34 @@
 package io.github.flemmli97.runecraftory.common.network;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.attachment.player.LevelExpPair;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.entity.player.Player;
 
-public class S2CLevelPkt implements Packet {
+public class S2CLevelPkt implements CustomPacketPayload {
 
-    public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "s2c_level");
+    public static final CustomPacketPayload.Type<S2CLevelPkt> TYPE = new CustomPacketPayload.Type<>(RuneCraftory.modRes("s2c_level"));
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, S2CLevelPkt> STREAM_CODEC = new StreamCodec<>() {
+        @Override
+        public S2CLevelPkt decode(RegistryFriendlyByteBuf buf) {
+            return new S2CLevelPkt(new LevelExpPair(buf), buf.readInt(), buf.readFloat(), buf.readFloat(), buf.readFloat(), buf.readFloat());
+        }
+
+        @Override
+        public void encode(RegistryFriendlyByteBuf buf, S2CLevelPkt pkt) {
+            pkt.level.toPacket(buf);
+            buf.writeInt(pkt.rp);
+            buf.writeFloat(pkt.rpMax);
+            buf.writeFloat(pkt.str);
+            buf.writeFloat(pkt.intel);
+            buf.writeFloat(pkt.vit);
+        }
+    };
 
     private final LevelExpPair level;
     private final int rp;
@@ -38,37 +55,19 @@ public class S2CLevelPkt implements Packet {
         this.vit = data.getVit();
     }
 
-    public static S2CLevelPkt read(FriendlyByteBuf buf) {
-        return new S2CLevelPkt(new LevelExpPair(buf), buf.readInt(), buf.readFloat(), buf.readFloat(), buf.readFloat(), buf.readFloat());
-    }
-
-    public static void handle(S2CLevelPkt pkt) {
-        Player player = ClientHandlers.getPlayer();
-        if (player == null)
-            return;
-        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-            data.getPlayerLevel().from(pkt.level);
-            data.setRunePoints(player, pkt.rp);
-            data.setMaxRunePoints(player, pkt.rpMax);
-            data.setStr(player, pkt.str);
-            data.setIntel(player, pkt.intel);
-            data.setVit(player, pkt.vit);
-        });
+    public static void handle(S2CLevelPkt pkt, Player player) {
+        PlayerData data = Platform.INSTANCE.getPlayerData(player);
+        data.getPlayerLevel().from(pkt.level);
+        data.setRunePoints(pkt.rp);
+        data.setMaxRunePoints(pkt.rpMax);
+        data.setStr(pkt.str);
+        data.setIntel(pkt.intel);
+        data.setVit(pkt.vit);
     }
 
     @Override
-    public void write(FriendlyByteBuf buf) {
-        this.level.toPacket(buf);
-        buf.writeInt(this.rp);
-        buf.writeFloat(this.rpMax);
-        buf.writeFloat(this.str);
-        buf.writeFloat(this.intel);
-        buf.writeFloat(this.vit);
-    }
-
-    @Override
-    public ResourceLocation getID() {
-        return ID;
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 
 }

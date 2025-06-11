@@ -6,12 +6,10 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.client.model.SittingModel;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityHornet;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.client.AnimationManager;
-import io.github.flemmli97.tenshilib.client.model.BlockBenchAnimations;
 import io.github.flemmli97.tenshilib.client.model.ExtendedModel;
-import io.github.flemmli97.tenshilib.client.model.ModelPartHandler;
 import io.github.flemmli97.tenshilib.client.model.RideableModel;
+import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.IllagerModel;
@@ -25,12 +23,11 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
 public class ModelHornet<T extends EntityHornet> extends EntityModel<T> implements ExtendedModel, RideableModel<T> {
 
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(RuneCraftory.MODID, "hornet"), "main");
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(RuneCraftory.modRes("hornet"), "main");
 
     protected final ModelPartHandler model;
     protected final BlockBenchAnimations anim;
@@ -41,7 +38,7 @@ public class ModelHornet<T extends EntityHornet> extends EntityModel<T> implemen
     public ModelHornet(ModelPart root) {
         super();
         this.model = new ModelPartHandler(root, "root");
-        this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "hornet"));
+        this.anim = AnimationManager.getInstance().getAnimation(RuneCraftory.modRes("hornet"));
         this.body = this.model.getPart("body");
         this.ridingPosition = this.model.getPart("ridingPos");
     }

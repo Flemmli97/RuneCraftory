@@ -7,9 +7,7 @@ import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.client.model.SittingModel;
 import io.github.flemmli97.runecraftory.common.entities.monster.wisp.EntityWispBase;
 import io.github.flemmli97.tenshilib.client.AnimationManager;
-import io.github.flemmli97.tenshilib.client.model.BlockBenchAnimations;
 import io.github.flemmli97.tenshilib.client.model.ExtendedModel;
-import io.github.flemmli97.tenshilib.client.model.ModelPartHandler;
 import io.github.flemmli97.tenshilib.client.model.RideableModel;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
@@ -26,12 +24,11 @@ import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
 public class ModelWisp<T extends EntityWispBase> extends EntityModel<T> implements ExtendedModel, RideableModel<T> {
 
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(RuneCraftory.MODID, "wisp"), "main");
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(RuneCraftory.modRes("wisp"), "main");
 
     protected final ModelPartHandler model;
     protected final BlockBenchAnimations anim;
@@ -42,7 +39,7 @@ public class ModelWisp<T extends EntityWispBase> extends EntityModel<T> implemen
     public ModelWisp(ModelPart root) {
         super(RenderType::entityTranslucentCull);
         this.model = new ModelPartHandler(root, "main");
-        this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "wisp"));
+        this.anim = AnimationManager.getInstance().getAnimation(RuneCraftory.modRes("wisp"));
         this.main = this.model.getPart("main");
         this.ridingPosition = this.model.getPart("ridingPos");
     }

@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.utils;
 
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
@@ -18,15 +19,18 @@ import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import io.github.flemmli97.tenshilib.api.item.IAOEWeapon;
-import io.github.flemmli97.tenshilib.common.utils.OrientedBoundingBox;
-import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
+import io.github.flemmli97.tenshilib.common.item.AOEWeapon;
+import io.github.flemmli97.tenshilib.common.utils.HitResultUtils;
+import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionHand;
@@ -55,25 +59,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import java.util.UUID;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class CombatUtils {
 
-    private static final UUID TEMP_ATTRIBUTE_MOD = UUID.fromString("5c8e5c2d-1eb0-434a-858f-8ab81f51832c");
-    private static final UUID TEMP_ATTRIBUTE_MOD_MULT = UUID.fromString("e2465d35-6c65-4ec8-a13c-a305a9d34c66");
+    private static final ResourceLocation TEMP_ATTRIBUTE_MOD = RuneCraftory.modRes("combat_temp_mod");
+    private static final ResourceLocation TEMP_ATTRIBUTE_MOD_MULT = RuneCraftory.modRes("combat_temp_mod_multiply");
 
     /**
      * For damage calculation target should be null. The damage reduction gets done at the target.
      */
-    public static double getAttributeValue(Entity entity, Attribute att) {
+    public static double getAttributeValue(Entity entity, Holder<Attribute> att) {
         if (!(entity instanceof LivingEntity attacker))
             return 0;
         double increase = 0;
         if (attacker instanceof Player player) {
-            increase += Platform.INSTANCE.getPlayerData(player).map(cap -> cap.getAttributeValue((Player) attacker, att)).orElse(0d);
+            increase += Platform.INSTANCE.getPlayerData(player).getAttributeValue(att);
         } else if (attacker.getAttribute(att) != null) {
             increase += attacker.getAttributeValue(att);
         }
@@ -82,63 +85,63 @@ public class CombatUtils {
         return inc + restRound;
     }
 
-    public static Attribute opposing(Attribute att) {
-        if (att == ModAttributes.PARA.get())
-            return ModAttributes.RES_PARA.get();
-        if (att == ModAttributes.POISON.get())
-            return ModAttributes.RES_POISON.get();
-        if (att == ModAttributes.SEAL.get())
-            return ModAttributes.RES_SEAL.get();
-        if (att == ModAttributes.SLEEP.get())
-            return ModAttributes.RES_SLEEP.get();
-        if (att == ModAttributes.FATIGUE.get())
-            return ModAttributes.RES_FAT.get();
-        if (att == ModAttributes.COLD.get())
-            return ModAttributes.RES_COLD.get();
-        if (att == ModAttributes.DIZZY.get())
-            return ModAttributes.RES_DIZZY.get();
-        if (att == ModAttributes.CRIT.get())
-            return ModAttributes.RES_CRIT.get();
-        if (att == ModAttributes.STUN.get())
-            return ModAttributes.RES_STUN.get();
-        if (att == ModAttributes.FAINT.get())
-            return ModAttributes.RES_FAINT.get();
-        if (att == ModAttributes.DRAIN.get())
-            return ModAttributes.RES_DRAIN.get();
+    public static Holder<Attribute> opposing(Holder<Attribute> att) {
+        if (att.is(ModAttributes.PARA.getID()))
+            return ModAttributes.RES_PARA.asHolder();
+        if (att.is(ModAttributes.POISON.getID()))
+            return ModAttributes.RES_POISON.asHolder();
+        if (att.is(ModAttributes.SEAL.getID()))
+            return ModAttributes.RES_SEAL.asHolder();
+        if (att.is(ModAttributes.SLEEP.getID()))
+            return ModAttributes.RES_SLEEP.asHolder();
+        if (att.is(ModAttributes.FATIGUE.getID()))
+            return ModAttributes.RES_FAT.asHolder();
+        if (att.is(ModAttributes.COLD.getID()))
+            return ModAttributes.RES_COLD.asHolder();
+        if (att.is(ModAttributes.DIZZY.getID()))
+            return ModAttributes.RES_DIZZY.asHolder();
+        if (att.is(ModAttributes.CRIT.getID()))
+            return ModAttributes.RES_CRIT.asHolder();
+        if (att.is(ModAttributes.STUN.getID()))
+            return ModAttributes.RES_STUN.asHolder();
+        if (att.is(ModAttributes.FAINT.getID()))
+            return ModAttributes.RES_FAINT.asHolder();
+        if (att.is(ModAttributes.DRAIN.getID()))
+            return ModAttributes.RES_DRAIN.asHolder();
         return null;
     }
 
-    public static EnumSkills matchingSkill(Attribute att) {
-        if (att == ModAttributes.PARA.get())
+    public static EnumSkills matchingSkill(Holder<Attribute> att) {
+        if (att.is(ModAttributes.PARA.getID()))
             return EnumSkills.RES_PARA;
-        if (att == ModAttributes.POISON.get())
+        if (att.is(ModAttributes.POISON.getID()))
             return EnumSkills.RES_POISON;
-        if (att == ModAttributes.SEAL.get())
+        if (att.is(ModAttributes.SEAL.getID()))
             return EnumSkills.RES_SEAL;
-        if (att == ModAttributes.SLEEP.get())
+        if (att.is(ModAttributes.SLEEP.getID()))
             return EnumSkills.RES_SLEEP;
-        if (att == ModAttributes.FATIGUE.get())
+        if (att.is(ModAttributes.FATIGUE.getID()))
             return EnumSkills.RES_FATIGUE;
-        if (att == ModAttributes.COLD.get())
+        if (att.is(ModAttributes.COLD.getID()))
             return EnumSkills.RES_COLD;
         return null;
     }
 
-    public static double statusEffectValue(LivingEntity entity, Attribute att, Entity target) {
+    public static double statusEffectValue(LivingEntity entity, Holder<Attribute> att, Entity target) {
         double value = getAttributeValue(entity, att) * 0.01;
-        Attribute opposing = opposing(att);
+        Holder<Attribute> opposing = opposing(att);
         double res = target instanceof LivingEntity livingTarget && opposing != null ? getAttributeValue(livingTarget, opposing) : 0;
         if (target instanceof Player player) {
             EnumSkills matchingSkill = matchingSkill(att);
             if (matchingSkill != null)
-                res += Platform.INSTANCE.getPlayerData(player).map(d -> d.getSkillLevel(matchingSkill).getLevel() * 0.005).orElse(0d);
+                res += Platform.INSTANCE.getPlayerData(player).getSkillLevel(matchingSkill).getLevel() * 0.005;
         }
         res *= 0.01;
         return value * (1 - res);
     }
 
     public static float reduceDamageFromStats(LivingEntity entity, DamageSource source, float amount) {
-        if (ArmorEffect.hasArmorEffect(entity, ModArmorEffects.SHIELD_RING.get()) && entity.getRandom().nextFloat() < 0.1)
+        if (ArmorEffect.hasArmorEffect(entity, ModArmorEffects.SHIELD_RING.asHolder()) && entity.getRandom().nextFloat() < 0.1)
             return 1;
         float reduce = 0;
         boolean ignoreDefence = switch (GeneralConfig.defenceSystem) {
@@ -151,18 +154,18 @@ public class CombatUtils {
                     !(source instanceof CustomDamage) && (entity instanceof Player || source.getEntity() instanceof Player);
         };
         if (!ignoreDefence) {
-            if (source.isMagic()) {
-                if (!source.isBypassMagic())
-                    reduce = (float) getAttributeValue(entity, ModAttributes.MAGIC_DEFENCE.get());
-            } else if (!source.isBypassArmor()) {
-                reduce = (float) getAttributeValue(entity, ModAttributes.DEFENCE.get());
+            if (source.is(RunecraftoryTags.IS_MAGIC)) {
+                if (!source.is(RunecraftoryTags.BYPASS_MAGIC))
+                    reduce = (float) getAttributeValue(entity, ModAttributes.MAGIC_DEFENCE.asHolder());
+            } else if (!source.is(DamageTypeTags.BYPASSES_ARMOR)) {
+                reduce = (float) getAttributeValue(entity, ModAttributes.DEFENCE.asHolder());
             }
         }
         float dmg = amount - reduce;
         if (reduce > amount * 0.8)
             dmg = (float) Math.max(0.05 * amount, amount * 0.2 * Math.pow(0.997, reduce - amount * 0.8));
         if (source instanceof CustomDamage custom && GeneralConfig.randomDamage && !custom.fixedDamage()) {
-            dmg += entity.level.random.nextGaussian() * dmg / 10.0;
+            dmg += entity.level().random.nextGaussian() * dmg / 10.0;
         }
         return elementalReduction(entity, source, dmg);
     }
@@ -173,25 +176,25 @@ public class CombatUtils {
             double percent = 0;
             switch (element) {
                 case DARK:
-                    percent = getAttributeValue(entity, ModAttributes.RES_DARK.get());
+                    percent = getAttributeValue(entity, ModAttributes.RES_DARK.asHolder());
                     break;
                 case EARTH:
-                    percent = getAttributeValue(entity, ModAttributes.RES_EARTH.get());
+                    percent = getAttributeValue(entity, ModAttributes.RES_EARTH.asHolder());
                     break;
                 case FIRE:
-                    percent = getAttributeValue(entity, ModAttributes.RES_FIRE.get());
+                    percent = getAttributeValue(entity, ModAttributes.RES_FIRE.asHolder());
                     break;
                 case LIGHT:
-                    percent = getAttributeValue(entity, ModAttributes.RES_LIGHT.get());
+                    percent = getAttributeValue(entity, ModAttributes.RES_LIGHT.asHolder());
                     break;
                 case LOVE:
-                    percent = getAttributeValue(entity, ModAttributes.RES_LOVE.get());
+                    percent = getAttributeValue(entity, ModAttributes.RES_LOVE.asHolder());
                     break;
                 case WATER:
-                    percent = getAttributeValue(entity, ModAttributes.RES_WATER.get());
+                    percent = getAttributeValue(entity, ModAttributes.RES_WATER.asHolder());
                     break;
                 case WIND:
-                    percent = getAttributeValue(entity, ModAttributes.RES_WIND.get());
+                    percent = getAttributeValue(entity, ModAttributes.RES_WIND.asHolder());
                     break;
                 case NONE:
                     break;
@@ -257,7 +260,7 @@ public class CombatUtils {
                 mot = mot.scale(0.5).add(xRatio / f * strength, 0, zRatio / f * strength);
             }
             if (source.getKnockBackType() != CustomDamage.KnockBackType.UP) {
-                if (entity.isOnGround()) {
+                if (entity.onGround()) {
                     y /= 2.0;
                     y += strength;
                     if (y > 0.4000000059604645) {
@@ -292,23 +295,23 @@ public class CombatUtils {
                     player.getCooldowns().addCooldown(stack.getItem(), Mth.ceil(20 * ItemNBT.attackSpeedModifier(player)));
                     playSound = true;
                 }
-                boolean faintChance = player.level.random.nextDouble() < statusEffectValue(player, ModAttributes.FAINT.get(), target);
-                boolean critChance = player.level.random.nextDouble() < statusEffectValue(player, ModAttributes.CRIT.get(), target);
-                CustomDamage.DamageType damageType = CustomDamage.DamageType.NORMAL;
+                boolean faintChance = player.level().random.nextDouble() < statusEffectValue(player, ModAttributes.FAINT.asHolder(), target);
+                boolean critChance = player.level().random.nextDouble() < statusEffectValue(player, ModAttributes.CRIT.asHolder(), target);
+                CustomDamage.DamageCategory damageCategory = CustomDamage.DamageCategory.NORMAL;
                 if (faintChance)
-                    damageType = CustomDamage.DamageType.FAINT;
+                    damageCategory = CustomDamage.DamageCategory.FAINT;
                 else if (critChance)
-                    damageType = CustomDamage.DamageType.IGNOREDEF;
+                    damageCategory = CustomDamage.DamageCategory.IGNOREDEF;
 
-                double knockbackAtt = statusEffectValue(player, ModAttributes.KNOCK.get(), target);
+                double knockbackAtt = statusEffectValue(player, ModAttributes.KNOCK.asHolder(), target);
                 int i = player.isSprinting() ? 1 : 0;
-                i += EnchantmentHelper.getKnockbackBonus(player);
+                i += EnchantmentHelper.modifyKnockback(player.level(), stack, i);
                 float knockback = (float) (i * 0.5f + knockbackAtt * 3);
                 if (ItemNBT.doesFixedOneDamage(stack)) {
-                    damageType = CustomDamage.DamageType.FIXED;
+                    damageCategory = CustomDamage.DamageCategory.FIXED;
                     damagePhys = 1;
                 }
-                CustomDamage.Builder source = new CustomDamage.Builder(player).element(ItemNBT.getElement(stack)).damageType(damageType).knock(CustomDamage.KnockBackType.VANILLA)
+                CustomDamage.Builder source = new CustomDamage.Builder(player).element(ItemNBT.getElement(stack)).damageType(damageCategory).knock(CustomDamage.KnockBackType.VANILLA)
                         .knockAmount(knockback).hurtResistant(0);
                 Vec3 targetMot = target.getDeltaMovement();
                 if (damageWithFaintAndCrit(player, target, source, damagePhys, stack)) {
@@ -326,17 +329,17 @@ public class CombatUtils {
                     }
                     if (critChance) {
                         if (playSound) {
-                            player.level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_CRIT, player.getSoundSource(), 1.0f, 1.0f);
+                            player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_CRIT, player.getSoundSource(), 1.0f, 1.0f);
                         }
                         player.crit(target);
                         player.magicCrit(target);
-                    } else if (stack.getItem() instanceof IAOEWeapon aoe && aoe.getWidth(player, stack) == 0.0f && playSound) {
-                        player.level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, player.getSoundSource(), 1.0f, 1.0f);
+                    } else if (stack.getItem() instanceof AOEWeapon aoe && aoe.getWidth(player, stack) == 0.0f && playSound) {
+                        player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, player.getSoundSource(), 1.0f, 1.0f);
                     } else if (playSound) {
-                        player.level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, player.getSoundSource(), 1.0f, 1.0f);
+                        player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, player.getSoundSource(), 1.0f, 1.0f);
                     }
                 } else if (playSound) {
-                    player.level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_NODAMAGE, player.getSoundSource(), 1.0f, 1.0f);
+                    player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_NODAMAGE, player.getSoundSource(), 1.0f, 1.0f);
                 }
                 return true;
             }
@@ -353,17 +356,17 @@ public class CombatUtils {
     public static boolean mobAttack(LivingEntity attacker, Entity target, CustomDamage.Builder source) {
         ItemStack stack = attacker.getMainHandItem();
         double damagePhys = getAttributeValue(attacker, Attributes.ATTACK_DAMAGE);
-        if (attacker.level instanceof ServerLevel serverLevel)
+        if (attacker.level() instanceof ServerLevel serverLevel)
             ModSpells.STAFF_CAST.get().use(serverLevel, attacker, stack);
         if (ItemNBT.doesFixedOneDamage(stack)) {
-            source.damageType(CustomDamage.DamageType.FIXED);
+            source.damageType(CustomDamage.DamageCategory.FIXED);
             damagePhys = 1;
         }
         return mobAttack(attacker, target, source, damagePhys);
     }
 
     public static boolean mobAttack(LivingEntity attacker, Entity target, CustomDamage.Builder source, double dmg) {
-        if (target.level.getDifficulty() == Difficulty.PEACEFUL && target instanceof Player)
+        if (target.level().getDifficulty() == Difficulty.PEACEFUL && target instanceof Player)
             return false;
         if (dmg > 0) {
             if (attacker instanceof ElementalAttackMob mob) {
@@ -384,16 +387,16 @@ public class CombatUtils {
         // Setup some more things
         if (attacker instanceof LivingEntity livingAttacker) {
             builder.getAttributesChanges().forEach((att, val) -> CombatUtils.applyTempAttribute(livingAttacker, att, val));
-            if (allowFaint && livingAttacker.level.random.nextDouble() < statusEffectValue(livingAttacker, ModAttributes.FAINT.get(), target)) {
-                builder.damageType(CustomDamage.DamageType.FAINT);
-            } else if (allowCrit && livingAttacker.level.random.nextDouble() < statusEffectValue(livingAttacker, ModAttributes.CRIT.get(), target)) {
+            if (allowFaint && livingAttacker.level().random.nextDouble() < statusEffectValue(livingAttacker, ModAttributes.FAINT.asHolder(), target)) {
+                builder.damageType(CustomDamage.DamageCategory.FAINT);
+            } else if (allowCrit && livingAttacker.level().random.nextDouble() < statusEffectValue(livingAttacker, ModAttributes.CRIT.asHolder(), target)) {
                 switch (builder.getDamageType()) {
-                    case MAGIC -> builder.damageType(CustomDamage.DamageType.IGNOREMAGICDEF);
-                    case NORMAL -> builder.damageType(CustomDamage.DamageType.IGNOREDEF);
+                    case MAGIC -> builder.damageType(CustomDamage.DamageCategory.IGNOREMAGICDEF);
+                    case NORMAL -> builder.damageType(CustomDamage.DamageCategory.IGNOREDEF);
                 }
             }
             if (builder.calculateKnockback()) {
-                double knockbackAtt = statusEffectValue(livingAttacker, ModAttributes.KNOCK.get(), target);
+                double knockbackAtt = statusEffectValue(livingAttacker, ModAttributes.KNOCK.asHolder(), target);
                 int i = livingAttacker.isSprinting() ? 1 : 0;
                 i += EnchantmentHelper.getKnockbackBonus(livingAttacker);
                 float knockback = (float) (i * 0.5f + knockbackAtt * 3);
@@ -447,7 +450,7 @@ public class CombatUtils {
     public static void elementalEffects(Entity attacker, EnumElement element, Entity target) {
         if (!(target instanceof IBaseMob) && !(target instanceof Player)) {
             switch (element) {
-                case FIRE -> target.setSecondsOnFire(3);
+                case FIRE -> target.igniteForSeconds(3);
                 case DARK -> {
                     if (target instanceof LivingEntity living)
                         living.addEffect(new MobEffectInstance(MobEffects.WITHER, 200));
@@ -465,66 +468,66 @@ public class CombatUtils {
     }
 
     public static void applyStatusEffects(LivingEntity attackingEntity, LivingEntity target) {
-        boolean poisonChance = attackingEntity.level.random.nextDouble() < statusEffectValue(attackingEntity, ModAttributes.POISON.get(), target);
-        boolean sleepChance = attackingEntity.level.random.nextDouble() < statusEffectValue(attackingEntity, ModAttributes.SLEEP.get(), target);
-        boolean fatigueChance = attackingEntity.level.random.nextDouble() < statusEffectValue(attackingEntity, ModAttributes.FATIGUE.get(), target);
-        boolean coldChance = attackingEntity.level.random.nextDouble() < statusEffectValue(attackingEntity, ModAttributes.COLD.get(), target);
-        boolean paraChance = attackingEntity.level.random.nextDouble() < statusEffectValue(attackingEntity, ModAttributes.PARA.get(), target);
-        boolean sealChance = attackingEntity.level.random.nextDouble() < statusEffectValue(attackingEntity, ModAttributes.SEAL.get(), target);
-        boolean dizzyChance = attackingEntity.level.random.nextDouble() < statusEffectValue(attackingEntity, ModAttributes.DIZZY.get(), target);
-        double stunAmount = statusEffectValue(attackingEntity, ModAttributes.STUN.get(), target);
+        boolean poisonChance = attackingEntity.level().random.nextDouble() < statusEffectValue(attackingEntity, ModAttributes.POISON.asHolder(), target);
+        boolean sleepChance = attackingEntity.level().random.nextDouble() < statusEffectValue(attackingEntity, ModAttributes.SLEEP.asHolder(), target);
+        boolean fatigueChance = attackingEntity.level().random.nextDouble() < statusEffectValue(attackingEntity, ModAttributes.FATIGUE.asHolder(), target);
+        boolean coldChance = attackingEntity.level().random.nextDouble() < statusEffectValue(attackingEntity, ModAttributes.COLD.asHolder(), target);
+        boolean paraChance = attackingEntity.level().random.nextDouble() < statusEffectValue(attackingEntity, ModAttributes.PARA.asHolder(), target);
+        boolean sealChance = attackingEntity.level().random.nextDouble() < statusEffectValue(attackingEntity, ModAttributes.SEAL.asHolder(), target);
+        boolean dizzyChance = attackingEntity.level().random.nextDouble() < statusEffectValue(attackingEntity, ModAttributes.DIZZY.asHolder(), target);
+        double stunAmount = statusEffectValue(attackingEntity, ModAttributes.STUN.asHolder(), target);
         if (poisonChance) {
             EntityUtils.applyPermanentEffect(target, ModEffects.POISON.get(), 0);
             if (attackingEntity instanceof ServerPlayer player)
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RES_POISON, 5));
+                LevelCalc.levelSkill(player, Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_POISON, 5);
             if (target instanceof ServerPlayer player)
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RES_POISON, 15));
+                LevelCalc.levelSkill(player, Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_POISON, 15);
         }
         if (fatigueChance) {
             EntityUtils.applyPermanentEffect(target, ModEffects.FATIGUE.get(), 0);
             if (attackingEntity instanceof ServerPlayer player)
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RES_FATIGUE, 5));
+                LevelCalc.levelSkill(player, Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_FATIGUE, 5);
             if (target instanceof ServerPlayer player)
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RES_FATIGUE, 15));
+                LevelCalc.levelSkill(player, Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_FATIGUE, 15);
         }
         if (coldChance) {
             EntityUtils.applyPermanentEffect(target, ModEffects.COLD.get(), 0);
             if (attackingEntity instanceof ServerPlayer player)
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RES_COLD, 5));
+                LevelCalc.levelSkill(player, Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_COLD, 5);
             if (target instanceof ServerPlayer player)
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RES_COLD, 15));
+                LevelCalc.levelSkill(player, Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_COLD, 15);
         }
         if (paraChance) {
             EntityUtils.applyPermanentEffect(target, ModEffects.PARALYSIS.get(), 0);
             if (attackingEntity instanceof ServerPlayer player)
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RES_PARA, 5));
+                LevelCalc.levelSkill(player, Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_PARA, 5);
             if (target instanceof ServerPlayer player)
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RES_PARA, 15));
+                LevelCalc.levelSkill(player, Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_PARA, 15);
         }
         if (sealChance) {
             EntityUtils.applyPermanentEffect(target, ModEffects.SEAL.get(), 0);
             if (attackingEntity instanceof ServerPlayer player)
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RES_SEAL, 5));
+                LevelCalc.levelSkill(player, Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_SEAL, 5);
             if (target instanceof ServerPlayer player)
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RES_SEAL, 15));
+                LevelCalc.levelSkill(player, Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_SEAL, 15);
         }
         if (dizzyChance) {
             target.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 80, 1, true, false));
         }
-        if (stunAmount > 0.1 && attackingEntity.level.random.nextDouble() < stunAmount) {
-            target.addEffect(new MobEffectInstance(ModEffects.STUNNED.get(), Mth.floor(Math.min(1, stunAmount) * 50), 0, true, false));
+        if (stunAmount > 0.1 && attackingEntity.level().random.nextDouble() < stunAmount) {
+            target.addEffect(new MobEffectInstance(ModEffects.STUNNED.asHolder(), Mth.floor(Math.min(1, stunAmount) * 50), 0, true, false));
         }
         if (sleepChance) {
-            target.addEffect(new MobEffectInstance(ModEffects.SLEEP.get(), 80, 0, true, false));
+            target.addEffect(new MobEffectInstance(ModEffects.SLEEP.asHolder(), 80, 0, true, false));
             if (attackingEntity instanceof ServerPlayer player)
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RES_SLEEP, 5));
+                LevelCalc.levelSkill(player, Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_SLEEP, 5);
             if (target instanceof ServerPlayer player)
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RES_SLEEP, 15));
+                LevelCalc.levelSkill(player, Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_SLEEP, 15);
         }
     }
 
     public static void spawnElementalParticle(Entity target, EnumElement element) {
-        if (target.level instanceof ServerLevel serverLevel) {
+        if (target.level() instanceof ServerLevel serverLevel) {
             int color = 0xFFFFFF;
             switch (element) {
                 case DARK -> color = 0x1B133F;
@@ -547,19 +550,19 @@ public class CombatUtils {
         }
     }
 
-    public static void applyTempAttribute(LivingEntity entity, Attribute att, double val) {
+    public static void applyTempAttribute(LivingEntity entity, Holder<Attribute> att, double val) {
         AttributeInstance inst = entity.getAttribute(att);
         if (inst != null && inst.getModifier(TEMP_ATTRIBUTE_MOD) == null)
-            inst.addTransientModifier(new AttributeModifier(TEMP_ATTRIBUTE_MOD, "temp_mod", val, AttributeModifier.Operation.ADDITION));
+            inst.addTransientModifier(new AttributeModifier(TEMP_ATTRIBUTE_MOD, val, AttributeModifier.Operation.ADD_VALUE));
     }
 
-    public static void applyTempAttributeMult(LivingEntity entity, Attribute att, double val) {
+    public static void applyTempAttributeMult(LivingEntity entity, Holder<Attribute> att, double val) {
         AttributeInstance inst = entity.getAttribute(att);
         if (inst != null && inst.getModifier(TEMP_ATTRIBUTE_MOD_MULT) == null)
-            inst.addTransientModifier(new AttributeModifier(TEMP_ATTRIBUTE_MOD_MULT, "temp_mod_mult", (val - 1), AttributeModifier.Operation.MULTIPLY_TOTAL));
+            inst.addTransientModifier(new AttributeModifier(TEMP_ATTRIBUTE_MOD_MULT, (val - 1), AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
     }
 
-    public static void removeTempAttribute(LivingEntity entity, Attribute att) {
+    public static void removeTempAttribute(LivingEntity entity, Holder<Attribute> att) {
         AttributeInstance inst = entity.getAttribute(att);
         if (inst != null) {
             inst.removeModifier(TEMP_ATTRIBUTE_MOD);
@@ -568,9 +571,7 @@ public class CombatUtils {
     }
 
     public static void hitEntityWithItemPlayer(ServerPlayer player, ItemStack stack) {
-        PlayerData data = Platform.INSTANCE.getPlayerData(player).orElse(null);
-        if (data == null)
-            return;
+        PlayerData data = Platform.INSTANCE.getPlayerData(player);
         //Weapons
         if (stack.getItem() instanceof ItemStaffBase) {
             switch (ItemNBT.getElement(stack)) {
@@ -612,11 +613,11 @@ public class CombatUtils {
     }
 
     public static double getRange(LivingEntity entity, double bonus) {
-        return (EntityUtils.tryGetAttribute(entity, ModAttributes.ATTACK_RANGE.get()) + bonus);
+        return (EntityUtils.tryGetAttribute(entity, ModAttributes.ATTACK_RANGE.asHolder()) + bonus);
     }
 
     public static double getWidth(LivingEntity entity, double bonus) {
-        return (EntityUtils.tryGetAttribute(entity, ModAttributes.ATTACK_WIDTH.get()) + bonus);
+        return (EntityUtils.tryGetAttribute(entity, ModAttributes.ATTACK_WIDTH.asHolder()) + bonus);
     }
 
     public static int getSpellLevelFromStack(ItemStack stack) {
@@ -651,15 +652,15 @@ public class CombatUtils {
     public static boolean canPerform(LivingEntity entity, EnumSkills skill, int requiredLvl) {
         if (!(entity instanceof Player player))
             return false;
-        return player.isCreative() || Platform.INSTANCE.getPlayerData(player).map(d -> d.getSkillLevel(skill).getLevel() >= requiredLvl).orElse(false);
+        return player.isCreative() || Platform.INSTANCE.getPlayerData(player).getSkillLevel(skill).getLevel() >= requiredLvl;
     }
 
     public static class EntityAttack {
 
         private final LivingEntity attacker;
         private Predicate<LivingEntity> targetPred;
-        private final Map<Attribute, Double> bonusAttributes = new HashMap<>();
-        private final Map<Attribute, Double> bonusAttributesMultiplier = new HashMap<>();
+        private final Map<Holder<Attribute>, Double> bonusAttributes = new HashMap<>();
+        private final Map<Holder<Attribute>, Double> bonusAttributesMultiplier = new HashMap<>();
 
         private Consumer<LivingEntity> onSuccess;
 
@@ -693,7 +694,7 @@ public class CombatUtils {
                 for (int steps = 0; steps <= rotationSteps; steps++) {
                     float yRot = minYRot + inc * steps;
                     OrientedBoundingBox obb = new OrientedBoundingBox(aabb, yRot, xRot == null ? 0 : xRot.get((float) steps / rotationSteps), attacker.position());
-                    entities.addAll(RayTraceUtils.getEntitiesIn(attacker, obb, false, EntityTypeTest.forClass(LivingEntity.class), predicate));
+                    entities.addAll(HitResultUtils.getEntities(attacker, obb, false, EntityTypeTest.forClass(LivingEntity.class), predicate));
                     S2CAttackDebug.sendDebugPacket(obb, S2CAttackDebug.EnumAABBType.ATTACK, attacker);
                 }
                 return entities;
@@ -712,7 +713,7 @@ public class CombatUtils {
                 for (int steps = 0; steps <= rotationSteps; steps++) {
                     float yRot = minYRot + inc * steps;
                     OrientedBoundingBox obb = new OrientedBoundingBox(aabb, yRot, 0, attacker.position());
-                    entities.addAll(RayTraceUtils.getEntitiesIn(attacker, obb, false, EntityTypeTest.forClass(LivingEntity.class), predicate));
+                    entities.addAll(HitResultUtils.getEntities(attacker, obb, false, EntityTypeTest.forClass(LivingEntity.class), predicate));
                     S2CAttackDebug.sendDebugPacket(obb, S2CAttackDebug.EnumAABBType.ATTACK, attacker);
                 }
                 return entities;
@@ -727,7 +728,7 @@ public class CombatUtils {
             return (attacker, predicate) -> {
                 OrientedBoundingBox obb = new OrientedBoundingBox(relative ? aabb.move(attacker.position().scale(-1)) : aabb, attacker.getYRot(), 0, attacker.position());
                 S2CAttackDebug.sendDebugPacket(obb, S2CAttackDebug.EnumAABBType.ATTACK, attacker);
-                return RayTraceUtils.getEntitiesIn(attacker, obb, true, EntityTypeTest.forClass(LivingEntity.class), predicate);
+                return HitResultUtils.getEntities(attacker, obb, true, EntityTypeTest.forClass(LivingEntity.class), predicate);
             };
         }
 
@@ -737,14 +738,14 @@ public class CombatUtils {
                 AABB aabb = new AABB(-width * 0.5, -0.02, 0, width * 0.5, attacker.getBbHeight(), reach);
                 OrientedBoundingBox obb = new OrientedBoundingBox(aabb, yRot, -xRot, attacker.position());
                 S2CAttackDebug.sendDebugPacket(obb, S2CAttackDebug.EnumAABBType.ATTACK, attacker);
-                return RayTraceUtils.getEntitiesIn(attacker, obb, false, EntityTypeTest.forClass(LivingEntity.class), predicate);
+                return HitResultUtils.getEntities(attacker, obb, false, EntityTypeTest.forClass(LivingEntity.class), predicate);
             };
         }
 
         public static BiFunction<LivingEntity, Predicate<LivingEntity>, Collection<LivingEntity>> obbTargets(OrientedBoundingBox obb) {
             return (attacker, predicate) -> {
                 S2CAttackDebug.sendDebugPacket(obb, S2CAttackDebug.EnumAABBType.ATTACK, attacker);
-                return RayTraceUtils.getEntitiesIn(attacker, obb, false, EntityTypeTest.forClass(LivingEntity.class), predicate);
+                return HitResultUtils.getEntities(attacker, obb, false, EntityTypeTest.forClass(LivingEntity.class), predicate);
             };
         }
 
@@ -753,12 +754,12 @@ public class CombatUtils {
             return this;
         }
 
-        public EntityAttack withBonusAttributes(Attribute att, double val) {
+        public EntityAttack withBonusAttributes(Holder<Attribute> att, double val) {
             this.bonusAttributes.put(att, val);
             return this;
         }
 
-        public EntityAttack withBonusAttributesMultiplier(Attribute att, double val) {
+        public EntityAttack withBonusAttributesMultiplier(Holder<Attribute> att, double val) {
             this.bonusAttributesMultiplier.put(att, val);
             return this;
         }
@@ -774,7 +775,7 @@ public class CombatUtils {
         }
 
         public Collection<LivingEntity> executeAttack() {
-            if (this.attacker.level.isClientSide)
+            if (this.attacker.level().isClientSide)
                 return List.of();
             if (this.attacker instanceof TargetableOpponent pred)
                 this.targetPred = this.targetPred == null ? pred.validTargetPredicate() :
@@ -795,7 +796,7 @@ public class CombatUtils {
                     if (this.onSuccess != null)
                         this.onSuccess.accept(livingEntity);
                     if (this.soundToPlay != null)
-                        this.attacker.level.playSound(null, this.attacker.getX(), this.attacker.getY(), this.attacker.getZ(),
+                        this.attacker.level().playSound(null, this.attacker.getX(), this.attacker.getY(), this.attacker.getZ(),
                                 this.soundToPlay, this.attacker.getSoundSource(), 1.0f, 1.0f);
                 }
             }

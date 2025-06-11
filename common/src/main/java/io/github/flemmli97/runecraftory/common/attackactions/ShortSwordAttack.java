@@ -12,8 +12,8 @@ import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.api.item.IAOEWeapon;
+import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.item.AOEWeapon;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -39,8 +39,8 @@ public class ShortSwordAttack extends AttackAction {
     public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimatedAction anim) {
         if (handler.getComboCount() != 6) {
             if (anim.isAt("attack")) {
-                if (!entity.level.isClientSide) {
-                    CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(IAOEWeapon.createOBB(entity, stack,
+                if (!entity.level().isClientSide) {
+                    CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(AOEWeapon.createOBB(entity, stack,
                                     CombatUtils.getRange(entity, 0),
                                     CombatUtils.getWidth(entity, 0))))
                             .executeAttack();
@@ -102,7 +102,7 @@ public class ShortSwordAttack extends AttackAction {
     @Override
     public void onStart(LivingEntity entity, AttackActionHandler handler) {
         if (handler.getComboCount() == 6 && entity instanceof ServerPlayer player)
-            Platform.INSTANCE.getPlayerData(player).ifPresent(d -> LevelCalc.useRP(player, d, GeneralConfig.shortSwordUltimate, true, 0, false));
+            LevelCalc.useRP(player, Platform.INSTANCE.getPlayerData(player), GeneralConfig.shortSwordUltimate, true, 0, false);
     }
 
     @Override
@@ -112,7 +112,7 @@ public class ShortSwordAttack extends AttackAction {
 
     @Override
     public float movementReduction(AnimatedAction current) {
-        return GeneralConfig.moveSpeedAttack.get().floatValue();
+        return GeneralConfig.MOVE_SPEED_ATTACK.get().floatValue();
     }
 
     @Override

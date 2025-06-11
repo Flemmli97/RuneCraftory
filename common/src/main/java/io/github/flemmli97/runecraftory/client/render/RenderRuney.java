@@ -14,10 +14,10 @@ import net.minecraft.util.Mth;
 
 public class RenderRuney extends EntityRenderer<EntityRuney> {
 
-    private static final ResourceLocation TEX_1 = new ResourceLocation(RuneCraftory.MODID, "textures/particle/runey_0.png");
-    private static final ResourceLocation TEX_2 = new ResourceLocation(RuneCraftory.MODID, "textures/particle/runey_1.png");
-    private static final ResourceLocation TEX_3 = new ResourceLocation(RuneCraftory.MODID, "textures/particle/runey_2.png");
-    private static final ResourceLocation TEX_4 = new ResourceLocation(RuneCraftory.MODID, "textures/particle/runey_3.png");
+    private static final ResourceLocation TEX_1 = RuneCraftory.modRes("textures/particle/runey_0.png");
+    private static final ResourceLocation TEX_2 = RuneCraftory.modRes("textures/particle/runey_1.png");
+    private static final ResourceLocation TEX_3 = RuneCraftory.modRes("textures/particle/runey_2.png");
+    private static final ResourceLocation TEX_4 = RuneCraftory.modRes("textures/particle/runey_3.png");
 
     protected final RenderUtils.TextureBuilder textureBuilder = new RenderUtils.TextureBuilder();
 

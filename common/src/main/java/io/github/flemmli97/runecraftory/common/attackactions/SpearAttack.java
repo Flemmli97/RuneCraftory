@@ -12,9 +12,9 @@ import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.api.item.IAOEWeapon;
-import io.github.flemmli97.tenshilib.common.utils.MathUtils;
+import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.item.AOEWeapon;
+import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -48,8 +48,8 @@ public class SpearAttack extends AttackAction {
     public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimatedAction anim) {
         if (handler.getComboCount() != 5) {
             if (anim.isAt("attack")) {
-                if (!entity.level.isClientSide) {
-                    CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(IAOEWeapon.createOBB(entity, stack,
+                if (!entity.level().isClientSide) {
+                    CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(AOEWeapon.createOBB(entity, stack,
                                     CombatUtils.getRange(entity, 0),
                                     CombatUtils.getWidth(entity, 0))))
                             .executeAttack();
@@ -101,8 +101,8 @@ public class SpearAttack extends AttackAction {
                     for (int i = -180; i < 180; i += 15) {
                         Vec3 scaled = MathUtils.rotate(axis, dir2, i);
                         mut.set(Mth.floor(pos.x() + dir2.x()), Mth.floor(pos.y()), Mth.floor(pos.z() + dir2.z()));
-                        BlockState state = entity.level.getBlockState(mut);
-                        if (state.getRenderShape() != RenderShape.INVISIBLE && entity.getLevel() instanceof ServerLevel serverLevel)
+                        BlockState state = entity.level().getBlockState(mut);
+                        if (state.getRenderShape() != RenderShape.INVISIBLE && entity.level() instanceof ServerLevel serverLevel)
                             serverLevel.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state), attackPos.x() + scaled.x() + entity.getDeltaMovement().x(), entity.getY() + 0.1, attackPos.z() + scaled.z() + entity.getDeltaMovement().z(), 0, (float) scaled.x(), 1.5f, (float) scaled.z(), 1);
                     }
                     entity.playSound(SoundEvents.DRAGON_FIREBALL_EXPLODE, 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
@@ -117,7 +117,7 @@ public class SpearAttack extends AttackAction {
     @Override
     public void onStart(LivingEntity entity, AttackActionHandler handler) {
         if (handler.getComboCount() == 5 && entity instanceof ServerPlayer player)
-            Platform.INSTANCE.getPlayerData(player).ifPresent(d -> LevelCalc.useRP(player, d, GeneralConfig.spearUltimate, true, 0, false));
+            LevelCalc.useRP(player, Platform.INSTANCE.getPlayerData(player), GeneralConfig.spearUltimate, true, 0, false);
     }
 
     @Override
@@ -127,7 +127,7 @@ public class SpearAttack extends AttackAction {
 
     @Override
     public float movementReduction(AnimatedAction current) {
-        return GeneralConfig.moveSpeedAttack.get().floatValue();
+        return GeneralConfig.MOVE_SPEED_ATTACK.get().floatValue();
     }
 
     @Override

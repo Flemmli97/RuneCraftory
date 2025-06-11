@@ -1,11 +1,13 @@
 package io.github.flemmli97.runecraftory.common.attachment;
 
+import io.github.flemmli97.runecraftory.api.registry.ArmorEffect;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityCustomFishingHook;
 import io.github.flemmli97.runecraftory.common.entities.utils.SleepingEntity;
 import io.github.flemmli97.runecraftory.common.network.S2CEntityDataSync;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import net.minecraft.resources.ResourceLocation;
+import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
+import net.minecraft.core.Holder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
@@ -23,10 +25,10 @@ public class EntityData {
 
     public float sleepYRot;
 
-    private final HashSet<ResourceLocation> armorFlags = new HashSet<>();
+    private final HashSet<Holder<ArmorEffect>> armorFlags = new HashSet<>();
 
     public static SleepState getSleepStateFrom(LivingEntity entity) {
-        return Platform.INSTANCE.getEntityData(entity).map(e -> e.getSleepState(entity)).orElse(SleepState.NONE);
+        return Platform.INSTANCE.getEntityData(entity).getSleepState(entity);
     }
 
     public SleepState getSleepState(LivingEntity entity) {
@@ -42,8 +44,8 @@ public class EntityData {
         this.updateAiState(entity, flag);
         this.setOrthoView(entity, flag);
         this.sleepYRot = entity.yBodyRot;
-        if (!entity.level.isClientSide) {
-            Platform.INSTANCE.sendToTrackingAndSelf(new S2CEntityDataSync(entity.getId(), S2CEntityDataSync.Type.SLEEP, this.sleeping), entity);
+        if (!entity.level().isClientSide) {
+            LoaderNetwork.INSTANCE.sendToTracking(new S2CEntityDataSync(entity.getId(), S2CEntityDataSync.DataType.SLEEP, this.sleeping), entity);
         } else
             ClientHandlers.grabMouse(entity, this.sleeping);
     }
@@ -54,8 +56,8 @@ public class EntityData {
 
     public void setPoison(LivingEntity entity, boolean flag) {
         this.poison = flag;
-        if (!entity.level.isClientSide) {
-            Platform.INSTANCE.sendToTrackingAndSelf(new S2CEntityDataSync(entity.getId(), S2CEntityDataSync.Type.POISON, this.poison), entity);
+        if (!entity.level().isClientSide) {
+            LoaderNetwork.INSTANCE.sendToTracking(new S2CEntityDataSync(entity.getId(), S2CEntityDataSync.DataType.POISON, this.poison), entity);
         }
     }
 
@@ -65,8 +67,8 @@ public class EntityData {
 
     public void setCold(LivingEntity entity, boolean flag) {
         this.cold = flag;
-        if (!entity.level.isClientSide) {
-            Platform.INSTANCE.sendToTrackingAndSelf(new S2CEntityDataSync(entity.getId(), S2CEntityDataSync.Type.COLD, this.cold), entity);
+        if (!entity.level().isClientSide) {
+            LoaderNetwork.INSTANCE.sendToTracking(new S2CEntityDataSync(entity.getId(), S2CEntityDataSync.DataType.COLD, this.cold), entity);
         }
     }
 
@@ -76,8 +78,8 @@ public class EntityData {
 
     public void setParalysis(LivingEntity entity, boolean flag) {
         this.paralysis = flag;
-        if (!entity.level.isClientSide) {
-            Platform.INSTANCE.sendToTrackingAndSelf(new S2CEntityDataSync(entity.getId(), S2CEntityDataSync.Type.PARALYSIS, this.paralysis), entity);
+        if (!entity.level().isClientSide) {
+            LoaderNetwork.INSTANCE.sendToTracking(new S2CEntityDataSync(entity.getId(), S2CEntityDataSync.DataType.PARALYSIS, this.paralysis), entity);
         }
     }
 
@@ -88,8 +90,8 @@ public class EntityData {
     public void setStunned(LivingEntity entity, boolean flag) {
         this.stunned = flag;
         this.updateAiState(entity, flag);
-        if (!entity.level.isClientSide) {
-            Platform.INSTANCE.sendToTrackingAndSelf(new S2CEntityDataSync(entity.getId(), S2CEntityDataSync.Type.STUN, this.stunned), entity);
+        if (!entity.level().isClientSide) {
+            LoaderNetwork.INSTANCE.sendToTracking(new S2CEntityDataSync(entity.getId(), S2CEntityDataSync.DataType.STUN, this.stunned), entity);
         }
     }
 
@@ -99,8 +101,8 @@ public class EntityData {
 
     public void setInvis(LivingEntity entity, boolean flag) {
         this.invis = flag;
-        if (!entity.level.isClientSide) {
-            Platform.INSTANCE.sendToTrackingAndSelf(new S2CEntityDataSync(entity.getId(), S2CEntityDataSync.Type.INVIS, this.invis), entity);
+        if (!entity.level().isClientSide) {
+            LoaderNetwork.INSTANCE.sendToTracking(new S2CEntityDataSync(entity.getId(), S2CEntityDataSync.DataType.INVIS, this.invis), entity);
         }
     }
 
@@ -110,8 +112,8 @@ public class EntityData {
 
     public void setOrthoView(LivingEntity entity, boolean flag) {
         this.orthoView = flag;
-        if (!entity.level.isClientSide) {
-            Platform.INSTANCE.sendToTrackingAndSelf(new S2CEntityDataSync(entity.getId(), S2CEntityDataSync.Type.ORTHOVIEW, this.orthoView), entity);
+        if (!entity.level().isClientSide) {
+            LoaderNetwork.INSTANCE.sendToTracking(new S2CEntityDataSync(entity.getId(), S2CEntityDataSync.DataType.ORTHOVIEW, this.orthoView), entity);
         } else
             ClientHandlers.trySetPerspective(entity, flag);
     }
@@ -128,15 +130,15 @@ public class EntityData {
         return this.off;
     }
 
-    public void addArmorFlag(ResourceLocation key) {
+    public void addArmorFlag(Holder<ArmorEffect> key) {
         this.armorFlags.add(key);
     }
 
-    public void removeArmorFlag(ResourceLocation key) {
+    public void removeArmorFlag(Holder<ArmorEffect> key) {
         this.armorFlags.remove(key);
     }
 
-    public boolean hasArmorFlag(ResourceLocation key) {
+    public boolean hasArmorFlag(Holder<ArmorEffect> key) {
         return this.armorFlags.contains(key);
     }
 

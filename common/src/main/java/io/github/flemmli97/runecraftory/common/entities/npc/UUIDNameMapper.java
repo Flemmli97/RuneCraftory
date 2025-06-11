@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.npc;
 
-import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;

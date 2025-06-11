@@ -4,9 +4,9 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.RandomSource;
 
 import java.util.List;
-import java.util.Random;
 
 public record IndexedColorSetting(List<Integer> indices, ColorSetting color) {
 
@@ -16,7 +16,7 @@ public record IndexedColorSetting(List<Integer> indices, ColorSetting color) {
                     ColorSetting.CODEC.fieldOf("colors").forGetter(d -> d.color)
             ).apply(inst, IndexedColorSetting::new));
 
-    public ResolvedIndexColor resolve(Random random) {
+    public ResolvedIndexColor resolve(RandomSource random) {
         int index = this.indices.isEmpty() ? 0 : this.indices.get(random.nextInt(this.indices.size()));
         return new ResolvedIndexColor(index, this.color.getRandom(random));
     }

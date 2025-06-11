@@ -14,9 +14,9 @@ import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCConversat
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCDataManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCLookManager;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.NPCAttackActions;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.HashCache;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import org.apache.logging.log4j.LogManager;
@@ -43,11 +43,11 @@ public abstract class NPCDataProvider implements DataProvider, AdditionalLanguag
     public final Map<String, Map<String, String>> dialogueTranslations = new LinkedHashMap<>();
     private final Map<String, String> translations = new LinkedHashMap<>();
 
-    private final DataGenerator gen;
+    private final PackOutput packOutput;
     private final FileVerifier verifier;
     protected final String modid;
 
-    public NPCDataProvider(DataGenerator gen, FileVerifier verifier, String modid) {
+    public NPCDataProvider(PackOutput packOutput, FileVerifier verifier, String modid) {
         this.gen = gen;
         this.verifier = verifier;
         this.modid = modid;
@@ -119,34 +119,34 @@ public abstract class NPCDataProvider implements DataProvider, AdditionalLanguag
     public void addNPCData(String id, NPCData.Builder data, Map<ConversationContext, ConversationSet.Builder> conversations,
                            Map<ResourceLocation, QuestResponseBuilder> questConversations) {
         conversations.forEach((key, value) -> {
-            ResourceLocation conversationId = new ResourceLocation(this.modid, id + "/" + key.key().getPath());
+            ResourceLocation conversationId = ResourceLocation.fromNamespaceAndPath(this.modid, id + "/" + key.key().getPath());
             this.dialogueTranslations.computeIfAbsent(id, o -> new LinkedHashMap<>())
                     .putAll(value.getTranslations());
             this.conversations.put(conversationId, value.build());
             data.addInteractionIfAbsent(key, conversationId);
         });
         questConversations.forEach((key, value) -> {
-            ResourceLocation startId = new ResourceLocation(this.modid, id + "/quest_start_" + key.getPath());
+            ResourceLocation startId = ResourceLocation.fromNamespaceAndPath(this.modid, id + "/quest_start_" + key.getPath());
             for (int i = 0; i < value.start.size(); i++) {
                 String path = startId.getPath();
                 if (i != 0)
                     path += "_" + i;
-                ResourceLocation runIdI = new ResourceLocation(this.modid, path);
+                ResourceLocation runIdI = ResourceLocation.fromNamespaceAndPath(this.modid, path);
                 this.dialogueTranslations.computeIfAbsent(id, o -> new LinkedHashMap<>())
                         .putAll(value.start.get(i).getTranslations());
                 this.conversations.put(runIdI, value.start.get(i).build());
             }
-            ResourceLocation runId = new ResourceLocation(this.modid, id + "/quest_active_" + key.getPath());
+            ResourceLocation runId = ResourceLocation.fromNamespaceAndPath(this.modid, id + "/quest_active_" + key.getPath());
             for (int i = 0; i < value.active.size(); i++) {
                 String path = runId.getPath();
                 if (i != 0)
                     path += "_" + i;
-                ResourceLocation runIdI = new ResourceLocation(this.modid, path);
+                ResourceLocation runIdI = ResourceLocation.fromNamespaceAndPath(this.modid, path);
                 this.dialogueTranslations.computeIfAbsent(id, o -> new LinkedHashMap<>())
                         .putAll(value.active.get(i).getTranslations());
                 this.conversations.put(runIdI, value.active.get(i).build());
             }
-            ResourceLocation endId = new ResourceLocation(this.modid, id + "/quest_end_" + key.getPath());
+            ResourceLocation endId = ResourceLocation.fromNamespaceAndPath(this.modid, id + "/quest_end_" + key.getPath());
             this.dialogueTranslations.computeIfAbsent(id, o -> new LinkedHashMap<>())
                     .putAll(value.end.getTranslations());
             this.conversations.put(endId, value.end.build());
@@ -154,7 +154,7 @@ public abstract class NPCDataProvider implements DataProvider, AdditionalLanguag
         });
         this.dialogueTranslations.computeIfAbsent(id, o -> new LinkedHashMap<>())
                 .putAll(data.getTranslations());
-        this.data.put(new ResourceLocation(this.modid, id), data.build());
+        this.data.put(ResourceLocation.fromNamespaceAndPath(this.modid, id), data.build());
     }
 
     public ResourceLocation addLook(ResourceLocation id, NPCLook look) {

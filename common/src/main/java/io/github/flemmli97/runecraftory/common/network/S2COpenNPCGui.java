@@ -7,8 +7,12 @@ import io.github.flemmli97.runecraftory.common.entities.npc.job.ShopState;
 import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
 import io.github.flemmli97.runecraftory.common.world.family.SyncedFamilyData;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -16,9 +20,30 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class S2COpenNPCGui implements Packet {
+public class S2COpenNPCGui implements CustomPacketPayload {
 
-    public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "s2c_npc_gui");
+    public static final CustomPacketPayload.Type<S2COpenNPCGui> TYPE = new CustomPacketPayload.Type<>(RuneCraftory.modRes("s2c_npc_gui"));
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, S2COpenNPCGui> STREAM_CODEC = new StreamCodec<>() {
+        @Override
+        public S2COpenNPCGui decode(RegistryFriendlyByteBuf buf) {
+            return new S2COpenNPCGui(buf.readInt(), buf.readEnum(ShopState.class), buf.readInt(),
+                    buf.readMap(LinkedHashMap::new, ByteBufCodecs.STRING_UTF8, buf1 -> buf1.readList(b -> ComponentSerialization.STREAM_CODEC.decode(buf))), !buf.readBoolean() ? null : buf.readResourceLocation(),
+                    new SyncedFamilyData(buf));
+        }
+
+        @Override
+        public void encode(RegistryFriendlyByteBuf buf, S2COpenNPCGui pkt) {
+            buf.writeInt(pkt.entityID);
+            buf.writeEnum(pkt.isShopOpen);
+            buf.writeInt(pkt.followState);
+            buf.writeMap(pkt.actions, ByteBufCodecs.STRING_UTF8, (buf1, components) -> buf1.writeCollection(components, (b, c) -> ComponentSerialization.STREAM_CODEC.encode(buf, c)));
+            buf.writeBoolean(pkt.quest != null);
+            if (pkt.quest != null)
+                buf.writeResourceLocation(pkt.quest);
+            pkt.family.toPacket(buf);
+        }
+    };
 
     private final int entityID;
     private final ShopState isShopOpen;
@@ -42,16 +67,10 @@ public class S2COpenNPCGui implements Packet {
         this.actions = entity.getShop().actions(entity, player);
         this.quest = QuestHandler.questForExists(player, entity);
         if (entity.getEntityToFollowUUID() == null)
-            this.followState = Platform.INSTANCE.getPlayerData(player).map(d -> d.party.isPartyFull()).orElse(true) ? 2 : 0;
+            this.followState = Platform.INSTANCE.getPlayerData(player).party.isPartyFull() ? 2 : 0;
         else
             this.followState = entity.getEntityToFollowUUID().equals(player.getUUID()) ? 1 : 2;
         this.family = entity.getFamily().forSyncing(entity, player);
-    }
-
-    public static S2COpenNPCGui read(FriendlyByteBuf buf) {
-        return new S2COpenNPCGui(buf.readInt(), buf.readEnum(ShopState.class), buf.readInt(),
-                buf.readMap(LinkedHashMap::new, FriendlyByteBuf::readUtf, b -> b.readList(FriendlyByteBuf::readComponent)), !buf.readBoolean() ? null : buf.readResourceLocation(),
-                new SyncedFamilyData(buf));
     }
 
     public static void handle(S2COpenNPCGui pkt) {
@@ -59,19 +78,7 @@ public class S2COpenNPCGui implements Packet {
     }
 
     @Override
-    public void write(FriendlyByteBuf buf) {
-        buf.writeInt(this.entityID);
-        buf.writeEnum(this.isShopOpen);
-        buf.writeInt(this.followState);
-        buf.writeMap(this.actions, FriendlyByteBuf::writeUtf, (buf1, components) -> buf1.writeCollection(components, FriendlyByteBuf::writeComponent));
-        buf.writeBoolean(this.quest != null);
-        if (this.quest != null)
-            buf.writeResourceLocation(this.quest);
-        this.family.toPacket(buf);
-    }
-
-    @Override
-    public ResourceLocation getID() {
-        return ID;
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 }

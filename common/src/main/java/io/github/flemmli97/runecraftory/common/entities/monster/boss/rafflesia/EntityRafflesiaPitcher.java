@@ -3,8 +3,8 @@ package io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia;
 import io.github.flemmli97.runecraftory.common.entities.utils.IBaseMob;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.AnimationHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
@@ -72,7 +72,7 @@ public class EntityRafflesiaPitcher extends EntityRafflesiaPart {
                                 mob.restrictTo(owner.blockPosition(), (int) owner.getRestrictRadius() + 1);
                         }
                         if (e instanceof IBaseMob mob && owner != null) {
-                            int level = part.getOwner().level().getLevel();
+                            int level = part.getOwner().xpLevel().getLevel();
                             mob.setLevel(level + (int) ((part.getRandom().nextDouble() - 0.5) * level * 0.1));
                         }
                         for (int p = 0; p < 5; p++)

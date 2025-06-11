@@ -23,9 +23,9 @@ import java.util.function.Consumer;
 public class PoisonHealSpell extends Spell {
 
     public static void spawnStatusHealParticles(LivingEntity entity) {
-        if (entity.level.isClientSide)
+        if (entity.level().isClientSide)
             return;
-        ServerLevel serverLevel = (ServerLevel) entity.level;
+        ServerLevel serverLevel = (ServerLevel) entity.level();
         serverLevel.sendParticles(ParticleTypes.HEART, entity.getX(), entity.getY() + entity.getBbHeight() + 0.5, entity.getZ(), 0, 0, 0.1, 0, 0);
         for (int i = 0; i < 16; i++) {
             serverLevel.sendParticles(new ColoredParticleData(ModParticles.LIGHT.get(), 57 / 255F, 112 / 255F, 179 / 255F, 0.5f, 2f), entity.getRandomX(1.2), entity.getY() + entity.getBbHeight() * 0.5 + entity.getRandom().nextGaussian() * 0.5 * entity.getBbHeight() * 0.3, entity.getRandomZ(1.2), 1, entity.getRandom().nextGaussian() * 0.03, entity.getRandom().nextGaussian() * 0.03, entity.getRandom().nextGaussian() * 0.03, 0);
@@ -38,14 +38,14 @@ public class PoisonHealSpell extends Spell {
             return false;
         Consumer<LivingEntity> apply = living -> {
             if (lvl >= 10) {
-                living.removeEffect(ModEffects.SEAL.get());
+                living.removeEffect(ModEffects.SEAL.asHolder());
             }
             if (lvl >= 5) {
-                living.removeEffect(ModEffects.PARALYSIS.get());
+                living.removeEffect(ModEffects.PARALYSIS.asHolder());
                 living.removeEffect(MobEffects.WITHER);
             }
             living.removeEffect(MobEffects.POISON);
-            living.removeEffect(ModEffects.POISON.get());
+            living.removeEffect(ModEffects.POISON.asHolder());
             spawnStatusHealParticles(living);
         };
         List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(12), e -> {
@@ -53,7 +53,7 @@ public class PoisonHealSpell extends Spell {
                 return true;
             if (entity instanceof Player player) {
                 return e instanceof OwnableEntity ownable && player.getUUID().equals(ownable.getOwnerUUID())
-                        || e instanceof AbstractVillager || e instanceof Animal || Platform.INSTANCE.getPlayerData(player).map(d -> d.party.isPartyMember(e)).orElse(false);
+                        || e instanceof AbstractVillager || e instanceof Animal || Platform.INSTANCE.getPlayerData(player).party.isPartyMember(e);
             } else {
                 if (entity instanceof HealingPredicateEntity healer)
                     return healer.healeableEntities().test(e);

@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.fabric.mixin;
 
 import com.google.common.collect.Multimap;
-import io.github.flemmli97.runecraftory.common.attachment.ArmorEffectData;
-import io.github.flemmli97.runecraftory.common.attachment.StaffData;
+import io.github.flemmli97.runecraftory.common.components.ArmorEffectData;
+import io.github.flemmli97.runecraftory.common.components.StaffData;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.fabric.mixinhelper.ItemStackDataGetter;

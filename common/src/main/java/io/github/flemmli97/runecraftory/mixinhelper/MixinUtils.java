@@ -60,7 +60,7 @@ public class MixinUtils {
     }
 
     public static boolean handleEntityCollision(ItemEntity entity) {
-        if (entity.isInWater() || entity.isInLava() || entity.getThrower() == null || entity.level.isClientSide)
+        if (entity.isInWater() || entity.isInLava() || entity.getThrower() == null || entity.level().isClientSide)
             return true;
         HitResult hitResult = ProjectileUtil.getHitResult(entity, t -> canHitEntity(entity, t));
         if (hitResult.getType() == HitResult.Type.BLOCK) {
@@ -70,7 +70,7 @@ public class MixinUtils {
             EntityHitResult result = (EntityHitResult) hitResult;
             if (result.getEntity() instanceof IBaseMob mob) {
                 ItemStack stack = entity.getItem();
-                Entity e = ((ServerLevel) entity.level).getEntity(entity.getThrower());
+                Entity e = ((ServerLevel) entity.level()).getEntity(entity.getThrower());
                 if (e instanceof Player thrower) {
                     if (mob.onGivingItem(thrower, stack)) {
                         if (stack.isEmpty())

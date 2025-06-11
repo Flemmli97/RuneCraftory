@@ -22,7 +22,7 @@ public class NPCDataManager extends SimpleJsonResourceReloadListener {
 
     public static final String DIRECTORY = "npc_data";
 
-    public static final ResourceLocation DEFAULT_ID = new ResourceLocation(RuneCraftory.MODID, "default_npc");
+    public static final ResourceLocation DEFAULT_ID = RuneCraftory.modRes("default_npc");
 
     private Map<ResourceLocation, NPCData> keyData = ImmutableMap.of();
     private Map<NPCData, ResourceLocation> dataKey = ImmutableMap.of();

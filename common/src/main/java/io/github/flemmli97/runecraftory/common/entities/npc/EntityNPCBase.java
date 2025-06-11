@@ -71,14 +71,11 @@ import io.github.flemmli97.runecraftory.common.world.family.FamilyHandler;
 import io.github.flemmli97.runecraftory.mixin.AttributeMapAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.simplequests_api.quest.QuestState;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
-import io.github.flemmli97.tenshilib.api.entity.IAnimated;
-import io.github.flemmli97.tenshilib.api.item.IAOEWeapon;
-import io.github.flemmli97.tenshilib.api.item.IExtendedWeapon;
+import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
-import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
-import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
+import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
+import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
@@ -86,8 +83,6 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.network.protocol.game.DebugPackets;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -499,8 +494,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         if (this.getEntityToFollowUUID() != null && this.getEntityToFollowUUID().equals(serverPlayer.getUUID())) {
             EntityUtils.sendAttributesTo(this, serverPlayer);
         }
-        Platform.INSTANCE.sendToClient(new S2CUpdateNPCData(this, this.relationManager.getFriendPointData(player.getUUID()).save()), serverPlayer);
-        Platform.INSTANCE.sendToClient(new S2COpenNPCGui(this, serverPlayer), serverPlayer);
+        LoaderNetwork.INSTANCE.sendToPlayer(new S2CUpdateNPCData(this, this.relationManager.getFriendPointData(player.getUUID()).save()), serverPlayer);
+        LoaderNetwork.INSTANCE.sendToPlayer(new S2COpenNPCGui(this, serverPlayer), serverPlayer);
         this.interactWithPlayer(serverPlayer);
         this.lookAt(serverPlayer, 30, 30);
         return InteractionResult.CONSUME;
@@ -629,10 +624,10 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             NPCData.Gift gift = this.giftOf(stack);
             if (gift != null) {
                 if (this.relationManager.getFriendPointData(player.getUUID()).giftXP(this.level, (int) (gift.xp() * mult)))
-                    this.tellDialogue(serverPlayer, null, null, new TranslatableComponent(gift.responseKey()), List.of());
+                    this.tellDialogue(serverPlayer, null, null, Component.translatable(gift.responseKey()), List.of());
             } else {
                 if (this.relationManager.getFriendPointData(player.getUUID()).giftXP(this.level, (int) (5 * mult)))
-                    this.tellDialogue(serverPlayer, null, null, new TranslatableComponent(this.data.neutralGiftResponse()), List.of());
+                    this.tellDialogue(serverPlayer, null, null, Component.translatable(this.data.neutralGiftResponse()), List.of());
             }
         }
         stack.shrink(1);
@@ -676,7 +671,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             this.tellDialogue(player, convCtx, randomLine.getKey(), randomLine.getValue());
         } else {
             Component dialog = conversations.missing() != null
-                    ? new TranslatableComponent(conversations.fallbackKey(), conversations.missing()) : new TranslatableComponent(conversations.fallbackKey());
+                    ? Component.translatable(conversations.fallbackKey(), conversations.missing()) : Component.translatable(conversations.fallbackKey());
             this.tellDialogue(player, convCtx, null, dialog, List.of());
         }
     }
@@ -714,19 +709,19 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             this.tellDialogue(player, null, randomLine.getKey(), randomLine.getValue());
         } else {
             Component dialog = conversations.missing() != null
-                    ? new TranslatableComponent(conversations.fallbackKey(), conversations.missing()) : new TranslatableComponent(conversations.fallbackKey());
+                    ? Component.translatable(conversations.fallbackKey(), conversations.missing()) : Component.translatable(conversations.fallbackKey());
             this.tellDialogue(player, null, null, dialog, List.of());
         }
     }
 
     private void tellDialogue(ServerPlayer player, ConversationContext convCtx, String conversationID, ConversationSet.Conversation conversation) {
-        List<Component> actions = conversation.actions().stream().map(e -> (Component) new TranslatableComponent(e.translationKey())).toList();
-        this.tellDialogue(player, convCtx, conversationID, new TranslatableComponent(conversation.translationKey()), actions);
+        List<Component> actions = conversation.actions().stream().map(e -> (Component) Component.translatable(e.translationKey())).toList();
+        this.tellDialogue(player, convCtx, conversationID, Component.translatable(conversation.translationKey()), actions);
     }
 
     private void tellDialogue(ServerPlayer player, ConversationContext convCtx, String conversationID, Component component, List<Component> actions) {
         this.interactWithPlayer(player);
-        Platform.INSTANCE.sendToClient(new S2CNpcDialogue(this.getId(), convCtx, conversationID, component, this.conversationData(player), actions), player);
+        LoaderNetwork.INSTANCE.sendToPlayer(new S2CNpcDialogue(this.getId(), convCtx, conversationID, component, this.conversationData(player), actions), player);
     }
 
     private Map<String, Component> conversationData(ServerPlayer player) {
@@ -828,33 +823,32 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         return CombatUtils.mobAttack(attacker, target, source);
     }
 
-    @Override
-    public LevelExpPair level() {
+    public LevelExpPair xpLevel() {
         return this.levelPair;
     }
 
     @Override
     public void setLevel(int level) {
-        this.level().setLevel(Mth.clamp(level, 1, LibConstants.MAX_MONSTER_LEVEL), LevelCalc::xpAmountForLevelUp);
+        this.xpLevel().setLevel(Mth.clamp(level, 1, LibConstants.MAX_MONSTER_LEVEL), LevelCalc::xpAmountForLevelUp);
         this.updateStatsToLevel();
     }
 
     public void increaseLevel() {
-        this.level().setLevel(Mth.clamp(this.level().getLevel() + 1, 1, LibConstants.MAX_MONSTER_LEVEL), LevelCalc::xpAmountForLevelUp);
+        this.xpLevel().setLevel(Mth.clamp(this.xpLevel().getLevel() + 1, 1, LibConstants.MAX_MONSTER_LEVEL), LevelCalc::xpAmountForLevelUp);
         this.updateStatsToLevel();
     }
 
     public void addXp(float amount) {
-        boolean res = this.level().addXP(amount, LibConstants.MAX_MONSTER_LEVEL, LevelCalc::xpAmountForLevelUp, () -> {
+        boolean res = this.xpLevel().addXP(amount, LibConstants.MAX_MONSTER_LEVEL, LevelCalc::xpAmountForLevelUp, () -> {
         });
-        Platform.INSTANCE.sendToTrackingAndSelf(S2CEntityLevelPkt.create(this), this);
+        LoaderNetwork.INSTANCE.sendToTracking(S2CEntityLevelPkt.create(this), this);
         if (res)
             this.updateStatsToLevel();
     }
 
     public void updateStatsToLevel() {
         if (!this.level.isClientSide)
-            Platform.INSTANCE.sendToTrackingAndSelf(S2CEntityLevelPkt.create(this), this);
+            LoaderNetwork.INSTANCE.sendToTracking(S2CEntityLevelPkt.create(this), this);
         float preHealthDiff = this.getMaxHealth() - this.getHealth();
         ((AttributeMapAccessor) this.getAttributes()).getAttributes().forEach((att, inst) -> inst.removeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD));
         if (this.data != null) {
@@ -865,11 +859,11 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
                 if (inst != null) {
                     float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
                     if (att == Attributes.MAX_HEALTH) {
-                        multiplier += LevelCalc.getMultiplierInterval(this.level().getLevel(), 20, 30, 0.12f) * 0.015f;
+                        multiplier += LevelCalc.getMultiplierInterval(this.xpLevel().getLevel(), 20, 30, 0.12f) * 0.015f;
                     } else {
-                        multiplier += LevelCalc.getMultiplierInterval(this.level().getLevel(), 20, 30, 0) * 0.01f;
+                        multiplier += LevelCalc.getMultiplierInterval(this.xpLevel().getLevel(), 20, 30, 0) * 0.01f;
                     }
-                    inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, RuneCraftory.MODID + ".levelMod", (this.level().getLevel() - 1) * val * multiplier, AttributeModifier.Operation.ADDITION));
+                    inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, RuneCraftory.MODID + ".levelMod", (this.xpLevel().getLevel() - 1) * val * multiplier, AttributeModifier.Operation.ADDITION));
                     if (att == Attributes.MAX_HEALTH)
                         this.setHealth(this.getMaxHealth() - preHealthDiff);
                 }
@@ -880,28 +874,28 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         AttributeInstance inst = this.getAttribute(Attributes.MAX_HEALTH);
         if (inst != null) {
             float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, RuneCraftory.MODID + ".levelMod", (this.level().getLevel() - levelOffset) * MobConfig.NPC_HEALTH_GAIN * multiplier, AttributeModifier.Operation.ADDITION));
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, RuneCraftory.MODID + ".levelMod", (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_HEALTH_GAIN * multiplier, AttributeModifier.Operation.ADDITION));
             this.setHealth(this.getMaxHealth() - preHealthDiff);
         }
         inst = this.getAttribute(Attributes.ATTACK_DAMAGE);
         if (inst != null) {
             float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, RuneCraftory.MODID + ".levelMod", (this.level().getLevel() - levelOffset) * MobConfig.NPC_ATTACK_GAIN * multiplier, AttributeModifier.Operation.ADDITION));
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, RuneCraftory.MODID + ".levelMod", (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_ATTACK_GAIN * multiplier, AttributeModifier.Operation.ADDITION));
         }
         inst = this.getAttribute(ModAttributes.DEFENCE.get());
         if (inst != null) {
             float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, RuneCraftory.MODID + ".levelMod", (this.level().getLevel() - levelOffset) * MobConfig.NPC_DEFENCE_GAIN * multiplier, AttributeModifier.Operation.ADDITION));
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, RuneCraftory.MODID + ".levelMod", (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_DEFENCE_GAIN * multiplier, AttributeModifier.Operation.ADDITION));
         }
         inst = this.getAttribute(ModAttributes.MAGIC.get());
         if (inst != null) {
             float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, RuneCraftory.MODID + ".levelMod", (this.level().getLevel() - levelOffset) * MobConfig.NPC_MAGIC_ATTACK_GAIN * multiplier, AttributeModifier.Operation.ADDITION));
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, RuneCraftory.MODID + ".levelMod", (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_MAGIC_ATTACK_GAIN * multiplier, AttributeModifier.Operation.ADDITION));
         }
         inst = this.getAttribute(ModAttributes.MAGIC_DEFENCE.get());
         if (inst != null) {
             float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, RuneCraftory.MODID + ".levelMod", (this.level().getLevel() - levelOffset) * MobConfig.NPC_MAGIC_DEFENCE_GAIN * multiplier, AttributeModifier.Operation.ADDITION));
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, RuneCraftory.MODID + ".levelMod", (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_MAGIC_DEFENCE_GAIN * multiplier, AttributeModifier.Operation.ADDITION));
         }
     }
 
@@ -1055,8 +1049,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     private Component getKnockoutMessage() {
         DamageSource source = this.getLastDamageSource();
         if (source instanceof EntityDamageSource && source.getEntity() != null)
-            return new TranslatableComponent("runecraftory.tamed.monster.knockout.by", this.getDisplayName(), this.blockPosition().getX(), this.blockPosition().getY(), this.blockPosition().getZ(), source.getEntity().getDisplayName());
-        return new TranslatableComponent("runecraftory.tamed.monster.knockout", this.getDisplayName(), this.blockPosition().getX(), this.blockPosition().getY(), this.blockPosition().getZ());
+            return Component.translatable("runecraftory.tamed.monster.knockout.by", this.getDisplayName(), this.blockPosition().getX(), this.blockPosition().getY(), this.blockPosition().getZ(), source.getEntity().getDisplayName());
+        return Component.translatable("runecraftory.tamed.monster.knockout", this.getDisplayName(), this.blockPosition().getX(), this.blockPosition().getY(), this.blockPosition().getZ());
     }
 
     public int getPlayDeathTick() {
@@ -1103,7 +1097,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.put("MobLevel", this.level().save());
+        compound.put("MobLevel", this.xpLevel().save());
         compound.putInt("FoodBuffTick", this.foodBuffTick);
         compound.putBoolean("PlayDeath", this.entityData.get(PLAY_DEATH_STATE));
 
@@ -1567,7 +1561,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         if (gifts.isEmpty())
             return Optional.empty();
         GiftData gift = gifts.get(this.updater.getDailyRandom().nextInt(gifts.size()));
-        return Optional.of(new TranslatableComponent(gift.translation(this.updater.getDailyRandom())));
+        return Optional.of(Component.translatable(gift.translation(this.updater.getDailyRandom())));
     }
 
     private void calcGifts() {
@@ -1594,7 +1588,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             }).ifPresent(shopList -> Platform.INSTANCE.openGuiMenu(player, new MenuProvider() {
                 @Override
                 public Component getDisplayName() {
-                    return new TranslatableComponent(EntityNPCBase.this.getShop().getTranslationKey());
+                    return Component.translatable(EntityNPCBase.this.getShop().getTranslationKey());
                 }
 
                 @Nullable
@@ -1643,13 +1637,13 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             if (this.data.name() == null) {
                 String name = DataPackHandler.INSTANCE.nameManager().getRandomFullName(this.random, this.isMale());
                 if (name != null) {
-                    this.setCustomName(new TextComponent(name));
+                    this.setCustomName(Component.literal(name));
                 }
             } else {
                 String name = this.data.name();
                 if (this.data.surname() != null)
                     name += " " + this.data.surname();
-                this.setCustomName(new TextComponent(name));
+                this.setCustomName(Component.literal(name));
             }
             this.birthday = null;
             this.getBirthday();
@@ -1678,7 +1672,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
                 String name = this.data.name();
                 if (this.data.surname() != null)
                     name += " " + this.data.surname();
-                this.setCustomName(new TextComponent(name));
+                this.setCustomName(Component.literal(name));
             }
             if (this.data.birthday() != null) {
                 this.birthday = null;
@@ -1690,12 +1684,12 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
                 this.schedule.with(data.schedule());
         }
         this.applyAttributes(!load);
-        if (this.level().getLevel() < this.data.baseLevel()) {
+        if (this.xpLevel().getLevel() < this.data.baseLevel()) {
             this.setLevel(this.data.baseLevel());
         }
         this.refreshDimensions();
         if (!this.level.isClientSide)
-            Platform.INSTANCE.sendToTrackingAndSelf(new S2CNPCLook(this.getId(), this.look, this.lookFeatures), this);
+            LoaderNetwork.INSTANCE.sendToTracking(new S2CNPCLook(this.getId(), this.look, this.lookFeatures), this);
     }
 
     private CompoundTag saveNPCData() {
@@ -1746,8 +1740,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     @Override
     public void startSeenByPlayer(ServerPlayer player) {
-        Platform.INSTANCE.sendToClient(new S2CNPCLook(this.getId(), this.look, this.lookFeatures), player);
-        Platform.INSTANCE.sendToClient(S2CEntityLevelPkt.create(this), player);
+        LoaderNetwork.INSTANCE.sendToPlayer(new S2CNPCLook(this.getId(), this.look, this.lookFeatures), player);
+        LoaderNetwork.INSTANCE.sendToPlayer(S2CEntityLevelPkt.create(this), player);
     }
 
     @Override

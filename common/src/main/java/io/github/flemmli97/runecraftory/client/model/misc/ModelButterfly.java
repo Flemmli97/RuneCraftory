@@ -6,9 +6,7 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityButterfly;
 import io.github.flemmli97.tenshilib.client.AnimationManager;
-import io.github.flemmli97.tenshilib.client.model.BlockBenchAnimations;
 import io.github.flemmli97.tenshilib.client.model.ExtendedModel;
-import io.github.flemmli97.tenshilib.client.model.ModelPartHandler;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -18,11 +16,10 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.resources.ResourceLocation;
 
 public class ModelButterfly<T extends EntityButterfly> extends EntityModel<T> implements ExtendedModel {
 
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(RuneCraftory.MODID, "butterfly"), "main");
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(RuneCraftory.modRes("butterfly"), "main");
 
     protected final ModelPartHandler model;
     protected final BlockBenchAnimations anim;
@@ -32,7 +29,7 @@ public class ModelButterfly<T extends EntityButterfly> extends EntityModel<T> im
     public ModelButterfly(ModelPart root) {
         super();
         this.model = new ModelPartHandler(root, "root");
-        this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "butterfly"));
+        this.anim = AnimationManager.getInstance().getAnimation(RuneCraftory.modRes("butterfly"));
     }
 
     public static LayerDefinition createBodyLayer() {

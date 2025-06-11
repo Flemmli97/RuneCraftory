@@ -5,7 +5,6 @@ import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
@@ -33,11 +32,11 @@ public class BathhouseAttendant extends NPCJob {
                             int baths = d.getDailyUpdater().getBathCounter() + 1;
                             int amount = 300 * baths + (Math.max(0, baths - 1)) * 100;
                             if (d.useMoney(player, amount)) {
-                                player.sendMessage(new TranslatableComponent(BATH_ACTION_SUCCESS, player.getName()), Util.NIL_UUID);
+                                player.sendMessage(Component.translatable(BATH_ACTION_SUCCESS, player.getName()), Util.NIL_UUID);
                                 player.addEffect(new MobEffectInstance(ModEffects.BATH.get(), 1700, 0, false, true, false));
                                 d.getDailyUpdater().increaseBathCounter();
                             } else {
-                                player.sendMessage(new TranslatableComponent(BATH_ACTION_FAIL, player.getName(), amount), Util.NIL_UUID);
+                                player.sendMessage(Component.translatable(BATH_ACTION_FAIL, player.getName(), amount), Util.NIL_UUID);
                             }
                         });
             }
@@ -45,7 +44,7 @@ public class BathhouseAttendant extends NPCJob {
 
     @Override
     public Map<String, List<Component>> actions(EntityNPCBase entity, ServerPlayer player) {
-        return Map.of(BATH_ACTION, List.of(new TranslatableComponent(BATH_COST, Platform.INSTANCE.getPlayerData(player)
+        return Map.of(BATH_ACTION, List.of(Component.translatable(BATH_COST, Platform.INSTANCE.getPlayerData(player)
                 .map(d -> {
                     int baths = d.getDailyUpdater().getBathCounter() + 1;
                     return 300 * baths + (Math.max(0, baths - 1)) * 100;

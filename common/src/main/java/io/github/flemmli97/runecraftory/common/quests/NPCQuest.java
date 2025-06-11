@@ -16,11 +16,10 @@ import io.github.flemmli97.simplequests_api.quest.QuestBase;
 import io.github.flemmli97.simplequests_api.quest.QuestCategory;
 import io.github.flemmli97.simplequests_api.quest.entry.ResolvedQuestTask;
 import io.github.flemmli97.simplequests_api.registry.QuestBaseRegistry;
-import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
 import net.minecraft.Util;
 import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
@@ -45,7 +44,7 @@ import java.util.stream.Collectors;
  */
 public class NPCQuest extends QuestBase {
 
-    public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "npc_quest");
+    public static final ResourceLocation ID = RuneCraftory.modRes("npc_quest");
 
     public static final Function<QuestBaseRegistry.CodecContext, Codec<NPCQuest>> CODEC = Util.memoize(ctx ->
             QuestBase.buildCodec(NPCQuestData.CODEC
@@ -130,14 +129,14 @@ public class NPCQuest extends QuestBase {
 
     @Override
     public MutableComponent getName(ServerPlayer player, int idx) {
-        return new TranslatableComponent(this.name);
+        return Component.translatable(this.name);
     }
 
     @Override
     public List<MutableComponent> getDescription(ServerPlayer player, int idx) {
         EntityNPCBase npc = this.getNpc(player.level);
         if (npc != null) {
-            return this.description.stream().map(s -> new TranslatableComponent(s, npc.getCustomName(), npc.getX(), npc.getY(), npc.getZ())).collect(Collectors.toList());
+            return this.description.stream().map(s -> Component.translatable(s, npc.getCustomName(), npc.getX(), npc.getY(), npc.getZ())).collect(Collectors.toList());
         }
         return super.getDescription(player, idx);
     }

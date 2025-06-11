@@ -27,7 +27,7 @@ public record ConversationContext(ResourceLocation key) {
     public static final ConversationContext PROCREATION_COOLDOWN = register("procreation_cooldown");
 
     private static ConversationContext register(String key) {
-        return register(new ResourceLocation(RuneCraftory.MODID, key));
+        return register(RuneCraftory.modRes(key));
     }
 
     public static ConversationContext register(ResourceLocation res) {

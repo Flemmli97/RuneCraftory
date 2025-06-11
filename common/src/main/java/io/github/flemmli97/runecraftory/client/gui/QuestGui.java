@@ -19,8 +19,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
@@ -30,8 +29,8 @@ import java.util.Optional;
 
 public class QuestGui extends Screen {
 
-    protected static final ResourceLocation TEXTUREPATH = new ResourceLocation(RuneCraftory.MODID, "textures/gui/quest_gui.png");
-    protected static final ResourceLocation TEXTUREPATH_WIDGETS = new ResourceLocation(RuneCraftory.MODID, "textures/gui/quest_gui_widgets.png");
+    protected static final ResourceLocation TEXTUREPATH = RuneCraftory.modRes("textures/gui/quest_gui.png");
+    protected static final ResourceLocation TEXTUREPATH_WIDGETS = RuneCraftory.modRes("textures/gui/quest_gui_widgets.png");
 
     private final int textureX = 238;
     private final int textureY = 175;
@@ -54,7 +53,7 @@ public class QuestGui extends Screen {
     private final boolean hasActive;
 
     public QuestGui(boolean hasActive, List<ClientSideQuestDisplay> quests) {
-        super(new TextComponent(""));
+        super(Component.literal(""));
         this.hasActive = hasActive;
         this.quests = quests;
         this.heads = this.quests.stream().map(display -> {
@@ -121,7 +120,7 @@ public class QuestGui extends Screen {
         if (this.selectedQuest != null) {
             RenderSystem.setShaderTexture(0, TEXTUREPATH_WIDGETS);
             this.blit(stack, this.leftPos + 52, this.topPos + 56, 13, 25, 134, 63);
-            ClientHandlers.drawCenteredScaledString(stack, this.font, this.selectedQuest.active() ? new TranslatableComponent("runecraftory.gui.quests.reset").withStyle(ChatFormatting.RED) : new TranslatableComponent("runecraftory.gui.quests.accept"), this.leftPos + 52 + 67, this.topPos + 61, 1, 0);
+            ClientHandlers.drawCenteredScaledString(stack, this.font, this.selectedQuest.active() ? Component.translatable("runecraftory.gui.quests.reset").withStyle(ChatFormatting.RED) : Component.translatable("runecraftory.gui.quests.accept"), this.leftPos + 52 + 67, this.topPos + 61, 1, 0);
         }
         this.yesButton.renderButtonSelect(stack);
         this.noButton.renderButtonSelect(stack);
@@ -210,7 +209,7 @@ public class QuestGui extends Screen {
         private final int index;
 
         public QuestButton(int i, int j, int k, OnPress onPress) {
-            super(i, j, 198, 21, TextComponent.EMPTY, onPress);
+            super(i, j, 198, 21, MutableComponent.EMPTY, onPress);
             this.index = k;
             this.visible = false;
         }
@@ -254,7 +253,7 @@ public class QuestGui extends Screen {
     private class SubmitButton extends Button {
 
         public SubmitButton(int i, int j, OnPress onPress) {
-            super(i, j, 20, 22, TextComponent.EMPTY, onPress);
+            super(i, j, 20, 22, MutableComponent.EMPTY, onPress);
         }
 
         @Override
@@ -275,7 +274,7 @@ public class QuestGui extends Screen {
         @Override
         public void renderToolTip(PoseStack poseStack, int relativeMouseX, int relativeMouseY) {
             if (this.isHovered && this.active) {
-                QuestGui.this.renderTooltip(poseStack, new TranslatableComponent("runecraftory.gui.quest.submit.button"), relativeMouseX, relativeMouseY + 24);
+                QuestGui.this.renderTooltip(poseStack, Component.translatable("runecraftory.gui.quest.submit.button"), relativeMouseX, relativeMouseY + 24);
             }
         }
     }
@@ -285,7 +284,7 @@ public class QuestGui extends Screen {
         private final boolean red;
 
         public QuestSelectButton(int i, int j, boolean red, OnPress onPress) {
-            super(i, j, 44, 22, red ? new TranslatableComponent("runecraftory.generic.no") : new TranslatableComponent("runecraftory.generic.yes"), onPress);
+            super(i, j, 44, 22, red ? Component.translatable("runecraftory.generic.no") : Component.translatable("runecraftory.generic.yes"), onPress);
             this.visible = false;
             this.red = red;
         }

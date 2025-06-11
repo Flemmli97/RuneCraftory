@@ -12,7 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class RenderSkelefang<T extends EntitySkelefang> extends RenderMonster<T, ModelSkelefang<T>> {
 
-    public static final ResourceLocation TEXTURE = new ResourceLocation(RuneCraftory.MODID, "textures/entity/monsters/skelefang.png");
+    public static final ResourceLocation TEXTURE = RuneCraftory.modRes("textures/entity/monsters/skelefang.png");
 
     public RenderSkelefang(EntityRendererProvider.Context ctx) {
         super(ctx, new ModelSkelefang<>(ctx.bakeLayer(ModelSkelefang.LAYER_LOCATION), RenderType::entityTranslucent), TEXTURE, 0);

@@ -29,7 +29,7 @@ public class BathEffect extends MobEffect {
     }
 
     @Override
-    public void applyEffectTick(LivingEntity living, int amplifier) {
+    public boolean applyEffectTick(LivingEntity living, int amplifier) {
         if (living.isInWater()) {
             BlockState state = living.getFeetBlockState();
             if (state.getFluidState().is(FluidTags.WATER)) {

@@ -6,9 +6,9 @@ import io.github.flemmli97.runecraftory.api.registry.NPCAction;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCAttackGoal;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCActions;
-import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
 import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Optional;
@@ -17,7 +17,7 @@ import java.util.function.Supplier;
 public class RunAwayAction implements NPCAction {
 
     public static final Codec<RunAwayAction> CODEC = RecordCodecBuilder.create((instance) ->
-            instance.group(CodecHelper.NUMER_PROVIDER_CODEC.fieldOf("duration").forGetter(d -> d.duration),
+            instance.group(NumberProviders.CODEC.fieldOf("duration").forGetter(d -> d.duration),
                     NPCAction.optionalNumCooldown(d -> d.cooldown),
                     Codec.FLOAT.fieldOf("max_dist").forGetter(d -> d.maxDist),
                     Codec.FLOAT.fieldOf("speed").forGetter(d -> d.speed)
@@ -27,7 +27,6 @@ public class RunAwayAction implements NPCAction {
     private final NumberProvider cooldown;
     private final float maxDist, speed;
 
-    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     private RunAwayAction(NumberProvider duration, Optional<NumberProvider> cooldown, float maxDist, float speed) {
         this(duration, cooldown.orElse(NPCAction.CONST_ZERO), maxDist, speed);
     }
@@ -44,7 +43,7 @@ public class RunAwayAction implements NPCAction {
     }
 
     @Override
-    public Supplier<NPCActionCodec> codec() {
+    public Supplier<Codec<RunAwayAction>> codec() {
         return ModNPCActions.RUN_AWAY_ACTION;
     }
 

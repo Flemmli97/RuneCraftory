@@ -8,7 +8,6 @@ import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.Util;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.player.Player;
@@ -68,7 +67,7 @@ public class Smith extends NPCJob {
                             boolean enough = MATERIALS.entrySet().stream()
                                     .allMatch(p -> stacks.getOrDefault(p.getKey(), List.of()).stream().mapToInt(ItemStack::getCount).sum() >= (int) (p.getValue() * multiplier));
                             if (enough && d.useMoney(player, amount)) {
-                                player.sendMessage(new TranslatableComponent(BARN_ACTION_SUCCESS, player.getName()), Util.NIL_UUID);
+                                player.sendMessage(Component.translatable(BARN_ACTION_SUCCESS, player.getName()), Util.NIL_UUID);
                                 for (Map.Entry<ItemPredicate, List<ItemStack>> e : stacks.entrySet()) {
                                     int needed = (int) (MATERIALS.get(e.getKey()) * multiplier);
                                     for (ItemStack stack : e.getValue()) {
@@ -86,7 +85,7 @@ public class Smith extends NPCJob {
                                     player.spawnAtLocation(new ItemStack(ModItems.MONSTER_BARN.get()));
                                 d.onBuyBarn();
                             } else {
-                                player.sendMessage(new TranslatableComponent(BARN_ACTION_FAIL, player.getName(), amount), Util.NIL_UUID);
+                                player.sendMessage(Component.translatable(BARN_ACTION_FAIL, player.getName(), amount), Util.NIL_UUID);
                             }
                         });
             }
@@ -105,8 +104,8 @@ public class Smith extends NPCJob {
                 obj[i] = (int) (e.getValue() * COST_FUNC_MAT_MULTIPLIER.apply(d.getBoughtBarns()));
                 i++;
             }
-            return List.of((Component) new TranslatableComponent(BARN_COST, COST_FUNC.applyAsInt(d.getBoughtBarns())),
-                    new TranslatableComponent(BARN_COST_MAT, obj));
-        }).orElse(List.of(new TranslatableComponent(BARN_ACTION_FAIL)));
+            return List.of((Component) Component.translatable(BARN_COST, COST_FUNC.applyAsInt(d.getBoughtBarns())),
+                    Component.translatable(BARN_COST_MAT, obj));
+        }).orElse(List.of(Component.translatable(BARN_ACTION_FAIL)));
     }
 }

@@ -8,7 +8,6 @@ import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -41,8 +40,8 @@ public class NPCSpawnEgg extends RuneCraftoryEggItem {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
         super.appendHoverText(stack, level, tooltipComponents, isAdvanced);
-        tooltipComponents.add(new TranslatableComponent("runecraftory.tooltip.item.npc").withStyle(ChatFormatting.GOLD));
-        tooltipComponents.add(new TranslatableComponent(getJob(stack).getTranslationKey()).withStyle(ChatFormatting.AQUA));
+        tooltipComponents.add(Component.translatable("runecraftory.tooltip.item.npc").withStyle(ChatFormatting.GOLD));
+        tooltipComponents.add(Component.translatable(getJob(stack).getTranslationKey()).withStyle(ChatFormatting.AQUA));
     }
 
     @Override

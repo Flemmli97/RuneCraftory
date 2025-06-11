@@ -2,12 +2,19 @@ package io.github.flemmli97.runecraftory.common;
 
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 
 public class RFCreativeTabs {
 
-    public static final CreativeModeTab WEAPON_TOOL_TAB = Platform.INSTANCE.tab("weapons_tools", () -> new ItemStack(ModItems.SHORT_DAGGER.get()));
+    public static final CreativeModeTab WEAPON_TOOL_TAB = Platform.INSTANCE.tabBuilder()
+            .icon(() -> new ItemStack(ModItems.SHORT_DAGGER.get())).title(Component.translatable("prf .weapons_tools"))
+            .displayItems(((parameters, output) -> {
+                output.accept();
+                CreativeModeInventoryScreen
+            })).build();
 
     public static final CreativeModeTab EQUIPMENT = Platform.INSTANCE.tab("equipment", () -> new ItemStack(ModItems.CHEAP_BRACELET.get()));
 

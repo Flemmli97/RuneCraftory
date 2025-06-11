@@ -2,41 +2,41 @@ package io.github.flemmli97.runecraftory.common.network;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 
-public class C2SProcreationRequest implements Packet {
+public record C2SProcreationRequest(int id) implements CustomPacketPayload {
 
-    public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "c2s_procreation_request");
+    public static final CustomPacketPayload.Type<C2SProcreationRequest> TYPE = new CustomPacketPayload.Type<>(RuneCraftory.modRes("c2s_procreation_request"));
 
-    private final int id;
+    public static final StreamCodec<RegistryFriendlyByteBuf, C2SProcreationRequest> STREAM_CODEC = new StreamCodec<>() {
+        @Override
+        public C2SProcreationRequest decode(RegistryFriendlyByteBuf buf) {
+            return new C2SProcreationRequest(buf.readInt());
+        }
 
-    public C2SProcreationRequest(int entityID) {
-        this.id = entityID;
-    }
+        @Override
+        public void encode(RegistryFriendlyByteBuf buf, C2SProcreationRequest pkt) {
+            buf.writeInt(pkt.id);
+        }
+    };
 
-    public static C2SProcreationRequest read(FriendlyByteBuf buf) {
-        return new C2SProcreationRequest(buf.readInt());
+    public C2SProcreationRequest(Entity entity) {
+        this(entity.getId());
     }
 
     public static void handle(C2SProcreationRequest pkt, ServerPlayer sender) {
-        if (sender != null) {
-            Entity entity = sender.level.getEntity(pkt.id);
-            if (entity instanceof EntityNPCBase npc) {
-                npc.procreateWith(sender);
-            }
+        Entity entity = sender.level().getEntity(pkt.id);
+        if (entity instanceof EntityNPCBase npc) {
+            npc.procreateWith(sender);
         }
     }
 
     @Override
-    public void write(FriendlyByteBuf buf) {
-        buf.writeInt(this.id);
-    }
-
-    @Override
-    public ResourceLocation getID() {
-        return ID;
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 }

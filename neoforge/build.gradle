@@ -1,0 +1,70 @@
+apply from: "https://raw.githubusercontent.com/Flemmli97/GradleScripts/arch-loom-v2/neoforge.gradle"
+
+loom {
+    runs {
+        data {
+            data()
+            programArgs "--all", "--mod", "runecraftory"
+            programArgs "--output", project(":common").file("src/generated/resources").absolutePath
+            programArgs "--existing", file("src/main/resources").absolutePath
+            programArgs "--existing", project(":common").file("src/main/resources").absolutePath
+        }
+    }
+}
+
+ext {
+    mod_meta.tenshilib_version = tenshilib_version
+}
+
+repositories {
+    mavenLocal()
+    maven {
+        name = "TenshiLib"
+        url "https://maven.blazing-coop.net/releases"
+    }
+    maven {
+        url "https://maven.blamejared.com"
+    }
+    maven { url "https://maven.shedaniel.me" }
+    maven {
+        name = "CurseMaven"
+        url "https://www.cursemaven.com"
+    }
+    maven {
+        name = "minecolonies"
+        url "https://ldtteam.jfrog.io/ldtteam/modding/"
+    }
+    maven {
+        name = "The one probe"
+        url "https://maven.k-4u.nl"
+    }
+}
+
+dependencies {
+    modImplementation "io.github.flemmli97:tenshilib:${tenshilib_version}-neoforge"
+    modImplementation patchouli
+    modImplementation patchouli_datagen
+    modImplementation include("io.github.flemmli97:simplequests_api:${simplequests_api_version}-forge")
+    // Jar-Jar not added otherwise
+    modRuntimeOnly "io.github.flemmli97:lingua_bib:1.18.2-1.0.1-forge"
+    modCompileOnly("mcjty.theoneprobe:theoneprobe:${top_version}") {
+        transitive = false
+    }
+    // for 1.18 the package structure is different between forge/fabric
+    modImplementation "curse.maven:jade-324717:4800837"
+
+    //modRuntimeOnly "mezz.jei:jei-1.18.2-forge:${jei_version}"
+
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-forge:${rei_version}"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-forge:${rei_version}"
+    //modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-forge:${rei_version}"
+
+    modCompileOnly "com.ldtteam:minecolonies:${rootProject.minecolonies}"
+
+    //Mods useful for testing things
+    modRuntimeOnly "curse.maven:mobbattle-268746:4697990"
+    modRuntimeOnly "curse.maven:dummy-225738:3820503"
+    modRuntimeOnly "curse.maven:spark-361579:3824951"
+
+    modRuntimeOnly "io.github.flemmli97:debugutils:1.18.2-1.0.1-forge"
+}

@@ -11,7 +11,7 @@ public class PiyoSandalsEffect extends ArmorEffect {
 
     @Override
     public boolean canBeAppliedTo(ItemStack stack) {
-        return stack.getItem() instanceof ArmorItem armor && armor.getSlot() == EquipmentSlot.FEET;
+        return stack.getItem() instanceof ArmorItem armor && armor.getEquipmentSlot() == EquipmentSlot.FEET;
     }
 
     @Override

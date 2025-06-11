@@ -3,7 +3,6 @@ package io.github.flemmli97.runecraftory.common.items;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
-import io.github.flemmli97.tenshilib.platform.EventCalls;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -11,7 +10,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
@@ -68,11 +66,11 @@ public class BabySpawnEgg extends Item {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
         super.appendHoverText(stack, level, tooltipComponents, isAdvanced);
-        tooltipComponents.add(isBoy(stack) ? new TranslatableComponent("runecraftory.tooltip.baby.boy").withStyle(ChatFormatting.BLUE)
-                : new TranslatableComponent("runecraftory.tooltip.baby.girl").withStyle(ChatFormatting.RED));
+        tooltipComponents.add(isBoy(stack) ? Component.translatable("runecraftory.tooltip.baby.boy").withStyle(ChatFormatting.BLUE)
+                : Component.translatable("runecraftory.tooltip.baby.girl").withStyle(ChatFormatting.RED));
         Component name = this.getPlayerName(stack);
         if (name != null)
-            tooltipComponents.add(new TranslatableComponent("runecraftory.tooltip.baby.owner", name).withStyle(ChatFormatting.GOLD));
+            tooltipComponents.add(Component.translatable("runecraftory.tooltip.baby.owner", name).withStyle(ChatFormatting.GOLD));
     }
 
     public Component getPlayerName(ItemStack stack) {
@@ -147,7 +145,7 @@ public class BabySpawnEgg extends Item {
         Component customName = this.getEntityName(stack);
         if (customName == null && tag.getBoolean("NeedsName")) {
             if (player != null)
-                player.sendMessage(new TranslatableComponent("runecraftory.npc.spawn.name.missing"), Util.NIL_UUID);
+                player.sendMessage(Component.translatable("runecraftory.npc.spawn.name.missing"), Util.NIL_UUID);
             return null;
         }
         Entity e = type.create(world, tag, null, player, pos, reason, updateLocation, doCollisionOffset);

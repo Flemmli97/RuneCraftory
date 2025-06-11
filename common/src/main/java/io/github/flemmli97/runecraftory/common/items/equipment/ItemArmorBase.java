@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.platform.ExtendedItem;
-import io.github.flemmli97.tenshilib.api.item.DynamicArmorTextureItem;
+import io.github.flemmli97.tenshilib.common.item.DynamicArmorTextureItem;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;

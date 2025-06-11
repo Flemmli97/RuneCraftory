@@ -4,7 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityHomingEnergyOrb;
-import io.github.flemmli97.tenshilib.client.model.ModelPartHandler;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -15,13 +14,12 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 public class ModelEnergyOrb<T extends EntityHomingEnergyOrb> extends EntityModel<T> {
 
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(RuneCraftory.MODID, "energy_orb"), "main");
-    public static final ModelLayerLocation LAYER_LOCATION_LAYER = new ModelLayerLocation(new ResourceLocation(RuneCraftory.MODID, "energy_orb_layer"), "main");
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(RuneCraftory.modRes("energy_orb"), "main");
+    public static final ModelLayerLocation LAYER_LOCATION_LAYER = new ModelLayerLocation(RuneCraftory.modRes("energy_orb_layer"), "main");
 
     protected final ModelPartHandler model;
     protected final ModelPartHandler.ModelPartExtended bone;

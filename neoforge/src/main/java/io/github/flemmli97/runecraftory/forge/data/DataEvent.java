@@ -1,0 +1,98 @@
+package io.github.flemmli97.runecraftory.forge.data;
+
+import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.api.datapack.provider.FileVerifier;
+import io.github.flemmli97.runecraftory.forge.data.worldgen.MainWorldGenData;
+import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.resources.Resource;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
+
+import java.io.IOException;
+import java.util.Collections;
+
+@Mod.EventBusSubscriber(modid = RuneCraftory.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+public class DataEvent {
+
+    @SubscribeEvent
+    public static void data(GatherDataEvent event) {
+        PackOutput packOutput = event.getGenerator();
+        NPCDataGen npcDataGen = null;
+        QuestGen questGen = null;
+        FileVerifier verifier = new FileVerifier() {
+            @Override
+            public boolean exists(ResourceLocation loc, PackType packType, String prefix) {
+                return event.getExistingFileHelper().exists(loc, packType, ".json", prefix);
+            }
+
+            @Override
+            public void track(ResourceLocation loc, PackType packType, String prefix) {
+                event.getExistingFileHelper().trackGenerated(loc, packType, ".json", prefix);
+            }
+        };
+        if (event.includeServer()) {
+            data.addProvider(questGen = new QuestGen(data));
+            data.addProvider(npcDataGen = new NPCDataGen(data, verifier, questGen));
+        }
+        if (event.includeClient()) {
+            IgnoreFileHelper ignore = new IgnoreFileHelper(event.getExistingFileHelper());
+            data.addProvider(new BlockStatesGen(data, ignore));
+            data.addProvider(new ItemModels(data, ignore));
+            data.addProvider(new LangGen(data, npcDataGen, questGen));
+            data.addProvider(new NPCDialogLangGen(data, npcDataGen));
+            data.addProvider(new ParticleGen(data));
+            data.addProvider(new SoundGen(data, event.getExistingFileHelper()));
+        }
+        if (event.includeServer()) {
+            BlockTagGen blocks = new BlockTagGen(data, event.getExistingFileHelper());
+            data.addProvider(blocks);
+            data.addProvider(new ItemTagGen(data, blocks, event.getExistingFileHelper()));
+            data.addProvider(new ItemStatGen(data));
+            data.addProvider(new FoodGen(data));
+            data.addProvider(new CropGen(data));
+            data.addProvider(new RecipesGen(data));
+            data.addProvider(new Loottables(data, questGen));
+            data.addProvider(new BiomeTagGen(data, event.getExistingFileHelper()));
+            data.addProvider(new StructureBossGen(data, verifier));
+            data.addProvider(new MainWorldGenData(data, verifier));
+            data.addProvider(new PatchouliGen(data));
+            data.addProvider(new EntityTagGen(data, event.getExistingFileHelper()));
+            data.addProvider(new ShopItemGen(data));
+            data.addProvider(new AdvancementGen(data));
+            data.addProvider(new GateSpawnGen(data));
+            data.addProvider(new MobPropertiesgen(data));
+            data.addProvider(new SpellPropertiesgen(data));
+            data.addProvider(new SkillPropertiesgen(data));
+            data.addProvider(new NPCNameGen(data));
+            data.addProvider(new LootModifierGen(data));
+        }
+    }
+
+    protected static class IgnoreFileHelper extends ExistingFileHelper {
+
+        private final ExistingFileHelper wrapper;
+
+        public IgnoreFileHelper(ExistingFileHelper wrapper) {
+            super(Collections.emptySet(), Collections.emptySet(), false, null, null);
+            this.wrapper = wrapper;
+        }
+
+        @Override
+        public boolean exists(ResourceLocation loc, PackType type, String pathSuffix, String pathPrefix) {
+            return true;
+        }
+
+        @Override
+        public Resource getResource(ResourceLocation loc, PackType type, String pathSuffix, String pathPrefix) throws IOException {
+            return this.wrapper.getResource(loc, type, pathSuffix, pathPrefix);
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return this.wrapper.isEnabled();
+        }
+    }
+}

@@ -2,10 +2,8 @@ package io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia;
 
 import io.github.flemmli97.runecraftory.common.entities.ai.RafflesiaPartAttackGoal;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.api.entity.IAnimated;
-import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
-import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
+import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;

@@ -15,7 +15,7 @@ import io.github.flemmli97.runecraftory.common.utils.CraftingUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.Util;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -71,7 +71,7 @@ public class ItemRecipeBread extends Item {
                                 .forEach(r -> unlocked.addAll(r.getValue()));
                         data.getRecipeKeeper().unlockRecipes(player, unlocked);
                         if (unlocked.isEmpty())
-                            player.sendMessage(new TranslatableComponent("runecraftory.misc.recipe.eat.fail"), Util.NIL_UUID);
+                            player.sendMessage(Component.translatable("runecraftory.misc.recipe.eat.fail"), Util.NIL_UUID);
                     });
         }
         level.playSound(null, living.getX(), living.getY(), living.getZ(), SoundEvents.PLAYER_BURP, SoundSource.PLAYERS, 0.5F, level.random.nextFloat() * 0.1F + 0.9F);

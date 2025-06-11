@@ -4,9 +4,8 @@ import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
-import io.github.flemmli97.tenshilib.common.entity.EntityBeam;
+import io.github.flemmli97.tenshilib.common.entity.BeamEntity;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
-import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -18,7 +17,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.function.Predicate;
 
-public class EntityWindGust extends EntityBeam {
+public class EntityWindGust extends BeamEntity {
 
     private Vec3 pMotion, up, side;
     private Predicate<LivingEntity> pred = (e) -> !e.equals(this.getOwner());

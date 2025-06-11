@@ -3,11 +3,10 @@ package io.github.flemmli97.runecraftory.api.datapack.provider;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
 import io.github.flemmli97.runecraftory.common.datapack.manager.StructureBossManager;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.HashCache;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import org.apache.logging.log4j.LogManager;
@@ -24,25 +23,25 @@ public abstract class StructureBossProvider implements DataProvider {
 
     private final Map<ResourceLocation, StructureBossManager.BossSpawnList> data = new HashMap<>();
 
-    private final DataGenerator gen;
+    private final PackOutput packOutput;
     private final FileVerifier verifier;
 
-    public StructureBossProvider(DataGenerator gen, FileVerifier verifier) {
-        this.gen = gen;
+    public StructureBossProvider(PackOutput packOutput, FileVerifier verifier) {
+        this.packOutput = packOutput;
         this.verifier = verifier;
     }
 
     protected abstract void add();
 
     @Override
-    public void run(HashCache cache) {
+    public void run(CachedOutput cache) {
         this.add();
         this.data.forEach((res, spawnData) -> {
-            Path path = this.gen.getOutputFolder().resolve("data/" + res.getNamespace() + "/" + StructureBossManager.DIRECTORY + "/" + res.getPath() + ".json");
+            Path path = this.packOutput.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(res.getNamespace() + "/" + StructureBossManager.DIRECTORY + "/" + res.getPath() + ".json");
             try {
                 JsonElement obj = StructureBossManager.BossSpawnList.CODEC.encodeStart(JsonOps.INSTANCE, spawnData)
                         .getOrThrow(false, RuneCraftory.LOGGER::error);
-                DataProvider.save(GsonInstances.GSON, cache, obj, path);
+                DataProvider.saveStable(cache, obj, path);
             } catch (IOException e) {
                 LOGGER.error("Couldn't save itemstat {}", path, e);
             }

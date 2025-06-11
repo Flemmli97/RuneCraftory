@@ -16,7 +16,7 @@ import net.minecraft.util.Mth;
 
 public class RenderDarkness extends EntityRenderer<EntityDarkness> {
 
-    private static final ResourceLocation TEX = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/darkness.png");
+    private static final ResourceLocation TEX = RuneCraftory.modRes("textures/entity/projectile/darkness.png");
 
     protected final RenderUtils.TextureBuilder textureBuilder = new RenderUtils.TextureBuilder();
 

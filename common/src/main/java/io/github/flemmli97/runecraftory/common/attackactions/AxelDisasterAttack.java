@@ -7,7 +7,7 @@ import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -42,7 +42,7 @@ public class AxelDisasterAttack extends AttackAction {
         }
         handler.applyMoveDirection();
         if (anim.isPast("attack_start") && !anim.isPast("attack_end")) {
-            if (!entity.level.isClientSide) {
+            if (!entity.level().isClientSide) {
                 if (anim.isAt("reset"))
                     handler.resetHitEntityTracker();
                 handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox()

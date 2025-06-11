@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia;
 
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.AnimationHandler;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;

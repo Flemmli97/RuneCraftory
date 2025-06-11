@@ -8,7 +8,7 @@ import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -35,7 +35,7 @@ public class FireballUseAttack extends AttackAction {
 
     @Override
     public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimatedAction anim) {
-        if (entity.getLevel() instanceof ServerLevel serverLevel && anim.isAt("attack")) {
+        if (entity.level() instanceof ServerLevel serverLevel && anim.isAt("attack")) {
             entity.swing(InteractionHand.MAIN_HAND);
             if (handler.get(DataKey.USED_SPELL) != null) {
                 Spell spell = handler.get(DataKey.USED_SPELL);

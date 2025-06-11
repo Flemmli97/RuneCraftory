@@ -16,8 +16,6 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
@@ -27,11 +25,11 @@ import java.util.List;
 
 public class CraftingGui extends AbstractContainerScreen<ContainerCrafting> {
 
-    private static final ResourceLocation BARS = new ResourceLocation(RuneCraftory.MODID, "textures/gui/bars.png");
-    private static final ResourceLocation FORGING = new ResourceLocation(RuneCraftory.MODID, "textures/gui/forging.png");
-    private static final ResourceLocation CRAFTING = new ResourceLocation(RuneCraftory.MODID, "textures/gui/crafting.png");
-    private static final ResourceLocation COOKING = new ResourceLocation(RuneCraftory.MODID, "textures/gui/cooking.png");
-    private static final ResourceLocation CHEMISTRY = new ResourceLocation(RuneCraftory.MODID, "textures/gui/chemistry.png");
+    private static final ResourceLocation BARS = RuneCraftory.modRes("textures/gui/bars.png");
+    private static final ResourceLocation FORGING = RuneCraftory.modRes("textures/gui/forging.png");
+    private static final ResourceLocation CRAFTING = RuneCraftory.modRes("textures/gui/crafting.png");
+    private static final ResourceLocation COOKING = RuneCraftory.modRes("textures/gui/cooking.png");
+    private static final ResourceLocation CHEMISTRY = RuneCraftory.modRes("textures/gui/chemistry.png");
 
     private Rect scrollBar = new Rect(195, 12, 8, 142);
     private Rect scrollArea = new Rect(172, 12, 31, 142);
@@ -80,9 +78,9 @@ public class CraftingGui extends AbstractContainerScreen<ContainerCrafting> {
         PlayerData data = Platform.INSTANCE.getPlayerData(this.minecraft.player).orElse(null);
         if (this.menu.rpCost() >= 0) {
             int rpMax = data != null ? data.getMaxRunePoints() : 0;
-            MutableComponent cost = new TextComponent("" + this.menu.rpCost());
+            MutableComponent cost = Component.literal("" + this.menu.rpCost());
             if (rpMax < this.menu.rpCost() && !this.minecraft.player.isCreative()) {
-                cost = new TranslatableComponent("runecraftory.gui.crafting.rpMax.missing").withStyle(ChatFormatting.DARK_RED);
+                cost = Component.translatable("runecraftory.gui.crafting.rpMax.missing").withStyle(ChatFormatting.DARK_RED);
             }
             ClientHandlers.drawCenteredScaledString(stack, this.font, cost, this.leftPos + 123, this.topPos + 20, 1, 0);
         }
@@ -99,7 +97,7 @@ public class CraftingGui extends AbstractContainerScreen<ContainerCrafting> {
             this.blit(stack, 17, 3, 18, 40, runePointsWidth, 9);
             ClientHandlers.drawCenteredScaledString(stack, this.font, data.getRunePoints() + "/" + data.getMaxRunePoints(), 18 + 75 * 0.5f, 5, 0.7f, 0xffffff);
             stack.popPose();
-            this.font.draw(stack, new TranslatableComponent("runecraftory.gui.display.level", data.getSkillLevel(this.skill).getLevel()),
+            this.font.draw(stack, Component.translatable("runecraftory.gui.display.level", data.getSkillLevel(this.skill).getLevel()),
                     this.leftPos + this.titleLabelX + this.font.width(this.title) + 6, this.topPos + this.titleLabelY, 0x404040);
         }
     }
@@ -195,7 +193,7 @@ public class CraftingGui extends AbstractContainerScreen<ContainerCrafting> {
         private final int index;
 
         public RecipeSelectButton(int i, int j, int k, OnPress onPress) {
-            super(i, j, 22, 20, TextComponent.EMPTY, onPress);
+            super(i, j, 22, 20, MutableComponent.EMPTY, onPress);
             this.index = k;
             this.visible = false;
         }

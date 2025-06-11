@@ -3,7 +3,6 @@ package io.github.flemmli97.runecraftory.common.crafting;
 import com.google.gson.JsonObject;
 import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
-import io.github.flemmli97.tenshilib.platform.registry.CustomRegistryEntry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -11,10 +10,10 @@ import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.UpgradeRecipe;
+import net.minecraft.world.item.crafting.SingleItemRecipe;
 import net.minecraft.world.level.Level;
 
-public class LevelUpUpgradeRecipe extends UpgradeRecipe {
+public class LevelUpUpgradeRecipe extends SingleItemRecipe {
 
     private final ResourceLocation id;
     protected final int level;

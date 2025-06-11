@@ -1,57 +1,57 @@
 package io.github.flemmli97.runecraftory.common.network;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.client.ClientHandlers;
+import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
 public record S2CEntityDataSync(int entityID,
-                                S2CEntityDataSync.Type type,
-                                boolean flag) implements Packet {
+                                DataType dataType,
+                                boolean flag) implements CustomPacketPayload {
 
-    public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "s2c_entity_data_sync");
+    public static final CustomPacketPayload.Type<S2CEntityDataSync> TYPE = new CustomPacketPayload.Type<>(RuneCraftory.modRes("s2c_entity_data_sync"));
 
-    public static S2CEntityDataSync read(FriendlyByteBuf buf) {
-        return new S2CEntityDataSync(buf.readInt(), buf.readEnum(Type.class), buf.readBoolean());
-    }
+    public static final StreamCodec<RegistryFriendlyByteBuf, S2CEntityDataSync> STREAM_CODEC = new StreamCodec<>() {
+        @Override
+        public S2CEntityDataSync decode(RegistryFriendlyByteBuf buf) {
+            return new S2CEntityDataSync(buf.readInt(), buf.readEnum(DataType.class), buf.readBoolean());
+        }
 
-    public static void handle(S2CEntityDataSync pkt) {
-        Player player = ClientHandlers.getPlayer();
-        if (player == null)
-            return;
-        Entity e = player.level.getEntity(pkt.entityID);
+        @Override
+        public void encode(RegistryFriendlyByteBuf buf, S2CEntityDataSync pkt) {
+            buf.writeInt(pkt.entityID);
+            buf.writeEnum(pkt.dataType);
+            buf.writeBoolean(pkt.flag);
+        }
+    };
+
+    public static void handle(S2CEntityDataSync pkt, Player player) {
+        Entity e = player.level().getEntity(pkt.entityID);
         if (e instanceof LivingEntity living) {
-            Platform.INSTANCE.getEntityData(living).ifPresent(data -> {
-                switch (pkt.type) {
-                    case POISON -> data.setPoison(living, pkt.flag);
-                    case SLEEP -> data.setSleeping(living, pkt.flag);
-                    case PARALYSIS -> data.setParalysis(living, pkt.flag);
-                    case COLD -> data.setCold(living, pkt.flag);
-                    case INVIS -> data.setInvis(living, pkt.flag);
-                    case ORTHOVIEW -> data.setOrthoView(living, pkt.flag);
-                    case STUN -> data.setStunned(living, pkt.flag);
-                }
-            });
+            EntityData data = Platform.INSTANCE.getEntityData(living);
+            switch (pkt.dataType) {
+                case POISON -> data.setPoison(living, pkt.flag);
+                case SLEEP -> data.setSleeping(living, pkt.flag);
+                case PARALYSIS -> data.setParalysis(living, pkt.flag);
+                case COLD -> data.setCold(living, pkt.flag);
+                case INVIS -> data.setInvis(living, pkt.flag);
+                case ORTHOVIEW -> data.setOrthoView(living, pkt.flag);
+                case STUN -> data.setStunned(living, pkt.flag);
+            }
         }
     }
 
     @Override
-    public void write(FriendlyByteBuf buf) {
-        buf.writeInt(this.entityID);
-        buf.writeEnum(this.type);
-        buf.writeBoolean(this.flag);
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 
-    @Override
-    public ResourceLocation getID() {
-        return ID;
-    }
-
-    public enum Type {
+    public enum DataType {
 
         POISON,
         SLEEP,

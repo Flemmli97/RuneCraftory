@@ -8,9 +8,9 @@ import io.github.flemmli97.runecraftory.common.world.structure.SurfaceJigsawStru
 import io.github.flemmli97.runecraftory.common.world.structure.processors.BossSpawnerProcessor;
 import io.github.flemmli97.runecraftory.common.world.structure.processors.NPCDataProcessor;
 import io.github.flemmli97.runecraftory.common.world.structure.processors.WaterUnlogProcessor;
-import io.github.flemmli97.tenshilib.platform.PlatformUtils;
-import io.github.flemmli97.tenshilib.platform.registry.PlatformRegistry;
-import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
+import io.github.flemmli97.tenshilib.loader.LoaderRegistryAccess;
+import io.github.flemmli97.tenshilib.loader.registry.LoaderRegister;
+import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;
@@ -26,9 +26,9 @@ import java.util.function.Supplier;
 
 public class ModStructures {
 
-    public static final PlatformRegistry<StructureFeature<?>> STRUCTURES = PlatformUtils.INSTANCE.of(Registry.STRUCTURE_FEATURE_REGISTRY, RuneCraftory.MODID);
+    public static final int STRUCTURES = LoaderRegistryAccess.INSTANCE.of(Registry.STRUCTURE_FEATURE_REGISTRY, RuneCraftory.MODID);
 
-    public static final PlatformRegistry<StructureProcessorType<?>> STRUCTURESPROCESSORS = PlatformUtils.INSTANCE.of(Registry.STRUCTURE_PROCESSOR_REGISTRY, RuneCraftory.MODID);
+    public static final LoaderRegister<StructureProcessorType<?>> STRUCTURESPROCESSORS = LoaderRegistryAccess.INSTANCE.of(Registry.STRUCTURE_PROCESSOR_REGISTRY, RuneCraftory.MODID);
 
     public static final RegistryEntrySupplier<StructureFeature<JigsawConfiguration>> FOREST_GROVE = register("forest_grove", () -> new SurfaceJigsawStructure(JigsawConfiguration.CODEC));
     public static final RegistryEntrySupplier<StructureFeature<JigsawConfiguration>> WATER_RUINS = register("water_ruins", () -> new SurfaceJigsawStructure(JigsawConfiguration.CODEC));
@@ -52,7 +52,7 @@ public class ModStructures {
     private static Map<ResourceLocation, Holder<StructureProcessorList>> registerNPCProcessorLists() {
         ImmutableMap.Builder<ResourceLocation, Holder<StructureProcessorList>> map = ImmutableMap.builder();
         for (ResourceLocation shop : ModNPCJobs.DEFAULT_JOB_ID) {
-            Holder<StructureProcessorList> holder = BuiltinRegistries.register(BuiltinRegistries.PROCESSOR_LIST, new ResourceLocation(RuneCraftory.MODID, "npc_" + shop.getPath()),
+            Holder<StructureProcessorList> holder = BuiltinRegistries.register(BuiltinRegistries.PROCESSOR_LIST, RuneCraftory.modRes("npc_" + shop.getPath()),
                     new StructureProcessorList(ImmutableList.of(new NPCDataProcessor(shop))));
             map.put(shop, holder);
         }

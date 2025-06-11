@@ -32,12 +32,12 @@ public class SpellArgumentType implements ArgumentType<ResourceLocation> {
 
     public static <S> Spell getSpell(CommandContext<S> context, String name) {
         ResourceLocation id = context.getArgument(name, ResourceLocation.class);
-        return ModSpells.SPELL_REGISTRY.get().getFromId(id);
+        return ModSpells.SPELLS.registry().get(id);
     }
 
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> commandContext, SuggestionsBuilder suggestionsBuilder) {
-        return SharedSuggestionProvider.suggestResource(ModSpells.SPELL_REGISTRY.get().keys(), suggestionsBuilder);
+        return SharedSuggestionProvider.suggestResource(ModSpells.SPELLS.registry().keySet(), suggestionsBuilder);
     }
 
     @Override

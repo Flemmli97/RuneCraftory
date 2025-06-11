@@ -24,7 +24,7 @@ import java.util.Map;
 
 public class NPCDialogueGui<T extends EntityNPCBase> extends Screen {
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation(RuneCraftory.MODID, "textures/gui/npc_dialogue.png");
+    private static final ResourceLocation TEXTURE = RuneCraftory.modRes("textures/gui/npc_dialogue.png");
 
     public static final int MAX_WIDTH = 200;
     public static final int MAX_HEIGHT = 73;

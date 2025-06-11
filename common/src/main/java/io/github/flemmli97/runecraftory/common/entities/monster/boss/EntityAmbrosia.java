@@ -11,8 +11,8 @@ import io.github.flemmli97.runecraftory.common.network.S2CMobUpdate;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
@@ -21,7 +21,7 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTarget
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.StrafingRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.TimedWrappedRunner;
-import io.github.flemmli97.tenshilib.common.utils.OrientedBoundingBox;
+import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.random.WeightedEntry;
@@ -90,9 +90,9 @@ public class EntityAmbrosia extends BossMonster {
             entity.setDeltaMovement(entity.moveDirection);
             if (anim.isAt("attack") && !EntityUtils.sealed(entity)) {
                 entity.getNavigation().stop();
-                EntityPollen pollen = new EntityPollen(entity.level, entity);
+                EntityPollen pollen = new EntityPollen(entity.level(), entity);
                 pollen.setPos(pollen.getX(), pollen.getY() + 0.5, pollen.getZ());
-                entity.level.addFreshEntity(pollen);
+                entity.level().addFreshEntity(pollen);
             }
         };
         b.put(POLLEN, pollenHandler);

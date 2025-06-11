@@ -11,12 +11,12 @@ import java.util.function.Supplier;
 
 public class GroundedAbilitySpell extends WeaponSpell {
 
-    public GroundedAbilitySpell(Supplier<AttackAction> attackAction, TagKey<Item> weapon) {
+    public GroundedAbilitySpell(Supplier<? extends AttackAction> attackAction, TagKey<Item> weapon) {
         super(attackAction, weapon);
     }
 
     @Override
     public boolean canUse(ServerLevel world, LivingEntity entity, ItemStack stack) {
-        return (entity.isOnGround() || entity.isNoGravity()) && super.canUse(world, entity, stack);
+        return (entity.onGround() || entity.isNoGravity()) && super.canUse(world, entity, stack);
     }
 }

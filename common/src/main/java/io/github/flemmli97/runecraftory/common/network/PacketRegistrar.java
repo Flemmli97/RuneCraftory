@@ -1,77 +1,80 @@
 package io.github.flemmli97.runecraftory.common.network;
 
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class PacketRegistrar {
 
-    public static int registerServerPackets(ServerPacketRegister register, int id) {
-        register.registerMessage(id++, C2SOpenInfo.ID, C2SOpenInfo.class, C2SOpenInfo::write, C2SOpenInfo::read, C2SOpenInfo::handle);
-        register.registerMessage(id++, C2SRideJump.ID, C2SRideJump.class, C2SRideJump::write, C2SRideJump::read, C2SRideJump::handle);
-        register.registerMessage(id++, C2SSpellKey.ID, C2SSpellKey.class, C2SSpellKey::write, C2SSpellKey::read, C2SSpellKey::handle);
-        register.registerMessage(id++, C2SSetMonsterBehaviour.ID, C2SSetMonsterBehaviour.class, C2SSetMonsterBehaviour::write, C2SSetMonsterBehaviour::read, C2SSetMonsterBehaviour::handle);
-        register.registerMessage(id++, C2SNPCInteraction.ID, C2SNPCInteraction.class, C2SNPCInteraction::write, C2SNPCInteraction::read, C2SNPCInteraction::handle);
-        register.registerMessage(id++, C2SShopButton.ID, C2SShopButton.class, C2SShopButton::write, C2SShopButton::read, C2SShopButton::handle);
-        register.registerMessage(id++, C2SSelectRecipeCrafting.ID, C2SSelectRecipeCrafting.class, C2SSelectRecipeCrafting::write, C2SSelectRecipeCrafting::read, C2SSelectRecipeCrafting::handle);
-        register.registerMessage(id++, C2SDialogueAction.ID, C2SDialogueAction.class, C2SDialogueAction::write, C2SDialogueAction::read, C2SDialogueAction::handle);
-        register.registerMessage(id++, C2SQuestSelect.ID, C2SQuestSelect.class, C2SQuestSelect::write, C2SQuestSelect::read, C2SQuestSelect::handle);
-        register.registerMessage(id++, C2SSubmitQuestBoard.ID, C2SSubmitQuestBoard.class, C2SSubmitQuestBoard::write, C2SSubmitQuestBoard::read, C2SSubmitQuestBoard::handle);
-        register.registerMessage(id++, C2SSpawnEgg.ID, C2SSpawnEgg.class, C2SSpawnEgg::write, C2SSpawnEgg::read, C2SSpawnEgg::handle);
-        register.registerMessage(id++, C2SProcreationRequest.ID, C2SProcreationRequest.class, C2SProcreationRequest::write, C2SProcreationRequest::read, C2SProcreationRequest::handle);
-        return id;
+    public static void registerServerPackets(ServerPacketRegister register) {
+        register.register(C2SOpenInfo.TYPE, C2SOpenInfo.STREAM_CODEC, C2SOpenInfo::handle);
+        register.register(C2SRideJump.TYPE, C2SRideJump.STREAM_CODEC, C2SRideJump::handle);
+        register.register(C2SSpellKey.TYPE, C2SSpellKey.STREAM_CODEC, C2SSpellKey::handle);
+        register.register(C2SSetMonsterBehaviour.TYPE, C2SSetMonsterBehaviour.STREAM_CODEC, C2SSetMonsterBehaviour::handle);
+        register.register(C2SNPCInteraction.TYPE, C2SNPCInteraction.STREAM_CODEC, C2SNPCInteraction::handle);
+        register.register(C2SShopButton.TYPE, C2SShopButton.STREAM_CODEC, C2SShopButton::handle);
+        register.register(C2SSelectRecipeCrafting.TYPE, C2SSelectRecipeCrafting.STREAM_CODEC, C2SSelectRecipeCrafting::handle);
+        register.register(C2SDialogueAction.TYPE, C2SDialogueAction.STREAM_CODEC, C2SDialogueAction::handle);
+        register.register(C2SQuestSelect.TYPE, C2SQuestSelect.STREAM_CODEC, C2SQuestSelect::handle);
+        register.register(C2SSubmitQuestBoard.TYPE, C2SSubmitQuestBoard.STREAM_CODEC, C2SSubmitQuestBoard::handle);
+        register.register(C2SSpawnEgg.TYPE, C2SSpawnEgg.STREAM_CODEC, C2SSpawnEgg::handle);
+        register.register(C2SProcreationRequest.TYPE, C2SProcreationRequest.STREAM_CODEC, C2SProcreationRequest::handle);
     }
 
-    public static int registerClientPackets(ClientPacketRegister register, int id) {
-        register.registerMessage(id++, S2CAttackDebug.ID, S2CAttackDebug.class, S2CAttackDebug::write, S2CAttackDebug::read, S2CAttackDebug::handle);
-        register.registerMessage(id++, S2CCalendar.ID, S2CCalendar.class, S2CCalendar::write, S2CCalendar::read, S2CCalendar::handle);
-        register.registerMessage(id++, S2CCapSync.ID, S2CCapSync.class, S2CCapSync::write, S2CCapSync::read, S2CCapSync::handle);
-        register.registerMessage(id++, S2CDataPackSync.ID, S2CDataPackSync.class, S2CDataPackSync::write, S2CDataPackSync::read, S2CDataPackSync::handle);
-        register.registerMessage(id++, S2CEntityDataSync.ID, S2CEntityDataSync.class, S2CEntityDataSync::write, S2CEntityDataSync::read, S2CEntityDataSync::handle);
-        register.registerMessage(id++, S2CEntityDataSyncAll.ID, S2CEntityDataSyncAll.class, S2CEntityDataSyncAll::write, S2CEntityDataSyncAll::read, S2CEntityDataSyncAll::handle);
-        register.registerMessage(id++, S2CFoodPkt.ID, S2CFoodPkt.class, S2CFoodPkt::write, S2CFoodPkt::read, S2CFoodPkt::handle);
-        register.registerMessage(id++, S2CItemStatBoost.ID, S2CItemStatBoost.class, S2CItemStatBoost::write, S2CItemStatBoost::read, S2CItemStatBoost::handle);
-        register.registerMessage(id++, S2CLevelPkt.ID, S2CLevelPkt.class, S2CLevelPkt::write, S2CLevelPkt::read, S2CLevelPkt::handle);
-        register.registerMessage(id++, S2CMaxRunePoints.ID, S2CMaxRunePoints.class, S2CMaxRunePoints::write, S2CMaxRunePoints::read, S2CMaxRunePoints::handle);
-        register.registerMessage(id++, S2CMoney.ID, S2CMoney.class, S2CMoney::write, S2CMoney::read, S2CMoney::handle);
-        register.registerMessage(id++, S2CPlayerStats.ID, S2CPlayerStats.class, S2CPlayerStats::write, S2CPlayerStats::read, S2CPlayerStats::handle);
-        register.registerMessage(id++, S2CRecipe.ID, S2CRecipe.class, S2CRecipe::write, S2CRecipe::read, S2CRecipe::handle);
-        register.registerMessage(id++, S2CRunePoints.ID, S2CRunePoints.class, S2CRunePoints::write, S2CRunePoints::read, S2CRunePoints::handle);
-        register.registerMessage(id++, S2CSkillLevelPkt.ID, S2CSkillLevelPkt.class, S2CSkillLevelPkt::write, S2CSkillLevelPkt::read, S2CSkillLevelPkt::handle);
-        register.registerMessage(id++, S2COpenCompanionGui.ID, S2COpenCompanionGui.class, S2COpenCompanionGui::write, S2COpenCompanionGui::read, S2COpenCompanionGui::handle);
-        register.registerMessage(id++, S2COpenNPCGui.ID, S2COpenNPCGui.class, S2COpenNPCGui::write, S2COpenNPCGui::read, S2COpenNPCGui::handle);
-        register.registerMessage(id++, S2CUpdateNPCData.ID, S2CUpdateNPCData.class, S2CUpdateNPCData::write, S2CUpdateNPCData::read, S2CUpdateNPCData::handle);
-        register.registerMessage(id++, S2CShopResponses.ID, S2CShopResponses.class, S2CShopResponses::write, S2CShopResponses::read, S2CShopResponses::handle);
-        register.registerMessage(id++, S2CScreenShake.ID, S2CScreenShake.class, S2CScreenShake::write, S2CScreenShake::read, S2CScreenShake::handle);
-        register.registerMessage(id++, S2CWeaponUse.ID, S2CWeaponUse.class, S2CWeaponUse::write, S2CWeaponUse::read, S2CWeaponUse::handle);
-        register.registerMessage(id++, S2CCraftingRecipes.ID, S2CCraftingRecipes.class, S2CCraftingRecipes::write, S2CCraftingRecipes::read, S2CCraftingRecipes::handle);
-        register.registerMessage(id++, S2CNPCLook.ID, S2CNPCLook.class, S2CNPCLook::write, S2CNPCLook::read, S2CNPCLook::handle);
-        register.registerMessage(id++, S2CUpdateAttributesWithAdditional.ID, S2CUpdateAttributesWithAdditional.class, S2CUpdateAttributesWithAdditional::write, S2CUpdateAttributesWithAdditional::read, S2CUpdateAttributesWithAdditional::handle);
-        register.registerMessage(id++, S2CTriggers.ID, S2CTriggers.class, S2CTriggers::write, S2CTriggers::read, S2CTriggers::handle);
-        register.registerMessage(id++, S2CFarmlandUpdatePacket.ID, S2CFarmlandUpdatePacket.class, S2CFarmlandUpdatePacket::write, S2CFarmlandUpdatePacket::read, S2CFarmlandUpdatePacket::handle);
-        register.registerMessage(id++, S2CFarmlandRemovePacket.ID, S2CFarmlandRemovePacket.class, S2CFarmlandRemovePacket::write, S2CFarmlandRemovePacket::read, S2CFarmlandRemovePacket::handle);
-        register.registerMessage(id++, S2CNpcDialogue.ID, S2CNpcDialogue.class, S2CNpcDialogue::write, S2CNpcDialogue::read, S2CNpcDialogue::handle);
-        register.registerMessage(id++, S2COpenQuestGui.ID, S2COpenQuestGui.class, S2COpenQuestGui::write, S2COpenQuestGui::read, S2COpenQuestGui::handle);
-        register.registerMessage(id++, S2CSyncConfig.ID, S2CSyncConfig.class, S2CSyncConfig::write, S2CSyncConfig::read, S2CSyncConfig::handle);
-        register.registerMessage(id++, S2CSpawnEggScreen.ID, S2CSpawnEggScreen.class, S2CSpawnEggScreen::write, S2CSpawnEggScreen::read, S2CSpawnEggScreen::handle);
-        register.registerMessage(id++, S2CEntityLevelPkt.ID, S2CEntityLevelPkt.class, S2CEntityLevelPkt::write, S2CEntityLevelPkt::read, S2CEntityLevelPkt::handle);
-        register.registerMessage(id++, S2CBossbarInfoAdd.ID, S2CBossbarInfoAdd.class, S2CBossbarInfoAdd::write, S2CBossbarInfoAdd::read, S2CBossbarInfoAdd::handle);
-        register.registerMessage(id++, S2CBossbarInfoRemove.ID, S2CBossbarInfoRemove.class, S2CBossbarInfoRemove::write, S2CBossbarInfoRemove::read, S2CBossbarInfoRemove::handle);
-        register.registerMessage(id++, S2CBossbarMusicUpdate.ID, S2CBossbarMusicUpdate.class, S2CBossbarMusicUpdate::write, S2CBossbarMusicUpdate::read, S2CBossbarMusicUpdate::handle);
-        register.registerMessage(id++, S2CMobUpdate.ID, S2CMobUpdate.class, S2CMobUpdate::write, S2CMobUpdate::read, S2CMobUpdate::handle);
-        register.registerMessage(id++, S2CSimpleToast.ID, S2CSimpleToast.class, S2CSimpleToast::write, S2CSimpleToast::read, S2CSimpleToast::handle);
-        return id;
+    public static void registerClientPackets(ClientPacketRegister register) {
+        register.register(S2CAttackDebug.TYPE, S2CAttackDebug.STREAM_CODEC, (pkt, player) -> S2CAttackDebug.handle(pkt));
+        register.register(S2CCalendar.TYPE, S2CCalendar.STREAM_CODEC, S2CCalendar::handle);
+        register.register(S2CCapSync.TYPE, S2CCapSync.STREAM_CODEC, S2CCapSync::handle);
+        register.register(S2CDataPackSync.TYPE, S2CDataPackSync.STREAM_CODEC, S2CDataPackSync::handle);
+        register.register(S2CEntityDataSync.TYPE, S2CEntityDataSync.STREAM_CODEC, S2CEntityDataSync::handle);
+        register.register(S2CEntityDataSyncAll.TYPE, S2CEntityDataSyncAll.STREAM_CODEC, S2CEntityDataSyncAll::handle);
+        register.register(S2CFoodPkt.TYPE, S2CFoodPkt.STREAM_CODEC, S2CFoodPkt::handle);
+        register.register(S2CItemStatBoost.TYPE, S2CItemStatBoost.STREAM_CODEC, S2CItemStatBoost::handle);
+        register.register(S2CLevelPkt.TYPE, S2CLevelPkt.STREAM_CODEC, S2CLevelPkt::handle);
+        register.register(S2CMaxRunePoints.TYPE, S2CMaxRunePoints.STREAM_CODEC, S2CMaxRunePoints::handle);
+        register.register(S2CMoney.TYPE, S2CMoney.STREAM_CODEC, S2CMoney::handle);
+        register.register(S2CPlayerStats.TYPE, S2CPlayerStats.STREAM_CODEC, S2CPlayerStats::handle);
+        register.register(S2CRecipe.TYPE, S2CRecipe.STREAM_CODEC, S2CRecipe::handle);
+        register.register(S2CRunePoints.TYPE, S2CRunePoints.STREAM_CODEC, S2CRunePoints::handle);
+        register.register(S2CSkillLevelPkt.TYPE, S2CSkillLevelPkt.STREAM_CODEC, S2CSkillLevelPkt::handle);
+        register.register(S2COpenCompanionGui.TYPE, S2COpenCompanionGui.STREAM_CODEC, S2COpenCompanionGui::handle);
+        register.register(S2COpenNPCGui.TYPE, S2COpenNPCGui.STREAM_CODEC, S2COpenNPCGui::handle);
+        register.register(S2CUpdateNPCData.TYPE, S2CUpdateNPCData.STREAM_CODEC, S2CUpdateNPCData::handle);
+        register.register(S2CShopResponses.TYPE, S2CShopResponses.STREAM_CODEC, S2CShopResponses::handle);
+        register.register(S2CScreenShake.TYPE, S2CScreenShake.STREAM_CODEC, S2CScreenShake::handle);
+        register.register(S2CWeaponUse.TYPE, S2CWeaponUse.STREAM_CODEC, S2CWeaponUse::handle);
+        register.register(S2CCraftingRecipes.TYPE, S2CCraftingRecipes.STREAM_CODEC, S2CCraftingRecipes::handle);
+        register.register(S2CNPCLook.TYPE, S2CNPCLook.STREAM_CODEC, S2CNPCLook::handle);
+        register.register(S2CUpdateAttributesWithAdditional.TYPE, S2CUpdateAttributesWithAdditional.STREAM_CODEC, S2CUpdateAttributesWithAdditional::handle);
+        register.register(S2CTriggers.TYPE, S2CTriggers.STREAM_CODEC, S2CTriggers::handle);
+        register.register(S2CFarmlandUpdatePacket.TYPE, S2CFarmlandUpdatePacket.STREAM_CODEC, S2CFarmlandUpdatePacket::handle);
+        register.register(S2CFarmlandRemovePacket.TYPE, S2CFarmlandRemovePacket.STREAM_CODEC, S2CFarmlandRemovePacket::handle);
+        register.register(S2CNpcDialogue.TYPE, S2CNpcDialogue.STREAM_CODEC, S2CNpcDialogue::handle);
+        register.register(S2COpenQuestGui.TYPE, S2COpenQuestGui.STREAM_CODEC, S2COpenQuestGui::handle);
+        register.register(S2CSyncConfig.TYPE, S2CSyncConfig.STREAM_CODEC, S2CSyncConfig::handle);
+        register.register(S2CSpawnEggScreen.TYPE, S2CSpawnEggScreen.STREAM_CODEC, S2CSpawnEggScreen::handle);
+        register.register(S2CEntityLevelPkt.TYPE, S2CEntityLevelPkt.STREAM_CODEC, S2CEntityLevelPkt::handle);
+        register.register(S2CBossbarInfoAdd.TYPE, S2CBossbarInfoAdd.STREAM_CODEC, S2CBossbarInfoAdd::handle);
+        register.register(S2CBossbarInfoRemove.TYPE, S2CBossbarInfoRemove.STREAM_CODEC, S2CBossbarInfoRemove::handle);
+        register.register(S2CBossbarMusicUpdate.TYPE, S2CBossbarMusicUpdate.STREAM_CODEC, S2CBossbarMusicUpdate::handle);
+        register.register(S2CMobUpdate.TYPE, S2CMobUpdate.STREAM_CODEC, S2CMobUpdate::handle);
+        register.register(S2CSimpleToast.TYPE, S2CSimpleToast.STREAM_CODEC, S2CSimpleToast::handle);
     }
 
     public interface ServerPacketRegister {
-        <P> void registerMessage(int index, ResourceLocation id, Class<P> clss, BiConsumer<P, FriendlyByteBuf> encoder, Function<FriendlyByteBuf, P> decoder, BiConsumer<P, ServerPlayer> handler);
+        <P extends CustomPacketPayload> void register(CustomPacketPayload.Type<P> type, StreamCodec<RegistryFriendlyByteBuf, P> codec, BiConsumer<P, ServerPlayer> handler);
     }
 
     public interface ClientPacketRegister {
-        <P> void registerMessage(int index, ResourceLocation id, Class<P> clss, BiConsumer<P, FriendlyByteBuf> encoder, Function<FriendlyByteBuf, P> decoder, Consumer<P> handler);
+        <P extends CustomPacketPayload> void register(CustomPacketPayload.Type<P> type, StreamCodec<RegistryFriendlyByteBuf, P> codec, BiConsumer<P, Player> handler);
+
+        default <P extends CustomPacketPayload> void register(CustomPacketPayload.Type<P> type, StreamCodec<RegistryFriendlyByteBuf, P> codec, Consumer<P> handler) {
+            this.register(type, codec, (pkt, p) -> handler.accept(pkt));
+        }
     }
 }

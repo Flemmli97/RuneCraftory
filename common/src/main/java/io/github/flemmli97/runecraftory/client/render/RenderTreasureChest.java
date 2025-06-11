@@ -16,9 +16,9 @@ import net.minecraft.util.Mth;
 
 public class RenderTreasureChest extends EntityRenderer<EntityTreasureChest> {
 
-    protected static final ResourceLocation COMMON = new ResourceLocation(RuneCraftory.MODID, "textures/entity/chest.png");
-    protected static final ResourceLocation RARE = new ResourceLocation(RuneCraftory.MODID, "textures/entity/rare_chest.png");
-    protected static final ResourceLocation QUEST = new ResourceLocation(RuneCraftory.MODID, "textures/entity/quest_chest.png");
+    protected static final ResourceLocation COMMON = RuneCraftory.modRes("textures/entity/chest.png");
+    protected static final ResourceLocation RARE = RuneCraftory.modRes("textures/entity/rare_chest.png");
+    protected static final ResourceLocation QUEST = RuneCraftory.modRes("textures/entity/quest_chest.png");
 
     protected final EntityModel<EntityTreasureChest> model;
 

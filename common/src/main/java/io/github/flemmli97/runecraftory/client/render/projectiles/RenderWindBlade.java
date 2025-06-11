@@ -3,14 +3,13 @@ package io.github.flemmli97.runecraftory.client.render.projectiles;
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityWindBlade;
-import io.github.flemmli97.tenshilib.client.render.RenderTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 
 public class RenderWindBlade extends RenderTexture<EntityWindBlade> {
 
-    private static final ResourceLocation TEX = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/wind_blade.png");
+    private static final ResourceLocation TEX = RuneCraftory.modRes("textures/entity/projectile/wind_blade.png");
 
     public RenderWindBlade(EntityRendererProvider.Context ctx) {
         super(ctx, 1, 1, 8, 1);

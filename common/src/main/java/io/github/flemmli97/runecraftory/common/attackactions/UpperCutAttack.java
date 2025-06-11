@@ -6,8 +6,8 @@ import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.common.utils.OrientedBoundingBox;
+import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
@@ -25,7 +25,7 @@ public class UpperCutAttack extends AttackAction {
     public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimatedAction anim) {
         if (anim.isAt("attack")) {
             entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_LIGHT.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
-            if (!entity.level.isClientSide) {
+            if (!entity.level().isClientSide) {
                 AABB aabb = new AABB(-1, -0.02, 0, 1, entity.getBbHeight() + 1, entity.getBbWidth() + 2);
                 OrientedBoundingBox obb = new OrientedBoundingBox(aabb, entity.getYRot(), 0, entity.position());
                 CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(obb))

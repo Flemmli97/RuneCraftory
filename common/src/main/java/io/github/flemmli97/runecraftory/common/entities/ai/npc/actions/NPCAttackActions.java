@@ -6,8 +6,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.registry.NPCAction;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCActions;
-import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
-import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.ExtraCodecs;
@@ -50,7 +48,7 @@ public class NPCAttackActions {
 
         public static final Codec<WeightedAction> CODEC = RecordCodecBuilder.create((instance) ->
                 instance.group(ExtraCodecs.POSITIVE_INT.fieldOf("weight").forGetter(d -> d.weight.asInt()),
-                        CodecHelper.ENTITY_PREDICATE_CODEC.optionalFieldOf("predicate").forGetter(d -> d.predicate == EntityPredicate.ANY ? Optional.empty() : Optional.of(d.predicate)),
+                        EntityPredicate.CODEC.optionalFieldOf("predicate").forGetter(d -> d.predicate == EntityPredicate.ANY ? Optional.empty() : Optional.of(d.predicate)),
                         CodecUtils.registryCodec(ModNPCActions.ACTIONS_REGISTRY_KEY)
                                 .dispatchStable(c -> c.codec().get(), c -> c.codec).listOf().fieldOf("concurrent_actions").forGetter(d -> d.chainedActions)
                 ).apply(instance, (weight, pred, concurrent) -> new WeightedAction(weight, pred.orElse(EntityPredicate.ANY), concurrent)));

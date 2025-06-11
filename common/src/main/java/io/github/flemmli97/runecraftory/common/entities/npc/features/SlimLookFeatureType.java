@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.npc.features;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeature;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureHolder;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureType;
@@ -12,7 +12,7 @@ import net.minecraft.network.FriendlyByteBuf;
 public class SlimLookFeatureType implements NPCFeatureHolder<SlimLookFeatureType.SlimLookFeature> {
 
     public static final SlimLookFeatureType INSTANCE = new SlimLookFeatureType();
-    public static final Codec<SlimLookFeatureType> CODEC = Codec.unit(INSTANCE);
+    public static final MapCodec<SlimLookFeatureType> CODEC = MapCodec.unit(INSTANCE);
     public static final SlimLookFeature FEATURE = new SlimLookFeature();
 
     private SlimLookFeatureType() {

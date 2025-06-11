@@ -12,9 +12,8 @@ import io.github.flemmli97.simplequests_api.quest.QuestBase;
 import io.github.flemmli97.simplequests_api.quest.entry.QuestEntryKey;
 import io.github.flemmli97.simplequests_api.quest.entry.QuestTask;
 import io.github.flemmli97.simplequests_api.quest.entry.ResolvedQuestTask;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -23,10 +22,10 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 
 public class LevelTask implements QuestTask<LevelTask.LevelTaskResolved> {
 
-    public static final QuestEntryKey<LevelTask> ID = new QuestEntryKey<>(new ResourceLocation(RuneCraftory.MODID, "level"));
+    public static final QuestEntryKey<LevelTask> ID = new QuestEntryKey<>(RuneCraftory.modRes("level"));
     public static final Codec<LevelTask> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(Codec.STRING.fieldOf("description").forGetter(d -> d.description),
-                    CodecHelper.NUMER_PROVIDER_CODEC.fieldOf("level").forGetter(d -> d.range)
+                    NumberProviders.CODEC.fieldOf("level").forGetter(d -> d.range)
             ).apply(instance, LevelTask::new));
 
     private final String description;
@@ -43,9 +42,9 @@ public class LevelTask implements QuestTask<LevelTask.LevelTaskResolved> {
     @Override
     public MutableComponent translation(ServerPlayer player) {
         if (this.description.isEmpty() && this.range instanceof ConstantValue) {
-            return new TranslatableComponent(this.getId().toString(), this.range.getInt(null));
+            return Component.translatable(this.getId().toString(), this.range.getInt(null));
         }
-        return new TranslatableComponent(this.description);
+        return Component.translatable(this.description);
     }
 
     @Override
@@ -76,7 +75,7 @@ public class LevelTask implements QuestTask<LevelTask.LevelTaskResolved> {
 
         @Override
         public MutableComponent translation(ServerPlayer player) {
-            return new TranslatableComponent(this.getId().toString(), this.level);
+            return Component.translatable(this.getId().toString(), this.level);
         }
     }
 }

@@ -13,14 +13,15 @@ import io.github.flemmli97.runecraftory.common.registry.ModArmorEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
-import io.github.flemmli97.runecraftory.common.registry.ModContainer;
 import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
 import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
+import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModFeatures;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
+import io.github.flemmli97.runecraftory.common.registry.ModMenuTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCActions;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
@@ -37,8 +38,7 @@ import io.github.flemmli97.runecraftory.fabric.event.CropGrowEvent;
 import io.github.flemmli97.runecraftory.fabric.loot.CropLootModifiers;
 import io.github.flemmli97.runecraftory.fabric.network.ServerPacketHandler;
 import io.github.flemmli97.runecraftory.mixin.AttributeAccessor;
-import io.github.flemmli97.tenshilib.fabric.events.AOEAttackEvent;
-import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
+import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
@@ -94,7 +94,7 @@ public class RuneCraftoryFabric implements ModInitializer {
 
     public static void entityTick(LivingEntity entity) {
         EntityCalls.updateLivingTick(entity);
-        if (entity.level.isClientSide)
+        if (entity.level().isClientSide)
             ClientCalls.tick(entity);
     }
 
@@ -121,7 +121,7 @@ public class RuneCraftoryFabric implements ModInitializer {
 
             @Override
             public ResourceLocation getFabricId() {
-                return new ResourceLocation(RuneCraftory.MODID, "item_stats");
+                return RuneCraftory.modRes("item_stats");
             }
         });
         ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new IdentifiableResourceReloadListener() {
@@ -134,7 +134,7 @@ public class RuneCraftoryFabric implements ModInitializer {
 
             @Override
             public ResourceLocation getFabricId() {
-                return new ResourceLocation(RuneCraftory.MODID, "crop_manager");
+                return RuneCraftory.modRes("crop_manager");
             }
         });
         ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new IdentifiableResourceReloadListener() {
@@ -147,7 +147,7 @@ public class RuneCraftoryFabric implements ModInitializer {
 
             @Override
             public ResourceLocation getFabricId() {
-                return new ResourceLocation(RuneCraftory.MODID, "food_manager");
+                return RuneCraftory.modRes("food_manager");
             }
         });
         ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new IdentifiableResourceReloadListener() {
@@ -160,7 +160,7 @@ public class RuneCraftoryFabric implements ModInitializer {
 
             @Override
             public ResourceLocation getFabricId() {
-                return new ResourceLocation(RuneCraftory.MODID, "shop_items");
+                return RuneCraftory.modRes("shop_items");
             }
         });
         ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new IdentifiableResourceReloadListener() {
@@ -173,7 +173,7 @@ public class RuneCraftoryFabric implements ModInitializer {
 
             @Override
             public ResourceLocation getFabricId() {
-                return new ResourceLocation(RuneCraftory.MODID, "random_npc_data");
+                return RuneCraftory.modRes("random_npc_data");
             }
         });
         ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new IdentifiableResourceReloadListener() {
@@ -186,7 +186,7 @@ public class RuneCraftoryFabric implements ModInitializer {
 
             @Override
             public ResourceLocation getFabricId() {
-                return new ResourceLocation(RuneCraftory.MODID, "gate_spawn_data");
+                return RuneCraftory.modRes("gate_spawn_data");
             }
         });
         ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new IdentifiableResourceReloadListener() {
@@ -199,7 +199,7 @@ public class RuneCraftoryFabric implements ModInitializer {
 
             @Override
             public ResourceLocation getFabricId() {
-                return new ResourceLocation(RuneCraftory.MODID, "datapack_properties");
+                return RuneCraftory.modRes("datapack_properties");
             }
         });
         ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(CropLootModifiers.INSTANCE);
@@ -270,7 +270,7 @@ public class RuneCraftoryFabric implements ModInitializer {
         ModItems.ITEMS.registerContent();
 
         ModBlocks.BLOCK_ENTITY_TYPES.registerContent();
-        ModContainer.CONTAINERS.registerContent();
+        ModMenuTypes.CONTAINERS.registerContent();
         //ModAttributes.ATTRIBUTES.registerContent();
         ModEffects.EFFECTS.registerContent();
         ModCrafting.RECIPESERIALIZER.registerContent();
@@ -292,6 +292,7 @@ public class RuneCraftoryFabric implements ModInitializer {
         ModStructures.STRUCTURESPROCESSORS.registerContent();
         ModCrafting.RECIPETYPE.registerContent();
         ModSounds.SOUND_EVENTS.registerContent();
+        ModDataComponentTypes.DATA_COMPONENTS.registerContent();
 
         this.tweakVanillaAttribute(Attributes.MAX_HEALTH, Double.MAX_VALUE);
         this.tweakVanillaAttribute(Attributes.ATTACK_DAMAGE, Double.MAX_VALUE);

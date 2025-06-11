@@ -1,16 +1,14 @@
 package io.github.flemmli97.runecraftory.client.render.projectiles;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.tenshilib.client.render.RenderBeam;
-import io.github.flemmli97.tenshilib.common.entity.EntityBeam;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 public class RenderSingleFrameBeam<T extends EntityBeam> extends RenderBeam<T> {
 
-    public static final ResourceLocation DARK_BEAM = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/dark_beam.png");
-    public static final ResourceLocation LIGHT_BEAM = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/light_beam.png");
+    public static final ResourceLocation DARK_BEAM = RuneCraftory.modRes("textures/entity/projectile/dark_beam.png");
+    public static final ResourceLocation LIGHT_BEAM = RuneCraftory.modRes("textures/entity/projectile/light_beam.png");
 
     private final ResourceLocation texture;
 

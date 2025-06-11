@@ -3,14 +3,11 @@ package io.github.flemmli97.runecraftory.common.items.creative;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
-import io.github.flemmli97.tenshilib.api.item.IExtendedWeapon;
 import io.github.flemmli97.tenshilib.common.item.AnimationDebugger;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -40,9 +37,9 @@ public class ItemDebug extends AnimationDebugger implements IExtendedWeapon {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> components, TooltipFlag isAdvanced) {
         super.appendHoverText(stack, level, components, isAdvanced);
-        components.add(new TranslatableComponent("runecraftory.item.creative.tooltip").withStyle(ChatFormatting.DARK_RED));
-        components.add(new TranslatableComponent("runecraftory.item.creative.tooltip.mode",
-                new TranslatableComponent(this.getCurrentMode(stack).translationKey).withStyle(ChatFormatting.AQUA)).withStyle(ChatFormatting.DARK_RED));
+        components.add(Component.translatable("runecraftory.item.creative.tooltip").withStyle(ChatFormatting.DARK_RED));
+        components.add(Component.translatable("runecraftory.item.creative.tooltip.mode",
+                Component.translatable(this.getCurrentMode(stack).translationKey).withStyle(ChatFormatting.AQUA)).withStyle(ChatFormatting.DARK_RED));
     }
 
     @Override
@@ -53,13 +50,13 @@ public class ItemDebug extends AnimationDebugger implements IExtendedWeapon {
             /*long time = System.nanoTime();
             Set<ConfiguredStructureFeature<?, ?>> structures = GateSpawning.getStructuresAt(serverLevel, player.blockPosition());
             long delta = System.nanoTime() - time;
-            player.sendMessage(new TextComponent("" + structures), Util.NIL_UUID);
-            player.sendMessage(new TextComponent("check time " + delta), Util.NIL_UUID);
+            player.sendMessage(Component.literal("" + structures), Util.NIL_UUID);
+            player.sendMessage(Component.literal("check time " + delta), Util.NIL_UUID);
             long time2 = System.nanoTime();
             boolean hasSpawns = GateSpawning.hasStructureSpawns(serverLevel, player.blockPosition());
             long delta2 = System.nanoTime() - time2;
-            player.sendMessage(new TextComponent("" + hasSpawns), Util.NIL_UUID);
-            player.sendMessage(new TextComponent("time " + delta2), Util.NIL_UUID);*/
+            player.sendMessage(Component.literal("" + hasSpawns), Util.NIL_UUID);
+            player.sendMessage(Component.literal("time " + delta2), Util.NIL_UUID);*/
             return InteractionResultHolder.success(player.getItemInHand(hand));
         }
         return super.use(level, player, hand);
@@ -69,11 +66,11 @@ public class ItemDebug extends AnimationDebugger implements IExtendedWeapon {
     public InteractionResult useOn(UseOnContext context) {
         if (context.getLevel() instanceof ServerLevel serverLevel) {
             int lvl = LevelCalc.levelFromPos(serverLevel, Vec3.atCenterOf(context.getClickedPos()), LevelCalc.playersAround(serverLevel, Vec3.atCenterOf(context.getClickedPos()), 256));
-            context.getPlayer().sendMessage(new TextComponent("GateLevel at pos: " + lvl), Util.NIL_UUID);
+            context.getPlayer().sendMessage(Component.literal("GateLevel at pos: " + lvl), Util.NIL_UUID);
             FarmlandHandler.get(serverLevel.getServer()).getData(serverLevel, context.getClickedPos())
-                    .ifPresent(d -> context.getPlayer().sendMessage(new TextComponent(d.toStringFull()), Util.NIL_UUID));
+                    .ifPresent(d -> context.getPlayer().sendMessage(Component.literal(d.toStringFull()), Util.NIL_UUID));
             /*int f = serverLevel.getPoiManager().getFreeTickets(context.getClickedPos());
-            context.getPlayer().sendMessage(new TextComponent("Free POITickets" + f), Util.NIL_UUID);*/
+            context.getPlayer().sendMessage(Component.literal("Free POITickets" + f), Util.NIL_UUID);*/
             return InteractionResult.CONSUME;
         }
         return super.useOn(context);

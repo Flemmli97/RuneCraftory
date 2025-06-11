@@ -2,14 +2,13 @@ package io.github.flemmli97.runecraftory.client.render.projectiles;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityWaterLaser;
-import io.github.flemmli97.tenshilib.client.render.RenderBeam;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 public class RenderWaterLaser extends RenderBeam<EntityWaterLaser> {
 
-    private static final ResourceLocation TEX = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/water_laser.png");
+    private static final ResourceLocation TEX = RuneCraftory.modRes("textures/entity/projectile/water_laser.png");
 
     private final float widthMod;
 

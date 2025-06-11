@@ -18,8 +18,6 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
@@ -36,7 +34,7 @@ import java.util.Set;
 
 public class NPCGui<T extends EntityNPCBase> extends Screen {
 
-    private static final ResourceLocation TEXTURE_PATH = new ResourceLocation(RuneCraftory.MODID, "textures/gui/view.png");
+    private static final ResourceLocation TEXTURE_PATH = RuneCraftory.modRes("textures/gui/view.png");
 
     private final int offSetX = 140;
     private final int offSetY = 50;
@@ -96,21 +94,21 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
         y += 1;
         if (renderParents) {
             if (this.family.father() == null) {
-                this.font.draw(stack, new TranslatableComponent("runecraftory.gui.npc.parent"), txtOffX, txtOffY + 13 * y, 0);
+                this.font.draw(stack, Component.translatable("runecraftory.gui.npc.parent"), txtOffX, txtOffY + 13 * y, 0);
                 y += 1;
                 for (FormattedCharSequence ch : this.font.split(this.family.mother(), 150 - 10)) {
                     this.font.draw(stack, ch, txtOffX, txtOffY + 13 * y, 0);
                     y += 1;
                 }
             } else if (this.family.mother() == null) {
-                this.font.draw(stack, new TranslatableComponent("runecraftory.gui.npc.parent"), txtOffX, txtOffY + 13 * y, 0);
+                this.font.draw(stack, Component.translatable("runecraftory.gui.npc.parent"), txtOffX, txtOffY + 13 * y, 0);
                 y += 1;
                 for (FormattedCharSequence ch : this.font.split(this.family.father(), 150 - 10)) {
                     this.font.draw(stack, ch, txtOffX, txtOffY + 13 * y, 0);
                     y += 1;
                 }
             } else {
-                this.font.draw(stack, new TranslatableComponent("runecraftory.gui.npc.parents"), txtOffX, txtOffY + 13 * y, 0);
+                this.font.draw(stack, Component.translatable("runecraftory.gui.npc.parents"), txtOffX, txtOffY + 13 * y, 0);
                 y += 1;
                 for (FormattedCharSequence ch : this.font.split(this.family.father(), 150 - 10)) {
                     this.font.draw(stack, ch, txtOffX, txtOffY + 13 * y, 0);
@@ -146,9 +144,9 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
         if (!this.entity.isBaby()) {
             MutableComponent shopComp = null;
             if (this.entity.getShop() == ModNPCJobs.GENERAL.getSecond())
-                shopComp = new TranslatableComponent("runecraftory.gui.npc.shop.owner", new TranslatableComponent(this.entity.getShop().getTranslationKey()));
+                shopComp = Component.translatable("runecraftory.gui.npc.shop.owner", Component.translatable(this.entity.getShop().getTranslationKey()));
             else if (this.entity.getShop().hasWorkSchedule)
-                shopComp = new TranslatableComponent(this.entity.getShop().getTranslationKey());
+                shopComp = Component.translatable(this.entity.getShop().getTranslationKey());
             if (shopComp != null) {
                 if (this.isShopOpen == ShopState.NOBED || this.isShopOpen == ShopState.NOWORKPLACE)
                     shopComp.withStyle(ChatFormatting.DARK_RED);
@@ -181,13 +179,13 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
         int x = -52;
         int xSize = 150;
         int y = 0;
-        this.addRenderableWidget(new Button(this.leftPos + x, this.topPos + y, xSize, 20, new TranslatableComponent(C2SNPCInteraction.Type.TALK.translation), b -> {
+        this.addRenderableWidget(new Button(this.leftPos + x, this.topPos + y, xSize, 20, Component.translatable(C2SNPCInteraction.Type.TALK.translation), b -> {
             Platform.INSTANCE.sendToServer(new C2SNPCInteraction(this.entity.getId(), C2SNPCInteraction.Type.TALK));
             this.minecraft.setScreen(null);
         }));
         if (this.canFollow) {
             y += 30;
-            this.addRenderableWidget(new Button(this.leftPos + x, this.topPos + y, xSize, 20, new TranslatableComponent(C2SNPCInteraction.Type.FOLLOW.translation), b -> {
+            this.addRenderableWidget(new Button(this.leftPos + x, this.topPos + y, xSize, 20, Component.translatable(C2SNPCInteraction.Type.FOLLOW.translation), b -> {
                 Platform.INSTANCE.sendToServer(new C2SNPCInteraction(this.entity.getId(), C2SNPCInteraction.Type.FOLLOW));
                 this.minecraft.setScreen(null);
             }));
@@ -195,14 +193,14 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
         if (!this.entity.isBaby() && this.isShopOpen == ShopState.OPEN) {
             if (this.entity.getShop().hasShop) {
                 y += 30;
-                this.addRenderableWidget(new Button(this.leftPos + x, this.topPos + y, xSize, 20, new TranslatableComponent(C2SNPCInteraction.Type.SHOP.translation), b -> {
+                this.addRenderableWidget(new Button(this.leftPos + x, this.topPos + y, xSize, 20, Component.translatable(C2SNPCInteraction.Type.SHOP.translation), b -> {
                     Platform.INSTANCE.sendToServer(new C2SNPCInteraction(this.entity.getId(), C2SNPCInteraction.Type.SHOP));
                     this.minecraft.setScreen(null);
                 }));
             }
             for (Map.Entry<String, List<Component>> action : this.actions.entrySet()) {
                 y += 30;
-                this.addRenderableWidget(new Button(this.leftPos + x, this.topPos + y, xSize, 20, new TranslatableComponent(action.getKey()), b -> {
+                this.addRenderableWidget(new Button(this.leftPos + x, this.topPos + y, xSize, 20, Component.translatable(action.getKey()), b -> {
                     Platform.INSTANCE.sendToServer(new C2SNPCInteraction(this.entity.getId(), action.getKey()));
                     this.minecraft.setScreen(null);
                 }));
@@ -217,25 +215,25 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
         }
         if (this.quest != null) {
             y += 30;
-            this.addRenderableWidget(new Button(this.leftPos + x, this.topPos + y, xSize, 20, new TranslatableComponent(C2SNPCInteraction.Type.QUEST.translation), b -> {
+            this.addRenderableWidget(new Button(this.leftPos + x, this.topPos + y, xSize, 20, Component.translatable(C2SNPCInteraction.Type.QUEST.translation), b -> {
                 Platform.INSTANCE.sendToServer(new C2SNPCInteraction(this.entity.getId(), C2SNPCInteraction.Type.QUEST, this.quest.toString()));
                 this.minecraft.setScreen(null);
             }));
         }
         if (!this.entity.isBaby() && this.family.canProcreate()) {
             y += 30;
-            this.addRenderableWidget(new Button(this.leftPos + x, this.topPos + y, xSize, 20, new TranslatableComponent("runecraftory.gui.npc.procreate"), b -> {
+            this.addRenderableWidget(new Button(this.leftPos + x, this.topPos + y, xSize, 20, Component.translatable("runecraftory.gui.npc.procreate"), b -> {
                 Platform.INSTANCE.sendToServer(new C2SProcreationRequest(this.entity.getId()));
                 this.minecraft.setScreen(null);
             }));
         }
         if (this.isShopOpen == ShopState.NOBED) {
             this.components = new ArrayList<>();
-            this.components.addAll(this.font.split(new TranslatableComponent("runecraftory.gui.npc.bed.no"), 150));
+            this.components.addAll(this.font.split(Component.translatable("runecraftory.gui.npc.bed.no"), 150));
         }
         if (!this.entity.isBaby() && this.isShopOpen == ShopState.NOWORKPLACE && this.entity.getShop().poiType != null && this.entity.getShop().poiType.get() != null) {
             this.components = new ArrayList<>();
-            this.components.addAll(this.font.split(new TranslatableComponent("runecraftory.gui.npc.workplace.no", this.formatShopPoi(this.entity.getShop().poiType.get())), 150));
+            this.components.addAll(this.font.split(Component.translatable("runecraftory.gui.npc.workplace.no", this.formatShopPoi(this.entity.getShop().poiType.get())), 150));
         }
     }
 
@@ -243,7 +241,7 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
         Set<BlockState> set = new HashSet<>(((PoiTypeAccessor) poiType).matches());
         if (this.entity.getShop().predicate != null && this.entity.getShop().predicate.test(ModPoiTypes.CASH_REGISTER.get()))
             set.addAll(((PoiTypeAccessor) ModPoiTypes.CASH_REGISTER.get()).matches());
-        MutableComponent comp = new TextComponent("");
+        MutableComponent comp = Component.literal("");
         set.stream().map(BlockBehaviour.BlockStateBase::getBlock)
                 .distinct()
                 .map(Block::getName)
@@ -251,7 +249,7 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
                     if (comp.getSiblings().isEmpty())
                         comp.append(c);
                     else
-                        comp.append(new TextComponent(", ").append(c));
+                        comp.append(Component.literal(", ").append(c));
                 });
         return comp.withStyle(ChatFormatting.AQUA);
     }

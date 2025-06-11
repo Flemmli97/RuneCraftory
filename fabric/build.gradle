@@ -32,20 +32,20 @@ dependencies {
     modApi("${cloth_config}") {
         exclude(group: "net.fabricmc.fabric-api")
     }
-    modImplementation "${mod_menu}"
-    // for 1.18 the package structure is different between forge/fabric
-    modImplementation "curse.maven:jade-324717:4573438"
-
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:${rei_version}"
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:${rei_version}"
-    modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${rei_version}"
-    //modRuntimeOnly "mezz.jei:jei-1.18.2-fabric:${jei_version}"
-
-    modRuntimeOnly "io.github.flemmli97:debugutils:1.18.2-1.0.1-fabric"
-
-    modRuntimeOnly include("io.github.flemmli97:simplequests_api:${simplequests_api_version}-fabric") {
-        transitive = false
-    }
-    // Jar-Jar not added otherwise
-    modRuntimeOnly "io.github.flemmli97:lingua_bib:1.18.2-1.0.1-fabric"
+//    modImplementation "${mod_menu}"
+//    // for 1.18 the package structure is different between forge/fabric
+//    modImplementation "curse.maven:jade-324717:4573438"
+//
+//    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:${rei_version}"
+//    modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:${rei_version}"
+//    modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${rei_version}"
+//    //modRuntimeOnly "mezz.jei:jei-1.18.2-fabric:${jei_version}"
+//
+//    modRuntimeOnly "io.github.flemmli97:debugutils:1.18.2-1.0.1-fabric"
+//
+//    modRuntimeOnly include("io.github.flemmli97:simplequests_api:${simplequests_api_version}-fabric") {
+//        transitive = false
+//    }
+//    // Jar-Jar not added otherwise
+//    modRuntimeOnly "io.github.flemmli97:lingua_bib:1.18.2-1.0.1-fabric"
 }

@@ -5,9 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityWooly;
 import io.github.flemmli97.tenshilib.client.AnimationManager;
-import io.github.flemmli97.tenshilib.client.model.BlockBenchAnimations;
 import io.github.flemmli97.tenshilib.client.model.ExtendedModel;
-import io.github.flemmli97.tenshilib.client.model.ModelPartHandler;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -17,11 +15,10 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.resources.ResourceLocation;
 
 public class ModelWoolyWool<T extends EntityWooly> extends EntityModel<T> implements ExtendedModel {
 
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(RuneCraftory.MODID, "wooly_wool"), "main");
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(RuneCraftory.modRes("wooly_wool"), "main");
 
     protected final ModelPartHandler model;
     protected final BlockBenchAnimations anim;
@@ -37,7 +34,7 @@ public class ModelWoolyWool<T extends EntityWooly> extends EntityModel<T> implem
     public ModelWoolyWool(ModelPart root) {
         super();
         this.model = new ModelPartHandler(root.getChild("bodyCenter"), "bodyCenter");
-        this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "wooly_wool"));
+        this.anim = AnimationManager.getInstance().getAnimation(RuneCraftory.modRes("wooly_wool"));
         this.bodyCenter = this.model.getMainPart();
         this.body = this.model.getPart("body");
         this.bodyUp = this.model.getPart("bodyUp");

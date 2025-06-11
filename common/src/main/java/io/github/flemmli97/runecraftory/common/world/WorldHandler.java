@@ -290,10 +290,10 @@ public class WorldHandler extends SavedData {
     public void safeUnloadedPartyMembers(LivingEntity entity) {
         if (entity instanceof BaseMonster monster && monster.getOwnerUUID() != null)
             this.unloadedPartyMembers.computeIfAbsent(monster.getOwnerUUID(), o -> new HashSet<>())
-                    .add(new UnloadedPartyMember(entity.getUUID(), GlobalPos.of(entity.level.dimension(), entity.blockPosition())));
+                    .add(new UnloadedPartyMember(entity.getUUID(), GlobalPos.of(entity.level().dimension(), entity.blockPosition())));
         else if (entity instanceof EntityNPCBase npc && npc.getEntityToFollowUUID() != null)
             this.unloadedPartyMembers.computeIfAbsent(npc.getEntityToFollowUUID(), o -> new HashSet<>())
-                    .add(new UnloadedPartyMember(entity.getUUID(), GlobalPos.of(entity.level.dimension(), entity.blockPosition())));
+                    .add(new UnloadedPartyMember(entity.getUUID(), GlobalPos.of(entity.level().dimension(), entity.blockPosition())));
     }
 
     public Set<UnloadedPartyMember> getUnloadedPartyMembersFor(Player player) {

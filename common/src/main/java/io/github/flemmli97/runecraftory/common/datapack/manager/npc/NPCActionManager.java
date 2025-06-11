@@ -20,7 +20,7 @@ public class NPCActionManager extends SimpleJsonResourceReloadListener {
 
     public static final String DIRECTORY = "npc_actions";
 
-    public static final ResourceLocation DEFAULT_ID = new ResourceLocation(RuneCraftory.MODID, "default_action");
+    public static final ResourceLocation DEFAULT_ID = RuneCraftory.modRes("default_action");
 
     private Map<ResourceLocation, NPCAttackActions> keyData = ImmutableMap.of();
     private Map<NPCAttackActions, ResourceLocation> dataKey = ImmutableMap.of();

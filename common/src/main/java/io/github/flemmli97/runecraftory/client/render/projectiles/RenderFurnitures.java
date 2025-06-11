@@ -28,13 +28,13 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class RenderFurnitures extends EntityRenderer<EntityFurniture> {
 
-    public static final ModelLayerLocation LOC_CHAIR = new ModelLayerLocation(new ResourceLocation(RuneCraftory.MODID, "chair"), "main");
-    public static final ModelLayerLocation LOC_CHIPSQUEEK_PLUSH = new ModelLayerLocation(new ResourceLocation(RuneCraftory.MODID, "chipsqueek_plush"), "main");
-    public static final ModelLayerLocation LOC_WOOLY_PLUSH = new ModelLayerLocation(new ResourceLocation(RuneCraftory.MODID, "wooly_plush"), "main");
+    public static final ModelLayerLocation LOC_CHAIR = new ModelLayerLocation(RuneCraftory.modRes("chair"), "main");
+    public static final ModelLayerLocation LOC_CHIPSQUEEK_PLUSH = new ModelLayerLocation(RuneCraftory.modRes("chipsqueek_plush"), "main");
+    public static final ModelLayerLocation LOC_WOOLY_PLUSH = new ModelLayerLocation(RuneCraftory.modRes("wooly_plush"), "main");
 
-    private static final ResourceLocation TEX_CHAIR = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/chair.png");
-    private static final ResourceLocation TEX_WOOLY = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/wooly_plush.png");
-    private static final ResourceLocation TEX_CHIPSQUEEK = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/chipsqueek_plush.png");
+    private static final ResourceLocation TEX_CHAIR = RuneCraftory.modRes("textures/entity/projectile/chair.png");
+    private static final ResourceLocation TEX_WOOLY = RuneCraftory.modRes("textures/entity/projectile/wooly_plush.png");
+    private static final ResourceLocation TEX_CHIPSQUEEK = RuneCraftory.modRes("textures/entity/projectile/chipsqueek_plush.png");
 
     private final BlockState barrel = Blocks.BARREL.defaultBlockState();
     private final BlockState anvil = Blocks.ANVIL.defaultBlockState();

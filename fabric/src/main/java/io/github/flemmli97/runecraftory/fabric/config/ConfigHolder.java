@@ -74,7 +74,7 @@ public record ConfigHolder<T>(T configSpec, Consumer<T> loader) {
         GeneralConfig.silverWateringCanWater = spec.silverWateringCanWater.get();
         GeneralConfig.goldWateringCanWater = spec.goldWateringCanWater.get();
         GeneralConfig.platinumWateringCanWater = spec.platinumWateringCanWater.get();
-        GeneralConfig.moveSpeedAttack.read(spec.moveSpeedAttack.get());
+        GeneralConfig.MOVE_SPEED_ATTACK.read(spec.moveSpeedAttack.get());
 
         GeneralConfig.xpMultiplier = spec.xpMultiplier.get().floatValue();
         GeneralConfig.skillXpMultiplier = spec.skillXpMultiplier.get().floatValue();

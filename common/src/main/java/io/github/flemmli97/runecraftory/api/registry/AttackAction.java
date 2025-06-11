@@ -4,8 +4,7 @@ import io.github.flemmli97.runecraftory.api.action.AttackActionHandler;
 import io.github.flemmli97.runecraftory.api.action.ComboContainer;
 import io.github.flemmli97.runecraftory.api.action.DataKey;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.platform.registry.CustomRegistryEntry;
+import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -13,10 +12,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.item.ItemStack;
 
-public class AttackAction extends CustomRegistryEntry<AttackAction> {
+public class AttackAction {
 
     public static CombatUtils.EntityAttack spinAttack(LivingEntity entity, AnimatedAction anim, double startSec, double endSec, float startRot, float endRot, float range) {
-        if (!entity.level.isClientSide() && anim.isBetween(startSec, endSec)) {
+        if (!entity.level().isClientSide() && anim.isBetween(startSec, endSec)) {
             float start = (float) (startSec * 20);
             float end = (float) (endSec * 20);
             float f = anim.progress(start, end, 1, 0);
@@ -29,7 +28,7 @@ public class AttackAction extends CustomRegistryEntry<AttackAction> {
 
     public static CombatUtils.EntityAttack spinAttack(LivingEntity entity, AnimatedAction anim, double startSec, double endSec, float startRot, float endRot,
                                                       CombatUtils.FloatMap xRot, float range) {
-        if (!entity.level.isClientSide() && anim.isBetween(startSec, endSec)) {
+        if (!entity.level().isClientSide() && anim.isBetween(startSec, endSec)) {
             float start = (float) (startSec * 20);
             float end = (float) (endSec * 20);
             float f = anim.progress(start, end, 1, 0);
@@ -55,7 +54,7 @@ public class AttackAction extends CustomRegistryEntry<AttackAction> {
 
     public void onStart(LivingEntity entity, AttackActionHandler handler) {
         Spell spell = handler.get(DataKey.USED_SPELL);
-        if (spell != null && !spell.delayedUse() && entity.getLevel() instanceof ServerLevel serverLevel) {
+        if (spell != null && !spell.delayedUse() && entity.level() instanceof ServerLevel serverLevel) {
             entity.swing(InteractionHand.MAIN_HAND);
             ItemStack stack = handler.get(DataKey.USED_WEAPON);
             if (spell.use(serverLevel, entity, stack) && entity instanceof ServerPlayer player) {

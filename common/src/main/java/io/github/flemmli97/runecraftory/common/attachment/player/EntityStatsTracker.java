@@ -4,7 +4,7 @@ import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -22,12 +22,12 @@ public class EntityStatsTracker {
         this.tamedMonster++;
         if (monster.getType().is(RunecraftoryTags.BOSS_MONSTERS))
             this.tamedBossMonster++;
-        this.tamedMonsters.computeInt(Registry.ENTITY_TYPE.getKey(monster.getType()),
+        this.tamedMonsters.computeInt(BuiltInRegistries.ENTITY_TYPE.getKey(monster.getType()),
                 (id, o) -> o == null ? 1 : ++o);
     }
 
     public void killEntity(Entity entity) {
-        this.defeatedMonsters.computeInt(Registry.ENTITY_TYPE.getKey(entity.getType()),
+        this.defeatedMonsters.computeInt(BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType()),
                 (id, o) -> o == null ? 1 : ++o);
     }
 
@@ -36,11 +36,11 @@ public class EntityStatsTracker {
     }
 
     public int getTameCount(EntityType<?> type) {
-        return this.tamedMonsters.getInt(Registry.ENTITY_TYPE.getKey(type));
+        return this.tamedMonsters.getInt(BuiltInRegistries.ENTITY_TYPE.getKey(type));
     }
 
     public int getKillCount(EntityType<?> type) {
-        return this.defeatedMonsters.getInt(Registry.ENTITY_TYPE.getKey(type));
+        return this.defeatedMonsters.getInt(BuiltInRegistries.ENTITY_TYPE.getKey(type));
     }
 
     public void reset() {
@@ -54,9 +54,9 @@ public class EntityStatsTracker {
         this.tamedMonster = tag.getInt("TamedMonster");
         this.tamedBossMonster = tag.getInt("TamedBossMonster");
         CompoundTag tamed = tag.getCompound("TamedMonstersTrack");
-        tamed.getAllKeys().forEach(key -> this.tamedMonsters.put(new ResourceLocation(key), tamed.getInt(key)));
+        tamed.getAllKeys().forEach(key -> this.tamedMonsters.put(ResourceLocation.parse(key), tamed.getInt(key)));
         CompoundTag killed = tag.getCompound("KilledMonstersTrack");
-        killed.getAllKeys().forEach(key -> this.tamedMonsters.put(new ResourceLocation(key), killed.getInt(key)));
+        killed.getAllKeys().forEach(key -> this.tamedMonsters.put(ResourceLocation.parse(key), killed.getInt(key)));
     }
 
     public CompoundTag save() {

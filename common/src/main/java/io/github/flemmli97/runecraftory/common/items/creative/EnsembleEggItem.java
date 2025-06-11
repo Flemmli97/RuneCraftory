@@ -3,12 +3,11 @@ package io.github.flemmli97.runecraftory.common.items.creative;
 import io.github.flemmli97.runecraftory.common.blocks.tile.BossSpawnerBlockEntity;
 import io.github.flemmli97.runecraftory.common.entities.EnsembleMonsters;
 import io.github.flemmli97.runecraftory.common.network.S2CSpawnEggScreen;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
+import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -45,7 +44,7 @@ public class EnsembleEggItem extends SpawnEgg {
         InteractionResultHolder<ItemStack> res = super.use(world, player, hand);
         if (res.getResult() == InteractionResult.PASS) {
             if (player instanceof ServerPlayer serverPlayer)
-                Platform.INSTANCE.sendToClient(new S2CSpawnEggScreen(hand), serverPlayer);
+                LoaderNetwork.INSTANCE.sendToPlayer(new S2CSpawnEggScreen(hand), serverPlayer);
             return InteractionResultHolder.consume(player.getItemInHand(hand));
         }
         return res;
@@ -62,7 +61,7 @@ public class EnsembleEggItem extends SpawnEgg {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
-        tooltipComponents.add(new TranslatableComponent("runecraftory.tooltip.item.spawn").withStyle(ChatFormatting.GOLD));
+        tooltipComponents.add(Component.translatable("runecraftory.tooltip.item.spawn").withStyle(ChatFormatting.GOLD));
         super.appendHoverText(stack, level, tooltipComponents, isAdvanced);
     }
 }

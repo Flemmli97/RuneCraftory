@@ -18,7 +18,7 @@ import java.util.List;
 
 public class DialogueOptionButton extends Button {
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation(RuneCraftory.MODID, "textures/gui/npc_dialogue.png");
+    private static final ResourceLocation TEXTURE = RuneCraftory.modRes("textures/gui/npc_dialogue.png");
 
     private final List<FormattedCharSequence> text;
     private final int txtX;

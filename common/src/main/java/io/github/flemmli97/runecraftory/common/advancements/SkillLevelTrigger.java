@@ -1,74 +1,53 @@
 package io.github.flemmli97.runecraftory.common.advancements;
 
-import com.google.gson.JsonObject;
-import io.github.flemmli97.runecraftory.RuneCraftory;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
+import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
-import net.minecraft.advancements.critereon.DeserializationContext;
+import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
+import net.minecraft.advancements.Criterion;
+import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
-import net.minecraft.advancements.critereon.SerializationContext;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.GsonHelper;
+import net.minecraft.util.ExtraCodecs;
+
+import java.util.Optional;
 
 public class SkillLevelTrigger extends SimpleCriterionTrigger<SkillLevelTrigger.TriggerInstance> {
 
-    public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "skill_level_trigger");
-
     @Override
-    protected SkillLevelTrigger.TriggerInstance createInstance(JsonObject json, EntityPredicate.Composite player, DeserializationContext context) {
-        String s = GsonHelper.getAsString(json, "skill", "*");
-        EnumSkills skill = null;
-        if (!s.equals("*")) {
-            try {
-                skill = EnumSkills.valueOf(s);
-            } catch (IllegalArgumentException e) {
-                RuneCraftory.LOGGER.error("Error with skill level trigger. No such skill {}", s);
-            }
-        }
-        return new SkillLevelTrigger.TriggerInstance(player, GsonHelper.getAsInt(json, "level", 1), skill);
+    public Codec<TriggerInstance> codec() {
+        return TriggerInstance.CODEC;
     }
 
     public void trigger(ServerPlayer player, EnumSkills skill) {
         this.trigger(player, inst -> inst.matches(player, skill));
     }
 
-    @Override
-    public ResourceLocation getId() {
-        return ID;
-    }
+    public record TriggerInstance(Optional<ContextAwarePredicate> player, Optional<EnumSkills> skill,
+                                  int level) implements SimpleCriterionTrigger.SimpleInstance {
 
-    public static class TriggerInstance extends AbstractCriterionTriggerInstance {
+        public static final Codec<TriggerInstance> CODEC = RecordCodecBuilder.create(inst -> inst.group(
+                EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(TriggerInstance::player),
+                CodecUtils.stringEnumCodec(EnumSkills.class, null).optionalFieldOf("skill").forGetter(TriggerInstance::skill),
+                ExtraCodecs.POSITIVE_INT.fieldOf("level").forGetter(TriggerInstance::level)
+        ).apply(inst, TriggerInstance::new));
 
-        private final int level;
-        private final EnumSkills skill;
-
-        public TriggerInstance(EntityPredicate.Composite composite, int amount, EnumSkills skill) {
-            super(ID, composite);
-            this.level = Math.max(1, amount);
-            this.skill = skill;
+        public static Criterion<TriggerInstance> of(int level) {
+            return ModCriteria.SKILL_LEVEL_TRIGGER.get().createCriterion(new TriggerInstance(Optional.empty(), Optional.empty(), level));
         }
 
-        public static SkillLevelTrigger.TriggerInstance of(int amount) {
-            return new SkillLevelTrigger.TriggerInstance(EntityPredicate.Composite.ANY, amount, null);
-        }
-
-        public static SkillLevelTrigger.TriggerInstance of(int amount, EnumSkills skill) {
-            return new SkillLevelTrigger.TriggerInstance(EntityPredicate.Composite.ANY, amount, skill);
+        public static Criterion<TriggerInstance> of(EnumSkills skill, int level) {
+            return ModCriteria.SKILL_LEVEL_TRIGGER.get().createCriterion(new TriggerInstance(Optional.empty(), Optional.ofNullable(skill), level));
         }
 
         public boolean matches(ServerPlayer player, EnumSkills skill) {
-            return Platform.INSTANCE.getPlayerData(player).map(d -> (this.skill == null || skill == this.skill) && d.getSkillLevel(skill).getLevel() >= this.level).orElse(false);
-        }
-
-        @Override
-        public JsonObject serializeToJson(SerializationContext context) {
-            JsonObject obj = super.serializeToJson(context);
-            obj.addProperty("level", this.level);
-            obj.addProperty("skill", this.skill == null ? "*" : this.skill.name());
-            return obj;
+            PlayerData data = Platform.INSTANCE.getPlayerData(player);
+            return this.skill.map(s -> s == skill).orElse(true)
+                    && data.getSkillLevel(skill).getLevel() >= this.level;
         }
     }
 }

@@ -22,7 +22,7 @@ public class NPCLookManager extends SimpleJsonResourceReloadListener {
 
     public static final String DIRECTORY = "npc_looks";
 
-    public static final ResourceLocation DEFAULT_ID = new ResourceLocation(RuneCraftory.MODID, "default_look");
+    public static final ResourceLocation DEFAULT_ID = RuneCraftory.modRes("default_look");
 
     private Map<ResourceLocation, NPCLook> keyData = ImmutableMap.of();
     private Map<NPCLook, ResourceLocation> dataKey = ImmutableMap.of();

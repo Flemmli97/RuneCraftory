@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public record NPCLook(NPCData.Gender gender, @Nullable String playerSkin, int weight,
                       Map<NPCFeatureType<?>, NPCFeatureHolder<?>> additionalFeatures) {
 
-    public static final ResourceLocation DEFAULT_LOOK_ID = new ResourceLocation(RuneCraftory.MODID, "default_look");
+    public static final ResourceLocation DEFAULT_LOOK_ID = RuneCraftory.modRes("default_look");
     public static final NPCLook DEFAULT_LOOK = new NPCLook(NPCData.Gender.MALE, null, 0, Map.of());
 
     public static final Codec<NPCLook> CODEC = RecordCodecBuilder.create(inst ->

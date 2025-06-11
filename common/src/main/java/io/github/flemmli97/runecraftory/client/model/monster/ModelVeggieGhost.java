@@ -8,9 +8,7 @@ import io.github.flemmli97.runecraftory.client.model.SittingModel;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderVeggieGhost;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityVeggieGhost;
 import io.github.flemmli97.tenshilib.client.AnimationManager;
-import io.github.flemmli97.tenshilib.client.model.BlockBenchAnimations;
 import io.github.flemmli97.tenshilib.client.model.ExtendedModel;
-import io.github.flemmli97.tenshilib.client.model.ModelPartHandler;
 import io.github.flemmli97.tenshilib.client.model.RideableModel;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
@@ -26,13 +24,12 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 
 public class ModelVeggieGhost<T extends EntityVeggieGhost> extends EntityModel<T> implements ExtendedModel, RideableModel<T> {
 
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(RuneCraftory.MODID, "veggie_ghost"), "main");
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(RuneCraftory.modRes("veggie_ghost"), "main");
 
     protected final ModelPartHandler model;
     protected final BlockBenchAnimations anim;
@@ -44,7 +41,7 @@ public class ModelVeggieGhost<T extends EntityVeggieGhost> extends EntityModel<T
     public ModelVeggieGhost(ModelPart root) {
         super(RenderType::entityTranslucentCull);
         this.model = new ModelPartHandler(root, "root");
-        this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "veggie_ghost"));
+        this.anim = AnimationManager.getInstance().getAnimation(RuneCraftory.modRes("veggie_ghost"));
         this.body = this.model.getPart("body");
         this.head = this.model.getPart("head");
         this.ridingPosition = this.model.getPart("ridingPos");

@@ -46,7 +46,7 @@ public class WorldUtils {
             if (i >= 1 && i <= 30) {
                 return DataResult.success(i);
             }
-            return DataResult.error("Date must be between 1 - 30 but is " + i);
+            return DataResult.error(() -> "Date must be between 1 - 30 but is " + i);
         };
         return Codec.INT.flatXmap(function, function);
     }
@@ -112,13 +112,13 @@ public class WorldUtils {
 
             @Override
             public void onRemove(Entity.RemovalReason reason) {
-                if (member.level instanceof ServerLevel serverLevel) {
+                if (member.level() instanceof ServerLevel serverLevel) {
                     if (reason == Entity.RemovalReason.UNLOADED_TO_CHUNK) {
                         WorldHandler.get(serverLevel.getServer()).safeUnloadedPartyMembers(member);
                     } else if (reason == Entity.RemovalReason.DISCARDED || reason == Entity.RemovalReason.KILLED) {
                         Player owner = partyOwner.get();
                         if (owner instanceof ServerPlayer player) {
-                            Platform.INSTANCE.getPlayerData(player).ifPresent(d -> d.party.removePartyMember(member));
+                            Platform.INSTANCE.getPlayerData(player).party.removePartyMember(member);
                         } else
                             WorldHandler.get(serverLevel.getServer()).toRemovePartyMember(member);
                     }

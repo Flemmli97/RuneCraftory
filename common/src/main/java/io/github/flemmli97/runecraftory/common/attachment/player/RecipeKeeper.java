@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.network.S2CRecipe;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -38,7 +38,7 @@ public class RecipeKeeper {
     public void unlockRecipesRes(Player player, Collection<ResourceLocation> recipes) {
         this.unlockedRecipes.addAll(recipes);
         if (player instanceof ServerPlayer)
-            Platform.INSTANCE.sendToClient(new S2CRecipe(recipes, false), (ServerPlayer) player);
+            LoaderNetwork.INSTANCE.sendToPlayer(new S2CRecipe(recipes, false), (ServerPlayer) player);
     }
 
     public void lockRecipe(Player player, Recipe<?> recipe) {
@@ -56,7 +56,7 @@ public class RecipeKeeper {
     public void lockRecipesRes(Player player, Collection<ResourceLocation> recipes) {
         recipes.forEach(this.unlockedRecipes::remove);
         if (player instanceof ServerPlayer)
-            Platform.INSTANCE.sendToClient(new S2CRecipe(recipes, true), (ServerPlayer) player);
+            LoaderNetwork.INSTANCE.sendToPlayer(new S2CRecipe(recipes, true), (ServerPlayer) player);
     }
 
     public boolean isUnlocked(Recipe<?> recipe) {

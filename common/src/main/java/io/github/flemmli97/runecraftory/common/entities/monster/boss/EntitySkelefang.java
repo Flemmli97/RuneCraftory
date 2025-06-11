@@ -16,16 +16,15 @@ import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.TimedWrappedRunner;
-import io.github.flemmli97.tenshilib.common.utils.MathUtils;
-import io.github.flemmli97.tenshilib.common.utils.OrientedBoundingBox;
-import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
+import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
+import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -98,7 +97,7 @@ public class EntitySkelefang extends BossMonster {
             if (entity.remainingTailBones() > 10 || entity.isEnraged()) {
                 if (anim.isAt("attack_1") || anim.isAt("attack_2") || anim.isAt("attack_3")) {
                     entity.mobAttack(anim, entity.getTarget(), entity::doHurtTarget);
-                    entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 2, 0.7f);
+                    entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 2, 0.7f);
                 }
             }
         });
@@ -106,10 +105,10 @@ public class EntitySkelefang extends BossMonster {
             if (anim.isAt("attack")) {
                 ModSpells.BONE_NEEDLES.get().use(entity);
                 if (entity.remainingHeadBones() > 10) {
-                    entity.level.broadcastEntityEvent(entity, HEAD_THROW);
+                    entity.level().broadcastEntityEvent(entity, HEAD_THROW);
                     entity.setHeadBones(10, false);
                 } else if (entity.remainingHeadBones() > 0) {
-                    entity.level.broadcastEntityEvent(entity, NECK_THROW);
+                    entity.level().broadcastEntityEvent(entity, NECK_THROW);
                     entity.setHeadBones(0, false);
                 }
             }
@@ -136,23 +135,23 @@ public class EntitySkelefang extends BossMonster {
                 dir = dir.scale(entity.getBbWidth() * 0.5 + 1);
                 if (entity.remainingLeftLegBones() > 0) {
                     Vec3 leftPos = entity.position().add(dir).add(side.scale(-1.3));
-                    EntitySlashResidue slash = new EntitySlashResidue(entity.level, entity);
+                    EntitySlashResidue slash = new EntitySlashResidue(entity.level(), entity);
                     slash.setSize(1.5f);
                     slash.setOneTime();
                     slash.setPos(leftPos.x, leftPos.y, leftPos.z);
                     slash.setXRot(0);
                     slash.setYRot(entity.yBodyRot);
-                    entity.level.addFreshEntity(slash);
+                    entity.level().addFreshEntity(slash);
                 }
                 if (entity.remainingRightLegBones() > 0) {
                     Vec3 rightPos = entity.position().add(dir).add(side.scale(1.3));
-                    EntitySlashResidue slash = new EntitySlashResidue(entity.level, entity);
+                    EntitySlashResidue slash = new EntitySlashResidue(entity.level(), entity);
                     slash.setSize(1.5f);
                     slash.setOneTime();
                     slash.setPos(rightPos.x, rightPos.y, rightPos.z);
                     slash.setXRot(0);
                     slash.setYRot(entity.yBodyRot);
-                    entity.level.addFreshEntity(slash);
+                    entity.level().addFreshEntity(slash);
                 }
             }
         });
@@ -180,7 +179,7 @@ public class EntitySkelefang extends BossMonster {
         });
         b.put(BEAM, (anim, entity) -> {
             if (anim.isAt("charge"))
-                entity.level.broadcastEntityEvent(entity, CHARGE_BEAM);
+                entity.level().broadcastEntityEvent(entity, CHARGE_BEAM);
             if (anim.isAt("beam"))
                 ModSpells.ENERGY_ORB_SPELL.get().use(entity);
             if (anim.isAt("restore"))

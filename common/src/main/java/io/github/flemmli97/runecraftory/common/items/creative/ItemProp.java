@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.common.items.creative;
 
 import com.google.common.base.Suppliers;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -24,7 +23,7 @@ public class ItemProp extends Item {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
         super.appendHoverText(stack, level, tooltipComponents, isAdvanced);
-        tooltipComponents.add(new TranslatableComponent("runecraftory.tooltip.item.prop"));
+        tooltipComponents.add(Component.translatable("runecraftory.tooltip.item.prop"));
     }
 
     public ItemStack clientItemStack() {

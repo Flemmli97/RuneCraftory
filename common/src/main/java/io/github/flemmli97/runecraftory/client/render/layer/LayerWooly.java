@@ -14,7 +14,7 @@ import net.minecraft.world.item.DyeColor;
 
 public class LayerWooly<T extends EntityWooly> extends RenderLayer<T, ModelWooly<T>> {
 
-    private final ResourceLocation tex = new ResourceLocation(RuneCraftory.MODID, "textures/entity/monsters/wooly_wool.png");
+    private final ResourceLocation tex = RuneCraftory.modRes("textures/entity/monsters/wooly_wool.png");
     private final ModelWoolyWool<T> woolModel;
 
     public LayerWooly(RenderLayerParent<T, ModelWooly<T>> renderer, ModelWoolyWool<T> woolModel) {

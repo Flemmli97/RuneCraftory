@@ -3,8 +3,8 @@ package io.github.flemmli97.runecraftory.common.spells;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityBoneNeedle;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
-import io.github.flemmli97.tenshilib.common.utils.MathUtils;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
+import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -22,7 +22,7 @@ public class BoneNeedleSpell extends Spell {
         Vec3 direct;
         if (entity instanceof Mob mob && mob.getTarget() != null) {
             Vec3 pos = new EntityBoneNeedle(level, entity).position().add(0, -entity.getBbHeight() * 0.25, 0);
-            direct = EntityUtil.getStraightProjectileTarget(pos, mob.getTarget()).subtract(pos);
+            direct = EntityUtils.getStraightProjectileTarget(pos, mob.getTarget()).subtract(pos);
         } else
             direct = Vec3.directionFromRotation(entity.getXRot(), entity.yBodyRot);
         Vec3 side = Vec3.directionFromRotation(0, entity.yBodyRot - 90);

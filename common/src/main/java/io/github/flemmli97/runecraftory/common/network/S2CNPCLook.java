@@ -2,18 +2,31 @@ package io.github.flemmli97.runecraftory.common.network;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.npc.NPCLook;
-import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.NPCFeatureContainer;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 
-public class S2CNPCLook implements Packet {
+public class S2CNPCLook implements CustomPacketPayload {
 
-    public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "s2c_npc_look_update");
+    public static final CustomPacketPayload.Type<S2CNPCLook> TYPE = new CustomPacketPayload.Type<>(RuneCraftory.modRes("c2s_dialogue_action"));
 
+    public static final StreamCodec<RegistryFriendlyByteBuf, S2CNPCLook> STREAM_CODEC = new StreamCodec<>() {
+        @Override
+        public S2CNPCLook decode(RegistryFriendlyByteBuf buf) {
+            return new S2CNPCLook(buf.readInt(), NPCLook.fromBuffer(buf), new NPCFeatureContainer().fromBuffer(buf));
+        }
+
+        @Override
+        public void encode(RegistryFriendlyByteBuf buf, S2CNPCLook pkt) {
+            buf.writeInt(pkt.id);
+            pkt.look.writeToBuffer(buf);
+            pkt.features.toBuffer(buf);
+        }
+    };
     private final int id;
     private final NPCLook look;
     private final NPCFeatureContainer features;
@@ -24,15 +37,12 @@ public class S2CNPCLook implements Packet {
         this.features = features;
     }
 
-    public static S2CNPCLook read(FriendlyByteBuf buf) {
+    public static S2CNPCLook read(RegistryFriendlyByteBuf buf) {
         return new S2CNPCLook(buf.readInt(), NPCLook.fromBuffer(buf), new NPCFeatureContainer().fromBuffer(buf));
     }
 
-    public static void handle(S2CNPCLook pkt) {
-        Player player = ClientHandlers.getPlayer();
-        if (player == null)
-            return;
-        Entity e = player.getLevel().getEntity(pkt.id);
+    public static void handle(S2CNPCLook pkt, Player player) {
+        Entity e = player.level().getEntity(pkt.id);
         if (e instanceof EntityNPCBase npc) {
             npc.lookFeatures.with(pkt.features);
             npc.setClientLook(pkt.look);
@@ -40,14 +50,7 @@ public class S2CNPCLook implements Packet {
     }
 
     @Override
-    public void write(FriendlyByteBuf buf) {
-        buf.writeInt(this.id);
-        this.look.writeToBuffer(buf);
-        this.features.toBuffer(buf);
-    }
-
-    @Override
-    public ResourceLocation getID() {
-        return ID;
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 }

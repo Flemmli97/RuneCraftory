@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.client.render.projectiles;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityAppleProjectile;
-import io.github.flemmli97.tenshilib.client.render.RenderProjectileItem;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.world.item.ItemStack;

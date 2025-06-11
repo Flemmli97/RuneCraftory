@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -22,5 +23,9 @@ public class RuneCraftory {
         return new LootContext.Builder((ServerLevel) entity.getLevel()).withParameter(LootContextParams.THIS_ENTITY, entity)
                 .withParameter(LootContextParams.ORIGIN, entity.position()).withRandom(entity.getRandom())
                 .create(LootContextParamSets.ADVANCEMENT_ENTITY);
+    }
+
+    public static ResourceLocation modRes(String path) {
+        return ResourceLocation.fromNamespaceAndPath(MODID, path);
     }
 }

@@ -16,7 +16,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.ChatType;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -75,7 +75,7 @@ public class BossSpawnerBlockEntity extends BlockEntity {
                             Vec3 opposite = player.position().subtract(pos).normalize();
                             player.fallDistance = 0;
                             player.setDeltaMovement(opposite);
-                            player.sendMessage(new TranslatableComponent("runecraftory.misc.spawner.entry.deny").withStyle(ChatFormatting.DARK_PURPLE),
+                            player.sendMessage(Component.translatable("runecraftory.misc.spawner.entry.deny").withStyle(ChatFormatting.DARK_PURPLE),
                                     ChatType.GAME_INFO, Util.NIL_UUID);
                             player.connection.send(new ClientboundSetEntityMotionPacket(player));
                         }

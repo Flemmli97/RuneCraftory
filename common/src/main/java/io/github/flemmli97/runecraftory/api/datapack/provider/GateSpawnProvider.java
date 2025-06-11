@@ -6,9 +6,9 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.GateSpawnData;
 import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
 import io.github.flemmli97.runecraftory.common.datapack.manager.GateSpawnsManager;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.HashCache;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,9 +24,9 @@ public abstract class GateSpawnProvider implements DataProvider {
 
     private final Map<ResourceLocation, GateSpawnData> data = new HashMap<>();
 
-    private final DataGenerator gen;
+    private final PackOutput packOutput;
 
-    public GateSpawnProvider(DataGenerator gen) {
+    public GateSpawnProvider(PackOutput packOutput) {
         this.gen = gen;
     }
 

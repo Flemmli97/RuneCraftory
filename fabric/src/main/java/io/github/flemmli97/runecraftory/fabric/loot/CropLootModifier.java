@@ -78,7 +78,7 @@ public class CropLootModifier {
 
         public CropLootModifier read(ResourceLocation id, JsonObject object) {
             LootItemCondition[] lootConditions = GSON_INSTANCE.fromJson(object.get("conditions"), LootItemCondition[].class);
-            return new CropLootModifier(lootConditions, Registry.ITEM.get(new ResourceLocation(GsonHelper.getAsString(object, "exclude"))));
+            return new CropLootModifier(lootConditions, Registry.ITEM.get(ResourceLocation.fromNamespaceAndPath(GsonHelper.getAsString(object, "exclude"))));
         }
 
         public JsonObject write(CropLootModifier instance) {

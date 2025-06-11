@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.inventory.container;
 
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
-import io.github.flemmli97.runecraftory.common.registry.ModContainer;
+import io.github.flemmli97.runecraftory.common.registry.ModMenuTypes;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
@@ -19,7 +19,7 @@ public class ShippingContainer extends AbstractContainerMenu {
     }
 
     public ShippingContainer(int i, Inventory inventory, Container shippingBin) {
-        super(ModContainer.SHIPPING_CONTAINER.get(), i);
+        super(ModMenuTypes.SHIPPING_CONTAINER.get(), i);
         this.container = shippingBin;
         if (this.container == null)
             throw new IllegalStateException("Couldn't get shipping container from player");

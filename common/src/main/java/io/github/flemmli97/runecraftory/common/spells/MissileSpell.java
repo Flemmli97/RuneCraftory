@@ -4,7 +4,7 @@ import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityMissile;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
+import io.github.flemmli97.tenshilib.common.utils.HitResultUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
@@ -67,7 +67,7 @@ public class MissileSpell extends Spell {
         Vec3 pos = entity.getEyePosition(1);
         Vec3 dir = entity.getViewVector(1);
         Vec3 scaledDir = dir.scale(reach);
-        EntityHitResult result = RayTraceUtils.rayTraceEntities(entity.level, entity, pos, pos.add(scaledDir), entity.getBoundingBox().expandTowards(scaledDir).inflate(1), (t) -> EntitySelector.NO_SPECTATORS.test(t) && t.isPickable(), e -> e.getPickRadius() + 1);
+        EntityHitResult result = HitResultUtils.rayTraceEntities(entity, pos, pos.add(scaledDir), entity.getBoundingBox().expandTowards(scaledDir).inflate(1), t -> EntitySelector.NO_SPECTATORS.test(t) && t.isPickable());
         if (result != null) {
             Vec3 loc = result.getLocation();
             double dist = pos.distanceToSqr(loc);

@@ -6,8 +6,7 @@ import io.github.flemmli97.runecraftory.api.action.DataKey;
 import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.api.entity.IAnimated;
+import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -42,7 +41,7 @@ public class EntityWeaponHandler<T extends LivingEntity & IAnimated> implements 
     @Override
     public boolean doWeaponAttack(AttackAction action, ItemStack stack, @Nullable Spell spell) {
         AttackAction.OverrideType overrideType = this.checkOverride(action, true);
-        if (!this.entity.level.isClientSide && overrideType != AttackAction.OverrideType.NONE) {
+        if (!this.entity.level().isClientSide && overrideType != AttackAction.OverrideType.NONE) {
             if (overrideType == AttackAction.OverrideType.SCHEDULE) {
                 this.scheduledAction = true;
                 return true;
@@ -88,7 +87,7 @@ public class EntityWeaponHandler<T extends LivingEntity & IAnimated> implements 
         this.entity.yBodyRot = this.entity.yHeadRot;
         this.resetHitEntityTracker();
         this.currentAction.onStart(this.entity, this);
-        if (!this.entity.level.isClientSide) {
+        if (!this.entity.level().isClientSide) {
             if (anim == null) {
                 this.entity.getAnimationHandler().setAnimation(null);
             } else {

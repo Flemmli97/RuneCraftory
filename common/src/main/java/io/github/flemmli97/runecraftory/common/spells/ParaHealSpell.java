@@ -25,14 +25,14 @@ public class ParaHealSpell extends Spell {
             return false;
         Consumer<LivingEntity> apply = living -> {
             if (lvl >= 10) {
-                entity.removeEffect(ModEffects.SEAL.get());
+                entity.removeEffect(ModEffects.SEAL.asHolder());
             }
             if (lvl >= 5) {
-                entity.removeEffect(ModEffects.POISON.get());
+                entity.removeEffect(ModEffects.POISON.asHolder());
                 entity.removeEffect(MobEffects.DIG_SLOWDOWN);
             }
             entity.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
-            entity.removeEffect(ModEffects.PARALYSIS.get());
+            entity.removeEffect(ModEffects.PARALYSIS.asHolder());
             PoisonHealSpell.spawnStatusHealParticles(living);
         };
         List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(12), e -> {
@@ -40,7 +40,7 @@ public class ParaHealSpell extends Spell {
                 return true;
             if (entity instanceof Player player) {
                 return e instanceof OwnableEntity ownable && player.getUUID().equals(ownable.getOwnerUUID())
-                        || e instanceof AbstractVillager || e instanceof Animal || Platform.INSTANCE.getPlayerData(player).map(d -> d.party.isPartyMember(e)).orElse(false);
+                        || e instanceof AbstractVillager || e instanceof Animal || Platform.INSTANCE.getPlayerData(player).party.isPartyMember(e);
             } else {
                 if (entity instanceof HealingPredicateEntity healer)
                     return healer.healeableEntities().test(e);

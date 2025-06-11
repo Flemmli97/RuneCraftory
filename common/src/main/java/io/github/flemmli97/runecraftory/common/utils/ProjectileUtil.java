@@ -1,16 +1,15 @@
 package io.github.flemmli97.runecraftory.common.utils;
 
 import io.github.flemmli97.runecraftory.common.entities.utils.MobAttackExt;
-import io.github.flemmli97.tenshilib.common.entity.EntityBeam;
-import io.github.flemmli97.tenshilib.common.entity.EntityProjectile;
-import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
+import io.github.flemmli97.tenshilib.common.entity.AdvancedProjectile;
+import io.github.flemmli97.tenshilib.common.entity.BeamEntity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.phys.Vec3;
 
 public class ProjectileUtil {
 
-    public static void shoot(LivingEntity shooter, EntityProjectile projectile, float velocity, float inaccuracy) {
+    public static void shoot(LivingEntity shooter, AdvancedProjectile projectile, float velocity, float inaccuracy) {
         Vec3 target = getAimTarget(shooter, projectile.position());
         if (target != null) {
             projectile.shootAtPosition(target.x(), target.y(), target.z(), velocity, inaccuracy);
@@ -18,7 +17,7 @@ public class ProjectileUtil {
             projectile.shoot(shooter, shooter.getXRot(), shooter.getYRot(), 0, velocity, inaccuracy);
     }
 
-    public static void shoot(LivingEntity shooter, EntityBeam beam, float inaccuracy) {
+    public static void shoot(LivingEntity shooter, BeamEntity beam, float inaccuracy) {
         MobAttackExt.TargetPosition target;
         if (shooter instanceof MobAttackExt ext && (target = ext.getTargetPosition()) != null) {
             Vec3 v = target.asVec(beam.position());
@@ -49,7 +48,7 @@ public class ProjectileUtil {
         if (shooter instanceof MobAttackExt ext && (target = ext.getTargetPosition()) != null) {
             return target.asVec(shooter.position().add(0, offset, 0));
         } else if (shooter instanceof Mob mob && mob.getTarget() != null) {
-            return EntityUtil.getStraightProjectileTarget(shooter.position(), mob.getTarget());
+            return EntityUtils.getStraightProjectileTarget(shooter.position(), mob.getTarget());
         }
         return null;
     }

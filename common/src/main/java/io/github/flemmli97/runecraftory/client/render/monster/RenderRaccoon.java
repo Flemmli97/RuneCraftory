@@ -9,7 +9,7 @@ import io.github.flemmli97.runecraftory.client.model.monster.ModelRaccoonBerserk
 import io.github.flemmli97.runecraftory.client.render.RenderMonster;
 import io.github.flemmli97.runecraftory.client.render.layer.RiderLayerRendererExt;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityRaccoon;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -19,7 +19,7 @@ import net.minecraft.world.phys.Vec3;
 
 public class RenderRaccoon<T extends EntityRaccoon> extends RenderMonster<T, ModelRaccoonBase<T>> {
 
-    private static final ResourceLocation BERSERK_TEXTURE = new ResourceLocation(RuneCraftory.MODID, "textures/entity/monsters/raccoon_berserk.png");
+    private static final ResourceLocation BERSERK_TEXTURE = RuneCraftory.modRes("textures/entity/monsters/raccoon_berserk.png");
     public static final float BERSERK_SCALE = 1.4f;
 
     private final ModelRaccoonBase<T> normalModel;
@@ -28,7 +28,7 @@ public class RenderRaccoon<T extends EntityRaccoon> extends RenderMonster<T, Mod
     private boolean clone;
 
     public RenderRaccoon(EntityRendererProvider.Context ctx) {
-        super(ctx, new ModelRaccoon<>(ctx.bakeLayer(ModelRaccoon.LAYER_LOCATION)), new ResourceLocation(RuneCraftory.MODID, "textures/entity/monsters/raccoon.png"), 0.5f, false);
+        super(ctx, new ModelRaccoon<>(ctx.bakeLayer(ModelRaccoon.LAYER_LOCATION)), RuneCraftory.modRes("textures/entity/monsters/raccoon.png"), 0.5f, false);
         this.normalModel = this.model;
         this.berserkModel = new ModelRaccoonBerserk<>(ctx.bakeLayer(ModelRaccoonBerserk.LAYER_LOCATION));
         this.layers.add(new RiderLayerRendererExt<>(this, (stack, entity) -> {

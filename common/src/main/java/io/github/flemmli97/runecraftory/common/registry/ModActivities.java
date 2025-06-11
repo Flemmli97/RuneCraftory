@@ -2,17 +2,17 @@ package io.github.flemmli97.runecraftory.common.registry;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import io.github.flemmli97.tenshilib.platform.PlatformUtils;
-import io.github.flemmli97.tenshilib.platform.registry.PlatformRegistry;
-import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
-import net.minecraft.core.Registry;
+import io.github.flemmli97.tenshilib.loader.LoaderRegistryAccess;
+import io.github.flemmli97.tenshilib.loader.registry.LoaderRegister;
+import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.schedule.Activity;
 
 public class ModActivities {
 
-    public static final PlatformRegistry<Activity> ACTIVITIES = PlatformUtils.INSTANCE.of(Registry.ACTIVITY_REGISTRY, RuneCraftory.MODID);
+    public static final LoaderRegister<Activity> ACTIVITIES = LoaderRegistryAccess.INSTANCE.of(Registries.ACTIVITY, RuneCraftory.MODID);
 
-    public static final RegistryEntrySupplier<Activity> DISABLED = ACTIVITIES.register("disabled", () -> Platform.INSTANCE.activity("disabled"));
-    public static final RegistryEntrySupplier<Activity> EARLYIDLE = ACTIVITIES.register("early_idle", () -> Platform.INSTANCE.activity("early_idle"));
+    public static final RegistryEntrySupplier<Activity, Activity> DISABLED = ACTIVITIES.register("disabled", () -> Platform.INSTANCE.activity("disabled"));
+    public static final RegistryEntrySupplier<Activity, Activity> EARLYIDLE = ACTIVITIES.register("early_idle", () -> Platform.INSTANCE.activity("early_idle"));
 
 }

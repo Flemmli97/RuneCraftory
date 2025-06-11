@@ -8,7 +8,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -48,7 +48,7 @@ public class RapidMoveAttack extends AttackAction {
         }
         if (anim.isAt("attack")) {
             entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_LIGHT.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
-            if (!entity.level.isClientSide) {
+            if (!entity.level().isClientSide) {
                 handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox().inflate(0.5)
                                 .expandTowards(0, 0, 1)))
                         .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
@@ -61,8 +61,8 @@ public class RapidMoveAttack extends AttackAction {
     @Override
     public void onStart(LivingEntity entity, AttackActionHandler handler) {
         super.onStart(entity, handler);
-        if (!entity.level.isClientSide()) {
-            LivingEntity target = entity.level.getNearestEntity(LivingEntity.class, TargetingConditions.forCombat(), entity, entity.getX(),
+        if (!entity.level().isClientSide()) {
+            LivingEntity target = entity.level().getNearestEntity(LivingEntity.class, TargetingConditions.forCombat(), entity, entity.getX(),
                     entity.getY(), entity.getZ(), entity.getBoundingBox().inflate(20, 10, 20));
             if (target != null)
                 handler.store(DataKey.TARGET, target);

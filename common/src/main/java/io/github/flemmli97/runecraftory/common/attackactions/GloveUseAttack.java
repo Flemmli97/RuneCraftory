@@ -7,7 +7,7 @@ import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
@@ -29,11 +29,11 @@ public class GloveUseAttack extends AttackAction {
         if (anim.isPast("attack_start") && !handler.getAnimation().isPast("attack_end")) {
             Vec3 look = entity.getLookAngle();
             Vec3 move = new Vec3(look.x, 0.0, look.z).normalize()
-                    .scale(entity.isOnGround() ? 0.5 : 0.3).add(0, entity.getDeltaMovement().y, 0);
+                    .scale(entity.onGround() ? 0.5 : 0.3).add(0, entity.getDeltaMovement().y, 0);
             entity.setDeltaMovement(move);
             if (anim.isAt("reset"))
                 handler.resetHitEntityTracker();
-            if (!entity.level.isClientSide) {
+            if (!entity.level().isClientSide) {
                 List<LivingEntity> hit = new ArrayList<>();
                 handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox()
                                 .inflate(1)))
@@ -41,7 +41,7 @@ public class GloveUseAttack extends AttackAction {
                         .doOnSuccess(hit::add)
                         .executeAttack());
                 if (!hit.isEmpty() && entity instanceof ServerPlayer serverPlayer) {
-                    Platform.INSTANCE.getPlayerData(serverPlayer).ifPresent(data -> LevelCalc.levelSkill(serverPlayer, data, EnumSkills.DUAL, 2));
+                    LevelCalc.levelSkill(serverPlayer, Platform.INSTANCE.getPlayerData(serverPlayer), EnumSkills.DUAL, 2);
                 }
             }
         }

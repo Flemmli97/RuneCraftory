@@ -1,21 +1,13 @@
 package io.github.flemmli97.runecraftory.platform;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumElement;
-import io.github.flemmli97.runecraftory.common.attachment.ArmorEffectData;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
-import io.github.flemmli97.runecraftory.common.attachment.StaffData;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
-import io.github.flemmli97.runecraftory.common.items.equipment.ItemArmorBase;
-import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
-import io.github.flemmli97.runecraftory.common.network.Packet;
-import io.github.flemmli97.tenshilib.platform.InitUtil;
-import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
+import io.github.flemmli97.tenshilib.loader.LoaderInitializer;
+import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.Container;
@@ -36,7 +28,6 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BaseSpawner;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
@@ -47,7 +38,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 import org.apache.commons.lang3.function.TriFunction;
 
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -56,47 +46,27 @@ import java.util.function.Supplier;
 
 public interface Platform {
 
-    Platform INSTANCE = InitUtil.getPlatformInstance(Platform.class,
+    Platform INSTANCE = LoaderInitializer.getImplInstance(Platform.class,
             "io.github.flemmli97.runecraftory.fabric.platform.PlatformImpl",
-            "io.github.flemmli97.runecraftory.forge.platform.PlatformImpl");
+            "io.github.flemmli97.runecraftory.neoforge.platform.PlatformImpl");
 
     boolean isDatagen();
 
-    Optional<PlayerData> getPlayerData(Player player);
+    PlayerData getPlayerData(Player player);
 
-    Optional<EntityData> getEntityData(LivingEntity living);
-
-    Optional<StaffData> getStaffData(Object stack);
-
-    Optional<ArmorEffectData> getArmorEffects(Object stack);
+    EntityData getEntityData(LivingEntity living);
 
     void openGuiMenu(ServerPlayer player, MenuProvider provider);
 
     void openGuiMenu(ServerPlayer player, MenuProvider provider, BlockPos pos);
 
-    void openGuiMenu(ServerPlayer player, MenuProvider provider, Consumer<FriendlyByteBuf> writer);
-
-    //Network
-
-    void sendToClient(Packet message, ServerPlayer player);
-
-    void sendToServer(Packet message);
-
-    void sendToAll(Packet message, MinecraftServer server);
-
-    void sendToTrackingAndSelf(Packet message, Entity e);
-
-    void sendToTracking(Packet message, ServerLevel level, ChunkPos pos);
+    void openGuiMenu(ServerPlayer player, MenuProvider provider, Consumer<RegistryFriendlyByteBuf> writer);
 
     //Item Stuff
 
     boolean isShield(ItemStack stack, Player player);
 
     boolean canEquip(ItemStack stack, EquipmentSlot slot, LivingEntity entity);
-
-    ItemStaffBase staff(EnumElement starterElement, int amount, Item.Properties properties);
-
-    ItemArmorBase armor(EquipmentSlot slot, Item.Properties properties, ResourceLocation id, boolean useItemTexture);
 
     //Block Stuff
 
@@ -118,7 +88,7 @@ public interface Platform {
 
     Activity activity(String name);
 
-    CreativeModeTab tab(String label, Supplier<ItemStack> icon);
+    CreativeModeTab.Builder tabBuilder();
 
     boolean matchingInventory(BlockEntity blockEntity, Predicate<ItemStack> func);
 

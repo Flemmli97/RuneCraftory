@@ -4,14 +4,14 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCAttackGoal;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
-import io.github.flemmli97.tenshilib.platform.registry.CustomRegistryEntry;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -39,14 +39,17 @@ public interface NPCAction {
                 return Optional.empty();
             return Optional.of(provider);
         };
-        return CodecHelper.NUMER_PROVIDER_CODEC.optionalFieldOf(field).forGetter(optGetter);
+        return NumberProviders.CODEC.optionalFieldOf(field).forGetter(optGetter);
     }
 
     static LootContext createLootContext(EntityNPCBase npc) {
-        return new LootContext.Builder((ServerLevel) npc.getLevel()).withParameter(LootContextParams.THIS_ENTITY, npc).withParameter(LootContextParams.ORIGIN, npc.position()).withRandom(npc.getRandom()).create(LootContextParamSets.ADVANCEMENT_ENTITY);
+        LootParams.Builder builder = new LootParams.Builder((ServerLevel) npc.level())
+                .withParameter(LootContextParams.THIS_ENTITY, npc).withParameter(LootContextParams.ORIGIN, npc.position());
+        return new LootContext.Builder(builder.create(LootContextParamSets.ADVANCEMENT_ENTITY)).withOptionalRandomSource(npc.getRandom())
+                .create(Optional.empty());
     }
 
-    Supplier<NPCActionCodec> codec();
+    Supplier<? extends Codec<? extends NPCAction>> codec();
 
     int getDuration(EntityNPCBase npc);
 
@@ -65,17 +68,6 @@ public interface NPCAction {
     record NPCAttackAction(AttackAction action, int comboCount) {
         public static NPCAttackAction of(AttackAction action) {
             return new NPCAttackAction(action, 1);
-        }
-    }
-
-    //Wrapper needed for registries on forge
-    class NPCActionCodec extends CustomRegistryEntry<NPCActionCodec> {
-
-        public final Codec<NPCAction> codec;
-
-        @SuppressWarnings("unchecked")
-        public NPCActionCodec(Codec<? extends NPCAction> codec) {
-            this.codec = (Codec<NPCAction>) codec;
         }
     }
 }

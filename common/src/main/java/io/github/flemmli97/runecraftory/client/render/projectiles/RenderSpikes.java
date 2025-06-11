@@ -4,15 +4,14 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.model.misc.ModelSpikes;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntitySpike;
-import io.github.flemmli97.tenshilib.client.render.RenderProjectileModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 
 public class RenderSpikes<T extends EntitySpike> extends RenderProjectileModel<T> {
 
-    private static final ResourceLocation EARTH_SPIKE = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/spikes_dirt_tiled.png");
-    private static final ResourceLocation BRANCHES = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/spikes_wood_tiled.png");
+    private static final ResourceLocation EARTH_SPIKE = RuneCraftory.modRes("textures/entity/projectile/spikes_dirt_tiled.png");
+    private static final ResourceLocation BRANCHES = RuneCraftory.modRes("textures/entity/projectile/spikes_wood_tiled.png");
 
     public RenderSpikes(EntityRendererProvider.Context ctx) {
         super(ctx, new ModelSpikes<>(ctx.bakeLayer(ModelSpikes.LAYER_LOCATION)));

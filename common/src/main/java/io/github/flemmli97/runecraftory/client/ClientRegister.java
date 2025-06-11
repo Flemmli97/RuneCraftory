@@ -140,13 +140,12 @@ import io.github.flemmli97.runecraftory.common.items.tools.ItemToolFishingRod;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemDualBladeBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemGloveBase;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
-import io.github.flemmli97.runecraftory.common.registry.ModContainer;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.ModMenuTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.tenshilib.client.model.RideableModel;
 import io.github.flemmli97.tenshilib.client.particles.ColoredParticle;
-import io.github.flemmli97.tenshilib.client.render.RenderProjectileItem;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColor;
@@ -261,12 +260,12 @@ public class ClientRegister {
     }
 
     public static void registerScreen(MenuScreenRegister factory) {
-        factory.register(ModContainer.CRAFTING_CONTAINER.get(), (CraftingGui::new));
-        factory.register(ModContainer.UPGRADE_CONTAINER.get(), UpgradeGui::new);
-        factory.register(ModContainer.INFO_CONTAINER.get(), InfoScreen::new);
-        factory.register(ModContainer.INFO_SUB_CONTAINER.get(), InfoSubScreen::new);
-        factory.register(ModContainer.SHIPPING_CONTAINER.get(), MaxChestScreen<ShippingContainer>::new);
-        factory.register(ModContainer.SHOP_CONTAINER.get(), NPCShopGui::new);
+        factory.register(ModMenuTypes.CRAFTING_CONTAINER.get(), (CraftingGui::new));
+        factory.register(ModMenuTypes.UPGRADE_CONTAINER.get(), UpgradeGui::new);
+        factory.register(ModMenuTypes.INFO_CONTAINER.get(), InfoScreen::new);
+        factory.register(ModMenuTypes.INFO_SUB_CONTAINER.get(), InfoSubScreen::new);
+        factory.register(ModMenuTypes.SHIPPING_CONTAINER.get(), MaxChestScreen<ShippingContainer>::new);
+        factory.register(ModMenuTypes.SHOP_CONTAINER.get(), NPCShopGui::new);
     }
 
     public static void registerRenderers(EntityRendererRegister consumer) {
@@ -387,7 +386,7 @@ public class ClientRegister {
         consumer.register(ModEntities.DARK_BULLET.get(), RenderDarkBullet::new);
         consumer.register(ModEntities.POISON_NEEDLE.get(), RenderPoisonNeedle::new);
         consumer.register(ModEntities.SLEEP_AURA.get(), EmptyRender::new);
-        consumer.register(ModEntities.CIRCLING_BULLET.get(), ctx -> new RenderBullet(ctx, new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/bullet.png")));
+        consumer.register(ModEntities.CIRCLING_BULLET.get(), ctx -> new RenderBullet(ctx, RuneCraftory.modRes("textures/entity/projectile/bullet.png")));
         consumer.register(ModEntities.THROWN_ITEM.get(), RenderThrownItem::new);
         consumer.register(ModEntities.APPLE.get(), RenderAppleProjectile::new);
         consumer.register(ModEntities.SLASH_RESIDUE.get(), EmptyRender::new);
@@ -458,11 +457,11 @@ public class ClientRegister {
     }
 
     public static ResourceLocation mobTexture(EntityType<?> reg) {
-        return new ResourceLocation(RuneCraftory.MODID, "textures/entity/monsters/" + Registry.ENTITY_TYPE.getKey(reg).getPath() + ".png");
+        return RuneCraftory.modRes("textures/entity/monsters/" + Registry.ENTITY_TYPE.getKey(reg).getPath() + ".png");
     }
 
     public static ResourceLocation mobTexture(EntityType<?> reg, String append) {
-        return new ResourceLocation(RuneCraftory.MODID, "textures/entity/monsters/" + Registry.ENTITY_TYPE.getKey(reg).getPath() + append + ".png");
+        return RuneCraftory.modRes("textures/entity/monsters/" + Registry.ENTITY_TYPE.getKey(reg).getPath() + append + ".png");
     }
 
     public static void layerRegister(BiConsumer<ModelLayerLocation, Supplier<LayerDefinition>> consumer) {

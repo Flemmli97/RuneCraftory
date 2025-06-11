@@ -1,7 +1,8 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
 import io.github.flemmli97.runecraftory.api.registry.AttackAction;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
+
 
 public class EmptyAction extends AttackAction {
 

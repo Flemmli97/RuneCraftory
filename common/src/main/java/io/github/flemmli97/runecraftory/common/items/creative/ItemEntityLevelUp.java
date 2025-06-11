@@ -17,7 +17,7 @@ public class ItemEntityLevelUp extends Item {
 
     @Override
     public InteractionResult interactLivingEntity(ItemStack itemstack, Player player, LivingEntity entity, InteractionHand hand) {
-        if (entity.level.isClientSide) {
+        if (entity.level().isClientSide) {
             return InteractionResult.SUCCESS;
         }
         if (entity instanceof BaseMonster monster) {

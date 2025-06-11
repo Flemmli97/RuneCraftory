@@ -5,7 +5,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.datapack.ShopItemProperties;
 import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -21,7 +21,7 @@ import java.util.Random;
 public class GiftData {
 
     public static final Codec<GiftData> CODEC = RecordCodecBuilder.create(inst ->
-            inst.group(Codec.either(ShopItemProperties.TAG_CODEC, Registry.ITEM.byNameCodec())
+            inst.group(Codec.either(ShopItemProperties.TAG_CODEC, BuiltInRegistries.ITEM.byNameCodec())
                             .listOf().fieldOf("items").forGetter(d -> d.items),
                     Range.CODEC.optionalFieldOf("xp_range").forGetter(d -> Optional.ofNullable(d.xp_range)),
                     CodecHelper.nonEmptyList(Codec.STRING, "Translations can't be empty").fieldOf("translations").forGetter(d -> d.translations)

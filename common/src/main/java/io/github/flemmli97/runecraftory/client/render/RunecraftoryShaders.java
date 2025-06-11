@@ -5,7 +5,6 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormatElement;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.tenshilib.client.CustomRenderTypesHelper;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.resources.ResourceLocation;
@@ -28,7 +27,7 @@ public class RunecraftoryShaders extends RenderType {
             .setOverlayState(OVERLAY).createCompositeState(false));
 
     public static void registerShader(ShaderRegister register) throws IOException {
-        register.register(new ResourceLocation(RuneCraftory.MODID, "gate"), POSITION_COLOR_2X_TEX,
+        register.register(RuneCraftory.modRes("gate"), POSITION_COLOR_2X_TEX,
                 shaderInstance -> RunecraftoryShaders.GATE_SHADER_INSTANCE = shaderInstance);
     }
 

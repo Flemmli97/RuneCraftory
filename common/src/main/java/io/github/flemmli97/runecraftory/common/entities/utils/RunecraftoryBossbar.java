@@ -4,7 +4,7 @@ import io.github.flemmli97.runecraftory.common.network.Packet;
 import io.github.flemmli97.runecraftory.common.network.S2CBossbarInfoAdd;
 import io.github.flemmli97.runecraftory.common.network.S2CBossbarInfoRemove;
 import io.github.flemmli97.runecraftory.common.network.S2CBossbarMusicUpdate;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerBossEvent;
@@ -87,12 +87,12 @@ public class RunecraftoryBossbar extends ServerBossEvent {
             if (prev != 0 && progress == 0) {
                 S2CBossbarMusicUpdate pkt = new S2CBossbarMusicUpdate(this.getId(), this.getMusicId(), true);
                 for (ServerPlayer serverPlayer : this.getPlayers()) {
-                    Platform.INSTANCE.sendToClient(pkt, serverPlayer);
+                    LoaderNetwork.INSTANCE.sendToPlayer(pkt, serverPlayer);
                 }
             } else if (prev == 0 && progress != 0) {
                 S2CBossbarMusicUpdate pkt = new S2CBossbarMusicUpdate(this.getId(), this.getMusicId(), false);
                 for (ServerPlayer serverPlayer : this.getPlayers()) {
-                    Platform.INSTANCE.sendToClient(pkt, serverPlayer);
+                    LoaderNetwork.INSTANCE.sendToPlayer(pkt, serverPlayer);
                 }
             }
         }
@@ -106,7 +106,7 @@ public class RunecraftoryBossbar extends ServerBossEvent {
         if (this.isVisible()) {
             Packet pkt = remove ? new S2CBossbarInfoRemove(this.getId(), immediate) : new S2CBossbarInfoAdd(this.getId(), this.getMusicId(), this.type, this.music);
             for (ServerPlayer serverPlayer : this.getPlayers()) {
-                Platform.INSTANCE.sendToClient(pkt, serverPlayer);
+                LoaderNetwork.INSTANCE.sendToPlayer(pkt, serverPlayer);
             }
         }
     }

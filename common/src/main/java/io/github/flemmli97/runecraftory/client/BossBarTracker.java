@@ -7,6 +7,7 @@ import io.github.flemmli97.runecraftory.mixin.SoundManagerAccessor;
 import io.github.flemmli97.runecraftory.mixinhelper.SoundEngineUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.sounds.ChannelAccess;
@@ -132,12 +133,12 @@ public class BossBarTracker {
         }
     }
 
-    public static int tryRenderCustomBossbar(PoseStack poseStack, int x, int y, BossEvent bossEvent, boolean withName) {
+    public static int tryRenderCustomBossbar(GuiGraphics graphics, int x, int y, BossEvent bossEvent, boolean withName) {
         BossBarData data = ACTIVE_BOSS_BARS.get(bossEvent.getId());
         if (data != null) {
             ClientBossBarType type = BOSS_BARS.get(data.type);
             if (type != null)
-                return type.renderFrom(poseStack, x, y, bossEvent, withName);
+                return type.renderFrom(graphics, x, y, bossEvent, withName);
         }
         return 0;
     }

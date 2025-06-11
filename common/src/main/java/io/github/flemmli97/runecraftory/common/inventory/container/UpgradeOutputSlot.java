@@ -67,10 +67,8 @@ public class UpgradeOutputSlot extends Slot {
             }
             data.decreaseRunePoints(player, this.container.rpCost(), true);
             switch (this.container.craftingType()) {
-                case FORGE ->
-                        CraftingUtils.giveUpgradeXPTo(serverPlayer, data, EnumSkills.FORGING, toUpgrade, material);
-                case ARMOR ->
-                        CraftingUtils.giveUpgradeXPTo(serverPlayer, data, EnumSkills.CRAFTING, toUpgrade, material);
+                case FORGE -> CraftingUtils.giveUpgradeXPTo(data, EnumSkills.FORGING, toUpgrade, material);
+                case ARMOR -> CraftingUtils.giveUpgradeXPTo(data, EnumSkills.CRAFTING, toUpgrade, material);
             }
         });
         ItemStack ing1 = this.ingredientInv.getItem(0);

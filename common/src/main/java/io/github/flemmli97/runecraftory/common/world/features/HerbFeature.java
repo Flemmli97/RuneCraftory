@@ -82,8 +82,8 @@ public class HerbFeature extends Feature<HerbFeatureConfig> {
             this.block = block;
             this.weight = Weight.of(weight);
             ResourceLocation res = Registry.BLOCK.getKey(block);
-            this.whitelist = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(RuneCraftory.MODID, "herb/in_" + res.getPath()));
-            this.blacklist = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(RuneCraftory.MODID, "herb/not_" + res.getPath()));
+            this.whitelist = TagKey.create(Registry.BIOME_REGISTRY, RuneCraftory.modRes("herb/in_" + res.getPath()));
+            this.blacklist = TagKey.create(Registry.BIOME_REGISTRY, RuneCraftory.modRes("herb/not_" + res.getPath()));
         }
 
         public Entry(Block block, TagKey<Biome> whitelist, TagKey<Biome> blacklist, int weight) {

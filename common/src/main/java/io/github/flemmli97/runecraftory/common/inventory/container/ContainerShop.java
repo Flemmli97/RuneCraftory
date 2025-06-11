@@ -4,13 +4,12 @@ import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.EnumShopResult;
 import io.github.flemmli97.runecraftory.common.inventory.InventoryShop;
 import io.github.flemmli97.runecraftory.common.network.S2CShopResponses;
-import io.github.flemmli97.runecraftory.common.registry.ModContainer;
+import io.github.flemmli97.runecraftory.common.registry.ModMenuTypes;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
@@ -35,7 +34,7 @@ public class ContainerShop extends AbstractContainerMenu {
     }
 
     public ContainerShop(int windowID, Inventory playerInv, InventoryShop invShop) {
-        super(ModContainer.SHOP_CONTAINER.get(), windowID);
+        super(ModMenuTypes.SHOP_CONTAINER.get(), windowID);
         this.invShop = invShop;
         if (this.invShop == null)
             throw new IllegalStateException("Tried creating a shop container but shop inventory was null");
@@ -121,11 +120,11 @@ public class ContainerShop extends AbstractContainerMenu {
             if (shopOutput.hasItem() && player instanceof ServerPlayer serverPlayer) {
                 EnumShopResult res = ItemUtils.buyItem(player, this.invShop.npc, shopOutput.getItem().copy());
                 Component txt = switch (res) {
-                    case NOMONEY -> new TranslatableComponent("runecraftory.npc.shop.money.no");
-                    case NOSPACE -> new TranslatableComponent("runecraftory.npc.shop.inventory.full");
-                    case SUCCESS -> new TranslatableComponent("runecraftory.npc.shop.success");
+                    case NOMONEY -> Component.translatable("runecraftory.npc.shop.money.no");
+                    case NOSPACE -> Component.translatable("runecraftory.npc.shop.inventory.full");
+                    case SUCCESS -> Component.translatable("runecraftory.npc.shop.success");
                 };
-                Platform.INSTANCE.sendToClient(new S2CShopResponses(txt), serverPlayer);
+                LoaderNetwork.INSTANCE.sendToPlayer(new S2CShopResponses(txt), serverPlayer);
                 if (res == EnumShopResult.SUCCESS)
                     shopOutput.set(ItemStack.EMPTY);
             }

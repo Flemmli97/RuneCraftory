@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.inventory.container;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.crafting.SextupleRecipe;
 import io.github.flemmli97.runecraftory.common.inventory.PlayerContainerInv;
@@ -62,32 +63,32 @@ public class CraftingOutputSlot extends Slot {
         if (!(player instanceof ServerPlayer serverPlayer))
             return;
         NonNullList<ItemStack> remaining = this.craftingContainer.getCurrentRecipe() != null ? this.craftingContainer.getCurrentRecipe().getRemainingItems(this.ingredientInv) : NonNullList.withSize(0, ItemStack.EMPTY);
-        if (this.craftingContainer.rpCost() >= 0)
-            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                data.decreaseRunePoints(player, this.craftingContainer.rpCost(), true);
-                SextupleRecipe recipe = this.craftingContainer.getCurrentRecipe();
-                if (recipe != null && !recipe.isSpecial() && !data.getRecipeKeeper().isUnlocked(recipe)) {
-                    data.getRecipeKeeper().unlockRecipe(player, recipe);
-                    this.craftingContainer.sendCraftingRecipesToClient(serverPlayer, data);
-                }
-                switch (this.craftingContainer.craftingType()) {
-                    case FORGE ->
-                            CraftingUtils.giveCraftingXPTo(serverPlayer, data, EnumSkills.FORGING, this.craftingContainer.getCurrentRecipe());
-                    case ARMOR ->
-                            CraftingUtils.giveCraftingXPTo(serverPlayer, data, EnumSkills.CRAFTING, this.craftingContainer.getCurrentRecipe());
-                    case CHEM ->
-                            CraftingUtils.giveCraftingXPTo(serverPlayer, data, EnumSkills.CHEMISTRY, this.craftingContainer.getCurrentRecipe());
-                    case COOKING ->
-                            CraftingUtils.giveCraftingXPTo(serverPlayer, data, EnumSkills.COOKING, this.craftingContainer.getCurrentRecipe());
-                }
-            });
+        if (this.craftingContainer.rpCost() >= 0) {
+            PlayerData data = Platform.INSTANCE.getPlayerData(player);
+            data.decreaseRunePoints(this.craftingContainer.rpCost(), true);
+            SextupleRecipe recipe = this.craftingContainer.getCurrentRecipe();
+            if (recipe != null && !recipe.isSpecial() && !data.getRecipeKeeper().isUnlocked(recipe)) {
+                data.getRecipeKeeper().unlockRecipe(player, recipe);
+                this.craftingContainer.sendCraftingRecipesToClient(serverPlayer, data);
+            }
+            switch (this.craftingContainer.craftingType()) {
+                case FORGE ->
+                        CraftingUtils.giveCraftingXPTo(data, EnumSkills.FORGING, this.craftingContainer.getCurrentRecipe());
+                case ARMOR ->
+                        CraftingUtils.giveCraftingXPTo(data, EnumSkills.CRAFTING, this.craftingContainer.getCurrentRecipe());
+                case CHEM ->
+                        CraftingUtils.giveCraftingXPTo(data, EnumSkills.CHEMISTRY, this.craftingContainer.getCurrentRecipe());
+                case COOKING ->
+                        CraftingUtils.giveCraftingXPTo(data, EnumSkills.COOKING, this.craftingContainer.getCurrentRecipe());
+            }
+        }
         if (ItemNBT.usedLightOre(stack))
-            ModCriteria.LIGHT_ORE.trigger(serverPlayer);
+            ModCriteria.LIGHT_ORE.get().trigger(serverPlayer);
         switch (this.craftingContainer.craftingType()) {
-            case FORGE -> ModCriteria.FORGING.trigger(serverPlayer);
-            case ARMOR -> ModCriteria.CRAFTING.trigger(serverPlayer);
-            case CHEM -> ModCriteria.MEDICINE.trigger(serverPlayer);
-            case COOKING -> ModCriteria.COOKING.trigger(serverPlayer);
+            case FORGE -> ModCriteria.FORGING.get().trigger(serverPlayer);
+            case ARMOR -> ModCriteria.CRAFTING.get().trigger(serverPlayer);
+            case CHEM -> ModCriteria.MEDICINE.get().trigger(serverPlayer);
+            case COOKING -> ModCriteria.COOKING.get().trigger(serverPlayer);
         }
         boolean refreshRecipe = false;
         for (int i = 0; i < remaining.size(); ++i) {
@@ -133,6 +134,6 @@ public class CraftingOutputSlot extends Slot {
     public boolean mayPickup(Player player) {
         if (!GeneralConfig.useRp)
             return true;
-        return (player.isCreative() || Platform.INSTANCE.getPlayerData(player).map(data -> data.getMaxRunePoints() >= this.craftingContainer.rpCost()).orElse(false));
+        return (player.isCreative() || Platform.INSTANCE.getPlayerData(player).getMaxRunePoints() >= this.craftingContainer.rpCost());
     }
 }

@@ -5,7 +5,7 @@ import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityElementalBall;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
-import io.github.flemmli97.tenshilib.common.utils.MathUtils;
+import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -32,7 +32,7 @@ public class BaseStaffSpell extends Spell {
                 EntityElementalBall ball = new EntityElementalBall(level, entity, element);
                 Vec3 look = entity.getLookAngle();
                 ball.shoot(look.x, look.y, look.z, 1, 0);
-                entity.level.addFreshEntity(ball);
+                entity.level().addFreshEntity(ball);
             } else if (staff.amount == 2) {
                 for (float offset : OFFSET_TWO) {
                     Vec3 side = MathUtils.rotate(MathUtils.NORMAL_Y, MathUtils.NORMAL_X, -entity.getYRot() * Mth.DEG_TO_RAD);
@@ -41,7 +41,7 @@ public class BaseStaffSpell extends Spell {
                     Vec3 look = entity.getLookAngle();
                     ball.shoot(look.x, look.y, look.z, 1, 0);
                     ball.setPos(newPos.x, newPos.y, newPos.z);
-                    entity.level.addFreshEntity(ball);
+                    entity.level().addFreshEntity(ball);
                 }
             } else {
                 for (float offset : OFFSET_THREE) {
@@ -51,7 +51,7 @@ public class BaseStaffSpell extends Spell {
                     Vec3 look = entity.getLookAngle();
                     ball.shoot(look.x, look.y, look.z, 1, 0);
                     ball.setPos(newPos.x, newPos.y, newPos.z);
-                    entity.level.addFreshEntity(ball);
+                    entity.level().addFreshEntity(ball);
                 }
             }
             return true;

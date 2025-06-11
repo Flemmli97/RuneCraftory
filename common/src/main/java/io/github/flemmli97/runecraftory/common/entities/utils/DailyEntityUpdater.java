@@ -23,7 +23,7 @@ public class DailyEntityUpdater<T extends LivingEntity> {
     public void tick() {
         if (this.dailyRandomSeed == 0)
             this.dailyRandomSeed = this.entity.getRandom().nextInt();
-        int day = WorldUtils.day(this.entity.level);
+        int day = WorldUtils.day(this.entity.level());
         if (this.lastUpdateDay != day) {
             this.lastUpdateDay = day;
             this.dailyRandomSeed = this.entity.getRandom().nextInt();

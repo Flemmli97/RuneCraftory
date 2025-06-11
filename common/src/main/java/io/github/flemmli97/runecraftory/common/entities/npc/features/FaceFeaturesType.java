@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.entities.npc.features;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeature;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureHolder;
@@ -21,7 +22,7 @@ public record FaceFeaturesType(IndexedColorSetting irisSetting,
                                IndexedColorSetting eyebrowSetting,
                                Map<String, ExpressionFeature> expressionMap) implements NPCFeatureHolder<FaceFeaturesType.FaceFeatures> {
 
-    public static final Codec<FaceFeaturesType> CODEC = RecordCodecBuilder.create(inst ->
+    public static final MapCodec<FaceFeaturesType> CODEC = RecordCodecBuilder.mapCodec(inst ->
             inst.group(
                     IndexedColorSetting.CODEC.fieldOf("iris").forGetter(d -> d.irisSetting),
                     IndexedColorSetting.CODEC.fieldOf("sclera").forGetter(d -> d.scleraSetting),

@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public interface IBaseMob {
 
-    LevelExpPair level();
+    LevelExpPair xpLevel();
 
     void setLevel(int level);
 

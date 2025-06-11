@@ -3,7 +3,6 @@ package io.github.flemmli97.runecraftory.client.render.projectiles;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityElementalTrail;
-import io.github.flemmli97.tenshilib.client.render.RenderTexture;
 import io.github.flemmli97.tenshilib.client.render.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
@@ -18,8 +17,8 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class RenderElementalTrail extends RenderTexture<EntityElementalTrail> {
 
-    private static final ResourceLocation DARK = new ResourceLocation("minecraft", "block/soul_fire_0");
-    private static final ResourceLocation FIRE = new ResourceLocation("minecraft", "block/fire_0");
+    private static final ResourceLocation DARK = ResourceLocation.fromNamespaceAndPath("minecraft", "block/soul_fire_0");
+    private static final ResourceLocation FIRE = ResourceLocation.fromNamespaceAndPath("minecraft", "block/fire_0");
 
     private final BlockState ice = Blocks.ICE.defaultBlockState();
     private final BlockState dirt = Blocks.COARSE_DIRT.defaultBlockState();

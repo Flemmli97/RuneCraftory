@@ -13,8 +13,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -42,7 +41,7 @@ public class SpawnEggScreen extends Screen {
     private ResourceLocation npcID;
 
     public SpawnEggScreen(InteractionHand hand) {
-        super(new TextComponent(""));
+        super(Component.literal(""));
         this.hand = hand;
         this.player = Minecraft.getInstance().player;
     }
@@ -90,11 +89,11 @@ public class SpawnEggScreen extends Screen {
         this.fillGradient(stack, this.leftPos, this.topPos, this.leftPos + this.sizeX, this.topPos + this.sizeY, -1072689136, -804253680);
         int xPadding = 16;
         int yOff = 16;
-        this.minecraft.font.draw(stack, new TranslatableComponent("runecraftory.gui.level"), this.leftPos + xPadding, this.topPos + yOff, 0xffffff);
+        this.minecraft.font.draw(stack, Component.translatable("runecraftory.gui.level"), this.leftPos + xPadding, this.topPos + yOff, 0xffffff);
         this.levelEditor.render(stack, mouseX, mouseY, partialTick);
         yOff += 16 + 20 + 60;
         if (this.npcIDEditor != null) {
-            this.minecraft.font.draw(stack, new TranslatableComponent("runecraftory.gui.npc.id"), this.leftPos + xPadding, this.topPos + yOff, 0xffffff);
+            this.minecraft.font.draw(stack, Component.translatable("runecraftory.gui.npc.id"), this.leftPos + xPadding, this.topPos + yOff, 0xffffff);
             this.npcIDEditor.render(stack, mouseX, mouseY, partialTick);
         }
         int max = Math.min(4, this.entities.size());
@@ -124,7 +123,7 @@ public class SpawnEggScreen extends Screen {
     protected void buttons() {
         int padding = 16;
         int yOff = padding + 12;
-        this.levelEditor = new EditBox(this.minecraft.font, this.leftPos + padding, this.topPos + yOff, 48, 16, new TextComponent("")) {
+        this.levelEditor = new EditBox(this.minecraft.font, this.leftPos + padding, this.topPos + yOff, 48, 16, Component.literal("")) {
             @Override
             public boolean charTyped(char codePoint, int modifiers) {
                 if (Character.isDigit(codePoint))
@@ -144,7 +143,7 @@ public class SpawnEggScreen extends Screen {
         this.addWidget(this.levelEditor);
         yOff += 16 + 20 + 60;
         if (stack.getItem() instanceof NPCSpawnEgg) {
-            this.npcIDEditor = new EditBox(this.minecraft.font, this.leftPos + padding, this.topPos + yOff, this.sizeY - 32, 16, new TextComponent(""));
+            this.npcIDEditor = new EditBox(this.minecraft.font, this.leftPos + padding, this.topPos + yOff, this.sizeY - 32, 16, Component.literal(""));
             this.npcID = NPCSpawnEgg.getNpcID(stack);
             if (this.npcID != null)
                 this.npcIDEditor.setValue(this.npcID.toString());
@@ -157,7 +156,7 @@ public class SpawnEggScreen extends Screen {
             this.addWidget(this.npcIDEditor);
         }
         yOff += (16 + 8) * 2;
-        this.addRenderableWidget(new Button(this.leftPos + this.sizeX / 2 - 50, this.topPos + yOff, 100, 20, new TranslatableComponent("runecraftory.gui.save"), b -> {
+        this.addRenderableWidget(new Button(this.leftPos + this.sizeX / 2 - 50, this.topPos + yOff, 100, 20, Component.translatable("runecraftory.gui.save"), b -> {
             Platform.INSTANCE.sendToServer(new C2SSpawnEgg(this.hand, this.level, this.npcID));
             this.minecraft.setScreen(null);
         }));

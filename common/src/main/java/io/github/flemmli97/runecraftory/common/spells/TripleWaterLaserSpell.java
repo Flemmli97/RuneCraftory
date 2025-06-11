@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
-import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
@@ -8,12 +7,13 @@ import io.github.flemmli97.runecraftory.common.entities.misc.EntityWaterLaser;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
+import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import org.joml.Vector3f;
 
 public class TripleWaterLaserSpell extends Spell {
 
@@ -23,7 +23,7 @@ public class TripleWaterLaserSpell extends Spell {
             return false;
         for (int i = -1; i < 2; i++) {
             float posYawOff = i * 130;
-            Vector3f vec = RayTraceUtils.rotatedAround(entity.getLookAngle(), Vector3f.YP, posYawOff);
+            Vector3f vec = MathUtils.rotatedAround(entity.getLookAngle(), Vector3f.YP, posYawOff);
             EntityWaterLaser laser = new EntityWaterLaser(level, entity);
             laser.setPos(laser.getX() + vec.x(), laser.getY() + vec.y(), laser.getZ() + vec.z());
             laser.setMaxTicks(entity instanceof Player ?

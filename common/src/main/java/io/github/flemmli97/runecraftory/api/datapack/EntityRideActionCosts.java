@@ -3,8 +3,10 @@ package io.github.flemmli97.runecraftory.api.datapack;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import net.minecraft.core.Holder;
 import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -41,20 +43,20 @@ public class EntityRideActionCosts {
 
     public boolean canRun(int command, Entity entity, @Nullable Spell spell) {
         RideActionCost cost = this.getCost(command);
-        return !(entity instanceof ServerPlayer player) || Platform.INSTANCE.getPlayerData(player)
-                .map(data -> {
-                    if (spell == null || !cost.multiplier) {
-                        if (cost.multiplier)
-                            return true;
-                        if (!LevelCalc.useRP(player, data, cost.cost, false, 0, false)) {
-                            player.connection.send(
-                                    new ClientboundSoundPacket(SoundEvents.VILLAGER_NO, SoundSource.PLAYERS, player.position().x, player.position().y, player.position().z, 1, 1));
-                            return false;
-                        }
-                        return true;
-                    }
-                    return Spell.tryUseWithCost(player, ItemStack.EMPTY, spell, cost.cost);
-                }).orElse(false);
+        if (!(entity instanceof ServerPlayer player))
+            return true;
+        PlayerData data = Platform.INSTANCE.getPlayerData(player);
+        if (spell == null || !cost.multiplier) {
+            if (cost.multiplier)
+                return true;
+            if (!LevelCalc.useRP(player, data, cost.cost, false, 0, false)) {
+                player.connection.send(
+                        new ClientboundSoundPacket(Holder.direct(SoundEvents.VILLAGER_NO), SoundSource.PLAYERS, player.position().x, player.position().y, player.position().z, 1, 1, player.getRandom().nextLong()));
+                return false;
+            }
+            return true;
+        }
+        return Spell.tryUseWithCost(player, ItemStack.EMPTY, spell, cost.cost);
     }
 
     private RideActionCost getCost(int command) {

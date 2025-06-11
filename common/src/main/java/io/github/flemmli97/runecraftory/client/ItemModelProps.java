@@ -12,10 +12,10 @@ import net.minecraft.world.item.ItemStack;
 
 public class ItemModelProps {
 
-    public static final ResourceLocation HELD_ID = new ResourceLocation(RuneCraftory.MODID, "held");
-    public static final ResourceLocation GLOVE_HELD_ID = new ResourceLocation(RuneCraftory.MODID, "glove_held");
-    public static final ResourceLocation FISHING_ROD_ID = new ResourceLocation(RuneCraftory.MODID, "fishing");
-    public static final ResourceLocation BABY_GENDER = new ResourceLocation(RuneCraftory.MODID, "baby_gender");
+    public static final ResourceLocation HELD_ID = RuneCraftory.modRes("held");
+    public static final ResourceLocation GLOVE_HELD_ID = RuneCraftory.modRes("glove_held");
+    public static final ResourceLocation FISHING_ROD_ID = RuneCraftory.modRes("fishing");
+    public static final ResourceLocation BABY_GENDER = RuneCraftory.modRes("baby_gender");
 
     public static int HELD_TYPE;
 

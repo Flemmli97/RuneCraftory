@@ -11,7 +11,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 
 import java.util.Random;
 
@@ -28,7 +28,7 @@ public class SkelefangParticleData implements ParticleOptions {
             try {
                 boneType = SkelefangBoneType.valueOf(bone);
             } catch (IllegalArgumentException e) {
-                throw new SimpleCommandExceptionType(new TextComponent("No such bonetype " + bone)).create();
+                throw new SimpleCommandExceptionType(Component.literal("No such bonetype " + bone)).create();
             }
             reader.expect(' ');
             float initX = reader.readFloat();

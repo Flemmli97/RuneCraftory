@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.entities.npc.features;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeature;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureHolder;
@@ -13,7 +14,7 @@ import net.minecraft.network.FriendlyByteBuf;
 
 public class BlushFeatureType implements NPCFeatureHolder<BlushFeatureType.BlushFeature> {
 
-    public static Codec<BlushFeatureType> CODEC = RecordCodecBuilder.create(inst ->
+    public static MapCodec<BlushFeatureType> CODEC = RecordCodecBuilder.mapCodec(inst ->
             inst.group(
                     Codec.FLOAT.fieldOf("chance").forGetter(d -> d.chance),
                     ColorSetting.CODEC.fieldOf("colors").forGetter(d -> d.setting)

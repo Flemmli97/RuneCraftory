@@ -1,27 +1,28 @@
 package io.github.flemmli97.runecraftory.api.registry;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
+import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import io.github.flemmli97.tenshilib.platform.registry.CustomRegistryEntry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Map;
 
-public abstract class Spell extends CustomRegistryEntry<Spell> {
+public abstract class Spell {
 
     public static boolean tryUseWithCost(LivingEntity entity, ItemStack stack, Spell spell) {
         return tryUseWithCost(entity, stack, spell, 1);
@@ -32,20 +33,19 @@ public abstract class Spell extends CustomRegistryEntry<Spell> {
     }
 
     public static boolean tryUseWithCost(LivingEntity entity, ItemStack stack, Spell spell, float costMultiplier, boolean hurt) {
-        return !(entity instanceof ServerPlayer player) || Platform.INSTANCE.getPlayerData(player)
-                .map(data -> {
-                    if (!LevelCalc.useRP(player, data, spell.rpCost() * costMultiplier, hurt, spell.percentageCost(), true, spell.costReductionSkills())) {
-                        if (!hurt)
-                            player.connection.send(
-                                    new ClientboundSoundPacket(SoundEvents.VILLAGER_NO, SoundSource.PLAYERS, player.position().x, player.position().y, player.position().z, 1, 1));
-                        return false;
-                    }
-                    return true;
-                }).orElse(false);
+        if (!(entity instanceof ServerPlayer player))
+            return true;
+        PlayerData data = Platform.INSTANCE.getPlayerData(player);
+        if (!LevelCalc.useRP(player, data, spell.rpCost() * costMultiplier, hurt, spell.percentageCost(), true, spell.costReductionSkills())) {
+            if (!hurt)
+                player.connection.send(new ClientboundSoundPacket(BuiltInRegistries.SOUND_EVENT.wrapAsHolder(SoundEvents.VILLAGER_NO), player.getSoundSource(), player.getX(), player.getY(), player.getZ(), 1, 1, player.getRandom().nextLong()));
+            return false;
+        }
+        return true;
     }
 
     public static void playSound(LivingEntity entity, SoundEvent sound, float volume, float pitch) {
-        entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), sound, entity.getSoundSource(), volume, pitch);
+        entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), sound, entity.getSoundSource(), volume, pitch);
     }
 
     public void update(Player player, ItemStack stack) {
@@ -54,8 +54,8 @@ public abstract class Spell extends CustomRegistryEntry<Spell> {
     public void levelSkill(ServerPlayer player) {
         Map<EnumSkills, Float> skillXp = DataPackHandler.INSTANCE.spellPropertiesManager().getPropertiesFor(this).skillXP;
         if (!skillXp.isEmpty()) {
-            Platform.INSTANCE.getPlayerData(player).ifPresent(data ->
-                    skillXp.forEach((skill, xp) -> LevelCalc.levelSkill(player, data, EnumSkills.DARK, xp)));
+            PlayerData data = Platform.INSTANCE.getPlayerData(player);
+            skillXp.forEach((skill, xp) -> LevelCalc.levelSkill(player, data, EnumSkills.DARK, xp));
         }
     }
 
@@ -76,13 +76,13 @@ public abstract class Spell extends CustomRegistryEntry<Spell> {
     }
 
     public boolean use(LivingEntity entity) {
-        if (entity.level instanceof ServerLevel serverLevel)
+        if (entity.level() instanceof ServerLevel serverLevel)
             return this.use(serverLevel, entity, ItemStack.EMPTY);
         return false;
     }
 
     public boolean use(LivingEntity entity, boolean ignoreSeal) {
-        if (entity.level instanceof ServerLevel serverLevel)
+        if (entity.level() instanceof ServerLevel serverLevel)
             return this.use(serverLevel, entity, ItemStack.EMPTY, ignoreSeal);
         return false;
     }
@@ -94,7 +94,7 @@ public abstract class Spell extends CustomRegistryEntry<Spell> {
     public boolean use(ServerLevel world, LivingEntity entity, ItemStack stack, boolean ignoreSeal) {
         if (!ignoreSeal && EntityUtils.sealed(entity)) {
             if (entity instanceof ServerPlayer player) {
-                player.connection.send(new ClientboundSoundPacket(SoundEvents.VILLAGER_NO, entity.getSoundSource(), entity.getX(), entity.getY(), entity.getZ(), 1, 0.7f));
+                player.connection.send(new ClientboundSoundPacket(BuiltInRegistries.SOUND_EVENT.wrapAsHolder(SoundEvents.VILLAGER_NO), player.getSoundSource(), player.getX(), player.getY(), player.getZ(), 1, 1, player.getRandom().nextLong()));
             }
             return false;
         }
@@ -121,6 +121,6 @@ public abstract class Spell extends CustomRegistryEntry<Spell> {
 
     @Override
     public String toString() {
-        return this.getRegistryName().toString();
+        return ModSpells.SPELLS.registry().getKey(this).toString();
     }
 }

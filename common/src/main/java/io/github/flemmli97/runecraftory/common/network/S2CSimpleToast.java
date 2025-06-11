@@ -2,13 +2,28 @@ package io.github.flemmli97.runecraftory.common.network;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.ComponentSerialization;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
-public class S2CSimpleToast implements Packet {
+public class S2CSimpleToast implements CustomPacketPayload {
 
-    public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "s2c_simple_toast");
+    public static final CustomPacketPayload.Type<S2CSimpleToast> TYPE = new CustomPacketPayload.Type<>(RuneCraftory.modRes("s2c_simple_toast"));
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, S2CSimpleToast> STREAM_CODEC = new StreamCodec<>() {
+        @Override
+        public S2CSimpleToast decode(RegistryFriendlyByteBuf buf) {
+            return new S2CSimpleToast(ComponentSerialization.STREAM_CODEC.decode(buf), ComponentSerialization.STREAM_CODEC.decode(buf));
+        }
+
+        @Override
+        public void encode(RegistryFriendlyByteBuf buf, S2CSimpleToast pkt) {
+            ComponentSerialization.STREAM_CODEC.encode(buf, pkt.title);
+            ComponentSerialization.STREAM_CODEC.encode(buf, pkt.subtitle);
+        }
+    };
 
     private final Component title;
     private final Component subtitle;
@@ -18,22 +33,13 @@ public class S2CSimpleToast implements Packet {
         this.subtitle = subtitle;
     }
 
-    public static S2CSimpleToast read(FriendlyByteBuf buf) {
-        return new S2CSimpleToast(buf.readComponent(), buf.readComponent());
-    }
-
     public static void handle(S2CSimpleToast pkt) {
         ClientHandlers.simpleToast(pkt.title, pkt.subtitle);
     }
 
-    @Override
-    public void write(FriendlyByteBuf buf) {
-        buf.writeComponent(this.title);
-        buf.writeComponent(this.subtitle);
-    }
 
     @Override
-    public ResourceLocation getID() {
-        return ID;
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 }

@@ -4,7 +4,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
 import io.github.flemmli97.runecraftory.common.blocks.tile.UpgradingCraftingBlockEntity;
 import io.github.flemmli97.runecraftory.common.inventory.DummyInventory;
 import io.github.flemmli97.runecraftory.common.inventory.PlayerContainerInv;
-import io.github.flemmli97.runecraftory.common.registry.ModContainer;
+import io.github.flemmli97.runecraftory.common.registry.ModMenuTypes;
 import io.github.flemmli97.runecraftory.common.utils.CraftingUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -32,7 +32,7 @@ public class ContainerUpgrade extends AbstractContainerMenu {
     }
 
     public ContainerUpgrade(int windowId, Inventory playerInv, UpgradingCraftingBlockEntity tile) {
-        super(ModContainer.UPGRADE_CONTAINER.get(), windowId);
+        super(ModMenuTypes.UPGRADE_CONTAINER.get(), windowId);
         this.outPutInv = new DummyInventory(new SimpleContainer(1));
         this.craftingInv = PlayerContainerInv.create(this, tile.getUpgradeInventory(), playerInv.player);
         this.type = tile.craftingType();
@@ -77,7 +77,7 @@ public class ContainerUpgrade extends AbstractContainerMenu {
     private void updateOutput() {
         if (this.craftingInv.getPlayer().level.isClientSide)
             return;
-        int cost = CraftingUtils.upgradeCost(this.craftingType(), Platform.INSTANCE.getPlayerData(this.craftingInv.getPlayer()).orElseThrow(EntityUtils::playerDataException), this.craftingInv.getItem(0), this.craftingInv.getItem(1));
+        int cost = CraftingUtils.upgradeCost(this.craftingType(), Platform.INSTANCE.getPlayerData(this.craftingInv.getPlayer()), this.craftingInv.getItem(0), this.craftingInv.getItem(1));
         if (cost >= 0) {
             this.outPutInv.setItem(0, CraftingUtils.getUpgradedStack(this.craftingInv.getItem(0), this.craftingInv.getItem(1), this.craftingType()));
         } else {

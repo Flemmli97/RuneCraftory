@@ -6,7 +6,7 @@ import io.github.flemmli97.runecraftory.common.entities.misc.EntityElementalBall
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ProjectileUtil;
-import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
+import io.github.flemmli97.tenshilib.common.utils.HitResultUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -25,7 +25,7 @@ public class IceBallDropSpell extends Spell {
         ball.setVariant(1);
         Vec3 target = ProjectileUtil.getAimTarget(entity);
         if (target == null) {
-            HitResult res = RayTraceUtils.entityRayTrace(entity, 10, ClipContext.Block.COLLIDER, ClipContext.Fluid.SOURCE_ONLY, true, true, null);
+            HitResult res = HitResultUtils.entityRayTrace(entity, 10, ClipContext.Block.COLLIDER, ClipContext.Fluid.SOURCE_ONLY, true, true, null);
             target = res instanceof EntityHitResult entityHitResult ? entityHitResult.getEntity().getEyePosition() : res.getLocation();
         }
         ball.setPos(target.x(), target.y() + 5, target.z());

@@ -45,7 +45,7 @@ public class PlayerContainerInv extends DummyInventory {
 
     @Override
     public void setItem(int slot, ItemStack stack) {
-        if (!ItemStack.isSame(this.getItem(slot), stack))
+        if (!ItemStack.isSameItemSameComponents(this.getItem(slot), stack))
             this.refreshFlag = true;
         super.setItem(slot, stack);
         this.container.slotsChanged(this);

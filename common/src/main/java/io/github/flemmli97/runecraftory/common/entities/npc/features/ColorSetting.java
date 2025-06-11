@@ -12,9 +12,9 @@ import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 
 import java.util.List;
-import java.util.Random;
 import java.util.function.Supplier;
 
 public record ColorSetting(List<Either<Integer, ColorRange>> colors) {
@@ -54,7 +54,7 @@ public record ColorSetting(List<Either<Integer, ColorRange>> colors) {
     public static final Codec<ColorSetting> CODEC = Codec.either(ColorRange.HEX_COLOR, ColorRange.CODEC).listOf()
             .xmap(ColorSetting::new, ColorSetting::colors);
 
-    public int getRandom(Random random) {
+    public int getRandom(RandomSource random) {
         if (this.colors.isEmpty())
             return 0xffffff;
         Either<Integer, ColorRange> rand = this.colors.get(random.nextInt(this.colors.size()));
@@ -90,13 +90,13 @@ public record ColorSetting(List<Either<Integer, ColorRange>> colors) {
                 inst.group(HEX_COLOR.fieldOf("color_min").forGetter(d -> d.colorMin),
                         HEX_COLOR.fieldOf("color_max").forGetter(d -> d.colorMax)).apply(inst, ColorRange::new));
 
-        static int randomRange(Random random, int first, int second) {
+        static int randomRange(RandomSource random, int first, int second) {
             if (first > second)
                 return Mth.nextInt(random, second, first);
             return Mth.nextInt(random, first, second);
         }
 
-        public int getRandom(Random random) {
+        public int getRandom(RandomSource random) {
             int red = randomRange(random, this.colorMin >> 16 & 255, this.colorMax >> 16 & 255);
             int green = randomRange(random, this.colorMin >> 8 & 255, this.colorMax >> 8 & 255);
             int blue = randomRange(random, this.colorMin & 255, this.colorMax & 255);

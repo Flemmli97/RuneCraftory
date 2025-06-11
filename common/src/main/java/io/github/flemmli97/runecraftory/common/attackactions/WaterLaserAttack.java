@@ -9,7 +9,7 @@ import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -43,7 +43,7 @@ public class WaterLaserAttack extends AttackAction {
     @Override
     public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimatedAction anim) {
         if (handler.getComboCount() == 1) {
-            if (entity.getLevel() instanceof ServerLevel serverLevel && anim.isAt("attack")) {
+            if (entity.level() instanceof ServerLevel serverLevel && anim.isAt("attack")) {
                 entity.swing(InteractionHand.MAIN_HAND);
                 if (handler.get(DataKey.USED_SPELL) != null) {
                     Spell spell = handler.get(DataKey.USED_SPELL);
@@ -52,10 +52,9 @@ public class WaterLaserAttack extends AttackAction {
                     }
                 }
             }
-            if (!entity.level.isClientSide) {
+            if (!entity.level().isClientSide) {
                 if (anim.isPast("continue")) {
-                    if (!(entity instanceof ServerPlayer player) || entity.getUseItem().isEmpty() && Platform.INSTANCE.getPlayerData(player)
-                            .map(d -> d.getInv().getInUseStack() != handler.get(DataKey.USED_WEAPON)).orElse(false)) {
+                    if (!(entity instanceof ServerPlayer player) || entity.getUseItem().isEmpty() && Platform.INSTANCE.getPlayerData(player).getInv().getInUseStack() != handler.get(DataKey.USED_WEAPON)) {
                         handler.doWeaponAttack(this, handler.get(DataKey.USED_WEAPON), handler.get(DataKey.USED_SPELL));
                     }
                 }

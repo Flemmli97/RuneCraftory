@@ -32,7 +32,7 @@ public class SextupleRecipeCategory<T extends SextupleRecipe> implements IRecipe
     public static final RecipeType<SextupleRecipe> COOKINGCATEGORY = RecipeType.create(RuneCraftory.MODID, EnumCrafting.COOKING.getId() + "_category", SextupleRecipe.class);
     public static final RecipeType<SextupleRecipe> ARMORCATEGORY = RecipeType.create(RuneCraftory.MODID, EnumCrafting.ARMOR.getId() + "_category", SextupleRecipe.class);
     public static final RecipeType<SextupleRecipe> CHEMISTRYCATEGORY = RecipeType.create(RuneCraftory.MODID, EnumCrafting.CHEM.getId() + "_category", SextupleRecipe.class);
-    public static final ResourceLocation GUI = new ResourceLocation(RuneCraftory.MODID, "textures/gui/crafting.png");
+    public static final ResourceLocation GUI = RuneCraftory.modRes("textures/gui/crafting.png");
 
     private final IDrawable icon;
     private final IDrawable background;
@@ -42,7 +42,7 @@ public class SextupleRecipeCategory<T extends SextupleRecipe> implements IRecipe
     public SextupleRecipeCategory(IGuiHelper guiHelper, RecipeType<T> recipeType, Item icon) {
         this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(icon));
         this.recipeType = recipeType;
-        this.title = new TranslatableComponent("runecraftory.tile.crafting." + this.recipeType.getUid().getPath().replace("_category", ""));
+        this.title = Component.translatable("runecraftory.tile.crafting." + this.recipeType.getUid().getPath().replace("_category", ""));
         this.background = guiHelper.createDrawable(GUI, 19, 20, 119, 42);
     }
 
@@ -84,7 +84,7 @@ public class SextupleRecipeCategory<T extends SextupleRecipe> implements IRecipe
     }
 
     protected void drawLevel(T recipe, PoseStack poseStack) {
-        TranslatableComponent level = new TranslatableComponent("runecraftory.recipe_integration.crafting_level", recipe.getCraftingLevel());
+        TranslatableComponent level = Component.translatable("runecraftory.recipe_integration.crafting_level", recipe.getCraftingLevel());
         Minecraft minecraft = Minecraft.getInstance();
         Font fontRenderer = minecraft.font;
         int width = fontRenderer.width(level);
@@ -111,7 +111,7 @@ public class SextupleRecipeCategory<T extends SextupleRecipe> implements IRecipe
                     .addItemStack(new ItemStack(ModItems.UNKNOWN.get()))
                     .addTooltipCallback((view, tooltip) -> {
                         tooltip.clear();
-                        tooltip.add(new TranslatableComponent("runecraftory.recipe_integration.locked"));
+                        tooltip.add(Component.translatable("runecraftory.recipe_integration.locked"));
                     });
         }
         builder.addSlot(RecipeIngredientRole.OUTPUT, 97, 15)

@@ -4,8 +4,12 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.ConversationContext;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -15,40 +19,43 @@ import java.util.Map;
 
 public record S2CNpcDialogue(int entity, ConversationContext convCtx, String conversationID, Component component,
                              Map<String, Component> data,
-                             List<Component> actions) implements Packet {
+                             List<Component> actions) implements CustomPacketPayload {
 
-    public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "s2c_npc_dialogue");
+    public static final ResourceLocation ID = RuneCraftory.modRes("s2c_npc_dialogue");
+    public static final CustomPacketPayload.Type<S2CNpcDialogue> TYPE = new CustomPacketPayload.Type<>(RuneCraftory.modRes("s2c_npc_dialogue"));
 
-    public static S2CNpcDialogue read(FriendlyByteBuf buf) {
-        return new S2CNpcDialogue(buf.readInt(), buf.readBoolean() ? ConversationContext.get(buf.readResourceLocation()) : null,
-                buf.readBoolean() ? buf.readUtf() : null, buf.readComponent(), buf.readMap(FriendlyByteBuf::readUtf, FriendlyByteBuf::readComponent), buf.readList(FriendlyByteBuf::readComponent));
-    }
+    public static final StreamCodec<RegistryFriendlyByteBuf, S2CNpcDialogue> STREAM_CODEC = new StreamCodec<>() {
+        @Override
+        public S2CNpcDialogue decode(RegistryFriendlyByteBuf buf) {
+            return new S2CNpcDialogue(buf.readInt(), buf.readBoolean() ? ConversationContext.get(buf.readResourceLocation()) : null,
+                    buf.readBoolean() ? buf.readUtf() : null, ComponentSerialization.STREAM_CODEC.decode(buf),
+                    buf.readMap(ByteBufCodecs.STRING_UTF8, b -> ComponentSerialization.STREAM_CODEC.decode(buf)),
+                    buf.readList(b -> ComponentSerialization.STREAM_CODEC.decode(buf)));
+        }
 
-    public static void handle(S2CNpcDialogue pkt) {
-        Player player = ClientHandlers.getPlayer();
-        if (player == null)
-            return;
-        Entity entity = player.level.getEntity(pkt.entity);
+        @Override
+        public void encode(RegistryFriendlyByteBuf buf, S2CNpcDialogue pkt) {
+            buf.writeInt(pkt.entity);
+            buf.writeBoolean(pkt.convCtx != null);
+            if (pkt.convCtx != null)
+                buf.writeResourceLocation(pkt.convCtx.key());
+            buf.writeBoolean(pkt.conversationID != null);
+            if (pkt.conversationID != null)
+                buf.writeUtf(pkt.conversationID);
+            ComponentSerialization.STREAM_CODEC.encode(buf, pkt.component);
+            buf.writeMap(pkt.data, ByteBufCodecs.STRING_UTF8, (b, c) -> ComponentSerialization.STREAM_CODEC.encode(buf, c));
+            buf.writeCollection(pkt.actions, (b, c) -> ComponentSerialization.STREAM_CODEC.encode(buf, c));
+        }
+    };
+
+    public static void handle(S2CNpcDialogue pkt, Player player) {
+        Entity entity = player.level().getEntity(pkt.entity);
         if (entity instanceof EntityNPCBase npc)
             ClientHandlers.updateNPCDialogue(npc, pkt.convCtx, pkt.conversationID, pkt.component, pkt.data, pkt.actions);
     }
 
     @Override
-    public void write(FriendlyByteBuf buf) {
-        buf.writeInt(this.entity);
-        buf.writeBoolean(this.convCtx != null);
-        if (this.convCtx != null)
-            buf.writeResourceLocation(this.convCtx.key());
-        buf.writeBoolean(this.conversationID != null);
-        if (this.conversationID != null)
-            buf.writeUtf(this.conversationID);
-        buf.writeComponent(this.component);
-        buf.writeMap(this.data, FriendlyByteBuf::writeUtf, FriendlyByteBuf::writeComponent);
-        buf.writeCollection(this.actions, FriendlyByteBuf::writeComponent);
-    }
-
-    @Override
-    public ResourceLocation getID() {
-        return ID;
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 }

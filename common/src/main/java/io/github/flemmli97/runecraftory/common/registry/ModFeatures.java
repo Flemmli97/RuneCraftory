@@ -12,11 +12,12 @@ import io.github.flemmli97.runecraftory.common.world.features.trees.FruitLeaveDe
 import io.github.flemmli97.runecraftory.common.world.features.trees.FruitTreeSproutConfiguration;
 import io.github.flemmli97.runecraftory.common.world.features.trees.FruitTreeSproutFeature;
 import io.github.flemmli97.runecraftory.common.world.features.trees.FruitTreeTrunkPlacer;
-import io.github.flemmli97.tenshilib.platform.PlatformUtils;
-import io.github.flemmli97.tenshilib.platform.registry.PlatformRegistry;
-import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
+import io.github.flemmli97.tenshilib.loader.LoaderRegistryAccess;
+import io.github.flemmli97.tenshilib.loader.registry.LoaderRegister;
+import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.tags.BiomeTags;
@@ -45,17 +46,17 @@ import java.util.List;
 
 public class ModFeatures {
 
-    public static final PlatformRegistry<Feature<?>> FEATURES = PlatformUtils.INSTANCE.of(Registry.FEATURE_REGISTRY, RuneCraftory.MODID);
-    public static final PlatformRegistry<TrunkPlacerType<?>> TRUNK_PLACER = PlatformUtils.INSTANCE.of(Registry.TRUNK_PLACER_TYPE_REGISTRY, RuneCraftory.MODID);
-    public static final PlatformRegistry<TreeDecoratorType<?>> TREE_DECORATORS = PlatformUtils.INSTANCE.of(Registry.TREE_DECORATOR_TYPE_REGISTRY, RuneCraftory.MODID);
+    public static final LoaderRegister<Feature<?>> FEATURES = LoaderRegistryAccess.INSTANCE.of(Registries.FEATURE, RuneCraftory.MODID);
+    public static final LoaderRegister<TrunkPlacerType<?>> TRUNK_PLACER = LoaderRegistryAccess.INSTANCE.of(Registries.TRUNK_PLACER_TYPE, RuneCraftory.MODID);
+    public static final LoaderRegister<TreeDecoratorType<?>> TREE_DECORATORS = LoaderRegistryAccess.INSTANCE.of(Registries.TREE_DECORATOR_TYPE, RuneCraftory.MODID);
 
-    public static final RegistryEntrySupplier<MineralFeature> MINERALFEATURE = FEATURES.register("mineral_feature", () -> new MineralFeature(ChancedBlockClusterConfig.CODEC));
+    public static final RegistryEntrySupplier<Feature<?>, MineralFeature> MINERALFEATURE = FEATURES.register("mineral_feature", () -> new MineralFeature(ChancedBlockClusterConfig.CODEC));
 
-    public static final RegistryEntrySupplier<HerbFeature> HERBFEATURE = FEATURES.register("herb_feature", () -> new HerbFeature(HerbFeatureConfig.CODEC));
-    public static final RegistryEntrySupplier<FruitTreeSproutFeature> FRUIT_SPROUT = FEATURES.register("fruit_tree_sprout", () -> new FruitTreeSproutFeature(FruitTreeSproutConfiguration.CODEC));
+    public static final RegistryEntrySupplier<Feature<?>, HerbFeature> HERBFEATURE = FEATURES.register("herb_feature", () -> new HerbFeature(HerbFeatureConfig.CODEC));
+    public static final RegistryEntrySupplier<Feature<?>, FruitTreeSproutFeature> FRUIT_SPROUT = FEATURES.register("fruit_tree_sprout", () -> new FruitTreeSproutFeature(FruitTreeSproutConfiguration.CODEC));
 
-    public static final RegistryEntrySupplier<TrunkPlacerType<?>> FRUIT_TRUNK_PLACER = TRUNK_PLACER.register("fruit_tree_trunk", () -> createTrunkPlacerType(FruitTreeTrunkPlacer.CODEC));
-    public static final RegistryEntrySupplier<TreeDecoratorType<?>> FRUIT_DECORATOR = TREE_DECORATORS.register("fruit_decorator", () -> createTreeDecoratorType(FruitLeaveDecorator.CODEC));
+    public static final RegistryEntrySupplier<TrunkPlacerType<?>, TrunkPlacerType<?>> FRUIT_TRUNK_PLACER = TRUNK_PLACER.register("fruit_tree_trunk", () -> createTrunkPlacerType(FruitTreeTrunkPlacer.CODEC));
+    public static final RegistryEntrySupplier<TreeDecoratorType<?>, TreeDecoratorType<?>> FRUIT_DECORATOR = TREE_DECORATORS.register("fruit_decorator", () -> createTreeDecoratorType(FruitLeaveDecorator.CODEC));
 
     public static Holder<ConfiguredFeature<?, ?>> APPLE_1;
     public static Holder<ConfiguredFeature<TreeConfiguration, ?>> APPLE_2;
@@ -143,7 +144,7 @@ public class ModFeatures {
 
     private static void registerMineralFeatures(ImmutableList.Builder<Holder<PlacedFeature>> builder, ImmutableList.Builder<Holder<PlacedFeature>> nether,
                                                 RegistryEntrySupplier<Block> block, TagKey<Biome> whitelist, TagKey<Biome> blacklist, int chance, int min, int max) {
-        Holder<ConfiguredFeature<?, ?>> CONFIGUREDMINERALFEATURE = BuiltinRegistries.register(BuiltinRegistries.CONFIGURED_FEATURE, RuneCraftory.MODID + ":configured_mineral_feature" + block.getID().getPath(), new ConfiguredFeature<>(MINERALFEATURE.get(),
+        Holder<ConfiguredFeature<?, ?>> CONFIGUREDMINERALFEATURE = BuiltInRegistries.register(BuiltinRegistries.CONFIGURED_FEATURE, RuneCraftory.MODID + ":configured_mineral_feature" + block.getID().getPath(), new ConfiguredFeature<>(MINERALFEATURE.get(),
                 new ChancedBlockClusterConfig(BlockStateProvider.simple(block.get()), whitelist, blacklist, min, max, 3, 64)));
         builder.add(BuiltinRegistries.register(BuiltinRegistries.PLACED_FEATURE, RuneCraftory.MODID + ":placed_mineral_feature_" + block.getID().getPath(), new PlacedFeature(CONFIGUREDMINERALFEATURE, List.of(
                 RarityFilter.onAverageOnceEvery(chance),

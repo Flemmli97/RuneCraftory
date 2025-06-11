@@ -8,18 +8,18 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 
 public class SkillButton extends Button {
 
-    private static final ResourceLocation TEXTURE_PATH = new ResourceLocation(RuneCraftory.MODID, "textures/gui/bars.png");
+    private static final ResourceLocation TEXTURE_PATH = RuneCraftory.modRes("textures/gui/bars.png");
 
     private final Screen ownerGui;
 
     public SkillButton(int x, int y, Screen ownerGui, OnPress press) {
-        super(x, y, 12, 12, TextComponent.EMPTY, press);
+        super(x, y, 12, 12, MutableComponent.EMPTY, press);
         this.ownerGui = ownerGui;
     }
 

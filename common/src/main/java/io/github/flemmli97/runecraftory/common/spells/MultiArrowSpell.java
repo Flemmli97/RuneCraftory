@@ -1,14 +1,12 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityMobArrow;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
-import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
@@ -16,6 +14,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 
 public class MultiArrowSpell extends Spell {
 
@@ -38,7 +37,7 @@ public class MultiArrowSpell extends Spell {
         if (stack.getItem() instanceof ItemStaffBase)
             f = BowItem.getPowerForTime(72000 - entity.getUseItemRemainingTicks());
         if (entity instanceof Mob mob && mob.getTarget() != null) {
-            Vec3 targetPos = EntityUtil.getStraightProjectileTarget(pos, mob.getTarget());
+            Vec3 targetPos = EntityUtils.getStraightProjectileTarget(pos, mob.getTarget());
             dir = new Vec3(targetPos.x() - pos.x(), targetPos.y() - pos.y(), targetPos.z() - pos.z());
         } else {
             dir = entity.getLookAngle();

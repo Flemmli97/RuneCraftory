@@ -4,13 +4,12 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.model.misc.ModelPlate;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityBigPlate;
-import io.github.flemmli97.tenshilib.client.render.RenderProjectileModel;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 
 public class RenderPlate extends RenderProjectileModel<EntityBigPlate> {
 
-    private static final ResourceLocation TEX = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/big_plate.png");
+    private static final ResourceLocation TEX = RuneCraftory.modRes("textures/entity/projectile/big_plate.png");
 
     public RenderPlate(EntityRendererProvider.Context ctx) {
         super(ctx, new ModelPlate<>(ctx.bakeLayer(ModelPlate.LAYER_LOCATION)));

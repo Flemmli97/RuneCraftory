@@ -59,7 +59,7 @@ public class TendCropsGoal extends Goal {
             return false;
         this.toTend.clear();
         this.canPlant = this.entity.getSeedInventory() != null && Platform.INSTANCE.matchingInventory(
-                this.entity.level.getBlockEntity(this.entity.getSeedInventory()), SEED_ITEM);
+                this.entity.level().getBlockEntity(this.entity.getSeedInventory()), SEED_ITEM);
         BlockPos center = this.entity.getRestrictCenter();
         BlockPos.MutableBlockPos mutable = this.entity.getRestrictCenter().mutable();
         int radius = MobConfig.farmRadius;
@@ -67,7 +67,7 @@ public class TendCropsGoal extends Goal {
             for (int z = -radius; z <= radius; ++z) {
                 for (int y = -1; y <= 1; ++y) {
                     mutable.set(center.getX() + x, center.getY() + y, center.getZ() + z);
-                    if (this.validPos(mutable, this.entity.level))
+                    if (this.validPos(mutable, this.entity.level()))
                         this.toTend.add(new BlockPos(mutable));
                 }
             }
@@ -128,8 +128,8 @@ public class TendCropsGoal extends Goal {
                 return;
             this.selected = this.toTend.remove(this.entity.getRandom().nextInt(this.toTend.size()));
             this.canPlant = this.entity.getSeedInventory() != null && Platform.INSTANCE.matchingInventory(
-                    this.entity.level.getBlockEntity(this.entity.getSeedInventory()), SEED_ITEM);
-            if (!this.validPos(this.selected, this.entity.level)) {
+                    this.entity.level().getBlockEntity(this.entity.getSeedInventory()), SEED_ITEM);
+            if (!this.validPos(this.selected, this.entity.level())) {
                 this.selected = null;
                 this.cooldown = 10;
                 return;
@@ -141,31 +141,31 @@ public class TendCropsGoal extends Goal {
             this.entity.getNavigation().moveTo(path, 1);
             this.cooldown = this.entity.getRandom().nextInt(5) + 5;
         } else {
-            BlockState state = this.entity.level.getBlockState(this.selected);
+            BlockState state = this.entity.level().getBlockState(this.selected);
             Block block = state.getBlock();
             boolean success = false;
             if (state.is(RunecraftoryTags.MONSTER_CLEARABLE)) {
-                this.breakBlock((ServerLevel) this.entity.level, this.selected, this.entity.getCropInventory() != null ?
-                        s -> Platform.INSTANCE.insertInto(this.entity.level.getBlockEntity(this.entity.getCropInventory()), s) : null);
+                this.breakBlock((ServerLevel) this.entity.level(), this.selected, this.entity.getCropInventory() != null ?
+                        s -> Platform.INSTANCE.insertInto(this.entity.level().getBlockEntity(this.entity.getCropInventory()), s) : null);
             } else if (block instanceof CropBlock crop && crop.isMaxAge(state)) {
-                CropUtils.harvestCropRightClick(state, this.entity.level, this.selected, this.entity, ItemStack.EMPTY, CropUtils.getPropertiesFor(crop), InteractionHand.MAIN_HAND, this.entity.getCropInventory() != null ?
-                        s -> Platform.INSTANCE.insertInto(this.entity.level.getBlockEntity(this.entity.getCropInventory()), s) : null);
-                this.entity.level.getEntities(EntityTypeTest.forClass(ItemEntity.class), this.entity.getBoundingBox().inflate(0.2), e -> true);
+                CropUtils.harvestCropRightClick(state, this.entity.level(), this.selected, this.entity, ItemStack.EMPTY, CropUtils.getPropertiesFor(crop), InteractionHand.MAIN_HAND, this.entity.getCropInventory() != null ?
+                        s -> Platform.INSTANCE.insertInto(this.entity.level().getBlockEntity(this.entity.getCropInventory()), s) : null);
+                this.entity.level().getEntities(EntityTypeTest.forClass(ItemEntity.class), this.entity.getBoundingBox().inflate(0.2), e -> true);
                 success = true;
             } else {
                 BlockPos pos = this.selected.below();
-                BlockState state2 = this.entity.level.getBlockState(pos);
+                BlockState state2 = this.entity.level().getBlockState(pos);
                 if (state2.is(RunecraftoryTags.FARMLAND)) {
                     if (state2.getValue(FarmBlock.MOISTURE) < 7) {
-                        FarmlandHandler.waterLand((ServerLevel) this.entity.level, pos, state2);
+                        FarmlandHandler.waterLand((ServerLevel) this.entity.level(), pos, state2);
                         success = true;
                     } else if (state.isAir()) {
                         if (this.entity.getSeedInventory() != null) {
-                            ItemStack stack = Platform.INSTANCE.findMatchingItem(this.entity.level.getBlockEntity(this.entity.getSeedInventory()), SEED_ITEM, 1);
+                            ItemStack stack = Platform.INSTANCE.findMatchingItem(this.entity.level().getBlockEntity(this.entity.getSeedInventory()), SEED_ITEM, 1);
                             if (!stack.isEmpty() && stack.getItem() instanceof BlockItem blockItem) {
-                                blockItem.place(BlockPlaceCtxHelper.entityPlaceAt(this.entity.level, stack, this.selected, Direction.UP));
-                                //this.entity.level.setBlock(this.selected, blockItem.getBlock().defaultBlockState(), 3);
-                                //this.entity.level.playSound(null, this.selected.getX(), this.selected.getY(), this.selected.getZ(), SoundEvents.CROP_PLANTED, SoundSource.BLOCKS, 1.0f, 1.0f);
+                                blockItem.place(BlockPlaceCtxHelper.entityPlaceAt(this.entity.level(), stack, this.selected, Direction.UP));
+                                //this.entity.level().setBlock(this.selected, blockItem.getBlock().defaultBlockState(), 3);
+                                //this.entity.level().playSound(null, this.selected.getX(), this.selected.getY(), this.selected.getZ(), SoundEvents.CROP_PLANTED, SoundSource.BLOCKS, 1.0f, 1.0f);
                                 //stack.shrink(1);
                                 success = true;
                             }

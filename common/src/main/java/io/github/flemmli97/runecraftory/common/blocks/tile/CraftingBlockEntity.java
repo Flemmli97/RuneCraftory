@@ -6,7 +6,6 @@ import io.github.flemmli97.runecraftory.platform.SaveItemContainer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.Container;
 import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
@@ -38,7 +37,7 @@ public class CraftingBlockEntity extends BlockEntity implements MenuProvider {
 
     @Override
     public Component getDisplayName() {
-        return new TranslatableComponent(DISPLAY_PREFIX + this.type.getId());
+        return Component.translatable(DISPLAY_PREFIX + this.type.getId());
     }
 
     @Override

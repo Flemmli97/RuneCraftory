@@ -5,10 +5,9 @@ import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.inventory.DummyInventory;
 import io.github.flemmli97.runecraftory.common.inventory.InventorySpells;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
-import io.github.flemmli97.runecraftory.common.registry.ModContainer;
+import io.github.flemmli97.runecraftory.common.registry.ModMenuTypes;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -32,7 +31,7 @@ public class ContainerInfoScreen extends AbstractContainerMenu {
     private final boolean main;
 
     public ContainerInfoScreen(int windowId, Inventory playerInventory, boolean main) {
-        super(main ? ModContainer.INFO_CONTAINER.get() : ModContainer.INFO_SUB_CONTAINER.get(), windowId);
+        super(main ? ModMenuTypes.INFO_CONTAINER.get() : ModMenuTypes.INFO_SUB_CONTAINER.get(), windowId);
         this.main = main;
         InventorySpells playerSpells = Platform.INSTANCE.getPlayerData(playerInventory.player).map(PlayerData::getInv).orElse(null);
         if (playerSpells == null)
@@ -104,7 +103,7 @@ public class ContainerInfoScreen extends AbstractContainerMenu {
         return new MenuProvider() {
             @Override
             public Component getDisplayName() {
-                return new TranslatableComponent(TITLE);
+                return Component.translatable(TITLE);
             }
 
             @Override
@@ -118,7 +117,7 @@ public class ContainerInfoScreen extends AbstractContainerMenu {
         return new MenuProvider() {
             @Override
             public Component getDisplayName() {
-                return new TranslatableComponent(TITLE_SUB);
+                return Component.translatable(TITLE_SUB);
             }
 
             @Override

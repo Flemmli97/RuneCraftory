@@ -2,19 +2,35 @@ package io.github.flemmli97.runecraftory.common.network;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.registry.AttackAction;
-import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
-public class S2CWeaponUse implements Packet {
+public class S2CWeaponUse implements CustomPacketPayload {
 
-    public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "s2c_weapon_use");
+    public static final CustomPacketPayload.Type<S2CWeaponUse> TYPE = new CustomPacketPayload.Type<>(RuneCraftory.modRes("s2c_weapon_use"));
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, S2CWeaponUse> STREAM_CODEC = new StreamCodec<>() {
+        @Override
+        public S2CWeaponUse decode(RegistryFriendlyByteBuf buf) {
+            return new S2CWeaponUse(ByteBufCodecs.registry(ModAttackActions.ATTACK_ACTION_KEY).decode(buf), ItemStack.STREAM_CODEC.decode(buf), buf.readInt(), buf.readInt());
+        }
+
+        @Override
+        public void encode(RegistryFriendlyByteBuf buf, S2CWeaponUse pkt) {
+            ByteBufCodecs.registry(ModAttackActions.ATTACK_ACTION_KEY).encode(buf, pkt.action);
+            ItemStack.STREAM_CODEC.encode(buf, pkt.stack);
+            buf.writeInt(pkt.count);
+            buf.writeInt(pkt.entity);
+        }
+    };
 
     private final AttackAction action;
     private final ItemStack stack;
@@ -34,29 +50,14 @@ public class S2CWeaponUse implements Packet {
         this.entity = entity;
     }
 
-    public static S2CWeaponUse read(FriendlyByteBuf buf) {
-        return new S2CWeaponUse(ModAttackActions.ATTACK_ACTION_REGISTRY.get().getFromId(buf.readResourceLocation()), buf.readItem(), buf.readInt(), buf.readInt());
-    }
-
-    public static void handle(S2CWeaponUse pkt) {
-        Player client = ClientHandlers.getPlayer();
-        if (client == null)
-            return;
-        Entity target = client.level.getEntity(pkt.entity);
+    public static void handle(S2CWeaponUse pkt, Player client) {
+        Entity target = client.level().getEntity(pkt.entity);
         if (target instanceof Player player)
-            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.getWeaponHandler().clientSideUpdate(pkt.action, pkt.stack, pkt.count));
+            Platform.INSTANCE.getPlayerData(player).getWeaponHandler().clientSideUpdate(pkt.action, pkt.stack, pkt.count);
     }
 
     @Override
-    public void write(FriendlyByteBuf buf) {
-        buf.writeResourceLocation(this.action.getRegistryName());
-        buf.writeItem(this.stack);
-        buf.writeInt(this.count);
-        buf.writeInt(this.entity);
-    }
-
-    @Override
-    public ResourceLocation getID() {
-        return ID;
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 }

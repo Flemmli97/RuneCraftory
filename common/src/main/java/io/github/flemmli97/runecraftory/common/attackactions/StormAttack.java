@@ -8,7 +8,7 @@ import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
@@ -32,7 +32,7 @@ public class StormAttack extends AttackAction {
     @Override
     public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimatedAction anim) {
         if (anim.isAt("attack") && handler.getComboCount() != 5) {
-            if (!entity.level.isClientSide) {
+            if (!entity.level().isClientSide) {
                 double range = CombatUtils.getRange(entity, 0) * 0.5;
                 if (handler.getComboCount() == 3) {
                     range *= 2;
@@ -84,7 +84,7 @@ public class StormAttack extends AttackAction {
                 handler.applyMoveDirection();
                 entity.fallDistance = 0;
                 if (anim.isAt("attack")) {
-                    if (!entity.level.isClientSide) {
+                    if (!entity.level().isClientSide) {
                         CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox().inflate(1, 0.5, 0)
                                         .expandTowards(0, -1, CombatUtils.getRange(entity, 0))))
                                 .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))

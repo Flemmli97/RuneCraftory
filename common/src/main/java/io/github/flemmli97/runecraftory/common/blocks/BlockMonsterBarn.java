@@ -9,7 +9,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -68,7 +68,7 @@ public class BlockMonsterBarn extends BaseEntityBlock {
             Platform.INSTANCE.getPlayerData(player)
                     .ifPresent(d -> {
                         if (d.onBarnFailMine(pos))
-                            player.sendMessage(new TranslatableComponent("runecraftory.barn.interact.not.owner", player.getServer()
+                            player.sendMessage(Component.translatable("runecraftory.barn.interact.not.owner", player.getServer()
                                     .getProfileCache().get(uuid).map(GameProfile::getName).orElse("UNKNOWN")).withStyle(ChatFormatting.DARK_RED), Util.NIL_UUID);
                     });
         }
@@ -89,7 +89,7 @@ public class BlockMonsterBarn extends BaseEntityBlock {
             if (level.getBlockEntity(pos) instanceof MonsterBarnBlockEntity barn && (player.isCreative() || player.getUUID().equals(owner = barn.getOwner()))) {
                 if (barn.getBarnData() != null) {
                     String key = barn.getBarnData().hasRoof() ? "runecraftory.barn.interact.block.roofed" : "runecraftory.barn.interact.block";
-                    player.sendMessage(new TranslatableComponent(key, barn.getBarnData().getCapacity(), barn.getBarnData().getCapacity() - barn.getBarnData().usedCapacity())
+                    player.sendMessage(Component.translatable(key, barn.getBarnData().getCapacity(), barn.getBarnData().getCapacity() - barn.getBarnData().usedCapacity())
                             .withStyle(barn.getBarnData().getCapacity() > 0 ? ChatFormatting.GOLD : ChatFormatting.DARK_RED), Util.NIL_UUID);
                 }
             } else if (owner != null) {
@@ -97,7 +97,7 @@ public class BlockMonsterBarn extends BaseEntityBlock {
                 Platform.INSTANCE.getPlayerData(player)
                         .ifPresent(d -> {
                             if (d.onBarnFailMine(pos))
-                                player.sendMessage(new TranslatableComponent("runecraftory.barn.interact.not.owner", player.getServer()
+                                player.sendMessage(Component.translatable("runecraftory.barn.interact.not.owner", player.getServer()
                                         .getProfileCache().get(uuid).map(GameProfile::getName).orElse("UNKNOWN")).withStyle(ChatFormatting.DARK_RED), Util.NIL_UUID);
                         });
             }

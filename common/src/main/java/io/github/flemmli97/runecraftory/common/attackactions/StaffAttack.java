@@ -8,8 +8,8 @@ import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.api.item.IAOEWeapon;
+import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.item.AOEWeapon;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
@@ -30,8 +30,8 @@ public class StaffAttack extends AttackAction {
     @Override
     public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimatedAction anim) {
         if (anim.isAt("attack")) {
-            if (entity.level instanceof ServerLevel serverLevel) {
-                CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(IAOEWeapon.createOBB(entity, stack,
+            if (entity.level() instanceof ServerLevel serverLevel) {
+                CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(AOEWeapon.createOBB(entity, stack,
                                 CombatUtils.getRange(entity, 0),
                                 CombatUtils.getWidth(entity, 0))))
                         .executeAttack();
@@ -43,7 +43,7 @@ public class StaffAttack extends AttackAction {
 
     @Override
     public float movementReduction(AnimatedAction current) {
-        return GeneralConfig.moveSpeedAttack.get().floatValue();
+        return GeneralConfig.MOVE_SPEED_ATTACK.get().floatValue();
     }
 
     @Override

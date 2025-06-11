@@ -7,7 +7,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
@@ -29,11 +29,11 @@ public class MindThrustAttack extends AttackAction {
             entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_LIGHT.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         }
         if (anim.isAt("attack")) {
-            if (!entity.level.isClientSide)
+            if (!entity.level().isClientSide)
                 CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(entity.getYRot(), entity.getXRot(), 1, 0.5f, false))
-                        .withBonusAttributes(ModAttributes.PARA.get(), 40)
-                        .withBonusAttributes(ModAttributes.POISON.get(), 10)
-                        .withBonusAttributes(ModAttributes.SEAL.get(), 25)
+                        .withBonusAttributes(ModAttributes.PARA.asHolder(), 40)
+                        .withBonusAttributes(ModAttributes.POISON.asHolder(), 10)
+                        .withBonusAttributes(ModAttributes.SEAL.asHolder(), 25)
                         .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
                         .executeAttack();
         }

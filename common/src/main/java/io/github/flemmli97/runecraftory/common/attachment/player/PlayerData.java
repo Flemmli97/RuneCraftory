@@ -8,7 +8,6 @@ import io.github.flemmli97.runecraftory.api.datapack.npc.NPCData;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
-import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
 import io.github.flemmli97.runecraftory.common.inventory.InventoryShippingBin;
 import io.github.flemmli97.runecraftory.common.inventory.InventoryShop;
@@ -32,8 +31,9 @@ import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleTypes;
@@ -69,6 +69,8 @@ import java.util.function.Function;
 
 public class PlayerData {
 
+    private final Player player;
+
     public boolean starting, unlockedRecipes;
     //max runepoints possible: 2883
     private int money = GeneralConfig.startingMoney;
@@ -96,7 +98,7 @@ public class PlayerData {
     private final InventoryShippingBin shipping = new InventoryShippingBin();
     //Food buff
     private Item lastFoodBuff;
-    private Map<Attribute, Double> foodBuffs = new HashMap<>();
+    private Map<Holder<Attribute>, Double> foodBuffs = new HashMap<>();
     private int foodDuration;
 
     private final PlayerWeaponHandler weaponHandler;
@@ -123,13 +125,14 @@ public class PlayerData {
     private NPCData.Gender gender;
 
     public PlayerData(Player player) {
+        this.player = player;
         for (EnumSkills skill : EnumSkills.values()) {
             this.skillLevels.put(skill, new LevelExpPair());
         }
         this.weaponHandler = new PlayerWeaponHandler(player);
     }
 
-    public void setMaxHealth(Player player, float amount, boolean asBaseHealth) {
+    public void setMaxHealth(float amount, boolean asBaseHealth) {
         AttributeInstance health = player.getAttribute(Attributes.MAX_HEALTH);
         AttributeModifier modifier = health.getModifier(LibConstants.MAX_HEALTH_MODIFIER);
         double val = amount - (asBaseHealth ? health.getBaseValue() : health.getValue());
@@ -139,7 +142,7 @@ public class PlayerData {
         health.addPermanentModifier(new AttributeModifier(LibConstants.MAX_HEALTH_MODIFIER, "rf.hpModifier", val, AttributeModifier.Operation.ADDITION));
     }
 
-    private void setFoodHealthBonus(Player player, double amount) {
+    private void setFoodHealthBonus(double amount) {
         AttributeInstance health = player.getAttribute(Attributes.MAX_HEALTH);
         health.removeModifier(LibConstants.FOOD_MODIFIER);
         health.addPermanentModifier(new AttributeModifier(LibConstants.FOOD_MODIFIER, "rf.food.hpModifier", amount, AttributeModifier.Operation.ADDITION));
@@ -157,7 +160,7 @@ public class PlayerData {
         return this.runePointsMax;
     }
 
-    public boolean decreaseRunePoints(Player player, int amount, boolean damage) {
+    public boolean decreaseRunePoints(int amount, boolean damage) {
         if (!GeneralConfig.useRp && !player.level.isClientSide)
             return true;
         if (!player.isCreative()) {
@@ -182,50 +185,50 @@ public class PlayerData {
                 return false;
             this.rpStillRegen = 200;
             if (player instanceof ServerPlayer serverPlayer)
-                Platform.INSTANCE.sendToClient(new S2CRunePoints(this), serverPlayer);
+                LoaderNetwork.INSTANCE.sendToPlayer(new S2CRunePoints(this), serverPlayer);
             return true;
         }
         return true;
     }
 
-    public void refreshRunePoints(Player player, int amount) {
+    public void refreshRunePoints(int amount) {
         this.runePoints = Mth.clamp(this.runePoints + amount, 0, this.getMaxRunePoints());
         if (player instanceof ServerPlayer serverPlayer)
-            Platform.INSTANCE.sendToClient(new S2CRunePoints(this), serverPlayer);
+            LoaderNetwork.INSTANCE.sendToPlayer(new S2CRunePoints(this), serverPlayer);
     }
 
-    public void setRunePoints(Player player, int amount) {
+    public void setRunePoints(int amount) {
         this.runePoints = amount;
         if (player instanceof ServerPlayer serverPlayer)
-            Platform.INSTANCE.sendToClient(new S2CRunePoints(this), serverPlayer);
+            LoaderNetwork.INSTANCE.sendToPlayer(new S2CRunePoints(this), serverPlayer);
     }
 
-    public void setMaxRunePoints(Player player, float amount) {
+    public void setMaxRunePoints(float amount) {
         this.runePointsMax = amount;
         if (player instanceof ServerPlayer serverPlayer)
-            Platform.INSTANCE.sendToClient(new S2CMaxRunePoints(this), serverPlayer);
+            LoaderNetwork.INSTANCE.sendToPlayer(new S2CMaxRunePoints(this), serverPlayer);
     }
 
     public int getMoney() {
         return this.money;
     }
 
-    public boolean useMoney(Player player, int amount) {
+    public boolean useMoney(int amount) {
         if (this.money >= amount) {
             this.money -= amount;
             if (player instanceof ServerPlayer serverPlayer) {
-                Platform.INSTANCE.sendToClient(new S2CMoney(this), serverPlayer);
+                LoaderNetwork.INSTANCE.sendToPlayer(new S2CMoney(this), serverPlayer);
             }
             return true;
         }
         return false;
     }
 
-    public void setMoney(Player player, int amount) {
+    public void setMoney(int amount) {
         this.money = amount;
         if (player instanceof ServerPlayer serverPlayer) {
             ModCriteria.MONEY_TRIGGER.trigger(serverPlayer);
-            Platform.INSTANCE.sendToClient(new S2CMoney(this), serverPlayer);
+            LoaderNetwork.INSTANCE.sendToPlayer(new S2CMoney(this), serverPlayer);
         }
     }
 
@@ -233,48 +236,48 @@ public class PlayerData {
         return this.str;
     }
 
-    public void setStr(Player player, float amount) {
+    public void setStr(float amount) {
         this.str = amount;
         if (player instanceof ServerPlayer serverPlayer)
-            Platform.INSTANCE.sendToClient(new S2CPlayerStats(this), serverPlayer);
+            LoaderNetwork.INSTANCE.sendToPlayer(new S2CPlayerStats(this), serverPlayer);
     }
 
     public float getVit() {
         return this.vit;
     }
 
-    public void setVit(Player player, float amount) {
+    public void setVit(float amount) {
         this.vit = amount;
         if (player instanceof ServerPlayer serverPlayer)
-            Platform.INSTANCE.sendToClient(new S2CPlayerStats(this), serverPlayer);
+            LoaderNetwork.INSTANCE.sendToPlayer(new S2CPlayerStats(this), serverPlayer);
     }
 
     public float getIntel() {
         return this.intel;
     }
 
-    public void setIntel(Player player, float amount) {
+    public void setIntel(float amount) {
         this.intel = amount;
         if (player instanceof ServerPlayer serverPlayer)
-            Platform.INSTANCE.sendToClient(new S2CPlayerStats(this), serverPlayer);
+            LoaderNetwork.INSTANCE.sendToPlayer(new S2CPlayerStats(this), serverPlayer);
     }
 
     public LevelExpPair getPlayerLevel() {
         return this.level;
     }
 
-    public void setPlayerLevel(Player player, int level, float xpAmount, boolean recalc) {
+    public void setPlayerLevel(int level, float xpAmount, boolean recalc) {
         this.level.setLevel(Mth.clamp(level, 1, GeneralConfig.maxLevel), LevelCalc::xpAmountForLevelUp);
         this.level.setXp(Mth.clamp(xpAmount, 0, LevelCalc.xpAmountForLevelUp(level)));
         if (player instanceof ServerPlayer serverPlayer) {
             if (recalc) {
                 this.recalculateStats(serverPlayer, true);
             } else
-                Platform.INSTANCE.sendToClient(new S2CLevelPkt(this), serverPlayer);
+                LoaderNetwork.INSTANCE.sendToPlayer(new S2CLevelPkt(this), serverPlayer);
         }
     }
 
-    public void addXp(Player player, float amount) {
+    public void addXp(float amount) {
         if (this.level.getLevel() >= GeneralConfig.maxLevel)
             return;
         boolean levelUp = this.level.addXP(amount, GeneralConfig.maxLevel, LevelCalc::xpAmountForLevelUp, () -> this.onLevelUp(player));
@@ -284,7 +287,7 @@ public class PlayerData {
         if (player instanceof ServerPlayer serverPlayer) {
             if (levelUp)
                 ModCriteria.LEVEL_TRIGGER.trigger(serverPlayer);
-            Platform.INSTANCE.sendToClient(new S2CLevelPkt(this), serverPlayer);
+            LoaderNetwork.INSTANCE.sendToPlayer(new S2CLevelPkt(this), serverPlayer);
         }
     }
 
@@ -299,7 +302,7 @@ public class PlayerData {
         this.intel += GeneralConfig.intPerLevel;
     }
 
-    public void recalculateStats(ServerPlayer player, boolean regen) {
+    public void recalculateStats(boolean regen) {
         int lvl = this.level.getLevel() - 1;
         this.updateHealth(player);
         this.runePointsMax = GeneralConfig.rpPerLevel * lvl + GeneralConfig.startingRp + (int) this.skillValLevelFunc((skillLvl, prop) -> Math.min(100, skillLvl) * prop.rpIncrease());
@@ -310,7 +313,7 @@ public class PlayerData {
         this.str = GeneralConfig.strPerLevel * lvl + GeneralConfig.startingStr + (float) this.skillVal(SkillProperties::strIncrease);
         this.intel = GeneralConfig.intPerLevel * lvl + GeneralConfig.startingIntel + (float) this.skillVal(SkillProperties::intelIncrease);
         this.vit = GeneralConfig.vitPerLevel * lvl + GeneralConfig.startingVit + (float) this.skillVal(SkillProperties::vitIncrease);
-        Platform.INSTANCE.sendToClient(new S2CLevelPkt(this), player);
+        LoaderNetwork.INSTANCE.sendToPlayer(new S2CLevelPkt(this), player);
     }
 
     private double skillVal(Function<SkillProperties, Number> func) {
@@ -325,7 +328,7 @@ public class PlayerData {
         return this.skillLevels.get(skill);
     }
 
-    public void setSkillLevel(EnumSkills skill, Player player, int level, float xpAmount, boolean recalc) {
+    public void setSkillLevel(EnumSkills skill, int level, float xpAmount, boolean recalc) {
         this.skillLevels.get(skill).setLevel(player.level.isClientSide ? level : Mth.clamp(level, 1, DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(skill).maxLevel()), l -> LevelCalc.xpAmountForSkillLevelUp(skill, l));
         this.skillLevels.get(skill).setXp(player.level.isClientSide ? xpAmount : Mth.clamp(xpAmount, 0, LevelCalc.xpAmountForSkillLevelUp(skill, level)));
         if (player instanceof ServerPlayer serverPlayer) {
@@ -333,11 +336,11 @@ public class PlayerData {
                 this.recalculateStats(serverPlayer, true);
                 player.setHealth(player.getMaxHealth());
             }
-            Platform.INSTANCE.sendToClient(new S2CSkillLevelPkt(this, skill), serverPlayer);
+            LoaderNetwork.INSTANCE.sendToPlayer(new S2CSkillLevelPkt(this, skill), serverPlayer);
         }
     }
 
-    public void increaseSkill(EnumSkills skill, Player player, float amount) {
+    public void increaseSkill(EnumSkills skill, float amount) {
         if (this.skillLevels.get(skill).getLevel() >= DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(skill).maxLevel())
             return;
         boolean levelUp = this.skillLevels.get(skill).addXP(amount, DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(skill).maxLevel(), lvl -> LevelCalc.xpAmountForSkillLevelUp(skill, lvl), () -> this.onSkillLevelUp(skill, player));
@@ -347,7 +350,7 @@ public class PlayerData {
         if (player instanceof ServerPlayer serverPlayer) {
             if (levelUp)
                 ModCriteria.SKILL_LEVEL_TRIGGER.trigger(serverPlayer, skill);
-            Platform.INSTANCE.sendToClient(new S2CSkillLevelPkt(this, skill), serverPlayer);
+            LoaderNetwork.INSTANCE.sendToPlayer(new S2CSkillLevelPkt(this, skill), serverPlayer);
         }
     }
 
@@ -375,22 +378,22 @@ public class PlayerData {
         }), true);
     }
 
-    public void increaseStatBonus(Player player, ItemStatIncrease.Stat type) {
+    public void increaseStatBonus(ItemStatIncrease.Stat type) {
         switch (type) {
             case STR -> {
                 this.strAdd += 1;
                 if (player instanceof ServerPlayer serverPlayer)
-                    Platform.INSTANCE.sendToClient(new S2CItemStatBoost(type, false), serverPlayer);
+                    LoaderNetwork.INSTANCE.sendToPlayer(new S2CItemStatBoost(type, false), serverPlayer);
             }
             case INT -> {
                 this.intAdd += 1;
                 if (player instanceof ServerPlayer serverPlayer)
-                    Platform.INSTANCE.sendToClient(new S2CItemStatBoost(type, false), serverPlayer);
+                    LoaderNetwork.INSTANCE.sendToPlayer(new S2CItemStatBoost(type, false), serverPlayer);
             }
             case VIT -> {
                 this.vitAdd += 1;
                 if (player instanceof ServerPlayer serverPlayer)
-                    Platform.INSTANCE.sendToClient(new S2CItemStatBoost(type, false), serverPlayer);
+                    LoaderNetwork.INSTANCE.sendToPlayer(new S2CItemStatBoost(type, false), serverPlayer);
             }
             case HP -> {
                 AttributeInstance health = player.getAttribute(Attributes.MAX_HEALTH);
@@ -402,22 +405,22 @@ public class PlayerData {
         }
     }
 
-    public void resetAllStatBoost(Player player, ItemStatIncrease.Stat type) {
+    public void resetAllStatBoost(ItemStatIncrease.Stat type) {
         switch (type) {
             case STR -> {
                 this.strAdd = 0;
                 if (player instanceof ServerPlayer serverPlayer)
-                    Platform.INSTANCE.sendToClient(new S2CItemStatBoost(type, true), serverPlayer);
+                    LoaderNetwork.INSTANCE.sendToPlayer(new S2CItemStatBoost(type, true), serverPlayer);
             }
             case INT -> {
                 this.intAdd = 0;
                 if (player instanceof ServerPlayer serverPlayer)
-                    Platform.INSTANCE.sendToClient(new S2CItemStatBoost(type, true), serverPlayer);
+                    LoaderNetwork.INSTANCE.sendToPlayer(new S2CItemStatBoost(type, true), serverPlayer);
             }
             case VIT -> {
                 this.vitAdd = 0;
                 if (player instanceof ServerPlayer serverPlayer)
-                    Platform.INSTANCE.sendToClient(new S2CItemStatBoost(type, true), serverPlayer);
+                    LoaderNetwork.INSTANCE.sendToPlayer(new S2CItemStatBoost(type, true), serverPlayer);
             }
             case HP -> {
                 AttributeInstance health = player.getAttribute(Attributes.MAX_HEALTH);
@@ -426,7 +429,7 @@ public class PlayerData {
         }
     }
 
-    public double getAttributeValue(Player player, Attribute att) {
+    public double getAttributeValue(Holder<Attribute> att) {
         double val = 0;
         float vit = this.getVit() + this.vitAdd;
         if (att == Attributes.ATTACK_DAMAGE) {
@@ -511,7 +514,7 @@ public class PlayerData {
         return this.lastFoodBuff;
     }
 
-    public void applyFoodEffect(Player player, ItemStack stack) {
+    public void applyFoodEffect(ItemStack stack) {
         FoodProperties food = DataPackHandler.INSTANCE.foodManager().get(stack.getItem());
         if (food == null)
             return;
@@ -544,7 +547,7 @@ public class PlayerData {
             this.lastFoodBuff = stack.getItem();
         }
         if (player instanceof ServerPlayer serverPlayer) {
-            Platform.INSTANCE.sendToClient(new S2CFoodPkt(stack), serverPlayer);
+            LoaderNetwork.INSTANCE.sendToPlayer(new S2CFoodPkt(stack), serverPlayer);
         }
     }
 
@@ -554,7 +557,7 @@ public class PlayerData {
         this.lastFoodBuff = null;
         this.setFoodHealthBonus(player, 0);
         if (player instanceof ServerPlayer serverPlayer) {
-            Platform.INSTANCE.sendToClient(new S2CFoodPkt(null), serverPlayer);
+            LoaderNetwork.INSTANCE.sendToPlayer(new S2CFoodPkt(null), serverPlayer);
         }
     }
 
@@ -665,7 +668,7 @@ public class PlayerData {
         return start;
     }
 
-    public void increaseMobFrom(ServerPlayer player, BaseMonster monster) {
+    public void increaseMobFrom(ServerBaseMonster monster) {
         this.entityStatsTracker.killEntity(monster);
         this.increaseMobLevel(monster.getProp().levelIncreaseFromKill(this.entityStatsTracker.getKillCount(monster.getType()), player));
     }
@@ -737,7 +740,7 @@ public class PlayerData {
         return this.writeToNBT(nbt, null, false);
     }
 
-    public CompoundTag writeToNBT(CompoundTag nbt, Player player, boolean wasDead) {
+    public CompoundTag writeToNBT(CompoundTag nbt, boolean wasDead) {
         nbt.putBoolean("Starting", this.starting);
         nbt.putFloat("MaxRunePoints", this.runePointsMax);
         if (player == null) {

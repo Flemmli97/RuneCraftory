@@ -8,7 +8,7 @@ import io.github.flemmli97.runecraftory.client.model.armor.PiyoSandals;
 import io.github.flemmli97.runecraftory.client.model.armor.RingsArmorModel;
 import io.github.flemmli97.runecraftory.common.items.equipment.ItemArmorBase;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
-import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
+import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.PlayerModel;

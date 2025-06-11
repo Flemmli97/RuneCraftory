@@ -11,7 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class EnergyOrbSwirlLayer extends EnergySwirlLayer<EntityHomingEnergyOrb, EntityModel<EntityHomingEnergyOrb>> {
 
-    public static final ResourceLocation TEXTURE = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/energy_orb_layer.png");
+    public static final ResourceLocation TEXTURE = RuneCraftory.modRes("textures/entity/projectile/energy_orb_layer.png");
     private final EntityModel<EntityHomingEnergyOrb> model;
 
     public EnergyOrbSwirlLayer(RenderLayerParent<EntityHomingEnergyOrb, EntityModel<EntityHomingEnergyOrb>> parent, EntityModelSet entityModelSet) {

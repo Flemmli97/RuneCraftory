@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.client.render.layer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.tenshilib.client.model.RideableModel;
-import io.github.flemmli97.tenshilib.client.render.RiderLayerRenderer;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;

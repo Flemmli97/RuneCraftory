@@ -1,9 +1,11 @@
 package io.github.flemmli97.runecraftory.common.lib;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.biome.Biome;
@@ -14,18 +16,8 @@ import java.util.Map;
 
 public class RunecraftoryTags {
 
-    //Forge Tags
-    public static final TagKey<Item> TIN_F = forge("ingots/tin");
-    public static final TagKey<Item> BRONZE_F = forge("ingots/bronze");
-    public static final TagKey<Item> SILVER_F = forge("ingots/silver");
-    public static final TagKey<Item> PLATINUM_F = forge("ingots/platinum");
+    // Items
 
-    public static final TagKey<Item> AMETHYST_F = forge("gems/amethyst");
-    public static final TagKey<Item> AQUAMARINE_F = forge("gems/aquamarine");
-    public static final TagKey<Item> RUBY_F = forge("gems/ruby");
-    public static final TagKey<Item> SAPPHIRE_F = forge("gems/sapphire");
-
-    //General items vanilla/modded compat
     public static final TagKey<Item> SEEDS = tagCommon("seeds");
 
     public static final TagKey<Item> WOOD_ROD = tagCommon("wooden_rods");
@@ -68,10 +60,10 @@ public class RunecraftoryTags {
     public static final TagKey<Item> FOODS = tagCommon("foods");
     public static final TagKey<Item> TURNIP = tagCommon("crops/turnip");
 
-    //Gifts
+    // Gifts
     public static final TagKey<Item> GENERIC_TRASH = tag("generic_trash");
 
-    //Runefactory categories
+    // Runefactory categories
     public static final TagKey<Item> MINERALS = tag("mineral");
     public static final TagKey<Item> JEWELS = tag("jewels");
     public static final TagKey<Item> CRYSTALS = tag("crystals");
@@ -88,7 +80,7 @@ public class RunecraftoryTags {
     public static final TagKey<Item> CLAWS_FANGS = tag("claws_fangs");
     public static final TagKey<Item> SCALES = tag("scales");
 
-    //Other
+    // Other
     public static final TagKey<Item> SPELLS = tag("spells");
     public static final TagKey<Item> MAGIC_SPELLS = tag("magic_spells");
     public static final TagKey<Item> RUNE_ABILITIES = tag("rune_abilities");
@@ -155,48 +147,49 @@ public class RunecraftoryTags {
 
     private static final Map<EntityType<?>, TagKey<Item>> ENTITY_TAMING_TAGS = new HashMap<>();
 
-    //Blocks
-    public static final TagKey<Block> ORES = blockMod("ores");
+    // Blocks
+    public static final TagKey<Block> ORES = block("ores");
 
     public static final TagKey<Block> FARMLAND = blockCommon("farmland");
-    public static final TagKey<Block> SICKLE_DESTROYABLE = blockMod("sickle_destroyable");
-    public static final TagKey<Block> HAMMER_FLATTENABLE = blockMod("hammer_flattenable");
-    public static final TagKey<Block> HAMMER_BREAKABLE = blockMod("hammer_breakable");
-    public static final TagKey<Block> HERBS = blockMod("herbs");
+    public static final TagKey<Block> SICKLE_DESTROYABLE = block("sickle_destroyable");
+    public static final TagKey<Block> HAMMER_FLATTENABLE = block("hammer_flattenable");
+    public static final TagKey<Block> HAMMER_BREAKABLE = block("hammer_breakable");
+    public static final TagKey<Block> HERBS = block("herbs");
     public static final TagKey<Block> SICKLE_EFFECTIVE = blockCommon("mineable/sickle");
 
-    public static final TagKey<Block> CROP_BLOCKS = blockMod("crops");
-    public static final TagKey<Block> FLOWER_BLOCKS = blockMod("flowers");
-    public static final TagKey<Block> GIANT_CROP_BLOCKS = blockMod("giant_crop");
+    public static final TagKey<Block> CROP_BLOCKS = block("crops");
+    public static final TagKey<Block> FLOWER_BLOCKS = block("flowers");
+    public static final TagKey<Block> GIANT_CROP_BLOCKS = block("giant_crop");
 
     public static final TagKey<Block> ENDSTONES = blockCommon("end_stones");
 
-    public static final TagKey<Block> MONSTER_CLEARABLE = blockMod("monster_clearable");
+    public static final TagKey<Block> MONSTER_CLEARABLE = block("monster_clearable");
 
-    public static final TagKey<Block> BARN_GROUND = blockMod("barn_ground");
-    public static final TagKey<Block> ONSEN_PROVIDER = blockMod("onsen_provider");
+    public static final TagKey<Block> BARN_GROUND = block("barn_ground");
+    public static final TagKey<Block> ONSEN_PROVIDER = block("onsen_provider");
 
     public static final TagKey<Block> STONE = blockCommon("stone");
 
-    public static final TagKey<Block> MINERAL_GEN_PLACE = blockMod("mineral_gen_place");
+    public static final TagKey<Block> MINERAL_GEN_PLACE = block("mineral_gen_place");
 
-    //Entities
-    public static final TagKey<EntityType<?>> MONSTERS = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(RuneCraftory.MODID, "monsters"));
-    public static final TagKey<EntityType<?>> BOSS_MONSTERS = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(RuneCraftory.MODID, "boss_monsters"));
+    // Entities
 
-    public static final TagKey<EntityType<?>> BOSSES = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("c", "bosses"));
+    public static final TagKey<EntityType<?>> MONSTERS = entity("monsters");
+    public static final TagKey<EntityType<?>> BOSS_MONSTERS = entity("boss_monsters");
 
-    public static final TagKey<EntityType<?>> RAFFLESIA_SUMMONS = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(RuneCraftory.MODID, "rafflesia_summons"));
+    public static final TagKey<EntityType<?>> BOSSES = entityCommon("bosses");
 
-    public static final TagKey<EntityType<?>> HELD_WEAPON_EXEMPT = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(RuneCraftory.MODID, "held_weapon_exempt"));
+    public static final TagKey<EntityType<?>> RAFFLESIA_SUMMONS = entity("rafflesia_summons");
+
+    public static final TagKey<EntityType<?>> HELD_WEAPON_EXEMPT = entity("held_weapon_exempt");
 
     /**
      * Tag for entities that normally target hostile mobs but shouldn't target monster if they are tamed
      * E.g. iron golems and snow golems
      */
-    public static final TagKey<EntityType<?>> TAMED_MONSTER_IGNORE = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(RuneCraftory.MODID, "ignore_tamed_monsters"));
+    public static final TagKey<EntityType<?>> TAMED_MONSTER_IGNORE = entity("ignore_tamed_monsters");
 
-    //BIOME Tags via forges BiomeDictionary
+    // Biomes
     public static final TagKey<Biome> IS_HOT = biomeCommon("is_hot");
 
     public static final TagKey<Biome> IS_SPARSE = biomeCommon("is_sparse");
@@ -227,59 +220,67 @@ public class RunecraftoryTags {
 
     public static final TagKey<Biome> IS_END = biomeCommon("is_end");
 
-    public static final TagKey<Biome> NETHER_END = biomeMod("nether_end");
+    public static final TagKey<Biome> NETHER_END = biome("nether_end");
 
-    public static final TagKey<Biome> AQUAMARINE_GEN = biomeMod("aquamarine_gen");
-    public static final TagKey<Biome> AMETHYST_GEN = biomeMod("amethyst_gen");
-    public static final TagKey<Biome> RUBY_GEN = biomeMod("ruby_gen");
-    public static final TagKey<Biome> EMERALD_GEN = biomeMod("emerald_gen");
-    public static final TagKey<Biome> SAPPHIRE_GEN = biomeMod("sapphire_gen");
+    public static final TagKey<Biome> AQUAMARINE_GEN = biome("aquamarine_gen");
+    public static final TagKey<Biome> AMETHYST_GEN = biome("amethyst_gen");
+    public static final TagKey<Biome> RUBY_GEN = biome("ruby_gen");
+    public static final TagKey<Biome> EMERALD_GEN = biome("emerald_gen");
+    public static final TagKey<Biome> SAPPHIRE_GEN = biome("sapphire_gen");
 
-    public static final TagKey<Biome> WATER_NETHER_END = biomeMod("water_nether_end");
-    public static final TagKey<Biome> MUSHROOM_GEN = biomeMod("mushroom_gen");
-    public static final TagKey<Biome> INDIGO_GEN = biomeMod("indigo_gen");
-    public static final TagKey<Biome> PURPLE_GEN = biomeMod("purple_gen");
-    public static final TagKey<Biome> BLUE_GEN = biomeMod("blue_gen");
-    public static final TagKey<Biome> WATER_END = biomeMod("water_end");
-    public static final TagKey<Biome> YELLOW_GEN = biomeMod("yellow_gen");
-    public static final TagKey<Biome> ORANGE_GEN = biomeMod("orange_gen");
+    public static final TagKey<Biome> WATER_NETHER_END = biome("water_nether_end");
+    public static final TagKey<Biome> MUSHROOM_GEN = biome("mushroom_gen");
+    public static final TagKey<Biome> INDIGO_GEN = biome("indigo_gen");
+    public static final TagKey<Biome> PURPLE_GEN = biome("purple_gen");
+    public static final TagKey<Biome> BLUE_GEN = biome("blue_gen");
+    public static final TagKey<Biome> WATER_END = biome("water_end");
+    public static final TagKey<Biome> YELLOW_GEN = biome("yellow_gen");
+    public static final TagKey<Biome> ORANGE_GEN = biome("orange_gen");
 
-    public static final TagKey<Biome> BAMBOO_GEN = biomeMod("bamboo_gen");
-    public static final TagKey<Biome> GENERAL_HERBS = biomeMod("herb_tree_biomes");
+    public static final TagKey<Biome> BAMBOO_GEN = biome("bamboo_gen");
+    public static final TagKey<Biome> GENERAL_HERBS = biome("herb_tree_biomes");
+
+    // Ref Neoforge
+    public static final TagKey<DamageType> IS_MAGIC = damageCommon("is_magic");
+    public static final TagKey<DamageType> BYPASS_MAGIC = damageCommon("bypass_magic");
 
     private static TagKey<Item> tag(String name) {
-        return TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(RuneCraftory.MODID, name));
+        return TagKey.create(Registries.ITEM, RuneCraftory.modRes(name));
     }
 
     public static TagKey<Item> tagCommon(String name) {
-        return TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("c", name));
+        return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", name));
     }
 
-    private static TagKey<Item> forge(String name) {
-        return TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("forge", name));
-    }
-
-    private static TagKey<Block> blockForge(String name) {
-        return TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation("forge", name));
+    private static TagKey<Block> block(String name) {
+        return TagKey.create(Registries.BLOCK, RuneCraftory.modRes(name));
     }
 
     private static TagKey<Block> blockCommon(String name) {
-        return TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation("c", name));
+        return TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("c", name));
     }
 
-    private static TagKey<Block> blockMod(String name) {
-        return TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(RuneCraftory.MODID, name));
-    }
-
-    private static TagKey<Biome> biomeMod(String name) {
-        return TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(RuneCraftory.MODID, name));
+    private static TagKey<Biome> biome(String name) {
+        return TagKey.create(Registries.BIOME, RuneCraftory.modRes(name));
     }
 
     private static TagKey<Biome> biomeCommon(String name) {
-        return TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation("c", name));
+        return TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath("c", name));
+    }
+
+    private static TagKey<EntityType<?>> entity(String name) {
+        return TagKey.create(Registries.ENTITY_TYPE, RuneCraftory.modRes(name));
+    }
+
+    private static TagKey<EntityType<?>> entityCommon(String name) {
+        return TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath("c", name));
+    }
+
+    private static TagKey<DamageType> damageCommon(String name) {
+        return TagKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath("c", name));
     }
 
     public static TagKey<Item> tamingTag(EntityType<?> type) {
-        return ENTITY_TAMING_TAGS.computeIfAbsent(type, r -> tag("taming/" + Registry.ENTITY_TYPE.getKey(type).getPath()));
+        return ENTITY_TAMING_TAGS.computeIfAbsent(type, r -> tag("taming/" + BuiltInRegistries.ENTITY_TYPE.getKey(type).getPath()));
     }
 }

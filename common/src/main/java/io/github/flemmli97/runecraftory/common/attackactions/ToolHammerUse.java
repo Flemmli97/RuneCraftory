@@ -6,10 +6,11 @@ import io.github.flemmli97.runecraftory.api.action.DataKey;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.registry.AttackAction;
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolHammer;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -32,7 +33,7 @@ public class ToolHammerUse extends AttackAction {
 
     @Override
     public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimatedAction anim) {
-        if (entity.getLevel() instanceof ServerLevel serverLevel && anim.isAt("attack") && stack.getItem() instanceof ItemToolHammer hammer) {
+        if (entity.level() instanceof ServerLevel serverLevel && anim.isAt("attack") && stack.getItem() instanceof ItemToolHammer hammer) {
             ItemToolHammer.setDontUseRPFlagTemp(stack, true);
             int range = handler.get(DataKey.TOOL_DATA).charge();
             BlockPos pos = entity.blockPosition();
@@ -43,10 +44,9 @@ public class ToolHammerUse extends AttackAction {
                     .filter(p -> hammer.hammer(serverLevel, p.immutable(), stack, entity, true) != ItemToolHammer.HammerState.FAIL)
                     .count();
             if (amount > 0 && entity instanceof ServerPlayer player) {
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                    LevelCalc.useRP(player, data, range * 15, true, 0, true, EnumSkills.MINING);
-                    LevelCalc.levelSkill(player, data, EnumSkills.MINING, (range + 1) * 10);
-                });
+                PlayerData data = Platform.INSTANCE.getPlayerData(player);
+                LevelCalc.useRP(player, data, range * 15, true, 0, true, EnumSkills.MINING);
+                LevelCalc.levelSkill(player, data, EnumSkills.MINING, (range + 1) * 10);
             }
             ItemToolHammer.setDontUseRPFlagTemp(stack, false);
         }

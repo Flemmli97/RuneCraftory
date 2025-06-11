@@ -9,7 +9,6 @@ import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.network.C2SOpenInfo;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.ChatFormatting;
@@ -17,8 +16,6 @@ import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Inventory;
@@ -27,20 +24,20 @@ import net.minecraft.world.item.ItemStack;
 
 public class InfoScreen extends EffectRenderingInventoryScreen<AbstractContainerMenu> {
 
-    protected static final ResourceLocation TEXTURE_PATH = new ResourceLocation(RuneCraftory.MODID, "textures/gui/skills_1.png");
-    protected static final ResourceLocation BARS = new ResourceLocation(RuneCraftory.MODID, "textures/gui/bars.png");
+    protected static final ResourceLocation TEXTURE_PATH = RuneCraftory.modRes("textures/gui/skills_1.png");
+    protected static final ResourceLocation BARS = RuneCraftory.modRes("textures/gui/bars.png");
 
     protected final PlayerData data;
     private final int textureX = 223;
     private final int textureY = 198;
-    private final Component levelTxt = new TranslatableComponent("runecraftory.gui.level");
+    private final Component levelTxt = Component.translatable("runecraftory.gui.level");
 
     // Cause if we just simply check to apply the color it can go out of sync for a few render ticks since item is set first before attribute update packet arrives
     private int canUseAttack = -1;
 
     public InfoScreen(AbstractContainerMenu container, Inventory inv, Component name) {
         super(container, inv, name);
-        this.data = Platform.INSTANCE.getPlayerData(inv.player).orElseThrow(EntityUtils::playerDataException);
+        this.data = Platform.INSTANCE.getPlayerData(inv.player);
     }
 
     @Override
@@ -82,7 +79,7 @@ public class InfoScreen extends EffectRenderingInventoryScreen<AbstractContainer
         ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + this.data.getMoney(), this.leftPos + 187, this.topPos + 9, 0.6f, 0);
         int statX = 216;
         int statY = 59;
-        MutableComponent mut = new TextComponent("" + (int) CombatUtils.getAttributeValue(this.minecraft.player, Attributes.ATTACK_DAMAGE));
+        MutableComponent mut = Component.literal("" + (int) CombatUtils.getAttributeValue(this.minecraft.player, Attributes.ATTACK_DAMAGE));
         if (this.canUseAttack == -1) {
             this.canUseAttack = ItemNBT.isWeapon(this.minecraft.player.getMainHandItem()) ? 1 : 0;
         }
@@ -97,8 +94,8 @@ public class InfoScreen extends EffectRenderingInventoryScreen<AbstractContainer
     }
 
     protected void buttons() {
-        this.addRenderableWidget(new PageButton(this.leftPos + 206, this.topPos + 5, new TextComponent(">"), b -> Platform.INSTANCE.sendToServer(new C2SOpenInfo(C2SOpenInfo.Type.SUB))));
-        this.addRenderableWidget(new PageButton(this.leftPos + 193, this.topPos + 5, new TextComponent("<"), b -> {
+        this.addRenderableWidget(new PageButton(this.leftPos + 206, this.topPos + 5, Component.literal(">"), b -> Platform.INSTANCE.sendToServer(new C2SOpenInfo(C2SOpenInfo.Type.SUB))));
+        this.addRenderableWidget(new PageButton(this.leftPos + 193, this.topPos + 5, Component.literal("<"), b -> {
             InventoryScreen inventory = new InventoryScreen(this.minecraft.player);
             ItemStack stack = this.minecraft.player.containerMenu.getCarried();
             this.minecraft.player.containerMenu.setCarried(ItemStack.EMPTY);

@@ -14,7 +14,7 @@ import net.minecraft.util.Mth;
 
 public class RenderDarkBullet<T extends EntityDarkBullet> extends EntityRenderer<T> {
 
-    private static final ResourceLocation TEX = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/dark_bullet.png");
+    private static final ResourceLocation TEX = RuneCraftory.modRes("textures/entity/projectile/dark_bullet.png");
 
     protected final RenderUtils.TextureBuilder textureBuilder = new RenderUtils.TextureBuilder();
 

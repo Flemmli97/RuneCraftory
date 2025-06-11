@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.entities.npc.features;
 
 import com.mojang.datafixers.util.Pair;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeature;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureHolder;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureType;
@@ -13,7 +13,7 @@ import net.minecraft.network.FriendlyByteBuf;
 
 public record OutfitFeatureType(TypedIndexRange types) implements NPCFeatureHolder<OutfitFeatureType.OutfitFeature> {
 
-    public static final Codec<OutfitFeatureType> CODEC = TypedIndexRange.CODEC.fieldOf("outfits").xmap(OutfitFeatureType::new, OutfitFeatureType::types).codec();
+    public static final MapCodec<OutfitFeatureType> CODEC = TypedIndexRange.CODEC.fieldOf("outfits").xmap(OutfitFeatureType::new, OutfitFeatureType::types);
 
     @Override
     public OutfitFeature create(EntityNPCBase npc) {

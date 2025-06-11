@@ -25,7 +25,7 @@ import java.util.List;
 
 public class SextupleCategory implements DisplayCategory<SextupleDisplay> {
 
-    public static final ResourceLocation GUI = new ResourceLocation(RuneCraftory.MODID, "textures/gui/crafting.png");
+    public static final ResourceLocation GUI = RuneCraftory.modRes("textures/gui/crafting.png");
     private final EnumCrafting type;
     private final CategoryIdentifier<SextupleDisplay> identifier;
 
@@ -49,7 +49,7 @@ public class SextupleCategory implements DisplayCategory<SextupleDisplay> {
 
     @Override
     public Component getTitle() {
-        return new TranslatableComponent(CraftingBlockEntity.DISPLAY_PREFIX + this.type.getId());
+        return Component.translatable(CraftingBlockEntity.DISPLAY_PREFIX + this.type.getId());
     }
 
     @Override
@@ -67,11 +67,11 @@ public class SextupleCategory implements DisplayCategory<SextupleDisplay> {
                         widgets.add(Widgets.createSlot(new Point(bounds.getX() + 1 + x * 18, bounds.getY() + 6 + y * 18)).entries(display.getInputEntries().get(ind)));
                 }
             }
-            TranslatableComponent level = new TranslatableComponent("runecraftory.recipe_integration.crafting_level", display.recipe().getCraftingLevel());
+            TranslatableComponent level = Component.translatable("runecraftory.recipe_integration.crafting_level", display.recipe().getCraftingLevel());
             widgets.add(Widgets.createLabel(new Point(bounds.getX() + bounds.getWidth(), bounds.getY()), level).noShadow().rightAligned().color(0xFF404040, 0xFFBBBBBB));
         } else {
             widgets.add(Widgets.createSlot(new Point(bounds.getX() + 64, bounds.getY() + 14)).entry(EntryStacks.of(new ItemStack(ModItems.UNKNOWN.get()))
-                    .tooltip(new TranslatableComponent("runecraftory.recipe_integration.locked"))));
+                    .tooltip(Component.translatable("runecraftory.recipe_integration.locked"))));
         }
         widgets.add(Widgets.createSlot(new Point(bounds.getX() + 97, bounds.getY() + 15))
                 .backgroundEnabled(false).entries(display.getOutputEntries().get(0)));

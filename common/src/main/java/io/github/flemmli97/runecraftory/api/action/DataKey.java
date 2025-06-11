@@ -26,11 +26,11 @@ public record DataKey<T>(ResourceLocation id, T defaultValue, BiConsumer<LivingE
     }
 
     public DataKey(String namespace, String path, T defaultValue) {
-        this(new ResourceLocation(namespace, path), defaultValue, null);
+        this(ResourceLocation.fromNamespaceAndPath(namespace, path), defaultValue, null);
     }
 
     public DataKey(String namespace, String path, T defaultValue, BiConsumer<LivingEntity, T> onClear) {
-        this(new ResourceLocation(namespace, path), defaultValue, onClear);
+        this(ResourceLocation.fromNamespaceAndPath(namespace, path), defaultValue, onClear);
     }
 
     @Override

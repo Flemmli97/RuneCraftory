@@ -274,7 +274,7 @@ public class ClientHandlers {
         }
     }
 
-    public static void handleTriggers(S2CTriggers.Type type, BlockPos pos) {
+    public static void handleTriggers(S2CTriggers.TriggerType type, BlockPos pos) {
         switch (type) {
             case FERTILIZER -> { //Makes the particles more visible. The one called at BoneMealItem checks for air blocks
                 Level level = Minecraft.getInstance().level;

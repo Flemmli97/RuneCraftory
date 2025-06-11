@@ -17,9 +17,7 @@ import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import io.github.flemmli97.tenshilib.api.item.IAOEWeapon;
-import io.github.flemmli97.tenshilib.common.utils.OrientedBoundingBox;
-import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
+import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -159,7 +157,7 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IAOEWeapon, Big
                 return;
             }
             if (performRightClickAction(stack, entity, this.getRange(entity, stack), 0.7f)) {
-                entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, entity.getSoundSource(), 1.0f, 1.0f);
+                entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, entity.getSoundSource(), 1.0f, 1.0f);
             }
         }
     }
@@ -179,13 +177,13 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IAOEWeapon, Big
 
     public static boolean performRightClickAction(ItemStack stack, LivingEntity entity, double range, float knockback) {
         Collection<LivingEntity> list = getEntitiesIn(entity, range, null);
-        entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.DRAGON_FIREBALL_EXPLODE, entity.getSoundSource(), 1.0f, 0.4f);
+        entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.DRAGON_FIREBALL_EXPLODE, entity.getSoundSource(), 1.0f, 0.4f);
         Vec3 pos = entity.position().add(0, -1, 0);
         BlockPos.MutableBlockPos mut = new BlockPos.MutableBlockPos();
         for (Vec3 dir : PARTICLE_DIRECTION) {
             Vec3 scaled = dir.scale(0.5);
             mut.set(Mth.floor(pos.x() + dir.x()), Mth.floor(pos.y()), Mth.floor(pos.z() + dir.z()));
-            BlockState state = entity.level.getBlockState(mut);
+            BlockState state = entity.level().getBlockState(mut);
             if (state.getRenderShape() != RenderShape.INVISIBLE)
                 ((ServerLevel) entity.getLevel()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state), entity.getX() + dir.x(), entity.getY() + 0.1, entity.getZ() + dir.z(), 0, (float) scaled.x(), 1.5f, (float) scaled.z(), 1);
         }

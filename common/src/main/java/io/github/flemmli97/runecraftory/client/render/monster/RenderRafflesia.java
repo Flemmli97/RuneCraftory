@@ -10,7 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class RenderRafflesia<T extends EntityRafflesia> extends RenderMonster<T, ModelRafflesia<T>> {
 
-    public static final ResourceLocation TEXTURE = new ResourceLocation(RuneCraftory.MODID, "textures/entity/monsters/rafflesia.png");
+    public static final ResourceLocation TEXTURE = RuneCraftory.modRes("textures/entity/monsters/rafflesia.png");
 
     public RenderRafflesia(EntityRendererProvider.Context ctx) {
         super(ctx, new ModelRafflesia<>(ctx.bakeLayer(ModelRafflesia.LAYER_LOCATION)), TEXTURE, 0.5f);

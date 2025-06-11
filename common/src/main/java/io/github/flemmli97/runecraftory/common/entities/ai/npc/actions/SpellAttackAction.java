@@ -9,22 +9,21 @@ import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCAttackGoal;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCActions;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
-import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
-import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 
 import java.util.function.Supplier;
 
 public class SpellAttackAction implements NPCAction {
 
     public static final Codec<SpellAttackAction> CODEC = RecordCodecBuilder.create((instance) ->
-            instance.group(CodecHelper.NUMER_PROVIDER_CODEC.fieldOf("walk_time").forGetter(d -> d.walkTime),
+            instance.group(NumberProviders.CODEC.fieldOf("walk_time").forGetter(d -> d.walkTime),
                     NPCAction.optionalNumCooldown(d -> d.cooldown),
                     NPCAction.optionalNum(d -> d.combos, "combos", CONST_ONE),
 
-                    CodecUtils.registryCodec(ModSpells.SPELL_REGISTRY_KEY).fieldOf("spell").forGetter(d -> d.spell),
+                    ModSpells.SPELLS.registry().byNameCodec().fieldOf("spell").forGetter(d -> d.spell),
                     Codec.DOUBLE.fieldOf("range").forGetter(d -> d.range),
                     Codec.BOOL.fieldOf("ignore_seal").forGetter(d -> d.ignoreSeal)
             ).apply(instance, (walkTime, cooldown, combos, spell, range, ignoreSeal) -> new SpellAttackAction(spell, range, ignoreSeal, walkTime, cooldown.orElse(NPCAction.CONST_ZERO), combos.orElse(NPCAction.CONST_ONE))));
@@ -50,7 +49,7 @@ public class SpellAttackAction implements NPCAction {
     }
 
     @Override
-    public Supplier<NPCActionCodec> codec() {
+    public Supplier<Codec<SpellAttackAction>> codec() {
         return ModNPCActions.SPELL_ATTACK;
     }
 

@@ -9,7 +9,7 @@ import net.minecraft.world.entity.LivingEntity;
 public class PoisonEffect extends PermanentEffect {
 
     public PoisonEffect() {
-        super(MobEffectCategory.HARMFUL, 0, S2CEntityDataSync.Type.POISON);
+        super(MobEffectCategory.HARMFUL, 0, S2CEntityDataSync.DataType.POISON);
         this.setTickDelay(60);
     }
 

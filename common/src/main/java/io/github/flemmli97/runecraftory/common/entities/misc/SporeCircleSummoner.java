@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.common.entities.misc;
 
 import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
-import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;

@@ -57,11 +57,12 @@ import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.mixin.AttributeMapAccessor;
 import io.github.flemmli97.runecraftory.mixin.CombatTrackerAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.api.entity.AoeAttackEntity;
-import io.github.flemmli97.tenshilib.api.entity.IAnimated;
-import io.github.flemmli97.tenshilib.common.utils.OrientedBoundingBox;
-import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
+import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.AnimatedEntity;
+import io.github.flemmli97.tenshilib.common.entity.AoeAttackEntity;
+import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
+import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
+import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
@@ -70,7 +71,6 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -139,7 +139,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnimated, IExtendedMob, ExtendedEntity, SleepingEntity, TargetableOpponent, AoeAttackEntity, MobUpdateHandler, MobAttackExt {
+public abstract class BaseMonster extends PathfinderMob implements Enemy, AnimatedEntity, IExtendedMob, ExtendedEntity, SleepingEntity, TargetableOpponent, AoeAttackEntity, MobUpdateHandler, MobAttackExt {
 
     private static final EntityDataAccessor<Optional<UUID>> OWNER_UUID = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.OPTIONAL_UUID);
     private static final EntityDataAccessor<Byte> MOVE_FLAGS = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.BYTE);
@@ -331,7 +331,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                             }
                         } else {
                             if (this.tickCount > 20)
-                                this.getOwner().sendMessage(new TranslatableComponent("runecraftory.monster.interact.barn.no.ext", this.getDisplayName(), this.blockPosition().toShortString()), Util.NIL_UUID);
+                                this.getOwner().sendMessage(Component.translatable("runecraftory.monster.interact.barn.no.ext", this.getDisplayName(), this.blockPosition().toShortString()), Util.NIL_UUID);
                             this.setBehaviour(Behaviour.WANDER);
                         }
                         this.goalSelector.addGoal(6, this.wander);
@@ -583,7 +583,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.put("MobLevel", this.level().save());
+        compound.put("MobLevel", this.xpLevel().save());
         if (this.isTamed())
             compound.putUUID("Owner", this.getOwnerUUID());
         compound.putInt("Behaviour", this.behaviourState().ordinal());
@@ -701,7 +701,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
         this.populateDefaultEquipmentSlots(difficulty);
-        this.setLevel(Mth.clamp(this.level().getLevel(), this.prop.minLevel, LibConstants.MAX_MONSTER_LEVEL));
+        this.setLevel(Mth.clamp(this.xpLevel().getLevel(), this.prop.minLevel, LibConstants.MAX_MONSTER_LEVEL));
         //for(Attribute att : this.prop.getAttributeGains().keySet())
         //    this.attributeRandomizer.put(att, this.rand.nextInt(5)-2);
         return spawnData;
@@ -719,7 +719,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         if (this.isTamed()) {
             if (!player.getUUID().equals(this.getOwnerUUID())) {
                 if (!clientSide)
-                    player.sendMessage(new TranslatableComponent("runecraftory.monster.interact.notowner"), Util.NIL_UUID);
+                    player.sendMessage(Component.translatable("runecraftory.monster.interact.notowner"), Util.NIL_UUID);
                 return InteractionResult.sidedSuccess(clientSide);
             }
             if (player.isShiftKeyDown()) {
@@ -733,7 +733,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             }
             if (!clientSide && MobConfig.monsterNeedBarn && this.assignedBarn == null) {
                 if (!this.assignBarn()) {
-                    player.sendMessage(new TranslatableComponent("runecraftory.monster.interact.barn.no", this.getDisplayName()), Util.NIL_UUID);
+                    player.sendMessage(Component.translatable("runecraftory.monster.interact.barn.no", this.getDisplayName()), Util.NIL_UUID);
                     return InteractionResult.CONSUME;
                 }
             }
@@ -755,7 +755,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 if (player.isShiftKeyDown()) {
                     if (player instanceof ServerPlayer serverPlayer) {
                         EntityUtils.sendAttributesTo(this, serverPlayer);
-                        Platform.INSTANCE.sendToClient(new S2COpenCompanionGui(this, serverPlayer), serverPlayer);
+                        LoaderNetwork.INSTANCE.sendToPlayer(new S2COpenCompanionGui(this, serverPlayer), serverPlayer);
                     }
                     return InteractionResult.sidedSuccess(clientSide);
                 }
@@ -921,7 +921,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     @Override
-    public LevelExpPair level() {
+    public LevelExpPair xpLevel() {
         return this.levelPair;
     }
 
@@ -933,7 +933,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     @Override
     public void startSeenByPlayer(ServerPlayer player) {
-        Platform.INSTANCE.sendToClient(S2CEntityLevelPkt.create(this), player);
+        LoaderNetwork.INSTANCE.sendToPlayer(S2CEntityLevelPkt.create(this), player);
     }
 
     @Override
@@ -1092,7 +1092,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     public void updateStatsToLevel() {
         if (!this.level.isClientSide)
-            Platform.INSTANCE.sendToTrackingAndSelf(S2CEntityLevelPkt.create(this), this);
+            LoaderNetwork.INSTANCE.sendToTracking(S2CEntityLevelPkt.create(this), this);
         float preHealthDiff = this.getMaxHealth() - this.getHealth();
         this.prop.getAttributeGains().forEach((att, val) -> {
             AttributeInstance inst = this.getAttribute(att);
@@ -1101,11 +1101,11 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 inst.removeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD);
                 float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
                 if (att == Attributes.MAX_HEALTH) {
-                    multiplier += LevelCalc.getMultiplierInterval(this.level().getLevel(), 20, 30, 0.15f) * 0.02f;
+                    multiplier += LevelCalc.getMultiplierInterval(this.xpLevel().getLevel(), 20, 30, 0.15f) * 0.02f;
                 } else {
-                    multiplier += LevelCalc.getMultiplierInterval(this.level().getLevel(), 20, 30, 0) * 0.015f;
+                    multiplier += LevelCalc.getMultiplierInterval(this.xpLevel().getLevel(), 20, 30, 0) * 0.015f;
                 }
-                inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.level().getLevel() - 1) * val * multiplier, AttributeModifier.Operation.ADDITION));
+                inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.xpLevel().getLevel() - 1) * val * multiplier, AttributeModifier.Operation.ADDITION));
                 if (att == Attributes.MAX_HEALTH)
                     this.setHealth(this.getMaxHealth() - preHealthDiff);
             }
@@ -1113,15 +1113,15 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     public void increaseLevel() {
-        this.levelPair.setLevel(Mth.clamp(this.level().getLevel() + 1, 1, LibConstants.MAX_MONSTER_LEVEL), LevelCalc::xpAmountForLevelUp);
+        this.levelPair.setLevel(Mth.clamp(this.xpLevel().getLevel() + 1, 1, LibConstants.MAX_MONSTER_LEVEL), LevelCalc::xpAmountForLevelUp);
         this.updateStatsToLevel();
     }
 
     public void addXp(float amount) {
-        LevelExpPair pair = this.level();
+        LevelExpPair pair = this.xpLevel();
         boolean res = pair.addXP(amount, LibConstants.MAX_MONSTER_LEVEL, LevelCalc::xpAmountForLevelUp, () -> {
         });
-        Platform.INSTANCE.sendToTrackingAndSelf(S2CEntityLevelPkt.create(this), this);
+        LoaderNetwork.INSTANCE.sendToTracking(S2CEntityLevelPkt.create(this), this);
         if (res)
             this.updateStatsToLevel();
     }
@@ -1245,7 +1245,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         ++this.deathTime;
         if (this.deathTime == (this.maxDeathTime() - 5)) {
             if (!this.level.isClientSide && this.getLastHurtByMob() != null) {
-                LevelCalc.addXP(this.getLastHurtByMob(), this.baseXP(), this.baseMoney(), this.level().getLevel());
+                LevelCalc.addXP(this.getLastHurtByMob(), this.baseXP(), this.baseMoney(), this.xpLevel().getLevel());
             }
         }
         if (this.deathTime >= this.maxDeathTime()) {
@@ -1292,8 +1292,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     private Component getKnockoutMessage() {
         DamageSource source = this.getLastDamageSource();
         if (source instanceof EntityDamageSource && source.getEntity() != null)
-            return new TranslatableComponent("runecraftory.tamed.monster.knockout.by", this.getDisplayName(), this.blockPosition().getX(), this.blockPosition().getY(), this.blockPosition().getZ(), source.getEntity().getDisplayName());
-        return new TranslatableComponent("runecraftory.tamed.monster.knockout", this.getDisplayName(), this.blockPosition().getX(), this.blockPosition().getY(), this.blockPosition().getZ());
+            return Component.translatable("runecraftory.tamed.monster.knockout.by", this.getDisplayName(), this.blockPosition().getX(), this.blockPosition().getY(), this.blockPosition().getZ(), source.getEntity().getDisplayName());
+        return Component.translatable("runecraftory.tamed.monster.knockout", this.getDisplayName(), this.blockPosition().getX(), this.blockPosition().getY(), this.blockPosition().getZ());
     }
 
     public int getPlayDeathTick() {
@@ -1686,7 +1686,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             player.startRiding(this);
             return true;
         }
-        player.sendMessage(new TranslatableComponent("runecraftory.monster.interact.ride.no"), Util.NIL_UUID);
+        player.sendMessage(Component.translatable("runecraftory.monster.interact.ride.no"), Util.NIL_UUID);
         return false;
     }
 

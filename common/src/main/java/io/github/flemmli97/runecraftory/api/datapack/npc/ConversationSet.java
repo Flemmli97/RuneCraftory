@@ -1,29 +1,15 @@
 package io.github.flemmli97.runecraftory.api.datapack.npc;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSyntaxException;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.DataResult;
-import com.mojang.serialization.Dynamic;
-import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
-import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.world.level.storage.loot.Deserializers;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.Serializer;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -86,50 +72,15 @@ public record ConversationSet(String fallbackKey, @Nullable ResourceLocation mis
                                @Nullable NumberProvider maxHearts, boolean startingConversation,
                                List<ConversationActionHolder> actions, LootItemCondition... conditions) {
 
-        private static final Gson GSON = Deserializers.createConditionSerializer().create();
-        private static final JsonDeserializationContext CTX_DESERIALIZER = GSON::fromJson;
-        private static final JsonSerializationContext CTX_SERIALIZER = new JsonSerializationContext() {
-            @Override
-            public JsonElement serialize(Object src) {
-                return GSON.toJsonTree(src);
-            }
-
-            @Override
-            public JsonElement serialize(Object src, Type typeOfSrc) {
-                return GSON.toJsonTree(src, typeOfSrc);
-            }
-        };
-
-        @SuppressWarnings("unchecked")
-        public static final Codec<LootItemCondition> LOOT_ITEM_CONDITION_CODEC = Codec.PASSTHROUGH.comapFlatMap(dynamic -> {
-            JsonElement json = dynamic.convert(JsonOps.INSTANCE).getValue();
-            if (json instanceof JsonObject obj) {
-                String type = GsonHelper.getAsString(obj, "type", "");
-                if (type.isEmpty()) {
-                    throw new JsonSyntaxException("Missing LootConditionType");
-                }
-                LootItemConditionType conditionType = Registry.LOOT_CONDITION_TYPE.get(new ResourceLocation(type));
-                if (conditionType == null) {
-                    throw new JsonSyntaxException("Unknown type '" + type + "'");
-                }
-                return DataResult.success(conditionType.getSerializer().deserialize(obj, CTX_DESERIALIZER));
-            }
-            return DataResult.error("Not a json object: " + json);
-        }, conditon -> {
-            JsonObject obj = new JsonObject();
-            obj.addProperty("type", Registry.LOOT_CONDITION_TYPE.getKey(conditon.getType()).toString());
-            ((Serializer<LootItemCondition>) conditon.getType().getSerializer()).serialize(obj, conditon, CTX_SERIALIZER);
-            return new Dynamic<>(JsonOps.INSTANCE, obj);
-        });
         public static final Codec<Conversation> CODEC = RecordCodecBuilder.create(inst ->
                 inst.group(
                         Codec.BOOL.optionalFieldOf("starting_conversation").forGetter(d -> d.startingConversation ? Optional.empty() : Optional.of(false)),
                         ConversationActionHolder.CODEC.listOf().optionalFieldOf("actions").forGetter(d -> d.actions.isEmpty() ? Optional.empty() : Optional.of(d.actions)),
-                        LOOT_ITEM_CONDITION_CODEC.listOf().fieldOf("conditions").forGetter(d -> Arrays.stream(d.conditions).toList()),
+                        LootItemCondition.DIRECT_CODEC.listOf().fieldOf("conditions").forGetter(d -> Arrays.stream(d.conditions).toList()),
 
                         Codec.STRING.fieldOf("translation_key").forGetter(d -> d.translationKey),
-                        CodecUtils.jsonCodecBuilder(GSON, NumberProvider.class, "NumberProvider").optionalFieldOf("min_hearts").forGetter(d -> Optional.ofNullable(d.minHearts)),
-                        CodecUtils.jsonCodecBuilder(GSON, NumberProvider.class, "NumberProvider").optionalFieldOf("max_hearts").forGetter(d -> Optional.ofNullable(d.maxHearts))
+                        NumberProviders.CODEC.optionalFieldOf("min_hearts").forGetter(d -> Optional.ofNullable(d.minHearts)),
+                        NumberProviders.CODEC.optionalFieldOf("max_hearts").forGetter(d -> Optional.ofNullable(d.maxHearts))
                 ).apply(inst, (start, action, cond, key, min, max) -> new Conversation(key, min.orElse(null), max.orElse(null), start.orElse(true), action.orElse(List.of()), cond.toArray(new LootItemCondition[0]))));
 
         public boolean test(int hearts, LootContext ctx) {

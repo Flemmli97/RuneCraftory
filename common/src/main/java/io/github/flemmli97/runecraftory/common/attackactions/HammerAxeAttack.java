@@ -12,8 +12,8 @@ import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.api.item.IAOEWeapon;
+import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.item.AOEWeapon;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
@@ -36,7 +36,7 @@ public class HammerAxeAttack extends AttackAction {
     @Override
     public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimatedAction anim) {
         if (anim.isAt("attack") && handler.getComboCount() != 3) {
-            CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(IAOEWeapon.createOBB(entity, stack,
+            CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(AOEWeapon.createOBB(entity, stack,
                             CombatUtils.getRange(entity, 0),
                             CombatUtils.getWidth(entity, 0))))
                     .executeAttack();
@@ -46,12 +46,12 @@ public class HammerAxeAttack extends AttackAction {
             if (anim.isAt("spin_start")) {
                 handler.store(DataKey.SPIN_ROTATION, entity.getYRot());
                 handler.resetHitEntityTracker();
-                entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
+                entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(),
                         SoundEvents.ENDER_DRAGON_FLAP, entity.getSoundSource(), 0.7f, 0.5f);
             }
             if (anim.isAt("reset")) {
                 handler.resetHitEntityTracker();
-                entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
+                entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(),
                         SoundEvents.ENDER_DRAGON_FLAP, entity.getSoundSource(), 1, 0.7f);
             }
             if (anim.isPast("spin_start") && !anim.isPast("spin_end")) {
@@ -61,7 +61,7 @@ public class HammerAxeAttack extends AttackAction {
                 if (anim.isAt("spin_middle"))
                     handler.store(DataKey.MOVE_DIRECTION, dir.scale(0.35).add(0, -0.15, 0));
                 entity.resetFallDistance();
-                if (!entity.level.isClientSide) {
+                if (!entity.level().isClientSide) {
                     handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity,
                                     CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox().inflate(1)))
                             .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
@@ -78,7 +78,7 @@ public class HammerAxeAttack extends AttackAction {
     @Override
     public void onStart(LivingEntity entity, AttackActionHandler handler) {
         if (handler.getComboCount() == 3 && entity instanceof ServerPlayer player)
-            Platform.INSTANCE.getPlayerData(player).ifPresent(d -> LevelCalc.useRP(player, d, GeneralConfig.hammerAxeUltimate, true, 0, false));
+            LevelCalc.useRP(player, Platform.INSTANCE.getPlayerData(player), GeneralConfig.hammerAxeUltimate, true, 0, false);
     }
 
     @Override
@@ -88,7 +88,7 @@ public class HammerAxeAttack extends AttackAction {
 
     @Override
     public float movementReduction(AnimatedAction current) {
-        return GeneralConfig.moveSpeedAttack.get().floatValue();
+        return GeneralConfig.MOVE_SPEED_ATTACK.get().floatValue();
     }
 
     @Override

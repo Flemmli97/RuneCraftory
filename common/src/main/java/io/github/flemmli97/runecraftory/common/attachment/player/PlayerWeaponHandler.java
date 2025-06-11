@@ -9,7 +9,8 @@ import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
 import io.github.flemmli97.runecraftory.common.network.S2CWeaponUse;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -55,7 +56,7 @@ public class PlayerWeaponHandler implements AttackActionHandler {
     @Override
     public boolean doWeaponAttack(AttackAction action, ItemStack stack, @Nullable Spell spell) {
         AttackAction.OverrideType overrideType = this.checkOverride(action, true);
-        if (this.entity.level.isClientSide || overrideType != AttackAction.OverrideType.NONE) {
+        if (this.entity.level().isClientSide || overrideType != AttackAction.OverrideType.NONE) {
             if (overrideType == AttackAction.OverrideType.SCHEDULE) {
                 this.scheduledAction = true;
                 return true;
@@ -111,14 +112,14 @@ public class PlayerWeaponHandler implements AttackActionHandler {
         this.entity.yBodyRot = this.entity.yHeadRot;
         this.resetHitEntityTracker();
         this.currentAction.onStart(this.entity, this);
-        if (!this.entity.level.isClientSide && packet) {
-            Platform.INSTANCE.sendToTrackingAndSelf(new S2CWeaponUse(this.currentAction, this.get(DataKey.USED_WEAPON),
+        if (!this.entity.level().isClientSide && packet) {
+            LoaderNetwork.INSTANCE.sendToTracking(new S2CWeaponUse(this.currentAction, this.get(DataKey.USED_WEAPON),
                     this.comboCount - 1, this.entity), this.entity);
         }
     }
 
     public void clientSideUpdate(AttackAction action, ItemStack stack, int count) {
-        if (!this.entity.level.isClientSide)
+        if (!this.entity.level().isClientSide)
             return;
         this.comboCount = count;
         this.setAnimationBasedOnState(action, -1, false);
@@ -143,9 +144,9 @@ public class PlayerWeaponHandler implements AttackActionHandler {
             } else {
                 ItemStack weapon = this.get(DataKey.USED_WEAPON);
                 if (this.entity instanceof ServerPlayer player) {
-                    PlayerData data = Platform.INSTANCE.getPlayerData(player).orElse(null);
+                    PlayerData data = Platform.INSTANCE.getPlayerData(player);
                     boolean changedItem = this.entity.getMainHandItem() != weapon;
-                    if (changedItem && weapon.getItem() instanceof ItemSpell && data != null) {
+                    if (changedItem && weapon.getItem() instanceof ItemSpell) {
                         for (int i = 0; i < data.getInv().getContainerSize(); i++) {
                             if (data.getInv().getItem(i) == weapon) {
                                 changedItem = false;

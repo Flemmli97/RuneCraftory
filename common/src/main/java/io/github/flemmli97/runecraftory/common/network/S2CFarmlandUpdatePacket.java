@@ -2,18 +2,30 @@ package io.github.flemmli97.runecraftory.common.network;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientFarmlandHandler;
-import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandData;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandDataContainer;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
 import java.util.List;
 
-public class S2CFarmlandUpdatePacket implements Packet {
+public class S2CFarmlandUpdatePacket implements CustomPacketPayload {
 
-    public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "s2c_farmland_update_packet");
+    public static final CustomPacketPayload.Type<S2CFarmlandUpdatePacket> TYPE = new CustomPacketPayload.Type<>(RuneCraftory.modRes("s2c_farmland_update_packet"));
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, S2CFarmlandUpdatePacket> STREAM_CODEC = new StreamCodec<>() {
+        @Override
+        public S2CFarmlandUpdatePacket decode(RegistryFriendlyByteBuf buf) {
+            return new S2CFarmlandUpdatePacket(buf.readLong(), buf.readList(FarmlandDataContainer::fromBuffer), true);
+        }
+
+        @Override
+        public void encode(RegistryFriendlyByteBuf buf, S2CFarmlandUpdatePacket pkt) {
+            buf.writeLong(pkt.packedChunk);
+            buf.writeCollection(pkt.data, (b, d) -> d.writeToBuffer(b));
+        }
+    };
 
     private final long packedChunk;
     private List<FarmlandData> data;
@@ -29,25 +41,12 @@ public class S2CFarmlandUpdatePacket implements Packet {
         this.holder = holder;
     }
 
-    public static S2CFarmlandUpdatePacket read(FriendlyByteBuf buf) {
-        return new S2CFarmlandUpdatePacket(buf.readLong(), buf.readList(FarmlandDataContainer::fromBuffer), true);
-    }
-
     public static void handle(S2CFarmlandUpdatePacket pkt) {
-        Player player = ClientHandlers.getPlayer();
-        if (player == null)
-            return;
         ClientFarmlandHandler.INSTANCE.updateChunk(pkt.packedChunk, pkt.holder);
     }
 
     @Override
-    public void write(FriendlyByteBuf buf) {
-        buf.writeLong(this.packedChunk);
-        buf.writeCollection(this.data, (b, d) -> d.writeToBuffer(b));
-    }
-
-    @Override
-    public ResourceLocation getID() {
-        return ID;
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 }

@@ -13,7 +13,6 @@ import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ClickType;
@@ -21,7 +20,7 @@ import net.minecraft.world.inventory.Slot;
 
 public class NPCShopGui extends AbstractContainerScreen<ContainerShop> {
 
-    protected static final ResourceLocation TEXTURE_PATH = new ResourceLocation(RuneCraftory.MODID, "textures/gui/shop.png");
+    protected static final ResourceLocation TEXTURE_PATH = RuneCraftory.modRes("textures/gui/shop.png");
 
     private final Inventory inventory;
 
@@ -43,8 +42,8 @@ public class NPCShopGui extends AbstractContainerScreen<ContainerShop> {
         this.imageHeight = 217;
         super.init();
 
-        this.addRenderableWidget(this.next = new PageButton(this.leftPos + 123, this.topPos + 8, new TextComponent(">"), b -> Platform.INSTANCE.sendToServer(new C2SShopButton(true))));
-        this.addRenderableWidget(this.prev = new PageButton(this.leftPos + 12, this.topPos + 8, new TextComponent("<"), b -> Platform.INSTANCE.sendToServer(new C2SShopButton(false))));
+        this.addRenderableWidget(this.next = new PageButton(this.leftPos + 123, this.topPos + 8, Component.literal(">"), b -> Platform.INSTANCE.sendToServer(new C2SShopButton(true))));
+        this.addRenderableWidget(this.prev = new PageButton(this.leftPos + 12, this.topPos + 8, Component.literal("<"), b -> Platform.INSTANCE.sendToServer(new C2SShopButton(false))));
         this.updateButtons();
         this.addRenderableOnly(this.speech = new SpeechBubble(this.minecraft, this.leftPos + 148, this.topPos + 10, 98, 30));
     }
@@ -87,9 +86,9 @@ public class NPCShopGui extends AbstractContainerScreen<ContainerShop> {
         RenderSystem.setShaderTexture(0, TEXTURE_PATH);
         this.blit(stack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 
-        Platform.INSTANCE.getPlayerData(this.minecraft.player).ifPresent(data -> ClientHandlers.drawRightAlignedScaledString(stack, this.font, new TextComponent("" + data.getMoney()), this.leftPos + 237, this.topPos + 197, 1, 0));
+        Platform.INSTANCE.getPlayerData(this.minecraft.player).ifPresent(data -> ClientHandlers.drawRightAlignedScaledString(stack, this.font, Component.literal("" + data.getMoney()), this.leftPos + 237, this.topPos + 197, 1, 0));
         if (this.menu.getCurrentCost() > 0) {
-            ClientHandlers.drawRightAlignedScaledString(stack, this.font, new TextComponent("" + this.menu.getCurrentCost()), this.leftPos + 237, this.topPos + 175, 1, 0);
+            ClientHandlers.drawRightAlignedScaledString(stack, this.font, Component.literal("" + this.menu.getCurrentCost()), this.leftPos + 237, this.topPos + 175, 1, 0);
         }
     }
 

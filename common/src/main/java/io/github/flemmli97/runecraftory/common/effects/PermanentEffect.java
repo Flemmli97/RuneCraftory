@@ -14,17 +14,17 @@ import java.util.List;
 
 public class PermanentEffect extends MobEffect implements ExtendedEffect {
 
-    private final S2CEntityDataSync.Type packetType;
+    private final S2CEntityDataSync.DataType packetType;
     private final List<ItemStack> empty = List.of();
     private int tickDelay;
 
-    public PermanentEffect(MobEffectCategory type, int color, S2CEntityDataSync.Type packetType) {
+    public PermanentEffect(MobEffectCategory type, int color, S2CEntityDataSync.DataType packetType) {
         super(type, color);
         this.tickDelay = 5;
         this.packetType = packetType;
     }
 
-    private static void sendPacket(LivingEntity entity, S2CEntityDataSync.Type type, boolean flag) {
+    private static void sendPacket(LivingEntity entity, S2CEntityDataSync.DataType type, boolean flag) {
         Platform.INSTANCE.getEntityData(entity).ifPresent(data -> {
             switch (type) {
                 case POISON -> data.setPoison(entity, flag);
@@ -43,7 +43,7 @@ public class PermanentEffect extends MobEffect implements ExtendedEffect {
     }
 
     @Override
-    public void applyEffectTick(LivingEntity living, int amplifier) {
+    public boolean applyEffectTick(LivingEntity living, int amplifier) {
         MobEffectInstance inst = living.getEffect(this);
         if (!living.level.isClientSide) {
             if (inst == null || inst.getDuration() <= 1) {

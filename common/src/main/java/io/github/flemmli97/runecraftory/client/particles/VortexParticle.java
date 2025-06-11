@@ -6,7 +6,7 @@ import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.common.particles.ColoredParticleData4f;
 import io.github.flemmli97.tenshilib.client.particles.ParticleRenderTypes;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
-import io.github.flemmli97.tenshilib.common.utils.MathUtils;
+import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;

@@ -46,7 +46,7 @@ public class ItemUtils {
     }
 
     public static void spawnItemAtEntity(LivingEntity entity, ItemStack stack) {
-        spawnItemAt(entity.level, entity.blockPosition(), stack, entity);
+        spawnItemAt(entity.level(), entity.blockPosition(), stack, entity);
     }
 
     public static void spawnItemAt(Level level, BlockPos pos, ItemStack stack, @Nullable LivingEntity entity) {
@@ -60,10 +60,10 @@ public class ItemUtils {
     }
 
     public static void spawnLeveledItem(LivingEntity entity, ItemStack stack, int level) {
-        if (!entity.level.isClientSide) {
-            ItemEntity item = new ItemEntity(entity.level, entity.getX(), entity.getY(), entity.getZ(), ItemNBT.getLeveledItem(stack, level));
+        if (!entity.level().isClientSide) {
+            ItemEntity item = new ItemEntity(entity.level(), entity.getX(), entity.getY(), entity.getZ(), ItemNBT.getLeveledItem(stack, level));
             item.setPickUpDelay(0);
-            entity.level.addFreshEntity(item);
+            entity.level().addFreshEntity(item);
         }
     }
 

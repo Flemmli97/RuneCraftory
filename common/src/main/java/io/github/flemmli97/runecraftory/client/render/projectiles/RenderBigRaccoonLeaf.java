@@ -4,7 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityBigRaccoonLeaf;
-import io.github.flemmli97.tenshilib.client.render.RenderTexture;
 import io.github.flemmli97.tenshilib.client.render.RenderUtils;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -13,7 +12,7 @@ import net.minecraft.util.Mth;
 
 public class RenderBigRaccoonLeaf extends RenderTexture<EntityBigRaccoonLeaf> {
 
-    private static final ResourceLocation TEX = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/leaf.png");
+    private static final ResourceLocation TEX = RuneCraftory.modRes("textures/entity/projectile/leaf.png");
 
     public RenderBigRaccoonLeaf(EntityRendererProvider.Context ctx) {
         super(ctx, 0.8f, 0.8f, 1, 1);

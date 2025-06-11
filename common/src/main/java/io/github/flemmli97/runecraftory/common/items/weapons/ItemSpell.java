@@ -5,7 +5,6 @@ import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -60,7 +59,7 @@ public class ItemSpell extends Item {
     public void appendHoverText(ItemStack stack, Level world, List<Component> list, TooltipFlag flag) {
         super.appendHoverText(stack, world, list, flag);
         if (this.spell.get() == ModSpells.EMPTY.get())
-            list.add(new TextComponent("WIP").withStyle(ChatFormatting.DARK_RED));
+            list.add(Component.literal("WIP").withStyle(ChatFormatting.DARK_RED));
     }
 
     public Spell getSpell() {

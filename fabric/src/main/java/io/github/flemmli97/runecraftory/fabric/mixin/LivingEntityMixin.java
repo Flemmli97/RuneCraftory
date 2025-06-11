@@ -5,7 +5,7 @@ import io.github.flemmli97.runecraftory.common.events.EntityCalls;
 import io.github.flemmli97.runecraftory.fabric.RuneCraftoryFabric;
 import io.github.flemmli97.runecraftory.fabric.mixinhelper.EntityDataGetter;
 import io.github.flemmli97.runecraftory.platform.ExtendedItem;
-import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
+import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;

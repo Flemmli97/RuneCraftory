@@ -29,14 +29,14 @@ public class VillageStructuresModification {
         if (INIT)
             return;
         INIT = true;
-        Pools.register(new StructureTemplatePool(new ResourceLocation(RuneCraftory.MODID, "npc/bath_house_under"), new ResourceLocation(RuneCraftory.MODID, "npc/bath_house_under"),
+        Pools.register(new StructureTemplatePool(RuneCraftory.modRes("npc/bath_house_under"), RuneCraftory.modRes("npc/bath_house_under"),
                 ImmutableList.of(Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/bath_house_under", ProcessorLists.EMPTY).apply(StructureTemplatePool.Projection.RIGID), 1))));
 
         String[] vanillaVillages = new String[]{"plains", "desert", "savanna", "snowy", "taiga"};
         for (String s : vanillaVillages) {
             if (!s.equals("savanna") && !s.equals("desert")) {
                 //Register custom pool with big houses
-                Pools.register(new StructureTemplatePool(new ResourceLocation(RuneCraftory.MODID, "npc/big_houses_" + s), new ResourceLocation(RuneCraftory.MODID, "npc/big_houses_" + s),
+                Pools.register(new StructureTemplatePool(RuneCraftory.modRes("npc/big_houses_" + s), RuneCraftory.modRes("npc/big_houses_" + s),
                         ImmutableList.of(Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/bath_house", get(ModNPCJobs.BATHHOUSE.getFirst())).apply(StructureTemplatePool.Projection.RIGID), 2),
                                 Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/restaurant", get(ModNPCJobs.COOK.getFirst())).apply(StructureTemplatePool.Projection.RIGID), 2))));
                 //Add a big street to the villages streets pool

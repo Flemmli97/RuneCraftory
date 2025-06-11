@@ -12,7 +12,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 
 public class EntityMineralSqueek extends EntityChipsqueek {
 
-    public static final ResourceLocation MINERAL_SQUEEK_HURT = new ResourceLocation(RuneCraftory.MODID, "entities/mineral_squeek_hurt");
+    public static final ResourceLocation MINERAL_SQUEEK_HURT = RuneCraftory.modRes("entities/mineral_squeek_hurt");
 
     public EntityMineralSqueek(EntityType<? extends EntityChipsqueek> type, Level world) {
         super(type, world);

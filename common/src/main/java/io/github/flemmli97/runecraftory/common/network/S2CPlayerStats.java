@@ -1,16 +1,30 @@
 package io.github.flemmli97.runecraftory.common.network;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.entity.player.Player;
 
-public class S2CPlayerStats implements Packet {
+public class S2CPlayerStats implements CustomPacketPayload {
 
-    public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "s2c_base_stats");
+    public static final CustomPacketPayload.Type<S2CPlayerStats> TYPE = new CustomPacketPayload.Type<>(RuneCraftory.modRes("s2c_base_stats"));
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, S2CPlayerStats> STREAM_CODEC = new StreamCodec<>() {
+        @Override
+        public S2CPlayerStats decode(RegistryFriendlyByteBuf buf) {
+            return new S2CPlayerStats(buf.readFloat(), buf.readFloat(), buf.readFloat());
+        }
+
+        @Override
+        public void encode(RegistryFriendlyByteBuf buf, S2CPlayerStats pkt) {
+            buf.writeFloat(pkt.strength);
+            buf.writeFloat(pkt.intel);
+            buf.writeFloat(pkt.vit);
+        }
+    };
 
     private final float strength, intel, vit;
 
@@ -26,30 +40,15 @@ public class S2CPlayerStats implements Packet {
         this.vit = data.getVit();
     }
 
-    public static S2CPlayerStats read(FriendlyByteBuf buf) {
-        return new S2CPlayerStats(buf.readFloat(), buf.readFloat(), buf.readFloat());
-    }
-
-    public static void handle(S2CPlayerStats pkt) {
-        Player player = ClientHandlers.getPlayer();
-        if (player == null)
-            return;
-        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-            data.setStr(player, pkt.strength);
-            data.setIntel(player, pkt.intel);
-            data.setVit(player, pkt.vit);
-        });
+    public static void handle(S2CPlayerStats pkt, Player player) {
+        PlayerData data = Platform.INSTANCE.getPlayerData(player);
+        data.setStr(pkt.strength);
+        data.setIntel(pkt.intel);
+        data.setVit(pkt.vit);
     }
 
     @Override
-    public void write(FriendlyByteBuf buf) {
-        buf.writeFloat(this.strength);
-        buf.writeFloat(this.intel);
-        buf.writeFloat(this.vit);
-    }
-
-    @Override
-    public ResourceLocation getID() {
-        return ID;
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 }

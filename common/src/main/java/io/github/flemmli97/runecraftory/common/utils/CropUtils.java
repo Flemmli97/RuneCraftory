@@ -112,7 +112,7 @@ public class CropUtils {
         } else
             level.removeBlock(pos, false);
         if (entity instanceof ServerPlayer player) {
-            ModCriteria.HARVEST_CROP.trigger(player, state);
+            ModCriteria.HARVEST_CROP.get().trigger(player, state);
             if (cropBlock.isMaxAge(state)) {
                 spawnRuney(player, pos);
                 Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.FARMING, 2f));

@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
 import io.github.flemmli97.runecraftory.common.entities.utils.TargetableOpponent;
-import io.github.flemmli97.tenshilib.common.entity.EntityBeam;
+import io.github.flemmli97.tenshilib.common.entity.BeamEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -11,7 +11,7 @@ import net.minecraft.world.phys.AABB;
 
 import java.util.function.Predicate;
 
-public abstract class BaseBeam extends EntityBeam {
+public abstract class BaseBeam extends BeamEntity {
 
     private Predicate<LivingEntity> pred = e -> !e.getUUID().equals(this.getOwnerUUID());
     protected float damageMultiplier = 1;

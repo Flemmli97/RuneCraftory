@@ -8,9 +8,9 @@ import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
 import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
 import io.github.flemmli97.runecraftory.common.datapack.manager.ItemStatManager;
 import net.minecraft.core.Registry;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.HashCache;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -33,10 +33,10 @@ public abstract class ItemStatProvider implements DataProvider {
     private final Map<ResourceLocation, ItemStat.Builder> data = new HashMap<>();
     private final Map<ResourceLocation, Consumer<JsonObject>> item = new HashMap<>();
 
-    private final DataGenerator gen;
+    private final PackOutput packOutput;
     private final String modid;
 
-    public ItemStatProvider(DataGenerator gen, String modid) {
+    public ItemStatProvider(PackOutput packOutput, String modid) {
         this.gen = gen;
         this.modid = modid;
     }
@@ -78,7 +78,7 @@ public abstract class ItemStatProvider implements DataProvider {
     }
 
     public void addStat(String id, ItemLike item, ItemStat.Builder builder) {
-        ResourceLocation res = new ResourceLocation(this.modid, id);
+        ResourceLocation res = ResourceLocation.fromNamespaceAndPath(this.modid, id);
         this.data.put(res, builder);
         this.item.put(res, obj -> obj.addProperty("item", (Registry.ITEM.getKey(item.asItem()).toString())));
     }
@@ -88,20 +88,20 @@ public abstract class ItemStatProvider implements DataProvider {
     }
 
     public void addStat(String id, TagKey<Item> tag, ItemStat.Builder builder) {
-        ResourceLocation res = new ResourceLocation(this.modid, id);
+        ResourceLocation res = ResourceLocation.fromNamespaceAndPath(this.modid, id);
         this.data.put(res, builder);
         this.item.put(res, obj -> obj.addProperty("item", "#" + tag.location()));
     }
 
     protected int calcBuyOf(double multiplier, ItemLike... others) {
         return this.calcValueOf(multiplier, b -> b.buyPrice, Stream.of(others)
-                .map(other -> new ResourceLocation(this.modid, Registry.ITEM.getKey(other.asItem()).getPath()))
+                .map(other -> ResourceLocation.fromNamespaceAndPath(this.modid, Registry.ITEM.getKey(other.asItem()).getPath()))
                 .toArray(ResourceLocation[]::new));
     }
 
     protected int calcSellOf(double multiplier, ItemLike... others) {
         return this.calcValueOf(multiplier, b -> b.sellPrice, Stream.of(others)
-                .map(other -> new ResourceLocation(this.modid, Registry.ITEM.getKey(other.asItem()).getPath()))
+                .map(other -> ResourceLocation.fromNamespaceAndPath(this.modid, Registry.ITEM.getKey(other.asItem()).getPath()))
                 .toArray(ResourceLocation[]::new));
     }
 

@@ -31,7 +31,7 @@ public class FireballSpell extends Spell {
         level.addFreshEntity(ball);
         playSound(entity, ModSounds.SPELL_GENERIC_FIRE_BALL.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         if (entity instanceof Player player) {
-            return !Platform.INSTANCE.getPlayerData(player).map(cap -> cap.getWeaponHandler().canExecuteAction(this.useAction())).orElse(false);
+            return !Platform.INSTANCE.getPlayerData(player).getWeaponHandler().canExecuteAction(this.useAction());
         }
         return true;
     }

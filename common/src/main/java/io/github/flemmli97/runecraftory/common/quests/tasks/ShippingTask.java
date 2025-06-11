@@ -15,9 +15,8 @@ import io.github.flemmli97.simplequests_api.quest.entry.ResolvedQuestTask;
 import io.github.flemmli97.simplequests_api.util.DescriptiveValue;
 import io.github.flemmli97.simplequests_api.util.JsonCodecs;
 import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -28,11 +27,11 @@ import java.util.List;
 
 public class ShippingTask implements QuestTask<ShippingTask.SkillLevelTaskResolved> {
 
-    public static final QuestEntryKey<ShippingTask> ID = new QuestEntryKey<>(new ResourceLocation(RuneCraftory.MODID, "shipping"));
+    public static final QuestEntryKey<ShippingTask> ID = new QuestEntryKey<>(RuneCraftory.modRes("shipping"));
     public static final Codec<ShippingTask> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(Codec.STRING.fieldOf("description").forGetter(d -> d.description),
-                    CodecHelper.nonEmptyList(DescriptiveValue.withTranslation(CodecHelper.ITEM_PREDICATE_CODEC), "Item predicates can't be empty").fieldOf("item_predicates").forGetter(d -> d.itemPredicates),
-                    CodecHelper.NUMER_PROVIDER_CODEC.fieldOf("amount").forGetter(d -> d.amount)
+                    CodecHelper.nonEmptyList(DescriptiveValue.withTranslation(ItemPredicate.CODEC), "Item predicates can't be empty").fieldOf("item_predicates").forGetter(d -> d.itemPredicates),
+                    NumberProviders.CODEC.fieldOf("amount").forGetter(d -> d.amount)
             ).apply(instance, ShippingTask::new));
 
     private final String description;
@@ -57,7 +56,7 @@ public class ShippingTask implements QuestTask<ShippingTask.SkillLevelTaskResolv
         if (this.description.isEmpty() && this.simple()) {
             return this.itemPredicates.get(0).getTranslation(this.getId().toString(), this.amount.getInt(null));
         }
-        return new TranslatableComponent(this.description);
+        return Component.translatable(this.description);
     }
 
     @Override
@@ -82,7 +81,7 @@ public class ShippingTask implements QuestTask<ShippingTask.SkillLevelTaskResolv
 
         @Override
         public boolean submit(ServerPlayer player) {
-            return Platform.INSTANCE.getPlayerData(player).map(d -> d.getPlayerLevel().getLevel() >= this.amount).orElse(false);
+            return Platform.INSTANCE.getPlayerData(player).getPlayerLevel().getLevel() >= this.amount;
         }
 
         @Override

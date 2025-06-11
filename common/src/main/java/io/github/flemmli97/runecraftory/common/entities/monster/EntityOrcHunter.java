@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityMobArrow;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;

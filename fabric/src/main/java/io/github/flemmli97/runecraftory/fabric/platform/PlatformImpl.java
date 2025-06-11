@@ -2,24 +2,16 @@ package io.github.flemmli97.runecraftory.fabric.platform;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
-import io.github.flemmli97.runecraftory.common.attachment.ArmorEffectData;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
-import io.github.flemmli97.runecraftory.common.attachment.StaffData;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.items.equipment.ItemArmorBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
-import io.github.flemmli97.runecraftory.common.network.Packet;
 import io.github.flemmli97.runecraftory.fabric.mixin.DamageSourceAccessor;
 import io.github.flemmli97.runecraftory.fabric.mixinhelper.EntityDataGetter;
-import io.github.flemmli97.runecraftory.fabric.mixinhelper.ItemStackDataGetter;
 import io.github.flemmli97.runecraftory.fabric.mixinhelper.PlayerDataGetter;
-import io.github.flemmli97.runecraftory.fabric.network.ClientPacketHandler;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
+import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
@@ -28,8 +20,6 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.Container;
@@ -44,6 +34,7 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.schedule.Activity;
+import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTab;
@@ -53,7 +44,6 @@ import net.minecraft.world.item.RecordItem;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.BaseSpawner;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
@@ -66,7 +56,6 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import org.apache.commons.lang3.function.TriFunction;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -81,27 +70,13 @@ public class PlatformImpl implements Platform {
     }
 
     @Override
-    public Optional<PlayerData> getPlayerData(Player player) {
-        return Optional.of(((PlayerDataGetter) player).runecraftory$getPlayerData());
+    public PlayerData getPlayerData(Player player) {
+        return ((PlayerDataGetter) player).runecraftory$getPlayerData();
     }
 
     @Override
-    public Optional<EntityData> getEntityData(LivingEntity living) {
-        return Optional.of(((EntityDataGetter) living).runecraftory$getEntityData());
-    }
-
-    @Override
-    public Optional<StaffData> getStaffData(Object stack) {
-        if (stack instanceof ItemStackDataGetter getter)
-            return Optional.ofNullable(getter.runecraftory$getStaffData());
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<ArmorEffectData> getArmorEffects(Object stack) {
-        if (stack instanceof ItemStackDataGetter getter)
-            return Optional.ofNullable(getter.runecraftory$getArmorEffectData());
-        return Optional.empty();
+    public EntityData getEntityData(LivingEntity living) {
+        return ((EntityDataGetter) living).runecraftory$getEntityData();
     }
 
     @Override
@@ -113,8 +88,8 @@ public class PlatformImpl implements Platform {
     public void openGuiMenu(ServerPlayer player, MenuProvider provider, BlockPos pos) {
         player.openMenu(new ExtendedScreenHandlerFactory() {
             @Override
-            public void writeScreenOpeningData(ServerPlayer player, FriendlyByteBuf buf) {
-                buf.writeBlockPos(pos);
+            public Object getScreenOpeningData(ServerPlayer serverPlayer) {
+                return null;
             }
 
             @Override
@@ -149,41 +124,6 @@ public class PlatformImpl implements Platform {
                 return provider.createMenu(i, inventory, player);
             }
         });
-    }
-
-    @Override
-    public void sendToClient(Packet message, ServerPlayer player) {
-        FriendlyByteBuf buf = PacketByteBufs.create();
-        message.write(buf);
-        ServerPlayNetworking.send(player, message.getID(), buf);
-    }
-
-    @Override
-    public void sendToServer(Packet message) {
-        ClientPacketHandler.sendToServer(message);
-    }
-
-    @Override
-    public void sendToAll(Packet message, MinecraftServer server) {
-        FriendlyByteBuf buf = PacketByteBufs.create();
-        message.write(buf);
-        PlayerLookup.all(server).forEach(player -> ServerPlayNetworking.send(player, message.getID(), buf));
-    }
-
-    @Override
-    public void sendToTrackingAndSelf(Packet message, Entity e) {
-        FriendlyByteBuf buf = PacketByteBufs.create();
-        message.write(buf);
-        PlayerLookup.tracking(e).forEach(player -> ServerPlayNetworking.send(player, message.getID(), buf));
-        if (e instanceof ServerPlayer serverPlayer)
-            ServerPlayNetworking.send(serverPlayer, message.getID(), buf);
-    }
-
-    @Override
-    public void sendToTracking(Packet message, ServerLevel level, ChunkPos pos) {
-        FriendlyByteBuf buf = PacketByteBufs.create();
-        message.write(buf);
-        PlayerLookup.tracking(level, pos).forEach(player -> ServerPlayNetworking.send(player, message.getID(), buf));
     }
 
     @Override
@@ -240,12 +180,14 @@ public class PlatformImpl implements Platform {
 
     @Override
     public <T extends AbstractContainerMenu> MenuType<T> menuType(BiFunction<Integer, Inventory, T> create) {
-        return new MenuType<>(create::apply);
+        return new MenuType<>(create::apply, FeatureFlagSet.of());
     }
 
     @Override
     public <T extends AbstractContainerMenu> MenuType<T> menuType(TriFunction<Integer, Inventory, FriendlyByteBuf, T> create) {
-        return new ExtendedScreenHandlerType<>(create::apply);
+        return new ExtendedScreenHandlerType<>((a, b, c) -> {
+            return create.apply(a, b, new FriendlyByteBuf(null));
+        }, BlockPos.STREAM_CODEC);
     }
 
     @Override
@@ -255,7 +197,7 @@ public class PlatformImpl implements Platform {
 
     @Override
     public CreativeModeTab tab(String label, Supplier<ItemStack> icon) {
-        return FabricItemGroupBuilder.build(new ResourceLocation(RuneCraftory.MODID, label), icon);
+        return FabricItemGroupBuilder.build(RuneCraftory.modRes(label), icon);
     }
 
     @Override

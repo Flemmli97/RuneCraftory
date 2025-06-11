@@ -19,7 +19,7 @@ dependencies {
     //Fabric/Loom==========    
     modImplementation("io.github.flemmli97:runecraftory:${minecraft_version}-${mod_version}-${mod_loader}")
     
-    //Forge==========    
+    //NeoForge==========    
     compile fg.deobf("io.github.flemmli97:runecraftory:${minecraft_version}-${mod_version}-${mod_loader}")
 }
 ```

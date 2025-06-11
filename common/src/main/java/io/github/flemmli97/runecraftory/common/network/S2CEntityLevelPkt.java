@@ -1,17 +1,30 @@
 package io.github.flemmli97.runecraftory.common.network;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.attachment.player.LevelExpPair;
 import io.github.flemmli97.runecraftory.common.entities.utils.IBaseMob;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 
-public class S2CEntityLevelPkt implements Packet {
+public class S2CEntityLevelPkt implements CustomPacketPayload {
 
-    public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "s2c_entity_level");
+    public static final CustomPacketPayload.Type<S2CEntityLevelPkt> TYPE = new CustomPacketPayload.Type<>(RuneCraftory.modRes("s2c_entity.level"));
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, S2CEntityLevelPkt> STREAM_CODEC = new StreamCodec<>() {
+        @Override
+        public S2CEntityLevelPkt decode(RegistryFriendlyByteBuf buf) {
+            return new S2CEntityLevelPkt(buf.readInt(), new LevelExpPair(buf));
+        }
+
+        @Override
+        public void encode(RegistryFriendlyByteBuf buf, S2CEntityLevelPkt pkt) {
+            buf.writeInt(pkt.entityID);
+            pkt.level.toPacket(buf);
+        }
+    };
 
     private final int entityID;
     private final LevelExpPair level;
@@ -22,31 +35,18 @@ public class S2CEntityLevelPkt implements Packet {
     }
 
     public static <T extends Entity & IBaseMob> S2CEntityLevelPkt create(T entity) {
-        return new S2CEntityLevelPkt(entity.getId(), entity.level());
+        return new S2CEntityLevelPkt(entity.getId(), entity.xpLevel());
     }
 
-    public static S2CEntityLevelPkt read(FriendlyByteBuf buf) {
-        return new S2CEntityLevelPkt(buf.readInt(), new LevelExpPair(buf));
-    }
-
-    public static void handle(S2CEntityLevelPkt pkt) {
-        Player player = ClientHandlers.getPlayer();
-        if (player == null)
-            return;
-        Entity e = player.getLevel().getEntity(pkt.entityID);
+    public static void handle(S2CEntityLevelPkt pkt, Player player) {
+        Entity e = player.level().getEntity(pkt.entityID);
         if (e instanceof IBaseMob mob) {
-            mob.level().from(pkt.level);
+            mob.xpLevel().from(pkt.level);
         }
     }
 
     @Override
-    public void write(FriendlyByteBuf buf) {
-        buf.writeInt(this.entityID);
-        this.level.toPacket(buf);
-    }
-
-    @Override
-    public ResourceLocation getID() {
-        return ID;
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 }

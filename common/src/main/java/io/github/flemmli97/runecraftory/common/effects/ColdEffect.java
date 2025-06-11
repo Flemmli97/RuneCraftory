@@ -9,7 +9,7 @@ import net.minecraft.world.entity.player.Player;
 public class ColdEffect extends PermanentEffect {
 
     public ColdEffect() {
-        super(MobEffectCategory.HARMFUL, 0, S2CEntityDataSync.Type.COLD);
+        super(MobEffectCategory.HARMFUL, 0, S2CEntityDataSync.DataType.COLD);
         this.setTickDelay(60);
     }
 

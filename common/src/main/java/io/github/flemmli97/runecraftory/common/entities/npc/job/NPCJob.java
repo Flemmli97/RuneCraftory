@@ -4,6 +4,7 @@ import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.common.registry.ModPoiTypes;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.player.Player;
@@ -11,7 +12,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -58,15 +58,15 @@ public class NPCJob {
 
     public static class Builder {
 
-        private final Supplier<PoiType> poiType;
+        private final ResourceKey<PoiType> poiType;
 
         private boolean allowCashPOI = true;
         private boolean hasShop = true;
         private boolean hasSchedule = true;
         private boolean hasWorkSchedule = true;
 
-        public Builder(Supplier<PoiType> poiType) {
-            this.poiType = Objects.requireNonNullElseGet(poiType, () -> () -> null);
+        public Builder(ResourceKey<PoiType> poiType) {
+            this.poiType = poiType;
         }
 
         public Builder ignoreCashRegisterPOI() {

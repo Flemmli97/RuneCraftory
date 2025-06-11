@@ -20,7 +20,6 @@ import me.shedaniel.rei.api.common.entry.type.VanillaEntryTypes;
 import me.shedaniel.rei.api.common.registry.RecipeManagerContext;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.client.Minecraft;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -34,10 +33,10 @@ import java.util.function.Supplier;
 
 public class ReiClientPlugin implements REIClientPlugin {
 
-    public static final CategoryIdentifier<SextupleDisplay> FORGING = CategoryIdentifier.of(new ResourceLocation(RuneCraftory.MODID, EnumCrafting.FORGE.getId() + "_category"));
-    public static final CategoryIdentifier<SextupleDisplay> CHEM = CategoryIdentifier.of(new ResourceLocation(RuneCraftory.MODID, EnumCrafting.CHEM.getId() + "chemistry_category"));
-    public static final CategoryIdentifier<SextupleDisplay> COOKING = CategoryIdentifier.of(new ResourceLocation(RuneCraftory.MODID, EnumCrafting.COOKING.getId() + "cooking_category"));
-    public static final CategoryIdentifier<SextupleDisplay> ARMOR = CategoryIdentifier.of(new ResourceLocation(RuneCraftory.MODID, EnumCrafting.ARMOR.getId() + "armor_category"));
+    public static final CategoryIdentifier<SextupleDisplay> FORGING = CategoryIdentifier.of(RuneCraftory.modRes(EnumCrafting.FORGE.getId() + "_category"));
+    public static final CategoryIdentifier<SextupleDisplay> CHEM = CategoryIdentifier.of(RuneCraftory.modRes(EnumCrafting.CHEM.getId() + "chemistry_category"));
+    public static final CategoryIdentifier<SextupleDisplay> COOKING = CategoryIdentifier.of(RuneCraftory.modRes(EnumCrafting.COOKING.getId() + "cooking_category"));
+    public static final CategoryIdentifier<SextupleDisplay> ARMOR = CategoryIdentifier.of(RuneCraftory.modRes(EnumCrafting.ARMOR.getId() + "armor_category"));
 
     @Override
     public void registerCategories(CategoryRegistry registry) {

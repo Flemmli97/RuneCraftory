@@ -3,28 +3,43 @@ package io.github.flemmli97.runecraftory.common.network;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.quests.QuestData;
 import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
-public record C2SQuestSelect(ResourceLocation quest, boolean active) implements Packet {
+public record C2SQuestSelect(ResourceLocation quest, boolean active) implements CustomPacketPayload {
 
-    public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "c2s_quest_select");
+    public static final CustomPacketPayload.Type<C2SQuestSelect> TYPE = new CustomPacketPayload.Type<>(RuneCraftory.modRes("c2s_quest_select"));
 
-    public static C2SQuestSelect read(FriendlyByteBuf buf) {
+    public static final StreamCodec<RegistryFriendlyByteBuf, C2SQuestSelect> STREAM_CODEC = new StreamCodec<>() {
+        @Override
+        public C2SQuestSelect decode(RegistryFriendlyByteBuf buf) {
+            return new C2SQuestSelect(buf.readBoolean() ? buf.readResourceLocation() : null, buf.readBoolean());
+        }
+
+        @Override
+        public void encode(RegistryFriendlyByteBuf buf, C2SQuestSelect pkt) {
+            buf.writeBoolean(pkt.quest != null);
+            if (pkt.quest != null)
+                buf.writeResourceLocation(pkt.quest);
+            buf.writeBoolean(pkt.active);
+        }
+    };
+
+    public static C2SQuestSelect read(RegistryFriendlyByteBuf buf) {
         return new C2SQuestSelect(buf.readBoolean() ? buf.readResourceLocation() : null, buf.readBoolean());
     }
 
     public static void handle(C2SQuestSelect pkt, ServerPlayer sender) {
-        if (sender != null) {
-            QuestData data = QuestHandler.getData(sender);
-            if (pkt.quest() == null)
-                data.setQuestboardQuests(null);
-            else if (pkt.active())
-                data.reset(pkt.quest());
-            else
-                data.acceptQuest(pkt.quest());
-        }
+        QuestData data = QuestHandler.getData(sender);
+        if (pkt.quest() == null)
+            data.setQuestboardQuests(null);
+        else if (pkt.active())
+            data.reset(pkt.quest());
+        else
+            data.acceptQuest(pkt.quest());
     }
 
     public C2SQuestSelect() {
@@ -32,15 +47,7 @@ public record C2SQuestSelect(ResourceLocation quest, boolean active) implements 
     }
 
     @Override
-    public void write(FriendlyByteBuf buf) {
-        buf.writeBoolean(this.quest != null);
-        if (this.quest != null)
-            buf.writeResourceLocation(this.quest);
-        buf.writeBoolean(this.active);
-    }
-
-    @Override
-    public ResourceLocation getID() {
-        return ID;
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 }

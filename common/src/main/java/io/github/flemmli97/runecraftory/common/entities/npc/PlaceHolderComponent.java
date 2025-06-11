@@ -49,7 +49,7 @@ public class PlaceHolderComponent {
                     args.add(replacement);
                 }
             }
-            parse = new TranslatableComponent(translation, args.toArray());
+            parse = Component.translatable(translation, args.toArray());
         } else {
             parse = component.plainCopy();
         }

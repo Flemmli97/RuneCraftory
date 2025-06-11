@@ -8,8 +8,8 @@ import io.github.flemmli97.simplequests_api.player.QuestProgress;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 
@@ -44,7 +44,7 @@ public class TamingTracker extends ProgressionTrackerBase<Entity, TamingTask.Tam
     @Override
     public MutableComponent formattedProgress(ServerPlayer player, QuestProgress progress) {
         float perc = this.entities.size() / (float) this.questEntry().amount();
-        return new TranslatableComponent(TAMING_PROGRESS, this.entities.size(), this.questEntry().amount())
+        return Component.translatable(TAMING_PROGRESS, this.entities.size(), this.questEntry().amount())
                 .withStyle(ProgressionTrackerBase.of(perc));
     }
 

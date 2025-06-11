@@ -1,15 +1,15 @@
 package io.github.flemmli97.runecraftory.fabric.mixinhelper;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.common.attachment.ArmorEffectData;
-import io.github.flemmli97.runecraftory.common.attachment.StaffData;
+import io.github.flemmli97.runecraftory.common.components.ArmorEffectData;
+import io.github.flemmli97.runecraftory.common.components.StaffData;
 import net.minecraft.resources.ResourceLocation;
 
 public interface ItemStackDataGetter {
 
-    ResourceLocation STAFF_ID = new ResourceLocation(RuneCraftory.MODID, "staff");
+    ResourceLocation STAFF_ID = RuneCraftory.modRes("staff");
 
-    ResourceLocation ARMOR_EFFECT_ID = new ResourceLocation(RuneCraftory.MODID, "armor_effects");
+    ResourceLocation ARMOR_EFFECT_ID = RuneCraftory.modRes("armor_effects");
 
     StaffData runecraftory$getStaffData();
 

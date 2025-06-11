@@ -22,7 +22,7 @@ public class SimpleVanillaProjectileSpell extends Spell {
         Snowball snowball = new Snowball(level, entity);
         snowball.shoot(direction.x, direction.y, direction.z, 2.0F, 1.0F);
         Vec3 vec3 = entity.getDeltaMovement();
-        snowball.setDeltaMovement(snowball.getDeltaMovement().add(vec3.x, entity.isOnGround() ? 0.0 : vec3.y, vec3.z));
+        snowball.setDeltaMovement(snowball.getDeltaMovement().add(vec3.x, entity.onGround() ? 0.0 : vec3.y, vec3.z));
         return snowball;
     };
 

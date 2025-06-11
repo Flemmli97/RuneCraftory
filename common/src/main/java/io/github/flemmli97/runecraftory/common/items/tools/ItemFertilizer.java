@@ -93,7 +93,7 @@ public class ItemFertilizer extends Item {
                     .getData(level, blockPos)
                     .map(d -> {
                         if (this.use.useItemOnFarmland(ctx.getItemInHand(), level, d, ctx.getPlayer())) {
-                            Platform.INSTANCE.sendToAll(new S2CTriggers(S2CTriggers.Type.FERTILIZER, blockPos), level.getServer());
+                            Platform.INSTANCE.sendToAll(new S2CTriggers(S2CTriggers.TriggerType.FERTILIZER, blockPos), level.getServer());
                             return InteractionResult.CONSUME;
                         }
                         return InteractionResult.PASS;
@@ -104,7 +104,7 @@ public class ItemFertilizer extends Item {
                     .getData(level, below)
                     .map(d -> {
                         if (this.use.useItemOnFarmland(ctx.getItemInHand(), level, d, ctx.getPlayer())) {
-                            Platform.INSTANCE.sendToAll(new S2CTriggers(S2CTriggers.Type.FERTILIZER, below), level.getServer());
+                            Platform.INSTANCE.sendToAll(new S2CTriggers(S2CTriggers.TriggerType.FERTILIZER, below), level.getServer());
                             return InteractionResult.CONSUME;
                         }
                         return InteractionResult.PASS;

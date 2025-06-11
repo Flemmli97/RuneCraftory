@@ -4,7 +4,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumDay;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeather;
 import io.github.flemmli97.runecraftory.common.network.S2CCalendar;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -68,7 +68,7 @@ public class CalendarImpl {
 
     public void setWeather(MinecraftServer server, EnumWeather weather) {
         this.currentWeather = weather;
-        Platform.INSTANCE.sendToAll(new S2CCalendar(this), server);
+        LoaderNetwork.INSTANCE.sendToAll(new S2CCalendar(this), server);
     }
 
     public void updateWeathers(EnumWeather[] nextDays) {

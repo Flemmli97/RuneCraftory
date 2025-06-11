@@ -4,13 +4,28 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 
-public class S2COpenCompanionGui implements Packet {
+public class S2COpenCompanionGui implements CustomPacketPayload {
 
-    public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "s2c_companion_gui");
+    public static final CustomPacketPayload.Type<S2COpenCompanionGui> TYPE = new CustomPacketPayload.Type<>(RuneCraftory.modRes("s2c_companion_gui"));
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, S2COpenCompanionGui> STREAM_CODEC = new StreamCodec<>() {
+        @Override
+        public S2COpenCompanionGui decode(RegistryFriendlyByteBuf buf) {
+            return new S2COpenCompanionGui(buf.readInt(), buf.readBoolean(), buf.readBoolean());
+        }
+
+        @Override
+        public void encode(RegistryFriendlyByteBuf buf, S2COpenCompanionGui pkt) {
+            buf.writeInt(pkt.entityID);
+            buf.writeBoolean(pkt.fullParty);
+            buf.writeBoolean(pkt.hasHome);
+        }
+    };
 
     private final int entityID;
     private final boolean fullParty, hasHome;
@@ -23,13 +38,8 @@ public class S2COpenCompanionGui implements Packet {
 
     public S2COpenCompanionGui(BaseMonster entity, ServerPlayer player) {
         this.entityID = entity.getId();
-        this.fullParty = Platform.INSTANCE.getPlayerData(player)
-                .map(d -> d.party.isPartyFull()).orElse(true);
+        this.fullParty = Platform.INSTANCE.getPlayerData(player).party.isPartyFull();
         this.hasHome = entity.getAssignedBarn() != null;
-    }
-
-    public static S2COpenCompanionGui read(FriendlyByteBuf buf) {
-        return new S2COpenCompanionGui(buf.readInt(), buf.readBoolean(), buf.readBoolean());
     }
 
     public static void handle(S2COpenCompanionGui pkt) {
@@ -37,14 +47,7 @@ public class S2COpenCompanionGui implements Packet {
     }
 
     @Override
-    public void write(FriendlyByteBuf buf) {
-        buf.writeInt(this.entityID);
-        buf.writeBoolean(this.fullParty);
-        buf.writeBoolean(this.hasHome);
-    }
-
-    @Override
-    public ResourceLocation getID() {
-        return ID;
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 }

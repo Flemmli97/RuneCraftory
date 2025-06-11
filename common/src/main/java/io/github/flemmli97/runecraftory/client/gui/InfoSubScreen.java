@@ -9,16 +9,14 @@ import io.github.flemmli97.runecraftory.client.gui.widgets.PageButton;
 import io.github.flemmli97.runecraftory.common.network.C2SOpenInfo;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 
 public class InfoSubScreen extends InfoScreen {
 
-    private static final ResourceLocation PAGE_2 = new ResourceLocation(RuneCraftory.MODID, "textures/gui/skills_2.png");
-    private static final ResourceLocation PAGE_END = new ResourceLocation(RuneCraftory.MODID, "textures/gui/skills_3.png");
+    private static final ResourceLocation PAGE_2 = RuneCraftory.modRes("textures/gui/skills_2.png");
+    private static final ResourceLocation PAGE_END = RuneCraftory.modRes("textures/gui/skills_3.png");
     private final int maxPages = EnumSkills.values().length / 12;
     private int page;
 
@@ -36,7 +34,7 @@ public class InfoSubScreen extends InfoScreen {
                 int skillXP = (int) (this.data.getSkillLevel(skill).getProgress() * 96.0f);
                 RenderSystem.setShaderTexture(0, BARS);
                 this.blit(stack, this.leftPos + 9, this.topPos + 117 + 13 * i, 2, 80, skillXP, 9);
-                this.minecraft.font.draw(stack, new TranslatableComponent(skill.getTranslation()), this.leftPos + 11, this.topPos + 118 + 13 * i, 0xffffff);
+                this.minecraft.font.draw(stack, Component.translatable(skill.getTranslation()), this.leftPos + 11, this.topPos + 118 + 13 * i, 0xffffff);
                 ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + this.data.getSkillLevel(skill).getLevel(), this.leftPos + 104, this.topPos + 118 + 13 * i, 1.0f, 0xffffff);
             }
             index = i + 6 + this.page * 12;
@@ -45,7 +43,7 @@ public class InfoSubScreen extends InfoScreen {
                 int skillXP2 = (int) (this.data.getSkillLevel(skill2).getProgress() * 96.0f);
                 RenderSystem.setShaderTexture(0, BARS);
                 this.blit(stack, this.leftPos + 119, this.topPos + 117 + 13 * i, 2, 80, skillXP2, 9);
-                this.minecraft.font.draw(stack, new TranslatableComponent(skill2.getTranslation()), this.leftPos + 121, this.topPos + 118 + 13 * i, 0xffffff);
+                this.minecraft.font.draw(stack, Component.translatable(skill2.getTranslation()), this.leftPos + 121, this.topPos + 118 + 13 * i, 0xffffff);
                 ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + this.data.getSkillLevel(skill2).getLevel(), this.leftPos + 214, this.topPos + 118 + 13 * i, 1.0f, 0xffffff);
             }
         }
@@ -54,11 +52,11 @@ public class InfoSubScreen extends InfoScreen {
     @Override
     protected void buttons() {
         if (this.page < this.maxPages)
-            this.addRenderableWidget(new PageButton(this.leftPos + 206, this.topPos + 5, new TextComponent(">"), b -> {
+            this.addRenderableWidget(new PageButton(this.leftPos + 206, this.topPos + 5, Component.literal(">"), b -> {
                 this.page++;
                 this.init(this.minecraft, this.width, this.height);
             }));
-        this.addRenderableWidget(new PageButton(this.leftPos + 193, this.topPos + 5, new TextComponent("<"), b -> {
+        this.addRenderableWidget(new PageButton(this.leftPos + 193, this.topPos + 5, Component.literal("<"), b -> {
             if (this.page == 0)
                 Platform.INSTANCE.sendToServer(new C2SOpenInfo(C2SOpenInfo.Type.MAIN));
             else {

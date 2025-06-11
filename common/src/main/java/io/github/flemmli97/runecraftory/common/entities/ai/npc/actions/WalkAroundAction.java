@@ -6,9 +6,9 @@ import io.github.flemmli97.runecraftory.api.registry.NPCAction;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCAttackGoal;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCActions;
-import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
 import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Optional;
@@ -17,7 +17,7 @@ import java.util.function.Supplier;
 public class WalkAroundAction implements NPCAction {
 
     public static final Codec<WalkAroundAction> CODEC = RecordCodecBuilder.create((instance) ->
-            instance.group(CodecHelper.NUMER_PROVIDER_CODEC.fieldOf("duration").forGetter(d -> d.duration),
+            instance.group(NumberProviders.CODEC.fieldOf("duration").forGetter(d -> d.duration),
                     NPCAction.optionalNumCooldown(d -> d.cooldown)
             ).apply(instance, WalkAroundAction::new));
 
@@ -39,7 +39,7 @@ public class WalkAroundAction implements NPCAction {
     }
 
     @Override
-    public Supplier<NPCActionCodec> codec() {
+    public Supplier<Codec<WalkAroundAction>> codec() {
         return ModNPCActions.WALK_AROUND_ACTION;
     }
 

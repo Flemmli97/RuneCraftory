@@ -8,12 +8,10 @@ import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.tenshilib.common.utils.ArrayUtils;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -33,14 +31,14 @@ public class FoodProperties {
 
     public static final Codec<FoodProperties> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(
-                    Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("cooking_bonus_percent").forGetter(d -> d.cookingBonusPercent),
+                    Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("cooking_bonus_percent").forGetter(d -> d.cookingBonusPercent),
                     SimpleEffect.CODEC.listOf().fieldOf("potion_apply").forGetter(d -> Arrays.asList(d.potionApply)),
-                    Registry.MOB_EFFECT.byNameCodec().listOf().fieldOf("potion_remove").forGetter(d -> Arrays.asList(d.potionRemove)),
+                    BuiltInRegistries.MOB_EFFECT.byNameCodec().listOf().fieldOf("potion_remove").forGetter(d -> Arrays.asList(d.potionRemove)),
 
                     Codec.INT.fieldOf("duration").forGetter(d -> d.duration),
-                    Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("effects").forGetter(d -> d.effects),
-                    Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("effects_percentage").forGetter(d -> d.effectsPercentage),
-                    Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("cooking_bonus").forGetter(d -> d.cookingBonus)
+                    Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("effects").forGetter(d -> d.effects),
+                    Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("effects_percentage").forGetter(d -> d.effectsPercentage),
+                    Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("cooking_bonus").forGetter(d -> d.cookingBonus)
             ).apply(instance, (cookingPercent, potion, remove, duration, effects, effPercent, cooking) -> new FoodProperties(duration, effects, effPercent, cooking, cookingPercent, potion, remove)));
 
     private final Map<Attribute, Double> effects = new TreeMap<>(ModAttributes.SORTED);
@@ -72,24 +70,24 @@ public class FoodProperties {
         prop.duration = buffer.readInt();
         int size = buffer.readInt();
         for (int i = 0; i < size; i++)
-            prop.effects.put(Registry.ATTRIBUTE.get(buffer.readResourceLocation()), buffer.readDouble());
+            prop.effects.put(BuiltInRegistries.ATTRIBUTE.get(buffer.readResourceLocation()), buffer.readDouble());
         size = buffer.readInt();
         for (int i = 0; i < size; i++)
-            prop.effectsPercentage.put(Registry.ATTRIBUTE.get(buffer.readResourceLocation()), buffer.readDouble());
+            prop.effectsPercentage.put(BuiltInRegistries.ATTRIBUTE.get(buffer.readResourceLocation()), buffer.readDouble());
         /*size = buffer.readInt();
         for (int i = 0; i < size; i++)
-            prop.cookingBonus.put(Registry.ATTRIBUTE.get(buffer.readResourceLocation()), buffer.readDouble());
+            prop.cookingBonus.put(BuiltInRegistries.ATTRIBUTE.get(buffer.readResourceLocation()), buffer.readDouble());
         size = buffer.readInt();
         for (int i = 0; i < size; i++)
-            prop.cookingBonusPercent.put(Registry.ATTRIBUTE.get(buffer.readResourceLocation()), buffer.readDouble());*/
+            prop.cookingBonusPercent.put(BuiltInRegistries.ATTRIBUTE.get(buffer.readResourceLocation()), buffer.readDouble());*/
         size = buffer.readInt();
         prop.potionRemove = new MobEffect[size];
         for (int i = 0; i < size; i++)
-            prop.potionRemove[i] = Registry.MOB_EFFECT.get(buffer.readResourceLocation());
+            prop.potionRemove[i] = BuiltInRegistries.MOB_EFFECT.get(buffer.readResourceLocation());
         size = buffer.readInt();
         prop.potionApply = new SimpleEffect[size];
         for (int i = 0; i < size; i++)
-            prop.potionApply[i] = new SimpleEffect(Registry.MOB_EFFECT.get(buffer.readResourceLocation()), buffer.readInt(), buffer.readInt());
+            prop.potionApply[i] = new SimpleEffect(BuiltInRegistries.MOB_EFFECT.get(buffer.readResourceLocation()), buffer.readInt(), buffer.readInt());
         return prop;
     }
 
@@ -151,32 +149,32 @@ public class FoodProperties {
         buffer.writeInt(this.duration);
         buffer.writeInt(this.effects.size());
         this.effects.forEach((att, val) -> {
-            buffer.writeResourceLocation(Registry.ATTRIBUTE.getKey(att));
+            buffer.writeResourceLocation(BuiltInRegistries.ATTRIBUTE.getKey(att));
             buffer.writeDouble(val);
         });
         buffer.writeInt(this.effectsPercentage.size());
         this.effectsPercentage.forEach((att, val) -> {
-            buffer.writeResourceLocation(Registry.ATTRIBUTE.getKey(att));
+            buffer.writeResourceLocation(BuiltInRegistries.ATTRIBUTE.getKey(att));
             buffer.writeDouble(val);
         });
         /*
         buffer.writeInt(this.cookingBonus.size());
         this.cookingBonus.forEach((att, val) -> {
-            buffer.writeResourceLocation(Registry.ATTRIBUTE.getKey(att));
+            buffer.writeResourceLocation(BuiltInRegistries.ATTRIBUTE.getKey(att));
             buffer.writeDouble(val);
         });
         buffer.writeInt(this.cookingBonusPercent.size());
         this.cookingBonusPercent.forEach((att, val) -> {
-            buffer.writeResourceLocation(Registry.ATTRIBUTE.getKey(att));
+            buffer.writeResourceLocation(BuiltInRegistries.ATTRIBUTE.getKey(att));
             buffer.writeDouble(val);
         });*/
         buffer.writeInt(this.potionRemove.length);
         for (MobEffect eff : this.potionRemove) {
-            buffer.writeResourceLocation(Registry.MOB_EFFECT.getKey(eff));
+            buffer.writeResourceLocation(BuiltInRegistries.MOB_EFFECT.getKey(eff));
         }
         buffer.writeInt(this.potionApply.length);
         for (SimpleEffect eff : this.potionApply) {
-            buffer.writeResourceLocation(Registry.MOB_EFFECT.getKey(eff.getPotion()));
+            buffer.writeResourceLocation(BuiltInRegistries.MOB_EFFECT.getKey(eff.getPotion()));
             buffer.writeInt(eff.getDuration());
             buffer.writeInt(eff.getAmplifier());
         }
@@ -184,18 +182,18 @@ public class FoodProperties {
 
     public List<Component> texts(ItemStack stack) {
         List<Component> translationTexts = new ArrayList<>();
-        translationTexts.add(new TranslatableComponent("runecraftory.tooltip.item.eaten").withStyle(ChatFormatting.GRAY));
-        TextComponent hprp = new TextComponent("");
+        translationTexts.add(Component.translatable("runecraftory.tooltip.item.eaten").withStyle(ChatFormatting.GRAY));
+        MutableComponent hprp = Component.literal("");
         Pair<Map<Attribute, Double>, Map<Attribute, Double>> foodStats = ItemNBT.foodStats(stack);
         Map<Attribute, Double> effects = foodStats.getFirst();
         Map<Attribute, Double> effectsPercent = foodStats.getSecond();
-        TextComponent hpIncrease = new TextComponent("");
-        TextComponent rpIncrease = new TextComponent("");
+        MutableComponent hpIncrease = Component.literal("");
+        MutableComponent rpIncrease = Component.literal("");
         List<Component> attributes = new ArrayList<>();
         for (Map.Entry<Attribute, Double> entry : effects.entrySet()) {
             if (entry.getValue() == 0)
                 continue;
-            MutableComponent comp = new TextComponent(" ").append(new TranslatableComponent(entry.getKey().getDescriptionId())).append(new TextComponent(": " + this.format(entry.getValue())));
+            MutableComponent comp = Component.literal(" ").append(Component.translatable(entry.getKey().getDescriptionId())).append(Component.literal(": " + this.format(entry.getValue())));
             if (entry.getKey() == ModAttributes.HEALTHGAIN.get() || entry.getKey() == ModAttributes.RPGAIN.get())
                 hprp.append(comp);
             else if (entry.getKey() == ModAttributes.RPINCREASE.get())
@@ -208,7 +206,7 @@ public class FoodProperties {
         for (Map.Entry<Attribute, Double> entry : effectsPercent.entrySet()) {
             if (entry.getValue() == 0)
                 continue;
-            MutableComponent comp = new TextComponent(" ").append(new TranslatableComponent(entry.getKey().getDescriptionId())).append(new TextComponent(": " + this.format(entry.getValue()) + "%"));
+            MutableComponent comp = Component.literal(" ").append(Component.translatable(entry.getKey().getDescriptionId())).append(Component.literal(": " + this.format(entry.getValue()) + "%"));
             if (entry.getKey() == ModAttributes.HEALTHGAIN.get() || entry.getKey() == ModAttributes.RPGAIN.get())
                 hprp.append(comp);
             else if (entry.getKey() == ModAttributes.RPINCREASE.get())

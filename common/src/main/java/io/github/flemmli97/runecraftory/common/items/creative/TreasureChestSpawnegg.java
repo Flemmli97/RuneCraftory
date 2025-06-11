@@ -5,7 +5,6 @@ import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
@@ -32,8 +31,8 @@ public class TreasureChestSpawnegg extends SpawnEgg {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
-        tooltipComponents.add(new TranslatableComponent("runecraftory.tooltip.item.treasure_chest").withStyle(ChatFormatting.GOLD));
-        tooltipComponents.add(new TranslatableComponent("runecraftory.tooltip.item.treasure_level", this.getTier(stack) + 1).withStyle(ChatFormatting.AQUA));
+        tooltipComponents.add(Component.translatable("runecraftory.tooltip.item.treasure_chest").withStyle(ChatFormatting.GOLD));
+        tooltipComponents.add(Component.translatable("runecraftory.tooltip.item.treasure_level", this.getTier(stack) + 1).withStyle(ChatFormatting.AQUA));
         super.appendHoverText(stack, level, tooltipComponents, isAdvanced);
     }
 

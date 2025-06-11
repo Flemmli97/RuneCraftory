@@ -9,7 +9,7 @@ import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -31,10 +31,10 @@ public class GrandImpactAttack extends AttackAction {
 
     @Override
     public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimatedAction anim) {
-        if (!entity.level.isClientSide && (anim.isAt("attack_1") || anim.isAt("attack_2"))) {
-            float reach = (float) entity.getAttributeValue(ModAttributes.ATTACK_RANGE.get());
+        if (!entity.level().isClientSide && (anim.isAt("attack_1") || anim.isAt("attack_2"))) {
+            float reach = (float) entity.getAttributeValue(ModAttributes.ATTACK_RANGE.asHolder());
             S2CScreenShake.sendAround(entity, 16, 6, 3);
-            entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, entity.getSoundSource(), 1.0f, 1.0f);
+            entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, entity.getSoundSource(), 1.0f, 1.0f);
             CombatUtils.applyTempAttribute(entity, Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack));
             ItemAxeBase.performRightClickAction(stack, entity, reach + 1, 0.1f);
             CombatUtils.removeTempAttribute(entity, Attributes.ATTACK_DAMAGE);

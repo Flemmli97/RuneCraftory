@@ -10,7 +10,7 @@ import java.util.Iterator;
 public class PotionCureHelper {
 
     public static boolean cureEffects(LivingEntity entity, ItemStack stack) {
-        if (entity.level.isClientSide) {
+        if (entity.level().isClientSide) {
             return false;
         }
         boolean ret = false;

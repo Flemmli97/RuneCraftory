@@ -13,7 +13,6 @@ import io.github.flemmli97.runecraftory.common.quests.tasks.SkillLevelTask;
 import io.github.flemmli97.runecraftory.common.quests.tasks.TamingTask;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import io.github.flemmli97.runecraftory.mixinhelper.QuestDataGet;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.simplequests_api.datapack.QuestsManager;
 import io.github.flemmli97.simplequests_api.player.QuestProgress;
 import io.github.flemmli97.simplequests_api.quest.QuestBase;
@@ -22,10 +21,10 @@ import io.github.flemmli97.simplequests_api.registry.PlayerQuestDataRegistry;
 import io.github.flemmli97.simplequests_api.registry.ProgressionTrackerRegistry;
 import io.github.flemmli97.simplequests_api.registry.QuestBaseRegistry;
 import io.github.flemmli97.simplequests_api.registry.QuestEntryRegistry;
+import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
@@ -38,8 +37,8 @@ import java.util.stream.Stream;
 
 public class QuestHandler {
 
-    public static final ResourceLocation QUEST_CATEGORY = new ResourceLocation(RuneCraftory.MODID, "quests");
-    public static final ResourceLocation QUEST_CONTEXT = new ResourceLocation(RuneCraftory.MODID, "contexts");
+    public static final ResourceLocation QUEST_CATEGORY = RuneCraftory.modRes("quests");
+    public static final ResourceLocation QUEST_CONTEXT = RuneCraftory.modRes("contexts");
 
     public static final String QUEST_BOARD_TRIGGER = RuneCraftory.MODID + "_quest_board_trigger";
 
@@ -53,7 +52,7 @@ public class QuestHandler {
         ProgressionTrackerRegistry.registerSerializer(ShippingTracker.KEY, ShippingTracker::new);
         ProgressionTrackerRegistry.registerSerializer(TamingTracker.KEY, TamingTracker::new);
         ProgressionTrackerRegistry.registerSerializer(NPCTalkTracker.KEY, NPCTalkTracker::new);
-        PlayerQuestDataRegistry.registerFetcher(new ResourceLocation(RuneCraftory.MODID, "quest_data"), QuestHandler::getData);
+        PlayerQuestDataRegistry.registerFetcher(RuneCraftory.modRes("quest_data"), QuestHandler::getData);
     }
 
     public static QuestData getData(ServerPlayer player) {
@@ -63,13 +62,13 @@ public class QuestHandler {
     public static void openGui(ServerPlayer player, Vec3 at) {
         Map<ResourceLocation, QuestBase> quest = getQuestsFor(player, at);
         QuestData data = getData(player);
-        Platform.INSTANCE.sendToClient(new S2COpenQuestGui(false, quest.entrySet().stream().sorted(Map.Entry.comparingByKey()).map(e -> {
+        LoaderNetwork.INSTANCE.sendToPlayer(new S2COpenQuestGui(false, quest.entrySet().stream().sorted(Map.Entry.comparingByKey()).map(e -> {
             List<MutableComponent> description = e.getValue().getDescription(player);
             EntityNPCBase npc;
             if (e.getValue() instanceof NPCQuest npcQuest && (npc = npcQuest.getNpc(player.level)) != null) {
-                description = Stream.concat(Stream.of(new TranslatableComponent("runecraftory.quest.npc.header", npc.getName(), npc.blockPosition().getX(),
+                description = Stream.concat(Stream.of(Component.translatable("runecraftory.quest.npc.header", npc.getName(), npc.blockPosition().getX(),
                                 npc.blockPosition().getY(), npc.blockPosition().getZ()).withStyle(ChatFormatting.GOLD),
-                        (MutableComponent) TextComponent.EMPTY), description.stream()).toList();
+                        (MutableComponent) MutableComponent.EMPTY), description.stream()).toList();
                 return new ClientSideQuestDisplay(e.getKey(), e.getValue().getName(player), description,
                         npc.lookFeatures, npc.getLook().playerSkin(), data.isActive(e.getKey()));
             }

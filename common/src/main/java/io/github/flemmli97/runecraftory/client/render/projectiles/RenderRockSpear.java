@@ -17,8 +17,8 @@ import net.minecraft.world.entity.OwnableEntity;
 
 public class RenderRockSpear extends EntityRenderer<EntityRockSpear> {
 
-    private static final ResourceLocation BIG = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/avenger_rock_entity.png");
-    private static final ResourceLocation SMALL = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/screw_rock_entity.png");
+    private static final ResourceLocation BIG = RuneCraftory.modRes("textures/entity/projectile/avenger_rock_entity.png");
+    private static final ResourceLocation SMALL = RuneCraftory.modRes("textures/entity/projectile/screw_rock_entity.png");
 
     protected final RenderUtils.TextureBuilder textureBuilder = new RenderUtils.TextureBuilder();
 

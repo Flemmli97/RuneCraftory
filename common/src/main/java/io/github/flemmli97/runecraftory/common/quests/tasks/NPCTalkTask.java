@@ -13,11 +13,9 @@ import io.github.flemmli97.simplequests_api.quest.entry.QuestEntryKey;
 import io.github.flemmli97.simplequests_api.quest.entry.QuestTask;
 import io.github.flemmli97.simplequests_api.quest.entry.ResolvedQuestTask;
 import io.github.flemmli97.simplequests_api.util.JsonCodecs;
-import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -26,7 +24,7 @@ import java.util.UUID;
 
 public class NPCTalkTask implements QuestTask<NPCTalkTask.NPCTalkResolved> {
 
-    public static final QuestEntryKey<NPCTalkTask> ID = new QuestEntryKey<>(new ResourceLocation(RuneCraftory.MODID, "npc_talk"));
+    public static final QuestEntryKey<NPCTalkTask> ID = new QuestEntryKey<>(RuneCraftory.modRes("npc_talk"));
     public static final Codec<NPCTalkTask> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(ResourceLocation.CODEC.optionalFieldOf("target_npc_id").forGetter(d -> Optional.ofNullable(d.targetNPCId)),
                     JsonCodecs.ENTITY_PREDICATE_CODEC.optionalFieldOf("predicate").forGetter(d -> d.predicate == EntityPredicate.ANY ? Optional.empty() : Optional.of(d.predicate))
@@ -53,7 +51,7 @@ public class NPCTalkTask implements QuestTask<NPCTalkTask.NPCTalkResolved> {
 
     @Override
     public MutableComponent translation(ServerPlayer player) {
-        return new TranslatableComponent(this.getId().toString() + ".not_resolved");
+        return Component.translatable(this.getId().toString() + ".not_resolved");
     }
 
     @Override
@@ -105,8 +103,8 @@ public class NPCTalkTask implements QuestTask<NPCTalkTask.NPCTalkResolved> {
                 name = this.npc.getName();
             }
             if (name != null)
-                return new TranslatableComponent(this.getId().toString(), name);
-            return new TranslatableComponent(this.getId().toString() + ".generic");
+                return Component.translatable(this.getId().toString(), name);
+            return Component.translatable(this.getId().toString() + ".generic");
         }
 
         public boolean trySubmit(ServerPlayer player, EntityNPCBase npc) {

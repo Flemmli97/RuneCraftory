@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
 import io.github.flemmli97.runecraftory.common.entities.utils.TargetableOpponent;
-import io.github.flemmli97.tenshilib.common.entity.EntityDamageCloud;
+import io.github.flemmli97.tenshilib.common.entity.DamageCloudEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
 
-public abstract class BaseDamageCloud extends EntityDamageCloud {
+public abstract class BaseDamageCloud extends DamageCloudEntity {
 
     private Predicate<LivingEntity> pred = e -> !e.getUUID().equals(this.getOwnerUUID());
     protected float damageMultiplier = 1;

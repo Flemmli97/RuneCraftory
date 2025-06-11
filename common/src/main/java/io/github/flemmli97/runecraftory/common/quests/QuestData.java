@@ -5,7 +5,6 @@ import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.network.S2CSimpleToast;
 import io.github.flemmli97.runecraftory.common.quests.tasks.NPCTalkTask;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.simplequests_api.datapack.QuestsManager;
 import io.github.flemmli97.simplequests_api.impls.progression.EntityTracker;
 import io.github.flemmli97.simplequests_api.impls.quests.Quest;
@@ -15,13 +14,14 @@ import io.github.flemmli97.simplequests_api.player.QuestProgress;
 import io.github.flemmli97.simplequests_api.quest.QuestBase;
 import io.github.flemmli97.simplequests_api.quest.QuestState;
 import io.github.flemmli97.simplequests_api.quest.entry.ResolvedQuestTask;
+import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -82,7 +82,7 @@ public class QuestData implements PlayerQuestData {
     public boolean acceptQuest(QuestBase quest) {
         AcceptType type = this.canAcceptQuest(quest, false);
         if (type != AcceptType.ACCEPT) {
-            this.player.sendMessage(new TranslatableComponent(type.langKey()).withStyle(ChatFormatting.DARK_RED), Util.NIL_UUID);
+            this.player.sendMessage(Component.translatable(type.langKey()).withStyle(ChatFormatting.DARK_RED), Util.NIL_UUID);
             return false;
         }
         this.currentQuests.add(new QuestProgress(quest, this, 0));
@@ -124,7 +124,7 @@ public class QuestData implements PlayerQuestData {
                 case PARTIAL_COMPLETE -> completion.put(prog.getQuest().id, QuestState.PARTIAL_COMPLETE);
                 case PARTIAL -> {
                     this.player.level.playSound(null, this.player.getX(), this.player.getY(), this.player.getZ(), SoundEvents.VILLAGER_YES, this.player.getSoundSource(), 2 * 0.75f, 1.0f);
-                    tasks.forEach(t -> Platform.INSTANCE.sendToClient(new S2CSimpleToast(prog.getName(this.player).withStyle(ChatFormatting.DARK_PURPLE),
+                    tasks.forEach(t -> LoaderNetwork.INSTANCE.sendToPlayer(new S2CSimpleToast(prog.getName(this.player).withStyle(ChatFormatting.DARK_PURPLE),
                             t.translation(this.player).withStyle(ChatFormatting.GOLD)), this.player));
                 }
                 case NOTHING ->
@@ -176,7 +176,7 @@ public class QuestData implements PlayerQuestData {
             if ((state == QuestState.NO) && !fulfilled.isEmpty()) {
                 fulfilled.forEach(p -> {
                     if (!(p.getSecond() instanceof NPCTalkTask.NPCTalkResolved)) {
-                        Platform.INSTANCE.sendToClient(new S2CSimpleToast(prog.getName(this.player).withStyle(ChatFormatting.DARK_PURPLE),
+                        LoaderNetwork.INSTANCE.sendToPlayer(new S2CSimpleToast(prog.getName(this.player).withStyle(ChatFormatting.DARK_PURPLE),
                                 p.getSecond().translation(this.player).withStyle(ChatFormatting.GOLD)), this.player);
                     }
                 });
@@ -218,7 +218,7 @@ public class QuestData implements PlayerQuestData {
         this.tickables.removeIf(prog -> {
             Pair<Boolean, Set<ResolvedQuestTask>> fulfilled = prog.tickProgress(this);
             if (!fulfilled.getSecond().isEmpty()) {
-                fulfilled.getSecond().forEach(p -> Platform.INSTANCE.sendToClient(new S2CSimpleToast(prog.getName(this.player).withStyle(ChatFormatting.DARK_PURPLE),
+                fulfilled.getSecond().forEach(p -> LoaderNetwork.INSTANCE.sendToPlayer(new S2CSimpleToast(prog.getName(this.player).withStyle(ChatFormatting.DARK_PURPLE),
                         p.translation(this.player).withStyle(ChatFormatting.GOLD)), this.player));
             }
             return fulfilled.getFirst();

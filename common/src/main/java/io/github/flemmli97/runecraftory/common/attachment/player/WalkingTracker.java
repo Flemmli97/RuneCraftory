@@ -39,7 +39,7 @@ public class WalkingTracker {
         }
         if (mult != 0) {
             float finalMult = mult * 0.3f;
-            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.WALKING, finalMult));
+            LevelCalc.levelSkill(player, Platform.INSTANCE.getPlayerData(player), EnumSkills.WALKING, finalMult);
         }
         return mult != 0;
     }
@@ -62,6 +62,6 @@ public class WalkingTracker {
     }
 
     public void read(CompoundTag compound) {
-        compound.getAllKeys().forEach(key -> this.lastCheck.put(new ResourceLocation(key), compound.getInt(key)));
+        compound.getAllKeys().forEach(key -> this.lastCheck.put(ResourceLocation.parse(key), compound.getInt(key)));
     }
 }

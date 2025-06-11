@@ -10,7 +10,6 @@ import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.LivingEntity;
@@ -18,12 +17,12 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 
 public abstract class CompanionGui<T extends LivingEntity & IBaseMob> extends Screen {
 
-    protected static final ResourceLocation TEXTURE_PATH = new ResourceLocation(RuneCraftory.MODID, "textures/gui/companion_gui.png");
-    protected static final ResourceLocation BARS = new ResourceLocation(RuneCraftory.MODID, "textures/gui/bars.png");
+    protected static final ResourceLocation TEXTURE_PATH = RuneCraftory.modRes("textures/gui/companion_gui.png");
+    protected static final ResourceLocation BARS = RuneCraftory.modRes("textures/gui/bars.png");
 
     private final int textureX = 190;
     private final int textureY = 113 + 70;
-    private final Component levelTxt = new TranslatableComponent("runecraftory.gui.level");
+    private final Component levelTxt = Component.translatable("runecraftory.gui.level");
     protected int leftPos;
     protected int topPos;
 

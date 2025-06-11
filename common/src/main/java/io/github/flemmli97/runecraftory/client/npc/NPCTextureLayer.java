@@ -187,8 +187,8 @@ public class NPCTextureLayer<T extends EntityNPCBase, M extends HumanoidModel<T>
         public final float expand;
 
         LayerType(String name, float expand) {
-            this.location = name == null ? null : new ModelLayerLocation(new ResourceLocation(RuneCraftory.MODID, "npc_" + name), "main");
-            this.slimLocation = name == null ? null : new ModelLayerLocation(new ResourceLocation(RuneCraftory.MODID, "npc_slim_" + name), "main");
+            this.location = name == null ? null : new ModelLayerLocation(RuneCraftory.modRes("npc_" + name), "main");
+            this.slimLocation = name == null ? null : new ModelLayerLocation(RuneCraftory.modRes("npc_slim_" + name), "main");
             this.expand = expand;
         }
     }

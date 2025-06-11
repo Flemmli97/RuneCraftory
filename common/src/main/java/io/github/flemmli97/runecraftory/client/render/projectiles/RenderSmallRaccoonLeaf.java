@@ -4,7 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntitySmallRaccoonLeaf;
-import io.github.flemmli97.tenshilib.client.render.RenderTexture;
 import io.github.flemmli97.tenshilib.client.render.RenderUtils;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -12,7 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class RenderSmallRaccoonLeaf extends RenderTexture<EntitySmallRaccoonLeaf> {
 
-    private static final ResourceLocation TEX = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/leaf.png");
+    private static final ResourceLocation TEX = RuneCraftory.modRes("textures/entity/projectile/leaf.png");
 
     public RenderSmallRaccoonLeaf(EntityRendererProvider.Context ctx) {
         super(ctx, 0.4f, 0.4f, 1, 1);

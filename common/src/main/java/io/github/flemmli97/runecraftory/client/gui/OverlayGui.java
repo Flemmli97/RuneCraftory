@@ -12,12 +12,12 @@ import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 public class OverlayGui extends GuiComponent {
 
-    private static final ResourceLocation TEXTURE_PATH = new ResourceLocation(RuneCraftory.MODID, "textures/gui/bars.png");
+    private static final ResourceLocation TEXTURE_PATH = RuneCraftory.modRes("textures/gui/bars.png");
     private final Minecraft mc;
 
     public OverlayGui(Minecraft mc) {
@@ -59,7 +59,7 @@ public class OverlayGui extends GuiComponent {
             this.blit(stack, xPos + 3, yPos + 3, season.ordinal() * 32, 226, 32, 30);
             this.blit(stack, xPos, yPos + 39, 0, 176, 48, 17);
 
-            ClientHandlers.drawCenteredScaledString(stack, this.mc.font, new TranslatableComponent(calendar.currentDay().translation()).append(new TranslatableComponent(" " + calendar.date())),
+            ClientHandlers.drawCenteredScaledString(stack, this.mc.font, Component.translatable(calendar.currentDay().translation()).append(Component.translatable(" " + calendar.date())),
                     ClientConfig.seasonDisplayX + 26, ClientConfig.seasonDisplayY + 39 + 5, 1, 0xbd1600);
         }
     }

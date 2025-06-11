@@ -4,7 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityPoisonNeedle;
-import io.github.flemmli97.tenshilib.client.render.RenderCrossedTextureEntity;
 import io.github.flemmli97.tenshilib.client.render.RenderUtils;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -12,7 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class RenderPoisonNeedle extends RenderCrossedTextureEntity<EntityPoisonNeedle> {
 
-    private static final ResourceLocation TEX = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/poison_needle.png");
+    private static final ResourceLocation TEX = RuneCraftory.modRes("textures/entity/projectile/poison_needle.png");
 
     public RenderPoisonNeedle(EntityRendererProvider.Context ctx) {
         super(ctx, 0.8f, 0.8f, 1, 1);

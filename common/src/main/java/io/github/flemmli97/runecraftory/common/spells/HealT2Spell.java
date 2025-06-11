@@ -27,14 +27,14 @@ public class HealT2Spell extends Spell {
                 return true;
             if (entity instanceof Player player) {
                 return e instanceof OwnableEntity ownable && player.getUUID().equals(ownable.getOwnerUUID())
-                        || e instanceof AbstractVillager || e instanceof Animal || Platform.INSTANCE.getPlayerData(player).map(d -> d.party.isPartyMember(e)).orElse(false);
+                        || e instanceof AbstractVillager || e instanceof Animal || Platform.INSTANCE.getPlayerData(player).party.isPartyMember(e);
             } else {
                 if (entity instanceof HealingPredicateEntity healer)
                     return healer.healeableEntities().test(e);
                 return false;
             }
         });
-        float healAmount = (float) (CombatUtils.getAttributeValue(entity, ModAttributes.MAGIC.get()) * CombatUtils.getAbilityDamageBonus(lvl, 1.1f));
+        float healAmount = (float) (CombatUtils.getAttributeValue(entity, ModAttributes.MAGIC.asHolder()) * CombatUtils.getAbilityDamageBonus(lvl, 1.1f));
         entity.heal(healAmount);
         HealT1Spell.spawnHealParticles(entity);
         entities.forEach(e -> {

@@ -10,9 +10,9 @@ import io.github.flemmli97.runecraftory.common.datapack.manager.ShopItemsManager
 import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import net.minecraft.advancements.critereon.EntityPredicate;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.HashCache;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -37,9 +37,9 @@ public abstract class ShopItemProvider implements DataProvider {
 
     private final Map<ResourceLocation, Boolean> overwrite = new HashMap<>();
 
-    private final DataGenerator gen;
+    private final PackOutput packOutput;
 
-    public ShopItemProvider(DataGenerator gen) {
+    public ShopItemProvider(PackOutput packOutput) {
         this.gen = gen;
     }
 

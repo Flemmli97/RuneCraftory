@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.client.particles;
 import io.github.flemmli97.runecraftory.common.particles.ColoredParticleData4f;
 import io.github.flemmli97.tenshilib.client.particles.ColoredParticle;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
-import io.github.flemmli97.tenshilib.common.utils.MathUtils;
+import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;

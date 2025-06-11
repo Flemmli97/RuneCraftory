@@ -14,7 +14,6 @@ import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import io.github.flemmli97.tenshilib.api.item.IAOEWeapon;
 import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -128,7 +127,7 @@ public class ItemShortSwordBase extends SwordItem implements IItemUsable, IAOEWe
                 return;
             }
             if (performRightClickAction(stack, entity, CombatUtils.getRange(entity, 0), CombatUtils.getWidth(entity, 1))) {
-                entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 1.0f, 1.0f);
+                entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 1.0f, 1.0f);
             }
         }
     }
@@ -136,7 +135,7 @@ public class ItemShortSwordBase extends SwordItem implements IItemUsable, IAOEWe
     public static void delayedRightClickAction(LivingEntity entity, ItemStack stack) {
         double width = CombatUtils.getWidth(entity, 1);
         double reach = CombatUtils.getRange(entity, 0);
-        entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 1.0f, 1.0f);
+        entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 1.0f, 1.0f);
         if (performRightClickAction(stack, entity, reach, width) && entity instanceof ServerPlayer player) {
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.SHORTSWORD, 6));
         }

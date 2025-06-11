@@ -9,6 +9,7 @@ import io.github.flemmli97.runecraftory.common.utils.MiscUtils;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -25,8 +26,8 @@ public record ShopItemProperties(ItemStack stack, UnlockType unlockType,
     public static final Codec<TagKey<Item>> TAG_CODEC = Codec.STRING.flatXmap(
             r -> {
                 if (r.startsWith("#"))
-                    return DataResult.success(TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(r.substring(1))));
-                return DataResult.error("Not a tag value" + r);
+                    return DataResult.success(TagKey.create(Registries.ITEM, ResourceLocation.parse(r.substring(1))));
+                return DataResult.error(() -> "Not a tag value" + r);
             },
             l -> DataResult.success("#" + l.location())
     );
@@ -38,7 +39,7 @@ public record ShopItemProperties(ItemStack stack, UnlockType unlockType,
             instance.group(
                     MULTI_ITEM_VALUE_CODEC.fieldOf("item").forGetter(d -> d.items),
                     CodecUtils.stringEnumCodec(UnlockType.class, null).fieldOf("unlock_type").forGetter(d -> d.unlockType),
-                    CodecHelper.ENTITY_PREDICATE_CODEC.optionalFieldOf("predicate").forGetter(d -> Optional.ofNullable(d.predicate == EntityPredicate.ANY ? null : d.predicate))
+                    EntityPredicate.CODEC.optionalFieldOf("predicate").forGetter(d -> Optional.ofNullable(d.predicate == EntityPredicate.ANY ? null : d.predicate))
             ).apply(instance, (stack, type, adv) ->
                     new IntermediaryShopItem(stack, type, adv.orElse(EntityPredicate.ANY))));
 

@@ -7,9 +7,9 @@ import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
 import io.github.flemmli97.runecraftory.common.datapack.manager.FoodManager;
 import net.minecraft.core.Registry;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.HashCache;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -30,10 +30,10 @@ public abstract class FoodProvider implements DataProvider {
     private final Map<ResourceLocation, FoodProperties.Builder> data = new HashMap<>();
     private final Map<ResourceLocation, Consumer<JsonObject>> item = new HashMap<>();
 
-    private final DataGenerator gen;
+    private final PackOutput packOutput;
     private final String modid;
 
-    public FoodProvider(DataGenerator gen, String modid) {
+    public FoodProvider(PackOutput packOutput, String modid) {
         this.gen = gen;
         this.modid = modid;
     }
@@ -75,7 +75,7 @@ public abstract class FoodProvider implements DataProvider {
     }
 
     public void addStat(String id, ItemLike item, FoodProperties.Builder builder) {
-        ResourceLocation res = new ResourceLocation(this.modid, id);
+        ResourceLocation res = ResourceLocation.fromNamespaceAndPath(this.modid, id);
         this.data.put(res, builder);
         this.item.put(res, obj -> obj.addProperty("item", (Registry.ITEM.getKey(item.asItem()).toString())));
     }
@@ -85,7 +85,7 @@ public abstract class FoodProvider implements DataProvider {
     }
 
     public void addStat(String id, TagKey<Item> tag, FoodProperties.Builder builder) {
-        ResourceLocation res = new ResourceLocation(this.modid, id);
+        ResourceLocation res = ResourceLocation.fromNamespaceAndPath(this.modid, id);
         this.data.put(res, builder);
         this.item.put(res, obj -> obj.addProperty("item", "#" + tag.location()));
     }

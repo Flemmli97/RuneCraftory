@@ -16,8 +16,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -45,8 +43,8 @@ import snownee.jade.util.UsernameCache;
 @WailaPlugin
 public class JadePlugin implements IWailaPlugin {
 
-    private static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "jade_entity_plugin");
-    private static final ResourceLocation IDBLOCK = new ResourceLocation(RuneCraftory.MODID, "jade_block_plugin");
+    private static final ResourceLocation ID = RuneCraftory.modRes("jade_entity_plugin");
+    private static final ResourceLocation IDBLOCK = RuneCraftory.modRes("jade_block_plugin");
 
     @Override
     public void register(IWailaCommonRegistration registration) {
@@ -75,7 +73,7 @@ public class JadePlugin implements IWailaPlugin {
             public void appendServerData(CompoundTag compoundTag, ServerPlayer player, Level level, Entity entity, boolean b) {
                 if (entity instanceof IBaseMob mob && (player.getMainHandItem().getItem() == ModItems.DEBUG.get() || player.isCreative()
                         || (entity instanceof OwnableEntity ownable && player.getUUID().equals(ownable.getOwnerUUID())))) {
-                    LevelExpPair entityLevel = mob.level();
+                    LevelExpPair entityLevel = mob.xpLevel();
                     compoundTag.putFloat("RunecraftoryLevelPerc", entityLevel.getProgress());
                     compoundTag.putInt("RunecraftoryLevel", entityLevel.getLevel());
                 }
@@ -124,16 +122,16 @@ public class JadePlugin implements IWailaPlugin {
                 CompoundTag tag = blockAccessor.getServerData();
                 if (blockAccessor.getBlockEntity() instanceof MonsterBarnBlockEntity) {
                     int size = tag.getInt("Size");
-                    Component sizeText = size > 1 ? new TextComponent("" + size).withStyle(ChatFormatting.GREEN)
-                            : new TextComponent("" + size).withStyle(ChatFormatting.DARK_RED);
+                    Component sizeText = size > 1 ? Component.literal("" + size).withStyle(ChatFormatting.GREEN)
+                            : Component.literal("" + size).withStyle(ChatFormatting.DARK_RED);
                     if (!tag.getBoolean("Roof")) {
-                        iTooltip.add(new TranslatableComponent("runecraftory.dependency.tooltips.barn.1",
+                        iTooltip.add(Component.translatable("runecraftory.dependency.tooltips.barn.1",
                                 sizeText));
                     } else {
-                        iTooltip.add(new TranslatableComponent("runecraftory.dependency.tooltips.barn.1.alt", new TranslatableComponent("" + tag.getInt("RoofHeight")).withStyle(ChatFormatting.YELLOW),
+                        iTooltip.add(Component.translatable("runecraftory.dependency.tooltips.barn.1.alt", Component.translatable("" + tag.getInt("RoofHeight")).withStyle(ChatFormatting.YELLOW),
                                 sizeText));
                     }
-                    iTooltip.add(new TranslatableComponent("runecraftory.dependency.tooltips.barn.2", tag.getInt("Used"), tag.getInt("Capacity")));
+                    iTooltip.add(Component.translatable("runecraftory.dependency.tooltips.barn.2", tag.getInt("Used"), tag.getInt("Capacity")));
                 }
             }
 
@@ -160,27 +158,27 @@ public class JadePlugin implements IWailaPlugin {
                 if (tag.contains("RunecraftoryLevel")) {
                     float prog = tag.getFloat("RunecraftoryLevelPerc");
                     int lvl = tag.getInt("RunecraftoryLevel");
-                    iTooltip.add(new ProgressElement(prog, new TranslatableComponent("runecraftory.tooltip.item.level", lvl),
+                    iTooltip.add(new ProgressElement(prog, Component.translatable("runecraftory.tooltip.item.level", lvl),
                             new ProgressStyle().color(0xff0c8995, 0xff0c8995),
                             box, true));
                 }
                 if (entityAccessor.getEntity() instanceof BaseMonster monster) {
                     if (monster.getOwnerUUID() != null) {
                         if (!tag.getBoolean("HasUsername")) {
-                            iTooltip.add(new TranslatableComponent("runecraftory.dependency.tooltips.owner.none").withStyle(ChatFormatting.YELLOW));
+                            iTooltip.add(Component.translatable("runecraftory.dependency.tooltips.owner.none").withStyle(ChatFormatting.YELLOW));
                         } else {
                             String username = tag.getString("Username");
-                            iTooltip.add(new TranslatableComponent("runecraftory.dependency.tooltips.owner", username).withStyle(ChatFormatting.GOLD));
+                            iTooltip.add(Component.translatable("runecraftory.dependency.tooltips.owner", username).withStyle(ChatFormatting.GOLD));
                         }
                         if (entityAccessor.getPlayer().getUUID().equals(monster.getOwnerUUID())) {
-                            withText(iTooltip, "runecraftory.dependency.tooltips.friendpoints", new TextComponent("" + tag.getInt("FP")), ChatFormatting.YELLOW);
+                            withText(iTooltip, "runecraftory.dependency.tooltips.friendpoints", Component.literal("" + tag.getInt("FP")), ChatFormatting.YELLOW);
                             if (tag.getBoolean("HasBarn")) {
                                 BlockPos pos = BlockPos.CODEC.parse(NbtOps.INSTANCE, tag.get("Barn")).getOrThrow(false, RuneCraftory.LOGGER::error);
-                                withText(iTooltip, "runecraftory.dependency.tooltips.barn", new TextComponent(String.format("[%s, %s, %s]", pos.getX(), pos.getY(), pos.getZ())), ChatFormatting.GREEN);
+                                withText(iTooltip, "runecraftory.dependency.tooltips.barn", Component.literal(String.format("[%s, %s, %s]", pos.getX(), pos.getY(), pos.getZ())), ChatFormatting.GREEN);
                             } else {
-                                iTooltip.add(new TranslatableComponent("runecraftory.dependency.tooltips.barn.no").withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
+                                iTooltip.add(Component.translatable("runecraftory.dependency.tooltips.barn.no").withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
                             }
-                            withText(iTooltip, "runecraftory.dependency.tooltips.behaviour", new TextComponent(tag.getString("Behaviour")), ChatFormatting.YELLOW);
+                            withText(iTooltip, "runecraftory.dependency.tooltips.behaviour", Component.literal(tag.getString("Behaviour")), ChatFormatting.YELLOW);
                         }
                     }
                 }
@@ -188,7 +186,7 @@ public class JadePlugin implements IWailaPlugin {
                     if (tag.contains("NPCFollow")) {
                         withText(iTooltip, "runecraftory.dependency.tooltips.npc.follow", Component.Serializer.fromJson(tag.getString("NPCFollow")), ChatFormatting.YELLOW);
                     }
-                    withText(iTooltip, "runecraftory.dependency.tooltips.friendpoints", new TextComponent("" + tag.getInt("FP")), ChatFormatting.YELLOW);
+                    withText(iTooltip, "runecraftory.dependency.tooltips.friendpoints", Component.literal("" + tag.getInt("FP")), ChatFormatting.YELLOW);
                 }
             }
 
@@ -200,6 +198,6 @@ public class JadePlugin implements IWailaPlugin {
     }
 
     private static void withText(ITooltip tooltip, String key, MutableComponent other, ChatFormatting formatting, ChatFormatting... main) {
-        tooltip.add(new TranslatableComponent(key, other.withStyle(formatting)).withStyle(main));
+        tooltip.add(Component.translatable(key, other.withStyle(formatting)).withStyle(main));
     }
 }

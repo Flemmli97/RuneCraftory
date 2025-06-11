@@ -4,9 +4,9 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import net.minecraft.util.ExtraCodecs;
+import net.minecraft.util.RandomSource;
 
 import java.util.List;
-import java.util.Random;
 
 public interface IndexRange {
 
@@ -19,7 +19,7 @@ public interface IndexRange {
 
     Type getType();
 
-    int getRandom(Random random);
+    int getRandom(RandomSource random);
 
     enum Type {
         FIRST_N,
@@ -37,7 +37,7 @@ public interface IndexRange {
         }
 
         @Override
-        public int getRandom(Random random) {
+        public int getRandom(RandomSource random) {
             if (this.n <= 0)
                 return 0;
             return random.nextInt(this.n);
@@ -58,7 +58,7 @@ public interface IndexRange {
         }
 
         @Override
-        public int getRandom(Random random) {
+        public int getRandom(RandomSource random) {
             return random.nextInt(this.max - this.min) + this.min;
         }
     }
@@ -73,7 +73,7 @@ public interface IndexRange {
         }
 
         @Override
-        public int getRandom(Random random) {
+        public int getRandom(RandomSource random) {
             return this.indices.isEmpty() ? 0 : this.indices.get(random.nextInt(this.indices.size()));
         }
     }

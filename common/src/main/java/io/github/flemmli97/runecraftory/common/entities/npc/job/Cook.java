@@ -10,7 +10,6 @@ import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
@@ -41,7 +40,7 @@ public class Cook extends NPCJob {
         if (npc.updater.getBreadToBuy() <= 0)
             return;
         if (Platform.INSTANCE.getPlayerData(player).map(d -> !d.useMoney(player, BREAD_PRICE)).orElse(true)) {
-            player.sendMessage(new TranslatableComponent(BREAD_ACTION_FAIL, player.getName(), BREAD_PRICE), Util.NIL_UUID);
+            player.sendMessage(Component.translatable(BREAD_ACTION_FAIL, player.getName(), BREAD_PRICE), Util.NIL_UUID);
             return;
         }
         ItemStack bread = switch (action) {
@@ -56,16 +55,16 @@ public class Cook extends NPCJob {
             player.spawnAtLocation(bread);
         npc.updater.onBuyBread();
         if (level >= 7)
-            player.sendMessage(new TranslatableComponent(BREAD_ACTION_SUCCESS_GOOD, player.getName()), Util.NIL_UUID);
+            player.sendMessage(Component.translatable(BREAD_ACTION_SUCCESS_GOOD, player.getName()), Util.NIL_UUID);
         else
-            player.sendMessage(new TranslatableComponent(BREAD_ACTION_SUCCESS, player.getName()), Util.NIL_UUID);
+            player.sendMessage(Component.translatable(BREAD_ACTION_SUCCESS, player.getName()), Util.NIL_UUID);
     }
 
     @Override
     public Map<String, List<Component>> actions(EntityNPCBase entity, ServerPlayer player) {
         int bread = entity.updater.getBreadToBuy();
         if (bread > 0) {
-            Component comp = new TranslatableComponent(BREAD_COST, BREAD_PRICE, bread);
+            Component comp = Component.translatable(BREAD_COST, BREAD_PRICE, bread);
             return ImmutableMap.of(
                     FORGE_BREAD_ACTION, List.of(comp),
                     ARMOR_BREAD_DESCRIPTION, List.of(comp),

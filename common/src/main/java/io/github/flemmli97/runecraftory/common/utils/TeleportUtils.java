@@ -5,14 +5,15 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.level.pathfinder.PathType;
+import net.minecraft.world.level.pathfinder.PathfindingContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import java.util.Random;
 import java.util.function.Predicate;
 
 public class TeleportUtils {
@@ -86,15 +87,15 @@ public class TeleportUtils {
     }
 
     public static BlockPos isSafePos(Mob entity, BlockPos pos, Predicate<BlockState> validPos) {
-        return isSafePos(entity, entity.level, pos, validPos);
+        return isSafePos(entity, entity.level(), pos, validPos);
     }
 
     public static BlockPos isSafePos(Mob entity, Level level, BlockPos pos, Predicate<BlockState> validPos) {
-        BlockPathTypes blockPathTypes = entity.getNavigation().getNodeEvaluator().getBlockPathType(level, pos.getX(), pos.getY(), pos.getZ());
-        if (blockPathTypes == BlockPathTypes.OPEN) {
+        PathType blockPathTypes = entity.getNavigation().getNodeEvaluator().getPathType(new PathfindingContext(entity.level(), entity), pos.getX(), pos.getY(), pos.getZ());
+        if (blockPathTypes == PathType.OPEN) {
             if (!entity.isNoGravity())
                 return null;
-        } else if (blockPathTypes != BlockPathTypes.WALKABLE) {
+        } else if (blockPathTypes != PathType.WALKABLE) {
             return null;
         }
         BlockState blockState = level.getBlockState(pos.below());
@@ -109,7 +110,7 @@ public class TeleportUtils {
         return pos;
     }
 
-    private static int randomIntInclusive(Random random, int min, int max) {
+    private static int randomIntInclusive(RandomSource random, int min, int max) {
         return random.nextInt(max - min + 1) + min;
     }
 }

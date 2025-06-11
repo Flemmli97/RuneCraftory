@@ -3,22 +3,24 @@ package io.github.flemmli97.runecraftory.common.utils;
 import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
+import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import net.minecraft.client.resources.language.I18n;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.core.Holder;
+import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.EntityDamageSource;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
-public class CustomDamage extends EntityDamageSource {
+public class CustomDamage extends DamageSource {
 
     public static final DamageSource EXHAUST = Platform.INSTANCE.createDamageSource(RuneCraftory.MODID + ".exhaust", true, true, true);
     public static final DamageSource POISON = Platform.INSTANCE.createDamageSource(RuneCraftory.MODID + ".poison", true, true, false);
@@ -26,24 +28,32 @@ public class CustomDamage extends EntityDamageSource {
     public static final String ENTITY_DAMAGE_SOURCE = RuneCraftory.MODID + ".attack";
     private final EnumElement element;
     private final KnockBackType knock;
-    private final Entity trueSourceEntity;
     private final float knockAmount;
     private final int hurtProtection;
     private final boolean faintEntity;
     private final boolean fixedDamage;
 
-    private final ImmutableMap<Attribute, Double> attributesChange;
+    private final ImmutableMap<Holder<Attribute>, Double> attributesChange;
 
-    public CustomDamage(Entity attacker, @Nullable Entity cause, EnumElement element, KnockBackType knock, float knockBackAmount, int hurtTimeProtection, boolean faintEntity, boolean fixedDamage, Map<Attribute, Double> attributesChange) {
-        super(ENTITY_DAMAGE_SOURCE, attacker);
+    private final Set<TagKey<DamageType>> dynamicTags;
+
+    public CustomDamage(Holder<DamageType> type, Entity attacker, @Nullable Entity cause, EnumElement element, KnockBackType knock,
+                        float knockBackAmount, int hurtTimeProtection, boolean faintEntity, boolean fixedDamage,
+                        Map<Holder<Attribute>, Double> attributesChange, Set<TagKey<DamageType>> dynamicTags) {
+        super(type, attacker, cause);
         this.element = element;
         this.knock = knock;
-        this.trueSourceEntity = cause;
         this.knockAmount = knockBackAmount;
         this.hurtProtection = hurtTimeProtection;
         this.faintEntity = faintEntity;
         this.fixedDamage = fixedDamage;
         this.attributesChange = ImmutableMap.copyOf(attributesChange);
+        this.dynamicTags = dynamicTags;
+    }
+
+    @Override
+    public boolean is(TagKey<DamageType> damageTypeKey) {
+        return super.is(damageTypeKey) || this.dynamicTags.contains(damageTypeKey);
     }
 
     public EnumElement getElement() {
@@ -70,28 +80,8 @@ public class CustomDamage extends EntityDamageSource {
         return this.fixedDamage;
     }
 
-    public ImmutableMap<Attribute, Double> getAttributesChange() {
+    public ImmutableMap<Holder<Attribute>, Double> getAttributesChange() {
         return this.attributesChange;
-    }
-
-    @Override
-    @Nullable
-    public Entity getEntity() {
-        return this.trueSourceEntity != null ? this.trueSourceEntity : this.getDirectEntity();
-    }
-
-    @Override
-    public Component getLocalizedDeathMessage(LivingEntity entityLivingBaseIn) {
-        Entity source = this.getEntity() != null ? this.getEntity() : this.getDirectEntity();
-        ItemStack itemstack = source instanceof LivingEntity ? ((LivingEntity) source).getMainHandItem() : ItemStack.EMPTY;
-        String s = "death.attack." + this.msgId;
-        String s1 = s + ".item";
-        return !itemstack.isEmpty() && itemstack.hasCustomHoverName() && I18n.exists(s1) ? new TranslatableComponent(s1, entityLivingBaseIn.getDisplayName(), source.getDisplayName(), itemstack.getDisplayName()) : new TranslatableComponent(s, entityLivingBaseIn.getDisplayName(), source.getDisplayName());
-    }
-
-    @Override
-    public Entity getDirectEntity() {
-        return this.entity;
     }
 
     /**
@@ -111,7 +101,7 @@ public class CustomDamage extends EntityDamageSource {
         return success;
     }
 
-    public enum DamageType {
+    public enum DamageCategory {
         NORMAL,
         MAGIC,
         IGNOREDEF,
@@ -136,8 +126,8 @@ public class CustomDamage extends EntityDamageSource {
         private Entity trueSource;
         private float knockAmount;
         private int protection = 10;
-        private DamageType dmg = DamageType.NORMAL;
-        private final Map<Attribute, Double> attributesChange = new HashMap<>();
+        private DamageCategory dmg = DamageCategory.NORMAL;
+        private final Map<Holder<Attribute>, Double> attributesChange = new HashMap<>();
 
         private boolean isProjectile;
 
@@ -180,21 +170,21 @@ public class CustomDamage extends EntityDamageSource {
         }
 
         public Builder magic() {
-            this.dmg = DamageType.MAGIC;
+            this.dmg = DamageCategory.MAGIC;
             return this;
         }
 
-        public Builder damageType(DamageType type) {
-            if (this.dmg != DamageType.FAINT)
+        public Builder damageType(DamageCategory type) {
+            if (this.dmg != DamageCategory.FAINT)
                 this.dmg = type;
             return this;
         }
 
-        public DamageType getDamageType() {
+        public DamageCategory getDamageType() {
             return this.dmg;
         }
 
-        public Builder withChangedAttribute(Attribute att, double change) {
+        public Builder withChangedAttribute(Holder<Attribute> att, double change) {
             this.attributesChange.put(att, change);
             return this;
         }
@@ -204,31 +194,35 @@ public class CustomDamage extends EntityDamageSource {
             return this;
         }
 
-        public Map<Attribute, Double> getAttributesChanges() {
+        public Map<Holder<Attribute>, Double> getAttributesChanges() {
             return this.attributesChange;
         }
 
         public CustomDamage get() {
-            CustomDamage source = new CustomDamage(this.cause, this.trueSource, this.element, this.knock, this.knockAmount, this.protection, this.dmg == DamageType.FAINT, this.dmg == DamageType.FIXED, this.attributesChange);
+            Set<TagKey<DamageType>> tags = new HashSet<>();
             switch (this.dmg) {
-                case NORMAL:
-                    break;
-                case MAGIC:
-                    source.setMagic();
-                    break;
-                case FAINT:
-                case FIXED:
-                case IGNOREDEF:
-                    source.bypassArmor();
-                    break;
-                case IGNOREMAGICDEF:
-                    source.setMagic();
-                    source.bypassMagic();
-                    break;
+                case MAGIC -> {
+                    tags.add(RunecraftoryTags.IS_MAGIC);
+                    tags.add(DamageTypeTags.BYPASSES_ARMOR);
+                }
+                case FAINT, FIXED, IGNOREDEF -> tags.add(DamageTypeTags.BYPASSES_ARMOR);
+                case IGNOREMAGICDEF -> {
+                    tags.add(RunecraftoryTags.IS_MAGIC);
+                    tags.add(RunecraftoryTags.BYPASS_MAGIC);
+                    tags.add(DamageTypeTags.BYPASSES_ARMOR);
+                    tags.add(DamageTypeTags.BYPASSES_EFFECTS);
+                    tags.add(DamageTypeTags.BYPASSES_RESISTANCE);
+                    tags.add(DamageTypeTags.BYPASSES_ENCHANTMENTS);
+                    tags.add(DamageTypeTags.BYPASSES_SHIELD);
+                }
             }
             if (this.isProjectile)
-                source.setProjectile();
-            return source;
+                tags.add(DamageTypeTags.IS_PROJECTILE);
+            if (this.cause instanceof Player)
+                tags.add(DamageTypeTags.IS_PLAYER_ATTACK);
+            return new CustomDamage(, this.cause, this.trueSource, this.element, this.knock, this.knockAmount, this.protection,
+                    this.dmg == DamageCategory.FAINT, this.dmg == DamageCategory.FIXED,
+                    this.attributesChange, tags);
         }
     }
 }

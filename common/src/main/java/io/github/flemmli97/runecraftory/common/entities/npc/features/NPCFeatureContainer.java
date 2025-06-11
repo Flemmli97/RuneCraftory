@@ -43,9 +43,9 @@ public class NPCFeatureContainer {
     public NPCFeatureContainer read(CompoundTag tag) {
         this.map.clear();
         tag.getAllKeys().forEach(key -> {
-            NPCFeatureType<?> t = ModNPCLooks.NPC_FEATURE_REGISTRY.get()
+            NPCFeatureType<?> t = ModNPCLooks.NPC_FEATURES.get()
                     .getFromId(new ResourceLocation(key));
-            this.map.put(t, t.load.apply(tag.get(key)));
+            this.map.put(t, t.load().apply(tag.get(key)));
         });
         return this;
     }
@@ -62,9 +62,9 @@ public class NPCFeatureContainer {
         this.map.clear();
         int size = buf.readInt();
         for (int i = 0; i < size; ++i) {
-            NPCFeatureType<?> t = ModNPCLooks.NPC_FEATURE_REGISTRY.get()
+            NPCFeatureType<?> t = ModNPCLooks.NPC_FEATURES.get()
                     .getFromId(buf.readResourceLocation());
-            this.map.put(t, t.pkt.apply(buf));
+            this.map.put(t, t.pkt().apply(buf));
         }
         return this;
     }

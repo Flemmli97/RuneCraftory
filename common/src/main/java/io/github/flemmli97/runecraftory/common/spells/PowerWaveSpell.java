@@ -25,7 +25,7 @@ public class PowerWaveSpell extends WeaponSpell {
             wave.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.75f));
             ProjectileUtil.shoot(entity, wave, 0.9f, 0);
             level.addFreshEntity(wave);
-            entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), ModSounds.PLAYER_ATTACK_SWOOSH.get(), entity.getSoundSource(), 1.4f, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.5f);
+            entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), ModSounds.PLAYER_ATTACK_SWOOSH.get(), entity.getSoundSource(), 1.4f, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.5f);
         }
         return result;
     }

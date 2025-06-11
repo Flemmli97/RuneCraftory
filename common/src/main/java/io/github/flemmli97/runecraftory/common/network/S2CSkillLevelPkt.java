@@ -2,17 +2,35 @@ package io.github.flemmli97.runecraftory.common.network;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
-import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.attachment.player.LevelExpPair;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.entity.player.Player;
 
-public class S2CSkillLevelPkt implements Packet {
+public class S2CSkillLevelPkt implements CustomPacketPayload {
 
-    public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "s2c_skill_level");
+    public static final CustomPacketPayload.Type<S2CSkillLevelPkt> TYPE = new CustomPacketPayload.Type<>(RuneCraftory.modRes("s2c_skill_level"));
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, S2CSkillLevelPkt> STREAM_CODEC = new StreamCodec<>() {
+        @Override
+        public S2CSkillLevelPkt decode(RegistryFriendlyByteBuf buf) {
+            return new S2CSkillLevelPkt(buf.readEnum(EnumSkills.class), new LevelExpPair(buf), buf.readInt(), buf.readFloat(), buf.readFloat(), buf.readFloat(), buf.readFloat());
+        }
+
+        @Override
+        public void encode(RegistryFriendlyByteBuf buf, S2CSkillLevelPkt pkt) {
+            buf.writeEnum(pkt.skill);
+            pkt.level.toPacket(buf);
+            buf.writeInt(pkt.rp);
+            buf.writeFloat(pkt.rpMax);
+            buf.writeFloat(pkt.str);
+            buf.writeFloat(pkt.intel);
+            buf.writeFloat(pkt.vit);
+        }
+    };
 
     private final EnumSkills skill;
     private final LevelExpPair level;
@@ -42,37 +60,20 @@ public class S2CSkillLevelPkt implements Packet {
         this.vit = cap.getVit();
     }
 
-    public static S2CSkillLevelPkt read(FriendlyByteBuf buf) {
-        return new S2CSkillLevelPkt(buf.readEnum(EnumSkills.class), new LevelExpPair(buf), buf.readInt(), buf.readFloat(), buf.readFloat(), buf.readFloat(), buf.readFloat());
-    }
-
-    public static void handle(S2CSkillLevelPkt pkt) {
-        Player player = ClientHandlers.getPlayer();
+    public static void handle(S2CSkillLevelPkt pkt, Player player) {
         if (player == null)
             return;
-        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-            data.getSkillLevel(pkt.skill).from(pkt.level);
-            data.setRunePoints(player, pkt.rp);
-            data.setMaxRunePoints(player, pkt.rpMax);
-            data.setStr(player, pkt.str);
-            data.setIntel(player, pkt.intel);
-            data.setVit(player, pkt.vit);
-        });
+        PlayerData data = Platform.INSTANCE.getPlayerData(player);
+        data.getSkillLevel(pkt.skill).from(pkt.level);
+        data.setRunePoints(pkt.rp);
+        data.setMaxRunePoints(pkt.rpMax);
+        data.setStr(pkt.str);
+        data.setIntel(pkt.intel);
+        data.setVit(pkt.vit);
     }
 
     @Override
-    public void write(FriendlyByteBuf buf) {
-        buf.writeEnum(this.skill);
-        this.level.toPacket(buf);
-        buf.writeInt(this.rp);
-        buf.writeFloat(this.rpMax);
-        buf.writeFloat(this.str);
-        buf.writeFloat(this.intel);
-        buf.writeFloat(this.vit);
-    }
-
-    @Override
-    public ResourceLocation getID() {
-        return ID;
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 }

@@ -1,16 +1,16 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
-import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityThunderboltBeam;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ProjectileUtil;
-import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
+import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 
 public class Laser5Spell extends Spell {
 
@@ -25,7 +25,7 @@ public class Laser5Spell extends Spell {
         } else {
             dir = entity.getLookAngle();
         }
-        for (Vector3f vec : RayTraceUtils.rotatedVecs(dir, new Vec3(0, 1, 0), -50, 50, 25)) {
+        for (Vector3f vec : MathUtils.rotatedVecs(dir, new Vec3(0, 1, 0), -50, 50, 25)) {
             EntityThunderboltBeam beam = new EntityThunderboltBeam(level, entity);
             beam.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.9f));
             beam.setRotationToDir(vec.x(), vec.y(), vec.z(), 0);

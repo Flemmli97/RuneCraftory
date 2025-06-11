@@ -21,7 +21,7 @@ import net.minecraft.world.item.Items;
 
 public class RenderMarionettaTrap extends EntityRenderer<EntityMarionettaTrap> {
 
-    protected static final ResourceLocation COMMON = new ResourceLocation(RuneCraftory.MODID, "textures/entity/chest.png");
+    protected static final ResourceLocation COMMON = RuneCraftory.modRes("textures/entity/chest.png");
 
     protected final EntityModel<EntityMarionettaTrap> model;
 

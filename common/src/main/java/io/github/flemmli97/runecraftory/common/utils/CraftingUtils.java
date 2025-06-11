@@ -12,7 +12,6 @@ import io.github.flemmli97.runecraftory.common.inventory.PlayerContainerInv;
 import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.NonNullList;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -33,7 +32,7 @@ public class CraftingUtils {
     }
 
     public static boolean canUpgrade(Player player, EnumCrafting type, ItemStack stack, ItemStack ingredient) {
-        return upgradeCost(type, Platform.INSTANCE.getPlayerData(player).orElseThrow(EntityUtils::playerDataException), stack, ingredient, true) >= 0;
+        return upgradeCost(type, Platform.INSTANCE.getPlayerData(player), stack, ingredient, true) >= 0;
     }
 
     public static int upgradeCost(EnumCrafting type, PlayerData data, ItemStack stack, ItemStack ingredient) {
@@ -122,10 +121,10 @@ public class CraftingUtils {
         return xp;
     }
 
-    public static void giveCraftingXPTo(ServerPlayer serverPlayer, PlayerData data, EnumSkills skill, SextupleRecipe recipe) {
+    public static void giveCraftingXPTo(PlayerData data, EnumSkills skill, SextupleRecipe recipe) {
         if (GeneralConfig.skillXpMultiplier == 0)
             return;
-        data.increaseSkill(skill, serverPlayer, xpForCrafting(skill, recipe, data.getSkillLevel(skill).getLevel()) * GeneralConfig.skillXpMultiplier);
+        data.increaseSkill(skill, xpForCrafting(skill, recipe, data.getSkillLevel(skill).getLevel()) * GeneralConfig.skillXpMultiplier);
     }
 
     private static float xpForUpgrade(EnumSkills skill, ItemStack equip, ItemStack upgrade, int skillLevel) {
@@ -137,10 +136,10 @@ public class CraftingUtils {
         return xp;
     }
 
-    public static void giveUpgradeXPTo(ServerPlayer serverPlayer, PlayerData data, EnumSkills skill, ItemStack equip, ItemStack upgrade) {
+    public static void giveUpgradeXPTo(PlayerData data, EnumSkills skill, ItemStack equip, ItemStack upgrade) {
         if (GeneralConfig.skillXpMultiplier == 0)
             return;
-        data.increaseSkill(skill, serverPlayer, xpForUpgrade(skill, equip, upgrade, data.getSkillLevel(skill).getLevel()) * GeneralConfig.skillXpMultiplier);
+        data.increaseSkill(skill, xpForUpgrade(skill, equip, upgrade, data.getSkillLevel(skill).getLevel()) * GeneralConfig.skillXpMultiplier);
     }
 
     public static ItemStack getCraftingOutput(ItemStack stack, PlayerContainerInv inv, Pair<NonNullList<ItemStack>, NonNullList<ItemStack>> materials, EnumCrafting type) {
@@ -161,7 +160,7 @@ public class CraftingUtils {
                 break;
         }
         NonNullList<ItemStack> recipeStacks = materials.getFirst();
-        Platform.INSTANCE.getPlayerData(inv.getPlayer()).ifPresent(d -> RAND.setSeed(d.getCraftingSeed(inv.getPlayer())));
+        RAND.setSeed(Platform.INSTANCE.getPlayerData(inv.getPlayer()).getCraftingSeed(inv.getPlayer()));
         if (recipeStacks.size() > 3) {
             while (i < 3) {
                 ItemStack rand = recipeStacks.get(RAND.nextInt(recipeStacks.size()));

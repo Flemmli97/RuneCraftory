@@ -15,13 +15,13 @@ import net.minecraft.resources.ResourceLocation;
 
 public class RenderElementBall extends EntityRenderer<EntityElementalBall> {
 
-    private static final ResourceLocation FIRE = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/fireball_n.png");
-    private static final ResourceLocation WATER = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/bubble.png");
-    private static final ResourceLocation WATER_2 = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/ice_ball.png");
-    private static final ResourceLocation EARTH = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/earth_ball.png");
-    private static final ResourceLocation LOVE = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/love_ball.png");
-    private static final ResourceLocation WIND = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/wind_blade.png");
-    private static final ResourceLocation BLOB = new ResourceLocation(RuneCraftory.MODID, "textures/particle/light.png");
+    private static final ResourceLocation FIRE = RuneCraftory.modRes("textures/entity/projectile/fireball_n.png");
+    private static final ResourceLocation WATER = RuneCraftory.modRes("textures/entity/projectile/bubble.png");
+    private static final ResourceLocation WATER_2 = RuneCraftory.modRes("textures/entity/projectile/ice_ball.png");
+    private static final ResourceLocation EARTH = RuneCraftory.modRes("textures/entity/projectile/earth_ball.png");
+    private static final ResourceLocation LOVE = RuneCraftory.modRes("textures/entity/projectile/love_ball.png");
+    private static final ResourceLocation WIND = RuneCraftory.modRes("textures/entity/projectile/wind_blade.png");
+    private static final ResourceLocation BLOB = RuneCraftory.modRes("textures/particle/light.png");
 
     public final float xSize = 1, ySize = 1;
 

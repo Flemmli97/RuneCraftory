@@ -13,8 +13,10 @@ import io.github.flemmli97.runecraftory.common.network.S2CUpdateAttributesWithAd
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -46,10 +48,10 @@ import java.util.function.Predicate;
 
 public class EntityUtils {
 
-    public static double tryGetAttribute(LivingEntity entity, Attribute attribute) {
+    public static double tryGetAttribute(LivingEntity entity, Holder<Attribute> attribute) {
         AttributeInstance inst = entity.getAttribute(attribute);
         if (inst == null)
-            return attribute.getDefaultValue();
+            return attribute.value().getDefaultValue();
         return inst.getValue();
     }
 
@@ -91,7 +93,7 @@ public class EntityUtils {
         if (att != null)
             entity.getAttributes().getDirtyAttributes().add(att);
         if (entity == player) {
-            Platform.INSTANCE.sendToClient(new S2CUpdateAttributesWithAdditional(entity.getAttributes().getDirtyAttributes()), player);
+            LoaderNetwork.INSTANCE.sendToPlayer(new S2CUpdateAttributesWithAdditional(entity.getAttributes().getDirtyAttributes()), player);
             entity.getAttributes().getDirtyAttributes().clear();
         } else {
             player.connection.send(new ClientboundUpdateAttributesPacket(entity.getId(), entity.getAttributes().getDirtyAttributes()));
@@ -143,7 +145,7 @@ public class EntityUtils {
         if (itemMultiplier == 0 || GeneralConfig.tamingMultiplier == 0)
             return 0;
         int lvl = Platform.INSTANCE.getPlayerData(player).map(d -> d.getPlayerLevel().getLevel()).orElse(1) + 1;
-        float lvlPenalty = Math.max(0, (monster.level().getLevel() - lvl) * 0.02f);
+        float lvlPenalty = Math.max(0, (monster.xpLevel().getLevel() - lvl) * 0.02f);
         float brushBonus = brushCount * 0.05f;
         float loveAttackBonus = loveAttackCount * 0.002f;
         float tamingLvlBonus = (Platform.INSTANCE.getPlayerData(player).map(d -> d.getSkillLevel(EnumSkills.TAMING).getLevel()).orElse(1) - 1) * 0.005f;
@@ -178,12 +180,12 @@ public class EntityUtils {
     public static void tieredTreasureChest(GateEntity spawner, EntityTreasureChest chest) {
         int max = 0;
         for (WeightedChestTier tier : CHEST_TIERS) {
-            max += tier.getModifiedWeight(spawner.level().getLevel());
+            max += tier.getModifiedWeight(spawner.xpLevel().getLevel());
         }
 
         int rand = spawner.getRandom().nextInt(max);
         for (WeightedChestTier tier : CHEST_TIERS) {
-            if ((rand -= tier.getModifiedWeight(spawner.level().getLevel())) >= 0) continue;
+            if ((rand -= tier.getModifiedWeight(spawner.xpLevel().getLevel())) >= 0) continue;
             chest.setTier(tier.tier);
         }
     }

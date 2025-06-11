@@ -13,15 +13,13 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 public class UpgradeGui extends AbstractContainerScreen<ContainerUpgrade> {
 
-    private static final ResourceLocation FORGING = new ResourceLocation(RuneCraftory.MODID, "textures/gui/forging_upgrade.png");
-    private static final ResourceLocation CRAFTING = new ResourceLocation(RuneCraftory.MODID, "textures/gui/crafting_upgrade.png");
+    private static final ResourceLocation FORGING = RuneCraftory.modRes("textures/gui/forging_upgrade.png");
+    private static final ResourceLocation CRAFTING = RuneCraftory.modRes("textures/gui/crafting_upgrade.png");
 
     private final EnumSkills skill;
 
@@ -52,10 +50,10 @@ public class UpgradeGui extends AbstractContainerScreen<ContainerUpgrade> {
         PlayerData data = Platform.INSTANCE.getPlayerData(this.minecraft.player).orElse(null);
         if (this.menu.rpCost() >= 0) {
             int rpMax = data != null ? data.getMaxRunePoints() : 0;
-            MutableComponent cost = new TextComponent("" + this.menu.rpCost());
+            MutableComponent cost = Component.literal("" + this.menu.rpCost());
             int yOffset = 0;
             if (rpMax < this.menu.rpCost() && !this.minecraft.player.isCreative()) {
-                cost = new TranslatableComponent("runecraftory.gui.crafting.rpMax.missing").withStyle(ChatFormatting.DARK_RED);
+                cost = Component.translatable("runecraftory.gui.crafting.rpMax.missing").withStyle(ChatFormatting.DARK_RED);
                 yOffset = -25;
             }
             ClientHandlers.drawCenteredScaledString(stack, this.font, cost, this.leftPos + 91, this.topPos + 42 + yOffset, 1, 0);
@@ -67,13 +65,13 @@ public class UpgradeGui extends AbstractContainerScreen<ContainerUpgrade> {
             int yPos = this.topPos - 12;
             stack.translate(xPos, yPos, 0);
             stack.scale(scale, scale, scale);
-            RenderSystem.setShaderTexture(0, new ResourceLocation(RuneCraftory.MODID, "textures/gui/bars.png"));
+            RenderSystem.setShaderTexture(0, RuneCraftory.modRes("textures/gui/bars.png"));
             this.blit(stack, 0, 0, 131, 74, 96, 29);
             int runePointsWidth = Math.min(76, (int) (data.getRunePoints() / (float) data.getMaxRunePoints() * 76.0f));
             this.blit(stack, 17, 3, 18, 40, runePointsWidth, 9);
             ClientHandlers.drawCenteredScaledString(stack, this.font, data.getRunePoints() + "/" + data.getMaxRunePoints(), 18 + 75 * 0.5f, 5, 0.7f, 0xffffff);
             stack.popPose();
-            this.font.draw(stack, new TranslatableComponent("runecraftory.gui.display.level", data.getSkillLevel(this.skill).getLevel()),
+            this.font.draw(stack, Component.translatable("runecraftory.gui.display.level", data.getSkillLevel(this.skill).getLevel()),
                     this.leftPos + this.titleLabelX + this.font.width(this.title) + 6, this.topPos + this.titleLabelY, 0x404040);
         }
     }

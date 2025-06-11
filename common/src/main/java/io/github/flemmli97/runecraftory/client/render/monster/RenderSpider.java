@@ -7,12 +7,11 @@ import io.github.flemmli97.runecraftory.client.model.monster.ModelSpider;
 import io.github.flemmli97.runecraftory.client.render.RenderMonster;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntitySpider;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.resources.ResourceLocation;
 
 public class RenderSpider<T extends EntitySpider> extends RenderMonster<T, ModelSpider<T>> {
 
     public RenderSpider(EntityRendererProvider.Context ctx) {
-        super(ctx, new ModelSpider<>(ctx.bakeLayer(ModelSpider.LAYER_LOCATION)), new ResourceLocation(RuneCraftory.MODID, "textures/entity/monsters/spider.png"), 0.7f);
+        super(ctx, new ModelSpider<>(ctx.bakeLayer(ModelSpider.LAYER_LOCATION)), RuneCraftory.modRes("textures/entity/monsters/spider.png"), 0.7f);
     }
 
     @Override

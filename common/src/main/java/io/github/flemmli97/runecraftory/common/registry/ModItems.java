@@ -41,12 +41,13 @@ import io.github.flemmli97.runecraftory.common.items.weapons.ItemLongSwordBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemShortSwordBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpearBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
+import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import io.github.flemmli97.tenshilib.platform.PlatformUtils;
-import io.github.flemmli97.tenshilib.platform.registry.PlatformRegistry;
-import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
-import net.minecraft.core.Registry;
+import io.github.flemmli97.tenshilib.loader.LoaderRegistryAccess;
+import io.github.flemmli97.tenshilib.loader.registry.LoaderRegister;
+import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -68,29 +69,29 @@ import java.util.function.Supplier;
 
 public class ModItems {
 
-    public static final PlatformRegistry<Item> ITEMS = PlatformUtils.INSTANCE.of(Registry.ITEM_REGISTRY, RuneCraftory.MODID);
+    public static final LoaderRegister<Item> ITEMS = LoaderRegistryAccess.INSTANCE.of(Registries.ITEM, RuneCraftory.MODID);
 
     //Here till all items have textures
-    public static final List<RegistryEntrySupplier<Item>> NOTEX = new ArrayList<>();
+    public static final List<RegistryEntrySupplier<Item, ?>> NOTEX = new ArrayList<>();
     //Those collections are for datagen
-    public static final Map<TagKey<Item>, List<RegistryEntrySupplier<Item>>> DATAGENTAGS = new HashMap<>();
-    public static final List<RegistryEntrySupplier<Item>> SEEDS = new ArrayList<>();
-    public static final List<Pair<String, RegistryEntrySupplier<Item>>> VEGGIES = new ArrayList<>();
-    public static final List<Pair<String, RegistryEntrySupplier<Item>>> FRUITS = new ArrayList<>();
-    public static final List<Pair<String, RegistryEntrySupplier<Item>>> FLOWERS = new ArrayList<>();
-    public static final List<RegistryEntrySupplier<Item>> CROPS = new ArrayList<>();
-    public static final List<RegistryEntrySupplier<Item>> FOOD = new ArrayList<>();
+    public static final Map<TagKey<Item>, List<RegistryEntrySupplier<Item, ?>>> DATAGENTAGS = new HashMap<>();
+    public static final List<RegistryEntrySupplier<Item, ?>> SEEDS = new ArrayList<>();
+    public static final List<Pair<String, RegistryEntrySupplier<Item, ?>>> VEGGIES = new ArrayList<>();
+    public static final List<Pair<String, RegistryEntrySupplier<Item, ?>>> FRUITS = new ArrayList<>();
+    public static final List<Pair<String, RegistryEntrySupplier<Item, ?>>> FLOWERS = new ArrayList<>();
+    public static final List<RegistryEntrySupplier<Item, ?>> CROPS = new ArrayList<>();
+    public static final List<RegistryEntrySupplier<Item, ?>> FOOD = new ArrayList<>();
 
-    public static final List<RegistryEntrySupplier<Item>> TIER_1_CHEST = new ArrayList<>();
-    public static final List<RegistryEntrySupplier<Item>> TIER_2_CHEST = new ArrayList<>();
-    public static final List<RegistryEntrySupplier<Item>> TIER_3_CHEST = new ArrayList<>();
-    public static final List<RegistryEntrySupplier<Item>> TIER_4_CHEST = new ArrayList<>();
+    public static final List<RegistryEntrySupplier<Item, ?>> TIER_1_CHEST = new ArrayList<>();
+    public static final List<RegistryEntrySupplier<Item, ?>> TIER_2_CHEST = new ArrayList<>();
+    public static final List<RegistryEntrySupplier<Item, ?>> TIER_3_CHEST = new ArrayList<>();
+    public static final List<RegistryEntrySupplier<Item, ?>> TIER_4_CHEST = new ArrayList<>();
 
-    private static final FoodProperties LOW_FOOD_PROP = new FoodProperties.Builder().nutrition(1).saturationMod(0.5f).alwaysEat().build();
-    private static final FoodProperties FOOD_PROP = new FoodProperties.Builder().nutrition(2).saturationMod(0.5f).alwaysEat().build();
-    private static final FoodProperties HIGH_FOOD_PROP = new FoodProperties.Builder().nutrition(6).saturationMod(0.75f).alwaysEat().build();
+    private static final FoodProperties LOW_FOOD_PROP = new FoodProperties.Builder().nutrition(1).saturationModifier(0.5f).alwaysEdible().build();
+    private static final FoodProperties FOOD_PROP = new FoodProperties.Builder().nutrition(2).saturationModifier(0.5f).alwaysEdible().build();
+    private static final FoodProperties HIGH_FOOD_PROP = new FoodProperties.Builder().nutrition(6).saturationModifier(0.75f).alwaysEdible().build();
 
-    public static final RegistryEntrySupplier<Item> HOE_SCRAP = hoe(EnumToolTier.SCRAP);
+    public static final RegistryEntrySupplier<Item, ItemCommandStaff> HOE_SCRAP = hoe(EnumToolTier.SCRAP);
     public static final RegistryEntrySupplier<Item> HOE_IRON = hoe(EnumToolTier.IRON);
     public static final RegistryEntrySupplier<Item> HOE_SILVER = hoe(EnumToolTier.SILVER);
     public static final RegistryEntrySupplier<Item> HOE_GOLD = hoe(EnumToolTier.GOLD);
@@ -121,22 +122,22 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> FISHING_ROD_GOLD = fishingRod(EnumToolTier.GOLD);
     public static final RegistryEntrySupplier<Item> FISHING_ROD_PLATINUM = fishingRod(EnumToolTier.PLATINUM);
     public static final RegistryEntrySupplier<Item> MOB_STAFF = ITEMS.register("monster_command_staff", () -> new ItemCommandStaff(new Item.Properties().stacksTo(1).tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
-    public static final RegistryEntrySupplier<Item> BRUSH = ITEMS.register("brush", () -> new ItemBrush(new Item.Properties().stacksTo(1).tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
-    public static final RegistryEntrySupplier<Item> GLASS = ITEMS.register("magnifying_glass", () -> new ItemToolGlass(new Item.Properties().stacksTo(1).tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
+    public static final RegistryEntrySupplier<Item, ItemBrush> BRUSH = ITEMS.register("brush", () -> new ItemBrush(new Item.Properties().stacksTo(1).tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
+    public static final RegistryEntrySupplier<Item, ItemToolGlass> GLASS = ITEMS.register("magnifying_glass", () -> new ItemToolGlass(new Item.Properties().stacksTo(1).tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
 
-    public static final RegistryEntrySupplier<Item> LEVELISER = ITEMS.register("leveliser", () -> new ItemStatIncrease(ItemStatIncrease.Stat.LEVEL, new Item.Properties().tab(RFCreativeTabs.MEDICINE)));
-    public static final RegistryEntrySupplier<Item> HEART_DRINK = ITEMS.register("heart_drink", () -> new ItemStatIncrease(ItemStatIncrease.Stat.HP, new Item.Properties().tab(RFCreativeTabs.MEDICINE)));
-    public static final RegistryEntrySupplier<Item> VITAL_GUMMI = ITEMS.register("vital_gummi", () -> new ItemStatIncrease(ItemStatIncrease.Stat.VIT, new Item.Properties().tab(RFCreativeTabs.MEDICINE)));
-    public static final RegistryEntrySupplier<Item> INTELLIGENCER = ITEMS.register("intelligencer", () -> new ItemStatIncrease(ItemStatIncrease.Stat.INT, new Item.Properties().tab(RFCreativeTabs.MEDICINE)));
-    public static final RegistryEntrySupplier<Item> PROTEIN = ITEMS.register("protein", () -> new ItemStatIncrease(ItemStatIncrease.Stat.STR, new Item.Properties().tab(RFCreativeTabs.MEDICINE)));
-    public static final RegistryEntrySupplier<Item> FORMULAR_A = ITEMS.register("formular_a", () -> new ItemFertilizer(ItemFertilizer.FORMULAR_A, new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
-    public static final RegistryEntrySupplier<Item> FORMULAR_B = ITEMS.register("formular_b", () -> new ItemFertilizer(ItemFertilizer.FORMULAR_B, new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
-    public static final RegistryEntrySupplier<Item> FORMULAR_C = ITEMS.register("formular_c", () -> new ItemFertilizer(ItemFertilizer.FORMULAR_C, new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
-    public static final RegistryEntrySupplier<Item> MINIMIZER = ITEMS.register("minimizer", () -> new ItemFertilizer(ItemFertilizer.MINIMIZER, new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
-    public static final RegistryEntrySupplier<Item> GIANTIZER = ITEMS.register("giantizer", () -> new ItemFertilizer(ItemFertilizer.GIANTIZER, new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
-    public static final RegistryEntrySupplier<Item> GREENIFIER = ITEMS.register("greenifier", () -> new ItemFertilizer(ItemFertilizer.GREENIFIER, new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
-    public static final RegistryEntrySupplier<Item> GREENIFIER_PLUS = ITEMS.register("greenifier_plus", () -> new ItemFertilizer(ItemFertilizer.GREENIFIER_PLUS, new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
-    public static final RegistryEntrySupplier<Item> WETTABLE_POWDER = ITEMS.register("wettable_powder", () -> new ItemFertilizer(ItemFertilizer.WETTABLE, new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
+    public static final RegistryEntrySupplier<Item, ItemStatIncrease> LEVELISER = ITEMS.register("leveliser", () -> new ItemStatIncrease(ItemStatIncrease.Stat.LEVEL, new Item.Properties().tab(RFCreativeTabs.MEDICINE)));
+    public static final RegistryEntrySupplier<Item, ItemStatIncrease> HEART_DRINK = ITEMS.register("heart_drink", () -> new ItemStatIncrease(ItemStatIncrease.Stat.HP, new Item.Properties().tab(RFCreativeTabs.MEDICINE)));
+    public static final RegistryEntrySupplier<Item, ItemStatIncrease> VITAL_GUMMI = ITEMS.register("vital_gummi", () -> new ItemStatIncrease(ItemStatIncrease.Stat.VIT, new Item.Properties().tab(RFCreativeTabs.MEDICINE)));
+    public static final RegistryEntrySupplier<Item, ItemStatIncrease> INTELLIGENCER = ITEMS.register("intelligencer", () -> new ItemStatIncrease(ItemStatIncrease.Stat.INT, new Item.Properties().tab(RFCreativeTabs.MEDICINE)));
+    public static final RegistryEntrySupplier<Item, ItemStatIncrease> PROTEIN = ITEMS.register("protein", () -> new ItemStatIncrease(ItemStatIncrease.Stat.STR, new Item.Properties().tab(RFCreativeTabs.MEDICINE)));
+    public static final RegistryEntrySupplier<Item, ItemFertilizer> FORMULAR_A = ITEMS.register("formular_a", () -> new ItemFertilizer(ItemFertilizer.FORMULAR_A, new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
+    public static final RegistryEntrySupplier<Item, ItemFertilizer> FORMULAR_B = ITEMS.register("formular_b", () -> new ItemFertilizer(ItemFertilizer.FORMULAR_B, new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
+    public static final RegistryEntrySupplier<Item, ItemFertilizer> FORMULAR_C = ITEMS.register("formular_c", () -> new ItemFertilizer(ItemFertilizer.FORMULAR_C, new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
+    public static final RegistryEntrySupplier<Item, ItemFertilizer> MINIMIZER = ITEMS.register("minimizer", () -> new ItemFertilizer(ItemFertilizer.MINIMIZER, new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
+    public static final RegistryEntrySupplier<Item, ItemFertilizer> GIANTIZER = ITEMS.register("giantizer", () -> new ItemFertilizer(ItemFertilizer.GIANTIZER, new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
+    public static final RegistryEntrySupplier<Item, ItemFertilizer> GREENIFIER = ITEMS.register("greenifier", () -> new ItemFertilizer(ItemFertilizer.GREENIFIER, new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
+    public static final RegistryEntrySupplier<Item, ItemFertilizer> GREENIFIER_PLUS = ITEMS.register("greenifier_plus", () -> new ItemFertilizer(ItemFertilizer.GREENIFIER_PLUS, new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
+    public static final RegistryEntrySupplier<Item, ItemFertilizer> WETTABLE_POWDER = ITEMS.register("wettable_powder", () -> new ItemFertilizer(ItemFertilizer.WETTABLE, new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
 
     public static final RegistryEntrySupplier<Item> BROAD_SWORD = shortSword("broad_sword", Texture.Y);
     public static final RegistryEntrySupplier<Item> STEEL_SWORD = shortSword("steel_sword", Texture.Y);
@@ -171,7 +172,7 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> BACK_SCRATCHER = shortSword("back_scratcher", Texture.N);
     public static final RegistryEntrySupplier<Item> SPOON = shortSword("spoon", Texture.N);
     public static final RegistryEntrySupplier<Item> VEGGIE_BLADE = shortSword("veggie_blade", Texture.N);
-    public static final RegistryEntrySupplier<Item> PLANT_SWORD = ITEMS.register("plant_sword", () -> new ItemShortSwordBase(new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
+    public static final RegistryEntrySupplier<Item, ItemShortSwordBase> PLANT_SWORD = ITEMS.register("plant_sword", () -> new ItemShortSwordBase(new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
 
     public static final RegistryEntrySupplier<Item> CLAYMORE = longSword("claymore", Texture.Y);
     public static final RegistryEntrySupplier<Item> ZWEIHAENDER = longSword("zweihaender", Texture.Y);
@@ -377,9 +378,9 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> ELVISH_HARP = staff("elvish_harp", EnumElement.LOVE, 3, Texture.N);
     public static final RegistryEntrySupplier<Item> SYRINGE = staff("syringe", EnumElement.WATER, 2, Texture.N);
 
-    public static final RegistryEntrySupplier<Item> LOVE_LETTER = ITEMS.register("love_letter", () -> new Item(new Item.Properties().stacksTo(1).tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
-    public static final RegistryEntrySupplier<Item> DIVORCE_PAPER = ITEMS.register("divorce_paper", () -> new Item(new Item.Properties().stacksTo(1).tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
-    public static final RegistryEntrySupplier<Item> ENGAGEMENT_RING = ITEMS.register("engagement_ring", () -> Platform.INSTANCE.armor(EquipmentSlot.LEGS, new Item.Properties().tab(RFCreativeTabs.EQUIPMENT), new ResourceLocation(RuneCraftory.MODID, "engagement_ring"), false));
+    public static final RegistryEntrySupplier<Item, Item> LOVE_LETTER = ITEMS.register("love_letter", () -> new Item(new Item.Properties().stacksTo(1).tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
+    public static final RegistryEntrySupplier<Item, Item> DIVORCE_PAPER = ITEMS.register("divorce_paper", () -> new Item(new Item.Properties().stacksTo(1).tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
+    public static final RegistryEntrySupplier<Item> ENGAGEMENT_RING = ITEMS.register("engagement_ring", () -> Platform.INSTANCE.armor(EquipmentSlot.LEGS, new Item.Properties().tab(RFCreativeTabs.EQUIPMENT), RuneCraftory.modRes("engagement_ring"), false));
     public static final RegistryEntrySupplier<Item> CHEAP_BRACELET = equipment(EquipmentSlot.LEGS, "cheap_bracelet", Texture.Y);
     public static final RegistryEntrySupplier<Item> BRONZE_BRACELET = equipment(EquipmentSlot.LEGS, "bronze_bracelet", Texture.Y);
     public static final RegistryEntrySupplier<Item> SILVER_BRACELET = equipment(EquipmentSlot.LEGS, "silver_bracelet", Texture.Y);
@@ -537,14 +538,14 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> MAGICAL_SHIELD = shield("magical_shield", Texture.N);
     public static final RegistryEntrySupplier<Item> PRISM_SHIELD = shield("prism_shield", Texture.N);
     public static final RegistryEntrySupplier<Item> RUNE_SHIELD = shield("rune_shield", Texture.N);
-    public static final RegistryEntrySupplier<Item> PLANT_SHIELD = ITEMS.register("plant_shield", () -> new ItemStatShield(new Item.Properties().stacksTo(1).tab(RFCreativeTabs.EQUIPMENT)));
+    public static final RegistryEntrySupplier<Item, ItemStatShield> PLANT_SHIELD = ITEMS.register("plant_shield", () -> new ItemStatShield(new Item.Properties().stacksTo(1).tab(RFCreativeTabs.EQUIPMENT)));
 
-    public static final RegistryEntrySupplier<Item> ITEM_BLOCK_FORGE = ITEMS.register("forge", () -> new CraftingBlockItem(ModBlocks.FORGE.get(), new Item.Properties().tab(RFCreativeTabs.BLOCKS)));
-    public static final RegistryEntrySupplier<Item> ITEM_BLOCK_ACCESS = ITEMS.register("accessory_workbench", () -> new CraftingBlockItem(ModBlocks.ACCESSORY.get(), new Item.Properties().tab(RFCreativeTabs.BLOCKS)));
-    public static final RegistryEntrySupplier<Item> ITEM_BLOCK_COOKING = ITEMS.register("cooking_table", () -> new CraftingBlockItem(ModBlocks.COOKING.get(), new Item.Properties().tab(RFCreativeTabs.BLOCKS)));
-    public static final RegistryEntrySupplier<Item> ITEM_BLOCK_CHEM = ITEMS.register("chemistry_set", () -> new CraftingBlockItem(ModBlocks.CHEMISTRY.get(), new Item.Properties().tab(RFCreativeTabs.BLOCKS)));
+    public static final RegistryEntrySupplier<Item, CraftingBlockItem> ITEM_BLOCK_FORGE = ITEMS.register("forge", () -> new CraftingBlockItem(ModBlocks.FORGE.get(), new Item.Properties().tab(RFCreativeTabs.BLOCKS)));
+    public static final RegistryEntrySupplier<Item, CraftingBlockItem> ITEM_BLOCK_ACCESS = ITEMS.register("accessory_workbench", () -> new CraftingBlockItem(ModBlocks.ACCESSORY.get(), new Item.Properties().tab(RFCreativeTabs.BLOCKS)));
+    public static final RegistryEntrySupplier<Item, CraftingBlockItem> ITEM_BLOCK_COOKING = ITEMS.register("cooking_table", () -> new CraftingBlockItem(ModBlocks.COOKING.get(), new Item.Properties().tab(RFCreativeTabs.BLOCKS)));
+    public static final RegistryEntrySupplier<Item, CraftingBlockItem> ITEM_BLOCK_CHEM = ITEMS.register("chemistry_set", () -> new CraftingBlockItem(ModBlocks.CHEMISTRY.get(), new Item.Properties().tab(RFCreativeTabs.BLOCKS)));
 
-    public static final RegistryEntrySupplier<Item> MINERAL_IRON = mineral(EnumMineralTier.IRON);
+    public static final RegistryEntrySupplier<Item, Item> MINERAL_IRON = mineral(EnumMineralTier.IRON);
     public static final RegistryEntrySupplier<Item> MINERAL_TIN = mineral(EnumMineralTier.TIN);
     public static final RegistryEntrySupplier<Item> MINERAL_SILVER = mineral(EnumMineralTier.SILVER);
     public static final RegistryEntrySupplier<Item> MINERAL_GOLD = mineral(EnumMineralTier.GOLD);
@@ -573,11 +574,11 @@ public class ModItems {
 
     public static final RegistryEntrySupplier<Item> RAW_TIN = ITEMS.register("raw_tin", () -> new Item(new Item.Properties().tab(RFCreativeTabs.UPGRADE_ITEMS)));
     public static final RegistryEntrySupplier<Item> TIN_INGOT = mat("tin_ingot", Texture.Y);
-    public static final RegistryEntrySupplier<Item> BRONZE_DUST = ITEMS.register("bronze_dust", () -> new Item(new Item.Properties().tab(RFCreativeTabs.UPGRADE_ITEMS)));
+    public static final RegistryEntrySupplier<Item, Item> BRONZE_DUST = ITEMS.register("bronze_dust", () -> new Item(new Item.Properties().tab(RFCreativeTabs.UPGRADE_ITEMS)));
     public static final RegistryEntrySupplier<Item> BRONZE_INGOT = mat("bronze_ingot", Texture.Y);
-    public static final RegistryEntrySupplier<Item> RAW_SILVER = ITEMS.register("raw_silver", () -> new Item(new Item.Properties().tab(RFCreativeTabs.UPGRADE_ITEMS)));
+    public static final RegistryEntrySupplier<Item, Item> RAW_SILVER = ITEMS.register("raw_silver", () -> new Item(new Item.Properties().tab(RFCreativeTabs.UPGRADE_ITEMS)));
     public static final RegistryEntrySupplier<Item> SILVER_INGOT = mat("silver_ingot", Texture.Y);
-    public static final RegistryEntrySupplier<Item> RAW_PLATINUM = ITEMS.register("raw_platinum", () -> new Item(new Item.Properties().tab(RFCreativeTabs.UPGRADE_ITEMS)));
+    public static final RegistryEntrySupplier<Item, Item> RAW_PLATINUM = ITEMS.register("raw_platinum", () -> new Item(new Item.Properties().tab(RFCreativeTabs.UPGRADE_ITEMS)));
     public static final RegistryEntrySupplier<Item> PLATINUM_INGOT = mat("platinum_ingot", Texture.Y);
     public static final RegistryEntrySupplier<Item> ORICHALCUM = mat("orichalcum", Rarity.UNCOMMON, Texture.Y);
     public static final RegistryEntrySupplier<Item> DRAGONIC = mat("dragonic_stone", Rarity.UNCOMMON, Texture.Y);
@@ -971,9 +972,9 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> SWORD_SEEDS = seed("sword", () -> ModBlocks.SWORD_CROP);
     public static final RegistryEntrySupplier<Item> DUNGEON_SEEDS = seed("dungeon", () -> ModBlocks.DUNGEON);
 
-    public static final RegistryEntrySupplier<Item> APPLE_SAPLING = ITEMS.register("apple_sapling", () -> new ItemNameBlockItem(ModBlocks.APPLE_SAPLING.get(), new Item.Properties().tab(RFCreativeTabs.CROPS)));
-    public static final RegistryEntrySupplier<Item> ORANGE_SAPLING = ITEMS.register("orange_sapling", () -> new ItemNameBlockItem(ModBlocks.ORANGE_SAPLING.get(), new Item.Properties().tab(RFCreativeTabs.CROPS)));
-    public static final RegistryEntrySupplier<Item> GRAPE_SAPLING = ITEMS.register("grape_sapling", () -> new ItemNameBlockItem(ModBlocks.GRAPE_SAPLING.get(), new Item.Properties().tab(RFCreativeTabs.CROPS)));
+    public static final RegistryEntrySupplier<Item, ItemNameBlockItem> APPLE_SAPLING = ITEMS.register("apple_sapling", () -> new ItemNameBlockItem(ModBlocks.APPLE_SAPLING.get(), new Item.Properties().tab(RFCreativeTabs.CROPS)));
+    public static final RegistryEntrySupplier<Item, ItemNameBlockItem> ORANGE_SAPLING = ITEMS.register("orange_sapling", () -> new ItemNameBlockItem(ModBlocks.ORANGE_SAPLING.get(), new Item.Properties().tab(RFCreativeTabs.CROPS)));
+    public static final RegistryEntrySupplier<Item, ItemNameBlockItem> GRAPE_SAPLING = ITEMS.register("grape_sapling", () -> new ItemNameBlockItem(ModBlocks.GRAPE_SAPLING.get(), new Item.Properties().tab(RFCreativeTabs.CROPS)));
 
     public static final RegistryEntrySupplier<Item> ROUNDOFF = medicine("roundoff", false);
     public static final RegistryEntrySupplier<Item> PARA_GONE = medicine("para_gone", false);
@@ -983,7 +984,7 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> HEALING_POTION = medicine("healing_potion", true);
     public static final RegistryEntrySupplier<Item> MYSTERY_POTION = medicine("mystery_potion", true);
     public static final RegistryEntrySupplier<Item> MAGICAL_POTION = medicine("magical_potion", true);
-    public static final RegistryEntrySupplier<Item> INVINCIROID = drinkable("invinciroid");
+    public static final RegistryEntrySupplier<Item, ItemObjectX> INVINCIROID = drinkable("invinciroid");
     public static final RegistryEntrySupplier<Item> LOVE_POTION = drinkable("love_potion");
     public static final RegistryEntrySupplier<Item> FORMUADE = drinkable("formuade");
     public static final RegistryEntrySupplier<Item> OBJECT_X = ITEMS.register("object_x", () -> new ItemObjectX(new Item.Properties().food(FOOD_PROP).tab(RFCreativeTabs.MEDICINE)));
@@ -1003,8 +1004,8 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> ANTIDOTE_GRASS = herb("antidote_grass", () -> ModBlocks.ANTIDOTE_GRASS);
     public static final RegistryEntrySupplier<Item> MEDICINAL_HERB = herb("medicinal_herb", () -> ModBlocks.MEDICINAL_HERB);
     public static final RegistryEntrySupplier<Item> BAMBOO_SPROUT = herb("bamboo_sprout", () -> ModBlocks.BAMBOO_SPROUT);
-    public static final RegistryEntrySupplier<Item> MUSHROOM = ITEMS.register("mushroom", () -> new ItemMushroom(new Item.Properties().food(LOW_FOOD_PROP).tab(RFCreativeTabs.FOOD)));
-    public static final RegistryEntrySupplier<Item> MONARCH_MUSHROOM = ITEMS.register("monarch_mushroom", () -> new ItemMushroom(new Item.Properties().food(LOW_FOOD_PROP).tab(RFCreativeTabs.FOOD)));
+    public static final RegistryEntrySupplier<Item, ItemMushroom> MUSHROOM = ITEMS.register("mushroom", () -> new ItemMushroom(new Item.Properties().food(LOW_FOOD_PROP).tab(RFCreativeTabs.FOOD)));
+    public static final RegistryEntrySupplier<Item, ItemMushroom> MONARCH_MUSHROOM = ITEMS.register("monarch_mushroom", () -> new ItemMushroom(new Item.Properties().food(LOW_FOOD_PROP).tab(RFCreativeTabs.FOOD)));
 
     public static final RegistryEntrySupplier<Item> RICE = food("rice", Texture.Y, FOOD_PROP, RunecraftoryTags.RICE);
     public static final RegistryEntrySupplier<Item> RICE_FLOUR = food("rice_flour", Texture.Y, LOW_FOOD_PROP);
@@ -1207,84 +1208,84 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> GRAPES = food("grapes", Texture.Y, LOW_FOOD_PROP);
     public static final RegistryEntrySupplier<Item> MEALY_APPLE = food("mealy_apple", Texture.Y, LOW_FOOD_PROP);
 
-    public static final RegistryEntrySupplier<Item> FORGING_BREAD = ITEMS.register("forging_bread", () -> new ItemRecipeBread(EnumCrafting.FORGE, new Item.Properties().tab(RFCreativeTabs.FOOD).stacksTo(16)));
-    public static final RegistryEntrySupplier<Item> ARMOR_BREAD = ITEMS.register("armory_bread", () -> new ItemRecipeBread(EnumCrafting.ARMOR, new Item.Properties().tab(RFCreativeTabs.FOOD).stacksTo(16)));
-    public static final RegistryEntrySupplier<Item> CHEMISTRY_BREAD = ITEMS.register("chemistry_bread", () -> new ItemRecipeBread(EnumCrafting.CHEM, new Item.Properties().tab(RFCreativeTabs.FOOD).stacksTo(16)));
-    public static final RegistryEntrySupplier<Item> COOKING_BREAD = ITEMS.register("cooking_bread", () -> new ItemRecipeBread(EnumCrafting.COOKING, new Item.Properties().tab(RFCreativeTabs.FOOD).stacksTo(16)));
+    public static final RegistryEntrySupplier<Item, ItemRecipeBread> FORGING_BREAD = ITEMS.register("forging_bread", () -> new ItemRecipeBread(EnumCrafting.FORGE, new Item.Properties().tab(RFCreativeTabs.FOOD).stacksTo(16)));
+    public static final RegistryEntrySupplier<Item, ItemRecipeBread> ARMOR_BREAD = ITEMS.register("armory_bread", () -> new ItemRecipeBread(EnumCrafting.ARMOR, new Item.Properties().tab(RFCreativeTabs.FOOD).stacksTo(16)));
+    public static final RegistryEntrySupplier<Item, ItemRecipeBread> CHEMISTRY_BREAD = ITEMS.register("chemistry_bread", () -> new ItemRecipeBread(EnumCrafting.CHEM, new Item.Properties().tab(RFCreativeTabs.FOOD).stacksTo(16)));
+    public static final RegistryEntrySupplier<Item, ItemRecipeBread> COOKING_BREAD = ITEMS.register("cooking_bread", () -> new ItemRecipeBread(EnumCrafting.COOKING, new Item.Properties().tab(RFCreativeTabs.FOOD).stacksTo(16)));
 
     public static final RegistryEntrySupplier<Item> SHIPPING_BIN = blockItem("shipping_bin", () -> ModBlocks.SHIPPING);
     public static final RegistryEntrySupplier<Item> SPAWNER = blockItem("boss_spawner", () -> ModBlocks.BOSS_SPAWNER, RFCreativeTabs.MONSTERS);
     public static final RegistryEntrySupplier<Item> CASH_REGISTER = blockItem("cash_register", () -> ModBlocks.CASH_REGISTER);
     public static final RegistryEntrySupplier<Item> MONSTER_BARN = blockItem("monster_barn", () -> ModBlocks.MONSTER_BARN);
-    public static final RegistryEntrySupplier<Item> QUEST_BOARD = ITEMS.register("quest_board", () -> new QuestBoardItem(ModBlocks.QUEST_BOARD.get(), new Item.Properties().tab(RFCreativeTabs.BLOCKS)));
+    public static final RegistryEntrySupplier<Item, QuestBoardItem> QUEST_BOARD = ITEMS.register("quest_board", () -> new QuestBoardItem(ModBlocks.QUEST_BOARD.get(), new Item.Properties().tab(RFCreativeTabs.BLOCKS)));
 
-    public static final RegistryEntrySupplier<Item> ICON_0 = ITEMS.register("icon_0", () -> new Item(new Item.Properties()));
-    public static final RegistryEntrySupplier<Item> DEBUG = ITEMS.register("debug_item", () -> new ItemDebug(new Item.Properties()));
-    public static final RegistryEntrySupplier<Item> LEVEL = ITEMS.register("level_item", () -> new ItemLevelUp(new Item.Properties()));
-    public static final RegistryEntrySupplier<Item> SKILL = ITEMS.register("skill_item", () -> new ItemSkillUp(new Item.Properties()));
-    public static final RegistryEntrySupplier<Item> TAME = ITEMS.register("insta_tame", () -> new Item(new Item.Properties()) {
+    public static final RegistryEntrySupplier<Item, Item> ICON_0 = ITEMS.register("icon_0", () -> new Item(new Item.Properties()));
+    public static final RegistryEntrySupplier<Item, ItemDebug> DEBUG = ITEMS.register("debug_item", () -> new ItemDebug(new Item.Properties()));
+    public static final RegistryEntrySupplier<Item, ItemLevelUp> LEVEL = ITEMS.register("level_item", () -> new ItemLevelUp(new Item.Properties()));
+    public static final RegistryEntrySupplier<Item, ItemSkillUp> SKILL = ITEMS.register("skill_item", () -> new ItemSkillUp(new Item.Properties()));
+    public static final RegistryEntrySupplier<Item, Item> TAME = ITEMS.register("insta_tame", () -> new Item(new Item.Properties()) {
         @Override
         public boolean isFoil(ItemStack stack) {
             return true;
         }
     });
-    public static final RegistryEntrySupplier<Item> UNKNOWN = ITEMS.register("unknown", () -> new Item(new Item.Properties()));
-    public static final RegistryEntrySupplier<Item> ORC_MAZE = ITEMS.register("orc_maze", () -> new Item(new Item.Properties().stacksTo(1)));
-    public static final RegistryEntrySupplier<Item> STEEL_SWORD_PROP = ITEMS.register("steel_sword_prop", () -> new ItemProp(new Item.Properties().stacksTo(1), () -> new ItemStack(ModItems.STEEL_SWORD.get())));
-    public static final RegistryEntrySupplier<Item> CUTLASS_PROP = ITEMS.register("cutlass_prop", () -> new ItemProp(new Item.Properties().stacksTo(1), () -> new ItemStack(ModItems.CUTLASS.get())));
-    public static final RegistryEntrySupplier<Item> THIEF_KNIFE_PROP = ITEMS.register("thief_knife_prop", () -> new ItemProp(new Item.Properties().stacksTo(1), () -> new ItemStack(ModItems.THIEF_KNIFE.get())));
+    public static final RegistryEntrySupplier<Item, Item> UNKNOWN = ITEMS.register("unknown", () -> new Item(new Item.Properties()));
+    public static final RegistryEntrySupplier<Item, Item> ORC_MAZE = ITEMS.register("orc_maze", () -> new Item(new Item.Properties().stacksTo(1)));
+    public static final RegistryEntrySupplier<Item, ItemProp> STEEL_SWORD_PROP = ITEMS.register("steel_sword_prop", () -> new ItemProp(new Item.Properties().stacksTo(1), () -> new ItemStack(ModItems.STEEL_SWORD.get())));
+    public static final RegistryEntrySupplier<Item, ItemProp> CUTLASS_PROP = ITEMS.register("cutlass_prop", () -> new ItemProp(new Item.Properties().stacksTo(1), () -> new ItemStack(ModItems.CUTLASS.get())));
+    public static final RegistryEntrySupplier<Item, ItemProp> THIEF_KNIFE_PROP = ITEMS.register("thief_knife_prop", () -> new ItemProp(new Item.Properties().stacksTo(1), () -> new ItemStack(ModItems.THIEF_KNIFE.get())));
 
-    public static final RegistryEntrySupplier<Item> NPC_BABY = ITEMS.register("baby", () -> new BabySpawnEgg(new Item.Properties().stacksTo(1)));
+    public static final RegistryEntrySupplier<Item, BabySpawnEgg> NPC_BABY = ITEMS.register("baby", () -> new BabySpawnEgg(new Item.Properties().stacksTo(1)));
 
-    public static RegistryEntrySupplier<Item> hoe(EnumToolTier tier) {
-        RegistryEntrySupplier<Item> sup = ITEMS.register("hoe_" + tier.getName(), () -> new ItemToolHoe(tier, new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
+    public static RegistryEntrySupplier<Item, ItemToolHoe> hoe(EnumToolTier tier) {
+        RegistryEntrySupplier<Item, ItemToolHoe> sup = ITEMS.register("hoe_" + tier.getName(), () -> new ItemToolHoe(tier, new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
         if (Platform.INSTANCE.isDatagen())
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.HOES, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
-    public static RegistryEntrySupplier<Item> wateringCan(EnumToolTier tier) {
-        RegistryEntrySupplier<Item> sup = ITEMS.register("watering_can_" + tier.getName(), () -> new ItemToolWateringCan(tier, new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
+    public static RegistryEntrySupplier<Item, ItemToolWateringCan> wateringCan(EnumToolTier tier) {
+        RegistryEntrySupplier<Item, ItemToolWateringCan> sup = ITEMS.register("watering_can_" + tier.getName(), () -> new ItemToolWateringCan(tier, new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
         if (Platform.INSTANCE.isDatagen())
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.WATERINGCANS, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
-    public static RegistryEntrySupplier<Item> sickle(EnumToolTier tier) {
-        RegistryEntrySupplier<Item> sup = ITEMS.register("sickle_" + tier.getName(), () -> new ItemToolSickle(tier, new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
+    public static RegistryEntrySupplier<Item, ItemToolSickle> sickle(EnumToolTier tier) {
+        RegistryEntrySupplier<Item, ItemToolSickle> sup = ITEMS.register("sickle_" + tier.getName(), () -> new ItemToolSickle(tier, new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
         if (Platform.INSTANCE.isDatagen())
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.SICKLES, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
-    public static RegistryEntrySupplier<Item> hammerTool(EnumToolTier tier) {
-        RegistryEntrySupplier<Item> sup = ITEMS.register("hammer_" + tier.getName(), () -> new ItemToolHammer(tier, new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
+    public static RegistryEntrySupplier<Item, ItemToolHammer> hammerTool(EnumToolTier tier) {
+        RegistryEntrySupplier<Item, ItemToolHammer> sup = ITEMS.register("hammer_" + tier.getName(), () -> new ItemToolHammer(tier, new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
         if (Platform.INSTANCE.isDatagen())
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.HAMMER_TOOLS, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
-    public static RegistryEntrySupplier<Item> axeTool(EnumToolTier tier) {
-        RegistryEntrySupplier<Item> sup = ITEMS.register("axe_" + tier.getName(), () -> new ItemToolAxe(tier, new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
+    public static RegistryEntrySupplier<Item, ItemToolAxe> axeTool(EnumToolTier tier) {
+        RegistryEntrySupplier<Item, ItemToolAxe> sup = ITEMS.register("axe_" + tier.getName(), () -> new ItemToolAxe(tier, new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
         if (Platform.INSTANCE.isDatagen())
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.AXE_TOOLS, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
-    public static RegistryEntrySupplier<Item> fishingRod(EnumToolTier tier) {
-        RegistryEntrySupplier<Item> sup = ITEMS.register("fishing_rod_" + tier.getName(), () -> new ItemToolFishingRod(tier, new Item.Properties().stacksTo(1).tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
+    public static RegistryEntrySupplier<Item, ItemToolFishingRod> fishingRod(EnumToolTier tier) {
+        RegistryEntrySupplier<Item, ItemToolFishingRod> sup = ITEMS.register("fishing_rod_" + tier.getName(), () -> new ItemToolFishingRod(tier, new Item.Properties().stacksTo(1).tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
         if (Platform.INSTANCE.isDatagen())
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.FISHING_RODS, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
-    public static RegistryEntrySupplier<Item> shortSword(String name, Texture texture) {
+    public static RegistryEntrySupplier<Item, ItemShortSwordBase> shortSword(String name, Texture texture) {
         if (texture == Texture.N) {
-            RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemShortSwordBase(new Item.Properties()));
+            RegistryEntrySupplier<Item, ItemShortSwordBase> sup = ITEMS.register(name, () -> new ItemShortSwordBase(new Item.Properties()));
             NOTEX.add(sup);
             return sup;
         }
-        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemShortSwordBase(new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
+        RegistryEntrySupplier<Item, ItemShortSwordBase> sup = ITEMS.register(name, () -> new ItemShortSwordBase(new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
         if (Platform.INSTANCE.isDatagen()) {
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.SHORTSWORDS, t -> new ArrayList<>()).add(sup);
             TIER_3_CHEST.add(sup);
@@ -1292,13 +1293,13 @@ public class ModItems {
         return sup;
     }
 
-    public static RegistryEntrySupplier<Item> longSword(String name, Texture texture) {
+    public static RegistryEntrySupplier<Item, ItemLongSwordBase> longSword(String name, Texture texture) {
         if (texture == Texture.N) {
-            RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemLongSwordBase(new Item.Properties()));
+            RegistryEntrySupplier<Item, ItemLongSwordBase> sup = ITEMS.register(name, () -> new ItemLongSwordBase(new Item.Properties()));
             NOTEX.add(sup);
             return sup;
         }
-        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemLongSwordBase(new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
+        RegistryEntrySupplier<Item, ItemLongSwordBase> sup = ITEMS.register(name, () -> new ItemLongSwordBase(new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
         if (Platform.INSTANCE.isDatagen()) {
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.LONGSWORDS, t -> new ArrayList<>()).add(sup);
             TIER_3_CHEST.add(sup);
@@ -1306,13 +1307,13 @@ public class ModItems {
         return sup;
     }
 
-    public static RegistryEntrySupplier<Item> spear(String name, Texture texture) {
+    public static RegistryEntrySupplier<Item, ItemSpearBase> spear(String name, Texture texture) {
         if (texture == Texture.N) {
-            RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemSpearBase(new Item.Properties()));
+            RegistryEntrySupplier<Item, ItemSpearBase> sup = ITEMS.register(name, () -> new ItemSpearBase(new Item.Properties()));
             NOTEX.add(sup);
             return sup;
         }
-        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemSpearBase(new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
+        RegistryEntrySupplier<Item, ItemSpearBase> sup = ITEMS.register(name, () -> new ItemSpearBase(new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
         if (Platform.INSTANCE.isDatagen()) {
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.SPEARS, t -> new ArrayList<>()).add(sup);
             TIER_3_CHEST.add(sup);
@@ -1320,13 +1321,13 @@ public class ModItems {
         return sup;
     }
 
-    public static RegistryEntrySupplier<Item> axe(String name, Texture texture) {
+    public static RegistryEntrySupplier<Item, ItemAxeBase> axe(String name, Texture texture) {
         if (texture == Texture.N) {
-            RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemAxeBase(new Item.Properties()));
+            RegistryEntrySupplier<Item, ItemAxeBase> sup = ITEMS.register(name, () -> new ItemAxeBase(new Item.Properties()));
             NOTEX.add(sup);
             return sup;
         }
-        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemAxeBase(new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
+        RegistryEntrySupplier<Item, ItemAxeBase> sup = ITEMS.register(name, () -> new ItemAxeBase(new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
         if (Platform.INSTANCE.isDatagen()) {
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.AXES, t -> new ArrayList<>()).add(sup);
             TIER_3_CHEST.add(sup);
@@ -1334,13 +1335,13 @@ public class ModItems {
         return sup;
     }
 
-    public static RegistryEntrySupplier<Item> hammer(String name, Texture texture) {
+    public static RegistryEntrySupplier<Item, ItemHammerBase> hammer(String name, Texture texture) {
         if (texture == Texture.N) {
-            RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemHammerBase(new Item.Properties()));
+            RegistryEntrySupplier<Item, ItemHammerBase> sup = ITEMS.register(name, () -> new ItemHammerBase(new Item.Properties()));
             NOTEX.add(sup);
             return sup;
         }
-        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemHammerBase(new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
+        RegistryEntrySupplier<Item, ItemHammerBase> sup = ITEMS.register(name, () -> new ItemHammerBase(new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
         if (Platform.INSTANCE.isDatagen()) {
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.HAMMERS, t -> new ArrayList<>()).add(sup);
             TIER_3_CHEST.add(sup);
@@ -1348,13 +1349,13 @@ public class ModItems {
         return sup;
     }
 
-    public static RegistryEntrySupplier<Item> dualBlade(String name, Texture texture) {
+    public static RegistryEntrySupplier<Item, ItemDualBladeBase> dualBlade(String name, Texture texture) {
         if (texture == Texture.N) {
-            RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemDualBladeBase(new Item.Properties()));
+            RegistryEntrySupplier<Item, ItemDualBladeBase> sup = ITEMS.register(name, () -> new ItemDualBladeBase(new Item.Properties()));
             NOTEX.add(sup);
             return sup;
         }
-        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemDualBladeBase(new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
+        RegistryEntrySupplier<Item, ItemDualBladeBase> sup = ITEMS.register(name, () -> new ItemDualBladeBase(new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
         if (Platform.INSTANCE.isDatagen()) {
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.DUALBLADES, t -> new ArrayList<>()).add(sup);
             TIER_3_CHEST.add(sup);
@@ -1362,13 +1363,13 @@ public class ModItems {
         return sup;
     }
 
-    public static RegistryEntrySupplier<Item> gloves(String name, Texture texture) {
+    public static RegistryEntrySupplier<Item, ItemGloveBase> gloves(String name, Texture texture) {
         if (texture == Texture.N) {
-            RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemGloveBase(new Item.Properties()));
+            RegistryEntrySupplier<Item, ItemGloveBase> sup = ITEMS.register(name, () -> new ItemGloveBase(new Item.Properties()));
             NOTEX.add(sup);
             return sup;
         }
-        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemGloveBase(new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
+        RegistryEntrySupplier<Item, ItemGloveBase> sup = ITEMS.register(name, () -> new ItemGloveBase(new Item.Properties().tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
         if (Platform.INSTANCE.isDatagen()) {
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.FISTS, t -> new ArrayList<>()).add(sup);
             TIER_3_CHEST.add(sup);
@@ -1376,13 +1377,13 @@ public class ModItems {
         return sup;
     }
 
-    public static RegistryEntrySupplier<Item> staff(String name, EnumElement starterElement, int amount, Texture texture) {
+    public static RegistryEntrySupplier<Item, ItemStaffBase> staff(String name, EnumElement starterElement, int amount, Texture texture) {
         if (texture == Texture.N) {
-            RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> Platform.INSTANCE.staff(starterElement, amount, new Item.Properties().stacksTo(1)));
+            RegistryEntrySupplier<Item, ItemStaffBase> sup = ITEMS.register(name, () -> Platform.INSTANCE.staff(starterElement, amount, new Item.Properties().stacksTo(1)));
             NOTEX.add(sup);
             return sup;
         }
-        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> Platform.INSTANCE.staff(starterElement, amount, new Item.Properties().stacksTo(1).tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
+        RegistryEntrySupplier<Item, ItemStaffBase> sup = ITEMS.register(name, () -> Platform.INSTANCE.staff(starterElement, amount, new Item.Properties().stacksTo(1).tab(RFCreativeTabs.WEAPON_TOOL_TAB)));
         if (Platform.INSTANCE.isDatagen()) {
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.STAFFS, t -> new ArrayList<>()).add(sup);
             TIER_3_CHEST.add(sup);
@@ -1390,17 +1391,17 @@ public class ModItems {
         return sup;
     }
 
-    public static RegistryEntrySupplier<Item> equipment(EquipmentSlot slot, String name, Texture texture) {
+    public static RegistryEntrySupplier<Item, ItemAxeBase> equipment(EquipmentSlot slot, String name, Texture texture) {
         return equipment(slot, name, texture, false);
     }
 
-    public static RegistryEntrySupplier<Item> equipment(EquipmentSlot slot, String name, Texture texture, boolean useItemTexture) {
+    public static RegistryEntrySupplier<Item, ItemAxeBase> equipment(EquipmentSlot slot, String name, Texture texture, boolean useItemTexture) {
         if (texture == Texture.N) {
-            RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> Platform.INSTANCE.armor(slot, new Item.Properties(), new ResourceLocation(RuneCraftory.MODID, name), useItemTexture));
+            RegistryEntrySupplier<Item, ItemAxeBase> sup = ITEMS.register(name, () -> Platform.INSTANCE.armor(slot, new Item.Properties(), RuneCraftory.modRes(name), useItemTexture));
             NOTEX.add(sup);
             return sup;
         }
-        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> Platform.INSTANCE.armor(slot, new Item.Properties().tab(RFCreativeTabs.EQUIPMENT), new ResourceLocation(RuneCraftory.MODID, name), useItemTexture));
+        RegistryEntrySupplier<Item, ItemAxeBase> sup = ITEMS.register(name, () -> Platform.INSTANCE.armor(slot, new Item.Properties().tab(RFCreativeTabs.EQUIPMENT), RuneCraftory.modRes(name), useItemTexture));
         if (Platform.INSTANCE.isDatagen()) {
             TIER_3_CHEST.add(sup);
             switch (slot) {
@@ -1413,13 +1414,13 @@ public class ModItems {
         return sup;
     }
 
-    public static RegistryEntrySupplier<Item> shield(String name, Texture texture) {
+    public static RegistryEntrySupplier<Item, ItemStatShield> shield(String name, Texture texture) {
         if (texture == Texture.N) {
-            RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemStatShield(new Item.Properties().stacksTo(1)));
+            RegistryEntrySupplier<Item, ItemStatShield> sup = ITEMS.register(name, () -> new ItemStatShield(new Item.Properties().stacksTo(1)));
             NOTEX.add(sup);
             return sup;
         }
-        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemStatShield(new Item.Properties().stacksTo(1).tab(RFCreativeTabs.EQUIPMENT)));
+        RegistryEntrySupplier<Item, ItemStatShield> sup = ITEMS.register(name, () -> new ItemStatShield(new Item.Properties().stacksTo(1).tab(RFCreativeTabs.EQUIPMENT)));
         if (Platform.INSTANCE.isDatagen()) {
             TIER_3_CHEST.add(sup);
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.SHIELDS, t -> new ArrayList<>()).add(sup);
@@ -1427,35 +1428,35 @@ public class ModItems {
         return sup;
     }
 
-    public static RegistryEntrySupplier<Item> blockItem(String name, Supplier<Supplier<Block>> block) {
+    public static RegistryEntrySupplier<Item, BlockItem> blockItem(String name, Supplier<Supplier<Block>> block) {
         return ITEMS.register(name, () -> new BlockItem(block.get().get(), new Item.Properties().tab(RFCreativeTabs.BLOCKS)));
     }
 
-    public static RegistryEntrySupplier<Item> blockItem(String name, Supplier<Supplier<Block>> block, CreativeModeTab group) {
+    public static RegistryEntrySupplier<Item, BlockItem> blockItem(String name, Supplier<Supplier<Block>> block, CreativeModeTab group) {
         return ITEMS.register(name, () -> new BlockItem(block.get().get(), new Item.Properties().tab(group)));
     }
 
-    public static RegistryEntrySupplier<Item> mineral(EnumMineralTier tier) {
+    public static RegistryEntrySupplier<Item, BlockItem> mineral(EnumMineralTier tier) {
         Supplier<Block> block = () -> ModBlocks.MINERAL_MAP.get(tier).get();
         return ITEMS.register("ore_" + tier.getSerializedName(), () -> new BlockItem(block.get(), new Item.Properties().tab(RFCreativeTabs.BLOCKS)));
     }
 
-    public static RegistryEntrySupplier<Item> brokenMineral(EnumMineralTier tier) {
+    public static RegistryEntrySupplier<Item, BlockItem> brokenMineral(EnumMineralTier tier) {
         Supplier<Block> block = () -> ModBlocks.BROKEN_MINERAL_MAP.get(tier).get();
         return ITEMS.register("ore_broken_" + tier.getSerializedName(), () -> new BlockItem(block.get(), new Item.Properties()));
     }
 
-    public static RegistryEntrySupplier<Item> mat(String name, Texture texture) {
+    public static RegistryEntrySupplier<Item, Item> mat(String name, Texture texture) {
         return mat(name, Rarity.COMMON, texture);
     }
 
-    public static RegistryEntrySupplier<Item> mat(String name, Rarity rarity, Texture texture) {
+    public static RegistryEntrySupplier<Item, Item> mat(String name, Rarity rarity, Texture texture) {
         if (texture == Texture.N) {
-            RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new Item(new Item.Properties().rarity(rarity)));
+            RegistryEntrySupplier<Item, Item> sup = ITEMS.register(name, () -> new Item(new Item.Properties().rarity(rarity)));
             NOTEX.add(sup);
             return sup;
         }
-        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new Item(new Item.Properties().rarity(rarity).tab(RFCreativeTabs.UPGRADE_ITEMS)));
+        RegistryEntrySupplier<Item, Item> sup = ITEMS.register(name, () -> new Item(new Item.Properties().rarity(rarity).tab(RFCreativeTabs.UPGRADE_ITEMS)));
         if (Platform.INSTANCE.isDatagen()) {
             if (rarity == Rarity.COMMON)
                 TIER_1_CHEST.add(sup);
@@ -1463,15 +1464,15 @@ public class ModItems {
         return sup;
     }
 
-    public static RegistryEntrySupplier<Item> medicine(String name, boolean affectStats) {
-        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemMedicine(affectStats, new Item.Properties().food(FOOD_PROP).stacksTo(16).tab(RFCreativeTabs.MEDICINE)));
+    public static RegistryEntrySupplier<Item, ItemMedicine> medicine(String name, boolean affectStats) {
+        RegistryEntrySupplier<Item, ItemMedicine> sup = ITEMS.register(name, () -> new ItemMedicine(affectStats, new Item.Properties().food(FOOD_PROP).stacksTo(16).tab(RFCreativeTabs.MEDICINE)));
         if (Platform.INSTANCE.isDatagen())
             TIER_2_CHEST.add(sup);
         return sup;
     }
 
-    public static RegistryEntrySupplier<Item> drinkable(String name) {
-        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new Item(new Item.Properties().food(FOOD_PROP).stacksTo(16).tab(RFCreativeTabs.MEDICINE)) {
+    public static RegistryEntrySupplier<Item, Item> drinkable(String name) {
+        RegistryEntrySupplier<Item, Item> sup = ITEMS.register(name, () -> new Item(new Item.Properties().food(FOOD_PROP).stacksTo(16).tab(RFCreativeTabs.MEDICINE)) {
             @Override
             public UseAnim getUseAnimation(ItemStack stack) {
                 return UseAnim.DRINK;
@@ -1501,20 +1502,20 @@ public class ModItems {
         return ret;
     }
 
-    public static RegistryEntrySupplier<Item> fish(String name, Texture texture) {
+    public static RegistryEntrySupplier<Item, Item> fish(String name, Texture texture) {
         if (texture == Texture.N) {
-            RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new Item(new Item.Properties()));
+            RegistryEntrySupplier<Item, Item> sup = ITEMS.register(name, () -> new Item(new Item.Properties()));
             NOTEX.add(sup);
             return sup;
         }
-        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new Item(new Item.Properties().tab(RFCreativeTabs.FOOD)));
+        RegistryEntrySupplier<Item, Item> sup = ITEMS.register(name, () -> new Item(new Item.Properties().tab(RFCreativeTabs.FOOD)));
         if (Platform.INSTANCE.isDatagen())
             TIER_1_CHEST.add(sup);
         return sup;
     }
 
-    public static RegistryEntrySupplier<Item> seed(String name, Supplier<Supplier<Block>> block) {
-        RegistryEntrySupplier<Item> sup = ITEMS.register(name + "_seeds", () -> new ItemNameBlockItem(block.get().get(), new Item.Properties().tab(RFCreativeTabs.CROPS)));
+    public static RegistryEntrySupplier<Item, ItemNameBlockItem> seed(String name, Supplier<Supplier<Block>> block) {
+        RegistryEntrySupplier<Item, ItemNameBlockItem> sup = ITEMS.register(name + "_seeds", () -> new ItemNameBlockItem(block.get().get(), new Item.Properties().tab(RFCreativeTabs.CROPS)));
         if (Platform.INSTANCE.isDatagen())
             SEEDS.add(sup);
         return sup;
@@ -1529,7 +1530,7 @@ public class ModItems {
      */
     public static RegistryEntrySupplier<Item> cropWith(String name, ResourceLocation small, Texture texture, int type) {
         if (texture == Texture.N) {
-            RegistryEntrySupplier<Item> sup;
+            RegistryEntrySupplier<Item, ItemGiantCrops> sup;
             if (small != null)
                 sup = ITEMS.register(name, () -> new ItemGiantCrops(new Item.Properties().food(FOOD_PROP)));
             else
@@ -1537,7 +1538,7 @@ public class ModItems {
             NOTEX.add(sup);
             return sup;
         }
-        RegistryEntrySupplier<Item> sup;
+        RegistryEntrySupplier<Item, ItemGiantCrops> sup;
         if (small != null)
             sup = ITEMS.register(name, () -> new ItemGiantCrops(new Item.Properties().food(FOOD_PROP).tab(RFCreativeTabs.CROPS)));
         else
@@ -1554,26 +1555,26 @@ public class ModItems {
         return sup;
     }
 
-    public static RegistryEntrySupplier<Item> herb(String name, Supplier<Supplier<Block>> block) {
-        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new BlockItem(block.get().get(), new Item.Properties().food(LOW_FOOD_PROP).tab(RFCreativeTabs.MEDICINE)));
+    public static RegistryEntrySupplier<Item, BlockItem> herb(String name, Supplier<Supplier<Block>> block) {
+        RegistryEntrySupplier<Item, BlockItem> sup = ITEMS.register(name, () -> new BlockItem(block.get().get(), new Item.Properties().food(LOW_FOOD_PROP).tab(RFCreativeTabs.MEDICINE)));
         if (Platform.INSTANCE.isDatagen())
             TIER_1_CHEST.add(sup);
         return sup;
     }
 
     @SafeVarargs
-    public static RegistryEntrySupplier<Item> food(String name, Texture texture, TagKey<Item>... tags) {
+    public static RegistryEntrySupplier<Item, Item> food(String name, Texture texture, TagKey<Item>... tags) {
         return food(name, texture, HIGH_FOOD_PROP, tags);
     }
 
     @SafeVarargs
-    public static RegistryEntrySupplier<Item> food(String name, Texture texture, FoodProperties foodProp, TagKey<Item>... tags) {
+    public static RegistryEntrySupplier<Item, Item> food(String name, Texture texture, FoodProperties foodProp, TagKey<Item>... tags) {
         if (texture == Texture.N) {
-            RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new Item(new Item.Properties().food(foodProp)));
+            RegistryEntrySupplier<Item, Item> sup = ITEMS.register(name, () -> new Item(new Item.Properties().food(foodProp)));
             NOTEX.add(sup);
             return sup;
         }
-        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new Item(new Item.Properties().food(foodProp).tab(RFCreativeTabs.FOOD)));
+        RegistryEntrySupplier<Item, Item> sup = ITEMS.register(name, () -> new Item(new Item.Properties().food(foodProp).tab(RFCreativeTabs.FOOD)));
         if (Platform.INSTANCE.isDatagen()) {
             TIER_2_CHEST.add(sup);
             FOOD.add(sup);
@@ -1585,9 +1586,9 @@ public class ModItems {
     }
 
     @SafeVarargs
-    public static RegistryEntrySupplier<Item> drinkable(String name, Texture texture, FoodProperties foodProp, TagKey<Item>... tags) {
+    public static RegistryEntrySupplier<Item, Item> drinkable(String name, Texture texture, FoodProperties foodProp, TagKey<Item>... tags) {
         if (texture == Texture.N) {
-            RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new Item(new Item.Properties().food(foodProp)) {
+            RegistryEntrySupplier<Item, Item> sup = ITEMS.register(name, () -> new Item(new Item.Properties().food(foodProp)) {
                 @Override
                 public UseAnim getUseAnimation(ItemStack stack) {
                     return UseAnim.DRINK;
@@ -1596,7 +1597,7 @@ public class ModItems {
             NOTEX.add(sup);
             return sup;
         }
-        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new Item(new Item.Properties().food(foodProp).tab(RFCreativeTabs.FOOD)) {
+        RegistryEntrySupplier<Item, Item> sup = ITEMS.register(name, () -> new Item(new Item.Properties().food(foodProp).tab(RFCreativeTabs.FOOD)) {
             @Override
             public UseAnim getUseAnimation(ItemStack stack) {
                 return UseAnim.DRINK;
@@ -1612,13 +1613,13 @@ public class ModItems {
         return sup;
     }
 
-    public static List<RegistryEntrySupplier<Item>> ribbons() {
+    public static List<RegistryEntrySupplier<Item, ?>> ribbons() {
         return List.of(ModItems.BLUE_RIBBON, ModItems.GREEN_RIBBON, ModItems.PURPLE_RIBBON, ModItems.BLACK_RIBBON,
                 ModItems.YELLOW_RIBBON, ModItems.RED_RIBBON, ModItems.ORANGE_RIBBON, ModItems.WHITE_RIBBON,
                 ModItems.INDIGO_RIBBON);
     }
 
-    public static List<RegistryEntrySupplier<Item>> hatItems() {
+    public static List<RegistryEntrySupplier<Item, ?>> hatItems() {
         return List.of(ModItems.STRAW_HAT, ModItems.FANCY_HAT);
     }
 

@@ -10,7 +10,7 @@ import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.utils.LootTableResources;
 import io.github.flemmli97.runecraftory.mixinhelper.ExtendedFishingRodHookTrigger;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import io.github.flemmli97.tenshilib.common.entity.EntityProjectile;
+import io.github.flemmli97.tenshilib.common.entity.AdvancedProjectile;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -54,7 +54,7 @@ import java.util.function.BooleanSupplier;
 /**
  * The vanilla fishing hook has too much hardcoded stuff in it
  */
-public class EntityCustomFishingHook extends EntityProjectile {
+public class EntityCustomFishingHook extends AdvancedProjectile {
 
     private static final EntityDataAccessor<Boolean> DATA_BITING = SynchedEntityData.defineId(EntityCustomFishingHook.class, EntityDataSerializers.BOOLEAN);
 

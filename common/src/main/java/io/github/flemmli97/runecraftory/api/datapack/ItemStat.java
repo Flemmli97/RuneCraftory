@@ -18,12 +18,10 @@ import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import io.github.flemmli97.tenshilib.common.utils.MapUtils;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -46,15 +44,15 @@ public class ItemStat {
 
     public static final Codec<ItemStat> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(
-                    CodecUtils.registryCodec(ModSpells.SPELL_REGISTRY_KEY).optionalFieldOf("tier_3_Spell").forGetter(s -> Optional.ofNullable(s.getTier3Spell())),
-                    CodecUtils.registryCodec(ModArmorEffects.ARMOR_EFFECT_KEY).optionalFieldOf("armor_effect").forGetter(s -> Optional.ofNullable(s.getArmorEffect())),
+                    ModSpells.SPELLS.registry().byNameCodec().optionalFieldOf("tier_3_Spell").forGetter(s -> Optional.ofNullable(s.getTier3Spell())),
+                    ModArmorEffects.ARMOR_EFFECTS.registry().byNameCodec().optionalFieldOf("armor_effect").forGetter(s -> Optional.ofNullable(s.getArmorEffect())),
 
                     CodecUtils.stringEnumCodec(EnumElement.class, EnumElement.NONE).orElse(EnumElement.NONE).fieldOf("element").forGetter(ItemStat::element),
-                    CodecUtils.registryCodec(ModSpells.SPELL_REGISTRY_KEY).optionalFieldOf("tier_1_Spell").forGetter(s -> Optional.ofNullable(s.getTier1Spell())),
-                    CodecUtils.registryCodec(ModSpells.SPELL_REGISTRY_KEY).optionalFieldOf("tier_2_Spell").forGetter(s -> Optional.ofNullable(s.getTier2Spell())),
+                    ModSpells.SPELLS.registry().byNameCodec().optionalFieldOf("tier_1_Spell").forGetter(s -> Optional.ofNullable(s.getTier1Spell())),
+                    ModSpells.SPELLS.registry().byNameCodec().optionalFieldOf("tier_2_Spell").forGetter(s -> Optional.ofNullable(s.getTier2Spell())),
 
-                    Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("item_stats").forGetter(ItemStat::itemStats),
-                    Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("monster_bonus").forGetter(ItemStat::getMonsterGiftIncrease),
+                    Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("item_stats").forGetter(ItemStat::itemStats),
+                    Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("monster_bonus").forGetter(ItemStat::getMonsterGiftIncrease),
 
                     ExtraCodecs.NON_NEGATIVE_INT.fieldOf("buy_price").forGetter(ItemStat::getBuy),
                     ExtraCodecs.NON_NEGATIVE_INT.fieldOf("sell_price").forGetter(ItemStat::getSell),
@@ -142,11 +140,11 @@ public class ItemStat {
         stat.element = buffer.readEnum(EnumElement.class);
         int size = buffer.readInt();
         for (int i = 0; i < size; i++)
-            stat.itemStats.put(Registry.ATTRIBUTE.get(buffer.readResourceLocation()), buffer.readDouble());
+            stat.itemStats.put(BuiltInRegistries.ATTRIBUTE.get(buffer.readResourceLocation()), buffer.readDouble());
         size = buffer.readInt();
         ImmutableSortedMap.Builder<Attribute, Double> builder = new ImmutableSortedMap.Builder<>(ModAttributes.SORTED);
         for (int i = 0; i < size; i++)
-            builder.put(Registry.ATTRIBUTE.get(buffer.readResourceLocation()), buffer.readDouble());
+            builder.put(BuiltInRegistries.ATTRIBUTE.get(buffer.readResourceLocation()), buffer.readDouble());
         stat.monsterGiftIncrease = builder.build();
         if (buffer.readBoolean())
             stat.tier1Spell = ModSpells.SPELL_REGISTRY.get().getFromId(buffer.readResourceLocation());
@@ -225,12 +223,12 @@ public class ItemStat {
         buffer.writeEnum(this.element);
         buffer.writeInt(this.itemStats.size());
         this.itemStats.forEach((att, val) -> {
-            buffer.writeResourceLocation(Registry.ATTRIBUTE.getKey(att));
+            buffer.writeResourceLocation(BuiltInRegistries.ATTRIBUTE.getKey(att));
             buffer.writeDouble(val);
         });
         buffer.writeInt(this.monsterGiftIncrease.size());
         this.monsterGiftIncrease.forEach((att, val) -> {
-            buffer.writeResourceLocation(Registry.ATTRIBUTE.getKey(att));
+            buffer.writeResourceLocation(BuiltInRegistries.ATTRIBUTE.getKey(att));
             buffer.writeDouble(val);
         });
         buffer.writeBoolean(this.tier1Spell != null);
@@ -249,30 +247,30 @@ public class ItemStat {
 
     public List<Component> texts(ItemStack stack, boolean showStat) {
         List<Component> list = new ArrayList<>();
-        MutableComponent price = ItemNBT.shouldHaveLevel(stack) ? new TranslatableComponent("runecraftory.tooltip.item.level", ItemNBT.itemLevel(stack)) : null;
+        MutableComponent price = ItemNBT.shouldHaveLevel(stack) ? Component.translatable("runecraftory.tooltip.item.level", ItemNBT.itemLevel(stack)) : null;
         if (ItemUtils.getBuyPrice(stack, this) > 0) {
             if (price == null)
-                price = new TranslatableComponent("runecraftory.tooltip.item.buy", ItemUtils.getBuyPrice(stack, this));
+                price = Component.translatable("runecraftory.tooltip.item.buy", ItemUtils.getBuyPrice(stack, this));
             else
-                price.append(" ").append(new TranslatableComponent("runecraftory.tooltip.item.buy", ItemUtils.getBuyPrice(stack, this))).append(" ");
+                price.append(" ").append(Component.translatable("runecraftory.tooltip.item.buy", ItemUtils.getBuyPrice(stack, this))).append(" ");
         }
         if (ItemUtils.getSellPrice(stack, this) > 0) {
             if (price == null)
-                price = new TranslatableComponent("runecraftory.tooltip.item.sell", ItemUtils.getSellPrice(stack, this));
+                price = Component.translatable("runecraftory.tooltip.item.sell", ItemUtils.getSellPrice(stack, this));
             else
-                price.append(" ").append(new TranslatableComponent("runecraftory.tooltip.item.sell", ItemUtils.getSellPrice(stack, this)));
+                price.append(" ").append(Component.translatable("runecraftory.tooltip.item.sell", ItemUtils.getSellPrice(stack, this)));
         }
         if (price != null)
             list.add(price.withStyle(ChatFormatting.YELLOW));
         boolean shouldHaveStats = ItemNBT.shouldHaveStats(stack);
         if (!shouldHaveStats && this.getDiff() > 0)
-            list.add(new TranslatableComponent("runecraftory.tooltip.item.difficulty", this.getDiff()).withStyle(ChatFormatting.YELLOW));
+            list.add(Component.translatable("runecraftory.tooltip.item.difficulty", this.getDiff()).withStyle(ChatFormatting.YELLOW));
         if (showStat) {
             AttributeMapDisplay stats = getStatsAttributeMap(stack);
             List<Component> statsTooltip = stats.components();
             if (!statsTooltip.isEmpty()) {
                 String prefix = shouldHaveStats ? "runecraftory.tooltip.item.equipped" : "runecraftory.tooltip.item.upgrade";
-                list.add(new TranslatableComponent(prefix).withStyle(ChatFormatting.GRAY));
+                list.add(Component.translatable(prefix).withStyle(ChatFormatting.GRAY));
                 list.addAll(statsTooltip);
             }
         }
@@ -300,19 +298,19 @@ public class ItemStat {
             List<Component> list = new ArrayList<>();
             if (this.flat != null) {
                 for (Map.Entry<Attribute, Double> entry : this.flat.entrySet()) {
-                    ResourceLocation key = Registry.ATTRIBUTE.getKey(entry.getKey());
+                    ResourceLocation key = BuiltInRegistries.ATTRIBUTE.getKey(entry.getKey());
                     if (IGNORED.contains(key))
                         continue;
                     double d = entry.getKey().equals(Attributes.KNOCKBACK_RESISTANCE) ? entry.getValue() * 10 : entry.getValue();
                     String num = format(key, d, false);
                     if (num == null)
                         continue;
-                    MutableComponent comp = new TextComponent(" ").append(new TranslatableComponent(entry.getKey().getDescriptionId())).append(new TextComponent(": " + num));
+                    MutableComponent comp = Component.literal(" ").append(Component.translatable(entry.getKey().getDescriptionId())).append(Component.literal(": " + num));
                     list.add(comp.withStyle(ChatFormatting.BLUE));
                 }
             } else if (this.ext != null) {
                 for (Map.Entry<Attribute, AttributeValues> entry : this.ext.entrySet()) {
-                    ResourceLocation key = Registry.ATTRIBUTE.getKey(entry.getKey());
+                    ResourceLocation key = BuiltInRegistries.ATTRIBUTE.getKey(entry.getKey());
                     if (IGNORED.contains(key))
                         continue;
                     if (entry.getValue().flat != 0) {
@@ -320,21 +318,21 @@ public class ItemStat {
                         String num = format(key, d, false);
                         if (num == null)
                             continue;
-                        MutableComponent comp = new TextComponent(" ").append(new TranslatableComponent(entry.getKey().getDescriptionId())).append(new TextComponent(": " + num));
+                        MutableComponent comp = Component.literal(" ").append(Component.translatable(entry.getKey().getDescriptionId())).append(Component.literal(": " + num));
                         list.add(comp.withStyle(ChatFormatting.BLUE));
                     }
                     if (entry.getValue().multBase != 0) {
                         String num = format(key, entry.getValue().multBase, true);
                         if (num == null)
                             continue;
-                        MutableComponent comp = new TextComponent(" ").append(new TranslatableComponent(entry.getKey().getDescriptionId())).append(new TextComponent(": " + num));
+                        MutableComponent comp = Component.literal(" ").append(Component.translatable(entry.getKey().getDescriptionId())).append(Component.literal(": " + num));
                         list.add(comp.withStyle(ChatFormatting.BLUE));
                     }
                     if (entry.getValue().multTotal != 0) {
                         String num = format(key, entry.getValue().multTotal, true);
                         if (num == null)
                             continue;
-                        MutableComponent comp = new TextComponent(" ").append(new TranslatableComponent(entry.getKey().getDescriptionId())).append(new TextComponent(": " + num));
+                        MutableComponent comp = Component.literal(" ").append(Component.translatable(entry.getKey().getDescriptionId())).append(Component.literal(": " + num));
                         list.add(comp.withStyle(ChatFormatting.BLUE));
                     }
                 }
@@ -369,7 +367,7 @@ public class ItemStat {
         }
 
         private static AttributeValues of(AttributeModifier mod) {
-            return switch (mod.getOperation()) {
+            return switch (mod.operation()) {
                 case ADDITION -> new AttributeValues(mod.getAmount(), 0, 0);
                 case MULTIPLY_BASE -> new AttributeValues(0, mod.getAmount(), 0);
                 case MULTIPLY_TOTAL -> new AttributeValues(0, 0, mod.getAmount());
@@ -377,7 +375,7 @@ public class ItemStat {
         }
 
         private AttributeValues add(AttributeModifier mod) {
-            switch (mod.getOperation()) {
+            switch (mod.operation()) {
                 case ADDITION -> this.flat += mod.getAmount();
                 case MULTIPLY_BASE -> this.multBase += mod.getAmount();
                 case MULTIPLY_TOTAL -> this.multTotal += mod.getAmount();
@@ -388,7 +386,7 @@ public class ItemStat {
 
     @Override
     public String toString() {
-        String s = "[Buy:" + this.buyPrice + ";Sell:" + this.sellPrice + ";UpgradeDifficulty:" + this.upgradeDifficulty + ";DefaultElement:" + this.element + "];{stats:[" + MapUtils.toString(this.itemStats, reg -> Registry.ATTRIBUTE.getKey(reg).toString(), Object::toString) + "]}";
+        String s = "[Buy:" + this.buyPrice + ";Sell:" + this.sellPrice + ";UpgradeDifficulty:" + this.upgradeDifficulty + ";DefaultElement:" + this.element + "];{stats:[" + MapUtils.toString(this.itemStats, reg -> BuiltInRegistries.ATTRIBUTE.getKey(reg).toString(), Object::toString) + "]}";
         if (this.id != null)
             s = this.id + ":" + s;
         return s;

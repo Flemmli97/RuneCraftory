@@ -50,7 +50,7 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
 
     private static final Map<String, PlayerSkin> PLAYER_SKIN_TEXTURE_LOCATIONS = new HashMap<>();
     private static final Map<String, ResourceLocation> TEXTURE_LAYERS_LOCATIONS = new HashMap<>();
-    public static final ResourceLocation EMPTY = new ResourceLocation(RuneCraftory.MODID, "textures/entity/npc/empty.png");
+    public static final ResourceLocation EMPTY = RuneCraftory.modRes("textures/entity/npc/empty.png");
 
     public final NPCArmorLayer<T, PlayerModel<T>, HumanoidModel<T>> armorLayer, armorLayerSlim;
     public final List<NPCTextureLayer<T, PlayerModel<T>, PlayerModel<T>>> textureLayers = new ArrayList<>();
@@ -181,7 +181,7 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
     }
 
     private static ResourceLocation modLoc(String s) {
-        return new ResourceLocation(RuneCraftory.MODID, s);
+        return RuneCraftory.modRes(s);
     }
 
     public static boolean renderForTooltip(PoseStack stack, int x, int y, @Nullable String skin, List<Pair<Integer, ResourceLocation>> textures) {

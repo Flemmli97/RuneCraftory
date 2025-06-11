@@ -5,11 +5,10 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -28,7 +27,7 @@ public class CropProperties {
                     Codec.INT.fieldOf("max_drops").forGetter(d -> d.maxDrops),
                     Codec.BOOL.fieldOf("regrowable").forGetter(d -> d.regrowable),
 
-                    Registry.BLOCK.byNameCodec().optionalFieldOf("giant_crop").forGetter(d -> d.giantVersion == Blocks.AIR ? Optional.empty() : Optional.of(d.giantVersion)),
+                    BuiltInRegistries.BLOCK.byNameCodec().optionalFieldOf("giant_crop").forGetter(d -> d.giantVersion == Blocks.AIR ? Optional.empty() : Optional.of(d.giantVersion)),
                     Codec.list(CodecUtils.stringEnumCodec(EnumSeason.class, EnumSeason.SPRING)).fieldOf("best_season").forGetter(d -> List.copyOf(d.bestSeason)),
                     Codec.list(CodecUtils.stringEnumCodec(EnumSeason.class, EnumSeason.SPRING)).fieldOf("bad_season").forGetter(d -> List.copyOf(d.badSeason))
             ).apply(instance, (growth, drops, regrowable, giant, best, bad) -> new CropProperties(growth, drops, regrowable, giant.orElse(Blocks.AIR), best, bad)));
@@ -128,11 +127,11 @@ public class CropProperties {
         if (this.translationTexts == null) {
             this.translationTexts = new ArrayList<>();
             if (!this.bestSeason.isEmpty()) {
-                MutableComponent season = new TranslatableComponent("runecraftory.tooltip.season.best").append(": ");
+                MutableComponent season = Component.translatable("runecraftory.tooltip.season.best").append(": ");
                 int i = 0;
                 for (EnumSeason seas : this.bestSeasons()) {
                     season.append(i != 0 ? "/" : "").withStyle(ChatFormatting.GRAY)
-                            .append(new TranslatableComponent(seas.translationKey()).withStyle(seas.getColor()));
+                            .append(Component.translatable(seas.translationKey()).withStyle(seas.getColor()));
                     i++;
                 }
                 this.translationTexts.add(season);
@@ -140,17 +139,17 @@ public class CropProperties {
             EnumSet<EnumSeason> badSeasons = EnumSet.copyOf(this.badSeason);
             badSeasons.removeAll(this.bestSeasons());
             if (!badSeasons.isEmpty()) {
-                MutableComponent season = new TranslatableComponent("runecraftory.tooltip.season.bad").append(": ");
+                MutableComponent season = Component.translatable("runecraftory.tooltip.season.bad").append(": ");
                 int i = 0;
                 for (EnumSeason seas : badSeasons) {
                     season.append(i != 0 ? "/" : "").withStyle(ChatFormatting.GRAY)
-                            .append(new TranslatableComponent(seas.translationKey()).withStyle(seas.getColor()));
+                            .append(Component.translatable(seas.translationKey()).withStyle(seas.getColor()));
                     i++;
                 }
                 this.translationTexts.add(season);
             }
-            MutableComponent growth = new TranslatableComponent("runecraftory.tooltip.growth", this.growth()).withStyle(ChatFormatting.GOLD);
-            Component harvest = new TranslatableComponent("runecraftory.tooltip.harvested", this.maxDrops()).withStyle(ChatFormatting.GOLD);
+            MutableComponent growth = Component.translatable("runecraftory.tooltip.growth", this.growth()).withStyle(ChatFormatting.GOLD);
+            Component harvest = Component.translatable("runecraftory.tooltip.harvested", this.maxDrops()).withStyle(ChatFormatting.GOLD);
             this.translationTexts.add(growth.append("  ").append(harvest));
         }
         return this.translationTexts;

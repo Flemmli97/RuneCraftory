@@ -7,12 +7,10 @@ import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.client.model.SittingModel;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntitySkelefang;
 import io.github.flemmli97.runecraftory.common.particles.SkelefangParticleData;
-import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.client.AnimationManager;
-import io.github.flemmli97.tenshilib.client.model.BlockBenchAnimations;
 import io.github.flemmli97.tenshilib.client.model.ExtendedModel;
-import io.github.flemmli97.tenshilib.client.model.ModelPartHandler;
 import io.github.flemmli97.tenshilib.client.model.RideableModel;
+import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.IllagerModel;
@@ -35,7 +33,7 @@ import java.util.function.Function;
 
 public class ModelSkelefang<T extends EntitySkelefang> extends EntityModel<T> implements ExtendedModel, RideableModel<T> {
 
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(RuneCraftory.MODID, "skelefang"), "main");
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(RuneCraftory.modRes("skelefang"), "main");
 
     protected final ModelPartHandler model;
     protected final BlockBenchAnimations anim;
@@ -65,7 +63,7 @@ public class ModelSkelefang<T extends EntitySkelefang> extends EntityModel<T> im
     public ModelSkelefang(ModelPart root, Function<ResourceLocation, RenderType> function) {
         super(function);
         this.model = new ModelPartHandler(root, "root");
-        this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "skelefang"));
+        this.anim = AnimationManager.getInstance().getAnimation(RuneCraftory.modRes("skelefang"));
         this.head = this.model.getPart("head");
         this.neck = this.model.getPart("neckSpine");
         this.body = this.model.getPart("body");

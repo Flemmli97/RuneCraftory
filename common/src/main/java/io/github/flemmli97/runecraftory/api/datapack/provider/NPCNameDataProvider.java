@@ -3,9 +3,9 @@ package io.github.flemmli97.runecraftory.api.datapack.provider;
 import com.google.gson.JsonElement;
 import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NameManager;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.HashCache;
+import net.minecraft.data.PackOutput;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,10 +22,10 @@ public abstract class NPCNameDataProvider implements DataProvider {
 
     private final Map<String, NameStructure> names = new HashMap<>();
 
-    private final DataGenerator gen;
+    private final PackOutput packOutput;
     private final String modid;
 
-    public NPCNameDataProvider(DataGenerator gen, String modid) {
+    public NPCNameDataProvider(PackOutput packOutput, String modid) {
         this.gen = gen;
         this.modid = modid;
     }

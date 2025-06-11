@@ -14,9 +14,8 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -25,7 +24,7 @@ import net.minecraft.world.phys.HitResult;
 
 public class FarmlandInfo extends GuiComponent {
 
-    private static final ResourceLocation TEXTURE_PATH = new ResourceLocation(RuneCraftory.MODID, "textures/gui/farmland_view.png");
+    private static final ResourceLocation TEXTURE_PATH = RuneCraftory.modRes("textures/gui/farmland_view.png");
     private final Minecraft mc;
 
     public FarmlandInfo(Minecraft mc) {
@@ -67,28 +66,28 @@ public class FarmlandInfo extends GuiComponent {
         yPos += 5;
         xPos += 5;
         if (cropBlock) {
-            MutableComponent growth = new TextComponent(data.ageProgress() + "%");
+            MutableComponent growth = Component.literal(data.ageProgress() + "%");
             if (data.ageProgress() == 100)
                 growth.withStyle(ChatFormatting.GREEN);
-            this.mc.font.draw(stack, new TranslatableComponent("runecraftory.magnifying_glass.view.crop.growth", growth), xPos, yPos, 0x000000);
-            this.mc.font.draw(stack, new TranslatableComponent("runecraftory.magnifying_glass.view.crop.level", data.cropLevel()), xPos, yPos + 10, 0x000000);
-            MutableComponent giant = new TextComponent(data.cropSizeProgress() + "%");
+            this.mc.font.draw(stack, Component.translatable("runecraftory.magnifying_glass.view.crop.growth", growth), xPos, yPos, 0x000000);
+            this.mc.font.draw(stack, Component.translatable("runecraftory.magnifying_glass.view.crop.level", data.cropLevel()), xPos, yPos + 10, 0x000000);
+            MutableComponent giant = Component.literal(data.cropSizeProgress() + "%");
             if (data.cropSizeProgress() == 100)
                 giant.withStyle(ChatFormatting.GREEN);
-            this.mc.font.draw(stack, new TranslatableComponent("runecraftory.magnifying_glass.view.crop.giant", giant), xPos, yPos + 10 * 2, 0x000000);
+            this.mc.font.draw(stack, Component.translatable("runecraftory.magnifying_glass.view.crop.giant", giant), xPos, yPos + 10 * 2, 0x000000);
             yPos += 10 * 4;
         }
-        MutableComponent growth = new TextComponent(this.formattedValue(data.growth()));
+        MutableComponent growth = Component.literal(this.formattedValue(data.growth()));
         if (data.growth() <= 0.5)
             growth.withStyle(ChatFormatting.RED);
-        this.mc.font.draw(stack, new TranslatableComponent("runecraftory.magnifying_glass.view.speed", growth), xPos, yPos, 0x000000);
-        MutableComponent health = new TextComponent(data.health() + "");
+        this.mc.font.draw(stack, Component.translatable("runecraftory.magnifying_glass.view.speed", growth), xPos, yPos, 0x000000);
+        MutableComponent health = Component.literal(data.health() + "");
         if (data.health() <= 10)
             health.withStyle(ChatFormatting.RED);
-        this.mc.font.draw(stack, new TranslatableComponent("runecraftory.magnifying_glass.view.health", health), xPos, yPos + 10, 0x000000);
-        this.mc.font.draw(stack, new TranslatableComponent("runecraftory.magnifying_glass.view.level", this.formattedValue(data.quality())), xPos, yPos + 10 * 2, 0x000000);
-        this.mc.font.draw(stack, new TranslatableComponent("runecraftory.magnifying_glass.view.giant", this.formattedValue(data.size())), xPos, yPos + 10 * 3, 0x000000);
-        this.mc.font.draw(stack, new TranslatableComponent("runecraftory.magnifying_glass.view.defence", this.formattedValue(data.defence())), xPos, yPos + 10 * 4, 0x000000);
+        this.mc.font.draw(stack, Component.translatable("runecraftory.magnifying_glass.view.health", health), xPos, yPos + 10, 0x000000);
+        this.mc.font.draw(stack, Component.translatable("runecraftory.magnifying_glass.view.level", this.formattedValue(data.quality())), xPos, yPos + 10 * 2, 0x000000);
+        this.mc.font.draw(stack, Component.translatable("runecraftory.magnifying_glass.view.giant", this.formattedValue(data.size())), xPos, yPos + 10 * 3, 0x000000);
+        this.mc.font.draw(stack, Component.translatable("runecraftory.magnifying_glass.view.defence", this.formattedValue(data.defence())), xPos, yPos + 10 * 4, 0x000000);
     }
 
     private String formattedValue(float f) {

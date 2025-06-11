@@ -18,7 +18,7 @@ public class SleepEffect extends MobEffect {
     }
 
     private static void applySleep(LivingEntity entity, boolean flag) {
-        Platform.INSTANCE.getEntityData(entity).ifPresent(data -> data.setSleeping(entity, flag));
+        Platform.INSTANCE.getEntityData(entity).setSleeping(entity, flag);
     }
 
     @Override

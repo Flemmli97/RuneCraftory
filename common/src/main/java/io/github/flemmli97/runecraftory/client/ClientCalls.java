@@ -31,6 +31,7 @@ import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.ParticleStatus;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
@@ -43,8 +44,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
@@ -146,13 +145,13 @@ public class ClientCalls {
         }
     }
 
-    public static void renderScreenOverlays(PoseStack stack, float partialTicks) {
+    public static void renderScreenOverlays(GuiGraphics graphics, float partialTicks) {
         if (ClientHandlers.OVERLAY != null)
-            ClientHandlers.OVERLAY.renderBar(stack);
+            ClientHandlers.OVERLAY.renderBar(graphics);
         if (ClientHandlers.SPELL_DISPLAY != null && ClientConfig.inventoryButton)
-            ClientHandlers.SPELL_DISPLAY.render(stack, partialTicks);
+            ClientHandlers.SPELL_DISPLAY.render(graphics, partialTicks);
         if (ClientHandlers.FARM_DISPLAY != null)
-            ClientHandlers.FARM_DISPLAY.render(stack);
+            ClientHandlers.FARM_DISPLAY.render(graphics);
     }
 
     public static void tooltipEvent(ItemStack stack, List<Component> tooltip, TooltipFlag flag) {
@@ -180,23 +179,23 @@ public class ClientCalls {
         DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem()).ifPresent(stat -> {
             tooltip.addAll(stat.texts(stack, shift));
             if (flag.isAdvanced())
-                debug.add(new TranslatableComponent("runecraftory.tooltip.debug.stat", stat.getId().toString()).withStyle(ChatFormatting.GRAY));
+                debug.add(Component.translatable("runecraftory.tooltip.debug.stat", stat.getId().toString()).withStyle(ChatFormatting.GRAY));
         });
         CropProperties props = DataPackHandler.INSTANCE.cropManager().get(stack.getItem());
         if (props != null) {
             tooltip.addAll(props.texts());
             if (flag.isAdvanced())
-                debug.add(new TranslatableComponent("runecraftory.tooltip.debug.crop", props.getId().toString()).withStyle(ChatFormatting.GRAY));
+                debug.add(Component.translatable("runecraftory.tooltip.debug.crop", props.getId().toString()).withStyle(ChatFormatting.GRAY));
         }
         if (shift) {
             FoodProperties food = DataPackHandler.INSTANCE.foodManager().get(stack.getItem());
             if (food != null) {
                 tooltip.addAll(food.texts(stack));
                 if (flag.isAdvanced())
-                    debug.add(new TranslatableComponent("runecraftory.tooltip.debug.food", food.getId().toString()).withStyle(ChatFormatting.GRAY));
+                    debug.add(Component.translatable("runecraftory.tooltip.debug.food", food.getId().toString()).withStyle(ChatFormatting.GRAY));
             } else if (stack.isEdible()) {
-                tooltip.add(new TranslatableComponent("runecraftory.tooltip.item.eaten").withStyle(ChatFormatting.GRAY));
-                MutableComponent comp = new TextComponent(" ").append(new TranslatableComponent(ModAttributes.RPGAIN.get().getDescriptionId())).append(new TextComponent(": " + EntityUtils.getRPFromVanillaFood(stack)));
+                tooltip.add(Component.translatable("runecraftory.tooltip.item.eaten").withStyle(ChatFormatting.GRAY));
+                MutableComponent comp = Component.literal(" ").append(Component.translatable(ModAttributes.RPGAIN.get().getDescriptionId())).append(Component.literal(": " + EntityUtils.getRPFromVanillaFood(stack)));
                 tooltip.add(comp.withStyle(ChatFormatting.AQUA));
             }
         }
@@ -279,15 +278,15 @@ public class ClientCalls {
         Platform.INSTANCE.getEntityData(entity).ifPresent(data -> {
             int mod = entity.tickCount % 20;
             if (mod == 0 && data.isSleeping()) {
-                entity.level.addParticle(ModParticles.SLEEP.get(), entity.getX(), entity.getY() + entity.getBbHeight() + 0.5, entity.getZ(), 0, 0, 0);
+                entity.level().addParticle(ModParticles.SLEEP.get(), entity.getX(), entity.getY() + entity.getBbHeight() + 0.5, entity.getZ(), 0, 0, 0);
             }
             if (mod == 5 && data.isPoisoned()) {
-                entity.level.addParticle(ModParticles.POISON.get(), entity.getX(), entity.getY() + entity.getBbHeight() + 0.1, entity.getZ(), 0, 0, 0);
+                entity.level().addParticle(ModParticles.POISON.get(), entity.getX(), entity.getY() + entity.getBbHeight() + 0.1, entity.getZ(), 0, 0, 0);
             }
             if (data.isParalysed()) {
                 boolean bl2 = entity.isInvisible() ? entity.getRandom().nextInt(25) == 0 : entity.getRandom().nextInt(5) == 0;
                 if (bl2) {
-                    entity.level.addParticle(ModParticles.PARALYSIS.get(), entity.getRandomX(0.5), entity.getRandomY(), entity.getRandomZ(0.5), 0.05, 0.05, 0.05);
+                    entity.level().addParticle(ModParticles.PARALYSIS.get(), entity.getRandomX(0.5), entity.getRandomY(), entity.getRandomZ(0.5), 0.05, 0.05, 0.05);
                 }
             }
         });
@@ -300,7 +299,7 @@ public class ClientCalls {
             if (ClientHandlers.CLIENT_CALENDAR.currentWeather() == EnumWeather.RUNEY) {
                 int tries = Minecraft.getInstance().options.particles != ParticleStatus.ALL ? 1 : 2;
                 for (int i = 0; i < tries; i++)
-                    entity.level.addParticle(ModParticles.RUNEY.get(),
+                    entity.level().addParticle(ModParticles.RUNEY.get(),
                             entity.getX() + (entity.getRandom().nextDouble() - 0.5) * 24,
                             entity.getY() + (entity.getRandom().nextDouble() - 0.5) * 12,
                             entity.getZ() + (entity.getRandom().nextDouble() - 0.5) * 24, 0, 0, 0);

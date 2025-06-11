@@ -14,9 +14,8 @@ import io.github.flemmli97.simplequests_api.quest.entry.QuestEntryKey;
 import io.github.flemmli97.simplequests_api.quest.entry.QuestTask;
 import io.github.flemmli97.simplequests_api.quest.entry.ResolvedQuestTask;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -27,11 +26,11 @@ import java.util.List;
 
 public class SkillLevelTask implements QuestTask<SkillLevelTask.SkillLevelTaskResolved> {
 
-    public static final QuestEntryKey<SkillLevelTask> ID = new QuestEntryKey<>(new ResourceLocation(RuneCraftory.MODID, "skill_level"));
+    public static final QuestEntryKey<SkillLevelTask> ID = new QuestEntryKey<>(RuneCraftory.modRes("skill_level"));
     public static final Codec<SkillLevelTask> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(Codec.STRING.fieldOf("description").forGetter(d -> d.description),
                     CodecHelper.nonEmptyList(CodecUtils.stringEnumCodec(EnumSkills.class, null), "Skill list can't be empty").fieldOf("skill").forGetter(d -> d.skills),
-                    CodecHelper.NUMER_PROVIDER_CODEC.fieldOf("level").forGetter(d -> d.range)
+                    NumberProviders.CODEC.fieldOf("level").forGetter(d -> d.range)
             ).apply(instance, SkillLevelTask::new));
 
     private final String description;
@@ -55,9 +54,9 @@ public class SkillLevelTask implements QuestTask<SkillLevelTask.SkillLevelTaskRe
     public MutableComponent translation(ServerPlayer player) {
         if (this.description.isEmpty() && this.simple()) {
             EnumSkills skill = this.skills.get(0);
-            return new TranslatableComponent(this.getId().toString(), skill, this.range.getInt(null));
+            return Component.translatable(this.getId().toString(), skill, this.range.getInt(null));
         }
-        return new TranslatableComponent(this.description);
+        return Component.translatable(this.description);
     }
 
     @Override
@@ -91,7 +90,7 @@ public class SkillLevelTask implements QuestTask<SkillLevelTask.SkillLevelTaskRe
 
         @Override
         public MutableComponent translation(ServerPlayer player) {
-            return new TranslatableComponent(this.getId().toString(), this.skill, this.level);
+            return Component.translatable(this.getId().toString(), this.skill, this.level);
         }
     }
 }

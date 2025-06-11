@@ -4,7 +4,6 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.utils.MobAttackExt;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.syncher.EntityDataSerializer;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
 
 public class SyncableDatas {
@@ -50,7 +49,7 @@ public class SyncableDatas {
         }
     };
 
-    public static final SyncableEntityData.SyncedEntityData<MobAttackExt.TargetPosition> TARGET_POS = SyncableEntityData.register(new ResourceLocation(RuneCraftory.MODID, "target_position"), TARGET_POSITION);
-    public static final SyncableEntityData.SyncedEntityData<Vec3> MOTION_DIR = SyncableEntityData.register(new ResourceLocation(RuneCraftory.MODID, "motion_direction"), VEC3);
+    public static final SyncableEntityData.SyncedEntityData<MobAttackExt.TargetPosition> TARGET_POS = SyncableEntityData.register(RuneCraftory.modRes("target_position"), TARGET_POSITION);
+    public static final SyncableEntityData.SyncedEntityData<Vec3> MOTION_DIR = SyncableEntityData.register(RuneCraftory.modRes("motion_direction"), VEC3);
 
 }

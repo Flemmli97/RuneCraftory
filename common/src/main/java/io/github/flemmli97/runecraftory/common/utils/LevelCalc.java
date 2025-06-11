@@ -196,7 +196,7 @@ public class LevelCalc {
                 cons = npc::addXp;
             if (cons == null)
                 return;
-            cons.accept(adjustOnLevel ? levelXpWith(base, mob.level().getLevel(), level) : base);
+            cons.accept(adjustOnLevel ? levelXpWith(base, mob.xpLevel().getLevel(), level) : base);
         }
     }
 

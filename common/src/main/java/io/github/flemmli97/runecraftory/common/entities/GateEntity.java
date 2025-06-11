@@ -32,6 +32,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
@@ -108,7 +109,7 @@ public class GateEntity extends Mob implements IBaseMob {
         return spawnType == MobSpawnType.SPAWNER || level.getBlockState(blockPos).isValidSpawn(level, blockPos, type) || (level.getSeaLevel() - 5 > pos.getY() && state.getFluidState().is(FluidTags.WATER));
     }
 
-    public static boolean canSpawnAt(EntityType<? extends GateEntity> type, ServerLevelAccessor level, MobSpawnType reason, BlockPos pos, Random random) {
+    public static boolean canSpawnAt(EntityType<? extends GateEntity> type, ServerLevelAccessor level, MobSpawnType reason, BlockPos pos, RandomSource random) {
         BlockState state = level.getBlockState(pos);
         return level.getDifficulty() != Difficulty.PEACEFUL && DataPackHandler.INSTANCE.gateSpawnsManager().hasSpawns(level, pos, state)
                 && level.getLevel().getPoiManager().find(PoiType.MEETING.getPredicate(), p -> true, pos, MobConfig.bellRadius, PoiManager.Occupancy.ANY).isEmpty()
@@ -128,7 +129,7 @@ public class GateEntity extends Mob implements IBaseMob {
     }
 
     @Override
-    public LevelExpPair level() {
+    public LevelExpPair xpLevel() {
         this.expPair.setLevel(this.entityData.get(MOB_LEVEL), l -> 0);
         return this.expPair;
     }
@@ -389,7 +390,7 @@ public class GateEntity extends Mob implements IBaseMob {
     protected void tickDeath() {
         if (this.deathTime == 5) {
             if (!this.level.isClientSide && this.getLastHurtByMob() != null)
-                LevelCalc.addXP(this.getLastHurtByMob(), this.baseXP(), this.baseMoney(), this.level().getLevel());
+                LevelCalc.addXP(this.getLastHurtByMob(), this.baseXP(), this.baseMoney(), this.xpLevel().getLevel());
         }
         super.tickDeath();
     }
@@ -437,11 +438,11 @@ public class GateEntity extends Mob implements IBaseMob {
 
     private void updateStatsToLevel() {
         this.getAttribute(Attributes.MAX_HEALTH).removeModifier(ATTRIBUTE_LEVEL_MOD);
-        this.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(new AttributeModifier(ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.level().getLevel() - 1) * MobConfig.gateHealthGain, AttributeModifier.Operation.ADDITION));
+        this.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(new AttributeModifier(ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.xpLevel().getLevel() - 1) * MobConfig.gateHealthGain, AttributeModifier.Operation.ADDITION));
         this.getAttribute(ModAttributes.DEFENCE.get()).removeModifier(ATTRIBUTE_LEVEL_MOD);
-        this.getAttribute(ModAttributes.DEFENCE.get()).addPermanentModifier(new AttributeModifier(ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.level().getLevel() - 1) * MobConfig.gateDefGain, AttributeModifier.Operation.ADDITION));
+        this.getAttribute(ModAttributes.DEFENCE.get()).addPermanentModifier(new AttributeModifier(ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.xpLevel().getLevel() - 1) * MobConfig.gateDefGain, AttributeModifier.Operation.ADDITION));
         this.getAttribute(ModAttributes.MAGIC_DEFENCE.get()).removeModifier(ATTRIBUTE_LEVEL_MOD);
-        this.getAttribute(ModAttributes.MAGIC_DEFENCE.get()).addPermanentModifier(new AttributeModifier(ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.level().getLevel() - 1) * MobConfig.gateMDefGain, AttributeModifier.Operation.ADDITION));
+        this.getAttribute(ModAttributes.MAGIC_DEFENCE.get()).addPermanentModifier(new AttributeModifier(ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.xpLevel().getLevel() - 1) * MobConfig.gateMDefGain, AttributeModifier.Operation.ADDITION));
         this.setHealth(this.getMaxHealth());
     }
 

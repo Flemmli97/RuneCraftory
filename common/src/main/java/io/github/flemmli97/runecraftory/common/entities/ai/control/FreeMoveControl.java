@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.entities.ai.control;
 
 import io.github.flemmli97.runecraftory.common.utils.MathsHelper;
-import io.github.flemmli97.tenshilib.common.utils.MathUtils;
+import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;

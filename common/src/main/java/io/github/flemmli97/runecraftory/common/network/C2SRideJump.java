@@ -2,29 +2,28 @@ package io.github.flemmli97.runecraftory.common.network;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 
-public class C2SRideJump implements Packet {
+public class C2SRideJump implements CustomPacketPayload {
 
-    public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "c2s_ride_jump");
+    public static final CustomPacketPayload.Type<C2SRideJump> TYPE = new CustomPacketPayload.Type<>(RuneCraftory.modRes("c2s_ride_jump"));
 
-    public static C2SRideJump read(FriendlyByteBuf buf) {
-        return new C2SRideJump();
+    public static final C2SRideJump INSTANCE = new C2SRideJump();
+    public static final StreamCodec<RegistryFriendlyByteBuf, C2SRideJump> STREAM_CODEC = StreamCodec.unit(INSTANCE);
+
+    private C2SRideJump() {
     }
 
     public static void handle(C2SRideJump pkt, ServerPlayer sender) {
-        if (sender != null && sender.isPassenger() && sender.getVehicle() instanceof BaseMonster)
+        if (sender.isPassenger() && sender.getVehicle() instanceof BaseMonster)
             ((BaseMonster) sender.getVehicle()).setDoJumping(true);
     }
 
     @Override
-    public void write(FriendlyByteBuf buf) {
-    }
-
-    @Override
-    public ResourceLocation getID() {
-        return ID;
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 }

@@ -7,10 +7,10 @@ import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCAttackGoal;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityThrownItem;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCActions;
-import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +20,7 @@ public class FoodThrowAction implements NPCAction {
 
     public static final Codec<FoodThrowAction> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(ItemStack.CODEC.listOf().fieldOf("items").forGetter(d -> d.items),
-                    CodecHelper.NUMER_PROVIDER_CODEC.fieldOf("walk_time").forGetter(d -> d.walkTime),
+                    NumberProviders.CODEC.fieldOf("walk_time").forGetter(d -> d.walkTime),
                     NPCAction.optionalNumCooldown(d -> d.cooldown)
             ).apply(instance, FoodThrowAction::new));
 
@@ -44,7 +44,7 @@ public class FoodThrowAction implements NPCAction {
     }
 
     @Override
-    public Supplier<NPCActionCodec> codec() {
+    public Supplier<Codec<FoodThrowAction>> codec() {
         return ModNPCActions.FOOD_THROW_ACTION;
     }
 
@@ -67,11 +67,11 @@ public class FoodThrowAction implements NPCAction {
         if (npc.distanceToSqr(npc.followEntity()) <= 30) {
             npc.swing(InteractionHand.MAIN_HAND);
             ItemStack stack = this.items.get(npc.getRandom().nextInt(this.items.size())).copy();
-            EntityThrownItem entity = new EntityThrownItem(npc.level, npc);
+            EntityThrownItem entity = new EntityThrownItem(npc.level(), npc);
             entity.setItem(stack);
             entity.setActAsFood(true);
             entity.shootAtEntity(npc.followEntity(), 0.6f, 0);
-            npc.level.addFreshEntity(entity);
+            npc.level().addFreshEntity(entity);
             npc.getNavigation().stop();
             return true;
         }

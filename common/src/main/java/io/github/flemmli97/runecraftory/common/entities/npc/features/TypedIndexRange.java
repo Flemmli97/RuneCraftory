@@ -3,19 +3,19 @@ package io.github.flemmli97.runecraftory.common.entities.npc.features;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.util.random.WeightedRandom;
 
 import java.util.List;
-import java.util.Random;
 
 public class TypedIndexRange {
 
     private static final Codec<WeightedEntry.Wrapper<Pair<String, IndexRange>>> VAL = RecordCodecBuilder.create(inst ->
             inst.group(
                     Codec.INT.fieldOf("weight").forGetter(d -> d.getWeight().asInt()),
-                    Codec.STRING.fieldOf("outfit").forGetter(d -> d.getData().getFirst()),
-                    IndexRange.CODEC.fieldOf("range").forGetter(d -> d.getData().getSecond())
+                    Codec.STRING.fieldOf("outfit").forGetter(d -> d.data().getFirst()),
+                    IndexRange.CODEC.fieldOf("range").forGetter(d -> d.data().getSecond())
             ).apply(inst, (weight, type, range) -> WeightedEntry.wrap(Pair.of(type, range), weight)));
 
     public static final Codec<TypedIndexRange> CODEC = VAL.listOf().xmap(TypedIndexRange::new, t -> t.outfits);
@@ -28,10 +28,10 @@ public class TypedIndexRange {
         this.outfits = outfits;
     }
 
-    public Pair<String, Integer> getRandom(Random random) {
+    public Pair<String, Integer> getRandom(RandomSource random) {
         if (this.outfits.isEmpty())
             return NONE;
         return WeightedRandom.getRandomItem(random, this.outfits)
-                .map(p -> p.getData().mapSecond(i -> i.getRandom(random))).orElse(NONE);
+                .map(p -> p.data().mapSecond(i -> i.getRandom(random))).orElse(NONE);
     }
 }

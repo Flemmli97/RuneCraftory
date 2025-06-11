@@ -17,7 +17,7 @@ import java.util.function.Supplier;
 
 public class SpecialSextupleRecipe extends SextupleRecipe {
 
-    public static final Supplier<SpecialSextupleRecipe> SCRAP = Suppliers.memoize(() -> new SpecialSextupleRecipe(new ResourceLocation(RuneCraftory.MODID, "scrap_metal"), new ItemStack(ModItems.SCRAP.get())) {
+    public static final Supplier<SpecialSextupleRecipe> SCRAP = Suppliers.memoize(() -> new SpecialSextupleRecipe(RuneCraftory.modRes("scrap_metal"), new ItemStack(ModItems.SCRAP.get())) {
         @Override
         public RecipeOutput getCraftingOutput(PlayerContainerInv inv) {
             Platform.INSTANCE.getPlayerData(inv.getPlayer()).ifPresent(d -> CraftingUtils.RAND.setSeed(d.getCraftingSeed(inv.getPlayer())));
@@ -26,8 +26,8 @@ public class SpecialSextupleRecipe extends SextupleRecipe {
             return new RecipeOutput(new ItemStack(ModItems.SCRAP_PLUS.get()), new ItemStack(ModItems.UNKNOWN.get()), NonNullList.create());
         }
     });
-    public static final Supplier<SpecialSextupleRecipe> OBJECT_X = Suppliers.memoize(() -> new SpecialSextupleRecipe(new ResourceLocation(RuneCraftory.MODID, "object_x"), new ItemStack(ModItems.OBJECT_X.get())));
-    public static final Supplier<SpecialSextupleRecipe> FAILED_DISH = Suppliers.memoize(() -> new SpecialSextupleRecipe(new ResourceLocation(RuneCraftory.MODID, "scrap_metal"), new ItemStack(ModItems.FAILED_DISH.get())) {
+    public static final Supplier<SpecialSextupleRecipe> OBJECT_X = Suppliers.memoize(() -> new SpecialSextupleRecipe(RuneCraftory.modRes("object_x"), new ItemStack(ModItems.OBJECT_X.get())));
+    public static final Supplier<SpecialSextupleRecipe> FAILED_DISH = Suppliers.memoize(() -> new SpecialSextupleRecipe(RuneCraftory.modRes("scrap_metal"), new ItemStack(ModItems.FAILED_DISH.get())) {
         @Override
         public RecipeOutput getCraftingOutput(PlayerContainerInv inv) {
             Platform.INSTANCE.getPlayerData(inv.getPlayer()).ifPresent(d -> CraftingUtils.RAND.setSeed(d.getCraftingSeed(inv.getPlayer())));

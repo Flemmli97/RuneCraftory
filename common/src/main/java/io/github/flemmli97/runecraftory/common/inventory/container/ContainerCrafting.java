@@ -10,12 +10,13 @@ import io.github.flemmli97.runecraftory.common.crafting.SpecialSextupleRecipe;
 import io.github.flemmli97.runecraftory.common.inventory.DummyInventory;
 import io.github.flemmli97.runecraftory.common.inventory.PlayerContainerInv;
 import io.github.flemmli97.runecraftory.common.network.S2CCraftingRecipes;
-import io.github.flemmli97.runecraftory.common.registry.ModContainer;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.ModMenuTypes;
 import io.github.flemmli97.runecraftory.common.utils.CraftingUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.mixin.AbstractContainerMenuAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.server.TickTask;
@@ -60,7 +61,7 @@ public class ContainerCrafting extends AbstractContainerMenu {
     }
 
     public ContainerCrafting(int windowID, Inventory playerInv, CraftingBlockEntity tile) {
-        super(ModContainer.CRAFTING_CONTAINER.get(), windowID);
+        super(ModMenuTypes.CRAFTING_CONTAINER.get(), windowID);
         this.outPutInv = new DummyInventory(new SimpleContainer(2));
         this.craftingInv = PlayerContainerInv.create(this, tile.getInventory(), playerInv.player);
         this.tile = tile;
@@ -148,7 +149,7 @@ public class ContainerCrafting extends AbstractContainerMenu {
             }
             this.currentRecipe = this.matchingRecipes.get(this.tile.craftingIndex());
             SextupleRecipe.RecipeOutput output = this.currentRecipe.getCraftingOutput(this.craftingInv);
-            this.rpCost.set(CraftingUtils.craftingCost(this.type, Platform.INSTANCE.getPlayerData(this.craftingInv.getPlayer()).orElseThrow(EntityUtils::playerDataException), this.currentRecipe, output.bonusItems(), output.clientResult().getItem() != ModItems.UNKNOWN.get()));
+            this.rpCost.set(CraftingUtils.craftingCost(this.type, Platform.INSTANCE.getPlayerData(this.craftingInv.getPlayer()), this.currentRecipe, output.bonusItems(), output.clientResult().getItem() != ModItems.UNKNOWN.get()));
             trueOutput = output.serverResult();
             clientOutput = output.clientResult();
         } else {
@@ -175,9 +176,9 @@ public class ContainerCrafting extends AbstractContainerMenu {
                     return Pair.of(i, recipe instanceof SpecialSextupleRecipe || data.getRecipeKeeper().isUnlocked(recipe) ? this.matchingRecipes.get(i).getResultItem() : new ItemStack(ModItems.UNKNOWN.get()));
                 }).toList();
         if (!this.init)
-            Platform.INSTANCE.sendToClient(new S2CCraftingRecipes(clientData, 0), player);
+            LoaderNetwork.INSTANCE.sendToPlayer(new S2CCraftingRecipes(clientData, 0), player);
         else //The client wont have the gui open if it just got opened server side
-            player.getServer().tell(new TickTask(1, () -> Platform.INSTANCE.sendToClient(new S2CCraftingRecipes(clientData, this.currentRecipe == null ? 0 : this.matchingRecipes.indexOf(this.currentRecipe)), player)));
+            player.getServer().tell(new TickTask(1, () -> LoaderNetwork.INSTANCE.sendToPlayer(new S2CCraftingRecipes(clientData, this.currentRecipe == null ? 0 : this.matchingRecipes.indexOf(this.currentRecipe)), player)));
     }
 
     public SextupleRecipe getCurrentRecipe() {

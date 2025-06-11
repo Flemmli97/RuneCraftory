@@ -9,7 +9,7 @@ import net.minecraft.world.phys.Vec3;
 
 public class EntityKingWooly extends EntityAggressiveWooly {
 
-    public static final ResourceLocation KING_WOOLY_WOOLED_LOOT = new ResourceLocation(RuneCraftory.MODID, "entities/king_wooly/white");
+    public static final ResourceLocation KING_WOOLY_WOOLED_LOOT = RuneCraftory.modRes("entities/king_wooly/white");
 
     public EntityKingWooly(EntityType<? extends EntityWooly> type, Level level) {
         super(type, level);
