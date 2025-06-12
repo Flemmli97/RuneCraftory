@@ -2,11 +2,10 @@ package io.github.flemmli97.runecraftory.common.inventory.container;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
 import io.github.flemmli97.runecraftory.common.blocks.tile.UpgradingCraftingBlockEntity;
-import io.github.flemmli97.runecraftory.common.inventory.DummyInventory;
-import io.github.flemmli97.runecraftory.common.inventory.PlayerContainerInv;
+import io.github.flemmli97.runecraftory.common.inventory.PlayerBoundCraftingContainer;
+import io.github.flemmli97.runecraftory.common.inventory.WrappedContainer;
 import io.github.flemmli97.runecraftory.common.registry.ModMenuTypes;
 import io.github.flemmli97.runecraftory.common.utils.CraftingUtils;
-import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.Container;
@@ -22,19 +21,19 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 
 public class ContainerUpgrade extends AbstractContainerMenu {
 
-    private final PlayerContainerInv craftingInv;
+    private final PlayerBoundCraftingContainer craftingInv;
     private final EnumCrafting type;
-    private final DummyInventory outPutInv;
+    private final WrappedContainer outPutInv;
     private final DataSlot rpCost;
 
     public ContainerUpgrade(int windowId, Inventory inv, FriendlyByteBuf data) {
-        this(windowId, inv, getTile(inv.player.level, data));
+        this(windowId, inv, getTile(inv.player.level(), data));
     }
 
     public ContainerUpgrade(int windowId, Inventory playerInv, UpgradingCraftingBlockEntity tile) {
         super(ModMenuTypes.UPGRADE_CONTAINER.get(), windowId);
-        this.outPutInv = new DummyInventory(new SimpleContainer(1));
-        this.craftingInv = PlayerContainerInv.create(this, tile.getUpgradeInventory(), playerInv.player);
+        this.outPutInv = new WrappedContainer(new SimpleContainer(1));
+        this.craftingInv = PlayerBoundCraftingContainer.create(tile.getUpgradeInventory(), playerInv.player);
         this.type = tile.craftingType();
         this.addSlot(new UpgradeOutputSlot(this.outPutInv, this, this.craftingInv, 0, 116, 35));
         for (int i = 0; i < 3; ++i) {
@@ -75,7 +74,7 @@ public class ContainerUpgrade extends AbstractContainerMenu {
     }
 
     private void updateOutput() {
-        if (this.craftingInv.getPlayer().level.isClientSide)
+        if (this.craftingInv.getPlayer().level().isClientSide)
             return;
         int cost = CraftingUtils.upgradeCost(this.craftingType(), Platform.INSTANCE.getPlayerData(this.craftingInv.getPlayer()), this.craftingInv.getItem(0), this.craftingInv.getItem(1));
         if (cost >= 0) {
@@ -104,7 +103,7 @@ public class ContainerUpgrade extends AbstractContainerMenu {
             ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
             if (slotID == 0) {
-                itemstack1.onCraftedBy(player.level, player, itemstack1.getCount());
+                itemstack1.onCraftedBy(player.level(), player, itemstack1.getCount());
                 if (!this.moveItemStackTo(itemstack1, 1, 37, false))
                     return ItemStack.EMPTY;
                 slot.onQuickCraft(itemstack1, itemstack);

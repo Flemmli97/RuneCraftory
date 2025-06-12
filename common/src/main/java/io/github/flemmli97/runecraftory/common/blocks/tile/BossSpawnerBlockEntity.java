@@ -10,12 +10,11 @@ import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
-import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.ChatType;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.resources.ResourceLocation;
@@ -65,18 +64,17 @@ public class BossSpawnerBlockEntity extends BlockEntity {
         if (!nearby.isEmpty() && blockEntity.nextSpawn != null) {
             EntityProperties prop = DataPackHandler.INSTANCE.monsterPropertiesManager().getPropertiesFor(blockEntity.nextSpawn);
             boolean canSpawn = false;
-            if (prop.spawnerPredicate != EntityPredicate.ANY) {
+            if (prop.spawnerPredicate.isPresent()) {
                 // Throw out all non matching players
                 List<ServerPlayer> removed = new ArrayList<>();
                 for (ServerPlayer player : nearby) {
-                    if (!prop.spawnerPredicate.matches(player, player)) {
+                    if (!prop.spawnerPredicate.get().matches(player, player)) {
                         removed.add(player);
                         if (player.position().closerThan(pos, 16)) {
                             Vec3 opposite = player.position().subtract(pos).normalize();
                             player.fallDistance = 0;
                             player.setDeltaMovement(opposite);
-                            player.sendMessage(Component.translatable("runecraftory.misc.spawner.entry.deny").withStyle(ChatFormatting.DARK_PURPLE),
-                                    ChatType.GAME_INFO, Util.NIL_UUID);
+                            player.displayClientMessage(Component.translatable("runecraftory.misc.spawner.entry.deny").withStyle(ChatFormatting.DARK_PURPLE), true);
                             player.connection.send(new ClientboundSetEntityMotionPacket(player));
                         }
                     } else if (player.position().closerThan(pos, 10)) {
@@ -92,13 +90,6 @@ public class BossSpawnerBlockEntity extends BlockEntity {
                 blockEntity.spawnEntity(nearby, pos);
             }
         }
-    }
-
-    public StructureStart getStructure() {
-        if (this.structureID != null && this.level instanceof ServerLevel serverLevel)
-            this.structure = serverLevel.structureFeatureManager().getStructureAt(this.getBlockPos(), this.level.registryAccess().registry(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY)
-                    .map(r -> r.get(this.structureID)).orElseThrow());
-        return this.structure;
     }
 
     public void spawnEntity(List<ServerPlayer> nearby, Vec3 pos) {
@@ -124,7 +115,7 @@ public class BossSpawnerBlockEntity extends BlockEntity {
                 e.moveTo(this.worldPosition.getX() + 0.5, this.worldPosition.getY() + 5, this.worldPosition.getZ() + 0.5, this.level.random.nextFloat() * 360.0F, 0.0F);
                 if (e instanceof Mob mob) {
                     mob.restrictTo(this.worldPosition, 13);
-                    mob.finalizeSpawn((ServerLevelAccessor) this.level, this.level.getCurrentDifficultyAt(e.blockPosition()), MobSpawnType.SPAWNER, null, null);
+                    mob.finalizeSpawn((ServerLevelAccessor) this.level, this.level.getCurrentDifficultyAt(e.blockPosition()), MobSpawnType.SPAWNER, null);
                 }
                 this.level.addFreshEntity(e);
                 this.updateEntity();
@@ -147,27 +138,31 @@ public class BossSpawnerBlockEntity extends BlockEntity {
     }
 
     @Override
-    public void load(CompoundTag tag) {
-        super.load(tag);
+    public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
+        super.loadAdditional(tag, provider);
         this.lastUpdateDay = tag.getInt("LastUpdate");
         if (tag.contains("SpawnListId")) {
-            this.spawnListId = new ResourceLocation(tag.getString("SpawnListId"));
-            this.spawnList = DataPackHandler.INSTANCE.structureBossManager().getBoss(new ResourceLocation(tag.getString("SpawnListId")));
+            this.spawnListId = ResourceLocation.parse(tag.getString("SpawnListId"));
+            this.spawnList = DataPackHandler.INSTANCE.structureBossManager().getBoss(this.spawnListId);
             this.updateEntity();
         }
         if (tag.contains("Entity")) {
-            this.nextSpawn = Registry.ENTITY_TYPE.get(new ResourceLocation(tag.getString("Entity")));
+            this.nextSpawn = BuiltInRegistries.ENTITY_TYPE.byNameCodec()
+                    .parse(provider.createSerializationContext(NbtOps.INSTANCE), tag.get("Entity"))
+                    .getOrThrow();
         }
     }
 
     @Override
-    public void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
+    public void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
+        super.saveAdditional(tag, provider);
         tag.putInt("LastUpdate", this.lastUpdateDay);
         if (this.spawnListId != null)
             tag.putString("SpawnListId", this.spawnListId.toString());
         if (this.nextSpawn != null)
-            tag.putString("Entity", Registry.ENTITY_TYPE.getKey(this.nextSpawn).toString());
+            tag.put("Entity", BuiltInRegistries.ENTITY_TYPE.byNameCodec()
+                    .encodeStart(provider.createSerializationContext(NbtOps.INSTANCE), this.nextSpawn)
+                    .getOrThrow());
     }
 
     public static CompoundTag creatTagFor(ResourceLocation spawnListId) {

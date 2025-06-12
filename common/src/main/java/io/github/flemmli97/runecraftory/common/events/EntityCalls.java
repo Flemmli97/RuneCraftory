@@ -21,7 +21,6 @@ import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.network.S2CCalendar;
 import io.github.flemmli97.runecraftory.common.network.S2CCapSync;
-import io.github.flemmli97.runecraftory.common.network.S2CDataPackSync;
 import io.github.flemmli97.runecraftory.common.network.S2CEntityDataSyncAll;
 import io.github.flemmli97.runecraftory.common.network.S2CSyncConfig;
 import io.github.flemmli97.runecraftory.common.network.S2CTriggers;
@@ -29,6 +28,7 @@ import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
+import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
@@ -49,8 +49,6 @@ import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -95,11 +93,9 @@ public class EntityCalls {
 
     public static void joinPlayer(Player player) {
         if (player instanceof ServerPlayer serverPlayer) {
-            for (S2CDataPackSync.SyncedType type : S2CDataPackSync.SyncedType.values())
-                LoaderNetwork.INSTANCE.sendToPlayer(new S2CDataPackSync(type), serverPlayer);
             LoaderNetwork.INSTANCE.sendToPlayer(new S2CCalendar(WorldHandler.get(serverPlayer.getServer()).getCalendar()), serverPlayer);
             PlayerData data = Platform.INSTANCE.getPlayerData(player);
-            data.recalculateStats(false);
+            data.recalculateStats(serverPlayer, false);
             if (!data.starting) {
                 data.starting = true;
                 data.setMaxHealth(GeneralConfig.startingHealth, true);
@@ -110,15 +106,6 @@ public class EntityCalls {
             FamilyHandler.get(serverPlayer.getServer())
                     .getOrCreateEntry(serverPlayer)
                     .updateName(player);
-        }
-    }
-
-    // These datapack need resync. Do this at a stage where resource reloading is finished
-    public static void onResourceReloadEnd(MinecraftServer server) {
-        for (S2CDataPackSync.SyncedType type : S2CDataPackSync.SyncedType.values()) {
-            DataPackHandler.prepareResync(type);
-            CustomPacketPayload pkt = new S2CDataPackSync(type);
-            LoaderNetwork.INSTANCE.sendToAll(pkt, server);
         }
     }
 
@@ -171,8 +158,9 @@ public class EntityCalls {
             if (entry.getKey().getType() == EquipmentSlot.Type.ARMOR) {
                 ItemStack now = entry.getValue();
                 ItemStack last = lastArmor.apply(entry.getKey());
-                Platform.INSTANCE.getArmorEffects(last).ifPresent(d -> d.triggerEvent(last, e -> e.onRemove(entity, last)));
-                Platform.INSTANCE.getArmorEffects(now).ifPresent(d -> d.triggerEvent(now, e -> e.onEquip(entity, now)));
+                last.get(ModDataComponentTypes.ARMOR_EFFECT.get()).triggerEvent(last, e -> e.onRemove(entity, last));
+                Platform.INSTANCE.getArmorEffects(last).triggerEvent(last, e -> e.onRemove(entity, last)));
+                Platform.INSTANCE.getArmorEffects(now).triggerEvent(now, e -> e.onEquip(entity, now)));
             }
         }
         boolean hasWeapon = ItemNBT.isWeapon(entity.getMainHandItem());

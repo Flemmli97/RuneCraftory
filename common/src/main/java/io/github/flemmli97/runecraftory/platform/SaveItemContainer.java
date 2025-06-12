@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.platform;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.Container;
@@ -112,13 +113,13 @@ public class SaveItemContainer implements Container, StackedContentsCompatible {
         return 64;
     }
 
-    public void load(CompoundTag compound) {
-        ContainerHelper.loadAllItems(compound, this.stacks);
+    public void load(CompoundTag compound, HolderLookup.Provider provider) {
+        ContainerHelper.loadAllItems(compound, this.stacks, provider);
     }
 
-    public CompoundTag save() {
+    public CompoundTag save(HolderLookup.Provider provider) {
         CompoundTag compound = new CompoundTag();
-        ContainerHelper.saveAllItems(compound, this.stacks);
+        ContainerHelper.saveAllItems(compound, this.stacks, provider);
         return compound;
     }
 }

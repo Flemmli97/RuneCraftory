@@ -8,7 +8,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModMenuTypes;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.core.NonNullList;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -29,8 +29,8 @@ public class ContainerShop extends AbstractContainerMenu {
     private final DataSlot next;
     private final DataSlot prev;
 
-    public ContainerShop(int windowID, Inventory playerInv, FriendlyByteBuf buffer) {
-        this(windowID, playerInv, read(playerInv.player.level, buffer));
+    public ContainerShop(int windowID, Inventory playerInv, RegistryFriendlyByteBuf buffer) {
+        this(windowID, playerInv, read(playerInv.player.level(), buffer));
     }
 
     public ContainerShop(int windowID, Inventory playerInv, InventoryShop invShop) {
@@ -139,7 +139,7 @@ public class ContainerShop extends AbstractContainerMenu {
             if (mouse == 1)
                 count = -count;
             boolean changed = false;
-            if (!shopOutput.hasItem() || !ItemStack.isSameItemSameTags(clickedStack, shopOutput.getItem())) {
+            if (!shopOutput.hasItem() || !ItemStack.isSameItemSameComponents(clickedStack, shopOutput.getItem())) {
                 if (count > 0) {
                     ItemStack copy = clickedStack.copy();
                     copy.setCount(count);
@@ -168,13 +168,13 @@ public class ContainerShop extends AbstractContainerMenu {
         return this.invShop.npc;
     }
 
-    private static InventoryShop read(Level level, FriendlyByteBuf buf) {
+    private static InventoryShop read(Level level, RegistryFriendlyByteBuf buf) {
         Entity entity = level.getEntity(buf.readInt());
         if (entity instanceof EntityNPCBase npc) {
             NonNullList<ItemStack> list = NonNullList.create();
             int size = buf.readInt();
             for (int i = 0; i < size; i++)
-                list.add(buf.readWithCodec(ItemStack.CODEC));
+                list.add(ItemStack.STREAM_CODEC.decode(buf));
             return new InventoryShop(npc, list);
         }
         return null;

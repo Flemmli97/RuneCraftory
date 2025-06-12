@@ -18,6 +18,7 @@ import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import io.github.flemmli97.tenshilib.common.utils.MapUtils;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -51,8 +52,8 @@ public class ItemStat {
                     ModSpells.SPELLS.registry().byNameCodec().optionalFieldOf("tier_1_Spell").forGetter(s -> Optional.ofNullable(s.getTier1Spell())),
                     ModSpells.SPELLS.registry().byNameCodec().optionalFieldOf("tier_2_Spell").forGetter(s -> Optional.ofNullable(s.getTier2Spell())),
 
-                    Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("item_stats").forGetter(ItemStat::itemStats),
-                    Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("monster_bonus").forGetter(ItemStat::getMonsterGiftIncrease),
+                    Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.holderByNameCodec(), Codec.DOUBLE).fieldOf("item_stats").forGetter(ItemStat::itemStats),
+                    Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.holderByNameCodec(), Codec.DOUBLE).fieldOf("monster_bonus").forGetter(ItemStat::getMonsterGiftIncrease),
 
                     ExtraCodecs.NON_NEGATIVE_INT.fieldOf("buy_price").forGetter(ItemStat::getBuy),
                     ExtraCodecs.NON_NEGATIVE_INT.fieldOf("sell_price").forGetter(ItemStat::getSell),
@@ -100,8 +101,8 @@ public class ItemStat {
             LibAttributes.RP_GAIN
     );
 
-    private final Map<Attribute, Double> itemStats;
-    private Map<Attribute, Double> monsterGiftIncrease = Map.of();
+    private final Map<Holder<Attribute>, Double> itemStats;
+    private Map<Holder<Attribute>, Double> monsterGiftIncrease = Map.of();
 
     private int buyPrice;
     private int sellPrice;
@@ -118,7 +119,7 @@ public class ItemStat {
         this.itemStats = new HashMap<>();
     }
 
-    private ItemStat(int buyPrice, int sellPrice, int upgradeDifficulty, EnumElement element, Spell tier1Spell, Spell tier2Spell, Spell tier3Spell, ArmorEffect effect, Map<Attribute, Double> itemStats, Map<Attribute, Double> monsterGiftIncrease) {
+    private ItemStat(int buyPrice, int sellPrice, int upgradeDifficulty, EnumElement element, Spell tier1Spell, Spell tier2Spell, Spell tier3Spell, ArmorEffect effect, Map<Holder<Attribute>, Double> itemStats, Map<Holder<Attribute>, Double> monsterGiftIncrease) {
         this.itemStats = itemStats;
         this.buyPrice = buyPrice;
         this.sellPrice = sellPrice;
@@ -142,7 +143,7 @@ public class ItemStat {
         for (int i = 0; i < size; i++)
             stat.itemStats.put(BuiltInRegistries.ATTRIBUTE.get(buffer.readResourceLocation()), buffer.readDouble());
         size = buffer.readInt();
-        ImmutableSortedMap.Builder<Attribute, Double> builder = new ImmutableSortedMap.Builder<>(ModAttributes.SORTED);
+        ImmutableSortedMap.Builder<Holder<Attribute>, Double> builder = new ImmutableSortedMap.Builder<>(ModAttributes.SORTED);
         for (int i = 0; i < size; i++)
             builder.put(BuiltInRegistries.ATTRIBUTE.get(buffer.readResourceLocation()), buffer.readDouble());
         stat.monsterGiftIncrease = builder.build();
@@ -182,13 +183,13 @@ public class ItemStat {
         return this.element;
     }
 
-    public Map<Attribute, Double> itemStats() {
-        TreeMap<Attribute, Double> map = new TreeMap<>(ModAttributes.SORTED);
+    public Map<Holder<Attribute>, Double> itemStats() {
+        TreeMap<Holder<Attribute>, Double> map = new TreeMap<>(ModAttributes.SORTED);
         map.putAll(this.itemStats);
         return map;
     }
 
-    public Map<Attribute, Double> getMonsterGiftIncrease() {
+    public Map<Holder<Attribute>, Double> getMonsterGiftIncrease() {
         return this.monsterGiftIncrease;
     }
 
@@ -286,18 +287,18 @@ public class ItemStat {
                     .map(s -> new AttributeMapDisplay(s.itemStats, null)).orElse(new AttributeMapDisplay(null, null));
         if (!ItemStat.SHOW_STATS_CUSTOM)
             return new AttributeMapDisplay(null, null);
-        Map<Attribute, AttributeValues> map = new TreeMap<>(ModAttributes.SORTED);
-        Multimap<Attribute, AttributeModifier> multimap = stack.getAttributeModifiers(ItemUtils.slotOf(stack));
+        Map<Holder<Attribute>, AttributeValues> map = new TreeMap<>(ModAttributes.SORTED);
+        Multimap<Holder<Attribute>, AttributeModifier> multimap = stack.getAttributeModifiers(ItemUtils.slotOf(stack));
         multimap.forEach((att, mod) -> map.compute(att, (key, old) -> old == null ? AttributeValues.of(mod) : old.add(mod)));
         return new AttributeMapDisplay(null, map);
     }
 
-    record AttributeMapDisplay(Map<Attribute, Double> flat, Map<Attribute, AttributeValues> ext) {
+    record AttributeMapDisplay(Map<Holder<Attribute>, Double> flat, Map<Holder<Attribute>, AttributeValues> ext) {
 
         private List<Component> components() {
             List<Component> list = new ArrayList<>();
             if (this.flat != null) {
-                for (Map.Entry<Attribute, Double> entry : this.flat.entrySet()) {
+                for (Map.Entry<Holder<Attribute>, Double> entry : this.flat.entrySet()) {
                     ResourceLocation key = BuiltInRegistries.ATTRIBUTE.getKey(entry.getKey());
                     if (IGNORED.contains(key))
                         continue;
@@ -309,7 +310,7 @@ public class ItemStat {
                     list.add(comp.withStyle(ChatFormatting.BLUE));
                 }
             } else if (this.ext != null) {
-                for (Map.Entry<Attribute, AttributeValues> entry : this.ext.entrySet()) {
+                for (Map.Entry<Holder<Attribute>, AttributeValues> entry : this.ext.entrySet()) {
                     ResourceLocation key = BuiltInRegistries.ATTRIBUTE.getKey(entry.getKey());
                     if (IGNORED.contains(key))
                         continue;
@@ -318,21 +319,21 @@ public class ItemStat {
                         String num = format(key, d, false);
                         if (num == null)
                             continue;
-                        MutableComponent comp = Component.literal(" ").append(Component.translatable(entry.getKey().getDescriptionId())).append(Component.literal(": " + num));
+                        MutableComponent comp = Component.literal(" ").append(Component.translatable(entry.getKey().value().getDescriptionId())).append(Component.literal(": " + num));
                         list.add(comp.withStyle(ChatFormatting.BLUE));
                     }
                     if (entry.getValue().multBase != 0) {
                         String num = format(key, entry.getValue().multBase, true);
                         if (num == null)
                             continue;
-                        MutableComponent comp = Component.literal(" ").append(Component.translatable(entry.getKey().getDescriptionId())).append(Component.literal(": " + num));
+                        MutableComponent comp = Component.literal(" ").append(Component.translatable(entry.getKey().value().getDescriptionId())).append(Component.literal(": " + num));
                         list.add(comp.withStyle(ChatFormatting.BLUE));
                     }
                     if (entry.getValue().multTotal != 0) {
                         String num = format(key, entry.getValue().multTotal, true);
                         if (num == null)
                             continue;
-                        MutableComponent comp = Component.literal(" ").append(Component.translatable(entry.getKey().getDescriptionId())).append(Component.literal(": " + num));
+                        MutableComponent comp = Component.literal(" ").append(Component.translatable(entry.getKey().value().getDescriptionId())).append(Component.literal(": " + num));
                         list.add(comp.withStyle(ChatFormatting.BLUE));
                     }
                 }
@@ -394,8 +395,8 @@ public class ItemStat {
 
     public static class Builder {
 
-        private final Map<Attribute, Double> itemStats = new HashMap<>();
-        private final Map<Attribute, Double> monsterGiftIncrease = new HashMap<>();
+        private final Map<Holder<Attribute>, Double> itemStats = new HashMap<>();
+        private final Map<Holder<Attribute>, Double> monsterGiftIncrease = new HashMap<>();
         public final int buyPrice;
         public final int sellPrice;
         public final int upgradeDifficulty;
@@ -416,12 +417,12 @@ public class ItemStat {
             return this;
         }
 
-        public Builder addAttribute(Attribute att, double value) {
+        public Builder addAttribute(Holder<Attribute> att, double value) {
             this.itemStats.put(att, value);
             return this;
         }
 
-        public Builder addMonsterStat(Attribute att, double value) {
+        public Builder addMonsterStat(Holder<Attribute> att, double value) {
             this.monsterGiftIncrease.put(att, value);
             return this;
         }

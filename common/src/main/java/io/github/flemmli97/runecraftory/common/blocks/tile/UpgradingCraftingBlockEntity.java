@@ -4,6 +4,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
 import io.github.flemmli97.runecraftory.common.inventory.container.ContainerUpgrade;
 import io.github.flemmli97.runecraftory.platform.SaveItemContainer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
@@ -19,11 +20,11 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public abstract class UpgradingCraftingBlockEntity extends CraftingBlockEntity {
 
-    private final SaveItemContainer upgradeInv;
+    private final SaveItemContainer upgradeContainer;
 
     public UpgradingCraftingBlockEntity(BlockEntityType<?> blockEntityType, EnumCrafting type, BlockPos blockPos, BlockState blockState) {
         super(blockEntityType, type, blockPos, blockState);
-        this.upgradeInv = new SaveItemContainer(this, 2) {
+        this.upgradeContainer = new SaveItemContainer(this, 2) {
             @Override
             public boolean canPlaceItem(int index, ItemStack stack) {
                 return UpgradingCraftingBlockEntity.this.isItemValid(index, stack);
@@ -32,21 +33,21 @@ public abstract class UpgradingCraftingBlockEntity extends CraftingBlockEntity {
     }
 
     public Container getUpgradeInventory() {
-        return this.upgradeInv;
+        return this.upgradeContainer;
     }
 
     public abstract boolean isItemValid(int slot, ItemStack stack);
 
     @Override
-    public void load(CompoundTag nbt) {
-        super.load(nbt);
-        this.upgradeInv.load(nbt.getCompound("UpgradeInventory"));
+    public void loadAdditional(CompoundTag nbt, HolderLookup.Provider provider) {
+        super.loadAdditional(nbt, provider);
+        this.upgradeContainer.load(nbt.getCompound("UpgradeInventory"), provider);
     }
 
     @Override
-    public void saveAdditional(CompoundTag nbt) {
-        super.saveAdditional(nbt);
-        nbt.put("UpgradeInventory", this.upgradeInv.save());
+    public void saveAdditional(CompoundTag nbt, HolderLookup.Provider provider) {
+        super.saveAdditional(nbt, provider);
+        nbt.put("UpgradeInventory", this.upgradeContainer.save(provider));
     }
 
     @Override

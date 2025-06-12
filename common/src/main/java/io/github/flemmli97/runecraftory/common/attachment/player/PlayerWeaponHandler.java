@@ -9,7 +9,7 @@ import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
 import io.github.flemmli97.runecraftory.common.network.S2CWeaponUse;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -34,7 +34,7 @@ public class PlayerWeaponHandler implements AttackActionHandler {
     private int comboCount;
     private boolean scheduledAction;
 
-    private AnimatedAction currentAnimation, lastAnimation;
+    private AnimationState currentAnimation, lastAnimation;
 
     /**
      * Value used to interpolate animation transitions
@@ -208,7 +208,7 @@ public class PlayerWeaponHandler implements AttackActionHandler {
         if (this.currentAnimation == null) {
             return 1;
         }
-        return this.currentAnimation.getStartTransitionProgress(partialTicks);
+        return (float) this.currentAnimation.getStartTransitionProgress(partialTicks);
     }
 
     @Override
@@ -220,12 +220,12 @@ public class PlayerWeaponHandler implements AttackActionHandler {
     }
 
     @Override
-    public AnimatedAction getAnimation() {
+    public AnimationState getAnimation() {
         return this.currentAnimation;
     }
 
     @Override
-    public AnimatedAction getLastAnimation() {
+    public AnimationState getLastAnimation() {
         return this.lastAnimation;
     }
 

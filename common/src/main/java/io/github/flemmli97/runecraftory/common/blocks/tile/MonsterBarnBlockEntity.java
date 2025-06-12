@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.world.BarnData;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -105,17 +106,17 @@ public class MonsterBarnBlockEntity extends BlockEntity {
     }
 
     @Override
-    public void load(CompoundTag nbt) {
-        super.load(nbt);
-        if (nbt.hasUUID("Owner"))
-            this.owner = nbt.getUUID("Owner");
+    public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
+        super.loadAdditional(tag, provider);
+        if (tag.hasUUID("Owner"))
+            this.owner = tag.getUUID("Owner");
     }
 
     @Override
-    public void saveAdditional(CompoundTag nbt) {
-        super.saveAdditional(nbt);
+    public void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
+        super.saveAdditional(tag, provider);
         if (this.owner != null)
-            nbt.putUUID("Owner", this.owner);
+            tag.putUUID("Owner", this.owner);
     }
 
     @Override
@@ -124,7 +125,7 @@ public class MonsterBarnBlockEntity extends BlockEntity {
     }
 
     @Override
-    public CompoundTag getUpdateTag() {
+    public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
         CompoundTag nbt = new CompoundTag();
         if (this.owner != null)
             nbt.putUUID("Owner", this.owner);

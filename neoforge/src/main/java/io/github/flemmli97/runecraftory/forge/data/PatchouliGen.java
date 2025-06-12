@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.forge.data;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.common.RFCreativeTabs;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
+import io.github.flemmli97.runecraftory.common.registry.ModCreativeModTabs;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
@@ -29,7 +29,7 @@ public class PatchouliGen extends PatchouliBookProvider {
     protected void addBooks(Consumer<BookBuilder> consumer) {
         BookBuilder book = this.createBookBuilder("runecraftory_book", "runecraftory_book", "runecraftory.patchouli.landing")
                 //.setSubtitle("runecraftory.patchouli.subtitle")
-                .setCreativeTab(RFCreativeTabs.WEAPON_TOOL_TAB.getRecipeFolderName())
+                .setCreativeTab(ModCreativeModTabs.WEAPON_TOOL_TAB.getRecipeFolderName())
                 .setVersion("1.0")
                 .setI18n(true)
                 .setShowProgress(false);

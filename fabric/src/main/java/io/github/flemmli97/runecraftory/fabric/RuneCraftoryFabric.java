@@ -4,6 +4,7 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientCalls;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
+import io.github.flemmli97.runecraftory.common.datapack.ListenerExtension;
 import io.github.flemmli97.runecraftory.common.entities.GateEntity;
 import io.github.flemmli97.runecraftory.common.events.EntityCalls;
 import io.github.flemmli97.runecraftory.common.events.WorldCalls;
@@ -14,6 +15,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
+import io.github.flemmli97.runecraftory.common.registry.ModCreativeModTabs;
 import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
 import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
@@ -23,6 +25,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
 import io.github.flemmli97.runecraftory.common.registry.ModMenuTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCActions;
+import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.registry.ModPoiTypes;
@@ -63,6 +66,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.InteractionResult;
@@ -111,6 +115,23 @@ public class RuneCraftoryFabric implements ModInitializer {
 
         SpawnRestrictionAccessor.callRegister(ModEntities.GATE.get(), SpawnPlacements.Type.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, GateEntity::canSpawnAt);
 
+        DataPackHandler.addListeners(new DataPackHandler.Register() {
+            @Override
+            public <T extends PreparableReloadListener & ListenerExtension> void accept(T listener) {
+                ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(listener.id(), reg -> new IdentifiableResourceReloadListener() {
+                    @Override
+                    public CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, ProfilerFiller preparationsProfiler, ProfilerFiller reloadProfiler, Executor backgroundExecutor, Executor gameExecutor) {
+                        listener.insertRegistryAccess(reg);
+                        return listener.reload(preparationBarrier, resourceManager, preparationsProfiler, reloadProfiler, backgroundExecutor, gameExecutor);
+                    }
+
+                    @Override
+                    public ResourceLocation getFabricId() {
+                        return listener.id();
+                    }
+                });
+            }
+        });
         ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new IdentifiableResourceReloadListener() {
             @Override
             public CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, ProfilerFiller preparationsProfiler, ProfilerFiller reloadProfiler, Executor backgroundExecutor, Executor gameExecutor) {
@@ -276,16 +297,18 @@ public class RuneCraftoryFabric implements ModInitializer {
         ModCrafting.RECIPESERIALIZER.registerContent();
         ModFeatures.FEATURES.registerContent();
         ModFeatures.TRUNK_PLACER.registerContent();
-        ModFeatures.TREE_DECORATORS.registerContent();
-        ModSpells.SPELLS.registerContent();
+        ModFeatures.CONFIGURED_FEATURES.registerContent();
+        ModSpells.SPELLS.register().registerContent();
         ModStructures.STRUCTURES.registerContent();
         ModParticles.PARTICLES.registerContent();
         ModActivities.ACTIVITIES.registerContent();
         ModPoiTypes.POI.registerContent();
-        ModNPCActions.ACTIONS.registerContent();
-        ModAttackActions.ATTACK_ACTIONS.registerContent();
-        ModArmorEffects.ARMOR_EFFECTS.registerContent();
-        ModNPCLooks.NPC_FEATURES.registerContent();
+        ModNPCActions.ACTIONS.register().registerContent();
+        ModAttackActions.ATTACK_ACTIONS.register().registerContent();
+        ModArmorEffects.ARMOR_EFFECTS.register().registerContent();
+        ModNPCLooks.NPC_FEATURES.register().registerContent();
+        ModCreativeModTabs.CREATIVE_MODE_TABS.registerContent();
+        ModNPCJobs.JOBS.register().registerContent();
 
         ModLootRegistries.LOOTFUNCTION.registerContent();
         ModLootRegistries.LOOTCONDITIONS.registerContent();
@@ -293,11 +316,10 @@ public class RuneCraftoryFabric implements ModInitializer {
         ModCrafting.RECIPETYPE.registerContent();
         ModSounds.SOUND_EVENTS.registerContent();
         ModDataComponentTypes.DATA_COMPONENTS.registerContent();
-
+        ModCriteria.TRIGGERS.registerContent();
         this.tweakVanillaAttribute(Attributes.MAX_HEALTH, Double.MAX_VALUE);
         this.tweakVanillaAttribute(Attributes.ATTACK_DAMAGE, Double.MAX_VALUE);
         ModFeatures.registerConfiguredFeatures();
-        ModCriteria.init();
     }
 
     public static Collection<RegistryEntrySupplier<Attribute>> attributes() {

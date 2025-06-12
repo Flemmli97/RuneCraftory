@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.datapack;
 
+import com.google.gson.Gson;
 import io.github.flemmli97.runecraftory.common.datapack.manager.CropManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.FoodManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.GateSpawnsManager;
@@ -15,90 +16,53 @@ import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCConversat
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCDataManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCLookManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NameManager;
-import io.github.flemmli97.runecraftory.common.network.S2CDataPackSync;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.packs.resources.PreparableReloadListener;
+import io.github.flemmli97.tenshilib.common.data.SyncedReloadListeners;
+import net.minecraft.resources.ResourceLocation;
 
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 
 public class DataPackHandler {
 
+    public static final Gson GSON = new Gson();
+
     public static final DataPackHandler INSTANCE = new DataPackHandler();
 
-    private final ItemStatManager itemStats = new ItemStatManager();
-    private final CropManager crops = new CropManager();
-    private final FoodManager foods = new FoodManager();
-    private final ShopItemsManager shopItems = new ShopItemsManager();
-    private final GateSpawnsManager gateSpawnsManager = new GateSpawnsManager();
-    private final StructureBossManager structureBossManager = new StructureBossManager();
-    private final MonsterPropertiesManager mobProperties = new MonsterPropertiesManager();
-    private final SpellPropertiesManager spellProperties = new SpellPropertiesManager();
-    private final SkillPropertiesManager skillPropertiesManager = new SkillPropertiesManager();
-    private final NameManager names = new NameManager();
-    private final GiftManager gifts = new GiftManager();
-    private final NPCDataManager npcData = new NPCDataManager();
-    private final NPCLookManager npcLooks = new NPCLookManager();
-    private final NPCActionManager npcActions = new NPCActionManager();
-    private final NPCConversationManager npcConversations = new NPCConversationManager();
+    private static final Set<ListenerExtension> LISTENERS = new HashSet<>();
+    private static final Map<ResourceLocation, SyncableListener<?>> SYNCABLES = new LinkedHashMap<>();
 
-    public static void reloadItemStats(Consumer<PreparableReloadListener> cons) {
-        cons.accept(INSTANCE.itemStats);
+    private final ItemStatManager itemStats = syncable(new ItemStatManager());
+    private final CropManager crops = syncable(new CropManager());
+    private final FoodManager foods = syncable(new FoodManager());
+    private final ShopItemsManager shopItems = add(new ShopItemsManager());
+    private final GateSpawnsManager gateSpawnsManager = add(new GateSpawnsManager());
+    private final StructureBossManager structureBossManager = add(new StructureBossManager());
+    private final MonsterPropertiesManager mobProperties = add(new MonsterPropertiesManager());
+    private final SpellPropertiesManager spellProperties = add(new SpellPropertiesManager());
+    private final SkillPropertiesManager skillPropertiesManager = add(new SkillPropertiesManager());
+    private final NameManager names = add(new NameManager());
+    private final GiftManager gifts = add(new GiftManager());
+    private final NPCDataManager npcData = add(new NPCDataManager());
+    private final NPCLookManager npcLooks = add(new NPCLookManager());
+    private final NPCActionManager npcActions = add(new NPCActionManager());
+    private final NPCConversationManager npcConversations = add(new NPCConversationManager());
+
+    public static void addListeners(Consumer<ListenerExtension> cons) {
+        LISTENERS.forEach(cons);
     }
 
-    public static void reloadCropManager(Consumer<PreparableReloadListener> cons) {
-        cons.accept(INSTANCE.crops);
+    private static <T extends ListenerExtension> T add(T listener) {
+        LISTENERS.add(listener);
+        return listener;
     }
 
-    public static void reloadFoodManager(Consumer<PreparableReloadListener> cons) {
-        cons.accept(INSTANCE.foods);
-    }
-
-    public static void reloadShopItems(Consumer<PreparableReloadListener> cons) {
-        cons.accept(INSTANCE.shopItems);
-    }
-
-    public static void reloadGateSpawns(Consumer<PreparableReloadListener> cons) {
-        cons.accept(INSTANCE.gateSpawnsManager);
-        cons.accept(INSTANCE.structureBossManager);
-    }
-
-    public static void reloadProperties(Consumer<PreparableReloadListener> cons) {
-        cons.accept(INSTANCE.mobProperties);
-        cons.accept(INSTANCE.spellProperties);
-        cons.accept(INSTANCE.skillPropertiesManager);
-    }
-
-    public static void reloadNPCData(Consumer<PreparableReloadListener> cons) {
-        cons.accept(INSTANCE.names);
-        cons.accept(INSTANCE.gifts);
-        cons.accept(INSTANCE.npcData);
-        cons.accept(INSTANCE.npcLooks);
-        cons.accept(INSTANCE.npcConversations);
-        cons.accept(INSTANCE.npcActions);
-    }
-
-    public static void toPacket(FriendlyByteBuf buffer, S2CDataPackSync.SyncedType type) {
-        switch (type) {
-            case ITEMSTATS -> INSTANCE.itemStats.toPacket(buffer);
-            case CROPS -> INSTANCE.crops.toPacket(buffer);
-            case FOOD -> INSTANCE.foods.toPacket(buffer);
-        }
-    }
-
-    public static void fromPacket(S2CDataPackSync.SyncedType type, FriendlyByteBuf buffer) {
-        switch (type) {
-            case ITEMSTATS -> INSTANCE.itemStats.fromPacket(buffer);
-            case CROPS -> INSTANCE.crops.fromPacket(buffer);
-            case FOOD -> INSTANCE.foods.fromPacket(buffer);
-        }
-    }
-
-    public static void prepareResync(S2CDataPackSync.SyncedType type) {
-        switch (type) {
-            case ITEMSTATS -> INSTANCE.itemStats.resolveTags(true);
-            case CROPS -> INSTANCE.crops.resolveTags(true);
-            case FOOD -> INSTANCE.foods.resolveTags(true);
-        }
+    private static <T extends SyncableListener<?>> T syncable(T listener) {
+        SYNCABLES.put(listener.id(), listener);
+        SyncedReloadListeners.addOrUpdate(listener.id(), listener);
+        return add(listener);
     }
 
     private DataPackHandler() {
@@ -162,5 +126,10 @@ public class DataPackHandler {
 
     public NPCConversationManager npcConversationManager() {
         return this.npcConversations;
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> SyncableListener<T> getSyncable(ResourceLocation id) {
+        return (SyncableListener<T>) SYNCABLES.get(id);
     }
 }

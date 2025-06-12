@@ -6,7 +6,6 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.EntityProperties;
 import io.github.flemmli97.runecraftory.api.datapack.EntityRideActionCosts;
 import io.github.flemmli97.runecraftory.api.datapack.GateSpawnData;
-import io.github.flemmli97.runecraftory.common.RFCreativeTabs;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.GateEntity;
 import io.github.flemmli97.runecraftory.common.entities.MultiPartEntity;
@@ -166,7 +165,6 @@ import java.util.function.BiConsumer;
 public class ModEntities {
 
     public static final LoaderRegister<EntityType<?>> ENTITIES = LoaderRegistryAccess.INSTANCE.of(Registries.ENTITY_TYPE, RuneCraftory.MODID);
-    public static final RegistryEntrySupplier<EntityType<?>, EntityType<GateEntity>> GATE = reg(EntityType.Builder.of(GateEntity::new, MobCategory.MONSTER).sized(0.9f, 0.9f).clientTrackingRange(8), RuneCraftory.modRes("gate"));
 
     private static final List<RegistryEntrySupplier<EntityType<?>, EntityType<?>>> MONSTERS = new ArrayList<>();
     private static final List<RegistryEntrySupplier<EntityType<?>, EntityType<?>>> BOSSES = new ArrayList<>();
@@ -180,6 +178,8 @@ public class ModEntities {
     private static final Map<ResourceLocation, EntityProperties.Builder> DEFAULT_MOB_PROPERTIES = new HashMap<>();
 
     private static final float BOSS_TAMING_CHANCE = 0.005f;
+
+    public static final RegistryEntrySupplier<EntityType<?>, EntityType<GateEntity>> GATE = reg(EntityType.Builder.of(GateEntity::new, MobCategory.MONSTER).sized(0.9f, 0.9f).clientTrackingRange(8), RuneCraftory.modRes("gate"));
 
     public static final RegistryEntrySupplier<EntityType<?>, EntityType<EntityWooly>> WOOLY = regMonster(EntityType.Builder.of(EntityWooly::new, MobCategory.MONSTER).sized(0.7f, 1.55f).clientTrackingRange(8), RuneCraftory.modRes("wooly"),
             0xffffcc, 0xffffff,
@@ -1520,25 +1520,25 @@ public class ModEntities {
 
     public static <V extends Entity> RegistryEntrySupplier<EntityType<?>, EntityType<V>> regEnsemble(EntityType.Builder<V> v, ResourceLocation name, int primary, int secondary) {
         RegistryEntrySupplier<EntityType<?>, EntityType<V>> reg = reg(v, name);
-        ModItems.ITEMS.register(name.getPath() + "_spawn_egg", () -> new EnsembleEggItem(reg, primary, secondary, new Item.Properties().tab(RFCreativeTabs.MONSTERS)));
+        ModItems.ITEMS.register(name.getPath() + "_spawn_egg", () -> new EnsembleEggItem(reg, primary, secondary, new Item.Properties().tab(ModCreativeModTabs.MONSTERS)));
         return reg;
     }
 
     public static <V extends Mob> RegistryEntrySupplier<EntityType<?>, EntityType<V>> regWithEgg(EntityType.Builder<V> v, ResourceLocation name, int primary, int secondary) {
         RegistryEntrySupplier<EntityType<?>, EntityType<V>> reg = reg(v, name);
-        ModItems.ITEMS.register(name.getPath() + "_spawn_egg", () -> new RuneCraftoryEggItem(reg, primary, secondary, new Item.Properties().tab(RFCreativeTabs.MONSTERS)));
+        ModItems.ITEMS.register(name.getPath() + "_spawn_egg", () -> new RuneCraftoryEggItem(reg, primary, secondary, new Item.Properties().tab(ModCreativeModTabs.MONSTERS)));
         return reg;
     }
 
     public static <V extends Entity> RegistryEntrySupplier<EntityType<?>, EntityType<V>> treasureChest(EntityType.Builder<V> v, ResourceLocation name) {
         RegistryEntrySupplier<EntityType<?>, EntityType<V>> reg = reg(v, name);
-        ModItems.ITEMS.register(name.getPath() + "_spawn_egg", () -> new TreasureChestSpawnegg(reg, new Item.Properties().tab(RFCreativeTabs.MONSTERS)));
+        ModItems.ITEMS.register(name.getPath() + "_spawn_egg", () -> new TreasureChestSpawnegg(reg, new Item.Properties().tab(ModCreativeModTabs.MONSTERS)));
         return reg;
     }
 
     public static <V extends Mob> RegistryEntrySupplier<EntityType<?>, EntityType<V>> npc(EntityType.Builder<V> v, ResourceLocation name) {
         RegistryEntrySupplier<EntityType<?>, EntityType<V>> reg = reg(v, name);
-        ModItems.ITEMS.register(name.getPath() + "_spawn_egg", () -> new NPCSpawnEgg(reg, new Item.Properties().tab(RFCreativeTabs.MONSTERS)));
+        ModItems.ITEMS.register(name.getPath() + "_spawn_egg", () -> new NPCSpawnEgg(reg, new Item.Properties().tab(ModCreativeModTabs.MONSTERS)));
         return reg;
     }
 

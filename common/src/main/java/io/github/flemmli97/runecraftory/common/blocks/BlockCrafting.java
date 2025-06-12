@@ -9,7 +9,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -29,12 +29,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.shapes.BooleanOp;
-import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.stream.Stream;
 
 public abstract class BlockCrafting extends HorizontalDirectionalBlock implements EntityBlock {
 
@@ -45,34 +40,6 @@ public abstract class BlockCrafting extends HorizontalDirectionalBlock implement
     public BlockCrafting(EnumCrafting type, BlockBehaviour.Properties props) {
         super(props);
         this.type = type;
-    }
-
-    public static VoxelShape[] joinedOrDirs(ShapeBuilder... shapes) {
-        return new VoxelShape[]{
-                joinedOr(Direction.SOUTH, shapes),
-                joinedOr(Direction.WEST, shapes),
-                joinedOr(Direction.NORTH, shapes),
-                joinedOr(Direction.EAST, shapes)
-        };
-    }
-
-    public static VoxelShape joinedOr(Direction direction, ShapeBuilder... shapes) {
-        return Stream.of(shapes)
-                .map(s -> {
-                    switch (direction) {
-                        case EAST -> {
-                            return Block.box(16 - s.z2, s.y1, s.x1, 16 - s.z1, s.y2, s.x2);
-                        }
-                        case SOUTH -> {
-                            return Block.box(16 - s.x2, s.y1, 16 - s.z2, 16 - s.x1, s.y2, 16 - s.z1);
-                        }
-                        case WEST -> {
-                            return Block.box(s.z1, s.y1, 16 - s.x2, s.z2, s.y2, 16 - s.x1);
-                        }
-                    }
-                    return Block.box(s.x1, s.y1, s.z1, s.x2, s.y2, s.z2);
-                })
-                .reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
     }
 
     @Override
@@ -97,9 +64,9 @@ public abstract class BlockCrafting extends HorizontalDirectionalBlock implement
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
+    public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
         if (level.isClientSide) {
-            return InteractionResult.CONSUME;
+            return ItemInteractionResult.CONSUME;
         } else {
             BlockEntity tile = level.getBlockEntity(pos);
             if (!(tile instanceof CraftingBlockEntity)) {
@@ -111,9 +78,9 @@ public abstract class BlockCrafting extends HorizontalDirectionalBlock implement
                     Platform.INSTANCE.openGuiMenu((ServerPlayer) player, upgrading.upgradeMenu(), pos);
                 else
                     Platform.INSTANCE.openGuiMenu((ServerPlayer) player, craftingBlock, pos);
-                return InteractionResult.SUCCESS;
+                return ItemInteractionResult.SUCCESS;
             }
-            return InteractionResult.PASS;
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
     }
 
@@ -152,14 +119,14 @@ public abstract class BlockCrafting extends HorizontalDirectionalBlock implement
     }
 
     @Override
-    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+    public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         BlockPos blockPos = this.getOtherPos(pos, state);
         BlockState other;
         if (!level.isClientSide && player.isCreative() && state.getValue(PART) == EnumPart.RIGHT && (other = level.getBlockState(blockPos)).is(this) && other.getValue(PART) == EnumPart.LEFT) {
             level.setBlock(blockPos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
             level.levelEvent(player, LevelEvent.PARTICLES_DESTROY_BLOCK, blockPos, Block.getId(other));
         }
-        super.playerWillDestroy(level, pos, state, player);
+        return super.playerWillDestroy(level, pos, state, player);
     }
 
     @Override

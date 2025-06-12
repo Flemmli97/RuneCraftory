@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.api.action;
 
 import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
@@ -36,9 +36,9 @@ public interface AttackActionHandler {
 
     float getLastTransitionProgress(float partialTicks);
 
-    AnimatedAction getAnimation();
+    AnimationState getAnimation();
 
-    AnimatedAction getLastAnimation();
+    AnimationState getLastAnimation();
 
     void setComboCount(int count);
 
@@ -49,7 +49,7 @@ public interface AttackActionHandler {
     Set<LivingEntity> getHitEntityTracker();
 
     default boolean isCurrentAnimationDone() {
-        AnimatedAction anim = this.getAnimation();
+        AnimationState anim = this.getAnimation();
         return anim == null || anim.done(0);
     }
 

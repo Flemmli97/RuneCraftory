@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.forge;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
+import io.github.flemmli97.runecraftory.common.datapack.ListenerExtension;
 import io.github.flemmli97.runecraftory.common.entities.GateEntity;
 import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
 import io.github.flemmli97.runecraftory.common.registry.ModActivities;
@@ -10,6 +11,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
+import io.github.flemmli97.runecraftory.common.registry.ModCreativeModTabs;
 import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
 import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
@@ -19,6 +21,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
 import io.github.flemmli97.runecraftory.common.registry.ModMenuTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCActions;
+import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.registry.ModPoiTypes;
@@ -35,6 +38,7 @@ import io.github.flemmli97.runecraftory.forge.network.PacketHandler;
 import io.github.flemmli97.runecraftory.forge.registry.ModAttachments;
 import io.github.flemmli97.runecraftory.mixin.AttributeAccessor;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
+import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SpawnPlacementTypes;
@@ -101,7 +105,7 @@ public class RuneCraftoryNeoForge {
         ModEffects.EFFECTS.registerContent(modBus);
         ModCrafting.RECIPESERIALIZER.registerContent(modBus);
         ModFeatures.FEATURES.registerContent(modBus);
-        ModFeatures.TREE_DECORATORS.registerContent(modBus);
+        ModFeatures.CONFIGURED_FEATURES.registerContent(modBus);
         ModSpells.SPELLS.register().registerContent(modBus);
         ModStructures.STRUCTURES.registerContent(modBus);
         ModParticles.PARTICLES.registerContent(modBus);
@@ -120,7 +124,9 @@ public class RuneCraftoryNeoForge {
         ModFeatures.TRUNK_PLACER.registerContent(modBus);
         ModAttachments.ATTACHMENT_TYPES.register(modBus);
         ModDataComponentTypes.DATA_COMPONENTS.registerContent(modBus);
-        ModCriteria.init();
+        ModCriteria.TRIGGERS.registerContent(modBus);
+        ModCreativeModTabs.CREATIVE_MODE_TABS.registerContent(modBus);
+        ModNPCJobs.JOBS.register().registerContent(modBus);
     }
 
     public void common(FMLCommonSetupEvent event) {
@@ -159,6 +165,13 @@ public class RuneCraftoryNeoForge {
     }
 
     public void addReloadListener(AddReloadListenerEvent event) {
+        DataPackHandler.addListeners(new DataPackHandler.Register() {
+            @Override
+            public <T extends PreparableReloadListener & ListenerExtension> void accept(T listener) {
+                listener.insertRegistryAccess(event.getRegistryAccess());
+                event.addListener(listener);
+            }
+        });
         DataPackHandler.reloadItemStats(event::addListener);
         DataPackHandler.reloadCropManager(event::addListener);
         DataPackHandler.reloadFoodManager(event::addListener);

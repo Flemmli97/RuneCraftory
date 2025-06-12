@@ -71,10 +71,11 @@ public class PacketRegistrar {
     }
 
     public interface ClientPacketRegister {
-        <P extends CustomPacketPayload> void register(CustomPacketPayload.Type<P> type, StreamCodec<RegistryFriendlyByteBuf, P> codec, BiConsumer<P, Player> handler);
 
         default <P extends CustomPacketPayload> void register(CustomPacketPayload.Type<P> type, StreamCodec<RegistryFriendlyByteBuf, P> codec, Consumer<P> handler) {
             this.register(type, codec, (pkt, p) -> handler.accept(pkt));
         }
+
+        <P extends CustomPacketPayload> void register(CustomPacketPayload.Type<P> type, StreamCodec<RegistryFriendlyByteBuf, P> codec, BiConsumer<P, Player> handler);
     }
 }

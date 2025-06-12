@@ -8,6 +8,7 @@ import io.github.flemmli97.runecraftory.api.datapack.npc.NPCData;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
+import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
 import io.github.flemmli97.runecraftory.common.inventory.InventoryShippingBin;
 import io.github.flemmli97.runecraftory.common.inventory.InventoryShop;
@@ -46,7 +47,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
@@ -55,7 +55,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -133,19 +132,19 @@ public class PlayerData {
     }
 
     public void setMaxHealth(float amount, boolean asBaseHealth) {
-        AttributeInstance health = player.getAttribute(Attributes.MAX_HEALTH);
+        AttributeInstance health = this.player.getAttribute(Attributes.MAX_HEALTH);
         AttributeModifier modifier = health.getModifier(LibConstants.MAX_HEALTH_MODIFIER);
         double val = amount - (asBaseHealth ? health.getBaseValue() : health.getValue());
         if (modifier != null && !asBaseHealth)
-            val += modifier.getAmount();
+            val += modifier.amount();
         health.removeModifier(LibConstants.MAX_HEALTH_MODIFIER);
-        health.addPermanentModifier(new AttributeModifier(LibConstants.MAX_HEALTH_MODIFIER, "rf.hpModifier", val, AttributeModifier.Operation.ADDITION));
+        health.addPermanentModifier(new AttributeModifier(LibConstants.MAX_HEALTH_MODIFIER, val, AttributeModifier.Operation.ADD_VALUE));
     }
 
     private void setFoodHealthBonus(double amount) {
-        AttributeInstance health = player.getAttribute(Attributes.MAX_HEALTH);
+        AttributeInstance health = this.player.getAttribute(Attributes.MAX_HEALTH);
         health.removeModifier(LibConstants.FOOD_MODIFIER);
-        health.addPermanentModifier(new AttributeModifier(LibConstants.FOOD_MODIFIER, "rf.food.hpModifier", amount, AttributeModifier.Operation.ADDITION));
+        health.addPermanentModifier(new AttributeModifier(LibConstants.FOOD_MODIFIER, amount, AttributeModifier.Operation.ADD_VALUE));
     }
 
     public int getRunePoints() {
@@ -161,10 +160,10 @@ public class PlayerData {
     }
 
     public boolean decreaseRunePoints(int amount, boolean damage) {
-        if (!GeneralConfig.useRp && !player.level.isClientSide)
+        if (!GeneralConfig.useRp && !this.player.level().isClientSide)
             return true;
-        if (!player.isCreative()) {
-            if (EntityUtils.isExhaust(player)) {
+        if (!this.player.isCreative()) {
+            if (EntityUtils.isExhaust(this.player)) {
                 amount *= 2;
             }
             if (this.runePoints >= amount)
@@ -172,19 +171,19 @@ public class PlayerData {
             else if (damage) {
                 int diff = amount - this.runePoints;
                 this.runePoints = 0;
-                if (!player.level.isClientSide) {
-                    int invul = player.invulnerableTime;
-                    player.invulnerableTime = 10;
-                    boolean res = player.hurt(CustomDamage.EXHAUST, Math.min(player.getMaxHealth() * 0.25f, (float) (diff * 2)));
+                if (!this.player.level().isClientSide) {
+                    int invul = this.player.invulnerableTime;
+                    this.player.invulnerableTime = 10;
+                    boolean res = this.player.hurt(CustomDamage.EXHAUST, Math.min(this.player.getMaxHealth() * 0.25f, (float) (diff * 2)));
                     if (res)
-                        player.invulnerableTime = 10;
+                        this.player.invulnerableTime = 10;
                     else
-                        player.invulnerableTime = invul;
+                        this.player.invulnerableTime = invul;
                 }
             } else
                 return false;
             this.rpStillRegen = 200;
-            if (player instanceof ServerPlayer serverPlayer)
+            if (this.player instanceof ServerPlayer serverPlayer)
                 LoaderNetwork.INSTANCE.sendToPlayer(new S2CRunePoints(this), serverPlayer);
             return true;
         }
@@ -193,19 +192,19 @@ public class PlayerData {
 
     public void refreshRunePoints(int amount) {
         this.runePoints = Mth.clamp(this.runePoints + amount, 0, this.getMaxRunePoints());
-        if (player instanceof ServerPlayer serverPlayer)
+        if (this.player instanceof ServerPlayer serverPlayer)
             LoaderNetwork.INSTANCE.sendToPlayer(new S2CRunePoints(this), serverPlayer);
     }
 
     public void setRunePoints(int amount) {
         this.runePoints = amount;
-        if (player instanceof ServerPlayer serverPlayer)
+        if (this.player instanceof ServerPlayer serverPlayer)
             LoaderNetwork.INSTANCE.sendToPlayer(new S2CRunePoints(this), serverPlayer);
     }
 
     public void setMaxRunePoints(float amount) {
         this.runePointsMax = amount;
-        if (player instanceof ServerPlayer serverPlayer)
+        if (this.player instanceof ServerPlayer serverPlayer)
             LoaderNetwork.INSTANCE.sendToPlayer(new S2CMaxRunePoints(this), serverPlayer);
     }
 
@@ -216,7 +215,7 @@ public class PlayerData {
     public boolean useMoney(int amount) {
         if (this.money >= amount) {
             this.money -= amount;
-            if (player instanceof ServerPlayer serverPlayer) {
+            if (this.player instanceof ServerPlayer serverPlayer) {
                 LoaderNetwork.INSTANCE.sendToPlayer(new S2CMoney(this), serverPlayer);
             }
             return true;
@@ -226,8 +225,8 @@ public class PlayerData {
 
     public void setMoney(int amount) {
         this.money = amount;
-        if (player instanceof ServerPlayer serverPlayer) {
-            ModCriteria.MONEY_TRIGGER.trigger(serverPlayer);
+        if (this.player instanceof ServerPlayer serverPlayer) {
+            ModCriteria.MONEY_TRIGGER.get().trigger(serverPlayer);
             LoaderNetwork.INSTANCE.sendToPlayer(new S2CMoney(this), serverPlayer);
         }
     }
@@ -238,7 +237,7 @@ public class PlayerData {
 
     public void setStr(float amount) {
         this.str = amount;
-        if (player instanceof ServerPlayer serverPlayer)
+        if (this.player instanceof ServerPlayer serverPlayer)
             LoaderNetwork.INSTANCE.sendToPlayer(new S2CPlayerStats(this), serverPlayer);
     }
 
@@ -248,7 +247,7 @@ public class PlayerData {
 
     public void setVit(float amount) {
         this.vit = amount;
-        if (player instanceof ServerPlayer serverPlayer)
+        if (this.player instanceof ServerPlayer serverPlayer)
             LoaderNetwork.INSTANCE.sendToPlayer(new S2CPlayerStats(this), serverPlayer);
     }
 
@@ -258,7 +257,7 @@ public class PlayerData {
 
     public void setIntel(float amount) {
         this.intel = amount;
-        if (player instanceof ServerPlayer serverPlayer)
+        if (this.player instanceof ServerPlayer serverPlayer)
             LoaderNetwork.INSTANCE.sendToPlayer(new S2CPlayerStats(this), serverPlayer);
     }
 
@@ -269,7 +268,7 @@ public class PlayerData {
     public void setPlayerLevel(int level, float xpAmount, boolean recalc) {
         this.level.setLevel(Mth.clamp(level, 1, GeneralConfig.maxLevel), LevelCalc::xpAmountForLevelUp);
         this.level.setXp(Mth.clamp(xpAmount, 0, LevelCalc.xpAmountForLevelUp(level)));
-        if (player instanceof ServerPlayer serverPlayer) {
+        if (this.player instanceof ServerPlayer serverPlayer) {
             if (recalc) {
                 this.recalculateStats(serverPlayer, true);
             } else
@@ -280,20 +279,20 @@ public class PlayerData {
     public void addXp(float amount) {
         if (this.level.getLevel() >= GeneralConfig.maxLevel)
             return;
-        boolean levelUp = this.level.addXP(amount, GeneralConfig.maxLevel, LevelCalc::xpAmountForLevelUp, () -> this.onLevelUp(player));
+        boolean levelUp = this.level.addXP(amount, GeneralConfig.maxLevel, LevelCalc::xpAmountForLevelUp, () -> this.onLevelUp(this.player));
         if (levelUp) {
-            player.level.playSound(null, player.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1, 0.5f);
+            this.player.level().playSound(null, this.player.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1, 0.5f);
         }
-        if (player instanceof ServerPlayer serverPlayer) {
+        if (this.player instanceof ServerPlayer serverPlayer) {
             if (levelUp)
-                ModCriteria.LEVEL_TRIGGER.trigger(serverPlayer);
+                ModCriteria.LEVEL_TRIGGER.get().trigger(serverPlayer);
             LoaderNetwork.INSTANCE.sendToPlayer(new S2CLevelPkt(this), serverPlayer);
         }
     }
 
     private void onLevelUp(Player player) {
         float health = player.getMaxHealth();
-        this.updateHealth(player);
+        this.updateHealth();
         player.heal(player.getMaxHealth() - health);
         this.runePointsMax += GeneralConfig.rpPerLevel;
         this.runePoints = Math.min(this.runePoints + (int) GeneralConfig.rpPerLevel, this.runePoints);
@@ -302,9 +301,9 @@ public class PlayerData {
         this.intel += GeneralConfig.intPerLevel;
     }
 
-    public void recalculateStats(boolean regen) {
+    public void recalculateStats(ServerPlayer player, boolean regen) {
         int lvl = this.level.getLevel() - 1;
-        this.updateHealth(player);
+        this.updateHealth();
         this.runePointsMax = GeneralConfig.rpPerLevel * lvl + GeneralConfig.startingRp + (int) this.skillValLevelFunc((skillLvl, prop) -> Math.min(100, skillLvl) * prop.rpIncrease());
         if (regen) {
             player.setHealth(player.getMaxHealth());
@@ -329,12 +328,12 @@ public class PlayerData {
     }
 
     public void setSkillLevel(EnumSkills skill, int level, float xpAmount, boolean recalc) {
-        this.skillLevels.get(skill).setLevel(player.level.isClientSide ? level : Mth.clamp(level, 1, DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(skill).maxLevel()), l -> LevelCalc.xpAmountForSkillLevelUp(skill, l));
-        this.skillLevels.get(skill).setXp(player.level.isClientSide ? xpAmount : Mth.clamp(xpAmount, 0, LevelCalc.xpAmountForSkillLevelUp(skill, level)));
-        if (player instanceof ServerPlayer serverPlayer) {
+        this.skillLevels.get(skill).setLevel(this.player.level().isClientSide ? level : Mth.clamp(level, 1, DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(skill).maxLevel()), l -> LevelCalc.xpAmountForSkillLevelUp(skill, l));
+        this.skillLevels.get(skill).setXp(this.player.level().isClientSide ? xpAmount : Mth.clamp(xpAmount, 0, LevelCalc.xpAmountForSkillLevelUp(skill, level)));
+        if (this.player instanceof ServerPlayer serverPlayer) {
             if (recalc) {
                 this.recalculateStats(serverPlayer, true);
-                player.setHealth(player.getMaxHealth());
+                this.player.setHealth(this.player.getMaxHealth());
             }
             LoaderNetwork.INSTANCE.sendToPlayer(new S2CSkillLevelPkt(this, skill), serverPlayer);
         }
@@ -343,13 +342,13 @@ public class PlayerData {
     public void increaseSkill(EnumSkills skill, float amount) {
         if (this.skillLevels.get(skill).getLevel() >= DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(skill).maxLevel())
             return;
-        boolean levelUp = this.skillLevels.get(skill).addXP(amount, DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(skill).maxLevel(), lvl -> LevelCalc.xpAmountForSkillLevelUp(skill, lvl), () -> this.onSkillLevelUp(skill, player));
+        boolean levelUp = this.skillLevels.get(skill).addXP(amount, DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(skill).maxLevel(), lvl -> LevelCalc.xpAmountForSkillLevelUp(skill, lvl), () -> this.onSkillLevelUp(skill, this.player));
         if (levelUp) {
-            player.level.playSound(null, player.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1, 0.5f);
+            this.player.level().playSound(null, this.player.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1, 0.5f);
         }
-        if (player instanceof ServerPlayer serverPlayer) {
+        if (this.player instanceof ServerPlayer serverPlayer) {
             if (levelUp)
-                ModCriteria.SKILL_LEVEL_TRIGGER.trigger(serverPlayer, skill);
+                ModCriteria.SKILL_LEVEL_TRIGGER.get().trigger(serverPlayer, skill);
             LoaderNetwork.INSTANCE.sendToPlayer(new S2CSkillLevelPkt(this, skill), serverPlayer);
         }
     }
@@ -358,7 +357,7 @@ public class PlayerData {
         SkillProperties prop = DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(skill);
         int level = this.skillLevels.get(skill).getLevel();
         float health = player.getMaxHealth();
-        this.updateHealth(player);
+        this.updateHealth();
         player.heal(player.getMaxHealth() - health);
         if (level <= 100) {
             this.runePointsMax += prop.rpIncrease();
@@ -369,8 +368,8 @@ public class PlayerData {
         this.intel += prop.intelIncrease();
     }
 
-    private void updateHealth(Player player) {
-        this.setMaxHealth(player, GeneralConfig.startingHealth
+    private void updateHealth() {
+        this.setMaxHealth(GeneralConfig.startingHealth
                 + GeneralConfig.hpPerLevel * LevelCalc.getMultiplierInterval(this.level.getLevel(), 30, 30, 0.5f)
                 + (float) this.skillValLevelFunc((skillLvl, prop) -> {
             int skillHealthMultiplier = 1 + (skillLvl / 25);
@@ -382,23 +381,23 @@ public class PlayerData {
         switch (type) {
             case STR -> {
                 this.strAdd += 1;
-                if (player instanceof ServerPlayer serverPlayer)
+                if (this.player instanceof ServerPlayer serverPlayer)
                     LoaderNetwork.INSTANCE.sendToPlayer(new S2CItemStatBoost(type, false), serverPlayer);
             }
             case INT -> {
                 this.intAdd += 1;
-                if (player instanceof ServerPlayer serverPlayer)
+                if (this.player instanceof ServerPlayer serverPlayer)
                     LoaderNetwork.INSTANCE.sendToPlayer(new S2CItemStatBoost(type, false), serverPlayer);
             }
             case VIT -> {
                 this.vitAdd += 1;
-                if (player instanceof ServerPlayer serverPlayer)
+                if (this.player instanceof ServerPlayer serverPlayer)
                     LoaderNetwork.INSTANCE.sendToPlayer(new S2CItemStatBoost(type, false), serverPlayer);
             }
             case HP -> {
-                AttributeInstance health = player.getAttribute(Attributes.MAX_HEALTH);
+                AttributeInstance health = this.player.getAttribute(Attributes.MAX_HEALTH);
                 AttributeModifier modifier = health.getModifier(LibConstants.MAX_HEALTH_ITEM_INCREASE);
-                double val = modifier == null ? 0 : modifier.getAmount();
+                double val = modifier == null ? 0 : modifier.amount();
                 health.removeModifier(LibConstants.MAX_HEALTH_ITEM_INCREASE);
                 health.addPermanentModifier(new AttributeModifier(LibConstants.MAX_HEALTH_ITEM_INCREASE, "rf.item.hpModifier", val + 10, AttributeModifier.Operation.ADDITION));
             }
@@ -409,21 +408,21 @@ public class PlayerData {
         switch (type) {
             case STR -> {
                 this.strAdd = 0;
-                if (player instanceof ServerPlayer serverPlayer)
+                if (this.player instanceof ServerPlayer serverPlayer)
                     LoaderNetwork.INSTANCE.sendToPlayer(new S2CItemStatBoost(type, true), serverPlayer);
             }
             case INT -> {
                 this.intAdd = 0;
-                if (player instanceof ServerPlayer serverPlayer)
+                if (this.player instanceof ServerPlayer serverPlayer)
                     LoaderNetwork.INSTANCE.sendToPlayer(new S2CItemStatBoost(type, true), serverPlayer);
             }
             case VIT -> {
                 this.vitAdd = 0;
-                if (player instanceof ServerPlayer serverPlayer)
+                if (this.player instanceof ServerPlayer serverPlayer)
                     LoaderNetwork.INSTANCE.sendToPlayer(new S2CItemStatBoost(type, true), serverPlayer);
             }
             case HP -> {
-                AttributeInstance health = player.getAttribute(Attributes.MAX_HEALTH);
+                AttributeInstance health = this.player.getAttribute(Attributes.MAX_HEALTH);
                 health.removeModifier(LibConstants.MAX_HEALTH_ITEM_INCREASE);
             }
         }
@@ -434,7 +433,6 @@ public class PlayerData {
         float vit = this.getVit() + this.vitAdd;
         if (att == Attributes.ATTACK_DAMAGE) {
             val += this.getStr() + this.strAdd;
-            val += EnchantmentHelper.getDamageBonus(player.getMainHandItem(), MobType.UNDEFINED);
         }
         if (att == ModAttributes.MAGIC.get())
             val += this.getIntel() + this.intAdd;
@@ -444,7 +442,7 @@ public class PlayerData {
             val += vit * 0.5;
         val += this.foodBuffs.getOrDefault(att, 0d);
 
-        AttributeMap atts = player.getAttributes();
+        AttributeMap atts = this.player.getAttributes();
         val += atts.hasAttribute(att) ? atts.getValue(att) : 0;
         return val;
     }
@@ -459,7 +457,7 @@ public class PlayerData {
 
     public void refreshShop(Player player) {
         if (player instanceof ServerPlayer serverPlayer) {
-            for (NPCJob profession : ModNPCJobs.allJobs()) {
+            for (NPCJob profession : ModNPCJobs.JOBS.registry()) {
                 Collection<ShopItemProperties> datapack = DataPackHandler.INSTANCE.shopItemsManager().get(profession);
                 List<ItemStack> shopItems = new ArrayList<>();
                 datapack.forEach(shopProps -> {
@@ -473,10 +471,10 @@ public class PlayerData {
                 });
                 NonNullList<ItemStack> shop = NonNullList.create();
                 if (!shopItems.isEmpty()) {
-                    for (float chance = 1.5f + shopItems.size() * 0.002f; player.level.random.nextFloat() < chance; chance -= 0.1f) {
-                        ItemStack stack = shopItems.remove(player.level.random.nextInt(shopItems.size()));
+                    for (float chance = 1.5f + shopItems.size() * 0.002f; player.level().random.nextFloat() < chance; chance -= 0.1f) {
+                        ItemStack stack = shopItems.remove(player.level().random.nextInt(shopItems.size()));
                         shop.add(stack);
-                        if (shopItems.isEmpty() || (profession == ModNPCJobs.RANDOM.getSecond() && shop.size() >= InventoryShop.SHOP_SIZE))
+                        if (shopItems.isEmpty() || (profession == ModNPCJobs.RANDOM.get() && shop.size() >= InventoryShop.SHOP_SIZE))
                             break;
                     }
                 }
@@ -518,13 +516,13 @@ public class PlayerData {
         FoodProperties food = DataPackHandler.INSTANCE.foodManager().get(stack.getItem());
         if (food == null)
             return;
-        Pair<Map<Attribute, Double>, Map<Attribute, Double>> foodStats = ItemNBT.foodStats(stack);
-        Map<Attribute, Double> gain = foodStats.getFirst();
+        Pair<Map<Holder<Attribute>, Double>, Map<Holder<Attribute>, Double>> foodStats = ItemNBT.foodStats(stack);
+        Map<Holder<Attribute>, Double> gain = foodStats.getFirst();
         foodStats.getSecond().forEach((att, d) -> {
             float percent = (float) (d * 0.01f);
             double mult = 0;
             if (att == Attributes.MAX_HEALTH)
-                mult += player.getMaxHealth() * percent;
+                mult += this.player.getMaxHealth() * percent;
             else if (att == ModAttributes.RPINCREASE.get())
                 mult += this.runePointsMax * percent;
             else if (att == Attributes.ATTACK_DAMAGE)
@@ -539,14 +537,14 @@ public class PlayerData {
             gain.put(att, mult);
         });
         if (!gain.isEmpty()) {
-            this.removeFoodEffect(player);
+            this.removeFoodEffect(this.player);
             this.foodBuffs = gain;
             if (this.foodBuffs.containsKey(Attributes.MAX_HEALTH))
-                this.setFoodHealthBonus(player, this.foodBuffs.get(Attributes.MAX_HEALTH));
+                this.setFoodHealthBonus(this.foodBuffs.get(Attributes.MAX_HEALTH));
             this.foodDuration = food.duration();
             this.lastFoodBuff = stack.getItem();
         }
-        if (player instanceof ServerPlayer serverPlayer) {
+        if (this.player instanceof ServerPlayer serverPlayer) {
             LoaderNetwork.INSTANCE.sendToPlayer(new S2CFoodPkt(stack), serverPlayer);
         }
     }
@@ -555,13 +553,13 @@ public class PlayerData {
         this.foodBuffs = Collections.emptyMap();
         this.foodDuration = -1;
         this.lastFoodBuff = null;
-        this.setFoodHealthBonus(player, 0);
+        this.setFoodHealthBonus(0);
         if (player instanceof ServerPlayer serverPlayer) {
             LoaderNetwork.INSTANCE.sendToPlayer(new S2CFoodPkt(null), serverPlayer);
         }
     }
 
-    public Map<Attribute, Double> foodEffects() {
+    public Map<Holder<Attribute>, Double> foodEffects() {
         return this.foodBuffs;
     }
 
@@ -596,46 +594,46 @@ public class PlayerData {
         return this.weaponHandler;
     }
 
-    public void tick(Player player) {
+    public void tick() {
         this.weaponHandler.tick();
-        if (player instanceof ServerPlayer serverPlayer) {
+        if (this.player instanceof ServerPlayer serverPlayer) {
             this.updater.tick(serverPlayer);
             if (serverPlayer.tickCount % 10 == 0) {
                 if (this.walkingTracker.tickWalkingTracker(serverPlayer))
                     this.rpStillRegen = 200;
             }
             if (--this.rpStillRegen < 0 && serverPlayer.tickCount % 20 == 0) {
-                this.refreshRunePoints(player, 1);
+                this.refreshRunePoints(1);
             }
             if (--this.breakTick <= 0)
                 this.blockBreakPosForMsg = null;
-            ItemStack main = player.getMainHandItem();
-            ItemStack off = player.getOffhandItem();
+            ItemStack main = this.player.getMainHandItem();
+            ItemStack off = this.player.getOffhandItem();
             if (main.is(ModItems.MOB_STAFF.get()) || off.is(ModItems.MOB_STAFF.get())) {
                 if (this.entitySelector.poi != null) {
-                    serverPlayer.getLevel().sendParticles(serverPlayer, ParticleTypes.FLAME, true,
+                    serverPlayer.serverLevel().sendParticles(serverPlayer, ParticleTypes.FLAME, true,
                             this.entitySelector.poi.getX() + 0.5, this.entitySelector.poi.getY() + 1.5, this.entitySelector.poi.getZ() + 0.5,
                             1, 0, 0, 0, 0);
-                    serverPlayer.getLevel().sendParticles(serverPlayer, ParticleTypes.FLAME, true,
+                    serverPlayer.serverLevel().sendParticles(serverPlayer, ParticleTypes.FLAME, true,
                             this.entitySelector.poi.getX() + 0.5, this.entitySelector.poi.getY() + 1.5, this.entitySelector.poi.getZ() + 0.5,
                             3, 0, 0, 0, 0.01);
                 }
             } else
                 this.entitySelector.reset();
 
-            if (serverPlayer.hasEffect(ModEffects.BATH.get())) {
+            if (serverPlayer.hasEffect(ModEffects.BATH.asHolder())) {
                 if (!this.touchedWater && serverPlayer.isInWater())
                     this.touchedWater = true;
                 else if (this.touchedWater && !serverPlayer.isInWater()) {
-                    serverPlayer.removeEffect(ModEffects.BATH.get());
+                    serverPlayer.removeEffect(ModEffects.BATH.asHolder());
                     this.touchedWater = false;
                 }
             }
         }
-        this.getInv().update(player);
+        this.getInv().update(this.player);
         this.foodDuration = Math.max(--this.foodDuration, -1);
         if (this.foodDuration == 0) {
-            this.removeFoodEffect(player);
+            this.removeFoodEffect(this.player);
         }
     }
 
@@ -668,9 +666,11 @@ public class PlayerData {
         return start;
     }
 
-    public void increaseMobFrom(ServerBaseMonster monster) {
+    public void increaseMobFrom(BaseMonster monster) {
+        if (!(this.player instanceof ServerPlayer serverPlayer))
+            return;
         this.entityStatsTracker.killEntity(monster);
-        this.increaseMobLevel(monster.getProp().levelIncreaseFromKill(this.entityStatsTracker.getKillCount(monster.getType()), player));
+        this.increaseMobLevel(monster.getProp().levelIncreaseFromKill(this.entityStatsTracker.getKillCount(monster.getType()), serverPlayer));
     }
 
     public void increaseMobLevel(int increase) {
@@ -743,14 +743,14 @@ public class PlayerData {
     public CompoundTag writeToNBT(CompoundTag nbt, boolean wasDead) {
         nbt.putBoolean("Starting", this.starting);
         nbt.putFloat("MaxRunePoints", this.runePointsMax);
-        if (player == null) {
+        if (this.player == null) {
             nbt.putInt("RunePoints", this.runePoints);
         } else {
             if (wasDead) {
-                nbt.putFloat("RestoreHP", player.getMaxHealth() * GeneralConfig.deathHpPercent);
+                nbt.putFloat("RestoreHP", this.player.getMaxHealth() * GeneralConfig.deathHpPercent);
                 nbt.putInt("RunePoints", (int) (this.runePointsMax * GeneralConfig.deathRpPercent));
             } else {
-                nbt.putFloat("RestoreHP", player.getHealth());
+                nbt.putFloat("RestoreHP", this.player.getHealth());
                 nbt.putInt("RunePoints", this.runePoints);
             }
         }

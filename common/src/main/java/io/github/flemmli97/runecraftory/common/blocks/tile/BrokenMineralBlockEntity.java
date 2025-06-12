@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
@@ -54,15 +55,15 @@ public class BrokenMineralBlockEntity extends BlockEntity implements IDailyUpdat
     }
 
     @Override
-    public void load(CompoundTag nbt) {
-        super.load(nbt);
+    public void loadAdditional(CompoundTag nbt, HolderLookup.Provider provider) {
+        super.loadAdditional(nbt, provider);
         this.lastUpdateDay = nbt.getInt("LastUpdate");
         this.check = true;
     }
 
     @Override
-    public void saveAdditional(CompoundTag nbt) {
-        super.saveAdditional(nbt);
+    public void saveAdditional(CompoundTag nbt, HolderLookup.Provider provider) {
+        super.saveAdditional(nbt, provider);
         nbt.putInt("LastUpdate", this.lastUpdateDay);
     }
 

@@ -2,10 +2,13 @@ package io.github.flemmli97.runecraftory.common.datapack.manager.npc;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonElement;
+import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
 import io.github.flemmli97.runecraftory.api.datapack.npc.GiftData;
+import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
+import io.github.flemmli97.runecraftory.common.datapack.ListenerExtension;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
@@ -15,16 +18,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-public class GiftManager extends SimpleJsonResourceReloadListener {
+public class GiftManager extends SimpleJsonResourceReloadListener implements ListenerExtension {
 
-    public static final String DIRECTORY = "npc_gifts";
+    public static final ResourceLocation ID = RuneCraftory.modRes("npc_gifts");
 
     private Map<ResourceLocation, GiftData> gifts;
     private Map<GiftData, ResourceLocation> giftsLookup;
     private List<GiftData> giftsList;
 
+    private HolderLookup.Provider provider;
+
     public GiftManager() {
-        super(GsonInstances.GSON, DIRECTORY);
+        super(DataPackHandler.GSON, ID.getPath());
     }
 
     public GiftData get(ResourceLocation id) {
@@ -45,10 +50,10 @@ public class GiftManager extends SimpleJsonResourceReloadListener {
     @Override
     protected void apply(Map<ResourceLocation, JsonElement> data, ResourceManager manager, ProfilerFiller profiler) {
         ImmutableMap.Builder<ResourceLocation, GiftData> builder = ImmutableMap.builder();
+        DynamicOps<JsonElement> ops = this.provider.createSerializationContext(JsonOps.INSTANCE);
         data.forEach((res, e) -> {
             try {
-                builder.put(res, GiftData.CODEC.parse(JsonOps.INSTANCE, e)
-                        .getOrThrow(true, RuneCraftory.LOGGER::error));
+                builder.put(res, GiftData.CODEC.parse(ops, e).getOrThrow());
             } catch (Exception exception) {
                 RuneCraftory.LOGGER.error("Error parsing GiftData: {} - {}", res, exception);
             }
@@ -58,5 +63,15 @@ public class GiftManager extends SimpleJsonResourceReloadListener {
         this.gifts.forEach((resourceLocation, giftData) -> reverse.put(giftData, resourceLocation));
         this.giftsLookup = reverse.build();
         this.giftsList = this.gifts.keySet().stream().sorted().map(this.gifts::get).toList();
+    }
+
+    @Override
+    public ResourceLocation id() {
+        return ID;
+    }
+
+    @Override
+    public void insertRegistryAccess(HolderLookup.Provider provider) {
+        this.provider = provider;
     }
 }

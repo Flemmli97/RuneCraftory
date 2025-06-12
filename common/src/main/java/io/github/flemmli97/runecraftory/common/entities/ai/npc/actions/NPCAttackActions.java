@@ -20,8 +20,7 @@ import java.util.Optional;
 public class NPCAttackActions {
 
     public static final Codec<NPCAttackActions> CODEC = RecordCodecBuilder.create((instance) ->
-            instance.group(
-                    WeightedAction.CODEC.listOf().fieldOf("actions").forGetter(d -> d.actions)
+            instance.group(WeightedAction.CODEC.listOf().fieldOf("actions").forGetter(d -> d.actions)
             ).apply(instance, NPCAttackActions::new));
 
     public static final NPCAttackActions DEFAULT = new NPCAttackActions(List.of());

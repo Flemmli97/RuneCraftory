@@ -4,11 +4,14 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
 import io.github.flemmli97.runecraftory.api.datapack.npc.NPCData;
 import io.github.flemmli97.runecraftory.api.datapack.npc.NPCLook;
+import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
+import io.github.flemmli97.runecraftory.common.datapack.ListenerExtension;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
@@ -18,9 +21,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-public class NPCLookManager extends SimpleJsonResourceReloadListener {
+public class NPCLookManager extends SimpleJsonResourceReloadListener implements ListenerExtension {
 
-    public static final String DIRECTORY = "npc_looks";
+    public static final ResourceLocation ID = RuneCraftory.modRes("npc_looks");
 
     public static final ResourceLocation DEFAULT_ID = RuneCraftory.modRes("default_look");
 
@@ -28,8 +31,10 @@ public class NPCLookManager extends SimpleJsonResourceReloadListener {
     private Map<NPCLook, ResourceLocation> dataKey = ImmutableMap.of();
     private List<NPCLook> selectable = ImmutableList.of();
 
+    private HolderLookup.Provider provider;
+
     public NPCLookManager() {
-        super(GsonInstances.GSON, DIRECTORY);
+        super(DataPackHandler.GSON, ID.getPath());
     }
 
     public NPCLook get(ResourceLocation res) {
@@ -54,14 +59,14 @@ public class NPCLookManager extends SimpleJsonResourceReloadListener {
     @Override
     protected void apply(Map<ResourceLocation, JsonElement> map, ResourceManager resourceManager, ProfilerFiller profiler) {
         ImmutableMap.Builder<ResourceLocation, NPCLook> builder = ImmutableMap.builder();
+        DynamicOps<JsonElement> ops = this.provider.createSerializationContext(JsonOps.INSTANCE);
         map.forEach((fres, el) -> {
             if (!fres.equals(DEFAULT_ID)) {
                 try {
                     JsonObject obj = el.getAsJsonObject();
-                    builder.put(fres, NPCLook.CODEC.parse(JsonOps.INSTANCE, obj)
-                            .getOrThrow(false, RuneCraftory.LOGGER::error));
+                    builder.put(fres, NPCLook.CODEC.parse(ops, obj).getOrThrow());
                 } catch (Exception ex) {
-                    RuneCraftory.LOGGER.error("Couldnt parse npc look json {} {}", fres, ex);
+                    RuneCraftory.LOGGER.error("Couldn't parse npc look json {} {}", fres, ex);
                     ex.fillInStackTrace();
                 }
             }
@@ -75,5 +80,15 @@ public class NPCLookManager extends SimpleJsonResourceReloadListener {
         this.keyData.entrySet().stream().filter(e -> e.getValue().weight() > 0)
                 .forEach(e -> selectable.add(e.getValue()));
         this.selectable = selectable.build();
+    }
+
+    @Override
+    public ResourceLocation id() {
+        return ID;
+    }
+
+    @Override
+    public void insertRegistryAccess(HolderLookup.Provider provider) {
+        this.provider = provider;
     }
 }

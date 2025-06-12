@@ -22,6 +22,7 @@ public class ModLootRegistries {
 
     public static final LoaderRegister<LootItemConditionType> LOOTCONDITIONS = LoaderRegistryAccess.INSTANCE.of(Registries.LOOT_CONDITION_TYPE, RuneCraftory.MODID);
     public static final LoaderRegister<LootItemFunctionType<?>> LOOTFUNCTION = LoaderRegistryAccess.INSTANCE.of(Registries.LOOT_FUNCTION_TYPE, RuneCraftory.MODID);
+
     public static final RegistryEntrySupplier<LootItemConditionType> SKILL_CHECK = LOOTCONDITIONS.register("skill_check", () -> new LootItemConditionType(new SkillLevelCondition.Serializer()));
     public static final RegistryEntrySupplier<LootItemConditionType> INTERACTINGPLAYER = LOOTCONDITIONS.register("interacting_player", () -> new LootItemConditionType(new NPCRelationCondition.Serializer()));
     public static final RegistryEntrySupplier<LootItemConditionType> SEASONTYPE = LOOTCONDITIONS.register("season", () -> new LootItemConditionType(new SeasonLootCondition.Serializer()));

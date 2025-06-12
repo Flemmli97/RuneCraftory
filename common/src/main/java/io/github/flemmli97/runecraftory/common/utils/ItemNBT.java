@@ -9,20 +9,22 @@ import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
 import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
+import io.github.flemmli97.runecraftory.common.components.ItemAttributeData;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.lib.LibNBT;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
+import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -76,58 +78,38 @@ public class ItemNBT {
     );
 
     public static int itemLevel(ItemStack stack) {
-        CompoundTag tag = getItemNBT(stack);
-        return tag != null ? Math.max(1, tag.getInt(LibNBT.LEVEL)) : 1;
+        return stack.getOrDefault(ModDataComponentTypes.LEVEL.get(), 1);
     }
 
     public static boolean addItemLevel(ItemStack stack) {
         int level = itemLevel(stack);
         if (level < 10) {
-            CompoundTag tag = getItemNBT(stack);
-            if (tag != null) {
-                tag.putInt(LibNBT.LEVEL, level + 1);
-                return true;
-            }
+            stack.set(ModDataComponentTypes.LEVEL.get(), level + 1);
+            return true;
         }
         return false;
     }
 
     public static ItemStack getLeveledItem(ItemStack stack, int level) {
         if (shouldHaveLevel(stack)) {
-            CompoundTag compound = ItemNBT.getItemNBT(stack);
-            if (compound == null)
-                compound = new CompoundTag();
-            compound.putInt(LibNBT.LEVEL, Mth.clamp(level, 1, 10));
-            stack.getOrCreateTag().put(RuneCraftory.MODID, compound);
+            stack.set(ModDataComponentTypes.LEVEL.get(), level);
         }
         return stack;
     }
 
-    public static Map<Attribute, Double> statIncrease(ItemStack stack) {
-        CompoundTag compound = getItemNBT(stack);
-        if (compound == null || !compound.contains(LibNBT.BASE)) {
-            return DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem()).map(ItemStat::itemStats).orElse(new TreeMap<>(ModAttributes.SORTED));
+    public static Map<Holder<Attribute>, Double> statIncrease(ItemStack stack) {
+        ItemAttributeData stats = stack.get(ModDataComponentTypes.STATS.get());
+        if (stats == null) {
+            return DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem()).map(ItemStat::itemStats)
+                    .orElse(Map.of());
         }
-        Map<Attribute, Double> map = new TreeMap<>(ModAttributes.SORTED);
-        CompoundTag base = compound.getCompound(LibNBT.BASE);
-        for (String attName : base.getAllKeys()) {
-            Attribute att = Registry.ATTRIBUTE.get(new ResourceLocation(attName));
-            if (Registry.ATTRIBUTE.getKey(att).toString().equals(attName))
-                map.put(att, base.getDouble(attName));
-        }
-        CompoundTag tag = compound.getCompound(LibNBT.STATS);
-        for (String attName : tag.getAllKeys()) {
-            Attribute att = Registry.ATTRIBUTE.get(new ResourceLocation(attName));
-            if (Registry.ATTRIBUTE.getKey(att).toString().equals(attName))
-                map.compute(att, (key, old) -> old == null ? tag.getDouble(attName) : old + tag.getDouble(attName));
-        }
-        return map;
+        return stats.getTotalStats();
     }
 
-    public static Multimap<Attribute, AttributeModifier> getStatsAttributeMap(ItemStack stack, Multimap<Attribute, AttributeModifier> map, EquipmentSlot slot) {
+    public static Multimap<Holder<Attribute>, AttributeModifier> getStatsAttributeMap(ItemStack stack, Multimap<Holder<Attribute>, AttributeModifier> map, EquipmentSlot slot) {
         if (ItemNBT.shouldHaveStats(stack) && ItemUtils.slotOf(stack) == slot) {
-            Multimap<Attribute, AttributeModifier> multimap = MultimapBuilder.treeKeys(ModAttributes.SORTED).hashSetValues().build();
-            ItemNBT.statIncrease(stack).forEach((att, d) -> multimap.put(att, new AttributeModifier(LibConstants.EQUIPMENT_MODIFIERS[slot.ordinal()], "rf.stat_increase", d, AttributeModifier.Operation.ADDITION)));
+            Multimap<Holder<Attribute>, AttributeModifier> multimap = MultimapBuilder.treeKeys(ModAttributes.SORTED).hashSetValues().build();
+            ItemNBT.statIncrease(stack).forEach((att, d) -> multimap.put(att, new AttributeModifier(LibConstants.EQUIPMENT_MODIFIERS[slot.ordinal()], d, AttributeModifier.Operation.ADD_VALUE)));
             return multimap;
         }
         return map;
@@ -209,6 +191,7 @@ public class ItemNBT {
                 else if (stack.getItem() instanceof ArmorItem armor1 && stackToAdd.getItem() instanceof ArmorItem armor2 && armor1.getSlot() == armor2.getSlot())
                     return changeBaseItemTo(stack, stackToAdd, type);
             }
+            stack.get(ModDataComponentTypes.STATS.get())
             if (stack.is(RunecraftoryTags.UPGRADABLE_HELD)) {
                 if (!stackToAdd.is(RunecraftoryTags.UPGRADABLE_HELD))
                     return stack;

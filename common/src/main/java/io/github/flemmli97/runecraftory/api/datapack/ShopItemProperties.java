@@ -5,7 +5,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
-import io.github.flemmli97.runecraftory.common.utils.MiscUtils;
+import io.github.flemmli97.runecraftory.common.utils.HolderUtils;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.core.Registry;
@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 public record ShopItemProperties(ItemStack stack, UnlockType unlockType,
-                                 EntityPredicate predicate) {
+                                 Optional<EntityPredicate> predicate) {
 
     public static final Codec<TagKey<Item>> TAG_CODEC = Codec.STRING.flatXmap(
             r -> {
@@ -89,7 +89,7 @@ public record ShopItemProperties(ItemStack stack, UnlockType unlockType,
 
         public List<ItemStack> getContents() {
             if (this.tag != null) {
-                return MiscUtils.expandTag(Registry.ITEM, this.tag, ItemStack::new);
+                return HolderUtils.expandTag(Registry.ITEM, this.tag, ItemStack::new);
             }
             return this.items;
         }

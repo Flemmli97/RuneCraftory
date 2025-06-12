@@ -2,36 +2,34 @@ package io.github.flemmli97.runecraftory.common.datapack.manager.npc;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
+import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
+import io.github.flemmli97.runecraftory.common.datapack.ListenerExtension;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
+import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.profiling.ProfilerFiller;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-public class NameManager extends SimplePreparableReloadListener<Map<ResourceLocation, JsonObject>> {
+public class NameManager extends SimpleJsonResourceReloadListener implements ListenerExtension {
 
-    public static final String DIRECTORY = "names";
+    public static final ResourceLocation ID = RuneCraftory.modRes("names");
 
     private Map<String, List<String>> surnames;
     private Map<String, List<String>> maleNames;
     private Map<String, List<String>> femaleNames;
+
+    public NameManager() {
+        super(DataPackHandler.GSON, ID.getPath());
+    }
 
     public String getRandomSurname(Random random, String lang) {
         if (this.surnames.isEmpty())
@@ -74,50 +72,40 @@ public class NameManager extends SimplePreparableReloadListener<Map<ResourceLoca
     }
 
     @Override
-    protected Map<ResourceLocation, JsonObject> prepare(ResourceManager resourceManager, ProfilerFiller profiler) {
-        HashMap<ResourceLocation, JsonObject> map = Maps.newHashMap();
-        int i = DIRECTORY.length() + 1;
-        for (ResourceLocation fileRes : resourceManager.listResources(DIRECTORY, string -> string.endsWith(".json"))) {
-            String path = fileRes.getPath();
-            path = path.substring(i, path.length() - ".json".length());
-            ResourceLocation res = new ResourceLocation(fileRes.getNamespace(), path);
-            try {
-                try (Resource resource = resourceManager.getResource(fileRes)) {
-                    try (InputStream inputStream = resource.getInputStream(); BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
-                        JsonObject obj = GsonHelper.fromJson(GsonInstances.GSON, reader, JsonObject.class);
-                        if (obj != null) {
-                            map.put(res, obj);
-                        }
-                    }
-                }
-            } catch (JsonParseException | IOException | IllegalArgumentException exception) {
-                RuneCraftory.LOGGER.error("Couldn't parse data file {} {}", res, exception);
-            }
-        }
-        return map;
-    }
-
-    @Override
-    protected void apply(Map<ResourceLocation, JsonObject> data, ResourceManager manager, ProfilerFiller profiler) {
+    protected void apply(Map<ResourceLocation, JsonElement> data, ResourceManager manager, ProfilerFiller profiler) {
         ImmutableMap.Builder<String, List<String>> surnames = ImmutableMap.builder();
         ImmutableMap.Builder<String, List<String>> maleNames = ImmutableMap.builder();
         ImmutableMap.Builder<String, List<String>> femaleNames = ImmutableMap.builder();
-        data.forEach((res, arr) -> {
-            ImmutableList.Builder<String> lang_surnames = ImmutableList.builder();
-            ImmutableList.Builder<String> lang_maleNames = ImmutableList.builder();
-            ImmutableList.Builder<String> lang_femaleNames = ImmutableList.builder();
-            GsonHelper.getAsJsonArray(arr, "surnames", new JsonArray())
-                    .forEach(e -> lang_surnames.add(e.getAsString()));
-            GsonHelper.getAsJsonArray(arr, "male_names", new JsonArray())
-                    .forEach(e -> lang_maleNames.add(e.getAsString()));
-            GsonHelper.getAsJsonArray(arr, "female_names", new JsonArray())
-                    .forEach(e -> lang_femaleNames.add(e.getAsString()));
-            surnames.put(res.getPath(), lang_surnames.build());
-            maleNames.put(res.getPath(), lang_maleNames.build());
-            femaleNames.put(res.getPath(), lang_femaleNames.build());
+        data.forEach((res, el) -> {
+            if (!el.isJsonObject()) {
+                RuneCraftory.LOGGER.error("Name file {} is invalid ", res);
+            } else {
+                JsonObject obj = el.getAsJsonObject();
+                ImmutableList.Builder<String> lang_surnames = ImmutableList.builder();
+                ImmutableList.Builder<String> lang_maleNames = ImmutableList.builder();
+                ImmutableList.Builder<String> lang_femaleNames = ImmutableList.builder();
+                GsonHelper.getAsJsonArray(obj, "surnames", new JsonArray())
+                        .forEach(e -> lang_surnames.add(e.getAsString()));
+                GsonHelper.getAsJsonArray(obj, "male_names", new JsonArray())
+                        .forEach(e -> lang_maleNames.add(e.getAsString()));
+                GsonHelper.getAsJsonArray(obj, "female_names", new JsonArray())
+                        .forEach(e -> lang_femaleNames.add(e.getAsString()));
+                surnames.put(res.getPath(), lang_surnames.build());
+                maleNames.put(res.getPath(), lang_maleNames.build());
+                femaleNames.put(res.getPath(), lang_femaleNames.build());
+            }
         });
         this.surnames = surnames.build();
         this.maleNames = maleNames.build();
         this.femaleNames = femaleNames.build();
+    }
+
+    @Override
+    public ResourceLocation id() {
+        return ID;
+    }
+
+    @Override
+    public void insertRegistryAccess(HolderLookup.Provider provider) {
     }
 }

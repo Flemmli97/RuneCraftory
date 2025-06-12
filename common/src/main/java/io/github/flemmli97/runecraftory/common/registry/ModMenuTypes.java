@@ -16,6 +16,7 @@ import net.minecraft.world.inventory.MenuType;
 public class ModMenuTypes {
 
     public static final LoaderRegister<MenuType<?>> CONTAINERS = LoaderRegistryAccess.INSTANCE.of(Registries.MENU, RuneCraftory.MODID);
+
     public static final RegistryEntrySupplier<MenuType<?>, MenuType<ContainerInfoScreen>> INFO_CONTAINER = CONTAINERS.register("info_container", () -> Platform.INSTANCE.menuType((windowID, inv) -> new ContainerInfoScreen(windowID, inv, true)));
     public static final RegistryEntrySupplier<MenuType<?>, MenuType<ContainerInfoScreen>> INFO_SUB_CONTAINER = CONTAINERS.register("info_sub_container", () -> Platform.INSTANCE.menuType((windowID, inv) -> new ContainerInfoScreen(windowID, inv, false)));
     public static final RegistryEntrySupplier<MenuType<?>, MenuType<ContainerCrafting>> CRAFTING_CONTAINER = CONTAINERS.register("crafting_container", () -> Platform.INSTANCE.menuType(ContainerCrafting::new));

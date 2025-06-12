@@ -5,7 +5,7 @@ import io.github.flemmli97.runecraftory.common.lib.LibAttributes;
 import io.github.flemmli97.tenshilib.loader.LoaderRegistryAccess;
 import io.github.flemmli97.tenshilib.loader.registry.LoaderRegister;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -23,17 +23,17 @@ public class ModAttributes {
     public static final Collection<RegistryEntrySupplier<Attribute, ?>> ENTITY_ATTRIBUTES = new ArrayList<>();
     public static final Collection<RegistryEntrySupplier<Attribute, ?>> PLAYER_ATTRIBUTES = new ArrayList<>();
 
-    public static final Comparator<Attribute> SORTED = (o1, o2) -> {
-        if (o1 == Attributes.MAX_HEALTH && o2 != Attributes.MAX_HEALTH)
+    public static final Comparator<Holder<Attribute>> SORTED = (h1, h2) -> {
+        if (h1.value() == Attributes.MAX_HEALTH && h2.value() != Attributes.MAX_HEALTH)
             return -1;
-        if (o1 != Attributes.MAX_HEALTH && o2 == Attributes.MAX_HEALTH)
+        if (h1.value() != Attributes.MAX_HEALTH && h2.value() == Attributes.MAX_HEALTH)
             return 1;
-        if (!(o1 instanceof OrderedAttribute) && !(o2 instanceof OrderedAttribute))
-            return BuiltInRegistries.ATTRIBUTE.getKey(o1).compareTo(BuiltInRegistries.ATTRIBUTE.getKey(o2));
-        if (o1 instanceof OrderedAttribute) {
-            if (o2 instanceof OrderedAttribute)
-                return Integer.compare(((OrderedAttribute) o1).order, ((OrderedAttribute) o2).order);
+        if (h1.value() instanceof OrderedAttribute o1) {
+            if (h2.value() instanceof OrderedAttribute o2)
+                return Integer.compare(o1.order, o2.order);
             return 1;
+        } else if ((!(h2.value() instanceof OrderedAttribute))) {
+            return h1.getRegisteredName().compareTo(h2.getRegisteredName());
         }
         return -1;
     };

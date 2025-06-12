@@ -3,8 +3,10 @@ package io.github.flemmli97.runecraftory.common.blocks.tile;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -42,7 +44,7 @@ public class SingleTimeSpawner extends BlockEntity {
             Entity e = this.savedEntity.create(this.level);
             if (e != null) {
                 if (e instanceof Mob mob) {
-                    mob.finalizeSpawn((ServerLevelAccessor) this.level, this.level.getCurrentDifficultyAt(e.blockPosition()), MobSpawnType.SPAWNER, null, null);
+                    mob.finalizeSpawn((ServerLevelAccessor) this.level, this.level.getCurrentDifficultyAt(e.blockPosition()), MobSpawnType.SPAWNER, null);
                 }
                 if (e instanceof EntityNPCBase npc) {
                     npc.randomizeData(this.shop);
@@ -58,28 +60,32 @@ public class SingleTimeSpawner extends BlockEntity {
         }
     }
 
-    public void setEntity(ResourceLocation entity, CompoundTag tag) {
-        this.savedEntity = Registry.ENTITY_TYPE.get(entity);
+    public void setEntity(EntityType<?> entity, CompoundTag tag) {
+        this.savedEntity = entity;
         this.tag = tag;
         if (this.tag != null && this.tag.hasUUID(Entity.UUID_TAG))
             this.tag.remove(Entity.UUID_TAG);
     }
 
     @Override
-    public void load(CompoundTag nbt) {
-        super.load(nbt);
-        this.savedEntity = Registry.ENTITY_TYPE.get(new ResourceLocation(nbt.getString("Entity")));
+    public void loadAdditional(CompoundTag nbt, HolderLookup.Provider provider) {
+        super.loadAdditional(nbt, provider);
+        this.savedEntity = BuiltInRegistries.ENTITY_TYPE.byNameCodec()
+                .parse(provider.createSerializationContext(NbtOps.INSTANCE), nbt.get("Entity"))
+                .getOrThrow();
         if (nbt.contains("EntityNBT"))
             this.tag = nbt.getCompound("EntityNBT");
         if (nbt.contains("NPCShop"))
-            this.shop = new ResourceLocation(nbt.getString("NPCShop"));
+            this.shop = ResourceLocation.parse(nbt.getString("NPCShop"));
     }
 
     @Override
-    public void saveAdditional(CompoundTag nbt) {
-        super.saveAdditional(nbt);
+    public void saveAdditional(CompoundTag nbt, HolderLookup.Provider provider) {
+        super.saveAdditional(nbt, provider);
         if (this.savedEntity != null)
-            nbt.putString("Entity", Registry.ENTITY_TYPE.getKey(this.savedEntity).toString());
+            nbt.put("Entity", BuiltInRegistries.ENTITY_TYPE.byNameCodec()
+                    .encodeStart(provider.createSerializationContext(NbtOps.INSTANCE), this.savedEntity)
+                    .getOrThrow());
         if (this.tag != null)
             nbt.put("EntityNBT", this.tag);
         if (this.shop != null)

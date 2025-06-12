@@ -3,13 +3,17 @@ package io.github.flemmli97.runecraftory.common.datapack.manager;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
-import net.minecraft.core.Registry;
+import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
+import io.github.flemmli97.runecraftory.common.datapack.ListenerExtension;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.util.random.SimpleWeightedRandomList;
 import net.minecraft.util.random.WeightedEntry;
@@ -19,18 +23,19 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class StructureBossManager extends SimpleJsonResourceReloadListener {
+public class StructureBossManager extends SimpleJsonResourceReloadListener implements ListenerExtension {
 
-    public static final String DIRECTORY = "runecraftory_bosses";
+    public static final ResourceLocation ID = RuneCraftory.modRes("runecraftory_bosses");
 
     private Map<ResourceLocation, BossSpawnList> spawnList = new HashMap<>();
 
+    private HolderLookup.Provider provider;
+
     public StructureBossManager() {
-        super(GsonInstances.GSON, DIRECTORY);
+        super(DataPackHandler.GSON, ID.getPath());
     }
 
     @Nullable
@@ -41,10 +46,10 @@ public class StructureBossManager extends SimpleJsonResourceReloadListener {
     @Override
     protected void apply(Map<ResourceLocation, JsonElement> data, ResourceManager manager, ProfilerFiller profiler) {
         ImmutableMap.Builder<ResourceLocation, BossSpawnList> builder = new ImmutableMap.Builder<>();
+        DynamicOps<JsonElement> ops = this.provider.createSerializationContext(JsonOps.INSTANCE);
         data.forEach((key, el) -> {
             try {
-                BossSpawnList list = BossSpawnList.CODEC.parse(JsonOps.INSTANCE, el)
-                        .getOrThrow(false, RuneCraftory.LOGGER::error);
+                BossSpawnList list = BossSpawnList.CODEC.parse(ops, el).getOrThrow();
                 builder.put(key, list);
             } catch (Exception ex) {
                 RuneCraftory.LOGGER.error("Couldn't parse boss spawn list json {} {}", key, ex);
@@ -54,9 +59,19 @@ public class StructureBossManager extends SimpleJsonResourceReloadListener {
         this.spawnList = builder.build();
     }
 
+    @Override
+    public ResourceLocation id() {
+        return ID;
+    }
+
+    @Override
+    public void insertRegistryAccess(HolderLookup.Provider provider) {
+        this.provider = provider;
+    }
+
     public static class BossSpawnList {
 
-        public static final Codec<BossSpawnList> CODEC = SimpleWeightedRandomList.wrappedCodec(Registry.ENTITY_TYPE.byNameCodec())
+        public static final Codec<BossSpawnList> CODEC = SimpleWeightedRandomList.wrappedCodec(BuiltInRegistries.ENTITY_TYPE.byNameCodec())
                 .xmap(BossSpawnList::new, b -> b.list);
 
         private final SimpleWeightedRandomList<EntityType<?>> list;
@@ -64,14 +79,14 @@ public class StructureBossManager extends SimpleJsonResourceReloadListener {
 
         public BossSpawnList(SimpleWeightedRandomList<EntityType<?>> list) {
             this.list = list;
-            this.direct = this.list.unwrap().stream().map(WeightedEntry.Wrapper::getData).collect(Collectors.toUnmodifiableSet());
+            this.direct = this.list.unwrap().stream().map(WeightedEntry.Wrapper::data).collect(Collectors.toUnmodifiableSet());
         }
 
         public static BossSpawnList of(EntityType<?> type) {
             return new BossSpawnList(SimpleWeightedRandomList.single(type));
         }
 
-        public Optional<EntityType<?>> getRandom(Random random) {
+        public Optional<EntityType<?>> getRandom(RandomSource random) {
             return this.list.getRandomValue(random);
         }
 

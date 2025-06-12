@@ -34,6 +34,7 @@
     "PoiTypeAccessor",
     "PoolsMixin",
     "RandomizableCBEMixin",
+    "ShapelessRecipeAccessor",
     "ServerLevelMixin",
     "ServerPlayerMixin",
     "SinglePoolElementMixin",

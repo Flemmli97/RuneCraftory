@@ -3,10 +3,13 @@ package io.github.flemmli97.runecraftory.common.datapack.manager.npc;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
+import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
+import io.github.flemmli97.runecraftory.common.datapack.ListenerExtension;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.NPCAttackActions;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
@@ -16,9 +19,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-public class NPCActionManager extends SimpleJsonResourceReloadListener {
+public class NPCActionManager extends SimpleJsonResourceReloadListener implements ListenerExtension {
 
-    public static final String DIRECTORY = "npc_actions";
+    public static final ResourceLocation ID = RuneCraftory.modRes("npc_actions");
 
     public static final ResourceLocation DEFAULT_ID = RuneCraftory.modRes("default_action");
 
@@ -26,8 +29,10 @@ public class NPCActionManager extends SimpleJsonResourceReloadListener {
     private Map<NPCAttackActions, ResourceLocation> dataKey = ImmutableMap.of();
     private List<NPCAttackActions> actions = List.of();
 
+    private HolderLookup.Provider provider;
+
     public NPCActionManager() {
-        super(GsonInstances.GSON, DIRECTORY);
+        super(DataPackHandler.GSON, ID.getPath());
     }
 
     public NPCAttackActions get(ResourceLocation res) {
@@ -47,14 +52,14 @@ public class NPCActionManager extends SimpleJsonResourceReloadListener {
     @Override
     protected void apply(Map<ResourceLocation, JsonElement> map, ResourceManager resourceManager, ProfilerFiller profiler) {
         ImmutableMap.Builder<ResourceLocation, NPCAttackActions> builder = ImmutableMap.builder();
+        DynamicOps<JsonElement> ops = this.provider.createSerializationContext(JsonOps.INSTANCE);
         map.forEach((fres, el) -> {
             if (!fres.equals(DEFAULT_ID)) {
                 try {
                     JsonObject obj = el.getAsJsonObject();
-                    builder.put(fres, NPCAttackActions.CODEC.parse(JsonOps.INSTANCE, obj)
-                            .getOrThrow(false, RuneCraftory.LOGGER::error));
+                    builder.put(fres, NPCAttackActions.CODEC.parse(ops, obj).getOrThrow());
                 } catch (Exception ex) {
-                    RuneCraftory.LOGGER.error("Couldnt parse npc actions json {} {}", fres, ex);
+                    RuneCraftory.LOGGER.error("Couldn't parse npc actions json {} {}", fres, ex);
                     ex.fillInStackTrace();
                 }
             }
@@ -64,5 +69,15 @@ public class NPCActionManager extends SimpleJsonResourceReloadListener {
         this.keyData.forEach((resourceLocation, data) -> reverse.put(data, resourceLocation));
         this.dataKey = reverse.build();
         this.actions = this.keyData.values().stream().toList();
+    }
+
+    @Override
+    public ResourceLocation id() {
+        return ID;
+    }
+
+    @Override
+    public void insertRegistryAccess(HolderLookup.Provider provider) {
+        this.provider = provider;
     }
 }

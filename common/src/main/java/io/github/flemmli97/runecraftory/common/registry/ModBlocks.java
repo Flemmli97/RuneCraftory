@@ -61,6 +61,7 @@ public class ModBlocks {
 
     public static final LoaderRegister<Block> BLOCKS = LoaderRegistryAccess.INSTANCE.of(Registries.BLOCK, RuneCraftory.MODID);
     public static final LoaderRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = LoaderRegistryAccess.INSTANCE.of(Registries.BLOCK_ENTITY_TYPE, RuneCraftory.MODID);
+
     public static final List<RegistryEntrySupplier<Block, ?>> CROPS = new ArrayList<>();
     public static final List<RegistryEntrySupplier<Block, ?>> FLOWERS = new ArrayList<>();
     public static final List<RegistryEntrySupplier<Block, ?>> HERBS = new ArrayList<>();
@@ -259,13 +260,13 @@ public class ModBlocks {
         return reg;
     }
 
-    public static RegistryEntrySupplier<Block, BlockCrop> crop(String name, Supplier<Supplier<Item>> crop, Supplier<Supplier<Item>> seed) {
+    public static RegistryEntrySupplier<Block, BlockCrop> crop(String name, Supplier<Supplier<? extends Item>> crop, Supplier<Supplier<? extends Item>> seed) {
         RegistryEntrySupplier<Block, BlockCrop> reg = BLOCKS.register(name, () -> new BlockCrop(BlockBehaviour.Properties.of(Material.PLANT).noCollission().sound(SoundType.GRASS), crop.get(), seed.get()));
         CROPS.add(reg);
         return reg;
     }
 
-    public static RegistryEntrySupplier<Block, BlockGiantCrop> giantCrop(String name, Supplier<Supplier<Item>> giant, Supplier<Supplier<Item>> seed, RegistryEntrySupplier<Block> crop) {
+    public static RegistryEntrySupplier<Block, BlockGiantCrop> giantCrop(String name, Supplier<Supplier<? extends Item>> giant, Supplier<Supplier<? extends Item>> seed, RegistryEntrySupplier<Block> crop) {
         RegistryEntrySupplier<Block, BlockGiantCrop> reg = BLOCKS.register(name, () -> new BlockGiantCrop(BlockBehaviour.Properties.of(Material.PLANT).noCollission().sound(SoundType.GRASS), giant.get(), seed.get()));
         CROPS.add(reg);
         if (Platform.INSTANCE.isDatagen())
@@ -273,13 +274,13 @@ public class ModBlocks {
         return reg;
     }
 
-    public static RegistryEntrySupplier<Block, BlockCrop> flower(String name, Supplier<Supplier<Item>> crop, Supplier<Supplier<Item>> seed) {
+    public static RegistryEntrySupplier<Block, BlockCrop> flower(String name, Supplier<Supplier<? extends Item>> crop, Supplier<Supplier<? extends Item>> seed) {
         RegistryEntrySupplier<Block, BlockCrop> reg = BLOCKS.register(name, () -> new BlockCrop(BlockBehaviour.Properties.of(Material.PLANT).noCollission().sound(SoundType.GRASS), crop.get(), seed.get()));
         FLOWERS.add(reg);
         return reg;
     }
 
-    public static RegistryEntrySupplier<Block, BlockGiantCrop> giantFlower(String name, Supplier<Supplier<Item>> giant, Supplier<Supplier<Item>> seed, RegistryEntrySupplier<Block> flower) {
+    public static RegistryEntrySupplier<Block, BlockGiantCrop> giantFlower(String name, Supplier<Supplier<? extends Item>> giant, Supplier<Supplier<? extends Item>> seed, RegistryEntrySupplier<Block> flower) {
         RegistryEntrySupplier<Block, BlockGiantCrop> reg = BLOCKS.register(name, () -> new BlockGiantCrop(BlockBehaviour.Properties.of(Material.PLANT).noCollission().sound(SoundType.GRASS), giant.get(), seed.get()));
         FLOWERS.add(reg);
         if (Platform.INSTANCE.isDatagen())

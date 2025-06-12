@@ -1,7 +1,6 @@
 package io.github.flemmli97.runecraftory.common.attachment.player;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.network.S2CRecipe;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
@@ -12,67 +11,50 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class RecipeKeeper {
 
-    private final Set<ResourceLocation> unlockedRecipes = new HashSet<>();
+    private final Set<RecipeHolder<?>> unlockedRecipes = new HashSet<>();
 
-    public void unlockRecipe(Player player, Recipe<?> recipe) {
-        this.unlockRecipesRes(player, Sets.newHashSet(recipe.getId()));
+    public void unlockRecipe(Player player, RecipeHolder<?> recipe) {
+        this.unlockRecipes(player, Set.of(recipe));
     }
 
-    public void unlockRecipe(Player player, ResourceLocation res) {
-        this.unlockRecipesRes(player, Sets.newHashSet(res));
-    }
-
-    public void unlockRecipes(Player player, Collection<? extends Recipe<?>> recipes) {
-        this.unlockRecipesRes(player, recipes.stream().map(Recipe::getId).collect(Collectors.toSet()));
-    }
-
-    public void unlockRecipesRes(Player player, Collection<ResourceLocation> recipes) {
+    public void unlockRecipes(Player player, Collection<? extends RecipeHolder<?>> recipes) {
         this.unlockedRecipes.addAll(recipes);
         if (player instanceof ServerPlayer)
             LoaderNetwork.INSTANCE.sendToPlayer(new S2CRecipe(recipes, false), (ServerPlayer) player);
     }
 
-    public void lockRecipe(Player player, Recipe<?> recipe) {
-        this.lockRecipesRes(player, Sets.newHashSet(recipe.getId()));
+    public void lockRecipe(Player player, RecipeHolder<?> recipe) {
+        this.lockRecipes(player, Set.of(recipe));
     }
 
-    public void lockRecipe(Player player, ResourceLocation res) {
-        this.lockRecipesRes(player, Sets.newHashSet(res));
-    }
-
-    public void lockRecipes(Player player, Collection<? extends Recipe<?>> recipes) {
-        this.lockRecipesRes(player, recipes.stream().map(Recipe::getId).collect(Collectors.toSet()));
-    }
-
-    public void lockRecipesRes(Player player, Collection<ResourceLocation> recipes) {
-        recipes.forEach(this.unlockedRecipes::remove);
+    public void lockRecipes(Player player, Collection<? extends RecipeHolder<?>> recipes) {
+        this.unlockedRecipes.removeAll(recipes);
         if (player instanceof ServerPlayer)
             LoaderNetwork.INSTANCE.sendToPlayer(new S2CRecipe(recipes, true), (ServerPlayer) player);
     }
 
-    public boolean isUnlocked(Recipe<?> recipe) {
+    public boolean isUnlocked(RecipeHolder<?> recipe) {
         if (GeneralConfig.recipeSystem.lockIsIgnored())
             return true;
-        return this.unlockedRecipes.contains(recipe.getId());
+        return this.unlockedRecipes.contains(recipe);
     }
 
-    public boolean isUnlockedForCrafting(Recipe<?> recipe) {
+    public boolean isUnlockedForCrafting(RecipeHolder<?> recipe) {
         if (GeneralConfig.recipeSystem == GeneralConfig.RecipeSystem.SKILLBLOCKLOCK ||
                 GeneralConfig.recipeSystem == GeneralConfig.RecipeSystem.BASEBLOCKLOCK)
             return this.isUnlocked(recipe);
         return true;
     }
 
-    public Collection<ResourceLocation> unlockedRecipes() {
+    public Collection<RecipeHolder<?>> unlockedRecipes() {
         return ImmutableSet.copyOf(this.unlockedRecipes);
     }
 

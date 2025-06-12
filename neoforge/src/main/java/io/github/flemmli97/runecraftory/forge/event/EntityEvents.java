@@ -132,7 +132,7 @@ public class EntityEvents {
     @SubscribeEvent
     public void itemStackAttributes(ItemAttributeModifierEvent event) {
         Multimap<Attribute, AttributeModifier> map = ItemNBT.getStatsAttributeMap(event.getItemStack(), event.getModifiers(), event.getSlotType());
-        if (map != event.getOriginalModifiers()) {
+        if (map != event.getModifiers()) {
             event.clearModifiers();
             map.forEach(event::addModifier);
         }

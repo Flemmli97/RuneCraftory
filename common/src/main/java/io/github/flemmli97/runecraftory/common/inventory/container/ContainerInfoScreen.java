@@ -1,9 +1,8 @@
 package io.github.flemmli97.runecraftory.common.inventory.container;
 
 import com.mojang.datafixers.util.Pair;
-import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
-import io.github.flemmli97.runecraftory.common.inventory.DummyInventory;
 import io.github.flemmli97.runecraftory.common.inventory.InventorySpells;
+import io.github.flemmli97.runecraftory.common.inventory.WrappedContainer;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
 import io.github.flemmli97.runecraftory.common.registry.ModMenuTypes;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -11,14 +10,15 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.Equipable;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 
 public class ContainerInfoScreen extends AbstractContainerMenu {
@@ -33,10 +33,8 @@ public class ContainerInfoScreen extends AbstractContainerMenu {
     public ContainerInfoScreen(int windowId, Inventory playerInventory, boolean main) {
         super(main ? ModMenuTypes.INFO_CONTAINER.get() : ModMenuTypes.INFO_SUB_CONTAINER.get(), windowId);
         this.main = main;
-        InventorySpells playerSpells = Platform.INSTANCE.getPlayerData(playerInventory.player).map(PlayerData::getInv).orElse(null);
-        if (playerSpells == null)
-            return;
-        DummyInventory iinv = new DummyInventory(playerSpells) {
+        InventorySpells playerSpells = Platform.INSTANCE.getPlayerData(playerInventory.player).getInv();
+        WrappedContainer iinv = new WrappedContainer(playerSpells) {
             @Override
             public int getMaxStackSize() {
                 return 1;
@@ -79,7 +77,7 @@ public class ContainerInfoScreen extends AbstractContainerMenu {
                 @Override
                 public boolean mayPickup(Player player) {
                     ItemStack itemstack = this.getItem();
-                    return (itemstack.isEmpty() || player.isCreative() || !EnchantmentHelper.hasBindingCurse(itemstack)) && super.mayPickup(player);
+                    return (itemstack.isEmpty() || player.isCreative() || !EnchantmentHelper.has(itemstack, EnchantmentEffectComponents.PREVENT_ARMOR_CHANGE)) && super.mayPickup(player);
                 }
             });
         }
@@ -135,8 +133,9 @@ public class ContainerInfoScreen extends AbstractContainerMenu {
             if (slot != null && slot.hasItem()) {
                 ItemStack itemstack1 = slot.getItem();
                 itemstack = itemstack1.copy();
-                EquipmentSlot slotType = LivingEntity.getEquipmentSlotForItem(itemstack);
-                if (slotType.getType() == EquipmentSlot.Type.ARMOR && !this.slots.get(39 - slotType.getIndex()).hasItem()) {
+                Equipable equipable = Equipable.get(itemstack);
+                EquipmentSlot slotType = equipable != null ? equipable.getEquipmentSlot() : null;
+                if (slotType != null && slotType.getType() == EquipmentSlot.Type.HUMANOID_ARMOR && !this.slots.get(39 - slotType.getIndex()).hasItem()) {
                     int i = 39 - slotType.getIndex();
                     if (!this.moveItemStackTo(itemstack1, i, i + 1, false)) {
                         return ItemStack.EMPTY;

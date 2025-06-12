@@ -26,7 +26,7 @@ import java.util.function.Supplier;
 
 public class ModStructures {
 
-    public static final int STRUCTURES = LoaderRegistryAccess.INSTANCE.of(Registry.STRUCTURE_FEATURE_REGISTRY, RuneCraftory.MODID);
+    public static final LoaderRegister<StructureProcessorType<?>> STRUCTURES = LoaderRegistryAccess.INSTANCE.of(Registry.STRUCTURE_FEATURE_REGISTRY, RuneCraftory.MODID);
 
     public static final LoaderRegister<StructureProcessorType<?>> STRUCTURESPROCESSORS = LoaderRegistryAccess.INSTANCE.of(Registry.STRUCTURE_PROCESSOR_REGISTRY, RuneCraftory.MODID);
 

@@ -76,10 +76,10 @@ public class CraftingGui extends AbstractContainerScreen<ContainerCrafting> {
         RenderSystem.setShaderTexture(0, texture);
         this.blit(stack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
         PlayerData data = Platform.INSTANCE.getPlayerData(this.minecraft.player).orElse(null);
-        if (this.menu.rpCost() >= 0) {
+        if (this.menu.runepointCost() >= 0) {
             int rpMax = data != null ? data.getMaxRunePoints() : 0;
-            MutableComponent cost = Component.literal("" + this.menu.rpCost());
-            if (rpMax < this.menu.rpCost() && !this.minecraft.player.isCreative()) {
+            MutableComponent cost = Component.literal("" + this.menu.runepointCost());
+            if (rpMax < this.menu.runepointCost() && !this.minecraft.player.isCreative()) {
                 cost = Component.translatable("runecraftory.gui.crafting.rpMax.missing").withStyle(ChatFormatting.DARK_RED);
             }
             ClientHandlers.drawCenteredScaledString(stack, this.font, cost, this.leftPos + 123, this.topPos + 20, 1, 0);

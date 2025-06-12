@@ -39,9 +39,6 @@ public class ModCriteria {
     public static final RegistryEntrySupplier<CriterionTrigger<?>, PlayerTrigger> MEDICINE = register("medicine", PlayerTrigger::new);
     public static final RegistryEntrySupplier<CriterionTrigger<?>, PlayerTrigger> COOKING = register("cooking", PlayerTrigger::new);
 
-    public static void init() {
-    }
-
     private static <T extends CriterionTrigger<?>> RegistryEntrySupplier<CriterionTrigger<?>, T> register(String name, Supplier<T> inst) {
         return TRIGGERS.register(name, inst);
     }

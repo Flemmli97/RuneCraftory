@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.common.inventory.container;
 
-import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.registry.ModMenuTypes;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.world.Container;
@@ -15,7 +14,7 @@ public class ShippingContainer extends AbstractContainerMenu {
     private final Container container;
 
     public ShippingContainer(int i, Inventory inventory) {
-        this(i, inventory, Platform.INSTANCE.getPlayerData(inventory.player).map(PlayerData::getShippingInv).orElse(null));
+        this(i, inventory, Platform.INSTANCE.getPlayerData(inventory.player).getShippingInv());
     }
 
     public ShippingContainer(int i, Inventory inventory, Container shippingBin) {

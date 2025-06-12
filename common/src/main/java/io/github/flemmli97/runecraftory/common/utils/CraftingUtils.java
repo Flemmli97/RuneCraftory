@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.common.utils;
 
-import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
 import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
@@ -8,7 +7,7 @@ import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.crafting.SextupleRecipe;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
-import io.github.flemmli97.runecraftory.common.inventory.PlayerContainerInv;
+import io.github.flemmli97.runecraftory.common.inventory.PlayerBoundCraftingContainer;
 import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.NonNullList;
@@ -142,24 +141,24 @@ public class CraftingUtils {
         data.increaseSkill(skill, xpForUpgrade(skill, equip, upgrade, data.getSkillLevel(skill).getLevel()) * GeneralConfig.skillXpMultiplier);
     }
 
-    public static ItemStack getCraftingOutput(ItemStack stack, PlayerContainerInv inv, Pair<NonNullList<ItemStack>, NonNullList<ItemStack>> materials, EnumCrafting type) {
+    public static ItemStack getCraftingOutput(ItemStack stack, PlayerBoundCraftingContainer inv, SextupleRecipe.MatchResult materials, EnumCrafting type) {
         if (type == EnumCrafting.COOKING) {
-            for (ItemStack base : materials.getFirst()) {
+            for (ItemStack base : materials.recipeMatches()) {
                 ItemNBT.addFoodBonusItem(stack, base);
             }
-            for (ItemStack bonus : materials.getSecond()) {
+            for (ItemStack bonus : materials.bonusItems()) {
                 ItemNBT.addFoodBonusItem(stack, bonus);
             }
             return stack;
         }
         int i = 0;
-        for (ItemStack bonus : materials.getSecond()) {
+        for (ItemStack bonus : materials.bonusItems()) {
             i++;
             ItemNBT.addUpgradeItem(stack, bonus, true, type);
             if (i == 3)
                 break;
         }
-        NonNullList<ItemStack> recipeStacks = materials.getFirst();
+        NonNullList<ItemStack> recipeStacks = materials.recipeMatches();
         RAND.setSeed(Platform.INSTANCE.getPlayerData(inv.getPlayer()).getCraftingSeed(inv.getPlayer()));
         if (recipeStacks.size() > 3) {
             while (i < 3) {

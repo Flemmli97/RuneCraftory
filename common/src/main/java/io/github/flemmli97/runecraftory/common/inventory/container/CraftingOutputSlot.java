@@ -4,7 +4,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.crafting.SextupleRecipe;
-import io.github.flemmli97.runecraftory.common.inventory.PlayerContainerInv;
+import io.github.flemmli97.runecraftory.common.inventory.PlayerBoundCraftingContainer;
 import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
 import io.github.flemmli97.runecraftory.common.utils.CraftingUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
@@ -18,12 +18,12 @@ import net.minecraft.world.item.ItemStack;
 
 public class CraftingOutputSlot extends Slot {
 
-    private final PlayerContainerInv ingredientInv;
+    private final PlayerBoundCraftingContainer ingredientInv;
     private final ContainerCrafting craftingContainer;
     private int amountCrafted;
     private final int id;
 
-    public CraftingOutputSlot(Container output, ContainerCrafting container, PlayerContainerInv ingredientInv, int id, int x, int y) {
+    public CraftingOutputSlot(Container output, ContainerCrafting container, PlayerBoundCraftingContainer ingredientInv, int id, int x, int y) {
         super(output, id, x, y);
         this.ingredientInv = ingredientInv;
         this.craftingContainer = container;
@@ -50,9 +50,9 @@ public class CraftingOutputSlot extends Slot {
     protected void checkTakeAchievements(ItemStack stack) {
         Player player = this.ingredientInv.getPlayer();
         if (this.amountCrafted > 0) {
-            stack.onCraftedBy(player.level, player, this.amountCrafted);
+            stack.onCraftedBy(player.level(), player, this.amountCrafted);
             Platform.INSTANCE.craftingEvent(player, stack, this.ingredientInv);
-            Platform.INSTANCE.getPlayerData(player).ifPresent(d -> d.onCrafted(player));
+            Platform.INSTANCE.getPlayerData(player).onCrafted(player);
         }
         this.amountCrafted = 0;
     }
@@ -63,9 +63,9 @@ public class CraftingOutputSlot extends Slot {
         if (!(player instanceof ServerPlayer serverPlayer))
             return;
         NonNullList<ItemStack> remaining = this.craftingContainer.getCurrentRecipe() != null ? this.craftingContainer.getCurrentRecipe().getRemainingItems(this.ingredientInv) : NonNullList.withSize(0, ItemStack.EMPTY);
-        if (this.craftingContainer.rpCost() >= 0) {
+        if (this.craftingContainer.runepointCost() >= 0) {
             PlayerData data = Platform.INSTANCE.getPlayerData(player);
-            data.decreaseRunePoints(this.craftingContainer.rpCost(), true);
+            data.decreaseRunePoints(this.craftingContainer.runepointCost(), true);
             SextupleRecipe recipe = this.craftingContainer.getCurrentRecipe();
             if (recipe != null && !recipe.isSpecial() && !data.getRecipeKeeper().isUnlocked(recipe)) {
                 data.getRecipeKeeper().unlockRecipe(player, recipe);
@@ -104,7 +104,7 @@ public class CraftingOutputSlot extends Slot {
             if (!remainingStack.isEmpty()) {
                 if (itemstack.isEmpty()) {
                     this.ingredientInv.setItem(i, remainingStack);
-                } else if (ItemStack.isSame(itemstack, remainingStack) && ItemStack.tagMatches(itemstack, remainingStack)) {
+                } else if (ItemStack.isSameItemSameComponents(itemstack, remainingStack)) {
                     remainingStack.grow(itemstack.getCount());
                     this.ingredientInv.setItem(i, remainingStack);
                 } else if (!player.getInventory().add(remainingStack)) {
@@ -134,6 +134,6 @@ public class CraftingOutputSlot extends Slot {
     public boolean mayPickup(Player player) {
         if (!GeneralConfig.useRp)
             return true;
-        return (player.isCreative() || Platform.INSTANCE.getPlayerData(player).getMaxRunePoints() >= this.craftingContainer.rpCost());
+        return (player.isCreative() || Platform.INSTANCE.getPlayerData(player).getMaxRunePoints() >= this.craftingContainer.runepointCost());
     }
 }

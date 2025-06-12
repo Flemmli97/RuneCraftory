@@ -29,7 +29,7 @@ public class BossSpawnerProcessor extends DataStructureBlockProcessor {
 
     public BossSpawnerProcessor(TagKey<EntityType<?>> boss) {
         super("BOSS", false);
-        this.boss = new ResourceLocation(boss.location().toString());
+        this.boss = ResourceLocation.parse(boss.location().toString());
     }
 
     @Override
@@ -42,7 +42,7 @@ public class BossSpawnerProcessor extends DataStructureBlockProcessor {
             } catch (NumberFormatException ignored) {
             }
         }
-        BlockPos pos = origin.pos.above(off);
+        BlockPos pos = origin.pos().above(off);
         BlockState state = ModBlocks.BOSS_SPAWNER.get().defaultBlockState()
                 .setValue(BlockBossSpawner.FACING, Direction.SOUTH)
                 .mirror(settings.getMirror()).rotate(settings.getRotation());

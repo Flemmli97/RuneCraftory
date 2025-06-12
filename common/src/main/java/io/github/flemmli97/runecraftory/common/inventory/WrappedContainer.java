@@ -4,76 +4,76 @@ import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
-public class DummyInventory implements Container {
+public class WrappedContainer implements Container {
 
-    protected final Container inv;
+    protected final Container container;
 
-    public DummyInventory(Container inv) {
-        this.inv = inv;
+    public WrappedContainer(Container container) {
+        this.container = container;
     }
 
     @Override
     public int getContainerSize() {
-        return this.inv.getContainerSize();
+        return this.container.getContainerSize();
     }
 
     @Override
     public boolean isEmpty() {
-        return this.inv.isEmpty();
+        return this.container.isEmpty();
     }
 
     @Override
     public ItemStack getItem(int slot) {
-        return this.inv.getItem(slot);
+        return this.container.getItem(slot);
     }
 
     @Override
     public ItemStack removeItem(int slot, int count) {
-        return this.inv.removeItem(slot, count);
+        return this.container.removeItem(slot, count);
     }
 
     @Override
     public ItemStack removeItemNoUpdate(int index) {
-        return this.inv.removeItemNoUpdate(index);
+        return this.container.removeItemNoUpdate(index);
     }
 
     @Override
     public void setItem(int slot, ItemStack stack) {
-        this.inv.setItem(slot, stack);
+        this.container.setItem(slot, stack);
     }
 
     @Override
     public int getMaxStackSize() {
-        return this.inv.getMaxStackSize();
+        return this.container.getMaxStackSize();
     }
 
     @Override
     public void setChanged() {
-        this.inv.setChanged();
+        this.container.setChanged();
     }
 
     @Override
     public boolean stillValid(Player player) {
-        return this.inv.stillValid(player);
+        return this.container.stillValid(player);
     }
 
     @Override
     public void startOpen(Player player) {
-        this.inv.startOpen(player);
+        this.container.startOpen(player);
     }
 
     @Override
     public void stopOpen(Player player) {
-        this.inv.stopOpen(player);
+        this.container.stopOpen(player);
     }
 
     @Override
     public boolean canPlaceItem(int slot, ItemStack stack) {
-        return this.inv.canPlaceItem(slot, stack);
+        return this.container.canPlaceItem(slot, stack);
     }
 
     @Override
     public void clearContent() {
-        this.inv.clearContent();
+        this.container.clearContent();
     }
 }
