@@ -13,9 +13,9 @@ import io.github.flemmli97.runecraftory.common.items.BigWeapon;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemDualBladeBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemGloveBase;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
+import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
-import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
@@ -183,7 +183,7 @@ public class ClientMixinUtils {
         ItemModelProps.HELD_TYPE = 0;
     }
 
-    public static boolean onRenderHeldItem(LivingEntity livingEntity, ItemStack itemStack, ItemTransforms.TransformType transformType, boolean leftHand, PoseStack poseStack, MultiBufferSource buffer, int combinedLight) {
+    public static boolean onRenderHeldItem(LivingEntity livingEntity, ItemStack stack, ItemTransforms.TransformType transformType, boolean leftHand, PoseStack poseStack, MultiBufferSource buffer, int combinedLight) {
         if (livingEntity instanceof AbstractClientPlayer player && transformType.firstPerson()) {
             PlayerData data = Platform.INSTANCE.getPlayerData(player).orElse(null);
             if (data != null) {
@@ -219,7 +219,7 @@ public class ClientMixinUtils {
                 return true;
             }
         }
-        return ItemNBT.isInvis(itemStack);
+        return stack.has(ModDataComponentTypes.INVISIBLE.get());
     }
 
     public static ModelPartHandler.ModelPartExtended createPlayerItemPart(boolean left) {

@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.items.weapons;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.ChatFormatting;
@@ -35,18 +36,16 @@ public class ItemSpell extends Item {
     }
 
     public boolean useSpell(ServerPlayer player, ItemStack stack) {
-        if (!this.getSpell().canUse(player.getLevel(), player, stack))
+        if (!this.getSpell().canUse(player.serverLevel(), player, stack))
             return false;
         if (this.getSpell().useAction() != null) {
-            return Platform.INSTANCE.getPlayerData(player)
-                    .map(d -> {
-                        if (player.getCooldowns().getCooldownPercent(this, 0) <= 0) {
-                            return d.getWeaponHandler().doWeaponAttack(this.getSpell().useAction(), stack, this.getSpell());
-                        }
-                        return false;
-                    }).orElse(false);
+            PlayerData data = Platform.INSTANCE.getPlayerData(player);
+            if (player.getCooldowns().getCooldownPercent(this, 0) <= 0) {
+                return data.getWeaponHandler().doWeaponAttack(this.getSpell().useAction(), stack, this.getSpell());
+            }
+            return false;
         } else {
-            if (player.getCooldowns().getCooldownPercent(this, 0) <= 0 && this.spell.get().use(player.getLevel(), player, stack)) {
+            if (player.getCooldowns().getCooldownPercent(this, 0) <= 0 && this.spell.get().use(player.serverLevel(), player, stack)) {
                 player.getCooldowns().addCooldown(this, this.getSpell().coolDown());
                 this.spell.get().levelSkill(player);
                 return true;
@@ -56,8 +55,8 @@ public class ItemSpell extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, Level world, List<Component> list, TooltipFlag flag) {
-        super.appendHoverText(stack, world, list, flag);
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag tooltipFlag) {
+        super.appendHoverText(stack, context, list, tooltipFlag);
         if (this.spell.get() == ModSpells.EMPTY.get())
             list.add(Component.literal("WIP").withStyle(ChatFormatting.DARK_RED));
     }

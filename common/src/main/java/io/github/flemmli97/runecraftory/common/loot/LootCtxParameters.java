@@ -9,6 +9,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import java.util.UUID;
 
 public class LootCtxParameters {
+
     public static final LootContextParam<UUID> UUID_CONTEXT = new LootContextParam<>(RuneCraftory.modRes("uuid_context"));
     public static final LootContextParam<Integer> ITEM_LEVEL_CONTEXT = new LootContextParam<>(RuneCraftory.modRes("item_level_context"));
 

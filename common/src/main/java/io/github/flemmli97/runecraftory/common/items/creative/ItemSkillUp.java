@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.items.creative;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.world.InteractionHand;
@@ -19,10 +20,9 @@ public class ItemSkillUp extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         if (!world.isClientSide) {
-            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                for (EnumSkills skill : EnumSkills.values())
-                    data.increaseSkill(skill, player, LevelCalc.xpAmountForSkillLevelUp(skill, data.getSkillLevel(skill).getLevel()) - data.getSkillLevel(skill).getXp());
-            });
+            PlayerData data = Platform.INSTANCE.getPlayerData(player);
+            for (EnumSkills skill : EnumSkills.values())
+                data.increaseSkill(skill, LevelCalc.xpAmountForSkillLevelUp(skill, data.getSkillLevel(skill).getLevel()) - data.getSkillLevel(skill).getXp());
         }
         return InteractionResultHolder.success(player.getItemInHand(hand));
     }

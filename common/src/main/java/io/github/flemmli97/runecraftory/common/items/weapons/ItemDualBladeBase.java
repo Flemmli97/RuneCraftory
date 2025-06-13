@@ -1,28 +1,23 @@
 package io.github.flemmli97.runecraftory.common.items.weapons;
 
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
-import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
-import io.github.flemmli97.runecraftory.api.items.IItemUsable;
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
-import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import net.minecraft.network.protocol.game.ClientboundSoundPacket;
+import io.github.flemmli97.tenshilib.common.item.DualWeapon;
+import io.github.flemmli97.tenshilib.common.item.ExtendedWeapon;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -35,63 +30,23 @@ import net.minecraft.world.phys.AABB;
 import java.util.Collection;
 import java.util.function.Supplier;
 
-public class ItemDualBladeBase extends SwordItem implements IItemUsable, IDualWeapon, IAOEWeapon {
+public class ItemDualBladeBase extends SwordItem implements DualWeapon, ExtendedWeapon {
 
     public ItemDualBladeBase(Item.Properties props) {
-        super(ItemTiers.TIER, 0, 0, props);
+        super(ItemTiers.TIER, props);
     }
 
     @Override
-    public boolean resetAttackStrength(LivingEntity entity, ItemStack stack) {
-        return false;
-    }
-
-    @Override
-    public boolean swingWeapon(LivingEntity entity, ItemStack stack) {
-        return false;
-    }
-
-    @Override
-    public boolean onServerSwing(LivingEntity entity, ItemStack stack) {
-        if (entity instanceof Player player) {
-            Platform.INSTANCE.getPlayerData(player)
-                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(ModAttackActions.DUAL_BLADES.get(), stack));
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public EnumWeaponType getWeaponType() {
-        return EnumWeaponType.DUAL;
-    }
-
-    @Override
-    public void onBlockBreak(ServerPlayer player) {
-
-    }
-
-    @Override
-    public float getRange(LivingEntity entity, ItemStack stack) {
-        return (float) entity.getAttributeValue(ModAttributes.ATTACK_RANGE.get());
-    }
-
-    @Override
-    public float getWidth(LivingEntity entity, ItemStack stack) {
-        return (float) entity.getAttributeValue(ModAttributes.ATTACK_WIDTH.get());
-    }
-
-    @Override
-    public boolean doSweepingAttack() {
-        return false;
+    public void executeAttack(Player player, ItemStack stack) {
+        Platform.INSTANCE.getPlayerData(player).getWeaponHandler().doWeaponAttack(ModAttackActions.DUAL_BLADES.get(), stack);
     }
 
     @Override
     public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingUseDuration) {
         if (entity instanceof ServerPlayer player) {
-            int duration = stack.getUseDuration() - remainingUseDuration;
+            int duration = stack.getUseDuration(entity) - remainingUseDuration;
             if (duration == ItemUtils.getChargeTime(entity))
-                player.connection.send(new ClientboundSoundPacket(SoundEvents.NOTE_BLOCK_XYLOPHONE, player.getSoundSource(), player.getX(), player.getY(), player.getZ(), 1, 1));
+                EntityUtils.playSoundForPlayer(player, SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
         }
     }
 
@@ -100,8 +55,8 @@ public class ItemDualBladeBase extends SwordItem implements IItemUsable, IDualWe
         ItemStack itemstack = player.getItemInHand(hand);
         if (hand == InteractionHand.OFF_HAND)
             return InteractionResultHolder.pass(itemstack);
-        boolean canCharge = Platform.INSTANCE.getPlayerData(player)
-                .map(data -> (data.getSkillLevel(EnumSkills.DUAL).getLevel() >= 5 || player.isCreative()) && data.getWeaponHandler().canExecuteAction(ModAttackActions.DUAL_USE.get())).orElse(false);
+        PlayerData data = Platform.INSTANCE.getPlayerData(player);
+        boolean canCharge = (data.getSkillLevel(EnumSkills.DUAL).getLevel() >= 5 || player.isCreative()) && data.getWeaponHandler().canExecuteAction(ModAttackActions.DUAL_USE.get());
         if (canCharge) {
             player.startUsingItem(hand);
             return InteractionResultHolder.consume(itemstack);
@@ -115,15 +70,15 @@ public class ItemDualBladeBase extends SwordItem implements IItemUsable, IDualWe
     }
 
     @Override
-    public int getUseDuration(ItemStack stack) {
+    public int getUseDuration(ItemStack stack, LivingEntity entity) {
         return 72000;
     }
 
     @Override
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
-        if (!world.isClientSide && stack.getUseDuration() - timeLeft - 1 >= ItemUtils.getChargeTime(entity)) {
+        if (!world.isClientSide && stack.getUseDuration(entity) - timeLeft - 1 >= ItemUtils.getChargeTime(entity)) {
             if (entity instanceof ServerPlayer player) {
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.getWeaponHandler().doWeaponAttack(ModAttackActions.DUAL_USE.get(), stack));
+                Platform.INSTANCE.getPlayerData(player).getWeaponHandler().doWeaponAttack(ModAttackActions.DUAL_USE.get(), stack);
                 return;
             }
             if (performRightClickAction(stack, entity, CombatUtils.getRange(entity, 0), CombatUtils.getWidth(entity, 0))) {
@@ -139,7 +94,7 @@ public class ItemDualBladeBase extends SwordItem implements IItemUsable, IDualWe
         if (performRightClickAction(stack, entity, reach, width)) {
             entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 1.0f, 1.0f);
             if (entity instanceof ServerPlayer player) {
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.DUAL, 3));
+                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.DUAL, 3);
             }
         }
     }
@@ -163,10 +118,5 @@ public class ItemDualBladeBase extends SwordItem implements IItemUsable, IDualWe
     @Override
     public boolean isEnchantable(ItemStack stack) {
         return false;
-    }
-
-    @Override
-    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot equipmentSlot) {
-        return ImmutableMultimap.of();
     }
 }

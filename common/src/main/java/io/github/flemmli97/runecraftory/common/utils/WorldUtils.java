@@ -33,7 +33,7 @@ import java.util.function.Supplier;
 
 public class WorldUtils {
 
-    public static final TicketType<ChunkPos> ENTITY_LOADER = TicketType.create(RuneCraftory.MODID + "_entity_loader", Comparator.comparingLong(ChunkPos::toLong), 100);
+    public static final TicketType<ChunkPos> ENTITY_LOADER = TicketType.create(RuneCraftory.MODID + "_entity_loader", Comparator.comparingLong(ChunkPos::toLong), 10);
 
     public static final Codec<Pair<EnumSeason, Integer>> DATE = RecordCodecBuilder.create(inst ->
             inst.group(

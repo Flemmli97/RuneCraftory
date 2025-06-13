@@ -1,47 +1,54 @@
 package io.github.flemmli97.runecraftory.common.particles;
 
-import com.mojang.brigadier.StringReader;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
-import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 
 public class ColoredParticleData4f extends ColoredParticleData {
 
-    public static final ParticleOptions.Deserializer<ColoredParticleData4f> DESERIALIZER = new ParticleOptions.Deserializer<>() {
-        @Override
-        public ColoredParticleData4f fromCommand(ParticleType<ColoredParticleData4f> type, StringReader reader) throws CommandSyntaxException {
-            reader.expect(' ');
-            float r = reader.readFloat();
-            reader.expect(' ');
-            float g = reader.readFloat();
-            reader.expect(' ');
-            float b = reader.readFloat();
-            reader.expect(' ');
-            float a = reader.readFloat();
-            reader.expect(' ');
-            float scale = reader.readFloat();
-            reader.expect(' ');
-            float radius = reader.readFloat();
-            reader.expect(' ');
-            float inc = reader.readFloat();
-            reader.expect(' ');
-            float offset = reader.readFloat();
-            reader.expect(' ');
-            float angle = reader.readFloat();
-            reader.expect(' ');
-            float exp = reader.readFloat();
-            return new ColoredParticleData4f(type, r, g, b, a, scale, radius, inc, offset, angle, exp);
-        }
+    public static MapCodec<ColoredParticleData4f> codec4f(ParticleType<ColoredParticleData4f> type) {
+        return RecordCodecBuilder.mapCodec((builder) -> builder.group(
+                        Codec.FLOAT.fieldOf("r").forGetter(ColoredParticleData::getRed),
+                        Codec.FLOAT.fieldOf("g").forGetter(ColoredParticleData::getGreen),
+                        Codec.FLOAT.fieldOf("b").forGetter(ColoredParticleData::getBlue),
+                        Codec.FLOAT.fieldOf("alpha").forGetter(ColoredParticleData::getAlpha),
+                        Codec.FLOAT.fieldOf("scale").forGetter(ColoredParticleData::getScale),
+                        Codec.FLOAT.fieldOf("radius").forGetter(ColoredParticleData4f::getRadius),
+                        Codec.FLOAT.fieldOf("speed").forGetter(ColoredParticleData4f::getSpeed),
+                        Codec.FLOAT.fieldOf("offset").forGetter(ColoredParticleData4f::getOffset),
+                        Codec.FLOAT.fieldOf("angle_increase").forGetter(ColoredParticleData4f::getAngleIncrease),
+                        Codec.FLOAT.fieldOf("expansion").forGetter(ColoredParticleData4f::getExpansion))
+                .apply(builder, (r, g, b, a, scale, radius, inc, offset, angle, exp) -> new ColoredParticleData4f(type, r, g, b, a, scale, radius, inc, offset, angle, exp)));
+    }
 
-        @Override
-        public ColoredParticleData4f fromNetwork(ParticleType<ColoredParticleData4f> type, FriendlyByteBuf buffer) {
-            return new ColoredParticleData4f(type, buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat());
-        }
-    };
+    public static StreamCodec<RegistryFriendlyByteBuf, ColoredParticleData4f> streamCodec4f(ParticleType<ColoredParticleData4f> type) {
+        return new StreamCodec<>() {
+            @Override
+            public ColoredParticleData4f decode(RegistryFriendlyByteBuf buf) {
+                return new ColoredParticleData4f(type, buf.readFloat(), buf.readFloat(), buf.readFloat(), buf.readFloat(),
+                        buf.readFloat(), buf.readFloat(), buf.readFloat(), buf.readFloat(), buf.readFloat(), buf.readFloat());
+            }
+
+            @Override
+            public void encode(RegistryFriendlyByteBuf buf, ColoredParticleData4f data) {
+                buf.writeFloat(data.getRed());
+                buf.writeFloat(data.getGreen());
+                buf.writeFloat(data.getBlue());
+                buf.writeFloat(data.getAlpha());
+                buf.writeFloat(data.getScale());
+                buf.writeFloat(data.radius);
+                buf.writeFloat(data.speed);
+                buf.writeFloat(data.offset);
+                buf.writeFloat(data.angleIncrease);
+                buf.writeFloat(data.expansion);
+            }
+        };
+    }
+
     private final float radius;
     private final float speed;
     private final float offset;
@@ -59,35 +66,6 @@ public class ColoredParticleData4f extends ColoredParticleData {
         this.offset = offset;
         this.angleIncrease = angleInc;
         this.expansion = expansion;
-    }
-
-    public static Codec<ColoredParticleData4f> codec4f(ParticleType<ColoredParticleData4f> type) {
-        return RecordCodecBuilder.create((builder) -> builder.group(
-                        Codec.FLOAT.fieldOf("r").forGetter(ColoredParticleData::getRed),
-                        Codec.FLOAT.fieldOf("g").forGetter(ColoredParticleData::getGreen),
-                        Codec.FLOAT.fieldOf("b").forGetter(ColoredParticleData::getBlue),
-                        Codec.FLOAT.fieldOf("alpha").forGetter(ColoredParticleData::getAlpha),
-                        Codec.FLOAT.fieldOf("scale").forGetter(ColoredParticleData::getScale),
-                        Codec.FLOAT.fieldOf("radius").forGetter(ColoredParticleData4f::getRadius),
-                        Codec.FLOAT.fieldOf("speed").forGetter(ColoredParticleData4f::getSpeed),
-                        Codec.FLOAT.fieldOf("offset").forGetter(ColoredParticleData4f::getOffset),
-                        Codec.FLOAT.fieldOf("angle_increase").forGetter(ColoredParticleData4f::getAngleIncrease),
-                        Codec.FLOAT.fieldOf("expansion").forGetter(ColoredParticleData4f::getExpansion))
-                .apply(builder, (r, g, b, a, scale, radius, inc, offset, angle, exp) -> new ColoredParticleData4f(type, r, g, b, a, scale, radius, inc, offset, angle, exp)));
-    }
-
-    @Override
-    public void writeToNetwork(FriendlyByteBuf buffer) {
-        buffer.writeFloat(this.getRed());
-        buffer.writeFloat(this.getGreen());
-        buffer.writeFloat(this.getBlue());
-        buffer.writeFloat(this.getAlpha());
-        buffer.writeFloat(this.getScale());
-        buffer.writeFloat(this.radius);
-        buffer.writeFloat(this.speed);
-        buffer.writeFloat(this.offset);
-        buffer.writeFloat(this.angleIncrease);
-        buffer.writeFloat(this.expansion);
     }
 
     public float getRadius() {

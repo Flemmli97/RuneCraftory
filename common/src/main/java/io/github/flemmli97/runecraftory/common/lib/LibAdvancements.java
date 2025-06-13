@@ -73,6 +73,7 @@ public class LibAdvancements {
     }
 
     public static EntityPredicate.Builder playerAdvancementCheck(ResourceLocation advancement) {
-        return EntityPredicate.Builder.entity().player(PlayerPredicate.Builder.player().checkAdvancementDone(advancement, true).build());
+        return EntityPredicate.Builder.entity()
+                .subPredicate(PlayerPredicate.Builder.player().checkAdvancementDone(advancement, true).build());
     }
 }

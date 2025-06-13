@@ -4,13 +4,11 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import net.minecraft.core.Holder;
-import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -49,9 +47,8 @@ public class EntityRideActionCosts {
         if (spell == null || !cost.multiplier) {
             if (cost.multiplier)
                 return true;
-            if (!LevelCalc.useRP(player, data, cost.cost, false, 0, false)) {
-                player.connection.send(
-                        new ClientboundSoundPacket(Holder.direct(SoundEvents.VILLAGER_NO), SoundSource.PLAYERS, player.position().x, player.position().y, player.position().z, 1, 1, player.getRandom().nextLong()));
+            if (!LevelCalc.useRP(data, cost.cost, false, 0, false)) {
+                EntityUtils.playSoundForPlayer(player, SoundEvents.VILLAGER_NO, 1, 1);
                 return false;
             }
             return true;

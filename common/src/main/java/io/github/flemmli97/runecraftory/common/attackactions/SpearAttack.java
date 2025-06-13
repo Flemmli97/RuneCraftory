@@ -117,7 +117,7 @@ public class SpearAttack extends AttackAction {
     @Override
     public void onStart(LivingEntity entity, AttackActionHandler handler) {
         if (handler.getComboCount() == 5 && entity instanceof ServerPlayer player)
-            LevelCalc.useRP(player, Platform.INSTANCE.getPlayerData(player), GeneralConfig.spearUltimate, true, 0, false);
+            LevelCalc.useRP(Platform.INSTANCE.getPlayerData(player), GeneralConfig.spearUltimate, true, 0, false);
     }
 
     @Override

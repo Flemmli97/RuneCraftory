@@ -16,6 +16,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -30,8 +31,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.Random;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.ToIntBiFunction;
@@ -172,14 +171,12 @@ public class LevelCalc {
                 player = sP;
         }
         if (player != null) {
-            ServerPlayer finalPlayer = player;
-            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                data.addXp(finalPlayer, adjustOnLevel ? levelXpWith(base, data.getPlayerLevel().getLevel(), level) : base);
-                data.setMoney(finalPlayer, data.getMoney() + LevelCalc.getMoney(money, level));
-            });
+            PlayerData data = Platform.INSTANCE.getPlayerData(player);
+            data.addXp(adjustOnLevel ? levelXpWith(base, data.getPlayerLevel().getLevel(), level) : base);
+            data.setMoney(data.getMoney() + LevelCalc.getMoney(money, level));
             if (!(attacker instanceof Player))
                 tryAddXPTo(attacker, player, base, level, adjustOnLevel);
-            for (Mob e : player.level.getEntities(EntityTypeTest.forClass(Mob.class), player.getBoundingBox().inflate(32, 32, 32), e -> true)) {
+            for (Mob e : player.level().getEntities(EntityTypeTest.forClass(Mob.class), player.getBoundingBox().inflate(32, 32, 32), e -> true)) {
                 if (e == attacker)
                     continue;
                 tryAddXPTo(e, player, base, level, adjustOnLevel);
@@ -212,10 +209,10 @@ public class LevelCalc {
         return DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(skill).xpMultiplier();
     }
 
-    public static void levelSkill(ServerPlayer player, PlayerData data, EnumSkills skill, float amount) {
+    public static void levelSkill(PlayerData data, EnumSkills skill, float amount) {
         if (GeneralConfig.skillXpMultiplier == 0)
             return;
-        data.increaseSkill(skill, player, getSkillXpMultiplier(skill) * amount * GeneralConfig.skillXpMultiplier);
+        data.increaseSkill(skill, getSkillXpMultiplier(skill) * amount * GeneralConfig.skillXpMultiplier);
     }
 
     public static GateLevelResult levelFromPos(ServerLevel level, Vec3 pos) {
@@ -239,11 +236,11 @@ public class LevelCalc {
                         return distanceLevelFrom(level, pos, center);
                     }));
             case PLAYERLEVEL ->
-                    randomizedLevel(level.random, getLevelFor(MobConfig.baseGateLevel, list, (p, d) -> d.map(data -> data.getPlayerLevel().getLevel()).orElse(1)));
+                    randomizedLevel(level.random, getLevelFor(MobConfig.baseGateLevel, list, (p, d) -> d.getPlayerLevel().getLevel()));
         });
     }
 
-    private static int getLevelFor(int base, List<ServerPlayer> list, ToIntBiFunction<Player, Optional<PlayerData>> levelFunc) {
+    private static int getLevelFor(int base, List<ServerPlayer> list, ToIntBiFunction<Player, PlayerData> levelFunc) {
         if (levelFunc == null && !MobConfig.playerLevelType.increased)
             return base;
         if (list.isEmpty())
@@ -251,10 +248,10 @@ public class LevelCalc {
         int lvl = 0;
         boolean mean = MobConfig.playerLevelType.mean;
         for (Player player : list) {
-            Optional<PlayerData> data = Platform.INSTANCE.getPlayerData(player);
+            PlayerData data = Platform.INSTANCE.getPlayerData(player);
             int pL = levelFunc != null ? levelFunc.applyAsInt(player, data) : 0;
             if (MobConfig.playerLevelType.increased)
-                pL += data.map(PlayerData::getMobLevelIncrease).orElse(0);
+                pL += data.getMobLevelIncrease();
             if (mean)
                 lvl += pL;
             else if (pL > lvl)
@@ -284,11 +281,11 @@ public class LevelCalc {
         return list;
     }
 
-    public static int randomizedLevel(Random random, int level) {
+    public static int randomizedLevel(RandomSource random, int level) {
         return level + Math.round((float) ((random.nextDouble() * 2 - 1) * Math.ceil(level * 0.15)));
     }
 
-    public static boolean useRP(Player player, PlayerData data, float amount, boolean hurt, float percent, boolean mean, EnumSkills... skills) {
+    public static boolean useRP(PlayerData data, float amount, boolean hurt, float percent, boolean mean, EnumSkills... skills) {
         int skillVal = 0;
         if (skills.length == 0)
             skillVal = 1;
@@ -314,7 +311,7 @@ public class LevelCalc {
         float percentAmount = percent > 0 ? data.getMaxRunePoints() * percent * skillReduction : 0;
         val = Math.max(percentAmount, val);
         int usage = Mth.ceil(val);
-        return data.decreaseRunePoints(player, usage, hurt);
+        return data.decreaseRunePoints(usage, hurt);
     }
 
     public static float getMultiplierInterval(int level, int interval, float max, float bonus) {

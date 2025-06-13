@@ -1,78 +1,37 @@
 package io.github.flemmli97.runecraftory.common.items.tools;
 
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.enums.EnumToolTier;
-import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
-import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
+import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
-import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
-import io.github.flemmli97.runecraftory.platform.Platform;
-import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.Level;
 
-public class ItemToolAxe extends AxeItem implements IItemUsable {
+public class ItemToolAxe extends AxeItem {
 
-    public final EnumToolTier tier;
-
-    public ItemToolAxe(EnumToolTier tier, Item.Properties props) {
-        super(ItemTiers.TIER, 0, 0, props);
-        this.tier = tier;
-    }
-
-    public int chargeAmount() {
-        return this.tier.getTierLevel();
-    }
-
-    @Override
-    public boolean hasCooldown() {
-        return true;
-    }
-
-    @Override
-    public EnumWeaponType getWeaponType() {
-        return EnumWeaponType.FARM;
-    }
-
-    @Override
-    public void onBlockBreak(ServerPlayer player) {
-        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.LOGGING, 1));
+    public ItemToolAxe(Item.Properties props) {
+        super(ItemTiers.TIER, props);
     }
 
     @Override
     public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingUseDuration) {
         if (entity instanceof ServerPlayer player) {
-            int duration = stack.getUseDuration() - remainingUseDuration;
-            int chargeTime = ItemUtils.getChargeTime(entity, this.tier);
-            if (duration > 0 && duration / chargeTime <= this.chargeAmount() && duration % chargeTime == 0)
-                player.connection.send(new ClientboundSoundPacket(SoundEvents.NOTE_BLOCK_XYLOPHONE, player.getSoundSource(), player.getX(), player.getY(), player.getZ(), 1, 1));
+            int duration = stack.getUseDuration(entity) - remainingUseDuration;
+            EnumToolTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP);
+            int chargeTime = ItemUtils.getChargeTime(entity, tier);
+            if (duration > 0 && duration / chargeTime <= tier.getTierLevel() && duration % chargeTime == 0)
+                EntityUtils.playSoundForPlayer(player, SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
         }
-    }
-
-    @Override
-    public Rarity getRarity(ItemStack stack) {
-        return this.tier == EnumToolTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON;
     }
 
     @Override
     public boolean isEnchantable(ItemStack stack) {
         return false;
-    }
-
-    @Override
-    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot slot) {
-        return ImmutableMultimap.of();
     }
 }

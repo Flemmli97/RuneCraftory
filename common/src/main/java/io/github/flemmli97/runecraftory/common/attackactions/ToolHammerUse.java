@@ -45,8 +45,8 @@ public class ToolHammerUse extends AttackAction {
                     .count();
             if (amount > 0 && entity instanceof ServerPlayer player) {
                 PlayerData data = Platform.INSTANCE.getPlayerData(player);
-                LevelCalc.useRP(player, data, range * 15, true, 0, true, EnumSkills.MINING);
-                LevelCalc.levelSkill(player, data, EnumSkills.MINING, (range + 1) * 10);
+                LevelCalc.useRP(data, range * 15, true, 0, true, EnumSkills.MINING);
+                LevelCalc.levelSkill(data, EnumSkills.MINING, (range + 1) * 10);
             }
             ItemToolHammer.setDontUseRPFlagTemp(stack, false);
         }

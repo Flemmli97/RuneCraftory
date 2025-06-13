@@ -1,7 +1,6 @@
 package io.github.flemmli97.runecraftory.common.items.equipment;
 
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.platform.ExtendedItem;
 import io.github.flemmli97.tenshilib.common.item.DynamicArmorTextureItem;
@@ -9,22 +8,19 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 
 public class ItemArmorBase extends ArmorItem implements ExtendedItem, DynamicArmorTextureItem {
 
-    private static final String ARMOR_MODEL_PATH = "runecraftory:textures/models/armor/";
-    private static final String ITEM_PATH = "runecraftory:textures/models/armor/empty.png";
-    public final ResourceLocation registryID;
-    private final boolean useItemTexture;
+    private static final String ARMOR_MODEL_PATH = "textures/models/armor/";
+    private static final ResourceLocation ITEM_PATH = RuneCraftory.modRes("textures/models/armor/empty.png");
+    public final ResourceLocation armorPath;
 
-    public ItemArmorBase(EquipmentSlot slot, Properties properties, ResourceLocation registryID, boolean useItemTexture) {
+    public ItemArmorBase(ArmorItem.Type slot, Properties properties, ResourceLocation id, boolean useItemTexture) {
         super(ItemTiers.ARMOR, slot, properties);
-        this.registryID = registryID;
-        this.useItemTexture = useItemTexture;
+        this.armorPath = useItemTexture ? ITEM_PATH : ResourceLocation.fromNamespaceAndPath(id.getPath(), ARMOR_MODEL_PATH + id.getPath() + ".png");
     }
 
     @Override
@@ -33,17 +29,12 @@ public class ItemArmorBase extends ArmorItem implements ExtendedItem, DynamicArm
     }
 
     @Override
-    public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-        return this.useItemTexture ? ITEM_PATH : (ARMOR_MODEL_PATH + this.registryID.getPath() + ".png");
+    public ResourceLocation getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, ArmorMaterial.Layer layer, boolean innerModel) {
+        return this.armorPath;
     }
 
     @Override
     public boolean onEntitySwing(ItemStack stack, LivingEntity entity) {
         return false;
-    }
-
-    @Override
-    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot equipmentSlot) {
-        return ImmutableMultimap.of();
     }
 }

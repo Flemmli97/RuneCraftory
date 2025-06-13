@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.api.datapack;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.flemmli97.runecraftory.common.effects.PermanentEffect;
+import io.github.flemmli97.runecraftory.common.effects.SyncedMobEffect;
 import net.minecraft.core.Registry;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -33,7 +33,7 @@ public class SimpleEffect {
     }
 
     public int getAmplifier() {
-        if (this.potion instanceof PermanentEffect)
+        if (this.potion instanceof SyncedMobEffect)
             return Integer.MAX_VALUE;
         return this.amplifier;
     }

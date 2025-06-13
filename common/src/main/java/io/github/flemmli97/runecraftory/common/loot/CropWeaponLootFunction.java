@@ -1,21 +1,18 @@
 package io.github.flemmli97.runecraftory.common.loot;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
 import com.mojang.datafixers.util.Pair;
-import io.github.flemmli97.runecraftory.RuneCraftory;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
 import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
-import io.github.flemmli97.runecraftory.common.lib.LibNBT;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
+import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandData;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -29,12 +26,17 @@ import java.util.List;
 
 public class CropWeaponLootFunction extends LootItemConditionalFunction {
 
-    private CropWeaponLootFunction(LootItemCondition[] conditions) {
+    public static final MapCodec<CropWeaponLootFunction> CODEC = RecordCodecBuilder.mapCodec(
+            instance -> commonFields(instance)
+                    .apply(instance, CropWeaponLootFunction::new)
+    );
+
+    private CropWeaponLootFunction(List<LootItemCondition> conditions) {
         super(conditions);
     }
 
     @Override
-    public LootItemFunctionType getType() {
+    public LootItemFunctionType<CropWeaponLootFunction> getType() {
         return ModLootRegistries.CROP_WEAPON_FUNCTION.get();
     }
 
@@ -48,7 +50,7 @@ public class CropWeaponLootFunction extends LootItemConditionalFunction {
             level = ctx.getParam(LootCtxParameters.ITEM_LEVEL_CONTEXT);
         else {
             if (ctx.hasParam(LootContextParams.BLOCK_STATE) && ctx.hasParam(LootContextParams.ORIGIN)) {
-                BlockPos blockPos = new BlockPos(ctx.getParam(LootContextParams.ORIGIN));
+                BlockPos blockPos = BlockPos.containing(ctx.getParam(LootContextParams.ORIGIN));
                 level = FarmlandHandler.get(ctx.getLevel().getServer())
                         .getData(ctx.getLevel(), blockPos)
                         .map(FarmlandData::getCropLevel).orElse(1);
@@ -57,12 +59,7 @@ public class CropWeaponLootFunction extends LootItemConditionalFunction {
         List<Pair<ItemStack, ItemStat>> base = DataPackHandler.INSTANCE.itemStatManager()
                 .all(s -> !s.is(stack.getItem()) && equipment ? s.getItem() instanceof ShieldItem : s.is(RunecraftoryTags.UPGRADABLE_HELD));
         if (!base.isEmpty()) {
-            CompoundTag tag = ItemNBT.getItemNBT(stack);
-            if (tag == null)
-                tag = new CompoundTag();
-            tag.putBoolean(LibNBT.LIGHTORETAG, true);
-            CompoundTag stackTag = stack.getOrCreateTag();
-            stackTag.put(RuneCraftory.MODID, tag);
+            stack.set(ModDataComponentTypes.LIGHT_ORE.get(), true);
             ItemNBT.addUpgradeItem(stack, base.get(ctx.getRandom().nextInt(base.size())).getFirst(), true, equipment ? EnumCrafting.ARMOR : EnumCrafting.FORGE);
         }
         List<Pair<ItemStack, ItemStat>> bonus = DataPackHandler.INSTANCE.itemStatManager()
@@ -86,19 +83,6 @@ public class CropWeaponLootFunction extends LootItemConditionalFunction {
         @Override
         public LootItemFunction build() {
             return new CropWeaponLootFunction(this.getConditions());
-        }
-    }
-
-    public static class Serializer extends LootItemConditionalFunction.Serializer<CropWeaponLootFunction> {
-
-        @Override
-        public void serialize(JsonObject obj, CropWeaponLootFunction func, JsonSerializationContext context) {
-            super.serialize(obj, func, context);
-        }
-
-        @Override
-        public CropWeaponLootFunction deserialize(JsonObject obj, JsonDeserializationContext ctx, LootItemCondition[] conditions) {
-            return new CropWeaponLootFunction(conditions);
         }
     }
 }

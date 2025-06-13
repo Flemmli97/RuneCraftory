@@ -399,7 +399,7 @@ public class PlayerData {
                 AttributeModifier modifier = health.getModifier(LibConstants.MAX_HEALTH_ITEM_INCREASE);
                 double val = modifier == null ? 0 : modifier.amount();
                 health.removeModifier(LibConstants.MAX_HEALTH_ITEM_INCREASE);
-                health.addPermanentModifier(new AttributeModifier(LibConstants.MAX_HEALTH_ITEM_INCREASE, "rf.item.hpModifier", val + 10, AttributeModifier.Operation.ADDITION));
+                health.addPermanentModifier(new AttributeModifier(LibConstants.MAX_HEALTH_ITEM_INCREASE, val + 10, AttributeModifier.Operation.ADD_VALUE));
             }
         }
     }
@@ -461,7 +461,7 @@ public class PlayerData {
                 Collection<ShopItemProperties> datapack = DataPackHandler.INSTANCE.shopItemsManager().get(profession);
                 List<ItemStack> shopItems = new ArrayList<>();
                 datapack.forEach(shopProps -> {
-                    boolean canAdd = shopProps.predicate().matches(serverPlayer, serverPlayer) && switch (shopProps.unlockType()) {
+                    boolean canAdd = (shopProps.predicate().isEmpty() || shopProps.predicate().get().matches(serverPlayer, serverPlayer)) && switch (shopProps.unlockType()) {
                         case DEFAULT -> false;
                         case ALWAYS -> true;
                         case NEEDS_SHIPPING -> this.shippedItems.containsKey(shopProps.stack().getItem());

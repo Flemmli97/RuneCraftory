@@ -51,7 +51,6 @@ import io.github.flemmli97.runecraftory.common.attackactions.WindSlashAttack;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemDualBladeBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemLongSwordBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemShortSwordBase;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.loader.LoaderRegistryAccess;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.core.Registry;
@@ -89,9 +88,9 @@ public class ModAttackActions {
 
     public static final RegistryEntrySupplier<AttackAction, SpellUseAttack> STAFF_USE = register("staff_use", SpellUseAttack::new);
 
-    public static final RegistryEntrySupplier<AttackAction, TimedUseAttack> TOOL_AXE_USE = register("tool_axe", () -> new TimedUseAttack(PlayerModelAnimations.HAMME_AXE_USE.create(1.1f), true, (entity, stack) -> {
-        //TODO
-    }, false));
+    //    public static final RegistryEntrySupplier<AttackAction, TimedUseAttack> TOOL_AXE_USE = register("tool_axe", () -> new TimedUseAttack(PlayerModelAnimations.HAMME_AXE_USE.create(1.1f), true, (entity, stack) -> {
+//        //TODO
+//    }, false));
     public static final RegistryEntrySupplier<AttackAction, ToolHammerUse> TOOL_HAMMER_USE = register("tool_hammer", ToolHammerUse::new);
     public static final RegistryEntrySupplier<AttackAction, FireballUseAttack> FIREBALL_USE = register("fireball_use", () -> new FireballUseAttack(false));
     public static final RegistryEntrySupplier<AttackAction, FireballUseAttack> FIREBALL_BIG_USE = register("fireball_big_use", () -> new FireballUseAttack(true));
@@ -100,9 +99,9 @@ public class ModAttackActions {
     public static final RegistryEntrySupplier<AttackAction, WaterLaserAttack> DOUBLE_WATER_LASER_USE = register("double_water_laser_use", () -> new WaterLaserAttack(1));
     public static final RegistryEntrySupplier<AttackAction, WaterLaserAttack> TRIPLE_WATER_LASER_USE = register("triple_water_laser_use", () -> new WaterLaserAttack(2));
 
-    public static final RegistryEntrySupplier<AttackAction, TimedUseAttack> TOOL_ATTACK = register("tool_attack", () -> new TimedUseAttack(AnimatedAction.builder(1, "tool_attack").build(), true, (entity, stack) -> {
-        //TODO
-    }, false));
+//    public static final RegistryEntrySupplier<AttackAction, TimedUseAttack> TOOL_ATTACK = register("tool_attack", () -> new TimedUseAttack(AnimatedAction.builder(1, "tool_attack").build(), true, (entity, stack) -> {
+//        //TODO
+//    }, false));
 
     public static final RegistryEntrySupplier<AttackAction, PowerWaveAttack> POWER_WAVE = register("power_wave", PowerWaveAttack::new);
     public static final RegistryEntrySupplier<AttackAction, DashSlashAttack> DASH_SLASH = register("dash_slash", DashSlashAttack::new);

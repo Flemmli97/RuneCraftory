@@ -10,6 +10,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Fluid;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +18,6 @@ import java.util.Map;
 public class RunecraftoryTags {
 
     // Items
-
     public static final TagKey<Item> SEEDS = tagCommon("seeds");
 
     public static final TagKey<Item> WOOD_ROD = tagCommon("wooden_rods");
@@ -239,6 +239,8 @@ public class RunecraftoryTags {
 
     public static final TagKey<Biome> BAMBOO_GEN = biome("bamboo_gen");
     public static final TagKey<Biome> GENERAL_HERBS = biome("herb_tree_biomes");
+
+    public static final TagKey<Fluid> HOT_SPRING_FLUID = TagKey.create(Registries.FLUID, RuneCraftory.modRes("hot_spring_water"));
 
     // Ref Neoforge
     public static final TagKey<DamageType> IS_MAGIC = damageCommon("is_magic");

@@ -1,12 +1,11 @@
 package io.github.flemmli97.runecraftory.common.items.creative;
 
-import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import io.github.flemmli97.tenshilib.common.item.AnimationDebugger;
+import io.github.flemmli97.tenshilib.common.item.ExtendedWeapon;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -22,23 +21,20 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class ItemDebug extends AnimationDebugger implements IExtendedWeapon {
-
-    private static final String ITEM_MODE = RuneCraftory.MODID + ":debug_mode";
+public class ItemDebug extends AnimationDebugger implements ExtendedWeapon {
 
     public ItemDebug(Item.Properties props) {
-        super(props);
+        super(props, ModDataComponentTypes.SELECTED_UUID, ModDataComponentTypes.SELECTED_ANIMATION);
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> components, TooltipFlag isAdvanced) {
-        super.appendHoverText(stack, level, components, isAdvanced);
-        components.add(Component.translatable("runecraftory.item.creative.tooltip").withStyle(ChatFormatting.DARK_RED));
-        components.add(Component.translatable("runecraftory.item.creative.tooltip.mode",
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag tooltipFlag) {
+        super.appendHoverText(stack, context, list, tooltipFlag);
+        list.add(Component.translatable("runecraftory.item.creative.tooltip").withStyle(ChatFormatting.DARK_RED));
+        list.add(Component.translatable("runecraftory.item.creative.tooltip.mode",
                 Component.translatable(this.getCurrentMode(stack).translationKey).withStyle(ChatFormatting.AQUA)).withStyle(ChatFormatting.DARK_RED));
     }
 
@@ -66,9 +62,9 @@ public class ItemDebug extends AnimationDebugger implements IExtendedWeapon {
     public InteractionResult useOn(UseOnContext context) {
         if (context.getLevel() instanceof ServerLevel serverLevel) {
             int lvl = LevelCalc.levelFromPos(serverLevel, Vec3.atCenterOf(context.getClickedPos()), LevelCalc.playersAround(serverLevel, Vec3.atCenterOf(context.getClickedPos()), 256));
-            context.getPlayer().sendMessage(Component.literal("GateLevel at pos: " + lvl), Util.NIL_UUID);
+            context.getPlayer().displayClientMessage(Component.literal("GateLevel at pos: " + lvl), false);
             FarmlandHandler.get(serverLevel.getServer()).getData(serverLevel, context.getClickedPos())
-                    .ifPresent(d -> context.getPlayer().sendMessage(Component.literal(d.toStringFull()), Util.NIL_UUID));
+                    .ifPresent(d -> context.getPlayer().displayClientMessage(Component.literal(d.toStringFull()), false));
             /*int f = serverLevel.getPoiManager().getFreeTickets(context.getClickedPos());
             context.getPlayer().sendMessage(Component.literal("Free POITickets" + f), Util.NIL_UUID);*/
             return InteractionResult.CONSUME;
@@ -80,7 +76,7 @@ public class ItemDebug extends AnimationDebugger implements IExtendedWeapon {
     public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity target, InteractionHand usedHand) {
         if (this.getCurrentMode(stack) == Mode.ANIMATION)
             return super.interactLivingEntity(stack, player, target, usedHand);
-        if (player.level instanceof ServerLevel serverLevel) {
+        if (player.level() instanceof ServerLevel serverLevel) {
             if (target instanceof Mob mob)
                 mob.travel(new Vec3(0, 0, 5));
             return InteractionResult.SUCCESS;
@@ -103,21 +99,15 @@ public class ItemDebug extends AnimationDebugger implements IExtendedWeapon {
     }
 
     private void changeMode(ItemStack stack) {
-        CompoundTag compound = new CompoundTag();
-        if (stack.hasTag())
-            compound = stack.getTag();
         Mode mode = this.getCurrentMode(stack);
-        compound.putInt(ITEM_MODE, (mode.ordinal() + 1) % Mode.values().length);
-        compound.remove(SAVED_ENTITY);
-        compound.remove(ANIMATION_IDX);
-        stack.setTag(compound);
+        stack.set(ModDataComponentTypes.DEBUG_ITEM_MODE.get(), mode == Mode.DEFAULT ? Mode.ANIMATION : Mode.DEFAULT);
     }
 
     private Mode getCurrentMode(ItemStack stack) {
-        return stack.hasTag() ? Mode.values()[stack.getTag().getInt(ITEM_MODE)] : Mode.DEFAULT;
+        return stack.getOrDefault(ModDataComponentTypes.DEBUG_ITEM_MODE.get(), Mode.DEFAULT);
     }
 
-    private enum Mode {
+    public enum Mode {
 
         DEFAULT("runecraftory.item.creative.tooltip.mode.default"),
         ANIMATION("runecraftory.item.creative.tooltip.mode.animation");

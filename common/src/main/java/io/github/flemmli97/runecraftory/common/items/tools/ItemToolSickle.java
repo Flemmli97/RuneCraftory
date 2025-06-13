@@ -1,37 +1,32 @@
 package io.github.flemmli97.runecraftory.common.items.tools;
 
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.enums.EnumToolTier;
-import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
-import io.github.flemmli97.runecraftory.api.items.IItemUsable;
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
+import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
-import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -41,75 +36,45 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 
-public class ItemToolSickle extends DiggerItem implements IItemUsable {
+public class ItemToolSickle extends DiggerItem {
 
-    public final EnumToolTier tier;
-
-    public ItemToolSickle(EnumToolTier tier, Item.Properties props) {
-        super(0, 0, ItemTiers.TIER, RunecraftoryTags.SICKLE_EFFECTIVE, props);
-        this.tier = tier;
+    public ItemToolSickle(Item.Properties props) {
+        super(ItemTiers.TIER, RunecraftoryTags.SICKLE_EFFECTIVE, props);
     }
 
-    public int chargeAmount() {
-        return this.tier.getTierLevel();
-    }
-
-    @Override
-    public boolean hasCooldown() {
-        return true;
-    }
-
-    @Override
-    public EnumWeaponType getWeaponType() {
-        return EnumWeaponType.FARM;
-    }
-
-    @Override
-    public void onBlockBreak(ServerPlayer player) {
-        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-            LevelCalc.useRP(player, data, 2, true, 0, true, EnumSkills.FARMING, EnumSkills.WIND);
-            LevelCalc.levelSkill(player, data, EnumSkills.FARMING, 3);
-            LevelCalc.levelSkill(player, data, EnumSkills.WIND, 2);
-        });
-    }
-
-    @Override
-    public float getDestroySpeed(ItemStack stack, BlockState state) {
-        if (state.is(BlockTags.LEAVES) || state.is(BlockTags.WART_BLOCKS))
-            return this.speed;
-        //if (getToolTypes(stack).stream().anyMatch(e -> state.isToolEffective(e))) return efficiency;
-        return super.getDestroySpeed(stack, state);
+    public void postUse(ServerPlayer player) {
+        PlayerData data = Platform.INSTANCE.getPlayerData(player);
+        LevelCalc.useRP(data, 2, true, 0, true, EnumSkills.FARMING, EnumSkills.WIND);
+        LevelCalc.levelSkill(data, EnumSkills.FARMING, 3);
+        LevelCalc.levelSkill(data, EnumSkills.WIND, 2);
     }
 
     @Override
     public boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity entityLiving) {
-        if (entityLiving instanceof ServerPlayer serverPlayer && this.getDestroySpeed(stack, state) == this.speed) {
-            Platform.INSTANCE.getPlayerData(serverPlayer).ifPresent(data -> {
-                LevelCalc.levelSkill(serverPlayer, data, EnumSkills.FARMING, 3);
-                LevelCalc.levelSkill(serverPlayer, data, EnumSkills.WIND, 2);
-            });
+        Tool tool = stack.get(DataComponents.TOOL);
+        if (tool != null && entityLiving instanceof ServerPlayer serverPlayer && tool.rules().stream().anyMatch(p -> state.is(p.blocks()))) {
+            PlayerData data = Platform.INSTANCE.getPlayerData(serverPlayer);
+            LevelCalc.levelSkill(data, EnumSkills.FARMING, 3);
+            LevelCalc.levelSkill(data, EnumSkills.WIND, 2);
         }
         return super.mineBlock(stack, level, state, pos, entityLiving);
     }
 
     @Override
-    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot equipmentSlot) {
-        return ImmutableMultimap.of();
-    }
-
-    @Override
     public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingUseDuration) {
         if (entity instanceof ServerPlayer player) {
-            int duration = stack.getUseDuration() - remainingUseDuration;
-            int chargeTime = ItemUtils.getChargeTime(entity, this.tier);
-            if (duration > 0 && duration / chargeTime <= this.chargeAmount() && duration % chargeTime == 0)
-                player.connection.send(new ClientboundSoundPacket(SoundEvents.NOTE_BLOCK_XYLOPHONE, player.getSoundSource(), player.getX(), player.getY(), player.getZ(), 1, 1));
+            int duration = stack.getUseDuration(entity) - remainingUseDuration;
+            EnumToolTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP);
+            int chargeTime = ItemUtils.getChargeTime(entity, tier);
+            if (duration > 0 && duration / chargeTime <= tier.getTierLevel() && duration % chargeTime == 0)
+                EntityUtils.playSoundForPlayer(player, SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
         }
     }
 
     @Override
     public InteractionResult useOn(UseOnContext ctx) {
-        if (this.tier.getTierLevel() == 0) {
+        EnumToolTier tier = ctx.getItemInHand().getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP);
+        if (tier.getTierLevel() == 0) {
             return this.useOnBlock(ctx);
         }
         return InteractionResult.PASS;
@@ -117,12 +82,13 @@ public class ItemToolSickle extends DiggerItem implements IItemUsable {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand) {
-        ItemStack itemstack = player.getItemInHand(usedHand);
-        if (this.tier.getTierLevel() != 0) {
+        ItemStack stack = player.getItemInHand(usedHand);
+        EnumToolTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP);
+        if (tier.getTierLevel() != 0) {
             player.startUsingItem(usedHand);
-            return InteractionResultHolder.consume(itemstack);
+            return InteractionResultHolder.consume(stack);
         }
-        return InteractionResultHolder.pass(itemstack);
+        return InteractionResultHolder.pass(stack);
     }
 
     @Override
@@ -131,42 +97,36 @@ public class ItemToolSickle extends DiggerItem implements IItemUsable {
     }
 
     @Override
-    public int getUseDuration(ItemStack stack) {
+    public int getUseDuration(ItemStack stack, LivingEntity entity) {
         return 72000;
     }
 
     @Override
     public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
-        if (this.tier.getTierLevel() != 0 && entity instanceof ServerPlayer player) {
-            int useTime = (stack.getUseDuration() - timeLeft - 1) / ItemUtils.getChargeTime(entity, this.tier);
-            int range = Math.min(useTime, this.tier.getTierLevel()) + 2;
+        EnumToolTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP);
+        if (tier.getTierLevel() != 0 && entity instanceof ServerPlayer player) {
+            int useTime = (stack.getUseDuration(entity) - timeLeft - 1) / ItemUtils.getChargeTime(entity, tier);
+            int range = Math.min(useTime, tier.getTierLevel()) + 2;
             BlockHitResult result = getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
             if (range == 0) {
-                if (result != null) {
-                    this.useOnBlock(new UseOnContext(player, entity.getUsedItemHand(), result));
-                }
+                this.useOnBlock(new UseOnContext(player, entity.getUsedItemHand(), result));
             } else {
                 BlockPos pos = entity.blockPosition();
-                if (result != null && result.getType() != HitResult.Type.MISS) {
+                if (result.getType() != HitResult.Type.MISS) {
                     pos = result.getBlockPos();
                 }
                 int amount = (int) BlockPos.betweenClosedStream(pos.offset(-range, 0, -range), pos.offset(range, 0, range))
-                        .filter(p -> this.sickleUse(player.getLevel(), p.immutable(), stack, entity))
+                        .filter(p -> this.sickleUse(player.serverLevel(), p.immutable(), stack, entity))
                         .count();
-                if (amount > 0)
-                    Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                        LevelCalc.useRP(player, data, range * 10, true, 0, true, EnumSkills.FARMING);
-                        LevelCalc.levelSkill(player, data, EnumSkills.FARMING, 3.5f);
-                        LevelCalc.levelSkill(player, data, EnumSkills.WIND, 2.5f);
-                    });
+                if (amount > 0) {
+                    PlayerData data = Platform.INSTANCE.getPlayerData(player);
+                    LevelCalc.useRP(data, range * 10, true, 0, true, EnumSkills.FARMING);
+                    LevelCalc.levelSkill(data, EnumSkills.FARMING, 3.5f);
+                    LevelCalc.levelSkill(data, EnumSkills.WIND, 2.5f);
+                }
             }
         }
         super.releaseUsing(stack, level, entity, timeLeft);
-    }
-
-    @Override
-    public Rarity getRarity(ItemStack stack) {
-        return this.tier == EnumToolTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON;
     }
 
     @Override
@@ -179,7 +139,7 @@ public class ItemToolSickle extends DiggerItem implements IItemUsable {
             return InteractionResult.PASS;
         ItemStack stack = ctx.getItemInHand();
         if (this.sickleUse(serverLevel, ctx.getClickedPos(), stack, ctx.getPlayer())) {
-            this.onBlockBreak((ServerPlayer) ctx.getPlayer());
+            this.postUse((ServerPlayer) ctx.getPlayer());
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.PASS;

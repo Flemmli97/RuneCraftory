@@ -41,7 +41,7 @@ public class GloveUseAttack extends AttackAction {
                         .doOnSuccess(hit::add)
                         .executeAttack());
                 if (!hit.isEmpty() && entity instanceof ServerPlayer serverPlayer) {
-                    LevelCalc.levelSkill(serverPlayer, Platform.INSTANCE.getPlayerData(serverPlayer), EnumSkills.DUAL, 2);
+                    LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(serverPlayer), EnumSkills.DUAL, 2);
                 }
             }
         }

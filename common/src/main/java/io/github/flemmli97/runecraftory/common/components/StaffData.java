@@ -6,7 +6,6 @@ import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -15,53 +14,53 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public record StaffData(@Nullable Spell tier1, @Nullable Spell tier2, @Nullable Spell tier3, int chargeTime) {
+public record StaffData(Optional<Spell> tier1, Optional<Spell> tier2, Optional<Spell> tier3, int chargeTime) {
 
     public static final StaffData DEFAULT = new StaffData(null, null, null, 0);
     public static final Codec<StaffData> CODEC = RecordCodecBuilder.create((instance) ->
-            instance.group(ModSpells.SPELLS.registry().byNameCodec().optionalFieldOf("first_spell").forGetter(d -> Optional.ofNullable(d.tier1())),
-                    ModSpells.SPELLS.registry().byNameCodec().optionalFieldOf("second_spell").forGetter(d -> Optional.ofNullable(d.tier2())),
-                    ModSpells.SPELLS.registry().byNameCodec().optionalFieldOf("third_spell").forGetter(d -> Optional.ofNullable(d.tier3())),
+            instance.group(ModSpells.SPELLS.registry().byNameCodec().optionalFieldOf("first_spell").forGetter(StaffData::tier1),
+                    ModSpells.SPELLS.registry().byNameCodec().optionalFieldOf("second_spell").forGetter(StaffData::tier2),
+                    ModSpells.SPELLS.registry().byNameCodec().optionalFieldOf("third_spell").forGetter(StaffData::tier3),
                     Codec.INT.fieldOf("charge_time").forGetter(d -> d.chargeTime)
-            ).apply(instance, (f, s, t, idx) -> new StaffData(f.orElse(null),
-                    s.orElse(null), t.orElse(null), idx)));
-    private static final StreamCodec<RegistryFriendlyByteBuf, Spell> SPELL_CODEC = ByteBufCodecs.registry(ModSpells.SPELLS.registry().key());
+            ).apply(instance, StaffData::new));
+    private static final StreamCodec<RegistryFriendlyByteBuf, Optional<Spell>> SPELL_CODEC = ByteBufCodecs.optional(
+            ByteBufCodecs.registry(ModSpells.SPELLS.registry().key()));
     public static final StreamCodec<RegistryFriendlyByteBuf, StaffData> STREAM_CODEC = new StreamCodec<>() {
 
         @Override
         public StaffData decode(RegistryFriendlyByteBuf buf) {
-            return new StaffData(FriendlyByteBuf.readNullable(buf, SPELL_CODEC),
-                    FriendlyByteBuf.readNullable(buf, SPELL_CODEC),
-                    FriendlyByteBuf.readNullable(buf, SPELL_CODEC),
+            return new StaffData(SPELL_CODEC.decode(buf),
+                    SPELL_CODEC.decode(buf),
+                    SPELL_CODEC.decode(buf),
                     buf.readInt());
         }
 
         @Override
         public void encode(RegistryFriendlyByteBuf buf, StaffData component) {
-            FriendlyByteBuf.writeNullable(buf, component.tier1(), SPELL_CODEC);
-            FriendlyByteBuf.writeNullable(buf, component.tier2(), SPELL_CODEC);
-            FriendlyByteBuf.writeNullable(buf, component.tier3(), SPELL_CODEC);
+            SPELL_CODEC.encode(buf, component.tier1());
+            SPELL_CODEC.encode(buf, component.tier2());
+            SPELL_CODEC.encode(buf, component.tier3());
             buf.writeInt(component.chargeTime);
         }
     };
 
-    public StaffData setTier1Spell(Spell spell) {
-        return new StaffData(spell, this.tier2, this.tier3, spell != null ? spell.coolDown() : this.chargeTime);
+    public StaffData setTier1Spell(@Nullable Spell spell) {
+        return new StaffData(Optional.ofNullable(spell), this.tier2, this.tier3, spell != null ? spell.coolDown() : this.chargeTime);
     }
 
-    public StaffData setTier2Spell(Spell spell) {
-        return new StaffData(this.tier1, spell, this.tier3, spell != null && this.tier1 == null ? spell.coolDown() : this.chargeTime);
+    public StaffData setTier2Spell(@Nullable Spell spell) {
+        return new StaffData(this.tier1, Optional.ofNullable(spell), this.tier3, spell != null && this.tier1.isEmpty() ? spell.coolDown() : this.chargeTime);
     }
 
-    public StaffData setTier3Spell(Spell spell) {
-        return new StaffData(this.tier1, this.tier2, spell, spell != null && this.tier1 == null && this.tier2 == null ? spell.coolDown() : this.chargeTime);
+    public StaffData setTier3Spell(@Nullable Spell spell) {
+        return new StaffData(this.tier1, this.tier2, Optional.ofNullable(spell), spell != null && this.tier1.isEmpty() && this.tier2.isEmpty() ? spell.coolDown() : this.chargeTime);
     }
 
     public Spell fromChargeLevel(ItemStack stack, int level) {
         Spell spell = switch (level) {
-            case 3 -> this.tier3;
-            case 2 -> this.tier2;
-            case 1 -> this.tier1;
+            case 3 -> this.tier3.orElse(null);
+            case 2 -> this.tier2.orElse(null);
+            case 1 -> this.tier1.orElse(null);
             default -> null;
         };
         if (spell == null) {
@@ -76,11 +75,11 @@ public record StaffData(@Nullable Spell tier1, @Nullable Spell tier2, @Nullable 
     }
 
     public int getChargeLevel() {
-        if (this.tier3 != null)
+        if (this.tier3.isPresent())
             return 3;
-        if (this.tier2 != null)
+        if (this.tier2.isPresent())
             return 2;
-        if (this.tier1 != null)
+        if (this.tier1.isPresent())
             return 1;
         return 0;
     }

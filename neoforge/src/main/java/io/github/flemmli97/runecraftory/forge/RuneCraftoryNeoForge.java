@@ -39,12 +39,14 @@ import io.github.flemmli97.runecraftory.forge.registry.ModAttachments;
 import io.github.flemmli97.runecraftory.mixin.AttributeAccessor;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.server.packs.resources.PreparableReloadListener;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
+import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
@@ -67,6 +69,8 @@ import java.util.Map;
 public class RuneCraftoryNeoForge {
 
     public RuneCraftoryNeoForge(IEventBus modBus, ModContainer container) {
+        MobEffect effect;
+        effect.fillEffectCures();
         RuneCraftory.iris = ModList.get().isLoaded("iris");
 
         modBus.addListener(this::common);
@@ -119,6 +123,7 @@ public class RuneCraftoryNeoForge {
         ModNPCLooks.NPC_FEATURES.register().registerContent(modBus);
         ModLootRegistries.LOOTFUNCTION.registerContent(modBus);
         ModLootRegistries.LOOTCONDITIONS.registerContent(modBus);
+        ModLootRegistries.NUMBER_PROVIDERS.registerContent(modBus);
         ModStructures.STRUCTURESPROCESSORS.registerContent(modBus);
         ModCrafting.RECIPETYPE.registerContent(modBus);
         ModFeatures.TRUNK_PLACER.registerContent(modBus);

@@ -1,13 +1,13 @@
 package io.github.flemmli97.runecraftory.common.loot;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -22,17 +22,27 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 
 import java.util.List;
 
 public class LootingAndLuckLootFunction extends LootItemConditionalFunction {
+
+    public static final MapCodec<LootingAndLuckLootFunction> CODEC = RecordCodecBuilder.mapCodec(
+            instance -> commonFields(instance)
+                    .and(instance.group(NumberProviders.CODEC.fieldOf("base").forGetter(d -> d.baseChance),
+                            NumberProviders.CODEC.fieldOf("looting_bonus").forGetter(d -> d.lootingBonus),
+                            NumberProviders.CODEC.fieldOf("luck_bonus").forGetter(d -> d.luckBonus),
+                            Codec.INT.fieldOf("limit").forGetter(d -> d.limit))
+                    ).apply(instance, LootingAndLuckLootFunction::new)
+    );
 
     private final NumberProvider baseChance;
     private final NumberProvider lootingBonus;
     private final NumberProvider luckBonus;
     private final int limit;
 
-    private LootingAndLuckLootFunction(LootItemCondition[] conditions, NumberProvider baseChance, NumberProvider luckBonus, NumberProvider lootingBonus, int limit) {
+    private LootingAndLuckLootFunction(List<LootItemCondition> conditions, NumberProvider baseChance, NumberProvider luckBonus, NumberProvider lootingBonus, int limit) {
         super(conditions);
         this.baseChance = baseChance;
         this.luckBonus = luckBonus;
@@ -47,7 +57,7 @@ public class LootingAndLuckLootFunction extends LootItemConditionalFunction {
 
     @Override
     protected ItemStack run(ItemStack stack, LootContext ctx) {
-        Entity entity = ctx.getParamOrNull(LootContextParams.KILLER_ENTITY);
+        Entity entity = ctx.getParamOrNull(LootContextParams.ATTACKING_ENTITY);
         float luck = ctx.getLuck();
         int looting = 0;
         List<LivingEntity> contributing = getContributingEntities(ctx);
@@ -79,16 +89,15 @@ public class LootingAndLuckLootFunction extends LootItemConditionalFunction {
     }
 
     public static List<LivingEntity> getContributingEntities(LootContext ctx) {
-        Entity entity = ctx.getParamOrNull(LootContextParams.KILLER_ENTITY);
+        Entity entity = ctx.getParamOrNull(LootContextParams.ATTACKING_ENTITY);
         if (entity instanceof Player player) {
-            return Platform.INSTANCE.getPlayerData(player)
-                    .map(d -> entity.level().getEntities(EntityTypeTest.forClass(LivingEntity.class), entity.getBoundingBox().inflate(64), d.party::isPartyMember))
-                    .orElse(List.of());
+            PlayerData data = Platform.INSTANCE.getPlayerData(player);
+            return entity.level().getEntities(EntityTypeTest.forClass(LivingEntity.class), entity.getBoundingBox().inflate(64), data.party::isPartyMember);
         } else if (entity instanceof BaseMonster monster) {
-            if (monster.getOwner() != null && Platform.INSTANCE.getPlayerData(monster.getOwner()).map(d -> d.party.isPartyMember(monster)).orElse(false))
+            if (monster.getOwner() != null && Platform.INSTANCE.getPlayerData(monster.getOwner()).party.isPartyMember(monster))
                 return List.of(monster);
         } else if (entity instanceof EntityNPCBase npc) {
-            if (npc.followEntity() != null && Platform.INSTANCE.getPlayerData(npc.followEntity()).map(d -> d.party.isPartyMember(npc)).orElse(false))
+            if (npc.followEntity() != null && Platform.INSTANCE.getPlayerData(npc.followEntity()).party.isPartyMember(npc))
                 return List.of(npc);
         }
         return List.of();
@@ -128,27 +137,6 @@ public class LootingAndLuckLootFunction extends LootItemConditionalFunction {
         @Override
         public LootItemFunction build() {
             return new LootingAndLuckLootFunction(this.getConditions(), this.baseChance, this.luckBonus, this.lootingBonus, this.limit);
-        }
-    }
-
-    public static class Serializer extends LootItemConditionalFunction.Serializer<LootingAndLuckLootFunction> {
-
-        @Override
-        public void serialize(JsonObject obj, LootingAndLuckLootFunction func, JsonSerializationContext context) {
-            super.serialize(obj, func, context);
-            obj.add("baseChance", context.serialize(func.baseChance));
-            obj.add("luckBonus", context.serialize(func.luckBonus));
-            obj.add("lootingBonus", context.serialize(func.lootingBonus));
-            obj.addProperty("limit", func.limit);
-        }
-
-        @Override
-        public LootingAndLuckLootFunction deserialize(JsonObject obj, JsonDeserializationContext ctx, LootItemCondition[] conditions) {
-            return new LootingAndLuckLootFunction(conditions,
-                    GsonHelper.getAsObject(obj, "baseChance", ctx, NumberProvider.class),
-                    GsonHelper.getAsObject(obj, "luckBonus", ctx, NumberProvider.class),
-                    GsonHelper.getAsObject(obj, "lootingBonus", ctx, NumberProvider.class),
-                    GsonHelper.getAsInt(obj, "limit", 0));
         }
     }
 }

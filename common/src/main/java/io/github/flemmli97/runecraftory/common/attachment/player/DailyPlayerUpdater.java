@@ -43,17 +43,17 @@ public class DailyPlayerUpdater {
         this.lastUpdateDay = lastUpdateDay;
     }
 
-    public void onGiveMonsterItem(ServerPlayer player) {
+    public void onGiveMonsterItem() {
         if (!this.gaveMonsterItem) {
             this.gaveMonsterItem = true;
-            LevelCalc.levelSkill(player, this.data, EnumSkills.TAMING, 4);
+            LevelCalc.levelSkill(this.data, EnumSkills.TAMING, 4);
         }
     }
 
-    public void onFoodEaten(ServerPlayer player) {
+    public void onFoodEaten() {
         if (!this.ateFood) {
             this.ateFood = true;
-            LevelCalc.levelSkill(player, this.data, EnumSkills.EATING, 50);
+            LevelCalc.levelSkill(this.data, EnumSkills.EATING, 50);
         }
     }
 

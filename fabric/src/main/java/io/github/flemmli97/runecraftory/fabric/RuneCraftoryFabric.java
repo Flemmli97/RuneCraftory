@@ -312,6 +312,7 @@ public class RuneCraftoryFabric implements ModInitializer {
 
         ModLootRegistries.LOOTFUNCTION.registerContent();
         ModLootRegistries.LOOTCONDITIONS.registerContent();
+        ModLootRegistries.NUMBER_PROVIDERS.registerContent();
         ModStructures.STRUCTURESPROCESSORS.registerContent();
         ModCrafting.RECIPETYPE.registerContent();
         ModSounds.SOUND_EVENTS.registerContent();

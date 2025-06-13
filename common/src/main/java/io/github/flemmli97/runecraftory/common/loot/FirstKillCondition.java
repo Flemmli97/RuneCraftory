@@ -1,9 +1,7 @@
 package io.github.flemmli97.runecraftory.common.loot;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
+import com.mojang.serialization.MapCodec;
 import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
@@ -20,8 +18,14 @@ import java.util.Set;
 
 public class FirstKillCondition implements LootItemCondition {
 
+    public static final FirstKillCondition INSTANCE = new FirstKillCondition();
+    public static final MapCodec<FirstKillCondition> CODEC = MapCodec.unit(INSTANCE);
+
     public static LootItemCondition.Builder get() {
-        return FirstKillCondition::new;
+        return () -> INSTANCE;
+    }
+
+    private FirstKillCondition() {
     }
 
     @Override
@@ -31,12 +35,12 @@ public class FirstKillCondition implements LootItemCondition {
 
     @Override
     public Set<LootContextParam<?>> getReferencedContextParams() {
-        return ImmutableSet.of(LootContextParams.KILLER_ENTITY);
+        return ImmutableSet.of(LootContextParams.ATTACKING_ENTITY);
     }
 
     @Override
     public boolean test(LootContext ctx) {
-        Entity entity = ctx.getParamOrNull(LootContextParams.KILLER_ENTITY);
+        Entity entity = ctx.getParamOrNull(LootContextParams.ATTACKING_ENTITY);
         ServerPlayer player = null;
         if (entity instanceof LivingEntity living) {
             if (living instanceof ServerPlayer serverPlayer) {
@@ -47,17 +51,5 @@ public class FirstKillCondition implements LootItemCondition {
             return player != null && player.getStats().getValue(Stats.ENTITY_KILLED.get(entity.getType())) <= 0;
         }
         return false;
-    }
-
-    public static class Serializer implements net.minecraft.world.level.storage.loot.Serializer<FirstKillCondition> {
-
-        @Override
-        public void serialize(JsonObject object, FirstKillCondition condition, JsonSerializationContext context) {
-        }
-
-        @Override
-        public FirstKillCondition deserialize(JsonObject obj, JsonDeserializationContext context) {
-            return new FirstKillCondition();
-        }
     }
 }

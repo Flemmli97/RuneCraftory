@@ -10,6 +10,7 @@ import io.github.flemmli97.runecraftory.common.entities.misc.EntityTreasureChest
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.network.S2CUpdateAttributesWithAdditional;
+import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -17,8 +18,12 @@ import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -65,21 +70,21 @@ public class EntityUtils {
     }
 
     public static boolean isExhaust(LivingEntity entity) {
-        return entity.hasEffect(ModEffects.FATIGUE.get());
+        return entity.hasEffect(ModEffects.FATIGUE.asHolder());
     }
 
-    public static void applyPermanentEffect(LivingEntity entity, MobEffect effect, int amplifier) {
+    public static void applyPermanentEffect(LivingEntity entity, Holder<MobEffect> effect, int amplifier) {
         if (!entity.hasEffect(effect)) {
             entity.addEffect(new MobEffectInstance(effect, Integer.MAX_VALUE, amplifier));
         }
     }
 
     public static boolean paralysed(LivingEntity entity) {
-        return entity.hasEffect(ModEffects.PARALYSIS.get());
+        return entity.hasEffect(ModEffects.PARALYSIS.asHolder());
     }
 
     public static boolean sealed(LivingEntity entity) {
-        return entity.hasEffect(ModEffects.SEAL.get());
+        return entity.hasEffect(ModEffects.SEAL.asHolder());
     }
 
     public static boolean canMonsterTargetNPC(Entity e) {
@@ -91,20 +96,18 @@ public class EntityUtils {
     public static void sendAttributesTo(LivingEntity entity, ServerPlayer player) {
         AttributeInstance att = entity.getAttribute(Attributes.ATTACK_DAMAGE);
         if (att != null)
-            entity.getAttributes().getDirtyAttributes().add(att);
+            entity.getAttributes().getAttributesToUpdate().add(att);
         if (entity == player) {
-            LoaderNetwork.INSTANCE.sendToPlayer(new S2CUpdateAttributesWithAdditional(entity.getAttributes().getDirtyAttributes()), player);
-            entity.getAttributes().getDirtyAttributes().clear();
+            LoaderNetwork.INSTANCE.sendToPlayer(new S2CUpdateAttributesWithAdditional(entity.getAttributes().getAttributesToUpdate()), player);
         } else {
-            player.connection.send(new ClientboundUpdateAttributesPacket(entity.getId(), entity.getAttributes().getDirtyAttributes()));
-            entity.getAttributes().getDirtyAttributes().clear();
+            player.connection.send(new ClientboundUpdateAttributesPacket(entity.getId(), entity.getAttributes().getAttributesToUpdate()));
         }
     }
 
     public static boolean shouldShowFarmlandView(LivingEntity entity) {
         ItemStack main = entity.getMainHandItem();
         ItemStack off = entity.getOffhandItem();
-        return ItemNBT.canBeUsedAsMagnifyingGlass(main) || ItemNBT.canBeUsedAsMagnifyingGlass(off);
+        return main.has(ModDataComponentTypes.MAGNIFYING_GLASS.get()) || off.has(ModDataComponentTypes.MAGNIFYING_GLASS.get());
     }
 
     public static void foodHealing(LivingEntity entity, float amount) {
@@ -119,7 +122,7 @@ public class EntityUtils {
     }
 
     public static boolean isDisabled(LivingEntity entity) {
-        return entity.hasEffect(ModEffects.SLEEP.get()) || entity.hasEffect(ModEffects.STUNNED.get());
+        return entity.hasEffect(ModEffects.SLEEP.asHolder()) || entity.hasEffect(ModEffects.STUNNED.asHolder());
     }
 
     @Nullable
@@ -144,11 +147,11 @@ public class EntityUtils {
     public static float tamingChance(BaseMonster monster, Player player, float itemMultiplier, int brushCount, int loveAttackCount) {
         if (itemMultiplier == 0 || GeneralConfig.tamingMultiplier == 0)
             return 0;
-        int lvl = Platform.INSTANCE.getPlayerData(player).map(d -> d.getPlayerLevel().getLevel()).orElse(1) + 1;
+        int lvl = Platform.INSTANCE.getPlayerData(player).getPlayerLevel().getLevel() + 1;
         float lvlPenalty = Math.max(0, (monster.xpLevel().getLevel() - lvl) * 0.02f);
         float brushBonus = brushCount * 0.05f;
         float loveAttackBonus = loveAttackCount * 0.002f;
-        float tamingLvlBonus = (Platform.INSTANCE.getPlayerData(player).map(d -> d.getSkillLevel(EnumSkills.TAMING).getLevel()).orElse(1) - 1) * 0.005f;
+        float tamingLvlBonus = (Platform.INSTANCE.getPlayerData(player).getSkillLevel(EnumSkills.TAMING).getLevel() - 1) * 0.005f;
         float tamingBonus = 1 + brushBonus + loveAttackBonus + tamingLvlBonus;
         return monster.tamingChance() * GeneralConfig.tamingMultiplier * tamingBonus - lvlPenalty;
     }
@@ -191,10 +194,10 @@ public class EntityUtils {
     }
 
     public static int getRPFromVanillaFood(ItemStack stack) {
-        FoodProperties prop = stack.getItem().getFoodProperties();
+        FoodProperties prop = stack.get(DataComponents.FOOD);
         if (prop != null)
-            return (int) (stack.getItem().getFoodProperties().getNutrition() * 1.5
-                    * (1 + 1.8 * stack.getItem().getFoodProperties().getSaturationModifier()));
+            return (int) (prop.nutrition() * 1.5
+                    * (1 + 1.8 * prop.saturation()));
         return 0;
     }
 
@@ -241,11 +244,20 @@ public class EntityUtils {
                 return false;
             };
             Predicate<LivingEntity> pred = owner.getControllingPassenger() instanceof LivingEntity controller ? generator.apply(controller) : generator.apply(livingOwner);
-            return owner.level.getNearestEntity(LivingEntity.class, TargetingConditions.forCombat().ignoreLineOfSight()
+            return owner.level().getNearestEntity(LivingEntity.class, TargetingConditions.forCombat().ignoreLineOfSight()
                     .range(range).selector(pred), livingOwner, livingOwner.getX(), livingOwner.getY(), livingOwner.getZ(), new AABB(-10, -10, -10, 10, 10, 10)
                     .move(livingOwner.position()));
         }
         return null;
+    }
+
+    public static void playSoundForPlayer(ServerPlayer player, SoundEvent event, float volume, float pitch) {
+        playSoundForPlayer(player, BuiltInRegistries.SOUND_EVENT.wrapAsHolder(event), volume, pitch);
+    }
+
+    public static void playSoundForPlayer(ServerPlayer player, Holder<SoundEvent> event, float volume, float pitch) {
+        player.connection.send(new ClientboundSoundPacket(event, player.getSoundSource(), player.getX(), player.getY(), player.getZ(),
+                volume, pitch, player.getRandom().nextLong()));
     }
 
     record WeightedChestTier(int tier, int weight, float modifier, int max) {

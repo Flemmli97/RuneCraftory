@@ -1,34 +1,28 @@
 package io.github.flemmli97.runecraftory.common.items.tools;
 
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
 import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.enums.EnumToolTier;
-import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
-import io.github.flemmli97.runecraftory.api.items.IItemUsable;
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
+import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ClipContext;
@@ -44,52 +38,32 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public class ItemToolHoe extends HoeItem implements IItemUsable {
+public class ItemToolHoe extends HoeItem {
 
-    public final EnumToolTier tier;
-
-    public ItemToolHoe(EnumToolTier tier, Item.Properties props) {
-        super(ItemTiers.TIER, 0, 0, props);
-        this.tier = tier;
-    }
-
-    public int chargeAmount() {
-        return this.tier.getTierLevel();
-    }
-
-    @Override
-    public boolean hasCooldown() {
-        return true;
-    }
-
-    @Override
-    public EnumWeaponType getWeaponType() {
-        return EnumWeaponType.FARM;
-    }
-
-    @Override
-    public void onBlockBreak(ServerPlayer player) {
-        onHoeUse(player);
+    public ItemToolHoe(Item.Properties props) {
+        super(ItemTiers.TIER, props);
     }
 
     @Override
     public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingUseDuration) {
+        EnumToolTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP);
         if (entity instanceof ServerPlayer player) {
-            int duration = stack.getUseDuration() - remainingUseDuration;
-            int chargeTime = ItemUtils.getChargeTime(entity, this.tier);
-            if (duration > 0 && duration / chargeTime <= this.chargeAmount() && duration % chargeTime == 0)
-                player.connection.send(new ClientboundSoundPacket(SoundEvents.NOTE_BLOCK_XYLOPHONE, player.getSoundSource(), player.getX(), player.getY(), player.getZ(), 1, 1));
+            int duration = stack.getUseDuration(entity) - remainingUseDuration;
+            int chargeTime = ItemUtils.getChargeTime(entity, tier);
+            if (duration > 0 && duration / chargeTime <= tier.getTierLevel() && duration % chargeTime == 0)
+                EntityUtils.playSoundForPlayer(player, SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
         }
     }
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
-        ItemStack itemstack = player.getItemInHand(hand);
-        if (this.tier.getTierLevel() != 0) {
+        ItemStack stack = player.getItemInHand(hand);
+        EnumToolTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP);
+        if (tier.getTierLevel() != 0) {
             player.startUsingItem(hand);
-            return InteractionResultHolder.consume(itemstack);
+            return InteractionResultHolder.consume(stack);
         }
-        return InteractionResultHolder.pass(itemstack);
+        return InteractionResultHolder.pass(stack);
     }
 
     @Override
@@ -98,43 +72,37 @@ public class ItemToolHoe extends HoeItem implements IItemUsable {
     }
 
     @Override
-    public int getUseDuration(ItemStack stack) {
+    public int getUseDuration(ItemStack stack, LivingEntity entity) {
         return 72000;
     }
 
     @Override
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
-        if (this.tier.getTierLevel() != 0 && entity instanceof ServerPlayer player) {
-            int useTime = (stack.getUseDuration() - timeLeft - 1) / ItemUtils.getChargeTime(entity, this.tier);
-            int range = Math.min(useTime, this.tier.getTierLevel());
+        EnumToolTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP);
+        if (tier.getTierLevel() != 0 && entity instanceof ServerPlayer player) {
+            int useTime = (stack.getUseDuration(entity) - timeLeft - 1) / ItemUtils.getChargeTime(entity, tier);
+            int range = Math.min(useTime, tier.getTierLevel());
             BlockHitResult result = getPlayerPOVHitResult(world, player, ClipContext.Fluid.NONE);
             if (range == 0) {
-                if (result != null) {
-                    this.useOnBlock(new UseOnContext(player, entity.getUsedItemHand(), result));
-                }
+                this.useOnBlock(new UseOnContext(player, entity.getUsedItemHand(), result));
             } else {
                 BlockPos pos = entity.blockPosition().below();
-                if (result != null && result.getType() != HitResult.Type.MISS) {
+                if (result.getType() != HitResult.Type.MISS) {
                     pos = result.getBlockPos();
                 }
                 Function<BlockPos, BlockHitResult> hit = bh -> new BlockHitResult(Vec3.atCenterOf(bh), Direction.UP, bh, false);
                 int amount = (int) BlockPos.betweenClosedStream(pos.offset(-range, 0, -range), pos.offset(range, 0, range))
                         .filter(p -> this.hoeBlock(new UseOnContext(player, entity.getUsedItemHand(), hit.apply(p.immutable()))))
                         .count();
-                if (amount > 0)
-                    Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                        LevelCalc.useRP(player, data, 0, true, range * 17.5f, true, EnumSkills.FARMING);
-                        LevelCalc.levelSkill(player, data, EnumSkills.FARMING, range * 15);
-                        LevelCalc.levelSkill(player, data, EnumSkills.EARTH, range * 2);
-                    });
+                if (amount > 0) {
+                    PlayerData data = Platform.INSTANCE.getPlayerData(player);
+                    LevelCalc.useRP(data, 0, true, range * 17.5f, true, EnumSkills.FARMING);
+                    LevelCalc.levelSkill(data, EnumSkills.FARMING, range * 15);
+                    LevelCalc.levelSkill(data, EnumSkills.EARTH, range * 2);
+                }
             }
         }
         super.releaseUsing(stack, world, entity, timeLeft);
-    }
-
-    @Override
-    public Rarity getRarity(ItemStack stack) {
-        return this.tier == EnumToolTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON;
     }
 
     @Override
@@ -144,7 +112,8 @@ public class ItemToolHoe extends HoeItem implements IItemUsable {
 
     @Override
     public InteractionResult useOn(UseOnContext ctx) {
-        if (this.tier.getTierLevel() == 0) {
+        EnumToolTier tier = ctx.getItemInHand().getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP);
+        if (tier.getTierLevel() == 0) {
             return this.useOnBlock(ctx);
         }
         return InteractionResult.PASS;
@@ -154,7 +123,7 @@ public class ItemToolHoe extends HoeItem implements IItemUsable {
         if (ctx.getLevel().isClientSide)
             return InteractionResult.PASS;
         if (this.hoeBlock(ctx)) {
-            this.onBlockBreak((ServerPlayer) ctx.getPlayer());
+            onHoeUse((ServerPlayer) ctx.getPlayer());
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.PASS;
@@ -173,16 +142,10 @@ public class ItemToolHoe extends HoeItem implements IItemUsable {
         return false;
     }
 
-    @Override
-    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot equipmentSlot) {
-        return ImmutableMultimap.of();
-    }
-
     public static void onHoeUse(ServerPlayer player) {
-        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-            LevelCalc.useRP(player, data, 3, true, 0, true, EnumSkills.FARMING, EnumSkills.EARTH);
-            LevelCalc.levelSkill(player, data, EnumSkills.FARMING, 3);
-            LevelCalc.levelSkill(player, data, EnumSkills.EARTH, 1.5f);
-        });
+        PlayerData data = Platform.INSTANCE.getPlayerData(player);
+        LevelCalc.useRP(data, 3, true, 0, true, EnumSkills.FARMING, EnumSkills.EARTH);
+        LevelCalc.levelSkill(data, EnumSkills.FARMING, 3);
+        LevelCalc.levelSkill(data, EnumSkills.EARTH, 1.5f);
     }
 }

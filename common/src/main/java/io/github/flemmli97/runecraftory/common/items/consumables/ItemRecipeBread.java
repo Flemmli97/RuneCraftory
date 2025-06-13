@@ -14,7 +14,6 @@ import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpearBase;
 import io.github.flemmli97.runecraftory.common.utils.CraftingUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -28,6 +27,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
@@ -56,23 +56,21 @@ public class ItemRecipeBread extends Item {
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity living) {
         if (living instanceof ServerPlayer player) {
             int amount = Math.max(1, ItemNBT.itemLevel(stack) / 3);
-            Platform.INSTANCE.getPlayerData(player)
-                    .ifPresent(data -> {
-                        // Group equal recipes together. E.g. if an item has multiple variants of a recipe
-                        Map<Pair<Item, Integer>, List<SextupleRecipe>> grouped = new HashMap<>();
-                        player.getServer().getRecipeManager().getAllRecipesFor(CraftingUtils.getType(this.type))
-                                .stream().filter(r -> canUnlockRecipe(r, data, this.getSkill()))
-                                .forEach(r -> grouped.computeIfAbsent(Pair.of(r.getResultItem().getItem(), r.getCraftingLevel()), k -> new ArrayList<>())
-                                        .add(r));
-                        Collection<SextupleRecipe> unlocked = new ArrayList<>();
-                        grouped.entrySet().stream()
-                                .sorted(Comparator.comparingInt(p -> p.getKey().getSecond()))
-                                .limit(amount)
-                                .forEach(r -> unlocked.addAll(r.getValue()));
-                        data.getRecipeKeeper().unlockRecipes(player, unlocked);
-                        if (unlocked.isEmpty())
-                            player.sendMessage(Component.translatable("runecraftory.misc.recipe.eat.fail"), Util.NIL_UUID);
-                    });
+            PlayerData data = Platform.INSTANCE.getPlayerData(player);
+            // Group equal recipes together. E.g. if an item has multiple variants of a recipe
+            Map<Pair<Item, Integer>, List<RecipeHolder<SextupleRecipe>>> grouped = new HashMap<>();
+            player.getServer().getRecipeManager().getAllRecipesFor(CraftingUtils.getType(this.type))
+                    .stream().filter(r -> canUnlockRecipe(level, r, data, this.getSkill()))
+                    .forEach(r -> grouped.computeIfAbsent(Pair.of(r.value().getResultItem(level.registryAccess()).getItem(), r.value().getCraftingLevel()), k -> new ArrayList<>())
+                            .add(r));
+            Collection<RecipeHolder<SextupleRecipe>> unlocked = new ArrayList<>();
+            grouped.entrySet().stream()
+                    .sorted(Comparator.comparingInt(p -> p.getKey().getSecond()))
+                    .limit(amount)
+                    .forEach(r -> unlocked.addAll(r.getValue()));
+            data.getRecipeKeeper().unlockRecipes(player, unlocked);
+            if (unlocked.isEmpty())
+                player.displayClientMessage(Component.translatable("runecraftory.misc.recipe.eat.fail"), false);
         }
         level.playSound(null, living.getX(), living.getY(), living.getZ(), SoundEvents.PLAYER_BURP, SoundSource.PLAYERS, 0.5F, level.random.nextFloat() * 0.1F + 0.9F);
         if (!(living instanceof Player player) || !(player.getAbilities().instabuild)) {
@@ -87,7 +85,7 @@ public class ItemRecipeBread extends Item {
     }
 
     @Override
-    public int getUseDuration(ItemStack stack) {
+    public int getUseDuration(ItemStack stack, LivingEntity entity) {
         return 32;
     }
 
@@ -105,25 +103,26 @@ public class ItemRecipeBread extends Item {
         };
     }
 
-    private static boolean canUnlockRecipe(SextupleRecipe r, PlayerData data, EnumSkills skill) {
-        if (r instanceof ForgingRecipe) {
+    private static boolean canUnlockRecipe(Level level, RecipeHolder<SextupleRecipe> r, PlayerData data, EnumSkills skill) {
+        SextupleRecipe recipe = r.value();
+        if (recipe instanceof ForgingRecipe) {
             boolean weaponSkillCheck = true;
-            Item res = r.getResultItem().getItem();
+            Item res = recipe.getResultItem(level.registryAccess()).getItem();
             if (res instanceof ItemLongSwordBase) {
-                weaponSkillCheck = (r.getCraftingLevel() - data.getSkillLevel(EnumSkills.LONGSWORD).getLevel()) <= 5;
+                weaponSkillCheck = (recipe.getCraftingLevel() - data.getSkillLevel(EnumSkills.LONGSWORD).getLevel()) <= 5;
             } else if (res instanceof ItemDualBladeBase) {
-                weaponSkillCheck = (r.getCraftingLevel() - data.getSkillLevel(EnumSkills.DUAL).getLevel()) <= 5;
+                weaponSkillCheck = (recipe.getCraftingLevel() - data.getSkillLevel(EnumSkills.DUAL).getLevel()) <= 5;
             } else if (res instanceof SwordItem) {
-                weaponSkillCheck = (r.getCraftingLevel() - data.getSkillLevel(EnumSkills.SHORTSWORD).getLevel()) <= 5;
+                weaponSkillCheck = (recipe.getCraftingLevel() - data.getSkillLevel(EnumSkills.SHORTSWORD).getLevel()) <= 5;
             } else if (res instanceof ItemSpearBase) {
-                weaponSkillCheck = (r.getCraftingLevel() - data.getSkillLevel(EnumSkills.SPEAR).getLevel()) <= 5;
+                weaponSkillCheck = (recipe.getCraftingLevel() - data.getSkillLevel(EnumSkills.SPEAR).getLevel()) <= 5;
             } else if (res instanceof ItemHammerBase || res instanceof AxeItem) {
-                weaponSkillCheck = (r.getCraftingLevel() - data.getSkillLevel(EnumSkills.HAMMERAXE).getLevel()) <= 5;
+                weaponSkillCheck = (recipe.getCraftingLevel() - data.getSkillLevel(EnumSkills.HAMMERAXE).getLevel()) <= 5;
             } else if (res instanceof ItemGloveBase) {
-                weaponSkillCheck = (r.getCraftingLevel() - data.getSkillLevel(EnumSkills.FIST).getLevel()) <= 5;
+                weaponSkillCheck = (recipe.getCraftingLevel() - data.getSkillLevel(EnumSkills.FIST).getLevel()) <= 5;
             }
-            return weaponSkillCheck && !data.getRecipeKeeper().isUnlocked(r) && (r.getCraftingLevel() - data.getSkillLevel(skill).getLevel()) <= 5;
+            return weaponSkillCheck && !data.getRecipeKeeper().isUnlocked(r) && (recipe.getCraftingLevel() - data.getSkillLevel(skill).getLevel()) <= 5;
         }
-        return !data.getRecipeKeeper().isUnlocked(r) && (r.getCraftingLevel() - data.getSkillLevel(skill).getLevel()) <= 5;
+        return !data.getRecipeKeeper().isUnlocked(r) && (recipe.getCraftingLevel() - data.getSkillLevel(skill).getLevel()) <= 5;
     }
 }

@@ -155,12 +155,13 @@ public class EntityCalls {
             }
         }
         for (Map.Entry<EquipmentSlot, ItemStack> entry : changed.entrySet()) {
-            if (entry.getKey().getType() == EquipmentSlot.Type.ARMOR) {
+            if (entry.getKey().getType() == EquipmentSlot.Type.HUMANOID_ARMOR) {
                 ItemStack now = entry.getValue();
                 ItemStack last = lastArmor.apply(entry.getKey());
-                last.get(ModDataComponentTypes.ARMOR_EFFECT.get()).triggerEvent(last, e -> e.onRemove(entity, last));
-                Platform.INSTANCE.getArmorEffects(last).triggerEvent(last, e -> e.onRemove(entity, last)));
-                Platform.INSTANCE.getArmorEffects(now).triggerEvent(now, e -> e.onEquip(entity, now)));
+                if (last.has(ModDataComponentTypes.ARMOR_EFFECT.get()))
+                    last.get(ModDataComponentTypes.ARMOR_EFFECT.get()).triggerEvent(last, e -> e.onRemove(entity, last));
+                if (now.has(ModDataComponentTypes.ARMOR_EFFECT.get()))
+                    now.get(ModDataComponentTypes.ARMOR_EFFECT.get()).triggerEvent(last, e -> e.onEquip(entity, now));
             }
         }
         boolean hasWeapon = ItemNBT.isWeapon(entity.getMainHandItem());
@@ -405,7 +406,7 @@ public class EntityCalls {
             if (prop == null) {
                 if (entity instanceof ServerPlayer player && stack.isEdible()) {
                     Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                        LevelCalc.levelSkill(player, data, EnumSkills.EATING, 5);
+                        LevelCalc.levelSkill(data, EnumSkills.EATING, 5);
                         data.refreshRunePoints(player, EntityUtils.getRPFromVanillaFood(stack));
                     });
                 }
@@ -440,7 +441,7 @@ public class EntityCalls {
             player.heal(player.getMaxHealth());
             Platform.INSTANCE.getPlayerData(serverPlayer).ifPresent(data -> {
                 data.refreshRunePoints(player, data.getMaxRunePoints());
-                LevelCalc.levelSkill(serverPlayer, data, EnumSkills.SLEEPING, 75);
+                LevelCalc.levelSkill(data, EnumSkills.SLEEPING, 75);
             });
             player.removeEffect(ModEffects.FATIGUE.get());
         }
@@ -458,7 +459,7 @@ public class EntityCalls {
         if (damage < 0)
             entity.heal(-damage);
         else if (damage > 1 && source != DamageSource.OUT_OF_WORLD && entity instanceof ServerPlayer player) {
-            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.DEFENCE, Math.min(7, (float) (0.5 + Math.log(damage * 0.25))) * 1.5f));
+            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(data, EnumSkills.DEFENCE, Math.min(7, (float) (0.5 + Math.log(damage * 0.25))) * 1.5f));
         }
         //if (source instanceof CustomDamage)
         //    entity.invulnerableTime = ((CustomDamage) source).hurtProtection() + 10;
@@ -482,30 +483,30 @@ public class EntityCalls {
 
     public static void onBlockBreak(ServerPlayer player, BlockState state, BlockPos pos) {
         if (state.getBlock() instanceof CropBlock) {
-            ModCriteria.HARVEST_CROP.trigger(player, state);
+            ModCriteria.HARVEST_CROP.get().trigger(player, state);
         }
         if (!player.hasCorrectToolForDrops(state))
             return;
         if (state.is(RunecraftoryTags.HAMMER_BREAKABLE)) {
             ItemToolHammer.onHammering(player, true);
         } else if (state.is(BlockTags.MINEABLE_WITH_PICKAXE)) {
-            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.MINING, state.getBlock() instanceof BlockMineral ? 10 : 1));
+            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(data, EnumSkills.MINING, state.getBlock() instanceof BlockMineral ? 10 : 1));
         }
         if (state.is(BlockTags.MINEABLE_WITH_AXE)) {
-            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.LOGGING, 1));
+            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(data, EnumSkills.LOGGING, 1));
         }
         if (state.is(BlockTags.MINEABLE_WITH_HOE)) {
             if (!(player.getMainHandItem().getItem() instanceof ItemToolSickle))
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.FARMING, 1));
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(data, EnumSkills.FARMING, 1));
         }
         if (state.getBlock() instanceof BushBlock) {
-            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.FARMING, 0.5f));
+            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(data, EnumSkills.FARMING, 0.5f));
         }
     }
 
     public static void onLootTableBlockGen(Player player, BlockEntity blockEntity) {
         if (player instanceof ServerPlayer serverPlayer) {
-            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(serverPlayer, data, EnumSkills.SEARCHING, 7));
+            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(data, EnumSkills.SEARCHING, 7));
         }
     }
 

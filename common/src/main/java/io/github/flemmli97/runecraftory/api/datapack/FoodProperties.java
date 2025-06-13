@@ -8,6 +8,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.tenshilib.common.utils.ArrayUtils;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -31,20 +32,20 @@ public class FoodProperties {
 
     public static final Codec<FoodProperties> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(
-                    Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("cooking_bonus_percent").forGetter(d -> d.cookingBonusPercent),
+                    Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.holderByNameCodec(), Codec.DOUBLE).fieldOf("cooking_bonus_percent").forGetter(d -> d.cookingBonusPercent),
                     SimpleEffect.CODEC.listOf().fieldOf("potion_apply").forGetter(d -> Arrays.asList(d.potionApply)),
                     BuiltInRegistries.MOB_EFFECT.byNameCodec().listOf().fieldOf("potion_remove").forGetter(d -> Arrays.asList(d.potionRemove)),
 
                     Codec.INT.fieldOf("duration").forGetter(d -> d.duration),
-                    Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("effects").forGetter(d -> d.effects),
-                    Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("effects_percentage").forGetter(d -> d.effectsPercentage),
-                    Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("cooking_bonus").forGetter(d -> d.cookingBonus)
+                    Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.holderByNameCodec(), Codec.DOUBLE).fieldOf("effects").forGetter(d -> d.effects),
+                    Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.holderByNameCodec(), Codec.DOUBLE).fieldOf("effects_percentage").forGetter(d -> d.effectsPercentage),
+                    Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.holderByNameCodec(), Codec.DOUBLE).fieldOf("cooking_bonus").forGetter(d -> d.cookingBonus)
             ).apply(instance, (cookingPercent, potion, remove, duration, effects, effPercent, cooking) -> new FoodProperties(duration, effects, effPercent, cooking, cookingPercent, potion, remove)));
 
-    private final Map<Attribute, Double> effects = new TreeMap<>(ModAttributes.SORTED);
-    private final Map<Attribute, Double> effectsPercentage = new TreeMap<>(ModAttributes.SORTED);
-    private final Map<Attribute, Double> cookingBonus = new TreeMap<>(ModAttributes.SORTED);
-    private final Map<Attribute, Double> cookingBonusPercent = new TreeMap<>(ModAttributes.SORTED);
+    private final Map<Holder<Attribute>, Double> effects = new TreeMap<>(ModAttributes.SORTED);
+    private final Map<Holder<Attribute>, Double> effectsPercentage = new TreeMap<>(ModAttributes.SORTED);
+    private final Map<Holder<Attribute>, Double> cookingBonus = new TreeMap<>(ModAttributes.SORTED);
+    private final Map<Holder<Attribute>, Double> cookingBonusPercent = new TreeMap<>(ModAttributes.SORTED);
     private int duration;
     private SimpleEffect[] potionApply = new SimpleEffect[0];
     private MobEffect[] potionRemove = new MobEffect[0];
@@ -54,7 +55,7 @@ public class FoodProperties {
     private FoodProperties() {
     }
 
-    public FoodProperties(int duration, Map<Attribute, Double> effects, Map<Attribute, Double> effectsPercentage, Map<Attribute, Double> cookingBonus, Map<Attribute, Double> cookingBonusPercent, List<SimpleEffect> potionApply, List<MobEffect> potionRemove) {
+    public FoodProperties(int duration, Map<Holder<Attribute>, Double> effects, Map<Holder<Attribute>, Double> effectsPercentage, Map<Holder<Attribute>, Double> cookingBonus, Map<Holder<Attribute>, Double> cookingBonusPercent, List<SimpleEffect> potionApply, List<MobEffect> potionRemove) {
         this.duration = duration;
         this.effects.putAll(effects);
         this.effectsPercentage.putAll(effectsPercentage);
@@ -120,19 +121,19 @@ public class FoodProperties {
         return this.duration;
     }
 
-    public Map<Attribute, Double> effects() {
+    public Map<Holder<Attribute>, Double> effects() {
         return new LinkedHashMap<>(this.effects);
     }
 
-    public Map<Attribute, Double> effectsMultiplier() {
+    public Map<Holder<Attribute>, Double> effectsMultiplier() {
         return new LinkedHashMap<>(this.effectsPercentage);
     }
 
-    public Map<Attribute, Double> cookingBonus() {
+    public Map<Holder<Attribute>, Double> cookingBonus() {
         return new LinkedHashMap<>(this.cookingBonus);
     }
 
-    public Map<Attribute, Double> cookingBonusPercent() {
+    public Map<Holder<Attribute>, Double> cookingBonusPercent() {
         return new LinkedHashMap<>(this.cookingBonusPercent);
     }
 
@@ -184,16 +185,16 @@ public class FoodProperties {
         List<Component> translationTexts = new ArrayList<>();
         translationTexts.add(Component.translatable("runecraftory.tooltip.item.eaten").withStyle(ChatFormatting.GRAY));
         MutableComponent hprp = Component.literal("");
-        Pair<Map<Attribute, Double>, Map<Attribute, Double>> foodStats = ItemNBT.foodStats(stack);
-        Map<Attribute, Double> effects = foodStats.getFirst();
-        Map<Attribute, Double> effectsPercent = foodStats.getSecond();
+        Pair<Map<Holder<Attribute>, Double>, Map<Holder<Attribute>, Double>> foodStats = ItemNBT.foodStats(stack);
+        Map<Holder<Attribute>, Double> effects = foodStats.getFirst();
+        Map<Holder<Attribute>, Double> effectsPercent = foodStats.getSecond();
         MutableComponent hpIncrease = Component.literal("");
         MutableComponent rpIncrease = Component.literal("");
         List<Component> attributes = new ArrayList<>();
-        for (Map.Entry<Attribute, Double> entry : effects.entrySet()) {
+        for (Map.Entry<Holder<Attribute>, Double> entry : effects.entrySet()) {
             if (entry.getValue() == 0)
                 continue;
-            MutableComponent comp = Component.literal(" ").append(Component.translatable(entry.getKey().getDescriptionId())).append(Component.literal(": " + this.format(entry.getValue())));
+            MutableComponent comp = Component.literal(" ").append(Component.translatable(entry.getKey().value().getDescriptionId())).append(Component.literal(": " + this.format(entry.getValue())));
             if (entry.getKey() == ModAttributes.HEALTHGAIN.get() || entry.getKey() == ModAttributes.RPGAIN.get())
                 hprp.append(comp);
             else if (entry.getKey() == ModAttributes.RPINCREASE.get())
@@ -203,10 +204,10 @@ public class FoodProperties {
             else
                 attributes.add(comp.withStyle(ChatFormatting.AQUA));
         }
-        for (Map.Entry<Attribute, Double> entry : effectsPercent.entrySet()) {
+        for (Map.Entry<Holder<Attribute>, Double> entry : effectsPercent.entrySet()) {
             if (entry.getValue() == 0)
                 continue;
-            MutableComponent comp = Component.literal(" ").append(Component.translatable(entry.getKey().getDescriptionId())).append(Component.literal(": " + this.format(entry.getValue()) + "%"));
+            MutableComponent comp = Component.literal(" ").append(Component.translatable(entry.getKey().value().getDescriptionId())).append(Component.literal(": " + this.format(entry.getValue()) + "%"));
             if (entry.getKey() == ModAttributes.HEALTHGAIN.get() || entry.getKey() == ModAttributes.RPGAIN.get())
                 hprp.append(comp);
             else if (entry.getKey() == ModAttributes.RPINCREASE.get())
@@ -245,10 +246,10 @@ public class FoodProperties {
      */
     public static class Builder {
 
-        private final Map<Attribute, Double> effects = new HashMap<>();
-        private final Map<Attribute, Double> effectsPercentage = new HashMap<>();
-        private final Map<Attribute, Double> cookingBonus = new HashMap<>();
-        private final Map<Attribute, Double> cookingBonusPercent = new HashMap<>();
+        private final Map<Holder<Attribute>, Double> effects = new HashMap<>();
+        private final Map<Holder<Attribute>, Double> effectsPercentage = new HashMap<>();
+        private final Map<Holder<Attribute>, Double> cookingBonus = new HashMap<>();
+        private final Map<Holder<Attribute>, Double> cookingBonusPercent = new HashMap<>();
         private final List<SimpleEffect> potionApply = new ArrayList<>();
         private final List<MobEffect> potionRemove = new ArrayList<>();
         private final int duration;
@@ -260,44 +261,44 @@ public class FoodProperties {
 
         public Builder setHPRegen(int hpRegen, int hpRegenPercent) {
             if (hpRegen != 0)
-                this.effects.put(ModAttributes.HEALTHGAIN.get(), (double) hpRegen);
+                this.effects.put(ModAttributes.HEALTHGAIN.asHolder(), (double) hpRegen);
             if (hpRegenPercent != 0)
-                this.effectsPercentage.put(ModAttributes.HEALTHGAIN.get(), (double) hpRegenPercent);
+                this.effectsPercentage.put(ModAttributes.HEALTHGAIN.asHolder(), (double) hpRegenPercent);
             return this;
         }
 
         public Builder setRPRegen(int rpRegen, int rpRegenPercent) {
             if (rpRegen != 0)
-                this.effects.put(ModAttributes.RPGAIN.get(), (double) rpRegen);
+                this.effects.put(ModAttributes.RPGAIN.asHolder(), (double) rpRegen);
             if (rpRegenPercent != 0)
-                this.effectsPercentage.put(ModAttributes.RPGAIN.get(), (double) rpRegenPercent);
+                this.effectsPercentage.put(ModAttributes.RPGAIN.asHolder(), (double) rpRegenPercent);
             return this;
         }
 
         public Builder setRPIncrease(int increase, int percentIncrease) {
             if (increase != 0)
-                this.effects.put(ModAttributes.RPINCREASE.get(), (double) increase);
+                this.effects.put(ModAttributes.RPINCREASE.asHolder(), (double) increase);
             if (percentIncrease != 0)
-                this.effectsPercentage.put(ModAttributes.RPINCREASE.get(), (double) percentIncrease);
+                this.effectsPercentage.put(ModAttributes.RPINCREASE.asHolder(), (double) percentIncrease);
             return this;
         }
 
-        public Builder addEffect(Attribute att, double value) {
+        public Builder addEffect(Holder<Attribute> att, double value) {
             this.effects.put(att, value);
             return this;
         }
 
-        public Builder addEffectPercentage(Attribute att, double value) {
+        public Builder addEffectPercentage(Holder<Attribute> att, double value) {
             this.effectsPercentage.put(att, value);
             return this;
         }
 
-        public Builder addCookingBonus(Attribute att, double value) {
+        public Builder addCookingBonus(Holder<Attribute> att, double value) {
             this.cookingBonus.put(att, value);
             return this;
         }
 
-        public Builder addCookingBonusPercent(Attribute att, double value) {
+        public Builder addCookingBonusPercent(Holder<Attribute> att, double value) {
             this.cookingBonusPercent.put(att, value);
             return this;
         }

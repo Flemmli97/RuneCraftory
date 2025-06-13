@@ -16,6 +16,7 @@ import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.network.S2CAttackDebug;
 import io.github.flemmli97.runecraftory.common.registry.ModArmorEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
+import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -307,7 +308,7 @@ public class CombatUtils {
                 int i = player.isSprinting() ? 1 : 0;
                 i += EnchantmentHelper.modifyKnockback(player.level(), stack, i);
                 float knockback = (float) (i * 0.5f + knockbackAtt * 3);
-                if (ItemNBT.doesFixedOneDamage(stack)) {
+                if (stack.has(ModDataComponentTypes.SCRAP_METAL_PLUS.get())) {
                     damageCategory = CustomDamage.DamageCategory.FIXED;
                     damagePhys = 1;
                 }
@@ -358,7 +359,7 @@ public class CombatUtils {
         double damagePhys = getAttributeValue(attacker, Attributes.ATTACK_DAMAGE);
         if (attacker.level() instanceof ServerLevel serverLevel)
             ModSpells.STAFF_CAST.get().use(serverLevel, attacker, stack);
-        if (ItemNBT.doesFixedOneDamage(stack)) {
+        if (stack.has(ModDataComponentTypes.SCRAP_METAL_PLUS.get())) {
             source.damageType(CustomDamage.DamageCategory.FIXED);
             damagePhys = 1;
         }
@@ -479,37 +480,37 @@ public class CombatUtils {
         if (poisonChance) {
             EntityUtils.applyPermanentEffect(target, ModEffects.POISON.get(), 0);
             if (attackingEntity instanceof ServerPlayer player)
-                LevelCalc.levelSkill(player, Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_POISON, 5);
+                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_POISON, 5);
             if (target instanceof ServerPlayer player)
-                LevelCalc.levelSkill(player, Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_POISON, 15);
+                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_POISON, 15);
         }
         if (fatigueChance) {
             EntityUtils.applyPermanentEffect(target, ModEffects.FATIGUE.get(), 0);
             if (attackingEntity instanceof ServerPlayer player)
-                LevelCalc.levelSkill(player, Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_FATIGUE, 5);
+                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_FATIGUE, 5);
             if (target instanceof ServerPlayer player)
-                LevelCalc.levelSkill(player, Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_FATIGUE, 15);
+                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_FATIGUE, 15);
         }
         if (coldChance) {
             EntityUtils.applyPermanentEffect(target, ModEffects.COLD.get(), 0);
             if (attackingEntity instanceof ServerPlayer player)
-                LevelCalc.levelSkill(player, Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_COLD, 5);
+                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_COLD, 5);
             if (target instanceof ServerPlayer player)
-                LevelCalc.levelSkill(player, Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_COLD, 15);
+                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_COLD, 15);
         }
         if (paraChance) {
             EntityUtils.applyPermanentEffect(target, ModEffects.PARALYSIS.get(), 0);
             if (attackingEntity instanceof ServerPlayer player)
-                LevelCalc.levelSkill(player, Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_PARA, 5);
+                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_PARA, 5);
             if (target instanceof ServerPlayer player)
-                LevelCalc.levelSkill(player, Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_PARA, 15);
+                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_PARA, 15);
         }
         if (sealChance) {
             EntityUtils.applyPermanentEffect(target, ModEffects.SEAL.get(), 0);
             if (attackingEntity instanceof ServerPlayer player)
-                LevelCalc.levelSkill(player, Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_SEAL, 5);
+                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_SEAL, 5);
             if (target instanceof ServerPlayer player)
-                LevelCalc.levelSkill(player, Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_SEAL, 15);
+                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_SEAL, 15);
         }
         if (dizzyChance) {
             target.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 80, 1, true, false));
@@ -520,9 +521,9 @@ public class CombatUtils {
         if (sleepChance) {
             target.addEffect(new MobEffectInstance(ModEffects.SLEEP.asHolder(), 80, 0, true, false));
             if (attackingEntity instanceof ServerPlayer player)
-                LevelCalc.levelSkill(player, Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_SLEEP, 5);
+                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_SLEEP, 5);
             if (target instanceof ServerPlayer player)
-                LevelCalc.levelSkill(player, Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_SLEEP, 15);
+                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_SLEEP, 15);
         }
     }
 
@@ -575,40 +576,40 @@ public class CombatUtils {
         //Weapons
         if (stack.getItem() instanceof ItemStaffBase) {
             switch (ItemNBT.getElement(stack)) {
-                case WATER -> LevelCalc.levelSkill(player, data, EnumSkills.WATER, 3);
-                case EARTH -> LevelCalc.levelSkill(player, data, EnumSkills.EARTH, 3);
-                case WIND -> LevelCalc.levelSkill(player, data, EnumSkills.WIND, 3);
-                case FIRE -> LevelCalc.levelSkill(player, data, EnumSkills.FIRE, 3);
-                case LIGHT -> LevelCalc.levelSkill(player, data, EnumSkills.LIGHT, 3);
-                case DARK -> LevelCalc.levelSkill(player, data, EnumSkills.DARK, 3);
-                case LOVE -> LevelCalc.levelSkill(player, data, EnumSkills.LOVE, 3);
+                case WATER -> LevelCalc.levelSkill(data, EnumSkills.WATER, 3);
+                case EARTH -> LevelCalc.levelSkill(data, EnumSkills.EARTH, 3);
+                case WIND -> LevelCalc.levelSkill(data, EnumSkills.WIND, 3);
+                case FIRE -> LevelCalc.levelSkill(data, EnumSkills.FIRE, 3);
+                case LIGHT -> LevelCalc.levelSkill(data, EnumSkills.LIGHT, 3);
+                case DARK -> LevelCalc.levelSkill(data, EnumSkills.DARK, 3);
+                case LOVE -> LevelCalc.levelSkill(data, EnumSkills.LOVE, 3);
             }
             return;
         }
         if (stack.is(RunecraftoryTags.SHORTSWORDS)) {
-            LevelCalc.levelSkill(player, data, EnumSkills.SHORTSWORD, 2);
+            LevelCalc.levelSkill(data, EnumSkills.SHORTSWORD, 2);
         }
         if (stack.is(RunecraftoryTags.LONGSWORDS)) {
-            LevelCalc.levelSkill(player, data, EnumSkills.LONGSWORD, 4);
+            LevelCalc.levelSkill(data, EnumSkills.LONGSWORD, 4);
         }
         if (stack.is(RunecraftoryTags.SPEARS)) {
-            LevelCalc.levelSkill(player, data, EnumSkills.SPEAR, 3);
+            LevelCalc.levelSkill(data, EnumSkills.SPEAR, 3);
         }
         if (stack.is(RunecraftoryTags.AXES) || stack.is(RunecraftoryTags.HAMMERS)) {
-            LevelCalc.levelSkill(player, data, EnumSkills.HAMMERAXE, 5);
+            LevelCalc.levelSkill(data, EnumSkills.HAMMERAXE, 5);
         }
         if (stack.is(RunecraftoryTags.DUALBLADES)) {
-            LevelCalc.levelSkill(player, data, EnumSkills.DUAL, 2);
+            LevelCalc.levelSkill(data, EnumSkills.DUAL, 2);
         }
         if (stack.is(RunecraftoryTags.FISTS)) {
-            LevelCalc.levelSkill(player, data, EnumSkills.FIST, 2);
+            LevelCalc.levelSkill(data, EnumSkills.FIST, 2);
         }
         //Tools
         if (stack.is(RunecraftoryTags.AXE_TOOLS) || stack.is(RunecraftoryTags.HAMMER_TOOLS)) {
-            LevelCalc.levelSkill(player, data, EnumSkills.HAMMERAXE, 1);
+            LevelCalc.levelSkill(data, EnumSkills.HAMMERAXE, 1);
         }
         if (stack.is(RunecraftoryTags.HOES) || stack.is(RunecraftoryTags.WATERINGCANS) || stack.is(RunecraftoryTags.SICKLES)) {
-            LevelCalc.levelSkill(player, data, EnumSkills.FARMING, 1);
+            LevelCalc.levelSkill(data, EnumSkills.FARMING, 1);
         }
     }
 

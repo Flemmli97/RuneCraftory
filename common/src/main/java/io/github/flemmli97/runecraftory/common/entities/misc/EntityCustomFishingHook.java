@@ -81,7 +81,7 @@ public class EntityCustomFishingHook extends AdvancedProjectile {
         this.nibbleBonus = 0;
     }
 
-    public EntityCustomFishingHook(Level world, LivingEntity shooter, int speed, int luck, int charge) {
+    public EntityCustomFishingHook(Level world, LivingEntity shooter, float speed, int luck, int charge) {
         super(ModEntities.FISHING_HOOK.get(), world, shooter);
         this.setPos(this.getX(), this.getY() + 0.1, this.getZ());
         this.shoot(shooter, Math.max(-90, shooter.getXRot() - 5), shooter.getYRot(), 0, 1.1f + Math.max(-0.3f, Mth.sin(-shooter.getXRot() * Mth.DEG_TO_RAD)), 0);
@@ -189,8 +189,8 @@ public class EntityCustomFishingHook extends AdvancedProjectile {
             this.canAttack = null;
             if (this.getOwner() instanceof ServerPlayer player)
                 Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                    LevelCalc.levelSkill(player, data, EnumSkills.FISHING, 10);
-                    LevelCalc.levelSkill(player, data, EnumSkills.WATER, 1);
+                    LevelCalc.levelSkill(data, EnumSkills.FISHING, 10);
+                    LevelCalc.levelSkill(data, EnumSkills.WATER, 1);
                 });
         }
         return att;
@@ -401,8 +401,8 @@ public class EntityCustomFishingHook extends AdvancedProjectile {
             if (this.getOwner() instanceof ServerPlayer player)
                 Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
                     LevelCalc.useRP(player, data, 10 * (this.nibbleBonus + 1), true, 0, true, EnumSkills.FISHING);
-                    LevelCalc.levelSkill(player, data, EnumSkills.FISHING, 25);
-                    LevelCalc.levelSkill(player, data, EnumSkills.WATER, 5);
+                    LevelCalc.levelSkill(data, EnumSkills.FISHING, 25);
+                    LevelCalc.levelSkill(data, EnumSkills.WATER, 5);
                 });
         }
 

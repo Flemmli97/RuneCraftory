@@ -1,40 +1,36 @@
 package io.github.flemmli97.runecraftory.common.particles;
 
-import com.mojang.brigadier.StringReader;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.serialization.Codec;
-import net.minecraft.commands.arguments.blocks.BlockStateParser;
-import net.minecraft.core.Registry;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class BlockStateParticleData implements ParticleOptions {
 
-    public static final ParticleOptions.Deserializer<BlockStateParticleData> DESERIALIZER = new ParticleOptions.Deserializer<>() {
-        @Override
-        public BlockStateParticleData fromCommand(ParticleType<BlockStateParticleData> particleType, StringReader reader) throws CommandSyntaxException {
-            reader.expect(' ');
-            float yaw = reader.readFloat();
-            reader.expect(' ');
-            float pitch = reader.readFloat();
-            reader.expect(' ');
-            int duration = reader.readInt();
-            reader.expect(' ');
-            return new BlockStateParticleData(particleType, (new BlockStateParser(reader, false)).parse(false).getState(),
-                    yaw, pitch, duration);
-        }
+    public static MapCodec<BlockStateParticleData> codec(ParticleType<BlockStateParticleData> type) {
+        return BlockState.CODEC.fieldOf("state").xmap((blockState) -> new BlockStateParticleData(type, blockState), (BlockParticleOptionEx) -> BlockParticleOptionEx.state);
+    }
 
-        @Override
-        public BlockStateParticleData fromNetwork(ParticleType<BlockStateParticleData> particleType, FriendlyByteBuf buffer) {
-            return new BlockStateParticleData(particleType, Block.BLOCK_STATE_REGISTRY.byId(buffer.readVarInt()), buffer.readFloat(), buffer.readFloat(), buffer.readInt());
-        }
-    };
+    public static StreamCodec<RegistryFriendlyByteBuf, BlockStateParticleData> streamCodec(ParticleType<BlockStateParticleData> type) {
+        return new StreamCodec<>() {
+            @Override
+            public BlockStateParticleData decode(RegistryFriendlyByteBuf buf) {
+                return new BlockStateParticleData(type, ByteBufCodecs.idMapper(Block.BLOCK_STATE_REGISTRY).decode(buf),
+                        buf.readFloat(), buf.readFloat(), buf.readInt());
+            }
 
-    public static Codec<BlockStateParticleData> codec(ParticleType<BlockStateParticleData> type) {
-        return BlockState.CODEC.xmap((blockState) -> new BlockStateParticleData(type, blockState), (BlockParticleOptionEx) -> BlockParticleOptionEx.state);
+            @Override
+            public void encode(RegistryFriendlyByteBuf buf, BlockStateParticleData data) {
+                ByteBufCodecs.idMapper(Block.BLOCK_STATE_REGISTRY).encode(buf, data.state);
+                buf.writeFloat(data.yaw);
+                buf.writeFloat(data.pitch);
+                buf.writeInt(data.duration);
+            }
+        };
     }
 
     private final ParticleType<? extends BlockStateParticleData> type;
@@ -68,19 +64,6 @@ public class BlockStateParticleData implements ParticleOptions {
 
     public int getDuration() {
         return this.duration;
-    }
-
-    @Override
-    public void writeToNetwork(FriendlyByteBuf buffer) {
-        buffer.writeVarInt(Block.BLOCK_STATE_REGISTRY.getId(this.state));
-        buffer.writeFloat(this.yaw);
-        buffer.writeFloat(this.pitch);
-        buffer.writeInt(this.duration);
-    }
-
-    @Override
-    public String writeToString() {
-        return Registry.PARTICLE_TYPE.getKey(this.getType()) + "";
     }
 
     @Override

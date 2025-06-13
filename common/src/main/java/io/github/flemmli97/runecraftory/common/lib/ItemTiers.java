@@ -2,10 +2,13 @@ package io.github.flemmli97.runecraftory.common.lib;
 
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.block.Block;
 
 public class ItemTiers {
 
@@ -17,7 +20,7 @@ public class ItemTiers {
 
         @Override
         public float getSpeed() {
-            return 9;
+            return 6;
         }
 
         @Override
@@ -26,8 +29,8 @@ public class ItemTiers {
         }
 
         @Override
-        public int getLevel() {
-            return 3;
+        public TagKey<Block> getIncorrectBlocksForDrops() {
+            return BlockTags.INCORRECT_FOR_IRON_TOOL;
         }
 
         @Override

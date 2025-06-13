@@ -1,8 +1,10 @@
 package io.github.flemmli97.runecraftory.common.network;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.common.components.NPCSpawnData;
 import io.github.flemmli97.runecraftory.common.items.creative.NPCSpawnEgg;
 import io.github.flemmli97.runecraftory.common.items.creative.RuneCraftoryEggItem;
+import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -45,9 +47,10 @@ public class C2SSpawnEgg implements CustomPacketPayload {
     public static void handle(C2SSpawnEgg pkt, ServerPlayer sender) {
         ItemStack stack = sender.getItemInHand(pkt.hand);
         if (stack.getItem() instanceof RuneCraftoryEggItem) {
-            RuneCraftoryEggItem.setMobLevel(stack, pkt.level);
+            stack.set(ModDataComponentTypes.SPAWN_EGG_LEVEL.get(), Math.max(1, pkt.level));
             if (stack.getItem() instanceof NPCSpawnEgg) {
-                NPCSpawnEgg.setNpcID(stack, pkt.npcID);
+                NPCSpawnData data = stack.getOrDefault(ModDataComponentTypes.NPC_SPAWN_DATA.get(), NPCSpawnData.DEFAULT);
+                stack.set(ModDataComponentTypes.NPC_SPAWN_DATA.get(), data.withId(pkt.npcID));
             }
         }
     }

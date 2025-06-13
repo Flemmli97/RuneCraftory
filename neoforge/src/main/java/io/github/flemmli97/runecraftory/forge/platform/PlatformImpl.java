@@ -109,11 +109,6 @@ public class PlatformImpl implements Platform {
     }
 
     @Override
-    public SimpleParticleType simple(boolean overrideLimiter) {
-        return new SimpleParticleType(overrideLimiter);
-    }
-
-    @Override
     public <T extends BlockEntity> BlockEntityType<T> blockEntityType(BiFunction<BlockPos, BlockState, T> create, Block... valid) {
         return BlockEntityType.Builder.of(create::apply, valid).build(null);
     }
@@ -132,12 +127,6 @@ public class PlatformImpl implements Platform {
     public <T extends AbstractContainerMenu> MenuType<T> menuType(TriFunction<Integer, Inventory, FriendlyByteBuf, T> create) {
         return IForgeMenuType.create(create::apply);
     }
-
-    @Override
-    public Activity activity(String name) {
-        return new Activity(name);
-    }
-
     @Override
     public CreativeModeTab.Builder tabBuilder() {
         return CreativeModeTab.builder();

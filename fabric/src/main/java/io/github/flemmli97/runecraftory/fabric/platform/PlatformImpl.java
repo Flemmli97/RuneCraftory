@@ -164,11 +164,6 @@ public class PlatformImpl implements Platform {
     }
 
     @Override
-    public SimpleParticleType simple(boolean overrideLimiter) {
-        return ReflectiveInvokers.simpleParticleType(overrideLimiter);
-    }
-
-    @Override
     public <T extends BlockEntity> BlockEntityType<T> blockEntityType(BiFunction<BlockPos, BlockState, T> create, Block... valid) {
         return FabricBlockEntityTypeBuilder.create(create::apply, valid).build();
     }
@@ -188,11 +183,6 @@ public class PlatformImpl implements Platform {
         return new ExtendedScreenHandlerType<>((a, b, c) -> {
             return create.apply(a, b, new FriendlyByteBuf(null));
         }, BlockPos.STREAM_CODEC);
-    }
-
-    @Override
-    public Activity activity(String name) {
-        return ReflectiveInvokers.activity(name);
     }
 
     @Override

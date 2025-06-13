@@ -72,7 +72,7 @@ public class LongSwordAttack extends AttackAction {
     @Override
     public void onStart(LivingEntity entity, AttackActionHandler handler) {
         if (handler.getComboCount() == 4 && entity instanceof ServerPlayer player)
-            LevelCalc.useRP(player, Platform.INSTANCE.getPlayerData(player), GeneralConfig.longSwordUltimate, true, 0, false);
+            LevelCalc.useRP(Platform.INSTANCE.getPlayerData(player), GeneralConfig.longSwordUltimate, true, 0, false);
     }
 
     @Override

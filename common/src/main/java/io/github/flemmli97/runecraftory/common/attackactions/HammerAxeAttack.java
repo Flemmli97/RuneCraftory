@@ -78,7 +78,7 @@ public class HammerAxeAttack extends AttackAction {
     @Override
     public void onStart(LivingEntity entity, AttackActionHandler handler) {
         if (handler.getComboCount() == 3 && entity instanceof ServerPlayer player)
-            LevelCalc.useRP(player, Platform.INSTANCE.getPlayerData(player), GeneralConfig.hammerAxeUltimate, true, 0, false);
+            LevelCalc.useRP(Platform.INSTANCE.getPlayerData(player), GeneralConfig.hammerAxeUltimate, true, 0, false);
     }
 
     @Override

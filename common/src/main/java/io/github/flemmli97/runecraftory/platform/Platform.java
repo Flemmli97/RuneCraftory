@@ -5,7 +5,6 @@ import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.tenshilib.loader.LoaderInitializer;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -21,7 +20,6 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTab;
@@ -76,8 +74,6 @@ public interface Platform {
 
     DamageSource createDamageSource(String name, boolean bypassArmor, boolean bypassMagic, boolean bypassInvulnerability);
 
-    SimpleParticleType simple(boolean overrideLimiter);
-
     <T extends BlockEntity> BlockEntityType<T> blockEntityType(BiFunction<BlockPos, BlockState, T> create, Block... valid);
 
     <T extends BlockEntity> BlockEntityType<T> blockEntityType(BiFunction<BlockPos, BlockState, T> create, Set<Block> valid);
@@ -85,8 +81,6 @@ public interface Platform {
     <T extends AbstractContainerMenu> MenuType<T> menuType(BiFunction<Integer, Inventory, T> create);
 
     <T extends AbstractContainerMenu> MenuType<T> menuType(TriFunction<Integer, Inventory, FriendlyByteBuf, T> create);
-
-    Activity activity(String name);
 
     CreativeModeTab.Builder tabBuilder();
 
@@ -114,5 +108,5 @@ public interface Platform {
 
     int getLootingFromEntity(Entity entity, Entity killer, DamageSource source);
 
-    Supplier<Item> registerRecord(int analogOutput, RegistryEntrySupplier<SoundEvent> sound, Item.Properties properties);
+    Supplier<Item> registerRecord(int analogOutput, RegistryEntrySupplier<SoundEvent, ?> sound, Item.Properties properties);
 }

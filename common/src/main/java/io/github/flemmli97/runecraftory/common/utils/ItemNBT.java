@@ -10,6 +10,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.components.ItemAttributeData;
+import io.github.flemmli97.runecraftory.common.components.ItemStackHolder;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
@@ -25,6 +26,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -92,7 +94,7 @@ public class ItemNBT {
 
     public static ItemStack getLeveledItem(ItemStack stack, int level) {
         if (shouldHaveLevel(stack)) {
-            stack.set(ModDataComponentTypes.LEVEL.get(), level);
+            stack.set(ModDataComponentTypes.LEVEL.get(), Mth.clamp(level, 1, 10));
         }
         return stack;
     }
@@ -115,58 +117,26 @@ public class ItemNBT {
         return map;
     }
 
-    public static Pair<Map<Attribute, Double>, Map<Attribute, Double>> foodStats(ItemStack stack) {
+    public static Pair<Map<Holder<Attribute>, Double>, Map<Holder<Attribute>, Double>> foodStats(ItemStack stack) {
         FoodProperties props = DataPackHandler.INSTANCE.foodManager().get(stack.getItem());
         if (props == null)
             return Pair.of(new TreeMap<>(ModAttributes.SORTED), new TreeMap<>(ModAttributes.SORTED));
-        CompoundTag compound = getItemNBT(stack);
-        if (compound == null) {
+        ItemAttributeData data = stack.get(ModDataComponentTypes.FOOD_BUFF.get());
+        if (data == null) {
             return Pair.of(props.effects(), props.effectsMultiplier());
         }
-        Map<Attribute, Double> map;
-        Map<Attribute, Double> mapMulti;
-        if (compound.contains(LibNBT.FOOD_STATS)) {
-            CompoundTag tag = compound.getCompound(LibNBT.FOOD_STATS);
-            map = new TreeMap<>(ModAttributes.SORTED);
-            for (String attName : tag.getAllKeys()) {
-                Attribute att = Registry.ATTRIBUTE.get(new ResourceLocation(attName));
-                if (Registry.ATTRIBUTE.getKey(att).toString().equals(attName))
-                    map.put(att, tag.getDouble(attName));
-            }
-        } else
-            map = props.effects();
-        if (compound.contains(LibNBT.FOOD_STATS_MULT)) {
-            CompoundTag tag = compound.getCompound(LibNBT.FOOD_STATS_MULT);
-            mapMulti = new TreeMap<>(ModAttributes.SORTED);
-            for (String attName : tag.getAllKeys()) {
-                Attribute att = Registry.ATTRIBUTE.get(new ResourceLocation(attName));
-                if (Registry.ATTRIBUTE.getKey(att).toString().equals(attName))
-                    mapMulti.put(att, tag.getDouble(attName));
-            }
-        } else
-            mapMulti = props.effectsMultiplier();
-        return Pair.of(map, mapMulti);
+        return Pair.of(data.getBaseStats(), data.getStats());
     }
 
     public static void setElement(EnumElement element, ItemStack stack) {
-        CompoundTag tag = getItemNBT(stack);
-        if (tag != null) {
-            if (EnumElement.valueOf(tag.getString(LibNBT.ELEMENT)) == EnumElement.NONE) {
-                tag.putString(LibNBT.ELEMENT, element.toString());
-            } else {
-                tag.putString(LibNBT.ELEMENT, EnumElement.NONE.toString());
-            }
-        }
+        EnumElement stackElement = stack.get(ModDataComponentTypes.TOOL_TIER.get());
+        stack.set(ModDataComponentTypes.TOOL_TIER.get(), stackElement == null || stackElement == element ? element : EnumElement.NONE);
     }
 
     public static EnumElement getElement(ItemStack stack) {
-        CompoundTag tag = getItemNBT(stack);
-        if (tag != null) {
-            try {
-                return EnumElement.valueOf(tag.getString(LibNBT.ELEMENT));
-            } catch (IllegalArgumentException e) {
-                return EnumElement.NONE;
-            }
+        EnumElement stackElement = stack.get(ModDataComponentTypes.TOOL_TIER.get());
+        if (stackElement != null) {
+            return stackElement;
         }
         return isWeapon(stack) ? DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem()).map(ItemStat::element).orElse(EnumElement.NONE) : EnumElement.NONE;
     }
@@ -439,13 +409,6 @@ public class ItemNBT {
         stats.putDouble(att, oldValue + Math.floor(amount));
     }
 
-    public static CompoundTag getItemNBT(ItemStack stack) {
-        if (stack.hasTag() && stack.getTag().contains(RuneCraftory.MODID)) {
-            return stack.getTag().getCompound(RuneCraftory.MODID);
-        }
-        return null;
-    }
-
     public static boolean shouldHaveStats(ItemStack stack) {
         return stack.is(RunecraftoryTags.UPGRADABLE_HELD) || stack.is(RunecraftoryTags.EQUIPMENT);
     }
@@ -458,72 +421,16 @@ public class ItemNBT {
         return stack.is(RunecraftoryTags.UPGRADABLE_HELD);
     }
 
-    public static boolean canBeUsedAsMagnifyingGlass(ItemStack stack) {
-        if (stack.getItem() == ModItems.GLASS.get())
-            return true;
-        if (stack.hasTag()) {
-            CompoundTag tag = stack.getTag().getCompound(RuneCraftory.MODID);
-            return tag.getBoolean(LibNBT.MAGNIFYING_GLASS);
-        }
-        return false;
-    }
-
-    public static boolean doesFixedOneDamage(ItemStack stack) {
-        if (stack.hasTag()) {
-            CompoundTag tag = stack.getTag().getCompound(RuneCraftory.MODID);
-            return tag.getBoolean(LibNBT.SCRAP_METAL_PLUS);
-        }
-        return false;
-    }
-
-    public static boolean reverseStats(ItemStack stack) {
-        if (stack.hasTag()) {
-            CompoundTag tag = stack.getTag().getCompound(RuneCraftory.MODID);
-            return tag.getBoolean(LibNBT.OBJECT_X);
-        }
-        return false;
-    }
-
-    public static boolean isInvis(ItemStack stack) {
-        if (stack.hasTag()) {
-            CompoundTag tag = stack.getTag().getCompound(RuneCraftory.MODID);
-            return tag.getBoolean(LibNBT.INVIS);
-        }
-        return false;
-    }
-
-    public static boolean hasDragonScaleUpgrade(ItemStack stack) {
-        if (stack.hasTag()) {
-            CompoundTag tag = stack.getTag().getCompound(RuneCraftory.MODID);
-            return tag.getBoolean(LibNBT.DRAGON_SCALE);
-        }
-        return false;
-    }
-
-    public static ItemStack getOriginItem(ItemStack stack) {
-        if (shouldHaveStats(stack) && stack.hasTag()) {
-            CompoundTag tag = stack.getTag().getCompound(RuneCraftory.MODID);
-            String s = tag.getString(LibNBT.ORIGINITEM);
-            if (s.isEmpty())
-                return ItemStack.EMPTY;
-            return new ItemStack(Registry.ITEM.get(new ResourceLocation(s)));
-        }
-        return ItemStack.EMPTY;
-    }
-
     public static boolean usedLightOre(ItemStack stack) {
-        if (shouldHaveStats(stack) && stack.hasTag()) {
-            CompoundTag tag = stack.getTag().getCompound(RuneCraftory.MODID);
-            String s = tag.getString(LibNBT.ORIGINITEM);
-            if (s.isEmpty())
+        if (shouldHaveStats(stack)) {
+            if (stack.getOrDefault(ModDataComponentTypes.ORIGINAL_ITEM.get(), ItemStackHolder.DEFAULT).isEmpty())
                 return false;
-            ItemStack changed = new ItemStack(Registry.ITEM.get(new ResourceLocation(s)));
-            return changed.isEmpty() && tag.getBoolean(LibNBT.LIGHTORETAG);
+            return stack.has(ModDataComponentTypes.LIGHT_ORE.get());
         }
         return false;
     }
 
     public static double attackSpeedModifier(LivingEntity entity) {
-        return entity.getAttributeValue(ModAttributes.ATTACK_SPEED.get());
+        return entity.getAttributeValue(ModAttributes.ATTACK_SPEED.asHolder());
     }
 }

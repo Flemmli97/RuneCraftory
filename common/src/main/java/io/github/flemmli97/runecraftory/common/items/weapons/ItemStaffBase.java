@@ -1,16 +1,12 @@
 package io.github.flemmli97.runecraftory.common.items.weapons;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
-import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
-import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.api.registry.ArmorEffect;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.components.StaffData;
 import io.github.flemmli97.runecraftory.common.registry.ModArmorEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
-import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
-import io.github.flemmli97.runecraftory.platform.ExtendedItem;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.item.ExtendedWeapon;
 import net.minecraft.core.BlockPos;
@@ -28,7 +24,7 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class ItemStaffBase extends Item implements IItemUsable, ExtendedItem, ExtendedWeapon {
+public class ItemStaffBase extends Item implements ExtendedWeapon {
 
     public final EnumElement startElement;
     public final int amount;
@@ -53,36 +49,8 @@ public class ItemStaffBase extends Item implements IItemUsable, ExtendedItem, Ex
     }
 
     @Override
-    public boolean resetAttackStrength(LivingEntity entity, ItemStack stack) {
-        return false;
-    }
-
-    @Override
-    public boolean swingWeapon(LivingEntity entity, ItemStack stack) {
-        return false;
-    }
-
-    @Override
-    public boolean onServerSwing(LivingEntity entity, ItemStack stack) {
-        if (entity instanceof Player player) {
-            Platform.INSTANCE.getPlayerData(player).getWeaponHandler().doWeaponAttack(ModAttackActions.STAFF.get(), stack);
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public EnumWeaponType getWeaponType() {
-        return EnumWeaponType.STAFF;
-    }
-
-    @Override
-    public void onBlockBreak(ServerPlayer player) {
-    }
-
-    @Override
-    public float getRange(LivingEntity entity, ItemStack stack) {
-        return (float) entity.getAttributeValue(ModAttributes.ATTACK_RANGE.asHolder());
+    public void executeAttack(Player player, ItemStack stack) {
+        Platform.INSTANCE.getPlayerData(player).getWeaponHandler().doWeaponAttack(ModAttackActions.STAFF.get(), stack);
     }
 
     @Override
@@ -127,14 +95,14 @@ public class ItemStaffBase extends Item implements IItemUsable, ExtendedItem, Ex
     }
 
     @Override
-    public int getUseDuration(ItemStack stack) {
+    public int getUseDuration(ItemStack stack, LivingEntity entity) {
         return 72000;
     }
 
     @Override
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
         if (!world.isClientSide) {
-            int tier = (this.getUseDuration(stack) - timeLeft - 1) / this.getStaffChargeTime(entity, stack);
+            int tier = (stack.getUseDuration(entity) - timeLeft - 1) / this.getStaffChargeTime(entity, stack);
             int level = Math.min(tier, this.chargeAmount(stack));
             Spell spell = stack.getOrDefault(ModDataComponentTypes.STAFF.get(), StaffData.DEFAULT)
                     .fromChargeLevel(stack, level);
@@ -150,11 +118,6 @@ public class ItemStaffBase extends Item implements IItemUsable, ExtendedItem, Ex
 
     @Override
     public boolean isEnchantable(ItemStack stack) {
-        return false;
-    }
-
-    @Override
-    public boolean onEntitySwing(ItemStack stack, LivingEntity entity) {
         return false;
     }
 }

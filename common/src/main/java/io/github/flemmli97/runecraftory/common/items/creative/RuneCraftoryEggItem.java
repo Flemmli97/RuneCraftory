@@ -1,10 +1,9 @@
 package io.github.flemmli97.runecraftory.common.items.creative;
 
-import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.blocks.tile.BossSpawnerBlockEntity;
 import io.github.flemmli97.runecraftory.common.entities.utils.IBaseMob;
-import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.network.S2CSpawnEggScreen;
+import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.ChatFormatting;
@@ -30,8 +29,6 @@ import java.util.function.Supplier;
 
 public class RuneCraftoryEggItem extends SpawnEgg {
 
-    public static final String EGG_LEVEL = RuneCraftory.MODID + ":SpawnEggLevel";
-
     public RuneCraftoryEggItem(Supplier<? extends EntityType<? extends Mob>> type, int primary, int secondary, Properties props) {
         super(new EntityTypeHolder<>(Mob.class, type), primary, secondary, props);
     }
@@ -39,7 +36,7 @@ public class RuneCraftoryEggItem extends SpawnEgg {
     @Override
     public boolean onEntitySpawned(Entity e, ItemStack stack, Player player) {
         if (e instanceof IBaseMob mob) {
-            mob.setLevel(getMobLevel(stack));
+            mob.setLevel(stack.getOrDefault(ModDataComponentTypes.SPAWN_EGG_LEVEL.get(), 1));
         }
         //Temporary fix for Forge-Bug-#7730
         if (e.getBbWidth() > 0.7 && e.getBbWidth() < 1) {
@@ -62,27 +59,15 @@ public class RuneCraftoryEggItem extends SpawnEgg {
     @Override
     public InteractionResult onBlockUse(ItemStack stack, BlockPos pos, BlockState state, @Nullable BlockEntity tile) {
         if (tile instanceof BossSpawnerBlockEntity) {
-            ((BossSpawnerBlockEntity) tile).setEntity(this.getType(stack.getTag()));
+            ((BossSpawnerBlockEntity) tile).setEntity(this.getType(stack));
             return InteractionResult.SUCCESS;
         }
         return super.onBlockUse(stack, pos, state, tile);
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
-        tooltipComponents.add(Component.translatable("runecraftory.tooltip.item.spawn").withStyle(ChatFormatting.GOLD));
-        super.appendHoverText(stack, level, tooltipComponents, isAdvanced);
-    }
-
-    public static int getMobLevel(ItemStack stack) {
-        int level = LibConstants.BASE_LEVEL;
-        if (stack.hasTag() && stack.getTag().contains(EGG_LEVEL)) {
-            level = stack.getTag().getInt(EGG_LEVEL);
-        }
-        return level;
-    }
-
-    public static void setMobLevel(ItemStack stack, int level) {
-        stack.getOrCreateTag().putInt(EGG_LEVEL, level);
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag tooltipFlag) {
+        list.add(Component.translatable("runecraftory.tooltip.item.spawn").withStyle(ChatFormatting.GOLD));
+        super.appendHoverText(stack, context, list, tooltipFlag);
     }
 }

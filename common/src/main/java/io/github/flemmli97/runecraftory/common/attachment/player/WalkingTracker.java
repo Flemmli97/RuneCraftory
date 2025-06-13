@@ -39,7 +39,7 @@ public class WalkingTracker {
         }
         if (mult != 0) {
             float finalMult = mult * 0.3f;
-            LevelCalc.levelSkill(player, Platform.INSTANCE.getPlayerData(player), EnumSkills.WALKING, finalMult);
+            LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.WALKING, finalMult);
         }
         return mult != 0;
     }

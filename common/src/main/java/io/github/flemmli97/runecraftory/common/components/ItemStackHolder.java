@@ -6,7 +6,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 
-public class ItemStackHolder {
+public record ItemStackHolder(ItemStack stack) {
 
     public static final ItemStackHolder DEFAULT = new ItemStackHolder(ItemStack.EMPTY);
     public static final Codec<ItemStackHolder> CODEC = RecordCodecBuilder.create((instance) ->
@@ -15,10 +15,13 @@ public class ItemStackHolder {
     public static final StreamCodec<RegistryFriendlyByteBuf, ItemStackHolder> STREAM_CODEC = StreamCodec.composite(ItemStack.STREAM_CODEC,
             d -> d.stack, ItemStackHolder::new);
 
-    private final ItemStack stack;
+    @Override
+    public ItemStack stack() {
+        return this.stack.copy();
+    }
 
-    public ItemStackHolder(ItemStack stack) {
-        this.stack = stack;
+    public boolean isEmpty() {
+        return this.stack.isEmpty();
     }
 
     @Override
@@ -32,8 +35,4 @@ public class ItemStackHolder {
         return false;
     }
 
-    @Override
-    public int hashCode() {
-        return this.stack.hashCode();
-    }
 }

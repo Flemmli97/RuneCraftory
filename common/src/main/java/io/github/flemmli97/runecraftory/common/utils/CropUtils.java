@@ -26,7 +26,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
 
@@ -59,11 +59,11 @@ public class CropUtils {
         return DataPackHandler.INSTANCE.cropManager().get(((CropBlockAccessor) crop).getSeedItem().asItem());
     }
 
-    public static void modifyCropDrops(BlockState state, LootContext.Builder builder, CropBlock block, List<ItemStack> list) {
+    public static void modifyCropDrops(BlockState state, LootParams.Builder builder, CropBlock block, List<ItemStack> list) {
         CropProperties prop = getPropertiesFor(block);
         if (prop != null) {
             Vec3 pos = builder.getOptionalParameter(LootContextParams.ORIGIN);
-            int itemLevel = pos != null ? getCropLevel(builder.getLevel(), new BlockPos(pos)) : 1;
+            int itemLevel = pos != null ? getCropLevel(builder.getLevel(), BlockPos.containing(pos)) : 1;
             if (block.isMaxAge(state)) {
                 List<ItemStack> remove = new ArrayList<>();
                 boolean removedSeed = list.size() < 2;
@@ -102,7 +102,7 @@ public class CropUtils {
                         if (!rest.isEmpty())
                             Block.popResource(level, pos, rest);
                     });
-            state.spawnAfterBreak(serverLevel, pos, ItemStack.EMPTY);
+            state.spawnAfterBreak(serverLevel, pos, ItemStack.EMPTY, true);
         } else
             Block.dropResources(state, level, pos, null, entity, stack);
         level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
@@ -115,7 +115,7 @@ public class CropUtils {
             ModCriteria.HARVEST_CROP.get().trigger(player, state);
             if (cropBlock.isMaxAge(state)) {
                 spawnRuney(player, pos);
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.FARMING, 2f));
+                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.FARMING, 2f);
             }
         }
         if (entity instanceof LivingEntity living)
@@ -124,9 +124,9 @@ public class CropUtils {
 
     public static void spawnRuney(ServerPlayer player, BlockPos pos) {
         if (player.getRandom().nextFloat() < GeneralConfig.runeyChance) {
-            Entity entity = player.getRandom().nextFloat() < 0.4 ? ModEntities.RUNEY.get().create(player.getLevel()) : ModEntities.STAT_BONUS.get().create(player.getLevel());
+            Entity entity = player.getRandom().nextFloat() < 0.4 ? ModEntities.RUNEY.get().create(player.serverLevel()) : ModEntities.STAT_BONUS.get().create(player.serverLevel());
             entity.setPos(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
-            player.level.addFreshEntity(entity);
+            player.level().addFreshEntity(entity);
         }
     }
 }

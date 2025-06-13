@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.items.tools;
 
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -53,18 +54,17 @@ public class ItemStatIncrease extends Item {
     }
 
     @Override
-    public int getUseDuration(ItemStack stack) {
+    public int getUseDuration(ItemStack stack, LivingEntity entity) {
         return 32;
     }
 
     private void increaseStat(ItemStack stack, Level level, Player player) {
-        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-            switch (this.stat) {
-                case LEVEL ->
-                        data.addXp(player, LevelCalc.xpAmountForLevelUp(data.getPlayerLevel().getLevel()) - data.getPlayerLevel().getXp());
-                case STR, INT, VIT, HP -> data.increaseStatBonus(player, this.stat);
-            }
-        });
+        PlayerData data = Platform.INSTANCE.getPlayerData(player);
+        switch (this.stat) {
+            case LEVEL ->
+                    data.addXp(LevelCalc.xpAmountForLevelUp(data.getPlayerLevel().getLevel()) - data.getPlayerLevel().getXp());
+            case STR, INT, VIT, HP -> data.increaseStatBonus(this.stat);
+        }
     }
 
     public enum Stat {

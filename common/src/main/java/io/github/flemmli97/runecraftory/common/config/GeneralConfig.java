@@ -1,5 +1,7 @@
 package io.github.flemmli97.runecraftory.common.config;
 
+import io.github.flemmli97.runecraftory.api.enums.EnumToolTier;
+
 public class GeneralConfig {
 
     public static DefenceSystem defenceSystem = DefenceSystem.IGNORE_VANILLA_PLAYER;
@@ -50,6 +52,7 @@ public class GeneralConfig {
     public static float gloveUltimate = 7;
 
     public static float platinumChargeTime = 0.5f;
+
     public static int scrapWateringCanWater = 25;
     public static int ironWateringCanWater = 35;
     public static int silverWateringCanWater = 100;
@@ -63,6 +66,16 @@ public class GeneralConfig {
     public static float tamingMultiplier = 1;
 
     public static boolean debugAttack = false;
+
+    public static int getWaterFrom(EnumToolTier tier) {
+        return switch (tier) {
+            case SCRAP -> 25;
+            case IRON -> 35;
+            case SILVER -> 100;
+            case GOLD -> 150;
+            case PLATINUM -> 250;
+        };
+    }
 
     public enum DefenceSystem {
         NO_DEFENCE,

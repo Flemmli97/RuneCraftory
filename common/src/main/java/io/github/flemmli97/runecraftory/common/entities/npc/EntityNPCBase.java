@@ -79,6 +79,7 @@ import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -1608,7 +1609,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         this.randomizeData(ModNPCJobs.getFromID(job), false);
     }
 
-    public void randomizeData(NPCJob job, boolean overwrite) {
+    public void randomizeData(Holder<NPCJob> job, boolean overwrite) {
         if (this.getServer() != null) {
             this.setNPCData(DataPackHandler.INSTANCE.npcDataManager().getRandom(this.random, d ->
                     (d.profession().isEmpty() || d.profession().stream().anyMatch(j -> j.equals(job)))

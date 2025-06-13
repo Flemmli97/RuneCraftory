@@ -16,7 +16,7 @@ import java.util.HashSet;
 
 public class EntityData {
 
-    private boolean sleeping, isSilent, paralysis, stunned, noAIStunned, cold, poison, invis, orthoView;
+    private boolean sleeping, isSilent, paralysis, stunned, noAIStunned, cold, poison, invis, orthoView, enteredBath;
     private int disabledState;
 
     public EntityCustomFishingHook fishingHook;
@@ -140,6 +140,15 @@ public class EntityData {
 
     public boolean hasArmorFlag(Holder<ArmorEffect> key) {
         return this.armorFlags.contains(key);
+    }
+
+    public boolean enteredBath() {
+        return this.enteredBath;
+    }
+
+    public EntityData setEnteredBath(boolean enteredBath) {
+        this.enteredBath = enteredBath;
+        return this;
     }
 
     private void updateAiState(LivingEntity entity, boolean increase) {

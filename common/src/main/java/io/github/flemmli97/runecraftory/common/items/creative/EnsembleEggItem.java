@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.items.creative;
 import io.github.flemmli97.runecraftory.common.blocks.tile.BossSpawnerBlockEntity;
 import io.github.flemmli97.runecraftory.common.entities.EnsembleMonsters;
 import io.github.flemmli97.runecraftory.common.network.S2CSpawnEggScreen;
+import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.ChatFormatting;
@@ -34,7 +35,7 @@ public class EnsembleEggItem extends SpawnEgg {
     @Override
     public boolean onEntitySpawned(Entity e, ItemStack stack, Player player) {
         if (e instanceof EnsembleMonsters mob) {
-            mob.setLevel(RuneCraftoryEggItem.getMobLevel(stack));
+            mob.setLevel(stack.getOrDefault(ModDataComponentTypes.SPAWN_EGG_LEVEL.get(), 1));
         }
         return super.onEntitySpawned(e, stack, player);
     }
@@ -53,15 +54,15 @@ public class EnsembleEggItem extends SpawnEgg {
     @Override
     public InteractionResult onBlockUse(ItemStack stack, BlockPos pos, BlockState state, @Nullable BlockEntity tile) {
         if (tile instanceof BossSpawnerBlockEntity) {
-            ((BossSpawnerBlockEntity) tile).setEntity(this.getType(stack.getTag()));
+            ((BossSpawnerBlockEntity) tile).setEntity(this.getType(stack));
             return InteractionResult.SUCCESS;
         }
         return super.onBlockUse(stack, pos, state, tile);
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
-        tooltipComponents.add(Component.translatable("runecraftory.tooltip.item.spawn").withStyle(ChatFormatting.GOLD));
-        super.appendHoverText(stack, level, tooltipComponents, isAdvanced);
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag tooltipFlag) {
+        list.add(Component.translatable("runecraftory.tooltip.item.spawn").withStyle(ChatFormatting.GOLD));
+        super.appendHoverText(stack, context, list, tooltipFlag);
     }
 }

@@ -5,7 +5,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -17,8 +17,8 @@ import java.util.List;
 public abstract class BlockBehaviourMixin {
 
     @Inject(method = "getDrops", at = @At("TAIL"))
-    private void modifyBlockDrops(BlockState state, LootContext.Builder builder, CallbackInfoReturnable<List<ItemStack>> info) {
+    private void modifyBlockDrops(BlockState state, LootParams.Builder params, CallbackInfoReturnable<List<ItemStack>> info) {
         if (state.getBlock() instanceof CropBlock cropBlock)
-            CropUtils.modifyCropDrops(state, builder, cropBlock, info.getReturnValue());
+            CropUtils.modifyCropDrops(state, params, cropBlock, info.getReturnValue());
     }
 }

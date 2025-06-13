@@ -139,13 +139,13 @@ public class ArmorModels {
 
     public static ArmorModelGetter fromItemStack(ItemStack stack) {
         if (stack.getItem() instanceof ItemArmorBase armor)
-            return ARMOR_GETTER.get(armor.registryID);
+            return ARMOR_GETTER.get(armor.armorPath);
         return null;
     }
 
     public static FirstPersonArmorRenderer getFirstPersonRenderer(ItemStack stack) {
         if (stack.getItem() instanceof ItemArmorBase armor)
-            return FIRST_PERSON_GETTER.get(armor.registryID);
+            return FIRST_PERSON_GETTER.get(armor.armorPath);
         return null;
     }
 

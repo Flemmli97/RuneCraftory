@@ -1,7 +1,6 @@
 package io.github.flemmli97.runecraftory.common.registry;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.loader.LoaderRegistryAccess;
 import io.github.flemmli97.tenshilib.loader.registry.LoaderRegister;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
@@ -12,7 +11,7 @@ public class ModActivities {
 
     public static final LoaderRegister<Activity> ACTIVITIES = LoaderRegistryAccess.INSTANCE.of(Registries.ACTIVITY, RuneCraftory.MODID);
 
-    public static final RegistryEntrySupplier<Activity, Activity> DISABLED = ACTIVITIES.register("disabled", () -> Platform.INSTANCE.activity("disabled"));
-    public static final RegistryEntrySupplier<Activity, Activity> EARLYIDLE = ACTIVITIES.register("early_idle", () -> Platform.INSTANCE.activity("early_idle"));
+    public static final RegistryEntrySupplier<Activity, Activity> DISABLED = ACTIVITIES.register("disabled", () -> new Activity("disabled"));
+    public static final RegistryEntrySupplier<Activity, Activity> EARLYIDLE = ACTIVITIES.register("early_idle", () -> new Activity("early_idle"));
 
 }

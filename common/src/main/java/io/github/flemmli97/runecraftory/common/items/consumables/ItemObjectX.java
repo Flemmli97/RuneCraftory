@@ -1,7 +1,9 @@
 package io.github.flemmli97.runecraftory.common.items.consumables;
 
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
-import net.minecraft.core.Registry;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -21,7 +23,7 @@ public class ItemObjectX extends Item {
 
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity livingEntity) {
-        if (this.isEdible() && !livingEntity.level.isClientSide) {
+        if (stack.has(DataComponents.FOOD) && !livingEntity.level().isClientSide) {
             return applyEffect(livingEntity, stack);
         }
         return stack;
@@ -33,17 +35,17 @@ public class ItemObjectX extends Item {
     }
 
     public static ItemStack applyEffect(LivingEntity livingEntity, ItemStack stack) {
-        ItemStack eat = livingEntity.eat(livingEntity.level, stack);
-        List<MobEffect> list = Registry.MOB_EFFECT.stream().filter(effect -> effect.getCategory() == MobEffectCategory.HARMFUL).toList();
+        ItemStack eat = livingEntity.eat(livingEntity.level(), stack);
+        List<Holder.Reference<MobEffect>> list = BuiltInRegistries.MOB_EFFECT.holders().filter(effect -> effect.value().getCategory() == MobEffectCategory.HARMFUL).toList();
         if (!list.isEmpty()) {
             int r = livingEntity.getRandom().nextInt(5) + 1;
             for (int i = 0; i < r; i++) {
-                MobEffect effect = list.get(livingEntity.getRandom().nextInt(list.size()));
+                Holder.Reference<MobEffect> effect = list.get(livingEntity.getRandom().nextInt(list.size()));
                 int amp = livingEntity.getRandom().nextInt(2);
                 MobEffectInstance inst = livingEntity.getEffect(effect);
                 if (inst != null)
                     amp += inst.getAmplifier();
-                int duration = effect == ModEffects.SLEEP.get() ? 80 : 600;
+                int duration = effect.value() == ModEffects.SLEEP.get() ? 80 : 600;
                 livingEntity.addEffect(new MobEffectInstance(effect, duration, amp));
             }
         }

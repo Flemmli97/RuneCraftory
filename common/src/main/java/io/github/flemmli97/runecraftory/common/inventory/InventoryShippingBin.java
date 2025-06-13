@@ -27,22 +27,22 @@ public class InventoryShippingBin extends SaveItemContainer {
 
     public void shipItems(ServerPlayer player) {
         PlayerData data = Platform.INSTANCE.getPlayerData(player);
-            int money = 0;
-            for (int i = 0; i < this.getContainerSize(); ++i) {
-                ItemStack stack = this.getItem(i);
-                if (stack.isEmpty())
-                    continue;
-                int basePrice = ItemUtils.getSellPrice(stack);
-                if (basePrice <= 0)
-                    continue;
-                money += basePrice * stack.getCount();
-                data.addShippingItem(stack);
-                ModCriteria.SHIPPING_TRIGGER.get().trigger(player, data, stack);
-                QuestHandler.getData(player).trigger(ShippingTracker.KEY, stack);
-                this.setItem(i, ItemStack.EMPTY);
-            }
+        int money = 0;
+        for (int i = 0; i < this.getContainerSize(); ++i) {
+            ItemStack stack = this.getItem(i);
+            if (stack.isEmpty())
+                continue;
+            int basePrice = ItemUtils.getSellPrice(stack);
+            if (basePrice <= 0)
+                continue;
+            money += basePrice * stack.getCount();
+            data.addShippingItem(stack);
+            ModCriteria.SHIPPING_TRIGGER.get().trigger(player, data, stack);
+            QuestHandler.getData(player).trigger(ShippingTracker.KEY, stack);
+            this.setItem(i, ItemStack.EMPTY);
+        }
         data.setMoney(data.getMoney() + money);
-            if (money != 0)
-                player.displayClientMessage(Component.translatable("runecraftory.misc.shipping.money").append("" + money).withStyle(ChatFormatting.GOLD), true);
+        if (money != 0)
+            player.displayClientMessage(Component.translatable("runecraftory.misc.shipping.money").append("" + money).withStyle(ChatFormatting.GOLD), true);
     }
 }

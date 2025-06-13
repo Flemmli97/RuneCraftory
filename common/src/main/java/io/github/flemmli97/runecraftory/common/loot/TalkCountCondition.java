@@ -1,12 +1,10 @@
 package io.github.flemmli97.runecraftory.common.loot;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
+import com.mojang.serialization.MapCodec;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
-import net.minecraft.util.GsonHelper;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -17,6 +15,9 @@ import java.util.Set;
 import java.util.UUID;
 
 public record TalkCountCondition(int count) implements LootItemCondition {
+
+    public static final MapCodec<TalkCountCondition> CODEC = ExtraCodecs.NON_NEGATIVE_INT.fieldOf("count")
+            .xmap(TalkCountCondition::new, TalkCountCondition::count);
 
     public static Builder of(int count) {
         return () -> new TalkCountCondition(count);
@@ -40,18 +41,5 @@ public record TalkCountCondition(int count) implements LootItemCondition {
                 return npc.talkCount(uuid) >= this.count;
         }
         return false;
-    }
-
-    public static class Serializer implements net.minecraft.world.level.storage.loot.Serializer<TalkCountCondition> {
-
-        @Override
-        public void serialize(JsonObject object, TalkCountCondition condition, JsonSerializationContext context) {
-            object.addProperty("count", condition.count);
-        }
-
-        @Override
-        public TalkCountCondition deserialize(JsonObject obj, JsonDeserializationContext context) {
-            return new TalkCountCondition(GsonHelper.getAsInt(obj, "count", 0));
-        }
     }
 }

@@ -7,7 +7,7 @@ import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 
-public class ParalysisEffect extends PermanentEffect {
+public class ParalysisEffect extends UncurableEffect {
 
     private static final ResourceLocation MODIFIER = RuneCraftory.modRes("paralysis_effect");
 

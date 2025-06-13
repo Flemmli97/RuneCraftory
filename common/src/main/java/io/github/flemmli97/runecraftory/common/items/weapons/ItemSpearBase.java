@@ -1,18 +1,18 @@
 package io.github.flemmli97.runecraftory.common.items.weapons;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
-import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
-import io.github.flemmli97.runecraftory.api.items.IItemUsable;
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.items.BigWeapon;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
-import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.common.item.AOEWeapon;
+import io.github.flemmli97.tenshilib.common.item.ExtendedWeapon;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
@@ -27,63 +27,23 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Collection;
 
-public class ItemSpearBase extends Item implements IItemUsable, IAOEWeapon, BigWeapon {
+public class ItemSpearBase extends Item implements ExtendedWeapon, BigWeapon {
 
     public ItemSpearBase(Item.Properties props) {
         super(props.stacksTo(1));
     }
 
     @Override
-    public boolean resetAttackStrength(LivingEntity entity, ItemStack stack) {
-        return false;
-    }
-
-    @Override
-    public boolean swingWeapon(LivingEntity entity, ItemStack stack) {
-        return false;
-    }
-
-    @Override
-    public boolean onServerSwing(LivingEntity entity, ItemStack stack) {
-        if (entity instanceof Player player) {
-            Platform.INSTANCE.getPlayerData(player)
-                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(ModAttackActions.SPEAR.get(), stack));
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public EnumWeaponType getWeaponType() {
-        return EnumWeaponType.SPEAR;
-    }
-
-    @Override
-    public void onBlockBreak(ServerPlayer player) {
-
-    }
-
-    @Override
-    public float getRange(LivingEntity entity, ItemStack stack) {
-        return (float) entity.getAttributeValue(ModAttributes.ATTACK_RANGE.get());
-    }
-
-    @Override
-    public float getWidth(LivingEntity entity, ItemStack stack) {
-        return (float) entity.getAttributeValue(ModAttributes.ATTACK_WIDTH.get());
-    }
-
-    @Override
-    public boolean doSweepingAttack() {
-        return false;
+    public void executeAttack(Player player, ItemStack stack) {
+        Platform.INSTANCE.getPlayerData(player).getWeaponHandler().doWeaponAttack(ModAttackActions.SPEAR.get(), stack);
     }
 
     @Override
     public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingUseDuration) {
         if (entity instanceof ServerPlayer player) {
-            int duration = stack.getUseDuration() - remainingUseDuration;
+            int duration = stack.getUseDuration(entity) - remainingUseDuration;
             if (duration == ItemUtils.getChargeTime(entity))
-                player.connection.send(new ClientboundSoundPacket(SoundEvents.NOTE_BLOCK_XYLOPHONE, player.getSoundSource(), player.getX(), player.getY(), player.getZ(), 1, 1));
+                EntityUtils.playSoundForPlayer(player, SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
         }
     }
 
@@ -97,17 +57,15 @@ public class ItemSpearBase extends Item implements IItemUsable, IAOEWeapon, BigW
         ItemStack itemstack = player.getItemInHand(hand);
         if (hand == InteractionHand.OFF_HAND)
             return InteractionResultHolder.pass(itemstack);
-        if (player.isCreative() || Platform.INSTANCE.getPlayerData(player).map(cap -> cap.getSkillLevel(EnumSkills.SPEAR).getLevel() >= 5).orElse(false)) {
-            if (player instanceof ServerPlayer serverPlayer) {
-                if (Platform.INSTANCE.getPlayerData(player).map(data -> {
-                    // Check if insta use is possible
-                    if (data.getWeaponHandler().canExecuteAction(ModAttackActions.SPEAR_USE.get(), false)) {
-                        data.getWeaponHandler().doWeaponAttack(ModAttackActions.SPEAR_USE.get(), itemstack);
-                        return false;
+        PlayerData data = Platform.INSTANCE.getPlayerData(player);
+        if (player.isCreative() || data.getSkillLevel(EnumSkills.SPEAR).getLevel() >= 5) {
+            if (player instanceof ServerPlayer) {
+                if (data.getWeaponHandler().canExecuteAction(ModAttackActions.SPEAR_USE.get(), false)) {
+                    data.getWeaponHandler().doWeaponAttack(ModAttackActions.SPEAR_USE.get(), itemstack);
+                } else {
+                    if (data.getWeaponHandler().getCurrentAction() == ModAttackActions.NONE.get()) {
+                        player.startUsingItem(hand);
                     }
-                    return data.getWeaponHandler().getCurrentAction() == ModAttackActions.NONE.get();
-                }).orElse(true)) {
-                    player.startUsingItem(hand);
                 }
             }
             return InteractionResultHolder.consume(itemstack);
@@ -121,19 +79,18 @@ public class ItemSpearBase extends Item implements IItemUsable, IAOEWeapon, BigW
     }
 
     @Override
-    public int getUseDuration(ItemStack stack) {
+    public int getUseDuration(ItemStack stack, LivingEntity entity) {
         return 72000;
     }
 
     @Override
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
         if (entity instanceof ServerPlayer serverPlayer) {
-            Platform.INSTANCE.getPlayerData(serverPlayer).ifPresent(data -> {
-                int time = stack.getUseDuration() - timeLeft - 1;
-                if (time >= ItemUtils.getChargeTime(entity) && data.getWeaponHandler().canExecuteAction(ModAttackActions.SPEAR_USE.get())) {
-                    data.getWeaponHandler().doWeaponAttack(ModAttackActions.SPEAR_USE.get(), stack);
-                }
-            });
+            PlayerData data = Platform.INSTANCE.getPlayerData(serverPlayer);
+            int time = stack.getUseDuration(entity) - timeLeft - 1;
+            if (time >= ItemUtils.getChargeTime(entity) && data.getWeaponHandler().canExecuteAction(ModAttackActions.SPEAR_USE.get())) {
+                data.getWeaponHandler().doWeaponAttack(ModAttackActions.SPEAR_USE.get(), stack);
+            }
         }
     }
 
@@ -143,15 +100,15 @@ public class ItemSpearBase extends Item implements IItemUsable, IAOEWeapon, BigW
     }
 
     public void useSpear(ServerPlayer player, ItemStack stack, boolean finishing) {
-        Collection<LivingEntity> list = CombatUtils.EntityAttack.obbTargets(IAOEWeapon.createOBB(player, stack, this.getRange(player, stack), 0.5))
+        Collection<LivingEntity> list = CombatUtils.EntityAttack.obbTargets(AOEWeapon.createOBB(player, this.getRange(player, stack), 0.5, 0.5))
                 .apply(player, null);
         if (!list.isEmpty()) {
-            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.SPEAR, 2));
+            LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.SPEAR, 2);
             list.forEach(e -> CombatUtils.playerAttackWithItem(player, e, player.getMainHandItem(), 0.6f, false, false));
         }
         if (finishing)
-            player.level.playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.PLAYER_ATTACK_SWOOSH.get(), player.getSoundSource(), 1.0f, (player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.2f + 1.5f);
+            player.level().playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.PLAYER_ATTACK_SWOOSH.get(), player.getSoundSource(), 1.0f, (player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.2f + 1.5f);
         else
-            player.level.playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.PLAYER_ATTACK_SWOOSH_LIGHT.get(), player.getSoundSource(), 1.0f, (player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.2f + 1.0f);
+            player.level().playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.PLAYER_ATTACK_SWOOSH_LIGHT.get(), player.getSoundSource(), 1.0f, (player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.2f + 1.0f);
     }
 }

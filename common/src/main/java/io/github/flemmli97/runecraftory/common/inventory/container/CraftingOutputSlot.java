@@ -73,13 +73,13 @@ public class CraftingOutputSlot extends Slot {
             }
             switch (this.craftingContainer.craftingType()) {
                 case FORGE ->
-                        CraftingUtils.giveCraftingXPTo(data, EnumSkills.FORGING, this.craftingContainer.getCurrentRecipe());
+                        CraftingUtils.giveCraftingXPTo(data, EnumSkills.FORGING, this.craftingContainer.getCurrentRecipe().value());
                 case ARMOR ->
-                        CraftingUtils.giveCraftingXPTo(data, EnumSkills.CRAFTING, this.craftingContainer.getCurrentRecipe());
+                        CraftingUtils.giveCraftingXPTo(data, EnumSkills.CRAFTING, this.craftingContainer.getCurrentRecipe().value());
                 case CHEM ->
-                        CraftingUtils.giveCraftingXPTo(data, EnumSkills.CHEMISTRY, this.craftingContainer.getCurrentRecipe());
+                        CraftingUtils.giveCraftingXPTo(data, EnumSkills.CHEMISTRY, this.craftingContainer.getCurrentRecipe().value());
                 case COOKING ->
-                        CraftingUtils.giveCraftingXPTo(data, EnumSkills.COOKING, this.craftingContainer.getCurrentRecipe());
+                        CraftingUtils.giveCraftingXPTo(data, EnumSkills.COOKING, this.craftingContainer.getCurrentRecipe().value());
             }
         }
         if (ItemNBT.usedLightOre(stack))

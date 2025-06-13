@@ -10,8 +10,6 @@ import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -36,9 +34,9 @@ public abstract class Spell {
         if (!(entity instanceof ServerPlayer player))
             return true;
         PlayerData data = Platform.INSTANCE.getPlayerData(player);
-        if (!LevelCalc.useRP(player, data, spell.rpCost() * costMultiplier, hurt, spell.percentageCost(), true, spell.costReductionSkills())) {
+        if (!LevelCalc.useRP(data, spell.rpCost() * costMultiplier, hurt, spell.percentageCost(), true, spell.costReductionSkills())) {
             if (!hurt)
-                player.connection.send(new ClientboundSoundPacket(BuiltInRegistries.SOUND_EVENT.wrapAsHolder(SoundEvents.VILLAGER_NO), player.getSoundSource(), player.getX(), player.getY(), player.getZ(), 1, 1, player.getRandom().nextLong()));
+                EntityUtils.playSoundForPlayer(player, SoundEvents.VILLAGER_NO, 1, 1);
             return false;
         }
         return true;
@@ -55,7 +53,7 @@ public abstract class Spell {
         Map<EnumSkills, Float> skillXp = DataPackHandler.INSTANCE.spellPropertiesManager().getPropertiesFor(this).skillXP;
         if (!skillXp.isEmpty()) {
             PlayerData data = Platform.INSTANCE.getPlayerData(player);
-            skillXp.forEach((skill, xp) -> LevelCalc.levelSkill(player, data, EnumSkills.DARK, xp));
+            skillXp.forEach((skill, xp) -> LevelCalc.levelSkill(data, EnumSkills.DARK, xp));
         }
     }
 
@@ -94,7 +92,7 @@ public abstract class Spell {
     public boolean use(ServerLevel world, LivingEntity entity, ItemStack stack, boolean ignoreSeal) {
         if (!ignoreSeal && EntityUtils.sealed(entity)) {
             if (entity instanceof ServerPlayer player) {
-                player.connection.send(new ClientboundSoundPacket(BuiltInRegistries.SOUND_EVENT.wrapAsHolder(SoundEvents.VILLAGER_NO), player.getSoundSource(), player.getX(), player.getY(), player.getZ(), 1, 1, player.getRandom().nextLong()));
+                EntityUtils.playSoundForPlayer(player, SoundEvents.VILLAGER_NO, 1, 1);
             }
             return false;
         }

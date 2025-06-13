@@ -1,17 +1,14 @@
 package io.github.flemmli97.runecraftory.common.particles;
 
-import com.mojang.brigadier.StringReader;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
-import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 
 import java.util.Random;
 
@@ -19,32 +16,32 @@ public class SkelefangParticleData implements ParticleOptions {
 
     private static final Random RANDOM = new Random();
 
-    public static final Deserializer<SkelefangParticleData> DESERIALIZER = new Deserializer<>() {
+    public static final MapCodec<SkelefangParticleData> CODEC = RecordCodecBuilder.mapCodec((builder) -> builder.group(
+                    CodecUtils.stringEnumCodec(SkelefangBoneType.class, SkelefangBoneType.GENERIC).fieldOf("bone").forGetter(SkelefangParticleData::getBoneType),
+                    Codec.FLOAT.fieldOf("init_x").forGetter(SkelefangParticleData::getInitialRotX),
+                    Codec.FLOAT.fieldOf("init_y").forGetter(SkelefangParticleData::getInitialRotY),
+                    Codec.FLOAT.fieldOf("rot_x").forGetter(SkelefangParticleData::getPitchSpin),
+                    Codec.FLOAT.fieldOf("rot_y").forGetter(SkelefangParticleData::getYawSpin),
+                    Codec.INT.fieldOf("max_ticks").forGetter(SkelefangParticleData::getMaxTime),
+                    Codec.BOOL.fieldOf("gravity").forGetter(SkelefangParticleData::hasGravity))
+            .apply(builder, (bone, initX, initY, rotX, rotY, maxTick, gravity) -> new SkelefangParticleData(bone, initX, initY, rotX, rotX, maxTick, gravity)));
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, SkelefangParticleData> STREAM_CODEC = new StreamCodec<>() {
         @Override
-        public SkelefangParticleData fromCommand(ParticleType<SkelefangParticleData> type, StringReader reader) throws CommandSyntaxException {
-            reader.expect(' ');
-            String bone = reader.readString();
-            SkelefangBoneType boneType;
-            try {
-                boneType = SkelefangBoneType.valueOf(bone);
-            } catch (IllegalArgumentException e) {
-                throw new SimpleCommandExceptionType(Component.literal("No such bonetype " + bone)).create();
-            }
-            reader.expect(' ');
-            float initX = reader.readFloat();
-            reader.expect(' ');
-            float initY = reader.readFloat();
-            reader.expect(' ');
-            float rotX = reader.readFloat();
-            reader.expect(' ');
-            float rotY = reader.readFloat();
-            return new SkelefangParticleData(boneType, initX, initY, rotX, rotY);
+        public SkelefangParticleData decode(RegistryFriendlyByteBuf buf) {
+            return new SkelefangParticleData(buf.readEnum(SkelefangBoneType.class), buf.readFloat(), buf.readFloat(), buf.readFloat(), buf.readFloat(),
+                    buf.readInt(), buf.readBoolean());
         }
 
         @Override
-        public SkelefangParticleData fromNetwork(ParticleType<SkelefangParticleData> type, FriendlyByteBuf buffer) {
-            return new SkelefangParticleData(buffer.readEnum(SkelefangBoneType.class), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(),
-                    buffer.readInt(), buffer.readBoolean());
+        public void encode(RegistryFriendlyByteBuf buf, SkelefangParticleData data) {
+            buf.writeEnum(data.getBoneType());
+            buf.writeFloat(data.getInitialRotX());
+            buf.writeFloat(data.getInitialRotY());
+            buf.writeFloat(data.getPitchSpin());
+            buf.writeFloat(data.getYawSpin());
+            buf.writeInt(data.getMaxTime());
+            buf.writeBoolean(data.hasGravity());
         }
     };
 
@@ -71,37 +68,9 @@ public class SkelefangParticleData implements ParticleOptions {
         this.gravity = gravity;
     }
 
-    public static Codec<SkelefangParticleData> codec() {
-        return RecordCodecBuilder.create((builder) -> builder.group(
-                        CodecUtils.stringEnumCodec(SkelefangBoneType.class, SkelefangBoneType.GENERIC).fieldOf("bone").forGetter(SkelefangParticleData::getBoneType),
-                        Codec.FLOAT.fieldOf("init_x").forGetter(SkelefangParticleData::getInitialRotX),
-                        Codec.FLOAT.fieldOf("init_y").forGetter(SkelefangParticleData::getInitialRotY),
-                        Codec.FLOAT.fieldOf("rot_x").forGetter(SkelefangParticleData::getPitchSpin),
-                        Codec.FLOAT.fieldOf("rot_y").forGetter(SkelefangParticleData::getYawSpin),
-                        Codec.INT.fieldOf("max_ticks").forGetter(SkelefangParticleData::getMaxTime),
-                        Codec.BOOL.fieldOf("gravity").forGetter(SkelefangParticleData::hasGravity))
-                .apply(builder, (bone, initX, initY, rotX, rotY, maxTick, gravity) -> new SkelefangParticleData(bone, initX, initY, rotX, rotX, maxTick, gravity)));
-    }
-
     @Override
     public ParticleType<?> getType() {
         return ModParticles.SKELEFANG_BONES.get();
-    }
-
-    @Override
-    public void writeToNetwork(FriendlyByteBuf buffer) {
-        buffer.writeEnum(this.getBoneType());
-        buffer.writeFloat(this.getInitialRotX());
-        buffer.writeFloat(this.getInitialRotY());
-        buffer.writeFloat(this.getPitchSpin());
-        buffer.writeFloat(this.getYawSpin());
-        buffer.writeInt(this.getMaxTime());
-        buffer.writeBoolean(this.hasGravity());
-    }
-
-    @Override
-    public String writeToString() {
-        return Registry.PARTICLE_TYPE.getKey(this.getType()).toString();
     }
 
     public SkelefangBoneType getBoneType() {

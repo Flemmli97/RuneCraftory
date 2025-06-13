@@ -65,6 +65,9 @@ public class BlockTagGen extends BlockTagsProvider {
         for (RegistryEntrySupplier<Block> sup : ModBlocks.HERBS) {
             this.tag(RunecraftoryTags.HERBS).add(sup.get());
         }
+        this.tag(RunecraftoryTags.SICKLE_EFFECTIVE)
+                .addTag(BlockTags.LEAVES)
+                .addTag(BlockTags.WART_BLOCKS)
         this.tag(RunecraftoryTags.SICKLE_DESTROYABLE)
                 .addTag(RunecraftoryTags.HERBS)
                 .addTag(RunecraftoryTags.CROP_BLOCKS)

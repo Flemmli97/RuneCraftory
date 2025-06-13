@@ -5,7 +5,7 @@ import io.github.flemmli97.runecraftory.common.network.S2CTriggers;
 import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandData;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -15,6 +15,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
@@ -80,7 +81,7 @@ public class ItemFertilizer extends Item {
             if (ctx.getPlayer() instanceof ServerPlayer serverPlayer) {
                 if (!serverPlayer.isCreative())
                     ctx.getItemInHand().shrink(1);
-                ModCriteria.FERTILIZE_FARM.trigger(serverPlayer);
+                ModCriteria.FERTILIZE_FARM.get().trigger(serverPlayer);
             }
         }
         return res;
@@ -93,7 +94,7 @@ public class ItemFertilizer extends Item {
                     .getData(level, blockPos)
                     .map(d -> {
                         if (this.use.useItemOnFarmland(ctx.getItemInHand(), level, d, ctx.getPlayer())) {
-                            Platform.INSTANCE.sendToAll(new S2CTriggers(S2CTriggers.TriggerType.FERTILIZER, blockPos), level.getServer());
+                            LoaderNetwork.INSTANCE.sendToTracking(new S2CTriggers(S2CTriggers.TriggerType.FERTILIZER, blockPos), level, new ChunkPos(blockPos));
                             return InteractionResult.CONSUME;
                         }
                         return InteractionResult.PASS;
@@ -104,7 +105,7 @@ public class ItemFertilizer extends Item {
                     .getData(level, below)
                     .map(d -> {
                         if (this.use.useItemOnFarmland(ctx.getItemInHand(), level, d, ctx.getPlayer())) {
-                            Platform.INSTANCE.sendToAll(new S2CTriggers(S2CTriggers.TriggerType.FERTILIZER, below), level.getServer());
+                            LoaderNetwork.INSTANCE.sendToTracking(new S2CTriggers(S2CTriggers.TriggerType.FERTILIZER, below), level, new ChunkPos(below));
                             return InteractionResult.CONSUME;
                         }
                         return InteractionResult.PASS;

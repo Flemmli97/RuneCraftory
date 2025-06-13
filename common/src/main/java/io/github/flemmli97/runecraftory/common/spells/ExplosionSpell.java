@@ -17,7 +17,7 @@ public class ExplosionSpell extends Spell {
 
     @Override
     public void levelSkill(ServerPlayer player) {
-        LevelCalc.levelSkill(player, Platform.INSTANCE.getPlayerData(player), EnumSkills.FIRE, 10);
+        LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.FIRE, 10);
     }
 
     @Override

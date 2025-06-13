@@ -1,27 +1,25 @@
 package io.github.flemmli97.runecraftory.common.items.weapons;
 
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
-import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
-import io.github.flemmli97.runecraftory.api.items.IItemUsable;
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.items.BigWeapon;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.common.network.S2CAttackDebug;
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
-import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.common.item.ExtendedWeapon;
+import io.github.flemmli97.tenshilib.common.utils.HitResultUtils;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -29,10 +27,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AxeItem;
@@ -52,71 +47,25 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public class ItemAxeBase extends AxeItem implements IItemUsable, IAOEWeapon, BigWeapon {
+public class ItemAxeBase extends AxeItem implements ExtendedWeapon, BigWeapon {
 
     private static final Vec3[] PARTICLE_DIRECTION = generateParticleDir(2);
 
     public ItemAxeBase(Item.Properties props) {
-        super(ItemTiers.TIER, 0, 0, props);
+        super(ItemTiers.TIER, props);
     }
 
     @Override
-    public boolean resetAttackStrength(LivingEntity entity, ItemStack stack) {
-        return false;
-    }
-
-    @Override
-    public boolean swingWeapon(LivingEntity entity, ItemStack stack) {
-        return false;
-    }
-
-    @Override
-    public boolean onServerSwing(LivingEntity entity, ItemStack stack) {
-        if (entity instanceof Player player) {
-            Platform.INSTANCE.getPlayerData(player)
-                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(ModAttackActions.HAMMER_AXE.get(), stack));
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public EnumWeaponType getWeaponType() {
-        return EnumWeaponType.HAXE;
-    }
-
-    @Override
-    public void onBlockBreak(ServerPlayer player) {
-        Platform.INSTANCE.getPlayerData(player)
-                .ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.LOGGING, 1));
-    }
-
-    @Override
-    public float getRange(LivingEntity entity, ItemStack stack) {
-        return (float) entity.getAttributeValue(ModAttributes.ATTACK_RANGE.get());
-    }
-
-    @Override
-    public float getWidth(LivingEntity entity, ItemStack stack) {
-        return (float) entity.getAttributeValue(ModAttributes.ATTACK_WIDTH.get());
-    }
-
-    @Override
-    public boolean doSweepingAttack() {
-        return false;
-    }
-
-    @Override
-    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot equipmentSlot) {
-        return ImmutableMultimap.of();
+    public void executeAttack(Player player, ItemStack stack) {
+        Platform.INSTANCE.getPlayerData(player).getWeaponHandler().doWeaponAttack(ModAttackActions.HAMMER_AXE.get(), stack);
     }
 
     @Override
     public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingUseDuration) {
         if (entity instanceof ServerPlayer player) {
-            int duration = stack.getUseDuration() - remainingUseDuration;
+            int duration = stack.getUseDuration(entity) - remainingUseDuration;
             if (duration == ItemUtils.getChargeTime(entity))
-                player.connection.send(new ClientboundSoundPacket(SoundEvents.NOTE_BLOCK_XYLOPHONE, player.getSoundSource(), player.getX(), player.getY(), player.getZ(), 1, 1));
+                EntityUtils.playSoundForPlayer(player, SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
         }
     }
 
@@ -130,8 +79,8 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IAOEWeapon, Big
         ItemStack itemstack = player.getItemInHand(hand);
         if (hand == InteractionHand.OFF_HAND)
             return InteractionResultHolder.pass(itemstack);
-        boolean canCharge = Platform.INSTANCE.getPlayerData(player)
-                .map(data -> (data.getSkillLevel(EnumSkills.HAMMERAXE).getLevel() >= 5 || player.isCreative()) && data.getWeaponHandler().canExecuteAction(ModAttackActions.HAMMER_AXE_USE.get())).orElse(false);
+        PlayerData data = Platform.INSTANCE.getPlayerData(player);
+        boolean canCharge = (data.getSkillLevel(EnumSkills.HAMMERAXE).getLevel() >= 5 || player.isCreative()) && data.getWeaponHandler().canExecuteAction(ModAttackActions.HAMMER_AXE_USE.get());
         if (canCharge) {
             player.startUsingItem(hand);
             return InteractionResultHolder.consume(itemstack);
@@ -145,15 +94,15 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IAOEWeapon, Big
     }
 
     @Override
-    public int getUseDuration(ItemStack stack) {
+    public int getUseDuration(ItemStack stack, LivingEntity entity) {
         return 72000;
     }
 
     @Override
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
-        if (!world.isClientSide && stack.getUseDuration() - timeLeft - 1 >= ItemUtils.getChargeTime(entity)) {
+        if (!world.isClientSide && stack.getUseDuration(entity) - timeLeft - 1 >= ItemUtils.getChargeTime(entity)) {
             if (entity instanceof ServerPlayer player) {
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.getWeaponHandler().doWeaponAttack(ModAttackActions.HAMMER_AXE_USE.get(), stack));
+                Platform.INSTANCE.getPlayerData(player).getWeaponHandler().doWeaponAttack(ModAttackActions.HAMMER_AXE_USE.get(), stack);
                 return;
             }
             if (performRightClickAction(stack, entity, this.getRange(entity, stack), 0.7f)) {
@@ -171,7 +120,7 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IAOEWeapon, Big
         double reach = CombatUtils.getRange(entity, 0);
         S2CScreenShake.sendAround(entity, 16, 4, 3);
         if (performRightClickAction(stack, entity, reach, 0.7f) && entity instanceof ServerPlayer player) {
-            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.HAMMERAXE, 5));
+            LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.HAMMERAXE, 5);
         }
     }
 
@@ -185,7 +134,7 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IAOEWeapon, Big
             mut.set(Mth.floor(pos.x() + dir.x()), Mth.floor(pos.y()), Mth.floor(pos.z() + dir.z()));
             BlockState state = entity.level().getBlockState(mut);
             if (state.getRenderShape() != RenderShape.INVISIBLE)
-                ((ServerLevel) entity.getLevel()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state), entity.getX() + dir.x(), entity.getY() + 0.1, entity.getZ() + dir.z(), 0, (float) scaled.x(), 1.5f, (float) scaled.z(), 1);
+                ((ServerLevel) entity.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state), entity.getX() + dir.x(), entity.getY() + 0.1, entity.getZ() + dir.z(), 0, (float) scaled.x(), 1.5f, (float) scaled.z(), 1);
         }
         if (!list.isEmpty()) {
             Supplier<CustomDamage.Builder> base = () -> new CustomDamage.Builder(entity).element(ItemNBT.getElement(stack))
@@ -213,7 +162,7 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IAOEWeapon, Big
         for (int steps = 0; steps <= rotationSteps; steps++) {
             float yRot = minYRot + inc * steps;
             OrientedBoundingBox obb = new OrientedBoundingBox(aabb, yRot, 0, entity.position());
-            entities.addAll(RayTraceUtils.getEntitiesIn(entity, obb, true, EntityTypeTest.forClass(LivingEntity.class), predicate));
+            entities.addAll(HitResultUtils.getEntities(entity, obb, true, EntityTypeTest.forClass(LivingEntity.class), predicate));
             S2CAttackDebug.sendDebugPacket(obb, S2CAttackDebug.EnumAABBType.ATTACK, entity);
         }
         return entities;

@@ -2,26 +2,24 @@ package io.github.flemmli97.runecraftory.common.utils;
 
 import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
 import io.github.flemmli97.runecraftory.api.enums.EnumToolTier;
-import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.EnumShopResult;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
+import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,12 +32,16 @@ public class ItemUtils {
         spawnItemAtEntity(player, hammer);
     }
 
+    public static int getChargeAmount(ItemStack stack) {
+        return stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP).getTierLevel();
+    }
+
     public static int getChargeTime(LivingEntity entity) {
-        return Mth.ceil(EntityUtils.tryGetAttribute(entity, ModAttributes.CHARGE_TIME.get()));
+        return Mth.ceil(EntityUtils.tryGetAttribute(entity, ModAttributes.CHARGE_TIME.asHolder()));
     }
 
     public static int getChargeTime(LivingEntity entity, EnumToolTier toolTier) {
-        int time = Mth.ceil(EntityUtils.tryGetAttribute(entity, ModAttributes.CHARGE_TIME.get()));
+        int time = Mth.ceil(EntityUtils.tryGetAttribute(entity, ModAttributes.CHARGE_TIME.asHolder()));
         if (toolTier == EnumToolTier.PLATINUM)
             time *= GeneralConfig.platinumChargeTime;
         return time;
@@ -54,7 +56,7 @@ public class ItemUtils {
             ItemEntity item = new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), stack);
             item.setPickUpDelay(0);
             if (entity != null)
-                item.setOwner(entity.getUUID());
+                item.setThrower(entity);
             level.addFreshEntity(item);
         }
     }
@@ -85,9 +87,9 @@ public class ItemUtils {
             return EnumShopResult.NOSPACE;
         }
         int price = getBuyPrice(stack) * stack.getCount();
-        if (Platform.INSTANCE.getPlayerData(player).map(d -> d.useMoney(player, price)).orElse(false)) {
+        if (Platform.INSTANCE.getPlayerData(player).useMoney(price)) {
             if (player instanceof ServerPlayer serverPlayer)
-                ModCriteria.SHOP_TRIGGER.trigger(serverPlayer, npc, stack);
+                ModCriteria.SHOP_TRIGGER.get().trigger(serverPlayer, npc, stack);
             player.playSound(SoundEvents.VILLAGER_YES, 1.0f, 1.0f);
             while (stack.getCount() > 0) {
                 ItemStack copy = stack.copy();
@@ -107,7 +109,7 @@ public class ItemUtils {
         for (ItemStack iStack : playerInv.items) {
             if (iStack.isEmpty())
                 amount += stack.getMaxStackSize();
-            else if (ItemStack.isSameItemSameTags(stack, iStack))
+            else if (ItemStack.isSameItemSameComponents(stack, iStack))
                 amount += stack.getMaxStackSize() - iStack.getCount();
         }
         return amount;
@@ -122,18 +124,9 @@ public class ItemUtils {
     }
 
     public static float getShieldEfficiency(ItemStack stack) {
-        if (stack.getItem() instanceof IItemUsable usable) {
-            float eff = usable.getWeaponType().shieldEfficiency;
-            if (ItemNBT.hasDragonScaleUpgrade(stack))
-                eff = Math.min(0.5f, eff + 0.5f);
-            return eff;
-        }
-        return 1;
-    }
-
-    public static EquipmentSlot slotOf(ItemStack stack) {
-        if (stack.getItem() instanceof ShieldItem)
-            return EquipmentSlot.OFFHAND;
-        return LivingEntity.getEquipmentSlotForItem(stack);
+        float eff = stack.getOrDefault(ModDataComponentTypes.SHIELD_EFFICIENCY.get(), 1f);
+        if (stack.has(ModDataComponentTypes.DRAGON_SCALE.get()))
+            eff = Mth.clamp(eff + 0.5f, 0.5f, 1);
+        return eff;
     }
 }

@@ -9,6 +9,7 @@ import io.github.flemmli97.runecraftory.api.datapack.SimpleEffect;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.attachment.player.LevelExpPair;
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.ai.FollowOwnerGoalMonster;
@@ -57,15 +58,16 @@ import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.mixin.AttributeMapAccessor;
 import io.github.flemmli97.runecraftory.mixin.CombatTrackerAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedEntity;
-import io.github.flemmli97.tenshilib.common.entity.AoeAttackEntity;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimatedEntity;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinition;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.CompoundTag;
@@ -89,7 +91,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.CombatEntry;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.EntityDamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -259,15 +260,15 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         AttributeSupplier.Builder map = Monster.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.23)
                 .add(Attributes.FOLLOW_RANGE, 24.0)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1);
-        for (RegistryEntrySupplier<Attribute> att : ModAttributes.ENTITY_ATTRIBUTES)
-            map.add(att.get());
+        for (RegistryEntrySupplier<Attribute, ?> att : ModAttributes.ENTITY_ATTRIBUTES)
+            map.add(att.asHolder());
         return map;
     }
 
     //private Map<Attribute, Integer> attributeRandomizer = new HashMap<>();
 
     protected void applyAttributes() {
-        for (Map.Entry<Attribute, Double> att : this.prop.getBaseValues().entrySet()) {
+        for (Map.Entry<Holder<Attribute>, Double> att : this.prop.getBaseValues().entrySet()) {
             AttributeInstance inst = this.getAttribute(att.getKey());
             if (inst != null) {
                 inst.setBaseValue(att.getValue());
@@ -312,7 +313,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                     this.targetSelector.addGoal(0, this.hurt);
                 }
                 this.goalSelector.removeGoal(this.farm);
-                if (this.level instanceof ServerLevel serverLevel)
+                if (this.level() instanceof ServerLevel serverLevel)
                     FarmlandHandler.get(serverLevel.getServer()).removeIrrigationPOI(serverLevel, this.getUUID());
             }
             this.wander.setInterval(120);
@@ -322,7 +323,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                         if (this.findNearestBarn(load)) {
                             this.restrictToBasedOnBehaviour(null, load);
                             BlockPos pos = this.assignedBarn.pos.pos();
-                            if (this.level.dimension() == this.assignedBarn.pos.dimension())
+                            if (this.level().dimension() == this.assignedBarn.pos.dimension())
                                 TeleportSpell.safeTeleportTo(this, pos.getX(), pos.getY(), pos.getZ());
                             else {
                                 ServerLevel serverLevel = this.getServer().getLevel(this.assignedBarn.pos.dimension());
@@ -331,29 +332,29 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                             }
                         } else {
                             if (this.tickCount > 20)
-                                this.getOwner().sendMessage(Component.translatable("runecraftory.monster.interact.barn.no.ext", this.getDisplayName(), this.blockPosition().toShortString()), Util.NIL_UUID);
+                                this.getOwner().displayClientMessage(Component.translatable("runecraftory.monster.interact.barn.no.ext", this.getDisplayName(), this.blockPosition().toShortString()), false);
                             this.setBehaviour(Behaviour.WANDER);
                         }
                         this.goalSelector.addGoal(6, this.wander);
                         this.wander.setInterval(40);
-                        Platform.INSTANCE.getPlayerData(this.getOwner()).ifPresent(d -> d.party.removePartyMember(this));
+                        Platform.INSTANCE.getPlayerData(this.getOwner()).party.removePartyMember(this);
                     }
                 }
                 case FOLLOW -> {
-                    boolean party = this.getOwner() == null || Platform.INSTANCE.getPlayerData(this.getOwner())
-                            .map(d -> !d.party.isPartyFull() || d.party.isPartyMember(this)).orElse(false);
+                    PlayerData data = Platform.INSTANCE.getPlayerData(this.getOwner());
+                    boolean party = !data.party.isPartyFull() || data.party.isPartyMember(this);
                     if (party) {
                         this.clearRestriction();
                         this.goalSelector.removeGoal(this.wander);
                         if (this.getOwner() != null)
-                            Platform.INSTANCE.getPlayerData(this.getOwner()).ifPresent(d -> d.party.addPartyMember(this));
+                            data.party.addPartyMember(this);
                     }
                 }
                 case FOLLOW_DISTANCE -> {
                     this.clearRestriction();
                     this.goalSelector.removeGoal(this.wander);
                     if (this.getOwner() != null)
-                        Platform.INSTANCE.getPlayerData(this.getOwner()).ifPresent(d -> d.party.addPartyMember(this));
+                        Platform.INSTANCE.getPlayerData(this.getOwner()).party.addPartyMember(this);
                 }
                 case STAY -> {
                     this.goalSelector.addGoal(6, this.wander);
@@ -361,13 +362,13 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                     this.targetSelector.removeGoal(this.targetMobs);
                     this.targetSelector.removeGoal(this.hurt);
                     if (this.getOwner() != null)
-                        Platform.INSTANCE.getPlayerData(this.getOwner()).ifPresent(d -> d.party.addPartyMember(this));
+                        Platform.INSTANCE.getPlayerData(this.getOwner()).party.addPartyMember(this);
                 }
                 case WANDER -> {
                     this.restrictToBasedOnBehaviour(this.blockPosition(), load);
                     this.goalSelector.addGoal(6, this.wander);
                     if (this.getOwner() != null)
-                        Platform.INSTANCE.getPlayerData(this.getOwner()).ifPresent(d -> d.party.removePartyMember(this));
+                        Platform.INSTANCE.getPlayerData(this.getOwner()).party.removePartyMember(this);
                 }
                 case FARM -> {
                     this.restrictToBasedOnBehaviour(this.blockPosition(), load);
@@ -383,7 +384,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                     this.setSeedInventory(nearestInv);
                     this.setCropInventory(nearestInv);
                     if (this.getOwner() != null)
-                        Platform.INSTANCE.getPlayerData(this.getOwner()).ifPresent(d -> d.party.removePartyMember(this));
+                        Platform.INSTANCE.getPlayerData(this.getOwner()).party.removePartyMember(this);
                 }
             }
         }
@@ -391,7 +392,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
 
     public void restrictToBasedOnBehaviour(@Nullable BlockPos pos, boolean keepPos) {
         if (this.behaviourState() == Behaviour.WANDER_HOME && this.assignBarn()) {
-            if (this.level.dimension() == this.assignedBarn.pos.dimension())
+            if (this.level().dimension() == this.assignedBarn.pos.dimension())
                 this.restrictTo(this.assignedBarn.pos.pos(), this.assignedBarn.getSize() + 1);
         }
         if (pos == null)
@@ -400,7 +401,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
             pos = this.getRestrictCenter();
         if (this.behaviourState() == Behaviour.FARM) {
             this.restrictTo(pos, MobConfig.farmRadius + 3);
-            if (this.level instanceof ServerLevel serverLevel)
+            if (this.level() instanceof ServerLevel serverLevel)
                 FarmlandHandler.get(serverLevel.getServer()).addIrrigationPOI(serverLevel, this.getUUID(), this.blockPosition());
         } else if (this.behaviourState() == Behaviour.WANDER)
             this.restrictTo(pos, 9);
@@ -414,7 +415,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
             for (int x = -radius; x <= radius; x++)
                 for (int z = -radius; z <= radius; z++) {
                     mutableBlockPos.setWithOffset(blockPos, x, y, z);
-                    if (Platform.INSTANCE.matchingInventory(this.level.getBlockEntity(mutableBlockPos), s -> true)) {
+                    if (Platform.INSTANCE.matchingInventory(this.level().getBlockEntity(mutableBlockPos), s -> true)) {
                         return mutableBlockPos.immutable();
                     }
                 }
@@ -430,19 +431,19 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(OWNER_UUID, Optional.empty());
-        this.entityData.define(MOVE_FLAGS, (byte) 0);
-        this.entityData.define(BEHAVIOUR_DATA, 0);
-        this.entityData.define(PLAY_DEATH_STATE, false);
-        this.entityData.define(FRIEND_POINTS_SYNC, 1);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(OWNER_UUID, Optional.empty());
+        builder.define(MOVE_FLAGS, (byte) 0);
+        builder.define(BEHAVIOUR_DATA, 0);
+        builder.define(PLAY_DEATH_STATE, false);
+        builder.define(FRIEND_POINTS_SYNC, 1);
     }
 
     @Override
     public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
         super.onSyncedDataUpdated(key);
-        if (this.level.isClientSide) {
+        if (this.level().isClientSide) {
             if (key.equals(BEHAVIOUR_DATA)) {
                 try {
                     this.behaviour = Behaviour.values()[this.entityData.get(BEHAVIOUR_DATA)];
@@ -466,12 +467,12 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
             this.playTameEffect(false);
         } else if (id == 34) {
             for (int i = 0; i < 5; ++i) {
-                this.level.addParticle(ParticleTypes.ANGRY_VILLAGER, this.getX() - this.getBbWidth() * 0.25 + this.random.nextFloat() * this.getBbWidth() * 0.25f, this.getY() + this.getBbHeight() + this.random.nextFloat() * 0.3, this.getZ() - this.getBbWidth() * 0.25 + this.random.nextFloat() * this.getBbWidth() * 0.25f, 0, 0, 0);
+                this.level().addParticle(ParticleTypes.ANGRY_VILLAGER, this.getX() - this.getBbWidth() * 0.25 + this.random.nextFloat() * this.getBbWidth() * 0.25f, this.getY() + this.getBbHeight() + this.random.nextFloat() * 0.3, this.getZ() - this.getBbWidth() * 0.25 + this.random.nextFloat() * this.getBbWidth() * 0.25f, 0, 0, 0);
             }
         } else if (id == 64) {
-            this.level.addParticle(ParticleTypes.NOTE, true, this.getX(), this.getY() + this.getBbHeight() + 0.3, this.getZ(), 0, 0, 0);
+            this.level().addParticle(ParticleTypes.NOTE, true, this.getX(), this.getY() + this.getBbHeight() + 0.3, this.getZ(), 0, 0, 0);
         } else if (id == 65) {
-            this.level.addParticle(ParticleTypes.HEART, true, this.getX(), this.getY() + this.getBbHeight() + 0.3, this.getZ(), 0, 0, 0);
+            this.level().addParticle(ParticleTypes.HEART, true, this.getX(), this.getY() + this.getBbHeight() + 0.3, this.getZ(), 0, 0, 0);
         }
         super.handleEntityEvent(id);
     }
@@ -501,7 +502,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         } else {
             this.moveTick = Math.max(0, --this.moveTick);
         }
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             this.updater.tick();
             if (this.tamingTick > 0 || this.isNoAi()) {
                 if (this.getMoveFlag() != MoveType.NONE) {
@@ -538,7 +539,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
             this.handleTestingTick();
         } else {
             if (!this.playDeath() && TendCropsGoal.cantTendToCropsAnymore(this) && this.behaviour == Behaviour.FARM && this.tickCount % 20 == 0)
-                this.level.addParticle(ParticleTypes.ANGRY_VILLAGER, this.getX(), this.getY() + this.getBbHeight() + 0.3, this.getZ(), 0, 0, 0);
+                this.level().addParticle(ParticleTypes.ANGRY_VILLAGER, this.getX(), this.getY() + this.getBbHeight() + 0.3, this.getZ(), 0, 0, 0);
         }
         if (this.getAnimationHandler().getAnimation() == null)
             this.targetPosition = null;
@@ -550,13 +551,13 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         this.getAnimationHandler().tick();
 
         boolean teleported = false;
-        if (this.level instanceof ServerLevel serverLevel) {
+        if (this.level() instanceof ServerLevel serverLevel) {
             if (this.behaviourState().following && --this.tpCooldown <= 0) {
                 Player owner = this.getOwner();
                 if (owner != null) {
                     serverLevel.getChunkSource().addRegionTicket(WorldUtils.ENTITY_LOADER, this.chunkPosition(), 3, this.chunkPosition());
-                    if (owner.level.dimension() != this.level.dimension()) {
-                        TeleportUtils.safeDimensionTeleport(this, (ServerLevel) owner.level, owner.blockPosition());
+                    if (owner.level().dimension() != this.level().dimension()) {
+                        TeleportUtils.safeDimensionTeleport(this, (ServerLevel) owner.level(), owner.blockPosition());
                         teleported = true;
                         this.tpCooldown = 20;
                     } else if (owner.distanceToSqr(this) > 450) {
@@ -569,7 +570,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         }
         if (this.playDeath()) {
             this.playDeathTick = Math.min(15, ++this.playDeathTick);
-            if (!this.level.isClientSide) {
+            if (!this.level().isClientSide) {
                 if (teleported)
                     this.heal(1);
                 if (this.getHealth() > 0.02)
@@ -714,7 +715,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
 
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
-        boolean clientSide = this.level.isClientSide;
+        boolean clientSide = this.level().isClientSide;
         ItemStack stack = player.getItemInHand(hand);
         if (this.isTamed()) {
             if (!player.getUUID().equals(this.getOwnerUUID())) {
@@ -725,7 +726,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
             if (player.isShiftKeyDown()) {
                 if (stack.getItem() == Items.STICK) {
                     if (player instanceof ServerPlayer serverPlayer) {
-                        serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.VILLAGER_NO, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 1, 1));
+                        EntityUtils.playSoundForPlayer(serverPlayer, SoundEvents.VILLAGER_NO, 1, 1);
                         this.untameEntity();
                     }
                     return InteractionResult.sidedSuccess(clientSide);
@@ -739,14 +740,14 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
             }
             if (stack.getItem() == ModItems.BRUSH.get()) {
                 if (player instanceof ServerPlayer serverPlayer) {
-                    int day = WorldUtils.day(this.level);
+                    int day = WorldUtils.day(this.level());
                     if (this.updater.getLastUpdateBrush() == day)
                         return InteractionResult.PASS;
                     serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.HORSE_SADDLE, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 0.7f, 1));
                     this.updater.setLastUpdateBrush(day);
                     this.onBrushing();
                     this.increaseFriendPoints(15);
-                    this.level.broadcastEntityEvent(this, (byte) 64);
+                    this.level().broadcastEntityEvent(this, (byte) 64);
                     player.swing(hand);
                 }
                 return InteractionResult.sidedSuccess(clientSide);
@@ -774,7 +775,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                         serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.HORSE_SADDLE, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 0.7f, 1));
                         this.brushCount = Math.min(10, this.brushCount + 1);
                         this.tamingTick = 40;
-                        this.level.broadcastEntityEvent(this, (byte) 64);
+                        this.level().broadcastEntityEvent(this, (byte) 64);
                     }
                     return InteractionResult.sidedSuccess(clientSide);
                 }
@@ -823,7 +824,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
 
     @Override
     public boolean isControlledByLocalInstance() {
-        return this.canBeControlledByRider() && !this.level.isClientSide;
+        return this.canBeControlledByRider() && !this.level().isClientSide;
     }
 
     @Override
@@ -844,8 +845,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
 
     public int difficultyCooldown() {
         int diffAdd = 12;
-        Difficulty diff = this.level.getDifficulty();
-        if (this.level.getDifficulty() == Difficulty.HARD)
+        Difficulty diff = this.level().getDifficulty();
+        if (this.level().getDifficulty() == Difficulty.HARD)
             diffAdd = 0;
         else if (diff == Difficulty.NORMAL)
             diffAdd = 7;
@@ -897,10 +898,10 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         UUID uuid = this.getOwnerUUID();
         if (uuid != null) {
             if (this.owner == null || !this.owner.isAlive()) {
-                if (this.level.isClientSide)
-                    this.owner = this.level.getPlayerByUUID(uuid);
+                if (this.level().isClientSide)
+                    this.owner = this.level().getPlayerByUUID(uuid);
                 else
-                    this.owner = this.level.getServer().getPlayerList().getPlayer(uuid);
+                    this.owner = this.level().getServer().getPlayerList().getPlayer(uuid);
             }
         } else
             this.owner = null;
@@ -948,7 +949,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
 
     @Override
     public boolean applyFoodEffect(ItemStack stack) {
-        if (this.level.isClientSide)
+        if (this.level().isClientSide)
             return false;
         if (stack.getItem() == ModItems.OBJECT_X.get())
             ItemObjectX.applyEffect(this, stack);
@@ -1033,9 +1034,9 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                         this.updater.setLastUpdateFood(day);
                         this.increaseFriendPoints(favorite ? 50 : 30);
                         if (favorite)
-                            this.level.broadcastEntityEvent(this, (byte) 65);
+                            this.level().broadcastEntityEvent(this, (byte) 65);
                         else
-                            this.level.broadcastEntityEvent(this, (byte) 64);
+                            this.level().broadcastEntityEvent(this, (byte) 64);
                         DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem()).ifPresent(s -> s.getMonsterGiftIncrease().forEach((att, d) -> {
                             AttributeInstance inst = this.getAttribute(att);
                             if (inst != null) {
@@ -1072,11 +1073,11 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
             if (this.getServer() != null && (!MobConfig.monsterNeedBarn || WorldHandler.get(this.getServer()).findFittingBarn(this, player.getUUID()) != null))
                 this.delayedTaming = () -> {
                     if (chance == 0)
-                        this.level.broadcastEntityEvent(this, (byte) 34);
+                        this.level().broadcastEntityEvent(this, (byte) 34);
                     else if (this.random.nextFloat() < chance) {
                         this.tameEntity(player);
                     } else {
-                        this.level.broadcastEntityEvent(this, (byte) 11);
+                        this.level().broadcastEntityEvent(this, (byte) 11);
                     }
                 };
             return true;
@@ -1091,7 +1092,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     }
 
     public void updateStatsToLevel() {
-        if (!this.level.isClientSide)
+        if (!this.level().isClientSide)
             LoaderNetwork.INSTANCE.sendToTracking(S2CEntityLevelPkt.create(this), this);
         float preHealthDiff = this.getMaxHealth() - this.getHealth();
         this.prop.getAttributeGains().forEach((att, val) -> {
@@ -1141,14 +1142,14 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     }
 
     public void onDailyUpdate() {
-        if (this.level instanceof ServerLevel && this.isTamed() && !this.playDeath() && (!MobConfig.monsterNeedBarn || this.assignBarn())) {
+        if (this.level() instanceof ServerLevel && this.isTamed() && !this.playDeath() && (!MobConfig.monsterNeedBarn || this.assignBarn())) {
             ResourceLocation resourceLocation = this.dailyDropTable();
             this.dropAsDailyDrop(resourceLocation);
         }
     }
 
     protected void dropAsDailyDrop(ResourceLocation resourceLocation) {
-        LootTable lootTable = this.level.getServer().getLootTables().get(resourceLocation);
+        LootTable lootTable = this.level().getServer().getLootTables().get(resourceLocation);
         lootTable.getRandomItems(this.dailyDropContext().create(LootCtxParameters.MONSTER_INTERACTION), this::spawnAtLocation);
     }
 
@@ -1199,7 +1200,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
             double d0 = this.random.nextGaussian() * 0.02;
             double d2 = this.random.nextGaussian() * 0.02;
             double d3 = this.random.nextGaussian() * 0.02;
-            this.level.addParticle(particle, true, this.getX() + this.random.nextFloat() * this.getBbWidth() * 2.0f - this.getBbWidth(), this.getY() + 0.5 + this.random.nextFloat() * this.getBbHeight(), this.getZ() + this.random.nextFloat() * this.getBbWidth() * 2.0f - this.getBbWidth(), d0, d2, d3);
+            this.level().addParticle(particle, true, this.getX() + this.random.nextFloat() * this.getBbWidth() * 2.0f - this.getBbWidth(), this.getY() + 0.5 + this.random.nextFloat() * this.getBbHeight(), this.getZ() + this.random.nextFloat() * this.getBbWidth() * 2.0f - this.getBbWidth(), d0, d2, d3);
         }
     }
 
@@ -1207,8 +1208,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
 
     @Override
     public void die(DamageSource cause) {
-        if (!this.level.isClientSide) {
-            if (this.level.getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getOwner() instanceof ServerPlayer)
+        if (!this.level().isClientSide) {
+            if (this.level().getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getOwner() instanceof ServerPlayer)
                 this.getOwner().sendMessage(this.getCombatTracker().getDeathMessage(), Util.NIL_UUID);
             if (this.getServer() != null && this.getOwnerUUID() != null) {
                 WorldHandler.get(this.getServer())
@@ -1232,30 +1233,30 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
 
     public void onDeathDamageRecord(ServerPlayer player, DamageSource source, float damage) {
         if (damage > this.getMaxHealth() * 0.05) {
-            Platform.INSTANCE.getPlayerData(player).ifPresent(d -> d.increaseMobFrom(player, this));
+            Platform.INSTANCE.getPlayerData(player).increaseMobFrom(player, this));
         }
     }
 
     @Override
     protected void tickDeath() {
-        if (!this.level.isClientSide && this.deathTime == 0) {
+        if (!this.level().isClientSide && this.deathTime == 0) {
             this.playDeathAnimation(false);
             this.getNavigation().stop();
         }
         ++this.deathTime;
         if (this.deathTime == (this.maxDeathTime() - 5)) {
-            if (!this.level.isClientSide && this.getLastHurtByMob() != null) {
+            if (!this.level().isClientSide && this.getLastHurtByMob() != null) {
                 LevelCalc.addXP(this.getLastHurtByMob(), this.baseXP(), this.baseMoney(), this.xpLevel().getLevel());
             }
         }
         if (this.deathTime >= this.maxDeathTime()) {
-            if (!this.level.isClientSide)
+            if (!this.level().isClientSide)
                 this.remove(RemovalReason.KILLED);
             for (int i = 0; i < 20; ++i) {
                 double d0 = this.random.nextGaussian() * 0.02D;
                 double d1 = this.random.nextGaussian() * 0.02D;
                 double d2 = this.random.nextGaussian() * 0.02D;
-                this.level.addParticle(ParticleTypes.POOF, this.getRandomX(1.0D), this.getRandomY(), this.getRandomZ(1.0D), d0, d1, d2);
+                this.level().addParticle(ParticleTypes.POOF, this.getRandomX(1.0D), this.getRandomY(), this.getRandomZ(1.0D), d0, d1, d2);
             }
         }
     }
@@ -1274,9 +1275,9 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     public void setPlayDeath(boolean flag) {
         this.entityData.set(PLAY_DEATH_STATE, flag);
         if (flag) {
-            if (!this.level.isClientSide && this.level.getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getOwner() instanceof ServerPlayer)
+            if (!this.level().isClientSide && this.level().getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getOwner() instanceof ServerPlayer)
                 this.getOwner().sendMessage(this.getKnockoutMessage(), Util.NIL_UUID);
-            this.level.getEntities(EntityTypeTest.forClass(Mob.class), this.getBoundingBox().inflate(32), e -> this.equals(e.getTarget()))
+            this.level().getEntities(EntityTypeTest.forClass(Mob.class), this.getBoundingBox().inflate(32), e -> this.equals(e.getTarget()))
                     .forEach(m -> m.setTarget(null));
             this.getNavigation().stop();
             this.playDeathAnimation(false);
@@ -1430,7 +1431,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
             this.calculateEntityAnimation(this, false);
             return;
         }
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             if (this.adjustRotFromRider(player)) {
                 this.setYRot(this.rotateClamped(this.getYRot(), player.getYRot(), this.getHeadRotSpeed() * 2));
                 this.setXRot(this.rotateClamped(this.getXRot(), player.getXRot(), this.getMaxHeadXRot()));
@@ -1508,7 +1509,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     protected void playDeathAnimation(boolean load) {
         if (this.getDeathAnimation() != null) {
             this.getAnimationHandler().setAnimation(this.getDeathAnimation());
-            if (load && this.level.isClientSide) {
+            if (load && this.level().isClientSide) {
                 AnimatedAction anim = this.getAnimationHandler().getAnimation();
                 while (!anim.done(0))
                     anim.tick();
@@ -1516,7 +1517,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         }
     }
 
-    public AnimatedAction getDeathAnimation() {
+    public AnimationDefinition getDeathAnimation() {
         return null;
     }
 
@@ -1546,7 +1547,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         if (sleeping) {
             if (this.getSleepAnimation() != null) {
                 this.getAnimationHandler().setAnimation(this.getSleepAnimation());
-                if (this.firstTick && this.level.isClientSide) {
+                if (this.firstTick && this.level().isClientSide) {
                     AnimatedAction anim = this.getAnimationHandler().getAnimation();
                     while (!anim.done(0))
                         anim.tick();
@@ -1556,7 +1557,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
             this.getAnimationHandler().setAnimation(null);
     }
 
-    public AnimatedAction getSleepAnimation() {
+    public AnimationDefinition getSleepAnimation() {
         return null;
     }
 
@@ -1565,8 +1566,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
             return true;
         boolean result = this.getRestrictRadius() == -1.0f || this.getRestrictCenter().distToCenterSqr(pos.x(), pos.y(), pos.z()) < (this.getRestrictRadius() * this.getRestrictRadius());
         if (!result) {
-            this.level.playSound(null, this, SoundEvents.ANVIL_PLACE, this.getSoundSource(), 0.7f, 0.9f);
-            if (this.level instanceof ServerLevel serverLevel) {
+            this.level().playSound(null, this, SoundEvents.ANVIL_PLACE, this.getSoundSource(), 0.7f, 0.9f);
+            if (this.level() instanceof ServerLevel serverLevel) {
                 for (int i = 0; i < 6; i++)
                     serverLevel.sendParticles(ParticleTypes.ENCHANTED_HIT, this.getRandomX(1.2), this.getRandomY(), this.getRandomZ(1.2), 0, 0, 0, 0, 0);
             }
@@ -1574,13 +1575,13 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         return result;
     }
 
-    public void setupAttack(AnimatedAction anim) {
+    public void setupAttack(AnimationDefinition anim) {
         if (this.getTarget() != null) {
             this.setTargetPosition(this.getTarget());
         }
     }
 
-    public void handleAttack(AnimatedAction anim) {
+    public void handleAttack(AnimationState anim) {
         if (anim.is(this.getDeathAnimation(), this.getSleepAnimation()))
             return;
         this.getNavigation().stop();
@@ -1604,7 +1605,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
 
     public void setTargetPosition(TargetPosition position) {
         this.targetPosition = position;
-        if (!this.level.isClientSide)
+        if (!this.level().isClientSide)
             S2CMobUpdate.send(this, SyncableDatas.TARGET_POS, this.targetPosition);
     }
 
@@ -1621,15 +1622,15 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         return target != null ? target.position() : null;
     }
 
-    public void mobAttack(AnimatedAction anim, LivingEntity target, Consumer<LivingEntity> cons) {
+    public void mobAttack(AnimationState anim, LivingEntity target, Consumer<LivingEntity> cons) {
         OrientedBoundingBox obb = this.calculateAttackAABB(anim, this.tryGetTargetPosition(target), 0);
-        this.level.getEntitiesOfClass(LivingEntity.class, obb.getEncompassingBox(),
+        this.level().getEntitiesOfClass(LivingEntity.class, obb.getEncompassingBox(),
                 entity -> this.hitPred.test(entity) && obb.intersects(entity.getBoundingBox())).forEach(cons);
-        if (!this.level.isClientSide)
+        if (!this.level().isClientSide)
             S2CAttackDebug.sendDebugPacket(obb, S2CAttackDebug.EnumAABBType.ATTACK, this);
     }
 
-    public OrientedBoundingBox calculateAttackAABB(AnimatedAction anim, @Nullable Vec3 target, double grow) {
+    public OrientedBoundingBox calculateAttackAABB(AnimationState anim, @Nullable Vec3 target, double grow) {
         float yRot = this.getYRot();
         float xRot = this.getXRot();
         if (target != null && !this.canBeControlledByRider()) {
@@ -1648,14 +1649,14 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     }
 
     @Override
-    public OrientedBoundingBox prepareAttackBox(AnimatedAction anim, LivingEntity target, double grow, boolean debug) {
+    public OrientedBoundingBox prepareAttackBox(AnimationState anim, LivingEntity target, double grow, boolean debug) {
         OrientedBoundingBox obb = this.calculateAttackAABB(anim, target.position(), grow);
         if (debug)
             S2CAttackDebug.sendDebugPacket(obb, S2CAttackDebug.EnumAABBType.ATTEMPT, this);
         return obb;
     }
 
-    public AABB attackBB(AnimatedAction anim) {
+    public AABB attackBB(AnimationState anim) {
         double range = 1;
         return new AABB(-range * 0.5, -0.02, 0, range * 0.5, this.getBbHeight() + 0.02, range);
     }
@@ -1673,7 +1674,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     private void setBehaviour(Behaviour behaviour, boolean load) {
         this.entityData.set(BEHAVIOUR_DATA, behaviour.ordinal());
         this.behaviour = behaviour;
-        if (!this.level.isClientSide)
+        if (!this.level().isClientSide)
             this.updateAI(false, load);
     }
 
@@ -1702,13 +1703,13 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         this.setOwner(owner);
         this.navigation.stop();
         this.setTarget(null);
-        this.level.broadcastEntityEvent(this, (byte) 10);
+        this.level().broadcastEntityEvent(this, (byte) 10);
         this.updater.setLastUpdateDay(WorldUtils.day(this.level));
         if (Platform.INSTANCE.getPlayerData(owner).map(d -> d.party.isPartyFull()).orElse(true))
             this.setBehaviour(Behaviour.WANDER);
         else
             this.setBehaviour(Behaviour.FOLLOW);
-        this.level.getEntities(EntityTypeTest.forClass(Mob.class), this.getBoundingBox().inflate(32),
+        this.level().getEntities(EntityTypeTest.forClass(Mob.class), this.getBoundingBox().inflate(32),
                 e -> e != this && e instanceof OwnableEntity ownable && this.getOwnerUUID().equals(ownable.getOwnerUUID())
                         && e.getTarget() == this).forEach(e -> {
             e.setTarget(null);
@@ -1720,7 +1721,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
             Platform.INSTANCE.getPlayerData(serverPlayer).ifPresent(data -> {
                 data.entityStatsTracker.tameEntity(this);
                 ModCriteria.TAME_MONSTER_TRIGGER.trigger(serverPlayer, this, data.entityStatsTracker);
-                LevelCalc.levelSkill(serverPlayer, data, EnumSkills.TAMING, 10);
+                LevelCalc.levelSkill(data, EnumSkills.TAMING, 10);
             });
             QuestHandler.getData(serverPlayer).trigger(TamingTracker.KEY, this);
         }
@@ -1762,7 +1763,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     }
 
     protected void untameEntity() {
-        this.level.getEntities(EntityTypeTest.forClass(Mob.class), this.getBoundingBox().inflate(32),
+        this.level().getEntities(EntityTypeTest.forClass(Mob.class), this.getBoundingBox().inflate(32),
                 e -> e != this && e.getTarget() == this).forEach(e -> {
             e.setTarget(null);
             if (e.getLastHurtByMob() == this)
@@ -1772,10 +1773,10 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
             WorldHandler.get(this.getServer())
                     .removeMonsterFromPlayer(this.getOwnerUUID(), this);
             if (this.getOwner() != null)
-                Platform.INSTANCE.getPlayerData(this.getOwner()).ifPresent(d -> d.party.removePartyMember(this));
+                Platform.INSTANCE.getPlayerData(this.getOwner()).party.removePartyMember(this));
             else
-                WorldHandler.get(this.getServer())
-                        .toRemovePartyMember(this);
+            WorldHandler.get(this.getServer())
+                    .toRemovePartyMember(this);
             this.assignedBarn = null;
         }
         this.setOwner(null);

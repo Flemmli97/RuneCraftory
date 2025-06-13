@@ -1,13 +1,13 @@
 package io.github.flemmli97.runecraftory.common.items.tools;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumToolTier;
-import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
-import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityCustomFishingHook;
+import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import net.minecraft.network.protocol.game.ClientboundSoundPacket;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -19,59 +19,39 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.FishingRodItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 
-public class ItemToolFishingRod extends FishingRodItem implements IItemUsable {
+public class ItemToolFishingRod extends FishingRodItem {
 
-    public final EnumToolTier tier;
 
-    public ItemToolFishingRod(EnumToolTier tier, Properties props) {
+    public ItemToolFishingRod(Properties props) {
         super(props);
-        this.tier = tier;
-    }
-
-    public int chargeAmount() {
-        return this.tier.getTierLevel();
-    }
-
-    @Override
-    public boolean hasCooldown() {
-        return true;
-    }
-
-    @Override
-    public EnumWeaponType getWeaponType() {
-        return EnumWeaponType.FARM;
-    }
-
-    @Override
-    public void onBlockBreak(ServerPlayer player) {
-
     }
 
     @Override
     public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingUseDuration) {
         if (entity instanceof ServerPlayer player) {
-            int duration = stack.getUseDuration() - remainingUseDuration;
-            int chargeTime = ItemUtils.getChargeTime(entity, this.tier);
-            if (duration > 0 && duration / chargeTime <= this.chargeAmount() && duration % chargeTime == 0)
-                player.connection.send(new ClientboundSoundPacket(SoundEvents.NOTE_BLOCK_XYLOPHONE, player.getSoundSource(), player.getX(), player.getY(), player.getZ(), 1, 1));
+            int duration = stack.getUseDuration(entity) - remainingUseDuration;
+            EnumToolTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP);
+            int chargeTime = ItemUtils.getChargeTime(entity, tier);
+            if (duration > 0 && duration / chargeTime <= tier.getTierLevel() && duration % chargeTime == 0)
+                EntityUtils.playSoundForPlayer(player, SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
         }
     }
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
-        ItemStack itemstack = player.getItemInHand(hand);
-        if (this.tier.getTierLevel() != 0 && Platform.INSTANCE.getEntityData(player).map(d -> d.fishingHook == null).orElse(false)) {
+        ItemStack stack = player.getItemInHand(hand);
+        EnumToolTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP);
+        if (tier.getTierLevel() != 0 && Platform.INSTANCE.getEntityData(player).fishingHook == null) {
             player.startUsingItem(hand);
-            return InteractionResultHolder.consume(itemstack);
+            return InteractionResultHolder.consume(stack);
         }
-        this.throwRod(world, player, itemstack, 0);
-        return InteractionResultHolder.sidedSuccess(itemstack, world.isClientSide());
+        this.throwRod(world, player, stack, 0);
+        return InteractionResultHolder.sidedSuccess(stack, world.isClientSide());
     }
 
     @Override
@@ -80,15 +60,16 @@ public class ItemToolFishingRod extends FishingRodItem implements IItemUsable {
     }
 
     @Override
-    public int getUseDuration(ItemStack stack) {
+    public int getUseDuration(ItemStack stack, LivingEntity entity) {
         return 72000;
     }
 
     @Override
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
-        if (this.tier.getTierLevel() != 0) {
-            int useTime = (stack.getUseDuration() - timeLeft - 1) / ItemUtils.getChargeTime(entity, this.tier);
-            int charge = Math.min(useTime, this.tier.getTierLevel());
+        EnumToolTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP);
+        if (tier.getTierLevel() != 0) {
+            int useTime = (stack.getUseDuration(entity) - timeLeft - 1) / ItemUtils.getChargeTime(entity, tier);
+            int charge = Math.min(useTime, tier.getTierLevel());
             this.throwRod(world, entity, stack, charge);
             entity.swing(entity.getUsedItemHand());
         }
@@ -96,37 +77,33 @@ public class ItemToolFishingRod extends FishingRodItem implements IItemUsable {
     }
 
     @Override
-    public Rarity getRarity(ItemStack stack) {
-        return this.tier == EnumToolTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON;
-    }
-
-    @Override
     public boolean isEnchantable(ItemStack stack) {
         return false;
     }
 
-    protected void throwRod(Level level, LivingEntity entity, ItemStack itemStack, int charge) {
-        EntityCustomFishingHook hook = Platform.INSTANCE.getEntityData(entity).map(d -> d.fishingHook).orElse(null);
+    protected void throwRod(Level level, LivingEntity entity, ItemStack stack, int charge) {
+        EntityCustomFishingHook hook = Platform.INSTANCE.getEntityData(entity).fishingHook;
         if (hook != null) {
             if (!level.isClientSide) {
-                hook.retract(itemStack);
+                hook.retract(stack);
             }
             level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.FISHING_BOBBER_RETRIEVE, SoundSource.NEUTRAL, 1.0f, 0.4f / (level.getRandom().nextFloat() * 0.4f + 0.8f));
-            level.gameEvent(entity, GameEvent.FISHING_ROD_REEL_IN, entity);
+            entity.gameEvent(GameEvent.ITEM_INTERACT_FINISH);
         } else {
             level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.FISHING_BOBBER_THROW, SoundSource.NEUTRAL, 0.5f, 0.4f / (level.getRandom().nextFloat() * 0.4f + 0.8f));
-            if (!level.isClientSide) {
-                int speed = EnchantmentHelper.getFishingSpeedBonus(itemStack);
-                int luck = EnchantmentHelper.getFishingLuckBonus(itemStack);
-                hook = new EntityCustomFishingHook(level, entity, speed + this.tier.getTierLevel(), luck, charge);
-                hook.setElement(ItemNBT.getElement(itemStack));
+            if (level instanceof ServerLevel serverLevel) {
+                float speed = EnchantmentHelper.getFishingTimeReduction(serverLevel, stack, entity);
+                int luck = EnchantmentHelper.getFishingLuckBonus(serverLevel, stack, entity);
+                EnumToolTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP);
+                hook = new EntityCustomFishingHook(level, entity, speed + tier.getTierLevel(), luck, charge);
+                hook.setElement(ItemNBT.getElement(stack));
                 if (entity instanceof Player player)
-                    hook.attackHandlingPlayer(() -> player.getCooldowns().getCooldownPercent(itemStack.getItem(), 0.0f) <= 0, () -> player.getCooldowns().addCooldown(itemStack.getItem(), Mth.ceil(20 * ItemNBT.attackSpeedModifier(player))));
+                    hook.attackHandlingPlayer(() -> player.getCooldowns().getCooldownPercent(stack.getItem(), 0.0f) <= 0, () -> player.getCooldowns().addCooldown(stack.getItem(), Mth.ceil(20 * ItemNBT.attackSpeedModifier(player))));
                 level.addFreshEntity(hook);
             }
             if (entity instanceof Player player)
                 player.awardStat(Stats.ITEM_USED.get(this));
-            level.gameEvent(entity, GameEvent.FISHING_ROD_CAST, entity);
+            entity.gameEvent(GameEvent.ITEM_INTERACT_START);
         }
     }
 }

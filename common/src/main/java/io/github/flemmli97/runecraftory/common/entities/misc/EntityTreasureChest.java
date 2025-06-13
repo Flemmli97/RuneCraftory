@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.common.items.creative.TreasureChestSpawnegg;
 import io.github.flemmli97.runecraftory.common.loot.LootCtxParameters;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.utils.LootTableResources;
@@ -133,7 +134,7 @@ public class EntityTreasureChest extends Entity implements IAnimated {
                 this.getAnimationHandler().setAnimation(OPEN);
                 this.playSound(SoundEvents.CHEST_OPEN, 0.7f, 1);
                 this.openChest = () -> this.openChest(serverPlayer, serverPlayer.getItemInHand(hand));
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(serverPlayer, data, EnumSkills.SEARCHING, 20));
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(data, EnumSkills.SEARCHING, 20));
             }
         }
         return InteractionResult.CONSUME;
@@ -154,7 +155,7 @@ public class EntityTreasureChest extends Entity implements IAnimated {
         return SpawnEgg.fromType(this.getType()).map(ItemStack::new).orElse(ItemStack.EMPTY);
     }
 
-    public void setTier(int tier) {
+    public void setTier(TreasureChestSpawnegg.ChestTier tier) {
         this.entityData.set(TIER, Mth.clamp(tier, 0, MAX_TIER));
     }
 
