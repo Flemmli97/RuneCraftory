@@ -48,21 +48,21 @@ public class FoodProperties {
     private final Map<Holder<Attribute>, Double> cookingBonusPercent = new TreeMap<>(ModAttributes.SORTED);
     private int duration;
     private SimpleEffect[] potionApply = new SimpleEffect[0];
-    private MobEffect[] potionRemove = new MobEffect[0];
+    private List<Holder<MobEffect>> potionRemove = new ArrayList<>();
 
     private ResourceLocation id;
 
     private FoodProperties() {
     }
 
-    public FoodProperties(int duration, Map<Holder<Attribute>, Double> effects, Map<Holder<Attribute>, Double> effectsPercentage, Map<Holder<Attribute>, Double> cookingBonus, Map<Holder<Attribute>, Double> cookingBonusPercent, List<SimpleEffect> potionApply, List<MobEffect> potionRemove) {
+    public FoodProperties(int duration, Map<Holder<Attribute>, Double> effects, Map<Holder<Attribute>, Double> effectsPercentage, Map<Holder<Attribute>, Double> cookingBonus, Map<Holder<Attribute>, Double> cookingBonusPercent, List<SimpleEffect> potionApply, List<Holder<MobEffect>> potionRemove) {
         this.duration = duration;
         this.effects.putAll(effects);
         this.effectsPercentage.putAll(effectsPercentage);
         this.cookingBonus.putAll(cookingBonus);
         this.cookingBonusPercent.putAll(cookingBonusPercent);
         this.potionApply = potionApply.toArray(new SimpleEffect[0]);
-        this.potionRemove = potionRemove.toArray(new MobEffect[0]);
+        this.potionRemove.addAll(potionRemove);
     }
 
     public static FoodProperties fromPacket(FriendlyByteBuf buffer) {
@@ -137,7 +137,7 @@ public class FoodProperties {
         return new LinkedHashMap<>(this.cookingBonusPercent);
     }
 
-    public List<MobEffect> potionHeals() {
+    public List<Holder<MobEffect>> potionHeals() {
         return ImmutableList.copyOf(this.potionRemove);
     }
 
@@ -251,7 +251,7 @@ public class FoodProperties {
         private final Map<Holder<Attribute>, Double> cookingBonus = new HashMap<>();
         private final Map<Holder<Attribute>, Double> cookingBonusPercent = new HashMap<>();
         private final List<SimpleEffect> potionApply = new ArrayList<>();
-        private final List<MobEffect> potionRemove = new ArrayList<>();
+        private final List<Holder<MobEffect>> potionRemove = new ArrayList<>();
         private final int duration;
         //private int hpRegen, rpRegen, hpRegenPercent, rpRegenPercent, rpIncrease, rpPercentIncrease;
 
@@ -303,12 +303,12 @@ public class FoodProperties {
             return this;
         }
 
-        public Builder addPotion(MobEffect effect, int duration, int amplifier) {
+        public Builder addPotion(Holder<MobEffect> effect, int duration, int amplifier) {
             this.potionApply.add(new SimpleEffect(effect, duration, amplifier));
             return this;
         }
 
-        public Builder curePotion(MobEffect effect) {
+        public Builder curePotion(Holder<MobEffect> effect) {
             this.potionRemove.add(effect);
             return this;
         }

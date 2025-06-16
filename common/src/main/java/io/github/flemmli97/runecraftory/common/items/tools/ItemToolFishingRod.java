@@ -26,7 +26,6 @@ import net.minecraft.world.level.gameevent.GameEvent;
 
 public class ItemToolFishingRod extends FishingRodItem {
 
-
     public ItemToolFishingRod(Properties props) {
         super(props);
     }

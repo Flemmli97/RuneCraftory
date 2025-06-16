@@ -19,13 +19,17 @@ import java.util.Set;
 
 public class RecipeKeeper {
 
-    private final Set<RecipeHolder<?>> unlockedRecipes = new HashSet<>();
+    private final Set<ResourceLocation> unlockedRecipes = new HashSet<>();
 
     public void unlockRecipe(Player player, RecipeHolder<?> recipe) {
         this.unlockRecipes(player, Set.of(recipe));
     }
 
     public void unlockRecipes(Player player, Collection<? extends RecipeHolder<?>> recipes) {
+        this.unlockRecipesRes(player, recipes.stream().map(RecipeHolder::id).toList());
+    }
+
+    public void unlockRecipesRes(Player player, Collection<ResourceLocation> recipes) {
         this.unlockedRecipes.addAll(recipes);
         if (player instanceof ServerPlayer)
             LoaderNetwork.INSTANCE.sendToPlayer(new S2CRecipe(recipes, false), (ServerPlayer) player);
@@ -36,6 +40,10 @@ public class RecipeKeeper {
     }
 
     public void lockRecipes(Player player, Collection<? extends RecipeHolder<?>> recipes) {
+        this.lockRecipesRes(player, recipes.stream().map(RecipeHolder::id).toList());
+    }
+
+    public void lockRecipesRes(Player player, Collection<ResourceLocation> recipes) {
         this.unlockedRecipes.removeAll(recipes);
         if (player instanceof ServerPlayer)
             LoaderNetwork.INSTANCE.sendToPlayer(new S2CRecipe(recipes, true), (ServerPlayer) player);
@@ -44,7 +52,7 @@ public class RecipeKeeper {
     public boolean isUnlocked(RecipeHolder<?> recipe) {
         if (GeneralConfig.recipeSystem.lockIsIgnored())
             return true;
-        return this.unlockedRecipes.contains(recipe);
+        return this.unlockedRecipes.contains(recipe.id());
     }
 
     public boolean isUnlockedForCrafting(RecipeHolder<?> recipe) {
@@ -54,7 +62,7 @@ public class RecipeKeeper {
         return true;
     }
 
-    public Collection<RecipeHolder<?>> unlockedRecipes() {
+    public Collection<ResourceLocation> unlockedRecipes() {
         return ImmutableSet.copyOf(this.unlockedRecipes);
     }
 
@@ -69,7 +77,7 @@ public class RecipeKeeper {
     public void read(CompoundTag nbt) {
         this.unlockedRecipes.clear();
         ListTag recipes = nbt.getList("Unlocked", Tag.TAG_STRING);
-        recipes.forEach(inbt -> this.unlockedRecipes.add(new ResourceLocation(inbt.getAsString())));
+        recipes.forEach(inbt -> this.unlockedRecipes.add(ResourceLocation.parse(inbt.getAsString())));
     }
 
     public void clientUpdate(Collection<ResourceLocation> recipes) {

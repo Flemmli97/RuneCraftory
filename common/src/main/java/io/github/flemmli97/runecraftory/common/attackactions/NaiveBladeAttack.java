@@ -7,7 +7,7 @@ import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
@@ -22,15 +22,15 @@ public class NaiveBladeAttack extends AttackAction {
             .build();
 
     @Override
-    public AnimatedAction getAnimation(LivingEntity entity, int comboIdx) {
+    public AnimationState getAnimation(LivingEntity entity, int comboIdx) {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
         if (comboIdx == 1)
-            return PlayerModelAnimations.NAIVE_BLADE_SUCCESS.create(speed);
-        return PlayerModelAnimations.NAIVE_BLADE.create(speed);
+            return AttackAction.create(PlayerModelAnimations.NAIVE_BLADE_SUCCESS, speed);
+        return AttackAction.create(PlayerModelAnimations.NAIVE_BLADE, speed);
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimatedAction anim) {
+    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimationState anim) {
         if (handler.getComboCount() == 2) {
             if (anim.isAt("jump")) {
                 entity.setDeltaMovement(new Vec3(0, 0.37, 0));
@@ -75,7 +75,7 @@ public class NaiveBladeAttack extends AttackAction {
     }
 
     public static boolean canCounter(AttackActionHandler handler) {
-        AnimatedAction anim = handler.getAnimation();
+        AnimationState anim = handler.getAnimation();
         return handler.getCurrentAction() instanceof NaiveBladeAttack
                 && anim != null && handler.getComboCount() == 1 && anim.isPast("prepared") && !anim.done(0);
     }

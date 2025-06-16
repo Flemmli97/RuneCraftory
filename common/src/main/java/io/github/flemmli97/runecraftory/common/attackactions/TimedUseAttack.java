@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.attackactions;
 import io.github.flemmli97.runecraftory.api.action.AttackActionHandler;
 import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -12,17 +12,17 @@ import java.util.function.BiConsumer;
 
 public class TimedUseAttack extends AttackAction {
 
-    private final AnimatedAction animation;
+    private final String animation;
     private final boolean ignoreAttackSpeed;
 
     private final BiConsumer<LivingEntity, ItemStack> attack;
     private final boolean mountedUse;
 
-    public TimedUseAttack(AnimatedAction animation, BiConsumer<LivingEntity, ItemStack> attack) {
+    public TimedUseAttack(String animation, BiConsumer<LivingEntity, ItemStack> attack) {
         this(animation, false, attack, true);
     }
 
-    public TimedUseAttack(AnimatedAction animation, boolean ignoreAttackSpeed, BiConsumer<LivingEntity, ItemStack> attack, boolean mountedUse) {
+    public TimedUseAttack(String animation, boolean ignoreAttackSpeed, BiConsumer<LivingEntity, ItemStack> attack, boolean mountedUse) {
         this.animation = animation;
         this.ignoreAttackSpeed = ignoreAttackSpeed;
         this.attack = attack;
@@ -30,15 +30,13 @@ public class TimedUseAttack extends AttackAction {
     }
 
     @Override
-    public AnimatedAction getAnimation(LivingEntity entity, int comboIdx) {
-        if (!this.ignoreAttackSpeed)
-            return this.animation.create(1);
+    public AnimationState getAnimation(LivingEntity entity, int comboIdx) {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
-        return this.animation.create(speed);
+        return AttackAction.create(this.animation, this.ignoreAttackSpeed ? 1 : speed);
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimatedAction anim) {
+    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimationState anim) {
         if (!entity.level().isClientSide && anim.isAt("attack")) {
             entity.swing(InteractionHand.MAIN_HAND);
             this.attack.accept(entity, stack);

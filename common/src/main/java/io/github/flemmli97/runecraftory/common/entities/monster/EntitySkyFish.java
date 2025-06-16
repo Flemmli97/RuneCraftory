@@ -13,6 +13,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoa
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -36,12 +38,13 @@ import java.util.List;
 
 public class EntitySkyFish extends BaseMonster {
 
-    public static final AnimatedAction SLAP = AnimatedAction.builder(0.56, "slap").marker("attack", 0.28).build();
-    public static final AnimatedAction BEAM = AnimatedAction.builder(0.68, "beam").marker("attack", 0.4).build();
-    public static final AnimatedAction SWIPE = AnimatedAction.builder(0.76, "swipe").marker("attack", 0.28).build();
-    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(SLAP, "interact");
-    public static final AnimatedAction STILL = AnimatedAction.builder(0, "still").infinite().build();
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{SLAP, BEAM, SWIPE, INTERACT, STILL};
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String SLAP = BUILDER.add("slap", AnimationsBuilder.definition(0.56).marker("attack", 0.28));
+    public static final String BEAM = BUILDER.add("beam", AnimationsBuilder.definition(0.68).marker("attack", 0.4));
+    public static final String SWIPE = BUILDER.add("swipe", AnimationsBuilder.definition(0.76).marker("attack", 0.28));
+    public static final String INTERACT = BUILDER.add("interact", SLAP);
+    public static final String STILL = BUILDER.add("still", AnimationsBuilder.definition(0).infinite());
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntitySkyFish>>> ATTACKS = List.of(
             WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(SLAP, e -> 0.6f), 1),
@@ -94,7 +97,7 @@ public class EntitySkyFish extends BaseMonster {
     @Override
     public void tick() {
         super.tick();
-        if (!this.level.isClientSide && this.getTarget() == null && !this.isInWater() && this.belowSoldid()) {
+        if (!this.level().isClientSide && this.getTarget() == null && !this.isInWater() && this.belowSoldid()) {
             Vec3 mot = this.getDeltaMovement();
             double newY = Math.max(0, mot.y);
             newY += 0.03;
@@ -169,7 +172,7 @@ public class EntitySkyFish extends BaseMonster {
 
     private boolean belowSoldid() {
         BlockPos pos = this.blockPosition().below();
-        return this.level.getBlockState(pos).entityCanStandOn(this.level, pos, this);
+        return this.level().getBlockState(pos).entityCanStandOn(this.level(), pos, this);
     }
 
     @Override

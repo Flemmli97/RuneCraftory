@@ -47,9 +47,9 @@ public class EntityFurniture extends BaseProjectile {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(FURNITURE_TYPE_SYNC, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(FURNITURE_TYPE_SYNC, 0);
     }
 
     @Override
@@ -88,7 +88,7 @@ public class EntityFurniture extends BaseProjectile {
         double distVar = Double.MAX_VALUE;
         Entity ret = null;
         AABB entityBB = this.getBoundingBox();
-        for (Entity entity1 : this.level.getEntities(this, this.getBoundingBox().inflate(0.5).expandTowards(this.getDeltaMovement()), pred)) {
+        for (Entity entity1 : this.level().getEntities(this, this.getBoundingBox().inflate(0.5).expandTowards(this.getDeltaMovement()), pred)) {
             AABB axisalignedbb = entity1.getBoundingBox().inflate(0.33F);
             if (entityBB.intersects(axisalignedbb)) {
                 double dist = this.position().distanceToSqr(entity1.position());

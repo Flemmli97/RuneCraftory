@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.tenshilib.common.entity.BeamEntity;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
+import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -55,13 +56,13 @@ public class EntityWindGust extends BeamEntity {
     @Override
     public void tick() {
         super.tick();
-        if (this.level.isClientSide) {
+        if (this.level().isClientSide) {
             Vec3 pos = this.position();
             for (int i = 0; i < 4; i++) {
                 double upScale = this.random.nextDouble() * 2 - 1;
                 double sideScale = this.random.nextDouble() * 2 - 1;
                 Vec3 ppos = pos.add(this.up.scale(upScale)).add(this.side.scale(sideScale));
-                this.level.addParticle(new ColoredParticleData(ModParticles.WIND.get(), 255 / 255F, 255 / 255F, 255 / 255F, 1, 0.15f), ppos.x(), ppos.y(), ppos.z(), this.pMotion.x(), this.pMotion.y(), this.pMotion.z());
+                this.level().addParticle(new ColoredParticleData(ModParticles.WIND.get(), 255 / 255F, 255 / 255F, 255 / 255F, 1, 0.15f), ppos.x(), ppos.y(), ppos.z(), this.pMotion.x(), this.pMotion.y(), this.pMotion.z());
             }
         }
     }
@@ -71,7 +72,7 @@ public class EntityWindGust extends BeamEntity {
         HitResult res = super.getHitRay();
         Vec3 dir = res.getLocation().subtract(this.getEyePosition()).normalize();
         this.up = this.getUpVector(1).normalize().scale(this.radius());
-        this.side = new Vec3(RayTraceUtils.rotatedAround(this.up, new Vector3f(dir), 90))
+        this.side = new Vec3(MathUtils.rotatedAround(this.up, new Vector3f(dir), 90))
                 .normalize().scale(this.radius());
         this.pMotion = dir.scale(0.5);
         return res;

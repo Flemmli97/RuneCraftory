@@ -8,7 +8,7 @@ import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
@@ -24,13 +24,13 @@ public class StormAttack extends AttackAction {
             .build();
 
     @Override
-    public AnimatedAction getAnimation(LivingEntity entity, int comboIdx) {
+    public AnimationState getAnimation(LivingEntity entity, int comboIdx) {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
-        return PlayerModelAnimations.STORM.get(comboIdx).create(speed);
+        return AttackAction.create(PlayerModelAnimations.STORM.get(comboIdx), speed);
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimatedAction anim) {
+    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimationState anim) {
         if (anim.isAt("attack") && handler.getComboCount() != 5) {
             if (!entity.level().isClientSide) {
                 double range = CombatUtils.getRange(entity, 0) * 0.5;

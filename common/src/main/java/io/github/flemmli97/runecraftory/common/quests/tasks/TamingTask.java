@@ -29,7 +29,7 @@ public class TamingTask implements QuestTask<TamingTask.TamingTaskResolved> {
     public static final QuestEntryKey<TamingTask> ID = new QuestEntryKey<>(RuneCraftory.modRes("taming"));
     public static final Codec<TamingTask> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(Codec.STRING.fieldOf("description").forGetter(d -> d.description),
-                    JsonCodecs.nonEmptyList(DescriptiveValue.withTranslation(JsonCodecs.ENTITY_PREDICATE_CODEC), "predicates can't be empty").fieldOf("predicates").forGetter(d -> d.predicates),
+                    JsonCodecs.nonEmptyList(DescriptiveValue.withTranslation(EntityPredicate.CODEC), "predicates can't be empty").fieldOf("predicates").forGetter(d -> d.predicates),
                     NumberProviders.CODEC.fieldOf("amount").forGetter(d -> d.amount)
             ).apply(instance, TamingTask::new));
 
@@ -75,7 +75,7 @@ public class TamingTask implements QuestTask<TamingTask.TamingTaskResolved> {
                                      int amount) implements ResolvedQuestTask {
 
         public static final Codec<TamingTaskResolved> CODEC = RecordCodecBuilder.create((instance) ->
-                instance.group(DescriptiveValue.withTranslation(JsonCodecs.ENTITY_PREDICATE_CODEC).fieldOf("predicate").forGetter(d -> d.predicate),
+                instance.group(DescriptiveValue.withTranslation(EntityPredicate.CODEC).fieldOf("predicate").forGetter(d -> d.predicate),
                         ExtraCodecs.POSITIVE_INT.fieldOf("amount").forGetter(d -> d.amount)
                 ).apply(instance, TamingTaskResolved::new));
 

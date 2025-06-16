@@ -14,6 +14,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveAwayRunn
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.DifficultyInstance;
@@ -32,12 +34,13 @@ import java.util.List;
 
 public class EntityGoblin extends LeapingMonster {
 
-    protected static final AnimatedAction MELEE = AnimatedAction.builder(0.72, "slash").marker("attack", 0.36).build();
-    protected static final AnimatedAction LEAP = AnimatedAction.builder(0.92, "leap").marker("attack_start", 0.36).build();
-    protected static final AnimatedAction STONE = AnimatedAction.builder(0.72, "throw").marker("attack", 0.48).build();
-    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(0, "sleep").infinite().build();
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, LEAP, STONE, INTERACT, SLEEP};
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String MELEE = BUILDER.add("slash", AnimationsBuilder.definition(0.72).marker("attack", 0.36));
+    public static final String LEAP = BUILDER.add("leap", AnimationsBuilder.definition(0.92).marker("attack", 0.36));
+    public static final String STONE = BUILDER.add("throw", AnimationsBuilder.definition(0.72).marker("attack", 0.48));
+    public static final String INTERACT = BUILDER.add("interact", MELEE);
+    public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityGoblin>>> ATTACKS = List.of(
             WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(MELEE, e -> 0.8f), 2),

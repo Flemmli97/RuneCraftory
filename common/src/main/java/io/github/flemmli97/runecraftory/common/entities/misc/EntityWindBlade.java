@@ -57,9 +57,9 @@ public class EntityWindBlade extends BaseProjectile {
     @Override
     public void tick() {
         super.tick();
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             if ((this.target == null || !this.target.isAlive()) && this.type == Type.HOMING) {
-                List<Entity> list = this.level.getEntities(this, this.getBoundingBox().inflate(16).expandTowards(this.getDeltaMovement()), e -> {
+                List<Entity> list = this.level().getEntities(this, this.getBoundingBox().inflate(16).expandTowards(this.getDeltaMovement()), e -> {
                     if (!e.isPickable() || !e.isAttackable())
                         return false;
                     if (e.equals(this.getOwner()) || (e instanceof OwnableEntity ownable && ownable.getOwner() == this.getOwner())) {
@@ -91,7 +91,7 @@ public class EntityWindBlade extends BaseProjectile {
 
     @Override
     protected boolean entityRayTraceHit(EntityHitResult result) {
-        if (CombatUtils.damageWithFaintAndCrit(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).magic().noKnockback().hurtResistant(this.type == Type.PLAIN ? 2 : 10).element(EnumElement.WIND).projectile(), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier, null)) {
+        if (CombatUtils.damageWithFaintAndCrit(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).magic().noKnockback().hurtResistant(this.type == Type.PLAIN ? 2 : 10).element(EnumElement.WIND).projectile(), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.asHolder()) * this.damageMultiplier, null)) {
             if (!this.isPiercing())
                 this.discard();
             return true;
@@ -122,16 +122,16 @@ public class EntityWindBlade extends BaseProjectile {
     private void doBlockCollision() {
         Vec3 pos = this.position();
         Vec3 to = pos.add(this.getDeltaMovement());
-        BlockHitResult raytraceresult = this.level.clip(new ClipContext(pos, to, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
+        BlockHitResult raytraceresult = this.level().clip(new ClipContext(pos, to, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
         if (raytraceresult.getType() == HitResult.Type.BLOCK) {
             BlockPos blockpos = raytraceresult.getBlockPos();
-            BlockState blockstate = this.level.getBlockState(blockpos);
+            BlockState blockstate = this.level().getBlockState(blockpos);
             if (blockstate.is(Blocks.NETHER_PORTAL)) {
                 this.handleInsidePortal(blockpos);
             } else if (blockstate.is(Blocks.END_GATEWAY)) {
-                BlockEntity tileentity = this.level.getBlockEntity(blockpos);
+                BlockEntity tileentity = this.level().getBlockEntity(blockpos);
                 if (tileentity instanceof TheEndGatewayBlockEntity && TheEndGatewayBlockEntity.canEntityTeleport(this)) {
-                    TheEndGatewayBlockEntity.teleportEntity(this.level, blockpos, blockstate, this, (TheEndGatewayBlockEntity) tileentity);
+                    TheEndGatewayBlockEntity.teleportEntity(this.level(), blockpos, blockstate, this, (TheEndGatewayBlockEntity) tileentity);
                 }
             } else if (!EventCalls.INSTANCE.projectileHitCall(this, raytraceresult)) {
                 this.onBlockHit(raytraceresult);

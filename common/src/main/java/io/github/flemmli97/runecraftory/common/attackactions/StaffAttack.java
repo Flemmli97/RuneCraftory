@@ -8,7 +8,7 @@ import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.item.AOEWeapon;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -22,18 +22,18 @@ public class StaffAttack extends AttackAction {
             .build();
 
     @Override
-    public AnimatedAction getAnimation(LivingEntity entity, int comboIdx) {
+    public AnimationState getAnimation(LivingEntity entity, int comboIdx) {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
-        return PlayerModelAnimations.STAFF.get(comboIdx).create(speed);
+        return AttackAction.create(PlayerModelAnimations.STAFF.get(comboIdx), speed);
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimatedAction anim) {
+    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimationState anim) {
         if (anim.isAt("attack")) {
             if (entity.level() instanceof ServerLevel serverLevel) {
-                CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(AOEWeapon.createOBB(entity, stack,
+                CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(AOEWeapon.createOBB(entity,
                                 CombatUtils.getRange(entity, 0),
-                                CombatUtils.getWidth(entity, 0))))
+                                CombatUtils.getWidth(entity, 0), 0.5)))
                         .executeAttack();
                 ModSpells.STAFF_CAST.get().use(serverLevel, entity, stack);
             }
@@ -42,7 +42,7 @@ public class StaffAttack extends AttackAction {
     }
 
     @Override
-    public float movementReduction(AnimatedAction current) {
+    public float movementReduction(AnimationState current) {
         return GeneralConfig.MOVE_SPEED_ATTACK.get().floatValue();
     }
 

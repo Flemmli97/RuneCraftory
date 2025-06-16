@@ -32,7 +32,7 @@ public class EntityRafflesiaHorseTail extends EntityRafflesiaPart implements Hea
     @Override
     public void baseTick() {
         super.baseTick();
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             this.getAnimationHandler().runIfNotNull(anim -> {
                 if (anim.isAt("attack")) {
                     ModSpells.CURE_ALL.get().use(this);

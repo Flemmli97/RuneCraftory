@@ -17,6 +17,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
@@ -222,12 +223,12 @@ public class ClientMixinUtils {
         return stack.has(ModDataComponentTypes.INVISIBLE.get());
     }
 
-    public static ModelPartHandler.ModelPartExtended createPlayerItemPart(boolean left) {
+    public static ModelPartsContainer.ModelPartExtended createPlayerItemPart(boolean left) {
         ModelPart item = new ModelPart(List.of(), Map.of());
         item.loadPose(PartPose.offset(left ? -1.0F : 1.0F, -8.0F, 0.0F));
         ModelPart root = new ModelPart(List.of(), Map.of(left ? "LeftItem" : "RightItem", item));
         root.loadPose(PartPose.offset(left ? 1.0F : -1.0F, 8.0F, 0.0F));
-        return new ModelPartHandler.ModelPartExtended(root);
+        return new ModelPartsContainer.ModelPartExtended("root", null, root);
     }
 
     record SeasonedTint(int origin, EnumSeason season) {

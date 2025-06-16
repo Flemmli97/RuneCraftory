@@ -34,6 +34,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.random.WeightedEntry;
@@ -46,19 +47,20 @@ import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 public class NPCDataGen extends NPCDataProvider {
 
     private final QuestGen questGen;
 
-    public NPCDataGen(PackOutput packOutput, FileVerifier verifier, QuestGen questGen) {
-        super(gen, verifier, RuneCraftory.MODID);
+    public NPCDataGen(PackOutput packOutput, FileVerifier verifier, CompletableFuture<HolderLookup.Provider> provider, QuestGen questGen) {
+        super(packOutput, verifier, RuneCraftory.MODID, provider);
         this.questGen = questGen;
     }
 
     @Override
-    protected void add() {
+    protected void add(HolderLookup.Provider provider) {
         ResourceLocation genericAttack = this.addAttackActions(RuneCraftory.modRes("generic_melee_attack"), new NPCAttackActions.Builder()
                 .addAction(new NPCAttackActions.ActionBuilder(1)
                         .action(new AttackMeleeAction(UniformGenerator.between(30, 80)))));
@@ -83,41 +85,41 @@ public class NPCDataGen extends NPCDataProvider {
                         .action(new SpellAttackAction(ModSpells.WATER_LASER.get(), 8, false, UniformGenerator.between(20, 40), UniformGenerator.between(10, 20)))));
 
         ResourceLocation trashGift = this.addGiftData(RuneCraftory.modRes("trash"),
-                GiftData.builder(RunecraftoryTags.GENERIC_TRASH, "runecraftory.gift.trash", "Trash"));
+                GiftData.builder(RunecraftoryTags.Items.GENERIC_TRASH, "runecraftory.gift.trash", "Trash"));
         ResourceLocation smithTrashGift = this.addGiftData(RuneCraftory.modRes("smithing_trash"),
-                GiftData.builder(RunecraftoryTags.GENERIC_TRASH, "runecraftory.gift.trash.smith", "Trash")
+                GiftData.builder(RunecraftoryTags.Items.GENERIC_TRASH, "runecraftory.gift.trash.smith", "Trash")
                         .add(ModItems.SCRAP.get(), ModItems.SCRAP_PLUS.get()));
 
         ResourceLocation mineralGift = this.addGiftData(RuneCraftory.modRes("minerals"),
-                GiftData.builder(RunecraftoryTags.MINERALS, "runecraftory.gift.minerals", "minerals").max(7));
+                GiftData.builder(RunecraftoryTags.Items.MINERALS, "runecraftory.gift.minerals", "minerals").max(7));
         ResourceLocation flowers = this.addGiftData(RuneCraftory.modRes("flowers"),
-                GiftData.builder(RunecraftoryTags.FLOWERS, "runecraftory.gift.flowers", "flowers").max(7));
+                GiftData.builder(RunecraftoryTags.Items.FLOWERS, "runecraftory.gift.flowers", "flowers").max(7));
         ResourceLocation fruits = this.addGiftData(RuneCraftory.modRes("fruits"),
-                GiftData.builder(RunecraftoryTags.FRUITS, "runecraftory.gift.fruits", "fruits").max(7));
+                GiftData.builder(RunecraftoryTags.Items.FOODS_FRUIT, "runecraftory.gift.fruits", "fruits").max(7));
         ResourceLocation veggies = this.addGiftData(RuneCraftory.modRes("vegetables"),
-                GiftData.builder(RunecraftoryTags.VEGGIES, "runecraftory.gift.vegetables", "vegetables").max(7));
+                GiftData.builder(RunecraftoryTags.Items.FOODS_VEGGETABLE, "runecraftory.gift.vegetables", "vegetables").max(7));
         ResourceLocation turnip = this.addGiftData(RuneCraftory.modRes("turnip"),
-                GiftData.builder(RunecraftoryTags.TURNIP, "runecraftory.gift.turnip", "turnip").max(7));
+                GiftData.builder(RunecraftoryTags.Items.TURNIP, "runecraftory.gift.turnip", "turnip").max(7));
         ResourceLocation metals = this.addGiftData(RuneCraftory.modRes("ingots"),
-                GiftData.builder(RunecraftoryTags.IRON, "runecraftory.gift.ingots", "metals")
-                        .add(RunecraftoryTags.GOLD).add(RunecraftoryTags.TIN).add(RunecraftoryTags.COPPER)
-                        .add(RunecraftoryTags.BRONZE).add(RunecraftoryTags.SILVER).add(RunecraftoryTags.PLATINUM).max(7));
+                GiftData.builder(RunecraftoryTags.Items.IRON, "runecraftory.gift.ingots", "metals")
+                        .add(RunecraftoryTags.Items.GOLD).add(RunecraftoryTags.Items.RAW_MATERIALS_TIN).add(RunecraftoryTags.Items.COPPER)
+                        .add(RunecraftoryTags.Items.DUSTS_BRONZE).add(RunecraftoryTags.Items.RAW_MATERIALS_SILVER).add(RunecraftoryTags.Items.RAW_MATERIALS_PLATINUM).max(7));
         ResourceLocation gems = this.addGiftData(RuneCraftory.modRes("gems"),
                 GiftData.builder(Items.DIAMOND, "runecraftory.gift.gems", "gems")
-                        .add(RunecraftoryTags.EMERALDS).add(RunecraftoryTags.AMETHYSTS).add(RunecraftoryTags.AQUAMARINES)
-                        .add(RunecraftoryTags.RUBIES).add(RunecraftoryTags.SAPPHIRES).max(7));
+                        .add(RunecraftoryTags.Items.GEMS_EMERALD).add(RunecraftoryTags.Items.GEMS_AMETHYST).add(RunecraftoryTags.Items.GEMS_AQUAMARINE)
+                        .add(RunecraftoryTags.Items.GEMS_RUBY).add(RunecraftoryTags.Items.GEMS_SAPPHIRE).max(7));
         ResourceLocation onigiri = this.addGiftData(RuneCraftory.modRes("onigiri"),
-                GiftData.builder(RunecraftoryTags.ONIGIRI, "runecraftory.gift.onigiri", "onigiri").selectable());
+                GiftData.builder(RunecraftoryTags.Items.ONIGIRI, "runecraftory.gift.onigiri", "onigiri").selectable());
         ResourceLocation pie = this.addGiftData(RuneCraftory.modRes("pie"),
-                GiftData.builder(RunecraftoryTags.PIE, "runecraftory.gift.pie", "cake and pies").selectable());
+                GiftData.builder(RunecraftoryTags.Items.PIE, "runecraftory.gift.pie", "cake and pies").selectable());
         ResourceLocation juice = this.addGiftData(RuneCraftory.modRes("juice"),
-                GiftData.builder(RunecraftoryTags.JUICE, "runecraftory.gift.juice", "juice").selectable());
+                GiftData.builder(RunecraftoryTags.Items.JUICE, "runecraftory.gift.juice", "juice").selectable());
         ResourceLocation toast = this.addGiftData(RuneCraftory.modRes("toast"),
-                GiftData.builder(RunecraftoryTags.TOAST, "runecraftory.gift.toast", "toasts").selectable());
+                GiftData.builder(RunecraftoryTags.Items.TOAST, "runecraftory.gift.toast", "toasts").selectable());
         ResourceLocation udon = this.addGiftData(RuneCraftory.modRes("udon"),
-                GiftData.builder(RunecraftoryTags.UDON, "runecraftory.gift.udon", "udon").selectable());
+                GiftData.builder(RunecraftoryTags.Items.UDON, "runecraftory.gift.udon", "udon").selectable());
         ResourceLocation jam = this.addGiftData(RuneCraftory.modRes("jam"),
-                GiftData.builder(RunecraftoryTags.JAM, "runecraftory.gift.jam", "jam").selectable());
+                GiftData.builder(RunecraftoryTags.Items.JAM, "runecraftory.gift.jam", "jam").selectable());
 
         this.addLook(RuneCraftory.modRes("generic/male_1"), new NPCLook(NPCData.Gender.MALE,
                 null, 50, defaultNPCFeatures(false, m -> m.put(ModNPCLooks.OUTFIT.get(), new OutfitFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("generic", new IndexRange.FirstNIndices(3)), 1))))))));
@@ -314,7 +316,7 @@ public class NPCDataGen extends NPCDataProvider {
 
         this.addNPCData("shop_owner/1", new NPCData.Builder(50)
                         .withLook(new NPCData.NPCLookId(shopMale, NPCData.Gender.MALE), new NPCData.NPCLookId(shopFemale, NPCData.Gender.FEMALE))
-                        .withProfession(ModNPCJobs.GENERAL.getSecond(), ModNPCJobs.FLOWER.getSecond())
+                        .withProfession(ModNPCJobs.GENERAL.get(), ModNPCJobs.FLOWER.get())
                         .addGiftResponse("hate", new NPCData.Gift(trashGift, "npc.shop_owner.1.hate", -15), "Uhh... what should I do with this?")
                         .addGiftResponse("dislike", new NPCData.Gift(null, "npc.shop_owner.1.dislike", -7), "Sorry... but this isn't really my thing.")
                         .addGiftResponse("like", new NPCData.Gift(null, "npc.shop_owner.1.like", 10), "Oh, nice... this is something I can appreciate.")
@@ -366,7 +368,7 @@ public class NPCDataGen extends NPCDataProvider {
 
         this.addNPCData("smith/1", new NPCData.Builder(50)
                         .withLook(new NPCData.NPCLookId(smithMale, NPCData.Gender.MALE), new NPCData.NPCLookId(smithFemale, NPCData.Gender.FEMALE))
-                        .withProfession(ModNPCJobs.GENERAL.getSecond(), ModNPCJobs.SMITH.getSecond())
+                        .withProfession(ModNPCJobs.GENERAL.get(), ModNPCJobs.SMITH.get())
                         .addGiftResponse("dislike", new NPCData.Gift(smithTrashGift, "npc.smith.2.dislike", -7), "Hey! I'm not your trashcan!")
                         .addGiftResponse("like", new NPCData.Gift(mineralGift, "npc.smith.2.like", 10), "Wow thanks! I can make something great using this")
                         .setNeutralGiftResponse("npc.smith.2.gift.default", "Thanks. Btw did you know that I really like %like%?")
@@ -414,7 +416,7 @@ public class NPCDataGen extends NPCDataProvider {
 
         this.addNPCData("doctor/1", new NPCData.Builder(50)
                         .withLook(new NPCData.NPCLookId(doctorMale, NPCData.Gender.MALE), new NPCData.NPCLookId(doctorFemale, NPCData.Gender.FEMALE))
-                        .withProfession(ModNPCJobs.DOCTOR.getSecond())
+                        .withProfession(ModNPCJobs.DOCTOR.get())
                         .addGiftResponse("dislike", new NPCData.Gift(null, "npc.doctor.2.dislike", -7), "I can't use this...")
                         .addGiftResponse("like", new NPCData.Gift(null, "npc.doctor.2.like", 10), "Thanks! I really like this!")
                         .setNeutralGiftResponse("npc.doctor.2.gift.default", "Oh? this might be useful. Thanks")
@@ -463,7 +465,7 @@ public class NPCDataGen extends NPCDataProvider {
 
         this.addNPCData("cook/1", new NPCData.Builder(50)
                         .withLook(new NPCData.NPCLookId(cookMale, NPCData.Gender.MALE), new NPCData.NPCLookId(cookFemale, NPCData.Gender.FEMALE))
-                        .withProfession(ModNPCJobs.COOK.getSecond())
+                        .withProfession(ModNPCJobs.COOK.get())
                         .addGiftResponse("dislike", new NPCData.Gift(null, "npc.cook.2.dislike", -7), "This can't even be used in my dishes...")
                         .addGiftResponse("like", new NPCData.Gift(null, "npc.cook.2.like", 10), "Wow thanks! I really like this!")
                         .setNeutralGiftResponse("npc.cook.2.gift.default", "It’s nice of you to think of me. I’ll find a use for this.")

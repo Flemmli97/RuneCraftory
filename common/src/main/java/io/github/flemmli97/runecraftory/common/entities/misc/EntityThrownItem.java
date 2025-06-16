@@ -36,8 +36,8 @@ public class EntityThrownItem extends BaseProjectile {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
         this.getEntityData().define(STACK, ItemStack.EMPTY);
         this.getEntityData().define(ROTATING, false);
     }
@@ -88,8 +88,8 @@ public class EntityThrownItem extends BaseProjectile {
                     if (stack.isEmpty())
                         this.discard();
                 } else {
-                    ItemEntity entity = new ItemEntity(this.level, this.getX(), this.getY(), this.getZ(), this.getItem());
-                    this.level.addFreshEntity(entity);
+                    ItemEntity entity = new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), this.getItem());
+                    this.level().addFreshEntity(entity);
                 }
             }
             return true;
@@ -103,8 +103,8 @@ public class EntityThrownItem extends BaseProjectile {
     @Override
     protected void onBlockHit(BlockHitResult result) {
         if (this.actAsFood) {
-            ItemEntity entity = new ItemEntity(this.level, this.getX(), this.getY(), this.getZ(), this.getItem());
-            this.level.addFreshEntity(entity);
+            ItemEntity entity = new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), this.getItem());
+            this.level().addFreshEntity(entity);
         }
         this.discard();
     }

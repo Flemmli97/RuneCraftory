@@ -5,11 +5,6 @@ loom {
 }
 
 repositories {
-    mavenLocal()
-    maven {
-        name = "Flemmli97"
-        url "https://maven.blazing-coop.net/releases"
-    }
     maven {
         url "https://maven.blamejared.com"
     }
@@ -21,9 +16,12 @@ dependencies {
     modCompileOnly ("io.github.flemmli97:simplequests_api:${simplequests_api_version}-common") {
         transitive = false
     }
-    modCompileOnly "mezz.jei:jei-1.18.2-common:${jei_version}"
-    modCompileOnly "me.shedaniel:REIPluginCompatibilities-forge-annotations:8.+"
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api:${rei_version}"
+    modCompileOnly "net.tslat.smartbrainlib:SmartBrainLib-common-${project.minecraft_version}:${project.sbl_version}"
+    modCompileOnly "fuzs.forgeconfigapiport:forgeconfigapiport-common-neoforgeapi:${forge_config_api}"
+
+//    modCompileOnly "mezz.jei:jei-1.18.2-common:${jei_version}"
+//    modCompileOnly "me.shedaniel:REIPluginCompatibilities-forge-annotations:8.+"
+//    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api:${rei_version}"
 }
 
 sourceSets.main.resources {

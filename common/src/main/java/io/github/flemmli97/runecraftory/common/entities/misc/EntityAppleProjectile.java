@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.entities.misc;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
+import io.github.flemmli97.tenshilib.common.utils.HitResultUtils;
 import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -58,9 +59,9 @@ public class EntityAppleProjectile extends BaseProjectile {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(SIZE, 0f);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(SIZE, 0f);
     }
 
     public float getScale() {
@@ -70,7 +71,7 @@ public class EntityAppleProjectile extends BaseProjectile {
     @Override
     public void tick() {
         super.tick();
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             --this.circleTime;
             Entity owner = this.getOwner();
             if (owner == null)
@@ -117,7 +118,7 @@ public class EntityAppleProjectile extends BaseProjectile {
         if (!this.isAlive())
             return null;
         if (this.attackedEntities.isEmpty())
-            return RayTraceUtils.rayTraceEntities(this.level, this, from, to, this.getBoundingBox().expandTowards(this.getDeltaMovement()).inflate(1), this::canHit, e -> this.radius() + 0.3f);
+            return HitResultUtils.rayTraceEntities(this.level(), this, from, to, this.getBoundingBox().expandTowards(this.getDeltaMovement()).inflate(1), this::canHit, e -> this.radius() + 0.3f);
         return null;
     }
 

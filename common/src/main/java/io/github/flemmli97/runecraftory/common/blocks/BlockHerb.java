@@ -48,12 +48,12 @@ public class BlockHerb extends BushBlock {
             if (state.is(BlockTags.BASE_STONE_NETHER) || state.is(BlockTags.NYLIUM))
                 return true;
         if (this.types.contains(GroundTypes.END))
-            if (state.is(RunecraftoryTags.ENDSTONES))
+            if (state.is(RunecraftoryTags.Blocks.ENDSTONES))
                 return true;
         if (this.types.contains(GroundTypes.SANDY))
             if (state.is(BlockTags.SAND))
                 return true;
-        return state.is(BlockTags.DIRT) || state.is(RunecraftoryTags.FARMLAND) || super.mayPlaceOn(state, level, pos);
+        return state.is(BlockTags.DIRT) || state.is(RunecraftoryTags.Blocks.FARMLAND) || super.mayPlaceOn(state, level, pos);
     }
 
     @Override

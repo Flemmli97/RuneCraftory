@@ -100,9 +100,9 @@ public class EntityCustomFishingHook extends AdvancedProjectile {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_BITING, false);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_BITING, false);
     }
 
     @Override
@@ -111,13 +111,13 @@ public class EntityCustomFishingHook extends AdvancedProjectile {
             return;
         }
         BlockPos blockPos = this.blockPosition();
-        BlockState state = this.level.getBlockState(blockPos);
-        BlockState below = this.level.getBlockState(new BlockPos(this.position().add(0, -0.2, 0)));
-        this.currentFluidState = this.level.getFluidState(blockPos);
+        BlockState state = this.level().getBlockState(blockPos);
+        BlockState below = this.level().getBlockState(new BlockPos(this.position().add(0, -0.2, 0)));
+        this.currentFluidState = this.level().getFluidState(blockPos);
         float fluid = 0.0f;
         this.inSand = false;
         if (this.currentFluidState.is(FluidTags.WATER)) {
-            fluid = this.currentFluidState.getHeight(this.level, blockPos);
+            fluid = this.currentFluidState.getHeight(this.level(), blockPos);
         } else if (state.isAir() && below.is(BlockTags.SAND)) {
             this.inFishingSpot = true;
             this.inSand = true;
@@ -139,7 +139,7 @@ public class EntityCustomFishingHook extends AdvancedProjectile {
                 if (this.entityData.get(DATA_BITING)) {
                     this.setDeltaMovement(this.getDeltaMovement().add(0.0, -0.1 * this.random.nextFloat() * this.random.nextFloat(), 0.0));
                 }
-                if (!this.level.isClientSide) {
+                if (!this.level().isClientSide) {
                     this.doFishing();
                 }
             }
@@ -265,7 +265,7 @@ public class EntityCustomFishingHook extends AdvancedProjectile {
      * @param state 0 = water only, 1 = air only, 2 = both
      */
     private LocationType blockCheck(BlockPos blockPos, int state) {
-        BlockState blockState = this.level.getBlockState(blockPos);
+        BlockState blockState = this.level().getBlockState(blockPos);
         if (state != 0 && (blockState.isAir() || blockState.is(Blocks.LILY_PAD))) {
             return LocationType.AIR;
         }
@@ -275,13 +275,13 @@ public class EntityCustomFishingHook extends AdvancedProjectile {
             return LocationType.INVALID;
         }
         FluidState fluidState = blockState.getFluidState();
-        if (state != 1 && (fluidState.is(FluidTags.WATER) && fluidState.isSource() && blockState.getCollisionShape(this.level, blockPos).isEmpty()))
+        if (state != 1 && (fluidState.is(FluidTags.WATER) && fluidState.isSource() && blockState.getCollisionShape(this.level(), blockPos).isEmpty()))
             return LocationType.MATCH;
         return LocationType.INVALID;
     }
 
     protected void doFishing() {
-        if (!(this.level instanceof ServerLevel serverLevel))
+        if (!(this.level() instanceof ServerLevel serverLevel))
             return;
         if (this.nibble > 0) {
             --this.nibble;
@@ -307,7 +307,7 @@ public class EntityCustomFishingHook extends AdvancedProjectile {
                 double z = this.getZ() + (Mth.cos(a) * c) * 0.1;
                 if (this.inSand) {
                     Vec3 belowPos = this.position().add(0, -0.2, 0);
-                    BlockState below = this.level.getBlockState(new BlockPos(x, belowPos.y, z));
+                    BlockState below = this.level().getBlockState(new BlockPos(x, belowPos.y, z));
                     if (below.is(BlockTags.SAND))
                         serverLevel.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, below), x, y - 0.9, z, 2 + this.random.nextInt(2), 0.1f, 0.0, 0.1f, 0.0);
                 } else if (serverLevel.getBlockState(new BlockPos(x, y - 1.0, z)).is(Blocks.WATER)) {
@@ -346,7 +346,7 @@ public class EntityCustomFishingHook extends AdvancedProjectile {
                 double m = this.getY() + 0.5;
                 ParticleOptions particle = ParticleTypes.BUBBLE;
                 if (this.inSand) {
-                    BlockState below = this.level.getBlockState(new BlockPos(this.position().add(0, -0.2, 0)));
+                    BlockState below = this.level().getBlockState(new BlockPos(this.position().add(0, -0.2, 0)));
                     particle = new BlockParticleOption(ParticleTypes.BLOCK, below);
                 }
                 serverLevel.sendParticles(particle, this.getX(), m, this.getZ(), (int) (1.0f + this.getBbWidth() * 20.0f), this.getBbWidth(), 0.0, this.getBbWidth(), 0.2f);
@@ -367,7 +367,7 @@ public class EntityCustomFishingHook extends AdvancedProjectile {
 
     public void retract(ItemStack stack) {
         Entity eOwner = this.getOwner();
-        if (this.level.isClientSide || this.shouldStopFishing())
+        if (this.level().isClientSide || this.shouldStopFishing())
             return;
         if (!(eOwner instanceof ServerPlayer owner)) {
             this.discard();
@@ -377,23 +377,23 @@ public class EntityCustomFishingHook extends AdvancedProjectile {
             //For now using vanilla loottables
             float luck = this.luck + owner.getLuck() + this.difficultyBonus * 0.5f
                     + Platform.INSTANCE.getPlayerData(owner).map(d -> d.getSkillLevel(EnumSkills.FISHING).getLevel()).orElse(0) * 0.02f;
-            LootContext.Builder builder = new LootContext.Builder((ServerLevel) this.level)
+            LootContext.Builder builder = new LootContext.Builder((ServerLevel) this.level())
                     .withParameter(LootContextParams.ORIGIN, this.position())
                     .withParameter(LootContextParams.TOOL, stack)
                     .withParameter(LootContextParams.THIS_ENTITY, this)
                     .withRandom(this.random)
                     .withLuck(luck);
             ResourceLocation loot = this.inSand ? LootTableResources.SAND_FISHING : LootTableResources.FISHING;
-            LootTable lootTable = this.level.getServer().getLootTables().get(loot);
+            LootTable lootTable = this.level().getServer().getLootTables().get(loot);
             List<ItemStack> list = lootTable.getRandomItems(builder.create(LootContextParamSets.FISHING));
             ((ExtendedFishingRodHookTrigger) CriteriaTriggers.FISHING_ROD_HOOKED).runecraftory$customTrigger(owner, stack, this, list);
             for (ItemStack itemStack2 : list) {
-                ItemEntity itemEntity = new ItemEntity(this.level, this.getX(), this.getY(), this.getZ(), itemStack2);
+                ItemEntity itemEntity = new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), itemStack2);
                 double d = owner.getX() - this.getX();
                 double e = owner.getY() - this.getY();
                 double f = owner.getZ() - this.getZ();
                 itemEntity.setDeltaMovement(d * 0.1, e * 0.1 + Math.sqrt(Math.sqrt(d * d + e * e + f * f)) * 0.08, f * 0.1);
-                this.level.addFreshEntity(itemEntity);
+                this.level().addFreshEntity(itemEntity);
                 owner.level.addFreshEntity(new ExperienceOrb(owner.level, owner.getX(), owner.getY() + 0.5, owner.getZ() + 0.5, this.random.nextInt(6) + 1));
                 if (itemStack2.is(ItemTags.FISHES))
                     owner.awardStat(Stats.FISH_CAUGHT, 1);

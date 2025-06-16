@@ -230,7 +230,7 @@ public class BlockMineral extends Block implements SimpleWaterloggedBlock, Exten
     @Override
     public float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos pos) {
         float f = super.getDestroyProgress(state, player, level, pos);
-        return player.getMainHandItem().is(RunecraftoryTags.HAMMER_TOOLS) ? f : f * 0.5f;
+        return player.getMainHandItem().is(RunecraftoryTags.Items.HAMMER_TOOLS) ? f : f * 0.5f;
     }
 
     @Override

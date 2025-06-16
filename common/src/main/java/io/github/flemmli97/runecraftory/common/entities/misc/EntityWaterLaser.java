@@ -120,13 +120,13 @@ public class EntityWaterLaser extends BaseBeam {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(YAW_MOTION_VAL, 0f);
-        this.entityData.define(MAX_LIVING_TICK, 20);
-        this.entityData.define(YAW_OFFSET, 0f);
-        this.entityData.define(POSITION_YAW_OFFSET, 0f);
-        this.entityData.define(RANGE, 9f);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(YAW_MOTION_VAL, 0f);
+        builder.define(MAX_LIVING_TICK, 20);
+        builder.define(YAW_OFFSET, 0f);
+        builder.define(POSITION_YAW_OFFSET, 0f);
+        builder.define(RANGE, 9f);
     }
 
     @Override

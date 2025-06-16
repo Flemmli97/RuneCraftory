@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
 public class BlitzSpell extends WeaponSpell {
 
     public BlitzSpell() {
-        super(ModAttackActions.BLITZ, RunecraftoryTags.DUALBLADES);
+        super(ModAttackActions.BLITZ, RunecraftoryTags.Items.DUALBLADES);
     }
 
     @Override

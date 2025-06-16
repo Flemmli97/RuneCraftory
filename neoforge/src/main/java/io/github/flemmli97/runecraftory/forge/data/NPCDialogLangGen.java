@@ -1,20 +1,15 @@
 package io.github.flemmli97.runecraftory.forge.data;
 
+import com.google.gson.JsonObject;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
 import io.github.flemmli97.runecraftory.client.NPCDialogueLanguageManager;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.HashCache;
 import net.minecraft.data.PackOutput;
-import org.apache.commons.lang3.text.translate.JavaUnicodeEscaper;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Map;
-import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Same as LanguageProvider but with a linked hashmap
@@ -27,39 +22,27 @@ public class NPCDialogLangGen implements DataProvider {
     private final NPCDataGen npcDataGen;
 
     public NPCDialogLangGen(PackOutput packOutput, @Nullable NPCDataGen npcDataGen) {
-        this.gen = gen;
+        this.packOutput = packOutput;
         this.modid = RuneCraftory.MODID;
         this.locale = "en_us";
         this.npcDataGen = npcDataGen;
     }
 
     @Override
-    public void run(HashCache cache) throws IOException {
+    public CompletableFuture<?> run(CachedOutput cache) {
         if (this.npcDataGen != null) {
-            for (Map.Entry<String, Map<String, String>> entry : this.npcDataGen.dialogueTranslations.entrySet()) {
-                this.save(cache, entry.getValue(), this.gen.getOutputFolder().resolve("assets/" + this.modid + "/" + NPCDialogueLanguageManager.DIRECTORY + "/" + entry.getKey() + "/" + this.locale + ".json"));
-            }
+            return CompletableFuture.allOf(this.npcDataGen.dialogueTranslations.entrySet().stream().map(entry -> {
+                Path path = this.packOutput.getOutputFolder(PackOutput.Target.RESOURCE_PACK).resolve(this.modid + "/" + NPCDialogueLanguageManager.DIRECTORY + "/" + entry.getKey() + "/" + this.locale + ".json");
+                JsonObject json = new JsonObject();
+                entry.getValue().forEach(json::addProperty);
+                return DataProvider.saveStable(cache, json, path);
+            }).toArray(CompletableFuture[]::new));
         }
+        return CompletableFuture.allOf();
     }
 
     @Override
     public String getName() {
         return "NPC Dialogue Translation: " + this.locale;
-    }
-
-    @SuppressWarnings("deprecation")
-    private void save(HashCache cache, Object object, Path target) throws IOException {
-        String data = GsonInstances.GSON.toJson(object);
-        data = JavaUnicodeEscaper.outsideOf(0, 0x7f).translate(data); // Escape unicode after the fact so that it's not double escaped by GSON
-        String hash = DataProvider.SHA1.hashUnencodedChars(data).toString();
-        if (!Objects.equals(cache.getHash(target), hash) || !Files.exists(target)) {
-            Files.createDirectories(target.getParent());
-
-            try (BufferedWriter bufferedwriter = Files.newBufferedWriter(target)) {
-                bufferedwriter.write(data);
-            }
-        }
-
-        cache.putNew(target, hash);
     }
 }

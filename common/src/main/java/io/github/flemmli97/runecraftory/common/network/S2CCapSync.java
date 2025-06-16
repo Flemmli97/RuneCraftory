@@ -94,7 +94,7 @@ public class S2CCapSync implements CustomPacketPayload {
         this.level = data.getPlayerLevel();
         for (EnumSkills skill : EnumSkills.values())
             this.skillMap.put(skill, data.getSkillLevel(skill));
-        this.spells = data.getInv().save();
+        this.spells = data.getInv().save(data.player().registryAccess());
         this.foodData = data.foodBuffNBT();
         this.recipes = data.getRecipeKeeper().unlockedRecipes();
     }
@@ -109,7 +109,7 @@ public class S2CCapSync implements CustomPacketPayload {
         data.setIntel(pkt.intel);
         data.getPlayerLevel().from(pkt.level);
         pkt.skillMap.forEach((skill, val) -> data.getSkillLevel(skill).from(val));
-        data.getInv().load(pkt.spells);
+        data.getInv().load(pkt.spells, player.registryAccess());
         data.readFoodBuffFromNBT(pkt.foodData);
         data.getRecipeKeeper().clientUpdate(pkt.recipes);
     }

@@ -16,6 +16,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveAwayRunn
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -42,14 +44,15 @@ public class EntityMimic extends LeapingMonster {
 
     private static final EntityDataAccessor<Boolean> AWAKE = SynchedEntityData.defineId(EntityMimic.class, EntityDataSerializers.BOOLEAN);
 
-    private static final AnimatedAction MELEE = AnimatedAction.builder(0.6, "attack").marker("attack", 0.44).build();
-    private static final AnimatedAction LEAP = AnimatedAction.builder(0.6, "leap").marker("attack", 0.2).build();
-    private static final AnimatedAction THROW = AnimatedAction.builder(0.6, "throw").marker("attack", 0.44).build();
-    private static final AnimatedAction ARROW = AnimatedAction.copyOf(THROW, "arrow");
-    private static final AnimatedAction CAST = AnimatedAction.builder(0.6, "cast").marker("attack", 0.44).build();
-    private static final AnimatedAction CLOSE = AnimatedAction.builder(0.32, "close").build();
-    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, LEAP, THROW, ARROW, CAST, CLOSE, INTERACT};
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String MELEE = BUILDER.add("attack", AnimationsBuilder.definition(0.6).marker("attack", 0.44));
+    public static final String LEAP = BUILDER.add("leap", AnimationsBuilder.definition(0.6).marker("attack", 0.2));
+    public static final String THROW = BUILDER.add("throw", AnimationsBuilder.definition(0.6).marker("attack", 0.44));
+    public static final String ARROW = BUILDER.add("arrow", THROW);
+    public static final String CAST = BUILDER.add("cast", AnimationsBuilder.definition(0.6).marker("attack", 0.44));
+    public static final String CLOSE = BUILDER.add("close", AnimationsBuilder.definition(0.32));
+    public static final String INTERACT = BUILDER.add("interact", MELEE);
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityMimic>>> ATTACKS = List.of(
             WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(MELEE, e -> 0.8f), 8),
@@ -138,9 +141,9 @@ public class EntityMimic extends LeapingMonster {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(AWAKE, false);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(AWAKE, false);
     }
 
     @Override
@@ -196,7 +199,7 @@ public class EntityMimic extends LeapingMonster {
     @Override
     public void baseTick() {
         super.baseTick();
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             if (this.getTarget() == null) {
                 this.sleepTick--;
             }

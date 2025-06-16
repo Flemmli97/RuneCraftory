@@ -13,6 +13,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveAwayRunn
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.damagesource.DamageSource;
@@ -28,13 +30,14 @@ import java.util.List;
 
 public class EntityPanther extends LeapingMonster {
 
-    private static final AnimatedAction MELEE = AnimatedAction.builder(0.76, "attack").marker("attack", 0.32, 0.6).build();
-    private static final AnimatedAction LEAP = AnimatedAction.builder(1.12, "leap")
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String MELEE = BUILDER.add("attack", AnimationsBuilder.definition(0.76).marker("attack", 0.32, 0.6));
+    public static final String LEAP = BUILDER.add("leap", AnimationsBuilder.definition(1.12)
             .marker("attack_start", 0.2).marker("attack_end", 1)
-            .marker("attack", 0.48).build();
-    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(0, "sleep").infinite().build();
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, LEAP, INTERACT, SLEEP};
+            .marker("attack", 0.48));
+    public static final String INTERACT = BUILDER.add("interact", MELEE);
+    public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityPanther>>> ATTACKS = List.of(
             WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(MELEE, e -> 0.8f), 2),

@@ -4,6 +4,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
+import io.github.flemmli97.tenshilib.common.entity.EntityUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -44,14 +45,14 @@ public class EntityButterfly extends BaseProjectile {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(LOCKED_YAW, 0f);
-        this.entityData.define(LOCKED_PITCH, 0f);
-        this.entityData.define(HIT, Optional.empty());
-        this.entityData.define(HIT_X, 0f);
-        this.entityData.define(HIT_Y, 0f);
-        this.entityData.define(HIT_Z, 0f);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(LOCKED_YAW, 0f);
+        builder.define(LOCKED_PITCH, 0f);
+        builder.define(HIT, Optional.empty());
+        builder.define(HIT_X, 0f);
+        builder.define(HIT_Y, 0f);
+        builder.define(HIT_Z, 0f);
     }
 
     @Override
@@ -68,13 +69,13 @@ public class EntityButterfly extends BaseProjectile {
             this.setYRot(this.entityData.get(LOCKED_YAW));
             Vec3 pos = stuck.position().add(this.entityData.get(HIT_X), this.entityData.get(HIT_Y), this.entityData.get(HIT_Z));
             this.setPos(pos);
-            if (!this.level.isClientSide && this.livingTicks % 40 == 0 && this.getOwner() != null) {
+            if (!this.level().isClientSide && this.livingTicks % 40 == 0 && this.getOwner() != null) {
                 if (this.getOwner() instanceof LivingEntity living)
-                    CombatUtils.applyTempAttribute(living, ModAttributes.DRAIN.get(), 80);
+                    CombatUtils.applyTempAttribute(living, ModAttributes.DRAIN.asHolder(), 80);
                 CustomDamage.Builder builder = new CustomDamage.Builder(this, this.getOwner()).magic().noKnockback().hurtResistant(0);
-                builder.get().hurtEntity(stuck, (float) (CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier * 0.7));
+                builder.get().hurtEntity(stuck, (float) (CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.asHolder()) * this.damageMultiplier * 0.7));
                 if (this.getOwner() instanceof LivingEntity living)
-                    CombatUtils.removeTempAttribute(living, ModAttributes.DRAIN.get());
+                    CombatUtils.removeTempAttribute(living, ModAttributes.DRAIN.asHolder());
             }
         }
     }
@@ -86,7 +87,7 @@ public class EntityButterfly extends BaseProjectile {
 
     @Override
     protected boolean entityRayTraceHit(EntityHitResult result) {
-        if (CombatUtils.damageWithFaintAndCrit(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).magic().noKnockback().hurtResistant(5), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier, null)) {
+        if (CombatUtils.damageWithFaintAndCrit(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).magic().noKnockback().hurtResistant(5), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.asHolder()) * this.damageMultiplier, null)) {
             if (result.getEntity() instanceof LivingEntity livingTarget) {
                 this.hitEntity(livingTarget);
             } else {
@@ -141,7 +142,7 @@ public class EntityButterfly extends BaseProjectile {
             return this.stuckEntity;
         }
         this.entityData.get(HIT).ifPresent(uuid -> {
-            this.stuckEntity = EntityUtil.findFromUUID(LivingEntity.class, this.level, uuid);
+            this.stuckEntity = EntityUtils.findFromUUID(LivingEntity.class, this.level(), uuid);
             this.onUpdateOwner();
         });
         return this.stuckEntity;

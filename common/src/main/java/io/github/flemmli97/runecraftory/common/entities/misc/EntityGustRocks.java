@@ -59,18 +59,18 @@ public class EntityGustRocks extends BaseDamageCloud {
                     .normalize().scale(12);
         }
         Vec3 pos = this.position();
-        if (this.level.isClientSide) {
+        if (this.level().isClientSide) {
             for (int i = 0; i < 16; i++) {
                 double randX = (this.random.nextDouble() * 2 - 1) * 14;
                 double randY = (this.random.nextDouble() * 2 - 1) * 14;
                 double randZ = (this.random.nextDouble() * 2 - 1) * 14;
                 Vec3 pos2 = pos.add(randX, randY, randZ);
-                this.level.addParticle(new ColoredParticleData(ModParticles.WIND.get(), 255 / 255F, 255 / 255F, 255 / 255F, 1, 0.15f), pos2.x(), pos2.y(), pos2.z(), this.getLookAngle().x(), this.getLookAngle().y(), this.getLookAngle().z());
+                this.level().addParticle(new ColoredParticleData(ModParticles.WIND.get(), 255 / 255F, 255 / 255F, 255 / 255F, 1, 0.15f), pos2.x(), pos2.y(), pos2.z(), this.getLookAngle().x(), this.getLookAngle().y(), this.getLookAngle().z());
             }
         } else {
             for (int i = 0; i < 2; i++) {
                 if (this.getOwner() instanceof LivingEntity living) {
-                    EntityElementalBall spellBall = new EntityElementalBall(this.level, living, EnumElement.EARTH);
+                    EntityElementalBall spellBall = new EntityElementalBall(this.level(), living, EnumElement.EARTH);
                     spellBall.withMaxLivingTicks(40);
                     spellBall.setDamageMultiplier(this.damageMultiplier);
                     double upScale = this.random.nextDouble();
@@ -78,7 +78,7 @@ public class EntityGustRocks extends BaseDamageCloud {
                     Vec3 pos2 = pos.add(this.getLookAngle().scale(-8)).add(this.up.scale(upScale)).add(this.side.scale(sideScale));
                     spellBall.setPos(pos2.x(), pos2.y(), pos2.z());
                     spellBall.shoot(this.getLookAngle().x, -0.28, this.getLookAngle().z, 0.9f, 0);
-                    this.level.addFreshEntity(spellBall);
+                    this.level().addFreshEntity(spellBall);
                 }
             }
         }

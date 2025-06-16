@@ -5,7 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -21,8 +21,7 @@ public abstract class ClientPacketListenerMixin {
 
     @Inject(method = "handleSetEquipment", at = @At("TAIL"))
     private void onSetEquip(ClientboundSetEquipmentPacket packet, CallbackInfo info) {
-        Entity entity = this.level.getEntity(packet.getEntity());
-        if (entity != null && entity != Minecraft.getInstance().player) {
+        if (this.level.getEntity(packet.getEntity()) instanceof LivingEntity entity && entity != Minecraft.getInstance().player) {
             packet.getSlots().forEach((pair) -> {
                 ItemStack stack = pair.getSecond();
                 if (stack.getItem() instanceof ItemProp mimic) {

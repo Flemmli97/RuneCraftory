@@ -25,6 +25,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveAwayRunn
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetAttackRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.TimedWrappedRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -51,19 +53,20 @@ public class EntityGrimoire extends BossMonster {
 
     private static final List<Vector3f> CIRCLE_PARTICLE_MOTION = RayTraceUtils.rotatedVecs(new Vec3(0.25, 0, 0), new Vec3(0, 1, 0), -180, 175, 5);
 
-    public static final AnimatedAction TAIL_SWIPE = AnimatedAction.builder(0.84, "tail_swipe").marker("attack", 0.48).build();
-    public static final AnimatedAction BITE = AnimatedAction.builder(0.8, "bite").marker("attack", 0.44).build();
-    public static final AnimatedAction GUST = AnimatedAction.builder(1.96, "gust").marker("attack", 0.32).build();
-    public static final AnimatedAction CHARGE = AnimatedAction.builder(1.72, "charge").infinite()
-            .marker("charge_start", 0.16).marker("charge_end", 1.6).build();
-    public static final AnimatedAction CHARGE_LAND = AnimatedAction.builder(0.48, "charge_land").marker("attack", 0.16).build();
-    public static final AnimatedAction WIND_BREATH = AnimatedAction.builder(1.36, "wind_breath").marker("attack", 0.44).build();
-    public static final AnimatedAction TORNADO = AnimatedAction.builder(1.24, "tornado").marker("attack", 0.4).build();
-    public static final AnimatedAction DEFEAT = AnimatedAction.builder(10, "defeat").infinite().build();
-    public static final AnimatedAction ANGRY = new AnimatedAction(1.44, "angry");
-    public static final AnimatedAction SLEEP = new AnimatedAction(0, "sleep");
-    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(TAIL_SWIPE, "interact");
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{TAIL_SWIPE, BITE, GUST, CHARGE, CHARGE_LAND, WIND_BREATH, TORNADO, DEFEAT, ANGRY, INTERACT};
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String TAIL_SWIPE = BUILDER.add("tail_swipe", AnimationsBuilder.definition(0.84).marker("attack", 0.48));
+    public static final String BITE = BUILDER.add("bite", AnimationsBuilder.definition(0.8).marker("attack", 0.44));
+    public static final String GUST = BUILDER.add("gust", AnimationsBuilder.definition(1.96).marker("attack", 0.32));
+    public static final String CHARGE = BUILDER.add("charge", AnimationsBuilder.definition(1.72).infinite()
+            .marker("charge_start", 0.16).marker("charge_end", 1.6));
+    public static final String CHARGE_LAND = BUILDER.add("charge_land", AnimationsBuilder.definition(0.48).marker("attack", 0.16));
+    public static final String WIND_BREATH = BUILDER.add("wind_breath", AnimationsBuilder.definition(1.36).marker("attack", 0.44));
+    public static final String TORNADO = BUILDER.add("tornado", AnimationsBuilder.definition(1.24).marker("attack", 0.4));
+    public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
+    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(1.44).infinite());
+    public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
+    public static final String INTERACT = BUILDER.add("interact", TAIL_SWIPE);
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntityGrimoire>> ATTACK_HANDLER = createAnimationHandler(b -> {
         BiConsumer<AnimatedAction, EntityGrimoire> melee = (anim, entity) -> {
@@ -153,7 +156,7 @@ public class EntityGrimoire extends BossMonster {
         if (CHARGE.is(anim)) {
             this.hitEntity = null;
         }
-        if (!this.level.isClientSide && anim == null) {
+        if (!this.level().isClientSide && anim == null) {
             boolean chain = !this.commanded;
             this.setMoveDirection(null);
             this.commanded = false;
@@ -229,7 +232,7 @@ public class EntityGrimoire extends BossMonster {
         super.handleEntityEvent(id);
         if (id == 66) {
             for (Vector3f vec : CIRCLE_PARTICLE_MOTION) {
-                this.level.addParticle(new ColoredParticleData(ModParticles.WIND.get(), 67 / 255F, 163 / 255F, 65 / 255F, 1, 0.4f), this.getX(), this.getY() + 0.2, this.getZ(), vec.x(), vec.y(), vec.z());
+                this.level().addParticle(new ColoredParticleData(ModParticles.WIND.get(), 67 / 255F, 163 / 255F, 65 / 255F, 1, 0.4f), this.getX(), this.getY() + 0.2, this.getZ(), vec.x(), vec.y(), vec.z());
             }
         }
     }

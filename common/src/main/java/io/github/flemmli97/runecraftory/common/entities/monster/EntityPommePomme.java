@@ -10,6 +10,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -21,11 +23,12 @@ import java.util.List;
 
 public class EntityPommePomme extends ChargingMonster {
 
-    public static final AnimatedAction CHARGE_ATTACK = AnimatedAction.builder(2, "roll").marker("attack", 0.05).build();
-    public static final AnimatedAction KICK = AnimatedAction.builder(0.88, "kick").marker("attack", 0.52).build();
-    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(KICK, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(0, "sleep").infinite().build();
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{KICK, CHARGE_ATTACK, INTERACT, SLEEP};
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String CHARGE_ATTACK = BUILDER.add("roll", AnimationsBuilder.definition(2).marker("attack", 0.05));
+    public static final String KICK = BUILDER.add("kick", AnimationsBuilder.definition(0.88).marker("attack", 0.52));
+    public static final String INTERACT = BUILDER.add("interact", KICK);
+    public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityPommePomme>>> ATTACKS = List.of(
             WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(KICK, e -> 0.8f), 1),

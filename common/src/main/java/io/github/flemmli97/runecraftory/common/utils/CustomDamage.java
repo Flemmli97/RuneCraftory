@@ -4,8 +4,11 @@ import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
+import io.github.flemmli97.runecraftory.common.registry.ModDamageType;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
@@ -198,17 +201,17 @@ public class CustomDamage extends DamageSource {
             return this.attributesChange;
         }
 
-        public CustomDamage get() {
+        public CustomDamage get(HolderLookup.Provider provider) {
             Set<TagKey<DamageType>> tags = new HashSet<>();
             switch (this.dmg) {
                 case MAGIC -> {
-                    tags.add(RunecraftoryTags.IS_MAGIC);
+                    tags.add(RunecraftoryTags.DamageTypes.IS_MAGIC);
                     tags.add(DamageTypeTags.BYPASSES_ARMOR);
                 }
                 case FAINT, FIXED, IGNOREDEF -> tags.add(DamageTypeTags.BYPASSES_ARMOR);
                 case IGNOREMAGICDEF -> {
-                    tags.add(RunecraftoryTags.IS_MAGIC);
-                    tags.add(RunecraftoryTags.BYPASS_MAGIC);
+                    tags.add(RunecraftoryTags.DamageTypes.IS_MAGIC);
+                    tags.add(RunecraftoryTags.DamageTypes.BYPASS_MAGIC);
                     tags.add(DamageTypeTags.BYPASSES_ARMOR);
                     tags.add(DamageTypeTags.BYPASSES_EFFECTS);
                     tags.add(DamageTypeTags.BYPASSES_RESISTANCE);
@@ -220,7 +223,7 @@ public class CustomDamage extends DamageSource {
                 tags.add(DamageTypeTags.IS_PROJECTILE);
             if (this.cause instanceof Player)
                 tags.add(DamageTypeTags.IS_PLAYER_ATTACK);
-            return new CustomDamage(, this.cause, this.trueSource, this.element, this.knock, this.knockAmount, this.protection,
+            return new CustomDamage(provider.lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(ModDamageType.DYNAMIC_DAMAGE_TYPE), this.cause, this.trueSource, this.element, this.knock, this.knockAmount, this.protection,
                     this.dmg == DamageCategory.FAINT, this.dmg == DamageCategory.FIXED,
                     this.attributesChange, tags);
         }

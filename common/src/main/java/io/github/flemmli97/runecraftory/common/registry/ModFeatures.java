@@ -93,19 +93,19 @@ public class ModFeatures {
         )));
         ImmutableList.Builder<Holder<PlacedFeature>> builder = new ImmutableList.Builder<>();
         ImmutableList.Builder<Holder<PlacedFeature>> nether = new ImmutableList.Builder<>();
-        registerMineralFeatures(builder, nether, ModBlocks.MINERAL_IRON, null, RunecraftoryTags.WATER_NETHER_END, 15, 2, 5);
-        registerMineralFeatures(builder, nether, ModBlocks.MINERAL_TIN, null, RunecraftoryTags.WATER_NETHER_END, 20, 2, 4);
-        registerMineralFeatures(builder, nether, ModBlocks.MINERAL_SILVER, null, RunecraftoryTags.WATER_NETHER_END, 40, 2, 3);
-        registerMineralFeatures(builder, nether, ModBlocks.MINERAL_GOLD, null, RunecraftoryTags.WATER_NETHER_END, 60, 2, 3);
-        registerMineralFeatures(builder, nether, ModBlocks.MINERAL_PLATINUM, null, RunecraftoryTags.WATER_NETHER_END, 100, 1, 3);
-        registerMineralFeatures(builder, nether, ModBlocks.MINERAL_ORICHALCUM, null, RunecraftoryTags.WATER_NETHER_END, 175, 1, 3);
-        registerMineralFeatures(builder, nether, ModBlocks.MINERAL_DIAMOND, null, RunecraftoryTags.WATER_NETHER_END, 133, 1, 3);
+        registerMineralFeatures(builder, nether, ModBlocks.MINERAL_IRON, null, RunecraftoryTags.Biomes.WATER_NETHER_END, 15, 2, 5);
+        registerMineralFeatures(builder, nether, ModBlocks.MINERAL_TIN, null, RunecraftoryTags.Biomes.WATER_NETHER_END, 20, 2, 4);
+        registerMineralFeatures(builder, nether, ModBlocks.MINERAL_SILVER, null, RunecraftoryTags.Biomes.WATER_NETHER_END, 40, 2, 3);
+        registerMineralFeatures(builder, nether, ModBlocks.MINERAL_GOLD, null, RunecraftoryTags.Biomes.WATER_NETHER_END, 60, 2, 3);
+        registerMineralFeatures(builder, nether, ModBlocks.MINERAL_PLATINUM, null, RunecraftoryTags.Biomes.WATER_NETHER_END, 100, 1, 3);
+        registerMineralFeatures(builder, nether, ModBlocks.MINERAL_ORICHALCUM, null, RunecraftoryTags.Biomes.WATER_NETHER_END, 175, 1, 3);
+        registerMineralFeatures(builder, nether, ModBlocks.MINERAL_DIAMOND, null, RunecraftoryTags.Biomes.WATER_NETHER_END, 133, 1, 3);
         registerMineralFeatures(builder, nether, ModBlocks.MINERAL_DRAGONIC, RunecraftoryTags.IS_END, null, 25, 1, 2);
-        registerMineralFeatures(builder, nether, ModBlocks.MINERAL_AQUAMARINE, RunecraftoryTags.AQUAMARINE_GEN, RunecraftoryTags.NETHER_END, 25, 2, 3);
-        registerMineralFeatures(builder, nether, ModBlocks.MINERAL_AMETHYST, RunecraftoryTags.AMETHYST_GEN, RunecraftoryTags.WATER_NETHER_END, 66, 2, 3);
-        registerMineralFeatures(builder, nether, ModBlocks.MINERAL_RUBY, RunecraftoryTags.RUBY_GEN, null, 50, 2, 3);
-        registerMineralFeatures(builder, nether, ModBlocks.MINERAL_EMERALD, RunecraftoryTags.EMERALD_GEN, RunecraftoryTags.WATER_NETHER_END, 66, 1, 3);
-        registerMineralFeatures(builder, nether, ModBlocks.MINERAL_SAPPHIRE, RunecraftoryTags.SAPPHIRE_GEN, RunecraftoryTags.WATER_NETHER_END, 66, 2, 3);
+        registerMineralFeatures(builder, nether, ModBlocks.MINERAL_AQUAMARINE, RunecraftoryTags.Biomes.AQUAMARINE_GEN, RunecraftoryTags.Biomes.NETHER_END, 25, 2, 3);
+        registerMineralFeatures(builder, nether, ModBlocks.MINERAL_AMETHYST, RunecraftoryTags.Biomes.AMETHYST_GEN, RunecraftoryTags.Biomes.WATER_NETHER_END, 66, 2, 3);
+        registerMineralFeatures(builder, nether, ModBlocks.MINERAL_RUBY, RunecraftoryTags.Biomes.RUBY_GEN, null, 50, 2, 3);
+        registerMineralFeatures(builder, nether, ModBlocks.MINERAL_EMERALD, RunecraftoryTags.Biomes.EMERALD_GEN, RunecraftoryTags.Biomes.WATER_NETHER_END, 66, 1, 3);
+        registerMineralFeatures(builder, nether, ModBlocks.MINERAL_SAPPHIRE, RunecraftoryTags.Biomes.SAPPHIRE_GEN, RunecraftoryTags.Biomes.WATER_NETHER_END, 66, 2, 3);
         PLACEDMINERALFEATURES = builder.build();
         PLACEDNETHERMINERALFEATURES = nether.build();
 
@@ -122,23 +122,23 @@ public class ModFeatures {
 
     public static List<HerbFeature.Entry> build() {
         ImmutableList.Builder<HerbFeature.Entry> builder = new ImmutableList.Builder<>();
-        builder.add(new HerbFeature.Entry(ModBlocks.WEEDS.get(), null, RunecraftoryTags.WATER_NETHER_END, 100));
-        builder.add(new HerbFeature.Entry(ModBlocks.MUSHROOM.get(), RunecraftoryTags.MUSHROOM_GEN, RunecraftoryTags.WATER_NETHER_END, 40));
-        builder.add(new HerbFeature.Entry(ModBlocks.MONARCH_MUSHROOM.get(), RunecraftoryTags.MUSHROOM_GEN, RunecraftoryTags.WATER_NETHER_END, 10));
-        builder.add(new HerbFeature.Entry(ModBlocks.WITHERED_GRASS.get(), null, RunecraftoryTags.WATER_NETHER_END, 50));
-        builder.add(new HerbFeature.Entry(ModBlocks.WHITE_GRASS.get(), RunecraftoryTags.IS_SNOWY, RunecraftoryTags.WATER_NETHER_END, 30));
-        builder.add(new HerbFeature.Entry(ModBlocks.INDIGO_GRASS.get(), RunecraftoryTags.INDIGO_GEN, RunecraftoryTags.WATER_NETHER_END, 30));
-        builder.add(new HerbFeature.Entry(ModBlocks.PURPLE_GRASS.get(), RunecraftoryTags.PURPLE_GEN, RunecraftoryTags.WATER_NETHER_END, 30));
-        builder.add(new HerbFeature.Entry(ModBlocks.GREEN_GRASS.get(), RunecraftoryTags.GENERAL_HERBS, RunecraftoryTags.WATER_NETHER_END, 30));
-        builder.add(new HerbFeature.Entry(ModBlocks.BLUE_GRASS.get(), RunecraftoryTags.BLUE_GEN, RunecraftoryTags.NETHER_END, 30));
-        builder.add(new HerbFeature.Entry(ModBlocks.YELLOW_GRASS.get(), RunecraftoryTags.YELLOW_GEN, RunecraftoryTags.WATER_END, 30));
+        builder.add(new HerbFeature.Entry(ModBlocks.WEEDS.get(), null, RunecraftoryTags.Biomes.WATER_NETHER_END, 100));
+        builder.add(new HerbFeature.Entry(ModBlocks.MUSHROOM.get(), RunecraftoryTags.Biomes.MUSHROOM_GEN, RunecraftoryTags.Biomes.WATER_NETHER_END, 40));
+        builder.add(new HerbFeature.Entry(ModBlocks.MONARCH_MUSHROOM.get(), RunecraftoryTags.Biomes.MUSHROOM_GEN, RunecraftoryTags.Biomes.WATER_NETHER_END, 10));
+        builder.add(new HerbFeature.Entry(ModBlocks.WITHERED_GRASS.get(), null, RunecraftoryTags.Biomes.WATER_NETHER_END, 50));
+        builder.add(new HerbFeature.Entry(ModBlocks.WHITE_GRASS.get(), RunecraftoryTags.Biomes.IS_SNOWY, RunecraftoryTags.Biomes.WATER_NETHER_END, 30));
+        builder.add(new HerbFeature.Entry(ModBlocks.INDIGO_GRASS.get(), RunecraftoryTags.Biomes.INDIGO_GEN, RunecraftoryTags.Biomes.WATER_NETHER_END, 30));
+        builder.add(new HerbFeature.Entry(ModBlocks.PURPLE_GRASS.get(), RunecraftoryTags.Biomes.PURPLE_GEN, RunecraftoryTags.Biomes.WATER_NETHER_END, 30));
+        builder.add(new HerbFeature.Entry(ModBlocks.GREEN_GRASS.get(), RunecraftoryTags.Biomes.GENERAL_HERBS, RunecraftoryTags.Biomes.WATER_NETHER_END, 30));
+        builder.add(new HerbFeature.Entry(ModBlocks.BLUE_GRASS.get(), RunecraftoryTags.Biomes.BLUE_GEN, RunecraftoryTags.Biomes.NETHER_END, 30));
+        builder.add(new HerbFeature.Entry(ModBlocks.YELLOW_GRASS.get(), RunecraftoryTags.Biomes.YELLOW_GEN, RunecraftoryTags.Biomes.WATER_END, 30));
         builder.add(new HerbFeature.Entry(ModBlocks.RED_GRASS.get(), BiomeTags.IS_NETHER, null, 30));
-        builder.add(new HerbFeature.Entry(ModBlocks.ORANGE_GRASS.get(), RunecraftoryTags.ORANGE_GEN, RunecraftoryTags.WATER_END, 30));
+        builder.add(new HerbFeature.Entry(ModBlocks.ORANGE_GRASS.get(), RunecraftoryTags.Biomes.ORANGE_GEN, RunecraftoryTags.Biomes.WATER_END, 30));
         builder.add(new HerbFeature.Entry(ModBlocks.BLACK_GRASS.get(), RunecraftoryTags.IS_END, null, 75));
         builder.add(new HerbFeature.Entry(ModBlocks.ELLI_LEAVES.get(), RunecraftoryTags.IS_END, null, 10));
-        builder.add(new HerbFeature.Entry(ModBlocks.ANTIDOTE_GRASS.get(), RunecraftoryTags.GENERAL_HERBS, RunecraftoryTags.WATER_NETHER_END, 75));
-        builder.add(new HerbFeature.Entry(ModBlocks.MEDICINAL_HERB.get(), RunecraftoryTags.GENERAL_HERBS, RunecraftoryTags.WATER_NETHER_END, 75));
-        builder.add(new HerbFeature.Entry(ModBlocks.BAMBOO_SPROUT.get(), RunecraftoryTags.BAMBOO_GEN, RunecraftoryTags.WATER_NETHER_END, 66));
+        builder.add(new HerbFeature.Entry(ModBlocks.ANTIDOTE_GRASS.get(), RunecraftoryTags.Biomes.GENERAL_HERBS, RunecraftoryTags.Biomes.WATER_NETHER_END, 75));
+        builder.add(new HerbFeature.Entry(ModBlocks.MEDICINAL_HERB.get(), RunecraftoryTags.Biomes.GENERAL_HERBS, RunecraftoryTags.Biomes.WATER_NETHER_END, 75));
+        builder.add(new HerbFeature.Entry(ModBlocks.BAMBOO_SPROUT.get(), RunecraftoryTags.Biomes.BAMBOO_GEN, RunecraftoryTags.Biomes.WATER_NETHER_END, 66));
         return builder.build();
     }
 

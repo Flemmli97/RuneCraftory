@@ -20,6 +20,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -46,13 +48,14 @@ import java.util.function.Consumer;
 
 public class EntityGhost extends ChargingMonster {
 
-    public static final AnimatedAction DARKBALL = AnimatedAction.builder(0.64, "darkball").marker("attack", 0.28).build();
-    public static final AnimatedAction CHARGE = AnimatedAction.builder(1.2, "charge").marker("attack_start", 0.36).build();
-    public static final AnimatedAction SWING = AnimatedAction.builder(0.52, "swing").marker("attack", 0.24).build();
-    public static final AnimatedAction VANISH = AnimatedAction.builder(5, "vanish").marker("teleport", 2.5).build();
-    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(SWING, "interact");
-    public static final AnimatedAction STILL = AnimatedAction.builder(0, "still").infinite().build();
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{DARKBALL, CHARGE, SWING, VANISH, INTERACT, STILL};
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String DARKBALL = BUILDER.add("darkball", AnimationsBuilder.definition(0.64).marker("attack", 0.28));
+    public static final String CHARGE = BUILDER.add("charge", AnimationsBuilder.definition(1.2).marker("attack_start", 0.36));
+    public static final String SWING = BUILDER.add("swing", AnimationsBuilder.definition(0.52).marker("attack", 0.24));
+    public static final String VANISH = BUILDER.add("vanish", AnimationsBuilder.definition(5).marker("teleport", 2.5));
+    public static final String INTERACT = BUILDER.add("interact", SWING);
+    public static final String STILL = BUILDER.add("still", AnimationsBuilder.definition(0).infinite());
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityGhost>>> ATTACKS = List.of(
             WeightedEntry.wrap(MonsterActionUtils.simpleRangedEvadingAction(DARKBALL, 9, 1, 1, e -> 1), 1),
@@ -217,7 +220,7 @@ public class EntityGhost extends ChargingMonster {
             this.noPhysics = entity.noPhysics;
         } else {
             this.noPhysics = !this.playDeath();
-            if (this.getY() < this.level.getMinBuildHeight() + 1)
+            if (this.getY() < this.level().getMinBuildHeight() + 1)
                 vec = new Vec3(vec.x, 0.006, vec.z);
         }
         this.handleFreeTravel(vec);
@@ -245,10 +248,10 @@ public class EntityGhost extends ChargingMonster {
 
     private void teleport(double x, double y, double z) {
         BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos(x, y, z);
-        while (mutableBlockPos.getY() > this.level.getMinBuildHeight() && !this.level.getBlockState(mutableBlockPos).getMaterial().blocksMotion()) {
+        while (mutableBlockPos.getY() > this.level().getMinBuildHeight() && !this.level().getBlockState(mutableBlockPos).getMaterial().blocksMotion()) {
             mutableBlockPos.move(Direction.DOWN);
         }
-        BlockState blockState = this.level.getBlockState(mutableBlockPos);
+        BlockState blockState = this.level().getBlockState(mutableBlockPos);
         if (!blockState.getMaterial().blocksMotion()) {
             y = this.getY();
         }
@@ -280,5 +283,10 @@ public class EntityGhost extends ChargingMonster {
     @Override
     public Vec3 passengerOffset(Entity passenger) {
         return new Vec3(0, 11.5 / 16d, -10 / 16d);
+    }
+
+    @Override
+    public boolean hasLineOfSight(Entity entity) {
+        return true;
     }
 }

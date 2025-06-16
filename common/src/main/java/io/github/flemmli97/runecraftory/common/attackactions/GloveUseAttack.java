@@ -7,7 +7,7 @@ import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
@@ -20,12 +20,12 @@ import java.util.List;
 public class GloveUseAttack extends AttackAction {
 
     @Override
-    public AnimatedAction getAnimation(LivingEntity entity, int comboIdx) {
-        return PlayerModelAnimations.GLOVES_USE.create(1);
+    public AnimationState getAnimation(LivingEntity entity, int comboIdx) {
+        return AttackAction.create(PlayerModelAnimations.GLOVES_USE, 1);
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimatedAction anim) {
+    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimationState anim) {
         if (anim.isPast("attack_start") && !handler.getAnimation().isPast("attack_end")) {
             Vec3 look = entity.getLookAngle();
             Vec3 move = new Vec3(look.x, 0.0, look.z).normalize()
@@ -49,7 +49,7 @@ public class GloveUseAttack extends AttackAction {
 
     @Override
     public void onStart(LivingEntity entity, AttackActionHandler handler) {
-        entity.maxUpStep += 0.5;
+        entity.maxUpStep() += 0.5;
     }
 
     @Override

@@ -11,7 +11,7 @@ public class SimpleAccessoryEffect extends ArmorEffect {
 
     @Override
     public boolean canBeAppliedTo(ItemStack stack) {
-        return stack.is(RunecraftoryTags.ACCESSORIES);
+        return stack.is(RunecraftoryTags.Items.ACCESSORIES);
     }
 
     @Override

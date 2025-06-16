@@ -26,5 +26,4 @@ public class LibConstants {
             RuneCraftory.modRes("88969886-531e-4141-9087-ef8340f8216c"),
             RuneCraftory.modRes("6fec8873-50b8-40d5-b8b9-94e06ef68c11"),
             RuneCraftory.modRes("fea154ab-3e7c-4d01-9e4e-18e515d37e57")};
-
 }

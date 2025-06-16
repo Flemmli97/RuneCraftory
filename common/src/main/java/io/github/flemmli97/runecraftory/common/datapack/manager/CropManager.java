@@ -62,7 +62,7 @@ public class CropManager extends SimpleJsonResourceReloadListener implements Syn
     private HolderLookup.Provider provider;
 
     public CropManager() {
-        super(DataPackHandler.GSON, ID.getPath());
+        super(DataPackHandler.GSON, ID.toString());
     }
 
     @Nullable

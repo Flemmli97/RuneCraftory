@@ -4,11 +4,10 @@ import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -28,7 +27,7 @@ public class SarcophagusTeleporter extends Entity {
     }
 
     @Override
-    protected void defineSynchedData() {
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
     }
 
     @Override
@@ -42,19 +41,14 @@ public class SarcophagusTeleporter extends Entity {
     }
 
     @Override
-    public Packet<?> getAddEntityPacket() {
-        return new ClientboundAddEntityPacket(this);
-    }
-
-    @Override
     public void tick() {
         super.tick();
-        if (this.level.isClientSide) {
+        if (this.level().isClientSide) {
             if (this.random.nextInt(3) == 0) {
-                this.level.addParticle(new ColoredParticleData(ModParticles.LIGHT.get(), 49 / 255f, 103 / 255f, 189 / 255f, 1, 2.2f), this.getX() + this.random.nextGaussian() * 0.15, this.getY() + 0.35 + this.random.nextGaussian() * 0.07, this.getZ() + this.random.nextGaussian() * 0.15, this.random.nextGaussian() * 0.01, Math.abs(this.random.nextGaussian() * 0.03), this.random.nextGaussian() * 0.01);
+                this.level().addParticle(new ColoredParticleData(ModParticles.LIGHT.get(), 49 / 255f, 103 / 255f, 189 / 255f, 1, 2.2f), this.getX() + this.random.nextGaussian() * 0.15, this.getY() + 0.35 + this.random.nextGaussian() * 0.07, this.getZ() + this.random.nextGaussian() * 0.15, this.random.nextGaussian() * 0.01, Math.abs(this.random.nextGaussian() * 0.03), this.random.nextGaussian() * 0.01);
             }
         } else {
-            int day = WorldUtils.day(this.level);
+            int day = WorldUtils.day(this.level());
             if (this.spawnedDay != day) {
                 this.discard();
             }
@@ -63,7 +57,7 @@ public class SarcophagusTeleporter extends Entity {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if (source == DamageSource.OUT_OF_WORLD) {
+        if (source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
             this.discard();
             return true;
         }
@@ -72,8 +66,8 @@ public class SarcophagusTeleporter extends Entity {
 
     @Override
     public InteractionResult interact(Player player, InteractionHand hand) {
-        if (!player.level.isClientSide && hand == InteractionHand.MAIN_HAND) {
-            player.sendMessage(Component.translatable("runecraftory.misc.sarcophagus.coming.soon").withStyle(ChatFormatting.DARK_RED), Util.NIL_UUID);
+        if (!player.level().isClientSide && hand == InteractionHand.MAIN_HAND) {
+            player.displayClientMessage(Component.translatable("runecraftory.misc.sarcophagus.coming.soon").withStyle(ChatFormatting.DARK_RED), false);
         }
         // TODO: teleport to boss room
         return super.interact(player, hand);

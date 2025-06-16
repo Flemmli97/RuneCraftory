@@ -9,6 +9,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
@@ -17,8 +19,9 @@ import java.util.List;
 
 public class EntityTrickyMuck extends EntityBigMuck {
 
-    public static final AnimatedAction SPORE_BALL = AnimatedAction.copyOf(SPORE, "spore_ball");
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{SLAP, SPORE, SPORE_BALL, INTERACT, SLEEP};
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String SPORE_BALL = BUILDER.add("spore_ball", SPORE);
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityTrickyMuck>>> ATTACKS = List.of(
             WeightedEntry.wrap(MonsterActionUtils.simpleMeleeActionInRange(SLAP, e -> 1), 1),

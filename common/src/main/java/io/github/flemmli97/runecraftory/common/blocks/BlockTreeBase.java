@@ -37,10 +37,10 @@ public class BlockTreeBase extends RotatedPillarBlock implements EntityBlock, Gr
     private final Supplier<ConfiguredFeature<?, ?>> stump;
     private final Supplier<ConfiguredFeature<TreeConfiguration, ?>> tree1;
     private final Supplier<ConfiguredFeature<TreeConfiguration, ?>> tree2;
-    private final Supplier<Item> seedItem;
+    private final Supplier<? extends Item> seedItem;
 
     public BlockTreeBase(Properties properties, Supplier<ConfiguredFeature<?, ?>> stump, Supplier<ConfiguredFeature<TreeConfiguration, ?>> tree1,
-                         Supplier<ConfiguredFeature<TreeConfiguration, ?>> tree2, Supplier<Item> seedItem) {
+                         Supplier<ConfiguredFeature<TreeConfiguration, ?>> tree2, Supplier<? extends Item> seedItem) {
         super(properties);
         this.stump = stump;
         this.tree1 = tree1;

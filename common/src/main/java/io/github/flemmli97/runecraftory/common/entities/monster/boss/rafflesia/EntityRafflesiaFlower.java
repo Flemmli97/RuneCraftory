@@ -25,7 +25,7 @@ public class EntityRafflesiaFlower extends EntityRafflesiaPart {
     @Override
     public void baseTick() {
         super.baseTick();
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             this.getAnimationHandler().runIfNotNull(anim -> {
                 if (anim.isAt("attack")) {
                     EntityRafflesiaPitcher.rafflesiaSpawning(this);

@@ -13,6 +13,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.StrafingRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -30,11 +32,12 @@ import java.util.List;
 
 public class EntityFlowerLily extends BaseMonster {
 
-    public static final AnimatedAction LEAP = AnimatedAction.builder(0.88, "leap").marker("leap", 0.28).build();
-    public static final AnimatedAction ATTACK = AnimatedAction.builder(0.56, "attack").marker("attack", 0.32).build();
-    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(ATTACK, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(0, "sleep").infinite().build();
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{LEAP, ATTACK, INTERACT, SLEEP};
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String LEAP = BUILDER.add("leap", AnimationsBuilder.definition(0.88).marker("leap", 0.28));
+    public static final String ATTACK = BUILDER.add("attack", AnimationsBuilder.definition(0.56).marker("attack", 0.32));
+    public static final String INTERACT = BUILDER.add("interact", ATTACK);
+    public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityFlowerLily>>> ATTACKS = List.of(
             WeightedEntry.wrap(MonsterActionUtils.simpleRangedEvadingAction(ATTACK, 9, 2, 1, e -> 1), 2),

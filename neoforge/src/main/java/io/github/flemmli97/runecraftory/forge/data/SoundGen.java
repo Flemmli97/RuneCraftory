@@ -14,12 +14,12 @@ import net.neoforged.neoforge.common.data.SoundDefinitionsProvider;
 public class SoundGen extends SoundDefinitionsProvider {
 
     public SoundGen(PackOutput packOutput, ExistingFileHelper helper) {
-        super(generator, RuneCraftory.MODID, helper);
+        super(packOutput, RuneCraftory.MODID, helper);
     }
 
     @Override
     public void registerSounds() {
-        for (RegistryEntrySupplier<SoundEvent> sup : ModSounds.SOUND_EVENTS.getEntries()) {
+        for (RegistryEntrySupplier<SoundEvent, ?> sup : ModSounds.SOUND_EVENTS.getEntries()) {
             if (ModSounds.BGM.stream().anyMatch(h -> h.sound().equals(sup)))
                 continue;
             int num = ModSounds.VARIATIONS.getInt(sup.getID());
@@ -34,18 +34,18 @@ public class SoundGen extends SoundDefinitionsProvider {
     }
 
     private void add(SoundEvent event) {
-        this.add(event, definition().subtitle(event.getLocation().toString()).with(SoundDefinition.Sound.sound(new ResourceLocation(event.getLocation().getNamespace(), event.getLocation().getPath().replace(".", "/")), SoundDefinition.SoundType.SOUND)));
+        this.add(event, definition().subtitle(event.getLocation().toString()).with(SoundDefinition.Sound.sound(ResourceLocation.fromNamespaceAndPath(event.getLocation().getNamespace(), event.getLocation().getPath().replace(".", "/")), SoundDefinition.SoundType.SOUND)));
     }
 
     private void add(SoundEvent event, int num) {
         SoundDefinition def = definition().subtitle(event.getLocation().toString());
         for (int i = 0; i < num; i++)
-            def.with(SoundDefinition.Sound.sound(new ResourceLocation(event.getLocation().getNamespace(), event.getLocation().getPath().replace(".", "/") + "_" + (i + 1)), SoundDefinition.SoundType.SOUND));
+            def.with(SoundDefinition.Sound.sound(ResourceLocation.fromNamespaceAndPath(event.getLocation().getNamespace(), event.getLocation().getPath().replace(".", "/") + "_" + (i + 1)), SoundDefinition.SoundType.SOUND));
         this.add(event, def);
     }
 
     private void addBgmWith(SoundEvent event) {
-        this.addBgmWith(event, new ResourceLocation(event.getLocation().getNamespace(), event.getLocation().getPath().replace(".", "/")));
+        this.addBgmWith(event, ResourceLocation.fromNamespaceAndPath(event.getLocation().getNamespace(), event.getLocation().getPath().replace(".", "/")));
     }
 
     private void addBgmWith(SoundEvent event, ResourceLocation sound) {

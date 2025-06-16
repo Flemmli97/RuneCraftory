@@ -30,7 +30,7 @@ public class MonsterPropertiesManager extends SimpleJsonResourceReloadListener i
     private HolderLookup.Provider provider;
 
     public MonsterPropertiesManager() {
-        super(DataPackHandler.GSON, ID.getPath());
+        super(DataPackHandler.GSON, ID.toString());
     }
 
     public EntityProperties getPropertiesFor(EntityType<?> type) {

@@ -1,10 +1,10 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
-import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
+import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -16,6 +16,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 
 public class EntityBullet extends BaseProjectile {
 
@@ -44,9 +45,9 @@ public class EntityBullet extends BaseProjectile {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(ELEMENT_DATA, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(ELEMENT_DATA, 0);
     }
 
     @Override
@@ -71,7 +72,7 @@ public class EntityBullet extends BaseProjectile {
         super.shoot(x, y, z, velocity, inaccuracy);
         Vec3 up = this.calculateUpVector(-this.getViewXRot(1), -this.getViewYRot(1)).normalize();
         this.dir = this.getDeltaMovement();
-        this.side = new Vec3(RayTraceUtils.rotatedAround(this.dir, new Vector3f(up), 90)).normalize();
+        this.side = new Vec3(MathUtils.rotatedAround(this.dir, new Vector3f(up.x(), up.y(), up.z()), 90)).normalize();
     }
 
     public void reverseMovement() {
@@ -90,7 +91,7 @@ public class EntityBullet extends BaseProjectile {
     @Override
     public void tick() {
         super.tick();
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             if (!this.straight && this.dir != null && this.side != null) {
                 int t = this.livingTicks % 16;
                 float sT = this.reverse ? -SIN_POINTS[t] : SIN_POINTS[t] * 2f;

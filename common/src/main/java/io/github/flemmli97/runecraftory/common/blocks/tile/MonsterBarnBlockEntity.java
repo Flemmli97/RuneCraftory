@@ -88,7 +88,7 @@ public class MonsterBarnBlockEntity extends BlockEntity {
 
     private static boolean matches(Level level, BlockPos pos, boolean ground) {
         BlockState state = level.getBlockState(pos);
-        return ground ? state.is(RunecraftoryTags.BARN_GROUND) : !state.is(ModBlocks.MONSTER_BARN.get()) && state.getCollisionShape(level, pos).isEmpty();
+        return ground ? state.is(RunecraftoryTags.Blocks.BARN_GROUND) : !state.is(ModBlocks.MONSTER_BARN.get()) && state.getCollisionShape(level, pos).isEmpty();
     }
 
     @Nullable

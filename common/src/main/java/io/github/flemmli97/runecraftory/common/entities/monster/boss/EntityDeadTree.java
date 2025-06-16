@@ -19,6 +19,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTarget
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.TimedWrappedRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -52,23 +54,19 @@ public class EntityDeadTree extends BossMonster {
 
     private static final EntityDataAccessor<Byte> SUMMON_ANIMATION = SynchedEntityData.defineId(EntityDeadTree.class, EntityDataSerializers.BYTE);
 
-    //Swipes x2
-    public static final AnimatedAction ATTACK = AnimatedAction.builder(0.92, "attack").marker("attack", 0.44, 0.68).build();
-
-    public static final AnimatedAction FALLING_APPLES = AnimatedAction.builder(0.72, "falling_apples")
-            .marker("attack", 0.36).withClientID("summon").build();
-    public static final AnimatedAction APPLE_SHIELD = AnimatedAction.copyOf(FALLING_APPLES, "apple_shield");
-    public static final AnimatedAction SPIKE = AnimatedAction.copyOf(FALLING_APPLES, "spike");
-
-    public static final AnimatedAction BIG_FALLING_APPLES = AnimatedAction.copyOf(FALLING_APPLES, "big_falling_apples");
-    public static final AnimatedAction MORE_FALLING_APPLES = AnimatedAction.copyOf(FALLING_APPLES, "more_falling_apples");
-    public static final AnimatedAction HEAL = AnimatedAction.copyOf(FALLING_APPLES, "heal");
-
-    public static final AnimatedAction DEFEAT = AnimatedAction.builder(10, "defeat").infinite().build();
-    public static final AnimatedAction ANGRY = AnimatedAction.builder(1.24, "angry").build();
-    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(ATTACK, "interact");
-
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{ATTACK, FALLING_APPLES, APPLE_SHIELD, SPIKE, BIG_FALLING_APPLES, MORE_FALLING_APPLES, HEAL, DEFEAT, ANGRY, INTERACT};
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String ATTACK = BUILDER.add("attack", AnimationsBuilder.definition(0.92).marker("attack", 0.44, 0.68));
+    public static final String FALLING_APPLES = BUILDER.add("falling_apples", AnimationsBuilder.definition(0.72)
+            .marker("attack", 0.36).animationId("summon"));
+    public static final String APPLE_SHIELD = BUILDER.add("apple_shield", FALLING_APPLES);
+    public static final String SPIKE = BUILDER.add("spike", FALLING_APPLES);
+    public static final String BIG_FALLING_APPLES = BUILDER.add("big_falling_apples", FALLING_APPLES);
+    public static final String MORE_FALLING_APPLES = BUILDER.add("more_falling_apples", FALLING_APPLES);
+    public static final String HEAL = BUILDER.add("heal", FALLING_APPLES);
+    public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
+    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(1.24));
+    public static final String INTERACT = BUILDER.add("interact", ATTACK);
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntityDeadTree>> ATTACK_HANDLER = createAnimationHandler(b -> {
         b.put(ATTACK, (anim, entity) -> {
@@ -147,14 +145,14 @@ public class EntityDeadTree extends BossMonster {
     public final AnimatedAttackGoal<EntityDeadTree> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityDeadTree> animationHandler = new AnimationHandler<>(this, ANIMS)
             .withChangeListener(anim -> {
-                if (!this.level.isClientSide && anim != null) {
+                if (!this.level().isClientSide && anim != null) {
                     if (anim.is(APPLE_SHIELD))
                         this.shieldCooldown = 100;
                     if (anim.is(HEAL))
                         this.healCooldown = 100;
                 } else if (anim != null && anim.getClientIdentifier().equals("summon")) {
                     int rand = this.random.nextInt(3);
-                    AnimatedAction animNew = AnimatedAction.builder(anim.getLength(), anim.getID()).withClientID(anim.getClientIdentifier() + "_" + rand)
+                    AnimatedAction animNew = AnimatedAction.builder(anim.getLength(), anim.getID()).animationId(anim.getClientIdentifier() + "_" + rand)
                             .withTransitionTime(anim.getStartTransition(), anim.getEndTransitionTime()).speed(anim.getSpeed()).build();
                     this.getAnimationHandler().setAnimation(animNew);
                     return true;
@@ -196,9 +194,9 @@ public class EntityDeadTree extends BossMonster {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(SUMMON_ANIMATION, (byte) 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(SUMMON_ANIMATION, (byte) 0);
     }
 
     @Override
@@ -213,7 +211,7 @@ public class EntityDeadTree extends BossMonster {
     @Override
     public void tick() {
         super.tick();
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             --this.shieldCooldown;
             --this.healCooldown;
         }

@@ -20,6 +20,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -44,32 +46,32 @@ import java.util.function.BiConsumer;
 
 public class EntitySarcophagus extends BossMonster {
 
-    public static final AnimatedAction TELEPORT = AnimatedAction.builder(2.64, "teleport")
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String TELEPORT = BUILDER.add("teleport", AnimationsBuilder.definition(2.64)
             .marker("teleport_start_1", 0.2).marker("teleport_end_1", 0.44)
             .marker("teleport_start_2", 1.2).marker("teleport_end_2", 1.44)
             .marker("teleport_start_3", 2.2).marker("teleport_end_3", 2.44)
-            .marker("teleport", 0.28, 1.28, 2.28).build();
-    public static final AnimatedAction CHARGE = AnimatedAction.builder(1.6, "charge")
-            .marker("attack_start", 0.28).marker("attack_end", 1.48).build();
-    public static final AnimatedAction BEAM = AnimatedAction.builder(0.68, "cast").marker("attack", 0.48).build();
-    public static final AnimatedAction BEAM_3X = AnimatedAction.builder(2.2, "cast_3x").marker("attack", 0.48, 1.24, 2.0).build();
-    public static final AnimatedAction FIRE_CIRCLE = AnimatedAction.builder(2.32, "circle_cast").marker("attack", 0.4).build();
-    public static final AnimatedAction WIND_CIRCLE = AnimatedAction.copyOf(FIRE_CIRCLE, "wind_circle");
-    public static final AnimatedAction ICE_CIRCLE = AnimatedAction.copyOf(FIRE_CIRCLE, "ice_circle");
-    public static final AnimatedAction EARTH_CIRCLE = AnimatedAction.copyOf(FIRE_CIRCLE, "earth_circle");
-    public static final AnimatedAction LIGHT_2X = AnimatedAction.copyOf(BEAM, "light_2x");
-    public static final AnimatedAction LIGHT_4X = AnimatedAction.copyOf(BEAM, "light_4x");
-    public static final AnimatedAction SHINE = AnimatedAction.copyOf(BEAM, "shine");
-    public static final AnimatedAction PRISM = AnimatedAction.copyOf(BEAM, "prism");
-    public static final AnimatedAction MISSILE = AnimatedAction.builder(1.04, "missile").marker("attack", 0.72).build();
-    public static final AnimatedAction STARFALL = AnimatedAction.builder(8.2, "starfall").marker("attack", 0.8)
+            .marker("teleport", 0.28, 1.28, 2.28));
+    public static final String CHARGE = BUILDER.add("charge", AnimationsBuilder.definition(1.6)
+            .marker("attack_start", 0.28).marker("attack_end", 1.48));
+    public static final String BEAM = BUILDER.add("cast", AnimationsBuilder.definition(0.68).marker("attack", 0.48));
+    public static final String BEAM_3X = BUILDER.add("cast_3x", AnimationsBuilder.definition(2.2).marker("attack", 0.48, 1.24, 2.0));
+    public static final String FIRE_CIRCLE = BUILDER.add("circle_cast", AnimationsBuilder.definition(2.32).marker("attack", 0.4));
+    public static final String WIND_CIRCLE = BUILDER.add("wind_circle", FIRE_CIRCLE);
+    public static final String ICE_CIRCLE = BUILDER.add("ice_circle", FIRE_CIRCLE);
+    public static final String EARTH_CIRCLE = BUILDER.add("earth_circle", FIRE_CIRCLE);
+    public static final String LIGHT_2X = BUILDER.add("light_2x", BEAM);
+    public static final String LIGHT_4X = BUILDER.add("light_4x", BEAM);
+    public static final String SHINE = BUILDER.add("shine", BEAM);
+    public static final String PRISM = BUILDER.add("prism", BEAM);
+    public static final String MISSILE = BUILDER.add("missile", AnimationsBuilder.definition(1.04).marker("attack", 0.72));
+    public static final String STARFALL = BUILDER.add("starfall", AnimationsBuilder.definition(8.2).marker("attack", 0.8)
             .marker("attack_start", 0.24).marker("attack_end", 7.96)
-            .marker("teleport_start", 0.2).marker("teleport_end", 8.0).build();
-    public static final AnimatedAction ANGRY = new AnimatedAction(1.04, "angry");
-    public static final AnimatedAction DEFEAT = AnimatedAction.builder(10, "defeat").infinite().build();
-    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(BEAM, "interact");
-    private static final AnimatedAction[] ANIMATED_ACTIONS = new AnimatedAction[]{TELEPORT, CHARGE, BEAM, BEAM_3X, FIRE_CIRCLE, WIND_CIRCLE, ICE_CIRCLE, EARTH_CIRCLE,
-            LIGHT_2X, LIGHT_4X, SHINE, PRISM, MISSILE, STARFALL, DEFEAT, INTERACT, ANGRY};
+            .marker("teleport_start", 0.2).marker("teleport_end", 8.0));
+    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(1.04));
+    public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
+    public static final String INTERACT = BUILDER.add("interact", BEAM);
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntitySarcophagus>> ATTACK_HANDLER = createAnimationHandler(b -> {
         b.put(TELEPORT, (anim, entity) -> {
@@ -388,7 +390,7 @@ public class EntitySarcophagus extends BossMonster {
     @Override
     public void tick() {
         super.tick();
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             --this.starfallCooldown;
         }
     }
@@ -454,8 +456,8 @@ public class EntitySarcophagus extends BossMonster {
 
     private boolean teleport(double x, double y, double z, int yRange) {
         BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(x, y - 1, z);
-        ChunkAccess chunk = this.level.getChunk(pos);
-        while (yRange > 0 && pos.getY() > this.level.getMinBuildHeight() && !chunk.getBlockState(pos).getMaterial().blocksMotion()) {
+        ChunkAccess chunk = this.level().getChunk(pos);
+        while (yRange > 0 && pos.getY() > this.level().getMinBuildHeight() && !chunk.getBlockState(pos).getMaterial().blocksMotion()) {
             pos.move(Direction.DOWN);
             yRange--;
             y--;
@@ -466,7 +468,7 @@ public class EntitySarcophagus extends BossMonster {
         }
         Vec3 current = this.position();
         this.teleportTo(x, y, z);
-        if (!this.level.noCollision(this) || this.level.containsAnyLiquid(this.getBoundingBox())) {
+        if (!this.level().noCollision(this) || this.level().containsAnyLiquid(this.getBoundingBox())) {
             this.teleportTo(current.x(), current.y(), current.z());
             return false;
         }

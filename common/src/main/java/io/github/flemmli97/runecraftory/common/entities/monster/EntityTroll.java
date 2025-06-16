@@ -12,6 +12,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.random.WeightedEntry;
@@ -28,12 +30,13 @@ import java.util.function.Consumer;
 
 public class EntityTroll extends BaseMonster {
 
-    public static final AnimatedAction PUNCH = AnimatedAction.builder(0.8, "punch").marker("attack", 0.52).build();
-    public static final AnimatedAction DOUBLE_PUNCH = AnimatedAction.builder(0.8, "double_fist_punch").marker("attack", 0.52).build();
-    public static final AnimatedAction SLAM = AnimatedAction.builder(0.8, "fist_slam").marker("attack", 0.52).build();
-    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(PUNCH, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(0, "sleep").infinite().build();
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{PUNCH, DOUBLE_PUNCH, SLAM, INTERACT, SLEEP};
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String PUNCH = BUILDER.add("punch", AnimationsBuilder.definition(0.8).marker("attack", 0.52));
+    public static final String DOUBLE_PUNCH = BUILDER.add("double_fist_punch", AnimationsBuilder.definition(0.8).marker("attack", 0.52));
+    public static final String SLAM = BUILDER.add("fist_slam", AnimationsBuilder.definition(0.8).marker("attack", 0.52));
+    public static final String INTERACT = BUILDER.add("interact", PUNCH);
+    public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityTroll>>> ATTACKS = List.of(
             WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(PUNCH, e -> 1), 1),
@@ -83,7 +86,7 @@ public class EntityTroll extends BaseMonster {
         super.mobAttack(anim, target, cons);
         if (anim.is(SLAM)) {
             S2CScreenShake.sendAround(this, 16, 10, 2);
-            this.level.playSound(null, this.blockPosition(), SoundEvents.GENERIC_EXPLODE, this.getSoundSource(), 1.0f, 1.0f);
+            this.level().playSound(null, this.blockPosition(), SoundEvents.GENERIC_EXPLODE, this.getSoundSource(), 1.0f, 1.0f);
         }
     }
 

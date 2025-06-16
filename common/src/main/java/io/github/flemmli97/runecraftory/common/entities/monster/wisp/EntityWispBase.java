@@ -17,6 +17,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRun
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.StayWithinHeightAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvent;
@@ -41,13 +43,14 @@ import java.util.List;
 
 public abstract class EntityWispBase extends BaseMonster {
 
-    public static final AnimatedAction ATTACK_FAR = AnimatedAction.builder(0.48, "attack").marker("attack", 0.36).build();
-    public static final AnimatedAction ATTACK_CLOSE = AnimatedAction.copyOf(ATTACK_FAR, "attack_close");
-    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(ATTACK_FAR, "interact");
-    public static final AnimatedAction VANISH = AnimatedAction.builder(5, "vanish")
-            .marker("teleport", 2.5).marker("teleport_done", 2.6).build();
-    public static final AnimatedAction STILL = AnimatedAction.builder(0, "still").infinite().build();
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{ATTACK_FAR, ATTACK_CLOSE, INTERACT, VANISH, STILL};
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String ATTACK_FAR = BUILDER.add("attack", AnimationsBuilder.definition(0.48).marker("attack", 0.36));
+    public static final String ATTACK_CLOSE = BUILDER.add("attack_close", ATTACK_FAR);
+    public static final String INTERACT = BUILDER.add("interact", ATTACK_FAR);
+    public static final String VANISH = BUILDER.add("vanish", AnimationsBuilder.definition(5)
+            .marker("teleport", 2.5).marker("teleport_done", 2.6));
+    public static final String STILL = BUILDER.add("still", AnimationsBuilder.definition(0).infinite());
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityWispBase>>> ATTACKS = List.of(
             WeightedEntry.wrap(MonsterActionUtils.simpleRangedEvadingAction(ATTACK_FAR, 7, 3, 1, e -> 1), 2),
@@ -191,7 +194,7 @@ public abstract class EntityWispBase extends BaseMonster {
             this.noPhysics = entity.noPhysics;
         } else {
             this.noPhysics = !this.playDeath();
-            if (this.getY() < this.level.getMinBuildHeight() + 1)
+            if (this.getY() < this.level().getMinBuildHeight() + 1)
                 vec = new Vec3(vec.x, 0.006, vec.z);
         }
         this.handleFreeTravel(vec);
@@ -213,10 +216,10 @@ public abstract class EntityWispBase extends BaseMonster {
 
     private void teleport(double x, double y, double z) {
         BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos(x, y, z);
-        while (mutableBlockPos.getY() > this.level.getMinBuildHeight() && !this.level.getBlockState(mutableBlockPos).getMaterial().blocksMotion()) {
+        while (mutableBlockPos.getY() > this.level().getMinBuildHeight() && !this.level().getBlockState(mutableBlockPos).getMaterial().blocksMotion()) {
             mutableBlockPos.move(Direction.DOWN);
         }
-        BlockState blockState = this.level.getBlockState(mutableBlockPos);
+        BlockState blockState = this.level().getBlockState(mutableBlockPos);
         if (!blockState.getMaterial().blocksMotion()) {
             y = this.getY();
         }

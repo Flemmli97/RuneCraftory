@@ -8,6 +8,8 @@ import io.github.flemmli97.runecraftory.common.utils.LootTableResources;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.common.entity.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -42,9 +44,9 @@ public class EntityTreasureChest extends Entity implements IAnimated {
 
     private static final EntityDataAccessor<Integer> TIER = SynchedEntityData.defineId(EntityTreasureChest.class, EntityDataSerializers.INT);
 
-    private static final AnimatedAction OPEN = AnimatedAction.builder(0.32, "open").infinite().build();
+    public static final String OPEN = BUILDER.add("open", AnimationsBuilder.definition(0.32).infinite());
 
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{OPEN};
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private final AnimationHandler<EntityTreasureChest> animationHandler = new AnimationHandler<>(this, ANIMS);
 
@@ -60,7 +62,7 @@ public class EntityTreasureChest extends Entity implements IAnimated {
 
     @Override
     protected void defineSynchedData() {
-        this.entityData.define(TIER, 0);
+        builder.define(TIER, 0);
     }
 
     @Override
@@ -68,7 +70,7 @@ public class EntityTreasureChest extends Entity implements IAnimated {
         super.baseTick();
         this.getAnimationHandler().tick();
         AnimatedAction anim = this.getAnimationHandler().getAnimation();
-        if (!this.isRemoved() && !this.level.isClientSide && anim != null && anim.is(OPEN) && anim.done(0)) {
+        if (!this.isRemoved() && !this.level().isClientSide && anim != null && anim.is(OPEN) && anim.done(0)) {
             if (this.openChest != null)
                 this.openChest.run();
             this.discard();
@@ -79,7 +81,7 @@ public class EntityTreasureChest extends Entity implements IAnimated {
         this.move(MoverType.SELF, this.getDeltaMovement());
         double friction = 0.98;
         if (this.onGround) {
-            friction = this.level.getBlockState(new BlockPos(this.getX(), this.getY() - 1.0, this.getZ())).getBlock().getFriction() * 0.98f;
+            friction = this.level().getBlockState(new BlockPos(this.getX(), this.getY() - 1.0, this.getZ())).getBlock().getFriction() * 0.98f;
         }
         this.setDeltaMovement(this.getDeltaMovement().multiply(friction, 0.98, friction));
     }
@@ -90,7 +92,7 @@ public class EntityTreasureChest extends Entity implements IAnimated {
             return false;
         if (source.getEntity() instanceof Player player)
             this.lastHurtByPlayer = player;
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             this.discard();
             this.dropFromLootTable(source, true);
         }
@@ -98,7 +100,7 @@ public class EntityTreasureChest extends Entity implements IAnimated {
             double d0 = this.random.nextGaussian() * 0.02D;
             double d1 = this.random.nextGaussian() * 0.02D;
             double d2 = this.random.nextGaussian() * 0.02D;
-            this.level.addParticle(ParticleTypes.POOF, this.getRandomX(1.0D), this.getRandomY(), this.getRandomZ(1.0D), d0, d1, d2);
+            this.level().addParticle(ParticleTypes.POOF, this.getRandomX(1.0D), this.getRandomY(), this.getRandomZ(1.0D), d0, d1, d2);
         }
         return true;
     }
@@ -170,26 +172,26 @@ public class EntityTreasureChest extends Entity implements IAnimated {
             case 3 -> LootTableResources.TIER_4_LOOT;
             default -> LootTableResources.TIER_1_LOOT;
         };
-        LootContext.Builder builder = new LootContext.Builder((ServerLevel) this.level)
+        LootContext.Builder builder = new LootContext.Builder((ServerLevel) this.level())
                 .withRandom(this.random)
                 .withLuck(player.getLuck())
                 .withParameter(LootContextParams.THIS_ENTITY, this)
                 .withParameter(LootContextParams.ORIGIN, this.position())
                 .withParameter(LootCtxParameters.UUID_CONTEXT, player.getUUID())
                 .withParameter(LootContextParams.TOOL, stack);
-        LootTable lootTable = this.level.getServer().getLootTables().get(resourceLocation);
+        LootTable lootTable = this.level().getServer().getLootTables().get(resourceLocation);
         lootTable.getRandomItems(builder.create(LootCtxParameters.MONSTER_INTERACTION), this::spawnAtLocation);
     }
 
     protected void dropFromLootTable(DamageSource damageSource, boolean attackedRecently) {
         ResourceLocation resourceLocation = this.getType().getDefaultLootTable();
-        LootTable lootTable = this.level.getServer().getLootTables().get(resourceLocation);
+        LootTable lootTable = this.level().getServer().getLootTables().get(resourceLocation);
         LootContext.Builder builder = this.createLootContext(attackedRecently, damageSource);
         lootTable.getRandomItems(builder.create(LootContextParamSets.ENTITY), this::spawnAtLocation);
     }
 
     protected LootContext.Builder createLootContext(boolean attackedRecently, DamageSource damageSource) {
-        LootContext.Builder builder = new LootContext.Builder((ServerLevel) this.level).withRandom(this.random).withParameter(LootContextParams.THIS_ENTITY, this).withParameter(LootContextParams.ORIGIN, this.position()).withParameter(LootContextParams.DAMAGE_SOURCE, damageSource).withOptionalParameter(LootContextParams.KILLER_ENTITY, damageSource.getEntity()).withOptionalParameter(LootContextParams.DIRECT_KILLER_ENTITY, damageSource.getDirectEntity());
+        LootContext.Builder builder = new LootContext.Builder((ServerLevel) this.level()).withRandom(this.random).withParameter(LootContextParams.THIS_ENTITY, this).withParameter(LootContextParams.ORIGIN, this.position()).withParameter(LootContextParams.DAMAGE_SOURCE, damageSource).withOptionalParameter(LootContextParams.KILLER_ENTITY, damageSource.getEntity()).withOptionalParameter(LootContextParams.DIRECT_KILLER_ENTITY, damageSource.getDirectEntity());
         if (attackedRecently && this.lastHurtByPlayer != null) {
             builder = builder.withParameter(LootContextParams.LAST_DAMAGE_PLAYER, this.lastHurtByPlayer).withLuck(this.lastHurtByPlayer.getLuck());
         }

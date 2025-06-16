@@ -4,9 +4,9 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.datapack.ShopItemProperties;
-import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -24,7 +24,7 @@ public class GiftData {
             inst.group(Codec.either(ShopItemProperties.TAG_CODEC, BuiltInRegistries.ITEM.byNameCodec())
                             .listOf().fieldOf("items").forGetter(d -> d.items),
                     Range.CODEC.optionalFieldOf("xp_range").forGetter(d -> Optional.ofNullable(d.xp_range)),
-                    CodecHelper.nonEmptyList(Codec.STRING, "Translations can't be empty").fieldOf("translations").forGetter(d -> d.translations)
+                    ExtraCodecs.nonEmptyList(Codec.STRING.listOf()).fieldOf("translations").forGetter(d -> d.translations)
             ).apply(inst, GiftData::new));
 
     private final List<Either<TagKey<Item>, Item>> items;
@@ -68,6 +68,7 @@ public class GiftData {
     }
 
     public static class Builder {
+
         private final List<Either<TagKey<Item>, Item>> items = new ArrayList<>();
         private Range range;
         public Map<String, String> translations = new LinkedHashMap<>();
@@ -124,6 +125,7 @@ public class GiftData {
     }
 
     private record Range(@Nullable Integer min, @Nullable Integer max) {
+
         public static final Codec<Range> CODEC = RecordCodecBuilder.create(inst ->
                 inst.group(Codec.INT.optionalFieldOf("min").forGetter(d -> Optional.ofNullable(d.min)),
                         Codec.INT.optionalFieldOf("max").forGetter(d -> Optional.ofNullable(d.max))

@@ -6,17 +6,20 @@ import io.github.flemmli97.runecraftory.api.datapack.provider.CropProvider;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Items;
 
+import java.util.concurrent.CompletableFuture;
+
 public class CropGen extends CropProvider {
 
-    public CropGen(PackOutput packOutput) {
-        super(gen, RuneCraftory.MODID);
+    public CropGen(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> provider) {
+        super(packOutput, RuneCraftory.MODID, provider);
     }
 
     @Override
-    protected void add() {
+    protected void add(HolderLookup.Provider provider) {
         this.addStat(Items.WHEAT_SEEDS, new CropProperties.Builder(5, 3, true).addGoodSeason(EnumSeason.FALL));
         this.addStat(Items.CARROT, new CropProperties.Builder(4, 4, false).addGoodSeason(EnumSeason.FALL)
                 .withGiantVersion(ModBlocks.CARROT_GIANT.get()));

@@ -66,7 +66,7 @@ public class ItemStatManager extends SimpleJsonResourceReloadListener implements
     private HolderLookup.Provider provider;
 
     public ItemStatManager() {
-        super(DataPackHandler.GSON, ID.getPath());
+        super(DataPackHandler.GSON, ID.toString());
     }
 
     public Optional<ItemStat> get(Item item) {

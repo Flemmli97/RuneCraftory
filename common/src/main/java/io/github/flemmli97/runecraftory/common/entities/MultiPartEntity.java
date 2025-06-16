@@ -1,19 +1,21 @@
 package io.github.flemmli97.runecraftory.common.entities;
 
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
+import io.github.flemmli97.tenshilib.common.entity.EntityUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.Pose;
@@ -32,7 +34,7 @@ public class MultiPartEntity extends Entity implements OwnableEntity {
     private static final EntityDataAccessor<Float> SIZE_X = SynchedEntityData.defineId(MultiPartEntity.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Float> SIZE_Y = SynchedEntityData.defineId(MultiPartEntity.class, EntityDataSerializers.FLOAT);
 
-    private Entity parent;
+    private LivingEntity parent;
     private EntityDimensions dimensions = EntityDimensions.fixed(1, 1);
     private boolean addedToLevel, isHead;
 
@@ -40,13 +42,13 @@ public class MultiPartEntity extends Entity implements OwnableEntity {
         super(multipartType, level);
     }
 
-    public MultiPartEntity(Entity parent, float width, float height) {
-        super(ModEntities.MULTIPART.get(), parent.level);
+    public MultiPartEntity(LivingEntity parent, float width, float height) {
+        super(ModEntities.MULTIPART.get(), parent.level());
         this.setSize(width, height);
         this.setParent(parent);
     }
 
-    public void setParent(Entity parent) {
+    public void setParent(LivingEntity parent) {
         this.entityData.set(PARENT_UUID, Optional.of(parent.getUUID()));
         this.parent = parent;
     }
@@ -57,10 +59,10 @@ public class MultiPartEntity extends Entity implements OwnableEntity {
     }
 
     @Override
-    protected void defineSynchedData() {
-        this.entityData.define(PARENT_UUID, Optional.empty());
-        this.entityData.define(SIZE_X, 0f);
-        this.entityData.define(SIZE_Y, 0f);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        builder.define(PARENT_UUID, Optional.empty());
+        builder.define(SIZE_X, 0f);
+        builder.define(SIZE_Y, 0f);
     }
 
     @Override
@@ -82,13 +84,8 @@ public class MultiPartEntity extends Entity implements OwnableEntity {
     }
 
     @Override
-    public Packet<?> getAddEntityPacket() {
-        return new ClientboundAddEntityPacket(this);
-    }
-
-    @Override
     public void tick() {
-        if (!this.level.isClientSide)
+        if (!this.level().isClientSide)
             if (this.getOwner() == null || !this.getOwner().isAlive())
                 this.remove(RemovalReason.KILLED);
         super.tick();
@@ -118,7 +115,7 @@ public class MultiPartEntity extends Entity implements OwnableEntity {
     public boolean isInvulnerableTo(DamageSource source) {
         if (this.getOwner() != null && this.getOwner().isInvulnerableTo(source))
             return true;
-        return source == DamageSource.FALL || source == DamageSource.DROWN || (!this.isHead && source == DamageSource.IN_WALL) || super.isInvulnerableTo(source);
+        return source.is(DamageTypeTags.IS_FALL) || source.is(DamageTypeTags.IS_DROWNING) || (!this.isHead && source.is(DamageTypes.IN_WALL)) || super.isInvulnerableTo(source);
     }
 
     @Override
@@ -130,17 +127,17 @@ public class MultiPartEntity extends Entity implements OwnableEntity {
     }
 
     public MultiPartEntity setSizeX(float x) {
-        this.setSize(x, this.dimensions.height);
+        this.setSize(x, this.dimensions.height());
         return this;
     }
 
     public MultiPartEntity setSizeY(float y) {
-        this.setSize(this.dimensions.width, y);
+        this.setSize(this.dimensions.width(), y);
         return this;
     }
 
     public MultiPartEntity setSize(float x, float y) {
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             this.entityData.set(SIZE_X, x);
             this.entityData.set(SIZE_Y, y);
         }
@@ -172,7 +169,7 @@ public class MultiPartEntity extends Entity implements OwnableEntity {
     public void updatePositionTo(double x, double y, double z, boolean simple) {
         if (this.getOwner() != null && !this.isAddedToLevel()) {
             this.setPos(x, y, z);
-            this.level.addFreshEntity(this);
+            this.level().addFreshEntity(this);
         }
         Vec3 old = this.position();
         this.setOldPosAndRot();
@@ -197,12 +194,11 @@ public class MultiPartEntity extends Entity implements OwnableEntity {
         return this.entityData.get(PARENT_UUID).orElse(null);
     }
 
-    @Nullable
     @Override
-    public Entity getOwner() {
+    public LivingEntity getOwner() {
         if (this.parent != null && this.parent.isAlive())
             return this.parent;
-        this.entityData.get(PARENT_UUID).ifPresent(uuid -> this.parent = EntityUtil.findFromUUID(Entity.class, this.level, uuid));
+        this.entityData.get(PARENT_UUID).ifPresent(uuid -> this.parent = EntityUtils.findFromUUID(LivingEntity.class, this.level(), uuid));
         return this.parent;
     }
 }

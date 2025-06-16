@@ -26,6 +26,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTarget
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.StrafingRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.TimedWrappedRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -53,21 +55,22 @@ public class EntityMarionetta extends BossMonster {
 
     private static final EntityDataAccessor<Boolean> CAUGHT = SynchedEntityData.defineId(EntityMarionetta.class, EntityDataSerializers.BOOLEAN);
 
-    public static final AnimatedAction MELEE = AnimatedAction.builder(0.48, "melee").marker("attack", 0.28).build();
-    public static final AnimatedAction SPIN = AnimatedAction.builder(1.52, "spin")
-            .marker("attack_start", 0.28).marker("attack_end", 1.4).build();
-    public static final AnimatedAction CARD_ATTACK = AnimatedAction.builder(0.64, "card_attack").marker("attack", 0.36).build();
-    public static final AnimatedAction CHEST_ATTACK = AnimatedAction.builder(1.2, "chest_attack")
-            .marker("attack_start", 0.28).marker("attack_end", 1).build();
-    public static final AnimatedAction CHEST_THROW = AnimatedAction.builder(5, "chest_throw").marker("attack", 0.28).build();
-    public static final AnimatedAction STUFFED_ANIMALS = AnimatedAction.builder(0.76, "stuffed_animals").marker("attack", 0.44).build();
-    public static final AnimatedAction DARK_BEAM = AnimatedAction.builder(0.8, "dark_beam").marker("attack", 0.36).build();
-    public static final AnimatedAction FURNITURE = AnimatedAction.builder(1.2, "furniture").marker("attack", 0.4).build();
-    public static final AnimatedAction DEFEAT = AnimatedAction.builder(10, "defeat").infinite().build();
-    public static final AnimatedAction ANGRY = AnimatedAction.builder(1.2, "angry").build();
-    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String MELEE = BUILDER.add("melee", AnimationsBuilder.definition(0.48).marker("attack", 0.28));
+    public static final String SPIN = BUILDER.add("spin", AnimationsBuilder.definition(1.52)
+            .marker("attack_start", 0.28).marker("attack_end", 1.4));
+    public static final String CARD_ATTACK = BUILDER.add("card_attack", AnimationsBuilder.definition(0.64).marker("attack", 0.36));
+    public static final String CHEST_ATTACK = BUILDER.add("chest_attack", AnimationsBuilder.definition(1.2)
+            .marker("attack_start", 0.28).marker("attack_end", 1));
+    public static final String CHEST_THROW = BUILDER.add("chest_throw", AnimationsBuilder.definition(5).marker("attack", 0.28));
+    public static final String STUFFED_ANIMALS = BUILDER.add("stuffed_animals", AnimationsBuilder.definition(0.76).marker("attack", 0.44));
+    public static final String DARK_BEAM = BUILDER.add("dark_beam", AnimationsBuilder.definition(0.8).marker("attack", 0.36));
+    public static final String FURNITURE = BUILDER.add("furniture", AnimationsBuilder.definition(1.2).marker("attack", 0.4));
+    public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
+    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(1.2));
+    public static final String INTERACT = BUILDER.add("interact", MELEE);
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, SPIN, CARD_ATTACK, CHEST_ATTACK, CHEST_THROW, STUFFED_ANIMALS, DARK_BEAM, FURNITURE, DEFEAT, ANGRY, INTERACT};
     private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntityMarionetta>> ATTACK_HANDLER = createAnimationHandler(b -> {
         b.put(MELEE, (anim, entity) -> {
             LivingEntity target = entity.getTarget();
@@ -167,7 +170,7 @@ public class EntityMarionetta extends BossMonster {
             .withChangeListener(anim -> {
                 this.moveDirection = null;
                 if (this.entityData.get(CAUGHT)) {
-                    if (!this.level.isClientSide) {
+                    if (!this.level().isClientSide) {
                         this.entityData.set(CAUGHT, false);
                         this.getAnimationHandler().setAnimation(CHEST_THROW);
                     }
@@ -193,9 +196,9 @@ public class EntityMarionetta extends BossMonster {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(CAUGHT, false);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(CAUGHT, false);
     }
 
     @Override

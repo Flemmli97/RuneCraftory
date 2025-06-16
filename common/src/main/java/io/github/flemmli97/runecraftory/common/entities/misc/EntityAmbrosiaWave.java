@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
-import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
@@ -9,6 +8,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
+import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -21,6 +21,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 
 import java.util.HashSet;
 import java.util.List;
@@ -29,7 +30,7 @@ import java.util.Set;
 public class EntityAmbrosiaWave extends BaseDamageCloud {
 
     private static final EntityDataAccessor<Integer> MAX_TICK = SynchedEntityData.defineId(EntityAmbrosiaWave.class, EntityDataSerializers.INT);
-    private static final List<Vector3f> CIRCLE_PARTICLE_MOTION = RayTraceUtils.rotatedVecs(new Vec3(0.25, 0, 0), new Vec3(0, 1, 0), -180, 175, 5);
+    private static final List<Vector3f> CIRCLE_PARTICLE_MOTION = MathUtils.rotatedVecs(new Vec3(0.25, 0, 0), new Vec3(0, 1, 0), -180, 175, 5);
 
     private final Set<FrozenEntity> hitEntityPos = new HashSet<>();
 
@@ -65,18 +66,18 @@ public class EntityAmbrosiaWave extends BaseDamageCloud {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(MAX_TICK, 140);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(MAX_TICK, 140);
     }
 
     @Override
     public void tick() {
         super.tick();
-        if (this.level.isClientSide) {
+        if (this.level().isClientSide) {
             if (this.livingTicks < (this.entityData.get(MAX_TICK) - 8) && this.livingTicks % 5 == 1) {
                 for (Vector3f vec : CIRCLE_PARTICLE_MOTION) {
-                    this.level.addParticle(new ColoredParticleData(ModParticles.STATIC_LIGHT.get(), 200 / 255F, 133 / 255F, 36 / 255F, 1, 0.4f), this.getX(), this.getY() + 0.2, this.getZ(), vec.x(), vec.y(), vec.z());
+                    this.level().addParticle(new ColoredParticleData(ModParticles.STATIC_LIGHT.get(), 200 / 255F, 133 / 255F, 36 / 255F, 1, 0.4f), this.getX(), this.getY() + 0.2, this.getZ(), vec.x(), vec.y(), vec.z());
                 }
             }
         } else {
@@ -107,8 +108,8 @@ public class EntityAmbrosiaWave extends BaseDamageCloud {
     @Override
     protected boolean damageEntity(LivingEntity e) {
         CustomDamage.Builder builder = new CustomDamage.Builder(this, this.getOwner()).magic().noKnockback().hurtResistant(5).element(EnumElement.EARTH)
-                .withChangedAttribute(ModAttributes.DRAIN.get(), 50);
-        if (CombatUtils.damageWithFaintAndCrit(this.getOwner(), e, builder, CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier, null)) {
+                .withChangedAttribute(ModAttributes.DRAIN.asHolder(), 50);
+        if (CombatUtils.damageWithFaintAndCrit(this.getOwner(), e, builder, CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.asHolder()) * this.damageMultiplier, null)) {
             e.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10, 6, true, false));
             this.hitEntityPos.add(new FrozenEntity(e, e.position()));
             return true;

@@ -39,7 +39,7 @@ import net.minecraft.world.phys.HitResult;
 public class ItemToolSickle extends DiggerItem {
 
     public ItemToolSickle(Item.Properties props) {
-        super(ItemTiers.TIER, RunecraftoryTags.SICKLE_EFFECTIVE, props);
+        super(ItemTiers.TIER, RunecraftoryTags.Blocks.SICKLE_EFFECTIVE, props);
     }
 
     public void postUse(ServerPlayer player) {
@@ -149,7 +149,7 @@ public class ItemToolSickle extends DiggerItem {
         if (entity instanceof Player player && !player.mayUseItemAt(pos.relative(Direction.UP), Direction.UP, stack))
             return false;
         BlockState state = level.getBlockState(pos);
-        if (state.is(RunecraftoryTags.SICKLE_DESTROYABLE)) {
+        if (state.is(RunecraftoryTags.Blocks.SICKLE_DESTROYABLE)) {
             if (entity instanceof ServerPlayer serverPlayer) {
                 if (serverPlayer.gameMode.destroyBlock(pos)) {
                     level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));

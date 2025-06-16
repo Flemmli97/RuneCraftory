@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.mixinhelper.ClientMixinUtils;
 import io.github.flemmli97.runecraftory.mixinhelper.HumanoidMainHand;
+import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
 import io.github.flemmli97.tenshilib.mixin.ModelPartAccessor;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
@@ -24,9 +25,9 @@ import java.util.function.Function;
 public abstract class HumanoidModelMixin<T extends LivingEntity> implements HumanoidMainHand {
 
     @Unique
-    private ModelPartHandler.ModelPartExtended runecraftory$LeftHandItem;
+    private ModelPartsContainer.ModelPartExtended runecraftory$LeftHandItem;
     @Unique
-    private ModelPartHandler.ModelPartExtended runecraftory$RightHandItem;
+    private ModelPartsContainer.ModelPartExtended runecraftory$RightHandItem;
     @Unique
     private List<Pair<ModelPart, PartPose>> runecraftory$defaultPoses;
 
@@ -50,14 +51,14 @@ public abstract class HumanoidModelMixin<T extends LivingEntity> implements Huma
     }
 
     @Override
-    public ModelPartHandler.ModelPartExtended runecraftory$getRightHandItem() {
+    public ModelPartsContainer.ModelPartExtended runecraftory$getRightHandItem() {
         if (this.runecraftory$RightHandItem == null)
             this.runecraftory$RightHandItem = ClientMixinUtils.createPlayerItemPart(false);
         return this.runecraftory$RightHandItem;
     }
 
     @Override
-    public ModelPartHandler.ModelPartExtended runecraftory$getLeftHandItem() {
+    public ModelPartsContainer.ModelPartExtended runecraftory$getLeftHandItem() {
         if (this.runecraftory$LeftHandItem == null)
             this.runecraftory$LeftHandItem = ClientMixinUtils.createPlayerItemPart(true);
         return this.runecraftory$LeftHandItem;

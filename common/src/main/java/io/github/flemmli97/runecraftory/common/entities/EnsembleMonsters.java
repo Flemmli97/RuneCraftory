@@ -2,8 +2,7 @@ package io.github.flemmli97.runecraftory.common.entities;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -24,13 +23,13 @@ public abstract class EnsembleMonsters extends Entity {
     }
 
     @Override
-    protected void defineSynchedData() {
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
     }
 
     @Override
     public void tick() {
         super.tick();
-        if (this.level instanceof ServerLevel serverLevel) {
+        if (this.level() instanceof ServerLevel serverLevel) {
             this.spawnEntities(serverLevel);
             this.discard();
         }
@@ -42,11 +41,6 @@ public abstract class EnsembleMonsters extends Entity {
 
     @Override
     protected void addAdditionalSaveData(CompoundTag compound) {
-    }
-
-    @Override
-    public Packet<?> getAddEntityPacket() {
-        return new ClientboundAddEntityPacket(this);
     }
 
     public void withDirection(Rotation rotation) {

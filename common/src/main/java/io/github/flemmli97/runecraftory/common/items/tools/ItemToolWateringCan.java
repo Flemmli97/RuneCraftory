@@ -169,7 +169,7 @@ public class ItemToolWateringCan extends TieredItem {
         boolean creative = !(entity instanceof Player) || ((Player) entity).isCreative();
         BlockState state = world.getBlockState(pos);
         int water = stack.getOrDefault(ModDataComponentTypes.WATER.get(), 0);
-        if ((creative || water > 0) && state.is(RunecraftoryTags.FARMLAND) && state.getValue(FarmBlock.MOISTURE) != 7) {
+        if ((creative || water > 0) && state.is(RunecraftoryTags.Blocks.FARMLAND) && state.getValue(FarmBlock.MOISTURE) != 7) {
             FarmlandHandler.waterLand(world, pos, state);
             if (!creative) {
                 stack.set(ModDataComponentTypes.WATER.get(), water - 1);

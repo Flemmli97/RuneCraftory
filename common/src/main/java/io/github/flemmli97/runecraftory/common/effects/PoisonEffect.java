@@ -16,7 +16,7 @@ public class PoisonEffect extends UncurableEffect {
     public boolean applyEffectTick(LivingEntity living, int amplifier) {
         float amount = living.getMaxHealth() * 0.05f;
         amount = ((living.getHealth() - amount < 1) ? (living.getHealth() - 1) : amount);
-        if (living.getType().is(RunecraftoryTags.BOSSES))
+        if (living.getType().is(RunecraftoryTags.EntityTypes.BOSSES))
             amount *= 0.25;
         if (amount > 0)
             living.hurt(CustomDamage.POISON, amount);

@@ -1,7 +1,8 @@
 package io.github.flemmli97.runecraftory.common.entities;
 
 import io.github.flemmli97.runecraftory.common.utils.MathsHelper;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinition;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -17,7 +18,7 @@ import java.util.function.Consumer;
 public abstract class LeapingMonster extends BaseMonster {
 
     protected List<LivingEntity> hitEntity;
-    private final Consumer<AnimatedAction> chargingAnim;
+    private final Consumer<AnimationDefinition> chargingAnim;
     private Vec3 leapingDir;
     private boolean initAnim;
 
@@ -26,7 +27,7 @@ public abstract class LeapingMonster extends BaseMonster {
         this.chargingAnim = this.animatedActionConsumer();
     }
 
-    protected Consumer<AnimatedAction> animatedActionConsumer() {
+    protected Consumer<AnimationDefinition> animatedActionConsumer() {
         return anim -> {
             if (this.isLeapingAnimation()) {
                 this.hitEntity = null;
@@ -50,7 +51,7 @@ public abstract class LeapingMonster extends BaseMonster {
 
     @Override
     protected Vec3 directionToLookAt() {
-        if (this.getAnimationHandler().hasAnimation() && this.isLeapingAnim(this.getAnimationHandler().getAnimation())) {
+        if (this.getAnimationHandler().hasAnimation() && this.isLeapingAnim(this.getAnimationHandler().getAnimation().getAnimation())) {
             if (this.getDeltaMovement().lengthSqr() > 0.01)
                 return this.getDeltaMovement();
             return null;
@@ -59,8 +60,8 @@ public abstract class LeapingMonster extends BaseMonster {
     }
 
     @Override
-    public void handleAttack(AnimatedAction anim) {
-        if (this.isLeapingAnim(anim)) {
+    public void handleAttack(AnimationState anim) {
+        if (this.isLeapingAnim(anim.getAnimation())) {
             this.getNavigation().stop();
             if (anim.isAt("attack_start")) {
                 Vec3 vec32 = this.getLeapVec(this.tryGetTargetPosition(this.getTarget()));
@@ -82,7 +83,7 @@ public abstract class LeapingMonster extends BaseMonster {
         }
     }
 
-    protected abstract boolean isLeapingAnim(AnimatedAction anim);
+    protected abstract boolean isLeapingAnim(String anim);
 
     public Vec3 getLeapVec(@Nullable Vec3 target) {
         if (target != null) {
@@ -96,7 +97,7 @@ public abstract class LeapingMonster extends BaseMonster {
     }
 
     @Override
-    public OrientedBoundingBox calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
+    public OrientedBoundingBox calculateAttackAABB(String anim, Vec3 target, double grow) {
         if (!this.isLeapingAnim(anim))
             return super.calculateAttackAABB(anim, target, grow);
         double width = this.getBbWidth();
@@ -123,7 +124,7 @@ public abstract class LeapingMonster extends BaseMonster {
     }
 
     private boolean isLeapingAnimation() {
-        AnimatedAction anim = this.getAnimationHandler().getAnimation();
-        return anim != null && this.isLeapingAnim(anim);
+        AnimationState anim = this.getAnimationHandler().getAnimation();
+        return anim != null && this.isLeapingAnim(anim.getID());
     }
 }

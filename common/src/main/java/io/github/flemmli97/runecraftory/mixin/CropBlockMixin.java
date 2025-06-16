@@ -16,7 +16,7 @@ public abstract class CropBlockMixin implements Growable {
 
     @Inject(method = "mayPlaceOn", at = @At("HEAD"), cancellable = true)
     private void checkPlace(BlockState state, BlockGetter level, BlockPos pos, CallbackInfoReturnable<Boolean> info) {
-        if (state.is(RunecraftoryTags.FARMLAND)) {
+        if (state.is(RunecraftoryTags.Blocks.FARMLAND)) {
             info.setReturnValue(true);
             info.cancel();
         }

@@ -39,9 +39,9 @@ public class EntitySlashResidue extends BaseDamageCloud {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(SIZE, 1f);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(SIZE, 1f);
     }
 
     @Override
@@ -80,13 +80,13 @@ public class EntitySlashResidue extends BaseDamageCloud {
     @Override
     public void tick() {
         super.tick();
-        if (this.level.isClientSide) {
+        if (this.level().isClientSide) {
             double height = this.getBoundingBox().getYsize();
             for (Vec3 vec3 : BASE) {
                 vec3 = vec3.scale(this.entityData.get(SIZE));
                 Vec3 rot = MathUtils.rotate(MathUtils.NORMAL_Y, vec3, -Mth.DEG_TO_RAD * this.getYRot());
                 for (double d = 0; d < height; d += 0.2) {
-                    this.level.addParticle(ParticleTypes.CRIT, this.getX() + rot.x, this.getY() + rot.y + d, this.getZ() + rot.z, 0, 0, 0);
+                    this.level().addParticle(ParticleTypes.CRIT, this.getX() + rot.x, this.getY() + rot.y + d, this.getZ() + rot.z, 0, 0, 0);
                 }
             }
         }

@@ -1010,202 +1010,202 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item, ItemMushroom> MUSHROOM = register("mushroom", () -> new ItemMushroom(new Item.Properties().food(LOW_FOOD_PROP)), ModCreativeModTabs.FOOD);
     public static final RegistryEntrySupplier<Item, ItemMushroom> MONARCH_MUSHROOM = register("monarch_mushroom", () -> new ItemMushroom(new Item.Properties().food(LOW_FOOD_PROP)), ModCreativeModTabs.FOOD);
 
-    public static final RegistryEntrySupplier<Item, Item> RICE = food("rice", Texture.Y, FOOD_PROP, RunecraftoryTags.RICE);
+    public static final RegistryEntrySupplier<Item, Item> RICE = food("rice", Texture.Y, FOOD_PROP, RunecraftoryTags.Items.RICE);
     public static final RegistryEntrySupplier<Item, Item> RICE_FLOUR = food("rice_flour", Texture.Y, LOW_FOOD_PROP);
-    public static final RegistryEntrySupplier<Item, Item> FLOUR = food("flour", Texture.Y, LOW_FOOD_PROP, RunecraftoryTags.FLOUR);
-    public static final RegistryEntrySupplier<Item, Item> OIL = drinkable("oil", Texture.Y, LOW_FOOD_PROP, RunecraftoryTags.OIL);
+    public static final RegistryEntrySupplier<Item, Item> FLOUR = food("flour", Texture.Y, LOW_FOOD_PROP, RunecraftoryTags.Items.FLOUR);
+    public static final RegistryEntrySupplier<Item, Item> OIL = drinkable("oil", Texture.Y, LOW_FOOD_PROP, RunecraftoryTags.Items.OIL);
     public static final RegistryEntrySupplier<Item, Item> CURRY_POWDER = food("curry_powder", Texture.Y, LOW_FOOD_PROP);
     public static final RegistryEntrySupplier<Item, Item> WINE = drinkable("wine", Texture.Y, FOOD_PROP);
-    public static final RegistryEntrySupplier<Item, Item> CHOCOLATE = food("chocolate", Texture.Y, RunecraftoryTags.CHOCOLATE);
-    public static final RegistryEntrySupplier<Item, Item> EGG_S = food("egg_s", Texture.Y, LOW_FOOD_PROP, RunecraftoryTags.FOOD_EGG);
-    public static final RegistryEntrySupplier<Item, Item> EGG_M = food("egg_m", Texture.Y, LOW_FOOD_PROP, RunecraftoryTags.FOOD_EGG);
-    public static final RegistryEntrySupplier<Item, Item> EGG_L = food("egg_l", Texture.Y, LOW_FOOD_PROP, RunecraftoryTags.FOOD_EGG);
-    public static final RegistryEntrySupplier<Item, Item> MILK_S = drinkable("milk_s", Texture.Y, LOW_FOOD_PROP, RunecraftoryTags.FOOD_MILK);
-    public static final RegistryEntrySupplier<Item, Item> MILK_M = drinkable("milk_m", Texture.Y, LOW_FOOD_PROP, RunecraftoryTags.FOOD_MILK);
-    public static final RegistryEntrySupplier<Item, Item> MILK_L = drinkable("milk_l", Texture.Y, LOW_FOOD_PROP, RunecraftoryTags.FOOD_MILK);
+    public static final RegistryEntrySupplier<Item, Item> CHOCOLATE = food("chocolate", Texture.Y, RunecraftoryTags.Items.CHOCOLATE);
+    public static final RegistryEntrySupplier<Item, Item> EGG_S = food("egg_s", Texture.Y, LOW_FOOD_PROP, RunecraftoryTags.Items.FOOD_EGG);
+    public static final RegistryEntrySupplier<Item, Item> EGG_M = food("egg_m", Texture.Y, LOW_FOOD_PROP, RunecraftoryTags.Items.FOOD_EGG);
+    public static final RegistryEntrySupplier<Item, Item> EGG_L = food("egg_l", Texture.Y, LOW_FOOD_PROP, RunecraftoryTags.Items.FOOD_EGG);
+    public static final RegistryEntrySupplier<Item, Item> MILK_S = drinkable("milk_s", Texture.Y, LOW_FOOD_PROP, RunecraftoryTags.Items.FOOD_MILK);
+    public static final RegistryEntrySupplier<Item, Item> MILK_M = drinkable("milk_m", Texture.Y, LOW_FOOD_PROP, RunecraftoryTags.Items.FOOD_MILK);
+    public static final RegistryEntrySupplier<Item, Item> MILK_L = drinkable("milk_l", Texture.Y, LOW_FOOD_PROP, RunecraftoryTags.Items.FOOD_MILK);
 
-    public static final RegistryEntrySupplier<Item, Item> ONIGIRI = food("onigiri", Texture.Y, RunecraftoryTags.ONIGIRI, RunecraftoryTags.SIMPLE);
-    public static final RegistryEntrySupplier<Item, Item> CHEESE = food("cheese", Texture.Y, LOW_FOOD_PROP, RunecraftoryTags.CHEESE, RunecraftoryTags.SIMPLE);
-    public static final RegistryEntrySupplier<Item, Item> PICKLED_TURNIP = food("pickled_turnip", Texture.Y, RunecraftoryTags.SIMPLE);
-    public static final RegistryEntrySupplier<Item, Item> PICKLES = food("pickles", Texture.N, RunecraftoryTags.SIMPLE);
-    public static final RegistryEntrySupplier<Item, Item> BAMBOO_RICE = food("bamboo_rice", Texture.N, RunecraftoryTags.SIMPLE);
-    public static final RegistryEntrySupplier<Item, Item> SALMON_ONIGIRI = food("salmon_onigiri", Texture.Y, RunecraftoryTags.ONIGIRI, RunecraftoryTags.SIMPLE);
-    public static final RegistryEntrySupplier<Item, Item> PICKLE_MIX = food("pickle_mix", Texture.N, RunecraftoryTags.SIMPLE);
-    public static final RegistryEntrySupplier<Item, Item> SANDWICH = food("sandwich", Texture.N, RunecraftoryTags.SIMPLE);
-    public static final RegistryEntrySupplier<Item, Item> FRUIT_SANDWICH = food("fruit_sandwich", Texture.N, RunecraftoryTags.SIMPLE);
-    public static final RegistryEntrySupplier<Item, Item> SALAD = food("salad", Texture.N, RunecraftoryTags.SIMPLE);
-    public static final RegistryEntrySupplier<Item, Item> RELAX_TEA_LEAVES = food("relax_tea_leaves", Texture.N, RunecraftoryTags.SIMPLE);
-    public static final RegistryEntrySupplier<Item, Item> TURNIP_HEAVEN = food("turnip_heaven", Texture.N, RunecraftoryTags.SIMPLE);
+    public static final RegistryEntrySupplier<Item, Item> ONIGIRI = food("onigiri", Texture.Y, RunecraftoryTags.Items.ONIGIRI, RunecraftoryTags.Items.SIMPLE);
+    public static final RegistryEntrySupplier<Item, Item> CHEESE = food("cheese", Texture.Y, LOW_FOOD_PROP, RunecraftoryTags.Items.CHEESE, RunecraftoryTags.Items.SIMPLE);
+    public static final RegistryEntrySupplier<Item, Item> PICKLED_TURNIP = food("pickled_turnip", Texture.Y, RunecraftoryTags.Items.SIMPLE);
+    public static final RegistryEntrySupplier<Item, Item> PICKLES = food("pickles", Texture.N, RunecraftoryTags.Items.SIMPLE);
+    public static final RegistryEntrySupplier<Item, Item> BAMBOO_RICE = food("bamboo_rice", Texture.N, RunecraftoryTags.Items.SIMPLE);
+    public static final RegistryEntrySupplier<Item, Item> SALMON_ONIGIRI = food("salmon_onigiri", Texture.Y, RunecraftoryTags.Items.ONIGIRI, RunecraftoryTags.Items.SIMPLE);
+    public static final RegistryEntrySupplier<Item, Item> PICKLE_MIX = food("pickle_mix", Texture.N, RunecraftoryTags.Items.SIMPLE);
+    public static final RegistryEntrySupplier<Item, Item> SANDWICH = food("sandwich", Texture.N, RunecraftoryTags.Items.SIMPLE);
+    public static final RegistryEntrySupplier<Item, Item> FRUIT_SANDWICH = food("fruit_sandwich", Texture.N, RunecraftoryTags.Items.SIMPLE);
+    public static final RegistryEntrySupplier<Item, Item> SALAD = food("salad", Texture.N, RunecraftoryTags.Items.SIMPLE);
+    public static final RegistryEntrySupplier<Item, Item> RELAX_TEA_LEAVES = food("relax_tea_leaves", Texture.N, RunecraftoryTags.Items.SIMPLE);
+    public static final RegistryEntrySupplier<Item, Item> TURNIP_HEAVEN = food("turnip_heaven", Texture.N, RunecraftoryTags.Items.SIMPLE);
 
-    public static final RegistryEntrySupplier<Item, Item> DUMPLINGS = food("dumplings", Texture.N, RunecraftoryTags.STEAMED);
-    public static final RegistryEntrySupplier<Item, Item> FLAN = food("flan", Texture.Y, RunecraftoryTags.STEAMED);
-    public static final RegistryEntrySupplier<Item, Item> PUMPKIN_FLAN = food("pumpkin_flan", Texture.N, RunecraftoryTags.STEAMED);
-    public static final RegistryEntrySupplier<Item, Item> STEAMED_BREAD = food("steamed_bread", Texture.N, RunecraftoryTags.STEAMED);
-    public static final RegistryEntrySupplier<Item, Item> CHEESE_BREAD = food("cheese_bread", Texture.N, RunecraftoryTags.STEAMED);
-    public static final RegistryEntrySupplier<Item, Item> POUND_CAKE = food("pound_cake", Texture.N, RunecraftoryTags.STEAMED);
-    public static final RegistryEntrySupplier<Item, Item> CHOCOLATE_SPONGE = food("chocolate_sponge", Texture.N, RunecraftoryTags.STEAMED);
-    public static final RegistryEntrySupplier<Item, Item> CURRY_MANJU = food("curry_manju", Texture.N, RunecraftoryTags.STEAMED);
-    public static final RegistryEntrySupplier<Item, Item> CHINESE_MANJU = food("chinese_manju", Texture.N, RunecraftoryTags.STEAMED);
-    public static final RegistryEntrySupplier<Item, Item> MEAT_DUMPLING = food("meat_dumpling", Texture.N, RunecraftoryTags.STEAMED);
-    public static final RegistryEntrySupplier<Item, Item> STEAMED_GYOZA = food("steamed_gyoza", Texture.N, RunecraftoryTags.STEAMED);
+    public static final RegistryEntrySupplier<Item, Item> DUMPLINGS = food("dumplings", Texture.N, RunecraftoryTags.Items.STEAMED);
+    public static final RegistryEntrySupplier<Item, Item> FLAN = food("flan", Texture.Y, RunecraftoryTags.Items.STEAMED);
+    public static final RegistryEntrySupplier<Item, Item> PUMPKIN_FLAN = food("pumpkin_flan", Texture.N, RunecraftoryTags.Items.STEAMED);
+    public static final RegistryEntrySupplier<Item, Item> STEAMED_BREAD = food("steamed_bread", Texture.N, RunecraftoryTags.Items.STEAMED);
+    public static final RegistryEntrySupplier<Item, Item> CHEESE_BREAD = food("cheese_bread", Texture.N, RunecraftoryTags.Items.STEAMED);
+    public static final RegistryEntrySupplier<Item, Item> POUND_CAKE = food("pound_cake", Texture.N, RunecraftoryTags.Items.STEAMED);
+    public static final RegistryEntrySupplier<Item, Item> CHOCOLATE_SPONGE = food("chocolate_sponge", Texture.N, RunecraftoryTags.Items.STEAMED);
+    public static final RegistryEntrySupplier<Item, Item> CURRY_MANJU = food("curry_manju", Texture.N, RunecraftoryTags.Items.STEAMED);
+    public static final RegistryEntrySupplier<Item, Item> CHINESE_MANJU = food("chinese_manju", Texture.N, RunecraftoryTags.Items.STEAMED);
+    public static final RegistryEntrySupplier<Item, Item> MEAT_DUMPLING = food("meat_dumpling", Texture.N, RunecraftoryTags.Items.STEAMED);
+    public static final RegistryEntrySupplier<Item, Item> STEAMED_GYOZA = food("steamed_gyoza", Texture.N, RunecraftoryTags.Items.STEAMED);
 
-    public static final RegistryEntrySupplier<Item, Item> MAYONNAISE = food("mayonnaise", Texture.Y, LOW_FOOD_PROP, RunecraftoryTags.MAYO, RunecraftoryTags.MIXED);
-    public static final RegistryEntrySupplier<Item, Item> BUTTER = food("butter", Texture.Y, LOW_FOOD_PROP, RunecraftoryTags.BUTTER, RunecraftoryTags.MIXED);
-    public static final RegistryEntrySupplier<Item, Item> KETCHUP = drinkable("ketchup", Texture.Y, LOW_FOOD_PROP, RunecraftoryTags.KETCHUP, RunecraftoryTags.MIXED);
-    public static final RegistryEntrySupplier<Item, Item> ICE_CREAM = food("ice_cream", Texture.N, RunecraftoryTags.MIXED);
-    public static final RegistryEntrySupplier<Item, Item> APPLE_JUICE = drinkable("apple_juice", Texture.Y, HIGH_FOOD_PROP, RunecraftoryTags.JUICE, RunecraftoryTags.MIXED);
-    public static final RegistryEntrySupplier<Item, Item> ORANGE_JUICE = drinkable("orange_juice", Texture.Y, HIGH_FOOD_PROP, RunecraftoryTags.JUICE, RunecraftoryTags.MIXED);
-    public static final RegistryEntrySupplier<Item, Item> GRAPE_JUICE = drinkable("grape_juice", Texture.Y, HIGH_FOOD_PROP, RunecraftoryTags.JUICE, RunecraftoryTags.MIXED);
-    public static final RegistryEntrySupplier<Item, Item> STRAWBERRY_MILK = drinkable("strawberry_milk", Texture.N, HIGH_FOOD_PROP, RunecraftoryTags.MIXED);
-    public static final RegistryEntrySupplier<Item, Item> TOMATO_JUICE = drinkable("tomato_juice", Texture.Y, HIGH_FOOD_PROP, RunecraftoryTags.JUICE, RunecraftoryTags.MIXED);
-    public static final RegistryEntrySupplier<Item, Item> PINEAPPLE_JUICE = drinkable("pineapple_juice", Texture.Y, HIGH_FOOD_PROP, RunecraftoryTags.JUICE, RunecraftoryTags.MIXED);
-    public static final RegistryEntrySupplier<Item, Item> FRUIT_JUICE = drinkable("fruit_juice", Texture.Y, HIGH_FOOD_PROP, RunecraftoryTags.JUICE, RunecraftoryTags.MIXED);
-    public static final RegistryEntrySupplier<Item, Item> FRUIT_SMOOTHIE = drinkable("fruit_smoothie", Texture.Y, HIGH_FOOD_PROP, RunecraftoryTags.MIXED);
-    public static final RegistryEntrySupplier<Item, Item> VEGETABLE_JUICE = drinkable("vegetable_juice", Texture.Y, HIGH_FOOD_PROP, RunecraftoryTags.JUICE, RunecraftoryTags.MIXED);
-    public static final RegistryEntrySupplier<Item, Item> VEGGIE_SMOOTHIE = drinkable("veggie_smoothie", Texture.Y, HIGH_FOOD_PROP, RunecraftoryTags.JUICE, RunecraftoryTags.MIXED);
-    public static final RegistryEntrySupplier<Item, Item> MIXED_JUICE = drinkable("mixed_juice", Texture.Y, HIGH_FOOD_PROP, RunecraftoryTags.JUICE, RunecraftoryTags.MIXED);
-    public static final RegistryEntrySupplier<Item, Item> MIXED_SMOOTHIE = drinkable("mixed_smoothie", Texture.Y, HIGH_FOOD_PROP, RunecraftoryTags.MIXED);
-    public static final RegistryEntrySupplier<Item, Item> HOT_JUICE = drinkable("hot_juice", Texture.N, HIGH_FOOD_PROP, RunecraftoryTags.MIXED);
-    public static final RegistryEntrySupplier<Item, Item> PRELUDE_TO_LOVE = drinkable("prelude_to_love", Texture.N, HIGH_FOOD_PROP, RunecraftoryTags.MIXED);
-    public static final RegistryEntrySupplier<Item, Item> GOLD_JUICE = drinkable("gold_juice", Texture.N, HIGH_FOOD_PROP, RunecraftoryTags.MIXED);
+    public static final RegistryEntrySupplier<Item, Item> MAYONNAISE = food("mayonnaise", Texture.Y, LOW_FOOD_PROP, RunecraftoryTags.Items.MAYO, RunecraftoryTags.Items.MIXED);
+    public static final RegistryEntrySupplier<Item, Item> BUTTER = food("butter", Texture.Y, LOW_FOOD_PROP, RunecraftoryTags.Items.BUTTER, RunecraftoryTags.Items.MIXED);
+    public static final RegistryEntrySupplier<Item, Item> KETCHUP = drinkable("ketchup", Texture.Y, LOW_FOOD_PROP, RunecraftoryTags.Items.KETCHUP, RunecraftoryTags.Items.MIXED);
+    public static final RegistryEntrySupplier<Item, Item> ICE_CREAM = food("ice_cream", Texture.N, RunecraftoryTags.Items.MIXED);
+    public static final RegistryEntrySupplier<Item, Item> APPLE_JUICE = drinkable("apple_juice", Texture.Y, HIGH_FOOD_PROP, RunecraftoryTags.Items.JUICE, RunecraftoryTags.Items.MIXED);
+    public static final RegistryEntrySupplier<Item, Item> ORANGE_JUICE = drinkable("orange_juice", Texture.Y, HIGH_FOOD_PROP, RunecraftoryTags.Items.JUICE, RunecraftoryTags.Items.MIXED);
+    public static final RegistryEntrySupplier<Item, Item> GRAPE_JUICE = drinkable("grape_juice", Texture.Y, HIGH_FOOD_PROP, RunecraftoryTags.Items.JUICE, RunecraftoryTags.Items.MIXED);
+    public static final RegistryEntrySupplier<Item, Item> STRAWBERRY_MILK = drinkable("strawberry_milk", Texture.N, HIGH_FOOD_PROP, RunecraftoryTags.Items.MIXED);
+    public static final RegistryEntrySupplier<Item, Item> TOMATO_JUICE = drinkable("tomato_juice", Texture.Y, HIGH_FOOD_PROP, RunecraftoryTags.Items.JUICE, RunecraftoryTags.Items.MIXED);
+    public static final RegistryEntrySupplier<Item, Item> PINEAPPLE_JUICE = drinkable("pineapple_juice", Texture.Y, HIGH_FOOD_PROP, RunecraftoryTags.Items.JUICE, RunecraftoryTags.Items.MIXED);
+    public static final RegistryEntrySupplier<Item, Item> FRUIT_JUICE = drinkable("fruit_juice", Texture.Y, HIGH_FOOD_PROP, RunecraftoryTags.Items.JUICE, RunecraftoryTags.Items.MIXED);
+    public static final RegistryEntrySupplier<Item, Item> FRUIT_SMOOTHIE = drinkable("fruit_smoothie", Texture.Y, HIGH_FOOD_PROP, RunecraftoryTags.Items.MIXED);
+    public static final RegistryEntrySupplier<Item, Item> VEGETABLE_JUICE = drinkable("vegetable_juice", Texture.Y, HIGH_FOOD_PROP, RunecraftoryTags.Items.JUICE, RunecraftoryTags.Items.MIXED);
+    public static final RegistryEntrySupplier<Item, Item> VEGGIE_SMOOTHIE = drinkable("veggie_smoothie", Texture.Y, HIGH_FOOD_PROP, RunecraftoryTags.Items.JUICE, RunecraftoryTags.Items.MIXED);
+    public static final RegistryEntrySupplier<Item, Item> MIXED_JUICE = drinkable("mixed_juice", Texture.Y, HIGH_FOOD_PROP, RunecraftoryTags.Items.JUICE, RunecraftoryTags.Items.MIXED);
+    public static final RegistryEntrySupplier<Item, Item> MIXED_SMOOTHIE = drinkable("mixed_smoothie", Texture.Y, HIGH_FOOD_PROP, RunecraftoryTags.Items.MIXED);
+    public static final RegistryEntrySupplier<Item, Item> HOT_JUICE = drinkable("hot_juice", Texture.N, HIGH_FOOD_PROP, RunecraftoryTags.Items.MIXED);
+    public static final RegistryEntrySupplier<Item, Item> PRELUDE_TO_LOVE = drinkable("prelude_to_love", Texture.N, HIGH_FOOD_PROP, RunecraftoryTags.Items.MIXED);
+    public static final RegistryEntrySupplier<Item, Item> GOLD_JUICE = drinkable("gold_juice", Texture.N, HIGH_FOOD_PROP, RunecraftoryTags.Items.MIXED);
 
-    public static final RegistryEntrySupplier<Item, Item> BAKED_ONIGIRI = food("baked_onigiri", Texture.Y, RunecraftoryTags.ONIGIRI, RunecraftoryTags.OVEN);
-    public static final RegistryEntrySupplier<Item, Item> SWEET_POTATO = food("sweet_potato", Texture.N, RunecraftoryTags.OVEN);
-    public static final RegistryEntrySupplier<Item, Item> CORN_ON_THE_COB = food("corn_on_the_cob", Texture.N, RunecraftoryTags.OVEN);
-    public static final RegistryEntrySupplier<Item, Item> BREAD = food("bread", Texture.N, RunecraftoryTags.BREAD, RunecraftoryTags.OVEN);
-    public static final RegistryEntrySupplier<Item, Item> TOAST = food("toast", Texture.Y, RunecraftoryTags.TOAST, RunecraftoryTags.OVEN);
-    public static final RegistryEntrySupplier<Item, Item> RAISIN_BREAD = food("raisin_bread", Texture.N, RunecraftoryTags.OVEN);
-    public static final RegistryEntrySupplier<Item, Item> YAM_OF_THE_AGES = food("yam_of_the_ages", Texture.N, RunecraftoryTags.OVEN);
-    public static final RegistryEntrySupplier<Item, Item> BUTTER_ROLL = food("butter_roll", Texture.N, RunecraftoryTags.OVEN);
-    public static final RegistryEntrySupplier<Item, Item> JAM_ROLL = food("jam_roll", Texture.N, RunecraftoryTags.OVEN);
-    public static final RegistryEntrySupplier<Item, Item> APPLE_PIE = food("apple_pie", Texture.Y, RunecraftoryTags.PIE, RunecraftoryTags.OVEN);
-    public static final RegistryEntrySupplier<Item, Item> CAKE = food("cake", Texture.N, RunecraftoryTags.PIE, RunecraftoryTags.OVEN);
-    public static final RegistryEntrySupplier<Item, Item> CHEESECAKE = food("cheesecake", Texture.Y, RunecraftoryTags.PIE, RunecraftoryTags.OVEN);
-    public static final RegistryEntrySupplier<Item, Item> CHOCOLATE_CAKE = food("chocolate_cake", Texture.Y, RunecraftoryTags.PIE, RunecraftoryTags.OVEN);
-    public static final RegistryEntrySupplier<Item, Item> COOKIE = food("cookie", Texture.Y, RunecraftoryTags.OVEN);
-    public static final RegistryEntrySupplier<Item, Item> CHOCO_COOKIE = food("choco_cookie", Texture.Y, RunecraftoryTags.OVEN);
-    public static final RegistryEntrySupplier<Item, Item> DORIA = food("doria", Texture.N, RunecraftoryTags.OVEN);
-    public static final RegistryEntrySupplier<Item, Item> SEAFOOD_DORIA = food("seafood_doria", Texture.N, RunecraftoryTags.OVEN);
-    public static final RegistryEntrySupplier<Item, Item> PIZZA = food("pizza", Texture.N, RunecraftoryTags.OVEN);
-    public static final RegistryEntrySupplier<Item, Item> SEAFOOD_PIZZA = food("seafood_pizza", Texture.N, RunecraftoryTags.OVEN);
-    public static final RegistryEntrySupplier<Item, Item> GRATIN = food("gratin", Texture.N, RunecraftoryTags.OVEN);
-    public static final RegistryEntrySupplier<Item, Item> SEAFOOD_GRATIN = food("seafood_gratin", Texture.N, RunecraftoryTags.OVEN);
+    public static final RegistryEntrySupplier<Item, Item> BAKED_ONIGIRI = food("baked_onigiri", Texture.Y, RunecraftoryTags.Items.ONIGIRI, RunecraftoryTags.Items.OVEN);
+    public static final RegistryEntrySupplier<Item, Item> SWEET_POTATO = food("sweet_potato", Texture.N, RunecraftoryTags.Items.OVEN);
+    public static final RegistryEntrySupplier<Item, Item> CORN_ON_THE_COB = food("corn_on_the_cob", Texture.N, RunecraftoryTags.Items.OVEN);
+    public static final RegistryEntrySupplier<Item, Item> BREAD = food("bread", Texture.N, RunecraftoryTags.Items.BREAD, RunecraftoryTags.Items.OVEN);
+    public static final RegistryEntrySupplier<Item, Item> TOAST = food("toast", Texture.Y, RunecraftoryTags.Items.TOAST, RunecraftoryTags.Items.OVEN);
+    public static final RegistryEntrySupplier<Item, Item> RAISIN_BREAD = food("raisin_bread", Texture.N, RunecraftoryTags.Items.OVEN);
+    public static final RegistryEntrySupplier<Item, Item> YAM_OF_THE_AGES = food("yam_of_the_ages", Texture.N, RunecraftoryTags.Items.OVEN);
+    public static final RegistryEntrySupplier<Item, Item> BUTTER_ROLL = food("butter_roll", Texture.N, RunecraftoryTags.Items.OVEN);
+    public static final RegistryEntrySupplier<Item, Item> JAM_ROLL = food("jam_roll", Texture.N, RunecraftoryTags.Items.OVEN);
+    public static final RegistryEntrySupplier<Item, Item> APPLE_PIE = food("apple_pie", Texture.Y, RunecraftoryTags.Items.PIE, RunecraftoryTags.Items.OVEN);
+    public static final RegistryEntrySupplier<Item, Item> CAKE = food("cake", Texture.N, RunecraftoryTags.Items.PIE, RunecraftoryTags.Items.OVEN);
+    public static final RegistryEntrySupplier<Item, Item> CHEESECAKE = food("cheesecake", Texture.Y, RunecraftoryTags.Items.PIE, RunecraftoryTags.Items.OVEN);
+    public static final RegistryEntrySupplier<Item, Item> CHOCOLATE_CAKE = food("chocolate_cake", Texture.Y, RunecraftoryTags.Items.PIE, RunecraftoryTags.Items.OVEN);
+    public static final RegistryEntrySupplier<Item, Item> COOKIE = food("cookie", Texture.Y, RunecraftoryTags.Items.OVEN);
+    public static final RegistryEntrySupplier<Item, Item> CHOCO_COOKIE = food("choco_cookie", Texture.Y, RunecraftoryTags.Items.OVEN);
+    public static final RegistryEntrySupplier<Item, Item> DORIA = food("doria", Texture.N, RunecraftoryTags.Items.OVEN);
+    public static final RegistryEntrySupplier<Item, Item> SEAFOOD_DORIA = food("seafood_doria", Texture.N, RunecraftoryTags.Items.OVEN);
+    public static final RegistryEntrySupplier<Item, Item> PIZZA = food("pizza", Texture.N, RunecraftoryTags.Items.OVEN);
+    public static final RegistryEntrySupplier<Item, Item> SEAFOOD_PIZZA = food("seafood_pizza", Texture.N, RunecraftoryTags.Items.OVEN);
+    public static final RegistryEntrySupplier<Item, Item> GRATIN = food("gratin", Texture.N, RunecraftoryTags.Items.OVEN);
+    public static final RegistryEntrySupplier<Item, Item> SEAFOOD_GRATIN = food("seafood_gratin", Texture.N, RunecraftoryTags.Items.OVEN);
 
-    public static final RegistryEntrySupplier<Item, Item> YOGURT = food("yogurt", Texture.Y, RunecraftoryTags.POT);
-    public static final RegistryEntrySupplier<Item, Item> RICE_PORRIDGE = food("rice_porridge", Texture.N, RunecraftoryTags.POT);
-    public static final RegistryEntrySupplier<Item, Item> MILK_PORRIDGE = food("milk_porridge", Texture.N, RunecraftoryTags.POT);
-    public static final RegistryEntrySupplier<Item, Item> MARMALADE = food("marmalade", Texture.Y, RunecraftoryTags.JAM, RunecraftoryTags.POT);
-    public static final RegistryEntrySupplier<Item, Item> APPLE_JAM = food("apple_jam", Texture.Y, RunecraftoryTags.JAM, RunecraftoryTags.POT);
-    public static final RegistryEntrySupplier<Item, Item> GRAPE_JAM = food("grape_jam", Texture.Y, RunecraftoryTags.JAM, RunecraftoryTags.POT);
-    public static final RegistryEntrySupplier<Item, Item> STRAWBERRY_JAM = food("strawberry_jam", Texture.Y, RunecraftoryTags.JAM, RunecraftoryTags.POT);
-    public static final RegistryEntrySupplier<Item, Item> HOT_MILK = drinkable("hot_milk", Texture.Y, HIGH_FOOD_PROP, RunecraftoryTags.POT);
-    public static final RegistryEntrySupplier<Item, Item> HOT_CHOCOLATE = drinkable("hot_chocolate", Texture.Y, HIGH_FOOD_PROP, RunecraftoryTags.POT);
-    public static final RegistryEntrySupplier<Item, Item> BOILED_EGG = food("boiled_egg", Texture.N, RunecraftoryTags.POT);
-    public static final RegistryEntrySupplier<Item, Item> BOILED_SPINACH = food("boiled_spinach", Texture.N, RunecraftoryTags.POT);
-    public static final RegistryEntrySupplier<Item, Item> BOILED_PUMPKIN = food("boiled_pumpkin", Texture.N, RunecraftoryTags.POT);
-    public static final RegistryEntrySupplier<Item, Item> CHEESE_FONDUE = food("cheese_fondue", Texture.N, RunecraftoryTags.POT);
-    public static final RegistryEntrySupplier<Item, Item> GRAPE_LIQUEUR = drinkable("grape_liqueur", Texture.N, HIGH_FOOD_PROP, RunecraftoryTags.POT);
-    public static final RegistryEntrySupplier<Item, Item> GLAZED_YAM = food("glazed_yam", Texture.N, RunecraftoryTags.POT);
-    public static final RegistryEntrySupplier<Item, Item> GRILLED_MISO = food("grilled_miso", Texture.N, RunecraftoryTags.POT);
-    public static final RegistryEntrySupplier<Item, Item> STEW = food("stew", Texture.N, RunecraftoryTags.POT);
-    public static final RegistryEntrySupplier<Item, Item> ROCKFISH_STEW = food("rockfish_stew", Texture.N, RunecraftoryTags.POT);
-    public static final RegistryEntrySupplier<Item, Item> UNION_STEW = food("union_stew", Texture.N, RunecraftoryTags.POT);
-    public static final RegistryEntrySupplier<Item, Item> EGG_BOWL = food("egg_bowl", Texture.N, RunecraftoryTags.POT);
-    public static final RegistryEntrySupplier<Item, Item> TEMPURA_BOWL = food("tempura_bowl", Texture.N, RunecraftoryTags.POT);
-    public static final RegistryEntrySupplier<Item, Item> CURRY_RICE = food("curry_rice", Texture.N, RunecraftoryTags.POT);
-    public static final RegistryEntrySupplier<Item, Item> UDON = food("udon", Texture.Y, RunecraftoryTags.UDON, RunecraftoryTags.POT);
-    public static final RegistryEntrySupplier<Item, Item> TEMPURA_UDON = food("tempura_udon", Texture.Y, RunecraftoryTags.UDON, RunecraftoryTags.POT);
-    public static final RegistryEntrySupplier<Item, Item> CURRY_UDON = food("curry_udon", Texture.Y, RunecraftoryTags.UDON, RunecraftoryTags.POT);
-    public static final RegistryEntrySupplier<Item, Item> BOILED_GYOZA = food("boiled_gyoza", Texture.N, RunecraftoryTags.POT);
-    public static final RegistryEntrySupplier<Item, Item> RELAX_TEA = food("relax_tea", Texture.N, RunecraftoryTags.POT);
-    public static final RegistryEntrySupplier<Item, Item> ULTIMATE_CURRY = food("ultimate_curry", Texture.N, RunecraftoryTags.POT);
-    public static final RegistryEntrySupplier<Item, Item> ROYAL_CURRY = food("royal_curry", Texture.N, RunecraftoryTags.POT);
+    public static final RegistryEntrySupplier<Item, Item> YOGURT = food("yogurt", Texture.Y, RunecraftoryTags.Items.POT);
+    public static final RegistryEntrySupplier<Item, Item> RICE_PORRIDGE = food("rice_porridge", Texture.N, RunecraftoryTags.Items.POT);
+    public static final RegistryEntrySupplier<Item, Item> MILK_PORRIDGE = food("milk_porridge", Texture.N, RunecraftoryTags.Items.POT);
+    public static final RegistryEntrySupplier<Item, Item> MARMALADE = food("marmalade", Texture.Y, RunecraftoryTags.Items.JAM, RunecraftoryTags.Items.POT);
+    public static final RegistryEntrySupplier<Item, Item> APPLE_JAM = food("apple_jam", Texture.Y, RunecraftoryTags.Items.JAM, RunecraftoryTags.Items.POT);
+    public static final RegistryEntrySupplier<Item, Item> GRAPE_JAM = food("grape_jam", Texture.Y, RunecraftoryTags.Items.JAM, RunecraftoryTags.Items.POT);
+    public static final RegistryEntrySupplier<Item, Item> STRAWBERRY_JAM = food("strawberry_jam", Texture.Y, RunecraftoryTags.Items.JAM, RunecraftoryTags.Items.POT);
+    public static final RegistryEntrySupplier<Item, Item> HOT_MILK = drinkable("hot_milk", Texture.Y, HIGH_FOOD_PROP, RunecraftoryTags.Items.POT);
+    public static final RegistryEntrySupplier<Item, Item> HOT_CHOCOLATE = drinkable("hot_chocolate", Texture.Y, HIGH_FOOD_PROP, RunecraftoryTags.Items.POT);
+    public static final RegistryEntrySupplier<Item, Item> BOILED_EGG = food("boiled_egg", Texture.N, RunecraftoryTags.Items.POT);
+    public static final RegistryEntrySupplier<Item, Item> BOILED_SPINACH = food("boiled_spinach", Texture.N, RunecraftoryTags.Items.POT);
+    public static final RegistryEntrySupplier<Item, Item> BOILED_PUMPKIN = food("boiled_pumpkin", Texture.N, RunecraftoryTags.Items.POT);
+    public static final RegistryEntrySupplier<Item, Item> CHEESE_FONDUE = food("cheese_fondue", Texture.N, RunecraftoryTags.Items.POT);
+    public static final RegistryEntrySupplier<Item, Item> GRAPE_LIQUEUR = drinkable("grape_liqueur", Texture.N, HIGH_FOOD_PROP, RunecraftoryTags.Items.POT);
+    public static final RegistryEntrySupplier<Item, Item> GLAZED_YAM = food("glazed_yam", Texture.N, RunecraftoryTags.Items.POT);
+    public static final RegistryEntrySupplier<Item, Item> GRILLED_MISO = food("grilled_miso", Texture.N, RunecraftoryTags.Items.POT);
+    public static final RegistryEntrySupplier<Item, Item> STEW = food("stew", Texture.N, RunecraftoryTags.Items.POT);
+    public static final RegistryEntrySupplier<Item, Item> ROCKFISH_STEW = food("rockfish_stew", Texture.N, RunecraftoryTags.Items.POT);
+    public static final RegistryEntrySupplier<Item, Item> UNION_STEW = food("union_stew", Texture.N, RunecraftoryTags.Items.POT);
+    public static final RegistryEntrySupplier<Item, Item> EGG_BOWL = food("egg_bowl", Texture.N, RunecraftoryTags.Items.POT);
+    public static final RegistryEntrySupplier<Item, Item> TEMPURA_BOWL = food("tempura_bowl", Texture.N, RunecraftoryTags.Items.POT);
+    public static final RegistryEntrySupplier<Item, Item> CURRY_RICE = food("curry_rice", Texture.N, RunecraftoryTags.Items.POT);
+    public static final RegistryEntrySupplier<Item, Item> UDON = food("udon", Texture.Y, RunecraftoryTags.Items.UDON, RunecraftoryTags.Items.POT);
+    public static final RegistryEntrySupplier<Item, Item> TEMPURA_UDON = food("tempura_udon", Texture.Y, RunecraftoryTags.Items.UDON, RunecraftoryTags.Items.POT);
+    public static final RegistryEntrySupplier<Item, Item> CURRY_UDON = food("curry_udon", Texture.Y, RunecraftoryTags.Items.UDON, RunecraftoryTags.Items.POT);
+    public static final RegistryEntrySupplier<Item, Item> BOILED_GYOZA = food("boiled_gyoza", Texture.N, RunecraftoryTags.Items.POT);
+    public static final RegistryEntrySupplier<Item, Item> RELAX_TEA = food("relax_tea", Texture.N, RunecraftoryTags.Items.POT);
+    public static final RegistryEntrySupplier<Item, Item> ULTIMATE_CURRY = food("ultimate_curry", Texture.N, RunecraftoryTags.Items.POT);
+    public static final RegistryEntrySupplier<Item, Item> ROYAL_CURRY = food("royal_curry", Texture.N, RunecraftoryTags.Items.POT);
 
-    public static final RegistryEntrySupplier<Item, Item> BAKED_APPLE = food("baked_apple", Texture.Y, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> FRIED_EGGS = food("fried_eggs", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> POPCORN = food("popcorn", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> FRENCH_FRIES = food("french_fries", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> CORN_CEREAL = food("corn_cereal", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> OMELET = food("omelet", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> OMELET_RICE = food("omelet_rice", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> FRIED_RICE = food("fried_rice", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> FRIED_VEGGIES = food("fried_veggies", Texture.Y, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> FRENCH_TOAST = food("french_toast", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> CROQUETTES = food("croquettes", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> PANCAKES = food("pancakes", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> DONUT = food("donut", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> RISOTTO = food("risotto", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> MISO_EGGPLANT = food("miso_eggplant", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> GYOZA = food("gyoza", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> TEMPURA = food("tempura", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> CURRY_BREAD = food("curry_bread", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> CABBAGE_CAKES = food("cabbage_cakes", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> DRY_CURRY = food("dry_curry", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> FRIED_UDON = food("fried_udon", Texture.N, RunecraftoryTags.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> BAKED_APPLE = food("baked_apple", Texture.Y, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> FRIED_EGGS = food("fried_eggs", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> POPCORN = food("popcorn", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> FRENCH_FRIES = food("french_fries", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> CORN_CEREAL = food("corn_cereal", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> OMELET = food("omelet", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> OMELET_RICE = food("omelet_rice", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> FRIED_RICE = food("fried_rice", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> FRIED_VEGGIES = food("fried_veggies", Texture.Y, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> FRENCH_TOAST = food("french_toast", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> CROQUETTES = food("croquettes", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> PANCAKES = food("pancakes", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> DONUT = food("donut", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> RISOTTO = food("risotto", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> MISO_EGGPLANT = food("miso_eggplant", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> GYOZA = food("gyoza", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> TEMPURA = food("tempura", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> CURRY_BREAD = food("curry_bread", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> CABBAGE_CAKES = food("cabbage_cakes", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> DRY_CURRY = food("dry_curry", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> FRIED_UDON = food("fried_udon", Texture.N, RunecraftoryTags.Items.FRIED);
 
-    public static final RegistryEntrySupplier<Item, Item> SALTED_CHAR = food("salted_char", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> SALTED_MASU_TROUT = food("salted_masu_trout", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> SALTED_CHERRY_SALMON = food("salted_cherry_salmon", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> SALTED_RAINBOW_TROUT = food("salted_rainbow_trout", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> SALTED_SALMON = food("salted_salmon", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> SALTED_TAIMEN = food("salted_taimen", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> SALTED_CHUB = food("salted_chub", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> GRILLED_SQUID = food("grilled_squid", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> GRILLED_SUNSQUID = food("grilled_sunsquid", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> GRILLED_LAMP_SQUID = food("grilled_lamp_squid", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> GRILLED_SAND_FLOUNDER = food("grilled_sand_flounder", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> GRILLED_SHRIMP = food("grilled_shrimp", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> GRILLED_LOBSTER = food("grilled_lobster", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> GRILLED_BLOWFISH = food("grilled_blowfish", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> GRILLED_FALL_FLOUNDER = food("grilled_fall_flounder", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> GRILLED_TURBOT = food("grilled_turbot", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> GRILLED_FLOUNDER = food("grilled_flounder", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> SALTED_PIKE = food("salted_pike", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> GRILLED_NEEDLEFISH = food("grilled_needlefish", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> DRIED_SARDINES = food("dried_sardines", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> TUNA_TERIYAKI = food("tuna_teriyaki", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> SALTED_POND_SMELT = food("salted_pond_smelt", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> GRILLED_YELLOWTAIL = food("grilled_yellowtail", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> GRILLED_MACKEREL = food("grilled_mackerel", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> GRILLED_SKIPJACK = food("grilled_skipjack", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> GRILLED_LOVER_SNAPPER = food("grilled_lover_snapper", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> GRILLED_GLITTER_SNAPPER = food("grilled_glitter_snapper", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> GRILLED_GIRELLA = food("grilled_girella", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> GRILLED_SNAPPER = food("grilled_snapper", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> GRILLED_GIBELIO = food("grilled_gibelio", Texture.N, RunecraftoryTags.FRIED);
-    public static final RegistryEntrySupplier<Item, Item> GRILLED_CRUCIAN_CARP = food("grilled_crucian_carp", Texture.N, RunecraftoryTags.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> SALTED_CHAR = food("salted_char", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> SALTED_MASU_TROUT = food("salted_masu_trout", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> SALTED_CHERRY_SALMON = food("salted_cherry_salmon", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> SALTED_RAINBOW_TROUT = food("salted_rainbow_trout", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> SALTED_SALMON = food("salted_salmon", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> SALTED_TAIMEN = food("salted_taimen", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> SALTED_CHUB = food("salted_chub", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> GRILLED_SQUID = food("grilled_squid", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> GRILLED_SUNSQUID = food("grilled_sunsquid", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> GRILLED_LAMP_SQUID = food("grilled_lamp_squid", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> GRILLED_SAND_FLOUNDER = food("grilled_sand_flounder", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> GRILLED_SHRIMP = food("grilled_shrimp", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> GRILLED_LOBSTER = food("grilled_lobster", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> GRILLED_BLOWFISH = food("grilled_blowfish", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> GRILLED_FALL_FLOUNDER = food("grilled_fall_flounder", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> GRILLED_TURBOT = food("grilled_turbot", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> GRILLED_FLOUNDER = food("grilled_flounder", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> SALTED_PIKE = food("salted_pike", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> GRILLED_NEEDLEFISH = food("grilled_needlefish", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> DRIED_SARDINES = food("dried_sardines", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> TUNA_TERIYAKI = food("tuna_teriyaki", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> SALTED_POND_SMELT = food("salted_pond_smelt", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> GRILLED_YELLOWTAIL = food("grilled_yellowtail", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> GRILLED_MACKEREL = food("grilled_mackerel", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> GRILLED_SKIPJACK = food("grilled_skipjack", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> GRILLED_LOVER_SNAPPER = food("grilled_lover_snapper", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> GRILLED_GLITTER_SNAPPER = food("grilled_glitter_snapper", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> GRILLED_GIRELLA = food("grilled_girella", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> GRILLED_SNAPPER = food("grilled_snapper", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> GRILLED_GIBELIO = food("grilled_gibelio", Texture.N, RunecraftoryTags.Items.FRIED);
+    public static final RegistryEntrySupplier<Item, Item> GRILLED_CRUCIAN_CARP = food("grilled_crucian_carp", Texture.N, RunecraftoryTags.Items.FRIED);
 
-    public static final RegistryEntrySupplier<Item, Item> CHAR_SASHIMI = food("char_sashimi", Texture.N, RunecraftoryTags.KNIFE);
-    public static final RegistryEntrySupplier<Item, Item> TROUT_SASHIMI = food("trout_sashimi", Texture.N, RunecraftoryTags.KNIFE);
-    public static final RegistryEntrySupplier<Item, Item> CHERRY_SASHIMI = food("cherry_sashimi", Texture.N, RunecraftoryTags.KNIFE);
-    public static final RegistryEntrySupplier<Item, Item> RAINBOW_SASHIMI = food("rainbow_sashimi", Texture.N, RunecraftoryTags.KNIFE);
-    public static final RegistryEntrySupplier<Item, Item> SALMON_SASHIMI = food("salmon_sashimi", Texture.N, RunecraftoryTags.KNIFE);
-    public static final RegistryEntrySupplier<Item, Item> TAIMEN_SASHIMI = food("taimen_sashimi", Texture.N, RunecraftoryTags.KNIFE);
-    public static final RegistryEntrySupplier<Item, Item> SQUID_SASHIMI = food("squid_sashimi", Texture.N, RunecraftoryTags.KNIFE);
-    public static final RegistryEntrySupplier<Item, Item> SUNSQUID_SASHIMI = food("sunsquid_sashimi", Texture.N, RunecraftoryTags.KNIFE);
-    public static final RegistryEntrySupplier<Item, Item> LAMP_SQUID_SASHIMI = food("lamp_squid_sashimi", Texture.N, RunecraftoryTags.KNIFE);
-    public static final RegistryEntrySupplier<Item, Item> SHRIMP_SASHIMI = food("shrimp_sashimi", Texture.N, RunecraftoryTags.KNIFE);
-    public static final RegistryEntrySupplier<Item, Item> LOBSTER_SASHIMI = food("lobster_sashimi", Texture.N, RunecraftoryTags.KNIFE);
-    public static final RegistryEntrySupplier<Item, Item> BLOWFISH_SASHIMI = food("blowfish_sashimi", Texture.N, RunecraftoryTags.KNIFE);
-    public static final RegistryEntrySupplier<Item, Item> FALL_SASHIMI = food("fall_sashimi", Texture.N, RunecraftoryTags.KNIFE);
-    public static final RegistryEntrySupplier<Item, Item> TURBOT_SASHIMI = food("turbot_sashimi", Texture.N, RunecraftoryTags.KNIFE);
-    public static final RegistryEntrySupplier<Item, Item> FLOUNDER_SASHIMI = food("flounder_sashimi", Texture.N, RunecraftoryTags.KNIFE);
-    public static final RegistryEntrySupplier<Item, Item> PIKE_SASHIMI = food("pike_sashimi", Texture.N, RunecraftoryTags.KNIFE);
-    public static final RegistryEntrySupplier<Item, Item> NEEDLEFISH_SASHIMI = food("needlefish_sashimi", Texture.N, RunecraftoryTags.KNIFE);
-    public static final RegistryEntrySupplier<Item, Item> SARDINE_SASHIMI = food("sardine_sashimi", Texture.N, RunecraftoryTags.KNIFE);
-    public static final RegistryEntrySupplier<Item, Item> TUNA_SASHIMI = food("tuna_sashimi", Texture.N, RunecraftoryTags.KNIFE);
-    public static final RegistryEntrySupplier<Item, Item> YELLOWTAIL_SASHIMI = food("yellowtail_sashimi", Texture.N, RunecraftoryTags.KNIFE);
-    public static final RegistryEntrySupplier<Item, Item> SKIPJACK_SASHIMI = food("skipjack_sashimi", Texture.N, RunecraftoryTags.KNIFE);
-    public static final RegistryEntrySupplier<Item, Item> GIRELLA_SASHIMI = food("girella_sashimi", Texture.N, RunecraftoryTags.KNIFE);
-    public static final RegistryEntrySupplier<Item, Item> LOVER_SASHIMI = food("lover_sashimi", Texture.N, RunecraftoryTags.KNIFE);
-    public static final RegistryEntrySupplier<Item, Item> GLITTER_SASHIMI = food("glitter_sashimi", Texture.N, RunecraftoryTags.KNIFE);
-    public static final RegistryEntrySupplier<Item, Item> SNAPPER_SASHIMI = food("snapper_sashimi", Texture.N, RunecraftoryTags.KNIFE);
+    public static final RegistryEntrySupplier<Item, Item> CHAR_SASHIMI = food("char_sashimi", Texture.N, RunecraftoryTags.Items.KNIFE);
+    public static final RegistryEntrySupplier<Item, Item> TROUT_SASHIMI = food("trout_sashimi", Texture.N, RunecraftoryTags.Items.KNIFE);
+    public static final RegistryEntrySupplier<Item, Item> CHERRY_SASHIMI = food("cherry_sashimi", Texture.N, RunecraftoryTags.Items.KNIFE);
+    public static final RegistryEntrySupplier<Item, Item> RAINBOW_SASHIMI = food("rainbow_sashimi", Texture.N, RunecraftoryTags.Items.KNIFE);
+    public static final RegistryEntrySupplier<Item, Item> SALMON_SASHIMI = food("salmon_sashimi", Texture.N, RunecraftoryTags.Items.KNIFE);
+    public static final RegistryEntrySupplier<Item, Item> TAIMEN_SASHIMI = food("taimen_sashimi", Texture.N, RunecraftoryTags.Items.KNIFE);
+    public static final RegistryEntrySupplier<Item, Item> SQUID_SASHIMI = food("squid_sashimi", Texture.N, RunecraftoryTags.Items.KNIFE);
+    public static final RegistryEntrySupplier<Item, Item> SUNSQUID_SASHIMI = food("sunsquid_sashimi", Texture.N, RunecraftoryTags.Items.KNIFE);
+    public static final RegistryEntrySupplier<Item, Item> LAMP_SQUID_SASHIMI = food("lamp_squid_sashimi", Texture.N, RunecraftoryTags.Items.KNIFE);
+    public static final RegistryEntrySupplier<Item, Item> SHRIMP_SASHIMI = food("shrimp_sashimi", Texture.N, RunecraftoryTags.Items.KNIFE);
+    public static final RegistryEntrySupplier<Item, Item> LOBSTER_SASHIMI = food("lobster_sashimi", Texture.N, RunecraftoryTags.Items.KNIFE);
+    public static final RegistryEntrySupplier<Item, Item> BLOWFISH_SASHIMI = food("blowfish_sashimi", Texture.N, RunecraftoryTags.Items.KNIFE);
+    public static final RegistryEntrySupplier<Item, Item> FALL_SASHIMI = food("fall_sashimi", Texture.N, RunecraftoryTags.Items.KNIFE);
+    public static final RegistryEntrySupplier<Item, Item> TURBOT_SASHIMI = food("turbot_sashimi", Texture.N, RunecraftoryTags.Items.KNIFE);
+    public static final RegistryEntrySupplier<Item, Item> FLOUNDER_SASHIMI = food("flounder_sashimi", Texture.N, RunecraftoryTags.Items.KNIFE);
+    public static final RegistryEntrySupplier<Item, Item> PIKE_SASHIMI = food("pike_sashimi", Texture.N, RunecraftoryTags.Items.KNIFE);
+    public static final RegistryEntrySupplier<Item, Item> NEEDLEFISH_SASHIMI = food("needlefish_sashimi", Texture.N, RunecraftoryTags.Items.KNIFE);
+    public static final RegistryEntrySupplier<Item, Item> SARDINE_SASHIMI = food("sardine_sashimi", Texture.N, RunecraftoryTags.Items.KNIFE);
+    public static final RegistryEntrySupplier<Item, Item> TUNA_SASHIMI = food("tuna_sashimi", Texture.N, RunecraftoryTags.Items.KNIFE);
+    public static final RegistryEntrySupplier<Item, Item> YELLOWTAIL_SASHIMI = food("yellowtail_sashimi", Texture.N, RunecraftoryTags.Items.KNIFE);
+    public static final RegistryEntrySupplier<Item, Item> SKIPJACK_SASHIMI = food("skipjack_sashimi", Texture.N, RunecraftoryTags.Items.KNIFE);
+    public static final RegistryEntrySupplier<Item, Item> GIRELLA_SASHIMI = food("girella_sashimi", Texture.N, RunecraftoryTags.Items.KNIFE);
+    public static final RegistryEntrySupplier<Item, Item> LOVER_SASHIMI = food("lover_sashimi", Texture.N, RunecraftoryTags.Items.KNIFE);
+    public static final RegistryEntrySupplier<Item, Item> GLITTER_SASHIMI = food("glitter_sashimi", Texture.N, RunecraftoryTags.Items.KNIFE);
+    public static final RegistryEntrySupplier<Item, Item> SNAPPER_SASHIMI = food("snapper_sashimi", Texture.N, RunecraftoryTags.Items.KNIFE);
 
     public static final RegistryEntrySupplier<Item, Item> DISASTROUS_DISH = food("disastrous_dish", Texture.Y, LOW_FOOD_PROP);
     public static final RegistryEntrySupplier<Item, Item> FAILED_DISH = food("failed_dish", Texture.Y, LOW_FOOD_PROP);
     public static final RegistryEntrySupplier<Item, Item> MIXED_HERBS = food("mixed_herbs", Texture.Y, LOW_FOOD_PROP);
     public static final RegistryEntrySupplier<Item, Item> SOUR_DROP = food("sour_drop", Texture.Y, LOW_FOOD_PROP);
-    public static final RegistryEntrySupplier<Item, Item> SWEET_POWDER = food("sweet_powder", Texture.Y, LOW_FOOD_PROP, RunecraftoryTags.SUGAR);
+    public static final RegistryEntrySupplier<Item, Item> SWEET_POWDER = food("sweet_powder", Texture.Y, LOW_FOOD_PROP, RunecraftoryTags.Items.SUGAR);
     public static final RegistryEntrySupplier<Item, Item> HEAVY_SPICE = food("heavy_spice", Texture.Y, LOW_FOOD_PROP);
     public static final RegistryEntrySupplier<Item, Item> ORANGE = food("orange", Texture.Y, LOW_FOOD_PROP);
     public static final RegistryEntrySupplier<Item, Item> GRAPES = food("grapes", Texture.Y, LOW_FOOD_PROP);
@@ -1245,7 +1245,7 @@ public class ModItems {
                 .component(DataComponents.RARITY, tier == EnumToolTier.PLATINUM ? Rarity.RARE : Rarity.COMMON)
                 .component(ModDataComponentTypes.TOOL_TIER.get(), tier)), ModCreativeModTabs.WEAPON_TOOL_TAB);
         if (Platform.INSTANCE.isDatagen())
-            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.HOES, t -> new ArrayList<>()).add(sup);
+            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.HOES, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
@@ -1255,7 +1255,7 @@ public class ModItems {
                 .component(ModDataComponentTypes.TOOL_TIER.get(), tier)
                 .component(ModDataComponentTypes.MAX_WATER.get(), GeneralConfig.getWaterFrom(tier))), ModCreativeModTabs.WEAPON_TOOL_TAB);
         if (Platform.INSTANCE.isDatagen())
-            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.WATERINGCANS, t -> new ArrayList<>()).add(sup);
+            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.WATERINGCANS, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
@@ -1264,7 +1264,7 @@ public class ModItems {
                 .component(DataComponents.RARITY, tier == EnumToolTier.PLATINUM ? Rarity.RARE : Rarity.COMMON)
                 .component(ModDataComponentTypes.TOOL_TIER.get(), tier)), ModCreativeModTabs.WEAPON_TOOL_TAB);
         if (Platform.INSTANCE.isDatagen())
-            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.SICKLES, t -> new ArrayList<>()).add(sup);
+            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.SICKLES, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
@@ -1273,7 +1273,7 @@ public class ModItems {
                 .component(DataComponents.RARITY, tier == EnumToolTier.PLATINUM ? Rarity.RARE : Rarity.COMMON)
                 .component(ModDataComponentTypes.TOOL_TIER.get(), tier)), ModCreativeModTabs.WEAPON_TOOL_TAB);
         if (Platform.INSTANCE.isDatagen())
-            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.HAMMER_TOOLS, t -> new ArrayList<>()).add(sup);
+            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.HAMMER_TOOLS, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
@@ -1282,7 +1282,7 @@ public class ModItems {
                 .component(DataComponents.RARITY, tier == EnumToolTier.PLATINUM ? Rarity.RARE : Rarity.COMMON)
                 .component(ModDataComponentTypes.TOOL_TIER.get(), tier)), ModCreativeModTabs.WEAPON_TOOL_TAB);
         if (Platform.INSTANCE.isDatagen())
-            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.AXE_TOOLS, t -> new ArrayList<>()).add(sup);
+            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.AXE_TOOLS, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
@@ -1291,7 +1291,7 @@ public class ModItems {
                 .component(DataComponents.RARITY, tier == EnumToolTier.PLATINUM ? Rarity.RARE : Rarity.COMMON)
                 .component(ModDataComponentTypes.TOOL_TIER.get(), tier).stacksTo(1)), ModCreativeModTabs.WEAPON_TOOL_TAB);
         if (Platform.INSTANCE.isDatagen())
-            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.FISHING_RODS, t -> new ArrayList<>()).add(sup);
+            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.FISHING_RODS, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
@@ -1305,7 +1305,7 @@ public class ModItems {
         RegistryEntrySupplier<Item, ItemShortSwordBase> sup = register(name, () -> new ItemShortSwordBase(new Item.Properties()
                 .component(ModDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(ModAttackActions.SHORT_SWORD))), ModCreativeModTabs.WEAPON_TOOL_TAB);
         if (Platform.INSTANCE.isDatagen()) {
-            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.SHORTSWORDS, t -> new ArrayList<>()).add(sup);
+            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.SHORTSWORDS, t -> new ArrayList<>()).add(sup);
             TIER_3_CHEST.add(sup);
         }
         return sup;
@@ -1323,7 +1323,7 @@ public class ModItems {
                 .component(ModDataComponentTypes.SHIELD_EFFICIENCY.get(), 0.5f)
                 .component(ModDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(ModAttackActions.LONG_SWORD))), ModCreativeModTabs.WEAPON_TOOL_TAB);
         if (Platform.INSTANCE.isDatagen()) {
-            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.LONGSWORDS, t -> new ArrayList<>()).add(sup);
+            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.LONGSWORDS, t -> new ArrayList<>()).add(sup);
             TIER_3_CHEST.add(sup);
         }
         return sup;
@@ -1341,7 +1341,7 @@ public class ModItems {
                 .component(ModDataComponentTypes.SHIELD_EFFICIENCY.get(), 0.5f)
                 .component(ModDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(ModAttackActions.SPEAR))), ModCreativeModTabs.WEAPON_TOOL_TAB);
         if (Platform.INSTANCE.isDatagen()) {
-            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.SPEARS, t -> new ArrayList<>()).add(sup);
+            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.SPEARS, t -> new ArrayList<>()).add(sup);
             TIER_3_CHEST.add(sup);
         }
         return sup;
@@ -1359,7 +1359,7 @@ public class ModItems {
                 .component(ModDataComponentTypes.SHIELD_EFFICIENCY.get(), 0.5f)
                 .component(ModDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(ModAttackActions.HAMMER_AXE))), ModCreativeModTabs.WEAPON_TOOL_TAB);
         if (Platform.INSTANCE.isDatagen()) {
-            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.AXES, t -> new ArrayList<>()).add(sup);
+            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.AXES, t -> new ArrayList<>()).add(sup);
             TIER_3_CHEST.add(sup);
         }
         return sup;
@@ -1377,7 +1377,7 @@ public class ModItems {
                 .component(ModDataComponentTypes.SHIELD_EFFICIENCY.get(), 0.5f)
                 .component(ModDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(ModAttackActions.HAMMER_AXE))), ModCreativeModTabs.WEAPON_TOOL_TAB);
         if (Platform.INSTANCE.isDatagen()) {
-            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.HAMMERS, t -> new ArrayList<>()).add(sup);
+            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.HAMMERS, t -> new ArrayList<>()).add(sup);
             TIER_3_CHEST.add(sup);
         }
         return sup;
@@ -1395,7 +1395,7 @@ public class ModItems {
                 .component(ModDataComponentTypes.SHIELD_EFFICIENCY.get(), 0f)
                 .component(ModDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(ModAttackActions.DUAL_BLADES))), ModCreativeModTabs.WEAPON_TOOL_TAB);
         if (Platform.INSTANCE.isDatagen()) {
-            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.DUALBLADES, t -> new ArrayList<>()).add(sup);
+            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.DUALBLADES, t -> new ArrayList<>()).add(sup);
             TIER_3_CHEST.add(sup);
         }
         return sup;
@@ -1413,7 +1413,7 @@ public class ModItems {
                 .component(ModDataComponentTypes.SHIELD_EFFICIENCY.get(), 0f)
                 .component(ModDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(ModAttackActions.GLOVES))), ModCreativeModTabs.WEAPON_TOOL_TAB);
         if (Platform.INSTANCE.isDatagen()) {
-            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.FISTS, t -> new ArrayList<>()).add(sup);
+            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.FISTS, t -> new ArrayList<>()).add(sup);
             TIER_3_CHEST.add(sup);
         }
         return sup;
@@ -1431,7 +1431,7 @@ public class ModItems {
                 .component(ModDataComponentTypes.SHIELD_EFFICIENCY.get(), 0.5f)
                 .component(ModDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(ModAttackActions.STAFF)).stacksTo(1)), ModCreativeModTabs.WEAPON_TOOL_TAB);
         if (Platform.INSTANCE.isDatagen()) {
-            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.STAFFS, t -> new ArrayList<>()).add(sup);
+            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.STAFFS, t -> new ArrayList<>()).add(sup);
             TIER_3_CHEST.add(sup);
         }
         return sup;
@@ -1451,12 +1451,14 @@ public class ModItems {
         if (Platform.INSTANCE.isDatagen()) {
             TIER_3_CHEST.add(sup);
             switch (slot) {
-                case BOOTS -> DATAGENTAGS.computeIfAbsent(RunecraftoryTags.BOOTS, t -> new ArrayList<>()).add(sup);
+                case BOOTS ->
+                        DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.BOOTS, t -> new ArrayList<>()).add(sup);
                 case LEGGINGS ->
-                        DATAGENTAGS.computeIfAbsent(RunecraftoryTags.ACCESSORIES, t -> new ArrayList<>()).add(sup);
+                        DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.ACCESSORIES, t -> new ArrayList<>()).add(sup);
                 case CHESTPLATE ->
-                        DATAGENTAGS.computeIfAbsent(RunecraftoryTags.CHESTPLATE, t -> new ArrayList<>()).add(sup);
-                case HELMET -> DATAGENTAGS.computeIfAbsent(RunecraftoryTags.HELMET, t -> new ArrayList<>()).add(sup);
+                        DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.CHESTPLATE, t -> new ArrayList<>()).add(sup);
+                case HELMET ->
+                        DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.HELMET, t -> new ArrayList<>()).add(sup);
             }
         }
         return sup;
@@ -1471,7 +1473,7 @@ public class ModItems {
         RegistryEntrySupplier<Item, ItemStatShield> sup = register(name, () -> new ItemStatShield(new Item.Properties().stacksTo(1)), ModCreativeModTabs.EQUIPMENT);
         if (Platform.INSTANCE.isDatagen()) {
             TIER_3_CHEST.add(sup);
-            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.SHIELDS, t -> new ArrayList<>()).add(sup);
+            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.SHIELDS, t -> new ArrayList<>()).add(sup);
         }
         return sup;
     }
@@ -1541,11 +1543,11 @@ public class ModItems {
                 new ItemSpell(sup.get(), new Item.Properties().stacksTo(1)), ModCreativeModTabs.SPELLS);
         if (Platform.INSTANCE.isDatagen()) {
             TIER_2_CHEST.add(ret);
-            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.SPELLS, t -> new ArrayList<>()).add(ret);
+            DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.SPELLS, t -> new ArrayList<>()).add(ret);
             if (type == 2)
-                DATAGENTAGS.computeIfAbsent(RunecraftoryTags.MAGIC_SPELLS, t -> new ArrayList<>()).add(ret);
+                DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.MAGIC_SPELLS, t -> new ArrayList<>()).add(ret);
             else if (type == 1)
-                DATAGENTAGS.computeIfAbsent(RunecraftoryTags.RUNE_ABILITIES, t -> new ArrayList<>()).add(ret);
+                DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.RUNE_ABILITIES, t -> new ArrayList<>()).add(ret);
         }
         return ret;
     }

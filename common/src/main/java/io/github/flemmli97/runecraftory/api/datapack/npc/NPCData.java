@@ -150,7 +150,6 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                         CodecUtils.stringEnumCodec(RelationShipState.class, RelationShipState.DEFAULT).fieldOf("relation_ship_state").forGetter(d -> d.relationShipState),
                         ResourceLocation.CODEC.listOf().optionalFieldOf("possible_children").forGetter(d -> d.possibleChildren.isEmpty() ? Optional.empty() : Optional.of(d.possibleChildren))
                 ).apply(inst, (state, childs) -> new RelationStruct(state, childs.orElse(List.of()))));
-
     }
 
     record NPCCombat(@Nullable Map<Attribute, Double> baseStats, @Nullable Map<Attribute, Double> statIncrease,
@@ -170,6 +169,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
     }
 
     public record QuestHandler(Map<ResourceLocation, QuestResponses> responses, Set<ResourceLocation> requiredQuests) {
+
         public static final Codec<QuestHandler> CODEC = RecordCodecBuilder.create(inst ->
                 inst.group(
                         Codec.unboundedMap(ResourceLocation.CODEC, QuestResponses.CODEC).fieldOf("responses").forGetter(d -> d.responses),
@@ -179,6 +179,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
 
     public record QuestResponses(ResourceLocation startID, ResourceLocation activeID,
                                  ResourceLocation endID) {
+
         public static final Codec<QuestResponses> CODEC = RecordCodecBuilder.create(inst ->
                 inst.group(
                         ResourceLocation.CODEC.fieldOf("start_id").forGetter(d -> d.startID),

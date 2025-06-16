@@ -62,7 +62,7 @@ public class FoodManager extends SimpleJsonResourceReloadListener implements Syn
     private HolderLookup.Provider provider;
 
     public FoodManager() {
-        super(DataPackHandler.GSON, ID.getPath());
+        super(DataPackHandler.GSON, ID.toString());
     }
 
     @Nullable

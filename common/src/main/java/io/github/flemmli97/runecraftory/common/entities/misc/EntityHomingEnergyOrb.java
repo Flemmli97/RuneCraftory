@@ -40,9 +40,9 @@ public class EntityHomingEnergyOrb extends BaseDamageCloud implements PowerableM
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(TARGET_UUID, Optional.empty());
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(TARGET_UUID, Optional.empty());
     }
 
     @Override
@@ -65,7 +65,7 @@ public class EntityHomingEnergyOrb extends BaseDamageCloud implements PowerableM
         this.setPos(newX, newY, newZ);
         if (this.spawnPos == null)
             this.spawnPos = this.position().add(0, this.getBbHeight() * 0.5, 0);
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             if (this.targetMob == null || this.targetMob.isDeadOrDying()) {
                 this.targetMob = EntityUtils.ownedProjectileTarget(this.getOwner(), 10);
                 if (this.targetMob != null)
@@ -81,7 +81,7 @@ public class EntityHomingEnergyOrb extends BaseDamageCloud implements PowerableM
             }
         } else {
             if (this.random.nextBoolean())
-                this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.GUARDIAN_ATTACK, this.getSoundSource(), 2, 0.8f, false);
+                this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.GUARDIAN_ATTACK, this.getSoundSource(), 2, 0.8f, false);
         }
     }
 
@@ -89,7 +89,7 @@ public class EntityHomingEnergyOrb extends BaseDamageCloud implements PowerableM
         if (this.targetMob != null && !this.targetMob.isRemoved()) {
             return this.targetMob;
         }
-        this.entityData.get(TARGET_UUID).ifPresent(uuid -> this.targetMob = EntityUtil.findFromUUID(LivingEntity.class, this.level, uuid));
+        this.entityData.get(TARGET_UUID).ifPresent(uuid -> this.targetMob = EntityUtil.findFromUUID(LivingEntity.class, this.level(), uuid));
         return this.targetMob;
     }
 

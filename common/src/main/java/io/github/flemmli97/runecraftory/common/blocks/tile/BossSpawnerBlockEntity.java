@@ -35,7 +35,6 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class BossSpawnerBlockEntity extends BlockEntity {
 
@@ -48,8 +47,6 @@ public class BossSpawnerBlockEntity extends BlockEntity {
 
     private ResourceLocation structureID;
     private StructureStart structure;
-
-    private final Random random = new Random();
 
     public BossSpawnerBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(ModBlocks.BOSS_SPAWNER_TILE.get(), blockPos, blockState);
@@ -93,6 +90,8 @@ public class BossSpawnerBlockEntity extends BlockEntity {
     }
 
     public void spawnEntity(List<ServerPlayer> nearby, Vec3 pos) {
+        if (this.nextSpawn == null)
+            this.updateEntity();
         if (!this.level.isClientSide && this.nextSpawn != null) {
             Entity e = this.nextSpawn.create(this.level);
             if (e != null) {
@@ -129,7 +128,7 @@ public class BossSpawnerBlockEntity extends BlockEntity {
 
     private void updateEntity() {
         if (this.spawnList != null)
-            this.spawnList.getRandom(this.random).ifPresent(this::setEntity);
+            this.spawnList.getRandom(this.level.getRandom()).ifPresent(this::setEntity);
     }
 
     private boolean noNearby() {
@@ -144,7 +143,6 @@ public class BossSpawnerBlockEntity extends BlockEntity {
         if (tag.contains("SpawnListId")) {
             this.spawnListId = ResourceLocation.parse(tag.getString("SpawnListId"));
             this.spawnList = DataPackHandler.INSTANCE.structureBossManager().getBoss(this.spawnListId);
-            this.updateEntity();
         }
         if (tag.contains("Entity")) {
             this.nextSpawn = BuiltInRegistries.ENTITY_TYPE.byNameCodec()

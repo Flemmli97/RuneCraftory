@@ -30,7 +30,7 @@ public class SpellPropertiesManager extends SimpleJsonResourceReloadListener imp
     private HolderLookup.Provider provider;
 
     public SpellPropertiesManager() {
-        super(DataPackHandler.GSON, ID.getPath());
+        super(DataPackHandler.GSON, ID.toString());
     }
 
     public SpellProperties getPropertiesFor(Spell spell) {

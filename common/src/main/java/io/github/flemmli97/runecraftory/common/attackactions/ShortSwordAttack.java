@@ -12,7 +12,7 @@ import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.item.AOEWeapon;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
@@ -30,13 +30,13 @@ public class ShortSwordAttack extends AttackAction {
             .build();
 
     @Override
-    public AnimatedAction getAnimation(LivingEntity entity, int comboIdx) {
+    public AnimationState getAnimation(LivingEntity entity, int comboIdx) {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
-        return PlayerModelAnimations.SHORT_SWORD.get(comboIdx).create(speed);
+        return AttackAction.create(PlayerModelAnimations.SHORT_SWORD.get(comboIdx), speed);
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimatedAction anim) {
+    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimationState anim) {
         if (handler.getComboCount() != 6) {
             if (anim.isAt("attack")) {
                 if (!entity.level().isClientSide) {
@@ -111,7 +111,7 @@ public class ShortSwordAttack extends AttackAction {
     }
 
     @Override
-    public float movementReduction(AnimatedAction current) {
+    public float movementReduction(AnimationState current) {
         return GeneralConfig.MOVE_SPEED_ATTACK.get().floatValue();
     }
 

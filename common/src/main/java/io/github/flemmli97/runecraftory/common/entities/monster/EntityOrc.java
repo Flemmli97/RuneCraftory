@@ -12,6 +12,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.random.WeightedEntry;
@@ -31,11 +33,12 @@ import java.util.function.Consumer;
 
 public class EntityOrc extends BaseMonster {
 
-    private static final AnimatedAction MELEE_1 = AnimatedAction.builder(1, "attack_1").marker("attack", 0.72).build();
-    private static final AnimatedAction MELEE_2 = AnimatedAction.builder(1.04, "attack_2").marker("attack", 0.56).build();
-    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE_1, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(0, "sleep").infinite().build();
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE_1, MELEE_2, INTERACT, SLEEP};
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String MELEE_1 = BUILDER.add("attack_1", AnimationsBuilder.definition(1).marker("attack", 0.72));
+    public static final String MELEE_2 = BUILDER.add("attack_2", AnimationsBuilder.definition(1.04).marker("attack", 0.56));
+    public static final String INTERACT = BUILDER.add("interact", MELEE_1);
+    public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityOrc>>> ATTACKS = List.of(
             WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(MELEE_1, e -> e.getType() == ModEntities.ORC.get() ? 0.85f : 0.95f), 1),

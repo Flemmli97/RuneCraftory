@@ -1,42 +1,49 @@
 package io.github.flemmli97.runecraftory.forge.data;
 
+import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonElement;
+import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.api.datapack.EntityProperties;
-import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
 import io.github.flemmli97.runecraftory.common.datapack.manager.MonsterPropertiesManager;
 import io.github.flemmli97.runecraftory.common.lib.LibAdvancements;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.HashCache;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
-public record MobPropertiesgen(PackOutput packOutput) implements DataProvider {
+public class MobPropertiesgen implements DataProvider {
 
-    private static final Logger LOGGER = LogManager.getLogger();
+    private final PackOutput packOutput;
+    protected final CompletableFuture<HolderLookup.Provider> provider;
+
+    public MobPropertiesgen(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> provider) {
+        this.packOutput = packOutput;
+        this.provider = provider;
+    }
 
     @Override
-    public void run(HashCache cache) {
+    public CompletableFuture<?> run(CachedOutput cache) {
+        return this.provider.thenCompose(provider -> {
+            DynamicOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, provider);
+            ImmutableList.Builder<CompletableFuture<?>> futures = new ImmutableList.Builder<>();
         Map<ResourceLocation, EntityProperties.Builder> props = new HashMap<>(ModEntities.getDefaultMobProperties());
         props.put(ModEntities.SANO_AND_UNO.getID(), new EntityProperties.Builder()
                 .withSpawnerPredicate(LibAdvancements.playerAdvancementCheck(LibAdvancements.MARIONETTA)));
         props.forEach((res, builder) -> {
-            Path path = this.gen.getOutputFolder().resolve("data/" + res.getNamespace() + "/" + MonsterPropertiesManager.DIRECTORY + "/" + res.getPath() + ".json");
-            try {
-                JsonElement obj = EntityProperties.CODEC.encodeStart(JsonOps.INSTANCE, builder.build())
-                        .getOrThrow(false, LOGGER::error);
-                DataProvider.save(GsonInstances.GSON, cache, obj, path);
-            } catch (IOException e) {
-                LOGGER.error("Couldn't save entity properties {}", path, e);
-            }
+            Path path = this.packOutput.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(res.getNamespace() + "/" + MonsterPropertiesManager.ID + "/" + res.getPath() + ".json");
+            JsonElement obj = EntityProperties.CODEC.encodeStart(ops, builder.build()).getOrThrow();
+            futures.add(DataProvider.saveStable(cache, obj, path));
+        });
+            return CompletableFuture.allOf(futures.build().toArray(CompletableFuture[]::new));
         });
     }
 

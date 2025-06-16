@@ -2,7 +2,10 @@ package io.github.flemmli97.runecraftory.common.entities.misc;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerEntity;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -36,14 +39,14 @@ public abstract class ProjectileSummonHelperEntity extends Entity implements Own
     }
 
     @Override
-    protected void defineSynchedData() {
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
     }
 
     @Override
     public void tick() {
         super.tick();
         this.ticksExisted++;
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             if (this.getOwner() != null && this.getOwner().isAlive()) {
                 this.summonProjectiles();
             }
@@ -83,15 +86,15 @@ public abstract class ProjectileSummonHelperEntity extends Entity implements Own
     }
 
     @Override
-    public Packet<?> getAddEntityPacket() {
-        Entity entity = this.getOwner();
-        return new ClientboundAddEntityPacket(this, entity == null ? 0 : entity.getId());
+    public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity entity) {
+        Entity owner = this.getOwner();
+        return new ClientboundAddEntityPacket(this, entity, owner == null ? 0 : owner.getId());
     }
 
     @Override
     public void recreateFromPacket(ClientboundAddEntityPacket packet) {
         super.recreateFromPacket(packet);
-        Entity entity = this.level.getEntity(packet.getData());
+        Entity entity = this.level().getEntity(packet.getData());
         if (entity instanceof LivingEntity livingEntity) {
             this.setOwner(livingEntity);
         }
@@ -123,8 +126,8 @@ public abstract class ProjectileSummonHelperEntity extends Entity implements Own
     public LivingEntity getOwner() {
         if (this.caster != null && !this.caster.isRemoved()) {
             return this.caster;
-        } else if (this.ownerUUID != null && this.level instanceof ServerLevel) {
-            Entity e = ((ServerLevel) this.level).getEntity(this.ownerUUID);
+        } else if (this.ownerUUID != null && this.level() instanceof ServerLevel serverLevel) {
+            Entity e = serverLevel.getEntity(this.ownerUUID);
             if (e instanceof LivingEntity livingEntity) {
                 this.caster = livingEntity;
             }

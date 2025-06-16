@@ -58,16 +58,16 @@ public class MainWorldGenData implements DataProvider {
                 this.simple(StructureBossGen.WATER_RUIN_BOSSES));
         this.addBossStructure(ModStructures.THEATER_RUINS.getID(),
                 new RandomSpreadStructurePlacement(21, 7, RandomSpreadType.LINEAR, 1224466882),
-                ModStructures.THEATER_RUINS.get(), RunecraftoryTags.IS_SPOOKY, true,
+                ModStructures.THEATER_RUINS.get(), RunecraftoryTags.Biomes.IS_SPOOKY, true,
                 new StructureProcessorList(List.of(new BossSpawnerProcessor(StructureBossGen.THEATER_RUIN_BOSSES),
                         WaterUnlogProcessor.INST)));
         this.addBossStructure(ModStructures.PLAINS_ARENA.getID(),
                 new RandomSpreadStructurePlacement(24, 8, RandomSpreadType.LINEAR, 1224466883),
-                ModStructures.PLAINS_ARENA.get(), RunecraftoryTags.IS_PLAINS, true,
+                ModStructures.PLAINS_ARENA.get(), RunecraftoryTags.Biomes.IS_PLAINS, true,
                 this.simple(StructureBossGen.PLAINS_BOSSES));
         this.addBossStructure(ModStructures.DESERT_ARENA.getID(),
                 new RandomSpreadStructurePlacement(24, 8, RandomSpreadType.LINEAR, 1224466884),
-                ModStructures.DESERT_ARENA.get(), RunecraftoryTags.IS_SANDY, true,
+                ModStructures.DESERT_ARENA.get(), RunecraftoryTags.Biomes.IS_SANDY, true,
                 this.simple(StructureBossGen.DESERT_BOSSES));
         this.addBossStructure(ModStructures.NETHER_ARENA.getID(),
                 new RandomSpreadStructurePlacement(20, 9, RandomSpreadType.LINEAR, 1224466885),

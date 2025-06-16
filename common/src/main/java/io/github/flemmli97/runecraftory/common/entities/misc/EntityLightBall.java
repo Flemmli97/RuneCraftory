@@ -99,9 +99,9 @@ public class EntityLightBall extends BaseDamageCloud {
             this.spawnPos = this.position();
         if (this.getOwner() == null)
             this.discard();
-        if (this.level.isClientSide) {
+        if (this.level().isClientSide) {
             for (int i = 0; i < 2; i++)
-                this.level.addParticle(new ColoredParticleData(ModParticles.SHORT_LIGHT.get(), 246 / 255F, 252 / 255F, 197 / 255F, 0.5f, 3f), this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ(), 0, 0, 0);
+                this.level().addParticle(new ColoredParticleData(ModParticles.SHORT_LIGHT.get(), 246 / 255F, 252 / 255F, 197 / 255F, 0.5f, 3f), this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ(), 0, 0, 0);
         } else {
             if (this.getOwner() != null) {
                 Entity owner = this.getOwner();

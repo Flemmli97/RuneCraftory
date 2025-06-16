@@ -2,21 +2,20 @@ package io.github.flemmli97.runecraftory.common.entities.ai.pathing;
 
 import io.github.flemmli97.runecraftory.mixin.MobAccessor;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.pathfinder.FlyNodeEvaluator;
+import net.minecraft.world.level.pathfinder.PathType;
+import net.minecraft.world.level.pathfinder.PathfindingContext;
 
 public class NoClipFlyEvaluator extends FlyNodeEvaluator {
 
     @Override
-    public BlockPathTypes getBlockPathType(BlockGetter blockaccess, int x, int y, int z, Mob entityliving, int xSize, int ySize, int zSize, boolean canBreakDoors, boolean canEnterDoors) {
-        if (entityliving.getFirstPassenger() instanceof LivingEntity passenger) {
-            if (passenger instanceof MobAccessor mob) {
-                return mob.getTrueNavigator().getNodeEvaluator().getBlockPathType(blockaccess, x, y, z, entityliving, xSize, ySize, zSize, canBreakDoors, canEnterDoors);
+    public PathType getPathType(PathfindingContext context, int x, int y, int z) {
+        if (this.mob.getFirstPassenger() instanceof LivingEntity passenger) {
+            if (passenger instanceof MobAccessor other) {
+                return other.getTrueNavigator().getNodeEvaluator().getPathType(context, x, y, z);
             }
-            return super.getBlockPathType(blockaccess, x, y, z, entityliving, xSize, ySize, zSize, canBreakDoors, canEnterDoors);
+            return super.getPathType(context, x, y, z);
         }
-        return BlockPathTypes.OPEN;
+        return PathType.OPEN;
     }
 }

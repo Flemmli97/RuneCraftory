@@ -28,7 +28,7 @@ public class NameManager extends SimpleJsonResourceReloadListener implements Lis
     private Map<String, List<String>> femaleNames;
 
     public NameManager() {
-        super(DataPackHandler.GSON, ID.getPath());
+        super(DataPackHandler.GSON, ID.toString());
     }
 
     public String getRandomSurname(Random random, String lang) {

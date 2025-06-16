@@ -12,6 +12,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -24,8 +26,9 @@ import java.util.function.Predicate;
 
 public class EntityNappie extends EntityPommePomme implements HealingPredicateEntity {
 
-    public static final AnimatedAction HEAL = AnimatedAction.builder(0.72, "cast").marker("attack", 0.32).build();
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{HEAL, KICK, CHARGE_ATTACK, INTERACT, SLEEP};
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String HEAL = BUILDER.add("cast", AnimationsBuilder.definition(0.72).marker("attack", 0.32));
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityPommePomme>>> ATTACKS = List.of(
             WeightedEntry.wrap(MonsterActionUtils.simpleMeleeActionInRange(KICK, e -> 1), 5),

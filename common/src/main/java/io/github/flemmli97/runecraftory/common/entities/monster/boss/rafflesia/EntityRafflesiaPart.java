@@ -3,6 +3,9 @@ package io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia;
 import io.github.flemmli97.runecraftory.common.entities.ai.RafflesiaPartAttackGoal;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimatedEntity;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -30,14 +33,16 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
 
-public abstract class EntityRafflesiaPart extends Mob implements IAnimated, OwnableEntity {
+public abstract class EntityRafflesiaPart extends Mob implements AnimatedEntity, OwnableEntity {
 
     private static final EntityDataAccessor<Optional<UUID>> PARENT = SynchedEntityData.defineId(EntityRafflesiaPart.class, EntityDataSerializers.OPTIONAL_UUID);
     private static final EntityDataAccessor<Direction> SPAWN_DIRECTION = SynchedEntityData.defineId(EntityRafflesiaPart.class, EntityDataSerializers.DIRECTION);
 
-    public static final AnimatedAction HORSE_TAIL_ACTION = AnimatedAction.builder(1.28, "horse_tail_action").marker("attack", 0.56).build();
-    public static final AnimatedAction FLOWER_ACTION = AnimatedAction.builder(1, "flower_action").marker("attack", 0.4456).build();
-    public static final AnimatedAction PITCHER_ACTION = AnimatedAction.builder(0.96, "pitcher_action").marker("attack", 0.4).build();
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String HORSE_TAIL_ACTION = BUILDER.add("horse_tail_action", AnimationsBuilder.definition(1.28).marker("attack", 0.56));
+    public static final String FLOWER_ACTION = BUILDER.add("flower_action", AnimationsBuilder.definition(1).marker("attack", 0.4456));
+    public static final String PITCHER_ACTION = BUILDER.add("pitcher_action", AnimationsBuilder.definition(0.96).marker("attack", 0.4));
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     public final RafflesiaPartAttackGoal attack = new RafflesiaPartAttackGoal(this);
 
@@ -80,7 +85,7 @@ public abstract class EntityRafflesiaPart extends Mob implements IAnimated, Owna
 
     @Override
     public void baseTick() {
-        if (!this.level.isClientSide && !this.firstTick) {
+        if (!this.level().isClientSide && !this.firstTick) {
             if (this.getOwner() != null) {
                 if (this.getOwner().isDeadOrDying() || this.getPartType().getPart.apply(this.getOwner()) != this)
                     this.discard();
@@ -99,10 +104,10 @@ public abstract class EntityRafflesiaPart extends Mob implements IAnimated, Owna
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(PARENT, Optional.empty());
-        this.entityData.define(SPAWN_DIRECTION, Direction.NORTH);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(PARENT, Optional.empty());
+        builder.define(SPAWN_DIRECTION, Direction.NORTH);
     }
 
 
@@ -145,7 +150,7 @@ public abstract class EntityRafflesiaPart extends Mob implements IAnimated, Owna
         UUID uuid = this.getOwnerUUID();
         if (uuid != null) {
             if (this.parent == null || !this.parent.isAlive()) {
-                this.parent = EntityUtil.findFromUUID(EntityRafflesia.class, this.level, uuid);
+                this.parent = EntityUtil.findFromUUID(EntityRafflesia.class, this.level(), uuid);
             }
         } else
             this.parent = null;

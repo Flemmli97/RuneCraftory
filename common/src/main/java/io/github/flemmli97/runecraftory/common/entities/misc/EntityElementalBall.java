@@ -69,10 +69,10 @@ public class EntityElementalBall extends BaseProjectile {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(ELEMENT_DATA, 0);
-        this.entityData.define(VARIANT, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(ELEMENT_DATA, 0);
+        builder.define(VARIANT, 0);
     }
 
     @Override

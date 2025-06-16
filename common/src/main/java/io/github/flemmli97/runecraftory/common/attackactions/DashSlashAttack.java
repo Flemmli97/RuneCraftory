@@ -8,7 +8,7 @@ import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
@@ -24,13 +24,13 @@ public class DashSlashAttack extends AttackAction {
             .build();
 
     @Override
-    public AnimatedAction getAnimation(LivingEntity entity, int comboIdx) {
+    public AnimationState getAnimation(LivingEntity entity, int comboIdx) {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
-        return PlayerModelAnimations.DASH_SLASH.get(comboIdx).create(speed);
+        return AttackAction.create(PlayerModelAnimations.DASH_SLASH.get(comboIdx), speed);
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimatedAction anim) {
+    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimationState anim) {
         if (handler.getComboCount() == 2) {
             handler.store(DataKey.MOVE_DIRECTION, null);
             entity.setDeltaMovement(entity.getDeltaMovement().multiply(0.95, 1, 0.95));

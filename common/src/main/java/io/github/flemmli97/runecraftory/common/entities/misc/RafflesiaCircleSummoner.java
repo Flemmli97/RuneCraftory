@@ -20,11 +20,11 @@ public class RafflesiaCircleSummoner extends ProjectileSummonHelperEntity {
     @Override
     protected void summonProjectiles() {
         float rot = this.getYRot() + this.tickCount * 10;
-        EntityStatusBall ball = new EntityStatusBall(this.level, this.getOwner());
+        EntityStatusBall ball = new EntityStatusBall(this.level(), this.getOwner());
         ball.setType(EntityStatusBall.Type.RAFFLESIA_ALL);
         ball.setDamageMultiplier(this.damageMultiplier);
         ball.shootFromRotation(this, 0, rot, 0, 0.3f, 0);
         ball.setPos(ball.getX(), this.getY(), ball.getZ());
-        this.level.addFreshEntity(ball);
+        this.level().addFreshEntity(ball);
     }
 }

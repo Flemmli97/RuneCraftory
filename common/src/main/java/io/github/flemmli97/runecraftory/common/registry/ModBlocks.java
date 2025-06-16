@@ -42,10 +42,12 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
-import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -54,7 +56,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 
 public class ModBlocks {
@@ -200,52 +201,52 @@ public class ModBlocks {
 
     public static final RegistryEntrySupplier<Block, BlockCrop> DUNGEON = flower("dungeon_flower", () -> () -> Items.STONE, () -> ModItems.DUNGEON_SEEDS);
 
-    public static final RegistryEntrySupplier<Block, BlockCrop> MUSHROOM = herb("mushroom");
-    public static final RegistryEntrySupplier<Block, BlockCrop> MONARCH_MUSHROOM = herb("monarch_mushroom");
-    public static final RegistryEntrySupplier<Block, BlockCrop> ELLI_LEAVES = herb("elli_leaves", BlockHerb.GroundTypes.END);
-    public static final RegistryEntrySupplier<Block, BlockCrop> WITHERED_GRASS = herb("withered_grass", BlockHerb.GroundTypes.SANDY);
-    public static final RegistryEntrySupplier<Block, BlockCrop> WEEDS = herb("weeds");
-    public static final RegistryEntrySupplier<Block, BlockCrop> WHITE_GRASS = herb("white_grass");
-    public static final RegistryEntrySupplier<Block, BlockCrop> INDIGO_GRASS = herb("indigo_grass");
-    public static final RegistryEntrySupplier<Block, BlockCrop> PURPLE_GRASS = herb("purple_grass");
-    public static final RegistryEntrySupplier<Block, BlockCrop> GREEN_GRASS = herb("green_grass");
-    public static final RegistryEntrySupplier<Block, BlockCrop> BLUE_GRASS = herb("blue_grass");
-    public static final RegistryEntrySupplier<Block, BlockCrop> YELLOW_GRASS = herb("yellow_grass", BlockHerb.GroundTypes.SANDY, BlockHerb.GroundTypes.NETHER);
-    public static final RegistryEntrySupplier<Block, BlockCrop> RED_GRASS = herb("red_grass", BlockHerb.GroundTypes.NETHER);
-    public static final RegistryEntrySupplier<Block, BlockCrop> ORANGE_GRASS = herb("orange_grass", BlockHerb.GroundTypes.SANDY, BlockHerb.GroundTypes.NETHER);
-    public static final RegistryEntrySupplier<Block, BlockCrop> BLACK_GRASS = herb("black_grass", BlockHerb.GroundTypes.END);
-    public static final RegistryEntrySupplier<Block, BlockCrop> ANTIDOTE_GRASS = herb("antidote_grass");
-    public static final RegistryEntrySupplier<Block, BlockCrop> MEDICINAL_HERB = herb("medicinal_herb");
-    public static final RegistryEntrySupplier<Block, BlockCrop> BAMBOO_SPROUT = herb("bamboo_sprout");
+    public static final RegistryEntrySupplier<Block, BlockHerb> MUSHROOM = herb("mushroom");
+    public static final RegistryEntrySupplier<Block, BlockHerb> MONARCH_MUSHROOM = herb("monarch_mushroom");
+    public static final RegistryEntrySupplier<Block, BlockHerb> ELLI_LEAVES = herb("elli_leaves", BlockHerb.GroundTypes.END);
+    public static final RegistryEntrySupplier<Block, BlockHerb> WITHERED_GRASS = herb("withered_grass", BlockHerb.GroundTypes.SANDY);
+    public static final RegistryEntrySupplier<Block, BlockHerb> WEEDS = herb("weeds");
+    public static final RegistryEntrySupplier<Block, BlockHerb> WHITE_GRASS = herb("white_grass");
+    public static final RegistryEntrySupplier<Block, BlockHerb> INDIGO_GRASS = herb("indigo_grass");
+    public static final RegistryEntrySupplier<Block, BlockHerb> PURPLE_GRASS = herb("purple_grass");
+    public static final RegistryEntrySupplier<Block, BlockHerb> GREEN_GRASS = herb("green_grass");
+    public static final RegistryEntrySupplier<Block, BlockHerb> BLUE_GRASS = herb("blue_grass");
+    public static final RegistryEntrySupplier<Block, BlockHerb> YELLOW_GRASS = herb("yellow_grass", BlockHerb.GroundTypes.SANDY, BlockHerb.GroundTypes.NETHER);
+    public static final RegistryEntrySupplier<Block, BlockHerb> RED_GRASS = herb("red_grass", BlockHerb.GroundTypes.NETHER);
+    public static final RegistryEntrySupplier<Block, BlockHerb> ORANGE_GRASS = herb("orange_grass", BlockHerb.GroundTypes.SANDY, BlockHerb.GroundTypes.NETHER);
+    public static final RegistryEntrySupplier<Block, BlockHerb> BLACK_GRASS = herb("black_grass", BlockHerb.GroundTypes.END);
+    public static final RegistryEntrySupplier<Block, BlockHerb> ANTIDOTE_GRASS = herb("antidote_grass");
+    public static final RegistryEntrySupplier<Block, BlockHerb> MEDICINAL_HERB = herb("medicinal_herb");
+    public static final RegistryEntrySupplier<Block, BlockHerb> BAMBOO_SPROUT = herb("bamboo_sprout");
 
-    public static final RegistryEntrySupplier<Block, BlockMeltableSnow> SNOW = BLOCKS.register("snow", () -> new BlockMeltableSnow(BlockBehaviour.Properties.of(Material.TOP_SNOW).randomTicks().strength(0.1f).requiresCorrectToolForDrops().sound(SoundType.SNOW).isViewBlocking((blockState, blockGetter, blockPos) -> blockState.getValue(SnowLayerBlock.LAYERS) >= 8)));
+    public static final RegistryEntrySupplier<Block, BlockMeltableSnow> SNOW = BLOCKS.register("snow", () -> new BlockMeltableSnow(BlockBehaviour.Properties.ofFullCopy(Blocks.SNOW)));
 
-    public static final RegistryEntrySupplier<Block, BlockTreeRoot> TREE_SOIL = BLOCKS.register("tree_soil", () -> new BlockTreeRoot(BlockBehaviour.Properties.of(Material.DIRT).sound(SoundType.GRAVEL).strength(-1, 99999)));
+    public static final RegistryEntrySupplier<Block, BlockTreeRoot> TREE_SOIL = BLOCKS.register("tree_soil", () -> new BlockTreeRoot(BlockBehaviour.Properties.ofFullCopy(Blocks.DIRT).sound(SoundType.GRAVEL).strength(-1, 99999)));
     public static final RegistryEntrySupplier<Block, BlockTreeBase> APPLE_TREE = BLOCKS.register("apple_tree", () -> new BlockTreeBase(logProps(), () -> ModFeatures.APPLE_1.value(), () -> ModFeatures.APPLE_2.value(), () -> ModFeatures.APPLE_3.value(), ModItems.APPLE_SAPLING));
-    public static final RegistryEntrySupplier<Block, BlockTreeSapling> APPLE_SAPLING = BLOCKS.register("apple_sapling", () -> new BlockTreeSapling(BlockBehaviour.Properties.of(Material.PLANT).noCollission().instabreak().sound(SoundType.GRASS), APPLE_TREE));
-    public static final RegistryEntrySupplier<Block, RotatedPillarBlock> APPLE_WOOD = BLOCKS.register("apple_wood", () -> new RotatedPillarBlock(BlockBehaviour.Properties.of(Material.WOOD).sound(SoundType.WOOD).strength(-1, 99999)));
-    public static final RegistryEntrySupplier<Block, LeavesBlock> APPLE_LEAVES = BLOCKS.register("apple_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES).strength(-1, 99999)));
-    public static final RegistryEntrySupplier<Block, BlockFruitTreeLeaf> APPLE = BLOCKS.register("apple_leaves_fruit", () -> new BlockFruitTreeLeaf(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES).strength(-1, 99999), () -> Items.APPLE));
+    public static final RegistryEntrySupplier<Block, BlockTreeSapling> APPLE_SAPLING = BLOCKS.register("apple_sapling", () -> new BlockTreeSapling(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_SAPLING), APPLE_TREE));
+    public static final RegistryEntrySupplier<Block, RotatedPillarBlock> APPLE_WOOD = BLOCKS.register("apple_wood", () -> new RotatedPillarBlock(logProps().strength(-1, 99999)));
+    public static final RegistryEntrySupplier<Block, LeavesBlock> APPLE_LEAVES = BLOCKS.register("apple_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES).strength(-1, 99999)));
+    public static final RegistryEntrySupplier<Block, BlockFruitTreeLeaf> APPLE = BLOCKS.register("apple_leaves_fruit", () -> new BlockFruitTreeLeaf(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES).strength(-1, 99999), () -> Items.APPLE));
     public static final RegistryEntrySupplier<Block, BlockTreeBase> ORANGE_TREE = BLOCKS.register("orange_tree", () -> new BlockTreeBase(logProps(), () -> ModFeatures.ORANGE_1.value(), () -> ModFeatures.ORANGE_2.value(), () -> ModFeatures.ORANGE_3.value(), ModItems.ORANGE_SAPLING));
-    public static final RegistryEntrySupplier<Block, BlockTreeSapling> ORANGE_SAPLING = BLOCKS.register("orange_sapling", () -> new BlockTreeSapling(BlockBehaviour.Properties.of(Material.PLANT).noCollission().instabreak().sound(SoundType.GRASS), ORANGE_TREE));
-    public static final RegistryEntrySupplier<Block, RotatedPillarBlock> ORANGE_WOOD = BLOCKS.register("orange_wood", () -> new RotatedPillarBlock(BlockBehaviour.Properties.of(Material.WOOD).sound(SoundType.WOOD).strength(-1, 99999)));
-    public static final RegistryEntrySupplier<Block, LeavesBlock> ORANGE_LEAVES = BLOCKS.register("orange_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES).strength(-1, 99999)));
-    public static final RegistryEntrySupplier<Block, BlockFruitTreeLeaf> ORANGE = BLOCKS.register("orange_leaves_fruit", () -> new BlockFruitTreeLeaf(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES).strength(-1, 99999), ModItems.ORANGE::get));
+    public static final RegistryEntrySupplier<Block, BlockTreeSapling> ORANGE_SAPLING = BLOCKS.register("orange_sapling", () -> new BlockTreeSapling(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_SAPLING), ORANGE_TREE));
+    public static final RegistryEntrySupplier<Block, RotatedPillarBlock> ORANGE_WOOD = BLOCKS.register("orange_wood", () -> new RotatedPillarBlock(logProps().strength(-1, 99999)));
+    public static final RegistryEntrySupplier<Block, LeavesBlock> ORANGE_LEAVES = BLOCKS.register("orange_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES).strength(-1, 99999)));
+    public static final RegistryEntrySupplier<Block, BlockFruitTreeLeaf> ORANGE = BLOCKS.register("orange_leaves_fruit", () -> new BlockFruitTreeLeaf(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES).strength(-1, 99999), ModItems.ORANGE));
     public static final RegistryEntrySupplier<Block, BlockTreeBase> GRAPE_TREE = BLOCKS.register("grape_tree", () -> new BlockTreeBase(logProps(), () -> ModFeatures.GRAPE_1.value(), () -> ModFeatures.GRAPE_2.value(), () -> ModFeatures.GRAPE_3.value(), ModItems.GRAPE_SAPLING));
-    public static final RegistryEntrySupplier<Block, BlockTreeSapling> GRAPE_SAPLING = BLOCKS.register("grape_sapling", () -> new BlockTreeSapling(BlockBehaviour.Properties.of(Material.PLANT).noCollission().instabreak().sound(SoundType.GRASS), GRAPE_TREE));
-    public static final RegistryEntrySupplier<Block, RotatedPillarBlock> GRAPE_WOOD = BLOCKS.register("grape_wood", () -> new RotatedPillarBlock(BlockBehaviour.Properties.of(Material.WOOD).sound(SoundType.WOOD).strength(-1, 99999)));
-    public static final RegistryEntrySupplier<Block, LeavesBlock> GRAPE_LEAVES = BLOCKS.register("grape_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES).strength(-1, 99999)));
-    public static final RegistryEntrySupplier<Block, BlockFruitTreeLeaf> GRAPE = BLOCKS.register("grape_leaves_fruit", () -> new BlockFruitTreeLeaf(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES).strength(-1, 99999), ModItems.GRAPES::get));
+    public static final RegistryEntrySupplier<Block, BlockTreeSapling> GRAPE_SAPLING = BLOCKS.register("grape_sapling", () -> new BlockTreeSapling(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_SAPLING), GRAPE_TREE));
+    public static final RegistryEntrySupplier<Block, RotatedPillarBlock> GRAPE_WOOD = BLOCKS.register("grape_wood", () -> new RotatedPillarBlock(logProps().sound(SoundType.WOOD).strength(-1, 99999)));
+    public static final RegistryEntrySupplier<Block, LeavesBlock> GRAPE_LEAVES = BLOCKS.register("grape_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES).strength(-1, 99999)));
+    public static final RegistryEntrySupplier<Block, BlockFruitTreeLeaf> GRAPE = BLOCKS.register("grape_leaves_fruit", () -> new BlockFruitTreeLeaf(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES).strength(-1, 99999), ModItems.GRAPES));
 
     public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<BrokenMineralBlockEntity>> BROKEN_MINERAL_TILE = brokenMineralTile("broken_mineral_tile", BROKEN_MINERAL_MAP.values());
-    public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<AccessoryBlockEntity>> ACCESSORY_TILE = BLOCK_ENTITY_TYPES.register("accessory_tile", () -> Platform.INSTANCE.blockEntityType(AccessoryBlockEntity::new, ACCESSORY.get()));
-    public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<ForgingBlockEntity>> FORGING_TILE = BLOCK_ENTITY_TYPES.register("forge_tile", () -> Platform.INSTANCE.blockEntityType(ForgingBlockEntity::new, FORGE.get()));
-    public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<ChemistryBlockEntity>> CHEMISTRY_TILE = BLOCK_ENTITY_TYPES.register("chemistry_tile", () -> Platform.INSTANCE.blockEntityType(ChemistryBlockEntity::new, CHEMISTRY.get()));
-    public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<CookingBlockEntity>> COOKING_TILE = BLOCK_ENTITY_TYPES.register("cooking_tile", () -> Platform.INSTANCE.blockEntityType(CookingBlockEntity::new, COOKING.get()));
-    public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<BossSpawnerBlockEntity>> BOSS_SPAWNER_TILE = BLOCK_ENTITY_TYPES.register("spawner_tile", () -> Platform.INSTANCE.blockEntityType(BossSpawnerBlockEntity::new, BOSS_SPAWNER.get()));
-    public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<SingleTimeSpawner>> SINGLE_SPAWNER_TILE = BLOCK_ENTITY_TYPES.register("single_spawner_tile", () -> Platform.INSTANCE.blockEntityType(SingleTimeSpawner::new, SINGLE_SPAWN_BLOCK.get()));
-    public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<MonsterBarnBlockEntity>> MONSTER_BARN_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("monster_barn_block_entity", () -> Platform.INSTANCE.blockEntityType(MonsterBarnBlockEntity::new, MONSTER_BARN.get()));
-    public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<TreeBlockEntity>> TREE_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("tree", () -> Platform.INSTANCE.blockEntityType(TreeBlockEntity::new, APPLE_TREE.get(), ORANGE_TREE.get(), GRAPE_TREE.get()));
+    public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<AccessoryBlockEntity>> ACCESSORY_TILE = BLOCK_ENTITY_TYPES.register("accessory_tile", () -> BlockEntityType.Builder.of(AccessoryBlockEntity::new, ACCESSORY.get()).build(null));
+    public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<ForgingBlockEntity>> FORGING_TILE = BLOCK_ENTITY_TYPES.register("forge_tile", () -> BlockEntityType.Builder.of(ForgingBlockEntity::new, FORGE.get()).build(null));
+    public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<ChemistryBlockEntity>> CHEMISTRY_TILE = BLOCK_ENTITY_TYPES.register("chemistry_tile", () -> BlockEntityType.Builder.of(ChemistryBlockEntity::new, CHEMISTRY.get()).build(null));
+    public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<CookingBlockEntity>> COOKING_TILE = BLOCK_ENTITY_TYPES.register("cooking_tile", () -> BlockEntityType.Builder.of(CookingBlockEntity::new, COOKING.get()).build(null));
+    public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<BossSpawnerBlockEntity>> BOSS_SPAWNER_TILE = BLOCK_ENTITY_TYPES.register("spawner_tile", () -> BlockEntityType.Builder.of(BossSpawnerBlockEntity::new, BOSS_SPAWNER.get()).build(null));
+    public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<SingleTimeSpawner>> SINGLE_SPAWNER_TILE = BLOCK_ENTITY_TYPES.register("single_spawner_tile", () -> BlockEntityType.Builder.of(SingleTimeSpawner::new, SINGLE_SPAWN_BLOCK.get()).build(null));
+    public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<MonsterBarnBlockEntity>> MONSTER_BARN_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("monster_barn_block_entity", () -> BlockEntityType.Builder.of(MonsterBarnBlockEntity::new, MONSTER_BARN.get()).build(null));
+    public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<TreeBlockEntity>> TREE_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("tree", () -> BlockEntityType.Builder.of(TreeBlockEntity::new, APPLE_TREE.get(), ORANGE_TREE.get(), GRAPE_TREE.get()).build(null));
 
     public static RegistryEntrySupplier<Block, BlockMineral> mineral(EnumMineralTier name) {
         RegistryEntrySupplier<Block, BlockMineral> reg = BLOCKS.register("ore_" + name.getSerializedName(), () -> new BlockMineral(name, BlockBehaviour.Properties.of(Material.STONE).strength(5, 10)
@@ -261,13 +262,13 @@ public class ModBlocks {
     }
 
     public static RegistryEntrySupplier<Block, BlockCrop> crop(String name, Supplier<Supplier<? extends Item>> crop, Supplier<Supplier<? extends Item>> seed) {
-        RegistryEntrySupplier<Block, BlockCrop> reg = BLOCKS.register(name, () -> new BlockCrop(BlockBehaviour.Properties.of(Material.PLANT).noCollission().sound(SoundType.GRASS), crop.get(), seed.get()));
+        RegistryEntrySupplier<Block, BlockCrop> reg = BLOCKS.register(name, () -> new BlockCrop(cropProps(), crop.get(), seed.get()));
         CROPS.add(reg);
         return reg;
     }
 
     public static RegistryEntrySupplier<Block, BlockGiantCrop> giantCrop(String name, Supplier<Supplier<? extends Item>> giant, Supplier<Supplier<? extends Item>> seed, RegistryEntrySupplier<Block> crop) {
-        RegistryEntrySupplier<Block, BlockGiantCrop> reg = BLOCKS.register(name, () -> new BlockGiantCrop(BlockBehaviour.Properties.of(Material.PLANT).noCollission().sound(SoundType.GRASS), giant.get(), seed.get()));
+        RegistryEntrySupplier<Block, BlockGiantCrop> reg = BLOCKS.register(name, () -> new BlockGiantCrop(cropProps(), giant.get(), seed.get()));
         CROPS.add(reg);
         if (Platform.INSTANCE.isDatagen())
             GIANT_CROP_MAP.put(crop, reg);
@@ -275,21 +276,21 @@ public class ModBlocks {
     }
 
     public static RegistryEntrySupplier<Block, BlockCrop> flower(String name, Supplier<Supplier<? extends Item>> crop, Supplier<Supplier<? extends Item>> seed) {
-        RegistryEntrySupplier<Block, BlockCrop> reg = BLOCKS.register(name, () -> new BlockCrop(BlockBehaviour.Properties.of(Material.PLANT).noCollission().sound(SoundType.GRASS), crop.get(), seed.get()));
+        RegistryEntrySupplier<Block, BlockCrop> reg = BLOCKS.register(name, () -> new BlockCrop(cropProps(), crop.get(), seed.get()));
         FLOWERS.add(reg);
         return reg;
     }
 
-    public static RegistryEntrySupplier<Block, BlockGiantCrop> giantFlower(String name, Supplier<Supplier<? extends Item>> giant, Supplier<Supplier<? extends Item>> seed, RegistryEntrySupplier<Block> flower) {
-        RegistryEntrySupplier<Block, BlockGiantCrop> reg = BLOCKS.register(name, () -> new BlockGiantCrop(BlockBehaviour.Properties.of(Material.PLANT).noCollission().sound(SoundType.GRASS), giant.get(), seed.get()));
+    public static RegistryEntrySupplier<Block, BlockGiantCrop> giantFlower(String name, Supplier<Supplier<? extends Item>> giant, Supplier<Supplier<? extends Item>> seed, RegistryEntrySupplier<Block, ?> flower) {
+        RegistryEntrySupplier<Block, BlockGiantCrop> reg = BLOCKS.register(name, () -> new BlockGiantCrop(cropProps(), giant.get(), seed.get()));
         FLOWERS.add(reg);
         if (Platform.INSTANCE.isDatagen())
             GIANT_CROP_MAP.put(flower, reg);
         return reg;
     }
 
-    public static RegistryEntrySupplier<Block, BlockCrop> herb(String name, BlockHerb.GroundTypes... types) {
-        RegistryEntrySupplier<Block, BlockHerb> reg = BLOCKS.register(name, () -> new BlockHerb(BlockBehaviour.Properties.of(Material.PLANT).noCollission().sound(SoundType.GRASS), types));
+    public static RegistryEntrySupplier<Block, BlockHerb> herb(String name, BlockHerb.GroundTypes... types) {
+        RegistryEntrySupplier<Block, BlockHerb> reg = BLOCKS.register(name, () -> new BlockHerb(plantProps(), types));
         HERBS.add(reg);
         return reg;
     }
@@ -302,11 +303,20 @@ public class ModBlocks {
         return one;
     }
 
-    public static RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<BrokenMineralBlockEntity>> brokenMineralTile(String name, Collection<RegistryEntrySupplier<Block>> blocks) {
-        return BLOCK_ENTITY_TYPES.register(name, () -> Platform.INSTANCE.blockEntityType(BrokenMineralBlockEntity::new, blocks.stream().map(RegistryEntrySupplier::get).collect(Collectors.toSet())));
+    public static RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<BrokenMineralBlockEntity>> brokenMineralTile(String name, Collection<RegistryEntrySupplier<Block, ?>> blocks) {
+        return BLOCK_ENTITY_TYPES.register(name, () -> BlockEntityType.Builder.of(BrokenMineralBlockEntity::new,
+                blocks.stream().map(RegistryEntrySupplier::get).toArray(Block[]::new)).build(null));
     }
 
     private static BlockBehaviour.Properties logProps() {
-        return BlockBehaviour.Properties.of(Material.WOOD).strength(2.0f).sound(SoundType.WOOD);
+        return BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD).strength(2.0f).sound(SoundType.WOOD);
+    }
+
+    private static BlockBehaviour.Properties plantProps() {
+        return BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().instabreak().sound(SoundType.GRASS).offsetType(BlockBehaviour.OffsetType.XZ).pushReaction(PushReaction.DESTROY);
+    }
+
+    private static BlockBehaviour.Properties cropProps() {
+        return BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().instabreak().sound(SoundType.CROP).pushReaction(PushReaction.DESTROY);
     }
 }

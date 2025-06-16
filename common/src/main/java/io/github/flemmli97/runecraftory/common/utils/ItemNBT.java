@@ -153,8 +153,8 @@ public class ItemNBT {
             if (!crafting || tag.contains(LibNBT.ORIGINITEM))
                 return stack;
             boolean lightOreApplied = tag.getBoolean(LibNBT.LIGHTORETAG);
-            if (stack.is(RunecraftoryTags.EQUIPMENT)) {
-                if (!stackToAdd.is(RunecraftoryTags.EQUIPMENT))
+            if (stack.is(RunecraftoryTags.Items.EQUIPMENT)) {
+                if (!stackToAdd.is(RunecraftoryTags.Items.EQUIPMENT))
                     return stack;
                 if (lightOreApplied)
                     return changeBaseItemTo(stack, stackToAdd, type);
@@ -162,8 +162,8 @@ public class ItemNBT {
                     return changeBaseItemTo(stack, stackToAdd, type);
             }
             stack.get(ModDataComponentTypes.STATS.get())
-            if (stack.is(RunecraftoryTags.UPGRADABLE_HELD)) {
-                if (!stackToAdd.is(RunecraftoryTags.UPGRADABLE_HELD))
+            if (stack.is(RunecraftoryTags.Items.UPGRADABLE_HELD)) {
+                if (!stackToAdd.is(RunecraftoryTags.Items.UPGRADABLE_HELD))
                     return stack;
                 if (lightOreApplied)
                     return changeBaseItemTo(stack, stackToAdd, type);
@@ -211,7 +211,7 @@ public class ItemNBT {
             tag.putBoolean(LibNBT.OBJECT_X, !hasObjectX);
         if (type == EnumCrafting.FORGE && stackToAdd.getItem() == ModItems.INVIS_STONE.get())
             tag.putBoolean(LibNBT.INVIS, true);
-        if (type == EnumCrafting.FORGE && stackToAdd.is(RunecraftoryTags.SCALES))
+        if (type == EnumCrafting.FORGE && stackToAdd.is(RunecraftoryTags.Items.SCALES))
             tag.putBoolean(LibNBT.DRAGON_SCALE, true);
         if (crafting && stackToAdd.getItem() == ModItems.LIGHT_ORE.get() && !tag.contains(LibNBT.ORIGINITEM))
             tag.putBoolean(LibNBT.LIGHTORETAG, true);
@@ -410,15 +410,15 @@ public class ItemNBT {
     }
 
     public static boolean shouldHaveStats(ItemStack stack) {
-        return stack.is(RunecraftoryTags.UPGRADABLE_HELD) || stack.is(RunecraftoryTags.EQUIPMENT);
+        return stack.is(RunecraftoryTags.Items.UPGRADABLE_HELD) || stack.is(RunecraftoryTags.Items.EQUIPMENT);
     }
 
     public static boolean shouldHaveLevel(ItemStack stack) {
-        return shouldHaveStats(stack) || stack.is(RunecraftoryTags.SPELLS);
+        return shouldHaveStats(stack) || stack.is(RunecraftoryTags.Items.SPELLS);
     }
 
     public static boolean isWeapon(ItemStack stack) {
-        return stack.is(RunecraftoryTags.UPGRADABLE_HELD);
+        return stack.is(RunecraftoryTags.Items.UPGRADABLE_HELD);
     }
 
     public static boolean usedLightOre(ItemStack stack) {

@@ -32,10 +32,10 @@ public class BlazeBarrageSummoner extends ProjectileSummonHelperEntity {
             float inaccuracy = 5;
             Vec3 vec3 = look.normalize().add(this.random.nextGaussian() * 0.0075 * inaccuracy,
                     this.random.nextGaussian() * 0.0075 * inaccuracy, this.random.nextGaussian() * 0.0075 * inaccuracy).scale(2);
-            SmallFireball fireball = new SmallFireball(this.level, owner, vec3.x, vec3.y, vec3.z);
+            SmallFireball fireball = new SmallFireball(this.level(), owner, vec3.x, vec3.y, vec3.z);
             fireball.setPos(fireball.getX(), owner.getY(0.5) + 0.5, fireball.getZ());
             this.playSound(SoundEvents.BLAZE_SHOOT, 1, (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.0f);
-            this.level.addFreshEntity(fireball);
+            this.level().addFreshEntity(fireball);
         }
     }
 }

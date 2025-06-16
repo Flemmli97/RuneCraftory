@@ -71,7 +71,7 @@ public class EntityMarionettaTrap extends Entity implements OwnableEntity, IAnim
 
     @Override
     protected void defineSynchedData() {
-        this.entityData.define(CAUGHT_ENTITIES, new CompoundTag());
+        builder.define(CAUGHT_ENTITIES, new CompoundTag());
     }
 
     @Override
@@ -108,7 +108,7 @@ public class EntityMarionettaTrap extends Entity implements OwnableEntity, IAnim
                 });
             }
         });
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             if (this.dirty) {
                 this.entityData.set(CAUGHT_ENTITIES, this.writeCaughtEntities());
                 this.dirty = false;
@@ -171,7 +171,7 @@ public class EntityMarionettaTrap extends Entity implements OwnableEntity, IAnim
         if (this.shooter == null || this.shooter.isRemoved()) {
             UUID uuid = this.getOwnerUUID();
             if (uuid != null)
-                this.shooter = EntityUtil.findFromUUID(LivingEntity.class, this.level, uuid);
+                this.shooter = EntityUtil.findFromUUID(LivingEntity.class, this.level(), uuid);
         }
         return this.shooter;
     }
@@ -188,7 +188,7 @@ public class EntityMarionettaTrap extends Entity implements OwnableEntity, IAnim
         ListTag list = tag.getList("Caught", Tag.TAG_INT);
         this.caughtEntities.clear();
         list.forEach(t -> {
-            Entity e = this.level.getEntity(((IntTag) t).getAsInt());
+            Entity e = this.level().getEntity(((IntTag) t).getAsInt());
             if (e instanceof LivingEntity entity)
                 this.caughtEntities.add(entity);
         });

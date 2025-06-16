@@ -11,6 +11,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.ActionUtils;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.KeepDistanceRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.DifficultyInstance;
@@ -29,10 +31,11 @@ import java.util.List;
 
 public class EntityOrcArcher extends EntityOrc {
 
-    public static final AnimatedAction MELEE = AnimatedAction.builder(0.92, "kick").marker("attack", 0.58).build();
-    public static final AnimatedAction RANGED = AnimatedAction.builder(1, "bow").marker("attack", 0.6).build();
-    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, RANGED, INTERACT, SLEEP};
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String MELEE = BUILDER.add("kick", AnimationsBuilder.definition(0.92).marker("attack", 0.58));
+    public static final String RANGED = BUILDER.add("bow", AnimationsBuilder.definition(1).marker("attack", 0.6));
+    public static final String INTERACT = BUILDER.add("interact", MELEE);
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityOrc>>> ATTACKS = List.of(
             WeightedEntry.wrap(MonsterActionUtils.simpleMeleeActionInRange(MELEE, e -> 0.6f), 1),
@@ -110,17 +113,17 @@ public class EntityOrcArcher extends EntityOrc {
     }
 
     private void shootArrow(LivingEntity target) {
-        EntityMobArrow arrow = new EntityMobArrow(this.level, this, 0.8f);
-        arrow.shootAtEntity(target, 1.3f, 14 - this.level.getDifficulty().getId() * 4);
+        EntityMobArrow arrow = new EntityMobArrow(this.level(), this, 0.8f);
+        arrow.shootAtEntity(target, 1.3f, 14 - this.level().getDifficulty().getId() * 4);
         this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
-        this.level.addFreshEntity(arrow);
+        this.level().addFreshEntity(arrow);
     }
 
     private void shootArrowFromRotation(LivingEntity shooter) {
-        EntityMobArrow arrow = new EntityMobArrow(this.level, this, 0.8f);
-        arrow.shootFromRotation(shooter, shooter.getXRot(), shooter.getYRot(), 0.0F, 1.3f, 7 - this.level.getDifficulty().getId() * 2);
+        EntityMobArrow arrow = new EntityMobArrow(this.level(), this, 0.8f);
+        arrow.shootFromRotation(shooter, shooter.getXRot(), shooter.getYRot(), 0.0F, 1.3f, 7 - this.level().getDifficulty().getId() * 2);
         this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
-        this.level.addFreshEntity(arrow);
+        this.level().addFreshEntity(arrow);
     }
 
     @Override

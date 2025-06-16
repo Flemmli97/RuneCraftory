@@ -44,22 +44,22 @@ public class RafflesiaBreathSummoner extends ProjectileSummonHelperEntity {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(TYPE, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(TYPE, 0);
     }
 
     @Override
     protected void summonProjectiles() {
         float add = (this.tickCount * 70f / this.maxLivingTicks - 35f);
         float rot = Mth.wrapDegrees(this.getYRot() + (this.reversed ? add : -add));
-        EntityStatusBall ball = new EntityStatusBall(this.level, this.getOwner());
+        EntityStatusBall ball = new EntityStatusBall(this.level(), this.getOwner());
         ball.setType(this.type);
         ball.setLivingTicksMax(60);
         ball.setDamageMultiplier(this.damageMultiplier);
         ball.shootFromRotation(this, this.getXRot(), rot, 0, 0.25f, 0);
         Vec3 delta = ball.getDeltaMovement().normalize().scale(this.getOwner().getBbWidth() * 1);
         ball.setPos(ball.getX() + delta.x(), this.getY(), ball.getZ() + delta.z());
-        this.level.addFreshEntity(ball);
+        this.level().addFreshEntity(ball);
     }
 }

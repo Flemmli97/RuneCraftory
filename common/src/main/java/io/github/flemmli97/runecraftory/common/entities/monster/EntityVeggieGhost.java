@@ -18,6 +18,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRun
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.StrafingRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -42,13 +44,14 @@ import java.util.List;
 
 public class EntityVeggieGhost extends BaseMonster {
 
-    public static final AnimatedAction ATTACK = AnimatedAction.builder(1.16, "head_attack").marker("attack", 0.68).build();
-    public static final AnimatedAction CAST = AnimatedAction.builder(0.68, "cast").marker("attack", 0.36).build();
-    public static final AnimatedAction SPIN = AnimatedAction.builder(0.68, "spin").marker("attack", 0.36).build();
-    public static final AnimatedAction VANISH = AnimatedAction.builder(5, "vanish").marker("attack", 2.5).build();
-    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(CAST, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(0, "sleep").infinite().build();
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{ATTACK, CAST, SPIN, VANISH, INTERACT, SLEEP};
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String ATTACK = BUILDER.add("head_attack", AnimationsBuilder.definition(1.16).marker("attack", 0.68));
+    public static final String CAST = BUILDER.add("cast", AnimationsBuilder.definition(0.68).marker("attack", 0.36));
+    public static final String SPIN = BUILDER.add("spin", AnimationsBuilder.definition(0.68).marker("attack", 0.36));
+    public static final String VANISH = BUILDER.add("vanish", AnimationsBuilder.definition(5).marker("attack", 2.5));
+    public static final String INTERACT = BUILDER.add("interact", CAST);
+    public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityVeggieGhost>>> ATTACKS = List.of(
             WeightedEntry.wrap(MonsterActionUtils.simpleMeleeActionCondition(ATTACK, e -> 1, ActionUtils.ranged(8)), 1),
@@ -106,7 +109,7 @@ public class EntityVeggieGhost extends BaseMonster {
             this.noPhysics = entity.noPhysics;
         } else {
             this.noPhysics = !this.playDeath();
-            if (this.getY() < this.level.getMinBuildHeight() + 1)
+            if (this.getY() < this.level().getMinBuildHeight() + 1)
                 vec = new Vec3(vec.x, 0.006, vec.z);
         }
         this.handleFreeTravel(vec);
@@ -203,10 +206,10 @@ public class EntityVeggieGhost extends BaseMonster {
 
     private void teleport(double x, double y, double z) {
         BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos(x, y, z);
-        while (mutableBlockPos.getY() > this.level.getMinBuildHeight() && !this.level.getBlockState(mutableBlockPos).getMaterial().blocksMotion()) {
+        while (mutableBlockPos.getY() > this.level().getMinBuildHeight() && !this.level().getBlockState(mutableBlockPos).getMaterial().blocksMotion()) {
             mutableBlockPos.move(Direction.DOWN);
         }
-        BlockState blockState = this.level.getBlockState(mutableBlockPos);
+        BlockState blockState = this.level().getBlockState(mutableBlockPos);
         if (!blockState.getMaterial().blocksMotion()) {
             y = this.getY();
         }

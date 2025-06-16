@@ -131,6 +131,10 @@ public class PlayerData {
         this.weaponHandler = new PlayerWeaponHandler(player);
     }
 
+    public Player player() {
+        return this.player;
+    }
+
     public void setMaxHealth(float amount, boolean asBaseHealth) {
         AttributeInstance health = this.player.getAttribute(Attributes.MAX_HEALTH);
         AttributeModifier modifier = health.getModifier(LibConstants.MAX_HEALTH_MODIFIER);

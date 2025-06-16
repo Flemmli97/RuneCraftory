@@ -8,7 +8,7 @@ import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
 import io.github.flemmli97.runecraftory.common.utils.HolderUtils;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import net.minecraft.advancements.critereon.EntityPredicate;
-import net.minecraft.core.Registry;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -37,15 +37,14 @@ public record ShopItemProperties(ItemStack stack, UnlockType unlockType,
 
     public static final Codec<IntermediaryShopItem> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(
-                    MULTI_ITEM_VALUE_CODEC.fieldOf("item").forGetter(d -> d.items),
-                    CodecUtils.stringEnumCodec(UnlockType.class, null).fieldOf("unlock_type").forGetter(d -> d.unlockType),
-                    EntityPredicate.CODEC.optionalFieldOf("predicate").forGetter(d -> Optional.ofNullable(d.predicate == EntityPredicate.ANY ? null : d.predicate))
-            ).apply(instance, (stack, type, adv) ->
-                    new IntermediaryShopItem(stack, type, adv.orElse(EntityPredicate.ANY))));
+                    MULTI_ITEM_VALUE_CODEC.fieldOf("item").forGetter(IntermediaryShopItem::items),
+                    CodecUtils.stringEnumCodec(UnlockType.class, null).fieldOf("unlock_type").forGetter(IntermediaryShopItem::unlockType),
+                    EntityPredicate.CODEC.optionalFieldOf("predicate").forGetter(IntermediaryShopItem::predicate)
+            ).apply(instance, IntermediaryShopItem::new));
 
-    public static List<ShopItemProperties> from(IntermediaryShopItem item) {
+    public static List<ShopItemProperties> from(HolderLookup.Provider provider, IntermediaryShopItem item) {
         List<ShopItemProperties> list = new ArrayList<>();
-        item.items().getContents().forEach(stack -> list.add(new ShopItemProperties(stack, item.unlockType, item.predicate)));
+        item.items().getContents(provider).forEach(stack -> list.add(new ShopItemProperties(stack, item.unlockType, item.predicate)));
         return list;
     }
 
@@ -53,9 +52,10 @@ public record ShopItemProperties(ItemStack stack, UnlockType unlockType,
      * Used for the saved data instance
      */
     public record IntermediaryShopItem(MultiItemValue items, UnlockType unlockType,
-                                       EntityPredicate predicate) {
+                                       Optional<EntityPredicate> predicate) {
+
         public IntermediaryShopItem(MultiItemValue items, UnlockType unlockType) {
-            this(items, unlockType, EntityPredicate.ANY);
+            this(items, unlockType, Optional.empty());
         }
 
         public boolean isTag() {
@@ -87,9 +87,9 @@ public record ShopItemProperties(ItemStack stack, UnlockType unlockType,
             return new MultiItemValue(Arrays.stream(item).map(ItemStack::new).toList());
         }
 
-        public List<ItemStack> getContents() {
+        public List<ItemStack> getContents(HolderLookup.Provider provider) {
             if (this.tag != null) {
-                return HolderUtils.expandTag(Registry.ITEM, this.tag, ItemStack::new);
+                return HolderUtils.expandTag(provider, Registries.ITEM, this.tag, ItemStack::new);
             }
             return this.items;
         }

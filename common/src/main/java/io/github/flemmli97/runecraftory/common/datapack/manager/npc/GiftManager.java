@@ -29,7 +29,7 @@ public class GiftManager extends SimpleJsonResourceReloadListener implements Lis
     private HolderLookup.Provider provider;
 
     public GiftManager() {
-        super(DataPackHandler.GSON, ID.getPath());
+        super(DataPackHandler.GSON, ID.toString());
     }
 
     public GiftData get(ResourceLocation id) {

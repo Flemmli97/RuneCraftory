@@ -12,7 +12,7 @@ import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.item.AOEWeapon;
 import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
 import net.minecraft.core.BlockPos;
@@ -39,19 +39,19 @@ public class SpearAttack extends AttackAction {
             .build();
 
     @Override
-    public AnimatedAction getAnimation(LivingEntity entity, int comboIdx) {
+    public AnimationState getAnimation(LivingEntity entity, int comboIdx) {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
-        return PlayerModelAnimations.SPEAR.get(comboIdx).create(speed);
+        return AttackAction.create(PlayerModelAnimations.SPEAR.get(comboIdx), speed);
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimatedAction anim) {
+    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimationState anim) {
         if (handler.getComboCount() != 5) {
             if (anim.isAt("attack")) {
                 if (!entity.level().isClientSide) {
-                    CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(AOEWeapon.createOBB(entity, stack,
+                    CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(AOEWeapon.createOBB(entity,
                                     CombatUtils.getRange(entity, 0),
-                                    CombatUtils.getWidth(entity, 0))))
+                                    CombatUtils.getWidth(entity, 0), 0.5)))
                             .executeAttack();
                 }
                 entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_LIGHT.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
@@ -126,7 +126,7 @@ public class SpearAttack extends AttackAction {
     }
 
     @Override
-    public float movementReduction(AnimatedAction current) {
+    public float movementReduction(AnimationState current) {
         return GeneralConfig.MOVE_SPEED_ATTACK.get().floatValue();
     }
 

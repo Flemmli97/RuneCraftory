@@ -21,7 +21,7 @@ public class NPCWalkNodeEvaluator extends WalkNodeEvaluator {
     protected Node findAcceptedNode(int i, int j, int k, int l, double d, Direction direction, BlockPathTypes blockPathTypes) {
         Node node = super.findAcceptedNode(i, j, k, l, d, direction, blockPathTypes);
         if (node != null && node.type == BlockPathTypes.TRAPDOOR) {
-            BlockState state = this.level.getBlockState(new BlockPos(node.x, node.y, node.z));
+            BlockState state = this.level().getBlockState(new BlockPos(node.x, node.y, node.z));
             if (!(state.getBlock() instanceof TrapDoorBlock))
                 return node;
             boolean tryGoOver = false;

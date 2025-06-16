@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.forge.data;
 
 import com.google.common.collect.Lists;
+import com.google.gson.JsonObject;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
 import io.github.flemmli97.runecraftory.api.datapack.provider.AdditionalLanguages;
 import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
 import io.github.flemmli97.runecraftory.api.enums.EnumDay;
@@ -34,15 +34,15 @@ import io.github.flemmli97.runecraftory.common.quests.tasks.SkillLevelTask;
 import io.github.flemmli97.runecraftory.common.quests.tasks.TamingTask;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
+import io.github.flemmli97.runecraftory.common.registry.ModDamageType;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
-import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.HashCache;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
@@ -50,14 +50,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.RecordItem;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
-import org.apache.commons.lang3.text.translate.JavaUnicodeEscaper;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -65,7 +59,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -76,15 +70,15 @@ import java.util.stream.Stream;
 public class LangGen implements DataProvider {
 
     private static final Comparator<String> ORDER = Comparator.comparingInt(o -> LangType.get(o).ordinal());
+
     private final Map<String, String> data = new LinkedHashMap<>();
     private final PackOutput packOutput;
-    private final String modid;
-    private final String locale;
+    private final String modid, locale;
 
     private final AdditionalLanguages[] additionalLanguages;
 
     public LangGen(PackOutput packOutput, AdditionalLanguages... additionalLanguages) {
-        this.gen = gen;
+        this.packOutput = packOutput;
         this.modid = RuneCraftory.MODID;
         this.locale = "en_us";
         this.additionalLanguages = additionalLanguages;
@@ -122,7 +116,7 @@ public class LangGen implements DataProvider {
         this.add(ModItems.FISHING_ROD_SILVER.get(), "Skilled Pole");
         this.add(ModItems.FISHING_ROD_GOLD.get(), "Famous Pole");
         this.add(ModItems.FISHING_ROD_PLATINUM.get(), "Sacred Pole");
-        for (RegistryEntrySupplier<Item> sup : ModItems.ITEMS.getEntries()) {
+        for (RegistryEntrySupplier<Item, ?> sup : ModItems.ITEMS.getEntries()) {
             if (sup.get() instanceof ItemToolAxe || sup.get() instanceof ItemToolHoe || sup.get() instanceof ItemToolWateringCan
                     || sup.get() instanceof ItemToolSickle || sup.get() instanceof ItemToolHammer || sup.get() instanceof ItemToolFishingRod)
                 continue;
@@ -152,11 +146,12 @@ public class LangGen implements DataProvider {
                 this.add(sup.get(), "Grape Sapling?");
             } else if (sup.get() instanceof SpawnEgg)
                 this.add(sup.get(), "%s" + " Spawn Egg");
-            else if (sup.get() instanceof RecordItem record) {
-                this.add(sup.get(), "Music Disc");
-                this.add(record.getDescriptionId() + ".desc", this.simpleTranslation(sup.getID().getPath()
-                        .replace("music_disc_", "").replace("-", "_")));
-            } else
+//            else if (sup.get() instanceof RecordItem record) {
+//                this.add(sup.get(), "Music Disc");
+//                this.add(record.getDescriptionId() + ".desc", this.simpleTranslation(sup.getID().getPath()
+//                        .replace("music_disc_", "").replace("-", "_")));
+//            }
+            else
                 this.add(sup.get(), this.simpleTranslation(sup.getID()));
         }
 
@@ -165,7 +160,7 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.item.creative.tooltip.mode.default", "Default");
         this.add("runecraftory.item.creative.tooltip.mode.animation", "Entity Animations");
 
-        for (RegistryEntrySupplier<Block> sup : ModBlocks.BLOCKS.getEntries()) {
+        for (RegistryEntrySupplier<Block, ?> sup : ModBlocks.BLOCKS.getEntries()) {
             this.add(sup.get(), this.simpleTranslation(sup.getID()));
         }
 
@@ -178,7 +173,7 @@ public class LangGen implements DataProvider {
         this.add(ContainerInfoScreen.TITLE, "Info Screen");
         this.add(ContainerInfoScreen.TITLE_SUB, "Info Screen");
 
-        for (RegistryEntrySupplier<EntityType<?>> sup : ModEntities.ENTITIES.getEntries()) {
+        for (RegistryEntrySupplier<EntityType<?>, ?> sup : ModEntities.ENTITIES.getEntries()) {
             if (sup.get() == ModEntities.SARCOPHAGUS_TELEPORTER.get()) {
                 this.add(sup.get(), "Teleporter");
             } else {
@@ -228,7 +223,7 @@ public class LangGen implements DataProvider {
         this.add(ModAttributes.ATTACK_WIDTH.get().getDescriptionId(), "Attack Width");
         this.add(ModAttributes.CHARGE_TIME.get().getDescriptionId(), "Charge Time");
 
-        for (RegistryEntrySupplier<MobEffect> reg : ModEffects.EFFECTS.getEntries()) {
+        for (RegistryEntrySupplier<MobEffect, ?> reg : ModEffects.EFFECTS.getEntries()) {
             this.add(reg.get(), this.simpleTranslation(reg.getID()));
         }
 
@@ -284,9 +279,15 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.tooltip.baby.girl", "Girl");
         this.add("runecraftory.tooltip.baby.owner", "Parent: %s");
 
-        this.add("death.attack." + CustomDamage.EXHAUST.msgId, "%1$s fainted");
-        this.add("death.attack." + CustomDamage.ENTITY_DAMAGE_SOURCE, "%1$s was knocked down by %2$s");
-        this.add("death.attack." + CustomDamage.POISON.msgId, "%1$s was to weak and died of poison");
+        this.add("death.attack." + ModDamageType.DYNAMIC_DAMAGE_TYPE.location().toLanguageKey(), "%1$s was knocked");
+        this.add("death.attack." + ModDamageType.DYNAMIC_DAMAGE_TYPE.location().toLanguageKey() + ".player", "%1$s was knocked down by %2$s");
+        this.add("death.attack." + ModDamageType.DYNAMIC_DAMAGE_TYPE.location().toLanguageKey() + ".item", "%1$s was knocked down by %2$s using %3$s");
+        this.add("death.attack." + ModDamageType.EXHAUST.location().toLanguageKey(), "%1$s fainted");
+        this.add("death.attack." + ModDamageType.EXHAUST.location().toLanguageKey() + ".player", "%1$s fainted while fighting %2$s");
+        this.add("death.attack." + ModDamageType.EXHAUST.location().toLanguageKey() + ".item", "%1$s fainted while fighting %2$s");
+        this.add("death.attack." + ModDamageType.STRONG_POISON.location().toLanguageKey(), "%1$s was to weak and died of poison");
+        this.add("death.attack." + ModDamageType.STRONG_POISON.location().toLanguageKey() + ".player", "%1$s was to weak and died of poison while fighting %2$s");
+        this.add("death.attack." + ModDamageType.STRONG_POISON.location().toLanguageKey() + ".item", "%1$s was to weak and died of poison  while fighting %2$s using %3$s");
 
         this.add(BaseMonster.Behaviour.WANDER_HOME.interactKey, "You send %s home");
         this.add(BaseMonster.Behaviour.FOLLOW.interactKey, "%s is now following you");
@@ -365,12 +366,12 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.magnifying_glass.view.giant", "Size: %s");
         this.add("runecraftory.magnifying_glass.view.defence", "Defence: %s");
 
-        this.add(C2SNPCInteraction.Type.TALK.translation, "Talk");
-        this.add(C2SNPCInteraction.Type.FOLLOW.translation, "Follow me");
-        this.add(C2SNPCInteraction.Type.FOLLOWDISTANCE.translation, "Stay back a bit");
-        this.add(C2SNPCInteraction.Type.STAY.translation, "Stay here");
-        this.add(C2SNPCInteraction.Type.STOPFOLLOW.translation, "Stop following");
-        this.add(C2SNPCInteraction.Type.SHOP.translation, "I want to shop");
+        this.add(C2SNPCInteraction.Action.TALK.translation, "Talk");
+        this.add(C2SNPCInteraction.Action.FOLLOW.translation, "Follow me");
+        this.add(C2SNPCInteraction.Action.FOLLOWDISTANCE.translation, "Stay back a bit");
+        this.add(C2SNPCInteraction.Action.STAY.translation, "Stay here");
+        this.add(C2SNPCInteraction.Action.STOPFOLLOW.translation, "Stop following");
+        this.add(C2SNPCInteraction.Action.SHOP.translation, "I want to shop");
         this.add("runecraftory.gui.level", "Level");
         this.add("runecraftory.gui.npc.id", "Npc data-id");
         this.add("runecraftory.gui.npc.profession", "Npc Profession");
@@ -500,16 +501,16 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.misc.spawner.entry.deny", "A mystical force prevents you from entering!");
 
         // NPC stuff
-        this.add(ModNPCJobs.NONE.getSecond().getTranslationKey(), this.simpleTranslation(ModNPCJobs.NONE.getFirst()));
-        this.add(ModNPCJobs.GENERAL.getSecond().getTranslationKey(), this.simpleTranslation(ModNPCJobs.GENERAL.getFirst()));
-        this.add(ModNPCJobs.FLOWER.getSecond().getTranslationKey(), this.simpleTranslation(ModNPCJobs.FLOWER.getFirst()));
-        this.add(ModNPCJobs.SMITH.getSecond().getTranslationKey(), this.simpleTranslation(ModNPCJobs.SMITH.getFirst()));
-        this.add(ModNPCJobs.DOCTOR.getSecond().getTranslationKey(), this.simpleTranslation(ModNPCJobs.DOCTOR.getFirst()));
-        this.add(ModNPCJobs.COOK.getSecond().getTranslationKey(), this.simpleTranslation(ModNPCJobs.COOK.getFirst()));
-        this.add(ModNPCJobs.MAGIC.getSecond().getTranslationKey(), this.simpleTranslation(ModNPCJobs.MAGIC.getFirst()));
-        this.add(ModNPCJobs.RUNE_SKILLS.getSecond().getTranslationKey(), this.simpleTranslation(ModNPCJobs.RUNE_SKILLS.getFirst()));
-        this.add(ModNPCJobs.BATHHOUSE.getSecond().getTranslationKey(), this.simpleTranslation(ModNPCJobs.BATHHOUSE.getFirst()));
-        this.add(ModNPCJobs.RANDOM.getSecond().getTranslationKey(), this.simpleTranslation(ModNPCJobs.RANDOM.getFirst()));
+        this.add(ModNPCJobs.NONE.get().getTranslationKey(), this.simpleTranslation(ModNPCJobs.NONE.getID()));
+        this.add(ModNPCJobs.GENERAL.get().getTranslationKey(), this.simpleTranslation(ModNPCJobs.GENERAL.getID()));
+        this.add(ModNPCJobs.FLOWER.get().getTranslationKey(), this.simpleTranslation(ModNPCJobs.FLOWER.getID()));
+        this.add(ModNPCJobs.SMITH.get().getTranslationKey(), this.simpleTranslation(ModNPCJobs.SMITH.getID()));
+        this.add(ModNPCJobs.DOCTOR.get().getTranslationKey(), this.simpleTranslation(ModNPCJobs.DOCTOR.getID()));
+        this.add(ModNPCJobs.COOK.get().getTranslationKey(), this.simpleTranslation(ModNPCJobs.COOK.getID()));
+        this.add(ModNPCJobs.MAGIC.get().getTranslationKey(), this.simpleTranslation(ModNPCJobs.MAGIC.getID()));
+        this.add(ModNPCJobs.RUNE_SKILLS.get().getTranslationKey(), this.simpleTranslation(ModNPCJobs.RUNE_SKILLS.getID()));
+        this.add(ModNPCJobs.BATHHOUSE.get().getTranslationKey(), this.simpleTranslation(ModNPCJobs.BATHHOUSE.getID()));
+        this.add(ModNPCJobs.RANDOM.get().getTranslationKey(), this.simpleTranslation(ModNPCJobs.RANDOM.getID()));
 
         this.add(Smith.BARN_ACTION, "Monster barn");
         this.add(Smith.BARN_ACTION_DESCRIPTION, "You can buy a monster barn to house your tamed monsters. Each barn bought increases the costs of the next one");
@@ -789,7 +790,7 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.patchouli.category.entities", "Monsters");
         this.add("runecraftory.patchouli.category.entities.desc", "List of all monsters");
 
-        List<RegistryEntrySupplier<EntityType<? extends Entity>>> entities = new ArrayList<>();
+        List<RegistryEntrySupplier<EntityType<? extends Entity>, ?>> entities = new ArrayList<>();
         this.addPatchouliEntityDesc(entities, ModEntities.WOOLY, "Sheep like creature that is rather passive. Shearable.");
         this.addPatchouliEntityDesc(entities, ModEntities.ORC_ARCHER, "An orc but with a bow");
         this.addPatchouliEntityDesc(entities, ModEntities.BIG_MUCK, "Mushroom like create that attacks using spores");
@@ -799,7 +800,7 @@ public class LangGen implements DataProvider {
         this.addPatchouliEntityDesc(entities, ModEntities.MARIONETTA, "Spooky old doll");
         this.addPatchouliEntityDesc(entities, ModEntities.HANDONETTA, "Whose hand is this???");
 
-        for (RegistryEntrySupplier<EntityType<?>> sup : ModEntities.getMonsters()) {
+        for (RegistryEntrySupplier<EntityType<?>, ?> sup : ModEntities.getMonsters()) {
             if (entities.contains(sup))
                 continue;
             this.add(patchouliEntity(sup.getID()), "");
@@ -840,33 +841,22 @@ public class LangGen implements DataProvider {
     }
 
     @Override
-    public void run(HashCache cache) throws IOException {
+    public CompletableFuture<?> run(CachedOutput cache) {
         this.addTranslations();
         Map<String, String> sort = this.data.entrySet().stream().sorted((e, e2) -> ORDER.compare(e.getKey(), e2.getKey()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (old, v) -> old, LinkedHashMap::new));
-        if (!sort.isEmpty())
-            this.save(cache, sort, this.gen.getOutputFolder().resolve("assets/" + this.modid + "/lang/" + this.locale + ".json"));
+        if (!sort.isEmpty()) {
+            Path path = this.packOutput.getOutputFolder(PackOutput.Target.RESOURCE_PACK).resolve(this.modid + "/lang/" + this.locale + ".json");
+            JsonObject json = new JsonObject();
+            sort.forEach(json::addProperty);
+            return DataProvider.saveStable(cache, json, path);
+        }
+        return CompletableFuture.allOf();
     }
 
     @Override
     public String getName() {
         return "Languages: " + this.locale;
-    }
-
-    @SuppressWarnings("deprecation")
-    private void save(HashCache cache, Object object, Path target) throws IOException {
-        String data = GsonInstances.GSON.toJson(object);
-        data = JavaUnicodeEscaper.outsideOf(0, 0x7f).translate(data); // Escape unicode after the fact so that it's not double escaped by GSON
-        String hash = DataProvider.SHA1.hashUnencodedChars(data).toString();
-        if (!Objects.equals(cache.getHash(target), hash) || !Files.exists(target)) {
-            Files.createDirectories(target.getParent());
-
-            try (BufferedWriter bufferedwriter = Files.newBufferedWriter(target)) {
-                bufferedwriter.write(data);
-            }
-        }
-
-        cache.putNew(target, hash);
     }
 
     public void addBlock(Supplier<? extends Block> key, String name) {
@@ -894,24 +884,6 @@ public class LangGen implements DataProvider {
         this.add(key.getDescriptionId(), name);
     }
 
-    public void addEnchantment(Supplier<? extends Enchantment> key, String name) {
-        this.add(key.get(), name);
-    }
-
-    public void add(Enchantment key, String name) {
-        this.add(key.getDescriptionId(), name);
-    }
-
-    /*
-    public void addBiome(Supplier<? extends Biome> key, String name) {
-        add(key.get(), name);
-    }
-
-    public void add(Biome key, String name) {
-        add(key.getTranslationKey(), name);
-    }
-    */
-
     public void addEffect(Supplier<? extends MobEffect> key, String name) {
         this.add(key.get(), name);
     }
@@ -934,8 +906,8 @@ public class LangGen implements DataProvider {
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
-    public <T extends Entity> void addPatchouliEntityDesc(List<RegistryEntrySupplier<EntityType<?>>> list, RegistryEntrySupplier<EntityType<T>> sup, String value) {
-        list.add((RegistryEntrySupplier) sup);
+    public void addPatchouliEntityDesc(List<RegistryEntrySupplier<EntityType<?>, ?>> list, RegistryEntrySupplier<EntityType<?>, ?> sup, String value) {
+        list.add(sup);
         this.add(patchouliEntity(sup.getID()), value);
     }
 

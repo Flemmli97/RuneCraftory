@@ -14,6 +14,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
@@ -37,11 +39,12 @@ import java.util.List;
 
 public class EntityTortas extends ChargingMonster {
 
-    public static final AnimatedAction BITE = AnimatedAction.builder(0.56, "bite").marker("attack", 0.32).build();
-    public static final AnimatedAction SPIN = AnimatedAction.builder(2.5, "spin").marker("attack_start", 0).build();
-    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(BITE, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(0, "sleep").infinite().build();
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{BITE, SPIN, INTERACT, SLEEP};
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String BITE = BUILDER.add("bite", AnimationsBuilder.definition(0.56).marker("attack", 0.32));
+    public static final String SPIN = BUILDER.add("spin", AnimationsBuilder.definition(2.5).marker("attack_start", 0));
+    public static final String INTERACT = BUILDER.add("interact", BITE);
+    public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityTortas>>> ATTACKS = List.of(
             WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(BITE, e -> 0.85f), 1),
@@ -216,7 +219,7 @@ public class EntityTortas extends ChargingMonster {
 
     @Override
     public void updateSwimming() {
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             if (this.isInWater()) {
                 this.navigation = this.waterNavigator;
                 this.wander.setInterval(2);

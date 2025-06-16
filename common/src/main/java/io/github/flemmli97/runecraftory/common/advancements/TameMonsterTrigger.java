@@ -40,6 +40,10 @@ public class TameMonsterTrigger extends SimpleCriterionTrigger<TameMonsterTrigge
             return ModCriteria.TAME_MONSTER_TRIGGER.get().createCriterion(new TriggerInstance(Optional.empty(), Optional.empty(), amount));
         }
 
+        public static Criterion<TriggerInstance> of(int amount, EntityPredicate.Builder builder) {
+            return ModCriteria.TAME_MONSTER_TRIGGER.get().createCriterion(new TriggerInstance(Optional.empty(), Optional.of(builder.build()), amount));
+        }
+
         public static Advancement.Builder amountOfSteps(Advancement.Builder builder, String key, int amount, boolean boss) {
             for (int i = 0; i < amount; i++) {
                 builder.addCriterion(key + "_" + i, boss ? bossOf(i + 1) : of(i + 1));
@@ -49,7 +53,7 @@ public class TameMonsterTrigger extends SimpleCriterionTrigger<TameMonsterTrigge
 
         public static Criterion<TriggerInstance> bossOf(int amount) {
             return ModCriteria.TAME_MONSTER_TRIGGER.get().createCriterion(new TriggerInstance(Optional.empty(),
-                    Optional.of(EntityPredicate.Builder.entity().of(RunecraftoryTags.BOSS_MONSTERS).build()), amount));
+                    Optional.of(EntityPredicate.Builder.entity().of(RunecraftoryTags.EntityTypes.BOSS_MONSTERS).build()), amount));
         }
 
         public boolean matches(ServerPlayer player, BaseMonster monster, EntityStatsTracker tracker) {

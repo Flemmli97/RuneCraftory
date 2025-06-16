@@ -44,9 +44,9 @@ public class ElementBallBarrageSummoner extends ProjectileSummonHelperEntity {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(ELEMENT_DATA, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(ELEMENT_DATA, 0);
     }
 
     @Override
@@ -67,12 +67,12 @@ public class ElementBallBarrageSummoner extends ProjectileSummonHelperEntity {
 
     @Override
     protected void summonProjectiles() {
-        EntityElementalBall spellBall = new EntityElementalBall(this.level, this.getOwner(), this.element);
+        EntityElementalBall spellBall = new EntityElementalBall(this.level(), this.getOwner(), this.element);
         spellBall.withMaxLivingTicks(30);
         spellBall.setDamageMultiplier(this.damageMultiplier);
         spellBall.setPos(spellBall.getX() + this.random.nextFloat() * 1.5 - 0.75, spellBall.getY() + this.random.nextFloat() * 0.05 - 0.1, spellBall.getZ() + this.random.nextFloat() * 1.5 - 0.75);
         spellBall.shootAtPosition(this.targetX, this.targetY, this.targetZ, 0.3f, 8);
-        this.level.addFreshEntity(spellBall);
+        this.level().addFreshEntity(spellBall);
         if (this.getOwner() != null) {
             switch (this.element) {
                 case FIRE ->

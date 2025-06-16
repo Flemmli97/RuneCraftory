@@ -56,7 +56,7 @@ public class EntityBigPlate extends BaseProjectile {
     protected boolean entityRayTraceHit(EntityHitResult result) {
         boolean att = CombatUtils.damageWithFaintAndCrit(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).noKnockback().hurtResistant(5), CombatUtils.getAttributeValue(this.getOwner(), Attributes.ATTACK_DAMAGE) * this.damageMultiplier, null);
         if (!this.hitSomething) {
-            this.level.playSound(null, result.getEntity().blockPosition(), SoundEvents.ANVIL_LAND, this.getSoundSource(), 1.0f, 0.5f);
+            this.level().playSound(null, result.getEntity().blockPosition(), SoundEvents.ANVIL_LAND, this.getSoundSource(), 1.0f, 0.5f);
             this.hitSomething = true;
         }
         return att;
@@ -65,7 +65,7 @@ public class EntityBigPlate extends BaseProjectile {
     @Override
     protected void onBlockHit(BlockHitResult blockHitResult) {
         if (!this.hitSomething) {
-            this.level.playSound(null, blockHitResult.getBlockPos(), SoundEvents.ANVIL_LAND, this.getSoundSource(), 1.0f, 0.5f);
+            this.level().playSound(null, blockHitResult.getBlockPos(), SoundEvents.ANVIL_LAND, this.getSoundSource(), 1.0f, 0.5f);
         }
         this.discard();
     }

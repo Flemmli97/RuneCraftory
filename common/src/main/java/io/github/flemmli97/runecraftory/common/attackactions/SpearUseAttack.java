@@ -6,8 +6,9 @@ import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpearBase;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.common.entity.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinition;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -28,17 +29,18 @@ public class SpearUseAttack extends AttackAction {
     }
 
     @Override
-    public AnimatedAction getAnimation(LivingEntity entity, int comboIdx) {
+    public AnimationState getAnimation(LivingEntity entity, int comboIdx) {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
         if (comboIdx > 0) {
-            float offset = (float) (PlayerModelAnimations.SPEAR_USE.getMarker("chain_offset", 0) * 20);
-            return PlayerModelAnimations.SPEAR_USE.create(1, AnimationHandler.FALLBACK_TRANSIT_TIME, offset, speed);
+            AnimationDefinition definition = PlayerModelAnimations.ANIMS.get(PlayerModelAnimations.SPEAR_USE);
+            double offset = definition.marker("chain_offset", 0) * 20;
+            return AnimationState.create(definition, 0, AnimationHandler.FALLBACK_TRANSIT_TIME, offset, speed);
         }
-        return PlayerModelAnimations.SPEAR_USE.create(speed);
+        return AttackAction.create(PlayerModelAnimations.SPEAR_USE, speed);
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimatedAction anim) {
+    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimationState anim) {
         if (entity instanceof ServerPlayer serverPlayer && stack.getItem() instanceof ItemSpearBase spear) {
             if (anim.isAt("attack")) {
                 spear.useSpear(serverPlayer, stack, false);

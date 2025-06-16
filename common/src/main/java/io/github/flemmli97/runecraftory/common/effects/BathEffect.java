@@ -26,7 +26,7 @@ public class BathEffect extends MobEffect {
     @Override
     public boolean applyEffectTick(LivingEntity living, int amplifier) {
         EntityData entityData = Platform.INSTANCE.getEntityData(living);
-        if (living.updateFluidHeightAndDoFluidPushing(RunecraftoryTags.HOT_SPRING_FLUID, 0.014)) {
+        if (living.updateFluidHeightAndDoFluidPushing(RunecraftoryTags.Fluids.HOT_SPRING_FLUID, 0.014)) {
             entityData.setEnteredBath(true);
             living.heal(living.getMaxHealth() * 0.04f);
             if (living instanceof ServerPlayer player) {

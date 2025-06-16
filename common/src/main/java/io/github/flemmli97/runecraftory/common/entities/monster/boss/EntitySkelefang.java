@@ -23,6 +23,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.TimedWrappedRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.core.BlockPos;
@@ -75,22 +77,22 @@ public class EntitySkelefang extends BossMonster {
     private static final EntityDataAccessor<Integer> RIGHT_LEG_BONES = SynchedEntityData.defineId(EntitySkelefang.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> BODY_BONES = SynchedEntityData.defineId(EntitySkelefang.class, EntityDataSerializers.INT);
 
-    public static final AnimatedAction TAIL_SLAM = AnimatedAction.builder(2, "tail_slam")
-            .marker("attack_1", 0.72).marker("attack_2", 1.2).marker("attack_3", 1.64).build();
-    public static final AnimatedAction NEEDLE_THROW = AnimatedAction.builder(1.16, "needle_throw").marker("attack", 0.8).build();
-    public static final AnimatedAction TAIL_SLAP = AnimatedAction.builder(0.84, "tail_slap").marker("attack", 0.52).build();
-    public static final AnimatedAction SLASH = AnimatedAction.builder(0.96, "slash").marker("attack", 0.6).build();
-    public static final AnimatedAction CHARGE = AnimatedAction.builder(1.5, "charge").marker("attack_start", 0).marker("attack_end").build();
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String TAIL_SLAM = BUILDER.add("tail_slam", AnimationsBuilder.definition(2)
+            .marker("attack_1", 0.72).marker("attack_2", 1.2).marker("attack_3", 1.64));
+    public static final String NEEDLE_THROW = BUILDER.add("needle_throw", AnimationsBuilder.definition(1.16).marker("attack", 0.8));
+    public static final String TAIL_SLAP = BUILDER.add("tail_slap", AnimationsBuilder.definition(0.84).marker("attack", 0.52));
+    public static final String SLASH = BUILDER.add("slash", AnimationsBuilder.definition(0.96).marker("attack", 0.6));
+    public static final String CHARGE = BUILDER.add("charge", AnimationsBuilder.definition(1.5).marker("attack_start", 0).marker("attack_end"));
     // 4.5 till start beam, 2 sec beam charge, 4 sec beam duration, 2 sec till restore, 1 sec restoring time
-    public static final AnimatedAction BEAM = AnimatedAction.builder(13, "beam")
+    public static final String BEAM = BUILDER.add("beam", AnimationsBuilder.definition(13)
             .marker("charge", 4.5).marker("beam", 6.5)
             .marker("restore_start", 11).marker("restore_end", 12)
-            .marker("restore", 11.5).build();
-
-    public static final AnimatedAction DEATH = AnimatedAction.builder(10, "death").infinite().build();
-    public static final AnimatedAction ROAR = AnimatedAction.builder(2, "roar").marker("roar", 0.28).build();
-    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(TAIL_SLAM, "interact");
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{TAIL_SLAP, NEEDLE_THROW, TAIL_SLAM, SLASH, CHARGE, BEAM, DEATH, ROAR, INTERACT};
+            .marker("restore", 11.5));
+    public static final String DEATH = BUILDER.add("death", AnimationsBuilder.definition(10).infinite());
+    public static final String ROAR = BUILDER.add("roar", AnimationsBuilder.definition(2).marker("roar", 0.28));
+    public static final String INTERACT = BUILDER.add("interact", TAIL_SLAM);
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntitySkelefang>> ATTACK_HANDLER = createAnimationHandler(b -> {
         b.put(TAIL_SLAM, (anim, entity) -> {
@@ -223,7 +225,7 @@ public class EntitySkelefang extends BossMonster {
                 if (anim != null) {
                     this.hitEntity = null;
                 }
-                if (!this.level.isClientSide && anim == null) {
+                if (!this.level().isClientSide && anim == null) {
                     boolean chain = !this.commanded;
                     this.commanded = false;
                     if (chain) {
@@ -275,13 +277,13 @@ public class EntitySkelefang extends BossMonster {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(HEAD_BONES, 20);
-        this.entityData.define(TAIL_BONES, 20);
-        this.entityData.define(LEFT_LEG_BONES, 20);
-        this.entityData.define(RIGHT_LEG_BONES, 20);
-        this.entityData.define(BODY_BONES, 20);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(HEAD_BONES, 20);
+        builder.define(TAIL_BONES, 20);
+        builder.define(LEFT_LEG_BONES, 20);
+        builder.define(RIGHT_LEG_BONES, 20);
+        builder.define(BODY_BONES, 20);
     }
 
     @Override
@@ -310,9 +312,9 @@ public class EntitySkelefang extends BossMonster {
         this.entityData.set(HEAD_BONES, Math.min(amount, 20));
         if (withParticle) {
             if (pre > 10 && amount <= 10)
-                this.level.broadcastEntityEvent(this, HEAD_DROP);
+                this.level().broadcastEntityEvent(this, HEAD_DROP);
             if (amount <= 0)
-                this.level.broadcastEntityEvent(this, NECK_DROP);
+                this.level().broadcastEntityEvent(this, NECK_DROP);
         }
     }
 
@@ -324,9 +326,9 @@ public class EntitySkelefang extends BossMonster {
         int pre = this.entityData.get(TAIL_BONES);
         this.entityData.set(TAIL_BONES, Math.min(amount, 20));
         if (pre > 10 && amount <= 10)
-            this.level.broadcastEntityEvent(this, TAIL);
+            this.level().broadcastEntityEvent(this, TAIL);
         if (amount <= 0)
-            this.level.broadcastEntityEvent(this, TAIL_BASE);
+            this.level().broadcastEntityEvent(this, TAIL_BASE);
     }
 
     public int remainingTailBones() {
@@ -336,7 +338,7 @@ public class EntitySkelefang extends BossMonster {
     public void setLeftLegBones(int amount) {
         this.entityData.set(LEFT_LEG_BONES, Math.min(amount, 20));
         if (amount <= 0)
-            this.level.broadcastEntityEvent(this, LEFT_LEG);
+            this.level().broadcastEntityEvent(this, LEFT_LEG);
     }
 
     public int remainingLeftLegBones() {
@@ -346,7 +348,7 @@ public class EntitySkelefang extends BossMonster {
     public void setRightLegBones(int amount) {
         this.entityData.set(RIGHT_LEG_BONES, Math.min(amount, 20));
         if (amount <= 0)
-            this.level.broadcastEntityEvent(this, RIGHT_LEG);
+            this.level().broadcastEntityEvent(this, RIGHT_LEG);
     }
 
     public int remainingRightLegBones() {
@@ -357,13 +359,13 @@ public class EntitySkelefang extends BossMonster {
         int pre = this.entityData.get(BODY_BONES);
         this.entityData.set(BODY_BONES, Math.min(amount, 20));
         if (pre > 15 && amount <= 15)
-            this.level.broadcastEntityEvent(this, BACK_RIBS);
+            this.level().broadcastEntityEvent(this, BACK_RIBS);
         if (pre > 10 && amount <= 10)
-            this.level.broadcastEntityEvent(this, BACK);
+            this.level().broadcastEntityEvent(this, BACK);
         if (pre > 5 && amount <= 5)
-            this.level.broadcastEntityEvent(this, FRONT_RIBS);
+            this.level().broadcastEntityEvent(this, FRONT_RIBS);
         if (amount <= 0)
-            this.level.broadcastEntityEvent(this, FRONT);
+            this.level().broadcastEntityEvent(this, FRONT);
     }
 
     public boolean checkIgnoreHurtOverlay() {
@@ -407,7 +409,7 @@ public class EntitySkelefang extends BossMonster {
     @Override
     public void tick() {
         super.tick();
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             --this.hurtResist;
             this.updateParts();
             if (!this.isDeadOrDying() && !this.hasBones() && !this.getAnimationHandler().isCurrent(BEAM))
@@ -421,50 +423,50 @@ public class EntitySkelefang extends BossMonster {
     public void handleEntityEvent(byte id) {
         switch (id) {
             case HEAD_DROP ->
-                    this.level.addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.HEAD, this.getXRot(), this.yHeadRot, 1, 0),
+                    this.level().addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.HEAD, this.getXRot(), this.yHeadRot, 1, 0),
                             this.getX(), this.getY(), this.getZ(), 0, 0, 0);
             case HEAD_THROW -> {
                 Vec3 look = Vec3.directionFromRotation(0, this.yBodyRot);
-                this.level.addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.HEAD, this.getXRot(), this.yHeadRot, -2, 0, 40, false),
+                this.level().addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.HEAD, this.getXRot(), this.yHeadRot, -2, 0, 40, false),
                         this.getX(), this.getY(), this.getZ(), look.x, look.y, look.z);
             }
             case NECK_DROP ->
-                    this.level.addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.NECK, this.getXRot(), this.yHeadRot, 1, this.random.nextInt(2) - 1),
+                    this.level().addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.NECK, this.getXRot(), this.yHeadRot, 1, this.random.nextInt(2) - 1),
                             this.getX(), this.getY(), this.getZ(), 0, 0, 0);
             case NECK_THROW -> {
                 Vec3 look = Vec3.directionFromRotation(0, this.yBodyRot);
-                this.level.addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.NECK, this.getXRot(), this.yHeadRot, -2, 0, 40, false),
+                this.level().addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.NECK, this.getXRot(), this.yHeadRot, -2, 0, 40, false),
                         this.getX(), this.getY(), this.getZ(), look.x, look.y, look.z);
             }
             case FRONT ->
-                    this.level.addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.FRONT, this.getXRot(), this.yBodyRot, this.random.nextInt(2) - 1, this.random.nextInt(2) - 1),
+                    this.level().addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.FRONT, this.getXRot(), this.yBodyRot, this.random.nextInt(2) - 1, this.random.nextInt(2) - 1),
                             this.getX(), this.getY(), this.getZ(), 0, 0, 0);
             case FRONT_RIBS ->
-                    this.level.addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.FRONT_RIBS, this.getXRot(), this.yBodyRot, this.random.nextInt(2) - 1, this.random.nextInt(2) - 1),
+                    this.level().addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.FRONT_RIBS, this.getXRot(), this.yBodyRot, this.random.nextInt(2) - 1, this.random.nextInt(2) - 1),
                             this.getX(), this.getY(), this.getZ(), 0, 0, 0);
             case LEFT_LEG ->
-                    this.level.addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.LEFT_LEG, this.getXRot(), this.yBodyRot, this.random.nextInt(2) - 1, this.random.nextInt(2) - 1),
+                    this.level().addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.LEFT_LEG, this.getXRot(), this.yBodyRot, this.random.nextInt(2) - 1, this.random.nextInt(2) - 1),
                             this.getX(), this.getY(), this.getZ(), 0, 0, 0);
             case RIGHT_LEG ->
-                    this.level.addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.RIGHT_LEG, this.getXRot(), this.yBodyRot, this.random.nextInt(2) - 1, this.random.nextInt(2) - 1),
+                    this.level().addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.RIGHT_LEG, this.getXRot(), this.yBodyRot, this.random.nextInt(2) - 1, this.random.nextInt(2) - 1),
                             this.getX(), this.getY(), this.getZ(), 0, 0, 0);
             case BACK ->
-                    this.level.addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.BACK, this.getXRot(), this.yBodyRot, this.random.nextInt(2) - 1, this.random.nextInt(2) - 1),
+                    this.level().addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.BACK, this.getXRot(), this.yBodyRot, this.random.nextInt(2) - 1, this.random.nextInt(2) - 1),
                             this.getX(), this.getY(), this.getZ(), 0, 0, 0);
             case BACK_RIBS ->
-                    this.level.addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.BACK_RIBS, this.getXRot(), this.yBodyRot, this.random.nextInt(2) - 1, this.random.nextInt(2) - 1),
+                    this.level().addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.BACK_RIBS, this.getXRot(), this.yBodyRot, this.random.nextInt(2) - 1, this.random.nextInt(2) - 1),
                             this.getX(), this.getY(), this.getZ(), 0, 0, 0);
             case TAIL ->
-                    this.level.addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.TAIL, this.getXRot(), this.yBodyRot, this.random.nextInt(2) - 1, this.random.nextInt(2) - 1),
+                    this.level().addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.TAIL, this.getXRot(), this.yBodyRot, this.random.nextInt(2) - 1, this.random.nextInt(2) - 1),
                             this.getX(), this.getY(), this.getZ(), 0, 0, 0);
             case TAIL_BASE ->
-                    this.level.addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.TAIL_BASE, this.getXRot(), this.yBodyRot, this.random.nextInt(2) - 1, this.random.nextInt(2) - 1),
+                    this.level().addAlwaysVisibleParticle(new SkelefangParticleData(SkelefangParticleData.SkelefangBoneType.TAIL_BASE, this.getXRot(), this.yBodyRot, this.random.nextInt(2) - 1, this.random.nextInt(2) - 1),
                             this.getX(), this.getY(), this.getZ(), 0, 0, 0);
             case HIT -> {
                 int amount = this.random.nextInt(6) + 12;
                 for (int i = 0; i < amount; i++) {
                     SkelefangParticleData.SkelefangBoneType type = this.random.nextFloat() < 0.4 ? SkelefangParticleData.SkelefangBoneType.GENERIC : SkelefangParticleData.SkelefangBoneType.GENERIC2;
-                    this.level.addAlwaysVisibleParticle(new SkelefangParticleData(type, this.getXRot() + this.random.nextInt(40) - 20, this.yHeadRot + this.random.nextInt(360), this.random.nextInt(2) - 1, this.random.nextInt(2) - 1),
+                    this.level().addAlwaysVisibleParticle(new SkelefangParticleData(type, this.getXRot() + this.random.nextInt(40) - 20, this.yHeadRot + this.random.nextInt(360), this.random.nextInt(2) - 1, this.random.nextInt(2) - 1),
                             this.getRandomX(1.3), this.getY(0.5) + this.getBbHeight() * 0.5, this.getRandomZ(1.3), this.random.nextGaussian() * 0.11, this.random.nextGaussian() * 0.11, this.random.nextGaussian() * 0.11);
                 }
             }
@@ -473,7 +475,7 @@ public class EntitySkelefang extends BossMonster {
                 if (this.hasBones()) {
                     for (int i = 0; i < amount; i++) {
                         SkelefangParticleData.SkelefangBoneType type = this.random.nextFloat() < 0.4 ? SkelefangParticleData.SkelefangBoneType.GENERIC : SkelefangParticleData.SkelefangBoneType.GENERIC2;
-                        this.level.addAlwaysVisibleParticle(new SkelefangParticleData(type, this.getXRot() + this.random.nextInt(40) - 20, this.yHeadRot + this.random.nextInt(360), this.random.nextInt(2) - 1, this.random.nextInt(2) - 1),
+                        this.level().addAlwaysVisibleParticle(new SkelefangParticleData(type, this.getXRot() + this.random.nextInt(40) - 20, this.yHeadRot + this.random.nextInt(360), this.random.nextInt(2) - 1, this.random.nextInt(2) - 1),
                                 this.getRandomX(1.3), this.getY(0.5) + this.getBbHeight() * 0.5, this.getRandomZ(1.3), this.random.nextGaussian() * 0.13, this.random.nextGaussian() * 0.13, this.random.nextGaussian() * 0.13);
                     }
                 }
@@ -508,7 +510,7 @@ public class EntitySkelefang extends BossMonster {
                 for (Vector3f vec : locations) {
                     Vec3 pos = center.add(vec.x(), vec.y(), vec.z());
                     Vec3 dir = new Vec3(vec.x(), vec.y(), vec.z()).normalize().scale(speed);
-                    this.level.addAlwaysVisibleParticle(new DurationalParticleData(217 / 255f, 248 / 255f, 252 / 255f, 0.4f, 2.3f, 40, this.getId()),
+                    this.level().addAlwaysVisibleParticle(new DurationalParticleData(217 / 255f, 248 / 255f, 252 / 255f, 0.4f, 2.3f, 40, this.getId()),
                             pos.x(), pos.y(), pos.z(), -dir.x(), -dir.y(), -dir.z());
                 }
             }
@@ -559,11 +561,11 @@ public class EntitySkelefang extends BossMonster {
     }
 
     @Override
-    protected void actuallyHurt(DamageSource damageSrc, float damageAmount) {
-        if (damageSrc == DamageSource.OUT_OF_WORLD) {
-            super.actuallyHurt(damageSrc, damageAmount);
+    protected void actuallyHurt(DamageSource source, float damageAmount) {
+        if (source == DamageSource.OUT_OF_WORLD) {
+            super.actuallyHurt(source, damageAmount);
             if (this.isDeadOrDying())
-                this.level.broadcastEntityEvent(this, (byte) 83);
+                this.level().broadcastEntityEvent(this, (byte) 83);
             return;
         }
         if (this.hurtResist > 0)
@@ -598,13 +600,13 @@ public class EntitySkelefang extends BossMonster {
                 }
             }
             if (this.isDeadOrDying())
-                this.level.broadcastEntityEvent(this, (byte) 83);
+                this.level().broadcastEntityEvent(this, (byte) 83);
             else
-                this.level.broadcastEntityEvent(this, (byte) 82);
+                this.level().broadcastEntityEvent(this, (byte) 82);
             if (!this.hasBones())
                 this.getAnimationHandler().setAnimation(BEAM);
         } else
-            super.actuallyHurt(damageSrc, damageAmount);
+            super.actuallyHurt(source, damageAmount);
     }
 
     @Override
@@ -636,9 +638,9 @@ public class EntitySkelefang extends BossMonster {
             OrientedBoundingBox obb = new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
                     .inflate(0.2, 0, 0.2)
                     .expandTowards(0, 0, speed), this.getYRot(), 0, this.position());
-            this.level.getEntitiesOfClass(LivingEntity.class, obb.getEncompassingBox(),
+            this.level().getEntitiesOfClass(LivingEntity.class, obb.getEncompassingBox(),
                     entity -> this.hitPred.test(entity) && obb.intersects(entity.getBoundingBox())).forEach(cons);
-            if (!this.level.isClientSide)
+            if (!this.level().isClientSide)
                 S2CAttackDebug.sendDebugPacket(obb, S2CAttackDebug.EnumAABBType.ATTACK, this);
             return;
         }
@@ -683,8 +685,8 @@ public class EntitySkelefang extends BossMonster {
         }
         Set<LivingEntity> targets = new HashSet<>();
         for (OrientedBoundingBox obb : obbs) {
-            targets.addAll(this.level.getEntitiesOfClass(LivingEntity.class, obb.getEncompassingBox(), entity -> this.hitPred.test(entity) && obb.intersects(entity.getBoundingBox())));
-            if (!this.level.isClientSide)
+            targets.addAll(this.level().getEntitiesOfClass(LivingEntity.class, obb.getEncompassingBox(), entity -> this.hitPred.test(entity) && obb.intersects(entity.getBoundingBox())));
+            if (!this.level().isClientSide)
                 S2CAttackDebug.sendDebugPacket(obb, S2CAttackDebug.EnumAABBType.ATTACK, this);
         }
         targets.forEach(cons);

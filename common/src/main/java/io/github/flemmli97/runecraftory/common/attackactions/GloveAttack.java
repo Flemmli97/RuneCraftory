@@ -12,7 +12,7 @@ import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.item.AOEWeapon;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -32,19 +32,19 @@ public class GloveAttack extends AttackAction {
             .build();
 
     @Override
-    public AnimatedAction getAnimation(LivingEntity entity, int comboIdx) {
+    public AnimationState getAnimation(LivingEntity entity, int comboIdx) {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
-        return PlayerModelAnimations.GLOVES.get(comboIdx).create(speed);
+        return AttackAction.create(PlayerModelAnimations.GLOVES.get(comboIdx), speed);
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimatedAction anim) {
+    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimationState anim) {
         if (anim.isAt("attack") && handler.getComboCount() != 5) {
             if (!entity.level().isClientSide) {
                 if (handler.getComboCount() != 4)
-                    CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(AOEWeapon.createOBB(entity, stack,
+                    CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(AOEWeapon.createOBB(entity,
                                     CombatUtils.getRange(entity, 0),
-                                    CombatUtils.getWidth(entity, 0))))
+                                    CombatUtils.getWidth(entity, 0), 0.5)))
                             .executeAttack();
                 else
                     CombatUtils.EntityAttack.create(entity,
@@ -113,7 +113,7 @@ public class GloveAttack extends AttackAction {
     }
 
     @Override
-    public float movementReduction(AnimatedAction current) {
+    public float movementReduction(AnimationState current) {
         return GeneralConfig.MOVE_SPEED_ATTACK.get().floatValue();
     }
 

@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class EntityMixin {
 
     @Unique
-    private double runecraftoryMoveTracker;
+    private double runecraftory$MoveTracker;
 
     @Inject(method = "canCollideWith", at = @At("HEAD"), cancellable = true)
     private void collideCheckEntitySensitive(Entity other, CallbackInfoReturnable<Boolean> info) {
@@ -29,15 +29,15 @@ public abstract class EntityMixin {
     @ModifyVariable(method = "move", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;getMovementEmission()Lnet/minecraft/world/entity/Entity$MovementEmission;"), ordinal = 1)
     private Vec3 onStepLiving(Vec3 orig, MoverType type, Vec3 pos) {
         if ((Object) this instanceof LivingEntity living) {
-            this.runecraftoryMoveTracker += orig.lengthSqr();
+            this.runecraftory$MoveTracker += orig.lengthSqr();
             // Get the next step value independent of current move dist
             float pre = living.moveDist;
             living.moveDist = 0;
             float next = this.nextStep();
             living.moveDist = pre;
 
-            if (this.runecraftoryMoveTracker > 0.5 * 0.5) {
-                this.runecraftoryMoveTracker = 0;
+            if (this.runecraftory$MoveTracker > 0.5 * 0.5) {
+                this.runecraftory$MoveTracker = 0;
                 MixinUtils.triggerArmorStepEffect(living);
             }
         }

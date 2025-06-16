@@ -15,6 +15,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 
 public class CraftingOutputSlot extends Slot {
 
@@ -62,12 +63,12 @@ public class CraftingOutputSlot extends Slot {
         this.checkTakeAchievements(stack);
         if (!(player instanceof ServerPlayer serverPlayer))
             return;
-        NonNullList<ItemStack> remaining = this.craftingContainer.getCurrentRecipe() != null ? this.craftingContainer.getCurrentRecipe().getRemainingItems(this.ingredientInv) : NonNullList.withSize(0, ItemStack.EMPTY);
+        NonNullList<ItemStack> remaining = this.craftingContainer.getCurrentRecipe() != null ? this.craftingContainer.getCurrentRecipe().value().getRemainingItems(this.ingredientInv) : NonNullList.withSize(0, ItemStack.EMPTY);
         if (this.craftingContainer.runepointCost() >= 0) {
             PlayerData data = Platform.INSTANCE.getPlayerData(player);
             data.decreaseRunePoints(this.craftingContainer.runepointCost(), true);
-            SextupleRecipe recipe = this.craftingContainer.getCurrentRecipe();
-            if (recipe != null && !recipe.isSpecial() && !data.getRecipeKeeper().isUnlocked(recipe)) {
+            RecipeHolder<SextupleRecipe> recipe = this.craftingContainer.getCurrentRecipe();
+            if (recipe != null && !recipe.value().isSpecial() && !data.getRecipeKeeper().isUnlocked(recipe)) {
                 data.getRecipeKeeper().unlockRecipe(player, recipe);
                 this.craftingContainer.sendCraftingRecipesToClient(serverPlayer, data);
             }

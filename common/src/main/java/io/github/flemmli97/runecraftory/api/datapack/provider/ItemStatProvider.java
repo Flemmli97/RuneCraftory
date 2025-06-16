@@ -1,16 +1,17 @@
 package io.github.flemmli97.runecraftory.api.datapack.provider;
 
+import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
-import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
 import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
 import io.github.flemmli97.runecraftory.common.datapack.manager.ItemStatManager;
-import net.minecraft.core.Registry;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.HashCache;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -18,11 +19,12 @@ import net.minecraft.world.level.ItemLike;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.ToIntFunction;
 import java.util.stream.Stream;
 
@@ -35,34 +37,46 @@ public abstract class ItemStatProvider implements DataProvider {
 
     private final PackOutput packOutput;
     private final String modid;
+    protected final CompletableFuture<HolderLookup.Provider> provider;
 
-    public ItemStatProvider(PackOutput packOutput, String modid) {
-        this.gen = gen;
-        this.modid = modid;
+    private final Function<Item, ResourceLocation> keyExtractor;
+
+    @SuppressWarnings("deprecation")
+    public ItemStatProvider(PackOutput packOutput, String modid, CompletableFuture<HolderLookup.Provider> provider) {
+        this(packOutput, modid, provider, item -> item.builtInRegistryHolder().key().location());
     }
 
-    protected abstract void add();
+    public ItemStatProvider(PackOutput packOutput, String modid, CompletableFuture<HolderLookup.Provider> provider, Function<Item, ResourceLocation> keyExtractor) {
+        this.packOutput = packOutput;
+        this.modid = modid;
+        this.provider = provider;
+        this.keyExtractor = keyExtractor;
+    }
+
+    protected abstract void add(HolderLookup.Provider provider);
 
     @Override
-    public void run(HashCache cache) {
-        this.add();
-        this.data.forEach((res, builder) -> {
-            Path path = this.gen.getOutputFolder().resolve("data/" + res.getNamespace() + "/" + ItemStatManager.DIRECTORY + "/" + res.getPath() + ".json");
-            try {
-                JsonElement obj = ItemStat.CODEC.encodeStart(JsonOps.INSTANCE, builder.build())
-                        .getOrThrow(false, RuneCraftory.LOGGER::error);
+    public CompletableFuture<?> run(CachedOutput cache) {
+        return this.provider.thenApply(provider -> {
+            this.add(provider);
+            return provider;
+        }).thenCompose(provider -> {
+            DynamicOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, provider);
+            ImmutableList.Builder<CompletableFuture<?>> futures = new ImmutableList.Builder<>();
+            this.data.forEach((res, builder) -> {
+                Path path = this.packOutput.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(res.getNamespace() + "/" + ItemStatManager.ID + "/" + res.getPath() + ".json");
+                JsonElement obj = ItemStat.CODEC.encodeStart(ops, builder.build()).getOrThrow();
                 if (obj.isJsonObject())
                     this.item.get(res).accept(obj.getAsJsonObject());
-                DataProvider.save(GsonInstances.GSON, cache, obj, path);
-            } catch (IOException e) {
-                LOGGER.error("Couldn't save itemstat {}", path, e);
-            }
+                futures.add(DataProvider.saveStable(cache, obj, path));
+            });
+            return CompletableFuture.allOf(futures.build().toArray(CompletableFuture[]::new));
         });
     }
 
     @Override
     public String getName() {
-        return "ItemStats";
+        return "ItemStats for " + this.modid;
     }
 
     public void addStat(ItemLike item, int buy, int sell, int upgrade) {
@@ -74,13 +88,13 @@ public abstract class ItemStatProvider implements DataProvider {
     }
 
     public void addStat(ItemLike item, ItemStat.Builder builder) {
-        this.addStat(Registry.ITEM.getKey(item.asItem()).getPath(), item, builder);
+        this.addStat(this.keyExtractor.apply(item.asItem()).getPath(), item, builder);
     }
 
     public void addStat(String id, ItemLike item, ItemStat.Builder builder) {
         ResourceLocation res = ResourceLocation.fromNamespaceAndPath(this.modid, id);
         this.data.put(res, builder);
-        this.item.put(res, obj -> obj.addProperty("item", (Registry.ITEM.getKey(item.asItem()).toString())));
+        this.item.put(res, obj -> obj.addProperty("item", this.keyExtractor.apply(item.asItem()).toString()));
     }
 
     public void addStat(String id, TagKey<Item> tag, int buy, int sell, int upgrade) {
@@ -95,13 +109,13 @@ public abstract class ItemStatProvider implements DataProvider {
 
     protected int calcBuyOf(double multiplier, ItemLike... others) {
         return this.calcValueOf(multiplier, b -> b.buyPrice, Stream.of(others)
-                .map(other -> ResourceLocation.fromNamespaceAndPath(this.modid, Registry.ITEM.getKey(other.asItem()).getPath()))
+                .map(other -> ResourceLocation.fromNamespaceAndPath(this.modid, this.keyExtractor.apply(other.asItem()).getPath()))
                 .toArray(ResourceLocation[]::new));
     }
 
     protected int calcSellOf(double multiplier, ItemLike... others) {
         return this.calcValueOf(multiplier, b -> b.sellPrice, Stream.of(others)
-                .map(other -> ResourceLocation.fromNamespaceAndPath(this.modid, Registry.ITEM.getKey(other.asItem()).getPath()))
+                .map(other -> ResourceLocation.fromNamespaceAndPath(this.modid, this.keyExtractor.apply(other.asItem()).getPath()))
                 .toArray(ResourceLocation[]::new));
     }
 

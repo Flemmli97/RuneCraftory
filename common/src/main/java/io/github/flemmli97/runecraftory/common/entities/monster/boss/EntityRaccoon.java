@@ -22,6 +22,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTarget
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.TimedWrappedRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.nbt.CompoundTag;
@@ -60,29 +62,29 @@ public class EntityRaccoon extends BossMonster {
     private static final EntityDataAccessor<Optional<Vec3>> CLONE_CENTER = SynchedEntityData.defineId(EntityRaccoon.class, CustomDataSerializers.OPTIONAL_VEC);
     private static final EntityDataAccessor<Integer> CLONE_INDEX = SynchedEntityData.defineId(EntityRaccoon.class, EntityDataSerializers.INT);
 
-    public static final AnimatedAction DOUBLE_PUNCH = AnimatedAction.builder(0.88, "double_punch").marker("attack", 0.4, 0.68).build();
-    public static final AnimatedAction PUNCH = AnimatedAction.builder(0.92, "punch").marker("attack", 0.56).build();
-    public static final AnimatedAction JUMP = AnimatedAction.builder(1.08, "jump")
-            .marker("jump", 0.2).infinite().build();
-    public static final AnimatedAction LAND = AnimatedAction.builder(0.4, "land").marker("attack", 0.24).build();
-    public static final AnimatedAction STOMP = AnimatedAction.builder(1.36, "stomp").marker("attack", 0.56, 1.12).build();
-    public static final AnimatedAction LEAF_SHOOT = AnimatedAction.builder(0.88, "shoot").marker("attack", 0.44).build();
-    public static final AnimatedAction LEAF_BOOMERANG = AnimatedAction.copyOf(LEAF_SHOOT, "spinning_shoot");
-    public static final AnimatedAction LEAF_SHOT_CLONE = AnimatedAction.builder(0.88, "leaf_clone")
-            .withClientID("shoot").marker("attack", 0.44, 0.64).build();
-    public static final AnimatedAction BARRAGE = AnimatedAction.builder(3.32, "punch_barrage")
-            .marker("attack", 0.44, 0.84, 1.28).marker("vulnerable_start", 1.52).marker("vulnerable_end", 3.04).build();
-    public static final AnimatedAction ROAR = AnimatedAction.builder(1.24, "roar").marker("roar", 0.12).build();
-    public static final AnimatedAction ANGRY = AnimatedAction.copyOf(ROAR, "angry");
-    public static final AnimatedAction CLONE = AnimatedAction.copyOf(ROAR, "clone");
-
-    public static final AnimatedAction DEFEAT = AnimatedAction.builder(10, "defeat").infinite().build();
-    public static final AnimatedAction TRANSFORM = AnimatedAction.builder(1.5, "transform").build();
-    public static final AnimatedAction UNTRANSFORM = AnimatedAction.builder(2.2, "untransform")
-            .marker("knockback_start", 1).marker("knockback_end", 1.5).build();
-    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(DOUBLE_PUNCH, "interact");
-    public static final AnimatedAction INTERACT_BERSERK = AnimatedAction.copyOf(PUNCH, "interact_berserk");
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{DOUBLE_PUNCH, PUNCH, JUMP, LAND, STOMP, LEAF_SHOOT, LEAF_BOOMERANG, LEAF_SHOT_CLONE, BARRAGE, ROAR, ANGRY, CLONE, DEFEAT, TRANSFORM, UNTRANSFORM, INTERACT, INTERACT_BERSERK};
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String DOUBLE_PUNCH = BUILDER.add("double_punch", AnimationsBuilder.definition(0.88).marker("attack", 0.4, 0.68));
+    public static final String PUNCH = BUILDER.add("punch", AnimationsBuilder.definition(0.92).marker("attack", 0.56));
+    public static final String JUMP = BUILDER.add("jump", AnimationsBuilder.definition(1.08)
+            .marker("jump", 0.2).infinite());
+    public static final String LAND = BUILDER.add("land", AnimationsBuilder.definition(0.4).marker("attack", 0.24));
+    public static final String STOMP = BUILDER.add("stomp", AnimationsBuilder.definition(1.36).marker("attack", 0.56, 1.12));
+    public static final String LEAF_SHOOT = BUILDER.add("shoot", AnimationsBuilder.definition(0.88).marker("attack", 0.44));
+    public static final String LEAF_BOOMERANG = BUILDER.add("spinning_shoot", LEAF_SHOOT);
+    public static final String LEAF_SHOT_CLONE = BUILDER.add("leaf_clone", AnimationsBuilder.definition(0.88)
+            .animationId("shoot").marker("attack", 0.44, 0.64));
+    public static final String BARRAGE = BUILDER.add("punch_barrage", AnimationsBuilder.definition(3.32)
+            .marker("attack", 0.44, 0.84, 1.28).marker("vulnerable_start", 1.52).marker("vulnerable_end", 3.04));
+    public static final String ROAR = BUILDER.add("roar", AnimationsBuilder.definition(1.24).marker("roar", 0.12));
+    public static final String ANGRY = BUILDER.add("angry", ROAR);
+    public static final String CLONE = BUILDER.add("clone", ROAR);
+    public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
+    public static final String TRANSFORM = BUILDER.add("transform", AnimationsBuilder.definition(1.5));
+    public static final String UNTRANSFORM = BUILDER.add("untransform", AnimationsBuilder.definition(2.2)
+            .marker("knockback_start", 1).marker("knockback_end", 1.5));
+    public static final String INTERACT = BUILDER.add("interact", DOUBLE_PUNCH);
+    public static final String INTERACT_BERSERK = BUILDER.add("interact_berserk", PUNCH);
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntityRaccoon>> ATTACK_HANDLER = createAnimationHandler(b -> {
         b.put(DOUBLE_PUNCH, (anim, entity) -> {
@@ -305,11 +307,11 @@ public class EntityRaccoon extends BossMonster {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(BERSERK, false);
-        this.entityData.define(CLONE_CENTER, Optional.empty());
-        this.entityData.define(CLONE_INDEX, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(BERSERK, false);
+        builder.define(CLONE_CENTER, Optional.empty());
+        builder.define(CLONE_INDEX, 0);
     }
 
     @Override
@@ -340,7 +342,7 @@ public class EntityRaccoon extends BossMonster {
     @Override
     public void baseTick() {
         super.baseTick();
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             --this.hitCountdown;
             if (this.isAlive() && !this.isBerserk() && (this.hitCountdown == 0 || this.hit >= 5)) {
                 this.setBerserk(true, false);
@@ -357,8 +359,8 @@ public class EntityRaccoon extends BossMonster {
     }
 
     @Override
-    protected void actuallyHurt(DamageSource damageSrc, float damageAmount) {
-        super.actuallyHurt(damageSrc, damageAmount);
+    protected void actuallyHurt(DamageSource source, float damageAmount) {
+        super.actuallyHurt(source, damageAmount);
         if (!this.isBerserk()) {
             this.hit++;
             this.hitCountdown = 30;

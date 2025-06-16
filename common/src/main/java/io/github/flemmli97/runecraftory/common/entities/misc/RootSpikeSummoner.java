@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.entities.misc;
 
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
+import io.github.flemmli97.tenshilib.common.utils.HitResultUtils;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -27,14 +28,14 @@ public class RootSpikeSummoner extends ProjectileSummonHelperEntity {
     protected void summonProjectiles() {
         if (this.ticksExisted % 10 != 0 || this.getOwner() == null)
             return;
-        EntitySpike spike = new EntitySpike(this.level, this.getOwner(), 0, 10, EntitySpike.SpikeType.ROOT);
+        EntitySpike spike = new EntitySpike(this.level(), this.getOwner(), 0, 10, EntitySpike.SpikeType.ROOT);
         Vec3 targetPos = null;
         if (this.getOwner() instanceof Mob mob) {
             Entity target = EntityUtils.ownedProjectileTarget(mob, 14);
             if (target != null)
                 targetPos = target.position();
         } else if (this.getOwner() instanceof Player player) {
-            HitResult result = RayTraceUtils.entityRayTrace(player, 12, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, true, false, e -> e instanceof LivingEntity);
+            HitResult result = HitResultUtils.entityRayTrace(player, 12, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, true, false, e -> e instanceof LivingEntity);
             if (result != null) {
                 targetPos = result.getLocation();
             }
@@ -42,6 +43,6 @@ public class RootSpikeSummoner extends ProjectileSummonHelperEntity {
         if (targetPos != null) {
             spike.setPos(targetPos);
         }
-        this.level.addFreshEntity(spike);
+        this.level().addFreshEntity(spike);
     }
 }

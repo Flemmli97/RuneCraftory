@@ -35,7 +35,7 @@ public class StructureBossManager extends SimpleJsonResourceReloadListener imple
     private HolderLookup.Provider provider;
 
     public StructureBossManager() {
-        super(DataPackHandler.GSON, ID.getPath());
+        super(DataPackHandler.GSON, ID.toString());
     }
 
     @Nullable

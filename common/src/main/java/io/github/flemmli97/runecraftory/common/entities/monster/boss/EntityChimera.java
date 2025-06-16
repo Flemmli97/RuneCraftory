@@ -22,6 +22,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveAwayRunn
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetAttackRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.TimedWrappedRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -45,19 +47,20 @@ import java.util.function.BiConsumer;
 
 public class EntityChimera extends BossMonster {
 
-    public static final AnimatedAction LEAP = AnimatedAction.builder(1.36, "leap").marker("attack_start", 0).marker("attack_end", 1.2).build();
-    public static final AnimatedAction FIRE_TAIL_BUBBLE = AnimatedAction.builder(1.48, "tail_beam").marker("attack", 0.44).build();
-    public static final AnimatedAction WATER_TAIL_BUBBLE = AnimatedAction.copyOf(FIRE_TAIL_BUBBLE, "water_tail_bubble");
-    public static final AnimatedAction WATER_TAIL_BEAM = AnimatedAction.copyOf(FIRE_TAIL_BUBBLE, "water_tail_beam");
-    public static final AnimatedAction FIRE_BREATH = AnimatedAction.builder(1.2, "breath_attack").marker("attack", 0.4).build();
-    public static final AnimatedAction BUBBLE_BEAM = AnimatedAction.copyOf(FIRE_BREATH, "bubble_beam");
-    public static final AnimatedAction SLASH = AnimatedAction.builder(0.64, "claw_attack").marker("attack", 0.36, 0.72).build();
-    public static final AnimatedAction BITE = AnimatedAction.builder(1.04, "bite_attack").marker("attack_1", 0.4).marker("attack_2", 0.72).build();
-    public static final AnimatedAction ANGRY = new AnimatedAction(1.04, "angry");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(0, "sleep").infinite().build();
-    public static final AnimatedAction DEFEAT = AnimatedAction.builder(10, "defeat").infinite().build();
-    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(SLASH, "interact");
-    private static final AnimatedAction[] ANIMATED_ACTIONS = new AnimatedAction[]{LEAP, FIRE_TAIL_BUBBLE, WATER_TAIL_BUBBLE, WATER_TAIL_BEAM, FIRE_BREATH, BUBBLE_BEAM, SLASH, BITE, DEFEAT, INTERACT, ANGRY, SLEEP};
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String LEAP = BUILDER.add("leap", AnimationsBuilder.definition(1.36).marker("attack_start", 0).marker("attack_end", 1.2));
+    public static final String FIRE_TAIL_BUBBLE = BUILDER.add("tail_beam", AnimationsBuilder.definition(1.48).marker("attack", 0.44));
+    public static final String WATER_TAIL_BUBBLE = BUILDER.add("water_tail_bubble", FIRE_TAIL_BUBBLE);
+    public static final String WATER_TAIL_BEAM = BUILDER.add("water_tail_beam", FIRE_TAIL_BUBBLE);
+    public static final String FIRE_BREATH = BUILDER.add("breath_attack", AnimationsBuilder.definition(1.2).marker("attack", 0.4));
+    public static final String BUBBLE_BEAM = BUILDER.add("bubble_beam", FIRE_BREATH);
+    public static final String SLASH = BUILDER.add("claw_attack", AnimationsBuilder.definition(0.64).marker("attack", 0.36, 0.72));
+    public static final String BITE = BUILDER.add("bite_attack", AnimationsBuilder.definition(1.04).marker("attack_1", 0.4).marker("attack_2", 0.72));
+    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(1.04));
+    public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
+    public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
+    public static final String INTERACT = BUILDER.add("interact", SLASH);
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntityChimera>> ATTACK_HANDLER = createAnimationHandler(b -> {
         BiConsumer<AnimatedAction, EntityChimera> summonFire = (anim, entity) -> {
@@ -138,7 +141,7 @@ public class EntityChimera extends BossMonster {
     public final AnimatedAttackGoal<EntityChimera> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityChimera> animationHandler = new AnimationHandler<>(this, ANIMATED_ACTIONS)
             .withChangeListener(anim -> {
-                if (!this.level.isClientSide) {
+                if (!this.level().isClientSide) {
                     if (anim == null) {
                         this.setChargeMotion(null);
                     }

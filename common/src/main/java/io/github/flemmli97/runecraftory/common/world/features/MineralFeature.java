@@ -32,7 +32,7 @@ public class MineralFeature extends Feature<ChancedBlockClusterConfig> {
         for (int i = 0; i < ctx.config().tries; i++) {
             BlockPos pos = ctx.origin().offset(ctx.random().nextInt(ctx.config().radius) - ctx.random().nextInt(ctx.config().radius),
                     ctx.random().nextInt(ctx.config().radius) - ctx.random().nextInt(ctx.config().radius), ctx.random().nextInt(ctx.config().radius) - ctx.random().nextInt(ctx.config().radius));
-            if (ctx.level().getBlockState(pos).getMaterial().isReplaceable() && ctx.level().getBlockState(pos.below()).is(RunecraftoryTags.MINERAL_GEN_PLACE) && state.canSurvive(ctx.level(), pos)) {
+            if (ctx.level().getBlockState(pos).getMaterial().isReplaceable() && ctx.level().getBlockState(pos.below()).is(RunecraftoryTags.Blocks.MINERAL_GEN_PLACE) && state.canSurvive(ctx.level(), pos)) {
                 if (state.hasProperty(BlockStateProperties.HORIZONTAL_FACING))
                     state = state.setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.Plane.HORIZONTAL.getRandomDirection(ctx.random()));
                 if (state.hasProperty(BlockStateProperties.WATERLOGGED))

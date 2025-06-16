@@ -21,6 +21,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTarget
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.StrafingRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.TimedWrappedRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -41,18 +43,19 @@ import java.util.function.BiConsumer;
 
 public class EntityAmbrosia extends BossMonster {
 
-    public static final AnimatedAction KICK_1 = AnimatedAction.builder(0.6, "kick_1").marker("attack", 0.32).build();
-    public static final AnimatedAction KICK_2 = AnimatedAction.builder(0.6, "kick_2").marker("attack", 0.32).build();
-    public static final AnimatedAction KICK_3 = AnimatedAction.builder(0.84, "kick_3").marker("attack", 0.28).build();
-    public static final AnimatedAction BUTTERFLY = AnimatedAction.builder(2.04, "butterfly").marker("attack", 0.32).build();
-    public static final AnimatedAction WAVE = AnimatedAction.builder(2.24, "wave").marker("attack", 0.24).build();
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(0.76, "sleep").marker("attack", 0.24).build();
-    public static final AnimatedAction POLLEN = AnimatedAction.builder(0.72, "pollen").marker("attack", 0.28).build();
-    public static final AnimatedAction POLLEN_2 = AnimatedAction.copyOf(POLLEN, "pollen_2");
-    public static final AnimatedAction DEFEAT = AnimatedAction.builder(10, "defeat").infinite().build();
-    public static final AnimatedAction ANGRY = AnimatedAction.builder(2.4, "angry").build();
-    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(KICK_1, "interact");
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{KICK_1, BUTTERFLY, WAVE, SLEEP, POLLEN, POLLEN_2, KICK_2, KICK_3, DEFEAT, ANGRY, INTERACT};
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String KICK_1 = BUILDER.add("kick_1", AnimationsBuilder.definition(0.6).marker("attack", 0.32));
+    public static final String KICK_2 = BUILDER.add("kick_2", AnimationsBuilder.definition(0.6).marker("attack", 0.32));
+    public static final String KICK_3 = BUILDER.add("kick_3", AnimationsBuilder.definition(0.84).marker("attack", 0.28));
+    public static final String BUTTERFLY = BUILDER.add("butterfly", AnimationsBuilder.definition(2.04).marker("attack", 0.32));
+    public static final String WAVE = BUILDER.add("wave", AnimationsBuilder.definition(2.24).marker("attack", 0.24));
+    public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0.76).marker("attack", 0.24));
+    public static final String POLLEN = BUILDER.add("pollen", AnimationsBuilder.definition(0.72).marker("attack", 0.28));
+    public static final String POLLEN_2 = BUILDER.add("pollen_2", POLLEN);
+    public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
+    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(2.4));
+    public static final String INTERACT = BUILDER.add("interact", KICK_1);
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntityAmbrosia>> ATTACK_HANDLER = createAnimationHandler(b -> {
         b.put(BUTTERFLY, (anim, entity) -> {
@@ -117,7 +120,7 @@ public class EntityAmbrosia extends BossMonster {
 
     public final AnimatedAttackGoal<EntityAmbrosia> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityAmbrosia> animationHandler = new AnimationHandler<>(this, ANIMS).withChangeListener(anim -> {
-        if (!this.level.isClientSide && anim == null) {
+        if (!this.level().isClientSide && anim == null) {
             boolean chain = !this.commanded;
             this.setMoveDirection(null);
             this.commanded = false;

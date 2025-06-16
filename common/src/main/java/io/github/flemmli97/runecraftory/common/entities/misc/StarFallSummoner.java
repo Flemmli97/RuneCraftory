@@ -28,10 +28,10 @@ public class StarFallSummoner extends ProjectileSummonHelperEntity {
                 double randZ = this.random.nextDouble() * 32 - 16;
                 if (randX * randX + randZ * randZ > 16 * 16)
                     continue;
-                EntityStarfall proj = new EntityStarfall(this.level, this.getOwner());
+                EntityStarfall proj = new EntityStarfall(this.level(), this.getOwner());
                 proj.setDamageMultiplier(this.damageMultiplier);
                 proj.setPos(this.getX() + randX, this.getY() + 11 + this.random.nextDouble() * 2, this.getZ() + randZ);
-                this.level.addFreshEntity(proj);
+                this.level().addFreshEntity(proj);
             }
             this.playSound(ModSounds.ENTITY_FAIRY_AMBIENT.get(), 0.4f, (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.3f);
         }

@@ -2,19 +2,24 @@ package io.github.flemmli97.runecraftory.forge.data;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.provider.FileVerifier;
+import io.github.flemmli97.runecraftory.forge.data.tags.BiomeTagGen;
+import io.github.flemmli97.runecraftory.forge.data.tags.BlockTagGen;
+import io.github.flemmli97.runecraftory.forge.data.tags.EntityTagGen;
+import io.github.flemmli97.runecraftory.forge.data.tags.ItemTagGen;
 import io.github.flemmli97.runecraftory.forge.data.worldgen.MainWorldGenData;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.Resource;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 import java.io.IOException;
 import java.util.Collections;
 
-@Mod.EventBusSubscriber(modid = RuneCraftory.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = RuneCraftory.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class DataEvent {
 
     @SubscribeEvent
@@ -39,8 +44,8 @@ public class DataEvent {
         }
         if (event.includeClient()) {
             IgnoreFileHelper ignore = new IgnoreFileHelper(event.getExistingFileHelper());
-            data.addProvider(new BlockStatesGen(data, ignore));
-            data.addProvider(new ItemModels(data, ignore));
+            data.addProvider(new BlockStatesGen(data));
+            data.addProvider(new ItemModels(data));
             data.addProvider(new LangGen(data, npcDataGen, questGen));
             data.addProvider(new NPCDialogLangGen(data, npcDataGen));
             data.addProvider(new ParticleGen(data));
@@ -56,7 +61,7 @@ public class DataEvent {
             data.addProvider(new RecipesGen(data));
             data.addProvider(new Loottables(data, questGen));
             data.addProvider(new BiomeTagGen(data, event.getExistingFileHelper()));
-            data.addProvider(new StructureBossGen(data, verifier));
+            data.addProvider(new StructureBossGen(data));
             data.addProvider(new MainWorldGenData(data, verifier));
             data.addProvider(new PatchouliGen(data));
             data.addProvider(new EntityTagGen(data, event.getExistingFileHelper()));

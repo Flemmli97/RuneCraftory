@@ -86,7 +86,7 @@ public class FarmlandHandler extends SavedData {
     }
 
     public static boolean isFarmBlock(BlockState state) {
-        return state.is(RunecraftoryTags.FARMLAND) && state.hasProperty(FarmBlock.MOISTURE);
+        return state.is(RunecraftoryTags.Blocks.FARMLAND) && state.hasProperty(FarmBlock.MOISTURE);
     }
 
     public static void waterLand(ServerLevel level, BlockPos pos, BlockState state) {

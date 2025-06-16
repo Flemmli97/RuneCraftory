@@ -12,6 +12,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.KeepDistanceRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -27,13 +29,14 @@ import java.util.function.Predicate;
 
 public class EntityMage extends BaseMonster implements HealingPredicateEntity {
 
-    public static final AnimatedAction SWING = AnimatedAction.builder(0.64, "swing").marker("attack", 0.36).build();
-    public static final AnimatedAction CAST_1 = AnimatedAction.builder(0.84, "cast_1").marker("attack", 0.4).build();
-    public static final AnimatedAction CAST_DOUBLE = AnimatedAction.builder(0.84, "cast_double").marker("attack", 0.4, 0.6).build();
-    public static final AnimatedAction CAST_2 = AnimatedAction.builder(0.92, "cast_2").marker("attack", 0.36).build();
-    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(SWING, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(0, "sleep").infinite().build();
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{SWING, CAST_1, CAST_2, CAST_DOUBLE, INTERACT, SLEEP};
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String SWING = BUILDER.add("swing", AnimationsBuilder.definition(0.64).marker("attack", 0.36));
+    public static final String CAST_1 = BUILDER.add("cast_1", AnimationsBuilder.definition(0.84).marker("attack", 0.4));
+    public static final String CAST_DOUBLE = BUILDER.add("cast_double", AnimationsBuilder.definition(0.84).marker("attack", 0.4, 0.6));
+    public static final String CAST_2 = BUILDER.add("cast_2", AnimationsBuilder.definition(0.92).marker("attack", 0.36));
+    public static final String INTERACT = BUILDER.add("interact", SWING);
+    public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityMage>>> ATTACKS = List.of(
             WeightedEntry.wrap(MonsterActionUtils.simpleMeleeActionInRange(SWING, e -> 0.8f), 1),

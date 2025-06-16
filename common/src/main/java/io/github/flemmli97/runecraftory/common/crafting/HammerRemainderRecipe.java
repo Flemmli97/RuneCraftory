@@ -29,7 +29,7 @@ public class HammerRemainderRecipe extends ShapelessRecipe {
         NonNullList<ItemStack> list = NonNullList.withSize(inv.size(), ItemStack.EMPTY);
         for (int i = 0; i < inv.size(); ++i) {
             ItemStack itemStack = inv.getItem(i);
-            if (!itemStack.isEmpty() && itemStack.is(RunecraftoryTags.HAMMER_TOOLS)) {
+            if (!itemStack.isEmpty() && itemStack.is(RunecraftoryTags.Items.HAMMER_TOOLS)) {
                 list.set(i, itemStack.copy());
             }
         }

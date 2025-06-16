@@ -9,7 +9,7 @@ import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -29,19 +29,19 @@ public class WaterLaserAttack extends AttackAction {
     }
 
     @Override
-    public AnimatedAction getAnimation(LivingEntity entity, int comboIdx) {
+    public AnimationState getAnimation(LivingEntity entity, int comboIdx) {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
         if (comboIdx == 1)
-            return PlayerModelAnimations.WATER_LASER_END.create(speed);
+            return AttackAction.create(PlayerModelAnimations.WATER_LASER_END, speed);
         return switch (this.type) {
-            case 2 -> PlayerModelAnimations.WATER_LASER_THREE.create(speed);
-            case 1 -> PlayerModelAnimations.WATER_LASER_TWO.create(speed);
-            default -> PlayerModelAnimations.WATER_LASER_ONE.create(speed);
+            case 2 -> AttackAction.create(PlayerModelAnimations.WATER_LASER_THREE, speed);
+            case 1 -> AttackAction.create(PlayerModelAnimations.WATER_LASER_TWO, speed);
+            default -> AttackAction.create(PlayerModelAnimations.WATER_LASER_ONE, speed);
         };
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimatedAction anim) {
+    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimationState anim) {
         if (handler.getComboCount() == 1) {
             if (entity.level() instanceof ServerLevel serverLevel && anim.isAt("attack")) {
                 entity.swing(InteractionHand.MAIN_HAND);

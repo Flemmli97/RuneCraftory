@@ -69,6 +69,7 @@ public class EntityRideActionCosts {
     }
 
     record RideActionCost(float cost, boolean multiplier) {
+
         public static final Codec<RideActionCost> CODEC = RecordCodecBuilder.create((instance) ->
                 instance.group(
                         Codec.FLOAT.fieldOf("cost").forGetter(d -> d.cost),

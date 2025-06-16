@@ -20,7 +20,7 @@ public class EntityStatsTracker {
 
     public void tameEntity(BaseMonster monster) {
         this.tamedMonster++;
-        if (monster.getType().is(RunecraftoryTags.BOSS_MONSTERS))
+        if (monster.getType().is(RunecraftoryTags.EntityTypes.BOSS_MONSTERS))
             this.tamedBossMonster++;
         this.tamedMonsters.computeInt(BuiltInRegistries.ENTITY_TYPE.getKey(monster.getType()),
                 (id, o) -> o == null ? 1 : ++o);

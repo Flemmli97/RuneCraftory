@@ -12,16 +12,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class GoalSelectorMixin implements DisableTicking {
 
     @Unique
-    private boolean runecraftoryDisabled;
+    private boolean runecraftory$Disabled;
 
     @Inject(method = "tickRunningGoals", at = @At(value = "HEAD"), cancellable = true)
     private void checkDisabled(boolean tickAllRunning, CallbackInfo info) {
-        if (this.runecraftoryDisabled)
+        if (this.runecraftory$Disabled)
             info.cancel();
     }
 
     @Override
     public void runecraftory$disable(boolean disable) {
-        this.runecraftoryDisabled = disable;
+        this.runecraftory$Disabled = disable;
     }
 }

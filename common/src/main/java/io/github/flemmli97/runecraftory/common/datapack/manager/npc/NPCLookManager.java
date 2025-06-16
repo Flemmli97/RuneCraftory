@@ -34,7 +34,7 @@ public class NPCLookManager extends SimpleJsonResourceReloadListener implements 
     private HolderLookup.Provider provider;
 
     public NPCLookManager() {
-        super(DataPackHandler.GSON, ID.getPath());
+        super(DataPackHandler.GSON, ID.toString());
     }
 
     public NPCLook get(ResourceLocation res) {

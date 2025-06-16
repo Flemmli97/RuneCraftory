@@ -63,20 +63,20 @@ public class EntityTornado extends BaseDamageCloud {
     @Override
     public void tick() {
         super.tick();
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             if (this.getOwner() instanceof LivingEntity living) {
                 if (this.random.nextBoolean()) {
-                    EntityWindBlade wind = new EntityWindBlade(this.level, living);
+                    EntityWindBlade wind = new EntityWindBlade(this.level(), living);
                     wind.setPos(this.getX(), this.getRandomY(), this.getZ());
                     wind.setDamageMultiplier(this.damageMultiplier);
                     wind.setType(EntityWindBlade.Type.PLAIN);
                     wind.shoot(this.random.nextDouble() - 0.5, this.random.nextDouble() * 0.3 - 0.15, this.random.nextDouble() - 0.5, 0.6f, 3);
-                    this.level.addFreshEntity(wind);
+                    this.level().addFreshEntity(wind);
                 }
             }
         } else {
             for (int i = 0; i < 8; i++) {
-                this.level.addParticle(new ColoredParticleData4f.Builder((49 + this.random.nextInt(25)) / 255F, (150 + this.random.nextInt(40)) / 255F, (18 + this.random.nextInt(25)) / 255F, 1)
+                this.level().addParticle(new ColoredParticleData4f.Builder((49 + this.random.nextInt(25)) / 255F, (150 + this.random.nextInt(40)) / 255F, (18 + this.random.nextInt(25)) / 255F, 1)
                         .withScale(0.2f).circle(0.3f, 10).expandCircle(0.03f)
                         .withOffset(this.random.nextInt(360))
                         .withSpeed(0.23f).build(ModParticles.TORNADO.get()), this.position().x() + this.random.nextDouble() * 0.6 - 0.3, this.position().y() - 0.1, this.position().z() + this.random.nextDouble() * 0.6 - 0.3, 0, 0, 0);

@@ -15,6 +15,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.KeepDistanceRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -36,10 +38,11 @@ import java.util.List;
 
 public class EntityHornet extends BaseMonster {
 
-    public static final AnimatedAction ATTACK = AnimatedAction.builder(0.68, "attack").marker("attack", 0.36).build();
-    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(ATTACK, "interact");
-    public static final AnimatedAction STILL = AnimatedAction.builder(0, "still").infinite().build();
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{ATTACK, INTERACT, STILL};
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String ATTACK = BUILDER.add("attack", AnimationsBuilder.definition(0.68).marker("attack", 0.36));
+    public static final String INTERACT = BUILDER.add("interact", ATTACK);
+    public static final String STILL = BUILDER.add("still", AnimationsBuilder.definition(0).infinite());
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityHornet>>> ATTACKS = List.of(
             WeightedEntry.wrap(MonsterActionUtils.simpleRangedEvadingAction(ATTACK, 9, 2, 1, e -> 1), 1)

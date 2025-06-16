@@ -13,7 +13,7 @@ import net.minecraft.world.item.ItemStack;
 public class PowerWaveSpell extends WeaponSpell {
 
     public PowerWaveSpell() {
-        super(ModAttackActions.POWER_WAVE, RunecraftoryTags.SHORTSWORDS);
+        super(ModAttackActions.POWER_WAVE, RunecraftoryTags.Items.SHORTSWORDS);
     }
 
     @Override

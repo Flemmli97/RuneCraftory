@@ -45,9 +45,9 @@ public class EntityStatusBall extends BaseDamageCloud {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(TYPE_DATA, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(TYPE_DATA, 0);
     }
 
     public void setType(Type type) {
@@ -97,18 +97,18 @@ public class EntityStatusBall extends BaseDamageCloud {
     @Override
     public void tick() {
         super.tick();
-        if (this.level.isClientSide) {
+        if (this.level().isClientSide) {
             switch (this.type) {
                 case SLEEP, PARALYSIS, MUSHROOM_POISON -> {
                     for (int i = 0; i < 2; i++) {
                         Vector3f color = this.type.particleColor;
-                        this.level.addParticle(new ColoredParticleData(ModParticles.LIGHT.get(), color.x(), color.y(), color.z(), 1, 2), this.getX() + this.random.nextGaussian() * 0.15, this.getY() + 0.35 + this.random.nextGaussian() * 0.07, this.getZ() + this.random.nextGaussian() * 0.15, this.random.nextGaussian() * 0.01, Math.abs(this.random.nextGaussian() * 0.03), this.random.nextGaussian() * 0.01);
+                        this.level().addParticle(new ColoredParticleData(ModParticles.LIGHT.get(), color.x(), color.y(), color.z(), 1, 2), this.getX() + this.random.nextGaussian() * 0.15, this.getY() + 0.35 + this.random.nextGaussian() * 0.07, this.getZ() + this.random.nextGaussian() * 0.15, this.random.nextGaussian() * 0.01, Math.abs(this.random.nextGaussian() * 0.03), this.random.nextGaussian() * 0.01);
                     }
                 }
                 case RAFFLESIA_SLEEP, RAFFLESIA_PARALYSIS, RAFFLESIA_POISON, RAFFLESIA_ALL -> {
                     for (int i = 0; i < 2; i++) {
                         Vector3f color = this.type.particleColor;
-                        this.level.addParticle(new DurationalParticleData(color.x(), color.y(), color.z(), 0.8f, 2.5f, 3), this.getX() + this.random.nextGaussian() * 0.15, this.getY() + 0.35 + this.random.nextGaussian() * 0.07, this.getZ() + this.random.nextGaussian() * 0.15, 0, 0, 0);
+                        this.level().addParticle(new DurationalParticleData(color.x(), color.y(), color.z(), 0.8f, 2.5f, 3), this.getX() + this.random.nextGaussian() * 0.15, this.getY() + 0.35 + this.random.nextGaussian() * 0.07, this.getZ() + this.random.nextGaussian() * 0.15, 0, 0, 0);
                     }
                 }
             }

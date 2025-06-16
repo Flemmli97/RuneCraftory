@@ -61,10 +61,10 @@ public class EntityBigRaccoonLeaf extends BaseProjectile {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(SPIN, false);
-        this.entityData.define(INITIAL_YAW, 0f);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(SPIN, false);
+        builder.define(INITIAL_YAW, 0f);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class EntityBigRaccoonLeaf extends BaseProjectile {
     @Override
     public void tick() {
         super.tick();
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             if (this.diameter > 0) {
                 Vec3 toCenterDir = this.dir.normalize().scale(this.diameter * 0.5);
                 if (this.center == null) {

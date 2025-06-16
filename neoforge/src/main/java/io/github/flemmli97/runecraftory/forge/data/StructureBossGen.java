@@ -5,10 +5,13 @@ import io.github.flemmli97.runecraftory.api.datapack.provider.FileVerifier;
 import io.github.flemmli97.runecraftory.api.datapack.provider.StructureBossProvider;
 import io.github.flemmli97.runecraftory.common.datapack.manager.StructureBossManager;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.random.SimpleWeightedRandomList;
 import net.minecraft.world.entity.EntityType;
+
+import java.util.concurrent.CompletableFuture;
 
 public class StructureBossGen extends StructureBossProvider {
 
@@ -21,12 +24,12 @@ public class StructureBossGen extends StructureBossProvider {
     public static final ResourceLocation WIND_SHRINE_BOSSES = RuneCraftory.modRes("wind_shrine");
     public static final ResourceLocation LEON_KARNAK_BOSSES = RuneCraftory.modRes("leon_karnak");
 
-    public StructureBossGen(PackOutput packOutput, FileVerifier verifier) {
-        super(gen, verifier);
+    public StructureBossGen(PackOutput packOutput, FileVerifier verifier, CompletableFuture<HolderLookup.Provider> provider) {
+        super(packOutput, RuneCraftory.MODID, verifier, provider);
     }
 
     @Override
-    protected void add() {
+    protected void add(HolderLookup.Provider provider) {
         this.addGateSpawn(FOREST_BOSSES, new StructureBossManager.BossSpawnList(SimpleWeightedRandomList
                 .<EntityType<?>>builder().add(ModEntities.AMBROSIA.get(), 10)
                 .add(ModEntities.DEAD_TREE.get(), 10).build()));

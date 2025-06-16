@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.entities.npc.job;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.common.registry.ModPoiTypes;
+import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
@@ -52,7 +53,7 @@ public class NPCJob {
 
     public String getTranslationKey() {
         if (this.translationKey == null)
-            this.translationKey = "npc.job." + ModNPCJobs.getIDFrom(this);
+            this.translationKey = Util.makeDescriptionId("npc.job", ModNPCJobs.JOBS.registry().getKey(this));
         return this.translationKey;
     }
 

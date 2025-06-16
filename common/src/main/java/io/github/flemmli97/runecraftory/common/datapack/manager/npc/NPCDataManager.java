@@ -35,7 +35,7 @@ public class NPCDataManager extends SimpleJsonResourceReloadListener implements 
     private HolderLookup.Provider provider;
 
     public NPCDataManager() {
-        super(DataPackHandler.GSON, ID.getPath());
+        super(DataPackHandler.GSON, ID.toString());
     }
 
     public NPCData get(ResourceLocation res) {

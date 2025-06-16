@@ -11,6 +11,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
@@ -21,14 +23,15 @@ import java.util.function.BiConsumer;
 
 public class EntityUno extends EntitySanoUno {
 
-    public static final AnimatedAction WATER_LASER = AnimatedAction.builder(2, "water_laser")
-            .marker("attack_1", 0.8).marker("attack_2", 1.2).build();
-    public static final AnimatedAction WATER_LASER_2 = AnimatedAction.builder(2, "water_swipe")
-            .marker("attack_1", 0.8).marker("attack_2", 1.6).build();
-    public static final AnimatedAction ICEBALLS_5 = AnimatedAction.builder(3, "iceballs").marker("attack", 0.8, 1.2, 1.6, 2, 2.4).build();
-    public static final AnimatedAction HOMING_WATER_WAVE = AnimatedAction.builder(2, "water_wave").marker("attack", 0.8).build();
-    public static final AnimatedAction DEFEAT = AnimatedAction.builder(10, "defeat").infinite().build();
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{WATER_LASER, WATER_LASER_2, ICEBALLS_5, HOMING_WATER_WAVE, DEFEAT};
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String WATER_LASER = BUILDER.add("water_laser", AnimationsBuilder.definition(2)
+            .marker("attack_1", 0.8).marker("attack_2", 1.2));
+    public static final String WATER_LASER_2 = BUILDER.add("water_swipe", AnimationsBuilder.definition(2)
+            .marker("attack_1", 0.8).marker("attack_2", 1.6));
+    public static final String ICEBALLS_5 = BUILDER.add("iceballs", AnimationsBuilder.definition(3).marker("attack", 0.8, 1.2, 1.6, 2, 2.4));
+    public static final String HOMING_WATER_WAVE = BUILDER.add("water_wave", AnimationsBuilder.definition(2).marker("attack", 0.8));
+    public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntityUno>> ATTACK_HANDLER = createAnimationHandler(b -> {
         b.put(WATER_LASER, (anim, entity) -> {
@@ -120,7 +123,7 @@ public class EntityUno extends EntitySanoUno {
             return this.other;
         }
         if (this.getLinkedID() != null) {
-            List<EntitySano> results = this.level.getEntities(EntityTypeTest.forClass(EntitySano.class), this.getBoundingBox().inflate(64), e -> this.getLinkedID().equals(e.getLinkedID()));
+            List<EntitySano> results = this.level().getEntities(EntityTypeTest.forClass(EntitySano.class), this.getBoundingBox().inflate(64), e -> this.getLinkedID().equals(e.getLinkedID()));
             if (!results.isEmpty()) {
                 this.other = results.get(0);
             }

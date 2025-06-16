@@ -10,6 +10,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoa
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.damagesource.DamageSource;
@@ -23,11 +25,12 @@ import java.util.List;
 
 public class EntityChipsqueek extends ChargingMonster {
 
-    public static final AnimatedAction MELEE = AnimatedAction.builder(0.44, "tail_slap").marker("attack", 0.28).build();
-    public static final AnimatedAction ROLL = AnimatedAction.builder(0.56, "roll").marker("attack_start", 0.2).build();
-    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(0, "sleep").infinite().build();
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, ROLL, MELEE, SLEEP};
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String MELEE = BUILDER.add("tail_slap", AnimationsBuilder.definition(0.44).marker("attack", 0.28));
+    public static final String ROLL = BUILDER.add("roll", AnimationsBuilder.definition(0.56).marker("attack_start", 0.2));
+    public static final String INTERACT = BUILDER.add("interact", MELEE);
+    public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityChipsqueek>>> ATTACKS = List.of(
             WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(MELEE, e -> 1), 1),

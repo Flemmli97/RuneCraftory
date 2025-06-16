@@ -43,9 +43,9 @@ public class EntityMissile extends BaseProjectile {
     @Override
     public void tick() {
         super.tick();
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             if (this.target == null || !this.target.isAlive()) {
-                List<Entity> list = this.level.getEntities(this, this.getBoundingBox().inflate(16).expandTowards(this.getDeltaMovement()), e -> {
+                List<Entity> list = this.level().getEntities(this, this.getBoundingBox().inflate(16).expandTowards(this.getDeltaMovement()), e -> {
                     if (!e.isPickable() || !e.isAttackable())
                         return false;
                     if (e.equals(this.getOwner()) || (e instanceof OwnableEntity ownable && ownable.getOwner() == this.getOwner())) {

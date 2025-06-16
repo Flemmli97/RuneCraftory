@@ -227,7 +227,7 @@ public class EntityCalls {
         if (source instanceof CustomDamage || attacker instanceof Player) {
             return false;
         }
-        if (attacker instanceof LivingEntity living && living.getMainHandItem().is(RunecraftoryTags.UPGRADABLE_HELD) && !living.getType().is(RunecraftoryTags.HELD_WEAPON_EXEMPT)) {
+        if (attacker instanceof LivingEntity living && living.getMainHandItem().is(RunecraftoryTags.Items.UPGRADABLE_HELD) && !living.getType().is(RunecraftoryTags.EntityTypes.HELD_WEAPON_EXEMPT)) {
             CombatUtils.mobAttack(living, target);
             return true;
         }
@@ -306,7 +306,7 @@ public class EntityCalls {
     public static void cropRightClickHarvest(Player player, BlockState state, BlockPos pos, InteractionHand hand) {
         if (!player.level.isClientSide && state.getBlock() instanceof CropBlock crop) {
             ItemStack stack = player.getItemInHand(hand);
-            if (stack.is(RunecraftoryTags.QUICKHARVEST_BYPASS)) {
+            if (stack.is(RunecraftoryTags.Items.QUICKHARVEST_BYPASS)) {
                 return;
             }
             if (crop.isMaxAge(state)) {
@@ -487,7 +487,7 @@ public class EntityCalls {
         }
         if (!player.hasCorrectToolForDrops(state))
             return;
-        if (state.is(RunecraftoryTags.HAMMER_BREAKABLE)) {
+        if (state.is(RunecraftoryTags.Blocks.HAMMER_BREAKABLE)) {
             ItemToolHammer.onHammering(player, true);
         } else if (state.is(BlockTags.MINEABLE_WITH_PICKAXE)) {
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(data, EnumSkills.MINING, state.getBlock() instanceof BlockMineral ? 10 : 1));

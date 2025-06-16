@@ -108,10 +108,10 @@ public class EntityElementalTrail extends BaseDamageCloud {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(ELEMENT_DATA, 0);
-        this.entityData.define(STATIONARY, false);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(ELEMENT_DATA, 0);
+        builder.define(STATIONARY, false);
     }
 
     @Override
@@ -124,7 +124,7 @@ public class EntityElementalTrail extends BaseDamageCloud {
             double newZ = this.getZ() + motion.z;
             this.setPos(newX, newY, newZ);
         }
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             if (this.homing) {
                 if (this.targetMob == null || this.targetMob.isDeadOrDying()) {
                     this.targetMob = EntityUtils.ownedProjectileTarget(this.getOwner(), 10);
@@ -139,9 +139,9 @@ public class EntityElementalTrail extends BaseDamageCloud {
         } else {
             if (this.livingTicks % 2 == 0) {
                 if (this.element == EnumElement.WATER)
-                    this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.GLASS_BREAK, this.getSoundSource(), 0.9f, 0.8f, false);
+                    this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.GLASS_BREAK, this.getSoundSource(), 0.9f, 0.8f, false);
                 if (this.element == EnumElement.EARTH)
-                    this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.ROOTED_DIRT_BREAK, this.getSoundSource(), 2, 0.8f, false);
+                    this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.ROOTED_DIRT_BREAK, this.getSoundSource(), 2, 0.8f, false);
             }
         }
     }

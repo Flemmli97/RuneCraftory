@@ -11,6 +11,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.damagesource.DamageSource;
@@ -26,12 +28,13 @@ import java.util.List;
 
 public class EntityDuck extends ChargingMonster {
 
-    private static final AnimatedAction MELEE = AnimatedAction.builder(0.72, "slap").marker("attack", 0.4).build();
-    public static final AnimatedAction DIVE = AnimatedAction.builder(1.84, "dive").marker("dive", 1.08).infinite().build();
-    private static final AnimatedAction LAND = new AnimatedAction(0.48, "land");
-    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
-    public static final AnimatedAction STILL = AnimatedAction.builder(0, "still").infinite().build();
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, DIVE, LAND, INTERACT, STILL};
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String MELEE = BUILDER.add("slap", AnimationsBuilder.definition(0.72).marker("attack", 0.4));
+    public static final String DIVE = BUILDER.add("dive", AnimationsBuilder.definition(1.84).marker("dive", 1.08).infinite());
+    public static final String LAND = BUILDER.add("land", AnimationsBuilder.definition(0.48));
+    public static final String INTERACT = BUILDER.add("interact", MELEE);
+    public static final String STILL = BUILDER.add("still", AnimationsBuilder.definition(0).infinite());
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityDuck>>> ATTACKS = List.of(
             WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(MELEE, e -> 1), 1),

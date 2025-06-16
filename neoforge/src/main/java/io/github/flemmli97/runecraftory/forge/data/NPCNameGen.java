@@ -7,7 +7,7 @@ import net.minecraft.data.PackOutput;
 public class NPCNameGen extends NPCNameDataProvider {
 
     public NPCNameGen(PackOutput packOutput) {
-        super(gen, RuneCraftory.MODID);
+        super(packOutput, RuneCraftory.MODID);
     }
 
     @Override

@@ -25,9 +25,9 @@ public class FireWallSummoner extends ProjectileSummonHelperEntity {
     @Override
     public void tick() {
         super.tick();
-        if (!this.level.isClientSide && this.ticksExisted == 5) {
+        if (!this.level().isClientSide && this.ticksExisted == 5) {
             Vec3 dir = new Vec3(this.targetX, this.targetY, this.targetZ).subtract(this.position()).normalize().scale(1.8);
-            ((ServerLevel) this.level).sendParticles(new ColoredParticleData(ModParticles.STATIC_LIGHT.get(), 255 / 255F, 255 / 255F, 255 / 255F, 1, 1), this.getX(), this.getY(), this.getZ(), 0, dir.x(), dir.y(), dir.z(), 1);
+            ((ServerLevel) this.level()).sendParticles(new ColoredParticleData(ModParticles.STATIC_LIGHT.get(), 255 / 255F, 255 / 255F, 255 / 255F, 1, 1), this.getX(), this.getY(), this.getZ(), 0, dir.x(), dir.y(), dir.z(), 1);
         }
     }
 
@@ -36,10 +36,10 @@ public class FireWallSummoner extends ProjectileSummonHelperEntity {
         LivingEntity owner = this.getOwner();
         if (this.ticksExisted > 10 && this.ticksExisted % 2 == 0) {
             Vec3 dir = new Vec3(this.targetX, this.targetY, this.targetZ).subtract(this.position()).normalize();
-            EntityElementalTrail fire = new EntityElementalTrail(this.level, owner, EnumElement.FIRE);
+            EntityElementalTrail fire = new EntityElementalTrail(this.level(), owner, EnumElement.FIRE);
             fire.setPos(this.position().add(dir.scale((this.ticksExisted - 10) / 2f * 1)));
             this.playSound(SoundEvents.BLAZE_SHOOT, 1, (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.0f);
-            this.level.addFreshEntity(fire);
+            this.level().addFreshEntity(fire);
 
         }
     }

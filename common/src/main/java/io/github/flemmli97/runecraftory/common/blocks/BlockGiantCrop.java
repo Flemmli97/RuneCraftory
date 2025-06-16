@@ -30,7 +30,7 @@ public class BlockGiantCrop extends BlockCrop {
 
     private static final VoxelShape[] SHAPE = BlockCrafting.joinedOrDirs(BlockCrafting.ShapeBuilder.of(0.0D, 0.0D, 0.0D, 13.0D, 12.0D, 13.0D));
 
-    public BlockGiantCrop(Properties prop, Supplier<Item> giant, Supplier<Item> seed) {
+    public BlockGiantCrop(Properties prop, Supplier<? extends Item> giant, Supplier<? extends Item> seed) {
         super(prop, giant, seed);
         this.registerDefaultState(this.defaultBlockState().setValue(DIRECTION, Direction.NORTH));
     }

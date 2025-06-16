@@ -2,14 +2,17 @@ package io.github.flemmli97.runecraftory.common.entities;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.spells.TeleportSpell;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.OverlayEntityRender;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -38,20 +41,19 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public abstract class BossMonster extends BaseMonster implements IOverlayEntityRender {
+public abstract class BossMonster extends BaseMonster implements OverlayEntityRender {
 
-    protected static final List<Supplier<Attribute>> STAT_INCREASE = List.of(
+    protected static final List<Supplier<Holder<Attribute>>> STAT_INCREASE = List.of(
             () -> Attributes.ATTACK_DAMAGE,
-            ModAttributes.DEFENCE,
-            ModAttributes.MAGIC,
-            ModAttributes.MAGIC_DEFENCE
+            ModAttributes.DEFENCE::asHolder,
+            ModAttributes.MAGIC::asHolder,
+            ModAttributes.MAGIC_DEFENCE::asHolder
     );
-    protected static final UUID STAT_INCREASE_ID = UUID.fromString("fc5aaf23-4e83-4f7d-a4f0-675350d6e5e7");
+    protected static final ResourceLocation STAT_INCREASE_ID = RuneCraftory.modRes("boss_enraged_buff");
     private static final EntityDataAccessor<Boolean> ENRAGED = SynchedEntityData.defineId(BossMonster.class, EntityDataSerializers.BOOLEAN);
 
     protected final RunecraftoryBossbar bossInfo;
@@ -65,8 +67,8 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
         this.bossInfo = this.createBossBar();
     }
 
-    public static <T extends BaseMonster> ImmutableMap<String, BiConsumer<AnimatedAction, T>> createAnimationHandler(Consumer<ImmutableMap.Builder<AnimatedAction, BiConsumer<AnimatedAction, T>>> cons) {
-        ImmutableMap.Builder<AnimatedAction, BiConsumer<AnimatedAction, T>> builder = ImmutableMap.builder();
+    public static <T extends BaseMonster> ImmutableMap<String, BiConsumer<AnimationState, T>> createAnimationHandler(Consumer<ImmutableMap.Builder<AnimationState, BiConsumer<AnimationState, T>>> cons) {
+        ImmutableMap.Builder<AnimationState, BiConsumer<AnimationState, T>> builder = ImmutableMap.builder();
         cons.accept(builder);
         return builder.build().entrySet().stream().collect(ImmutableMap.toImmutableMap(e -> e.getKey().getID(), Map.Entry::getValue));
     }
@@ -76,15 +78,15 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(ENRAGED, false);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(ENRAGED, false);
     }
 
     @Override
     public void baseTick() {
         super.baseTick();
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             if (!this.isTamed() && this.isAlive()) {
                 this.updatePlayers();
                 this.updateBossBar();
@@ -99,7 +101,7 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
                     }
                     if (this.combatTick > 600 && this.hasRestriction() && !this.isWithinRestriction() && this.restrictDimension != null) {
                         BlockPos restrict = this.getRestrictCenter();
-                        if (this.level.dimension().equals(this.restrictDimension)) {
+                        if (this.level().dimension().equals(this.restrictDimension)) {
                             TeleportSpell.safeTeleportTo(this, restrict.getX(), restrict.getY(), restrict.getZ());
                         } else {
                             ServerLevel serverLevel = this.getServer().getLevel(this.restrictDimension);
@@ -121,7 +123,7 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
     @Override
     public void restrictTo(@Nullable BlockPos pos, int distance) {
         super.restrictTo(pos, distance);
-        this.restrictDimension = this.level.dimension();
+        this.restrictDimension = this.level().dimension();
     }
 
     @Override
@@ -148,7 +150,7 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
             this.bossInfo.setName(this.getDisplayName());
         }
         if (compound.contains("RestrictDim"))
-            this.restrictDimension = ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(compound.getString("RestrictDim")));
+            this.restrictDimension = ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(compound.getString("RestrictDim")));
     }
 
     @Override
@@ -173,12 +175,12 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
     @Override
     protected void tickDeath() {
         super.tickDeath();
-        if (!this.level.isClientSide && this.deathTime == 1)
+        if (!this.level().isClientSide && this.deathTime == 1)
             this.updateBossBar();
-        if (this.level.isClientSide && this.deathTime > 1) {
+        if (this.level().isClientSide && this.deathTime > 1) {
             if (this.deathTime < 40) {
                 if (this.deathTime % 10 == 0)
-                    this.level.addParticle(new ColoredParticleData(ModParticles.BLINK.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
+                    this.level().addParticle(new ColoredParticleData(ModParticles.BLINK.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
                             this.getX() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth()),
                             this.getY() + this.random.nextDouble() * (this.getBbHeight()),
                             this.getZ() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth()),
@@ -187,7 +189,7 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
                             this.random.nextGaussian() * 0.02D);
             } else if (this.deathTime < 80) {
                 if (this.deathTime % 2 == 0)
-                    this.level.addParticle(new ColoredParticleData(ModParticles.BLINK.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
+                    this.level().addParticle(new ColoredParticleData(ModParticles.BLINK.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
                             this.getX() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth() + 2),
                             this.getY() + this.random.nextDouble() * (this.getBbHeight() + 1),
                             this.getZ() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth() + 2),
@@ -197,7 +199,7 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
             } else {
                 int amount = (this.deathTime - 80) / 10;
                 for (int i = 0; i < amount; i++) {
-                    this.level.addParticle(new ColoredParticleData(ModParticles.BLINK.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
+                    this.level().addParticle(new ColoredParticleData(ModParticles.BLINK.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
                             this.getX() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth() + 3),
                             this.getY() + this.random.nextDouble() * (this.getBbHeight() + 1),
                             this.getZ() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth() + 3),
@@ -237,7 +239,7 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
                 STAT_INCREASE.forEach(att -> {
                     AttributeInstance inst = this.getAttribute(att.get());
                     if (inst.getModifier(STAT_INCREASE_ID) == null)
-                        inst.addPermanentModifier(new AttributeModifier(STAT_INCREASE_ID, "rf.boss_stat_increase", 0.1, AttributeModifier.Operation.MULTIPLY_TOTAL));
+                        inst.addPermanentModifier(new AttributeModifier(STAT_INCREASE_ID, 0.1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
                 });
             } else {
                 STAT_INCREASE.forEach(att -> this.getAttribute(att.get()).removeModifier(STAT_INCREASE_ID));
@@ -258,8 +260,8 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
     }
 
     @Override
-    protected void actuallyHurt(DamageSource damageSrc, float damageAmount) {
-        super.actuallyHurt(damageSrc, damageAmount);
+    protected void actuallyHurt(DamageSource source, float damageAmount) {
+        super.actuallyHurt(source, damageAmount);
         this.combatTick = 0;
         if (!this.isTamed() && this.checkRage()) {
             this.setEnraged(true, false);
@@ -288,7 +290,7 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
 
     private void updatePlayers() {
         Set<ServerPlayer> set = new HashSet<>();
-        for (ServerPlayer serverPlayer : this.level.getEntitiesOfClass(ServerPlayer.class, this.arenaAABB(), e -> true)) {
+        for (ServerPlayer serverPlayer : this.level().getEntitiesOfClass(ServerPlayer.class, this.arenaAABB(), e -> true)) {
             this.bossInfo.addPlayer(serverPlayer);
             set.add(serverPlayer);
         }
@@ -340,10 +342,10 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
     }
 
     @Override
-    public boolean allowAnimation(String prev, AnimatedAction other) {
+    public boolean allowAnimation(String prev, String other) {
         if (other == null)
             return super.allowAnimation(prev, null);
-        return !prev.equals(other.getID());
+        return !prev.equals(other);
     }
 
     public void playAngrySound() {

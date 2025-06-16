@@ -26,7 +26,7 @@ public class SkillPropertiesManager extends SimpleJsonResourceReloadListener imp
     private Map<EnumSkills, SkillProperties> propertiesMap = new EnumMap<>(EnumSkills.class);
 
     public SkillPropertiesManager() {
-        super(DataPackHandler.GSON, ID.getPath());
+        super(DataPackHandler.GSON, ID.toString());
     }
 
     public SkillProperties getPropertiesFor(EnumSkills skills) {

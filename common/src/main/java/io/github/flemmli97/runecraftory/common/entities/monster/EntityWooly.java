@@ -5,8 +5,6 @@ import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActio
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.loot.LootCtxParameters;
 import io.github.flemmli97.runecraftory.common.utils.LootTableResources;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.common.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
@@ -15,10 +13,15 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveAwayRunn
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -46,13 +49,14 @@ public class EntityWooly extends LeapingMonster {
     private static final EntityDataAccessor<Boolean> SHEARED = SynchedEntityData.defineId(EntityWooly.class, EntityDataSerializers.BOOLEAN);
     protected static final EntityDataAccessor<Boolean> SPAWNSHEARED = SynchedEntityData.defineId(EntityWooly.class, EntityDataSerializers.BOOLEAN);
 
-    public static final AnimatedAction SLAP = AnimatedAction.builder(0.76, "slap").marker("attack", 0.28, 0.56).build();
-    public static final AnimatedAction KICK = AnimatedAction.builder(1, "kick")
-            .marker("attack_start", 0.24).marker("attack_end", 0.92).build();
-    public static final AnimatedAction HEADBUTT = AnimatedAction.builder(0.8, "headbutt").marker("attack", 0.44).build();
-    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(HEADBUTT, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(0, "sleep").infinite().build();
-    public static final AnimatedAction[] ANIMS = new AnimatedAction[]{SLAP, KICK, HEADBUTT, INTERACT, SLEEP};
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String SLAP = BUILDER.add("slap", AnimationsBuilder.definition(0.76).marker("attack", 0.28, 0.56));
+    public static final String KICK = BUILDER.add("kick", AnimationsBuilder.definition(1)
+            .marker("attack_start", 0.24).marker("attack_end", 0.92));
+    public static final String HEADBUTT = BUILDER.add("headbutt", AnimationsBuilder.definition(0.8).marker("attack", 0.44));
+    public static final String INTERACT = BUILDER.add("interact", HEADBUTT);
+    public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityWooly>>> ATTACKS = List.of(
             WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(SLAP, EntityWooly::attackChance), 2),
@@ -82,10 +86,10 @@ public class EntityWooly extends LeapingMonster {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(SPAWNSHEARED, this.getRandom().nextFloat() < 0.05);
-        this.entityData.define(SHEARED, this.entityData.get(SPAWNSHEARED));
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(SPAWNSHEARED, this.getRandom().nextFloat() < 0.05);
+        builder.define(SHEARED, this.entityData.get(SPAWNSHEARED));
     }
 
     @Override
@@ -116,8 +120,8 @@ public class EntityWooly extends LeapingMonster {
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
-        if (itemStack.is(RunecraftoryTags.SHEARS)) {
-            if (!this.level.isClientSide && !this.isSheared() && (!this.isTamed() || player.getUUID().equals(this.getOwnerUUID()))) {
+        if (itemStack.is(RunecraftoryTags.Items.SHEARS)) {
+            if (!this.level().isClientSide && !this.isSheared() && (!this.isTamed() || player.getUUID().equals(this.getOwnerUUID()))) {
                 this.shear(player, itemStack);
                 itemStack.hurtAndBreak(1, player, (playerx) -> playerx.broadcastBreakEvent(hand));
                 return InteractionResult.SUCCESS;
@@ -195,7 +199,7 @@ public class EntityWooly extends LeapingMonster {
     }
 
     @Override
-    protected ResourceLocation getDefaultLootTable() {
+    protected ResourceKey<LootTable> getDefaultLootTable() {
         if (this.isSheared())
             return super.getDefaultLootTable();
         else
@@ -211,7 +215,7 @@ public class EntityWooly extends LeapingMonster {
     }
 
     public void shear(Player player, ItemStack used) {
-        LootTable lootTable = this.level.getServer().getLootTables().get(shearedLootTable(this.getDefaultLootTable()));
+        LootTable lootTable = this.level().getServer().getLootTables().get(shearedLootTable(this.getDefaultLootTable()));
         lootTable.getRandomItems(this.dailyDropContext()
                 .withOptionalParameter(LootCtxParameters.UUID_CONTEXT, player.getUUID())
                 .withOptionalParameter(LootContextParams.TOOL, used).create(LootCtxParameters.MONSTER_INTERACTION), this::spawnAtLocation);
@@ -239,7 +243,8 @@ public class EntityWooly extends LeapingMonster {
         return this.getEntityData().get(SPAWNSHEARED) || this.isTamed() ? 0.8f : 0;
     }
 
-    public static ResourceLocation shearedLootTable(ResourceLocation def) {
-        return new ResourceLocation(def.getNamespace(), def.getPath() + "_sheared_drops");
+    public static ResourceKey<LootTable> shearedLootTable(ResourceKey<LootTable> def) {
+        return ResourceKey.create(Registries.LOOT_TABLE,
+                ResourceLocation.fromNamespaceAndPath(def.location().getNamespace(), def.location().getPath() + "_sheared_drops");
     }
 }

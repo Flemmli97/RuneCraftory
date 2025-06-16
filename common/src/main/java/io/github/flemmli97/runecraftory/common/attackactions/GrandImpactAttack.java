@@ -9,7 +9,7 @@ import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -24,13 +24,13 @@ public class GrandImpactAttack extends AttackAction {
             .build();
 
     @Override
-    public AnimatedAction getAnimation(LivingEntity entity, int comboIdx) {
-        float speed = (float) (ItemNBT.attackSpeedModifier(entity));
-        return PlayerModelAnimations.GRAND_IMPACT.create(speed);
+    public AnimationState getAnimation(LivingEntity entity, int comboIdx) {
+        double speed = ItemNBT.attackSpeedModifier(entity);
+        return AttackAction.create(PlayerModelAnimations.GRAND_IMPACT, speed);
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimatedAction anim) {
+    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimationState anim) {
         if (!entity.level().isClientSide && (anim.isAt("attack_1") || anim.isAt("attack_2"))) {
             float reach = (float) entity.getAttributeValue(ModAttributes.ATTACK_RANGE.asHolder());
             S2CScreenShake.sendAround(entity, 16, 6, 3);

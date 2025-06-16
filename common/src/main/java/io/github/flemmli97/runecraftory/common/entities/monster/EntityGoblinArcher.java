@@ -13,6 +13,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.ActionUtils;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.KeepDistanceRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.DifficultyInstance;
@@ -31,11 +33,12 @@ import java.util.List;
 
 public class EntityGoblinArcher extends EntityGoblin {
 
-    private static final AnimatedAction BOW = AnimatedAction.builder(0.8, "bow").marker("attack", 0.52).build();
-    private static final AnimatedAction TRIPLE = AnimatedAction.copyOf(BOW, "triple");
-    private static final AnimatedAction KICK = AnimatedAction.builder(0.56, "kick").marker("attack", 0.32).build();
-    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(KICK, "interact");
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{BOW, TRIPLE, KICK, INTERACT, SLEEP};
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String BOW = BUILDER.add("bow", AnimationsBuilder.definition(0.8).marker("attack", 0.52));
+    public static final String TRIPLE = BUILDER.add("triple", BOW);
+    public static final String KICK = BUILDER.add("kick", AnimationsBuilder.definition(0.56).marker("attack", 0.32));
+    public static final String INTERACT = BUILDER.add("interact", KICK);
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityGoblinArcher>>> ATTACKS = List.of(
             WeightedEntry.wrap(MonsterActionUtils.simpleMeleeActionInRange(KICK, e -> 0.6f), 1),
@@ -125,38 +128,38 @@ public class EntityGoblinArcher extends EntityGoblin {
     }
 
     private void shootArrow(LivingEntity target) {
-        EntityMobArrow arrow = new EntityMobArrow(this.level, this, 0.8f);
+        EntityMobArrow arrow = new EntityMobArrow(this.level(), this, 0.8f);
         Vec3 dir = new Vec3(target.getX() - arrow.getX(), target.getY(0.33) - arrow.getY(), target.getZ() - arrow.getZ());
         double l = Math.sqrt(dir.x * dir.x + dir.z * dir.z);
         dir = dir.add(0, l * 0.2, 0);
-        arrow.shoot(dir.x, dir.y, dir.z, 1.3f, 7 - this.level.getDifficulty().getId() * 2);
+        arrow.shoot(dir.x, dir.y, dir.z, 1.3f, 7 - this.level().getDifficulty().getId() * 2);
         this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
-        this.level.addFreshEntity(arrow);
+        this.level().addFreshEntity(arrow);
     }
 
     private void shootArrowFromRotation(LivingEntity shooter) {
-        EntityMobArrow arrow = new EntityMobArrow(this.level, this, 0.8f);
-        arrow.shootFromRotation(shooter, shooter.getXRot(), shooter.getYRot(), 0.0F, 1.3f, 7 - this.level.getDifficulty().getId() * 2);
+        EntityMobArrow arrow = new EntityMobArrow(this.level(), this, 0.8f);
+        arrow.shootFromRotation(shooter, shooter.getXRot(), shooter.getYRot(), 0.0F, 1.3f, 7 - this.level().getDifficulty().getId() * 2);
         this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
-        this.level.addFreshEntity(arrow);
+        this.level().addFreshEntity(arrow);
     }
 
     private void shootTripleArrow(LivingEntity target) {
-        EntityMobArrow arrow = new EntityMobArrow(this.level, this, 0.8f);
+        EntityMobArrow arrow = new EntityMobArrow(this.level(), this, 0.8f);
         Vec3 dir = new Vec3(target.getX() - arrow.getX(), target.getY(0.33) - arrow.getY(), target.getZ() - arrow.getZ());
         double l = Math.sqrt(dir.x * dir.x + dir.z * dir.z);
         dir = dir.add(0, l * 0.2, 0);
-        arrow.shoot(dir.x, dir.y, dir.z, 1.3f, 7 - this.level.getDifficulty().getId() * 2);
-        this.level.addFreshEntity(arrow);
+        arrow.shoot(dir.x, dir.y, dir.z, 1.3f, 7 - this.level().getDifficulty().getId() * 2);
+        this.level().addFreshEntity(arrow);
         Vec3 up = this.getUpVector(1);
 
         for (float y = -15; y <= 15; y += 30) {
             Quaternion quaternion = new Quaternion(new Vector3f(up), y, true);
             Vector3f newDir = new Vector3f(dir);
             newDir.transform(quaternion);
-            EntityMobArrow arrowO = new EntityMobArrow(this.level, this, 0.8f);
-            arrowO.shoot(newDir.x(), newDir.y(), newDir.z(), 1.3f, 7 - this.level.getDifficulty().getId() * 2);
-            this.level.addFreshEntity(arrowO);
+            EntityMobArrow arrowO = new EntityMobArrow(this.level(), this, 0.8f);
+            arrowO.shoot(newDir.x(), newDir.y(), newDir.z(), 1.3f, 7 - this.level().getDifficulty().getId() * 2);
+            this.level().addFreshEntity(arrowO);
         }
 
         this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
@@ -164,10 +167,10 @@ public class EntityGoblinArcher extends EntityGoblin {
 
     private void shootTripleArrowFromRotation(LivingEntity shooter) {
         for (int i = 0; i < 3; i++) {
-            EntityMobArrow arrow = new EntityMobArrow(this.level, this, 0.8f);
-            arrow.shootFromRotation(shooter, shooter.getXRot(), shooter.getYRot() + (i - 1) * 15, 0.0F, 1.3f, 7 - this.level.getDifficulty().getId() * 2);
+            EntityMobArrow arrow = new EntityMobArrow(this.level(), this, 0.8f);
+            arrow.shootFromRotation(shooter, shooter.getXRot(), shooter.getYRot() + (i - 1) * 15, 0.0F, 1.3f, 7 - this.level().getDifficulty().getId() * 2);
             this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
-            this.level.addFreshEntity(arrow);
+            this.level().addFreshEntity(arrow);
         }
     }
 

@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.api.registry;
 import io.github.flemmli97.runecraftory.api.action.AttackActionHandler;
 import io.github.flemmli97.runecraftory.api.action.ComboContainer;
 import io.github.flemmli97.runecraftory.api.action.DataKey;
+import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import net.minecraft.server.level.ServerLevel;
@@ -38,6 +39,10 @@ public class AttackAction {
             return CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets(startRot + f * add, startRot + fNext * add, xRot2, range));
         }
         return null;
+    }
+
+    public static AnimationState create(String animation, double speed) {
+        return AnimationState.create(PlayerModelAnimations.ANIMS.get(animation), speed);
     }
 
     public AnimationState getAnimation(LivingEntity entity, int comboIdx) {

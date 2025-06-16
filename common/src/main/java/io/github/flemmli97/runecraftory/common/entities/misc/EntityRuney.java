@@ -30,7 +30,7 @@ public class EntityRuney extends Entity {
     public void tick() {
         super.tick();
         this.ticksExisted++;
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             if (this.ticksExisted > 6000)
                 this.discard();
         }
@@ -38,7 +38,7 @@ public class EntityRuney extends Entity {
 
     @Override
     public void playerTouch(Player player) {
-        if (this.level.isClientSide) {
+        if (this.level().isClientSide) {
             return;
         }
         this.discard();

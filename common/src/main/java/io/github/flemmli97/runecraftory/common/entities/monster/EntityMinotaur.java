@@ -16,6 +16,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.sounds.SoundEvents;
@@ -32,14 +34,15 @@ import java.util.function.Consumer;
 
 public class EntityMinotaur extends ChargingMonster {
 
-    public static final AnimatedAction SWING = AnimatedAction.builder(1.08, "swing").marker("attack", 0.72).build();
-    public static final AnimatedAction SPIN = AnimatedAction.builder(1.48, "spin")
-            .marker("attack_start", 0.24).marker("attack_end", 1.28).marker("reset", 0.84).build();
-    public static final AnimatedAction CHARGE = AnimatedAction.builder(2.64, "charge")
-            .marker("attack_start", 0.64).marker("attack_end", 2.2).build();
-    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(SWING, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(0, "sleep").infinite().build();
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{SWING, SPIN, CHARGE, INTERACT, SLEEP};
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String SWING = BUILDER.add("swing", AnimationsBuilder.definition(1.08).marker("attack", 0.72));
+    public static final String SPIN = BUILDER.add("spin", AnimationsBuilder.definition(1.48)
+            .marker("attack_start", 0.24).marker("attack_end", 1.28).marker("reset", 0.84));
+    public static final String CHARGE = BUILDER.add("charge", AnimationsBuilder.definition(2.64)
+            .marker("attack_start", 0.64).marker("attack_end", 2.2));
+    public static final String INTERACT = BUILDER.add("interact", SWING);
+    public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityMinotaur>>> ATTACKS = List.of(
             WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(SWING, e -> 1), 1),
@@ -69,7 +72,7 @@ public class EntityMinotaur extends ChargingMonster {
     protected Consumer<AnimatedAction> animatedActionConsumer() {
         return (anim) -> {
             super.animatedActionConsumer().accept(anim);
-            if (!this.level.isClientSide) {
+            if (!this.level().isClientSide) {
                 if (anim == null || anim.is(SPIN)) {
                     this.hitEntity = null;
                     this.spinDirection = null;
@@ -124,7 +127,7 @@ public class EntityMinotaur extends ChargingMonster {
         } else {
             if (anim.is(SWING) && anim.isAt("attack")) {
                 S2CScreenShake.sendAround(this, 16, 5, 3);
-                this.level.playSound(null, this.blockPosition(), SoundEvents.GENERIC_EXPLODE, this.getSoundSource(), 1.0f, 0.9f);
+                this.level().playSound(null, this.blockPosition(), SoundEvents.GENERIC_EXPLODE, this.getSoundSource(), 1.0f, 0.9f);
             }
             super.handleAttack(anim);
         }

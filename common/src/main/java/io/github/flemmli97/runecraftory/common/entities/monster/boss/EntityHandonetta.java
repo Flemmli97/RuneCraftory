@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 
 import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.NearestTargetHorizontal;
 import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.entities.ai.control.FreeMoveControl;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.FloatingFlyNavigator;
@@ -28,6 +27,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTarget
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.StrafingRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.TimedWrappedRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -41,9 +42,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -55,23 +54,24 @@ import java.util.function.BiConsumer;
 
 public class EntityHandonetta extends BossMonster {
 
-    public static final AnimatedAction SWIPE = AnimatedAction.builder(1.28, "swipe").marker("attack", 0.64).build();
-    public static final AnimatedAction FLICK = AnimatedAction.builder(1.32, "flick").marker("attack", 0.64).build();
-    public static final AnimatedAction SHOOT = AnimatedAction.builder(1.44, "shoot").marker("attack", 0.36).build();
-    public static final AnimatedAction LASER = AnimatedAction.builder(1.24, "laser")
-            .marker("aim", 0.3).marker("attack", 0.4).build();
-    public static final AnimatedAction PLATE = AnimatedAction.builder(0.88, "plate").marker("attack", 0.56).build();
-    public static final AnimatedAction GRAB = AnimatedAction.builder(1.2, "grab")
-            .marker("attack", 0.56).marker("invis_start", 0.72).marker("grab_done", 1.04).build();
-    public static final AnimatedAction GRAB_CAUGHT = AnimatedAction.builder(1.96, "grab_caught")
-            .marker("attack", 0.12, 0.6, 1.04, 1.48).marker("attack_end", 1.8).build();
-    public static final AnimatedAction PUNCH = AnimatedAction.builder(1.2, "punch")
-            .marker("attack_start", 0.28).marker("attack_end", 1.04).build();
-    public static final AnimatedAction DEFEAT = AnimatedAction.builder(10, "defeat").infinite().build();
-    public static final AnimatedAction ANGRY = AnimatedAction.builder(1.56, "angry").build();
-    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(SWIPE, "interact");
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String SWIPE = BUILDER.add("swipe", AnimationsBuilder.definition(1.28).marker("attack", 0.64));
+    public static final String FLICK = BUILDER.add("flick", AnimationsBuilder.definition(1.32).marker("attack", 0.64));
+    public static final String SHOOT = BUILDER.add("shoot", AnimationsBuilder.definition(1.44).marker("attack", 0.36));
+    public static final String LASER = BUILDER.add("laser", AnimationsBuilder.definition(1.24)
+            .marker("aim", 0.3).marker("attack", 0.4));
+    public static final String PLATE = BUILDER.add("plate", AnimationsBuilder.definition(0.88).marker("attack", 0.56));
+    public static final String GRAB = BUILDER.add("grab", AnimationsBuilder.definition(1.2)
+            .marker("attack", 0.56).marker("invis_start", 0.72).marker("grab_done", 1.04));
+    public static final String GRAB_CAUGHT = BUILDER.add("grab_caught", AnimationsBuilder.definition(1.96)
+            .marker("attack", 0.12, 0.6, 1.04, 1.48).marker("attack_end", 1.8));
+    public static final String PUNCH = BUILDER.add("punch", AnimationsBuilder.definition(1.2)
+            .marker("attack_start", 0.28).marker("attack_end", 1.04));
+    public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
+    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(1.56));
+    public static final String INTERACT = BUILDER.add("interact", SWIPE);
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{SWIPE, FLICK, SHOOT, LASER, PLATE, GRAB, GRAB_CAUGHT, PUNCH, DEFEAT, ANGRY, INTERACT};
     private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntityHandonetta>> ATTACK_HANDLER = createAnimationHandler(b -> {
         b.put(SWIPE, (anim, entity) -> {
             LivingEntity target = entity.getTarget();
@@ -226,16 +226,6 @@ public class EntityHandonetta extends BossMonster {
         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.26);
         this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(32);
         this.getAttribute(Attributes.FLYING_SPEED).setBaseValue(0.32);
-    }
-
-    @Override
-    protected NearestAttackableTargetGoal<Player> createTargetGoalPlayer() {
-        return new NearestTargetHorizontal<>(this, Player.class, 16, true, true, player -> !this.isTamed());
-    }
-
-    @Override
-    protected NearestAttackableTargetGoal<Mob> createTargetGoalMobs() {
-        return new NearestTargetHorizontal<>(this, Mob.class, 16, true, true, this.targetPred);
     }
 
     @Override

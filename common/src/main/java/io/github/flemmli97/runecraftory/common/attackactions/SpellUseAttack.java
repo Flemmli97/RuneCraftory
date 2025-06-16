@@ -8,7 +8,7 @@ import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -18,13 +18,13 @@ import net.minecraft.world.item.ItemStack;
 public class SpellUseAttack extends AttackAction {
 
     @Override
-    public AnimatedAction getAnimation(LivingEntity entity, int comboIdx) {
-        float speed = (float) (ItemNBT.attackSpeedModifier(entity));
-        return PlayerModelAnimations.STAFF_USE.create(speed);
+    public AnimationState getAnimation(LivingEntity entity, int comboIdx) {
+        double speed = ItemNBT.attackSpeedModifier(entity);
+        return AttackAction.create(PlayerModelAnimations.STAFF_USE, speed);
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimatedAction anim) {
+    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimationState anim) {
         if (entity.level() instanceof ServerLevel serverLevel && anim.isAt("attack")) {
             entity.swing(InteractionHand.MAIN_HAND);
             if (handler.get(DataKey.USED_SPELL) != null) {
@@ -39,7 +39,7 @@ public class SpellUseAttack extends AttackAction {
     }
 
     @Override
-    public float movementReduction(AnimatedAction current) {
+    public float movementReduction(AnimationState current) {
         return GeneralConfig.MOVE_SPEED_ATTACK.get().floatValue();
     }
 }

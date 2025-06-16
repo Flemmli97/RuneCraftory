@@ -12,6 +12,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -52,23 +54,22 @@ public class EntityRafflesia extends BossMonster {
     private static final EntityDataAccessor<Optional<UUID>> PITCHER = SynchedEntityData.defineId(EntityRafflesia.class, EntityDataSerializers.OPTIONAL_UUID);
     private static final EntityDataAccessor<Direction> SPAWN_DIRECTION = SynchedEntityData.defineId(EntityRafflesia.class, EntityDataSerializers.DIRECTION);
 
-    public static final AnimatedAction POISON_BREATH = AnimatedAction.builder(1.96, "breath").marker("attack", 0.56).build();
-    public static final AnimatedAction POISON_BREATH_REV = AnimatedAction.copyOf(POISON_BREATH, "breath_2");
-    public static final AnimatedAction PARA_BREATH = AnimatedAction.copyOf(POISON_BREATH, "paralysis_breath");
-    public static final AnimatedAction PARA_BREATH_REV = AnimatedAction.copyOf(POISON_BREATH, "paralysis_breath_2");
-    public static final AnimatedAction SLEEP_BREATH = AnimatedAction.copyOf(POISON_BREATH, "sleep_breath");
-    public static final AnimatedAction SLEEP_BREATH_REV = AnimatedAction.copyOf(POISON_BREATH, "sleep_breath_2");
-    public static final AnimatedAction WIND_BLADE_X8 = AnimatedAction.builder(0.88, "casting").marker("attack", 0.44).build();
-    public static final AnimatedAction WIND_BLADE_X16 = AnimatedAction.copyOf(WIND_BLADE_X8, "wind_blade_x16");
-    public static final AnimatedAction RESUMMON = AnimatedAction.copyOf(WIND_BLADE_X8, "resummon");
-    public static final AnimatedAction STATUS_CIRCLE = AnimatedAction.copyOf(WIND_BLADE_X8, "status_circle");
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String POISON_BREATH = BUILDER.add("breath", AnimationsBuilder.definition(1.96).marker("attack", 0.56));
+    public static final String POISON_BREATH_REV = BUILDER.add("breath_2", POISON_BREATH);
+    public static final String PARA_BREATH = BUILDER.add("paralysis_breath", POISON_BREATH);
+    public static final String PARA_BREATH_REV = BUILDER.add("paralysis_breath_2", POISON_BREATH);
+    public static final String SLEEP_BREATH = BUILDER.add("sleep_breath", POISON_BREATH);
+    public static final String SLEEP_BREATH_REV = BUILDER.add("sleep_breath_2", POISON_BREATH);
+    public static final String WIND_BLADE_X8 = BUILDER.add("casting", AnimationsBuilder.definition(0.88).marker("attack", 0.44));
+    public static final String WIND_BLADE_X16 = BUILDER.add("wind_blade_x16", WIND_BLADE_X8);
+    public static final String RESUMMON = BUILDER.add("resummon", WIND_BLADE_X8);
+    public static final String STATUS_CIRCLE = BUILDER.add("status_circle", WIND_BLADE_X8);
+    public static final String DEATH = BUILDER.add("death", AnimationsBuilder.definition(10).infinite());
+    public static final String ANGRY = BUILDER.add("roar", WIND_BLADE_X8);
+    public static final String INTERACT = BUILDER.add("interact", POISON_BREATH);
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
-    public static final AnimatedAction DEATH = AnimatedAction.builder(10, "death").infinite().build();
-    public static final AnimatedAction ANGRY = AnimatedAction.copyOf(WIND_BLADE_X8, "roar");
-    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(POISON_BREATH, "interact");
-
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{POISON_BREATH, POISON_BREATH_REV, PARA_BREATH, PARA_BREATH_REV, SLEEP_BREATH, SLEEP_BREATH_REV,
-            WIND_BLADE_X8, WIND_BLADE_X16, RESUMMON, STATUS_CIRCLE, DEATH, ANGRY, INTERACT};
     private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntityRafflesia>> ATTACK_HANDLER = createAnimationHandler(b -> {
         BiConsumer<AnimatedAction, EntityRafflesia> cons = (anim, entity) -> {
             if (anim.isAt("attack")) {
@@ -132,7 +133,7 @@ public class EntityRafflesia extends BossMonster {
 
     private final AnimationHandler<EntityRafflesia> animationHandler = new AnimationHandler<>(this, ANIMS)
             .withChangeListener(anim -> {
-                if (!this.level.isClientSide) {
+                if (!this.level().isClientSide) {
                     this.mirrorAttack = isMirrorAttack(anim);
                 }
                 return false;
@@ -203,12 +204,12 @@ public class EntityRafflesia extends BossMonster {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(HORSE_TAIL, Optional.empty());
-        this.entityData.define(FLOWER, Optional.empty());
-        this.entityData.define(PITCHER, Optional.empty());
-        this.entityData.define(SPAWN_DIRECTION, Direction.NORTH);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(HORSE_TAIL, Optional.empty());
+        builder.define(FLOWER, Optional.empty());
+        builder.define(PITCHER, Optional.empty());
+        builder.define(SPAWN_DIRECTION, Direction.NORTH);
     }
 
     @Override
@@ -247,7 +248,7 @@ public class EntityRafflesia extends BossMonster {
     @Override
     public void baseTick() {
         super.baseTick();
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             LivingEntity target = this.getTarget();
             if (target != null && !this.getAnimationHandler().hasAnimation()) {
                 this.getLookControl().setLookAt(target, 30.0f, 30.0f);
@@ -256,7 +257,7 @@ public class EntityRafflesia extends BossMonster {
                 this.summonCooldown = this.random.nextInt(200) + 300;
             }
             if (this.tickCount % 30 == 0) {
-                this.level.getEntities(EntityTypeTest.forClass(LivingEntity.class),
+                this.level().getEntities(EntityTypeTest.forClass(LivingEntity.class),
                                 this.getBoundingBox().inflate(0.3).move(0, this.getBbHeight(), 0),
                                 e -> e != this && this.targetPred.test(e))
                         .forEach(e -> {
@@ -294,24 +295,24 @@ public class EntityRafflesia extends BossMonster {
     private void respawnParts() {
         Direction dir = this.entityData.get(SPAWN_DIRECTION);
         if (this.getHorseTail() == null) {
-            EntityRafflesiaHorseTail horseTail = new EntityRafflesiaHorseTail(this.level, this);
+            EntityRafflesiaHorseTail horseTail = new EntityRafflesiaHorseTail(this.level(), this);
             horseTail.setSpawnDirection(dir);
             horseTail.setPos(this.position().add(rotateVec(dir, horseTail.offset())));
-            this.level.addFreshEntity(horseTail);
+            this.level().addFreshEntity(horseTail);
             this.entityData.set(HORSE_TAIL, Optional.of(horseTail.getUUID()));
         }
         if (this.getFlower() == null) {
-            EntityRafflesiaFlower flower = new EntityRafflesiaFlower(this.level, this);
+            EntityRafflesiaFlower flower = new EntityRafflesiaFlower(this.level(), this);
             flower.setSpawnDirection(dir);
             flower.setPos(this.position().add(rotateVec(dir, flower.offset())));
-            this.level.addFreshEntity(flower);
+            this.level().addFreshEntity(flower);
             this.entityData.set(FLOWER, Optional.of(flower.getUUID()));
         }
         if (this.getPitcher() == null) {
-            EntityRafflesiaPitcher pitcher = new EntityRafflesiaPitcher(this.level, this);
+            EntityRafflesiaPitcher pitcher = new EntityRafflesiaPitcher(this.level(), this);
             pitcher.setSpawnDirection(dir);
             pitcher.setPos(this.position().add(rotateVec(dir, pitcher.offset())));
-            this.level.addFreshEntity(pitcher);
+            this.level().addFreshEntity(pitcher);
             this.entityData.set(PITCHER, Optional.of(pitcher.getUUID()));
         }
         this.summonCooldown = this.random.nextInt(200) + 300;
@@ -374,7 +375,7 @@ public class EntityRafflesia extends BossMonster {
         UUID uuid = this.entityData.get(HORSE_TAIL).orElse(null);
         if (uuid != null) {
             if (this.horseTailEntity == null) {
-                this.horseTailEntity = EntityUtil.findFromUUID(EntityRafflesiaPart.class, this.level, uuid);
+                this.horseTailEntity = EntityUtil.findFromUUID(EntityRafflesiaPart.class, this.level(), uuid);
             } else if (this.horseTailEntity.isRemoved()) {
                 this.horseTailEntity = null;
                 this.entityData.set(HORSE_TAIL, Optional.empty());
@@ -388,7 +389,7 @@ public class EntityRafflesia extends BossMonster {
         UUID uuid = this.entityData.get(FLOWER).orElse(null);
         if (uuid != null) {
             if (this.flowerEntity == null) {
-                this.flowerEntity = EntityUtil.findFromUUID(EntityRafflesiaPart.class, this.level, uuid);
+                this.flowerEntity = EntityUtil.findFromUUID(EntityRafflesiaPart.class, this.level(), uuid);
             } else if (this.flowerEntity.isRemoved()) {
                 this.flowerEntity = null;
                 this.entityData.set(FLOWER, Optional.empty());
@@ -402,7 +403,7 @@ public class EntityRafflesia extends BossMonster {
         UUID uuid = this.entityData.get(PITCHER).orElse(null);
         if (uuid != null) {
             if (this.pitcherEntity == null) {
-                this.pitcherEntity = EntityUtil.findFromUUID(EntityRafflesiaPart.class, this.level, uuid);
+                this.pitcherEntity = EntityUtil.findFromUUID(EntityRafflesiaPart.class, this.level(), uuid);
             } else if (this.pitcherEntity.isRemoved()) {
                 this.pitcherEntity = null;
                 this.entityData.set(PITCHER, Optional.empty());

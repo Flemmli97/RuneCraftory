@@ -3,7 +3,6 @@ package io.github.flemmli97.runecraftory.common.utils;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootTable;
 
@@ -11,13 +10,13 @@ import java.util.List;
 
 public class LootTableResources {
 
-    public static final ResourceLocation FISHING = RuneCraftory.modRes("chore/fishing");
-    public static final ResourceLocation SAND_FISHING = RuneCraftory.modRes("chore/sand_fishing");
+    public static final ResourceKey<LootTable> FISHING = ResourceKey.create(Registries.LOOT_TABLE, RuneCraftory.modRes("chore/fishing"));
+    public static final ResourceKey<LootTable> SAND_FISHING = ResourceKey.create(Registries.LOOT_TABLE, RuneCraftory.modRes("chore/sand_fishing"));
 
-    public static final ResourceLocation TIER_1_LOOT = RuneCraftory.modRes("entities/treasure_chest_tier_1");
-    public static final ResourceLocation TIER_2_LOOT = RuneCraftory.modRes("entities/treasure_chest_tier_2");
-    public static final ResourceLocation TIER_3_LOOT = RuneCraftory.modRes("entities/treasure_chest_tier_3");
-    public static final ResourceLocation TIER_4_LOOT = RuneCraftory.modRes("entities/treasure_chest_tier_4");
+    public static final ResourceKey<LootTable> TIER_1_LOOT = ResourceKey.create(Registries.LOOT_TABLE, RuneCraftory.modRes("entities/treasure_chest_tier_1"));
+    public static final ResourceKey<LootTable> TIER_2_LOOT = ResourceKey.create(Registries.LOOT_TABLE, RuneCraftory.modRes("entities/treasure_chest_tier_2"));
+    public static final ResourceKey<LootTable> TIER_3_LOOT = ResourceKey.create(Registries.LOOT_TABLE, RuneCraftory.modRes("entities/treasure_chest_tier_3"));
+    public static final ResourceKey<LootTable> TIER_4_LOOT = ResourceKey.create(Registries.LOOT_TABLE, RuneCraftory.modRes("entities/treasure_chest_tier_4"));
 
     public static final ResourceKey<LootTable> CHEST_LOOT_SPELLS = ResourceKey.create(Registries.LOOT_TABLE, RuneCraftory.modRes("chest/inject/spells"));
 
@@ -39,6 +38,6 @@ public class LootTableResources {
             BuiltInLootTables.BASTION_TREASURE
     );
 
-    public static final ResourceLocation WOOLED_WHITE_LOOT = RuneCraftory.modRes("entities/wooly/white");
+    public static final ResourceKey<LootTable> WOOLED_WHITE_LOOT = ResourceKey.create(Registries.LOOT_TABLE, RuneCraftory.modRes("entities/wooly/white"));
 
 }

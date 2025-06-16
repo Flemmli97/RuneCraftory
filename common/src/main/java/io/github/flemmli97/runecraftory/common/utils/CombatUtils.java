@@ -155,8 +155,8 @@ public class CombatUtils {
                     !(source instanceof CustomDamage) && (entity instanceof Player || source.getEntity() instanceof Player);
         };
         if (!ignoreDefence) {
-            if (source.is(RunecraftoryTags.IS_MAGIC)) {
-                if (!source.is(RunecraftoryTags.BYPASS_MAGIC))
+            if (source.is(RunecraftoryTags.DamageTypes.IS_MAGIC)) {
+                if (!source.is(RunecraftoryTags.DamageTypes.BYPASS_MAGIC))
                     reduce = (float) getAttributeValue(entity, ModAttributes.MAGIC_DEFENCE.asHolder());
             } else if (!source.is(DamageTypeTags.BYPASSES_ARMOR)) {
                 reduce = (float) getAttributeValue(entity, ModAttributes.DEFENCE.asHolder());
@@ -217,10 +217,10 @@ public class CombatUtils {
     }
 
     public static void knockbackEntityIgnoreResistance(LivingEntity entity, double strength, double x, double z) {
-        if (!entity.getType().is(RunecraftoryTags.BOSSES))
+        if (!entity.getType().is(RunecraftoryTags.EntityTypes.BOSSES))
             applyTempAttribute(entity, Attributes.KNOCKBACK_RESISTANCE, -entity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
         entity.knockback(strength, x, z);
-        if (!entity.getType().is(RunecraftoryTags.BOSSES))
+        if (!entity.getType().is(RunecraftoryTags.EntityTypes.BOSSES))
             removeTempAttribute(entity, Attributes.KNOCKBACK_RESISTANCE);
     }
 
@@ -586,29 +586,29 @@ public class CombatUtils {
             }
             return;
         }
-        if (stack.is(RunecraftoryTags.SHORTSWORDS)) {
+        if (stack.is(RunecraftoryTags.Items.SHORTSWORDS)) {
             LevelCalc.levelSkill(data, EnumSkills.SHORTSWORD, 2);
         }
-        if (stack.is(RunecraftoryTags.LONGSWORDS)) {
+        if (stack.is(RunecraftoryTags.Items.LONGSWORDS)) {
             LevelCalc.levelSkill(data, EnumSkills.LONGSWORD, 4);
         }
-        if (stack.is(RunecraftoryTags.SPEARS)) {
+        if (stack.is(RunecraftoryTags.Items.SPEARS)) {
             LevelCalc.levelSkill(data, EnumSkills.SPEAR, 3);
         }
-        if (stack.is(RunecraftoryTags.AXES) || stack.is(RunecraftoryTags.HAMMERS)) {
+        if (stack.is(RunecraftoryTags.Items.AXES) || stack.is(RunecraftoryTags.Items.HAMMERS)) {
             LevelCalc.levelSkill(data, EnumSkills.HAMMERAXE, 5);
         }
-        if (stack.is(RunecraftoryTags.DUALBLADES)) {
+        if (stack.is(RunecraftoryTags.Items.DUALBLADES)) {
             LevelCalc.levelSkill(data, EnumSkills.DUAL, 2);
         }
-        if (stack.is(RunecraftoryTags.FISTS)) {
+        if (stack.is(RunecraftoryTags.Items.FISTS)) {
             LevelCalc.levelSkill(data, EnumSkills.FIST, 2);
         }
         //Tools
-        if (stack.is(RunecraftoryTags.AXE_TOOLS) || stack.is(RunecraftoryTags.HAMMER_TOOLS)) {
+        if (stack.is(RunecraftoryTags.Items.AXE_TOOLS) || stack.is(RunecraftoryTags.Items.HAMMER_TOOLS)) {
             LevelCalc.levelSkill(data, EnumSkills.HAMMERAXE, 1);
         }
-        if (stack.is(RunecraftoryTags.HOES) || stack.is(RunecraftoryTags.WATERINGCANS) || stack.is(RunecraftoryTags.SICKLES)) {
+        if (stack.is(RunecraftoryTags.Items.HOES) || stack.is(RunecraftoryTags.Items.WATERINGCANS) || stack.is(RunecraftoryTags.Items.SICKLES)) {
             LevelCalc.levelSkill(data, EnumSkills.FARMING, 1);
         }
     }

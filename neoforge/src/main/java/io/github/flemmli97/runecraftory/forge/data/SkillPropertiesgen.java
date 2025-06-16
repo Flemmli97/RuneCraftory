@@ -3,33 +3,28 @@ package io.github.flemmli97.runecraftory.forge.data;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
 import io.github.flemmli97.runecraftory.api.datapack.SkillProperties;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.datapack.manager.SkillPropertiesManager;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.HashCache;
 import net.minecraft.data.PackOutput;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.EnumMap;
 import java.util.Locale;
+import java.util.concurrent.CompletableFuture;
 
 public class SkillPropertiesgen implements DataProvider {
 
-    private static final Logger LOGGER = LogManager.getLogger();
     private final PackOutput packOutput;
     private final EnumMap<EnumSkills, SkillProperties> skillProps = new EnumMap<>(EnumSkills.class);
 
     public SkillPropertiesgen(PackOutput packOutput) {
-        this.gen = gen;
+        this.packOutput = packOutput;
     }
 
-    @Override
-    public void run(HashCache cache) {
+    protected void add() {
         this.skillProps.clear();
         this.skillProps.put(EnumSkills.SHORTSWORD, new SkillProperties(100, 0, 0.25f, 0.25f, 0, 0, 1));
         this.skillProps.put(EnumSkills.LONGSWORD, new SkillProperties(100, 0, 0.25f, 0.25f, 0, 0, 1));
@@ -72,17 +67,16 @@ public class SkillPropertiesgen implements DataProvider {
         this.skillProps.put(EnumSkills.BATH, new SkillProperties(100, 1, 1, 0, 0.1f, 0, 1));
         this.skillProps.put(EnumSkills.TAMING, new SkillProperties(100, 0, 0.2f, 0, 0, 0.5f, 1));
         this.skillProps.put(EnumSkills.LEADER, new SkillProperties(100, 0, 0, 0.25f, 0, 0.1f, 1));
+    }
 
-        this.skillProps.forEach((skill, builder) -> {
-            Path path = this.gen.getOutputFolder().resolve("data/" + RuneCraftory.MODID + "/" + SkillPropertiesManager.DIRECTORY + "/" + skill.name().toLowerCase(Locale.ROOT) + ".json");
-            try {
-                JsonElement obj = SkillProperties.CODEC.encodeStart(JsonOps.INSTANCE, builder)
-                        .getOrThrow(false, LOGGER::error);
-                DataProvider.save(GsonInstances.GSON, cache, obj, path);
-            } catch (IOException e) {
-                LOGGER.error("Couldn't save skill properties {}", path, e);
-            }
-        });
+    @Override
+    public CompletableFuture<?> run(CachedOutput cache) {
+        this.add();
+        return CompletableFuture.allOf(this.skillProps.entrySet().stream().map((entry) -> {
+            Path path = this.packOutput.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(RuneCraftory.MODID + "/" + SkillPropertiesManager.ID + "/" + entry.getKey().name().toLowerCase(Locale.ROOT) + ".json");
+            JsonElement obj = SkillProperties.CODEC.encodeStart(JsonOps.INSTANCE, entry.getValue()).getOrThrow();
+            return DataProvider.saveStable(cache, obj, path);
+        }).toArray(CompletableFuture[]::new));
     }
 
     @Override

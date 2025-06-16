@@ -11,7 +11,7 @@ import net.minecraft.world.item.ItemStack;
 public class NaiveBladeSpell extends WeaponSpell {
 
     public NaiveBladeSpell() {
-        super(ModAttackActions.NAIVE_BLADE, RunecraftoryTags.LONGSWORDS);
+        super(ModAttackActions.NAIVE_BLADE, RunecraftoryTags.Items.LONGSWORDS);
     }
 
     @Override

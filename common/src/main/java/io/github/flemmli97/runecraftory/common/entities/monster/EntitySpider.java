@@ -10,6 +10,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -37,11 +39,12 @@ public class EntitySpider extends BaseMonster {
 
     private static final EntityDataAccessor<Boolean> CLIMBING_SYNC = SynchedEntityData.defineId(EntitySpider.class, EntityDataSerializers.BOOLEAN);
 
-    public static final AnimatedAction MELEE = AnimatedAction.builder(0.6, "attack").marker("attack", 0.48).build();
-    public static final AnimatedAction WEBSHOT = AnimatedAction.builder(0.68, "webshot").marker("attack", 0.36).build();
-    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
-    public static final AnimatedAction STILL = AnimatedAction.builder(0, "still").infinite().build();
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, WEBSHOT, INTERACT, STILL};
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String MELEE = BUILDER.add("attack", AnimationsBuilder.definition(0.6).marker("attack", 0.48));
+    public static final String WEBSHOT = BUILDER.add("webshot", AnimationsBuilder.definition(0.68).marker("attack", 0.36));
+    public static final String INTERACT = BUILDER.add("interact", MELEE);
+    public static final String STILL = BUILDER.add("still", AnimationsBuilder.definition(0).infinite());
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntitySpider>>> ATTACKS = List.of(
             WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(MELEE, e -> 0.7f), 1),
@@ -76,15 +79,15 @@ public class EntitySpider extends BaseMonster {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(CLIMBING_SYNC, false);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(CLIMBING_SYNC, false);
     }
 
     @Override
     public void tick() {
         super.tick();
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             this.setClimbing(this.horizontalCollision);
         }
         if (this.isClimbing() && this.isAlive() && !this.playDeath()) {

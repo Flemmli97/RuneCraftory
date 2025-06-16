@@ -19,6 +19,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -26,6 +27,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -58,6 +60,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 
@@ -71,7 +74,7 @@ import java.util.UUID;
 
 public class GateEntity extends Mob implements IBaseMob {
 
-    private static final Map<EnumElement, ResourceLocation> LOOT_RES = new HashMap<>();
+    private static final Map<EnumElement, ResourceKey<LootTable>> LOOT_RES = new HashMap<>();
 
     private static final EntityDataAccessor<String> ELEMENT_TYPE = SynchedEntityData.defineId(GateEntity.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Integer> ELEMENT = SynchedEntityData.defineId(GateEntity.class, EntityDataSerializers.INT);
@@ -117,10 +120,10 @@ public class GateEntity extends Mob implements IBaseMob {
                 && level.getEntitiesOfClass(GateEntity.class, new AABB(pos).inflate(MobConfig.minDist)).size() < MobConfig.maxGroup;
     }
 
-    public static ResourceLocation getGateLootLocation(EnumElement element) {
-        ResourceLocation def = ModEntities.GATE.get().getDefaultLootTable();
-        return LOOT_RES.computeIfAbsent(element, e -> new ResourceLocation(def.getNamespace(),
-                def.getPath() + "_" + e.name().toLowerCase(Locale.ROOT)));
+    public static ResourceKey<LootTable> getGateLootLocation(EnumElement element) {
+        ResourceKey<LootTable> def = ModEntities.GATE.get().getDefaultLootTable();
+        return LOOT_RES.computeIfAbsent(element, e -> ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(def.location().getNamespace(),
+                def.location().getPath() + "_" + e.name().toLowerCase(Locale.ROOT))));
     }
 
     @Override
@@ -179,17 +182,17 @@ public class GateEntity extends Mob implements IBaseMob {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(ELEMENT_TYPE, "none");
-        this.entityData.define(MOB_LEVEL, LibConstants.BASE_LEVEL);
-        this.entityData.define(ELEMENT, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(ELEMENT_TYPE, "none");
+        builder.define(MOB_LEVEL, LibConstants.BASE_LEVEL);
+        builder.define(ELEMENT, 0);
     }
 
     @Override
     public void tick() {
         if (Platform.INSTANCE.onLivingUpdate(this)) return;
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             if (this.removeCauseEmptyList) {
                 this.discard();
                 return;
@@ -213,7 +216,7 @@ public class GateEntity extends Mob implements IBaseMob {
         } else if (!this.isEffectiveAi()) {
             this.setDeltaMovement(this.getDeltaMovement().scale(0.98D));
         }
-        if (!this.level.isClientSide && --this.spawnDelay <= 0 && this.level.getDifficulty() != Difficulty.PEACEFUL) {
+        if (!this.level().isClientSide && --this.spawnDelay <= 0 && this.level().getDifficulty() != Difficulty.PEACEFUL) {
             this.spawnDelay = MobConfig.minSpawnDelay >= MobConfig.maxSpawnDelay ? MobConfig.minSpawnDelay : this.getRandom().nextInt(MobConfig.minSpawnDelay, MobConfig.maxSpawnDelay);
             if (this.spawnMobs(1)) {
                 this.spawnDelay *= 0.4;
@@ -312,10 +315,10 @@ public class GateEntity extends Mob implements IBaseMob {
     }
 
     private boolean spawnMobs(int count) {
-        if (!(this.level instanceof ServerLevel serverLevel) || serverLevel.getDifficulty() == Difficulty.PEACEFUL)
+        if (!(this.level() instanceof ServerLevel serverLevel) || serverLevel.getDifficulty() == Difficulty.PEACEFUL)
             return false;
         if (!this.spawnList.isEmpty()) {
-            List<Entity> nearby = this.level.getEntities(this, this.getBoundingBox().inflate(18), entity ->
+            List<Entity> nearby = this.level().getEntities(this, this.getBoundingBox().inflate(18), entity ->
                     entity.getType() == ModEntities.TREASURE_CHEST.get() ||
                             entity.getType() == ModEntities.MONSTER_BOX.get() ||
                             entity.getType() == ModEntities.GOBBLE_BOX.get() ||
@@ -334,28 +337,28 @@ public class GateEntity extends Mob implements IBaseMob {
                             type = chest;
                         }
                     }
-                    Entity entity = type.create(this.level);
+                    Entity entity = type.create(this.level());
                     if (entity instanceof EntityTreasureChest chest) {
-                        entity.absMoveTo(x, y, z, this.level.random.nextFloat() * 360.0f, 0.0f);
-                        if (this.level.noCollision(chest)) {
+                        entity.absMoveTo(x, y, z, this.level().random.nextFloat() * 360.0f, 0.0f);
+                        if (this.level().noCollision(chest)) {
                             EntityUtils.tieredTreasureChest(this, chest);
-                            this.level.addFreshEntity(entity);
+                            this.level().addFreshEntity(entity);
                         }
                     } else if (entity instanceof Mob mob) {
                         BlockPos pos = new BlockPos(x, y, z);
                         boolean notSolid;
                         BlockState state;
-                        while ((notSolid = !(state = this.level.getBlockState(pos.below())).entityCanStandOnFace(this.level, pos, entity, Direction.UP) && !state.getFluidState().is(FluidTags.WATER)) && pos.distToCenterSqr(x, y, z) < 16)
+                        while ((notSolid = !(state = this.level().getBlockState(pos.below())).entityCanStandOnFace(this.level(), pos, entity, Direction.UP) && !state.getFluidState().is(FluidTags.WATER)) && pos.distToCenterSqr(x, y, z) < 16)
                             pos = pos.below();
                         if (!notSolid) {
                             if (mob instanceof BaseMonster)
                                 ((BaseMonster) mob).setLevel(levelRand);
-                            entity.absMoveTo(x, y, z, this.level.random.nextFloat() * 360.0f, 0.0f);
-                            if (Platform.INSTANCE.canEntitySpawnSpawner(mob, this.level, (float) entity.getX(), (float) entity.getY(), (float) entity.getZ(), null, MobSpawnType.SPAWNER) && this.level.noCollision(mob)) {
-                                mob.finalizeSpawn(serverLevel, this.level.getCurrentDifficultyAt(mob.blockPosition()), MobSpawnType.SPAWNER, null, null);
+                            entity.absMoveTo(x, y, z, this.level().random.nextFloat() * 360.0f, 0.0f);
+                            if (Platform.INSTANCE.canEntitySpawnSpawner(mob, this.level(), (float) entity.getX(), (float) entity.getY(), (float) entity.getZ(), null, MobSpawnType.SPAWNER) && this.level().noCollision(mob)) {
+                                mob.finalizeSpawn(serverLevel, this.level().getCurrentDifficultyAt(mob.blockPosition()), MobSpawnType.SPAWNER, null, null);
                                 AttributeInstance follow = mob.getAttribute(Attributes.FOLLOW_RANGE);
                                 mob.restrictTo(this.blockPosition(), (int) Math.max(18, follow != null ? follow.getValue() * 0.75 : 0));
-                                this.level.addFreshEntity(entity);
+                                this.level().addFreshEntity(entity);
                                 mob.spawnAnim();
                             }
                         }
@@ -389,7 +392,7 @@ public class GateEntity extends Mob implements IBaseMob {
     @Override
     protected void tickDeath() {
         if (this.deathTime == 5) {
-            if (!this.level.isClientSide && this.getLastHurtByMob() != null)
+            if (!this.level().isClientSide && this.getLastHurtByMob() != null)
                 LevelCalc.addXP(this.getLastHurtByMob(), this.baseXP(), this.baseMoney(), this.xpLevel().getLevel());
         }
         super.tickDeath();
@@ -406,7 +409,7 @@ public class GateEntity extends Mob implements IBaseMob {
     @Override
     public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
         super.onSyncedDataUpdated(key);
-        if (this.level.isClientSide) {
+        if (this.level().isClientSide) {
             if (key.equals(MOB_LEVEL)) {
                 this.updateStatsToLevel();
             }
@@ -448,25 +451,25 @@ public class GateEntity extends Mob implements IBaseMob {
 
     private EnumElement getType(ServerLevelAccessor level, Holder<Biome> key) {
         EnumElement element = EnumElement.values()[this.getRandom().nextInt(EnumElement.values().length)];
-        if (key.is(RunecraftoryTags.IS_PLAINS) && this.getRandom().nextFloat() < 0.5) {
+        if (key.is(RunecraftoryTags.Biomes.IS_PLAINS) && this.getRandom().nextFloat() < 0.5) {
             element = EnumElement.NONE;
         } else if (key.is(BiomeTags.IS_FOREST) && this.getRandom().nextFloat() < 0.5) {
             element = EnumElement.WIND;
-        } else if (key.is(RunecraftoryTags.IS_HOT) && this.getRandom().nextFloat() < 0.5) {
+        } else if (key.is(RunecraftoryTags.Biomes.IS_HOT) && this.getRandom().nextFloat() < 0.5) {
             element = EnumElement.FIRE;
         } else if (key.is(BiomeTags.IS_MOUNTAIN) && this.getRandom().nextFloat() < 0.5) {
             element = EnumElement.WIND;
         } else if (key.is(BiomeTags.IS_OCEAN) && this.getRandom().nextFloat() < 0.5) {
             element = EnumElement.WATER;
-        } else if (key.is(RunecraftoryTags.IS_SANDY) && this.getRandom().nextFloat() < 0.5) {
+        } else if (key.is(RunecraftoryTags.Biomes.IS_SANDY) && this.getRandom().nextFloat() < 0.5) {
             element = EnumElement.EARTH;
-        } else if (key.is(RunecraftoryTags.IS_MAGICAL)) {
+        } else if (key.is(RunecraftoryTags.Biomes.IS_MAGICAL)) {
             if (this.getRandom().nextFloat() < 0.4) {
                 element = EnumElement.LIGHT;
             } else if (this.getRandom().nextFloat() < 0.2) {
                 element = EnumElement.LOVE;
             }
-        } else if (key.is(RunecraftoryTags.IS_SPOOKY) && this.getRandom().nextFloat() < 0.4) {
+        } else if (key.is(RunecraftoryTags.Biomes.IS_SPOOKY) && this.getRandom().nextFloat() < 0.4) {
             element = EnumElement.DARK;
         }
         if (key.is(RunecraftoryTags.IS_END)) {

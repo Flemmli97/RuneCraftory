@@ -15,6 +15,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRun
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -30,14 +32,15 @@ import java.util.function.Predicate;
 
 public class EntityDemon extends BaseMonster implements HealingPredicateEntity, ElementalAttackMob {
 
-    public static final AnimatedAction DARK = AnimatedAction.builder(0.88, "cast").marker("attack", 0.52).build();
-    public static final AnimatedAction HEAL = AnimatedAction.copyOf(DARK, "heal");
-    public static final AnimatedAction STAB = AnimatedAction.builder(0.68, "stab").marker("attack", 0.4).build();
-    public static final AnimatedAction STAB_LONG = AnimatedAction.builder(0.8, "stab_long").marker("attack", 0.48).build();
-    public static final AnimatedAction SWIPE = AnimatedAction.builder(0.88, "swipe").marker("attack", 0.44).build();
-    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(DARK, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(0, "sleep").infinite().build();
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{DARK, HEAL, STAB, STAB_LONG, SWIPE, INTERACT, SLEEP};
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String DARK = BUILDER.add("cast", AnimationsBuilder.definition(0.88).marker("attack", 0.52));
+    public static final String HEAL = BUILDER.add("heal", DARK);
+    public static final String STAB = BUILDER.add("stab", AnimationsBuilder.definition(0.68).marker("attack", 0.4));
+    public static final String STAB_LONG = BUILDER.add("stab_long", AnimationsBuilder.definition(0.8).marker("attack", 0.48));
+    public static final String SWIPE = BUILDER.add("swipe", AnimationsBuilder.definition(0.88).marker("attack", 0.44));
+    public static final String INTERACT = BUILDER.add("interact", DARK);
+    public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityDemon>>> ATTACKS = List.of(
             WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(STAB, e -> 1), 3),

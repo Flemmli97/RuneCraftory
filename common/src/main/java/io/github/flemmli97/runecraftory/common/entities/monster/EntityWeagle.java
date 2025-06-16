@@ -19,6 +19,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.StrafingRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -42,14 +44,15 @@ import java.util.List;
 
 public class EntityWeagle extends BaseMonster {
 
-    public static final AnimatedAction GALE = AnimatedAction.builder(0.96, "gale").marker("attack", 0.28).build();
-    public static final AnimatedAction PECK = AnimatedAction.builder(0.56, "peck").marker("attack", 0.2).build();
-    public static final AnimatedAction SWOOP = AnimatedAction.builder(0.6, "swoop")
-            .marker("swoop_start", 0.2).marker("swoop_end", 0.48).build();
-    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(PECK, "interact");
-    public static final AnimatedAction DEFEAT = AnimatedAction.builder(2, "defeat").infinite().build();
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(0, "sleep").infinite().build();
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{GALE, PECK, SWOOP, INTERACT, DEFEAT, SLEEP};
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String GALE = BUILDER.add("gale", AnimationsBuilder.definition(0.96).marker("attack", 0.28));
+    public static final String PECK = BUILDER.add("peck", AnimationsBuilder.definition(0.56).marker("attack", 0.2));
+    public static final String SWOOP = BUILDER.add("swoop", AnimationsBuilder.definition(0.6)
+            .marker("swoop_start", 0.2).marker("swoop_end", 0.48));
+    public static final String INTERACT = BUILDER.add("interact", PECK);
+    public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(2).infinite());
+    public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityWeagle>>> ATTACKS = List.of(
             WeightedEntry.wrap(MonsterActionUtils.simpleMeleeActionInRange(PECK, e -> 1), 1),

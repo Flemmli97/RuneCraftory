@@ -32,7 +32,7 @@ public class NPCActionManager extends SimpleJsonResourceReloadListener implement
     private HolderLookup.Provider provider;
 
     public NPCActionManager() {
-        super(DataPackHandler.GSON, ID.getPath());
+        super(DataPackHandler.GSON, ID.toString());
     }
 
     public NPCAttackActions get(ResourceLocation res) {

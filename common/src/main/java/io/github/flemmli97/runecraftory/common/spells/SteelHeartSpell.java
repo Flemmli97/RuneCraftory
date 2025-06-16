@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
 public class SteelHeartSpell extends WeaponSpell {
 
     public SteelHeartSpell() {
-        super(ModAttackActions.STEEL_HEART, RunecraftoryTags.LONGSWORDS);
+        super(ModAttackActions.STEEL_HEART, RunecraftoryTags.Items.LONGSWORDS);
     }
 
     @Override

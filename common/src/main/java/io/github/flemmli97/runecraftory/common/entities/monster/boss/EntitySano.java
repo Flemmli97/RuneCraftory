@@ -13,6 +13,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
@@ -24,14 +26,15 @@ import java.util.function.BiConsumer;
 
 public class EntitySano extends EntitySanoUno {
 
-    public static final AnimatedAction FIREBALL_3X = AnimatedAction.builder(2, "fireball_3x").marker("attack", 0.8, 1, 1.2).build();
-    public static final AnimatedAction FIREBALL_BARRAGE = AnimatedAction.builder(4.5, "fireball_barrage")
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String FIREBALL_3X = BUILDER.add("fireball_3x", AnimationsBuilder.definition(2).marker("attack", 0.8, 1, 1.2));
+    public static final String FIREBALL_BARRAGE = BUILDER.add("fireball_barrage", AnimationsBuilder.definition(4.5)
             .marker("single", 3).marker("double", 3.8)
-            .marker("triple", 0.8).marker("quad", 1.2, 3.4).build();
-    public static final AnimatedAction EXPLOSION = AnimatedAction.builder(1.5, "explosion").marker("attack", 0.8).build();
-    public static final AnimatedAction FIRE_BREATH = AnimatedAction.builder(2, "fire_breath").marker("attack", 0.8, 1.2).build();
-    public static final AnimatedAction DEFEAT = AnimatedAction.builder(10, "defeat").infinite().build();
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{FIREBALL_3X, FIREBALL_BARRAGE, EXPLOSION, FIRE_BREATH, DEFEAT};
+            .marker("triple", 0.8).marker("quad", 1.2, 3.4));
+    public static final String EXPLOSION = BUILDER.add("explosion", AnimationsBuilder.definition(1.5).marker("attack", 0.8));
+    public static final String FIRE_BREATH = BUILDER.add("fire_breath", AnimationsBuilder.definition(2).marker("attack", 0.8, 1.2));
+    public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntitySano>> ATTACK_HANDLER = createAnimationHandler(b -> {
         b.put(FIREBALL_3X, (anim, entity) -> {
@@ -126,7 +129,7 @@ public class EntitySano extends EntitySanoUno {
             return this.other;
         }
         if (this.getLinkedID() != null) {
-            List<EntityUno> results = this.level.getEntities(EntityTypeTest.forClass(EntityUno.class), this.getBoundingBox().inflate(64), e -> this.getLinkedID().equals(e.getLinkedID()));
+            List<EntityUno> results = this.level().getEntities(EntityTypeTest.forClass(EntityUno.class), this.getBoundingBox().inflate(64), e -> this.getLinkedID().equals(e.getLinkedID()));
             if (!results.isEmpty()) {
                 this.other = results.get(0);
             }

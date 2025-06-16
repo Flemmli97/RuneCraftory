@@ -53,9 +53,9 @@ public class EntityRockSpear extends BaseBeam {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(BIG, false);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(BIG, false);
     }
 
     @Override

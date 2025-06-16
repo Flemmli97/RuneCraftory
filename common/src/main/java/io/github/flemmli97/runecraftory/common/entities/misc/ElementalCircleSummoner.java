@@ -28,16 +28,16 @@ public class ElementalCircleSummoner extends ProjectileSummonHelperEntity {
         float rot = this.getYRot() + (this.tickCount - 2) * 10;
         switch (this.element) {
             case WIND -> {
-                EntityWindBlade proj = new EntityWindBlade(this.level, this.getOwner());
+                EntityWindBlade proj = new EntityWindBlade(this.level(), this.getOwner());
                 proj.setType(EntityWindBlade.Type.PLAIN);
                 proj.setDamageMultiplier(this.damageMultiplier);
                 proj.shoot(this, 0, rot, 0, 0.32f, 0);
                 proj.setPos(proj.getX(), this.getY(), proj.getZ());
-                this.level.addFreshEntity(proj);
+                this.level().addFreshEntity(proj);
                 this.playSound(ModSounds.SPELL_GENERIC_WIND.get(), 1, (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.0f);
             }
             case FIRE, DARK, WATER, EARTH -> {
-                EntityElementalTrail proj = new EntityElementalTrail(this.level, this.getOwner(), this.element);
+                EntityElementalTrail proj = new EntityElementalTrail(this.level(), this.getOwner(), this.element);
                 proj.setDamageMultiplier(this.damageMultiplier);
                 proj.shoot(this, 0, rot, 0, 0.32f, 0);
                 proj.withMaxLiving(40);
@@ -45,7 +45,7 @@ public class ElementalCircleSummoner extends ProjectileSummonHelperEntity {
                 if (this.element == EnumElement.WATER || this.element == EnumElement.EARTH)
                     y -= 0.5;
                 proj.setPos(proj.getX(), y, proj.getZ());
-                this.level.addFreshEntity(proj);
+                this.level().addFreshEntity(proj);
                 this.playSound(ModSounds.SPELL_GENERIC_FIRE_BALL.get(), 1, (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.0f);
             }
         }

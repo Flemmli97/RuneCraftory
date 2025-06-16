@@ -1,10 +1,11 @@
 package io.github.flemmli97.runecraftory.mixinhelper;
 
+import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
 
 public interface HumanoidMainHand {
 
-    ModelPartHandler.ModelPartExtended runecraftory$getRightHandItem();
+    ModelPartsContainer.ModelPartExtended runecraftory$getRightHandItem();
 
-    ModelPartHandler.ModelPartExtended runecraftory$getLeftHandItem();
+    ModelPartsContainer.ModelPartExtended runecraftory$getLeftHandItem();
 
 }

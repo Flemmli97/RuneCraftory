@@ -48,9 +48,9 @@ public class EntitySpike extends BaseDamageCloud {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(TYPE, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(TYPE, 0);
     }
 
     public void setEntityTarget(LivingEntity target) {
@@ -95,12 +95,12 @@ public class EntitySpike extends BaseDamageCloud {
         double newY = this.getY() + motion.y;
         double newZ = this.getZ() + motion.z;
         this.setPos(newX, newY, newZ);
-        if (this.level.isClientSide) {
+        if (this.level().isClientSide) {
             if (!this.attacking) {
                 double y = this.getY();
-                BlockState current = this.level.getBlockState(this.blockPosition());
+                BlockState current = this.level().getBlockState(this.blockPosition());
                 if (current.isAir()) {
-                    current = this.level.getBlockState(this.blockPosition().below());
+                    current = this.level().getBlockState(this.blockPosition().below());
                     if (current.isAir()) {
                         current = Blocks.DIRT.defaultBlockState();
                     } else {
@@ -115,11 +115,11 @@ public class EntitySpike extends BaseDamageCloud {
                     double dZ = (this.random.nextDouble() * 2.0 - 1.0) * 0.3;
                     double pY = y + this.random.nextDouble() * 0.5 - 0.25;
                     this.clientLightLevelHeight = Mth.floor(y);
-                    this.level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, current),
+                    this.level().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, current),
                             this.getRandomX(2), pY, this.getRandomZ(2),
                             dX, dY, dZ);
                 }
-                this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), current.getSoundType().getStepSound(), this.getSoundSource(), 1.0f, this.random.nextFloat() * 0.1f + 0.75f, false);
+                this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), current.getSoundType().getStepSound(), this.getSoundSource(), 1.0f, this.random.nextFloat() * 0.1f + 0.75f, false);
             }
         } else {
             if (this.livingTicks < this.targetDuration) {
@@ -138,7 +138,7 @@ public class EntitySpike extends BaseDamageCloud {
             } else if (++this.attackTime > this.attackDelay) {
                 this.setDeltaMovement(Vec3.ZERO);
                 if (!this.attacking) {
-                    this.level.broadcastEntityEvent(this, (byte) 4);
+                    this.level().broadcastEntityEvent(this, (byte) 4);
                     this.attacking = true;
                 }
             }
@@ -168,7 +168,7 @@ public class EntitySpike extends BaseDamageCloud {
             this.attacking = true;
             this.clientAttackTime = this.livingTicks;
             if (!this.isSilent()) {
-                this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.GENERIC_EAT, this.getSoundSource(), 1.0f, this.random.nextFloat() * 0.1f + 0.75f, false);
+                this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.GENERIC_EAT, this.getSoundSource(), 1.0f, this.random.nextFloat() * 0.1f + 0.75f, false);
             }
         }
     }

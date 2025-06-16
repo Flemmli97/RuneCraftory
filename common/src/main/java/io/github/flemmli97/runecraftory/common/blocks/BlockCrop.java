@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.blocks;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ItemLike;
@@ -17,7 +18,6 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import java.util.Random;
 import java.util.function.Supplier;
 
 public class BlockCrop extends CropBlock {
@@ -25,10 +25,10 @@ public class BlockCrop extends CropBlock {
     public static final IntegerProperty AGE = IntegerProperty.create("age", 0, 4);
     public static final BooleanProperty WILTED = BooleanProperty.create("wilted");
     private static final VoxelShape[] SHAPE_BY_AGE = new VoxelShape[]{Block.box(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D)};
-    private final Supplier<Item> crop;
-    private final Supplier<Item> seed;
+    private final Supplier<? extends Item> crop;
+    private final Supplier<? extends Item> seed;
 
-    public BlockCrop(BlockBehaviour.Properties prop, Supplier<Item> crop, Supplier<Item> seed) {
+    public BlockCrop(BlockBehaviour.Properties prop, Supplier<? extends Item> crop, Supplier<? extends Item> seed) {
         super(prop);
         this.registerDefaultState(this.defaultBlockState().setValue(this.getAgeProperty(), 0).setValue(WILTED, false));
         this.crop = crop;
@@ -56,7 +56,7 @@ public class BlockCrop extends CropBlock {
     }
 
     @Override
-    public void randomTick(BlockState state, ServerLevel level, BlockPos pos, Random random) {
+    protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
     }
 
     @Override

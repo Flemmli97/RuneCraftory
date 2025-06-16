@@ -20,7 +20,9 @@ import io.github.flemmli97.simplequests_api.util.DescriptiveValue;
 import net.minecraft.advancements.critereon.BlockPredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
@@ -36,6 +38,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -50,15 +53,15 @@ public class QuestGen extends QuestProvider implements AdditionalLanguages {
             .build();
 
     private final Map<String, String> translations = new LinkedHashMap<>();
-    public final Map<ResourceLocation, LootTable.Builder> loot = new HashMap<>();
+    public final Map<ResourceKey<LootTable>, LootTable.Builder> loot = new HashMap<>();
     public final Map<ResourceLocation, Map<ResourceLocation, NPCDataProvider.QuestResponseBuilder>> questResponses = new HashMap<>();
 
-    public QuestGen(PackOutput packOutput) {
-        super(gen, false);
+    public QuestGen(PackOutput output, CompletableFuture<HolderLookup.Provider> lookup) {
+        super(output, lookup, false);
     }
 
     @Override
-    protected void add() {
+    protected void add(HolderLookup.Provider provider) {
         this.addQuest(this.createNPCQuest(id("ship_turnip"), "First Shipment!", "Come see me.",
                         b -> b.addNPC("shop_owner/1", new NPCDataProvider.QuestResponseBuilder(
                                 new ConversationSet.Builder("npc.shop_owner.quest.ship_turnip.start", """
@@ -91,8 +94,8 @@ public class QuestGen extends QuestProvider implements AdditionalLanguages {
                                 .withPool(LootPool.lootPool()
                                         .add(LootItem.lootTableItem(Items.IRON_INGOT).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 5))))
                                         .add(LootItem.lootTableItem(Items.COPPER_INGOT).apply(SetItemCountFunction.setCount(UniformGenerator.between(6, 10))))),
-                        builder -> builder.addEntry("Break %s mineral blocks", desc -> new BlockInteractTask(DescriptiveValue.list(BlockPredicate.Builder.block().of(RunecraftoryTags.ORES).build(), desc).build(),
-                                List.of(), ConstantValue.exactly(10), false, false, true, "", EntityPredicate.ANY)))
+                        builder -> builder.addEntry("Break %s mineral blocks", desc -> new BlockInteractTask(DescriptiveValue.list(BlockPredicate.Builder.block().of(RunecraftoryTags.Blocks.ORES).build(), desc).build(),
+                                List.of(), ConstantValue.exactly(10), false, false, true, "", null)))
                 .setRepeatDelay(-1)
                 .withCategory(this.main));
 
@@ -108,7 +111,7 @@ public class QuestGen extends QuestProvider implements AdditionalLanguages {
                         )),
                         LootTable.lootTable().withPool(LootPool.lootPool()
                                 .add(LootItem.lootTableItem(ModItems.BRUSH.get()))),
-                        builder -> builder.addEntry("Tame a monster", desc -> new TamingTask("", DescriptiveValue.list(EntityPredicate.ANY, desc).build(), ConstantValue.exactly(1))))
+                        builder -> builder.addEntry("Tame a monster", desc -> new TamingTask("", DescriptiveValue.list(EntityPredicate.Builder.entity().build(), desc).build(), ConstantValue.exactly(1))))
                 .setRepeatDelay(-1)
                 .withCategory(this.main));
     }
@@ -133,8 +136,8 @@ public class QuestGen extends QuestProvider implements AdditionalLanguages {
         cons.accept(entryBuilder);
         for (int i = 0; i < entryBuilder.entries.size(); i++) {
             Map<String, QuestTask<?>> entries = entryBuilder.entries.get(i);
-            ResourceLocation subID = new ResourceLocation(builder.getID().getNamespace(), builder.getID().getPath() + "_ref_" + i);
-            Quest.Builder questBuilder = new Quest.Builder(subID, "NPC_SUBQUEST", BuiltInLootTables.EMPTY)
+            ResourceLocation subID = ResourceLocation.fromNamespaceAndPath(builder.getID().getNamespace(), builder.getID().getPath() + "_ref_" + i);
+            Quest.Builder questBuilder = new Quest.Builder(subID, "NPC_SUBQUEST", BuiltInLootTables.EMPTY.location())
                     .withCategory(this.hidden);
             entries.forEach(questBuilder::addTaskEntry);
             this.addQuest(questBuilder);

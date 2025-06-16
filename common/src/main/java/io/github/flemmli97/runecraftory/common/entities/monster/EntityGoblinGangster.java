@@ -12,6 +12,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.Entity;
@@ -25,10 +27,11 @@ import java.util.List;
 
 public class EntityGoblinGangster extends EntityGoblin {
 
-    private static final AnimatedAction DOUBLE_STAB = AnimatedAction.builder(0.88, "double_stab").marker("attack", 0.4, 0.72).build();
-    private static final AnimatedAction DOUBLE_THROW = AnimatedAction.builder(0.96, "double_throw").marker("attack", 0.4, 0.76).build();
-    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(DOUBLE_THROW, "interact");
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{DOUBLE_STAB, DOUBLE_THROW, INTERACT, SLEEP};
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String DOUBLE_STAB = BUILDER.add("double_stab", AnimationsBuilder.definition(0.88).marker("attack", 0.4, 0.72));
+    public static final String DOUBLE_THROW = BUILDER.add("double_throw", AnimationsBuilder.definition(0.96).marker("attack", 0.4, 0.76));
+    public static final String INTERACT = BUILDER.add("interact", DOUBLE_THROW);
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityGoblinGangster>>> ATTACKS = List.of(
             WeightedEntry.wrap(MonsterActionUtils.simpleMeleeActionInRange(DOUBLE_STAB, e -> 0.8f), 2),

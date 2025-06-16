@@ -23,6 +23,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTarget
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.StrafingRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.TimedWrappedRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -52,30 +54,29 @@ import java.util.function.BiConsumer;
 
 public class EntityThunderbolt extends BossMonster {
 
-    public static final AnimatedAction BACK_KICK = AnimatedAction.builder(0.64, "back_kick").marker("attack", 0.32).build();
-    public static final AnimatedAction LASER_X5 = AnimatedAction.builder(1.44, "laser_x5").marker("attack", 1.2).build();
-    public static final AnimatedAction STOMP = AnimatedAction.builder(0.44, "stomp").marker("attack", 0.28).build();
-    public static final AnimatedAction HORN_ATTACK = AnimatedAction.builder(0.44, "horn_attack").marker("attack", 0.24).build();
-    public static final AnimatedAction BACK_KICK_HORN = AnimatedAction.copyOf(BACK_KICK, "back_kick_horn");
-    public static final AnimatedAction CHARGE = AnimatedAction.builder(1.64, "charge")
-            .marker("attack_start", 0.44).marker("attack_end", 1.12).build();
-    public static final AnimatedAction CHARGE_2 = AnimatedAction.copyOf(CHARGE, "charge_2");
-    public static final AnimatedAction CHARGE_3 = AnimatedAction.copyOf(CHARGE, "charge_3");
-    public static final AnimatedAction LASER_AOE = AnimatedAction.copyOf(LASER_X5, "laser_aoe");
-    public static final AnimatedAction LASER_KICK = AnimatedAction.builder(1.2, "laser_kick").marker("attack", 0.32).build();
-    public static final AnimatedAction LASER_KICK_2 = AnimatedAction.copyOf(LASER_KICK, "laser_kick_2");
-    public static final AnimatedAction WIND_BLADE = AnimatedAction.builder(0.72, "wind_blade").marker("attack", 0.36).build();
-    public static final AnimatedAction LASER_KICK_3 = AnimatedAction.copyOf(LASER_KICK, "laser_kick_3");
-    public static final AnimatedAction FEINT = AnimatedAction.builder(2, "feint").marker("neigh", 0.96).build();
-    public static final AnimatedAction DEFEAT = AnimatedAction.builder(10, "defeat").infinite().build();
-    public static final AnimatedAction NEIGH = AnimatedAction.builder(1.16, "neigh").marker("neigh", 0.48).build();
-    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(STOMP, "interact");
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String BACK_KICK = BUILDER.add("back_kick", AnimationsBuilder.definition(0.64).marker("attack", 0.32));
+    public static final String LASER_X5 = BUILDER.add("laser_x5", AnimationsBuilder.definition(1.44).marker("attack", 1.2));
+    public static final String STOMP = BUILDER.add("stomp", AnimationsBuilder.definition(0.44).marker("attack", 0.28));
+    public static final String HORN_ATTACK = BUILDER.add("horn_attack", AnimationsBuilder.definition(0.44).marker("attack", 0.24));
+    public static final String BACK_KICK_HORN = BUILDER.add("back_kick_horn", BACK_KICK);
+    public static final String CHARGE = BUILDER.add("charge", AnimationsBuilder.definition(1.64)
+            .marker("attack_start", 0.44).marker("attack_end", 1.12));
+    public static final String CHARGE_2 = BUILDER.add("charge_2", CHARGE);
+    public static final String CHARGE_3 = BUILDER.add("charge_3", CHARGE);
+    public static final String LASER_AOE = BUILDER.add("laser_aoe", LASER_X5);
+    public static final String LASER_KICK = BUILDER.add("laser_kick", AnimationsBuilder.definition(1.2).marker("attack", 0.32));
+    public static final String LASER_KICK_2 = BUILDER.add("laser_kick_2", LASER_KICK);
+    public static final String WIND_BLADE = BUILDER.add("wind_blade", AnimationsBuilder.definition(0.72).marker("attack", 0.36));
+    public static final String LASER_KICK_3 = BUILDER.add("laser_kick_3", LASER_KICK);
+    public static final String FEINT = BUILDER.add("feint", AnimationsBuilder.definition(2).marker("neigh", 0.96));
+    public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
+    public static final String NEIGH = BUILDER.add("neigh", AnimationsBuilder.definition(1.16).marker("neigh", 0.48));
+    public static final String INTERACT = BUILDER.add("interact", STOMP);
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final float RANGE_THRESHOLD = 0.7f;
     private static final float FEINT_THRESHOLD = 0.35f;
-
-    private static final AnimatedAction[] ANIMATED_ACTIONS = new AnimatedAction[]{BACK_KICK, LASER_X5, STOMP, HORN_ATTACK, BACK_KICK_HORN, CHARGE, CHARGE_2, CHARGE_3,
-            LASER_AOE, LASER_KICK, LASER_KICK_2, WIND_BLADE, LASER_KICK_3, FEINT, DEFEAT, NEIGH, INTERACT};
 
     private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntityThunderbolt>> ATTACK_HANDLER = createAnimationHandler(b -> {
         BiConsumer<AnimatedAction, EntityThunderbolt> kick = (anim, entity) -> {
@@ -218,9 +219,9 @@ public class EntityThunderbolt extends BossMonster {
     );
 
     public final AnimatedAttackGoal<EntityThunderbolt> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
-    private final AnimationHandler<EntityThunderbolt> animationHandler = new AnimationHandler<>(this, ANIMATED_ACTIONS)
+    private final AnimationHandler<EntityThunderbolt> animationHandler = new AnimationHandler<>(this, ANIMS)
             .withChangeListener(anim -> {
-                if (!this.level.isClientSide) {
+                if (!this.level().isClientSide) {
                     this.setChargeDirection(null);
                     if (anim == null) {
                         AnimatedAction chainAnim = this.chainAnim(this.getAnimationHandler().getAnimation());
@@ -370,7 +371,7 @@ public class EntityThunderbolt extends BossMonster {
     @Override
     public void tick() {
         super.tick();
-        if (!this.level.isClientSide && this.getHealth() > 0 && this.getAnimationHandler().isCurrent(DEFEAT) && !this.feintedDeath && !this.isTamed()) {
+        if (!this.level().isClientSide && this.getHealth() > 0 && this.getAnimationHandler().isCurrent(DEFEAT) && !this.feintedDeath && !this.isTamed()) {
             AnimatedAction anim = this.getAnimationHandler().getAnimation();
             if (anim.done(0)) {
                 this.feintDeath();
@@ -383,7 +384,7 @@ public class EntityThunderbolt extends BossMonster {
                 int tick = (int) this.getAnimationHandler().getAnimation().getTick(1);
                 if (tick < 40) {
                     if (tick % 10 == 0)
-                        this.level.addParticle(new ColoredParticleData(ModParticles.BLINK.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
+                        this.level().addParticle(new ColoredParticleData(ModParticles.BLINK.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
                                 this.getX() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth()),
                                 this.getY() + this.random.nextDouble() * (this.getBbHeight()),
                                 this.getZ() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth()),
@@ -392,7 +393,7 @@ public class EntityThunderbolt extends BossMonster {
                                 this.random.nextGaussian() * 0.02D);
                 } else if (tick < 80) {
                     if (tick % 2 == 0)
-                        this.level.addParticle(new ColoredParticleData(ModParticles.BLINK.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
+                        this.level().addParticle(new ColoredParticleData(ModParticles.BLINK.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
                                 this.getX() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth() + 2),
                                 this.getY() + this.random.nextDouble() * (this.getBbHeight() + 1),
                                 this.getZ() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth() + 2),
@@ -402,7 +403,7 @@ public class EntityThunderbolt extends BossMonster {
                 } else {
                     int amount = (tick - 80) / 10;
                     for (int i = 0; i < amount; i++) {
-                        this.level.addParticle(new ColoredParticleData(ModParticles.BLINK.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
+                        this.level().addParticle(new ColoredParticleData(ModParticles.BLINK.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
                                 this.getX() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth() + 3),
                                 this.getY() + this.random.nextDouble() * (this.getBbHeight() + 1),
                                 this.getZ() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth() + 3),
@@ -491,10 +492,10 @@ public class EntityThunderbolt extends BossMonster {
     @Override
     protected void playStepSound(BlockPos pos, BlockState state) {
         if (!state.liquid()) {
-            BlockState blockstate = this.level.getBlockState(pos.above());
-            SoundType soundtype = Platform.INSTANCE.getSoundType(state, this.level, pos, this);
+            BlockState blockstate = this.level().getBlockState(pos.above());
+            SoundType soundtype = Platform.INSTANCE.getSoundType(state, this.level(), pos, this);
             if (blockstate.is(Blocks.SNOW)) {
-                soundtype = Platform.INSTANCE.getSoundType(blockstate, this.level, pos, this);
+                soundtype = Platform.INSTANCE.getSoundType(blockstate, this.level(), pos, this);
             }
             this.playSound(SoundEvents.HORSE_GALLOP, soundtype.getVolume() * 0.15F, soundtype.getPitch());
         }

@@ -8,8 +8,9 @@ import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.common.entity.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinition;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
@@ -30,17 +31,18 @@ public class TornadoSwingAttack extends AttackAction {
     }
 
     @Override
-    public AnimatedAction getAnimation(LivingEntity entity, int comboIdx) {
+    public AnimationState getAnimation(LivingEntity entity, int comboIdx) {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
         if (comboIdx > 0) {
-            float offset = (float) (PlayerModelAnimations.TORNADO_SWING.getMarker("chain_offset", 0) * 20);
-            return PlayerModelAnimations.TORNADO_SWING.create(0, AnimationHandler.FALLBACK_TRANSIT_TIME, offset, speed);
+            AnimationDefinition definition = PlayerModelAnimations.ANIMS.get(PlayerModelAnimations.TORNADO_SWING);
+            double offset = definition.marker("chain_offset", 0) * 20;
+            return AnimationState.create(definition, 0, AnimationHandler.FALLBACK_TRANSIT_TIME, offset, speed);
         }
-        return PlayerModelAnimations.TORNADO_SWING.create(speed);
+        return AttackAction.create(PlayerModelAnimations.TORNADO_SWING, speed);
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimatedAction anim) {
+    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimationState anim) {
         if (anim.isAt("attack_start_1")) {
             entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_HEAVY.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.8f);
         }
@@ -76,7 +78,7 @@ public class TornadoSwingAttack extends AttackAction {
     }
 
     @Override
-    public float movementReduction(AnimatedAction current) {
+    public float movementReduction(AnimationState current) {
         return 0.6f;
     }
 

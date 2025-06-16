@@ -35,6 +35,14 @@ public class ItemLevelLootFunction extends LootItemConditionalFunction {
         this.level = level;
     }
 
+    public static Builder defaultFunc() {
+        return new Builder().with(ConstantValue.exactly(1));
+    }
+
+    public static Builder with(NumberProvider provider) {
+        return new Builder().with(provider);
+    }
+
     @Override
     public LootItemFunctionType getType() {
         return ModLootRegistries.ITEM_LEVEL.get();

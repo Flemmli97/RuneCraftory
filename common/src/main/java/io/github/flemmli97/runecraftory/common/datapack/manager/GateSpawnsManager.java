@@ -42,7 +42,6 @@ import java.util.stream.Collectors;
 
 public class GateSpawnsManager extends SimpleJsonResourceReloadListener implements ListenerExtension {
 
-    public static final String DIRECTORY = "gate_spawning";
     public static final ResourceLocation ID = RuneCraftory.modRes("gate_spawning");
 
     private Map<TagKey<Biome>, List<SpawnResource>> biomeSpawns = new HashMap<>();
@@ -51,7 +50,7 @@ public class GateSpawnsManager extends SimpleJsonResourceReloadListener implemen
     private HolderLookup.Provider provider;
 
     public GateSpawnsManager() {
-        super(DataPackHandler.GSON, ID.getPath());
+        super(DataPackHandler.GSON, ID.toString());
     }
 
     public List<EntityType<?>> pickRandomMobs(ServerLevel level, GateEntity gate, Holder<Biome> biome, RandomSource rand, int amount, BlockPos pos, List<ServerPlayer> players) {

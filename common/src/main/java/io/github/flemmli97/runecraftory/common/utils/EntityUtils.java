@@ -24,6 +24,7 @@ import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -113,7 +114,7 @@ public class EntityUtils {
     public static void foodHealing(LivingEntity entity, float amount) {
         if (amount > 0)
             entity.heal(amount);
-        else if (!entity.getType().is(RunecraftoryTags.BOSS_MONSTERS))
+        else if (!entity.getType().is(RunecraftoryTags.EntityTypes.BOSS_MONSTERS))
             entity.setHealth(entity.getHealth() + amount);
     }
 
@@ -252,11 +253,20 @@ public class EntityUtils {
     }
 
     public static void playSoundForPlayer(ServerPlayer player, SoundEvent event, float volume, float pitch) {
-        playSoundForPlayer(player, BuiltInRegistries.SOUND_EVENT.wrapAsHolder(event), volume, pitch);
+        playSoundForPlayer(player, BuiltInRegistries.SOUND_EVENT.wrapAsHolder(event), player.getSoundSource(), volume, pitch);
+    }
+
+    public static void playSoundForPlayer(ServerPlayer player, SoundEvent event, SoundSource source, float volume, float pitch) {
+        playSoundForPlayer(player, BuiltInRegistries.SOUND_EVENT.wrapAsHolder(event), source, volume, pitch);
     }
 
     public static void playSoundForPlayer(ServerPlayer player, Holder<SoundEvent> event, float volume, float pitch) {
         player.connection.send(new ClientboundSoundPacket(event, player.getSoundSource(), player.getX(), player.getY(), player.getZ(),
+                volume, pitch, player.getRandom().nextLong()));
+    }
+
+    public static void playSoundForPlayer(ServerPlayer player, Holder<SoundEvent> event, SoundSource source, float volume, float pitch) {
+        player.connection.send(new ClientboundSoundPacket(event, source, player.getX(), player.getY(), player.getZ(),
                 volume, pitch, player.getRandom().nextLong()));
     }
 

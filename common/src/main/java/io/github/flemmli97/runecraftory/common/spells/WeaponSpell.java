@@ -23,7 +23,7 @@ public class WeaponSpell extends Spell {
 
     @Override
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
-        boolean hasWeapon = entity.getMainHandItem().is(RunecraftoryTags.WEAPONS) || entity.getMainHandItem().is(RunecraftoryTags.TOOLS);
+        boolean hasWeapon = entity.getMainHandItem().is(RunecraftoryTags.Items.WEAPONS) || entity.getMainHandItem().is(RunecraftoryTags.Items.TOOLS);
         if (!hasWeapon)
             return false;
         boolean correctWeapon = entity.getMainHandItem().is(this.weapon);
@@ -35,7 +35,7 @@ public class WeaponSpell extends Spell {
     public boolean canUse(ServerLevel world, LivingEntity entity, ItemStack stack) {
         if (!super.canUse(world, entity, stack))
             return false;
-        return entity.getMainHandItem().is(RunecraftoryTags.WEAPONS) || entity.getMainHandItem().is(RunecraftoryTags.TOOLS);
+        return entity.getMainHandItem().is(RunecraftoryTags.Items.WEAPONS) || entity.getMainHandItem().is(RunecraftoryTags.Items.TOOLS);
     }
 
     @Override

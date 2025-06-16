@@ -17,234 +17,281 @@ import java.util.Map;
 
 public class RunecraftoryTags {
 
-    // Items
-    public static final TagKey<Item> SEEDS = tagCommon("seeds");
+    public static class Items {
 
-    public static final TagKey<Item> WOOD_ROD = tagCommon("wooden_rods");
-    public static final TagKey<Item> SLIME = tagCommon("slime_balls");
+        public static final TagKey<Item> WOOD_ROD = tagCommon("rods/wooden");
+        public static final TagKey<Item> SLIME = tagCommon("slime_balls");
+        public static final TagKey<Item> SHEARS = tagCommon("tools/shear");
+        public static final TagKey<Item> COBBLESTONE = tagCommon("cobblestones");
+        public static final TagKey<Item> CHEST = tagCommon("chests");
 
-    public static final TagKey<Item> IRON = tagCommon("iron_ingots");
-    public static final TagKey<Item> GOLD = tagCommon("gold_ingots");
-    public static final TagKey<Item> TIN = tagCommon("tin_ingots");
-    public static final TagKey<Item> COPPER = tagCommon("copper_ingots");
+        public static final TagKey<Item> IRON = tagCommon("ingots/iron");
+        public static final TagKey<Item> GOLD = tagCommon("ingots/gold");
+        public static final TagKey<Item> COPPER = tagCommon("ingots/copper");
 
-    public static final TagKey<Item> EMERALDS = tagCommon("emeralds");
+        public static final TagKey<Item> RAW_MATERIALS_TIN = tagCommon("raw_materials/tin");
+        public static final TagKey<Item> INGOTS_TIN = tagCommon("ingots/tin");
+        public static final TagKey<Item> DUSTS_BRONZE = tagCommon("dusts/bronze");
+        public static final TagKey<Item> INGOTS_BRONZE = tagCommon("ingots/bronze");
+        public static final TagKey<Item> RAW_MATERIALS_SILVER = tagCommon("raw_materials/silver");
+        public static final TagKey<Item> INGOTS_SILVER = tagCommon("ingots/silver");
+        public static final TagKey<Item> RAW_MATERIALS_PLATINUM = tagCommon("raw_materials/platinum");
+        public static final TagKey<Item> INGOTS_PLATINUM = tagCommon("ingots/platinum");
 
-    public static final TagKey<Item> SHEARS = tagCommon("shears");
+        public static final TagKey<Item> GEMS_EMERALD = tagCommon("gems/emerald");
+        public static final TagKey<Item> GEMS_AMETHYST = tagCommon("gems/amethyst");
+        public static final TagKey<Item> GEMS_AQUAMARINE = tagCommon("gems/aquamarine");
+        public static final TagKey<Item> GEMS_RUBY = tagCommon("gems/ruby");
+        public static final TagKey<Item> GEMS_SAPPHIRE = tagCommon("gems/sapphire");
 
-    public static final TagKey<Item> COBBLESTONE = tagCommon("cobblestone");
-    public static final TagKey<Item> CHEST = tagCommon("chests");
+        public static final TagKey<Item> EGGS = tagCommon("eggs");
+        public static final TagKey<Item> MILKS = tagCommon("milks");
 
-    public static final TagKey<Item> BRONZE = tagCommon("bronze_ingots");
-    public static final TagKey<Item> SILVER = tagCommon("silver_ingots");
-    public static final TagKey<Item> PLATINUM = tagCommon("platinum_ingots");
-    public static final TagKey<Item> ORICHALCUM = tagCommon("orichalcum");
-    public static final TagKey<Item> DRAGONIC = tagCommon("dragonic");
+        public static final TagKey<Item> SEEDS = tagCommon("seeds");
 
-    public static final TagKey<Item> AMETHYSTS = tagCommon("amethysts");
-    public static final TagKey<Item> AQUAMARINES = tagCommon("aquamarines");
-    public static final TagKey<Item> RUBIES = tagCommon("rubies");
-    public static final TagKey<Item> SAPPHIRES = tagCommon("sapphires");
+        public static final TagKey<Item> FOODS = tagCommon("foods");
+        public static final TagKey<Item> FOODS_FRUIT = tagCommon("foods/fruit");
+        public static final TagKey<Item> FOODS_VEGGETABLE = tagCommon("foods/vegetable");
 
-    public static final TagKey<Item> EGGS = tagCommon("eggs");
-    public static final TagKey<Item> MILKS = tagCommon("milks");
+        public static final TagKey<Item> GRAPES = tagCommon("foods/fruit/grapes");
+        public static final TagKey<Item> ORANGE = tagCommon("foods/fruit/orange");
 
-    public static final TagKey<Item> GRAPES = tagCommon("fruits/grapes");
-    public static final TagKey<Item> ORANGE = tagCommon("fruits/orange");
+        public static final TagKey<Item> FLOWERS = tagCommon("flowers");
 
-    public static final TagKey<Item> VEGGIES = tagCommon("vegetables");
-    public static final TagKey<Item> FRUITS = tagCommon("fruits");
-    public static final TagKey<Item> FLOWERS = tagCommon("flowers");
-    public static final TagKey<Item> CROPS = tagCommon("crops");
+        public static final TagKey<Item> CROPS = tagCommon("crops");
+        public static final TagKey<Item> TURNIP = tagCommon("crops/turnip");
 
-    public static final TagKey<Item> FOODS = tagCommon("foods");
-    public static final TagKey<Item> TURNIP = tagCommon("crops/turnip");
+        public static final TagKey<Item> ORICHALCUM = tagCommon("orichalcum");
+        public static final TagKey<Item> DRAGONIC = tagCommon("dragonic");
 
-    // Gifts
-    public static final TagKey<Item> GENERIC_TRASH = tag("generic_trash");
+        public static final TagKey<Item> GENERIC_TRASH = tag("generic_trash");
+        // Runefactory categories
+        public static final TagKey<Item> MINERALS = tag("mineral");
+        public static final TagKey<Item> JEWELS = tag("jewels");
+        public static final TagKey<Item> CRYSTALS = tag("crystals");
+        public static final TagKey<Item> STICKS = tag("sticks");
+        public static final TagKey<Item> LIQUIDS = tag("liquids");
+        public static final TagKey<Item> FEATHERS = tagCommon("feathers");
+        public static final TagKey<Item> SHELLS_BONES = tag("shells_bones");
+        public static final TagKey<Item> STONES = tag("stones");
+        public static final TagKey<Item> STRINGS = tagCommon("string");
+        public static final TagKey<Item> SHARDS = tag("shards");
+        public static final TagKey<Item> FURS = tag("furs");
+        public static final TagKey<Item> POWDERS = tag("powders");
+        public static final TagKey<Item> CLOTHS = tag("cloths");
+        public static final TagKey<Item> CLAWS_FANGS = tag("claws_fangs");
+        public static final TagKey<Item> SCALES = tag("scales");
 
-    // Runefactory categories
-    public static final TagKey<Item> MINERALS = tag("mineral");
-    public static final TagKey<Item> JEWELS = tag("jewels");
-    public static final TagKey<Item> CRYSTALS = tag("crystals");
-    public static final TagKey<Item> STICKS = tag("sticks");
-    public static final TagKey<Item> LIQUIDS = tag("liquids");
-    public static final TagKey<Item> FEATHERS = tagCommon("feathers");
-    public static final TagKey<Item> SHELLS_BONES = tag("shells_bones");
-    public static final TagKey<Item> STONES = tag("stones");
-    public static final TagKey<Item> STRINGS = tagCommon("string");
-    public static final TagKey<Item> SHARDS = tag("shards");
-    public static final TagKey<Item> FURS = tag("furs");
-    public static final TagKey<Item> POWDERS = tag("powders");
-    public static final TagKey<Item> CLOTHS = tag("cloths");
-    public static final TagKey<Item> CLAWS_FANGS = tag("claws_fangs");
-    public static final TagKey<Item> SCALES = tag("scales");
+        public static final TagKey<Item> SPELLS = tag("spells");
+        public static final TagKey<Item> MAGIC_SPELLS = tag("magic_spells");
+        public static final TagKey<Item> RUNE_ABILITIES = tag("rune_abilities");
 
-    // Other
-    public static final TagKey<Item> SPELLS = tag("spells");
-    public static final TagKey<Item> MAGIC_SPELLS = tag("magic_spells");
-    public static final TagKey<Item> RUNE_ABILITIES = tag("rune_abilities");
-    public static final TagKey<Item> HIGH_TIER_TOOLS = tag("high_tier_tools");
+        public static final TagKey<Item> HIGH_TIER_TOOLS = tag("high_tier_tools");
+        public static final TagKey<Item> UPGRADABLE_HELD = tag("upgradable_held");
 
-    public static final TagKey<Item> UPGRADABLE_HELD = tag("upgradable_held");
+        public static final TagKey<Item> TOOLS = tag("tools");
+        public static final TagKey<Item> HOES = tag("tools/hoes");
+        public static final TagKey<Item> WATERINGCANS = tag("tools/wateringcans");
+        public static final TagKey<Item> SICKLES = tag("tools/sickles");
+        public static final TagKey<Item> HAMMER_TOOLS = tag("tools/hammers");
+        public static final TagKey<Item> AXE_TOOLS = tag("tools/axes");
+        public static final TagKey<Item> FISHING_RODS = tag("tools/fishing_rods");
 
-    public static final TagKey<Item> TOOLS = tag("tools");
-    public static final TagKey<Item> HOES = tag("tools/hoes");
-    public static final TagKey<Item> WATERINGCANS = tag("tools/wateringcans");
-    public static final TagKey<Item> SICKLES = tag("tools/sickles");
-    public static final TagKey<Item> HAMMER_TOOLS = tag("tools/hammers");
-    public static final TagKey<Item> AXE_TOOLS = tag("tools/axes");
-    public static final TagKey<Item> FISHING_RODS = tag("tools/fishing_rods");
+        public static final TagKey<Item> WEAPONS = tag("weapon");
+        public static final TagKey<Item> SHORTSWORDS = tag("weapon/short_swords");
+        public static final TagKey<Item> LONGSWORDS = tag("weapon/long_swords");
+        public static final TagKey<Item> SPEARS = tag("weapon/spears");
+        public static final TagKey<Item> AXES = tag("weapon/axes");
+        public static final TagKey<Item> HAMMERS = tag("weapon/hammers");
+        public static final TagKey<Item> HAMMER_AXES = tag("weapon/hammers_and_axes");
+        public static final TagKey<Item> DUALBLADES = tag("weapon/dual_blades");
+        public static final TagKey<Item> FISTS = tag("weapon/fists");
+        public static final TagKey<Item> STAFFS = tag("weapon/staffs");
 
-    public static final TagKey<Item> WEAPONS = tag("weapon");
-    public static final TagKey<Item> SHORTSWORDS = tag("weapon/short_swords");
-    public static final TagKey<Item> LONGSWORDS = tag("weapon/long_swords");
-    public static final TagKey<Item> SPEARS = tag("weapon/spears");
-    public static final TagKey<Item> AXES = tag("weapon/axes");
-    public static final TagKey<Item> HAMMERS = tag("weapon/hammers");
-    public static final TagKey<Item> HAMMER_AXES = tag("weapon/hammers_and_axes");
-    public static final TagKey<Item> DUALBLADES = tag("weapon/dual_blades");
-    public static final TagKey<Item> FISTS = tag("weapon/fists");
-    public static final TagKey<Item> STAFFS = tag("weapon/staffs");
+        public static final TagKey<Item> EQUIPMENT = tag("equipment");
+        public static final TagKey<Item> HELMET = tag("equipment/helmet");
+        public static final TagKey<Item> CHESTPLATE = tag("equipment/chestplate");
+        public static final TagKey<Item> ACCESSORIES = tag("equipment/accessories");
+        public static final TagKey<Item> BOOTS = tag("equipment/boots");
+        public static final TagKey<Item> SHIELDS = tag("equipment/shields");
 
-    public static final TagKey<Item> EQUIPMENT = tag("equipment");
-    public static final TagKey<Item> HELMET = tag("equipment/helmet");
-    public static final TagKey<Item> CHESTPLATE = tag("equipment/chestplate");
-    public static final TagKey<Item> ACCESSORIES = tag("equipment/accessories");
-    public static final TagKey<Item> BOOTS = tag("equipment/boots");
-    public static final TagKey<Item> SHIELDS = tag("equipment/shields");
+        public static final TagKey<Item> QUICKHARVEST_BYPASS = tag("quick_harvest_bypass");
 
-    public static final TagKey<Item> QUICKHARVEST_BYPASS = tag("quick_harvest_bypass");
+        public static final TagKey<Item> SIMPLE = tag("food/simple");
+        public static final TagKey<Item> FRIED = tag("food/fried");
+        public static final TagKey<Item> POT = tag("food/pot");
+        public static final TagKey<Item> STEAMED = tag("food/steamed");
+        public static final TagKey<Item> KNIFE = tag("food/knife");
+        public static final TagKey<Item> MIXED = tag("food/mixed");
+        public static final TagKey<Item> OVEN = tag("food/oven");
 
-    // FOOD
-    public static final TagKey<Item> SIMPLE = tag("food/simple");
-    public static final TagKey<Item> FRIED = tag("food/fried");
-    public static final TagKey<Item> POT = tag("food/pot");
-    public static final TagKey<Item> STEAMED = tag("food/steamed");
-    public static final TagKey<Item> KNIFE = tag("food/knife");
-    public static final TagKey<Item> MIXED = tag("food/mixed");
-    public static final TagKey<Item> OVEN = tag("food/oven");
+        public static final TagKey<Item> OIL = tagCommon("foods/oil");
+        public static final TagKey<Item> FLOUR = tagCommon("foods/flour");
+        public static final TagKey<Item> CHEESE = tagCommon("foods/cheese");
+        public static final TagKey<Item> MAYO = tagCommon("foods/mayo");
+        public static final TagKey<Item> FOOD_EGG = tagCommon("foods/egg");
+        public static final TagKey<Item> FOOD_MILK = tagCommon("foods/milk");
+        public static final TagKey<Item> CHOCOLATE = tagCommon("foods/chocolate");
+        public static final TagKey<Item> RICE = tagCommon("foods/rice");
+        public static final TagKey<Item> BUTTER = tagCommon("foods/butter");
+        public static final TagKey<Item> KETCHUP = tagCommon("foods/ketchup");
+        public static final TagKey<Item> SUGAR = tagCommon("foods/sugar");
+        public static final TagKey<Item> BREAD = tagCommon("foods/bread");
+        public static final TagKey<Item> ONIGIRI = tagCommon("foods/onigiri");
+        public static final TagKey<Item> PIE = tagCommon("foods/pie");
+        public static final TagKey<Item> JUICE = tagCommon("foods/juice");
+        public static final TagKey<Item> TOAST = tagCommon("foods/toast");
+        public static final TagKey<Item> UDON = tagCommon("foods/udon");
+        public static final TagKey<Item> JAM = tagCommon("foods/jam");
 
-    public static final TagKey<Item> OIL = tagCommon("foods/oil");
-    public static final TagKey<Item> FLOUR = tagCommon("foods/flour");
-    public static final TagKey<Item> CHEESE = tagCommon("foods/cheese");
-    public static final TagKey<Item> MAYO = tagCommon("foods/mayo");
-    public static final TagKey<Item> FOOD_EGG = tagCommon("foods/egg");
-    public static final TagKey<Item> FOOD_MILK = tagCommon("foods/milk");
-    public static final TagKey<Item> CHOCOLATE = tagCommon("foods/chocolate");
-    public static final TagKey<Item> RICE = tagCommon("foods/rice");
-    public static final TagKey<Item> BUTTER = tagCommon("foods/butter");
-    public static final TagKey<Item> KETCHUP = tagCommon("foods/ketchup");
-    public static final TagKey<Item> SUGAR = tagCommon("foods/sugar");
-    public static final TagKey<Item> BREAD = tagCommon("foods/bread");
+        /**
+         * Taming items for monsters
+         */
+        private static final Map<EntityType<?>, TagKey<Item>> ENTITY_TAMING_TAGS = new HashMap<>();
+    }
 
-    public static final TagKey<Item> ONIGIRI = tagCommon("foods/onigiri");
-    public static final TagKey<Item> PIE = tagCommon("foods/pie");
-    public static final TagKey<Item> JUICE = tagCommon("foods/juice");
-    public static final TagKey<Item> TOAST = tagCommon("foods/toast");
-    public static final TagKey<Item> UDON = tagCommon("foods/udon");
-    public static final TagKey<Item> JAM = tagCommon("foods/jam");
+    public static class Blocks {
 
-    private static final Map<EntityType<?>, TagKey<Item>> ENTITY_TAMING_TAGS = new HashMap<>();
+        // Blocks
+        public static final TagKey<Block> FARMLAND = blockCommon("farmland");
+        public static final TagKey<Block> STONE = blockCommon("stones");
+        public static final TagKey<Block> ENDSTONES = blockCommon("end_stones");
 
-    // Blocks
-    public static final TagKey<Block> ORES = block("ores");
+        public static final TagKey<Block> ORES = block("ores");
+        public static final TagKey<Block> SICKLE_DESTROYABLE = block("sickle_destroyable");
+        public static final TagKey<Block> SICKLE_EFFECTIVE = blockCommon("mineable/sickle");
+        public static final TagKey<Block> HAMMER_FLATTENABLE = block("hammer_flattenable");
+        public static final TagKey<Block> HAMMER_BREAKABLE = block("hammer_breakable");
 
-    public static final TagKey<Block> FARMLAND = blockCommon("farmland");
-    public static final TagKey<Block> SICKLE_DESTROYABLE = block("sickle_destroyable");
-    public static final TagKey<Block> HAMMER_FLATTENABLE = block("hammer_flattenable");
-    public static final TagKey<Block> HAMMER_BREAKABLE = block("hammer_breakable");
-    public static final TagKey<Block> HERBS = block("herbs");
-    public static final TagKey<Block> SICKLE_EFFECTIVE = blockCommon("mineable/sickle");
+        public static final TagKey<Block> HERBS = block("herbs");
+        public static final TagKey<Block> CROP_BLOCKS = block("crops");
+        public static final TagKey<Block> FLOWER_BLOCKS = block("flowers");
+        public static final TagKey<Block> GIANT_CROP_BLOCKS = block("giant_crop");
 
-    public static final TagKey<Block> CROP_BLOCKS = block("crops");
-    public static final TagKey<Block> FLOWER_BLOCKS = block("flowers");
-    public static final TagKey<Block> GIANT_CROP_BLOCKS = block("giant_crop");
+        public static final TagKey<Block> MONSTER_CLEARABLE = block("monster_clearable");
 
-    public static final TagKey<Block> ENDSTONES = blockCommon("end_stones");
+        public static final TagKey<Block> BARN_GROUND = block("barn_ground");
+        public static final TagKey<Block> MINERAL_GEN_PLACE = block("mineral_gen_place");
+    }
 
-    public static final TagKey<Block> MONSTER_CLEARABLE = block("monster_clearable");
+    public static class EntityTypes {
 
-    public static final TagKey<Block> BARN_GROUND = block("barn_ground");
-    public static final TagKey<Block> ONSEN_PROVIDER = block("onsen_provider");
+        public static final TagKey<EntityType<?>> BOSSES = entityCommon("bosses");
 
-    public static final TagKey<Block> STONE = blockCommon("stone");
+        public static final TagKey<EntityType<?>> MONSTERS = entity("monsters");
+        public static final TagKey<EntityType<?>> BOSS_MONSTERS = entity("boss_monsters");
+        public static final TagKey<EntityType<?>> RAFFLESIA_SUMMONS = entity("rafflesia_summons");
+        public static final TagKey<EntityType<?>> HELD_WEAPON_EXEMPT = entity("held_weapon_exempt");
+        /**
+         * Tag for entities that normally target hostile mobs but shouldn't target monster if they are tamed
+         * E.g. iron golems and snow golems
+         */
+        public static final TagKey<EntityType<?>> TAMED_MONSTER_IGNORE = entity("ignore_tamed_monsters");
+    }
 
-    public static final TagKey<Block> MINERAL_GEN_PLACE = block("mineral_gen_place");
+    public static class Biomes {
 
-    // Entities
+        /*
+         * ====================
+         * Copy of all common tags defined in neoforge WITHOUT vanilla mirrors
+         */
+        public static final TagKey<Biome> IS_VOID = biomeCommon("is_void");
+        public static final TagKey<Biome> IS_HOT = biomeCommon("is_hot");
+        public static final TagKey<Biome> IS_HOT_OVERWORLD = biomeCommon("is_hot/overworld");
+        public static final TagKey<Biome> IS_HOT_NETHER = biomeCommon("is_hot/nether");
+        public static final TagKey<Biome> IS_HOT_END = biomeCommon("is_hot/end");
+        public static final TagKey<Biome> IS_COLD = biomeCommon("is_cold");
+        public static final TagKey<Biome> IS_COLD_OVERWORLD = biomeCommon("is_cold/overworld");
+        public static final TagKey<Biome> IS_COLD_NETHER = biomeCommon("is_cold/nether");
+        public static final TagKey<Biome> IS_COLD_END = biomeCommon("is_cold/end");
+        public static final TagKey<Biome> IS_SPARSE_VEGETATION = biomeCommon("is_sparse_vegetation");
+        public static final TagKey<Biome> IS_SPARSE_VEGETATION_OVERWORLD = biomeCommon("is_sparse_vegetation/overworld");
+        public static final TagKey<Biome> IS_SPARSE_VEGETATION_NETHER = biomeCommon("is_sparse_vegetation/nether");
+        public static final TagKey<Biome> IS_SPARSE_VEGETATION_END = biomeCommon("is_sparse_vegetation/end");
+        public static final TagKey<Biome> IS_DENSE_VEGETATION = biomeCommon("is_dense_vegetation");
+        public static final TagKey<Biome> IS_DENSE_VEGETATION_OVERWORLD = biomeCommon("is_dense_vegetation/overworld");
+        public static final TagKey<Biome> IS_DENSE_VEGETATION_NETHER = biomeCommon("is_dense_vegetation/nether");
+        public static final TagKey<Biome> IS_DENSE_VEGETATION_END = biomeCommon("is_dense_vegetation/end");
+        public static final TagKey<Biome> IS_WET = biomeCommon("is_wet");
+        public static final TagKey<Biome> IS_WET_OVERWORLD = biomeCommon("is_wet/overworld");
+        public static final TagKey<Biome> IS_WET_NETHER = biomeCommon("is_wet/nether");
+        public static final TagKey<Biome> IS_WET_END = biomeCommon("is_wet/end");
+        public static final TagKey<Biome> IS_DRY = biomeCommon("is_dry");
+        public static final TagKey<Biome> IS_DRY_OVERWORLD = biomeCommon("is_dry/overworld");
+        public static final TagKey<Biome> IS_DRY_NETHER = biomeCommon("is_dry/nether");
+        public static final TagKey<Biome> IS_DRY_END = biomeCommon("is_dry/end");
+        public static final TagKey<Biome> IS_CONIFEROUS_TREE = biomeCommon("is_tree/coniferous");
+        public static final TagKey<Biome> IS_SAVANNA_TREE = biomeCommon("is_tree/savanna");
+        public static final TagKey<Biome> IS_JUNGLE_TREE = biomeCommon("is_tree/jungle");
+        public static final TagKey<Biome> IS_DECIDUOUS_TREE = biomeCommon("is_tree/deciduous");
+        public static final TagKey<Biome> IS_MOUNTAIN_PEAK = biomeCommon("is_mountain/peak");
+        public static final TagKey<Biome> IS_MOUNTAIN_SLOPE = biomeCommon("is_mountain/slope");
+        public static final TagKey<Biome> IS_PLAINS = biomeCommon("is_plains");
+        public static final TagKey<Biome> IS_SNOWY_PLAINS = biomeCommon("is_snowy_plains");
+        public static final TagKey<Biome> IS_BIRCH_FOREST = biomeCommon("is_birch_forest");
+        public static final TagKey<Biome> IS_FLOWER_FOREST = biomeCommon("is_flower_forest");
+        public static final TagKey<Biome> IS_OLD_GROWTH = biomeCommon("is_old_growth");
+        public static final TagKey<Biome> IS_WINDSWEPT = biomeCommon("is_windswept");
+        public static final TagKey<Biome> IS_SWAMP = biomeCommon("is_swamp");
+        public static final TagKey<Biome> IS_DESERT = biomeCommon("is_desert");
+        public static final TagKey<Biome> IS_STONY_SHORES = biomeCommon("is_stony_shores");
+        public static final TagKey<Biome> IS_MUSHROOM = biomeCommon("is_mushroom");
+        public static final TagKey<Biome> IS_SHALLOW_OCEAN = biomeCommon("is_shallow_ocean");
+        public static final TagKey<Biome> IS_UNDERGROUND = biomeCommon("is_underground");
+        public static final TagKey<Biome> IS_CAVE = biomeCommon("is_cave");
+        public static final TagKey<Biome> IS_LUSH = biomeCommon("is_lush");
+        public static final TagKey<Biome> IS_MAGICAL = biomeCommon("is_magical");
+        public static final TagKey<Biome> IS_RARE = biomeCommon("is_rare");
+        public static final TagKey<Biome> IS_PLATEAU = biomeCommon("is_plateau");
+        public static final TagKey<Biome> IS_MODIFIED = biomeCommon("is_modified");
+        public static final TagKey<Biome> IS_SPOOKY = biomeCommon("is_spooky");
+        public static final TagKey<Biome> IS_WASTELAND = biomeCommon("is_wasteland");
+        public static final TagKey<Biome> IS_DEAD = biomeCommon("is_dead");
+        public static final TagKey<Biome> IS_FLORAL = biomeCommon("is_floral");
+        public static final TagKey<Biome> IS_SANDY = biomeCommon("is_sandy");
+        public static final TagKey<Biome> IS_SNOWY = biomeCommon("is_snowy");
+        public static final TagKey<Biome> IS_ICY = biomeCommon("is_icy");
+        public static final TagKey<Biome> IS_AQUATIC = biomeCommon("is_aquatic");
+        public static final TagKey<Biome> IS_AQUATIC_ICY = biomeCommon("is_aquatic_icy");
+        public static final TagKey<Biome> IS_NETHER_FOREST = biomeCommon("is_nether_forest");
+        public static final TagKey<Biome> IS_OUTER_END_ISLAND = biomeCommon("is_outer_end_island");
+        /*
+         * ====================
+         */
+        public static final TagKey<Biome> NETHER_END = biome("nether_end");
 
-    public static final TagKey<EntityType<?>> MONSTERS = entity("monsters");
-    public static final TagKey<EntityType<?>> BOSS_MONSTERS = entity("boss_monsters");
+        /*
+         * Used for worldgen
+         */
+        public static final TagKey<Biome> AQUAMARINE_GEN = biome("aquamarine_gen");
+        public static final TagKey<Biome> AMETHYST_GEN = biome("amethyst_gen");
+        public static final TagKey<Biome> RUBY_GEN = biome("ruby_gen");
+        public static final TagKey<Biome> EMERALD_GEN = biome("emerald_gen");
+        public static final TagKey<Biome> SAPPHIRE_GEN = biome("sapphire_gen");
 
-    public static final TagKey<EntityType<?>> BOSSES = entityCommon("bosses");
+        public static final TagKey<Biome> WATER_NETHER_END = biome("water_nether_end");
+        public static final TagKey<Biome> MUSHROOM_GEN = biome("mushroom_gen");
+        public static final TagKey<Biome> INDIGO_GEN = biome("indigo_gen");
+        public static final TagKey<Biome> PURPLE_GEN = biome("purple_gen");
+        public static final TagKey<Biome> BLUE_GEN = biome("blue_gen");
+        public static final TagKey<Biome> WATER_END = biome("water_end");
+        public static final TagKey<Biome> YELLOW_GEN = biome("yellow_gen");
+        public static final TagKey<Biome> ORANGE_GEN = biome("orange_gen");
+        public static final TagKey<Biome> BAMBOO_GEN = biome("bamboo_gen");
+        public static final TagKey<Biome> GENERAL_HERBS = biome("herb_tree_biomes");
+    }
 
-    public static final TagKey<EntityType<?>> RAFFLESIA_SUMMONS = entity("rafflesia_summons");
+    public static class Fluids {
 
-    public static final TagKey<EntityType<?>> HELD_WEAPON_EXEMPT = entity("held_weapon_exempt");
+        public static final TagKey<Fluid> HOT_SPRING_FLUID = TagKey.create(Registries.FLUID, RuneCraftory.modRes("hot_spring_water"));
+    }
 
-    /**
-     * Tag for entities that normally target hostile mobs but shouldn't target monster if they are tamed
-     * E.g. iron golems and snow golems
-     */
-    public static final TagKey<EntityType<?>> TAMED_MONSTER_IGNORE = entity("ignore_tamed_monsters");
+    public static class DamageTypes {
 
-    // Biomes
-    public static final TagKey<Biome> IS_HOT = biomeCommon("is_hot");
-
-    public static final TagKey<Biome> IS_SPARSE = biomeCommon("is_sparse");
-    public static final TagKey<Biome> IS_DENSE_OVERWORLD = biomeCommon("is_dense/overworld");
-
-    public static final TagKey<Biome> IS_WET = biomeCommon("is_wet");
-    public static final TagKey<Biome> IS_DRY_OVERWORLD = biomeCommon("is_dry/overworld");
-
-    public static final TagKey<Biome> IS_SAVANNA = biomeCommon("is_savanna");
-
-    public static final TagKey<Biome> IS_SPOOKY = biomeCommon("is_spooky");
-    public static final TagKey<Biome> IS_DEAD = biomeCommon("is_dead");
-    public static final TagKey<Biome> IS_LUSH = biomeCommon("is_lush");
-    public static final TagKey<Biome> IS_MUSHROOM = biomeCommon("is_mushroom");
-    public static final TagKey<Biome> IS_MAGICAL = biomeCommon("is_magical");
-
-    public static final TagKey<Biome> IS_WATER = biomeCommon("is_water");
-
-    public static final TagKey<Biome> IS_PLAINS = biomeCommon("is_plains");
-    public static final TagKey<Biome> IS_SWAMP = biomeCommon("is_swamp");
-    public static final TagKey<Biome> IS_SANDY = biomeCommon("is_sandy");
-    public static final TagKey<Biome> IS_SNOWY = biomeCommon("is_snowy");
-    public static final TagKey<Biome> IS_WASTELAND = biomeCommon("is_wasteland");
-    public static final TagKey<Biome> IS_BEACH = biomeCommon("is_beach");
-
-    public static final TagKey<Biome> IS_PEAK = biomeCommon("is_peak");
-    public static final TagKey<Biome> IS_SLOPE = biomeCommon("is_slope");
-
-    public static final TagKey<Biome> IS_END = biomeCommon("is_end");
-
-    public static final TagKey<Biome> NETHER_END = biome("nether_end");
-
-    public static final TagKey<Biome> AQUAMARINE_GEN = biome("aquamarine_gen");
-    public static final TagKey<Biome> AMETHYST_GEN = biome("amethyst_gen");
-    public static final TagKey<Biome> RUBY_GEN = biome("ruby_gen");
-    public static final TagKey<Biome> EMERALD_GEN = biome("emerald_gen");
-    public static final TagKey<Biome> SAPPHIRE_GEN = biome("sapphire_gen");
-
-    public static final TagKey<Biome> WATER_NETHER_END = biome("water_nether_end");
-    public static final TagKey<Biome> MUSHROOM_GEN = biome("mushroom_gen");
-    public static final TagKey<Biome> INDIGO_GEN = biome("indigo_gen");
-    public static final TagKey<Biome> PURPLE_GEN = biome("purple_gen");
-    public static final TagKey<Biome> BLUE_GEN = biome("blue_gen");
-    public static final TagKey<Biome> WATER_END = biome("water_end");
-    public static final TagKey<Biome> YELLOW_GEN = biome("yellow_gen");
-    public static final TagKey<Biome> ORANGE_GEN = biome("orange_gen");
-
-    public static final TagKey<Biome> BAMBOO_GEN = biome("bamboo_gen");
-    public static final TagKey<Biome> GENERAL_HERBS = biome("herb_tree_biomes");
-
-    public static final TagKey<Fluid> HOT_SPRING_FLUID = TagKey.create(Registries.FLUID, RuneCraftory.modRes("hot_spring_water"));
-
-    // Ref Neoforge
-    public static final TagKey<DamageType> IS_MAGIC = damageCommon("is_magic");
-    public static final TagKey<DamageType> BYPASS_MAGIC = damageCommon("bypass_magic");
+        // Neoforge damage types
+        public static final TagKey<DamageType> IS_MAGIC = damageCommon("is_magic");
+        public static final TagKey<DamageType> BYPASS_MAGIC = damageCommon("bypass_magic");
+    }
 
     private static TagKey<Item> tag(String name) {
         return TagKey.create(Registries.ITEM, RuneCraftory.modRes(name));
@@ -283,6 +330,6 @@ public class RunecraftoryTags {
     }
 
     public static TagKey<Item> tamingTag(EntityType<?> type) {
-        return ENTITY_TAMING_TAGS.computeIfAbsent(type, r -> tag("taming/" + BuiltInRegistries.ENTITY_TYPE.getKey(type).getPath()));
+        return Items.ENTITY_TAMING_TAGS.computeIfAbsent(type, r -> tag("taming/" + BuiltInRegistries.ENTITY_TYPE.getKey(type).getPath()));
     }
 }

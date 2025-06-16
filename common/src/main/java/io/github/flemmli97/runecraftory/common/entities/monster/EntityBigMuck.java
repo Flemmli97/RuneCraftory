@@ -10,6 +10,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.entity.Entity;
@@ -23,11 +25,12 @@ import java.util.List;
 
 public class EntityBigMuck extends BaseMonster {
 
-    public static final AnimatedAction SLAP = AnimatedAction.builder(1.2, "slap").marker("attack", 0.36).build();
-    public static final AnimatedAction SPORE = AnimatedAction.builder(2.16, "spore").marker("attack", 0.96).build();
-    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(SLAP, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(0, "sleep").infinite().build();
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{SLAP, SPORE, INTERACT, SLEEP};
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String SLAP = BUILDER.add("slap", AnimationsBuilder.definition(1.2).marker("attack", 0.36));
+    public static final String SPORE = BUILDER.add("spore", AnimationsBuilder.definition(2.16).marker("attack", 0.96));
+    public static final String INTERACT = BUILDER.add("interact", SLAP);
+    public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityBigMuck>>> ATTACKS = List.of(
             WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(SLAP, e -> 1), 1),

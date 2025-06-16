@@ -27,7 +27,7 @@ public class NPCConversationManager extends SimpleJsonResourceReloadListener imp
     private HolderLookup.Provider provider;
 
     public NPCConversationManager() {
-        super(DataPackHandler.GSON, ID.getPath());
+        super(DataPackHandler.GSON, ID.toString());
     }
 
     public ConversationSet get(ResourceLocation res, ConversationSet fallback) {

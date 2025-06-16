@@ -16,6 +16,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.entity.Entity;
@@ -37,12 +39,13 @@ import java.util.function.Predicate;
 
 public class EntityFairy extends BaseMonster implements HealingPredicateEntity {
 
-    public static final AnimatedAction LIGHT = AnimatedAction.builder(0.72, "light").marker("attack", 0.32).build();
-    public static final AnimatedAction WIND = AnimatedAction.builder(0.72, "wind").marker("attack", 0.48).build();
-    public static final AnimatedAction HEAL = AnimatedAction.copyOf(LIGHT, "heal");
-    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(LIGHT, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(0, "sleep").infinite().build();
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{LIGHT, WIND, HEAL, INTERACT, SLEEP};
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String LIGHT = BUILDER.add("light", AnimationsBuilder.definition(0.72).marker("attack", 0.32));
+    public static final String WIND = BUILDER.add("wind", AnimationsBuilder.definition(0.72).marker("attack", 0.48));
+    public static final String HEAL = BUILDER.add("heal", LIGHT);
+    public static final String INTERACT = BUILDER.add("interact", LIGHT);
+    public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityFairy>>> ATTACKS = List.of(
             WeightedEntry.wrap(MonsterActionUtils.simpleRangedEvadingAction(WIND, 9, 2, 1, e -> 1), 8),

@@ -41,7 +41,7 @@ public class Smith extends NPCJob {
 
     private static final Map<ItemPredicate, Integer> MATERIALS = ImmutableMap.of(
             ItemPredicate.Builder.item().of(ItemTags.LOGS).build(), 32,
-            ItemPredicate.Builder.item().of(RunecraftoryTags.COBBLESTONE).build(), 64
+            ItemPredicate.Builder.item().of(RunecraftoryTags.Items.COBBLESTONE).build(), 64
     );
 
     public Smith(NPCJob.Builder builder) {

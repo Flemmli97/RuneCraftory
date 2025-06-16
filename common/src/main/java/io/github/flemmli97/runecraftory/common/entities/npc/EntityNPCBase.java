@@ -333,18 +333,18 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(PLAY_DEATH_STATE, false);
-        this.entityData.define(SHOP_SYNC, 0);
-        this.entityData.define(MALE, false);
-        this.entityData.define(BEHAVIOUR_DATA, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(PLAY_DEATH_STATE, false);
+        builder.define(SHOP_SYNC, 0);
+        builder.define(MALE, false);
+        builder.define(BEHAVIOUR_DATA, 0);
     }
 
     @Override
     public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
         super.onSyncedDataUpdated(key);
-        if (this.level.isClientSide) {
+        if (this.level().isClientSide) {
             if (key.equals(SHOP_SYNC)) {
                 try {
                     this.shop = ModNPCJobs.getFromSyncID(this.entityData.get(SHOP_SYNC));
@@ -398,13 +398,13 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         super.tick();
         if (this.playDeath()) {
             this.playDeathTick = Math.min(15, ++this.playDeathTick);
-            if (!this.level.isClientSide && this.getHealth() > 0.02) {
+            if (!this.level().isClientSide && this.getHealth() > 0.02) {
                 this.setPlayDeath(false);
             }
         } else {
             this.playDeathTick = Math.max(0, --this.playDeathTick);
         }
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             if (this.tickCount % 10 == 0) {
                 this.interactingPlayers.removeIf(p -> p.distanceToSqr(this) > 100);
             }
@@ -431,12 +431,12 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         this.getAnimationHandler().tick();
         this.weaponHandler.tick();
         boolean teleported = false;
-        if (this.level instanceof ServerLevel serverLevel) {
+        if (this.level() instanceof ServerLevel serverLevel) {
             if (this.behaviourState().following && --this.tpCooldown <= 0) {
                 Player follow = this.followEntity();
                 if (follow != null) {
                     serverLevel.getChunkSource().addRegionTicket(WorldUtils.ENTITY_LOADER, this.chunkPosition(), 3, this.chunkPosition());
-                    if (follow.level.dimension() != this.level.dimension()) {
+                    if (follow.level.dimension() != this.level().dimension()) {
                         TeleportUtils.safeDimensionTeleport(this, (ServerLevel) follow.level, follow.blockPosition());
                         teleported = true;
                         this.tpCooldown = 20;
@@ -464,7 +464,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         }
         if (this.playDeath()) {
             this.playDeathTick = Math.min(15, ++this.playDeathTick);
-            if (!this.level.isClientSide) {
+            if (!this.level().isClientSide) {
                 if (teleported) {
                     this.heal(1);
                 }
@@ -523,7 +523,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             double d = this.random.nextGaussian() * 0.02;
             double e = this.random.nextGaussian() * 0.02;
             double f = this.random.nextGaussian() * 0.02;
-            this.level.addParticle(particleData, this.getRandomX(1.0), this.getRandomY() + 1.0, this.getRandomZ(1.0), d, e, f);
+            this.level().addParticle(particleData, this.getRandomX(1.0), this.getRandomY() + 1.0, this.getRandomZ(1.0), d, e, f);
         }
     }
 
@@ -624,10 +624,10 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         if (player instanceof ServerPlayer serverPlayer) {
             NPCData.Gift gift = this.giftOf(stack);
             if (gift != null) {
-                if (this.relationManager.getFriendPointData(player.getUUID()).giftXP(this.level, (int) (gift.xp() * mult)))
+                if (this.relationManager.getFriendPointData(player.getUUID()).giftXP(this.level(), (int) (gift.xp() * mult)))
                     this.tellDialogue(serverPlayer, null, null, Component.translatable(gift.responseKey()), List.of());
             } else {
-                if (this.relationManager.getFriendPointData(player.getUUID()).giftXP(this.level, (int) (5 * mult)))
+                if (this.relationManager.getFriendPointData(player.getUUID()).giftXP(this.level(), (int) (5 * mult)))
                     this.tellDialogue(serverPlayer, null, null, Component.translatable(this.data.neutralGiftResponse()), List.of());
             }
         }
@@ -638,7 +638,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         ConversationContext ctx = ConversationContext.TALK;
         NPCFriendPoints fp = this.relationManager.getFriendPointData(player.getUUID());
         boolean talkedTo = fp.talked();
-        boolean doGreet = fp.talkTo(this.level, 15);
+        boolean doGreet = fp.talkTo(this.level(), 15);
         if (!talkedTo) {
             ctx = ConversationContext.FIRST_TALK;
         } else if (doGreet) {
@@ -650,7 +650,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     public void speak(ServerPlayer player, ConversationContext convCtx) {
         int heart = this.relationManager.getFriendPointData(player.getUUID()).points.getLevel();
         ConversationSet conversations = this.data.getConversation(convCtx);
-        LootContext ctx = new LootContext.Builder((ServerLevel) this.level).withRandom(this.random)
+        LootContext ctx = new LootContext.Builder((ServerLevel) this.level()).withRandom(this.random)
                 .withParameter(LootContextParams.THIS_ENTITY, this)
                 .withParameter(LootContextParams.ORIGIN, this.position())
                 .withParameter(LootCtxParameters.UUID_CONTEXT, player.getUUID())
@@ -696,7 +696,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             this.relationManager.advanceQuest(player.getUUID(), quest);
         int heart = this.relationManager.getFriendPointData(player.getUUID()).points.getLevel();
         ConversationSet conversations = this.data.getFromQuest(quest, questCtx, questState);
-        LootContext ctx = new LootContext.Builder((ServerLevel) this.level).withRandom(this.random)
+        LootContext ctx = new LootContext.Builder((ServerLevel) this.level()).withRandom(this.random)
                 .withParameter(LootContextParams.THIS_ENTITY, this)
                 .withParameter(LootContextParams.ORIGIN, this.position())
                 .withParameter(LootCtxParameters.UUID_CONTEXT, player.getUUID())
@@ -824,6 +824,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         return CombatUtils.mobAttack(attacker, target, source);
     }
 
+    @Override
     public LevelExpPair xpLevel() {
         return this.levelPair;
     }
@@ -848,7 +849,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     public void updateStatsToLevel() {
-        if (!this.level.isClientSide)
+        if (!this.level().isClientSide)
             LoaderNetwork.INSTANCE.sendToTracking(S2CEntityLevelPkt.create(this), this);
         float preHealthDiff = this.getMaxHealth() - this.getHealth();
         ((AttributeMapAccessor) this.getAttributes()).getAttributes().forEach((att, inst) -> inst.removeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD));
@@ -925,21 +926,21 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     @Override
     public boolean applyFoodEffect(ItemStack stack) {
-        if (this.level.isClientSide)
+        if (this.level().isClientSide)
             return false;
         if (stack.getItem() == ModItems.OBJECT_X.get())
             ItemObjectX.applyEffect(this, stack);
         FoodProperties food = DataPackHandler.INSTANCE.foodManager().get(stack.getItem());
         if (food == null) {
             net.minecraft.world.food.FoodProperties mcFood = stack.getItem().getFoodProperties();
-            this.eat(this.level, stack);
+            this.eat(this.level(), stack);
             if (mcFood != null) {
                 this.heal(mcFood.getNutrition() * 0.5f);
                 return true;
             }
             return false;
         }
-        this.eat(this.level, stack);
+        this.eat(this.level(), stack);
         Pair<Map<Attribute, Double>, Map<Attribute, Double>> foodStats = ItemNBT.foodStats(stack);
         if (!foodStats.getFirst().isEmpty() || !foodStats.getSecond().isEmpty()) {
             this.removeFoodEffect();
@@ -995,7 +996,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     @Override
     public void die(DamageSource cause) {
         RuneCraftory.LOGGER.info("NPC {} died, message: '{}'", this, cause.getLocalizedDeathMessage(this).getString());
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             this.getAnimationHandler().setAnimation(null);
         }
         super.die(cause);
@@ -1033,10 +1034,10 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         this.entityData.set(PLAY_DEATH_STATE, flag);
         if (flag) {
             Player partner;
-            if (!this.level.isClientSide && this.level.getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES)
+            if (!this.level().isClientSide && this.level().getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES)
                     && this.followEntity() == null && (partner = this.getPartner()) instanceof ServerPlayer)
                 partner.sendMessage(this.getKnockoutMessage(), Util.NIL_UUID);
-            this.level.getEntities(EntityTypeTest.forClass(Mob.class), this.getBoundingBox().inflate(32), e -> this.equals(e.getTarget()))
+            this.level().getEntities(EntityTypeTest.forClass(Mob.class), this.getBoundingBox().inflate(32), e -> this.equals(e.getTarget()))
                     .forEach(m -> m.setTarget(null));
             this.getNavigation().stop();
             this.setShiftKeyDown(false);
@@ -1222,7 +1223,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     public void setShop(NPCJob shop) {
         this.shop = shop;
-        if (!this.level.isClientSide)
+        if (!this.level().isClientSide)
             this.entityData.set(SHOP_SYNC, ModNPCJobs.getSyncIDFrom(shop));
     }
 
@@ -1231,10 +1232,10 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     public boolean updateActivity() {
-        if (this.tickCount % 20 == 0 && this.level instanceof ServerLevel serverLevel && this.interactingPlayers.isEmpty()) {
+        if (this.tickCount % 20 == 0 && this.level() instanceof ServerLevel serverLevel && this.interactingPlayers.isEmpty()) {
             Activity prev = this.activity;
             this.activity = this.getActivityForTime(serverLevel);
-            if (this.activity == ModActivities.EARLYIDLE.get() && this.getBedPos() != null && this.getBedPos().dimension() == this.level.dimension()) {
+            if (this.activity == ModActivities.EARLYIDLE.get() && this.getBedPos() != null && this.getBedPos().dimension() == this.level().dimension()) {
                 if (!this.getRestrictCenter().equals(this.getBedPos().pos())) {
                     this.prevRestriction = this.getRestrictCenter();
                     this.prevRestrictionRadius = (int) this.getRestrictRadius();
@@ -1251,7 +1252,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     public void syncActivity(CompoundTag tag) {
-        if (this.level.isClientSide)
+        if (this.level().isClientSide)
             this.schedule.load(tag);
     }
 
@@ -1273,7 +1274,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     public void setWorkPlace(GlobalPos pos) {
         if (pos != null)
-            this.level.broadcastEntityEvent(this, (byte) 15);
+            this.level().broadcastEntityEvent(this, (byte) 15);
         this.getBrain().setMemory(MemoryModuleType.JOB_SITE, pos);
     }
 
@@ -1283,7 +1284,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     public void setBedPos(GlobalPos pos) {
         if (pos != null)
-            this.level.broadcastEntityEvent(this, (byte) 14);
+            this.level().broadcastEntityEvent(this, (byte) 14);
         this.getBrain().setMemory(MemoryModuleType.HOME, pos);
     }
 
@@ -1313,7 +1314,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     public boolean nearWorkPlace(GlobalPos pos, int range) {
         if (this.followEntity() == null) {
-            if (this.level.dimension() != pos.dimension())
+            if (this.level().dimension() != pos.dimension())
                 return false;
             return pos.pos().closerToCenterThan(this.position(), range);
         }
@@ -1323,7 +1324,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     public void releasePOI(GlobalPos globalPos) {
         if (globalPos == null)
             return;
-        ServerLevel serverLevel = globalPos.dimension() != this.level.dimension() ? this.level.getServer().getLevel(globalPos.dimension()) : (ServerLevel) this.level;
+        ServerLevel serverLevel = globalPos.dimension() != this.level().dimension() ? this.level().getServer().getLevel(globalPos.dimension()) : (ServerLevel) this.level;
         if (serverLevel == null) {
             return;
         }
@@ -1337,10 +1338,10 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     public Player followEntity() {
         if (this.entityToFollowUUID != null) {
             if (this.entityToFollow == null || !this.entityToFollow.isAlive()) {
-                if (this.level.isClientSide)
-                    this.entityToFollow = this.level.getPlayerByUUID(this.entityToFollowUUID);
+                if (this.level().isClientSide)
+                    this.entityToFollow = this.level().getPlayerByUUID(this.entityToFollowUUID);
                 else
-                    this.entityToFollow = this.level.getServer().getPlayerList().getPlayer(this.entityToFollowUUID);
+                    this.entityToFollow = this.level().getServer().getPlayerList().getPlayer(this.entityToFollowUUID);
             }
         }
         return this.entityToFollow;
@@ -1379,7 +1380,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     public void setBehaviour(Behaviour behaviour) {
         this.entityData.set(BEHAVIOUR_DATA, behaviour.ordinal());
         this.behaviour = behaviour;
-        if (!this.level.isClientSide)
+        if (!this.level().isClientSide)
             this.onSetBehaviour();
     }
 
@@ -1448,7 +1449,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     private boolean spawnBaby() {
-        if (!(this.level instanceof ServerLevel serverLevel))
+        if (!(this.level() instanceof ServerLevel serverLevel))
             return false;
         EntityNPCBase baby = ModEntities.NPC.get().create(serverLevel, null, null, null, this.blockPosition(), MobSpawnType.BREEDING, false, false);
         if (baby == null)
@@ -1537,7 +1538,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     public void setClientLook(NPCLook look) {
-        if (this.level.isClientSide) {
+        if (this.level().isClientSide) {
             this.look = look;
             this.refreshDimensions();
         }
@@ -1689,7 +1690,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             this.setLevel(this.data.baseLevel());
         }
         this.refreshDimensions();
-        if (!this.level.isClientSide)
+        if (!this.level().isClientSide)
             LoaderNetwork.INSTANCE.sendToTracking(new S2CNPCLook(this.getId(), this.look, this.lookFeatures), this);
     }
 

@@ -13,6 +13,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.KeepDistanceRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -30,12 +32,13 @@ import java.util.List;
 
 public class EntityLeafBall extends BaseMonster {
 
-    public static final AnimatedAction MELEE = AnimatedAction.builder(0.68, "tackle").marker("attack", 0.36).build();
-    public static final AnimatedAction WIND = AnimatedAction.builder(1.12, "wind_blade").marker("attack", 0.52).build();
-    public static final AnimatedAction SLEEP_ATTACK = AnimatedAction.builder(0.8, "sleep_aura").marker("attack", 0.44).build();
-    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
-    public static final AnimatedAction STILL = AnimatedAction.builder(0, "still").infinite().build();
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, WIND, SLEEP_ATTACK, INTERACT, STILL};
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String MELEE = BUILDER.add("tackle", AnimationsBuilder.definition(0.68).marker("attack", 0.36));
+    public static final String WIND = BUILDER.add("wind_blade", AnimationsBuilder.definition(1.12).marker("attack", 0.52));
+    public static final String SLEEP_ATTACK = BUILDER.add("sleep_aura", AnimationsBuilder.definition(0.8).marker("attack", 0.44));
+    public static final String INTERACT = BUILDER.add("interact", MELEE);
+    public static final String STILL = BUILDER.add("still", AnimationsBuilder.definition(0).infinite());
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityLeafBall>>> ATTACKS = List.of(
             WeightedEntry.wrap(MonsterActionUtils.simpleMeleeActionInRange(MELEE, e -> 0.7f), 1),

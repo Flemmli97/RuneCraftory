@@ -1,16 +1,21 @@
 package io.github.flemmli97.runecraftory.common.entities;
 
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
 import io.github.flemmli97.runecraftory.common.network.S2CMobUpdate;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.MathsHelper;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinition;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
@@ -20,10 +25,11 @@ import java.util.function.Consumer;
 
 public abstract class ChargingMonster extends BaseMonster {
 
+    protected static final ResourceLocation CHARGING_STEP = RuneCraftory.modRes("charging_step");
+
     protected List<LivingEntity> hitEntity;
     private Vec3 chargeMotion;
-    private float prevStepHeight = -1;
-    private final Consumer<AnimatedAction> chargingAnim;
+    private final Consumer<AnimationDefinition> chargingAnim;
     private boolean initAnim;
 
     public ChargingMonster(EntityType<? extends ChargingMonster> type, Level level) {
@@ -31,15 +37,13 @@ public abstract class ChargingMonster extends BaseMonster {
         this.chargingAnim = this.animatedActionConsumer();
     }
 
-    protected Consumer<AnimatedAction> animatedActionConsumer() {
+    protected Consumer<AnimationDefinition> animatedActionConsumer() {
         return anim -> {
-            if (!this.level.isClientSide) {
-                if (anim != null && this.isChargingAnim(anim)) {
-                    this.prevStepHeight = this.maxUpStep;
-                    this.maxUpStep = Math.max(1.5f, 1f + this.maxUpStep);
-                } else if (this.prevStepHeight != -1) {
-                    this.maxUpStep = this.prevStepHeight;
-                    this.prevStepHeight = -1;
+            if (!this.level().isClientSide) {
+                if (anim != null && this.isChargingAnim(anim.id())) {
+                    this.getAttribute(Attributes.STEP_HEIGHT).addTransientModifier(new AttributeModifier(CHARGING_STEP, 1, AttributeModifier.Operation.ADD_VALUE));
+                } else {
+                    this.getAttribute(Attributes.STEP_HEIGHT).removeModifier(CHARGING_STEP);
                 }
                 if (this.isChargingAnimation()) {
                     this.hitEntity = null;
@@ -71,8 +75,8 @@ public abstract class ChargingMonster extends BaseMonster {
     }
 
     @Override
-    public void handleAttack(AnimatedAction anim) {
-        if (this.isChargingAnim(anim)) {
+    public void handleAttack(AnimationState anim) {
+        if (this.isChargingAnim(anim.getAnimation())) {
             if (this.chargeMotion == null) {
                 this.setChargeMotion(this.getChargeTo(anim));
             }
@@ -95,14 +99,14 @@ public abstract class ChargingMonster extends BaseMonster {
         }
     }
 
-    protected abstract boolean isChargingAnim(AnimatedAction anim);
+    protected abstract boolean isChargingAnim(String anim);
 
     protected boolean fixedYaw() {
         return this.isChargingAnimation();
     }
 
     @Override
-    public OrientedBoundingBox calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
+    public OrientedBoundingBox calculateAttackAABB(String anim, Vec3 target, double grow) {
         if (!this.isChargingAnim(anim))
             return super.calculateAttackAABB(anim, target, grow);
         double width = this.getBbWidth();
@@ -137,7 +141,7 @@ public abstract class ChargingMonster extends BaseMonster {
         super.push(entity);
     }
 
-    public boolean handleChargeMovement(AnimatedAction anim) {
+    public boolean handleChargeMovement(AnimationState anim) {
         if (this.chargeMotion != null) {
             this.setDeltaMovement(this.chargeMotion.x, this.getDeltaMovement().y, this.chargeMotion.z);
             return true;
@@ -153,14 +157,14 @@ public abstract class ChargingMonster extends BaseMonster {
         return 0.4;
     }
 
-    public Vec3 getChargeTo(AnimatedAction anim) {
+    public Vec3 getChargeTo(AnimationState anim) {
         return EntityUtils.getTargetDirection(this, EntityAnchorArgument.Anchor.FEET, true)
                 .scale(this.chargingSpeed());
     }
 
     private boolean isChargingAnimation() {
-        AnimatedAction anim = this.getAnimationHandler().getAnimation();
-        return anim != null && this.isChargingAnim(anim);
+        AnimationState anim = this.getAnimationHandler().getAnimation();
+        return anim != null && this.isChargingAnim(anim.getAnimation());
     }
 
     @Override

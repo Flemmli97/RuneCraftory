@@ -1,11 +1,11 @@
 package io.github.flemmli97.runecraftory.common.entities.utils;
 
-import io.github.flemmli97.runecraftory.common.network.Packet;
 import io.github.flemmli97.runecraftory.common.network.S2CBossbarInfoAdd;
 import io.github.flemmli97.runecraftory.common.network.S2CBossbarInfoRemove;
 import io.github.flemmli97.runecraftory.common.network.S2CBossbarMusicUpdate;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerPlayer;
@@ -104,7 +104,7 @@ public class RunecraftoryBossbar extends ServerBossEvent {
 
     private void broadcast(boolean remove, boolean immediate) {
         if (this.isVisible()) {
-            Packet pkt = remove ? new S2CBossbarInfoRemove(this.getId(), immediate) : new S2CBossbarInfoAdd(this.getId(), this.getMusicId(), this.type, this.music);
+            CustomPacketPayload pkt = remove ? new S2CBossbarInfoRemove(this.getId(), immediate) : new S2CBossbarInfoAdd(this.getId(), this.getMusicId(), this.type, this.music);
             for (ServerPlayer serverPlayer : this.getPlayers()) {
                 LoaderNetwork.INSTANCE.sendToPlayer(pkt, serverPlayer);
             }

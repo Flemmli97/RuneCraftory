@@ -46,8 +46,8 @@ public class EntitySpore extends BaseDamageCloud {
     @Override
     public void tick() {
         super.tick();
-        if (!this.level.isClientSide && this.livingTicks == 1) {
-            this.level.broadcastEntityEvent(this, (byte) 64);
+        if (!this.level().isClientSide && this.livingTicks == 1) {
+            this.level().broadcastEntityEvent(this, (byte) 64);
         }
     }
 
@@ -66,7 +66,7 @@ public class EntitySpore extends BaseDamageCloud {
         if (id == 64) {
             for (Vector3f dir : PARTICLE_CIRCLE) {
                 for (int i = 0; i < 3; i++)
-                    this.level.addParticle(new ColoredParticleData(ModParticles.SINKING_DUST.get(), 168 / 255F, 227 / 255F, 86 / 255F, 1), this.getX(), this.getY() + this.getBbHeight() * 0.3, this.getZ(), dir.x(), dir.y(), dir.z());
+                    this.level().addParticle(new ColoredParticleData(ModParticles.SINKING_DUST.get(), 168 / 255F, 227 / 255F, 86 / 255F, 1), this.getX(), this.getY() + this.getBbHeight() * 0.3, this.getZ(), dir.x(), dir.y(), dir.z());
             }
         } else
             super.handleEntityEvent(id);

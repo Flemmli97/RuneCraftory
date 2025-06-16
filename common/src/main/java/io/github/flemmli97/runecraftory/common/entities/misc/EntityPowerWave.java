@@ -41,12 +41,12 @@ public class EntityPowerWave extends BaseProjectile {
     @Override
     public void tick() {
         super.tick();
-        if (this.level.isClientSide) {
+        if (this.level().isClientSide) {
             for (int i = 0; i < 4; i++)
-                this.level.addParticle(new ColoredParticleData(ModParticles.LIGHT.get(), 207 / 255F, 194 / 255F, 60 / 255F, 0.8f, (float) (3.5 + this.random.nextGaussian() * 0.5)),
+                this.level().addParticle(new ColoredParticleData(ModParticles.LIGHT.get(), 207 / 255F, 194 / 255F, 60 / 255F, 0.8f, (float) (3.5 + this.random.nextGaussian() * 0.5)),
                         this.getX() + this.random.nextGaussian() * 0.15, this.getY(), this.getZ() + this.random.nextGaussian() * 0.15, 0, 0.15 + this.random.nextGaussian() * 0.03, 0);
         } else {
-            List<LivingEntity> targets = this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(0.5).expandTowards(0, 1.5, 0), this::canHit);
+            List<LivingEntity> targets = this.level().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(0.5).expandTowards(0, 1.5, 0), this::canHit);
             for (LivingEntity living : targets) {
                 this.checkedEntities.add(living.getUUID());
                 if (!this.attackedEntities.contains(living.getUUID()) && CombatUtils.damageWithFaintAndCrit(this.getOwner(), living, new CustomDamage.Builder(this, this.getOwner()).noKnockback().hurtResistant(4), CombatUtils.getAttributeValue(this.getOwner(), Attributes.ATTACK_DAMAGE) * this.damageMultiplier, null)) {

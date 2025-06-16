@@ -29,12 +29,12 @@ public class EntitySleepAura extends BaseDamageCloud {
     @Override
     public void tick() {
         super.tick();
-        if (this.level.isClientSide) {
+        if (this.level().isClientSide) {
             for (int i = 0; i < 12; i++) {
                 double x = this.getRandomX(0.9);
                 double y = this.getRandomY();
                 double z = this.getRandomZ(0.9);
-                this.level.addAlwaysVisibleParticle(ParticleTypes.ENTITY_EFFECT, x, y, z, 161 / 255f, 201 / 255f, 195 / 255f);
+                this.level().addAlwaysVisibleParticle(ParticleTypes.ENTITY_EFFECT, x, y, z, 161 / 255f, 201 / 255f, 195 / 255f);
             }
         }
     }

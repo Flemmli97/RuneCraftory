@@ -57,9 +57,9 @@ public abstract class EntitySanoUno extends BossMonster {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(CAN_BE_REMOVED, false);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(CAN_BE_REMOVED, false);
     }
 
     @Override
@@ -136,14 +136,14 @@ public abstract class EntitySanoUno extends BossMonster {
 
     @Override
     protected void tickDeath() {
-        if (!this.level.isClientSide && this.deathTime == 0) {
+        if (!this.level().isClientSide && this.deathTime == 0) {
             EntitySanoUno other = this.getLinked();
             // Notify the other that their death should be treated as normal
             if (other != null && !this.entityData.get(CAN_BE_REMOVED))
                 other.entityData.set(CAN_BE_REMOVED, true);
         }
         if (this.deathTime == this.maxDeathTime() - 1) {
-            if (this.level.isClientSide)
+            if (this.level().isClientSide)
                 return;
             EntitySanoUno other = this.getLinked();
             // Keep this one in the world while the other is still alive
@@ -155,11 +155,11 @@ public abstract class EntitySanoUno extends BossMonster {
 
     @Override
     public void remove(RemovalReason reason) {
-        if (!this.level.isClientSide && reason == RemovalReason.KILLED && this.linkedID != null) {
+        if (!this.level().isClientSide && reason == RemovalReason.KILLED && this.linkedID != null) {
             Vec3 dir = Vec3.directionFromRotation(0, this.getYRot());
-            SarcophagusTeleporter teleporter = new SarcophagusTeleporter(ModEntities.SARCOPHAGUS_TELEPORTER.get(), this.level);
+            SarcophagusTeleporter teleporter = new SarcophagusTeleporter(ModEntities.SARCOPHAGUS_TELEPORTER.get(), this.level());
             teleporter.setPos(this.position().add(dir.scale(-2)));
-            this.level.addFreshEntity(teleporter);
+            this.level().addFreshEntity(teleporter);
         }
         super.remove(reason);
     }

@@ -29,9 +29,9 @@ public class EntityPollenPuff extends BaseProjectile {
     @Override
     public void tick() {
         super.tick();
-        if (this.level.isClientSide) {
+        if (this.level().isClientSide) {
             for (int i = 0; i < 3; i++)
-                this.level.addParticle(PARTICLE, this.getRandomX(0.5), this.getY() + this.getBbHeight() * 0.5, this.getRandomZ(0.5), 0, 0, 0);
+                this.level().addParticle(PARTICLE, this.getRandomX(0.5), this.getY() + this.getBbHeight() * 0.5, this.getRandomZ(0.5), 0, 0, 0);
         }
     }
 

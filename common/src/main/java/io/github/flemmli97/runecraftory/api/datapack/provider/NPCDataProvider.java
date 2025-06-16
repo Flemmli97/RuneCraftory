@@ -1,9 +1,10 @@
 package io.github.flemmli97.runecraftory.api.datapack.provider;
 
+import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonElement;
+import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.api.datapack.ConversationContext;
-import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
 import io.github.flemmli97.runecraftory.api.datapack.npc.ConversationSet;
 import io.github.flemmli97.runecraftory.api.datapack.npc.GiftData;
 import io.github.flemmli97.runecraftory.api.datapack.npc.NPCData;
@@ -14,20 +15,22 @@ import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCConversat
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCDataManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCLookManager;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.NPCAttackActions;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.HashCache;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 public abstract class NPCDataProvider implements DataProvider, AdditionalLanguages {
 
@@ -46,74 +49,61 @@ public abstract class NPCDataProvider implements DataProvider, AdditionalLanguag
     private final PackOutput packOutput;
     private final FileVerifier verifier;
     protected final String modid;
+    protected final CompletableFuture<HolderLookup.Provider> provider;
 
-    public NPCDataProvider(PackOutput packOutput, FileVerifier verifier, String modid) {
-        this.gen = gen;
+    public NPCDataProvider(PackOutput packOutput, FileVerifier verifier, String modid, CompletableFuture<HolderLookup.Provider> provider) {
+        this.packOutput = packOutput;
         this.verifier = verifier;
         this.modid = modid;
+        this.provider = provider;
     }
 
-    protected abstract void add();
+    protected abstract void add(HolderLookup.Provider provider);
 
     @Override
-    public void run(HashCache cache) {
-        this.add();
-        this.data.forEach((res, val) -> {
-            Path path = this.gen.getOutputFolder().resolve("data/" + res.getNamespace() + "/" + NPCDataManager.DIRECTORY + "/" + res.getPath() + ".json");
-            this.verifyData(val);
-            try {
-                JsonElement obj = NPCData.CODEC.encodeStart(JsonOps.INSTANCE, val)
-                        .getOrThrow(false, LOGGER::error);
-                DataProvider.save(GsonInstances.GSON, cache, obj, path);
-            } catch (IOException e) {
-                LOGGER.error("Couldn't save npc data {}", path, e);
-            }
-        });
-        this.looks.forEach((res, val) -> {
-            Path path = this.gen.getOutputFolder().resolve("data/" + res.getNamespace() + "/" + NPCLookManager.DIRECTORY + "/" + res.getPath() + ".json");
-            try {
-                JsonElement obj = NPCLook.CODEC.encodeStart(JsonOps.INSTANCE, val)
-                        .getOrThrow(false, LOGGER::error);
-                DataProvider.save(GsonInstances.GSON, cache, obj, path);
-            } catch (IOException e) {
-                LOGGER.error("Couldn't save npc looks {}", path, e);
-            }
-        });
-        this.conversations.forEach((res, val) -> {
-            Path path = this.gen.getOutputFolder().resolve("data/" + res.getNamespace() + "/" + NPCConversationManager.DIRECTORY + "/" + res.getPath() + ".json");
-            try {
-                JsonElement obj = ConversationSet.CODEC.encodeStart(JsonOps.INSTANCE, val)
-                        .getOrThrow(false, LOGGER::error);
-                DataProvider.save(GsonInstances.GSON, cache, obj, path);
-            } catch (IOException e) {
-                LOGGER.error("Couldn't save npc conversations {}", path, e);
-            }
-        });
-        this.giftData.forEach((res, val) -> {
-            Path path = this.gen.getOutputFolder().resolve("data/" + res.getNamespace() + "/" + GiftManager.DIRECTORY + "/" + res.getPath() + ".json");
-            try {
-                JsonElement obj = GiftData.CODEC.encodeStart(JsonOps.INSTANCE, val)
-                        .getOrThrow(false, LOGGER::error);
-                DataProvider.save(GsonInstances.GSON, cache, obj, path);
-            } catch (IOException e) {
-                LOGGER.error("Couldn't save gift data {}", path, e);
-            }
-        });
-        this.actions.forEach((res, val) -> {
-            Path path1 = this.gen.getOutputFolder().resolve("data/" + res.getNamespace() + "/" + NPCActionManager.DIRECTORY + "/" + res.getPath() + ".json");
-            try {
-                JsonElement obj = NPCAttackActions.CODEC.encodeStart(JsonOps.INSTANCE, val)
-                        .getOrThrow(false, LOGGER::error);
-                DataProvider.save(GsonInstances.GSON, cache, obj, path1);
-            } catch (IOException e) {
-                LOGGER.error("Couldn't combat action {}", path1, e);
-            }
+    public CompletableFuture<?> run(CachedOutput cache) {
+        return this.provider.thenApply(provider -> {
+            this.add(provider);
+            return provider;
+        }).thenCompose(provider -> {
+            DynamicOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, provider);
+            ImmutableList.Builder<CompletableFuture<?>> futures = new ImmutableList.Builder<>();
+            this.data.forEach((res, val) -> {
+                Path path = this.packOutput.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(res.getNamespace() + "/" + NPCDataManager.ID + "/" + res.getPath() + ".json");
+                this.verifyData(val);
+                JsonElement obj = NPCData.CODEC.encodeStart(ops, val)
+                        .getOrThrow();
+                futures.add(DataProvider.saveStable(cache, obj, path));
+            });
+            this.looks.forEach((res, val) -> {
+                Path path = this.packOutput.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(res.getNamespace() + "/" + NPCLookManager.ID + "/" + res.getPath() + ".json");
+                JsonElement obj = NPCLook.CODEC.encodeStart(ops, val).getOrThrow();
+                DataProvider.saveStable(cache, obj, path);
+                futures.add(DataProvider.saveStable(cache, obj, path));
+            });
+            this.conversations.forEach((res, val) -> {
+                Path path = this.packOutput.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(res.getNamespace() + "/" + NPCConversationManager.ID + "/" + res.getPath() + ".json");
+                JsonElement obj = ConversationSet.CODEC.encodeStart(ops, val).getOrThrow();
+                futures.add(DataProvider.saveStable(cache, obj, path));
+            });
+            this.giftData.forEach((res, val) -> {
+                Path path = this.packOutput.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(res.getNamespace() + "/" + GiftManager.ID + "/" + res.getPath() + ".json");
+                JsonElement obj = GiftData.CODEC.encodeStart(ops, val).getOrThrow();
+                DataProvider.saveStable(cache, obj, path);
+                futures.add(DataProvider.saveStable(cache, obj, path));
+            });
+            this.actions.forEach((res, val) -> {
+                Path path = this.packOutput.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(res.getNamespace() + "/" + NPCActionManager.ID + "/" + res.getPath() + ".json");
+                JsonElement obj = NPCAttackActions.CODEC.encodeStart(ops, val).getOrThrow();
+                futures.add(DataProvider.saveStable(cache, obj, path));
+            });
+            return CompletableFuture.allOf(futures.build().toArray(CompletableFuture[]::new));
         });
     }
 
     @Override
     public String getName() {
-        return "NPCData";
+        return "NPCData for " + this.modid;
     }
 
     public void addNPCData(String id, NPCData.Builder data, Map<ConversationContext, ConversationSet.Builder> conversations,
@@ -160,7 +150,7 @@ public abstract class NPCDataProvider implements DataProvider, AdditionalLanguag
     public ResourceLocation addLook(ResourceLocation id, NPCLook look) {
         if (this.looks.put(id, look) != null)
             throw new IllegalStateException("Look already registered");
-        this.verifier.track(id, PackType.SERVER_DATA, NPCLookManager.DIRECTORY);
+        this.verifier.track(id, PackType.SERVER_DATA, NPCLookManager.ID.toString());
         return id;
     }
 
@@ -168,32 +158,32 @@ public abstract class NPCDataProvider implements DataProvider, AdditionalLanguag
         if (this.giftData.put(id, giftData.build()) != null)
             throw new IllegalStateException("GiftData already registered");
         this.translations.putAll(giftData.translations);
-        this.verifier.track(id, PackType.SERVER_DATA, GiftManager.DIRECTORY);
+        this.verifier.track(id, PackType.SERVER_DATA, GiftManager.ID.toString());
         return id;
     }
 
     public ResourceLocation addAttackActions(ResourceLocation id, NPCAttackActions.Builder actions) {
         if (this.actions.put(id, actions.build()) != null)
             throw new IllegalStateException("Attack action already registered");
-        this.verifier.track(id, PackType.SERVER_DATA, NPCActionManager.DIRECTORY);
+        this.verifier.track(id, PackType.SERVER_DATA, NPCActionManager.ID.toString());
         return id;
     }
 
     private void verifyData(NPCData data) {
         if (data.look() != null) {
             for (NPCData.NPCLookId look : data.look()) {
-                if (!this.verifier.exists(look.id(), PackType.SERVER_DATA, NPCLookManager.DIRECTORY))
+                if (!this.verifier.exists(look.id(), PackType.SERVER_DATA, NPCLookManager.ID.toString()))
                     throw new IllegalStateException("No look registered for " + look.id());
             }
         }
         if (data.combatActions() != null) {
             for (ResourceLocation action : data.combatActions()) {
-                if (!this.verifier.exists(action, PackType.SERVER_DATA, NPCActionManager.DIRECTORY))
+                if (!this.verifier.exists(action, PackType.SERVER_DATA, NPCActionManager.ID.toString()))
                     throw new IllegalStateException("No npc action registered for " + action);
             }
         }
         data.giftItems().forEach((s, g) -> {
-            if (g.giftID() != null && !this.verifier.exists(g.giftID(), PackType.SERVER_DATA, GiftManager.DIRECTORY))
+            if (g.giftID() != null && !this.verifier.exists(g.giftID(), PackType.SERVER_DATA, GiftManager.ID.toString()))
                 throw new IllegalStateException("No gift registered for " + g.giftID());
         });
     }

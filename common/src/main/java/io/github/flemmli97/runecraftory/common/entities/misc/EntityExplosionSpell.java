@@ -42,10 +42,10 @@ public class EntityExplosionSpell extends BaseProjectile {
     @Override
     public void tick() {
         super.tick();
-        if (this.level.isClientSide) {
+        if (this.level().isClientSide) {
             Vec3 dir = this.getDeltaMovement().scale(0.5);
-            this.level.addParticle(new ColoredParticleData(ModParticles.LIGHT.get(), 246 / 255F, 52 / 255F, 52 / 255F, 0.5f, 3f), this.getX() + dir.x(), this.getY() + dir.y(), this.getZ() + dir.z(), 0, 0, 0);
-            this.level.addParticle(new ColoredParticleData(ModParticles.LIGHT.get(), 246 / 255F, 52 / 255F, 52 / 255F, 0.5f, 3f), this.getX(), this.getY(), this.getZ(), 0, 0, 0);
+            this.level().addParticle(new ColoredParticleData(ModParticles.LIGHT.get(), 246 / 255F, 52 / 255F, 52 / 255F, 0.5f, 3f), this.getX() + dir.x(), this.getY() + dir.y(), this.getZ() + dir.z(), 0, 0, 0);
+            this.level().addParticle(new ColoredParticleData(ModParticles.LIGHT.get(), 246 / 255F, 52 / 255F, 52 / 255F, 0.5f, 3f), this.getX(), this.getY(), this.getZ(), 0, 0, 0);
         }
     }
 
@@ -67,15 +67,15 @@ public class EntityExplosionSpell extends BaseProjectile {
 
     private void doExplosion(double x, double y, double z, Entity hit) {
         this.doExplosion(hit);
-        this.level.playSound(null, x, y, z, SoundEvents.GENERIC_EXPLODE, this.getSoundSource(), 1.0f, 1.0f);
+        this.level().playSound(null, x, y, z, SoundEvents.GENERIC_EXPLODE, this.getSoundSource(), 1.0f, 1.0f);
         this.discard();
-        S2CScreenShake.sendAround(this.level, new Vec3(x, y, z), 16, 8, 2);
+        S2CScreenShake.sendAround(this.level(), new Vec3(x, y, z), 16, 8, 2);
     }
 
     protected void doExplosion(Entity hit) {
         if (hit != null)
             CombatUtils.damageWithFaintAndCrit(this.getOwner(), hit, new CustomDamage.Builder(this, this.getOwner()).magic().element(EnumElement.FIRE).hurtResistant(5).knock(CustomDamage.KnockBackType.BACK).knockAmount(1), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier, null);
-        List<Entity> list = this.level.getEntities(this, new AABB(-5, -5, -5, 5, 5, 5).move(this.position()));
+        List<Entity> list = this.level().getEntities(this, new AABB(-5, -5, -5, 5, 5, 5).move(this.position()));
         for (Entity e : list) {
             double dist;
             if ((dist = e.distanceToSqr(this)) > 25 || (e != hit && !this.canHit(e)))
@@ -89,7 +89,7 @@ public class EntityExplosionSpell extends BaseProjectile {
                 dmgPerc = 1;
             CombatUtils.damageWithFaintAndCrit(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).magic().element(EnumElement.FIRE).hurtResistant(5).knock(CustomDamage.KnockBackType.BACK).knockAmount(1), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier * dmgPerc, null);
         }
-        if (this.level instanceof ServerLevel serverLevel)
+        if (this.level() instanceof ServerLevel serverLevel)
             serverLevel.sendParticles(ParticleTypes.EXPLOSION_EMITTER, this.getX(), this.getY(), this.getZ(), 2, 1.0, 0.0, 0.0, 1);
     }
 

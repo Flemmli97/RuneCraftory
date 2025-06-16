@@ -46,7 +46,7 @@ public class ShopItemsManager extends SimpleJsonResourceReloadListener implement
     private HolderLookup.Provider provider;
 
     public ShopItemsManager() {
-        super(DataPackHandler.GSON, ID.getPath());
+        super(DataPackHandler.GSON, ID.toString());
     }
 
     public Collection<ShopItemProperties> get(NPCJob shop) {
@@ -68,7 +68,7 @@ public class ShopItemsManager extends SimpleJsonResourceReloadListener implement
                 Collection<ShopItemProperties> newCollection = new ArrayList<>();
                 Collection<ShopItemProperties> defaultCollection = new ArrayList<>();
                 items.forEach(props -> {
-                    List<ShopItemProperties> contents = ShopItemProperties.from(props);
+                    List<ShopItemProperties> contents = ShopItemProperties.from(this.provider, props);
                     contents.forEach((prop -> {
                         if (DataPackHandler.INSTANCE.itemStatManager().get(prop.stack().getItem()).map(ItemStat::getBuy).orElse(0) > 0) {
                             if (prop.unlockType() == ShopItemProperties.UnlockType.DEFAULT) {

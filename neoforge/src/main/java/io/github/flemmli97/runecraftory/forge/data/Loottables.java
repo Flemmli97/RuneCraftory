@@ -1,7 +1,5 @@
 package io.github.flemmli97.runecraftory.forge.data;
 
-import com.google.common.collect.ImmutableList;
-import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.enums.EnumMineralTier;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
@@ -18,31 +16,34 @@ import io.github.flemmli97.runecraftory.common.loot.FirstKillCondition;
 import io.github.flemmli97.runecraftory.common.loot.FriendPointCondition;
 import io.github.flemmli97.runecraftory.common.loot.ItemLevelLootFunction;
 import io.github.flemmli97.runecraftory.common.loot.LootingAndLuckLootFunction;
+import io.github.flemmli97.runecraftory.common.loot.LuckBonusNumberProvider;
 import io.github.flemmli97.runecraftory.common.loot.SkillLevelCondition;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.utils.LootTableResources;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
-import net.minecraft.advancements.critereon.EnchantmentPredicate;
-import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.WritableRegistry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.loot.BlockLoot;
+import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.data.loot.LootTableProvider;
+import net.minecraft.data.loot.LootTableSubProvider;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.ValidationContext;
@@ -50,18 +51,13 @@ import net.minecraft.world.level.storage.loot.entries.AlternativesEntry;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
-import net.minecraft.world.level.storage.loot.entries.LootTableReference;
+import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
-import net.minecraft.world.level.storage.loot.functions.LootingEnchantFunction;
+import net.minecraft.world.level.storage.loot.functions.EnchantedCountIncreaseFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithLootingCondition;
-import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 
@@ -69,10 +65,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class Loottables extends LootTableProvider {
 
@@ -84,36 +80,35 @@ public class Loottables extends LootTableProvider {
     private static final float LOOTING_BONUS = 0.2f;
     private static final float RARE_LOOTING_BONUS = 0.1f;
 
-    private final List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> loot;
-
-    public Loottables(PackOutput packOutput, QuestGen questGen) {
-        super(gen);
-        this.loot = ImmutableList.of(Pair.of(EntityLoot::new, LootContextParamSets.ENTITY),
-                Pair.of(WoolyShearedEntityLoot::new, LootContextParamSets.FISHING),
-                Pair.of(BlockLootData::new, LootContextParamSets.BLOCK),
-                Pair.of(FishingLootData::new, LootContextParamSets.FISHING),
-                Pair.of(ChestLoots::new, LootContextParamSets.CHEST),
-                Pair.of(() -> new QuestLootData(questGen), LootContextParamSets.CHEST));
-
+    public Loottables(PackOutput output, CompletableFuture<HolderLookup.Provider> registries, QuestGen questGen) {
+        super(output, Set.of(), List.of(
+                new SubProviderEntry(EntityLoot::new, LootContextParamSets.ENTITY),
+                new SubProviderEntry(BlockLootData::new, LootContextParamSets.BLOCK),
+                new SubProviderEntry(ChestLoots::new, LootContextParamSets.CHEST),
+                // WoolyShearedEntityLoot::new, LootContextParamSets.FISHING)
+                new SubProviderEntry(provider -> new QuestLootData(provider, questGen), LootContextParamSets.CHEST),
+                new SubProviderEntry(FishingLootData::new, LootContextParamSets.FISHING)
+        ), registries);
     }
 
     @Override
-    protected List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> getTables() {
-        return this.loot;
+    protected void validate(WritableRegistry<LootTable> writableregistry, ValidationContext validationcontext, ProblemReporter.Collector problemreporter$collector) {
     }
 
-    @Override
-    protected void validate(Map<ResourceLocation, LootTable> map, ValidationContext validationtracker) {
-    }
+    static class EntityLoot implements LootTableSubProvider {
 
-    static class EntityLoot implements Consumer<BiConsumer<ResourceLocation, LootTable.Builder>> {
+        protected final Map<ResourceKey<LootTable>, LootTable.Builder> lootTables = new HashMap<>();
 
-        protected final Map<ResourceLocation, LootTable.Builder> lootTables = new HashMap<>();
+        protected final HolderLookup.Provider provider;
+
+        EntityLoot(HolderLookup.Provider provider) {
+            this.provider = provider;
+        }
 
         protected void init() {
             this.lootTables.put(LootTableResources.WOOLED_WHITE_LOOT, this.table(
                             new ItemLootData(ModItems.FUR_SMALL.get(), 0.6f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2))
-                    .withPool(LootPool.lootPool().add(LootTableReference.lootTableReference(ModEntities.WOOLY.get().getDefaultLootTable()))));
+                    .withPool(LootPool.lootPool().add(NestedLootTable.lootTableReference(ModEntities.WOOLY.get().getDefaultLootTable()))));
             this.registerLootTable(ModEntities.WOOLY.get(), this.table(
                                     new ItemLootData(Items.SHEARS, 0.05f, RARE_LUCK_BONUS, LOOTING_BONUS, 1))
                             .withPool(this.create().add(this.addWithCount(Items.MUTTON, -3, 1, 1))),
@@ -281,7 +276,7 @@ public class Loottables extends LootTableProvider {
                             new ItemLootData(ModItems.FUR_MEDIUM.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2),
                             new ItemLootData(ModItems.FURBALL.get(), 0.05f, RARE_LUCK_BONUS, LOOTING_BONUS, 2),
                             new ItemLootData(Items.SHEARS, 0.01f, RARE_LUCK_BONUS, 0, 0))
-                    .withPool(LootPool.lootPool().add(LootTableReference.lootTableReference(ModEntities.WOOLY.get().getDefaultLootTable()))));
+                    .withPool(LootPool.lootPool().add(NestedLootTable.lootTableReference(ModEntities.WOOLY.get().getDefaultLootTable()))));
             this.tamedDropTable(ModEntities.KING_WOOLY.get(), new TamedItemLootData(ModItems.FUR_SMALL.get(), 1, 0),
                     new TamedItemLootData(ModItems.FUR_MEDIUM.get(), 1, 5),
                     new TamedItemLootData(ModItems.FUR_LARGE.get(), 1, 8));
@@ -459,8 +454,8 @@ public class Loottables extends LootTableProvider {
             for (ItemLootData data : datas) {
                 LootPoolSingletonContainer.Builder<?> b = LootItem.lootTableItem(data.item);
                 if (data.defaultLooting) {
-                    b.when(LootItemRandomChanceWithLootingCondition.randomChanceAndLootingBoost(data.chance, data.luckBonus))
-                            .apply(LootingEnchantFunction.lootingMultiplier(UniformGenerator.between(0, data.lootingBonus)).setLimit(data.max));
+                    b.when(LootItemRandomChanceCondition.randomChance(new LuckBonusNumberProvider(ConstantValue.exactly(data.chance), data.luckBonus)))
+                            .apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.provider, UniformGenerator.between(0, data.lootingBonus)).setLimit(data.max));
                 } else {
                     b.apply(new LootingAndLuckLootFunction.Builder(ConstantValue.exactly(data.chance))
                             .withLuckBonus(ConstantValue.exactly(data.luckBonus))
@@ -469,7 +464,7 @@ public class Loottables extends LootTableProvider {
                 }
                 if (data.guaranteeFirst) {
                     builder.withPool(this.create()
-                            .add(LootItem.lootTableItem(data.item).when(FirstKillCondition::new).otherwise(b)));
+                            .add(LootItem.lootTableItem(data.item).when(() -> FirstKillCondition.INSTANCE).otherwise(b)));
                 } else {
                     builder.withPool(this.create()
                             .add(b));
@@ -480,20 +475,21 @@ public class Loottables extends LootTableProvider {
 
         private LootPoolSingletonContainer.Builder<?> guaranteeOnFirstKill(ItemLike item, float min, float max, float lootingCountBonus) {
             return LootItem.lootTableItem(item).apply(SetItemCountFunction.setCount(UniformGenerator.between(min, max)))
-                    .apply(LootingEnchantFunction.lootingMultiplier(UniformGenerator.between(0, lootingCountBonus)));
+                    .apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.provider, UniformGenerator.between(0, lootingCountBonus)));
         }
 
         private LootPoolSingletonContainer.Builder<?> addWithCount(ItemLike item, float min, float max, float lootingCountBonus) {
             return LootItem.lootTableItem(item).apply(SetItemCountFunction.setCount(UniformGenerator.between(min, max)))
-                    .apply(LootingEnchantFunction.lootingMultiplier(UniformGenerator.between(0, lootingCountBonus)));
+                    .apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.provider, UniformGenerator.between(0, lootingCountBonus)));
         }
 
         private void tamedDropTable(EntityType<?> entity, TamedItemLootData... datas) {
-            ResourceLocation def = entity.getDefaultLootTable();
-            this.tamedDropTable(new ResourceLocation(def.getNamespace(), def.getPath() + "_tamed_drops"), datas);
+            ResourceKey<LootTable> def = entity.getDefaultLootTable();
+            this.tamedDropTable(ResourceKey.create(Registries.LOOT_TABLE,
+                    ResourceLocation.fromNamespaceAndPath(def.location().getNamespace(), def.location().getPath() + "_tamed_drops")), datas);
         }
 
-        private void tamedDropTable(ResourceLocation res, TamedItemLootData... datas) {
+        private void tamedDropTable(ResourceKey<LootTable> res, TamedItemLootData... datas) {
             if (datas.length > 1) {
                 LootPoolEntryContainer.Builder<?> builder = AlternativesEntry.alternatives();
                 List<TamedItemLootData> sorted = Arrays.stream(datas).sorted((f, s) -> Integer.compare(s.friendPoints, f.friendPoints)).toList();
@@ -514,9 +510,9 @@ public class Loottables extends LootTableProvider {
         }
 
         @Override
-        public void accept(BiConsumer<ResourceLocation, LootTable.Builder> cons) {
+        public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> output) {
             this.init();
-            this.lootTables.forEach(cons);
+            this.lootTables.forEach(output);
         }
 
         record ItemLootData(ItemLike item, float chance, float luckBonus, float lootingBonus,
@@ -542,58 +538,68 @@ public class Loottables extends LootTableProvider {
      */
     static class WoolyShearedEntityLoot extends EntityLoot {
 
+        WoolyShearedEntityLoot(HolderLookup.Provider provider) {
+            super(provider);
+        }
+
         @Override
         protected void init() {
             LootPoolEntryContainer.Builder<?> b = AlternativesEntry.alternatives();
             b.otherwise(LootItem.lootTableItem(ModItems.FUR_LARGE.get()).when(FriendPointCondition.of(8))
                     .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
-                    .apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE)));
+                    .apply(ApplyBonusCount.addUniformBonusCount(this.provider.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FORTUNE))));
             b.otherwise(LootItem.lootTableItem(ModItems.FUR_MEDIUM.get()).when(FriendPointCondition.of(5))
                     .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
-                    .apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE)));
+                    .apply(ApplyBonusCount.addUniformBonusCount(this.provider.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FORTUNE))));
             b.otherwise(LootItem.lootTableItem(ModItems.FUR_SMALL.get()).when(FriendPointCondition.of(0))
                     .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
-                    .apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE)));
+                    .apply(ApplyBonusCount.addUniformBonusCount(this.provider.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FORTUNE))));
 
             this.lootTables.put(EntityWooly.shearedLootTable(LootTableResources.WOOLED_WHITE_LOOT), LootTable.lootTable().withPool(LootPool.lootPool().add(b)));
         }
     }
 
-    static class ChestLoots implements Consumer<BiConsumer<ResourceLocation, LootTable.Builder>> {
+    static class ChestLoots implements LootTableSubProvider {
+
+        private final HolderLookup.Provider provider;
+
+        ChestLoots(HolderLookup.Provider provider) {
+            this.provider = provider;
+        }
 
         @Override
-        public void accept(BiConsumer<ResourceLocation, LootTable.Builder> biConsumer) {
+        public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> output) {
             LootPool.Builder tier1 = LootPool.lootPool().setRolls(UniformGenerator.between(2, 4));
-            for (RegistryEntrySupplier<Item> item : ModItems.TIER_1_CHEST) {
+            for (RegistryEntrySupplier<Item, ?> item : ModItems.TIER_1_CHEST) {
                 tier1.add(LootItem.lootTableItem(item.get()));
             }
             tier1.add(LootItem.lootTableItem(ModItems.FORGING_BREAD.get()));
             tier1.add(LootItem.lootTableItem(ModItems.ARMOR_BREAD.get()));
             tier1.add(LootItem.lootTableItem(ModItems.CHEMISTRY_BREAD.get()));
             tier1.add(LootItem.lootTableItem(ModItems.COOKING_BREAD.get()));
-            biConsumer.accept(LootTableResources.TIER_1_LOOT, LootTable.lootTable().withPool(tier1));
+            output.accept(LootTableResources.TIER_1_LOOT, LootTable.lootTable().withPool(tier1));
 
             LootPool.Builder tier2 = LootPool.lootPool().setRolls(UniformGenerator.between(2, 4));
-            for (RegistryEntrySupplier<Item> item : ModItems.TIER_2_CHEST) {
+            for (RegistryEntrySupplier<Item, ?> item : ModItems.TIER_2_CHEST) {
                 tier2.add(LootItem.lootTableItem(item.get()));
             }
             tier2.add(LootItem.lootTableItem(ModItems.FORGING_BREAD.get()));
             tier2.add(LootItem.lootTableItem(ModItems.ARMOR_BREAD.get()));
             tier2.add(LootItem.lootTableItem(ModItems.CHEMISTRY_BREAD.get()));
             tier2.add(LootItem.lootTableItem(ModItems.COOKING_BREAD.get()));
-            biConsumer.accept(LootTableResources.TIER_2_LOOT, LootTable.lootTable().withPool(tier2));
+            output.accept(LootTableResources.TIER_2_LOOT, LootTable.lootTable().withPool(tier2));
 
             LootPool.Builder tier3 = LootPool.lootPool().setRolls(UniformGenerator.between(1, 2));
-            for (RegistryEntrySupplier<Item> item : ModItems.TIER_3_CHEST) {
+            for (RegistryEntrySupplier<Item, ?> item : ModItems.TIER_3_CHEST) {
                 tier3.add(LootItem.lootTableItem(item.get()));
             }
-            biConsumer.accept(LootTableResources.TIER_3_LOOT, LootTable.lootTable().withPool(tier3));
+            output.accept(LootTableResources.TIER_3_LOOT, LootTable.lootTable().withPool(tier3));
 
             LootPool.Builder tier4 = LootPool.lootPool().setRolls(UniformGenerator.between(1, 2));
-            for (RegistryEntrySupplier<Item> item : ModItems.TIER_4_CHEST) {
+            for (RegistryEntrySupplier<Item, ?> item : ModItems.TIER_4_CHEST) {
                 tier4.add(LootItem.lootTableItem(item.get()));
             }
-            biConsumer.accept(LootTableResources.TIER_4_LOOT, LootTable.lootTable().withPool(tier4));
+            output.accept(LootTableResources.TIER_4_LOOT, LootTable.lootTable().withPool(tier4));
 
 //            biConsumer.accept(QuestGen.MINING, LootTable.lootTable().withPool(LootPool.lootPool()
 //                            .add(LootItem.lootTableItem(ModItems.HAMMER_SCRAP.get())))
@@ -661,18 +667,21 @@ public class Loottables extends LootTableProvider {
             spells.add(LootItem.lootTableItem(ModItems.RUSH_PUNCH.get()).setWeight(60));
             spells.add(LootItem.lootTableItem(ModItems.CYCLONE.get()).setWeight(60));
             spells.add(LootItem.lootTableItem(ModItems.RAPID_MOVE.get()).setWeight(90));
-            biConsumer.accept(LootTableResources.CHEST_LOOT_SPELLS, LootTable.lootTable().withPool(spells));
+            output.accept(LootTableResources.CHEST_LOOT_SPELLS, LootTable.lootTable().withPool(spells));
         }
     }
 
-    static class BlockLootData extends BlockLoot {
+    static class BlockLootData extends BlockLootSubProvider {
 
-        private static final LootItemCondition.Builder SILK_TOUCH = MatchTool.toolMatches(ItemPredicate.Builder.item().hasEnchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.atLeast(1))));
-        private final Map<ResourceLocation, LootTable.Builder> loots = new HashMap<>();
+        private final Map<ResourceKey<LootTable>, LootTable.Builder> loots = new HashMap<>();
+
+        protected BlockLootData(HolderLookup.Provider registries) {
+            super(Set.of(), FeatureFlagSet.of(), registries);
+        }
 
         protected static LootPool.Builder herbLoot(ItemLike item) {
             LootPool.Builder build = LootPool.lootPool().setRolls(ConstantValue.exactly(1));
-            build.add(LootItem.lootTableItem(item).apply(ItemLevelLootFunction.getDef()));
+            build.add(LootItem.lootTableItem(item).apply(ItemLevelLootFunction.defaultFunc()));
             return build;
         }
 
@@ -791,7 +800,7 @@ public class Loottables extends LootTableProvider {
                     build.add(ore(7, 5, ModItems.LIGHT_ORE.get(), 15));
                 }
             }
-            build.apply(ItemLevelLootFunction.getDef());
+            build.apply(ItemLevelLootFunction.defaultFunc());
             return build;
         }
 
@@ -804,7 +813,11 @@ public class Loottables extends LootTableProvider {
         }
 
         @Override
-        public void accept(BiConsumer<ResourceLocation, LootTable.Builder> cons) {
+        protected void generate() {
+        }
+
+        @Override
+        public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> biConsumer) {
             this.add(ModBlocks.MUSHROOM.get(), LootTable.lootTable().withPool(herbLoot(ModItems.MUSHROOM.get())));
             this.add(ModBlocks.MONARCH_MUSHROOM.get(), LootTable.lootTable().withPool(herbLoot(ModItems.MONARCH_MUSHROOM.get())));
             this.add(ModBlocks.ELLI_LEAVES.get(), LootTable.lootTable().withPool(herbLoot(ModItems.ELLI_LEAVES.get())));
@@ -823,22 +836,22 @@ public class Loottables extends LootTableProvider {
             this.add(ModBlocks.MEDICINAL_HERB.get(), LootTable.lootTable().withPool(herbLoot(ModItems.MEDICINAL_HERB.get())));
             this.add(ModBlocks.BAMBOO_SPROUT.get(), LootTable.lootTable().withPool(herbLoot(ModItems.BAMBOO_SPROUT.get())));
 
-            this.add(ModBlocks.FORGE.get(), block -> createSinglePropConditionTable(block, BlockCrafting.PART, BlockCrafting.EnumPart.LEFT));
-            this.add(ModBlocks.COOKING.get(), block -> createSinglePropConditionTable(block, BlockCrafting.PART, BlockCrafting.EnumPart.LEFT));
-            this.add(ModBlocks.CHEMISTRY.get(), block -> createSinglePropConditionTable(block, BlockCrafting.PART, BlockCrafting.EnumPart.LEFT));
-            this.add(ModBlocks.ACCESSORY.get(), block -> createSinglePropConditionTable(block, BlockCrafting.PART, BlockCrafting.EnumPart.LEFT));
+            this.add(ModBlocks.FORGE.get(), block -> this.createSinglePropConditionTable(block, BlockCrafting.PART, BlockCrafting.EnumPart.LEFT));
+            this.add(ModBlocks.COOKING.get(), block -> this.createSinglePropConditionTable(block, BlockCrafting.PART, BlockCrafting.EnumPart.LEFT));
+            this.add(ModBlocks.CHEMISTRY.get(), block -> this.createSinglePropConditionTable(block, BlockCrafting.PART, BlockCrafting.EnumPart.LEFT));
+            this.add(ModBlocks.ACCESSORY.get(), block -> this.createSinglePropConditionTable(block, BlockCrafting.PART, BlockCrafting.EnumPart.LEFT));
 
             this.dropSelf(ModBlocks.SHIPPING.get());
             this.dropSelf(ModBlocks.CASH_REGISTER.get());
             this.dropSelf(ModBlocks.MONSTER_BARN.get());
-            this.add(ModBlocks.QUEST_BOARD.get(), block -> createSinglePropConditionTable(block, BlockQuestboard.PART, BlockQuestboard.Part.BOTTOM_LEFT));
+            this.add(ModBlocks.QUEST_BOARD.get(), block -> this.createSinglePropConditionTable(block, BlockQuestboard.PART, BlockQuestboard.Part.BOTTOM_LEFT));
 
-            for (RegistryEntrySupplier<Block> reg : ModBlocks.CROPS) {
+            for (RegistryEntrySupplier<Block, ?> reg : ModBlocks.CROPS) {
                 Block block = reg.get();
                 if (block instanceof BlockCrop)
                     this.add(reg.get(), LootTable.lootTable().withPool(cropLoot((BlockCrop) block)));
             }
-            for (RegistryEntrySupplier<Block> reg : ModBlocks.FLOWERS) {
+            for (RegistryEntrySupplier<Block, ?> reg : ModBlocks.FLOWERS) {
                 if (reg == ModBlocks.SWORD_CROP || reg == ModBlocks.SHIELD_CROP) {
                     Block block = reg.get();
                     if (block instanceof BlockCrop)
@@ -851,11 +864,12 @@ public class Loottables extends LootTableProvider {
             }
             ModBlocks.MINERAL_MAP.forEach((tier, reg) -> this.add(reg.get(), LootTable.lootTable().withPool(oreLootPool(tier))));
 
-            this.add(ModBlocks.ACCESSORY.get(), block -> createSinglePropConditionTable(block, BlockCrafting.PART, BlockCrafting.EnumPart.LEFT));
+            this.add(ModBlocks.ACCESSORY.get(), block -> this.createSinglePropConditionTable(block, BlockCrafting.PART, BlockCrafting.EnumPart.LEFT));
 
             //Copy of snow layer
-            this.add(ModBlocks.SNOW.get(), block -> LootTable.lootTable().withPool(LootPool.lootPool().when(LootItemEntityPropertyCondition.entityPresent(LootContext.EntityTarget.THIS)).add(AlternativesEntry.alternatives(AlternativesEntry.alternatives(new LootPoolEntryContainer.Builder[]{LootItem.lootTableItem(Items.SNOWBALL).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(SnowLayerBlock.LAYERS, 1))), (LootItem.lootTableItem(Items.SNOWBALL).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(SnowLayerBlock.LAYERS, 2)))).apply(SetItemCountFunction.setCount(ConstantValue.exactly(2.0F))), (LootItem.lootTableItem(Items.SNOWBALL).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(SnowLayerBlock.LAYERS, 3)))).apply(SetItemCountFunction.setCount(ConstantValue.exactly(3.0F))), (LootItem.lootTableItem(Items.SNOWBALL).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(SnowLayerBlock.LAYERS, 4)))).apply(SetItemCountFunction.setCount(ConstantValue.exactly(4.0F))), (LootItem.lootTableItem(Items.SNOWBALL).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(SnowLayerBlock.LAYERS, 5)))).apply(SetItemCountFunction.setCount(ConstantValue.exactly(5.0F))), (LootItem.lootTableItem(Items.SNOWBALL).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(SnowLayerBlock.LAYERS, 6)))).apply(SetItemCountFunction.setCount(ConstantValue.exactly(6.0F))), (LootItem.lootTableItem(Items.SNOWBALL).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(SnowLayerBlock.LAYERS, 7)))).apply(SetItemCountFunction.setCount(ConstantValue.exactly(7.0F))), LootItem.lootTableItem(Items.SNOWBALL).apply(SetItemCountFunction.setCount(ConstantValue.exactly(8.0F)))}).when(SILK_TOUCH), AlternativesEntry.alternatives(LootItem.lootTableItem(Blocks.SNOW).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(SnowLayerBlock.LAYERS, 1))), LootItem.lootTableItem(Blocks.SNOW).apply(SetItemCountFunction.setCount(ConstantValue.exactly(2.0F))).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(SnowLayerBlock.LAYERS, 2))), LootItem.lootTableItem(Blocks.SNOW).apply(SetItemCountFunction.setCount(ConstantValue.exactly(3.0F))).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(SnowLayerBlock.LAYERS, 3))), LootItem.lootTableItem(Blocks.SNOW).apply(SetItemCountFunction.setCount(ConstantValue.exactly(4.0F))).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(SnowLayerBlock.LAYERS, 4))), LootItem.lootTableItem(Blocks.SNOW).apply(SetItemCountFunction.setCount(ConstantValue.exactly(5.0F))).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(SnowLayerBlock.LAYERS, 5))), LootItem.lootTableItem(Blocks.SNOW).apply(SetItemCountFunction.setCount(ConstantValue.exactly(6.0F))).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(SnowLayerBlock.LAYERS, 6))), LootItem.lootTableItem(Blocks.SNOW).apply(SetItemCountFunction.setCount(ConstantValue.exactly(7.0F))).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(SnowLayerBlock.LAYERS, 7))), LootItem.lootTableItem(Blocks.SNOW_BLOCK))))));
-            this.loots.forEach(cons);
+            this.add(ModBlocks.SNOW.get(), block -> LootTable.lootTable()
+                    .withPool(LootPool.lootPool().add(NestedLootTable.lootTableReference(Blocks.SNOW.getLootTable()))));
+            this.loots.forEach(biConsumer);
         }
 
         @Override
@@ -867,35 +881,39 @@ public class Loottables extends LootTableProvider {
         public void add(Block block, LootTable.Builder builder) {
             this.loots.put(block.getLootTable(), builder);
         }
-
-        protected void registerLootTable(ResourceLocation s, LootTable.Builder builder) {
-            this.loots.put(s, builder);
-        }
     }
 
-    static class FishingLootData implements Consumer<BiConsumer<ResourceLocation, LootTable.Builder>> {
+    static class FishingLootData implements LootTableSubProvider {
+
+        private final HolderLookup.Provider provider;
+
+        FishingLootData(HolderLookup.Provider provider) {
+            this.provider = provider;
+        }
 
         @Override
-        public void accept(BiConsumer<ResourceLocation, LootTable.Builder> biConsumer) {
+        public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> output) {
             //For now delegate to default table till fish get textures
-            biConsumer.accept(LootTableResources.FISHING, LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
-                    .add(LootTableReference.lootTableReference(BuiltInLootTables.FISHING))));
-            biConsumer.accept(LootTableResources.SAND_FISHING, LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
+            output.accept(LootTableResources.FISHING, LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
+                    .add(NestedLootTable.lootTableReference(BuiltInLootTables.FISHING))));
+            output.accept(LootTableResources.SAND_FISHING, LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
                     .add(LootItem.lootTableItem(Items.SAND))));
         }
     }
 
-    static class QuestLootData implements Consumer<BiConsumer<ResourceLocation, LootTable.Builder>> {
+    static class QuestLootData implements LootTableSubProvider {
 
+        private final HolderLookup.Provider provider;
         private final QuestGen questGen;
 
-        QuestLootData(QuestGen questGen) {
+        QuestLootData(HolderLookup.Provider provider, QuestGen questGen) {
+            this.provider = provider;
             this.questGen = questGen;
         }
 
         @Override
-        public void accept(BiConsumer<ResourceLocation, LootTable.Builder> biConsumer) {
-            this.questGen.loot.forEach(biConsumer);
+        public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> output) {
+            this.questGen.loot.forEach(output);
         }
     }
 }

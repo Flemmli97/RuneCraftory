@@ -12,6 +12,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.Entity;
@@ -25,9 +27,10 @@ import java.util.List;
 
 public class EntityGoblinPirate extends EntityGoblin {
 
-    private static final AnimatedAction DOUBLE_SLASH = AnimatedAction.builder(1, "double_slash").marker("attack", 0.4, 0.8).build();
-    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(DOUBLE_SLASH, "interact");
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{DOUBLE_SLASH, LEAP, INTERACT, SLEEP};
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final String DOUBLE_SLASH = BUILDER.add("double_slash", AnimationsBuilder.definition(1).marker("attack", 0.4, 0.8));
+    public static final String INTERACT = BUILDER.add("interact", DOUBLE_SLASH);
+    public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityGoblinPirate>>> ATTACKS = List.of(
             WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(DOUBLE_SLASH, e -> 0.8f), 1),
