@@ -11,8 +11,10 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -125,9 +127,9 @@ public abstract class EntitySanoUno extends BossMonster {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if (source == DamageSource.IN_WALL)
+        if (source.is(DamageTypes.IN_WALL))
             return false;
-        if (source == DamageSource.OUT_OF_WORLD && this.deathTime == this.maxDeathTime() - 1) {
+        if (!source.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && this.deathTime == this.maxDeathTime() - 1) {
             this.remove(RemovalReason.KILLED);
             return true;
         }
@@ -163,11 +165,11 @@ public abstract class EntitySanoUno extends BossMonster {
         }
         super.remove(reason);
     }
-
-    @Override
-    public Vec3 passengerOffset(Entity passenger) {
-        return new Vec3(0, 30.5 / 16d, 6 / 16d).scale(2);
-    }
+//
+//    @Override
+//    public Vec3 passengerOffset(Entity passenger) {
+//        return new Vec3(0, 30.5 / 16d, 6 / 16d).scale(2);
+//    }
 
     @Override
     public boolean reversed() {

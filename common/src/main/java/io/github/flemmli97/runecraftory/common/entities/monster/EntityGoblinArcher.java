@@ -1,35 +1,26 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
-import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityMobArrow;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.common.entity.AnimationHandler;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.ActionUtils;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.KeepDistanceRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinition;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.random.WeightedEntry;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.List;
+import org.joml.Vector3d;
 
 public class EntityGoblinArcher extends EntityGoblin {
 
@@ -39,33 +30,31 @@ public class EntityGoblinArcher extends EntityGoblin {
     public static final String KICK = BUILDER.add("kick", AnimationsBuilder.definition(0.56).marker("attack", 0.32));
     public static final String INTERACT = BUILDER.add("interact", KICK);
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
-
-    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityGoblinArcher>>> ATTACKS = List.of(
-            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeActionInRange(KICK, e -> 0.6f), 1),
-            WeightedEntry.wrap(MonsterActionUtils.<EntityGoblinArcher>simpleRangedStrafingAction(BOW, 8, 1, e -> 1)
-                    .withCondition(ActionUtils.chanced(e -> 1,
-                            (goal, target, previous) -> goal.attacker.getMainHandItem().getItem() instanceof BowItem)), 6),
-            WeightedEntry.wrap(MonsterActionUtils.<EntityGoblinArcher>simpleRangedStrafingAction(TRIPLE, 8, 1, e -> 1)
-                    .withCondition(ActionUtils.chanced(e -> 1,
-                            (goal, target, previous) -> goal.attacker.getMainHandItem().getItem() instanceof BowItem)), 3)
-    );
-    private static final List<WeightedEntry.Wrapper<IdleAction<EntityGoblinArcher>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<>(() -> new KeepDistanceRunner<>(4, 10, 1)), 3),
-            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 1),
-            WeightedEntry.wrap(new IdleAction<>(DoNothingRunner::new), 2)
-    );
-
-    public final AnimatedAttackGoal<EntityGoblinArcher> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+    //
+//    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityGoblinArcher>>> ATTACKS = List.of(
+//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeActionInRange(KICK, e -> 0.6f), 1),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntityGoblinArcher>simpleRangedStrafingAction(BOW, 8, 1, e -> 1)
+//                    .withCondition(ActionUtils.chanced(e -> 1,
+//                            (goal, target, previous) -> goal.attacker.getMainHandItem().getItem() instanceof BowItem)), 6),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntityGoblinArcher>simpleRangedStrafingAction(TRIPLE, 8, 1, e -> 1)
+//                    .withCondition(ActionUtils.chanced(e -> 1,
+//                            (goal, target, previous) -> goal.attacker.getMainHandItem().getItem() instanceof BowItem)), 3)
+//    );
+//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityGoblinArcher>>> IDLE_ACTIONS = List.of(
+//            WeightedEntry.wrap(new IdleAction<>(() -> new KeepDistanceRunner<>(4, 10, 1)), 3),
+//            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 1),
+//            WeightedEntry.wrap(new IdleAction<>(DoNothingRunner::new), 2)
+//    );
+//
+//    public final AnimatedAttackGoal<EntityGoblinArcher> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityGoblinArcher> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityGoblinArcher(EntityType<? extends EntityGoblin> type, Level level) {
         super(type, level);
-        this.goalSelector.removeGoal(super.attack);
-        this.goalSelector.addGoal(2, this.attack);
     }
 
     @Override
-    protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
+    protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance difficulty) {
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
         this.setDropChance(EquipmentSlot.MAINHAND, 0);
     }
@@ -90,14 +79,14 @@ public class EntityGoblinArcher extends EntityGoblin {
     }
 
     @Override
-    public AABB attackBB(String anim) {
+    public AABB attackBB(AnimationState anim) {
         double width = this.getBbWidth() * 1.3;
         double length = this.getBbWidth() * 1.7;
         return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
     }
 
     @Override
-    public void setupAttack(AnimatedAction anim) {
+    public void setupAttack(AnimationDefinition anim) {
         if (anim.is(BOW, TRIPLE)) {
             this.startUsingItem(InteractionHand.MAIN_HAND);
         }
@@ -152,11 +141,10 @@ public class EntityGoblinArcher extends EntityGoblin {
         arrow.shoot(dir.x, dir.y, dir.z, 1.3f, 7 - this.level().getDifficulty().getId() * 2);
         this.level().addFreshEntity(arrow);
         Vec3 up = this.getUpVector(1);
+        Vector3d dir3d = new Vector3d(dir.x(), dir.y(), dir.z());
 
         for (float y = -15; y <= 15; y += 30) {
-            Quaternion quaternion = new Quaternion(new Vector3f(up), y, true);
-            Vector3f newDir = new Vector3f(dir);
-            newDir.transform(quaternion);
+            Vector3d newDir = dir3d.rotateAxis(y * Mth.DEG_TO_RAD, up.x(), up.y(), up.z(), new Vector3d());
             EntityMobArrow arrowO = new EntityMobArrow(this.level(), this, 0.8f);
             arrowO.shoot(newDir.x(), newDir.y(), newDir.z(), 1.3f, 7 - this.level().getDifficulty().getId() * 2);
             this.level().addFreshEntity(arrowO);

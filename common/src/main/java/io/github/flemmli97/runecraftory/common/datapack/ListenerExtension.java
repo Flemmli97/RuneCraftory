@@ -9,5 +9,4 @@ public interface ListenerExtension extends PreparableReloadListener {
     ResourceLocation id();
 
     void insertRegistryAccess(HolderLookup.Provider provider);
-
 }

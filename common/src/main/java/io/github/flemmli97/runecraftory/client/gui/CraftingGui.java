@@ -183,6 +183,7 @@ public class CraftingGui extends AbstractContainerScreen<ContainerCrafting> {
     }
 
     record Rect(int x, int y, int width, int height) {
+
         public boolean isMouseOver(double mouseX, double mouseY) {
             return mouseX >= this.x && mouseY >= this.y && mouseX < (this.x + this.width) && mouseY < (this.y + this.height);
         }

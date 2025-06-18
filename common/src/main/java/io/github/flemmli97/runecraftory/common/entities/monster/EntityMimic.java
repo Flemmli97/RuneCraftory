@@ -1,36 +1,23 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.LeapingMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.RiderAttackTargetGoal;
-import io.github.flemmli97.runecraftory.common.entities.ai.StayGoal;
-import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.common.entity.AnimationHandler;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveAwayRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
-import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.goal.MoveTowardsRestrictionGoal;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -53,29 +40,29 @@ public class EntityMimic extends LeapingMonster {
     public static final String CLOSE = BUILDER.add("close", AnimationsBuilder.definition(0.32));
     public static final String INTERACT = BUILDER.add("interact", MELEE);
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
-
-    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityMimic>>> ATTACKS = List.of(
-            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(MELEE, e -> 0.8f), 8),
-            WeightedEntry.wrap(new GoalAttackAction<EntityMimic>(LEAP)
-                    .cooldown(e -> e.animationCooldown(LEAP))
-                    .prepare(() -> new WrappedRunner<>(new MoveAwayRunner<>(3, 1, 3))), 8),
-            WeightedEntry.wrap(MonsterActionUtils.simpleRangedEvadingAction(THROW, 9, 3, 1, e -> 1), 4),
-            WeightedEntry.wrap(new GoalAttackAction<EntityMimic>(THROW)
-                    .cooldown(e -> e.animationCooldown(THROW))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 3),
-            WeightedEntry.wrap(new GoalAttackAction<EntityMimic>(ARROW)
-                    .cooldown(e -> e.animationCooldown(ARROW))
-                    .prepare(() -> new WrappedRunner<>(new MoveAwayRunner<>(2, 1, 2))), 6),
-            WeightedEntry.wrap(new GoalAttackAction<EntityMimic>(CAST)
-                    .cooldown(e -> e.animationCooldown(CAST))
-                    .prepare(() -> new WrappedRunner<>(new MoveAwayRunner<>(2, 1, 2))), 6)
-    );
-    private static final List<WeightedEntry.Wrapper<IdleAction<EntityMimic>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 1.5)), 1),
-            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 2)
-    );
-
-    public final AnimatedAttackGoal<EntityMimic> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+    //
+//    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityMimic>>> ATTACKS = List.of(
+//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(MELEE, e -> 0.8f), 8),
+//            WeightedEntry.wrap(new GoalAttackAction<EntityMimic>(LEAP)
+//                    .cooldown(e -> e.animationCooldown(LEAP))
+//                    .prepare(() -> new WrappedRunner<>(new MoveAwayRunner<>(3, 1, 3))), 8),
+//            WeightedEntry.wrap(MonsterActionUtils.simpleRangedEvadingAction(THROW, 9, 3, 1, e -> 1), 4),
+//            WeightedEntry.wrap(new GoalAttackAction<EntityMimic>(THROW)
+//                    .cooldown(e -> e.animationCooldown(THROW))
+//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 3),
+//            WeightedEntry.wrap(new GoalAttackAction<EntityMimic>(ARROW)
+//                    .cooldown(e -> e.animationCooldown(ARROW))
+//                    .prepare(() -> new WrappedRunner<>(new MoveAwayRunner<>(2, 1, 2))), 6),
+//            WeightedEntry.wrap(new GoalAttackAction<EntityMimic>(CAST)
+//                    .cooldown(e -> e.animationCooldown(CAST))
+//                    .prepare(() -> new WrappedRunner<>(new MoveAwayRunner<>(2, 1, 2))), 6)
+//    );
+//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityMimic>>> IDLE_ACTIONS = List.of(
+//            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 1.5)), 1),
+//            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 2)
+//    );
+//
+//    public final AnimatedAttackGoal<EntityMimic> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityMimic> animationHandler = new AnimationHandler<>(this, ANIMS);
     private int sleepTick = -1;
     private boolean sleeping;
@@ -88,7 +75,6 @@ public class EntityMimic extends LeapingMonster {
 
     public EntityMimic(EntityType<? extends EntityMimic> type, Level world) {
         super(type, world);
-        this.goalSelector.addGoal(2, this.attack);
         this.moveControl = new JumpingMover(this);
     }
 
@@ -98,18 +84,18 @@ public class EntityMimic extends LeapingMonster {
         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.5);
     }
 
-    @Override
-    public void addGoal() {
-        this.targetSelector.addGoal(1, this.targetPlayer);
-        this.targetSelector.addGoal(2, this.targetMobs);
-        this.targetSelector.addGoal(0, this.hurt);
-        this.targetSelector.addGoal(3, new RiderAttackTargetGoal(this, 15));
-
-        this.goalSelector.addGoal(0, this.swimGoal);
-        this.goalSelector.addGoal(0, new StayGoal<>(this, StayGoal.CANSTAYMONSTER));
-        this.goalSelector.addGoal(3, this.followOwnerGoal);
-        this.goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 1.0));
-    }
+//    @Override
+//    public void addGoal() {
+//        this.targetSelector.addGoal(1, this.targetPlayer);
+//        this.targetSelector.addGoal(2, this.targetMobs);
+//        this.targetSelector.addGoal(0, this.hurt);
+//        this.targetSelector.addGoal(3, new RiderAttackTargetGoal(this, 15));
+//
+//        this.goalSelector.addGoal(0, this.swimGoal);
+//        this.goalSelector.addGoal(0, new StayGoal<>(this, StayGoal.CANSTAYMONSTER));
+//        this.goalSelector.addGoal(3, this.followOwnerGoal);
+//        this.goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 1.0));
+//    }
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
@@ -120,7 +106,7 @@ public class EntityMimic extends LeapingMonster {
     }
 
     @Override
-    public AABB attackBB(String anim) {
+    public AABB attackBB(AnimationState anim) {
         double width = this.getBbWidth() * 1.6;
         double length = this.getBbWidth() * 1.8;
         return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
@@ -165,7 +151,7 @@ public class EntityMimic extends LeapingMonster {
             if (anim.isAt("attack"))
                 ModSpells.DOUBLE_ARROW.get().use(this);
         } else {
-            if (!this.isLeapingAnim(anim)) {
+            if (!this.isLeapingAnim(anim.getID())) {
                 Vec3 vec32 = this.getLeapVec(this.tryGetTargetPosition(this.getTarget())).scale(0.1);
                 this.setDeltaMovement(vec32.x, 0.05f, vec32.z);
             }
@@ -174,8 +160,8 @@ public class EntityMimic extends LeapingMonster {
     }
 
     @Override
-    protected boolean isLeapingAnim(AnimatedAction anim) {
-        return anim.is(LEAP);
+    protected boolean isLeapingAnim(String anim) {
+        return anim.equals(LEAP);
     }
 
     @Override
@@ -224,7 +210,7 @@ public class EntityMimic extends LeapingMonster {
     }
 
     @Override
-    protected void jumpFromGround() {
+    public void jumpFromGround() {
         Vec3 vec3 = this.getDeltaMovement();
         this.setDeltaMovement(vec3.x, this.getJumpPower(), vec3.z);
         this.hasImpulse = true;
@@ -297,7 +283,7 @@ public class EntityMimic extends LeapingMonster {
             double dZ = this.wantedZ - this.mob.getZ();
             float n = (float) (Mth.atan2(dZ, dX) * Mth.RAD_TO_DEG) - 90.0f;
             this.mob.setYRot(this.rotlerp(this.mob.getYRot(), n, 90.0f));
-            if (this.mob.isOnGround()) {
+            if (this.mob.onGround()) {
                 this.mob.setSpeed((float) (this.speedModifier * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED)));
                 if (this.jumpDelay-- <= 0) {
                     this.jumpDelay = this.mimic.getJumpDelay();

@@ -1,15 +1,16 @@
 package io.github.flemmli97.runecraftory.common.entities.ai.control;
 
 import io.github.flemmli97.runecraftory.common.utils.MathsHelper;
+import io.github.flemmli97.tenshilib.common.entity.ai.MoveControllerPlus;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
 
-public class SwimWalkMoveController extends MoveControlerEx {
+public class SwimWalkMoveController extends MoveControllerPlus {
 
     public SwimWalkMoveController(Mob entity) {
         super(entity);
@@ -29,7 +30,7 @@ public class SwimWalkMoveController extends MoveControlerEx {
             this.mob.setXRot(this.rotlerp(this.mob.getXRot(), yXRot[1], 30));
             Path path = this.mob.getNavigation().getPath();
             Node node = path != null && !path.isDone() ? path.getPreviousNode() : null;
-            if (node != null && node.type == BlockPathTypes.WATER_BORDER && this.mob.isInWater() && this.mob.getDeltaMovement().y() < 0.2) {
+            if (node != null && node.type == PathType.WATER_BORDER && this.mob.isInWater() && this.mob.getDeltaMovement().y() < 0.2) {
                 this.mob.getJumpControl().jump();
             }
 

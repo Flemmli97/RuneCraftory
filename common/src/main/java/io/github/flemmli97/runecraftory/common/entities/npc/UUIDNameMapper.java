@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.npc;
 
-
+import io.github.flemmli97.tenshilib.common.entity.EntityUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
@@ -20,7 +20,7 @@ public class UUIDNameMapper {
 
     public void recalculateName(Level level) {
         if (this.uuid != null) {
-            Entity entity = EntityUtil.findFromUUID(Entity.class, level, this.uuid);
+            Entity entity = EntityUtils.findFromUUID(Entity.class, level, this.uuid);
             if (entity != null)
                 this.name = entity.getName();
         }
@@ -32,7 +32,7 @@ public class UUIDNameMapper {
 
     public Component getName(Level level) {
         if (this.name == null && this.uuid != null) {
-            Entity entity = EntityUtil.findFromUUID(Entity.class, level, this.uuid);
+            Entity entity = EntityUtils.findFromUUID(Entity.class, level, this.uuid);
             if (entity != null)
                 this.name = entity.getName();
         }

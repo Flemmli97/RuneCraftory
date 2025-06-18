@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.common.datapack.manager.npc;
 
-
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.util.random.WeightedRandom;
@@ -10,6 +9,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class WeightedList<T> {
+
     private int totalWeight;
     private List<WeightedEntry.Wrapper<T>> view = List.of();
 

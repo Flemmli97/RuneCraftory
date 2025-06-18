@@ -42,7 +42,6 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
     protected int topPos;
     private int lines;
 
-
     protected final T entity;
     private final ShopState isShopOpen;
     private final boolean canFollow;
@@ -287,6 +286,5 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
     interface ToolTipRenderer {
 
         void render(PoseStack stack, int mouseX, int mouseY);
-
     }
 }

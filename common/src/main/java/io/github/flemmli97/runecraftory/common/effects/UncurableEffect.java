@@ -8,5 +8,4 @@ public class UncurableEffect extends SyncedMobEffect {
     public UncurableEffect(MobEffectCategory type, int color, S2CEntityDataSync.DataType packetType) {
         super(type, color, packetType);
     }
-
 }

@@ -67,6 +67,7 @@ public class ComboContainer {
     }
 
     public interface ComboGetter {
+
         int get(AttackActionHandler handler);
     }
 

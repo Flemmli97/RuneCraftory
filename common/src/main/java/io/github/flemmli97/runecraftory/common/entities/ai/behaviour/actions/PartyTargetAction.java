@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.entities.ai.behaviour.actions;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.registry.NPCAction;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
@@ -12,11 +13,10 @@ import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 
 import java.util.Optional;
-import java.util.function.Supplier;
 
 public class PartyTargetAction implements NPCAction {
 
-    public static final Codec<PartyTargetAction> CODEC = RecordCodecBuilder.create((instance) ->
+    public static final MapCodec<PartyTargetAction> CODEC = RecordCodecBuilder.mapCodec((instance) ->
             instance.group(ModSpells.SPELLS.registry().byNameCodec().fieldOf("spell").forGetter(d -> d.spell),
                     Codec.BOOL.fieldOf("ignore_seal").forGetter(d -> d.ignoreSeal),
                     NPCAction.optionalNumCooldown(d -> d.cooldown)
@@ -25,7 +25,6 @@ public class PartyTargetAction implements NPCAction {
     private final Spell spell;
     private final boolean ignoreSeal;
     private final NumberProvider cooldown;
-
 
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     private PartyTargetAction(Spell spell, boolean ignoreSeal, Optional<NumberProvider> cooldown) {
@@ -43,8 +42,8 @@ public class PartyTargetAction implements NPCAction {
     }
 
     @Override
-    public Supplier<Codec<PartyTargetAction>> codec() {
-        return ModNPCActions.PARTY_TARGET_ACTION;
+    public MapCodec<PartyTargetAction> codec() {
+        return ModNPCActions.PARTY_TARGET_ACTION.get();
     }
 
     @Override

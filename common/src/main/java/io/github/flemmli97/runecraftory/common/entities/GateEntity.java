@@ -195,7 +195,6 @@ public class GateEntity extends Mob implements IBaseMob {
                 return;
             }
             this.setSharedFlag(6, this.isCurrentlyGlowing());
-
         } else {
             this.clientRenderTick += 10;
         }

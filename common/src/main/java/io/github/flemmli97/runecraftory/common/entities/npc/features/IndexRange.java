@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.entities.npc.features;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import net.minecraft.util.ExtraCodecs;
@@ -29,7 +30,7 @@ public interface IndexRange {
 
     record FirstNIndices(int n) implements IndexRange {
 
-        public static final Codec<FirstNIndices> CODEC = ExtraCodecs.POSITIVE_INT.fieldOf("amount").xmap(FirstNIndices::new, FirstNIndices::n).codec();
+        public static final MapCodec<FirstNIndices> CODEC = ExtraCodecs.POSITIVE_INT.fieldOf("amount").xmap(FirstNIndices::new, FirstNIndices::n);
 
         @Override
         public Type getType() {
@@ -46,7 +47,7 @@ public interface IndexRange {
 
     record RangeIndices(int min, int max) implements IndexRange {
 
-        public static final Codec<RangeIndices> CODEC = RecordCodecBuilder.create(inst ->
+        public static final MapCodec<RangeIndices> CODEC = RecordCodecBuilder.mapCodec(inst ->
                 inst.group(
                         Codec.INT.fieldOf("min").forGetter(d -> d.min),
                         Codec.INT.fieldOf("max").forGetter(d -> d.max)
@@ -65,7 +66,7 @@ public interface IndexRange {
 
     record SelectedIndices(List<Integer> indices) implements IndexRange {
 
-        public static final Codec<SelectedIndices> CODEC = Codec.INT.listOf().fieldOf("indices").xmap(SelectedIndices::new, SelectedIndices::indices).codec();
+        public static final MapCodec<SelectedIndices> CODEC = Codec.INT.listOf().fieldOf("indices").xmap(SelectedIndices::new, SelectedIndices::indices);
 
         @Override
         public Type getType() {

@@ -1,7 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 
 import com.google.common.collect.ImmutableMap;
-import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.MultiPartEntity;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntitySlashResidue;
@@ -16,14 +15,9 @@ import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.common.entity.AnimationHandler;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.TimedWrappedRunner;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
@@ -33,10 +27,9 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.random.WeightedEntry;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -45,6 +38,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -94,7 +88,7 @@ public class EntitySkelefang extends BossMonster {
     public static final String INTERACT = BUILDER.add("interact", TAIL_SLAM);
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
-    private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntitySkelefang>> ATTACK_HANDLER = createAnimationHandler(b -> {
+    private static final ImmutableMap<String, BiConsumer<AnimationState, EntitySkelefang>> ATTACK_HANDLER = createAnimationHandler(b -> {
         b.put(TAIL_SLAM, (anim, entity) -> {
             if (entity.remainingTailBones() > 10 || entity.isEnraged()) {
                 if (anim.isAt("attack_1") || anim.isAt("attack_2") || anim.isAt("attack_3")) {
@@ -174,7 +168,7 @@ public class EntitySkelefang extends BossMonster {
             }
             entity.mobAttack(anim, null, e -> {
                 if (!entity.hitEntity.contains(e) && CombatUtils.mobAttack(entity, e,
-                        new CustomDamage.Builder(entity).hurtResistant(5).knock(CustomDamage.KnockBackType.UP).withChangedAttribute(ModAttributes.STUN.get(), 70))) {
+                        new CustomDamage.Builder(entity).hurtResistant(5).knock(CustomDamage.KnockBackType.UP).withChangedAttribute(ModAttributes.STUN.asHolder(), 70))) {
                     entity.hitEntity.add(e);
                 }
             });
@@ -194,32 +188,32 @@ public class EntitySkelefang extends BossMonster {
             }
         });
     });
-
-    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntitySkelefang>>> ATTACKS = List.of(
-            WeightedEntry.wrap(new GoalAttackAction<EntitySkelefang>(TAIL_SLAM)
-                    .cooldown(e -> e.animationCooldown(TAIL_SLAM))
-                    .withCondition(((goal, target, previous) -> goal.attacker.remainingTailBones() > 10))
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 4), e -> 40 + e.getRandom().nextInt(20))), 10),
-            WeightedEntry.wrap(new GoalAttackAction<EntitySkelefang>(NEEDLE_THROW)
-                    .cooldown(e -> e.animationCooldown(NEEDLE_THROW))
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 6), e -> 40 + e.getRandom().nextInt(20))), 9),
-            WeightedEntry.wrap(new GoalAttackAction<EntitySkelefang>(TAIL_SLAP)
-                    .cooldown(e -> e.animationCooldown(TAIL_SLAP))
-                    .withCondition(((goal, target, previous) -> goal.attacker.remainingTailBones() > 10))
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 3), e -> 40 + e.getRandom().nextInt(20))), 12),
-            WeightedEntry.wrap(new GoalAttackAction<EntitySkelefang>(SLASH)
-                    .cooldown(e -> e.animationCooldown(SLASH))
-                    .withCondition(((goal, target, previous) -> goal.attacker.remainingRightLegBones() > 0 || goal.attacker.remainingLeftLegBones() > 0))
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 4), e -> 40 + e.getRandom().nextInt(20))), 9),
-            WeightedEntry.wrap(new GoalAttackAction<EntitySkelefang>(CHARGE)
-                    .cooldown(e -> e.animationCooldown(CHARGE))
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 7), e -> 20 + e.getRandom().nextInt(20))), 11)
-    );
-    private static final List<WeightedEntry.Wrapper<IdleAction<EntitySkelefang>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 3)), 1)
-    );
-
-    public final AnimatedAttackGoal<EntitySkelefang> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+    //
+//    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntitySkelefang>>> ATTACKS = List.of(
+//            WeightedEntry.wrap(new GoalAttackAction<EntitySkelefang>(TAIL_SLAM)
+//                    .cooldown(e -> e.animationCooldown(TAIL_SLAM))
+//                    .withCondition(((goal, target, previous) -> goal.attacker.remainingTailBones() > 10))
+//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 4), e -> 40 + e.getRandom().nextInt(20))), 10),
+//            WeightedEntry.wrap(new GoalAttackAction<EntitySkelefang>(NEEDLE_THROW)
+//                    .cooldown(e -> e.animationCooldown(NEEDLE_THROW))
+//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 6), e -> 40 + e.getRandom().nextInt(20))), 9),
+//            WeightedEntry.wrap(new GoalAttackAction<EntitySkelefang>(TAIL_SLAP)
+//                    .cooldown(e -> e.animationCooldown(TAIL_SLAP))
+//                    .withCondition(((goal, target, previous) -> goal.attacker.remainingTailBones() > 10))
+//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 3), e -> 40 + e.getRandom().nextInt(20))), 12),
+//            WeightedEntry.wrap(new GoalAttackAction<EntitySkelefang>(SLASH)
+//                    .cooldown(e -> e.animationCooldown(SLASH))
+//                    .withCondition(((goal, target, previous) -> goal.attacker.remainingRightLegBones() > 0 || goal.attacker.remainingLeftLegBones() > 0))
+//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 4), e -> 40 + e.getRandom().nextInt(20))), 9),
+//            WeightedEntry.wrap(new GoalAttackAction<EntitySkelefang>(CHARGE)
+//                    .cooldown(e -> e.animationCooldown(CHARGE))
+//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 7), e -> 20 + e.getRandom().nextInt(20))), 11)
+//    );
+//    private static final List<WeightedEntry.Wrapper<IdleAction<EntitySkelefang>>> IDLE_ACTIONS = List.of(
+//            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 3)), 1)
+//    );
+//
+//    public final AnimatedAttackGoal<EntitySkelefang> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntitySkelefang> animationHandler = new AnimationHandler<>(this, ANIMS)
             .withChangeListener(anim -> {
                 if (anim != null) {
@@ -256,8 +250,6 @@ public class EntitySkelefang extends BossMonster {
 
     public EntitySkelefang(EntityType<? extends EntitySkelefang> type, Level world) {
         super(type, world);
-        if (!world.isClientSide)
-            this.goalSelector.addGoal(1, this.attack);
         this.head = new MultiPartContainer(() -> new MultiPartEntity(this, 1.6f, 1.3f));
         this.back = new MultiPartContainer(() -> new MultiPartEntity(this, 1.6f, 1.5f));
         this.rightLeg = new MultiPartContainer(() -> new MultiPartEntity(this, 1.5f, 2.5f));
@@ -504,9 +496,9 @@ public class EntitySkelefang extends BossMonster {
                 Vec3 center = this.position().add(0, this.getBbHeight() * 0.5, 0);
                 List<Vector3f> locations = new ArrayList<>();
                 double speed = (this.getBbWidth() + 2) / 40;
-                locations.addAll(RayTraceUtils.rotatedVecs(MathUtils.NORMAL_X.scale(this.getBbWidth() + 2), MathUtils.NORMAL_Z, -180, 180, 10));
-                locations.addAll(RayTraceUtils.rotatedVecs(MathUtils.NORMAL_X.scale(this.getBbWidth() + 2), MathUtils.NORMAL_Y, -180, 180, 10));
-                locations.addAll(RayTraceUtils.rotatedVecs(MathUtils.NORMAL_Y.scale(this.getBbWidth() + 2), MathUtils.NORMAL_X, -180, 180, 10));
+                locations.addAll(MathUtils.rotatedVecs(MathUtils.NORMAL_X.scale(this.getBbWidth() + 2), MathUtils.NORMAL_Z, -180, 180, 10));
+                locations.addAll(MathUtils.rotatedVecs(MathUtils.NORMAL_X.scale(this.getBbWidth() + 2), MathUtils.NORMAL_Y, -180, 180, 10));
+                locations.addAll(MathUtils.rotatedVecs(MathUtils.NORMAL_Y.scale(this.getBbWidth() + 2), MathUtils.NORMAL_X, -180, 180, 10));
                 for (Vector3f vec : locations) {
                     Vec3 pos = center.add(vec.x(), vec.y(), vec.z());
                     Vec3 dir = new Vec3(vec.x(), vec.y(), vec.z()).normalize().scale(speed);
@@ -562,7 +554,7 @@ public class EntitySkelefang extends BossMonster {
 
     @Override
     protected void actuallyHurt(DamageSource source, float damageAmount) {
-        if (source == DamageSource.OUT_OF_WORLD) {
+        if (!source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
             super.actuallyHurt(source, damageAmount);
             if (this.isDeadOrDying())
                 this.level().broadcastEntityEvent(this, (byte) 83);
@@ -610,7 +602,7 @@ public class EntitySkelefang extends BossMonster {
     }
 
     @Override
-    public AnimatedAction getDeathAnimation() {
+    public String getDeathAnimation() {
         return DEATH;
     }
 
@@ -625,13 +617,13 @@ public class EntitySkelefang extends BossMonster {
     @Override
     public void handleAttack(AnimationState anim) {
         this.getNavigation().stop();
-        BiConsumer<AnimatedAction, EntitySkelefang> handler = ATTACK_HANDLER.get(anim.getID());
+        BiConsumer<AnimationState, EntitySkelefang> handler = ATTACK_HANDLER.get(anim.getID());
         if (handler != null)
             handler.accept(anim, this);
     }
 
     @Override
-    public void mobAttack(AnimatedAction anim, LivingEntity target, Consumer<LivingEntity> cons) {
+    public void mobAttack(AnimationState anim, LivingEntity target, Consumer<LivingEntity> cons) {
         if (anim.is(CHARGE)) {
             double width = this.getBbWidth();
             double speed = Math.max(width, this.getDeltaMovement().length() - width);
@@ -715,13 +707,13 @@ public class EntitySkelefang extends BossMonster {
     @Override
     protected void playStepSound(BlockPos pos, BlockState blockIn) {
     }
-
-    @Override
-    public Vec3 passengerOffset(Entity passenger) {
-        if (this.hasBones())
-            return new Vec3(0, 43.5 / 16d, 7 / 16d);
-        return new Vec3(0, 30 / 16d, -3 / 16d);
-    }
+//
+//    @Override
+//    public Vec3 passengerOffset(Entity passenger) {
+//        if (this.hasBones())
+//            return new Vec3(0, 43.5 / 16d, 7 / 16d);
+//        return new Vec3(0, 30 / 16d, -3 / 16d);
+//    }
 
     @Override
     public AnimationHandler<EntitySkelefang> getAnimationHandler() {
@@ -734,7 +726,7 @@ public class EntitySkelefang extends BossMonster {
     }
 
     @Override
-    public int animationCooldown(AnimatedAction anim) {
+    public int animationCooldown(String anim) {
         int diffAdd = this.difficultyCooldown();
         return (this.isEnraged() ? 27 + this.getRandom().nextInt(20) : 35 + this.getRandom().nextInt(25)) + diffAdd;
     }

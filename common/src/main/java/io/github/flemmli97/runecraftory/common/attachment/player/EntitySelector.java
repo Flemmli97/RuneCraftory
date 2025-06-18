@@ -19,5 +19,4 @@ public class EntitySelector {
         this.poi = null;
         this.apply = null;
     }
-
 }

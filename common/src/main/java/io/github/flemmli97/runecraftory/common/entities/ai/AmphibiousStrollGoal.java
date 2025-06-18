@@ -32,5 +32,4 @@ public class AmphibiousStrollGoal extends RandomStrollGoal {
         }
         return target;
     }
-
 }

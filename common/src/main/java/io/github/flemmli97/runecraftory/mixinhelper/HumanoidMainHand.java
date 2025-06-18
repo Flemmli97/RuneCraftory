@@ -7,5 +7,4 @@ public interface HumanoidMainHand {
     ModelPartsContainer.ModelPartExtended runecraftory$getRightHandItem();
 
     ModelPartsContainer.ModelPartExtended runecraftory$getLeftHandItem();
-
 }

@@ -55,5 +55,6 @@ public class LevelSetBlockSnapshot {
     }
 
     public record BlockSnapshot(BlockState state, BlockPos pos, int updateFlag) {
+
     }
 }

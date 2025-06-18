@@ -123,8 +123,8 @@ public class RunecraftoryCommand {
         if (s.equals("ALL")) {
             for (ServerPlayer player : EntityArgument.getPlayers(ctx, "player")) {
                 PlayerData data = Platform.INSTANCE.getPlayerData(player);
-                    for (EnumSkills skill : EnumSkills.values())
-                        data.increaseSkill(skill, amount);
+                for (EnumSkills skill : EnumSkills.values())
+                    data.increaseSkill(skill, amount);
                 ctx.getSource().sendSuccess(() -> Component.translatable("runecraftory.command.skill.lvl.add", s, player.getName(), amount), false);
                 ret++;
             }
@@ -150,8 +150,8 @@ public class RunecraftoryCommand {
         if (s.equals("ALL")) {
             for (ServerPlayer player : EntityArgument.getPlayers(ctx, "player")) {
                 PlayerData data = Platform.INSTANCE.getPlayerData(player);
-                    for (EnumSkills skill : EnumSkills.values())
-                        data.setSkillLevel(skill, amount, 0, true);
+                for (EnumSkills skill : EnumSkills.values())
+                    data.setSkillLevel(skill, amount, 0, true);
                 ctx.getSource().sendSuccess(() -> Component.translatable("runecraftory.command.skill.lvl.set", s, player.getName(), amount), false);
                 ret++;
             }
@@ -197,7 +197,7 @@ public class RunecraftoryCommand {
         for (ServerPlayer player : EntityArgument.getPlayers(ctx, "player")) {
             PlayerData data = Platform.INSTANCE.getPlayerData(player);
             data.resetAll();
-                LoaderNetwork.INSTANCE.sendToPlayer(new S2CCapSync(data), player);
+            LoaderNetwork.INSTANCE.sendToPlayer(new S2CCapSync(data), player);
             QuestHandler.getData(player).resetAll();
             ctx.getSource().sendSuccess(() -> Component.translatable("runecraftory.command.reset.all", player.getName()), false);
             ret++;

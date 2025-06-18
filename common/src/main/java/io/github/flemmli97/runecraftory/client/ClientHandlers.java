@@ -341,6 +341,5 @@ public class ClientHandlers {
         }
         if (scale != 1)
             poseStack.scale(scale, scale, scale);
-
     }
 }

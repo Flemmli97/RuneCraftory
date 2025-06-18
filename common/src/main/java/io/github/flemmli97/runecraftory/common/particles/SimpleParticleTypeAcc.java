@@ -7,5 +7,4 @@ public class SimpleParticleTypeAcc extends SimpleParticleType {
     public SimpleParticleTypeAcc(boolean overrideLimiter) {
         super(overrideLimiter);
     }
-
 }

@@ -297,6 +297,7 @@ public class NPCQuest extends QuestBase {
     }
 
     private record DynamicQuestData(UUID npcUuid, ResourceLocation origin) {
+
         static final Codec<DynamicQuestData> CODEC = RecordCodecBuilder.create(inst -> inst.group(
                 Codec.STRING.xmap(UUID::fromString, UUID::toString).fieldOf("npcUuid").forGetter(d -> d.npcUuid),
                 ResourceLocation.CODEC.fieldOf("origin_id").forGetter(d -> d.origin)

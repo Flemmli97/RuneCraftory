@@ -8,17 +8,22 @@ import io.github.flemmli97.runecraftory.api.registry.NPCFeatureHolder;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.network.FriendlyByteBuf;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 
 public class BlushFeatureType implements NPCFeatureHolder<BlushFeatureType.BlushFeature> {
 
-    public static MapCodec<BlushFeatureType> CODEC = RecordCodecBuilder.mapCodec(inst ->
-            inst.group(
-                    Codec.FLOAT.fieldOf("chance").forGetter(d -> d.chance),
+    public static MapCodec<BlushFeatureType> TYPE_CODEC = RecordCodecBuilder.mapCodec(inst ->
+            inst.group(Codec.FLOAT.fieldOf("chance").forGetter(d -> d.chance),
                     ColorSetting.CODEC.fieldOf("colors").forGetter(d -> d.setting)
             ).apply(inst, BlushFeatureType::new));
+    public static MapCodec<BlushFeature> CODEC = RecordCodecBuilder.mapCodec(inst ->
+            inst.group(Codec.BOOL.fieldOf("blush").forGetter(BlushFeature::blush),
+                    Codec.INT.fieldOf("color").forGetter(BlushFeature::color)
+            ).apply(inst, BlushFeature::new));
+    public static final StreamCodec<ByteBuf, BlushFeature> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.BOOL, BlushFeature::blush, ByteBufCodecs.INT, BlushFeature::color, BlushFeature::new);
 
     private final float chance;
     private final ColorSetting setting;
@@ -30,7 +35,7 @@ public class BlushFeatureType implements NPCFeatureHolder<BlushFeatureType.Blush
 
     @Override
     public BlushFeature create(EntityNPCBase npc) {
-        return new BlushFeature(this.setting.getRandom(npc.getRandom()), npc.getRandom().nextFloat() < this.chance);
+        return new BlushFeature(npc.getRandom().nextFloat() < this.chance, this.setting.getRandom(npc.getRandom()));
     }
 
     @Override
@@ -38,40 +43,10 @@ public class BlushFeatureType implements NPCFeatureHolder<BlushFeatureType.Blush
         return ModNPCLooks.BLUSH.get();
     }
 
-    public static class BlushFeature implements NPCFeature {
-
-        public final boolean blush;
-        public final int color;
-
-        public BlushFeature(FriendlyByteBuf buf) {
-            this(buf.readInt(), buf.readBoolean());
-        }
-
-        public BlushFeature(Tag tag) {
-            this(((CompoundTag) tag).getInt("Color"), ((CompoundTag) tag).getBoolean("Blush"));
-        }
-
-        public BlushFeature(int color, boolean blush) {
-            this.color = color;
-            this.blush = blush;
-        }
+    public record BlushFeature(boolean blush, int color) implements NPCFeature {
 
         @Override
-        public void writeToBuffer(FriendlyByteBuf buf) {
-            buf.writeInt(this.color);
-            buf.writeBoolean(this.blush);
-        }
-
-        @Override
-        public Tag save() {
-            CompoundTag tag = new CompoundTag();
-            tag.putInt("Color", this.color);
-            tag.putBoolean("Blush", this.blush);
-            return tag;
-        }
-
-        @Override
-        public NPCFeatureType<?> getType() {
+        public NPCFeatureType<?> type() {
             return ModNPCLooks.BLUSH.get();
         }
     }

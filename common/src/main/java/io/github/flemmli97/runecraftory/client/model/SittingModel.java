@@ -5,5 +5,4 @@ import com.mojang.blaze3d.vertex.PoseStack;
 public interface SittingModel {
 
     void translateSittingPosition(PoseStack stack);
-
 }

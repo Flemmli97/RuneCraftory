@@ -2,24 +2,16 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.common.entity.AnimationHandler;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.StrafingRunner;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.random.WeightedEntry;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
@@ -27,8 +19,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 public class EntityFlowerLily extends BaseMonster {
 
@@ -38,23 +28,22 @@ public class EntityFlowerLily extends BaseMonster {
     public static final String INTERACT = BUILDER.add("interact", ATTACK);
     public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
-
-    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityFlowerLily>>> ATTACKS = List.of(
-            WeightedEntry.wrap(MonsterActionUtils.simpleRangedEvadingAction(ATTACK, 9, 2, 1, e -> 1), 2),
-            WeightedEntry.wrap(MonsterActionUtils.<EntityFlowerLily>simpleMeleeAction(LEAP, e -> 1)
-                    .withCondition(((goal, target, previous) -> goal.distanceToTargetSq < 4)), 5)
-    );
-    private static final List<WeightedEntry.Wrapper<IdleAction<EntityFlowerLily>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 2),
-            WeightedEntry.wrap(new IdleAction<>(() -> new StrafingRunner<>(16, 1)), 1)
-    );
-
-    public final AnimatedAttackGoal<EntityFlowerLily> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+    //
+//    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityFlowerLily>>> ATTACKS = List.of(
+//            WeightedEntry.wrap(MonsterActionUtils.simpleRangedEvadingAction(ATTACK, 9, 2, 1, e -> 1), 2),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntityFlowerLily>simpleMeleeAction(LEAP, e -> 1)
+//                    .withCondition(((goal, target, previous) -> goal.distanceToTargetSq < 4)), 5)
+//    );
+//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityFlowerLily>>> IDLE_ACTIONS = List.of(
+//            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 2),
+//            WeightedEntry.wrap(new IdleAction<>(() -> new StrafingRunner<>(16, 1)), 1)
+//    );
+//
+//    public final AnimatedAttackGoal<EntityFlowerLily> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityFlowerLily> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityFlowerLily(EntityType<? extends EntityFlowerLily> type, Level world) {
         super(type, world);
-        this.goalSelector.addGoal(2, this.attack);
     }
 
     @Override
@@ -64,7 +53,7 @@ public class EntityFlowerLily extends BaseMonster {
     }
 
     @Override
-    public OrientedBoundingBox calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
+    public OrientedBoundingBox calculateAttackAABB(AnimationState anim, Vec3 target, double grow) {
         if (anim.is(LEAP)) {
             return new OrientedBoundingBox(this.attackBB(anim), this.getYRot(), 0, this.position());
         }
@@ -72,7 +61,7 @@ public class EntityFlowerLily extends BaseMonster {
     }
 
     @Override
-    public AABB attackBB(String anim) {
+    public AABB attackBB(AnimationState anim) {
         double attackSize = this.getBbWidth() * 2.1;
         return new AABB(-attackSize, -0.2, -attackSize, attackSize, this.getBbHeight() + 0.2, attackSize);
     }
@@ -147,9 +136,9 @@ public class EntityFlowerLily extends BaseMonster {
     public String getSleepAnimation() {
         return SLEEP;
     }
-
-    @Override
-    public Vec3 passengerOffset(Entity passenger) {
-        return new Vec3(0, 14 / 16d, -4 / 16d);
-    }
+//
+//    @Override
+//    public Vec3 passengerOffset(Entity passenger) {
+//        return new Vec3(0, 14 / 16d, -4 / 16d);
+//    }
 }

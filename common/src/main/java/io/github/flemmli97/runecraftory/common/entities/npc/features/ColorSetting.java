@@ -4,18 +4,10 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.flemmli97.runecraftory.api.registry.NPCFeature;
-import io.github.flemmli97.runecraftory.api.registry.NPCFeatureHolder;
-import io.github.flemmli97.runecraftory.api.registry.NPCFeatureType;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import net.minecraft.nbt.IntTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 
 import java.util.List;
-import java.util.function.Supplier;
 
 public record ColorSetting(List<Either<Integer, ColorRange>> colors) {
 
@@ -61,29 +53,13 @@ public record ColorSetting(List<Either<Integer, ColorRange>> colors) {
         return rand.map(i -> i, range -> range.getRandom(random));
     }
 
-    public static NPCFeatureType<ColorSettingFeature> createSimple(Supplier<NPCFeatureType<ColorSettingFeature>> type) {
-        return new NPCFeatureType<>(ColorSetting.CODEC.xmap(s -> new ColorSettingFeatureType(s, type), f -> f.setting),
-                buf -> new ColorSettingFeature(buf) {
-                    @Override
-                    public NPCFeatureType<?> getType() {
-                        return type.get();
-                    }
-                },
-                tag -> new ColorSettingFeature(tag) {
-                    @Override
-                    public NPCFeatureType<?> getType() {
-                        return type.get();
-                    }
-                });
-    }
-
     public record ColorRange(int colorMin, int colorMax) {
 
         public static Codec<Integer> HEX_COLOR = Codec.STRING.flatXmap(s -> {
             try {
                 return DataResult.success(Integer.parseInt(s, 16));
             } catch (NumberFormatException e) {
-                return DataResult.error("Could not parse color " + s);
+                return DataResult.error(() -> "Could not parse color " + s);
             }
         }, i -> DataResult.success(String.format("%06x", i)));
         public static final Codec<ColorRange> CODEC = RecordCodecBuilder.create(inst ->
@@ -101,59 +77,6 @@ public record ColorSetting(List<Either<Integer, ColorRange>> colors) {
             int green = randomRange(random, this.colorMin >> 8 & 255, this.colorMax >> 8 & 255);
             int blue = randomRange(random, this.colorMin & 255, this.colorMax & 255);
             return red << 16 | green << 8 | blue;
-        }
-    }
-
-    public static class ColorSettingFeatureType implements NPCFeatureHolder<ColorSettingFeature> {
-
-        private final ColorSetting setting;
-        private final Supplier<NPCFeatureType<ColorSettingFeature>> type;
-
-        protected ColorSettingFeatureType(ColorSetting setting, Supplier<NPCFeatureType<ColorSettingFeature>> type) {
-            this.setting = setting;
-            this.type = type;
-        }
-
-        @Override
-        public ColorSettingFeature create(EntityNPCBase npc) {
-            return new ColorSettingFeature(this.setting.getRandom(npc.getRandom())) {
-                @Override
-                public NPCFeatureType<?> getType() {
-                    return ColorSettingFeatureType.this.type.get();
-                }
-            };
-        }
-
-        @Override
-        public NPCFeatureType<ColorSettingFeature> getType() {
-            return this.type.get();
-        }
-    }
-
-    public static abstract class ColorSettingFeature implements NPCFeature {
-
-        public final int color;
-
-        public ColorSettingFeature(FriendlyByteBuf buf) {
-            this(buf.readInt());
-        }
-
-        public ColorSettingFeature(Tag tag) {
-            this(((IntTag) tag).getAsInt());
-        }
-
-        public ColorSettingFeature(int color) {
-            this.color = color;
-        }
-
-        @Override
-        public void writeToBuffer(FriendlyByteBuf buf) {
-            buf.writeInt(this.color);
-        }
-
-        @Override
-        public Tag save() {
-            return IntTag.valueOf(this.color);
         }
     }
 }

@@ -23,5 +23,4 @@ public class ModMenuTypes {
     public static final RegistryEntrySupplier<MenuType<?>, MenuType<ShippingContainer>> SHIPPING_CONTAINER = CONTAINERS.register("shipping_container", () -> Platform.INSTANCE.menuType((windowID, inv) -> new ShippingContainer(windowID, inv)));
     public static final RegistryEntrySupplier<MenuType<?>, MenuType<ContainerUpgrade>> UPGRADE_CONTAINER = CONTAINERS.register("upgrade_container", () -> Platform.INSTANCE.menuType(ContainerUpgrade::new));
     public static final RegistryEntrySupplier<MenuType<?>, MenuType<ContainerShop>> SHOP_CONTAINER = CONTAINERS.register("shop_container", () -> Platform.INSTANCE.menuType(ContainerShop::new));
-
 }

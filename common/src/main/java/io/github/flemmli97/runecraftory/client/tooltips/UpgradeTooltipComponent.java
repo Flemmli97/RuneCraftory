@@ -1,14 +1,13 @@
 package io.github.flemmli97.runecraftory.client.tooltips;
 
 import com.google.common.base.Suppliers;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.components.ItemStackHolder;
 import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
@@ -62,28 +61,29 @@ public class UpgradeTooltipComponent implements ClientTooltipComponent {
     }
 
     @Override
-    public void renderImage(Font font, int mouseX, int mouseY, PoseStack poseStack, ItemRenderer itemRenderer, int blitOffset) {
+    public void renderImage(Font font, int x, int y, GuiGraphics guiGraphics) {
         if (this.stacks.isEmpty())
             return;
-        PoseStack modelViewStack = RenderSystem.getModelViewStack();
-        modelViewStack.pushPose();
-        float scale = 0.8f;
-        modelViewStack.scale(scale, scale, 1);
-        int x = (int) (mouseX / scale);
-        int y = (int) (mouseY / scale);
-        for (ItemStack stack : this.stacks) {
-            if (!stack.isEmpty())
-                this.renderItem(stack, itemRenderer, x, y);
-            x += 16;
-        }
-        modelViewStack.popPose();
-        RenderSystem.applyModelViewMatrix();
+//        PoseStack modelViewStack = RenderSystem.getModelViewStack();
+//        modelViewStack.pushPose();
+//        float scale = 0.8f;
+//        modelViewStack.scale(scale, scale, 1);
+//        int x = (int) (mouseX / scale);
+//        int y = (int) (mouseY / scale);
+//        for (ItemStack stack : this.stacks) {
+//            if (!stack.isEmpty())
+//                this.renderItem(stack, itemRenderer, x, y);
+//            x += 16;
+//        }
+//        modelViewStack.popPose();
+//        RenderSystem.applyModelViewMatrix();
     }
 
     private void renderItem(ItemStack stack, ItemRenderer renderer, int x, int y) {
-        renderer.renderAndDecorateItem(stack, x, y);
+//        renderer.renderAndDecorateItem(stack, x, y);
     }
 
     public record UpgradeComponent(ItemStack stack) implements TooltipComponent {
+
     }
 }

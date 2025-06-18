@@ -1,21 +1,14 @@
 package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 
 import com.google.common.collect.ImmutableMap;
-import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntitySanoUno;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.spells.FireWallSpell;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.common.entity.AnimationHandler;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
-import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.entity.EntityTypeTest;
@@ -36,7 +29,7 @@ public class EntitySano extends EntitySanoUno {
     public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
-    private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntitySano>> ATTACK_HANDLER = createAnimationHandler(b -> {
+    private static final ImmutableMap<String, BiConsumer<AnimationState, EntitySano>> ATTACK_HANDLER = createAnimationHandler(b -> {
         b.put(FIREBALL_3X, (anim, entity) -> {
             if (anim.isAt("attack"))
                 ModSpells.FIREBALL.get().use(entity);
@@ -65,41 +58,39 @@ public class EntitySano extends EntitySanoUno {
             }
         });
     });
-
-    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntitySano>>> ATTACKS = List.of(
-            WeightedEntry.wrap(MonsterActionUtils.<EntitySano>nonRepeatableAttack(FIREBALL_3X)
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 10),
-            WeightedEntry.wrap(MonsterActionUtils.<EntitySano>nonRepeatableAttack(FIREBALL_BARRAGE)
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 10),
-            WeightedEntry.wrap(MonsterActionUtils.<EntitySano>nonRepeatableAttack(EXPLOSION)
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 10),
-            WeightedEntry.wrap(MonsterActionUtils.<EntitySano>nonRepeatableAttack(FIRE_BREATH)
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 10)
-    );
-    private static final List<WeightedEntry.Wrapper<IdleAction<EntitySano>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<EntitySano>(DoNothingRunner::new)
-                    .duration(e -> e.getRandom().nextInt(20) + 35), 1)
-    );
-
-    public final AnimatedAttackGoal<EntitySano> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+    //
+//    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntitySano>>> ATTACKS = List.of(
+//            WeightedEntry.wrap(MonsterActionUtils.<EntitySano>nonRepeatableAttack(FIREBALL_3X)
+//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 10),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntitySano>nonRepeatableAttack(FIREBALL_BARRAGE)
+//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 10),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntitySano>nonRepeatableAttack(EXPLOSION)
+//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 10),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntitySano>nonRepeatableAttack(FIRE_BREATH)
+//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 10)
+//    );
+//    private static final List<WeightedEntry.Wrapper<IdleAction<EntitySano>>> IDLE_ACTIONS = List.of(
+//            WeightedEntry.wrap(new IdleAction<EntitySano>(DoNothingRunner::new)
+//                    .duration(e -> e.getRandom().nextInt(20) + 35), 1)
+//    );
+//
+//    public final AnimatedAttackGoal<EntitySano> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntitySano> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     private EntityUno other;
 
     public EntitySano(EntityType<? extends EntitySano> type, Level world) {
         super(type, world);
-        if (!world.isClientSide)
-            this.goalSelector.addGoal(1, this.attack);
     }
 
     @Override
-    public AnimatedAction getDeathAnimation() {
+    public String getDeathAnimation() {
         return DEFEAT;
     }
 
     @Override
     public void handleAttack(AnimationState anim) {
-        BiConsumer<AnimatedAction, EntitySano> handler = ATTACK_HANDLER.get(anim.getID());
+        BiConsumer<AnimationState, EntitySano> handler = ATTACK_HANDLER.get(anim.getID());
         if (handler != null)
             handler.accept(anim, this);
     }

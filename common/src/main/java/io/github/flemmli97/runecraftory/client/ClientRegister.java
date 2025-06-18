@@ -146,6 +146,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModMenuTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.tenshilib.client.model.RideableModel;
 import io.github.flemmli97.tenshilib.client.particles.ColoredParticle;
+import io.github.flemmli97.tenshilib.client.render.ItemProjectileRenderer;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColor;
@@ -238,7 +239,7 @@ public class ClientRegister {
             else if (reg == ModItems.NPC_BABY)
                 register.register(reg.get(), ItemModelProps.BABY_GENDER, ItemModelProps.BABY_GENDER_PROPS);
             else if (reg.get() instanceof ShieldItem)
-                register.register(reg.get(), new ResourceLocation("blocking"), (itemStack, clientLevel, livingEntity, i) -> livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == itemStack ? 1.0f : 0.0f);
+                register.register(reg.get(), ResourceLocation.withDefaultNamespace("blocking"), (itemStack, clientLevel, livingEntity, i) -> livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == itemStack ? 1.0f : 0.0f);
         });
     }
 
@@ -347,7 +348,7 @@ public class ClientRegister {
         consumer.register(ModEntities.ARROW.get(), RenderMobArrow::new);
         consumer.register(ModEntities.SPORE.get(), EmptyRender::new);
         consumer.register(ModEntities.GUST.get(), EmptyRender::new);
-        consumer.register(ModEntities.STONE.get(), ctx -> new RenderProjectileItem<>(ctx) {
+        consumer.register(ModEntities.STONE.get(), ctx -> new ItemProjectileRenderer<EntityStone>(ctx) {
             private final ItemStack stack = new ItemStack(ModItems.STONE_ROUND.get());
 
             @Override
@@ -570,26 +571,32 @@ public class ClientRegister {
     }
 
     public interface EntityRendererRegister {
+
         <T extends Entity> void register(EntityType<? extends T> type, EntityRendererProvider<T> provider);
     }
 
     public interface PartileRegister {
+
         <T extends ParticleOptions> void register(ParticleType<T> type, Function<SpriteSet, ParticleProvider<T>> provider);
     }
 
     public interface ItemModelPropsRegister {
+
         void register(Item item, ResourceLocation res, ClampedItemPropertyFunction function);
     }
 
     public interface MenuScreenRegister {
+
         <M extends AbstractContainerMenu, U extends Screen & MenuAccess<M>> void register(MenuType<? extends M> type, ScreenConstructor<M, U> provider);
     }
 
     public interface ScreenConstructor<T extends AbstractContainerMenu, U extends Screen & MenuAccess<T>> {
+
         U create(T var1, Inventory var2, Component var3);
     }
 
     public interface ToolTipComponentRegister {
+
         <T extends TooltipComponent> void register(Class<T> clss, Function<? super T, ? extends ClientTooltipComponent> factory);
     }
 }

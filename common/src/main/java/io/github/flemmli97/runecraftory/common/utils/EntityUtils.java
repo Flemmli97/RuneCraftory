@@ -272,6 +272,7 @@ public class EntityUtils {
     }
 
     record WeightedChestTier(TreasureChestSpawnegg.ChestTier tier, int weight, float modifier, int max) {
+
         int getModifiedWeight(int mod) {
             return Math.min(this.max, (int) (this.weight + this.modifier * mod));
         }

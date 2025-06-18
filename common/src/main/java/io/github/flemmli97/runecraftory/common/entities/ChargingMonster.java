@@ -76,7 +76,7 @@ public abstract class ChargingMonster extends BaseMonster {
 
     @Override
     public void handleAttack(AnimationState anim) {
-        if (this.isChargingAnim(anim.getAnimation())) {
+        if (this.isChargingAnim(anim.getID())) {
             if (this.chargeMotion == null) {
                 this.setChargeMotion(this.getChargeTo(anim));
             }
@@ -106,7 +106,7 @@ public abstract class ChargingMonster extends BaseMonster {
     }
 
     @Override
-    public OrientedBoundingBox calculateAttackAABB(String anim, Vec3 target, double grow) {
+    public OrientedBoundingBox calculateAttackAABB(AnimationState anim, Vec3 target, double grow) {
         if (!this.isChargingAnim(anim))
             return super.calculateAttackAABB(anim, target, grow);
         double width = this.getBbWidth();
@@ -127,7 +127,7 @@ public abstract class ChargingMonster extends BaseMonster {
 
     public void setChargeMotion(Vec3 chargeMotion) {
         this.chargeMotion = chargeMotion;
-        S2CMobUpdate.send(this, SyncableDatas.MOTION_DIR, this.chargeMotion);
+        S2CMobUpdate.send(this, SyncableDatas.NPC_JOB, this.chargeMotion);
     }
 
     public Vec3 getChargeMotion() {
@@ -164,12 +164,12 @@ public abstract class ChargingMonster extends BaseMonster {
 
     private boolean isChargingAnimation() {
         AnimationState anim = this.getAnimationHandler().getAnimation();
-        return anim != null && this.isChargingAnim(anim.getAnimation());
+        return anim != null && this.isChargingAnim(anim.getID());
     }
 
     @Override
     public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
         super.onUpdate(data);
-        data.runIf(SyncableDatas.MOTION_DIR, charge -> this.chargeMotion = charge);
+        data.runIf(SyncableDatas.NPC_JOB, charge -> this.chargeMotion = charge);
     }
 }

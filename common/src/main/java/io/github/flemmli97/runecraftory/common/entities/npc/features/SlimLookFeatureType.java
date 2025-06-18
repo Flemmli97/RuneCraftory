@@ -6,14 +6,16 @@ import io.github.flemmli97.runecraftory.api.registry.NPCFeatureHolder;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
-import net.minecraft.nbt.Tag;
-import net.minecraft.network.FriendlyByteBuf;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 
 public class SlimLookFeatureType implements NPCFeatureHolder<SlimLookFeatureType.SlimLookFeature> {
 
-    public static final SlimLookFeatureType INSTANCE = new SlimLookFeatureType();
-    public static final MapCodec<SlimLookFeatureType> CODEC = MapCodec.unit(INSTANCE);
+    public static final SlimLookFeatureType TYPE_INSTANCE = new SlimLookFeatureType();
     public static final SlimLookFeature FEATURE = new SlimLookFeature();
+    public static final MapCodec<SlimLookFeatureType> TYPE_CODEC = MapCodec.unit(TYPE_INSTANCE);
+    public static final MapCodec<SlimLookFeature> CODEC = MapCodec.unit(FEATURE);
+    public static final StreamCodec<ByteBuf, SlimLookFeature> STREAM_CODEC = StreamCodec.unit(FEATURE);
 
     private SlimLookFeatureType() {
     }
@@ -30,22 +32,12 @@ public class SlimLookFeatureType implements NPCFeatureHolder<SlimLookFeatureType
 
     public static class SlimLookFeature implements NPCFeature {
 
-        public SlimLookFeature() {
+        private SlimLookFeature() {
         }
 
         @Override
-        public void writeToBuffer(FriendlyByteBuf buf) {
-        }
-
-        @Override
-        public Tag save() {
-            return null;
-        }
-
-        @Override
-        public NPCFeatureType<SlimLookFeature> getType() {
+        public NPCFeatureType<SlimLookFeature> type() {
             return ModNPCLooks.SLIM.get();
         }
-
     }
 }

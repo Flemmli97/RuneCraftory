@@ -47,5 +47,4 @@ public class RenderDarkBullet<T extends EntityDarkBullet> extends EntityRenderer
     protected RenderType getRenderType(T entity, ResourceLocation loc) {
         return RenderType.entityCutoutNoCull(loc);
     }
-
 }

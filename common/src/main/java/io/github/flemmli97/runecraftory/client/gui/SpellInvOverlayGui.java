@@ -47,7 +47,6 @@ public class SpellInvOverlayGui extends GuiComponent {
                 }
             }
         }
-
     }
 
     private void renderHotbarItem(PoseStack matrixStack, int x, int y, float partialTicks, ItemStack stack) {

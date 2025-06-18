@@ -298,5 +298,6 @@ public class ContainerCrafting extends AbstractContainerMenu implements Containe
     }
 
     public record ClientRecipeResult(int idx, ItemStack result) {
+
     }
 }

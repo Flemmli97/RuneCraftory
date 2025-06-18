@@ -9,5 +9,4 @@ import java.util.Collection;
 public interface ExtendedFishingRodHookTrigger {
 
     void runecraftory$customTrigger(ServerPlayer player, ItemStack rod, EntityCustomFishingHook entity, Collection<ItemStack> stacks);
-
 }

@@ -98,14 +98,14 @@ public class NPCRelationManager {
         quests.getAllKeys().forEach(key -> {
             ListTag listTag = quests.getList(key, Tag.TAG_STRING);
             Set<ResourceLocation> set = new HashSet<>();
-            listTag.forEach(t -> set.add(new ResourceLocation(t.getAsString())));
+            listTag.forEach(t -> set.add(ResourceLocation.parse(t.getAsString())));
             this.completedQuests.put(UUID.fromString(key), set);
         });
         CompoundTag questsTracker = compound.getCompound("QuestStates");
         questsTracker.getAllKeys().forEach(key -> {
             CompoundTag states = questsTracker.getCompound(key);
             Map<ResourceLocation, Integer> map = new HashMap<>();
-            states.getAllKeys().forEach(id -> map.put(new ResourceLocation(id), states.getInt(id)));
+            states.getAllKeys().forEach(id -> map.put(ResourceLocation.parse(id), states.getInt(id)));
             this.questTracker.put(UUID.fromString(key), map);
         });
     }

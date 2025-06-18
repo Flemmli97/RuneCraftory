@@ -28,5 +28,4 @@ public class FloatingFlyNavigator extends WaterBoundPathNavigation {
     public boolean isStableDestination(BlockPos pos) {
         return true;
     }
-
 }

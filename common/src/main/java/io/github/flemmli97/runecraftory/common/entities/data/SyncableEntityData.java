@@ -28,6 +28,7 @@ public class SyncableEntityData {
     }
 
     public record SyncedEntityData<T>(ResourceLocation id, StreamCodec<RegistryFriendlyByteBuf, T> serializer) {
+
     }
 
     public static class SyncedContainer<T> {

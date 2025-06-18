@@ -7,11 +7,9 @@ import io.github.flemmli97.runecraftory.api.registry.NPCAction;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCActions;
 import net.minecraft.advancements.critereon.EntityPredicate;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.random.Weight;
 import net.minecraft.util.random.WeightedEntry;
-import net.minecraft.util.random.WeightedRandom;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,11 +30,11 @@ public class NPCAttackActions {
     }
 
     public List<NPCAction> getAction(EntityNPCBase npc) {
-        List<WeightedAction> list = this.actions.stream().filter(w -> w.predicate.matches((ServerLevel) npc.level, npc.position(), npc)).toList();
-        if (list.isEmpty())
-            return List.of();
-        return WeightedRandom.getRandomItem(npc.getRandom(), list)
-                .map(w -> w.chainedActions).orElse(List.of());
+//        List<WeightedAction> list = this.actions.stream().filter(w -> w.predicate.matches((ServerLevel) npc.level, npc.position(), npc)).toList();
+//        if (list.isEmpty())
+        return List.of();
+//        return WeightedRandom.getRandomItem(npc.getRandom(), list)
+//                .map(w -> w.chainedActions).orElse(List.of());
     }
 
     public boolean isEmpty() {
@@ -47,16 +45,16 @@ public class NPCAttackActions {
 
         public static final Codec<WeightedAction> CODEC = RecordCodecBuilder.create((instance) ->
                 instance.group(ExtraCodecs.POSITIVE_INT.fieldOf("weight").forGetter(d -> d.weight.asInt()),
-                        EntityPredicate.CODEC.optionalFieldOf("predicate").forGetter(d -> d.predicate == EntityPredicate.ANY ? Optional.empty() : Optional.of(d.predicate)),
-                        CodecUtils.registryCodec(ModNPCActions.ACTIONS_REGISTRY_KEY)
-                                .dispatchStable(c -> c.codec().get(), c -> c.codec).listOf().fieldOf("concurrent_actions").forGetter(d -> d.chainedActions)
-                ).apply(instance, (weight, pred, concurrent) -> new WeightedAction(weight, pred.orElse(EntityPredicate.ANY), concurrent)));
+                        EntityPredicate.CODEC.optionalFieldOf("predicate").forGetter(d -> d.predicate),
+                        ModNPCActions.ACTIONS.registry().byNameCodec().<NPCAction>dispatchStable(NPCAction::codec, c -> c)
+                                .listOf().fieldOf("concurrent_actions").forGetter(d -> d.chainedActions)
+                ).apply(instance, WeightedAction::new));
 
         private final Weight weight;
-        private final EntityPredicate predicate;
+        private final Optional<EntityPredicate> predicate;
         private final List<NPCAction> chainedActions;
 
-        public WeightedAction(int weight, EntityPredicate predicate, List<NPCAction> chainedActions) {
+        public WeightedAction(int weight, Optional<EntityPredicate> predicate, List<NPCAction> chainedActions) {
             this.weight = Weight.of(weight);
             this.predicate = predicate;
             this.chainedActions = chainedActions;
@@ -69,6 +67,7 @@ public class NPCAttackActions {
     }
 
     public static class Builder {
+
         private final List<WeightedAction> chainedActions = new ArrayList<>();
 
         public Builder addAction(ActionBuilder builder) {
@@ -84,7 +83,7 @@ public class NPCAttackActions {
     public static class ActionBuilder {
 
         private final int weight;
-        private EntityPredicate predicate = EntityPredicate.ANY;
+        private Optional<EntityPredicate> predicate = Optional.empty();
         private final List<NPCAction> chainedActions = new ArrayList<>();
 
         public ActionBuilder(int weight) {
@@ -92,7 +91,7 @@ public class NPCAttackActions {
         }
 
         public ActionBuilder predicate(EntityPredicate predicate) {
-            this.predicate = predicate;
+            this.predicate = Optional.ofNullable(predicate);
             return this;
         }
 

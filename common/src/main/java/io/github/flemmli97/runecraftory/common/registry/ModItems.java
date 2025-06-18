@@ -1667,7 +1667,7 @@ public class ModItems {
         return register(name, item, null);
     }
 
-    private static <T extends Item> RegistryEntrySupplier<Item, T> register(String name, Supplier<T> item, RegistryEntrySupplier<CreativeModeTab, CreativeModeTab> creativeModTabs) {
+    public static <T extends Item> RegistryEntrySupplier<Item, T> register(String name, Supplier<T> item, RegistryEntrySupplier<CreativeModeTab, CreativeModeTab> creativeModTabs) {
         RegistryEntrySupplier<Item, T> res = ITEMS.register(name, item);
         if (creativeModTabs != null) {
             ModCreativeModTabs.appendTo(creativeModTabs.getID(), res);

@@ -7,6 +7,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
+import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
@@ -25,7 +26,7 @@ public class ItemModelProps {
         if (entity != null) {
             if (HELD_TYPE == 0)
                 return 0;
-            int skin = entity instanceof AbstractClientPlayer player && player.getModelName().equals("slim") ? 1 : 0;
+            int skin = entity instanceof AbstractClientPlayer player && player.getSkin().model() == PlayerSkin.Model.SLIM ? 1 : 0;
             return (HELD_TYPE + skin * 2) * 0.25f;
         }
         return 0;
@@ -41,7 +42,7 @@ public class ItemModelProps {
             if (main.getItem() instanceof ItemToolFishingRod) {
                 flag1 = false;
             }
-            return (flag || flag1) && Platform.INSTANCE.getEntityData(entity).map(d -> d.fishingHook != null).orElse(false) ? 1.0F : 0.0F;
+            return (flag || flag1) && Platform.INSTANCE.getEntityData(entity).fishingHook != null ? 1.0F : 0.0F;
         }
     };
 

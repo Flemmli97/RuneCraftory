@@ -33,5 +33,4 @@ public class EnergyOrbSwirlLayer extends EnergySwirlLayer<EntityHomingEnergyOrb,
     protected EntityModel<EntityHomingEnergyOrb> model() {
         return this.model;
     }
-
 }

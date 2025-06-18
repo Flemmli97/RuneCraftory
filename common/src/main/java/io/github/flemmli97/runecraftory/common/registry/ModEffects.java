@@ -35,5 +35,4 @@ public class ModEffects {
     public static final RegistryEntrySupplier<MobEffect, StunEffect> STUNNED = EFFECTS.register("stunned", StunEffect::new);
 
     public static final RegistryEntrySupplier<MobEffect, TrueInvis> TRUE_INVIS = EFFECTS.register("true_invisibility", TrueInvis::new);
-
 }

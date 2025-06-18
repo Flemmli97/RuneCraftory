@@ -1,16 +1,17 @@
 package io.github.flemmli97.runecraftory.client.render.projectiles;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityBigRaccoonLeaf;
 import io.github.flemmli97.tenshilib.client.render.RenderUtils;
+import io.github.flemmli97.tenshilib.client.render.TextureRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
-public class RenderBigRaccoonLeaf extends RenderTexture<EntityBigRaccoonLeaf> {
+public class RenderBigRaccoonLeaf extends TextureRenderer<EntityBigRaccoonLeaf> {
 
     private static final ResourceLocation TEX = RuneCraftory.modRes("textures/entity/projectile/leaf.png");
 
@@ -28,16 +29,16 @@ public class RenderBigRaccoonLeaf extends RenderTexture<EntityBigRaccoonLeaf> {
         stack.pushPose();
         stack.translate(0, this.ySize * 0.27, 0.05);
         float spin = entity.initialYaw() + Mth.lerp(packedLight, 40 * entity.livingTicks(), 40 * entity.livingTicks() + 1);
-        stack.mulPose(Vector3f.YP.rotationDegrees(entity.spinRight() ? spin : -spin));
+        stack.mulPose(Axis.YP.rotationDegrees(entity.spinRight() ? spin : -spin));
         super.render(entity, rotation, partialTicks, stack, buffer, packedLight);
         stack.popPose();
     }
 
     @Override
     public void doRender(EntityBigRaccoonLeaf entity, float partialTicks, PoseStack stack, MultiBufferSource buffer) {
-        stack.mulPose(Vector3f.XP.rotationDegrees(-20));
+        stack.mulPose(Axis.XP.rotationDegrees(-20));
         RenderUtils.renderTexture(stack, buffer.getBuffer(this.getRenderType(entity, this.getTextureLocation(entity))), this.xSize, this.ySize, this.textureBuilder);
-        stack.mulPose(Vector3f.XP.rotationDegrees(40));
+        stack.mulPose(Axis.XP.rotationDegrees(40));
         RenderUtils.renderTexture(stack, buffer.getBuffer(this.getRenderType(entity, this.getTextureLocation(entity))), this.xSize, this.ySize, this.textureBuilder);
     }
 

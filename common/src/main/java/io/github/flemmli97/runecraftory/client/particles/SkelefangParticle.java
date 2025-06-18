@@ -3,12 +3,14 @@ package io.github.flemmli97.runecraftory.client.particles;
 import com.google.common.base.Suppliers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelSkelefang;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderSkelefang;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntitySkelefang;
 import io.github.flemmli97.runecraftory.common.particles.SkelefangParticleData;
+import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
 import io.github.flemmli97.tenshilib.client.model.PoseExtended;
 import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
 import net.minecraft.client.Camera;
@@ -57,25 +59,25 @@ public class SkelefangParticle extends Particle {
         this.pitchSpin = data.getPitchSpin();
         this.yawSpin = data.getYawSpin();
         this.lifetime = data.getMaxTime();
-        ModelPartHandler.ModelPartExtended[] parts = switch (this.boneType) {
+        ModelPartsContainer.ModelPartExtended[] parts = switch (this.boneType) {
             case TAIL ->
-                    new ModelPartHandler.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineBack, MODEL.get().tailBase, MODEL.get().tail};
+                    new ModelPartsContainer.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineBack, MODEL.get().tailBase, MODEL.get().tail};
             case TAIL_BASE ->
-                    new ModelPartHandler.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineBack, MODEL.get().tailBase};
+                    new ModelPartsContainer.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineBack, MODEL.get().tailBase};
             case LEFT_LEG ->
-                    new ModelPartHandler.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineBack, MODEL.get().leftLegBase};
+                    new ModelPartsContainer.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineBack, MODEL.get().leftLegBase};
             case RIGHT_LEG ->
-                    new ModelPartHandler.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineBack, MODEL.get().rightLegBase};
+                    new ModelPartsContainer.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineBack, MODEL.get().rightLegBase};
             case HEAD ->
-                    new ModelPartHandler.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineFront, MODEL.get().neck, MODEL.get().head};
+                    new ModelPartsContainer.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineFront, MODEL.get().neck, MODEL.get().head};
             case NECK ->
-                    new ModelPartHandler.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineFront, MODEL.get().neck};
-            case BACK -> new ModelPartHandler.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineBack};
+                    new ModelPartsContainer.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineFront, MODEL.get().neck};
+            case BACK -> new ModelPartsContainer.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineBack};
             case BACK_RIBS ->
-                    new ModelPartHandler.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineBack, MODEL.get().ribsSpine};
-            case FRONT -> new ModelPartHandler.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineFront};
+                    new ModelPartsContainer.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineBack, MODEL.get().ribsSpine};
+            case FRONT -> new ModelPartsContainer.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineFront};
             case FRONT_RIBS ->
-                    new ModelPartHandler.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineFront, MODEL.get().ribsBody};
+                    new ModelPartsContainer.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineFront, MODEL.get().ribsBody};
             default -> null;
         };
         //Offset pos based on part
@@ -83,7 +85,7 @@ public class SkelefangParticle extends Particle {
             double mX = 0;
             double mY = 0;
             double mZ = 0;
-            for (ModelPartHandler.ModelPartExtended part : parts) {
+            for (ModelPartsContainer.ModelPartExtended part : parts) {
                 mX += part.x;
                 mY += part.y;
                 mZ += part.z;
@@ -129,8 +131,8 @@ public class SkelefangParticle extends Particle {
         }
         float yaw = Mth.lerp(partialTicks, this.initialRotY + this.yawSpin * spinAge, this.initialRotY + this.yawSpin * next);
         float pitch = Mth.lerp(partialTicks, this.initialRotX + this.pitchSpin * spinAge, this.initialRotX + this.pitchSpin * next);
-        stack.mulPose(Vector3f.YP.rotationDegrees(180.0F - yaw));
-        stack.mulPose(Vector3f.XP.rotationDegrees(pitch));
+        stack.mulPose(Axis.YP.rotationDegrees(180.0F - yaw));
+        stack.mulPose(Axis.XP.rotationDegrees(pitch));
         stack.scale(-1.0F, -1.0F, 1.0F);
         stack.translate(0.0D, -1.5, 0.0D);
         RenderType type = RENDER_TYPE.get();

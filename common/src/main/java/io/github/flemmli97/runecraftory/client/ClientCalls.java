@@ -26,6 +26,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.mixin.ContainerScreenAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
@@ -74,7 +75,7 @@ public class ClientCalls {
     public static void clientTick() {
         BossBarTracker.tickSounds();
         Player player = Minecraft.getInstance().player;
-        if (player != null && Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().isItemSwapBlocked()).orElse(false)) {
+        if (player != null && Platform.INSTANCE.getPlayerData(player).getWeaponHandler().isItemSwapBlocked()) {
             Options options = Minecraft.getInstance().options;
             //Disable changing held item
             for (int i = 0; i < 9; ++i) {
@@ -85,20 +86,20 @@ public class ClientCalls {
         if (Minecraft.getInstance().screen != null)
             return;
         switch (ClientHandlers.SPELL_1.onPress()) {
-            case PRESSING -> Platform.INSTANCE.sendToServer(new C2SSpellKey(0, false));
-            case RELEASE -> Platform.INSTANCE.sendToServer(new C2SSpellKey(0, true));
+            case PRESSING -> LoaderNetwork.INSTANCE.sendToServer(new C2SSpellKey(0, false));
+            case RELEASE -> LoaderNetwork.INSTANCE.sendToServer(new C2SSpellKey(0, true));
         }
         switch (ClientHandlers.SPELL_2.onPress()) {
-            case PRESSING -> Platform.INSTANCE.sendToServer(new C2SSpellKey(1, false));
-            case RELEASE -> Platform.INSTANCE.sendToServer(new C2SSpellKey(1, true));
+            case PRESSING -> LoaderNetwork.INSTANCE.sendToServer(new C2SSpellKey(1, false));
+            case RELEASE -> LoaderNetwork.INSTANCE.sendToServer(new C2SSpellKey(1, true));
         }
         switch (ClientHandlers.SPELL_3.onPress()) {
-            case PRESSING -> Platform.INSTANCE.sendToServer(new C2SSpellKey(2, false));
-            case RELEASE -> Platform.INSTANCE.sendToServer(new C2SSpellKey(2, true));
+            case PRESSING -> LoaderNetwork.INSTANCE.sendToServer(new C2SSpellKey(2, false));
+            case RELEASE -> LoaderNetwork.INSTANCE.sendToServer(new C2SSpellKey(2, true));
         }
         switch (ClientHandlers.SPELL_4.onPress()) {
-            case PRESSING -> Platform.INSTANCE.sendToServer(new C2SSpellKey(3, false));
-            case RELEASE -> Platform.INSTANCE.sendToServer(new C2SSpellKey(3, true));
+            case PRESSING -> LoaderNetwork.INSTANCE.sendToServer(new C2SSpellKey(3, false));
+            case RELEASE -> LoaderNetwork.INSTANCE.sendToServer(new C2SSpellKey(3, true));
         }
     }
 
@@ -114,7 +115,7 @@ public class ClientCalls {
                     x += ClientConfig.creativeInventoryOffsetX;
                     y += ClientConfig.creativeInventoryOffsetY;
                 }
-                cons.accept(new SkillButton(x, y, screen, b -> Platform.INSTANCE.sendToServer(new C2SOpenInfo(C2SOpenInfo.Type.MAIN))));
+                cons.accept(new SkillButton(x, y, screen, b -> LoaderNetwork.INSTANCE.sendToServer(new C2SOpenInfo(C2SOpenInfo.Action.MAIN))));
             }
         }
     }

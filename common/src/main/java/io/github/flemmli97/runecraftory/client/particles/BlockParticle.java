@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.client.particles;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.particles.BlockStateParticleData;
 import net.minecraft.client.Camera;
@@ -60,9 +60,9 @@ public class BlockParticle extends Particle {
         PoseStack stack = new PoseStack();
         this.irisFix(stack, renderInfo, partialTicks);
         stack.translate(x, y, z);
-        stack.mulPose(Vector3f.YP.rotationDegrees(180.0F - this.yaw));
-        stack.mulPose(Vector3f.XP.rotationDegrees(this.pitch));
-        BlockPos pos = new BlockPos(this.x, this.y, this.z);
+        stack.mulPose(Axis.YP.rotationDegrees(180.0F - this.yaw));
+        stack.mulPose(Axis.XP.rotationDegrees(this.pitch));
+        BlockPos pos = BlockPos.containing(this.x, this.y, this.z);
         if (this.level.getBlockState(pos).canOcclude())
             pos = pos.above();
         int block = this.level.getBrightness(LightLayer.BLOCK, pos);
@@ -78,8 +78,8 @@ public class BlockParticle extends Particle {
     private void irisFix(PoseStack stack, Camera renderInfo, float partialTicks) {
         if (!RuneCraftory.iris)
             return;
-        stack.mulPose(Vector3f.XP.rotationDegrees(Mth.lerp(partialTicks, this.cameraLastPitch, renderInfo.getXRot())));
-        stack.mulPose(Vector3f.YP.rotationDegrees(Mth.lerp(partialTicks, this.cameraLastYaw, renderInfo.getYRot() - 180)));
+        stack.mulPose(Axis.XP.rotationDegrees(Mth.lerp(partialTicks, this.cameraLastPitch, renderInfo.getXRot())));
+        stack.mulPose(Axis.YP.rotationDegrees(Mth.lerp(partialTicks, this.cameraLastYaw, renderInfo.getYRot() - 180)));
         this.cameraLastPitch = renderInfo.getXRot();
         this.cameraLastYaw = renderInfo.getYRot() - 180;
     }

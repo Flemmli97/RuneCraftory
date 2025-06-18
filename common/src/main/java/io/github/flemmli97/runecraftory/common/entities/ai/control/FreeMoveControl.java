@@ -1,14 +1,14 @@
 package io.github.flemmli97.runecraftory.common.entities.ai.control;
 
 import io.github.flemmli97.runecraftory.common.utils.MathsHelper;
-import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.pathfinder.NodeEvaluator;
+import net.minecraft.world.level.pathfinder.PathType;
+import net.minecraft.world.level.pathfinder.PathfindingContext;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.function.BooleanSupplier;
@@ -49,17 +49,18 @@ public class FreeMoveControl extends MoveControl {
             forward *= len;
             right *= len;
 
-            Vec3 target = MathUtils.rotate(new Vec3(0, 1, 0), new Vec3(right, 0, forward).normalize().scale(this.mob.getBbWidth() + 0.3),
-                    -this.mob.getYRot() * Mth.DEG_TO_RAD);
+            Vec3 target = new Vec3(right, 0, forward).normalize().scale(this.mob.getBbWidth() + 0.3)
+                    .yRot(-this.mob.getYRot() * Mth.DEG_TO_RAD);
             PathNavigation pathnavigate = this.mob.getNavigation();
+            PathfindingContext ctx = new PathfindingContext(this.mob.level(), this.mob);
             NodeEvaluator nodeprocessor = pathnavigate.getNodeEvaluator();
             int x = Mth.floor(this.mob.getX() + target.x());
             int y = Mth.floor(this.mob.getY());
             int z = Mth.floor(this.mob.getZ() + target.z());
-            BlockPathTypes node = nodeprocessor.getBlockPathType(this.mob.level, x, y, z);
-            if (node != BlockPathTypes.WALKABLE) {
-                this.strafeForwards *= -1.0F;
-                this.strafeRight *= -1.0F;
+            PathType node = nodeprocessor.getPathType(ctx, x, y, z);
+            if (node != PathType.WALKABLE) {
+                this.strafeForwards = 1.0F;
+                this.strafeRight = 0.0F;
             }
 
             this.mob.setSpeed(speed);

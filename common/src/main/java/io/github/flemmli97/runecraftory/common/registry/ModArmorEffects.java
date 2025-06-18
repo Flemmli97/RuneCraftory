@@ -21,5 +21,4 @@ public class ModArmorEffects {
     public static final RegistryEntrySupplier<ArmorEffect, SimpleAccessoryEffect> SHIELD_RING = ARMOR_EFFECTS.register().register("shield_ring", SimpleAccessoryEffect::new);
     public static final RegistryEntrySupplier<ArmorEffect, SimpleAccessoryEffect> MAGIC_RING = ARMOR_EFFECTS.register().register("magic_ring", SimpleAccessoryEffect::new);
     public static final RegistryEntrySupplier<ArmorEffect, SimpleAccessoryEffect> THROWING_RING = ARMOR_EFFECTS.register().register("throwing_ring", SimpleAccessoryEffect::new);
-
 }

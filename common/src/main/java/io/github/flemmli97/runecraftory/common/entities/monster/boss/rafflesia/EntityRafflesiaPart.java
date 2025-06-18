@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia;
 
 import io.github.flemmli97.runecraftory.common.entities.ai.RafflesiaPartAttackGoal;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.EntityUtils;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimatedEntity;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
@@ -67,8 +67,8 @@ public abstract class EntityRafflesiaPart extends Mob implements AnimatedEntity,
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder map = Monster.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0)
                 .add(Attributes.FOLLOW_RANGE, 32);
-        for (RegistryEntrySupplier<Attribute> att : ModAttributes.ENTITY_ATTRIBUTES)
-            map.add(att.get());
+        for (RegistryEntrySupplier<Attribute, ?> att : ModAttributes.ENTITY_ATTRIBUTES)
+            map.add(att.asHolder());
         return map;
     }
 
@@ -110,7 +110,6 @@ public abstract class EntityRafflesiaPart extends Mob implements AnimatedEntity,
         builder.define(SPAWN_DIRECTION, Direction.NORTH);
     }
 
-
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
@@ -150,7 +149,7 @@ public abstract class EntityRafflesiaPart extends Mob implements AnimatedEntity,
         UUID uuid = this.getOwnerUUID();
         if (uuid != null) {
             if (this.parent == null || !this.parent.isAlive()) {
-                this.parent = EntityUtil.findFromUUID(EntityRafflesia.class, this.level(), uuid);
+                this.parent = EntityUtils.findFromUUID(EntityRafflesia.class, this.level(), uuid);
             }
         } else
             this.parent = null;

@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class SpellArgumentType implements ArgumentType<ResourceLocation> {
+
     private static final Collection<String> EXAMPLES = List.of("");
 
     public SpellArgumentType() {

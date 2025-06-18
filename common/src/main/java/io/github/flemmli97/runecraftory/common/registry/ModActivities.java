@@ -15,5 +15,4 @@ public class ModActivities {
     public static final RegistryEntrySupplier<Activity, Activity> EARLYIDLE = ACTIVITIES.register("early_idle", () -> new Activity("early_idle"));
     public static final RegistryEntrySupplier<Activity, Activity> FOLLOW = ACTIVITIES.register("early_idle", () -> new Activity("early_idle"));
     public static final RegistryEntrySupplier<Activity, Activity> FOLLOW_DISTANCE = ACTIVITIES.register("early_idle", () -> new Activity("early_idle"));
-
 }

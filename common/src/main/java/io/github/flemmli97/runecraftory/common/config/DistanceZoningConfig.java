@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.common.config;
 
-
 import io.github.flemmli97.tenshilib.common.utils.SearchUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -42,5 +41,6 @@ public class DistanceZoningConfig {
     }
 
     public record Zone(int start, float increasePerBlock) {
+
     }
 }

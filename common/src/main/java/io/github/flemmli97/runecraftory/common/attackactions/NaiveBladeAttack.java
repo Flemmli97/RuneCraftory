@@ -54,12 +54,10 @@ public class NaiveBladeAttack extends AttackAction {
                             .executeAttack();
                 }
             }
-
         } else if (anim.isAt("prepared")) {
             entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.CHAIN_PLACE, entity.getSoundSource(), 1.5f, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         }
     }
-
 
     @Override
     public void onStart(LivingEntity entity, AttackActionHandler handler) {

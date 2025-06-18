@@ -1,11 +1,11 @@
 package io.github.flemmli97.runecraftory.common.entities.npc.job;
 
 import com.google.common.collect.ImmutableMap;
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import net.minecraft.Util;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -52,42 +52,40 @@ public class Smith extends NPCJob {
     public void handleAction(EntityNPCBase npc, Player player, String action) {
         if (npc.canTrade() == ShopState.OPEN)
             if (action.equals(BARN_ACTION)) {
-                Platform.INSTANCE.getPlayerData(player)
-                        .ifPresent(d -> {
-                            int amount = COST_FUNC.applyAsInt(d.getBoughtBarns());
-                            Map<ItemPredicate, List<ItemStack>> stacks = new HashMap<>();
-                            for (ItemStack stack : player.getInventory().items) {
-                                for (ItemPredicate pred : MATERIALS.keySet()) {
-                                    if (pred.matches(stack))
-                                        stacks.computeIfAbsent(pred, k -> new ArrayList<>())
-                                                .add(stack);
-                                }
-                            }
-                            float multiplier = COST_FUNC_MAT_MULTIPLIER.apply(d.getBoughtBarns());
-                            boolean enough = MATERIALS.entrySet().stream()
-                                    .allMatch(p -> stacks.getOrDefault(p.getKey(), List.of()).stream().mapToInt(ItemStack::getCount).sum() >= (int) (p.getValue() * multiplier));
-                            if (enough && d.useMoney(player, amount)) {
-                                player.sendMessage(Component.translatable(BARN_ACTION_SUCCESS, player.getName()), Util.NIL_UUID);
-                                for (Map.Entry<ItemPredicate, List<ItemStack>> e : stacks.entrySet()) {
-                                    int needed = (int) (MATERIALS.get(e.getKey()) * multiplier);
-                                    for (ItemStack stack : e.getValue()) {
-                                        if (needed > stack.getCount()) {
-                                            int count = stack.getCount();
-                                            stack.setCount(0);
-                                            needed -= count;
-                                        } else {
-                                            stack.shrink(needed);
-                                            break;
-                                        }
-                                    }
-                                }
-                                if (!player.addItem(new ItemStack(ModItems.MONSTER_BARN.get())))
-                                    player.spawnAtLocation(new ItemStack(ModItems.MONSTER_BARN.get()));
-                                d.onBuyBarn();
+                PlayerData data = Platform.INSTANCE.getPlayerData(player);
+                int amount = COST_FUNC.applyAsInt(data.getBoughtBarns());
+                Map<ItemPredicate, List<ItemStack>> stacks = new HashMap<>();
+                for (ItemStack stack : player.getInventory().items) {
+                    for (ItemPredicate pred : MATERIALS.keySet()) {
+                        if (pred.test(stack))
+                            stacks.computeIfAbsent(pred, k -> new ArrayList<>())
+                                    .add(stack);
+                    }
+                }
+                float multiplier = COST_FUNC_MAT_MULTIPLIER.apply(data.getBoughtBarns());
+                boolean enough = MATERIALS.entrySet().stream()
+                        .allMatch(p -> stacks.getOrDefault(p.getKey(), List.of()).stream().mapToInt(ItemStack::getCount).sum() >= (int) (p.getValue() * multiplier));
+                if (enough && data.useMoney(amount)) {
+                    player.displayClientMessage(Component.translatable(BARN_ACTION_SUCCESS, player.getName()), false);
+                    for (Map.Entry<ItemPredicate, List<ItemStack>> e : stacks.entrySet()) {
+                        int needed = (int) (MATERIALS.get(e.getKey()) * multiplier);
+                        for (ItemStack stack : e.getValue()) {
+                            if (needed > stack.getCount()) {
+                                int count = stack.getCount();
+                                stack.setCount(0);
+                                needed -= count;
                             } else {
-                                player.sendMessage(Component.translatable(BARN_ACTION_FAIL, player.getName(), amount), Util.NIL_UUID);
+                                stack.shrink(needed);
+                                break;
                             }
-                        });
+                        }
+                    }
+                    if (!player.addItem(new ItemStack(ModItems.MONSTER_BARN.get())))
+                        player.spawnAtLocation(new ItemStack(ModItems.MONSTER_BARN.get()));
+                    data.onBuyBarn();
+                } else {
+                    player.displayClientMessage(Component.translatable(BARN_ACTION_FAIL, player.getName(), amount), false);
+                }
             }
     }
 
@@ -97,15 +95,14 @@ public class Smith extends NPCJob {
     }
 
     private static List<Component> getBarnActionComponent(ServerPlayer player) {
-        return Platform.INSTANCE.getPlayerData(player).map(d -> {
-            Object[] obj = new Object[MATERIALS.size()];
-            int i = 0;
-            for (Map.Entry<ItemPredicate, Integer> e : MATERIALS.entrySet()) {
-                obj[i] = (int) (e.getValue() * COST_FUNC_MAT_MULTIPLIER.apply(d.getBoughtBarns()));
-                i++;
-            }
-            return List.of((Component) Component.translatable(BARN_COST, COST_FUNC.applyAsInt(d.getBoughtBarns())),
-                    Component.translatable(BARN_COST_MAT, obj));
-        }).orElse(List.of(Component.translatable(BARN_ACTION_FAIL)));
+        PlayerData data = Platform.INSTANCE.getPlayerData(player);
+        Object[] obj = new Object[MATERIALS.size()];
+        int i = 0;
+        for (Map.Entry<ItemPredicate, Integer> e : MATERIALS.entrySet()) {
+            obj[i] = (int) (e.getValue() * COST_FUNC_MAT_MULTIPLIER.apply(data.getBoughtBarns()));
+            i++;
+        }
+        return List.of(Component.translatable(BARN_COST, COST_FUNC.applyAsInt(data.getBoughtBarns())),
+                Component.translatable(BARN_COST_MAT, obj));
     }
 }

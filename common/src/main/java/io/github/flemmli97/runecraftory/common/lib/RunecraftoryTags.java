@@ -298,7 +298,6 @@ public class RunecraftoryTags {
         public static final TagKey<Attribute> NON_INHERITABLE = TagKey.create(Registries.ATTRIBUTE, RuneCraftory.modRes("non_inheritable"));
         public static final TagKey<Attribute> PERCENTAGE_DISPLAY = TagKey.create(Registries.ATTRIBUTE, RuneCraftory.modRes("percentage_display"));
         public static final TagKey<Attribute> DISPLAY_IGNORED = TagKey.create(Registries.ATTRIBUTE, RuneCraftory.modRes("display_ignored"));
-
     }
 
     public static class DamageTypes {

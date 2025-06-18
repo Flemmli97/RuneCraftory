@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.entities.ai.behaviour.actions;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.registry.NPCAction;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCAttackGoal;
@@ -12,11 +13,10 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Optional;
-import java.util.function.Supplier;
 
 public class RunAwayAction implements NPCAction {
 
-    public static final Codec<RunAwayAction> CODEC = RecordCodecBuilder.create((instance) ->
+    public static final MapCodec<RunAwayAction> CODEC = RecordCodecBuilder.mapCodec((instance) ->
             instance.group(NumberProviders.CODEC.fieldOf("duration").forGetter(d -> d.duration),
                     NPCAction.optionalNumCooldown(d -> d.cooldown),
                     Codec.FLOAT.fieldOf("max_dist").forGetter(d -> d.maxDist),
@@ -43,8 +43,8 @@ public class RunAwayAction implements NPCAction {
     }
 
     @Override
-    public Supplier<Codec<RunAwayAction>> codec() {
-        return ModNPCActions.RUN_AWAY_ACTION;
+    public MapCodec<RunAwayAction> codec() {
+        return ModNPCActions.RUN_AWAY_ACTION.get();
     }
 
     @Override

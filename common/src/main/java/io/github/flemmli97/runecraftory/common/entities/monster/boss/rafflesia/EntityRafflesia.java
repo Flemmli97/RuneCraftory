@@ -5,14 +5,11 @@ import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.common.entity.AnimationHandler;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
+import io.github.flemmli97.tenshilib.common.entity.EntityUtils;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinition;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -21,11 +18,9 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
@@ -41,7 +36,6 @@ import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -70,8 +64,8 @@ public class EntityRafflesia extends BossMonster {
     public static final String INTERACT = BUILDER.add("interact", POISON_BREATH);
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
-    private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntityRafflesia>> ATTACK_HANDLER = createAnimationHandler(b -> {
-        BiConsumer<AnimatedAction, EntityRafflesia> cons = (anim, entity) -> {
+    private static final ImmutableMap<String, BiConsumer<AnimationState, EntityRafflesia>> ATTACK_HANDLER = createAnimationHandler(b -> {
+        BiConsumer<AnimationState, EntityRafflesia> cons = (anim, entity) -> {
             if (anim.isAt("attack")) {
                 entity.useAttack(anim);
             }
@@ -87,48 +81,48 @@ public class EntityRafflesia extends BossMonster {
         b.put(RESUMMON, cons);
         b.put(STATUS_CIRCLE, cons);
     });
-
-    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityRafflesia>>> ATTACKS = List.of(
-            WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(POISON_BREATH)
-                    .cooldown(e -> e.animationCooldown(POISON_BREATH))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 6),
-            WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(POISON_BREATH_REV)
-                    .cooldown(e -> e.animationCooldown(POISON_BREATH_REV))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 6),
-            WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(PARA_BREATH)
-                    .cooldown(e -> e.animationCooldown(PARA_BREATH))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 6),
-            WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(PARA_BREATH_REV)
-                    .cooldown(e -> e.animationCooldown(PARA_BREATH_REV))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 6),
-            WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(SLEEP_BREATH)
-                    .cooldown(e -> e.animationCooldown(SLEEP_BREATH))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 6),
-            WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(SLEEP_BREATH_REV)
-                    .cooldown(e -> e.animationCooldown(SLEEP_BREATH_REV))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 6),
-            WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(WIND_BLADE_X8)
-                    .cooldown(e -> e.animationCooldown(WIND_BLADE_X8))
-                    .withCondition(((goal, target, previous) -> !goal.attacker.isEnraged()))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 8),
-            WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(WIND_BLADE_X16)
-                    .cooldown(e -> e.animationCooldown(WIND_BLADE_X16))
-                    .withCondition(((goal, target, previous) -> goal.attacker.isEnraged()))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 8),
-            WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(STATUS_CIRCLE)
-                    .cooldown(e -> e.animationCooldown(STATUS_CIRCLE))
-                    .withCondition(((goal, target, previous) -> goal.attacker.isEnraged()))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 8),
-            WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(RESUMMON)
-                    .cooldown(e -> e.animationCooldown(RESUMMON))
-                    .withCondition(((goal, target, previous) -> goal.attacker.getHorseTail() == null || goal.attacker.getPitcher() == null || goal.attacker.getFlower() == null))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 7)
-    );
-    private static final List<WeightedEntry.Wrapper<IdleAction<EntityRafflesia>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<>(DoNothingRunner::new), 1)
-    );
-
-    public final AnimatedAttackGoal<EntityRafflesia> attack2 = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+    //
+//    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityRafflesia>>> ATTACKS = List.of(
+//            WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(POISON_BREATH)
+//                    .cooldown(e -> e.animationCooldown(POISON_BREATH))
+//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 6),
+//            WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(POISON_BREATH_REV)
+//                    .cooldown(e -> e.animationCooldown(POISON_BREATH_REV))
+//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 6),
+//            WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(PARA_BREATH)
+//                    .cooldown(e -> e.animationCooldown(PARA_BREATH))
+//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 6),
+//            WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(PARA_BREATH_REV)
+//                    .cooldown(e -> e.animationCooldown(PARA_BREATH_REV))
+//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 6),
+//            WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(SLEEP_BREATH)
+//                    .cooldown(e -> e.animationCooldown(SLEEP_BREATH))
+//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 6),
+//            WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(SLEEP_BREATH_REV)
+//                    .cooldown(e -> e.animationCooldown(SLEEP_BREATH_REV))
+//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 6),
+//            WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(WIND_BLADE_X8)
+//                    .cooldown(e -> e.animationCooldown(WIND_BLADE_X8))
+//                    .withCondition(((goal, target, previous) -> !goal.attacker.isEnraged()))
+//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 8),
+//            WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(WIND_BLADE_X16)
+//                    .cooldown(e -> e.animationCooldown(WIND_BLADE_X16))
+//                    .withCondition(((goal, target, previous) -> goal.attacker.isEnraged()))
+//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 8),
+//            WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(STATUS_CIRCLE)
+//                    .cooldown(e -> e.animationCooldown(STATUS_CIRCLE))
+//                    .withCondition(((goal, target, previous) -> goal.attacker.isEnraged()))
+//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 8),
+//            WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(RESUMMON)
+//                    .cooldown(e -> e.animationCooldown(RESUMMON))
+//                    .withCondition(((goal, target, previous) -> goal.attacker.getHorseTail() == null || goal.attacker.getPitcher() == null || goal.attacker.getFlower() == null))
+//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 7)
+//    );
+//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityRafflesia>>> IDLE_ACTIONS = List.of(
+//            WeightedEntry.wrap(new IdleAction<>(DoNothingRunner::new), 1)
+//    );
+//
+//    public final AnimatedAttackGoal<EntityRafflesia> attack2 = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private boolean mirrorAttack;
 
     private final AnimationHandler<EntityRafflesia> animationHandler = new AnimationHandler<>(this, ANIMS)
@@ -146,8 +140,6 @@ public class EntityRafflesia extends BossMonster {
 
     public EntityRafflesia(EntityType<? extends EntityRafflesia> type, Level world) {
         super(type, world);
-        if (!world.isClientSide)
-            this.goalSelector.addGoal(1, this.attack2);
     }
 
     public static Vec3 rotateVec(Direction dir, Vec3 v) {
@@ -159,7 +151,7 @@ public class EntityRafflesia extends BossMonster {
         };
     }
 
-    public static boolean isMirrorAttack(AnimatedAction anim) {
+    public static boolean isMirrorAttack(AnimationDefinition anim) {
         return anim != null && anim.is(POISON_BREATH_REV, PARA_BREATH_REV, SLEEP_BREATH_REV);
     }
 
@@ -180,7 +172,7 @@ public class EntityRafflesia extends BossMonster {
         };
     }
 
-    public void useAttack(AnimatedAction anim) {
+    public void useAttack(AnimationState anim) {
         if (anim.is(RESUMMON))
             this.respawnParts();
         if (anim.is(WIND_BLADE_X8))
@@ -239,10 +231,10 @@ public class EntityRafflesia extends BossMonster {
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData) {
         this.entityData.set(SPAWN_DIRECTION, this.getDirection());
         this.respawnParts();
-        return super.finalizeSpawn(level, difficulty, reason, spawnData, dataTag);
+        return super.finalizeSpawn(level, difficulty, reason, spawnData);
     }
 
     @Override
@@ -272,7 +264,7 @@ public class EntityRafflesia extends BossMonster {
     }
 
     @Override
-    public void setupAttack(AnimatedAction anim) {
+    public void setupAttack(AnimationDefinition anim) {
         LivingEntity target = this.getTarget();
         if (target != null) {
             this.setTargetPosition(target);
@@ -283,7 +275,7 @@ public class EntityRafflesia extends BossMonster {
 
     @Override
     public void handleAttack(AnimationState anim) {
-        BiConsumer<AnimatedAction, EntityRafflesia> handler = ATTACK_HANDLER.get(anim.getID());
+        BiConsumer<AnimationState, EntityRafflesia> handler = ATTACK_HANDLER.get(anim.getID());
         if (handler != null)
             handler.accept(anim, this);
     }
@@ -324,7 +316,7 @@ public class EntityRafflesia extends BossMonster {
     }
 
     @Override
-    public AnimatedAction getDeathAnimation() {
+    public String getDeathAnimation() {
         return DEATH;
     }
 
@@ -375,7 +367,7 @@ public class EntityRafflesia extends BossMonster {
         UUID uuid = this.entityData.get(HORSE_TAIL).orElse(null);
         if (uuid != null) {
             if (this.horseTailEntity == null) {
-                this.horseTailEntity = EntityUtil.findFromUUID(EntityRafflesiaPart.class, this.level(), uuid);
+                this.horseTailEntity = EntityUtils.findFromUUID(EntityRafflesiaPart.class, this.level(), uuid);
             } else if (this.horseTailEntity.isRemoved()) {
                 this.horseTailEntity = null;
                 this.entityData.set(HORSE_TAIL, Optional.empty());
@@ -389,7 +381,7 @@ public class EntityRafflesia extends BossMonster {
         UUID uuid = this.entityData.get(FLOWER).orElse(null);
         if (uuid != null) {
             if (this.flowerEntity == null) {
-                this.flowerEntity = EntityUtil.findFromUUID(EntityRafflesiaPart.class, this.level(), uuid);
+                this.flowerEntity = EntityUtils.findFromUUID(EntityRafflesiaPart.class, this.level(), uuid);
             } else if (this.flowerEntity.isRemoved()) {
                 this.flowerEntity = null;
                 this.entityData.set(FLOWER, Optional.empty());
@@ -403,7 +395,7 @@ public class EntityRafflesia extends BossMonster {
         UUID uuid = this.entityData.get(PITCHER).orElse(null);
         if (uuid != null) {
             if (this.pitcherEntity == null) {
-                this.pitcherEntity = EntityUtil.findFromUUID(EntityRafflesiaPart.class, this.level(), uuid);
+                this.pitcherEntity = EntityUtils.findFromUUID(EntityRafflesiaPart.class, this.level(), uuid);
             } else if (this.pitcherEntity.isRemoved()) {
                 this.pitcherEntity = null;
                 this.entityData.set(PITCHER, Optional.empty());
@@ -427,9 +419,9 @@ public class EntityRafflesia extends BossMonster {
     public boolean mirrorAttack() {
         return this.mirrorAttack;
     }
-
-    @Override
-    public Vec3 passengerOffset(Entity passenger) {
-        return new Vec3(0, 43 / 16d, 3.5 / 16d);
-    }
+//
+//    @Override
+//    public Vec3 passengerOffset(Entity passenger) {
+//        return new Vec3(0, 43 / 16d, 3.5 / 16d);
+//    }
 }

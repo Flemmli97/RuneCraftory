@@ -7,17 +7,19 @@ import io.github.flemmli97.runecraftory.api.registry.NPCFeatureHolder;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
-import net.minecraft.nbt.StringTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.network.FriendlyByteBuf;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 
 import java.util.List;
 
 public record SimpleHatFeatureType(
         List<String> hats) implements NPCFeatureHolder<SimpleHatFeatureType.SimpleHatFeature> {
 
-    public static final MapCodec<SimpleHatFeatureType> CODEC = Codec.STRING.listOf().fieldOf("hats")
+    public static final MapCodec<SimpleHatFeatureType> TYPE_CODEC = Codec.STRING.listOf().fieldOf("hats")
             .xmap(SimpleHatFeatureType::new, SimpleHatFeatureType::hats);
+    public static MapCodec<SimpleHatFeature> CODEC = Codec.STRING.fieldOf("type").xmap(SimpleHatFeature::new, SimpleHatFeature::hat);
+    public static final StreamCodec<ByteBuf, SimpleHatFeature> STREAM_CODEC = ByteBufCodecs.STRING_UTF8.map(SimpleHatFeature::new, SimpleHatFeature::hat);
 
     @Override
     public SimpleHatFeature create(EntityNPCBase npc) {
@@ -29,34 +31,10 @@ public record SimpleHatFeatureType(
         return ModNPCLooks.HAT.get();
     }
 
-    public static class SimpleHatFeature implements NPCFeature {
-
-        public final String hat;
-
-        public SimpleHatFeature(FriendlyByteBuf buf) {
-            this(buf.readUtf());
-        }
-
-        public SimpleHatFeature(Tag tag) {
-            this(tag.getAsString());
-        }
-
-        public SimpleHatFeature(String hat) {
-            this.hat = hat;
-        }
+    public record SimpleHatFeature(String hat) implements NPCFeature {
 
         @Override
-        public void writeToBuffer(FriendlyByteBuf buf) {
-            buf.writeUtf(this.hat);
-        }
-
-        @Override
-        public Tag save() {
-            return StringTag.valueOf(this.hat);
-        }
-
-        @Override
-        public NPCFeatureType<SimpleHatFeature> getType() {
+        public NPCFeatureType<SimpleHatFeature> type() {
             return ModNPCLooks.HAT.get();
         }
     }

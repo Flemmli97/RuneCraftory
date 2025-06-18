@@ -323,5 +323,6 @@ public class BossBarTracker {
     }
 
     public record BossbarTexture(ResourceLocation texture, int width, int height, int offsetX, int offsetY) {
+
     }
 }

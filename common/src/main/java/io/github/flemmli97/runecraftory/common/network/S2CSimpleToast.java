@@ -37,7 +37,6 @@ public class S2CSimpleToast implements CustomPacketPayload {
         ClientHandlers.simpleToast(pkt.title, pkt.subtitle);
     }
 
-
     @Override
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;

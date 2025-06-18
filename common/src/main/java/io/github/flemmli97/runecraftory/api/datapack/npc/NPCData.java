@@ -15,7 +15,8 @@ import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
-import net.minecraft.core.Registry;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -40,12 +41,13 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                       Map<ConversationContext, ResourceLocation> interactions,
                       QuestHandler questHandler,
                       Map<String, Gift> giftItems, @Nullable NPCSchedule.Schedule schedule,
-                      @Nullable Map<Attribute, Double> baseStats, @Nullable Map<Attribute, Double> statIncrease,
+                      @Nullable Map<Holder<Attribute>, Double> baseStats,
+                      @Nullable Map<Holder<Attribute>, Double> statIncrease,
                       int baseLevel, @Nullable List<ResourceLocation> combatActions, int unique,
                       RelationShipState relationShipState, List<ResourceLocation> possibleChildren) {
 
-    public static final Map<Attribute, Double> DEFAULT_GAIN = Map.of(Attributes.MAX_HEALTH, 3d, Attributes.ATTACK_DAMAGE, 1d,
-            ModAttributes.DEFENCE.get(), 0.5d, ModAttributes.MAGIC_ATTACK.get(), 1d, ModAttributes.MAGIC_DEFENCE.get(), 0.5d);
+    public static final Map<Holder<Attribute>, Double> DEFAULT_GAIN = Map.of(Attributes.MAX_HEALTH, 3d, Attributes.ATTACK_DAMAGE, 1d,
+            ModAttributes.DEFENCE.asHolder(), 0.5d, ModAttributes.MAGIC_ATTACK.asHolder(), 1d, ModAttributes.MAGIC_DEFENCE.asHolder(), 0.5d);
     public static final NPCData DEFAULT_DATA = new NPCData(null, null, Gender.UNDEFINED, List.of(), null, null, 1, "runecraftory.npc.default.gift.neutral",
             Map.of(), new QuestHandler(Map.of(), Set.of()), Map.of(), null, null, null, 1, null, 0, RelationShipState.DEFAULT, List.of());
 
@@ -58,7 +60,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                 }
             }
             if (!missing.isEmpty())
-                return DataResult.error("Conversation map is missing conversation for contexts: " + missing, map);
+                return DataResult.error(() -> "Conversation map is missing conversation for contexts: " + missing, map);
             return DataResult.success(map);
         };
         return codec.flatXmap(check, DataResult::success);
@@ -90,7 +92,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                     Codec.STRING.optionalFieldOf("name").forGetter(d -> Optional.ofNullable(d.name)),
                     Codec.STRING.optionalFieldOf("surname").forGetter(d -> Optional.ofNullable(d.surname)),
                     CodecUtils.stringEnumCodec(Gender.class, Gender.UNDEFINED).fieldOf("gender").forGetter(d -> d.gender),
-                    ModNPCJobs.CODEC.listOf().optionalFieldOf("profession").forGetter(d -> d.profession.isEmpty() ? Optional.empty() : Optional.of(d.profession))
+                    ModNPCJobs.JOBS.registry().byNameCodec().listOf().optionalFieldOf("profession").forGetter(d -> d.profession.isEmpty() ? Optional.empty() : Optional.of(d.profession))
             ).apply(inst, (interactions, questHandler, schedule, combat, relation, neutralGift, giftItems, look, birthday, weight, unique, name, surname, gender, profession) ->
                     new NPCData(name.orElse(null), surname.orElse(null), gender, profession.orElse(List.of()), look.orElse(null), birthday.orElse(null),
                             weight, neutralGift, interactions, questHandler, giftItems, schedule.orElse(null), combat.map(d -> d.baseStats).orElse(null),
@@ -116,13 +118,13 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                 if (state <= 0)
                     yield responses.startID;
                 else
-                    yield new ResourceLocation(responses.startID.getNamespace(), responses.startID.getPath() + "_" + state);
+                    yield ResourceLocation.fromNamespaceAndPath(responses.startID.getNamespace(), responses.startID.getPath() + "_" + state);
             }
             case IN_PROGRESS -> {
                 if (state == 0)
                     yield responses.activeID;
                 else
-                    yield new ResourceLocation(responses.activeID.getNamespace(), responses.activeID.getPath() + "_" + state);
+                    yield ResourceLocation.fromNamespaceAndPath(responses.activeID.getNamespace(), responses.activeID.getPath() + "_" + state);
             }
             case COMPLETED -> responses.endID;
         };
@@ -152,15 +154,16 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                 ).apply(inst, (state, childs) -> new RelationStruct(state, childs.orElse(List.of()))));
     }
 
-    record NPCCombat(@Nullable Map<Attribute, Double> baseStats, @Nullable Map<Attribute, Double> statIncrease,
+    record NPCCombat(@Nullable Map<Holder<Attribute>, Double> baseStats,
+                     @Nullable Map<Holder<Attribute>, Double> statIncrease,
                      int baseLevel, @Nullable List<ResourceLocation> npcAction) {
 
         public static final Codec<NPCCombat> CODEC = RecordCodecBuilder.create(inst ->
                 inst.group(
                         ExtraCodecs.POSITIVE_INT.optionalFieldOf("base_level").forGetter(d -> d.baseLevel != 1 ? Optional.of(d.baseLevel) : Optional.empty()),
                         ResourceLocation.CODEC.listOf().optionalFieldOf("combat_actions").forGetter(d -> Optional.ofNullable(d.npcAction == null || d.npcAction.isEmpty() ? null : d.npcAction)),
-                        Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).optionalFieldOf("base_stats").forGetter(d -> Optional.ofNullable(d.baseStats)),
-                        Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).optionalFieldOf("stat_increase").forGetter(d -> Optional.ofNullable(d.statIncrease))
+                        Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.holderByNameCodec(), Codec.DOUBLE).optionalFieldOf("base_stats").forGetter(d -> Optional.ofNullable(d.baseStats)),
+                        Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.holderByNameCodec(), Codec.DOUBLE).optionalFieldOf("stat_increase").forGetter(d -> Optional.ofNullable(d.statIncrease))
                 ).apply(inst, (lvl, action, stats, inc) -> new NPCCombat(stats.orElse(null), inc.orElse(null), lvl.orElse(1), action.orElse(null))));
 
         public boolean isNone() {
@@ -203,8 +206,8 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         private List<NPCLookId> look;
         private List<ResourceLocation> combatAction;
 
-        private final Map<Attribute, Double> baseStats = new TreeMap<>(ModAttributes.SORTED);
-        private final Map<Attribute, Double> statIncrease = new TreeMap<>(ModAttributes.SORTED);
+        private final Map<Holder<Attribute>, Double> baseStats = new TreeMap<>(ModAttributes.SORTED);
+        private final Map<Holder<Attribute>, Double> statIncrease = new TreeMap<>(ModAttributes.SORTED);
         private int baseLevel = 1;
         private int unique;
         private RelationShipState relationShipState = RelationShipState.DEFAULT;
@@ -280,12 +283,12 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             return this;
         }
 
-        public Builder setBaseStat(Attribute attribute, double val) {
+        public Builder setBaseStat(Holder<Attribute> attribute, double val) {
             this.baseStats.put(attribute, val);
             return this;
         }
 
-        public Builder setStatIncrease(Attribute attribute, double val) {
+        public Builder setStatIncrease(Holder<Attribute> attribute, double val) {
             this.statIncrease.put(attribute, val);
             return this;
         }
@@ -352,7 +355,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                 ).apply(inst, NPCLookId::new))).flatXmap(d -> {
             if (d.left().isPresent())
                 return DataResult.success(new NPCLookId(d.left().get()));
-            return d.right().map(DataResult::success).orElse(DataResult.error("Failed to parse npc look id"));
+            return d.right().map(DataResult::success).orElse(DataResult.error(() -> "Failed to parse npc look id"));
         }, i -> DataResult.success(i.gender == Gender.UNDEFINED ? Either.left(i.id()) : Either.right(i)));
 
         public NPCLookId(String namespace, String path) {

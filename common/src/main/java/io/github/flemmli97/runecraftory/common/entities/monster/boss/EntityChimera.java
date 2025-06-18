@@ -2,8 +2,6 @@ package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 
 import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.RestrictedWaterAvoidingStrollGoal;
-import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
 import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
@@ -13,30 +11,18 @@ import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.common.entity.AnimationHandler;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveAwayRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetAttackRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.TimedWrappedRunner;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
-import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.util.Mth;
-import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -62,15 +48,15 @@ public class EntityChimera extends BossMonster {
     public static final String INTERACT = BUILDER.add("interact", SLASH);
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
-    private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntityChimera>> ATTACK_HANDLER = createAnimationHandler(b -> {
-        BiConsumer<AnimatedAction, EntityChimera> summonFire = (anim, entity) -> {
+    private static final ImmutableMap<String, BiConsumer<AnimationState, EntityChimera>> ATTACK_HANDLER = createAnimationHandler(b -> {
+        BiConsumer<AnimationState, EntityChimera> summonFire = (anim, entity) -> {
             if (anim.isAt("attack")) {
                 ModSpells.FIREBALL_BARRAGE.get().use(entity);
             }
         };
         b.put(FIRE_TAIL_BUBBLE, summonFire);
         b.put(FIRE_BREATH, summonFire);
-        BiConsumer<AnimatedAction, EntityChimera> summonWater = (anim, entity) -> {
+        BiConsumer<AnimationState, EntityChimera> summonWater = (anim, entity) -> {
             if (anim.isAt("attack")) {
                 ModSpells.BUBBLE_BEAM.get().use(entity);
             }
@@ -116,30 +102,30 @@ public class EntityChimera extends BossMonster {
             }
         });
     });
-
-    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityChimera>>> ATTACKS = List.of(
-            WeightedEntry.wrap(MonsterActionUtils.<EntityChimera>nonRepeatableAttack(LEAP)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 4), e -> 30 + e.getRandom().nextInt(15))), 10),
-            WeightedEntry.wrap(MonsterActionUtils.<EntityChimera>nonRepeatableAttack(FIRE_TAIL_BUBBLE)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 6), e -> 30 + e.getRandom().nextInt(15))), 8),
-            WeightedEntry.wrap(MonsterActionUtils.<EntityChimera>nonRepeatableAttack(WATER_TAIL_BUBBLE)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 6), e -> 30 + e.getRandom().nextInt(15))), 8),
-            WeightedEntry.wrap(MonsterActionUtils.<EntityChimera>nonRepeatableAttack(WATER_TAIL_BEAM)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 6), e -> 30 + e.getRandom().nextInt(15))), 8),
-            WeightedEntry.wrap(MonsterActionUtils.<EntityChimera>nonRepeatableAttack(FIRE_BREATH)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 6), e -> 30 + e.getRandom().nextInt(15))), 8),
-            WeightedEntry.wrap(MonsterActionUtils.<EntityChimera>nonRepeatableAttack(BUBBLE_BEAM)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 6), e -> 30 + e.getRandom().nextInt(15))), 8),
-            WeightedEntry.wrap(MonsterActionUtils.<EntityChimera>nonRepeatableAttack(SLASH)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.1), e -> 30 + e.getRandom().nextInt(15))), 10)
-    );
-    private static final List<WeightedEntry.Wrapper<IdleAction<EntityChimera>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1.1, 1)), 9),
-            WeightedEntry.wrap(new IdleAction<>(() -> new MoveAwayRunner<>(4, 1, 6)), 10)
-    );
-
-    public final AnimatedAttackGoal<EntityChimera> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
-    private final AnimationHandler<EntityChimera> animationHandler = new AnimationHandler<>(this, ANIMATED_ACTIONS)
+    //
+//    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityChimera>>> ATTACKS = List.of(
+//            WeightedEntry.wrap(MonsterActionUtils.<EntityChimera>nonRepeatableAttack(LEAP)
+//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 4), e -> 30 + e.getRandom().nextInt(15))), 10),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntityChimera>nonRepeatableAttack(FIRE_TAIL_BUBBLE)
+//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 6), e -> 30 + e.getRandom().nextInt(15))), 8),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntityChimera>nonRepeatableAttack(WATER_TAIL_BUBBLE)
+//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 6), e -> 30 + e.getRandom().nextInt(15))), 8),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntityChimera>nonRepeatableAttack(WATER_TAIL_BEAM)
+//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 6), e -> 30 + e.getRandom().nextInt(15))), 8),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntityChimera>nonRepeatableAttack(FIRE_BREATH)
+//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 6), e -> 30 + e.getRandom().nextInt(15))), 8),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntityChimera>nonRepeatableAttack(BUBBLE_BEAM)
+//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 6), e -> 30 + e.getRandom().nextInt(15))), 8),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntityChimera>nonRepeatableAttack(SLASH)
+//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.1), e -> 30 + e.getRandom().nextInt(15))), 10)
+//    );
+//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityChimera>>> IDLE_ACTIONS = List.of(
+//            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1.1, 1)), 9),
+//            WeightedEntry.wrap(new IdleAction<>(() -> new MoveAwayRunner<>(4, 1, 6)), 10)
+//    );
+//
+//    public final AnimatedAttackGoal<EntityChimera> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+    private final AnimationHandler<EntityChimera> animationHandler = new AnimationHandler<>(this, ANIMS)
             .withChangeListener(anim -> {
                 if (!this.level().isClientSide) {
                     if (anim == null) {
@@ -164,11 +150,8 @@ public class EntityChimera extends BossMonster {
 
     public EntityChimera(EntityType<? extends EntityChimera> type, Level world) {
         super(type, world);
-        if (!world.isClientSide)
-            this.goalSelector.addGoal(1, this.attack);
-        this.maxUpStep = 1;
+//        this.maxUpStep = 1;
     }
-
 
     @Override
     public RunecraftoryBossbar createBossBar() {
@@ -182,13 +165,13 @@ public class EntityChimera extends BossMonster {
         super.applyAttributes();
     }
 
-    @Override
-    public void addGoal() {
-        super.addGoal();
-        this.goalSelector.removeGoal(this.wander);
-        this.wander = new RestrictedWaterAvoidingStrollGoal(this, 0.6);
-        this.goalSelector.addGoal(6, this.wander);
-    }
+//    @Override
+//    public void addGoal() {
+//        super.addGoal();
+//        this.goalSelector.removeGoal(this.wander);
+//        this.wander = new RestrictedWaterAvoidingStrollGoal(this, 0.6);
+//        this.goalSelector.addGoal(6, this.wander);
+//    }
 
     @Override
     public double sprintSpeedThreshold() {
@@ -213,15 +196,15 @@ public class EntityChimera extends BossMonster {
     }
 
     @Override
-    public AnimatedAction getDeathAnimation() {
+    public String getDeathAnimation() {
         return DEFEAT;
     }
 
     @Override
-    public AABB attackBB(String anim) {
+    public AABB attackBB(AnimationState anim) {
         double width = this.getBbWidth() * 1.6;
         double length = this.getBbWidth() * 1.7;
-        if (anim.is(BITE)) {
+        if (anim.equals(BITE)) {
             width = this.getBbWidth() * 1.2;
             length = this.getBbWidth() * 1.3;
         }
@@ -229,33 +212,33 @@ public class EntityChimera extends BossMonster {
     }
 
     @Override
-    public OrientedBoundingBox calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
-        if (anim.is(LEAP)) {
+    public OrientedBoundingBox calculateAttackAABB(AnimationState anim, Vec3 target, double grow) {
+        if (anim.equals(LEAP)) {
             return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
                     .inflate(0.3, 0.1, 0.3 + this.getDeltaMovement().scale(0.3).length()), this.getYRot(), 0, this.position());
         }
-        if (!anim.is(BITE)) {
-            return super.calculateAttackAABB(anim, target, grow);
-        }
-        double reach = this.getBbWidth() * 0.9;
-        Vec3 dir;
-        float offset = anim.isAt("attack") ? 45 : -5;
-        if (target != null && !this.canBeControlledByRider()) {
-            reach = Math.min(reach, this.position().distanceTo(target));
-            dir = MathUtils.rotate(MathUtils.NORMAL_Y, target.subtract(this.position()).normalize(), offset * Mth.DEG_TO_RAD);
-        } else {
-            if (this.getControllingPassenger() instanceof Player player)
-                dir = Vec3.directionFromRotation(player.getXRot(), player.getYRot() + offset);
-            else
-                dir = Vec3.directionFromRotation(this.getXRot(), this.getYRot() + offset);
-        }
-        Vec3 attackPos = this.position().add(dir.scale(reach));
-        return new OrientedBoundingBox(this.attackBB(anim).inflate(grow, 0, grow), this.getYRot() + 45, 0, attackPos);
+//        if (!anim.equals(BITE)) {
+        return super.calculateAttackAABB(anim, target, grow);
+//        }
+//        double reach = this.getBbWidth() * 0.9;
+//        Vec3 dir;
+//        float offset = anim.isAt("attack") ? 45 : -5;
+//        if (target != null && !this.canBeControlledByRider()) {
+//            reach = Math.min(reach, this.position().distanceTo(target));
+//            dir = MathUtils.rotate(MathUtils.NORMAL_Y, target.subtract(this.position()).normalize(), offset * Mth.DEG_TO_RAD);
+//        } else {
+//            if (this.getControllingPassenger() instanceof Player player)
+//                dir = Vec3.directionFromRotation(player.getXRot(), player.getYRot() + offset);
+//            else
+//                dir = Vec3.directionFromRotation(this.getXRot(), this.getYRot() + offset);
+//        }
+//        Vec3 attackPos = this.position().add(dir.scale(reach));
+//        return new OrientedBoundingBox(this.attackBB(anim).inflate(grow, 0, grow), this.getYRot() + 45, 0, attackPos);
     }
 
     @Override
     public void handleAttack(AnimationState anim) {
-        BiConsumer<AnimatedAction, EntityChimera> handler = ATTACK_HANDLER.get(anim.getID());
+        BiConsumer<AnimationState, EntityChimera> handler = ATTACK_HANDLER.get(anim.getID());
         if (handler != null)
             handler.accept(anim, this);
     }
@@ -301,14 +284,14 @@ public class EntityChimera extends BossMonster {
             this.getAnimationHandler().setAnimation(ANGRY);
     }
 
-    @Override
-    public Vec3 passengerOffset(Entity passenger) {
-        return new Vec3(0, 22.75 / 16d, -5 / 16d);
-    }
+//    @Override
+//    public Vec3 passengerOffset(Entity passenger) {
+//        return new Vec3(0, 22.75 / 16d, -5 / 16d);
+//    }
 
     public void setChargeMotion(Vec3 charge) {
         this.chargeMotion = charge;
-        S2CMobUpdate.send(this, SyncableDatas.MOTION_DIR, this.chargeMotion);
+        S2CMobUpdate.send(this, SyncableDatas.NPC_JOB, this.chargeMotion);
     }
 
     @Override
@@ -329,6 +312,6 @@ public class EntityChimera extends BossMonster {
     @Override
     public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
         super.onUpdate(data);
-        data.runIf(SyncableDatas.MOTION_DIR, motion -> this.chargeMotion = motion);
+        data.runIf(SyncableDatas.NPC_JOB, motion -> this.chargeMotion = motion);
     }
 }

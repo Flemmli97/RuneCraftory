@@ -23,7 +23,7 @@ public abstract class ServerLevelMixin {
     @ModifyExpressionValue(method = "tickPrecipitation", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/biome/Biome;getPrecipitationAt(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/biome/Biome$Precipitation;"))
     private Biome.Precipitation withSeason(Biome.Precipitation original, BlockPos pos, @Local Biome biome, @Local(ordinal = 1) BlockPos pos2) {
         if (original == Biome.Precipitation.RAIN && SeasonUtils.coldEnoughForSnowSeason((ServerLevel) (Object) this, pos.below(), biome)) {
-                return Biome.Precipitation.SNOW;
+            return Biome.Precipitation.SNOW;
         }
         return original;
     }

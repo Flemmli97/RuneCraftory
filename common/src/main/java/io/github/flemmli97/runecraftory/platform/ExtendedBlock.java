@@ -9,5 +9,4 @@ import net.minecraft.world.level.material.FluidState;
 public interface ExtendedBlock {
 
     boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid);
-
 }

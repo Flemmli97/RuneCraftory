@@ -808,6 +808,7 @@ public class CombatUtils {
     }
 
     public interface FloatMap {
+
         float get(float val);
     }
 }

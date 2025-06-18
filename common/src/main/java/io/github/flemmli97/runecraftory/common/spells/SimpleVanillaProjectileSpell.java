@@ -55,6 +55,5 @@ public class SimpleVanillaProjectileSpell extends Spell {
     public interface ProjectileFactory {
 
         Entity create(ServerLevel level, LivingEntity entity, Vec3 direction);
-
     }
 }

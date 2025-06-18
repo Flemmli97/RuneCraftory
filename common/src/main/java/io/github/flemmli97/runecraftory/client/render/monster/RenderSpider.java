@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.client.render.monster;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelSpider;
 import io.github.flemmli97.runecraftory.client.render.RenderMonster;
@@ -21,7 +21,7 @@ public class RenderSpider<T extends EntitySpider> extends RenderMonster<T, Model
             float f = (entity.climbingTicker + (entity.isClimbing() ? partialTicks : -partialTicks)) / EntitySpider.CLIMB_MAX;
             if (f > 1)
                 f = 1;
-            stack.mulPose(Vector3f.XP.rotationDegrees(f * 90));
+            stack.mulPose(Axis.XP.rotationDegrees(f * 90));
             stack.translate(0, -0.8 * f, -0.2 * f);
         }
     }

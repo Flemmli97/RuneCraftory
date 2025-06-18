@@ -5,7 +5,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.contents.TranslatableContents;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +32,7 @@ public class PlaceHolderComponent {
      */
     public static Component parseDialogueComponent(Component component, Map<String, Component> replacements) {
         Component parse;
-        if (component instanceof TranslatableComponent translatable) {
+        if (component.getContents() instanceof TranslatableContents translatable) {
             String translation = NPCDialogueLanguageManager.INSTANCE
                     .getOrDefault(translatable.getKey());
             if (translation.equals(translatable.getKey())) {

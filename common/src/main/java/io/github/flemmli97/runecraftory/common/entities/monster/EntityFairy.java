@@ -2,25 +2,16 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.NearestTargetHorizontal;
-import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.entities.ai.control.FreeMoveControl;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.FloatingFlyNavigator;
 import io.github.flemmli97.runecraftory.common.entities.utils.HealingPredicateEntity;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.common.entity.AnimationHandler;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.util.random.WeightedEntry;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -31,10 +22,8 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.function.Predicate;
 
 public class EntityFairy extends BaseMonster implements HealingPredicateEntity {
@@ -46,22 +35,22 @@ public class EntityFairy extends BaseMonster implements HealingPredicateEntity {
     public static final String INTERACT = BUILDER.add("interact", LIGHT);
     public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
-
-    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityFairy>>> ATTACKS = List.of(
-            WeightedEntry.wrap(MonsterActionUtils.simpleRangedEvadingAction(WIND, 9, 2, 1, e -> 1), 8),
-            WeightedEntry.wrap(new GoalAttackAction<EntityFairy>(LIGHT)
-                    .cooldown(e -> e.animationCooldown(LIGHT))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 3),
-            WeightedEntry.wrap(new GoalAttackAction<EntityFairy>(HEAL)
-                    .cooldown(e -> e.animationCooldown(HEAL))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 2)
-    );
-    private static final List<WeightedEntry.Wrapper<IdleAction<EntityFairy>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 2),
-            WeightedEntry.wrap(new IdleAction<>(DoNothingRunner::new), 1)
-    );
-
-    public final AnimatedAttackGoal<EntityFairy> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+    //
+//    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityFairy>>> ATTACKS = List.of(
+//            WeightedEntry.wrap(MonsterActionUtils.simpleRangedEvadingAction(WIND, 9, 2, 1, e -> 1), 8),
+//            WeightedEntry.wrap(new GoalAttackAction<EntityFairy>(LIGHT)
+//                    .cooldown(e -> e.animationCooldown(LIGHT))
+//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 3),
+//            WeightedEntry.wrap(new GoalAttackAction<EntityFairy>(HEAL)
+//                    .cooldown(e -> e.animationCooldown(HEAL))
+//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 2)
+//    );
+//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityFairy>>> IDLE_ACTIONS = List.of(
+//            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 2),
+//            WeightedEntry.wrap(new IdleAction<>(DoNothingRunner::new), 1)
+//    );
+//
+//    public final AnimatedAttackGoal<EntityFairy> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityFairy> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     private final Predicate<LivingEntity> healingPredicate = e -> {
@@ -77,7 +66,6 @@ public class EntityFairy extends BaseMonster implements HealingPredicateEntity {
 
     public EntityFairy(EntityType<? extends EntityFairy> type, Level world) {
         super(type, world);
-        this.goalSelector.addGoal(2, this.attack);
         this.setNoGravity(true);
         this.moveControl = new FreeMoveControl(this);
     }
@@ -168,9 +156,9 @@ public class EntityFairy extends BaseMonster implements HealingPredicateEntity {
     public String getSleepAnimation() {
         return SLEEP;
     }
-
-    @Override
-    public Vec3 passengerOffset(Entity passenger) {
-        return new Vec3(0, 10 / 16d, -6 / 16d);
-    }
+//
+//    @Override
+//    public Vec3 passengerOffset(Entity passenger) {
+//        return new Vec3(0, 10 / 16d, -6 / 16d);
+//    }
 }

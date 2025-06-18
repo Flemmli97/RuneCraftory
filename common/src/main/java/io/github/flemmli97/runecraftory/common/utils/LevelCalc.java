@@ -342,5 +342,6 @@ public class LevelCalc {
     }
 
     public record GateLevelResult(int level, List<ServerPlayer> nearby) {
+
     }
 }

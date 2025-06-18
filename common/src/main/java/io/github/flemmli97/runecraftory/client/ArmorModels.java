@@ -20,6 +20,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.HumanoidArm;
@@ -59,18 +60,18 @@ public class ArmorModels {
             boolean right = entityLiving.getMainArm() == HumanoidArm.RIGHT;
             ModelPart model = right ? origin.rightArm : origin.leftArm;
             model.visible = true;
-            if (entityLiving instanceof AbstractClientPlayer clientPlayer && clientPlayer.getModelName().equals("slim")) {
+            if (entityLiving instanceof AbstractClientPlayer clientPlayer && clientPlayer.getSkin().model() == PlayerSkin.Model.SLIM) {
                 model.x += right ? 0.5 : -0.5;
             }
             return null;
         });
-        for (RegistryEntrySupplier<Item> sup : bracelets())
+        for (RegistryEntrySupplier<Item, ?> sup : bracelets())
             builder.put(sup.getID(), bracelet);
         ArmorModelGetter normalItemModel = (entityLiving, itemStack, slot, origin) -> {
             ITEM_MODEL.setProperties(entityLiving, itemStack, origin.getHead(), ArmorSimpleItemModel.TRANSLATE_TO_HEAD);
             return ITEM_MODEL;
         };
-        for (RegistryEntrySupplier<Item> sup : ModItems.ribbons())
+        for (RegistryEntrySupplier<Item, ?> sup : ModItems.ribbons())
             builder.put(sup.getID(), normalItemModel);
         builder.put(ModItems.PIYO_SANDALS.getID(), ((entityLiving, itemStack, slot, origin) -> {
             origin.copyPropertiesTo((HumanoidModel) PIYO_SANDALS_MODEL);
@@ -79,7 +80,7 @@ public class ArmorModels {
             PIYO_SANDALS_MODEL.rightLeg.visible = true;
             return PIYO_SANDALS_MODEL;
         }));
-        for (RegistryEntrySupplier<Item> sup : ModItems.hatItems())
+        for (RegistryEntrySupplier<Item, ?> sup : ModItems.hatItems())
             builder.put(sup.getID(), normalItemModel);
         ArmorModelGetter rings = ((entityLiving, itemStack, slot, origin) -> {
             origin.copyPropertiesTo((HumanoidModel) RINGS_MODEL);
@@ -87,12 +88,12 @@ public class ArmorModels {
             boolean right = entityLiving.getMainArm() == HumanoidArm.RIGHT;
             ModelPart model = right ? RINGS_MODEL.rightArm : RINGS_MODEL.leftArm;
             model.visible = true;
-            if (entityLiving instanceof AbstractClientPlayer clientPlayer && clientPlayer.getModelName().equals("slim")) {
+            if (entityLiving instanceof AbstractClientPlayer clientPlayer && clientPlayer.getSkin().model() == PlayerSkin.Model.SLIM) {
                 model.x += right ? 0.5 : -0.5;
             }
             return RINGS_MODEL;
         });
-        for (RegistryEntrySupplier<Item> sup : rings())
+        for (RegistryEntrySupplier<Item, ?> sup : rings())
             builder.put(sup.getID(), rings);
         return builder.build();
     }
@@ -105,22 +106,22 @@ public class ArmorModels {
             OUTER.setAllVisible(false);
             ModelPart model = right ? OUTER.rightArm : OUTER.leftArm;
             model.visible = true;
-            if (player.getModelName().equals("slim"))
+            if (player.getSkin().model() == PlayerSkin.Model.SLIM)
                 model.x += right ? 0.5 : -0.5;
             renderModelPart(model, player, right, buffer, stack, poseStack, light);
         };
-        for (RegistryEntrySupplier<Item> sup : bracelets())
+        for (RegistryEntrySupplier<Item, ?> sup : bracelets())
             builder.put(sup.getID(), bracelet);
         FirstPersonArmorRenderer rings = (player, stack, right, origin, poseStack, buffer, light) -> {
             origin.copyPropertiesTo((HumanoidModel) RINGS_MODEL);
             RINGS_MODEL.setAllVisible(false);
             ModelPart model = right ? RINGS_MODEL.rightArm : RINGS_MODEL.leftArm;
             model.visible = true;
-            if (player.getModelName().equals("slim"))
+            if (player.getSkin().model() == PlayerSkin.Model.SLIM)
                 model.x += right ? 0.5 : -0.5;
             renderModelPart(model, player, right, buffer, stack, poseStack, light);
         };
-        for (RegistryEntrySupplier<Item> sup : rings())
+        for (RegistryEntrySupplier<Item, ?> sup : rings())
             builder.put(sup.getID(), rings);
         return builder.build();
     }
@@ -161,12 +162,12 @@ public class ArmorModels {
         RINGS_MODEL = new RingsArmorModel(ctx.bakeLayer(RingsArmorModel.LAYER_LOCATION));
     }
 
-    private static List<RegistryEntrySupplier<Item>> bracelets() {
+    private static List<RegistryEntrySupplier<Item, ?>> bracelets() {
         return List.of(ModItems.CHEAP_BRACELET, ModItems.BRONZE_BRACELET, ModItems.SILVER_BRACELET,
                 ModItems.GOLD_BRACELET, ModItems.PLATINUM_BRACELET);
     }
 
-    private static List<RegistryEntrySupplier<Item>> rings() {
+    private static List<RegistryEntrySupplier<Item, ?>> rings() {
         return List.of(ModItems.SILVER_RING, ModItems.GOLD_RING, ModItems.PLATINUM_RING, ModItems.ENGAGEMENT_RING,
                 ModItems.SHIELD_RING, ModItems.CRITICAL_RING, ModItems.SILENT_RING, ModItems.PARALYSIS_RING, ModItems.POISON_RING, ModItems.MAGIC_RING, ModItems.THROWING_RING, ModItems.STAY_UP_RING,
                 ModItems.AQUAMARINE_RING, ModItems.AMETHYST_RING, ModItems.EMERALD_RING, ModItems.SAPPHIRE_RING, ModItems.RUBY_RING,
@@ -175,10 +176,12 @@ public class ArmorModels {
     }
 
     public interface ArmorModelGetter {
+
         Model getModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot slot, HumanoidModel<?> origin);
     }
 
     public interface FirstPersonArmorRenderer {
+
         void render(AbstractClientPlayer player, ItemStack stack, boolean rightArm, PlayerModel<?> arm, PoseStack poseStack, MultiBufferSource buffer, int light);
     }
 }

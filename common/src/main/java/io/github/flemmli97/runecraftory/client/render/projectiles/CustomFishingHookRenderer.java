@@ -27,7 +27,7 @@ import net.minecraft.world.phys.Vec3;
  */
 public class CustomFishingHookRenderer extends EntityRenderer<EntityCustomFishingHook> {
 
-    private static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation("textures/entity/fishing_hook.png");
+    private static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.parse("textures/entity/fishing_hook.png");
     private static final RenderType RENDER_TYPE = RenderType.entityCutout(TEXTURE_LOCATION);
 
     public CustomFishingHookRenderer(EntityRendererProvider.Context context) {

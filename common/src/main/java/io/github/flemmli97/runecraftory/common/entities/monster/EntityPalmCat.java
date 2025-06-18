@@ -1,21 +1,13 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.LeapingMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.RestrictedWaterAvoidingStrollGoal;
-import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.common.entity.AnimationHandler;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinition;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
-import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -24,7 +16,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.function.Consumer;
 
 public class EntityPalmCat extends LeapingMonster {
@@ -36,19 +27,19 @@ public class EntityPalmCat extends LeapingMonster {
     public static final String INTERACT = BUILDER.add("interact", MELEE);
     public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
-
-    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityPalmCat>>> ATTACKS = List.of(
-            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(MELEE, e -> e.consecutive ? 1 : 0.7f), 4),
-            WeightedEntry.wrap(new GoalAttackAction<EntityPalmCat>(LEAP)
-                    .cooldown(e -> e.animationCooldown(LEAP))
-                    .prepare(() -> new WrappedRunner<>(new MoveToTargetRunner<>(1, 3))), 2)
-    );
-    private static final List<WeightedEntry.Wrapper<IdleAction<EntityPalmCat>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 0.5)), 3),
-            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(12, 5)), 1)
-    );
-
-    public final AnimatedAttackGoal<EntityPalmCat> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+    //
+//    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityPalmCat>>> ATTACKS = List.of(
+//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(MELEE, e -> e.consecutive ? 1 : 0.7f), 4),
+//            WeightedEntry.wrap(new GoalAttackAction<EntityPalmCat>(LEAP)
+//                    .cooldown(e -> e.animationCooldown(LEAP))
+//                    .prepare(() -> new WrappedRunner<>(new MoveToTargetRunner<>(1, 3))), 2)
+//    );
+//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityPalmCat>>> IDLE_ACTIONS = List.of(
+//            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 0.5)), 3),
+//            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(12, 5)), 1)
+//    );
+//
+//    public final AnimatedAttackGoal<EntityPalmCat> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityPalmCat> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     private boolean hitAny;
@@ -56,31 +47,30 @@ public class EntityPalmCat extends LeapingMonster {
 
     public EntityPalmCat(EntityType<? extends EntityPalmCat> type, Level world) {
         super(type, world);
-        this.goalSelector.addGoal(2, this.attack);
     }
 
     @Override
-    protected Consumer<AnimatedAction> animatedActionConsumer() {
+    protected Consumer<AnimationDefinition> animatedActionConsumer() {
         return anim -> {
             super.animatedActionConsumer().accept(anim);
             if (!this.level().isClientSide) {
-                AnimatedAction current = this.animationHandler.getAnimation();
-                if (MELEE.is(current) || LEAP.is(current)) {
-                    if (this.hitAny && !this.consecutive) {
-                        this.consecutive = true;
-                        this.attack.resetCooldown();
-                    } else {
-                        this.consecutive = false;
-                    }
-                }
+                AnimationState current = this.animationHandler.getAnimation();
+//                if (MELEE.is(current) || LEAP.is(current)) {
+//                    if (this.hitAny && !this.consecutive) {
+//                        this.consecutive = true;
+//                        this.attack.resetCooldown();
+//                    } else {
+//                        this.consecutive = false;
+//                    }
+//                }
                 this.hitAny = false;
             }
         };
     }
 
     @Override
-    protected boolean isLeapingAnim(AnimatedAction anim) {
-        return anim.is(LEAP);
+    protected boolean isLeapingAnim(String anim) {
+        return anim.equals(LEAP);
     }
 
     @Override
@@ -89,13 +79,13 @@ public class EntityPalmCat extends LeapingMonster {
         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.3);
     }
 
-    @Override
-    public void addGoal() {
-        super.addGoal();
-        this.goalSelector.removeGoal(this.wander);
-        this.wander = new RestrictedWaterAvoidingStrollGoal(this, 0.6);
-        this.goalSelector.addGoal(6, this.wander);
-    }
+//    @Override
+//    public void addGoal() {
+//        super.addGoal();
+//        this.goalSelector.removeGoal(this.wander);
+//        this.wander = new RestrictedWaterAvoidingStrollGoal(this, 0.6);
+//        this.goalSelector.addGoal(6, this.wander);
+//    }
 
     @Override
     public double sprintSpeedThreshold() {
@@ -135,7 +125,7 @@ public class EntityPalmCat extends LeapingMonster {
     }
 
     @Override
-    public AABB attackBB(String anim) {
+    public AABB attackBB(AnimationState anim) {
         double width = this.getBbWidth() * 1.3;
         double length = this.getBbWidth() * 2.1;
         return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
@@ -162,9 +152,9 @@ public class EntityPalmCat extends LeapingMonster {
     public String getSleepAnimation() {
         return SLEEP;
     }
-
-    @Override
-    public Vec3 passengerOffset(Entity passenger) {
-        return new Vec3(0, 15.75 / 16d, -4 / 16d);
-    }
+//
+//    @Override
+//    public Vec3 passengerOffset(Entity passenger) {
+//        return new Vec3(0, 15.75 / 16d, -4 / 16d);
+//    }
 }

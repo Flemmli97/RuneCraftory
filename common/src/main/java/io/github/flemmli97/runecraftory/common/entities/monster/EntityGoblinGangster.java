@@ -1,20 +1,14 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
-import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.common.entity.AnimationHandler;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
-import net.minecraft.util.random.WeightedEntry;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -23,8 +17,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 
-import java.util.List;
-
 public class EntityGoblinGangster extends EntityGoblin {
 
     public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
@@ -32,28 +24,26 @@ public class EntityGoblinGangster extends EntityGoblin {
     public static final String DOUBLE_THROW = BUILDER.add("double_throw", AnimationsBuilder.definition(0.96).marker("attack", 0.4, 0.76));
     public static final String INTERACT = BUILDER.add("interact", DOUBLE_THROW);
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
-
-    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityGoblinGangster>>> ATTACKS = List.of(
-            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeActionInRange(DOUBLE_STAB, e -> 0.8f), 2),
-            WeightedEntry.wrap(MonsterActionUtils.<EntityGoblinGangster>simpleRangedEvadingAction(DOUBLE_THROW, 8, 3, 1, e -> 1)
-                    .withCondition(((goal, target, previous) -> !goal.attacker.getMainHandItem().isEmpty())), 3)
-    );
-    private static final List<WeightedEntry.Wrapper<IdleAction<EntityGoblinGangster>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 0.5)), 1),
-            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 2)
-    );
-
-    public final AnimatedAttackGoal<EntityGoblinGangster> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+    //
+//    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityGoblinGangster>>> ATTACKS = List.of(
+//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeActionInRange(DOUBLE_STAB, e -> 0.8f), 2),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntityGoblinGangster>simpleRangedEvadingAction(DOUBLE_THROW, 8, 3, 1, e -> 1)
+//                    .withCondition(((goal, target, previous) -> !goal.attacker.getMainHandItem().isEmpty())), 3)
+//    );
+//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityGoblinGangster>>> IDLE_ACTIONS = List.of(
+//            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 0.5)), 1),
+//            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 2)
+//    );
+//
+//    public final AnimatedAttackGoal<EntityGoblinGangster> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityGoblinGangster> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityGoblinGangster(EntityType<? extends EntityGoblin> type, Level level) {
         super(type, level);
-        this.goalSelector.removeGoal(super.attack);
-        this.goalSelector.addGoal(2, this.attack);
     }
 
     @Override
-    protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
+    protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance difficulty) {
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.CUTLASS_PROP.get()));
         this.setDropChance(EquipmentSlot.MAINHAND, 0);
         this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ModItems.CUTLASS_PROP.get()));
@@ -78,7 +68,7 @@ public class EntityGoblinGangster extends EntityGoblin {
     }
 
     @Override
-    public AABB attackBB(String anim) {
+    public AABB attackBB(AnimationState anim) {
         double width = this.getBbWidth() * 1.5;
         double length = this.getBbWidth() * 2.15;
         return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);

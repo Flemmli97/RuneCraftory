@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.ai.behaviour.actions;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.registry.NPCAction;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCAttackGoal;
@@ -14,11 +14,10 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 public class FoodThrowAction implements NPCAction {
 
-    public static final Codec<FoodThrowAction> CODEC = RecordCodecBuilder.create((instance) ->
+    public static final MapCodec<FoodThrowAction> CODEC = RecordCodecBuilder.mapCodec((instance) ->
             instance.group(ItemStack.CODEC.listOf().fieldOf("items").forGetter(d -> d.items),
                     NumberProviders.CODEC.fieldOf("walk_time").forGetter(d -> d.walkTime),
                     NPCAction.optionalNumCooldown(d -> d.cooldown)
@@ -44,8 +43,8 @@ public class FoodThrowAction implements NPCAction {
     }
 
     @Override
-    public Supplier<Codec<FoodThrowAction>> codec() {
-        return ModNPCActions.FOOD_THROW_ACTION;
+    public MapCodec<FoodThrowAction> codec() {
+        return ModNPCActions.FOOD_THROW_ACTION.get();
     }
 
     @Override

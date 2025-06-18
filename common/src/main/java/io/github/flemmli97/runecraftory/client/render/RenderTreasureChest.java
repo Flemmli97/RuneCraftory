@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.client.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.model.misc.ModelChest;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityTreasureChest;
@@ -40,7 +40,7 @@ public class RenderTreasureChest extends EntityRenderer<EntityTreasureChest> {
         this.model.prepareMobModel(entity, 0.0F, 0.0F, partialTicks);
         this.model.setupAnim(entity, 0.0F, 0.0F, partialLivingTicks, yaw, pitch);
         VertexConsumer ivertexbuilder = buffer.getBuffer(this.model.renderType(this.getTextureLocation(entity)));
-        this.model.renderToBuffer(stack, ivertexbuilder, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        this.model.renderToBuffer(stack, ivertexbuilder, packedLight, OverlayTexture.NO_OVERLAY);
         stack.popPose();
         super.render(entity, rotation, partialTicks, stack, buffer, packedLight);
     }
@@ -56,7 +56,7 @@ public class RenderTreasureChest extends EntityRenderer<EntityTreasureChest> {
     }
 
     public void translate(EntityTreasureChest entity, PoseStack stack, float pitch, float yaw, float partialTicks) {
-        stack.mulPose(Vector3f.YP.rotationDegrees(180.0F + yaw));
-        stack.mulPose(Vector3f.XP.rotationDegrees(pitch));
+        stack.mulPose(Axis.YP.rotationDegrees(180.0F + yaw));
+        stack.mulPose(Axis.XP.rotationDegrees(pitch));
     }
 }

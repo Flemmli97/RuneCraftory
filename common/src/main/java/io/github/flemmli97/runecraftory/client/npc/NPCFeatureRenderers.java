@@ -32,7 +32,7 @@ public class NPCFeatureRenderers {
 
     @SuppressWarnings("unchecked")
     public static <T extends NPCFeature> NPCFeatureRenderer<T> get(NPCFeature feature) {
-        NPCFeatureRenderer<T> renderer = (NPCFeatureRenderer<T>) RENDERERS.get(feature.getType());
+        NPCFeatureRenderer<T> renderer = (NPCFeatureRenderer<T>) RENDERERS.get(feature.type());
         if (renderer == null)
             throw new IllegalStateException("No npc feature renderer registered for " + feature);
         return renderer;

@@ -1,11 +1,10 @@
 package io.github.flemmli97.runecraftory.client.npc;
 
 import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.npc.NPCLook;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeature;
@@ -19,7 +18,7 @@ import io.github.flemmli97.runecraftory.common.entities.npc.features.OutfitFeatu
 import io.github.flemmli97.runecraftory.common.entities.npc.features.SimpleHatFeatureType;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelLayers;
@@ -29,6 +28,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.client.resources.DefaultPlayerSkin;
+import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -48,7 +48,7 @@ import java.util.Map;
 
 public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerModel<T>> {
 
-    private static final Map<String, PlayerSkin> PLAYER_SKIN_TEXTURE_LOCATIONS = new HashMap<>();
+    private static final Map<String, PlayerSkinData> PLAYER_SKIN_TEXTURE_LOCATIONS = new HashMap<>();
     private static final Map<String, ResourceLocation> TEXTURE_LAYERS_LOCATIONS = new HashMap<>();
     public static final ResourceLocation EMPTY = RuneCraftory.modRes("textures/entity/npc/empty.png");
 
@@ -59,7 +59,7 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
         super(ctx, new PlayerModel<>(ctx.bakeLayer(ModelLayers.PLAYER), false), 0.5f);
         this.addLayer(this.armorLayer = new NPCArmorLayer<>(this, new HumanoidModel<>(ctx.bakeLayer(ModelLayers.PLAYER_INNER_ARMOR)), new HumanoidModel<>(ctx.bakeLayer(ModelLayers.PLAYER_OUTER_ARMOR))));
         this.addLayer(this.armorLayerSlim = new NPCArmorLayer<>(this, new HumanoidModel<>(ctx.bakeLayer(ModelLayers.PLAYER_SLIM_INNER_ARMOR)), new HumanoidModel<>(ctx.bakeLayer(ModelLayers.PLAYER_SLIM_OUTER_ARMOR))));
-        this.addLayer(new ItemInHandLayer<>(this));
+        this.addLayer(new ItemInHandLayer<>(this, ctx.getItemInHandRenderer()));
         for (NPCTextureLayer.LayerType layerType : NPCTextureLayer.LayerType.values()) {
             if (layerType.location == null)
                 continue;
@@ -76,8 +76,8 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
     public static boolean isSlim(EntityNPCBase npc) {
         String skin = npc.getLook().playerSkin();
         if (skin != null) {
-            String skinMeta = PLAYER_SKIN_TEXTURE_LOCATIONS.computeIfAbsent(skin, s -> new PlayerSkin(skin)).getSkinMeta();
-            return skinMeta.equals("slim");
+            PlayerSkin.Model skinMeta = PLAYER_SKIN_TEXTURE_LOCATIONS.computeIfAbsent(skin, s -> new PlayerSkinData(skin)).getSkinMeta();
+            return skinMeta == PlayerSkin.Model.SLIM;
         }
         return npc.lookFeatures.view.containsKey(ModNPCLooks.SLIM.get());
     }
@@ -87,7 +87,7 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
         if (type == NPCTextureLayer.LayerType.SKIN_LAYER) {
             String skin = look.playerSkin();
             if (skin != null) {
-                return PLAYER_SKIN_TEXTURE_LOCATIONS.computeIfAbsent(skin, s -> new PlayerSkin(skin)).getLocation();
+                return PLAYER_SKIN_TEXTURE_LOCATIONS.computeIfAbsent(skin, s -> new PlayerSkinData(skin)).getLocation();
             }
         } else if (look.playerSkin() != null) {
             // Ignore other layers if using a player skin
@@ -105,7 +105,7 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
                 IndexedColorSettingType.IndexedColorFeature feat = features.getFeature(ModNPCLooks.SKIN.get());
                 int num = 0;
                 if (feat != null)
-                    num = feat.index;
+                    num = feat.index();
                 String location = String.format("textures/entity/npc/skin/%s%s.png", slim ? "slim_" : "", num);
                 yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, RenderNPC::modLoc);
             }
@@ -113,7 +113,7 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
                 FaceFeaturesType.FaceFeatures feat = features.getFeature(ModNPCLooks.FACE.get());
                 int num = 0;
                 if (feat != null) {
-                    num = feat.iris.index();
+                    num = feat.iris().index();
                     if (subType != null) {
                         subType = feat.expressionTexture(features, subType, FaceFeaturesType.ExpressionType.IRIS);
                     }
@@ -126,7 +126,7 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
                 FaceFeaturesType.FaceFeatures feat = features.getFeature(ModNPCLooks.FACE.get());
                 int num = 0;
                 if (feat != null) {
-                    num = feat.sclera.index();
+                    num = feat.sclera().index();
                     if (subType != null) {
                         subType = feat.expressionTexture(features, subType, FaceFeaturesType.ExpressionType.SCLERA);
                     }
@@ -139,7 +139,7 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
                 FaceFeaturesType.FaceFeatures feat = features.getFeature(ModNPCLooks.FACE.get());
                 int num = 0;
                 if (feat != null) {
-                    num = feat.eyebrow.index();
+                    num = feat.eyebrow().index();
                     if (subType != null) {
                         subType = feat.expressionTexture(features, subType, FaceFeaturesType.ExpressionType.EYEBROWS);
                     }
@@ -150,7 +150,7 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
             }
             case BLUSH_LAYER -> {
                 BlushFeatureType.BlushFeature feat = features.getFeature(ModNPCLooks.BLUSH.get());
-                if (feat == null || !feat.blush)
+                if (feat == null || !feat.blush())
                     yield null;
                 String location = "textures/entity/npc/misc/blush.png";
                 yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, RenderNPC::modLoc);
@@ -159,21 +159,21 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
                 OutfitFeatureType.OutfitFeature feat = features.getFeature(ModNPCLooks.OUTFIT.get());
                 String location = String.format("textures/entity/npc/outfit/generic%s_0.png", slim ? "_slim" : "");
                 if (feat != null)
-                    location = String.format("textures/entity/npc/outfit/%s%s_%s.png", feat.type, slim ? "_slim" : "", feat.index);
+                    location = String.format("textures/entity/npc/outfit/%s%s_%s.png", feat.outfit(), slim ? "_slim" : "", feat.index());
                 yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, RenderNPC::modLoc);
             }
             case HAIR_LAYER -> {
                 HairFeatureType.HairFeature feat = features.getFeature(ModNPCLooks.HAIR.get());
                 if (feat == null)
                     yield null;
-                String location = String.format("textures/entity/npc/hair/%s_%s.png", feat.type, feat.index);
+                String location = String.format("textures/entity/npc/hair/%s_%s.png", feat.hair(), feat.index());
                 yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, RenderNPC::modLoc);
             }
             case HAT_LAYER -> {
                 SimpleHatFeatureType.SimpleHatFeature feat = features.getFeature(ModNPCLooks.HAT.get());
-                if (feat == null || feat.hat.isEmpty())
+                if (feat == null || feat.hat().isEmpty())
                     yield null;
-                String location = String.format("textures/entity/npc/misc/%s.png", feat.hat);
+                String location = String.format("textures/entity/npc/misc/%s.png", feat.hat());
                 yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, RenderNPC::modLoc);
             }
         };
@@ -184,17 +184,16 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
         return RuneCraftory.modRes(s);
     }
 
-    public static boolean renderForTooltip(PoseStack stack, int x, int y, @Nullable String skin, List<Pair<Integer, ResourceLocation>> textures) {
+    public static boolean renderForTooltip(GuiGraphics graphics, int x, int y, @Nullable String skin, List<Pair<Integer, ResourceLocation>> textures) {
         if (skin == null && textures == null)
             return false;
         int sizeX = 16;
         int sizeY = 16;
         if (skin != null) {
-            ResourceLocation res = PLAYER_SKIN_TEXTURE_LOCATIONS.computeIfAbsent(skin, s -> new PlayerSkin(skin)).getLocation();
-            RenderSystem.setShaderTexture(0, res);
-            GuiComponent.blit(stack, x, y, sizeX, sizeY, 8.0f, 8, 8, 8, 64, 64);
+            ResourceLocation res = PLAYER_SKIN_TEXTURE_LOCATIONS.computeIfAbsent(skin, s -> new PlayerSkinData(skin)).getLocation();
+            graphics.blit(res, x, y, sizeX, sizeY, 8.0f, 8, 8, 8, 64, 64);
             RenderSystem.enableBlend();
-            GuiComponent.blit(stack, x, y, sizeX, sizeY, 40.0F, 8, 8, 8, 64, 64);
+            graphics.blit(res, x, y, sizeX, sizeY, 40.0F, 8, 8, 8, 64, 64);
             RenderSystem.disableBlend();
         } else {
             for (Pair<Integer, ResourceLocation> layer : textures) {
@@ -204,10 +203,9 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
                 float g = (float) (color >> 8 & 0xFF) / 255.0f;
                 float b = (float) (color & 0xFF) / 255.0f;
                 RenderSystem.setShaderColor(r, g, b, a);
-                RenderSystem.setShaderTexture(0, layer.getSecond());
-                GuiComponent.blit(stack, x, y, sizeX, sizeY, 8.0f, 8, 8, 8, 64, 64);
+                graphics.blit(layer.getSecond(), x, y, sizeX, sizeY, 8.0f, 8, 8, 8, 64, 64);
                 RenderSystem.enableBlend();
-                GuiComponent.blit(stack, x, y, sizeX, sizeY, 40.0F, 8, 8, 8, 64, 64);
+                graphics.blit(layer.getSecond(), x, y, sizeX, sizeY, 40.0F, 8, 8, 8, 64, 64);
                 RenderSystem.disableBlend();
             }
             RenderSystem.setShaderColor(1, 1, 1, 1);
@@ -284,19 +282,19 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
     }
 
     @Override
-    protected void setupRotations(T entity, PoseStack stack, float ageInTicks, float rotationYaw, float partialTicks) {
-        super.setupRotations(entity, stack, ageInTicks, rotationYaw, partialTicks);
+    protected void setupRotations(T entity, PoseStack stack, float bob, float yBodyRot, float partialTick, float scale) {
+        super.setupRotations(entity, stack, bob, yBodyRot, partialTick, scale);
         if (entity.getPlayDeathTick() > 0) {
-            float partial = partialTicks - 1;
+            float partial = partialTick - 1;
             float f = (entity.getPlayDeathTick() + (entity.playDeath() ? partial : -partial)) / 20.0f * 1.6f;
             if ((f = Mth.sqrt(f)) > 1.0f) {
                 f = 1.0f;
             }
             stack.translate(0, f * 0.1, -f * entity.getBbHeight() * 0.5);
-            stack.mulPose(Vector3f.XP.rotationDegrees(f * this.getFlipDegrees(entity)));
+            stack.mulPose(Axis.XP.rotationDegrees(f * this.getFlipDegrees(entity)));
         }
         for (NPCFeature feature : entity.lookFeatures.view.values()) {
-            NPCFeatureRenderers.get(feature).transformStack(feature, this, entity, stack, partialTicks);
+            NPCFeatureRenderers.get(feature).transformStack(feature, this, entity, stack, partialTick);
         }
     }
 
@@ -312,17 +310,18 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
         return null;
     }
 
-    static class PlayerSkin {
+    static class PlayerSkinData {
 
         private GameProfile gameProfile;
 
-        private ResourceLocation location = DefaultPlayerSkin.getDefaultSkin();
-        private String skinMeta = "";
+        private ResourceLocation location = DefaultPlayerSkin.getDefaultTexture();
+        private PlayerSkin.Model skinMeta = net.minecraft.client.resources.PlayerSkin.Model.SLIM;
 
         private boolean pendingTextures;
 
-        public PlayerSkin(String name) {
-            SkullBlockEntity.updateGameprofile(new GameProfile(null, name), prof -> this.gameProfile = prof);
+        public PlayerSkinData(String name) {
+            SkullBlockEntity.fetchGameProfile(name)
+                    .thenAccept(prof -> prof.ifPresent(p -> this.gameProfile = p));
         }
 
         public ResourceLocation getLocation() {
@@ -330,7 +329,7 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
             return this.location;
         }
 
-        public String getSkinMeta() {
+        public PlayerSkin.Model getSkinMeta() {
             this.registerTextures();
             return this.skinMeta;
         }
@@ -339,16 +338,11 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
             synchronized (this) {
                 if (!this.pendingTextures && this.gameProfile != null) {
                     this.pendingTextures = true;
-                    Minecraft.getInstance().getSkinManager().registerSkins(this.gameProfile, (type, resourceLocation, minecraftProfileTexture) -> {
-                        if (type == MinecraftProfileTexture.Type.SKIN) {
-                            String metadata = minecraftProfileTexture.getMetadata("model");
-                            if (metadata == null) {
-                                metadata = "default";
-                            }
-                            this.location = resourceLocation;
-                            this.skinMeta = metadata;
-                        }
-                    }, true);
+                    Minecraft.getInstance().getSkinManager().getOrLoad(this.gameProfile)
+                            .thenAccept(skin -> {
+                                this.location = skin.texture();
+                                this.skinMeta = skin.model();
+                            });
                 }
             }
         }

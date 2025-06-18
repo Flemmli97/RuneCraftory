@@ -1,35 +1,25 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.animated.ChargeAction;
-import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.common.entity.AnimationHandler;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinition;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.random.WeightedEntry;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Consumer;
 
 public class EntityMinotaur extends ChargingMonster {
@@ -43,21 +33,21 @@ public class EntityMinotaur extends ChargingMonster {
     public static final String INTERACT = BUILDER.add("interact", SWING);
     public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
-
-    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityMinotaur>>> ATTACKS = List.of(
-            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(SWING, e -> 1), 1),
-            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(SPIN, e -> 1), 1),
-            WeightedEntry.wrap(new GoalAttackAction<EntityMinotaur>(CHARGE)
-                    .cooldown(e -> e.animationCooldown(CHARGE))
-                    .withCondition(MonsterActionUtils.chargeCondition())
-                    .prepare(ChargeAction::new), 2)
-    );
-    private static final List<WeightedEntry.Wrapper<IdleAction<EntityMinotaur>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 0.5)), 3),
-            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(12, 5)), 5)
-    );
-
-    public final AnimatedAttackGoal<EntityMinotaur> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+    //
+//    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityMinotaur>>> ATTACKS = List.of(
+//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(SWING, e -> 1), 1),
+//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(SPIN, e -> 1), 1),
+//            WeightedEntry.wrap(new GoalAttackAction<EntityMinotaur>(CHARGE)
+//                    .cooldown(e -> e.animationCooldown(CHARGE))
+//                    .withCondition(MonsterActionUtils.chargeCondition())
+//                    .prepare(ChargeAction::new), 2)
+//    );
+//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityMinotaur>>> IDLE_ACTIONS = List.of(
+//            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 0.5)), 3),
+//            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(12, 5)), 5)
+//    );
+//
+//    public final AnimatedAttackGoal<EntityMinotaur> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityMinotaur> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     private Vec3 spinDirection;
@@ -65,11 +55,10 @@ public class EntityMinotaur extends ChargingMonster {
 
     public EntityMinotaur(EntityType<? extends EntityMinotaur> type, Level world) {
         super(type, world);
-        this.goalSelector.addGoal(2, this.attack);
     }
 
     @Override
-    protected Consumer<AnimatedAction> animatedActionConsumer() {
+    protected Consumer<AnimationDefinition> animatedActionConsumer() {
         return (anim) -> {
             super.animatedActionConsumer().accept(anim);
             if (!this.level().isClientSide) {
@@ -82,7 +71,7 @@ public class EntityMinotaur extends ChargingMonster {
     }
 
     @Override
-    public OrientedBoundingBox calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
+    public OrientedBoundingBox calculateAttackAABB(AnimationState anim, Vec3 target, double grow) {
         if (anim.is(SPIN)) {
             return new OrientedBoundingBox(this.attackBB(anim), this.getYRot(), 0, this.position());
         }
@@ -90,7 +79,7 @@ public class EntityMinotaur extends ChargingMonster {
     }
 
     @Override
-    public AABB attackBB(String anim) {
+    public AABB attackBB(AnimationState anim) {
         if (anim.is(SPIN)) {
             double attackSize = this.getBbWidth() * 1.4;
             return new AABB(-attackSize, -0.2, -attackSize, attackSize, this.getBbHeight() + 0.2, attackSize);
@@ -114,8 +103,8 @@ public class EntityMinotaur extends ChargingMonster {
                 this.setDeltaMovement(this.spinDirection.x(), this.getDeltaMovement().y, this.spinDirection.z());
                 float start = (float) (anim.getMarker("attack_start", 0) * 20);
                 float end = (float) (anim.getMarker("attack_end", 0) * 20);
-                float f = anim.progress(start, end, 1, 0);
-                float fNext = anim.progress(start, end, 1, 1);
+                float f = (float) anim.progress(start, end, 1, 0);
+                float fNext = (float) anim.progress(start, end, 1, 1);
                 float angleInc = -490;
                 if (anim.isAt("reset"))
                     this.hitEntity.clear();
@@ -127,7 +116,7 @@ public class EntityMinotaur extends ChargingMonster {
         } else {
             if (anim.is(SWING) && anim.isAt("attack")) {
                 S2CScreenShake.sendAround(this, 16, 5, 3);
-                this.level().playSound(null, this.blockPosition(), SoundEvents.GENERIC_EXPLODE, this.getSoundSource(), 1.0f, 0.9f);
+//                this.level().playSound(null, this.blockPosition(), SoundEvents.GENERIC_EXPLODE, this.getSoundSource(), 1.0f, 0.9f);
             }
             super.handleAttack(anim);
         }
@@ -139,17 +128,17 @@ public class EntityMinotaur extends ChargingMonster {
         if (this.getAnimationHandler().isCurrent(CHARGE))
             source.knock(CustomDamage.KnockBackType.BACK).knockAmount(2);
         else if (this.getAnimationHandler().isCurrent(SWING))
-            source.withChangedAttribute(ModAttributes.STUN.get(), 30);
+            source.withChangedAttribute(ModAttributes.STUN.asHolder(), 30);
         return source;
     }
 
     @Override
     protected boolean isChargingAnim(String anim) {
-        return anim.is(CHARGE);
+        return anim.equals(CHARGE);
     }
 
     @Override
-    public boolean handleChargeMovement(AnimatedAction anim) {
+    public boolean handleChargeMovement(AnimationState anim) {
         boolean res = super.handleChargeMovement(anim);
         if (res) {
             if (this.tickCount % 7 == 0)
@@ -190,8 +179,8 @@ public class EntityMinotaur extends ChargingMonster {
         return SLEEP;
     }
 
-    @Override
-    public Vec3 passengerOffset(Entity passenger) {
-        return new Vec3(0, 37 / 16d, -7 / 16d);
-    }
+//    @Override
+//    public Vec3 passengerOffset(Entity passenger) {
+//        return new Vec3(0, 37 / 16d, -7 / 16d);
+//    }
 }

@@ -38,6 +38,5 @@ public class RunecraftoryShaders extends RenderType {
     public interface ShaderRegister {
 
         void register(ResourceLocation id, VertexFormat vertexFormat, Consumer<ShaderInstance> onLoad) throws IOException;
-
     }
 }

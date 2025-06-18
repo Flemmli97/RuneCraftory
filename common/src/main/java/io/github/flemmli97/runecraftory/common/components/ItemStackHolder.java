@@ -34,5 +34,4 @@ public record ItemStackHolder(ItemStack stack) {
         }
         return false;
     }
-
 }

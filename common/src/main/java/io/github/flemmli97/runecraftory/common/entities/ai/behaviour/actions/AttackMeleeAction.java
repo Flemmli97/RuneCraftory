@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.entities.ai.behaviour.actions;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.registry.NPCAction;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCAttackGoal;
@@ -11,11 +12,10 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 
 import java.util.Optional;
-import java.util.function.Supplier;
 
 public class AttackMeleeAction implements NPCAction {
 
-    public static final Codec<AttackMeleeAction> CODEC = RecordCodecBuilder.create((instance) ->
+    public static final MapCodec<AttackMeleeAction> CODEC = RecordCodecBuilder.mapCodec((instance) ->
             instance.group(NumberProviders.CODEC.fieldOf("walk_time").forGetter(d -> d.walkTime),
                     NPCAction.optionalNumCooldown(d -> d.cooldown),
                     Codec.FLOAT.fieldOf("speed").forGetter(d -> d.speed)
@@ -45,8 +45,8 @@ public class AttackMeleeAction implements NPCAction {
     }
 
     @Override
-    public Supplier<Codec<AttackMeleeAction>> codec() {
-        return ModNPCActions.MELEE_ATTACK;
+    public MapCodec<AttackMeleeAction> codec() {
+        return ModNPCActions.MELEE_ATTACK.get();
     }
 
     @Override

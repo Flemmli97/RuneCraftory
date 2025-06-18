@@ -4,6 +4,7 @@ import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.common.registry.ModPoiTypes;
 import net.minecraft.Util;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
@@ -14,15 +15,14 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 public class NPCJob {
 
     public final boolean hasShop, hasSchedule, hasWorkSchedule;
 
-    public final Supplier<PoiType> poiType;
+    public final ResourceKey<PoiType> poiType;
     @Nullable
-    public final Predicate<PoiType> predicate;
+    public final Predicate<Holder<PoiType>> predicate;
 
     private String translationKey;
 
@@ -33,9 +33,9 @@ public class NPCJob {
         this.poiType = builder.poiType;
         if (this.poiType != null) {
             if (!builder.allowCashPOI || this.poiType == ModPoiTypes.CASH_REGISTER)
-                this.predicate = t -> this.poiType.get().getPredicate().test(t);
+                this.predicate = t -> t.is(this.poiType);
             else
-                this.predicate = t -> this.poiType.get().getPredicate().test(t) || ModPoiTypes.CASH_REGISTER.get().getPredicate().test(t);
+                this.predicate = t -> t.is(this.poiType) || t.is(ModPoiTypes.CASH_REGISTER.getKey());
         } else
             this.predicate = null;
     }

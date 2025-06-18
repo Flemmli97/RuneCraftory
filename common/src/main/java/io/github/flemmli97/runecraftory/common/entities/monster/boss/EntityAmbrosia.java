@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 
 import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityPollen;
@@ -11,25 +10,16 @@ import io.github.flemmli97.runecraftory.common.network.S2CMobUpdate;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.common.entity.AnimationHandler;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveAwayRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetAttackRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.StrafingRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.TimedWrappedRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinition;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -38,7 +28,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.List;
 import java.util.function.BiConsumer;
 
 public class EntityAmbrosia extends BossMonster {
@@ -57,13 +46,13 @@ public class EntityAmbrosia extends BossMonster {
     public static final String INTERACT = BUILDER.add("interact", KICK_1);
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
-    private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntityAmbrosia>> ATTACK_HANDLER = createAnimationHandler(b -> {
+    private static final ImmutableMap<String, BiConsumer<AnimationState, EntityAmbrosia>> ATTACK_HANDLER = createAnimationHandler(b -> {
         b.put(BUTTERFLY, (anim, entity) -> {
             if (anim.isAt("attack")) {
                 ModSpells.BUTTERFLY.get().use(entity);
             }
         });
-        BiConsumer<AnimatedAction, EntityAmbrosia> kick = (anim, entity) -> {
+        BiConsumer<AnimationState, EntityAmbrosia> kick = (anim, entity) -> {
             LivingEntity target = entity.getTarget();
             if (target != null) {
                 entity.getNavigation().moveTo(target, 1.0);
@@ -85,7 +74,7 @@ public class EntityAmbrosia extends BossMonster {
             if (anim.isAt("attack"))
                 ModSpells.WAVE.get().use(entity);
         });
-        BiConsumer<AnimatedAction, EntityAmbrosia> pollenHandler = (anim, entity) -> {
+        BiConsumer<AnimationState, EntityAmbrosia> pollenHandler = (anim, entity) -> {
             if (entity.moveDirection == null) {
                 entity.setMoveDirection(EntityUtils.getTargetDirection(entity, EntityAnchorArgument.Anchor.FEET, true)
                         .scale(0.35));
@@ -102,34 +91,34 @@ public class EntityAmbrosia extends BossMonster {
         b.put(POLLEN_2, pollenHandler);
     });
 
-    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityAmbrosia>>> ATTACKS = List.of(
-            WeightedEntry.wrap(MonsterActionUtils.<EntityAmbrosia>nonRepeatableAttack(BUTTERFLY)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveAwayRunner<>(4.5, 1.1, 6), e -> 40 + e.getRandom().nextInt(10))), 8),
-            WeightedEntry.wrap(MonsterActionUtils.<EntityAmbrosia>nonRepeatableAttack(KICK_1)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.2), e -> 50 + e.getRandom().nextInt(10))), 11),
-            WeightedEntry.wrap(MonsterActionUtils.<EntityAmbrosia>nonRepeatableAttack(SLEEP)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.2, 2), e -> 50 + e.getRandom().nextInt(10))), 10),
-            WeightedEntry.wrap(MonsterActionUtils.<EntityAmbrosia>nonRepeatableAttack(WAVE)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 1.5), e -> 20 + e.getRandom().nextInt(10))), 10),
-            WeightedEntry.wrap(MonsterActionUtils.<EntityAmbrosia>enragedBossAttack(POLLEN)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 2), e -> 45 + e.getRandom().nextInt(10))), 9)
-    );
-    private static final List<WeightedEntry.Wrapper<IdleAction<EntityAmbrosia>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<>(() -> new StrafingRunner<>(7, 5, 1, 0.2f)), 1)
-    );
-
-    public final AnimatedAttackGoal<EntityAmbrosia> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+    //    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityAmbrosia>>> ATTACKS = List.of(
+//            WeightedEntry.wrap(MonsterActionUtils.<EntityAmbrosia>nonRepeatableAttack(BUTTERFLY)
+//                    .prepare(() -> new TimedWrappedRunner<>(new MoveAwayRunner<>(4.5, 1.1, 6), e -> 40 + e.getRandom().nextInt(10))), 8),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntityAmbrosia>nonRepeatableAttack(KICK_1)
+//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.2), e -> 50 + e.getRandom().nextInt(10))), 11),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntityAmbrosia>nonRepeatableAttack(SLEEP)
+//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.2, 2), e -> 50 + e.getRandom().nextInt(10))), 10),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntityAmbrosia>nonRepeatableAttack(WAVE)
+//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 1.5), e -> 20 + e.getRandom().nextInt(10))), 10),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntityAmbrosia>enragedBossAttack(POLLEN)
+//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 2), e -> 45 + e.getRandom().nextInt(10))), 9)
+//    );
+//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityAmbrosia>>> IDLE_ACTIONS = List.of(
+//            WeightedEntry.wrap(new IdleAction<>(() -> new StrafingRunner<>(7, 5, 1, 0.2f)), 1)
+//    );
+//
+//    public final AnimatedAttackGoal<EntityAmbrosia> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityAmbrosia> animationHandler = new AnimationHandler<>(this, ANIMS).withChangeListener(anim -> {
         if (!this.level().isClientSide && anim == null) {
             boolean chain = !this.commanded;
             this.setMoveDirection(null);
             this.commanded = false;
             if (chain) {
-                AnimatedAction chainAnim = this.chainAnim(this.getAnimationHandler().getAnimation());
-                if (chainAnim != null) {
-                    this.getAnimationHandler().setAnimation(chainAnim);
-                    return true;
-                }
+//                AnimatedAction chainAnim = this.chainAnim(this.getAnimationHandler().getAnimation());
+//                if (chainAnim != null) {
+//                    this.getAnimationHandler().setAnimation(chainAnim);
+//                    return true;
+//                }
             }
         }
         return false;
@@ -140,8 +129,6 @@ public class EntityAmbrosia extends BossMonster {
 
     public EntityAmbrosia(EntityType<? extends EntityAmbrosia> type, Level world) {
         super(type, world);
-        if (!world.isClientSide)
-            this.goalSelector.addGoal(1, this.attack);
     }
 
     @Override
@@ -179,7 +166,7 @@ public class EntityAmbrosia extends BossMonster {
     }
 
     @Override
-    public AnimatedAction getDeathAnimation() {
+    public String getDeathAnimation() {
         return DEFEAT;
     }
 
@@ -192,7 +179,7 @@ public class EntityAmbrosia extends BossMonster {
     }
 
     @Override
-    public void setupAttack(AnimatedAction anim) {
+    public void setupAttack(AnimationDefinition anim) {
         if (anim.is(BUTTERFLY) && this.getTarget() != null) {
             LivingEntity target = this.getTarget();
             this.setTargetPosition(new TargetPosition(target.position(),
@@ -203,14 +190,14 @@ public class EntityAmbrosia extends BossMonster {
 
     @Override
     public void handleAttack(AnimationState anim) {
-        BiConsumer<AnimatedAction, EntityAmbrosia> handler = ATTACK_HANDLER.get(anim.getID());
+        BiConsumer<AnimationState, EntityAmbrosia> handler = ATTACK_HANDLER.get(anim.getID());
         if (handler != null)
             handler.accept(anim, this);
     }
 
     @Override
-    public OrientedBoundingBox calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
-        if (anim.is(POLLEN)) {
+    public OrientedBoundingBox calculateAttackAABB(AnimationState anim, Vec3 target, double grow) {
+        if (anim.equals(POLLEN)) {
             return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
                     .inflate(grow + 2, grow, grow + 2), this.getYRot(), this.getXRot(), this.position());
         }
@@ -218,7 +205,7 @@ public class EntityAmbrosia extends BossMonster {
     }
 
     @Override
-    public AABB attackBB(String anim) {
+    public AABB attackBB(AnimationState anim) {
         double width = this.getBbWidth() * 1.6;
         double length = this.getBbWidth() * 2.1;
         return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
@@ -250,35 +237,35 @@ public class EntityAmbrosia extends BossMonster {
     protected void playStepSound(BlockPos pos, BlockState blockIn) {
     }
 
-    @Override
-    public Vec3 passengerOffset(Entity passenger) {
-        return new Vec3(0, 29 / 16d, -5 / 16d);
-    }
+//    @Override
+//    public Vec3 passengerOffset(Entity passenger) {
+//        return new Vec3(0, 29 / 16d, -5 / 16d);
+//    }
 
     @Override
     public AnimationHandler<EntityAmbrosia> getAnimationHandler() {
         return this.animationHandler;
     }
 
-    @Override
-    public boolean allowAnimation(String prev, AnimatedAction other) {
-        if (prev.equals(POLLEN_2.getID()))
-            return !POLLEN.is(other);
-        if (prev.equals(KICK_3.getID()))
-            return !KICK_1.is(other);
-        return super.allowAnimation(prev, other);
-    }
+//    @Override
+//    public boolean allowAnimation(String prev, String other) {
+//        if (prev.equals(POLLEN_2.getID()))
+//            return !POLLEN.is(other);
+//        if (prev.equals(KICK_3.getID()))
+//            return !KICK_1.is(other);
+//        return super.allowAnimation(prev, other);
+//    }
 
-    public AnimatedAction chainAnim(AnimatedAction anim) {
-        if (anim == null)
-            return null;
-        return switch (anim.getID()) {
-            case "kick_1" -> KICK_2;
-            case "kick_2" -> KICK_3;
-            case "pollen" -> POLLEN_2;
-            default -> null;
-        };
-    }
+//    public String chainAnim(String anim) {
+//        if (anim == null)
+//            return null;
+//        return switch (anim.getID()) {
+//            case "kick_1" -> KICK_2;
+//            case "kick_2" -> KICK_3;
+//            case "pollen" -> POLLEN_2;
+//            default -> null;
+//        };
+//    }
 
     @Override
     public void playInteractionAnimation() {
@@ -287,12 +274,12 @@ public class EntityAmbrosia extends BossMonster {
 
     protected void setMoveDirection(Vec3 moveDirection) {
         this.moveDirection = moveDirection;
-        S2CMobUpdate.send(this, SyncableDatas.MOTION_DIR, this.moveDirection);
+        S2CMobUpdate.send(this, SyncableDatas.NPC_JOB, this.moveDirection);
     }
 
     @Override
     public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
         super.onUpdate(data);
-        data.runIf(SyncableDatas.MOTION_DIR, motion -> this.moveDirection = motion);
+        data.runIf(SyncableDatas.NPC_JOB, motion -> this.moveDirection = motion);
     }
 }

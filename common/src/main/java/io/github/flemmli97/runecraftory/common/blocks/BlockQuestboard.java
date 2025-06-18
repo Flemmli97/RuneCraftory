@@ -137,7 +137,6 @@ public class BlockQuestboard extends HorizontalDirectionalBlock {
         return super.playerWillDestroy(level, pos, state, player);
     }
 
-
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING, PART);

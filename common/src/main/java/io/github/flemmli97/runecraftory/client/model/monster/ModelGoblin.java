@@ -26,7 +26,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
 
-public class ModelGoblin<T extends EntityGoblin> extends EntityModel<T> implements ExtendedModel, RideableModel<T>, IItemArmModel, SittingModel {
+public class ModelGoblin<T extends EntityGoblin> extends EntityModel<T> implements ExtendedModel, RideableModel<T>, ItemArmModel, SittingModel {
 
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(RuneCraftory.modRes("goblin"), "main");
 

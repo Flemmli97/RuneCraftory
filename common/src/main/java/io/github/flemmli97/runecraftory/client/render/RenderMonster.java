@@ -1,9 +1,10 @@
 package io.github.flemmli97.runecraftory.client.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.tenshilib.client.model.RideableModel;
+import io.github.flemmli97.tenshilib.client.render.layer.RiderEntityLayer;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -23,7 +24,7 @@ public class RenderMonster<T extends BaseMonster, M extends EntityModel<T> & Rid
         super(ctx, model, shadow);
         this.tex = texture;
         if (withDefaultRiderLayer)
-            this.layers.add(new RiderLayerRenderer<>(this));
+            this.layers.add(new RiderEntityLayer<>(this));
     }
 
     @Override
@@ -32,15 +33,15 @@ public class RenderMonster<T extends BaseMonster, M extends EntityModel<T> & Rid
     }
 
     @Override
-    protected void setupRotations(T entity, PoseStack stack, float ageInTicks, float rotationYaw, float partialTicks) {
-        super.setupRotations(entity, stack, ageInTicks, rotationYaw, partialTicks);
+    protected void setupRotations(T entity, PoseStack stack, float ageInTicks, float rotationYaw, float partialTicks, float scale) {
+        super.setupRotations(entity, stack, ageInTicks, rotationYaw, partialTicks, scale);
         if (entity.getPlayDeathTick() > 0 && entity.getDeathAnimation() == null) {
             float f = (entity.getPlayDeathTick() + (entity.playDeath() ? partialTicks : -partialTicks)) / 20.0f * 1.6f;
             if ((f = Mth.sqrt(f)) > 1.0f) {
                 f = 1.0f;
             }
             stack.translate(0, f * 0.1, -f * entity.getBbHeight() * 0.5);
-            stack.mulPose(Vector3f.XP.rotationDegrees(f * this.getFlipDegrees(entity)));
+            stack.mulPose(Axis.XP.rotationDegrees(f * this.getFlipDegrees(entity)));
         }
     }
 

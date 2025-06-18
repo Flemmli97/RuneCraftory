@@ -12,7 +12,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
@@ -29,7 +28,6 @@ import net.minecraft.world.level.material.Material;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
-import java.util.Random;
 import java.util.function.Supplier;
 
 public class BlockTreeBase extends RotatedPillarBlock implements EntityBlock, Growable {

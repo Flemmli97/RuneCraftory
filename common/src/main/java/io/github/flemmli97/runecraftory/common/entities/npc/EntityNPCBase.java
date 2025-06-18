@@ -8,13 +8,13 @@ import io.github.flemmli97.runecraftory.api.action.AttackActionHandler;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.datapack.ConversationContext;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
-import io.github.flemmli97.runecraftory.api.datapack.SimpleEffect;
 import io.github.flemmli97.runecraftory.api.datapack.npc.ConversationSet;
 import io.github.flemmli97.runecraftory.api.datapack.npc.GiftData;
 import io.github.flemmli97.runecraftory.api.datapack.npc.NPCData;
 import io.github.flemmli97.runecraftory.api.datapack.npc.NPCLook;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.common.attachment.player.LevelExpPair;
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCDataManager;
@@ -28,8 +28,10 @@ import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCAttackGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCFindPOI;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCFollowGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCWanderGoal;
+import io.github.flemmli97.runecraftory.common.entities.data.MobUpdateHandler;
+import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
+import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.NPCFeatureContainer;
-import io.github.flemmli97.runecraftory.common.entities.npc.features.SizeFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.ShopState;
 import io.github.flemmli97.runecraftory.common.entities.pathing.NPCWalkNodeEvaluator;
@@ -43,6 +45,7 @@ import io.github.flemmli97.runecraftory.common.items.consumables.ItemObjectX;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.loot.LootCtxParameters;
 import io.github.flemmli97.runecraftory.common.network.S2CEntityLevelPkt;
+import io.github.flemmli97.runecraftory.common.network.S2CMobUpdate;
 import io.github.flemmli97.runecraftory.common.network.S2CNPCLook;
 import io.github.flemmli97.runecraftory.common.network.S2CNpcDialogue;
 import io.github.flemmli97.runecraftory.common.network.S2COpenNPCGui;
@@ -55,12 +58,10 @@ import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
-import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.utils.TeleportUtils;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
@@ -73,18 +74,20 @@ import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.simplequests_api.quest.QuestState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimatedEntity;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.network.protocol.game.DebugPackets;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -95,24 +98,21 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.EntityDamageSource;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.OwnableEntity;
-import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -136,6 +136,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.Equipable;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.level.GameRules;
@@ -146,6 +147,7 @@ import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.level.pathfinder.PathFinder;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import org.jetbrains.annotations.Nullable;
 
@@ -162,20 +164,18 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, AnimatedEntity, TargetableOpponent, MobAttackExt {
+public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, AnimatedEntity, TargetableOpponent, MobAttackExt, MobUpdateHandler {
 
     public static final float PATH_FIND_LENGTH = 100;
 
     private static final EntityDataAccessor<Boolean> PLAY_DEATH_STATE = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Integer> SHOP_SYNC = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> MALE = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> BEHAVIOUR_DATA = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.INT);
 
     private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.JOB_SITE, MemoryModuleType.MEETING_POINT,
             MemoryModuleType.DOORS_TO_CLOSE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.WALK_TARGET, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE);
 
-    public static final AnimatedAction[] ANIMS = PlayerModelAnimations.getAll().toArray(new AnimatedAction[0]);
-    private final AnimationHandler<EntityNPCBase> animationHandler = new AnimationHandler<>(this, ANIMS).withChangeListener(anim -> {
+    private final AnimationHandler<EntityNPCBase> animationHandler = new AnimationHandler<>(this, PlayerModelAnimations.ANIMS).withChangeListener(anim -> {
         if (this.getTarget() != null) {
             this.lookAt(this.getTarget(), 360, 90);
             this.targetPosition = TargetPosition.of(this.getTarget());
@@ -215,7 +215,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
 
     private final LevelExpPair levelPair = new LevelExpPair();
 
-    private NPCJob shop = ModNPCJobs.NONE.getSecond();
+    private NPCJob shop = ModNPCJobs.NONE.get();
 
     public boolean ignoreInit;
     private NPCData data = NPCData.DEFAULT_DATA;
@@ -267,11 +267,11 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder map = Monster.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.24)
                 .add(Attributes.FOLLOW_RANGE, 32);
-        for (RegistryEntrySupplier<Attribute> att : ModAttributes.ENTITY_ATTRIBUTES)
-            map.add(att.get());
-        for (RegistryEntrySupplier<Attribute> att : ModAttributes.PLAYER_ATTRIBUTES)
-            map.add(att.get());
-        map.add(ModAttributes.ATTACK_RANGE.get(), 1.5);
+        for (RegistryEntrySupplier<Attribute, ?> att : ModAttributes.ENTITY_ATTRIBUTES)
+            map.add(att.asHolder());
+        for (RegistryEntrySupplier<Attribute, ?> att : ModAttributes.PLAYER_ATTRIBUTES)
+            map.add(att.asHolder());
+        map.add(ModAttributes.ATTACK_RANGE.asHolder(), 1.5);
         return map;
     }
 
@@ -297,15 +297,15 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
         if (inst != null) {
             inst.setBaseValue(MobConfig.NPC_ATTACK);
         }
-        inst = this.getAttribute(ModAttributes.DEFENCE.get());
+        inst = this.getAttribute(ModAttributes.DEFENCE.asHolder());
         if (inst != null) {
             inst.setBaseValue(MobConfig.NPC_DEFENCE);
         }
-        inst = this.getAttribute(ModAttributes.MAGIC_ATTACK.get());
+        inst = this.getAttribute(ModAttributes.MAGIC_ATTACK.asHolder());
         if (inst != null) {
             inst.setBaseValue(MobConfig.NPC_MAGIC_ATTACK);
         }
-        inst = this.getAttribute(ModAttributes.MAGIC_DEFENCE.get());
+        inst = this.getAttribute(ModAttributes.MAGIC_DEFENCE.asHolder());
         if (inst != null) {
             inst.setBaseValue(MobConfig.NPC_MAGIC_DEFENCE);
         }
@@ -336,7 +336,6 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(PLAY_DEATH_STATE, false);
-        builder.define(SHOP_SYNC, 0);
         builder.define(MALE, false);
         builder.define(BEHAVIOUR_DATA, 0);
     }
@@ -345,12 +344,6 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
     public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
         super.onSyncedDataUpdated(key);
         if (this.level().isClientSide) {
-            if (key.equals(SHOP_SYNC)) {
-                try {
-                    this.shop = ModNPCJobs.getFromSyncID(this.entityData.get(SHOP_SYNC));
-                } catch (ArrayIndexOutOfBoundsException ignored) {
-                }
-            }
             if (key.equals(BEHAVIOUR_DATA)) {
                 try {
                     this.behaviour = Behaviour.values()[this.entityData.get(BEHAVIOUR_DATA)];
@@ -436,8 +429,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
                 Player follow = this.followEntity();
                 if (follow != null) {
                     serverLevel.getChunkSource().addRegionTicket(WorldUtils.ENTITY_LOADER, this.chunkPosition(), 3, this.chunkPosition());
-                    if (follow.level.dimension() != this.level().dimension()) {
-                        TeleportUtils.safeDimensionTeleport(this, (ServerLevel) follow.level, follow.blockPosition());
+                    if (follow.level().dimension() != this.level().dimension()) {
+                        TeleportUtils.safeDimensionTeleport(this, (ServerLevel) follow.level(), follow.blockPosition());
                         teleported = true;
                         this.tpCooldown = 20;
                     } else if (follow.distanceToSqr(this) > 450) {
@@ -533,7 +526,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
         SoundEvent sound = switch (stack.getUseAnimation()) {
             case DRINK -> stack.getDrinkingSound();
             case EAT -> stack.getEatingSound();
-            default -> SoundEvents.NOTE_BLOCK_PLING;
+            default -> SoundEvents.NOTE_BLOCK_PLING.value();
         };
         if (stack.getItem() == ModItems.DIVORCE_PAPER.get()) {
             if (player instanceof ServerPlayer serverPlayer) {
@@ -611,9 +604,10 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
             WorldHandler handler = WorldHandler.get(serverPlayer.getServer());
             if (handler.currentSeason() == this.birthday.getFirst() && handler.date() == this.birthday.getSecond())
                 mult = 3;
-            serverPlayer.connection.send(new ClientboundSoundPacket(sound, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 0.7f, 1));
+            EntityUtils.playSoundForPlayer(serverPlayer, sound, SoundSource.NEUTRAL, 0.7f, 1);
         }
-        EquipmentSlot slot = ItemUtils.slotOf(stack);
+        Equipable equipable = Equipable.get(stack);
+        EquipmentSlot slot = equipable != null ? equipable.getEquipmentSlot() : null;
         if (slot != EquipmentSlot.MAINHAND || ItemNBT.isWeapon(stack) || stack.getItem() instanceof SwordItem || stack.getItem() instanceof AxeItem) {
             ItemStack copy = stack.copy();
             copy.setCount(1);
@@ -650,11 +644,12 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
     public void speak(ServerPlayer player, ConversationContext convCtx) {
         int heart = this.relationManager.getFriendPointData(player.getUUID()).points.getLevel();
         ConversationSet conversations = this.data.getConversation(convCtx);
-        LootContext ctx = new LootContext.Builder((ServerLevel) this.level()).withRandom(this.random)
+        LootParams ctx = new LootParams.Builder((ServerLevel) this.level())
                 .withParameter(LootContextParams.THIS_ENTITY, this)
                 .withParameter(LootContextParams.ORIGIN, this.position())
                 .withParameter(LootCtxParameters.UUID_CONTEXT, player.getUUID())
                 .withLuck(player.getLuck()).create(LootCtxParameters.NPC_INTERACTION);
+        LootContext lootContext = new LootContext.Builder(ctx).create(Optional.empty());
         List<Map.Entry<String, ConversationSet.Conversation>> filtered = conversations.conversations().entrySet().stream()
                 .filter(c -> {
                     //Disable if player already has a quest from this npc
@@ -662,7 +657,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
                             QuestHandler.questForExists(player, this) != null &&
                             !this.updater.alreadyAcceptedRandomquest(player))
                         return false;
-                    return c.getValue().startingConversation() && c.getValue().test(heart, ctx);
+                    return c.getValue().startingConversation() && c.getValue().test(heart, lootContext);
                 })
                 .collect(Collectors.toList());
         Collections.shuffle(filtered, this.updater.getDailyRandom());
@@ -696,12 +691,13 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
             this.relationManager.advanceQuest(player.getUUID(), quest);
         int heart = this.relationManager.getFriendPointData(player.getUUID()).points.getLevel();
         ConversationSet conversations = this.data.getFromQuest(quest, questCtx, questState);
-        LootContext ctx = new LootContext.Builder((ServerLevel) this.level()).withRandom(this.random)
+        LootParams ctx = new LootParams.Builder((ServerLevel) this.level())
                 .withParameter(LootContextParams.THIS_ENTITY, this)
                 .withParameter(LootContextParams.ORIGIN, this.position())
                 .withParameter(LootCtxParameters.UUID_CONTEXT, player.getUUID())
                 .withLuck(player.getLuck()).create(LootCtxParameters.NPC_INTERACTION);
-        List<Map.Entry<String, ConversationSet.Conversation>> filtered = conversations.conversations().entrySet().stream().filter(c -> c.getValue().startingConversation() && c.getValue().test(heart, ctx))
+        LootContext lootContext = new LootContext.Builder(ctx).create(Optional.empty());
+        List<Map.Entry<String, ConversationSet.Conversation>> filtered = conversations.conversations().entrySet().stream().filter(c -> c.getValue().startingConversation() && c.getValue().test(heart, lootContext))
                 .collect(Collectors.toList());
         Collections.shuffle(filtered, this.updater.getDailyRandom());
         int size = Math.min(filtered.size(), 2 + this.updater.getDailyRandom().nextInt(2)); //Select 2-3 random lines
@@ -752,7 +748,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
                         }
                     }
                     case QUEST ->
-                            QuestHandler.acceptQuestRandom(sender, this, new ResourceLocation(action.actionValue()));
+                            QuestHandler.acceptQuestRandom(sender, this, ResourceLocation.parse(action.actionValue()));
                 }
             }
         }
@@ -854,7 +850,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
         float preHealthDiff = this.getMaxHealth() - this.getHealth();
         ((AttributeMapAccessor) this.getAttributes()).getAttributes().forEach((att, inst) -> inst.removeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD));
         if (this.data != null) {
-            Map<Attribute, Double> gain = this.data.statIncrease() != null ? this.data.statIncrease() : NPCData.DEFAULT_GAIN;
+            Map<Holder<Attribute>, Double> gain = this.data.statIncrease() != null ? this.data.statIncrease() : NPCData.DEFAULT_GAIN;
             gain.forEach((att, val) -> {
                 val *= 0.01;
                 AttributeInstance inst = this.getAttribute(att);
@@ -865,7 +861,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
                     } else {
                         multiplier += LevelCalc.getMultiplierInterval(this.xpLevel().getLevel(), 20, 30, 0) * 0.01f;
                     }
-                    inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, RuneCraftory.MODID + ".levelMod", (this.xpLevel().getLevel() - 1) * val * multiplier, AttributeModifier.Operation.ADDITION));
+                    inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, (this.xpLevel().getLevel() - 1) * val * multiplier, AttributeModifier.Operation.ADD_VALUE));
                     if (att == Attributes.MAX_HEALTH)
                         this.setHealth(this.getMaxHealth() - preHealthDiff);
                 }
@@ -876,28 +872,28 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
         AttributeInstance inst = this.getAttribute(Attributes.MAX_HEALTH);
         if (inst != null) {
             float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, RuneCraftory.MODID + ".levelMod", (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_HEALTH_GAIN * multiplier, AttributeModifier.Operation.ADDITION));
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_HEALTH_GAIN * multiplier, AttributeModifier.Operation.ADD_VALUE));
             this.setHealth(this.getMaxHealth() - preHealthDiff);
         }
         inst = this.getAttribute(Attributes.ATTACK_DAMAGE);
         if (inst != null) {
             float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, RuneCraftory.MODID + ".levelMod", (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_ATTACK_GAIN * multiplier, AttributeModifier.Operation.ADDITION));
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_ATTACK_GAIN * multiplier, AttributeModifier.Operation.ADD_VALUE));
         }
-        inst = this.getAttribute(ModAttributes.DEFENCE.get());
+        inst = this.getAttribute(ModAttributes.DEFENCE.asHolder());
         if (inst != null) {
             float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, RuneCraftory.MODID + ".levelMod", (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_DEFENCE_GAIN * multiplier, AttributeModifier.Operation.ADDITION));
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_DEFENCE_GAIN * multiplier, AttributeModifier.Operation.ADD_VALUE));
         }
-        inst = this.getAttribute(ModAttributes.MAGIC_ATTACK.get());
+        inst = this.getAttribute(ModAttributes.MAGIC_ATTACK.asHolder());
         if (inst != null) {
             float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, RuneCraftory.MODID + ".levelMod", (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_MAGIC_ATTACK_GAIN * multiplier, AttributeModifier.Operation.ADDITION));
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_MAGIC_ATTACK_GAIN * multiplier, AttributeModifier.Operation.ADD_VALUE));
         }
-        inst = this.getAttribute(ModAttributes.MAGIC_DEFENCE.get());
+        inst = this.getAttribute(ModAttributes.MAGIC_DEFENCE.asHolder());
         if (inst != null) {
             float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, RuneCraftory.MODID + ".levelMod", (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_MAGIC_DEFENCE_GAIN * multiplier, AttributeModifier.Operation.ADDITION));
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_MAGIC_DEFENCE_GAIN * multiplier, AttributeModifier.Operation.ADD_VALUE));
         }
     }
 
@@ -932,44 +928,44 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
             ItemObjectX.applyEffect(this, stack);
         FoodProperties food = DataPackHandler.INSTANCE.foodManager().get(stack.getItem());
         if (food == null) {
-            net.minecraft.world.food.FoodProperties mcFood = stack.getItem().getFoodProperties();
+            net.minecraft.world.food.FoodProperties mcFood = stack.get(DataComponents.FOOD);
             this.eat(this.level(), stack);
             if (mcFood != null) {
-                this.heal(mcFood.getNutrition() * 0.5f);
+                this.heal(mcFood.nutrition() * 0.5f);
                 return true;
             }
             return false;
         }
         this.eat(this.level(), stack);
-        Pair<Map<Attribute, Double>, Map<Attribute, Double>> foodStats = ItemNBT.foodStats(stack);
-        if (!foodStats.getFirst().isEmpty() || !foodStats.getSecond().isEmpty()) {
-            this.removeFoodEffect();
-            for (Map.Entry<Attribute, Double> entry : foodStats.getSecond().entrySet()) {
-                AttributeInstance inst = this.getAttribute(entry.getKey());
-                if (inst == null)
-                    continue;
-                inst.removeModifier(LibConstants.FOOD_UUID_MULTI);
-                inst.addPermanentModifier(new AttributeModifier(LibConstants.FOOD_UUID_MULTI, "foodBuffMulti_" + entry.getKey().getDescriptionId(), entry.getValue(), AttributeModifier.Operation.MULTIPLY_BASE));
-            }
-            for (Map.Entry<Attribute, Double> entry : foodStats.getFirst().entrySet()) {
-                AttributeInstance inst = this.getAttribute(entry.getKey());
-                if (inst == null)
-                    continue;
-                inst.removeModifier(LibConstants.FOOD_UUID);
-                inst.addPermanentModifier(new AttributeModifier(LibConstants.FOOD_UUID, "foodBuff_" + entry.getKey().getDescriptionId(), entry.getValue(), AttributeModifier.Operation.ADDITION));
-            }
-            this.foodBuffTick = food.duration();
-        }
-        EntityUtils.foodHealing(this, food.getHPGain());
-        EntityUtils.foodHealing(this, this.getMaxHealth() * food.getHpPercentGain() * 0.01F);
-        if (food.potionHeals() != null)
-            for (MobEffect s : food.potionHeals()) {
-                this.removeEffect(s);
-            }
-        if (food.potionApply() != null)
-            for (SimpleEffect s : food.potionApply()) {
-                this.addEffect(s.create());
-            }
+//        Pair<Map<Attribute, Double>, Map<Attribute, Double>> foodStats = ItemNBT.foodStats(stack);
+//        if (!foodStats.getFirst().isEmpty() || !foodStats.getSecond().isEmpty()) {
+//            this.removeFoodEffect();
+//            for (Map.Entry<Attribute, Double> entry : foodStats.getSecond().entrySet()) {
+//                AttributeInstance inst = this.getAttribute(entry.getKey());
+//                if (inst == null)
+//                    continue;
+//                inst.removeModifier(LibConstants.FOOD_UUID_MULTI);
+//                inst.addPermanentModifier(new AttributeModifier(LibConstants.FOOD_UUID_MULTI, entry.getValue(), AttributeModifier.Operation.MULTIPLY_BASE));
+//            }
+//            for (Map.Entry<Attribute, Double> entry : foodStats.getFirst().entrySet()) {
+//                AttributeInstance inst = this.getAttribute(entry.getKey());
+//                if (inst == null)
+//                    continue;
+//                inst.removeModifier(LibConstants.FOOD_UUID);
+//                inst.addPermanentModifier(new AttributeModifier(LibConstants.FOOD_UUID, entry.getValue(), AttributeModifier.Operation.ADD_VALUE));
+//            }
+//            this.foodBuffTick = food.duration();
+//        }
+//        EntityUtils.foodHealing(this, food.getHPGain());
+//        EntityUtils.foodHealing(this, this.getMaxHealth() * food.getHpPercentGain() * 0.01F);
+//        if (food.potionHeals() != null)
+//            for (MobEffect s : food.potionHeals()) {
+//                this.removeEffect(s);
+//            }
+//        if (food.potionApply() != null)
+//            for (SimpleEffect s : food.potionApply()) {
+//                this.addEffect(s.create());
+//            }
         return true;
     }
 
@@ -1036,7 +1032,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
             Player partner;
             if (!this.level().isClientSide && this.level().getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES)
                     && this.followEntity() == null && (partner = this.getPartner()) instanceof ServerPlayer)
-                partner.sendMessage(this.getKnockoutMessage(), Util.NIL_UUID);
+                partner.displayClientMessage(this.getKnockoutMessage(), false);
             this.level().getEntities(EntityTypeTest.forClass(Mob.class), this.getBoundingBox().inflate(32), e -> this.equals(e.getTarget()))
                     .forEach(m -> m.setTarget(null));
             this.getNavigation().stop();
@@ -1050,7 +1046,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
 
     private Component getKnockoutMessage() {
         DamageSource source = this.getLastDamageSource();
-        if (source instanceof EntityDamageSource && source.getEntity() != null)
+        if (source != null && source.getEntity() != null)
             return Component.translatable("runecraftory.tamed.monster.knockout.by", this.getDisplayName(), this.blockPosition().getX(), this.blockPosition().getY(), this.blockPosition().getZ(), source.getEntity().getDisplayName());
         return Component.translatable("runecraftory.tamed.monster.knockout", this.getDisplayName(), this.blockPosition().getX(), this.blockPosition().getY(), this.blockPosition().getZ());
     }
@@ -1066,21 +1062,21 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if (this.playDeath() && source != DamageSource.OUT_OF_WORLD) {
+        if (this.playDeath() && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
             return false;
         }
         if (this.followEntity() != null && source.getEntity() != null) {
             Player follow = this.followEntity();
-            if (follow.equals(source.getEntity()) || Platform.INSTANCE.getPlayerData(follow).map(d -> d.party.isPartyMember(source.getEntity())).orElse(false))
+            if (follow.equals(source.getEntity()) || Platform.INSTANCE.getPlayerData(follow).party.isPartyMember(source.getEntity()))
                 return false;
         }
         return super.hurt(source, amount);
     }
 
     @Override
-    protected void actuallyHurt(DamageSource damageSrc, float damageAmount) {
-        super.actuallyHurt(damageSrc, damageAmount);
-        if (damageSrc != DamageSource.OUT_OF_WORLD) {
+    protected void actuallyHurt(DamageSource source, float damageAmount) {
+        super.actuallyHurt(source, damageAmount);
+        if (!source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
             FamilyEntry family;
             if (this.getHealth() <= 0 && (this.followEntity() != null
                     || ((family = this.getFamily()) != null && family.getPartner() != null && FamilyHandler.get(this.getServer())
@@ -1135,10 +1131,10 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData) {
         if (!this.ignoreInit)
             this.randomizeData(null, true);
-        return super.finalizeSpawn(level, difficulty, reason, spawnData, dataTag);
+        return super.finalizeSpawn(level, difficulty, reason, spawnData);
     }
 
     public void handleAttack(AnimationState anim) {
@@ -1150,36 +1146,28 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
     }
 
     public List<LivingEntity> attackableEntites() {
-        ItemStack held = this.getMainHandItem();
-        if (held.getItem() instanceof IAOEWeapon weapon) {
-            return RayTraceUtils.getEntitiesIn(this,
-                    weapon.attackOBB(this, held, false),
-                    true, EntityTypeTest.forClass(LivingEntity.class), this.hitPred);
-        }
-        LivingEntity target = this.getTarget();
-        if (target == null)
-            return List.of();
-        double range = this.getMeleeAttackRangeSqr(target);
-        if (this.distanceToSqr(target.getX(), target.getY(), target.getZ()) <= range)
-            return List.of(target);
+//        ItemStack held = this.getMainHandItem();
+//        if (held.getItem() instanceof IAOEWeapon weapon) {
+//            return RayTraceUtils.getEntitiesIn(this,
+//                    weapon.attackOBB(this, held, false),
+//                    true, EntityTypeTest.forClass(LivingEntity.class), this.hitPred);
+//        }
+//        LivingEntity target = this.getTarget();
+//        if (target == null)
+//            return List.of();
+//        double range = this.getMeleeAttackRangeSqr(target);
+//        if (this.distanceToSqr(target.getX(), target.getY(), target.getZ()) <= range)
+//            return List.of(target);
         return List.of();
     }
 
-    @Override
-    public double getMeleeAttackRangeSqr(LivingEntity target) {
-        double reachSqr;
-        ItemStack held = this.getMainHandItem();
-        if (held.getItem() instanceof IAOEWeapon) {
-            reachSqr = this.getAttributeValue(ModAttributes.ATTACK_RANGE.get()) - 0.3 + target.getBbWidth() * 0.5;
-            reachSqr = reachSqr * reachSqr;
-        } else if (held.getItem() instanceof IExtendedWeapon weapon) {
-            float weaponRange = weapon.getRange(this, held);
-            reachSqr = weaponRange + target.getBbWidth() * 0.5;
-            reachSqr = reachSqr * reachSqr;
-        } else
-            reachSqr = super.getMeleeAttackRangeSqr(target);
-        return reachSqr;
-    }
+//
+//    @Override
+//    public double getMeleeAttackRangeSqr(LivingEntity target) {
+//        double reachSqr = this.getAttributeValue(ModAttributes.ATTACK_RANGE.asHolder()) - 0.3 + target.getBbWidth() * 0.5;
+//        reachSqr = reachSqr * reachSqr;
+//        return reachSqr;
+//    }
 
     @Override
     public void startSleeping(BlockPos pos) {
@@ -1209,13 +1197,13 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
         return super.hasRestriction() && this.getEntityToFollowUUID() == null;
     }
 
-    @Override
-    public EntityDimensions getDimensions(Pose pose) {
-        SizeFeatureType.SizeFeature feat = this.lookFeatures.getFeature(ModNPCLooks.SIZE.get());
-        if (feat != null)
-            return super.getDimensions(pose).scale(feat.size);
-        return super.getDimensions(pose);
-    }
+//    @Override
+//    public EntityDimensions getDimensions(Pose pose) {
+//        SizeFeatureType.SizeFeature feat = this.lookFeatures.getFeature(ModNPCLooks.SIZE.get());
+//        if (feat != null)
+//            return super.getDimensions(pose).scale(feat.size());
+//        return super.getDimensions(pose);
+//    }
 
     public NPCJob getShop() {
         return this.shop;
@@ -1223,8 +1211,9 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
 
     public void setShop(NPCJob shop) {
         this.shop = shop;
-        if (!this.level().isClientSide)
-            this.entityData.set(SHOP_SYNC, ModNPCJobs.getSyncIDFrom(shop));
+        if (!this.level().isClientSide) {
+            S2CMobUpdate.send(this, SyncableDatas.NPC_JOB, this.shop);
+        }
     }
 
     public boolean isShopDefined() {
@@ -1324,7 +1313,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
     public void releasePOI(GlobalPos globalPos) {
         if (globalPos == null)
             return;
-        ServerLevel serverLevel = globalPos.dimension() != this.level().dimension() ? this.level().getServer().getLevel(globalPos.dimension()) : (ServerLevel) this.level;
+        ServerLevel serverLevel = globalPos.dimension() != this.level().dimension() ? this.level().getServer().getLevel(globalPos.dimension()) : (ServerLevel) this.level();
         if (serverLevel == null) {
             return;
         }
@@ -1387,10 +1376,10 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
     private void onSetBehaviour() {
         if (this.behaviourState().following) {
             if (this.followEntity() != null)
-                Platform.INSTANCE.getPlayerData(this.followEntity()).ifPresent(d -> d.party.addPartyMember(this));
+                Platform.INSTANCE.getPlayerData(this.followEntity()).party.addPartyMember(this);
         } else {
             if (this.followEntity() != null)
-                Platform.INSTANCE.getPlayerData(this.followEntity()).ifPresent(d -> d.party.removePartyMember(this));
+                Platform.INSTANCE.getPlayerData(this.followEntity()).party.removePartyMember(this);
             this.setTarget(null);
         }
         this.getNavigation().stop();
@@ -1453,7 +1442,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
     private boolean spawnBaby() {
         if (!(this.level() instanceof ServerLevel serverLevel))
             return false;
-        EntityNPCBase baby = ModEntities.NPC.get().create(serverLevel, null, null, null, this.blockPosition(), MobSpawnType.BREEDING, false, false);
+        EntityNPCBase baby = ModEntities.NPC.get().create(serverLevel, null, this.blockPosition(), MobSpawnType.BREEDING, false, false);
         if (baby == null)
             return false;
         baby.setBaby(true);
@@ -1582,14 +1571,11 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
     }
 
     public void openShopForPlayer(ServerPlayer player) {
-        if (this.canTrade() == ShopState.OPEN) {
+        if (this.canTrade() == ShopState.OPEN && this.getShop().hasShop) {
             this.interactWithPlayer(player);
-            Platform.INSTANCE.getPlayerData(player).map(d -> {
-                if (EntityNPCBase.this.getShop().hasShop) {
-                    return d.getShop(this.getShop());
-                }
-                return null;
-            }).ifPresent(shopList -> Platform.INSTANCE.openGuiMenu(player, new MenuProvider() {
+            PlayerData data = Platform.INSTANCE.getPlayerData(player);
+            NonNullList<ItemStack> shopList = data.getShop(this.getShop());
+            Platform.INSTANCE.openGuiMenu(player, new MenuProvider() {
                 @Override
                 public Component getDisplayName() {
                     return Component.translatable(EntityNPCBase.this.getShop().getTranslationKey());
@@ -1603,16 +1589,16 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
             }, buf -> {
                 buf.writeInt(EntityNPCBase.this.getId());
                 buf.writeInt(shopList.size());
-                shopList.forEach(s -> buf.writeWithCodec(ItemStack.CODEC, s));
-            }));
+                shopList.forEach(stack -> ItemStack.STREAM_CODEC.encode(buf, stack));
+            });
         }
     }
 
     public void randomizeData(@Nullable ResourceLocation job) {
-        this.randomizeData(ModNPCJobs.getFromID(job), false);
+        this.randomizeData(job == null ? null : ModNPCJobs.JOBS.registry().get(job), false);
     }
 
-    public void randomizeData(Holder<NPCJob> job, boolean overwrite) {
+    public void randomizeData(NPCJob job, boolean overwrite) {
         if (this.getServer() != null) {
             this.setNPCData(DataPackHandler.INSTANCE.npcDataManager().getRandom(this.random, d ->
                     (d.profession().isEmpty() || d.profession().stream().anyMatch(j -> j.equals(job)))
@@ -1636,7 +1622,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
         this.data = data;
         this.dataRandom.setSeed(this.getUUID().hashCode());
         if (!load) {
-            this.setShop(!this.data.profession().isEmpty() ? this.data.profession().get(this.dataRandom.nextInt(this.data.profession().size())) : ModNPCJobs.getRandomJob(this.random));
+            this.setShop(!this.data.profession().isEmpty() ? this.data.profession().get(this.dataRandom.nextInt(this.data.profession().size()))
+                    : ModNPCJobs.JOBS.registry().getRandom(this.random).map(Holder::value).get());
             this.setMale(this.data.gender() == NPCData.Gender.UNDEFINED ? this.random.nextBoolean() : this.data.gender() != NPCData.Gender.FEMALE);
             if (this.data.name() == null) {
                 String name = DataPackHandler.INSTANCE.nameManager().getRandomFullName(this.random, this.isMale());
@@ -1669,7 +1656,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
                 this.getLook();
             }
             if (!this.data.profession().isEmpty() && !this.data.profession().contains(this.getShop()))
-                this.setShop(!this.data.profession().isEmpty() ? this.data.profession().get(this.dataRandom.nextInt(this.data.profession().size())) : ModNPCJobs.getRandomJob(this.random));
+                this.setShop(!this.data.profession().isEmpty() ? this.data.profession().get(this.dataRandom.nextInt(this.data.profession().size()))
+                        : ModNPCJobs.JOBS.registry().getRandom(this.random).map(Holder::value).get());
             if (this.data.gender() != NPCData.Gender.UNDEFINED && (this.data.gender() == NPCData.Gender.MALE) != this.isMale())
                 this.setMale(this.data.gender() == NPCData.Gender.UNDEFINED ? this.random.nextBoolean() : this.data.gender() != NPCData.Gender.FEMALE);
             if (this.data.name() != null) {
@@ -1700,13 +1688,14 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
         CompoundTag tag = new CompoundTag();
         tag.putString("Data", DataPackHandler.INSTANCE.npcDataManager().getId(this.data).toString());
         tag.putString("Look", DataPackHandler.INSTANCE.npcLookManager().getId(this.getLook()).toString());
-        tag.putString("Profession", ModNPCJobs.getIDFrom(this.getShop()).toString());
+        tag.put("Profession", ModNPCJobs.JOBS.registry().byNameCodec().encodeStart(NbtOps.INSTANCE, this.getShop())
+                .getOrThrow());
         tag.putBoolean("Male", this.isMale());
         tag.putInt("BirthdayMonth", this.getBirthday().getFirst().ordinal());
         tag.putInt("Birthday", this.getBirthday().getSecond());
         tag.putString("Combat", DataPackHandler.INSTANCE.npcActionsManager().getId(this.getAttackActions()).toString());
         tag.put("Schedule", this.schedule.save());
-        tag.put("LookFeatures", this.lookFeatures.save());
+        tag.put("LookFeatures", this.lookFeatures.save(this.registryAccess()));
         CompoundTag gifts = new CompoundTag();
         this.gifts.forEach((s, g) -> gifts.putString(s, DataPackHandler.INSTANCE.giftManager().getId(g).toString()));
         tag.put("GiftData", gifts);
@@ -1714,9 +1703,10 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
     }
 
     private void loadNpcData(CompoundTag tag) {
-        NPCData data = DataPackHandler.INSTANCE.npcDataManager().get(new ResourceLocation(tag.getString("Data")));
-        this.look = DataPackHandler.INSTANCE.npcLookManager().get(new ResourceLocation(tag.getString("Look")));
-        this.setShop(ModNPCJobs.getFromID(new ResourceLocation(tag.getString("Profession"))));
+        NPCData data = DataPackHandler.INSTANCE.npcDataManager().get(ResourceLocation.parse(tag.getString("Data")));
+        this.look = DataPackHandler.INSTANCE.npcLookManager().get(ResourceLocation.parse(tag.getString("Look")));
+        this.setShop(ModNPCJobs.JOBS.registry().byNameCodec().parse(NbtOps.INSTANCE, tag.get("Profession"))
+                .getOrThrow());
         this.setMale(tag.getBoolean("Male"));
         try {
             EnumSeason month = EnumSeason.values()[tag.getInt("BirthdayMonth")];
@@ -1724,17 +1714,17 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
         } catch (IllegalArgumentException e) {
             this.getBirthday();
         }
-        this.attackActions = DataPackHandler.INSTANCE.npcActionsManager().get(new ResourceLocation(tag.getString("Combat")));
+        this.attackActions = DataPackHandler.INSTANCE.npcActionsManager().get(ResourceLocation.parse(tag.getString("Combat")));
         this.schedule.load(tag.getCompound("Schedule"));
         try {
-            this.lookFeatures.read(tag.getCompound("LookFeatures"));
+            this.lookFeatures.read(tag.getCompound("LookFeatures"), this.registryAccess());
         } catch (Exception e) {
             this.lookFeatures.buildFromLooks(this, this.look.additionalFeatures().values());
         }
         CompoundTag gifts = tag.getCompound("GiftData");
         ImmutableMap.Builder<String, GiftData> b = ImmutableMap.builder();
         gifts.getAllKeys().forEach(key -> {
-            GiftData giftData = DataPackHandler.INSTANCE.giftManager().get(new ResourceLocation(gifts.getString(key)));
+            GiftData giftData = DataPackHandler.INSTANCE.giftManager().get(ResourceLocation.parse(gifts.getString(key)));
             if (giftData != null)
                 b.put(key, giftData);
         });
@@ -1756,6 +1746,11 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
     @Override
     public TargetPosition getTargetPosition() {
         return this.targetPosition;
+    }
+
+    @Override
+    public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
+        data.runIf(SyncableDatas.NPC_JOB, job -> this.shop = job);
     }
 
     public enum Behaviour {

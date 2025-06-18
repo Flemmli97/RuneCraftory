@@ -1,22 +1,13 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.common.entity.AnimationHandler;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
-import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
@@ -24,7 +15,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class EntityDuck extends ChargingMonster {
 
@@ -36,23 +26,22 @@ public class EntityDuck extends ChargingMonster {
     public static final String STILL = BUILDER.add("still", AnimationsBuilder.definition(0).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
-    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityDuck>>> ATTACKS = List.of(
-            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(MELEE, e -> 1), 1),
-            WeightedEntry.wrap(new GoalAttackAction<EntityDuck>(DIVE)
-                    .cooldown(e -> e.animationCooldown(DIVE))
-                    .prepare(() -> new WrappedRunner<>(new MoveToTargetRunner<>(1, 6))), 1)
-    );
-    private static final List<WeightedEntry.Wrapper<IdleAction<EntityDuck>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 2),
-            WeightedEntry.wrap(new IdleAction<>(DoNothingRunner::new), 3)
-    );
-
-    public final AnimatedAttackGoal<EntityDuck> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+    //    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityDuck>>> ATTACKS = List.of(
+//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(MELEE, e -> 1), 1),
+//            WeightedEntry.wrap(new GoalAttackAction<EntityDuck>(DIVE)
+//                    .cooldown(e -> e.animationCooldown(DIVE))
+//                    .prepare(() -> new WrappedRunner<>(new MoveToTargetRunner<>(1, 6))), 1)
+//    );
+//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityDuck>>> IDLE_ACTIONS = List.of(
+//            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 2),
+//            WeightedEntry.wrap(new IdleAction<>(DoNothingRunner::new), 3)
+//    );
+//
+//    public final AnimatedAttackGoal<EntityDuck> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityDuck> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityDuck(EntityType<? extends EntityDuck> type, Level world) {
         super(type, world);
-        this.goalSelector.addGoal(2, this.attack);
     }
 
     @Override
@@ -74,7 +63,7 @@ public class EntityDuck extends ChargingMonster {
                     this.setChargeMotion(this.getChargeTo(anim));
                 }
                 this.setDeltaMovement(this.getChargeMotion().x, -0.25f, this.getChargeMotion().z);
-                if (!this.isOnGround()) {
+                if (!this.onGround()) {
                     if (this.hitEntity == null)
                         this.hitEntity = new ArrayList<>();
                     this.mobAttack(anim, null, e -> {
@@ -100,17 +89,17 @@ public class EntityDuck extends ChargingMonster {
 
     @Override
     protected boolean fixedYaw() {
-        AnimatedAction anim = this.getAnimationHandler().getAnimation();
+        AnimationState anim = this.getAnimationHandler().getAnimation();
         return anim != null && (anim.is(DIVE) ? anim.isPast("dive") : anim.is(LAND));
     }
 
     @Override
     protected boolean isChargingAnim(String anim) {
-        return anim.is(DIVE, LAND);
+        return anim.equals(DIVE) || anim.equals(LAND);
     }
 
     @Override
-    public Vec3 getChargeTo(AnimatedAction anim) {
+    public Vec3 getChargeTo(AnimationState anim) {
         return EntityUtils.getTargetDirection(this, EntityAnchorArgument.Anchor.FEET, true).scale(0.7);
     }
 
@@ -120,7 +109,7 @@ public class EntityDuck extends ChargingMonster {
     }
 
     @Override
-    public AABB attackBB(String anim) {
+    public AABB attackBB(AnimationState anim) {
         double width = this.getBbWidth() * 1.8;
         double length = this.getBbWidth() * 2.7;
         return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
@@ -148,8 +137,8 @@ public class EntityDuck extends ChargingMonster {
         return STILL;
     }
 
-    @Override
-    public Vec3 passengerOffset(Entity passenger) {
-        return new Vec3(0, 24.6 / 16d, -6 / 16d);
-    }
+//    @Override
+//    public Vec3 passengerOffset(Entity passenger) {
+//        return new Vec3(0, 24.6 / 16d, -6 / 16d);
+//    }
 }

@@ -2,24 +2,15 @@ package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 
 import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.spells.HealT1Spell;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.common.entity.AnimationHandler;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetAttackRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.TimedWrappedRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -29,13 +20,9 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
@@ -43,10 +30,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.Set;
 import java.util.function.BiConsumer;
 
@@ -68,7 +53,7 @@ public class EntityDeadTree extends BossMonster {
     public static final String INTERACT = BUILDER.add("interact", ATTACK);
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
-    private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntityDeadTree>> ATTACK_HANDLER = createAnimationHandler(b -> {
+    private static final ImmutableMap<String, BiConsumer<AnimationState, EntityDeadTree>> ATTACK_HANDLER = createAnimationHandler(b -> {
         b.put(ATTACK, (anim, entity) -> {
             if (anim.isAt("attack")) {
                 entity.mobAttack(anim, entity.getTarget(), entity::doHurtTarget);
@@ -101,7 +86,7 @@ public class EntityDeadTree extends BossMonster {
         });
         b.put(HEAL, (anim, entity) -> {
             if (anim.isAt("attack")) {
-                float healAmount = (float) (CombatUtils.getAttributeValue(entity, ModAttributes.MAGIC_ATTACK.get()) * 2);
+                float healAmount = (float) (CombatUtils.getAttributeValue(entity, ModAttributes.MAGIC_ATTACK.asHolder()) * 2);
                 entity.heal(healAmount);
                 ServerLevel serverLevel = (ServerLevel) entity.level();
                 serverLevel.sendParticles(ParticleTypes.HEART, entity.getX(), entity.getY() + entity.getBbHeight() + 0.5, entity.getZ(), 0, 0, 0.1, 0, 0);
@@ -111,38 +96,38 @@ public class EntityDeadTree extends BossMonster {
             }
         });
     });
-
-    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityDeadTree>>> ATTACKS = List.of(
-            WeightedEntry.wrap(MonsterActionUtils.<EntityDeadTree>nonRepeatableAttack(ATTACK)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1), e -> 35 + e.getRandom().nextInt(15))), 9),
-            WeightedEntry.wrap(new GoalAttackAction<EntityDeadTree>(FALLING_APPLES)
-                    .cooldown(e -> e.animationCooldown(FALLING_APPLES))
-                    .withCondition(((goal, target, previous) -> !goal.attacker.isEnraged()))
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 4), e -> 35 + e.getRandom().nextInt(15))), 10),
-            WeightedEntry.wrap(new GoalAttackAction<EntityDeadTree>(APPLE_SHIELD)
-                    .cooldown(e -> e.animationCooldown(APPLE_SHIELD))
-                    .withCondition(((goal, target, previous) -> goal.attacker.shieldCooldown <= 0))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 8),
-            WeightedEntry.wrap(MonsterActionUtils.<EntityDeadTree>nonRepeatableAttack(SPIKE)
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 9),
-            WeightedEntry.wrap(new GoalAttackAction<EntityDeadTree>(BIG_FALLING_APPLES)
-                    .cooldown(e -> e.animationCooldown(BIG_FALLING_APPLES))
-                    .withCondition(((goal, target, previous) -> goal.attacker.isEnraged()))
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 4), e -> 40 + e.getRandom().nextInt(20))), 9),
-            WeightedEntry.wrap(new GoalAttackAction<EntityDeadTree>(MORE_FALLING_APPLES)
-                    .cooldown(e -> e.animationCooldown(MORE_FALLING_APPLES))
-                    .withCondition(((goal, target, previous) -> goal.attacker.isEnraged()))
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 4), e -> 40 + e.getRandom().nextInt(20))), 10),
-            WeightedEntry.wrap(new GoalAttackAction<EntityDeadTree>(HEAL)
-                    .cooldown(e -> e.animationCooldown(HEAL))
-                    .withCondition(((goal, target, previous) -> goal.attacker.healCooldown <= 0))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 11)
-    );
-    private static final List<WeightedEntry.Wrapper<IdleAction<EntityDeadTree>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 3)), 1)
-    );
-
-    public final AnimatedAttackGoal<EntityDeadTree> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+    //
+//    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityDeadTree>>> ATTACKS = List.of(
+//            WeightedEntry.wrap(MonsterActionUtils.<EntityDeadTree>nonRepeatableAttack(ATTACK)
+//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1), e -> 35 + e.getRandom().nextInt(15))), 9),
+//            WeightedEntry.wrap(new GoalAttackAction<EntityDeadTree>(FALLING_APPLES)
+//                    .cooldown(e -> e.animationCooldown(FALLING_APPLES))
+//                    .withCondition(((goal, target, previous) -> !goal.attacker.isEnraged()))
+//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 4), e -> 35 + e.getRandom().nextInt(15))), 10),
+//            WeightedEntry.wrap(new GoalAttackAction<EntityDeadTree>(APPLE_SHIELD)
+//                    .cooldown(e -> e.animationCooldown(APPLE_SHIELD))
+//                    .withCondition(((goal, target, previous) -> goal.attacker.shieldCooldown <= 0))
+//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 8),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntityDeadTree>nonRepeatableAttack(SPIKE)
+//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 9),
+//            WeightedEntry.wrap(new GoalAttackAction<EntityDeadTree>(BIG_FALLING_APPLES)
+//                    .cooldown(e -> e.animationCooldown(BIG_FALLING_APPLES))
+//                    .withCondition(((goal, target, previous) -> goal.attacker.isEnraged()))
+//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 4), e -> 40 + e.getRandom().nextInt(20))), 9),
+//            WeightedEntry.wrap(new GoalAttackAction<EntityDeadTree>(MORE_FALLING_APPLES)
+//                    .cooldown(e -> e.animationCooldown(MORE_FALLING_APPLES))
+//                    .withCondition(((goal, target, previous) -> goal.attacker.isEnraged()))
+//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 4), e -> 40 + e.getRandom().nextInt(20))), 10),
+//            WeightedEntry.wrap(new GoalAttackAction<EntityDeadTree>(HEAL)
+//                    .cooldown(e -> e.animationCooldown(HEAL))
+//                    .withCondition(((goal, target, previous) -> goal.attacker.healCooldown <= 0))
+//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 11)
+//    );
+//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityDeadTree>>> IDLE_ACTIONS = List.of(
+//            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 3)), 1)
+//    );
+//
+//    public final AnimatedAttackGoal<EntityDeadTree> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityDeadTree> animationHandler = new AnimationHandler<>(this, ANIMS)
             .withChangeListener(anim -> {
                 if (!this.level().isClientSide && anim != null) {
@@ -150,13 +135,13 @@ public class EntityDeadTree extends BossMonster {
                         this.shieldCooldown = 100;
                     if (anim.is(HEAL))
                         this.healCooldown = 100;
-                } else if (anim != null && anim.getClientIdentifier().equals("summon")) {
-                    int rand = this.random.nextInt(3);
-                    AnimatedAction animNew = AnimatedAction.builder(anim.getLength(), anim.getID()).animationId(anim.getClientIdentifier() + "_" + rand)
-                            .withTransitionTime(anim.getStartTransition(), anim.getEndTransitionTime()).speed(anim.getSpeed()).build();
-                    this.getAnimationHandler().setAnimation(animNew);
-                    return true;
-                }
+                } //else if (anim != null && anim.getClientIdentifier().equals("summon")) {
+//                    int rand = this.random.nextInt(3);
+//                    AnimatedAction animNew = AnimatedAction.builder(anim.getLength(), anim.getID()).animationId(anim.getClientIdentifier() + "_" + rand)
+//                            .withTransitionTime(anim.getStartTransition(), anim.getEndTransitionTime()).speed(anim.getSpeed()).build();
+//                    this.getAnimationHandler().setAnimation(animNew);
+//                    return true;
+//                }
                 return false;
             });
 
@@ -164,8 +149,6 @@ public class EntityDeadTree extends BossMonster {
 
     public EntityDeadTree(EntityType<? extends EntityDeadTree> type, Level world) {
         super(type, world);
-        if (!world.isClientSide)
-            this.goalSelector.addGoal(1, this.attack);
     }
 
     @Override
@@ -199,10 +182,10 @@ public class EntityDeadTree extends BossMonster {
         builder.define(SUMMON_ANIMATION, (byte) 0);
     }
 
-    @Override
-    protected float getStandingEyeHeight(Pose pose, EntityDimensions dimensions) {
-        return dimensions.height * 0.25f;
-    }
+//    @Override
+//    protected float getStandingEyeHeight(Pose pose, EntityDimensions dimensions) {
+//        return dimensions.height * 0.25f;
+//    }
 
     public byte summonAnimationType() {
         return this.entityData.get(SUMMON_ANIMATION);
@@ -218,9 +201,9 @@ public class EntityDeadTree extends BossMonster {
     }
 
     @Override
-    public int animationCooldown(AnimatedAction anim) {
+    public int animationCooldown(String anim) {
         int cooldown = super.animationCooldown(anim);
-        if (anim != null && anim.is(SPIKE))
+        if (anim != null && anim.equals(SPIKE))
             cooldown += 40;
         return cooldown;
     }
@@ -245,12 +228,12 @@ public class EntityDeadTree extends BossMonster {
     }
 
     @Override
-    public AnimatedAction getDeathAnimation() {
+    public String getDeathAnimation() {
         return DEFEAT;
     }
 
     @Override
-    public AABB attackBB(String anim) {
+    public AABB attackBB(AnimationState anim) {
         double width = this.getBbWidth() * 2.1;
         double length = this.getBbWidth() * 1.85;
         return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
@@ -259,7 +242,7 @@ public class EntityDeadTree extends BossMonster {
     @Override
     public void handleAttack(AnimationState anim) {
         this.getNavigation().stop();
-        BiConsumer<AnimatedAction, EntityDeadTree> handler = ATTACK_HANDLER.get(anim.getID());
+        BiConsumer<AnimationState, EntityDeadTree> handler = ATTACK_HANDLER.get(anim.getID());
         if (handler != null)
             handler.accept(anim, this);
     }
@@ -301,10 +284,10 @@ public class EntityDeadTree extends BossMonster {
         return ModSounds.ENTITY_DEAD_TREE_DEATH.get();
     }
 
-    @Override
-    public Vec3 passengerOffset(Entity passenger) {
-        return new Vec3(0, 57 / 16d, -3 / 16d).scale(2);
-    }
+//    @Override
+//    public Vec3 passengerOffset(Entity passenger) {
+//        return new Vec3(0, 57 / 16d, -3 / 16d).scale(2);
+//    }
 
     @Override
     public AnimationHandler<EntityDeadTree> getAnimationHandler() {

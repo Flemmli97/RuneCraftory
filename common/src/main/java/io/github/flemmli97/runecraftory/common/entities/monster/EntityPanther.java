@@ -1,24 +1,13 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.LeapingMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.common.entity.AnimationHandler;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.ActionUtils;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveAwayRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -26,7 +15,6 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class EntityPanther extends LeapingMonster {
 
@@ -38,29 +26,28 @@ public class EntityPanther extends LeapingMonster {
     public static final String INTERACT = BUILDER.add("interact", MELEE);
     public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
-
-    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityPanther>>> ATTACKS = List.of(
-            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(MELEE, e -> 0.8f), 2),
-            WeightedEntry.wrap(new GoalAttackAction<EntityPanther>(LEAP)
-                    .cooldown(e -> e.animationCooldown(LEAP))
-                    .withCondition(ActionUtils.chanced(e -> 1))
-                    .prepare(() -> new WrappedRunner<>(new MoveAwayRunner<>(1.5, 1, 4))), 1),
-            WeightedEntry.wrap(new GoalAttackAction<EntityPanther>(LEAP)
-                    .cooldown(e -> e.animationCooldown(LEAP))
-                    .withCondition(ActionUtils.chanced(e -> 1))
-                    .prepare(() -> new WrappedRunner<>(new MoveToTargetRunner<>(1, 4))), 2)
-    );
-    private static final List<WeightedEntry.Wrapper<IdleAction<EntityPanther>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 0.5)), 1),
-            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 2)
-    );
-
-    public final AnimatedAttackGoal<EntityPanther> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+    //
+//    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityPanther>>> ATTACKS = List.of(
+//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(MELEE, e -> 0.8f), 2),
+//            WeightedEntry.wrap(new GoalAttackAction<EntityPanther>(LEAP)
+//                    .cooldown(e -> e.animationCooldown(LEAP))
+//                    .withCondition(ActionUtils.chanced(e -> 1))
+//                    .prepare(() -> new WrappedRunner<>(new MoveAwayRunner<>(1.5, 1, 4))), 1),
+//            WeightedEntry.wrap(new GoalAttackAction<EntityPanther>(LEAP)
+//                    .cooldown(e -> e.animationCooldown(LEAP))
+//                    .withCondition(ActionUtils.chanced(e -> 1))
+//                    .prepare(() -> new WrappedRunner<>(new MoveToTargetRunner<>(1, 4))), 2)
+//    );
+//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityPanther>>> IDLE_ACTIONS = List.of(
+//            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 0.5)), 1),
+//            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 2)
+//    );
+//
+//    public final AnimatedAttackGoal<EntityPanther> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityPanther> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityPanther(EntityType<? extends EntityPanther> type, Level world) {
         super(type, world);
-        this.goalSelector.addGoal(2, this.attack);
     }
 
     @Override
@@ -100,8 +87,8 @@ public class EntityPanther extends LeapingMonster {
     }
 
     @Override
-    protected boolean isLeapingAnim(AnimatedAction anim) {
-        return anim.is(LEAP);
+    protected boolean isLeapingAnim(String anim) {
+        return anim.equals(LEAP);
     }
 
     @Override
@@ -115,7 +102,7 @@ public class EntityPanther extends LeapingMonster {
     }
 
     @Override
-    public AABB attackBB(String anim) {
+    public AABB attackBB(AnimationState anim) {
         double width = this.getBbWidth() * 1.3;
         double length = this.getBbWidth() * 1.7;
         return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
@@ -143,8 +130,8 @@ public class EntityPanther extends LeapingMonster {
         return SLEEP;
     }
 
-    @Override
-    public Vec3 passengerOffset(Entity passenger) {
-        return new Vec3(0, 21.5 / 16d, -13 / 16d);
-    }
+//    @Override
+//    public Vec3 passengerOffset(Entity passenger) {
+//        return new Vec3(0, 21.5 / 16d, -13 / 16d);
+//    }
 }

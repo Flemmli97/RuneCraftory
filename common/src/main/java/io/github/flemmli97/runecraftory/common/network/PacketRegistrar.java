@@ -67,6 +67,7 @@ public class PacketRegistrar {
     }
 
     public interface ServerPacketRegister {
+
         <P extends CustomPacketPayload> void register(CustomPacketPayload.Type<P> type, StreamCodec<RegistryFriendlyByteBuf, P> codec, BiConsumer<P, ServerPlayer> handler);
     }
 

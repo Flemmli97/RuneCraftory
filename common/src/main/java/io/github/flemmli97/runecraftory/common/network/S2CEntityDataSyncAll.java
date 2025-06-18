@@ -10,7 +10,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
-
 public class S2CEntityDataSyncAll implements CustomPacketPayload {
 
     public static final CustomPacketPayload.Type<S2CEntityDataSyncAll> TYPE = new CustomPacketPayload.Type<>(RuneCraftory.modRes("s2c_entity_data_all"));

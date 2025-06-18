@@ -50,7 +50,7 @@ public class EntityBigMuck extends BaseMonster {
     }
 
     @Override
-    public OrientedBoundingBox calculateAttackAABB(String anim, Vec3 target, double grow) {
+    public OrientedBoundingBox calculateAttackAABB(AnimationState anim, Vec3 target, double grow) {
         if (anim.equals(SPORE)) {
             return new OrientedBoundingBox(this.attackBB(anim), this.getYRot(), 0, this.position());
         }
@@ -58,7 +58,7 @@ public class EntityBigMuck extends BaseMonster {
     }
 
     @Override
-    public AABB attackBB(String anim) {
+    public AABB attackBB(AnimationState anim) {
         if (anim.equals(SPORE)) {
             double attackSize = this.getBbWidth() * 1.5;
             return new AABB(-attackSize, -0.2, -attackSize, attackSize, this.getBbHeight() + 0.2, attackSize);

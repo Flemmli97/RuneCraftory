@@ -13,7 +13,6 @@ import io.github.flemmli97.runecraftory.common.blocks.BlockForge;
 import io.github.flemmli97.runecraftory.common.blocks.BlockFruitTreeLeaf;
 import io.github.flemmli97.runecraftory.common.blocks.BlockGiantCrop;
 import io.github.flemmli97.runecraftory.common.blocks.BlockHerb;
-import io.github.flemmli97.runecraftory.common.blocks.BlockMeltableSnow;
 import io.github.flemmli97.runecraftory.common.blocks.BlockMineral;
 import io.github.flemmli97.runecraftory.common.blocks.BlockMonsterBarn;
 import io.github.flemmli97.runecraftory.common.blocks.BlockQuestboard;
@@ -56,7 +55,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
-
 
 public class ModBlocks {
 

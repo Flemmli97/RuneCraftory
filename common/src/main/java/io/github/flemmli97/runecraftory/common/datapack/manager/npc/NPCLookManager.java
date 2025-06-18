@@ -15,11 +15,11 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.profiling.ProfilerFiller;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 public class NPCLookManager extends SimpleJsonResourceReloadListener implements ListenerExtension {
 
@@ -45,7 +45,7 @@ public class NPCLookManager extends SimpleJsonResourceReloadListener implements 
         return this.dataKey.getOrDefault(data, DEFAULT_ID);
     }
 
-    public NPCLook getRandom(Random random, boolean male) {
+    public NPCLook getRandom(RandomSource random, boolean male) {
         if (this.selectable.isEmpty())
             return NPCLook.DEFAULT_LOOK;
         List<NPCLook> looks = this.selectable.stream().filter(l ->

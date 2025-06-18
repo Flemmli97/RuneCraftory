@@ -39,5 +39,4 @@ public class LootTableResources {
     );
 
     public static final ResourceKey<LootTable> WOOLED_WHITE_LOOT = ResourceKey.create(Registries.LOOT_TABLE, RuneCraftory.modRes("entities/wooly/white"));
-
 }

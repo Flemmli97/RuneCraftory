@@ -1,33 +1,23 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
-import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityMobArrow;
-import io.github.flemmli97.runecraftory.common.registry.ModEntities;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.common.entity.AnimationHandler;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.ActionUtils;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.KeepDistanceRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinition;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.random.WeightedEntry;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-
-import java.util.List;
 
 public class EntityOrcArcher extends EntityOrc {
 
@@ -36,44 +26,41 @@ public class EntityOrcArcher extends EntityOrc {
     public static final String RANGED = BUILDER.add("bow", AnimationsBuilder.definition(1).marker("attack", 0.6));
     public static final String INTERACT = BUILDER.add("interact", MELEE);
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
-
-    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityOrc>>> ATTACKS = List.of(
-            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeActionInRange(MELEE, e -> 0.6f), 1),
-            WeightedEntry.wrap(MonsterActionUtils.<EntityOrc>simpleRangedStrafingAction(RANGED, 8, 1, e -> 1)
-                    .withCondition(ActionUtils.chanced(e -> e.getType() == ModEntities.ORC.get() ? 0.85f : 0.95f,
-                            (goal, target, previous) -> goal.attacker.getMainHandItem().getItem() instanceof BowItem)), 4)
-    );
-    private static final List<WeightedEntry.Wrapper<IdleAction<EntityOrc>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<>(() -> new KeepDistanceRunner<>(4, 10, 1)), 3),
-            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 1),
-            WeightedEntry.wrap(new IdleAction<>(DoNothingRunner::new), 2)
-    );
-
-    public final AnimatedAttackGoal<EntityOrc> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+    //
+//    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityOrc>>> ATTACKS = List.of(
+//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeActionInRange(MELEE, e -> 0.6f), 1),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntityOrc>simpleRangedStrafingAction(RANGED, 8, 1, e -> 1)
+//                    .withCondition(ActionUtils.chanced(e -> e.getType() == ModEntities.ORC.get() ? 0.85f : 0.95f,
+//                            (goal, target, previous) -> goal.attacker.getMainHandItem().getItem() instanceof BowItem)), 4)
+//    );
+//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityOrc>>> IDLE_ACTIONS = List.of(
+//            WeightedEntry.wrap(new IdleAction<>(() -> new KeepDistanceRunner<>(4, 10, 1)), 3),
+//            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 1),
+//            WeightedEntry.wrap(new IdleAction<>(DoNothingRunner::new), 2)
+//    );
+//
+//    public final AnimatedAttackGoal<EntityOrc> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityOrcArcher> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityOrcArcher(EntityType<? extends EntityOrcArcher> type, Level level) {
         super(type, level);
-        this.goalSelector.removeGoal(super.attack);
-        this.goalSelector.addGoal(2, this.attack);
     }
 
     @Override
-    protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
+    protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance difficulty) {
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
         this.setDropChance(EquipmentSlot.MAINHAND, 0);
     }
 
     @Override
-    public AABB attackBB(String anim) {
+    public AABB attackBB(AnimationState anim) {
         double width = this.getBbWidth() * 1.2;
         double length = this.getBbWidth() * 1.7;
         return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
     }
 
-
     @Override
-    public void setupAttack(AnimatedAction anim) {
+    public void setupAttack(AnimationDefinition anim) {
         if (anim.is(RANGED)) {
             this.startUsingItem(InteractionHand.MAIN_HAND);
         }

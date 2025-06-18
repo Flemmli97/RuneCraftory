@@ -15,13 +15,13 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.ExtraCodecs;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.schedule.Activity;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Random;
 
 public class NPCSchedule {
 
@@ -36,7 +36,7 @@ public class NPCSchedule {
         this.schedule = schedule;
     }
 
-    public NPCSchedule(EntityNPCBase npc, Random random) {
+    public NPCSchedule(EntityNPCBase npc, RandomSource random) {
         this(npc, new Schedule(random));
     }
 
@@ -68,12 +68,13 @@ public class NPCSchedule {
     }
 
     public CompoundTag save() {
-        return (CompoundTag) Schedule.CODEC.encodeStart(NbtOps.INSTANCE, this.schedule).getOrThrow(true, RuneCraftory.LOGGER::error);
+        return (CompoundTag) Schedule.CODEC.encodeStart(NbtOps.INSTANCE, this.schedule).getOrThrow();
     }
 
     public void load(CompoundTag tag) {
         this.schedule = Schedule.CODEC.parse(NbtOps.INSTANCE, tag)
-                .resultOrPartial(s -> RuneCraftory.LOGGER.error("Couldn't load schedule for {}. {}", this.npc, s)).orElse(new Schedule(this.npc.getRandom()));
+                .resultOrPartial(s -> RuneCraftory.LOGGER.error("Couldn't load schedule for {}. {}", this.npc, s))
+                .orElse(new Schedule(this.npc.getRandom()));
         this.view = null;
     }
 
@@ -174,7 +175,7 @@ public class NPCSchedule {
             this(wakeUpTime, workTime, breakTime, workTimeAfter, doneWorkTime, sleepTime, meetTimeOffday, meetTimeAfterOffday, workDays.isEmpty() ? EnumSet.noneOf(EnumDay.class) : EnumSet.copyOf(workDays));
         }
 
-        public Schedule(Random random) {
+        public Schedule(RandomSource random) {
             this(randomizedTime(random, 6, 9),
 
                     randomizedTime(random, 8, 10),
@@ -189,13 +190,13 @@ public class NPCSchedule {
                     randomizedWorkDays(random));
         }
 
-        private static int randomizedTime(Random random, int min, int max) {
+        private static int randomizedTime(RandomSource random, int min, int max) {
             float hourAdd = random.nextInt((max - min) * 2) * 0.5f;
             float hour = (min + hourAdd - 6); //-6 cause 0 daytime = 6:00
             return (int) (hour * 10) * 100;
         }
 
-        private static EnumSet<EnumDay> randomizedWorkDays(Random random) {
+        private static EnumSet<EnumDay> randomizedWorkDays(RandomSource random) {
             EnumSet<EnumDay> set = EnumSet.noneOf(EnumDay.class);
             for (EnumDay day : EnumDay.values()) {
                 if (day == EnumDay.SATURDAY) {

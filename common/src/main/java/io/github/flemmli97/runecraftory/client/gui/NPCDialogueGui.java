@@ -191,5 +191,6 @@ public class NPCDialogueGui<T extends EntityNPCBase> extends Screen {
     }
 
     record ConversationLine(int width, FormattedText raw, FormattedCharSequence txt) {
+
     }
 }

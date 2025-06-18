@@ -13,11 +13,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.profiling.ProfilerFiller;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 public class NameManager extends SimpleJsonResourceReloadListener implements ListenerExtension {
 
@@ -31,7 +31,7 @@ public class NameManager extends SimpleJsonResourceReloadListener implements Lis
         super(DataPackHandler.GSON, ID.toString());
     }
 
-    public String getRandomSurname(Random random, String lang) {
+    public String getRandomSurname(RandomSource random, String lang) {
         if (this.surnames.isEmpty())
             return null;
         List<String> names = this.surnames.get(lang);
@@ -40,7 +40,7 @@ public class NameManager extends SimpleJsonResourceReloadListener implements Lis
         return names.get(random.nextInt(names.size()));
     }
 
-    public String getRandomName(Random random, String lang, boolean male) {
+    public String getRandomName(RandomSource random, String lang, boolean male) {
         List<String> names;
         if (male) {
             if (this.maleNames.isEmpty())
@@ -56,7 +56,7 @@ public class NameManager extends SimpleJsonResourceReloadListener implements Lis
         return names.get(random.nextInt(names.size()));
     }
 
-    public String getRandomFullName(Random random, boolean male) {
+    public String getRandomFullName(RandomSource random, boolean male) {
         List<String> langs;
         if (male) {
             langs = this.maleNames.keySet().stream().toList();

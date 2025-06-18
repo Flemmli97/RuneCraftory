@@ -31,9 +31,9 @@ public class BlockTreeSapling extends BushBlock implements Growable {
 
     protected static final VoxelShape SHAPE = Block.box(2.0, 0.0, 2.0, 14.0, 12.0, 14.0);
 
-    private final Supplier<Block> treeBase;
+    private final Supplier<? extends Block> treeBase;
 
-    public BlockTreeSapling(Properties properties, Supplier<Block> treeBase) {
+    public BlockTreeSapling(Properties properties, Supplier<? extends Block> treeBase) {
         super(properties);
         this.treeBase = treeBase;
     }

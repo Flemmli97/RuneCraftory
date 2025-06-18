@@ -11,6 +11,6 @@ public class RenderOrc<T extends EntityOrc> extends RenderMonster<T, ModelOrc<T>
 
     public RenderOrc(EntityRendererProvider.Context ctx, ResourceLocation texture) {
         super(ctx, new ModelOrc<>(ctx.bakeLayer(ModelOrc.LAYER_LOCATION)), texture, 0.5f);
-        this.layers.add(new ItemLayer<>(this));
+        this.layers.add(new ItemLayer<>(this, ctx.getItemInHandRenderer()));
     }
 }

@@ -3,11 +3,9 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.phys.Vec3;
 
 public class EntityKingWooly extends EntityAggressiveWooly {
 
@@ -35,8 +33,8 @@ public class EntityKingWooly extends EntityAggressiveWooly {
         return 1.15f;
     }
 
-    @Override
-    public Vec3 passengerOffset(Entity passenger) {
-        return super.passengerOffset(passenger).scale(2.5f);
-    }
+//    @Override
+//    public Vec3 passengerOffset(Entity passenger) {
+//        return super.passengerOffset(passenger).scale(2.5f);
+//    }
 }

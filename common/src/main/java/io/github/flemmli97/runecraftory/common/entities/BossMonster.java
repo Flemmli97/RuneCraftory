@@ -67,10 +67,10 @@ public abstract class BossMonster extends BaseMonster implements OverlayEntityRe
         this.bossInfo = this.createBossBar();
     }
 
-    public static <T extends BaseMonster> ImmutableMap<String, BiConsumer<AnimationState, T>> createAnimationHandler(Consumer<ImmutableMap.Builder<AnimationState, BiConsumer<AnimationState, T>>> cons) {
-        ImmutableMap.Builder<AnimationState, BiConsumer<AnimationState, T>> builder = ImmutableMap.builder();
+    public static <T extends BaseMonster> ImmutableMap<String, BiConsumer<AnimationState, T>> createAnimationHandler(Consumer<ImmutableMap.Builder<String, BiConsumer<AnimationState, T>>> cons) {
+        ImmutableMap.Builder<String, BiConsumer<AnimationState, T>> builder = ImmutableMap.builder();
         cons.accept(builder);
-        return builder.build().entrySet().stream().collect(ImmutableMap.toImmutableMap(e -> e.getKey().getID(), Map.Entry::getValue));
+        return builder.build().entrySet().stream().collect(ImmutableMap.toImmutableMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     public RunecraftoryBossbar createBossBar() {

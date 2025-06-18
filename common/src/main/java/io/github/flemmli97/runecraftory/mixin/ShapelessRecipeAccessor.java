@@ -10,5 +10,4 @@ public interface ShapelessRecipeAccessor {
 
     @Accessor("result")
     ItemStack getResult();
-
 }

@@ -392,15 +392,15 @@ public class EntityCalls {
             if (prop == null) {
                 if (entity instanceof ServerPlayer player && stack.has(DataComponents.FOOD)) {
                     PlayerData data = Platform.INSTANCE.getPlayerData(player);
-                        LevelCalc.levelSkill(data, EnumSkills.EATING, 5);
+                    LevelCalc.levelSkill(data, EnumSkills.EATING, 5);
                     data.refreshRunePoints(EntityUtils.getRPFromVanillaFood(stack));
                 }
                 return;
             }
             if (entity instanceof ServerPlayer player) {
                 PlayerData data = Platform.INSTANCE.getPlayerData(player);
-                    if (data.foodBuffDuration() <= 0)
-                        data.getDailyUpdater().onFoodEaten();
+                if (data.foodBuffDuration() <= 0)
+                    data.getDailyUpdater().onFoodEaten();
                 data.applyFoodEffect(stack);
                 data.refreshRunePoints(prop.getRPRegen() + (int) (data.getMaxRunePoints() * prop.getRpPercentRegen() * 0.01));
             }
@@ -425,7 +425,7 @@ public class EntityCalls {
             player.heal(player.getMaxHealth());
             PlayerData data = Platform.INSTANCE.getPlayerData(player);
             data.refreshRunePoints(data.getMaxRunePoints());
-                LevelCalc.levelSkill(data, EnumSkills.SLEEPING, 75);
+            LevelCalc.levelSkill(data, EnumSkills.SLEEPING, 75);
             player.removeEffect(ModEffects.FATIGUE.asHolder());
         }
     }

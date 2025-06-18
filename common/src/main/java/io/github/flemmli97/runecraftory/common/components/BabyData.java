@@ -27,5 +27,4 @@ public record BabyData(boolean male, Optional<String> name, UUID father, UUID mo
     public static final StreamCodec<RegistryFriendlyByteBuf, BabyData> STREAM_CODEC = StreamCodec.composite(ByteBufCodecs.BOOL,
             BabyData::male, ByteBufCodecs.optional(ByteBufCodecs.STRING_UTF8), BabyData::name, UUIDUtil.STREAM_CODEC, BabyData::father,
             UUIDUtil.STREAM_CODEC, BabyData::mother, ByteBufCodecs.optional(ComponentSerialization.STREAM_CODEC), BabyData::player, BabyData::new);
-
 }

@@ -2,12 +2,13 @@ package io.github.flemmli97.runecraftory.client.render.projectiles;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityAppleProjectile;
+import io.github.flemmli97.tenshilib.client.render.ItemProjectileRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
-public class RenderAppleProjectile extends RenderProjectileItem<EntityAppleProjectile> {
+public class RenderAppleProjectile extends ItemProjectileRenderer<EntityAppleProjectile> {
 
     private static final ItemStack STACK = new ItemStack(Items.APPLE);
 

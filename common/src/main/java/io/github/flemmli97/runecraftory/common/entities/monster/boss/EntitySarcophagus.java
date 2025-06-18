@@ -2,8 +2,6 @@ package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 
 import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.RestrictedWaterAvoidingStrollGoal;
-import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
 import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
@@ -13,14 +11,9 @@ import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.common.entity.AnimationHandler;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -28,10 +21,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
-import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -73,7 +64,7 @@ public class EntitySarcophagus extends BossMonster {
     public static final String INTERACT = BUILDER.add("interact", BEAM);
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
-    private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntitySarcophagus>> ATTACK_HANDLER = createAnimationHandler(b -> {
+    private static final ImmutableMap<String, BiConsumer<AnimationState, EntitySarcophagus>> ATTACK_HANDLER = createAnimationHandler(b -> {
         b.put(TELEPORT, (anim, entity) -> {
             entity.getNavigation().stop();
             if (anim.isAt("teleport_start_1") || anim.isAt("teleport_end_1")
@@ -187,69 +178,69 @@ public class EntitySarcophagus extends BossMonster {
         });
     });
 
-    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntitySarcophagus>>> ATTACKS = List.of(
-            WeightedEntry.wrap(MonsterActionUtils.<EntitySarcophagus>nonRepeatableAttack(TELEPORT)
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 10),
-            WeightedEntry.wrap(MonsterActionUtils.<EntitySarcophagus>nonRepeatableAttack(CHARGE)
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 8),
-            WeightedEntry.wrap(MonsterActionUtils.<EntitySarcophagus>nonRepeatableAttack(BEAM)
-                    .withCondition((goal, target, previous) -> !goal.attacker.isEnraged() && goal.attacker.allowAnimation(previous, BEAM))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 8),
-            WeightedEntry.wrap(MonsterActionUtils.<EntitySarcophagus>enragedBossAttack(BEAM_3X)
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 8),
-            WeightedEntry.wrap(MonsterActionUtils.<EntitySarcophagus>nonRepeatableAttack(FIRE_CIRCLE)
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 4),
-            WeightedEntry.wrap(MonsterActionUtils.<EntitySarcophagus>nonRepeatableAttack(WIND_CIRCLE)
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 4),
-            WeightedEntry.wrap(MonsterActionUtils.<EntitySarcophagus>nonRepeatableAttack(ICE_CIRCLE)
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 4),
-            WeightedEntry.wrap(MonsterActionUtils.<EntitySarcophagus>nonRepeatableAttack(EARTH_CIRCLE)
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 4),
-            WeightedEntry.wrap(MonsterActionUtils.<EntitySarcophagus>nonRepeatableAttack(LIGHT_2X)
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 8),
-            WeightedEntry.wrap(MonsterActionUtils.<EntitySarcophagus>enragedBossAttack(LIGHT_4X)
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 8),
-            WeightedEntry.wrap(MonsterActionUtils.<EntitySarcophagus>nonRepeatableAttack(SHINE)
-                    .withCondition((goal, target, previous) -> !goal.attacker.isEnraged() && goal.attacker.allowAnimation(previous, SHINE))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 7),
-            WeightedEntry.wrap(MonsterActionUtils.<EntitySarcophagus>enragedBossAttack(PRISM)
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 7),
-            WeightedEntry.wrap(MonsterActionUtils.<EntitySarcophagus>nonRepeatableAttack(MISSILE)
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 8),
-            WeightedEntry.wrap(MonsterActionUtils.<EntitySarcophagus>enragedBossAttack(STARFALL)
-                    .withCondition(((goal, target, previous) -> goal.attacker.isEnraged() && goal.attacker.starfallCooldown <= 0))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 10)
-    );
-    private static final List<WeightedEntry.Wrapper<IdleAction<EntitySarcophagus>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<>(() -> new DoNothingRunner<>(true)), 1)
-    );
-
-    public final AnimatedAttackGoal<EntitySarcophagus> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
-    private final AnimationHandler<EntitySarcophagus> animationHandler = new AnimationHandler<>(this, ANIMATED_ACTIONS).withChangeListener(anim -> {
+    //    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntitySarcophagus>>> ATTACKS = List.of(
+//            WeightedEntry.wrap(MonsterActionUtils.<EntitySarcophagus>nonRepeatableAttack(TELEPORT)
+//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 10),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntitySarcophagus>nonRepeatableAttack(CHARGE)
+//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 8),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntitySarcophagus>nonRepeatableAttack(BEAM)
+//                    .withCondition((goal, target, previous) -> !goal.attacker.isEnraged() && goal.attacker.allowAnimation(previous, BEAM))
+//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 8),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntitySarcophagus>enragedBossAttack(BEAM_3X)
+//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 8),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntitySarcophagus>nonRepeatableAttack(FIRE_CIRCLE)
+//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 4),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntitySarcophagus>nonRepeatableAttack(WIND_CIRCLE)
+//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 4),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntitySarcophagus>nonRepeatableAttack(ICE_CIRCLE)
+//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 4),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntitySarcophagus>nonRepeatableAttack(EARTH_CIRCLE)
+//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 4),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntitySarcophagus>nonRepeatableAttack(LIGHT_2X)
+//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 8),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntitySarcophagus>enragedBossAttack(LIGHT_4X)
+//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 8),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntitySarcophagus>nonRepeatableAttack(SHINE)
+//                    .withCondition((goal, target, previous) -> !goal.attacker.isEnraged() && goal.attacker.allowAnimation(previous, SHINE))
+//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 7),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntitySarcophagus>enragedBossAttack(PRISM)
+//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 7),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntitySarcophagus>nonRepeatableAttack(MISSILE)
+//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 8),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntitySarcophagus>enragedBossAttack(STARFALL)
+//                    .withCondition(((goal, target, previous) -> goal.attacker.isEnraged() && goal.attacker.starfallCooldown <= 0))
+//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 10)
+//    );
+//    private static final List<WeightedEntry.Wrapper<IdleAction<EntitySarcophagus>>> IDLE_ACTIONS = List.of(
+//            WeightedEntry.wrap(new IdleAction<>(() -> new DoNothingRunner<>(true)), 1)
+//    );
+//
+//    public final AnimatedAttackGoal<EntitySarcophagus> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+    private final AnimationHandler<EntitySarcophagus> animationHandler = new AnimationHandler<>(this, ANIMS).withChangeListener(anim -> {
         this.hitEntity = null;
-        if (anim != null) {
-            this.teleported = TELEPORT.is(anim);
-            if (!TELEPORT.is(anim))
-                this.previousAttack = anim.getID();
-            if (CHARGE.is(anim)) {
-                this.chargeMotion = null;
-                this.prevStepHeight = this.maxUpStep;
-                this.maxUpStep = 1 + this.maxUpStep;
-            }
-            if (STARFALL.is(anim)) {
-                this.gravityPre = this.isNoGravity();
-                this.starfallCooldown = 240 + this.getRandom().nextInt(600);
-                this.setNoGravity(true);
-            }
-        } else {
-            if (this.prevStepHeight != -1) {
-                this.maxUpStep = this.prevStepHeight;
-                this.prevStepHeight = -1;
-            }
-            if (this.getAnimationHandler().isCurrent(STARFALL)) {
-                this.setNoGravity(this.gravityPre);
-            }
-        }
+//        if (anim != null) {
+//            this.teleported = TELEPORT.is(anim);
+//            if (!TELEPORT.is(anim))
+//                this.previousAttack = anim.getID();
+//            if (CHARGE.is(anim)) {
+//                this.chargeMotion = null;
+//                this.prevStepHeight = this.maxUpStep;
+//                this.maxUpStep = 1 + this.maxUpStep;
+//            }
+//            if (STARFALL.is(anim)) {
+//                this.gravityPre = this.isNoGravity();
+//                this.starfallCooldown = 240 + this.getRandom().nextInt(600);
+//                this.setNoGravity(true);
+//            }
+//        } else {
+//            if (this.prevStepHeight != -1) {
+//                this.maxUpStep = this.prevStepHeight;
+//                this.prevStepHeight = -1;
+//            }
+//            if (this.getAnimationHandler().isCurrent(STARFALL)) {
+//                this.setNoGravity(this.gravityPre);
+//            }
+//        }
         return false;
     });
 
@@ -262,9 +253,7 @@ public class EntitySarcophagus extends BossMonster {
 
     public EntitySarcophagus(EntityType<? extends EntitySarcophagus> type, Level world) {
         super(type, world);
-        if (!world.isClientSide)
-            this.goalSelector.addGoal(1, this.attack);
-        this.maxUpStep = 1;
+//        this.maxUpStep = 1;
     }
 
     @Override
@@ -279,13 +268,13 @@ public class EntitySarcophagus extends BossMonster {
         super.applyAttributes();
     }
 
-    @Override
-    public void addGoal() {
-        super.addGoal();
-        this.goalSelector.removeGoal(this.wander);
-        this.wander = new RestrictedWaterAvoidingStrollGoal(this, 0.6);
-        this.goalSelector.addGoal(6, this.wander);
-    }
+//    @Override
+//    public void addGoal() {
+//        super.addGoal();
+//        this.goalSelector.removeGoal(this.wander);
+//        this.wander = new RestrictedWaterAvoidingStrollGoal(this, 0.6);
+//        this.goalSelector.addGoal(6, this.wander);
+//    }
 
     @Override
     public double sprintSpeedThreshold() {
@@ -315,16 +304,16 @@ public class EntitySarcophagus extends BossMonster {
     }
 
     private boolean isTeleporting() {
-        AnimatedAction anim = this.getAnimationHandler().getAnimation();
-        if (TELEPORT.is(anim)) {
-            if (anim.isPast("teleport_start_1") && !anim.isPast("teleport_end_1"))
-                return true;
-            if (anim.isPast("teleport_start_2") && !anim.isPast("teleport_end_2"))
-                return true;
-            return anim.isPast("teleport_start_3") && !anim.isPast("teleport_end_3");
-        } else if (STARFALL.is(anim)) {
-            return anim.isPast("teleport_start") && !anim.isPast("teleport_end");
-        }
+        AnimationState anim = this.getAnimationHandler().getAnimation();
+//        if (TELEPORT.is(anim)) {
+//            if (anim.isPast("teleport_start_1") && !anim.isPast("teleport_end_1"))
+//                return true;
+//            if (anim.isPast("teleport_start_2") && !anim.isPast("teleport_end_2"))
+//                return true;
+//            return anim.isPast("teleport_start_3") && !anim.isPast("teleport_end_3");
+//        } else if (STARFALL.is(anim)) {
+//            return anim.isPast("teleport_start") && !anim.isPast("teleport_end");
+//        }
         return false;
     }
 
@@ -336,20 +325,20 @@ public class EntitySarcophagus extends BossMonster {
     }
 
     @Override
-    public int animationCooldown(AnimatedAction anim) {
-        if (TELEPORT.is(anim))
+    public int animationCooldown(String anim) {
+        if (TELEPORT.equals(anim))
             return 7 + this.getRandom().nextInt(6);
         return super.animationCooldown(anim);
     }
 
     @Override
-    public AnimatedAction getDeathAnimation() {
+    public String getDeathAnimation() {
         return DEFEAT;
     }
 
     @Override
-    public OrientedBoundingBox calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
-        if (anim.is(CHARGE)) {
+    public OrientedBoundingBox calculateAttackAABB(AnimationState anim, Vec3 target, double grow) {
+        if (anim.equals(CHARGE)) {
             double width = this.getBbWidth();
             double speed = Math.max(width, this.getDeltaMovement().length() - width);
             float rotY = -Mth.wrapDegrees((float) (Mth.atan2(this.getDeltaMovement().x(), this.getDeltaMovement().z()) * Mth.RAD_TO_DEG));
@@ -366,7 +355,7 @@ public class EntitySarcophagus extends BossMonster {
             this.getNavigation().stop();
             this.getLookControl().setLookAt(target, 60.0f, 30.0f);
         }
-        BiConsumer<AnimatedAction, EntitySarcophagus> handler = ATTACK_HANDLER.get(anim.getID());
+        BiConsumer<AnimationState, EntitySarcophagus> handler = ATTACK_HANDLER.get(anim.getID());
         if (handler != null)
             handler.accept(anim, this);
     }
@@ -412,22 +401,22 @@ public class EntitySarcophagus extends BossMonster {
             this.getAnimationHandler().setAnimation(ANGRY);
     }
 
-    @Override
-    public Vec3 passengerOffset(Entity passenger) {
-        return new Vec3(0, 29.5 / 16d, -8 / 16d);
-    }
+//    @Override
+//    public Vec3 passengerOffset(Entity passenger) {
+//        return new Vec3(0, 29.5 / 16d, -8 / 16d);
+//    }
 
     @Override
     public AnimationHandler<EntitySarcophagus> getAnimationHandler() {
         return this.animationHandler;
     }
-
-    @Override
-    public boolean allowAnimation(String prev, AnimatedAction other) {
-        if (!this.teleported)
-            return TELEPORT.is(other);
-        return !TELEPORT.is(other) && (!this.previousAttack.equals(other.getID()));
-    }
+//
+//    @Override
+//    public boolean allowAnimation(String prev, AnimatedAction other) {
+//        if (!this.teleported)
+//            return TELEPORT.is(other);
+//        return !TELEPORT.is(other) && (!this.previousAttack.equals(other.getID()));
+//    }
 
     @Override
     public void playInteractionAnimation() {
@@ -457,13 +446,13 @@ public class EntitySarcophagus extends BossMonster {
     private boolean teleport(double x, double y, double z, int yRange) {
         BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(x, y - 1, z);
         ChunkAccess chunk = this.level().getChunk(pos);
-        while (yRange > 0 && pos.getY() > this.level().getMinBuildHeight() && !chunk.getBlockState(pos).getMaterial().blocksMotion()) {
+        while (yRange > 0 && pos.getY() > this.level().getMinBuildHeight() && !chunk.getBlockState(pos).blocksMotion()) {
             pos.move(Direction.DOWN);
             yRange--;
             y--;
         }
         BlockState blockState = chunk.getBlockState(pos);
-        if (!blockState.getMaterial().blocksMotion()) {
+        if (!blockState.blocksMotion()) {
             return false;
         }
         Vec3 current = this.position();
@@ -477,12 +466,12 @@ public class EntitySarcophagus extends BossMonster {
 
     protected void setChargeDirection(Vec3 moveDirection) {
         this.chargeMotion = moveDirection;
-        S2CMobUpdate.send(this, SyncableDatas.MOTION_DIR, this.chargeMotion);
+        S2CMobUpdate.send(this, SyncableDatas.NPC_JOB, this.chargeMotion);
     }
 
     @Override
     public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
         super.onUpdate(data);
-        data.runIf(SyncableDatas.MOTION_DIR, motion -> this.chargeMotion = motion);
+        data.runIf(SyncableDatas.NPC_JOB, motion -> this.chargeMotion = motion);
     }
 }

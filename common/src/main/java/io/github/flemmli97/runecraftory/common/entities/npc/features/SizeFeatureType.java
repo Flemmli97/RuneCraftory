@@ -1,24 +1,25 @@
 package io.github.flemmli97.runecraftory.common.entities.npc.features;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeature;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureHolder;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
-import net.minecraft.nbt.FloatTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.network.FriendlyByteBuf;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 
 public record SizeFeatureType(NumberProvider size) implements NPCFeatureHolder<SizeFeatureType.SizeFeature> {
 
-    public static final MapCodec<SizeFeatureType> CODEC = RecordCodecBuilder.mapCodec(inst ->
-            inst.group(NumberProviders.CODEC.fieldOf("size").forGetter(d -> d.size)).apply(inst, SizeFeatureType::new));
+    public static final MapCodec<SizeFeatureType> TYPE_CODEC = NumberProviders.CODEC.fieldOf("size").xmap(SizeFeatureType::new, SizeFeatureType::size);
+    public static final MapCodec<SizeFeature> CODEC = Codec.FLOAT.fieldOf("size").xmap(SizeFeature::new, SizeFeature::size);
+    public static final StreamCodec<ByteBuf, SizeFeature> STREAM_CODEC = ByteBufCodecs.FLOAT.map(SizeFeature::new, f -> f.size);
 
     public static final float MIN = 0.2F;
     public static final float MAX = 10;
@@ -33,36 +34,15 @@ public record SizeFeatureType(NumberProvider size) implements NPCFeatureHolder<S
         return ModNPCLooks.SIZE.get();
     }
 
-    public static class SizeFeature implements NPCFeature {
-
-        public final float size;
-
-        public SizeFeature(FriendlyByteBuf buf) {
-            this(buf.readFloat());
-        }
-
-        public SizeFeature(Tag tag) {
-            this(((FloatTag) tag).getAsFloat());
-        }
+    public record SizeFeature(float size) implements NPCFeature {
 
         public SizeFeature(float size) {
             this.size = Mth.clamp(size, MIN, MAX);
         }
 
         @Override
-        public void writeToBuffer(FriendlyByteBuf buf) {
-            buf.writeFloat(this.size);
-        }
-
-        @Override
-        public Tag save() {
-            return FloatTag.valueOf(this.size);
-        }
-
-        @Override
-        public NPCFeatureType<SizeFeature> getType() {
+        public NPCFeatureType<SizeFeature> type() {
             return ModNPCLooks.SIZE.get();
         }
-
     }
 }

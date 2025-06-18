@@ -16,7 +16,6 @@ import io.github.flemmli97.runecraftory.common.entities.ai.TendCropsGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.FarmCrops;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.FollowEntityEx;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetTargetFromRider;
-import io.github.flemmli97.runecraftory.common.entities.ai.control.MoveControlerEx;
 import io.github.flemmli97.runecraftory.common.entities.data.MobUpdateHandler;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
@@ -56,6 +55,7 @@ import io.github.flemmli97.runecraftory.mixin.AttributeMapAccessor;
 import io.github.flemmli97.runecraftory.mixin.CombatTrackerAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.entity.AOEAttackEntity;
+import io.github.flemmli97.tenshilib.common.entity.ai.MoveControllerPlus;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.SetMoveToRestriction;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimatedEntity;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinition;
@@ -264,7 +264,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
 
     public BaseMonster(EntityType<? extends BaseMonster> type, Level level) {
         super(type, level);
-        this.moveControl = new MoveControlerEx(this);
+        this.moveControl = new MoveControllerPlus(this);
         //Client will get default value. This is intentional
         this.prop = DataPackHandler.INSTANCE.monsterPropertiesManager().getPropertiesFor(type);
         this.applyAttributes();
@@ -1518,14 +1518,14 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     }
 
     public void mobAttack(AnimationState anim, LivingEntity target, Consumer<LivingEntity> cons) {
-        OrientedBoundingBox obb = this.calculateAttackAABB(anim.getAnimation(), this.tryGetTargetPosition(target), 0);
+        OrientedBoundingBox obb = this.calculateAttackAABB(anim, this.tryGetTargetPosition(target), 0);
         this.level().getEntitiesOfClass(LivingEntity.class, obb.getEncompassingBox(),
                 entity -> this.hitPred.test(entity) && obb.intersects(entity.getBoundingBox())).forEach(cons);
         if (!this.level().isClientSide)
             S2CAttackDebug.sendDebugPacket(obb, S2CAttackDebug.EnumAABBType.ATTACK, this);
     }
 
-    public OrientedBoundingBox calculateAttackAABB(String anim, @Nullable Vec3 target, double grow) {
+    public OrientedBoundingBox calculateAttackAABB(AnimationState anim, @Nullable Vec3 target, double grow) {
         float yRot = this.getYRot();
         float xRot = this.getXRot();
         if (target != null && !this.isControlledByLocalInstance()) {
@@ -1545,13 +1545,14 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
 
     @Override
     public OrientedBoundingBox prepareAttackBox(String anim, Entity target, double grow, boolean debug) {
-        OrientedBoundingBox obb = this.calculateAttackAABB(anim, target != null ? target.position() : null, grow);
+        OrientedBoundingBox obb = this.calculateAttackAABB(this.getAnimationHandler().createDefaulted(anim),
+                target != null ? target.position() : null, grow);
         if (debug)
             S2CAttackDebug.sendDebugPacket(obb, S2CAttackDebug.EnumAABBType.ATTEMPT, this);
         return obb;
     }
 
-    public AABB attackBB(String anim) {
+    public AABB attackBB(AnimationState anim) {
         double range = 1;
         return new AABB(-range * 0.5, -0.02, 0, range * 0.5, this.getBbHeight() + 0.02, range);
     }

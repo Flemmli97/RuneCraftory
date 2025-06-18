@@ -48,13 +48,11 @@ public class MobConfig {
     public static int initialProcreationCooldown = 24000;
     public static int procreationCooldown = 24000;
 
-
     public enum GateLevelType {
         CONSTANT,
         DISTANCESPAWN,
         DISTANCESPAWNPLAYER,
         PLAYERLEVEL,
-
     }
 
     public enum PlayerLevelType {

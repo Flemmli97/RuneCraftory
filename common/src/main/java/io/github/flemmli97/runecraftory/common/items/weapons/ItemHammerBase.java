@@ -34,7 +34,6 @@ public class ItemHammerBase extends PickaxeItem implements ExtendedWeapon, BigWe
         Platform.INSTANCE.getPlayerData(player).getWeaponHandler().doWeaponAttack(ModAttackActions.HAMMER_AXE.get(), stack);
     }
 
-
     @Override
     public boolean doSweepingAttack() {
         return false;

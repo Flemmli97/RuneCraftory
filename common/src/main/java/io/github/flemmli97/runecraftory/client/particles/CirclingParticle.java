@@ -8,6 +8,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 
 public class CirclingParticle extends ColoredParticle {
@@ -27,12 +28,12 @@ public class CirclingParticle extends ColoredParticle {
         this.speedMod = speedMod;
         len = Math.sqrt(dirX * dirX + dirY * dirY);
         this.point = new double[]{-dirY / len * radius, dirX / len * radius, 0};
-        this.point = MathUtils.rotate(this.motionAX, this.motionAY, this.motionAZ, this.point[0], this.point[1], this.point[2], MathUtils.degToRad(radAdd));
+        this.point = MathUtils.rotate(this.motionAX, this.motionAY, this.motionAZ, this.point[0], this.point[1], this.point[2], radAdd * Mth.DEG_TO_RAD);
         this.setPos(this.x + this.point[0] * 0.5, this.y + this.point[1] * 0.5, this.z);
         this.xo = this.x;
         this.yo = this.y;
         this.zo = this.z;
-        this.radInc = MathUtils.degToRad(radInc);
+        this.radInc = radInc * Mth.DEG_TO_RAD;
         this.expansion = expansion;
     }
 

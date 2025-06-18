@@ -40,7 +40,6 @@ public class FireWallSummoner extends ProjectileSummonHelperEntity {
             fire.setPos(this.position().add(dir.scale((this.ticksExisted - 10) / 2f * 1)));
             this.playSound(SoundEvents.BLAZE_SHOOT, 1, (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.0f);
             this.level().addFreshEntity(fire);
-
         }
     }
 }

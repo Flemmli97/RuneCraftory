@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.ai.behaviour.actions;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.registry.NPCAction;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCAttackGoal;
@@ -10,11 +10,10 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 
 import java.util.Optional;
-import java.util.function.Supplier;
 
 public class RunToLeadAction implements NPCAction {
 
-    public static final Codec<RunToLeadAction> CODEC = RecordCodecBuilder.create((instance) ->
+    public static final MapCodec<RunToLeadAction> CODEC = RecordCodecBuilder.mapCodec((instance) ->
             instance.group(NumberProviders.CODEC.fieldOf("duration").forGetter(d -> d.duration),
                     NPCAction.optionalNumCooldown(d -> d.cooldown)
             ).apply(instance, RunToLeadAction::new));
@@ -37,8 +36,8 @@ public class RunToLeadAction implements NPCAction {
     }
 
     @Override
-    public Supplier<Codec<RunToLeadAction>> codec() {
-        return ModNPCActions.RUN_TO_LEADER;
+    public MapCodec<RunToLeadAction> codec() {
+        return ModNPCActions.RUN_TO_LEADER.get();
     }
 
     @Override

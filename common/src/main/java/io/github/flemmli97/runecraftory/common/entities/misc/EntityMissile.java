@@ -34,7 +34,6 @@ public class EntityMissile extends BaseProjectile {
         this.target = entity;
     }
 
-
     @Override
     public int livingTickMax() {
         return 120;

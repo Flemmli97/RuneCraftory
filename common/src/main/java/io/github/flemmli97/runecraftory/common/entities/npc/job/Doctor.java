@@ -1,9 +1,10 @@
 package io.github.flemmli97.runecraftory.common.entities.npc.job;
 
 import com.google.common.collect.ImmutableMap;
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import net.minecraft.Util;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
@@ -31,19 +32,20 @@ public class Doctor extends NPCJob {
     public void handleAction(EntityNPCBase npc, Player player, String action) {
         if (npc.updater.getBreadToBuy() <= 0)
             return;
-        if (Platform.INSTANCE.getPlayerData(player).map(d -> !d.useMoney(player, CURE_PRICE)).orElse(true)) {
-            player.sendMessage(Component.translatable(CURE_ACTION_FAIL, player.getName(), CURE_PRICE), Util.NIL_UUID);
+        PlayerData data = Platform.INSTANCE.getPlayerData(player);
+        if (!data.useMoney(CURE_PRICE)) {
+            player.displayClientMessage(Component.translatable(CURE_ACTION_FAIL, player.getName(), CURE_PRICE), false);
             return;
         }
-        List<MobEffect> negativeEffects = player.getActiveEffectsMap().keySet().stream().filter(e -> e.getCategory() == MobEffectCategory.HARMFUL)
+        List<Holder<MobEffect>> negativeEffects = player.getActiveEffectsMap().keySet().stream().filter(e -> e.value().getCategory() == MobEffectCategory.HARMFUL)
                 .toList();
         negativeEffects.forEach(player::removeEffect);
-        player.sendMessage(Component.translatable(CURE_ACTION_SUCCESS, player.getName()), Util.NIL_UUID);
+        player.displayClientMessage(Component.translatable(CURE_ACTION_SUCCESS, player.getName()), false);
     }
 
     @Override
     public Map<String, List<Component>> actions(EntityNPCBase entity, ServerPlayer player) {
-        if (player.getActiveEffects().stream().anyMatch(i -> i.getEffect().getCategory() == MobEffectCategory.HARMFUL)) {
+        if (player.getActiveEffects().stream().anyMatch(i -> i.getEffect().value().getCategory() == MobEffectCategory.HARMFUL)) {
             return ImmutableMap.of(CURE_ACTION, List.of(Component.translatable(CURE_ACTION_DESC), Component.translatable(CURE_COST, CURE_PRICE)));
         }
         return Map.of();

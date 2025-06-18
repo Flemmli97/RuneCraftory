@@ -42,7 +42,6 @@ public class FamilyEntry {
 
     private final FamilyHandler familyHandler;
 
-
     public FamilyEntry(FamilyHandler familyHandler, UUID self, Component name, NPCData.Gender gender, boolean player) {
         this.familyHandler = familyHandler;
         this.self = self;
@@ -454,6 +453,7 @@ public class FamilyEntry {
         record FamilyRelationRelation(FamilyRelation father, FamilyRelation mother, FamilyRelation maleSibling,
                                       FamilyRelation femaleSibling, FamilyRelation maleChild,
                                       FamilyRelation femaleChild) {
+
         }
     }
 }

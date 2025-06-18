@@ -49,7 +49,6 @@ public class ElementalCircleSummoner extends ProjectileSummonHelperEntity {
                 this.playSound(ModSounds.SPELL_GENERIC_FIRE_BALL.get(), 1, (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.0f);
             }
         }
-
     }
 
     @Override

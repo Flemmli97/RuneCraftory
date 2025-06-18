@@ -37,5 +37,4 @@ public enum EnumDay {
     public String translationFull() {
         return this.translationFull;
     }
-
 }

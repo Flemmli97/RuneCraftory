@@ -35,5 +35,4 @@ public enum EnumWeather {
     private static Consumer<ServerLevel> stormyWeather() {
         return level -> level.setWeatherParameters(0, 24000, true, true);
     }
-
 }

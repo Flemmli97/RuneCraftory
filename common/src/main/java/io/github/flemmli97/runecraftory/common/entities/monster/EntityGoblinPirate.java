@@ -4,7 +4,6 @@ import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActio
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.common.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
@@ -13,6 +12,7 @@ import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRun
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
 import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.DifficultyInstance;
@@ -75,7 +75,7 @@ public class EntityGoblinPirate extends EntityGoblin {
     }
 
     @Override
-    public AABB attackBB(String anim) {
+    public AABB attackBB(AnimationState anim) {
         double width = this.getBbWidth() * 1.5;
         double length = this.getBbWidth() * 2;
         return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);

@@ -116,5 +116,6 @@ public class ModSounds {
     }
 
     public record BGMHolder(RegistryEntrySupplier<SoundEvent, SoundEvent> sound, ResourceLocation bgm) {
+
     }
 }

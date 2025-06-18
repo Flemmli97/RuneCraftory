@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 
 import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.entities.ai.control.FreeMoveControl;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.FloatingFlyNavigator;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
@@ -17,23 +16,14 @@ import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.MathsHelper;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.common.entity.AnimationHandler;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.KeepDistanceRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetAttackRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.StrafingRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.TimedWrappedRunner;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -72,7 +62,7 @@ public class EntityHandonetta extends BossMonster {
     public static final String INTERACT = BUILDER.add("interact", SWIPE);
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
-    private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntityHandonetta>> ATTACK_HANDLER = createAnimationHandler(b -> {
+    private static final ImmutableMap<String, BiConsumer<AnimationState, EntityHandonetta>> ATTACK_HANDLER = createAnimationHandler(b -> {
         b.put(SWIPE, (anim, entity) -> {
             LivingEntity target = entity.getTarget();
             entity.getNavigation().stop();
@@ -147,36 +137,36 @@ public class EntityHandonetta extends BossMonster {
                 S2CScreenShake.sendAround(entity, 24, 4, 1);
             }
             if (anim.isPast("attack_end") && !entity.caughtEntities.isEmpty()) {
-                entity.caughtEntities.forEach(e -> e.removeEffect(ModEffects.TRUE_INVIS.get()));
+                entity.caughtEntities.forEach(e -> e.removeEffect(ModEffects.TRUE_INVIS.asHolder()));
                 entity.caughtEntities.clear();
             }
         });
     });
-    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityHandonetta>>> ATTACKS = List.of(
-            WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>nonRepeatableAttack(SWIPE)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.1), e -> 70 + e.getRandom().nextInt(50)))
-                    .withCondition((goal, target, previous) -> goal.attacker.allowAnimation(previous, SWIPE)
-                            && (goal.distanceToTargetSq < 16 || goal.attacker.random.nextFloat() < 0.5)), 11),
-            WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>nonRepeatableAttack(FLICK)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.1), e -> 70 + e.getRandom().nextInt(50)))
-                    .withCondition((goal, target, previous) -> goal.attacker.allowAnimation(previous, FLICK)
-                            && (goal.distanceToTargetSq < 16 || goal.attacker.random.nextFloat() < 0.5)), 11),
-            WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>nonRepeatableAttack(PUNCH)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 8, true, true, true), e -> 70 + e.getRandom().nextInt(50))), 10),
-            WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>nonRepeatableAttack(LASER)
-                    .prepare(() -> new TimedWrappedRunner<>(new KeepDistanceRunner<>(7, 9, 1), e -> 70 + e.getRandom().nextInt(50))), 10),
-            WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>nonRepeatableAttack(PLATE)
-                    .prepare(() -> new TimedWrappedRunner<>(new KeepDistanceRunner<>(7, 11, 1), e -> 70 + e.getRandom().nextInt(50))), 9),
-            WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>enragedBossAttack(GRAB)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 5, true, true, true), e -> 70 + e.getRandom().nextInt(50))), 8),
-            WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>enragedBossAttack(SHOOT)
-                    .prepare(() -> new TimedWrappedRunner<>(new KeepDistanceRunner<>(7, 10, 1), e -> 70 + e.getRandom().nextInt(50))), 9)
-    );
-    private static final List<WeightedEntry.Wrapper<IdleAction<EntityHandonetta>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<>(() -> new StrafingRunner<>(10, 8, 0.8f, 0.1f)), 2)
-    );
-
-    public final AnimatedAttackGoal<EntityHandonetta> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+    //    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityHandonetta>>> ATTACKS = List.of(
+//            WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>nonRepeatableAttack(SWIPE)
+//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.1), e -> 70 + e.getRandom().nextInt(50)))
+//                    .withCondition((goal, target, previous) -> goal.attacker.allowAnimation(previous, SWIPE)
+//                            && (goal.distanceToTargetSq < 16 || goal.attacker.random.nextFloat() < 0.5)), 11),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>nonRepeatableAttack(FLICK)
+//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.1), e -> 70 + e.getRandom().nextInt(50)))
+//                    .withCondition((goal, target, previous) -> goal.attacker.allowAnimation(previous, FLICK)
+//                            && (goal.distanceToTargetSq < 16 || goal.attacker.random.nextFloat() < 0.5)), 11),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>nonRepeatableAttack(PUNCH)
+//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 8, true, true, true), e -> 70 + e.getRandom().nextInt(50))), 10),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>nonRepeatableAttack(LASER)
+//                    .prepare(() -> new TimedWrappedRunner<>(new KeepDistanceRunner<>(7, 9, 1), e -> 70 + e.getRandom().nextInt(50))), 10),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>nonRepeatableAttack(PLATE)
+//                    .prepare(() -> new TimedWrappedRunner<>(new KeepDistanceRunner<>(7, 11, 1), e -> 70 + e.getRandom().nextInt(50))), 9),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>enragedBossAttack(GRAB)
+//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 5, true, true, true), e -> 70 + e.getRandom().nextInt(50))), 8),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>enragedBossAttack(SHOOT)
+//                    .prepare(() -> new TimedWrappedRunner<>(new KeepDistanceRunner<>(7, 10, 1), e -> 70 + e.getRandom().nextInt(50))), 9)
+//    );
+//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityHandonetta>>> IDLE_ACTIONS = List.of(
+//            WeightedEntry.wrap(new IdleAction<>(() -> new StrafingRunner<>(10, 8, 0.8f, 0.1f)), 2)
+//    );
+//
+//    public final AnimatedAttackGoal<EntityHandonetta> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityHandonetta> animationHandler = new AnimationHandler<>(this, ANIMS)
             .withChangeListener(anim -> {
                 this.moveDirection = null;
@@ -191,8 +181,6 @@ public class EntityHandonetta extends BossMonster {
 
     public EntityHandonetta(EntityType<? extends EntityHandonetta> type, Level world) {
         super(type, world);
-        if (!world.isClientSide)
-            this.goalSelector.addGoal(1, this.attack);
         this.setNoGravity(true);
         this.moveControl = new HandonettaMoveController(this);
     }
@@ -256,17 +244,16 @@ public class EntityHandonetta extends BossMonster {
     }
 
     @Override
-    public AnimatedAction getDeathAnimation() {
+    public String getDeathAnimation() {
         return DEFEAT;
     }
 
     @Override
     public void handleAttack(AnimationState anim) {
-        BiConsumer<AnimatedAction, EntityHandonetta> handler = ATTACK_HANDLER.get(anim.getID());
+        BiConsumer<AnimationState, EntityHandonetta> handler = ATTACK_HANDLER.get(anim.getID());
         if (handler != null)
             handler.accept(anim, this);
     }
-
 
     @Override
     public CustomDamage.Builder damageSourceAttack() {
@@ -283,13 +270,13 @@ public class EntityHandonetta extends BossMonster {
     }
 
     @Override
-    public OrientedBoundingBox calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
-        if (anim.is(PUNCH)) {
+    public OrientedBoundingBox calculateAttackAABB(AnimationState anim, Vec3 target, double grow) {
+        if (anim.equals(PUNCH)) {
             float[] rots = MathsHelper.YXRotFrom(this.moveDirection);
             return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
                     .inflate(grow + 0.2, grow, grow + 0.2), rots[0], rots[1], this.position());
         }
-        if (anim.is(GRAB)) {
+        if (anim.equals(GRAB)) {
             float[] rots = MathsHelper.YXRotFrom(this.moveDirection);
             return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
                     .inflate(grow, 0, grow), rots[0], rots[1], this.position());
@@ -298,10 +285,10 @@ public class EntityHandonetta extends BossMonster {
     }
 
     @Override
-    public AABB attackBB(String anim) {
+    public AABB attackBB(AnimationState anim) {
         double width = this.getBbWidth() * 2.2;
         double length = this.getBbWidth() * 1.7;
-        if (anim.is(FLICK)) {
+        if (anim.equals(FLICK)) {
             width = this.getBbWidth() * 1.6;
             length = this.getBbWidth() * 1.8;
         }
@@ -334,7 +321,7 @@ public class EntityHandonetta extends BossMonster {
                     else
                         e.setPos(this.getX(), this.getY(), this.getZ());
                     if (invis)
-                        e.addEffect(new MobEffectInstance(ModEffects.TRUE_INVIS.get(), 10, 1, true, false, false));
+                        e.addEffect(new MobEffectInstance(ModEffects.TRUE_INVIS.asHolder(), 10, 1, true, false, false));
                 }
             });
         }
@@ -352,11 +339,6 @@ public class EntityHandonetta extends BossMonster {
     }
 
     @Override
-    public boolean isOnGround() {
-        return super.isOnGround();
-    }
-
-    @Override
     public void travel(Vec3 vec) {
         this.handleFreeTravel(vec);
     }
@@ -366,10 +348,10 @@ public class EntityHandonetta extends BossMonster {
         return this.animationHandler;
     }
 
-    @Override
-    public Vec3 passengerOffset(Entity passenger) {
-        return new Vec3(0, 23.25 / 16d, -6 / 16d);
-    }
+//    @Override
+//    public Vec3 passengerOffset(Entity passenger) {
+//        return new Vec3(0, 23.25 / 16d, -6 / 16d);
+//    }
 
     @Override
     public void playInteractionAnimation() {
@@ -378,13 +360,13 @@ public class EntityHandonetta extends BossMonster {
 
     protected void setMoveDirection(Vec3 moveDirection) {
         this.moveDirection = moveDirection;
-        S2CMobUpdate.send(this, SyncableDatas.MOTION_DIR, this.moveDirection);
+        S2CMobUpdate.send(this, SyncableDatas.NPC_JOB, this.moveDirection);
     }
 
     @Override
     public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
         super.onUpdate(data);
-        data.runIf(SyncableDatas.MOTION_DIR, motion -> this.moveDirection = motion);
+        data.runIf(SyncableDatas.NPC_JOB, motion -> this.moveDirection = motion);
     }
 
     static class HandonettaMoveController extends FreeMoveControl {

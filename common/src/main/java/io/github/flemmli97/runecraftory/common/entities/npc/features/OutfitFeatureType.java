@@ -1,19 +1,27 @@
 package io.github.flemmli97.runecraftory.common.entities.npc.features;
 
 import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeature;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureHolder;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.network.FriendlyByteBuf;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 
 public record OutfitFeatureType(TypedIndexRange types) implements NPCFeatureHolder<OutfitFeatureType.OutfitFeature> {
 
-    public static final MapCodec<OutfitFeatureType> CODEC = TypedIndexRange.CODEC.fieldOf("outfits").xmap(OutfitFeatureType::new, OutfitFeatureType::types);
+    public static final MapCodec<OutfitFeatureType> TYPE_CODEC = TypedIndexRange.CODEC.fieldOf("outfits").xmap(OutfitFeatureType::new, OutfitFeatureType::types);
+    public static MapCodec<OutfitFeature> CODEC = RecordCodecBuilder.mapCodec(inst ->
+            inst.group(Codec.STRING.fieldOf("outfit").forGetter(OutfitFeature::outfit),
+                    Codec.INT.fieldOf("index").forGetter(OutfitFeature::index)
+            ).apply(inst, OutfitFeature::new));
+    public static final StreamCodec<ByteBuf, OutfitFeature> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.STRING_UTF8, OutfitFeature::outfit, ByteBufCodecs.INT, OutfitFeature::index, OutfitFeature::new);
 
     @Override
     public OutfitFeature create(EntityNPCBase npc) {
@@ -26,40 +34,10 @@ public record OutfitFeatureType(TypedIndexRange types) implements NPCFeatureHold
         return ModNPCLooks.OUTFIT.get();
     }
 
-    public static class OutfitFeature implements NPCFeature {
-
-        public final String type;
-        public final int index;
-
-        public OutfitFeature(FriendlyByteBuf buf) {
-            this(buf.readUtf(), buf.readInt());
-        }
-
-        public OutfitFeature(Tag tag) {
-            this(((CompoundTag) tag).getString("Type"), ((CompoundTag) tag).getInt("Index"));
-        }
-
-        public OutfitFeature(String type, int index) {
-            this.type = type;
-            this.index = index;
-        }
+    public record OutfitFeature(String outfit, int index) implements NPCFeature {
 
         @Override
-        public void writeToBuffer(FriendlyByteBuf buf) {
-            buf.writeUtf(this.type);
-            buf.writeInt(this.index);
-        }
-
-        @Override
-        public Tag save() {
-            CompoundTag tag = new CompoundTag();
-            tag.putString("Type", this.type);
-            tag.putInt("Index", this.index);
-            return tag;
-        }
-
-        @Override
-        public NPCFeatureType<OutfitFeature> getType() {
+        public NPCFeatureType<OutfitFeature> type() {
             return ModNPCLooks.OUTFIT.get();
         }
     }

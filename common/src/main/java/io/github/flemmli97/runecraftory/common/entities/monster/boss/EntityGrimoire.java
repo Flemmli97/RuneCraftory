@@ -1,10 +1,8 @@
 package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 
 import com.google.common.collect.ImmutableMap;
-import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
 import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
@@ -16,34 +14,25 @@ import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.common.entity.AnimationHandler;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveAwayRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetAttackRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.TimedWrappedRunner;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
+import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +40,7 @@ import java.util.function.BiConsumer;
 
 public class EntityGrimoire extends BossMonster {
 
-    private static final List<Vector3f> CIRCLE_PARTICLE_MOTION = RayTraceUtils.rotatedVecs(new Vec3(0.25, 0, 0), new Vec3(0, 1, 0), -180, 175, 5);
+    private static final List<Vector3f> CIRCLE_PARTICLE_MOTION = MathUtils.rotatedVecs(new Vec3(0.25, 0, 0), new Vec3(0, 1, 0), -180, 175, 5);
 
     public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
     public static final String TAIL_SWIPE = BUILDER.add("tail_swipe", AnimationsBuilder.definition(0.84).marker("attack", 0.48));
@@ -68,8 +57,8 @@ public class EntityGrimoire extends BossMonster {
     public static final String INTERACT = BUILDER.add("interact", TAIL_SWIPE);
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
-    private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntityGrimoire>> ATTACK_HANDLER = createAnimationHandler(b -> {
-        BiConsumer<AnimatedAction, EntityGrimoire> melee = (anim, entity) -> {
+    private static final ImmutableMap<String, BiConsumer<AnimationState, EntityGrimoire>> ATTACK_HANDLER = createAnimationHandler(b -> {
+        BiConsumer<AnimationState, EntityGrimoire> melee = (anim, entity) -> {
             if (anim.isAt("attack")) {
                 entity.mobAttack(anim, entity.getTarget(), entity::doHurtTarget);
             }
@@ -113,13 +102,13 @@ public class EntityGrimoire extends BossMonster {
                 if (entity.getDeltaMovement().y < -0.72) {
                     entity.setDeltaMovement(entity.getDeltaMovement().x, -0.72, entity.getDeltaMovement().z);
                 }
-                if (entity.isOnGround()) {
+                if (entity.onGround()) {
                     entity.getAnimationHandler().setAnimation(CHARGE_LAND);
                 }
                 // Stuck check. Or e.g. if in water
-                if (anim.isPast(6) && (!entity.getFeetBlockState().is(Blocks.AIR) || !entity.getBlockStateOn().is(Blocks.AIR))) {
-                    entity.getAnimationHandler().setAnimation(CHARGE_LAND);
-                }
+//                if (anim.isPast(6) && (!entity.getFeetBlockState().is(Blocks.AIR) || !entity.getBlockStateOn().is(Blocks.AIR))) {
+//                    entity.getAnimationHandler().setAnimation(CHARGE_LAND);
+//                }
             }
         });
         b.put(CHARGE_LAND, (anim, entity) -> {
@@ -127,33 +116,33 @@ public class EntityGrimoire extends BossMonster {
                 CustomDamage.Builder source = new CustomDamage.Builder(entity).noKnockback().element(EnumElement.WIND).hurtResistant(5);
                 entity.mobAttack(anim, entity.getTarget(), e -> CombatUtils.mobAttack(entity, e, source));
                 S2CScreenShake.sendAround(entity, 24, 4, 3);
-                entity.level().playSound(null, entity.blockPosition(), SoundEvents.GENERIC_EXPLODE, entity.getSoundSource(), 1.0f, 0.9f);
+//                entity.level().playSound(null, entity.blockPosition(), SoundEvents.GENERIC_EXPLODE, entity.getSoundSource(), 1.0f, 0.9f);
                 entity.level().broadcastEntityEvent(entity, (byte) 66);
             }
         });
     });
-
-    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityGrimoire>>> ATTACKS = List.of(
-            WeightedEntry.wrap(MonsterActionUtils.<EntityGrimoire>nonRepeatableAttack(TAIL_SWIPE)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.1), e -> 40 + e.getRandom().nextInt(15))), 10),
-            WeightedEntry.wrap(MonsterActionUtils.<EntityGrimoire>nonRepeatableAttack(BITE)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.1), e -> 40 + e.getRandom().nextInt(15))), 10),
-            WeightedEntry.wrap(MonsterActionUtils.<EntityGrimoire>nonRepeatableAttack(GUST)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveAwayRunner<>(4, 1, 7), e -> 40 + e.getRandom().nextInt(15))), 9),
-            WeightedEntry.wrap(MonsterActionUtils.<EntityGrimoire>nonRepeatableAttack(CHARGE)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 6), e -> 40 + e.getRandom().nextInt(15))), 8),
-            WeightedEntry.wrap(MonsterActionUtils.<EntityGrimoire>nonRepeatableAttack(WIND_BREATH)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveAwayRunner<>(4, 1, 6), e -> 40 + e.getRandom().nextInt(20))), 8),
-            WeightedEntry.wrap(MonsterActionUtils.<EntityGrimoire>enragedBossAttack(TORNADO)
-                    .prepare(() -> new TimedWrappedRunner<>(new MoveAwayRunner<>(3, 1, 6), e -> 40 + e.getRandom().nextInt(15))), 10)
-    );
-    private static final List<WeightedEntry.Wrapper<IdleAction<EntityGrimoire>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 1.5)), 1)
-    );
-
-    public final AnimatedAttackGoal<EntityGrimoire> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+    //
+//    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityGrimoire>>> ATTACKS = List.of(
+//            WeightedEntry.wrap(MonsterActionUtils.<EntityGrimoire>nonRepeatableAttack(TAIL_SWIPE)
+//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.1), e -> 40 + e.getRandom().nextInt(15))), 10),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntityGrimoire>nonRepeatableAttack(BITE)
+//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.1), e -> 40 + e.getRandom().nextInt(15))), 10),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntityGrimoire>nonRepeatableAttack(GUST)
+//                    .prepare(() -> new TimedWrappedRunner<>(new MoveAwayRunner<>(4, 1, 7), e -> 40 + e.getRandom().nextInt(15))), 9),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntityGrimoire>nonRepeatableAttack(CHARGE)
+//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 6), e -> 40 + e.getRandom().nextInt(15))), 8),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntityGrimoire>nonRepeatableAttack(WIND_BREATH)
+//                    .prepare(() -> new TimedWrappedRunner<>(new MoveAwayRunner<>(4, 1, 6), e -> 40 + e.getRandom().nextInt(20))), 8),
+//            WeightedEntry.wrap(MonsterActionUtils.<EntityGrimoire>enragedBossAttack(TORNADO)
+//                    .prepare(() -> new TimedWrappedRunner<>(new MoveAwayRunner<>(3, 1, 6), e -> 40 + e.getRandom().nextInt(15))), 10)
+//    );
+//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityGrimoire>>> IDLE_ACTIONS = List.of(
+//            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 1.5)), 1)
+//    );
+//
+//    public final AnimatedAttackGoal<EntityGrimoire> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityGrimoire> animationHandler = new AnimationHandler<>(this, ANIMS).withChangeListener(anim -> {
-        if (CHARGE.is(anim)) {
+        if (CHARGE.equals(anim)) {
             this.hitEntity = null;
         }
         if (!this.level().isClientSide && anim == null) {
@@ -176,8 +165,6 @@ public class EntityGrimoire extends BossMonster {
 
     public EntityGrimoire(EntityType<? extends EntityGrimoire> type, Level world) {
         super(type, world);
-        if (!world.isClientSide)
-            this.goalSelector.addGoal(1, this.attack);
     }
 
     @Override
@@ -215,7 +202,7 @@ public class EntityGrimoire extends BossMonster {
     }
 
     @Override
-    public AnimatedAction getDeathAnimation() {
+    public String getDeathAnimation() {
         return DEFEAT;
     }
 
@@ -239,16 +226,16 @@ public class EntityGrimoire extends BossMonster {
 
     @Override
     public void handleAttack(AnimationState anim) {
-        BiConsumer<AnimatedAction, EntityGrimoire> handler = ATTACK_HANDLER.get(anim.getID());
+        BiConsumer<AnimationState, EntityGrimoire> handler = ATTACK_HANDLER.get(anim.getID());
         if (handler != null)
             handler.accept(anim, this);
     }
 
     @Override
-    public OrientedBoundingBox calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
-        if (anim.is(CHARGE_LAND))
+    public OrientedBoundingBox calculateAttackAABB(AnimationState anim, Vec3 target, double grow) {
+        if (anim.equals(CHARGE_LAND))
             return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this).inflate(1.2, 0.1, 1.2), this.getYRot(), 0, this.position());
-        if (anim.is(CHARGE)) {
+        if (anim.equals(CHARGE)) {
             double width = this.getBbWidth();
             double speed = Math.max(width, this.getDeltaMovement().length() - width);
             return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
@@ -258,15 +245,15 @@ public class EntityGrimoire extends BossMonster {
     }
 
     @Override
-    public AABB attackBB(String anim) {
+    public AABB attackBB(AnimationState anim) {
         double width = this.getBbWidth() * 1.4;
         double length = this.getBbWidth() * 1.5;
-        if (anim.is(TAIL_SWIPE)) {
+        if (anim.equals(TAIL_SWIPE)) {
             width = this.getBbWidth() * 1.5;
             length = this.getBbWidth() * 1.45;
             return new AABB(-width * 0.65, -0.02, 0, width * 0.35, this.getBbHeight() + 0.02, length);
         }
-        if (anim.is(BITE)) {
+        if (anim.equals(BITE)) {
             width = this.getBbWidth() * 1.1;
             length = this.getBbWidth() * 1.4;
         }
@@ -298,23 +285,23 @@ public class EntityGrimoire extends BossMonster {
     @Override
     protected void playStepSound(BlockPos pos, BlockState blockIn) {
     }
-
-    @Override
-    public Vec3 passengerOffset(Entity passenger) {
-        return new Vec3(0, 39 / 16d, 11.5 / 16d).scale(1.5);
-    }
+//
+//    @Override
+//    public Vec3 passengerOffset(Entity passenger) {
+//        return new Vec3(0, 39 / 16d, 11.5 / 16d).scale(1.5);
+//    }
 
     @Override
     public AnimationHandler<EntityGrimoire> getAnimationHandler() {
         return this.animationHandler;
     }
 
-    @Override
-    public boolean allowAnimation(String prev, AnimatedAction other) {
-        if (prev.equals(BITE.getID()))
-            return !this.isEnraged() || !TAIL_SWIPE.is(other);
-        return super.allowAnimation(prev, other);
-    }
+//    @Override
+//    public boolean allowAnimation(String prev, AnimatedAction other) {
+//        if (prev.equals(BITE.getID()))
+//            return !this.isEnraged() || !TAIL_SWIPE.is(other);
+//        return super.allowAnimation(prev, other);
+//    }
 
     @Override
     public void playInteractionAnimation() {
@@ -328,12 +315,12 @@ public class EntityGrimoire extends BossMonster {
 
     protected void setMoveDirection(Vec3 moveDirection) {
         this.moveDirection = moveDirection;
-        S2CMobUpdate.send(this, SyncableDatas.MOTION_DIR, this.moveDirection);
+        S2CMobUpdate.send(this, SyncableDatas.NPC_JOB, this.moveDirection);
     }
 
     @Override
     public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
         super.onUpdate(data);
-        data.runIf(SyncableDatas.MOTION_DIR, motion -> this.moveDirection = motion);
+        data.runIf(SyncableDatas.NPC_JOB, motion -> this.moveDirection = motion);
     }
 }

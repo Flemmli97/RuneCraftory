@@ -564,5 +564,6 @@ public class FarmlandData {
     }
 
     protected record ExternalModifiers(EnumSeason season, EnumWeather weather) {
+
     }
 }

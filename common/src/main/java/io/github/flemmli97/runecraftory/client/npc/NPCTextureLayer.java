@@ -20,6 +20,7 @@ import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 import org.jetbrains.annotations.Nullable;
 
 public class NPCTextureLayer<T extends EntityNPCBase, M extends HumanoidModel<T>, A extends PlayerModel<T>> extends RenderLayer<T, M> {
@@ -41,37 +42,37 @@ public class NPCTextureLayer<T extends EntityNPCBase, M extends HumanoidModel<T>
                 IndexedColorSettingType.IndexedColorFeature feat = features.getFeature(ModNPCLooks.SKIN.get());
                 if (feat == null)
                     yield 0xd5bfa7;
-                yield feat.color;
+                yield feat.color();
             }
             case IRIS_LAYER -> {
                 FaceFeaturesType.FaceFeatures feat = features.getFeature(ModNPCLooks.FACE.get());
-                if (feat == null || feat.iris == null)
+                if (feat == null || feat.iris() == null)
                     yield 0x000000;
-                yield feat.iris.color();
+                yield feat.iris().color();
             }
             case SCLERA_LAYER -> {
                 FaceFeaturesType.FaceFeatures feat = features.getFeature(ModNPCLooks.FACE.get());
-                if (feat == null || feat.sclera == null)
+                if (feat == null || feat.sclera() == null)
                     yield 0x000000;
-                yield feat.sclera.color();
+                yield feat.sclera().color();
             }
             case EYEBROWS_LAYER -> {
                 FaceFeaturesType.FaceFeatures feat = features.getFeature(ModNPCLooks.FACE.get());
-                if (feat == null || feat.eyebrow == null)
+                if (feat == null || feat.eyebrow() == null)
                     yield 0x000000;
-                yield feat.eyebrow.color();
+                yield feat.eyebrow().color();
             }
             case BLUSH_LAYER -> {
                 BlushFeatureType.BlushFeature feat = features.getFeature(ModNPCLooks.BLUSH.get());
                 if (feat == null)
                     yield 0xffffff;
-                yield feat.color;
+                yield feat.color();
             }
             case HAIR_LAYER -> {
                 HairFeatureType.HairFeature feat = features.getFeature(ModNPCLooks.HAIR.get());
                 if (feat == null)
                     yield 0xffffff;
-                yield feat.color;
+                yield feat.color();
             }
             default -> 0xffffff;
         };
@@ -116,7 +117,8 @@ public class NPCTextureLayer<T extends EntityNPCBase, M extends HumanoidModel<T>
             float r = (float) (color >> 16 & 0xFF) / 255.0f;
             float g = (float) (color >> 8 & 0xFF) / 255.0f;
             float b = (float) (color & 0xFF) / 255.0f;
-            layerModel.renderToBuffer(poseStack, vertexConsumer, packedLight, m, r, g, b, a * (bl2 ? 0.15f : 1.0f));
+            layerModel.renderToBuffer(poseStack, vertexConsumer, packedLight, m,
+                    FastColor.ARGB32.colorFromFloat(a * (bl2 ? 0.15f : 1.0f), r, g, b));
         }
     }
 

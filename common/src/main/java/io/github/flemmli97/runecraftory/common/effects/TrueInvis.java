@@ -8,5 +8,4 @@ public class TrueInvis extends UncurableEffect {
     public TrueInvis() {
         super(MobEffectCategory.NEUTRAL, 0, S2CEntityDataSync.DataType.INVIS);
     }
-
 }

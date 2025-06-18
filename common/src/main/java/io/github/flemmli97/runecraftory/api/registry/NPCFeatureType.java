@@ -2,13 +2,12 @@ package io.github.flemmli97.runecraftory.api.registry;
 
 import com.mojang.serialization.MapCodec;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
-import net.minecraft.nbt.Tag;
-import net.minecraft.network.FriendlyByteBuf;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 
-import java.util.function.Function;
-
-public record NPCFeatureType<F extends NPCFeature>(MapCodec<? extends NPCFeatureHolder<F>> codec,
-                                                   Function<FriendlyByteBuf, F> pkt, Function<Tag, F> load) {
+public record NPCFeatureType<F extends NPCFeature>(MapCodec<? extends NPCFeatureHolder<F>> holderCodec,
+                                                   MapCodec<F> codec,
+                                                   StreamCodec<? extends ByteBuf, F> streamCodec) {
 
     @Override
     public String toString() {

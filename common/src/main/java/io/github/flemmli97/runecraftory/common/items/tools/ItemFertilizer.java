@@ -115,6 +115,7 @@ public class ItemFertilizer extends Item {
     }
 
     public interface IFertilizerOnUse {
+
         boolean useItemOnFarmland(ItemStack stack, ServerLevel level, FarmlandData data, Player player);
     }
 

@@ -6,7 +6,8 @@ import io.github.flemmli97.runecraftory.api.action.DataKey;
 import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimatedEntity;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -17,7 +18,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public class EntityWeaponHandler<T extends LivingEntity & IAnimated> implements AttackActionHandler {
+public class EntityWeaponHandler<T extends LivingEntity & AnimatedEntity> implements AttackActionHandler {
 
     private final T entity;
 
@@ -80,7 +81,7 @@ public class EntityWeaponHandler<T extends LivingEntity & IAnimated> implements 
         }
         this.currentAction = action;
         this.scheduledAction = false;
-        AnimatedAction anim = action.getAnimation(this.entity, this.getComboCount());
+        AnimationState anim = action.getAnimation(this.entity, this.getComboCount());
         if (this.currentAction != ModAttackActions.NONE.get()) {
             this.comboCount++;
         }
@@ -91,7 +92,7 @@ public class EntityWeaponHandler<T extends LivingEntity & IAnimated> implements 
             if (anim == null) {
                 this.entity.getAnimationHandler().setAnimation(null);
             } else {
-                this.entity.getAnimationHandler().setAnimation(anim,
+                this.entity.getAnimationHandler().setAnimation(anim.definition(),
                         anim.getStartTransition(), anim.getEndTransitionTime(),
                         anim.getTick(1));
             }
@@ -162,12 +163,12 @@ public class EntityWeaponHandler<T extends LivingEntity & IAnimated> implements 
     }
 
     @Override
-    public AnimatedAction getAnimation() {
+    public AnimationState getAnimation() {
         return this.entity.getAnimationHandler().getAnimation();
     }
 
     @Override
-    public AnimatedAction getLastAnimation() {
+    public AnimationState getLastAnimation() {
         return this.entity.getAnimationHandler().getLastAnimation();
     }
 

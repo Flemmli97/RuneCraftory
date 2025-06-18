@@ -1,16 +1,17 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityMobArrow;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinition;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3d;
 
 public class EntityOrcHunter extends EntityOrcArcher {
 
@@ -19,7 +20,7 @@ public class EntityOrcHunter extends EntityOrcArcher {
     }
 
     @Override
-    public void setupAttack(AnimatedAction anim) {
+    public void setupAttack(AnimationDefinition anim) {
         if (anim.is(EntityOrcArcher.RANGED)) {
             this.startUsingItem(InteractionHand.MAIN_HAND);
         }
@@ -49,11 +50,10 @@ public class EntityOrcHunter extends EntityOrcArcher {
         arrow.shoot(dir.x, dir.y, dir.z, 1.3f, 7 - this.level().getDifficulty().getId() * 2);
         this.level().addFreshEntity(arrow);
         Vec3 up = this.getUpVector(1);
+        Vector3d dir3d = new Vector3d(dir.x(), dir.y(), dir.z());
 
         for (float y = -15; y <= 15; y += 30) {
-            Quaternion quaternion = new Quaternion(new Vector3f(up), y, true);
-            Vector3f newDir = new Vector3f(dir);
-            newDir.transform(quaternion);
+            Vector3d newDir = dir3d.rotateAxis(y * Mth.DEG_TO_RAD, up.x(), up.y(), up.z(), new Vector3d());
             EntityMobArrow arrowO = new EntityMobArrow(this.level(), this, 0.8f);
             arrowO.shoot(newDir.x(), newDir.y(), newDir.z(), 1.3f, 7 - this.level().getDifficulty().getId() * 2);
             this.level().addFreshEntity(arrowO);

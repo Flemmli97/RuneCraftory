@@ -176,6 +176,7 @@ public abstract class BlockCrafting extends HorizontalDirectionalBlock implement
     }
 
     public record ShapeBuilder(double x1, double y1, double z1, double x2, double y2, double z2) {
+
         public static ShapeBuilder of(double x1, double y1, double z1, double x2, double y2, double z2) {
             return new ShapeBuilder(x1, y1, z1, x2, y2, z2);
         }

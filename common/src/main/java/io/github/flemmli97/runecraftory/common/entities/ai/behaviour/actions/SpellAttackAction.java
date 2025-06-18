@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.entities.ai.behaviour.actions;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.api.registry.NPCAction;
@@ -14,11 +15,9 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 
-import java.util.function.Supplier;
-
 public class SpellAttackAction implements NPCAction {
 
-    public static final Codec<SpellAttackAction> CODEC = RecordCodecBuilder.create((instance) ->
+    public static final MapCodec<SpellAttackAction> CODEC = RecordCodecBuilder.mapCodec((instance) ->
             instance.group(NumberProviders.CODEC.fieldOf("walk_time").forGetter(d -> d.walkTime),
                     NPCAction.optionalNumCooldown(d -> d.cooldown),
                     NPCAction.optionalNum(d -> d.combos, "combos", CONST_ONE),
@@ -49,8 +48,8 @@ public class SpellAttackAction implements NPCAction {
     }
 
     @Override
-    public Supplier<Codec<SpellAttackAction>> codec() {
-        return ModNPCActions.SPELL_ATTACK;
+    public MapCodec<SpellAttackAction> codec() {
+        return ModNPCActions.SPELL_ATTACK.get();
     }
 
     @Override

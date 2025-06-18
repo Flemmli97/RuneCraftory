@@ -69,5 +69,4 @@ public class S2CLevelPkt implements CustomPacketPayload {
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }
-
 }

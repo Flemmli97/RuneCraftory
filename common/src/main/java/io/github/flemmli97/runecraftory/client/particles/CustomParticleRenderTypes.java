@@ -20,6 +20,11 @@ public class CustomParticleRenderTypes {
 
     public static final ParticleRenderType ENTITY_MODEL_TYPE = new ParticleRenderType() {
         @Override
+        public BufferBuilder begin(Tesselator tesselator, TextureManager textureManager) {
+            return null;
+        }
+
+        @Override
         public void begin(BufferBuilder builder, TextureManager manager) {
         }
 

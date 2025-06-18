@@ -8,5 +8,4 @@ public enum ShopState {
     TOOFAR,
     NOWORKPLACE,
     NOTWORKER
-
 }

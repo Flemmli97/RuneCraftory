@@ -818,5 +818,6 @@ public class PlayerData {
     }
 
     public record ShippedItemData(int amount, int maxLevel) {
+
     }
 }

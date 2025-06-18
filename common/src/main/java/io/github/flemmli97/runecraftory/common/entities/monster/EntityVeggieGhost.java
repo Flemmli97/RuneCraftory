@@ -1,36 +1,24 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.AirWanderGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.NearestTargetHorizontal;
-import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.entities.ai.control.FreeMoveControl;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.FloatingFlyNavigator;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.common.entity.AnimationHandler;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.ActionUtils;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.StrafingRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
@@ -39,8 +27,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.List;
 
 public class EntityVeggieGhost extends BaseMonster {
 
@@ -52,21 +38,21 @@ public class EntityVeggieGhost extends BaseMonster {
     public static final String INTERACT = BUILDER.add("interact", CAST);
     public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
-
-    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityVeggieGhost>>> ATTACKS = List.of(
-            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeActionCondition(ATTACK, e -> 1, ActionUtils.ranged(8)), 1),
-            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeActionCondition(SPIN, e -> 1, ActionUtils.ranged(8)), 1),
-            WeightedEntry.wrap(MonsterActionUtils.simpleRangedEvadingAction(CAST, 10, 5, 1, e -> 1), 2),
-            WeightedEntry.wrap(new GoalAttackAction<EntityVeggieGhost>(VANISH)
-                    .withCondition(((goal, target, previous) -> goal.attacker.shouldVanishNext(previous)))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 4)
-    );
-    private static final List<WeightedEntry.Wrapper<IdleAction<EntityVeggieGhost>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 2),
-            WeightedEntry.wrap(new IdleAction<>(() -> new StrafingRunner<>(16, 5)), 1)
-    );
-
-    public final AnimatedAttackGoal<EntityVeggieGhost> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+    //
+//    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityVeggieGhost>>> ATTACKS = List.of(
+//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeActionCondition(ATTACK, e -> 1, ActionUtils.ranged(8)), 1),
+//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeActionCondition(SPIN, e -> 1, ActionUtils.ranged(8)), 1),
+//            WeightedEntry.wrap(MonsterActionUtils.simpleRangedEvadingAction(CAST, 10, 5, 1, e -> 1), 2),
+//            WeightedEntry.wrap(new GoalAttackAction<EntityVeggieGhost>(VANISH)
+//                    .withCondition(((goal, target, previous) -> goal.attacker.shouldVanishNext(previous)))
+//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 4)
+//    );
+//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityVeggieGhost>>> IDLE_ACTIONS = List.of(
+//            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 2),
+//            WeightedEntry.wrap(new IdleAction<>(() -> new StrafingRunner<>(16, 5)), 1)
+//    );
+//
+//    public final AnimatedAttackGoal<EntityVeggieGhost> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityVeggieGhost> animationHandler = new AnimationHandler<>(this, ANIMS).withChangeListener(anim -> {
         if (anim != null && anim.is(VANISH))
             this.vanishNext = this.getRandom().nextFloat() < 0.6;
@@ -77,10 +63,10 @@ public class EntityVeggieGhost extends BaseMonster {
 
     public EntityVeggieGhost(EntityType<? extends EntityVeggieGhost> type, Level world) {
         super(type, world);
-        this.goalSelector.removeGoal(this.wander);
-        this.goalSelector.addGoal(6, this.wander = new AirWanderGoal(this));
-        this.goalSelector.removeGoal(this.swimGoal);
-        this.goalSelector.addGoal(2, this.attack);
+//        this.goalSelector.removeGoal(this.wander);
+//        this.goalSelector.addGoal(6, this.wander = new AirWanderGoal(this));
+//        this.goalSelector.removeGoal(this.swimGoal);
+//        this.goalSelector.addGoal(2, this.attack);
         this.noPhysics = true;
         this.moveControl = new FreeMoveControl(this);
         this.setNoGravity(true);
@@ -116,7 +102,7 @@ public class EntityVeggieGhost extends BaseMonster {
     }
 
     @Override
-    public OrientedBoundingBox calculateAttackAABB(AnimatedAction anim, Vec3 target, double grow) {
+    public OrientedBoundingBox calculateAttackAABB(AnimationState anim, Vec3 target, double grow) {
         if (anim.is(SPIN)) {
             return new OrientedBoundingBox(this.attackBB(anim), this.getYRot(), 0, this.position());
         }
@@ -124,7 +110,7 @@ public class EntityVeggieGhost extends BaseMonster {
     }
 
     @Override
-    public AABB attackBB(String anim) {
+    public AABB attackBB(AnimationState anim) {
         if (anim.is(SPIN)) {
             double attackSize = this.getBbWidth() * 1.4;
             return new AABB(-attackSize, -0.2, -attackSize, attackSize, this.getBbHeight() + 0.2, attackSize);
@@ -206,11 +192,11 @@ public class EntityVeggieGhost extends BaseMonster {
 
     private void teleport(double x, double y, double z) {
         BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos(x, y, z);
-        while (mutableBlockPos.getY() > this.level().getMinBuildHeight() && !this.level().getBlockState(mutableBlockPos).getMaterial().blocksMotion()) {
+        while (mutableBlockPos.getY() > this.level().getMinBuildHeight() && !this.level().getBlockState(mutableBlockPos).blocksMotion()) {
             mutableBlockPos.move(Direction.DOWN);
         }
         BlockState blockState = this.level().getBlockState(mutableBlockPos);
-        if (!blockState.getMaterial().blocksMotion()) {
+        if (!blockState.blocksMotion()) {
             y = this.getY();
         }
         this.teleportTo(x, y + 1, z);
@@ -220,7 +206,7 @@ public class EntityVeggieGhost extends BaseMonster {
         LivingEntity target = this.getTarget();
         if (target != null && target.distanceToSqr(this) > 140)
             return true;
-        return this.random.nextFloat() < 0.2f || !prev.equals(VANISH.getID()) && this.vanishNext;
+        return this.random.nextFloat() < 0.2f || !prev.equals(VANISH) && this.vanishNext;
     }
 
     @Override
@@ -246,13 +232,13 @@ public class EntityVeggieGhost extends BaseMonster {
         return SLEEP;
     }
 
-    @Override
-    public Vec3 passengerOffset(Entity passenger) {
-        return new Vec3(0, 12 / 16d, -4 / 16d);
-    }
+//    @Override
+//    public Vec3 passengerOffset(Entity passenger) {
+//        return new Vec3(0, 12 / 16d, -4 / 16d);
+//    }
 
-    @Override
-    public MobType getMobType() {
-        return MobType.UNDEAD;
-    }
+//    @Override
+//    public MobType getMobType() {
+//        return MobType.UNDEAD;
+//    }
 }

@@ -1,19 +1,19 @@
 package io.github.flemmli97.runecraftory.common.entities.npc.features;
 
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeature;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureHolder;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.IntTag;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class NPCFeatureContainer {
@@ -31,40 +31,32 @@ public class NPCFeatureContainer {
         features.forEach(feat -> this.map.put(feat.getType(), feat.create(npc)));
     }
 
-    public CompoundTag save() {
-        CompoundTag tag = new CompoundTag();
-        this.map.forEach((type, feat) -> {
-            Tag save = feat.save();
-            tag.put(type.getRegistryName().toString(), save == null ? IntTag.valueOf(0) : save);
-        });
-        return tag;
+    public Tag save(HolderLookup.Provider provider) {
+        return NPCFeature.FEATURE_CODEC.listOf().encodeStart(provider.createSerializationContext(NbtOps.INSTANCE),
+                List.copyOf(this.map.values())).getOrThrow();
     }
 
-    public NPCFeatureContainer read(CompoundTag tag) {
+    public NPCFeatureContainer read(Tag tag, HolderLookup.Provider provider) {
         this.map.clear();
-        tag.getAllKeys().forEach(key -> {
-            NPCFeatureType<?> t = ModNPCLooks.NPC_FEATURES.get()
-                    .getFromId(new ResourceLocation(key));
-            this.map.put(t, t.load().apply(tag.get(key)));
-        });
+        NPCFeature.FEATURE_CODEC.listOf().parse(provider.createSerializationContext(NbtOps.INSTANCE), tag)
+                .promotePartial(RuneCraftory.LOGGER::error).getOrThrow()
+                .forEach(feature -> this.map.put(feature.type(), feature));
         return this;
     }
 
-    public void toBuffer(FriendlyByteBuf buf) {
+    public void toBuffer(RegistryFriendlyByteBuf buf) {
         buf.writeInt(this.map.size());
         this.map.forEach((type, feat) -> {
-            buf.writeResourceLocation(type.getRegistryName());
-            feat.writeToBuffer(buf);
+            NPCFeature.STREAM_CODEC.encode(buf, feat);
         });
     }
 
-    public NPCFeatureContainer fromBuffer(FriendlyByteBuf buf) {
+    public NPCFeatureContainer fromBuffer(RegistryFriendlyByteBuf buf) {
         this.map.clear();
         int size = buf.readInt();
         for (int i = 0; i < size; ++i) {
-            NPCFeatureType<?> t = ModNPCLooks.NPC_FEATURES.get()
-                    .getFromId(buf.readResourceLocation());
-            this.map.put(t, t.pkt().apply(buf));
+            NPCFeature feat = NPCFeature.STREAM_CODEC.decode(buf);
+            this.map.put(feat.type(), feat);
         }
         return this;
     }

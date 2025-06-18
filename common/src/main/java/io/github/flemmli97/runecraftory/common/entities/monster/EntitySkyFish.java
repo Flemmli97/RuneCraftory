@@ -1,40 +1,27 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.AirWanderGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.NearestTargetHorizontal;
-import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
-import io.github.flemmli97.runecraftory.common.entities.ai.control.FreeMoveControl;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.FloatingFlyNavigator;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.common.entity.AnimationHandler;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.List;
 
 public class EntitySkyFish extends BaseMonster {
 
@@ -45,31 +32,31 @@ public class EntitySkyFish extends BaseMonster {
     public static final String INTERACT = BUILDER.add("interact", SLAP);
     public static final String STILL = BUILDER.add("still", AnimationsBuilder.definition(0).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
-
-    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntitySkyFish>>> ATTACKS = List.of(
-            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(SLAP, e -> 0.6f), 1),
-            WeightedEntry.wrap(MonsterActionUtils.simpleRangedEvadingAction(BEAM, 8, 5, 1, e -> 1), 2),
-            WeightedEntry.wrap(MonsterActionUtils.simpleRangedEvadingAction(SWIPE, 8, 5, 1, e -> 1), 1)
-    );
-    private static final List<WeightedEntry.Wrapper<IdleAction<EntitySkyFish>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(10, 5)), 2),
-            WeightedEntry.wrap(new IdleAction<>(DoNothingRunner::new), 1)
-    );
-
-    public final AnimatedAttackGoal<EntitySkyFish> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+    //
+//    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntitySkyFish>>> ATTACKS = List.of(
+//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(SLAP, e -> 0.6f), 1),
+//            WeightedEntry.wrap(MonsterActionUtils.simpleRangedEvadingAction(BEAM, 8, 5, 1, e -> 1), 2),
+//            WeightedEntry.wrap(MonsterActionUtils.simpleRangedEvadingAction(SWIPE, 8, 5, 1, e -> 1), 1)
+//    );
+//    private static final List<WeightedEntry.Wrapper<IdleAction<EntitySkyFish>>> IDLE_ACTIONS = List.of(
+//            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(10, 5)), 2),
+//            WeightedEntry.wrap(new IdleAction<>(DoNothingRunner::new), 1)
+//    );
+//
+//    public final AnimatedAttackGoal<EntitySkyFish> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntitySkyFish> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntitySkyFish(EntityType<? extends BaseMonster> type, Level world) {
         super(type, world);
-        this.goalSelector.removeGoal(this.wander);
-        this.goalSelector.addGoal(6, this.wander = new AirWanderGoal(this));
-        this.setPathfindingMalus(BlockPathTypes.WATER, 0.0F);
-        //this.setPathPriority(BlockPathTypes.OPEN, 0.5f);
-        this.goalSelector.addGoal(2, this.attack);
-        this.moveControl = new FreeMoveControl(this, () -> false);
-        this.goalSelector.removeGoal(this.swimGoal);
-        this.wander.setInterval(50);
-        this.setNoGravity(true);
+//        this.goalSelector.removeGoal(this.wander);
+//        this.goalSelector.addGoal(6, this.wander = new AirWanderGoal(this));
+//        this.setPathfindingMalus(BlockPathTypes.WATER, 0.0F);
+//        //this.setPathPriority(BlockPathTypes.OPEN, 0.5f);
+//        this.goalSelector.addGoal(2, this.attack);
+//        this.moveControl = new FreeMoveControl(this, () -> false);
+//        this.goalSelector.removeGoal(this.swimGoal);
+//        this.wander.setInterval(50);
+//        this.setNoGravity(true);
     }
 
     @Override
@@ -111,7 +98,7 @@ public class EntitySkyFish extends BaseMonster {
     }
 
     @Override
-    public AABB attackBB(String anim) {
+    public AABB attackBB(AnimationState anim) {
         double width = this.getBbWidth() * 1.5;
         double length = this.getBbWidth() * 1.6;
         return new AABB(-width * 0.2, -0.02, 0, width * 0.8, this.getBbHeight() + 0.02, length);
@@ -191,20 +178,20 @@ public class EntitySkyFish extends BaseMonster {
         return false;
     }
 
-    @Override
-    public boolean canBreatheUnderwater() {
-        return true;
-    }
-
-    @Override
-    public boolean rideableUnderWater() {
-        return false;
-    }
-
-    @Override
-    public MobType getMobType() {
-        return MobType.WATER;
-    }
+//    @Override
+//    public boolean canBreatheUnderwater() {
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean rideableUnderWater() {
+//        return false;
+//    }
+//
+//    @Override
+//    public MobType getMobType() {
+//        return MobType.WATER;
+//    }
 
     @Override
     public void playInteractionAnimation() {
@@ -216,8 +203,8 @@ public class EntitySkyFish extends BaseMonster {
         return STILL;
     }
 
-    @Override
-    public Vec3 passengerOffset(Entity passenger) {
-        return new Vec3(0, 12 / 16d, -2 / 16d);
-    }
+//    @Override
+//    public Vec3 passengerOffset(Entity passenger) {
+//        return new Vec3(0, 12 / 16d, -2 / 16d);
+//    }
 }

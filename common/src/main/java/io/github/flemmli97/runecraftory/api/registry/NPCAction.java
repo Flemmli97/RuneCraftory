@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.api.registry;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCAttackGoal;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
@@ -16,7 +16,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public interface NPCAction {
 
@@ -49,7 +48,7 @@ public interface NPCAction {
                 .create(Optional.empty());
     }
 
-    Supplier<? extends Codec<? extends NPCAction>> codec();
+    MapCodec<? extends NPCAction> codec();
 
     int getDuration(EntityNPCBase npc);
 
@@ -66,6 +65,7 @@ public interface NPCAction {
     boolean doAction(EntityNPCBase npc, NPCAttackGoal<?> goal, @Nullable NPCAttackAction action);
 
     record NPCAttackAction(AttackAction action, int comboCount) {
+
         public static NPCAttackAction of(AttackAction action) {
             return new NPCAttackAction(action, 1);
         }

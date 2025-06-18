@@ -39,5 +39,4 @@ public class ModLootRegistries {
     public static final RegistryEntrySupplier<LootItemFunctionType<?>, LootItemFunctionType<CropWeaponLootFunction>> CROP_WEAPON_FUNCTION = LOOTFUNCTION.register("crop_weapon", () -> new LootItemFunctionType<>(CropWeaponLootFunction.CODEC));
 
     public static final RegistryEntrySupplier<LootNumberProviderType, LootNumberProviderType> LUCK_BOOSTED = NUMBER_PROVIDERS.register("luck_boosted", () -> new LootNumberProviderType(LuckBonusNumberProvider.CODEC));
-
 }

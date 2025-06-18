@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.client;
 
-import io.github.flemmli97.runecraftory.mixinhelper.RotationFromMatrix;
 import net.minecraft.client.model.geom.PartPose;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;

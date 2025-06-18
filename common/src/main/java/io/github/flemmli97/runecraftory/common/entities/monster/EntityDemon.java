@@ -2,32 +2,20 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.entities.utils.ElementalAttackMob;
 import io.github.flemmli97.runecraftory.common.entities.utils.HealingPredicateEntity;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.common.entity.AnimationHandler;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
-import net.minecraft.util.random.WeightedEntry;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 
-import java.util.List;
 import java.util.function.Predicate;
 
 public class EntityDemon extends BaseMonster implements HealingPredicateEntity, ElementalAttackMob {
@@ -41,24 +29,24 @@ public class EntityDemon extends BaseMonster implements HealingPredicateEntity, 
     public static final String INTERACT = BUILDER.add("interact", DARK);
     public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
-
-    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityDemon>>> ATTACKS = List.of(
-            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(STAB, e -> 1), 3),
-            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(STAB_LONG, e -> 1), 3),
-            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(SWIPE, e -> 1), 3),
-            WeightedEntry.wrap(new GoalAttackAction<EntityDemon>(DARK)
-                    .cooldown(e -> e.animationCooldown(DARK))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 2),
-            WeightedEntry.wrap(new GoalAttackAction<EntityDemon>(HEAL)
-                    .cooldown(e -> e.animationCooldown(HEAL))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 1)
-    );
-    private static final List<WeightedEntry.Wrapper<IdleAction<EntityDemon>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 2),
-            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 0.5)), 1)
-    );
-
-    public final AnimatedAttackGoal<EntityDemon> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+    //
+//    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityDemon>>> ATTACKS = List.of(
+//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(STAB, e -> 1), 3),
+//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(STAB_LONG, e -> 1), 3),
+//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(SWIPE, e -> 1), 3),
+//            WeightedEntry.wrap(new GoalAttackAction<EntityDemon>(DARK)
+//                    .cooldown(e -> e.animationCooldown(DARK))
+//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 2),
+//            WeightedEntry.wrap(new GoalAttackAction<EntityDemon>(HEAL)
+//                    .cooldown(e -> e.animationCooldown(HEAL))
+//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 1)
+//    );
+//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityDemon>>> IDLE_ACTIONS = List.of(
+//            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 2),
+//            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 0.5)), 1)
+//    );
+//
+//    public final AnimatedAttackGoal<EntityDemon> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityDemon> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     private final Predicate<LivingEntity> healingPredicate = e -> {
@@ -74,7 +62,6 @@ public class EntityDemon extends BaseMonster implements HealingPredicateEntity, 
 
     public EntityDemon(EntityType<? extends EntityDemon> type, Level world) {
         super(type, world);
-        this.goalSelector.addGoal(2, this.attack);
     }
 
     @Override
@@ -109,7 +96,7 @@ public class EntityDemon extends BaseMonster implements HealingPredicateEntity, 
     }
 
     @Override
-    public AABB attackBB(String anim) {
+    public AABB attackBB(AnimationState anim) {
         double width = this.getBbWidth() * 1;
         double length = width;
         if (anim.is(STAB)) {
@@ -144,11 +131,11 @@ public class EntityDemon extends BaseMonster implements HealingPredicateEntity, 
     public String getSleepAnimation() {
         return SLEEP;
     }
-
-    @Override
-    public Vec3 passengerOffset(Entity passenger) {
-        return new Vec3(0, 15.5 / 16d, -5 / 16d);
-    }
+//
+//    @Override
+//    public Vec3 passengerOffset(Entity passenger) {
+//        return new Vec3(0, 15.5 / 16d, -5 / 16d);
+//    }
 
     @Override
     public EnumElement getAttackElement() {

@@ -51,7 +51,7 @@ public abstract class LeapingMonster extends BaseMonster {
 
     @Override
     protected Vec3 directionToLookAt() {
-        if (this.getAnimationHandler().hasAnimation() && this.isLeapingAnim(this.getAnimationHandler().getAnimation().getAnimation())) {
+        if (this.getAnimationHandler().hasAnimation() && this.isLeapingAnim(this.getAnimationHandler().getAnimation().getID())) {
             if (this.getDeltaMovement().lengthSqr() > 0.01)
                 return this.getDeltaMovement();
             return null;
@@ -61,7 +61,7 @@ public abstract class LeapingMonster extends BaseMonster {
 
     @Override
     public void handleAttack(AnimationState anim) {
-        if (this.isLeapingAnim(anim.getAnimation())) {
+        if (this.isLeapingAnim(anim.getID())) {
             this.getNavigation().stop();
             if (anim.isAt("attack_start")) {
                 Vec3 vec32 = this.getLeapVec(this.tryGetTargetPosition(this.getTarget()));
@@ -97,7 +97,7 @@ public abstract class LeapingMonster extends BaseMonster {
     }
 
     @Override
-    public OrientedBoundingBox calculateAttackAABB(String anim, Vec3 target, double grow) {
+    public OrientedBoundingBox calculateAttackAABB(AnimationState anim, Vec3 target, double grow) {
         if (!this.isLeapingAnim(anim))
             return super.calculateAttackAABB(anim, target, grow);
         double width = this.getBbWidth();

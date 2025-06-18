@@ -13,6 +13,7 @@ import net.minecraft.world.level.Level;
 import java.util.function.Supplier;
 
 public class ItemHoldSpell extends ItemSpell {
+
     public ItemHoldSpell(Supplier<? extends Spell> spell, Properties properties) {
         super(spell, properties);
     }

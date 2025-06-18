@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.client.render.monster;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelVeggieGhost;
 import io.github.flemmli97.runecraftory.client.render.ScaledRenderer;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityVeggieGhost;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
@@ -20,7 +20,7 @@ public class RenderVeggieGhost<T extends EntityVeggieGhost> extends ScaledEntity
 
     @Override
     public boolean shouldRender(T entity, Frustum camera, double camX, double camY, double camZ) {
-        AnimatedAction anim = entity.getAnimationHandler().getAnimation();
+        AnimationState anim = entity.getAnimationHandler().getAnimation();
         if (anim != null && anim.is(EntityVeggieGhost.VANISH)) {
             int tick = (int) anim.getTick(1);
             if (tick < 10 || tick > 90)

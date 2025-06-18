@@ -92,5 +92,6 @@ public class QuestToast implements Toast {
     }
 
     record ToastPage(FormattedCharSequence first, FormattedCharSequence second) {
+
     }
 }

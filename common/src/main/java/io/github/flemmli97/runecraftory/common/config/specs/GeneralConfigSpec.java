@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.common.config.specs;
 
-
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;

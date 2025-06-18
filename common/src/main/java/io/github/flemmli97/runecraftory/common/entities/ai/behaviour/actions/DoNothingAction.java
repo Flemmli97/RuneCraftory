@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.ai.behaviour.actions;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.registry.NPCAction;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCAttackGoal;
@@ -10,11 +10,10 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 
 import java.util.Optional;
-import java.util.function.Supplier;
 
 public class DoNothingAction implements NPCAction {
 
-    public static final Codec<DoNothingAction> CODEC = RecordCodecBuilder.create((instance) ->
+    public static final MapCodec<DoNothingAction> CODEC = RecordCodecBuilder.mapCodec((instance) ->
             instance.group(NumberProviders.CODEC.fieldOf("duration").forGetter(d -> d.duration),
                     NPCAction.optionalNumCooldown(d -> d.cooldown)
             ).apply(instance, DoNothingAction::new));
@@ -37,8 +36,8 @@ public class DoNothingAction implements NPCAction {
     }
 
     @Override
-    public Supplier<Codec<DoNothingAction>> codec() {
-        return ModNPCActions.DO_NOTHING_ACTION;
+    public MapCodec<DoNothingAction> codec() {
+        return ModNPCActions.DO_NOTHING_ACTION.get();
     }
 
     @Override

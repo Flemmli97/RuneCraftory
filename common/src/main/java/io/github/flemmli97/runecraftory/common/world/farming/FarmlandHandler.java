@@ -541,5 +541,6 @@ public class FarmlandHandler extends SavedData {
     }
 
     record PositionDirection(BlockPos pos, Direction direction) {
+
     }
 }

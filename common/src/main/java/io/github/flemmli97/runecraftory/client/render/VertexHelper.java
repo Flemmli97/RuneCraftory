@@ -21,5 +21,4 @@ public class VertexHelper {
         cons.nextElement();
         return cons;
     }
-
 }

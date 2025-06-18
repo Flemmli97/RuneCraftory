@@ -1,14 +1,11 @@
 package io.github.flemmli97.runecraftory.common.entities.npc.job;
 
 import com.google.common.collect.ImmutableMap;
-import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.lib.LibNBT;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import net.minecraft.Util;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -39,8 +36,9 @@ public class Cook extends NPCJob {
     public void handleAction(EntityNPCBase npc, Player player, String action) {
         if (npc.updater.getBreadToBuy() <= 0)
             return;
-        if (Platform.INSTANCE.getPlayerData(player).map(d -> !d.useMoney(player, BREAD_PRICE)).orElse(true)) {
-            player.sendMessage(Component.translatable(BREAD_ACTION_FAIL, player.getName(), BREAD_PRICE), Util.NIL_UUID);
+        PlayerData data = Platform.INSTANCE.getPlayerData(player);
+        if (!data.useMoney(BREAD_PRICE)) {
+            player.displayClientMessage(Component.translatable(BREAD_ACTION_FAIL, player.getName(), BREAD_PRICE), false);
             return;
         }
         ItemStack bread = switch (action) {
@@ -50,14 +48,14 @@ public class Cook extends NPCJob {
             default -> new ItemStack(ModItems.FORGING_BREAD.get());
         };
         int level = Mth.ceil(Math.abs(npc.getRandom().nextGaussian() * 4));
-        withLevel(bread, level);
+        ItemNBT.getLeveledItem(bread, level);
         if (!player.addItem(bread))
             player.spawnAtLocation(bread);
         npc.updater.onBuyBread();
         if (level >= 7)
-            player.sendMessage(Component.translatable(BREAD_ACTION_SUCCESS_GOOD, player.getName()), Util.NIL_UUID);
+            player.displayClientMessage(Component.translatable(BREAD_ACTION_SUCCESS_GOOD, player.getName()), false);
         else
-            player.sendMessage(Component.translatable(BREAD_ACTION_SUCCESS, player.getName()), Util.NIL_UUID);
+            player.displayClientMessage(Component.translatable(BREAD_ACTION_SUCCESS, player.getName()), false);
     }
 
     @Override
@@ -72,15 +70,5 @@ public class Cook extends NPCJob {
                     COOKING_BREAD_SUCCESS, List.of(comp));
         }
         return Map.of();
-    }
-
-    public static ItemStack withLevel(ItemStack stack, int level) {
-        CompoundTag tag = ItemNBT.getItemNBT(stack);
-        if (tag == null)
-            tag = new CompoundTag();
-        tag.putInt(LibNBT.LEVEL, Mth.clamp(level, 1, 10));
-        CompoundTag stackTag = stack.getOrCreateTag();
-        stackTag.put(RuneCraftory.MODID, tag);
-        return stack;
     }
 }

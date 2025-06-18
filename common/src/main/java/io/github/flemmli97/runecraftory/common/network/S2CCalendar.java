@@ -35,7 +35,6 @@ public class S2CCalendar implements CustomPacketPayload {
         this.calendar = calendar;
     }
 
-
     public static void handle(S2CCalendar pkt) {
         ClientHandlers.updateClientCalendar(pkt.buffer);
     }

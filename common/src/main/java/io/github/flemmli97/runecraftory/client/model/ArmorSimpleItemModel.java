@@ -55,6 +55,7 @@ public class ArmorSimpleItemModel extends EntityModel<Entity> {
     }
 
     public interface TriConsumer<A, B, C> {
+
         void accept(A a, B b, C c);
     }
 }
