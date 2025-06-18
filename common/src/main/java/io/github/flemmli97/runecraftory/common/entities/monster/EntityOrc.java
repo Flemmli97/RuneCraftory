@@ -70,7 +70,7 @@ public class EntityOrc extends BaseMonster {
     }
 
     @Override
-    public AABB attackBB(AnimatedAction anim) {
+    public AABB attackBB(String anim) {
         double width = this.getBbWidth() * 1.8;
         double length = this.getBbWidth() * 2.1;
         return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
@@ -126,7 +126,7 @@ public class EntityOrc extends BaseMonster {
     }
 
     @Override
-    public AnimatedAction getSleepAnimation() {
+    public String getSleepAnimation() {
         return SLEEP;
     }
 

@@ -1,7 +1,11 @@
 package io.github.flemmli97.runecraftory.common.blocks;
 
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.github.flemmli97.tenshilib.common.utils.VoxelUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.BlockGetter;
@@ -24,15 +28,27 @@ import java.util.function.Supplier;
 
 public class BlockGiantCrop extends BlockCrop {
 
+    public static final MapCodec<BlockCrop> CODEC = RecordCodecBuilder.mapCodec(inst ->
+            inst.group(
+                    propertiesCodec(),
+                    BuiltInRegistries.ITEM.byNameCodec().fieldOf("crop").forGetter(BlockCrop::getCrop),
+                    BuiltInRegistries.ITEM.byNameCodec().fieldOf("seed").forGetter(d -> d.seed.get())
+            ).apply(inst, (prop, crop, seed) -> new BlockGiantCrop(prop, () -> crop, () -> seed)));
+
     public static final IntegerProperty AGE = BlockStateProperties.AGE_1;
     public static final EnumProperty<Direction> DIRECTION = BlockStateProperties.HORIZONTAL_FACING;
     private static final List<Direction> DIRECTIONS = Direction.Plane.HORIZONTAL.stream().sorted(Comparator.comparingInt(Direction::get2DDataValue)).toList();
 
-    private static final VoxelShape[] SHAPE = BlockCrafting.joinedOrDirs(BlockCrafting.ShapeBuilder.of(0.0D, 0.0D, 0.0D, 13.0D, 12.0D, 13.0D));
+    private static final VoxelShape[] SHAPE = VoxelUtils.joinedOrDirs(VoxelUtils.ShapeBuilder.of(0.0D, 0.0D, 0.0D, 13.0D, 12.0D, 13.0D));
 
     public BlockGiantCrop(Properties prop, Supplier<? extends Item> giant, Supplier<? extends Item> seed) {
         super(prop, giant, seed);
         this.registerDefaultState(this.defaultBlockState().setValue(DIRECTION, Direction.NORTH));
+    }
+
+    @Override
+    public MapCodec<BlockCrop> codec() {
+        return CODEC;
     }
 
     @Override
@@ -59,7 +75,7 @@ public class BlockGiantCrop extends BlockCrop {
     }
 
     @Override
-    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+    public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         if (!level.isClientSide && player.isCreative()) {
             BlockPos.MutableBlockPos mut = pos.mutable();
             BlockState blockAt;
@@ -75,7 +91,7 @@ public class BlockGiantCrop extends BlockCrop {
                 }
             }
         }
-        super.playerWillDestroy(level, pos, state, player);
+        return super.playerWillDestroy(level, pos, state, player);
     }
 
     @Override

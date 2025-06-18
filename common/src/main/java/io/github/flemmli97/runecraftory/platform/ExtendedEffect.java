@@ -10,8 +10,4 @@ public interface ExtendedEffect {
 
     default void onEffectRemoved(LivingEntity livingEntity, MobEffectInstance instance) {
     }
-
-    default boolean renderIcons() {
-        return false;
-    }
 }

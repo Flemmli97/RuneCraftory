@@ -28,20 +28,20 @@ public abstract class PlayerMixin implements PlayerDataGetter {
     @Inject(method = "createAttributes", at = @At("RETURN"))
     private static void addToAttributes(CallbackInfoReturnable<AttributeSupplier.Builder> info) {
         AttributeSupplier.Builder builder = info.getReturnValue();
-        for (RegistryEntrySupplier<Attribute> s : RuneCraftoryFabric.playerAttributes()) {
-            builder.add(s.get());
+        for (RegistryEntrySupplier<Attribute, ?> s : RuneCraftoryFabric.playerAttributes()) {
+            builder.add(s.asHolder());
         }
     }
 
     @Inject(method = "readAdditionalSaveData", at = @At("RETURN"))
     private void loadData(CompoundTag compound, CallbackInfo info) {
-        if (compound.contains(RuneCraftory.MODID + ":data"))
-            this.runecraftoryPlayerData.readFromNBT(compound.getCompound(RuneCraftory.MODID + ":data"), (Player) (Object) this);
+        if (compound.contains(RuneCraftory.MODID + ":player_data"))
+            this.runecraftoryPlayerData.readFromNBT(compound.getCompound(RuneCraftory.MODID + ":data"));
     }
 
     @Inject(method = "addAdditionalSaveData", at = @At("RETURN"))
     private void saveData(CompoundTag compound, CallbackInfo info) {
-        compound.put(RuneCraftory.MODID + ":data", this.runecraftoryPlayerData.writeToNBTPlain(new CompoundTag()));
+        compound.put(RuneCraftory.MODID + ":player_data", this.runecraftoryPlayerData.writeToNBTPlain(new CompoundTag()));
     }
 
     @ModifyVariable(method = "actuallyHurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;getDamageAfterArmorAbsorb(Lnet/minecraft/world/damagesource/DamageSource;F)F"), argsOnly = true)

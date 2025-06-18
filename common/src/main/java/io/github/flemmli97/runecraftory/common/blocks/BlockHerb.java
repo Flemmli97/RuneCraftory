@@ -1,20 +1,24 @@
 package io.github.flemmli97.runecraftory.common.blocks;
 
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.loot.LootCtxParameters;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
+import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -25,6 +29,12 @@ import java.util.List;
 import java.util.Set;
 
 public class BlockHerb extends BushBlock {
+
+    public static final MapCodec<BlockHerb> CODEC = RecordCodecBuilder.mapCodec(inst ->
+            inst.group(propertiesCodec(),
+                    CodecUtils.stringEnumCodec(GroundTypes.class, null)
+                            .listOf().fieldOf("types").forGetter(d -> List.copyOf(d.types))
+            ).apply(inst, (prop, types) -> new BlockHerb(prop, types.toArray(GroundTypes[]::new))));
 
     public static final VoxelShape SHAPE = Block.box(5.0D, 0.0D, 5.0D, 11.0D, 10.0D, 11.0D);
 
@@ -38,7 +48,12 @@ public class BlockHerb extends BushBlock {
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+    public MapCodec<BlockHerb> codec() {
+        return CODEC;
+    }
+
+    @Override
+    public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         return super.getDrops(state, builder.withParameter(LootCtxParameters.ITEM_LEVEL_CONTEXT, state.getValue(LEVEL)));
     }
 
@@ -57,11 +72,6 @@ public class BlockHerb extends BushBlock {
     }
 
     @Override
-    public BlockBehaviour.OffsetType getOffsetType() {
-        return BlockBehaviour.OffsetType.XZ;
-    }
-
-    @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         Vec3 vector3d = state.getOffset(level, pos);
         return SHAPE.move(vector3d.x, vector3d.y, vector3d.z);
@@ -73,7 +83,7 @@ public class BlockHerb extends BushBlock {
     }
 
     @Override
-    public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state) {
+    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
         return ItemNBT.getLeveledItem(super.getCloneItemStack(level, pos, state), 1);
     }
 

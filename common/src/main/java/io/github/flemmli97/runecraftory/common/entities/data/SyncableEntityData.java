@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.entities.data;
 
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.syncher.EntityDataSerializer;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.HashMap;
@@ -12,7 +12,7 @@ public class SyncableEntityData {
 
     private static final Map<ResourceLocation, SyncedEntityData<?>> REGISTRY = new HashMap<>();
 
-    public static synchronized <T> SyncedEntityData<T> register(ResourceLocation id, EntityDataSerializer<T> serializer) {
+    public static synchronized <T> SyncedEntityData<T> register(ResourceLocation id, StreamCodec<RegistryFriendlyByteBuf, T> serializer) {
         return register(new SyncedEntityData<>(id, serializer));
     }
 
@@ -27,7 +27,7 @@ public class SyncableEntityData {
         return (SyncedEntityData<T>) REGISTRY.get(id);
     }
 
-    public record SyncedEntityData<T>(ResourceLocation id, EntityDataSerializer<T> serializer) {
+    public record SyncedEntityData<T>(ResourceLocation id, StreamCodec<RegistryFriendlyByteBuf, T> serializer) {
     }
 
     public static class SyncedContainer<T> {
@@ -48,18 +48,18 @@ public class SyncableEntityData {
             }
         }
 
-        public void write(FriendlyByteBuf buf) {
+        public void write(RegistryFriendlyByteBuf buf) {
             buf.writeResourceLocation(this.syncedEntityData.id);
             buf.writeBoolean(this.value != null);
             if (this.value != null)
-                this.syncedEntityData.serializer().write(buf, this.value);
+                this.syncedEntityData.serializer().encode(buf, this.value);
         }
 
-        public static <T> SyncedContainer<T> from(FriendlyByteBuf buf) {
+        public static <T> SyncedContainer<T> from(RegistryFriendlyByteBuf buf) {
             ResourceLocation id = buf.readResourceLocation();
             SyncedEntityData<T> data = get(id);
             boolean none = buf.readBoolean();
-            return new SyncedContainer<>(data, none ? data.serializer().read(buf) : null);
+            return new SyncedContainer<>(data, none ? data.serializer().decode(buf) : null);
         }
     }
 }

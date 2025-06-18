@@ -87,33 +87,33 @@ public class CombatUtils {
     }
 
     public static Holder<Attribute> opposing(Holder<Attribute> att) {
-        if (att.is(ModAttributes.PARA.getID()))
-            return ModAttributes.RES_PARA.asHolder();
+        if (att.is(ModAttributes.PARALYSIS.getID()))
+            return ModAttributes.PARALYSIS_RESISTANCE.asHolder();
         if (att.is(ModAttributes.POISON.getID()))
-            return ModAttributes.RES_POISON.asHolder();
+            return ModAttributes.POISON_RESISTANCE.asHolder();
         if (att.is(ModAttributes.SEAL.getID()))
-            return ModAttributes.RES_SEAL.asHolder();
+            return ModAttributes.SEAL_RESISTANCE.asHolder();
         if (att.is(ModAttributes.SLEEP.getID()))
-            return ModAttributes.RES_SLEEP.asHolder();
+            return ModAttributes.SLEEP_RESISTANCE.asHolder();
         if (att.is(ModAttributes.FATIGUE.getID()))
-            return ModAttributes.RES_FAT.asHolder();
+            return ModAttributes.FATIGUE_RESISTANCE.asHolder();
         if (att.is(ModAttributes.COLD.getID()))
-            return ModAttributes.RES_COLD.asHolder();
+            return ModAttributes.COLD_RESISTANCE.asHolder();
         if (att.is(ModAttributes.DIZZY.getID()))
-            return ModAttributes.RES_DIZZY.asHolder();
-        if (att.is(ModAttributes.CRIT.getID()))
-            return ModAttributes.RES_CRIT.asHolder();
+            return ModAttributes.DIZZY_RESISTANCE.asHolder();
+        if (att.is(ModAttributes.CRITICAL.getID()))
+            return ModAttributes.CRITICAL_RESISTANCE.asHolder();
         if (att.is(ModAttributes.STUN.getID()))
-            return ModAttributes.RES_STUN.asHolder();
+            return ModAttributes.STUN_RESISTANCE.asHolder();
         if (att.is(ModAttributes.FAINT.getID()))
-            return ModAttributes.RES_FAINT.asHolder();
+            return ModAttributes.FAINT_RESISTANCE.asHolder();
         if (att.is(ModAttributes.DRAIN.getID()))
-            return ModAttributes.RES_DRAIN.asHolder();
+            return ModAttributes.DRAIN_RESISTANCE.asHolder();
         return null;
     }
 
     public static EnumSkills matchingSkill(Holder<Attribute> att) {
-        if (att.is(ModAttributes.PARA.getID()))
+        if (att.is(ModAttributes.PARALYSIS.getID()))
             return EnumSkills.RES_PARA;
         if (att.is(ModAttributes.POISON.getID()))
             return EnumSkills.RES_POISON;
@@ -177,25 +177,25 @@ public class CombatUtils {
             double percent = 0;
             switch (element) {
                 case DARK:
-                    percent = getAttributeValue(entity, ModAttributes.RES_DARK.asHolder());
+                    percent = getAttributeValue(entity, ModAttributes.DARK_RESISTANCE.asHolder());
                     break;
                 case EARTH:
-                    percent = getAttributeValue(entity, ModAttributes.RES_EARTH.asHolder());
+                    percent = getAttributeValue(entity, ModAttributes.EARTH_RESISTANCE.asHolder());
                     break;
                 case FIRE:
-                    percent = getAttributeValue(entity, ModAttributes.RES_FIRE.asHolder());
+                    percent = getAttributeValue(entity, ModAttributes.FIRE_RESISTANCE.asHolder());
                     break;
                 case LIGHT:
-                    percent = getAttributeValue(entity, ModAttributes.RES_LIGHT.asHolder());
+                    percent = getAttributeValue(entity, ModAttributes.LIGHT_RESISTANCE.asHolder());
                     break;
                 case LOVE:
-                    percent = getAttributeValue(entity, ModAttributes.RES_LOVE.asHolder());
+                    percent = getAttributeValue(entity, ModAttributes.LOVE_RESISTANCE.asHolder());
                     break;
                 case WATER:
-                    percent = getAttributeValue(entity, ModAttributes.RES_WATER.asHolder());
+                    percent = getAttributeValue(entity, ModAttributes.WATER_RESISTANCE.asHolder());
                     break;
                 case WIND:
-                    percent = getAttributeValue(entity, ModAttributes.RES_WIND.asHolder());
+                    percent = getAttributeValue(entity, ModAttributes.WIND_RESISTANCE.asHolder());
                     break;
                 case NONE:
                     break;
@@ -297,14 +297,14 @@ public class CombatUtils {
                     playSound = true;
                 }
                 boolean faintChance = player.level().random.nextDouble() < statusEffectValue(player, ModAttributes.FAINT.asHolder(), target);
-                boolean critChance = player.level().random.nextDouble() < statusEffectValue(player, ModAttributes.CRIT.asHolder(), target);
+                boolean critChance = player.level().random.nextDouble() < statusEffectValue(player, ModAttributes.CRITICAL.asHolder(), target);
                 CustomDamage.DamageCategory damageCategory = CustomDamage.DamageCategory.NORMAL;
                 if (faintChance)
                     damageCategory = CustomDamage.DamageCategory.FAINT;
                 else if (critChance)
                     damageCategory = CustomDamage.DamageCategory.IGNOREDEF;
 
-                double knockbackAtt = statusEffectValue(player, ModAttributes.KNOCK.asHolder(), target);
+                double knockbackAtt = statusEffectValue(player, ModAttributes.KNOCKOUT.asHolder(), target);
                 int i = player.isSprinting() ? 1 : 0;
                 i += EnchantmentHelper.modifyKnockback(player.level(), stack, i);
                 float knockback = (float) (i * 0.5f + knockbackAtt * 3);
@@ -390,14 +390,14 @@ public class CombatUtils {
             builder.getAttributesChanges().forEach((att, val) -> CombatUtils.applyTempAttribute(livingAttacker, att, val));
             if (allowFaint && livingAttacker.level().random.nextDouble() < statusEffectValue(livingAttacker, ModAttributes.FAINT.asHolder(), target)) {
                 builder.damageType(CustomDamage.DamageCategory.FAINT);
-            } else if (allowCrit && livingAttacker.level().random.nextDouble() < statusEffectValue(livingAttacker, ModAttributes.CRIT.asHolder(), target)) {
+            } else if (allowCrit && livingAttacker.level().random.nextDouble() < statusEffectValue(livingAttacker, ModAttributes.CRITICAL.asHolder(), target)) {
                 switch (builder.getDamageType()) {
                     case MAGIC -> builder.damageType(CustomDamage.DamageCategory.IGNOREMAGICDEF);
                     case NORMAL -> builder.damageType(CustomDamage.DamageCategory.IGNOREDEF);
                 }
             }
             if (builder.calculateKnockback()) {
-                double knockbackAtt = statusEffectValue(livingAttacker, ModAttributes.KNOCK.asHolder(), target);
+                double knockbackAtt = statusEffectValue(livingAttacker, ModAttributes.KNOCKOUT.asHolder(), target);
                 int i = livingAttacker.isSprinting() ? 1 : 0;
                 i += EnchantmentHelper.getKnockbackBonus(livingAttacker);
                 float knockback = (float) (i * 0.5f + knockbackAtt * 3);
@@ -473,7 +473,7 @@ public class CombatUtils {
         boolean sleepChance = attackingEntity.level().random.nextDouble() < statusEffectValue(attackingEntity, ModAttributes.SLEEP.asHolder(), target);
         boolean fatigueChance = attackingEntity.level().random.nextDouble() < statusEffectValue(attackingEntity, ModAttributes.FATIGUE.asHolder(), target);
         boolean coldChance = attackingEntity.level().random.nextDouble() < statusEffectValue(attackingEntity, ModAttributes.COLD.asHolder(), target);
-        boolean paraChance = attackingEntity.level().random.nextDouble() < statusEffectValue(attackingEntity, ModAttributes.PARA.asHolder(), target);
+        boolean paraChance = attackingEntity.level().random.nextDouble() < statusEffectValue(attackingEntity, ModAttributes.PARALYSIS.asHolder(), target);
         boolean sealChance = attackingEntity.level().random.nextDouble() < statusEffectValue(attackingEntity, ModAttributes.SEAL.asHolder(), target);
         boolean dizzyChance = attackingEntity.level().random.nextDouble() < statusEffectValue(attackingEntity, ModAttributes.DIZZY.asHolder(), target);
         double stunAmount = statusEffectValue(attackingEntity, ModAttributes.STUN.asHolder(), target);

@@ -17,7 +17,7 @@ public class StayGoal<T extends Mob> extends Goal {
         if (monster.isInWaterOrBubble() && !monster.canBreatheUnderwater()) {
             return false;
         }
-        if (!monster.isOnGround() && !monster.isNoGravity()) {
+        if (!monster.onGround() && !monster.isNoGravity()) {
             return false;
         }
         return monster.isStaying();
@@ -26,7 +26,7 @@ public class StayGoal<T extends Mob> extends Goal {
         if (npc.isInWaterOrBubble()) {
             return false;
         }
-        if (!npc.isOnGround()) {
+        if (!npc.onGround()) {
             return false;
         }
         return npc.isStaying();

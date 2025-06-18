@@ -7,9 +7,6 @@ import io.github.flemmli97.runecraftory.client.ClientFarmlandHandler;
 import io.github.flemmli97.runecraftory.client.ClientRegister;
 import io.github.flemmli97.runecraftory.client.render.RunecraftoryShaders;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
-import io.github.flemmli97.runecraftory.fabric.config.ClientConfigSpec;
-import io.github.flemmli97.runecraftory.fabric.config.ConfigHolder;
-import io.github.flemmli97.runecraftory.fabric.network.ClientPacketHandler;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientChunkEvents;
@@ -17,6 +14,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.ArmorRenderer;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.CoreShaderRegistrationCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
@@ -24,7 +22,6 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.client.screen.v1.Screens;
-import net.fabricmc.fabric.impl.client.rendering.ArmorRendererRegistryImpl;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
@@ -43,9 +40,6 @@ public class RuneCraftoryFabricClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        ClientPacketHandler.registerClientPackets();
-        ConfigHolder.CONFIGS.get(ClientConfigSpec.SPEC.getLeft())
-                .reloadConfig();
         //ClientRegister
         ClientRegister.init();
 
@@ -74,12 +68,12 @@ public class RuneCraftoryFabricClient implements ClientModInitializer {
         //ClientCalls
         ClientTickEvents.START_CLIENT_TICK.register(client -> ClientCalls.clientTick());
         ScreenEvents.AFTER_INIT.register((client, screen, scaledWidth, scaledHeight) -> ClientCalls.initSkillTab(screen, Screens.getButtons(screen)::add));
-        ItemTooltipCallback.EVENT.register((stack, context, lines) -> ClientCalls.tooltipEvent(stack, lines, context));
+        ItemTooltipCallback.EVENT.register((stack, context, flag, lines) -> ClientCalls.tooltipEvent(stack, lines, flag));
         WorldRenderEvents.END.register(ctx -> ClientCalls.worldRender(ctx.matrixStack()));
         ModItems.ITEMS.getEntries().forEach(e -> {
             ArmorModels.ArmorModelGetter r = ArmorModels.ARMOR_GETTER.get(e.getID());
             if (r != null)
-                ArmorRendererRegistryImpl.register(new ArmorRendererImpl(r, new ResourceLocation(e.getID().getNamespace(), "textures/models/armor/" + e.getID().getPath() + ".png")), e.get());
+                ArmorRenderer.register(new ArmorRendererImpl(r, ResourceLocation.fromNamespaceAndPath(e.getID().getNamespace(), "textures/models/armor/" + e.getID().getPath() + ".png")), e.get());
         });
         ClientChunkEvents.CHUNK_UNLOAD.register(((world, chunk) -> ClientFarmlandHandler.INSTANCE.onChunkUnLoad(chunk.getPos())));
         CoreShaderRegistrationCallback.EVENT.register(reg -> RunecraftoryShaders.registerShader(reg::register));

@@ -4,7 +4,7 @@ import com.google.common.base.Suppliers;
 import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
-import io.github.flemmli97.runecraftory.common.blocks.tile.CraftingBlockEntity;
+import io.github.flemmli97.runecraftory.common.blocks.entity.CraftingBlockEntity;
 import io.github.flemmli97.runecraftory.common.crafting.SextupleRecipe;
 import io.github.flemmli97.runecraftory.common.crafting.SpecialSextupleRecipe;
 import io.github.flemmli97.runecraftory.common.inventory.PlayerBoundCraftingContainer;
@@ -50,12 +50,12 @@ public class ContainerCrafting extends AbstractContainerMenu implements Containe
     private final CraftingBlockEntity blockEntity;
     private final DataSlot runePointCost;
 
-    private List<RecipeHolder<SextupleRecipe>> matchingRecipes;
+    private List<RecipeHolder<? extends SextupleRecipe>> matchingRecipes;
 
     private List<ClientRecipeResult> matchingRecipesClient = new ArrayList<>();
     private boolean updatedRecipes;
 
-    private RecipeHolder<SextupleRecipe> currentRecipe;
+    private RecipeHolder<? extends SextupleRecipe> currentRecipe;
 
     public ContainerCrafting(int windowId, Inventory inv, FriendlyByteBuf data) {
         this(windowId, inv, getTile(inv.player.level(), data));
@@ -112,16 +112,17 @@ public class ContainerCrafting extends AbstractContainerMenu implements Containe
         if (this.craftingInv.getPlayer().level().isClientSide)
             return;
         if (this.craftingInv.refreshAndSet()) {
-            this.matchingRecipes = getRecipes(this.craftingInv, this.type);
+            this.matchingRecipes = new ArrayList<>();
+            this.matchingRecipes.addAll(getRecipes(this.craftingInv, this.type));
             if (this.matchingRecipes.isEmpty()) {
                 this.matchingRecipes = new ArrayList<>();
-                SpecialSextupleRecipe recipe = switch (this.type) {
+                RecipeHolder<SpecialSextupleRecipe> recipe = switch (this.type) {
                     case ARMOR, FORGE -> SpecialSextupleRecipe.SCRAP.get();
                     case CHEM -> SpecialSextupleRecipe.OBJECT_X.get();
                     case COOKING -> SpecialSextupleRecipe.FAILED_DISH.get();
                 };
-                if (recipe.matches(this.craftingInv, this.craftingInv.getPlayer().level()))
-                    this.matchingRecipes.add(new RecipeHolder<>());
+                if (recipe.value().matches(this.craftingInv, this.craftingInv.getPlayer().level()))
+                    this.matchingRecipes.add(recipe);
             }
             this.updatedRecipes = true;
             if (!init)
@@ -146,7 +147,7 @@ public class ContainerCrafting extends AbstractContainerMenu implements Containe
                     this.blockEntity.resetIndex();
             }
             this.currentRecipe = this.matchingRecipes.get(this.blockEntity.craftingIndex());
-            SextupleRecipe.RecipeOutput output = this.currentRecipe.value().getCraftingOutput(this.craftingInv);
+            SextupleRecipe.RecipeOutput output = SextupleRecipe.getCraftingOutput(this.craftingInv, this.currentRecipe);
             this.runePointCost.set(CraftingUtils.craftingCost(this.type, Platform.INSTANCE.getPlayerData(this.craftingInv.getPlayer()), this.currentRecipe.value(), output.bonusItems(), output.clientResult().getItem() != ModItems.UNKNOWN.get()));
             trueOutput = output.serverResult();
             clientOutput = output.clientResult();
@@ -179,7 +180,7 @@ public class ContainerCrafting extends AbstractContainerMenu implements Containe
             player.getServer().tell(new TickTask(1, () -> LoaderNetwork.INSTANCE.sendToPlayer(new S2CCraftingRecipes(clientData, this.currentRecipe == null ? 0 : this.matchingRecipes.indexOf(this.currentRecipe)), player)));
     }
 
-    public RecipeHolder<SextupleRecipe> getCurrentRecipe() {
+    public RecipeHolder<? extends SextupleRecipe> getCurrentRecipe() {
         return this.currentRecipe;
     }
 

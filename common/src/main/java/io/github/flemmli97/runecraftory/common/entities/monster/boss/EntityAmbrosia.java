@@ -202,7 +202,7 @@ public class EntityAmbrosia extends BossMonster {
     }
 
     @Override
-    public void handleAttack(AnimatedAction anim) {
+    public void handleAttack(AnimationState anim) {
         BiConsumer<AnimatedAction, EntityAmbrosia> handler = ATTACK_HANDLER.get(anim.getID());
         if (handler != null)
             handler.accept(anim, this);
@@ -218,7 +218,7 @@ public class EntityAmbrosia extends BossMonster {
     }
 
     @Override
-    public AABB attackBB(AnimatedAction anim) {
+    public AABB attackBB(String anim) {
         double width = this.getBbWidth() * 1.6;
         double length = this.getBbWidth() * 2.1;
         return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);

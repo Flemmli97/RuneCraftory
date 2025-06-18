@@ -22,10 +22,10 @@ public abstract class DataStructureBlockProcessor extends StructureProcessor {
     @Nullable
     @Override
     public StructureTemplate.StructureBlockInfo processBlock(LevelReader level, BlockPos blockPos, BlockPos pos, StructureTemplate.StructureBlockInfo blockInfo, StructureTemplate.StructureBlockInfo relativeBlockInfo, StructurePlaceSettings settings) {
-        if (!relativeBlockInfo.state.is(Blocks.STRUCTURE_BLOCK) || relativeBlockInfo.nbt == null)
+        if (!relativeBlockInfo.state().is(Blocks.STRUCTURE_BLOCK) || relativeBlockInfo.nbt() == null)
             return relativeBlockInfo;
-        if (StructureMode.valueOf(relativeBlockInfo.nbt.getString("mode")) == StructureMode.DATA) {
-            String data = relativeBlockInfo.nbt.getString("metadata");
+        if (StructureMode.valueOf(relativeBlockInfo.nbt().getString("mode")) == StructureMode.DATA) {
+            String data = relativeBlockInfo.nbt().getString("metadata");
             boolean match = this.exactMatch ? data.equals(this.data) : data.startsWith(this.data);
             if (match) {
                 return this.handleDataMarker(data, relativeBlockInfo, level, settings);

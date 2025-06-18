@@ -72,7 +72,7 @@ public class EntityFlowerLily extends BaseMonster {
     }
 
     @Override
-    public AABB attackBB(AnimatedAction anim) {
+    public AABB attackBB(String anim) {
         double attackSize = this.getBbWidth() * 2.1;
         return new AABB(-attackSize, -0.2, -attackSize, attackSize, this.getBbHeight() + 0.2, attackSize);
     }
@@ -88,7 +88,7 @@ public class EntityFlowerLily extends BaseMonster {
     }
 
     @Override
-    public void handleAttack(AnimatedAction anim) {
+    public void handleAttack(AnimationState anim) {
         if (anim.is(LEAP)) {
             this.getNavigation().stop();
             if (anim.isAt("leap")) {
@@ -126,7 +126,7 @@ public class EntityFlowerLily extends BaseMonster {
     }
 
     @Override
-    public int animationCooldown(@Nullable AnimatedAction anim) {
+    public int animationCooldown(@Nullable String anim) {
         int diffAdd = this.difficultyCooldown();
         if (anim == null)
             return this.getRandom().nextInt(20) + 30 + diffAdd;
@@ -144,7 +144,7 @@ public class EntityFlowerLily extends BaseMonster {
     }
 
     @Override
-    public AnimatedAction getSleepAnimation() {
+    public String getSleepAnimation() {
         return SLEEP;
     }
 

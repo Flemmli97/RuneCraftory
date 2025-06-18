@@ -71,7 +71,7 @@ public class EntityTroll extends BaseMonster {
     }
 
     @Override
-    public AABB attackBB(AnimatedAction anim) {
+    public AABB attackBB(String anim) {
         if (anim.is(SLAM)) {
             double range = this.getBbWidth() * 2.1;
             return new AABB(-range * 0.5, -0.02, -range * 0.25, range * 0.5, this.getBbHeight() + 0.02, range * 0.75);
@@ -123,7 +123,7 @@ public class EntityTroll extends BaseMonster {
     }
 
     @Override
-    public AnimatedAction getSleepAnimation() {
+    public String getSleepAnimation() {
         return SLEEP;
     }
 

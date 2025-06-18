@@ -12,7 +12,7 @@ import java.util.function.BiFunction;
 public class FollowEntityEx<E extends PathfinderMob, T extends Entity> extends FollowEntity<E, T> {
 
     protected BiFunction<E, T, Double> followStartDist = (entity, target) -> 4d;
-    protected BiFunction<E, T, Double> ignoreTargetDist = (entity) -> 20d;
+    protected BiFunction<E, T, Double> ignoreTargetDist = (entity, target) -> 20d;
 
     public FollowEntityEx<E, T> startFollowingWhen(double followStartDist) {
         return this.startFollowingWhen((entity, target) -> followStartDist);

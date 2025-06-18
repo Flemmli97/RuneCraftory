@@ -22,15 +22,15 @@ import io.github.flemmli97.runecraftory.common.blocks.BlockSingleTimeSpawner;
 import io.github.flemmli97.runecraftory.common.blocks.BlockTreeBase;
 import io.github.flemmli97.runecraftory.common.blocks.BlockTreeRoot;
 import io.github.flemmli97.runecraftory.common.blocks.BlockTreeSapling;
-import io.github.flemmli97.runecraftory.common.blocks.tile.AccessoryBlockEntity;
-import io.github.flemmli97.runecraftory.common.blocks.tile.BossSpawnerBlockEntity;
-import io.github.flemmli97.runecraftory.common.blocks.tile.BrokenMineralBlockEntity;
-import io.github.flemmli97.runecraftory.common.blocks.tile.ChemistryBlockEntity;
-import io.github.flemmli97.runecraftory.common.blocks.tile.CookingBlockEntity;
-import io.github.flemmli97.runecraftory.common.blocks.tile.ForgingBlockEntity;
-import io.github.flemmli97.runecraftory.common.blocks.tile.MonsterBarnBlockEntity;
-import io.github.flemmli97.runecraftory.common.blocks.tile.SingleTimeSpawner;
-import io.github.flemmli97.runecraftory.common.blocks.tile.TreeBlockEntity;
+import io.github.flemmli97.runecraftory.common.blocks.entity.AccessoryBlockEntity;
+import io.github.flemmli97.runecraftory.common.blocks.entity.BossSpawnerBlockEntity;
+import io.github.flemmli97.runecraftory.common.blocks.entity.BrokenMineralBlockEntity;
+import io.github.flemmli97.runecraftory.common.blocks.entity.ChemistryBlockEntity;
+import io.github.flemmli97.runecraftory.common.blocks.entity.CookingBlockEntity;
+import io.github.flemmli97.runecraftory.common.blocks.entity.ForgingBlockEntity;
+import io.github.flemmli97.runecraftory.common.blocks.entity.MonsterBarnBlockEntity;
+import io.github.flemmli97.runecraftory.common.blocks.entity.SingleTimeSpawner;
+import io.github.flemmli97.runecraftory.common.blocks.entity.TreeBlockEntity;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.loader.LoaderRegistryAccess;
 import io.github.flemmli97.tenshilib.loader.registry.LoaderRegister;
@@ -218,8 +218,6 @@ public class ModBlocks {
     public static final RegistryEntrySupplier<Block, BlockHerb> ANTIDOTE_GRASS = herb("antidote_grass");
     public static final RegistryEntrySupplier<Block, BlockHerb> MEDICINAL_HERB = herb("medicinal_herb");
     public static final RegistryEntrySupplier<Block, BlockHerb> BAMBOO_SPROUT = herb("bamboo_sprout");
-
-    public static final RegistryEntrySupplier<Block, BlockMeltableSnow> SNOW = BLOCKS.register("snow", () -> new BlockMeltableSnow(BlockBehaviour.Properties.ofFullCopy(Blocks.SNOW)));
 
     public static final RegistryEntrySupplier<Block, BlockTreeRoot> TREE_SOIL = BLOCKS.register("tree_soil", () -> new BlockTreeRoot(BlockBehaviour.Properties.ofFullCopy(Blocks.DIRT).sound(SoundType.GRAVEL).strength(-1, 99999)));
     public static final RegistryEntrySupplier<Block, BlockTreeBase> APPLE_TREE = BLOCKS.register("apple_tree", () -> new BlockTreeBase(logProps(), () -> ModFeatures.APPLE_1.value(), () -> ModFeatures.APPLE_2.value(), () -> ModFeatures.APPLE_3.value(), ModItems.APPLE_SAPLING));

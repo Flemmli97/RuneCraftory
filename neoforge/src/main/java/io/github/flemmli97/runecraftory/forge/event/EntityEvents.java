@@ -1,17 +1,11 @@
 package io.github.flemmli97.runecraftory.forge.event;
 
-import com.google.common.collect.Multimap;
 import io.github.flemmli97.runecraftory.client.ClientCalls;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.events.EntityCalls;
-import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
-import io.github.flemmli97.tenshilib.neoforge.events.AOEAttackEventForge;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.common.util.TriState;
-import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
@@ -43,12 +37,6 @@ public class EntityEvents {
     @SubscribeEvent
     public void playerAttack(AttackEntityEvent event) {
         if (EntityCalls.playerAttack(event.getEntity(), event.getTarget()))
-            event.setCanceled(true);
-    }
-
-    @SubscribeEvent
-    public void playerAoeAttack(AOEAttackEventForge event) {
-        if (EntityCalls.playerAoeAttack(event.getEntity(), event.usedItem, event.attackList()))
             event.setCanceled(true);
     }
 
@@ -129,14 +117,14 @@ public class EntityEvents {
         }
     }
 
-    @SubscribeEvent
-    public void itemStackAttributes(ItemAttributeModifierEvent event) {
-        Multimap<Attribute, AttributeModifier> map = ItemNBT.getStatsAttributeMap(event.getItemStack(), event.getModifiers(), event.getSlotType());
-        if (map != event.getModifiers()) {
-            event.clearModifiers();
-            map.forEach(event::addModifier);
-        }
-    }
+//    @SubscribeEvent
+//    public void itemStackAttributes(ItemAttributeModifierEvent event) {
+//        Multimap<Attribute, AttributeModifier> map = ItemNBT.getStatsAttributeMap(event.getItemStack(), event.getModifiers(), event.getSlotType());
+//        if (map != event.getModifiers()) {
+//            event.clearModifiers();
+//            map.forEach(event::addModifier);
+//        }
+//    }
 
     @SubscribeEvent
     public void farmlandTrample(BlockEvent.FarmlandTrampleEvent event) {

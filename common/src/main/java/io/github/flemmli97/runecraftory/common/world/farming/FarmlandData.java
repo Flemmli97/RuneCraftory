@@ -341,7 +341,7 @@ public class FarmlandData {
                     break;
                 continue;
             }
-            boolean hasGiantVersion = props != null && props.getGiantVersion() != Blocks.AIR && !cropState.is(props.getGiantVersion());
+            boolean hasGiantVersion = props != null && props.getGiantVersion().map(g -> !cropState.is(g)).orElse(false);
 
             //Dont do stuff if crop is fully grown.
             //No withering unlike game (for e.g. building purposes)
@@ -364,7 +364,7 @@ public class FarmlandData {
                                 newGrowable.onGrow(level, cropPos, newState, cropState);
                             else
                                 level.setBlock(cropPos, newState, Block.UPDATE_ALL);
-                            Platform.INSTANCE.cropGrowEvent(level, cropPos, level.getBlockState(cropPos));
+                            Platform.INSTANCE.cropGrowEventPost(level, cropPos, level.getBlockState(cropPos));
                         });
                     } else {
                         run.add(() -> CropUtils.attemptGiantize(level, cropPos, crop, cropState, this.cropSize, props));

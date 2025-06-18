@@ -31,7 +31,7 @@ public class EntityProperties {
             instance.group(
                     Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.holderByNameCodec(), Codec.DOUBLE).fieldOf("base_values").forGetter(d -> d.baseValues),
                     Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.holderByNameCodec(), Codec.DOUBLE).fieldOf("level_gains").forGetter(d -> d.levelGains),
-                    EntityPredicate.CODEC.optionalFieldOf("spawner_predicate").forGetter(d -> d.spawnerPredicate),
+                    EntityPredicate.CODEC.optionalFieldOf("spawner_predicate").forGetter(EntityProperties::spawnerPredicate),
 
                     Codec.BOOL.fieldOf("needs_roof").forGetter(d -> d.needsRoof),
                     OnKilledIncrease.CODEC.listOf().optionalFieldOf("level_increase_on_kill").forGetter(d -> d.levelIncreaseOnKill.isEmpty() ? Optional.empty() : Optional.of(d.levelIncreaseOnKill)),
@@ -62,7 +62,7 @@ public class EntityProperties {
 
     private final List<OnKilledIncrease> levelIncreaseOnKill;
 
-    public final Optional<EntityPredicate> spawnerPredicate;
+    public final EntityPredicate spawnerPredicate;
 
     private EntityProperties(int minLevel, int xp, int money, float tamingChance, boolean rideable, boolean flying, int size, boolean needsRoof, EntityRideActionCosts rideActionCosts, Map<Holder<Attribute>, Double> baseValues, Map<Holder<Attribute>, Double> levelGains, List<OnKilledIncrease> levelIncreaseOnKill, Optional<EntityPredicate> spawnerPredicate) {
         this.minLevel = Math.max(1, minLevel);
@@ -77,7 +77,7 @@ public class EntityProperties {
         this.baseValues = baseValues;
         this.levelGains = levelGains;
         this.levelIncreaseOnKill = levelIncreaseOnKill.stream().sorted().toList();
-        this.spawnerPredicate = spawnerPredicate;
+        this.spawnerPredicate = spawnerPredicate.orElse(null);
     }
 
     public Map<Holder<Attribute>, Double> getBaseValues() {
@@ -86,6 +86,10 @@ public class EntityProperties {
 
     public Map<Holder<Attribute>, Double> getAttributeGains() {
         return ImmutableMap.copyOf(this.levelGains);
+    }
+
+    public Optional<EntityPredicate> spawnerPredicate() {
+        return Optional.ofNullable(this.spawnerPredicate);
     }
 
     public int levelIncreaseFromKill(int killed, ServerPlayer player) {

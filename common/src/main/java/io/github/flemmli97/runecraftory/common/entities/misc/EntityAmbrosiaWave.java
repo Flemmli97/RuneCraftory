@@ -109,7 +109,7 @@ public class EntityAmbrosiaWave extends BaseDamageCloud {
     protected boolean damageEntity(LivingEntity e) {
         CustomDamage.Builder builder = new CustomDamage.Builder(this, this.getOwner()).magic().noKnockback().hurtResistant(5).element(EnumElement.EARTH)
                 .withChangedAttribute(ModAttributes.DRAIN.asHolder(), 50);
-        if (CombatUtils.damageWithFaintAndCrit(this.getOwner(), e, builder, CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.asHolder()) * this.damageMultiplier, null)) {
+        if (CombatUtils.damageWithFaintAndCrit(this.getOwner(), e, builder, CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC_ATTACK.asHolder()) * this.damageMultiplier, null)) {
             e.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10, 6, true, false));
             this.hitEntityPos.add(new FrozenEntity(e, e.position()));
             return true;

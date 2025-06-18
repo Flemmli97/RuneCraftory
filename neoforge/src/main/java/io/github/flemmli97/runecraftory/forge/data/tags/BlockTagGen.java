@@ -23,15 +23,6 @@ public class BlockTagGen extends IntrinsicHolderTagsProvider<Block> {
 
     @Override
     public void addTags(HolderLookup.Provider provider) {
-        //Snow
-        this.tag(BlockTags.SNOW).add(ModBlocks.SNOW.get());
-        this.tag(BlockTags.INSIDE_STEP_SOUND_BLOCKS).add(ModBlocks.SNOW.get());
-        this.tag(BlockTags.GOATS_SPAWNABLE_ON).add(ModBlocks.SNOW.get());
-        this.tag(BlockTags.RABBITS_SPAWNABLE_ON).add(ModBlocks.SNOW.get());
-        this.tag(BlockTags.FOXES_SPAWNABLE_ON).add(ModBlocks.SNOW.get());
-        this.tag(BlockTags.WOLVES_SPAWNABLE_ON).add(ModBlocks.SNOW.get());
-        this.tag(BlockTags.MINEABLE_WITH_SHOVEL).add(ModBlocks.SNOW.get());
-
         this.tag(RunecraftoryTags.Blocks.ORES)
                 .add(ModBlocks.MINERAL_MAP.values().stream().map(RegistryEntrySupplier::get).toArray(Block[]::new));
 

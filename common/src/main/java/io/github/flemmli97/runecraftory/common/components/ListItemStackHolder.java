@@ -7,6 +7,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ListItemStackHolder {
@@ -24,6 +25,19 @@ public class ListItemStackHolder {
         this.stacks = stacks;
     }
 
+    public ListItemStackHolder add(ItemStack add) {
+        List<ItemStack> stacks = new ArrayList<>(this.stacks);
+        stacks.add(add);
+        return new ListItemStackHolder(stacks);
+    }
+
+    public int matchesItem(ItemStack other) {
+        int matches = 0;
+        for (ItemStack stack : this.stacks)
+            if (ItemStack.isSameItem(stack, other))
+                matches++;
+        return matches;
+    }
 
     @Override
     public boolean equals(Object object) {

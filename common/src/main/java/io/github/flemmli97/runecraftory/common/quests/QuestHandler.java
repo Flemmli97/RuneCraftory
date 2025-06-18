@@ -65,7 +65,7 @@ public class QuestHandler {
         LoaderNetwork.INSTANCE.sendToPlayer(new S2COpenQuestGui(false, quest.entrySet().stream().sorted(Map.Entry.comparingByKey()).map(e -> {
             List<MutableComponent> description = e.getValue().getDescription(player);
             EntityNPCBase npc;
-            if (e.getValue() instanceof NPCQuest npcQuest && (npc = npcQuest.getNpc(player.level)) != null) {
+            if (e.getValue() instanceof NPCQuest npcQuest && (npc = npcQuest.getNpc(player.level())) != null) {
                 description = Stream.concat(Stream.of(Component.translatable("runecraftory.quest.npc.header", npc.getName(), npc.blockPosition().getX(),
                                 npc.blockPosition().getY(), npc.blockPosition().getZ()).withStyle(ChatFormatting.GOLD),
                         (MutableComponent) MutableComponent.EMPTY), description.stream()).toList();

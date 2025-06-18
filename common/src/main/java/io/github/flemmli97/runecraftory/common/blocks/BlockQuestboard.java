@@ -1,14 +1,16 @@
 package io.github.flemmli97.runecraftory.common.blocks;
 
 import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.MapCodec;
 import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
+import io.github.flemmli97.tenshilib.common.utils.VoxelUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -38,20 +40,22 @@ import java.util.Locale;
 
 public class BlockQuestboard extends HorizontalDirectionalBlock {
 
-    public static final VoxelShape[] BOTTOM_LEFT = BlockCrafting.joinedOrDirs(BlockCrafting.ShapeBuilder.of(0, 0, 7, 2, 10, 9),
-            BlockCrafting.ShapeBuilder.of(1, 11, 6.5, 16, 16, 9.5),
-            BlockCrafting.ShapeBuilder.of(0, 10, 6, 1, 16, 10),
-            BlockCrafting.ShapeBuilder.of(1, 10, 6, 16, 11, 10));
-    public static final VoxelShape[] BOTTOM_RIGHT = BlockCrafting.joinedOrDirs(BlockCrafting.ShapeBuilder.of(14, 0, 7, 16, 10, 9),
-            BlockCrafting.ShapeBuilder.of(0, 11, 6.5, 15, 16, 9.5),
-            BlockCrafting.ShapeBuilder.of(15, 10, 6, 16, 16, 10),
-            BlockCrafting.ShapeBuilder.of(0, 10, 6, 15, 11, 10));
-    public static final VoxelShape[] TOP_LEFT = BlockCrafting.joinedOrDirs(BlockCrafting.ShapeBuilder.of(1, 0, 6.5, 16, 15, 9.5),
-            BlockCrafting.ShapeBuilder.of(0, 0, 6, 1, 16, 10),
-            BlockCrafting.ShapeBuilder.of(1, 15, 6, 16, 16, 10));
-    public static final VoxelShape[] TOP_RIGHT = BlockCrafting.joinedOrDirs(BlockCrafting.ShapeBuilder.of(0, 0, 6.5, 15, 15, 9.5),
-            BlockCrafting.ShapeBuilder.of(15, 0, 6, 16, 16, 10),
-            BlockCrafting.ShapeBuilder.of(0, 15, 6, 15, 16, 10));
+    public static final MapCodec<BlockQuestboard> CODEC = simpleCodec(BlockQuestboard::new);
+
+    public static final VoxelShape[] BOTTOM_LEFT = VoxelUtils.joinedOrDirs(VoxelUtils.ShapeBuilder.of(0, 0, 7, 2, 10, 9),
+            VoxelUtils.ShapeBuilder.of(1, 11, 6.5, 16, 16, 9.5),
+            VoxelUtils.ShapeBuilder.of(0, 10, 6, 1, 16, 10),
+            VoxelUtils.ShapeBuilder.of(1, 10, 6, 16, 11, 10));
+    public static final VoxelShape[] BOTTOM_RIGHT = VoxelUtils.joinedOrDirs(VoxelUtils.ShapeBuilder.of(14, 0, 7, 16, 10, 9),
+            VoxelUtils.ShapeBuilder.of(0, 11, 6.5, 15, 16, 9.5),
+            VoxelUtils.ShapeBuilder.of(15, 10, 6, 16, 16, 10),
+            VoxelUtils.ShapeBuilder.of(0, 10, 6, 15, 11, 10));
+    public static final VoxelShape[] TOP_LEFT = VoxelUtils.joinedOrDirs(VoxelUtils.ShapeBuilder.of(1, 0, 6.5, 16, 15, 9.5),
+            VoxelUtils.ShapeBuilder.of(0, 0, 6, 1, 16, 10),
+            VoxelUtils.ShapeBuilder.of(1, 15, 6, 16, 16, 10));
+    public static final VoxelShape[] TOP_RIGHT = VoxelUtils.joinedOrDirs(VoxelUtils.ShapeBuilder.of(0, 0, 6.5, 15, 15, 9.5),
+            VoxelUtils.ShapeBuilder.of(15, 0, 6, 16, 16, 10),
+            VoxelUtils.ShapeBuilder.of(0, 15, 6, 15, 16, 10));
 
     public static final EnumProperty<Part> PART = EnumProperty.create("part", Part.class);
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
@@ -63,12 +67,17 @@ public class BlockQuestboard extends HorizontalDirectionalBlock {
     }
 
     @Override
+    public MapCodec<BlockQuestboard> codec() {
+        return CODEC;
+    }
+
+    @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return switch (state.getValue(PART)) {
-            case BOTTOM_LEFT -> BOTTOM_LEFT[state.getValue(BlockCrafting.FACING).get2DDataValue()];
-            case BOTTOM_RIGHT -> BOTTOM_RIGHT[state.getValue(BlockCrafting.FACING).get2DDataValue()];
-            case TOP_LEFT -> TOP_LEFT[state.getValue(BlockCrafting.FACING).get2DDataValue()];
-            case TOP_RIGHT -> TOP_RIGHT[state.getValue(BlockCrafting.FACING).get2DDataValue()];
+            case BOTTOM_LEFT -> BOTTOM_LEFT[state.getValue(FACING).get2DDataValue()];
+            case BOTTOM_RIGHT -> BOTTOM_RIGHT[state.getValue(FACING).get2DDataValue()];
+            case TOP_LEFT -> TOP_LEFT[state.getValue(FACING).get2DDataValue()];
+            case TOP_RIGHT -> TOP_RIGHT[state.getValue(FACING).get2DDataValue()];
         };
     }
 
@@ -85,12 +94,12 @@ public class BlockQuestboard extends HorizontalDirectionalBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
+    public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
         if (!(player instanceof ServerPlayer serverPlayer)) {
-            return InteractionResult.CONSUME;
+            return ItemInteractionResult.CONSUME;
         } else {
             QuestHandler.openGui(serverPlayer, Vec3.atCenterOf(pos));
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         }
     }
 
@@ -114,7 +123,7 @@ public class BlockQuestboard extends HorizontalDirectionalBlock {
     }
 
     @Override
-    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+    public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         if (!level.isClientSide && player.isCreative()) {
             Direction facing = state.getValue(FACING);
             getPosMap(pos, state).forEach(p -> {
@@ -125,7 +134,7 @@ public class BlockQuestboard extends HorizontalDirectionalBlock {
                 }
             });
         }
-        super.playerWillDestroy(level, pos, state, player);
+        return super.playerWillDestroy(level, pos, state, player);
     }
 
 

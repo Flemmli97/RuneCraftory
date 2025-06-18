@@ -66,7 +66,7 @@ public class EntityNappie extends EntityPommePomme implements HealingPredicateEn
     }
 
     @Override
-    public void handleAttack(AnimatedAction anim) {
+    public void handleAttack(AnimationState anim) {
         if (anim.is(HEAL)) {
             this.getNavigation().stop();
             if (anim.isAt("attack")) {

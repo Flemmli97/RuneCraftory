@@ -18,12 +18,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -32,6 +30,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BiomeTags;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -50,7 +49,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
-import net.minecraft.world.entity.ai.village.poi.PoiType;
+import net.minecraft.world.entity.ai.village.poi.PoiTypes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -59,7 +58,6 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
@@ -69,7 +67,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Random;
 import java.util.UUID;
 
 public class GateEntity extends Mob implements IBaseMob {
@@ -79,7 +76,7 @@ public class GateEntity extends Mob implements IBaseMob {
     private static final EntityDataAccessor<String> ELEMENT_TYPE = SynchedEntityData.defineId(GateEntity.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Integer> ELEMENT = SynchedEntityData.defineId(GateEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> MOB_LEVEL = SynchedEntityData.defineId(GateEntity.class, EntityDataSerializers.INT);
-    private static final UUID ATTRIBUTE_LEVEL_MOD = UUID.fromString("EC84560E-5266-4DC3-A4E1-388b97DBC0CB");
+    private static final ResourceLocation ATTRIBUTE_LEVEL_MOD = RuneCraftory.modRes("gate_level_modifier");
     public int rotate, clientRenderTick;
     private final List<EntityType<?>> spawnList = new ArrayList<>();
     private EnumElement type = EnumElement.NONE;
@@ -100,14 +97,14 @@ public class GateEntity extends Mob implements IBaseMob {
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(ModAttributes.DEFENCE.get()).add(ModAttributes.MAGIC_DEFENCE.get())
-                .add(ModAttributes.RES_WATER.get()).add(ModAttributes.RES_EARTH.get())
-                .add(ModAttributes.RES_WIND.get()).add(ModAttributes.RES_FIRE.get())
-                .add(ModAttributes.RES_DARK.get()).add(ModAttributes.RES_LIGHT.get())
-                .add(ModAttributes.RES_LOVE.get());
+        return Mob.createMobAttributes().add(ModAttributes.DEFENCE.asHolder()).add(ModAttributes.MAGIC_DEFENCE.asHolder())
+                .add(ModAttributes.WATER_RESISTANCE.asHolder()).add(ModAttributes.EARTH_RESISTANCE.asHolder())
+                .add(ModAttributes.WIND_RESISTANCE.asHolder()).add(ModAttributes.FIRE_RESISTANCE.asHolder())
+                .add(ModAttributes.DARK_RESISTANCE.asHolder()).add(ModAttributes.LIGHT_RESISTANCE.asHolder())
+                .add(ModAttributes.LOVE_RESISTANCE.asHolder());
     }
 
-    public static boolean gateSpawnRules(EntityType<? extends Mob> type, LevelAccessor level, MobSpawnType spawnType, BlockPos pos, BlockState state, Random random) {
+    public static boolean gateSpawnRules(EntityType<? extends Mob> type, LevelAccessor level, MobSpawnType spawnType, BlockPos pos, BlockState state, RandomSource random) {
         BlockPos blockPos = pos.below();
         return spawnType == MobSpawnType.SPAWNER || level.getBlockState(blockPos).isValidSpawn(level, blockPos, type) || (level.getSeaLevel() - 5 > pos.getY() && state.getFluidState().is(FluidTags.WATER));
     }
@@ -115,7 +112,7 @@ public class GateEntity extends Mob implements IBaseMob {
     public static boolean canSpawnAt(EntityType<? extends GateEntity> type, ServerLevelAccessor level, MobSpawnType reason, BlockPos pos, RandomSource random) {
         BlockState state = level.getBlockState(pos);
         return level.getDifficulty() != Difficulty.PEACEFUL && DataPackHandler.INSTANCE.gateSpawnsManager().hasSpawns(level, pos, state)
-                && level.getLevel().getPoiManager().find(PoiType.MEETING.getPredicate(), p -> true, pos, MobConfig.bellRadius, PoiManager.Occupancy.ANY).isEmpty()
+                && level.getLevel().getPoiManager().find(holder -> holder.is(PoiTypes.MEETING), p -> true, pos, MobConfig.bellRadius, PoiManager.Occupancy.ANY).isEmpty()
                 && gateSpawnRules(type, level, reason, pos, state, random)
                 && level.getEntitiesOfClass(GateEntity.class, new AABB(pos).inflate(MobConfig.minDist)).size() < MobConfig.maxGroup;
     }
@@ -176,8 +173,8 @@ public class GateEntity extends Mob implements IBaseMob {
 
     private void updateAttributes() {
         this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(MobConfig.gateHealth);
-        this.getAttribute(ModAttributes.DEFENCE.get()).setBaseValue(MobConfig.gateDef);
-        this.getAttribute(ModAttributes.MAGIC_DEFENCE.get()).setBaseValue(MobConfig.gateMDef);
+        this.getAttribute(ModAttributes.DEFENCE.asHolder()).setBaseValue(MobConfig.gateDef);
+        this.getAttribute(ModAttributes.MAGIC_DEFENCE.asHolder()).setBaseValue(MobConfig.gateMDef);
         this.setHealth(this.getMaxHealth());
     }
 
@@ -191,7 +188,7 @@ public class GateEntity extends Mob implements IBaseMob {
 
     @Override
     public void tick() {
-        if (Platform.INSTANCE.onLivingUpdate(this)) return;
+        if (Platform.INSTANCE.entityTickPre(this)) return;
         if (!this.level().isClientSide) {
             if (this.removeCauseEmptyList) {
                 this.discard();
@@ -228,9 +225,7 @@ public class GateEntity extends Mob implements IBaseMob {
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("MobLevel", this.entityData.get(MOB_LEVEL));
-        ListTag list = new ListTag();
-        this.spawnList.forEach(type -> list.add(StringTag.valueOf(Registry.ENTITY_TYPE.getKey(type).toString())));
-        compound.put("Spawns", list);
+        compound.put("Spawns", BuiltInRegistries.ENTITY_TYPE.byNameCodec().listOf().encodeStart(NbtOps.INSTANCE, this.spawnList).getOrThrow());
         compound.putString("Element", this.type.toString());
         compound.putBoolean("FirstSpawn", this.initialSpawn);
         compound.putInt("MaxNearby", this.maxNearby);
@@ -243,8 +238,9 @@ public class GateEntity extends Mob implements IBaseMob {
         if (compound.contains("MobLevel")) {
             this.entityData.set(MOB_LEVEL, compound.getInt("MobLevel"));
         }
-        compound.getList("Spawns", Tag.TAG_STRING)
-                .forEach(nbt -> this.spawnList.add(Registry.ENTITY_TYPE.get(new ResourceLocation(nbt.getAsString()))));
+        this.spawnList.clear();
+        this.spawnList.addAll(BuiltInRegistries.ENTITY_TYPE.byNameCodec().listOf()
+                .parse(NbtOps.INSTANCE, compound.get("Spawns")).getOrThrow());
         if (compound.contains("Element")) {
             String el = compound.getString("Element");
             try {
@@ -261,12 +257,7 @@ public class GateEntity extends Mob implements IBaseMob {
     }
 
     @Override
-    protected LootContext.Builder createLootContext(boolean attackedRecently, DamageSource src) {
-        return super.createLootContext(attackedRecently, src);
-    }
-
-    @Override
-    protected ResourceLocation getDefaultLootTable() {
+    protected ResourceKey<LootTable> getDefaultLootTable() {
         return getGateLootLocation(this.getElement());
     }
 
@@ -290,7 +281,7 @@ public class GateEntity extends Mob implements IBaseMob {
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData) {
         Holder<Biome> biome = level.getBiome(this.blockPosition());
         this.type = this.getType(level, biome);
         LevelCalc.GateLevelResult gateLevel = LevelCalc.levelFromPos(level.getLevel(), this.position());
@@ -345,7 +336,7 @@ public class GateEntity extends Mob implements IBaseMob {
                             this.level().addFreshEntity(entity);
                         }
                     } else if (entity instanceof Mob mob) {
-                        BlockPos pos = new BlockPos(x, y, z);
+                        BlockPos pos = BlockPos.containing(x, y, z);
                         boolean notSolid;
                         BlockState state;
                         while ((notSolid = !(state = this.level().getBlockState(pos.below())).entityCanStandOnFace(this.level(), pos, entity, Direction.UP) && !state.getFluidState().is(FluidTags.WATER)) && pos.distToCenterSqr(x, y, z) < 16)
@@ -354,8 +345,8 @@ public class GateEntity extends Mob implements IBaseMob {
                             if (mob instanceof BaseMonster)
                                 ((BaseMonster) mob).setLevel(levelRand);
                             entity.absMoveTo(x, y, z, this.level().random.nextFloat() * 360.0f, 0.0f);
-                            if (Platform.INSTANCE.canEntitySpawnSpawner(mob, this.level(), (float) entity.getX(), (float) entity.getY(), (float) entity.getZ(), null, MobSpawnType.SPAWNER) && this.level().noCollision(mob)) {
-                                mob.finalizeSpawn(serverLevel, this.level().getCurrentDifficultyAt(mob.blockPosition()), MobSpawnType.SPAWNER, null, null);
+                            if (Platform.INSTANCE.checkSpawnPosition(mob, serverLevel, MobSpawnType.SPAWNER) && this.level().noCollision(mob)) {
+                                mob.finalizeSpawn(serverLevel, this.level().getCurrentDifficultyAt(mob.blockPosition()), MobSpawnType.SPAWNER, null);
                                 AttributeInstance follow = mob.getAttribute(Attributes.FOLLOW_RANGE);
                                 mob.restrictTo(this.blockPosition(), (int) Math.max(18, follow != null ? follow.getValue() * 0.75 : 0));
                                 this.level().addFreshEntity(entity);
@@ -371,22 +362,16 @@ public class GateEntity extends Mob implements IBaseMob {
     }
 
     @Override
-    protected float getDamageAfterArmorAbsorb(DamageSource damageSrc, float damageAmount) {
+    protected float getDamageAfterArmorAbsorb(DamageSource source, float damageAmount) {
         float reduce = 0.0f;
-        if (!damageSrc.isBypassMagic() && !damageSrc.isBypassArmor()) {
-            if (damageSrc.isMagic()) {
-                reduce = (float) this.getAttribute(ModAttributes.MAGIC_DEFENCE.get()).getValue();
-            } else {
-                reduce = (float) this.getAttribute(ModAttributes.DEFENCE.get()).getValue();
-            }
+        if (source.is(RunecraftoryTags.DamageTypes.IS_MAGIC)) {
+            if (!source.is(RunecraftoryTags.DamageTypes.BYPASS_MAGIC))
+                reduce = (float) this.getAttributeValue(ModAttributes.MAGIC_DEFENCE.asHolder());
+        } else if (!source.is(DamageTypeTags.BYPASSES_ARMOR)) {
+            reduce = (float) this.getAttributeValue(ModAttributes.DEFENCE.asHolder());
         }
         float min = reduce > damageAmount * 2 ? 0 : 0.5f;
-        return super.getDamageAfterArmorAbsorb(damageSrc, Math.max(min, damageAmount - reduce));
-    }
-
-    @Override
-    public boolean canBreatheUnderwater() {
-        return true;
+        return super.getDamageAfterArmorAbsorb(source, Math.max(min, damageAmount - reduce));
     }
 
     @Override
@@ -441,11 +426,11 @@ public class GateEntity extends Mob implements IBaseMob {
 
     private void updateStatsToLevel() {
         this.getAttribute(Attributes.MAX_HEALTH).removeModifier(ATTRIBUTE_LEVEL_MOD);
-        this.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(new AttributeModifier(ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.xpLevel().getLevel() - 1) * MobConfig.gateHealthGain, AttributeModifier.Operation.ADDITION));
-        this.getAttribute(ModAttributes.DEFENCE.get()).removeModifier(ATTRIBUTE_LEVEL_MOD);
-        this.getAttribute(ModAttributes.DEFENCE.get()).addPermanentModifier(new AttributeModifier(ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.xpLevel().getLevel() - 1) * MobConfig.gateDefGain, AttributeModifier.Operation.ADDITION));
-        this.getAttribute(ModAttributes.MAGIC_DEFENCE.get()).removeModifier(ATTRIBUTE_LEVEL_MOD);
-        this.getAttribute(ModAttributes.MAGIC_DEFENCE.get()).addPermanentModifier(new AttributeModifier(ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.xpLevel().getLevel() - 1) * MobConfig.gateMDefGain, AttributeModifier.Operation.ADDITION));
+        this.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(new AttributeModifier(ATTRIBUTE_LEVEL_MOD, (this.xpLevel().getLevel() - 1) * MobConfig.gateHealthGain, AttributeModifier.Operation.ADD_VALUE));
+        this.getAttribute(ModAttributes.DEFENCE.asHolder()).removeModifier(ATTRIBUTE_LEVEL_MOD);
+        this.getAttribute(ModAttributes.DEFENCE.asHolder()).addPermanentModifier(new AttributeModifier(ATTRIBUTE_LEVEL_MOD, (this.xpLevel().getLevel() - 1) * MobConfig.gateDefGain, AttributeModifier.Operation.ADD_VALUE));
+        this.getAttribute(ModAttributes.MAGIC_DEFENCE.asHolder()).removeModifier(ATTRIBUTE_LEVEL_MOD);
+        this.getAttribute(ModAttributes.MAGIC_DEFENCE.asHolder()).addPermanentModifier(new AttributeModifier(ATTRIBUTE_LEVEL_MOD, (this.xpLevel().getLevel() - 1) * MobConfig.gateMDefGain, AttributeModifier.Operation.ADD_VALUE));
         this.setHealth(this.getMaxHealth());
     }
 
@@ -472,7 +457,7 @@ public class GateEntity extends Mob implements IBaseMob {
         } else if (key.is(RunecraftoryTags.Biomes.IS_SPOOKY) && this.getRandom().nextFloat() < 0.4) {
             element = EnumElement.DARK;
         }
-        if (key.is(RunecraftoryTags.IS_END)) {
+        if (key.is(BiomeTags.IS_END)) {
             if (this.getRandom().nextFloat() < 0.3) {
                 element = EnumElement.DARK;
             } else if (this.getRandom().nextFloat() < 0.3) {

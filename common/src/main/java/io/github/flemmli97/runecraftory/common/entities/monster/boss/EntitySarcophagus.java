@@ -360,7 +360,7 @@ public class EntitySarcophagus extends BossMonster {
     }
 
     @Override
-    public void handleAttack(AnimatedAction anim) {
+    public void handleAttack(AnimationState anim) {
         LivingEntity target = this.getTarget();
         if (target != null) {
             this.getNavigation().stop();

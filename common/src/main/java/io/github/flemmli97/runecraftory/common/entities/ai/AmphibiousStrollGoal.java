@@ -20,7 +20,7 @@ public class AmphibiousStrollGoal extends RandomStrollGoal {
         for (int i = 0; i < 10; i++) {
             Vec3 pos = DefaultRandomPos.getPos(this.mob, 10, 7);
             if (pos != null) {
-                if (this.mob.level.getBlockState(new BlockPos(pos)).isPathfindable(this.mob.level, new BlockPos(pos), PathComputationType.WATER)) {
+                if (this.mob.level().getBlockState(BlockPos.containing(pos)).isPathfindable(PathComputationType.WATER)) {
                     target = pos;
                     break;
                 } else

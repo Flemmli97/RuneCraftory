@@ -16,8 +16,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class ItemInHandRendererMixin {
 
     @Inject(method = "renderItem", at = @At("HEAD"), cancellable = true)
-    private void onRender(LivingEntity entity, ItemStack itemStack, ItemDisplayContext displayContext, boolean leftHand, PoseStack poseStack, MultiBufferSource buffer, int seed, CallbackInfo ci) {
-        if (ClientMixinUtils.onRenderHeldItem(entity, itemStack, displayContext, leftHand, poseStack, buffer, combinedLight))
+    private void onRender(LivingEntity entity, ItemStack itemStack, ItemDisplayContext displayContext, boolean leftHand, PoseStack poseStack, MultiBufferSource buffer, int seed, CallbackInfo info) {
+        if (ClientMixinUtils.onRenderHeldItem(entity, itemStack, displayContext, leftHand, poseStack, buffer, seed))
             info.cancel();
     }
 }

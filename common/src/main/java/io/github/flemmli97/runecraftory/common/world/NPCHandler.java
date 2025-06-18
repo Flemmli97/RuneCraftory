@@ -5,11 +5,15 @@ import io.github.flemmli97.runecraftory.api.datapack.npc.NPCData;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
@@ -84,10 +88,11 @@ public class NPCHandler {
         return this.resetQuestNPCS.getOrDefault(npc, new HashSet<>());
     }
 
-    public CompoundTag save() {
+    public CompoundTag save(HolderLookup.Provider provider) {
+        RegistryOps<Tag> ops = provider.createSerializationContext(NbtOps.INSTANCE);
         CompoundTag tag = new CompoundTag();
         CompoundTag npcs = new CompoundTag();
-        this.npcs.forEach((uuid, comp) -> npcs.put(uuid.toString(), StringTag.valueOf(Component.Serializer.toJson(comp))));
+        this.npcs.forEach((uuid, comp) -> npcs.put(uuid.toString(), ComponentSerialization.CODEC.encodeStart(ops, comp).getOrThrow()));
         tag.put("NPCs", npcs);
         CompoundTag uniques = new CompoundTag();
         this.uniqueNPCS.forEach((res, ids) -> {
@@ -106,19 +111,20 @@ public class NPCHandler {
         return tag;
     }
 
-    public void load(CompoundTag tag) {
+    public void load(CompoundTag tag, HolderLookup.Provider provider) {
+        RegistryOps<Tag> ops = provider.createSerializationContext(NbtOps.INSTANCE);
         CompoundTag npcs = tag.getCompound("NPCs");
         npcs.getAllKeys()
-                .forEach(key -> this.npcs.put(UUID.fromString(key), Component.Serializer.fromJson(npcs.getString(key))));
+                .forEach(key -> this.npcs.put(UUID.fromString(key), ComponentSerialization.CODEC.parse(ops, npcs.get(key)).getOrThrow()));
         CompoundTag uniques = tag.getCompound("UniqueNPCs");
         uniques.getAllKeys().forEach(key -> {
             ListTag idTag = uniques.getList(key, Tag.TAG_STRING);
-            this.uniqueNPCS.put(new ResourceLocation(key), idTag.stream().map(t -> UUID.fromString(t.getAsString())).collect(Collectors.toSet()));
+            this.uniqueNPCS.put(ResourceLocation.parse(key), idTag.stream().map(t -> UUID.fromString(t.getAsString())).collect(Collectors.toSet()));
         });
         CompoundTag resetQuestTracker = tag.getCompound("ResetQuestNPCs");
         resetQuestTracker.getAllKeys().forEach(key -> {
             CompoundTag pairs = resetQuestTracker.getCompound(key);
-            this.resetQuestNPCS.put(UUID.fromString(key), pairs.getAllKeys().stream().map(t -> Pair.of(UUID.fromString(t), new ResourceLocation(pairs.getString(t)))).collect(Collectors.toSet()));
+            this.resetQuestNPCS.put(UUID.fromString(key), pairs.getAllKeys().stream().map(t -> Pair.of(UUID.fromString(t), ResourceLocation.parse(pairs.getString(t)))).collect(Collectors.toSet()));
         });
     }
 }

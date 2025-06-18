@@ -68,7 +68,7 @@ public class CalendarImpl {
 
     public void setWeather(MinecraftServer server, EnumWeather weather) {
         this.currentWeather = weather;
-        LoaderNetwork.INSTANCE.sendToAll(new S2CCalendar(this), server.getPlayerList().getPlayers());
+        LoaderNetwork.INSTANCE.sendToAll(new S2CCalendar(this), server);
     }
 
     public void updateWeathers(EnumWeather[] nextDays) {

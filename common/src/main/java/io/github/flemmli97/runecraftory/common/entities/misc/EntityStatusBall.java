@@ -124,7 +124,7 @@ public class EntityStatusBall extends BaseDamageCloud {
     protected boolean damageEntity(LivingEntity target) {
         CustomDamage.Builder builder = new CustomDamage.Builder(this, this.getOwner()).noKnockback();
         this.type.damageMod.accept(builder);
-        if (CombatUtils.damageWithFaintAndCrit(this.getOwner(), target, builder, CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier, null)) {
+        if (CombatUtils.damageWithFaintAndCrit(this.getOwner(), target, builder, CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC_ATTACK.get()) * this.damageMultiplier, null)) {
             this.discard();
             return true;
         }
@@ -154,18 +154,18 @@ public class EntityStatusBall extends BaseDamageCloud {
 
         SLEEP(b -> b.magic().element(EnumElement.EARTH).withChangedAttribute(ModAttributes.SLEEP.get(), 100), new Vector3f(207 / 255F, 13 / 255F, 38 / 255F), 40),
         MUSHROOM_POISON(b -> b.magic().withChangedAttribute(ModAttributes.POISON.get(), 50), new Vector3f(112 / 255F, 201 / 255F, 95 / 255F), 40),
-        PARALYSIS(b -> b.magic().withChangedAttribute(ModAttributes.PARA.get(), 50), new Vector3f(196 / 255F, 186 / 255F, 35 / 255F), 40),
+        PARALYSIS(b -> b.magic().withChangedAttribute(ModAttributes.PARALYSIS.get(), 50), new Vector3f(196 / 255F, 186 / 255F, 35 / 255F), 40),
         RAFFLESIA_SLEEP(b -> b.hurtResistant(2).magic().withChangedAttribute(ModAttributes.SLEEP.get(), 10)
                 .withChangedAttribute(ModAttributes.FATIGUE.get(), 2)
                 .withChangedAttribute(ModAttributes.COLD.get(), 2), new Vector3f(207 / 255F, 13 / 255F, 38 / 255F), 30),
-        RAFFLESIA_PARALYSIS(b -> b.hurtResistant(2).magic().withChangedAttribute(ModAttributes.PARA.get(), 7)
+        RAFFLESIA_PARALYSIS(b -> b.hurtResistant(2).magic().withChangedAttribute(ModAttributes.PARALYSIS.get(), 7)
                 .withChangedAttribute(ModAttributes.FATIGUE.get(), 2)
                 .withChangedAttribute(ModAttributes.COLD.get(), 2), new Vector3f(204 / 255F, 190 / 255F, 57 / 255F), 30),
         RAFFLESIA_POISON(b -> b.hurtResistant(2).magic().withChangedAttribute(ModAttributes.POISON.get(), 7)
                 .withChangedAttribute(ModAttributes.FATIGUE.get(), 2)
                 .withChangedAttribute(ModAttributes.COLD.get(), 2), new Vector3f(184 / 255F, 56 / 255F, 209 / 255F), 30),
         RAFFLESIA_ALL(b -> b.hurtResistant(2).magic().withChangedAttribute(ModAttributes.SLEEP.get(), 5)
-                .withChangedAttribute(ModAttributes.PARA.get(), 5)
+                .withChangedAttribute(ModAttributes.PARALYSIS.get(), 5)
                 .withChangedAttribute(ModAttributes.POISON.get(), 5), new Vector3f(135 / 255F, 23 / 255F, 29 / 255F), 30);
 
         public final Consumer<CustomDamage.Builder> damageMod;

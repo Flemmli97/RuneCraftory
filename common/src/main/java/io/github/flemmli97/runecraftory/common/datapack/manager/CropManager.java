@@ -41,16 +41,16 @@ public class CropManager extends SimpleJsonResourceReloadListener implements Syn
             ImmutableMap.Builder<Item, CropProperties> builder = ImmutableMap.builder();
             int size = buf.readVarInt();
             for (int i = 0; i < size; i++)
-                builder.put(ByteBufCodecs.registry(Registries.ITEM).decode(buf), CropProperties.fromPacket(buf));
+                builder.put(ByteBufCodecs.registry(Registries.ITEM).decode(buf), CropProperties.STREAM_CODEC.decode(buf));
             return builder.build();
         }
 
         @Override
-        public void encode(RegistryFriendlyByteBuf buf, Map<Item, CropProperties> crops) {
-            buf.writeInt(crops.size());
-            crops.forEach((item, prop) -> {
+        public void encode(RegistryFriendlyByteBuf buf, Map<Item, CropProperties> props) {
+            buf.writeInt(props.size());
+            props.forEach((item, prop) -> {
                 ByteBufCodecs.registry(Registries.ITEM).encode(buf, item);
-                prop.toPacket(buf);
+                CropProperties.STREAM_CODEC.encode(buf, prop);
             });
         }
     };

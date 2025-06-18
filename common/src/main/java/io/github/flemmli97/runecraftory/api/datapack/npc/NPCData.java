@@ -45,7 +45,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                       RelationShipState relationShipState, List<ResourceLocation> possibleChildren) {
 
     public static final Map<Attribute, Double> DEFAULT_GAIN = Map.of(Attributes.MAX_HEALTH, 3d, Attributes.ATTACK_DAMAGE, 1d,
-            ModAttributes.DEFENCE.get(), 0.5d, ModAttributes.MAGIC.get(), 1d, ModAttributes.MAGIC_DEFENCE.get(), 0.5d);
+            ModAttributes.DEFENCE.get(), 0.5d, ModAttributes.MAGIC_ATTACK.get(), 1d, ModAttributes.MAGIC_DEFENCE.get(), 0.5d);
     public static final NPCData DEFAULT_DATA = new NPCData(null, null, Gender.UNDEFINED, List.of(), null, null, 1, "runecraftory.npc.default.gift.neutral",
             Map.of(), new QuestHandler(Map.of(), Set.of()), Map.of(), null, null, null, 1, null, 0, RelationShipState.DEFAULT, List.of());
 

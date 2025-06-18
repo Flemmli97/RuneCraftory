@@ -109,14 +109,14 @@ public class EntityTortas extends ChargingMonster {
     }
 
     @Override
-    public AABB attackBB(AnimatedAction anim) {
+    public AABB attackBB(String anim) {
         double width = this.getBbWidth() * 1.2;
         double length = this.getBbWidth() * 1.4;
         return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
     }
 
     @Override
-    protected boolean isChargingAnim(AnimatedAction anim) {
+    protected boolean isChargingAnim(String anim) {
         return anim.is(SPIN);
     }
 
@@ -258,7 +258,7 @@ public class EntityTortas extends ChargingMonster {
     }
 
     @Override
-    public AnimatedAction getSleepAnimation() {
+    public String getSleepAnimation() {
         return SLEEP;
     }
 

@@ -41,16 +41,16 @@ public class FoodManager extends SimpleJsonResourceReloadListener implements Syn
             ImmutableMap.Builder<Item, FoodProperties> builder = ImmutableMap.builder();
             int size = buf.readVarInt();
             for (int i = 0; i < size; i++)
-                builder.put(ByteBufCodecs.registry(Registries.ITEM).decode(buf), FoodProperties.fromPacket(buf));
+                builder.put(ByteBufCodecs.registry(Registries.ITEM).decode(buf), FoodProperties.STREAM_CODEC.decode(buf));
             return builder.build();
         }
 
         @Override
-        public void encode(RegistryFriendlyByteBuf buf, Map<Item, FoodProperties> crops) {
-            buf.writeInt(crops.size());
-            crops.forEach((item, prop) -> {
+        public void encode(RegistryFriendlyByteBuf buf, Map<Item, FoodProperties> props) {
+            buf.writeInt(props.size());
+            props.forEach((item, prop) -> {
                 ByteBufCodecs.registry(Registries.ITEM).encode(buf, item);
-                prop.toPacket(buf);
+                FoodProperties.STREAM_CODEC.encode(buf, prop);
             });
         }
     };

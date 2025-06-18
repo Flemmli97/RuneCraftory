@@ -6,6 +6,7 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.pools.SinglePoolElement;
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockIgnoreProcessor;
+import net.minecraft.world.level.levelgen.structure.templatesystem.LiquidSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 import org.spongepowered.asm.mixin.Final;
@@ -26,7 +27,7 @@ public abstract class SinglePoolElementMixin {
      * We shift vanillas processor to last. That way we can actually access structure blocks
      */
     @Inject(method = "getSettings", at = @At("RETURN"))
-    private void modifySettings(Rotation rotation, BoundingBox boundingBox, boolean bl, CallbackInfoReturnable<StructurePlaceSettings> info) {
+    private void modifySettings(Rotation rotation, BoundingBox boundingBox, LiquidSettings liquidSettings, boolean offset, CallbackInfoReturnable<StructurePlaceSettings> info) {
         if (this.processors.value().list().stream().anyMatch(p -> p instanceof DataStructureBlockProcessor)) {
             StructurePlaceSettings setting = info.getReturnValue();
             setting.popProcessor(BlockIgnoreProcessor.STRUCTURE_BLOCK);

@@ -167,9 +167,11 @@ public abstract class SextupleRecipe implements Recipe<PlayerBoundCraftingContai
     }
 
     public record MatchResult(NonNullList<ItemStack> recipeMatches, NonNullList<ItemStack> bonusItems) {
+
     }
 
     public record RecipeOutput(ItemStack serverResult, ItemStack clientResult, NonNullList<ItemStack> bonusItems) {
+
     }
 
     public static class Serializer<T extends SextupleRecipe> implements RecipeSerializer<T> {
@@ -249,6 +251,7 @@ public abstract class SextupleRecipe implements Recipe<PlayerBoundCraftingContai
         }
 
         public interface Factory<T extends SextupleRecipe> {
+
             T get(String group, int level, int cost, ItemStack result, NonNullList<Ingredient> ingredients);
         }
     }

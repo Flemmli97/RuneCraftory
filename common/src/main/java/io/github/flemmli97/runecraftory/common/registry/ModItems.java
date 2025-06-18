@@ -22,7 +22,6 @@ import io.github.flemmli97.runecraftory.common.items.creative.ItemLevelUp;
 import io.github.flemmli97.runecraftory.common.items.creative.ItemProp;
 import io.github.flemmli97.runecraftory.common.items.creative.ItemSkillUp;
 import io.github.flemmli97.runecraftory.common.items.equipment.ItemArmorBase;
-import io.github.flemmli97.runecraftory.common.items.equipment.ItemStatShield;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemCommandStaff;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemFertilizer;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemStatIncrease;
@@ -60,6 +59,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemNameBlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.block.Block;
 
@@ -524,24 +524,24 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item, ItemArmorBase> ICE_SKATES = equipment(ArmorItem.Type.BOOTS, "ice_skates", Texture.N);
     public static final RegistryEntrySupplier<Item, ItemArmorBase> ROCKET_WING = equipment(ArmorItem.Type.BOOTS, "rocket_wing", Texture.N);
 
-    public static final RegistryEntrySupplier<Item, ItemStatShield> SMALL_SHIELD = shield("small_shield", Texture.Y);
-    public static final RegistryEntrySupplier<Item, ItemStatShield> UMBRELLA = shield("umbrella", Texture.Y);
-    public static final RegistryEntrySupplier<Item, ItemStatShield> IRON_SHIELD = shield("iron_shield", Texture.Y);
-    public static final RegistryEntrySupplier<Item, ItemStatShield> MONKEY_PLUSH = shield("monkey_plush", Texture.Y);
-    public static final RegistryEntrySupplier<Item, ItemStatShield> ROUND_SHIELD = shield("round_shield", Texture.Y);
-    public static final RegistryEntrySupplier<Item, ItemStatShield> TURTLE_SHIELD = shield("turtle_shield", Texture.Y);
-    public static final RegistryEntrySupplier<Item, ItemStatShield> CHAOS_SHIELD = shield("chaos_shield", Texture.N);
-    public static final RegistryEntrySupplier<Item, ItemStatShield> BONE_SHIELD = shield("bone_shield", Texture.N);
-    public static final RegistryEntrySupplier<Item, ItemStatShield> MAGIC_SHIELD = shield("magic_shield", Texture.N);
-    public static final RegistryEntrySupplier<Item, ItemStatShield> HEAVY_SHIELD = shield("heavy_shield", Texture.N);
-    public static final RegistryEntrySupplier<Item, ItemStatShield> PLATINUM_SHIELD = shield("platinum_shield", Texture.N);
-    public static final RegistryEntrySupplier<Item, ItemStatShield> KITE_SHIELD = shield("kite_shield", Texture.N);
-    public static final RegistryEntrySupplier<Item, ItemStatShield> KNIGHT_SHIELD = shield("knight_shield", Texture.N);
-    public static final RegistryEntrySupplier<Item, ItemStatShield> ELEMENT_SHIELD = shield("element_shield", Texture.N);
-    public static final RegistryEntrySupplier<Item, ItemStatShield> MAGICAL_SHIELD = shield("magical_shield", Texture.N);
-    public static final RegistryEntrySupplier<Item, ItemStatShield> PRISM_SHIELD = shield("prism_shield", Texture.N);
-    public static final RegistryEntrySupplier<Item, ItemStatShield> RUNE_SHIELD = shield("rune_shield", Texture.N);
-    public static final RegistryEntrySupplier<Item, ItemStatShield> PLANT_SHIELD = register("plant_shield", () -> new ItemStatShield(new Item.Properties().stacksTo(1)), ModCreativeModTabs.EQUIPMENT);
+    public static final RegistryEntrySupplier<Item, ShieldItem> SMALL_SHIELD = shield("small_shield", Texture.Y);
+    public static final RegistryEntrySupplier<Item, ShieldItem> UMBRELLA = shield("umbrella", Texture.Y);
+    public static final RegistryEntrySupplier<Item, ShieldItem> IRON_SHIELD = shield("iron_shield", Texture.Y);
+    public static final RegistryEntrySupplier<Item, ShieldItem> MONKEY_PLUSH = shield("monkey_plush", Texture.Y);
+    public static final RegistryEntrySupplier<Item, ShieldItem> ROUND_SHIELD = shield("round_shield", Texture.Y);
+    public static final RegistryEntrySupplier<Item, ShieldItem> TURTLE_SHIELD = shield("turtle_shield", Texture.Y);
+    public static final RegistryEntrySupplier<Item, ShieldItem> CHAOS_SHIELD = shield("chaos_shield", Texture.N);
+    public static final RegistryEntrySupplier<Item, ShieldItem> BONE_SHIELD = shield("bone_shield", Texture.N);
+    public static final RegistryEntrySupplier<Item, ShieldItem> MAGIC_SHIELD = shield("magic_shield", Texture.N);
+    public static final RegistryEntrySupplier<Item, ShieldItem> HEAVY_SHIELD = shield("heavy_shield", Texture.N);
+    public static final RegistryEntrySupplier<Item, ShieldItem> PLATINUM_SHIELD = shield("platinum_shield", Texture.N);
+    public static final RegistryEntrySupplier<Item, ShieldItem> KITE_SHIELD = shield("kite_shield", Texture.N);
+    public static final RegistryEntrySupplier<Item, ShieldItem> KNIGHT_SHIELD = shield("knight_shield", Texture.N);
+    public static final RegistryEntrySupplier<Item, ShieldItem> ELEMENT_SHIELD = shield("element_shield", Texture.N);
+    public static final RegistryEntrySupplier<Item, ShieldItem> MAGICAL_SHIELD = shield("magical_shield", Texture.N);
+    public static final RegistryEntrySupplier<Item, ShieldItem> PRISM_SHIELD = shield("prism_shield", Texture.N);
+    public static final RegistryEntrySupplier<Item, ShieldItem> RUNE_SHIELD = shield("rune_shield", Texture.N);
+    public static final RegistryEntrySupplier<Item, ShieldItem> PLANT_SHIELD = register("plant_shield", () -> new ShieldItem(new Item.Properties().stacksTo(1)), ModCreativeModTabs.EQUIPMENT);
 
     public static final RegistryEntrySupplier<Item, CraftingBlockItem> ITEM_BLOCK_FORGE = register("forge", () -> new CraftingBlockItem(ModBlocks.FORGE.get(), new Item.Properties()), ModCreativeModTabs.BLOCKS);
     public static final RegistryEntrySupplier<Item, CraftingBlockItem> ITEM_BLOCK_ACCESS = register("accessory_workbench", () -> new CraftingBlockItem(ModBlocks.ACCESSORY.get(), new Item.Properties()), ModCreativeModTabs.BLOCKS);
@@ -1464,13 +1464,13 @@ public class ModItems {
         return sup;
     }
 
-    private static RegistryEntrySupplier<Item, ItemStatShield> shield(String name, Texture texture) {
+    private static RegistryEntrySupplier<Item, ShieldItem> shield(String name, Texture texture) {
         if (texture == Texture.N) {
-            RegistryEntrySupplier<Item, ItemStatShield> sup = register(name, () -> new ItemStatShield(new Item.Properties().stacksTo(1)));
+            RegistryEntrySupplier<Item, ShieldItem> sup = register(name, () -> new ShieldItem(new Item.Properties().stacksTo(1)));
             NOTEX.add(sup);
             return sup;
         }
-        RegistryEntrySupplier<Item, ItemStatShield> sup = register(name, () -> new ItemStatShield(new Item.Properties().stacksTo(1)), ModCreativeModTabs.EQUIPMENT);
+        RegistryEntrySupplier<Item, ShieldItem> sup = register(name, () -> new ShieldItem(new Item.Properties().stacksTo(1)), ModCreativeModTabs.EQUIPMENT);
         if (Platform.INSTANCE.isDatagen()) {
             TIER_3_CHEST.add(sup);
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.SHIELDS, t -> new ArrayList<>()).add(sup);

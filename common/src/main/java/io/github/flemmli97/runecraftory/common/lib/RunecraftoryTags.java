@@ -7,12 +7,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class RunecraftoryTags {
@@ -107,6 +109,9 @@ public class RunecraftoryTags {
         public static final TagKey<Item> DUALBLADES = tag("weapon/dual_blades");
         public static final TagKey<Item> FISTS = tag("weapon/fists");
         public static final TagKey<Item> STAFFS = tag("weapon/staffs");
+        public static final List<TagKey<Item>> WEAPONTAGS = List.of(
+                SHORTSWORDS, LONGSWORDS, SPEARS, AXES, HAMMERS, DUALBLADES, FISTS, STAFFS
+        );
 
         public static final TagKey<Item> EQUIPMENT = tag("equipment");
         public static final TagKey<Item> HELMET = tag("equipment/helmet");
@@ -284,6 +289,16 @@ public class RunecraftoryTags {
     public static class Fluids {
 
         public static final TagKey<Fluid> HOT_SPRING_FLUID = TagKey.create(Registries.FLUID, RuneCraftory.modRes("hot_spring_water"));
+    }
+
+    public static class Attributes {
+
+        public static final TagKey<Attribute> WEAPON_ONLY = TagKey.create(Registries.ATTRIBUTE, RuneCraftory.modRes("weapon_only"));
+        public static final TagKey<Attribute> ARMOR_ONLY = TagKey.create(Registries.ATTRIBUTE, RuneCraftory.modRes("armor_only"));
+        public static final TagKey<Attribute> NON_INHERITABLE = TagKey.create(Registries.ATTRIBUTE, RuneCraftory.modRes("non_inheritable"));
+        public static final TagKey<Attribute> PERCENTAGE_DISPLAY = TagKey.create(Registries.ATTRIBUTE, RuneCraftory.modRes("percentage_display"));
+        public static final TagKey<Attribute> DISPLAY_IGNORED = TagKey.create(Registries.ATTRIBUTE, RuneCraftory.modRes("display_ignored"));
+
     }
 
     public static class DamageTypes {

@@ -1,11 +1,12 @@
 package io.github.flemmli97.runecraftory.mixinhelper;
 
-import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.api.registry.ArmorEffect;
-import io.github.flemmli97.runecraftory.common.attachment.EntityData;
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.entities.utils.IBaseMob;
 import io.github.flemmli97.runecraftory.common.registry.ModArmorEffects;
+import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
+import io.github.flemmli97.runecraftory.mixin.CropBlockAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -16,7 +17,6 @@ import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -25,18 +25,14 @@ import net.minecraft.world.phys.HitResult;
 
 public class MixinUtils {
 
-    public static boolean stop(Player player, ItemStack stack, HitResult hitResult) {
-        Item item = stack.getItem();
-        return hitResult.getType() != HitResult.Type.BLOCK && item instanceof IItemUsable && player.getCooldowns().isOnCooldown(item);
-    }
-
     public static boolean playerPose(Player player) {
-        if (Platform.INSTANCE.getEntityData(player).map(EntityData::isSleeping).orElse(false)) {
+        if (Platform.INSTANCE.getEntityData(player).isSleeping()) {
             if (player.getPose() != Pose.SLEEPING)
                 player.setPose(Pose.SLEEPING);
             return true;
         }
-        Pose pose = Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().getCurrentAction().getPose(player, d.getWeaponHandler())).orElse(null);
+        PlayerData data = Platform.INSTANCE.getPlayerData(player);
+        Pose pose = data.getWeaponHandler().getCurrentAction().getPose(player, data.getWeaponHandler());
         if (pose != null) {
             if (player.getPose() != pose)
                 player.setPose(pose);
@@ -47,22 +43,22 @@ public class MixinUtils {
 
     public static void onPlayerThrowItem(Player player, ItemEntity entity) {
         if (!player.isDeadOrDying()) {
-            entity.setThrower(player.getUUID());
+            entity.setThrower(player);
             PrevEntityPosition pos = (PrevEntityPosition) player;
             double dX = player.getX() - pos.runecraftory$getOldPlayerX();
             double dZ = player.getZ() - pos.runecraftory$getOldPlayerZ();
             double spd = dX * dX + dZ * dZ;
             if (spd > 0.01) {
-                double scale = ArmorEffect.hasArmorEffect(player, ModArmorEffects.THROWING_RING.get()) ? 2.5 : 1.7;
+                double scale = ArmorEffect.hasArmorEffect(player, ModArmorEffects.THROWING_RING.asHolder()) ? 2.5 : 1.7;
                 entity.setDeltaMovement(entity.getDeltaMovement().scale(scale));
             }
         }
     }
 
     public static boolean handleEntityCollision(ItemEntity entity) {
-        if (entity.isInWater() || entity.isInLava() || entity.getThrower() == null || entity.level().isClientSide)
+        if (entity.isInWater() || entity.isInLava() || entity.getOwner() == null || entity.level().isClientSide)
             return true;
-        HitResult hitResult = ProjectileUtil.getHitResult(entity, t -> canHitEntity(entity, t));
+        HitResult hitResult = ProjectileUtil.getHitResultOnMoveVector(entity, t -> canHitEntity(entity, t));
         if (hitResult.getType() == HitResult.Type.BLOCK) {
             return true;
         }
@@ -70,7 +66,7 @@ public class MixinUtils {
             EntityHitResult result = (EntityHitResult) hitResult;
             if (result.getEntity() instanceof IBaseMob mob) {
                 ItemStack stack = entity.getItem();
-                Entity e = ((ServerLevel) entity.level()).getEntity(entity.getThrower());
+                Entity e = entity.getOwner();
                 if (e instanceof Player thrower) {
                     if (mob.onGivingItem(thrower, stack)) {
                         if (stack.isEmpty())
@@ -84,10 +80,11 @@ public class MixinUtils {
     }
 
     protected static boolean canHitEntity(ItemEntity entity, Entity target) {
-        if (target.isSpectator() || !target.isAlive() || !target.isPickable()) {
+        Entity owner;
+        if (target.isSpectator() || !target.isAlive() || !target.isPickable() || (owner = entity.getOwner()) == null) {
             return false;
         }
-        return !target.getUUID().equals(entity.getThrower());
+        return !target.getUUID().equals(owner.getUUID());
     }
 
     public static void onBlockStateChange(ServerLevel level, BlockPos pos, BlockState blockState, BlockState newState) {
@@ -104,7 +101,7 @@ public class MixinUtils {
                 if (!(newState.getBlock() instanceof CropBlock post)) {
                     FarmlandHandler.get(level.getServer()).getData(level, pos.below())
                             .ifPresent(d -> d.onCropRemove(level, pos, newState));
-                } else if (blockState.getValue(pre.getAgeProperty()) > newState.getValue(post.getAgeProperty())) {
+                } else if (blockState.getValue(((CropBlockAccessor) pre).cropAgeProperty()) > newState.getValue(((CropBlockAccessor) post).cropAgeProperty())) {
                     //Crop got reset (e.g. via right click harvesting)
                     FarmlandHandler.get(level.getServer()).getData(level, pos.below())
                             .ifPresent(d -> d.onRegrowableHarvest(level, pos, newState));
@@ -121,11 +118,11 @@ public class MixinUtils {
 
     public static void triggerArmorStepEffect(LivingEntity living) {
         for (EquipmentSlot slot : EquipmentSlot.values()) {
-            if (slot.getType() != EquipmentSlot.Type.ARMOR)
+            if (slot.getType() != EquipmentSlot.Type.HUMANOID_ARMOR)
                 continue;
             ItemStack stack = living.getItemBySlot(slot);
-            if (!stack.isEmpty())
-                Platform.INSTANCE.getArmorEffects(stack).ifPresent(d -> d.triggerEvent(stack, e -> e.onStep(living, stack)));
+            if (!stack.isEmpty() && stack.has(ModDataComponentTypes.ARMOR_EFFECT.get()))
+                stack.get(ModDataComponentTypes.ARMOR_EFFECT.get()).triggerEvent(stack, e -> e.onStep(living, stack));
         }
     }
 }

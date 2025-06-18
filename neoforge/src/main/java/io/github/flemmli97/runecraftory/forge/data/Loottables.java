@@ -42,7 +42,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -459,7 +458,7 @@ public class Loottables extends LootTableProvider {
                 } else {
                     b.apply(new LootingAndLuckLootFunction.Builder(ConstantValue.exactly(data.chance))
                             .withLuckBonus(ConstantValue.exactly(data.luckBonus))
-                            .withLootingBonus(ConstantValue.exactly(data.lootingBonus))
+                            .withLootingBonus(this.provider, ConstantValue.exactly(data.lootingBonus))
                             .limit(data.max));
                 }
                 if (data.guaranteeFirst) {
@@ -866,9 +865,6 @@ public class Loottables extends LootTableProvider {
 
             this.add(ModBlocks.ACCESSORY.get(), block -> this.createSinglePropConditionTable(block, BlockCrafting.PART, BlockCrafting.EnumPart.LEFT));
 
-            //Copy of snow layer
-            this.add(ModBlocks.SNOW.get(), block -> LootTable.lootTable()
-                    .withPool(LootPool.lootPool().add(NestedLootTable.lootTableReference(Blocks.SNOW.getLootTable()))));
             this.loots.forEach(biConsumer);
         }
 

@@ -2,50 +2,40 @@ package io.github.flemmli97.runecraftory.common.entities.data;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.utils.MobAttackExt;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.syncher.EntityDataSerializer;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.phys.Vec3;
 
 public class SyncableDatas {
 
-    public static final EntityDataSerializer<Vec3> VEC3 = new EntityDataSerializer<>() {
+    public static final StreamCodec<RegistryFriendlyByteBuf, Vec3> VEC3 = new StreamCodec<>() {
         @Override
-        public void write(FriendlyByteBuf buffer, Vec3 value) {
-            buffer.writeDouble(value.x());
-            buffer.writeDouble(value.y());
-            buffer.writeDouble(value.z());
-        }
-
-        @Override
-        public Vec3 read(FriendlyByteBuf buffer) {
+        public Vec3 decode(RegistryFriendlyByteBuf buffer) {
             return new Vec3(buffer.readDouble(), buffer.readDouble(), buffer.readDouble());
         }
 
         @Override
-        public Vec3 copy(Vec3 value) {
-            return new Vec3(value.x(), value.y(), value.z());
+        public void encode(RegistryFriendlyByteBuf buffer, Vec3 value) {
+            buffer.writeDouble(value.x());
+            buffer.writeDouble(value.y());
+            buffer.writeDouble(value.z());
         }
     };
 
-    public static final EntityDataSerializer<MobAttackExt.TargetPosition> TARGET_POSITION = new EntityDataSerializer<>() {
+    public static final StreamCodec<RegistryFriendlyByteBuf, MobAttackExt.TargetPosition> TARGET_POSITION = new StreamCodec<>() {
         @Override
-        public void write(FriendlyByteBuf buffer, MobAttackExt.TargetPosition value) {
-            buffer.writeDouble(value.position().x());
-            buffer.writeDouble(value.position().y());
-            buffer.writeDouble(value.position().z());
-            buffer.writeDouble(value.minHeight());
-            buffer.writeDouble(value.maxHeight());
-        }
-
-        @Override
-        public MobAttackExt.TargetPosition read(FriendlyByteBuf buffer) {
+        public MobAttackExt.TargetPosition decode(RegistryFriendlyByteBuf buffer) {
             return new MobAttackExt.TargetPosition(new Vec3(buffer.readDouble(), buffer.readDouble(), buffer.readDouble()),
                     buffer.readDouble(), buffer.readDouble());
         }
 
         @Override
-        public MobAttackExt.TargetPosition copy(MobAttackExt.TargetPosition value) {
-            return new MobAttackExt.TargetPosition(value.position(), value.minHeight(), value.maxHeight());
+        public void encode(RegistryFriendlyByteBuf buffer, MobAttackExt.TargetPosition value) {
+            buffer.writeDouble(value.position().x());
+            buffer.writeDouble(value.position().y());
+            buffer.writeDouble(value.position().z());
+            buffer.writeDouble(value.minHeight());
+            buffer.writeDouble(value.maxHeight());
         }
     };
 

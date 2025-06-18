@@ -50,7 +50,7 @@ public abstract class BossMonster extends BaseMonster implements OverlayEntityRe
     protected static final List<Supplier<Holder<Attribute>>> STAT_INCREASE = List.of(
             () -> Attributes.ATTACK_DAMAGE,
             ModAttributes.DEFENCE::asHolder,
-            ModAttributes.MAGIC::asHolder,
+            ModAttributes.MAGIC_ATTACK::asHolder,
             ModAttributes.MAGIC_DEFENCE::asHolder
     );
     protected static final ResourceLocation STAT_INCREASE_ID = RuneCraftory.modRes("boss_enraged_buff");
@@ -250,7 +250,7 @@ public abstract class BossMonster extends BaseMonster implements OverlayEntityRe
     }
 
     @Override
-    public int animationCooldown(AnimatedAction anim) {
+    public int animationCooldown(String anim) {
         int diffAdd = this.difficultyCooldown();
         return (this.isEnraged() ? 25 + this.getRandom().nextInt(20) : 30 + this.getRandom().nextInt(25)) + diffAdd;
     }
@@ -339,13 +339,6 @@ public abstract class BossMonster extends BaseMonster implements OverlayEntityRe
     @Override
     public int overlayV(int orig) {
         return this.isEnraged() ? 0 : orig;
-    }
-
-    @Override
-    public boolean allowAnimation(String prev, String other) {
-        if (other == null)
-            return super.allowAnimation(prev, null);
-        return !prev.equals(other);
     }
 
     public void playAngrySound() {

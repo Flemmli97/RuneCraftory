@@ -34,7 +34,7 @@ public class MillionStrikeAttack extends AttackAction {
             if (!entity.level().isClientSide) {
                 CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(entity.getYRot(), 0, 0, 1, false))
                         .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
-                        .withBonusAttributes(ModAttributes.CRIT.asHolder(), 100d).executeAttack();
+                        .withBonusAttributes(ModAttributes.CRITICAL.asHolder(), 100d).executeAttack();
             }
             entity.playSound(SoundEvents.PLAYER_ATTACK_CRIT, 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.7f);
         }

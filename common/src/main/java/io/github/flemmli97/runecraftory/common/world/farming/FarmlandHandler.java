@@ -1,7 +1,6 @@
 package io.github.flemmli97.runecraftory.common.world.farming;
 
 import com.mojang.datafixers.util.Pair;
-import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeather;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
 import io.github.flemmli97.runecraftory.common.blocks.BlockGiantCrop;
@@ -12,15 +11,16 @@ import io.github.flemmli97.runecraftory.common.network.S2CFarmlandRemovePacket;
 import io.github.flemmli97.runecraftory.common.network.S2CFarmlandUpdatePacket;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongArraySet;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Registry;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.ResourceKey;
@@ -32,6 +32,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
+import net.minecraft.util.datafix.DataFixTypes;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
@@ -60,7 +61,9 @@ import java.util.function.Consumer;
  */
 public class FarmlandHandler extends SavedData {
 
-    private static final String ID = "FarmlandData";
+    private static final String IDENTIFIER = "FarmlandData";
+    private static final SavedData.Factory<FarmlandHandler> FACTORY = new Factory<>(FarmlandHandler::new, FarmlandHandler::new, DataFixTypes.LEVEL);
+
     private static final int CHUNK_SECTION_SIZE = 16 * 16 * 16;
 
     private final Map<ResourceKey<Level>, Long2ObjectMap<FarmlandData>> farmland = new HashMap<>();
@@ -74,15 +77,15 @@ public class FarmlandHandler extends SavedData {
 
     private int lastUpdateDay;
 
-    public FarmlandHandler() {
+    private FarmlandHandler() {
     }
 
-    private FarmlandHandler(CompoundTag tag) {
+    private FarmlandHandler(CompoundTag tag, HolderLookup.Provider provider) {
         this.load(tag);
     }
 
     public static FarmlandHandler get(MinecraftServer server) {
-        return server.overworld().getDataStorage().computeIfAbsent(FarmlandHandler::new, FarmlandHandler::new, ID);
+        return server.overworld().getDataStorage().computeIfAbsent(FACTORY, IDENTIFIER);
     }
 
     public static boolean isFarmBlock(BlockState state) {
@@ -107,19 +110,19 @@ public class FarmlandHandler extends SavedData {
             return false;
         }
         Biome biome = level.getBiome(position).value();
-        return biome.getPrecipitation() == Biome.Precipitation.RAIN && biome.warmEnoughToRain(position);
+        return biome.getPrecipitationAt(position) == Biome.Precipitation.RAIN && biome.warmEnoughToRain(position);
     }
 
     public static void sendChangesTo(ServerLevel level, ChunkPos pos, List<FarmlandData> data) {
-        Platform.INSTANCE.sendToTracking(new S2CFarmlandUpdatePacket(pos.toLong(), data), level, pos);
+        LoaderNetwork.INSTANCE.sendToTracking(new S2CFarmlandUpdatePacket(pos.toLong(), data), level, pos);
     }
 
     public static void onFarmRemoveChange(ServerLevel level, ChunkPos pos, List<BlockPos> data) {
-        Platform.INSTANCE.sendToTracking(new S2CFarmlandRemovePacket(pos.toLong(), data), level, pos);
+        LoaderNetwork.INSTANCE.sendToTracking(new S2CFarmlandRemovePacket(pos.toLong(), data), level, pos);
     }
 
     public static void unloadChunk(ServerLevel level, ChunkPos pos) {
-        Platform.INSTANCE.sendToTracking(new S2CFarmlandRemovePacket(pos.toLong()), level, pos);
+        LoaderNetwork.INSTANCE.sendToTracking(new S2CFarmlandRemovePacket(pos.toLong()), level, pos);
     }
 
     /**
@@ -235,11 +238,11 @@ public class FarmlandHandler extends SavedData {
     }
 
     public void sendChangesTo(ServerPlayer player, ChunkPos pos) {
-        Long2ObjectMap<Set<FarmlandData>> chunkFarms = this.farmlandChunks.get(player.getLevel().dimension());
+        Long2ObjectMap<Set<FarmlandData>> chunkFarms = this.farmlandChunks.get(player.level().dimension());
         if (chunkFarms != null) {
             Set<FarmlandData> farms = chunkFarms.get(pos.toLong());
             if (farms != null) {
-                Platform.INSTANCE.sendToTracking(new S2CFarmlandUpdatePacket(pos.toLong(), new ArrayList<>(farms)), player.getLevel(), pos);
+                LoaderNetwork.INSTANCE.sendToTracking(new S2CFarmlandUpdatePacket(pos.toLong(), new ArrayList<>(farms)), (ServerLevel) player.level(), pos);
             }
         }
     }
@@ -368,7 +371,7 @@ public class FarmlandHandler extends SavedData {
         CompoundTag farmTag = compoundTag.getCompound("Farms");
         farmTag.getAllKeys().forEach(levelKey -> {
             CompoundTag levelTag = farmTag.getCompound(levelKey);
-            ResourceKey<Level> key = ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(levelKey));
+            ResourceKey<Level> key = ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(levelKey));
             levelTag.getAllKeys().forEach(l -> {
                 long packedPos = Long.parseLong(l);
                 FarmlandData data = FarmlandData.fromTag(levelTag.getCompound(l), BlockPos.of(packedPos));
@@ -379,7 +382,7 @@ public class FarmlandHandler extends SavedData {
         CompoundTag irrigationTag = compoundTag.getCompound("Irrigation");
         irrigationTag.getAllKeys().forEach(levelKey -> {
             CompoundTag t = irrigationTag.getCompound(levelKey);
-            ResourceKey<Level> key = ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(levelKey));
+            ResourceKey<Level> key = ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(levelKey));
             t.getAllKeys().forEach(uuidKey -> {
                 UUID uuid = UUID.fromString(uuidKey);
                 this.irrigationPOI.computeIfAbsent(key, old -> new HashMap<>())
@@ -397,7 +400,7 @@ public class FarmlandHandler extends SavedData {
     }
 
     @Override
-    public CompoundTag save(CompoundTag compoundTag) {
+    public CompoundTag save(CompoundTag compoundTag, HolderLookup.Provider provider) {
         compoundTag.putInt("LastUpdateDay", this.lastUpdateDay);
         CompoundTag farmTag = new CompoundTag();
         this.farmland.forEach((key, map) -> {
@@ -440,7 +443,7 @@ public class FarmlandHandler extends SavedData {
         public static final String ID = "MonsterIrrigation";
 
         public MonsterCropIrrigation(CompoundTag tag) {
-            this(tag.getLong("Start"), BlockPos.CODEC.parse(NbtOps.INSTANCE, tag.getCompound("Pos")).getOrThrow(false, RuneCraftory.LOGGER::error));
+            this(tag.getLong("Start"), BlockPos.CODEC.parse(NbtOps.INSTANCE, tag.getCompound("Pos")).getOrThrow());
         }
 
         @Override
@@ -462,7 +465,7 @@ public class FarmlandHandler extends SavedData {
             CompoundTag tag = new CompoundTag();
             tag.putString("ID", ID);
             tag.putLong("Start", this.getStartTime());
-            tag.put("Pos", BlockPos.CODEC.encodeStart(NbtOps.INSTANCE, this.pos).getOrThrow(false, RuneCraftory.LOGGER::error));
+            tag.put("Pos", BlockPos.CODEC.encodeStart(NbtOps.INSTANCE, this.pos).getOrThrow());
             return tag;
         }
     }

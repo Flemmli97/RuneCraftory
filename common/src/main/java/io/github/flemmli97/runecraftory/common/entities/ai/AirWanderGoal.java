@@ -27,7 +27,7 @@ public class AirWanderGoal extends RandomStrollGoal {
         Vec3 vec = DefaultRandomPos.getPos(this.mob, radius, 7);
         //this.creature.setPathPriority(PathNodeType.OPEN, this.prevPrio);
         BlockPos pos;
-        if (vec != null && this.mob.level.getBlockState(pos = new BlockPos(vec).below()).entityCanStandOn(this.mob.level, pos, this.mob)) {
+        if (vec != null && this.mob.level().getBlockState(pos = BlockPos.containing(vec).below()).entityCanStandOn(this.mob.level(), pos, this.mob)) {
             return vec.add(0, 1, 0);
         }
         return vec;

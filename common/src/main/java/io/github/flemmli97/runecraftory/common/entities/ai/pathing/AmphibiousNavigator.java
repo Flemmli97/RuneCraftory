@@ -26,6 +26,6 @@ public class AmphibiousNavigator extends WaterBoundPathNavigation {
 
     @Override
     public boolean isStableDestination(BlockPos pos) {
-        return !this.level().getBlockState(pos.below()).isAir();
+        return !this.level.getBlockState(pos.below()).isAir();
     }
 }

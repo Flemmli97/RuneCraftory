@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.blocks;
 
-import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
+import com.mojang.serialization.MapCodec;
 import io.github.flemmli97.runecraftory.common.inventory.InventoryShippingBin;
 import io.github.flemmli97.runecraftory.common.inventory.container.ShippingContainer;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -8,9 +8,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -25,12 +26,19 @@ import net.minecraft.world.phys.BlockHitResult;
 
 public class BlockShippingBin extends Block {
 
+    public static final MapCodec<BlockShippingBin> CODEC = simpleCodec(BlockShippingBin::new);
+
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final String NAME = "runecraftory.container.shipping_bin";
 
     public BlockShippingBin(BlockBehaviour.Properties props) {
         super(props);
         this.registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH));
+    }
+
+    @Override
+    public MapCodec<BlockShippingBin> codec() {
+        return CODEC;
     }
 
     @Override
@@ -44,15 +52,12 @@ public class BlockShippingBin extends Block {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
+    public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
         if (level.isClientSide)
-            return InteractionResult.SUCCESS;
-        InventoryShippingBin shippingInv = Platform.INSTANCE.getPlayerData(player).map(PlayerData::getShippingInv).orElse(null);
-        if (shippingInv != null) {
-            player.openMenu(new SimpleMenuProvider((id, inventory, playerIn) -> new ShippingContainer(id, inventory, shippingInv), Component.translatable(NAME)));
-            return InteractionResult.SUCCESS;
-        }
-        return super.use(state, level, pos, player, hand, result);
+            return ItemInteractionResult.SUCCESS;
+        InventoryShippingBin shippingInv = Platform.INSTANCE.getPlayerData(player).getShippingInv();
+        player.openMenu(new SimpleMenuProvider((id, inventory, playerIn) -> new ShippingContainer(id, inventory, shippingInv), Component.translatable(NAME)));
+        return ItemInteractionResult.SUCCESS;
     }
 
     @Override

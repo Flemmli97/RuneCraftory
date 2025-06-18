@@ -1,11 +1,11 @@
 package io.github.flemmli97.runecraftory.fabric;
 
+import fuzs.forgeconfigapiport.fabric.api.neoforge.v4.NeoForgeConfigRegistry;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientCalls;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
+import io.github.flemmli97.runecraftory.common.config.specs.ConfigHolder;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
-import io.github.flemmli97.runecraftory.common.datapack.ListenerExtension;
-import io.github.flemmli97.runecraftory.common.entities.GateEntity;
 import io.github.flemmli97.runecraftory.common.events.EntityCalls;
 import io.github.flemmli97.runecraftory.common.events.WorldCalls;
 import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
@@ -20,7 +20,6 @@ import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
 import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
-import io.github.flemmli97.runecraftory.common.registry.ModFeatures;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
 import io.github.flemmli97.runecraftory.common.registry.ModMenuTypes;
@@ -31,21 +30,16 @@ import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.registry.ModPoiTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
-import io.github.flemmli97.runecraftory.common.registry.ModStructures;
 import io.github.flemmli97.runecraftory.common.utils.LootTableResources;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
-import io.github.flemmli97.runecraftory.fabric.config.ConfigHolder;
-import io.github.flemmli97.runecraftory.fabric.config.GeneralConfigSpec;
-import io.github.flemmli97.runecraftory.fabric.config.MobConfigSpec;
 import io.github.flemmli97.runecraftory.fabric.event.CropGrowEvent;
-import io.github.flemmli97.runecraftory.fabric.loot.CropLootModifiers;
-import io.github.flemmli97.runecraftory.fabric.network.ServerPacketHandler;
+import io.github.flemmli97.runecraftory.fabric.network.PacketHandler;
+import io.github.flemmli97.runecraftory.fabric.platform.PlatformImpl;
 import io.github.flemmli97.runecraftory.mixin.AttributeAccessor;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
-import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
-import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.entity.event.v1.EntitySleepEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents;
@@ -55,40 +49,36 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
-import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
+import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.fabricmc.fabric.api.networking.v1.EntityTrackingEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.fabricmc.fabric.mixin.object.builder.SpawnRestrictionAccessor;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.packs.PackType;
-import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.storage.loot.LootPool;
-import net.minecraft.world.level.storage.loot.entries.LootTableReference;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
+import net.neoforged.fml.config.IConfigSpec;
+import net.neoforged.fml.config.ModConfig;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class RuneCraftoryFabric implements ModInitializer {
 
@@ -107,123 +97,32 @@ public class RuneCraftoryFabric implements ModInitializer {
         RuneCraftory.iris = FabricLoader.getInstance().isModLoaded("iris");
 
         this.initContent();
-        ConfigHolder.CONFIGS.get(GeneralConfigSpec.SPEC.getLeft())
-                .reloadConfig();
-        ConfigHolder.CONFIGS.get(MobConfigSpec.SPEC.getLeft())
-                .reloadConfig();
-        ServerPacketHandler.registerServer();
+        for (Map.Entry<IConfigSpec, ConfigHolder<?>> confs : ConfigHolder.CONFIGS.entrySet()) {
+            ConfigHolder<?> loader = confs.getValue();
+            NeoForgeConfigRegistry.INSTANCE.register(loader.configName(), loader.configType() == ConfigHolder.ConfigType.COMMON ? ModConfig.Type.COMMON : ModConfig.Type.CLIENT, confs.getKey(), loader.configName());
+        }
+        PacketHandler.register();
 
-        SpawnRestrictionAccessor.callRegister(ModEntities.GATE.get(), SpawnPlacements.Type.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, GateEntity::canSpawnAt);
+        ServerLifecycleEvents.SERVER_STARTED.register(server -> PlatformImpl.CURRENT_SERVER = server);
+        ServerLifecycleEvents.SERVER_STOPPED.register(server -> PlatformImpl.CURRENT_SERVER = null);
 
-        DataPackHandler.addListeners(new DataPackHandler.Register() {
-            @Override
-            public <T extends PreparableReloadListener & ListenerExtension> void accept(T listener) {
-                ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(listener.id(), reg -> new IdentifiableResourceReloadListener() {
-                    @Override
-                    public CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, ProfilerFiller preparationsProfiler, ProfilerFiller reloadProfiler, Executor backgroundExecutor, Executor gameExecutor) {
-                        listener.insertRegistryAccess(reg);
-                        return listener.reload(preparationBarrier, resourceManager, preparationsProfiler, reloadProfiler, backgroundExecutor, gameExecutor);
-                    }
+//        SpawnRestrictionAccessor.callRegister(ModEntities.GATE.get(), SpawnPlacements.Type.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, GateEntity::canSpawnAt);
 
-                    @Override
-                    public ResourceLocation getFabricId() {
-                        return listener.id();
-                    }
-                });
-            }
+        DataPackHandler.addListeners(listener -> {
+            ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(listener.id(), reg -> new IdentifiableResourceReloadListener() {
+                @Override
+                public CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, ProfilerFiller preparationsProfiler, ProfilerFiller reloadProfiler, Executor backgroundExecutor, Executor gameExecutor) {
+                    listener.insertRegistryAccess(reg);
+                    return listener.reload(preparationBarrier, resourceManager, preparationsProfiler, reloadProfiler, backgroundExecutor, gameExecutor);
+                }
+
+                @Override
+                public ResourceLocation getFabricId() {
+                    return listener.id();
+                }
+            });
         });
-        ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new IdentifiableResourceReloadListener() {
-            @Override
-            public CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, ProfilerFiller preparationsProfiler, ProfilerFiller reloadProfiler, Executor backgroundExecutor, Executor gameExecutor) {
-                AtomicReference<CompletableFuture<Void>> ret = new AtomicReference<>();
-                DataPackHandler.reloadItemStats(l -> ret.set(l.reload(preparationBarrier, resourceManager, preparationsProfiler, reloadProfiler, backgroundExecutor, gameExecutor)));
-                return ret.get();
-            }
-
-            @Override
-            public ResourceLocation getFabricId() {
-                return RuneCraftory.modRes("item_stats");
-            }
-        });
-        ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new IdentifiableResourceReloadListener() {
-            @Override
-            public CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, ProfilerFiller preparationsProfiler, ProfilerFiller reloadProfiler, Executor backgroundExecutor, Executor gameExecutor) {
-                AtomicReference<CompletableFuture<Void>> ret = new AtomicReference<>();
-                DataPackHandler.reloadCropManager(l -> ret.set(l.reload(preparationBarrier, resourceManager, preparationsProfiler, reloadProfiler, backgroundExecutor, gameExecutor)));
-                return ret.get();
-            }
-
-            @Override
-            public ResourceLocation getFabricId() {
-                return RuneCraftory.modRes("crop_manager");
-            }
-        });
-        ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new IdentifiableResourceReloadListener() {
-            @Override
-            public CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, ProfilerFiller preparationsProfiler, ProfilerFiller reloadProfiler, Executor backgroundExecutor, Executor gameExecutor) {
-                AtomicReference<CompletableFuture<Void>> ret = new AtomicReference<>();
-                DataPackHandler.reloadFoodManager(l -> ret.set(l.reload(preparationBarrier, resourceManager, preparationsProfiler, reloadProfiler, backgroundExecutor, gameExecutor)));
-                return ret.get();
-            }
-
-            @Override
-            public ResourceLocation getFabricId() {
-                return RuneCraftory.modRes("food_manager");
-            }
-        });
-        ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new IdentifiableResourceReloadListener() {
-            @Override
-            public CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, ProfilerFiller preparationsProfiler, ProfilerFiller reloadProfiler, Executor backgroundExecutor, Executor gameExecutor) {
-                AtomicReference<CompletableFuture<Void>> ret = new AtomicReference<>();
-                DataPackHandler.reloadShopItems(l -> ret.set(l.reload(preparationBarrier, resourceManager, preparationsProfiler, reloadProfiler, backgroundExecutor, gameExecutor)));
-                return ret.get();
-            }
-
-            @Override
-            public ResourceLocation getFabricId() {
-                return RuneCraftory.modRes("shop_items");
-            }
-        });
-        ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new IdentifiableResourceReloadListener() {
-            @Override
-            public CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, ProfilerFiller preparationsProfiler, ProfilerFiller reloadProfiler, Executor backgroundExecutor, Executor gameExecutor) {
-                AtomicReference<CompletableFuture<Void>> ret = new AtomicReference<>();
-                DataPackHandler.reloadNPCData(l -> ret.set(l.reload(preparationBarrier, resourceManager, preparationsProfiler, reloadProfiler, backgroundExecutor, gameExecutor)));
-                return ret.get();
-            }
-
-            @Override
-            public ResourceLocation getFabricId() {
-                return RuneCraftory.modRes("random_npc_data");
-            }
-        });
-        ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new IdentifiableResourceReloadListener() {
-            @Override
-            public CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, ProfilerFiller preparationsProfiler, ProfilerFiller reloadProfiler, Executor backgroundExecutor, Executor gameExecutor) {
-                AtomicReference<CompletableFuture<Void>> ret = new AtomicReference<>();
-                DataPackHandler.reloadGateSpawns(l -> ret.set(l.reload(preparationBarrier, resourceManager, preparationsProfiler, reloadProfiler, backgroundExecutor, gameExecutor)));
-                return ret.get();
-            }
-
-            @Override
-            public ResourceLocation getFabricId() {
-                return RuneCraftory.modRes("gate_spawn_data");
-            }
-        });
-        ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new IdentifiableResourceReloadListener() {
-            @Override
-            public CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, ProfilerFiller preparationsProfiler, ProfilerFiller reloadProfiler, Executor backgroundExecutor, Executor gameExecutor) {
-                AtomicReference<CompletableFuture<Void>> ret = new AtomicReference<>();
-                DataPackHandler.reloadProperties(l -> ret.set(l.reload(preparationBarrier, resourceManager, preparationsProfiler, reloadProfiler, backgroundExecutor, gameExecutor)));
-                return ret.get();
-            }
-
-            @Override
-            public ResourceLocation getFabricId() {
-                return RuneCraftory.modRes("datapack_properties");
-            }
-        });
-        ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(CropLootModifiers.INSTANCE);
+//        ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(CropLootModifiers.INSTANCE);
 
         ModEntities.registerAttributes(FabricDefaultAttributeRegistry::register);
 
@@ -235,7 +134,6 @@ public class RuneCraftoryFabric implements ModInitializer {
 
         //PlayerCalls
         EntityTrackingEvents.START_TRACKING.register((trackedEntity, player) -> EntityCalls.trackEntity(player, trackedEntity));
-        AOEAttackEvent.ATTACK.register(EntityCalls::playerAoeAttack);
         EntitySleepEvents.ALLOW_SLEEP_TIME.register(((player, sleepingPos, vanillaResult) -> GeneralConfig.modifyBed ? InteractionResult.CONSUME : InteractionResult.PASS));
         ServerPlayerEvents.COPY_FROM.register((old, newPlayer, keepEverything) -> EntityCalls.clone(old, newPlayer, !keepEverything));
         ServerPlayConnectionEvents.JOIN.register(((handler, sender, server) -> EntityCalls.joinPlayer(handler.getPlayer())));
@@ -255,13 +153,13 @@ public class RuneCraftoryFabric implements ModInitializer {
         });
 
         //WorldCalls
-        CommandRegistrationCallback.EVENT.register(((dispatcher, dedicated) -> WorldCalls.command(dispatcher)));
-        WorldCalls.addFeatures(((d, feature) -> BiomeModifications.addFeature(BiomeSelectors.foundInTheEnd(), d, feature.unwrapKey().get())),
-                Biome.BiomeCategory.THEEND);
-        WorldCalls.addFeatures(((d, feature) -> BiomeModifications.addFeature(BiomeSelectors.foundInTheNether(), d, feature.unwrapKey().get())),
-                Biome.BiomeCategory.THEEND);
-        WorldCalls.addFeatures(((d, feature) -> BiomeModifications.addFeature(BiomeSelectors.foundInOverworld(), d, feature.unwrapKey().get())),
-                Biome.BiomeCategory.NONE);
+        CommandRegistrationCallback.EVENT.register(((dispatcher, ctx, selection) -> WorldCalls.command(dispatcher)));
+//        WorldCalls.addFeatures(((d, feature) -> BiomeModifications.addFeature(BiomeSelectors.foundInTheEnd(), d, feature.unwrapKey().get())),
+//                Biome.BiomeCategory.THEEND);
+//        WorldCalls.addFeatures(((d, feature) -> BiomeModifications.addFeature(BiomeSelectors.foundInTheNether(), d, feature.unwrapKey().get())),
+//                Biome.BiomeCategory.THEEND);
+//        WorldCalls.addFeatures(((d, feature) -> BiomeModifications.addFeature(BiomeSelectors.foundInOverworld(), d, feature.unwrapKey().get())),
+//                Biome.BiomeCategory.NONE);
         BiomeModifications.addSpawn(t -> true, MobCategory.MONSTER, ModEntities.GATE.get(), 100, 1, 1);
         ServerTickEvents.END_WORLD_TICK.register(world -> {
             if (world.dimension() == Level.OVERWORLD) {
@@ -272,12 +170,9 @@ public class RuneCraftoryFabric implements ModInitializer {
         ServerChunkEvents.CHUNK_LOAD.register(((world, chunk) -> FarmlandHandler.get(world.getServer()).onChunkLoad(world, chunk.getPos())));
         ServerChunkEvents.CHUNK_UNLOAD.register(((world, chunk) -> FarmlandHandler.get(world.getServer()).onChunkUnLoad(world, chunk.getPos())));
 
-        ServerLifecycleEvents.SERVER_STARTED.register(server -> SERVER_INSTANCE = server);
-        ServerLifecycleEvents.SERVER_STOPPED.register(server -> SERVER_INSTANCE = null);
-
-        LootTableEvents.MODIFY.register(((resourceManager, lootManager, id, tableBuilder, source) -> {
+        LootTableEvents.MODIFY.register(((id, builder, source, provider) -> {
             if (LootTableResources.VANILLA_CHESTS.contains(id))
-                tableBuilder.withPool(LootPool.lootPool().add(LootTableReference.lootTableReference(LootTableResources.CHEST_LOOT_SPELLS)));
+                builder.withPool(LootPool.lootPool().add(NestedLootTable.lootTableReference(LootTableResources.CHEST_LOOT_SPELLS)));
         }));
 
         QuestHandler.register();
@@ -295,11 +190,11 @@ public class RuneCraftoryFabric implements ModInitializer {
         //ModAttributes.ATTRIBUTES.registerContent();
         ModEffects.EFFECTS.registerContent();
         ModCrafting.RECIPESERIALIZER.registerContent();
-        ModFeatures.FEATURES.registerContent();
-        ModFeatures.TRUNK_PLACER.registerContent();
-        ModFeatures.CONFIGURED_FEATURES.registerContent();
+//        ModFeatures.FEATURES.registerContent();
+//        ModFeatures.TRUNK_PLACER.registerContent();
+//        ModFeatures.CONFIGURED_FEATURES.registerContent();
         ModSpells.SPELLS.register().registerContent();
-        ModStructures.STRUCTURES.registerContent();
+//        ModStructures.STRUCTURES.registerContent();
         ModParticles.PARTICLES.registerContent();
         ModActivities.ACTIVITIES.registerContent();
         ModPoiTypes.POI.registerContent();
@@ -313,17 +208,17 @@ public class RuneCraftoryFabric implements ModInitializer {
         ModLootRegistries.LOOTFUNCTION.registerContent();
         ModLootRegistries.LOOTCONDITIONS.registerContent();
         ModLootRegistries.NUMBER_PROVIDERS.registerContent();
-        ModStructures.STRUCTURESPROCESSORS.registerContent();
+//        ModStructures.STRUCTURESPROCESSORS.registerContent();
         ModCrafting.RECIPETYPE.registerContent();
         ModSounds.SOUND_EVENTS.registerContent();
         ModDataComponentTypes.DATA_COMPONENTS.registerContent();
         ModCriteria.TRIGGERS.registerContent();
-        this.tweakVanillaAttribute(Attributes.MAX_HEALTH, Double.MAX_VALUE);
-        this.tweakVanillaAttribute(Attributes.ATTACK_DAMAGE, Double.MAX_VALUE);
-        ModFeatures.registerConfiguredFeatures();
+        this.tweakVanillaAttribute(Attributes.MAX_HEALTH.value(), Double.MAX_VALUE);
+        this.tweakVanillaAttribute(Attributes.ATTACK_DAMAGE.value(), Double.MAX_VALUE);
+//        ModFeatures.registerConfiguredFeatures();
     }
 
-    public static Collection<RegistryEntrySupplier<Attribute>> attributes() {
+    public static Collection<RegistryEntrySupplier<Attribute, ?>> attributes() {
         if (!INIT_ATTRIBUTES) {
             ModAttributes.ATTRIBUTES.registerContent();
             INIT_ATTRIBUTES = true;
@@ -331,7 +226,7 @@ public class RuneCraftoryFabric implements ModInitializer {
         return ModAttributes.ENTITY_ATTRIBUTES;
     }
 
-    public static Collection<RegistryEntrySupplier<Attribute>> playerAttributes() {
+    public static Collection<RegistryEntrySupplier<Attribute, ?>> playerAttributes() {
         if (!INIT_ATTRIBUTES) {
             ModAttributes.ATTRIBUTES.registerContent();
             INIT_ATTRIBUTES = true;
@@ -343,10 +238,5 @@ public class RuneCraftoryFabric implements ModInitializer {
         if (attribute instanceof RangedAttribute) {
             ((AttributeAccessor) attribute).setMaxValue(value);
         }
-    }
-
-    @Nullable
-    public static MinecraftServer getServerInstance() {
-        return SERVER_INSTANCE;
     }
 }

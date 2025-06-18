@@ -1,13 +1,11 @@
 package io.github.flemmli97.runecraftory.common.registry;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.common.lib.LibAttributes;
 import io.github.flemmli97.tenshilib.loader.LoaderRegistryAccess;
 import io.github.flemmli97.tenshilib.loader.registry.LoaderRegister;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
@@ -37,79 +35,83 @@ public class ModAttributes {
         }
         return -1;
     };
-    //public static final RegistryEntrySupplier<Attribute RP_MAX;
+
     private static int ID = 0;
 
     //For ease of use these are attributes
     //Used for e.g. food
     //RP only applies to players
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> HEALTHGAIN = registerAdditional(LibAttributes.HEALTH_GAIN, ID++, 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> RPGAIN = registerAdditional(LibAttributes.RP_GAIN, ID++, 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> RPINCREASE = registerAdditional(LibAttributes.RP_INCREASE, ID++, 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
+    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> HEALTH_GAIN = registerAdditional("health_gain", ID++, 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
+    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> RUNE_POINTS_GAIN = registerAdditional("rune_points_gain", ID++, 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
 
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> DEFENCE = registerSyncable(LibAttributes.DEFENCE, ID++, 0, -9999, 9999);
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> MAGIC = registerSyncable(LibAttributes.MAGIC, ID++, 0, -9999, 9999);
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> MAGIC_DEFENCE = registerSyncable(LibAttributes.MAGIC_DEFENCE, ID++, 0, -9999, 9999);
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> PARA = register(LibAttributes.PARA, ID++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> POISON = register(LibAttributes.POISON, ID++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> SEAL = register(LibAttributes.SEAL, ID++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> SLEEP = register(LibAttributes.SLEEP, ID++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> FATIGUE = register(LibAttributes.FATIGUE, ID++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> COLD = register(LibAttributes.COLD, ID++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> DIZZY = register(LibAttributes.DIZZY, ID++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> CRIT = register(LibAttributes.CRIT, ID++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> STUN = register(LibAttributes.STUN, ID++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> KNOCK = register(LibAttributes.KNOCK, ID++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> FAINT = register(LibAttributes.FAINT, ID++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> DRAIN = register(LibAttributes.DRAIN, ID++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> RES_WATER = register(LibAttributes.RES_WATER, ID++, 0, -100, 200);
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> RES_EARTH = register(LibAttributes.RES_EARTH, ID++, 0, -100, 200);
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> RES_WIND = register(LibAttributes.RES_WIND, ID++, 0, -100, 200);
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> RES_FIRE = register(LibAttributes.RES_FIRE, ID++, 0, -100, 200);
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> RES_DARK = register(LibAttributes.RES_DARK, ID++, 0, -100, 200);
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> RES_LIGHT = register(LibAttributes.RES_LIGHT, ID++, 0, -100, 200);
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> RES_LOVE = register(LibAttributes.RES_LOVE, ID++, 0, -100, 200);
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> RES_PARA = register(LibAttributes.RES_PARA, ID++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> RES_POISON = register(LibAttributes.RES_POISON, ID++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> RES_SEAL = register(LibAttributes.RES_SEAL, ID++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> RES_SLEEP = register(LibAttributes.RES_SLEEP, ID++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> RES_FAT = register(LibAttributes.RES_FATIGUE, ID++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> RES_COLD = register(LibAttributes.RES_COLD, ID++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> RES_DIZZY = register(LibAttributes.RES_DIZZY, ID++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> RES_CRIT = register(LibAttributes.RES_CRIT, ID++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> RES_STUN = register(LibAttributes.RES_STUN, ID++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> RES_FAINT = register(LibAttributes.RES_FAINT, ID++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> RES_DRAIN = register(LibAttributes.RES_DRAIN, ID++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> MAX_RUNEPOINTS = registerAdditional("max_runepoints", ID++, 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
+
+    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> DEFENCE = registerSyncable("defence", ID++, 0, -9999, 9999);
+    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> MAGIC_ATTACK = registerSyncable("magic_attack", ID++, 0, -9999, 9999);
+    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> MAGIC_DEFENCE = registerSyncable("magic_defence", ID++, 0, -9999, 9999);
+    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> PARALYSIS = register("paralysis", ID++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> POISON = register("poison", ID++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> SEAL = register("seal", ID++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> SLEEP = register("sleep", ID++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> FATIGUE = register("fatigue", ID++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> COLD = register("cold", ID++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> DIZZY = register("dizzy", ID++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> CRITICAL = register("critical", ID++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> STUN = register("stun", ID++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> KNOCKOUT = register("knockout", ID++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> FAINT = register("faint", ID++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> DRAIN = register("drain", ID++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> WATER_RESISTANCE = register("water_resistance", ID++, 0, -100, 200);
+    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> EARTH_RESISTANCE = register("earth_resistance", ID++, 0, -100, 200);
+    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> WIND_RESISTANCE = register("wind_resistance", ID++, 0, -100, 200);
+    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> FIRE_RESISTANCE = register("fire_resistance", ID++, 0, -100, 200);
+    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> DARK_RESISTANCE = register("dark_resistance", ID++, 0, -100, 200);
+    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> LIGHT_RESISTANCE = register("light_resistance", ID++, 0, -100, 200);
+    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> LOVE_RESISTANCE = register("love_resistance", ID++, 0, -100, 200);
+    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> PARALYSIS_RESISTANCE = register("paralysis_resistance", ID++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> POISON_RESISTANCE = register("poison_resistance", ID++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> SEAL_RESISTANCE = register("seal_resistance", ID++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> SLEEP_RESISTANCE = register("sleep_resistance", ID++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> FATIGUE_RESISTANCE = register("fatigue_resistance", ID++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> COLD_RESISTANCE = register("cold_resistance", ID++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> DIZZY_RESISTANCE = register("dizzy_resistance", ID++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> CRITICAL_RESISTANCE = register("critical_resistance", ID++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> STUN_RESISTANCE = register("stun_resistance", ID++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> FAINT_RESISTANCE = register("faint_resistance", ID++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> DRAIN_RESISTANCE = register("drain_resistance", ID++, 0, -100, 100);
 
     /**
-     * We use a custom attribute for this to remove other influences like haste etc.
+     * Use a custom attribute for this to remove other influences like haste etc.
      * Attack speed is in ticks
      */
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> ATTACK_SPEED = registerPlayerSyncable(LibAttributes.ATTACK_SPEED, ID++, 1, 0, 2);
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> ATTACK_RANGE = registerPlayerSyncable(LibAttributes.ATTACK_RANGE, ID++, 3, 0, 9999);
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> ATTACK_WIDTH = registerPlayerSyncable(LibAttributes.ATTACK_WIDTH, ID++, 0, 0, 9999);
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> CHARGE_TIME = registerPlayerSyncable(LibAttributes.CHARGE_TIME, ID++, 20, 0, 9999);
+    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> ATTACK_SPEED = registerPlayerSyncable("attack_speed", ID++, 1, 0, 2);
+    /**
+     * Use a custom attribute for this to remove other influences from other sources.
+     */
+    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> ATTACK_RANGE = registerPlayerSyncable("attack_range", ID++, 3, 0, 9999);
+    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> ATTACK_WIDTH = registerPlayerSyncable("attack_width", ID++, 0, 0, 9999);
+    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> CHARGE_TIME = registerPlayerSyncable("charge_time", ID++, 20, 0, 9999);
 
-    private static RegistryEntrySupplier<Attribute, OrderedAttribute> register(ResourceLocation reg, int id, double base, double min, double max) {
-        RegistryEntrySupplier<Attribute, OrderedAttribute> sup = ATTRIBUTES.register(reg.getPath(), () -> new OrderedAttribute("attribute." + reg, id, base, min, max));
+    private static RegistryEntrySupplier<Attribute, OrderedAttribute> register(String name, int id, double base, double min, double max) {
+        RegistryEntrySupplier<Attribute, OrderedAttribute> sup = ATTRIBUTES.register(name, res -> new OrderedAttribute("attribute." + res, id, base, min, max));
         ENTITY_ATTRIBUTES.add(sup);
         return sup;
     }
 
-    private static RegistryEntrySupplier<Attribute, OrderedAttribute> registerSyncable(ResourceLocation reg, int id, double base, double min, double max) {
-        RegistryEntrySupplier<Attribute, OrderedAttribute> sup = ATTRIBUTES.register(reg.getPath(), () -> (OrderedAttribute) new OrderedAttribute("attribute." + reg, id, base, min, max).setSyncable(true));
+    private static RegistryEntrySupplier<Attribute, OrderedAttribute> registerSyncable(String name, int id, double base, double min, double max) {
+        RegistryEntrySupplier<Attribute, OrderedAttribute> sup = ATTRIBUTES.register(name, res -> (OrderedAttribute) new OrderedAttribute("attribute." + res, id, base, min, max).setSyncable(true));
         ENTITY_ATTRIBUTES.add(sup);
         return sup;
     }
 
-    private static RegistryEntrySupplier<Attribute, OrderedAttribute> registerPlayerSyncable(ResourceLocation reg, int id, double base, double min, double max) {
-        RegistryEntrySupplier<Attribute, OrderedAttribute> sup = ATTRIBUTES.register(reg.getPath(), () -> (OrderedAttribute) new OrderedAttribute("attribute." + reg, id, base, min, max).setSyncable(true));
+    private static RegistryEntrySupplier<Attribute, OrderedAttribute> registerPlayerSyncable(String name, int id, double base, double min, double max) {
+        RegistryEntrySupplier<Attribute, OrderedAttribute> sup = ATTRIBUTES.register(name, res -> (OrderedAttribute) new OrderedAttribute("attribute." + res, id, base, min, max).setSyncable(true));
         PLAYER_ATTRIBUTES.add(sup);
         return sup;
     }
 
-    private static RegistryEntrySupplier<Attribute, OrderedAttribute> registerAdditional(ResourceLocation reg, int id, double base, double min, double max) {
-        return ATTRIBUTES.register(reg.getPath(), () -> new OrderedAttribute("attribute." + reg, id, base, min, max));
+    private static RegistryEntrySupplier<Attribute, OrderedAttribute> registerAdditional(String name, int id, double base, double min, double max) {
+        return ATTRIBUTES.register(name, res -> new OrderedAttribute("attribute." + res, id, base, min, max));
     }
 
     public static class OrderedAttribute extends RangedAttribute {

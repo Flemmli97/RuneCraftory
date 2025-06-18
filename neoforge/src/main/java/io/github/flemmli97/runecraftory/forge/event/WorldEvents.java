@@ -2,12 +2,9 @@ package io.github.flemmli97.runecraftory.forge.event;
 
 import io.github.flemmli97.runecraftory.client.ClientFarmlandHandler;
 import io.github.flemmli97.runecraftory.common.events.WorldCalls;
-import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.level.ChunkEvent;
@@ -22,11 +19,11 @@ public class WorldEvents {
         WorldCalls.command(event.getDispatcher());
     }
 
-    @SubscribeEvent
-    public void biomeLoad(BiomeLoadingEvent event) {
-        event.getSpawns().addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(ModEntities.GATE.get(), 100, 1, 1));
-        WorldCalls.addFeatures(event.getGeneration()::addFeature, event.getCategory());
-    }
+//    @SubscribeEvent
+//    public void biomeLoad(BiomeLoadingEvent event) {
+//        event.getSpawns().addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(ModEntities.GATE.get(), 100, 1, 1));
+//        WorldCalls.addFeatures(event.getGeneration()::addFeature, event.getCategory());
+//    }
 
     @SubscribeEvent
     public void daily(LevelTickEvent.Post event) {

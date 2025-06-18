@@ -27,7 +27,7 @@ public class ShippingTracker extends ProgressionTrackerBase<ItemStack, ShippingT
 
     @Override
     public boolean progress(ServerPlayer player, QuestProgress prog, ItemStack with) {
-        if (this.questEntry().item().value().matches(with)) {
+        if (this.questEntry().item().value().test(with)) {
             this.amount += with.getCount();
             return this.amount >= this.questEntry().amount();
         }

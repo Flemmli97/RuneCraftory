@@ -166,7 +166,7 @@ public class EntityWaterLaser extends BaseBeam {
                 invul_time = 0;
             }
         }
-        CombatUtils.damageWithFaintAndCrit(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(invul_time).magic().noKnockback().element(EnumElement.WATER), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier, null);
+        CombatUtils.damageWithFaintAndCrit(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(invul_time).magic().noKnockback().element(EnumElement.WATER), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC_ATTACK.get()) * this.damageMultiplier, null);
         this.hitEntities.put(e, this.tickCount);
     }
 

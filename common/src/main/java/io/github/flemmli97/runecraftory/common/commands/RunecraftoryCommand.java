@@ -13,6 +13,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumWeather;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.attachment.player.LevelExpPair;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
+import io.github.flemmli97.runecraftory.common.components.StaffData;
 import io.github.flemmli97.runecraftory.common.crafting.SextupleRecipe;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
@@ -20,6 +21,7 @@ import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.network.S2CCapSync;
 import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
 import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
+import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
@@ -34,6 +36,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 
 import java.util.Collection;
 import java.util.List;
@@ -88,12 +91,11 @@ public class RunecraftoryCommand {
         String s = StringArgumentType.getString(ctx, "skill");
         if (s.equals("ALL")) {
             for (ServerPlayer player : EntityArgument.getPlayers(ctx, "player")) {
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                    for (EnumSkills skill : EnumSkills.values()) {
-                        LevelExpPair skLvl = data.getSkillLevel(skill);
-                        data.setSkillLevel(skill, player, skLvl.getLevel() + amount, skLvl.getXp(), true);
-                    }
-                });
+                PlayerData data = Platform.INSTANCE.getPlayerData(player);
+                for (EnumSkills skill : EnumSkills.values()) {
+                    LevelExpPair skLvl = data.getSkillLevel(skill);
+                    data.setSkillLevel(skill, skLvl.getLevel() + amount, skLvl.getXp(), true);
+                }
                 ctx.getSource().sendSuccess(() -> Component.translatable("runecraftory.command.skill.lvl.add", s, player.getName(), amount), false);
                 ret++;
             }
@@ -105,10 +107,9 @@ public class RunecraftoryCommand {
             return 0;
         }
         for (ServerPlayer player : EntityArgument.getPlayers(ctx, "player")) {
-            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                LevelExpPair skLvl = data.getSkillLevel(skill);
-                data.setSkillLevel(skill, player, skLvl.getLevel() + amount, skLvl.getXp(), true);
-            });
+            PlayerData data = Platform.INSTANCE.getPlayerData(player);
+            LevelExpPair skLvl = data.getSkillLevel(skill);
+            data.setSkillLevel(skill, skLvl.getLevel() + amount, skLvl.getXp(), true);
             ctx.getSource().sendSuccess(() -> Component.translatable("runecraftory.command.skill.lvl.add", s, player.getName(), amount), false);
             ret++;
         }
@@ -121,10 +122,9 @@ public class RunecraftoryCommand {
         String s = StringArgumentType.getString(ctx, "skill");
         if (s.equals("ALL")) {
             for (ServerPlayer player : EntityArgument.getPlayers(ctx, "player")) {
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
+                PlayerData data = Platform.INSTANCE.getPlayerData(player);
                     for (EnumSkills skill : EnumSkills.values())
-                        data.increaseSkill(skill, player, amount);
-                });
+                        data.increaseSkill(skill, amount);
                 ctx.getSource().sendSuccess(() -> Component.translatable("runecraftory.command.skill.lvl.add", s, player.getName(), amount), false);
                 ret++;
             }
@@ -136,7 +136,7 @@ public class RunecraftoryCommand {
             return 0;
         }
         for (ServerPlayer player : EntityArgument.getPlayers(ctx, "player")) {
-            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.increaseSkill(skill, player, amount));
+            Platform.INSTANCE.getPlayerData(player).increaseSkill(skill, amount);
             ctx.getSource().sendSuccess(() -> Component.translatable("runecraftory.command.skill.xp.add", s, player.getName(), amount), false);
             ret++;
         }
@@ -149,10 +149,9 @@ public class RunecraftoryCommand {
         String s = StringArgumentType.getString(ctx, "skill");
         if (s.equals("ALL")) {
             for (ServerPlayer player : EntityArgument.getPlayers(ctx, "player")) {
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
+                PlayerData data = Platform.INSTANCE.getPlayerData(player);
                     for (EnumSkills skill : EnumSkills.values())
-                        data.setSkillLevel(skill, player, amount, 0, true);
-                });
+                        data.setSkillLevel(skill, amount, 0, true);
                 ctx.getSource().sendSuccess(() -> Component.translatable("runecraftory.command.skill.lvl.set", s, player.getName(), amount), false);
                 ret++;
             }
@@ -164,7 +163,7 @@ public class RunecraftoryCommand {
             return 0;
         }
         for (ServerPlayer player : EntityArgument.getPlayers(ctx, "player")) {
-            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.setSkillLevel(skill, player, amount, 0, true));
+            Platform.INSTANCE.getPlayerData(player).setSkillLevel(skill, amount, 0, true);
             ctx.getSource().sendSuccess(() -> Component.translatable("runecraftory.command.skill.lvl.set", Component.translatable(skill.getTranslation()), player.getName(), amount), false);
             ret++;
         }
@@ -175,7 +174,7 @@ public class RunecraftoryCommand {
         int ret = 0;
         int amount = IntegerArgumentType.getInteger(ctx, "amount");
         for (ServerPlayer player : EntityArgument.getPlayers(ctx, "player")) {
-            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.addXp(player, amount));
+            Platform.INSTANCE.getPlayerData(player).addXp(amount);
             ctx.getSource().sendSuccess(() -> Component.translatable("runecraftory.command.lvl.xp.add", player.getName(), amount), false);
             ret++;
         }
@@ -186,7 +185,7 @@ public class RunecraftoryCommand {
         int ret = 0;
         int amount = Math.max(1, IntegerArgumentType.getInteger(ctx, "amount"));
         for (ServerPlayer player : EntityArgument.getPlayers(ctx, "player")) {
-            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.setPlayerLevel(player, amount, 0, true));
+            Platform.INSTANCE.getPlayerData(player).setPlayerLevel(amount, 0, true);
             ctx.getSource().sendSuccess(() -> Component.translatable("runecraftory.command.lvl.set", player.getName(), amount), false);
             ret++;
         }
@@ -196,10 +195,9 @@ public class RunecraftoryCommand {
     private static int resetAll(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         int ret = 0;
         for (ServerPlayer player : EntityArgument.getPlayers(ctx, "player")) {
-            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                data.resetAll(player);
+            PlayerData data = Platform.INSTANCE.getPlayerData(player);
+            data.resetAll();
                 LoaderNetwork.INSTANCE.sendToPlayer(new S2CCapSync(data), player);
-            });
             QuestHandler.getData(player).resetAll();
             ctx.getSource().sendSuccess(() -> Component.translatable("runecraftory.command.reset.all", player.getName()), false);
             ret++;
@@ -209,23 +207,23 @@ public class RunecraftoryCommand {
 
     private static CompletableFuture<Suggestions> allRecipes(CommandContext<CommandSourceStack> ctx, SuggestionsBuilder builder) throws CommandSyntaxException {
         Set<ResourceLocation> allRecipes = Sets.newHashSet();
-        PlayerData data = Platform.INSTANCE.getPlayerData(ctx.getSource().getPlayerOrException()).orElse(null);
+        PlayerData data = Platform.INSTANCE.getPlayerData(ctx.getSource().getPlayerOrException());
         if (data != null) {
-            for (SextupleRecipe r : ctx.getSource().getServer().getRecipeManager().getAllRecipesFor(ModCrafting.FORGE.get())) {
+            for (RecipeHolder<SextupleRecipe> r : ctx.getSource().getServer().getRecipeManager().getAllRecipesFor(ModCrafting.FORGE.get())) {
                 if (!data.getRecipeKeeper().isUnlocked(r))
-                    allRecipes.add(r.getId());
+                    allRecipes.add(r.id());
             }
-            for (SextupleRecipe r : ctx.getSource().getServer().getRecipeManager().getAllRecipesFor(ModCrafting.CHEMISTRY.get())) {
+            for (RecipeHolder<SextupleRecipe> r : ctx.getSource().getServer().getRecipeManager().getAllRecipesFor(ModCrafting.CHEMISTRY.get())) {
                 if (!data.getRecipeKeeper().isUnlocked(r))
-                    allRecipes.add(r.getId());
+                    allRecipes.add(r.id());
             }
-            for (SextupleRecipe r : ctx.getSource().getServer().getRecipeManager().getAllRecipesFor(ModCrafting.ARMOR.get())) {
+            for (RecipeHolder<SextupleRecipe> r : ctx.getSource().getServer().getRecipeManager().getAllRecipesFor(ModCrafting.ARMOR.get())) {
                 if (!data.getRecipeKeeper().isUnlocked(r))
-                    allRecipes.add(r.getId());
+                    allRecipes.add(r.id());
             }
-            for (SextupleRecipe r : ctx.getSource().getServer().getRecipeManager().getAllRecipesFor(ModCrafting.COOKING.get())) {
+            for (RecipeHolder<SextupleRecipe> r : ctx.getSource().getServer().getRecipeManager().getAllRecipesFor(ModCrafting.COOKING.get())) {
                 if (!data.getRecipeKeeper().isUnlocked(r))
-                    allRecipes.add(r.getId());
+                    allRecipes.add(r.id());
             }
         }
         return SharedSuggestionProvider.suggest(allRecipes.stream().map(ResourceLocation::toString), builder);
@@ -235,7 +233,7 @@ public class RunecraftoryCommand {
         ResourceLocation res = ResourceLocationArgument.getId(ctx, "id");
         int ret = 0;
         for (ServerPlayer player : EntityArgument.getPlayers(ctx, "player")) {
-            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.getRecipeKeeper().unlockRecipesRes(player, List.of(res)));
+            Platform.INSTANCE.getPlayerData(player).getRecipeKeeper().unlockRecipesRes(player, List.of(res));
             ctx.getSource().sendSuccess(() -> Component.translatable("runecraftory.command.unlock.recipe", player.getName(), res.toString()), false);
             ret++;
         }
@@ -250,7 +248,7 @@ public class RunecraftoryCommand {
         ctx.getSource().getServer().getRecipeManager().getAllRecipesFor(ModCrafting.COOKING.get()).forEach(r -> allRecipes.add(r.id()));
         int ret = 0;
         for (ServerPlayer player : EntityArgument.getPlayers(ctx, "player")) {
-            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.getRecipeKeeper().unlockRecipesRes(player, allRecipes));
+            Platform.INSTANCE.getPlayerData(player).getRecipeKeeper().unlockRecipesRes(player, allRecipes);
             ctx.getSource().sendSuccess(() -> Component.translatable("runecraftory.command.unlock.recipes", player.getName()), false);
             ret++;
         }
@@ -260,7 +258,8 @@ public class RunecraftoryCommand {
     private static int resetRecipes(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         int ret = 0;
         for (ServerPlayer player : EntityArgument.getPlayers(ctx, "player")) {
-            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.getRecipeKeeper().lockRecipesRes(player, data.getRecipeKeeper().unlockedRecipes()));
+            PlayerData data = Platform.INSTANCE.getPlayerData(player);
+            data.getRecipeKeeper().lockRecipesRes(player, data.getRecipeKeeper().unlockedRecipes());
             ctx.getSource().sendSuccess(() -> Component.translatable("runecraftory.command.reset.recipe", player.getName()), false);
             ret++;
         }
@@ -286,8 +285,7 @@ public class RunecraftoryCommand {
         int i = 0;
         for (Entity e : entities) {
             if (e instanceof ServerPlayer player) {
-                Platform.INSTANCE.getPlayerData(player)
-                        .ifPresent(d -> d.recalculateStats(player, false));
+                Platform.INSTANCE.getPlayerData(player).recalculateStats(false);
                 i++;
             } else if (e instanceof EntityNPCBase npc) {
                 npc.recalcStatsFull();
@@ -322,12 +320,11 @@ public class RunecraftoryCommand {
             if (entity instanceof LivingEntity living) {
                 ItemStack stack = living.getMainHandItem();
                 if (stack.getItem() instanceof ItemStaffBase) {
-                    Platform.INSTANCE.getStaffData(stack).ifPresent(data -> {
-                        switch (tier) {
-                            case 3 -> data.setTier3Spell(spell);
-                            case 2 -> data.setTier2Spell(spell);
-                            default -> data.setTier1Spell(spell);
-                        }
+                    StaffData data = stack.getOrDefault(ModDataComponentTypes.STAFF.get(), StaffData.DEFAULT);
+                    stack.set(ModDataComponentTypes.STAFF.get(), switch (tier) {
+                        case 3 -> data.setTier3Spell(spell);
+                        case 2 -> data.setTier2Spell(spell);
+                        default -> data.setTier1Spell(spell);
                     });
                     success++;
                 }

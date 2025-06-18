@@ -7,6 +7,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.enums.EnumToolTier;
 import io.github.flemmli97.runecraftory.common.components.ArmorEffectData;
 import io.github.flemmli97.runecraftory.common.components.AttackActionData;
+import io.github.flemmli97.runecraftory.common.components.BabyData;
 import io.github.flemmli97.runecraftory.common.components.ItemAttributeData;
 import io.github.flemmli97.runecraftory.common.components.ItemStackHolder;
 import io.github.flemmli97.runecraftory.common.components.ListItemStackHolder;
@@ -69,6 +70,7 @@ public class ModDataComponentTypes {
     public static final RegistryEntrySupplier<DataComponentType<?>, DataComponentType<Integer>> SPAWN_EGG_LEVEL = register("spawn_egg_level", ExtraCodecs.POSITIVE_INT, ByteBufCodecs.INT);
     public static final RegistryEntrySupplier<DataComponentType<?>, DataComponentType<TreasureChestSpawnegg.ChestTier>> SPAWN_EGG_CHEST_TIER = register("spawn_egg_chest_tier", CodecUtils.stringEnumCodec(TreasureChestSpawnegg.ChestTier.class, null), ofEnum(TreasureChestSpawnegg.ChestTier.class));
     public static final RegistryEntrySupplier<DataComponentType<?>, DataComponentType<NPCSpawnData>> NPC_SPAWN_DATA = register("npc_spawn_data", NPCSpawnData.CODEC, NPCSpawnData.STREAM_CODEC);
+    public static final RegistryEntrySupplier<DataComponentType<?>, DataComponentType<BabyData>> BABY_DATA = register("baby_data", BabyData.CODEC, BabyData.STREAM_CODEC);
 
     private static <T> RegistryEntrySupplier<DataComponentType<?>, DataComponentType<T>> register(String name, Codec<T> codec, StreamCodec<? super RegistryFriendlyByteBuf, T> streamCodec) {
         return DATA_COMPONENTS.register(name, () -> DataComponentType.<T>builder().persistent(codec).networkSynchronized(streamCodec).build());

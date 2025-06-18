@@ -282,7 +282,7 @@ public class EntityRafflesia extends BossMonster {
     }
 
     @Override
-    public void handleAttack(AnimatedAction anim) {
+    public void handleAttack(AnimationState anim) {
         BiConsumer<AnimatedAction, EntityRafflesia> handler = ATTACK_HANDLER.get(anim.getID());
         if (handler != null)
             handler.accept(anim, this);
@@ -367,7 +367,7 @@ public class EntityRafflesia extends BossMonster {
     }
 
     @Override
-    public AnimatedAction getSleepAnimation() {
+    public String getSleepAnimation() {
         return DEATH;
     }
 

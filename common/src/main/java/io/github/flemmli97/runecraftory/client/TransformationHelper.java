@@ -1,11 +1,10 @@
 package io.github.flemmli97.runecraftory.client;
 
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
-import com.mojang.math.Vector4f;
 import io.github.flemmli97.runecraftory.mixinhelper.RotationFromMatrix;
 import net.minecraft.client.model.geom.PartPose;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 public class TransformationHelper {
 
@@ -40,7 +39,7 @@ public class TransformationHelper {
                 matrix4f.multiply(Vector3f.YP.rotation(child.yRot));
             if (child.xRot != 0)
                 matrix4f.multiply(Vector3f.XP.rotation(child.xRot));
-            rot = ((RotationFromMatrix) (Object) matrix4f).runecraftory$getMatrixRotationZYX();
+            rot = matrix4f.getEulerAnglesZYX(new Vector3f());
         }
         return PartPose.offsetAndRotation(pos.x(),
                 pos.y(),
@@ -82,7 +81,7 @@ public class TransformationHelper {
                 matrix4f.multiply(Vector3f.YP.rotation(child.yRot));
             if (child.xRot != 0)
                 matrix4f.multiply(Vector3f.XP.rotation(child.xRot));
-            rot = ((RotationFromMatrix) (Object) matrix4f).runecraftory$getMatrixRotationZYX();
+            rot = matrix4f.getEulerAnglesZYX(new Vector3f());
         }
         return PartPose.offsetAndRotation(pos.x(),
                 pos.y(),

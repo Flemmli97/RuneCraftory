@@ -32,7 +32,7 @@ public class SanoAndUnoDuo extends EnsembleMonsters {
     @Override
     public void spawnEntities(ServerLevel serverLevel) {
         BlockPos off = new BlockPos(5, 0, 4);
-        Entity e = ModEntities.SANO.get().create(serverLevel, null, null, null, this.blockPosition()
+        Entity e = ModEntities.SANO.get().create(serverLevel, null, this.blockPosition()
                         .offset(off.rotate(this.rotation)),
                 MobSpawnType.SPAWNER, false, false);
         UUID link = Mth.createInsecureUUID();
@@ -48,7 +48,7 @@ public class SanoAndUnoDuo extends EnsembleMonsters {
             serverLevel.addFreshEntityWithPassengers(sano);
         }
         off = new BlockPos(-5, 0, 4);
-        e = ModEntities.UNO.get().create(serverLevel, null, null, null, this.blockPosition()
+        e = ModEntities.UNO.get().create(serverLevel, null, this.blockPosition()
                         .offset(off.rotate(this.rotation)),
                 MobSpawnType.SPAWNER, false, false);
         if (e instanceof EntityUno uno) {

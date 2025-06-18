@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.blocks;
 
-import io.github.flemmli97.runecraftory.common.blocks.tile.BossSpawnerBlockEntity;
+import com.mojang.serialization.MapCodec;
+import io.github.flemmli97.runecraftory.common.blocks.entity.BossSpawnerBlockEntity;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -22,10 +23,17 @@ import org.jetbrains.annotations.Nullable;
 
 public class BlockBossSpawner extends BaseEntityBlock {
 
+    public static final MapCodec<BlockBossSpawner> CODEC = simpleCodec(BlockBossSpawner::new);
+
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     public BlockBossSpawner(BlockBehaviour.Properties props) {
         super(props);
+    }
+
+    @Override
+    public MapCodec<BlockBossSpawner> codec() {
+        return CODEC;
     }
 
     @Override

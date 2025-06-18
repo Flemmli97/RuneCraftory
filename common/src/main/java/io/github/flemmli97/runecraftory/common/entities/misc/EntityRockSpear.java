@@ -60,7 +60,7 @@ public class EntityRockSpear extends BaseBeam {
 
     @Override
     public void onImpact(EntityHitResult entityHitResult) {
-        CombatUtils.damageWithFaintAndCrit(this.getOwner(), entityHitResult.getEntity(), new CustomDamage.Builder(this, this.getOwner()).magic().noKnockback().element(EnumElement.EARTH).hurtResistant(5), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier, null);
+        CombatUtils.damageWithFaintAndCrit(this.getOwner(), entityHitResult.getEntity(), new CustomDamage.Builder(this, this.getOwner()).magic().noKnockback().element(EnumElement.EARTH).hurtResistant(5), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC_ATTACK.get()) * this.damageMultiplier, null);
     }
 
     @Override

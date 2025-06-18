@@ -22,7 +22,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.state.BlockState;
@@ -37,8 +36,8 @@ import java.util.function.Function;
 public class CropUtils {
 
     public static void attemptGiantize(ServerLevel level, BlockPos cropPos, Growable crop, BlockState state, float progress, CropProperties props) {
-        if (crop.runecraftory$isAtMaxAge(state) && props.getGiantVersion() != Blocks.AIR && progress >= 0.5) {
-            if (state.is(props.getGiantVersion()))
+        if (crop.runecraftory$isAtMaxAge(state) && props.getGiantVersion().isPresent() && progress >= 0.5) {
+            if (state.is(props.getGiantVersion().get()))
                 return;
             if (state.getBlock() instanceof BlockCrop blockCrop) {
                 int age = state.getValue(blockCrop.getAgeProperty());
@@ -46,11 +45,11 @@ public class CropUtils {
                     level.setBlock(cropPos, state.setValue(blockCrop.getAgeProperty(), blockCrop.getGiantAge()), Block.UPDATE_ALL);
                 } else if (progress >= 1) {
                     FarmlandHandler.get(level.getServer())
-                            .scheduleGiantCropMerge(level, cropPos, props.getGiantVersion().defaultBlockState());
+                            .scheduleGiantCropMerge(level, cropPos, props.getGiantVersion().get().defaultBlockState());
                 }
             } else if (progress >= 1) {
                 FarmlandHandler.get(level.getServer())
-                        .scheduleGiantCropMerge(level, cropPos, props.getGiantVersion().defaultBlockState());
+                        .scheduleGiantCropMerge(level, cropPos, props.getGiantVersion().get().defaultBlockState());
             }
         }
     }
@@ -108,7 +107,7 @@ public class CropUtils {
         level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
         if (props != null && props.regrowable()) {
             //Actually handled at block state change detection
-            level.setBlock(pos, state.setValue(cropBlock.getAgeProperty(), 0), Block.UPDATE_ALL);
+            level.setBlock(pos, state.setValue(((CropBlockAccessor) cropBlock).cropAgeProperty(), 0), Block.UPDATE_ALL);
         } else
             level.removeBlock(pos, false);
         if (entity instanceof ServerPlayer player) {

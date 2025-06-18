@@ -23,11 +23,11 @@ import io.github.flemmli97.runecraftory.common.entities.ai.LookAtAliveGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.LookAtInteractingPlayerGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.RandomLookGoalAlive;
 import io.github.flemmli97.runecraftory.common.entities.ai.StayGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.actions.NPCAttackActions;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCAttackGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCFindPOI;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCFollowGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCWanderGoal;
-import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.NPCAttackActions;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.NPCFeatureContainer;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.SizeFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
@@ -71,8 +71,8 @@ import io.github.flemmli97.runecraftory.common.world.family.FamilyHandler;
 import io.github.flemmli97.runecraftory.mixin.AttributeMapAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.simplequests_api.quest.QuestState;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.common.entity.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimatedEntity;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
@@ -162,7 +162,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimated, TargetableOpponent, MobAttackExt {
+public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, AnimatedEntity, TargetableOpponent, MobAttackExt {
 
     public static final float PATH_FIND_LENGTH = 100;
 
@@ -301,7 +301,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         if (inst != null) {
             inst.setBaseValue(MobConfig.NPC_DEFENCE);
         }
-        inst = this.getAttribute(ModAttributes.MAGIC.get());
+        inst = this.getAttribute(ModAttributes.MAGIC_ATTACK.get());
         if (inst != null) {
             inst.setBaseValue(MobConfig.NPC_MAGIC_ATTACK);
         }
@@ -889,7 +889,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
             inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, RuneCraftory.MODID + ".levelMod", (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_DEFENCE_GAIN * multiplier, AttributeModifier.Operation.ADDITION));
         }
-        inst = this.getAttribute(ModAttributes.MAGIC.get());
+        inst = this.getAttribute(ModAttributes.MAGIC_ATTACK.get());
         if (inst != null) {
             float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
             inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, RuneCraftory.MODID + ".levelMod", (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_MAGIC_ATTACK_GAIN * multiplier, AttributeModifier.Operation.ADDITION));
@@ -1141,7 +1141,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         return super.finalizeSpawn(level, difficulty, reason, spawnData, dataTag);
     }
 
-    public void handleAttack(AnimatedAction anim) {
+    public void handleAttack(AnimationState anim) {
         this.getNavigation().stop();
     }
 
@@ -1424,6 +1424,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         FamilyEntry family = this.getFamily();
         if (family == null || !family.getPartner().equals(other.getUUID()) || this.procreationProgress > 0)
             return false;
+        if (!other.getUUID().equals(family.getPartner()))
+            return false;
         if (!this.canProcreate()) {
             if (other instanceof ServerPlayer player) {
                 this.speak(player, ConversationContext.PROCREATION_COOLDOWN);
@@ -1440,8 +1442,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             this.setCustomName(component);
     }
 
-    public boolean hasDataName() {
-        return this.data.name() != null;
+    public Optional<String> getDataName() {
+        return Optional.ofNullable(this.data.name());
     }
 
     public boolean canProcreate() {

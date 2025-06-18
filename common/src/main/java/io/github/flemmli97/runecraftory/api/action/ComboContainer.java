@@ -10,14 +10,8 @@ import java.util.function.Predicate;
 
 public class ComboContainer {
 
-    public static final Predicate<AttackActionHandler> AFTER_ANIM = AttackActionHandler::isCurrentAnimationDone;
-
     public static Predicate<AttackActionHandler> past(String marker) {
         return handler -> handler.getAnimation() == null || handler.isCurrentAnimationDone() || handler.getAnimation().isPast(marker);
-    }
-
-    public static Predicate<AttackActionHandler> past(double time) {
-        return handler -> handler.getAnimation() == null || handler.isCurrentAnimationDone() || handler.getAnimation().isPast(time);
     }
 
     private final List<ComboHandler> handlers;

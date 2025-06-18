@@ -1,7 +1,9 @@
 package io.github.flemmli97.runecraftory.common.blocks;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -13,12 +15,17 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import java.util.Random;
-
 public class BlockTreeRoot extends FarmBlock {
+
+    public static final MapCodec<FarmBlock> CODEC = simpleCodec(BlockTreeRoot::new);
 
     public BlockTreeRoot(Properties properties) {
         super(properties);
+    }
+
+    @Override
+    public MapCodec<FarmBlock> codec() {
+        return CODEC;
     }
 
     @Override
@@ -39,10 +46,10 @@ public class BlockTreeRoot extends FarmBlock {
     }
 
     @Override
-    public void tick(BlockState state, ServerLevel level, BlockPos pos, Random random) {
+    public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
     }
 
     @Override
-    public void randomTick(BlockState state, ServerLevel level, BlockPos pos, Random random) {
+    public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
     }
 }

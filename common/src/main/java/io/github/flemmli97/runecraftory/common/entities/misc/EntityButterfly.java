@@ -73,7 +73,7 @@ public class EntityButterfly extends BaseProjectile {
                 if (this.getOwner() instanceof LivingEntity living)
                     CombatUtils.applyTempAttribute(living, ModAttributes.DRAIN.asHolder(), 80);
                 CustomDamage.Builder builder = new CustomDamage.Builder(this, this.getOwner()).magic().noKnockback().hurtResistant(0);
-                builder.get().hurtEntity(stuck, (float) (CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.asHolder()) * this.damageMultiplier * 0.7));
+                builder.get().hurtEntity(stuck, (float) (CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC_ATTACK.asHolder()) * this.damageMultiplier * 0.7));
                 if (this.getOwner() instanceof LivingEntity living)
                     CombatUtils.removeTempAttribute(living, ModAttributes.DRAIN.asHolder());
             }
@@ -87,7 +87,7 @@ public class EntityButterfly extends BaseProjectile {
 
     @Override
     protected boolean entityRayTraceHit(EntityHitResult result) {
-        if (CombatUtils.damageWithFaintAndCrit(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).magic().noKnockback().hurtResistant(5), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.asHolder()) * this.damageMultiplier, null)) {
+        if (CombatUtils.damageWithFaintAndCrit(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).magic().noKnockback().hurtResistant(5), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC_ATTACK.asHolder()) * this.damageMultiplier, null)) {
             if (result.getEntity() instanceof LivingEntity livingTarget) {
                 this.hitEntity(livingTarget);
             } else {

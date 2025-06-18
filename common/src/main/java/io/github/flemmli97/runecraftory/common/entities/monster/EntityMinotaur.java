@@ -90,7 +90,7 @@ public class EntityMinotaur extends ChargingMonster {
     }
 
     @Override
-    public AABB attackBB(AnimatedAction anim) {
+    public AABB attackBB(String anim) {
         if (anim.is(SPIN)) {
             double attackSize = this.getBbWidth() * 1.4;
             return new AABB(-attackSize, -0.2, -attackSize, attackSize, this.getBbHeight() + 0.2, attackSize);
@@ -101,7 +101,7 @@ public class EntityMinotaur extends ChargingMonster {
     }
 
     @Override
-    public void handleAttack(AnimatedAction anim) {
+    public void handleAttack(AnimationState anim) {
         if (anim.is(SPIN)) {
             if (this.hitEntity == null)
                 this.hitEntity = new ArrayList<>();
@@ -144,7 +144,7 @@ public class EntityMinotaur extends ChargingMonster {
     }
 
     @Override
-    protected boolean isChargingAnim(AnimatedAction anim) {
+    protected boolean isChargingAnim(String anim) {
         return anim.is(CHARGE);
     }
 
@@ -186,7 +186,7 @@ public class EntityMinotaur extends ChargingMonster {
     }
 
     @Override
-    public AnimatedAction getSleepAnimation() {
+    public String getSleepAnimation() {
         return SLEEP;
     }
 

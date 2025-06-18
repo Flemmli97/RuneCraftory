@@ -45,6 +45,7 @@ public class EntityTagGen extends IntrinsicHolderTagsProvider<EntityType<?>> {
                     .add(sup.get());
         }
         this.tag(EntityTypeTags.CAN_BREATHE_UNDER_WATER)
+                .add(ModEntities.GATE.get())
                 .add(ModEntities.SKY_FISH.get());
         this.tag(EntityTypeTags.AQUATIC)
                 .add(ModEntities.SKY_FISH.get());

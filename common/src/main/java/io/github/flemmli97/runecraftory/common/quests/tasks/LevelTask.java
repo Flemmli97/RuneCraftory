@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.quests.tasks;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -23,7 +24,7 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 public class LevelTask implements QuestTask<LevelTask.LevelTaskResolved> {
 
     public static final QuestEntryKey<LevelTask> ID = new QuestEntryKey<>(RuneCraftory.modRes("level"));
-    public static final Codec<LevelTask> CODEC = RecordCodecBuilder.create((instance) ->
+    public static final MapCodec<LevelTask> CODEC = RecordCodecBuilder.mapCodec((instance) ->
             instance.group(Codec.STRING.fieldOf("description").forGetter(d -> d.description),
                     NumberProviders.CODEC.fieldOf("level").forGetter(d -> d.range)
             ).apply(instance, LevelTask::new));
@@ -60,12 +61,12 @@ public class LevelTask implements QuestTask<LevelTask.LevelTaskResolved> {
 
     public record LevelTaskResolved(int level) implements ResolvedQuestTask {
 
-        public static final Codec<LevelTaskResolved> CODEC = RecordCodecBuilder.create((instance) ->
+        public static final MapCodec<LevelTaskResolved> CODEC = RecordCodecBuilder.mapCodec((instance) ->
                 instance.group(ExtraCodecs.POSITIVE_INT.fieldOf("level").forGetter(d -> d.level)).apply(instance, LevelTaskResolved::new));
 
         @Override
         public boolean submit(ServerPlayer player) {
-            return Platform.INSTANCE.getPlayerData(player).map(d -> d.getPlayerLevel().getLevel() >= this.level).orElse(false);
+            return Platform.INSTANCE.getPlayerData(player).getPlayerLevel().getLevel() >= this.level;
         }
 
         @Override

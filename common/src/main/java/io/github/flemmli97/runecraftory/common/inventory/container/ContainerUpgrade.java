@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.inventory.container;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
-import io.github.flemmli97.runecraftory.common.blocks.tile.UpgradingCraftingBlockEntity;
+import io.github.flemmli97.runecraftory.common.blocks.entity.UpgradingCraftingBlockEntity;
 import io.github.flemmli97.runecraftory.common.inventory.PlayerBoundCraftingContainer;
 import io.github.flemmli97.runecraftory.common.inventory.WrappedContainer;
 import io.github.flemmli97.runecraftory.common.registry.ModMenuTypes;

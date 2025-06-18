@@ -78,7 +78,7 @@ public class EntityDemon extends BaseMonster implements HealingPredicateEntity, 
     }
 
     @Override
-    public void handleAttack(AnimatedAction anim) {
+    public void handleAttack(AnimationState anim) {
         if (anim.is(DARK)) {
             this.getNavigation().stop();
             if (anim.isAt("attack")) {
@@ -109,7 +109,7 @@ public class EntityDemon extends BaseMonster implements HealingPredicateEntity, 
     }
 
     @Override
-    public AABB attackBB(AnimatedAction anim) {
+    public AABB attackBB(String anim) {
         double width = this.getBbWidth() * 1;
         double length = width;
         if (anim.is(STAB)) {
@@ -141,7 +141,7 @@ public class EntityDemon extends BaseMonster implements HealingPredicateEntity, 
     }
 
     @Override
-    public AnimatedAction getSleepAnimation() {
+    public String getSleepAnimation() {
         return SLEEP;
     }
 

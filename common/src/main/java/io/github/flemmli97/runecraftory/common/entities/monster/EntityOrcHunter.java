@@ -27,7 +27,7 @@ public class EntityOrcHunter extends EntityOrcArcher {
     }
 
     @Override
-    public void handleAttack(AnimatedAction anim) {
+    public void handleAttack(AnimationState anim) {
         if (anim.is(EntityOrcArcher.RANGED)) {
             this.getNavigation().stop();
             if (anim.isAt("attack")) {

@@ -87,7 +87,7 @@ public class InfoScreen extends EffectRenderingInventoryScreen<AbstractContainer
             mut.withStyle(ChatFormatting.DARK_RED);
         ClientHandlers.drawRightAlignedScaledString(stack, this.font, mut, this.leftPos + statX, this.topPos + statY, 1.0f, 0);
         ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + (int) CombatUtils.getAttributeValue(this.minecraft.player, ModAttributes.DEFENCE.get()), this.leftPos + statX, this.topPos + statY + 13, 1.0f, 0);
-        ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + (int) CombatUtils.getAttributeValue(this.minecraft.player, ModAttributes.MAGIC.get()), this.leftPos + statX, this.topPos + statY + 13 * 2, 1.0f, 0);
+        ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + (int) CombatUtils.getAttributeValue(this.minecraft.player, ModAttributes.MAGIC_ATTACK.get()), this.leftPos + statX, this.topPos + statY + 13 * 2, 1.0f, 0);
         ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + (int) CombatUtils.getAttributeValue(this.minecraft.player, ModAttributes.MAGIC_DEFENCE.get()), this.leftPos + statX, this.topPos + statY + 13 * 3, 1.0f, 0);
 
         InventoryScreen.renderEntityInInventory(this.leftPos + 57, this.topPos + 76, 29, this.leftPos + 58 - mouseX, this.topPos + 26 - mouseY, this.minecraft.player);

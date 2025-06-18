@@ -91,7 +91,7 @@ public class EntityWindBlade extends BaseProjectile {
 
     @Override
     protected boolean entityRayTraceHit(EntityHitResult result) {
-        if (CombatUtils.damageWithFaintAndCrit(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).magic().noKnockback().hurtResistant(this.type == Type.PLAIN ? 2 : 10).element(EnumElement.WIND).projectile(), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.asHolder()) * this.damageMultiplier, null)) {
+        if (CombatUtils.damageWithFaintAndCrit(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).magic().noKnockback().hurtResistant(this.type == Type.PLAIN ? 2 : 10).element(EnumElement.WIND).projectile(), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC_ATTACK.asHolder()) * this.damageMultiplier, null)) {
             if (!this.isPiercing())
                 this.discard();
             return true;

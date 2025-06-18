@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.mixinhelper;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.client.ArmorModels;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
@@ -18,6 +18,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimatedEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
@@ -25,7 +26,6 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
@@ -34,6 +34,7 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.phys.Vec3;
@@ -106,14 +107,14 @@ public class ClientMixinUtils {
 
     public static void translateSleepingEntity(LivingEntity entity, PoseStack poseStack, float flipDegrees) {
         if (EntityData.getSleepStateFrom(entity) == EntityData.SleepState.VANILLA && flipDegrees != 0) {
-            poseStack.mulPose(Vector3f.XP.rotationDegrees(flipDegrees));
+            poseStack.mulPose(Axis.XP.rotationDegrees(flipDegrees));
             float standOffset = entity.getEyeHeight(Pose.STANDING) * 0.6f;
             poseStack.translate(0, -standOffset, 0);
         }
     }
 
     public static boolean shouldAnimate(LivingEntity entity) {
-        return ClientHandlers.getAnimatedPlayerModel() != null && (entity instanceof Player || entity instanceof IAnimated);
+        return ClientHandlers.getAnimatedPlayerModel() != null && (entity instanceof Player || entity instanceof AnimatedEntity);
     }
 
     public static void transformHumanoidModel(LivingEntity entity, HumanoidModel<?> model) {
@@ -127,13 +128,13 @@ public class ClientMixinUtils {
         }
         if (ClientHandlers.getAnimatedPlayerModel() != null) {
             float partialTicks = ClientHandlers.getPartialTicks();
-            if (entity instanceof IAnimated) {
+            if (entity instanceof AnimatedEntity) {
                 boolean result = ClientHandlers.getAnimatedPlayerModel().setUpModel(entity, model, null, partialTicks);
                 if (result)
                     ClientHandlers.getAnimatedPlayerModel().copyTo(model);
                 return;
             }
-            PlayerWeaponHandler weaponHandler = entity instanceof Player player ? Platform.INSTANCE.getPlayerData(player).map(PlayerData::getWeaponHandler).orElse(null) : null;
+            PlayerWeaponHandler weaponHandler = entity instanceof Player player ? Platform.INSTANCE.getPlayerData(player).getWeaponHandler() : null;
             if (weaponHandler == null)
                 return;
             boolean ignoreRiding = weaponHandler.getCurrentAction() == ModAttackActions.DUAL_USE.get();
@@ -164,7 +165,7 @@ public class ClientMixinUtils {
         }
     }
 
-    public static void adjustForHeldModel(ItemStack itemStack, ItemTransforms.TransformType transformType) {
+    public static void adjustForHeldModel(ItemStack itemStack, ItemDisplayContext transformType) {
         if (itemStack.getItem() instanceof ItemGloveBase || itemStack.getItem() instanceof BigWeapon) {
             ItemModelProps.HELD_TYPE = switch (transformType) {
                 case FIRST_PERSON_LEFT_HAND, THIRD_PERSON_LEFT_HAND -> 1;
@@ -184,9 +185,9 @@ public class ClientMixinUtils {
         ItemModelProps.HELD_TYPE = 0;
     }
 
-    public static boolean onRenderHeldItem(LivingEntity livingEntity, ItemStack stack, ItemTransforms.TransformType transformType, boolean leftHand, PoseStack poseStack, MultiBufferSource buffer, int combinedLight) {
+    public static boolean onRenderHeldItem(LivingEntity livingEntity, ItemStack stack, ItemDisplayContext transformType, boolean leftHand, PoseStack poseStack, MultiBufferSource buffer, int combinedLight) {
         if (livingEntity instanceof AbstractClientPlayer player && transformType.firstPerson()) {
-            PlayerData data = Platform.INSTANCE.getPlayerData(player).orElse(null);
+            PlayerData data = Platform.INSTANCE.getPlayerData(player);
             if (data != null) {
                 PlayerRenderer playerRenderer = (PlayerRenderer) Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(player);
                 float partialTicks = ClientHandlers.getPartialTicks();
@@ -212,7 +213,7 @@ public class ClientMixinUtils {
                 poseStack.translate(x, y, z);
                 poseStack.translate(0, 0.1, 0.1);
                 float rot = Mth.lerp(partialTicks, player.yRotO, player.getYRot());
-                poseStack.mulPose(Vector3f.YP.rotationDegrees(rot + 180));
+                poseStack.mulPose(Axis.YP.rotationDegrees(rot + 180));
                 ItemRenderContext = true;
                 playerRenderer.render(player, 0, partialTicks, poseStack, buffer, combinedLight);
                 ItemRenderContext = false;

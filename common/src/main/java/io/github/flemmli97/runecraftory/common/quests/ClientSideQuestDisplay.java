@@ -1,8 +1,10 @@
 package io.github.flemmli97.runecraftory.common.quests;
 
 import io.github.flemmli97.runecraftory.common.entities.npc.features.NPCFeatureContainer;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,21 +14,26 @@ public record ClientSideQuestDisplay(ResourceLocation id, Component task, List<?
                                      @Nullable NPCFeatureContainer features, @Nullable String npcSkin,
                                      boolean active) {
 
-    public static ClientSideQuestDisplay read(FriendlyByteBuf buf) {
-        return new ClientSideQuestDisplay(buf.readResourceLocation(), buf.readComponent(), buf.readList(FriendlyByteBuf::readComponent),
-                buf.readBoolean() ? new NPCFeatureContainer().fromBuffer(buf) : null, buf.readBoolean() ? buf.readUtf() : null, buf.readBoolean());
-    }
+    public static final StreamCodec<RegistryFriendlyByteBuf, ClientSideQuestDisplay> STREAM_CODEC = new StreamCodec<>() {
+        @Override
+        public ClientSideQuestDisplay decode(RegistryFriendlyByteBuf buf) {
+            return new ClientSideQuestDisplay(buf.readResourceLocation(), ComponentSerialization.STREAM_CODEC.decode(buf),
+                    buf.readList((b) -> ComponentSerialization.STREAM_CODEC.decode(buf)),
+                    buf.readBoolean() ? new NPCFeatureContainer().fromBuffer(buf) : null, buf.readBoolean() ? buf.readUtf() : null, buf.readBoolean());
+        }
 
-    public void write(FriendlyByteBuf buf) {
-        buf.writeResourceLocation(this.id);
-        buf.writeComponent(this.task);
-        buf.writeCollection(this.description, FriendlyByteBuf::writeComponent);
-        buf.writeBoolean(this.features != null);
-        if (this.features != null)
-            this.features.toBuffer(buf);
-        buf.writeBoolean(this.npcSkin != null);
-        if (this.npcSkin != null)
-            buf.writeUtf(this.npcSkin);
-        buf.writeBoolean(this.active);
-    }
+        @Override
+        public void encode(RegistryFriendlyByteBuf buf, ClientSideQuestDisplay data) {
+            buf.writeResourceLocation(data.id);
+            ComponentSerialization.STREAM_CODEC.encode(buf, data.task);
+            buf.writeCollection(data.description, (b, val) -> ComponentSerialization.STREAM_CODEC.encode(buf, val));
+            buf.writeBoolean(data.features != null);
+            if (data.features != null)
+                data.features.toBuffer(buf);
+            buf.writeBoolean(data.npcSkin != null);
+            if (data.npcSkin != null)
+                buf.writeUtf(data.npcSkin);
+            buf.writeBoolean(data.active);
+        }
+    };
 }

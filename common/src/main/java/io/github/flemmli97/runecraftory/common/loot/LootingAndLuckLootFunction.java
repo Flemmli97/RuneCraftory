@@ -8,11 +8,17 @@ import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
@@ -31,22 +37,27 @@ public class LootingAndLuckLootFunction extends LootItemConditionalFunction {
     public static final MapCodec<LootingAndLuckLootFunction> CODEC = RecordCodecBuilder.mapCodec(
             instance -> commonFields(instance)
                     .and(instance.group(NumberProviders.CODEC.fieldOf("base").forGetter(d -> d.baseChance),
-                            NumberProviders.CODEC.fieldOf("looting_bonus").forGetter(d -> d.lootingBonus),
+                            Enchantment.CODEC.fieldOf("enchantment").forGetter(d -> d.enchantment),
+                            NumberProviders.CODEC.fieldOf("enchanted_bonus").forGetter(d -> d.enchantedBonus),
                             NumberProviders.CODEC.fieldOf("luck_bonus").forGetter(d -> d.luckBonus),
                             Codec.INT.fieldOf("limit").forGetter(d -> d.limit))
                     ).apply(instance, LootingAndLuckLootFunction::new)
     );
 
     private final NumberProvider baseChance;
-    private final NumberProvider lootingBonus;
+    private final Holder<Enchantment> enchantment;
+    private final NumberProvider enchantedBonus;
     private final NumberProvider luckBonus;
     private final int limit;
 
-    private LootingAndLuckLootFunction(List<LootItemCondition> conditions, NumberProvider baseChance, NumberProvider luckBonus, NumberProvider lootingBonus, int limit) {
+    private LootingAndLuckLootFunction(List<LootItemCondition> conditions, NumberProvider baseChance,
+                                       Holder<Enchantment> enchantment, NumberProvider enchantedBonus,
+                                       NumberProvider luckBonus, int limit) {
         super(conditions);
         this.baseChance = baseChance;
+        this.enchantment = enchantment;
         this.luckBonus = luckBonus;
-        this.lootingBonus = lootingBonus;
+        this.enchantedBonus = enchantedBonus;
         this.limit = limit;
     }
 
@@ -61,16 +72,15 @@ public class LootingAndLuckLootFunction extends LootItemConditionalFunction {
         float luck = ctx.getLuck();
         int looting = 0;
         List<LivingEntity> contributing = getContributingEntities(ctx);
-        if (entity instanceof LivingEntity) {
-            looting = Platform.INSTANCE.getLootingFromCtx(ctx);
-
+        if (entity instanceof LivingEntity living) {
+            looting = EnchantmentHelper.getEnchantmentLevel(this.enchantment, living);
         }
         for (LivingEntity other : contributing) {
-            looting += Platform.INSTANCE.getLootingFromEntity(ctx.getParamOrNull(LootContextParams.THIS_ENTITY), other, ctx.getParamOrNull(LootContextParams.DAMAGE_SOURCE));
+            looting += EnchantmentHelper.getEnchantmentLevel(this.enchantment, other);
             if (other.getAttributes().hasAttribute(Attributes.LUCK))
                 luck += (float) other.getAttributeValue(Attributes.LUCK);
         }
-        float chance = (this.baseChance.getFloat(ctx) + this.luckBonus.getFloat(ctx) * luck) * (1 + this.lootingBonus.getFloat(ctx) * looting);
+        float chance = (this.baseChance.getFloat(ctx) + this.luckBonus.getFloat(ctx) * luck) * (1 + this.enchantedBonus.getFloat(ctx) * looting);
         if (chance >= 1) {
             int uniform = (int) chance * 2;
             float left = chance - uniform;
@@ -106,7 +116,8 @@ public class LootingAndLuckLootFunction extends LootItemConditionalFunction {
     public static class Builder extends LootItemConditionalFunction.Builder<LootingAndLuckLootFunction.Builder> {
 
         private final NumberProvider baseChance;
-        private NumberProvider lootingBonus = ConstantValue.exactly(0);
+        private Holder<Enchantment> enchantment;
+        private NumberProvider enchantedBonus = ConstantValue.exactly(0);
         private NumberProvider luckBonus = ConstantValue.exactly(0);
         private int limit = 0;
 
@@ -124,8 +135,9 @@ public class LootingAndLuckLootFunction extends LootItemConditionalFunction {
             return this;
         }
 
-        public LootingAndLuckLootFunction.Builder withLootingBonus(NumberProvider lootingBonus) {
-            this.lootingBonus = lootingBonus;
+        public LootingAndLuckLootFunction.Builder withLootingBonus(HolderLookup.Provider registries, NumberProvider lootingBonus) {
+            this.enchantment = registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.LOOTING);
+            this.enchantedBonus = lootingBonus;
             return this;
         }
 
@@ -136,7 +148,7 @@ public class LootingAndLuckLootFunction extends LootItemConditionalFunction {
 
         @Override
         public LootItemFunction build() {
-            return new LootingAndLuckLootFunction(this.getConditions(), this.baseChance, this.luckBonus, this.lootingBonus, this.limit);
+            return new LootingAndLuckLootFunction(this.getConditions(), this.baseChance, this.enchantment, this.enchantedBonus, this.luckBonus, this.limit);
         }
     }
 }

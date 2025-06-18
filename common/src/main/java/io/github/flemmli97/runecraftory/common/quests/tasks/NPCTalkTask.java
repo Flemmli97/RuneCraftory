@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.quests.tasks;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
@@ -25,7 +26,7 @@ import java.util.UUID;
 public class NPCTalkTask implements QuestTask<NPCTalkTask.NPCTalkResolved> {
 
     public static final QuestEntryKey<NPCTalkTask> ID = new QuestEntryKey<>(RuneCraftory.modRes("npc_talk"));
-    public static final Codec<NPCTalkTask> CODEC = RecordCodecBuilder.create((instance) ->
+    public static final MapCodec<NPCTalkTask> CODEC = RecordCodecBuilder.mapCodec((instance) ->
             instance.group(ResourceLocation.CODEC.optionalFieldOf("target_npc_id").forGetter(d -> Optional.ofNullable(d.targetNPCId)),
                     JsonCodecs.ENTITY_PREDICATE_CODEC.optionalFieldOf("predicate").forGetter(d -> d.predicate == EntityPredicate.ANY ? Optional.empty() : Optional.of(d.predicate))
             ).apply(instance, (npcId, predicate) -> new NPCTalkTask(npcId.orElse(null), predicate.orElse(null))));
@@ -63,7 +64,7 @@ public class NPCTalkTask implements QuestTask<NPCTalkTask.NPCTalkResolved> {
 
     public static class NPCTalkResolved implements ResolvedQuestTask {
 
-        public static final Codec<NPCTalkResolved> CODEC = RecordCodecBuilder.create((instance) ->
+        public static final MapCodec<NPCTalkResolved> CODEC = RecordCodecBuilder.mapCodec((instance) ->
                 instance.group(Codec.STRING.fieldOf("target_npc").xmap(UUID::fromString, UUID::toString).forGetter(d -> d.targetNPC),
                         JsonCodecs.ENTITY_PREDICATE_CODEC.optionalFieldOf("predicate").forGetter(d -> Optional.ofNullable(d.predicate))
                 ).apply(instance, (target, predicate) -> new NPCTalkResolved(target, predicate.orElse(null))));

@@ -92,7 +92,7 @@ public class EntityTornado extends BaseDamageCloud {
 
     @Override
     protected boolean damageEntity(LivingEntity livingEntity) {
-        return CombatUtils.damageWithFaintAndCrit(this.getOwner(), livingEntity, new CustomDamage.Builder(this, this.getOwner()).element(EnumElement.WIND).magic().noKnockback().hurtResistant(10), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier, null);
+        return CombatUtils.damageWithFaintAndCrit(this.getOwner(), livingEntity, new CustomDamage.Builder(this, this.getOwner()).element(EnumElement.WIND).magic().noKnockback().hurtResistant(10), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC_ATTACK.get()) * this.damageMultiplier, null);
     }
 
     @Override

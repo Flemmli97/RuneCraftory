@@ -8,8 +8,6 @@ import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NameManager;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -19,8 +17,6 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public abstract class NPCNameDataProvider implements DataProvider {
-
-    private static final Logger LOGGER = LogManager.getLogger();
 
     private final Map<String, NameStructure> names = new HashMap<>();
 

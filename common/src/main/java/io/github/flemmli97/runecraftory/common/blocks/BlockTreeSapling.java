@@ -1,10 +1,14 @@
 package io.github.flemmli97.runecraftory.common.blocks;
 
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
@@ -14,25 +18,35 @@ import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Supplier;
 
 public class BlockTreeSapling extends BushBlock implements Growable {
 
-    private final Supplier<BlockTreeBase> treeBase;
+    public static final MapCodec<BlockTreeSapling> CODEC = RecordCodecBuilder.mapCodec(inst ->
+            inst.group(propertiesCodec(),
+                    BuiltInRegistries.BLOCK.byNameCodec().fieldOf("base").forGetter(d -> d.treeBase.get())
+            ).apply(inst, (prop, base) -> new BlockTreeSapling(prop, () -> base)));
+
     protected static final VoxelShape SHAPE = Block.box(2.0, 0.0, 2.0, 14.0, 12.0, 14.0);
 
-    public BlockTreeSapling(Properties properties, Supplier<BlockTreeBase> treeBase) {
+    private final Supplier<Block> treeBase;
+
+    public BlockTreeSapling(Properties properties, Supplier<Block> treeBase) {
         super(properties);
         this.treeBase = treeBase;
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("runecraftory.tooltip.sapling").withStyle(ChatFormatting.GRAY));
-        super.appendHoverText(stack, level, tooltip, flag);
+    public MapCodec<BlockTreeSapling> codec() {
+        return CODEC;
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> list, TooltipFlag tooltipFlag) {
+        list.add(Component.translatable("runecraftory.tooltip.sapling").withStyle(ChatFormatting.GRAY));
+        super.appendHoverText(stack, context, list, tooltipFlag);
     }
 
     @Override

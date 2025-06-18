@@ -45,7 +45,7 @@ public class HealT1Spell extends Spell {
                 return false;
             }
         });
-        float healAmount = (float) (CombatUtils.getAttributeValue(entity, ModAttributes.MAGIC.asHolder()) * CombatUtils.getAbilityDamageBonus(lvl, 0.6f));
+        float healAmount = (float) (CombatUtils.getAttributeValue(entity, ModAttributes.MAGIC_ATTACK.asHolder()) * CombatUtils.getAbilityDamageBonus(lvl, 0.6f));
         entity.heal(healAmount);
         spawnHealParticles(entity);
         entities.forEach(e -> {

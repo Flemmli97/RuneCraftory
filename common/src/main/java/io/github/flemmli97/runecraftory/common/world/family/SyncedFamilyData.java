@@ -1,29 +1,32 @@
 package io.github.flemmli97.runecraftory.common.world.family;
 
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 
-public record SyncedFamilyData(Component father, Component mother, Component partner,
+import java.util.Optional;
+
+public record SyncedFamilyData(Optional<Component> father, Optional<Component> mother, Optional<Component> partner,
                                FamilyEntry.Relationship relationship, boolean canProcreate) {
 
-    public SyncedFamilyData(FriendlyByteBuf buf) {
-        this(buf.readBoolean() ? buf.readComponent() : null,
-                buf.readBoolean() ? buf.readComponent() : null,
-                buf.readBoolean() ? buf.readComponent() : null,
-                buf.readEnum(FamilyEntry.Relationship.class), buf.readBoolean());
-    }
+    public static final StreamCodec<RegistryFriendlyByteBuf, SyncedFamilyData> STREAM_CODEC = new StreamCodec<RegistryFriendlyByteBuf, SyncedFamilyData>() {
+        @Override
+        public SyncedFamilyData decode(RegistryFriendlyByteBuf buf) {
+            return new SyncedFamilyData(ByteBufCodecs.optional(ComponentSerialization.STREAM_CODEC).decode(buf),
+                    ByteBufCodecs.optional(ComponentSerialization.STREAM_CODEC).decode(buf),
+                    ByteBufCodecs.optional(ComponentSerialization.STREAM_CODEC).decode(buf),
+                    buf.readEnum(FamilyEntry.Relationship.class), buf.readBoolean());
+        }
 
-    public void toPacket(FriendlyByteBuf buf) {
-        buf.writeBoolean(this.father != null);
-        if (this.father != null)
-            buf.writeComponent(this.father);
-        buf.writeBoolean(this.mother != null);
-        if (this.mother != null)
-            buf.writeComponent(this.mother);
-        buf.writeBoolean(this.partner != null);
-        if (this.partner != null)
-            buf.writeComponent(this.partner);
-        buf.writeEnum(this.relationship);
-        buf.writeBoolean(this.canProcreate);
-    }
+        @Override
+        public void encode(RegistryFriendlyByteBuf buf, SyncedFamilyData data) {
+            ByteBufCodecs.optional(ComponentSerialization.STREAM_CODEC).encode(buf, data.father);
+            ByteBufCodecs.optional(ComponentSerialization.STREAM_CODEC).encode(buf, data.mother);
+            ByteBufCodecs.optional(ComponentSerialization.STREAM_CODEC).encode(buf, data.partner);
+            buf.writeEnum(data.relationship);
+            buf.writeBoolean(data.canProcreate);
+        }
+    };
 }

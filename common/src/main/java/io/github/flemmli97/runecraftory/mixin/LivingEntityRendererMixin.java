@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class LivingEntityRendererMixin<T extends LivingEntity> {
 
     @Inject(method = "setupRotations", at = @At(value = "RETURN"))
-    public void render(T entity, PoseStack poseStack, float ageInTicks, float rotationYaw, float partialTicks, CallbackInfo info) {
+    public void render(T entity, PoseStack poseStack, float bob, float yBodyRot, float partialTick, float scale, CallbackInfo info) {
         ClientMixinUtils.translateSleepingEntity(entity, poseStack, this.getFlipDegrees(entity));
     }
 

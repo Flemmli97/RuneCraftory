@@ -42,6 +42,7 @@ public class ItemToolWateringCan extends TieredItem {
     }
 
     public void postUse(ServerPlayer player) {
+        player.disableShield();
         PlayerData data = Platform.INSTANCE.getPlayerData(player);
         LevelCalc.useRP(data, 2, true, 0, true, EnumSkills.FARMING, EnumSkills.WATER);
         LevelCalc.levelSkill(data, EnumSkills.FARMING, 4);

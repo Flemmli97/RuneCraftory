@@ -130,7 +130,7 @@ public class ClientCalls {
             input.jumping = false;
             input.shiftKeyDown = false;
         }
-        float reduction = Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().movementReduction()).orElse(1f);
+        float reduction = Platform.INSTANCE.getPlayerData(player).getWeaponHandler().movementReduction();
         if (reduction != 1) {
             input.leftImpulse *= reduction;
             input.forwardImpulse *= reduction;
@@ -195,7 +195,7 @@ public class ClientCalls {
                     debug.add(Component.translatable("runecraftory.tooltip.debug.food", food.getId().toString()).withStyle(ChatFormatting.GRAY));
             } else if (stack.isEdible()) {
                 tooltip.add(Component.translatable("runecraftory.tooltip.item.eaten").withStyle(ChatFormatting.GRAY));
-                MutableComponent comp = Component.literal(" ").append(Component.translatable(ModAttributes.RPGAIN.get().getDescriptionId())).append(Component.literal(": " + EntityUtils.getRPFromVanillaFood(stack)));
+                MutableComponent comp = Component.literal(" ").append(Component.translatable(ModAttributes.RUNE_POINTS_GAIN.get().getDescriptionId())).append(Component.literal(": " + EntityUtils.getRPFromVanillaFood(stack)));
                 tooltip.add(comp.withStyle(ChatFormatting.AQUA));
             }
         }

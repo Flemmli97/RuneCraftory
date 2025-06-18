@@ -68,5 +68,6 @@ public class SpecialSextupleRecipe extends SextupleRecipe {
     }
 
     private record AlternateResult(ItemStack stack, float chance) {
+
     }
 }

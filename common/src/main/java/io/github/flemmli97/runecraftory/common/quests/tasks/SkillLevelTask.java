@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.quests.tasks;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
@@ -28,7 +29,7 @@ import java.util.List;
 public class SkillLevelTask implements QuestTask<SkillLevelTask.SkillLevelTaskResolved> {
 
     public static final QuestEntryKey<SkillLevelTask> ID = new QuestEntryKey<>(RuneCraftory.modRes("skill_level"));
-    public static final Codec<SkillLevelTask> CODEC = RecordCodecBuilder.create((instance) ->
+    public static final MapCodec<SkillLevelTask> CODEC = RecordCodecBuilder.mapCodec((instance) ->
             instance.group(Codec.STRING.fieldOf("description").forGetter(d -> d.description),
                     CodecHelper.nonEmptyList(CodecUtils.stringEnumCodec(EnumSkills.class, null), "Skill list can't be empty").fieldOf("skill").forGetter(d -> d.skills),
                     NumberProviders.CODEC.fieldOf("level").forGetter(d -> d.range)
@@ -74,14 +75,14 @@ public class SkillLevelTask implements QuestTask<SkillLevelTask.SkillLevelTaskRe
 
     public record SkillLevelTaskResolved(EnumSkills skill, int level) implements ResolvedQuestTask {
 
-        public static final Codec<SkillLevelTaskResolved> CODEC = RecordCodecBuilder.create((instance) ->
+        public static final MapCodec<SkillLevelTaskResolved> CODEC = RecordCodecBuilder.mapCodec((instance) ->
                 instance.group(CodecUtils.stringEnumCodec(EnumSkills.class, null).fieldOf("skill").forGetter(d -> d.skill),
                         ExtraCodecs.POSITIVE_INT.fieldOf("level").forGetter(d -> d.level)
                 ).apply(instance, SkillLevelTaskResolved::new));
 
         @Override
         public boolean submit(ServerPlayer player) {
-            return Platform.INSTANCE.getPlayerData(player).map(d -> d.getPlayerLevel().getLevel() >= this.level).orElse(false);
+            return Platform.INSTANCE.getPlayerData(player).getPlayerLevel().getLevel() >= this.level;
         }
 
         @Override

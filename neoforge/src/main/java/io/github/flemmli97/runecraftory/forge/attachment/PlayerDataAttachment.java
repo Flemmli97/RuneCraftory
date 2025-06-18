@@ -26,6 +26,6 @@ public class PlayerDataAttachment extends PlayerData implements INBTSerializable
 
     @Override
     public void deserializeNBT(HolderLookup.Provider provider, CompoundTag tag) {
-        this.readFromNBT(tag, null);
+        this.readFromNBT(tag);
     }
 }

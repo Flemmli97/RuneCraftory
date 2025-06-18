@@ -50,6 +50,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.Collection;
 import java.util.List;
@@ -126,14 +127,15 @@ public class ClientHandlers {
 
     public static boolean disableScrollMouse() {
         Minecraft mc = Minecraft.getInstance();
-        return mc.player != null && (EntityUtils.isDisabled(mc.player) || Platform.INSTANCE.getPlayerData(mc.player).map(d -> d.getWeaponHandler().isItemSwapBlocked()).orElse(false)) && (mc.screen == null || mc.screen instanceof AbstractContainerScreen<?>);
+        return mc.player != null && (EntityUtils.isDisabled(mc.player) || Platform.INSTANCE.getPlayerData(mc.player).getWeaponHandler().isItemSwapBlocked()) && (mc.screen == null || mc.screen instanceof AbstractContainerScreen<?>);
     }
 
+    // Unused atm
     public static boolean disableKeys(int key, int scanCode) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null || mc.screen instanceof ChatScreen)
             return false;
-        return key != 256
+        return key != GLFW.GLFW_KEY_ESCAPE
                 && !mc.options.keyInventory.matches(key, scanCode)
                 && !mc.options.keyChat.matches(key, scanCode)
                 && !mc.options.keyCommand.matches(key, scanCode) && EntityUtils.isDisabled(mc.player);

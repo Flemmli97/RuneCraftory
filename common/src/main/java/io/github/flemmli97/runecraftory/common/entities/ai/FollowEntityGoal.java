@@ -6,7 +6,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.level.pathfinder.PathType;
 
 import java.util.EnumSet;
 
@@ -78,15 +78,15 @@ public abstract class FollowEntityGoal<T extends Mob> extends Goal {
     @Override
     public void start() {
         this.timeToRecalcPath = 0;
-        this.oldWaterCost = this.mob.getPathfindingMalus(BlockPathTypes.WATER);
-        this.mob.setPathfindingMalus(BlockPathTypes.WATER, 0.0f);
+        this.oldWaterCost = this.mob.getPathfindingMalus(PathType.WATER);
+        this.mob.setPathfindingMalus(PathType.WATER, 0.0f);
     }
 
     @Override
     public void stop() {
         this.owner = null;
         this.mob.getNavigation().stop();
-        this.mob.setPathfindingMalus(BlockPathTypes.WATER, this.oldWaterCost);
+        this.mob.setPathfindingMalus(PathType.WATER, this.oldWaterCost);
     }
 
     @Override

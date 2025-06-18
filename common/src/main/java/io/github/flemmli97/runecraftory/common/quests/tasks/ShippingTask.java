@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.quests.tasks;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
@@ -29,7 +30,7 @@ import java.util.List;
 public class ShippingTask implements QuestTask<ShippingTask.SkillLevelTaskResolved> {
 
     public static final QuestEntryKey<ShippingTask> ID = new QuestEntryKey<>(RuneCraftory.modRes("shipping"));
-    public static final Codec<ShippingTask> CODEC = RecordCodecBuilder.create((instance) ->
+    public static final MapCodec<ShippingTask> CODEC = RecordCodecBuilder.mapCodec((instance) ->
             instance.group(Codec.STRING.fieldOf("description").forGetter(d -> d.description),
                     CodecHelper.nonEmptyList(DescriptiveValue.withTranslation(ItemPredicate.CODEC), "Item predicates can't be empty").fieldOf("item_predicates").forGetter(d -> d.itemPredicates),
                     NumberProviders.CODEC.fieldOf("amount").forGetter(d -> d.amount)
@@ -75,7 +76,7 @@ public class ShippingTask implements QuestTask<ShippingTask.SkillLevelTaskResolv
     public record SkillLevelTaskResolved(DescriptiveValue<ItemPredicate> item,
                                          int amount) implements ResolvedQuestTask {
 
-        public static final Codec<SkillLevelTaskResolved> CODEC = RecordCodecBuilder.create((instance) ->
+        public static final MapCodec<SkillLevelTaskResolved> CODEC = RecordCodecBuilder.mapCodec((instance) ->
                 instance.group(DescriptiveValue.withTranslation(JsonCodecs.ITEM_PREDICATE_CODEC).fieldOf("item").forGetter(d -> d.item),
                         ExtraCodecs.POSITIVE_INT.fieldOf("amount").forGetter(d -> d.amount)
                 ).apply(instance, SkillLevelTaskResolved::new));

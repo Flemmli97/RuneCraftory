@@ -11,7 +11,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeather;
 import io.github.flemmli97.runecraftory.common.blocks.BlockShippingBin;
-import io.github.flemmli97.runecraftory.common.blocks.tile.CraftingBlockEntity;
+import io.github.flemmli97.runecraftory.common.blocks.entity.CraftingBlockEntity;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.BathhouseAttendant;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.Cook;
@@ -181,42 +181,42 @@ public class LangGen implements DataProvider {
             }
         }
 
-        this.add(ModAttributes.HEALTHGAIN.get().getDescriptionId(), "HP");
-        this.add(ModAttributes.RPGAIN.get().getDescriptionId(), "RP");
-        this.add(ModAttributes.RPINCREASE.get().getDescriptionId(), "RP Max");
+        this.add(ModAttributes.HEALTH_GAIN.get().getDescriptionId(), "HP");
+        this.add(ModAttributes.RUNE_POINTS_GAIN.get().getDescriptionId(), "RP");
+        this.add(ModAttributes.MAX_RUNEPOINTS.get().getDescriptionId(), "RP Max");
 
         this.add(ModAttributes.DEFENCE.get().getDescriptionId(), "DEF");
-        this.add(ModAttributes.MAGIC.get().getDescriptionId(), "M. ATT");
+        this.add(ModAttributes.MAGIC_ATTACK.get().getDescriptionId(), "M. ATT");
         this.add(ModAttributes.MAGIC_DEFENCE.get().getDescriptionId(), "M. DEF");
-        this.add(ModAttributes.PARA.get().getDescriptionId(), "Para");
+        this.add(ModAttributes.PARALYSIS.get().getDescriptionId(), "Para");
         this.add(ModAttributes.POISON.get().getDescriptionId(), "Poison");
         this.add(ModAttributes.SEAL.get().getDescriptionId(), "Sealing");
         this.add(ModAttributes.SLEEP.get().getDescriptionId(), "Sleep");
         this.add(ModAttributes.FATIGUE.get().getDescriptionId(), "Fatigue");
         this.add(ModAttributes.COLD.get().getDescriptionId(), "Cold");
         this.add(ModAttributes.DIZZY.get().getDescriptionId(), "Dizz");
-        this.add(ModAttributes.CRIT.get().getDescriptionId(), "Crit");
+        this.add(ModAttributes.CRITICAL.get().getDescriptionId(), "Crit");
         this.add(ModAttributes.STUN.get().getDescriptionId(), "Stun");
         this.add(ModAttributes.FAINT.get().getDescriptionId(), "Faint");
         this.add(ModAttributes.DRAIN.get().getDescriptionId(), "Drain");
-        this.add(ModAttributes.RES_WATER.get().getDescriptionId(), "Water Res");
-        this.add(ModAttributes.RES_EARTH.get().getDescriptionId(), "Earth Res");
-        this.add(ModAttributes.RES_WIND.get().getDescriptionId(), "Wind Res");
-        this.add(ModAttributes.RES_FIRE.get().getDescriptionId(), "Fire Res");
-        this.add(ModAttributes.RES_DARK.get().getDescriptionId(), "Dark Res");
-        this.add(ModAttributes.RES_LIGHT.get().getDescriptionId(), "Light Res");
-        this.add(ModAttributes.RES_LOVE.get().getDescriptionId(), "Love Res");
-        this.add(ModAttributes.RES_PARA.get().getDescriptionId(), "Paralysis Res");
-        this.add(ModAttributes.RES_POISON.get().getDescriptionId(), "Poison Res");
-        this.add(ModAttributes.RES_SEAL.get().getDescriptionId(), "Seal Res");
-        this.add(ModAttributes.RES_SLEEP.get().getDescriptionId(), "Sleep Res");
-        this.add(ModAttributes.RES_FAT.get().getDescriptionId(), "Fatigue Res");
-        this.add(ModAttributes.RES_COLD.get().getDescriptionId(), "Cold Res");
-        this.add(ModAttributes.RES_DIZZY.get().getDescriptionId(), "Diz Res");
-        this.add(ModAttributes.RES_CRIT.get().getDescriptionId(), "Crit Res");
-        this.add(ModAttributes.RES_STUN.get().getDescriptionId(), "Stun Res");
-        this.add(ModAttributes.RES_FAINT.get().getDescriptionId(), "Faint Res");
-        this.add(ModAttributes.RES_DRAIN.get().getDescriptionId(), "Drain Res");
+        this.add(ModAttributes.WATER_RESISTANCE.get().getDescriptionId(), "Water Res");
+        this.add(ModAttributes.EARTH_RESISTANCE.get().getDescriptionId(), "Earth Res");
+        this.add(ModAttributes.WIND_RESISTANCE.get().getDescriptionId(), "Wind Res");
+        this.add(ModAttributes.FIRE_RESISTANCE.get().getDescriptionId(), "Fire Res");
+        this.add(ModAttributes.DARK_RESISTANCE.get().getDescriptionId(), "Dark Res");
+        this.add(ModAttributes.LIGHT_RESISTANCE.get().getDescriptionId(), "Light Res");
+        this.add(ModAttributes.LOVE_RESISTANCE.get().getDescriptionId(), "Love Res");
+        this.add(ModAttributes.PARALYSIS_RESISTANCE.get().getDescriptionId(), "Paralysis Res");
+        this.add(ModAttributes.POISON_RESISTANCE.get().getDescriptionId(), "Poison Res");
+        this.add(ModAttributes.SEAL_RESISTANCE.get().getDescriptionId(), "Seal Res");
+        this.add(ModAttributes.SLEEP_RESISTANCE.get().getDescriptionId(), "Sleep Res");
+        this.add(ModAttributes.FATIGUE_RESISTANCE.get().getDescriptionId(), "Fatigue Res");
+        this.add(ModAttributes.COLD_RESISTANCE.get().getDescriptionId(), "Cold Res");
+        this.add(ModAttributes.DIZZY_RESISTANCE.get().getDescriptionId(), "Diz Res");
+        this.add(ModAttributes.CRITICAL_RESISTANCE.get().getDescriptionId(), "Crit Res");
+        this.add(ModAttributes.STUN_RESISTANCE.get().getDescriptionId(), "Stun Res");
+        this.add(ModAttributes.FAINT_RESISTANCE.get().getDescriptionId(), "Faint Res");
+        this.add(ModAttributes.DRAIN_RESISTANCE.get().getDescriptionId(), "Drain Res");
 
         this.add(ModAttributes.ATTACK_SPEED.get().getDescriptionId(), "Attack Speed");
         this.add(ModAttributes.ATTACK_RANGE.get().getDescriptionId(), "Attack Range");
@@ -251,13 +251,19 @@ public class LangGen implements DataProvider {
                             Lists.newArrayList("and")));
         }
 
+        this.add("runecraftory.generic.yes", "Yes");
+        this.add("runecraftory.generic.no", "No");
+
         this.add("runecraftory.tooltip.item.level", "Level: %s");
         this.add("runecraftory.tooltip.item.buy", "Buy: %s$");
         this.add("runecraftory.tooltip.item.sell", "Sell: %s$");
         this.add("runecraftory.tooltip.item.difficulty", "Upgrade Difficulty: %s");
         this.add("runecraftory.tooltip.item.equipped", "When equipped");
         this.add("runecraftory.tooltip.item.upgrade", "Upgrade");
-        this.add("runecraftory.tooltip.item.eaten", "When eaten");
+        this.add("runecraftory.tooltip.item.attribute", "%s: %s");
+        this.add("runecraftory.tooltip.item.attribute.percentage", "%s: %s%");
+
+        this.add("runecraftory.tooltip.food.header", "When eaten");
 
         this.add("runecraftory.tooltip.item.spawn", "Right click in air to change mob level");
         this.add("runecraftory.tooltip.item.prop", "A prop item. Takes on the items look when in another entities hand");
@@ -270,10 +276,13 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.tooltip.item.npc", "Shift-right-click to change profession");
         this.add("runecraftory.tooltip.sapling", "Needs to be placed on farmland");
 
-        this.add("runecraftory.tooltip.growth", "Growth: %sd");
-        this.add("runecraftory.tooltip.harvested", "Harvest Amount: %s");
-        this.add("runecraftory.tooltip.season.best", "Good Season");
-        this.add("runecraftory.tooltip.season.bad", "Bad Season");
+        this.add("runecraftory.tooltip.crops.season.best", "Good Season: %s");
+        this.add("runecraftory.tooltip.crops.season.bad", "Bad Season: %s");
+        this.add("runecraftory.tooltip.crops.entry.2", "%s - %s");
+        this.add("runecraftory.tooltip.crops.entry.3", "%s - %s - %s");
+        this.add("runecraftory.tooltip.crops.growth", "Growth: %sd");
+        this.add("runecraftory.tooltip.crops.harvested", "Harvest: %s");
+        this.add("runecraftory.tooltip.crops.regrowable", "Regrowable");
 
         this.add("runecraftory.tooltip.baby.boy", "Boy");
         this.add("runecraftory.tooltip.baby.girl", "Girl");
@@ -491,9 +500,6 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.advancements.progression.boss.sano_uno.description", "Defeat sano and uno. Now where are they...");
         this.add("runecraftory.advancements.progression.boss.sarcophagus.title", "Don't get cursed!");
         this.add("runecraftory.advancements.progression.boss.sarcophagus.description", "Defeat sarcophagus after proving your worth to sano and uno");
-
-        this.add("runecraftory.generic.yes", "Yes");
-        this.add("runecraftory.generic.no", "No");
 
         this.add("runecraftory.misc.recipe.eat.fail", "Didn't learn any recipe. Maybe your crafting level is too low");
         this.add("runecraftory.misc.sarcophagus.coming.soon", "This looks like a teleporter but it seems to not lead to anywhere yet...");

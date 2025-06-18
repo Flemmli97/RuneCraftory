@@ -436,7 +436,7 @@ public class EntityRaccoon extends BossMonster {
     }
 
     @Override
-    public void handleAttack(AnimatedAction anim) {
+    public void handleAttack(AnimationState anim) {
         this.getNavigation().stop();
         BiConsumer<AnimatedAction, EntityRaccoon> handler = ATTACK_HANDLER.get(anim.getID());
         if (handler != null)
@@ -463,7 +463,7 @@ public class EntityRaccoon extends BossMonster {
     }
 
     @Override
-    public AABB attackBB(AnimatedAction anim) {
+    public AABB attackBB(String anim) {
         if (anim.is(JUMP, LAND)) {
             double attackSize = this.getBbWidth() * 1.5;
             return new AABB(-attackSize, -0.5, -attackSize, attackSize, 2, attackSize);

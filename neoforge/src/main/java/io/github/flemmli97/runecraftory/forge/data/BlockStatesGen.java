@@ -16,7 +16,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
 import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
@@ -166,10 +165,6 @@ public class BlockStatesGen extends BlockStateProvider {
         this.simpleBlock(ModBlocks.BOSS_SPAWNER.get(), this.models().getExistingFile(ResourceLocation.withDefaultNamespace(ModelProvider.BLOCK_FOLDER + "/" + this.key(Blocks.SPAWNER).getPath())));
         this.simpleBlock(ModBlocks.SINGLE_SPAWN_BLOCK.get(), this.models().getExistingFile(ResourceLocation.withDefaultNamespace(ModelProvider.BLOCK_FOLDER + "/" + this.key(Blocks.SPAWNER).getPath())));
         this.simpleBlock(ModBlocks.MONSTER_BARN.get(), this.models().getExistingFile(RuneCraftory.modRes(ModelProvider.BLOCK_FOLDER + "/" + ModBlocks.MONSTER_BARN.getID().getPath())));
-
-        this.getVariantBuilder(ModBlocks.SNOW.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(
-                        this.models().getExistingFile(state.getValue(SnowLayerBlock.LAYERS) == 8 ? ResourceLocation.withDefaultNamespace(ModelProvider.BLOCK_FOLDER + "/snow_block") : ResourceLocation.withDefaultNamespace(ModelProvider.BLOCK_FOLDER + "/snow_height" + state.getValue(SnowLayerBlock.LAYERS) * 2)))
-                .build());
 
         this.getVariantBuilder(ModBlocks.SHIPPING.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(
                         this.models().orientableVertical(ModBlocks.SHIPPING.getID().getPath(), this.modLoc(ModelProvider.BLOCK_FOLDER + "/shipping_bin"), this.modLoc(ModelProvider.BLOCK_FOLDER + "/shipping_bin_top")))

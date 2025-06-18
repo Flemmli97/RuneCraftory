@@ -45,16 +45,16 @@ public class ItemStatManager extends SimpleJsonResourceReloadListener implements
             ImmutableMap.Builder<Item, ItemStat> builder = ImmutableMap.builder();
             int size = buf.readVarInt();
             for (int i = 0; i < size; i++)
-                builder.put(ByteBufCodecs.registry(Registries.ITEM).decode(buf), ItemStat.fromPacket(buf));
+                builder.put(ByteBufCodecs.registry(Registries.ITEM).decode(buf), ItemStat.STREAM_CODEC.decode(buf));
             return builder.build();
         }
 
         @Override
-        public void encode(RegistryFriendlyByteBuf buf, Map<Item, ItemStat> crops) {
-            buf.writeInt(crops.size());
-            crops.forEach((item, prop) -> {
+        public void encode(RegistryFriendlyByteBuf buf, Map<Item, ItemStat> props) {
+            buf.writeInt(props.size());
+            props.forEach((item, prop) -> {
                 ByteBufCodecs.registry(Registries.ITEM).encode(buf, item);
-                prop.toPacket(buf);
+                ItemStat.STREAM_CODEC.encode(buf, prop);
             });
         }
     };

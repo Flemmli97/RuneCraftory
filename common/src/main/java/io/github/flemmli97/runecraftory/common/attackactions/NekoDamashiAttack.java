@@ -27,7 +27,7 @@ public class NekoDamashiAttack extends AttackAction {
             if (!entity.level().isClientSide) {
                 double range = Math.min(2.5, CombatUtils.getRange(entity, 0));
                 CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(entity.getYRot(), 0, 1.5, range, true))
-                        .withBonusAttributes(ModAttributes.PARA.asHolder(), 30)
+                        .withBonusAttributes(ModAttributes.PARALYSIS.asHolder(), 30)
                         .withBonusAttributes(ModAttributes.STUN.asHolder(), 20)
                         .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
                         .executeAttack();

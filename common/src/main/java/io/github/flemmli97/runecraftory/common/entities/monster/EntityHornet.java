@@ -88,7 +88,7 @@ public class EntityHornet extends BaseMonster {
     }
 
     @Override
-    public int animationCooldown(@Nullable AnimatedAction anim) {
+    public int animationCooldown(@Nullable String anim) {
         int diffAdd = this.difficultyCooldown();
         if (anim == null)
             return this.getRandom().nextInt(20) + 30 + diffAdd;
@@ -96,7 +96,7 @@ public class EntityHornet extends BaseMonster {
     }
 
     @Override
-    public void handleAttack(AnimatedAction anim) {
+    public void handleAttack(AnimationState anim) {
         if (anim.is(ATTACK)) {
             this.getNavigation().stop();
             if (anim.isAt("attack")) {
@@ -164,7 +164,7 @@ public class EntityHornet extends BaseMonster {
     }
 
     @Override
-    public AnimatedAction getSleepAnimation() {
+    public String getSleepAnimation() {
         return STILL;
     }
 

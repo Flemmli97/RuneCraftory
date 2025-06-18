@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.forge;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.common.config.specs.ConfigHolder;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
-import io.github.flemmli97.runecraftory.common.datapack.ListenerExtension;
 import io.github.flemmli97.runecraftory.common.entities.GateEntity;
 import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
 import io.github.flemmli97.runecraftory.common.registry.ModActivities;
@@ -16,7 +16,6 @@ import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
 import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
-import io.github.flemmli97.runecraftory.common.registry.ModFeatures;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
 import io.github.flemmli97.runecraftory.common.registry.ModMenuTypes;
@@ -27,26 +26,19 @@ import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.registry.ModPoiTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
-import io.github.flemmli97.runecraftory.common.registry.ModStructures;
 import io.github.flemmli97.runecraftory.forge.client.ClientEvents;
-import io.github.flemmli97.runecraftory.forge.config.ConfigHolder;
 import io.github.flemmli97.runecraftory.forge.event.EntityEvents;
 import io.github.flemmli97.runecraftory.forge.event.WorldEvents;
-import io.github.flemmli97.runecraftory.forge.integration.jade.JadePlugin;
-import io.github.flemmli97.runecraftory.forge.integration.top.TOP;
 import io.github.flemmli97.runecraftory.forge.network.PacketHandler;
 import io.github.flemmli97.runecraftory.forge.registry.ModAttachments;
 import io.github.flemmli97.runecraftory.mixin.AttributeAccessor;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
-import net.minecraft.server.packs.resources.PreparableReloadListener;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
-import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
@@ -54,6 +46,7 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.IConfigSpec;
+import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
@@ -69,8 +62,6 @@ import java.util.Map;
 public class RuneCraftoryNeoForge {
 
     public RuneCraftoryNeoForge(IEventBus modBus, ModContainer container) {
-        MobEffect effect;
-        effect.fillEffectCures();
         RuneCraftory.iris = ModList.get().isLoaded("iris");
 
         modBus.addListener(this::common);
@@ -79,7 +70,7 @@ public class RuneCraftoryNeoForge {
         modBus.addListener(this::attributesAdd);
         modBus.addListener(this::spawnPlacement);
         modBus.addListener(PacketHandler::register);
-        modBus.addListener(TOP::enqueueIMC);
+//        modBus.addListener(TOP::enqueueIMC);
         if (FMLEnvironment.dist == Dist.CLIENT)
             ClientEvents.register(modBus);
 
@@ -90,11 +81,11 @@ public class RuneCraftoryNeoForge {
         forgeBus.register(new EntityEvents());
         forgeBus.register(new WorldEvents());
 
-        if (ModList.get().isLoaded("jade"))
-            NeoForge.EVENT_BUS.addListener(JadePlugin::multipartHandler);
+//        if (ModList.get().isLoaded("jade"))
+//            NeoForge.EVENT_BUS.addListener(JadePlugin::multipartHandler);
         for (Map.Entry<IConfigSpec, ConfigHolder<?>> confs : ConfigHolder.CONFIGS.entrySet()) {
             ConfigHolder<?> loader = confs.getValue();
-            container.registerConfig(loader.configType(), confs.getKey(), loader.configName());
+            container.registerConfig(loader.configType() == ConfigHolder.ConfigType.COMMON ? ModConfig.Type.COMMON : ModConfig.Type.CLIENT, confs.getKey(), loader.configName());
         }
         QuestHandler.register();
     }
@@ -108,10 +99,10 @@ public class RuneCraftoryNeoForge {
         ModAttributes.ATTRIBUTES.registerContent(modBus);
         ModEffects.EFFECTS.registerContent(modBus);
         ModCrafting.RECIPESERIALIZER.registerContent(modBus);
-        ModFeatures.FEATURES.registerContent(modBus);
-        ModFeatures.CONFIGURED_FEATURES.registerContent(modBus);
+//        ModFeatures.FEATURES.registerContent(modBus);
+//        ModFeatures.CONFIGURED_FEATURES.registerContent(modBus);
         ModSpells.SPELLS.register().registerContent(modBus);
-        ModStructures.STRUCTURES.registerContent(modBus);
+//        ModStructures.STRUCTURES.registerContent(modBus);
         ModParticles.PARTICLES.registerContent(modBus);
         ModActivities.ACTIVITIES.registerContent(modBus);
         ModPoiTypes.POI.registerContent(modBus);
@@ -124,9 +115,9 @@ public class RuneCraftoryNeoForge {
         ModLootRegistries.LOOTFUNCTION.registerContent(modBus);
         ModLootRegistries.LOOTCONDITIONS.registerContent(modBus);
         ModLootRegistries.NUMBER_PROVIDERS.registerContent(modBus);
-        ModStructures.STRUCTURESPROCESSORS.registerContent(modBus);
+//        ModStructures.STRUCTURESPROCESSORS.registerContent(modBus);
         ModCrafting.RECIPETYPE.registerContent(modBus);
-        ModFeatures.TRUNK_PLACER.registerContent(modBus);
+//        ModFeatures.TRUNK_PLACER.registerContent(modBus);
         ModAttachments.ATTACHMENT_TYPES.register(modBus);
         ModDataComponentTypes.DATA_COMPONENTS.registerContent(modBus);
         ModCriteria.TRIGGERS.registerContent(modBus);
@@ -135,9 +126,9 @@ public class RuneCraftoryNeoForge {
     }
 
     public void common(FMLCommonSetupEvent event) {
-        event.enqueueWork(() -> {
-            ModFeatures.registerConfiguredFeatures();
-        });
+//        event.enqueueWork(() -> {
+//            ModFeatures.registerConfiguredFeatures();
+//        });
         this.tweakVanillaAttribute(Attributes.MAX_HEALTH.value(), Double.MAX_VALUE);
         this.tweakVanillaAttribute(Attributes.ATTACK_DAMAGE.value(), Double.MAX_VALUE);
     }
@@ -170,20 +161,10 @@ public class RuneCraftoryNeoForge {
     }
 
     public void addReloadListener(AddReloadListenerEvent event) {
-        DataPackHandler.addListeners(new DataPackHandler.Register() {
-            @Override
-            public <T extends PreparableReloadListener & ListenerExtension> void accept(T listener) {
-                listener.insertRegistryAccess(event.getRegistryAccess());
-                event.addListener(listener);
-            }
+        DataPackHandler.addListeners(ext -> {
+            ext.insertRegistryAccess(event.getRegistryAccess());
+            event.addListener(ext);
         });
-        DataPackHandler.reloadItemStats(event::addListener);
-        DataPackHandler.reloadCropManager(event::addListener);
-        DataPackHandler.reloadFoodManager(event::addListener);
-        DataPackHandler.reloadShopItems(event::addListener);
-        DataPackHandler.reloadGateSpawns(event::addListener);
-        DataPackHandler.reloadProperties(event::addListener);
-        DataPackHandler.reloadNPCData(event::addListener);
     }
 
     private void tweakVanillaAttribute(Attribute attribute, double value) {

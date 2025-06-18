@@ -623,7 +623,7 @@ public class EntitySkelefang extends BossMonster {
     }
 
     @Override
-    public void handleAttack(AnimatedAction anim) {
+    public void handleAttack(AnimationState anim) {
         this.getNavigation().stop();
         BiConsumer<AnimatedAction, EntitySkelefang> handler = ATTACK_HANDLER.get(anim.getID());
         if (handler != null)
@@ -740,7 +740,7 @@ public class EntitySkelefang extends BossMonster {
     }
 
     @Override
-    public AnimatedAction getSleepAnimation() {
+    public String getSleepAnimation() {
         return DEATH;
     }
 

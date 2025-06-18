@@ -16,8 +16,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -29,8 +27,6 @@ import java.util.function.ToIntFunction;
 import java.util.stream.Stream;
 
 public abstract class ItemStatProvider implements DataProvider {
-
-    private static final Logger LOGGER = LogManager.getLogger();
 
     private final Map<ResourceLocation, ItemStat.Builder> data = new HashMap<>();
     private final Map<ResourceLocation, Consumer<JsonObject>> item = new HashMap<>();

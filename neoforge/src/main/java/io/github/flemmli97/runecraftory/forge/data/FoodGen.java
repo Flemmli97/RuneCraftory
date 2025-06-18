@@ -23,68 +23,68 @@ public class FoodGen extends FoodProvider {
     @Override
     protected void add(HolderLookup.Provider provider) {
         this.addStat("fish", Items.COD, new FoodProperties.Builder(6000).setRPRegen(5, 0)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 3));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 3));
         this.addStat("salmon", Items.SALMON, new FoodProperties.Builder(6000).setRPRegen(5, 0)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 3));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 3));
         this.addStat("sweet_berry", Items.SWEET_BERRIES, new FoodProperties.Builder(6000).setRPRegen(5, 0)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 3));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 3));
         this.addStat("cookie", Items.COOKIE, new FoodProperties.Builder(6000).setRPRegen(3, 0)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 2));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 2));
         this.addStat("honey_bottle", Items.HONEY_BOTTLE, new FoodProperties.Builder(6000).setRPRegen(15, 1)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 10));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 10));
         this.addStat("apple", Items.APPLE, new FoodProperties.Builder(6000).setRPRegen(7, 0)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
 
         this.addStat("chorus_fruit", Items.CHORUS_FRUIT, new FoodProperties.Builder(6000).setRPRegen(5, 0)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat("kelp", Items.DRIED_KELP, new FoodProperties.Builder(6000).setRPRegen(3, 0)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat("melon", Items.MELON_SLICE, new FoodProperties.Builder(6000).setRPRegen(3, 0)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat("potato", Items.POTATO, new FoodProperties.Builder(6000).setRPRegen(7, 0)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 10));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 10));
         this.addStat("carrot", Items.CARROT, new FoodProperties.Builder(6000).setRPRegen(7, 0)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 10));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 10));
 
         this.addStat(ModItems.WITHERED_GRASS.get(), new FoodProperties.Builder(6000)
                 .addPotion(ModEffects.POISON.asHolder(), 60, 0).setRPRegen(0, -35)
-                .addCookingBonusPercent(ModAttributes.HEALTHGAIN.asHolder(), -10));
+                .addCookingBonusPercent(ModAttributes.HEALTH_GAIN.asHolder(), -10));
         this.addStat(ModItems.WEEDS.get(), new FoodProperties.Builder(6000).setHPRegen(-10, 0)
-                .addCookingBonusPercent(ModAttributes.HEALTHGAIN.asHolder(), -5));
+                .addCookingBonusPercent(ModAttributes.HEALTH_GAIN.asHolder(), -5));
         this.addStat(ModItems.WHITE_GRASS.get(), new FoodProperties.Builder(6000).setHPRegen(10, 0).setRPRegen(5, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 3));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 3));
         this.addStat(ModItems.INDIGO_GRASS.get(), new FoodProperties.Builder(6000).setHPRegen(10, 0).setRPRegen(5, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 3));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 3));
         this.addStat(ModItems.PURPLE_GRASS.get(), new FoodProperties.Builder(6000).setHPRegen(10, 0).setRPRegen(5, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 3));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 3));
         this.addStat(ModItems.GREEN_GRASS.get(), new FoodProperties.Builder(6000).setHPRegen(10, 0).setRPRegen(5, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 3));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 3));
         this.addStat(ModItems.BLUE_GRASS.get(), new FoodProperties.Builder(6000).setHPRegen(10, 0).setRPRegen(5, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 3));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 3));
         this.addStat(ModItems.YELLOW_GRASS.get(), new FoodProperties.Builder(6000).setHPRegen(10, 0).setRPRegen(5, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 3));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 3));
         this.addStat(ModItems.RED_GRASS.get(), new FoodProperties.Builder(6000).setHPRegen(10, 0).setRPRegen(5, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 3));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 3));
         this.addStat(ModItems.ORANGE_GRASS.get(), new FoodProperties.Builder(6000).setHPRegen(10, 0).setRPRegen(5, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 3));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 3));
         this.addStat(ModItems.BLACK_GRASS.get(), new FoodProperties.Builder(6000).setHPRegen(10, 0).setRPRegen(5, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 3));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 3));
         this.addStat(ModItems.ANTIDOTE_GRASS.get(), new FoodProperties.Builder(6000).setHPRegen(10, 0)
                 .curePotion(ModEffects.POISON.asHolder()).curePotion(MobEffects.POISON).curePotion(MobEffects.WITHER)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 5));
         this.addStat(ModItems.MEDICINAL_HERB.get(), new FoodProperties.Builder(6000).setHPRegen(25, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 20));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 20));
         this.addStat(ModItems.BAMBOO_SPROUT.get(), new FoodProperties.Builder(6000).setHPRegen(12, 0).setRPRegen(5, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10));
 
         this.addStat(ModItems.ROUNDOFF.get(), new FoodProperties.Builder(6000).setHPRegen(500, 0).curePotion(ModEffects.SEAL.asHolder()));
         this.addStat(ModItems.PARA_GONE.get(), new FoodProperties.Builder(6000).setHPRegen(500, 0).curePotion(MobEffects.MOVEMENT_SLOWDOWN).curePotion(ModEffects.PARALYSIS.asHolder()));
@@ -95,12 +95,12 @@ public class FoodGen extends FoodProvider {
         this.addStat(ModItems.MYSTERY_POTION.get(), new FoodProperties.Builder(6000).setHPRegen(500, 0));
         this.addStat(ModItems.MAGICAL_POTION.get(), new FoodProperties.Builder(6000).setHPRegen(0, 50));
         this.addStat(ModItems.INVINCIROID.get(), new FoodProperties.Builder(6000)
-                .addEffect(ModAttributes.RES_PARA.asHolder(), 100)
-                .addEffect(ModAttributes.RES_POISON.asHolder(), 100)
-                .addEffect(ModAttributes.RES_SEAL.asHolder(), 100)
-                .addEffect(ModAttributes.RES_SLEEP.asHolder(), 100)
-                .addEffect(ModAttributes.RES_FAT.asHolder(), 100)
-                .addEffect(ModAttributes.RES_COLD.asHolder(), 100)
+                .addEffect(ModAttributes.PARALYSIS_RESISTANCE.asHolder(), 100)
+                .addEffect(ModAttributes.POISON_RESISTANCE.asHolder(), 100)
+                .addEffect(ModAttributes.SEAL_RESISTANCE.asHolder(), 100)
+                .addEffect(ModAttributes.SLEEP_RESISTANCE.asHolder(), 100)
+                .addEffect(ModAttributes.FATIGUE_RESISTANCE.asHolder(), 100)
+                .addEffect(ModAttributes.COLD_RESISTANCE.asHolder(), 100)
                 .curePotion(MobEffects.POISON)
                 .curePotion(MobEffects.WITHER)
                 .curePotion(MobEffects.MOVEMENT_SLOWDOWN)
@@ -117,19 +117,19 @@ public class FoodGen extends FoodProvider {
         this.addStat(ModItems.FORMUADE.get(), new FoodProperties.Builder(6000).setRPIncrease(0, 75)
                 .addEffectPercentage(Attributes.MAX_HEALTH, -50)
                 .addEffect(Attributes.ATTACK_DAMAGE, 70)
-                .addEffect(ModAttributes.MAGIC.asHolder(), 70)
+                .addEffect(ModAttributes.MAGIC_ATTACK.asHolder(), 70)
                 .addEffect(ModAttributes.DEFENCE.asHolder(), 35)
                 .addEffect(ModAttributes.MAGIC_DEFENCE.asHolder(), 35)
-                .addEffect(ModAttributes.RES_POISON.asHolder(), 25)
-                .addEffect(ModAttributes.RES_PARA.asHolder(), 25)
-                .addEffect(ModAttributes.RES_SEAL.asHolder(), 25)
-                .addEffect(ModAttributes.RES_SLEEP.asHolder(), 25)
-                .addEffect(ModAttributes.RES_FAT.asHolder(), 25)
-                .addEffect(ModAttributes.RES_COLD.asHolder(), 25)
-                .addEffect(ModAttributes.RES_FAINT.asHolder(), 25));
+                .addEffect(ModAttributes.POISON_RESISTANCE.asHolder(), 25)
+                .addEffect(ModAttributes.PARALYSIS_RESISTANCE.asHolder(), 25)
+                .addEffect(ModAttributes.SEAL_RESISTANCE.asHolder(), 25)
+                .addEffect(ModAttributes.SLEEP_RESISTANCE.asHolder(), 25)
+                .addEffect(ModAttributes.FATIGUE_RESISTANCE.asHolder(), 25)
+                .addEffect(ModAttributes.COLD_RESISTANCE.asHolder(), 25)
+                .addEffect(ModAttributes.FAINT_RESISTANCE.asHolder(), 25));
         this.addStat(ModItems.OBJECT_X.get(), new FoodProperties.Builder(6000).setRPIncrease(0, -50)
-                .addCookingBonusPercent(ModAttributes.HEALTHGAIN.asHolder(), -15)
-                .addCookingBonusPercent(ModAttributes.RPGAIN.asHolder(), -15));
+                .addCookingBonusPercent(ModAttributes.HEALTH_GAIN.asHolder(), -15)
+                .addCookingBonusPercent(ModAttributes.RUNE_POINTS_GAIN.asHolder(), -15));
 
         this.addStat(ModItems.MUSHROOM.get(), new FoodProperties.Builder(6000).setHPRegen(15, 1).setRPRegen(10, 0));
         this.addStat(ModItems.MONARCH_MUSHROOM.get(), new FoodProperties.Builder(6000).setHPRegen(20, 2).setRPRegen(15, 0));
@@ -138,26 +138,26 @@ public class FoodGen extends FoodProvider {
         this.addStat(ModItems.RICE_FLOUR.get(), new FoodProperties.Builder(6000));
         this.addStat(ModItems.FLOUR.get(), new FoodProperties.Builder(6000));
         this.addStat(ModItems.OIL.get(), new FoodProperties.Builder(6000).setHPRegen(0, 0)
-                .addEffect(ModAttributes.RES_FIRE.asHolder(), -30));
+                .addEffect(ModAttributes.FIRE_RESISTANCE.asHolder(), -30));
         this.addStat(ModItems.CURRY_POWDER.get(), new FoodProperties.Builder(6000));
         this.addStat(ModItems.WINE.get(), new FoodProperties.Builder(6000).setRPRegen(15, 0)
                 .addPotion(ModEffects.SLEEP.asHolder(), 80, 0));
         this.addStat(ModItems.CHOCOLATE.get(), new FoodProperties.Builder(6000).setRPRegen(25, 0));
         this.addStat(ModItems.EGG_S.get(), new FoodProperties.Builder(6000).setHPRegen(5, 0)
-                .addCookingBonusPercent(ModAttributes.HEALTHGAIN.asHolder(), 5));
+                .addCookingBonusPercent(ModAttributes.HEALTH_GAIN.asHolder(), 5));
         this.addStat(ModItems.EGG_M.get(), new FoodProperties.Builder(6000).setHPRegen(10, 0).setRPRegen(10, 0)
-                .addCookingBonusPercent(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonusPercent(ModAttributes.RPGAIN.asHolder(), 10));
+                .addCookingBonusPercent(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonusPercent(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 10));
         this.addStat(ModItems.EGG_L.get(), new FoodProperties.Builder(6000).setHPRegen(40, 0).setRPRegen(20, 0)
-                .addCookingBonusPercent(ModAttributes.HEALTHGAIN.asHolder(), 40)
-                .addCookingBonusPercent(ModAttributes.RPGAIN.asHolder(), 20));
+                .addCookingBonusPercent(ModAttributes.HEALTH_GAIN.asHolder(), 40)
+                .addCookingBonusPercent(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 20));
         this.addStat(ModItems.MILK_S.get(), new FoodProperties.Builder(6000).setRPRegen(5, 0));
         this.addStat(ModItems.MILK_M.get(), new FoodProperties.Builder(6000).setRPRegen(10, 0).setHPRegen(30, 0)
-                .addCookingBonusPercent(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonusPercent(ModAttributes.RPGAIN.asHolder(), 30));
+                .addCookingBonusPercent(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonusPercent(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 30));
         this.addStat(ModItems.MILK_L.get(), new FoodProperties.Builder(6000).setRPRegen(40, 0).setHPRegen(50, 0)
-                .addCookingBonusPercent(ModAttributes.HEALTHGAIN.asHolder(), 40)
-                .addCookingBonusPercent(ModAttributes.RPGAIN.asHolder(), 50));
+                .addCookingBonusPercent(ModAttributes.HEALTH_GAIN.asHolder(), 40)
+                .addCookingBonusPercent(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 50));
 
         //Main effects: HP/RP regen, damage, magic dmg, defense stats
         this.addStat(ModItems.ONIGIRI.get(), new FoodProperties.Builder(6000)
@@ -169,14 +169,14 @@ public class FoodGen extends FoodProvider {
                 .setRPRegen(100, 0)
                 .addEffect(Attributes.ATTACK_DAMAGE, 3)
                 .addEffect(ModAttributes.DEFENCE.asHolder(), 1)
-                .addEffect(ModAttributes.MAGIC.asHolder(), 2));
+                .addEffect(ModAttributes.MAGIC_ATTACK.asHolder(), 2));
         this.addStat(ModItems.PICKLES.get(), new FoodProperties.Builder(6000));
         this.addStat(ModItems.BAMBOO_RICE.get(), new FoodProperties.Builder(6000));
         this.addStat(ModItems.SALMON_ONIGIRI.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(250, 5)
                 .addEffect(Attributes.ATTACK_DAMAGE, 10)
                 .addEffect(ModAttributes.DEFENCE.asHolder(), 5)
-                .addEffect(ModAttributes.MAGIC.asHolder(), 7));
+                .addEffect(ModAttributes.MAGIC_ATTACK.asHolder(), 7));
         this.addStat(ModItems.PICKLE_MIX.get(), new FoodProperties.Builder(6000));
         this.addStat(ModItems.SANDWICH.get(), new FoodProperties.Builder(6000));
         this.addStat(ModItems.FRUIT_SANDWICH.get(), new FoodProperties.Builder(6000));
@@ -191,8 +191,8 @@ public class FoodGen extends FoodProvider {
                 .setRPRegen(130, 0)
                 .addPotion(MobEffects.MOVEMENT_SPEED, 200, 1)
                 .addEffect(ModAttributes.DEFENCE.asHolder(), 1)
-                .addEffect(ModAttributes.RES_FAT.asHolder(), 15)
-                .addEffect(ModAttributes.RES_COLD.asHolder(), 15));
+                .addEffect(ModAttributes.FATIGUE_RESISTANCE.asHolder(), 15)
+                .addEffect(ModAttributes.COLD_RESISTANCE.asHolder(), 15));
         this.addStat(ModItems.PUMPKIN_FLAN.get(), new FoodProperties.Builder(6000));
         this.addStat(ModItems.STEAMED_BREAD.get(), new FoodProperties.Builder(6000));
         this.addStat(ModItems.CHEESE_BREAD.get(), new FoodProperties.Builder(6000));
@@ -211,48 +211,48 @@ public class FoodGen extends FoodProvider {
         this.addStat(ModItems.APPLE_JUICE.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(150, 0)
                 .setRPRegen(70, 0)
-                .addEffect(ModAttributes.MAGIC.asHolder(), 2));
+                .addEffect(ModAttributes.MAGIC_ATTACK.asHolder(), 2));
         this.addStat(ModItems.ORANGE_JUICE.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(180, 0)
                 .setRPRegen(90, 0)
-                .addEffect(ModAttributes.MAGIC.asHolder(), 5));
+                .addEffect(ModAttributes.MAGIC_ATTACK.asHolder(), 5));
         this.addStat(ModItems.GRAPE_JUICE.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(230, 0)
                 .setRPRegen(120, 0)
-                .addEffect(ModAttributes.MAGIC.asHolder(), 10));
+                .addEffect(ModAttributes.MAGIC_ATTACK.asHolder(), 10));
         this.addStat(ModItems.STRAWBERRY_MILK.get(), new FoodProperties.Builder(6000));
         this.addStat(ModItems.TOMATO_JUICE.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(430, 0)
                 .setRPRegen(160, 0)
-                .addEffect(ModAttributes.MAGIC.asHolder(), 15));
+                .addEffect(ModAttributes.MAGIC_ATTACK.asHolder(), 15));
         this.addStat(ModItems.PINEAPPLE_JUICE.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(1600, 0)
                 .setRPRegen(300, 0)
-                .addEffect(ModAttributes.MAGIC.asHolder(), 45));
+                .addEffect(ModAttributes.MAGIC_ATTACK.asHolder(), 45));
         this.addStat(ModItems.FRUIT_JUICE.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(500, 0)
                 .setRPRegen(200, 0)
-                .addEffect(ModAttributes.MAGIC.asHolder(), 19));
+                .addEffect(ModAttributes.MAGIC_ATTACK.asHolder(), 19));
         this.addStat(ModItems.FRUIT_SMOOTHIE.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(900, 0)
                 .setRPRegen(300, 0)
-                .addEffect(ModAttributes.MAGIC.asHolder(), 33));
+                .addEffect(ModAttributes.MAGIC_ATTACK.asHolder(), 33));
         this.addStat(ModItems.VEGETABLE_JUICE.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(610, 0)
                 .setRPRegen(200, 0)
-                .addEffect(ModAttributes.MAGIC.asHolder(), 22));
+                .addEffect(ModAttributes.MAGIC_ATTACK.asHolder(), 22));
         this.addStat(ModItems.VEGGIE_SMOOTHIE.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(1050, 0)
                 .setRPRegen(300, 0)
-                .addEffect(ModAttributes.MAGIC.asHolder(), 37));
+                .addEffect(ModAttributes.MAGIC_ATTACK.asHolder(), 37));
         this.addStat(ModItems.MIXED_JUICE.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(860, 0)
                 .setRPRegen(200, 0)
-                .addEffect(ModAttributes.MAGIC.asHolder(), 38));
+                .addEffect(ModAttributes.MAGIC_ATTACK.asHolder(), 38));
         this.addStat(ModItems.MIXED_SMOOTHIE.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(1300, 0)
                 .setRPRegen(300, 0)
-                .addEffect(ModAttributes.MAGIC.asHolder(), 40));
+                .addEffect(ModAttributes.MAGIC_ATTACK.asHolder(), 40));
         this.addStat(ModItems.HOT_JUICE.get(), new FoodProperties.Builder(6000));
         this.addStat(ModItems.PRELUDE_TO_LOVE.get(), new FoodProperties.Builder(6000));
         this.addStat(ModItems.GOLD_JUICE.get(), new FoodProperties.Builder(6000));
@@ -354,18 +354,18 @@ public class FoodGen extends FoodProvider {
         this.addStat(ModItems.UDON.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(200, 0)
                 .setRPRegen(50, 0)
-                .addEffect(ModAttributes.HEALTHGAIN.asHolder(), 100)
-                .addEffect(ModAttributes.RES_EARTH.asHolder(), 5));
+                .addEffect(ModAttributes.HEALTH_GAIN.asHolder(), 100)
+                .addEffect(ModAttributes.EARTH_RESISTANCE.asHolder(), 5));
         this.addStat(ModItems.TEMPURA_UDON.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(400, 30)
                 .setRPRegen(200, 0)
-                .addEffect(ModAttributes.HEALTHGAIN.asHolder(), 200)
-                .addEffect(ModAttributes.RES_EARTH.asHolder(), 15));
+                .addEffect(ModAttributes.HEALTH_GAIN.asHolder(), 200)
+                .addEffect(ModAttributes.EARTH_RESISTANCE.asHolder(), 15));
         this.addStat(ModItems.CURRY_UDON.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(500, 50)
                 .setRPRegen(220, 0)
-                .addEffect(ModAttributes.HEALTHGAIN.asHolder(), 250)
-                .addEffect(ModAttributes.RES_EARTH.asHolder(), 15));
+                .addEffect(ModAttributes.HEALTH_GAIN.asHolder(), 250)
+                .addEffect(ModAttributes.EARTH_RESISTANCE.asHolder(), 15));
         this.addStat(ModItems.BOILED_GYOZA.get(), new FoodProperties.Builder(6000));
         this.addStat(ModItems.RELAX_TEA.get(), new FoodProperties.Builder(6000));
         this.addStat(ModItems.ULTIMATE_CURRY.get(), new FoodProperties.Builder(6000));
@@ -377,7 +377,7 @@ public class FoodGen extends FoodProvider {
                 .addEffectPercentage(Attributes.MAX_HEALTH, 10)
                 .addEffect(Attributes.ATTACK_DAMAGE, 5)
                 .addEffect(ModAttributes.DEFENCE.asHolder(), 2)
-                .addEffect(ModAttributes.MAGIC.asHolder(), 5)
+                .addEffect(ModAttributes.MAGIC_ATTACK.asHolder(), 5)
                 .addEffect(ModAttributes.MAGIC_DEFENCE.asHolder(), 2));
         this.addStat(ModItems.FRIED_EGGS.get(), new FoodProperties.Builder(6000));
         this.addStat(ModItems.POPCORN.get(), new FoodProperties.Builder(6000));
@@ -392,7 +392,7 @@ public class FoodGen extends FoodProvider {
                 .setRPIncrease(0, 20)
                 .addEffectPercentage(Attributes.MAX_HEALTH, 300)
                 .addEffect(ModAttributes.DEFENCE.asHolder(), 1)
-                .addEffect(ModAttributes.MAGIC.asHolder(), 1));
+                .addEffect(ModAttributes.MAGIC_ATTACK.asHolder(), 1));
         this.addStat(ModItems.FRENCH_TOAST.get(), new FoodProperties.Builder(6000));
         this.addStat(ModItems.CROQUETTES.get(), new FoodProperties.Builder(6000));
         this.addStat(ModItems.PANCAKES.get(), new FoodProperties.Builder(6000));
@@ -471,342 +471,342 @@ public class FoodGen extends FoodProvider {
                 .setRPIncrease(0, -10)
                 .addEffectPercentage(Attributes.ATTACK_DAMAGE, -10)
                 .addEffectPercentage(ModAttributes.DEFENCE.asHolder(), -10)
-                .addEffectPercentage(ModAttributes.MAGIC.asHolder(), -10)
+                .addEffectPercentage(ModAttributes.MAGIC_ATTACK.asHolder(), -10)
                 .addEffectPercentage(ModAttributes.MAGIC_DEFENCE.asHolder(), -10));
         this.addStat(ModItems.DISASTROUS_DISH.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(0, -60)
                 .setRPIncrease(0, -30)
                 .addEffectPercentage(Attributes.ATTACK_DAMAGE, -25)
                 .addEffectPercentage(ModAttributes.DEFENCE.asHolder(), -25)
-                .addEffectPercentage(ModAttributes.MAGIC.asHolder(), -25)
+                .addEffectPercentage(ModAttributes.MAGIC_ATTACK.asHolder(), -25)
                 .addEffectPercentage(ModAttributes.MAGIC_DEFENCE.asHolder(), -25));
         this.addStat(ModItems.MIXED_HERBS.get(), new FoodProperties.Builder(6000)
-                .addEffect(ModAttributes.RES_WIND.asHolder(), -30));
+                .addEffect(ModAttributes.WIND_RESISTANCE.asHolder(), -30));
         this.addStat(ModItems.SOUR_DROP.get(), new FoodProperties.Builder(6000)
-                .addEffect(ModAttributes.RES_EARTH.asHolder(), -30));
+                .addEffect(ModAttributes.EARTH_RESISTANCE.asHolder(), -30));
         this.addStat(ModItems.SWEET_POWDER.get(), new FoodProperties.Builder(6000)
-                .addEffect(ModAttributes.RES_WATER.asHolder(), -30));
+                .addEffect(ModAttributes.WATER_RESISTANCE.asHolder(), -30));
         this.addStat(ModItems.HEAVY_SPICE.get(), new FoodProperties.Builder(6000)
-                .addEffect(ModAttributes.RES_FIRE.asHolder(), -30));
+                .addEffect(ModAttributes.FIRE_RESISTANCE.asHolder(), -30));
         this.addStat(ModItems.ORANGE.get(), new FoodProperties.Builder(6000).setHPRegen(15, 0).setRPRegen(15, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 25));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 25));
         this.addStat(ModItems.GRAPES.get(), new FoodProperties.Builder(6000).setHPRegen(15, 0).setRPRegen(15, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 25));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 25));
         this.addStat(ModItems.MEALY_APPLE.get(), new FoodProperties.Builder(6000)
                 .addEffectPercentage(Attributes.ATTACK_DAMAGE, -50)
                 .addEffectPercentage(ModAttributes.DEFENCE.asHolder(), -50)
-                .addEffectPercentage(ModAttributes.MAGIC.asHolder(), -50)
+                .addEffectPercentage(ModAttributes.MAGIC_ATTACK.asHolder(), -50)
                 .addEffectPercentage(ModAttributes.MAGIC_DEFENCE.asHolder(), -50)
-                .addEffectPercentage(ModAttributes.RES_FIRE.asHolder(), -20)
-                .addEffectPercentage(ModAttributes.RES_WATER.asHolder(), -20)
-                .addEffectPercentage(ModAttributes.RES_EARTH.asHolder(), -20)
-                .addEffectPercentage(ModAttributes.RES_WIND.asHolder(), -20));
+                .addEffectPercentage(ModAttributes.FIRE_RESISTANCE.asHolder(), -20)
+                .addEffectPercentage(ModAttributes.WATER_RESISTANCE.asHolder(), -20)
+                .addEffectPercentage(ModAttributes.EARTH_RESISTANCE.asHolder(), -20)
+                .addEffectPercentage(ModAttributes.WIND_RESISTANCE.asHolder(), -20));
 
         this.addStat(ModItems.TURNIP.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(20, 0)
                 .setRPIncrease(5, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.TURNIP_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(45, 0)
                 .setRPIncrease(15, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.TURNIP_PINK.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(25, 0)
                 .setRPIncrease(5, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.TURNIP_PINK_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(90, 0)
                 .setRPIncrease(18, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.CABBAGE.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(15, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.CABBAGE_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(35, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.PINK_MELON.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(100, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.PINK_MELON_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(150, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.PINEAPPLE.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(200, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.PINEAPPLE_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(300, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.STRAWBERRY.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(60, 0)
                 .setRPIncrease(3, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.STRAWBERRY_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(110, 0)
                 .setRPIncrease(7, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.GOLDEN_TURNIP.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(300, 5)
                 .setRPIncrease(3, 3)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.GOLDEN_TURNIP_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(500, 5)
                 .setRPIncrease(30, 5)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.GOLDEN_POTATO.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(230, 5)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.GOLDEN_POTATO_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(400, 7)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.GOLDEN_PUMPKIN.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(200, 3)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.GOLDEN_PUMPKIN_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(300, 7)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.GOLDEN_CABBAGE.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(150, 5)
                 .setRPIncrease(5, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.GOLDEN_CABBAGE_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(300, 5)
                 .setRPIncrease(40, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.BOK_CHOY.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(30, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.BOK_CHOY_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(60, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.LEEK.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(20, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.LEEK_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(80, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.RADISH.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(25, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.RADISH_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(50, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.SPINACH.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(44, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.SPINACH_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(90, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.GREEN_PEPPER.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(60, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.GREEN_PEPPER_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(100, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.YAM.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(33, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.YAM_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(70, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.EGGPLANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(55, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.EGGPLANT_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(120, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.TOMATO.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(80, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.TOMATO_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(160, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.CORN.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(45, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.CORN_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(110, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.CUCUMBER.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(70, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.CUCUMBER_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(140, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.PUMPKIN.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(20, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.PUMPKIN_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(75, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.ONION.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(35, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.ONION_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(60, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
 
         this.addStat(ModItems.POTATO_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(80, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat(ModItems.CARROT_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(80, 0)
-                .addCookingBonus(ModAttributes.HEALTHGAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 5));
+                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
 
         this.addStat(ModItems.TOYHERB.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(15, 0)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 15));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
         this.addStat(ModItems.TOYHERB_GIANT.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(60, 0)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 15));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
         this.addStat(ModItems.MOONDROP_FLOWER.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(18, 0)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 15));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
         this.addStat(ModItems.MOONDROP_FLOWER_GIANT.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(66, 0)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 15));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
         this.addStat(ModItems.PINK_CAT.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(20, 0)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 15));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
         this.addStat(ModItems.PINK_CAT_GIANT.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(70, 0)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 15));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
         this.addStat(ModItems.CHARM_BLUE.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(25, 0)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 15));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
         this.addStat(ModItems.CHARM_BLUE_GIANT.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(90, 0)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 15));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
         this.addStat(ModItems.LAMP_GRASS.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(33, 0)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 15));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
         this.addStat(ModItems.LAMP_GRASS_GIANT.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(80, 0)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 15));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
         this.addStat(ModItems.CHERRY_GRASS.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(20, 0)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 15));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
         this.addStat(ModItems.CHERRY_GRASS_GIANT.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(55, 0)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 15));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
         this.addStat(ModItems.POM_POM_GRASS.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(15, 0)
                 .setRPRegen(10, 0)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 15));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
         this.addStat(ModItems.POM_POM_GRASS_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(80, 0)
                 .setRPRegen(25, 0)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 15));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
         this.addStat(ModItems.AUTUMN_GRASS.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(20, 0)
                 .setRPRegen(15, 0)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 15));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
         this.addStat(ModItems.AUTUMN_GRASS_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(20, 0)
                 .setRPRegen(35, 0)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 15));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
         this.addStat(ModItems.NOEL_GRASS.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(80, 0)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 15));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
         this.addStat(ModItems.NOEL_GRASS_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(250, 0)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 15));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
         this.addStat(ModItems.FIREFLOWER.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(35, 0)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 15));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
         this.addStat(ModItems.FIREFLOWER_GIANT.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(85, 0)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 15));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
         this.addStat(ModItems.FOUR_LEAF_CLOVER.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(25, 0)
                 .addPotion(MobEffects.LUCK, 600, 0)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 15));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
         this.addStat(ModItems.FOUR_LEAF_CLOVER_GIANT.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(55, 0)
                 .addPotion(MobEffects.LUCK, 600, 1)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 15));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
         this.addStat(ModItems.IRONLEAF.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(-50, 0)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 15));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
         this.addStat(ModItems.IRONLEAF_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(-100, 0)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 15));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
         this.addStat(ModItems.WHITE_CRYSTAL.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(75, 0)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 15));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
         this.addStat(ModItems.WHITE_CRYSTAL_GIANT.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(150, 0)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 15));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
         this.addStat(ModItems.RED_CRYSTAL.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(75, 0)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 15));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
         this.addStat(ModItems.RED_CRYSTAL_GIANT.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(150, 0)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 15));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
         this.addStat(ModItems.GREEN_CRYSTAL.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(75, 0)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 15));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
         this.addStat(ModItems.GREEN_CRYSTAL_GIANT.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(150, 0)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 15));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
         this.addStat(ModItems.BLUE_CRYSTAL.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(75, 0)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 15));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
         this.addStat(ModItems.BLUE_CRYSTAL_GIANT.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(150, 0)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 15));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
         this.addStat(ModItems.EMERY_FLOWER.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(0, 10)
                 .setRPRegen(0, 5)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 50));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 50));
         this.addStat(ModItems.EMERY_FLOWER_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(0, 15)
                 .setRPRegen(0, 10)
-                .addCookingBonus(ModAttributes.RPGAIN.asHolder(), 50));
+                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 50));
     }
 }

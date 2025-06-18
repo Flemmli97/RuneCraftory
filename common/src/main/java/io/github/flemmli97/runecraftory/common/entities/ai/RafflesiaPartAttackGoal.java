@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.entities.ai;
 
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia.EntityRafflesiaPart;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 
@@ -44,7 +44,7 @@ public class RafflesiaPartAttackGoal extends Goal {
     public void tick() {
         if (this.attacker.getTarget() == null)
             return;
-        AnimatedAction anim = this.attacker.getAnimationHandler().getAnimation();
+        AnimationState anim = this.attacker.getAnimationHandler().getAnimation();
         if (anim != null) {
             return;
         }

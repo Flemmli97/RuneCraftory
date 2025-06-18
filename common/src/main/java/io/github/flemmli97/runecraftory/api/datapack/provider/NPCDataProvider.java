@@ -14,7 +14,7 @@ import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCActionMan
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCConversationManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCDataManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCLookManager;
-import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.NPCAttackActions;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.actions.NPCAttackActions;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
@@ -22,8 +22,6 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -33,8 +31,6 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public abstract class NPCDataProvider implements DataProvider, AdditionalLanguages {
-
-    private static final Logger LOGGER = LogManager.getLogger();
 
     private final Map<ResourceLocation, NPCLook> looks = new HashMap<>();
     private final Map<ResourceLocation, ConversationSet> conversations = new HashMap<>();

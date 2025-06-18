@@ -37,9 +37,9 @@ public class LongSwordAttack extends AttackAction {
     public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimationState anim) {
         if (handler.getComboCount() != 4) {
             if (!entity.level().isClientSide && anim.isAt("attack")) {
-                CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(AOEWeapon.createOBB(entity, stack,
+                CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(AOEWeapon.createOBB(entity,
                                 CombatUtils.getRange(entity, 0),
-                                CombatUtils.getWidth(entity, 0))))
+                                CombatUtils.getWidth(entity, 0), 0.5)))
                         .executeAttack();
             }
             if (anim.isAt("attack")) {

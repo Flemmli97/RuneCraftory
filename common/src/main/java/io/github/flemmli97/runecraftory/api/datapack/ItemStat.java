@@ -1,43 +1,42 @@
 package io.github.flemmli97.runecraftory.api.datapack;
 
-import com.google.common.collect.ImmutableSortedMap;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Sets;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.registry.ArmorEffect;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
-import io.github.flemmli97.runecraftory.common.lib.LibAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModArmorEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
+import io.github.flemmli97.runecraftory.common.utils.StreamCodecUtils;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import io.github.flemmli97.tenshilib.common.utils.MapUtils;
+import it.unimi.dsi.fastutil.objects.Object2DoubleAVLTreeMap;
+import it.unimi.dsi.fastutil.objects.Object2DoubleSortedMaps;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.ComponentUtils;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.TreeMap;
+import java.util.function.Function;
 
 public class ItemStat {
 
@@ -45,12 +44,12 @@ public class ItemStat {
 
     public static final Codec<ItemStat> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(
-                    ModSpells.SPELLS.registry().byNameCodec().optionalFieldOf("tier_3_Spell").forGetter(s -> Optional.ofNullable(s.getTier3Spell())),
-                    ModArmorEffects.ARMOR_EFFECTS.registry().byNameCodec().optionalFieldOf("armor_effect").forGetter(s -> Optional.ofNullable(s.getArmorEffect())),
+                    ModSpells.SPELLS.registry().holderByNameCodec().optionalFieldOf("tier_3_Spell").forGetter(ItemStat::getTier3Spell),
+                    ModArmorEffects.ARMOR_EFFECTS.registry().holderByNameCodec().optionalFieldOf("armor_effect").forGetter(ItemStat::getArmorEffect),
 
                     CodecUtils.stringEnumCodec(EnumElement.class, EnumElement.NONE).orElse(EnumElement.NONE).fieldOf("element").forGetter(ItemStat::element),
-                    ModSpells.SPELLS.registry().byNameCodec().optionalFieldOf("tier_1_Spell").forGetter(s -> Optional.ofNullable(s.getTier1Spell())),
-                    ModSpells.SPELLS.registry().byNameCodec().optionalFieldOf("tier_2_Spell").forGetter(s -> Optional.ofNullable(s.getTier2Spell())),
+                    ModSpells.SPELLS.registry().holderByNameCodec().optionalFieldOf("tier_1_Spell").forGetter(ItemStat::getTier1Spell),
+                    ModSpells.SPELLS.registry().holderByNameCodec().optionalFieldOf("tier_2_Spell").forGetter(ItemStat::getTier2Spell),
 
                     Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.holderByNameCodec(), Codec.DOUBLE).fieldOf("item_stats").forGetter(ItemStat::itemStats),
                     Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.holderByNameCodec(), Codec.DOUBLE).fieldOf("monster_bonus").forGetter(ItemStat::getMonsterGiftIncrease),
@@ -59,68 +58,57 @@ public class ItemStat {
                     ExtraCodecs.NON_NEGATIVE_INT.fieldOf("sell_price").forGetter(ItemStat::getSell),
                     ExtraCodecs.NON_NEGATIVE_INT.fieldOf("upgrade_difficulty").forGetter(ItemStat::getDiff)
             ).apply(instance, ((spell3, armorEffect, element, spell, spell2, atts, monster, buy, sell, upgrade) ->
-                    new ItemStat(buy, sell, upgrade, element, spell.orElse(null), spell2.orElse(null), spell3.orElse(null), armorEffect.orElse(null), atts, monster))));
+                    new ItemStat(buy, sell, upgrade, element, spell, spell2, spell3, armorEffect, atts, monster))));
+    public static final StreamCodec<RegistryFriendlyByteBuf, ItemStat> STREAM_CODEC = new StreamCodec<>() {
 
-    private static final Set<ResourceLocation> PERCENT_ATTRIBUTES = Sets.newHashSet(
-            LibAttributes.PARA,
-            LibAttributes.POISON,
-            LibAttributes.SEAL,
-            LibAttributes.SLEEP,
-            LibAttributes.FATIGUE,
-            LibAttributes.COLD,
-            LibAttributes.CRIT,
-            LibAttributes.STUN,
-            LibAttributes.FAINT,
-            LibAttributes.DRAIN,
-            LibAttributes.KNOCK,
+        private static final StreamCodec<RegistryFriendlyByteBuf, Optional<Holder<Spell>>> SPELL_CODEC = ByteBufCodecs.optional(
+                ByteBufCodecs.holderRegistry(ModSpells.SPELL_REGISTRY_KEY));
 
-            LibAttributes.RES_WATER,
-            LibAttributes.RES_EARTH,
-            LibAttributes.RES_WIND,
-            LibAttributes.RES_FIRE,
-            LibAttributes.RES_DARK,
-            LibAttributes.RES_LIGHT,
-            LibAttributes.RES_LOVE,
+        @Override
+        public ItemStat decode(RegistryFriendlyByteBuf buf) {
+            return new ItemStat(buf.readInt(), buf.readInt(), buf.readInt(), buf.readEnum(EnumElement.class),
+                    SPELL_CODEC.decode(buf), SPELL_CODEC.decode(buf), SPELL_CODEC.decode(buf),
+                    ByteBufCodecs.optional(ByteBufCodecs.holderRegistry(ModArmorEffects.ARMOR_EFFECT_KEY)).decode(buf),
+                    StreamCodecUtils.ATTRIBUTE_CODEC.decode(buf), StreamCodecUtils.ATTRIBUTE_CODEC.decode(buf))
+                    .setID(buf.readResourceLocation());
+        }
 
-            LibAttributes.RES_PARA,
-            LibAttributes.RES_POISON,
-            LibAttributes.RES_SEAL,
-            LibAttributes.RES_SLEEP,
-            LibAttributes.RES_FATIGUE,
-            LibAttributes.RES_COLD,
-            LibAttributes.RES_CRIT,
-            LibAttributes.RES_STUN,
-            LibAttributes.RES_FAINT,
-            LibAttributes.RES_DRAIN,
-            LibAttributes.RES_KNOCK);
+        @Override
+        public void encode(RegistryFriendlyByteBuf buf, ItemStat prop) {
+            buf.writeInt(prop.buyPrice);
+            buf.writeInt(prop.sellPrice);
+            buf.writeInt(prop.upgradeDifficulty);
+            buf.writeEnum(prop.element);
 
-    private static final Set<ResourceLocation> IGNORED = Sets.newHashSet(
-            LibAttributes.ATTACK_SPEED,
-            LibAttributes.ATTACK_RANGE,
-            LibAttributes.HEALTH_GAIN,
-            LibAttributes.RP_GAIN
-    );
+            SPELL_CODEC.encode(buf, prop.getTier2Spell());
+            SPELL_CODEC.encode(buf, prop.getTier2Spell());
+            SPELL_CODEC.encode(buf, prop.getTier2Spell());
+            ByteBufCodecs.optional(ByteBufCodecs.holderRegistry(ModArmorEffects.ARMOR_EFFECT_KEY)).encode(buf, prop.getArmorEffect());
 
+            StreamCodecUtils.ATTRIBUTE_CODEC.encode(buf, prop.itemStats);
+            StreamCodecUtils.ATTRIBUTE_CODEC.encode(buf, prop.monsterGiftIncrease);
+            buf.writeResourceLocation(prop.id);
+        }
+    };
+
+    private final int buyPrice;
+    private final int sellPrice;
+    private final int upgradeDifficulty;
+    private final EnumElement element;
+    private final Optional<Holder<Spell>> tier1Spell;
+    private final Optional<Holder<Spell>> tier2Spell;
+    private final Optional<Holder<Spell>> tier3Spell;
+    private final Optional<Holder<ArmorEffect>> armorEffect;
     private final Map<Holder<Attribute>, Double> itemStats;
-    private Map<Holder<Attribute>, Double> monsterGiftIncrease = Map.of();
-
-    private int buyPrice;
-    private int sellPrice;
-    private int upgradeDifficulty;
-    private EnumElement element = EnumElement.NONE;
-    private Spell tier1Spell;
-    private Spell tier2Spell;
-    private Spell tier3Spell;
-    private ArmorEffect armorEffect;
+    private final Map<Holder<Attribute>, Double> monsterGiftIncrease;
 
     private transient ResourceLocation id;
 
-    private ItemStat() {
-        this.itemStats = new HashMap<>();
-    }
-
-    private ItemStat(int buyPrice, int sellPrice, int upgradeDifficulty, EnumElement element, Spell tier1Spell, Spell tier2Spell, Spell tier3Spell, ArmorEffect effect, Map<Holder<Attribute>, Double> itemStats, Map<Holder<Attribute>, Double> monsterGiftIncrease) {
-        this.itemStats = itemStats;
+    private ItemStat(int buyPrice, int sellPrice, int upgradeDifficulty, EnumElement element,
+                     Optional<Holder<Spell>> tier1Spell, Optional<Holder<Spell>> tier2Spell, Optional<Holder<Spell>> tier3Spell,
+                     Optional<Holder<ArmorEffect>> effect,
+                     Map<Holder<Attribute>, Double> itemStats, Map<Holder<Attribute>, Double> monsterGiftIncrease) {
+        this.itemStats = createFor(itemStats);
         this.buyPrice = buyPrice;
         this.sellPrice = sellPrice;
         this.upgradeDifficulty = upgradeDifficulty;
@@ -129,38 +117,19 @@ public class ItemStat {
         this.tier2Spell = tier2Spell;
         this.tier3Spell = tier3Spell;
         this.armorEffect = effect;
-        this.monsterGiftIncrease = ImmutableSortedMap.copyOf(monsterGiftIncrease, ModAttributes.SORTED);
+        this.monsterGiftIncrease = createFor(monsterGiftIncrease);
     }
 
-    public static ItemStat fromPacket(FriendlyByteBuf buffer) {
-        ItemStat stat = new ItemStat();
-        stat.id = buffer.readResourceLocation();
-        stat.buyPrice = buffer.readInt();
-        stat.sellPrice = buffer.readInt();
-        stat.upgradeDifficulty = buffer.readInt();
-        stat.element = buffer.readEnum(EnumElement.class);
-        int size = buffer.readInt();
-        for (int i = 0; i < size; i++)
-            stat.itemStats.put(BuiltInRegistries.ATTRIBUTE.get(buffer.readResourceLocation()), buffer.readDouble());
-        size = buffer.readInt();
-        ImmutableSortedMap.Builder<Holder<Attribute>, Double> builder = new ImmutableSortedMap.Builder<>(ModAttributes.SORTED);
-        for (int i = 0; i < size; i++)
-            builder.put(BuiltInRegistries.ATTRIBUTE.get(buffer.readResourceLocation()), buffer.readDouble());
-        stat.monsterGiftIncrease = builder.build();
-        if (buffer.readBoolean())
-            stat.tier1Spell = ModSpells.SPELL_REGISTRY.get().getFromId(buffer.readResourceLocation());
-        if (buffer.readBoolean())
-            stat.tier2Spell = ModSpells.SPELL_REGISTRY.get().getFromId(buffer.readResourceLocation());
-        if (buffer.readBoolean())
-            stat.tier3Spell = ModSpells.SPELL_REGISTRY.get().getFromId(buffer.readResourceLocation());
-        if (buffer.readBoolean())
-            stat.armorEffect = ModArmorEffects.ARMOR_EFFECT_REGISTRY.get().getFromId(buffer.readResourceLocation());
-        return stat;
+    private static Map<Holder<Attribute>, Double> createFor(Map<Holder<Attribute>, Double> map) {
+        Object2DoubleAVLTreeMap<Holder<Attribute>> sorted = new Object2DoubleAVLTreeMap<>(ModAttributes.SORTED);
+        sorted.putAll(map);
+        return Object2DoubleSortedMaps.unmodifiable(sorted);
     }
 
-    public void setID(ResourceLocation id) {
+    public ItemStat setID(ResourceLocation id) {
         if (this.id == null)
             this.id = id;
+        return this;
     }
 
     public ResourceLocation getId() {
@@ -193,76 +162,37 @@ public class ItemStat {
         return this.monsterGiftIncrease;
     }
 
-    @Nullable
-    public Spell getTier1Spell() {
+    public Optional<Holder<Spell>> getTier1Spell() {
         return this.tier1Spell;
     }
 
-    @Nullable
-    public Spell getTier2Spell() {
+    public Optional<Holder<Spell>> getTier2Spell() {
         return this.tier2Spell;
     }
 
-    @Nullable
-    public Spell getTier3Spell() {
+    public Optional<Holder<Spell>> getTier3Spell() {
         return this.tier3Spell;
     }
 
-    @Nullable
-    public ArmorEffect getArmorEffect() {
+    public Optional<Holder<ArmorEffect>> getArmorEffect() {
         return this.armorEffect;
-    }
-
-    /**
-     * Writes this ItemStat to a buffer for synchronization. Spell upgrades are not synched
-     */
-    public void toPacket(FriendlyByteBuf buffer) {
-        buffer.writeResourceLocation(this.id);
-        buffer.writeInt(this.buyPrice);
-        buffer.writeInt(this.sellPrice);
-        buffer.writeInt(this.upgradeDifficulty);
-        buffer.writeEnum(this.element);
-        buffer.writeInt(this.itemStats.size());
-        this.itemStats.forEach((att, val) -> {
-            buffer.writeResourceLocation(BuiltInRegistries.ATTRIBUTE.getKey(att));
-            buffer.writeDouble(val);
-        });
-        buffer.writeInt(this.monsterGiftIncrease.size());
-        this.monsterGiftIncrease.forEach((att, val) -> {
-            buffer.writeResourceLocation(BuiltInRegistries.ATTRIBUTE.getKey(att));
-            buffer.writeDouble(val);
-        });
-        buffer.writeBoolean(this.tier1Spell != null);
-        if (this.tier1Spell != null)
-            buffer.writeResourceLocation(this.tier1Spell.getRegistryName());
-        buffer.writeBoolean(this.tier2Spell != null);
-        if (this.tier2Spell != null)
-            buffer.writeResourceLocation(this.tier2Spell.getRegistryName());
-        buffer.writeBoolean(this.tier3Spell != null);
-        if (this.tier3Spell != null)
-            buffer.writeResourceLocation(this.tier3Spell.getRegistryName());
-        buffer.writeBoolean(this.armorEffect != null);
-        if (this.armorEffect != null)
-            buffer.writeResourceLocation(this.armorEffect.getRegistryName());
     }
 
     public List<Component> texts(ItemStack stack, boolean showStat) {
         List<Component> list = new ArrayList<>();
-        MutableComponent price = ItemNBT.shouldHaveLevel(stack) ? Component.translatable("runecraftory.tooltip.item.level", ItemNBT.itemLevel(stack)) : null;
-        if (ItemUtils.getBuyPrice(stack, this) > 0) {
-            if (price == null)
-                price = Component.translatable("runecraftory.tooltip.item.buy", ItemUtils.getBuyPrice(stack, this));
-            else
-                price.append(" ").append(Component.translatable("runecraftory.tooltip.item.buy", ItemUtils.getBuyPrice(stack, this))).append(" ");
+        List<Component> header = new ArrayList<>();
+        if (ItemNBT.shouldHaveLevel(stack))
+            header.add(Component.translatable("runecraftory.tooltip.item.level", ItemNBT.itemLevel(stack)));
+        int buyPrice = ItemUtils.getBuyPrice(stack, this);
+        if (buyPrice > 0) {
+            header.add(Component.translatable("runecraftory.tooltip.item.buy", buyPrice));
         }
-        if (ItemUtils.getSellPrice(stack, this) > 0) {
-            if (price == null)
-                price = Component.translatable("runecraftory.tooltip.item.sell", ItemUtils.getSellPrice(stack, this));
-            else
-                price.append(" ").append(Component.translatable("runecraftory.tooltip.item.sell", ItemUtils.getSellPrice(stack, this)));
+        int sellPrice = ItemUtils.getSellPrice(stack, this);
+        if (sellPrice > 0) {
+            header.add(Component.translatable("runecraftory.tooltip.item.sell", sellPrice));
         }
-        if (price != null)
-            list.add(price.withStyle(ChatFormatting.YELLOW));
+        if (!header.isEmpty())
+            list.add(ComponentUtils.formatList(header, CommonComponents.space(), Function.identity()).withStyle(ChatFormatting.YELLOW));
         boolean shouldHaveStats = ItemNBT.shouldHaveStats(stack);
         if (!shouldHaveStats && this.getDiff() > 0)
             list.add(Component.translatable("runecraftory.tooltip.item.difficulty", this.getDiff()).withStyle(ChatFormatting.YELLOW));
@@ -287,74 +217,74 @@ public class ItemStat {
                     .map(s -> new AttributeMapDisplay(s.itemStats, null)).orElse(new AttributeMapDisplay(null, null));
         if (!ItemStat.SHOW_STATS_CUSTOM)
             return new AttributeMapDisplay(null, null);
-        Map<Holder<Attribute>, AttributeValues> map = new TreeMap<>(ModAttributes.SORTED);
-        Multimap<Holder<Attribute>, AttributeModifier> multimap = stack.getAttributeModifiers(ItemUtils.slotOf(stack));
-        multimap.forEach((att, mod) -> map.compute(att, (key, old) -> old == null ? AttributeValues.of(mod) : old.add(mod)));
-        return new AttributeMapDisplay(null, map);
+
+//        Map<Holder<Attribute>, AttributeValues> map = new TreeMap<>(ModAttributes.SORTED);
+//        Multimap<Holder<Attribute>, AttributeModifier> multimap = ItemNBT.statIncrease(stack);
+//        multimap.forEach((att, mod) -> map.compute(att, (key, old) -> old == null ? AttributeValues.of(mod) : old.add(mod)));
+        return new AttributeMapDisplay(null, null);
     }
 
     record AttributeMapDisplay(Map<Holder<Attribute>, Double> flat, Map<Holder<Attribute>, AttributeValues> ext) {
 
         private List<Component> components() {
             List<Component> list = new ArrayList<>();
-            if (this.flat != null) {
-                for (Map.Entry<Holder<Attribute>, Double> entry : this.flat.entrySet()) {
-                    ResourceLocation key = BuiltInRegistries.ATTRIBUTE.getKey(entry.getKey());
-                    if (IGNORED.contains(key))
-                        continue;
-                    double d = entry.getKey().equals(Attributes.KNOCKBACK_RESISTANCE) ? entry.getValue() * 10 : entry.getValue();
-                    String num = format(key, d, false);
-                    if (num == null)
-                        continue;
-                    MutableComponent comp = Component.literal(" ").append(Component.translatable(entry.getKey().getDescriptionId())).append(Component.literal(": " + num));
-                    list.add(comp.withStyle(ChatFormatting.BLUE));
-                }
-            } else if (this.ext != null) {
-                for (Map.Entry<Holder<Attribute>, AttributeValues> entry : this.ext.entrySet()) {
-                    ResourceLocation key = BuiltInRegistries.ATTRIBUTE.getKey(entry.getKey());
-                    if (IGNORED.contains(key))
-                        continue;
-                    if (entry.getValue().flat != 0) {
-                        double d = entry.getKey().equals(Attributes.KNOCKBACK_RESISTANCE) ? entry.getValue().flat * 10 : entry.getValue().flat;
-                        String num = format(key, d, false);
-                        if (num == null)
-                            continue;
-                        MutableComponent comp = Component.literal(" ").append(Component.translatable(entry.getKey().value().getDescriptionId())).append(Component.literal(": " + num));
-                        list.add(comp.withStyle(ChatFormatting.BLUE));
-                    }
-                    if (entry.getValue().multBase != 0) {
-                        String num = format(key, entry.getValue().multBase, true);
-                        if (num == null)
-                            continue;
-                        MutableComponent comp = Component.literal(" ").append(Component.translatable(entry.getKey().value().getDescriptionId())).append(Component.literal(": " + num));
-                        list.add(comp.withStyle(ChatFormatting.BLUE));
-                    }
-                    if (entry.getValue().multTotal != 0) {
-                        String num = format(key, entry.getValue().multTotal, true);
-                        if (num == null)
-                            continue;
-                        MutableComponent comp = Component.literal(" ").append(Component.translatable(entry.getKey().value().getDescriptionId())).append(Component.literal(": " + num));
-                        list.add(comp.withStyle(ChatFormatting.BLUE));
-                    }
-                }
-            }
+//            if (this.flat != null) {
+//                for (Map.Entry<Holder<Attribute>, Double> entry : this.flat.entrySet()) {
+//                    ResourceLocation key = BuiltInRegistries.ATTRIBUTE.getKey(entry.getKey());
+//                    if (IGNORED.contains(key))
+//                        continue;
+//                    double d = entry.getKey().equals(Attributes.KNOCKBACK_RESISTANCE) ? entry.getValue() * 10 : entry.getValue();
+//                    String num = format(key, d, false);
+//                    if (num == null)
+//                        continue;
+//                    MutableComponent comp = Component.literal(" ").append(Component.translatable(entry.getKey().getDescriptionId())).append(Component.literal(": " + num));
+//                    list.add(comp.withStyle(ChatFormatting.BLUE));
+//                }
+//            } else if (this.ext != null) {
+//                for (Map.Entry<Holder<Attribute>, AttributeValues> entry : this.ext.entrySet()) {
+//                    if (IGNORED.contains(key))
+//                        continue;
+//                    if (entry.getValue().flat != 0) {
+//                        double d = entry.getKey().equals(Attributes.KNOCKBACK_RESISTANCE) ? entry.getValue().flat * 10 : entry.getValue().flat;
+//                        String num = format(key, d, false);
+//                        if (num == null)
+//                            continue;
+//                        MutableComponent comp = Component.literal(" ").append(Component.translatable(entry.getKey().value().getDescriptionId())).append(Component.literal(": " + num));
+//                        list.add(comp.withStyle(ChatFormatting.BLUE));
+//                    }
+//                    if (entry.getValue().multBase != 0) {
+//                        String num = format(key, entry.getValue().multBase, true);
+//                        if (num == null)
+//                            continue;
+//                        MutableComponent comp = Component.literal(" ").append(Component.translatable(entry.getKey().value().getDescriptionId())).append(Component.literal(": " + num));
+//                        list.add(comp.withStyle(ChatFormatting.BLUE));
+//                    }
+//                    if (entry.getValue().multTotal != 0) {
+//                        String num = format(key, entry.getValue().multTotal, true);
+//                        if (num == null)
+//                            continue;
+//                        MutableComponent comp = Component.literal(" ").append(Component.translatable(entry.getKey().value().getDescriptionId())).append(Component.literal(": " + num));
+//                        list.add(comp.withStyle(ChatFormatting.BLUE));
+//                    }
+//                }
+//            }
             return list;
         }
 
-        private static String format(ResourceLocation att, double n, boolean percentage) {
-            String sign = n > 0 ? (percentage ? "x" : "+") : "";
-            if (att.equals(LibAttributes.MOVEMENT_SPEED)) {
-                double val = percentage ? n : ((int) (n * 100)) / 100d;
-                if (val == 0)
-                    return null;
-                return (sign + ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(val));
-            }
-            boolean percSign = PERCENT_ATTRIBUTES.contains(att);
-            double val = percentage ? n : (int) (n * 2) * 0.5f;
-            if (val == 0)
-                return null;
-            return (sign + ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(val)) + (percSign ? "%" : "");
-        }
+//        private static String format(Holder<Attribute> att, double n, boolean percentage) {
+//            String sign = n > 0 ? (percentage ? "x" : "+") : "";
+//            if (att.value() == Attributes.MOVEMENT_SPEED) {
+//                double val = percentage ? n : ((int) (n * 100)) / 100d;
+//                if (val == 0)
+//                    return null;
+//                return (sign + ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(val));
+//            }
+//            boolean percSign = PERCENT_ATTRIBUTES.contains(att);
+//            double val = percentage ? n : (int) (n * 2) * 0.5f;
+//            if (val == 0)
+//                return null;
+//            return (sign + ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(val)) + (percSign ? "%" : "");
+//        }
     }
 
     private static class AttributeValues {
@@ -367,27 +297,27 @@ public class ItemStat {
             this.multTotal = multTotal;
         }
 
-        private static AttributeValues of(AttributeModifier mod) {
-            return switch (mod.operation()) {
-                case ADDITION -> new AttributeValues(mod.getAmount(), 0, 0);
-                case MULTIPLY_BASE -> new AttributeValues(0, mod.getAmount(), 0);
-                case MULTIPLY_TOTAL -> new AttributeValues(0, 0, mod.getAmount());
-            };
-        }
-
-        private AttributeValues add(AttributeModifier mod) {
-            switch (mod.operation()) {
-                case ADDITION -> this.flat += mod.getAmount();
-                case MULTIPLY_BASE -> this.multBase += mod.getAmount();
-                case MULTIPLY_TOTAL -> this.multTotal += mod.getAmount();
-            }
-            return this;
-        }
+//        private static AttributeValues of(AttributeModifier mod) {
+//            return switch (mod.operation()) {
+//                case ADDITION -> new AttributeValues(mod.getAmount(), 0, 0);
+//                case MULTIPLY_BASE -> new AttributeValues(0, mod.getAmount(), 0);
+//                case MULTIPLY_TOTAL -> new AttributeValues(0, 0, mod.getAmount());
+//            };
+//        }
+//
+//        private AttributeValues add(AttributeModifier mod) {
+//            switch (mod.operation()) {
+//                case ADDITION -> this.flat += mod.getAmount();
+//                case MULTIPLY_BASE -> this.multBase += mod.getAmount();
+//                case MULTIPLY_TOTAL -> this.multTotal += mod.getAmount();
+//            }
+//            return this;
+//        }
     }
 
     @Override
     public String toString() {
-        String s = "[Buy:" + this.buyPrice + ";Sell:" + this.sellPrice + ";UpgradeDifficulty:" + this.upgradeDifficulty + ";DefaultElement:" + this.element + "];{stats:[" + MapUtils.toString(this.itemStats, reg -> BuiltInRegistries.ATTRIBUTE.getKey(reg).toString(), Object::toString) + "]}";
+        String s = "[Buy:" + this.buyPrice + ";Sell:" + this.sellPrice + ";UpgradeDifficulty:" + this.upgradeDifficulty + ";DefaultElement:" + this.element + "];{stats:[" + MapUtils.toString(this.itemStats, Holder::getRegisteredName, Object::toString) + "]}";
         if (this.id != null)
             s = this.id + ":" + s;
         return s;
@@ -401,10 +331,10 @@ public class ItemStat {
         public final int sellPrice;
         public final int upgradeDifficulty;
         private EnumElement element = EnumElement.NONE;
-        private Spell tier1Spell;
-        private Spell tier2Spell;
-        private Spell tier3Spell;
-        private ArmorEffect armorEffect;
+        private Holder<Spell> tier1Spell;
+        private Holder<Spell> tier2Spell;
+        private Holder<Spell> tier3Spell;
+        private Holder<ArmorEffect> armorEffect;
 
         public Builder(int buy, int sell, int upgrade) {
             this.buyPrice = buy;
@@ -427,20 +357,22 @@ public class ItemStat {
             return this;
         }
 
-        public Builder setSpell(Spell tier1, Spell tier2, Spell tier3) {
+        public Builder setSpell(Holder<Spell> tier1, Holder<Spell> tier2, Holder<Spell> tier3) {
             this.tier1Spell = tier1;
             this.tier2Spell = tier2;
             this.tier3Spell = tier3;
             return this;
         }
 
-        public Builder withArmorEffect(ArmorEffect effect) {
+        public Builder withArmorEffect(Holder<ArmorEffect> effect) {
             this.armorEffect = effect;
             return this;
         }
 
         public ItemStat build() {
-            return new ItemStat(this.buyPrice, this.sellPrice, this.upgradeDifficulty, this.element, this.tier1Spell, this.tier2Spell, this.tier3Spell, this.armorEffect, this.itemStats, this.monsterGiftIncrease);
+            return new ItemStat(this.buyPrice, this.sellPrice, this.upgradeDifficulty, this.element,
+                    Optional.ofNullable(this.tier1Spell), Optional.ofNullable(this.tier2Spell), Optional.ofNullable(this.tier3Spell),
+                    Optional.ofNullable(this.armorEffect), this.itemStats, this.monsterGiftIncrease);
         }
     }
 }

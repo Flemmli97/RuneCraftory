@@ -1,11 +1,9 @@
 package io.github.flemmli97.runecraftory.common.utils;
 
 import com.google.common.collect.ImmutableMap;
-import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.ModDamageType;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
@@ -25,10 +23,6 @@ import java.util.Set;
 
 public class CustomDamage extends DamageSource {
 
-    public static final DamageSource EXHAUST = Platform.INSTANCE.createDamageSource(RuneCraftory.MODID + ".exhaust", true, true, true);
-    public static final DamageSource POISON = Platform.INSTANCE.createDamageSource(RuneCraftory.MODID + ".poison", true, true, false);
-
-    public static final String ENTITY_DAMAGE_SOURCE = RuneCraftory.MODID + ".attack";
     private final EnumElement element;
     private final KnockBackType knock;
     private final float knockAmount;

@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,7 +11,6 @@ import java.util.List;
  */
 public class PlayerModelAnimations {
 
-    private static final List<String> ALL = new ArrayList<>();
     public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
 
     public static final List<String> SHORT_SWORD = addTo(6, "short_sword", count -> switch (count) {

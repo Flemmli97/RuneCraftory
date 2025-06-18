@@ -46,7 +46,7 @@ public class NPCQuest extends QuestBase {
 
     public static final ResourceLocation ID = RuneCraftory.modRes("npc_quest");
 
-    public static final Function<QuestBaseRegistry.CodecContext, Codec<NPCQuest>> CODEC = Util.memoize(ctx ->
+    public static final Function<QuestBaseRegistry.CodecContext, MapCodec<NPCQuest>> CODEC = Util.memoize(ctx ->
             QuestBase.buildCodec(NPCQuestData.CODEC
                     .forGetter(q -> new NPCQuest.NPCQuestData(q.npcDataIDs,
                             q.quests, q.loot, q.global, q.dynamicData)), ctx, (id, task, data) -> {

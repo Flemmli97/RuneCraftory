@@ -3,14 +3,13 @@ package io.github.flemmli97.runecraftory.common.components;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
+import io.github.flemmli97.runecraftory.common.utils.StreamCodecUtils;
 import it.unimi.dsi.fastutil.objects.Object2DoubleAVLTreeMap;
 import it.unimi.dsi.fastutil.objects.Object2DoubleSortedMap;
 import it.unimi.dsi.fastutil.objects.Object2DoubleSortedMaps;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 
@@ -25,20 +24,18 @@ public class ItemAttributeData {
             instance.group(Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.holderByNameCodec(), Codec.DOUBLE).fieldOf("base_stats").forGetter(d -> d.baseStats),
                     Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.holderByNameCodec(), Codec.DOUBLE).fieldOf("stats").forGetter(d -> d.stats)
             ).apply(instance, ItemAttributeData::new));
-    private static final StreamCodec<RegistryFriendlyByteBuf, Map<Holder<Attribute>, Double>> ATTRIBUTE_CODEC = ByteBufCodecs.
-            map(HashMap::new, ByteBufCodecs.holderRegistry(Registries.ATTRIBUTE), ByteBufCodecs.DOUBLE);
     public static final StreamCodec<RegistryFriendlyByteBuf, ItemAttributeData> STREAM_CODEC = new StreamCodec<>() {
 
         @Override
         public ItemAttributeData decode(RegistryFriendlyByteBuf buf) {
-            return new ItemAttributeData(ATTRIBUTE_CODEC.decode(buf),
-                    ATTRIBUTE_CODEC.decode(buf));
+            return new ItemAttributeData(StreamCodecUtils.ATTRIBUTE_CODEC.decode(buf),
+                    StreamCodecUtils.ATTRIBUTE_CODEC.decode(buf));
         }
 
         @Override
         public void encode(RegistryFriendlyByteBuf buf, ItemAttributeData component) {
-            ATTRIBUTE_CODEC.encode(buf, component.baseStats);
-            ATTRIBUTE_CODEC.encode(buf, component.baseStats);
+            StreamCodecUtils.ATTRIBUTE_CODEC.encode(buf, component.baseStats);
+            StreamCodecUtils.ATTRIBUTE_CODEC.encode(buf, component.baseStats);
         }
     };
 

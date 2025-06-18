@@ -2,8 +2,10 @@ package io.github.flemmli97.runecraftory.common.world.family;
 
 import io.github.flemmli97.runecraftory.api.datapack.npc.NPCData;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.datafix.DataFixTypes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.saveddata.SavedData;
 
@@ -14,19 +16,20 @@ import java.util.UUID;
 
 public class FamilyHandler extends SavedData {
 
-    private static final String ID = "RunecraftoryFamilyHandler";
+    private static final String IDENTIFIER = "RunecraftoryFamilyHandler";
+    private static final SavedData.Factory<FamilyHandler> FACTORY = new Factory<>(FamilyHandler::new, FamilyHandler::new, DataFixTypes.LEVEL);
 
     private final Map<UUID, FamilyEntry> families = new HashMap<>();
 
-    public FamilyHandler() {
+    private FamilyHandler() {
     }
 
-    private FamilyHandler(CompoundTag tag) {
-        this.load(tag);
+    private FamilyHandler(CompoundTag tag, HolderLookup.Provider provider) {
+        this.load(tag, provider);
     }
 
     public static FamilyHandler get(MinecraftServer server) {
-        return server.overworld().getDataStorage().computeIfAbsent(FamilyHandler::new, FamilyHandler::new, ID);
+        return server.overworld().getDataStorage().computeIfAbsent(FACTORY, IDENTIFIER);
     }
 
     public Optional<FamilyEntry> getFamily(UUID uuid) {
@@ -49,19 +52,19 @@ public class FamilyHandler extends SavedData {
         return entry;
     }
 
-    public void load(CompoundTag compoundNBT) {
-        CompoundTag data = compoundNBT.getCompound("Families");
-        data.getAllKeys().forEach((id) -> this.families.put(UUID.fromString(id), new FamilyEntry(this, data.getCompound(id))));
+    public void load(CompoundTag tag, HolderLookup.Provider provider) {
+        CompoundTag data = tag.getCompound("Families");
+        data.getAllKeys().forEach((id) -> this.families.put(UUID.fromString(id), new FamilyEntry(this, data.getCompound(id), provider)));
     }
 
     @Override
-    public CompoundTag save(CompoundTag compoundTag) {
+    public CompoundTag save(CompoundTag tag, HolderLookup.Provider provider) {
         CompoundTag data = new CompoundTag();
         this.families.forEach((uuid, entry) -> {
             if (entry.shouldPersist())
-                data.put(uuid.toString(), entry.save());
+                data.put(uuid.toString(), entry.save(provider));
         });
-        compoundTag.put("Families", data);
-        return compoundTag;
+        tag.put("Families", data);
+        return tag;
     }
 }

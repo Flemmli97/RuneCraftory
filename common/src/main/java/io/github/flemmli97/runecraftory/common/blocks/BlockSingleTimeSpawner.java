@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.blocks;
 
-import io.github.flemmli97.runecraftory.common.blocks.tile.SingleTimeSpawner;
+import com.mojang.serialization.MapCodec;
+import io.github.flemmli97.runecraftory.common.blocks.entity.SingleTimeSpawner;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
@@ -15,8 +16,15 @@ import org.jetbrains.annotations.Nullable;
 
 public class BlockSingleTimeSpawner extends BaseEntityBlock {
 
+    public static final MapCodec<BlockSingleTimeSpawner> CODEC = simpleCodec(BlockSingleTimeSpawner::new);
+
     public BlockSingleTimeSpawner(BlockBehaviour.Properties props) {
         super(props);
+    }
+
+    @Override
+    public MapCodec<BlockSingleTimeSpawner> codec() {
+        return CODEC;
     }
 
     @Nullable

@@ -21,8 +21,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -34,8 +32,6 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 public abstract class ShopItemProvider implements DataProvider {
-
-    private static final Logger LOGGER = LogManager.getLogger();
 
     private final Map<ResourceLocation, Collection<ShopItemProperties.IntermediaryShopItem>> props = new HashMap<>();
 

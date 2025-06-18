@@ -83,7 +83,7 @@ public class EntityLeafBall extends BaseMonster {
     }
 
     @Override
-    public void handleAttack(AnimatedAction anim) {
+    public void handleAttack(AnimationState anim) {
         if (anim.is(WIND)) {
             this.getNavigation().stop();
             if (anim.isAt("attack")) {
@@ -99,7 +99,7 @@ public class EntityLeafBall extends BaseMonster {
     }
 
     @Override
-    public AABB attackBB(AnimatedAction anim) {
+    public AABB attackBB(String anim) {
         double width = this.getBbWidth() * 1.4;
         double length = this.getBbWidth() * 2;
         return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
@@ -118,7 +118,7 @@ public class EntityLeafBall extends BaseMonster {
     }
 
     @Override
-    public int animationCooldown(@Nullable AnimatedAction anim) {
+    public int animationCooldown(@Nullable String anim) {
         int diffAdd = this.difficultyCooldown();
         if (anim == null)
             return this.getRandom().nextInt(20) + 30 + diffAdd;
@@ -136,7 +136,7 @@ public class EntityLeafBall extends BaseMonster {
     }
 
     @Override
-    public AnimatedAction getSleepAnimation() {
+    public String getSleepAnimation() {
         return STILL;
     }
 

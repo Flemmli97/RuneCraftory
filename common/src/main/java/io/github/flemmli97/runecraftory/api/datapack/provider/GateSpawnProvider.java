@@ -12,8 +12,6 @@ import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -21,8 +19,6 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public abstract class GateSpawnProvider implements DataProvider {
-
-    private static final Logger LOGGER = LogManager.getLogger();
 
     private final Map<ResourceLocation, GateSpawnData> data = new HashMap<>();
 

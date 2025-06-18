@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.effects;
 
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.network.S2CEntityDataSync;
-import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
+import io.github.flemmli97.runecraftory.common.utils.DamageSourceUtils;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 
@@ -19,7 +19,7 @@ public class PoisonEffect extends UncurableEffect {
         if (living.getType().is(RunecraftoryTags.EntityTypes.BOSSES))
             amount *= 0.25;
         if (amount > 0)
-            living.hurt(CustomDamage.POISON, amount);
+            living.hurt(DamageSourceUtils.poison(living.level()), amount);
         return super.applyEffectTick(living, amplifier);
     }
 

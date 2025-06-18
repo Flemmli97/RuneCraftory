@@ -1,9 +1,13 @@
 package io.github.flemmli97.runecraftory.common.blocks;
 
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.enums.EnumMineralTier;
-import io.github.flemmli97.runecraftory.common.blocks.tile.BrokenMineralBlockEntity;
+import io.github.flemmli97.runecraftory.common.blocks.entity.BrokenMineralBlockEntity;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.platform.ExtendedBlock;
+import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
+import io.github.flemmli97.tenshilib.common.utils.VoxelUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
@@ -28,82 +32,35 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import java.util.stream.Stream;
-
 public class BlockBrokenMineral extends Block implements SimpleWaterloggedBlock, EntityBlock, ExtendedBlock {
+
+    public static final MapCodec<BlockBrokenMineral> CODEC = RecordCodecBuilder.mapCodec(inst ->
+            inst.group(
+                    CodecUtils.stringEnumCodec(EnumMineralTier.class, null).fieldOf("mineral_tier").forGetter(d -> d.tier),
+                    propertiesCodec()
+            ).apply(inst, BlockBrokenMineral::new));
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
-    public static final VoxelShape NORTH = Stream.of(
-            Block.box(8, 0, 0, 13, 1, 5),
-            Block.box(10, 0, 8, 13, 1, 10),
-            Block.box(9, 0, 10, 16, 1, 15),
-            Block.box(6, 0, 8, 10, 3, 10),
-            Block.box(3, 0, 10, 9, 2, 14),
-            Block.box(6, 0, 3, 8, 1, 4),
-            Block.box(2, 0, 1, 7, 1, 3),
-            Block.box(1, 0, 3, 6, 3, 10),
-            Block.box(0, 0, 10, 3, 1, 16),
-            Block.box(13, 0, 1, 15, 2, 10),
-            Block.box(6, 0, 4, 13, 2, 8),
-            Block.box(10, 0.3, 9, 12, 1.3, 10),
-            Block.box(6.75, 1.55, 4.5, 8.75, 2.55, 7.5),
-            Block.box(3.75, 1.55, 9.5, 5.75, 2.55, 11.5)
-    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
-    public static final VoxelShape WEST = Stream.of(
-            Block.box(0, 0, 3, 5, 1, 8),
-            Block.box(8, 0, 3, 10, 1, 6),
-            Block.box(10, 0, 0, 15, 1, 7),
-            Block.box(8, 0, 6, 10, 3, 10),
-            Block.box(10, 0, 7, 14, 2, 13),
-            Block.box(3, 0, 8, 4, 1, 10),
-            Block.box(1, 0, 9, 3, 1, 14),
-            Block.box(3, 0, 10, 10, 3, 15),
-            Block.box(10, 0, 13, 16, 1, 16),
-            Block.box(1, 0, 1, 10, 2, 3),
-            Block.box(4, 0, 3, 8, 2, 10),
-            Block.box(9, 0.3, 4, 10, 1.3, 6),
-            Block.box(4.5, 1.55, 7.25, 7.5, 2.55, 9.25),
-            Block.box(9.5, 1.55, 10.25, 11.5, 2.55, 12.25)
-    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
-    public static final VoxelShape SOUTH = Stream.of(
-            Block.box(3, 0, 11, 8, 1, 16),
-            Block.box(3, 0, 6, 6, 1, 8),
-            Block.box(0, 0, 1, 7, 1, 6),
-            Block.box(6, 0, 6, 10, 3, 8),
-            Block.box(7, 0, 2, 13, 2, 6),
-            Block.box(8, 0, 12, 10, 1, 13),
-            Block.box(9, 0, 13, 14, 1, 15),
-            Block.box(10, 0, 6, 15, 3, 13),
-            Block.box(13, 0, 0, 16, 1, 6),
-            Block.box(1, 0, 6, 3, 2, 15),
-            Block.box(3, 0, 8, 10, 2, 12),
-            Block.box(4, 0.3, 6, 6, 1.3, 7),
-            Block.box(7.25, 1.55, 8.5, 9.25, 2.55, 11.5),
-            Block.box(10.25, 1.55, 4.5, 12.25, 2.55, 6.5)
-    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
-    public static final VoxelShape EAST = Stream.of(
-            Block.box(11, 0, 8, 16, 1, 13),
-            Block.box(6, 0, 10, 8, 1, 13),
-            Block.box(1, 0, 9, 6, 1, 16),
-            Block.box(6, 0, 6, 8, 3, 10),
-            Block.box(2, 0, 3, 6, 2, 9),
-            Block.box(12, 0, 6, 13, 1, 8),
-            Block.box(13, 0, 2, 15, 1, 7),
-            Block.box(6, 0, 1, 13, 3, 6),
-            Block.box(0, 0, 0, 6, 1, 3),
-            Block.box(6, 0, 13, 15, 2, 15),
-            Block.box(8, 0, 6, 12, 2, 13),
-            Block.box(6, 0.3, 10, 7, 1.3, 12),
-            Block.box(8.5, 1.55, 6.75, 11.5, 2.55, 8.75),
-            Block.box(4.5, 1.55, 3.75, 6.5, 2.55, 5.75)
-    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
+    public static final VoxelShape[] SHAPES = VoxelUtils.joinedOrDirs(
+            VoxelUtils.ShapeBuilder.of(8, 0, 0, 13, 1, 5),
+            VoxelUtils.ShapeBuilder.of(10, 0, 8, 13, 1, 10),
+            VoxelUtils.ShapeBuilder.of(9, 0, 10, 16, 1, 15),
+            VoxelUtils.ShapeBuilder.of(6, 0, 8, 10, 3, 10),
+            VoxelUtils.ShapeBuilder.of(3, 0, 10, 9, 2, 14),
+            VoxelUtils.ShapeBuilder.of(6, 0, 3, 8, 1, 4),
+            VoxelUtils.ShapeBuilder.of(2, 0, 1, 7, 1, 3),
+            VoxelUtils.ShapeBuilder.of(1, 0, 3, 6, 3, 10),
+            VoxelUtils.ShapeBuilder.of(0, 0, 10, 3, 1, 16),
+            VoxelUtils.ShapeBuilder.of(13, 0, 1, 15, 2, 10),
+            VoxelUtils.ShapeBuilder.of(6, 0, 4, 13, 2, 8),
+            VoxelUtils.ShapeBuilder.of(10, 0.3, 9, 12, 1.3, 10),
+            VoxelUtils.ShapeBuilder.of(6.75, 1.55, 4.5, 8.75, 2.55, 7.5),
+            VoxelUtils.ShapeBuilder.of(3.75, 1.55, 9.5, 5.75, 2.55, 11.5));
 
     public final EnumMineralTier tier;
 
@@ -114,16 +71,21 @@ public class BlockBrokenMineral extends Block implements SimpleWaterloggedBlock,
     }
 
     @Override
+    public MapCodec<BlockBrokenMineral> codec() {
+        return CODEC;
+    }
+
+    @Override
     public BlockState getStateForPlacement(BlockPlaceContext ctx) {
         FluidState fluidstate = ctx.getLevel().getFluidState(ctx.getClickedPos());
         return this.defaultBlockState().setValue(FACING, ctx.getPlayer() != null ? ctx.getPlayer().getDirection().getOpposite() : Direction.NORTH).setValue(WATERLOGGED, fluidstate.getType() == Fluids.WATER);
     }
 
     @Override
-    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
-        super.playerWillDestroy(level, pos, state, player);
+    public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         if (!level.isClientSide)
             level.levelEvent(null, LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
+        return super.playerWillDestroy(level, pos, state, player);
     }
 
     @Override
@@ -163,12 +125,7 @@ public class BlockBrokenMineral extends Block implements SimpleWaterloggedBlock,
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return switch (state.getValue(FACING)) {
-            case WEST -> WEST;
-            case EAST -> EAST;
-            case SOUTH -> SOUTH;
-            default -> NORTH;
-        };
+        return SHAPES[state.getValue(BlockCrafting.FACING).get2DDataValue()];
     }
 
     @Override

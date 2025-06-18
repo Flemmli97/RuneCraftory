@@ -3,32 +3,22 @@ package io.github.flemmli97.runecraftory.common.entities.monster.wisp;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.NearestTargetNoLoS;
-import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.entities.ai.control.FreeMoveControl;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.FloatingFlyNavigator;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.NoClipFlyEvaluator;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.common.entity.AnimationHandler;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.DoNothingRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.StayWithinHeightAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
@@ -38,8 +28,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.PathFinder;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 public abstract class EntityWispBase extends BaseMonster {
 
@@ -52,21 +40,21 @@ public abstract class EntityWispBase extends BaseMonster {
     public static final String STILL = BUILDER.add("still", AnimationsBuilder.definition(0).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
-    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityWispBase>>> ATTACKS = List.of(
-            WeightedEntry.wrap(MonsterActionUtils.simpleRangedEvadingAction(ATTACK_FAR, 7, 3, 1, e -> 1), 2),
-            WeightedEntry.wrap(new GoalAttackAction<EntityWispBase>(ATTACK_CLOSE)
-                    .cooldown(e -> e.animationCooldown(ATTACK_CLOSE))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 1),
-            WeightedEntry.wrap(new GoalAttackAction<EntityWispBase>(VANISH)
-                    .withCondition(((goal, target, previous) -> goal.attacker.shouldVanishNext(previous)))
-                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 6)
-    );
-    private static final List<WeightedEntry.Wrapper<IdleAction<EntityWispBase>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<>(() -> new StayWithinHeightAction<>(2.0, new RandomMoveAroundRunner<>(7, 4))), 1),
-            WeightedEntry.wrap(new IdleAction<>(() -> new StayWithinHeightAction<>(2.0, new DoNothingRunner<>())), 3)
-    );
-
-    public final AnimatedAttackGoal<EntityWispBase> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+    //    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityWispBase>>> ATTACKS = List.of(
+//            WeightedEntry.wrap(MonsterActionUtils.simpleRangedEvadingAction(ATTACK_FAR, 7, 3, 1, e -> 1), 2),
+//            WeightedEntry.wrap(new GoalAttackAction<EntityWispBase>(ATTACK_CLOSE)
+//                    .cooldown(e -> e.animationCooldown(ATTACK_CLOSE))
+//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 1),
+//            WeightedEntry.wrap(new GoalAttackAction<EntityWispBase>(VANISH)
+//                    .withCondition(((goal, target, previous) -> goal.attacker.shouldVanishNext(previous)))
+//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 6)
+//    );
+//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityWispBase>>> IDLE_ACTIONS = List.of(
+//            WeightedEntry.wrap(new IdleAction<>(() -> new StayWithinHeightAction<>(2.0, new RandomMoveAroundRunner<>(7, 4))), 1),
+//            WeightedEntry.wrap(new IdleAction<>(() -> new StayWithinHeightAction<>(2.0, new DoNothingRunner<>())), 3)
+//    );
+//
+//    public final AnimatedAttackGoal<EntityWispBase> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private boolean vanishNext;
 
     private final AnimationHandler<EntityWispBase> animationHandler = new AnimationHandler<>(this, ANIMS)
@@ -78,8 +66,6 @@ public abstract class EntityWispBase extends BaseMonster {
 
     public EntityWispBase(EntityType<? extends EntityWispBase> type, Level world) {
         super(type, world);
-        this.goalSelector.addGoal(2, this.attack);
-        this.goalSelector.removeGoal(this.swimGoal);
         this.setNoGravity(true);
         this.noPhysics = true;
         this.moveControl = new FreeMoveControl(this);
@@ -125,7 +111,7 @@ public abstract class EntityWispBase extends BaseMonster {
     }
 
     @Override
-    public void handleAttack(AnimatedAction anim) {
+    public void handleAttack(AnimationState anim) {
         LivingEntity target = this.getTarget();
         if (anim.is(ATTACK_FAR)) {
             this.getNavigation().stop();
@@ -176,7 +162,7 @@ public abstract class EntityWispBase extends BaseMonster {
     }
 
     @Override
-    public int animationCooldown(@Nullable AnimatedAction anim) {
+    public int animationCooldown(@Nullable String anim) {
         int diffAdd = this.difficultyCooldown();
         if (anim == null)
             return this.getRandom().nextInt(20) + 30 + diffAdd;
@@ -216,11 +202,11 @@ public abstract class EntityWispBase extends BaseMonster {
 
     private void teleport(double x, double y, double z) {
         BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos(x, y, z);
-        while (mutableBlockPos.getY() > this.level().getMinBuildHeight() && !this.level().getBlockState(mutableBlockPos).getMaterial().blocksMotion()) {
+        while (mutableBlockPos.getY() > this.level().getMinBuildHeight() && !this.level().getBlockState(mutableBlockPos).blocksMotion()) {
             mutableBlockPos.move(Direction.DOWN);
         }
         BlockState blockState = this.level().getBlockState(mutableBlockPos);
-        if (!blockState.getMaterial().blocksMotion()) {
+        if (!blockState.blocksMotion()) {
             y = this.getY();
         }
         this.teleportTo(x, y + 1, z);
@@ -234,12 +220,7 @@ public abstract class EntityWispBase extends BaseMonster {
         LivingEntity target = this.getTarget();
         if (target != null && target.distanceToSqr(this) > 140)
             return true;
-        return !prev.equals(VANISH.getID()) && this.vanishNext;
-    }
-
-    @Override
-    public MobType getMobType() {
-        return MobType.UNDEAD;
+        return !prev.equals(VANISH) && this.vanishNext;
     }
 
     @Override
@@ -248,12 +229,12 @@ public abstract class EntityWispBase extends BaseMonster {
     }
 
     @Override
-    public AnimatedAction getSleepAnimation() {
+    public String getSleepAnimation() {
         return STILL;
     }
-
-    @Override
-    public Vec3 passengerOffset(Entity passenger) {
-        return new Vec3(0, 10 / 16d, -3 / 16d);
-    }
+//
+//    @Override
+//    public Vec3 passengerOffset(Entity passenger) {
+//        return new Vec3(0, 10 / 16d, -3 / 16d);
+//    }
 }

@@ -8,7 +8,7 @@ import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.datapack.ListenerExtension;
-import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.NPCAttackActions;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.actions.NPCAttackActions;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;

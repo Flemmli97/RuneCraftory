@@ -1,7 +1,8 @@
 package io.github.flemmli97.runecraftory.common.blocks;
 
+import com.mojang.serialization.MapCodec;
 import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
-import io.github.flemmli97.runecraftory.common.blocks.tile.AccessoryBlockEntity;
+import io.github.flemmli97.runecraftory.common.blocks.entity.AccessoryBlockEntity;
 import io.github.flemmli97.tenshilib.common.utils.VoxelUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
@@ -11,6 +12,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class BlockAccessory extends BlockCrafting {
+
+    public static final MapCodec<BlockAccessory> CODEC = simpleCodec(BlockAccessory::new);
 
     public static final VoxelShape[] SHAPES_LEFT = VoxelUtils.joinedOrDirs(VoxelUtils.ShapeBuilder.of(0, 13, 0, 16, 15, 16),
             VoxelUtils.ShapeBuilder.of(13, 0, 0, 16, 13, 3),
@@ -30,6 +33,11 @@ public class BlockAccessory extends BlockCrafting {
 
     public BlockAccessory(Properties props) {
         super(EnumCrafting.ARMOR, props);
+    }
+
+    @Override
+    public MapCodec<BlockAccessory> codec() {
+        return CODEC;
     }
 
     @Override

@@ -3,17 +3,22 @@ package io.github.flemmli97.runecraftory.common.world.family;
 import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.api.datapack.npc.NPCData;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumMap;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -46,9 +51,9 @@ public class FamilyEntry {
         this.entityState = player ? EntityState.PLAYER : EntityState.ALIVE;
     }
 
-    public FamilyEntry(FamilyHandler familyHandler, CompoundTag tag) {
+    public FamilyEntry(FamilyHandler familyHandler, CompoundTag tag, HolderLookup.Provider provider) {
         this.familyHandler = familyHandler;
-        this.load(tag);
+        this.load(tag, provider);
     }
 
     public void setFather(UUID father) {
@@ -340,7 +345,8 @@ public class FamilyEntry {
         return false;
     }
 
-    public CompoundTag save() {
+    public CompoundTag save(HolderLookup.Provider provider) {
+        RegistryOps<Tag> ops = provider.createSerializationContext(NbtOps.INSTANCE);
         CompoundTag tag = new CompoundTag();
         if (this.father != null)
             tag.putUUID("Father", this.father);
@@ -352,7 +358,7 @@ public class FamilyEntry {
         ListTag children = new ListTag();
         this.children.forEach(uuid -> children.add(NbtUtils.createUUID(uuid)));
         tag.put("Children", children);
-        tag.putString("Name", Component.Serializer.toJson(this.name));
+        tag.put("Name", ComponentSerialization.CODEC.encodeStart(ops, this.name).getOrThrow());
         tag.putInt("Gender", this.gender.ordinal());
         tag.putUUID("OwnID", this.self);
         if (this.partner != null)
@@ -362,7 +368,8 @@ public class FamilyEntry {
         return tag;
     }
 
-    public void load(CompoundTag tag) {
+    public void load(CompoundTag tag, HolderLookup.Provider provider) {
+        RegistryOps<Tag> ops = provider.createSerializationContext(NbtOps.INSTANCE);
         if (tag.hasUUID("Father"))
             this.father = tag.getUUID("Father");
         if (tag.hasUUID("Mother"))
@@ -371,7 +378,7 @@ public class FamilyEntry {
         siblings.forEach(sibling -> this.siblings.add(NbtUtils.loadUUID(sibling)));
         ListTag children = tag.getList("Children", Tag.TAG_INT_ARRAY);
         children.forEach(sibling -> this.children.add(NbtUtils.loadUUID(sibling)));
-        this.name = Component.Serializer.fromJson(tag.getString("Name"));
+        this.name = ComponentSerialization.CODEC.parse(ops, tag.get("Name")).getOrThrow();
         this.gender = NPCData.Gender.values()[tag.getInt("Gender")];
         this.self = tag.getUUID("OwnID");
         this.gender = NPCData.Gender.values()[tag.getInt("Gender")];
@@ -388,7 +395,7 @@ public class FamilyEntry {
                 .map(e -> e.name).orElse(null) : null;
         Component partner = this.partner != null ? this.familyHandler.getFamily(this.partner)
                 .map(e -> e.name).orElse(null) : null;
-        return new SyncedFamilyData(father, mother, partner, this.relationship,
+        return new SyncedFamilyData(Optional.ofNullable(father), Optional.ofNullable(mother), Optional.ofNullable(partner), this.relationship,
                 player.getUUID().equals(this.partner) && npc.canProcreate());
     }
 

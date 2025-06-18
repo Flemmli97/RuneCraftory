@@ -1,8 +1,11 @@
 package io.github.flemmli97.runecraftory.common.blocks;
 
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -19,6 +22,12 @@ import java.util.function.Supplier;
 
 public class BlockFruitTreeLeaf extends LeavesBlock {
 
+    public static final MapCodec<BlockFruitTreeLeaf> CODEC = RecordCodecBuilder.mapCodec(inst ->
+            inst.group(
+                    propertiesCodec(),
+                    BuiltInRegistries.ITEM.byNameCodec().fieldOf("fruit").forGetter(d -> d.fruit.get())
+            ).apply(inst, (prop, fruit) -> new BlockFruitTreeLeaf(prop, () -> fruit)));
+
     public static final BooleanProperty HAS_FRUIT = BooleanProperty.create("has_fruit");
 
     private final Supplier<Item> fruit;
@@ -26,6 +35,11 @@ public class BlockFruitTreeLeaf extends LeavesBlock {
     public BlockFruitTreeLeaf(Properties properties, Supplier<Item> fruit) {
         super(properties);
         this.fruit = fruit;
+    }
+
+    @Override
+    public MapCodec<BlockFruitTreeLeaf> codec() {
+        return CODEC;
     }
 
     @Override
@@ -40,15 +54,15 @@ public class BlockFruitTreeLeaf extends LeavesBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (level.isClientSide)
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         if (state.getValue(HAS_FRUIT)) {
             Block.popResource(level, pos.below(), new ItemStack(this.fruit.get()));
             level.setBlock(pos, state.setValue(HAS_FRUIT, false), Block.UPDATE_ALL);
-            return InteractionResult.CONSUME;
+            return ItemInteractionResult.CONSUME;
         }
-        return super.use(state, level, pos, player, hand, hit);
+        return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
     }
 }
 

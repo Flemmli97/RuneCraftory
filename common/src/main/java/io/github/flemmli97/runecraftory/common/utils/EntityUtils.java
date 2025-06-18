@@ -8,6 +8,7 @@ import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.GateEntity;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityTreasureChest;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.items.creative.TreasureChestSpawnegg;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.network.S2CUpdateAttributesWithAdditional;
 import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
@@ -175,10 +176,10 @@ public class EntityUtils {
     }
 
     private static final List<WeightedChestTier> CHEST_TIERS = ImmutableList.of(
-            new WeightedChestTier(0, 150, 0.4f, 550),
-            new WeightedChestTier(1, 40, 0.3f, 200),
-            new WeightedChestTier(2, 1, 0.3f, 60),
-            new WeightedChestTier(3, 0, 0, 20) //0.05f
+            new WeightedChestTier(TreasureChestSpawnegg.ChestTier.COMMON, 150, 0.4f, 550),
+            new WeightedChestTier(TreasureChestSpawnegg.ChestTier.UNCOMMON, 40, 0.3f, 200),
+            new WeightedChestTier(TreasureChestSpawnegg.ChestTier.RARE, 1, 0.3f, 60),
+            new WeightedChestTier(TreasureChestSpawnegg.ChestTier.EPIC, 0, 0, 20) //0.05f
     );
 
     public static void tieredTreasureChest(GateEntity spawner, EntityTreasureChest chest) {
@@ -270,7 +271,7 @@ public class EntityUtils {
                 volume, pitch, player.getRandom().nextLong()));
     }
 
-    record WeightedChestTier(int tier, int weight, float modifier, int max) {
+    record WeightedChestTier(TreasureChestSpawnegg.ChestTier tier, int weight, float modifier, int max) {
         int getModifiedWeight(int mod) {
             return Math.min(this.max, (int) (this.weight + this.modifier * mod));
         }

@@ -1,24 +1,19 @@
 package io.github.flemmli97.runecraftory.mixin;
 
-import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(SnowLayerBlock.class)
 public abstract class SnowLayerBlockMixin {
 
-    @Inject(method = "getStateForPlacement", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;is(Lnet/minecraft/world/level/block/Block;)Z"), cancellable = true, locals = LocalCapture.CAPTURE_FAILHARD)
-    private void replace(BlockPlaceContext context, CallbackInfoReturnable<BlockState> info, BlockState state) {
-        if (state.is(ModBlocks.SNOW.get())) {
-            int i = state.getValue(SnowLayerBlock.LAYERS);
-            info.setReturnValue(Blocks.SNOW.defaultBlockState().setValue(SnowLayerBlock.LAYERS, Math.min(8, i + 1)));
-        }
+    @Inject(method = "randomTick", at = @At(value = "RETURN"))
+    private void meltingTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random, CallbackInfo info) {
     }
 }

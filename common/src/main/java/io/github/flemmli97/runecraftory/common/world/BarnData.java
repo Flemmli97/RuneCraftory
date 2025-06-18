@@ -33,7 +33,7 @@ public class BarnData {
 
     public static BarnData fromTag(CompoundTag tag) {
         DataResult<GlobalPos> dataResult = GlobalPos.CODEC.parse(new Dynamic<>(NbtOps.INSTANCE, tag.get("Pos")));
-        BarnData data = new BarnData(dataResult.getOrThrow(false, RuneCraftory.LOGGER::error));
+        BarnData data = new BarnData(dataResult.getOrThrow());
         data.load(tag);
         return data;
     }
@@ -46,7 +46,7 @@ public class BarnData {
         --this.changeCooldown;
         this.listeners.removeIf(m -> {
             if (m.behaviourState() == BaseMonster.Behaviour.WANDER_HOME) {
-                if (m.level.dimension() == this.pos.dimension())
+                if (m.level().dimension() == this.pos.dimension())
                     m.restrictTo(this.pos.pos(), this.getSize() + 1);
             }
             return m.isRemoved();

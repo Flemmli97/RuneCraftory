@@ -1,18 +1,9 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.LeapingMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.animated.MonsterActionUtils;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.loot.LootCtxParameters;
 import io.github.flemmli97.runecraftory.common.utils.LootTableResources;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.AnimatedAttackGoal;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.GoalAttackAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.IdleAction;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.ActionUtils;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveAwayRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.MoveToTargetRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.RandomMoveAroundRunner;
-import io.github.flemmli97.tenshilib.common.entity.ai.animated.impl.WrappedRunner;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
@@ -25,12 +16,11 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -39,10 +29,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 public class EntityWooly extends LeapingMonster {
 
@@ -58,31 +45,30 @@ public class EntityWooly extends LeapingMonster {
     public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
-    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityWooly>>> ATTACKS = List.of(
-            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(SLAP, EntityWooly::attackChance), 2),
-            WeightedEntry.wrap(new GoalAttackAction<EntityWooly>(KICK)
-                    .cooldown(e -> e.animationCooldown(KICK))
-                    .withCondition(ActionUtils.chanced(EntityWooly::attackChance))
-                    .prepare(() -> new WrappedRunner<>(new MoveAwayRunner<>(1.5, 1, 4))), 1),
-            WeightedEntry.wrap(new GoalAttackAction<EntityWooly>(KICK)
-                    .cooldown(e -> e.animationCooldown(KICK))
-                    .withCondition(ActionUtils.chanced(EntityWooly::attackChance))
-                    .prepare(() -> new WrappedRunner<>(new MoveToTargetRunner<>(1, 3))), 1),
-            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(HEADBUTT, EntityWooly::attackChance), 2)
-    );
-    private static final List<WeightedEntry.Wrapper<IdleAction<EntityWooly>>> IDLE_ACTIONS = List.of(
-            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 0.5)), 1),
-            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(10, 5)), 2),
-            WeightedEntry.wrap(new IdleAction<EntityWooly>(DoNothingRunner::new)
-                    .duration(e -> e.getRandom().nextInt(10) + 15), 3)
-    );
-
-    public final AnimatedAttackGoal<EntityWooly> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+    //    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityWooly>>> ATTACKS = List.of(
+//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(SLAP, EntityWooly::attackChance), 2),
+//            WeightedEntry.wrap(new GoalAttackAction<EntityWooly>(KICK)
+//                    .cooldown(e -> e.animationCooldown(KICK))
+//                    .withCondition(ActionUtils.chanced(EntityWooly::attackChance))
+//                    .prepare(() -> new WrappedRunner<>(new MoveAwayRunner<>(1.5, 1, 4))), 1),
+//            WeightedEntry.wrap(new GoalAttackAction<EntityWooly>(KICK)
+//                    .cooldown(e -> e.animationCooldown(KICK))
+//                    .withCondition(ActionUtils.chanced(EntityWooly::attackChance))
+//                    .prepare(() -> new WrappedRunner<>(new MoveToTargetRunner<>(1, 3))), 1),
+//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(HEADBUTT, EntityWooly::attackChance), 2)
+//    );
+//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityWooly>>> IDLE_ACTIONS = List.of(
+//            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 0.5)), 1),
+//            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(10, 5)), 2),
+//            WeightedEntry.wrap(new IdleAction<EntityWooly>(DoNothingRunner::new)
+//                    .duration(e -> e.getRandom().nextInt(10) + 15), 3)
+//    );
+//
+//    public final AnimatedAttackGoal<EntityWooly> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityWooly> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityWooly(EntityType<? extends EntityWooly> type, Level level) {
         super(type, level);
-        this.goalSelector.addGoal(2, this.attack);
     }
 
     @Override
@@ -93,8 +79,8 @@ public class EntityWooly extends LeapingMonster {
     }
 
     @Override
-    protected boolean isLeapingAnim(AnimatedAction anim) {
-        return anim.is(KICK);
+    protected boolean isLeapingAnim(String anim) {
+        return anim.equals(KICK);
     }
 
     @Override
@@ -123,7 +109,7 @@ public class EntityWooly extends LeapingMonster {
         if (itemStack.is(RunecraftoryTags.Items.SHEARS)) {
             if (!this.level().isClientSide && !this.isSheared() && (!this.isTamed() || player.getUUID().equals(this.getOwnerUUID()))) {
                 this.shear(player, itemStack);
-                itemStack.hurtAndBreak(1, player, (playerx) -> playerx.broadcastBreakEvent(hand));
+                itemStack.hurtAndBreak(1, player, hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
                 return InteractionResult.SUCCESS;
             } else {
                 return InteractionResult.CONSUME;
@@ -134,10 +120,10 @@ public class EntityWooly extends LeapingMonster {
     }
 
     @Override
-    public AABB attackBB(AnimatedAction anim) {
+    public AABB attackBB(String anim) {
         double width = this.getBbWidth() * 1.4;
         double length = this.getBbWidth() * 1.9;
-        if (anim.is(HEADBUTT, KICK)) {
+        if (anim.equals(HEADBUTT) || anim.equals(KICK)) {
             length *= 1.5;
         }
         return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
@@ -179,7 +165,7 @@ public class EntityWooly extends LeapingMonster {
     }
 
     @Override
-    public int animationCooldown(@Nullable AnimatedAction anim) {
+    public int animationCooldown(@Nullable String anim) {
         int diffAdd = this.difficultyCooldown();
         if (anim == null)
             return this.getRandom().nextInt(20) + 30 + diffAdd;
@@ -215,7 +201,7 @@ public class EntityWooly extends LeapingMonster {
     }
 
     public void shear(Player player, ItemStack used) {
-        LootTable lootTable = this.level().getServer().getLootTables().get(shearedLootTable(this.getDefaultLootTable()));
+        LootTable lootTable = this.level().getServer().reloadableRegistries().getLootTable(shearedLootTable(this.getDefaultLootTable()));
         lootTable.getRandomItems(this.dailyDropContext()
                 .withOptionalParameter(LootCtxParameters.UUID_CONTEXT, player.getUUID())
                 .withOptionalParameter(LootContextParams.TOOL, used).create(LootCtxParameters.MONSTER_INTERACTION), this::spawnAtLocation);
@@ -230,14 +216,14 @@ public class EntityWooly extends LeapingMonster {
     }
 
     @Override
-    public AnimatedAction getSleepAnimation() {
+    public String getSleepAnimation() {
         return SLEEP;
     }
 
-    @Override
-    public Vec3 passengerOffset(Entity passenger) {
-        return new Vec3(0, 13.5 / 16d, -6 / 16d);
-    }
+//    @Override
+//    public Vec3 passengerOffset(Entity passenger) {
+//        return new Vec3(0, 13.5 / 16d, -6 / 16d);
+//    }
 
     protected float attackChance() {
         return this.getEntityData().get(SPAWNSHEARED) || this.isTamed() ? 0.8f : 0;
@@ -245,6 +231,6 @@ public class EntityWooly extends LeapingMonster {
 
     public static ResourceKey<LootTable> shearedLootTable(ResourceKey<LootTable> def) {
         return ResourceKey.create(Registries.LOOT_TABLE,
-                ResourceLocation.fromNamespaceAndPath(def.location().getNamespace(), def.location().getPath() + "_sheared_drops");
+                ResourceLocation.fromNamespaceAndPath(def.location().getNamespace(), def.location().getPath() + "_sheared_drops"));
     }
 }

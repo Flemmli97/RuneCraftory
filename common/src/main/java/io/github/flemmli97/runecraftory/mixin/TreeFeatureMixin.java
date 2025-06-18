@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.mixin;
 
-import io.github.flemmli97.runecraftory.common.blocks.tile.TreeBlockEntity;
+import io.github.flemmli97.runecraftory.common.blocks.entity.TreeBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;

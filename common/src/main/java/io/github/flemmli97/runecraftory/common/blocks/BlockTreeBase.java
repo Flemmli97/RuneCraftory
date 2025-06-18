@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.blocks;
 
-import io.github.flemmli97.runecraftory.common.blocks.tile.TreeBlockEntity;
+import com.mojang.serialization.MapCodec;
+import io.github.flemmli97.runecraftory.common.blocks.entity.TreeBlockEntity;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.mixinhelper.LevelSnapshotHandler;
@@ -8,10 +9,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
@@ -48,11 +51,16 @@ public class BlockTreeBase extends RotatedPillarBlock implements EntityBlock, Gr
         this.seedItem = seedItem;
     }
 
-    public static boolean isAirOrReplaceable(BlockState state) {
-        return state.isAir() || state.getMaterial() == Material.REPLACEABLE_PLANT || state.is(BlockTags.LEAVES);
+    @Override
+    public MapCodec<BlockCashRegister> codec() {
+        return CODEC;
     }
 
-    public boolean growTree(ServerLevel level, BlockPos pos, BlockState state, Random rand) {
+    public static boolean isAirOrReplaceable(BlockState state) {
+        return state.isAir() || state.repla() == Material.REPLACEABLE_PLANT || state.is(BlockTags.LEAVES);
+    }
+
+    public boolean growTree(ServerLevel level, BlockPos pos, BlockState state, RandomSource rand) {
         return switch (state.getValue(AGE)) {
             case 2 -> {
                 ((LevelSnapshotHandler) level).runecraftory$getSnapshotHandler().takeSnapshot(null);
@@ -107,7 +115,7 @@ public class BlockTreeBase extends RotatedPillarBlock implements EntityBlock, Gr
     }
 
     @Override
-    public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state) {
+    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
         return new ItemStack(this.seedItem.get());
     }
 

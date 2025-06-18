@@ -1,19 +1,20 @@
 package io.github.flemmli97.runecraftory.common.blocks;
 
 import com.mojang.authlib.GameProfile;
-import io.github.flemmli97.runecraftory.common.blocks.tile.MonsterBarnBlockEntity;
+import com.mojang.serialization.MapCodec;
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
+import io.github.flemmli97.runecraftory.common.blocks.entity.MonsterBarnBlockEntity;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -35,10 +36,17 @@ import java.util.UUID;
 
 public class BlockMonsterBarn extends BaseEntityBlock {
 
+    public static final MapCodec<BlockMonsterBarn> CODEC = simpleCodec(BlockMonsterBarn::new);
+
     public static final VoxelShape SHAPE = Block.box(0, 0, 0, 16, 3, 16);
 
     public BlockMonsterBarn(Properties properties) {
         super(properties);
+    }
+
+    @Override
+    public MapCodec<BlockMonsterBarn> codec() {
+        return CODEC;
     }
 
     @Override
@@ -63,14 +71,12 @@ public class BlockMonsterBarn extends BaseEntityBlock {
         UUID owner = null;
         if (player.isCreative() || (level.getBlockEntity(pos) instanceof MonsterBarnBlockEntity barn && player.getUUID().equals(owner = barn.getOwner())))
             return super.getDestroyProgress(state, player, level, pos);
-        if (!player.level.isClientSide && owner != null) {
+        if (!player.level().isClientSide && owner != null) {
             UUID uuid = owner;
-            Platform.INSTANCE.getPlayerData(player)
-                    .ifPresent(d -> {
-                        if (d.onBarnFailMine(pos))
-                            player.sendMessage(Component.translatable("runecraftory.barn.interact.not.owner", player.getServer()
-                                    .getProfileCache().get(uuid).map(GameProfile::getName).orElse("UNKNOWN")).withStyle(ChatFormatting.DARK_RED), Util.NIL_UUID);
-                    });
+            PlayerData data = Platform.INSTANCE.getPlayerData(player);
+            if (data.onBarnFailMine(pos))
+                player.displayClientMessage(Component.translatable("runecraftory.barn.interact.not.owner", player.getServer()
+                        .getProfileCache().get(uuid).map(GameProfile::getName).orElse("UNKNOWN")).withStyle(ChatFormatting.DARK_RED), false);
         }
         return 0;
     }
@@ -83,27 +89,25 @@ public class BlockMonsterBarn extends BaseEntityBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
         if (!level.isClientSide) {
             UUID owner = null;
             if (level.getBlockEntity(pos) instanceof MonsterBarnBlockEntity barn && (player.isCreative() || player.getUUID().equals(owner = barn.getOwner()))) {
                 if (barn.getBarnData() != null) {
                     String key = barn.getBarnData().hasRoof() ? "runecraftory.barn.interact.block.roofed" : "runecraftory.barn.interact.block";
-                    player.sendMessage(Component.translatable(key, barn.getBarnData().getCapacity(), barn.getBarnData().getCapacity() - barn.getBarnData().usedCapacity())
-                            .withStyle(barn.getBarnData().getCapacity() > 0 ? ChatFormatting.GOLD : ChatFormatting.DARK_RED), Util.NIL_UUID);
+                    player.displayClientMessage(Component.translatable(key, barn.getBarnData().getCapacity(), barn.getBarnData().getCapacity() - barn.getBarnData().usedCapacity())
+                            .withStyle(barn.getBarnData().getCapacity() > 0 ? ChatFormatting.GOLD : ChatFormatting.DARK_RED), true);
                 }
             } else if (owner != null) {
                 UUID uuid = owner;
-                Platform.INSTANCE.getPlayerData(player)
-                        .ifPresent(d -> {
-                            if (d.onBarnFailMine(pos))
-                                player.sendMessage(Component.translatable("runecraftory.barn.interact.not.owner", player.getServer()
-                                        .getProfileCache().get(uuid).map(GameProfile::getName).orElse("UNKNOWN")).withStyle(ChatFormatting.DARK_RED), Util.NIL_UUID);
-                        });
+                PlayerData data = Platform.INSTANCE.getPlayerData(player);
+                if (data.onBarnFailMine(pos))
+                    player.displayClientMessage(Component.translatable("runecraftory.barn.interact.not.owner", player.getServer()
+                            .getProfileCache().get(uuid).map(GameProfile::getName).orElse("UNKNOWN")).withStyle(ChatFormatting.DARK_RED), false);
             }
-            return InteractionResult.CONSUME;
+            return ItemInteractionResult.CONSUME;
         }
-        return InteractionResult.SUCCESS;
+        return ItemInteractionResult.SUCCESS;
     }
 
     @Nullable

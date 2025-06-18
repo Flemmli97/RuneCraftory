@@ -5,14 +5,16 @@ import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
+import io.github.flemmli97.runecraftory.platform.ExtendedEffect;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 
-public class BathEffect extends MobEffect {
+public class BathEffect extends MobEffect implements ExtendedEffect {
 
     public BathEffect() {
         super(MobEffectCategory.BENEFICIAL, 0);
@@ -39,5 +41,11 @@ public class BathEffect extends MobEffect {
             living.removeEffect(BuiltInRegistries.MOB_EFFECT.wrapAsHolder(this));
         }
         return super.applyEffectTick(living, amplifier);
+    }
+
+    @Override
+    public void onEffectRemoved(LivingEntity entity, MobEffectInstance instance) {
+        ExtendedEffect.super.onEffectRemoved(entity, instance);
+        Platform.INSTANCE.getEntityData(entity).setEnteredBath(false);
     }
 }

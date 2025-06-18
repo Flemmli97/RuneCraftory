@@ -159,7 +159,7 @@ public abstract class EntityRafflesiaPart extends Mob implements AnimatedEntity,
 
     public abstract Vec3 offset();
 
-    public abstract AnimatedAction attackAnim();
+    public abstract String attackAnim();
 
     public int cooldown() {
         return this.getRandom().nextInt(40) + 100;

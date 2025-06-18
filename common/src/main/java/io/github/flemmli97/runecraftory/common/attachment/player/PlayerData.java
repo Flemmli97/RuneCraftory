@@ -28,7 +28,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
-import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
+import io.github.flemmli97.runecraftory.common.utils.DamageSourceUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
@@ -36,13 +36,11 @@ import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -96,7 +94,7 @@ public class PlayerData {
     private final Map<NPCJob, NonNullList<ItemStack>> shopItems = new HashMap<>();
     private final InventoryShippingBin shipping = new InventoryShippingBin();
     //Food buff
-    private Item lastFoodBuff;
+    private Holder<Item> lastFoodBuff;
     private Map<Holder<Attribute>, Double> foodBuffs = new HashMap<>();
     private int foodDuration;
 
@@ -156,7 +154,7 @@ public class PlayerData {
     }
 
     public int getMaxRunePoints() {
-        return (int) (this.runePointsMax + this.foodBuffs.getOrDefault(ModAttributes.RPINCREASE.get(), 0d));
+        return (int) (this.runePointsMax + this.foodBuffs.getOrDefault(ModAttributes.MAX_RUNEPOINTS.get(), 0d));
     }
 
     public float getMaxRunePointsRaw() {
@@ -178,7 +176,7 @@ public class PlayerData {
                 if (!this.player.level().isClientSide) {
                     int invul = this.player.invulnerableTime;
                     this.player.invulnerableTime = 10;
-                    boolean res = this.player.hurt(CustomDamage.EXHAUST, Math.min(this.player.getMaxHealth() * 0.25f, (float) (diff * 2)));
+                    boolean res = this.player.hurt(DamageSourceUtils.exhaust(this.player.level()), Math.min(this.player.getMaxHealth() * 0.25f, (float) (diff * 2)));
                     if (res)
                         this.player.invulnerableTime = 10;
                     else
@@ -274,7 +272,7 @@ public class PlayerData {
         this.level.setXp(Mth.clamp(xpAmount, 0, LevelCalc.xpAmountForLevelUp(level)));
         if (this.player instanceof ServerPlayer serverPlayer) {
             if (recalc) {
-                this.recalculateStats(serverPlayer, true);
+                this.recalculateStats(true);
             } else
                 LoaderNetwork.INSTANCE.sendToPlayer(new S2CLevelPkt(this), serverPlayer);
         }
@@ -305,18 +303,20 @@ public class PlayerData {
         this.intel += GeneralConfig.intPerLevel;
     }
 
-    public void recalculateStats(ServerPlayer player, boolean regen) {
+    public void recalculateStats(boolean regen) {
+        if (!(this.player instanceof ServerPlayer serverPlayer))
+            return;
         int lvl = this.level.getLevel() - 1;
         this.updateHealth();
         this.runePointsMax = GeneralConfig.rpPerLevel * lvl + GeneralConfig.startingRp + (int) this.skillValLevelFunc((skillLvl, prop) -> Math.min(100, skillLvl) * prop.rpIncrease());
         if (regen) {
-            player.setHealth(player.getMaxHealth());
+            this.player.setHealth(this.player.getMaxHealth());
             this.runePoints = (int) this.runePointsMax;
         }
         this.str = GeneralConfig.strPerLevel * lvl + GeneralConfig.startingStr + (float) this.skillVal(SkillProperties::strIncrease);
         this.intel = GeneralConfig.intPerLevel * lvl + GeneralConfig.startingIntel + (float) this.skillVal(SkillProperties::intelIncrease);
         this.vit = GeneralConfig.vitPerLevel * lvl + GeneralConfig.startingVit + (float) this.skillVal(SkillProperties::vitIncrease);
-        LoaderNetwork.INSTANCE.sendToPlayer(new S2CLevelPkt(this), player);
+        LoaderNetwork.INSTANCE.sendToPlayer(new S2CLevelPkt(this), serverPlayer);
     }
 
     private double skillVal(Function<SkillProperties, Number> func) {
@@ -336,7 +336,7 @@ public class PlayerData {
         this.skillLevels.get(skill).setXp(this.player.level().isClientSide ? xpAmount : Mth.clamp(xpAmount, 0, LevelCalc.xpAmountForSkillLevelUp(skill, level)));
         if (this.player instanceof ServerPlayer serverPlayer) {
             if (recalc) {
-                this.recalculateStats(serverPlayer, true);
+                this.recalculateStats(true);
                 this.player.setHealth(this.player.getMaxHealth());
             }
             LoaderNetwork.INSTANCE.sendToPlayer(new S2CSkillLevelPkt(this, skill), serverPlayer);
@@ -438,7 +438,7 @@ public class PlayerData {
         if (att == Attributes.ATTACK_DAMAGE) {
             val += this.getStr() + this.strAdd;
         }
-        if (att == ModAttributes.MAGIC.get())
+        if (att == ModAttributes.MAGIC_ATTACK.get())
             val += this.getIntel() + this.intAdd;
         if (att == ModAttributes.DEFENCE.get())
             val += vit * 0.5;
@@ -459,8 +459,8 @@ public class PlayerData {
         return this.shipping;
     }
 
-    public void refreshShop(Player player) {
-        if (player instanceof ServerPlayer serverPlayer) {
+    public void refreshShop() {
+        if (this.player instanceof ServerPlayer serverPlayer) {
             for (NPCJob profession : ModNPCJobs.JOBS.registry()) {
                 Collection<ShopItemProperties> datapack = DataPackHandler.INSTANCE.shopItemsManager().get(profession);
                 List<ItemStack> shopItems = new ArrayList<>();
@@ -475,8 +475,8 @@ public class PlayerData {
                 });
                 NonNullList<ItemStack> shop = NonNullList.create();
                 if (!shopItems.isEmpty()) {
-                    for (float chance = 1.5f + shopItems.size() * 0.002f; player.level().random.nextFloat() < chance; chance -= 0.1f) {
-                        ItemStack stack = shopItems.remove(player.level().random.nextInt(shopItems.size()));
+                    for (float chance = 1.5f + shopItems.size() * 0.002f; this.player.level().random.nextFloat() < chance; chance -= 0.1f) {
+                        ItemStack stack = shopItems.remove(this.player.level().random.nextInt(shopItems.size()));
                         shop.add(stack);
                         if (shopItems.isEmpty() || (profession == ModNPCJobs.RANDOM.get() && shop.size() >= InventoryShop.SHOP_SIZE))
                             break;
@@ -512,7 +512,7 @@ public class PlayerData {
         return this.keeper;
     }
 
-    public Item lastEatenFood() {
+    public Holder<Item> lastEatenFood() {
         return this.lastFoodBuff;
     }
 
@@ -527,13 +527,13 @@ public class PlayerData {
             double mult = 0;
             if (att == Attributes.MAX_HEALTH)
                 mult += this.player.getMaxHealth() * percent;
-            else if (att == ModAttributes.RPINCREASE.get())
+            else if (att == ModAttributes.MAX_RUNEPOINTS.get())
                 mult += this.runePointsMax * percent;
             else if (att == Attributes.ATTACK_DAMAGE)
                 mult += this.str * percent;
             else if (att == ModAttributes.DEFENCE.get())
                 mult += this.vit * 0.5 * percent;
-            else if (att == ModAttributes.MAGIC.get())
+            else if (att == ModAttributes.MAGIC_ATTACK.get())
                 mult += this.intel * percent;
             else if (att == ModAttributes.DEFENCE.get())
                 mult += this.vit * 0.5 * percent;
@@ -546,7 +546,7 @@ public class PlayerData {
             if (this.foodBuffs.containsKey(Attributes.MAX_HEALTH))
                 this.setFoodHealthBonus(this.foodBuffs.get(Attributes.MAX_HEALTH));
             this.foodDuration = food.duration();
-            this.lastFoodBuff = stack.getItem();
+            this.lastFoodBuff = stack.getItemHolder();
         }
         if (this.player instanceof ServerPlayer serverPlayer) {
             LoaderNetwork.INSTANCE.sendToPlayer(new S2CFoodPkt(stack), serverPlayer);
@@ -574,10 +574,11 @@ public class PlayerData {
     public CompoundTag foodBuffNBT() {
         CompoundTag nbt = new CompoundTag();
         if (this.lastFoodBuff != null)
-            nbt.putString("LastFood", Registry.ITEM.getKey(this.lastFoodBuff).toString());
+            nbt.put("LastFood", BuiltInRegistries.ITEM.holderByNameCodec().encodeStart(NbtOps.INSTANCE, this.lastFoodBuff).getOrThrow());
+
         CompoundTag compound3 = new CompoundTag();
-        for (Map.Entry<Attribute, Double> entry : this.foodBuffs.entrySet()) {
-            compound3.putDouble(Registry.ATTRIBUTE.getKey(entry.getKey()).toString(), entry.getValue());
+        for (Map.Entry<Holder<Attribute>, Double> entry : this.foodBuffs.entrySet()) {
+            compound3.putDouble(entry.getKey().unwrapKey().get().location().toString(), entry.getValue());
         }
         nbt.put("FoodBuffs", compound3);
         nbt.putInt("FoodBuffDuration", this.foodDuration);
@@ -585,11 +586,11 @@ public class PlayerData {
     }
 
     public void readFoodBuffFromNBT(CompoundTag nbt) {
-        this.lastFoodBuff = nbt.contains("LastFood") ? Registry.ITEM.get(new ResourceLocation(nbt.getString("LastFood"))) : null;
+        this.lastFoodBuff = nbt.contains("LastFood") ? BuiltInRegistries.ITEM.holderByNameCodec().parse(NbtOps.INSTANCE, nbt.get("LastFood")).getOrThrow() : null;
         this.foodBuffs.clear();
         CompoundTag tag = nbt.getCompound("FoodBuffs");
         for (String s : tag.getAllKeys()) {
-            this.foodBuffs.put(Registry.ATTRIBUTE.get(new ResourceLocation(s)), tag.getDouble(s));
+            this.foodBuffs.put(BuiltInRegistries.ATTRIBUTE.getHolder(ResourceLocation.parse(s)).get(), tag.getDouble(s));
         }
         this.foodDuration = nbt.getInt("FoodBuffDuration");
     }
@@ -689,128 +690,128 @@ public class PlayerData {
         return this.gender;
     }
 
-    public void readFromNBT(CompoundTag nbt, Player player) {
-        this.starting = nbt.getBoolean("Starting");
-        this.runePointsMax = nbt.getFloat("MaxRunePoints");
-        this.runePoints = nbt.getInt("RunePoints");
-        this.money = nbt.getInt("Money");
-        this.str = nbt.getFloat("Strength");
-        this.vit = nbt.getFloat("Vitality");
-        this.intel = nbt.getFloat("Intelligence");
-        this.level.read(nbt.get("Level"));
-        this.strAdd = nbt.getFloat("StrengthBonus");
-        this.vitAdd = nbt.getFloat("VitalityBonus");
-        this.intAdd = nbt.getFloat("IntelligenceBonus");
-        CompoundTag skillCompound = nbt.getCompound("Skills");
-        for (EnumSkills skill : EnumSkills.values()) {
-            this.skillLevels.get(skill).read(skillCompound.get(skill.toString()));
-        }
-        this.spells.load(nbt.getCompound("Inventory"));
-        this.shipping.load(nbt.getCompound("Shipping"));
-        CompoundTag shipped = nbt.getCompound("ShippedItems");
-        shipped.getAllKeys().forEach(key -> {
-            CompoundTag d = shipped.getCompound(key);
-            this.shippedItems.put(Registry.ITEM.get(new ResourceLocation(key)), new ShippedItemData(d.getInt("Amount"), d.getInt("Level")));
-        });
-        CompoundTag shops = nbt.getCompound("ShopItems");
-        shops.getAllKeys().forEach(key -> {
-            NonNullList<ItemStack> items = NonNullList.create();
-            shops.getList(key, Tag.TAG_COMPOUND).forEach(comp ->
-                    items.add(ItemStack.of((CompoundTag) comp)));
-            this.shopItems.put(ModNPCJobs.getFromID(new ResourceLocation(key)), items);
-        });
-        this.keeper.read(nbt.getCompound("Recipes"));
-        this.updater.read(nbt.getCompound("DailyUpdater"));
-        /*if (nbt.contains("Quest")) {
-            this.quest = new QuestMission(nbt.getCompoundTag("Quest"));
-        }*/
-        this.readFoodBuffFromNBT(nbt.getCompound("FoodData"));
-        if (player instanceof ServerPlayer serverPlayer && serverPlayer.connection != null) {
-            this.recalculateStats(serverPlayer, false);
-        }
-        if (nbt.contains("RestoreHP") && player instanceof ServerPlayer serverPlayer) {
-            float f = nbt.getFloat("RestoreHP");
-            //Sheduling the health update in case other mods modify max health
-            serverPlayer.getServer().tell(new TickTask(1, () -> player.setHealth(f)));
-        }
-        this.walkingTracker.read(nbt.getCompound("WalkingTracker"));
-        this.party.load(nbt.getCompound("PartyTag"));
-        this.craftingSeed = nbt.getInt("CraftingSeed");
-        this.boughtBarns = nbt.getInt("BoughtBarns");
-        this.mobLevelIncrease = nbt.getInt("MobLevelIncrease");
+    public void readFromNBT(CompoundTag nbt) {
+//        this.starting = nbt.getBoolean("Starting");
+//        this.runePointsMax = nbt.getFloat("MaxRunePoints");
+//        this.runePoints = nbt.getInt("RunePoints");
+//        this.money = nbt.getInt("Money");
+//        this.str = nbt.getFloat("Strength");
+//        this.vit = nbt.getFloat("Vitality");
+//        this.intel = nbt.getFloat("Intelligence");
+//        this.level.read(nbt.get("Level"));
+//        this.strAdd = nbt.getFloat("StrengthBonus");
+//        this.vitAdd = nbt.getFloat("VitalityBonus");
+//        this.intAdd = nbt.getFloat("IntelligenceBonus");
+//        CompoundTag skillCompound = nbt.getCompound("Skills");
+//        for (EnumSkills skill : EnumSkills.values()) {
+//            this.skillLevels.get(skill).read(skillCompound.get(skill.toString()));
+//        }
+//        this.spells.load(nbt.getCompound("Inventory"));
+//        this.shipping.load(nbt.getCompound("Shipping"));
+//        CompoundTag shipped = nbt.getCompound("ShippedItems");
+//        shipped.getAllKeys().forEach(key -> {
+//            CompoundTag d = shipped.getCompound(key);
+//            this.shippedItems.put(Registry.ITEM.get(new ResourceLocation(key)), new ShippedItemData(d.getInt("Amount"), d.getInt("Level")));
+//        });
+//        CompoundTag shops = nbt.getCompound("ShopItems");
+//        shops.getAllKeys().forEach(key -> {
+//            NonNullList<ItemStack> items = NonNullList.create();
+//            shops.getList(key, Tag.TAG_COMPOUND).forEach(comp ->
+//                    items.add(ItemStack.of((CompoundTag) comp)));
+//            this.shopItems.put(ModNPCJobs.getFromID(new ResourceLocation(key)), items);
+//        });
+//        this.keeper.read(nbt.getCompound("Recipes"));
+//        this.updater.read(nbt.getCompound("DailyUpdater"));
+//        /*if (nbt.contains("Quest")) {
+//            this.quest = new QuestMission(nbt.getCompoundTag("Quest"));
+//        }*/
+//        this.readFoodBuffFromNBT(nbt.getCompound("FoodData"));
+//        if (player instanceof ServerPlayer serverPlayer && serverPlayer.connection != null) {
+//            this.recalculateStats(serverPlayer, false);
+//        }
+//        if (nbt.contains("RestoreHP") && player instanceof ServerPlayer serverPlayer) {
+//            float f = nbt.getFloat("RestoreHP");
+//            //Sheduling the health update in case other mods modify max health
+//            serverPlayer.getServer().tell(new TickTask(1, () -> player.setHealth(f)));
+//        }
+//        this.walkingTracker.read(nbt.getCompound("WalkingTracker"));
+//        this.party.load(nbt.getCompound("PartyTag"));
+//        this.craftingSeed = nbt.getInt("CraftingSeed");
+//        this.boughtBarns = nbt.getInt("BoughtBarns");
+//        this.mobLevelIncrease = nbt.getInt("MobLevelIncrease");
     }
 
     public CompoundTag writeToNBTPlain(CompoundTag nbt) {
-        return this.writeToNBT(nbt, null, false);
+        return this.writeToNBT(nbt, false);
     }
 
     public CompoundTag writeToNBT(CompoundTag nbt, boolean wasDead) {
-        nbt.putBoolean("Starting", this.starting);
-        nbt.putFloat("MaxRunePoints", this.runePointsMax);
-        if (this.player == null) {
-            nbt.putInt("RunePoints", this.runePoints);
-        } else {
-            if (wasDead) {
-                nbt.putFloat("RestoreHP", this.player.getMaxHealth() * GeneralConfig.deathHpPercent);
-                nbt.putInt("RunePoints", (int) (this.runePointsMax * GeneralConfig.deathRpPercent));
-            } else {
-                nbt.putFloat("RestoreHP", this.player.getHealth());
-                nbt.putInt("RunePoints", this.runePoints);
-            }
-        }
-        nbt.putInt("Money", this.money);
-        nbt.putFloat("Strength", this.str);
-        nbt.putFloat("Vitality", this.vit);
-        nbt.putFloat("Intelligence", this.intel);
-        nbt.put("Level", this.level.save());
-        nbt.putFloat("StrengthBonus", this.strAdd);
-        nbt.putFloat("VitalityBonus", this.vitAdd);
-        nbt.putFloat("IntelligenceBonus", this.intAdd);
-        CompoundTag skillCompound = new CompoundTag();
-        for (EnumSkills skill : EnumSkills.values()) {
-            skillCompound.put(skill.toString(), this.skillLevels.get(skill).save());
-        }
-        nbt.put("Skills", skillCompound);
-        nbt.put("Inventory", this.spells.save());
-        nbt.put("Shipping", this.shipping.save());
-        CompoundTag ship = new CompoundTag();
-        this.shippedItems.forEach((key, value) -> {
-            CompoundTag d = new CompoundTag();
-            d.putInt("Amount", value.amount);
-            d.putInt("Level", value.maxLevel);
-            ship.put(key.toString(), d);
-        });
-        nbt.put("ShippedItems", ship);
-        CompoundTag shop = new CompoundTag();
-        for (Map.Entry<NPCJob, NonNullList<ItemStack>> entry : this.shopItems.entrySet()) {
-            ListTag l = new ListTag();
-            for (ItemStack stack : entry.getValue())
-                l.add(stack.save(new CompoundTag()));
-            shop.put(ModNPCJobs.getIDFrom(entry.getKey()).toString(), l);
-        }
-        nbt.put("ShopItems", shop);
-        nbt.put("Recipes", this.keeper.save());
-        nbt.put("DailyUpdater", this.updater.save());
-        /*if (this.quest != null) {
-            nbt.setTag("Quest", this.quest.writeToNBT(new NBTTagCompound()));
-        }*/
-        nbt.put("FoodData", this.foodBuffNBT());
-        nbt.put("WalkingTracker", this.walkingTracker.save());
-        nbt.put("TamedEntityTracker", this.entityStatsTracker.save());
-        nbt.put("PartyTag", this.party.save());
-        nbt.putInt("CraftingSeed", this.craftingSeed);
-        nbt.putInt("BoughtBarns", this.boughtBarns);
-        nbt.putInt("MobLevelIncrease", this.mobLevelIncrease);
+//        nbt.putBoolean("Starting", this.starting);
+//        nbt.putFloat("MaxRunePoints", this.runePointsMax);
+//        if (this.player == null) {
+//            nbt.putInt("RunePoints", this.runePoints);
+//        } else {
+//            if (wasDead) {
+//                nbt.putFloat("RestoreHP", this.player.getMaxHealth() * GeneralConfig.deathHpPercent);
+//                nbt.putInt("RunePoints", (int) (this.runePointsMax * GeneralConfig.deathRpPercent));
+//            } else {
+//                nbt.putFloat("RestoreHP", this.player.getHealth());
+//                nbt.putInt("RunePoints", this.runePoints);
+//            }
+//        }
+//        nbt.putInt("Money", this.money);
+//        nbt.putFloat("Strength", this.str);
+//        nbt.putFloat("Vitality", this.vit);
+//        nbt.putFloat("Intelligence", this.intel);
+//        nbt.put("Level", this.level.save());
+//        nbt.putFloat("StrengthBonus", this.strAdd);
+//        nbt.putFloat("VitalityBonus", this.vitAdd);
+//        nbt.putFloat("IntelligenceBonus", this.intAdd);
+//        CompoundTag skillCompound = new CompoundTag();
+//        for (EnumSkills skill : EnumSkills.values()) {
+//            skillCompound.put(skill.toString(), this.skillLevels.get(skill).save());
+//        }
+//        nbt.put("Skills", skillCompound);
+//        nbt.put("Inventory", this.spells.save());
+//        nbt.put("Shipping", this.shipping.save());
+//        CompoundTag ship = new CompoundTag();
+//        this.shippedItems.forEach((key, value) -> {
+//            CompoundTag d = new CompoundTag();
+//            d.putInt("Amount", value.amount);
+//            d.putInt("Level", value.maxLevel);
+//            ship.put(key.toString(), d);
+//        });
+//        nbt.put("ShippedItems", ship);
+//        CompoundTag shop = new CompoundTag();
+//        for (Map.Entry<NPCJob, NonNullList<ItemStack>> entry : this.shopItems.entrySet()) {
+//            ListTag l = new ListTag();
+//            for (ItemStack stack : entry.getValue())
+//                l.add(stack.save(new CompoundTag()));
+//            shop.put(ModNPCJobs.getIDFrom(entry.getKey()).toString(), l);
+//        }
+//        nbt.put("ShopItems", shop);
+//        nbt.put("Recipes", this.keeper.save());
+//        nbt.put("DailyUpdater", this.updater.save());
+//        /*if (this.quest != null) {
+//            nbt.setTag("Quest", this.quest.writeToNBT(new NBTTagCompound()));
+//        }*/
+//        nbt.put("FoodData", this.foodBuffNBT());
+//        nbt.put("WalkingTracker", this.walkingTracker.save());
+//        nbt.put("TamedEntityTracker", this.entityStatsTracker.save());
+//        nbt.put("PartyTag", this.party.save());
+//        nbt.putInt("CraftingSeed", this.craftingSeed);
+//        nbt.putInt("BoughtBarns", this.boughtBarns);
+//        nbt.putInt("MobLevelIncrease", this.mobLevelIncrease);
         return nbt;
     }
 
-    public void resetAll(ServerPlayer player) {
-        PlayerData newData = new PlayerData(player);
-        newData.spells.load(this.spells.save());
-        newData.shipping.load(this.shipping.save());
-        this.readFromNBT(newData.writeToNBTPlain(new CompoundTag()), null);
-        this.recalculateStats(player, false);
-        this.refreshShop(player);
+    public void resetAll() {
+        PlayerData newData = new PlayerData(this.player);
+        newData.spells.load(this.spells.save(this.player.registryAccess()), this.player.registryAccess());
+        newData.shipping.load(this.shipping.save(this.player.registryAccess()), this.player.registryAccess());
+        this.readFromNBT(newData.writeToNBTPlain(new CompoundTag()));
+        this.recalculateStats(false);
+        this.refreshShop();
         this.starting = false;
         this.entityStatsTracker.reset();
         this.mobLevelIncrease = 0;

@@ -1,12 +1,15 @@
 package io.github.flemmli97.runecraftory.common.items;
 
+import io.github.flemmli97.runecraftory.common.components.BabyData;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -23,6 +26,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -34,6 +38,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 public class BabySpawnEgg extends Item {
@@ -49,46 +54,26 @@ public class BabySpawnEgg extends Item {
         tag.remove("Motion");
         tag.remove("Rotation");
         ItemStack stack = new ItemStack(ModItems.NPC_BABY.get());
-        CompoundTag stackTag = stack.getOrCreateTag();
-        stackTag.put(EntityType.ENTITY_TAG, tag);
-        stackTag.putBoolean("Boy", baby.isMale());
-        stackTag.putBoolean("NeedsName", !baby.hasDataName());
-        stackTag.putUUID("Father", father);
-        stackTag.putUUID("Mother", mother);
-        stackTag.putString("PlayerName", Component.Serializer.toJson(playerName));
+        stack.set(DataComponents.ENTITY_DATA, CustomData.of(tag));
+        stack.set(ModDataComponentTypes.BABY_DATA.get(), new BabyData(baby.isMale(), baby.getDataName(), father, mother, Optional.of(playerName)));
         return stack;
     }
 
     public static boolean isBoy(ItemStack stack) {
-        return !stack.hasTag() || stack.getTag().getBoolean("Boy");
+        return stack.getOrDefault(ModDataComponentTypes.BABY_DATA.get(), BabyData.DEFAULT).male();
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
-        super.appendHoverText(stack, level, tooltipComponents, isAdvanced);
-        tooltipComponents.add(isBoy(stack) ? Component.translatable("runecraftory.tooltip.baby.boy").withStyle(ChatFormatting.BLUE)
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag tooltipFlag) {
+        super.appendHoverText(stack, context, list, tooltipFlag);
+        list.add(isBoy(stack) ? Component.translatable("runecraftory.tooltip.baby.boy").withStyle(ChatFormatting.BLUE)
                 : Component.translatable("runecraftory.tooltip.baby.girl").withStyle(ChatFormatting.RED));
-        Component name = this.getPlayerName(stack);
-        if (name != null)
-            tooltipComponents.add(Component.translatable("runecraftory.tooltip.baby.owner", name).withStyle(ChatFormatting.GOLD));
+        this.getPlayerName(stack).ifPresent(name -> list.add(Component.translatable("runecraftory.tooltip.baby.owner", name)
+                .withStyle(ChatFormatting.GOLD)));
     }
 
-    public Component getPlayerName(ItemStack stack) {
-        CompoundTag compoundTag = stack.getTag();
-        if (compoundTag != null && compoundTag.contains("PlayerName")) {
-            try {
-                MutableComponent component = Component.Serializer.fromJson(compoundTag.getString("PlayerName"));
-                if (component != null) {
-                    return component;
-                }
-            } catch (Exception ignored) {
-            }
-        }
-        return null;
-    }
-
-    public Component getEntityName(ItemStack stack) {
-        return stack.hasCustomHoverName() ? stack.getHoverName() : null;
+    public Optional<Component> getPlayerName(ItemStack stack) {
+        return stack.getOrDefault(ModDataComponentTypes.BABY_DATA.get(), BabyData.DEFAULT).player();
     }
 
     @Override
@@ -137,25 +122,25 @@ public class BabySpawnEgg extends Item {
         }
     }
 
-    private Entity spawnEntity(ServerLevel world, Player player, ItemStack stack, BlockPos pos, MobSpawnType reason, boolean forgeCheck, boolean updateLocation, boolean doCollisionOffset) {
-        CompoundTag tag = stack.getTag();
-        if (tag == null)
+    private Entity spawnEntity(ServerLevel level, Player player, ItemStack stack, BlockPos pos, MobSpawnType spawnType, boolean forgeCheck, boolean updateLocation, boolean doCollisionOffset) {
+        BabyData data = stack.get(ModDataComponentTypes.BABY_DATA.get());
+        if (data == null)
             return null;
         EntityType<?> type = ModEntities.NPC.get();
-        Component customName = this.getEntityName(stack);
-        if (customName == null && tag.getBoolean("NeedsName")) {
+        if (data.name().isEmpty()) {
             if (player != null)
-                player.sendMessage(Component.translatable("runecraftory.npc.spawn.name.missing"), Util.NIL_UUID);
+                player.displayClientMessage(Component.translatable("runecraftory.npc.spawn.name.missing")
+                        .withStyle(ChatFormatting.RED), false);
             return null;
         }
-        Entity e = type.create(world, tag, null, player, pos, reason, updateLocation, doCollisionOffset);
+        Entity e = type.create(level, EntityType.createDefaultStackConfig(level, stack, player), pos, spawnType, updateLocation, doCollisionOffset);
         if (e instanceof EntityNPCBase npc) {
-            if (forgeCheck && EventCalls.INSTANCE.specialSpawnCall((Mob) e, world, pos.getX(), pos.getY(), pos.getZ(), null, reason))
+            if (forgeCheck && EventCalls.INSTANCE.specialSpawnCall((Mob) e, level, pos.getX(), pos.getY(), pos.getZ(), null, spawnType))
                 return null;
-            npc.tryUpdateName(customName);
-            npc.getFamily().setFather(tag.getUUID("Father"));
-            npc.getFamily().setMother(tag.getUUID("Mother"));
-            world.addFreshEntityWithPassengers(e);
+            npc.tryUpdateName(Component.literal(data.name().get()));
+            npc.getFamily().setFather(data.father());
+            npc.getFamily().setMother(data.mother());
+            level.addFreshEntityWithPassengers(e);
             return e;
         }
         return null;

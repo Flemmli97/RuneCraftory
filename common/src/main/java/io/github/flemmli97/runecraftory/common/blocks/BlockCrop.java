@@ -1,7 +1,10 @@
 package io.github.flemmli97.runecraftory.common.blocks;
 
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
@@ -22,17 +25,29 @@ import java.util.function.Supplier;
 
 public class BlockCrop extends CropBlock {
 
+    public static final MapCodec<BlockCrop> CODEC = RecordCodecBuilder.mapCodec(inst ->
+            inst.group(
+                    propertiesCodec(),
+                    BuiltInRegistries.ITEM.byNameCodec().fieldOf("crop").forGetter(BlockCrop::getCrop),
+                    BuiltInRegistries.ITEM.byNameCodec().fieldOf("seed").forGetter(d -> d.seed.get())
+            ).apply(inst, (prop, crop, seed) -> new BlockCrop(prop, () -> crop, () -> seed)));
+
     public static final IntegerProperty AGE = IntegerProperty.create("age", 0, 4);
     public static final BooleanProperty WILTED = BooleanProperty.create("wilted");
     private static final VoxelShape[] SHAPE_BY_AGE = new VoxelShape[]{Block.box(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D)};
-    private final Supplier<? extends Item> crop;
-    private final Supplier<? extends Item> seed;
+    protected final Supplier<? extends Item> crop;
+    protected final Supplier<? extends Item> seed;
 
     public BlockCrop(BlockBehaviour.Properties prop, Supplier<? extends Item> crop, Supplier<? extends Item> seed) {
         super(prop);
         this.registerDefaultState(this.defaultBlockState().setValue(this.getAgeProperty(), 0).setValue(WILTED, false));
         this.crop = crop;
         this.seed = seed;
+    }
+
+    @Override
+    public MapCodec<BlockCrop> codec() {
+        return CODEC;
     }
 
     @Override

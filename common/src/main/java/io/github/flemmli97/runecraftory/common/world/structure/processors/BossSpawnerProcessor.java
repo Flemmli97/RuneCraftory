@@ -2,9 +2,8 @@ package io.github.flemmli97.runecraftory.common.world.structure.processors;
 
 import com.mojang.serialization.Codec;
 import io.github.flemmli97.runecraftory.common.blocks.BlockBossSpawner;
-import io.github.flemmli97.runecraftory.common.blocks.tile.BossSpawnerBlockEntity;
+import io.github.flemmli97.runecraftory.common.blocks.entity.BossSpawnerBlockEntity;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
-import io.github.flemmli97.runecraftory.common.registry.ModStructures;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -51,6 +50,6 @@ public class BossSpawnerProcessor extends DataStructureBlockProcessor {
 
     @Override
     protected StructureProcessorType<?> getType() {
-        return ModStructures.BOSS_PROCESSOR.get();
+        return null;//ModStructures.BOSS_PROCESSOR.get();
     }
 }

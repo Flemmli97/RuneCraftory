@@ -261,7 +261,7 @@ public class EntityHandonetta extends BossMonster {
     }
 
     @Override
-    public void handleAttack(AnimatedAction anim) {
+    public void handleAttack(AnimationState anim) {
         BiConsumer<AnimatedAction, EntityHandonetta> handler = ATTACK_HANDLER.get(anim.getID());
         if (handler != null)
             handler.accept(anim, this);
@@ -298,7 +298,7 @@ public class EntityHandonetta extends BossMonster {
     }
 
     @Override
-    public AABB attackBB(AnimatedAction anim) {
+    public AABB attackBB(String anim) {
         double width = this.getBbWidth() * 2.2;
         double length = this.getBbWidth() * 1.7;
         if (anim.is(FLICK)) {

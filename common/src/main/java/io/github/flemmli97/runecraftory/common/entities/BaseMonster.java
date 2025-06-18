@@ -12,9 +12,6 @@ import io.github.flemmli97.runecraftory.common.attachment.player.LevelExpPair;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
-import io.github.flemmli97.runecraftory.common.entities.ai.FollowOwnerGoalMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.HurtByTargetPredicate;
-import io.github.flemmli97.runecraftory.common.entities.ai.RestrictedWaterAvoidingStrollGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.TendCropsGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.FarmCrops;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.FollowEntityEx;
@@ -115,8 +112,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.behavior.LookAtTargetSink;
 import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Monster;
@@ -130,7 +125,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.entity.EntityInLevelCallback;
 import net.minecraft.world.level.entity.EntityTypeTest;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
@@ -145,6 +140,7 @@ import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.Idle;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.move.FloatToSurfaceOfFluid;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.target.InvalidateAttackTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.target.SetPlayerLookTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.target.SetRandomLookTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.target.TargetOrRetaliate;
@@ -197,13 +193,13 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     };
     private final EntityProperties prop;
 
-    public NearestAttackableTargetGoal<Player> targetPlayer = this.createTargetGoalPlayer();//|| player != BaseMonster.this.getOwner());
-    public NearestAttackableTargetGoal<Mob> targetMobs = this.createTargetGoalMobs();
-    public FloatGoal swimGoal = new FloatGoal(this);
-    public FollowOwnerGoalMonster followOwnerGoal = new FollowOwnerGoalMonster(this, 1.05, 9, 2, 20);
-    public RandomStrollGoal wander = new RestrictedWaterAvoidingStrollGoal(this, 1.0);
-    public HurtByTargetPredicate hurt = new HurtByTargetPredicate(this, this.defendPred);
-    public TendCropsGoal farm = new TendCropsGoal(this);
+//    public NearestAttackableTargetGoal<Player> targetPlayer = this.createTargetGoalPlayer();//|| player != BaseMonster.this.getOwner());
+//    public NearestAttackableTargetGoal<Mob> targetMobs = this.createTargetGoalMobs();
+//    public FloatGoal swimGoal = new FloatGoal(this);
+//    public FollowOwnerGoalMonster followOwnerGoal = new FollowOwnerGoalMonster(this, 1.05, 9, 2, 20);
+//    public RandomStrollGoal wander = new RestrictedWaterAvoidingStrollGoal(this, 1.0);
+//    public HurtByTargetPredicate hurt = new HurtByTargetPredicate(this, this.defendPred);
+//    public TendCropsGoal farm = new TendCropsGoal(this);
 
     private TargetPosition targetPosition;
     private BlockPos seedInventory, cropInventory;
@@ -698,7 +694,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
 
     private void updateFriendPointAttributeBonus() {
         List<Holder<Attribute>> increasable = List.of(Attributes.MAX_HEALTH, Attributes.ATTACK_DAMAGE,
-                ModAttributes.DEFENCE.asHolder(), ModAttributes.MAGIC.asHolder(), ModAttributes.MAGIC_DEFENCE.asHolder());
+                ModAttributes.DEFENCE.asHolder(), ModAttributes.MAGIC_ATTACK.asHolder(), ModAttributes.MAGIC_DEFENCE.asHolder());
         for (Holder<Attribute> att : increasable) {
             AttributeInstance inst = this.getAttribute(att);
             if (inst != null) {
@@ -712,7 +708,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     public void onBrushing() {
         Holder<Attribute> toIncrease = switch (this.random.nextInt(4)) {
             case 1 -> ModAttributes.DEFENCE.asHolder();
-            case 2 -> ModAttributes.MAGIC.asHolder();
+            case 2 -> ModAttributes.MAGIC_ATTACK.asHolder();
             case 3 -> ModAttributes.MAGIC_DEFENCE.asHolder();
             default -> Attributes.ATTACK_DAMAGE;
         };
@@ -741,7 +737,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         return new CustomDamage.Builder(this).hurtResistant(5);
     }
 
-    public int animationCooldown(@Nullable AnimatedAction anim) {
+    public int animationCooldown(@Nullable String anim) {
         int diffAdd = this.difficultyCooldown();
         if (anim == null)
             return this.getRandom().nextInt(20) + 25 + diffAdd;
@@ -1010,7 +1006,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                 } else {
                     multiplier += LevelCalc.getMultiplierInterval(this.xpLevel().getLevel(), 20, 30, 0) * 0.015f;
                 }
-                inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.xpLevel().getLevel() - 1) * val * multiplier, AttributeModifier.Operation.ADDITION));
+                inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, (this.xpLevel().getLevel() - 1) * val * multiplier, AttributeModifier.Operation.ADD_VALUE));
                 if (att == Attributes.MAX_HEALTH)
                     this.setHealth(this.getMaxHealth() - preHealthDiff);
             }
@@ -1057,9 +1053,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         lootTable.getRandomItems(this.dailyDropContext().create(LootCtxParameters.MONSTER_INTERACTION), this::spawnAtLocation);
     }
 
-    protected LootContext.Builder dailyDropContext() {
-        LootContext.Builder builder = new LootContext.Builder((ServerLevel) this.level())
-                .withRandom(this.random)
+    protected LootParams.Builder dailyDropContext() {
+        LootParams.Builder builder = new LootParams.Builder((ServerLevel) this.level())
                 .withParameter(LootContextParams.THIS_ENTITY, this)
                 .withParameter(LootContextParams.ORIGIN, this.position());
         if (this.getOwnerUUID() != null)
@@ -1244,7 +1239,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
 
     @Override
     protected boolean isImmobile() {
-        return super.isImmobile() || this.canBeControlledByRider() || this.playDeath() || this.tamingTick > 0;
+        return super.isImmobile() || this.hasControllingPassenger() || this.playDeath() || this.tamingTick > 0;
     }
 
     @Override
@@ -1286,7 +1281,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     }
 
     public void handleLandTravel(Vec3 vec) {
-        this.flyingSpeed = 0.02f; // Default Val
         if (!this.isAlive() || this.playDeath()) {
             vec = Vec3.ZERO;
         }
@@ -1351,7 +1345,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         if (player.zza < 0)
             forward *= -0.5f;
         float vertical = 0;
-        this.flyingSpeed = speed * 0.2f;
 
         if (hovers && forward > 0) {
             vertical = (float) Math.min(0, player.getLookAngle().y + 0.45) * speed;
@@ -1767,10 +1760,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         return this.hitPred;
     }
 
-    public boolean allowAnimation(String prev, @Nullable String other) {
-        return true;
-    }
-
     @Override
     public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
         data.runIf(SyncableDatas.TARGET_POS, pos -> this.targetPosition = pos);
@@ -1921,6 +1910,26 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         );
     }
 
+    @SuppressWarnings({"unchecked"})
+    @Override
+    public BrainActivityGroup<? extends BaseMonster> getFightTasks() {
+        return BrainActivityGroup.fightTasks(
+                new InvalidateAttackTarget<BaseMonster>(),
+                new FirstApplicableBehaviour<>(
+                        (ExtendedBehaviour<BaseMonster>) this.getCombatAI(),
+                        new OneRandomBehaviour<>(this.getIdleAI().toArray(Pair[]::new))
+                )
+        );
+    }
+
+    public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
+        return new Idle<>();
+    }
+
+    public List<Pair<ExtendedBehaviour<? extends BaseMonster>, Integer>> getIdleAI() {
+        return List.of();
+    }
+
     @Override
     public List<? extends ExtendedSensor<? extends BaseMonster>> getSensors() {
         return List.of(new NearbyPlayersSensor<>(),
@@ -1928,6 +1937,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                 new HurtBySensor<>());
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Map<Activity, BrainActivityGroup<? extends BaseMonster>> getAdditionalTasks() {
         Map<Activity, BrainActivityGroup<? extends BaseMonster>> map = new HashMap<>();

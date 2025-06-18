@@ -101,7 +101,7 @@ public class EntityDeadTree extends BossMonster {
         });
         b.put(HEAL, (anim, entity) -> {
             if (anim.isAt("attack")) {
-                float healAmount = (float) (CombatUtils.getAttributeValue(entity, ModAttributes.MAGIC.get()) * 2);
+                float healAmount = (float) (CombatUtils.getAttributeValue(entity, ModAttributes.MAGIC_ATTACK.get()) * 2);
                 entity.heal(healAmount);
                 ServerLevel serverLevel = (ServerLevel) entity.level();
                 serverLevel.sendParticles(ParticleTypes.HEART, entity.getX(), entity.getY() + entity.getBbHeight() + 0.5, entity.getZ(), 0, 0, 0.1, 0, 0);
@@ -250,14 +250,14 @@ public class EntityDeadTree extends BossMonster {
     }
 
     @Override
-    public AABB attackBB(AnimatedAction anim) {
+    public AABB attackBB(String anim) {
         double width = this.getBbWidth() * 2.1;
         double length = this.getBbWidth() * 1.85;
         return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
     }
 
     @Override
-    public void handleAttack(AnimatedAction anim) {
+    public void handleAttack(AnimationState anim) {
         this.getNavigation().stop();
         BiConsumer<AnimatedAction, EntityDeadTree> handler = ATTACK_HANDLER.get(anim.getID());
         if (handler != null)
@@ -317,7 +317,7 @@ public class EntityDeadTree extends BossMonster {
     }
 
     @Override
-    public AnimatedAction getSleepAnimation() {
+    public String getSleepAnimation() {
         return DEFEAT;
     }
 

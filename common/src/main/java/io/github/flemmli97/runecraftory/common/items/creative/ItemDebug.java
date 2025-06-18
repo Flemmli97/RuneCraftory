@@ -85,17 +85,16 @@ public class ItemDebug extends AnimationDebugger implements ExtendedWeapon {
     }
 
     @Override
-    public float getRange(LivingEntity entity, ItemStack stack) {
-        return 4;
+    public double getRange(LivingEntity entity, ItemStack stack) {
+        return ExtendedWeapon.super.getRange(entity, stack) + 2;
     }
 
     @Override
-    public boolean onServerSwing(LivingEntity entity, ItemStack stack) {
-        ItemStack main = entity.getMainHandItem();
-        if (entity instanceof ServerPlayer player && player.isShiftKeyDown() && stack == main) {
+    public void executeAttack(Player player, ItemStack stack) {
+        ItemStack main = player.getMainHandItem();
+        if (player instanceof ServerPlayer && player.isShiftKeyDown() && stack == main) {
             this.changeMode(stack);
         }
-        return false;
     }
 
     private void changeMode(ItemStack stack) {

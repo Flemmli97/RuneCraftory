@@ -111,14 +111,14 @@ public class EntitySkyFish extends BaseMonster {
     }
 
     @Override
-    public AABB attackBB(AnimatedAction anim) {
+    public AABB attackBB(String anim) {
         double width = this.getBbWidth() * 1.5;
         double length = this.getBbWidth() * 1.6;
         return new AABB(-width * 0.2, -0.02, 0, width * 0.8, this.getBbHeight() + 0.02, length);
     }
 
     @Override
-    public void handleAttack(AnimatedAction anim) {
+    public void handleAttack(AnimationState anim) {
         if (anim.is(BEAM)) {
             this.getNavigation().stop();
             if (anim.isAt("attack")) {
@@ -212,7 +212,7 @@ public class EntitySkyFish extends BaseMonster {
     }
 
     @Override
-    public AnimatedAction getSleepAnimation() {
+    public String getSleepAnimation() {
         return STILL;
     }
 

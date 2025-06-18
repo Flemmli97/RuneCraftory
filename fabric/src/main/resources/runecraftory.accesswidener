@@ -10,4 +10,4 @@ accessible class net/minecraft/world/entity/ai/control/MoveControl$Operation
 
 accessible method net/minecraft/world/entity/schedule/Activity <init> (Ljava/lang/String;)V
 
-accessible method net/minecraft/world/level/storage/loot/parameters/LootContextParamSets register (Ljava/lang/String;Ljava/util/function/Consumer;)Lnet/minecraft/util/context/ContextKeySet;
+accessible method net/minecraft/world/level/storage/loot/parameters/LootContextParamSets register (Ljava/lang/String;Ljava/util/function/Consumer;)Lnet/minecraft/world/level/storage/loot/parameters/LootContextParamSet;

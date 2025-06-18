@@ -1,9 +1,11 @@
 package io.github.flemmli97.runecraftory.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.flemmli97.runecraftory.client.ClientCalls;
-import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
+import io.github.flemmli97.runecraftory.common.utils.SeasonUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.LevelRenderer;
@@ -14,10 +16,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LevelRenderer.class)
@@ -29,33 +29,20 @@ public abstract class LevelRendererMixin {
     @Shadow
     private ClientLevel level;
 
-    @Unique
-    private Biome runecraftoryCacheBiome;
-
-    @ModifyVariable(method = "renderSnowAndRain", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/biome/Biome;warmEnoughToRain(Lnet/minecraft/core/BlockPos;)Z"))
-    private Biome cacheBiomeSnowRain(Biome biome) {
-        this.runecraftoryCacheBiome = biome;
-        return biome;
+    @WrapOperation(method = "renderSnowAndRain", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/biome/Biome;getPrecipitationAt(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/biome/Biome$Precipitation;"))
+    private Biome.Precipitation cacheBiomeSnowRain(Biome instance, BlockPos pos, Operation<Biome.Precipitation> origOp) {
+        Biome.Precipitation original = origOp.call(instance, pos);
+        if (original == Biome.Precipitation.RAIN && SeasonUtils.coldEnoughForSnowSeason(this.minecraft.level, pos, instance))
+            return Biome.Precipitation.SNOW;
+        return original;
     }
 
-    @ModifyVariable(method = "renderSnowAndRain", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/biome/Biome;warmEnoughToRain(Lnet/minecraft/core/BlockPos;)Z"))
-    private BlockPos.MutableBlockPos snowRainCheck(BlockPos.MutableBlockPos pos) {
-        if (WorldUtils.coldEnoughForSnow(this.minecraft.level, pos, this.runecraftoryCacheBiome))
-            pos.set(pos.getX(), 1000, pos.getZ());
-        return pos;
-    }
-
-    @ModifyVariable(method = "tickRain", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/BlockPos;getY()I", ordinal = 0, shift = At.Shift.BEFORE))
-    private Biome cacheBiomeTickRain(Biome biome) {
-        this.runecraftoryCacheBiome = biome;
-        return biome;
-    }
-
-    @ModifyVariable(method = "tickRain", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/BlockPos;getY()I", ordinal = 0, shift = At.Shift.BEFORE), ordinal = 2)
-    private BlockPos rainTickCheck(BlockPos pos) {
-        if (WorldUtils.coldEnoughForSnow(this.minecraft.level, pos, this.runecraftoryCacheBiome))
-            return new BlockPos(pos.getX(), this.minecraft.level.getMinBuildHeight() - 1, pos.getZ());
-        return pos;
+    @WrapOperation(method = "tickRain", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/biome/Biome;getPrecipitationAt(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/biome/Biome$Precipitation;"))
+    private Biome.Precipitation rainTickCheck(Biome instance, BlockPos pos, Operation<Biome.Precipitation> origOp) {
+        Biome.Precipitation original = origOp.call(instance, pos);
+        if (original == Biome.Precipitation.RAIN && SeasonUtils.coldEnoughForSnowSeason(this.minecraft.level, pos, instance))
+            return Biome.Precipitation.SNOW;
+        return original;
     }
 
     @Inject(method = "renderHitOutline", at = @At("RETURN"))

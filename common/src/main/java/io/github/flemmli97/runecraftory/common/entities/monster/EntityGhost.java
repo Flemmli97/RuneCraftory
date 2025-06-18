@@ -146,7 +146,7 @@ public class EntityGhost extends ChargingMonster {
     }
 
     @Override
-    public AABB attackBB(AnimatedAction anim) {
+    public AABB attackBB(String anim) {
         double width = this.getBbWidth() * 2.9;
         double length = this.getBbWidth() * 2.5;
         return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
@@ -186,7 +186,7 @@ public class EntityGhost extends ChargingMonster {
     }
 
     @Override
-    public void handleAttack(AnimatedAction anim) {
+    public void handleAttack(AnimationState anim) {
         if (anim.is(DARKBALL)) {
             this.getNavigation().stop();
             if (anim.isAt("attack")) {
@@ -210,7 +210,7 @@ public class EntityGhost extends ChargingMonster {
     }
 
     @Override
-    protected boolean isChargingAnim(AnimatedAction anim) {
+    protected boolean isChargingAnim(String anim) {
         return anim.is(CHARGE);
     }
 
@@ -276,7 +276,7 @@ public class EntityGhost extends ChargingMonster {
     }
 
     @Override
-    public AnimatedAction getSleepAnimation() {
+    public String getSleepAnimation() {
         return STILL;
     }
 

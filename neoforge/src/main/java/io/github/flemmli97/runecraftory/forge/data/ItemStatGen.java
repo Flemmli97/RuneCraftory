@@ -58,8 +58,8 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(Attributes.MAX_HEALTH, 2)
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat("candles", ItemTags.CANDLES, new ItemStat.Builder(0, 0, 1)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 1)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 0.5));
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 1)
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 0.5));
 
         this.addStat(Items.STICK, new ItemStat.Builder(11, 1, 1)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 1)
@@ -74,18 +74,18 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(ModAttributes.MAGIC_DEFENCE.asHolder(), 0.2));
         this.addStat(Items.SNOWBALL, new ItemStat.Builder(15, 1, 5)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 1)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 1)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 1)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.2)
                 .setSpell(ModSpells.SNOWBALL.get(), null, null));
         this.addStat(Items.STRING, new ItemStat.Builder(75, 7, 13)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 2)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 2)
-                .addAttribute(ModAttributes.PARA.asHolder(), 3)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 2)
+                .addAttribute(ModAttributes.PARALYSIS.asHolder(), 3)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5)
                 .setSpell(null, ModSpells.WEB_SHOT.get(), null));
         this.addStat(Items.FEATHER, new ItemStat.Builder(85, 7, 11)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 2)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 0.5)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 2)
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 0.5)
                 .setSpell(null, null, ModSpells.GUST_SPELL.get()));
         this.addStat(Items.ROTTEN_FLESH, new ItemStat.Builder(50, 5, 9)
                 .addAttribute(Attributes.MAX_HEALTH, 5)
@@ -95,7 +95,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(ModAttributes.DEFENCE.asHolder(), 0.5));
         this.addStat(Items.GUNPOWDER, new ItemStat.Builder(100, 7, 21)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 1)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 5)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 5)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(Items.REDSTONE, new ItemStat.Builder(120, 7, 15)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 3)
@@ -107,11 +107,11 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(Attributes.ATTACK_DAMAGE, 7)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(Items.GLOWSTONE_DUST, new ItemStat.Builder(200, 17, 17)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 4)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 0.5));
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 4)
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 0.5));
         this.addStat(Items.LAPIS_LAZULI, new ItemStat.Builder(54, 4, 13)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 2)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 0.5));
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 2)
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 0.5));
         this.addStat(Items.LEATHER, new ItemStat.Builder(170, 14, 23)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 9)
                 .addMonsterStat(ModAttributes.DEFENCE.asHolder(), 1));
@@ -123,38 +123,38 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 2)
                 .addMonsterStat(ModAttributes.DEFENCE.asHolder(), 1));
         this.addStat(Items.PAPER, new ItemStat.Builder(167, 13, 4)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 3)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 0.5));
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 3)
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 0.5));
         this.addStat(Items.BOOK, new ItemStat.Builder(500, 42, 26)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 12)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 0.5));
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 12)
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 0.5));
         this.addStat(Items.PRISMARINE_SHARD, new ItemStat.Builder(389, 34, 17)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 2.5)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 5)
                 .addMonsterStat(ModAttributes.MAGIC_DEFENCE.asHolder(), 0.5));
         this.addStat(Items.PRISMARINE_CRYSTALS, new ItemStat.Builder(523, 46, 25)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 8)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 0.5));
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 8)
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 0.5));
         this.addStat(Items.BLAZE_ROD, new ItemStat.Builder(350, 23, 25)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 12)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1)
                 .setSpell(ModSpells.BLAZE_FIREBALLS.get(), null, null));
         this.addStat(Items.ENDER_PEARL, new ItemStat.Builder(400, 28, 21)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 3)
-                .addAttribute(ModAttributes.RES_STUN.asHolder(), 5)
-                .addMonsterStat(ModAttributes.RES_STUN.asHolder(), 0.5));
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 3)
+                .addAttribute(ModAttributes.STUN_RESISTANCE.asHolder(), 5)
+                .addMonsterStat(ModAttributes.STUN_RESISTANCE.asHolder(), 0.5));
         this.addStat(Items.SLIME_BALL, new ItemStat.Builder(375, 31, 18)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 5)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 5)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 12)
                 .addMonsterStat(ModAttributes.DEFENCE.asHolder(), 0.5));
         this.addStat(Items.MAGMA_CREAM, new ItemStat.Builder(250, 21, 20)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 3)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 3)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 3)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 8)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 0.5));
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 0.5));
         this.addStat(Items.GHAST_TEAR, new ItemStat.Builder(750, 49, 22)
                 .addAttribute(Attributes.MAX_HEALTH, 15)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 2)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 2)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 3)
                 .addMonsterStat(Attributes.MAX_HEALTH, 2)
                 .setSpell(ModSpells.GHAST_FIREBALL.get(), null, null));
@@ -172,8 +172,8 @@ public class ItemStatGen extends ItemStatProvider {
                 .setSpell(null, ModSpells.EVOKER_FANG.get(), null));
         this.addStat(Items.DRAGON_BREATH, new ItemStat.Builder(2000, 150, 24)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 4)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 15)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 1)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 15)
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 1)
                 .setSpell(null, ModSpells.DRAGON_FIREBALL.get(), null));
         this.addStat(Items.SHULKER_SHELL, new ItemStat.Builder(700, 80, 29)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 17)
@@ -182,34 +182,34 @@ public class ItemStatGen extends ItemStatProvider {
                 .setSpell(ModSpells.SHULKER_BULLET.get(), null, null));
         this.addStat(Items.WITHER_SKELETON_SKULL, new ItemStat.Builder(5000, 170, 29)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 5)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 20)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 1)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 20)
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 1)
                 .setSpell(ModSpells.WITHER_SKULL.get(), null, null)
                 .setElement(EnumElement.DARK));
         this.addStat(Items.NETHER_STAR, new ItemStat.Builder(20000, 600, 45)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 17)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 7)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 35)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 35)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 9)
                 .addAttribute(ModAttributes.DRAIN.asHolder(), 5)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 3)
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 3)
                 .setSpell(ModSpells.WITHER_SKULL.get(), null, null)
                 .setElement(EnumElement.DARK));
 
         //=======
         this.addStat(ModItems.ROUNDOFF.get(), new ItemStat.Builder(750, 50, 0)
                 .addMonsterStat(Attributes.MAX_HEALTH, 3)
-                .addMonsterStat(ModAttributes.RES_SEAL.asHolder(), 0.5));
+                .addMonsterStat(ModAttributes.SEAL_RESISTANCE.asHolder(), 0.5));
         this.addStat(ModItems.PARA_GONE.get(), new ItemStat.Builder(750, 50, 0)
                 .addMonsterStat(Attributes.MAX_HEALTH, 3)
-                .addMonsterStat(ModAttributes.RES_PARA.asHolder(), 0.5));
+                .addMonsterStat(ModAttributes.PARALYSIS_RESISTANCE.asHolder(), 0.5));
         this.addStat(ModItems.COLD_MED.get(), new ItemStat.Builder(750, 50, 0)
                 .addMonsterStat(Attributes.MAX_HEALTH, 3)
-                .addMonsterStat(ModAttributes.RES_COLD.asHolder(), 0.5));
+                .addMonsterStat(ModAttributes.COLD_RESISTANCE.asHolder(), 0.5));
         this.addStat(ModItems.ANTIDOTE.get(), new ItemStat.Builder(750, 50, 0)
                 .addMonsterStat(Attributes.MAX_HEALTH, 3)
-                .addMonsterStat(ModAttributes.RES_POISON.asHolder(), 0.5));
+                .addMonsterStat(ModAttributes.POISON_RESISTANCE.asHolder(), 0.5));
         this.addStat(ModItems.RECOVERY_POTION.get(), new ItemStat.Builder(300, 25, 0)
                 .addMonsterStat(Attributes.MAX_HEALTH, 3));
         this.addStat(ModItems.HEALING_POTION.get(), new ItemStat.Builder(500, 35, 0)
@@ -249,7 +249,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(ModItems.AQUA_SWORD.get(), new ItemStat.Builder(6850, 357, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 37)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 9)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 9)
                 .addAttribute(ModAttributes.DIZZY.asHolder(), 5)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0))
                 .addAttribute(ModAttributes.ATTACK_WIDTH.asHolder(), 1.5f)
@@ -257,7 +257,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .setElement(EnumElement.WATER));
         this.addStat(ModItems.INVISI_BLADE.get(), new ItemStat.Builder(9350, 571, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 49)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 6)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 6)
                 .addAttribute(ModAttributes.DIZZY.asHolder(), 5)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0))
                 .addAttribute(ModAttributes.ATTACK_WIDTH.asHolder(), 1.5f)
@@ -271,7 +271,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(ModItems.BURNING_SWORD.get(), new ItemStat.Builder(13440, 1290, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 79)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 15)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 15)
                 .addAttribute(ModAttributes.DIZZY.asHolder(), 5)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0))
                 .addAttribute(ModAttributes.ATTACK_WIDTH.asHolder(), 1.5f)
@@ -286,7 +286,7 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.GAIA_SWORD.get(), new ItemStat.Builder(19260, 2120, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 95)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 7)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 17)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 17)
                 .addAttribute(ModAttributes.DIZZY.asHolder(), 5)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0))
                 .addAttribute(ModAttributes.ATTACK_WIDTH.asHolder(), 1.5f)
@@ -372,7 +372,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(ModItems.EARTH_SHADE.get(), new ItemStat.Builder(19360, 1250, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 99)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 15)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 15)
                 .addAttribute(ModAttributes.DIZZY.asHolder(), 10)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(4.5))
                 .addAttribute(ModAttributes.ATTACK_WIDTH.asHolder(), 3.5f)
@@ -444,7 +444,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(ModItems.TRIDENT.get(), new ItemStat.Builder(9280, 543, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 50)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 8)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 8)
                 .addAttribute(ModAttributes.DIZZY.asHolder(), 6)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(5.3))
                 .addAttribute(ModAttributes.ATTACK_WIDTH.asHolder(), 1)
@@ -452,7 +452,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .setElement(EnumElement.WATER));
         this.addStat(ModItems.WATER_SPEAR.get(), new ItemStat.Builder(14730, 934, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 68)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 14)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 14)
                 .addAttribute(ModAttributes.DIZZY.asHolder(), 6)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(5.3))
                 .addAttribute(ModAttributes.ATTACK_WIDTH.asHolder(), 1)
@@ -502,42 +502,42 @@ public class ItemStatGen extends ItemStatProvider {
 
         this.addStat(ModItems.BATTLE_AXE.get(), new ItemStat.Builder(250, 19, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 9)
-                .addAttribute(ModAttributes.CRIT.asHolder(), 5)
+                .addAttribute(ModAttributes.CRITICAL.asHolder(), 5)
                 .addAttribute(ModAttributes.DIZZY.asHolder(), 2)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(4.5))
                 .addAttribute(ModAttributes.ATTACK_WIDTH.asHolder(), 3)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(ModItems.BATTLE_SCYTHE.get(), new ItemStat.Builder(1430, 60, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 14)
-                .addAttribute(ModAttributes.CRIT.asHolder(), 15)
+                .addAttribute(ModAttributes.CRITICAL.asHolder(), 15)
                 .addAttribute(ModAttributes.DIZZY.asHolder(), 2)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(4.5))
                 .addAttribute(ModAttributes.ATTACK_WIDTH.asHolder(), 3)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(ModItems.POLE_AXE.get(), new ItemStat.Builder(3250, 147, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 25)
-                .addAttribute(ModAttributes.CRIT.asHolder(), 7)
+                .addAttribute(ModAttributes.CRITICAL.asHolder(), 7)
                 .addAttribute(ModAttributes.DIZZY.asHolder(), 2)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(4.5))
                 .addAttribute(ModAttributes.ATTACK_WIDTH.asHolder(), 3)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(ModItems.POLE_AXE_PLUS.get(), new ItemStat.Builder(5430, 245, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 39)
-                .addAttribute(ModAttributes.CRIT.asHolder(), 7)
+                .addAttribute(ModAttributes.CRITICAL.asHolder(), 7)
                 .addAttribute(ModAttributes.DIZZY.asHolder(), 2)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(4.5))
                 .addAttribute(ModAttributes.ATTACK_WIDTH.asHolder(), 3)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(ModItems.GREAT_AXE.get(), new ItemStat.Builder(8580, 417, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 54)
-                .addAttribute(ModAttributes.CRIT.asHolder(), 11)
+                .addAttribute(ModAttributes.CRITICAL.asHolder(), 11)
                 .addAttribute(ModAttributes.DIZZY.asHolder(), 2)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(4.5))
                 .addAttribute(ModAttributes.ATTACK_WIDTH.asHolder(), 3)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(ModItems.TOMAHAWK.get(), new ItemStat.Builder(11360, 683, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 70)
-                .addAttribute(ModAttributes.CRIT.asHolder(), 15)
+                .addAttribute(ModAttributes.CRITICAL.asHolder(), 15)
                 .addAttribute(ModAttributes.DIZZY.asHolder(), 2)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(4.5))
                 .addAttribute(ModAttributes.ATTACK_WIDTH.asHolder(), 3)
@@ -546,14 +546,14 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.BASILISK_FANG.get(), new ItemStat.Builder(14280, 1220, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 105)
                 .addAttribute(ModAttributes.POISON.asHolder(), 10)
-                .addAttribute(ModAttributes.CRIT.asHolder(), 15)
+                .addAttribute(ModAttributes.CRITICAL.asHolder(), 15)
                 .addAttribute(ModAttributes.DIZZY.asHolder(), 2)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(4.5))
                 .addAttribute(ModAttributes.ATTACK_WIDTH.asHolder(), 3)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(ModItems.ROCK_AXE.get(), new ItemStat.Builder(20280, 2420, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 128)
-                .addAttribute(ModAttributes.CRIT.asHolder(), 15)
+                .addAttribute(ModAttributes.CRITICAL.asHolder(), 15)
                 .addAttribute(ModAttributes.DIZZY.asHolder(), 2)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(4.5))
                 .addAttribute(ModAttributes.ATTACK_WIDTH.asHolder(), 3)
@@ -561,7 +561,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .setElement(EnumElement.EARTH));
         this.addStat(ModItems.DEMON_AXE.get(), new ItemStat.Builder(26240, 3180, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 140)
-                .addAttribute(ModAttributes.CRIT.asHolder(), 15)
+                .addAttribute(ModAttributes.CRITICAL.asHolder(), 15)
                 .addAttribute(ModAttributes.DIZZY.asHolder(), 2)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(4.5))
                 .addAttribute(ModAttributes.ATTACK_WIDTH.asHolder(), 3)
@@ -625,7 +625,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(ModItems.ICE_HAMMER.get(), new ItemStat.Builder(15930, 910, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 88)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 15)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 15)
                 .addAttribute(ModAttributes.STUN.asHolder(), 11)
                 .addAttribute(ModAttributes.DIZZY.asHolder(), 20)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(4.5))
@@ -679,7 +679,7 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.FROST_EDGE.get(), new ItemStat.Builder(2610, 121, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 12)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 5)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 4)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 4)
                 .addAttribute(ModAttributes.DIZZY.asHolder(), 3)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0f))
                 .addAttribute(ModAttributes.ATTACK_WIDTH.asHolder(), 1.5f)
@@ -702,7 +702,7 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.WIND_EDGE.get(), new ItemStat.Builder(9600, 568, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 44)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 12)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 9)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 9)
                 .addAttribute(ModAttributes.DIZZY.asHolder(), 3)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0f))
                 .addAttribute(ModAttributes.ATTACK_WIDTH.asHolder(), 1.5f)
@@ -794,7 +794,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(ModItems.FIST_EARTH.get(), new ItemStat.Builder(12640, 587, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 49)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 10)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 10)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 14)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 5)
                 .addAttribute(ModAttributes.DIZZY.asHolder(), 3)
@@ -804,7 +804,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .setElement(EnumElement.EARTH));
         this.addStat(ModItems.FIST_FIRE.get(), new ItemStat.Builder(14720, 794, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 63)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 18)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 18)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 18)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 5)
                 .addAttribute(ModAttributes.DIZZY.asHolder(), 3)
@@ -814,7 +814,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .setElement(EnumElement.FIRE));
         this.addStat(ModItems.FIST_WATER.get(), new ItemStat.Builder(16380, 931, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 79)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 21)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 21)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 20)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 5)
                 .addAttribute(ModAttributes.DIZZY.asHolder(), 3)
@@ -831,7 +831,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(ModItems.FIST_DARK.get(), new ItemStat.Builder(23930, 1960, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 101)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 24)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 24)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 24)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 10)
                 .addAttribute(ModAttributes.DIZZY.asHolder(), 3)
@@ -851,82 +851,82 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.FENRIR.get(), new ItemStat.Builder(0, 0, 0));
 
         this.addStat(ModItems.ROD.get(), new ItemStat.Builder(281, 32, 0)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 5)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 5)
                 .addAttribute(ModAttributes.DIZZY.asHolder(), 15)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0))
                 .addAttribute(ModAttributes.ATTACK_WIDTH.asHolder(), 1.5f)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 0.5f)
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 0.5f)
                 .setElement(EnumElement.FIRE)
                 .setSpell(ModSpells.FIREBALL.get(), null, null));
         this.addStat(ModItems.AMETHYST_ROD.get(), new ItemStat.Builder(1550, 76, 0)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 13)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 13)
                 .addAttribute(ModAttributes.DIZZY.asHolder(), 15)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0))
                 .addAttribute(ModAttributes.ATTACK_WIDTH.asHolder(), 0.5f)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 0.5)
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 0.5)
                 .setElement(EnumElement.EARTH));
         this.addStat(ModItems.AQUAMARINE_ROD.get(), new ItemStat.Builder(3430, 186, 0)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 17)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 17)
                 .addAttribute(ModAttributes.DIZZY.asHolder(), 15)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0))
                 .addAttribute(ModAttributes.ATTACK_WIDTH.asHolder(), 0.5f)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 0.5)
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 0.5)
                 .setElement(EnumElement.WATER));
         this.addStat(ModItems.FRIENDLY_ROD.get(), new ItemStat.Builder(6670, 297, 0)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 28)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 28)
                 .addAttribute(ModAttributes.DIZZY.asHolder(), 15)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0))
                 .addAttribute(ModAttributes.ATTACK_WIDTH.asHolder(), 0.5f)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 1)
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 1)
                 .setElement(EnumElement.LOVE));
         this.addStat(ModItems.LOVE_LOVE_ROD.get(), new ItemStat.Builder(8550, 436, 0)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 41)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 41)
                 .addAttribute(ModAttributes.DIZZY.asHolder(), 15)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0))
                 .addAttribute(ModAttributes.ATTACK_WIDTH.asHolder(), 0.5f)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 1)
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 1)
                 .setElement(EnumElement.LOVE));
         this.addStat(ModItems.STAFF.get(), new ItemStat.Builder(11110, 599, 0)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 65)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 65)
                 .addAttribute(ModAttributes.DIZZY.asHolder(), 15)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0))
                 .addAttribute(ModAttributes.ATTACK_WIDTH.asHolder(), 0.5f)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 1)
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 1)
                 .setElement(EnumElement.EARTH));
         this.addStat(ModItems.EMERALD_ROD.get(), new ItemStat.Builder(12430, 705, 0)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 77)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 77)
                 .addAttribute(ModAttributes.DIZZY.asHolder(), 15)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0))
                 .addAttribute(ModAttributes.ATTACK_WIDTH.asHolder(), 0.5f)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 0.5)
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 0.5)
                 .setElement(EnumElement.WIND));
         this.addStat(ModItems.SILVER_STAFF.get(), new ItemStat.Builder(14600, 917, 0)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 98)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 98)
                 .addAttribute(ModAttributes.DIZZY.asHolder(), 15)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0))
                 .addAttribute(ModAttributes.ATTACK_WIDTH.asHolder(), 0.5f)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 1)
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 1)
                 .setElement(EnumElement.DARK));
         this.addStat(ModItems.FLARE_STAFF.get(), new ItemStat.Builder(18000, 1330, 0)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 112)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 112)
                 .addAttribute(ModAttributes.DIZZY.asHolder(), 15)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0))
                 .addAttribute(ModAttributes.ATTACK_WIDTH.asHolder(), 0.5f)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 1)
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 1)
                 .setElement(EnumElement.FIRE));
         this.addStat(ModItems.RUBY_ROD.get(), new ItemStat.Builder(21530, 1940, 0)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 127)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 127)
                 .addAttribute(ModAttributes.DIZZY.asHolder(), 15)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0))
                 .addAttribute(ModAttributes.ATTACK_WIDTH.asHolder(), 0.5f)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 1)
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 1)
                 .setElement(EnumElement.FIRE));
         this.addStat(ModItems.SAPPHIRE_ROD.get(), new ItemStat.Builder(24620, 2350, 0)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 149)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 149)
                 .addAttribute(ModAttributes.DIZZY.asHolder(), 15)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0))
                 .addAttribute(ModAttributes.ATTACK_WIDTH.asHolder(), 0.5f)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 1)
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 1)
                 .setElement(EnumElement.LIGHT));
         this.addStat(ModItems.EARTH_STAFF.get(), new ItemStat.Builder(0, 0, 0));
         this.addStat(ModItems.LIGHTNING_WAND.get(), new ItemStat.Builder(0, 0, 0));
@@ -960,50 +960,50 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(ModItems.HOE_IRON.get(), new ItemStat.Builder(4500, 121, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 15)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 3)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 3)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(ModItems.HOE_SILVER.get(), new ItemStat.Builder(25000, 300, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 34)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 5)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 5)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1)
                 .setElement(EnumElement.EARTH));
         this.addStat(ModItems.HOE_GOLD.get(), new ItemStat.Builder(0, 550, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 76)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 15)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 15)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1)
                 .setElement(EnumElement.EARTH));
         this.addStat(ModItems.HOE_PLATINUM.get(), new ItemStat.Builder(0, 2000, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 111)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 45)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 45)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1)
                 .setElement(EnumElement.EARTH));
 
         this.addStat(ModItems.WATERING_CAN_SCRAP.get(), new ItemStat.Builder(150, 45, 0)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 1)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 1)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1)
                 .setElement(EnumElement.WATER));
         this.addStat(ModItems.WATERING_CAN_IRON.get(), new ItemStat.Builder(4500, 164, 0)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 7)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 7)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1)
                 .setElement(EnumElement.WATER));
         this.addStat(ModItems.WATERING_CAN_SILVER.get(), new ItemStat.Builder(25000, 300, 0)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 19)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 19)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1)
                 .setElement(EnumElement.WATER));
         this.addStat(ModItems.WATERING_CAN_GOLD.get(), new ItemStat.Builder(0, 550, 0)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 39)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 39)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1)
                 .setElement(EnumElement.WATER));
         this.addStat(ModItems.WATERING_CAN_PLATINUM.get(), new ItemStat.Builder(0, 2000, 0)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 99)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 99)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1)
                 .setElement(EnumElement.WATER));
@@ -1022,97 +1022,97 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(ModItems.SICKLE_GOLD.get(), new ItemStat.Builder(0, 550, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 79)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 5)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 5)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1)
                 .setElement(EnumElement.WIND));
         this.addStat(ModItems.SICKLE_PLATINUM.get(), new ItemStat.Builder(0, 2000, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 134)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 31)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 31)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1)
                 .setElement(EnumElement.WIND));
 
         this.addStat(ModItems.AXE_SCRAP.get(), new ItemStat.Builder(150, 37, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 3)
-                .addAttribute(ModAttributes.CRIT.asHolder(), 5)
+                .addAttribute(ModAttributes.CRITICAL.asHolder(), 5)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(ModItems.AXE_IRON.get(), new ItemStat.Builder(4500, 148, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 22)
-                .addAttribute(ModAttributes.CRIT.asHolder(), 5)
+                .addAttribute(ModAttributes.CRITICAL.asHolder(), 5)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(ModItems.AXE_SILVER.get(), new ItemStat.Builder(25000, 300, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 39)
-                .addAttribute(ModAttributes.CRIT.asHolder(), 5)
+                .addAttribute(ModAttributes.CRITICAL.asHolder(), 5)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(ModItems.AXE_GOLD.get(), new ItemStat.Builder(0, 550, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 83)
-                .addAttribute(ModAttributes.CRIT.asHolder(), 5)
+                .addAttribute(ModAttributes.CRITICAL.asHolder(), 5)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(ModItems.AXE_PLATINUM.get(), new ItemStat.Builder(0, 2000, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 140)
-                .addAttribute(ModAttributes.CRIT.asHolder(), 15)
+                .addAttribute(ModAttributes.CRITICAL.asHolder(), 15)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
 
         this.addStat(ModItems.HAMMER_SCRAP.get(), new ItemStat.Builder(150, 39, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 3)
-                .addAttribute(ModAttributes.CRIT.asHolder(), -5)
+                .addAttribute(ModAttributes.CRITICAL.asHolder(), -5)
                 .addAttribute(ModAttributes.STUN.asHolder(), 10)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(ModItems.HAMMER_IRON.get(), new ItemStat.Builder(4500, 142, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 23)
-                .addAttribute(ModAttributes.CRIT.asHolder(), -5)
+                .addAttribute(ModAttributes.CRITICAL.asHolder(), -5)
                 .addAttribute(ModAttributes.STUN.asHolder(), 10)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(ModItems.HAMMER_SILVER.get(), new ItemStat.Builder(25000, 300, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 47)
-                .addAttribute(ModAttributes.CRIT.asHolder(), -5)
+                .addAttribute(ModAttributes.CRITICAL.asHolder(), -5)
                 .addAttribute(ModAttributes.STUN.asHolder(), 10)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(ModItems.HAMMER_GOLD.get(), new ItemStat.Builder(0, 550, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 85)
-                .addAttribute(ModAttributes.CRIT.asHolder(), -5)
+                .addAttribute(ModAttributes.CRITICAL.asHolder(), -5)
                 .addAttribute(ModAttributes.STUN.asHolder(), 10)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(ModItems.HAMMER_PLATINUM.get(), new ItemStat.Builder(0, 2000, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 145)
-                .addAttribute(ModAttributes.CRIT.asHolder(), -7)
+                .addAttribute(ModAttributes.CRITICAL.asHolder(), -7)
                 .addAttribute(ModAttributes.STUN.asHolder(), 10)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
 
         this.addStat(ModItems.FISHING_ROD_SCRAP.get(), new ItemStat.Builder(150, 35, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 1)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 5)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 5)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(ModItems.FISHING_ROD_IRON.get(), new ItemStat.Builder(4500, 135, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 9)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 14)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 14)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(ModItems.FISHING_ROD_SILVER.get(), new ItemStat.Builder(25000, 300, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 26)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 27)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 27)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(ModItems.FISHING_ROD_GOLD.get(), new ItemStat.Builder(0, 550, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 66)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 72)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 72)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(ModItems.FISHING_ROD_PLATINUM.get(), new ItemStat.Builder(0, 2000, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 89)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 98)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 98)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
 
@@ -1150,22 +1150,22 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 50)
                 .addMonsterStat(ModAttributes.MAGIC_DEFENCE.asHolder(), 1));
         this.addStat(ModItems.SILVER_RING.get(), new ItemStat.Builder(20000, 600, 0)
-                .addAttribute(ModAttributes.RES_LIGHT.asHolder(), 50)
-                .addAttribute(ModAttributes.RES_DARK.asHolder(), 50)
+                .addAttribute(ModAttributes.LIGHT_RESISTANCE.asHolder(), 50)
+                .addAttribute(ModAttributes.DARK_RESISTANCE.asHolder(), 50)
                 .addMonsterStat(ModAttributes.MAGIC_DEFENCE.asHolder(), 1));
         this.addStat(ModItems.GOLD_RING.get(), new ItemStat.Builder(0, 5000, 0)
-                .addAttribute(ModAttributes.RES_WIND.asHolder(), 15)
-                .addAttribute(ModAttributes.RES_WATER.asHolder(), 15)
-                .addAttribute(ModAttributes.RES_EARTH.asHolder(), 15)
-                .addAttribute(ModAttributes.RES_FIRE.asHolder(), 15)
+                .addAttribute(ModAttributes.WIND_RESISTANCE.asHolder(), 15)
+                .addAttribute(ModAttributes.WATER_RESISTANCE.asHolder(), 15)
+                .addAttribute(ModAttributes.EARTH_RESISTANCE.asHolder(), 15)
+                .addAttribute(ModAttributes.FIRE_RESISTANCE.asHolder(), 15)
                 .addMonsterStat(ModAttributes.MAGIC_DEFENCE.asHolder(), 2));
         this.addStat(ModItems.PLATINUM_RING.get(), new ItemStat.Builder(0, 7500, 0)
-                .addAttribute(ModAttributes.RES_WIND.asHolder(), 10)
-                .addAttribute(ModAttributes.RES_WATER.asHolder(), 10)
-                .addAttribute(ModAttributes.RES_EARTH.asHolder(), 10)
-                .addAttribute(ModAttributes.RES_FIRE.asHolder(), 10)
-                .addAttribute(ModAttributes.RES_LIGHT.asHolder(), 25)
-                .addAttribute(ModAttributes.RES_DARK.asHolder(), 25)
+                .addAttribute(ModAttributes.WIND_RESISTANCE.asHolder(), 10)
+                .addAttribute(ModAttributes.WATER_RESISTANCE.asHolder(), 10)
+                .addAttribute(ModAttributes.EARTH_RESISTANCE.asHolder(), 10)
+                .addAttribute(ModAttributes.FIRE_RESISTANCE.asHolder(), 10)
+                .addAttribute(ModAttributes.LIGHT_RESISTANCE.asHolder(), 25)
+                .addAttribute(ModAttributes.DARK_RESISTANCE.asHolder(), 25)
                 .addMonsterStat(ModAttributes.MAGIC_DEFENCE.asHolder(), 2));
         this.addStat(ModItems.SHIELD_RING.get(), new ItemStat.Builder(30000, 1000, 0)
                 .withArmorEffect(ModArmorEffects.SHIELD_RING.get())
@@ -1173,17 +1173,17 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 25)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 20));
         this.addStat(ModItems.CRITICAL_RING.get(), new ItemStat.Builder(25000, 0, 0)
-                .addAttribute(ModAttributes.CRIT.asHolder(), 20)
+                .addAttribute(ModAttributes.CRITICAL.asHolder(), 20)
                 .addAttribute(ModAttributes.DIZZY.asHolder(), 5));
         this.addStat(ModItems.SILENT_RING.get(), new ItemStat.Builder(15000, 750, 0)
                 .addAttribute(ModAttributes.SEAL.asHolder(), 10)
-                .addAttribute(ModAttributes.RES_SEAL.asHolder(), 100));
+                .addAttribute(ModAttributes.SEAL_RESISTANCE.asHolder(), 100));
         this.addStat(ModItems.PARALYSIS_RING.get(), new ItemStat.Builder(15000, 750, 0)
-                .addAttribute(ModAttributes.PARA.asHolder(), 10)
-                .addAttribute(ModAttributes.RES_PARA.asHolder(), 100));
+                .addAttribute(ModAttributes.PARALYSIS.asHolder(), 10)
+                .addAttribute(ModAttributes.PARALYSIS_RESISTANCE.asHolder(), 100));
         this.addStat(ModItems.POISON_RING.get(), new ItemStat.Builder(15000, 750, 0)
                 .addAttribute(ModAttributes.POISON.asHolder(), 10)
-                .addAttribute(ModAttributes.RES_POISON.asHolder(), 100));
+                .addAttribute(ModAttributes.POISON_RESISTANCE.asHolder(), 100));
         this.addStat(ModItems.MAGIC_RING.get(), new ItemStat.Builder(50000, 1500, 0)
                 .withArmorEffect(ModArmorEffects.MAGIC_RING.get())
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 50));
@@ -1191,26 +1191,26 @@ public class ItemStatGen extends ItemStatProvider {
                 .withArmorEffect(ModArmorEffects.THROWING_RING.get()));
         this.addStat(ModItems.STAY_UP_RING.get(), new ItemStat.Builder(8000, 500, 0)
                 .addAttribute(ModAttributes.SLEEP.asHolder(), -20)
-                .addAttribute(ModAttributes.RES_FAT.asHolder(), 25));
+                .addAttribute(ModAttributes.FATIGUE_RESISTANCE.asHolder(), 25));
         this.addStat(ModItems.AQUAMARINE_RING.get(), new ItemStat.Builder(0, 0, 0)
-                .addAttribute(ModAttributes.RES_WATER.asHolder(), 50)
-                .addMonsterStat(ModAttributes.RES_WATER.asHolder(), 1)
+                .addAttribute(ModAttributes.WATER_RESISTANCE.asHolder(), 50)
+                .addMonsterStat(ModAttributes.WATER_RESISTANCE.asHolder(), 1)
                 .setElement(EnumElement.WATER));
         this.addStat(ModItems.AMETHYST_RING.get(), new ItemStat.Builder(13000, 600, 0)
-                .addAttribute(ModAttributes.RES_EARTH.asHolder(), 50)
-                .addMonsterStat(ModAttributes.RES_EARTH.asHolder(), 1)
+                .addAttribute(ModAttributes.EARTH_RESISTANCE.asHolder(), 50)
+                .addMonsterStat(ModAttributes.EARTH_RESISTANCE.asHolder(), 1)
                 .setElement(EnumElement.EARTH));
         this.addStat(ModItems.EMERALD_RING.get(), new ItemStat.Builder(13000, 600, 0)
-                .addAttribute(ModAttributes.RES_WIND.asHolder(), 50)
-                .addMonsterStat(ModAttributes.RES_WIND.asHolder(), 1)
+                .addAttribute(ModAttributes.WIND_RESISTANCE.asHolder(), 50)
+                .addMonsterStat(ModAttributes.WIND_RESISTANCE.asHolder(), 1)
                 .setElement(EnumElement.WIND));
         this.addStat(ModItems.SAPPHIRE_RING.get(), new ItemStat.Builder(13000, 600, 0)
-                .addAttribute(ModAttributes.RES_LIGHT.asHolder(), 50)
-                .addMonsterStat(ModAttributes.RES_LIGHT.asHolder(), 1)
+                .addAttribute(ModAttributes.LIGHT_RESISTANCE.asHolder(), 50)
+                .addMonsterStat(ModAttributes.LIGHT_RESISTANCE.asHolder(), 1)
                 .setElement(EnumElement.LIGHT));
         this.addStat(ModItems.RUBY_RING.get(), new ItemStat.Builder(13000, 600, 0)
-                .addAttribute(ModAttributes.RES_FIRE.asHolder(), 50)
-                .addMonsterStat(ModAttributes.RES_FIRE.asHolder(), 1)
+                .addAttribute(ModAttributes.FIRE_RESISTANCE.asHolder(), 50)
+                .addMonsterStat(ModAttributes.FIRE_RESISTANCE.asHolder(), 1)
                 .setElement(EnumElement.FIRE));
         this.addStat(ModItems.CURSED_RING.get(), new ItemStat.Builder(0, 0, 0));
         this.addStat(ModItems.DIAMOND_RING.get(), new ItemStat.Builder(0, 0, 0));
@@ -1301,21 +1301,21 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(ModAttributes.DEFENCE.asHolder(), 0.5));
         this.addStat(ModItems.BLUE_RIBBON.get(), new ItemStat.Builder(500, 35, 0)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 3)
-                .addAttribute(ModAttributes.RES_SEAL.asHolder(), 5)
+                .addAttribute(ModAttributes.SEAL_RESISTANCE.asHolder(), 5)
                 .addMonsterStat(ModAttributes.DEFENCE.asHolder(), 0.5));
         this.addStat(ModItems.GREEN_RIBBON.get(), new ItemStat.Builder(500, 35, 0)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 3)
-                .addAttribute(ModAttributes.RES_SEAL.asHolder(), 5)
+                .addAttribute(ModAttributes.SEAL_RESISTANCE.asHolder(), 5)
                 .addMonsterStat(ModAttributes.DEFENCE.asHolder(), 0.5));
         this.addStat(ModItems.PURPLE_RIBBON.get(), new ItemStat.Builder(500, 35, 0)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 2)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 1)
-                .addAttribute(ModAttributes.RES_SEAL.asHolder(), 5)
+                .addAttribute(ModAttributes.SEAL_RESISTANCE.asHolder(), 5)
                 .addMonsterStat(ModAttributes.DEFENCE.asHolder(), 0.5));
         this.addStat(ModItems.SPECTACLES.get(), new ItemStat.Builder(1000, 100, 0)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 5)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 5)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 2)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 0.5));
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 0.5));
         this.addStat(ModItems.STRAW_HAT.get(), new ItemStat.Builder(1500, 140, 0)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 5)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 3)
@@ -1351,16 +1351,16 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(ModAttributes.DEFENCE.asHolder(), 0.5));
         this.addStat(ModItems.FREE_FARMING_SHOES.get(), new ItemStat.Builder(450, 40, 0)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 3)
-                .addAttribute(ModAttributes.RES_FAT.asHolder(), 3)
-                .addAttribute(ModAttributes.RES_COLD.asHolder(), 3)
+                .addAttribute(ModAttributes.FATIGUE_RESISTANCE.asHolder(), 3)
+                .addAttribute(ModAttributes.COLD_RESISTANCE.asHolder(), 3)
                 .addMonsterStat(ModAttributes.DEFENCE.asHolder(), 0.5));
         this.addStat(ModItems.PIYO_SANDALS.get(), new ItemStat.Builder(400, 35, 0)
                 .withArmorEffect(ModArmorEffects.PIYO_SANDALS.get())
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 5)
-                .addAttribute(ModAttributes.RES_LOVE.asHolder(), 1)
-                .addAttribute(ModAttributes.RES_DIZZY.asHolder(), 50)
+                .addAttribute(ModAttributes.LOVE_RESISTANCE.asHolder(), 1)
+                .addAttribute(ModAttributes.DIZZY_RESISTANCE.asHolder(), 50)
                 .addAttribute(ModAttributes.DIZZY.asHolder(), 20)
-                .addMonsterStat(ModAttributes.RES_DIZZY.asHolder(), 0.5));
+                .addMonsterStat(ModAttributes.DIZZY_RESISTANCE.asHolder(), 0.5));
         this.addStat(ModItems.SECRET_SHOES.get(), new ItemStat.Builder(3600, 150, 0)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 8)
                 .addMonsterStat(ModAttributes.DEFENCE.asHolder(), 1));
@@ -1369,9 +1369,9 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(ModAttributes.DEFENCE.asHolder(), 1));
         this.addStat(ModItems.HEAVY_BOOTS.get(), new ItemStat.Builder(9500, 680, 0)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 15)
-                .addAttribute(ModAttributes.RES_CRIT.asHolder(), 10)
+                .addAttribute(ModAttributes.CRITICAL_RESISTANCE.asHolder(), 10)
                 .addAttribute(Attributes.KNOCKBACK_RESISTANCE, 0.5)
-                .addAttribute(ModAttributes.RES_FAT.asHolder(), -20)
+                .addAttribute(ModAttributes.FATIGUE_RESISTANCE.asHolder(), -20)
                 .addMonsterStat(ModAttributes.DEFENCE.asHolder(), 1));
         this.addStat(ModItems.SNEAKING_BOOTS.get(), new ItemStat.Builder(0, 0, 0));
         this.addStat(ModItems.FAST_STEP_BOOTS.get(), new ItemStat.Builder(0, 0, 0));
@@ -1404,7 +1404,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(ModAttributes.DEFENCE.asHolder(), 0.5));
         this.addStat(ModItems.MONKEY_PLUSH.get(), new ItemStat.Builder(2400, 0, 0)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 15)
-                .addAttribute(ModAttributes.RES_LOVE.asHolder(), 50)
+                .addAttribute(ModAttributes.LOVE_RESISTANCE.asHolder(), 50)
                 .addMonsterStat(ModAttributes.MAGIC_DEFENCE.asHolder(), 0.5)
                 .setElement(EnumElement.LOVE));
         this.addStat(ModItems.ROUND_SHIELD.get(), new ItemStat.Builder(5100, 0, 0)
@@ -1413,7 +1413,7 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.TURTLE_SHIELD.get(), new ItemStat.Builder(8700, 0, 0)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 20)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 13)
-                .addAttribute(ModAttributes.RES_CRIT.asHolder(), 15)
+                .addAttribute(ModAttributes.CRITICAL_RESISTANCE.asHolder(), 15)
                 .addAttribute(Attributes.KNOCKBACK_RESISTANCE, 0.2)
                 .addMonsterStat(ModAttributes.DEFENCE.asHolder(), 1));
         this.addStat(ModItems.CHAOS_SHIELD.get(), new ItemStat.Builder(0, 0, 0));
@@ -1490,29 +1490,29 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(ModAttributes.MAGIC_DEFENCE.asHolder(), 5));
         this.addStat(ModItems.CORE_GREEN.get(), new ItemStat.Builder(15000, 1050, 70)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 50)
-                .addMonsterStat(ModAttributes.RES_WIND.asHolder(), 6)
-                .addMonsterStat(ModAttributes.RES_EARTH.asHolder(), -3));
+                .addMonsterStat(ModAttributes.WIND_RESISTANCE.asHolder(), 6)
+                .addMonsterStat(ModAttributes.EARTH_RESISTANCE.asHolder(), -3));
         this.addStat(ModItems.CORE_RED.get(), new ItemStat.Builder(15000, 1050, 70)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 50)
-                .addMonsterStat(ModAttributes.RES_FIRE.asHolder(), 6)
-                .addMonsterStat(ModAttributes.RES_WATER.asHolder(), -3));
+                .addMonsterStat(ModAttributes.FIRE_RESISTANCE.asHolder(), 6)
+                .addMonsterStat(ModAttributes.WATER_RESISTANCE.asHolder(), -3));
         this.addStat(ModItems.CORE_BLUE.get(), new ItemStat.Builder(15000, 1050, 70)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 50)
-                .addMonsterStat(ModAttributes.RES_WATER.asHolder(), 6)
-                .addMonsterStat(ModAttributes.RES_FIRE.asHolder(), -3));
+                .addMonsterStat(ModAttributes.WATER_RESISTANCE.asHolder(), 6)
+                .addMonsterStat(ModAttributes.FIRE_RESISTANCE.asHolder(), -3));
         this.addStat(ModItems.CORE_YELLOW.get(), new ItemStat.Builder(15000, 1050, 70)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 50)
-                .addMonsterStat(ModAttributes.RES_EARTH.asHolder(), 6)
-                .addMonsterStat(ModAttributes.RES_WIND.asHolder(), -3));
+                .addMonsterStat(ModAttributes.EARTH_RESISTANCE.asHolder(), 6)
+                .addMonsterStat(ModAttributes.WIND_RESISTANCE.asHolder(), -3));
         this.addStat(ModItems.CRYSTAL_SKULL.get(), new ItemStat.Builder(25000, 2300, 90)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 40)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 40)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 70)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 2)
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 2)
                 .addMonsterStat(ModAttributes.MAGIC_DEFENCE.asHolder(), 3));
 
         this.addStat(ModItems.CRYSTAL_WATER.get(), new ItemStat.Builder(2000, 150, 20)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 5)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 2)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 5)
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 2)
                 .setElement(EnumElement.WATER)
                 .setSpell(ModSpells.WATER_SWIPE.get(), ModSpells.WATER_SWIPE_140.get(), ModSpells.WATER_SWIPE_360.get()));
         this.addStat(ModItems.CRYSTAL_EARTH.get(), new ItemStat.Builder(2000, 150, 20)
@@ -1533,9 +1533,9 @@ public class ItemStatGen extends ItemStatProvider {
                 .setSpell(ModSpells.DOUBLE_SONIC.get(), ModSpells.QUADRUPLE_WIND_BLADE.get(), ModSpells.SEXTUPLE_WIND_BLADE.get()));
         this.addStat(ModItems.CRYSTAL_LIGHT.get(), new ItemStat.Builder(2000, 150, 20)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 1.5)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 3)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 3)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 1.5)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 1)
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 1)
                 .addMonsterStat(ModAttributes.DEFENCE.asHolder(), 0.5)
                 .addMonsterStat(ModAttributes.MAGIC_DEFENCE.asHolder(), 0.5)
                 .setElement(EnumElement.LIGHT)
@@ -1543,7 +1543,7 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.CRYSTAL_DARK.get(), new ItemStat.Builder(2000, 150, 20)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 1.5)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 3)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 1)
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 1)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1)
                 .setElement(EnumElement.DARK)
                 .setSpell(null, null, null)); // TODO
@@ -1554,9 +1554,9 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.CRYSTAL_SMALL.get(), 0, 0, 0);
         this.addStat(ModItems.CRYSTAL_BIG.get(), 0, 0, 0);
         this.addStat(ModItems.CRYSTAL_MAGIC.get(), new ItemStat.Builder(45, 400, 25)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 7)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 7)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 1)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 1));
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 1));
         this.addStat(ModItems.CRYSTAL_RUNE.get(), 0, 0, 0);
         this.addStat(ModItems.CRYSTAL_ELECTRO.get(), 0, 0, 0);
 
@@ -1571,7 +1571,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(ModItems.PLANT_STEM.get(), new ItemStat.Builder(300, 52, 17)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 3)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 3)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 3)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(ModItems.HORN_BULL.get(), new ItemStat.Builder(450, 64, 26)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 8)
@@ -1579,13 +1579,13 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 2));
         this.addStat(ModItems.HORN_DEVIL.get(), new ItemStat.Builder(850, 91, 43)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 30)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 30)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 30)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 2));
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 2));
         this.addStat(ModItems.MOVING_BRANCH.get(), new ItemStat.Builder(22000, 2300, 77)
                 .addAttribute(Attributes.ATTACK_DAMAGE, -10)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 150)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 3)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 150)
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 3)
                 .setSpell(ModSpells.ROOT_SPIKE.get(), ModSpells.APPLE_SHIELD.get(), null));
 
         this.addStat(ModItems.GLUE.get(), new ItemStat.Builder(380, 41, 13)
@@ -1594,7 +1594,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 1)
                 .addMonsterStat(ModAttributes.DEFENCE.asHolder(), 1));
         this.addStat(ModItems.DEVIL_BLOOD.get(), new ItemStat.Builder(730, 49, 27)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 10)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 10)
                 .addAttribute(ModAttributes.DRAIN.asHolder(), 15)
                 .addMonsterStat(ModAttributes.DRAIN.asHolder(), 1));
         this.addStat(ModItems.PARA_POISON.get(), 0, 0, 0);
@@ -1603,24 +1603,24 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.FEATHER_BLACK.get(), 0, 0, 0);
         this.addStat(ModItems.FEATHER_THUNDER.get(), 0, 0, 0);
         this.addStat(ModItems.FEATHER_YELLOW.get(), new ItemStat.Builder(500, 20, 15)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 13)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 2));
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 13)
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 2));
         this.addStat(ModItems.DRAGON_FIN.get(), 0, 0, 0);
 
         this.addStat(ModItems.TURTLE_SHELL.get(), new ItemStat.Builder(160, 30, 16)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 5)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 3)
-                .addAttribute(ModAttributes.CRIT.asHolder(), -3)
+                .addAttribute(ModAttributes.CRITICAL.asHolder(), -3)
                 .addMonsterStat(ModAttributes.DEFENCE.asHolder(), 1));
         this.addStat(ModItems.FISH_FOSSIL.get(), new ItemStat.Builder(180, 30, 19)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 5)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 5)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 1)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 1));
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 1));
         this.addStat(ModItems.SKULL.get(), new ItemStat.Builder(100, 1000, 35)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 9)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 9)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 4)
                 .addAttribute(ModAttributes.COLD.asHolder(), 5)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 1)
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 1)
                 .addMonsterStat(ModAttributes.MAGIC_DEFENCE.asHolder(), 1));
         this.addStat(ModItems.DRAGON_BONES.get(), new ItemStat.Builder(27000, 1500, 52)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 13)
@@ -1642,30 +1642,30 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 1)
                 .addMonsterStat(ModAttributes.DEFENCE.asHolder(), 1));
         this.addStat(ModItems.OLD_BANDAGE.get(), new ItemStat.Builder(320, 24, 5)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 2)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 2)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 1)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 1));
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 1));
         this.addStat(ModItems.AMBROSIAS_THORNS.get(), new ItemStat.Builder(7500, 500, 21)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 7)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 7)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 7)
                 .addAttribute(ModAttributes.SLEEP.asHolder(), 10)
                 .addMonsterStat(ModAttributes.SLEEP.asHolder(), 1)
                 .setSpell(ModSpells.POLLEN_PUFF.get(), ModSpells.WAVE.get(), ModSpells.BUTTERFLY.get()));
         this.addStat(ModItems.THREAD_SPIDER.get(), new ItemStat.Builder(370, 28, 17)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 2)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 2)
-                .addAttribute(ModAttributes.PARA.asHolder(), 5)
-                .addMonsterStat(ModAttributes.PARA.asHolder(), 0.3));
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 2)
+                .addAttribute(ModAttributes.PARALYSIS.asHolder(), 5)
+                .addMonsterStat(ModAttributes.PARALYSIS.asHolder(), 0.3));
         this.addStat(ModItems.PUPPETRY_STRINGS.get(), new ItemStat.Builder(30000, 1000, 37)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 6)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 9)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 9)
                 .addAttribute(ModAttributes.SEAL.asHolder(), 15)
-                .addAttribute(ModAttributes.PARA.asHolder(), 5)
+                .addAttribute(ModAttributes.PARALYSIS.asHolder(), 5)
                 .addMonsterStat(ModAttributes.SEAL.asHolder(), 0.5)
-                .addMonsterStat(ModAttributes.PARA.asHolder(), 0.5)
+                .addMonsterStat(ModAttributes.PARALYSIS.asHolder(), 0.5)
                 .setSpell(ModSpells.DARK_BEAM.get(), ModSpells.PLATE.get(), ModSpells.DARK_BULLETS.get()));
         this.addStat(ModItems.VINE.get(), new ItemStat.Builder(515, 58, 34)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 10)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 10)
                 .addAttribute(ModAttributes.SEAL.asHolder(), 5)
                 .addMonsterStat(ModAttributes.SEAL.asHolder(), 0.3));
         this.addStat(ModItems.TAIL_SCORPION.get(), new ItemStat.Builder(610, 62, 31)
@@ -1674,18 +1674,18 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(ModAttributes.POISON.asHolder(), 0.3));
         this.addStat(ModItems.STRONG_VINE.get(), 0, 0, 0);
         this.addStat(ModItems.THREAD_PRETTY.get(), new ItemStat.Builder(386, 41, 24)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 15)
-                .addAttribute(ModAttributes.PARA.asHolder(), 20)
-                .addMonsterStat(ModAttributes.PARA.asHolder(), 2)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 15)
+                .addAttribute(ModAttributes.PARALYSIS.asHolder(), 20)
+                .addMonsterStat(ModAttributes.PARALYSIS.asHolder(), 2)
                 .setSpell(null, ModSpells.WEB_SHOT.get(), null));
         this.addStat(ModItems.TAIL_CHIMERA.get(), new ItemStat.Builder(20000, 2600, 87)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 150)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), -10)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), -10)
                 .addAttribute(ModAttributes.POISON.asHolder(), 50)
-                .addAttribute(ModAttributes.PARA.asHolder(), 50)
+                .addAttribute(ModAttributes.PARALYSIS.asHolder(), 50)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1)
                 .addMonsterStat(ModAttributes.POISON.asHolder(), 1)
-                .addMonsterStat(ModAttributes.PARA.asHolder(), 1)
+                .addMonsterStat(ModAttributes.PARALYSIS.asHolder(), 1)
                 .setSpell(null, ModSpells.BUBBLE_BEAM.get(), ModSpells.FIREBALL_BARRAGE.get()));
 
         this.addStat(ModItems.ARROW_HEAD.get(), new ItemStat.Builder(80, 10, 2)
@@ -1697,32 +1697,32 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(ModItems.BROKEN_HILT.get(), new ItemStat.Builder(550, 50, 22)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 2)
-                .addAttribute(ModAttributes.RES_POISON.asHolder(), 5)
-                .addAttribute(ModAttributes.RES_SEAL.asHolder(), 5)
-                .addAttribute(ModAttributes.RES_PARA.asHolder(), 5)
-                .addAttribute(ModAttributes.RES_SLEEP.asHolder(), 5)
-                .addAttribute(ModAttributes.RES_FAT.asHolder(), 5)
-                .addAttribute(ModAttributes.RES_COLD.asHolder(), 5)
-                .addMonsterStat(ModAttributes.RES_POISON.asHolder(), 0.2)
-                .addMonsterStat(ModAttributes.RES_SEAL.asHolder(), 0.2)
-                .addMonsterStat(ModAttributes.RES_PARA.asHolder(), 0.2)
-                .addMonsterStat(ModAttributes.RES_SLEEP.asHolder(), 0.2)
-                .addMonsterStat(ModAttributes.RES_FAT.asHolder(), 0.2)
-                .addMonsterStat(ModAttributes.RES_COLD.asHolder(), 0.2));
+                .addAttribute(ModAttributes.POISON_RESISTANCE.asHolder(), 5)
+                .addAttribute(ModAttributes.SEAL_RESISTANCE.asHolder(), 5)
+                .addAttribute(ModAttributes.PARALYSIS_RESISTANCE.asHolder(), 5)
+                .addAttribute(ModAttributes.SLEEP_RESISTANCE.asHolder(), 5)
+                .addAttribute(ModAttributes.FATIGUE_RESISTANCE.asHolder(), 5)
+                .addAttribute(ModAttributes.COLD_RESISTANCE.asHolder(), 5)
+                .addMonsterStat(ModAttributes.POISON_RESISTANCE.asHolder(), 0.2)
+                .addMonsterStat(ModAttributes.SEAL_RESISTANCE.asHolder(), 0.2)
+                .addMonsterStat(ModAttributes.PARALYSIS_RESISTANCE.asHolder(), 0.2)
+                .addMonsterStat(ModAttributes.SLEEP_RESISTANCE.asHolder(), 0.2)
+                .addMonsterStat(ModAttributes.FATIGUE_RESISTANCE.asHolder(), 0.2)
+                .addMonsterStat(ModAttributes.COLD_RESISTANCE.asHolder(), 0.2));
         this.addStat(ModItems.BROKEN_BOX.get(), new ItemStat.Builder(1000, 200, 48)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 4)
-                .addAttribute(ModAttributes.RES_POISON.asHolder(), 10)
-                .addAttribute(ModAttributes.RES_SEAL.asHolder(), 10)
-                .addAttribute(ModAttributes.RES_PARA.asHolder(), 10)
-                .addAttribute(ModAttributes.RES_SLEEP.asHolder(), 10)
-                .addAttribute(ModAttributes.RES_FAT.asHolder(), 10)
-                .addAttribute(ModAttributes.RES_COLD.asHolder(), 10)
-                .addMonsterStat(ModAttributes.RES_POISON.asHolder(), 0.5)
-                .addMonsterStat(ModAttributes.RES_SEAL.asHolder(), 0.5)
-                .addMonsterStat(ModAttributes.RES_PARA.asHolder(), 0.5)
-                .addMonsterStat(ModAttributes.RES_SLEEP.asHolder(), 0.5)
-                .addMonsterStat(ModAttributes.RES_FAT.asHolder(), 0.5)
-                .addMonsterStat(ModAttributes.RES_COLD.asHolder(), 0.5));
+                .addAttribute(ModAttributes.POISON_RESISTANCE.asHolder(), 10)
+                .addAttribute(ModAttributes.SEAL_RESISTANCE.asHolder(), 10)
+                .addAttribute(ModAttributes.PARALYSIS_RESISTANCE.asHolder(), 10)
+                .addAttribute(ModAttributes.SLEEP_RESISTANCE.asHolder(), 10)
+                .addAttribute(ModAttributes.FATIGUE_RESISTANCE.asHolder(), 10)
+                .addAttribute(ModAttributes.COLD_RESISTANCE.asHolder(), 10)
+                .addMonsterStat(ModAttributes.POISON_RESISTANCE.asHolder(), 0.5)
+                .addMonsterStat(ModAttributes.SEAL_RESISTANCE.asHolder(), 0.5)
+                .addMonsterStat(ModAttributes.PARALYSIS_RESISTANCE.asHolder(), 0.5)
+                .addMonsterStat(ModAttributes.SLEEP_RESISTANCE.asHolder(), 0.5)
+                .addMonsterStat(ModAttributes.FATIGUE_RESISTANCE.asHolder(), 0.5)
+                .addMonsterStat(ModAttributes.COLD_RESISTANCE.asHolder(), 0.5));
         this.addStat(ModItems.BLADE_GLISTENING.get(), 0, 0, 0);
         this.addStat(ModItems.GREAT_HAMMER_SHARD.get(), 0, 0, 0);
         this.addStat(ModItems.HAMMER_PIECE.get(), new ItemStat.Builder(853, 106, 33)
@@ -1736,31 +1736,31 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.ROCK_SHARD_LEFT.get(), new ItemStat.Builder(14000, 937, 88)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 75)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 30)
-                .addAttribute(ModAttributes.RES_POISON.asHolder(), 6)
-                .addAttribute(ModAttributes.RES_SEAL.asHolder(), 6)
-                .addAttribute(ModAttributes.RES_PARA.asHolder(), 6)
-                .addAttribute(ModAttributes.RES_SLEEP.asHolder(), 6)
-                .addAttribute(ModAttributes.RES_FAT.asHolder(), 6)
-                .addAttribute(ModAttributes.RES_COLD.asHolder(), 6)
-                .addAttribute(ModAttributes.RES_FAINT.asHolder(), 1)
-                .addAttribute(ModAttributes.RES_DRAIN.asHolder(), 1)
+                .addAttribute(ModAttributes.POISON_RESISTANCE.asHolder(), 6)
+                .addAttribute(ModAttributes.SEAL_RESISTANCE.asHolder(), 6)
+                .addAttribute(ModAttributes.PARALYSIS_RESISTANCE.asHolder(), 6)
+                .addAttribute(ModAttributes.SLEEP_RESISTANCE.asHolder(), 6)
+                .addAttribute(ModAttributes.FATIGUE_RESISTANCE.asHolder(), 6)
+                .addAttribute(ModAttributes.COLD_RESISTANCE.asHolder(), 6)
+                .addAttribute(ModAttributes.FAINT_RESISTANCE.asHolder(), 1)
+                .addAttribute(ModAttributes.DRAIN_RESISTANCE.asHolder(), 1)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1)
-                .addAttribute(ModAttributes.RES_POISON.asHolder(), 2)
-                .addAttribute(ModAttributes.RES_SEAL.asHolder(), 2)
-                .addAttribute(ModAttributes.RES_PARA.asHolder(), 2)
-                .addAttribute(ModAttributes.RES_SLEEP.asHolder(), 2)
-                .addAttribute(ModAttributes.RES_FAT.asHolder(), 1)
-                .addAttribute(ModAttributes.RES_COLD.asHolder(), 1)
-                .addAttribute(ModAttributes.RES_FAINT.asHolder(), 1)
-                .addAttribute(ModAttributes.RES_DRAIN.asHolder(), 1));
+                .addAttribute(ModAttributes.POISON_RESISTANCE.asHolder(), 2)
+                .addAttribute(ModAttributes.SEAL_RESISTANCE.asHolder(), 2)
+                .addAttribute(ModAttributes.PARALYSIS_RESISTANCE.asHolder(), 2)
+                .addAttribute(ModAttributes.SLEEP_RESISTANCE.asHolder(), 2)
+                .addAttribute(ModAttributes.FATIGUE_RESISTANCE.asHolder(), 1)
+                .addAttribute(ModAttributes.COLD_RESISTANCE.asHolder(), 1)
+                .addAttribute(ModAttributes.FAINT_RESISTANCE.asHolder(), 1)
+                .addAttribute(ModAttributes.DRAIN_RESISTANCE.asHolder(), 1));
         this.addStat(ModItems.ROCK_SHARD_RIGHT.get(), new ItemStat.Builder(14000, 937, 88)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 30)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 75)
-                .addAttribute(ModAttributes.RES_DIZZY.asHolder(), 5)
-                .addAttribute(ModAttributes.RES_CRIT.asHolder(), 3)
+                .addAttribute(ModAttributes.DIZZY_RESISTANCE.asHolder(), 5)
+                .addAttribute(ModAttributes.CRITICAL_RESISTANCE.asHolder(), 3)
                 .addAttribute(Attributes.KNOCKBACK_RESISTANCE, 15)
-                .addMonsterStat(ModAttributes.RES_DIZZY.asHolder(), 1)
-                .addMonsterStat(ModAttributes.RES_CRIT.asHolder(), 1)
+                .addMonsterStat(ModAttributes.DIZZY_RESISTANCE.asHolder(), 1)
+                .addMonsterStat(ModAttributes.CRITICAL_RESISTANCE.asHolder(), 1)
                 .addMonsterStat(Attributes.KNOCKBACK_RESISTANCE, 3));
         this.addStat(ModItems.MTGU_PLATE.get(), 0, 0, 0);
         this.addStat(ModItems.BROKEN_ICE_WALL.get(), 0, 0, 0);
@@ -1768,78 +1768,78 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.FUR_SMALL.get(), new ItemStat.Builder(35, 7, 1)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 1)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 1)
-                .addAttribute(ModAttributes.RES_DIZZY.asHolder(), 1)
+                .addAttribute(ModAttributes.DIZZY_RESISTANCE.asHolder(), 1)
                 .addMonsterStat(ModAttributes.DEFENCE.asHolder(), 1));
         this.addStat(ModItems.FUR_MEDIUM.get(), new ItemStat.Builder(1000, 100, 29)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 5)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 3)
-                .addAttribute(ModAttributes.RES_DIZZY.asHolder(), 10)
+                .addAttribute(ModAttributes.DIZZY_RESISTANCE.asHolder(), 10)
                 .addMonsterStat(ModAttributes.DEFENCE.asHolder(), 1));
         this.addStat(ModItems.FUR_LARGE.get(), new ItemStat.Builder(3000, 500, 55)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 10)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 5)
-                .addAttribute(ModAttributes.RES_DIZZY.asHolder(), 25)
-                .addAttribute(ModAttributes.RES_SLEEP.asHolder(), 5)
+                .addAttribute(ModAttributes.DIZZY_RESISTANCE.asHolder(), 25)
+                .addAttribute(ModAttributes.SLEEP_RESISTANCE.asHolder(), 5)
                 .addMonsterStat(ModAttributes.DEFENCE.asHolder(), 1));
         this.addStat(ModItems.FUR.get(), new ItemStat.Builder(130, 23, 7)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 2)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 1)
-                .addAttribute(ModAttributes.RES_DIZZY.asHolder(), 3)
+                .addAttribute(ModAttributes.DIZZY_RESISTANCE.asHolder(), 3)
                 .addMonsterStat(ModAttributes.DEFENCE.asHolder(), 1));
         this.addStat(ModItems.FURBALL.get(), new ItemStat.Builder(900, 120, 38)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 8)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 4)
-                .addAttribute(ModAttributes.RES_DIZZY.asHolder(), 10)
-                .addAttribute(ModAttributes.RES_SLEEP.asHolder(), 3)
+                .addAttribute(ModAttributes.DIZZY_RESISTANCE.asHolder(), 10)
+                .addAttribute(ModAttributes.SLEEP_RESISTANCE.asHolder(), 3)
                 .addMonsterStat(ModAttributes.DEFENCE.asHolder(), 2));
         this.addStat(ModItems.DOWN_YELLOW.get(), new ItemStat.Builder(300, 33, 21)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 3)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 2)
-                .addAttribute(ModAttributes.RES_DIZZY.asHolder(), 5)
+                .addAttribute(ModAttributes.DIZZY_RESISTANCE.asHolder(), 5)
                 .addMonsterStat(ModAttributes.DEFENCE.asHolder(), 2));
         this.addStat(ModItems.FUR_QUALITY.get(), new ItemStat.Builder(650, 45, 36)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 4)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 3)
-                .addAttribute(ModAttributes.RES_DIZZY.asHolder(), 7)
+                .addAttribute(ModAttributes.DIZZY_RESISTANCE.asHolder(), 7)
                 .addMonsterStat(ModAttributes.DEFENCE.asHolder(), 2));
         this.addStat(ModItems.DOWN_PENGUIN.get(), new ItemStat.Builder(1250, 129, 59)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 13)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 7)
-                .addAttribute(ModAttributes.RES_DIZZY.asHolder(), 13)
+                .addAttribute(ModAttributes.DIZZY_RESISTANCE.asHolder(), 13)
                 .addMonsterStat(ModAttributes.DEFENCE.asHolder(), 3));
         this.addStat(ModItems.LIGHTNING_MANE.get(), new ItemStat.Builder(13000, 600, 31)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 8)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 6)
-                .addAttribute(ModAttributes.RES_DIZZY.asHolder(), 17)
+                .addAttribute(ModAttributes.DIZZY_RESISTANCE.asHolder(), 17)
                 .addMonsterStat(ModAttributes.DEFENCE.asHolder(), 1)
                 .addMonsterStat(ModAttributes.MAGIC_DEFENCE.asHolder(), 1)
-                .addMonsterStat(ModAttributes.RES_DIZZY.asHolder(), 1)
+                .addMonsterStat(ModAttributes.DIZZY_RESISTANCE.asHolder(), 1)
                 .setSpell(ModSpells.LASER3.get(), ModSpells.LASER5.get(), ModSpells.BIG_LIGHTNING.get()));
         this.addStat(ModItems.FUR_RED_LION.get(), 0, 0, 0);
         this.addStat(ModItems.FUR_BLUE_LION.get(), 0, 0, 0);
         this.addStat(ModItems.CHEST_HAIR.get(), 0, 0, 0);
 
         this.addStat(ModItems.SPORE.get(), new ItemStat.Builder(110, 19, 9)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 2)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 1)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 2)
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 1)
                 .setSpell(null, ModSpells.SPORE_CIRCLE_SPELL.get(), null));
         this.addStat(ModItems.POWDER_POISON.get(), new ItemStat.Builder(550, 80, 21)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 2)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 2)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 2)
                 .addAttribute(ModAttributes.POISON.asHolder(), 5)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 1)
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 1)
                 .addMonsterStat(ModAttributes.MAGIC_DEFENCE.asHolder(), 1)
                 .addMonsterStat(ModAttributes.POISON.asHolder(), 0.5)
                 .setSpell(null, ModSpells.POISON_BALL.get(), null));
         this.addStat(ModItems.SPORE_HOLY.get(), 0, 0, 0);
         this.addStat(ModItems.FAIRY_DUST.get(), new ItemStat.Builder(300, 40, 19)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 5)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 1)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 5)
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 1)
                 .setSpell(null, ModSpells.SLEEP_AURA.get(), null));
         this.addStat(ModItems.FAIRY_ELIXIR.get(), 0, 0, 0);
         this.addStat(ModItems.ROOT.get(), new ItemStat.Builder(770, 68, 25)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 8)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 1));
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 8)
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 1));
         this.addStat(ModItems.POWDER_MAGIC.get(), 0, 0, 0);
         this.addStat(ModItems.POWDER_MYSTERIOUS.get(), 0, 0, 0);
         this.addStat(ModItems.MAGIC.get(), 0, 0, 0);
@@ -1851,37 +1851,37 @@ public class ItemStatGen extends ItemStatProvider {
 
         this.addStat(ModItems.CLOTH_CHEAP.get(), new ItemStat.Builder(80, 12, 4)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 1)
-                .addAttribute(ModAttributes.RES_CRIT.asHolder(), 1)
+                .addAttribute(ModAttributes.CRITICAL_RESISTANCE.asHolder(), 1)
                 .addMonsterStat(ModAttributes.DEFENCE.asHolder(), 1));
         this.addStat(ModItems.CLOTH_QUALITY.get(), new ItemStat.Builder(800, 100, 18)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 5)
-                .addAttribute(ModAttributes.RES_CRIT.asHolder(), 5)
+                .addAttribute(ModAttributes.CRITICAL_RESISTANCE.asHolder(), 5)
                 .addMonsterStat(ModAttributes.DEFENCE.asHolder(), 1));
         this.addStat(ModItems.CLOTH_QUALITY_WORN.get(), 0, 0, 0);
         this.addStat(ModItems.CLOTH_SILK.get(), new ItemStat.Builder(950, 130, 26)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 8)
-                .addAttribute(ModAttributes.RES_CRIT.asHolder(), 5)
+                .addAttribute(ModAttributes.CRITICAL_RESISTANCE.asHolder(), 5)
                 .addMonsterStat(ModAttributes.DEFENCE.asHolder(), 1));
         this.addStat(ModItems.GHOST_HOOD.get(), new ItemStat.Builder(70, 650, 21)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 2)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 2)
-                .addAttribute(ModAttributes.RES_SEAL.asHolder(), 25)
-                .addMonsterStat(ModAttributes.RES_SEAL.asHolder(), 0.5));
+                .addAttribute(ModAttributes.SEAL_RESISTANCE.asHolder(), 25)
+                .addMonsterStat(ModAttributes.SEAL_RESISTANCE.asHolder(), 0.5));
         this.addStat(ModItems.GLOVE_GIANT.get(), new ItemStat.Builder(810, 76, 36)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 5)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 10)
-                .addAttribute(ModAttributes.RES_CRIT.asHolder(), 5)
-                .addMonsterStat(ModAttributes.RES_CRIT.asHolder(), 0.5));
+                .addAttribute(ModAttributes.CRITICAL_RESISTANCE.asHolder(), 5)
+                .addMonsterStat(ModAttributes.CRITICAL_RESISTANCE.asHolder(), 0.5));
         this.addStat(ModItems.GLOVE_BLUE_GIANT.get(), 0, 0, 0);
         this.addStat(ModItems.CARAPACE_INSECT.get(), new ItemStat.Builder(75, 11, 8)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 2)
-                .addAttribute(ModAttributes.RES_POISON.asHolder(), 15)
-                .addMonsterStat(ModAttributes.RES_POISON.asHolder(), 0.5));
+                .addAttribute(ModAttributes.POISON_RESISTANCE.asHolder(), 15)
+                .addMonsterStat(ModAttributes.POISON_RESISTANCE.asHolder(), 0.5));
         this.addStat(ModItems.CARAPACE_PRETTY.get(), new ItemStat.Builder(750, 85, 24)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 4)
-                .addAttribute(ModAttributes.RES_SEAL.asHolder(), 5)
-                .addAttribute(ModAttributes.RES_PARA.asHolder(), 20)
-                .addMonsterStat(ModAttributes.RES_PARA.asHolder(), 0.5));
+                .addAttribute(ModAttributes.SEAL_RESISTANCE.asHolder(), 5)
+                .addAttribute(ModAttributes.PARALYSIS_RESISTANCE.asHolder(), 20)
+                .addMonsterStat(ModAttributes.PARALYSIS_RESISTANCE.asHolder(), 0.5));
         this.addStat(ModItems.CLOTH_ANCIENT_ORC.get(), 0, 0, 0);
 
         this.addStat(ModItems.JAW_INSECT.get(), new ItemStat.Builder(100, 23, 14)
@@ -1906,12 +1906,12 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 2));
         this.addStat(ModItems.CLAW_CHIMERA.get(), new ItemStat.Builder(18000, 1500, 50)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 15)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 2)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 2)
                 .addAttribute(ModAttributes.POISON.asHolder(), 5)
-                .addAttribute(ModAttributes.PARA.asHolder(), 5)
+                .addAttribute(ModAttributes.PARALYSIS.asHolder(), 5)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 2)
                 .addMonsterStat(ModAttributes.POISON.asHolder(), 1)
-                .addMonsterStat(ModAttributes.PARA.asHolder(), 1)
+                .addMonsterStat(ModAttributes.PARALYSIS.asHolder(), 1)
                 .setSpell(null, ModSpells.SLASH.get(), null));
         this.addStat(ModItems.TUSK_IVORY.get(), 0, 0, 0);
         this.addStat(ModItems.TUSK_UNBROKEN_IVORY.get(), 0, 0, 0);
@@ -1933,9 +1933,9 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(Attributes.ATTACK_DAMAGE, 35)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 40)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 40)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 35)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 35)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 5)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 5));
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 5));
         this.addStat(ModItems.SCALE_DRAGON.get(), 0, 0, 0);
         this.addStat(ModItems.SCALE_CRIMSON.get(), 0, 0, 0);
         this.addStat(ModItems.SCALE_BLUE.get(), 0, 0, 0);
@@ -1955,40 +1955,40 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.RUNE_SPHERE_SHARD.get(), 0, 0, 0);
         this.addStat(ModItems.SHADE_STONE.get(), 0, 0, 0);
         this.addStat(ModItems.RACCOON_LEAF.get(), new ItemStat.Builder(25000, 2100, 60)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 35)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 35)
                 .addAttribute(ModAttributes.ATTACK_RANGE.asHolder(), 1)
                 .setSpell(ModSpells.BIG_LEAF_SPELL.get(), ModSpells.SMALL_LEAF_SPELL_X5.get(), null));
         this.addStat(ModItems.ICY_NOSE.get(), 0, 0, 0);
         this.addStat(ModItems.BIG_BIRDS_COMB.get(), 0, 0, 0);
         this.addStat(ModItems.RAFFLESIA_PETAL.get(), new ItemStat.Builder(30000, 3400, 55)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 5)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 18)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 18)
                 .addAttribute(ModAttributes.FATIGUE.asHolder(), 20)
                 .addAttribute(ModAttributes.COLD.asHolder(), 15)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 1)
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 1)
                 .addMonsterStat(ModAttributes.FATIGUE.asHolder(), 1)
                 .addMonsterStat(ModAttributes.COLD.asHolder(), 1)
                 .setSpell(ModSpells.WIND_CIRCLE_X8.get(), ModSpells.RAFFLESIA_CIRCLE.get(), ModSpells.RAFFLESIA_POISON.get()));
         this.addStat(ModItems.CURSED_DOLL.get(), new ItemStat.Builder(27000, 750, 39)
                 .addAttribute(ModAttributes.DEFENCE.asHolder(), 4)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.asHolder(), 7)
-                .addAttribute(ModAttributes.RES_SEAL.asHolder(), 10)
-                .addAttribute(ModAttributes.RES_PARA.asHolder(), 10)
-                .addAttribute(ModAttributes.RES_DRAIN.asHolder(), 15)
-                .addMonsterStat(ModAttributes.RES_SEAL.asHolder(), 1)
-                .addMonsterStat(ModAttributes.RES_PARA.asHolder(), 1)
-                .addMonsterStat(ModAttributes.RES_DRAIN.asHolder(), 1)
+                .addAttribute(ModAttributes.SEAL_RESISTANCE.asHolder(), 10)
+                .addAttribute(ModAttributes.PARALYSIS_RESISTANCE.asHolder(), 10)
+                .addAttribute(ModAttributes.DRAIN_RESISTANCE.asHolder(), 15)
+                .addMonsterStat(ModAttributes.SEAL_RESISTANCE.asHolder(), 1)
+                .addMonsterStat(ModAttributes.PARALYSIS_RESISTANCE.asHolder(), 1)
+                .addMonsterStat(ModAttributes.DRAIN_RESISTANCE.asHolder(), 1)
                 .setSpell(ModSpells.CARD_THROW.get(), ModSpells.PLUSH_THROW.get(), ModSpells.FURNITURE.get()));
         this.addStat(ModItems.WARRIORS_PROOF.get(), new ItemStat.Builder(3500, 330, 55)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 25)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 10)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 10)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 2)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 1));
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 1));
         this.addStat(ModItems.PROOF_OF_RANK.get(), new ItemStat.Builder(3500, 330, 55)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 10)
-                .addAttribute(ModAttributes.MAGIC.asHolder(), 25)
+                .addAttribute(ModAttributes.MAGIC_ATTACK.asHolder(), 25)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1)
-                .addMonsterStat(ModAttributes.MAGIC.asHolder(), 2));
+                .addMonsterStat(ModAttributes.MAGIC_ATTACK.asHolder(), 2));
         this.addStat(ModItems.THRONE_OF_EMPIRE.get(), 0, 0, 0);
         this.addStat(ModItems.WHITE_STONE.get(), 0, 0, 0);
         this.addStat(ModItems.RARE_CAN.get(), 0, 0, 0);
@@ -2069,7 +2069,7 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.RED_GRASS.get(), 120, 5, 1);
         this.addStat(ModItems.BLACK_GRASS.get(), 120, 5, 1);
         this.addStat(ModItems.ANTIDOTE_GRASS.get(), new ItemStat.Builder(120, 5, 1)
-                .addAttribute(ModAttributes.RES_POISON.asHolder(), 5));
+                .addAttribute(ModAttributes.POISON_RESISTANCE.asHolder(), 5));
         this.addStat(ModItems.MEDICINAL_HERB.get(), 150, 10, 1);
         this.addStat(ModItems.BAMBOO_SPROUT.get(), 100, 10, 1);
         this.addStat(ModItems.MUSHROOM.get(), 100, 10, 1);

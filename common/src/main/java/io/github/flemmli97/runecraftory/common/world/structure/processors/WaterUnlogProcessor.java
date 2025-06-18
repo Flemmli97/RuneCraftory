@@ -1,7 +1,6 @@
 package io.github.flemmli97.runecraftory.common.world.structure.processors;
 
 import com.mojang.serialization.Codec;
-import io.github.flemmli97.runecraftory.common.registry.ModStructures;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
@@ -26,6 +25,6 @@ public class WaterUnlogProcessor extends StructureProcessor {
 
     @Override
     protected StructureProcessorType<?> getType() {
-        return ModStructures.WATERUNLOG_PROCESSOR.get();
+        return null;//ModStructures.WATERUNLOG_PROCESSOR.get();
     }
 }

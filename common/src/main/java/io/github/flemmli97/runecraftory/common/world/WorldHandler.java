@@ -14,11 +14,12 @@ import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.network.S2CCalendar;
 import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
@@ -27,12 +28,12 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.datafix.DataFixTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
-import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -45,8 +46,8 @@ import java.util.UUID;
 
 public class WorldHandler extends SavedData {
 
-    private static final String ID_OLD = "RCCalendar";
-    private static final String ID = "RunecraftorySaveData";
+    private static final String IDENTIFIER = "RunecraftorySaveData";
+    private static final SavedData.Factory<WorldHandler> FACTORY = new Factory<>(WorldHandler::new, WorldHandler::new, DataFixTypes.LEVEL);
 
     private final CalendarImpl calendar = new CalendarImpl();
 
@@ -66,25 +67,15 @@ public class WorldHandler extends SavedData {
 
     private int updateDelay, lastUpdateDay;
 
-    public WorldHandler() {
+    private WorldHandler() {
     }
 
-    private WorldHandler(CompoundTag tag) {
-        this.load(tag);
+    private WorldHandler(CompoundTag tag, HolderLookup.Provider provider) {
+        this.load(tag, provider);
     }
 
     public static WorldHandler get(MinecraftServer server) {
-        DimensionDataStorage storage = server.overworld().getDataStorage();
-        WorldHandler newData = storage.get(WorldHandler::new, ID);
-        if (newData != null)
-            return newData;
-        WorldHandler legacy = storage.get(WorldHandler::new, ID_OLD);
-        if (legacy != null) {
-            storage.set(ID_OLD, null);
-            storage.set(ID, legacy);
-            return legacy;
-        }
-        return storage.computeIfAbsent(WorldHandler::new, WorldHandler::new, ID);
+        return server.overworld().getDataStorage().computeIfAbsent(FACTORY, IDENTIFIER);
     }
 
     public static boolean canUpdateWeather(Level level) {
@@ -104,7 +95,7 @@ public class WorldHandler extends SavedData {
 
     public void setDateDayAndSeason(MinecraftServer server, int date, EnumDay day, EnumSeason season) {
         this.calendar.setDateDayAndSeason(date, day, season);
-        Platform.INSTANCE.sendToAll(new S2CCalendar(this.calendar), server);
+        LoaderNetwork.INSTANCE.sendToAll(new S2CCalendar(this.calendar), server);
         this.setDirty();
     }
 
@@ -113,7 +104,7 @@ public class WorldHandler extends SavedData {
         EnumDay day = EnumDay.values()[Math.floorMod(date, EnumDay.values().length)];
         EnumSeason season = EnumSeason.values()[Math.floorMod(date / 30, EnumSeason.values().length)];
         this.calendar.setDateDayAndSeason(date % 30 + 1, day, season);
-        Platform.INSTANCE.sendToAll(new S2CCalendar(this.calendar), level.getServer());
+        LoaderNetwork.INSTANCE.sendToAll(new S2CCalendar(this.calendar), level.getServer());
         this.setDirty();
     }
 
@@ -255,7 +246,7 @@ public class WorldHandler extends SavedData {
         if (monster.getOwnerUUID() == null)
             return null;
         return this.barnsOf(monster.getOwnerUUID())
-                .stream().filter(b -> b.pos.dimension() == monster.level.dimension() &&
+                .stream().filter(b -> b.pos.dimension() == monster.level().dimension() &&
                         new AABB(monster.blockPosition())
                                 .inflate(radius).contains(Vec3.atCenterOf(b.pos.pos()))
                         && b.hasCapacityFor(monster))
@@ -313,7 +304,7 @@ public class WorldHandler extends SavedData {
         return this.toRemovePartyMembers.computeIfAbsent(player.getUUID(), o -> new HashSet<>());
     }
 
-    public void load(CompoundTag compoundNBT) {
+    public void load(CompoundTag compoundNBT, HolderLookup.Provider provider) {
         this.calendar.read(compoundNBT);
         this.lastUpdateDay = compoundNBT.getInt("LastUpdateDay");
         CompoundTag barns = compoundNBT.getCompound("PlayerBarns");
@@ -335,7 +326,7 @@ public class WorldHandler extends SavedData {
             list.forEach(t -> {
                 CompoundTag cTag = (CompoundTag) t;
                 map.add(new UnloadedPartyMember(UUID.fromString(cTag.getString("UUID")), GlobalPos.CODEC.parse(new Dynamic<>(NbtOps.INSTANCE, cTag.get("Pos")))
-                        .getOrThrow(false, RuneCraftory.LOGGER::error)));
+                        .getOrThrow()));
             });
         });
         CompoundTag removedPartyMembers = compoundNBT.getCompound("RemovedPartyMembers");
@@ -345,11 +336,11 @@ public class WorldHandler extends SavedData {
             Set<UUID> uuids = this.toRemovePartyMembers.computeIfAbsent(uuid, u -> new HashSet<>());
             list.forEach(t -> uuids.add(NbtUtils.loadUUID(t)));
         });
-        this.npcHandler.load(compoundNBT.getCompound("NPCHandler"));
+        this.npcHandler.load(compoundNBT.getCompound("NPCHandler"), provider);
     }
 
     @Override
-    public CompoundTag save(CompoundTag compoundNBT) {
+    public CompoundTag save(CompoundTag compoundNBT, HolderLookup.Provider provider) {
         this.calendar.write(compoundNBT);
         compoundNBT.putInt("LastUpdateDay", this.lastUpdateDay);
         CompoundTag barns = new CompoundTag();
@@ -386,7 +377,7 @@ public class WorldHandler extends SavedData {
             }
         });
         compoundNBT.put("RemovedPartyMembers", removedPartyMembers);
-        compoundNBT.put("NPCHandler", this.npcHandler.save());
+        compoundNBT.put("NPCHandler", this.npcHandler.save(provider));
         return compoundNBT;
     }
 

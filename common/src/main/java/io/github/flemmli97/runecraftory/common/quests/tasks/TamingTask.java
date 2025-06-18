@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.quests.tasks;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.simplequests_api.SimpleQuestsAPI;
@@ -27,7 +28,7 @@ import java.util.List;
 public class TamingTask implements QuestTask<TamingTask.TamingTaskResolved> {
 
     public static final QuestEntryKey<TamingTask> ID = new QuestEntryKey<>(RuneCraftory.modRes("taming"));
-    public static final Codec<TamingTask> CODEC = RecordCodecBuilder.create((instance) ->
+    public static final MapCodec<TamingTask> CODEC = RecordCodecBuilder.mapCodec((instance) ->
             instance.group(Codec.STRING.fieldOf("description").forGetter(d -> d.description),
                     JsonCodecs.nonEmptyList(DescriptiveValue.withTranslation(EntityPredicate.CODEC), "predicates can't be empty").fieldOf("predicates").forGetter(d -> d.predicates),
                     NumberProviders.CODEC.fieldOf("amount").forGetter(d -> d.amount)
@@ -74,7 +75,7 @@ public class TamingTask implements QuestTask<TamingTask.TamingTaskResolved> {
     public record TamingTaskResolved(DescriptiveValue<EntityPredicate> predicate,
                                      int amount) implements ResolvedQuestTask {
 
-        public static final Codec<TamingTaskResolved> CODEC = RecordCodecBuilder.create((instance) ->
+        public static final MapCodec<TamingTaskResolved> CODEC = RecordCodecBuilder.mapCodec((instance) ->
                 instance.group(DescriptiveValue.withTranslation(EntityPredicate.CODEC).fieldOf("predicate").forGetter(d -> d.predicate),
                         ExtraCodecs.POSITIVE_INT.fieldOf("amount").forGetter(d -> d.amount)
                 ).apply(instance, TamingTaskResolved::new));

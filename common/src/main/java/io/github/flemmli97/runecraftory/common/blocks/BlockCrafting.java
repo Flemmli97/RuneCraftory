@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.blocks;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
-import io.github.flemmli97.runecraftory.common.blocks.tile.CraftingBlockEntity;
-import io.github.flemmli97.runecraftory.common.blocks.tile.UpgradingCraftingBlockEntity;
+import io.github.flemmli97.runecraftory.common.blocks.entity.CraftingBlockEntity;
+import io.github.flemmli97.runecraftory.common.blocks.entity.UpgradingCraftingBlockEntity;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

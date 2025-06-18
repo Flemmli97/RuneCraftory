@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
+import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
@@ -10,9 +11,13 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import net.tslat.smartbrainlib.api.core.BrainActivityGroup;
+import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.SequentialBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomWalkTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
-import net.tslat.smartbrainlib.api.core.behaviour.custom.target.InvalidateAttackTarget;
+
+import java.util.List;
 
 public class EntityAnt extends BaseMonster {
 
@@ -28,13 +33,18 @@ public class EntityAnt extends BaseMonster {
     }
 
     @Override
-    public BrainActivityGroup<? extends BaseMonster> getFightTasks() {
-        return BrainActivityGroup.fightTasks(
-                new InvalidateAttackTarget<BaseMonster>(),
-                AttackBehaviourBuilder.<BaseMonster>create()
-                        .start(MELEE).prepare(new SetWalkTargetToAttackTarget<>(), new MoveToAttackTarget<>())
-                        .end(1)
-                        .build()
+    public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
+        return AttackBehaviourBuilder.<BaseMonster>create()
+                .start(MELEE).prepare(new SetWalkTargetToAttackTarget<>(), new MoveToAttackTarget<>())
+                .end(1)
+                .build()
+                .cooldownFor(e -> e.animationCooldown(null));
+    }
+
+    @Override
+    public List<Pair<ExtendedBehaviour<? extends BaseMonster>, Integer>> getIdleAI() {
+        return List.of(Pair.of(new SequentialBehaviour<>(new SetWalkTargetToAttackTarget<>(), new MoveToWalkTarget<>()), 1),
+                Pair.of(new SequentialBehaviour<>(new SetRandomWalkTarget<>(), new MoveToWalkTarget<>()), 1)
         );
     }
 
@@ -50,7 +60,7 @@ public class EntityAnt extends BaseMonster {
     }
 
     @Override
-    public int animationCooldown(AnimatedAction anim) {
+    public int animationCooldown(String anim) {
         return Math.max(25, (int) (super.animationCooldown(anim) * 0.7));
     }
 

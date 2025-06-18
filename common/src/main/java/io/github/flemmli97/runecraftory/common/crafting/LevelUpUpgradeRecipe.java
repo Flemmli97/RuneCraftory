@@ -1,61 +1,67 @@
 package io.github.flemmli97.runecraftory.common.crafting;
 
-import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.SingleItemRecipe;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 
-public class LevelUpUpgradeRecipe extends SingleItemRecipe {
+public class LevelUpUpgradeRecipe implements Recipe<SingleRecipeInput> {
 
-    private final ResourceLocation id;
     protected final int level;
     protected final Ingredient base;
     protected final Ingredient upgradeMaterial;
 
-    public LevelUpUpgradeRecipe(ResourceLocation id, int level, Ingredient base, Ingredient upgradeMaterial) {
-        super(id, base, upgradeMaterial, ItemStack.EMPTY);
-        this.id = id;
+    public LevelUpUpgradeRecipe(int level, Ingredient base, Ingredient upgradeMaterial) {
         this.level = level;
         this.base = base;
         this.upgradeMaterial = upgradeMaterial;
     }
 
-    @Override
-    public ResourceLocation getId() {
-        return this.id;
+    public static void build(RecipeOutput cons, int level, Ingredient base, Ingredient material, String string) {
+        build(cons, level, base, material, ResourceLocation.parse(string));
+    }
+
+    public static void build(RecipeOutput cons, int level, Ingredient base, Ingredient material, ResourceLocation res) {
+        cons.accept(ResourceLocation.fromNamespaceAndPath(res.getNamespace(), "level_upgrade/" + res.getPath()),
+                new LevelUpUpgradeRecipe(level, base, material), null);
     }
 
     @Override
-    public boolean matches(Container container, Level level) {
-        ItemStack stack = container.getItem(0);
+    public boolean matches(SingleRecipeInput input, Level level) {
+        ItemStack stack = input.getItem(0);
         if (ItemNBT.itemLevel(stack) != this.level)
             return false;
-        return super.matches(container, level);
-    }
-
-    @Override
-    public boolean isSpecial() {
         return true;
     }
 
     @Override
-    public ItemStack getResultItem() {
-        return ItemStack.EMPTY;
+    public ItemStack assemble(SingleRecipeInput input, HolderLookup.Provider registries) {
+        ItemStack stack = input.getItem(0).copy();
+        ItemNBT.getLeveledItem(stack, ItemNBT.itemLevel(stack) + 1);
+        return stack;
     }
 
     @Override
-    public ItemStack assemble(Container container) {
-        ItemStack stack = container.getItem(0).copy();
-        ItemNBT.getLeveledItem(stack, ItemNBT.itemLevel(stack) + 1);
-        return stack;
+    public boolean canCraftInDimensions(int width, int height) {
+        return true;
+    }
+
+    @Override
+    public ItemStack getResultItem(HolderLookup.Provider registries) {
+        return ItemStack.EMPTY;
     }
 
     @Override
@@ -63,29 +69,46 @@ public class LevelUpUpgradeRecipe extends SingleItemRecipe {
         return ModCrafting.LEVEL_UPGRADE_SERIALIZER.get();
     }
 
-    public static class Serializer extends CustomRegistryEntry<Serializer> implements RecipeSerializer<LevelUpUpgradeRecipe> {
+    @Override
+    public RecipeType<?> getType() {
+        return RecipeType.CRAFTING;
+    }
+
+    @Override
+    public boolean isSpecial() {
+        return true;
+    }
+
+    public static class Serializer implements RecipeSerializer<LevelUpUpgradeRecipe> {
+
+        public static final MapCodec<LevelUpUpgradeRecipe> CODEC = RecordCodecBuilder.mapCodec(instance ->
+                instance.group(Codec.INT.fieldOf("level").forGetter(d -> d.level),
+                        Ingredient.CODEC_NONEMPTY.fieldOf("base").forGetter(d -> d.base),
+                        Ingredient.CODEC_NONEMPTY.fieldOf("base").forGetter(d -> d.base)
+                ).apply(instance, LevelUpUpgradeRecipe::new));
+
+        public static final StreamCodec<RegistryFriendlyByteBuf, LevelUpUpgradeRecipe> STREAM_CODEC = new StreamCodec<>() {
+            @Override
+            public LevelUpUpgradeRecipe decode(RegistryFriendlyByteBuf buf) {
+                return new LevelUpUpgradeRecipe(buf.readInt(), Ingredient.CONTENTS_STREAM_CODEC.decode(buf), Ingredient.CONTENTS_STREAM_CODEC.decode(buf));
+            }
+
+            @Override
+            public void encode(RegistryFriendlyByteBuf buf, LevelUpUpgradeRecipe recipe) {
+                buf.writeInt(recipe.level);
+                Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.base);
+                Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.upgradeMaterial);
+            }
+        };
 
         @Override
-        public LevelUpUpgradeRecipe fromJson(ResourceLocation id, JsonObject json) {
-            int level = GsonHelper.getAsInt(json, "current_level");
-            Ingredient ingredient = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "item"));
-            Ingredient ingredient1 = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "material"));
-            return new LevelUpUpgradeRecipe(id, level, ingredient, ingredient1);
+        public MapCodec<LevelUpUpgradeRecipe> codec() {
+            return CODEC;
         }
 
         @Override
-        public LevelUpUpgradeRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
-            int level = buffer.readInt();
-            Ingredient ingredient = Ingredient.fromNetwork(buffer);
-            Ingredient ingredient1 = Ingredient.fromNetwork(buffer);
-            return new LevelUpUpgradeRecipe(recipeId, level, ingredient, ingredient1);
-        }
-
-        @Override
-        public void toNetwork(FriendlyByteBuf buffer, LevelUpUpgradeRecipe recipe) {
-            buffer.writeInt(recipe.level);
-            recipe.base.toNetwork(buffer);
-            recipe.upgradeMaterial.toNetwork(buffer);
+        public StreamCodec<RegistryFriendlyByteBuf, LevelUpUpgradeRecipe> streamCodec() {
+            return STREAM_CODEC;
         }
     }
 }

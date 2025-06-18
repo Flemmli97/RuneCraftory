@@ -26,7 +26,7 @@ public record ArmorRendererImpl(ArmorModels.ArmorModelGetter armorRenderer,
             copyVisibilitySettings(contextModel, (HumanoidModel<LivingEntity>) model);
         }
         if (model instanceof ArmorSimpleItemModel)
-            model.renderToBuffer(matrices, null, light, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+            model.renderToBuffer(matrices, null, light, OverlayTexture.NO_OVERLAY, 0xffffffff);
         else
             ArmorRenderer.renderPart(matrices, vertexConsumers, light, stack, model, this.texture);
     }

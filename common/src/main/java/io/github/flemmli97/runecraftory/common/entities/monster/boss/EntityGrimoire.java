@@ -238,7 +238,7 @@ public class EntityGrimoire extends BossMonster {
     }
 
     @Override
-    public void handleAttack(AnimatedAction anim) {
+    public void handleAttack(AnimationState anim) {
         BiConsumer<AnimatedAction, EntityGrimoire> handler = ATTACK_HANDLER.get(anim.getID());
         if (handler != null)
             handler.accept(anim, this);
@@ -258,7 +258,7 @@ public class EntityGrimoire extends BossMonster {
     }
 
     @Override
-    public AABB attackBB(AnimatedAction anim) {
+    public AABB attackBB(String anim) {
         double width = this.getBbWidth() * 1.4;
         double length = this.getBbWidth() * 1.5;
         if (anim.is(TAIL_SWIPE)) {
@@ -322,7 +322,7 @@ public class EntityGrimoire extends BossMonster {
     }
 
     @Override
-    public AnimatedAction getSleepAnimation() {
+    public String getSleepAnimation() {
         return SLEEP;
     }
 

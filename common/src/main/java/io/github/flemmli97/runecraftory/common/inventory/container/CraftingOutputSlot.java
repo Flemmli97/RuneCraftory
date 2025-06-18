@@ -67,7 +67,7 @@ public class CraftingOutputSlot extends Slot {
         if (this.craftingContainer.runepointCost() >= 0) {
             PlayerData data = Platform.INSTANCE.getPlayerData(player);
             data.decreaseRunePoints(this.craftingContainer.runepointCost(), true);
-            RecipeHolder<SextupleRecipe> recipe = this.craftingContainer.getCurrentRecipe();
+            RecipeHolder<? extends SextupleRecipe> recipe = this.craftingContainer.getCurrentRecipe();
             if (recipe != null && !recipe.value().isSpecial() && !data.getRecipeKeeper().isUnlocked(recipe)) {
                 data.getRecipeKeeper().unlockRecipe(player, recipe);
                 this.craftingContainer.sendCraftingRecipesToClient(serverPlayer, data);

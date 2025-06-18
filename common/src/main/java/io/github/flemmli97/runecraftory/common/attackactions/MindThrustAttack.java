@@ -31,7 +31,7 @@ public class MindThrustAttack extends AttackAction {
         if (anim.isAt("attack")) {
             if (!entity.level().isClientSide)
                 CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(entity.getYRot(), entity.getXRot(), 1, 0.5f, false))
-                        .withBonusAttributes(ModAttributes.PARA.asHolder(), 40)
+                        .withBonusAttributes(ModAttributes.PARALYSIS.asHolder(), 40)
                         .withBonusAttributes(ModAttributes.POISON.asHolder(), 10)
                         .withBonusAttributes(ModAttributes.SEAL.asHolder(), 25)
                         .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))

@@ -67,7 +67,7 @@ public class EntityDuck extends ChargingMonster {
     }
 
     @Override
-    public void handleAttack(AnimatedAction anim) {
+    public void handleAttack(AnimationState anim) {
         if (anim.is(DIVE)) {
             if (anim.isPast("dive")) {
                 if (this.getChargeMotion() == null) {
@@ -105,7 +105,7 @@ public class EntityDuck extends ChargingMonster {
     }
 
     @Override
-    protected boolean isChargingAnim(AnimatedAction anim) {
+    protected boolean isChargingAnim(String anim) {
         return anim.is(DIVE, LAND);
     }
 
@@ -120,7 +120,7 @@ public class EntityDuck extends ChargingMonster {
     }
 
     @Override
-    public AABB attackBB(AnimatedAction anim) {
+    public AABB attackBB(String anim) {
         double width = this.getBbWidth() * 1.8;
         double length = this.getBbWidth() * 2.7;
         return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
@@ -144,7 +144,7 @@ public class EntityDuck extends ChargingMonster {
     }
 
     @Override
-    public AnimatedAction getSleepAnimation() {
+    public String getSleepAnimation() {
         return STILL;
     }
 
