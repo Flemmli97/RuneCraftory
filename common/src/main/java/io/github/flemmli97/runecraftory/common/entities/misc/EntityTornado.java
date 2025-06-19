@@ -7,6 +7,8 @@ import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
+import io.github.flemmli97.tenshilib.common.entity.AdvancedProjectile;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -36,7 +38,7 @@ public class EntityTornado extends BaseDamageCloud {
     }
 
     public void shootAtEntity(Entity target, float velocity, float inaccuracy) {
-        Vec3 targetPos = EntityUtil.getStraightProjectileTarget(this.position(), target);
+        Vec3 targetPos = EntityUtils.getStraightProjectileTarget(this.position(), target);
         Vec3 dir = (new Vec3(targetPos.x() - this.getX(), targetPos.y() - this.getY(), targetPos.z() - this.getZ()));
         this.shoot(dir.x, dir.y, dir.z, velocity, inaccuracy);
     }
@@ -47,13 +49,13 @@ public class EntityTornado extends BaseDamageCloud {
         float h = Mth.cos(yaw * ((float) Math.PI / 180)) * Mth.cos(pitch * ((float) Math.PI / 180));
         this.shoot(f, g, h, velocity, inaccuracy);
         Vec3 vec3 = shooter.getDeltaMovement();
-        this.setDeltaMovement(this.getDeltaMovement().add(vec3.x, shooter.isOnGround() ? 0.0 : vec3.y, vec3.z));
+        this.setDeltaMovement(this.getDeltaMovement().add(vec3.x, shooter.onGround() ? 0.0 : vec3.y, vec3.z));
     }
 
     public void shoot(double x, double y, double z, float velocity, float inaccuracy) {
         Vec3 vector3d = (new Vec3(x, y, z)).normalize().add(this.random.nextGaussian() * 0.0075F * inaccuracy, this.random.nextGaussian() * 0.0075F * inaccuracy, this.random.nextGaussian() * 0.0075F * inaccuracy).scale(velocity);
         this.setDeltaMovement(vector3d);
-        double f = Math.sqrt(EntityProjectile.horizontalMag(vector3d));
+        double f = Math.sqrt(AdvancedProjectile.horizontalMag(vector3d));
         this.setYRot((float) (Mth.atan2(vector3d.x, vector3d.z) * (180F / (float) Math.PI)));
         this.setXRot((float) (Mth.atan2(vector3d.y, f) * (180F / (float) Math.PI)));
         this.yRotO = this.getYRot();

@@ -1,0 +1,286 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:fireball",
+          "weight": 140
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:fireball_big",
+          "weight": 60
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:explosion",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:water_laser",
+          "weight": 110
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:parallel_laser",
+          "weight": 60
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:delta_laser",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:screw_rock",
+          "weight": 110
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:earth_spike",
+          "weight": 60
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:avenger_rock",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:sonic_wind",
+          "weight": 110
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:double_sonic",
+          "weight": 60
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:penetrate_sonic",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:light_barrier",
+          "weight": 90
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:shine",
+          "weight": 50
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:prism",
+          "weight": 15
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:dark_snake",
+          "weight": 100
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:dark_ball",
+          "weight": 50
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:darkness",
+          "weight": 15
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:cure",
+          "weight": 60
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:cure_all",
+          "weight": 30
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:cure_master",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:medi_poison",
+          "weight": 80
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:medi_paralysis",
+          "weight": 60
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:medi_seal",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:power_wave",
+          "weight": 100
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:dash_slash",
+          "weight": 80
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:rush_attack",
+          "weight": 85
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:round_break",
+          "weight": 60
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:mind_thrust",
+          "weight": 85
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:gust",
+          "weight": 60
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:storm",
+          "weight": 80
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:blitz",
+          "weight": 30
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:twin_attack",
+          "weight": 90
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:rail_strike",
+          "weight": 50
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:wind_slash",
+          "weight": 70
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:flash_strike",
+          "weight": 80
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:naive_blade",
+          "weight": 70
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:steel_heart",
+          "weight": 40
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:delta_strike",
+          "weight": 80
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:hurricane",
+          "weight": 90
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:reaper_slash",
+          "weight": 80
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:million_strike",
+          "weight": 50
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:axel_disaster",
+          "weight": 50
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:stardust_upper",
+          "weight": 80
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:tornado_swing",
+          "weight": 60
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:grand_impact",
+          "weight": 70
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:giga_swing",
+          "weight": 80
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:upper_cut",
+          "weight": 100
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:double_kick",
+          "weight": 90
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:straight_punch",
+          "weight": 80
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:neko_damashi",
+          "weight": 100
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:rush_punch",
+          "weight": 60
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:cyclone",
+          "weight": 60
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:rapid_move",
+          "weight": 90
+        }
+      ],
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max": 1.0,
+        "min": -2.0
+      }
+    }
+  ],
+  "random_sequence": "runecraftory:chest/inject/spells"
+}

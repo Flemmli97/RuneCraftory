@@ -20,6 +20,7 @@ import java.util.Map;
 public class NPCConversationManager extends SimpleJsonResourceReloadListener implements ListenerExtension {
 
     public static final ResourceLocation ID = RuneCraftory.modRes("conversations");
+    public static final String DIRECTORY = String.format("%s/%s", ID.getNamespace(), ID.getPath());
 
     private Map<ResourceLocation, ConversationSet> keyData = ImmutableMap.of();
     private Map<ConversationSet, ResourceLocation> dataKey = ImmutableMap.of();
@@ -27,7 +28,7 @@ public class NPCConversationManager extends SimpleJsonResourceReloadListener imp
     private HolderLookup.Provider provider;
 
     public NPCConversationManager() {
-        super(DataPackHandler.GSON, ID.toString());
+        super(DataPackHandler.GSON, DIRECTORY);
     }
 
     public ConversationSet get(ResourceLocation res, ConversationSet fallback) {

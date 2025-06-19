@@ -1,0 +1,12 @@
+{
+  "cooking_bonus": {},
+  "cooking_bonus_percent": {},
+  "duration": 6000,
+  "effects": {
+    "runecraftory:rune_points_gain": 20.0
+  },
+  "effects_percentage": {},
+  "item": "runecraftory:mayonnaise",
+  "potion_apply": [],
+  "potion_remove": []
+}

@@ -1,0 +1,71 @@
+{
+  "base_values": {
+    "minecraft:generic.attack_damage": 17.0,
+    "minecraft:generic.knockback_resistance": 1.0,
+    "minecraft:generic.max_health": 290.0,
+    "runecraftory:cold_resistance": 100.0,
+    "runecraftory:critical_resistance": 25.0,
+    "runecraftory:defence": 3.0,
+    "runecraftory:dizzy_resistance": 100.0,
+    "runecraftory:drain_resistance": 10.0,
+    "runecraftory:earth_resistance": 25.0,
+    "runecraftory:faint_resistance": 100.0,
+    "runecraftory:fatigue_resistance": 100.0,
+    "runecraftory:love_resistance": -25.0,
+    "runecraftory:magic_attack": 14.0,
+    "runecraftory:magic_defence": 2.0,
+    "runecraftory:paralysis_resistance": 90.0,
+    "runecraftory:poison_resistance": 100.0,
+    "runecraftory:seal_resistance": 80.0,
+    "runecraftory:sleep_resistance": 100.0,
+    "runecraftory:stun_resistance": 100.0,
+    "runecraftory:wind_resistance": 25.0
+  },
+  "flying": false,
+  "level_gains": {
+    "minecraft:generic.attack_damage": 283.0,
+    "minecraft:generic.max_health": 615.0,
+    "runecraftory:defence": 249.0,
+    "runecraftory:magic_attack": 278.0,
+    "runecraftory:magic_defence": 255.0
+  },
+  "level_increase_on_kill": [
+    {
+      "increase": 3,
+      "min_killed": 1
+    },
+    {
+      "increase": 1,
+      "min_killed": 2
+    },
+    {
+      "increase": 3,
+      "min_killed": 7
+    },
+    {
+      "increase": 5,
+      "min_killed": 15
+    }
+  ],
+  "min_level": 5,
+  "money": 0,
+  "needs_roof": true,
+  "ride_action_costs": {
+    "command_1": {
+      "cost": 0.0,
+      "multiplier": false
+    },
+    "command_2": {
+      "cost": 10.0,
+      "multiplier": false
+    },
+    "command_3": {
+      "cost": 0.5,
+      "multiplier": true
+    }
+  },
+  "rideable": true,
+  "size": 2,
+  "taming_chance": 0.005,
+  "xp": 70
+}

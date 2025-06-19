@@ -1,0 +1,32 @@
+{
+  "values": [
+    "runecraftory:paralysis",
+    "runecraftory:poison",
+    "runecraftory:seal",
+    "runecraftory:sleep",
+    "runecraftory:fatigue",
+    "runecraftory:cold",
+    "runecraftory:critical",
+    "runecraftory:stun",
+    "runecraftory:faint",
+    "runecraftory:drain",
+    "runecraftory:water_resistance",
+    "runecraftory:earth_resistance",
+    "runecraftory:wind_resistance",
+    "runecraftory:fire_resistance",
+    "runecraftory:dark_resistance",
+    "runecraftory:light_resistance",
+    "runecraftory:love_resistance",
+    "runecraftory:paralysis_resistance",
+    "runecraftory:poison_resistance",
+    "runecraftory:seal_resistance",
+    "runecraftory:sleep_resistance",
+    "runecraftory:fatigue_resistance",
+    "runecraftory:cold_resistance",
+    "runecraftory:critical_resistance",
+    "runecraftory:stun_resistance",
+    "runecraftory:faint_resistance",
+    "runecraftory:drain_resistance",
+    "minecraft:generic.knockback_resistance"
+  ]
+}

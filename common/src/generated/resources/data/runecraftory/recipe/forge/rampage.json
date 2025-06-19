@@ -1,0 +1,23 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:short_dagger"
+    },
+    {
+      "item": "minecraft:gold_block"
+    },
+    {
+      "item": "minecraft:diamond"
+    },
+    {
+      "item": "runecraftory:gold_wolf_fang"
+    }
+  ],
+  "required_level": 31,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:rampage"
+  }
+}

@@ -1,14 +1,14 @@
 {
   "parent": "minecraft:item/handheld",
-  "textures": {
-    "layer0": "runecraftory:item/priest_saber"
-  },
   "overrides": [
     {
+      "model": "runecraftory:item/priest_saber_single",
       "predicate": {
         "runecraftory:held": 1.0
-      },
-      "model": "runecraftory:item/priest_saber_single"
+      }
     }
-  ]
+  ],
+  "textures": {
+    "layer0": "runecraftory:item/priest_saber"
+  }
 }

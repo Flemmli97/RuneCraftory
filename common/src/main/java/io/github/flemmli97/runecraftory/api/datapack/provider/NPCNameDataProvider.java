@@ -34,7 +34,7 @@ public abstract class NPCNameDataProvider implements DataProvider {
     public CompletableFuture<?> run(CachedOutput cache) {
         this.add();
         return CompletableFuture.allOf(this.names.entrySet().stream().map(e -> {
-            Path dataPath = this.packOutput.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(String.format("%1$s/%2$s/%3$s.json", this.modid, NameManager.ID, e.getKey()));
+            Path dataPath = this.packOutput.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(String.format("%1$s/%2$s/%3$s.json", this.modid, NameManager.DIRECTORY, e.getKey()));
             JsonElement obj = NameStructure.CODEC.encodeStart(JsonOps.INSTANCE, e.getValue()).getOrThrow();
             return DataProvider.saveStable(cache, obj, dataPath);
         }).toArray(CompletableFuture[]::new));

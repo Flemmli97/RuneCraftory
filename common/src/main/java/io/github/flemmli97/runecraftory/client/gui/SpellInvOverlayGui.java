@@ -17,7 +17,7 @@ public class SpellInvOverlayGui {
         this.mc = mc;
     }
 
-    public void render(GuiGraphics graphics, float partialTicks) {
+    public void render(GuiGraphics graphics, DeltaTracker tracker) {
 //        if (!this.mc.player.isSpectator()) {
 //            InventorySpells inv = Platform.INSTANCE.getPlayerData(this.mc.player).getInv();
 //            if (inv != null) {

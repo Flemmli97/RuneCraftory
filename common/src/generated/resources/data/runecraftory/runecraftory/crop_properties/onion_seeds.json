@@ -1,0 +1,13 @@
+{
+  "bad_season": [
+    "SUMMER"
+  ],
+  "best_season": [
+    "FALL"
+  ],
+  "giant_crop": "runecraftory:ultra_onion",
+  "growth": 20,
+  "item": "runecraftory:onion_seeds",
+  "max_drops": 6,
+  "regrowable": false
+}

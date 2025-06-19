@@ -1,0 +1,17 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:rod"
+    },
+    {
+      "tag": "c:gems/aquamarine"
+    }
+  ],
+  "required_level": 12,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:aquamarine_rod"
+  }
+}

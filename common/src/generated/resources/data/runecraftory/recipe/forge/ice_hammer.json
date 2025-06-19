@@ -1,0 +1,23 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:battle_hammer"
+    },
+    {
+      "tag": "c:ingots/gold"
+    },
+    {
+      "item": "minecraft:packed_ice"
+    },
+    {
+      "tag": "c:gems/aquamarine"
+    }
+  ],
+  "required_level": 28,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:ice_hammer"
+  }
+}

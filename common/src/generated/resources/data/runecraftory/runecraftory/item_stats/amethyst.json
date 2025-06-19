@@ -1,0 +1,13 @@
+{
+  "buy_price": 3500,
+  "element": "NONE",
+  "item": "#c:gems/amethyst",
+  "item_stats": {
+    "runecraftory:magic_defence": 6.0
+  },
+  "monster_bonus": {
+    "runecraftory:defence": 2.0
+  },
+  "sell_price": 18,
+  "upgrade_difficulty": 19
+}

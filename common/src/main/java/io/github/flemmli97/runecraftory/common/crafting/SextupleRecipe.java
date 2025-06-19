@@ -188,7 +188,7 @@ public abstract class SextupleRecipe implements Recipe<PlayerBoundCraftingContai
             return RecordCodecBuilder.mapCodec(instance -> instance.group(
                             Codec.STRING.optionalFieldOf("group", "").forGetter(SextupleRecipe::getGroup),
                             ExtraCodecs.POSITIVE_INT.fieldOf("required_level").forGetter(SextupleRecipe::getCraftingLevel),
-                            ExtraCodecs.POSITIVE_INT.fieldOf("crafting_cost").forGetter(SextupleRecipe::getAdditionalCost),
+                            ExtraCodecs.NON_NEGATIVE_INT.fieldOf("crafting_cost").forGetter(SextupleRecipe::getAdditionalCost),
                             ItemStack.STRICT_CODEC.fieldOf("result").forGetter(SextupleRecipe::getRecipeOutput),
                             Ingredient.CODEC_NONEMPTY
                                     .listOf()

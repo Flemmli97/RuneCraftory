@@ -1,0 +1,15 @@
+{
+  "cooking_bonus": {},
+  "cooking_bonus_percent": {},
+  "duration": 6000,
+  "effects": {
+    "runecraftory:defence": 16.0,
+    "runecraftory:health_gain": 666.0,
+    "runecraftory:magic_defence": 16.0,
+    "runecraftory:rune_points_gain": 130.0
+  },
+  "effects_percentage": {},
+  "item": "runecraftory:cookie",
+  "potion_apply": [],
+  "potion_remove": []
+}

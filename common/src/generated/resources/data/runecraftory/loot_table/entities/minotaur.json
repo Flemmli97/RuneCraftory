@@ -1,0 +1,66 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "base": 0.2,
+              "enchanted_bonus": 0.2,
+              "enchantment": "minecraft:looting",
+              "function": "runecraftory:luck_and_looting",
+              "limit": 0,
+              "luck_bonus": 0.05
+            }
+          ],
+          "name": "runecraftory:devil_horn"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "base": 0.3,
+              "enchanted_bonus": 0.2,
+              "enchantment": "minecraft:looting",
+              "function": "runecraftory:luck_and_looting",
+              "limit": 0,
+              "luck_bonus": 0.05
+            }
+          ],
+          "name": "runecraftory:hammer_piece"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "base": 0.01,
+              "enchanted_bonus": 0.2,
+              "enchantment": "minecraft:looting",
+              "function": "runecraftory:luck_and_looting",
+              "limit": 0,
+              "luck_bonus": 0.005
+            }
+          ],
+          "name": "runecraftory:protein"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "runecraftory:entities/minotaur"
+}

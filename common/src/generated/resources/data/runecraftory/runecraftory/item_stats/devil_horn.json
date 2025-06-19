@@ -1,0 +1,15 @@
+{
+  "buy_price": 850,
+  "element": "NONE",
+  "item": "runecraftory:devil_horn",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 30.0,
+    "runecraftory:magic_attack": 30.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.attack_damage": 1.0,
+    "runecraftory:magic_attack": 2.0
+  },
+  "sell_price": 91,
+  "upgrade_difficulty": 43
+}

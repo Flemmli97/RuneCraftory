@@ -1,0 +1,14 @@
+{
+  "values": [
+    "runecraftory:scrap_plus",
+    "#c:ingots/iron",
+    "#c:ingots/gold",
+    "#c:ingots/copper",
+    "#c:ingots/copper",
+    "#c:dusts/bronze",
+    "#c:raw_materials/silver",
+    "#c:raw_materials/platinum",
+    "#c:orichalcum",
+    "#c:dragonic"
+  ]
+}

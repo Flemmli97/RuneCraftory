@@ -1,0 +1,20 @@
+{
+  "buy_price": 30000,
+  "element": "NONE",
+  "item": "runecraftory:puppetry_strings",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 6.0,
+    "runecraftory:magic_attack": 9.0,
+    "runecraftory:paralysis": 5.0,
+    "runecraftory:seal": 15.0
+  },
+  "monster_bonus": {
+    "runecraftory:paralysis": 0.5,
+    "runecraftory:seal": 0.5
+  },
+  "sell_price": 1000,
+  "tier_1_Spell": "runecraftory:dark_beam",
+  "tier_2_Spell": "runecraftory:big_plate",
+  "tier_3_Spell": "runecraftory:dark_bullets",
+  "upgrade_difficulty": 37
+}

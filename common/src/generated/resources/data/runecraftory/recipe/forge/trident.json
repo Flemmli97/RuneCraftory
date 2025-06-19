@@ -1,0 +1,20 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "minecraft:trident"
+    },
+    {
+      "tag": "c:raw_materials/silver"
+    },
+    {
+      "tag": "runecraftory:sticks"
+    }
+  ],
+  "required_level": 19,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:trident"
+  }
+}

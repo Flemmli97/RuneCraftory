@@ -1,0 +1,16 @@
+{
+  "buy_price": 22000,
+  "element": "NONE",
+  "item": "runecraftory:moving_branch",
+  "item_stats": {
+    "minecraft:generic.attack_damage": -10.0,
+    "runecraftory:magic_attack": 150.0
+  },
+  "monster_bonus": {
+    "runecraftory:magic_attack": 3.0
+  },
+  "sell_price": 2300,
+  "tier_1_Spell": "runecraftory:root_spike",
+  "tier_2_Spell": "runecraftory:apple_shield",
+  "upgrade_difficulty": 77
+}

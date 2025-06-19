@@ -1,0 +1,15 @@
+{
+  "buy_price": 25,
+  "element": "NONE",
+  "item": "#minecraft:wool",
+  "item_stats": {
+    "runecraftory:defence": 2.0,
+    "runecraftory:magic_defence": 2.0
+  },
+  "monster_bonus": {
+    "runecraftory:defence": 0.3,
+    "runecraftory:magic_defence": 0.3
+  },
+  "sell_price": 3,
+  "upgrade_difficulty": 5
+}

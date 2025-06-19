@@ -68,10 +68,10 @@ public class ModBlocks {
     public static final EnumMap<EnumMineralTier, RegistryEntrySupplier<Block, ?>> MINERAL_MAP = new EnumMap<>(EnumMineralTier.class);
     public static final EnumMap<EnumMineralTier, RegistryEntrySupplier<Block, ?>> BROKEN_MINERAL_MAP = new EnumMap<>(EnumMineralTier.class);
 
-    public static final RegistryEntrySupplier<Block, BlockForge> FORGE = BLOCKS.register("forge", () -> new BlockForge(BlockBehaviour.Properties.of(Material.METAL).noOcclusion().strength(3, 100)));
-    public static final RegistryEntrySupplier<Block, BlockCooking> COOKING = BLOCKS.register("cooking_table", () -> new BlockCooking(BlockBehaviour.Properties.of(Material.METAL).noOcclusion().strength(3, 100)));
-    public static final RegistryEntrySupplier<Block, BlockChemistry> CHEMISTRY = BLOCKS.register("chemistry_set", () -> new BlockChemistry(BlockBehaviour.Properties.of(Material.METAL).noOcclusion().strength(3, 100)));
-    public static final RegistryEntrySupplier<Block, BlockAccessory> ACCESSORY = BLOCKS.register("accessory_workbench", () -> new BlockAccessory(BlockBehaviour.Properties.of(Material.METAL).noOcclusion().strength(3, 100)));
+    public static final RegistryEntrySupplier<Block, BlockForge> FORGE = BLOCKS.register("forge", () -> new BlockForge(BlockBehaviour.Properties.of().sound(SoundType.METAL).noOcclusion().strength(3, 100)));
+    public static final RegistryEntrySupplier<Block, BlockCooking> COOKING = BLOCKS.register("cooking_table", () -> new BlockCooking(BlockBehaviour.Properties.of().noOcclusion().strength(3, 100)));
+    public static final RegistryEntrySupplier<Block, BlockChemistry> CHEMISTRY = BLOCKS.register("chemistry_set", () -> new BlockChemistry(BlockBehaviour.Properties.of().noOcclusion().strength(3, 100)));
+    public static final RegistryEntrySupplier<Block, BlockAccessory> ACCESSORY = BLOCKS.register("accessory_workbench", () -> new BlockAccessory(BlockBehaviour.Properties.of().noOcclusion().strength(3, 100)));
 
     public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_IRON = mineral(EnumMineralTier.IRON);
     public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_TIN = mineral(EnumMineralTier.TIN);
@@ -101,12 +101,12 @@ public class ModBlocks {
     public static final RegistryEntrySupplier<Block, BlockBrokenMineral> BROKEN_MINERAL_EMERALD = brokenMineral(EnumMineralTier.EMERALD);
     public static final RegistryEntrySupplier<Block, BlockBrokenMineral> BROKEN_MINERAL_SAPPHIRE = brokenMineral(EnumMineralTier.SAPPHIRE);
 
-    public static final RegistryEntrySupplier<Block, BlockBossSpawner> BOSS_SPAWNER = BLOCKS.register("boss_spawner", () -> new BlockBossSpawner(BlockBehaviour.Properties.of(Material.METAL).strength(60, 9999).noOcclusion()));
-    public static final RegistryEntrySupplier<Block, BlockShippingBin> SHIPPING = BLOCKS.register("shipping_bin", () -> new BlockShippingBin(BlockBehaviour.Properties.of(Material.WOOD).strength(3, 10)));
-    public static final RegistryEntrySupplier<Block, BlockSingleTimeSpawner> SINGLE_SPAWN_BLOCK = BLOCKS.register("one_time_spawner", () -> new BlockSingleTimeSpawner(BlockBehaviour.Properties.of(Material.METAL).strength(60, 9999).noOcclusion()));
-    public static final RegistryEntrySupplier<Block, BlockCashRegister> CASH_REGISTER = BLOCKS.register("cash_register", () -> new BlockCashRegister(BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(3, 5)));
-    public static final RegistryEntrySupplier<Block, BlockMonsterBarn> MONSTER_BARN = BLOCKS.register("monster_barn", () -> new BlockMonsterBarn(BlockBehaviour.Properties.of(Material.GRASS).sound(SoundType.GRASS).noOcclusion().noCollission().strength(1, 10000)));
-    public static final RegistryEntrySupplier<Block, BlockQuestboard> QUEST_BOARD = BLOCKS.register("quest_board", () -> new BlockQuestboard(BlockBehaviour.Properties.of(Material.WOOD).sound(SoundType.WOOD).noOcclusion().strength(2, 5)));
+    public static final RegistryEntrySupplier<Block, BlockBossSpawner> BOSS_SPAWNER = BLOCKS.register("boss_spawner", () -> new BlockBossSpawner(BlockBehaviour.Properties.of().sound(SoundType.METAL).instrument(NoteBlockInstrument.BASEDRUM).strength(60, 9999).noOcclusion()));
+    public static final RegistryEntrySupplier<Block, BlockShippingBin> SHIPPING = BLOCKS.register("shipping_bin", () -> new BlockShippingBin(BlockBehaviour.Properties.of().sound(SoundType.WOOD).instrument(NoteBlockInstrument.XYLOPHONE).strength(3, 10)));
+    public static final RegistryEntrySupplier<Block, BlockSingleTimeSpawner> SINGLE_SPAWN_BLOCK = BLOCKS.register("one_time_spawner", () -> new BlockSingleTimeSpawner(BlockBehaviour.Properties.of().sound(SoundType.METAL).instrument(NoteBlockInstrument.BASEDRUM).strength(60, 9999).noOcclusion()));
+    public static final RegistryEntrySupplier<Block, BlockCashRegister> CASH_REGISTER = BLOCKS.register("cash_register", () -> new BlockCashRegister(BlockBehaviour.Properties.of().sound(SoundType.TUFF).requiresCorrectToolForDrops().strength(3, 5)));
+    public static final RegistryEntrySupplier<Block, BlockMonsterBarn> MONSTER_BARN = BLOCKS.register("monster_barn", () -> new BlockMonsterBarn(BlockBehaviour.Properties.of().sound(SoundType.GRASS).noOcclusion().noCollission().strength(1, 10000)));
+    public static final RegistryEntrySupplier<Block, BlockQuestboard> QUEST_BOARD = BLOCKS.register("quest_board", () -> new BlockQuestboard(BlockBehaviour.Properties.of().sound(SoundType.WOOD).noOcclusion().strength(2, 5)));
 
     public static final RegistryEntrySupplier<Block, BlockCrop> TURNIP = crop("turnip", () -> ModItems.TURNIP, () -> ModItems.TURNIP_SEEDS);
     public static final RegistryEntrySupplier<Block, BlockCrop> TURNIP_PINK = crop("turnip_pink", () -> ModItems.TURNIP_PINK, () -> ModItems.TURNIP_PINK_SEEDS);
@@ -245,14 +245,14 @@ public class ModBlocks {
     public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<TreeBlockEntity>> TREE_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("tree", () -> BlockEntityType.Builder.of(TreeBlockEntity::new, APPLE_TREE.get(), ORANGE_TREE.get(), GRAPE_TREE.get()).build(null));
 
     public static RegistryEntrySupplier<Block, BlockMineral> mineral(EnumMineralTier name) {
-        RegistryEntrySupplier<Block, BlockMineral> reg = BLOCKS.register("ore_" + name.getSerializedName(), () -> new BlockMineral(name, BlockBehaviour.Properties.of(Material.STONE).strength(5, 10)
+        RegistryEntrySupplier<Block, BlockMineral> reg = BLOCKS.register("ore_" + name.getSerializedName(), () -> new BlockMineral(name, BlockBehaviour.Properties.of().lightLevel(s -> 1).strength(5, 10)
                 .requiresCorrectToolForDrops()));
         MINERAL_MAP.put(name, reg);
         return reg;
     }
 
     public static RegistryEntrySupplier<Block, BlockBrokenMineral> brokenMineral(EnumMineralTier name) {
-        RegistryEntrySupplier<Block, BlockBrokenMineral> reg = BLOCKS.register("ore_broken_" + name.getSerializedName(), () -> new BlockBrokenMineral(name, BlockBehaviour.Properties.of(Material.STONE).strength(30, 15)));
+        RegistryEntrySupplier<Block, BlockBrokenMineral> reg = BLOCKS.register("ore_broken_" + name.getSerializedName(), () -> new BlockBrokenMineral(name, BlockBehaviour.Properties.of().strength(30, 15)));
         BROKEN_MINERAL_MAP.put(name, reg);
         return reg;
     }

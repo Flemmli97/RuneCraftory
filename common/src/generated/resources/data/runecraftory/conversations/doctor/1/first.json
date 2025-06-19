@@ -1,9 +1,0 @@
-{
-  "fallback_key": "",
-  "conversations": {
-    "npc.doctor.1.first.1": {
-      "translation_key": "npc.doctor.1.first.1",
-      "conditions": []
-    }
-  }
-}

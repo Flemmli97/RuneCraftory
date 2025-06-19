@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "b": {
+      "item": "minecraft:blast_furnace"
+    },
+    "c": {
+      "tag": "c:cobblestones"
+    },
+    "i": {
+      "tag": "c:ingots/iron"
+    },
+    "l": {
+      "item": "minecraft:lava_bucket"
+    }
+  },
+  "pattern": [
+    "ccc",
+    "ibi",
+    "clc"
+  ],
+  "result": {
+    "count": 1,
+    "id": "runecraftory:forge"
+  }
+}

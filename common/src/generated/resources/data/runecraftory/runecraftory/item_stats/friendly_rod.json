@@ -1,0 +1,16 @@
+{
+  "buy_price": 6670,
+  "element": "LOVE",
+  "item": "runecraftory:friendly_rod",
+  "item_stats": {
+    "runecraftory:attack_range": 0.0,
+    "runecraftory:attack_width": 0.5,
+    "runecraftory:dizzy": 15.0,
+    "runecraftory:magic_attack": 28.0
+  },
+  "monster_bonus": {
+    "runecraftory:magic_attack": 1.0
+  },
+  "sell_price": 297,
+  "upgrade_difficulty": 0
+}

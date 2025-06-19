@@ -1,0 +1,14 @@
+{
+  "bad_season": [
+    "WINTER"
+  ],
+  "best_season": [
+    "SPRING",
+    "SUMMER"
+  ],
+  "giant_crop": "runecraftory:conqueror_melon",
+  "growth": 7,
+  "item": "runecraftory:pink_melon_seeds",
+  "max_drops": 2,
+  "regrowable": true
+}

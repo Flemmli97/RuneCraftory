@@ -1,0 +1,13 @@
+{
+  "buy_price": 2000,
+  "element": "LOVE",
+  "item": "runecraftory:love_crystal",
+  "item_stats": {
+    "runecraftory:drain": 3.0
+  },
+  "monster_bonus": {
+    "runecraftory:drain": 1.0
+  },
+  "sell_price": 150,
+  "upgrade_difficulty": 20
+}

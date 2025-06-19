@@ -1,9 +1,0 @@
-{
-  "buy_price": 120,
-  "sell_price": 5,
-  "upgrade_difficulty": 1,
-  "item_stats": {},
-  "monster_bonus": {},
-  "element": "NONE",
-  "item": "runecraftory:indigo_grass"
-}

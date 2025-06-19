@@ -42,6 +42,7 @@ dependencies {
     modImplementation include("io.github.flemmli97:simplequests_api:${simplequests_api_version}-neoforge")
     // Jar-Jar not added otherwise
     modRuntimeOnly "io.github.flemmli97:lingua_bib:${lingua_bib}-neoforge"
+    modImplementation "net.tslat.smartbrainlib:SmartBrainLib-neoforge-${project.minecraft_version}:${project.sbl_version}"
 
 //    modCompileOnly("mcjty.theoneprobe:theoneprobe:${top_version}") {
 //        transitive = false

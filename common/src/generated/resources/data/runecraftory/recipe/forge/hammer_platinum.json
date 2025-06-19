@@ -1,0 +1,20 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "tag": "c:raw_materials/platinum"
+    },
+    {
+      "tag": "c:ingots/iron"
+    },
+    {
+      "tag": "runecraftory:sticks"
+    }
+  ],
+  "required_level": 80,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:hammer_platinum"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "buy_price": 210,
+  "element": "NONE",
+  "item": "runecraftory:claymore",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 6.0,
+    "runecraftory:attack_range": 1.5,
+    "runecraftory:attack_width": 3.5,
+    "runecraftory:dizzy": 10.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.attack_damage": 0.5
+  },
+  "sell_price": 17,
+  "upgrade_difficulty": 0
+}

@@ -1,0 +1,14 @@
+{
+  "buy_price": 300,
+  "element": "NONE",
+  "item": "runecraftory:fairy_dust",
+  "item_stats": {
+    "runecraftory:magic_attack": 5.0
+  },
+  "monster_bonus": {
+    "runecraftory:magic_attack": 1.0
+  },
+  "sell_price": 40,
+  "tier_2_Spell": "runecraftory:sleep_aura",
+  "upgrade_difficulty": 19
+}

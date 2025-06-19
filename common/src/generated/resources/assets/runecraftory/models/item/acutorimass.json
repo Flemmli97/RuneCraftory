@@ -1,14 +1,14 @@
 {
   "parent": "minecraft:item/handheld",
-  "textures": {
-    "layer0": "runecraftory:item/acutorimass"
-  },
   "overrides": [
     {
+      "model": "runecraftory:item/acutorimass_single",
       "predicate": {
         "runecraftory:held": 1.0
-      },
-      "model": "runecraftory:item/acutorimass_single"
+      }
     }
-  ]
+  ],
+  "textures": {
+    "layer0": "runecraftory:item/acutorimass"
+  }
 }

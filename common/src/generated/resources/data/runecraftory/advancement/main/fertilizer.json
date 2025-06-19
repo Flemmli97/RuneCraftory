@@ -1,0 +1,26 @@
+{
+  "parent": "runecraftory:main/root",
+  "criteria": {
+    "fertilizer": {
+      "trigger": "runecraftory:fertilize_farm"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "runecraftory.advancements.fertilizer.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "runecraftory:formular_a"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.fertilizer.title"
+    }
+  },
+  "requirements": [
+    [
+      "fertilizer"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

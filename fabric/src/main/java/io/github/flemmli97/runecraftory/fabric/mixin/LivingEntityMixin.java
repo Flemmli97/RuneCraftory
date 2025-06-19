@@ -4,9 +4,7 @@ import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.events.EntityCalls;
 import io.github.flemmli97.runecraftory.fabric.RuneCraftoryFabric;
 import io.github.flemmli97.runecraftory.fabric.mixinhelper.EntityDataGetter;
-import io.github.flemmli97.runecraftory.platform.ExtendedItem;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -35,22 +33,14 @@ public abstract class LivingEntityMixin implements EntityDataGetter {
     @Inject(method = "createLivingAttributes", at = @At("RETURN"))
     private static void addToAttributes(CallbackInfoReturnable<AttributeSupplier.Builder> info) {
         AttributeSupplier.Builder builder = info.getReturnValue();
-        for (RegistryEntrySupplier<Attribute> s : RuneCraftoryFabric.attributes()) {
-            builder.add(s.get());
+        for (RegistryEntrySupplier<Attribute, ?> s : RuneCraftoryFabric.attributes()) {
+            builder.add(s.asHolder());
         }
     }
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void tickCall(CallbackInfo info) {
         RuneCraftoryFabric.entityTick((LivingEntity) (Object) this);
-    }
-
-    @Inject(method = "swing(Lnet/minecraft/world/InteractionHand;Z)V", at = @At("HEAD"), cancellable = true)
-    private void onSwing(InteractionHand hand, boolean updateSelf, CallbackInfo info) {
-        ItemStack stack = ((LivingEntity) (Object) this).getItemInHand(hand);
-        if (stack.getItem() instanceof ExtendedItem extendedItem && extendedItem.onEntitySwing(stack, (LivingEntity) (Object) this)) {
-            info.cancel();
-        }
     }
 
     @Inject(method = "completeUsingItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;triggerItemUseEffects(Lnet/minecraft/world/item/ItemStack;I)V", shift = At.Shift.AFTER))

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "b": {
+      "tag": "minecraft:beds"
+    },
+    "e": {
+      "item": "minecraft:ender_pearl"
+    }
+  },
+  "pattern": [
+    " e ",
+    "ebe",
+    " e "
+  ],
+  "result": {
+    "count": 1,
+    "id": "runecraftory:teleport"
+  }
+}

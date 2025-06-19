@@ -1,0 +1,26 @@
+{
+  "parent": "runecraftory:main/root",
+  "criteria": {
+    "craft": {
+      "trigger": "runecraftory:cooking"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "runecraftory.advancements.crafting.cooking.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "runecraftory:cooking_table"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.crafting.cooking.title"
+    }
+  },
+  "requirements": [
+    [
+      "craft"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

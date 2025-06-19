@@ -1,0 +1,17 @@
+{
+  "buy_price": 3460,
+  "element": "NONE",
+  "item": "runecraftory:lance_plus",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 21.0,
+    "runecraftory:attack_range": 2.3,
+    "runecraftory:attack_width": 1.0,
+    "runecraftory:defence": 2.0,
+    "runecraftory:dizzy": 6.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.attack_damage": 0.5
+  },
+  "sell_price": 198,
+  "upgrade_difficulty": 0
+}

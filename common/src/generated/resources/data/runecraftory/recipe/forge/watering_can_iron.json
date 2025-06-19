@@ -1,0 +1,20 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "minecraft:bucket"
+    },
+    {
+      "tag": "c:dusts/bronze"
+    },
+    {
+      "tag": "runecraftory:cloths"
+    }
+  ],
+  "required_level": 15,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:watering_can_iron"
+  }
+}

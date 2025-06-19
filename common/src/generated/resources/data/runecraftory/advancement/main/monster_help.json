@@ -1,0 +1,26 @@
+{
+  "parent": "runecraftory:main/fertilizer",
+  "criteria": {
+    "farming": {
+      "trigger": "runecraftory:monster_farming"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "runecraftory.advancements.monster.help.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "runecraftory:monster_command_staff"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.monster.help.title"
+    }
+  },
+  "requirements": [
+    [
+      "farming"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

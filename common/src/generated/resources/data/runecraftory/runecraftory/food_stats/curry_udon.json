@@ -1,0 +1,16 @@
+{
+  "cooking_bonus": {},
+  "cooking_bonus_percent": {},
+  "duration": 6000,
+  "effects": {
+    "runecraftory:earth_resistance": 15.0,
+    "runecraftory:health_gain": 250.0,
+    "runecraftory:rune_points_gain": 220.0
+  },
+  "effects_percentage": {
+    "runecraftory:health_gain": 50.0
+  },
+  "item": "runecraftory:curry_udon",
+  "potion_apply": [],
+  "potion_remove": []
+}

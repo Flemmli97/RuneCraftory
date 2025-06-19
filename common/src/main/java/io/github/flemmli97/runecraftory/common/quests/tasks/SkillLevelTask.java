@@ -5,7 +5,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
-import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.simplequests_api.SimpleQuestsAPI;
 import io.github.flemmli97.simplequests_api.player.PlayerQuestData;
@@ -31,7 +30,7 @@ public class SkillLevelTask implements QuestTask<SkillLevelTask.SkillLevelTaskRe
     public static final QuestEntryKey<SkillLevelTask> ID = new QuestEntryKey<>(RuneCraftory.modRes("skill_level"));
     public static final MapCodec<SkillLevelTask> CODEC = RecordCodecBuilder.mapCodec((instance) ->
             instance.group(Codec.STRING.fieldOf("description").forGetter(d -> d.description),
-                    CodecHelper.nonEmptyList(CodecUtils.stringEnumCodec(EnumSkills.class, null), "Skill list can't be empty").fieldOf("skill").forGetter(d -> d.skills),
+                    ExtraCodecs.nonEmptyList(CodecUtils.stringEnumCodec(EnumSkills.class, null).listOf()).fieldOf("skill").forGetter(d -> d.skills),
                     NumberProviders.CODEC.fieldOf("level").forGetter(d -> d.range)
             ).apply(instance, SkillLevelTask::new));
 

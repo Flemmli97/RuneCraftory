@@ -1,0 +1,13 @@
+{
+  "buy_price": 940,
+  "element": "NONE",
+  "item": "runecraftory:malm_claw",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 11.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.attack_damage": 2.0
+  },
+  "sell_price": 83,
+  "upgrade_difficulty": 45
+}

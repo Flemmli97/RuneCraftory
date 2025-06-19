@@ -3,14 +3,11 @@ package io.github.flemmli97.runecraftory.common.spells;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntitySmallRaccoonLeaf;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
-import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ProjectileUtil;
-import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Vector3f;
 
 public class SmallLeafSpell extends Spell {
 
@@ -33,13 +30,13 @@ public class SmallLeafSpell extends Spell {
             dir = entity.getLookAngle();
         }
         float degs = this.amount < 5 ? 25 : 35;
-        for (Vector3f vec : MathUtils.rotatedVecs(dir, MathUtils.NORMAL_Y, -degs, degs, degs * 2 / this.amount)) {
-            EntitySmallRaccoonLeaf leaf = new EntitySmallRaccoonLeaf(level, entity);
-            leaf.setPos(leaf.getX() + vec.x() * 0.1, leaf.getY() + vec.y() * 0.1, leaf.getZ() + vec.z() * 0.1);
-            leaf.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.9f));
-            leaf.shoot(vec.x(), vec.y(), vec.z(), 0.75f, 0);
-            level.addFreshEntity(leaf);
-        }
+//        for (Vector3f vec : MathUtils.rotatedVecs(dir, MathUtils.NORMAL_Y, -degs, degs, degs * 2 / this.amount)) {
+//            EntitySmallRaccoonLeaf leaf = new EntitySmallRaccoonLeaf(level, entity);
+//            leaf.setPos(leaf.getX() + vec.x() * 0.1, leaf.getY() + vec.y() * 0.1, leaf.getZ() + vec.z() * 0.1);
+//            leaf.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.9f));
+//            leaf.shoot(vec.x(), vec.y(), vec.z(), 0.75f, 0);
+//            level.addFreshEntity(leaf);
+//        }
         playSound(entity, ModSounds.ENTITY_FLOWER_LILY_STEP.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.2f);
         return true;
     }

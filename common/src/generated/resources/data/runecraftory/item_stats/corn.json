@@ -1,9 +1,0 @@
-{
-  "buy_price": 2500,
-  "sell_price": 1000,
-  "upgrade_difficulty": 37,
-  "item_stats": {},
-  "monster_bonus": {},
-  "element": "NONE",
-  "item": "runecraftory:corn"
-}

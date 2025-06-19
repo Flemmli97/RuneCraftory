@@ -1,0 +1,17 @@
+{
+  "type": "runecraftory:armor",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "tag": "c:ingots/gold"
+    },
+    {
+      "item": "runecraftory:lamb_squid"
+    }
+  ],
+  "required_level": 30,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:silent_ring"
+  }
+}

@@ -5,7 +5,6 @@ import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
@@ -34,7 +33,7 @@ public class EntitySleepAura extends BaseDamageCloud {
                 double x = this.getRandomX(0.9);
                 double y = this.getRandomY();
                 double z = this.getRandomZ(0.9);
-                this.level().addAlwaysVisibleParticle(ParticleTypes.ENTITY_EFFECT, x, y, z, 161 / 255f, 201 / 255f, 195 / 255f);
+//                this.level().addAlwaysVisibleParticle(ParticleTypes.ENTITY_EFFECT, x, y, z, 161 / 255f, 201 / 255f, 195 / 255f);
             }
         }
     }

@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "c": {
+      "tag": "c:chests"
+    },
+    "e": {
+      "tag": "c:gems/emerald"
+    },
+    "g": {
+      "item": "minecraft:gray_concrete"
+    },
+    "w": {
+      "item": "minecraft:white_concrete"
+    }
+  },
+  "pattern": [
+    "wgw",
+    "ece",
+    "www"
+  ],
+  "result": {
+    "count": 1,
+    "id": "runecraftory:cash_register"
+  }
+}

@@ -22,6 +22,7 @@ import java.util.Random;
 public class NPCActionManager extends SimpleJsonResourceReloadListener implements ListenerExtension {
 
     public static final ResourceLocation ID = RuneCraftory.modRes("npc_actions");
+    public static final String DIRECTORY = String.format("%s/%s", ID.getNamespace(), ID.getPath());
 
     public static final ResourceLocation DEFAULT_ID = RuneCraftory.modRes("default_action");
 
@@ -32,7 +33,7 @@ public class NPCActionManager extends SimpleJsonResourceReloadListener implement
     private HolderLookup.Provider provider;
 
     public NPCActionManager() {
-        super(DataPackHandler.GSON, ID.toString());
+        super(DataPackHandler.GSON, DIRECTORY);
     }
 
     public NPCAttackActions get(ResourceLocation res) {

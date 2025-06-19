@@ -1,0 +1,16 @@
+{
+  "buy_price": 190,
+  "element": "NONE",
+  "item": "runecraftory:leather_glove",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 5.0,
+    "runecraftory:attack_range": 0.0,
+    "runecraftory:attack_width": 1.0,
+    "runecraftory:dizzy": 3.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.attack_damage": 0.5
+  },
+  "sell_price": 13,
+  "upgrade_difficulty": 0
+}

@@ -1,0 +1,11 @@
+{
+  "items": [
+    "#c:flowers"
+  ],
+  "translations": [
+    "runecraftory.gift.flowers"
+  ],
+  "xp_range": {
+    "max": 7
+  }
+}

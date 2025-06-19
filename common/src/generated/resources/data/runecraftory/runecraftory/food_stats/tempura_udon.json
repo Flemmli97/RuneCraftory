@@ -1,0 +1,16 @@
+{
+  "cooking_bonus": {},
+  "cooking_bonus_percent": {},
+  "duration": 6000,
+  "effects": {
+    "runecraftory:earth_resistance": 15.0,
+    "runecraftory:health_gain": 200.0,
+    "runecraftory:rune_points_gain": 200.0
+  },
+  "effects_percentage": {
+    "runecraftory:health_gain": 30.0
+  },
+  "item": "runecraftory:tempura_udon",
+  "potion_apply": [],
+  "potion_remove": []
+}

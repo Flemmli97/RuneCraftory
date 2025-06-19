@@ -1,5 +1,9 @@
 {
   "variants": {
+    "facing=east": {
+      "model": "runecraftory:block/great_four_leaf_clover",
+      "y": 90
+    },
     "facing=north": {
       "model": "runecraftory:block/great_four_leaf_clover"
     },
@@ -10,10 +14,6 @@
     "facing=west": {
       "model": "runecraftory:block/great_four_leaf_clover",
       "y": 270
-    },
-    "facing=east": {
-      "model": "runecraftory:block/great_four_leaf_clover",
-      "y": 90
     }
   }
 }

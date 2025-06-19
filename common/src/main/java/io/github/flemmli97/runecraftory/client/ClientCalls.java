@@ -25,6 +25,7 @@ import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Camera;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.ParticleStatus;
@@ -142,11 +143,11 @@ public class ClientCalls {
         }
     }
 
-    public static void renderScreenOverlays(GuiGraphics graphics, float partialTicks) {
+    public static void renderScreenOverlays(GuiGraphics graphics, DeltaTracker tracker) {
         if (ClientHandlers.OVERLAY != null)
             ClientHandlers.OVERLAY.renderBar(graphics);
         if (ClientHandlers.SPELL_DISPLAY != null && ClientConfig.inventoryButton)
-            ClientHandlers.SPELL_DISPLAY.render(graphics, partialTicks);
+            ClientHandlers.SPELL_DISPLAY.render(graphics, tracker);
         if (ClientHandlers.FARM_DISPLAY != null)
             ClientHandlers.FARM_DISPLAY.render(graphics);
     }
@@ -199,7 +200,7 @@ public class ClientCalls {
         return Pair.of(tooltip, debug);
     }
 
-    public static void tooltipComponentEvent(ItemStack stack, Consumer<TooltipComponent> elements, int screenWidth, int screenHeight) {
+    public static void tooltipComponentEvent(ItemStack stack, Consumer<TooltipComponent> elements) {
         if (UpgradeTooltipComponent.shouldAdd(stack))
             elements.accept(new UpgradeTooltipComponent.UpgradeComponent(stack));
     }

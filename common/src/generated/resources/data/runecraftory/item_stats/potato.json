@@ -1,9 +1,0 @@
-{
-  "buy_price": 130,
-  "sell_price": 100,
-  "upgrade_difficulty": 3,
-  "item_stats": {},
-  "monster_bonus": {},
-  "element": "NONE",
-  "item": "minecraft:potato"
-}

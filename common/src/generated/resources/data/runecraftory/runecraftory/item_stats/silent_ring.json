@@ -1,0 +1,12 @@
+{
+  "buy_price": 15000,
+  "element": "NONE",
+  "item": "runecraftory:silent_ring",
+  "item_stats": {
+    "runecraftory:seal": 10.0,
+    "runecraftory:seal_resistance": 100.0
+  },
+  "monster_bonus": {},
+  "sell_price": 750,
+  "upgrade_difficulty": 0
+}

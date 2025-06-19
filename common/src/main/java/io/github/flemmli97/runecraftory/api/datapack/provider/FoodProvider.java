@@ -58,7 +58,7 @@ public abstract class FoodProvider implements DataProvider {
             DynamicOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, provider);
             ImmutableList.Builder<CompletableFuture<?>> futures = new ImmutableList.Builder<>();
             this.data.forEach((res, builder) -> {
-                Path path = this.packOutput.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(res.getNamespace() + "/" + FoodManager.ID + "/" + res.getPath() + ".json");
+                Path path = this.packOutput.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(res.getNamespace() + "/" + FoodManager.DIRECTORY + "/" + res.getPath() + ".json");
                 JsonElement obj = FoodProperties.CODEC.encodeStart(ops, builder.build()).getOrThrow();
                 if (obj.isJsonObject())
                     this.item.get(res).accept(obj.getAsJsonObject());

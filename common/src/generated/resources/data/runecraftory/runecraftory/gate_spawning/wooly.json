@@ -1,0 +1,17 @@
+{
+  "allow_underwater": false,
+  "biomes": {
+    "c:is_magical": 100,
+    "c:is_plains": 100,
+    "minecraft:is_beach": 100,
+    "minecraft:is_forest": 100,
+    "minecraft:is_hill": 100,
+    "minecraft:is_mountain": 60,
+    "minecraft:is_savanna": 60,
+    "minecraft:is_taiga": 60
+  },
+  "entity": "runecraftory:wooly",
+  "min_distance_from_spawn": 0,
+  "min_gate_level": 0,
+  "structures": {}
+}

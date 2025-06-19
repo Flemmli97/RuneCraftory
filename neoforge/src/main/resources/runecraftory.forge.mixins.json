@@ -1,9 +1,13 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "io.github.flemmli97.runecraftory.forge.mixin",
+  "package": "io.github.flemmli97.runecraftory.neoforge.mixin",
   "compatibilityLevel": "JAVA_16",
-  "mixins": ["BlockTreeSaplingMixin", "CompatApotheosis", "CompatMinecolonies", "CompatQuarkMixin"],
+  "mixins": [
+    "CompatApotheosis",
+    "CompatMinecolonies",
+    "CompatQuarkMixin"
+    ],
   "client": [
   ],
   "injectors": {

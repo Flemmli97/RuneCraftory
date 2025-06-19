@@ -1,0 +1,17 @@
+{
+  "type": "runecraftory:cooking",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:sour_drop"
+    },
+    {
+      "tag": "c:milks"
+    }
+  ],
+  "required_level": 5,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:cheese"
+  }
+}

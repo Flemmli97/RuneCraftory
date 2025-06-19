@@ -16,16 +16,20 @@ import io.github.flemmli97.simplequests_api.quest.QuestBase;
 import io.github.flemmli97.simplequests_api.quest.QuestCategory;
 import io.github.flemmli97.simplequests_api.quest.entry.ResolvedQuestTask;
 import io.github.flemmli97.simplequests_api.registry.QuestBaseRegistry;
+import io.github.flemmli97.tenshilib.common.entity.EntityUtils;
 import net.minecraft.Util;
 import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -49,7 +53,7 @@ public class NPCQuest extends QuestBase {
     public static final Function<QuestBaseRegistry.CodecContext, MapCodec<NPCQuest>> CODEC = Util.memoize(ctx ->
             QuestBase.buildCodec(NPCQuestData.CODEC
                     .forGetter(q -> new NPCQuest.NPCQuestData(q.npcDataIDs,
-                            q.quests, q.loot, q.global, q.dynamicData)), ctx, (id, task, data) -> {
+                            q.quests, q.loot.location(), q.global, q.dynamicData)), ctx, (id, task, data) -> {
                 NPCQuest.Builder builder = new NPCQuest.Builder(id, task, data.npcIDs, data.loot);
                 if (data.global)
                     builder.global();
@@ -64,7 +68,7 @@ public class NPCQuest extends QuestBase {
 
     public final List<ResourceLocation> npcDataIDs;
     public final List<ResourceLocation> quests;
-    public final ResourceLocation loot;
+    public final ResourceKey<LootTable> loot;
     public final boolean global;
 
     private NPCQuest(ResourceLocation id, QuestCategory category, String questTaskString, List<String> questTaskDesc,
@@ -73,14 +77,14 @@ public class NPCQuest extends QuestBase {
                 parents, redoParent, false, ItemStack.EMPTY, repeatDelay, 0, maxRepeat, sortingId, false, unlockCondition, Visibility.NEVER);
         this.npcDataIDs = npcDataIDs;
         this.quests = quests;
-        this.loot = loot;
+        this.loot = ResourceKey.create(Registries.LOOT_TABLE, loot);
         this.global = global;
     }
 
     private static ResourceLocation withUuid(ResourceLocation original, UUID uuid) {
         if (uuid == null)
             return original;
-        return new ResourceLocation(original.getNamespace(), original.getPath() + "/" + uuid);
+        return ResourceLocation.fromNamespaceAndPath(original.getNamespace(), original.getPath() + "/" + uuid);
     }
 
     private static AABB aabbOf(Vec3 pos) {
@@ -89,7 +93,7 @@ public class NPCQuest extends QuestBase {
     }
 
     public static List<NPCQuest> resolve(NPCQuest quest, ServerPlayer player, Vec3 at) {
-        return player.level.getEntities(EntityTypeTest.forClass(EntityNPCBase.class), aabbOf(at), e -> {
+        return player.level().getEntities(EntityTypeTest.forClass(EntityNPCBase.class), aabbOf(at), e -> {
                     if (quest.npcDataIDs.contains(e.getDataID()) && e.canAcceptNPCQuest(player, quest)) {
                         ResourceLocation id = QuestHandler.questForExists(player, e);
                         return id == null || quest.getOriginID().equals(id);
@@ -103,7 +107,7 @@ public class NPCQuest extends QuestBase {
         ResourceLocation newID = withUuid(this.id, npc.getUUID());
         NPCQuest quest = new NPCQuest(newID, this.category, this.name, this.description,
                 this.npcDataIDs, this.redoParent, this.repeatDelay, this.maxRepeat, this.sortingId,
-                this.unlockCondition, this.npcDataIDs, this.quests, this.loot, this.global);
+                this.unlockCondition, this.npcDataIDs, this.quests, this.loot.location(), this.global);
         quest.withNPC(npc, this.id);
         return quest;
     }
@@ -124,7 +128,7 @@ public class NPCQuest extends QuestBase {
 
     @Override
     public boolean isUnlocked(ServerPlayer player) {
-        return super.isUnlocked(player) && (this.getNpc(player.level) == null || this.getNpc(player.level).canAcceptNPCQuest(player, this));
+        return super.isUnlocked(player) && (this.getNpc(player.level()) == null || this.getNpc(player.level()).canAcceptNPCQuest(player, this));
     }
 
     @Override
@@ -134,7 +138,7 @@ public class NPCQuest extends QuestBase {
 
     @Override
     public List<MutableComponent> getDescription(ServerPlayer player, int idx) {
-        EntityNPCBase npc = this.getNpc(player.level);
+        EntityNPCBase npc = this.getNpc(player.level());
         if (npc != null) {
             return this.description.stream().map(s -> Component.translatable(s, npc.getCustomName(), npc.getX(), npc.getY(), npc.getZ())).collect(Collectors.toList());
         }
@@ -148,7 +152,7 @@ public class NPCQuest extends QuestBase {
     @Nullable
     public EntityNPCBase getNpc(Level level) {
         if (this.dynamicData != null && this.npc == null)
-            this.npc = EntityUtil.findFromUUID(EntityNPCBase.class, level, this.dynamicData.npcUuid());
+            this.npc = EntityUtils.findFromUUID(EntityNPCBase.class, level, this.dynamicData.npcUuid());
         return this.npc;
     }
 
@@ -175,32 +179,32 @@ public class NPCQuest extends QuestBase {
     }
 
     @Override
-    public ResourceLocation getLoot() {
+    public ResourceKey<LootTable> getLoot() {
         return this.loot;
     }
 
     @Override
     public void onComplete(ServerPlayer serverPlayer) {
-        EntityTreasureChest chest = ModEntities.TREASURE_CHEST.get().create(serverPlayer.getLevel());
+        EntityTreasureChest chest = ModEntities.TREASURE_CHEST.get().create(serverPlayer.serverLevel());
         if (chest != null && this.getLoot() != null && !this.getLoot().equals(BuiltInLootTables.EMPTY)) {
             chest.absMoveTo(serverPlayer.getX(2), serverPlayer.getY(1.5), serverPlayer.getZ(2), serverPlayer.getRandom().nextFloat() * 360.0f, 0.0f);
             int tries = 0;
-            while (!serverPlayer.level.noCollision(chest) && tries < 10) {
+            while (!serverPlayer.level().noCollision(chest) && tries < 10) {
                 chest.absMoveTo(serverPlayer.getX(2), serverPlayer.getY(1.5), serverPlayer.getZ(2), serverPlayer.getRandom().nextFloat() * 360.0f, 0.0f);
                 tries++;
             }
             chest.setChestLoot(this.loot);
-            serverPlayer.getLevel().addFreshEntity(chest);
+            serverPlayer.serverLevel().addFreshEntity(chest);
         }
-        if (this.getNpc(serverPlayer.level) != null)
-            this.getNpc(serverPlayer.level).completeNPCQuest(serverPlayer, this);
+        if (this.getNpc(serverPlayer.level()) != null)
+            this.getNpc(serverPlayer.level()).completeNPCQuest(serverPlayer, this);
         this.onReset(serverPlayer);
     }
 
     @Override
     public void onReset(ServerPlayer player) {
         if (this.dynamicData != null) {
-            EntityNPCBase npc = this.getNpc(player.level);
+            EntityNPCBase npc = this.getNpc(player.level());
             if (npc != null)
                 npc.resetQuestProcess(player, this.dynamicData.origin());
             else {

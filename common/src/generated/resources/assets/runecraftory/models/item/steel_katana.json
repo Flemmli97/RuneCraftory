@@ -1,14 +1,14 @@
 {
   "parent": "minecraft:item/handheld",
-  "textures": {
-    "layer0": "runecraftory:item/steel_katana"
-  },
   "overrides": [
     {
+      "model": "runecraftory:item/steel_katana_single",
       "predicate": {
         "runecraftory:held": 1.0
-      },
-      "model": "runecraftory:item/steel_katana_single"
+      }
     }
-  ]
+  ],
+  "textures": {
+    "layer0": "runecraftory:item/steel_katana"
+  }
 }

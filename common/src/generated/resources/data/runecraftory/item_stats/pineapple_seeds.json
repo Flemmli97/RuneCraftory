@@ -1,9 +1,0 @@
-{
-  "buy_price": 1300,
-  "sell_price": 130,
-  "upgrade_difficulty": 0,
-  "item_stats": {},
-  "monster_bonus": {},
-  "element": "NONE",
-  "item": "runecraftory:pineapple_seeds"
-}

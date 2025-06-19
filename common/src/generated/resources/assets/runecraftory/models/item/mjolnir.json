@@ -1,14 +1,14 @@
 {
   "parent": "minecraft:item/handheld",
-  "textures": {
-    "layer0": "runecraftory:item/mjolnir"
-  },
   "overrides": [
     {
+      "model": "runecraftory:item/mjolnir_held",
       "predicate": {
         "runecraftory:held": 1.0
-      },
-      "model": "runecraftory:item/mjolnir_held"
+      }
     }
-  ]
+  ],
+  "textures": {
+    "layer0": "runecraftory:item/mjolnir"
+  }
 }

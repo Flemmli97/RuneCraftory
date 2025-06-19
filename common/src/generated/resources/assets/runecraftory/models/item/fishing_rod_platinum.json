@@ -1,14 +1,14 @@
 {
   "parent": "minecraft:item/handheld_rod",
-  "textures": {
-    "layer0": "runecraftory:item/fishing_rod_platinum"
-  },
   "overrides": [
     {
+      "model": "runecraftory:item/fishing_rod_platinum_cast",
       "predicate": {
         "runecraftory:fishing": 1.0
-      },
-      "model": "runecraftory:item/fishing_rod_platinum_cast"
+      }
     }
-  ]
+  ],
+  "textures": {
+    "layer0": "runecraftory:item/fishing_rod_platinum"
+  }
 }

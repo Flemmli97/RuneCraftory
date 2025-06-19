@@ -1,9 +1,0 @@
-{
-  "buy_price": 500000,
-  "sell_price": 55000,
-  "upgrade_difficulty": 80,
-  "item_stats": {},
-  "monster_bonus": {},
-  "element": "NONE",
-  "item": "runecraftory:emery_flower"
-}

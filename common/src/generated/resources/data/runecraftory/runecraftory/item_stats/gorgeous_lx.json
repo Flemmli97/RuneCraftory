@@ -1,0 +1,16 @@
+{
+  "buy_price": 13500,
+  "element": "NONE",
+  "item": "runecraftory:gorgeous_lx",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 56.0,
+    "runecraftory:attack_range": 0.0,
+    "runecraftory:defence": 16.0,
+    "runecraftory:dizzy": 3.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.attack_damage": 1.0
+  },
+  "sell_price": 836,
+  "upgrade_difficulty": 0
+}

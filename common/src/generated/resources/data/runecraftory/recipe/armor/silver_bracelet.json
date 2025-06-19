@@ -1,0 +1,17 @@
+{
+  "type": "runecraftory:armor",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "tag": "c:raw_materials/silver"
+    },
+    {
+      "tag": "runecraftory:cloths"
+    }
+  ],
+  "required_level": 25,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:silver_bracelet"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "type": "runecraftory:armor",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "minecraft:leather_boots"
+    },
+    {
+      "tag": "c:raw_materials/silver"
+    },
+    {
+      "tag": "runecraftory:shards"
+    }
+  ],
+  "required_level": 18,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:silver_boots"
+  }
+}

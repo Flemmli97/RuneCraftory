@@ -1,32 +1,32 @@
 {
   "parent": "minecraft:item/handheld",
-  "textures": {
-    "layer0": "runecraftory:item/fist_of_fire"
-  },
   "overrides": [
     {
+      "model": "runecraftory:item/fist_of_fire_held",
       "predicate": {
         "runecraftory:glove_held": 0.25
-      },
-      "model": "runecraftory:item/fist_of_fire_held"
+      }
     },
     {
+      "model": "runecraftory:item/fist_of_fire_held_left",
       "predicate": {
         "runecraftory:glove_held": 0.5
-      },
-      "model": "runecraftory:item/fist_of_fire_held_left"
+      }
     },
     {
+      "model": "runecraftory:item/fist_of_fire_held_s",
       "predicate": {
         "runecraftory:glove_held": 0.75
-      },
-      "model": "runecraftory:item/fist_of_fire_held_s"
+      }
     },
     {
+      "model": "runecraftory:item/fist_of_fire_held_s_left",
       "predicate": {
         "runecraftory:glove_held": 1.0
-      },
-      "model": "runecraftory:item/fist_of_fire_held_s_left"
+      }
     }
-  ]
+  ],
+  "textures": {
+    "layer0": "runecraftory:item/fist_of_fire"
+  }
 }

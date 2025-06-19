@@ -1,7 +1,5 @@
 package io.github.flemmli97.runecraftory.client.render;
 
-import com.google.common.collect.ImmutableMap;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormatElement;
 import io.github.flemmli97.runecraftory.RuneCraftory;
@@ -21,10 +19,11 @@ public class RunecraftoryShaders extends RenderType {
             .add("UV1", VertexFormatElement.UV1).build();
 //            .put("Time", VertexHelper.TIME).build());
 
-    public static final RenderType GATE_RENDER = create("runecraftory:gate", POSITION_COLOR_2X_TEX, VertexFormat.Mode.QUADS, 256, false, false, CompositeState.builder()
-            .setShaderState(GATE_SHADER)
-            .setTransparencyState(RenderType.TRANSLUCENT_TRANSPARENCY)
-            .setOverlayState(OVERLAY).createCompositeState(false));
+    public static final RenderType GATE_RENDER = RenderType.clouds();
+//    create("runecraftory:gate", POSITION_COLOR_2X_TEX, VertexFormat.Mode.QUADS, 256, false, false, CompositeState.builder()
+//            .setShaderState(GATE_SHADER)
+//            .setTransparencyState(RenderType.TRANSLUCENT_TRANSPARENCY)
+//            .setOverlayState(OVERLAY).createCompositeState(false));
 
     public static void registerShader(ShaderRegister register) throws IOException {
         register.register(RuneCraftory.modRes("gate"), POSITION_COLOR_2X_TEX,

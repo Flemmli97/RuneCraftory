@@ -7,9 +7,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
-import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -106,18 +104,18 @@ public class EntityLightBall extends BaseDamageCloud {
             if (this.getOwner() != null) {
                 Entity owner = this.getOwner();
                 Vec3 ownerPos = owner.position();
-                double[] pos = switch (this.lightType) {
-                    case FRONT -> {
-                        Vec3 look = this.getOwner().getLookAngle();
-                        look = new Vec3(look.x, 0, look.z).scale(1.2);
-                        yield MathUtils.rotate(0, 1, 0, look.x, 0, look.z, Mth.DEG_TO_RAD * this.angleOffset);
-                    }
-                    case LONG, PIERCING_SHORT, PIERCING_LONG ->
-                            MathUtils.rotate(0, 1, 0, owner.getBbWidth() + 0.5, 0, 0, Mth.DEG_TO_RAD * (13 * this.livingTicks + this.angleOffset));
-                    case EXPAND ->
-                            MathUtils.rotate(0, 1, 0, owner.getBbWidth() + this.livingTicks * this.livingTicks * 0.01, 0, 0, Mth.DEG_TO_RAD * (13 * this.livingTicks + this.angleOffset));
-                };
-                this.setDeltaMovement(ownerPos.x + pos[0] - this.getX(), ownerPos.y + this.getOwner().getBbHeight() * 0.5 - this.getY(0.5), ownerPos.z + pos[2] - this.getZ());
+//                double[] pos = switch (this.lightType) {
+//                    case FRONT -> {
+//                        Vec3 look = this.getOwner().getLookAngle();
+//                        look = new Vec3(look.x, 0, look.z).scale(1.2);
+//                        yield MathUtils.rotate(0, 1, 0, look.x, 0, look.z, Mth.DEG_TO_RAD * this.angleOffset);
+//                    }
+//                    case LONG, PIERCING_SHORT, PIERCING_LONG ->
+//                            MathUtils.rotate(0, 1, 0, owner.getBbWidth() + 0.5, 0, 0, Mth.DEG_TO_RAD * (13 * this.livingTicks + this.angleOffset));
+//                    case EXPAND ->
+//                            MathUtils.rotate(0, 1, 0, owner.getBbWidth() + this.livingTicks * this.livingTicks * 0.01, 0, 0, Mth.DEG_TO_RAD * (13 * this.livingTicks + this.angleOffset));
+//                };
+//                this.setDeltaMovement(ownerPos.x + pos[0] - this.getX(), ownerPos.y + this.getOwner().getBbHeight() * 0.5 - this.getY(0.5), ownerPos.z + pos[2] - this.getZ());
                 this.hasImpulse = true;
             }
         }

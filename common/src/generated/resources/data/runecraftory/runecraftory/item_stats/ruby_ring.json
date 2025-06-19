@@ -1,0 +1,13 @@
+{
+  "buy_price": 13000,
+  "element": "FIRE",
+  "item": "runecraftory:ruby_ring",
+  "item_stats": {
+    "runecraftory:fire_resistance": 50.0
+  },
+  "monster_bonus": {
+    "runecraftory:fire_resistance": 1.0
+  },
+  "sell_price": 600,
+  "upgrade_difficulty": 0
+}

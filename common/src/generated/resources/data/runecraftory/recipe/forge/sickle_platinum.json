@@ -1,0 +1,17 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "tag": "c:raw_materials/platinum"
+    },
+    {
+      "tag": "runecraftory:shards"
+    }
+  ],
+  "required_level": 80,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:sickle_platinum"
+  }
+}

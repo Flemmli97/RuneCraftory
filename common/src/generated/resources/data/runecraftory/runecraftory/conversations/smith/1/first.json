@@ -1,0 +1,9 @@
+{
+  "conversations": {
+    "npc.smith.1.first.1": {
+      "conditions": [],
+      "translation_key": "npc.smith.1.first.1"
+    }
+  },
+  "fallback_key": ""
+}

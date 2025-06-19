@@ -1,0 +1,12 @@
+{
+  "buy_price": 750,
+  "element": "NONE",
+  "item": "runecraftory:cold_medicine",
+  "item_stats": {},
+  "monster_bonus": {
+    "minecraft:generic.max_health": 3.0,
+    "runecraftory:cold_resistance": 0.5
+  },
+  "sell_price": 50,
+  "upgrade_difficulty": 0
+}

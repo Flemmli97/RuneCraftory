@@ -1,9 +1,0 @@
-{
-  "buy_price": 3800,
-  "sell_price": 1250,
-  "upgrade_difficulty": 20,
-  "item_stats": {},
-  "monster_bonus": {},
-  "element": "NONE",
-  "item": "runecraftory:autumn_grass"
-}

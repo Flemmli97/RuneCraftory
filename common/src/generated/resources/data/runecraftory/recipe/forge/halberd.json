@@ -1,0 +1,23 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:spear"
+    },
+    {
+      "tag": "c:ingots/iron"
+    },
+    {
+      "tag": "c:ingots/gold"
+    },
+    {
+      "item": "runecraftory:blade_shard"
+    }
+  ],
+  "required_level": 24,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:halberd"
+  }
+}

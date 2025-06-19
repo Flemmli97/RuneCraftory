@@ -1,0 +1,12 @@
+{
+  "buy_price": 25000,
+  "element": "NONE",
+  "item": "runecraftory:critical_ring",
+  "item_stats": {
+    "runecraftory:critical": 20.0,
+    "runecraftory:dizzy": 5.0
+  },
+  "monster_bonus": {},
+  "sell_price": 0,
+  "upgrade_difficulty": 0
+}

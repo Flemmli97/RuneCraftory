@@ -1,0 +1,23 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "tag": "runecraftory:cloths"
+    },
+    {
+      "item": "minecraft:obsidian"
+    },
+    {
+      "item": "minecraft:diamond"
+    },
+    {
+      "item": "runecraftory:fire_crystal"
+    }
+  ],
+  "required_level": 25,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:fist_of_fire"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "buy_price": 5100,
+  "element": "NONE",
+  "item": "runecraftory:round_shield",
+  "item_stats": {
+    "runecraftory:defence": 13.0
+  },
+  "monster_bonus": {
+    "runecraftory:defence": 1.0
+  },
+  "sell_price": 0,
+  "upgrade_difficulty": 0
+}

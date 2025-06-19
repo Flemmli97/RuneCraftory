@@ -1,0 +1,48 @@
+{
+  "parent": "runecraftory:progression/path_3/raccoon",
+  "criteria": {
+    "boss": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "runecraftory:skelefang"
+            }
+          }
+        ],
+        "killing_blow": {
+          "source_entity": {
+            "type_specific": {
+              "type": "minecraft:player",
+              "advancements": {
+                "runecraftory:progression/path_3/raccoon": true
+              }
+            }
+          }
+        }
+      },
+      "trigger": "minecraft:player_killed_entity"
+    }
+  },
+  "display": {
+    "background": "minecraft:textures/block/dirt.png",
+    "description": {
+      "translate": "runecraftory.advancements.progression.boss.skelefang.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "runecraftory:skelefang_spawn_egg"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.progression.boss.skelefang.title"
+    }
+  },
+  "requirements": [
+    [
+      "boss"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

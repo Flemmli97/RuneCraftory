@@ -1,0 +1,20 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:claymore"
+    },
+    {
+      "tag": "c:ingots/gold"
+    },
+    {
+      "item": "minecraft:emerald"
+    }
+  ],
+  "required_level": 18,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:cyclone_blade"
+  }
+}

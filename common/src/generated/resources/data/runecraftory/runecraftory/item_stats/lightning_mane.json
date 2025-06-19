@@ -1,0 +1,20 @@
+{
+  "buy_price": 13000,
+  "element": "NONE",
+  "item": "runecraftory:lightning_mane",
+  "item_stats": {
+    "runecraftory:defence": 8.0,
+    "runecraftory:dizzy_resistance": 17.0,
+    "runecraftory:magic_defence": 6.0
+  },
+  "monster_bonus": {
+    "runecraftory:defence": 1.0,
+    "runecraftory:dizzy_resistance": 1.0,
+    "runecraftory:magic_defence": 1.0
+  },
+  "sell_price": 600,
+  "tier_1_Spell": "runecraftory:laser_3",
+  "tier_2_Spell": "runecraftory:laser_5",
+  "tier_3_Spell": "runecraftory:big_lightning",
+  "upgrade_difficulty": 31
+}

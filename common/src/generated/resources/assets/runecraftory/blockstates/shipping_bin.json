@@ -1,5 +1,9 @@
 {
   "variants": {
+    "facing=east": {
+      "model": "runecraftory:block/shipping_bin",
+      "y": 270
+    },
     "facing=north": {
       "model": "runecraftory:block/shipping_bin",
       "y": 180
@@ -10,10 +14,6 @@
     "facing=west": {
       "model": "runecraftory:block/shipping_bin",
       "y": 90
-    },
-    "facing=east": {
-      "model": "runecraftory:block/shipping_bin",
-      "y": 270
     }
   }
 }

@@ -1,0 +1,214 @@
+{
+  "values": [
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:power_wave"
+      },
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:dash_slash"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:rush_attack"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:round_break"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:mind_thrust"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:gust"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:storm"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:blitz"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:twin_attack"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:rail_strike"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:wind_slash"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:flash_strike"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:naive_blade"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:steel_heart"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:delta_strike"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:hurricane"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:reaper_slash"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:million_strike"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:axel_disaster"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:stardust_upper"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:tornado_swing"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:grand_impact"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:giga_swing"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:upper_cut"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:double_kick"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:straight_punch"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:neko_damashi"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:rush_punch"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:cyclone"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:rapid_move"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "cooldown": 5,
+  "percentage": 0.0,
+  "rp_cost": 20,
+  "skill_xp": {
+    "DUAL": 8.0
+  },
+  "skills": [
+    "DUAL"
+  ]
+}

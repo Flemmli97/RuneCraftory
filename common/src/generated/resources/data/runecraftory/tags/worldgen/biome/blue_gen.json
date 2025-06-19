@@ -1,7 +1,6 @@
 {
-  "replace": false,
   "values": [
-    "#c:is_beach",
+    "#minecraft:is_beach",
     {
       "id": "#c:is_magical",
       "required": false

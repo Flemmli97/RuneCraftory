@@ -1,0 +1,26 @@
+{
+  "parent": "runecraftory:main/crafting/forge",
+  "criteria": {
+    "element": {
+      "trigger": "runecraftory:change_element"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "runecraftory.advancements.change.element.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "runecraftory:love_crystal"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.change.element.title"
+    }
+  },
+  "requirements": [
+    [
+      "element"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
+import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -64,12 +65,12 @@ public record StaffData(Optional<Spell> tier1, Optional<Spell> tier2, Optional<S
             default -> null;
         };
         if (spell == null) {
-            return DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem()).map(stat -> switch (level) {
+            return DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem()).flatMap(stat -> switch (level) {
                 case 3 -> stat.getTier3Spell();
                 case 2 -> stat.getTier2Spell();
                 case 1 -> stat.getTier1Spell();
-                default -> null;
-            }).orElse(null);
+                default -> Optional.empty();
+            }).map(Holder::value).orElse(null);
         }
         return spell;
     }

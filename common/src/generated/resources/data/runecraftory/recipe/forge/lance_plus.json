@@ -1,0 +1,17 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:lance"
+    },
+    {
+      "tag": "c:dusts/bronze"
+    }
+  ],
+  "required_level": 13,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:lance_plus"
+  }
+}

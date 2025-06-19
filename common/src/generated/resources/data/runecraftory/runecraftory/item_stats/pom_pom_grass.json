@@ -1,0 +1,9 @@
+{
+  "buy_price": 1500,
+  "element": "NONE",
+  "item": "runecraftory:pom_pom_grass",
+  "item_stats": {},
+  "monster_bonus": {},
+  "sell_price": 550,
+  "upgrade_difficulty": 19
+}

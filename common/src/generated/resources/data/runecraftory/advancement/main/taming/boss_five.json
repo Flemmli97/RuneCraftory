@@ -1,0 +1,84 @@
+{
+  "parent": "runecraftory:main/taming/boss_first",
+  "criteria": {
+    "tame_bosses_0": {
+      "conditions": {
+        "amount": 1,
+        "predicate": {
+          "type": "#runecraftory:boss_monsters"
+        }
+      },
+      "trigger": "runecraftory:tame_monster"
+    },
+    "tame_bosses_1": {
+      "conditions": {
+        "amount": 2,
+        "predicate": {
+          "type": "#runecraftory:boss_monsters"
+        }
+      },
+      "trigger": "runecraftory:tame_monster"
+    },
+    "tame_bosses_2": {
+      "conditions": {
+        "amount": 3,
+        "predicate": {
+          "type": "#runecraftory:boss_monsters"
+        }
+      },
+      "trigger": "runecraftory:tame_monster"
+    },
+    "tame_bosses_3": {
+      "conditions": {
+        "amount": 4,
+        "predicate": {
+          "type": "#runecraftory:boss_monsters"
+        }
+      },
+      "trigger": "runecraftory:tame_monster"
+    },
+    "tame_bosses_4": {
+      "conditions": {
+        "amount": 5,
+        "predicate": {
+          "type": "#runecraftory:boss_monsters"
+        }
+      },
+      "trigger": "runecraftory:tame_monster"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "runecraftory.advancements.tame.boss.five.description"
+    },
+    "frame": "goal",
+    "icon": {
+      "components": {
+        "minecraft:enchantment_glint_override": true
+      },
+      "count": 1,
+      "id": "runecraftory:ambrosia_spawn_egg"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.tame.boss.five.title"
+    }
+  },
+  "requirements": [
+    [
+      "tame_bosses_0"
+    ],
+    [
+      "tame_bosses_1"
+    ],
+    [
+      "tame_bosses_2"
+    ],
+    [
+      "tame_bosses_3"
+    ],
+    [
+      "tame_bosses_4"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

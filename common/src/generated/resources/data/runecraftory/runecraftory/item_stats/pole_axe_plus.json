@@ -1,0 +1,17 @@
+{
+  "buy_price": 5430,
+  "element": "NONE",
+  "item": "runecraftory:pole_axe_plus",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 39.0,
+    "runecraftory:attack_range": 1.5,
+    "runecraftory:attack_width": 3.0,
+    "runecraftory:critical": 7.0,
+    "runecraftory:dizzy": 2.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.attack_damage": 1.0
+  },
+  "sell_price": 245,
+  "upgrade_difficulty": 0
+}

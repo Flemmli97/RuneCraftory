@@ -1,0 +1,20 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:zweihaender"
+    },
+    {
+      "tag": "c:ingots/iron"
+    },
+    {
+      "tag": "c:dusts/bronze"
+    }
+  ],
+  "required_level": 7,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:zweihaender_plus"
+  }
+}

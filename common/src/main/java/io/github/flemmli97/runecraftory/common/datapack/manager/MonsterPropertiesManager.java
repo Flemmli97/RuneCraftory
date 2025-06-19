@@ -24,13 +24,14 @@ import java.util.NoSuchElementException;
 public class MonsterPropertiesManager extends SimpleJsonResourceReloadListener implements ListenerExtension {
 
     public static final ResourceLocation ID = RuneCraftory.modRes("monster_properties");
+    public static final String DIRECTORY = String.format("%s/%s", ID.getNamespace(), ID.getPath());
 
     private Map<EntityType<?>, EntityProperties> propertiesMap = new HashMap<>();
 
     private HolderLookup.Provider provider;
 
     public MonsterPropertiesManager() {
-        super(DataPackHandler.GSON, ID.toString());
+        super(DataPackHandler.GSON, DIRECTORY);
     }
 
     public EntityProperties getPropertiesFor(EntityType<?> type) {

@@ -43,7 +43,7 @@ public abstract class GateSpawnProvider implements DataProvider {
             DynamicOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, provider);
             ImmutableList.Builder<CompletableFuture<?>> futures = new ImmutableList.Builder<>();
             this.data.forEach((res, spawnData) -> {
-                Path path = this.packOutput.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(res.getNamespace() + "/" + GateSpawnsManager.ID + "/" + res.getPath() + ".json");
+                Path path = this.packOutput.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(res.getNamespace() + "/" + GateSpawnsManager.DIRECTORY + "/" + res.getPath() + ".json");
                 JsonElement obj = GateSpawnData.CODEC.encodeStart(ops, spawnData).getOrThrow();
                 futures.add(DataProvider.saveStable(cache, obj, path));
             });

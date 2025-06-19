@@ -1,0 +1,17 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "tag": "runecraftory:sticks"
+    },
+    {
+      "tag": "c:raw_materials/platinum"
+    }
+  ],
+  "required_level": 80,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:hoe_platinum"
+  }
+}

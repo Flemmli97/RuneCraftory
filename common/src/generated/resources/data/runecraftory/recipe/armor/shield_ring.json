@@ -1,0 +1,23 @@
+{
+  "type": "runecraftory:armor",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "minecraft:shield"
+    },
+    {
+      "item": "runecraftory:turtle_shell"
+    },
+    {
+      "item": "runecraftory:black_tortoise_shell"
+    },
+    {
+      "tag": "runecraftory:mineral"
+    }
+  ],
+  "required_level": 40,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:shield_ring"
+  }
+}

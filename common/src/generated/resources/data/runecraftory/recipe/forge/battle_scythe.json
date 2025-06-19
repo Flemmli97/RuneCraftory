@@ -1,0 +1,17 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "tag": "c:dusts/bronze"
+    },
+    {
+      "tag": "runecraftory:claws_fangs"
+    }
+  ],
+  "required_level": 9,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:battle_scythe"
+  }
+}

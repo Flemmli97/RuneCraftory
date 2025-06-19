@@ -1,9 +1,0 @@
-{
-  "buy_price": 25000,
-  "sell_price": 10000,
-  "upgrade_difficulty": 87,
-  "item_stats": {},
-  "monster_bonus": {},
-  "element": "NONE",
-  "item": "runecraftory:golden_pumpkin"
-}

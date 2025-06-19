@@ -1,0 +1,29 @@
+{
+  "parent": "runecraftory:main/root",
+  "criteria": {
+    "ship_item": {
+      "conditions": {
+        "amount": 1
+      },
+      "trigger": "runecraftory:shipping"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "runecraftory.advancements.shipping.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "runecraftory:shipping_bin"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.shipping.title"
+    }
+  },
+  "requirements": [
+    [
+      "ship_item"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

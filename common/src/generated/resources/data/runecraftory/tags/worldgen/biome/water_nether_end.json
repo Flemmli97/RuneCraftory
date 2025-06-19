@@ -1,7 +1,6 @@
 {
-  "replace": false,
   "values": [
     "#runecraftory:nether_end",
-    "#c:is_water"
+    "#c:is_aquatic"
   ]
 }

@@ -9,13 +9,11 @@
         {
           "description": "runecraftory.quest.ship_turnip.sub.1.task.0",
           "value": {
-            "items": [
-              "runecraftory:turnip"
-            ]
+            "items": "runecraftory:turnip"
           }
         }
       ],
-      "amount": 1,
+      "amount": 1.0,
       "id": "runecraftory:shipping"
     }
   },

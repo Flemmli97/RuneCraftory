@@ -1,0 +1,14 @@
+{
+  "buy_price": 2500,
+  "element": "NONE",
+  "item": "runecraftory:fancy_hat",
+  "item_stats": {
+    "runecraftory:defence": 7.0,
+    "runecraftory:magic_defence": 4.0
+  },
+  "monster_bonus": {
+    "runecraftory:defence": 0.5
+  },
+  "sell_price": 210,
+  "upgrade_difficulty": 0
+}

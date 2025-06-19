@@ -4,7 +4,6 @@ import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityPollenPuff;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -18,8 +17,8 @@ public class PollenPuffSpell extends Spell {
         Vec3[] arr = new Vec3[amount];
         Vec3 dir = new Vec3(2, 1, 0).normalize();
         float step = 360f / amount;
-        for (int i = 0; i < amount; i++)
-            arr[i] = MathUtils.rotate(MathUtils.NORMAL_Y, dir, i * step);
+//        for (int i = 0; i < amount; i++)
+//            arr[i] = MathUtils.rotate(MathUtils.NORMAL_Y, dir, i * step);
         return arr;
     }
 

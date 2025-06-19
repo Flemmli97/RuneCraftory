@@ -26,7 +26,7 @@ public class TeleportSpell extends Spell {
 
     @Override
     public boolean use(ServerLevel world, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int level) {
-        if (entity instanceof Mob mob && mob.level instanceof ServerLevel) {
+        if (entity instanceof Mob mob && mob.level() instanceof ServerLevel) {
             if (mob.hasRestriction()) {
                 Vec3 home = Vec3.atCenterOf(mob.getRestrictCenter());
                 if (mob.distanceToSqr(home) > 100) {
@@ -38,7 +38,7 @@ public class TeleportSpell extends Spell {
             if (mob.getBrain().hasMemoryValue(MemoryModuleType.HOME) && (mem = mob.getBrain().getMemory(MemoryModuleType.HOME)).isPresent()) {
                 Vec3 home = Vec3.atCenterOf(mem.get().pos());
                 ResourceKey<Level> levelKey = mem.get().dimension();
-                if (mob.level.dimension() != levelKey) {
+                if (mob.level().dimension() != levelKey) {
                     ServerLevel serverLevel = mob.getServer().getLevel(levelKey);
                     if (serverLevel != null) {
                         changeDimension(mob, serverLevel, home.x(), home.y(), home.z());
@@ -55,7 +55,7 @@ public class TeleportSpell extends Spell {
             if (player.getRespawnPosition() != null) {
                 home = Vec3.atCenterOf(player.getRespawnPosition());
                 levelKey = player.getRespawnDimension();
-                if (player.level.dimension() == levelKey && player.distanceToSqr(home) <= 100) {
+                if (player.level().dimension() == levelKey && player.distanceToSqr(home) <= 100) {
                     home = Vec3.atCenterOf(player.getServer().overworld().getSharedSpawnPos());
                     levelKey = player.getServer().overworld().dimension();
                 }
@@ -63,7 +63,7 @@ public class TeleportSpell extends Spell {
                 home = Vec3.atCenterOf(player.getServer().overworld().getSharedSpawnPos());
                 levelKey = player.getServer().overworld().dimension();
             }
-            if (player.level.dimension() != levelKey) {
+            if (player.level().dimension() != levelKey) {
                 ServerLevel serverLevel = player.getServer().getLevel(levelKey);
                 if (serverLevel != null) {
                     changeDimension(player, serverLevel, home.x(), home.y(), home.z());
@@ -89,7 +89,7 @@ public class TeleportSpell extends Spell {
                 serverLevel.sendParticles(ParticleTypes.PORTAL, entity.getX(), entity.getY() + serverLevel.random.nextDouble() * 2.0, entity.getZ(), 0, serverLevel.random.nextGaussian(), 0.0, serverLevel.random.nextGaussian(), 1);
             }
         if (entity instanceof ServerPlayer player)
-            teleportNearbyImportantEntities(player, player.getLevel(), oldBox, x, y, z);
+            teleportNearbyImportantEntities(player, player.serverLevel(), oldBox, x, y, z);
     }
 
     public static void changeDimension(Entity entity, ServerLevel newLevel, double x, double y, double z) {
@@ -98,7 +98,7 @@ public class TeleportSpell extends Spell {
         if (entity instanceof ServerPlayer player) {
             player.stopRiding();
             AABB oldBB = player.getBoundingBox();
-            ServerLevel oldLvl = player.getLevel();
+            ServerLevel oldLvl = player.serverLevel();
             player.teleportTo(newLevel, x, y, z, yaw, pitch);
             if (player.isSleeping()) {
                 player.stopSleepInBed(true, true);
@@ -126,7 +126,7 @@ public class TeleportSpell extends Spell {
     }
 
     private static void teleportNearbyImportantEntities(ServerPlayer player, ServerLevel oldLevel, AABB oldBox, double x, double y, double z) {
-        boolean crossDim = player.getLevel().dimension() != oldLevel.dimension();
+        boolean crossDim = player.serverLevel().dimension() != oldLevel.dimension();
         for (Entity e : oldLevel.getEntities(EntityTypeTest.forClass(Mob.class), oldBox.inflate(24), e -> {
             if (e instanceof BaseMonster monster)
                 return player.getUUID().equals(monster.getOwnerUUID()) && monster.behaviourState() == BaseMonster.Behaviour.FOLLOW;
@@ -135,7 +135,7 @@ public class TeleportSpell extends Spell {
             return false;
         })) {
             if (crossDim)
-                changeDimension(e, player.getLevel(), x + oldLevel.random.nextDouble() * 2 - 1, y, z + oldLevel.random.nextDouble() * 2 - 1);
+                changeDimension(e, player.serverLevel(), x + oldLevel.random.nextDouble() * 2 - 1, y, z + oldLevel.random.nextDouble() * 2 - 1);
             else
                 safeTeleportTo(e, x + oldLevel.random.nextDouble() * 2 - 1, y, z + oldLevel.random.nextDouble() * 2 - 1);
         }

@@ -1,0 +1,20 @@
+{
+  "type": "runecraftory:armor",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "minecraft:chain"
+    },
+    {
+      "tag": "c:raw_materials/silver"
+    },
+    {
+      "tag": "c:string"
+    }
+  ],
+  "required_level": 21,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:chain_mail"
+  }
+}

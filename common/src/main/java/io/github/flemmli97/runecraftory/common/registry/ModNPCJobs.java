@@ -19,9 +19,9 @@ import java.util.function.Supplier;
  */
 public class ModNPCJobs {
 
-    public static final ResourceKey<? extends Registry<NPCJob>> JOB_REGISTRY_KEY = ResourceKey.createRegistryKey(RuneCraftory.modRes("npc_actions"));
+    public static final ResourceKey<? extends Registry<NPCJob>> JOB_REGISTRY_KEY = ResourceKey.createRegistryKey(RuneCraftory.modRes("npc_jobs"));
     public static final LoaderRegistryAccess.CustomLoaderRegistry<NPCJob> JOBS = LoaderRegistryAccess.INSTANCE.newRegistry(JOB_REGISTRY_KEY,
-            RuneCraftory.modRes("jobless"), true, false);
+            RuneCraftory.modRes("jobless"), true, true);
 
     public static final RegistryEntrySupplier<NPCJob, NPCJob> NONE = register("jobless", () -> new NPCJob(new NPCJob.Builder(null).noShop().noWorkSchedule()));
 

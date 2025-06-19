@@ -1,0 +1,15 @@
+{
+  "buy_price": 1250,
+  "element": "NONE",
+  "item": "runecraftory:penguin_down",
+  "item_stats": {
+    "runecraftory:defence": 13.0,
+    "runecraftory:dizzy_resistance": 13.0,
+    "runecraftory:magic_defence": 7.0
+  },
+  "monster_bonus": {
+    "runecraftory:defence": 3.0
+  },
+  "sell_price": 129,
+  "upgrade_difficulty": 59
+}

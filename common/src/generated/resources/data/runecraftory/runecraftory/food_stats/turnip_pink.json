@@ -1,0 +1,16 @@
+{
+  "cooking_bonus": {
+    "runecraftory:health_gain": 10.0,
+    "runecraftory:rune_points_gain": 5.0
+  },
+  "cooking_bonus_percent": {},
+  "duration": 6000,
+  "effects": {
+    "runecraftory:health_gain": 25.0,
+    "runecraftory:max_runepoints": 5.0
+  },
+  "effects_percentage": {},
+  "item": "runecraftory:turnip_pink",
+  "potion_apply": [],
+  "potion_remove": []
+}

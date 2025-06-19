@@ -65,31 +65,31 @@ public abstract class NPCDataProvider implements DataProvider, AdditionalLanguag
             DynamicOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, provider);
             ImmutableList.Builder<CompletableFuture<?>> futures = new ImmutableList.Builder<>();
             this.data.forEach((res, val) -> {
-                Path path = this.packOutput.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(res.getNamespace() + "/" + NPCDataManager.ID + "/" + res.getPath() + ".json");
+                Path path = this.packOutput.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(res.getNamespace() + "/" + NPCDataManager.DIRECTORY + "/" + res.getPath() + ".json");
                 this.verifyData(val);
                 JsonElement obj = NPCData.CODEC.encodeStart(ops, val)
                         .getOrThrow();
                 futures.add(DataProvider.saveStable(cache, obj, path));
             });
             this.looks.forEach((res, val) -> {
-                Path path = this.packOutput.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(res.getNamespace() + "/" + NPCLookManager.ID + "/" + res.getPath() + ".json");
+                Path path = this.packOutput.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(res.getNamespace() + "/" + NPCLookManager.DIRECTORY + "/" + res.getPath() + ".json");
                 JsonElement obj = NPCLook.CODEC.encodeStart(ops, val).getOrThrow();
                 DataProvider.saveStable(cache, obj, path);
                 futures.add(DataProvider.saveStable(cache, obj, path));
             });
             this.conversations.forEach((res, val) -> {
-                Path path = this.packOutput.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(res.getNamespace() + "/" + NPCConversationManager.ID + "/" + res.getPath() + ".json");
+                Path path = this.packOutput.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(res.getNamespace() + "/" + NPCConversationManager.DIRECTORY + "/" + res.getPath() + ".json");
                 JsonElement obj = ConversationSet.CODEC.encodeStart(ops, val).getOrThrow();
                 futures.add(DataProvider.saveStable(cache, obj, path));
             });
             this.giftData.forEach((res, val) -> {
-                Path path = this.packOutput.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(res.getNamespace() + "/" + GiftManager.ID + "/" + res.getPath() + ".json");
+                Path path = this.packOutput.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(res.getNamespace() + "/" + GiftManager.DIRECTORY + "/" + res.getPath() + ".json");
                 JsonElement obj = GiftData.CODEC.encodeStart(ops, val).getOrThrow();
                 DataProvider.saveStable(cache, obj, path);
                 futures.add(DataProvider.saveStable(cache, obj, path));
             });
             this.actions.forEach((res, val) -> {
-                Path path = this.packOutput.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(res.getNamespace() + "/" + NPCActionManager.ID + "/" + res.getPath() + ".json");
+                Path path = this.packOutput.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(res.getNamespace() + "/" + NPCActionManager.DIRECTORY + "/" + res.getPath() + ".json");
                 JsonElement obj = NPCAttackActions.CODEC.encodeStart(ops, val).getOrThrow();
                 futures.add(DataProvider.saveStable(cache, obj, path));
             });
@@ -146,7 +146,7 @@ public abstract class NPCDataProvider implements DataProvider, AdditionalLanguag
     public ResourceLocation addLook(ResourceLocation id, NPCLook look) {
         if (this.looks.put(id, look) != null)
             throw new IllegalStateException("Look already registered");
-        this.verifier.track(id, PackType.SERVER_DATA, NPCLookManager.ID.toString());
+        this.verifier.track(id, PackType.SERVER_DATA, NPCLookManager.DIRECTORY);
         return id;
     }
 
@@ -154,32 +154,32 @@ public abstract class NPCDataProvider implements DataProvider, AdditionalLanguag
         if (this.giftData.put(id, giftData.build()) != null)
             throw new IllegalStateException("GiftData already registered");
         this.translations.putAll(giftData.translations);
-        this.verifier.track(id, PackType.SERVER_DATA, GiftManager.ID.toString());
+        this.verifier.track(id, PackType.SERVER_DATA, GiftManager.DIRECTORY);
         return id;
     }
 
     public ResourceLocation addAttackActions(ResourceLocation id, NPCAttackActions.Builder actions) {
         if (this.actions.put(id, actions.build()) != null)
             throw new IllegalStateException("Attack action already registered");
-        this.verifier.track(id, PackType.SERVER_DATA, NPCActionManager.ID.toString());
+        this.verifier.track(id, PackType.SERVER_DATA, NPCActionManager.DIRECTORY);
         return id;
     }
 
     private void verifyData(NPCData data) {
         if (data.look() != null) {
             for (NPCData.NPCLookId look : data.look()) {
-                if (!this.verifier.exists(look.id(), PackType.SERVER_DATA, NPCLookManager.ID.toString()))
+                if (!this.verifier.exists(look.id(), PackType.SERVER_DATA, NPCLookManager.DIRECTORY))
                     throw new IllegalStateException("No look registered for " + look.id());
             }
         }
         if (data.combatActions() != null) {
             for (ResourceLocation action : data.combatActions()) {
-                if (!this.verifier.exists(action, PackType.SERVER_DATA, NPCActionManager.ID.toString()))
+                if (!this.verifier.exists(action, PackType.SERVER_DATA, NPCActionManager.DIRECTORY))
                     throw new IllegalStateException("No npc action registered for " + action);
             }
         }
         data.giftItems().forEach((s, g) -> {
-            if (g.giftID() != null && !this.verifier.exists(g.giftID(), PackType.SERVER_DATA, GiftManager.ID.toString()))
+            if (g.giftID() != null && !this.verifier.exists(g.giftID(), PackType.SERVER_DATA, GiftManager.DIRECTORY))
                 throw new IllegalStateException("No gift registered for " + g.giftID());
         });
     }

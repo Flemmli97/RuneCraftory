@@ -1,0 +1,298 @@
+{
+  "values": [
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:turnip_seeds"
+      },
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:turnip_pink_seeds"
+      },
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:cabbage_seeds"
+      },
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:pink_melon_seeds"
+      },
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:tomato_seeds"
+      },
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:cucumber_seeds"
+      },
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:turnip"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:turnip_pink"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:cabbage"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:pink_melon"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:pineapple"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:strawberry"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:golden_turnip"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:golden_potato"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:golden_pumpkin"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:golden_cabbage"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:hot_hot_fruit"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:bok_choy"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:leek"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:radish"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:spinach"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:green_pepper"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:yam"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:eggplant"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:tomato"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:corn"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:cucumber"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:pumpkin"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:onion"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:rice"
+      },
+      "unlock_type": "ALWAYS"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:chocolate"
+      },
+      "unlock_type": "ALWAYS"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:flour"
+      },
+      "unlock_type": "ALWAYS"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:oil"
+      },
+      "unlock_type": "ALWAYS"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:curry_powder"
+      },
+      "unlock_type": "ALWAYS"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:rice_flour"
+      },
+      "unlock_type": "ALWAYS"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:mixed_herbs"
+      },
+      "unlock_type": "ALWAYS"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:sweet_powder"
+      },
+      "unlock_type": "ALWAYS"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:sour_drop"
+      },
+      "unlock_type": "ALWAYS"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:heavy_spice"
+      },
+      "unlock_type": "ALWAYS"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:monster_command_staff"
+      },
+      "unlock_type": "ALWAYS"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:brush"
+      },
+      "unlock_type": "ALWAYS"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:magnifying_glass"
+      },
+      "unlock_type": "ALWAYS"
+    }
+  ]
+}

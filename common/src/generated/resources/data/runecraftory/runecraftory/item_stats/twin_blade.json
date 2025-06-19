@@ -1,0 +1,17 @@
+{
+  "buy_price": 19430,
+  "element": "NONE",
+  "item": "runecraftory:twin_blade",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 86.0,
+    "runecraftory:attack_range": 0.0,
+    "runecraftory:attack_width": 1.5,
+    "runecraftory:defence": 26.0,
+    "runecraftory:dizzy": 3.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.attack_damage": 1.0
+  },
+  "sell_price": 1830,
+  "upgrade_difficulty": 0
+}

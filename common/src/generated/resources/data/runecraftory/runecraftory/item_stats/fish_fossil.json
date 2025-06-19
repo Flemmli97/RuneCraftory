@@ -1,0 +1,14 @@
+{
+  "buy_price": 180,
+  "element": "NONE",
+  "item": "runecraftory:fish_fossil",
+  "item_stats": {
+    "runecraftory:magic_attack": 5.0,
+    "runecraftory:magic_defence": 1.0
+  },
+  "monster_bonus": {
+    "runecraftory:magic_attack": 1.0
+  },
+  "sell_price": 30,
+  "upgrade_difficulty": 19
+}

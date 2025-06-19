@@ -1,7 +1,6 @@
 {
-  "replace": false,
   "values": [
-    "#c:is_water",
-    "#c:is_end"
+    "#c:is_aquatic",
+    "#minecraft:is_end"
   ]
 }

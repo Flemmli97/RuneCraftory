@@ -1,0 +1,13 @@
+{
+  "buy_price": 450,
+  "element": "NONE",
+  "item": "runecraftory:panther_claw",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 4.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.attack_damage": 1.0
+  },
+  "sell_price": 55,
+  "upgrade_difficulty": 28
+}

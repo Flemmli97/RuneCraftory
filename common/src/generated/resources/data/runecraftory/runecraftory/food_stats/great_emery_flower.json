@@ -1,0 +1,15 @@
+{
+  "cooking_bonus": {
+    "runecraftory:rune_points_gain": 50.0
+  },
+  "cooking_bonus_percent": {},
+  "duration": 6000,
+  "effects": {},
+  "effects_percentage": {
+    "runecraftory:health_gain": 15.0,
+    "runecraftory:rune_points_gain": 10.0
+  },
+  "item": "runecraftory:great_emery_flower",
+  "potion_apply": [],
+  "potion_remove": []
+}

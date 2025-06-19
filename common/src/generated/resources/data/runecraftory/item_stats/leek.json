@@ -1,9 +1,0 @@
-{
-  "buy_price": 2300,
-  "sell_price": 800,
-  "upgrade_difficulty": 23,
-  "item_stats": {},
-  "monster_bonus": {},
-  "element": "NONE",
-  "item": "runecraftory:leek"
-}

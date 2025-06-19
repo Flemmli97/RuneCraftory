@@ -1,0 +1,9 @@
+{
+  "buy_price": 5000,
+  "element": "NONE",
+  "item": "runecraftory:golden_turnip_seeds",
+  "item_stats": {},
+  "monster_bonus": {},
+  "sell_price": 500,
+  "upgrade_difficulty": 0
+}

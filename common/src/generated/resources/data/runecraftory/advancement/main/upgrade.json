@@ -1,0 +1,26 @@
+{
+  "parent": "runecraftory:main/crafting/craft",
+  "criteria": {
+    "upgrade": {
+      "trigger": "runecraftory:upgrade_item"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "runecraftory.advancements.upgrade.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "runecraftory:cheap_bracelet"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.upgrade.title"
+    }
+  },
+  "requirements": [
+    [
+      "upgrade"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

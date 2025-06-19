@@ -1,0 +1,26 @@
+{
+  "parent": "runecraftory:main/crafting/forge",
+  "criteria": {
+    "spell": {
+      "trigger": "runecraftory:change_spell"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "runecraftory.advancements.change.spell.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "runecraftory:rod"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.change.spell.title"
+    }
+  },
+  "requirements": [
+    [
+      "spell"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

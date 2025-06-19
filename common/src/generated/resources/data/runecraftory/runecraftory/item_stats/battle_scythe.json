@@ -1,0 +1,17 @@
+{
+  "buy_price": 1430,
+  "element": "NONE",
+  "item": "runecraftory:battle_scythe",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 14.0,
+    "runecraftory:attack_range": 1.5,
+    "runecraftory:attack_width": 3.0,
+    "runecraftory:critical": 15.0,
+    "runecraftory:dizzy": 2.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.attack_damage": 0.5
+  },
+  "sell_price": 60,
+  "upgrade_difficulty": 0
+}

@@ -1,0 +1,13 @@
+{
+  "buy_price": 5,
+  "element": "NONE",
+  "item": "minecraft:gravel",
+  "item_stats": {
+    "runecraftory:magic_defence": 1.0
+  },
+  "monster_bonus": {
+    "runecraftory:magic_defence": 0.2
+  },
+  "sell_price": 1,
+  "upgrade_difficulty": 1
+}

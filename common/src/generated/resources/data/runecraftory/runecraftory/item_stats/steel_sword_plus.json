@@ -1,0 +1,16 @@
+{
+  "buy_price": 2310,
+  "element": "NONE",
+  "item": "runecraftory:steel_sword_plus",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 15.0,
+    "runecraftory:attack_range": 0.0,
+    "runecraftory:attack_width": 1.5,
+    "runecraftory:dizzy": 5.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.attack_damage": 0.5
+  },
+  "sell_price": 99,
+  "upgrade_difficulty": 0
+}

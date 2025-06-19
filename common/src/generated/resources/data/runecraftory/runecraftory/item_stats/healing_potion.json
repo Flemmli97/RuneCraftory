@@ -1,0 +1,11 @@
+{
+  "buy_price": 500,
+  "element": "NONE",
+  "item": "runecraftory:healing_potion",
+  "item_stats": {},
+  "monster_bonus": {
+    "minecraft:generic.max_health": 3.0
+  },
+  "sell_price": 35,
+  "upgrade_difficulty": 0
+}

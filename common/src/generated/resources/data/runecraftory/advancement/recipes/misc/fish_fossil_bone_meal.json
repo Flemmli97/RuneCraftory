@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "fish_fossil": {
+      "conditions": {
+        "items": [
+          {
+            "items": "runecraftory:fish_fossil"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "runecraftory:fish_fossil_bone_meal"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "fish_fossil"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "runecraftory:fish_fossil_bone_meal"
+    ]
+  }
+}

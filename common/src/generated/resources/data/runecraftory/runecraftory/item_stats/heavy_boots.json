@@ -1,0 +1,16 @@
+{
+  "buy_price": 9500,
+  "element": "NONE",
+  "item": "runecraftory:heavy_boots",
+  "item_stats": {
+    "minecraft:generic.knockback_resistance": 0.5,
+    "runecraftory:critical_resistance": 10.0,
+    "runecraftory:defence": 15.0,
+    "runecraftory:fatigue_resistance": -20.0
+  },
+  "monster_bonus": {
+    "runecraftory:defence": 1.0
+  },
+  "sell_price": 680,
+  "upgrade_difficulty": 0
+}

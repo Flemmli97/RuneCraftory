@@ -1,0 +1,12 @@
+{
+  "buy_price": 15000,
+  "element": "NONE",
+  "item": "runecraftory:paralysis_ring",
+  "item_stats": {
+    "runecraftory:paralysis": 10.0,
+    "runecraftory:paralysis_resistance": 100.0
+  },
+  "monster_bonus": {},
+  "sell_price": 750,
+  "upgrade_difficulty": 0
+}

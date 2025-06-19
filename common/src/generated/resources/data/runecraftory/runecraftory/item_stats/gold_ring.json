@@ -1,0 +1,16 @@
+{
+  "buy_price": 0,
+  "element": "NONE",
+  "item": "runecraftory:gold_ring",
+  "item_stats": {
+    "runecraftory:earth_resistance": 15.0,
+    "runecraftory:fire_resistance": 15.0,
+    "runecraftory:water_resistance": 15.0,
+    "runecraftory:wind_resistance": 15.0
+  },
+  "monster_bonus": {
+    "runecraftory:magic_defence": 2.0
+  },
+  "sell_price": 5000,
+  "upgrade_difficulty": 0
+}

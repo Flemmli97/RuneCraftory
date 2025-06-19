@@ -1,0 +1,23 @@
+{
+  "type": "runecraftory:cooking",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "tag": "c:foods/butter"
+    },
+    {
+      "tag": "c:foods/flour"
+    },
+    {
+      "tag": "c:foods/sugar"
+    },
+    {
+      "tag": "c:eggs"
+    }
+  ],
+  "required_level": 30,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:cookie"
+  }
+}

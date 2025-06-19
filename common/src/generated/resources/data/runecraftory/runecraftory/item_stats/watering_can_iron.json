@@ -1,0 +1,14 @@
+{
+  "buy_price": 4500,
+  "element": "WATER",
+  "item": "runecraftory:watering_can_iron",
+  "item_stats": {
+    "runecraftory:attack_range": 0.0,
+    "runecraftory:magic_attack": 7.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.max_health": 1.0
+  },
+  "sell_price": 164,
+  "upgrade_difficulty": 0
+}

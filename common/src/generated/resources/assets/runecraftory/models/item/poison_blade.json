@@ -1,14 +1,14 @@
 {
   "parent": "minecraft:item/handheld",
-  "textures": {
-    "layer0": "runecraftory:item/poison_blade"
-  },
   "overrides": [
     {
+      "model": "runecraftory:item/poison_blade_held",
       "predicate": {
         "runecraftory:held": 1.0
-      },
-      "model": "runecraftory:item/poison_blade_held"
+      }
     }
-  ]
+  ],
+  "textures": {
+    "layer0": "runecraftory:item/poison_blade"
+  }
 }

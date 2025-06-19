@@ -1,0 +1,23 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "tag": "runecraftory:cloths"
+    },
+    {
+      "tag": "c:gems/aquamarine"
+    },
+    {
+      "tag": "c:raw_materials/platinum"
+    },
+    {
+      "item": "runecraftory:water_crystal"
+    }
+  ],
+  "required_level": 27,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:fist_of_water"
+  }
+}

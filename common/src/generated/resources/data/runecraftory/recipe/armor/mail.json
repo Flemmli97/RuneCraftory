@@ -1,0 +1,20 @@
+{
+  "type": "runecraftory:armor",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "minecraft:light_blue_wool"
+    },
+    {
+      "tag": "c:dusts/bronze"
+    },
+    {
+      "tag": "runecraftory:liquids"
+    }
+  ],
+  "required_level": 18,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:mail"
+  }
+}

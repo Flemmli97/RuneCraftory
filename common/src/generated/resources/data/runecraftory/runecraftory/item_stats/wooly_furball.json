@@ -1,0 +1,16 @@
+{
+  "buy_price": 900,
+  "element": "NONE",
+  "item": "runecraftory:wooly_furball",
+  "item_stats": {
+    "runecraftory:defence": 8.0,
+    "runecraftory:dizzy_resistance": 10.0,
+    "runecraftory:magic_defence": 4.0,
+    "runecraftory:sleep_resistance": 3.0
+  },
+  "monster_bonus": {
+    "runecraftory:defence": 2.0
+  },
+  "sell_price": 120,
+  "upgrade_difficulty": 38
+}

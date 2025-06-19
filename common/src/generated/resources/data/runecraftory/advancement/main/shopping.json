@@ -1,0 +1,26 @@
+{
+  "parent": "runecraftory:main/shipping/first",
+  "criteria": {
+    "buy_item": {
+      "trigger": "runecraftory:shop_buy"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "runecraftory.advancements.shop.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minecraft:gold_ingot"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.shop.title"
+    }
+  },
+  "requirements": [
+    [
+      "buy_item"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

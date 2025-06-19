@@ -1,0 +1,16 @@
+{
+  "buy_price": 27000,
+  "element": "NONE",
+  "item": "runecraftory:dragon_bones",
+  "item_stats": {
+    "runecraftory:defence": 13.0,
+    "runecraftory:magic_defence": 13.0
+  },
+  "monster_bonus": {
+    "runecraftory:magic_defence": 3.0
+  },
+  "sell_price": 1500,
+  "tier_2_Spell": "runecraftory:bone_needles",
+  "tier_3_Spell": "runecraftory:energy_orb_spell",
+  "upgrade_difficulty": 52
+}

@@ -1,0 +1,17 @@
+{
+  "type": "runecraftory:armor",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "tag": "c:raw_materials/platinum"
+    },
+    {
+      "item": "runecraftory:dragonic_stone"
+    }
+  ],
+  "required_level": 70,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:platinum_ring"
+  }
+}

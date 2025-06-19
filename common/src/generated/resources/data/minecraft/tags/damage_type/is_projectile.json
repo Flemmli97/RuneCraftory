@@ -1,0 +1,8 @@
+{
+  "values": [
+    "runecraftory:physical_projectile",
+    "runecraftory:projectile_ignore_defence",
+    "runecraftory:magic_projectile",
+    "runecraftory:projectile_ignore_magic_defence"
+  ]
+}

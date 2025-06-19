@@ -1,0 +1,13 @@
+{
+  "bad_season": [
+    "WINTER"
+  ],
+  "best_season": [
+    "SUMMER"
+  ],
+  "giant_crop": "runecraftory:king_pink_cat",
+  "growth": 6,
+  "item": "runecraftory:pink_cat_seeds",
+  "max_drops": 3,
+  "regrowable": false
+}

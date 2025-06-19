@@ -1,0 +1,23 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:battle_hammer"
+    },
+    {
+      "item": "minecraft:diamond"
+    },
+    {
+      "tag": "c:string"
+    },
+    {
+      "item": "minecraft:iron_block"
+    }
+  ],
+  "required_level": 35,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:strong_stone"
+  }
+}

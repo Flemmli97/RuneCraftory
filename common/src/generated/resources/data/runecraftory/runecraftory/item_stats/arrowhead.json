@@ -1,0 +1,14 @@
+{
+  "buy_price": 80,
+  "element": "NONE",
+  "item": "runecraftory:arrowhead",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 2.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.attack_damage": 1.0
+  },
+  "sell_price": 10,
+  "tier_2_Spell": "runecraftory:double_arrow",
+  "upgrade_difficulty": 2
+}

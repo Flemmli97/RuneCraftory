@@ -1,0 +1,9 @@
+{
+  "conversations": {
+    "npc.doctor.1.procreation.fail.1": {
+      "conditions": [],
+      "translation_key": "npc.doctor.1.procreation.fail.1"
+    }
+  },
+  "fallback_key": ""
+}

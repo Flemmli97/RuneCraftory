@@ -1,0 +1,16 @@
+{
+  "buy_price": 12430,
+  "element": "WIND",
+  "item": "runecraftory:emerald_rod",
+  "item_stats": {
+    "runecraftory:attack_range": 0.0,
+    "runecraftory:attack_width": 0.5,
+    "runecraftory:dizzy": 15.0,
+    "runecraftory:magic_attack": 77.0
+  },
+  "monster_bonus": {
+    "runecraftory:magic_attack": 0.5
+  },
+  "sell_price": 705,
+  "upgrade_difficulty": 0
+}

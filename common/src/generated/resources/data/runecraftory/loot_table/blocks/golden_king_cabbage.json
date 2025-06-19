@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "block": "runecraftory:golden_king_cabbage",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "facing": "north"
+              }
+            }
+          ],
+          "name": "runecraftory:golden_king_cabbage"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "runecraftory:blocks/golden_king_cabbage"
+}

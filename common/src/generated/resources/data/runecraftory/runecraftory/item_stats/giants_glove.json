@@ -1,0 +1,15 @@
+{
+  "buy_price": 810,
+  "element": "NONE",
+  "item": "runecraftory:giants_glove",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 5.0,
+    "runecraftory:critical_resistance": 5.0,
+    "runecraftory:defence": 10.0
+  },
+  "monster_bonus": {
+    "runecraftory:critical_resistance": 0.5
+  },
+  "sell_price": 76,
+  "upgrade_difficulty": 36
+}

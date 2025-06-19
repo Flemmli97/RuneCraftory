@@ -1,14 +1,14 @@
 {
   "parent": "minecraft:item/handheld",
-  "textures": {
-    "layer0": "runecraftory:item/zweihaender_plus"
-  },
   "overrides": [
     {
+      "model": "runecraftory:item/zweihaender_plus_held",
       "predicate": {
         "runecraftory:held": 1.0
-      },
-      "model": "runecraftory:item/zweihaender_plus_held"
+      }
     }
-  ]
+  ],
+  "textures": {
+    "layer0": "runecraftory:item/zweihaender_plus"
+  }
 }

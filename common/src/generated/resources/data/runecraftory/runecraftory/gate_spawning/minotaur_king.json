@@ -1,0 +1,10 @@
+{
+  "allow_underwater": false,
+  "biomes": {
+    "minecraft:is_mountain": 18
+  },
+  "entity": "runecraftory:minotaur_king",
+  "min_distance_from_spawn": 0,
+  "min_gate_level": 75,
+  "structures": {}
+}

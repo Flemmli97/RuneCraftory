@@ -1,0 +1,96 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "base": 0.4,
+              "enchanted_bonus": 0.2,
+              "enchantment": "minecraft:looting",
+              "function": "runecraftory:luck_and_looting",
+              "limit": 2,
+              "luck_bonus": 0.05
+            }
+          ],
+          "name": "runecraftory:fur_s"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "base": 0.2,
+              "enchanted_bonus": 0.2,
+              "enchantment": "minecraft:looting",
+              "function": "runecraftory:luck_and_looting",
+              "limit": 2,
+              "luck_bonus": 0.05
+            }
+          ],
+          "name": "runecraftory:fur_m"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "base": 0.05,
+              "enchanted_bonus": 0.2,
+              "enchantment": "minecraft:looting",
+              "function": "runecraftory:luck_and_looting",
+              "limit": 2,
+              "luck_bonus": 0.01
+            }
+          ],
+          "name": "runecraftory:wooly_furball"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "base": 0.01,
+              "enchanted_bonus": 0.0,
+              "enchantment": "minecraft:looting",
+              "function": "runecraftory:luck_and_looting",
+              "limit": 0,
+              "luck_bonus": 0.01
+            }
+          ],
+          "name": "minecraft:shears"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "value": "runecraftory:entities/wooly"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "runecraftory:entities/king_wooly/white"
+}

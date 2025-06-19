@@ -24,13 +24,14 @@ import java.util.NoSuchElementException;
 public class SpellPropertiesManager extends SimpleJsonResourceReloadListener implements ListenerExtension {
 
     public static final ResourceLocation ID = RuneCraftory.modRes("spells");
+    public static final String DIRECTORY = String.format("%s/%s", ID.getNamespace(), ID.getPath());
 
     private Map<Spell, SpellProperties> propertiesMap = new HashMap<>();
 
     private HolderLookup.Provider provider;
 
     public SpellPropertiesManager() {
-        super(DataPackHandler.GSON, ID.toString());
+        super(DataPackHandler.GSON, DIRECTORY);
     }
 
     public SpellProperties getPropertiesFor(Spell spell) {

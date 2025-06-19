@@ -194,7 +194,7 @@ public class TendCropsGoal extends Goal {
                         if (!rest.isEmpty())
                             Block.popResource(level, pos, rest);
                     });
-            state.spawnAfterBreak(level, pos, ItemStack.EMPTY);
+//            state.spawnAfterBreak(level, pos, ItemStack.EMPTY);
         } else
             Block.dropResources(state, level, pos, blockEntity, this.entity, ItemStack.EMPTY);
         level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);

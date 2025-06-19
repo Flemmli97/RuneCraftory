@@ -1,0 +1,33 @@
+{
+  "parent": "runecraftory:main/crafting/forge",
+  "criteria": {
+    "spell": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#runecraftory:spells"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "runecraftory.advancements.spell.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "runecraftory:fireball"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.spell.title"
+    }
+  },
+  "requirements": [
+    [
+      "spell"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

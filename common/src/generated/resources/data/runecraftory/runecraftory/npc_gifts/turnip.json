@@ -1,0 +1,11 @@
+{
+  "items": [
+    "#c:crops/turnip"
+  ],
+  "translations": [
+    "runecraftory.gift.turnip"
+  ],
+  "xp_range": {
+    "max": 7
+  }
+}

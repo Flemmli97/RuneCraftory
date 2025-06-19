@@ -22,13 +22,14 @@ import java.util.Map;
 public class NameManager extends SimpleJsonResourceReloadListener implements ListenerExtension {
 
     public static final ResourceLocation ID = RuneCraftory.modRes("names");
+    public static final String DIRECTORY = String.format("%s/%s", ID.getNamespace(), ID.getPath());
 
     private Map<String, List<String>> surnames;
     private Map<String, List<String>> maleNames;
     private Map<String, List<String>> femaleNames;
 
     public NameManager() {
-        super(DataPackHandler.GSON, ID.toString());
+        super(DataPackHandler.GSON, DIRECTORY);
     }
 
     public String getRandomSurname(RandomSource random, String lang) {

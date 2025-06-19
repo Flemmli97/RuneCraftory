@@ -1,9 +1,0 @@
-{
-  "buy_price": 1000,
-  "sell_price": 100,
-  "upgrade_difficulty": 0,
-  "item_stats": {},
-  "monster_bonus": {},
-  "element": "NONE",
-  "item": "runecraftory:pink_melon_seeds"
-}

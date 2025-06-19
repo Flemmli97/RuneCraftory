@@ -1,0 +1,12 @@
+{
+  "values": [
+    "runecraftory:paralysis",
+    "runecraftory:poison",
+    "runecraftory:seal",
+    "runecraftory:sleep",
+    "runecraftory:fatigue",
+    "runecraftory:cold",
+    "runecraftory:faint",
+    "runecraftory:drain"
+  ]
+}

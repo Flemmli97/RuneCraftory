@@ -1,0 +1,17 @@
+{
+  "buy_price": 19360,
+  "element": "EARTH",
+  "item": "runecraftory:earth_shade",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 99.0,
+    "runecraftory:attack_range": 1.5,
+    "runecraftory:attack_width": 3.5,
+    "runecraftory:dizzy": 10.0,
+    "runecraftory:magic_attack": 15.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.attack_damage": 1.0
+  },
+  "sell_price": 1250,
+  "upgrade_difficulty": 0
+}

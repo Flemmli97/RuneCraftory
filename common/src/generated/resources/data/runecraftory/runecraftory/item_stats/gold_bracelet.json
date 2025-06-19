@@ -1,0 +1,13 @@
+{
+  "buy_price": 15000,
+  "element": "NONE",
+  "item": "runecraftory:gold_bracelet",
+  "item_stats": {
+    "runecraftory:magic_defence": 25.0
+  },
+  "monster_bonus": {
+    "runecraftory:magic_defence": 0.5
+  },
+  "sell_price": 750,
+  "upgrade_difficulty": 0
+}

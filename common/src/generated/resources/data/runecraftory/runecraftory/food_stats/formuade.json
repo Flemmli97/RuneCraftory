@@ -1,0 +1,25 @@
+{
+  "cooking_bonus": {},
+  "cooking_bonus_percent": {},
+  "duration": 6000,
+  "effects": {
+    "minecraft:generic.attack_damage": 70.0,
+    "runecraftory:cold_resistance": 25.0,
+    "runecraftory:defence": 35.0,
+    "runecraftory:faint_resistance": 25.0,
+    "runecraftory:fatigue_resistance": 25.0,
+    "runecraftory:magic_attack": 70.0,
+    "runecraftory:magic_defence": 35.0,
+    "runecraftory:paralysis_resistance": 25.0,
+    "runecraftory:poison_resistance": 25.0,
+    "runecraftory:seal_resistance": 25.0,
+    "runecraftory:sleep_resistance": 25.0
+  },
+  "effects_percentage": {
+    "minecraft:generic.max_health": -50.0,
+    "runecraftory:max_runepoints": 75.0
+  },
+  "item": "runecraftory:formuade",
+  "potion_apply": [],
+  "potion_remove": []
+}

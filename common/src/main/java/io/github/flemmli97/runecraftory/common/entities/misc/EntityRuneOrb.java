@@ -1,13 +1,12 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -45,15 +44,14 @@ public class EntityRuneOrb extends Entity {
         }
         this.discard();
         EnumSkills randomSkill = EnumSkills.values()[player.getRandom().nextInt(EnumSkills.values().length)];
-        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-            if (this.entityData.get(LEVELSTATS))
-                data.increaseSkill(randomSkill, player, LevelCalc.xpAmountForSkillLevelUp(randomSkill, data.getSkillLevel(randomSkill).getLevel()) - data.getSkillLevel(randomSkill).getXp());
-            data.refreshRunePoints(player, 150);
-        });
+        PlayerData data = Platform.INSTANCE.getPlayerData(player);
+        if (this.entityData.get(LEVELSTATS))
+            data.increaseSkill(randomSkill, LevelCalc.xpAmountForSkillLevelUp(randomSkill, data.getSkillLevel(randomSkill).getLevel()) - data.getSkillLevel(randomSkill).getXp());
+        data.refreshRunePoints(150);
     }
 
     @Override
-    protected void defineSynchedData() {
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
         builder.define(LEVELSTATS, true);
     }
 
@@ -67,10 +65,5 @@ public class EntityRuneOrb extends Entity {
     protected void addAdditionalSaveData(CompoundTag compound) {
         compound.putInt("TicksExisted", this.ticksExisted);
         compound.putBoolean("LevelStats", this.entityData.get(LEVELSTATS));
-    }
-
-    @Override
-    public Packet<?> getAddEntityPacket() {
-        return new ClientboundAddEntityPacket(this);
     }
 }

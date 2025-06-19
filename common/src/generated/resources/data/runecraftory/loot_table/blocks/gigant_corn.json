@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "block": "runecraftory:gigant_corn",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "facing": "north"
+              }
+            }
+          ],
+          "name": "runecraftory:gigant_corn"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "runecraftory:blocks/gigant_corn"
+}

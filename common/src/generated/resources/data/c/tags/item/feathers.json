@@ -1,0 +1,13 @@
+{
+  "values": [
+    "minecraft:feather",
+    "runecraftory:black_feather",
+    "runecraftory:thunder_feather",
+    "runecraftory:yellow_feather",
+    "runecraftory:dragon_fin",
+    {
+      "id": "#c:feathers",
+      "required": false
+    }
+  ]
+}

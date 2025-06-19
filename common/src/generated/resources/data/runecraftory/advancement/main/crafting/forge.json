@@ -1,0 +1,26 @@
+{
+  "parent": "runecraftory:main/root",
+  "criteria": {
+    "craft": {
+      "trigger": "runecraftory:forging"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "runecraftory.advancements.crafting.forging.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "runecraftory:forge"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.crafting.forging.title"
+    }
+  },
+  "requirements": [
+    [
+      "craft"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

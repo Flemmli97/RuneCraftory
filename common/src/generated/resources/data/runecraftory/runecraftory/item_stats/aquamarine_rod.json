@@ -1,0 +1,16 @@
+{
+  "buy_price": 3430,
+  "element": "WATER",
+  "item": "runecraftory:aquamarine_rod",
+  "item_stats": {
+    "runecraftory:attack_range": 0.0,
+    "runecraftory:attack_width": 0.5,
+    "runecraftory:dizzy": 15.0,
+    "runecraftory:magic_attack": 17.0
+  },
+  "monster_bonus": {
+    "runecraftory:magic_attack": 0.5
+  },
+  "sell_price": 186,
+  "upgrade_difficulty": 0
+}

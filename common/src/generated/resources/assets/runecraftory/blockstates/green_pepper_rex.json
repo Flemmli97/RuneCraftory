@@ -1,5 +1,8 @@
 {
   "variants": {
+    "facing=east": {
+      "model": "runecraftory:block/green_pepper_rex_2"
+    },
     "facing=north": {
       "model": "runecraftory:block/green_pepper_rex"
     },
@@ -10,9 +13,6 @@
     "facing=west": {
       "model": "runecraftory:block/green_pepper_rex_2",
       "y": 180
-    },
-    "facing=east": {
-      "model": "runecraftory:block/green_pepper_rex_2"
     }
   }
 }

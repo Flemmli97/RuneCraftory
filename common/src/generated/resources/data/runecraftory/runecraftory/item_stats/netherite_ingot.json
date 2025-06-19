@@ -1,0 +1,14 @@
+{
+  "buy_price": 0,
+  "element": "NONE",
+  "item": "minecraft:netherite_ingot",
+  "item_stats": {
+    "runecraftory:defence": 15.0,
+    "runecraftory:magic_defence": 15.0
+  },
+  "monster_bonus": {
+    "runecraftory:defence": 2.0
+  },
+  "sell_price": 200,
+  "upgrade_difficulty": 35
+}

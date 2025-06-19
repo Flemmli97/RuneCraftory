@@ -1,0 +1,21 @@
+{
+  "conversations": {
+    "npc.smith.1.talk.1": {
+      "conditions": [],
+      "translation_key": "npc.smith.1.talk.1"
+    },
+    "npc.smith.1.talk.2": {
+      "conditions": [],
+      "translation_key": "npc.smith.1.talk.2"
+    },
+    "npc.smith.1.talk.3": {
+      "conditions": [],
+      "translation_key": "npc.smith.1.talk.3"
+    },
+    "npc.smith.1.talk.4": {
+      "conditions": [],
+      "translation_key": "npc.smith.1.talk.4"
+    }
+  },
+  "fallback_key": ""
+}

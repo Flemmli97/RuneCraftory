@@ -1,14 +1,14 @@
 {
   "parent": "minecraft:item/handheld",
-  "textures": {
-    "layer0": "runecraftory:item/schnabel"
-  },
   "overrides": [
     {
+      "model": "runecraftory:item/schnabel_held",
       "predicate": {
         "runecraftory:held": 1.0
-      },
-      "model": "runecraftory:item/schnabel_held"
+      }
     }
-  ]
+  ],
+  "textures": {
+    "layer0": "runecraftory:item/schnabel"
+  }
 }

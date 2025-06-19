@@ -40,9 +40,9 @@ public class ShortSwordAttack extends AttackAction {
         if (handler.getComboCount() != 6) {
             if (anim.isAt("attack")) {
                 if (!entity.level().isClientSide) {
-                    CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(AOEWeapon.createOBB(entity, stack,
+                    CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(AOEWeapon.createOBB(entity,
                                     CombatUtils.getRange(entity, 0),
-                                    CombatUtils.getWidth(entity, 0))))
+                                    CombatUtils.getWidth(entity, 0), 0.5)))
                             .executeAttack();
                 }
                 entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);

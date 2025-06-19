@@ -1,0 +1,16 @@
+{
+  "buy_price": 3500,
+  "element": "NONE",
+  "item": "minecraft:totem_of_undying",
+  "item_stats": {
+    "runecraftory:defence": 9.0,
+    "runecraftory:magic_defence": 9.0
+  },
+  "monster_bonus": {
+    "runecraftory:defence": 1.0,
+    "runecraftory:magic_defence": 1.0
+  },
+  "sell_price": 110,
+  "tier_2_Spell": "runecraftory:vanilla_evoker_fang",
+  "upgrade_difficulty": 17
+}

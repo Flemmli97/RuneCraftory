@@ -1,0 +1,18 @@
+{
+  "buy_price": 7500,
+  "element": "NONE",
+  "item": "runecraftory:ambrosias_thorns",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 7.0,
+    "runecraftory:magic_attack": 7.0,
+    "runecraftory:sleep": 10.0
+  },
+  "monster_bonus": {
+    "runecraftory:sleep": 1.0
+  },
+  "sell_price": 500,
+  "tier_1_Spell": "runecraftory:pollen_puff",
+  "tier_2_Spell": "runecraftory:wave",
+  "tier_3_Spell": "runecraftory:butterfly",
+  "upgrade_difficulty": 21
+}

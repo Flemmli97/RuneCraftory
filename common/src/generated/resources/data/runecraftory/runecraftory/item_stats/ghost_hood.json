@@ -1,0 +1,15 @@
+{
+  "buy_price": 70,
+  "element": "NONE",
+  "item": "runecraftory:ghost_hood",
+  "item_stats": {
+    "runecraftory:defence": 2.0,
+    "runecraftory:magic_defence": 2.0,
+    "runecraftory:seal_resistance": 25.0
+  },
+  "monster_bonus": {
+    "runecraftory:seal_resistance": 0.5
+  },
+  "sell_price": 650,
+  "upgrade_difficulty": 21
+}

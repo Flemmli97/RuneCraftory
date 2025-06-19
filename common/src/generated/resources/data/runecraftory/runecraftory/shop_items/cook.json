@@ -1,0 +1,424 @@
+{
+  "values": [
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:rice"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:rice_flour"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:flour"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:oil"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:curry_powder"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:wine"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:chocolate"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:egg_s"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:egg_m"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:egg_l"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:milk_s"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:milk_m"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:milk_l"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:onigiri"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:cheese"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:pickled_turnip"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:salmon_onigiri"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:flan"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:mayonnaise"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:butter"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:ketchup"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:apple_juice"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:orange_juice"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:grape_juice"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:tomato_juice"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:pineapple_juice"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:fruit_juice"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:fruit_smoothie"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:vegetable_juice"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:veggie_smoothie"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:mixed_juice"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:mixed_smoothie"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:baked_onigiri"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:toast"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:apple_pie"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:cheesecake"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:chocolate_cake"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:cookie"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:choco_cookie"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:yogurt"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:marmalade"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:apple_jam"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:grape_jam"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:strawberry_jam"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:hot_milk"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:hot_chocolate"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:udon"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:tempura_udon"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:curry_udon"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:baked_apple"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:fried_veggies"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:disastrous_dish"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:failed_dish"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:mixed_herbs"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:sour_drop"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:sweet_powder"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:heavy_spice"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:orange"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:grapes"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:mealy_apple"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "buy_price": 450,
+  "element": "NONE",
+  "item": "runecraftory:bulls_horn",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 8.0,
+    "runecraftory:defence": 1.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.attack_damage": 2.0
+  },
+  "sell_price": 64,
+  "upgrade_difficulty": 26
+}

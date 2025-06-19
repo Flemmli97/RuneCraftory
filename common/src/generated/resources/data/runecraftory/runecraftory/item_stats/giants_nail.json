@@ -1,0 +1,13 @@
+{
+  "buy_price": 980,
+  "element": "NONE",
+  "item": "runecraftory:giants_nail",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 11.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.attack_damage": 2.0
+  },
+  "sell_price": 103,
+  "upgrade_difficulty": 44
+}

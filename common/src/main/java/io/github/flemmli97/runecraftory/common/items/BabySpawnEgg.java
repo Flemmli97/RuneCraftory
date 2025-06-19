@@ -18,7 +18,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -132,8 +131,8 @@ public class BabySpawnEgg extends Item {
         }
         Entity e = type.create(level, EntityType.createDefaultStackConfig(level, stack, player), pos, spawnType, updateLocation, doCollisionOffset);
         if (e instanceof EntityNPCBase npc) {
-            if (forgeCheck && EventCalls.INSTANCE.specialSpawnCall((Mob) e, level, pos.getX(), pos.getY(), pos.getZ(), null, spawnType))
-                return null;
+//            if (forgeCheck && EventCalls.INSTANCE.specialSpawnCall((Mob) e, level, pos.getX(), pos.getY(), pos.getZ(), null, spawnType))
+//                return null;
             npc.tryUpdateName(Component.literal(data.name().get()));
             npc.getFamily().setFather(data.father());
             npc.getFamily().setMother(data.mother());

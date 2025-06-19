@@ -1,0 +1,34 @@
+{
+  "parent": "runecraftory:main/monster_help",
+  "criteria": {
+    "final_tool": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#runecraftory:high_tier_tools"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "runecraftory.advancements.final.tool.description"
+    },
+    "frame": "challenge",
+    "icon": {
+      "count": 1,
+      "id": "runecraftory:watering_can_platinum"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.final.tool.title"
+    }
+  },
+  "requirements": [
+    [
+      "final_tool"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

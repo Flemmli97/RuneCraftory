@@ -1,0 +1,13 @@
+{
+  "buy_price": 470,
+  "element": "NONE",
+  "item": "runecraftory:wolf_fang",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 6.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.attack_damage": 2.0
+  },
+  "sell_price": 60,
+  "upgrade_difficulty": 31
+}

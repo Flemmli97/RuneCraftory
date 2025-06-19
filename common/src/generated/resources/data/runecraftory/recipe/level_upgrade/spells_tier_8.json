@@ -1,0 +1,7 @@
+{
+  "type": "runecraftory:level_upgrade",
+  "base": {
+    "tag": "runecraftory:magic_spells"
+  },
+  "level": 7
+}

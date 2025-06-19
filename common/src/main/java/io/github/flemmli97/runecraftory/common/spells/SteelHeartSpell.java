@@ -19,7 +19,7 @@ public class SteelHeartSpell extends WeaponSpell {
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         boolean result = super.use(level, entity, stack, rpUseMultiplier, amount, lvl);
         if (result) {
-            entity.addEffect(new MobEffectInstance(ModEffects.STEEL_HEART.get(), 400 + 30 * lvl, 0));
+            entity.addEffect(new MobEffectInstance(ModEffects.STEEL_HEART.asHolder(), 400 + 30 * lvl, 0));
             playSound(entity, ModSounds.SPELL_GENERIC_BUFF.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.2f);
         }
         return result;

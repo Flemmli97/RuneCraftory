@@ -1,0 +1,66 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "base": 0.4,
+              "enchanted_bonus": 0.2,
+              "enchantment": "minecraft:looting",
+              "function": "runecraftory:luck_and_looting",
+              "limit": 0,
+              "luck_bonus": 0.05
+            }
+          ],
+          "name": "runecraftory:ghost_hood"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "base": 0.05,
+              "enchanted_bonus": 0.2,
+              "enchantment": "minecraft:looting",
+              "function": "runecraftory:luck_and_looting",
+              "limit": 0,
+              "luck_bonus": 0.01
+            }
+          ],
+          "name": "runecraftory:skull"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "base": 0.03,
+              "enchanted_bonus": 0.2,
+              "enchantment": "minecraft:looting",
+              "function": "runecraftory:luck_and_looting",
+              "limit": 1,
+              "luck_bonus": 0.01
+            }
+          ],
+          "name": "minecraft:skeleton_skull"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "runecraftory:entities/ghost"
+}

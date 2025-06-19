@@ -1,0 +1,16 @@
+{
+  "buy_price": 11110,
+  "element": "EARTH",
+  "item": "runecraftory:staff",
+  "item_stats": {
+    "runecraftory:attack_range": 0.0,
+    "runecraftory:attack_width": 0.5,
+    "runecraftory:dizzy": 15.0,
+    "runecraftory:magic_attack": 65.0
+  },
+  "monster_bonus": {
+    "runecraftory:magic_attack": 1.0
+  },
+  "sell_price": 599,
+  "upgrade_difficulty": 0
+}

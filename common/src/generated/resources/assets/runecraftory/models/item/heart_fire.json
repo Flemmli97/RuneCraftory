@@ -1,14 +1,14 @@
 {
   "parent": "minecraft:item/handheld",
-  "textures": {
-    "layer0": "runecraftory:item/heart_fire"
-  },
   "overrides": [
     {
+      "model": "runecraftory:item/heart_fire_single",
       "predicate": {
         "runecraftory:held": 1.0
-      },
-      "model": "runecraftory:item/heart_fire_single"
+      }
     }
-  ]
+  ],
+  "textures": {
+    "layer0": "runecraftory:item/heart_fire"
+  }
 }

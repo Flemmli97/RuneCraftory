@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "arrowhead": {
+      "conditions": {
+        "items": [
+          {
+            "items": "runecraftory:arrowhead"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "feather": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#c:feathers"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "runecraftory:arrows"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "feather",
+      "arrowhead"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "runecraftory:arrows"
+    ]
+  }
+}

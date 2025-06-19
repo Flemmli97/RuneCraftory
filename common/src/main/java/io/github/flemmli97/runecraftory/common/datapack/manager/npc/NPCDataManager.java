@@ -24,6 +24,7 @@ import java.util.function.Predicate;
 public class NPCDataManager extends SimpleJsonResourceReloadListener implements ListenerExtension {
 
     public static final ResourceLocation ID = RuneCraftory.modRes("npc_data");
+    public static final String DIRECTORY = String.format("%s/%s", ID.getNamespace(), ID.getPath());
 
     public static final ResourceLocation DEFAULT_ID = RuneCraftory.modRes("default_npc");
 
@@ -35,7 +36,7 @@ public class NPCDataManager extends SimpleJsonResourceReloadListener implements 
     private HolderLookup.Provider provider;
 
     public NPCDataManager() {
-        super(DataPackHandler.GSON, ID.toString());
+        super(DataPackHandler.GSON, DIRECTORY);
     }
 
     public NPCData get(ResourceLocation res) {

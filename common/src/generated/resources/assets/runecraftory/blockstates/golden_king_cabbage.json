@@ -1,5 +1,8 @@
 {
   "variants": {
+    "facing=east": {
+      "model": "runecraftory:block/golden_king_cabbage_2"
+    },
     "facing=north": {
       "model": "runecraftory:block/golden_king_cabbage"
     },
@@ -10,9 +13,6 @@
     "facing=west": {
       "model": "runecraftory:block/golden_king_cabbage_2",
       "y": 180
-    },
-    "facing=east": {
-      "model": "runecraftory:block/golden_king_cabbage_2"
     }
   }
 }

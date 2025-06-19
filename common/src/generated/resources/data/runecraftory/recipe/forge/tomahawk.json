@@ -1,0 +1,23 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:battle_axe"
+    },
+    {
+      "tag": "c:raw_materials/silver"
+    },
+    {
+      "tag": "c:gems/emerald"
+    },
+    {
+      "item": "runecraftory:silk_cloth"
+    }
+  ],
+  "required_level": 28,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:tomahawk"
+  }
+}

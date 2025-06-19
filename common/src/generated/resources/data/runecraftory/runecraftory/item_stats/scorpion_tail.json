@@ -1,0 +1,14 @@
+{
+  "buy_price": 610,
+  "element": "NONE",
+  "item": "runecraftory:scorpion_tail",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 5.0,
+    "runecraftory:poison": 2.0
+  },
+  "monster_bonus": {
+    "runecraftory:poison": 0.3
+  },
+  "sell_price": 62,
+  "upgrade_difficulty": 31
+}

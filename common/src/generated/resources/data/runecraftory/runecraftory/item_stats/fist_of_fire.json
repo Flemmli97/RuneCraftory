@@ -1,0 +1,19 @@
+{
+  "buy_price": 14720,
+  "element": "FIRE",
+  "item": "runecraftory:fist_of_fire",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 63.0,
+    "runecraftory:attack_range": 0.0,
+    "runecraftory:attack_width": 1.0,
+    "runecraftory:defence": 18.0,
+    "runecraftory:dizzy": 3.0,
+    "runecraftory:magic_attack": 18.0,
+    "runecraftory:magic_defence": 5.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.attack_damage": 1.0
+  },
+  "sell_price": 794,
+  "upgrade_difficulty": 0
+}

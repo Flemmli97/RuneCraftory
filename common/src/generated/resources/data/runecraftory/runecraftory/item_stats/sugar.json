@@ -1,0 +1,13 @@
+{
+  "buy_price": 25,
+  "element": "NONE",
+  "item": "minecraft:sugar",
+  "item_stats": {
+    "minecraft:generic.movement_speed": 0.01
+  },
+  "monster_bonus": {
+    "minecraft:generic.max_health": 1.0
+  },
+  "sell_price": 13,
+  "upgrade_difficulty": 18
+}

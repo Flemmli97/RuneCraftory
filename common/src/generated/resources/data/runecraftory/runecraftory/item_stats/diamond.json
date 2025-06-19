@@ -1,0 +1,13 @@
+{
+  "buy_price": 5000,
+  "element": "NONE",
+  "item": "minecraft:diamond",
+  "item_stats": {
+    "runecraftory:magic_defence": 10.0
+  },
+  "monster_bonus": {
+    "runecraftory:magic_defence": 2.0
+  },
+  "sell_price": 21,
+  "upgrade_difficulty": 23
+}

@@ -1,0 +1,17 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:rod"
+    },
+    {
+      "tag": "c:gems/amethyst"
+    }
+  ],
+  "required_level": 6,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:amethyst_rod"
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:scrap",
+          "quality": 3,
+          "weight": 100
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:raw_platinum",
+          "quality": 12,
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "runecraftory:skill_check",
+              "minimum_level": 30,
+              "skill": "MINING"
+            }
+          ],
+          "name": "runecraftory:raw_platinum",
+          "quality": 29,
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "runecraftory:skill_check",
+              "minimum_level": 40,
+              "skill": "MINING"
+            }
+          ],
+          "name": "runecraftory:small_crystal",
+          "quality": 8,
+          "weight": 3
+        }
+      ],
+      "functions": [
+        {
+          "function": "runecraftory:item_level",
+          "level": 1.0
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "runecraftory:blocks/ore_platinum"
+}

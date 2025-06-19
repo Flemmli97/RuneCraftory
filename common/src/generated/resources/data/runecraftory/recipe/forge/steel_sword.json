@@ -1,0 +1,20 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:broad_sword"
+    },
+    {
+      "tag": "runecraftory:mineral"
+    },
+    {
+      "tag": "runecraftory:claws_fangs"
+    }
+  ],
+  "required_level": 5,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:steel_sword"
+  }
+}

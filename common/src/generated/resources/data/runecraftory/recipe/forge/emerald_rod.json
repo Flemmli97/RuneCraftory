@@ -1,0 +1,20 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:rod"
+    },
+    {
+      "tag": "c:gems/emerald"
+    },
+    {
+      "tag": "c:gems/emerald"
+    }
+  ],
+  "required_level": 24,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:emerald_rod"
+  }
+}

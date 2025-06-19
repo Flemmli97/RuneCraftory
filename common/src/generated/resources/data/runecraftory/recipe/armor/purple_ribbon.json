@@ -1,0 +1,20 @@
+{
+  "type": "runecraftory:armor",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:purple_grass"
+    },
+    {
+      "tag": "runecraftory:cloths"
+    },
+    {
+      "tag": "c:string"
+    }
+  ],
+  "required_level": 7,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:purple_ribbon"
+  }
+}

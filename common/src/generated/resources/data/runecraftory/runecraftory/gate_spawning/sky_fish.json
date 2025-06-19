@@ -1,0 +1,11 @@
+{
+  "allow_underwater": true,
+  "biomes": {
+    "c:is_aquatic": 60,
+    "minecraft:is_beach": 60
+  },
+  "entity": "runecraftory:sky_fish",
+  "min_distance_from_spawn": 0,
+  "min_gate_level": 7,
+  "structures": {}
+}

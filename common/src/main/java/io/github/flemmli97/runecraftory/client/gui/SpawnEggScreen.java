@@ -153,7 +153,6 @@ public class SpawnEggScreen extends Screen {
 //            this.minecraft.setScreen(null);
 //        }));
 //    }
-
     @Override
     public boolean isPauseScreen() {
         return false;

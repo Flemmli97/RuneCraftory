@@ -4,7 +4,6 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.flemmli97.runecraftory.common.particles.ColoredParticleData4f;
 import io.github.flemmli97.tenshilib.client.particles.ParticleRenderTypes;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
-import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
@@ -18,7 +17,7 @@ import net.minecraft.world.phys.Vec3;
 public class VortexParticle extends TextureSheetParticle {
 
     public final SpriteSet spriteProvider;
-    private final float[][] points;
+    private final Vec3[] points;
     private final float angleInc;
     private final float radInc;
     private float currentRadius;
@@ -40,10 +39,11 @@ public class VortexParticle extends TextureSheetParticle {
         this.quadSize *= colorData.getScale();
         this.angleInc = angleInc;
         this.currentAngle = this.angleInc + angleOffset;
-        this.points = new float[amount][];
+        this.points = new Vec3[amount];
         this.subOffset = 360 / (float) (amount * (renderOpposite ? 2 : 1));
         for (int i = 0; i < this.points.length; i++) {
-            this.points[i] = MathUtils.rotate(0, 0, 1, radius, radius, 0, (this.currentAngle + this.subOffset * i) * Mth.DEG_TO_RAD);
+            this.points[i] = new Vec3(radius, radius, 0)
+                    .zRot(Mth.wrapDegrees((this.currentAngle + this.subOffset * i)));
         }
         this.currentRadius = radius;
         this.radInc = radiusInc;
@@ -59,7 +59,8 @@ public class VortexParticle extends TextureSheetParticle {
             this.currentAngle += this.angleInc;
             this.currentRadius += this.radInc;
             for (int i = 0; i < this.points.length; i++) {
-                this.points[i] = MathUtils.rotate(0, 0, 1, this.currentRadius, this.currentRadius, 0, (this.currentAngle + this.subOffset * i) * Mth.DEG_TO_RAD);
+                this.points[i] = new Vec3(this.currentRadius, this.currentRadius, 0)
+                        .zRot(Mth.wrapDegrees((this.currentAngle + this.subOffset * i)));
             }
         }
     }

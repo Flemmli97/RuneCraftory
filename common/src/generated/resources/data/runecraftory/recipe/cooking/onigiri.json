@@ -1,0 +1,14 @@
+{
+  "type": "runecraftory:cooking",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "tag": "c:foods/rice"
+    }
+  ],
+  "required_level": 1,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:onigiri"
+  }
+}

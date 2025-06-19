@@ -1,0 +1,11 @@
+{
+  "buy_price": 3000,
+  "element": "NONE",
+  "item": "runecraftory:mystery_potion",
+  "item_stats": {},
+  "monster_bonus": {
+    "minecraft:generic.max_health": 5.0
+  },
+  "sell_price": 250,
+  "upgrade_difficulty": 0
+}

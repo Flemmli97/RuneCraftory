@@ -24,6 +24,7 @@ repositories {
 dependencies {
     modImplementation "io.github.flemmli97:tenshilib:${tenshilib_version}-fabric"
     modApi "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${forge_config_api}"
+    modImplementation "net.tslat.smartbrainlib:SmartBrainLib-fabric-${project.minecraft_version}:${project.sbl_version}"
 
 //    modApi("${cloth_config}") {
 //        exclude(group: "net.fabricmc.fabric-api")

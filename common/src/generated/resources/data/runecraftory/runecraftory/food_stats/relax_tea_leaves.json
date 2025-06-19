@@ -1,0 +1,10 @@
+{
+  "cooking_bonus": {},
+  "cooking_bonus_percent": {},
+  "duration": 6000,
+  "effects": {},
+  "effects_percentage": {},
+  "item": "runecraftory:relax_tea_leaves",
+  "potion_apply": [],
+  "potion_remove": []
+}

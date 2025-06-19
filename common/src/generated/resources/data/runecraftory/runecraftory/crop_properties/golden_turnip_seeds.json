@@ -1,0 +1,13 @@
+{
+  "bad_season": [
+    "SUMMER"
+  ],
+  "best_season": [
+    "WINTER"
+  ],
+  "giant_crop": "runecraftory:golden_tyrant_turnip",
+  "growth": 90,
+  "item": "runecraftory:golden_turnip_seeds",
+  "max_drops": 3,
+  "regrowable": false
+}

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "runecraftory:fur_s"
+    },
+    {
+      "item": "runecraftory:fur_s"
+    },
+    {
+      "item": "runecraftory:fur_s"
+    },
+    {
+      "item": "runecraftory:fur_s"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "minecraft:white_wool"
+  }
+}

@@ -1,9 +1,0 @@
-{
-  "buy_price": 40000,
-  "sell_price": 15000,
-  "upgrade_difficulty": 74,
-  "item_stats": {},
-  "monster_bonus": {},
-  "element": "NONE",
-  "item": "runecraftory:blue_crystal"
-}

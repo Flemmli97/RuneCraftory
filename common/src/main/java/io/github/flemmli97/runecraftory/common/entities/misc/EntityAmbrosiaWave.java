@@ -30,7 +30,7 @@ import java.util.Set;
 public class EntityAmbrosiaWave extends BaseDamageCloud {
 
     private static final EntityDataAccessor<Integer> MAX_TICK = SynchedEntityData.defineId(EntityAmbrosiaWave.class, EntityDataSerializers.INT);
-    private static final List<Vector3f> CIRCLE_PARTICLE_MOTION = MathUtils.rotatedVecs(new Vec3(0.25, 0, 0), new Vec3(0, 1, 0), -180, 175, 5);
+    private static final List<Vector3f> CIRCLE_PARTICLE_MOTION = MathUtils.rotatedVecs(new Vector3f(0.25f, 0, 0), new Vector3f(0, 1, 0), -180, 175, 5);
 
     private final Set<FrozenEntity> hitEntityPos = new HashSet<>();
 

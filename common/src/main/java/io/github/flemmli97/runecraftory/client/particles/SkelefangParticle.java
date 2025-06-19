@@ -10,7 +10,6 @@ import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntitySkele
 import io.github.flemmli97.runecraftory.common.particles.SkelefangParticleData;
 import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
 import io.github.flemmli97.tenshilib.client.model.PoseExtended;
-import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -81,8 +80,9 @@ public class SkelefangParticle extends Particle {
                 mY += part.y;
                 mZ += part.z;
             }
-            double[] offset = MathUtils.rotate(0, 1, 0, mX, mY - 22.75, mZ, Mth.DEG_TO_RAD * Mth.wrapDegrees(this.initialRotY));
-            this.setPos(this.x + offset[0] * 1 / 16d, this.y - offset[1] * 1 / 16d, this.z - offset[2] * 1 / 16d);
+            Vec3 offset = new Vec3(mX, mY - 22.75, mZ)
+                    .yRot(Mth.wrapDegrees(this.initialRotY));
+            this.setPos(this.x + offset.x() * 1 / 16d, this.y - offset.y() * 1 / 16d, this.z - offset.z() * 1 / 16d);
             this.xo = this.x;
             this.yo = this.y;
             this.zo = this.z;
@@ -139,7 +139,7 @@ public class SkelefangParticle extends Particle {
         CustomParticleRenderTypes.batchType(RENDER_TYPE);
         VertexConsumer consumer = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(RENDER_TYPE);
         MODEL.renderAsParticle(stack, consumer, this.boneType, LightTexture.pack(block, light),
-                OverlayTexture.NO_OVERLAY, FastColor.ARGB32.setColor((int) (alpha * 255), CommonColors.WHITE));
+                OverlayTexture.NO_OVERLAY, FastColor.ARGB32.color((int) (alpha * 255), CommonColors.WHITE));
     }
 
     /**

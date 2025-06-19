@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "block": "runecraftory:chemistry_set",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "part": "left"
+              }
+            }
+          ],
+          "name": "runecraftory:chemistry_set"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "runecraftory:blocks/chemistry_set"
+}

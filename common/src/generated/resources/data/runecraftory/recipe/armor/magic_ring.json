@@ -1,0 +1,20 @@
+{
+  "type": "runecraftory:armor",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "tag": "c:ingots/gold"
+    },
+    {
+      "tag": "c:raw_materials/platinum"
+    },
+    {
+      "item": "minecraft:experience_bottle"
+    }
+  ],
+  "required_level": 55,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:magic_ring"
+  }
+}

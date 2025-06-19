@@ -1,0 +1,17 @@
+{
+  "conversations": {
+    "npc.generic.2.marry.no.1": {
+      "conditions": [],
+      "translation_key": "npc.generic.2.marry.no.1"
+    },
+    "npc.generic.2.marry.no.2": {
+      "conditions": [],
+      "translation_key": "npc.generic.2.marry.no.2"
+    },
+    "npc.generic.2.marry.no.3": {
+      "conditions": [],
+      "translation_key": "npc.generic.2.marry.no.3"
+    }
+  },
+  "fallback_key": ""
+}

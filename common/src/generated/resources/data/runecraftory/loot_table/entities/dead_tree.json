@@ -1,0 +1,91 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "runecraftory:first_kill"
+                }
+              ],
+              "name": "runecraftory:moving_branch"
+            },
+            {
+              "type": "minecraft:item",
+              "functions": [
+                {
+                  "base": 0.6,
+                  "enchanted_bonus": 0.1,
+                  "enchantment": "minecraft:looting",
+                  "function": "runecraftory:luck_and_looting",
+                  "limit": 2,
+                  "luck_bonus": 0.05
+                }
+              ],
+              "name": "runecraftory:moving_branch"
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "chance": {
+                "type": "runecraftory:luck_boosted",
+                "base": 0.8,
+                "luck": 0.05
+              },
+              "condition": "minecraft:random_chance"
+            }
+          ],
+          "functions": [
+            {
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 0.0
+              },
+              "enchantment": "minecraft:looting",
+              "function": "minecraft:enchanted_count_increase"
+            }
+          ],
+          "name": "minecraft:apple"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "base": 0.05,
+              "enchanted_bonus": 0.2,
+              "enchantment": "minecraft:looting",
+              "function": "runecraftory:luck_and_looting",
+              "limit": 2,
+              "luck_bonus": 0.01
+            }
+          ],
+          "name": "runecraftory:small_crystal"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "runecraftory:entities/dead_tree"
+}

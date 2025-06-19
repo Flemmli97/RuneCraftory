@@ -1,0 +1,23 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:short_dagger"
+    },
+    {
+      "item": "minecraft:ice"
+    },
+    {
+      "item": "runecraftory:aquamarine"
+    },
+    {
+      "tag": "runecraftory:liquids"
+    }
+  ],
+  "required_level": 11,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:frost_edge"
+  }
+}

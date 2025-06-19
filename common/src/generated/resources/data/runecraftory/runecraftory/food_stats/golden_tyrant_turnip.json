@@ -1,0 +1,19 @@
+{
+  "cooking_bonus": {
+    "runecraftory:health_gain": 10.0,
+    "runecraftory:rune_points_gain": 5.0
+  },
+  "cooking_bonus_percent": {},
+  "duration": 6000,
+  "effects": {
+    "runecraftory:health_gain": 500.0,
+    "runecraftory:max_runepoints": 30.0
+  },
+  "effects_percentage": {
+    "runecraftory:health_gain": 5.0,
+    "runecraftory:max_runepoints": 5.0
+  },
+  "item": "runecraftory:golden_tyrant_turnip",
+  "potion_apply": [],
+  "potion_remove": []
+}

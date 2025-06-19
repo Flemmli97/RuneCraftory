@@ -1,9 +1,0 @@
-{
-  "buy_price": 1350,
-  "sell_price": 450,
-  "upgrade_difficulty": 23,
-  "item_stats": {},
-  "monster_bonus": {},
-  "element": "NONE",
-  "item": "runecraftory:onion"
-}

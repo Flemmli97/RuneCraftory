@@ -1,9 +1,0 @@
-{
-  "buy_price": 250,
-  "sell_price": 15,
-  "upgrade_difficulty": 1,
-  "item_stats": {},
-  "monster_bonus": {},
-  "element": "NONE",
-  "item": "runecraftory:elli_leaves"
-}

@@ -1,0 +1,14 @@
+{
+  "buy_price": 100,
+  "element": "NONE",
+  "item": "minecraft:gunpowder",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 1.0,
+    "runecraftory:magic_attack": 5.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.attack_damage": 0.5
+  },
+  "sell_price": 7,
+  "upgrade_difficulty": 21
+}

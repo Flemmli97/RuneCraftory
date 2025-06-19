@@ -1,0 +1,15 @@
+{
+  "bad_season": [
+    "SUMMER",
+    "FALL",
+    "WINTER"
+  ],
+  "best_season": [
+    "SPRING"
+  ],
+  "giant_crop": "runecraftory:big_blue_crystal",
+  "growth": 55,
+  "item": "runecraftory:blue_crystal_seeds",
+  "max_drops": 3,
+  "regrowable": false
+}

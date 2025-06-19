@@ -57,7 +57,6 @@ import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
@@ -83,8 +82,6 @@ import java.util.concurrent.Executor;
 public class RuneCraftoryFabric implements ModInitializer {
 
     private static boolean INIT_ATTRIBUTES;
-
-    private static MinecraftServer SERVER_INSTANCE;
 
     public static void entityTick(LivingEntity entity) {
         EntityCalls.updateLivingTick(entity);

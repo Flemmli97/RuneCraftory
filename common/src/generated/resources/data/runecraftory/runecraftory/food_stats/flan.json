@@ -1,0 +1,22 @@
+{
+  "cooking_bonus": {},
+  "cooking_bonus_percent": {},
+  "duration": 6000,
+  "effects": {
+    "runecraftory:cold_resistance": 15.0,
+    "runecraftory:defence": 1.0,
+    "runecraftory:fatigue_resistance": 15.0,
+    "runecraftory:health_gain": 200.0,
+    "runecraftory:rune_points_gain": 130.0
+  },
+  "effects_percentage": {},
+  "item": "runecraftory:flan",
+  "potion_apply": [
+    {
+      "amplifier": 1,
+      "duration": 200,
+      "effect": "minecraft:speed"
+    }
+  ],
+  "potion_remove": []
+}

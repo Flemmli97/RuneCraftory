@@ -1,0 +1,13 @@
+{
+  "bad_season": [
+    "SUMMER"
+  ],
+  "best_season": [
+    "FALL"
+  ],
+  "giant_crop": "runecraftory:noble_radish",
+  "growth": 4,
+  "item": "runecraftory:radish_seeds",
+  "max_drops": 1,
+  "regrowable": false
+}

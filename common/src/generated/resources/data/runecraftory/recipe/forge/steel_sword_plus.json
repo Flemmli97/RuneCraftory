@@ -1,0 +1,20 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:steel_sword"
+    },
+    {
+      "tag": "c:ingots/iron"
+    },
+    {
+      "tag": "runecraftory:mineral"
+    }
+  ],
+  "required_level": 7,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:steel_sword_plus"
+  }
+}

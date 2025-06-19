@@ -1,0 +1,18 @@
+{
+  "buy_price": 9350,
+  "element": "NONE",
+  "item": "runecraftory:iron_bat",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 44.0,
+    "minecraft:generic.attack_knockback": 1.0,
+    "runecraftory:attack_range": 1.5,
+    "runecraftory:attack_width": 3.0,
+    "runecraftory:dizzy": 20.0,
+    "runecraftory:stun": 9.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.attack_damage": 1.0
+  },
+  "sell_price": 421,
+  "upgrade_difficulty": 0
+}

@@ -1,0 +1,298 @@
+{
+  "values": [
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:toyherb_seeds"
+      },
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:moondrop_flower_seeds"
+      },
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:pink_cat_seeds"
+      },
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:charm_blue_seeds"
+      },
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:lamp_grass_seeds"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:cherry_grass_seeds"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:pom_pom_grass_seeds"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:autumn_grass_seeds"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:noel_grass_seeds"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:fireflower_seeds"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:four_leaf_clover_seeds"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:ironleaf_seeds"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:white_crystal_seeds"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:red_crystal_seeds"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:green_crystal_seeds"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:blue_crystal_seeds"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:emery_flower_seeds"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:toyherb"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:moondrop_flower"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:pink_cat"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:charm_blue"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:lamp_grass"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:cherry_grass"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:pom_pom_grass"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:autumn_grass"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:noel_grass"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:fireflower"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:four_leaf_clover"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:ironleaf"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:white_crystal"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:red_crystal"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:green_crystal"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:blue_crystal"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:emery_flower"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:formular_a"
+      },
+      "unlock_type": "ALWAYS"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:formular_b"
+      },
+      "unlock_type": "ALWAYS"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:formular_c"
+      },
+      "unlock_type": "ALWAYS"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:minimizer"
+      },
+      "unlock_type": "ALWAYS"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:giantizer"
+      },
+      "unlock_type": "ALWAYS"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:greenifier"
+      },
+      "unlock_type": "ALWAYS"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:greenifier_plus"
+      },
+      "unlock_type": "ALWAYS"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:wettable_powder"
+      },
+      "unlock_type": "ALWAYS"
+    }
+  ]
+}

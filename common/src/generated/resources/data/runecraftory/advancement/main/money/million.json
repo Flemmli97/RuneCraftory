@@ -1,0 +1,30 @@
+{
+  "parent": "runecraftory:main/money/100k",
+  "criteria": {
+    "have_money": {
+      "conditions": {
+        "amount": 1000000
+      },
+      "trigger": "runecraftory:money"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "runecraftory.advancements.million.description"
+    },
+    "frame": "challenge",
+    "icon": {
+      "count": 1,
+      "id": "runecraftory:emery_flower"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.million.title"
+    }
+  },
+  "requirements": [
+    [
+      "have_money"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,22 @@
+{
+  "buy_price": 27000,
+  "element": "NONE",
+  "item": "runecraftory:cursed_doll",
+  "item_stats": {
+    "runecraftory:defence": 4.0,
+    "runecraftory:drain_resistance": 15.0,
+    "runecraftory:magic_defence": 7.0,
+    "runecraftory:paralysis_resistance": 10.0,
+    "runecraftory:seal_resistance": 10.0
+  },
+  "monster_bonus": {
+    "runecraftory:drain_resistance": 1.0,
+    "runecraftory:paralysis_resistance": 1.0,
+    "runecraftory:seal_resistance": 1.0
+  },
+  "sell_price": 750,
+  "tier_1_Spell": "runecraftory:card_attack",
+  "tier_2_Spell": "runecraftory:throw_plush",
+  "tier_3_Spell": "runecraftory:furniture_summon",
+  "upgrade_difficulty": 39
+}

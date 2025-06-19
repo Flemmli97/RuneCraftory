@@ -1,0 +1,13 @@
+{
+  "buy_price": 167,
+  "element": "NONE",
+  "item": "minecraft:paper",
+  "item_stats": {
+    "runecraftory:magic_attack": 3.0
+  },
+  "monster_bonus": {
+    "runecraftory:magic_attack": 0.5
+  },
+  "sell_price": 13,
+  "upgrade_difficulty": 4
+}

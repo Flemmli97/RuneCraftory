@@ -1,0 +1,12 @@
+{
+  "cooking_bonus": {},
+  "cooking_bonus_percent": {},
+  "duration": 6000,
+  "effects": {
+    "runecraftory:rune_points_gain": 5.0
+  },
+  "effects_percentage": {},
+  "item": "runecraftory:milk_s",
+  "potion_apply": [],
+  "potion_remove": []
+}

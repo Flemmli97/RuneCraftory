@@ -1,0 +1,23 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:leather_glove"
+    },
+    {
+      "item": "minecraft:string"
+    },
+    {
+      "item": "runecraftory:fur_m"
+    },
+    {
+      "item": "runecraftory:quality_cloth"
+    }
+  ],
+  "required_level": 14,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:gloves"
+  }
+}

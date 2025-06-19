@@ -1,5 +1,9 @@
 {
   "variants": {
+    "facing=east": {
+      "model": "runecraftory:block/big_blue_crystal",
+      "y": 90
+    },
     "facing=north": {
       "model": "runecraftory:block/big_blue_crystal"
     },
@@ -10,10 +14,6 @@
     "facing=west": {
       "model": "runecraftory:block/big_blue_crystal",
       "y": 270
-    },
-    "facing=east": {
-      "model": "runecraftory:block/big_blue_crystal",
-      "y": 90
     }
   }
 }

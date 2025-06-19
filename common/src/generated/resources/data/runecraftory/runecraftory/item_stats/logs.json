@@ -1,0 +1,14 @@
+{
+  "buy_price": 10,
+  "element": "NONE",
+  "item": "#minecraft:logs",
+  "item_stats": {
+    "minecraft:generic.max_health": 3.0,
+    "runecraftory:defence": 2.0
+  },
+  "monster_bonus": {
+    "runecraftory:defence": 0.25
+  },
+  "sell_price": 2,
+  "upgrade_difficulty": 3
+}

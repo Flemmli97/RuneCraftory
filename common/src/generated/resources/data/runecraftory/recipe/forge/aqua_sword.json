@@ -1,0 +1,20 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:broad_sword"
+    },
+    {
+      "tag": "c:raw_materials/silver"
+    },
+    {
+      "item": "runecraftory:aquamarine"
+    }
+  ],
+  "required_level": 13,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:aqua_sword"
+  }
+}

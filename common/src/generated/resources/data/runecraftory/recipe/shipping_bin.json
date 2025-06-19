@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "c": {
+      "tag": "c:chests"
+    },
+    "e": {
+      "tag": "c:gems/emerald"
+    },
+    "l": {
+      "tag": "minecraft:planks"
+    },
+    "s": {
+      "tag": "minecraft:logs"
+    }
+  },
+  "pattern": [
+    "ses",
+    "scs",
+    "sls"
+  ],
+  "result": {
+    "count": 1,
+    "id": "runecraftory:shipping_bin"
+  }
+}

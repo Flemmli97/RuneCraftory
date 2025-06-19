@@ -1,0 +1,13 @@
+{
+  "buy_price": 3500,
+  "element": "NONE",
+  "item": "#c:gems/sapphire",
+  "item_stats": {
+    "runecraftory:magic_defence": 6.0
+  },
+  "monster_bonus": {
+    "runecraftory:magic_defence": 5.0
+  },
+  "sell_price": 24,
+  "upgrade_difficulty": 19
+}

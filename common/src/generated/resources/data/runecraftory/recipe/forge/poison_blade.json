@@ -1,0 +1,23 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:claymore"
+    },
+    {
+      "item": "runecraftory:poison_powder"
+    },
+    {
+      "tag": "c:ingots/gold"
+    },
+    {
+      "item": "minecraft:poisonous_potato"
+    }
+  ],
+  "required_level": 21,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:poison_blade"
+  }
+}

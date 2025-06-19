@@ -1,0 +1,12 @@
+{
+  "bad_season": [],
+  "best_season": [
+    "SUMMER",
+    "FALL"
+  ],
+  "giant_crop": "runecraftory:sultan_strawberry",
+  "growth": 15,
+  "item": "runecraftory:strawberry_seeds",
+  "max_drops": 5,
+  "regrowable": true
+}

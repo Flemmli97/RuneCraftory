@@ -1,9 +1,0 @@
-{
-  "max_level": 100,
-  "health_increase": 0.5,
-  "rp_increase": 0.125,
-  "str_increase": 0.0,
-  "vit_increase": 0.1,
-  "intel_increase": 0.0,
-  "xp_multiplier": 1.0
-}

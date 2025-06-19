@@ -1,0 +1,242 @@
+{
+  "values": [
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:hoe_scrap"
+      },
+      "unlock_type": "ALWAYS"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:hoe_iron"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:hoe_silver"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:watering_can_scrap"
+      },
+      "unlock_type": "ALWAYS"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:watering_can_iron"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:watering_can_silver"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:sickle_scrap"
+      },
+      "unlock_type": "ALWAYS"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:sickle_iron"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:sickle_silver"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:hammer_scrap"
+      },
+      "unlock_type": "ALWAYS"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:hammer_iron"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:hammer_silver"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:axe_scrap"
+      },
+      "unlock_type": "ALWAYS"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:axe_iron"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:axe_silver"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:fishing_rod_scrap"
+      },
+      "unlock_type": "ALWAYS"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:fishing_rod_iron"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:fishing_rod_silver"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:broad_sword"
+      },
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:cutlass"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:claymore"
+      },
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:great_sword"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:spear"
+      },
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:needle_spear"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:battle_axe"
+      },
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:pole_axe"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:battle_hammer"
+      },
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:war_hammer"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:short_dagger"
+      },
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:iron_edge"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:leather_glove"
+      },
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:gloves"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:rod"
+      },
+      "unlock_type": "DEFAULT"
+    },
+    {
+      "item": {
+        "count": 1,
+        "id": "runecraftory:aquamarine_rod"
+      },
+      "unlock_type": "NEEDS_SHIPPING"
+    }
+  ]
+}

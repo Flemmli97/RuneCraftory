@@ -1,0 +1,9 @@
+{
+  "buy_price": 500,
+  "element": "NONE",
+  "item": "runecraftory:grapes",
+  "item_stats": {},
+  "monster_bonus": {},
+  "sell_price": 100,
+  "upgrade_difficulty": 1
+}

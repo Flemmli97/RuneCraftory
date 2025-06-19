@@ -1,0 +1,75 @@
+{
+  "parent": "runecraftory:progression/path_4/marionetta",
+  "criteria": {
+    "boss1": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "runecraftory:sano"
+            }
+          }
+        ],
+        "killing_blow": {
+          "source_entity": {
+            "type_specific": {
+              "type": "minecraft:player",
+              "advancements": {
+                "runecraftory:progression/path_4/marionetta": true
+              }
+            }
+          }
+        }
+      },
+      "trigger": "minecraft:player_killed_entity"
+    },
+    "boss2": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "runecraftory:uno"
+            }
+          }
+        ],
+        "killing_blow": {
+          "source_entity": {
+            "type_specific": {
+              "type": "minecraft:player",
+              "advancements": {
+                "runecraftory:progression/path_4/marionetta": true
+              }
+            }
+          }
+        }
+      },
+      "trigger": "minecraft:player_killed_entity"
+    }
+  },
+  "display": {
+    "background": "minecraft:textures/block/dirt.png",
+    "description": {
+      "translate": "runecraftory.advancements.progression.boss.sano_uno.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "runecraftory:sano_spawn_egg"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.progression.boss.sano_uno.title"
+    }
+  },
+  "requirements": [
+    [
+      "boss1"
+    ],
+    [
+      "boss2"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

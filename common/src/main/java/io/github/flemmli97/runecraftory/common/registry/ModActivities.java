@@ -13,6 +13,6 @@ public class ModActivities {
 
     public static final RegistryEntrySupplier<Activity, Activity> DISABLED = ACTIVITIES.register("disabled", () -> new Activity("disabled"));
     public static final RegistryEntrySupplier<Activity, Activity> EARLYIDLE = ACTIVITIES.register("early_idle", () -> new Activity("early_idle"));
-    public static final RegistryEntrySupplier<Activity, Activity> FOLLOW = ACTIVITIES.register("early_idle", () -> new Activity("early_idle"));
-    public static final RegistryEntrySupplier<Activity, Activity> FOLLOW_DISTANCE = ACTIVITIES.register("early_idle", () -> new Activity("early_idle"));
+    public static final RegistryEntrySupplier<Activity, Activity> FOLLOW = ACTIVITIES.register("follow", () -> new Activity("early_idle"));
+    public static final RegistryEntrySupplier<Activity, Activity> FOLLOW_DISTANCE = ACTIVITIES.register("follow_distance", () -> new Activity("early_idle"));
 }

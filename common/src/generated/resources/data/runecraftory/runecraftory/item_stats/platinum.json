@@ -1,0 +1,13 @@
+{
+  "buy_price": 5000,
+  "element": "NONE",
+  "item": "#c:raw_materials/platinum",
+  "item_stats": {
+    "runecraftory:defence": 18.0
+  },
+  "monster_bonus": {
+    "runecraftory:defence": 3.0
+  },
+  "sell_price": 111,
+  "upgrade_difficulty": 34
+}

@@ -1,0 +1,13 @@
+{
+  "buy_price": 600,
+  "element": "NONE",
+  "item": "minecraft:phantom_membrane",
+  "item_stats": {
+    "minecraft:generic.movement_speed": 0.03
+  },
+  "monster_bonus": {
+    "minecraft:generic.max_health": 1.0
+  },
+  "sell_price": 55,
+  "upgrade_difficulty": 19
+}

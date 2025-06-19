@@ -15,9 +15,9 @@ import net.minecraft.world.phys.Vec3;
 
 public class SimpleVanillaProjectileSpell extends Spell {
 
-    public static final ProjectileFactory WITHER_SKULL = (level, entity, direction) -> new WitherSkull(level, entity, direction.x, direction.y, direction.z);
-    public static final ProjectileFactory GHAST_FIREBALL = (level, entity, direction) -> new LargeFireball(level, entity, direction.x, direction.y, direction.z, 1);
-    public static final ProjectileFactory DRAGON_FIREBALL = (level, entity, direction) -> new DragonFireball(level, entity, direction.x, direction.y, direction.z);
+    public static final ProjectileFactory WITHER_SKULL = WitherSkull::new;
+    public static final ProjectileFactory GHAST_FIREBALL = (level, entity, direction) -> new LargeFireball(level, entity, direction, 1);
+    public static final ProjectileFactory DRAGON_FIREBALL = DragonFireball::new;
     public static final ProjectileFactory SNOWBALL = (level, entity, direction) -> {
         Snowball snowball = new Snowball(level, entity);
         snowball.shoot(direction.x, direction.y, direction.z, 2.0F, 1.0F);

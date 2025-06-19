@@ -1,0 +1,17 @@
+{
+  "buy_price": 16400,
+  "element": "NONE",
+  "item": "runecraftory:steel_katana",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 71.0,
+    "runecraftory:attack_range": 0.0,
+    "runecraftory:attack_width": 1.5,
+    "runecraftory:defence": 21.0,
+    "runecraftory:dizzy": 3.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.attack_damage": 1.0
+  },
+  "sell_price": 1320,
+  "upgrade_difficulty": 0
+}

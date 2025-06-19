@@ -1,0 +1,13 @@
+{
+  "buy_price": 120,
+  "element": "NONE",
+  "item": "runecraftory:shirt",
+  "item_stats": {
+    "runecraftory:defence": 2.0
+  },
+  "monster_bonus": {
+    "runecraftory:defence": 0.5
+  },
+  "sell_price": 13,
+  "upgrade_difficulty": 0
+}

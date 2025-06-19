@@ -1,0 +1,127 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "base": 0.3,
+              "enchanted_bonus": 0.2,
+              "enchantment": "minecraft:looting",
+              "function": "runecraftory:luck_and_looting",
+              "limit": 0,
+              "luck_bonus": 0.05
+            }
+          ],
+          "name": "runecraftory:arrowhead"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "base": 0.4,
+              "enchanted_bonus": 0.2,
+              "enchantment": "minecraft:looting",
+              "function": "runecraftory:luck_and_looting",
+              "limit": 0,
+              "luck_bonus": 0.05
+            }
+          ],
+          "name": "runecraftory:old_bandage"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "chance": {
+                "type": "runecraftory:luck_boosted",
+                "base": 0.7,
+                "luck": 0.05
+              },
+              "condition": "minecraft:random_chance"
+            }
+          ],
+          "functions": [
+            {
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 0.7,
+                "min": 0.0
+              },
+              "enchantment": "minecraft:looting",
+              "function": "minecraft:enchanted_count_increase"
+            }
+          ],
+          "name": "minecraft:gunpowder"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "base": 0.08,
+              "enchanted_bonus": 0.2,
+              "enchantment": "minecraft:looting",
+              "function": "runecraftory:luck_and_looting",
+              "limit": 2,
+              "luck_bonus": 0.05
+            }
+          ],
+          "name": "runecraftory:recovery_potion"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 2.0,
+                "min": -2.0
+              },
+              "function": "minecraft:set_count"
+            },
+            {
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 0.0
+              },
+              "enchantment": "minecraft:looting",
+              "function": "minecraft:enchanted_count_increase"
+            }
+          ],
+          "name": "minecraft:arrow"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "runecraftory:entities/goblin_archer"
+}

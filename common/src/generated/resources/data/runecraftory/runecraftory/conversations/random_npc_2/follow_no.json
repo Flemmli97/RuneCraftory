@@ -1,0 +1,13 @@
+{
+  "conversations": {
+    "npc.generic.2.follow.no.1": {
+      "conditions": [],
+      "translation_key": "npc.generic.2.follow.no.1"
+    },
+    "npc.generic.2.follow.no.2": {
+      "conditions": [],
+      "translation_key": "npc.generic.2.follow.no.2"
+    }
+  },
+  "fallback_key": ""
+}

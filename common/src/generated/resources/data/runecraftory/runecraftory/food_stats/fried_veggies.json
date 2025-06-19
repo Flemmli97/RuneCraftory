@@ -1,0 +1,20 @@
+{
+  "cooking_bonus": {},
+  "cooking_bonus_percent": {},
+  "duration": 6000,
+  "effects": {
+    "runecraftory:defence": 1.0,
+    "runecraftory:health_gain": 250.0,
+    "runecraftory:magic_attack": 1.0,
+    "runecraftory:rune_points_gain": 150.0
+  },
+  "effects_percentage": {
+    "minecraft:generic.max_health": 300.0,
+    "runecraftory:health_gain": 30.0,
+    "runecraftory:max_runepoints": 20.0,
+    "runecraftory:rune_points_gain": 25.0
+  },
+  "item": "runecraftory:fried_veggies",
+  "potion_apply": [],
+  "potion_remove": []
+}

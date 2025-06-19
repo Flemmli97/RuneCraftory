@@ -1,0 +1,9 @@
+{
+  "bad_season": [],
+  "best_season": [],
+  "giant_crop": "minecraft:air",
+  "growth": 5,
+  "item": "runecraftory:fodder_seeds",
+  "max_drops": 1,
+  "regrowable": true
+}

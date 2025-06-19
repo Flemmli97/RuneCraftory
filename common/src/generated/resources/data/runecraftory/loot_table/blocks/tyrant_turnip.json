@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "block": "runecraftory:tyrant_turnip",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "facing": "north"
+              }
+            }
+          ],
+          "name": "runecraftory:tyrant_turnip"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "runecraftory:blocks/tyrant_turnip"
+}

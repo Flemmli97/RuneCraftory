@@ -1,0 +1,24 @@
+{
+  "buy_price": 1000,
+  "element": "NONE",
+  "item": "runecraftory:broken_box",
+  "item_stats": {
+    "runecraftory:cold_resistance": 10.0,
+    "runecraftory:defence": 4.0,
+    "runecraftory:fatigue_resistance": 10.0,
+    "runecraftory:paralysis_resistance": 10.0,
+    "runecraftory:poison_resistance": 10.0,
+    "runecraftory:seal_resistance": 10.0,
+    "runecraftory:sleep_resistance": 10.0
+  },
+  "monster_bonus": {
+    "runecraftory:cold_resistance": 0.5,
+    "runecraftory:fatigue_resistance": 0.5,
+    "runecraftory:paralysis_resistance": 0.5,
+    "runecraftory:poison_resistance": 0.5,
+    "runecraftory:seal_resistance": 0.5,
+    "runecraftory:sleep_resistance": 0.5
+  },
+  "sell_price": 200,
+  "upgrade_difficulty": 48
+}

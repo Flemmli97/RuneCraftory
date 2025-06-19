@@ -1,0 +1,13 @@
+{
+  "buy_price": 3500,
+  "element": "NONE",
+  "item": "#c:gems/aquamarine",
+  "item_stats": {
+    "runecraftory:magic_defence": 6.0
+  },
+  "monster_bonus": {
+    "runecraftory:magic_defence": 3.0
+  },
+  "sell_price": 23,
+  "upgrade_difficulty": 19
+}

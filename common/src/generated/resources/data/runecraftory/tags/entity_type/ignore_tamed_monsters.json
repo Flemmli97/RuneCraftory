@@ -1,0 +1,10 @@
+{
+  "values": [
+    "minecraft:snow_golem",
+    "minecraft:iron_golem",
+    {
+      "id": "advancedgolems:golem",
+      "required": false
+    }
+  ]
+}

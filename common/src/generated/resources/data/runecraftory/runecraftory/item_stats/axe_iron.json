@@ -1,0 +1,15 @@
+{
+  "buy_price": 4500,
+  "element": "NONE",
+  "item": "runecraftory:axe_iron",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 22.0,
+    "runecraftory:attack_range": 0.0,
+    "runecraftory:critical": 5.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.max_health": 1.0
+  },
+  "sell_price": 148,
+  "upgrade_difficulty": 0
+}

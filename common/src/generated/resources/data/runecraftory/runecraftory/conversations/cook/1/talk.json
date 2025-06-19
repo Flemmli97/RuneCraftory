@@ -1,0 +1,17 @@
+{
+  "conversations": {
+    "npc.cook.1.talk.1": {
+      "conditions": [],
+      "translation_key": "npc.cook.1.talk.1"
+    },
+    "npc.cook.1.talk.2": {
+      "conditions": [],
+      "translation_key": "npc.cook.1.talk.2"
+    },
+    "npc.cook.1.talk.3": {
+      "conditions": [],
+      "translation_key": "npc.cook.1.talk.3"
+    }
+  },
+  "fallback_key": ""
+}

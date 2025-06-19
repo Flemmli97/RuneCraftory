@@ -1,0 +1,58 @@
+{
+  "conversations": {
+    "npc.generic.1.talk.1": {
+      "actions": [
+        {
+          "actions": "ANSWER",
+          "translation_key": "npc.generic.1.talk.1.answer.same",
+          "value": "npc.generic.1.talk.1.response.same"
+        },
+        {
+          "actions": "ANSWER",
+          "translation_key": "npc.generic.1.talk.1.answer.ok",
+          "value": "npc.generic.1.talk.1.response.ok"
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:weather_check",
+          "raining": false
+        }
+      ],
+      "translation_key": "npc.generic.1.talk.1"
+    },
+    "npc.generic.1.talk.1.response.ok": {
+      "conditions": [],
+      "starting_conversation": false,
+      "translation_key": "npc.generic.1.talk.1.response.ok"
+    },
+    "npc.generic.1.talk.1.response.same": {
+      "conditions": [],
+      "starting_conversation": false,
+      "translation_key": "npc.generic.1.talk.1.response.same"
+    },
+    "npc.generic.1.talk.2": {
+      "conditions": [],
+      "translation_key": "npc.generic.1.talk.2"
+    },
+    "npc.generic.1.talk.rain.1": {
+      "conditions": [
+        {
+          "condition": "minecraft:weather_check",
+          "raining": true
+        }
+      ],
+      "translation_key": "npc.generic.1.talk.rain.1"
+    },
+    "npc.generic.1.talk.rain.2": {
+      "conditions": [
+        {
+          "condition": "minecraft:weather_check",
+          "raining": true
+        }
+      ],
+      "translation_key": "npc.generic.1.talk.rain.2"
+    }
+  },
+  "fallback_key": ""
+}

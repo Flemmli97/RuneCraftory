@@ -1,0 +1,19 @@
+{
+  "buy_price": 20000,
+  "element": "DARK",
+  "item": "minecraft:nether_star",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 17.0,
+    "runecraftory:defence": 7.0,
+    "runecraftory:drain": 5.0,
+    "runecraftory:magic_attack": 35.0,
+    "runecraftory:magic_defence": 9.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.attack_damage": 1.0,
+    "runecraftory:magic_attack": 3.0
+  },
+  "sell_price": 600,
+  "tier_1_Spell": "runecraftory:vanilla_wither_skull",
+  "upgrade_difficulty": 45
+}

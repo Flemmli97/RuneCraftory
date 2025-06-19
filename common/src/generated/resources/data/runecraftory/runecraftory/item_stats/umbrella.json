@@ -1,0 +1,13 @@
+{
+  "buy_price": 350,
+  "element": "NONE",
+  "item": "runecraftory:umbrella",
+  "item_stats": {
+    "runecraftory:magic_defence": 7.0
+  },
+  "monster_bonus": {
+    "runecraftory:magic_defence": 0.5
+  },
+  "sell_price": 60,
+  "upgrade_difficulty": 0
+}

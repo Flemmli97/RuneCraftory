@@ -1,0 +1,13 @@
+{
+  "cooking_bonus": {},
+  "cooking_bonus_percent": {},
+  "duration": 6000,
+  "effects": {
+    "minecraft:generic.attack_damage": 2.0,
+    "runecraftory:health_gain": 60.0
+  },
+  "effects_percentage": {},
+  "item": "runecraftory:onigiri",
+  "potion_apply": [],
+  "potion_remove": []
+}

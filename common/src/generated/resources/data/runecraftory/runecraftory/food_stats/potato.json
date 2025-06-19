@@ -1,0 +1,14 @@
+{
+  "cooking_bonus": {
+    "runecraftory:rune_points_gain": 10.0
+  },
+  "cooking_bonus_percent": {},
+  "duration": 6000,
+  "effects": {
+    "runecraftory:rune_points_gain": 7.0
+  },
+  "effects_percentage": {},
+  "item": "minecraft:potato",
+  "potion_apply": [],
+  "potion_remove": []
+}

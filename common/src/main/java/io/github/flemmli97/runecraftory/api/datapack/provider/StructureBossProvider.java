@@ -45,7 +45,7 @@ public abstract class StructureBossProvider implements DataProvider {
             DynamicOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, provider);
             ImmutableList.Builder<CompletableFuture<?>> futures = new ImmutableList.Builder<>();
             this.data.forEach((res, spawnData) -> {
-                Path path = this.packOutput.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(res.getNamespace() + "/" + StructureBossManager.ID + "/" + res.getPath() + ".json");
+                Path path = this.packOutput.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(res.getNamespace() + "/" + StructureBossManager.DIRECTORY + "/" + res.getPath() + ".json");
                 JsonElement obj = StructureBossManager.BossSpawnList.CODEC.encodeStart(JsonOps.INSTANCE, spawnData).getOrThrow();
                 futures.add(DataProvider.saveStable(cache, obj, path));
             });
@@ -60,6 +60,6 @@ public abstract class StructureBossProvider implements DataProvider {
 
     public void addGateSpawn(ResourceLocation key, StructureBossManager.BossSpawnList spawnData) {
         this.data.put(key, spawnData);
-        this.verifier.track(key, PackType.SERVER_DATA, StructureBossManager.ID.toString());
+        this.verifier.track(key, PackType.SERVER_DATA, StructureBossManager.DIRECTORY);
     }
 }

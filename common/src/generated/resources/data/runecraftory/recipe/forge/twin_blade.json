@@ -1,0 +1,20 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:short_dagger"
+    },
+    {
+      "item": "runecraftory:poison_powder"
+    },
+    {
+      "item": "runecraftory:rigid_horn"
+    }
+  ],
+  "required_level": 28,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:twin_blade"
+  }
+}

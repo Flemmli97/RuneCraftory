@@ -1,0 +1,23 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "tag": "runecraftory:cloths"
+    },
+    {
+      "tag": "c:ingots/gold"
+    },
+    {
+      "item": "runecraftory:rigid_horn"
+    },
+    {
+      "item": "runecraftory:earth_crystal"
+    }
+  ],
+  "required_level": 22,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:fist_of_earth"
+  }
+}

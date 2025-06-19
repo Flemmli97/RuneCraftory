@@ -1,0 +1,22 @@
+{
+  "buy_price": 14000,
+  "element": "NONE",
+  "item": "runecraftory:left_rock_shard",
+  "item_stats": {
+    "runecraftory:cold_resistance": 1.0,
+    "runecraftory:defence": 75.0,
+    "runecraftory:drain_resistance": 1.0,
+    "runecraftory:faint_resistance": 1.0,
+    "runecraftory:fatigue_resistance": 1.0,
+    "runecraftory:magic_defence": 30.0,
+    "runecraftory:paralysis_resistance": 2.0,
+    "runecraftory:poison_resistance": 2.0,
+    "runecraftory:seal_resistance": 2.0,
+    "runecraftory:sleep_resistance": 2.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.attack_damage": 1.0
+  },
+  "sell_price": 937,
+  "upgrade_difficulty": 88
+}

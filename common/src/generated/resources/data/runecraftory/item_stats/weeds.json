@@ -1,9 +1,0 @@
-{
-  "buy_price": 30,
-  "sell_price": 1,
-  "upgrade_difficulty": 1,
-  "item_stats": {},
-  "monster_bonus": {},
-  "element": "NONE",
-  "item": "runecraftory:weeds"
-}

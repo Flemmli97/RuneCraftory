@@ -1,4 +1,7 @@
 accessWidener	v1	named
+accessible class net/minecraft/world/level/block/entity/BlockEntityType$BlockEntitySupplier
+accessible method net/minecraft/world/entity/schedule/Activity <init> (Ljava/lang/String;)V
+
 accessible field net/minecraft/world/entity/ai/control/MoveControl operation Lnet/minecraft/world/entity/ai/control/MoveControl$Operation;
 accessible class net/minecraft/world/entity/ai/control/MoveControl$Operation
 
@@ -7,7 +10,3 @@ accessible class net/minecraft/world/entity/ai/control/MoveControl$Operation
 
 # accessible class net/minecraft/world/inventory/MenuType$MenuSupplier
 # accessible method net/minecraft/world/inventory/MenuType <init> (Lnet/minecraft/world/inventory/MenuType$MenuSupplier;)V
-
-accessible method net/minecraft/world/entity/schedule/Activity <init> (Ljava/lang/String;)V
-
-accessible method net/minecraft/world/level/storage/loot/parameters/LootContextParamSets register (Ljava/lang/String;Ljava/util/function/Consumer;)Lnet/minecraft/world/level/storage/loot/parameters/LootContextParamSet;

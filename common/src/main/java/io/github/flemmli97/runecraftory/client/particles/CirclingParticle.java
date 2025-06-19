@@ -3,19 +3,18 @@ package io.github.flemmli97.runecraftory.client.particles;
 import io.github.flemmli97.runecraftory.common.particles.ColoredParticleData4f;
 import io.github.flemmli97.tenshilib.client.particles.ColoredParticle;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
-import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.util.Mth;
-import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3d;
 
 public class CirclingParticle extends ColoredParticle {
 
     private final double motionAX, motionAY, motionAZ, speedMod;
     private final float radInc, expansion;
-    private double[] point;
+    private Vector3d point;
 
     public CirclingParticle(ClientLevel world, double x, double y, double z, double dirX, double dirY, double dirZ, ColoredParticleData colorData, SpriteSet sprite, int maxAge, float minAgeRand, float maxAgeRand, double radius, double speedMod, float radAdd, float radInc, float expansion) {
         super(world, x, y, z, 0, 0, 0, colorData, sprite, maxAge, minAgeRand, maxAgeRand, false, false, false);
@@ -27,9 +26,9 @@ public class CirclingParticle extends ColoredParticle {
         this.motionAZ = dirZ / len;
         this.speedMod = speedMod;
         len = Math.sqrt(dirX * dirX + dirY * dirY);
-        this.point = new double[]{-dirY / len * radius, dirX / len * radius, 0};
-        this.point = MathUtils.rotate(this.motionAX, this.motionAY, this.motionAZ, this.point[0], this.point[1], this.point[2], radAdd * Mth.DEG_TO_RAD);
-        this.setPos(this.x + this.point[0] * 0.5, this.y + this.point[1] * 0.5, this.z);
+        this.point = new Vector3d(-dirY / len * radius, dirX / len * radius, 0);
+        this.point.rotateAxis(radAdd * Mth.DEG_TO_RAD, this.motionAX, this.motionAY, this.motionAZ);
+        this.setPos(this.x + this.point.x() * 0.5, this.y + this.point.y() * 0.5, this.z);
         this.xo = this.x;
         this.yo = this.y;
         this.zo = this.z;
@@ -45,13 +44,13 @@ public class CirclingParticle extends ColoredParticle {
         if (this.age++ >= this.lifetime) {
             this.remove();
         } else {
-            double[] prev = this.point;
-            Vec3 dir = this.expansion == 0 ? Vec3.ZERO : new Vec3(this.point[0], this.point[1], this.point[2]).normalize().scale(this.expansion);
-            this.point = MathUtils.rotate(this.motionAX, this.motionAY, this.motionAZ, this.point[0] + dir.x, this.point[1] + dir.y, this.point[2] + dir.z, this.radInc);
-            this.setSpriteFromAge(this.spriteProvider);
-            this.move(this.point[0] - prev[0] + this.motionAX * this.speedMod,
-                    this.point[1] - prev[1] + this.motionAY * this.speedMod,
-                    this.point[2] - prev[2] + this.motionAZ * this.speedMod);
+//            double[] prev = this.point;
+//            Vec3 dir = this.expansion == 0 ? Vec3.ZERO : new Vec3(this.point[0], this.point[1], this.point[2]).normalize().scale(this.expansion);
+//            this.point = MathUtils.rotate(this.motionAX, this.motionAY, this.motionAZ, this.point[0] + dir.x, this.point[1] + dir.y, this.point[2] + dir.z, this.radInc);
+//            this.setSpriteFromAge(this.spriteProvider);
+//            this.move(this.point[0] - prev[0] + this.motionAX * this.speedMod,
+//                    this.point[1] - prev[1] + this.motionAY * this.speedMod,
+//                    this.point[2] - prev[2] + this.motionAZ * this.speedMod);
         }
     }
 

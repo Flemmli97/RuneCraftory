@@ -1,0 +1,17 @@
+{
+  "buy_price": 3170,
+  "element": "NONE",
+  "item": "runecraftory:kote",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 16.0,
+    "runecraftory:attack_range": 0.0,
+    "runecraftory:attack_width": 1.0,
+    "runecraftory:defence": 3.0,
+    "runecraftory:dizzy": 3.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.attack_damage": 0.5
+  },
+  "sell_price": 136,
+  "upgrade_difficulty": 0
+}

@@ -1,0 +1,23 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:claymore"
+    },
+    {
+      "tag": "c:ingots/gold"
+    },
+    {
+      "tag": "c:raw_materials/silver"
+    },
+    {
+      "item": "runecraftory:earth_crystal"
+    }
+  ],
+  "required_level": 26,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:earth_shade"
+  }
+}

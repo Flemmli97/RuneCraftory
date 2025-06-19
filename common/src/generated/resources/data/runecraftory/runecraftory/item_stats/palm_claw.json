@@ -1,0 +1,13 @@
+{
+  "buy_price": 640,
+  "element": "NONE",
+  "item": "runecraftory:palm_claw",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 9.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.attack_damage": 2.0
+  },
+  "sell_price": 74,
+  "upgrade_difficulty": 37
+}

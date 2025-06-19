@@ -1,0 +1,15 @@
+{
+  "buy_price": 300,
+  "element": "NONE",
+  "item": "runecraftory:yellow_down",
+  "item_stats": {
+    "runecraftory:defence": 3.0,
+    "runecraftory:dizzy_resistance": 5.0,
+    "runecraftory:magic_defence": 2.0
+  },
+  "monster_bonus": {
+    "runecraftory:defence": 2.0
+  },
+  "sell_price": 33,
+  "upgrade_difficulty": 21
+}

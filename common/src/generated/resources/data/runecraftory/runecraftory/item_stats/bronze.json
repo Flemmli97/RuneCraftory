@@ -1,0 +1,13 @@
+{
+  "buy_price": 400,
+  "element": "NONE",
+  "item": "#c:dusts/bronze",
+  "item_stats": {
+    "runecraftory:defence": 3.0
+  },
+  "monster_bonus": {
+    "runecraftory:defence": 0.5
+  },
+  "sell_price": 14,
+  "upgrade_difficulty": 12
+}

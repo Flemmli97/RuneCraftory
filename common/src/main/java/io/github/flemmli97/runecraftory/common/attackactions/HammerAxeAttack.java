@@ -36,9 +36,9 @@ public class HammerAxeAttack extends AttackAction {
     @Override
     public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimationState anim) {
         if (anim.isAt("attack") && handler.getComboCount() != 3) {
-            CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(AOEWeapon.createOBB(entity, stack,
+            CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(AOEWeapon.createOBB(entity,
                             CombatUtils.getRange(entity, 0),
-                            CombatUtils.getWidth(entity, 0))))
+                            CombatUtils.getWidth(entity, 0), 0.5)))
                     .executeAttack();
             entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH_HEAVY.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.8f);
         }

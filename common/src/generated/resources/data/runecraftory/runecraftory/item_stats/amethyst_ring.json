@@ -1,0 +1,13 @@
+{
+  "buy_price": 13000,
+  "element": "EARTH",
+  "item": "runecraftory:amethyst_ring",
+  "item_stats": {
+    "runecraftory:earth_resistance": 50.0
+  },
+  "monster_bonus": {
+    "runecraftory:earth_resistance": 1.0
+  },
+  "sell_price": 600,
+  "upgrade_difficulty": 0
+}

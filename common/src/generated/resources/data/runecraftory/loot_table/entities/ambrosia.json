@@ -1,0 +1,80 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "runecraftory:first_kill"
+                }
+              ],
+              "name": "runecraftory:ambrosias_thorns"
+            },
+            {
+              "type": "minecraft:item",
+              "functions": [
+                {
+                  "base": 0.65,
+                  "enchanted_bonus": 0.2,
+                  "enchantment": "minecraft:looting",
+                  "function": "runecraftory:luck_and_looting",
+                  "limit": 2,
+                  "luck_bonus": 0.05
+                }
+              ],
+              "name": "runecraftory:ambrosias_thorns"
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "base": 0.2,
+              "enchanted_bonus": 0.2,
+              "enchantment": "minecraft:looting",
+              "function": "runecraftory:luck_and_looting",
+              "limit": 0,
+              "luck_bonus": 0.05
+            }
+          ],
+          "name": "runecraftory:toyherb"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "base": 0.2,
+              "enchanted_bonus": 0.2,
+              "enchantment": "minecraft:looting",
+              "function": "runecraftory:luck_and_looting",
+              "limit": 0,
+              "luck_bonus": 0.05
+            }
+          ],
+          "name": "runecraftory:plant_stem"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "runecraftory:entities/ambrosia"
+}

@@ -1,0 +1,14 @@
+{
+  "bad_season": [
+    "SUMMER"
+  ],
+  "best_season": [
+    "SPRING",
+    "FALL"
+  ],
+  "giant_crop": "runecraftory:great_four_leaf_clover",
+  "growth": 28,
+  "item": "runecraftory:four_leaf_clover_seeds",
+  "max_drops": 3,
+  "regrowable": false
+}

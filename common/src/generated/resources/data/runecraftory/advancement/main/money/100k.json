@@ -1,0 +1,30 @@
+{
+  "parent": "runecraftory:main/shopping",
+  "criteria": {
+    "have_money": {
+      "conditions": {
+        "amount": 100000
+      },
+      "trigger": "runecraftory:money"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "runecraftory.advancements.100k.description"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "minecraft:gold_block"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.100k.title"
+    }
+  },
+  "requirements": [
+    [
+      "have_money"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

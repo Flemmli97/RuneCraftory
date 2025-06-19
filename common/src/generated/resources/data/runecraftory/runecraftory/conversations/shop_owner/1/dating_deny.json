@@ -1,0 +1,13 @@
+{
+  "conversations": {
+    "npc.shop_owner.1.dating.no.1": {
+      "conditions": [],
+      "translation_key": "npc.shop_owner.1.dating.no.1"
+    },
+    "npc.shop_owner.1.dating.no.2": {
+      "conditions": [],
+      "translation_key": "npc.shop_owner.1.dating.no.2"
+    }
+  },
+  "fallback_key": ""
+}

@@ -1,0 +1,23 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:battle_axe"
+    },
+    {
+      "item": "runecraftory:paralysis_poison"
+    },
+    {
+      "tag": "runecraftory:claws_fangs"
+    },
+    {
+      "tag": "runecraftory:claws_fangs"
+    }
+  ],
+  "required_level": 30,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:basilisk_fang"
+  }
+}

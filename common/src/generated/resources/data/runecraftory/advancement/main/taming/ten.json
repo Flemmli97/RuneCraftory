@@ -1,0 +1,111 @@
+{
+  "parent": "runecraftory:main/taming/first",
+  "criteria": {
+    "tame_monster_0": {
+      "conditions": {
+        "amount": 1
+      },
+      "trigger": "runecraftory:tame_monster"
+    },
+    "tame_monster_1": {
+      "conditions": {
+        "amount": 2
+      },
+      "trigger": "runecraftory:tame_monster"
+    },
+    "tame_monster_2": {
+      "conditions": {
+        "amount": 3
+      },
+      "trigger": "runecraftory:tame_monster"
+    },
+    "tame_monster_3": {
+      "conditions": {
+        "amount": 4
+      },
+      "trigger": "runecraftory:tame_monster"
+    },
+    "tame_monster_4": {
+      "conditions": {
+        "amount": 5
+      },
+      "trigger": "runecraftory:tame_monster"
+    },
+    "tame_monster_5": {
+      "conditions": {
+        "amount": 6
+      },
+      "trigger": "runecraftory:tame_monster"
+    },
+    "tame_monster_6": {
+      "conditions": {
+        "amount": 7
+      },
+      "trigger": "runecraftory:tame_monster"
+    },
+    "tame_monster_7": {
+      "conditions": {
+        "amount": 8
+      },
+      "trigger": "runecraftory:tame_monster"
+    },
+    "tame_monster_8": {
+      "conditions": {
+        "amount": 9
+      },
+      "trigger": "runecraftory:tame_monster"
+    },
+    "tame_monster_9": {
+      "conditions": {
+        "amount": 10
+      },
+      "trigger": "runecraftory:tame_monster"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "runecraftory.advancements.tame.ten.description"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "runecraftory:monster_barn"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.tame.ten.title"
+    }
+  },
+  "requirements": [
+    [
+      "tame_monster_0"
+    ],
+    [
+      "tame_monster_1"
+    ],
+    [
+      "tame_monster_2"
+    ],
+    [
+      "tame_monster_3"
+    ],
+    [
+      "tame_monster_4"
+    ],
+    [
+      "tame_monster_5"
+    ],
+    [
+      "tame_monster_6"
+    ],
+    [
+      "tame_monster_7"
+    ],
+    [
+      "tame_monster_8"
+    ],
+    [
+      "tame_monster_9"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

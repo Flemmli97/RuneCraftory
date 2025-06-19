@@ -1,0 +1,15 @@
+{
+  "cooking_bonus": {},
+  "cooking_bonus_percent": {},
+  "duration": 6000,
+  "effects": {
+    "runecraftory:defence": 19.0,
+    "runecraftory:health_gain": 950.0,
+    "runecraftory:magic_defence": 19.0,
+    "runecraftory:rune_points_gain": 280.0
+  },
+  "effects_percentage": {},
+  "item": "runecraftory:choco_cookie",
+  "potion_apply": [],
+  "potion_remove": []
+}

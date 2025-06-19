@@ -1,9 +1,0 @@
-{
-  "fallback_key": "",
-  "conversations": {
-    "npc.smith.1.procreation.fail.1": {
-      "translation_key": "npc.smith.1.procreation.fail.1",
-      "conditions": []
-    }
-  }
-}

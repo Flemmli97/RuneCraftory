@@ -1,0 +1,17 @@
+{
+  "buy_price": 14730,
+  "element": "WATER",
+  "item": "runecraftory:water_spear",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 68.0,
+    "runecraftory:attack_range": 2.3,
+    "runecraftory:attack_width": 1.0,
+    "runecraftory:dizzy": 6.0,
+    "runecraftory:magic_attack": 14.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.attack_damage": 1.0
+  },
+  "sell_price": 934,
+  "upgrade_difficulty": 0
+}

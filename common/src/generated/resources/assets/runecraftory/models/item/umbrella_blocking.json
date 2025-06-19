@@ -1,14 +1,14 @@
 {
   "parent": "runecraftory:item/umbrella",
   "display": {
-    "firstperson_righthand": {
+    "firstperson_lefthand": {
       "rotation": [
         -21,
         0,
         17
       ]
     },
-    "firstperson_lefthand": {
+    "firstperson_righthand": {
       "rotation": [
         -21,
         0,

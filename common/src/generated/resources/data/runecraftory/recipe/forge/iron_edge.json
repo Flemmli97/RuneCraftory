@@ -1,0 +1,23 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:short_dagger"
+    },
+    {
+      "tag": "c:ingots/iron"
+    },
+    {
+      "tag": "c:ingots/iron"
+    },
+    {
+      "tag": "c:raw_materials/silver"
+    }
+  ],
+  "required_level": 15,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:iron_edge"
+  }
+}

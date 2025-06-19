@@ -1,0 +1,13 @@
+{
+  "bad_season": [
+    "WINTER"
+  ],
+  "best_season": [
+    "SPRING"
+  ],
+  "giant_crop": "runecraftory:colossal_pink",
+  "growth": 8,
+  "item": "runecraftory:turnip_pink_seeds",
+  "max_drops": 3,
+  "regrowable": false
+}

@@ -1,0 +1,13 @@
+{
+  "buy_price": 200,
+  "element": "NONE",
+  "item": "#c:ingots/copper",
+  "item_stats": {
+    "runecraftory:defence": 2.0
+  },
+  "monster_bonus": {
+    "runecraftory:defence": 0.5
+  },
+  "sell_price": 9,
+  "upgrade_difficulty": 10
+}

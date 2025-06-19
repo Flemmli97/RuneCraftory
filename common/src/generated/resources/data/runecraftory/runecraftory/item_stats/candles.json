@@ -1,0 +1,13 @@
+{
+  "buy_price": 0,
+  "element": "NONE",
+  "item": "#minecraft:candles",
+  "item_stats": {
+    "runecraftory:magic_attack": 1.0
+  },
+  "monster_bonus": {
+    "runecraftory:magic_attack": 0.5
+  },
+  "sell_price": 0,
+  "upgrade_difficulty": 1
+}

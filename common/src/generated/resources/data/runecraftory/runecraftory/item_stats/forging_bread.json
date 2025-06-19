@@ -1,0 +1,9 @@
+{
+  "buy_price": 600,
+  "element": "NONE",
+  "item": "runecraftory:forging_bread",
+  "item_stats": {},
+  "monster_bonus": {},
+  "sell_price": 100,
+  "upgrade_difficulty": 1
+}

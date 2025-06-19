@@ -1,0 +1,13 @@
+{
+  "buy_price": 50,
+  "element": "NONE",
+  "item": "minecraft:shield",
+  "item_stats": {
+    "runecraftory:defence": 2.0
+  },
+  "monster_bonus": {
+    "runecraftory:defence": 0.5
+  },
+  "sell_price": 14,
+  "upgrade_difficulty": 0
+}

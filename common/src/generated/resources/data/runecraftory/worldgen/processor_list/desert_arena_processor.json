@@ -1,8 +1,0 @@
-{
-  "processors": [
-    {
-      "boss": "runecraftory:desert",
-      "processor_type": "runecraftory:boss_processor"
-    }
-  ]
-}

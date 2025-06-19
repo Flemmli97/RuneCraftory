@@ -6,7 +6,6 @@
   "mixins": [
     "BonemealMixin",
     "CatSpawnerMixin",
-    "DamageSourceAccessor",
     "FarmBlockMixin",
     "GrowEvent",
     "ItemStackMixin",
@@ -21,12 +20,11 @@
   ],
   "client": [
     "BossHealthOverlayMixin",
-    "CameraAccessor",
-    "GameRendererMixin",
+    "CameraMixin",
     "GuiMixin",
     "LocalPlayerMixin",
     "LivingEntityRendererMixin",
-    "ScreenMixin"
+    "GuiGraphicsMixin"
   ],
   "injectors": {
     "defaultRequire": 1

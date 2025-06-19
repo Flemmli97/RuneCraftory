@@ -1,0 +1,48 @@
+{
+  "parent": "runecraftory:progression/path_4/sano_uno",
+  "criteria": {
+    "boss": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "runecraftory:sarcophagus"
+            }
+          }
+        ],
+        "killing_blow": {
+          "source_entity": {
+            "type_specific": {
+              "type": "minecraft:player",
+              "advancements": {
+                "runecraftory:progression/path_4/sano_uno": true
+              }
+            }
+          }
+        }
+      },
+      "trigger": "minecraft:player_killed_entity"
+    }
+  },
+  "display": {
+    "background": "minecraft:textures/block/dirt.png",
+    "description": {
+      "translate": "runecraftory.advancements.progression.boss.sarcophagus.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "runecraftory:sarcophagus_spawn_egg"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.progression.boss.sarcophagus.title"
+    }
+  },
+  "requirements": [
+    [
+      "boss"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

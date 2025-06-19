@@ -1,0 +1,9 @@
+{
+  "buy_price": 1000,
+  "element": "NONE",
+  "item": "runecraftory:power_wave",
+  "item_stats": {},
+  "monster_bonus": {},
+  "sell_price": 50,
+  "upgrade_difficulty": 0
+}

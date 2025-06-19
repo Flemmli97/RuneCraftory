@@ -1,0 +1,13 @@
+{
+  "buy_price": 4000,
+  "element": "NONE",
+  "item": "#c:gems/ruby",
+  "item_stats": {
+    "runecraftory:magic_defence": 6.0
+  },
+  "monster_bonus": {
+    "runecraftory:magic_defence": 4.0
+  },
+  "sell_price": 37,
+  "upgrade_difficulty": 19
+}

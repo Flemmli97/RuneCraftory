@@ -1,0 +1,11 @@
+{
+  "cooldown": 60,
+  "percentage": 0.07,
+  "rp_cost": 60,
+  "skill_xp": {
+    "EARTH": 6.0
+  },
+  "skills": [
+    "EARTH"
+  ]
+}

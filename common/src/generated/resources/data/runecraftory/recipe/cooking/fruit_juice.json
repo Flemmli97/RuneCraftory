@@ -1,0 +1,20 @@
+{
+  "type": "runecraftory:cooking",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "minecraft:apple"
+    },
+    {
+      "tag": "c:foods/fruit/orange"
+    },
+    {
+      "tag": "c:foods/fruit/grapes"
+    }
+  ],
+  "required_level": 30,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:fruit_juice"
+  }
+}

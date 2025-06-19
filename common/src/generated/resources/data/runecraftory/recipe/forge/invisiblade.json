@@ -1,0 +1,23 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:broad_sword"
+    },
+    {
+      "item": "runecraftory:invisible_stone"
+    },
+    {
+      "tag": "runecraftory:claws_fangs"
+    },
+    {
+      "tag": "runecraftory:crystals"
+    }
+  ],
+  "required_level": 16,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:invisiblade"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "runecraftory:armor",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "minecraft:shield"
+    },
+    {
+      "tag": "c:dusts/bronze"
+    }
+  ],
+  "required_level": 18,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:round_shield"
+  }
+}

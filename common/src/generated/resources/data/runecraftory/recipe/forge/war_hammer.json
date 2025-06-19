@@ -1,0 +1,20 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:battle_hammer"
+    },
+    {
+      "tag": "c:dusts/bronze"
+    },
+    {
+      "tag": "runecraftory:shards"
+    }
+  ],
+  "required_level": 14,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:war_hammer"
+  }
+}

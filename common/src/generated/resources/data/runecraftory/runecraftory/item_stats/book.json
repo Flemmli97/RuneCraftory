@@ -1,0 +1,13 @@
+{
+  "buy_price": 500,
+  "element": "NONE",
+  "item": "minecraft:book",
+  "item_stats": {
+    "runecraftory:magic_attack": 12.0
+  },
+  "monster_bonus": {
+    "runecraftory:magic_attack": 0.5
+  },
+  "sell_price": 42,
+  "upgrade_difficulty": 26
+}

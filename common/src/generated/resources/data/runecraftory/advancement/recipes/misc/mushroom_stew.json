@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "runecraftory:mushroom_stew"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "mushroom_stew": {
+      "conditions": {
+        "items": [
+          {
+            "items": "runecraftory:mushroom"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "mushroom_stew"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "runecraftory:mushroom_stew"
+    ]
+  }
+}

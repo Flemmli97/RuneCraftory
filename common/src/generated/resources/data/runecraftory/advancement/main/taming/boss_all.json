@@ -1,0 +1,177 @@
+{
+  "parent": "runecraftory:main/taming/boss_five",
+  "criteria": {
+    "runecraftory:ambrosia": {
+      "conditions": {
+        "amount": 1,
+        "predicate": {
+          "type": "runecraftory:ambrosia"
+        }
+      },
+      "trigger": "runecraftory:tame_monster"
+    },
+    "runecraftory:chimera": {
+      "conditions": {
+        "amount": 1,
+        "predicate": {
+          "type": "runecraftory:chimera"
+        }
+      },
+      "trigger": "runecraftory:tame_monster"
+    },
+    "runecraftory:dead_tree": {
+      "conditions": {
+        "amount": 1,
+        "predicate": {
+          "type": "runecraftory:dead_tree"
+        }
+      },
+      "trigger": "runecraftory:tame_monster"
+    },
+    "runecraftory:grimoire": {
+      "conditions": {
+        "amount": 1,
+        "predicate": {
+          "type": "runecraftory:grimoire"
+        }
+      },
+      "trigger": "runecraftory:tame_monster"
+    },
+    "runecraftory:handonetta": {
+      "conditions": {
+        "amount": 1,
+        "predicate": {
+          "type": "runecraftory:handonetta"
+        }
+      },
+      "trigger": "runecraftory:tame_monster"
+    },
+    "runecraftory:marionetta": {
+      "conditions": {
+        "amount": 1,
+        "predicate": {
+          "type": "runecraftory:marionetta"
+        }
+      },
+      "trigger": "runecraftory:tame_monster"
+    },
+    "runecraftory:raccoon": {
+      "conditions": {
+        "amount": 1,
+        "predicate": {
+          "type": "runecraftory:raccoon"
+        }
+      },
+      "trigger": "runecraftory:tame_monster"
+    },
+    "runecraftory:rafflesia": {
+      "conditions": {
+        "amount": 1,
+        "predicate": {
+          "type": "runecraftory:rafflesia"
+        }
+      },
+      "trigger": "runecraftory:tame_monster"
+    },
+    "runecraftory:sano": {
+      "conditions": {
+        "amount": 1,
+        "predicate": {
+          "type": "runecraftory:sano"
+        }
+      },
+      "trigger": "runecraftory:tame_monster"
+    },
+    "runecraftory:sarcophagus": {
+      "conditions": {
+        "amount": 1,
+        "predicate": {
+          "type": "runecraftory:sarcophagus"
+        }
+      },
+      "trigger": "runecraftory:tame_monster"
+    },
+    "runecraftory:skelefang": {
+      "conditions": {
+        "amount": 1,
+        "predicate": {
+          "type": "runecraftory:skelefang"
+        }
+      },
+      "trigger": "runecraftory:tame_monster"
+    },
+    "runecraftory:thunderbolt": {
+      "conditions": {
+        "amount": 1,
+        "predicate": {
+          "type": "runecraftory:thunderbolt"
+        }
+      },
+      "trigger": "runecraftory:tame_monster"
+    },
+    "runecraftory:uno": {
+      "conditions": {
+        "amount": 1,
+        "predicate": {
+          "type": "runecraftory:uno"
+        }
+      },
+      "trigger": "runecraftory:tame_monster"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "runecraftory.advancements.tame.boss.all.description"
+    },
+    "frame": "challenge",
+    "icon": {
+      "count": 1,
+      "id": "runecraftory:legendary_scale"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.tame.boss.all.title"
+    }
+  },
+  "requirements": [
+    [
+      "runecraftory:chimera"
+    ],
+    [
+      "runecraftory:rafflesia"
+    ],
+    [
+      "runecraftory:grimoire"
+    ],
+    [
+      "runecraftory:dead_tree"
+    ],
+    [
+      "runecraftory:raccoon"
+    ],
+    [
+      "runecraftory:skelefang"
+    ],
+    [
+      "runecraftory:ambrosia"
+    ],
+    [
+      "runecraftory:thunderbolt"
+    ],
+    [
+      "runecraftory:marionetta"
+    ],
+    [
+      "runecraftory:handonetta"
+    ],
+    [
+      "runecraftory:sano"
+    ],
+    [
+      "runecraftory:uno"
+    ],
+    [
+      "runecraftory:sarcophagus"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

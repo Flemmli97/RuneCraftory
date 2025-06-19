@@ -1,0 +1,17 @@
+{
+  "armor_effect": "runecraftory:piyo_sandals",
+  "buy_price": 400,
+  "element": "NONE",
+  "item": "runecraftory:piyo_sandals",
+  "item_stats": {
+    "runecraftory:defence": 5.0,
+    "runecraftory:dizzy": 20.0,
+    "runecraftory:dizzy_resistance": 50.0,
+    "runecraftory:love_resistance": 1.0
+  },
+  "monster_bonus": {
+    "runecraftory:dizzy_resistance": 0.5
+  },
+  "sell_price": 35,
+  "upgrade_difficulty": 0
+}

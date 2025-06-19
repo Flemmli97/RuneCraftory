@@ -1,0 +1,14 @@
+{
+  "buy_price": 80,
+  "element": "NONE",
+  "item": "runecraftory:cheap_cloth",
+  "item_stats": {
+    "runecraftory:critical_resistance": 1.0,
+    "runecraftory:defence": 1.0
+  },
+  "monster_bonus": {
+    "runecraftory:defence": 1.0
+  },
+  "sell_price": 12,
+  "upgrade_difficulty": 4
+}

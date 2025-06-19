@@ -1,0 +1,20 @@
+{
+  "type": "runecraftory:armor",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "tag": "c:ingots/gold"
+    },
+    {
+      "item": "runecraftory:orichalcum"
+    },
+    {
+      "item": "runecraftory:turnips_miracle"
+    }
+  ],
+  "required_level": 20,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:gold_ring"
+  }
+}

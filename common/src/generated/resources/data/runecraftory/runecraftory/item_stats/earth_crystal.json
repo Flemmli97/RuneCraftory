@@ -1,0 +1,14 @@
+{
+  "buy_price": 2000,
+  "element": "EARTH",
+  "item": "runecraftory:earth_crystal",
+  "item_stats": {
+    "runecraftory:defence": 5.0
+  },
+  "monster_bonus": {
+    "runecraftory:defence": 1.0,
+    "runecraftory:magic_defence": 1.0
+  },
+  "sell_price": 150,
+  "upgrade_difficulty": 20
+}

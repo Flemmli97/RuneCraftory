@@ -1,0 +1,17 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:war_hammer"
+    },
+    {
+      "tag": "runecraftory:liquids"
+    }
+  ],
+  "required_level": 17,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:war_hammer_plus"
+  }
+}

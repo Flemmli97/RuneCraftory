@@ -12,9 +12,9 @@ import java.util.function.Function;
 
 public class TooltipHelper {
 
-    public static void gatherComponents(ItemStack stack, int screenWidth, int screenHeight, List<ClientTooltipComponent> components) {
+    public static void gatherComponents(ItemStack stack, List<ClientTooltipComponent> components) {
         List<TooltipComponent> elements = new ArrayList<>();
-        ClientCalls.tooltipComponentEvent(stack, elements::add, screenWidth, screenHeight);
+        ClientCalls.tooltipComponentEvent(stack, elements::add);
         components.addAll(1, elements.stream().map(c -> {
             Function<TooltipComponent, ClientTooltipComponent> factory = TooltipRegistry.get(c.getClass());
             if (factory != null)

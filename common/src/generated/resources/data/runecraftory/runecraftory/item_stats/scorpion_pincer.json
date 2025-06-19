@@ -1,0 +1,13 @@
+{
+  "buy_price": 1470,
+  "element": "NONE",
+  "item": "runecraftory:scorpion_pincer",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 20.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.attack_damage": 2.0
+  },
+  "sell_price": 138,
+  "upgrade_difficulty": 55
+}

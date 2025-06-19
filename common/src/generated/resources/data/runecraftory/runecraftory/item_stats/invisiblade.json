@@ -1,0 +1,17 @@
+{
+  "buy_price": 9350,
+  "element": "NONE",
+  "item": "runecraftory:invisiblade",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 49.0,
+    "runecraftory:attack_range": 0.0,
+    "runecraftory:attack_width": 1.5,
+    "runecraftory:dizzy": 5.0,
+    "runecraftory:magic_attack": 6.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.attack_damage": 1.0
+  },
+  "sell_price": 571,
+  "upgrade_difficulty": 0
+}

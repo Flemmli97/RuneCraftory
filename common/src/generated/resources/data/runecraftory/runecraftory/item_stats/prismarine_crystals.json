@@ -1,0 +1,13 @@
+{
+  "buy_price": 523,
+  "element": "NONE",
+  "item": "minecraft:prismarine_crystals",
+  "item_stats": {
+    "runecraftory:magic_attack": 8.0
+  },
+  "monster_bonus": {
+    "runecraftory:magic_attack": 0.5
+  },
+  "sell_price": 46,
+  "upgrade_difficulty": 25
+}

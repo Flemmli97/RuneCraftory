@@ -13,7 +13,7 @@ import io.github.flemmli97.simplequests_api.quest.QuestBase;
 import io.github.flemmli97.simplequests_api.quest.entry.QuestEntryKey;
 import io.github.flemmli97.simplequests_api.quest.entry.QuestTask;
 import io.github.flemmli97.simplequests_api.quest.entry.ResolvedQuestTask;
-import io.github.flemmli97.simplequests_api.util.JsonCodecs;
+import io.github.flemmli97.tenshilib.common.entity.EntityUtils;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -28,7 +28,7 @@ public class NPCTalkTask implements QuestTask<NPCTalkTask.NPCTalkResolved> {
     public static final QuestEntryKey<NPCTalkTask> ID = new QuestEntryKey<>(RuneCraftory.modRes("npc_talk"));
     public static final MapCodec<NPCTalkTask> CODEC = RecordCodecBuilder.mapCodec((instance) ->
             instance.group(ResourceLocation.CODEC.optionalFieldOf("target_npc_id").forGetter(d -> Optional.ofNullable(d.targetNPCId)),
-                    JsonCodecs.ENTITY_PREDICATE_CODEC.optionalFieldOf("predicate").forGetter(d -> d.predicate == EntityPredicate.ANY ? Optional.empty() : Optional.of(d.predicate))
+                    EntityPredicate.CODEC.optionalFieldOf("predicate").forGetter(d -> Optional.ofNullable(d.predicate))
             ).apply(instance, (npcId, predicate) -> new NPCTalkTask(npcId.orElse(null), predicate.orElse(null))));
 
     // Unused atm
@@ -37,7 +37,7 @@ public class NPCTalkTask implements QuestTask<NPCTalkTask.NPCTalkResolved> {
     private final EntityPredicate predicate;
 
     public NPCTalkTask(ResourceLocation generic) {
-        this(generic, EntityPredicate.ANY);
+        this(generic, null);
     }
 
     protected NPCTalkTask(ResourceLocation generic, EntityPredicate predicate) {
@@ -66,7 +66,7 @@ public class NPCTalkTask implements QuestTask<NPCTalkTask.NPCTalkResolved> {
 
         public static final MapCodec<NPCTalkResolved> CODEC = RecordCodecBuilder.mapCodec((instance) ->
                 instance.group(Codec.STRING.fieldOf("target_npc").xmap(UUID::fromString, UUID::toString).forGetter(d -> d.targetNPC),
-                        JsonCodecs.ENTITY_PREDICATE_CODEC.optionalFieldOf("predicate").forGetter(d -> Optional.ofNullable(d.predicate))
+                        EntityPredicate.CODEC.optionalFieldOf("predicate").forGetter(d -> Optional.ofNullable(d.predicate))
                 ).apply(instance, (target, predicate) -> new NPCTalkResolved(target, predicate.orElse(null))));
 
         private final UUID targetNPC;
@@ -94,7 +94,7 @@ public class NPCTalkTask implements QuestTask<NPCTalkTask.NPCTalkResolved> {
                 if (this.targetNPC == null)
                     this.npc = null;
                 else
-                    this.npc = EntityUtil.findFromUUID(EntityNPCBase.class, player.getLevel(), this.targetNPC);
+                    this.npc = EntityUtils.findFromUUID(EntityNPCBase.class, player.level(), this.targetNPC);
             }
             Component name;
             if (this.npc == null) {

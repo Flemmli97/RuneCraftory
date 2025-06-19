@@ -1,0 +1,19 @@
+{
+  "type": "runecraftory:hammer_remainder",
+  "category": "misc",
+  "ingredients": [
+    {
+      "tag": "c:ingots/copper"
+    },
+    {
+      "tag": "c:raw_materials/tin"
+    },
+    {
+      "tag": "runecraftory:tools/hammers"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "runecraftory:bronze_dust"
+  }
+}

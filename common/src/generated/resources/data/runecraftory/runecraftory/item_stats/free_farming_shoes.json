@@ -1,0 +1,15 @@
+{
+  "buy_price": 450,
+  "element": "NONE",
+  "item": "runecraftory:free_farming_shoes",
+  "item_stats": {
+    "runecraftory:cold_resistance": 3.0,
+    "runecraftory:defence": 3.0,
+    "runecraftory:fatigue_resistance": 3.0
+  },
+  "monster_bonus": {
+    "runecraftory:defence": 0.5
+  },
+  "sell_price": 40,
+  "upgrade_difficulty": 0
+}

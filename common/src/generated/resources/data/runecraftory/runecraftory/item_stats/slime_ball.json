@@ -1,0 +1,14 @@
+{
+  "buy_price": 375,
+  "element": "NONE",
+  "item": "minecraft:slime_ball",
+  "item_stats": {
+    "runecraftory:defence": 12.0,
+    "runecraftory:magic_attack": 5.0
+  },
+  "monster_bonus": {
+    "runecraftory:defence": 0.5
+  },
+  "sell_price": 31,
+  "upgrade_difficulty": 18
+}

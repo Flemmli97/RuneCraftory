@@ -1,0 +1,14 @@
+{
+  "buy_price": 350,
+  "element": "NONE",
+  "item": "minecraft:blaze_rod",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 12.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.attack_damage": 1.0
+  },
+  "sell_price": 23,
+  "tier_1_Spell": "runecraftory:vanilla_blaze_fireballs",
+  "upgrade_difficulty": 25
+}

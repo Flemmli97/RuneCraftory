@@ -2,12 +2,9 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityBoneNeedle;
-import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
-import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
@@ -30,16 +27,16 @@ public class BoneNeedleSpell extends Spell {
         double offset = -3;
         double max = Math.abs(offset);
         double inc = max * 2.7 / 16;
-        while (offset <= max) {
-            EntityBoneNeedle needle = new EntityBoneNeedle(level, entity);
-            Vec3 direction = MathUtils.rotate(MathUtils.NORMAL_Y, direct, (float) (Mth.DEG_TO_RAD * 15 * offset));
-            needle.shoot(direction.x(), direction.y(), direction.z(), entity.getRandom().nextFloat() * 0.1f + 0.6f, 2);
-            Vec3 random = needle.position().add(0, -entity.getBbHeight() * 0.25, 0).add(side.multiply(offset * 0.5, 0, offset * 0.5));
-            offset += entity.getRandom().nextDouble() * inc * 0.5 + inc * 0.5;
-            needle.setPos(random);
-            needle.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.65f));
-            level.addFreshEntity(needle);
-        }
+//        while (offset <= max) {
+//            EntityBoneNeedle needle = new EntityBoneNeedle(level, entity);
+//            Vec3 direction = MathUtils.rotate(MathUtils.NORMAL_Y, direct, (float) (Mth.DEG_TO_RAD * 15 * offset));
+//            needle.shoot(direction.x(), direction.y(), direction.z(), entity.getRandom().nextFloat() * 0.1f + 0.6f, 2);
+//            Vec3 random = needle.position().add(0, -entity.getBbHeight() * 0.25, 0).add(side.multiply(offset * 0.5, 0, offset * 0.5));
+//            offset += entity.getRandom().nextDouble() * inc * 0.5 + inc * 0.5;
+//            needle.setPos(random);
+//            needle.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.65f));
+//            level.addFreshEntity(needle);
+//        }
         level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ARROW_SHOOT, entity.getSoundSource(), 1.0f, 1.2f + level.getRandom().nextFloat() * 0.1f);
         return true;
     }

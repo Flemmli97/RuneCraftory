@@ -1,0 +1,17 @@
+{
+  "type": "runecraftory:armor",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "tag": "c:ingots/gold"
+    },
+    {
+      "tag": "c:gems/aquamarine"
+    }
+  ],
+  "required_level": 15,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:aquamarine_ring"
+  }
+}

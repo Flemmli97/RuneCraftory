@@ -1,0 +1,9 @@
+{
+  "buy_price": 50000,
+  "element": "NONE",
+  "item": "runecraftory:love_potion",
+  "item_stats": {},
+  "monster_bonus": {},
+  "sell_price": 2000,
+  "upgrade_difficulty": 0
+}

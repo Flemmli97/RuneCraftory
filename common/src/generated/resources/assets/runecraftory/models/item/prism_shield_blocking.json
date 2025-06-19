@@ -1,7 +1,7 @@
 {
   "parent": "runecraftory:item/prism_shield",
   "display": {
-    "firstperson_righthand": {
+    "firstperson_lefthand": {
       "rotation": [
         15,
         0,
@@ -13,7 +13,7 @@
         0
       ]
     },
-    "firstperson_lefthand": {
+    "firstperson_righthand": {
       "rotation": [
         15,
         0,

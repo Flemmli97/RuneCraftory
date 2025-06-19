@@ -1,0 +1,11 @@
+{
+  "buy_price": 300,
+  "element": "NONE",
+  "item": "runecraftory:recovery_potion",
+  "item_stats": {},
+  "monster_bonus": {
+    "minecraft:generic.max_health": 3.0
+  },
+  "sell_price": 25,
+  "upgrade_difficulty": 0
+}

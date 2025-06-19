@@ -1,0 +1,17 @@
+{
+  "type": "runecraftory:armor",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "tag": "c:ingots/gold"
+    },
+    {
+      "tag": "runecraftory:cloths"
+    }
+  ],
+  "required_level": 40,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:gold_bracelet"
+  }
+}

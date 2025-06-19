@@ -1,0 +1,62 @@
+{
+  "parent": "runecraftory:main/root",
+  "criteria": {
+    "axes_hammer": {
+      "conditions": {
+        "level": 5,
+        "skill": "HAMMERAXE"
+      },
+      "trigger": "runecraftory:skill_level_trigger"
+    },
+    "first": {
+      "conditions": {
+        "level": 5,
+        "skill": "FIST"
+      },
+      "trigger": "runecraftory:skill_level_trigger"
+    },
+    "long_sword": {
+      "conditions": {
+        "level": 5,
+        "skill": "LONGSWORD"
+      },
+      "trigger": "runecraftory:skill_level_trigger"
+    },
+    "short_sword": {
+      "conditions": {
+        "level": 5,
+        "skill": "SHORTSWORD"
+      },
+      "trigger": "runecraftory:skill_level_trigger"
+    },
+    "spear": {
+      "conditions": {
+        "level": 5,
+        "skill": "SPEAR"
+      },
+      "trigger": "runecraftory:skill_level_trigger"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "runecraftory.advancements.skill.weapon.5.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "runecraftory:wooly_spawn_egg"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.skill.weapon.5.title"
+    }
+  },
+  "requirements": [
+    [
+      "short_sword",
+      "long_sword",
+      "spear",
+      "axes_hammer",
+      "first"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

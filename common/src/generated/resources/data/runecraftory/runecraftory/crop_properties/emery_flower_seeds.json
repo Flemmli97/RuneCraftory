@@ -1,0 +1,9 @@
+{
+  "bad_season": [],
+  "best_season": [],
+  "giant_crop": "runecraftory:great_emery_flower",
+  "growth": 120,
+  "item": "runecraftory:emery_flower_seeds",
+  "max_drops": 2,
+  "regrowable": false
+}

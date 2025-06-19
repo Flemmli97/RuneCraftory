@@ -1,0 +1,13 @@
+{
+  "buy_price": 850,
+  "element": "NONE",
+  "item": "runecraftory:bronze_bracelet",
+  "item_stats": {
+    "runecraftory:magic_defence": 4.0
+  },
+  "monster_bonus": {
+    "runecraftory:magic_defence": 0.5
+  },
+  "sell_price": 38,
+  "upgrade_difficulty": 0
+}

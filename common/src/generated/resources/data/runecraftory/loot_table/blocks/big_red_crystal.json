@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "block": "runecraftory:big_red_crystal",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "facing": "north"
+              }
+            }
+          ],
+          "name": "runecraftory:big_red_crystal"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "runecraftory:blocks/big_red_crystal"
+}

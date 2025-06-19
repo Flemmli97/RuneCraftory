@@ -1,0 +1,17 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:rod"
+    },
+    {
+      "tag": "c:raw_materials/silver"
+    }
+  ],
+  "required_level": 28,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:silver_staff"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "type": "runecraftory:cooking",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "tag": "c:crops/tomato"
+    }
+  ],
+  "required_level": 26,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:tomato_juice"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "runecraftory:teleport"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "teleport": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#minecraft:beds"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "teleport"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "runecraftory:teleport"
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "cooking_bonus": {},
+  "cooking_bonus_percent": {},
+  "duration": 6000,
+  "effects": {
+    "runecraftory:defence": 15.0,
+    "runecraftory:health_gain": 500.0,
+    "runecraftory:magic_defence": 15.0,
+    "runecraftory:rune_points_gain": 300.0
+  },
+  "effects_percentage": {},
+  "item": "runecraftory:apple_pie",
+  "potion_apply": [],
+  "potion_remove": []
+}

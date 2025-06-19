@@ -59,8 +59,8 @@ public class ModDataComponentTypes {
     public static final RegistryEntrySupplier<DataComponentType<?>, DataComponentType<Unit>> INVISIBLE = register("invisible", Codec.unit(Unit.INSTANCE), StreamCodec.unit(Unit.INSTANCE));
 
     public static final RegistryEntrySupplier<DataComponentType<?>, DataComponentType<Boolean>> OBJECT_X = register("object_x", Codec.BOOL, ByteBufCodecs.BOOL);
-    public static final RegistryEntrySupplier<DataComponentType<?>, DataComponentType<Boolean>> DOUBLE_STEEL = register("double_Steel", Codec.BOOL, ByteBufCodecs.BOOL);
-    public static final RegistryEntrySupplier<DataComponentType<?>, DataComponentType<Boolean>> TENFOLD_STEEL = register("tenfold_Steel", Codec.BOOL, ByteBufCodecs.BOOL);
+    public static final RegistryEntrySupplier<DataComponentType<?>, DataComponentType<Boolean>> DOUBLE_STEEL = register("double_steel", Codec.BOOL, ByteBufCodecs.BOOL);
+    public static final RegistryEntrySupplier<DataComponentType<?>, DataComponentType<Boolean>> TENFOLD_STEEL = register("tenfold_steel", Codec.BOOL, ByteBufCodecs.BOOL);
     public static final RegistryEntrySupplier<DataComponentType<?>, DataComponentType<Boolean>> LIGHT_ORE = register("light_ore", Codec.BOOL, ByteBufCodecs.BOOL);
 
     public static final RegistryEntrySupplier<DataComponentType<?>, DataComponentType<ItemDebug.Mode>> DEBUG_ITEM_MODE = register("debug_item_mode",

@@ -1,0 +1,13 @@
+{
+  "bad_season": [
+    "SUMMER"
+  ],
+  "best_season": [
+    "WINTER"
+  ],
+  "giant_crop": "runecraftory:large_noel_grass",
+  "growth": 33,
+  "item": "runecraftory:noel_grass_seeds",
+  "max_drops": 4,
+  "regrowable": false
+}

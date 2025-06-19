@@ -1,0 +1,17 @@
+{
+  "type": "runecraftory:cooking",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:tempura"
+    },
+    {
+      "item": "runecraftory:udon"
+    }
+  ],
+  "required_level": 33,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:tempura_udon"
+  }
+}

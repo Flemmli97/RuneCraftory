@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.entities.misc;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolFishingRod;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
@@ -19,7 +20,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -40,7 +41,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -67,7 +68,7 @@ public class EntityCustomFishingHook extends AdvancedProjectile {
     private int timeUntilBite;
     private float fishAngle;
     private final int luck;
-    private final int lureSpeedBonus;
+    private final float lureSpeedBonus;
     private final int nibbleBonus;
     private int difficultyBonus;
 
@@ -112,7 +113,7 @@ public class EntityCustomFishingHook extends AdvancedProjectile {
         }
         BlockPos blockPos = this.blockPosition();
         BlockState state = this.level().getBlockState(blockPos);
-        BlockState below = this.level().getBlockState(new BlockPos(this.position().add(0, -0.2, 0)));
+        BlockState below = this.level().getBlockState(BlockPos.containing(this.position().add(0, -0.2, 0)));
         this.currentFluidState = this.level().getFluidState(blockPos);
         float fluid = 0.0f;
         this.inSand = false;
@@ -154,7 +155,7 @@ public class EntityCustomFishingHook extends AdvancedProjectile {
         }
         this.move(MoverType.SELF, this.getDeltaMovement());
         this.updateRotation();
-        if (!this.inFishingSpot && (this.onGround || this.horizontalCollision)) {
+        if (!this.inFishingSpot && (this.onGround() || this.horizontalCollision)) {
             this.setDeltaMovement(Vec3.ZERO);
         }
         this.setDeltaMovement(this.getDeltaMovement().scale(this.motionReduction(this.isInWater())));
@@ -187,11 +188,11 @@ public class EntityCustomFishingHook extends AdvancedProjectile {
             this.setOnCooldown.run();
             this.setOnCooldown = null;
             this.canAttack = null;
-            if (this.getOwner() instanceof ServerPlayer player)
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                    LevelCalc.levelSkill(data, EnumSkills.FISHING, 10);
-                    LevelCalc.levelSkill(data, EnumSkills.WATER, 1);
-                });
+            if (this.getOwner() instanceof ServerPlayer player) {
+                PlayerData data = Platform.INSTANCE.getPlayerData(player);
+                LevelCalc.levelSkill(data, EnumSkills.FISHING, 10);
+                LevelCalc.levelSkill(data, EnumSkills.WATER, 1);
+            }
         }
         return att;
     }
@@ -201,10 +202,10 @@ public class EntityCustomFishingHook extends AdvancedProjectile {
         this.setDeltaMovement(this.getDeltaMovement().normalize().scale(blockHitResult.distanceTo(this)));
     }
 
-    @Override
-    public boolean canChangeDimensions() {
-        return false;
-    }
+//    @Override
+//    public boolean canChangeDimensions() {
+//        return false;
+//    }
 
     @Override
     protected Entity.MovementEmission getMovementEmission() {
@@ -215,21 +216,21 @@ public class EntityCustomFishingHook extends AdvancedProjectile {
     public void remove(RemovalReason reason) {
         super.remove(reason);
         if (this.getOwner() instanceof LivingEntity living)
-            Platform.INSTANCE.getEntityData(living).ifPresent(data -> data.fishingHook = null);
+            Platform.INSTANCE.getEntityData(living).fishingHook = null;
     }
 
     @Override
     public void onClientRemoval() {
         super.onClientRemoval();
         if (this.getOwner() instanceof LivingEntity living)
-            Platform.INSTANCE.getEntityData(living).ifPresent(data -> data.fishingHook = null);
+            Platform.INSTANCE.getEntityData(living).fishingHook = null;
     }
 
     @Override
     public void onUpdateOwner() {
         super.onUpdateOwner();
         if (this.getOwner() instanceof LivingEntity living)
-            Platform.INSTANCE.getEntityData(living).ifPresent(data -> data.fishingHook = this);
+            Platform.INSTANCE.getEntityData(living).fishingHook = this;
     }
 
     private boolean shouldStopFishing() {
@@ -307,10 +308,10 @@ public class EntityCustomFishingHook extends AdvancedProjectile {
                 double z = this.getZ() + (Mth.cos(a) * c) * 0.1;
                 if (this.inSand) {
                     Vec3 belowPos = this.position().add(0, -0.2, 0);
-                    BlockState below = this.level().getBlockState(new BlockPos(x, belowPos.y, z));
+                    BlockState below = this.level().getBlockState(BlockPos.containing(x, belowPos.y, z));
                     if (below.is(BlockTags.SAND))
                         serverLevel.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, below), x, y - 0.9, z, 2 + this.random.nextInt(2), 0.1f, 0.0, 0.1f, 0.0);
-                } else if (serverLevel.getBlockState(new BlockPos(x, y - 1.0, z)).is(Blocks.WATER)) {
+                } else if (serverLevel.getBlockState(BlockPos.containing(x, y - 1.0, z)).is(Blocks.WATER)) {
                     serverLevel.sendParticles(ParticleTypes.SPLASH, x, y, z, 2 + this.random.nextInt(2), 0.1f, 0.0, 0.1f, 0.0);
                 }
             }
@@ -324,7 +325,7 @@ public class EntityCustomFishingHook extends AdvancedProjectile {
                 double x = this.getX() + (g * this.timeUntilBite * 0.1f);
                 if (this.inSand)
                     y -= 1;
-                BlockState blockState = serverLevel.getBlockState(new BlockPos(x, y - 1, z));
+                BlockState blockState = serverLevel.getBlockState(BlockPos.containing(x, y - 1, z));
                 if ((this.inSand && blockState.is(Blocks.SAND)) || (!this.inSand && blockState.is(Blocks.WATER))) {
                     ParticleOptions bubble = ParticleTypes.BUBBLE;
                     ParticleOptions particle = ParticleTypes.BUBBLE;
@@ -346,7 +347,7 @@ public class EntityCustomFishingHook extends AdvancedProjectile {
                 double m = this.getY() + 0.5;
                 ParticleOptions particle = ParticleTypes.BUBBLE;
                 if (this.inSand) {
-                    BlockState below = this.level().getBlockState(new BlockPos(this.position().add(0, -0.2, 0)));
+                    BlockState below = this.level().getBlockState(BlockPos.containing(this.position().add(0, -0.2, 0)));
                     particle = new BlockParticleOption(ParticleTypes.BLOCK, below);
                 }
                 serverLevel.sendParticles(particle, this.getX(), m, this.getZ(), (int) (1.0f + this.getBbWidth() * 20.0f), this.getBbWidth(), 0.0, this.getBbWidth(), 0.2f);
@@ -361,7 +362,7 @@ public class EntityCustomFishingHook extends AdvancedProjectile {
             }
         } else {
             this.fishAngle = Mth.nextFloat(this.random, 0.0f, 360.0f);
-            this.timeUntilBite = Mth.nextInt(this.random, Math.max(5, 100 - this.lureSpeedBonus * 15), Math.max(50, 600 - this.lureSpeedBonus * 75));
+            this.timeUntilBite = Mth.nextInt(this.random, (int) Math.max(5, 100 - this.lureSpeedBonus * 15), (int) Math.max(50, 600 - this.lureSpeedBonus * 75));
         }
     }
 
@@ -376,15 +377,14 @@ public class EntityCustomFishingHook extends AdvancedProjectile {
         if (this.nibble > 0) {
             //For now using vanilla loottables
             float luck = this.luck + owner.getLuck() + this.difficultyBonus * 0.5f
-                    + Platform.INSTANCE.getPlayerData(owner).map(d -> d.getSkillLevel(EnumSkills.FISHING).getLevel()).orElse(0) * 0.02f;
-            LootContext.Builder builder = new LootContext.Builder((ServerLevel) this.level())
+                    + Platform.INSTANCE.getPlayerData(owner).getSkillLevel(EnumSkills.FISHING).getLevel() * 0.02f;
+            LootParams.Builder builder = new LootParams.Builder((ServerLevel) this.level())
                     .withParameter(LootContextParams.ORIGIN, this.position())
                     .withParameter(LootContextParams.TOOL, stack)
                     .withParameter(LootContextParams.THIS_ENTITY, this)
-                    .withRandom(this.random)
                     .withLuck(luck);
-            ResourceLocation loot = this.inSand ? LootTableResources.SAND_FISHING : LootTableResources.FISHING;
-            LootTable lootTable = this.level().getServer().getLootTables().get(loot);
+            ResourceKey<LootTable> loot = this.inSand ? LootTableResources.SAND_FISHING : LootTableResources.FISHING;
+            LootTable lootTable = this.level().getServer().reloadableRegistries().getLootTable(loot);
             List<ItemStack> list = lootTable.getRandomItems(builder.create(LootContextParamSets.FISHING));
             ((ExtendedFishingRodHookTrigger) CriteriaTriggers.FISHING_ROD_HOOKED).runecraftory$customTrigger(owner, stack, this, list);
             for (ItemStack itemStack2 : list) {
@@ -394,16 +394,16 @@ public class EntityCustomFishingHook extends AdvancedProjectile {
                 double f = owner.getZ() - this.getZ();
                 itemEntity.setDeltaMovement(d * 0.1, e * 0.1 + Math.sqrt(Math.sqrt(d * d + e * e + f * f)) * 0.08, f * 0.1);
                 this.level().addFreshEntity(itemEntity);
-                owner.level.addFreshEntity(new ExperienceOrb(owner.level, owner.getX(), owner.getY() + 0.5, owner.getZ() + 0.5, this.random.nextInt(6) + 1));
+                owner.level().addFreshEntity(new ExperienceOrb(owner.level(), owner.getX(), owner.getY() + 0.5, owner.getZ() + 0.5, this.random.nextInt(6) + 1));
                 if (itemStack2.is(ItemTags.FISHES))
                     owner.awardStat(Stats.FISH_CAUGHT, 1);
             }
-            if (this.getOwner() instanceof ServerPlayer player)
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                    LevelCalc.useRP(player, data, 10 * (this.nibbleBonus + 1), true, 0, true, EnumSkills.FISHING);
-                    LevelCalc.levelSkill(data, EnumSkills.FISHING, 25);
-                    LevelCalc.levelSkill(data, EnumSkills.WATER, 5);
-                });
+            if (this.getOwner() instanceof ServerPlayer player) {
+                PlayerData data = Platform.INSTANCE.getPlayerData(player);
+                LevelCalc.useRP(data, 10 * (this.nibbleBonus + 1), true, 0, true, EnumSkills.FISHING);
+                LevelCalc.levelSkill(data, EnumSkills.FISHING, 25);
+                LevelCalc.levelSkill(data, EnumSkills.WATER, 5);
+            }
         }
 
         this.discard();

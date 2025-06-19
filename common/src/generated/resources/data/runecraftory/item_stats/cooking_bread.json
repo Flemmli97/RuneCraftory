@@ -1,9 +1,0 @@
-{
-  "buy_price": 600,
-  "sell_price": 100,
-  "upgrade_difficulty": 1,
-  "item_stats": {},
-  "monster_bonus": {},
-  "element": "NONE",
-  "item": "runecraftory:cooking_bread"
-}

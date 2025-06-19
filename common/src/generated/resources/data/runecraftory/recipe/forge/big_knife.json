@@ -1,0 +1,20 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "minecraft:iron_sword"
+    },
+    {
+      "item": "minecraft:diamond"
+    },
+    {
+      "tag": "c:raw_materials/silver"
+    }
+  ],
+  "required_level": 31,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:big_knife"
+  }
+}

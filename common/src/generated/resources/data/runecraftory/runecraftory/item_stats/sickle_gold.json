@@ -1,0 +1,15 @@
+{
+  "buy_price": 0,
+  "element": "WIND",
+  "item": "runecraftory:sickle_gold",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 79.0,
+    "runecraftory:attack_range": 0.0,
+    "runecraftory:magic_attack": 5.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.max_health": 1.0
+  },
+  "sell_price": 550,
+  "upgrade_difficulty": 0
+}

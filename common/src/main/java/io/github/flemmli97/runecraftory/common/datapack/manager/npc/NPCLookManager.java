@@ -24,6 +24,7 @@ import java.util.Map;
 public class NPCLookManager extends SimpleJsonResourceReloadListener implements ListenerExtension {
 
     public static final ResourceLocation ID = RuneCraftory.modRes("npc_looks");
+    public static final String DIRECTORY = String.format("%s/%s", ID.getNamespace(), ID.getPath());
 
     public static final ResourceLocation DEFAULT_ID = RuneCraftory.modRes("default_look");
 
@@ -34,7 +35,7 @@ public class NPCLookManager extends SimpleJsonResourceReloadListener implements 
     private HolderLookup.Provider provider;
 
     public NPCLookManager() {
-        super(DataPackHandler.GSON, ID.toString());
+        super(DataPackHandler.GSON, DIRECTORY);
     }
 
     public NPCLook get(ResourceLocation res) {

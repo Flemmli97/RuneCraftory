@@ -16,13 +16,11 @@ import io.github.flemmli97.simplequests_api.quest.QuestState;
 import io.github.flemmli97.simplequests_api.quest.entry.ResolvedQuestTask;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -74,6 +72,11 @@ public class QuestData implements PlayerQuestData {
         return this.currentQuests;
     }
 
+    @Override
+    public long getRandomSeed(@Nullable ResourceLocation quest) {
+        return 0;
+    }
+
     public boolean acceptQuest(ResourceLocation id) {
         QuestBase quest = this.questBoardContent == null ? null : this.questBoardContent.get(id);
         return this.acceptQuest(quest);
@@ -82,11 +85,11 @@ public class QuestData implements PlayerQuestData {
     public boolean acceptQuest(QuestBase quest) {
         AcceptType type = this.canAcceptQuest(quest, false);
         if (type != AcceptType.ACCEPT) {
-            this.player.sendMessage(Component.translatable(type.langKey()).withStyle(ChatFormatting.DARK_RED), Util.NIL_UUID);
+            this.player.displayClientMessage(Component.translatable(type.langKey()).withStyle(ChatFormatting.DARK_RED), false);
             return false;
         }
         this.currentQuests.add(new QuestProgress(quest, this, 0));
-        this.player.connection.send(new ClientboundSoundPacket(SoundEvents.VILLAGER_YES, this.player.getSoundSource(), this.player.getX(), this.player.getY(), this.player.getZ(), 1, 1.2f));
+//        this.player.connection.send(new ClientboundSoundPacket(SoundEvents.VILLAGER_YES, this.player.getSoundSource(), this.player.getX(), this.player.getY(), this.player.getZ(), 1, 1.2f));
         return true;
     }
 
@@ -123,23 +126,24 @@ public class QuestData implements PlayerQuestData {
                 }
                 case PARTIAL_COMPLETE -> completion.put(prog.getQuest().id, QuestState.PARTIAL_COMPLETE);
                 case PARTIAL -> {
-                    this.player.level.playSound(null, this.player.getX(), this.player.getY(), this.player.getZ(), SoundEvents.VILLAGER_YES, this.player.getSoundSource(), 2 * 0.75f, 1.0f);
+//                    this.player.level.playSound(null, this.player.getX(), this.player.getY(), this.player.getZ(), SoundEvents.VILLAGER_YES, this.player.getSoundSource(), 2 * 0.75f, 1.0f);
                     tasks.forEach(t -> LoaderNetwork.INSTANCE.sendToPlayer(new S2CSimpleToast(prog.getName(this.player).withStyle(ChatFormatting.DARK_PURPLE),
                             t.translation(this.player).withStyle(ChatFormatting.GOLD)), this.player));
                 }
-                case NOTHING ->
-                        this.player.level.playSound(null, this.player.getX(), this.player.getY(), this.player.getZ(), SoundEvents.VILLAGER_NO, this.player.getSoundSource(), 2 * 0.75f, 1.0f);
+                case NOTHING -> {
+//                    this.player.level.playSound(null, this.player.getX(), this.player.getY(), this.player.getZ(), SoundEvents.VILLAGER_NO, this.player.getSoundSource(), 2 * 0.75f, 1.0f);
+                }
             }
         }
         this.currentQuests.removeAll(completed);
         return completion;
     }
 
-    @Override
-    public Random getRandom(@Nullable ResourceLocation quest) {
-        this.questRandom.setSeed(this.dailySeed);
-        return this.questRandom;
-    }
+//    @Override
+//    public RandomS getRandom(@Nullable ResourceLocation quest) {
+//        this.questRandom.setSeed(this.dailySeed);
+//        return this.questRandom;
+//    }
 
     @Override
     public void addTickableProgress(QuestProgress progress) {
@@ -204,7 +208,7 @@ public class QuestData implements PlayerQuestData {
             this.finishedQuestsTracker.compute(npcQuest.getOriginID(), (key, i) -> i == null ? 1 : ++i);
         }
         this.finishedQuestDay++;
-        this.player.level.playSound(null, this.player.getX(), this.player.getY(), this.player.getZ(), SoundEvents.PLAYER_LEVELUP, this.player.getSoundSource(), 2 * 0.75f, 1.0f);
+        this.player.level().playSound(null, this.player.getX(), this.player.getY(), this.player.getZ(), SoundEvents.PLAYER_LEVELUP, this.player.getSoundSource(), 2 * 0.75f, 1.0f);
         if (!prog.getQuest().neededParentQuests.isEmpty() && prog.getQuest().redoParent) {
             prog.getQuest().neededParentQuests.forEach(res -> {
                 Quest quest = QuestsManager.instance().getActualQuest(res, null);
@@ -276,7 +280,7 @@ public class QuestData implements PlayerQuestData {
     public CompoundTag save() {
         CompoundTag tag = new CompoundTag();
         ListTag quests = new ListTag();
-        this.currentQuests.forEach(prog -> quests.add(prog.save()));
+        this.currentQuests.forEach(prog -> quests.add(prog.save(this.player.registryAccess())));
         tag.put("ActiveQuests", quests);
         ListTag unlocked = new ListTag();
         this.unlockTracker.forEach(res -> unlocked.add(StringTag.valueOf(res.toString())));
@@ -304,13 +308,13 @@ public class QuestData implements PlayerQuestData {
             });
         }
         ListTag unlocked = tag.getList("UnlockedQuests", Tag.TAG_STRING);
-        unlocked.forEach(t -> this.unlockTracker.add(new ResourceLocation(t.getAsString())));
+        unlocked.forEach(t -> this.unlockTracker.add(ResourceLocation.parse(t.getAsString())));
         if (tag.contains("TimeTracker"))
             this.questTrackerTime = LocalDateTime.parse(tag.getString("TimeTracker"), TIME);
         this.dailySeed = tag.getLong("DailySeed");
         this.finishedQuestDay = tag.getInt("DailyDone");
         CompoundTag total = tag.getCompound("FinishedQuestTracker");
-        total.getAllKeys().forEach(key -> this.finishedQuestsTracker.put(new ResourceLocation(key), total.getInt(key)));
+        total.getAllKeys().forEach(key -> this.finishedQuestsTracker.put(ResourceLocation.parse(key), total.getInt(key)));
     }
 
     public void setQuestboardQuests(Map<ResourceLocation, QuestBase> quest) {

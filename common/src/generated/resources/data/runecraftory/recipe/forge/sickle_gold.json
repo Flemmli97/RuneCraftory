@@ -1,0 +1,17 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "tag": "c:ingots/gold"
+    },
+    {
+      "tag": "runecraftory:shards"
+    }
+  ],
+  "required_level": 45,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:sickle_gold"
+  }
+}

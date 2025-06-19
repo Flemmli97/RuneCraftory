@@ -1,0 +1,11 @@
+{
+  "items": [
+    "#c:foods/vegetable"
+  ],
+  "translations": [
+    "runecraftory.gift.vegetables"
+  ],
+  "xp_range": {
+    "max": 7
+  }
+}

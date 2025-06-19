@@ -22,11 +22,12 @@ import java.util.Map;
 public class SkillPropertiesManager extends SimpleJsonResourceReloadListener implements ListenerExtension {
 
     public static final ResourceLocation ID = RuneCraftory.modRes("skills");
+    public static final String DIRECTORY = String.format("%s/%s", ID.getNamespace(), ID.getPath());
 
     private Map<EnumSkills, SkillProperties> propertiesMap = new EnumMap<>(EnumSkills.class);
 
     public SkillPropertiesManager() {
-        super(DataPackHandler.GSON, ID.toString());
+        super(DataPackHandler.GSON, DIRECTORY);
     }
 
     public SkillProperties getPropertiesFor(EnumSkills skills) {

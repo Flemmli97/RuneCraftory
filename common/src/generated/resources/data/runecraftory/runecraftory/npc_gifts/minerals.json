@@ -1,0 +1,11 @@
+{
+  "items": [
+    "#runecraftory:mineral"
+  ],
+  "translations": [
+    "runecraftory.gift.minerals"
+  ],
+  "xp_range": {
+    "max": 7
+  }
+}

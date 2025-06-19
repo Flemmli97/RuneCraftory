@@ -1,0 +1,26 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:short_dagger"
+    },
+    {
+      "tag": "c:ingots/gold"
+    },
+    {
+      "item": "minecraft:emerald"
+    },
+    {
+      "item": "runecraftory:wind_crystal"
+    },
+    {
+      "tag": "runecraftory:claws_fangs"
+    }
+  ],
+  "required_level": 20,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:wind_edge"
+  }
+}

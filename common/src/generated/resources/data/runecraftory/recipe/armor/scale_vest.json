@@ -1,0 +1,23 @@
+{
+  "type": "runecraftory:armor",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "minecraft:iron_chestplate"
+    },
+    {
+      "tag": "c:raw_materials/silver"
+    },
+    {
+      "item": "runecraftory:pretty_carapace"
+    },
+    {
+      "item": "runecraftory:root"
+    }
+  ],
+  "required_level": 25,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:scale_vest"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "runecraftory:main/level/level_25",
+  "criteria": {
+    "level": {
+      "conditions": {
+        "level": 50
+      },
+      "trigger": "runecraftory:level_trigger"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "runecraftory.advancements.level.50.description"
+    },
+    "icon": {
+      "components": {
+        "minecraft:enchantment_glint_override": true
+      },
+      "count": 1,
+      "id": "runecraftory:leveliser"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.level.50.title"
+    }
+  },
+  "requirements": [
+    [
+      "level"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

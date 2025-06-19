@@ -1,0 +1,16 @@
+{
+  "buy_price": 100,
+  "element": "NONE",
+  "item": "runecraftory:skull",
+  "item_stats": {
+    "runecraftory:cold": 5.0,
+    "runecraftory:magic_attack": 9.0,
+    "runecraftory:magic_defence": 4.0
+  },
+  "monster_bonus": {
+    "runecraftory:magic_attack": 1.0,
+    "runecraftory:magic_defence": 1.0
+  },
+  "sell_price": 1000,
+  "upgrade_difficulty": 35
+}

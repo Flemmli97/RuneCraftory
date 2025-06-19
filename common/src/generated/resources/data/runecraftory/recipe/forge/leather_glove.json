@@ -1,0 +1,14 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "tag": "runecraftory:cloths"
+    }
+  ],
+  "required_level": 3,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:leather_glove"
+  }
+}

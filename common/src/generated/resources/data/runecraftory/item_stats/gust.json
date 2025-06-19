@@ -1,9 +1,0 @@
-{
-  "buy_price": 3000,
-  "sell_price": 150,
-  "upgrade_difficulty": 0,
-  "item_stats": {},
-  "monster_bonus": {},
-  "element": "NONE",
-  "item": "runecraftory:gust"
-}

@@ -1,0 +1,15 @@
+{
+  "buy_price": 500,
+  "element": "NONE",
+  "item": "runecraftory:purple_ribbon",
+  "item_stats": {
+    "runecraftory:defence": 2.0,
+    "runecraftory:magic_defence": 1.0,
+    "runecraftory:seal_resistance": 5.0
+  },
+  "monster_bonus": {
+    "runecraftory:defence": 0.5
+  },
+  "sell_price": 35,
+  "upgrade_difficulty": 0
+}

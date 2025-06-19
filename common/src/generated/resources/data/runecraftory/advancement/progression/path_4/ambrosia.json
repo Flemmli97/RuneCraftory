@@ -1,0 +1,48 @@
+{
+  "parent": "runecraftory:progression/root",
+  "criteria": {
+    "boss": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "runecraftory:ambrosia"
+            }
+          }
+        ],
+        "killing_blow": {
+          "source_entity": {
+            "type_specific": {
+              "type": "minecraft:player",
+              "advancements": {
+                "runecraftory:progression/root": true
+              }
+            }
+          }
+        }
+      },
+      "trigger": "minecraft:player_killed_entity"
+    }
+  },
+  "display": {
+    "background": "minecraft:textures/block/dirt.png",
+    "description": {
+      "translate": "runecraftory.advancements.progression.boss.ambrosia.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "runecraftory:ambrosia_spawn_egg"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.progression.boss.ambrosia.title"
+    }
+  },
+  "requirements": [
+    [
+      "boss"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

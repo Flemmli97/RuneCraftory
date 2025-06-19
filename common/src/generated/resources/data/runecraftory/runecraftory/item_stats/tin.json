@@ -1,0 +1,13 @@
+{
+  "buy_price": 400,
+  "element": "NONE",
+  "item": "#c:raw_materials/tin",
+  "item_stats": {
+    "runecraftory:defence": 1.5
+  },
+  "monster_bonus": {
+    "runecraftory:defence": 0.5
+  },
+  "sell_price": 14,
+  "upgrade_difficulty": 12
+}

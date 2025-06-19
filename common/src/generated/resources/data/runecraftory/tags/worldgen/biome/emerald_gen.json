@@ -1,9 +1,8 @@
 {
-  "replace": false,
   "values": [
     "#c:is_plains",
     "#c:is_wasteland",
-    "#c:is_sparse",
+    "#c:is_sparse_vegetation/overworld",
     "#minecraft:is_hill"
   ]
 }

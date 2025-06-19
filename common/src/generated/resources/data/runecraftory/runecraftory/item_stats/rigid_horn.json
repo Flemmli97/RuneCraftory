@@ -1,0 +1,13 @@
+{
+  "buy_price": 200,
+  "element": "NONE",
+  "item": "runecraftory:rigid_horn",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 10.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.attack_damage": 1.0
+  },
+  "sell_price": 44,
+  "upgrade_difficulty": 11
+}

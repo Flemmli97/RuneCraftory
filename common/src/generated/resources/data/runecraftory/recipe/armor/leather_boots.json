@@ -1,0 +1,17 @@
+{
+  "type": "runecraftory:armor",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "minecraft:leather_boots"
+    },
+    {
+      "tag": "runecraftory:furs"
+    }
+  ],
+  "required_level": 5,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:leather_boots"
+  }
+}

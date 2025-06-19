@@ -1,0 +1,20 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "tag": "runecraftory:cloths"
+    },
+    {
+      "item": "runecraftory:panther_claw"
+    },
+    {
+      "tag": "c:ingots/gold"
+    }
+  ],
+  "required_level": 16,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:bear_claws"
+  }
+}

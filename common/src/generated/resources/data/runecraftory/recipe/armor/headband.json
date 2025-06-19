@@ -1,0 +1,14 @@
+{
+  "type": "runecraftory:armor",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "tag": "runecraftory:cloths"
+    }
+  ],
+  "required_level": 1,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:headband"
+  }
+}

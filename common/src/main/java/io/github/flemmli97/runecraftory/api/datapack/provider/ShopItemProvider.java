@@ -58,7 +58,7 @@ public abstract class ShopItemProvider implements DataProvider {
             DynamicOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, provider);
             ImmutableList.Builder<CompletableFuture<?>> futures = new ImmutableList.Builder<>();
             this.props.forEach((res, builder) -> {
-                Path path = this.packOutput.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(res.getNamespace() + "/" + ShopItemsManager.ID + "/" + res.getPath() + ".json");
+                Path path = this.packOutput.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(res.getNamespace() + "/" + ShopItemsManager.DIRECTORY + "/" + res.getPath() + ".json");
                 JsonObject obj = new JsonObject();
                 if (this.overwrite.getOrDefault(res, false))
                     obj.addProperty("replace", true);

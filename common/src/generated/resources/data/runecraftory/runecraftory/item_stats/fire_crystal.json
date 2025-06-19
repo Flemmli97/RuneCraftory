@@ -1,0 +1,16 @@
+{
+  "buy_price": 2000,
+  "element": "FIRE",
+  "item": "runecraftory:fire_crystal",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 5.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.attack_damage": 2.0
+  },
+  "sell_price": 150,
+  "tier_1_Spell": "runecraftory:double_fire_ball",
+  "tier_2_Spell": "runecraftory:triple_fire_ball",
+  "tier_3_Spell": "runecraftory:quad_fire_ball",
+  "upgrade_difficulty": 20
+}

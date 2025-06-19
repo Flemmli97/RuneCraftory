@@ -1,0 +1,17 @@
+{
+  "type": "runecraftory:armor",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "tag": "c:ingots/gold"
+    },
+    {
+      "item": "runecraftory:scorpion_tail"
+    }
+  ],
+  "required_level": 30,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:paralysis_ring"
+  }
+}

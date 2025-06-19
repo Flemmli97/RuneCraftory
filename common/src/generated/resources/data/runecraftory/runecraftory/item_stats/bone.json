@@ -1,0 +1,13 @@
+{
+  "buy_price": 75,
+  "element": "NONE",
+  "item": "minecraft:bone",
+  "item_stats": {
+    "runecraftory:defence": 2.0
+  },
+  "monster_bonus": {
+    "runecraftory:defence": 0.5
+  },
+  "sell_price": 5,
+  "upgrade_difficulty": 6
+}

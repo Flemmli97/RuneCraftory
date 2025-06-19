@@ -1,0 +1,14 @@
+{
+  "buy_price": 400,
+  "element": "NONE",
+  "item": "minecraft:ender_pearl",
+  "item_stats": {
+    "runecraftory:magic_attack": 3.0,
+    "runecraftory:stun_resistance": 5.0
+  },
+  "monster_bonus": {
+    "runecraftory:stun_resistance": 0.5
+  },
+  "sell_price": 28,
+  "upgrade_difficulty": 21
+}

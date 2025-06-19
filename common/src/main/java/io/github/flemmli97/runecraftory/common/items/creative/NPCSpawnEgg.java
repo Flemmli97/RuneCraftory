@@ -54,7 +54,7 @@ public class NPCSpawnEgg extends RuneCraftoryEggItem {
                 }
             }
             if (modifyJob) {
-                itemData.job().ifPresent(job -> npc.randomizeData(job, true));
+                itemData.job().ifPresent(job -> npc.randomizeData(job.value(), true));
             }
         }
         return super.onEntitySpawned(e, stack, player);

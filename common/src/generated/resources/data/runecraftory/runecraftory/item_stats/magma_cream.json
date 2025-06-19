@@ -1,0 +1,15 @@
+{
+  "buy_price": 250,
+  "element": "NONE",
+  "item": "minecraft:magma_cream",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 3.0,
+    "runecraftory:defence": 8.0,
+    "runecraftory:magic_attack": 3.0
+  },
+  "monster_bonus": {
+    "runecraftory:magic_attack": 0.5
+  },
+  "sell_price": 21,
+  "upgrade_difficulty": 20
+}

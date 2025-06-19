@@ -1,0 +1,23 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:battle_axe"
+    },
+    {
+      "item": "minecraft:diamond"
+    },
+    {
+      "item": "runecraftory:scorpion_pincer"
+    },
+    {
+      "item": "runecraftory:devil_blood"
+    }
+  ],
+  "required_level": 37,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:demon_axe"
+  }
+}

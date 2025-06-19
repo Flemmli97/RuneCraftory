@@ -1,0 +1,14 @@
+{
+  "buy_price": 150,
+  "element": "NONE",
+  "item": "runecraftory:sickle_scrap",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 2.0,
+    "runecraftory:attack_range": 0.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.max_health": 1.0
+  },
+  "sell_price": 24,
+  "upgrade_difficulty": 0
+}

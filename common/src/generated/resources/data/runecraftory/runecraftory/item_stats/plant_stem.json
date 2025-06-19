@@ -1,0 +1,14 @@
+{
+  "buy_price": 300,
+  "element": "NONE",
+  "item": "runecraftory:plant_stem",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 3.0,
+    "runecraftory:magic_attack": 3.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.attack_damage": 1.0
+  },
+  "sell_price": 52,
+  "upgrade_difficulty": 17
+}

@@ -1,0 +1,20 @@
+{
+  "type": "runecraftory:armor",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:holy_spore"
+    },
+    {
+      "tag": "runecraftory:mineral"
+    },
+    {
+      "item": "minecraft:phantom_membrane"
+    }
+  ],
+  "required_level": 27,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:stay_up_ring"
+  }
+}

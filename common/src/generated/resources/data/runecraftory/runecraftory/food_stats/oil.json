@@ -1,0 +1,12 @@
+{
+  "cooking_bonus": {},
+  "cooking_bonus_percent": {},
+  "duration": 6000,
+  "effects": {
+    "runecraftory:fire_resistance": -30.0
+  },
+  "effects_percentage": {},
+  "item": "runecraftory:oil",
+  "potion_apply": [],
+  "potion_remove": []
+}

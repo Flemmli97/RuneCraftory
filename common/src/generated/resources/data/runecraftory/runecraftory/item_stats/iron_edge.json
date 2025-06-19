@@ -1,0 +1,17 @@
+{
+  "buy_price": 4910,
+  "element": "NONE",
+  "item": "runecraftory:iron_edge",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 18.0,
+    "runecraftory:attack_range": 0.0,
+    "runecraftory:attack_width": 1.5,
+    "runecraftory:defence": 8.0,
+    "runecraftory:dizzy": 3.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.attack_damage": 1.0
+  },
+  "sell_price": 230,
+  "upgrade_difficulty": 0
+}

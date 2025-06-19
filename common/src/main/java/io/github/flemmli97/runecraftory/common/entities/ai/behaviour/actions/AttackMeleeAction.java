@@ -7,7 +7,6 @@ import io.github.flemmli97.runecraftory.api.registry.NPCAction;
 import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCAttackGoal;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCActions;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 
@@ -74,17 +73,17 @@ public class AttackMeleeAction implements NPCAction {
 
     @Override
     public boolean doAction(EntityNPCBase npc, NPCAttackGoal<?> goal, NPCAttackAction action) {
-        goal.moveToEntityNearer(goal.getAttackTarget(), this.speed);
-        npc.getLookControl().setLookAt(goal.getAttackTarget(), 30, 30);
-        double minDist = npc.getMeleeAttackRangeSqr(goal.getAttackTarget());
-        if (goal.getDistSqr() <= minDist) {
-            if (action == null) {
-                npc.swing(InteractionHand.MAIN_HAND);
-                npc.npcAttack(npc::doHurtTarget);
-            }
-            npc.weaponHandler.setComboCount(npc.getRandom().nextInt(2));
-            return true;
-        }
+//        goal.moveToEntityNearer(goal.getAttackTarget(), this.speed);
+//        npc.getLookControl().setLookAt(goal.getAttackTarget(), 30, 30);
+//        double minDist = npc.getMeleeAttackRangeSqr(goal.getAttackTarget());
+//        if (goal.getDistSqr() <= minDist) {
+//            if (action == null) {
+//                npc.swing(InteractionHand.MAIN_HAND);
+//                npc.npcAttack(npc::doHurtTarget);
+//            }
+//            npc.weaponHandler.setComboCount(npc.getRandom().nextInt(2));
+//            return true;
+//        }
         return false;
     }
 }

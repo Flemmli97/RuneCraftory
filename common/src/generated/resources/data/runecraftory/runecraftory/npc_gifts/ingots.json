@@ -1,0 +1,17 @@
+{
+  "items": [
+    "#c:ingots/iron",
+    "#c:ingots/gold",
+    "#c:raw_materials/tin",
+    "#c:ingots/copper",
+    "#c:dusts/bronze",
+    "#c:raw_materials/silver",
+    "#c:raw_materials/platinum"
+  ],
+  "translations": [
+    "runecraftory.gift.ingots"
+  ],
+  "xp_range": {
+    "max": 7
+  }
+}

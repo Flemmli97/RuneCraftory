@@ -1,0 +1,14 @@
+{
+  "buy_price": 20000,
+  "element": "NONE",
+  "item": "runecraftory:silver_ring",
+  "item_stats": {
+    "runecraftory:dark_resistance": 50.0,
+    "runecraftory:light_resistance": 50.0
+  },
+  "monster_bonus": {
+    "runecraftory:magic_defence": 1.0
+  },
+  "sell_price": 600,
+  "upgrade_difficulty": 0
+}

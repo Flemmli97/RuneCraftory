@@ -1,0 +1,17 @@
+{
+  "buy_price": 20280,
+  "element": "EARTH",
+  "item": "runecraftory:rock_axe",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 128.0,
+    "runecraftory:attack_range": 1.5,
+    "runecraftory:attack_width": 3.0,
+    "runecraftory:critical": 15.0,
+    "runecraftory:dizzy": 2.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.attack_damage": 1.0
+  },
+  "sell_price": 2420,
+  "upgrade_difficulty": 0
+}

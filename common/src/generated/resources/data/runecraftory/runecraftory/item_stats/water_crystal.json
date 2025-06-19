@@ -1,0 +1,16 @@
+{
+  "buy_price": 2000,
+  "element": "WATER",
+  "item": "runecraftory:water_crystal",
+  "item_stats": {
+    "runecraftory:magic_attack": 5.0
+  },
+  "monster_bonus": {
+    "runecraftory:magic_attack": 2.0
+  },
+  "sell_price": 150,
+  "tier_1_Spell": "runecraftory:water_swipe",
+  "tier_2_Spell": "runecraftory:water_swipe_140",
+  "tier_3_Spell": "runecraftory:water_swipe_360",
+  "upgrade_difficulty": 20
+}

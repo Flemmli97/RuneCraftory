@@ -1,0 +1,26 @@
+{
+  "base_values": {},
+  "flying": false,
+  "level_gains": {},
+  "min_level": 1,
+  "money": 0,
+  "needs_roof": true,
+  "ride_action_costs": {
+    "command_1": {
+      "cost": 0.5,
+      "multiplier": true
+    }
+  },
+  "rideable": false,
+  "size": 1,
+  "spawner_predicate": {
+    "type_specific": {
+      "type": "minecraft:player",
+      "advancements": {
+        "runecraftory:progression/path_4/marionetta": true
+      }
+    }
+  },
+  "taming_chance": 0.0,
+  "xp": 0
+}

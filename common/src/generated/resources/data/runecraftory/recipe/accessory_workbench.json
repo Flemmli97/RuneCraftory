@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "tag": "minecraft:wooden_slabs"
+    },
+    "c": {
+      "item": "minecraft:crafting_table"
+    },
+    "l": {
+      "tag": "minecraft:logs"
+    },
+    "s": {
+      "tag": "c:tools/shear"
+    }
+  },
+  "pattern": [
+    " s ",
+    "aaa",
+    "lcl"
+  ],
+  "result": {
+    "count": 1,
+    "id": "runecraftory:accessory_workbench"
+  }
+}

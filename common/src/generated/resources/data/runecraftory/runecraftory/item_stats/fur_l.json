@@ -1,0 +1,16 @@
+{
+  "buy_price": 3000,
+  "element": "NONE",
+  "item": "runecraftory:fur_l",
+  "item_stats": {
+    "runecraftory:defence": 10.0,
+    "runecraftory:dizzy_resistance": 25.0,
+    "runecraftory:magic_defence": 5.0,
+    "runecraftory:sleep_resistance": 5.0
+  },
+  "monster_bonus": {
+    "runecraftory:defence": 1.0
+  },
+  "sell_price": 500,
+  "upgrade_difficulty": 55
+}

@@ -27,6 +27,7 @@
     "LivingEntityAccessor",
     "LivingEntityMixin",
     "LootContextBuilderMixin",
+    "LootContextParamSetsAccessor",
     "MobAccessor",
     "MobMixin",
     "PlayerMixin",

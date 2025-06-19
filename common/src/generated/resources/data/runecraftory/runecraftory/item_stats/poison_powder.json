@@ -1,0 +1,18 @@
+{
+  "buy_price": 550,
+  "element": "NONE",
+  "item": "runecraftory:poison_powder",
+  "item_stats": {
+    "runecraftory:magic_attack": 2.0,
+    "runecraftory:magic_defence": 2.0,
+    "runecraftory:poison": 5.0
+  },
+  "monster_bonus": {
+    "runecraftory:magic_attack": 1.0,
+    "runecraftory:magic_defence": 1.0,
+    "runecraftory:poison": 0.5
+  },
+  "sell_price": 80,
+  "tier_2_Spell": "runecraftory:poison_ball",
+  "upgrade_difficulty": 21
+}

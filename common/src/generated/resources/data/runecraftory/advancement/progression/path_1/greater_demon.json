@@ -1,0 +1,26 @@
+{
+  "criteria": {
+    "dummy": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "background": "minecraft:textures/block/dirt.png",
+    "description": {
+      "translate": "runecraftory.advancements.progression.boss.greater_demon.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "runecraftory:wooly_spawn_egg"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.progression.boss.greater_demon.title"
+    }
+  },
+  "requirements": [
+    [
+      "dummy"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

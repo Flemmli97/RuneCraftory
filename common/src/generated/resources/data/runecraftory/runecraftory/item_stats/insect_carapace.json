@@ -1,0 +1,14 @@
+{
+  "buy_price": 75,
+  "element": "NONE",
+  "item": "runecraftory:insect_carapace",
+  "item_stats": {
+    "runecraftory:defence": 2.0,
+    "runecraftory:poison_resistance": 15.0
+  },
+  "monster_bonus": {
+    "runecraftory:poison_resistance": 0.5
+  },
+  "sell_price": 11,
+  "upgrade_difficulty": 8
+}

@@ -1,0 +1,13 @@
+{
+  "buy_price": 1000,
+  "element": "NONE",
+  "item": "runecraftory:iron_shield",
+  "item_stats": {
+    "runecraftory:defence": 7.0
+  },
+  "monster_bonus": {
+    "runecraftory:defence": 0.5
+  },
+  "sell_price": 130,
+  "upgrade_difficulty": 0
+}

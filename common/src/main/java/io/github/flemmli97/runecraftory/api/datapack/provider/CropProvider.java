@@ -58,7 +58,7 @@ public abstract class CropProvider implements DataProvider {
             DynamicOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, provider);
             ImmutableList.Builder<CompletableFuture<?>> futures = new ImmutableList.Builder<>();
             this.data.forEach((res, builder) -> {
-                Path path = this.packOutput.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(res.getNamespace() + "/" + CropManager.ID + "/" + res.getPath() + ".json");
+                Path path = this.packOutput.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(res.getNamespace() + "/" + CropManager.DIRECTORY + "/" + res.getPath() + ".json");
                 JsonElement obj = CropProperties.CODEC.encodeStart(ops, builder.build()).getOrThrow();
                 if (obj.isJsonObject())
                     this.item.get(res).accept(obj.getAsJsonObject());

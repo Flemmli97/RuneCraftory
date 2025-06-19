@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "runecraftory:quest_board"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "quest_board": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#minecraft:signs"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "quest_board"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "runecraftory:quest_board"
+    ]
+  }
+}

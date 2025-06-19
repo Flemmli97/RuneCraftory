@@ -15,7 +15,7 @@ public class SextupleRecipeBuilder {
 
     private final ItemStack result;
     private final int level, addCost;
-    private final NonNullList<Ingredient> ingredients = NonNullList.withSize(6, Ingredient.EMPTY);
+    private final NonNullList<Ingredient> ingredients = NonNullList.create();
     private final SextupleRecipe.Serializer.Factory<?> factory;
     private final EnumCrafting type;
     private String group;

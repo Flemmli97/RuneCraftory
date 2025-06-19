@@ -1,0 +1,23 @@
+{
+  "type": "runecraftory:cooking",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "tag": "c:foods/flour"
+    },
+    {
+      "item": "minecraft:apple"
+    },
+    {
+      "tag": "c:milks"
+    },
+    {
+      "tag": "c:eggs"
+    }
+  ],
+  "required_level": 25,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:apple_pie"
+  }
+}

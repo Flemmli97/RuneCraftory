@@ -1,0 +1,23 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:battle_axe"
+    },
+    {
+      "tag": "c:dusts/bronze"
+    },
+    {
+      "item": "runecraftory:wolf_fang"
+    },
+    {
+      "tag": "runecraftory:sticks"
+    }
+  ],
+  "required_level": 15,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:pole_axe"
+  }
+}

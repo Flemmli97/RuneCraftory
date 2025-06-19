@@ -1,14 +1,14 @@
 {
   "parent": "minecraft:item/handheld",
-  "textures": {
-    "layer0": "runecraftory:item/wind_edge"
-  },
   "overrides": [
     {
+      "model": "runecraftory:item/wind_edge_single",
       "predicate": {
         "runecraftory:held": 1.0
-      },
-      "model": "runecraftory:item/wind_edge_single"
+      }
     }
-  ]
+  ],
+  "textures": {
+    "layer0": "runecraftory:item/wind_edge"
+  }
 }

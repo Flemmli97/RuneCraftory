@@ -12,9 +12,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.TheEndGatewayBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -126,16 +123,16 @@ public class EntityWindBlade extends BaseProjectile {
         if (raytraceresult.getType() == HitResult.Type.BLOCK) {
             BlockPos blockpos = raytraceresult.getBlockPos();
             BlockState blockstate = this.level().getBlockState(blockpos);
-            if (blockstate.is(Blocks.NETHER_PORTAL)) {
-                this.handleInsidePortal(blockpos);
-            } else if (blockstate.is(Blocks.END_GATEWAY)) {
-                BlockEntity tileentity = this.level().getBlockEntity(blockpos);
-                if (tileentity instanceof TheEndGatewayBlockEntity && TheEndGatewayBlockEntity.canEntityTeleport(this)) {
-                    TheEndGatewayBlockEntity.teleportEntity(this.level(), blockpos, blockstate, this, (TheEndGatewayBlockEntity) tileentity);
-                }
-            } else if (!EventCalls.INSTANCE.projectileHitCall(this, raytraceresult)) {
-                this.onBlockHit(raytraceresult);
-            }
+//            if (blockstate.is(Blocks.NETHER_PORTAL)) {
+//                this.handleInsidePortal(blockpos);
+//            } else if (blockstate.is(Blocks.END_GATEWAY)) {
+//                BlockEntity tileentity = this.level().getBlockEntity(blockpos);
+//                if (tileentity instanceof TheEndGatewayBlockEntity && TheEndGatewayBlockEntity.canEntityTeleport(this)) {
+//                    TheEndGatewayBlockEntity.teleportEntity(this.level(), blockpos, blockstate, this, (TheEndGatewayBlockEntity) tileentity);
+//                }
+//            } else if (!EventCalls.INSTANCE.projectileHitCall(this, raytraceresult)) {
+//                this.onBlockHit(raytraceresult);
+//            }
         }
     }
 

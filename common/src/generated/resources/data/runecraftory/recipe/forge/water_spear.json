@@ -1,0 +1,23 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "minecraft:trident"
+    },
+    {
+      "tag": "c:gems/aquamarine"
+    },
+    {
+      "tag": "c:gems/aquamarine"
+    },
+    {
+      "tag": "c:raw_materials/silver"
+    }
+  ],
+  "required_level": 22,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:water_spear"
+  }
+}

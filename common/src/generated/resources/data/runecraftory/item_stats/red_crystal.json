@@ -1,9 +1,0 @@
-{
-  "buy_price": 65000,
-  "sell_price": 20000,
-  "upgrade_difficulty": 69,
-  "item_stats": {},
-  "monster_bonus": {},
-  "element": "NONE",
-  "item": "runecraftory:red_crystal"
-}

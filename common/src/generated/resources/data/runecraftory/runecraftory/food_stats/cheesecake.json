@@ -1,0 +1,15 @@
+{
+  "cooking_bonus": {},
+  "cooking_bonus_percent": {},
+  "duration": 6000,
+  "effects": {
+    "runecraftory:defence": 25.0,
+    "runecraftory:health_gain": 1000.0,
+    "runecraftory:magic_defence": 20.0,
+    "runecraftory:rune_points_gain": 400.0
+  },
+  "effects_percentage": {},
+  "item": "runecraftory:cheesecake",
+  "potion_apply": [],
+  "potion_remove": []
+}

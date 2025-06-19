@@ -1,0 +1,11 @@
+{
+  "bad_season": [],
+  "best_season": [
+    "FALL"
+  ],
+  "giant_crop": "minecraft:air",
+  "growth": 5,
+  "item": "minecraft:wheat_seeds",
+  "max_drops": 3,
+  "regrowable": true
+}

@@ -1,0 +1,17 @@
+{
+  "cooking_bonus": {},
+  "cooking_bonus_percent": {},
+  "duration": 6000,
+  "effects": {},
+  "effects_percentage": {
+    "minecraft:generic.attack_damage": -25.0,
+    "runecraftory:defence": -25.0,
+    "runecraftory:health_gain": -60.0,
+    "runecraftory:magic_attack": -25.0,
+    "runecraftory:magic_defence": -25.0,
+    "runecraftory:max_runepoints": -30.0
+  },
+  "item": "runecraftory:disastrous_dish",
+  "potion_apply": [],
+  "potion_remove": []
+}

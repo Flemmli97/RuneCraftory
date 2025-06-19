@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:double_steel",
+          "weight": 40
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:ten_fold_steel"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "runecraftory:entities/mineral_squeek_hurt"
+}

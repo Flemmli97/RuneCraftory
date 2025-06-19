@@ -157,7 +157,7 @@ public class MultiPartEntity extends Entity implements OwnableEntity {
         this.addedToLevel = true;
     }
 
-    public boolean isAddedToLevel() {
+    public boolean isEntityAddedToLevel() {
         return this.addedToLevel;
     }
 
@@ -167,7 +167,7 @@ public class MultiPartEntity extends Entity implements OwnableEntity {
     }
 
     public void updatePositionTo(double x, double y, double z, boolean simple) {
-        if (this.getOwner() != null && !this.isAddedToLevel()) {
+        if (this.getOwner() != null && !this.isEntityAddedToLevel()) {
             this.setPos(x, y, z);
             this.level().addFreshEntity(this);
         }

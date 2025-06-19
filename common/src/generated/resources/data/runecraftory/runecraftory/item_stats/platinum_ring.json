@@ -1,0 +1,18 @@
+{
+  "buy_price": 0,
+  "element": "NONE",
+  "item": "runecraftory:platinum_ring",
+  "item_stats": {
+    "runecraftory:dark_resistance": 25.0,
+    "runecraftory:earth_resistance": 10.0,
+    "runecraftory:fire_resistance": 10.0,
+    "runecraftory:light_resistance": 25.0,
+    "runecraftory:water_resistance": 10.0,
+    "runecraftory:wind_resistance": 10.0
+  },
+  "monster_bonus": {
+    "runecraftory:magic_defence": 2.0
+  },
+  "sell_price": 7500,
+  "upgrade_difficulty": 0
+}

@@ -1,0 +1,15 @@
+{
+  "buy_price": 15,
+  "element": "NONE",
+  "item": "minecraft:snowball",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 1.0,
+    "runecraftory:magic_attack": 1.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.attack_damage": 0.2
+  },
+  "sell_price": 1,
+  "tier_1_Spell": "runecraftory:vanilla_snowball",
+  "upgrade_difficulty": 5
+}

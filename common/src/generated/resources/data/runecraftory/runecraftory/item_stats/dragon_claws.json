@@ -1,0 +1,17 @@
+{
+  "buy_price": 19270,
+  "element": "NONE",
+  "item": "runecraftory:dragon_claws",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 91.0,
+    "runecraftory:attack_range": 0.0,
+    "runecraftory:attack_width": 1.0,
+    "runecraftory:defence": 35.0,
+    "runecraftory:dizzy": 3.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.attack_damage": 1.0
+  },
+  "sell_price": 1520,
+  "upgrade_difficulty": 0
+}

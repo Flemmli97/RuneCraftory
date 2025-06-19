@@ -1,0 +1,17 @@
+{
+  "type": "runecraftory:cooking",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:mixed_smoothie"
+    },
+    {
+      "tag": "c:milks"
+    }
+  ],
+  "required_level": 55,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:mixed_smoothie"
+  }
+}

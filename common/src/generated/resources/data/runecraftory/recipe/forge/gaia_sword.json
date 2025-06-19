@@ -1,0 +1,23 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:broad_sword"
+    },
+    {
+      "tag": "c:ingots/gold"
+    },
+    {
+      "item": "runecraftory:earth_crystal"
+    },
+    {
+      "item": "runecraftory:rigid_horn"
+    }
+  ],
+  "required_level": 32,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:gaia_sword"
+  }
+}

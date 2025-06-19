@@ -1,14 +1,14 @@
 {
   "parent": "minecraft:item/handheld_rod",
-  "textures": {
-    "layer0": "runecraftory:item/fishing_rod_gold"
-  },
   "overrides": [
     {
+      "model": "runecraftory:item/fishing_rod_gold_cast",
       "predicate": {
         "runecraftory:fishing": 1.0
-      },
-      "model": "runecraftory:item/fishing_rod_gold_cast"
+      }
     }
-  ]
+  ],
+  "textures": {
+    "layer0": "runecraftory:item/fishing_rod_gold"
+  }
 }

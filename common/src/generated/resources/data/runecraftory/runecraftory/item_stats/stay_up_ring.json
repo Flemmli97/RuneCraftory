@@ -1,0 +1,12 @@
+{
+  "buy_price": 8000,
+  "element": "NONE",
+  "item": "runecraftory:stay_up_ring",
+  "item_stats": {
+    "runecraftory:fatigue_resistance": 25.0,
+    "runecraftory:sleep": -20.0
+  },
+  "monster_bonus": {},
+  "sell_price": 500,
+  "upgrade_difficulty": 0
+}

@@ -1,0 +1,20 @@
+{
+  "type": "runecraftory:armor",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "minecraft:shield"
+    },
+    {
+      "item": "runecraftory:turtle_shell"
+    },
+    {
+      "tag": "c:dusts/bronze"
+    }
+  ],
+  "required_level": 23,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:turtle_shield"
+  }
+}

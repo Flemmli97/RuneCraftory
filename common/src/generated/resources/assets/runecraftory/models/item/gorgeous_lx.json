@@ -1,14 +1,14 @@
 {
   "parent": "minecraft:item/handheld",
-  "textures": {
-    "layer0": "runecraftory:item/gorgeous_lx"
-  },
   "overrides": [
     {
+      "model": "runecraftory:item/gorgeous_lx_single",
       "predicate": {
         "runecraftory:held": 1.0
-      },
-      "model": "runecraftory:item/gorgeous_lx_single"
+      }
     }
-  ]
+  ],
+  "textures": {
+    "layer0": "runecraftory:item/gorgeous_lx"
+  }
 }

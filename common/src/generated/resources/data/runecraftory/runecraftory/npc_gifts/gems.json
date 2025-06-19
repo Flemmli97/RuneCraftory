@@ -1,0 +1,16 @@
+{
+  "items": [
+    "minecraft:diamond",
+    "#c:gems/emerald",
+    "#c:gems/amethyst",
+    "#c:gems/aquamarine",
+    "#c:gems/ruby",
+    "#c:gems/sapphire"
+  ],
+  "translations": [
+    "runecraftory.gift.gems"
+  ],
+  "xp_range": {
+    "max": 7
+  }
+}

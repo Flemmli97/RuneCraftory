@@ -1,0 +1,11 @@
+{
+  "items": [
+    "#c:foods/fruit"
+  ],
+  "translations": [
+    "runecraftory.gift.fruits"
+  ],
+  "xp_range": {
+    "max": 7
+  }
+}

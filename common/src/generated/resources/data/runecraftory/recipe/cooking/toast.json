@@ -1,0 +1,14 @@
+{
+  "type": "runecraftory:cooking",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "tag": "c:foods/bread"
+    }
+  ],
+  "required_level": 11,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:toast"
+  }
+}

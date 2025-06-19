@@ -1,0 +1,12 @@
+{
+  "cooking_bonus": {},
+  "cooking_bonus_percent": {},
+  "duration": 6000,
+  "effects": {
+    "runecraftory:water_resistance": -30.0
+  },
+  "effects_percentage": {},
+  "item": "runecraftory:sweet_powder",
+  "potion_apply": [],
+  "potion_remove": []
+}

@@ -3,13 +3,10 @@ package io.github.flemmli97.runecraftory.common.entities.misc;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
-import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -84,10 +81,10 @@ public class EntitySlashResidue extends BaseDamageCloud {
             double height = this.getBoundingBox().getYsize();
             for (Vec3 vec3 : BASE) {
                 vec3 = vec3.scale(this.entityData.get(SIZE));
-                Vec3 rot = MathUtils.rotate(MathUtils.NORMAL_Y, vec3, -Mth.DEG_TO_RAD * this.getYRot());
-                for (double d = 0; d < height; d += 0.2) {
-                    this.level().addParticle(ParticleTypes.CRIT, this.getX() + rot.x, this.getY() + rot.y + d, this.getZ() + rot.z, 0, 0, 0);
-                }
+//                Vec3 rot = MathUtils.rotate(MathUtils.NORMAL_Y, vec3, -Mth.DEG_TO_RAD * this.getYRot());
+//                for (double d = 0; d < height; d += 0.2) {
+//                    this.level().addParticle(ParticleTypes.CRIT, this.getX() + rot.x, this.getY() + rot.y + d, this.getZ() + rot.z, 0, 0, 0);
+//                }
             }
         }
     }

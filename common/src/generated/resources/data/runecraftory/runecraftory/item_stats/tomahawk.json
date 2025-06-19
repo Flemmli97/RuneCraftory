@@ -1,0 +1,17 @@
+{
+  "buy_price": 11360,
+  "element": "WIND",
+  "item": "runecraftory:tomahawk",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 70.0,
+    "runecraftory:attack_range": 1.5,
+    "runecraftory:attack_width": 3.0,
+    "runecraftory:critical": 15.0,
+    "runecraftory:dizzy": 2.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.attack_damage": 1.0
+  },
+  "sell_price": 683,
+  "upgrade_difficulty": 0
+}

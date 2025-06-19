@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.simplequests_api.SimpleQuestsAPI;
 import io.github.flemmli97.simplequests_api.player.PlayerQuestData;
@@ -14,7 +13,6 @@ import io.github.flemmli97.simplequests_api.quest.entry.QuestEntryKey;
 import io.github.flemmli97.simplequests_api.quest.entry.QuestTask;
 import io.github.flemmli97.simplequests_api.quest.entry.ResolvedQuestTask;
 import io.github.flemmli97.simplequests_api.util.DescriptiveValue;
-import io.github.flemmli97.simplequests_api.util.JsonCodecs;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -32,7 +30,7 @@ public class ShippingTask implements QuestTask<ShippingTask.SkillLevelTaskResolv
     public static final QuestEntryKey<ShippingTask> ID = new QuestEntryKey<>(RuneCraftory.modRes("shipping"));
     public static final MapCodec<ShippingTask> CODEC = RecordCodecBuilder.mapCodec((instance) ->
             instance.group(Codec.STRING.fieldOf("description").forGetter(d -> d.description),
-                    CodecHelper.nonEmptyList(DescriptiveValue.withTranslation(ItemPredicate.CODEC), "Item predicates can't be empty").fieldOf("item_predicates").forGetter(d -> d.itemPredicates),
+                    ExtraCodecs.nonEmptyList(DescriptiveValue.withTranslation(ItemPredicate.CODEC).listOf()).fieldOf("item_predicates").forGetter(d -> d.itemPredicates),
                     NumberProviders.CODEC.fieldOf("amount").forGetter(d -> d.amount)
             ).apply(instance, ShippingTask::new));
 
@@ -77,7 +75,7 @@ public class ShippingTask implements QuestTask<ShippingTask.SkillLevelTaskResolv
                                          int amount) implements ResolvedQuestTask {
 
         public static final MapCodec<SkillLevelTaskResolved> CODEC = RecordCodecBuilder.mapCodec((instance) ->
-                instance.group(DescriptiveValue.withTranslation(JsonCodecs.ITEM_PREDICATE_CODEC).fieldOf("item").forGetter(d -> d.item),
+                instance.group(DescriptiveValue.withTranslation(ItemPredicate.CODEC).fieldOf("item").forGetter(d -> d.item),
                         ExtraCodecs.POSITIVE_INT.fieldOf("amount").forGetter(d -> d.amount)
                 ).apply(instance, SkillLevelTaskResolved::new));
 

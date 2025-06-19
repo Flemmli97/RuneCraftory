@@ -1,0 +1,17 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:pole_axe"
+    },
+    {
+      "tag": "c:raw_materials/silver"
+    }
+  ],
+  "required_level": 19,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:pole_axe_plus"
+  }
+}

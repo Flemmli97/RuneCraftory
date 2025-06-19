@@ -1,0 +1,11 @@
+{
+  "cooldown": 5,
+  "percentage": 0.0,
+  "rp_cost": 10,
+  "skill_xp": {
+    "SPEAR": 7.0
+  },
+  "skills": [
+    "SPEAR"
+  ]
+}

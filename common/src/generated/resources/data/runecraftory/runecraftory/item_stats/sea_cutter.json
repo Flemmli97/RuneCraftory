@@ -1,0 +1,16 @@
+{
+  "buy_price": 7170,
+  "element": "WATER",
+  "item": "runecraftory:sea_cutter",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 42.0,
+    "runecraftory:attack_range": 1.5,
+    "runecraftory:attack_width": 3.5,
+    "runecraftory:dizzy": 10.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.attack_damage": 1.0
+  },
+  "sell_price": 404,
+  "upgrade_difficulty": 0
+}

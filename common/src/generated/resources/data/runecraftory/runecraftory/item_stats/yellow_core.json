@@ -1,0 +1,14 @@
+{
+  "buy_price": 15000,
+  "element": "NONE",
+  "item": "runecraftory:yellow_core",
+  "item_stats": {
+    "runecraftory:magic_defence": 50.0
+  },
+  "monster_bonus": {
+    "runecraftory:earth_resistance": 6.0,
+    "runecraftory:wind_resistance": -3.0
+  },
+  "sell_price": 1050,
+  "upgrade_difficulty": 70
+}

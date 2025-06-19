@@ -1,9 +1,0 @@
-{
-  "replace": false,
-  "values": [
-    "runecraftory:milk_s",
-    "runecraftory:milk_m",
-    "runecraftory:milk_l",
-    "minecraft:milk_bucket"
-  ]
-}

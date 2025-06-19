@@ -56,7 +56,7 @@ public class NPCSpawner implements CustomSpawner {
 
     private void trySpawn(ServerLevel level, double x, double y, double z) {
         EntityNPCBase npc = new EntityNPCBase(ModEntities.NPC.get(), level);
-        npc.finalizeSpawn(level, level.getCurrentDifficultyAt(npc.blockPosition()), MobSpawnType.EVENT, null, null);
+        npc.finalizeSpawn(level, level.getCurrentDifficultyAt(npc.blockPosition()), MobSpawnType.EVENT, null);
         npc.moveTo(x, y, z, level.random.nextFloat() * 360.0f, 0.0f);
         level.addFreshEntityWithPassengers(npc);
     }

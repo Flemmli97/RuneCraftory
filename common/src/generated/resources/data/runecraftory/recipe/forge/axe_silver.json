@@ -1,0 +1,20 @@
+{
+  "type": "runecraftory:forge",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "tag": "c:raw_materials/silver"
+    },
+    {
+      "tag": "runecraftory:sticks"
+    },
+    {
+      "item": "runecraftory:blade_shard"
+    }
+  ],
+  "required_level": 30,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:axe_silver"
+  }
+}

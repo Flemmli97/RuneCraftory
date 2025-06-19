@@ -1,0 +1,18 @@
+{
+  "cooking_bonus": {},
+  "cooking_bonus_percent": {},
+  "duration": 6000,
+  "effects": {
+    "minecraft:generic.attack_damage": 5.0,
+    "runecraftory:defence": 2.0,
+    "runecraftory:health_gain": 130.0,
+    "runecraftory:magic_attack": 5.0,
+    "runecraftory:magic_defence": 2.0
+  },
+  "effects_percentage": {
+    "minecraft:generic.max_health": 10.0
+  },
+  "item": "runecraftory:baked_apple",
+  "potion_apply": [],
+  "potion_remove": []
+}

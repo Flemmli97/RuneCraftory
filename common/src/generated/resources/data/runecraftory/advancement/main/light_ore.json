@@ -1,0 +1,27 @@
+{
+  "parent": "runecraftory:main/change_element",
+  "criteria": {
+    "light_ore": {
+      "trigger": "runecraftory:light_ore"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "runecraftory.advancements.lightore.description"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "runecraftory:light_ore"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.lightore.title"
+    }
+  },
+  "requirements": [
+    [
+      "light_ore"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

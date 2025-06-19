@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.fabric.mixin;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import io.github.flemmli97.runecraftory.platform.ExtendedBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -15,7 +16,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(value = ServerPlayerGameMode.class, priority = 1001)
 public abstract class ServerPlayerGameModeMixin {
@@ -26,8 +26,8 @@ public abstract class ServerPlayerGameModeMixin {
     @Shadow
     protected ServerPlayer player;
 
-    @Inject(method = "destroyBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Block;playerWillDestroy(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/entity/player/Player;)V"), cancellable = true, locals = LocalCapture.CAPTURE_FAILHARD)
-    private void onDestroy(BlockPos pos, CallbackInfoReturnable<Boolean> info, BlockState state, BlockEntity blockEntity) {
+    @Inject(method = "destroyBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Block;playerWillDestroy(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/entity/player/Player;)Lnet/minecraft/world/level/block/state/BlockState;"), cancellable = true)
+    private void onDestroy(BlockPos pos, CallbackInfoReturnable<Boolean> info, @Local BlockState state, @Local BlockEntity blockEntity) {
         if (state.getBlock() instanceof ExtendedBlock extendedBlock) {
             if (this.isCreative()) {
                 this.removeBlock(state, extendedBlock, pos, false);

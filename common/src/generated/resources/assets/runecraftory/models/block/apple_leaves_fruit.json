@@ -2,7 +2,7 @@
   "parent": "runecraftory:block/fruit_leaves",
   "textures": {
     "base": "minecraft:block/oak_leaves",
-    "particle": "minecraft:block/oak_leaves",
-    "overlay": "runecraftory:block/apple_leaves_fruit"
+    "overlay": "runecraftory:block/apple_leaves_fruit",
+    "particle": "minecraft:block/oak_leaves"
   }
 }

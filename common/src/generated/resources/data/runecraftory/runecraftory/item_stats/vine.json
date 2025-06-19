@@ -1,0 +1,14 @@
+{
+  "buy_price": 515,
+  "element": "NONE",
+  "item": "runecraftory:vine",
+  "item_stats": {
+    "runecraftory:magic_attack": 10.0,
+    "runecraftory:seal": 5.0
+  },
+  "monster_bonus": {
+    "runecraftory:seal": 0.3
+  },
+  "sell_price": 58,
+  "upgrade_difficulty": 34
+}

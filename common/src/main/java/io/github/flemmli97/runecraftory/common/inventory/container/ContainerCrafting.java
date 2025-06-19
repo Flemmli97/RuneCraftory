@@ -8,16 +8,13 @@ import io.github.flemmli97.runecraftory.common.crafting.SextupleRecipe;
 import io.github.flemmli97.runecraftory.common.crafting.SpecialSextupleRecipe;
 import io.github.flemmli97.runecraftory.common.inventory.PlayerBoundCraftingContainer;
 import io.github.flemmli97.runecraftory.common.inventory.WrappedContainer;
-import io.github.flemmli97.runecraftory.common.network.S2CCraftingRecipes;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModMenuTypes;
 import io.github.flemmli97.runecraftory.common.utils.CraftingUtils;
 import io.github.flemmli97.runecraftory.mixin.AbstractContainerMenuAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
-import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.SimpleContainer;
@@ -110,23 +107,23 @@ public class ContainerCrafting extends AbstractContainerMenu implements Containe
     public void updateCraftingOutput(boolean init) {
         if (this.craftingInv.getPlayer().level().isClientSide)
             return;
-        if (this.craftingInv.refreshAndSet()) {
-            this.matchingRecipes = new ArrayList<>();
-            this.matchingRecipes.addAll(getRecipes(this.craftingInv, this.type));
-            if (this.matchingRecipes.isEmpty()) {
-                this.matchingRecipes = new ArrayList<>();
-                RecipeHolder<SpecialSextupleRecipe> recipe = switch (this.type) {
-                    case ARMOR, FORGE -> SpecialSextupleRecipe.SCRAP.get();
-                    case CHEM -> SpecialSextupleRecipe.OBJECT_X.get();
-                    case COOKING -> SpecialSextupleRecipe.FAILED_DISH.get();
-                };
-                if (recipe.value().matches(this.craftingInv, this.craftingInv.getPlayer().level()))
-                    this.matchingRecipes.add(recipe);
-            }
-            this.updatedRecipes = true;
-            if (!init)
-                this.blockEntity.resetIndex();
-        }
+//        if (this.craftingInv.refreshAndSet()) {
+//            this.matchingRecipes = new ArrayList<>();
+//            this.matchingRecipes.addAll(getRecipes(this.craftingInv, this.type));
+//            if (this.matchingRecipes.isEmpty()) {
+//                this.matchingRecipes = new ArrayList<>();
+//                RecipeHolder<SpecialSextupleRecipe> recipe = switch (this.type) {
+//                    case ARMOR, FORGE -> SpecialSextupleRecipe.SCRAP.get();
+//                    case CHEM -> SpecialSextupleRecipe.OBJECT_X.get();
+//                    case COOKING -> SpecialSextupleRecipe.FAILED_DISH.get();
+//                };
+//                if (recipe.value().matches(this.craftingInv, this.craftingInv.getPlayer().level()))
+//                    this.matchingRecipes.add(recipe);
+//            }
+//            this.updatedRecipes = true;
+//            if (!init)
+//                this.blockEntity.resetIndex();
+//        }
         this.updateCraftingSlot(init);
     }
 
@@ -170,13 +167,13 @@ public class ContainerCrafting extends AbstractContainerMenu implements Containe
     public void sendCraftingRecipesToClient(ServerPlayer player, PlayerData data) {
         List<ClientRecipeResult> clientData = IntStream.range(0, this.matchingRecipes.size())
                 .mapToObj(i -> {
-                    RecipeHolder<SextupleRecipe> recipe = this.matchingRecipes.get(i);
-                    return new ClientRecipeResult(i, recipe.value() instanceof SpecialSextupleRecipe || data.getRecipeKeeper().isUnlocked(recipe) ? this.matchingRecipes.get(i).value().getResultItem() : new ItemStack(ModItems.UNKNOWN.get()));
+                    RecipeHolder<? extends SextupleRecipe> recipe = this.matchingRecipes.get(i);
+                    return new ClientRecipeResult(i, recipe.value() instanceof SpecialSextupleRecipe || data.getRecipeKeeper().isUnlocked(recipe) ? this.matchingRecipes.get(i).value().getResultItem(player.registryAccess()) : new ItemStack(ModItems.UNKNOWN.get()));
                 }).toList();
-        if (!this.init)
-            LoaderNetwork.INSTANCE.sendToPlayer(new S2CCraftingRecipes(clientData, 0), player);
-        else //The client wont have the gui open if it just got opened server side
-            player.getServer().tell(new TickTask(1, () -> LoaderNetwork.INSTANCE.sendToPlayer(new S2CCraftingRecipes(clientData, this.currentRecipe == null ? 0 : this.matchingRecipes.indexOf(this.currentRecipe)), player)));
+//        if (!this.init)
+//            LoaderNetwork.INSTANCE.sendToPlayer(new S2CCraftingRecipes(clientData, 0), player);
+//        else //The client wont have the gui open if it just got opened server side
+//            player.getServer().tell(new TickTask(1, () -> LoaderNetwork.INSTANCE.sendToPlayer(new S2CCraftingRecipes(clientData, this.currentRecipe == null ? 0 : this.matchingRecipes.indexOf(this.currentRecipe)), player)));
     }
 
     public RecipeHolder<? extends SextupleRecipe> getCurrentRecipe() {
@@ -186,7 +183,7 @@ public class ContainerCrafting extends AbstractContainerMenu implements Containe
     public void updateCurrentRecipeIndex(int id) {
         id = Mth.clamp(id, 0, this.matchingRecipes != null ? this.matchingRecipes.size() - 1 : 0);
         this.blockEntity.setIndex(id);
-        this.updateCraftingSlot();
+//        this.updateCraftingSlot();
     }
 
     public int runepointCost() {

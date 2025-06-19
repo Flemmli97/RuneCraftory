@@ -1,0 +1,67 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:scrap",
+          "quality": 3,
+          "weight": 130
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:emerald",
+          "quality": 15,
+          "weight": 40
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:wind_crystal",
+          "quality": 17,
+          "weight": 15
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:light_ore",
+          "quality": 3
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "runecraftory:skill_check",
+              "minimum_level": 5,
+              "skill": "MINING"
+            }
+          ],
+          "name": "runecraftory:light_ore",
+          "quality": 3,
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "runecraftory:skill_check",
+              "minimum_level": 15,
+              "skill": "MINING"
+            }
+          ],
+          "name": "runecraftory:light_ore",
+          "quality": 5,
+          "weight": 7
+        }
+      ],
+      "functions": [
+        {
+          "function": "runecraftory:item_level",
+          "level": 1.0
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "runecraftory:blocks/ore_emerald"
+}

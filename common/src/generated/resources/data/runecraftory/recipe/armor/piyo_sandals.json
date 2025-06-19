@@ -1,0 +1,17 @@
+{
+  "type": "runecraftory:armor",
+  "crafting_cost": 0,
+  "ingredients": [
+    {
+      "item": "runecraftory:insect_carapace"
+    },
+    {
+      "tag": "runecraftory:cloths"
+    }
+  ],
+  "required_level": 11,
+  "result": {
+    "count": 1,
+    "id": "runecraftory:piyo_sandals"
+  }
+}

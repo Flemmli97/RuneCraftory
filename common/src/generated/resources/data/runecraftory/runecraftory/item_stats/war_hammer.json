@@ -1,0 +1,17 @@
+{
+  "buy_price": 2960,
+  "element": "NONE",
+  "item": "runecraftory:war_hammer",
+  "item_stats": {
+    "minecraft:generic.attack_damage": 20.0,
+    "runecraftory:attack_range": 1.5,
+    "runecraftory:attack_width": 3.0,
+    "runecraftory:dizzy": 20.0,
+    "runecraftory:stun": 6.0
+  },
+  "monster_bonus": {
+    "minecraft:generic.attack_damage": 0.5
+  },
+  "sell_price": 138,
+  "upgrade_difficulty": 0
+}

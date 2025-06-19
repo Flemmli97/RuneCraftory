@@ -1,5 +1,8 @@
 {
   "variants": {
+    "facing=east": {
+      "model": "runecraftory:block/king_pineapple_2"
+    },
     "facing=north": {
       "model": "runecraftory:block/king_pineapple"
     },
@@ -10,9 +13,6 @@
     "facing=west": {
       "model": "runecraftory:block/king_pineapple_2",
       "y": 180
-    },
-    "facing=east": {
-      "model": "runecraftory:block/king_pineapple_2"
     }
   }
 }
