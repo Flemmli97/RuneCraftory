@@ -54,7 +54,7 @@ public class EntityRuneOrb extends Entity {
 
     @Override
     protected void defineSynchedData() {
-        this.getEntityData().define(LEVELSTATS, true);
+        builder.define(LEVELSTATS, true);
     }
 
     @Override

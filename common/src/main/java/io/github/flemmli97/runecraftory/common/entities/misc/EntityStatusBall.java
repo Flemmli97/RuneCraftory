@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
-import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.particles.DurationalParticleData;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
@@ -8,6 +7,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
+import io.github.flemmli97.tenshilib.common.entity.AdvancedProjectile;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -20,6 +20,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 
 import java.util.function.Consumer;
 
@@ -81,13 +82,13 @@ public class EntityStatusBall extends BaseDamageCloud {
         float h = Mth.cos(yaw * ((float) Math.PI / 180)) * Mth.cos(pitch * ((float) Math.PI / 180));
         this.shoot(f, g, h, velocity, inaccuracy);
         Vec3 vec3 = shooter.getDeltaMovement();
-        this.setDeltaMovement(this.getDeltaMovement().add(vec3.x, shooter.isOnGround() ? 0.0 : vec3.y, vec3.z));
+        this.setDeltaMovement(this.getDeltaMovement().add(vec3.x, shooter.onGround() ? 0.0 : vec3.y, vec3.z));
     }
 
     public void shoot(double x, double y, double z, float velocity, float inaccuracy) {
         Vec3 vector3d = (new Vec3(x, y, z)).normalize().add(this.random.nextGaussian() * 0.0075F * inaccuracy, this.random.nextGaussian() * 0.0075F * inaccuracy, this.random.nextGaussian() * 0.0075F * inaccuracy).scale(velocity);
         this.setDeltaMovement(vector3d);
-        double f = Math.sqrt(EntityProjectile.horizontalMag(vector3d));
+        double f = Math.sqrt(AdvancedProjectile.horizontalMag(vector3d));
         this.setYRot((float) (Mth.atan2(vector3d.x, vector3d.z) * (180F / (float) Math.PI)));
         this.setXRot((float) (Mth.atan2(vector3d.y, f) * (180F / (float) Math.PI)));
         this.yRotO = this.getYRot();
@@ -124,7 +125,7 @@ public class EntityStatusBall extends BaseDamageCloud {
     protected boolean damageEntity(LivingEntity target) {
         CustomDamage.Builder builder = new CustomDamage.Builder(this, this.getOwner()).noKnockback();
         this.type.damageMod.accept(builder);
-        if (CombatUtils.damageWithFaintAndCrit(this.getOwner(), target, builder, CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC_ATTACK.get()) * this.damageMultiplier, null)) {
+        if (CombatUtils.damageWithFaintAndCrit(this.getOwner(), target, builder, CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC_ATTACK.asHolder()) * this.damageMultiplier, null)) {
             this.discard();
             return true;
         }
@@ -152,21 +153,21 @@ public class EntityStatusBall extends BaseDamageCloud {
 
     public enum Type {
 
-        SLEEP(b -> b.magic().element(EnumElement.EARTH).withChangedAttribute(ModAttributes.SLEEP.get(), 100), new Vector3f(207 / 255F, 13 / 255F, 38 / 255F), 40),
-        MUSHROOM_POISON(b -> b.magic().withChangedAttribute(ModAttributes.POISON.get(), 50), new Vector3f(112 / 255F, 201 / 255F, 95 / 255F), 40),
-        PARALYSIS(b -> b.magic().withChangedAttribute(ModAttributes.PARALYSIS.get(), 50), new Vector3f(196 / 255F, 186 / 255F, 35 / 255F), 40),
-        RAFFLESIA_SLEEP(b -> b.hurtResistant(2).magic().withChangedAttribute(ModAttributes.SLEEP.get(), 10)
-                .withChangedAttribute(ModAttributes.FATIGUE.get(), 2)
-                .withChangedAttribute(ModAttributes.COLD.get(), 2), new Vector3f(207 / 255F, 13 / 255F, 38 / 255F), 30),
-        RAFFLESIA_PARALYSIS(b -> b.hurtResistant(2).magic().withChangedAttribute(ModAttributes.PARALYSIS.get(), 7)
-                .withChangedAttribute(ModAttributes.FATIGUE.get(), 2)
-                .withChangedAttribute(ModAttributes.COLD.get(), 2), new Vector3f(204 / 255F, 190 / 255F, 57 / 255F), 30),
-        RAFFLESIA_POISON(b -> b.hurtResistant(2).magic().withChangedAttribute(ModAttributes.POISON.get(), 7)
-                .withChangedAttribute(ModAttributes.FATIGUE.get(), 2)
-                .withChangedAttribute(ModAttributes.COLD.get(), 2), new Vector3f(184 / 255F, 56 / 255F, 209 / 255F), 30),
-        RAFFLESIA_ALL(b -> b.hurtResistant(2).magic().withChangedAttribute(ModAttributes.SLEEP.get(), 5)
-                .withChangedAttribute(ModAttributes.PARALYSIS.get(), 5)
-                .withChangedAttribute(ModAttributes.POISON.get(), 5), new Vector3f(135 / 255F, 23 / 255F, 29 / 255F), 30);
+        SLEEP(b -> b.magic().element(EnumElement.EARTH).withChangedAttribute(ModAttributes.SLEEP.asHolder(), 100), new Vector3f(207 / 255F, 13 / 255F, 38 / 255F), 40),
+        MUSHROOM_POISON(b -> b.magic().withChangedAttribute(ModAttributes.POISON.asHolder(), 50), new Vector3f(112 / 255F, 201 / 255F, 95 / 255F), 40),
+        PARALYSIS(b -> b.magic().withChangedAttribute(ModAttributes.PARALYSIS.asHolder(), 50), new Vector3f(196 / 255F, 186 / 255F, 35 / 255F), 40),
+        RAFFLESIA_SLEEP(b -> b.hurtResistant(2).magic().withChangedAttribute(ModAttributes.SLEEP.asHolder(), 10)
+                .withChangedAttribute(ModAttributes.FATIGUE.asHolder(), 2)
+                .withChangedAttribute(ModAttributes.COLD.asHolder(), 2), new Vector3f(207 / 255F, 13 / 255F, 38 / 255F), 30),
+        RAFFLESIA_PARALYSIS(b -> b.hurtResistant(2).magic().withChangedAttribute(ModAttributes.PARALYSIS.asHolder(), 7)
+                .withChangedAttribute(ModAttributes.FATIGUE.asHolder(), 2)
+                .withChangedAttribute(ModAttributes.COLD.asHolder(), 2), new Vector3f(204 / 255F, 190 / 255F, 57 / 255F), 30),
+        RAFFLESIA_POISON(b -> b.hurtResistant(2).magic().withChangedAttribute(ModAttributes.POISON.asHolder(), 7)
+                .withChangedAttribute(ModAttributes.FATIGUE.asHolder(), 2)
+                .withChangedAttribute(ModAttributes.COLD.asHolder(), 2), new Vector3f(184 / 255F, 56 / 255F, 209 / 255F), 30),
+        RAFFLESIA_ALL(b -> b.hurtResistant(2).magic().withChangedAttribute(ModAttributes.SLEEP.asHolder(), 5)
+                .withChangedAttribute(ModAttributes.PARALYSIS.asHolder(), 5)
+                .withChangedAttribute(ModAttributes.POISON.asHolder(), 5), new Vector3f(135 / 255F, 23 / 255F, 29 / 255F), 30);
 
         public final Consumer<CustomDamage.Builder> damageMod;
 

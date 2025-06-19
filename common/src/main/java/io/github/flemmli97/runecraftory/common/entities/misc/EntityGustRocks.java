@@ -1,9 +1,9 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
-import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
+import io.github.flemmli97.tenshilib.common.entity.AdvancedProjectile;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
@@ -43,7 +43,7 @@ public class EntityGustRocks extends BaseDamageCloud {
 
     public void setDirection(double x, double y, double z) {
         Vec3 vector3d = new Vec3(x, y, z);
-        double f = Math.sqrt(EntityProjectile.horizontalMag(vector3d));
+        double f = Math.sqrt(AdvancedProjectile.horizontalMag(vector3d));
         this.setYRot((float) -(Mth.atan2(vector3d.x, vector3d.z) * (180F / (float) Math.PI)));
         this.setXRot((float) (Mth.atan2(vector3d.y, f) * (180F / (float) Math.PI)));
         this.yRotO = this.getYRot();
@@ -55,8 +55,7 @@ public class EntityGustRocks extends BaseDamageCloud {
         super.tick();
         if (this.up == null) {
             this.up = new Vec3(0, 1, 0).scale(8);
-            this.side = new Vec3(RayTraceUtils.rotatedAround(this.getLookAngle(), new Vector3f(0, 1, 0), 90))
-                    .normalize().scale(12);
+            this.side = this.getLookAngle().yRot(90).normalize().scale(12);
         }
         Vec3 pos = this.position();
         if (this.level().isClientSide) {

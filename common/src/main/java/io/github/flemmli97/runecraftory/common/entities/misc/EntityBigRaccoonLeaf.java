@@ -4,13 +4,13 @@ import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
-import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -18,6 +18,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3d;
 
 public class EntityBigRaccoonLeaf extends BaseProjectile {
 
@@ -86,9 +87,10 @@ public class EntityBigRaccoonLeaf extends BaseProjectile {
                     angle *= -1;
                 if (this.sumAngles == 0)
                     this.sumAngles += angle * 3;
-                double[] point = MathUtils.rotate(this.axis.x, this.axis.y, this.axis.z, -toCenterDir.x, -toCenterDir.y, -toCenterDir.z, this.sumAngles);
+                Vector3d point = new Vector3d(this.axis.x, this.axis.y, this.axis.z)
+                        .rotateAxis(this.sumAngles * Mth.DEG_TO_RAD, -toCenterDir.x, -toCenterDir.y, -toCenterDir.z);
                 this.sumAngles += angle;
-                Vec3 newPos = new Vec3(point[0], point[1], point[2])
+                Vec3 newPos = new Vec3(point.x(), point.y(), point.z())
                         .add(this.center);
                 this.setDeltaMovement(newPos.subtract(this.position()));
                 this.hasImpulse = true;

@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.mixin;
 
 import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.mixinhelper.StructureTemplateModifier;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import org.spongepowered.asm.mixin.Final;
@@ -18,7 +19,7 @@ public abstract class StructureTemplatePoolMixin implements StructureTemplateMod
     private List<Pair<StructurePoolElement, Integer>> rawTemplates;
     @Final
     @Shadow
-    private List<StructurePoolElement> templates;
+    private ObjectArrayList<StructurePoolElement> templates;
 
     @Override
     public void runecraftory$addPoolElement(Pair<StructurePoolElement, Integer> pair) {

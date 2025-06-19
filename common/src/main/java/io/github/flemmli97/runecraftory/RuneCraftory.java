@@ -4,10 +4,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.Optional;
 
 public class RuneCraftory {
 
@@ -20,9 +23,10 @@ public class RuneCraftory {
      * Simple loot context. Needs server side entity
      */
     public static LootContext createContext(LivingEntity entity) {
-        return new LootContext.Builder((ServerLevel) entity.getLevel()).withParameter(LootContextParams.THIS_ENTITY, entity)
-                .withParameter(LootContextParams.ORIGIN, entity.position()).withRandom(entity.getRandom())
-                .create(LootContextParamSets.ADVANCEMENT_ENTITY);
+        return new LootContext.Builder(new LootParams.Builder((ServerLevel) entity.level()).withParameter(LootContextParams.THIS_ENTITY, entity)
+                .withParameter(LootContextParams.ORIGIN, entity.position())
+                .create(LootContextParamSets.ADVANCEMENT_ENTITY))
+                .create(Optional.empty());
     }
 
     public static ResourceLocation modRes(String path) {

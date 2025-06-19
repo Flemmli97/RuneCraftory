@@ -82,7 +82,7 @@ public class EntityElementalBall extends BaseProjectile {
 
     @Override
     protected boolean entityRayTraceHit(EntityHitResult result) {
-        boolean att = CombatUtils.damageWithFaintAndCrit(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).magic().noKnockback().element(this.element).hurtResistant(5), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC_ATTACK.get()) * this.damageMultiplier, null);
+        boolean att = CombatUtils.damageWithFaintAndCrit(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).magic().noKnockback().element(this.element).hurtResistant(5), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC_ATTACK.asHolder()) * this.damageMultiplier, null);
         this.discard();
         this.playHitSound();
         return att;
@@ -115,7 +115,7 @@ public class EntityElementalBall extends BaseProjectile {
 
     protected void playHitSound() {
         if (this.element == EnumElement.WATER) {
-            SoundEvent event = this.getVariant() == 1 ? SoundEvents.GENERIC_EXPLODE : ModSounds.SPELL_GENERIC_WATER.get();
+            SoundEvent event = this.getVariant() == 1 ? SoundEvents.GENERIC_EXPLODE.value() : ModSounds.SPELL_GENERIC_WATER.get();
             this.playSound(event, this.getVariant() == 1 ? 0.9f : 0.35f, 1);
         }
     }

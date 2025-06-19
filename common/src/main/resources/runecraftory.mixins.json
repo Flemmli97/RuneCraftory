@@ -12,7 +12,7 @@
     "BiomeMixin",
     "BlockBehaviourMixin",
     "BrainMixin",
-    "ChunkMapMixin",
+    "ChunkSenderMixin",
     "CombatTrackerAccessor",
     "CropBlockAccessor",
     "CropBlockMixin",

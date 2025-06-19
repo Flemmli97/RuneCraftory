@@ -1,24 +1,25 @@
-package io.github.flemmli97.runecraftory.client.model.misc;
+package io.github.flemmli97.runecraftory.client.model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntitySpike;
 import io.github.flemmli97.tenshilib.client.data.ModelManager;
 import io.github.flemmli97.tenshilib.client.data.ReloadableCache;
 import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 
-public class ModelSpikes<T extends EntitySpike> extends EntityModel<T> {
-
-    public static final ResourceLocation LOCATION = RuneCraftory.modRes("spikes");
+public class SimpleGeoModel<T extends Entity> extends EntityModel<T> {
 
     protected final ReloadableCache<ModelPartsContainer> model;
 
-    public ModelSpikes() {
+    public SimpleGeoModel(ResourceLocation location) {
         super();
-        this.model = ModelManager.getInstance().getModel(LOCATION);
+        this.model = this.load(location);
+    }
+
+    protected ReloadableCache<ModelPartsContainer> load(ResourceLocation location) {
+        return ModelManager.getInstance().getModel(location);
     }
 
     @Override

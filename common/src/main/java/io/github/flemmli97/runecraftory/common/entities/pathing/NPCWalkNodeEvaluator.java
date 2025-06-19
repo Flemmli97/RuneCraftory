@@ -2,12 +2,11 @@ package io.github.flemmli97.runecraftory.common.entities.pathing;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.TrapDoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Half;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.pathfinder.Node;
+import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,10 +17,10 @@ public class NPCWalkNodeEvaluator extends WalkNodeEvaluator {
 
     @Nullable
     @Override
-    protected Node findAcceptedNode(int i, int j, int k, int l, double d, Direction direction, BlockPathTypes blockPathTypes) {
+    protected Node findAcceptedNode(int i, int j, int k, int l, double d, Direction direction, PathType blockPathTypes) {
         Node node = super.findAcceptedNode(i, j, k, l, d, direction, blockPathTypes);
-        if (node != null && node.type == BlockPathTypes.TRAPDOOR) {
-            BlockState state = this.level().getBlockState(new BlockPos(node.x, node.y, node.z));
+        if (node != null && node.type == PathType.TRAPDOOR) {
+            BlockState state = this.mob.level().getBlockState(new BlockPos(node.x, node.y, node.z));
             if (!(state.getBlock() instanceof TrapDoorBlock))
                 return node;
             boolean tryGoOver = false;
@@ -39,12 +38,12 @@ public class NPCWalkNodeEvaluator extends WalkNodeEvaluator {
         }
         return node;
     }
-
-    @Override
-    protected BlockPathTypes evaluateBlockPathType(BlockGetter level, boolean canOpenDoors, boolean canEnterDoors, BlockPos pos, BlockPathTypes nodeType) {
-        BlockPathTypes t = super.evaluateBlockPathType(level, canOpenDoors, canEnterDoors, pos, nodeType);
-        if (t == BlockPathTypes.UNPASSABLE_RAIL)
-            return BlockPathTypes.OPEN;
-        return t;
-    }
+//
+//    @Override
+//    protected PathType evaluateBlockPathType(BlockGetter level, boolean canOpenDoors, boolean canEnterDoors, BlockPos pos, PathType nodeType) {
+//        PathType t = super.evaluateBlockPathType(level, canOpenDoors, canEnterDoors, pos, nodeType);
+//        if (t == PathType.UNPASSABLE_RAIL)
+//            return PathType.OPEN;
+//        return t;
+//    }
 }

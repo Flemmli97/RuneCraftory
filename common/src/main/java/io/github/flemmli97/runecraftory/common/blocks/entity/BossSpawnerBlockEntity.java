@@ -61,11 +61,11 @@ public class BossSpawnerBlockEntity extends BlockEntity {
         if (!nearby.isEmpty() && blockEntity.nextSpawn != null) {
             EntityProperties prop = DataPackHandler.INSTANCE.monsterPropertiesManager().getPropertiesFor(blockEntity.nextSpawn);
             boolean canSpawn = false;
-            if (prop.spawnerPredicate.isPresent()) {
+            if (prop.spawnerPredicate().isPresent()) {
                 // Throw out all non matching players
                 List<ServerPlayer> removed = new ArrayList<>();
                 for (ServerPlayer player : nearby) {
-                    if (!prop.spawnerPredicate.get().matches(player, player)) {
+                    if (!prop.spawnerPredicate().get().matches(player, player)) {
                         removed.add(player);
                         if (player.position().closerThan(pos, 16)) {
                             Vec3 opposite = player.position().subtract(pos).normalize();

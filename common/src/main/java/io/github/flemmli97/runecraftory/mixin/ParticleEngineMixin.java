@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ParticleEngine.class)
 public abstract class ParticleEngineMixin {
 
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;depthMask(Z)V"))
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;depthMask(Z)V", remap = false))
     private void customTypes(LightTexture lightTexture, Camera camera, float partialTick, CallbackInfo info) {
         CustomParticleRenderTypes.endBatch();
     }

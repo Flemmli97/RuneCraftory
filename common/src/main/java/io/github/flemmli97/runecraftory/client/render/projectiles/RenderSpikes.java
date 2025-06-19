@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.client.render.projectiles;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.client.model.misc.ModelSpikes;
+import io.github.flemmli97.runecraftory.client.model.SimpleGeoModel;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntitySpike;
 import io.github.flemmli97.tenshilib.client.render.SimpleModelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -13,9 +13,10 @@ public class RenderSpikes<T extends EntitySpike> extends SimpleModelRenderer<T> 
 
     private static final ResourceLocation EARTH_SPIKE = RuneCraftory.modRes("textures/entity/projectile/spikes_dirt_tiled.png");
     private static final ResourceLocation BRANCHES = RuneCraftory.modRes("textures/entity/projectile/spikes_wood_tiled.png");
+    private static final ResourceLocation MODEL_LOCATION = RuneCraftory.modRes("spikes");
 
     public RenderSpikes(EntityRendererProvider.Context ctx) {
-        super(ctx, new ModelSpikes<>());
+        super(ctx, new SimpleGeoModel<>(MODEL_LOCATION));
     }
 
     @Override

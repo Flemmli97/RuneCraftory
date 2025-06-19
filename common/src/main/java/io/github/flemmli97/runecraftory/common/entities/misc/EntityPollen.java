@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
-import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
@@ -8,18 +7,19 @@ import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
+import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 
 import java.util.List;
 
 public class EntityPollen extends BaseDamageCloud {
 
-    private static final List<Vector3f> POLLEN_BASE = RayTraceUtils.rotatedVecs(new Vec3(1, 0, 0), new Vec3(0, 1, 0), -180, 135, 45);
-    private static final List<Vector3f> POLLEN_IND = RayTraceUtils.rotatedVecs(new Vec3(0.04, 0.07, 0), new Vec3(0, 1, 0), -180, 160, 20);
+    private static final List<Vector3f> POLLEN_BASE = MathUtils.rotatedVecs(new Vector3f(1, 0, 0), new Vector3f(0, 1, 0), -180, 135, 45);
+    private static final List<Vector3f> POLLEN_IND = MathUtils.rotatedVecs(new Vector3f(0.04f, 0.07f, 0), new Vector3f(0, 1, 0), -180, 160, 20);
 
     public EntityPollen(EntityType<? extends EntityPollen> type, Level world) {
         super(type, world);
@@ -73,7 +73,7 @@ public class EntityPollen extends BaseDamageCloud {
 
     @Override
     protected boolean damageEntity(LivingEntity e) {
-        return CombatUtils.damageWithFaintAndCrit(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).magic().noKnockback().hurtResistant(5).element(EnumElement.EARTH), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC_ATTACK.get()) * this.damageMultiplier, null);
+        return CombatUtils.damageWithFaintAndCrit(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).magic().noKnockback().hurtResistant(5).element(EnumElement.EARTH), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC_ATTACK.asHolder()) * this.damageMultiplier, null);
     }
 
     @Override

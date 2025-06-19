@@ -29,7 +29,7 @@ public class S2COpenNPCGui implements CustomPacketPayload {
         public S2COpenNPCGui decode(RegistryFriendlyByteBuf buf) {
             return new S2COpenNPCGui(buf.readInt(), buf.readEnum(ShopState.class), buf.readInt(),
                     buf.readMap(LinkedHashMap::new, ByteBufCodecs.STRING_UTF8, buf1 -> buf1.readList(b -> ComponentSerialization.STREAM_CODEC.decode(buf))), !buf.readBoolean() ? null : buf.readResourceLocation(),
-                    new SyncedFamilyData(buf));
+                    SyncedFamilyData.STREAM_CODEC.decode(buf));
         }
 
         @Override
@@ -41,7 +41,7 @@ public class S2COpenNPCGui implements CustomPacketPayload {
             buf.writeBoolean(pkt.quest != null);
             if (pkt.quest != null)
                 buf.writeResourceLocation(pkt.quest);
-            pkt.family.toPacket(buf);
+            SyncedFamilyData.STREAM_CODEC.encode(buf, pkt.family);
         }
     };
 

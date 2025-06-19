@@ -19,13 +19,13 @@ public record S2COpenQuestGui(boolean hasQuestBoardQuests,
     public static final StreamCodec<RegistryFriendlyByteBuf, S2COpenQuestGui> STREAM_CODEC = new StreamCodec<>() {
         @Override
         public S2COpenQuestGui decode(RegistryFriendlyByteBuf buf) {
-            return new S2COpenQuestGui(buf.readBoolean(), buf.readList(ClientSideQuestDisplay::read));
+            return new S2COpenQuestGui(buf.readBoolean(), buf.readList(b -> ClientSideQuestDisplay.STREAM_CODEC.decode(buf)));
         }
 
         @Override
         public void encode(RegistryFriendlyByteBuf buf, S2COpenQuestGui pkt) {
             buf.writeBoolean(pkt.hasQuestBoardQuests);
-            buf.writeCollection(pkt.quests, (b, t) -> t.write(b));
+            buf.writeCollection(pkt.quests, (b, t) -> ClientSideQuestDisplay.STREAM_CODEC.encode(buf, t));
         }
     };
 

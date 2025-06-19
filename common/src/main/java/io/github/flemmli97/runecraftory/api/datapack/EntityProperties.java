@@ -62,7 +62,7 @@ public class EntityProperties {
 
     private final List<OnKilledIncrease> levelIncreaseOnKill;
 
-    public final EntityPredicate spawnerPredicate;
+    private final EntityPredicate spawnerPredicate;
 
     private EntityProperties(int minLevel, int xp, int money, float tamingChance, boolean rideable, boolean flying, int size, boolean needsRoof, EntityRideActionCosts rideActionCosts, Map<Holder<Attribute>, Double> baseValues, Map<Holder<Attribute>, Double> levelGains, List<OnKilledIncrease> levelIncreaseOnKill, Optional<EntityPredicate> spawnerPredicate) {
         this.minLevel = Math.max(1, minLevel);

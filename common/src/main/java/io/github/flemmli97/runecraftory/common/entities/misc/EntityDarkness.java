@@ -44,7 +44,7 @@ public class EntityDarkness extends BaseDamageCloud {
 
     @Override
     protected boolean damageEntity(LivingEntity livingEntity) {
-        boolean flag = CombatUtils.damageWithFaintAndCrit(this.getOwner(), livingEntity, new CustomDamage.Builder(this, this.getOwner()).magic().noKnockback().element(EnumElement.DARK).hurtResistant(5), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC_ATTACK.get()) * this.damageMultiplier, null);
+        boolean flag = CombatUtils.damageWithFaintAndCrit(this.getOwner(), livingEntity, new CustomDamage.Builder(this, this.getOwner()).magic().noKnockback().element(EnumElement.DARK).hurtResistant(5), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC_ATTACK.asHolder()) * this.damageMultiplier, null);
         if (flag) {
             Vec3 distVec = livingEntity.position().subtract(this.position()).normalize();
             CombatUtils.knockbackEntityIgnoreResistance(livingEntity, 0.8f, distVec.x(), distVec.z());

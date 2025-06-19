@@ -38,8 +38,8 @@ public class EntityThrownItem extends BaseProjectile {
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
-        this.getEntityData().define(STACK, ItemStack.EMPTY);
-        this.getEntityData().define(ROTATING, false);
+        builder.define(STACK, ItemStack.EMPTY);
+        builder.define(ROTATING, false);
     }
 
     @Override
@@ -84,7 +84,7 @@ public class EntityThrownItem extends BaseProjectile {
             } else if (result.getEntity() instanceof Player player) {
                 Entity e = this.getOwner();
                 if (!(e instanceof Player)) {
-                    player.eat(player.level, stack);
+                    player.eat(player.level(), stack);
                     if (stack.isEmpty())
                         this.discard();
                 } else {
@@ -114,7 +114,7 @@ public class EntityThrownItem extends BaseProjectile {
         super.addAdditionalSaveData(compound);
         ItemStack itemStack = this.getItem();
         if (!itemStack.isEmpty()) {
-            compound.put("Item", itemStack.save(new CompoundTag()));
+            compound.put("Item", itemStack.save(this.registryAccess(), new CompoundTag()));
         }
         compound.putBoolean("Rotating", this.isRotating());
         compound.putBoolean("ActAsFood", this.actAsFood);
@@ -123,7 +123,7 @@ public class EntityThrownItem extends BaseProjectile {
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        ItemStack itemStack = ItemStack.of(compound.getCompound("Item"));
+        ItemStack itemStack = ItemStack.parseOptional(this.registryAccess(), compound.getCompound("Item"));
         this.setItem(itemStack);
         this.setRotating(compound.getBoolean("Rotating"));
         this.actAsFood = compound.getBoolean("ActAsFood");

@@ -5,11 +5,11 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.layers.CustomHeadLayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -50,7 +50,10 @@ public class ArmorSimpleItemModel extends EntityModel<Entity> {
         poseStack.pushPose();
         if (this.translate != null)
             this.translate.accept(this.entity, poseStack, this.part);
-        Minecraft.getInstance().renderItem(this.entity, this.stack, ItemTransforms.TransformType.HEAD, false, poseStack, Minecraft.getInstance().renderBuffers().bufferSource(), packedLight);
+        Minecraft.getInstance()
+                .getItemRenderer()
+                .renderStatic(this.entity, this.stack, ItemDisplayContext.HEAD, false, poseStack, Minecraft.getInstance().renderBuffers().bufferSource(),
+                        this.entity.level(), packedLight, packedOverlay, 0);
         poseStack.popPose();
     }
 

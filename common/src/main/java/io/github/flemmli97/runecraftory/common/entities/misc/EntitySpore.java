@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
-import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
@@ -8,17 +7,18 @@ import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
+import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 
 import java.util.List;
 
 public class EntitySpore extends BaseDamageCloud {
 
-    private static final List<Vector3f> PARTICLE_CIRCLE = RayTraceUtils.rotatedVecs(new Vec3(0.025, 0.065, 0), new Vec3(0, 1, 0), -180, 160, 20);
+    private static final List<Vector3f> PARTICLE_CIRCLE = MathUtils.rotatedVecs(new Vector3f(0.025f, 0.065f, 0), new Vector3f(0, 1, 0), -180, 160, 20);
 
     public EntitySpore(EntityType<? extends EntitySpore> type, Level world) {
         super(type, world);
@@ -53,7 +53,7 @@ public class EntitySpore extends BaseDamageCloud {
 
     @Override
     protected boolean damageEntity(LivingEntity livingEntity) {
-        return CombatUtils.damageWithFaintAndCrit(this.getOwner(), livingEntity, new CustomDamage.Builder(this, this.getOwner()).element(EnumElement.EARTH).magic().noKnockback().hurtResistant(5), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC_ATTACK.get()) * this.damageMultiplier, null);
+        return CombatUtils.damageWithFaintAndCrit(this.getOwner(), livingEntity, new CustomDamage.Builder(this, this.getOwner()).element(EnumElement.EARTH).magic().noKnockback().hurtResistant(5), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC_ATTACK.asHolder()) * this.damageMultiplier, null);
     }
 
     @Override

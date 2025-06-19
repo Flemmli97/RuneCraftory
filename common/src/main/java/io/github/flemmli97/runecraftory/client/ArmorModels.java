@@ -3,12 +3,14 @@ package io.github.flemmli97.runecraftory.client;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.model.ArmorSimpleItemModel;
-import io.github.flemmli97.runecraftory.client.model.armor.PiyoSandals;
-import io.github.flemmli97.runecraftory.client.model.armor.RingsArmorModel;
+import io.github.flemmli97.runecraftory.client.model.armor.CustomHumanoidArmorModel;
 import io.github.flemmli97.runecraftory.common.items.equipment.ItemArmorBase;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.PlayerModel;
@@ -25,11 +27,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,16 +38,14 @@ public class ArmorModels {
 
     public static final Map<ResourceLocation, ArmorModelGetter> ARMOR_GETTER = getArmorRenderer();
     private static final Map<ResourceLocation, FirstPersonArmorRenderer> FIRST_PERSON_GETTER = getFirstPersonHandRenderer();
-    private static final Map<String, ResourceLocation> ARMOR_TEXT_CACHE = new HashMap<>();
 
     private static final ArmorSimpleItemModel ITEM_MODEL = new ArmorSimpleItemModel();
-    private static PiyoSandals PIYO_SANDALS_MODEL;
-    private static RingsArmorModel RINGS_MODEL;
+    private static final CustomHumanoidArmorModel<?> PIYO_SANDALS_MODEL = new CustomHumanoidArmorModel<>(RuneCraftory.modRes("armor/piyo_sandals"));
+    private static final CustomHumanoidArmorModel<?> RINGS_MODEL = new CustomHumanoidArmorModel<>(RuneCraftory.modRes("armor/rings"));
 
     private static HumanoidModel<?> INNER;
     private static HumanoidModel<?> OUTER;
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
     private static Map<ResourceLocation, ArmorModelGetter> getArmorRenderer() {
         ImmutableMap.Builder<ResourceLocation, ArmorModelGetter> builder = ImmutableMap.builder();
         builder.put(ModItems.MAGIC_EARRINGS.getID(), ((entityLiving, itemStack, slot, origin) -> {
@@ -74,7 +73,7 @@ public class ArmorModels {
         for (RegistryEntrySupplier<Item, ?> sup : ModItems.ribbons())
             builder.put(sup.getID(), normalItemModel);
         builder.put(ModItems.PIYO_SANDALS.getID(), ((entityLiving, itemStack, slot, origin) -> {
-            origin.copyPropertiesTo((HumanoidModel) PIYO_SANDALS_MODEL);
+            PIYO_SANDALS_MODEL.copyFrom(origin);
             PIYO_SANDALS_MODEL.setAllVisible(false);
             PIYO_SANDALS_MODEL.leftLeg.visible = true;
             PIYO_SANDALS_MODEL.rightLeg.visible = true;
@@ -83,10 +82,10 @@ public class ArmorModels {
         for (RegistryEntrySupplier<Item, ?> sup : ModItems.hatItems())
             builder.put(sup.getID(), normalItemModel);
         ArmorModelGetter rings = ((entityLiving, itemStack, slot, origin) -> {
-            origin.copyPropertiesTo((HumanoidModel) RINGS_MODEL);
+            RINGS_MODEL.copyFrom(origin);
             RINGS_MODEL.setAllVisible(false);
             boolean right = entityLiving.getMainArm() == HumanoidArm.RIGHT;
-            ModelPart model = right ? RINGS_MODEL.rightArm : RINGS_MODEL.leftArm;
+            ModelPartsContainer.ModelPartExtended model = right ? RINGS_MODEL.rightArm : RINGS_MODEL.leftArm;
             model.visible = true;
             if (entityLiving instanceof AbstractClientPlayer clientPlayer && clientPlayer.getSkin().model() == PlayerSkin.Model.SLIM) {
                 model.x += right ? 0.5 : -0.5;
@@ -108,34 +107,32 @@ public class ArmorModels {
             model.visible = true;
             if (player.getSkin().model() == PlayerSkin.Model.SLIM)
                 model.x += right ? 0.5 : -0.5;
-            renderModelPart(model, player, right, buffer, stack, poseStack, light);
+            renderModelPart(OUTER, player, buffer, stack, poseStack, light);
         };
         for (RegistryEntrySupplier<Item, ?> sup : bracelets())
             builder.put(sup.getID(), bracelet);
         FirstPersonArmorRenderer rings = (player, stack, right, origin, poseStack, buffer, light) -> {
-            origin.copyPropertiesTo((HumanoidModel) RINGS_MODEL);
+            RINGS_MODEL.copyFrom(origin);
             RINGS_MODEL.setAllVisible(false);
-            ModelPart model = right ? RINGS_MODEL.rightArm : RINGS_MODEL.leftArm;
+            ModelPartsContainer.ModelPartExtended model = right ? RINGS_MODEL.rightArm : RINGS_MODEL.leftArm;
             model.visible = true;
             if (player.getSkin().model() == PlayerSkin.Model.SLIM)
                 model.x += right ? 0.5 : -0.5;
-            renderModelPart(model, player, right, buffer, stack, poseStack, light);
+            renderModelPart(RINGS_MODEL, player, buffer, stack, poseStack, light);
         };
         for (RegistryEntrySupplier<Item, ?> sup : rings())
             builder.put(sup.getID(), rings);
         return builder.build();
     }
 
-    private static VertexConsumer forArmor(MultiBufferSource buffer, ItemStack stack, Player player) {
-        if (stack.getItem() instanceof ItemArmorBase armor)
-            return ItemRenderer.getArmorFoilBuffer(buffer, RenderType.armorCutoutNoCull(ARMOR_TEXT_CACHE.computeIfAbsent(armor.getArmorTexture(stack, player, armor.getSlot(), null), ResourceLocation::new)), false, stack.hasFoil());
-        return null;
-    }
-
-    private static void renderModelPart(ModelPart model, AbstractClientPlayer player, boolean right, MultiBufferSource buffer, ItemStack stack, PoseStack poseStack, int light) {
-        VertexConsumer cons = forArmor(buffer, stack, player);
-        if (cons != null)
-            model.render(poseStack, cons, light, OverlayTexture.NO_OVERLAY);
+    private static void renderModelPart(EntityModel<?> model, AbstractClientPlayer player, MultiBufferSource buffer, ItemStack stack, PoseStack poseStack, int light) {
+        if (stack.getItem() instanceof ItemArmorBase armor) {
+            for (ArmorMaterial.Layer layer : armor.getMaterial().value().layers()) {
+                VertexConsumer cons = ItemRenderer.getArmorFoilBuffer(buffer,
+                        RenderType.armorCutoutNoCull(armor.getArmorTexture(stack, player, armor.getEquipmentSlot(), layer, false)), stack.hasFoil());
+                model.renderToBuffer(poseStack, cons, light, OverlayTexture.NO_OVERLAY);
+            }
+        }
     }
 
     public static ArmorModelGetter fromItemStack(ItemStack stack) {
@@ -157,9 +154,6 @@ public class ArmorModels {
     public static void initArmorModels(EntityRendererProvider.Context ctx) {
         INNER = new HumanoidModel<>(ctx.bakeLayer(ModelLayers.PLAYER_INNER_ARMOR));
         OUTER = new HumanoidModel<>(ctx.bakeLayer(ModelLayers.PLAYER_OUTER_ARMOR));
-
-        PIYO_SANDALS_MODEL = new PiyoSandals(ctx.bakeLayer(PiyoSandals.LAYER_LOCATION));
-        RINGS_MODEL = new RingsArmorModel(ctx.bakeLayer(RingsArmorModel.LAYER_LOCATION));
     }
 
     private static List<RegistryEntrySupplier<Item, ?>> bracelets() {

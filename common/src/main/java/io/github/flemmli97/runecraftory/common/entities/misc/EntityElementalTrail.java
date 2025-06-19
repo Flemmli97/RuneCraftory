@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
+import io.github.flemmli97.tenshilib.common.entity.AdvancedProjectile;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -51,14 +52,14 @@ public class EntityElementalTrail extends BaseDamageCloud {
         float f2 = Mth.cos(rotationYawIn * 0.017453292F) * Mth.cos(rotationPitchIn * 0.017453292F);
         this.shoot(f, f1, f2, velocity, inaccuracy);
         Vec3 throwerMotion = entityThrower.getDeltaMovement();
-        this.setDeltaMovement(this.getDeltaMovement().add(throwerMotion.x, entityThrower.isOnGround() ? 0.0D : throwerMotion.y, throwerMotion.z));
+        this.setDeltaMovement(this.getDeltaMovement().add(throwerMotion.x, entityThrower.onGround() ? 0.0D : throwerMotion.y, throwerMotion.z));
         this.getDeltaMovement().add(throwerMotion.x, 0, throwerMotion.z);
     }
 
     public void shoot(double x, double y, double z, float velocity, float inaccuracy) {
         Vec3 vector3d = (new Vec3(x, y, z)).normalize().add(this.random.nextGaussian() * 0.0075F * inaccuracy, this.random.nextGaussian() * 0.0075F * inaccuracy, this.random.nextGaussian() * 0.0075F * inaccuracy).scale(velocity);
         this.setDeltaMovement(vector3d);
-        double f = Math.sqrt(EntityProjectile.horizontalMag(vector3d));
+        double f = Math.sqrt(AdvancedProjectile.horizontalMag(vector3d));
         this.setYRot((float) (Mth.atan2(vector3d.x, vector3d.z) * (180F / (float) Math.PI)));
         this.setXRot((float) (Mth.atan2(vector3d.y, f) * (180F / (float) Math.PI)));
         this.yRotO = this.getYRot();
@@ -148,7 +149,7 @@ public class EntityElementalTrail extends BaseDamageCloud {
 
     @Override
     protected boolean damageEntity(LivingEntity target) {
-        if (CombatUtils.damageWithFaintAndCrit(this.getOwner(), target, new CustomDamage.Builder(this, this.getOwner()).magic().noKnockback().hurtResistant(10).element(this.element), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC_ATTACK.get()) * this.damageMultiplier, null)) {
+        if (CombatUtils.damageWithFaintAndCrit(this.getOwner(), target, new CustomDamage.Builder(this, this.getOwner()).magic().noKnockback().hurtResistant(10).element(this.element), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC_ATTACK.asHolder()) * this.damageMultiplier, null)) {
             if (this.hasKnockback)
                 target.knockback(0.5, this.getX() - target.getX(), this.getZ() - target.getZ());
             if (!this.piercing)

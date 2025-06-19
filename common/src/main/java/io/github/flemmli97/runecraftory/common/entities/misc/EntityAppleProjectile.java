@@ -4,12 +4,10 @@ import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.tenshilib.common.utils.HitResultUtils;
-import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -79,8 +77,9 @@ public class EntityAppleProjectile extends BaseProjectile {
             else if (this.circling) {
                 if (this.circleTime > 0) {
                     Vec3 ownerPos = owner.position();
-                    double[] pos = MathUtils.rotate(0, 1, 0, owner.getBbWidth() + 0.5, 0, 0, Mth.DEG_TO_RAD * (13 * this.livingTicks + this.angleOffset));
-                    this.setDeltaMovement(ownerPos.x + pos[0] - this.getX(), ownerPos.y + this.getOwner().getBbHeight() * 0.25 - this.getY(), ownerPos.z + pos[2] - this.getZ());
+                    Vec3 pos = new Vec3(owner.getBbWidth() + 0.5, 0, 0)
+                            .yRot((13 * this.livingTicks + this.angleOffset));
+                    this.setDeltaMovement(ownerPos.x + pos.x() - this.getX(), ownerPos.y + this.getOwner().getBbHeight() * 0.25 - this.getY(), ownerPos.z + pos.z() - this.getZ());
                     this.hasImpulse = true;
                 } else if (this.circleTime == 0) {
                     if (owner instanceof Mob mob && mob.getTarget() != null) {
@@ -118,7 +117,7 @@ public class EntityAppleProjectile extends BaseProjectile {
         if (!this.isAlive())
             return null;
         if (this.attackedEntities.isEmpty())
-            return HitResultUtils.rayTraceEntities(this.level(), this, from, to, this.getBoundingBox().expandTowards(this.getDeltaMovement()).inflate(1), this::canHit, e -> this.radius() + 0.3f);
+            return HitResultUtils.rayTraceEntities(this, from, to, this.getBoundingBox().expandTowards(this.getDeltaMovement()).inflate(1), this::canHit);
         return null;
     }
 

@@ -496,9 +496,9 @@ public class EntitySkelefang extends BossMonster {
                 Vec3 center = this.position().add(0, this.getBbHeight() * 0.5, 0);
                 List<Vector3f> locations = new ArrayList<>();
                 double speed = (this.getBbWidth() + 2) / 40;
-                locations.addAll(MathUtils.rotatedVecs(MathUtils.NORMAL_X.scale(this.getBbWidth() + 2), MathUtils.NORMAL_Z, -180, 180, 10));
-                locations.addAll(MathUtils.rotatedVecs(MathUtils.NORMAL_X.scale(this.getBbWidth() + 2), MathUtils.NORMAL_Y, -180, 180, 10));
-                locations.addAll(MathUtils.rotatedVecs(MathUtils.NORMAL_Y.scale(this.getBbWidth() + 2), MathUtils.NORMAL_X, -180, 180, 10));
+                locations.addAll(MathUtils.rotatedVecs(MathUtils.NORMAL_X.scale(this.getBbWidth() + 2).toVector3f(), MathUtils.NORMAL_Z.toVector3f(), -180, 180, 10));
+                locations.addAll(MathUtils.rotatedVecs(MathUtils.NORMAL_X.scale(this.getBbWidth() + 2).toVector3f(), MathUtils.NORMAL_Y.toVector3f(), -180, 180, 10));
+                locations.addAll(MathUtils.rotatedVecs(MathUtils.NORMAL_Y.scale(this.getBbWidth() + 2).toVector3f(), MathUtils.NORMAL_X.toVector3f(), -180, 180, 10));
                 for (Vector3f vec : locations) {
                     Vec3 pos = center.add(vec.x(), vec.y(), vec.z());
                     Vec3 dir = new Vec3(vec.x(), vec.y(), vec.z()).normalize().scale(speed);

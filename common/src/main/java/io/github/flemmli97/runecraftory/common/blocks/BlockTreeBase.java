@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 import io.github.flemmli97.runecraftory.common.blocks.entity.TreeBlockEntity;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
-import io.github.flemmli97.runecraftory.mixinhelper.LevelSnapshotHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
@@ -24,7 +23,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
-import net.minecraft.world.level.material.Material;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
@@ -32,60 +30,67 @@ import java.util.function.Supplier;
 
 public class BlockTreeBase extends RotatedPillarBlock implements EntityBlock, Growable {
 
+    public static final MapCodec<BlockTreeBase> CODEC = simpleCodec(BlockTreeBase::new);
+
     public static final int MAX_AGE = 4;
     public static final IntegerProperty AGE = BlockStateProperties.AGE_3;
 
-    private final Supplier<ConfiguredFeature<?, ?>> stump;
-    private final Supplier<ConfiguredFeature<TreeConfiguration, ?>> tree1;
-    private final Supplier<ConfiguredFeature<TreeConfiguration, ?>> tree2;
-    private final Supplier<? extends Item> seedItem;
+//    private final Supplier<ConfiguredFeature<?, ?>> stump;
+//    private final Supplier<ConfiguredFeature<TreeConfiguration, ?>> tree1;
+//    private final Supplier<ConfiguredFeature<TreeConfiguration, ?>> tree2;
+//    private final Supplier<? extends Item> seedItem;
+
+    public BlockTreeBase(Properties properties) {
+        super(properties);
+    }
 
     public BlockTreeBase(Properties properties, Supplier<ConfiguredFeature<?, ?>> stump, Supplier<ConfiguredFeature<TreeConfiguration, ?>> tree1,
                          Supplier<ConfiguredFeature<TreeConfiguration, ?>> tree2, Supplier<? extends Item> seedItem) {
         super(properties);
-        this.stump = stump;
-        this.tree1 = tree1;
-        this.tree2 = tree2;
-        this.seedItem = seedItem;
+//        this.stump = stump;
+//        this.tree1 = tree1;
+//        this.tree2 = tree2;
+//        this.seedItem = seedItem;
     }
 
     @Override
-    public MapCodec<BlockCashRegister> codec() {
+    public MapCodec<BlockTreeBase> codec() {
         return CODEC;
     }
 
     public static boolean isAirOrReplaceable(BlockState state) {
-        return state.isAir() || state.repla() == Material.REPLACEABLE_PLANT || state.is(BlockTags.LEAVES);
+        return state.isAir() || state.is(BlockTags.REPLACEABLE_BY_TREES) || state.is(BlockTags.LEAVES);
     }
 
     public boolean growTree(ServerLevel level, BlockPos pos, BlockState state, RandomSource rand) {
-        return switch (state.getValue(AGE)) {
-            case 2 -> {
-                ((LevelSnapshotHandler) level).runecraftory$getSnapshotHandler().takeSnapshot(null);
-                if (level.getBlockEntity(pos) instanceof TreeBlockEntity tree) {
-                    tree.onRemove(level, false);
-                }
-                boolean result = this.tree2.get().place(level, level.getChunkSource().getGenerator(), rand, pos);
-                ((LevelSnapshotHandler) level).runecraftory$getSnapshotHandler().popSnapshots(result);
-                yield result;
-            }
-            case 1 -> {
-                ((LevelSnapshotHandler) level).runecraftory$getSnapshotHandler().takeSnapshot(null);
-                if (level.getBlockEntity(pos) instanceof TreeBlockEntity tree) {
-                    tree.onRemove(level, false);
-                }
-                boolean result = this.tree1.get().place(level, level.getChunkSource().getGenerator(), rand, pos);
-                ((LevelSnapshotHandler) level).runecraftory$getSnapshotHandler().popSnapshots(result);
-                yield result;
-            }
-            case 0 -> this.stump.get().place(level, level.getChunkSource().getGenerator(), rand, pos);
-            default -> {
-                if (level.getBlockEntity(pos) instanceof TreeBlockEntity tree) {
-                    tree.update(level);
-                }
-                yield false;
-            }
-        };
+        return false;
+//        return switch (state.getValue(AGE)) {
+//            case 2 -> {
+//                ((LevelSnapshotHandler) level).runecraftory$getSnapshotHandler().takeSnapshot(null);
+//                if (level.getBlockEntity(pos) instanceof TreeBlockEntity tree) {
+//                    tree.onRemove(level, false);
+//                }
+//                boolean result = this.tree2.get().place(level, level.getChunkSource().getGenerator(), rand, pos);
+//                ((LevelSnapshotHandler) level).runecraftory$getSnapshotHandler().popSnapshots(result);
+//                yield result;
+//            }
+//            case 1 -> {
+//                ((LevelSnapshotHandler) level).runecraftory$getSnapshotHandler().takeSnapshot(null);
+//                if (level.getBlockEntity(pos) instanceof TreeBlockEntity tree) {
+//                    tree.onRemove(level, false);
+//                }
+//                boolean result = this.tree1.get().place(level, level.getChunkSource().getGenerator(), rand, pos);
+//                ((LevelSnapshotHandler) level).runecraftory$getSnapshotHandler().popSnapshots(result);
+//                yield result;
+//            }
+//            case 0 -> this.stump.get().place(level, level.getChunkSource().getGenerator(), rand, pos);
+//            default -> {
+//                if (level.getBlockEntity(pos) instanceof TreeBlockEntity tree) {
+//                    tree.update(level);
+//                }
+//                yield false;
+//            }
+//        };
     }
 
     @Override
@@ -114,7 +119,7 @@ public class BlockTreeBase extends RotatedPillarBlock implements EntityBlock, Gr
 
     @Override
     public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
-        return new ItemStack(this.seedItem.get());
+        return ItemStack.EMPTY;//new ItemStack(this.seedItem.get());
     }
 
     @Override

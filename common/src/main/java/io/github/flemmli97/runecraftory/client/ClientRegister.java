@@ -10,16 +10,6 @@ import io.github.flemmli97.runecraftory.client.gui.NPCShopGui;
 import io.github.flemmli97.runecraftory.client.gui.OverlayGui;
 import io.github.flemmli97.runecraftory.client.gui.SpellInvOverlayGui;
 import io.github.flemmli97.runecraftory.client.gui.UpgradeGui;
-import io.github.flemmli97.runecraftory.client.model.AnimatedPlayerModel;
-import io.github.flemmli97.runecraftory.client.model.ModelGate;
-import io.github.flemmli97.runecraftory.client.model.armor.PiyoSandals;
-import io.github.flemmli97.runecraftory.client.model.armor.RingsArmorModel;
-import io.github.flemmli97.runecraftory.client.model.misc.ModelButterfly;
-import io.github.flemmli97.runecraftory.client.model.misc.ModelChest;
-import io.github.flemmli97.runecraftory.client.model.misc.ModelEnergyOrb;
-import io.github.flemmli97.runecraftory.client.model.misc.ModelMissile;
-import io.github.flemmli97.runecraftory.client.model.misc.ModelPlate;
-import io.github.flemmli97.runecraftory.client.model.misc.ModelSpikes;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelAmbrosia;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelAnt;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelBeetle;
@@ -29,13 +19,9 @@ import io.github.flemmli97.runecraftory.client.model.monster.ModelBuffamoo;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelChimera;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelChipsqueek;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelCluckadoodle;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelDeadTree;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelDemon;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelDuck;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelFairy;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelFlowerLily;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelGhost;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelGoblin;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelGrimoire;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelHandonetta;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelHornet;
@@ -46,28 +32,18 @@ import io.github.flemmli97.runecraftory.client.model.monster.ModelMimic;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelMino;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelMinotaur;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelNappie;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelOrc;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelPalmCat;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelPanther;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelPommePomme;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelRaccoon;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelRaccoonBerserk;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelRafflesia;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelSanoUno;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelSarcophagus;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelScorpion;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelSkelefang;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelSkyFish;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelSpider;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelThunderbolt;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelTortas;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelTroll;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelVeggieGhost;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelWeagle;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelWisp;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelWolf;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelWooly;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelWoolyWool;
 import io.github.flemmli97.runecraftory.client.npc.NPCFeatureRenderers;
 import io.github.flemmli97.runecraftory.client.npc.NPCTextureLayer;
 import io.github.flemmli97.runecraftory.client.npc.RenderNPC;
@@ -156,7 +132,6 @@ import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.particle.HeartParticle;
@@ -166,7 +141,6 @@ import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
-import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -467,9 +441,6 @@ public class ClientRegister {
     }
 
     public static void layerRegister(BiConsumer<ModelLayerLocation, Supplier<LayerDefinition>> consumer) {
-        consumer.accept(PiyoSandals::createBodyLayer);
-        consumer.accept(RingsArmorModel::createBodyLayer);
-
         for (NPCTextureLayer.LayerType layerType : NPCTextureLayer.LayerType.values()) {
             if (layerType == NPCTextureLayer.LayerType.SKIN_LAYER || layerType.location == null)
                 continue;

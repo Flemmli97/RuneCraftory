@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.common.network;
 
-import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.inventory.container.ContainerCrafting;
@@ -20,10 +19,10 @@ public class S2CCraftingRecipes implements CustomPacketPayload {
     public static final StreamCodec<RegistryFriendlyByteBuf, S2CCraftingRecipes> STREAM_CODEC = new StreamCodec<>() {
         @Override
         public S2CCraftingRecipes decode(RegistryFriendlyByteBuf buf) {
-            List<Pair<Integer, ItemStack>> list = new ArrayList<>();
+            List<ContainerCrafting.ClientRecipeResult> list = new ArrayList<>();
             int size = buf.readInt();
             for (int i = 0; i < size; i++)
-                list.add(Pair.of(buf.readInt(), ItemStack.STREAM_CODEC.decode(buf)));
+                list.add(new ContainerCrafting.ClientRecipeResult(buf.readInt(), ItemStack.STREAM_CODEC.decode(buf)));
             return new S2CCraftingRecipes(list, buf.readInt());
         }
 
@@ -31,17 +30,17 @@ public class S2CCraftingRecipes implements CustomPacketPayload {
         public void encode(RegistryFriendlyByteBuf buf, S2CCraftingRecipes pkt) {
             buf.writeInt(pkt.data.size());
             pkt.data.forEach(p -> {
-                buf.writeInt(p.getFirst());
-                ItemStack.STREAM_CODEC.encode(buf, p.getSecond());
+                buf.writeInt(p.idx());
+                ItemStack.STREAM_CODEC.encode(buf, p.result());
             });
             buf.writeInt(pkt.clientRecipeIndex);
         }
     };
 
-    private final List<Pair<Integer, ItemStack>> data;
+    private final List<ContainerCrafting.ClientRecipeResult> data;
     private final int clientRecipeIndex;
 
-    public S2CCraftingRecipes(List<Pair<Integer, ItemStack>> data, int clientRecipeIndex) {
+    public S2CCraftingRecipes(List<ContainerCrafting.ClientRecipeResult> data, int clientRecipeIndex) {
         this.data = data;
         this.clientRecipeIndex = clientRecipeIndex;
     }

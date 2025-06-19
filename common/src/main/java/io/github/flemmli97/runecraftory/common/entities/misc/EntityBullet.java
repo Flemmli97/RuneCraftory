@@ -4,7 +4,6 @@ import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
-import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -16,7 +15,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Vector3f;
+import org.joml.Vector3d;
 
 public class EntityBullet extends BaseProjectile {
 
@@ -72,7 +71,9 @@ public class EntityBullet extends BaseProjectile {
         super.shoot(x, y, z, velocity, inaccuracy);
         Vec3 up = this.calculateUpVector(-this.getViewXRot(1), -this.getViewYRot(1)).normalize();
         this.dir = this.getDeltaMovement();
-        this.side = new Vec3(MathUtils.rotatedAround(this.dir, new Vector3f(up.x(), up.y(), up.z()), 90)).normalize();
+        Vector3d rot = new Vector3d(this.dir.x(), this.dir.y(), this.dir.z())
+                .rotateAxis(90 * Mth.DEG_TO_RAD, up.x(), up.y(), up.z());
+        this.side = new Vec3(rot.x(), rot.y(), rot.z()).normalize();
     }
 
     public void reverseMovement() {

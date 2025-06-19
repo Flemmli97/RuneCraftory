@@ -19,8 +19,6 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
 
 /**
  * From {@link FishingHookRenderer}
@@ -46,13 +44,11 @@ public class CustomFishingHookRenderer extends EntityRenderer<EntityCustomFishin
         matrixStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
         matrixStack.mulPose(Axis.YP.rotationDegrees(180.0f));
         PoseStack.Pose pose = matrixStack.last();
-        Matrix4f matrix4f = pose.pose();
-        Matrix3f matrix3f = pose.normal();
         VertexConsumer vertexConsumer = buffer.getBuffer(RENDER_TYPE);
-        vertex(vertexConsumer, matrix4f, matrix3f, packedLight, 0.0f, 0, 0, 1);
-        vertex(vertexConsumer, matrix4f, matrix3f, packedLight, 1.0f, 0, 1, 1);
-        vertex(vertexConsumer, matrix4f, matrix3f, packedLight, 1.0f, 1, 1, 0);
-        vertex(vertexConsumer, matrix4f, matrix3f, packedLight, 0.0f, 1, 0, 0);
+        vertex(vertexConsumer, pose, packedLight, 0.0f, 0, 0, 1);
+        vertex(vertexConsumer, pose, packedLight, 1.0f, 0, 1, 1);
+        vertex(vertexConsumer, pose, packedLight, 1.0f, 1, 1, 0);
+        vertex(vertexConsumer, pose, packedLight, 0.0f, 1, 0, 0);
         matrixStack.popPose();
         int i = owner.getMainArm() == HumanoidArm.RIGHT ? 1 : -1;
         ItemStack itemStack = owner.getMainHandItem();
@@ -101,8 +97,8 @@ public class CustomFishingHookRenderer extends EntityRenderer<EntityCustomFishin
         super.render(entity, entityYaw, partialTicks, matrixStack, buffer, packedLight);
     }
 
-    private static void vertex(VertexConsumer vertexConsumer, Matrix4f matrix4f, Matrix3f matrix3f, int i, float f, int j, int k, int l) {
-        vertexConsumer.addVertex(matrix4f, f - 0.5f, (float) j - 0.5f, 0.0f).setColor(255, 255, 255, 255).setUv(k, l).setOverlay(OverlayTexture.NO_OVERLAY).uv2(i).normal(matrix3f, 0.0f, 1.0f, 0.0f);
+    private static void vertex(VertexConsumer vertexConsumer, PoseStack.Pose pose, int light, float f, int j, int k, int l) {
+        vertexConsumer.addVertex(pose, f - 0.5f, j - 0.5f, 0.0f).setColor(255, 255, 255, 255).setUv(k, l).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(pose, 0.0f, 1.0f, 0.0f);
     }
 
     private static void stringVertex(float f, float g, float h, VertexConsumer vertexConsumer, PoseStack.Pose pose, float i, float j) {

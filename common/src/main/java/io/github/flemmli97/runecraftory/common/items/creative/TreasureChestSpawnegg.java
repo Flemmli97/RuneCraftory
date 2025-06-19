@@ -78,7 +78,8 @@ public class TreasureChestSpawnegg extends SpawnEgg {
         COMMON,
         UNCOMMON,
         RARE,
-        EPIC;
+        EPIC,
+        QUEST;
 
         public ChestTier cycle() {
             int next = (this.ordinal() + 1) % ChestTier.values().length;

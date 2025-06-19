@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
-import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
@@ -9,7 +8,6 @@ import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
@@ -25,6 +23,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -110,7 +109,7 @@ public class EntityWaterLaser extends BaseBeam {
             this.setYRot(e.getYRot() + this.entityData.get(YAW_OFFSET));
             this.xRotO = e.xRotO;
             this.yRotO = e.yRotO + this.entityData.get(YAW_OFFSET);
-            Vector3f vec = RayTraceUtils.rotatedAround(e.getLookAngle(), Vector3f.YP, this.entityData.get(POSITION_YAW_OFFSET));
+            Vec3 vec = e.getLookAngle().yRot(this.entityData.get(POSITION_YAW_OFFSET));
             this.setPos(e.getX() + vec.x(), e.getY() + (double) e.getEyeHeight() - 0.10000000149011612D + vec.y(), e.getZ() + vec.z());
             this.accumulatedRot += Math.abs(this.getYRot() - yRot) + Math.abs(this.getXRot() - xRot);
         }

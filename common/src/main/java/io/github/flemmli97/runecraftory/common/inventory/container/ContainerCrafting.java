@@ -1,7 +1,6 @@
 package io.github.flemmli97.runecraftory.common.inventory.container;
 
 import com.google.common.base.Suppliers;
-import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.blocks.entity.CraftingBlockEntity;
@@ -169,10 +168,10 @@ public class ContainerCrafting extends AbstractContainerMenu implements Containe
     }
 
     public void sendCraftingRecipesToClient(ServerPlayer player, PlayerData data) {
-        List<Pair<Integer, ItemStack>> clientData = IntStream.range(0, this.matchingRecipes.size())
+        List<ClientRecipeResult> clientData = IntStream.range(0, this.matchingRecipes.size())
                 .mapToObj(i -> {
                     RecipeHolder<SextupleRecipe> recipe = this.matchingRecipes.get(i);
-                    return Pair.of(i, recipe.value() instanceof SpecialSextupleRecipe || data.getRecipeKeeper().isUnlocked(recipe) ? this.matchingRecipes.get(i).value().getResultItem() : new ItemStack(ModItems.UNKNOWN.get()));
+                    return new ClientRecipeResult(i, recipe.value() instanceof SpecialSextupleRecipe || data.getRecipeKeeper().isUnlocked(recipe) ? this.matchingRecipes.get(i).value().getResultItem() : new ItemStack(ModItems.UNKNOWN.get()));
                 }).toList();
         if (!this.init)
             LoaderNetwork.INSTANCE.sendToPlayer(new S2CCraftingRecipes(clientData, 0), player);

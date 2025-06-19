@@ -1,12 +1,12 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
-import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
+import io.github.flemmli97.tenshilib.common.entity.AdvancedProjectile;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
@@ -15,6 +15,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3d;
 
 public class EntityDarkBall extends BaseDamageCloud {
 
@@ -60,14 +61,16 @@ public class EntityDarkBall extends BaseDamageCloud {
     public void shoot(double x, double y, double z, float velocity, float inaccuracy) {
         Vec3 vector3d = (new Vec3(x, y, z)).normalize().add(this.random.nextGaussian() * 0.0075F * inaccuracy, this.random.nextGaussian() * 0.0075F * inaccuracy, this.random.nextGaussian() * 0.0075F * inaccuracy).scale(velocity);
         this.setDeltaMovement(vector3d);
-        double f = Math.sqrt(EntityProjectile.horizontalMag(vector3d));
+        double f = Math.sqrt(AdvancedProjectile.horizontalMag(vector3d));
         this.setYRot((float) (Mth.atan2(vector3d.x, vector3d.z) * (180F / (float) Math.PI)));
         this.setXRot((float) (Mth.atan2(vector3d.y, f) * (180F / (float) Math.PI)));
         this.yRotO = this.getYRot();
         this.xRotO = this.getXRot();
         Vec3 up = this.calculateUpVector(-this.getViewXRot(1), -this.getViewYRot(1)).normalize();
         this.dir = this.getDeltaMovement();
-        this.side = new Vec3(RayTraceUtils.rotatedAround(this.dir, new Vector3f(up), 90)).normalize();
+        Vector3d rot = new Vector3d(this.dir.x(), this.dir.y(), this.dir.z())
+                .rotateAxis(90 * Mth.DEG_TO_RAD, up.x(), up.y(), up.z());
+        this.side = new Vec3(rot.x(), rot.y(), rot.z()).normalize();
     }
 
     @Override
@@ -101,7 +104,7 @@ public class EntityDarkBall extends BaseDamageCloud {
 
     @Override
     protected boolean damageEntity(LivingEntity target) {
-        return CombatUtils.damageWithFaintAndCrit(this.getOwner(), target, new CustomDamage.Builder(this, this.getOwner()).magic().noKnockback().hurtResistant(10).element(EnumElement.DARK), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC_ATTACK.get()) * this.damageMultiplier, null);
+        return CombatUtils.damageWithFaintAndCrit(this.getOwner(), target, new CustomDamage.Builder(this, this.getOwner()).magic().noKnockback().hurtResistant(10).element(EnumElement.DARK), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC_ATTACK.asHolder()) * this.damageMultiplier, null);
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.mojang.math.Axis;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.model.misc.ModelChest;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityTreasureChest;
+import io.github.flemmli97.runecraftory.common.items.creative.TreasureChestSpawnegg;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -47,10 +48,10 @@ public class RenderTreasureChest extends EntityRenderer<EntityTreasureChest> {
 
     @Override
     public ResourceLocation getTextureLocation(EntityTreasureChest entity) {
-        int tier = entity.tier();
-        if (tier == 2 || tier == 3)
+        TreasureChestSpawnegg.ChestTier tier = entity.tier();
+        if (tier == TreasureChestSpawnegg.ChestTier.RARE || tier == TreasureChestSpawnegg.ChestTier.EPIC)
             return RARE;
-        if (tier == 4)
+        if (tier == TreasureChestSpawnegg.ChestTier.QUEST)
             return QUEST;
         return COMMON;
     }

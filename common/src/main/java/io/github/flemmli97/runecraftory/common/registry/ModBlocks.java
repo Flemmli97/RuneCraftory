@@ -218,17 +218,17 @@ public class ModBlocks {
     public static final RegistryEntrySupplier<Block, BlockHerb> BAMBOO_SPROUT = herb("bamboo_sprout");
 
     public static final RegistryEntrySupplier<Block, BlockTreeRoot> TREE_SOIL = BLOCKS.register("tree_soil", () -> new BlockTreeRoot(BlockBehaviour.Properties.ofFullCopy(Blocks.DIRT).sound(SoundType.GRAVEL).strength(-1, 99999)));
-    public static final RegistryEntrySupplier<Block, BlockTreeBase> APPLE_TREE = BLOCKS.register("apple_tree", () -> new BlockTreeBase(logProps(), () -> ModFeatures.APPLE_1.value(), () -> ModFeatures.APPLE_2.value(), () -> ModFeatures.APPLE_3.value(), ModItems.APPLE_SAPLING));
+    public static final RegistryEntrySupplier<Block, BlockTreeBase> APPLE_TREE = BLOCKS.register("apple_tree", () -> new BlockTreeBase(logProps()));//, () -> ModFeatures.APPLE_1.value(), () -> ModFeatures.APPLE_2.value(), () -> ModFeatures.APPLE_3.value(), ModItems.APPLE_SAPLING));
     public static final RegistryEntrySupplier<Block, BlockTreeSapling> APPLE_SAPLING = BLOCKS.register("apple_sapling", () -> new BlockTreeSapling(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_SAPLING), APPLE_TREE));
     public static final RegistryEntrySupplier<Block, RotatedPillarBlock> APPLE_WOOD = BLOCKS.register("apple_wood", () -> new RotatedPillarBlock(logProps().strength(-1, 99999)));
     public static final RegistryEntrySupplier<Block, LeavesBlock> APPLE_LEAVES = BLOCKS.register("apple_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES).strength(-1, 99999)));
     public static final RegistryEntrySupplier<Block, BlockFruitTreeLeaf> APPLE = BLOCKS.register("apple_leaves_fruit", () -> new BlockFruitTreeLeaf(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES).strength(-1, 99999), () -> Items.APPLE));
-    public static final RegistryEntrySupplier<Block, BlockTreeBase> ORANGE_TREE = BLOCKS.register("orange_tree", () -> new BlockTreeBase(logProps(), () -> ModFeatures.ORANGE_1.value(), () -> ModFeatures.ORANGE_2.value(), () -> ModFeatures.ORANGE_3.value(), ModItems.ORANGE_SAPLING));
+    public static final RegistryEntrySupplier<Block, BlockTreeBase> ORANGE_TREE = BLOCKS.register("orange_tree", () -> new BlockTreeBase(logProps()));//, () -> ModFeatures.ORANGE_1.value(), () -> ModFeatures.ORANGE_2.value(), () -> ModFeatures.ORANGE_3.value(), ModItems.ORANGE_SAPLING));
     public static final RegistryEntrySupplier<Block, BlockTreeSapling> ORANGE_SAPLING = BLOCKS.register("orange_sapling", () -> new BlockTreeSapling(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_SAPLING), ORANGE_TREE));
     public static final RegistryEntrySupplier<Block, RotatedPillarBlock> ORANGE_WOOD = BLOCKS.register("orange_wood", () -> new RotatedPillarBlock(logProps().strength(-1, 99999)));
     public static final RegistryEntrySupplier<Block, LeavesBlock> ORANGE_LEAVES = BLOCKS.register("orange_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES).strength(-1, 99999)));
     public static final RegistryEntrySupplier<Block, BlockFruitTreeLeaf> ORANGE = BLOCKS.register("orange_leaves_fruit", () -> new BlockFruitTreeLeaf(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES).strength(-1, 99999), ModItems.ORANGE));
-    public static final RegistryEntrySupplier<Block, BlockTreeBase> GRAPE_TREE = BLOCKS.register("grape_tree", () -> new BlockTreeBase(logProps(), () -> ModFeatures.GRAPE_1.value(), () -> ModFeatures.GRAPE_2.value(), () -> ModFeatures.GRAPE_3.value(), ModItems.GRAPE_SAPLING));
+    public static final RegistryEntrySupplier<Block, BlockTreeBase> GRAPE_TREE = BLOCKS.register("grape_tree", () -> new BlockTreeBase(logProps()));//, () -> ModFeatures.GRAPE_1.value(), () -> ModFeatures.GRAPE_2.value(), () -> ModFeatures.GRAPE_3.value(), ModItems.GRAPE_SAPLING));
     public static final RegistryEntrySupplier<Block, BlockTreeSapling> GRAPE_SAPLING = BLOCKS.register("grape_sapling", () -> new BlockTreeSapling(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_SAPLING), GRAPE_TREE));
     public static final RegistryEntrySupplier<Block, RotatedPillarBlock> GRAPE_WOOD = BLOCKS.register("grape_wood", () -> new RotatedPillarBlock(logProps().sound(SoundType.WOOD).strength(-1, 99999)));
     public static final RegistryEntrySupplier<Block, LeavesBlock> GRAPE_LEAVES = BLOCKS.register("grape_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES).strength(-1, 99999)));
@@ -263,7 +263,7 @@ public class ModBlocks {
         return reg;
     }
 
-    public static RegistryEntrySupplier<Block, BlockGiantCrop> giantCrop(String name, Supplier<Supplier<? extends Item>> giant, Supplier<Supplier<? extends Item>> seed, RegistryEntrySupplier<Block> crop) {
+    public static RegistryEntrySupplier<Block, BlockGiantCrop> giantCrop(String name, Supplier<Supplier<? extends Item>> giant, Supplier<Supplier<? extends Item>> seed, RegistryEntrySupplier<Block, ?> crop) {
         RegistryEntrySupplier<Block, BlockGiantCrop> reg = BLOCKS.register(name, () -> new BlockGiantCrop(cropProps(), giant.get(), seed.get()));
         CROPS.add(reg);
         if (Platform.INSTANCE.isDatagen())
