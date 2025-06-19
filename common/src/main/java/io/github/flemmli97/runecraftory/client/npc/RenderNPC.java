@@ -57,8 +57,8 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
 
     public RenderNPC(EntityRendererProvider.Context ctx) {
         super(ctx, new PlayerModel<>(ctx.bakeLayer(ModelLayers.PLAYER), false), 0.5f);
-        this.addLayer(this.armorLayer = new NPCArmorLayer<>(this, new HumanoidModel<>(ctx.bakeLayer(ModelLayers.PLAYER_INNER_ARMOR)), new HumanoidModel<>(ctx.bakeLayer(ModelLayers.PLAYER_OUTER_ARMOR))));
-        this.addLayer(this.armorLayerSlim = new NPCArmorLayer<>(this, new HumanoidModel<>(ctx.bakeLayer(ModelLayers.PLAYER_SLIM_INNER_ARMOR)), new HumanoidModel<>(ctx.bakeLayer(ModelLayers.PLAYER_SLIM_OUTER_ARMOR))));
+        this.addLayer(this.armorLayer = new NPCArmorLayer<>(this, new HumanoidModel<>(ctx.bakeLayer(ModelLayers.PLAYER_INNER_ARMOR)), new HumanoidModel<>(ctx.bakeLayer(ModelLayers.PLAYER_OUTER_ARMOR)), ctx.getModelManager()));
+        this.addLayer(this.armorLayerSlim = new NPCArmorLayer<>(this, new HumanoidModel<>(ctx.bakeLayer(ModelLayers.PLAYER_SLIM_INNER_ARMOR)), new HumanoidModel<>(ctx.bakeLayer(ModelLayers.PLAYER_SLIM_OUTER_ARMOR)), ctx.getModelManager()));
         this.addLayer(new ItemInHandLayer<>(this, ctx.getItemInHandRenderer()));
         for (NPCTextureLayer.LayerType layerType : NPCTextureLayer.LayerType.values()) {
             if (layerType.location == null)

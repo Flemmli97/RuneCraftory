@@ -3,7 +3,6 @@ package io.github.flemmli97.runecraftory.common.utils;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
-import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.api.registry.ArmorEffect;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
@@ -19,11 +18,12 @@ import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
+import io.github.flemmli97.runecraftory.mixin.LivingEntityAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import io.github.flemmli97.tenshilib.common.item.AOEWeapon;
 import io.github.flemmli97.tenshilib.common.utils.HitResultUtils;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.core.Holder;
+import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.resources.ResourceLocation;
@@ -32,6 +32,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.tags.EntityTypeTags;
+import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionHand;
@@ -46,6 +48,8 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.projectile.ProjectileDeflection;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.entity.EntityTypeTest;
@@ -283,43 +287,48 @@ public class CombatUtils {
      * @param resetCooldown should the attack reset cooldown
      * @return if the attack was successful or not
      */
-    public static boolean playerAttackWithItem(Player player, Entity target, boolean resetCooldown, boolean levelSkill) {
-        return CombatUtils.playerAttackWithItem(player, target, player.getMainHandItem(), 1, resetCooldown, levelSkill);
+    public static boolean attackWithItem(Player player, Entity target, boolean resetCooldown, boolean levelSkill) {
+        return CombatUtils.attackWithItem(player, target, player.getMainHandItem(), 1, resetCooldown, levelSkill);
     }
 
-    public static boolean playerAttackWithItem(Player player, Entity target, ItemStack stack, float damageModifier, boolean resetCooldown, boolean levelSkill) {
+    public static boolean attackWithItem(Player player, Entity target, ItemStack stack, float damageModifier, boolean resetCooldown, boolean levelSkill) {
+        if (!(player.level() instanceof ServerLevel serverLevel))
+            return false;
         if (target.isAttackable() && !target.skipAttackInteraction(player) && player.getCooldowns().getCooldownPercent(stack.getItem(), 0.0f) <= 0) {
-            double damagePhys = getAttributeValue(player, Attributes.ATTACK_DAMAGE) * damageModifier;
-            if (damagePhys > 0) {
-                boolean playSound = false;
-                if (resetCooldown && stack.getItem() instanceof IItemUsable usable && usable.hasCooldown()) {
-                    player.getCooldowns().addCooldown(stack.getItem(), Mth.ceil(20 * ItemNBT.attackSpeedModifier(player)));
-                    playSound = true;
+            float damage = (float) (getAttributeValue(player, Attributes.ATTACK_DAMAGE) * damageModifier);
+            if (damage > 0) {
+                if (target.getType().is(EntityTypeTags.REDIRECTABLE_PROJECTILE) && target instanceof Projectile projectile) {
+                    if (projectile.deflect(ProjectileDeflection.AIM_DEFLECT, player, player, true)) {
+                        player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_NODAMAGE, player.getSoundSource());
+                        return true;
+                    }
                 }
-                boolean faintChance = player.level().random.nextDouble() < statusEffectValue(player, ModAttributes.FAINT.asHolder(), target);
-                boolean critChance = player.level().random.nextDouble() < statusEffectValue(player, ModAttributes.CRITICAL.asHolder(), target);
+                boolean faint = player.level().random.nextDouble() < statusEffectValue(player, ModAttributes.FAINT.asHolder(), target);
+                boolean critical = player.level().random.nextDouble() < statusEffectValue(player, ModAttributes.CRITICAL.asHolder(), target);
                 CustomDamage.DamageCategory damageCategory = CustomDamage.DamageCategory.NORMAL;
-                if (faintChance)
+                if (faint)
                     damageCategory = CustomDamage.DamageCategory.FAINT;
-                else if (critChance)
+                else if (critical)
                     damageCategory = CustomDamage.DamageCategory.IGNOREDEF;
-
-                double knockbackAtt = statusEffectValue(player, ModAttributes.KNOCKOUT.asHolder(), target);
-                int i = player.isSprinting() ? 1 : 0;
-                i += EnchantmentHelper.modifyKnockback(player.level(), stack, i);
-                float knockback = (float) (i * 0.5f + knockbackAtt * 3);
                 if (stack.has(ModDataComponentTypes.SCRAP_METAL_PLUS.get())) {
                     damageCategory = CustomDamage.DamageCategory.FIXED;
-                    damagePhys = 1;
+                    damage = 1;
                 }
-                CustomDamage.Builder source = new CustomDamage.Builder(player).element(ItemNBT.getElement(stack)).damageType(damageCategory).knock(CustomDamage.KnockBackType.VANILLA)
-                        .knockAmount(knockback).hurtResistant(0);
+                CustomDamage.Builder source = new CustomDamage.Builder(player).element(ItemNBT.getElement(stack)).damageType(damageCategory)
+                        .knock(CustomDamage.KnockBackType.VANILLA).hurtResistant(0);
+                CustomDamage tempBuild = source.get(player.registryAccess());
+
+                double enchantBonus = EnchantmentHelper.modifyDamage(serverLevel, stack, player, tempBuild, damage) - damage;
+                damage += enchantBonus;
+
+                float knockback = ((LivingEntityAccessor) player).getEntityKnockback(target, tempBuild) + (player.isSprinting() ? 1.0F : 0.0F);
+                source.knockAmount(knockback);
                 Vec3 targetMot = target.getDeltaMovement();
-                if (damageWithFaintAndCrit(player, target, source, damagePhys, stack)) {
+                if (damage(player, target, source, damage, stack, false, false)) {
                     //Level skill on successful attack
                     if (levelSkill && player instanceof ServerPlayer serverPlayer)
                         hitEntityWithItemPlayer(serverPlayer, stack);
-                    if (i > 0) {
+                    if (knockback > 0) {
                         player.setDeltaMovement(player.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
                         player.setSprinting(false);
                     }
@@ -328,18 +337,14 @@ public class CombatUtils {
                         target.hurtMarked = false;
                         target.setDeltaMovement(targetMot);
                     }
-                    if (critChance) {
-                        if (playSound) {
-                            player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_CRIT, player.getSoundSource(), 1.0f, 1.0f);
-                        }
+                    if (critical) {
+                        player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_CRIT, player.getSoundSource(), 1.0f, 1.0f);
                         player.crit(target);
                         player.magicCrit(target);
-                    } else if (stack.getItem() instanceof AOEWeapon aoe && aoe.getWidth(player, stack) == 0.0f && playSound) {
-                        player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, player.getSoundSource(), 1.0f, 1.0f);
-                    } else if (playSound) {
+                    } else {
                         player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, player.getSoundSource(), 1.0f, 1.0f);
                     }
-                } else if (playSound) {
+                } else {
                     player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_NODAMAGE, player.getSoundSource(), 1.0f, 1.0f);
                 }
                 return true;
@@ -356,26 +361,30 @@ public class CombatUtils {
 
     public static boolean mobAttack(LivingEntity attacker, Entity target, CustomDamage.Builder source) {
         ItemStack stack = attacker.getMainHandItem();
-        double damagePhys = getAttributeValue(attacker, Attributes.ATTACK_DAMAGE);
+        double damage = getAttributeValue(attacker, Attributes.ATTACK_DAMAGE);
         if (attacker.level() instanceof ServerLevel serverLevel)
             ModSpells.STAFF_CAST.get().use(serverLevel, attacker, stack);
         if (stack.has(ModDataComponentTypes.SCRAP_METAL_PLUS.get())) {
             source.damageType(CustomDamage.DamageCategory.FIXED);
-            damagePhys = 1;
+            damage = 1;
         }
-        return mobAttack(attacker, target, source, damagePhys);
+        return mobAttack(attacker, target, source, damage);
     }
 
-    public static boolean mobAttack(LivingEntity attacker, Entity target, CustomDamage.Builder source, double dmg) {
+    public static boolean mobAttack(LivingEntity attacker, Entity target, CustomDamage.Builder source, double damage) {
+        return mobAttack(attacker, target, source, damage, null);
+    }
+
+    public static boolean mobAttack(LivingEntity attacker, Entity target, CustomDamage.Builder source, double damage, @Nullable ItemStack stack) {
         if (target.level().getDifficulty() == Difficulty.PEACEFUL && target instanceof Player)
             return false;
-        if (dmg > 0) {
+        if (damage > 0) {
             if (attacker instanceof ElementalAttackMob mob) {
                 EnumElement element = mob.getAttackElement();
                 if (element != null)
                     source.element(element);
             }
-            return damageWithFaintAndCrit(attacker, target, source, dmg, null);
+            return damageWithFaintAndCrit(attacker, target, source, damage, stack);
         }
         return false;
     }
@@ -386,26 +395,24 @@ public class CombatUtils {
 
     public static boolean damage(@Nullable Entity attacker, Entity target, CustomDamage.Builder builder, double damage, @Nullable ItemStack stack, boolean allowCrit, boolean allowFaint) {
         // Setup some more things
-        if (attacker instanceof LivingEntity livingAttacker) {
-            builder.getAttributesChanges().forEach((att, val) -> CombatUtils.applyTempAttribute(livingAttacker, att, val));
-            if (allowFaint && livingAttacker.level().random.nextDouble() < statusEffectValue(livingAttacker, ModAttributes.FAINT.asHolder(), target)) {
+        if (attacker instanceof LivingEntity living) {
+            builder.getAttributesChanges().forEach((att, val) -> CombatUtils.applyTempAttribute(living, att, val));
+            if (allowFaint && living.level().random.nextDouble() < statusEffectValue(living, ModAttributes.FAINT.asHolder(), target)) {
                 builder.damageType(CustomDamage.DamageCategory.FAINT);
-            } else if (allowCrit && livingAttacker.level().random.nextDouble() < statusEffectValue(livingAttacker, ModAttributes.CRITICAL.asHolder(), target)) {
+            } else if (allowCrit && living.level().random.nextDouble() < statusEffectValue(living, ModAttributes.CRITICAL.asHolder(), target)) {
                 switch (builder.getDamageType()) {
                     case MAGIC -> builder.damageType(CustomDamage.DamageCategory.IGNOREMAGICDEF);
                     case NORMAL -> builder.damageType(CustomDamage.DamageCategory.IGNOREDEF);
                 }
             }
             if (builder.calculateKnockback()) {
-                double knockbackAtt = statusEffectValue(livingAttacker, ModAttributes.KNOCKOUT.asHolder(), target);
-                int i = livingAttacker.isSprinting() ? 1 : 0;
-                i += EnchantmentHelper.getKnockbackBonus(livingAttacker);
-                float knockback = (float) (i * 0.5f + knockbackAtt * 3);
+                float knockback = ((LivingEntityAccessor) living).getEntityKnockback(target, builder.get(living.registryAccess()))
+                        + (living.isSprinting() ? 1.0F : 0.0F);
                 builder.knockAmount(knockback);
             }
         }
 
-        CustomDamage source = builder.get();
+        CustomDamage source = builder.get(target.registryAccess());
         float dmg = (float) damage;
         if (source.criticalDamage())
             dmg = Float.MAX_VALUE;
@@ -419,16 +426,21 @@ public class CombatUtils {
             }
             if (target instanceof LivingEntity livingTarget) {
                 knockBack(livingTarget, source);
-                if (attacker instanceof LivingEntity livingAttacker) {
+                boolean handleStack = attacker instanceof Player && stack != null;
+                if (handleStack) {
+                    handleStack = stack.hurtEnemy(livingTarget, (Player) attacker);
+                }
+                if (attacker instanceof LivingEntity livingAttacker && livingAttacker.level() instanceof ServerLevel serverLevel) {
                     applyStatusEffects(livingAttacker, livingTarget);
-                    EnchantmentHelper.doPostHurtEffects(livingTarget, livingAttacker);
-                    if (stack != null && livingAttacker instanceof Player player) {
-                        ItemStack beforeHitCopy = stack.copy();
-                        stack.hurtEnemy(livingTarget, player);
-                        if (stack.isEmpty()) {
-                            Platform.INSTANCE.destroyItem(player, beforeHitCopy, InteractionHand.MAIN_HAND);
-                            livingAttacker.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
-                        }
+                    EnchantmentHelper.doPostAttackEffects(serverLevel, target, source);
+                }
+                if (handleStack && !stack.isEmpty())
+                    stack.postHurtEnemy(livingTarget, (Player) attacker);
+                if (stack != null && attacker instanceof Player player) {
+                    ItemStack beforeHitCopy = stack.copy();
+                    if (stack.isEmpty()) {
+                        Platform.INSTANCE.destroyItem(player, beforeHitCopy, InteractionHand.MAIN_HAND);
+                        player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
                     }
                 }
             }
@@ -478,35 +490,35 @@ public class CombatUtils {
         boolean dizzyChance = attackingEntity.level().random.nextDouble() < statusEffectValue(attackingEntity, ModAttributes.DIZZY.asHolder(), target);
         double stunAmount = statusEffectValue(attackingEntity, ModAttributes.STUN.asHolder(), target);
         if (poisonChance) {
-            EntityUtils.applyPermanentEffect(target, ModEffects.POISON.get(), 0);
+            EntityUtils.applyPermanentEffect(target, ModEffects.POISON.asHolder(), 0);
             if (attackingEntity instanceof ServerPlayer player)
                 LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_POISON, 5);
             if (target instanceof ServerPlayer player)
                 LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_POISON, 15);
         }
         if (fatigueChance) {
-            EntityUtils.applyPermanentEffect(target, ModEffects.FATIGUE.get(), 0);
+            EntityUtils.applyPermanentEffect(target, ModEffects.FATIGUE.asHolder(), 0);
             if (attackingEntity instanceof ServerPlayer player)
                 LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_FATIGUE, 5);
             if (target instanceof ServerPlayer player)
                 LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_FATIGUE, 15);
         }
         if (coldChance) {
-            EntityUtils.applyPermanentEffect(target, ModEffects.COLD.get(), 0);
+            EntityUtils.applyPermanentEffect(target, ModEffects.COLD.asHolder(), 0);
             if (attackingEntity instanceof ServerPlayer player)
                 LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_COLD, 5);
             if (target instanceof ServerPlayer player)
                 LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_COLD, 15);
         }
         if (paraChance) {
-            EntityUtils.applyPermanentEffect(target, ModEffects.PARALYSIS.get(), 0);
+            EntityUtils.applyPermanentEffect(target, ModEffects.PARALYSIS.asHolder(), 0);
             if (attackingEntity instanceof ServerPlayer player)
                 LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_PARA, 5);
             if (target instanceof ServerPlayer player)
                 LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_PARA, 15);
         }
         if (sealChance) {
-            EntityUtils.applyPermanentEffect(target, ModEffects.SEAL.get(), 0);
+            EntityUtils.applyPermanentEffect(target, ModEffects.SEAL.asHolder(), 0);
             if (attackingEntity instanceof ServerPlayer player)
                 LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_SEAL, 5);
             if (target instanceof ServerPlayer player)
@@ -541,12 +553,15 @@ public class CombatUtils {
                 default -> {
                 }
             }
-            double r = (color >> 16 & 0xFF) / 255.0;
-            double g = (color >> 8 & 0xFF) / 255.0;
-            double b = (color & 0xFF) / 255.0;
+            int r = (color >> 16 & 0xFF);
+            int g = (color >> 8 & 0xFF);
+            int b = (color & 0xFF);
             Random rand = new Random();
             for (int i = 0; i < 7; ++i) {
-                serverLevel.sendParticles(ParticleTypes.ENTITY_EFFECT, target.getX() + (rand.nextDouble() - 0.5) * target.getBbWidth(), target.getY() + 0.3 + rand.nextDouble() * target.getBbHeight(), target.getZ() + (rand.nextDouble() - 0.5) * target.getBbWidth(), 0, r, g, b, 1);
+                serverLevel.sendParticles(ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, FastColor.ARGB32.color(r, g, b)),
+                        target.getX() + (rand.nextDouble() - 0.5) * target.getBbWidth(),
+                        target.getY() + 0.3 + rand.nextDouble() * target.getBbHeight(),
+                        target.getZ() + (rand.nextDouble() - 0.5) * target.getBbWidth(), 0, 0, 0, 0, 1);
             }
         }
     }
@@ -790,7 +805,7 @@ public class CombatUtils {
                 if (target != livingEntity && this.attacker.getVehicle() == livingEntity)
                     continue;
                 if (this.attacker instanceof Player player) {
-                    flag = CombatUtils.playerAttackWithItem(player, livingEntity, false, false);
+                    flag = CombatUtils.attackWithItem(player, livingEntity, false, false);
                 } else if (this.attacker instanceof Mob mob)
                     flag = mob.doHurtTarget(livingEntity);
                 if (flag) {

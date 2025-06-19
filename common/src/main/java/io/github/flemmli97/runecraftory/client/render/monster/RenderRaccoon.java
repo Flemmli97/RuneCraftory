@@ -28,9 +28,9 @@ public class RenderRaccoon<T extends EntityRaccoon> extends RenderMonster<T, Mod
     private boolean clone;
 
     public RenderRaccoon(EntityRendererProvider.Context ctx) {
-        super(ctx, new ModelRaccoon<>(ctx.bakeLayer(ModelRaccoon.LAYER_LOCATION)), RuneCraftory.modRes("textures/entity/monsters/raccoon.png"), 0.5f, false);
+        super(ctx, new ModelRaccoon<>(), RuneCraftory.modRes("textures/entity/monsters/raccoon.png"), 0.5f, false);
         this.normalModel = this.model;
-        this.berserkModel = new ModelRaccoonBerserk<>(ctx.bakeLayer(ModelRaccoonBerserk.LAYER_LOCATION));
+        this.berserkModel = new ModelRaccoonBerserk<>();
         this.layers.add(new RiderLayerRendererExt<>(this, (stack, entity) -> {
             if (entity.isBerserk())
                 stack.scale(1 / BERSERK_SCALE, 1 / BERSERK_SCALE, 1 / BERSERK_SCALE);

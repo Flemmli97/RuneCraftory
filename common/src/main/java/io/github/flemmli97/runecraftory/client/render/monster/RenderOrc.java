@@ -10,7 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 public class RenderOrc<T extends EntityOrc> extends RenderMonster<T, ModelOrc<T>> {
 
     public RenderOrc(EntityRendererProvider.Context ctx, ResourceLocation texture) {
-        super(ctx, new ModelOrc<>(ctx.bakeLayer(ModelOrc.LAYER_LOCATION)), texture, 0.5f);
+        super(ctx, new ModelOrc<>(), texture, 0.5f);
         this.layers.add(new ItemLayer<>(this, ctx.getItemInHandRenderer()));
     }
 }

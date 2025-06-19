@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.client.render.projectiles;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.client.render.AnimatedTexture;
@@ -37,7 +37,7 @@ public class RenderElementBall extends EntityRenderer<EntityElementalBall> {
     @Override
     public void render(EntityElementalBall entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         stack.mulPose(this.entityRenderDispatcher.cameraOrientation());
-        stack.mulPose(Vector3f.YP.rotationDegrees(180));
+        stack.mulPose(Axis.YP.rotationDegrees(180));
         AnimatedTexture text = null;
         switch (entity.getElement()) {
             case FIRE -> text = this.fireTexAnim;

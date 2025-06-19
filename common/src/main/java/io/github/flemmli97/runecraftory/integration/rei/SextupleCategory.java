@@ -68,7 +68,7 @@
 //                }
 //            }
 //            TranslatableComponent level = Component.translatable("runecraftory.recipe_integration.crafting_level", display.recipe().getCraftingLevel());
-//            widgets.add(Widgets.createLabel(new Point(bounds.getX() + bounds.getWidth(), bounds.getY()), level).noShadow().rightAligned().color(0xFF404040, 0xFFBBBBBB));
+//            widgets.add(Widgets.createLabel(new Point(bounds.getX() + bounds.getWidth(), bounds.getY()), level).noShadow().rightAligned().setColor(0xFF404040, 0xFFBBBBBB));
 //        } else {
 //            widgets.add(Widgets.createSlot(new Point(bounds.getX() + 64, bounds.getY() + 14)).entry(EntryStacks.of(new ItemStack(ModItems.UNKNOWN.get()))
 //                    .tooltip(Component.translatable("runecraftory.recipe_integration.locked"))));

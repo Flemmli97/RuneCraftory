@@ -31,7 +31,7 @@ public class DailyPlayerUpdater {
         if (this.lastUpdateDay != day) {
             this.lastUpdateDay = day;
             this.data.getShippingInv().shipItems(player);
-            this.data.refreshShop(player);
+            this.data.refreshShop();
             this.gaveMonsterItem = false;
             this.ateFood = false;
             this.bathCounter = 0;

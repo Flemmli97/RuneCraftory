@@ -1,10 +1,9 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemStatIncrease;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -48,16 +47,15 @@ public class EntityRuney extends Entity {
             case 3 -> ItemStatIncrease.Stat.VIT;
             default -> ItemStatIncrease.Stat.HP;
         };
-        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-            data.increaseStatBonus(player, stat);
-            data.refreshRunePoints(player, 150);
-        });
-        player.level.playSound(null, player.blockPosition(), SoundEvents.GLASS_BREAK, this.getSoundSource(), 1, 0.5f);
+        PlayerData data = Platform.INSTANCE.getPlayerData(player);
+        data.increaseStatBonus(stat);
+        data.refreshRunePoints(150);
+        player.level().playSound(null, player.blockPosition(), SoundEvents.GLASS_BREAK, this.getSoundSource(), 1, 0.5f);
     }
 
     @Override
-    protected void defineSynchedData() {
-        this.getEntityData().define(TYPE, (byte) 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        builder.define(TYPE, (byte) 0);
     }
 
     public void setType(byte b) {
@@ -78,10 +76,5 @@ public class EntityRuney extends Entity {
     protected void addAdditionalSaveData(CompoundTag compound) {
         compound.putInt("TicksExisted", this.ticksExisted);
         compound.putByte("Type", this.entityData.get(TYPE));
-    }
-
-    @Override
-    public Packet<?> getAddEntityPacket() {
-        return new ClientboundAddEntityPacket(this);
     }
 }

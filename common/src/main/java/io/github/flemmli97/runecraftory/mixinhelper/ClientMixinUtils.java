@@ -92,14 +92,14 @@ public class ClientMixinUtils {
         int g = FastColor.ARGB32.green(color);
         int b = FastColor.ARGB32.blue(color);
         int gray = Math.max(b, Math.max(r, g));
-        return FastColor.ARGB32.color(FastColor.ARGB32.alpha(color),
+        return FastColor.ARGB32.setColor(FastColor.ARGB32.alpha(color),
                 (int) (r + (gray - r) * perc),
                 (int) (g + (gray - g) * perc),
                 (int) (b + (gray - b) * perc));
     }
 
     private static int add(int packedColourOne, int packedColorTwo) {
-        return FastColor.ARGB32.color(Math.min(255, FastColor.ARGB32.alpha(packedColourOne) + FastColor.ARGB32.alpha(packedColorTwo)),
+        return FastColor.ARGB32.setColor(Math.min(255, FastColor.ARGB32.alpha(packedColourOne) + FastColor.ARGB32.alpha(packedColorTwo)),
                 Math.min(255, FastColor.ARGB32.red(packedColourOne) + FastColor.ARGB32.red(packedColorTwo)),
                 Math.min(255, FastColor.ARGB32.green(packedColourOne) + FastColor.ARGB32.green(packedColorTwo)),
                 Math.min(255, FastColor.ARGB32.blue(packedColourOne) + FastColor.ARGB32.blue(packedColorTwo)));

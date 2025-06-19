@@ -1,12 +1,9 @@
 package io.github.flemmli97.runecraftory.client;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.common.config.ClientConfig;
 import io.github.flemmli97.runecraftory.mixin.SoundManagerAccessor;
 import io.github.flemmli97.runecraftory.mixinhelper.SoundEngineUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
@@ -196,7 +193,7 @@ public class BossBarTracker {
         private final Set<UUID> instances = new HashSet<>();
 
         public BossSoundInstance(UUID id, SoundEvent soundEvent, SoundSource soundSource, float volume, float pitch, int fadeTime) {
-            super(soundEvent, soundSource);
+            super(soundEvent, soundSource, SoundInstance.createUnseededRandom());
             this.id = id;
             this.volume = volume;
             this.pitch = pitch;
@@ -301,23 +298,20 @@ public class BossBarTracker {
 
     public record ClientBossBarType(BossbarTexture texture, BossbarTexture overlay) {
 
-        public int renderFrom(PoseStack poseStack, int x, int y, BossEvent bossEvent, boolean withName) {
+        public int renderFrom(GuiGraphics graphics, int x, int y, BossEvent bossEvent, boolean withName) {
             Minecraft mc = Minecraft.getInstance();
             if (withName) {
                 int screenX = mc.getWindow().getGuiScaledWidth();
                 Component component = bossEvent.getName();
                 int len = mc.font.width(component);
                 int txtX = screenX / 2 - len / 2;
-                mc.font.drawShadow(poseStack, component, txtX, y - 9, 0xFFFFFF);
+                graphics.drawString(mc.font, component, txtX, y - 9, 0xFFFFFF);
             }
 
-            RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-            RenderSystem.setShaderTexture(0, this.texture.texture);
-            GuiComponent.blit(poseStack, x, y, 0, this.texture.offsetX, this.texture.offsetY, this.texture.width, this.texture.height, 256, 256);
+            graphics.blit(this.texture.texture, x, y, 0, this.texture.offsetX, this.texture.offsetY, this.texture.width, this.texture.height, 256, 256);
 
-            RenderSystem.setShaderTexture(0, this.overlay.texture);
             int overlayWidth = (int) (bossEvent.getProgress() * this.overlay.width);
-            GuiComponent.blit(poseStack, x, y, 0, this.overlay.offsetX, this.overlay.offsetY, overlayWidth, this.overlay.height, 256, 256);
+            graphics.blit(this.overlay.texture, x, y, 0, this.overlay.offsetX, this.overlay.offsetY, overlayWidth, this.overlay.height, 256, 256);
             return y + mc.font.lineHeight + Math.max(this.texture.height, this.overlay.height) + 5;
         }
     }

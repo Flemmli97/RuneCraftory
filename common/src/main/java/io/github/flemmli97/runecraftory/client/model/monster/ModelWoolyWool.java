@@ -4,74 +4,45 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityWooly;
-import io.github.flemmli97.tenshilib.client.AnimationManager;
+import io.github.flemmli97.tenshilib.client.data.AnimationManager;
+import io.github.flemmli97.tenshilib.client.data.ModelManager;
+import io.github.flemmli97.tenshilib.client.data.ReloadableCache;
+import io.github.flemmli97.tenshilib.client.model.BedrockAnimations;
 import io.github.flemmli97.tenshilib.client.model.ExtendedModel;
+import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.resources.ResourceLocation;
 
 public class ModelWoolyWool<T extends EntityWooly> extends EntityModel<T> implements ExtendedModel {
 
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(RuneCraftory.modRes("wooly_wool"), "main");
+    public static final ResourceLocation LOCATION = RuneCraftory.modRes("wooly_wool");
 
-    protected final ModelPartHandler model;
-    protected final BlockBenchAnimations anim;
+    private final ReloadableCache<ModelPartsContainer> model;
+    protected final ReloadableCache<BedrockAnimations> anim;
 
-    public ModelPartHandler.ModelPartExtended bodyCenter;
-    public ModelPartHandler.ModelPartExtended body;
-    public ModelPartHandler.ModelPartExtended bodyUp;
-    public ModelPartHandler.ModelPartExtended armLeftBase;
-    public ModelPartHandler.ModelPartExtended armRightBase;
-    public ModelPartHandler.ModelPartExtended feetLeftBase;
-    public ModelPartHandler.ModelPartExtended feetRightBase;
+    public ModelPartsContainer.ModelPartExtended body;
+    public ModelPartsContainer.ModelPartExtended bodyUp;
+    public ModelPartsContainer.ModelPartExtended armLeftBase;
+    public ModelPartsContainer.ModelPartExtended armRightBase;
+    public ModelPartsContainer.ModelPartExtended feetLeftBase;
+    public ModelPartsContainer.ModelPartExtended feetRightBase;
 
-    public ModelWoolyWool(ModelPart root) {
+    public ModelWoolyWool() {
         super();
-        this.model = new ModelPartHandler(root.getChild("bodyCenter"), "bodyCenter");
-        this.anim = AnimationManager.getInstance().getAnimation(RuneCraftory.modRes("wooly_wool"));
-        this.bodyCenter = this.model.getMainPart();
-        this.body = this.model.getPart("body");
-        this.bodyUp = this.model.getPart("bodyUp");
-        this.armLeftBase = this.model.getPart("armLeftBase");
-        this.armRightBase = this.model.getPart("armRightBase");
-        this.feetLeftBase = this.model.getPart("feetLeftBase");
-        this.feetRightBase = this.model.getPart("feetRightBase");
-    }
-
-    public static LayerDefinition createBodyLayer() {
-        MeshDefinition meshdefinition = new MeshDefinition();
-        PartDefinition partdefinition = meshdefinition.getRoot();
-
-        PartDefinition bodyCenter = partdefinition.addOrReplaceChild("bodyCenter", CubeListBuilder.create(), PartPose.offset(0.0F, 17.75F, 0.0F));
-
-        PartDefinition body = bodyCenter.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 0).addBox(-3.5F, -7.0F, -4.5F, 7.0F, 13.0F, 9.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 22).addBox(-4.5F, -7.0F, -3.5F, 1.0F, 13.0F, 7.0F, new CubeDeformation(0.0F))
-                .texOffs(16, 22).addBox(3.5F, -7.0F, -3.5F, 1.0F, 13.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
-
-        PartDefinition bodyUp = body.addOrReplaceChild("bodyUp", CubeListBuilder.create().texOffs(32, 0).addBox(-2.5F, -1.0F, -3.5F, 5.0F, 2.0F, 7.0F, new CubeDeformation(0.0F))
-                .texOffs(32, 40).addBox(2.5F, -1.0F, -2.5F, 1.0F, 2.0F, 5.0F, new CubeDeformation(0.0F))
-                .texOffs(32, 33).addBox(-3.5F, -1.0F, -2.5F, 1.0F, 2.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -8.0F, 0.0F));
-
-        PartDefinition armLeftBase = body.addOrReplaceChild("armLeftBase", CubeListBuilder.create().texOffs(8, 42).addBox(0.25F, -1.0F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.75F, -3.0F, 0.0F, 0.1745F, 0.0F, 0.0F));
-
-        PartDefinition armRightBase = body.addOrReplaceChild("armRightBase", CubeListBuilder.create().texOffs(0, 42).addBox(-2.25F, -1.0F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-3.75F, -3.0F, 0.0F, 0.1745F, 0.0F, 0.0F));
-
-        PartDefinition feetLeftBase = body.addOrReplaceChild("feetLeftBase", CubeListBuilder.create().texOffs(32, 21).addBox(-1.5F, -5.5F, -2.5F, 3.0F, 7.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(4.0F, 4.75F, 0.0F));
-
-        PartDefinition feetRightBase = body.addOrReplaceChild("feetRightBase", CubeListBuilder.create().texOffs(32, 9).addBox(-1.5F, -5.5F, -2.5F, 3.0F, 7.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(-4.0F, 4.75F, 0.0F));
-
-        return LayerDefinition.create(meshdefinition, 64, 64);
+        this.model = ModelManager.getInstance().getModel(LOCATION, model -> {
+            this.body = model.getPart("body");
+            this.bodyUp = model.getPart("bodyUp");
+            this.armLeftBase = model.getPart("armLeftBase");
+            this.armRightBase = model.getPart("armRightBase");
+            this.feetLeftBase = model.getPart("feetLeftBase");
+            this.feetRightBase = model.getPart("feetRightBase");
+        });
+        this.anim = AnimationManager.getInstance().getAnimation(LOCATION);
     }
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-        this.model.getMainPart().render(poseStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
+        this.getModel().getMainPart().render(poseStack, buffer, packedLight, packedOverlay, color);
     }
 
     @Override
@@ -79,11 +50,11 @@ public class ModelWoolyWool<T extends EntityWooly> extends EntityModel<T> implem
     }
 
     @Override
-    public ModelPartHandler getHandler() {
-        return this.model;
+    public ModelPartsContainer getModel() {
+        return this.model.get();
     }
 
-    private void sync(ModelPartHandler.ModelPartExtended model, ModelPartHandler.ModelPartExtended other) {
+    private void sync(ModelPartsContainer.ModelPartExtended model, ModelPartsContainer.ModelPartExtended other) {
         model.xRot = other.xRot;
         model.yRot = other.yRot;
         model.zRot = other.zRot;
@@ -96,7 +67,7 @@ public class ModelWoolyWool<T extends EntityWooly> extends EntityModel<T> implem
     }
 
     public void syncModel(ModelWooly<T> model) {
-        this.sync(this.bodyCenter, model.bodyCenter);
+        this.sync(this.getModel().getMainPart(), model.getModel().getMainPart());
         this.sync(this.body, model.body);
         this.sync(this.bodyUp, model.bodyUp);
         this.sync(this.armLeftBase, model.armLeftBase);

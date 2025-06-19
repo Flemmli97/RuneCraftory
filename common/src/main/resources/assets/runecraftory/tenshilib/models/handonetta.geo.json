@@ -1,0 +1,272 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.unknown",
+        "texture_width": 128,
+        "texture_height": 128,
+        "visible_bounds_width": 3,
+        "visible_bounds_height": 4.5,
+        "visible_bounds_offset": [0, 1.75, 0]
+      },
+      "bones": [
+        {
+          "name": "palm",
+          "pivot": [0, 21, 4],
+          "rotation": [10, 0, 0],
+          "cubes": [
+            {
+              "origin": [-15.5, 12, 0],
+              "size": [31, 14, 8],
+              "uv": [0, 0]
+            }
+          ]
+        },
+        {
+          "name": "palmLower",
+          "parent": "palm",
+          "pivot": [0, 11.75, 4],
+          "cubes": [
+            {
+              "origin": [-10.5, 2, 0],
+              "size": [20, 10, 8],
+              "uv": [0, 40]
+            }
+          ]
+        },
+        {
+          "name": "palm2",
+          "parent": "palmLower",
+          "pivot": [-15.5, 12, 4],
+          "rotation": [0, 0, -35],
+          "cubes": [
+            {
+              "origin": [-15.5, 3, 0.01],
+              "size": [5, 9, 7.98],
+              "uv": [86, 60]
+            }
+          ]
+        },
+        {
+          "name": "palm3",
+          "parent": "palmLower",
+          "pivot": [15.5, 12, 4],
+          "rotation": [0, 0, 42.5],
+          "cubes": [
+            {
+              "origin": [10.5, 3, 0.01],
+              "size": [5, 9, 7.98],
+              "uv": [86, 77]
+            }
+          ]
+        },
+        {
+          "name": "fingerBase",
+          "parent": "palm",
+          "pivot": [0, 26, 8],
+          "rotation": [22.5, 0, 0],
+          "cubes": [
+            {
+              "origin": [-15.5, 26, 0],
+              "size": [31, 10, 8],
+              "inflate": -0.001,
+              "uv": [0, 22]
+            }
+          ]
+        },
+        {
+          "name": "index",
+          "parent": "fingerBase",
+          "pivot": [12, 36, 4],
+          "rotation": [12.5, 0, 0],
+          "cubes": [
+            {
+              "origin": [8.5, 36, 0.5],
+              "size": [7, 8, 7],
+              "inflate": 0,
+              "uv": [78, 15]
+            }
+          ]
+        },
+        {
+          "name": "index2",
+          "parent": "index",
+          "pivot": [12, 44, 4],
+          "rotation": [15, 0, 0],
+          "cubes": [
+            {
+              "origin": [8.5, 44, 0.5],
+              "size": [7, 8, 7],
+              "inflate": 0,
+              "uv": [78, 0]
+            }
+          ]
+        },
+        {
+          "name": "index3",
+          "parent": "index2",
+          "pivot": [12, 52, 4],
+          "rotation": [27.5, 0, 0],
+          "cubes": [
+            {
+              "origin": [8.5, 52, 0.5],
+              "size": [7, 8, 7],
+              "inflate": 0,
+              "uv": [58, 78]
+            }
+          ]
+        },
+        {
+          "name": "middle",
+          "parent": "fingerBase",
+          "pivot": [4, 36, 4],
+          "rotation": [12.5, 0, 0],
+          "cubes": [
+            {
+              "origin": [0.5, 36, 0.5],
+              "size": [7, 10, 7],
+              "uv": [30, 62]
+            }
+          ]
+        },
+        {
+          "name": "middle2",
+          "parent": "middle",
+          "pivot": [4, 46, 4],
+          "rotation": [17.5, 0, 0],
+          "cubes": [
+            {
+              "origin": [0.5, 46, 0.5],
+              "size": [7, 9, 7],
+              "uv": [58, 62]
+            }
+          ]
+        },
+        {
+          "name": "middle3",
+          "parent": "middle2",
+          "pivot": [4, 55, 4],
+          "rotation": [22.5, 0, 0],
+          "cubes": [
+            {
+              "origin": [0.5, 55, 0.5],
+              "size": [7, 8, 7],
+              "uv": [28, 79]
+            }
+          ]
+        },
+        {
+          "name": "ring",
+          "parent": "fingerBase",
+          "pivot": [-4, 36, 4],
+          "rotation": [20, 0, 0],
+          "cubes": [
+            {
+              "origin": [-7.5, 36, 0.5],
+              "size": [7, 9, 7],
+              "uv": [0, 78]
+            }
+          ]
+        },
+        {
+          "name": "ring2",
+          "parent": "ring",
+          "pivot": [-4, 45, 4],
+          "rotation": [15, 0, 0],
+          "cubes": [
+            {
+              "origin": [-7.5, 45, 0.5],
+              "size": [7, 8, 7],
+              "uv": [86, 30]
+            }
+          ]
+        },
+        {
+          "name": "ring3",
+          "parent": "ring2",
+          "pivot": [-4, 53, 4],
+          "rotation": [22.5, 0, 0],
+          "cubes": [
+            {
+              "origin": [-7.5, 53, 0.5],
+              "size": [7, 8, 7],
+              "uv": [86, 45]
+            }
+          ]
+        },
+        {
+          "name": "pinky",
+          "parent": "fingerBase",
+          "pivot": [-12, 36, 4],
+          "rotation": [12.5, 0, 0],
+          "cubes": [
+            {
+              "origin": [-15.5, 36, 0.5],
+              "size": [7, 7, 7],
+              "uv": [56, 93]
+            }
+          ]
+        },
+        {
+          "name": "pinky2",
+          "parent": "pinky",
+          "pivot": [-12, 43, 4],
+          "rotation": [17.5, 0, 0],
+          "cubes": [
+            {
+              "origin": [-15.5, 43, 0.5],
+              "size": [7, 7, 7],
+              "uv": [0, 94]
+            }
+          ]
+        },
+        {
+          "name": "pinky3",
+          "parent": "pinky2",
+          "pivot": [-12, 50, 4],
+          "rotation": [37.5, 0, 0],
+          "cubes": [
+            {
+              "origin": [-15.5, 50, 0.5],
+              "size": [7, 7, 7],
+              "uv": [28, 94]
+            }
+          ]
+        },
+        {
+          "name": "thumb",
+          "parent": "palm",
+          "pivot": [15.5, 14, 4],
+          "rotation": [27.5, 0, 55],
+          "cubes": [
+            {
+              "origin": [7.5, 14, 0.5],
+              "size": [8, 15, 7],
+              "uv": [56, 40]
+            }
+          ]
+        },
+        {
+          "name": "thumb2",
+          "parent": "thumb",
+          "pivot": [15.5, 29, 4],
+          "rotation": [20, 0, -30],
+          "cubes": [
+            {
+              "origin": [7.5, 29, 0.5],
+              "size": [8, 13, 7],
+              "inflate": -0.001,
+              "uv": [0, 58]
+            }
+          ]
+        },
+        {
+          "name": "ridingPos",
+          "parent": "palm",
+          "pivot": [0, 26, 8]
+        }
+      ]
+    }
+  ]
+}

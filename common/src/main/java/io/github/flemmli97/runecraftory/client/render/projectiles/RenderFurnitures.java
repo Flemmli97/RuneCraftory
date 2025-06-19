@@ -2,11 +2,13 @@ package io.github.flemmli97.runecraftory.client.render.projectiles;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityFurniture;
+import io.github.flemmli97.tenshilib.client.data.ModelManager;
+import io.github.flemmli97.tenshilib.client.data.ReloadableCache;
+import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -23,14 +25,15 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.CommonColors;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class RenderFurnitures extends EntityRenderer<EntityFurniture> {
 
-    public static final ModelLayerLocation LOC_CHAIR = new ModelLayerLocation(RuneCraftory.modRes("chair"), "main");
-    public static final ModelLayerLocation LOC_CHIPSQUEEK_PLUSH = new ModelLayerLocation(RuneCraftory.modRes("chipsqueek_plush"), "main");
-    public static final ModelLayerLocation LOC_WOOLY_PLUSH = new ModelLayerLocation(RuneCraftory.modRes("wooly_plush"), "main");
+    public static final ResourceLocation LOC_CHAIR = RuneCraftory.modRes("chair");
+    public static final ResourceLocation LOC_CHIPSQUEEK_PLUSH = RuneCraftory.modRes("chipsqueek_plush");
+    public static final ResourceLocation LOC_WOOLY_PLUSH = RuneCraftory.modRes("wooly_plush");
 
     private static final ResourceLocation TEX_CHAIR = RuneCraftory.modRes("textures/entity/projectile/chair.png");
     private static final ResourceLocation TEX_WOOLY = RuneCraftory.modRes("textures/entity/projectile/wooly_plush.png");
@@ -42,9 +45,9 @@ public class RenderFurnitures extends EntityRenderer<EntityFurniture> {
     private final ModelPart chestBottom;
     private final ModelPart chestLock;
 
-    private final ModelPart chair;
-    private final ModelPart woolyPlush;
-    private final ModelPart chipSqueekPlush;
+    private final ReloadableCache<ModelPartsContainer> chair;
+    private final ReloadableCache<ModelPartsContainer> woolyPlush;
+    private final ReloadableCache<ModelPartsContainer> chipSqueekPlush;
 
     public RenderFurnitures(EntityRendererProvider.Context ctx) {
         super(ctx);
@@ -53,9 +56,9 @@ public class RenderFurnitures extends EntityRenderer<EntityFurniture> {
         this.chestBottom = modelPart.getChild("lid");
         this.chestLock = modelPart.getChild("lock");
 
-        this.chair = ctx.bakeLayer(LOC_CHAIR);
-        this.woolyPlush = ctx.bakeLayer(LOC_WOOLY_PLUSH);
-        this.chipSqueekPlush = ctx.bakeLayer(LOC_CHIPSQUEEK_PLUSH);
+        this.chair = ModelManager.getInstance().getModel(LOC_CHAIR);
+        this.woolyPlush = ModelManager.getInstance().getModel(LOC_WOOLY_PLUSH);
+        this.chipSqueekPlush = ModelManager.getInstance().getModel(LOC_CHIPSQUEEK_PLUSH);
     }
 
     public static LayerDefinition chairLayer() {
@@ -113,7 +116,7 @@ public class RenderFurnitures extends EntityRenderer<EntityFurniture> {
     public void render(EntityFurniture entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         stack.pushPose();
         stack.scale(1.2f, 1.2f, 1.2f);
-        stack.mulPose(Vector3f.YP.rotationDegrees(entity.getRandomRotationOffset()));
+        stack.mulPose(Axis.YP.rotationDegrees(entity.getRandomRotationOffset()));
         switch (entity.getFurnitureType()) {
             case BARREL -> this.renderBlockModel(this.barrel, stack, buffer, packedLight);
             case ANVIL -> this.renderBlockModel(this.anvil, stack, buffer, packedLight);
@@ -154,6 +157,13 @@ public class RenderFurnitures extends EntityRenderer<EntityFurniture> {
         stack.scale(-1, -1, 1);
         stack.translate(0.0, -1.501f, 0.0);
         for (ModelPart part : parts)
-            part.render(stack, ivertexbuilder, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+            part.render(stack, ivertexbuilder, packedLight, OverlayTexture.NO_OVERLAY, CommonColors.WHITE);
+    }
+
+    private void renderModel(PoseStack stack, VertexConsumer ivertexbuilder, int packedLight, ReloadableCache<ModelPartsContainer>... parts) {
+        stack.scale(-1, -1, 1);
+        stack.translate(0.0, -1.501f, 0.0);
+        for (ReloadableCache<ModelPartsContainer> part : parts)
+            part.get().getMainPart().render(stack, ivertexbuilder, packedLight, OverlayTexture.NO_OVERLAY, CommonColors.WHITE);
     }
 }

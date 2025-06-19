@@ -7,13 +7,14 @@ import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
+import net.minecraft.client.resources.model.ModelManager;
 
 public class NPCArmorLayer<T extends EntityNPCBase, M extends PlayerModel<T>, A extends HumanoidModel<T>> extends HumanoidArmorLayer<T, M, A> {
 
     private boolean render;
 
-    public NPCArmorLayer(RenderLayerParent<T, M> renderer, A innerModel, A outerModel) {
-        super(renderer, innerModel, outerModel);
+    public NPCArmorLayer(RenderLayerParent<T, M> renderer, A innerModel, A outerModel, ModelManager modelManager) {
+        super(renderer, innerModel, outerModel, modelManager);
     }
 
     public void setRender(boolean render) {

@@ -1,15 +1,16 @@
 package io.github.flemmli97.runecraftory.client.render.projectiles;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntitySmallRaccoonLeaf;
 import io.github.flemmli97.tenshilib.client.render.RenderUtils;
+import io.github.flemmli97.tenshilib.client.render.TextureRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 
-public class RenderSmallRaccoonLeaf extends RenderTexture<EntitySmallRaccoonLeaf> {
+public class RenderSmallRaccoonLeaf extends TextureRenderer<EntitySmallRaccoonLeaf> {
 
     private static final ResourceLocation TEX = RuneCraftory.modRes("textures/entity/projectile/leaf.png");
 
@@ -33,9 +34,9 @@ public class RenderSmallRaccoonLeaf extends RenderTexture<EntitySmallRaccoonLeaf
     @Override
     public void doRender(EntitySmallRaccoonLeaf entity, float partialTicks, PoseStack stack, MultiBufferSource buffer) {
         stack.pushPose();
-        stack.mulPose(Vector3f.XP.rotationDegrees(-20));
+        stack.mulPose(Axis.XP.rotationDegrees(-20));
         RenderUtils.renderTexture(stack, buffer.getBuffer(this.getRenderType(entity, this.getTextureLocation(entity))), this.xSize, this.ySize, this.textureBuilder);
-        stack.mulPose(Vector3f.XP.rotationDegrees(40));
+        stack.mulPose(Axis.XP.rotationDegrees(40));
         RenderUtils.renderTexture(stack, buffer.getBuffer(this.getRenderType(entity, this.getTextureLocation(entity))), this.xSize, this.ySize, this.textureBuilder);
         stack.popPose();
     }

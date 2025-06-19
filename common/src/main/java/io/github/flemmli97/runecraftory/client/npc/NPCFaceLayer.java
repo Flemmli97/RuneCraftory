@@ -38,17 +38,17 @@ public class NPCFaceLayer<T extends EntityNPCBase, M extends HumanoidModel<T>, A
     }
 
     @Override
-    protected int color(T entity) {
+    protected int setColor(T entity) {
         if (this.textureType != null && (this.layer == LayerType.IRIS_LAYER || this.layer == LayerType.SCLERA_LAYER)) {
             FaceFeaturesType.FaceFeatures feat = entity.lookFeatures.getFeature(ModNPCLooks.FACE.get());
             boolean skin = this.layer == LayerType.IRIS_LAYER ?
                     feat.useSkinColor(entity.lookFeatures, this.textureType, FaceFeaturesType.ExpressionType.IRIS)
                     : feat.useSkinColor(entity.lookFeatures, this.textureType, FaceFeaturesType.ExpressionType.SCLERA);
             if (skin) {
-                return color(entity.lookFeatures, LayerType.SKIN_LAYER);
+                return setColor(entity.lookFeatures, LayerType.SKIN_LAYER);
             }
         }
-        return color(entity.lookFeatures, this.layer);
+        return setColor(entity.lookFeatures, this.layer);
     }
 
     @Override

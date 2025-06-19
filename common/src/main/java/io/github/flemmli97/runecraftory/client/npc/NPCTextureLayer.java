@@ -36,7 +36,7 @@ public class NPCTextureLayer<T extends EntityNPCBase, M extends HumanoidModel<T>
         this.layer = layer;
     }
 
-    public static int color(NPCFeatureContainer features, LayerType layer) {
+    public static int setColor(NPCFeatureContainer features, LayerType layer) {
         int color = switch (layer) {
             case SKIN_LAYER -> {
                 IndexedColorSettingType.IndexedColorFeature feat = features.getFeature(ModNPCLooks.SKIN.get());
@@ -112,7 +112,7 @@ public class NPCTextureLayer<T extends EntityNPCBase, M extends HumanoidModel<T>
         if (renderType != null) {
             VertexConsumer vertexConsumer = buffer.getBuffer(renderType);
             int m = LivingEntityRenderer.getOverlayCoords(npc, 0);
-            int color = this.color(npc);
+            int color = this.setColor(npc);
             float a = (float) (color >> 24 & 0xFF) / 255.0f;
             float r = (float) (color >> 16 & 0xFF) / 255.0f;
             float g = (float) (color >> 8 & 0xFF) / 255.0f;
@@ -147,8 +147,8 @@ public class NPCTextureLayer<T extends EntityNPCBase, M extends HumanoidModel<T>
         return null;
     }
 
-    protected int color(T entity) {
-        return color(entity.lookFeatures, this.layer);
+    protected int setColor(T entity) {
+        return setColor(entity.lookFeatures, this.layer);
     }
 
     protected ResourceLocation getTexture(T entity) {

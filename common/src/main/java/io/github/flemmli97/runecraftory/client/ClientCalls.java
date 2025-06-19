@@ -3,11 +3,9 @@ package io.github.flemmli97.runecraftory.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.util.Pair;
-import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeather;
-import io.github.flemmli97.runecraftory.client.gui.widgets.SkillButton;
 import io.github.flemmli97.runecraftory.client.tooltips.UpgradeTooltipComponent;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.config.ClientConfig;
@@ -16,8 +14,6 @@ import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.items.MultiBlockItem;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemFertilizer;
-import io.github.flemmli97.runecraftory.common.lib.LibNBT;
-import io.github.flemmli97.runecraftory.common.network.C2SOpenInfo;
 import io.github.flemmli97.runecraftory.common.network.C2SRideJump;
 import io.github.flemmli97.runecraftory.common.network.C2SSpellKey;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
@@ -42,7 +38,7 @@ import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
@@ -115,7 +111,7 @@ public class ClientCalls {
                     x += ClientConfig.creativeInventoryOffsetX;
                     y += ClientConfig.creativeInventoryOffsetY;
                 }
-                cons.accept(new SkillButton(x, y, screen, b -> LoaderNetwork.INSTANCE.sendToServer(new C2SOpenInfo(C2SOpenInfo.Action.MAIN))));
+//                cons.accept(new SkillButton(x, y, screen, b -> LoaderNetwork.INSTANCE.sendToServer(new C2SOpenInfo(C2SOpenInfo.Action.MAIN))));
             }
         }
     }
@@ -158,13 +154,13 @@ public class ClientCalls {
     public static void tooltipEvent(ItemStack stack, List<Component> tooltip, TooltipFlag flag) {
         if (!stack.isEmpty()) {
             boolean showTooltip = true;
-            if (stack.hasTag()) {
-                CompoundTag tag = stack.getTag();
-                if (tag.contains("HideFlags", 99))
-                    showTooltip = (stack.getTag().getInt("HideFlags") & 0x20) == 0x0;
-                if (tag.getCompound(RuneCraftory.MODID).contains(LibNBT.CRAFTING_BONUS) && tooltip.get(0) instanceof MutableComponent mut)
-                    mut.withStyle(ChatFormatting.AQUA);
-            }
+//            if (stack.hasTag()) {
+//                CompoundTag tag = stack.getTag();
+//                if (tag.contains("HideFlags", 99))
+//                    showTooltip = (stack.getTag().getInt("HideFlags") & 0x20) == 0x0;
+//                if (tag.getCompound(RuneCraftory.MODID).contains(LibNBT.CRAFTING_BONUS) && tooltip.get(0) instanceof MutableComponent mut)
+//                    mut.withStyle(ChatFormatting.AQUA);
+//            }
             if (showTooltip) {
                 Pair<List<Component>, List<Component>> p = injectAdditionalTooltip(stack, flag);
                 tooltip.addAll(1, p.getFirst());
@@ -194,7 +190,7 @@ public class ClientCalls {
                 tooltip.addAll(food.texts(stack));
                 if (flag.isAdvanced())
                     debug.add(Component.translatable("runecraftory.tooltip.debug.food", food.getId().toString()).withStyle(ChatFormatting.GRAY));
-            } else if (stack.isEdible()) {
+            } else if (stack.has(DataComponents.FOOD)) {
                 tooltip.add(Component.translatable("runecraftory.tooltip.item.eaten").withStyle(ChatFormatting.GRAY));
                 MutableComponent comp = Component.literal(" ").append(Component.translatable(ModAttributes.RUNE_POINTS_GAIN.get().getDescriptionId())).append(Component.literal(": " + EntityUtils.getRPFromVanillaFood(stack)));
                 tooltip.add(comp.withStyle(ChatFormatting.AQUA));
@@ -270,35 +266,34 @@ public class ClientCalls {
             float dY = (float) (o - l);
             float dZ = (float) (p - m);
             float len = Mth.sqrt(dX * dX + dY * dY + dZ * dZ);
-            consumer.vertex(pose.pose(), (float) (k - camX), (float) (l - camY), (float) (m - camZ)).color(r, g, b, alpha).normal(pose.normal(), dX /= len, dY /= len, dZ /= len).endVertex();
-            consumer.vertex(pose.pose(), (float) (n - camX), (float) (o - camY), (float) (p - camZ)).color(r, g, b, alpha).normal(pose.normal(), dX, dY, dZ).endVertex();
+            consumer.addVertex(pose, (float) (k - camX), (float) (l - camY), (float) (m - camZ)).setColor(r, g, b, alpha).setNormal(pose, dX /= len, dY /= len, dZ /= len);
+            consumer.addVertex(pose, (float) (n - camX), (float) (o - camY), (float) (p - camZ)).setColor(r, g, b, alpha).setNormal(pose, dX, dY, dZ);
         });
     }
 
     public static void tick(LivingEntity entity) {
-        Platform.INSTANCE.getEntityData(entity).ifPresent(data -> {
-            int mod = entity.tickCount % 20;
-            if (mod == 0 && data.isSleeping()) {
-                entity.level().addParticle(ModParticles.SLEEP.get(), entity.getX(), entity.getY() + entity.getBbHeight() + 0.5, entity.getZ(), 0, 0, 0);
+        EntityData data = Platform.INSTANCE.getEntityData(entity);
+        int mod = entity.tickCount % 20;
+        if (mod == 0 && data.isSleeping()) {
+            entity.level().addParticle(ModParticles.SLEEP.get(), entity.getX(), entity.getY() + entity.getBbHeight() + 0.5, entity.getZ(), 0, 0, 0);
+        }
+        if (mod == 5 && data.isPoisoned()) {
+            entity.level().addParticle(ModParticles.POISON.get(), entity.getX(), entity.getY() + entity.getBbHeight() + 0.1, entity.getZ(), 0, 0, 0);
+        }
+        if (data.isParalysed()) {
+            boolean bl2 = entity.isInvisible() ? entity.getRandom().nextInt(25) == 0 : entity.getRandom().nextInt(5) == 0;
+            if (bl2) {
+                entity.level().addParticle(ModParticles.PARALYSIS.get(), entity.getRandomX(0.5), entity.getRandomY(), entity.getRandomZ(0.5), 0.05, 0.05, 0.05);
             }
-            if (mod == 5 && data.isPoisoned()) {
-                entity.level().addParticle(ModParticles.POISON.get(), entity.getX(), entity.getY() + entity.getBbHeight() + 0.1, entity.getZ(), 0, 0, 0);
-            }
-            if (data.isParalysed()) {
-                boolean bl2 = entity.isInvisible() ? entity.getRandom().nextInt(25) == 0 : entity.getRandom().nextInt(5) == 0;
-                if (bl2) {
-                    entity.level().addParticle(ModParticles.PARALYSIS.get(), entity.getRandomX(0.5), entity.getRandomY(), entity.getRandomZ(0.5), 0.05, 0.05, 0.05);
-                }
-            }
-        });
+        }
         if (entity == Minecraft.getInstance().player) {
             ShakeHandler.shakeTick--;
             if (entity.getVehicle() instanceof BaseMonster && Minecraft.getInstance().player.input.jumping)
-                Platform.INSTANCE.sendToServer(new C2SRideJump());
+                LoaderNetwork.INSTANCE.sendToServer(C2SRideJump.INSTANCE);
         }
         if (entity == Minecraft.getInstance().cameraEntity) {
             if (ClientHandlers.CLIENT_CALENDAR.currentWeather() == EnumWeather.RUNEY) {
-                int tries = Minecraft.getInstance().options.particles != ParticleStatus.ALL ? 1 : 2;
+                int tries = Minecraft.getInstance().options.particles().get() != ParticleStatus.ALL ? 1 : 2;
                 for (int i = 0; i < tries; i++)
                     entity.level().addParticle(ModParticles.RUNEY.get(),
                             entity.getX() + (entity.getRandom().nextDouble() - 0.5) * 24,
@@ -309,12 +304,12 @@ public class ClientCalls {
     }
 
     public static boolean invis(LivingEntity entity) {
-        return Platform.INSTANCE.getEntityData(entity).map(EntityData::isInvis).orElse(false);
+        return Platform.INSTANCE.getEntityData(entity).isInvis();
     }
 
     public static void renderShaking(Camera camera, float yaw, float pitch, float roll, float partialTicks,
                                      Consumer<Float> setYaw, Consumer<Float> setPitch, Consumer<Float> setRoll) {
-        boolean stunned = Minecraft.getInstance().player.hasEffect(ModEffects.STUNNED.get());
+        boolean stunned = Minecraft.getInstance().player.hasEffect(ModEffects.STUNNED.asHolder());
         if (stunned) {
             float pT = Minecraft.getInstance().player.tickCount * 10 - partialTicks;
             setYaw.accept(yaw + Mth.sin(pT) * 0.5f);
@@ -331,7 +326,7 @@ public class ClientCalls {
     }
 
     public static void renderEntityShake(LivingEntity entity, PoseStack stack, float partialTicks) {
-        boolean stunned = Platform.INSTANCE.getEntityData(entity).map(EntityData::isStunned).orElse(false);
+        boolean stunned = Platform.INSTANCE.getEntityData(entity).isStunned();
         if (!stunned)
             return;
         Vec3 dir = Vec3.directionFromRotation(0, entity.getViewYRot(partialTicks) + 90).scale(0.1);
@@ -369,8 +364,8 @@ public class ClientCalls {
             q /= t;
             r /= t;
             s /= t;
-            consumer.vertex(pose.pose(), (float) (k + x), (float) (l + y), (float) (m + z)).color(red, green, blue, alpha).normal(pose.normal(), q, r, s).endVertex();
-            consumer.vertex(pose.pose(), (float) (n + x), (float) (o + y), (float) (p + z)).color(red, green, blue, alpha).normal(pose.normal(), q, r, s).endVertex();
+            consumer.addVertex(pose, (float) (k + x), (float) (l + y), (float) (m + z)).setColor(red, green, blue, alpha).setNormal(pose, q, r, s);
+            consumer.addVertex(pose, (float) (n + x), (float) (o + y), (float) (p + z)).setColor(red, green, blue, alpha).setNormal(pose, q, r, s);
         });
     }
 }

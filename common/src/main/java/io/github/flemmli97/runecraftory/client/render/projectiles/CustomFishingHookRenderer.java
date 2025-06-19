@@ -2,9 +2,7 @@ package io.github.flemmli97.runecraftory.client.render.projectiles;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix3f;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityCustomFishingHook;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolFishingRod;
 import net.minecraft.client.Minecraft;
@@ -21,6 +19,8 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
 
 /**
  * From {@link FishingHookRenderer}
@@ -44,7 +44,7 @@ public class CustomFishingHookRenderer extends EntityRenderer<EntityCustomFishin
         matrixStack.pushPose();
         matrixStack.scale(0.5f, 0.5f, 0.5f);
         matrixStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
-        matrixStack.mulPose(Vector3f.YP.rotationDegrees(180.0f));
+        matrixStack.mulPose(Axis.YP.rotationDegrees(180.0f));
         PoseStack.Pose pose = matrixStack.last();
         Matrix4f matrix4f = pose.pose();
         Matrix3f matrix3f = pose.normal();
@@ -76,7 +76,7 @@ public class CustomFishingHookRenderer extends EntityRenderer<EntityCustomFishin
             zPos = Mth.lerp(partialTicks, owner.zo, owner.getZ()) - d * j + e * 0.8;
             o = owner.isCrouching() ? -0.1875f : 0.0f;
         } else {
-            p = 960.0 / this.entityRenderDispatcher.options.fov;
+            p = 960.0 / this.entityRenderDispatcher.options.fov().get();
             Vec3 vec3 = this.entityRenderDispatcher.camera.getNearPlane().getPointOnPlane((float) i * 0.525f, -0.1f);
             vec3 = vec3.scale(p);
             vec3 = vec3.yRot(g * 0.5f);
@@ -102,7 +102,7 @@ public class CustomFishingHookRenderer extends EntityRenderer<EntityCustomFishin
     }
 
     private static void vertex(VertexConsumer vertexConsumer, Matrix4f matrix4f, Matrix3f matrix3f, int i, float f, int j, int k, int l) {
-        vertexConsumer.vertex(matrix4f, f - 0.5f, (float) j - 0.5f, 0.0f).color(255, 255, 255, 255).uv(k, l).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(i).normal(matrix3f, 0.0f, 1.0f, 0.0f).endVertex();
+        vertexConsumer.addVertex(matrix4f, f - 0.5f, (float) j - 0.5f, 0.0f).setColor(255, 255, 255, 255).setUv(k, l).setOverlay(OverlayTexture.NO_OVERLAY).uv2(i).normal(matrix3f, 0.0f, 1.0f, 0.0f);
     }
 
     private static void stringVertex(float f, float g, float h, VertexConsumer vertexConsumer, PoseStack.Pose pose, float i, float j) {
@@ -113,7 +113,7 @@ public class CustomFishingHookRenderer extends EntityRenderer<EntityCustomFishin
         float o = g * (j * j + j) * 0.5f + 0.25f - l;
         float p = h * j - m;
         float q = Mth.sqrt(n * n + o * o + p * p);
-        vertexConsumer.vertex(pose.pose(), k, l, m).color(0, 0, 0, 255).normal(pose.normal(), n / q, o / q, p / q).endVertex();
+        vertexConsumer.addVertex(pose.pose(), k, l, m).setColor(0, 0, 0, 255).setNormal(pose, n / q, o / q, p / q);
     }
 
     @Override

@@ -15,7 +15,7 @@ public class RenderVeggieGhost<T extends EntityVeggieGhost> extends ScaledEntity
     }
 
     public RenderVeggieGhost(EntityRendererProvider.Context ctx, ResourceLocation texture, float scale) {
-        super(ctx, new ModelVeggieGhost<>(ctx.bakeLayer(ModelVeggieGhost.LAYER_LOCATION)), texture, scale, 0);
+        super(ctx, new ModelVeggieGhost<>(), texture, scale, 0);
     }
 
     @Override

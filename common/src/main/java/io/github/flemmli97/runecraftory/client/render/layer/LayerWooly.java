@@ -9,6 +9,8 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.CommonColors;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.entity.animal.Sheep;
 import net.minecraft.world.item.DyeColor;
 
@@ -25,23 +27,21 @@ public class LayerWooly<T extends EntityWooly> extends RenderLayer<T, ModelWooly
     @Override
     public void render(PoseStack stack, MultiBufferSource buf, int light, T wooly, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if (!wooly.isSheared() && !wooly.isInvisible()) {
-            float[] color = {1, 1, 1};
+            int color = CommonColors.WHITE;
             if (wooly.hasCustomName() && "jeb_".equals(wooly.getName().getContents())) {
-                int rand = wooly.tickCount / 25 + wooly.getId();
-                int k = DyeColor.values().length;
-                int l = rand % k;
-                int m = (rand + 1) % k;
-                float f = ((float) (wooly.tickCount % 25) + partialTicks) / 25.0f;
-                float[] fs = Sheep.getColorArray(DyeColor.byId(l));
-                float[] gs = Sheep.getColorArray(DyeColor.byId(m));
-                color[0] = fs[0] * (1.0f - f) + gs[0] * f;
-                color[1] = fs[1] * (1.0f - f) + gs[1] * f;
-                color[2] = fs[2] * (1.0f - f) + gs[2] * f;
+                int tick = wooly.tickCount / 25 + wooly.getId();
+                int colorCount = DyeColor.values().length;
+                int l = tick % colorCount;
+                int m = (tick + 1) % colorCount;
+                float f = ((float) (wooly.tickCount % 25) + partialTicks) / 25.0F;
+                int n = Sheep.getColor(DyeColor.byId(l));
+                int o = Sheep.getColor(DyeColor.byId(m));
+                color = FastColor.ARGB32.lerp(f, n, o);
             }/* else {
                 color = Sheep.getColorArray(wooly.getColor());
             }*/
             this.woolModel.syncModel(this.getParentModel());
-            coloredCutoutModelCopyLayerRender(this.getParentModel(), this.woolModel, this.tex, stack, buf, light, wooly, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, partialTicks, color[0], color[1], color[2]);
+            coloredCutoutModelCopyLayerRender(this.getParentModel(), this.woolModel, this.tex, stack, buf, light, wooly, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, partialTicks, color);
         }
     }
 }

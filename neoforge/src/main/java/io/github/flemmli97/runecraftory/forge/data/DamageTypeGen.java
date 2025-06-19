@@ -22,8 +22,8 @@ public class DamageTypeGen extends JsonCodecProvider<DamageType> {
 
     @Override
     protected void gather() {
-        this.unconditional(ModDamageType.DYNAMIC_DAMAGE_TYPE.location(), new DamageType(
-                ModDamageType.DYNAMIC_DAMAGE_TYPE.location().toLanguageKey(), DamageScaling.WHEN_CAUSED_BY_LIVING_NON_PLAYER, 0.1f, DamageEffects.HURT));
+        this.unconditional(ModDamageType.PHYSICAL.location(), new DamageType(
+                ModDamageType.PHYSICAL.location().toLanguageKey(), DamageScaling.WHEN_CAUSED_BY_LIVING_NON_PLAYER, 0.1f, DamageEffects.HURT));
         this.unconditional(ModDamageType.EXHAUST.location(), new DamageType(
                 ModDamageType.EXHAUST.location().toLanguageKey(), DamageScaling.NEVER, 0.1f, DamageEffects.HURT));
         this.unconditional(ModDamageType.STRONG_POISON.location(), new DamageType(

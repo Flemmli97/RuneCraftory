@@ -2,13 +2,12 @@ package io.github.flemmli97.runecraftory.client.render.projectiles;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix3f;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.model.misc.ModelEnergyOrb;
 import io.github.flemmli97.runecraftory.client.render.layer.EnergyOrbSwirlLayer;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityHomingEnergyOrb;
+import io.github.flemmli97.tenshilib.client.render.SimpleModelRenderer;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -21,15 +20,15 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 
-public class RenderEnergyOrb extends RenderProjectileModel<EntityHomingEnergyOrb> implements RenderLayerParent<EntityHomingEnergyOrb, EntityModel<EntityHomingEnergyOrb>> {
+public class RenderEnergyOrb extends SimpleModelRenderer<EntityHomingEnergyOrb> implements RenderLayerParent<EntityHomingEnergyOrb, EntityModel<EntityHomingEnergyOrb>> {
 
     public static final ResourceLocation TEXTURE = RuneCraftory.modRes("textures/entity/projectile/energy_orb.png");
-    private static final RenderType BEAM_RENDER_TYPE = RenderType.entityCutoutNoCull(new ResourceLocation("textures/entity/guardian_beam.png"));
+    private static final RenderType BEAM_RENDER_TYPE = RenderType.entityCutoutNoCull(ResourceLocation.withDefaultNamespace("textures/entity/guardian_beam.png"));
 
     private final EnergyOrbSwirlLayer layer;
 
     public RenderEnergyOrb(EntityRendererProvider.Context ctx) {
-        super(ctx, new ModelEnergyOrb<>(ctx.bakeLayer(ModelEnergyOrb.LAYER_LOCATION)));
+        super(ctx, new ModelEnergyOrb<>(1));
         this.layer = new EnergyOrbSwirlLayer(this, ctx.getModelSet());
         this.alpha = 0.8f;
     }
@@ -50,8 +49,8 @@ public class RenderEnergyOrb extends RenderProjectileModel<EntityHomingEnergyOrb
         float beamYaw = (float) Math.atan2(dir.z, dir.x);
         stack.pushPose();
         stack.translate(0, entity.getBbHeight() * 0.5, 0);
-        stack.mulPose(Vector3f.YP.rotationDegrees(90 - beamYaw * Mth.RAD_TO_DEG));
-        stack.mulPose(Vector3f.XP.rotationDegrees(beamPitch * Mth.RAD_TO_DEG));
+        stack.mulPose(Axis.YP.rotationDegrees(90 - beamYaw * Mth.RAD_TO_DEG));
+        stack.mulPose(Axis.XP.rotationDegrees(beamPitch * Mth.RAD_TO_DEG));
 
         float colorScale = Mth.sin(entity.tickCount) * 0.5f + 0.5f;
         int red = 66 + (int) (colorScale * (166 - 66));
@@ -82,24 +81,22 @@ public class RenderEnergyOrb extends RenderProjectileModel<EntityHomingEnergyOrb
         float ao = len * 2.5f + an;
         VertexConsumer vertexConsumer = buffer.getBuffer(BEAM_RENDER_TYPE);
         PoseStack.Pose pose = stack.last();
-        Matrix4f matrix4f = pose.pose();
-        Matrix3f matrix3f = pose.normal();
-        vertex(vertexConsumer, matrix4f, matrix3f, ac, len, ad, red, green, blue, 0.4999f, ao);
-        vertex(vertexConsumer, matrix4f, matrix3f, ac, 0.0f, ad, red, green, blue, 0.4999f, an);
-        vertex(vertexConsumer, matrix4f, matrix3f, ae, 0.0f, af, red, green, blue, 0.0f, an);
-        vertex(vertexConsumer, matrix4f, matrix3f, ae, len, af, red, green, blue, 0.0f, ao);
-        vertex(vertexConsumer, matrix4f, matrix3f, ag, len, ah, red, green, blue, 0.4999f, ao);
-        vertex(vertexConsumer, matrix4f, matrix3f, ag, 0.0f, ah, red, green, blue, 0.4999f, an);
-        vertex(vertexConsumer, matrix4f, matrix3f, ai, 0.0f, aj, red, green, blue, 0.0f, an);
-        vertex(vertexConsumer, matrix4f, matrix3f, ai, len, aj, red, green, blue, 0.0f, ao);
+        vertex(vertexConsumer, pose, ac, len, ad, red, green, blue, 0.4999f, ao);
+        vertex(vertexConsumer, pose, ac, 0.0f, ad, red, green, blue, 0.4999f, an);
+        vertex(vertexConsumer, pose, ae, 0.0f, af, red, green, blue, 0.0f, an);
+        vertex(vertexConsumer, pose, ae, len, af, red, green, blue, 0.0f, ao);
+        vertex(vertexConsumer, pose, ag, len, ah, red, green, blue, 0.4999f, ao);
+        vertex(vertexConsumer, pose, ag, 0.0f, ah, red, green, blue, 0.4999f, an);
+        vertex(vertexConsumer, pose, ai, 0.0f, aj, red, green, blue, 0.0f, an);
+        vertex(vertexConsumer, pose, ai, len, aj, red, green, blue, 0.0f, ao);
         float ap = 0.0f;
         if (entity.tickCount % 2 == 0) {
             ap = 0.5f;
         }
-        vertex(vertexConsumer, matrix4f, matrix3f, u, len, v, red, green, blue, 0.5f, ap + 0.5f);
-        vertex(vertexConsumer, matrix4f, matrix3f, w, len, x, red, green, blue, 1.0f, ap + 0.5f);
-        vertex(vertexConsumer, matrix4f, matrix3f, aa, len, ab, red, green, blue, 1.0f, ap);
-        vertex(vertexConsumer, matrix4f, matrix3f, y, len, z, red, green, blue, 0.5f, ap);
+        vertex(vertexConsumer, pose, u, len, v, red, green, blue, 0.5f, ap + 0.5f);
+        vertex(vertexConsumer, pose, w, len, x, red, green, blue, 1.0f, ap + 0.5f);
+        vertex(vertexConsumer, pose, aa, len, ab, red, green, blue, 1.0f, ap);
+        vertex(vertexConsumer, pose, y, len, z, red, green, blue, 0.5f, ap);
         stack.popPose();
     }
 
@@ -123,8 +120,8 @@ public class RenderEnergyOrb extends RenderProjectileModel<EntityHomingEnergyOrb
         this.layer.render(stack, buffer, packedLight, entity, 0, 0, partialTicks, entity.tickCount, yaw, pitch);
     }
 
-    private static void vertex(VertexConsumer vertexConsumer, Matrix4f matrix4f, Matrix3f matrix3f, float x, float y, float z, int r, int g, int b, float u, float v) {
-        vertexConsumer.vertex(matrix4f, x, y, z).color(r, g, b, 200).uv(u, v).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(LightTexture.FULL_BRIGHT).normal(matrix3f, 0.0f, 1.0f, 0.0f).endVertex();
+    private static void vertex(VertexConsumer vertexConsumer, PoseStack.Pose pose, float x, float y, float z, int r, int g, int b, float u, float v) {
+        vertexConsumer.addVertex(pose, x, y, z).setColor(r, g, b, 200).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightTexture.FULL_BRIGHT).setNormal(pose, 0.0f, 1.0f, 0.0f);
     }
 
     @Override

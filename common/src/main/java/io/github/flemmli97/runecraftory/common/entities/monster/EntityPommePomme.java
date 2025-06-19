@@ -63,7 +63,7 @@ public class EntityPommePomme extends ChargingMonster {
 
     @Override
     protected boolean isChargingAnim(String anim) {
-        return anim.is(CHARGE_ATTACK);
+        return anim.equals(CHARGE_ATTACK);
     }
 
     @Override

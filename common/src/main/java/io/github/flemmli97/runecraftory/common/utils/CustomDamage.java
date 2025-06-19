@@ -2,18 +2,16 @@ package io.github.flemmli97.runecraftory.common.utils;
 
 import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
-import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.ModDamageType;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -99,12 +97,18 @@ public class CustomDamage extends DamageSource {
     }
 
     public enum DamageCategory {
-        NORMAL,
-        MAGIC,
-        IGNOREDEF,
-        IGNOREMAGICDEF,
-        FAINT,
-        FIXED
+        NORMAL(ModDamageType.PHYSICAL),
+        MAGIC(ModDamageType.MAGIC),
+        IGNOREDEF(ModDamageType.IGNORE_DEFENCE),
+        IGNOREMAGICDEF(ModDamageType.IGNORE_MAGIC_DEFENCE),
+        FAINT(ModDamageType.TRUE_DAMAGE),
+        FIXED(ModDamageType.TRUE_DAMAGE);
+
+        public final ResourceKey<DamageType> typeKey;
+
+        DamageCategory(ResourceKey<DamageType> typeKey) {
+            this.typeKey = typeKey;
+        }
     }
 
     public enum KnockBackType {
@@ -197,27 +201,13 @@ public class CustomDamage extends DamageSource {
 
         public CustomDamage get(HolderLookup.Provider provider) {
             Set<TagKey<DamageType>> tags = new HashSet<>();
-            switch (this.dmg) {
-                case MAGIC -> {
-                    tags.add(RunecraftoryTags.DamageTypes.IS_MAGIC);
-                    tags.add(DamageTypeTags.BYPASSES_ARMOR);
-                }
-                case FAINT, FIXED, IGNOREDEF -> tags.add(DamageTypeTags.BYPASSES_ARMOR);
-                case IGNOREMAGICDEF -> {
-                    tags.add(RunecraftoryTags.DamageTypes.IS_MAGIC);
-                    tags.add(RunecraftoryTags.DamageTypes.BYPASS_MAGIC);
-                    tags.add(DamageTypeTags.BYPASSES_ARMOR);
-                    tags.add(DamageTypeTags.BYPASSES_EFFECTS);
-                    tags.add(DamageTypeTags.BYPASSES_RESISTANCE);
-                    tags.add(DamageTypeTags.BYPASSES_ENCHANTMENTS);
-                    tags.add(DamageTypeTags.BYPASSES_SHIELD);
-                }
+            ResourceKey<DamageType> type = this.dmg.typeKey;
+            if (this.isProjectile) {
+                ResourceKey<DamageType> proj = ModDamageType.PROJECTILE_EQUIVALENT.get(type);
+                if (proj != null)
+                    type = ModDamageType.PHYSICAL_PROJECTILE;
             }
-            if (this.isProjectile)
-                tags.add(DamageTypeTags.IS_PROJECTILE);
-            if (this.cause instanceof Player)
-                tags.add(DamageTypeTags.IS_PLAYER_ATTACK);
-            return new CustomDamage(provider.lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(ModDamageType.DYNAMIC_DAMAGE_TYPE), this.cause, this.trueSource, this.element, this.knock, this.knockAmount, this.protection,
+            return new CustomDamage(provider.lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(type), this.cause, this.trueSource, this.element, this.knock, this.knockAmount, this.protection,
                     this.dmg == DamageCategory.FAINT, this.dmg == DamageCategory.FIXED,
                     this.attributesChange, tags);
         }

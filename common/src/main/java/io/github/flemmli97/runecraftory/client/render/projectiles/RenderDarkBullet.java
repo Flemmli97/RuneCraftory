@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.client.render.projectiles;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityDarkBullet;
 import io.github.flemmli97.tenshilib.client.render.RenderUtils;
@@ -27,12 +27,12 @@ public class RenderDarkBullet<T extends EntityDarkBullet> extends EntityRenderer
         this.textureBuilder.setLight(packedLight);
         this.textureBuilder.setColor(1, 1, 1, 1f);
         stack.pushPose();
-        stack.mulPose(Vector3f.YP.rotationDegrees(Mth.lerp(partialTicks, entity.yRotO, entity.getYRot()) + 90.0f));
-        stack.mulPose(Vector3f.ZP.rotationDegrees(-Mth.lerp(partialTicks, entity.xRotO, entity.getXRot())));
+        stack.mulPose(Axis.YP.rotationDegrees(Mth.lerp(partialTicks, entity.yRotO, entity.getYRot()) + 90.0f));
+        stack.mulPose(Axis.ZP.rotationDegrees(-Mth.lerp(partialTicks, entity.xRotO, entity.getXRot())));
         stack.translate(0, 0.125, 0);
-        stack.mulPose(Vector3f.XP.rotationDegrees(45.0f));
+        stack.mulPose(Axis.XP.rotationDegrees(45.0f));
         for (int r = 0; r < 4; ++r) {
-            stack.mulPose(Vector3f.XP.rotationDegrees(90.0f));
+            stack.mulPose(Axis.XP.rotationDegrees(90.0f));
             RenderUtils.renderTexture(stack, buffer.getBuffer(RenderType.entityCutout(this.getTextureLocation(entity))), 0.35f, 0.35f, this.textureBuilder);
         }
         stack.popPose();

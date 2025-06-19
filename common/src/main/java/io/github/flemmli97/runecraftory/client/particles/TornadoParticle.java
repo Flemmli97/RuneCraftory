@@ -19,8 +19,7 @@ public class TornadoParticle extends CirclingParticle {
         return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
     }
 
-    public record TornadoFactoryBase(
-            SpriteSet sprite) implements ParticleProvider<ColoredParticleData4f> {
+    public record TornadoFactoryBase(SpriteSet sprite) implements ParticleProvider<ColoredParticleData4f> {
 
         @Override
         public Particle createParticle(ColoredParticleData4f data, ClientLevel level, double x, double y, double z, double motionX, double motionY, double motionZ) {

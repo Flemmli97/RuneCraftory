@@ -274,12 +274,12 @@ public class EntityAmbrosia extends BossMonster {
 
     protected void setMoveDirection(Vec3 moveDirection) {
         this.moveDirection = moveDirection;
-        S2CMobUpdate.send(this, SyncableDatas.NPC_JOB, this.moveDirection);
+        S2CMobUpdate.send(this, SyncableDatas.MOTION_DIR, this.moveDirection);
     }
 
     @Override
     public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
         super.onUpdate(data);
-        data.runIf(SyncableDatas.NPC_JOB, motion -> this.moveDirection = motion);
+        data.runIf(SyncableDatas.MOTION_DIR, motion -> this.moveDirection = motion);
     }
 }

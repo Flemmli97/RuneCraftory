@@ -16,7 +16,7 @@ public class EnergyOrbSwirlLayer extends EnergySwirlLayer<EntityHomingEnergyOrb,
 
     public EnergyOrbSwirlLayer(RenderLayerParent<EntityHomingEnergyOrb, EntityModel<EntityHomingEnergyOrb>> parent, EntityModelSet entityModelSet) {
         super(parent);
-        this.model = new ModelEnergyOrb<>(entityModelSet.bakeLayer(ModelEnergyOrb.LAYER_LOCATION_LAYER));
+        this.model = new ModelEnergyOrb<>(1.5f);
     }
 
     @Override

@@ -233,7 +233,7 @@ public class EntityCalls {
 
     public static boolean playerAttack(Player player, Entity target) {
         if (!player.level().isClientSide && ItemNBT.isWeapon(player.getMainHandItem())) {
-            CombatUtils.playerAttackWithItem(player, target, true, true);
+            CombatUtils.attackWithItem(player, target, true, true);
             return true;
         }
         return false;

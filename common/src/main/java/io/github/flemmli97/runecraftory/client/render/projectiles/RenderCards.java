@@ -3,11 +3,12 @@ package io.github.flemmli97.runecraftory.client.render.projectiles;
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityCards;
+import io.github.flemmli97.tenshilib.client.render.TextureRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 
-public class RenderCards extends RenderTexture<EntityCards> {
+public class RenderCards extends TextureRenderer<EntityCards> {
 
     private static final ResourceLocation TEX_1 = RuneCraftory.modRes("textures/entity/projectile/card_b_1.png");
     private static final ResourceLocation TEX_2 = RuneCraftory.modRes("textures/entity/projectile/card_b_2.png");

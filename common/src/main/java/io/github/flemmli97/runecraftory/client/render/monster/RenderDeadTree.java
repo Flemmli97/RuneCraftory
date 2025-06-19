@@ -10,7 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 public class RenderDeadTree<T extends EntityDeadTree> extends ScaledEntityRenderer<T, ModelDeadTree<T>> {
 
     public RenderDeadTree(EntityRendererProvider.Context ctx, float scale) {
-        super(ctx, new ModelDeadTree<>(ctx.bakeLayer(ModelDeadTree.LAYER_LOCATION)), RuneCraftory.modRes("textures/entity/monsters/dead_tree.png"), scale, 0.65f * scale);
+        super(ctx, new ModelDeadTree<>(), RuneCraftory.modRes("textures/entity/monsters/dead_tree.png"), scale, 0.65f * scale);
     }
 
     @Override

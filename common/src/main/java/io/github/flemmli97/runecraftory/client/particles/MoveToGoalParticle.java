@@ -55,8 +55,7 @@ public class MoveToGoalParticle extends ColoredParticle {
         }
     }
 
-    public record ParticleFactoryBase(
-            SpriteSet sprite) implements ParticleProvider<DurationalParticleData> {
+    public record ParticleFactoryBase(SpriteSet sprite) implements ParticleProvider<DurationalParticleData> {
 
         @Override
         public Particle createParticle(DurationalParticleData data, ClientLevel level, double x, double y, double z, double motionX, double motionY, double motionZ) {

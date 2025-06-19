@@ -1,7 +1,5 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityBullet;
@@ -9,9 +7,11 @@ import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ProjectileUtil;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3d;
 
 public class TripleFireBulletSpell extends Spell {
 
@@ -35,9 +35,8 @@ public class TripleFireBulletSpell extends Spell {
 
         Vec3 up = entity.getUpVector(1);
         for (float y = -15; y <= 15; y += 30) {
-            Quaternion quaternion = new Quaternion(new Vector3f(up), y, true);
-            Vector3f newDir = new Vector3f(dir);
-            newDir.transform(quaternion);
+            Vector3d newDir = new Vector3d(dir.x(), dir.y(), dir.z())
+                    .rotateAxis(y * Mth.DEG_TO_RAD, up.x(), up.y(), up.z());
             EntityBullet other = new EntityBullet(level, entity);
             other.setStraight();
             other.setElement(EnumElement.FIRE);

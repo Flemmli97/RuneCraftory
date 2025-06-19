@@ -5,27 +5,26 @@ import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.client.model.misc.ModelChest;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityMimic;
 import io.github.flemmli97.tenshilib.client.model.RideableModel;
-import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.world.entity.Entity;
 
 public class ModelMimic<T extends EntityMimic> extends ModelChest<T> implements RideableModel<T> {
 
-    public ModelMimic(ModelPart root) {
-        super(root);
+    public ModelMimic() {
+        super();
     }
 
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        this.model.resetPoses();
+        this.getModel().resetPoses();
         float partialTicks = ClientHandlers.getPartialTicks();
         if (entity.deathTime <= 0 && !entity.playDeath()) {
             if (entity.isAwake())
-                this.anim.doAnimation(this, "open_idle", entity.tickCount, partialTicks);
+                this.anim.get().doAnimation(this, "open_idle", entity.tickCount, partialTicks);
             if (entity.moveTick() > 0)
-                this.anim.doAnimation(this, "move", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
+                this.anim.get().doAnimation(this, "move", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
         }
-        this.anim.doAnimation(this, entity.getAnimationHandler(), partialTicks);
+        this.anim.get().doAnimation(this, entity.getAnimationHandler(), partialTicks);
     }
 
     @Override

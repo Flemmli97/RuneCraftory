@@ -64,7 +64,6 @@ public class AttributeTagGen extends TagsProvider<Attribute> {
                         ModAttributes.STUN.getKey(),
                         ModAttributes.FAINT.getKey(),
                         ModAttributes.DRAIN.getKey(),
-                        ModAttributes.KNOCKOUT.getKey(),
 
                         ModAttributes.WATER_RESISTANCE.getKey(),
                         ModAttributes.EARTH_RESISTANCE.getKey(),

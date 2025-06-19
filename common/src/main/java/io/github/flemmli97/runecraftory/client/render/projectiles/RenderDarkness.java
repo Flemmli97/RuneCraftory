@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.client.render.projectiles;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityDarkness;
 import io.github.flemmli97.tenshilib.client.render.RenderUtils;
@@ -33,12 +33,12 @@ public class RenderDarkness extends EntityRenderer<EntityDarkness> {
                 && Minecraft.getInstance().options.getCameraType() == CameraType.FIRST_PERSON;
         if (playerView) {
             stack.translate(0, 0.01, 0);
-            stack.mulPose(Vector3f.YP.rotationDegrees(-(entity.getOwner().yRotO + (entity.getOwner().getYRot() - entity.getOwner().yRotO) * partialTicks) - 180.0F));
-            stack.mulPose(Vector3f.XP.rotationDegrees(-90));
+            stack.mulPose(Axis.YP.rotationDegrees(-(entity.getOwner().yRotO + (entity.getOwner().getYRot() - entity.getOwner().yRotO) * partialTicks) - 180.0F));
+            stack.mulPose(Axis.XP.rotationDegrees(-90));
             RenderUtils.renderTexture(stack, buffer.getBuffer(RenderType.entityCutoutNoCull(this.getTextureLocation(entity))), size, size, this.textureBuilder);
         } else {
             stack.mulPose(this.entityRenderDispatcher.cameraOrientation());
-            stack.mulPose(Vector3f.YP.rotationDegrees(180.0F));
+            stack.mulPose(Axis.YP.rotationDegrees(180.0F));
             RenderUtils.renderTexture(stack, buffer.getBuffer(RenderType.entityCutoutNoCull(this.getTextureLocation(entity))), size, size, this.textureBuilder);
         }
         stack.popPose();

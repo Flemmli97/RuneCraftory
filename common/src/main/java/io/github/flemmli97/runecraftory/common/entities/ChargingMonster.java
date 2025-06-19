@@ -107,7 +107,7 @@ public abstract class ChargingMonster extends BaseMonster {
 
     @Override
     public OrientedBoundingBox calculateAttackAABB(AnimationState anim, Vec3 target, double grow) {
-        if (!this.isChargingAnim(anim))
+        if (!this.isChargingAnim(anim.getID()))
             return super.calculateAttackAABB(anim, target, grow);
         double width = this.getBbWidth();
         double speed = Math.max(width, this.getDeltaMovement().length() - width);
@@ -127,7 +127,7 @@ public abstract class ChargingMonster extends BaseMonster {
 
     public void setChargeMotion(Vec3 chargeMotion) {
         this.chargeMotion = chargeMotion;
-        S2CMobUpdate.send(this, SyncableDatas.NPC_JOB, this.chargeMotion);
+        S2CMobUpdate.send(this, SyncableDatas.MOTION_DIR, this.chargeMotion);
     }
 
     public Vec3 getChargeMotion() {
@@ -170,6 +170,6 @@ public abstract class ChargingMonster extends BaseMonster {
     @Override
     public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
         super.onUpdate(data);
-        data.runIf(SyncableDatas.NPC_JOB, charge -> this.chargeMotion = charge);
+        data.runIf(SyncableDatas.MOTION_DIR, charge -> this.chargeMotion = charge);
     }
 }

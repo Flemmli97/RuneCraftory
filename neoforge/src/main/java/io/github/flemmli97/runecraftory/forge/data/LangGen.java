@@ -288,9 +288,9 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.tooltip.baby.girl", "Girl");
         this.add("runecraftory.tooltip.baby.owner", "Parent: %s");
 
-        this.add("death.attack." + ModDamageType.DYNAMIC_DAMAGE_TYPE.location().toLanguageKey(), "%1$s was knocked");
-        this.add("death.attack." + ModDamageType.DYNAMIC_DAMAGE_TYPE.location().toLanguageKey() + ".player", "%1$s was knocked down by %2$s");
-        this.add("death.attack." + ModDamageType.DYNAMIC_DAMAGE_TYPE.location().toLanguageKey() + ".item", "%1$s was knocked down by %2$s using %3$s");
+        this.add("death.attack." + ModDamageType.PHYSICAL.location().toLanguageKey(), "%1$s was knocked");
+        this.add("death.attack." + ModDamageType.PHYSICAL.location().toLanguageKey() + ".player", "%1$s was knocked down by %2$s");
+        this.add("death.attack." + ModDamageType.PHYSICAL.location().toLanguageKey() + ".item", "%1$s was knocked down by %2$s using %3$s");
         this.add("death.attack." + ModDamageType.EXHAUST.location().toLanguageKey(), "%1$s fainted");
         this.add("death.attack." + ModDamageType.EXHAUST.location().toLanguageKey() + ".player", "%1$s fainted while fighting %2$s");
         this.add("death.attack." + ModDamageType.EXHAUST.location().toLanguageKey() + ".item", "%1$s fainted while fighting %2$s");

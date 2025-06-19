@@ -98,7 +98,7 @@ public abstract class LeapingMonster extends BaseMonster {
 
     @Override
     public OrientedBoundingBox calculateAttackAABB(AnimationState anim, Vec3 target, double grow) {
-        if (!this.isLeapingAnim(anim))
+        if (!this.isLeapingAnim(anim.getID()))
             return super.calculateAttackAABB(anim, target, grow);
         double width = this.getBbWidth();
         double speed = Math.max(width, this.getDeltaMovement().length() - width);

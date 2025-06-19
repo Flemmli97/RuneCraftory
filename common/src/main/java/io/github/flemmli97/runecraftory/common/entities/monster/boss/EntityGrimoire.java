@@ -32,7 +32,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Vector3f;
+import org.joml.Vector3d;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +40,7 @@ import java.util.function.BiConsumer;
 
 public class EntityGrimoire extends BossMonster {
 
-    private static final List<Vector3f> CIRCLE_PARTICLE_MOTION = MathUtils.rotatedVecs(new Vec3(0.25, 0, 0), new Vec3(0, 1, 0), -180, 175, 5);
+    private static final List<Vector3d> CIRCLE_PARTICLE_MOTION = MathUtils.rotatedVecs(new Vector3d(0.25, 0, 0), new Vector3d(0, 1, 0), -180, 175, 5);
 
     public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
     public static final String TAIL_SWIPE = BUILDER.add("tail_swipe", AnimationsBuilder.definition(0.84).marker("attack", 0.48));
@@ -218,7 +218,7 @@ public class EntityGrimoire extends BossMonster {
     public void handleEntityEvent(byte id) {
         super.handleEntityEvent(id);
         if (id == 66) {
-            for (Vector3f vec : CIRCLE_PARTICLE_MOTION) {
+            for (Vector3d vec : CIRCLE_PARTICLE_MOTION) {
                 this.level().addParticle(new ColoredParticleData(ModParticles.WIND.get(), 67 / 255F, 163 / 255F, 65 / 255F, 1, 0.4f), this.getX(), this.getY() + 0.2, this.getZ(), vec.x(), vec.y(), vec.z());
             }
         }
@@ -315,12 +315,12 @@ public class EntityGrimoire extends BossMonster {
 
     protected void setMoveDirection(Vec3 moveDirection) {
         this.moveDirection = moveDirection;
-        S2CMobUpdate.send(this, SyncableDatas.NPC_JOB, this.moveDirection);
+        S2CMobUpdate.send(this, SyncableDatas.MOTION_DIR, this.moveDirection);
     }
 
     @Override
     public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
         super.onUpdate(data);
-        data.runIf(SyncableDatas.NPC_JOB, motion -> this.moveDirection = motion);
+        data.runIf(SyncableDatas.MOTION_DIR, motion -> this.moveDirection = motion);
     }
 }

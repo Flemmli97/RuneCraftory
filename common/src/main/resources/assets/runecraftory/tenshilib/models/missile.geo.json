@@ -1,0 +1,60 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.unknown",
+        "texture_width": 32,
+        "texture_height": 32,
+        "visible_bounds_width": 2,
+        "visible_bounds_height": 1.5,
+        "visible_bounds_offset": [0, 0.25, 0]
+      },
+      "bones": [
+        {
+          "name": "missile",
+          "pivot": [0, 2, 0],
+          "cubes": [
+            {
+              "origin": [-1.5, 0.5, 2],
+              "size": [3, 3, 2],
+              "uv": [0, 8]
+            },
+            {
+              "origin": [-1.5, 0.5, -3],
+              "size": [3, 3, 1],
+              "uv": [10, 10]
+            },
+            {
+              "origin": [-2, 0, -2],
+              "size": [4, 4, 4],
+              "uv": [0, 0]
+            },
+            {
+              "origin": [-1, 1, 4],
+              "size": [2, 2, 1],
+              "uv": [12, 0]
+            }
+          ]
+        },
+        {
+          "name": "propeller",
+          "parent": "missile",
+          "pivot": [0, 2, 5],
+          "cubes": [
+            {
+              "origin": [-1, -1, 5.001],
+              "size": [2, 6, 0],
+              "uv": [0, 13]
+            },
+            {
+              "origin": [-3, 1, 5.002],
+              "size": [6, 2, 0],
+              "uv": [8, 8]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

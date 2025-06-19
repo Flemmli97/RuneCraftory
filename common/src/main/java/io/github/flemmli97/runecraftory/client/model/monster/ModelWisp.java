@@ -6,89 +6,60 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.client.model.SittingModel;
 import io.github.flemmli97.runecraftory.common.entities.monster.wisp.EntityWispBase;
-import io.github.flemmli97.tenshilib.client.AnimationManager;
+import io.github.flemmli97.tenshilib.client.data.AnimationManager;
+import io.github.flemmli97.tenshilib.client.data.ModelManager;
+import io.github.flemmli97.tenshilib.client.data.ReloadableCache;
+import io.github.flemmli97.tenshilib.client.model.BedrockAnimations;
 import io.github.flemmli97.tenshilib.client.model.ExtendedModel;
+import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
 import io.github.flemmli97.tenshilib.client.model.RideableModel;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.IllagerModel;
-import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.entity.Entity;
 
 public class ModelWisp<T extends EntityWispBase> extends EntityModel<T> implements ExtendedModel, RideableModel<T> {
 
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(RuneCraftory.modRes("wisp"), "main");
+    public static final ResourceLocation LOCATION = RuneCraftory.modRes("wisp");
 
-    protected final ModelPartHandler model;
-    protected final BlockBenchAnimations anim;
+    private final ReloadableCache<ModelPartsContainer> model;
+    protected final ReloadableCache<BedrockAnimations> anim;
 
-    public ModelPartHandler.ModelPartExtended main;
-    public ModelPartHandler.ModelPartExtended ridingPosition;
+    public ModelPartsContainer.ModelPartExtended ridingPosition;
 
-    public ModelWisp(ModelPart root) {
+    public ModelWisp() {
         super(RenderType::entityTranslucentCull);
-        this.model = new ModelPartHandler(root, "main");
-        this.anim = AnimationManager.getInstance().getAnimation(RuneCraftory.modRes("wisp"));
-        this.main = this.model.getPart("main");
-        this.ridingPosition = this.model.getPart("ridingPos");
-    }
-
-    public static LayerDefinition createBodyLayer() {
-        MeshDefinition meshdefinition = new MeshDefinition();
-        PartDefinition partdefinition = meshdefinition.getRoot();
-
-        PartDefinition main = partdefinition.addOrReplaceChild("main", CubeListBuilder.create().texOffs(0, 0).addBox(-5.0F, -5.0F, -5.0F, 10.0F, 10.0F, 10.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 20).addBox(-4.5F, -4.5F, -4.5F, 9.0F, 9.0F, 9.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 18.5F, 0.0F));
-
-        PartDefinition floaty = main.addOrReplaceChild("floaty", CubeListBuilder.create().texOffs(4, 23).addBox(9.0F, 2.0F, 0.0F, 1.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
-
-        PartDefinition floaty2 = main.addOrReplaceChild("floaty2", CubeListBuilder.create().texOffs(0, 23).addBox(-8.0F, -5.0F, 4.0F, 1.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
-
-        PartDefinition floaty3 = main.addOrReplaceChild("floaty3", CubeListBuilder.create().texOffs(4, 20).addBox(9.0F, -5.0F, -7.0F, 1.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
-
-        PartDefinition floaty4 = main.addOrReplaceChild("floaty4", CubeListBuilder.create().texOffs(0, 20).addBox(-9.0F, 2.0F, 0.0F, 1.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
-
-        PartDefinition floaty5 = main.addOrReplaceChild("floaty5", CubeListBuilder.create().texOffs(0, 4).addBox(-2.0F, 0.0F, 7.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
-
-        PartDefinition floaty6 = main.addOrReplaceChild("floaty6", CubeListBuilder.create().texOffs(0, 0).addBox(-5.0F, -8.0F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
-
-        PartDefinition riderPos = main.addOrReplaceChild("ridingPos", CubeListBuilder.create(), PartPose.offset(0.0F, -4.5F, 3.0F));
-
-        return LayerDefinition.create(meshdefinition, 64, 64);
+        this.model = ModelManager.getInstance().getModel(LOCATION, model -> this.ridingPosition = model.getPart("ridingPos"));
+        this.anim = AnimationManager.getInstance().getAnimation(LOCATION);
     }
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
         //poseStack.scale(0.85f, 0.85f, 0.85f);
         //poseStack.translate(0, 0.2, 0);
-        this.model.getMainPart().render(poseStack, buffer, LightTexture.FULL_BRIGHT, packedOverlay, red, green, blue, 0.8f);
+        this.getModel().getMainPart().render(poseStack, buffer, LightTexture.FULL_BRIGHT, packedOverlay, FastColor.ARGB32.color(200, color));
     }
 
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        this.model.resetPoses();
-        this.model.getMainPart().visible = true;
+        this.getModel().resetPoses();
+        this.getModel().getMainPart().visible = true;
         float partialTicks = ClientHandlers.getPartialTicks();
         if (entity.deathTime <= 0 && !entity.playDeath()) {
-            this.anim.doAnimation(this, "idle", entity.tickCount, partialTicks);
+            this.anim.get().doAnimation(this, "idle", entity.tickCount, partialTicks);
         }
-        this.anim.doAnimation(this, entity.getAnimationHandler(), partialTicks);
+        this.anim.get().doAnimation(this, entity.getAnimationHandler(), partialTicks);
     }
 
     @Override
-    public ModelPartHandler getHandler() {
-        return this.model;
+    public ModelPartsContainer getModel() {
+        return this.model.get();
     }
 
     @Override
@@ -96,8 +67,7 @@ public class ModelWisp<T extends EntityWispBase> extends EntityModel<T> implemen
         if (ridingEntityRenderer instanceof LivingEntityRenderer<?, ?> lR) {
             EntityModel<?> model = lR.getModel();
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
-                this.main.translateAndRotate(poseStack);
-                this.ridingPosition.translateAndRotate(poseStack);
+                this.ridingPosition.translateAndRotateWithParents(poseStack);
                 ClientHandlers.translateRider(entityRenderer, rider, model, poseStack);
                 return true;
             }

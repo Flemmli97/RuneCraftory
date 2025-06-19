@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.client.render.projectiles;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityRockSpear;
 import io.github.flemmli97.tenshilib.client.render.RenderUtils;
@@ -40,14 +40,14 @@ public class RenderRockSpear extends EntityRenderer<EntityRockSpear> {
         stack.scale(Math.min(1, scale), 1, 1);
         stack.translate(size * 0.5, 0, 0);
         if (playerView) {
-            stack.mulPose(Vector3f.XP.rotationDegrees(-90));
+            stack.mulPose(Axis.XP.rotationDegrees(-90));
             float height = (float) (((entity.bigRock() ? 2.5f : 1.5f) * (Math.sin(Math.sqrt(entity.tickCount / (float) entity.livingTickMax()) * Math.PI))) + 0.2f);
             RenderUtils.renderTexture(stack, buffer.getBuffer(RenderType.entityCutoutNoCull(this.getTextureLocation(entity))), size, height, this.textureBuilder);
         } else {
-            stack.mulPose(Vector3f.XP.rotationDegrees(45));
+            stack.mulPose(Axis.XP.rotationDegrees(45));
             float height = (float) (((entity.bigRock() ? 2.5f : 1.5f) * (Math.sin(Math.sqrt(entity.tickCount / (float) entity.livingTickMax()) * Math.PI))) + 0.2f);
             RenderUtils.renderTexture(stack, buffer.getBuffer(RenderType.entityCutoutNoCull(this.getTextureLocation(entity))), size, height, this.textureBuilder);
-            stack.mulPose(Vector3f.XP.rotationDegrees(90));
+            stack.mulPose(Axis.XP.rotationDegrees(90));
             RenderUtils.renderTexture(stack, buffer.getBuffer(RenderType.entityCutoutNoCull(this.getTextureLocation(entity))), size, height, this.textureBuilder);
         }
         stack.popPose();

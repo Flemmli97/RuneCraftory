@@ -52,7 +52,7 @@ public class EntityHomingEnergyOrb extends BaseDamageCloud implements PowerableM
 
     @Override
     protected boolean damageEntity(LivingEntity target) {
-        return CombatUtils.damageWithFaintAndCrit(this.getOwner(), target, new CustomDamage.Builder(this, this.getOwner()).damageType(CustomDamage.DamageCategory.IGNOREMAGICDEF).noKnockback().hurtResistant(7).element(EnumElement.LIGHT), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC_ATTACK.get()) * this.damageMultiplier, null);
+        return CombatUtils.damageWithFaintAndCrit(this.getOwner(), target, new CustomDamage.Builder(this, this.getOwner()).damageType(CustomDamage.DamageCategory.IGNOREMAGICDEF).noKnockback().hurtResistant(7).element(EnumElement.LIGHT), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC_ATTACK.asHolder()) * this.damageMultiplier, null);
     }
 
     @Override
@@ -89,7 +89,7 @@ public class EntityHomingEnergyOrb extends BaseDamageCloud implements PowerableM
         if (this.targetMob != null && !this.targetMob.isRemoved()) {
             return this.targetMob;
         }
-        this.entityData.get(TARGET_UUID).ifPresent(uuid -> this.targetMob = EntityUtil.findFromUUID(LivingEntity.class, this.level(), uuid));
+        this.entityData.get(TARGET_UUID).ifPresent(uuid -> this.targetMob = io.github.flemmli97.tenshilib.common.entity.EntityUtils.findFromUUID(LivingEntity.class, this.level(), uuid));
         return this.targetMob;
     }
 

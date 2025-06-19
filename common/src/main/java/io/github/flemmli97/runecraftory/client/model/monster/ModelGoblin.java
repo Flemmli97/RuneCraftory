@@ -6,144 +6,79 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.client.model.SittingModel;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityGoblin;
-import io.github.flemmli97.tenshilib.client.AnimationManager;
+import io.github.flemmli97.tenshilib.client.data.AnimationManager;
+import io.github.flemmli97.tenshilib.client.data.ModelManager;
+import io.github.flemmli97.tenshilib.client.data.ReloadableCache;
+import io.github.flemmli97.tenshilib.client.model.BedrockAnimations;
 import io.github.flemmli97.tenshilib.client.model.ExtendedModel;
+import io.github.flemmli97.tenshilib.client.model.ItemHolderModel;
+import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
 import io.github.flemmli97.tenshilib.client.model.RideableModel;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.IllagerModel;
-import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
 
-public class ModelGoblin<T extends EntityGoblin> extends EntityModel<T> implements ExtendedModel, RideableModel<T>, ItemArmModel, SittingModel {
+public class ModelGoblin<T extends EntityGoblin> extends EntityModel<T> implements ExtendedModel, RideableModel<T>, ItemHolderModel, SittingModel {
 
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(RuneCraftory.modRes("goblin"), "main");
+    public static final ResourceLocation LOCATION = RuneCraftory.modRes("goblin");
 
-    protected final ModelPartHandler model;
-    protected final BlockBenchAnimations anim;
+    private final ReloadableCache<ModelPartsContainer> model;
+    protected final ReloadableCache<BedrockAnimations> anim;
 
-    public ModelPartHandler.ModelPartExtended body;
-    public ModelPartHandler.ModelPartExtended head;
-    public ModelPartHandler.ModelPartExtended leftArm;
-    public ModelPartHandler.ModelPartExtended leftArmDown;
-    public ModelPartHandler.ModelPartExtended rightArm;
-    public ModelPartHandler.ModelPartExtended rightArmDown;
-    public ModelPartHandler.ModelPartExtended ridingPosition;
-    public ModelPartHandler.ModelPartExtended leftItem;
-    public ModelPartHandler.ModelPartExtended rightItem;
+    public ModelPartsContainer.ModelPartExtended head;
+    public ModelPartsContainer.ModelPartExtended ridingPosition;
+    public ModelPartsContainer.ModelPartExtended leftItem;
+    public ModelPartsContainer.ModelPartExtended rightItem;
 
-    public ModelGoblin(ModelPart root) {
+    public ModelGoblin() {
         super();
-        this.model = new ModelPartHandler(root, "root");
-        this.anim = AnimationManager.getInstance().getAnimation(RuneCraftory.modRes("goblin"));
-        this.body = this.model.getPart("body");
-        this.head = this.model.getPart("head");
-        this.leftArm = this.model.getPart("leftArm");
-        this.leftArmDown = this.model.getPart("leftArmDown");
-        this.leftItem = this.model.getPart("leftItem");
-        this.rightArm = this.model.getPart("rightArm");
-        this.rightArmDown = this.model.getPart("rightArmDown");
-        this.rightItem = this.model.getPart("rightItem");
-        this.ridingPosition = this.model.getPart("ridingPos");
-    }
-
-    public static LayerDefinition createBodyLayer() {
-        MeshDefinition meshdefinition = new MeshDefinition();
-        PartDefinition partdefinition = meshdefinition.getRoot();
-
-        PartDefinition body = partdefinition.addOrReplaceChild("body", CubeListBuilder.create().texOffs(32, 0).addBox(-4.5F, -5.0F, -2.5F, 9.0F, 12.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 11.0F, 0.0F));
-
-        PartDefinition head = body.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -7.0F, -4.0F, 8.0F, 7.0F, 8.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 49).addBox(-1.0F, -3.0F, -5.0F, 2.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(28, 42).addBox(-1.0F, -2.0F, -5.75F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -5.0F, 0.0F));
-
-        PartDefinition horn = head.addOrReplaceChild("horn", CubeListBuilder.create().texOffs(42, 42).addBox(-0.5F, -3.0F, 0.0F, 1.0F, 4.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -7.0F, -4.6F, 0.6545F, 0.0F, 0.0F));
-
-        PartDefinition leftEar = head.addOrReplaceChild("leftEar", CubeListBuilder.create().texOffs(12, 42).addBox(-1.0F, -3.0F, -0.5F, 1.0F, 3.0F, 3.0F, new CubeDeformation(0.0F))
-                .texOffs(36, 42).addBox(-1.0F, -3.0F, 2.5F, 1.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
-                .texOffs(20, 42).addBox(-1.0F, -3.0F, 4.5F, 1.0F, 1.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(4.0F, -2.0F, -1.5F, 0.2182F, 0.829F, 0.0F));
-
-        PartDefinition rightEar = head.addOrReplaceChild("rightEar", CubeListBuilder.create().texOffs(12, 42).mirror().addBox(0.0F, -3.0F, -0.5F, 1.0F, 3.0F, 3.0F, new CubeDeformation(0.0F)).mirror(false)
-                .texOffs(36, 42).addBox(0.0F, -3.0F, 2.5F, 1.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
-                .texOffs(20, 42).addBox(0.0F, -3.0F, 4.5F, 1.0F, 1.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-4.0F, -2.0F, -1.5F, 0.2182F, -0.829F, 0.0F));
-
-        PartDefinition leftArm = body.addOrReplaceChild("leftArm", CubeListBuilder.create().texOffs(0, 42).addBox(0.0F, -1.5F, -2.0F, 3.0F, 4.0F, 3.0F, new CubeDeformation(0.0F))
-                .texOffs(16, 17).addBox(-0.5F, -2.0F, -2.5F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(4.5F, -1.5F, 0.5F));
-
-        PartDefinition leftArmDown = leftArm.addOrReplaceChild("leftArmDown", CubeListBuilder.create().texOffs(28, 34).addBox(-3.0F, 0.0F, -3.0F, 3.0F, 5.0F, 3.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 34).addBox(-3.5F, 1.0F, -3.5F, 4.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(3.0F, 2.5F, 1.0F));
-
-        PartDefinition leftItem = leftArmDown.addOrReplaceChild("leftItem", CubeListBuilder.create(), PartPose.offset(-1.5F, 4.0F, -2.0F));
-
-        PartDefinition rightArm = body.addOrReplaceChild("rightArm", CubeListBuilder.create().texOffs(40, 34).addBox(-3.0F, -1.5F, -1.5F, 3.0F, 4.0F, 3.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 17).addBox(-3.5F, -2.0F, -2.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(-4.5F, -1.5F, 0.0F));
-
-        PartDefinition rightArmDown = rightArm.addOrReplaceChild("rightArmDown", CubeListBuilder.create().texOffs(16, 34).addBox(0.0F, 0.0F, -3.0F, 3.0F, 5.0F, 3.0F, new CubeDeformation(0.0F))
-                .texOffs(40, 25).addBox(-0.5F, 1.0F, -3.5F, 4.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(-3.0F, 2.5F, 1.5F));
-
-        PartDefinition rightItem = rightArmDown.addOrReplaceChild("rightItem", CubeListBuilder.create(), PartPose.offset(1.5F, 4.0F, -2.0F));
-
-        PartDefinition rightLeg = body.addOrReplaceChild("rightLeg", CubeListBuilder.create().texOffs(28, 25).addBox(-1.5F, -0.5F, -2.0F, 3.0F, 6.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offset(-2.0F, 7.0F, 0.5F));
-
-        PartDefinition rightFoot = rightLeg.addOrReplaceChild("rightFoot", CubeListBuilder.create().texOffs(0, 25).addBox(-1.5F, 0.0F, -5.0F, 3.0F, 1.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 5.0F, 1.0F));
-
-        PartDefinition leftLeg = body.addOrReplaceChild("leftLeg", CubeListBuilder.create().texOffs(16, 25).addBox(-1.0F, -0.5F, -2.0F, 3.0F, 6.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offset(1.5F, 7.0F, 0.5F));
-
-        PartDefinition leftFoot = leftLeg.addOrReplaceChild("leftFoot", CubeListBuilder.create().texOffs(32, 17).addBox(-1.0F, 0.0F, -5.0F, 3.0F, 1.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 5.0F, 1.0F));
-
-        PartDefinition ridingPos = body.addOrReplaceChild("ridingPos", CubeListBuilder.create(), PartPose.offset(0.0F, -5.0F, 5.0F));
-
-        return LayerDefinition.create(meshdefinition, 64, 64);
+        this.model = ModelManager.getInstance().getModel(LOCATION, model -> {
+            this.head = model.getPart("head");
+            this.leftItem = model.getPart("leftItem");
+            this.rightItem = model.getPart("rightItem");
+            this.ridingPosition = model.getPart("ridingPos");
+        });
+        this.anim = AnimationManager.getInstance().getAnimation(LOCATION);
     }
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-        this.model.getMainPart().render(poseStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
+        this.getModel().getMainPart().render(poseStack, buffer, packedLight, packedOverlay, color);
     }
 
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        this.model.resetPoses();
+        this.getModel().resetPoses();
         this.head.yRot += netHeadYaw * Mth.DEG_TO_RAD;
         this.head.xRot += headPitch * Mth.DEG_TO_RAD;
         float partialTicks = ClientHandlers.getPartialTicks();
         if (entity.deathTime <= 0 && !entity.playDeath()) {
-            this.anim.doAnimation(this, "idle", entity.tickCount, partialTicks);
+            this.anim.get().doAnimation(this, "idle", entity.tickCount, partialTicks);
             if (entity.moveTick() > 0)
-                this.anim.doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
+                this.anim.get().doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
         }
         if (this.riding)
-            this.anim.doAnimation(this, "sit", entity.tickCount, partialTicks);
-        this.anim.doAnimation(this, entity.getAnimationHandler(), partialTicks);
+            this.anim.get().doAnimation(this, "sit", entity.tickCount, partialTicks);
+        this.anim.get().doAnimation(this, entity.getAnimationHandler(), partialTicks);
     }
 
     @Override
-    public ModelPartHandler getHandler() {
-        return this.model;
+    public ModelPartsContainer getModel() {
+        return this.model.get();
     }
 
     @Override
     public void transform(HumanoidArm humanoidArm, PoseStack poseStack) {
-        this.body.translateAndRotate(poseStack);
         if (humanoidArm == HumanoidArm.LEFT) {
-            this.leftArmDown.translateAndRotate(poseStack);
-            this.leftArm.translateAndRotate(poseStack);
-            this.leftItem.translateAndRotate(poseStack);
+            this.leftItem.translateAndRotateWithParents(poseStack);
         } else {
-            this.rightArmDown.translateAndRotate(poseStack);
-            this.rightArm.translateAndRotate(poseStack);
-            this.rightItem.translateAndRotate(poseStack);
+            this.rightItem.translateAndRotateWithParents(poseStack);
         }
         poseStack.scale(0.7f, 0.7f, 0.7f);
     }
@@ -157,8 +92,7 @@ public class ModelGoblin<T extends EntityGoblin> extends EntityModel<T> implemen
         if (ridingEntityRenderer instanceof LivingEntityRenderer<?, ?> lR) {
             EntityModel<?> model = lR.getModel();
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
-                this.body.translateAndRotate(poseStack);
-                this.ridingPosition.translateAndRotate(poseStack);
+                this.ridingPosition.translateAndRotateWithParents(poseStack);
                 ClientHandlers.translateRider(entityRenderer, rider, model, poseStack);
                 return true;
             }

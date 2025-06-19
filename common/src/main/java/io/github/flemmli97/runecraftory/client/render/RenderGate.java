@@ -2,19 +2,18 @@ package io.github.flemmli97.runecraftory.client.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
-import io.github.flemmli97.runecraftory.client.model.ModelGate;
 import io.github.flemmli97.runecraftory.common.entities.GateEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import org.joml.Matrix4f;
 
-public class RenderGate extends LivingEntityRenderer<GateEntity, ModelGate> {
+public class RenderGate extends EntityRenderer<GateEntity> {
 
     private static final float[][] NONE = new float[][]{
             new float[]{0.310f, 0.470f, 0.298f},
@@ -50,7 +49,7 @@ public class RenderGate extends LivingEntityRenderer<GateEntity, ModelGate> {
     };
 
     public RenderGate(EntityRendererProvider.Context ctx) {
-        super(ctx, new ModelGate(ctx.bakeLayer(ModelGate.LAYER_LOCATION)), 0);
+        super(ctx);
         ClientHandlers.initNonRendererModels(ctx);
     }
 
@@ -61,32 +60,27 @@ public class RenderGate extends LivingEntityRenderer<GateEntity, ModelGate> {
         stack.scale(scale, scale, scale);
         stack.translate(0, entity.getBbHeight() * 0.5 - 0.1, 0);
         stack.mulPose(this.entityRenderDispatcher.cameraOrientation());
-        stack.mulPose(Vector3f.YP.rotationDegrees(180.0F));
-        stack.mulPose(Vector3f.ZP.rotationDegrees(entity.clientRenderTick * 0.1f));
+        stack.mulPose(Axis.YP.rotationDegrees(180.0F));
+        stack.mulPose(Axis.ZP.rotationDegrees(entity.clientRenderTick * 0.1f));
 
         float xSize = 1.5f / 2f;
         float ySize = 1.5f / 2f;
         Matrix4f matrix4f = stack.last().pose();
         float[][] colors = this.getColor(entity);
         VertexConsumer builder = bufferIn.getBuffer(RunecraftoryShaders.GATE_RENDER);
-        VertexHelper.time(builder.vertex(matrix4f, -xSize, -ySize, 0).color(colors[0][0], colors[0][1], colors[0][2], 1)
-                        .color(colors[1][0], colors[1][1], colors[1][2], 1).uv(0, 1).overlayCoords(getOverlayCoords(entity, this.getWhiteOverlayProgress(entity, partialTicks))),
-                entity.tickCount, partialTicks).endVertex();
-        VertexHelper.time(builder.vertex(matrix4f, xSize, -ySize, 0).color(colors[0][0], colors[0][1], colors[0][2], 1)
-                        .color(colors[1][0], colors[1][1], colors[1][2], 1).uv(1, 1).overlayCoords(getOverlayCoords(entity, this.getWhiteOverlayProgress(entity, partialTicks))),
-                entity.tickCount, partialTicks).endVertex();
-        VertexHelper.time(builder.vertex(matrix4f, xSize, ySize, 0).color(colors[0][0], colors[0][1], colors[0][2], 1)
-                        .color(colors[1][0], colors[1][1], colors[1][2], 1).uv(1, 0).overlayCoords(getOverlayCoords(entity, this.getWhiteOverlayProgress(entity, partialTicks))),
-                entity.tickCount, partialTicks).endVertex();
-        VertexHelper.time(builder.vertex(matrix4f, -xSize, ySize, 0).color(colors[0][0], colors[0][1], colors[0][2], 1)
-                        .color(colors[1][0], colors[1][1], colors[1][2], 1).uv(0, 0).overlayCoords(getOverlayCoords(entity, this.getWhiteOverlayProgress(entity, partialTicks))),
-                entity.tickCount, partialTicks).endVertex();
+//        VertexHelper.time(builder.addVertex(matrix4f, -xSize, -ySize, 0).setColor(colors[0][0], colors[0][1], colors[0][2], 1)
+//                        .setColor(colors[1][0], colors[1][1], colors[1][2], 1).setUv(0, 1).setOverlay(LivingEntityRenderer.getOverlayCoords(entity, 0)),
+//                entity.tickCount, partialTicks);
+//        VertexHelper.time(builder.addVertex(matrix4f, xSize, -ySize, 0).setColor(colors[0][0], colors[0][1], colors[0][2], 1)
+//                        .setColor(colors[1][0], colors[1][1], colors[1][2], 1).setUv(1, 1).setOverlay(LivingEntityRenderer.getOverlayCoords(entity, 0)),
+//                entity.tickCount, partialTicks);
+//        VertexHelper.time(builder.addVertex(matrix4f, xSize, ySize, 0).setColor(colors[0][0], colors[0][1], colors[0][2], 1)
+//                        .setColor(colors[1][0], colors[1][1], colors[1][2], 1).setUv(1, 0).setOverlay(LivingEntityRenderer.getOverlayCoords(entity, 0)),
+//                entity.tickCount, partialTicks);
+//        VertexHelper.time(builder.addVertex(matrix4f, -xSize, ySize, 0).setColor(colors[0][0], colors[0][1], colors[0][2], 1)
+//                        .setColor(colors[1][0], colors[1][1], colors[1][2], 1).setUv(0, 0).setOverlay(LivingEntityRenderer.getOverlayCoords(entity, 0)),
+//                entity.tickCount, partialTicks);
         stack.popPose();
-    }
-
-    @Override
-    protected float getFlipDegrees(GateEntity entityLivingBaseIn) {
-        return 0;
     }
 
     @Override

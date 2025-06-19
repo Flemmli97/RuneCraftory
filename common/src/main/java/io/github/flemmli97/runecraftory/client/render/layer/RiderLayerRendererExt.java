@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.client.render.layer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.tenshilib.client.model.RideableModel;
+import io.github.flemmli97.tenshilib.client.render.layer.RiderEntityLayer;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
@@ -10,7 +11,7 @@ import net.minecraft.world.entity.LivingEntity;
 
 import java.util.function.BiConsumer;
 
-public class RiderLayerRendererExt<T extends LivingEntity, M extends EntityModel<T> & RideableModel<T>> extends RiderLayerRenderer<T, M> {
+public class RiderLayerRendererExt<T extends LivingEntity, M extends EntityModel<T> & RideableModel<T>> extends RiderEntityLayer<T, M> {
 
     private final BiConsumer<PoseStack, T> preRender;
 

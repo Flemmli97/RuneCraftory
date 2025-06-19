@@ -1,10 +1,8 @@
 package io.github.flemmli97.runecraftory.client.particles;
 
-import com.google.common.base.Suppliers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelSkelefang;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderSkelefang;
@@ -24,21 +22,17 @@ import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.CommonColors;
+import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.function.Supplier;
-
 public class SkelefangParticle extends Particle {
 
-    private static final Supplier<ModelSkelefang<EntitySkelefang>> MODEL = Suppliers.memoize(() -> {
-        ModelSkelefang<EntitySkelefang> model = new ModelSkelefang<>(Minecraft.getInstance().getEntityModels().bakeLayer(ModelSkelefang.LAYER_LOCATION), RenderType::entityTranslucentCull);
-        model.body.loadPoseRecursive(PoseExtended.ZERO);
-        return model;
-    });
+    private static final ModelSkelefang<EntitySkelefang> MODEL = particleModel();
 
-    private static final Supplier<RenderType> RENDER_TYPE = Suppliers.memoize(() -> MODEL.get().renderType(RenderSkelefang.TEXTURE));
+    private static final RenderType RENDER_TYPE = MODEL.renderType(RenderSkelefang.TEXTURE);
 
     private final SkelefangParticleData.SkelefangBoneType boneType;
     private final float initialRotX, initialRotY, pitchSpin, yawSpin;
@@ -61,23 +55,20 @@ public class SkelefangParticle extends Particle {
         this.lifetime = data.getMaxTime();
         ModelPartsContainer.ModelPartExtended[] parts = switch (this.boneType) {
             case TAIL ->
-                    new ModelPartsContainer.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineBack, MODEL.get().tailBase, MODEL.get().tail};
-            case TAIL_BASE ->
-                    new ModelPartsContainer.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineBack, MODEL.get().tailBase};
+                    new ModelPartsContainer.ModelPartExtended[]{MODEL.body, MODEL.spineBack, MODEL.tailBase, MODEL.tail};
+            case TAIL_BASE -> new ModelPartsContainer.ModelPartExtended[]{MODEL.body, MODEL.spineBack, MODEL.tailBase};
             case LEFT_LEG ->
-                    new ModelPartsContainer.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineBack, MODEL.get().leftLegBase};
+                    new ModelPartsContainer.ModelPartExtended[]{MODEL.body, MODEL.spineBack, MODEL.leftLegBase};
             case RIGHT_LEG ->
-                    new ModelPartsContainer.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineBack, MODEL.get().rightLegBase};
+                    new ModelPartsContainer.ModelPartExtended[]{MODEL.body, MODEL.spineBack, MODEL.rightLegBase};
             case HEAD ->
-                    new ModelPartsContainer.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineFront, MODEL.get().neck, MODEL.get().head};
-            case NECK ->
-                    new ModelPartsContainer.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineFront, MODEL.get().neck};
-            case BACK -> new ModelPartsContainer.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineBack};
-            case BACK_RIBS ->
-                    new ModelPartsContainer.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineBack, MODEL.get().ribsSpine};
-            case FRONT -> new ModelPartsContainer.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineFront};
+                    new ModelPartsContainer.ModelPartExtended[]{MODEL.body, MODEL.spineFront, MODEL.neck, MODEL.head};
+            case NECK -> new ModelPartsContainer.ModelPartExtended[]{MODEL.body, MODEL.spineFront, MODEL.neck};
+            case BACK -> new ModelPartsContainer.ModelPartExtended[]{MODEL.body, MODEL.spineBack};
+            case BACK_RIBS -> new ModelPartsContainer.ModelPartExtended[]{MODEL.body, MODEL.spineBack, MODEL.ribsSpine};
+            case FRONT -> new ModelPartsContainer.ModelPartExtended[]{MODEL.body, MODEL.spineFront};
             case FRONT_RIBS ->
-                    new ModelPartsContainer.ModelPartExtended[]{MODEL.get().body, MODEL.get().spineFront, MODEL.get().ribsBody};
+                    new ModelPartsContainer.ModelPartExtended[]{MODEL.body, MODEL.spineFront, MODEL.ribsBody};
             default -> null;
         };
         //Offset pos based on part
@@ -96,6 +87,12 @@ public class SkelefangParticle extends Particle {
             this.yo = this.y;
             this.zo = this.z;
         }
+    }
+
+    public static ModelSkelefang<EntitySkelefang> particleModel() {
+        ModelSkelefang<EntitySkelefang> model = new ModelSkelefang<>(RenderType::entityTranslucentCull);
+        model.getModel().getMainPart().loadPoseRecursive(PoseExtended.ZERO);
+        return model;
     }
 
     @Override
@@ -135,14 +132,14 @@ public class SkelefangParticle extends Particle {
         stack.mulPose(Axis.XP.rotationDegrees(pitch));
         stack.scale(-1.0F, -1.0F, 1.0F);
         stack.translate(0.0D, -1.5, 0.0D);
-        RenderType type = RENDER_TYPE.get();
-        CustomParticleRenderTypes.batchType(type);
-        VertexConsumer consumer = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(type);
         float alpha = 0.9f - this.age * 07f / this.lifetime;
-        BlockPos pos = new BlockPos(this.x, this.y, this.z);
+        BlockPos pos = BlockPos.containing(this.x, this.y, this.z);
         int block = this.level.getBrightness(LightLayer.BLOCK, pos);
         int light = this.level.getBrightness(LightLayer.SKY, pos);
-        MODEL.get().renderAsParticle(stack, consumer, this.boneType, LightTexture.pack(block, light), OverlayTexture.NO_OVERLAY, 1, 1, 1, alpha);
+        CustomParticleRenderTypes.batchType(RENDER_TYPE);
+        VertexConsumer consumer = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(RENDER_TYPE);
+        MODEL.renderAsParticle(stack, consumer, this.boneType, LightTexture.pack(block, light),
+                OverlayTexture.NO_OVERLAY, FastColor.ARGB32.setColor((int) (alpha * 255), CommonColors.WHITE));
     }
 
     /**
@@ -151,19 +148,18 @@ public class SkelefangParticle extends Particle {
     private void irisFix(PoseStack stack, Camera renderInfo, float partialTicks) {
         if (!RuneCraftory.iris)
             return;
-        stack.mulPose(Vector3f.XP.rotationDegrees(Mth.lerp(partialTicks, this.cameraLastPitch, renderInfo.getXRot())));
-        stack.mulPose(Vector3f.YP.rotationDegrees(Mth.lerp(partialTicks, this.cameraLastYaw, renderInfo.getYRot() - 180)));
+        stack.mulPose(Axis.XP.rotationDegrees(Mth.lerp(partialTicks, this.cameraLastPitch, renderInfo.getXRot())));
+        stack.mulPose(Axis.YP.rotationDegrees(Mth.lerp(partialTicks, this.cameraLastYaw, renderInfo.getYRot() - 180)));
         this.cameraLastPitch = renderInfo.getXRot();
         this.cameraLastYaw = renderInfo.getYRot() - 180;
     }
 
     @Override
     public ParticleRenderType getRenderType() {
-        return CustomParticleRenderTypes.ENTITY_MODEL_TYPE;
+        return ParticleRenderType.CUSTOM;
     }
 
-    public record SkelefangParticleFactoryBase(
-            SpriteSet sprite) implements ParticleProvider<SkelefangParticleData> {
+    public record SkelefangParticleFactoryBase(SpriteSet sprite) implements ParticleProvider<SkelefangParticleData> {
 
         @Override
         public Particle createParticle(SkelefangParticleData data, ClientLevel level, double x, double y, double z, double motionX, double motionY, double motionZ) {

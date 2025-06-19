@@ -4,23 +4,13 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.api.action.DataKey;
 import io.github.flemmli97.runecraftory.api.datapack.ConversationContext;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
-import io.github.flemmli97.runecraftory.client.gui.CraftingGui;
 import io.github.flemmli97.runecraftory.client.gui.FarmlandInfo;
-import io.github.flemmli97.runecraftory.client.gui.InfoScreen;
-import io.github.flemmli97.runecraftory.client.gui.MonsterCompanionGui;
-import io.github.flemmli97.runecraftory.client.gui.NPCCompanionGui;
-import io.github.flemmli97.runecraftory.client.gui.NPCDialogueGui;
-import io.github.flemmli97.runecraftory.client.gui.NPCGui;
-import io.github.flemmli97.runecraftory.client.gui.NPCShopGui;
 import io.github.flemmli97.runecraftory.client.gui.OverlayGui;
-import io.github.flemmli97.runecraftory.client.gui.QuestGui;
 import io.github.flemmli97.runecraftory.client.gui.SpawnEggScreen;
 import io.github.flemmli97.runecraftory.client.gui.SpellInvOverlayGui;
-import io.github.flemmli97.runecraftory.client.gui.widgets.QuestToast;
 import io.github.flemmli97.runecraftory.client.model.AnimatedPlayerModel;
 import io.github.flemmli97.runecraftory.client.model.SittingModel;
 import io.github.flemmli97.runecraftory.client.render.ScaledRenderer;
-import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.ShopState;
@@ -34,6 +24,7 @@ import net.minecraft.client.CameraType;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.toasts.RecipeToast;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -45,6 +36,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -55,7 +47,6 @@ import org.lwjgl.glfw.GLFW;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 public class ClientHandlers {
 
@@ -74,20 +65,12 @@ public class ClientHandlers {
 
     private static CameraType pastType = CameraType.FIRST_PERSON;
 
-    private static boolean paused;
-    private static float pausedPartial;
-
     public static Player getPlayer() {
         return Minecraft.getInstance().player;
     }
 
     public static float getPartialTicks() {
-        boolean isPaused = Minecraft.getInstance().isPaused();
-        if (isPaused && !paused) {
-            pausedPartial = Minecraft.getInstance().getFrameTime();
-        }
-        paused = isPaused;
-        return isPaused ? pausedPartial : Minecraft.getInstance().getFrameTime();
+        return Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(true);
     }
 
     public static void updateClientCalendar(FriendlyByteBuf buffer) {
@@ -116,8 +99,9 @@ public class ClientHandlers {
 
     public static boolean disableMouseMove() {
         Minecraft mc = Minecraft.getInstance();
-        return mc.player != null && (EntityUtils.isDisabled(mc.player) || Platform.INSTANCE.getPlayerData(mc.player)
-                .map(d -> d.getWeaponHandler().get(DataKey.FIXED_LOOK)).orElse(false)) && (mc.screen == null || mc.screen instanceof AbstractContainerScreen<?>);
+
+        return mc.player != null && (EntityUtils.isDisabled(mc.player)
+                || Platform.INSTANCE.getPlayerData(mc.player).getWeaponHandler().get(DataKey.FIXED_LOOK)) && (mc.screen == null || mc.screen instanceof AbstractContainerScreen<?>);
     }
 
     public static boolean disableMouseClick() {
@@ -147,7 +131,7 @@ public class ClientHandlers {
     }
 
     public static void simpleToast(Component title, Component subtitle) {
-        Minecraft.getInstance().getToasts().addToast(new QuestToast(title, subtitle));
+//        Minecraft.getInstance().getToasts().addToast(new QuestToast(title, subtitle));
     }
 
     public static void setToThirdPerson(boolean reset) {
@@ -167,7 +151,7 @@ public class ClientHandlers {
     public static boolean orthorgraphicCam() {
         Entity entity = Minecraft.getInstance().getCameraEntity();
         if (entity instanceof LivingEntity living) {
-            return Platform.INSTANCE.getEntityData(living).map(EntityData::isOrthoView).orElse(false);
+            return Platform.INSTANCE.getEntityData(living).isOrthoView();
         }
         return false;
     }
@@ -177,83 +161,87 @@ public class ClientHandlers {
         if (entity instanceof BaseMonster monster) {
             if (!Minecraft.getInstance().player.getUUID().equals(monster.getOwnerUUID()))
                 return;
-            Minecraft.getInstance().setScreen(new MonsterCompanionGui(monster, fullParty, hasHome));
+//            Minecraft.getInstance().setScreen(new MonsterCompanionGui(monster, fullParty, hasHome));
         }
     }
 
     public static void openNPCChat(int id, ShopState isShopOpen, SyncedFamilyData family, int followState, Map<String, List<Component>> actions, ResourceLocation quest) {
         Entity entity = Minecraft.getInstance().level.getEntity(id);
         if (entity instanceof EntityNPCBase npc) {
-            if (followState == 1)
-                Minecraft.getInstance().setScreen(new NPCCompanionGui(npc, isShopOpen == ShopState.OPEN, quest));
-            else
-                Minecraft.getInstance().setScreen(new NPCGui<>(npc, isShopOpen, followState == 0, family, actions, quest));
+//            if (followState == 1)
+//                Minecraft.getInstance().setScreen(new NPCCompanionGui(npc, isShopOpen == ShopState.OPEN, quest));
+//            else
+//                Minecraft.getInstance().setScreen(new NPCGui<>(npc, isShopOpen, followState == 0, family, actions, quest));
         }
     }
 
-    public static void drawCenteredScaledString(PoseStack stack, Font font, Component component, float x, float y, float scale, int color) {
+    public static void drawCenteredScaledString(GuiGraphics graphics, Font font, Component component, float x, float y, float scale, int color) {
         if (scale != 1) {
+            PoseStack stack = graphics.pose();
             stack.pushPose();
             stack.translate(x, y, 0);
             stack.scale(scale, scale, scale);
             stack.translate(-font.width(component) * 0.5, 0, 0);
-            font.draw(stack, component, 0, 0, color);
+            graphics.drawString(font, component, 0, 0, color);
             stack.popPose();
         } else {
             x -= font.width(component) * 0.5;
-            font.draw(stack, component, x, y, color);
+            graphics.drawString(font, component, (int) x, (int) y, color);
         }
     }
 
-    public static void drawCenteredScaledString(PoseStack stack, Font font, String string, float x, float y, float scale, int color) {
+    public static void drawCenteredScaledString(GuiGraphics graphics, Font font, String string, float x, float y, float scale, int color) {
         if (scale != 1) {
+            PoseStack stack = graphics.pose();
             stack.pushPose();
             stack.translate(x, y, 0);
             stack.scale(scale, scale, scale);
             stack.translate(-font.width(string) * 0.5, 0, 0);
-            font.draw(stack, string, 0, 0, color);
+            graphics.drawString(font, string, 0, 0, color);
             stack.popPose();
         } else {
             x -= font.width(string) * 0.5;
-            font.draw(stack, string, x, y, color);
+            graphics.drawString(font, string, (int) x, (int) y, color);
         }
     }
 
-    public static void drawRightAlignedScaledString(PoseStack stack, Font font, Component string, float x, float y, float scale, int color) {
+    public static void drawRightAlignedScaledString(GuiGraphics graphics, Font font, Component string, float x, float y, float scale, int color) {
         if (scale != 1) {
+            PoseStack stack = graphics.pose();
             stack.pushPose();
             stack.translate(x, y, 0);
             stack.scale(scale, scale, scale);
             stack.translate(-font.width(string), 0, 0);
-            font.draw(stack, string, 0, 0, color);
+            graphics.drawString(font, string, 0, 0, color);
             stack.popPose();
         } else {
             x -= font.width(string);
-            font.draw(stack, string, x, y, color);
+            graphics.drawString(font, string, (int) x, (int) y, color);
         }
     }
 
-    public static void drawRightAlignedScaledString(PoseStack stack, Font font, String string, float x, float y, float scale, int color) {
+    public static void drawRightAlignedScaledString(GuiGraphics graphics, Font font, String string, float x, float y, float scale, int color) {
         if (scale != 1) {
+            PoseStack stack = graphics.pose();
             stack.pushPose();
             stack.translate(x, y, 0);
             stack.scale(scale, scale, scale);
             stack.translate(-font.width(string), 0, 0);
-            font.draw(stack, string, 0, 0, color);
+            graphics.drawString(font, string, 0, 0, color);
             stack.popPose();
         } else {
             x -= font.width(string);
-            font.draw(stack, string, x, y, color);
+            graphics.drawString(font, string, (int) x, (int) y, color);
         }
     }
 
     public static void handleShopRespone(Component txt) {
-        if (Minecraft.getInstance().screen instanceof NPCShopGui shop) {
-            if (txt != null)
-                shop.drawBubble(txt);
-            else
-                shop.updateButtons();
-        }
+//        if (Minecraft.getInstance().screen instanceof NPCShopGui shop) {
+//            if (txt != null)
+//                shop.drawBubble(txt);
+//            else
+//                shop.updateButtons();
+//        }
     }
 
     public static AnimatedPlayerModel<?> getAnimatedPlayerModel() {
@@ -261,19 +249,19 @@ public class ClientHandlers {
     }
 
     public static void initNonRendererModels(EntityRendererProvider.Context ctx) {
-        ANIMATED_PLAYER_MODEL = new AnimatedPlayerModel<>(ctx.bakeLayer(AnimatedPlayerModel.LAYER_LOCATION));
+        ANIMATED_PLAYER_MODEL = new AnimatedPlayerModel<>();
         ArmorModels.initArmorModels(ctx);
     }
 
     public static void updateCurrentRecipeIndex(int index) {
-        if (Minecraft.getInstance().screen instanceof CraftingGui gui)
-            gui.setScrollValue(index);
+//        if (Minecraft.getInstance().screen instanceof CraftingGui gui)
+//            gui.setScrollValue(index);
     }
 
     public static void onAttributePkt() {
-        if (Minecraft.getInstance().screen instanceof InfoScreen screen) {
-            screen.onAttributePkt();
-        }
+//        if (Minecraft.getInstance().screen instanceof InfoScreen screen) {
+//            screen.onAttributePkt();
+//        }
     }
 
     public static void handleTriggers(S2CTriggers.TriggerType type, BlockPos pos) {
@@ -284,12 +272,12 @@ public class ClientHandlers {
                 double y = pos.getY() + 1.25D;
                 double z = pos.getZ() + 0.5D;
                 level.addParticle(ParticleTypes.HAPPY_VILLAGER, x, y, z, 0.0D, 0.0D, 0.0D);
-                Random random = level.getRandom();
+                RandomSource random = level.getRandom();
                 for (int i = 0; i < 15; ++i) {
                     double nX = x - 0.5 + random.nextDouble();
                     double nY = y - 0.35 + random.nextDouble() * 0.5;
                     double nZ = z - 0.5 + random.nextDouble();
-                    if (!level.getBlockState((new BlockPos(nX, nY, nZ)).below()).isAir()) {
+                    if (!level.getBlockState((BlockPos.containing(nX, nY, nZ)).below()).isAir()) {
                         level.addParticle(ParticleTypes.HAPPY_VILLAGER, nX, nY, nZ,
                                 random.nextGaussian() * 0.02D, random.nextGaussian() * 0.02D, random.nextGaussian() * 0.02D);
                     }
@@ -299,17 +287,17 @@ public class ClientHandlers {
     }
 
     public static void updateNPCDialogue(EntityNPCBase npc, ConversationContext convCtx, String conversationID, Component component, Map<String, Component> data, List<Component> actions) {
-        if (Minecraft.getInstance().screen instanceof NPCDialogueGui<?> gui) {
-            gui.updateConversation(Minecraft.getInstance(), convCtx, conversationID, component, data, actions);
-        } else {
-            NPCDialogueGui<EntityNPCBase> gui = new NPCDialogueGui<>(npc);
-            gui.updateConversation(Minecraft.getInstance(), convCtx, conversationID, component, data, actions);
-            Minecraft.getInstance().setScreen(gui);
-        }
+//        if (Minecraft.getInstance().screen instanceof NPCDialogueGui<?> gui) {
+//            gui.updateConversation(Minecraft.getInstance(), convCtx, conversationID, component, data, actions);
+//        } else {
+//            NPCDialogueGui<EntityNPCBase> gui = new NPCDialogueGui<>(npc);
+//            gui.updateConversation(Minecraft.getInstance(), convCtx, conversationID, component, data, actions);
+//            Minecraft.getInstance().setScreen(gui);
+//        }
     }
 
     public static void openQuestGui(boolean hasActive, List<ClientSideQuestDisplay> quests) {
-        Minecraft.getInstance().setScreen(new QuestGui(hasActive, quests));
+//        Minecraft.getInstance().setScreen(new QuestGui(hasActive, quests));
     }
 
     public static void openSpawneggGui(InteractionHand hand) {

@@ -53,7 +53,7 @@ public class EntityDarkBall extends BaseDamageCloud {
         float f2 = Mth.cos(rotationYawIn * 0.017453292F) * Mth.cos(rotationPitchIn * 0.017453292F);
         this.shoot(f, f1, f2, velocity, inaccuracy);
         Vec3 throwerMotion = entityThrower.getDeltaMovement();
-        this.setDeltaMovement(this.getDeltaMovement().add(throwerMotion.x, entityThrower.isOnGround() ? 0.0D : throwerMotion.y, throwerMotion.z));
+        this.setDeltaMovement(this.getDeltaMovement().add(throwerMotion.x, entityThrower.onGround() ? 0.0D : throwerMotion.y, throwerMotion.z));
         this.getDeltaMovement().add(throwerMotion.x, 0, throwerMotion.z);
     }
 

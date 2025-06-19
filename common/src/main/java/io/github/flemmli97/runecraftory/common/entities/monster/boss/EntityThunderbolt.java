@@ -534,12 +534,12 @@ public class EntityThunderbolt extends BossMonster {
 
     protected void setChargeDirection(Vec3 moveDirection) {
         this.chargeMotion = moveDirection;
-        S2CMobUpdate.send(this, SyncableDatas.NPC_JOB, this.chargeMotion);
+        S2CMobUpdate.send(this, SyncableDatas.MOTION_DIR, this.chargeMotion);
     }
 
     @Override
     public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
         super.onUpdate(data);
-        data.runIf(SyncableDatas.NPC_JOB, motion -> this.chargeMotion = motion);
+        data.runIf(SyncableDatas.MOTION_DIR, motion -> this.chargeMotion = motion);
     }
 }

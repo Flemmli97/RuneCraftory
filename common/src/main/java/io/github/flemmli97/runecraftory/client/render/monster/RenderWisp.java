@@ -11,7 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 public class RenderWisp<T extends EntityWispBase> extends RenderMonster<T, ModelWisp<T>> {
 
     public RenderWisp(EntityRendererProvider.Context ctx, ResourceLocation tex) {
-        super(ctx, new ModelWisp<>(ctx.bakeLayer(ModelWisp.LAYER_LOCATION)), tex, 0);
+        super(ctx, new ModelWisp<>(), tex, 0);
     }
 
     @Override

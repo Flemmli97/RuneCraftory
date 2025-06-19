@@ -135,16 +135,16 @@ public class VortexParticle extends TextureSheetParticle {
 //            float f5 = this.getV0();
 //            float f6 = this.getV1();
 //            int j = 0x500050;
-//            buffer.vertex(avector3f[0].x(), avector3f[0].y(), avector3f[0].z()).uv(f8, f6).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(j).endVertex();
-//            buffer.vertex(avector3f[1].x(), avector3f[1].y(), avector3f[1].z()).uv(f8, f5).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(j).endVertex();
-//            buffer.vertex(avector3f[2].x(), avector3f[2].y(), avector3f[2].z()).uv(f7, f5).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(j).endVertex();
-//            buffer.vertex(avector3f[3].x(), avector3f[3].y(), avector3f[3].z()).uv(f7, f6).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(j).endVertex();
+//            buffer.addVertex(avector3f[0].x(), avector3f[0].y(), avector3f[0].z()).setUv(f8, f6).setColor(this.rCol, this.gCol, this.bCol, this.alpha).uv2(j);
+//            buffer.addVertex(avector3f[1].x(), avector3f[1].y(), avector3f[1].z()).setUv(f8, f5).setColor(this.rCol, this.gCol, this.bCol, this.alpha).uv2(j);
+//            buffer.addVertex(avector3f[2].x(), avector3f[2].y(), avector3f[2].z()).setUv(f7, f5).setColor(this.rCol, this.gCol, this.bCol, this.alpha).uv2(j);
+//            buffer.addVertex(avector3f[3].x(), avector3f[3].y(), avector3f[3].z()).setUv(f7, f6).setColor(this.rCol, this.gCol, this.bCol, this.alpha).uv2(j);
 //
 //            if (this.renderOpposite) {
-//                buffer.vertex(opposite[0].x(), opposite[0].y(), opposite[0].z()).uv(f8, f6).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(j).endVertex();
-//                buffer.vertex(opposite[1].x(), opposite[1].y(), opposite[1].z()).uv(f8, f5).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(j).endVertex();
-//                buffer.vertex(opposite[2].x(), opposite[2].y(), opposite[2].z()).uv(f7, f5).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(j).endVertex();
-//                buffer.vertex(opposite[3].x(), opposite[3].y(), opposite[3].z()).uv(f7, f6).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(j).endVertex();
+//                buffer.addVertex(opposite[0].x(), opposite[0].y(), opposite[0].z()).setUv(f8, f6).setColor(this.rCol, this.gCol, this.bCol, this.alpha).uv2(j);
+//                buffer.addVertex(opposite[1].x(), opposite[1].y(), opposite[1].z()).setUv(f8, f5).setColor(this.rCol, this.gCol, this.bCol, this.alpha).uv2(j);
+//                buffer.addVertex(opposite[2].x(), opposite[2].y(), opposite[2].z()).setUv(f7, f5).setColor(this.rCol, this.gCol, this.bCol, this.alpha).uv2(j);
+//                buffer.addVertex(opposite[3].x(), opposite[3].y(), opposite[3].z()).setUv(f7, f6).setColor(this.rCol, this.gCol, this.bCol, this.alpha).uv2(j);
 //            }
 //        }
     }
@@ -154,8 +154,7 @@ public class VortexParticle extends TextureSheetParticle {
         return this.quadSize * Mth.sin((this.age + partialTicks) * (float) (Math.PI / this.lifetime * 2));//Mth.clamp(((float) this.age + partialTicks) / (float) this.maxAge * 8.0F, 0.0F, 1.0F);
     }
 
-    public record VortexFactoryBase(
-            SpriteSet sprite) implements ParticleProvider<ColoredParticleData4f> {
+    public record VortexFactoryBase(SpriteSet sprite) implements ParticleProvider<ColoredParticleData4f> {
 
         @Override
         public Particle createParticle(ColoredParticleData4f data, ClientLevel level, double x, double y, double z, double motX, double motY, double motZ) {

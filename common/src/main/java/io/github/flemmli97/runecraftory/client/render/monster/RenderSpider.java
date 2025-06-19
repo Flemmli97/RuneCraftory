@@ -11,12 +11,12 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 public class RenderSpider<T extends EntitySpider> extends RenderMonster<T, ModelSpider<T>> {
 
     public RenderSpider(EntityRendererProvider.Context ctx) {
-        super(ctx, new ModelSpider<>(ctx.bakeLayer(ModelSpider.LAYER_LOCATION)), RuneCraftory.modRes("textures/entity/monsters/spider.png"), 0.7f);
+        super(ctx, new ModelSpider<>(), RuneCraftory.modRes("textures/entity/monsters/spider.png"), 0.7f);
     }
 
     @Override
-    protected void setupRotations(T entity, PoseStack stack, float ageInTicks, float rotationYaw, float partialTicks) {
-        super.setupRotations(entity, stack, ageInTicks, rotationYaw, partialTicks);
+    protected void setupRotations(T entity, PoseStack stack, float ageInTicks, float rotationYaw, float partialTicks, float scale) {
+        super.setupRotations(entity, stack, ageInTicks, rotationYaw, partialTicks, scale);
         if (entity.climbingTicker >= 0) {
             float f = (entity.climbingTicker + (entity.isClimbing() ? partialTicks : -partialTicks)) / EntitySpider.CLIMB_MAX;
             if (f > 1)

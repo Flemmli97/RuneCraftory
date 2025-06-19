@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.entities.misc;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
+import io.github.flemmli97.tenshilib.common.entity.AdvancedProjectile;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
@@ -37,10 +38,10 @@ public class EntityBigPlate extends BaseProjectile {
         return getEntityHitResult(this, from, to, this::canHit);
     }
 
-    private static EntityHitResult getEntityHitResult(EntityProjectile projectile, Vec3 from, Vec3 to, Predicate<Entity> pred) {
+    private static EntityHitResult getEntityHitResult(AdvancedProjectile projectile, Vec3 from, Vec3 to, Predicate<Entity> pred) {
         double dY = to.y() - projectile.getY();
         AABB bb = projectile.getBoundingBox().expandTowards(0, dY, 0);
-        for (Entity e : projectile.level.getEntities(projectile, bb.inflate(1), pred)) {
+        for (Entity e : projectile.level().getEntities(projectile, bb.inflate(1), pred)) {
             if (e.getBoundingBox().inflate(0.3).intersects(bb))
                 return new EntityHitResult(e);
         }

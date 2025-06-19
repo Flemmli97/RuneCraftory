@@ -3,12 +3,14 @@ package io.github.flemmli97.runecraftory.common.entities.misc;
 import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.nbt.CompoundTag;
@@ -145,11 +147,9 @@ public class EntityWaterLaser extends BaseBeam {
             this.yRotO = yRot;
         }
         if (this.getOwner() instanceof ServerPlayer player) {
-            boolean keep = Platform.INSTANCE.getPlayerData(player)
-                    .map(d -> {
-                        AnimatedAction action = d.getWeaponHandler().getAnimation();
-                        return action != null && action.is(PlayerModelAnimations.WATER_LASER_ONE, PlayerModelAnimations.WATER_LASER_TWO, PlayerModelAnimations.WATER_LASER_THREE);
-                    }).orElse(false);
+            PlayerData data = Platform.INSTANCE.getPlayerData(player);
+            AnimationState action = data.getWeaponHandler().getAnimation();
+            boolean keep = action != null && action.is(PlayerModelAnimations.WATER_LASER_ONE, PlayerModelAnimations.WATER_LASER_TWO, PlayerModelAnimations.WATER_LASER_THREE);
             if (!keep && this.tickCount < this.livingTickMax() - 5) {
                 this.entityData.set(MAX_LIVING_TICK, this.tickCount + 5);
             }
@@ -166,7 +166,7 @@ public class EntityWaterLaser extends BaseBeam {
                 invul_time = 0;
             }
         }
-        CombatUtils.damageWithFaintAndCrit(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(invul_time).magic().noKnockback().element(EnumElement.WATER), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC_ATTACK.get()) * this.damageMultiplier, null);
+        CombatUtils.damageWithFaintAndCrit(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(invul_time).magic().noKnockback().element(EnumElement.WATER), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC_ATTACK.asHolder()) * this.damageMultiplier, null);
         this.hitEntities.put(e, this.tickCount);
     }
 

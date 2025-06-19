@@ -104,7 +104,7 @@ public class ItemSpearBase extends Item implements ExtendedWeapon, BigWeapon {
                 .apply(player, null);
         if (!list.isEmpty()) {
             LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.SPEAR, 2);
-            list.forEach(e -> CombatUtils.playerAttackWithItem(player, e, player.getMainHandItem(), 0.6f, false, false));
+            list.forEach(e -> CombatUtils.attackWithItem(player, e, player.getMainHandItem(), 0.6f, false, false));
         }
         if (finishing)
             player.level().playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.PLAYER_ATTACK_SWOOSH.get(), player.getSoundSource(), 1.0f, (player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.2f + 1.5f);

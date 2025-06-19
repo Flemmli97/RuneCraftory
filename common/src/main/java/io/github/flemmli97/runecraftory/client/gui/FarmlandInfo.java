@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.client.gui;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientFarmlandHandler;
 import io.github.flemmli97.runecraftory.common.blocks.Growable;
@@ -12,7 +11,7 @@ import io.github.flemmli97.runecraftory.common.world.farming.FarmlandDataContain
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -22,7 +21,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 
-public class FarmlandInfo extends GuiComponent {
+public class FarmlandInfo {
 
     private static final ResourceLocation TEXTURE_PATH = RuneCraftory.modRes("textures/gui/farmland_view.png");
     private final Minecraft mc;
@@ -31,7 +30,7 @@ public class FarmlandInfo extends GuiComponent {
         this.mc = mc;
     }
 
-    public void render(PoseStack stack) {
+    public void render(GuiGraphics graphics) {
         if (!EntityUtils.shouldShowFarmlandView(this.mc.player))
             return;
         HitResult res = this.mc.hitResult;
@@ -53,15 +52,13 @@ public class FarmlandInfo extends GuiComponent {
         if (data == null)
             return;
 
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-        RenderSystem.setShaderTexture(0, TEXTURE_PATH);
         RenderSystem.enableBlend();
         RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         int sY = 60 + (cropBlock ? 40 : 0);
         int xPos = ClientConfig.farmlandPosition.positionX(this.mc.getWindow().getGuiScaledWidth(), 100, ClientConfig.farmlandX);
         int yPos = ClientConfig.farmlandPosition.positionY(this.mc.getWindow().getGuiScaledHeight(), sY, ClientConfig.farmlandY);
-        this.blit(stack, xPos, yPos, 0, 0, 100, sY - 5);
-        this.blit(stack, xPos, yPos + sY - 5, 0, 100 - 5, 100, 5);
+        graphics.blit(TEXTURE_PATH, xPos, yPos, 0, 0, 100, sY - 5);
+        graphics.blit(TEXTURE_PATH, xPos, yPos + sY - 5, 0, 100 - 5, 100, 5);
         RenderSystem.defaultBlendFunc();
         yPos += 5;
         xPos += 5;
@@ -69,25 +66,25 @@ public class FarmlandInfo extends GuiComponent {
             MutableComponent growth = Component.literal(data.ageProgress() + "%");
             if (data.ageProgress() == 100)
                 growth.withStyle(ChatFormatting.GREEN);
-            this.mc.font.draw(stack, Component.translatable("runecraftory.magnifying_glass.view.crop.growth", growth), xPos, yPos, 0x000000);
-            this.mc.font.draw(stack, Component.translatable("runecraftory.magnifying_glass.view.crop.level", data.cropLevel()), xPos, yPos + 10, 0x000000);
+            graphics.drawString(this.mc.font, Component.translatable("runecraftory.magnifying_glass.view.crop.growth", growth), xPos, yPos, 0x000000);
+            graphics.drawString(this.mc.font, Component.translatable("runecraftory.magnifying_glass.view.crop.level", data.cropLevel()), xPos, yPos + 10, 0x000000);
             MutableComponent giant = Component.literal(data.cropSizeProgress() + "%");
             if (data.cropSizeProgress() == 100)
                 giant.withStyle(ChatFormatting.GREEN);
-            this.mc.font.draw(stack, Component.translatable("runecraftory.magnifying_glass.view.crop.giant", giant), xPos, yPos + 10 * 2, 0x000000);
+            graphics.drawString(this.mc.font, Component.translatable("runecraftory.magnifying_glass.view.crop.giant", giant), xPos, yPos + 10 * 2, 0x000000);
             yPos += 10 * 4;
         }
         MutableComponent growth = Component.literal(this.formattedValue(data.growth()));
         if (data.growth() <= 0.5)
             growth.withStyle(ChatFormatting.RED);
-        this.mc.font.draw(stack, Component.translatable("runecraftory.magnifying_glass.view.speed", growth), xPos, yPos, 0x000000);
+        graphics.drawString(this.mc.font, Component.translatable("runecraftory.magnifying_glass.view.speed", growth), xPos, yPos, 0x000000);
         MutableComponent health = Component.literal(data.health() + "");
         if (data.health() <= 10)
             health.withStyle(ChatFormatting.RED);
-        this.mc.font.draw(stack, Component.translatable("runecraftory.magnifying_glass.view.health", health), xPos, yPos + 10, 0x000000);
-        this.mc.font.draw(stack, Component.translatable("runecraftory.magnifying_glass.view.level", this.formattedValue(data.quality())), xPos, yPos + 10 * 2, 0x000000);
-        this.mc.font.draw(stack, Component.translatable("runecraftory.magnifying_glass.view.giant", this.formattedValue(data.size())), xPos, yPos + 10 * 3, 0x000000);
-        this.mc.font.draw(stack, Component.translatable("runecraftory.magnifying_glass.view.defence", this.formattedValue(data.defence())), xPos, yPos + 10 * 4, 0x000000);
+        graphics.drawString(this.mc.font, Component.translatable("runecraftory.magnifying_glass.view.health", health), xPos, yPos + 10, 0x000000);
+        graphics.drawString(this.mc.font, Component.translatable("runecraftory.magnifying_glass.view.level", this.formattedValue(data.quality())), xPos, yPos + 10 * 2, 0x000000);
+        graphics.drawString(this.mc.font, Component.translatable("runecraftory.magnifying_glass.view.giant", this.formattedValue(data.size())), xPos, yPos + 10 * 3, 0x000000);
+        graphics.drawString(this.mc.font, Component.translatable("runecraftory.magnifying_glass.view.defence", this.formattedValue(data.defence())), xPos, yPos + 10 * 4, 0x000000);
     }
 
     private String formattedValue(float f) {

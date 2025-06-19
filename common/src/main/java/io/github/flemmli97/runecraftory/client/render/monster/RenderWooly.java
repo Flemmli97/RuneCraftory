@@ -20,7 +20,7 @@ public class RenderWooly<T extends EntityWooly> extends ScaledEntityRenderer<T, 
     }
 
     public RenderWooly(EntityRendererProvider.Context ctx, ResourceLocation texture, float scale, float shadow) {
-        super(ctx, new ModelWooly<>(ctx.bakeLayer(ModelWooly.LAYER_LOCATION)), texture, scale, shadow);
-        this.layers.add(new LayerWooly<>(this, new ModelWoolyWool<>(ctx.bakeLayer(ModelWoolyWool.LAYER_LOCATION))));
+        super(ctx, new ModelWooly<>(), texture, scale, shadow);
+        this.layers.add(new LayerWooly<>(this, new ModelWoolyWool<>()));
     }
 }

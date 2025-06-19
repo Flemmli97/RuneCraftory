@@ -3,11 +3,12 @@ package io.github.flemmli97.runecraftory.client.render.projectiles;
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityBoneNeedle;
+import io.github.flemmli97.tenshilib.client.render.CrossedTextureRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 
-public class RenderBoneNeedle extends RenderCrossedTextureEntity<EntityBoneNeedle> {
+public class RenderBoneNeedle extends CrossedTextureRenderer<EntityBoneNeedle> {
 
     private static final ResourceLocation TEX = RuneCraftory.modRes("textures/entity/projectile/bone_needle.png");
 

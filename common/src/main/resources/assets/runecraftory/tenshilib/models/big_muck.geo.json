@@ -1,0 +1,137 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.unknown",
+        "texture_width": 76,
+        "texture_height": 125,
+        "visible_bounds_width": 3,
+        "visible_bounds_height": 3.5,
+        "visible_bounds_offset": [0, 1.25, 0]
+      },
+      "bones": [
+        {
+          "name": "body",
+          "pivot": [0.5, 0, -0.5],
+          "cubes": [
+            {
+              "origin": [-5.5, 0, -5.5],
+              "size": [11, 14, 11],
+              "uv": [0, 0]
+            },
+            {
+              "origin": [-4.5, 0, -6.5],
+              "size": [9, 14, 1],
+              "uv": [0, 25]
+            },
+            {
+              "origin": [5.5, 0, -4.5],
+              "size": [1, 14, 9],
+              "uv": [44, 0]
+            },
+            {
+              "origin": [-6.5, 0, -4.5],
+              "size": [1, 14, 9],
+              "uv": [44, 0]
+            },
+            {
+              "origin": [-4.5, 0, 5.5],
+              "size": [9, 14, 1],
+              "uv": [20, 25]
+            }
+          ]
+        },
+        {
+          "name": "mushroomCap",
+          "parent": "body",
+          "pivot": [0, 14, 0],
+          "cubes": [
+            {
+              "origin": [-9.5, 14, -9.5],
+              "size": [19, 2, 19],
+              "uv": [0, 48]
+            },
+            {
+              "origin": [-7.5, 16, -7.5],
+              "size": [15, 2, 15],
+              "uv": [0, 69]
+            },
+            {
+              "origin": [-6.5, 18, -6.5],
+              "size": [13, 3, 13],
+              "uv": [0, 86]
+            },
+            {
+              "origin": [-5.5, 21, -5.5],
+              "size": [11, 3, 11],
+              "uv": [0, 102]
+            },
+            {
+              "origin": [-3.5, 24, -3.5],
+              "size": [7, 2, 7],
+              "uv": [0, 116]
+            }
+          ]
+        },
+        {
+          "name": "ridingPos",
+          "parent": "mushroomCap",
+          "pivot": [0, 26, 3]
+        },
+        {
+          "name": "handLeft",
+          "parent": "body",
+          "pivot": [6.5, 8.5, 0],
+          "rotation": [0, 0, 15],
+          "cubes": [
+            {
+              "origin": [6.5, 8, -3.5],
+              "size": [8, 1, 7],
+              "uv": [0, 40],
+              "mirror": true
+            }
+          ]
+        },
+        {
+          "name": "handRight",
+          "parent": "body",
+          "pivot": [-6.5, 8.5, 0],
+          "rotation": [0, 0, -15],
+          "cubes": [
+            {
+              "origin": [-14.5, 8, -3.5],
+              "size": [8, 1, 7],
+              "uv": [0, 40]
+            }
+          ]
+        },
+        {
+          "name": "tail",
+          "parent": "body",
+          "pivot": [0, 1, 6.5],
+          "rotation": [40, 0, 0],
+          "cubes": [
+            {
+              "origin": [-0.5, 1, 6.5],
+              "size": [1, 1, 2],
+              "uv": [44, 23]
+            }
+          ]
+        },
+        {
+          "name": "tailCap",
+          "parent": "tail",
+          "pivot": [0.5, 1, 6.5],
+          "cubes": [
+            {
+              "origin": [-1, 0.5, 8.5],
+              "size": [2, 2, 2],
+              "uv": [50, 23]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

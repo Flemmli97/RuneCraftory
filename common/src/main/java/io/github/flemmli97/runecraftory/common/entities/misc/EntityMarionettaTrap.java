@@ -1,17 +1,18 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
+import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import io.github.flemmli97.tenshilib.common.entity.AnimatedAction;
-import io.github.flemmli97.tenshilib.common.entity.AnimationHandler;
+import io.github.flemmli97.tenshilib.common.entity.EntityUtils;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimatedEntity;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -28,13 +29,14 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
-public class EntityMarionettaTrap extends Entity implements OwnableEntity, IAnimated {
+public class EntityMarionettaTrap extends Entity implements OwnableEntity, AnimatedEntity {
 
     private static final EntityDataAccessor<CompoundTag> CAUGHT_ENTITIES = SynchedEntityData.defineId(EntityMarionettaTrap.class, EntityDataSerializers.COMPOUND_TAG);
 
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[0];
+    private static final AnimationDefinitionContainer ANIMS = new AnimationDefinitionContainer(Map.of());
 
     private final List<LivingEntity> caughtEntities = new ArrayList<>();
     private boolean dirty = true;
@@ -70,7 +72,7 @@ public class EntityMarionettaTrap extends Entity implements OwnableEntity, IAnim
     }
 
     @Override
-    protected void defineSynchedData() {
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
         builder.define(CAUGHT_ENTITIES, new CompoundTag());
     }
 
@@ -86,7 +88,7 @@ public class EntityMarionettaTrap extends Entity implements OwnableEntity, IAnim
     @Override
     public void baseTick() {
         super.baseTick();
-        if (!this.onGround) {
+        if (!this.onGround()) {
             Vec3 motion = this.getDeltaMovement();
             double f = Math.sqrt(horizontalMag(motion));
             this.setYRot(this.updateRotation(this.yRotO, (float) (Mth.atan2(motion.x, motion.z) * 57.29577951308232D)));
@@ -102,10 +104,9 @@ public class EntityMarionettaTrap extends Entity implements OwnableEntity, IAnim
             if (e.isAlive()) {
                 e.setPos(this.getX(), this.getY() + this.getBbHeight() + 0.05, this.getZ());
                 e.hurtMarked = true;
-                Platform.INSTANCE.getEntityData(e).ifPresent(data -> {
-                    if (!data.isOrthoView())
-                        data.setOrthoView(e, true);
-                });
+                EntityData data = Platform.INSTANCE.getEntityData(e);
+                if (!data.isOrthoView())
+                    data.setOrthoView(e, true);
             }
         });
         if (!this.level().isClientSide) {
@@ -118,7 +119,7 @@ public class EntityMarionettaTrap extends Entity implements OwnableEntity, IAnim
                     this.caughtEntities.forEach(e -> CombatUtils.mobAttack(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(this.tickLeft == 7 ? 10 : 0), CombatUtils.getAttributeValue(this.getOwner(), Attributes.ATTACK_DAMAGE) * this.damageMultiplier));
             }
             if (this.tickLeft <= 0) {
-                this.caughtEntities.forEach(e -> Platform.INSTANCE.getEntityData(e).ifPresent(data -> data.setOrthoView(e, false)));
+                this.caughtEntities.forEach(e -> Platform.INSTANCE.getEntityData(e).setOrthoView(e, false));
                 this.discard();
             }
         }
@@ -137,11 +138,6 @@ public class EntityMarionettaTrap extends Entity implements OwnableEntity, IAnim
     @Override
     public boolean canBeCollidedWith() {
         return true;
-    }
-
-    @Override
-    public Packet<?> getAddEntityPacket() {
-        return new ClientboundAddEntityPacket(this);
     }
 
     public int getTickLeft() {
@@ -171,7 +167,7 @@ public class EntityMarionettaTrap extends Entity implements OwnableEntity, IAnim
         if (this.shooter == null || this.shooter.isRemoved()) {
             UUID uuid = this.getOwnerUUID();
             if (uuid != null)
-                this.shooter = EntityUtil.findFromUUID(LivingEntity.class, this.level(), uuid);
+                this.shooter = EntityUtils.findFromUUID(LivingEntity.class, this.level(), uuid);
         }
         return this.shooter;
     }

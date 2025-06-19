@@ -7,92 +7,64 @@ import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.client.model.SittingModel;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderVeggieGhost;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityVeggieGhost;
-import io.github.flemmli97.tenshilib.client.AnimationManager;
+import io.github.flemmli97.tenshilib.client.data.AnimationManager;
+import io.github.flemmli97.tenshilib.client.data.ModelManager;
+import io.github.flemmli97.tenshilib.client.data.ReloadableCache;
+import io.github.flemmli97.tenshilib.client.model.BedrockAnimations;
 import io.github.flemmli97.tenshilib.client.model.ExtendedModel;
+import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
 import io.github.flemmli97.tenshilib.client.model.RideableModel;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.IllagerModel;
-import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 
 public class ModelVeggieGhost<T extends EntityVeggieGhost> extends EntityModel<T> implements ExtendedModel, RideableModel<T> {
 
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(RuneCraftory.modRes("veggie_ghost"), "main");
+    public static final ResourceLocation LOCATION = RuneCraftory.modRes("veggie_ghost");
 
-    protected final ModelPartHandler model;
-    protected final BlockBenchAnimations anim;
+    private final ReloadableCache<ModelPartsContainer> model;
+    protected final ReloadableCache<BedrockAnimations> anim;
 
-    public ModelPartHandler.ModelPartExtended body;
-    public ModelPartHandler.ModelPartExtended head;
-    public ModelPartHandler.ModelPartExtended ridingPosition;
+    public ModelPartsContainer.ModelPartExtended head;
+    public ModelPartsContainer.ModelPartExtended ridingPosition;
 
-    public ModelVeggieGhost(ModelPart root) {
+    public ModelVeggieGhost() {
         super(RenderType::entityTranslucentCull);
-        this.model = new ModelPartHandler(root, "root");
-        this.anim = AnimationManager.getInstance().getAnimation(RuneCraftory.modRes("veggie_ghost"));
-        this.body = this.model.getPart("body");
-        this.head = this.model.getPart("head");
-        this.ridingPosition = this.model.getPart("ridingPos");
-    }
-
-    public static LayerDefinition createBodyLayer() {
-        MeshDefinition meshdefinition = new MeshDefinition();
-        PartDefinition partdefinition = meshdefinition.getRoot();
-
-        PartDefinition body = partdefinition.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 14).addBox(-4.0F, -4.0F, -2.0F, 8.0F, 12.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 9.0F, 0.0F));
-
-        PartDefinition bodyLower = body.addOrReplaceChild("bodyLower", CubeListBuilder.create().texOffs(24, 10).addBox(-3.0F, 0.0F, -2.0F, 6.0F, 6.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 8.0F, 0.0F));
-
-        PartDefinition head = body.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 0).addBox(-3.5F, -7.0F, -3.5F, 7.0F, 7.0F, 7.0F, new CubeDeformation(0.0F))
-                .texOffs(32, 28).addBox(-1.5F, -8.0F, -1.5F, 3.0F, 1.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -4.0F, 0.0F));
-
-        PartDefinition leftArm = body.addOrReplaceChild("leftArm", CubeListBuilder.create().texOffs(28, 0).addBox(0.0F, -1.0F, -1.5F, 7.0F, 5.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offset(4.0F, -2.0F, 0.0F));
-
-        PartDefinition rightArm = body.addOrReplaceChild("rightArm", CubeListBuilder.create().texOffs(24, 20).addBox(-7.0F, -1.0F, -1.5F, 7.0F, 5.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offset(-4.0F, -2.0F, 0.0F));
-
-        PartDefinition lamp = rightArm.addOrReplaceChild("lamp", CubeListBuilder.create().texOffs(8, 35).addBox(-1.0F, -0.8333F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 30).addBox(-2.0F, 1.1667F, -2.0F, 4.0F, 1.0F, 4.0F, new CubeDeformation(0.25F))
-                .texOffs(20, 28).addBox(-2.0F, 1.1667F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 35).addBox(-1.0F, 1.1667F, -1.0F, 2.0F, 4.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-5.0F, 2.8333F, -1.5F, -0.2182F, 0.0F, 0.0F));
-
-        PartDefinition ridingPos = body.addOrReplaceChild("ridingPos", CubeListBuilder.create(), PartPose.offset(0.0F, 3.0F, 4.0F));
-
-        return LayerDefinition.create(meshdefinition, 64, 64);
+        this.model = ModelManager.getInstance().getModel(LOCATION, model -> {
+            this.head = model.getPart("head");
+            this.ridingPosition = model.getPart("ridingPos");
+        });
+        this.anim = AnimationManager.getInstance().getAnimation(LOCATION);
     }
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-        this.model.getMainPart().render(poseStack, buffer, packedLight, packedOverlay, red, green, blue, 0.9f);
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
+        this.getModel().getMainPart().render(poseStack, buffer, packedLight, packedOverlay, FastColor.ARGB32.color(200, color));
     }
 
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        this.model.resetPoses();
+        this.getModel().resetPoses();
         this.head.yRot += (netHeadYaw % 360) * Mth.DEG_TO_RAD * 0.5f;
         this.head.xRot += headPitch * Mth.DEG_TO_RAD * 0.5f;
-        this.model.getMainPart().visible = true;
+        this.getModel().getMainPart().visible = true;
         float partialTicks = ClientHandlers.getPartialTicks();
         if (entity.deathTime <= 0 && !entity.playDeath()) {
-            this.anim.doAnimation(this, "idle", entity.tickCount, partialTicks);
+            this.anim.get().doAnimation(this, "idle", entity.tickCount, partialTicks);
         }
-        this.anim.doAnimation(this, entity.getAnimationHandler(), partialTicks);
+        this.anim.get().doAnimation(this, entity.getAnimationHandler(), partialTicks);
     }
 
     @Override
-    public ModelPartHandler getHandler() {
-        return this.model;
+    public ModelPartsContainer getModel() {
+        return this.model.get();
     }
 
     @Override
@@ -100,8 +72,7 @@ public class ModelVeggieGhost<T extends EntityVeggieGhost> extends EntityModel<T
         if (ridingEntityRenderer instanceof LivingEntityRenderer<?, ?> lR && entityRenderer instanceof RenderVeggieGhost<T> scaledRender) {
             EntityModel<?> model = lR.getModel();
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
-                this.body.translateAndRotate(poseStack);
-                this.ridingPosition.translateAndRotate(poseStack);
+                this.ridingPosition.translateAndRotateWithParents(poseStack);
                 ClientHandlers.translateRider(entityRenderer, rider, model, poseStack);
                 return true;
             }

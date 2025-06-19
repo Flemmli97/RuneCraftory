@@ -6,116 +6,64 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.client.model.SittingModel;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityWeagle;
-import io.github.flemmli97.tenshilib.client.AnimationManager;
+import io.github.flemmli97.tenshilib.client.data.AnimationManager;
+import io.github.flemmli97.tenshilib.client.data.ModelManager;
+import io.github.flemmli97.tenshilib.client.data.ReloadableCache;
+import io.github.flemmli97.tenshilib.client.model.BedrockAnimations;
 import io.github.flemmli97.tenshilib.client.model.ExtendedModel;
+import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
 import io.github.flemmli97.tenshilib.client.model.RideableModel;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.IllagerModel;
-import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 
 public class ModelWeagle<T extends EntityWeagle> extends EntityModel<T> implements ExtendedModel, RideableModel<T> {
 
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(RuneCraftory.modRes("weagle"), "main");
+    public static final ResourceLocation LOCATION = RuneCraftory.modRes("weagle");
 
-    protected final ModelPartHandler model;
-    protected final BlockBenchAnimations anim;
+    private final ReloadableCache<ModelPartsContainer> model;
+    protected final ReloadableCache<BedrockAnimations> anim;
 
-    public ModelPartHandler.ModelPartExtended body;
-    public ModelPartHandler.ModelPartExtended head;
-    public ModelPartHandler.ModelPartExtended ridingPosition;
+    public ModelPartsContainer.ModelPartExtended head;
+    public ModelPartsContainer.ModelPartExtended ridingPosition;
 
-    public ModelWeagle(ModelPart root) {
+    public ModelWeagle() {
         super();
-        this.model = new ModelPartHandler(root, "root");
-        this.anim = AnimationManager.getInstance().getAnimation(RuneCraftory.modRes("weagle"));
-        this.body = this.model.getPart("body");
-        this.head = this.model.getPart("head");
-        this.ridingPosition = this.model.getPart("ridingPos");
-    }
-
-    public static LayerDefinition createBodyLayer() {
-        MeshDefinition meshdefinition = new MeshDefinition();
-        PartDefinition partdefinition = meshdefinition.getRoot();
-
-        PartDefinition body = partdefinition.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -1.0F, -4.0F, 8.0F, 8.0F, 14.0F, new CubeDeformation(0.0F))
-                .texOffs(60, 22).addBox(4.0F, 0.0F, -3.0F, 1.0F, 6.0F, 11.0F, new CubeDeformation(0.0F))
-                .texOffs(36, 22).addBox(-5.0F, 0.0F, -3.0F, 1.0F, 6.0F, 11.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 9.0F, 0.0F));
-
-        PartDefinition head = body.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 39).addBox(-3.0F, -2.0F, -6.0F, 6.0F, 6.0F, 7.0F, new CubeDeformation(0.0F))
-                .texOffs(42, 52).addBox(0.0F, -5.0F, -6.0F, 0.0F, 3.0F, 6.0F, new CubeDeformation(0.0F))
-                .texOffs(12, 61).addBox(0.0F, 4.0F, -5.0F, 0.0F, 2.0F, 5.0F, new CubeDeformation(0.0F))
-                .texOffs(22, 63).addBox(-2.0F, -1.0F, -7.0F, 4.0F, 4.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(46, 61).addBox(-1.0F, 0.25F, -8.5F, 2.0F, 3.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 2.0F, -4.0F));
-
-        PartDefinition leftWing = body.addOrReplaceChild("leftWing", CubeListBuilder.create().texOffs(46, 66).addBox(0.0F, -0.5F, -0.5F, 4.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(20, 52).addBox(0.0F, 0.0F, 0.0F, 4.0F, 0.0F, 6.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 52).addBox(0.0F, 0.2F, 0.0F, 4.0F, 0.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offset(4.7F, 2.5F, -1.5F));
-
-        PartDefinition leftWing2 = leftWing.addOrReplaceChild("leftWing2", CubeListBuilder.create().texOffs(22, 61).addBox(0.0F, -1.0F, 0.0F, 6.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(54, 39).addBox(0.0F, -0.505F, 0.5F, 6.0F, 0.0F, 8.0F, new CubeDeformation(0.0F))
-                .texOffs(54, 39).addBox(0.0F, -0.305F, 0.5F, 6.0F, 0.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offset(3.7F, 0.5F, -0.5F));
-
-        PartDefinition leftWing3 = leftWing2.addOrReplaceChild("leftWing3", CubeListBuilder.create().texOffs(20, 58).addBox(0.0F, 0.0F, 0.0F, 10.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 22).addBox(0.0F, 0.49F, 0.5F, 10.0F, 0.0F, 8.0F, new CubeDeformation(0.0F))
-                .texOffs(44, 0).addBox(0.0F, 0.69F, 0.5F, 10.0F, 0.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offset(5.7F, -1.0F, 0.0F));
-
-        PartDefinition rightWing = body.addOrReplaceChild("rightWing", CubeListBuilder.create().texOffs(46, 66).mirror().addBox(-4.0F, -0.5F, -0.5F, 4.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false)
-                .texOffs(20, 52).mirror().addBox(-4.0F, 0.0F, 0.0F, 4.0F, 0.0F, 6.0F, new CubeDeformation(0.0F)).mirror(false)
-                .texOffs(0, 52).mirror().addBox(-4.0F, 0.2F, 0.0F, 4.0F, 0.0F, 6.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(-4.7F, 2.5F, -1.5F));
-
-        PartDefinition rightWing2 = rightWing.addOrReplaceChild("rightWing2", CubeListBuilder.create().texOffs(22, 61).mirror().addBox(-6.0F, -1.0F, 0.0F, 6.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false)
-                .texOffs(54, 39).mirror().addBox(-6.0F, -0.505F, 0.5F, 6.0F, 0.0F, 8.0F, new CubeDeformation(0.0F)).mirror(false)
-                .texOffs(26, 39).addBox(-6.0F, -0.305F, 0.5F, 6.0F, 0.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offset(-3.7F, 0.5F, -0.5F));
-
-        PartDefinition rightWing3 = rightWing2.addOrReplaceChild("rightWing3", CubeListBuilder.create().texOffs(20, 58).mirror().addBox(-10.0F, 0.0F, 0.0F, 10.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false)
-                .texOffs(0, 22).mirror().addBox(-10.0F, 0.49F, 0.5F, 10.0F, 0.0F, 8.0F, new CubeDeformation(0.0F)).mirror(false)
-                .texOffs(44, 0).mirror().addBox(-10.0F, 0.69F, 0.5F, 10.0F, 0.0F, 8.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(-5.7F, -1.0F, 0.0F));
-
-        PartDefinition leftLeg = body.addOrReplaceChild("leftLeg", CubeListBuilder.create().texOffs(0, 61).addBox(-1.0F, -1.0F, -0.5F, 2.0F, 2.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(36, 61).addBox(-2.5F, -1.0F, 3.5F, 5.0F, 4.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(3.5F, 6.0F, 8.5F));
-
-        PartDefinition rightLeg = body.addOrReplaceChild("rightLeg", CubeListBuilder.create().texOffs(54, 52).addBox(-1.0F, -1.0F, -0.5F, 2.0F, 2.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(36, 61).mirror().addBox(-2.5F, -1.0F, 3.5F, 5.0F, 4.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(-3.5F, 6.0F, 8.5F));
-
-        PartDefinition ridingPos = body.addOrReplaceChild("ridingPos", CubeListBuilder.create(), PartPose.offsetAndRotation(0.0F, -1.0F, 6.0F, 1.2217F, 0.0F, 0.0F));
-        return LayerDefinition.create(meshdefinition, 128, 128);
+        this.model = ModelManager.getInstance().getModel(LOCATION, model -> {
+            this.head = model.getPart("head");
+            this.ridingPosition = model.getPart("ridingPos");
+        });
+        this.anim = AnimationManager.getInstance().getAnimation(LOCATION);
     }
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-        this.model.getMainPart().render(poseStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
+        this.getModel().getMainPart().render(poseStack, buffer, packedLight, packedOverlay, color);
     }
 
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        this.model.resetPoses();
+        this.getModel().resetPoses();
         this.head.yRot += (netHeadYaw % 360) * Mth.DEG_TO_RAD * 0.3f;
         this.head.xRot += headPitch * Mth.DEG_TO_RAD * 0.1f;
         float partialTicks = ClientHandlers.getPartialTicks();
         if (entity.deathTime <= 0 && !entity.playDeath()) {
             if (entity.moveTick() > 0) {
-                this.anim.doAnimation(this, "fly", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
-            } else if (!EntityWeagle.SLEEP.is(entity.getAnimationHandler().getAnimation()))
-                this.anim.doAnimation(this, "idle", entity.tickCount, partialTicks);
+                this.anim.get().doAnimation(this, "fly", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
+            } else if (!entity.getAnimationHandler().isCurrent(EntityWeagle.SLEEP))
+                this.anim.get().doAnimation(this, "idle", entity.tickCount, partialTicks);
         }
-        this.anim.doAnimation(this, entity.getAnimationHandler(), partialTicks);
+        this.anim.get().doAnimation(this, entity.getAnimationHandler(), partialTicks);
     }
 
     @Override
-    public ModelPartHandler getHandler() {
-        return this.model;
+    public ModelPartsContainer getModel() {
+        return this.model.get();
     }
 
     @Override
@@ -123,8 +71,7 @@ public class ModelWeagle<T extends EntityWeagle> extends EntityModel<T> implemen
         if (ridingEntityRenderer instanceof LivingEntityRenderer<?, ?> lR) {
             EntityModel<?> model = lR.getModel();
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
-                this.body.translateAndRotate(poseStack);
-                this.ridingPosition.translateAndRotate(poseStack);
+                this.ridingPosition.translateAndRotateWithParents(poseStack);
                 ClientHandlers.translateRider(entityRenderer, rider, model, poseStack);
                 return true;
             }

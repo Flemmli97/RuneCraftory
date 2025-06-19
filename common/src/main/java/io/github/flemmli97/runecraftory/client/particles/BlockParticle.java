@@ -86,7 +86,7 @@ public class BlockParticle extends Particle {
 
     @Override
     public ParticleRenderType getRenderType() {
-        return CustomParticleRenderTypes.ENTITY_MODEL_TYPE;
+        return ParticleRenderType.CUSTOM;
     }
 
     public record Factory(SpriteSet sprite) implements ParticleProvider<BlockStateParticleData> {

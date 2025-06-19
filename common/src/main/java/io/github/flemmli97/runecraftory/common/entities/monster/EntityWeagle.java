@@ -218,12 +218,12 @@ public class EntityWeagle extends BaseMonster {
 
     public void setSwoopMotion(Vec3 swoopMotion) {
         this.swoopMotion = swoopMotion;
-        S2CMobUpdate.send(this, SyncableDatas.NPC_JOB, this.swoopMotion);
+        S2CMobUpdate.send(this, SyncableDatas.MOTION_DIR, this.swoopMotion);
     }
 
     @Override
     public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
         super.onUpdate(data);
-        data.runIf(SyncableDatas.NPC_JOB, charge -> this.swoopMotion = charge);
+        data.runIf(SyncableDatas.MOTION_DIR, charge -> this.swoopMotion = charge);
     }
 }

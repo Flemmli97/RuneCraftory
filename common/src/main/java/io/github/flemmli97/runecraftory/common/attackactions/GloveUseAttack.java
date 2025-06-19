@@ -4,6 +4,7 @@ import io.github.flemmli97.runecraftory.api.action.AttackActionHandler;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.registry.AttackAction;
+import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -11,6 +12,8 @@ import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
@@ -49,12 +52,13 @@ public class GloveUseAttack extends AttackAction {
 
     @Override
     public void onStart(LivingEntity entity, AttackActionHandler handler) {
-        entity.maxUpStep() += 0.5;
+        entity.getAttribute(Attributes.STEP_HEIGHT)
+                .addTransientModifier(new AttributeModifier(LibConstants.STEP_UP_TEMP, 0.5, AttributeModifier.Operation.ADD_VALUE));
     }
 
     @Override
     public void onEnd(LivingEntity entity, AttackActionHandler handler) {
-        entity.maxUpStep -= 0.5;
+        entity.getAttribute(Attributes.STEP_HEIGHT).removeModifier(LibConstants.STEP_UP_TEMP);
     }
 
     @Override

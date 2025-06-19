@@ -1,11 +1,7 @@
 package io.github.flemmli97.runecraftory.client.particles;
 
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.Tesselator;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.texture.TextureManager;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -18,22 +14,10 @@ public class CustomParticleRenderTypes {
         MODEL_TYPES.add(type);
     }
 
-    public static final ParticleRenderType ENTITY_MODEL_TYPE = new ParticleRenderType() {
-        @Override
-        public BufferBuilder begin(Tesselator tesselator, TextureManager textureManager) {
-            return null;
+    public static void endBatch() {
+        for (RenderType type : MODEL_TYPES) {
+            Minecraft.getInstance().renderBuffers().bufferSource().endBatch(type);
         }
-
-        @Override
-        public void begin(BufferBuilder builder, TextureManager manager) {
-        }
-
-        @Override
-        public void end(Tesselator tessellator) {
-            for (RenderType type : MODEL_TYPES) {
-                Minecraft.getInstance().renderBuffers().bufferSource().endBatch(type);
-            }
-            MODEL_TYPES.clear();
-        }
-    };
+        MODEL_TYPES.clear();
+    }
 }

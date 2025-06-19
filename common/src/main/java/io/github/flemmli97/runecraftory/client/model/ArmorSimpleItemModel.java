@@ -44,13 +44,13 @@ public class ArmorSimpleItemModel extends EntityModel<Entity> {
     }
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
         if (this.stack == null || this.stack.isEmpty() || this.entity == null)
             return;
         poseStack.pushPose();
         if (this.translate != null)
             this.translate.accept(this.entity, poseStack, this.part);
-        Minecraft.getInstance().getItemInHandRenderer().renderItem(this.entity, this.stack, ItemTransforms.TransformType.HEAD, false, poseStack, Minecraft.getInstance().renderBuffers().bufferSource(), packedLight);
+        Minecraft.getInstance().renderItem(this.entity, this.stack, ItemTransforms.TransformType.HEAD, false, poseStack, Minecraft.getInstance().renderBuffers().bufferSource(), packedLight);
         poseStack.popPose();
     }
 

@@ -20,6 +20,8 @@ public class LibConstants {
     public static final ResourceLocation FOOD_UUID = RuneCraftory.modRes("mob_food_modifier");
     public static final ResourceLocation FOOD_UUID_MULTI = RuneCraftory.modRes("mob_food_modifier_multiplier");
 
+    public static final ResourceLocation STEP_UP_TEMP = RuneCraftory.modRes("step_buff_temp");
+
     public static final ResourceLocation[] EQUIPMENT_MODIFIERS = new ResourceLocation[]{RuneCraftory.modRes("a86e87f5-2f4a-4105-9d8b-1f29fed2f67e"),
             RuneCraftory.modRes("0f1dc59e-c82b-4765-a651-de69152440fc"),
             RuneCraftory.modRes("bb429d9c-ade1-4fe8-b914-5f1196ad9fa6"),

@@ -15,7 +15,7 @@ public class RenderGhost<T extends EntityGhost> extends ScaledEntityRenderer<T, 
     }
 
     public RenderGhost(EntityRendererProvider.Context ctx, ResourceLocation texture, float scale) {
-        super(ctx, new ModelGhost<>(ctx.bakeLayer(ModelGhost.LAYER_LOCATION)), texture, scale * 0.85f, 0);
+        super(ctx, new ModelGhost<>(), texture, scale * 0.85f, 0);
     }
 
     @Override

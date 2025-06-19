@@ -4,49 +4,37 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityHomingEnergyOrb;
+import io.github.flemmli97.tenshilib.client.data.ModelManager;
+import io.github.flemmli97.tenshilib.client.data.ReloadableCache;
+import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 public class ModelEnergyOrb<T extends EntityHomingEnergyOrb> extends EntityModel<T> {
 
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(RuneCraftory.modRes("energy_orb"), "main");
-    public static final ModelLayerLocation LAYER_LOCATION_LAYER = new ModelLayerLocation(RuneCraftory.modRes("energy_orb_layer"), "main");
+    public static final ResourceLocation LOCATION = RuneCraftory.modRes("energy_orb");
+    public static final ResourceLocation LAYER_LOCATION_LAYER = RuneCraftory.modRes("energy_orb_layer");
 
-    protected final ModelPartHandler model;
-    protected final ModelPartHandler.ModelPartExtended bone;
+    private final float growth;
+    protected final ReloadableCache<ModelPartsContainer> model;
+    protected ModelPartsContainer.ModelPartExtended bone;
 
-    public ModelEnergyOrb(ModelPart root) {
+    public ModelEnergyOrb(float growth) {
         super(RenderType::entityTranslucentCull);
-        this.model = new ModelPartHandler(root, "root");
-        this.bone = this.model.getPart("bone");
-    }
-
-    public static LayerDefinition createBodyLayer(CubeDeformation cubeDeformation) {
-        MeshDefinition meshdefinition = new MeshDefinition();
-        PartDefinition partdefinition = meshdefinition.getRoot();
-
-        PartDefinition bone = partdefinition.addOrReplaceChild("bone", CubeListBuilder.create().texOffs(0, 0).addBox(-8.0F, -8.0F, -8.0F, 16.0F, 16.0F, 16.0F, cubeDeformation), PartPose.offset(0.0F, 16.0F, 0.0F));
-
-        return LayerDefinition.create(meshdefinition, 64, 64);
+        this.growth = growth;
+        this.model = ModelManager.getInstance().getModel(LOCATION, model -> this.bone = model.getPart("bone"));
     }
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-        this.model.getMainPart().render(poseStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
+        this.model.get().getMainPart().render(poseStack, buffer, packedLight, packedOverlay, color);
     }
 
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        this.model.resetPoses();
+        this.model.get().resetPoses();
         float scale = 0.85f + Mth.sin(entity.tickCount * 0.2f) * 0.075f;
         this.bone.xScale = scale;
         this.bone.yScale = scale;
